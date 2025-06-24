@@ -116,15 +116,7 @@ public final class AssetSceneViewModel: Sendable {
     }
     
     var allBanners: [Banner] {
-        let allBanners = (assetDataModel.isActive ? [
-//            Banner(
-//                wallet: .none,
-//                asset: assetDataModel.asset,
-//                chain: .none,
-//                event: .activateAsset,
-//                state: .alwaysActive
-//            )
-        ] : [
+        let allBanners = (assetDataModel.isActive ? [] : [
             Banner(
                 wallet: .none,
                 asset: assetDataModel.asset,
@@ -138,7 +130,7 @@ public final class AssetSceneViewModel: Sendable {
     }
     
     var assetHeaderModel: AssetHeaderViewModel {
-        return AssetHeaderViewModel(
+        AssetHeaderViewModel(
             assetDataModel: assetDataModel,
             walletModel: walletModel,
             bannerEventsViewModel: HeaderBannerEventViewModel(events: allBanners.map(\.event))
