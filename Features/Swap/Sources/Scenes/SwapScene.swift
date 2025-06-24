@@ -174,10 +174,10 @@ extension SwapScene {
             }
             
             if let rateText = model.rateText {
-                ListItemImageView(
+                ListItemRotateView(
                     title: model.rateTitle,
                     subtitle: rateText,
-                    assetImage: .none
+                    action: model.switchRateDirection
                 )
             }
 
