@@ -151,7 +151,7 @@ public final class SwapSceneViewModel {
     }
     
     var shouldShowAdditionalInfo: Bool {
-        swapState.isLoading == false
+        swapState.quotes.isLoading == false
     }
 
     var isLoading: Bool {

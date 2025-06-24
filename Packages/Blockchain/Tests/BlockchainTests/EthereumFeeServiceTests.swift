@@ -28,7 +28,7 @@ class EthereumFeeServiceTests {
 
         let rewards = response.result.reward.toBigInts()
         let expectedFees: [FeePriority: BigInt] = [
-            .slow: 1_000_000_000.asBigInt,
+            .slow: 440_638_026.asBigInt,
             .normal: 1_644_614_388.asBigInt,
             .fast: 2_089_906_923.asBigInt
         ]
@@ -56,7 +56,7 @@ class EthereumFeeServiceTests {
         let expectedFees: [FeePriority: BigInt] = [
             .slow: 1_000_000_000.asBigInt,
             .normal: 2_000_000_000.asBigInt,
-            .fast: 1_000_000_000.asBigInt
+            .fast: 300_000_000.asBigInt
         ]
 
         #expect(priorityFees[.slow] == expectedFees[.slow])

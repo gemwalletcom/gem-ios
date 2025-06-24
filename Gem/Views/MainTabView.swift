@@ -209,6 +209,10 @@ extension MainTabView {
     private func onWalletIdChange() {
         navigationState.clearAll()
         navigationState.selectedTab = .wallet
+        
+        Task {
+            try await priceObserverService.setupAssets()
+        }
     }
 }
 
