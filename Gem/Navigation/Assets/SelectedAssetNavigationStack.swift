@@ -51,6 +51,7 @@ struct SelectedAssetNavigationStack: View  {
                             nodeService: nodeService,
                             stakeService: stakeService,
                             scanService: scanService,
+                            swapService: SwapService(nodeProvider: nodeService),
                             type: type,
                             onRecipientDataAction: {
                                 navigationPath.append($0)

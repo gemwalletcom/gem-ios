@@ -56,14 +56,14 @@ public struct SwapDataProvider: SwapDataProviding {
     }
 
     public func fetchSwapData(wallet: Wallet, fromAsset: Asset, toAsset: Asset, quote: SwapQuote) async throws -> TransferData {
-        let quoteData = try await fetchQuoteData(wallet: wallet, quote: quote)
+//        let quoteData = try await fetchQuoteData(wallet: wallet, quote: quote)
         let value = BigInt(stringLiteral: quote.request.value)
         let recipientData = RecipientData(
-            recipient: Recipient(name: quote.data.provider.name, address: quoteData.to, memo: .none),
+            recipient: Recipient(name: quote.data.provider.name, address: "", memo: .none),
             amount: .none
         )
         return TransferData(
-            type: .swap(fromAsset, toAsset, quote, quoteData),
+            type: .swap(fromAsset, toAsset,  quote, SwapQuoteData(to: "", value: "", data: "", approval: .none, gasLimit: .none)),
             recipientData: recipientData,
             value: value,
             canChangeValue: true

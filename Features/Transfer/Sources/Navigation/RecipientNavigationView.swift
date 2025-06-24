@@ -48,6 +48,7 @@ public struct RecipientNavigationView: View {
                     chainService: ChainServiceFactory(nodeProvider: model.nodeService)
                         .service(for: data.chain),
                     scanService: model.scanService,
+                    swapService: model.swapService,
                     walletsService: model.walletsService,
                     onComplete: onComplete
                 )

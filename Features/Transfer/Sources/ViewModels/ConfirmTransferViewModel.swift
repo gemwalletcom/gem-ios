@@ -15,6 +15,7 @@ import WalletsService
 import InfoSheet
 import Signer
 import Validators
+import SwapService
 
 @Observable
 @MainActor
@@ -39,6 +40,7 @@ public final class ConfirmTransferViewModel {
     private let transferTransactionProvider: any TransferTransactionProvidable
     private let transerExecutor: any TransferExecutable
     private let keystore: any Keystore
+    private let swapService: SwapService
 
     private let data: TransferData
     private let wallet: Wallet
@@ -53,6 +55,7 @@ public final class ConfirmTransferViewModel {
         keystore: any Keystore,
         chainService: any ChainServiceable,
         scanService: ScanService,
+        swapService: SwapService,
         walletsService: WalletsService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
@@ -78,8 +81,10 @@ public final class ConfirmTransferViewModel {
 
         self.transferTransactionProvider = TransferTransactionProvider(
             chainService: chainService,
-            scanService: scanService
+            scanService: scanService,
+            swapService: swapService
         )
+        self.swapService = swapService
 
         self.transerExecutor = TransferExecutor(
             signer: TransactionSigner(keystore: keystore),
@@ -303,12 +308,28 @@ extension ConfirmTransferViewModel {
             }
         }
     }
+    
+    private func getTranserData(data: TransferData) async throws -> TransferData {
+        guard case .swap(let from, let to, let quote, _) = data.type else {
+            return data
+        }
+        //TODO implement permit
+        let swapData = try await swapService.getQuoteData(quote, data: .none)
+        return TransferData(
+            type: .swap(from, to, quote, swapData),
+            recipientData: data.recipientData,
+            value: data.value,
+            canChangeValue: data.canChangeValue
+        )
+    }
 
     private func fetch() async {
         state = .loading
         feeModel.reset()
 
         do {
+            let data = try await getTranserData(data: data)
+            
             let metadata = try metadataProvider.metadata(wallet: wallet, data: data)
             let transferTransactionData = try await transferTransactionProvider.loadTransferTransactionData(
                 wallet: wallet, data: data,
@@ -325,13 +346,14 @@ extension ConfirmTransferViewModel {
             self.feeModel.update(rates: transferTransactionData.rates)
             self.updateState(
                 with: transactionInputViewModel(
+                    data: data,
                     transferAmount: transferAmount,
                     input: transferTransactionData.transactionData,
                     metaData: metadata
                 )
             )
         } catch let error as TransferAmountCalculatorError {
-            updateState(with: transactionInputViewModel(transferAmount: .error(nil, error)))
+            updateState(with: transactionInputViewModel(data: .none, transferAmount: .error(nil, error)))
         } catch {
             if !error.isCancelled {
                 state = .error(error)
@@ -344,7 +366,7 @@ extension ConfirmTransferViewModel {
         confirmingState = .loading
         do {
             let input = TransferConfirmationInput(
-                data: data,
+                data: state.value!.data,
                 wallet: wallet,
                 transactionData: transactionData,
                 amount: amount,
@@ -386,12 +408,13 @@ extension ConfirmTransferViewModel {
     }
 
     private func transactionInputViewModel(
+        data: TransferData?,
         transferAmount: TransferAmountResult,
         input: TransactionData? = nil,
         metaData: TransferDataMetadata? = nil
     ) -> TransactionInputViewModel {
         TransactionInputViewModel(
-            data: data,
+            data: data!,
             transactionData: input,
             metaData: metaData,
             transferAmountResult: transferAmount
