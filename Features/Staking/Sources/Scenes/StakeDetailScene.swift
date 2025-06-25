@@ -63,8 +63,8 @@ public struct StakeDetailScene: View {
                     }
                     if model.isWithdrawStakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: model.withdrawTitle)) {
-                            if let value = try? model.withdrawStakeRecipientData() {
-                                model.onAmountInputAction?(value)
+                            if let value = try? model.withdrawStakeTransferData() {
+                                model.onTransferAction?(value)
                             }
                         }
                     }
