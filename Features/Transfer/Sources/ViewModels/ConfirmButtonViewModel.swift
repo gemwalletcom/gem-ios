@@ -31,10 +31,7 @@ struct ConfirmButtonViewModel: StateButtonViewable {
 
         switch state.value?.transferAmount {
         case .success, .none: return Localized.Transfer.confirm
-        case .failure: 
-            // TODO: - integrate different title for error = minimumAccountBalanceTooLow
-            // provide info - https://docs.gemwallet.com/faq/account-minimal-balance/
-            return Localized.Errors.insufficientFunds
+        case .failure: return Localized.Errors.insufficientFunds
         }
     }
 
