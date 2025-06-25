@@ -3,6 +3,19 @@
 import SwiftUI
 import Style
 
+public protocol StateButtonViewable: Sendable{
+    var title: String { get }
+    var type: ButtonType { get }
+    var icon: Image? { get }
+    var infoText: String? { get }
+
+    @MainActor func action()
+}
+
+extension StateButtonViewable {
+    public var infoText: String? { nil }
+}
+
 public struct StateButton: View {
     public static let defaultTextStyle = TextStyle(font: .body.weight(.semibold), color: Colors.whiteSolid)
 
@@ -57,6 +70,18 @@ public struct StateButton: View {
         case .primary(let state): state != .normal
         case .secondary: false
         }
+    }
+}
+
+public extension StateButton {
+    init(_ model: StateButtonViewable) {
+        self.init(
+            text: model.title,
+            type: model.type,
+            image: model.icon,
+            infoTitle: model.infoText,
+            action: model.action
+        )
     }
 }
 

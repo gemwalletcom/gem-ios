@@ -25,7 +25,8 @@ extension TransferAmountCalculatorError: LocalizedError {
     
     public var isInfoSupported: Bool {
         switch self {
-        case .insufficientBalance, .minimumAccountBalanceTooLow: false
+        case .insufficientBalance: false
+        case .minimumAccountBalanceTooLow: false // TODO: - integrate into gemstone, provide info - https://docs.gemwallet.com/faq/account-minimal-balance/
         case .insufficientNetworkFee: true
         }
     }

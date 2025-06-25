@@ -17,11 +17,11 @@ public final class FiatSceneViewModel {
     private let fiatService: any GemAPIFiatService
     private let assetAddress: AssetAddress
     private let walletId: String
+    private let allowOnlyBuy: Bool
 
     private let amountFormatter: FiatAmountFormatter
 
     let currencyFormatter: CurrencyFormatter
-    let allowOnlyBuy: Bool
 
     var assetData: AssetData = .empty
     var assetRequest: AssetRequest

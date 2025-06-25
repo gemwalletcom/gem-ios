@@ -19,12 +19,7 @@ public struct ConfirmTransferScene: View {
         VStack {
             transactionsList
             Spacer()
-            StateButton(
-                text: model.buttonTitle,
-                type: model.buttonType,
-                image: statefullButtonImage,
-                action: model.onSelectConfirmButton
-            )
+            StateButton(model.confirmButtonModel)
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .padding(.bottom, .scene.bottom)
@@ -52,14 +47,15 @@ public struct ConfirmTransferScene: View {
                         .presentationDetentsForCurrentDeviceSize(expandable: true)
                 }
             case let .fiatConnect(assetAddress, walletId):
-                // TODO: - review the offset to navigation, when presenting
                 NavigationStack {
                     FiatConnectNavigationView(
                         model: FiatSceneViewModel(
                             assetAddress: assetAddress,
-                            walletId: walletId.id
+                            walletId: walletId.id,
+                            allowOnlyBuy: true
                         )
                     )
+                    .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarDismissItem(
                             title: .done,
@@ -83,12 +79,6 @@ public struct ConfirmTransferScene: View {
 // MARK: - UI Components
 
 extension ConfirmTransferScene {
-    private var statefullButtonImage: Image? {
-        if let image = model.buttonImage {
-            return Image(systemName: image)
-        }
-        return nil
-    }
 
     private var transactionsList: some View {
         List {

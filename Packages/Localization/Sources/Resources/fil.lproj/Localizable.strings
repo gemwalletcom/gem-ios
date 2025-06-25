@@ -414,3 +414,4 @@
 "wallet.import.contract_address_field" = "Kontrata o Token ID";
 "info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
 "info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"errors.insufficient_funds" = "Hindi sapat na pondo";

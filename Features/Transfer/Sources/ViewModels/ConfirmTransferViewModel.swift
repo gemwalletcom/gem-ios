@@ -16,6 +16,7 @@ import InfoSheet
 import Signer
 import Validators
 import Style
+import SwiftUI
 
 @Observable
 @MainActor
@@ -177,31 +178,6 @@ public final class ConfirmTransferViewModel {
         return error.isInfoSupported
     }
 
-    var buttonTitle: String {
-        // try again on failed data load
-        if state.isError { return Localized.Common.tryAgain }
-
-        switch state.value?.transferAmount {
-        case .success, .none: return Localized.Transfer.confirm
-        case .failure:
-            // TODO: - integrate different title for error = minimumAccountBalanceTooLow
-            // provide info - https://docs.gemwallet.com/faq/account-minimal-balance/
-            return "Insufficient funds"
-        }
-    }
-
-    var buttonType: ButtonType {
-        isPrimaryButtonState ? .primary(state, isDisabled: state.isNoData) : .secondary
-    }
-
-    var buttonImage: String? {
-        guard !state.isError else { return nil }
-        if state.value?.transferAmount?.isFailure ?? true { return nil }
-
-        let authentication = (try? keystore.getPasswordAuthentication()) ?? .none
-        return KeystoreAuthenticationViewModel(authentication: authentication).authenticationImage
-    }
-
     var showClearHeader: Bool {
         switch headerType {
         case .amount, .nft: true
@@ -219,6 +195,14 @@ public final class ConfirmTransferViewModel {
             metaData: metadata,
             transferAmount: nil
         ).headerType
+    }
+
+    var confirmButtonModel: ConfirmButtonViewModel {
+        ConfirmButtonViewModel(
+            state: state,
+            icon: confirmButtonIcon,
+            action: onSelectConfirmButton
+        )
     }
 }
 
@@ -260,13 +244,16 @@ extension ConfirmTransferViewModel {
     func onSelectConfirmButton() {
         if state.isError {
             fetch()
-        } else {
-            switch buttonType {
-            case .primary:
-                onSelectConfirmTransfer()
-            case .secondary:
-                isPresentingSheet = .fiatConnect(assetAddress: assetAddress, waletId: wallet.walletId)
-            }
+            return
+        }
+        switch buttonType {
+        case .primary:
+            onSelectConfirmTransfer()
+        case .secondary:
+            isPresentingSheet = .fiatConnect(
+                assetAddress: assetAddress,
+                waletId: wallet.walletId
+            )
         }
     }
 
@@ -398,12 +385,13 @@ extension ConfirmTransferViewModel {
     private var dataModel: TransferDataViewModel { TransferDataViewModel(data: data) }
     private var availableValue: BigInt { dataModel.availableValue(metadata: metadata) }
     private var senderLink: BlockExplorerLink { explorerService.addressUrl(chain: dataModel.chain, address: senderAddress) }
-    
-    private var isPrimaryButtonState: Bool {
-        switch state {
-        case .noData, .loading, .error: true
-        case let .data(value): value.transferAmount?.isSuccess ?? false
-        }
-    }
     private var assetAddress: AssetAddress { AssetAddress(asset: dataModel.asset, address: senderAddress)}
+    private var buttonType: ButtonType { ConfirmButtonViewModel.type(state) }
+    private var confirmButtonIcon: Image? {
+        guard !state.isError, state.value?.transferAmount?.isSuccess ?? false,
+              let auth = try? keystore.getPasswordAuthentication(),
+              let systemName = KeystoreAuthenticationViewModel(authentication: auth).authenticationImage
+        else { return nil }
+        return Image(systemName: systemName)
+    }
 }
