@@ -52,7 +52,7 @@ extension Locale {
         case .portuguese: "pt-BR"
         case .czech: "cs"
         case .chinese: usageLanguageIdentifier()
-        default: throw AnyError("missing mapping for \(languageCode)")
+        default: usageLanguageIdentifier()
         }
     }
 }

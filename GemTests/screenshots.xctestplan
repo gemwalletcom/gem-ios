@@ -2,10 +2,50 @@
   "configurations" : [
     {
       "id" : "1B6394DA-52A9-4E96-89AC-DF6231EF7709",
-      "name" : "English | en_US",
+      "name" : "English | en-US",
       "options" : {
         "language" : "en",
         "region" : "US"
+      }
+    },
+    {
+      "id" : "DE3A6F36-AF81-4ABA-9F4D-C945E43EF026",
+      "name" : "English | en-AU",
+      "options" : {
+        "language" : "en-AU",
+        "region" : "AU"
+      }
+    },
+    {
+      "id" : "B26CCB1A-D3B3-46B6-953A-889EF02A6411",
+      "name" : "English | en-CA",
+      "options" : {
+        "language" : "en",
+        "region" : "CA"
+      }
+    },
+    {
+      "id" : "85C51D57-42C9-4255-9114-5BF670E9371C",
+      "name" : "Engilsh | en-GB",
+      "options" : {
+        "language" : "en-GB",
+        "region" : "GB"
+      }
+    },
+    {
+      "id" : "5FA0C39C-F730-4323-BAA5-2849D272E023",
+      "name" : "Spanish | es-ES",
+      "options" : {
+        "language" : "es",
+        "region" : "ES"
+      }
+    },
+    {
+      "id" : "2C501FCB-73DF-44E5-B870-3AA65302411F",
+      "name" : "Spanish | es-MX",
+      "options" : {
+        "language" : "es-419",
+        "region" : "MX"
       }
     },
     {
@@ -17,19 +57,19 @@
       }
     },
     {
-      "id" : "5FA0C39C-F730-4323-BAA5-2849D272E023",
-      "name" : "Spain | es-ES",
-      "options" : {
-        "language" : "es",
-        "region" : "ES"
-      }
-    },
-    {
       "id" : "B4137A2E-98E4-43E2-8830-6782F8CEE35F",
-      "name" : "France | fr-FR",
+      "name" : "French | fr-FR",
       "options" : {
         "language" : "fr",
         "region" : "FR"
+      }
+    },
+    {
+      "id" : "FE4F956B-BCD8-41D8-8E0A-0EF60ADD317B",
+      "name" : "French | fr-CA",
+      "options" : {
+        "language" : "fr-CA",
+        "region" : "CA"
       }
     },
     {
@@ -82,10 +122,18 @@
     },
     {
       "id" : "497C5D5B-4FDD-4343-B31D-E75D889C3E91",
-      "name" : "Brazil | pt-BR",
+      "name" : "Portuguese | pt-BR",
       "options" : {
         "language" : "pt-BR",
         "region" : "BR"
+      }
+    },
+    {
+      "id" : "8B284296-7D73-4A8C-AA08-0F4F2480FBD9",
+      "name" : "Portuguese | pt-PT",
+      "options" : {
+        "language" : "pt-PT",
+        "region" : "PT"
       }
     },
     {
@@ -118,6 +166,150 @@
       "options" : {
         "language" : "cs",
         "region" : "CZ"
+      }
+    },
+    {
+      "id" : "D5395433-DE3B-45D1-A331-CD491D615021",
+      "name" : "Arabic | ar-SA",
+      "options" : {
+        "language" : "ar",
+        "region" : "SA"
+      }
+    },
+    {
+      "id" : "E77D266D-7CCB-4F11-BE95-F042B37525EB",
+      "name" : "Catalania | ca",
+      "options" : {
+        "language" : "ca",
+        "region" : "ES"
+      }
+    },
+    {
+      "id" : "0B217524-A5B3-470F-BBB1-8E6F1345246C",
+      "name" : "Croatia | hr",
+      "options" : {
+        "language" : "hr",
+        "region" : "HR"
+      }
+    },
+    {
+      "id" : "D2003F62-4590-4DB2-8928-889B0B82751D",
+      "name" : "Danish | da",
+      "options" : {
+        "language" : "da",
+        "region" : "DK"
+      }
+    },
+    {
+      "id" : "B436D377-66AA-4FBE-B6DF-3822911AFCC4",
+      "name" : "Dutch | nl-NL",
+      "options" : {
+        "language" : "nl",
+        "region" : "NL"
+      }
+    },
+    {
+      "id" : "B1AF85FE-AB26-4919-BC30-95396D79A96F",
+      "name" : "Finland | fi",
+      "options" : {
+        "language" : "fi",
+        "region" : "FI"
+      }
+    },
+    {
+      "id" : "1BFD2DF7-FF2C-4DD7-931A-AE8C792FD6AB",
+      "name" : "Greek | el",
+      "options" : {
+        "language" : "el",
+        "region" : "GR"
+      }
+    },
+    {
+      "id" : "A2FB93CE-B20A-44AB-95EB-30A862904E15",
+      "name" : "Hebrew | he",
+      "options" : {
+        "language" : "he",
+        "region" : "IL"
+      }
+    },
+    {
+      "id" : "F6804C7F-1B67-470B-9D82-7CAAFF3B1B69",
+      "name" : "Hindi | hi",
+      "options" : {
+        "language" : "hi",
+        "region" : "IN"
+      }
+    },
+    {
+      "id" : "29CE92CB-00E1-45A6-BF62-9B0F2FBA275D",
+      "name" : "Hungarian | hu",
+      "options" : {
+        "language" : "hu",
+        "region" : "HU"
+      }
+    },
+    {
+      "id" : "69E2F948-86B5-429B-9BF2-A3077652D45C",
+      "name" : "Indonesian | id",
+      "options" : {
+        "language" : "id",
+        "region" : "ID"
+      }
+    },
+    {
+      "id" : "3FBA183D-4D75-4DFC-BEC8-B0E6E31F1B9A",
+      "name" : "Malay | ms",
+      "options" : {
+        "language" : "ms",
+        "region" : "MY"
+      }
+    },
+    {
+      "id" : "74AEE53E-0DAE-48EC-955D-9C3620F15870",
+      "name" : "Norwegian | no",
+      "options" : {
+        "language" : "nb",
+        "region" : "NO"
+      }
+    },
+    {
+      "id" : "8C01A6E7-F6F1-4D69-A579-7ED023F1E0A4",
+      "name" : "Polish | pl",
+      "options" : {
+        "language" : "pl",
+        "region" : "PL"
+      }
+    },
+    {
+      "id" : "D0B051B2-6C2B-45D4-9DBB-9A539C29F882",
+      "name" : "Romanian | ro",
+      "options" : {
+        "language" : "ro",
+        "region" : "RO"
+      }
+    },
+    {
+      "id" : "40319CE9-DCCF-472B-AFCA-92D5E04BB33C",
+      "name" : "Slovak | sk",
+      "options" : {
+        "language" : "sk",
+        "region" : "SK"
+      }
+    },
+    {
+      "id" : "8AABE305-57C6-4FC1-9656-014A98553BD1",
+      "name" : "Swedish | sv",
+      "options" : {
+        "language" : "sv",
+        "region" : "SE"
+      }
+    },
+    {
+      "id" : "87AA9747-4066-44DD-81BC-B24B009C30A7",
+      "name" : "Thai | th",
+      "options" : {
+        "language" : "th",
+        "region" : "TH"
       }
     }
   ],
