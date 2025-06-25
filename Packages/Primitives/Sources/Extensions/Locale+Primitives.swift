@@ -23,34 +23,49 @@ extension Locale {
         guard let languageCode = language.languageCode else {
             return Locale.US.language.minimalIdentifier
         }
-        if language == Locale.PT_BR.language {
-            return Locale.PT_BR.identifier
-        }
         if let script = language.script, languageCode.identifier == Locale.ZH_Simplifier.language.languageCode?.identifier {
             return "\(languageCode.identifier)-\(script.identifier)"
+        }
+        if let region = language.region {
+            return "\(languageCode.identifier)-\(region.identifier)"
         }
         return languageCode.identifier
     }
 
     // https://github.com/fastlane/fastlane/blob/e1ab951b63aeb7a669b415708ffbe0e1346c0f59/fastlane_core/lib/fastlane_core/languages.rb#L14
-    public func appstoreLanguageIdentifier() throws -> String {
+    public func appstoreLanguageIdentifier() -> String {
         guard let languageCode = language.languageCode else {
             return Locale.US.language.minimalIdentifier
         }
         return switch languageCode {
-        case .english: "en-US"
         case .german: "de-DE"
-        case .spanish: "es-ES"
-        case .french: "fr-FR"
-        case .japanese: "ja"
-        case .korean: "ko"
-        case .russian: "ru"
-        case .turkish: "tr"
-        case .ukrainian: "uk"
-        case .vietnamese: "vi"
-        case .italian: "it"
-        case .portuguese: "pt-BR"
-        case .czech: "cs"
+        case .norwegian,
+            .norwegianBokmål,
+            .norwegianNynorsk: "no"
+        case .italian,
+            .vietnamese,
+            .czech,
+            .japanese,
+            .korean,
+            .russian,
+            .turkish,
+            .ukrainian,
+            .vietnamese,
+            .danish,
+            .greek,
+            .finnish,
+            .hebrew,
+            .hindi,
+            .croatian,
+            .indonesian,
+            .malay,
+            .polish,
+            .romanian,
+            .slovak,
+            .swedish,
+            .catalan,
+            .thai,
+            .hungarian: languageCode.identifier
         case .chinese: usageLanguageIdentifier()
         default: usageLanguageIdentifier()
         }

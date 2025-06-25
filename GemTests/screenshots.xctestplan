@@ -44,7 +44,7 @@
       "id" : "2C501FCB-73DF-44E5-B870-3AA65302411F",
       "name" : "Spanish | es-MX",
       "options" : {
-        "language" : "es-419",
+        "language" : "es",
         "region" : "MX"
       }
     },
@@ -318,6 +318,10 @@
       {
         "key" : "SCREENSHOTS_PATH",
         "value" : "${SCREENSHOTS_PATH}"
+      },
+      {
+        "key" : "RUNNING_SCREENSHOTS",
+        "value" : "YES"
       },
       {
         "key" : "SCREENSHOTS_SECRET_PHRASE",
