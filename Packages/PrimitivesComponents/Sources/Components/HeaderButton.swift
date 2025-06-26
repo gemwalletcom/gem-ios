@@ -6,16 +6,24 @@ import Localization
 import Style
 import Components
 
+public enum HeaderButtonViewType {
+    case button
+    case menuButton([ActionMenuItemType])
+}
+
 public struct HeaderButton: Identifiable {
     let type: HeaderButtonType
+    let viewType: HeaderButtonViewType
     let isEnabled: Bool
-    
+
     public init(
         type: HeaderButtonType,
+        viewType: HeaderButtonViewType = .button,
         isEnabled: Bool
     ) {
         self.type = type
         self.isEnabled = isEnabled
+        self.viewType = viewType
     }
     
     public var id: String { type.rawValue }

@@ -12,6 +12,7 @@ import Formatters
 public struct StakeDetailViewModel {
     public let model: StakeDelegationViewModel
     public let onAmountInputAction: AmountInputAction
+    public let onTransferAction: TransferDataAction
 
     private let wallet: Wallet
     private let service: StakeService
@@ -20,12 +21,14 @@ public struct StakeDetailViewModel {
         wallet: Wallet,
         model: StakeDelegationViewModel,
         service: StakeService,
-        onAmountInputAction: AmountInputAction
+        onAmountInputAction: AmountInputAction,
+        onTransferAction: TransferDataAction
     ) {
         self.wallet = wallet
         self.model = model
         self.service = service
         self.onAmountInputAction = onAmountInputAction
+        self.onTransferAction = onTransferAction
     }
 
     public var title: String { Localized.Transfer.Stake.title }
@@ -130,10 +133,15 @@ public struct StakeDetailViewModel {
         )
     }
     
-    public func withdrawStakeRecipientData() throws -> AmountInput {
-        AmountInput(
-            type: .withdraw(delegation: model.delegation),
-            asset: asset
+    public func withdrawStakeTransferData() throws -> TransferData {
+        TransferData(
+            type: .stake(asset, .withdraw(delegation: model.delegation)),
+            recipientData: RecipientData(
+                recipient: Recipient(name: validatorText, address: model.delegation.validator.id, memo: ""),
+                amount: .none
+            ),
+            value: model.delegation.base.balanceValue,
+            canChangeValue: false
         )
     }
 }
