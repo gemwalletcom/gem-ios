@@ -58,7 +58,7 @@ public struct WalletsService: Sendable {
         let processor = DiscoveryAssetsProcessor(
             discoverAssetService: DiscoverAssetsService(balanceService: balanceService),
             assetsService: assetsService,
-            assetsEnabler: assetsEnabler,
+            priceUpdater: priceUpdater,
             walletSessionService: walletSessionService
         )
         self.assetsVisibilityManager = AssetVisibilityManager(service: balanceService)

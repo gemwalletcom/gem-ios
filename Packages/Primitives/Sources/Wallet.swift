@@ -11,6 +11,11 @@ public enum WalletType: String, Codable, Equatable, Hashable, Sendable {
 	case view
 }
 
+public enum WalletCreationType: String, Codable, Equatable, Hashable, Sendable {
+	case imported
+	case created
+}
+
 public struct Wallet: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let name: String
@@ -20,8 +25,9 @@ public struct Wallet: Codable, Equatable, Hashable, Sendable {
 	public let order: Int32
 	public let isPinned: Bool
 	public let imageUrl: String?
+	public let creationType: WalletCreationType
 
-	public init(id: String, name: String, index: Int32, type: WalletType, accounts: [Account], order: Int32, isPinned: Bool, imageUrl: String?) {
+	public init(id: String, name: String, index: Int32, type: WalletType, accounts: [Account], order: Int32, isPinned: Bool, imageUrl: String?, creationType: WalletCreationType) {
 		self.id = id
 		self.name = name
 		self.index = index
@@ -30,6 +36,7 @@ public struct Wallet: Codable, Equatable, Hashable, Sendable {
 		self.order = order
 		self.isPinned = isPinned
 		self.imageUrl = imageUrl
+		self.creationType = creationType
 	}
 }
 

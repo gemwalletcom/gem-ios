@@ -65,6 +65,15 @@ public struct WalletScene: View {
                     showBalancePrivacy: $preferences.isHideBalanceEnabled
                 )
                 .listRowInsets(.assetListRowInsets)
+            } header: {
+                if model.isLoadingAssets {
+                    HStack {
+                        Text("Syncing wallet…")
+                        ActivityIndicator(isAnimating: .constant(true), style: .medium)
+                    }
+                    .listRowInsets(.assetListRowInsets)
+                    .textCase(nil)
+                }
             } footer: {
                 ListButton(
                     title: model.manageTokenTitle,

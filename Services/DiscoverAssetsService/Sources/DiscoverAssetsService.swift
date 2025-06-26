@@ -32,10 +32,8 @@ public struct DiscoverAssetsService: Sendable {
 
         let assets: [AssetId] = await balanceService
             .updateBalance(for: wallet, assetIds: assetIds)
-            .compactMap {
-                guard $0.type.available?.isZero == false else { return nil }
-                return $0.assetId
-            }
+            .filter { $0.type.available.or(.zero) > 1 }
+            .map { $0.assetId }
 
         return AssetUpdate(
             walletId: wallet.walletId,

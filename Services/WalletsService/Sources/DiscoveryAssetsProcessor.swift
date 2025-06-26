@@ -11,18 +11,18 @@ import WalletSessionService
 struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
     private let discoverAssetService: DiscoverAssetsService
     private let assetsService: AssetsService
-    private let assetsEnabler: any AssetsEnabler
+    private let priceUpdater: any PriceUpdater
     private let walletSessionService: any WalletSessionManageable
 
     init(
         discoverAssetService: DiscoverAssetsService,
         assetsService: AssetsService,
-        assetsEnabler: any AssetsEnabler,
+        priceUpdater: any PriceUpdater,
         walletSessionService: any WalletSessionManageable
     ) {
         self.discoverAssetService = discoverAssetService
         self.assetsService = assetsService
-        self.assetsEnabler = assetsEnabler
+        self.priceUpdater = priceUpdater
         self.walletSessionService = walletSessionService
     }
 
@@ -43,26 +43,14 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
             fromTimestamp: preferences.assetsTimestamp
         )
         preferences.assetsTimestamp = newTimestamp
-        await addNewAssets(for: update)
+        await updateEnabled(for: update)
+        preferences.isDiscoveredAssets = true
     }
 
-    // add fresh new asset: fetch asset and then activate balance
-    private func addNewAssets(for update: AssetUpdate) async {
+    private func updateEnabled(for update: AssetUpdate) async {
         do {
-            let assets = try assetsService.getAssets(for: update.assetIds)
-            let missingIds = update.assetIds.asSet().subtracting(assets.map { $0.id }.asSet())
-
-            async let enableExisting: () = assetsEnabler.enableAssets(walletId: update.walletId, assetIds: update.assetIds, enabled: true)
-            async let processMissing: () = withThrowingTaskGroup(of: Void.self) { group in
-                for assetId in missingIds {
-                    group.addTask {
-                        try await assetsService.updateAsset(assetId: assetId)
-                    }
-                }
-                for try await _ in group { }
-                await assetsEnabler.enableAssets(walletId: update.walletId, assetIds: update.assetIds, enabled: true)
-            }
-            _ = try await (enableExisting, processMissing)
+            try assetsService.updateEnabled(walletId: update.walletId, assetIds: update.assetIds, enabled: true)
+            try await priceUpdater.addPrices(assetIds: update.assetIds)
         } catch {
             NSLog("add new assets error: \(error)")
         }

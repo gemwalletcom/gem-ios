@@ -35,7 +35,8 @@ public struct LocalKeystore: Keystore {
     public func importWallet(
         name: String,
         type: KeystoreImportType,
-        isWalletsEmpty: Bool
+        isWalletsEmpty: Bool,
+        creationType: WalletCreationType
     ) throws -> Primitives.Wallet {
         return switch type {
         case .phrase(let words, let chains):
@@ -43,14 +44,16 @@ public struct LocalKeystore: Keystore {
                 name: name,
                 words: words,
                 chains: chains,
-                password: try getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
+                password: try getOrCreatePassword(createPasswordIfNone: isWalletsEmpty),
+                creationType: creationType
             )
         case .single(let words, let chain):
             try walletKeyStore.importWallet(
                 name: name,
                 words: words,
                 chains: [chain],
-                password: try getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
+                password: try getOrCreatePassword(createPasswordIfNone: isWalletsEmpty),
+                creationType: creationType
             )
         case .privateKey(let text, let chain):
             try walletKeyStore.importPrivateKey(
