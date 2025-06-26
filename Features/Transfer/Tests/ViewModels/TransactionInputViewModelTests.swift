@@ -25,7 +25,7 @@ struct TransactionInputViewModelTests {
     @Test
     func testValueWithError() {
         let viewModel = TransactionInputViewModel(
-            data: .mock(),
+            data: .mock(value: 100),
             transactionData: nil,
             metaData: nil,
             transferAmount: .failure( TransferAmountCalculatorError.insufficientBalance(.mock()))
@@ -43,7 +43,7 @@ struct TransactionInputViewModelTests {
             transferAmount: nil
         )
         
-        #expect(viewModel.value == BigInt(100))
+        #expect(viewModel.value == .zero)
     }
     
     @Test

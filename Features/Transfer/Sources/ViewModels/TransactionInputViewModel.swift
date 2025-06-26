@@ -32,7 +32,7 @@ struct TransactionInputViewModel: Sendable {
     var value: BigInt {
         switch transferAmount {
         case .success(let amount): amount.value
-        default: data.value
+        case .failure, .none: data.value
         }
     }
 
