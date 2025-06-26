@@ -10,7 +10,7 @@ import Primitives
 import enum Primitives.AnyError
 import enum Primitives.Chain
 import enum Primitives.EVMChain
-import Signer
+//import Signer
 
 public final class SwapService: Sendable {
     private let swapper: GemSwapperProtocol

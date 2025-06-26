@@ -10,6 +10,7 @@ import PrimitivesComponents
 import Keystore
 import Assets
 import Transfer
+import SwapService
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
@@ -77,6 +78,7 @@ struct SelectAssetSceneNavigationStack: View {
                             nodeService: nodeService,
                             stakeService: stakeService,
                             scanService: scanService,
+                            swapService: SwapService(nodeProvider: nodeService),
                             type: .asset(input.asset),
                             onRecipientDataAction: {
                                 navigationPath.append($0)
