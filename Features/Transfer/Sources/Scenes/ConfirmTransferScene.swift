@@ -7,6 +7,7 @@ import Localization
 import InfoSheet
 import PrimitivesComponents
 import FiatConnect
+import Validators
 
 public struct ConfirmTransferScene: View {
     @State private var model: ConfirmTransferViewModel
@@ -156,7 +157,11 @@ extension ConfirmTransferScene {
                 ListItemErrorView(
                     errorTitle: model.listErrorTitle,
                     error: listError,
-                    infoAction: model.shouldShowListErrorInfo ? { model.onSelectNetworkFeeInfo() } : nil
+                    infoAction: model.shouldShowListErrorInfo ? {
+                        if let error = listError as? TransferAmountCalculatorError {
+                            model.onSelectListError(error: error)
+                        }
+                    } : nil
                 )
             }
         }

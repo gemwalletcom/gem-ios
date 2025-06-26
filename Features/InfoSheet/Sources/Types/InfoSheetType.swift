@@ -14,6 +14,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case slippage
     // asset
     case assetStatus(AssetScoreType)
+    case accountMinimalBalance(assetAmount: String)
 
     public var id: String {
         switch self {
@@ -24,6 +25,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case .priceImpact: "priceImpact"
         case .slippage: "slippage"
         case .assetStatus(let status): "assetStatus_\(status.rawValue)"
+        case let .accountMinimalBalance(assetAmount): "accountMinimalBalance_\(assetAmount)"
         }
     }
 }

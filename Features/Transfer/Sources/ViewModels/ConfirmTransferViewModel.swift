@@ -17,6 +17,7 @@ import Signer
 import Validators
 import Style
 import SwiftUI
+import Formatters
 
 @Observable
 @MainActor
@@ -216,6 +217,22 @@ public final class ConfirmTransferViewModel {
 // MARK: - Business Logic
 
 extension ConfirmTransferViewModel {
+    func onSelectListError(error: TransferAmountCalculatorError) {
+        switch error {
+        case .insufficientBalance:
+            break
+        case .insufficientNetworkFee:
+            onSelectNetworkFeeInfo()
+        case .minimumAccountBalanceTooLow(let asset, let required):
+            let amount = ValueFormatter(style: .short).string(
+                required,
+                decimals: asset.decimals.asInt,
+                currency: asset.symbol
+            )
+            isPresentingSheet = .info(.accountMinimalBalance(assetAmount: amount))
+        }
+    }
+
     func onSelectNetworkFeeInfo() {
         isPresentingSheet = .info(.networkFee(dataModel.chain))
     }

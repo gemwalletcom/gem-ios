@@ -27,6 +27,7 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         case .priceImpact: Docs.url(.priceImpact)
         case .slippage: Docs.url(.slippage)
         case .assetStatus: Docs.url(.tokenVerification)
+        case .accountMinimalBalance: Docs.url(.accountMinimalBalance)
         }
     }
 
@@ -50,6 +51,7 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             case .suspicious: Localized.Asset.Verification.suspicious
             case .unverified: Localized.Asset.Verification.unverified
             }
+        case .accountMinimalBalance: "Minimum Balance"
         }
     }
 
@@ -72,6 +74,8 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             case .unverified: Localized.Info.AssetStatus.Unverified.description
             case .suspicious: Localized.Info.AssetStatus.Suspicious.description
             }
+        case let .accountMinimalBalance(assetAmount):
+            "Keep at least \(assetAmount) in this account so it stays active. This refundable reserve blocks spam and covers on-chain storage, keeping the network fast and low-cost."
         }
     }
 
@@ -108,6 +112,8 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         case .priceImpact:
             return .image(Images.Logo.logo)
         case .slippage:
+            return .image(Images.Logo.logo)
+        case .accountMinimalBalance:
             return .image(Images.Logo.logo)
         case .assetStatus(let status):
             switch status {
