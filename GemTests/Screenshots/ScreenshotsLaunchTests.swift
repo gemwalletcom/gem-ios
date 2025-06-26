@@ -75,7 +75,7 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "stake").tap()
         
-        sleep(2)
+        sleep(5)
 
         try snapshoter.snap("earn")
 
@@ -89,13 +89,21 @@ final class ScreenshotsLaunchTests: XCTestCase {
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         sleep(1)
-
-        app.tabBars.buttons.element(boundBy: 2).tap()
+        
+        if app.tabBars.element.exists {
+            app.tabBars.buttons.element(boundBy: 2).tap()
+        } else {
+            app.buttons.element(boundBy: 2).tap()
+        }
 
         try snapshoter.snap("activity")
 
-        app.tabBars.buttons.element(boundBy: 3).tap()
-
+        if app.tabBars.element.exists {
+            app.tabBars.buttons.element(boundBy: 3).tap()
+        } else {
+            app.buttons.element(boundBy: 3).tap()
+        }
+        
         try snapshoter.snap("control")
     }
 }
