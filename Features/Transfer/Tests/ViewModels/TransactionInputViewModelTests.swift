@@ -31,7 +31,7 @@ struct TransactionInputViewModelTests {
             transferAmountResult: .error(nil, TransferAmountCalculatorError.insufficientBalance(.mock()))
         )
         
-        #expect(viewModel.value == BigInt(100))
+        #expect(viewModel.value == .zero)
     }
     
     @Test
@@ -43,7 +43,7 @@ struct TransactionInputViewModelTests {
             transferAmountResult: nil
         )
         
-        #expect(viewModel.value == BigInt(100))
+        #expect(viewModel.value == .zero)
     }
     
     @Test
