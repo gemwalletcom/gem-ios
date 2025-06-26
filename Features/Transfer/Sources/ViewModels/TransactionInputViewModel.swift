@@ -7,7 +7,7 @@ import Primitives
 import PrimitivesComponents
 import Preferences
 
-struct TransactionInputViewModel {
+struct TransactionInputViewModel: Sendable {
     let data: TransferData
     let transactionData: TransactionData?
     let metaData: TransferDataMetadata?

@@ -3,7 +3,7 @@
 import SwiftUI
 import Style
 
-public protocol StateButtonViewable: Sendable{
+public protocol StateButtonViewable: Sendable {
     var title: String { get }
     var type: ButtonType { get }
     var icon: Image? { get }

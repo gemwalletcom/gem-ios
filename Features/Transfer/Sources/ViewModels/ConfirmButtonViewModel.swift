@@ -1,47 +1,63 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Primitives
-import SwiftUI
-import Localization
-import Components
-import Style
+ import Primitives
+ import SwiftUI
+ import Localization
+ import Components
+ import Style
 
-struct ConfirmButtonViewModel: StateButtonViewable {
-    let title: String
-    let type: ButtonType
-    let icon: Image?
-    private let onAction: @MainActor @Sendable () -> Void
+ struct ConfirmButtonViewModel: StateButtonViewable {
+     private let perform: @MainActor @Sendable () -> Void
+     private let state: StateViewType<TransactionInputViewModel>
 
-    func action() { onAction() }
+     let icon: Image?
 
-    init(
-        state: StateViewType<TransactionInputViewModel>,
-        icon: Image? = nil,
-        infoText: String? = nil,
-        action: @MainActor @Sendable @escaping () -> Void
-    ) {
-        self.title = Self.title(state)
-        self.type = Self.type(state)
-        self.icon = icon
-        self.onAction = action
-    }
+     init(
+         state: StateViewType<TransactionInputViewModel>,
+         icon: Image?,
+         onAction: @MainActor @Sendable @escaping (ConfrimButtonActionType) -> Void
+     ) {
+         self.state = state
+         self.icon = icon
+         self.perform = { onAction(Self.actionType(for: state)) }
+     }
 
-    private static func title(_ state: StateViewType<TransactionInputViewModel>) -> String {
-        if state.isError { return Localized.Common.tryAgain }
+     var title: String {
+         switch Self.actionType(for: state) {
+         case .buy: Localized.Errors.insufficientFunds
+         case .confirm: Localized.Transfer.confirm
+         case .retry: Localized.Common.tryAgain
+         }
+     }
 
-        switch state.value?.transferAmount {
-        case .success, .none: return Localized.Transfer.confirm
-        case .failure: return Localized.Errors.insufficientFunds
-        }
-    }
+     var type: ButtonType { Self.buttonType(for: state) }
 
-    static func type(_ state: StateViewType<TransactionInputViewModel>) -> ButtonType {
-        let isPrimary: Bool = {
-            switch state {
-            case .noData, .loading, .error: true
-            case let .data(model): model.transferAmount?.isSuccess ?? false
-            }
-        }()
-        return isPrimary ? .primary(state, isDisabled: state.isNoData) : .secondary
-    }
-}
+     func action() { perform() }
+ }
+
+ // MARK: - Private
+
+ extension ConfirmButtonViewModel {
+     private static func actionType(
+         for state: StateViewType<TransactionInputViewModel>
+     ) -> ConfrimButtonActionType {
+         if state.isError { return .retry }
+
+         switch buttonType(for: state) {
+         case .primary:   return .confirm
+         case .secondary: return .buy
+         }
+     }
+
+     private static func buttonType(
+           for state: StateViewType<TransactionInputViewModel>
+       ) -> ButtonType {
+           let isPrimary: Bool = {
+               switch state {
+               case .noData, .loading, .error: true
+               case let .data(model): model.transferAmount?.isSuccess ?? false
+               }
+           }()
+           return isPrimary ? .primary(state, isDisabled: state.isNoData) : .secondary
+       }
+ }

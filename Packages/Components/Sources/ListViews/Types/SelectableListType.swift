@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum SelectableListType<T> {
+public enum SelectableListType<T: Sendable>: Sendable {
     case plain([T])
     case section([ListSection<T>])
     

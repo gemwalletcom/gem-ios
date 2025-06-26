@@ -201,7 +201,14 @@ public final class ConfirmTransferViewModel {
         ConfirmButtonViewModel(
             state: state,
             icon: confirmButtonIcon,
-            action: onSelectConfirmButton
+            onAction: { [weak self] in
+                guard let self else { return }
+                switch $0 {
+                case .buy: self.onSelectBuy()
+                case .confirm: self.onSelectConfirmTransfer()
+                case .retry: self.fetch()
+                }
+            }
         )
     }
 }
@@ -241,22 +248,6 @@ extension ConfirmTransferViewModel {
         await fetch()
     }
 
-    func onSelectConfirmButton() {
-        if state.isError {
-            fetch()
-            return
-        }
-        switch buttonType {
-        case .primary:
-            onSelectConfirmTransfer()
-        case .secondary:
-            isPresentingSheet = .fiatConnect(
-                assetAddress: assetAddress,
-                waletId: wallet.walletId
-            )
-        }
-    }
-
     func fetch() {
         Task {
             await fetch()
@@ -267,6 +258,12 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
+    private func onSelectBuy() {
+        isPresentingSheet = .fiatConnect(
+            assetAddress: assetAddress,
+            waletId: wallet.walletId
+        )
+    }
     private func onSelectConfirmTransfer() {
         guard let value = state.value,
               let transactionData = value.transactionData,
@@ -386,7 +383,6 @@ extension ConfirmTransferViewModel {
     private var availableValue: BigInt { dataModel.availableValue(metadata: metadata) }
     private var senderLink: BlockExplorerLink { explorerService.addressUrl(chain: dataModel.chain, address: senderAddress) }
     private var assetAddress: AssetAddress { AssetAddress(asset: dataModel.asset, address: senderAddress)}
-    private var buttonType: ButtonType { ConfirmButtonViewModel.type(state) }
     private var confirmButtonIcon: Image? {
         guard !state.isError, state.value?.transferAmount?.isSuccess ?? false,
               let auth = try? keystore.getPasswordAuthentication(),
