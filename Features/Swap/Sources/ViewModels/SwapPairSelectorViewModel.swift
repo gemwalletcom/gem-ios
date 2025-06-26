@@ -19,6 +19,12 @@ struct SwapPairSelectorViewModel: Equatable {
 extension SwapPairSelectorViewModel {
     static func defaultSwapPair(for asset: Asset) -> SwapPairSelectorViewModel {
         if asset.type == .native {
+            if ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] != nil {
+                return SwapPairSelectorViewModel(
+                    fromAssetId: asset.chain.assetId,
+                    toAssetId: AssetId(chain: .ethereum)
+                )
+            }
             return SwapPairSelectorViewModel(
                 fromAssetId: asset.chain.assetId,
                 toAssetId: nil

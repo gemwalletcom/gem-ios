@@ -20,9 +20,8 @@ public struct ConfirmTransferScene: View {
             Spacer()
             StateButton(
                 text: model.buttonTitle,
-                viewState: model.state,
+                type: .primary(model.state, isDisabled: model.isButtonDisabled),
                 image: statefullButtonImage,
-                disabledRule: model.shouldDisableButton,
                 action: model.onSelectConfirmButton
             )
             .frame(maxWidth: .scene.button.maxWidth)

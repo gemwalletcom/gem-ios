@@ -45,6 +45,7 @@ public final class SwapSceneViewModel {
     var amountInputModel: InputValidationViewModel = InputValidationViewModel(mode: .onDemand)
     var toValue: String = ""
     var focusField: SwapScene.Field?
+    var rateDirection: AssetRateFormatter.Direction = .direct
 
     private let provider: any SwapDataProviding
     private let preferences: Preferences
@@ -152,6 +153,10 @@ public final class SwapSceneViewModel {
     var isSwitchAssetButtonDisabled: Bool {
         swapState.isLoading
     }
+    
+    var shouldShowAdditionalInfo: Bool {
+        swapState.quotes.isLoading == false
+    }
 
     var isLoading: Bool {
         swapState.quotes.isLoading
@@ -173,7 +178,8 @@ public final class SwapSceneViewModel {
             fromAsset: fromAsset.asset,
             toAsset: toAsset.asset,
             fromValue: selectedSwapQuote.fromValueBigInt,
-            toValue: selectedSwapQuote.toValueBigInt
+            toValue: selectedSwapQuote.toValueBigInt,
+            direction: rateDirection
         )
     }
 
@@ -198,6 +204,13 @@ public final class SwapSceneViewModel {
             ),
             type: type
         )
+    }
+    
+    func switchRateDirection() {
+        switch rateDirection {
+        case .direct: rateDirection = .inverse
+        case .inverse: rateDirection = .direct
+        }
     }
 
     public func swapProvidersViewModel(asset: AssetData) -> SwapProvidersViewModel {

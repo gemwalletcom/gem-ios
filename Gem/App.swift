@@ -69,6 +69,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         AppResolver.main.services.onstartService.migrations()
         AppResolver.main.storages.observablePreferences.preferences.incrementLaunchesCount()
 
+        #if DEBUG
+        // when running screenshots, set local currency
+        if ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] != nil {
+            if let currency = Locale.current.currency {
+                Preferences.standard.currency = currency.identifier
+            }
+        }
+        #endif
+        
         let device = UIDevice.current
         if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
             fatalError()

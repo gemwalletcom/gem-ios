@@ -85,7 +85,7 @@ public final class RecipientSceneViewModel {
     var memoField: String { Localized.Transfer.memo }
 
     var actionButtonTitle: String { Localized.Common.continue }
-    var actionButtonState: StateButtonStyle.State {
+    var actionButtonState: ButtonState {
         switch nameResolveState {
         case .none: addressInputModel.isValid || addressInputModel.text.isEmpty ? .normal : .disabled
         case .loading, .error: .disabled

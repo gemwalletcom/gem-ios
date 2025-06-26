@@ -12,22 +12,12 @@ import ImageGalleryService
 public struct CollectibleScene: View {
     @Environment(\.openURL) private var openURL
 
-    @State private var isPresentingPhotoPermissionMessage: Bool = false
-    @State private var isPresentingErrorMessage: String?
-    @State private var isPresentingSaveToPhotosToast = false
-    @State private var isPresentingSetAsAvatarToast = false
-    @Binding private var isPresentingCollectibleOptions: Bool?
-    
-    let model: CollectibleViewModel
-    
-    public init(
-        model: CollectibleViewModel,
-        isPresentingCollectibleOptions: Binding<Bool?>
-    ) {
-        self.model = model
-        _isPresentingCollectibleOptions = isPresentingCollectibleOptions
+    @State private var model: CollectibleViewModel
+
+    public init(model: CollectibleViewModel) {
+        _model = State(initialValue: model)
     }
-    
+
     public var body: some View {
         List {
             headerSectionView
@@ -42,7 +32,7 @@ public struct CollectibleScene: View {
         .environment(\.defaultMinListHeaderHeight, 0)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .alert(Localized.Permissions.accessDenied, isPresented: $isPresentingPhotoPermissionMessage) {
+        .alert(Localized.Permissions.accessDenied, isPresented: $model.isPresentingPhotoPermissionMessage) {
             Button(Localized.Common.openSettings) {
                 onSelectOpenSettings()
             }
@@ -51,26 +41,22 @@ public struct CollectibleScene: View {
             Text(Localized.Permissions.Image.PhotoAccess.Denied.description)
         }
         .alert("",
-            isPresented: $isPresentingErrorMessage.mappedToBool(),
-            actions: {},
-            message: {
-                Text(isPresentingErrorMessage ?? "")
-            }
+               isPresented: $model.isPresentingErrorMessage.mappedToBool(),
+               actions: {},
+               message: {
+            Text(model.isPresentingErrorMessage ?? "")
+        }
         )
         .toast(
-            isPresenting: $isPresentingSaveToPhotosToast,
+            isPresenting: $model.isPresentingSaveToPhotosToast,
             title: Localized.Nft.saveToPhotos,
             systemImage: SystemImage.checkmark
         )
         .toast(
-            isPresenting: $isPresentingSetAsAvatarToast,
+            isPresenting: $model.isPresentingSetAsAvatarToast,
             title: Localized.Nft.setAsAvatar,
             systemImage: SystemImage.checkmark
         )
-        .confirmationDialog(model.title, presenting: $isPresentingCollectibleOptions) {_ in
-            Button(Localized.Nft.saveToPhotos, action: onSelectSaveToGallery)
-            Button(Localized.Nft.setAsAvatar, action: onSelectSetAsAvatar)
-        }
     }
 }
 
@@ -95,29 +81,29 @@ extension CollectibleScene {
             .custom(
                 title: Localized.Nft.saveToPhotos,
                 systemImage: SystemImage.gallery,
-                action: onSelectSaveToGallery
+                action: model.onSelectSaveToGallery
             ),
             .custom(
                 title: Localized.Nft.setAsAvatar,
                 systemImage: SystemImage.emoji,
-                action: onSelectSetAsAvatar
+                action: model.onSelectSetAsAvatar
             )
         ])
     }
-    
+
     private var assetInfoSectionView: some View {
         Section {
             ListItemView(
                 title: model.collectionTitle,
                 subtitle: model.collectionText
             )
-            
+
             ListItemImageView(
                 title: model.networkTitle,
                 subtitle: model.networkText,
                 assetImage: model.networkAssetImage
             )
-            
+
             if model.showContract {
                 ListItemView(title: model.contractTitle, subtitle: model.contractText)
                     .contextMenu(.copy(value: model.contractValue))
@@ -125,7 +111,7 @@ extension CollectibleScene {
             ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)
         }
     }
-    
+
     private var attributesSectionView: some View {
         Section(model.attributesTitle) {
             ForEach(model.attributes) {
@@ -133,7 +119,7 @@ extension CollectibleScene {
             }
         }
     }
-    
+
     private var linksSectionView: some View {
         Section(Localized.Social.links) {
             SocialLinksView(model: model.socialLinksViewModel)
@@ -144,33 +130,6 @@ extension CollectibleScene {
 // MARK: - Actions
 
 extension CollectibleScene {
-    private func onSelectSaveToGallery() {
-        Task {
-            do {
-                try await model.saveImageToGallery()
-                isPresentingSaveToPhotosToast = true
-            } catch let error as ImageGalleryServiceError {
-                switch error {
-                case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
-                    isPresentingErrorMessage = Localized.Errors.errorOccured
-                case .permissionDenied:
-                    isPresentingPhotoPermissionMessage = true
-                }
-            }
-        }
-    }
-    
-    private func onSelectSetAsAvatar() {
-        Task {
-            do {
-                try await model.setWalletAvatar()
-                isPresentingSetAsAvatarToast = true
-            } catch {
-                NSLog("Set nft avatar error: \(error)")
-            }
-        }
-    }
-
     private func onSelectOpenSettings() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(settingsURL)

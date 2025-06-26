@@ -15,7 +15,7 @@ import Signer
 public final class SwapService: Sendable {
     private let swapper: GemSwapperProtocol
     private let swapConfig = GemstoneConfig.shared.getSwapConfig()
-    
+
     public init(swapper: GemSwapperProtocol) {
         self.swapper = swapper
     }

@@ -25,7 +25,7 @@ struct SwapSceneViewModelTests {
     }
     
     @Test
-    func swapEstimationText() async {
+    func swapEstimationText() {
         let model = SwapSceneViewModel.mock()
         
         model.selectedSwapQuote = .mock(etaInSeconds: nil)
@@ -39,6 +39,27 @@ struct SwapSceneViewModelTests {
     }
     
     @Test
+    func switchRate() async {
+        let model = await model()
+        
+        #expect(model.rateText == "1 ETH ≈ 250,000.00 USDT")
+        
+        model.switchRateDirection()
+        #expect(model.rateText == "1 USDT ≈ 0.000004 ETH")
+    }
+    
+    @Test
+    func additionalInfoVisibility() async {
+        let model = SwapSceneViewModel.mock()
+
+        model.swapState.quotes = .loading
+        #expect(model.shouldShowAdditionalInfo == false)
+
+        model.swapState.quotes = .data([.mock()])
+        #expect(model.shouldShowAdditionalInfo)
+	}
+
+	@Test
     func insufficientBalance() {
         let model = SwapSceneViewModel.mock()
         model.onChangeFromAsset(old: nil, new: .mock(asset: .mockEthereum(), balance: .init(available: 1000000000000000000)))

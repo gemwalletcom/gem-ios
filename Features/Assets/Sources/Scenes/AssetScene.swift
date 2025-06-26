@@ -34,6 +34,22 @@ public struct AssetScene: View {
                     closeAction: model.onCloseBanner
                 )
             }
+            if model.showStatus {
+                Section {
+                    NavigationCustomLink(with:
+                        ListItemImageView(
+                            title: Localized.Transaction.status,
+                            subtitle: model.scoreViewModel.status,
+                            subtitleStyle: model.scoreViewModel.statusStyle,
+                            assetImage: model.scoreViewModel.assetImage,
+                            infoAction: { model.onSelectTokenStatus() }
+                        )
+                    ) {
+                        model.onSelectTokenStatus()
+                    }
+                }
+            }
+            
             Section {
                 NavigationLink(
                     value: Scenes.Price(asset: model.assetModel.asset),
@@ -49,14 +65,7 @@ public struct AssetScene: View {
                 } else {
                     networkView
                 }
-                if model.showStatus {
-                    ListItemImageView(
-                        title: Localized.Transaction.status,
-                        subtitle: model.scoreViewModel.status,
-                        assetImage: model.scoreViewModel.assetImage,
-                        infoAction: { model.onSelectTokenStatus() }
-                    )
-                }
+                
             }
 
             if model.showBalances {

@@ -19,6 +19,9 @@ public struct Colors {
     public static let secondaryText = Color.dynamicColor("#818181")
     public static let listStyleColor = UIColor.dynamicColor(UIColor.systemBackground.color, dark: UIColor.secondarySystemBackground.color)
     public static let insetGroupedListStyle = UIColor.dynamicColor(UIColor.systemGroupedBackground.color, dark: UIColor.black.color)
+
+    public static let blueSecondary = Color.dynamicColor("#4364FF", dark: "#3A4EB8")
+    public static let blueSecondaryHover = Color.dynamicColor("#3958E6", dark: "#3343A1")
 }
 
 // MARK: - Empty
@@ -38,6 +41,8 @@ extension Colors {
         ("Black", Colors.black),
         ("Blue", Colors.blue),
         ("Blue Dark", Colors.blueDark),
+        ("Blue Secondary", Colors.blueSecondary),
+        ("Blue Secondary Hover", Colors.blueSecondaryHover),
         ("Red", Colors.red),
         ("Red Light", Colors.redLight),
         ("Green", Colors.green),
