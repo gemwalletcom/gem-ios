@@ -67,18 +67,7 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "SKIP_ANIMATIONS"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
       <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "SKIP_ANIMATIONS"
-            value = "YES"
-            isEnabled = "YES">
-         </EnvironmentVariable>
          <EnvironmentVariable
             key = "SCREENSHOTS_SECRET_PHRASE"
             value = "$(SCREENSHOTS_SECRET_PHRASE)"

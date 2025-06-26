@@ -13,6 +13,11 @@ final class ScreenshotsLaunchTests: XCTestCase {
     @MainActor func testScreenshots() throws {
         // Take a screenshot of an app's first window.
         let app = XCUIApplication()
+        
+        if let path = ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] {
+          app.launchEnvironment["SCREENSHOTS_PATH"] = path
+        }
+        
         app.launch()
         let snapshoter = Snapshoter(app: app)
 
@@ -50,9 +55,6 @@ final class ScreenshotsLaunchTests: XCTestCase {
         
         collectionViewsQuery.buttons.element(matching: .button, identifier: "swap").tap()
         
-        app.staticTexts["SOL"].tap()
-        app.staticTexts["Ethereum"].tap()
-        
         let fromTextField = app.textFields.element(boundBy: 0)
         fromTextField.tap()
         fromTextField.typeText("1\n")
@@ -73,7 +75,7 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "stake").tap()
         
-        sleep(2)
+        sleep(5)
 
         try snapshoter.snap("earn")
 
@@ -87,13 +89,21 @@ final class ScreenshotsLaunchTests: XCTestCase {
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         sleep(1)
-
-        app.tabBars.buttons.element(boundBy: 3).tap()
+        
+        if app.tabBars.element.exists {
+            app.tabBars.buttons.element(boundBy: 2).tap()
+        } else {
+            app.buttons.element(boundBy: 2).tap()
+        }
 
         try snapshoter.snap("activity")
 
-        app.tabBars.buttons.element(boundBy: 4).tap()
-
+        if app.tabBars.element.exists {
+            app.tabBars.buttons.element(boundBy: 3).tap()
+        } else {
+            app.buttons.element(boundBy: 3).tap()
+        }
+        
         try snapshoter.snap("control")
     }
 }
@@ -111,7 +121,7 @@ struct Snapshoter {
         let screenshotData = app.windows.firstMatch.screenshot().pngRepresentation
 
         let path = ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"]!
-        let directoryPath = "\(path)/\(try Locale.current.appstoreLanguageIdentifier())"
+        let directoryPath = "\(path)/\(Locale.current.appstoreLanguageIdentifier())"
         
         let fileURL = URL(fileURLWithPath: "\(directoryPath)/\(UIDevice.current.model.lowercased())_\(name).png")
 

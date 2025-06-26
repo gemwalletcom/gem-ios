@@ -91,17 +91,6 @@ struct TransactionInputViewModelTests {
     }
 }
 
-extension TransferData {
-    static func mock() -> TransferData {
-        TransferData(
-            type: .transfer(.mock()),
-            recipientData: .mock(),
-            value: BigInt(100),
-            canChangeValue: true
-        )
-    }
-}
-
 extension TransactionData {
     static func mock() -> TransactionData {
         TransactionData(
