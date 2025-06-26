@@ -5,7 +5,7 @@ import Primitives
 
 extension TransferData {
     public static func mock(
-        type: TransferDataType = .transfer(.mock()),
+        type: TransferDataType = .transfer(.mock())
     ) -> Self {
         .init(
             type: type,

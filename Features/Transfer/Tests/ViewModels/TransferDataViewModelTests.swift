@@ -20,7 +20,7 @@ struct TransferDataViewModelTests {
 
 private extension TransferDataViewModel {
     static func mock(
-        type: TransferDataType = .transfer(.mock()),
+        type: TransferDataType = .transfer(.mock())
     ) -> TransferDataViewModel {
         return TransferDataViewModel(
             data: TransferData.mock(type: type)
