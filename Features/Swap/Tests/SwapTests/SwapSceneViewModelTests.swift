@@ -57,6 +57,20 @@ struct SwapSceneViewModelTests {
 
         model.swapState.quotes = .data([.mock()])
         #expect(model.shouldShowAdditionalInfo)
+	}
+
+	@Test
+    func insufficientBalance() {
+        let model = SwapSceneViewModel.mock()
+        model.onChangeFromAsset(old: nil, new: .mock(asset: .mockEthereum(), balance: .init(available: 1000000000000000000)))
+        model.amountInputModel.text = "1.1"
+
+        #expect(model.actionButtonState.isError)
+        #expect(model.actionButtonTitle == "Insufficient ETH balance.")
+        
+        model.amountInputModel.text = "0.9"
+        #expect(!model.actionButtonState.isError)
+        #expect(model.actionButtonTitle == "Swap")
     }
     
     // MARK: - Private methods
