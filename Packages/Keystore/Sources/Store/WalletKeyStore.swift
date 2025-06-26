@@ -19,14 +19,14 @@ public struct WalletKeyStore: Sendable {
         self.keyStore = try! WalletCore.KeyStore(keyDirectory: directory)
     }
     
-    public func importWallet(name: String, words: [String], chains: [Chain], password: String, creationType: WalletCreationType) throws -> Primitives.Wallet {
+    public func importWallet(name: String, words: [String], chains: [Chain], password: String) throws -> Primitives.Wallet {
         let wallet = try keyStore.import(
             mnemonic: MnemonicFormatter.fromArray(words: words),
             name: name,
             encryptPassword: password,
             coins: []
         )
-        return try addCoins(wallet: wallet, chains: chains, password: password, creationType: creationType)
+        return try addCoins(wallet: wallet, chains: chains, password: password)
     }
 
     public static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
@@ -74,12 +74,11 @@ public struct WalletKeyStore: Sendable {
             accounts: [account],
             order: 0,
             isPinned: false,
-            imageUrl: nil,
-            creationType: .imported
+            imageUrl: nil
         )
     }
 
-    func addCoins(wallet: WalletCore.Wallet, chains: [Chain], password: String, creationType: WalletCreationType) throws -> Primitives.Wallet {
+    func addCoins(wallet: WalletCore.Wallet, chains: [Chain], password: String) throws -> Primitives.Wallet {
         let exclude = [Chain.solana]
         let coins = chains.filter { !exclude.contains($0) } .map { $0.coinType }.asSet().asArray()
         
@@ -113,15 +112,13 @@ public struct WalletKeyStore: Sendable {
             accounts: accounts,
             order: 0,
             isPinned: false,
-            imageUrl: nil,
-            creationType: creationType
+            imageUrl: nil
         )
     }
     
     func addChains(chains: [Chain], wallet: Primitives.Wallet, password: String) throws -> Primitives.Wallet {
-        let creationType = wallet.creationType
         let wallet = try getWallet(id: wallet.id)
-        return try addCoins(wallet: wallet, chains: chains, password: password, creationType: creationType)
+        return try addCoins(wallet: wallet, chains: chains, password: password)
     }
     
     private func getWallet(id: String) throws -> WalletCore.Wallet {

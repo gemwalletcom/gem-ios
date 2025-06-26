@@ -136,8 +136,7 @@ extension WalletRecord {
             accounts: [],
             order: order.asInt32,
             isPinned: isPinned,
-            imageUrl: imageUrl,
-            creationType: WalletCreationType(rawValue: creationType) ?? .created
+            imageUrl: imageUrl
         )
     }
 }
@@ -151,8 +150,7 @@ extension Wallet {
             index: index.asInt,
             order: 0,
             isPinned: false,
-            imageUrl: imageUrl,
-            creationType: creationType.rawValue
+            imageUrl: imageUrl
         )
     }
 }

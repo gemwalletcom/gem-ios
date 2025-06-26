@@ -220,9 +220,6 @@ extension WalletSceneViewModel {
     }
     
     private func shouldStartLoadingAssets() {
-        switch wallet.creationType {
-        case .imported: isLoadingAssets = !WalletPreferences(walletId: wallet.id).isDiscoveredAssets
-        case .created: isLoadingAssets = false
-        }
+        isLoadingAssets = !WalletPreferences(walletId: wallet.id).isEmptyWallet
     }
 }

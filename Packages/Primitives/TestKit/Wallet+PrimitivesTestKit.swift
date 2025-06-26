@@ -18,8 +18,7 @@ public extension Wallet {
             accounts: accounts,
             order: 0,
             isPinned: false,
-            imageUrl: nil,
-            creationType: .created
+            imageUrl: nil
         )
     }
 }

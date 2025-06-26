@@ -7,6 +7,7 @@ import SwiftUI
 import Style
 import Localization
 import PrimitivesComponents
+import Preferences
 
 // TODO: - migrate to @observable macro
 class VerifyPhraseViewModel: ObservableObject {
@@ -76,7 +77,9 @@ class VerifyPhraseViewModel: ObservableObject {
     
     func importWallet() throws  {
         let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
-        try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains), creationType: .created)
+        let wallet = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
+
+        WalletPreferences(walletId: wallet.id).markAsEmptyWallet()
         onFinish?()
     }
 }

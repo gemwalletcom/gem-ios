@@ -5,6 +5,7 @@ import Primitives
 import GemAPI
 import ChainService
 import BalanceService
+import Preferences
 
 public struct DiscoverAssetsService: Sendable {
     private let balanceService: BalanceService
@@ -23,6 +24,9 @@ public struct DiscoverAssetsService: Sendable {
         wallet: Wallet,
         fromTimestamp: Int
     ) async throws -> AssetUpdate {
+        if WalletPreferences(walletId: wallet.id).isEmptyWallet {
+            return AssetUpdate(walletId: wallet.walletId, assetIds: [])
+        }
         let assetIds = try await assetsService
             .getAssetsByDeviceId(
                 deviceId: deviceId,
