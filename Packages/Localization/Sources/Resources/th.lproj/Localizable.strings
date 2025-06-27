@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "กระเป๋าเงินที่คุณไม่สามารถเข้าถึงได้แต่คุณสามารถดูธุรกรรมและการเคลื่อนไหวได้";
-"info.network_fee.description" = "%@ เครือข่ายจะเรียกเก็บค่าธรรมเนียมการทำธุรกรรม ซึ่งแตกต่างกันไปตามการใช้งานเครือข่าย จ่ายให้กับนักขุดเพื่อดำเนินการธุรกรรมของคุณ";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "ไม่สามารถทำธุรกรรมให้เสร็จสมบูรณ์ได้เนื่องจากเกิดข้อผิดพลาด เช่น เงินไม่เพียงพอ ข้อมูลที่ป้อนไม่ถูกต้อง หรือเครือข่ายปฏิเสธ โปรดตรวจสอบรายละเอียดและลองอีกครั้ง";
 "info.transaction.pending.description" = "ธุรกรรมได้รับการส่งแล้วและกำลังรอการยืนยันบนเครือข่าย เวลาในการประมวลผลอาจแตกต่างกัน โปรดตรวจสอบอีกครั้งเพื่อดูการอัปเดต";
 "info.transaction.success.description" = "ธุรกรรมเสร็จสมบูรณ์และได้รับการยืนยันบนเครือข่ายแล้ว คุณสามารถตรวจสอบรายละเอียดเพื่อยืนยันสถานะได้";
@@ -420,3 +420,4 @@
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
+"info.account_minimum_balance.title" = "ยอดคงเหลือขั้นต่ำ";

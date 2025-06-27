@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Мережева плата";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Гаманець, до якого у вас немає доступу, але ви можете спостерігати за його транзакціями та рухами.";
-"info.network_fee.description" = "Мережа %@ стягує комісію за транзакцію, яка залежить від використання мережі. Виплачується майнерам за обробку вашої транзакції.";
+"info.network_fee.description" = "Кожна транзакція в мережі %@ вимагає комісію в %@, яка сплачується майнерам за обробку вашої транзакції, а не Гаманець Gem. Розмір мережевої комісії залежить від використання мережі.";
 "info.transaction.error.description" = "Транзакцію не вдалося завершити через помилку, таку як недостатня кількість коштів, недійсні дані або відхилення мережею. Перегляньте деталі та повторіть спробу.";
 "info.transaction.pending.description" = "Транзакцію надіслано та очікує підтвердження в мережі. Час обробки може змінюватися. Будь ласка, слідкуйте за оновленнями.";
 "info.transaction.success.description" = "Транзакцію завершено та підтверджено в мережі. Ви можете переглянути деталі, щоб перевірити її статус.";
@@ -420,3 +420,4 @@
 "brand_name" = "Гаманець Gem";
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
+"info.account_minimum_balance.title" = "Мінімальний баланс";

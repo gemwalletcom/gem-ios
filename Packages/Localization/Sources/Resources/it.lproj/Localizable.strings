@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Un portafoglio a cui non hai accesso, ma di cui puoi monitorare le transazioni e i movimenti.";
-"info.network_fee.description" = "%@ la rete addebita una commissione di transazione, che varia in base all'utilizzo della rete. Pagata ai minatori per elaborare la tua transazione.";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "La transazione non è stata completata a causa di un errore, ad esempio fondi insufficienti, input non validi o rifiuto da parte della rete. Si prega di controllare i dettagli e riprovare.";
 "info.transaction.pending.description" = "La transazione è stata inoltrata ed è in attesa di conferma sulla rete. I tempi di elaborazione possono variare. Si prega di controllare regolarmente per aggiornamenti.";
 "info.transaction.success.description" = "La transazione è stata completata e confermata sulla rete. Puoi controllare i dettagli per verificarne lo stato.";
@@ -420,3 +420,4 @@
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
+"info.account_minimum_balance.title" = "Saldo minimo";

@@ -56,18 +56,18 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             case .suspicious: Localized.Asset.Verification.suspicious
             case .unverified: Localized.Asset.Verification.unverified
             }
-        case .accountMinimalBalance: "Minimum Balance"
+        case .accountMinimalBalance: Localized.Info.AccountMinimumBalance.title
         }
     }
 
     public var description: String {
         switch type {
-        case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name)
+        case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol)
         case .insufficientBalance(let asset): return Localized.Info.InsufficientBalance.description(asset.symbol)
         case .insufficientNetworkFee(let asset, let required):
-            let amount = ValueFormatter(style: .short).string(required, decimals: asset.decimals.asInt)
+            let amount = ValueFormatter(style: .short).string(required, asset: asset)
             return Localized.Info.InsufficientNetworkFeeBalance.description(
-                "**\(amount) \(asset.symbol)**",
+                "**\(amount)**",
                 asset.name,
                 asset.symbol
             )
@@ -88,12 +88,8 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             case .suspicious: return Localized.Info.AssetStatus.Suspicious.description
             }
         case .accountMinimalBalance(let asset, let required):
-            let amount = ValueFormatter(style: .short).string(
-                required,
-                decimals: asset.decimals.asInt,
-                currency: asset.symbol
-            )
-            return "Keep at least \(amount) in this account so it stays active. This refundable reserve blocks spam and covers on-chain storage, keeping the network fast and low-cost."
+            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+            return Localized.Transfer.minimumAccountBalance(amount)
         }
     }
 

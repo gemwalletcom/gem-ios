@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Сетевая плата";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Кошелек, к которому у вас нет доступа, но вы можете следить за его транзакциями и движениями.";
-"info.network_fee.description" = "%@ сеть взимает комиссию за транзакцию, которая варьируется в зависимости от использования сети. Выплачивается майнерам за обработку вашей транзакции.";
+"info.network_fee.description" = "Каждая транзакция в сети %@ требует плату в %@ выплачиваемую майнерам за обработку вашей транзакции, а не Кошелек Gem. Сетевые сборы варьируются в зависимости от использования сети.";
 "info.transaction.error.description" = "Транзакция не может быть завершена из-за ошибки, например, недостаточно средств, неверных данных или отклонения сетью. Пожалуйста, проверьте детали и повторите попытку.";
 "info.transaction.pending.description" = "Транзакция была отправлена и ожидает подтверждения в сети. Время обработки может меняться. Пожалуйста, проверяйте обновления.";
 "info.transaction.success.description" = "Транзакция завершена и подтверждена в сети. Вы можете просмотреть детали, чтобы проверить ее статус.";
@@ -420,3 +420,4 @@
 "brand_name" = "Кошелек Gem";
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
+"info.account_minimum_balance.title" = "Минимальный баланс";

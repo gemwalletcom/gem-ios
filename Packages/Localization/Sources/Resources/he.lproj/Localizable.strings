@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "ארנק שאין לך גישה אליו, אבל אתה יכול לצפות בעסקאות ובתנועות שלו.";
-"info.network_fee.description" = "הרשת %@ גובה עמלת עסקאות, המשתנות בהתאם לשימוש ברשת. שולם לכורים כדי לעבד את העסקה שלך.";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "לא ניתן היה להשלים את העסקה עקב שגיאה, כגון חוסר כספים, קלט לא תקין או דחייה על ידי הרשת. אנא בדוק את הפרטים ונסה שוב.";
 "info.transaction.pending.description" = "העסקה הוגשה וממתינה לאישור ברשת. זמני העיבוד עשויים להשתנות. אנא בדקו שוב לעדכונים.";
 "info.transaction.success.description" = "העסקה הושלמה ואושרה ברשת. באפשרותך לעיין בפרטים כדי לאמת את מצבה.";
@@ -420,3 +420,4 @@
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
+"info.account_minimum_balance.title" = "יתרה מינימלית";

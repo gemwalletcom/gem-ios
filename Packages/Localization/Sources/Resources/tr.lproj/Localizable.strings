@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Ağ";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Erişiminizin olmadığı, ancak işlemlerini ve hareketlerini izleyebileceğiniz bir cüzdan.";
-"info.network_fee.description" = "%@ ağı, ağ kullanımına bağlı olarak değişen işlem ücreti alır. İşleminizi gerçekleştirmek için madencilere ödenir.";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "İşlem, yetersiz fon, geçersiz giriş veya ağ tarafından reddedilme gibi bir hata nedeniyle tamamlanamadı. Lütfen ayrıntıları inceleyin ve tekrar deneyin.";
 "info.transaction.pending.description" = "İşlem gönderildi ve ağda onay bekleniyor. İşlem süreleri değişiklik gösterebilir. Lütfen güncellemeler için tekrar kontrol edin.";
 "info.transaction.success.description" = "İşlem tamamlandı ve ağda onaylandı. Durumunu doğrulamak için ayrıntıları inceleyebilirsiniz.";
@@ -420,3 +420,4 @@
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
+"info.account_minimum_balance.title" = "Minimum bakiye";

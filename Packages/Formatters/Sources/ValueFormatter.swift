@@ -66,6 +66,10 @@ public struct ValueFormatter: Sendable {
         )
     }
     
+    public func string(_ value: BigInt, asset: Asset) -> String {
+        string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
+    }
+    
     public func string(_ value: BigInt, decimals: Int, currency: String = "") -> String {
         guard let decimal = BigNumberFormatter.standard.decimal(from: value, decimals: decimals) else {
             return ""

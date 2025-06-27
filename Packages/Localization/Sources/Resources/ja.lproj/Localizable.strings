@@ -281,7 +281,7 @@
 "info.network_fee.title" = "ネットワーク料金";
 "info.watch_wallet.title" = "ウォッチ";
 "info.watch_wallet.description" = "アクセス権はありませんが、取引や動きを監視できるウォレットです。";
-"info.network_fee.description" = "%@ネットワークは、ネットワークの使用状況に応じて変化する取引手数料を請求します。取引を処理するためにマイナーに支払われます。";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "残高不足、無効な入力、ネットワークによる拒否などのエラーにより、取引を完了できませんでした。詳細をご確認の上、再度お試しください。";
 "info.transaction.pending.description" = "取引は送信済みで、ネットワーク上での確認を待っています。処理時間は異なる場合があります。最新情報を再度ご確認ください。";
 "info.transaction.success.description" = "取引は完了し、ネットワーク上で確認されました。詳細を確認してステータスをご確認ください。";
@@ -420,3 +420,4 @@
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
+"info.account_minimum_balance.title" = "最低残高";
