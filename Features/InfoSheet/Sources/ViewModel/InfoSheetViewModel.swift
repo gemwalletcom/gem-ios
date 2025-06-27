@@ -21,6 +21,7 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
     public var url: URL? {
         switch type {
         case .networkFee: Docs.url(.networkFees)
+        case .insufficientNetworkFee: Docs.url(.networkFees)
         case .transactionState: Docs.url(.transactionStatus)
         case .watchWallet: Docs.url(.whatIsWatchWallet)
         case .stakeLockTime: Docs.url(.stakingLockTime)
@@ -34,6 +35,7 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
     public var title: String {
         switch type {
         case .networkFee: Localized.Info.NetworkFee.title
+        case .insufficientNetworkFee(let asset, _): Localized.Info.InsufficientFunds.title(asset.symbol)
         case .transactionState(_,_, let state):
             switch state {
             case .pending: Localized.Transaction.Status.pending
@@ -58,6 +60,11 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
     public var description: String {
         switch type {
         case .networkFee(let chain): Localized.Info.NetworkFee.description(chain.asset.name)
+        case .insufficientNetworkFee(let asset, let amount): Localized.Info.InsufficientFunds.description(
+            amount,
+            asset.name,
+            asset.symbol
+        )
         case .transactionState(_, _, let state):
             switch state {
             case .pending: Localized.Info.Transaction.Pending.description
@@ -82,6 +89,7 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
     public var image: InfoSheetImage? {
         switch type {
         case .networkFee: return .image(Images.Info.networkFee)
+        case .insufficientNetworkFee: return .image(Images.Info.networkFee)
         case .transactionState(let imageURL, let placeholder, let state):
             let stateImage = switch state {
             case .pending: Images.Transaction.State.pending
