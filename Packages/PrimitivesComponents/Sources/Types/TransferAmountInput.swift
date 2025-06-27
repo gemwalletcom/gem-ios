@@ -4,11 +4,6 @@ import Foundation
 import Primitives
 import BigInt
 
-public enum TransferAmountResult {
-    case amount(TransferAmount)
-    case error(TransferAmount?, Error)
-}
-
 public struct TransferAmountInput {
     public let asset: Asset
     public let assetBalance: Balance

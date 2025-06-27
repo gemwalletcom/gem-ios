@@ -5,23 +5,20 @@ import Primitives
 import BigInt
 import Validators
 
+public typealias TransferAmountValidation = Result<TransferAmount, TransferAmountCalculatorError>
+
 public struct TransferAmountCalculator {
     public init() {}
 
-    public func calculateResult(input: TransferAmountInput) -> TransferAmountResult {
+    public func validate(input: TransferAmountInput) -> TransferAmountValidation {
         do {
-            let amount = try calculate(input: input)
-            return .amount(amount)
-        } catch let error as TransferAmountCalculatorError {
-            let amount = TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
-            return .error(amount, error)
+            return .success(try calculate(input: input))
         } catch {
-            let amount = TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
-            return .error(amount, error)
+            return .failure(error)
         }
     }
 
-    public func calculate(input: TransferAmountInput) throws -> TransferAmount {
+    func calculate(input: TransferAmountInput) throws(TransferAmountCalculatorError) -> TransferAmount {
         if input.assetBalance.available == 0 && !input.ignoreValueCheck {
             guard input.fee.isZero else {
                 throw TransferAmountCalculatorError.insufficientBalance(input.asset)
@@ -29,9 +26,8 @@ public struct TransferAmountCalculator {
         }
 
         if input.ignoreValueCheck {
-
             if input.assetFeeBalance.available < input.fee {
-                throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee)
+                throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee, required: input.fee)
             }
 
             return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
@@ -40,9 +36,9 @@ public struct TransferAmountCalculator {
         if input.availableValue < input.value  {
             throw TransferAmountCalculatorError.insufficientBalance(input.asset)
         }
-        
+
         if input.assetFeeBalance.available < input.fee {
-            throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee)
+            throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee, required: input.fee)
         }
 
         if !input.canChangeValue && input.asset == input.assetFee {
@@ -50,7 +46,7 @@ public struct TransferAmountCalculator {
                 throw TransferAmountCalculatorError.insufficientBalance(input.asset)
             }
         }
-        
+
         // max value transfer
         if input.assetBalance.available == input.value {
             if input.asset == input.asset.feeAsset && input.canChangeValue  {
@@ -67,9 +63,9 @@ public struct TransferAmountCalculator {
         {
             throw TransferAmountCalculatorError.minimumAccountBalanceTooLow(input.asset, required: input.asset.chain.minimumAccountBalance)
         }
-        
+
         let useMaxAmount = input.availableValue == input.value
-        
+
         return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: useMaxAmount)
     }
 }

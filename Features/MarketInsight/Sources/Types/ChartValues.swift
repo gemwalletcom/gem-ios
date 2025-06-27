@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public struct ChartValues {
+public struct ChartValues: Sendable {
     public let charts: [ChartDateValue]
 
     public let lowerBoundValue: Double

@@ -6,7 +6,7 @@ import Charts
 import Preferences
 import Formatters
 
-public struct ChartValuesViewModel {
+public struct ChartValuesViewModel: Sendable {
     let period: ChartPeriod
     let price: Price?
     let values: ChartValues

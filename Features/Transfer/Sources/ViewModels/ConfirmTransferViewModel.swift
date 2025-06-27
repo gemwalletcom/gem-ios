@@ -15,12 +15,22 @@ import WalletsService
 import InfoSheet
 import Signer
 import Validators
+import Style
+import SwiftUI
+import Formatters
 
 @Observable
 @MainActor
 public final class ConfirmTransferViewModel {
     var feeModel: NetworkFeeSceneViewModel
-    var state: StateViewType<TransactionInputViewModel> = .loading
+    var state: StateViewType<TransactionInputViewModel> = .loading {
+        didSet {
+            if case .data(let data) = state, case .failure(let error) =  data.transferAmount {
+                onSelectListError(error: error)
+            }
+        }
+    }
+
     var confirmingState: StateViewType<Bool> = .noData {
         didSet {
             if case .error(let error) = confirmingState {
@@ -160,52 +170,22 @@ public final class ConfirmTransferViewModel {
         //        }
     }
 
-    var buttonTitle: String {
-        // try again on failed data load
-        if state.isError {
-            return Localized.Common.tryAgain
+    var listError: Error? {
+        if case let .error(error) = state {
+            return error
+        }
+        if case let .failure(error) = state.value?.transferAmount {
+            return error
         }
 
-        // error message on success data load and calculator
-        if let result = state.value?.transferAmountResult,
-           case .error(_, let error) = result {
-            let title: String = {
-                switch error {
-                case let tranferError as TransferAmountCalculatorError:
-                    switch tranferError {
-                    case .insufficientBalance(let asset):
-                        return Localized.Transfer.insufficientBalance(AssetViewModel(asset: asset).title)
-                    case .insufficientNetworkFee(let asset):
-                        return Localized.Transfer.insufficientNetworkFeeBalance(AssetViewModel(asset: asset).title)
-                    case .minimumAccountBalanceTooLow(let asset, _):
-                        return Localized.Transfer.minimumAccountBalance(AssetViewModel(asset: asset).title)
-                    }
-                default:
-                    return Localized.Errors.unknown
-                }
-            }()
-            return title
-        }
-
-        // confirm on success data load
-        return Localized.Transfer.confirm
+        return nil
     }
-
-    var buttonImage: String? {
-        if state.isError {
-            return nil
+    var listErrorTitle: String { Localized.Errors.errorOccured }
+    var shouldShowListErrorInfo: Bool {
+        switch state.value?.transferAmount {
+        case .success, .none: false
+        case .failure: true
         }
-
-        if let result = state.value?.transferAmountResult, case .error(_, let error) = result {
-            switch error as? TransferAmountCalculatorError {
-            case .insufficientBalance,
-                    .insufficientNetworkFee,
-                    .minimumAccountBalanceTooLow, .none: return nil
-            }
-        }
-
-        let authentication = (try? keystore.getPasswordAuthentication()) ?? .none
-        return KeystoreAuthenticationViewModel(authentication: authentication).authenticationImage
     }
 
     var showClearHeader: Bool {
@@ -213,13 +193,6 @@ public final class ConfirmTransferViewModel {
         case .amount, .nft: true
         case .swap: false
         }
-    }
-
-    var isButtonDisabled: Bool {
-        if let result = state.value?.transferAmountResult, case .error = result {
-            return true
-        }
-        return state.isNoData
     }
 
     var headerType: TransactionHeaderType {
@@ -230,14 +203,39 @@ public final class ConfirmTransferViewModel {
             data: dataModel.data,
             transactionData: nil,
             metaData: metadata,
-            transferAmountResult: nil
+            transferAmount: nil
         ).headerType
+    }
+
+    var confirmButtonModel: ConfirmButtonViewModel {
+        ConfirmButtonViewModel(
+            state: state,
+            icon: confirmButtonIcon,
+            onAction: { [weak self] in
+                guard let self else { return }
+                if case .data(let data) = state, case .success = data.transferAmount {
+                    onSelectConfirmTransfer()
+                } else {
+                    self.fetch()
+                }
+            }
+        )
     }
 }
 
 // MARK: - Business Logic
 
 extension ConfirmTransferViewModel {
+    func onSelectListError(error: Error) {
+        switch error {
+        case let error as TransferAmountCalculatorError:
+            self.isPresentingSheet = .info(error.infoSheet)
+        default:
+            break
+            //TODO Generic error
+        }
+    }
+
     func onSelectNetworkFeeInfo() {
         isPresentingSheet = .info(.networkFee(dataModel.chain))
     }
@@ -264,21 +262,6 @@ extension ConfirmTransferViewModel {
         await fetch()
     }
 
-    func onSelectConfirmButton() {
-        if state.isError {
-            fetch()
-        } else {
-            onSelectConfirmTransfer()
-        }
-    }
-
-    func onSelectConfirmTransfer() {
-        guard let value = state.value,
-              let TransactionData = value.transactionData,
-              case .amount(let amount) = value.transferAmountResult else { return }
-        confirmTransfer(transactionData: TransactionData, amount: amount)
-    }
-
     func fetch() {
         Task {
             await fetch()
@@ -289,6 +272,20 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
+    private func onSelectBuy() {
+        isPresentingSheet = .fiatConnect(
+            assetAddress: assetAddress,
+            waletId: wallet.walletId
+        )
+    }
+    private func onSelectConfirmTransfer() {
+        guard let value = state.value,
+              let transactionData = value.transactionData,
+              case .success(let amount) = value.transferAmount
+        else { return }
+        confirmTransfer(transactionData: transactionData, amount: amount)
+    }
+
     private func confirmTransfer(
         transactionData: TransactionData,
         amount: TransferAmount
@@ -330,8 +327,6 @@ extension ConfirmTransferViewModel {
                     metaData: metadata
                 )
             )
-        } catch let error as TransferAmountCalculatorError {
-            updateState(with: transactionInputViewModel(transferAmount: .error(nil, error)))
         } catch {
             if !error.isCancelled {
                 state = .error(error)
@@ -370,8 +365,8 @@ extension ConfirmTransferViewModel {
         assetBalance: Balance,
         assetFeeBalance: Balance,
         fee: BigInt
-    ) -> TransferAmountResult {
-        let calculatorInput = TransferAmountInput(
+    ) -> TransferAmountValidation {
+        let input = TransferAmountInput(
             asset: dataModel.asset,
             assetBalance: assetBalance,
             value: dataModel.data.value,
@@ -382,11 +377,11 @@ extension ConfirmTransferViewModel {
             canChangeValue: dataModel.data.canChangeValue,
             ignoreValueCheck: dataModel.data.ignoreValueCheck
         )
-        return TransferAmountCalculator().calculateResult(input: calculatorInput)
+        return TransferAmountCalculator().validate(input: input)
     }
 
     private func transactionInputViewModel(
-        transferAmount: TransferAmountResult,
+        transferAmount: TransferAmountValidation,
         input: TransactionData? = nil,
         metaData: TransferDataMetadata? = nil
     ) -> TransactionInputViewModel {
@@ -394,11 +389,32 @@ extension ConfirmTransferViewModel {
             data: data,
             transactionData: input,
             metaData: metaData,
-            transferAmountResult: transferAmount
+            transferAmount: transferAmount
         )
     }
 
     private var dataModel: TransferDataViewModel { TransferDataViewModel(data: data) }
     private var availableValue: BigInt { dataModel.availableValue(metadata: metadata) }
     private var senderLink: BlockExplorerLink { explorerService.addressUrl(chain: dataModel.chain, address: senderAddress) }
+    private var assetAddress: AssetAddress { AssetAddress(asset: dataModel.asset, address: senderAddress)}
+    private var confirmButtonIcon: Image? {
+        guard !state.isError, state.value?.transferAmount?.isSuccess ?? false,
+              let auth = try? keystore.getPasswordAuthentication(),
+              let systemName = KeystoreAuthenticationViewModel(authentication: auth).authenticationImage
+        else { return nil }
+        return Image(systemName: systemName)
+    }
+}
+
+extension TransferAmountCalculatorError {
+    var infoSheet: InfoSheetType {
+        switch self {
+        case .insufficientBalance(let asset):
+            .insufficientBalance(asset)
+        case .insufficientNetworkFee(let asset, let required):
+            .insufficientNetworkFee(asset, required: required)
+        case .minimumAccountBalanceTooLow(let asset, let required):
+            .accountMinimalBalance(asset, required: required)
+        }
+    }
 }

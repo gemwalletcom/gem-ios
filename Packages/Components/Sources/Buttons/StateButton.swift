@@ -3,6 +3,19 @@
 import SwiftUI
 import Style
 
+public protocol StateButtonViewable: Sendable {
+    var title: String { get }
+    var type: ButtonType { get }
+    var icon: Image? { get }
+    var infoText: String? { get }
+
+    @MainActor func action()
+}
+
+extension StateButtonViewable {
+    public var infoText: String? { nil }
+}
+
 public struct StateButton: View {
     public static let defaultTextStyle = TextStyle(font: .body.weight(.semibold), color: Colors.whiteSolid)
 
@@ -55,8 +68,19 @@ public struct StateButton: View {
     private var isDisabled: Bool {
         switch type {
         case .primary(let state): state != .normal
-        case .secondary: false
         }
+    }
+}
+
+public extension StateButton {
+    init(_ model: StateButtonViewable) {
+        self.init(
+            text: model.title,
+            type: model.type,
+            image: model.icon,
+            infoTitle: model.infoText,
+            action: model.action
+        )
     }
 }
 
@@ -66,15 +90,14 @@ public extension ButtonType {
         showProgress: Bool = true,
         isDisabled: Bool? = nil
     ) -> Self {
+        if let isDisabled, isDisabled {
+            return .primary(.disabled)
+        }
         switch viewState {
         case .loading: return .primary(.loading(showProgress: showProgress))
         case .noData: return .primary(.disabled)
         case .data: return .primary(.normal)
-        case .error:
-            if let isDisabled, !isDisabled {
-                return .primary(.normal)
-            }
-            return .primary(.disabled)
+        case .error: return .primary(.disabled)
         }
     }
 }
@@ -121,16 +144,6 @@ public extension ButtonType {
 
             StateButton(text: "Submit",
                         type: .primary(.disabled),
-                        action: {})
-        }
-
-        Section(header: Text("Secondary")) {
-            StateButton(text: "Insufficient Balance",
-                        type: .secondary,
-                        action: {})
-            StateButton(text: "Insufficient Balance",
-                        type: .secondary,
-                        image: Images.System.faceid,
                         action: {})
         }
     }
