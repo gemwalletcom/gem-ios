@@ -414,3 +414,7 @@
 "wallet.import.contract_address_field" = "Контракт або ID токена";
 "info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
 "info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"errors.insufficient_funds" = "Недостатньо коштів";
+"info.insufficient_funds.title" = "Потрібно %@";
+"info.insufficient_funds.description" = "Для цієї транзакції потрібно %@ для покриття мережевої комісії, сплаченої %@ майнерам, а не Гаманець Gem. Переконайтеся, що у вас достатньо %@.";
+"brand_name" = "Гаманець Gem";
