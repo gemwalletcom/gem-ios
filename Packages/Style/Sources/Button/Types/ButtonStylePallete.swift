@@ -35,14 +35,6 @@ extension ButtonStylePalette {
         backgroundDisabled: Colors.blueDark.opacity(0.6)
     )
 
-    static let secondary = ButtonStylePalette(
-        foreground: Colors.whiteSolid,
-        foregroundPressed: Colors.whiteSolid,
-        background: Colors.blueSecondary,
-        backgroundPressed: Colors.blueSecondaryHover,
-        backgroundDisabled: Colors.blueSecondary.opacity(0.6)
-    )
-
     static let blue = ButtonStylePalette(
         foreground: Colors.whiteSolid,
         foregroundPressed: Colors.whiteSolid,
@@ -139,11 +131,6 @@ private struct PaletteSwatch: View {
 
 #Preview {
     List {
-        Section("State-button palettes") {
-            PaletteSwatch(palette: .primary, title: "Primary")
-            PaletteSwatch(palette: .secondary, title: "Secondary")
-        }
-
         Section("Color-button palettes") {
             PaletteSwatch(palette: .blue, title: "Blue")
             PaletteSwatch(palette: .blueGrayPressed, title: "BlueGray")

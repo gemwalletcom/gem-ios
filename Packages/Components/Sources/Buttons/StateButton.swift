@@ -90,14 +90,14 @@ public extension ButtonType {
         showProgress: Bool = true,
         isDisabled: Bool? = nil
     ) -> Self {
+        if let isDisabled, isDisabled {
+            return .primary(.disabled)
+        }
         switch viewState {
         case .loading: return .primary(.loading(showProgress: showProgress))
         case .noData: return .primary(.disabled)
-        case .error, .data:
-            if let isDisabled, !isDisabled {
-                return .primary(.normal)
-            }
-            return .primary(.disabled)
+        case .data: return .primary(.normal)
+        case .error: return .primary(.disabled)
         }
     }
 }

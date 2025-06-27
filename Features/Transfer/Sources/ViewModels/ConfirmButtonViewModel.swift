@@ -29,7 +29,7 @@
          }
      }
 
-     var type: ButtonType { .primary(state, isDisabled: state.value != nil) }
+     var type: ButtonType { .primary(state, isDisabled: state.value?.transferAmount?.isFailure) }
 
      func action() { perform() }
  }
@@ -41,7 +41,6 @@
          for state: StateViewType<TransactionInputViewModel>
      ) -> ConfrimButtonActionType {
          if state.isError { return .retry }
-
          return .confirm
      }
  }

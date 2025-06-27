@@ -6,6 +6,7 @@ import Localization
 import GemstonePrimitives
 import Primitives
 import Style
+import Formatters
 
 public struct InfoSheetViewModel {
     private let type: InfoSheetType
@@ -29,13 +30,15 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         case .slippage: Docs.url(.slippage)
         case .assetStatus: Docs.url(.tokenVerification)
         case .accountMinimalBalance: Docs.url(.accountMinimalBalance)
+        case .insufficientBalance(_): fatalError()
         }
     }
 
     public var title: String {
         switch type {
         case .networkFee: Localized.Info.NetworkFee.title
-        case .insufficientNetworkFee(let asset, _): Localized.Info.InsufficientFunds.title(asset.symbol)
+        case .insufficientBalance: Localized.Info.InsufficientBalance.title
+        case .insufficientNetworkFee(let asset, _): Localized.Info.InsufficientNetworkFeeBalance.title(asset.symbol)
         case .transactionState(_,_, let state):
             switch state {
             case .pending: Localized.Transaction.Status.pending
@@ -59,37 +62,45 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
 
     public var description: String {
         switch type {
-        case .networkFee(let chain): Localized.Info.NetworkFee.description(chain.asset.name)
-        case .insufficientNetworkFee(let asset, let amount): Localized.Info.InsufficientFunds.description(
-            amount,
-            asset.name,
-            asset.symbol
-        )
+        case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name)
+        case .insufficientBalance(let asset): return Localized.Info.InsufficientBalance.description(asset.symbol)
+        case .insufficientNetworkFee(let asset, let required):
+            let amount = ValueFormatter(style: .short).string(required, decimals: asset.decimals.asInt)
+            return Localized.Info.InsufficientNetworkFeeBalance.description(
+                "**\(amount) \(asset.symbol)**",
+                asset.name,
+                asset.symbol
+            )
         case .transactionState(_, _, let state):
             switch state {
-            case .pending: Localized.Info.Transaction.Pending.description
-            case .confirmed: Localized.Info.Transaction.Success.description
-            case .failed, .reverted: Localized.Info.Transaction.Error.description
+            case .pending: return Localized.Info.Transaction.Pending.description
+            case .confirmed: return Localized.Info.Transaction.Success.description
+            case .failed, .reverted: return Localized.Info.Transaction.Error.description
             }
-        case .watchWallet: Localized.Info.WatchWallet.description
-        case .stakeLockTime: Localized.Info.LockTime.description
-        case .priceImpact: Localized.Info.PriceImpact.description
-        case .slippage: Localized.Info.Slippage.description
+        case .watchWallet: return Localized.Info.WatchWallet.description
+        case .stakeLockTime: return Localized.Info.LockTime.description
+        case .priceImpact: return Localized.Info.PriceImpact.description
+        case .slippage: return Localized.Info.Slippage.description
         case .assetStatus(let status):
             switch status {
-            case .verified: .empty // verified token status isn't displayed on the asset screen.
-            case .unverified: Localized.Info.AssetStatus.Unverified.description
-            case .suspicious: Localized.Info.AssetStatus.Suspicious.description
+            case .verified: return .empty // verified token status isn't displayed on the asset screen.
+            case .unverified: return Localized.Info.AssetStatus.Unverified.description
+            case .suspicious: return Localized.Info.AssetStatus.Suspicious.description
             }
-        case let .accountMinimalBalance(assetAmount):
-            "Keep at least \(assetAmount) in this account so it stays active. This refundable reserve blocks spam and covers on-chain storage, keeping the network fast and low-cost."
+        case .accountMinimalBalance(let asset, let required):
+            let amount = ValueFormatter(style: .short).string(
+                required,
+                decimals: asset.decimals.asInt,
+                currency: asset.symbol
+            )
+            return "Keep at least \(amount) in this account so it stays active. This refundable reserve blocks spam and covers on-chain storage, keeping the network fast and low-cost."
         }
     }
 
     public var image: InfoSheetImage? {
         switch type {
-        case .networkFee: return .image(Images.Info.networkFee)
-        case .insufficientNetworkFee: return .image(Images.Info.networkFee)
+        case .networkFee, .insufficientNetworkFee: return .image(Images.Info.networkFee)
+        case .insufficientBalance: return .none
         case .transactionState(let imageURL, let placeholder, let state):
             let stateImage = switch state {
             case .pending: Images.Transaction.State.pending

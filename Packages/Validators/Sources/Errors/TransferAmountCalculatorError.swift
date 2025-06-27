@@ -4,6 +4,7 @@ import Foundation
 import BigInt
 import Primitives
 import Localization
+import InfoSheet
 
 public enum TransferAmountCalculatorError: Equatable {
     case insufficientBalance(Asset)

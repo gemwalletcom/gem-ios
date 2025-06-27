@@ -213,7 +213,11 @@ public final class ConfirmTransferViewModel {
             icon: confirmButtonIcon,
             onAction: { [weak self] in
                 guard let self else { return }
-                self.fetch()
+                if case .data(let data) = state, case .success = data.transferAmount {
+                    onSelectConfirmTransfer()
+                } else {
+                    self.fetch()
+                }
             }
         )
     }
@@ -225,22 +229,10 @@ extension ConfirmTransferViewModel {
     func onSelectListError(error: Error) {
         switch error {
         case let error as TransferAmountCalculatorError:
-            switch error {
-            case .insufficientBalance:
-                break
-            case .insufficientNetworkFee(let asset, let required):
-                let amount = ValueFormatter(style: .short).string(required, decimals: asset.decimals.asInt)
-                self.isPresentingSheet = .info(.insufficientNetworkFee(asset, amount: "**\(amount) \(asset.symbol)**"))
-            case .minimumAccountBalanceTooLow(let asset, let required):
-                let amount = ValueFormatter(style: .short).string(
-                    required,
-                    decimals: asset.decimals.asInt,
-                    currency: asset.symbol
-                )
-                isPresentingSheet = .info(.accountMinimalBalance(assetAmount: amount))
-            }
-        default :
+            self.isPresentingSheet = .info(error.infoSheet)
+        default:
             break
+            //TODO Generic error
         }
     }
 
@@ -411,5 +403,18 @@ extension ConfirmTransferViewModel {
               let systemName = KeystoreAuthenticationViewModel(authentication: auth).authenticationImage
         else { return nil }
         return Image(systemName: systemName)
+    }
+}
+
+extension TransferAmountCalculatorError {
+    var infoSheet: InfoSheetType {
+        switch self {
+        case .insufficientBalance(let asset):
+            .insufficientBalance(asset)
+        case .insufficientNetworkFee(let asset, let required):
+            .insufficientNetworkFee(asset, required: required)
+        case .minimumAccountBalanceTooLow(let asset, let required):
+            .accountMinimalBalance(asset, required: required)
+        }
     }
 }
