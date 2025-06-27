@@ -368,8 +368,8 @@
 "asset.state.empty.description" = "Отримати, обміняти або купити %@";
 "activity.state.empty.title" = "Ваша активність відображатиметься тут";
 "activity.state.empty.description" = "Зробіть свою першу транзакцію";
-"stake.state.empty.title" = "Ваші ставки з'являться тут";
-"stake.state.empty.description" = "Зробіть свою першу ставку %@";
+"stake.state.empty.title" = "Ваші стейкинги з'являться тут";
+"stake.state.empty.description" = "Зробіть свій перший стейкінг %@";
 "wallet_connect.state.empty.title" = "Ваші контакти з'являться тут️";
 "wallet_connect.state.empty.description" = "Відскануйте або вставте код для підключення до DApp";
 "assets.state.empty.search_description" = "Ви можете спробувати додати його вручну";
@@ -421,3 +421,4 @@
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
 "info.account_minimum_balance.title" = "Мінімальний баланс";
+"asset.buy_asset" = "Купити %@";

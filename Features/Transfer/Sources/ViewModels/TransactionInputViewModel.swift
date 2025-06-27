@@ -59,4 +59,11 @@ struct TransactionInputViewModel: Sendable {
             metadata: metaData
         )
     }
+    
+    var isReady: Bool {
+        if case .success = self.transferAmount {
+            return true
+        }
+        return false
+    }
 }

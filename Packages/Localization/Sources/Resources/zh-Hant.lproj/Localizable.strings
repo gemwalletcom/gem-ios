@@ -421,3 +421,4 @@
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
 "info.account_minimum_balance.title" = "最低餘額";
+"asset.buy_asset" = "購買%@";

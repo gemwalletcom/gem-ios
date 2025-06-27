@@ -8,31 +8,29 @@ import Primitives
 import Style
 import Formatters
 
-public struct InfoSheetViewModel {
+public struct InfoSheetViewModel: InfoSheetModelViewable {
+    
     private let type: InfoSheetType
+    public var button: InfoSheetButton?
 
-    public init(type: InfoSheetType) {
+    public init(type: InfoSheetType, button: InfoSheetButton? = .none) {
         self.type = type
-    }
-}
-
-// MARK: - InfoSheetModelViewable
-
-extension InfoSheetViewModel: InfoSheetModelViewable {
-    public var url: URL? {
-        switch type {
-        case .networkFee: Docs.url(.networkFees)
-        case .insufficientNetworkFee: Docs.url(.networkFees)
-        case .transactionState: Docs.url(.transactionStatus)
-        case .watchWallet: Docs.url(.whatIsWatchWallet)
-        case .stakeLockTime: Docs.url(.stakingLockTime)
-        case .priceImpact: Docs.url(.priceImpact)
-        case .slippage: Docs.url(.slippage)
-        case .assetStatus: Docs.url(.tokenVerification)
-        case .accountMinimalBalance: Docs.url(.accountMinimalBalance)
-        case .insufficientBalance(_): fatalError()
+        //self.button = button
+        
+        switch button {
+        case .none:
+            self.button = .url(Self.url(for: type))
+        case .some(let button):
+            switch button {
+            case .action:
+                self.button = button
+            case .url(let url):
+                self.button = .url(url)
+            }
         }
     }
+
+// MARK: - InfoSheetModelViewable
 
     public var title: String {
         switch type {
@@ -139,5 +137,28 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         }
     }
     
-    public var buttonTitle: String { Localized.Common.learnMore }
+    public var buttonTitle: String {
+        switch button {
+        case .url: Localized.Common.learnMore
+        case .action(let title, _): title
+        case .none: .empty
+        }
+    }
+}
+
+private extension InfoSheetViewModel {
+    static func url(for type: InfoSheetType) -> URL {
+        switch type {
+        case .networkFee: Docs.url(.networkFees)
+        case .insufficientNetworkFee: Docs.url(.networkFees)
+        case .transactionState: Docs.url(.transactionStatus)
+        case .watchWallet: Docs.url(.whatIsWatchWallet)
+        case .stakeLockTime: Docs.url(.stakingLockTime)
+        case .priceImpact: Docs.url(.priceImpact)
+        case .slippage: Docs.url(.slippage)
+        case .assetStatus: Docs.url(.tokenVerification)
+        case .accountMinimalBalance: Docs.url(.accountMinimalBalance)
+        case .insufficientBalance: Docs.url(.networkFees) // Which one to use?
+        }
+    }
 }

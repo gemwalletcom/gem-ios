@@ -35,6 +35,10 @@ public enum Localized {
   public enum Asset {
     /// Balances
     public static let balances = Localized.tr("Localizable", "asset.balances", fallback: "Balances")
+    /// Buy %@
+    public static func buyAsset(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "asset.buy_asset", String(describing: p1), fallback: "Buy %@")
+    }
     /// Circulating Supply
     public static let circulatingSupply = Localized.tr("Localizable", "asset.circulating_supply", fallback: "Circulating Supply")
     /// Contract
