@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "एक वॉलेट जिस तक आपकी पहुंच नहीं है, लेकिन आप इसके लेनदेन और गतिविधियों पर नजर रख सकते हैं।";
-"info.network_fee.description" = "%@ नेटवर्क लेनदेन शुल्क लेता है, जो नेटवर्क उपयोग के आधार पर अलग-अलग होता है। आपके लेनदेन को संसाधित करने के लिए माइनर्स को भुगतान किया जाता है।";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "अपर्याप्त धनराशि, अमान्य इनपुट या नेटवर्क द्वारा अस्वीकृति जैसी किसी त्रुटि के कारण लेनदेन पूरा नहीं हो सका। कृपया विवरण की समीक्षा करें और पुनः प्रयास करें।";
 "info.transaction.pending.description" = "लेन-देन सबमिट कर दिया गया है और नेटवर्क पर पुष्टि की प्रतीक्षा कर रहा है। प्रसंस्करण समय अलग-अलग हो सकता है। कृपया अपडेट के लिए वापस जाँच करें।";
 "info.transaction.success.description" = "लेन-देन पूरा हो गया है और नेटवर्क पर इसकी पुष्टि हो गई है। आप इसकी स्थिति सत्यापित करने के लिए विवरण की समीक्षा कर सकते हैं।";
@@ -413,8 +413,12 @@
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "कॉन्ट्रैक्ट या टोकन ID";
 "info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
-"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "संदिग्ध या स्पैम टोकन को संभावित घोटाले या हानिकारक संपत्ति के रूप में पहचाना जाता है। वे एयरड्रॉप, ट्रांसफ़र या मैन्युअल आयात के कारण आपके वॉलेट में दिखाई दे सकते हैं।";
 "errors.insufficient_funds" = "अपर्याप्त कोष";
-"info.insufficient_funds.title" = "%@ required";
-"info.insufficient_funds.description" = "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.";
+"info.insufficient_network_fee_balance.title" = "%@ आवश्यक";
+"info.insufficient_network_fee_balance.description" = "इस लेनदेन के लिए %@ माइनर्स को भुगतान किए गए नेटवर्क शुल्क को कवर करने के लिए %@ की आवश्यकता है, न कि Gem Wallet । सुनिश्चित करें कि आपके पास पर्याप्त %@ है।";
 "brand_name" = "Gem Wallet";
+"info.insufficient_balance.title" = "अपर्याप्त शेषराशि";
+"info.insufficient_balance.description" = "इस लेनदेन को पूरा करने के लिए आपके पास पर्याप्त %@ नहीं है। कृपया अपने वॉलेट में टॉप अप करें, प्राप्त करें या स्वैप करें और फिर से प्रयास करें।";
+"info.account_minimum_balance.title" = "न्यूनतम शेष";
+"asset.buy_asset" = "%@ खरीदें";

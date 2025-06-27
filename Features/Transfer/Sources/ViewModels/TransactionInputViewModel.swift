@@ -7,11 +7,11 @@ import Primitives
 import PrimitivesComponents
 import Preferences
 
-struct TransactionInputViewModel {
+struct TransactionInputViewModel: Sendable {
     let data: TransferData
     let transactionData: TransactionData?
     let metaData: TransferDataMetadata?
-    let transferAmountResult: TransferAmountResult?
+    let transferAmount: TransferAmountValidation?
 
     private let preferences: Preferences
 
@@ -19,20 +19,20 @@ struct TransactionInputViewModel {
         data: TransferData,
         transactionData: TransactionData?,
         metaData: TransferDataMetadata?,
-        transferAmountResult: TransferAmountResult?,
+        transferAmount: TransferAmountValidation?,
         preferences: Preferences = Preferences.standard
     ) {
         self.transactionData = transactionData
         self.data = data
         self.metaData = metaData
-        self.transferAmountResult = transferAmountResult
+        self.transferAmount = transferAmount
         self.preferences = preferences
     }
 
     var value: BigInt {
-        switch transferAmountResult {
-        case .amount(let amount): amount.value
-        case .error, nil: data.value
+        switch transferAmount {
+        case .success(let amount): amount.value
+        case .failure, .none: data.value
         }
     }
 
@@ -49,16 +49,8 @@ struct TransactionInputViewModel {
         )
     }
     
-    var networkFeeText: String? {
-        guard let text = infoModel.feeValueText else {
-            return "-"
-        }
-        return text
-    }
-    
-    var networkFeeFiatText: String? {
-        infoModel.feeFiatValueText
-    }
+    var networkFeeText: String? { infoModel.feeValueText ?? "-" }
+    var networkFeeFiatText: String? { infoModel.feeFiatValueText }
     
     var headerType: TransactionHeaderType {
         TransactionHeaderTypeBuilder.build(
@@ -66,5 +58,12 @@ struct TransactionInputViewModel {
             dataType: data.type,
             metadata: metaData
         )
+    }
+    
+    var isReady: Bool {
+        if case .success = self.transferAmount {
+            return true
+        }
+        return false
     }
 }

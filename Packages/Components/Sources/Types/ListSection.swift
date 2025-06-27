@@ -3,7 +3,7 @@
 import Foundation
 import SwiftUI
 
-public struct ListSection<T>: Identifiable {
+public struct ListSection<T: Sendable>: Identifiable, Sendable {
     public let id: String
     public let title: String?
     public let image: Image?

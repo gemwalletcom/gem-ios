@@ -3,7 +3,7 @@
 import Components
 import Primitives
 
-public enum SignMessageDisplayType {
+public enum SignMessageDisplayType: Sendable {
     case sections([ListSection<KeyValueItem>])
     case text(String)
 }

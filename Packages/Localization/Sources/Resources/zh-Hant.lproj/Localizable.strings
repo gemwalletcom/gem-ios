@@ -281,7 +281,7 @@
 "info.network_fee.title" = "網絡費用";
 "info.watch_wallet.title" = "觀察錢包";
 "info.watch_wallet.description" = "這是一個您無法操作的錢包，但可以查看它的交易和資產變動。";
-"info.network_fee.description" = "%@網路收取交易費，此費用依網路使用情況而有所不同。支付給礦工以處理您的交易。";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "由於錯誤（例如資金不足、輸入無效或網路拒絕）導致交易無法完成。請查看詳細資訊並重試。";
 "info.transaction.pending.description" = "交易已提交並正在等待網路確認。處理時間可能有所不同。請回來查看更新。";
 "info.transaction.success.description" = "交易已完成並在網路上確認。您可以查看詳細資訊來驗證其狀態。";
@@ -412,9 +412,13 @@
 "filter.has_balance" = "有餘額";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "合約或代幣ID";
-"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
-"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "未驗證代幣是指未經可信任第三方服務充分驗證的代幣。它們可能因空投、轉帳或手動匯入而出現在您的錢包中。";
+"info.asset_status.suspicious.description" = "可疑或垃圾代幣會被識別為潛在的詐騙或有害資產。它們可能因空投、轉帳或手動匯入而出現在您的錢包中。";
 "errors.insufficient_funds" = "資金不足";
-"info.insufficient_funds.title" = "%@ required";
-"info.insufficient_funds.description" = "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.";
+"info.insufficient_network_fee_balance.title" = "需要%@";
+"info.insufficient_network_fee_balance.description" = "此交易需要%@來支付給%@礦工的網路費用，而非Gem Wallet 。請確保您有足夠的%@ 。";
 "brand_name" = "Gem Wallet";
+"info.insufficient_balance.title" = "餘額不足";
+"info.insufficient_balance.description" = "您的餘額不足%@ ，無法完成此交易。請充值、接收或兌換您的錢包，然後重試。";
+"info.account_minimum_balance.title" = "最低餘額";
+"asset.buy_asset" = "購買%@";

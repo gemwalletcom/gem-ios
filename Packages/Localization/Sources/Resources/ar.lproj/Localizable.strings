@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "محفظة لا يمكنك الوصول إليها، ولكن يمكنك مشاهدة معاملاتها وحركاتها.";
-"info.network_fee.description" = "تفرض شبكة %@ رسومًا على المعاملات، والتي تختلف بناءً على استخدام الشبكة. يتم دفعها إلى عمال المناجم لمعالجة معاملتك.";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "تعذّر إتمام المعاملة بسبب خطأ، مثل عدم كفاية الرصيد، أو إدخال غير صحيح، أو رفض من قِبل الشبكة. يُرجى مراجعة التفاصيل والمحاولة مرة أخرى.";
 "info.transaction.pending.description" = "تم إرسال المعاملة وهي بانتظار التأكيد على الشبكة. قد تختلف أوقات المعالجة. يُرجى مراجعة التحديثات.";
 "info.transaction.success.description" = "تم إتمام المعاملة وتأكيدها على الشبكة. يمكنك مراجعة التفاصيل للتحقق من حالتها.";
@@ -412,9 +412,13 @@
 "filter.has_balance" = "لديه توازن";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "عقد أو معرف توكن";
-"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
-"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "لم يتم التحقق من الرموز غير المُوثَّقة بشكل كافٍ من قِبل خدمات خارجية موثوقة. قد تظهر في محفظتك نتيجةً لعمليات الإنزال الجوي، أو التحويلات، أو الاستيراد اليدوي.";
+"info.asset_status.suspicious.description" = "يتم تحديد الرموز المشبوهة أو غير المرغوب فيها على أنها عمليات احتيال محتملة أو أصول ضارة. قد تظهر في محفظتك نتيجةً لعمليات الإنزال الجوي أو التحويلات أو الاستيراد اليدوي.";
 "errors.insufficient_funds" = "عدم كفاية الأموال";
-"info.insufficient_funds.title" = "%@ required";
-"info.insufficient_funds.description" = "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.";
+"info.insufficient_network_fee_balance.title" = "%@ مطلوب";
+"info.insufficient_network_fee_balance.description" = "تتطلب هذه المعاملة %@ لتغطية رسوم الشبكة المدفوعة لـ %@ من عمال المناجم، وليس Gem Wallet. تأكد من وجود %@ كافٍ لديك.";
 "brand_name" = "Gem Wallet";
+"info.insufficient_balance.title" = "رصيد غير كاف";
+"info.insufficient_balance.description" = "ليس لديك رصيد كافٍ %@ لإتمام هذه المعاملة. يُرجى شحن رصيدك أو استلامه أو استبداله في محفظتك والمحاولة مرة أخرى.";
+"info.account_minimum_balance.title" = "الحد الأدنى للرصيد";
+"asset.buy_asset" = "شراء %@";

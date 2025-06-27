@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "กระเป๋าเงินที่คุณไม่สามารถเข้าถึงได้แต่คุณสามารถดูธุรกรรมและการเคลื่อนไหวได้";
-"info.network_fee.description" = "%@ เครือข่ายจะเรียกเก็บค่าธรรมเนียมการทำธุรกรรม ซึ่งแตกต่างกันไปตามการใช้งานเครือข่าย จ่ายให้กับนักขุดเพื่อดำเนินการธุรกรรมของคุณ";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "ไม่สามารถทำธุรกรรมให้เสร็จสมบูรณ์ได้เนื่องจากเกิดข้อผิดพลาด เช่น เงินไม่เพียงพอ ข้อมูลที่ป้อนไม่ถูกต้อง หรือเครือข่ายปฏิเสธ โปรดตรวจสอบรายละเอียดและลองอีกครั้ง";
 "info.transaction.pending.description" = "ธุรกรรมได้รับการส่งแล้วและกำลังรอการยืนยันบนเครือข่าย เวลาในการประมวลผลอาจแตกต่างกัน โปรดตรวจสอบอีกครั้งเพื่อดูการอัปเดต";
 "info.transaction.success.description" = "ธุรกรรมเสร็จสมบูรณ์และได้รับการยืนยันบนเครือข่ายแล้ว คุณสามารถตรวจสอบรายละเอียดเพื่อยืนยันสถานะได้";
@@ -412,9 +412,13 @@
 "filter.has_balance" = "มีความสมดุล";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "สัญญาหรือรหัสโทเคน";
-"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
-"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "โทเค็นที่ไม่ได้รับการตรวจสอบนั้นไม่ได้รับการตรวจสอบอย่างเพียงพอโดยบริการบุคคลที่สามที่เชื่อถือได้ โทเค็นเหล่านี้อาจปรากฏในกระเป๋าเงินของคุณเนื่องจากการส่งทางอากาศ การโอน หรือการนำเข้าด้วยตนเอง";
+"info.asset_status.suspicious.description" = "โทเค็นที่น่าสงสัยหรือเป็นสแปมจะถูกระบุว่าเป็นการหลอกลวงหรือทรัพย์สินที่เป็นอันตราย โทเค็นเหล่านี้อาจปรากฏในกระเป๋าเงินของคุณเนื่องจากการส่งทางอากาศ การโอน หรือการนำเข้าด้วยตนเอง";
 "errors.insufficient_funds" = "เงินไม่เพียงพอ";
-"info.insufficient_funds.title" = "%@ required";
-"info.insufficient_funds.description" = "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.";
+"info.insufficient_network_fee_balance.title" = "%@ จำเป็น";
+"info.insufficient_network_fee_balance.description" = "ธุรกรรมนี้จำเป็นต้อง %@ ครอบคลุมค่าธรรมเนียมเครือข่ายที่จ่ายให้กับนักขุด %@ คน ไม่ใช่ Gem Wallet โปรดตรวจสอบให้แน่ใจว่าคุณมี %@ เพียงพอ";
 "brand_name" = "Gem Wallet";
+"info.insufficient_balance.title" = "ยอดเงินคงเหลือไม่เพียงพอ";
+"info.insufficient_balance.description" = "คุณมี %@ ไม่เพียงพอสำหรับการทำธุรกรรมนี้ โปรดเติมเงิน รับ หรือแลกเปลี่ยนในกระเป๋าสตางค์ของคุณแล้วลองอีกครั้ง";
+"info.account_minimum_balance.title" = "ยอดคงเหลือขั้นต่ำ";
+"asset.buy_asset" = "ซื้อ %@";

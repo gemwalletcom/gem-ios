@@ -6,35 +6,37 @@ import Localization
 import GemstonePrimitives
 import Primitives
 import Style
+import Formatters
 
-public struct InfoSheetViewModel {
+public struct InfoSheetViewModel: InfoSheetModelViewable {
+    
     private let type: InfoSheetType
+    public var button: InfoSheetButton?
 
-    public init(type: InfoSheetType) {
+    public init(type: InfoSheetType, button: InfoSheetButton? = .none) {
         self.type = type
-    }
-}
-
-// MARK: - InfoSheetModelViewable
-
-extension InfoSheetViewModel: InfoSheetModelViewable {
-    public var url: URL? {
-        switch type {
-        case .networkFee: Docs.url(.networkFees)
-        case .insufficientNetworkFee: Docs.url(.networkFees)
-        case .transactionState: Docs.url(.transactionStatus)
-        case .watchWallet: Docs.url(.whatIsWatchWallet)
-        case .stakeLockTime: Docs.url(.stakingLockTime)
-        case .priceImpact: Docs.url(.priceImpact)
-        case .slippage: Docs.url(.slippage)
-        case .assetStatus: Docs.url(.tokenVerification)
+        //self.button = button
+        
+        switch button {
+        case .none:
+            self.button = .url(Self.url(for: type))
+        case .some(let button):
+            switch button {
+            case .action:
+                self.button = button
+            case .url(let url):
+                self.button = .url(url)
+            }
         }
     }
+
+// MARK: - InfoSheetModelViewable
 
     public var title: String {
         switch type {
         case .networkFee: Localized.Info.NetworkFee.title
-        case .insufficientNetworkFee(let asset, _): Localized.Info.InsufficientFunds.title(asset.symbol)
+        case .insufficientBalance: Localized.Info.InsufficientBalance.title
+        case .insufficientNetworkFee(let asset, _): Localized.Info.InsufficientNetworkFeeBalance.title(asset.symbol)
         case .transactionState(_,_, let state):
             switch state {
             case .pending: Localized.Transaction.Status.pending
@@ -52,40 +54,47 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             case .suspicious: Localized.Asset.Verification.suspicious
             case .unverified: Localized.Asset.Verification.unverified
             }
+        case .accountMinimalBalance: Localized.Info.AccountMinimumBalance.title
         }
     }
 
     public var description: String {
         switch type {
-        case .networkFee(let chain): Localized.Info.NetworkFee.description(chain.asset.name)
-        case .insufficientNetworkFee(let asset, let amount): Localized.Info.InsufficientFunds.description(
-            amount,
-            asset.name,
-            asset.symbol
-        )
+        case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol)
+        case .insufficientBalance(let asset): return Localized.Info.InsufficientBalance.description(asset.symbol)
+        case .insufficientNetworkFee(let asset, let required):
+            let amount = ValueFormatter(style: .short).string(required, asset: asset)
+            return Localized.Info.InsufficientNetworkFeeBalance.description(
+                "**\(amount)**",
+                asset.name,
+                asset.symbol
+            )
         case .transactionState(_, _, let state):
             switch state {
-            case .pending: Localized.Info.Transaction.Pending.description
-            case .confirmed: Localized.Info.Transaction.Success.description
-            case .failed, .reverted: Localized.Info.Transaction.Error.description
+            case .pending: return Localized.Info.Transaction.Pending.description
+            case .confirmed: return Localized.Info.Transaction.Success.description
+            case .failed, .reverted: return Localized.Info.Transaction.Error.description
             }
-        case .watchWallet: Localized.Info.WatchWallet.description
-        case .stakeLockTime: Localized.Info.LockTime.description
-        case .priceImpact: Localized.Info.PriceImpact.description
-        case .slippage: Localized.Info.Slippage.description
+        case .watchWallet: return Localized.Info.WatchWallet.description
+        case .stakeLockTime: return Localized.Info.LockTime.description
+        case .priceImpact: return Localized.Info.PriceImpact.description
+        case .slippage: return Localized.Info.Slippage.description
         case .assetStatus(let status):
             switch status {
-            case .verified: .empty // verified token status isn't displayed on the asset screen.
-            case .unverified: Localized.Info.AssetStatus.Unverified.description
-            case .suspicious: Localized.Info.AssetStatus.Suspicious.description
+            case .verified: return .empty // verified token status isn't displayed on the asset screen.
+            case .unverified: return Localized.Info.AssetStatus.Unverified.description
+            case .suspicious: return Localized.Info.AssetStatus.Suspicious.description
             }
+        case .accountMinimalBalance(let asset, let required):
+            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+            return Localized.Transfer.minimumAccountBalance(amount)
         }
     }
 
     public var image: InfoSheetImage? {
         switch type {
-        case .networkFee: return .image(Images.Info.networkFee)
-        case .insufficientNetworkFee: return .image(Images.Info.networkFee)
+        case .networkFee, .insufficientNetworkFee: return .image(Images.Info.networkFee)
+        case .insufficientBalance: return .none
         case .transactionState(let imageURL, let placeholder, let state):
             let stateImage = switch state {
             case .pending: Images.Transaction.State.pending
@@ -117,6 +126,8 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             return .image(Images.Logo.logo)
         case .slippage:
             return .image(Images.Logo.logo)
+        case .accountMinimalBalance:
+            return .image(Images.Logo.logo)
         case .assetStatus(let status):
             switch status {
             case .verified: return .image(Images.Logo.logo)
@@ -126,5 +137,28 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         }
     }
     
-    public var buttonTitle: String { Localized.Common.learnMore }
+    public var buttonTitle: String {
+        switch button {
+        case .url: Localized.Common.learnMore
+        case .action(let title, _): title
+        case .none: .empty
+        }
+    }
+}
+
+private extension InfoSheetViewModel {
+    static func url(for type: InfoSheetType) -> URL {
+        switch type {
+        case .networkFee: Docs.url(.networkFees)
+        case .insufficientNetworkFee: Docs.url(.networkFees)
+        case .transactionState: Docs.url(.transactionStatus)
+        case .watchWallet: Docs.url(.whatIsWatchWallet)
+        case .stakeLockTime: Docs.url(.stakingLockTime)
+        case .priceImpact: Docs.url(.priceImpact)
+        case .slippage: Docs.url(.slippage)
+        case .assetStatus: Docs.url(.tokenVerification)
+        case .accountMinimalBalance: Docs.url(.accountMinimalBalance)
+        case .insufficientBalance: Docs.url(.networkFees) // Which one to use?
+        }
+    }
 }

@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Un portafoglio a cui non hai accesso, ma di cui puoi monitorare le transazioni e i movimenti.";
-"info.network_fee.description" = "%@ la rete addebita una commissione di transazione, che varia in base all'utilizzo della rete. Pagata ai minatori per elaborare la tua transazione.";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "La transazione non è stata completata a causa di un errore, ad esempio fondi insufficienti, input non validi o rifiuto da parte della rete. Si prega di controllare i dettagli e riprovare.";
 "info.transaction.pending.description" = "La transazione è stata inoltrata ed è in attesa di conferma sulla rete. I tempi di elaborazione possono variare. Si prega di controllare regolarmente per aggiornamenti.";
 "info.transaction.success.description" = "La transazione è stata completata e confermata sulla rete. Puoi controllare i dettagli per verificarne lo stato.";
@@ -412,9 +412,13 @@
 "filter.has_balance" = "Ha equilibrio";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "Contratto o ID token";
-"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
-"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "I token non verificati non sono stati sufficientemente verificati da servizi di terze parti affidabili. Potrebbero comparire nel tuo portafoglio a causa di airdrop, trasferimenti o importazioni manuali.";
+"info.asset_status.suspicious.description" = "I token sospetti o spam vengono identificati come potenziali truffe o asset dannosi. Potrebbero comparire nel tuo portafoglio a seguito di airdrop, trasferimenti o importazioni manuali.";
 "errors.insufficient_funds" = "Fondi insufficienti";
-"info.insufficient_funds.title" = "%@ required";
-"info.insufficient_funds.description" = "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.";
+"info.insufficient_network_fee_balance.title" = "%@ richiesto";
+"info.insufficient_network_fee_balance.description" = "Questa transazione richiede %@ per coprire la commissione di rete pagata a %@ minatori, non Gem Wallet. Assicurati di avere abbastanza %@.";
 "brand_name" = "Gem Wallet";
+"info.insufficient_balance.title" = "Saldo insufficiente";
+"info.insufficient_balance.description" = "Non hai abbastanza %@ per completare questa transazione. Ricarica, ricevi o scambia nel tuo portafoglio e riprova.";
+"info.account_minimum_balance.title" = "Saldo minimo";
+"asset.buy_asset" = "Acquista %@";

@@ -35,6 +35,10 @@ public enum Localized {
   public enum Asset {
     /// Balances
     public static let balances = Localized.tr("Localizable", "asset.balances", fallback: "Balances")
+    /// Buy %@
+    public static func buyAsset(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "asset.buy_asset", String(describing: p1), fallback: "Buy %@")
+    }
     /// Circulating Supply
     public static let circulatingSupply = Localized.tr("Localizable", "asset.circulating_supply", fallback: "Circulating Supply")
     /// Contract
@@ -455,6 +459,10 @@ public enum Localized {
     public static let types = Localized.tr("Localizable", "filter.types", fallback: "Types")
   }
   public enum Info {
+    public enum AccountMinimumBalance {
+      /// Minimum balance
+      public static let title = Localized.tr("Localizable", "info.account_minimum_balance.title", fallback: "Minimum balance")
+    }
     public enum AssetStatus {
       public enum Suspicious {
         /// Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.
@@ -465,14 +473,22 @@ public enum Localized {
         public static let description = Localized.tr("Localizable", "info.asset_status.unverified.description", fallback: "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.")
       }
     }
-    public enum InsufficientFunds {
+    public enum InsufficientBalance {
+      /// You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.
+      public static func description(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "info.insufficient_balance.description", String(describing: p1), fallback: "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.")
+      }
+      /// Insufficient Balance
+      public static let title = Localized.tr("Localizable", "info.insufficient_balance.title", fallback: "Insufficient Balance")
+    }
+    public enum InsufficientNetworkFeeBalance {
       /// This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.
       public static func description(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
-        return Localized.tr("Localizable", "info.insufficient_funds.description", String(describing: p1), String(describing: p2), String(describing: p3), fallback: "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.")
+        return Localized.tr("Localizable", "info.insufficient_network_fee_balance.description", String(describing: p1), String(describing: p2), String(describing: p3), fallback: "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.")
       }
       /// %@ required
       public static func title(_ p1: Any) -> String {
-        return Localized.tr("Localizable", "info.insufficient_funds.title", String(describing: p1), fallback: "%@ required")
+        return Localized.tr("Localizable", "info.insufficient_network_fee_balance.title", String(describing: p1), fallback: "%@ required")
       }
     }
     public enum LockTime {
@@ -480,9 +496,9 @@ public enum Localized {
       public static let description = Localized.tr("Localizable", "info.lock_time.description", fallback: "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.")
     }
     public enum NetworkFee {
-      /// %@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.
-      public static func description(_ p1: Any) -> String {
-        return Localized.tr("Localizable", "info.network_fee.description", String(describing: p1), fallback: "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.")
+      /// Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.
+      public static func description(_ p1: Any, _ p2: Any) -> String {
+        return Localized.tr("Localizable", "info.network_fee.description", String(describing: p1), String(describing: p2), fallback: "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.")
       }
       /// Network Fee
       public static let title = Localized.tr("Localizable", "info.network_fee.title", fallback: "Network Fee")

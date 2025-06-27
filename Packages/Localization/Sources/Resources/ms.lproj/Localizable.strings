@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "A wallet that you do not have access to, but you can watch its transactions and movements.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -412,9 +412,13 @@
 "filter.has_balance" = "Mempunyai keseimbangan";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "Kontrak atau ID Token";
-"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
-"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "Token yang tidak disahkan belum disahkan dengan secukupnya oleh perkhidmatan pihak ketiga yang dipercayai. Ia mungkin muncul dalam dompet anda disebabkan oleh airdrop, pemindahan atau import manual.";
+"info.asset_status.suspicious.description" = "Token yang mencurigakan atau spam dikenal pasti sebagai potensi penipuan atau aset berbahaya. Ia mungkin muncul dalam dompet anda disebabkan oleh airdrop, pemindahan atau import manual.";
 "errors.insufficient_funds" = "Dana tidak mencukupi";
-"info.insufficient_funds.title" = "%@ required";
-"info.insufficient_funds.description" = "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.";
+"info.insufficient_network_fee_balance.title" = "%@ diperlukan";
+"info.insufficient_network_fee_balance.description" = "Urus niaga ini memerlukan %@ untuk menampung yuran rangkaian yang dibayar kepada %@ pelombong, bukan Gem Wallet. Pastikan anda mempunyai cukup %@.";
 "brand_name" = "Gem Wallet";
+"info.insufficient_balance.title" = "Baki Tidak Mencukupi";
+"info.insufficient_balance.description" = "Anda tidak mempunyai cukup %@ untuk menyelesaikan transaksi ini. Sila tambah nilai, terima atau tukar dalam dompet anda dan cuba lagi.";
+"info.account_minimum_balance.title" = "Baki minimum";
+"asset.buy_asset" = "Beli %@";
