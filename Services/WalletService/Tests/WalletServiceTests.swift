@@ -19,8 +19,7 @@ struct WalletServiceTests {
         let service = WalletService.mock()
         let wallet = try service.importWallet(
             name: "Main",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
         #expect(service.wallets.map(\.walletId) == [wallet.walletId])
         #expect(service.currentWalletId == wallet.walletId)
@@ -32,19 +31,16 @@ struct WalletServiceTests {
 
         let first = try service.importWallet(
             name: "First",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
         let second = try service.importWallet(
             name: "Second",
-            type: .phrase(words: LocalKeystore.words, chains: [.solana]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.solana])
         )
 
         let third = try service.importWallet(
             name: "Third",
-            type: .phrase(words: LocalKeystore.words, chains: [.aptos]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.aptos])
         )
 
         try service.delete(second)
@@ -68,8 +64,7 @@ struct WalletServiceTests {
         let service = WalletService.mock()
         let wallet = try service.importWallet(
             name: "Pin me",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
 
         try service.pin(wallet: wallet)
@@ -86,13 +81,11 @@ struct WalletServiceTests {
         let service = WalletService.mock()
         let walletA = try service.importWallet(
             name: "A",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
         let walletB = try service.importWallet(
             name: "B",
-            type: .phrase(words: LocalKeystore.words, chains: [.solana]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.solana])
         )
 
         let orderBefore = service.wallets.map(\.order)
@@ -107,8 +100,7 @@ struct WalletServiceTests {
         let service = WalletService.mock()
         let wallet = try service.importWallet(
             name: "Old",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
 
         try service.rename(walletId: wallet.walletId, newName: "New")
@@ -121,8 +113,7 @@ struct WalletServiceTests {
         let service = WalletService.mock()
         let original = try service.importWallet(
             name: "Upgradable",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum, .algorand]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum, .algorand])
         )
 
         #expect(original.accounts.map(\.chain) == [.ethereum, .algorand])
@@ -140,8 +131,7 @@ struct WalletServiceTests {
         let service = WalletService.mock()
         let wallet = try service.importWallet(
             name: "Mnemonic",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
 
         #expect(try service.getMnemonic(wallet: wallet) == LocalKeystore.words)
@@ -154,8 +144,7 @@ struct WalletServiceTests {
 
         let wallet = try service.importWallet(
             name: "PK Wallet",
-            type: .privateKey(text: hex, chain: .solana),
-            creationType: .created
+            type: .privateKey(text: hex, chain: .solana)
         )
 
         let privateKey = try service.getPrivateKey(
@@ -175,15 +164,13 @@ struct WalletServiceTests {
 
         _ = try service.importWallet(
             name: "First",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
         #expect(try service.nextWalletIndex() == 2)
 
         _ = try service.importWallet(
             name: "Second",
-            type: .phrase(words: LocalKeystore.words, chains: [.solana]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.solana])
         )
 
         #expect(try service.nextWalletIndex() == 3)
@@ -195,13 +182,11 @@ struct WalletServiceTests {
 
         _ = try service.importWallet(
             name: "One",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
         let second = try service.importWallet(
             name: "Two",
-            type: .phrase(words: LocalKeystore.words, chains: [.solana]),
-            creationType: .created
+            type: .phrase(words: LocalKeystore.words, chains: [.solana])
         )
 
         service.setCurrent(for: 1)

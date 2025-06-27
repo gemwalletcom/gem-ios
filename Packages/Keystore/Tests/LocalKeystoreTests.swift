@@ -23,8 +23,7 @@ struct LocalKeystoreTests {
             let wallet = try keystore.importWallet(
                 name: "test",
                 type: .phrase(words: words, chains: [.ethereum]),
-                isWalletsEmpty: true,
-                creationType: .created
+                isWalletsEmpty: true
             )
 
             #expect(wallet.accounts.count == 1)
@@ -39,8 +38,7 @@ struct LocalKeystoreTests {
             let wallet = try keystore.importWallet(
                 name: "Solana Wallet",
                 type: .phrase(words: LocalKeystore.words, chains: [.solana]),
-                isWalletsEmpty: true,
-                creationType: .created
+                isWalletsEmpty: true
             )
 
             #expect(wallet.accounts.count == 1)
@@ -58,8 +56,7 @@ struct LocalKeystoreTests {
             let wallet = try keystore.importWallet(
                 name: "test",
                 type: .phrase(words: LocalKeystore.words, chains: chains),
-                isWalletsEmpty: true,
-                creationType: .created
+                isWalletsEmpty: true
             )
 
             #expect(wallet.accounts == chains.map {
@@ -79,8 +76,7 @@ struct LocalKeystoreTests {
             let wallet = try keystore.importWallet(
                 name: "Test Solana",
                 type: .privateKey(text: hex, chain: .solana),
-                isWalletsEmpty: true,
-                creationType: .created
+                isWalletsEmpty: true
             )
 
             let exportedHex = try keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .hex)
@@ -93,8 +89,7 @@ struct LocalKeystoreTests {
             let wallet2 = try keystore2.importWallet(
                 name: "Test Solana 2",
                 type: .privateKey(text: exportedBase58, chain: .solana),
-                isWalletsEmpty: true,
-                creationType: .created
+                isWalletsEmpty: true
             )
             let exportedKey = try keystore2.getPrivateKey(wallet: wallet2, chain: .solana)
 
@@ -108,8 +103,7 @@ struct LocalKeystoreTests {
         let wallet = try keystore.importWallet(
             name: "Test Solana",
             type: .phrase(words: LocalKeystore.words, chains: [.solana]),
-            isWalletsEmpty: true,
-            creationType: .created
+            isWalletsEmpty: true
         )
 
         let text = "5A2EYggC6hiAAuRArnkAANGySDyqQUGrbBHXfKQD9DQ5XcSkReDswnRqb7x3KRrnie9qSL"
@@ -140,8 +134,7 @@ struct LocalKeystoreTests {
             let wallet = try keystore.importWallet(
                 name: "test",
                 type: .phrase(words: LocalKeystore.words, chains: chains),
-                isWalletsEmpty: true,
-                creationType: .created
+                isWalletsEmpty: true
             )
 
             #expect(wallet.accounts.count == chains.count)
@@ -234,14 +227,12 @@ struct LocalKeystoreTests {
             let ethWallet = try keystore.importWallet(
                 name: "ETH only",
                 type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
-                isWalletsEmpty: true,
-                creationType: .created
+                isWalletsEmpty: true
             )
             let solWallet = try keystore.importWallet(
                 name: "SOL only",
                 type: .phrase(words: LocalKeystore.words, chains: [.solana]),
-                isWalletsEmpty: false,
-                creationType: .created
+                isWalletsEmpty: false
             )
             let updated = try keystore.setupChains(
                 chains: chains,
@@ -263,8 +254,7 @@ struct LocalKeystoreTests {
             let wallet = try keystore.importWallet(
                 name: "Complete wallet",
                 type: .phrase(words: LocalKeystore.words, chains: chains),
-                isWalletsEmpty: true,
-                creationType: .created
+                isWalletsEmpty: true
             )
 
             let result = try keystore.setupChains(
