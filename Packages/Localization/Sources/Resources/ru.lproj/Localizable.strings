@@ -418,7 +418,7 @@
 "info.insufficient_network_fee_balance.title" = "Требуется %@";
 "info.insufficient_network_fee_balance.description" = "Эта транзакция требует %@ для покрытия сетевой комиссии, выплачиваемой майнерам %@, а не Кошелек Gem. Убедитесь, что у вас достаточно %@.";
 "brand_name" = "Кошелек Gem";
-"info.insufficient_balance.title" = "Insufficient Balance";
-"info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
+"info.insufficient_balance.title" = "Недостаточный баланс";
+"info.insufficient_balance.description" = "У вас недостаточно %@ для завершения этой транзакции. Пожалуйста, пополните, получите или обменяйте ваш кошелек и попробуйте еще раз.";
 "info.account_minimum_balance.title" = "Минимальный баланс";
 "asset.buy_asset" = "Купить %@";
