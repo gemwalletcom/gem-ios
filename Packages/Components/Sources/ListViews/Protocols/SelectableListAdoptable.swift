@@ -3,7 +3,7 @@
 import SwiftUI
 
 public protocol SelectableListAdoptable {
-    associatedtype Item: Hashable & Identifiable
+    associatedtype Item: Hashable & Identifiable & Sendable
     var selectionType: SelectionType { get }
 
     var state: StateViewType<SelectableListType<Item>> { get }

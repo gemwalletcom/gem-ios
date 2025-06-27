@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct ChartDateValue {
+public struct ChartDateValue: Sendable {
     public let date: Date
     public let value: Double
 

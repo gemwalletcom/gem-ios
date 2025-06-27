@@ -10,7 +10,7 @@ import ExplorerService
 import GemstonePrimitives
 import Formatters
 
-public struct StakeDelegationViewModel {
+public struct StakeDelegationViewModel: Sendable {
     
     public let delegation: Delegation
     private let formatter = ValueFormatter(style: .medium)

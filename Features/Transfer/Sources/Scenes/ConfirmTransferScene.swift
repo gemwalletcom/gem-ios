@@ -6,6 +6,8 @@ import Style
 import Localization
 import InfoSheet
 import PrimitivesComponents
+import FiatConnect
+import Validators
 
 public struct ConfirmTransferScene: View {
     @State private var model: ConfirmTransferViewModel
@@ -18,12 +20,7 @@ public struct ConfirmTransferScene: View {
         VStack {
             transactionsList
             Spacer()
-            StateButton(
-                text: model.buttonTitle,
-                type: .primary(model.state, isDisabled: model.isButtonDisabled),
-                image: statefullButtonImage,
-                action: model.onSelectConfirmButton
-            )
+            StateButton(model.confirmButtonModel)
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .padding(.bottom, .scene.bottom)
@@ -50,6 +47,23 @@ public struct ConfirmTransferScene: View {
                     NetworkFeeScene(model: model.feeModel)
                         .presentationDetentsForCurrentDeviceSize(expandable: true)
                 }
+            case let .fiatConnect(assetAddress, walletId):
+                NavigationStack {
+                    FiatConnectNavigationView(
+                        model: FiatSceneViewModel(
+                            assetAddress: assetAddress,
+                            walletId: walletId.id,
+                            allowOnlyBuy: true
+                        )
+                    )
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarDismissItem(
+                            title: .done,
+                            placement: .topBarLeading
+                        )
+                    }
+                }
             }
         }
         .alert(
@@ -66,12 +80,6 @@ public struct ConfirmTransferScene: View {
 // MARK: - UI Components
 
 extension ConfirmTransferScene {
-    private var statefullButtonImage: Image? {
-        if let image = model.buttonImage {
-            return Image(systemName: image)
-        }
-        return nil
-    }
 
     private var transactionsList: some View {
         List {
@@ -145,8 +153,14 @@ extension ConfirmTransferScene {
                 }
             }
 
-            if case let .error(error) = model.state {
-                ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
+            if let error = model.listError {
+                ListItemErrorView(
+                    errorTitle: model.listErrorTitle,
+                    error: error,
+                    infoAction: {
+                        model.onSelectListError(error: error)
+                    }
+                )
             }
         }
         .contentMargins([.top], .small, for: .scrollContent)

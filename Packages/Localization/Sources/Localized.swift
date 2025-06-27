@@ -465,14 +465,22 @@ public enum Localized {
         public static let description = Localized.tr("Localizable", "info.asset_status.unverified.description", fallback: "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.")
       }
     }
-    public enum InsufficientFunds {
+    public enum InsufficientBalance {
+      /// You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.
+      public static func description(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "info.insufficient_balance.description", String(describing: p1), fallback: "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.")
+      }
+      /// Insufficient Balance
+      public static let title = Localized.tr("Localizable", "info.insufficient_balance.title", fallback: "Insufficient Balance")
+    }
+    public enum InsufficientNetworkFeeBalance {
       /// This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.
       public static func description(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
-        return Localized.tr("Localizable", "info.insufficient_funds.description", String(describing: p1), String(describing: p2), String(describing: p3), fallback: "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.")
+        return Localized.tr("Localizable", "info.insufficient_network_fee_balance.description", String(describing: p1), String(describing: p2), String(describing: p3), fallback: "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.")
       }
       /// %@ required
       public static func title(_ p1: Any) -> String {
-        return Localized.tr("Localizable", "info.insufficient_funds.title", String(describing: p1), fallback: "%@ required")
+        return Localized.tr("Localizable", "info.insufficient_network_fee_balance.title", String(describing: p1), fallback: "%@ required")
       }
     }
     public enum LockTime {
