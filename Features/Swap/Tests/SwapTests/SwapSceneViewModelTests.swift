@@ -18,14 +18,14 @@ import protocol Gemstone.GemSwapperProtocol
 struct SwapSceneViewModelTests {
     @Test
     func toValue() async {
-        #expect(await model().toValue == "2,500.00")
-        #expect(await model(toValueMock: "1000000").toValue == "0.01")
-        #expect(await model(toValueMock: "10000").toValue == "0.0001")
-        #expect(await model(toValueMock: "12").toValue == "0.00000012")
+        #expect(await model().toValue == "250,000.00")
+        #expect(await model(toValueMock: "1000000").toValue == "1.00")
+        #expect(await model(toValueMock: "10000").toValue == "0.01")
+        #expect(await model(toValueMock: "12").toValue == "0.000012")
     }
     
     @Test
-    func swapEstimationText() async {
+    func swapEstimationText() {
         let model = SwapSceneViewModel.mock()
         
         model.selectedSwapQuote = .mock(etaInSeconds: nil)
@@ -38,7 +38,42 @@ struct SwapSceneViewModelTests {
         #expect(model.swapEstimationText == "≈ 3 min")
     }
     
-    // MARK: - Privat methods
+    @Test
+    func switchRate() async {
+        let model = await model()
+        
+        #expect(model.rateText == "1 ETH ≈ 250,000.00 USDT")
+        
+        model.switchRateDirection()
+        #expect(model.rateText == "1 USDT ≈ 0.000004 ETH")
+    }
+    
+    @Test
+    func additionalInfoVisibility() async {
+        let model = SwapSceneViewModel.mock()
+
+        model.swapState.quotes = .loading
+        #expect(model.shouldShowAdditionalInfo == false)
+
+        model.swapState.quotes = .data([.mock()])
+        #expect(model.shouldShowAdditionalInfo)
+	}
+
+	@Test
+    func insufficientBalance() {
+        let model = SwapSceneViewModel.mock()
+        model.onChangeFromAsset(old: nil, new: .mock(asset: .mockEthereum(), balance: .init(available: 1000000000000000000)))
+        model.amountInputModel.text = "1.1"
+
+        #expect(model.actionButtonState.isError)
+        #expect(model.actionButtonTitle == "Insufficient ETH balance.")
+        
+        model.amountInputModel.text = "0.9"
+        #expect(!model.actionButtonState.isError)
+        #expect(model.actionButtonTitle == "Swap")
+    }
+    
+    // MARK: - Private methods
     
     private func model(
         toValueMock: String = "250000000000"

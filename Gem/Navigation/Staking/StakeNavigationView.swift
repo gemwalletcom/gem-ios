@@ -83,6 +83,9 @@ struct StakeNavigationView: View {
                     service: stakeService,
                     onAmountInputAction: {
                         navigationPath.append($0)
+                    },
+                    onTransferAction: {
+                        navigationPath.append($0)
                     }
                 )
             )

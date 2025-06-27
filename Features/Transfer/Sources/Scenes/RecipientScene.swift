@@ -29,7 +29,7 @@ struct RecipientScene: View {
                     InputValidationField(
                         model: $model.addressInputModel,
                         placeholder: model.recipientField,
-                        allowClean: false,
+                        allowClean: true,
                         trailingView: {
                             HStack(spacing: .large/2) {
                                 NameRecordView(
@@ -94,7 +94,7 @@ struct RecipientScene: View {
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
-                styleState: model.actionButtonState,
+                type: .primary(model.actionButtonState),
                 action: model.onContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)

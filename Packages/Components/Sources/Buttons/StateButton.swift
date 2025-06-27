@@ -9,67 +9,24 @@ public struct StateButton: View {
     public let textValue: TextValue
     public let image: Image?
     public let infoTextValue: TextValue?
-    public let styleState: StateButtonStyle.State
+    public let type: ButtonType
 
     private let action: () -> Void
-
-    public init<T>(
-        text: String,
-        textStyle: TextStyle = StateButton.defaultTextStyle,
-        viewState: StateViewType<T>,
-        showProgressIndicator: Bool = true,
-        image: Image? = nil,
-        infoTitle: String? = nil,
-        infoTitleStyle: TextStyle = .calloutSecondary,
-        disabledRule: Bool? = nil,
-        action: @escaping () -> Void
-    ) {
-
-        let styleState: StateButtonStyle.State = {
-            switch viewState {
-            case .noData:
-                return .disabled
-            case .loading:
-                return .loading(showProgress: showProgressIndicator)
-            case .data:
-                return .normal
-            case .error:
-                if let disabledRule {
-                    return disabledRule ? .disabled : .normal
-                } else {
-                    return .disabled
-                }
-            }
-        }()
-
-        self.init(text: text,
-                  textStyle: textStyle,
-                  styleState: styleState,
-                  image: image,
-                  infoTitle: infoTitle,
-                  infoTitleStyle: infoTitleStyle,
-                  action: action
-        )
-    }
 
     public init(
         text: String,
         textStyle: TextStyle = StateButton.defaultTextStyle,
-        styleState: StateButtonStyle.State,
+        type: ButtonType = .primary(),
         image: Image? = nil,
         infoTitle: String? = nil,
         infoTitleStyle: TextStyle = .calloutSecondary,
         action: @escaping () -> Void
     ) {
         self.textValue = TextValue(text: text, style: textStyle)
-        self.styleState = styleState
+        self.type = type
         self.infoTextValue = infoTitle.map({ TextValue(text: $0, style: infoTitleStyle) })
         self.action = action
         self.image = image
-    }
-
-    private var isDisabled: Bool {
-        styleState != .normal
     }
 
     public var body: some View {
@@ -79,49 +36,102 @@ public struct StateButton: View {
                     .textStyle(infoTextValue.style)
                     .multilineTextAlignment(.center)
             }
-            Button(
-                action: action,
-                label: {
-                    HStack {
-                        if let image {
-                            image
-                                .foregroundStyle(textValue.style.color)
-                        }
-                        Text(textValue.text)
+            Button(action: action) {
+                HStack {
+                    if let image {
+                        image
                             .foregroundStyle(textValue.style.color)
                     }
-                    .font(textValue.style.font)
+                    Text(textValue.text)
+                        .foregroundStyle(textValue.style.color)
                 }
-            )
+                .font(textValue.style.font)
+            }
+            .buttonStyle(.variant(type))
             .disabled(isDisabled)
-            .buttonStyle(.statefulBlue(state: styleState))
+        }
+    }
+    
+    private var isDisabled: Bool {
+        switch type {
+        case .primary(let state): state != .normal
+        case .secondary: false
         }
     }
 }
 
-// MARK: - Preview
+public extension ButtonType {
+    static func primary<T>(
+        _ viewState: StateViewType<T>,
+        showProgress: Bool = true,
+        isDisabled: Bool? = nil
+    ) -> Self {
+        switch viewState {
+        case .loading: return .primary(.loading(showProgress: showProgress))
+        case .noData: return .primary(.disabled)
+        case .data: return .primary(.normal)
+        case .error:
+            if let isDisabled, !isDisabled {
+                return .primary(.normal)
+            }
+            return .primary(.disabled)
+        }
+    }
+}
+
+// MARK: - Previews
 
 #Preview {
     List {
-        Section(header: Text("Normal State")) {
-            StateButton(text: "Submit", styleState: .normal, action: {})
-            StateButton(text: "Submit", styleState: .normal, image: Images.System.faceid, action: {})
+        Section(header: Text("Primary · normal")) {
+            StateButton(text: "Submit",
+                        type: .primary(),
+                        action: {})
+            StateButton(text: "Submit",
+                        type: .primary(),
+                        image: Images.System.faceid,
+                        action: {})
         }
 
-        Section(header: Text("Normal State with info")) {
-            StateButton(text: "Submit", styleState: .normal, infoTitle: "Approve token", action: {})
-            StateButton(text: "Submit", styleState: .normal, image: Images.System.faceid, infoTitle: "Big info titleBig info titleBig info titleBig info titleBig info titleBig info titleBig info title", action: {})
+        Section(header: Text("Primary · normal + info")) {
+            StateButton(text: "Submit",
+                        type: .primary(),
+                        infoTitle: "Approve token",
+                        action: {})
+            StateButton(text: "Submit",
+                        type: .primary(),
+                        image: Images.System.faceid,
+                        infoTitle: "Long info title Long info title Long info title",
+                        action: {})
         }
 
-        Section(header: Text("Loading State")) {
-            StateButton(text: "Submit", styleState: .loading(showProgress: true), image: Images.System.faceid, action: {})
+        Section(header: Text("Primary · loading")) {
+            StateButton(text: "Submit",
+                        type: .primary(.loading()),
+                        image: Images.System.faceid,
+                        action: {})
         }
 
-        Section(header: Text("Disabled State")) {
-            StateButton(text: "Submit", styleState: .normal, image: Images.System.faceid, action: {})
+        Section(header: Text("Primary · disabled")) {
+            StateButton(text: "Submit",
+                        type: .primary(),
+                        image: Images.System.faceid,
+                        action: {})
                 .disabled(true)
 
-            StateButton(text: "Submit", styleState: .disabled, action: {})
+            StateButton(text: "Submit",
+                        type: .primary(.disabled),
+                        action: {})
+        }
+
+        Section(header: Text("Secondary")) {
+            StateButton(text: "Insufficient Balance",
+                        type: .secondary,
+                        action: {})
+            StateButton(text: "Insufficient Balance",
+                        type: .secondary,
+                        image: Images.System.faceid,
+                        action: {})
         }
     }
     .padding()

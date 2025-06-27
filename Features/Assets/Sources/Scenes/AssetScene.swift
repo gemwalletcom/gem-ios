@@ -40,6 +40,7 @@ public struct AssetScene: View {
                         ListItemImageView(
                             title: Localized.Transaction.status,
                             subtitle: model.scoreViewModel.status,
+                            subtitleStyle: model.scoreViewModel.statusStyle,
                             assetImage: model.scoreViewModel.assetImage,
                             infoAction: { model.onSelectTokenStatus() }
                         )

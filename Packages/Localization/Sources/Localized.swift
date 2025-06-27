@@ -10,6 +10,8 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum Localized {
+  /// Gem Wallet
+  public static let brandName = Localized.tr("Localizable", "brand_name", fallback: "Gem Wallet")
   public enum Activity {
     /// Activity
     public static let title = Localized.tr("Localizable", "activity.title", fallback: "Activity")
@@ -331,6 +333,8 @@ public enum Localized {
     public static let error = Localized.tr("Localizable", "errors.error", fallback: "Error")
     /// An error occurred!
     public static let errorOccured = Localized.tr("Localizable", "errors.error_occured", fallback: "An error occurred!")
+    /// Insufficient funds
+    public static let insufficientFunds = Localized.tr("Localizable", "errors.insufficient_funds", fallback: "Insufficient funds")
     /// Invalid address or name
     public static let invalidAddressName = Localized.tr("Localizable", "errors.invalid_address_name", fallback: "Invalid address or name")
     /// Invalid amount
@@ -459,6 +463,16 @@ public enum Localized {
       public enum Unverified {
         /// Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.
         public static let description = Localized.tr("Localizable", "info.asset_status.unverified.description", fallback: "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.")
+      }
+    }
+    public enum InsufficientFunds {
+      /// This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.
+      public static func description(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
+        return Localized.tr("Localizable", "info.insufficient_funds.description", String(describing: p1), String(describing: p2), String(describing: p3), fallback: "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.")
+      }
+      /// %@ required
+      public static func title(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "info.insufficient_funds.title", String(describing: p1), fallback: "%@ required")
       }
     }
     public enum LockTime {

@@ -64,7 +64,7 @@ public struct SwapScene: View {
             interval: .none,
             action: model.onAssetIdsChange
         )
-        .onChange(of: model.fromValue, model.onChangeFromValue)
+        .onChange(of: model.amountInputModel.text, model.onChangeFromValue)
         .onChange(of: model.pairSelectorModel, model.onChangePair)
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
         .onChange(of: model.focusField, onChangeFocus)
@@ -86,7 +86,9 @@ extension SwapScene {
         List {
             swapFromSectionView
             swapToSectionView
-            additionalInfoSectionView
+            if model.shouldShowAdditionalInfo {
+                additionalInfoSectionView
+            }
 
             if let error = model.swapState.error {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
@@ -99,7 +101,7 @@ extension SwapScene {
             if let swapModel = model.swapTokenModel(type: .pay) {
                 SwapTokenView(
                     model: swapModel,
-                    text: $model.fromValue,
+                    text: $model.amountInputModel.text,
                     onBalanceAction: model.onSelectFromMaxBalance,
                     onSelectAssetAction: model.onSelectAssetPay
                 )
@@ -174,10 +176,10 @@ extension SwapScene {
             }
             
             if let rateText = model.rateText {
-                ListItemImageView(
+                ListItemRotateView(
                     title: model.rateTitle,
                     subtitle: rateText,
-                    assetImage: .none
+                    action: model.switchRateDirection
                 )
             }
 
@@ -194,8 +196,7 @@ extension SwapScene {
         VStack {
             StateButton(
                 text: model.actionButtonTitle,
-                viewState: model.actionButtonState,
-                disabledRule: model.shouldDisableActionButton,
+                type: .primary(model.actionButtonState, isDisabled: model.shouldDisableActionButton),
                 action: model.onSelectActionButton
             )
         }
