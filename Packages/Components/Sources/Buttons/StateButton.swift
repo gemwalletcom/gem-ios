@@ -68,7 +68,6 @@ public struct StateButton: View {
     private var isDisabled: Bool {
         switch type {
         case .primary(let state): state != .normal
-        case .secondary: false
         }
     }
 }
@@ -94,8 +93,7 @@ public extension ButtonType {
         switch viewState {
         case .loading: return .primary(.loading(showProgress: showProgress))
         case .noData: return .primary(.disabled)
-        case .data: return .primary(.normal)
-        case .error:
+        case .error, .data:
             if let isDisabled, !isDisabled {
                 return .primary(.normal)
             }
@@ -146,16 +144,6 @@ public extension ButtonType {
 
             StateButton(text: "Submit",
                         type: .primary(.disabled),
-                        action: {})
-        }
-
-        Section(header: Text("Secondary")) {
-            StateButton(text: "Insufficient Balance",
-                        type: .secondary,
-                        action: {})
-            StateButton(text: "Insufficient Balance",
-                        type: .secondary,
-                        image: Images.System.faceid,
                         action: {})
         }
     }

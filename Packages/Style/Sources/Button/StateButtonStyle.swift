@@ -56,14 +56,9 @@ extension ButtonStyle where Self == StateButtonStyle {
         .init(.primary(state), palettee: .primary)
     }
 
-    public static func secondary() -> Self {
-        .init(.secondary, palettee: .secondary)
-    }
-
     public static func variant(_ variant: ButtonType) -> Self {
         switch variant {
         case .primary(let state): .primary(state)
-        case .secondary: .secondary()
         }
     }
 }
@@ -72,15 +67,13 @@ extension ButtonStyle where Self == StateButtonStyle {
 
 #Preview {
     List {
-        Section("Helpers .primary / .secondary") {
+        Section("Helpers .primary") {
             Button("Primary · normal")  { }
                 .buttonStyle(.primary())
             Button("Primary · loading") { }
                 .buttonStyle(.primary(.loading()))
             Button("Primary · disabled"){ }
                 .buttonStyle(.primary(.disabled))
-            Button("Secondary") { }
-                .buttonStyle(.secondary())
         }
     }
     .padding()

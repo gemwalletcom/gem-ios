@@ -204,11 +204,7 @@ public final class ConfirmTransferViewModel {
             icon: confirmButtonIcon,
             onAction: { [weak self] in
                 guard let self else { return }
-                switch $0 {
-                case .buy: self.onSelectBuy()
-                case .confirm: self.onSelectConfirmTransfer()
-                case .retry: self.fetch()
-                }
+                self.fetch()
             }
         )
     }
