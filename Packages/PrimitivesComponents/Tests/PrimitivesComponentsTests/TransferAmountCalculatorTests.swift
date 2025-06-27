@@ -220,7 +220,7 @@ struct TransferAmountCalculatorTests {
             #expect(result == TransferAmount(value: 2222, networkFee: 3, useMaxAmount: false))
         }
 
-        #expect(throws: TransferAmountCalculatorError.insufficientNetworkFee(coinAsset, required: .zero)) {
+        #expect(throws: TransferAmountCalculatorError.insufficientNetworkFee(coinAsset, required: BigInt(13))) {
             try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
