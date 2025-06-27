@@ -20,7 +20,7 @@ public struct TransactionScene: View {
             model: TransactionViewModel(
                 explorerService: ExplorerService.standard,
                 transaction: transactions.first!,
-                formatter: .medium
+                formatter: .auto
             )
         )
     }
