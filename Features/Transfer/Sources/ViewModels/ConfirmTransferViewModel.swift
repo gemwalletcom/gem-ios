@@ -23,7 +23,14 @@ import Formatters
 @MainActor
 public final class ConfirmTransferViewModel {
     var feeModel: NetworkFeeSceneViewModel
-    var state: StateViewType<TransactionInputViewModel> = .loading
+    var state: StateViewType<TransactionInputViewModel> = .loading {
+        didSet {
+            if case .data(let data) = state, case .failure(let error) =  data.transferAmount {
+                onSelectListError(error: error)
+            }
+        }
+    }
+
     var confirmingState: StateViewType<Bool> = .noData {
         didSet {
             if case .error(let error) = confirmingState {
@@ -175,8 +182,10 @@ public final class ConfirmTransferViewModel {
     }
     var listErrorTitle: String { Localized.Errors.errorOccured }
     var shouldShowListErrorInfo: Bool {
-        guard case .failure(let error) = state.value?.transferAmount else { return false }
-        return error.isInfoSupported
+        switch state.value?.transferAmount {
+        case .success, .none: false
+        case .failure: true
+        }
     }
 
     var showClearHeader: Bool {
@@ -213,19 +222,25 @@ public final class ConfirmTransferViewModel {
 // MARK: - Business Logic
 
 extension ConfirmTransferViewModel {
-    func onSelectListError(error: TransferAmountCalculatorError) {
+    func onSelectListError(error: Error) {
         switch error {
-        case .insufficientBalance:
+        case let error as TransferAmountCalculatorError:
+            switch error {
+            case .insufficientBalance:
+                break
+            case .insufficientNetworkFee(let asset, let required):
+                let amount = ValueFormatter(style: .short).string(required, decimals: asset.decimals.asInt)
+                self.isPresentingSheet = .info(.insufficientNetworkFee(asset, amount: "**\(amount) \(asset.symbol)**"))
+            case .minimumAccountBalanceTooLow(let asset, let required):
+                let amount = ValueFormatter(style: .short).string(
+                    required,
+                    decimals: asset.decimals.asInt,
+                    currency: asset.symbol
+                )
+                isPresentingSheet = .info(.accountMinimalBalance(assetAmount: amount))
+            }
+        default :
             break
-        case .insufficientNetworkFee:
-            onSelectNetworkFeeInfo()
-        case .minimumAccountBalanceTooLow(let asset, let required):
-            let amount = ValueFormatter(style: .short).string(
-                required,
-                decimals: asset.decimals.asInt,
-                currency: asset.symbol
-            )
-            isPresentingSheet = .info(.accountMinimalBalance(assetAmount: amount))
         }
     }
 
@@ -249,12 +264,6 @@ extension ConfirmTransferViewModel {
 
     func onSelectFeePicker() {
         isPresentingSheet = .networkFeeSelector
-    }
-
-    func onSelectInfoButton(error: TransferAmountCalculatorError) {
-        if case error = .insufficientNetworkFee(dataModel.asset) {
-            onSelectNetworkFeeInfo()
-        }
     }
 
     func onChangeFeePriority(_ priority: FeePriority) async {

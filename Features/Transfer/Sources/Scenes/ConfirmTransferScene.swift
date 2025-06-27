@@ -153,15 +153,13 @@ extension ConfirmTransferScene {
                 }
             }
 
-            if let listError = model.listError {
+            if let error = model.listError {
                 ListItemErrorView(
                     errorTitle: model.listErrorTitle,
-                    error: listError,
-                    infoAction: model.shouldShowListErrorInfo ? {
-                        if let error = listError as? TransferAmountCalculatorError {
-                            model.onSelectListError(error: error)
-                        }
-                    } : nil
+                    error: error,
+                    infoAction: {
+                        model.onSelectListError(error: error)
+                    }
                 )
             }
         }

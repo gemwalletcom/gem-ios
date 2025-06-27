@@ -56,12 +56,9 @@ public struct ListItemErrorView: View {
             }
             HStack(alignment: .firstTextBaseline, spacing: .small) {
                 if let infoAction {
-                    Button(action: infoAction) {
-                        Images.System.info
-                            .frame(width: .list.image, height: .list.image)
-                            .foregroundStyle(Colors.gray)
-                    }
-                    .buttonStyle(.plain)
+                    InfoButton(
+                        action: infoAction
+                    )
                 }
                 if errorTitle != nil {
                     Text(error.localizedDescription)
