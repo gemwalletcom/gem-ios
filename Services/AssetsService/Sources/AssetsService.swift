@@ -32,7 +32,7 @@ public final class AssetsService: Sendable {
             )
         ])
         try addBalanceIfMissing(walletId: walletId, assetId: asset.id)
-        try updateEnabled(walletId: walletId, assetId: asset.id, enabled: true)
+        try updateEnabled(walletId: walletId, assetIds: [asset.id], enabled: true)
     }
 
     public func addAssets(assets: [AssetBasic]) throws {
@@ -96,14 +96,19 @@ public final class AssetsService: Sendable {
         }
     }
 
-    public func updateEnabled(walletId: WalletId, assetId: AssetId, enabled: Bool) throws {
-        try balanceStore.setIsEnabled(walletId: walletId.id, assetIds: [assetId.identifier], value: enabled)
+    public func updateEnabled(walletId: WalletId, assetIds: [AssetId], enabled: Bool) throws {
+        try balanceStore.setIsEnabled(walletId: walletId.id, assetIds: assetIds.map { $0.identifier }, value: enabled)
     }
 
     public func updateAsset(assetId: AssetId) async throws {
         let asset = try await getAsset(assetId: assetId)
         try assetStore.add(assets: [asset.basic])
         try assetStore.updateLinks(assetId: assetId, asset.links)
+    }
+    
+    public func addAssets(assetIds: [AssetId]) async throws {
+        let assets = try await getAssets(assetIds: assetIds)
+        try assetStore.add(assets: assets)
     }
 
     public func getAsset(assetId: AssetId) async throws -> AssetFull {

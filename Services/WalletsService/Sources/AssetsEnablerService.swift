@@ -23,8 +23,8 @@ struct AssetsEnablerService: AssetsEnabler {
         do {
             for assetId in assetIds {
                 try assetsService.addBalanceIfMissing(walletId: walletId, assetId: assetId)
-                try assetsService.updateEnabled(walletId: walletId, assetId: assetId, enabled: enabled)
             }
+            try assetsService.updateEnabled(walletId: walletId, assetIds: assetIds, enabled: enabled)
             // If enabling, also update balances and prices
             if enabled {
                 async let balanceUpdate: () = balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)

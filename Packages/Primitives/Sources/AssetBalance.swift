@@ -5,6 +5,14 @@ public enum AssetBalanceType: Sendable {
     case coin(available: BigInt, reserved: BigInt)
     case token(available: BigInt)
     case stake(staked: BigInt, pending: BigInt, rewards: BigInt, reserved: BigInt, locked: BigInt, frozen: BigInt)
+    
+    public var available: BigInt? {
+        switch self {
+        case .coin(let available, _): available
+        case .token(let available): available
+        case .stake: nil
+        }
+    }
 }
 
 public struct AssetBalanceChange: Sendable {

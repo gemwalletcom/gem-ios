@@ -6,16 +6,18 @@ import StoreTestKit
 import ChainServiceTestKit
 import Store
 import ChainService
+import AssetsService
+import AssetsServiceTestKit
 
 public extension BalanceService {
     static func mock(
         balanceStore: BalanceStore = .mock(),
-        assertStore: AssetStore = .mock(),
+        assetsService: AssetsService = .mock(),
         chainServiceFactory: ChainServiceFactory = .mock()
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,
-            assertStore: assertStore,
+            assetsService: assetsService,
             chainServiceFactory: chainServiceFactory
         )
     }

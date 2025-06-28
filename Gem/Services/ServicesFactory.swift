@@ -51,6 +51,11 @@ struct ServicesFactory {
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
 
         let avatarService = AvatarService(store: storeManager.walletStore)
+        let assetsService = Self.makeAssetsService(
+            assetStore: storeManager.assetStore,
+            balanceStore: storeManager.balanceStore,
+            chainFactory: chainServiceFactory
+        )
 
         let walletService = Self.makewalletService(
             preferences: storages.observablePreferences,
@@ -60,16 +65,11 @@ struct ServicesFactory {
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
-            assetsStore: storeManager.assetStore,
+            assetsService: assetsService,
             chainFactory: chainServiceFactory
         )
         let stakeService = Self.makeStakeService(
             stakeStore: storeManager.stakeStore,
-            chainFactory: chainServiceFactory
-        )
-        let assetsService = Self.makeAssetsService(
-            assetStore: storeManager.assetStore,
-            balanceStore: storeManager.balanceStore,
             chainFactory: chainServiceFactory
         )
         let nftService = Self.makeNftService(
@@ -242,12 +242,12 @@ extension ServicesFactory {
 
     private static func makeBalanceService(
         balanceStore: BalanceStore,
-        assetsStore: AssetStore,
+        assetsService: AssetsService,
         chainFactory: ChainServiceFactory
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,
-            assertStore: assetsStore,
+            assetsService: assetsService,
             chainServiceFactory: chainFactory
         )
     }
@@ -358,7 +358,6 @@ extension ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            chainService: chainServiceFactory,
             transactionService: transactionService,
             bannerSetupService: bannerSetupService,
             addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
