@@ -37,9 +37,11 @@ struct AssetNavigationView: View {
                     model.priceAlertsImage
                 }
 
-                ActionMenu(items: model.menuItems) {
-                    model.optionsImage
-                }
+                AdaptiveActionMenu(
+                    title: model.title,
+                    items: model.menuItems,
+                    label: { model.optionsImage }
+                )
             }
         }
         .toast(
