@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct XRPResult<T: Codable>: Codable {
+public struct XRPResult<T: Codable & Sendable>: Codable, Sendable {
 	public let result: T
 
 	public init(result: T) {
