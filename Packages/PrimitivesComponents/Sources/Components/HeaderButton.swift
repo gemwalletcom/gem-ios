@@ -6,9 +6,16 @@ import Localization
 import Style
 import Components
 
-public enum HeaderButtonViewType {
+public enum HeaderButtonViewType: Identifiable {
     case button
-    case menuButton([ActionMenuItemType])
+    case menuButton(title: String? = nil, items: [ActionMenuItemType])
+
+    public var id: String {
+        switch self {
+        case .button: "button"
+        case let .menuButton(title, items): "\(title ?? "")_\(items.map{ $0.id }))"
+        }
+    }
 }
 
 public struct HeaderButton: Identifiable {
@@ -26,7 +33,7 @@ public struct HeaderButton: Identifiable {
         self.viewType = viewType
     }
     
-    public var id: String { type.rawValue }
+    public var id: String { "\(type.rawValue)_\(viewType.id)" }
     
     public var title: String {
         switch type {
