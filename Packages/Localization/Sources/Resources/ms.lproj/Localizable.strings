@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "Anda tidak mempunyai cukup %@ untuk menyelesaikan transaksi ini. Sila tambah nilai, terima atau tukar dalam dompet anda dan cuba lagi.";
 "info.account_minimum_balance.title" = "Baki minimum";
 "asset.buy_asset" = "Beli %@";
+"wallet.import_address_warning" = "Anda boleh melihat baki dan urus niaga untuk alamat ini, tetapi **tidak boleh menghantar atau menjual dana**.";

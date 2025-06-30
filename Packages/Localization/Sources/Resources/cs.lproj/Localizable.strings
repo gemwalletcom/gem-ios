@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "Nemáte dostatek %@ k dokončení této transakce. Dobijte si prosím peněženku, přijměte ji nebo ji vyměňte a zkuste to znovu.";
 "info.account_minimum_balance.title" = "Minimální zůstatek";
 "asset.buy_asset" = "Koupit %@";
+"wallet.import_address_warning" = "Pro tuto adresu si můžete prohlížet zůstatky a transakce, ale **nemůžete posílat ani prodávat finanční prostředky**.";

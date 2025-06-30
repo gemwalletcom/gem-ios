@@ -58,6 +58,13 @@ class ImportWalletViewModel: ObservableObject {
             return [.phrase, .privateKey, .address]
         }
     }
+    
+    func footerText(type: WalletImportType) -> AttributedString? {
+        switch type {
+        case .phrase, .privateKey: .none
+        case .address: try? AttributedString(markdown: Localized.Wallet.importAddressWarning)
+        }
+    }
 
     var keyEncodingTypes: [EncodingType] {
         chain?.keyEncodingTypes ?? []

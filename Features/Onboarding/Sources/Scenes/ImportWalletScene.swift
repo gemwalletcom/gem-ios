@@ -89,6 +89,12 @@ struct ImportWalletScene: View {
                         }
                     }
                     .listRowBackground(Colors.white)
+                } footer: {
+                    if let text = model.footerText(type: importType) {
+                        Text(text)
+                    } else {
+                        EmptyView()
+                    }
                 }
             }
             .listSectionSpacing(.compact)

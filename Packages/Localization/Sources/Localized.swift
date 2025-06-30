@@ -1132,6 +1132,8 @@ public enum Localized {
     public static func defaultNameChain(_ p1: Any, _ p2: Int) -> String {
       return Localized.tr("Localizable", "wallet.default_name_chain", String(describing: p1), p2, fallback: "%@ Wallet #%d")
     }
+    /// You can view balances and transactions for this address, but **cannot send or sell funds**.
+    public static let importAddressWarning = Localized.tr("Localizable", "wallet.import_address_warning", fallback: "You can view balances and transactions for this address, but **cannot send or sell funds**.")
     /// Import an Existing Wallet
     public static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")
     /// Manage Tokens

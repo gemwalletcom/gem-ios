@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "이 거래를 완료하기에 %@ 잔액이 부족합니다. 지갑에 충전, 수령 또는 스왑한 후 다시 시도해 주세요.";
 "info.account_minimum_balance.title" = "최소 잔액";
 "asset.buy_asset" = "%@ 구매";
+"wallet.import_address_warning" = "이 주소에 대한 잔액과 거래 내역은 볼 수 있지만, **자금을 보내거나 판매할 수는 없습니다**.";
