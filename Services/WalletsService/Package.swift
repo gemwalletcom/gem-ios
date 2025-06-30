@@ -29,6 +29,7 @@ let package = Package(
         .package(name: "DiscoverAssetsService", path: "../DiscoverAssetsService"),
         .package(name: "ChainService", path: "../ChainService"),
         .package(name: "WalletSessionService", path: "../WalletSessionService"),
+        .package(name: "DeviceService", path: "../DeviceService"),
     ],
     targets: [
         .target(
@@ -44,7 +45,8 @@ let package = Package(
                 "TransactionService",
                 "DiscoverAssetsService",
                 "ChainService",
-                "WalletSessionService"
+                "WalletSessionService",
+                "DeviceService"
             ],
             path: "Sources"
         ),

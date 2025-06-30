@@ -10,7 +10,7 @@ public final class WalletPreferences: @unchecked Sendable {
         static let transactionsTimestamp = "transactions_timestamp_v1"
         static let completeInitialLoadAssets = "complete_initial_load_assets"
         static let completeInitialAddressStatus = "complete_initial_address_status"
-        static let isDiscoveredAssets = "is_discovered_assets"
+        static let completeDiscoveryAssets = "complete_discovered_assets"
     }
 
     private let defaults: UserDefaults
@@ -39,19 +39,21 @@ public final class WalletPreferences: @unchecked Sendable {
         get { defaults.bool(forKey: Keys.completeInitialAddressStatus) }
     }
     
-    public var isDiscoveredAssets: Bool {
-        set { defaults.setValue(newValue, forKey: Keys.isDiscoveredAssets) }
-        get { defaults.bool(forKey: Keys.isDiscoveredAssets) }
+    public var completeDiscoveryAssets: Bool {
+        set { defaults.setValue(newValue, forKey: Keys.completeDiscoveryAssets) }
+        get { defaults.bool(forKey: Keys.completeDiscoveryAssets) }
     }
     
-    public var isEmptyWallet: Bool {
-        isDiscoveredAssets && assetsTimestamp == .zero
-    }
-    
-    public func markAsEmptyWallet() {
+    public func completeInitialSynchronization() {
         completeInitialAddressStatus = true
         completeInitialLoadAssets = true
-        isDiscoveredAssets = true
+        completeDiscoveryAssets = true
+    }
+    
+    public func completeAssetDiscovery() {
+        if !completeDiscoveryAssets {
+            completeDiscoveryAssets = true
+        }
     }
     
     // transactions

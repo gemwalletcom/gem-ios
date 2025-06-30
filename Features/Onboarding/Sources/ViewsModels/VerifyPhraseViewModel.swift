@@ -79,7 +79,7 @@ class VerifyPhraseViewModel: ObservableObject {
         let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
         let wallet = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
 
-        WalletPreferences(walletId: wallet.id).markAsEmptyWallet()
+        WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
         onFinish?()
     }
 }

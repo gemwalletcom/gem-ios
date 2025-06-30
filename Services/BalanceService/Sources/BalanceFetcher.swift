@@ -11,18 +11,18 @@ public struct BalanceFetcher: Sendable {
         self.chainServiceFactory = chainServiceFactory
     }
     
-    public func fetchBalance(
+    public func getBalance(
         assetId: AssetId,
         address: String
     ) async throws -> AssetBalance  {
         switch assetId.type {
         case .native:
-            return try await fetchCoinBalance(
+            return try await getCoinBalance(
                 chain: assetId.chain,
                 address: address
             )
         case .token:
-            guard let balance = try await fetchTokenBalance(
+            guard let balance = try await getTokenBalance(
                 chain: assetId.chain,
                 address: address,
                 tokenIds: [assetId.identifier]
@@ -31,7 +31,7 @@ public struct BalanceFetcher: Sendable {
         }
     }
     
-    func fetchCoinBalance(
+    func getCoinBalance(
         chain: Chain,
         address: String
     ) async throws -> AssetBalance {
@@ -40,7 +40,7 @@ public struct BalanceFetcher: Sendable {
             .coinBalance(for: address)
     }
 
-    func fetchCoinStakeBalance(
+    func getCoinStakeBalance(
         chain: Chain,
         address: String
     ) async throws -> AssetBalance? {
@@ -49,7 +49,7 @@ public struct BalanceFetcher: Sendable {
             .getStakeBalance(for: address)
     }
 
-    func fetchTokenBalance(
+    func getTokenBalance(
         chain: Chain,
         address: String,
         tokenIds: [String]

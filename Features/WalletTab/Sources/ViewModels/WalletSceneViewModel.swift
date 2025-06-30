@@ -220,6 +220,7 @@ extension WalletSceneViewModel {
     }
     
     private func shouldStartLoadingAssets() {
-        isLoadingAssets = !WalletPreferences(walletId: wallet.id).isEmptyWallet
+        let preferences = WalletPreferences(walletId: wallet.id)
+        isLoadingAssets = !preferences.completeDiscoveryAssets && preferences.assetsTimestamp == .zero
     }
 }

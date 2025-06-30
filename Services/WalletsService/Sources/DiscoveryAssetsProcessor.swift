@@ -28,25 +28,36 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
 
     func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
         let wallet = try walletSessionService.getWallet(walletId: walletId)
-        // FIXME: temp solution to wait for 1 second (need to wait until subscriptions updated)
-        // otherwise it would return no assets
-        try await Task.sleep(nanoseconds: 1_000_000_000)
-        try await processDiscovery(for: wallet, preferences: preferences)
+        async let coinProcess: () = processCoinDiscovery(for: wallet, preferences: preferences)
+        async let tokenProcess: () = processTokenDiscovery(for: wallet, preferences: preferences)
+        _ = try await (coinProcess, tokenProcess)
+        
+        WalletPreferences(walletId: walletId.id).completeAssetDiscovery()
+    }
+    
+    // MARK: - Private methods
+
+    private func processCoinDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
+        // Only perform coin discovery if it hasn’t been done before.
+        guard !preferences.completeInitialLoadAssets else { return }
+
+        let coinUpdates = await discoverAssetService.updateCoins(wallet: wallet)
+        await updateEnabled(for: coinUpdates)
+        preferences.completeInitialLoadAssets = true
     }
 
-    private func processDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
+    private func processTokenDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
         let deviceId = try SecurePreferences.standard.getDeviceId()
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
-        let update = try await discoverAssetService.updateBalance(
+        let tokenUpdate = try await discoverAssetService.updateTokens(
             deviceId: deviceId,
             wallet: wallet,
             fromTimestamp: preferences.assetsTimestamp
         )
         preferences.assetsTimestamp = newTimestamp
-        await updateEnabled(for: update)
-        preferences.isDiscoveredAssets = true
+        await updateEnabled(for: tokenUpdate)
     }
-
+    
     private func updateEnabled(for update: AssetUpdate) async {
         do {
             try assetsService.updateEnabled(walletId: update.walletId, assetIds: update.assetIds, enabled: true)
