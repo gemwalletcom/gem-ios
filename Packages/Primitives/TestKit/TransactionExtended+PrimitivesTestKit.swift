@@ -5,15 +5,17 @@ import Primitives
 
 public extension TransactionExtended {
     static func mock(
-        transaction: Transaction = .mock()
+        transaction: Transaction = .mock(),
+        asset: Asset = .mock(),
+        assets: [Asset] = []
     ) -> TransactionExtended {
         TransactionExtended(
             transaction: transaction,
-            asset: .mock(),
+            asset: asset,
             feeAsset: .mock(),
             price: .none,
             feePrice: .none,
-            assets: [],
+            assets: assets,
             prices: []
         )
     }
