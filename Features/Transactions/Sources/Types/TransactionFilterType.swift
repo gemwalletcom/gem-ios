@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public enum TransactionFilterType: Int, CaseIterable {
+public enum TransactionFilterType: Int, CaseIterable, Sendable {
     case transfers
     case swaps
     case stake

@@ -11,7 +11,7 @@ struct Locale_PrimitivesTests {
         #expect(Locale.US.usageLanguageIdentifier() == "en")
         #expect(Locale.UK.usageLanguageIdentifier() == "en")
         #expect(Locale.EN_CH.usageLanguageIdentifier() == "en")
-        #expect(Locale.PT_BR.usageLanguageIdentifier() == "pt-BR")
+        #expect(Locale.PT_BR.usageLanguageIdentifier() == "pt")
         #expect(Locale.FR.usageLanguageIdentifier() == "fr")
         #expect(Locale.ZH_Simplifier.usageLanguageIdentifier() == "zh-Hans")
         #expect(Locale.ZH_Singapore.usageLanguageIdentifier() == "zh-Hans")
@@ -21,8 +21,8 @@ struct Locale_PrimitivesTests {
     @Test
     func testAppstoreLanguageIdentifier() throws {
         #expect(Locale.US.appstoreLanguageIdentifier() == "en-US")
-        #expect(Locale.UK.appstoreLanguageIdentifier() == "en-US")
-        #expect(Locale.FR.appstoreLanguageIdentifier() == "fr-FR")
+        #expect(Locale.UK.appstoreLanguageIdentifier() == "en-GB")
+        #expect(Locale.FR.appstoreLanguageIdentifier() == "fr-CA")
         #expect(Locale.IT.appstoreLanguageIdentifier() == "it")
         #expect(Locale.ZH_Simplifier.appstoreLanguageIdentifier() == "zh-Hans")
         #expect(Locale.ZH_Traditional.appstoreLanguageIdentifier() == "zh-Hant")

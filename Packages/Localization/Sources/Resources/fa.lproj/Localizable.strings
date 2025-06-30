@@ -281,7 +281,7 @@
 "info.network_fee.title" = "کارمزد شبکه";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "کیف پولی که به آن دسترسی ندارید اما می توانید تراکنش ها و حرکات آن را تماشا کنید.";
-"info.network_fee.description" = "شبکه %@ کارمزد تراکنش را دریافت می کند که بر اساس میزان استفاده از شبکه متفاوت است. برای پردازش تراکنش شما به ماینرها پرداخت می شود.";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "تراکنش به دلیل خطایی مانند موجودی ناکافی، ورودی نامعتبر یا رد شدن توسط شبکه، انجام نشد. لطفاً جزئیات را بررسی کرده و دوباره امتحان کنید.";
 "info.transaction.pending.description" = "تراکنش ارسال شده و در انتظار تأیید در شبکه است. زمان پردازش ممکن است متفاوت باشد. لطفاً برای به‌روزرسانی‌ها دوباره مراجعه کنید.";
 "info.transaction.success.description" = "تراکنش تکمیل و در شبکه تأیید شده است. می‌توانید جزئیات را برای تأیید وضعیت آن بررسی کنید.";
@@ -412,5 +412,13 @@
 "filter.has_balance" = "تعادل دارد";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "قرارداد یا شناسه توکن";
-"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
-"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "توکن‌های تایید نشده به اندازه کافی توسط سرویس‌های شخص ثالث مورد اعتماد تایید نشده‌اند. آنها ممکن است به دلیل ایردراپ، انتقال یا وارد کردن دستی در کیف پول شما ظاهر شوند.";
+"info.asset_status.suspicious.description" = "توکن‌های مشکوک یا اسپم به عنوان کلاهبرداری‌های بالقوه یا دارایی‌های مضر شناسایی می‌شوند. آنها ممکن است به دلیل ایردراپ‌ها، انتقال‌ها یا واردات دستی در کیف پول شما ظاهر شوند.";
+"errors.insufficient_funds" = "بودجه ناکافی";
+"info.insufficient_network_fee_balance.title" = "%@ مورد نیاز";
+"info.insufficient_network_fee_balance.description" = "این تراکنش مستلزم %@ است تا کارمزد شبکه پرداخت شده به %@ ماینرها را پوشش دهد، نه Gem Wallet. مطمئن شوید که %@ کافی دارید.";
+"brand_name" = "Gem Wallet";
+"info.insufficient_balance.title" = "موجودی ناکافی";
+"info.insufficient_balance.description" = "شما %@ کافی برای تکمیل این تراکنش ندارید. لطفاً کیف پول خود را شارژ، دریافت یا مبادله کنید و دوباره امتحان کنید.";
+"info.account_minimum_balance.title" = "حداقل موجودی";
+"asset.buy_asset" = "خرید %@";

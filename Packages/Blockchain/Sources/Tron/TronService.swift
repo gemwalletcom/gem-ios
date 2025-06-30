@@ -231,11 +231,11 @@ extension TronService {
 
 extension TronService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let available = try await accountBalance(address: address).available
+        let account = try await accountBalance(address: address)
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: available
+                available: account.available
             )
         )
     }

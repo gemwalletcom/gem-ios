@@ -15,6 +15,7 @@ import SwapService
 import WalletsService
 import struct Gemstone.SwapQuote
 import Formatters
+import Validators
 
 @MainActor
 @Observable
@@ -41,7 +42,7 @@ public final class SwapSceneViewModel {
     var pairSelectorModel: SwapPairSelectorViewModel
 
     var selectedSwapQuote: SwapQuote?
-    var fromValue: String = ""
+    var amountInputModel: InputValidationViewModel = InputValidationViewModel(mode: .onDemand)
     var toValue: String = ""
     var focusField: SwapScene.Field?
     var rateDirection: AssetRateFormatter.Direction = .direct
@@ -111,10 +112,18 @@ public final class SwapSceneViewModel {
     var providerImage: AssetImage? { selectedProvderModel?.providerImage }
 
     var actionButtonTitle: String {
-        swapState.error != nil ? Localized.Common.tryAgain : Localized.Wallet.swap
+        if amountInputModel.isValid == false, let fromAsset {
+            Localized.Transfer.insufficientBalance(fromAsset.asset.symbol)
+        } else {
+            swapState.error != nil ? Localized.Common.tryAgain : Localized.Wallet.swap
+        }
     }
 
     var actionButtonState: StateViewType<[SwapQuote]> {
+        if let error = amountInputModel.error {
+            return .error(error)
+        }
+
         if swapState.isLoading {
             return .loading
         }
@@ -137,13 +146,8 @@ public final class SwapSceneViewModel {
         }
     }
 
-    var isButtonDisabled: Bool {
-        guard let asset = fromAsset?.asset else { return false }
-        do {
-            return try formatter.format(inputValue: fromValue, decimals: asset.decimals.asInt) <= 0
-        } catch {
-            return true
-        }
+    var shouldDisableActionButton: Bool {
+        amountInputModel.isValid == false
     }
 
     var isSwitchAssetButtonDisabled: Bool {
@@ -223,7 +227,7 @@ extension SwapSceneViewModel {
             let input = try SwapQuoteInput.create(
                 fromAsset: fromAsset,
                 toAsset: toAsset,
-                fromValue: fromValue,
+                fromValue: amountInputModel.text,
                 formatter: formatter
             )
             swapState.fetch = .fetch(
@@ -269,6 +273,7 @@ extension SwapSceneViewModel {
         selectedSwapQuote = nil
         focusField = .from
         fetch()
+        updateValidators(for: new)
     }
 
     func onChangeToAsset(old: AssetData?, new: AssetData?) {
@@ -366,7 +371,7 @@ extension SwapSceneViewModel {
 extension SwapSceneViewModel {
     private func resetValues() {
         resetToValue()
-        fromValue = ""
+        amountInputModel.text = .empty
     }
 
     private func resetToValue() {
@@ -385,7 +390,7 @@ extension SwapSceneViewModel {
     }
 
     private func applyPercentToFromValue(percent: Int, assetData: AssetData) {
-        fromValue = formatter.format(
+        amountInputModel.text = formatter.format(
             value: assetData.balance.available.multiply(byPercent: percent),
             decimals: assetData.asset.decimals.asInt
         )
@@ -492,5 +497,18 @@ extension SwapSceneViewModel {
     private var selectedProvderModel: SwapProviderViewModel? {
         guard let selectedSwapQuote else { return nil }
         return SwapProviderViewModel(provider: selectedSwapQuote.data.provider)
+    }
+    
+    private func updateValidators(for assetData: AssetData?) {
+        guard let assetData else { return }
+        amountInputModel.update(
+            validators: [AmountValidator.amount(
+                source: .asset,
+                decimals: assetData.asset.decimals.asInt,
+                validators: [
+                    BalanceValueValidator<BigInt>(available: assetData.balance.available, asset: assetData.asset)
+                ]
+            )]
+        )
     }
 }

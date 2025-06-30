@@ -7,11 +7,18 @@ public enum InfoSheetImage: Sendable {
     case assetImage(AssetImage)
 }
 
+public typealias InfoSheetAction = @MainActor @Sendable () -> Void
+
+public enum InfoSheetButton: Sendable {
+    case url(URL)
+    case action(title: String, action: InfoSheetAction)
+}
+
 public protocol InfoSheetModelViewable: Sendable {
     var title: String { get }
     var description: String { get }
     var buttonTitle: String { get }
 
-    var url: URL? { get }
+    var button: InfoSheetButton? { get }
     var image: InfoSheetImage? { get }
 }

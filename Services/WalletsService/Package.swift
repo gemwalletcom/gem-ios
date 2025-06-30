@@ -61,6 +61,7 @@ let package = Package(
                 .product(name: "TransactionServiceTestKit", package: "TransactionService"),
                 .product(name: "BannerServiceTestKit", package: "BannerService"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "DeviceServiceTestKit", package: "DeviceService"),
                 "WalletsService"
             ],
             path: "TestKit"

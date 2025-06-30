@@ -176,12 +176,9 @@ extension ListItemView {
                         .truncationMode(.middle)
 
                     if let infoAction {
-                        Button(action: infoAction) {
-                            Images.System.info
-                                .font(title.style.font)
-                                .foregroundStyle(Colors.gray)
-                        }
-                        .buttonStyle(.plain)
+                        InfoButton(
+                            action: infoAction
+                        )
                     }
 
                     if let titleTag {

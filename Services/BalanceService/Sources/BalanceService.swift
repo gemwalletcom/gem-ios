@@ -62,9 +62,8 @@ extension BalanceService {
         }
     }
 
-    @discardableResult
-    public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async -> [AssetBalanceChange] {
-        await withTaskGroup(of: [AssetBalanceChange].self) { group in
+    public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async {
+        await withTaskGroup(of: Void.self) { group in
             for account in wallet.accounts {
                 let chain = account.chain
                 let address = account.address
@@ -91,11 +90,7 @@ extension BalanceService {
                 }
             }
 
-            var changes: [AssetBalanceChange] = []
-            for await change in group {
-                changes.append(contentsOf: change)
-            }
-            return changes
+            for await _ in group { }
         }
     }
 
@@ -126,6 +121,7 @@ extension BalanceService {
         try balanceStore.getBalances(assetIds: assetIds)
     }
 
+    @discardableResult
     private func updateCoinBalance(walletId: String, asset: AssetId, address: String) async -> [AssetBalanceChange] {
         let chain = asset.chain
         return await updateBalanceAsync(
@@ -136,6 +132,7 @@ extension BalanceService {
         )
     }
 
+    @discardableResult
     private func updateCoinStakeBalance(walletId: String, asset: AssetId, address: String) async -> [AssetBalanceChange] {
         let chain = asset.chain
         return await updateBalanceAsync(
@@ -146,6 +143,7 @@ extension BalanceService {
         )
     }
 
+    @discardableResult
     private func updateTokenBalances(walletId: String, chain: Chain, tokenIds: [AssetId], address: String) async -> [AssetBalanceChange] {
         await updateBalanceAsync(
             walletId: walletId,

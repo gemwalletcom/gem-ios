@@ -18,8 +18,18 @@ extension Locale {
     public static let ZH_Singapore = Locale(identifier: "zh_SG")
     public static let ZH_Traditional = Locale(identifier: "zh-Hant")
     public static let AR_SA = Locale(identifier: "ar_SA")
-
+    
     public func usageLanguageIdentifier() -> String {
+        guard let languageCode = language.languageCode else {
+            return Locale.US.language.minimalIdentifier
+        }
+        if let script = language.script, languageCode.identifier == Locale.ZH_Simplifier.language.languageCode?.identifier {
+            return "\(languageCode.identifier)-\(script.identifier)"
+        }
+        return languageCode.identifier
+    }
+
+    func usageAppstoreLanguageIdentifier() -> String {
         guard let languageCode = language.languageCode else {
             return Locale.US.language.minimalIdentifier
         }
@@ -66,8 +76,8 @@ extension Locale {
             .catalan,
             .thai,
             .hungarian: languageCode.identifier
-        case .chinese: usageLanguageIdentifier()
-        default: usageLanguageIdentifier()
+        case .chinese: usageAppstoreLanguageIdentifier()
+        default: usageAppstoreLanguageIdentifier()
         }
     }
 }
