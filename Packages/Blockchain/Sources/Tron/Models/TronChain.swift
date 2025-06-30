@@ -23,7 +23,7 @@ public struct TronChainParameters: Codable, Sendable {
 }
 
 public enum TronChainParameterKey: String, Codable, Equatable, Sendable {
-	case getCreateNewAccountFeeInSystemContract = "GetCreateNewAccountFeeInSystemContract"
-	case getCreateAccountFee = "GetCreateAccountFee"
-	case getEnergyFee = "GetEnergyFee"
+	case getCreateNewAccountFeeInSystemContract
+	case getCreateAccountFee
+	case getEnergyFee
 }
