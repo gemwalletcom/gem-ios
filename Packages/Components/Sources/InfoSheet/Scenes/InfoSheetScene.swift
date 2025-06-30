@@ -24,9 +24,9 @@ public struct InfoSheetScene: View {
                 closeButton
                     .padding([.trailing, .top], .medium)
             }
-            .if(model.url != nil) {
+            .if(model.button != nil) {
                 $0.safeAreaInset(edge: .bottom) {
-                    learnMoreButton
+                    actionButton
                         .padding([.bottom], .medium)
                 }
             }
@@ -45,10 +45,10 @@ public struct InfoSheetScene: View {
         .buttonStyle(.plain)
     }
 
-    private var learnMoreButton: some View {
+    private var actionButton: some View {
         StateButton(
             text: model.buttonTitle,
-            action: onLearnMore
+            action: onAction
         )
         .frame(maxWidth: .scene.button.maxWidth)
     }
@@ -61,9 +61,15 @@ extension InfoSheetScene {
         dismiss()
     }
 
-    private func onLearnMore() {
-        guard let url = model.url else { return }
-        isPresentedUrl = url
+    private func onAction() {
+        guard let button = model.button else { return }
+
+        switch button {
+        case .url(let url):
+            isPresentedUrl = url
+        case .action(_, let action):
+            action()
+        }
     }
 }
 
@@ -73,20 +79,20 @@ struct InfoSheetPreviewModel: InfoSheetModelViewable {
     var title: String
     var description: String
     var buttonTitle: String
-    var url: URL?
+    var button: InfoSheetButton?
     var image: InfoSheetImage?
 
     init(
         title: String,
         description: String,
         buttonTitle: String,
-        url: URL? = nil,
+        button: InfoSheetButton? = nil,
         image: InfoSheetImage? = nil
     ) {
         self.title = title
         self.description = description
         self.buttonTitle = buttonTitle
-        self.url = url
+        self.button = button
         self.image = image
     }
 }
@@ -97,6 +103,7 @@ struct InfoSheetPreviewModel: InfoSheetModelViewable {
             title: "Network Fees",
             description: "Network fees needed to pay the miners, quite a long message, double, triple, quadruple, quintuple, etc.",
             buttonTitle: "Continue",
+            button: .action(title: "test", action: { print("Action") }),
             image: .image(Image(systemName: "bell"))
         )
     )

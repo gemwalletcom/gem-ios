@@ -38,22 +38,28 @@ public struct ConfirmTransferScene: View {
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .sheet(item: $model.isPresentingSheet) {
             switch $0 {
-            case let .info(type):
-                InfoSheetScene(model: InfoSheetViewModel(type: type))
-            case let .url(url):
+            case .info(let type):
+                let model = InfoSheetViewModel(type: type)
+                InfoSheetScene(model: model)
+            case .infoAction(let type, let button):
+                let infoModel = InfoSheetViewModel(
+                    type: type,
+                    button: button
+                )
+                InfoSheetScene(model: infoModel)
+            case .url(let url):
                 SFSafariView(url: url)
             case .networkFeeSelector:
                 NavigationStack {
                     NetworkFeeScene(model: model.feeModel)
                         .presentationDetentsForCurrentDeviceSize(expandable: true)
                 }
-            case let .fiatConnect(assetAddress, walletId):
+            case .fiatConnect(let assetAddress, let walletId):
                 NavigationStack {
                     FiatConnectNavigationView(
                         model: FiatSceneViewModel(
                             assetAddress: assetAddress,
-                            walletId: walletId.id,
-                            allowOnlyBuy: true
+                            walletId: walletId.id
                         )
                     )
                     .navigationBarTitleDisplayMode(.inline)

@@ -213,7 +213,7 @@ public final class ConfirmTransferViewModel {
             icon: confirmButtonIcon,
             onAction: { [weak self] in
                 guard let self else { return }
-                if case .data(let data) = state, case .success = data.transferAmount {
+                if case .data(let data) = state, data.isReady {
                     onSelectConfirmTransfer()
                 } else {
                     self.fetch()
@@ -229,7 +229,17 @@ extension ConfirmTransferViewModel {
     func onSelectListError(error: Error) {
         switch error {
         case let error as TransferAmountCalculatorError:
-            self.isPresentingSheet = .info(error.infoSheet)
+            switch error {
+            case .insufficientBalance, .minimumAccountBalanceTooLow:
+                isPresentingSheet = .info(error.infoSheet)
+            case .insufficientNetworkFee(let asset, _):
+                isPresentingSheet = .infoAction(
+                    error.infoSheet,
+                    button: .action(title: Localized.Asset.buyAsset(asset.feeAsset.symbol)) {
+                        self.onSelectBuy()
+                    }
+                )
+            }
         default:
             break
             //TODO Generic error
@@ -272,10 +282,10 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
-    private func onSelectBuy() {
+    func onSelectBuy() {
         isPresentingSheet = .fiatConnect(
-            assetAddress: assetAddress,
-            waletId: wallet.walletId
+            assetAddress: feeAssetAddress,
+            walletId: wallet.walletId
         )
     }
     private func onSelectConfirmTransfer() {
@@ -396,7 +406,7 @@ extension ConfirmTransferViewModel {
     private var dataModel: TransferDataViewModel { TransferDataViewModel(data: data) }
     private var availableValue: BigInt { dataModel.availableValue(metadata: metadata) }
     private var senderLink: BlockExplorerLink { explorerService.addressUrl(chain: dataModel.chain, address: senderAddress) }
-    private var assetAddress: AssetAddress { AssetAddress(asset: dataModel.asset, address: senderAddress)}
+    private var feeAssetAddress: AssetAddress { AssetAddress(asset: dataModel.asset.feeAsset, address: senderAddress)}
     private var confirmButtonIcon: Image? {
         guard !state.isError, state.value?.transferAmount?.isSuccess ?? false,
               let auth = try? keystore.getPasswordAuthentication(),

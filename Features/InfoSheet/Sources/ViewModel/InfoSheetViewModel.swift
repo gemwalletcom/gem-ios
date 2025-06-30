@@ -8,31 +8,29 @@ import Primitives
 import Style
 import Formatters
 
-public struct InfoSheetViewModel {
+public struct InfoSheetViewModel: InfoSheetModelViewable {
+    
     private let type: InfoSheetType
+    public var button: InfoSheetButton?
 
-    public init(type: InfoSheetType) {
+    public init(type: InfoSheetType, button: InfoSheetButton? = .none) {
         self.type = type
-    }
-}
-
-// MARK: - InfoSheetModelViewable
-
-extension InfoSheetViewModel: InfoSheetModelViewable {
-    public var url: URL? {
-        switch type {
-        case .networkFee: Docs.url(.networkFees)
-        case .insufficientNetworkFee: Docs.url(.networkFees)
-        case .transactionState: Docs.url(.transactionStatus)
-        case .watchWallet: Docs.url(.whatIsWatchWallet)
-        case .stakeLockTime: Docs.url(.stakingLockTime)
-        case .priceImpact: Docs.url(.priceImpact)
-        case .slippage: Docs.url(.slippage)
-        case .assetStatus: Docs.url(.tokenVerification)
-        case .accountMinimalBalance: Docs.url(.accountMinimalBalance)
-        case .insufficientBalance(_): fatalError()
+        //self.button = button
+        
+        switch button {
+        case .none:
+            self.button = .url(Self.url(for: type))
+        case .some(let button):
+            switch button {
+            case .action:
+                self.button = button
+            case .url(let url):
+                self.button = .url(url)
+            }
         }
     }
+
+// MARK: - InfoSheetModelViewable
 
     public var title: String {
         switch type {
@@ -56,18 +54,18 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             case .suspicious: Localized.Asset.Verification.suspicious
             case .unverified: Localized.Asset.Verification.unverified
             }
-        case .accountMinimalBalance: "Minimum Balance"
+        case .accountMinimalBalance: Localized.Info.AccountMinimumBalance.title
         }
     }
 
     public var description: String {
         switch type {
-        case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name)
+        case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol)
         case .insufficientBalance(let asset): return Localized.Info.InsufficientBalance.description(asset.symbol)
         case .insufficientNetworkFee(let asset, let required):
-            let amount = ValueFormatter(style: .short).string(required, decimals: asset.decimals.asInt)
+            let amount = ValueFormatter(style: .short).string(required, asset: asset)
             return Localized.Info.InsufficientNetworkFeeBalance.description(
-                "**\(amount) \(asset.symbol)**",
+                "**\(amount)**",
                 asset.name,
                 asset.symbol
             )
@@ -88,12 +86,8 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             case .suspicious: return Localized.Info.AssetStatus.Suspicious.description
             }
         case .accountMinimalBalance(let asset, let required):
-            let amount = ValueFormatter(style: .short).string(
-                required,
-                decimals: asset.decimals.asInt,
-                currency: asset.symbol
-            )
-            return "Keep at least \(amount) in this account so it stays active. This refundable reserve blocks spam and covers on-chain storage, keeping the network fast and low-cost."
+            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+            return Localized.Transfer.minimumAccountBalance(amount)
         }
     }
 
@@ -143,5 +137,28 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         }
     }
     
-    public var buttonTitle: String { Localized.Common.learnMore }
+    public var buttonTitle: String {
+        switch button {
+        case .url: Localized.Common.learnMore
+        case .action(let title, _): title
+        case .none: .empty
+        }
+    }
+}
+
+private extension InfoSheetViewModel {
+    static func url(for type: InfoSheetType) -> URL {
+        switch type {
+        case .networkFee: Docs.url(.networkFees)
+        case .insufficientNetworkFee: Docs.url(.networkFees)
+        case .transactionState: Docs.url(.transactionStatus)
+        case .watchWallet: Docs.url(.whatIsWatchWallet)
+        case .stakeLockTime: Docs.url(.stakingLockTime)
+        case .priceImpact: Docs.url(.priceImpact)
+        case .slippage: Docs.url(.slippage)
+        case .assetStatus: Docs.url(.tokenVerification)
+        case .accountMinimalBalance: Docs.url(.accountMinimalBalance)
+        case .insufficientBalance: Docs.url(.networkFees) // Which one to use?
+        }
+    }
 }
