@@ -13,7 +13,7 @@ public enum HeaderButtonViewType: Identifiable {
     public var id: String {
         switch self {
         case .button: "button"
-        case let .menuButton(title, items): "\(title ?? "")_\(items.map{ $0.id }))"
+        case let .menuButton(title, items): "\(title ?? "")_\(items.map { $0.id }.joined(separator: ","))"
         }
     }
 }
