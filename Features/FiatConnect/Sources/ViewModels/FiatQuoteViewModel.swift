@@ -6,7 +6,7 @@ import Style
 import Components
 import Formatters
 
-public struct FiatQuoteViewModel {
+public struct FiatQuoteViewModel: Sendable {
     let quote: FiatQuote
     let selectedQuote: FiatQuote?
 

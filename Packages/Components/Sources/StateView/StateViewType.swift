@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum StateViewType<T> {
+public enum StateViewType<T: Sendable>: Sendable {
     case noData
     case loading
     case data(T)

@@ -11,8 +11,6 @@ import struct Assets.SelectedAssetInput
 struct CollectibleNavigationView: View {
     
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
-    @State private var isPresentingCollectibleOptions: Bool? = .none
-
     @Environment(\.avatarService) private var avatarService
 
     private let model: CollectibleNavigationViewModel
@@ -30,8 +28,7 @@ struct CollectibleNavigationView: View {
                 assetData: model.assetData,
                 avatarService: avatarService,
                 headerButtonAction: onHeaderButtonAction(type:)
-            ),
-            isPresentingCollectibleOptions: $isPresentingCollectibleOptions
+            )
         )
         .sheet(item: $isPresentingSelectedAssetInput) {
             SelectedAssetNavigationStack(
@@ -56,10 +53,8 @@ extension CollectibleNavigationView {
                 type: .send(.nft(model.assetData.asset)),
                 assetAddress: AssetAddress(asset: account.chain.asset, address: account.address)
             )
-        case .buy, .receive, .swap, .stake:
+        case .buy, .receive, .swap, .stake, .more:
             fatalError()
-        case .more:
-            isPresentingCollectibleOptions = true
         }
     }
 }

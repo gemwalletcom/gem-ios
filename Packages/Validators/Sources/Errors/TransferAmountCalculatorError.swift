@@ -7,7 +7,7 @@ import Localization
 
 public enum TransferAmountCalculatorError: Equatable {
     case insufficientBalance(Asset)
-    case insufficientNetworkFee(Asset)
+    case insufficientNetworkFee(Asset, required: BigInt)
     case minimumAccountBalanceTooLow(Asset, required: BigInt)
 }
 
@@ -16,7 +16,7 @@ extension TransferAmountCalculatorError: LocalizedError {
         switch self {
         case .insufficientBalance(let asset):
             Localized.Transfer.insufficientBalance(Self.title(asset: asset))
-        case .insufficientNetworkFee(let asset):
+        case .insufficientNetworkFee(let asset, _):
             Localized.Transfer.insufficientNetworkFeeBalance(Self.title(asset: asset))
         case .minimumAccountBalanceTooLow(let asset, _):
             Localized.Transfer.minimumAccountBalance(Self.title(asset: asset))

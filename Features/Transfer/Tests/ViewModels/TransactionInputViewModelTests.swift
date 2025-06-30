@@ -16,7 +16,7 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: nil,
             metaData: nil,
-            transferAmountResult: .amount(TransferAmount(value: 200, networkFee: 1, useMaxAmount: false))
+            transferAmount: .success(TransferAmount(value: 200, networkFee: 1, useMaxAmount: false))
         )
         
         #expect(viewModel.value == BigInt(200))
@@ -25,10 +25,10 @@ struct TransactionInputViewModelTests {
     @Test
     func testValueWithError() {
         let viewModel = TransactionInputViewModel(
-            data: .mock(),
+            data: .mock(value: 100),
             transactionData: nil,
             metaData: nil,
-            transferAmountResult: .error(nil, TransferAmountCalculatorError.insufficientBalance(.mock()))
+            transferAmount: .failure( TransferAmountCalculatorError.insufficientBalance(.mock()))
         )
         
         #expect(viewModel.value == BigInt(100))
@@ -40,10 +40,10 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: nil,
             metaData: nil,
-            transferAmountResult: nil
+            transferAmount: nil
         )
         
-        #expect(viewModel.value == BigInt(100))
+        #expect(viewModel.value == .zero)
     }
     
     @Test
@@ -52,7 +52,7 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: .mock(),
             metaData: nil,
-            transferAmountResult: nil
+            transferAmount: nil
         )
         
         #expect(viewModel.networkFeeText == "0.00000001 BTC")
@@ -71,7 +71,7 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: .mock(),
             metaData: metaData,
-            transferAmountResult: nil
+            transferAmount: nil
         )
         
         #expect(viewModel.networkFeeFiatText == "$0.000000015")
@@ -83,22 +83,11 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: nil,
             metaData: nil,
-            transferAmountResult: nil
+            transferAmount: nil
         )
         
         #expect(viewModel.networkFeeText == "-")
         #expect(viewModel.networkFeeFiatText == nil)
-    }
-}
-
-extension TransferData {
-    static func mock() -> TransferData {
-        TransferData(
-            type: .transfer(.mock()),
-            recipientData: .mock(),
-            value: BigInt(100),
-            canChangeValue: true
-        )
     }
 }
 

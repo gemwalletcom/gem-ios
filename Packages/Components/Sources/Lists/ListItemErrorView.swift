@@ -9,33 +9,38 @@ public struct ListItemErrorView: View {
     let error: Error
     let retryTitle: String?
     let retryAction: (() -> Void)?
+    let infoAction: (() -> Void)?
 
     public init(
         errorTitle: String?,
         errorSystemNameImage: String,
         error: Error,
         retryTitle: String? = nil,
-        retryAction: (() -> Void)? = nil
+        retryAction: (() -> Void)? = nil,
+        infoAction: (() -> Void)? = nil
     ) {
         self.errorTitle = errorTitle
         self.errorSystemNameImage = errorSystemNameImage
         self.error = error
         self.retryTitle = retryTitle
         self.retryAction = retryAction
+        self.infoAction = infoAction
     }
 
     public init(
         errorTitle: String? = nil,
         error: Error,
         retryTitle: String? = nil,
-        retryAction: (() -> Void)? = nil
+        retryAction: (() -> Void)? = nil,
+        infoAction: (() -> Void)? = nil
     ) {
         self.init(
             errorTitle: errorTitle,
             errorSystemNameImage: SystemImage.errorOccurred,
             error: error,
             retryTitle: retryTitle,
-            retryAction: retryAction
+            retryAction: retryAction,
+            infoAction: infoAction
         )
     }
 
@@ -49,9 +54,16 @@ public struct ListItemErrorView: View {
                     .textStyle(.headline)
                 Spacer()
             }
-            if errorTitle != nil {
-                Text(error.localizedDescription)
-                    .textStyle(.subheadline)
+            HStack(alignment: .firstTextBaseline, spacing: .small) {
+                if let infoAction {
+                    InfoButton(
+                        action: infoAction
+                    )
+                }
+                if errorTitle != nil {
+                    Text(error.localizedDescription)
+                        .textStyle(.subheadline)
+                }
             }
             if let retry = retryAction, let retryTitle = retryTitle {
                 Divider()
@@ -86,6 +98,12 @@ public struct ListItemErrorView: View {
                 error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to load data. Check your internet connection."]),
                 retryTitle: "Retry",
                 retryAction: {}
+            )
+
+            ListItemErrorView(
+                errorTitle: "Insufficient funds",
+                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to load data. Check your internet connection."]),
+                infoAction: {}
             )
         }
 

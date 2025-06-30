@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum ButtonState: Hashable {
+public enum ButtonState: Hashable, Sendable {
     case normal
     case loading(showProgress: Bool = true)
     case disabled

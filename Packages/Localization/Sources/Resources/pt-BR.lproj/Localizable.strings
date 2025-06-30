@@ -281,7 +281,7 @@
 "info.network_fee.title" = "Taxa de rede";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Uma carteira à qual você não tem acesso, mas pode monitorar suas transações e movimentos.";
-"info.network_fee.description" = "A rede %@ cobra uma taxa de transação, que varia com base no uso da rede. Pago aos mineradores para processar sua transação.";
+"info.network_fee.description" = "Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.";
 "info.transaction.error.description" = "A transação não pôde ser concluída devido a um erro, como fundos insuficientes, entrada inválida ou rejeição pela rede. Revise os detalhes e tente novamente.";
 "info.transaction.pending.description" = "A transação foi enviada e aguarda confirmação na rede. O tempo de processamento pode variar. Verifique novamente para obter atualizações.";
 "info.transaction.success.description" = "A transação foi concluída e confirmada na rede. Você pode revisar os detalhes para verificar o status.";
@@ -412,5 +412,13 @@
 "filter.has_balance" = "Tem equilíbrio";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "Сontrato ou ID do token";
-"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
-"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "Tokens não verificados não foram suficientemente verificados por serviços terceirizados confiáveis. Eles podem aparecer na sua carteira devido a airdrops, transferências ou importações manuais.";
+"info.asset_status.suspicious.description" = "Tokens suspeitos ou de spam são identificados como potenciais golpes ou ativos nocivos. Eles podem aparecer na sua carteira devido a airdrops, transferências ou importações manuais.";
+"errors.insufficient_funds" = "Fundos insuficientes";
+"info.insufficient_network_fee_balance.title" = "%@ necessário";
+"info.insufficient_network_fee_balance.description" = "Esta transação requer %@ para cobrir a taxa de rede paga a %@ mineradores, não Gem Wallet. Certifique-se de ter %@ suficientes.";
+"brand_name" = "Gem Wallet";
+"info.insufficient_balance.title" = "Saldo insuficiente";
+"info.insufficient_balance.description" = "Você não tem %@ suficientes para concluir esta transação. Recarregue, receba ou troque na sua carteira e tente novamente.";
+"info.account_minimum_balance.title" = "Saldo mínimo";
+"asset.buy_asset" = "Comprar %@";

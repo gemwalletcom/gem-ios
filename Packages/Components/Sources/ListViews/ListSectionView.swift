@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-public struct ListSectionView<Item: Identifiable, Content: View>: View {
+public struct ListSectionView<Item: Identifiable & Sendable, Content: View>: View {
     let sections: [ListSection<Item>]
     let content: (Item) -> Content
     

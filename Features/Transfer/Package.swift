@@ -33,6 +33,7 @@ let package = Package(
         .package(name: "NameResolver", path: "../NameResolver"),
         .package(name: "WalletConnector", path: "../WalletConnector"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
+        .package(name: "FiatConnect", path: "../FiatConnect"),
 
         .package(name: "ChainService", path: "../../Services/ChainService"),
         .package(name: "WalletService", path: "../../Services/WalletService"),
@@ -68,6 +69,7 @@ let package = Package(
                 "NameResolver",
                 "WalletConnector",
                 "InfoSheet",
+                "FiatConnect",
 
                 "ChainService",
                 "WalletService",
