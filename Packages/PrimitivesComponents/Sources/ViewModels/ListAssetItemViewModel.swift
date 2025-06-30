@@ -115,7 +115,14 @@ public struct ListAssetItemViewModel: ListAssetItemViewable {
     }
 
     public var assetImage: AssetImage {
-        return AssetViewModel(asset: assetDataModel.asset).assetImage
+        AssetViewModel(asset: assetDataModel.asset).assetImage
+    }
+    
+    public var verificationImage: AssetImage? {
+        switch type {
+        case .manage: assetDataModel.scoreViewModel.assetImage
+        case .wallet, .view, .copy, .price: nil
+        }
     }
 }
 

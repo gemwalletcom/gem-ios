@@ -33,6 +33,8 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
     public var assetImage: AssetImage {
         AssetViewModel(asset: data.asset).assetImage
     }
+    
+    public var verificationImage: AssetImage? { nil }
 
     public var subtitleView: ListAssetItemSubtitleView {
         .price(
