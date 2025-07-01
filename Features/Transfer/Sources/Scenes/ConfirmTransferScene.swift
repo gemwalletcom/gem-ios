@@ -160,13 +160,18 @@ extension ConfirmTransferScene {
             }
 
             if let error = model.listError {
-                ListItemErrorView(
-                    errorTitle: model.listErrorTitle,
-                    error: error,
-                    infoAction: {
-                        model.onSelectListError(error: error)
-                    }
-                )
+                Button {
+                    model.onSelectListError(error: error)
+                } label: {
+                    ListItemErrorView(
+                        errorTitle: model.listErrorTitle,
+                        error: error,
+                        infoAction: {
+                            model.onSelectListError(error: error)
+                        }
+                    )
+                }
+                .listRowInsets(.zero)
             }
         }
         .contentMargins([.top], .small, for: .scrollContent)
