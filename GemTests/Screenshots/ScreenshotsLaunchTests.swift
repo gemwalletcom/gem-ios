@@ -85,10 +85,18 @@ final class ScreenshotsLaunchTests: XCTestCase {
         collectionViewsQuery.buttons.element(matching: .button, identifier: "manage").tap()
 
         try snapshoter.snap("manage")
-
+        
         app.navigationBars.buttons.element(boundBy: 0).tap()
-
-        sleep(1)
+        
+        if app.tabBars.element.exists {
+            app.tabBars.buttons.element(boundBy: 1).tap()
+        } else {
+            app.buttons.element(boundBy: 1).tap()
+        }
+        
+        sleep(3)
+        
+        try snapshoter.snap("nft")
         
         if app.tabBars.element.exists {
             app.tabBars.buttons.element(boundBy: 2).tap()
@@ -105,6 +113,10 @@ final class ScreenshotsLaunchTests: XCTestCase {
         }
         
         try snapshoter.snap("control")
+        
+        collectionViewsQuery.staticTexts["WalletConnect"].tap()
+        
+        try snapshoter.snap("connect")
     }
 }
 
