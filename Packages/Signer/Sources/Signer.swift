@@ -3,7 +3,7 @@ import Primitives
 import WalletCore
 import Keystore
 
-public struct Signer {
+public struct Signer: Sendable {
     
     let wallet: Primitives.Wallet
     let keystore: any Keystore

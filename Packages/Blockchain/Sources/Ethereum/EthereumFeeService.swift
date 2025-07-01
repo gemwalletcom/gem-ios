@@ -40,6 +40,7 @@ extension EthereumService {
                 fatalError()
             }
         case .swap(_, _, _, let data):
+            guard let data else { return .none}
             switch data.approval {
             case .some(let approvalData):
                 return EthereumAbi.approve(spender: try Data.from(hex: approvalData.spender), value: .MAX_256)
@@ -73,7 +74,7 @@ extension EthereumService {
         case .transferNft(let asset):
             return try asset.getContractAddress()
         case .swap(_, _, _, let data):
-            switch data.approval {
+            switch data?.approval {
             case .some(let approvalData): return approvalData.token
             case .none: return input.destinationAddress
             }
@@ -98,24 +99,25 @@ extension EthereumService {
         switch input.type {
         case .transfer(let asset):
             switch asset.id.type {
-            case .native: input.value
-            case .token: .none
+            case .native: return input.value
+            case .token: return .none
             }
-        case .transferNft: .zero
+        case .transferNft: return .zero
         case .swap(_, _, _, let data):
+            guard let data else { return .none }
             switch data.approval {
-            case .some: .zero
-            case .none: BigInt(stringLiteral: data.value)
+            case .some: return .zero
+            case .none: return BigInt(stringLiteral: data.value)
             }
-        case .tokenApprove: .zero
-        case .generic: input.value
+        case .tokenApprove: return .zero
+        case .generic: return input.value
         case .stake(_, let type):
             switch input.chain {
             case .smartChain,
                  .ethereum:
                 switch type {
-                case .stake: input.value
-                case .unstake, .redelegate, .withdraw: .none
+                case .stake: return input.value
+                case .unstake, .redelegate, .withdraw: return .none
                 case .rewards:
                     fatalError()
                 }
@@ -129,11 +131,12 @@ extension EthereumService {
     public func extraFeeGasLimit(input: FeeInput) throws -> BigInt {
         switch input.type {
         case .swap(_, _, _, let data):
+            guard let data else { return .zero }
             switch data.approval {
-            case .some: try data.gasLimit()
-            case .none: .zero
+            case .some: return try data.gasLimit()
+            case .none: return .zero
             }
-        default: .zero
+        default: return .zero
         }
     }
     
