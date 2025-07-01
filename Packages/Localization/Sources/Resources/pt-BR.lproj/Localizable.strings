@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "Você não tem %@ suficientes para concluir esta transação. Recarregue, receba ou troque na sua carteira e tente novamente.";
 "info.account_minimum_balance.title" = "Saldo mínimo";
 "asset.buy_asset" = "Comprar %@";
+"wallet.import_address_warning" = "Você pode visualizar saldos e transações para este endereço, mas **não pode enviar ou vender fundos**.";
