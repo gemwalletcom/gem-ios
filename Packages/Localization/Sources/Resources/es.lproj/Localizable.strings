@@ -412,7 +412,7 @@
 "filter.has_balance" = "Tiene equilibrio";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "Contrato o ID de token";
-"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "Los tokens no verificados no han sido verificados adecuadamente por servicios externos de confianza. Podrían aparecer en tu billetera debido a airdrops, transferencias o importaciones manuales.";
 "info.asset_status.suspicious.description" = "Los tokens sospechosos o spam se identifican como posibles estafas o activos dañinos. Pueden aparecer en tu billetera debido a airdrops, transferencias o importaciones manuales.";
 "errors.insufficient_funds" = "Fondos insuficientes";
 "info.insufficient_network_fee_balance.title" = "%@ requerido";
@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "No tienes suficientes %@ para completar esta transacción. Recarga, recibe o intercambia tu billetera y vuelve a intentarlo.";
 "info.account_minimum_balance.title" = "Saldo mínimo";
 "asset.buy_asset" = "Comprar %@";
+"wallet.import_address_warning" = "Puede ver los saldos y las transacciones de esta dirección, pero **no puede enviar ni vender fondos**.";

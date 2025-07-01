@@ -31,22 +31,9 @@ public struct ActionMenu<Label: View>: View {
 
     public var body: some View {
         Menu {
-            ForEach(items) { build($0) }
+            ForEach(items) { ActionMenuItemView(item: $0) }
         } label: {
             label
-        }
-    }
-
-    @ViewBuilder
-    private func build(_ item: ActionMenuItemType) -> some View {
-        switch item {
-        case let .button(title, systemImage, role, action):
-            ContextMenuItem(
-                title: title,
-                systemImage: systemImage,
-                role: role,
-                action: { action?() }
-            )
         }
     }
 }

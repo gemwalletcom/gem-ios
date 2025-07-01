@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "ليس لديك رصيد كافٍ %@ لإتمام هذه المعاملة. يُرجى شحن رصيدك أو استلامه أو استبداله في محفظتك والمحاولة مرة أخرى.";
 "info.account_minimum_balance.title" = "الحد الأدنى للرصيد";
 "asset.buy_asset" = "شراء %@";
+"wallet.import_address_warning" = "يمكنك عرض الأرصدة والمعاملات لهذا العنوان، ولكن **لا يمكنك إرسال أو بيع الأموال**.";
