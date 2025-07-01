@@ -60,7 +60,7 @@ public struct DeviceService: DeviceServiceable {
     }
     
     public func getSubscriptionsDeviceId() async throws -> String {
-        if preferences.subscriptionsHasVersionChange {
+        if preferences.subscriptionsVersionHasChange {
             try await update()
         }
         return try getDeviceId()

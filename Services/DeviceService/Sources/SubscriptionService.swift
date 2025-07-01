@@ -50,7 +50,7 @@ public struct SubscriptionService: Sendable {
                 try await deleteSubscriptions(deviceId: deviceId, subscriptions: remoteSubscriptions.asArray())
             }
         }
-        preferences.subscriptionsHasVersionChange = false
+        preferences.subscriptionsVersionHasChange = false
     }
     
     private func localSubscription() throws -> [Primitives.Subscription] {
