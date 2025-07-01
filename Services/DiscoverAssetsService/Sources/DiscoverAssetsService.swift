@@ -68,24 +68,17 @@ public struct DiscoverAssetsService: Sendable {
                 }
             }
 
-            return await buildAssetUpdate(group: group, wallet: wallet)
-        }
-    }
-    
-    private func buildAssetUpdate(
-        group: TaskGroup<AssetBalanceChange?>,
-        wallet: Wallet
-    ) async -> AssetUpdate {
-        var updates: [AssetBalanceChange] = []
-        for await update in group {
-            if let update = update {
-                updates.append(update)
+            var updates: [AssetBalanceChange] = []
+            for await update in group {
+                if let update = update {
+                    updates.append(update)
+                }
             }
-        }
 
-        return AssetUpdate(
-            walletId: wallet.walletId,
-            assetIds: updates.filter { $0.type.available.or(.zero) > 0 }.map { $0.assetId }
-        )
+            return AssetUpdate(
+                walletId: wallet.walletId,
+                assetIds: updates.filter { $0.type.available.or(.zero) > 0 }.map { $0.assetId }
+            )
+        }
     }
 }

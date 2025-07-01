@@ -67,7 +67,14 @@ let package = Package(
         ),
         .testTarget(
             name: "WalletTabTests",
-            dependencies: ["WalletTab"]
+            dependencies: [
+                .product(name: "WalletsServiceTestKit", package: "WalletsService"),
+                .product(name: "BannerServiceTestKit", package: "BannerService"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "WalletServiceTestKit", package: "WalletService"),
+                "WalletTab"
+            ]
         ),
     ]
 )

@@ -186,6 +186,11 @@ extension WalletSceneViewModel {
             refresh(for: newWallet)
         }
     }
+    
+    func shouldStartLoadingAssets() {
+        let preferences = WalletPreferences(walletId: wallet.id)
+        isLoadingAssets = !preferences.completeDiscoveryAssets && preferences.assetsTimestamp == .zero
+    }
 }
 
 
@@ -217,10 +222,5 @@ extension WalletSceneViewModel {
 
     private func handleBanner(action: BannerAction) async throws {
         try await bannerService.handleAction(action)
-    }
-    
-    private func shouldStartLoadingAssets() {
-        let preferences = WalletPreferences(walletId: wallet.id)
-        isLoadingAssets = !preferences.completeDiscoveryAssets && preferences.assetsTimestamp == .zero
     }
 }

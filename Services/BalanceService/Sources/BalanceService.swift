@@ -162,7 +162,8 @@ extension BalanceService {
     ) async -> [AssetBalanceChange] {
         do {
             let balances = try await fetchBalance().compactMap { mapBalance($0) }
-            try await storeBalances(balances: balances, walletId: walletId)
+            try await addAssetsIfNeeded(balances: balances)
+            try storeBalances(balances: balances, walletId: walletId)
             return balances
         } catch {
             NSLog("update balance error: chain: \(chain.id): \(error.localizedDescription)")
@@ -222,19 +223,11 @@ extension BalanceService {
         }
     }
 
-    private func storeBalances(balances: [AssetBalanceChange], walletId: String) async throws {
+    private func storeBalances(balances: [AssetBalanceChange], walletId: String) throws {
         for balance in balances {
             NSLog("update balance: \(balance.assetId.identifier): \(balance.type)")
         }
-        let assetIds = balances.map { $0.assetId }
-        
-        let existAssets = try assetsService.getAssets(for: assetIds)
-        let missingIds = assetIds.asSet().subtracting(existAssets.map { $0.id }).asArray()
-        if missingIds.isNotEmpty {
-            try await assetsService.addAssets(assetIds: missingIds)
-        }
-
-        let assets = try assetsService.getAssets(for: assetIds)
+        let assets = try assetsService.getAssets(for: balances.map { $0.assetId })
         let updates = createBalanceUpdate(assets: assets, balances: balances)
 
         try updateBalances(updates, walletId: walletId)
@@ -259,12 +252,23 @@ extension BalanceService {
     }
 
     private func updateBalances(_ balances: [UpdateBalance], walletId: String) throws {
-        let addBalances: [AddBalance] = try balances.compactMap {
-            let exist = try balanceStore.isBalanceExist(walletId: walletId, assetId: $0.assetID)
-            guard !exist else { return nil }
-            return AddBalance(assetId: try AssetId(id: $0.assetID), isEnabled: false)
+        let assetIds = balances.map { $0.assetID }
+        let existBalances = try balanceStore.getBalances(walletId: walletId, assetIds: assetIds)
+        let missingBalances = assetIds.asSet().subtracting(existBalances.map { $0.assetId.identifier }).asArray()
+        let addBalances: [AddBalance] = try missingBalances.map {
+            AddBalance(assetId: try AssetId(id: $0), isEnabled: false)
         }
+
         try balanceStore.addBalance(addBalances, for: walletId)
         try balanceStore.updateBalances(balances, for: walletId)
+    }
+    
+    private func addAssetsIfNeeded(balances: [AssetBalanceChange]) async throws {
+        let assetIds = balances.map { $0.assetId }
+        let existAssets = try assetsService.getAssets(for: assetIds)
+        let missingIds = assetIds.asSet().subtracting(existAssets.map { $0.id }).asArray()
+        if missingIds.isNotEmpty {
+            try await assetsService.addAssets(assetIds: missingIds)
+        }
     }
 }

@@ -42,7 +42,7 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
         guard !preferences.completeInitialLoadAssets else { return }
 
         let coinUpdates = await discoverAssetService.updateCoins(wallet: wallet)
-        await updateEnabled(for: coinUpdates)
+        await processAssetUpdate(for: coinUpdates)
         preferences.completeInitialLoadAssets = true
     }
 
@@ -55,10 +55,10 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
             fromTimestamp: preferences.assetsTimestamp
         )
         preferences.assetsTimestamp = newTimestamp
-        await updateEnabled(for: tokenUpdate)
+        await processAssetUpdate(for: tokenUpdate)
     }
     
-    private func updateEnabled(for update: AssetUpdate) async {
+    private func processAssetUpdate(for update: AssetUpdate) async {
         do {
             try assetsService.updateEnabled(walletId: update.walletId, assetIds: update.assetIds, enabled: true)
             try await priceUpdater.addPrices(assetIds: update.assetIds)

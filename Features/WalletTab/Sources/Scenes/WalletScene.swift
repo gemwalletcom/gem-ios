@@ -7,6 +7,7 @@ import Store
 import Style
 import InfoSheet
 import PrimitivesComponents
+import Localization
 
 public struct WalletScene: View {
     private var model: WalletSceneViewModel
@@ -68,7 +69,7 @@ public struct WalletScene: View {
             } header: {
                 if model.isLoadingAssets {
                     HStack {
-                        Text("Syncing wallet…")
+                        Text(Localized.Common.loading + "...")
                         ActivityIndicator(isAnimating: .constant(true), style: .medium)
                     }
                     .listRowInsets(.assetListRowInsets)

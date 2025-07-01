@@ -10,7 +10,7 @@ public final class WalletPreferences: @unchecked Sendable {
         static let transactionsTimestamp = "transactions_timestamp_v1"
         static let completeInitialLoadAssets = "complete_initial_load_assets"
         static let completeInitialAddressStatus = "complete_initial_address_status"
-        static let completeDiscoveryAssets = "complete_discovered_assets"
+        static let completeDiscoveryAssets = "complete_discovery_assets"
     }
 
     private let defaults: UserDefaults
@@ -51,9 +51,7 @@ public final class WalletPreferences: @unchecked Sendable {
     }
     
     public func completeAssetDiscovery() {
-        if !completeDiscoveryAssets {
-            completeDiscoveryAssets = true
-        }
+        completeDiscoveryAssets = true
     }
     
     // transactions
