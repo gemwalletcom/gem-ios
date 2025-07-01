@@ -299,11 +299,11 @@ extension SwapSceneViewModel {
             return
         }
 
-        performSwap()
+        swap()
     }
 
     func onSelectSwapConfirmation() {
-        performSwap()
+        swap()
     }
 
     func onAssetIdsChange(assetIds: [AssetId]) async {
@@ -382,7 +382,7 @@ extension SwapSceneViewModel {
         )
     }
 
-    public func performSwap() {
+    public func swap() {
         guard let fromAsset = fromAsset,
               let toAsset = toAsset,
               let quote = selectedSwapQuote

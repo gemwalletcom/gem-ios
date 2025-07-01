@@ -356,9 +356,10 @@ extension ConfirmTransferViewModel {
     }
 
     private func fetchTransferData() async throws -> TransferData {
-        guard case let .swap(fromAsset, toAsset, quote, quoteData) = data.type,
-              quoteData == nil
-        else { return data }
+        // if swap, we refetch swap quote data
+        guard case let .swap(fromAsset, toAsset, quote, quoteData) = data.type, quoteData == nil else {
+            return data
+        }
 
         let swapQuoteData = try await swapDataProvider.fetchQuoteData(wallet: wallet, quote: quote)
         return SwapTransferDataFactory.swap(fromAsset: fromAsset, toAsset: toAsset, quote: quote, quoteData: swapQuoteData)
