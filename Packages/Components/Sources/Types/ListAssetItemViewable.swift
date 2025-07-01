@@ -25,6 +25,7 @@ public protocol ListAssetItemViewable {
     var symbol: String? { get }
 
     var assetImage: AssetImage { get }
+    var verificationImage: AssetImage? { get }
 
     var subtitleView: ListAssetItemSubtitleView { get }
     var rightView: ListAssetItemRightView { get }

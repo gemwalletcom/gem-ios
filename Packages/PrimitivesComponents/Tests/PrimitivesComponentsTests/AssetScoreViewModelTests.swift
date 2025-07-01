@@ -23,8 +23,8 @@ struct AssetScoreViewModelTests {
 
     @Test
     func testAssetImage() {
-        #expect(AssetScoreViewModel(score: 2).assetImage != nil)
-        #expect(AssetScoreViewModel(score: 12).assetImage != nil)
-        #expect(AssetScoreViewModel(score: 30).assetImage == nil)
+        #expect(AssetScoreViewModel(score: 2).assetImage.placeholder != nil)
+        #expect(AssetScoreViewModel(score: 12).assetImage.placeholder != nil)
+        #expect(AssetScoreViewModel(score: 30).assetImage.placeholder != nil)
     }
 }

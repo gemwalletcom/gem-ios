@@ -55,6 +55,10 @@ public struct AssetDataViewModel: Sendable {
     public var symbol: String {
         assetData.asset.symbol
     }
+    
+    public var scoreViewModel: AssetScoreViewModel {
+        AssetScoreViewModel(score: assetData.metadata.rankScore)
+    }
 
     // price
 

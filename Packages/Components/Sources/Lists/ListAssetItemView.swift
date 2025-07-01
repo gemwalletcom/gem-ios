@@ -44,6 +44,9 @@ extension ListAssetItemView {
                 Text(symbol)
                     .textStyle(.calloutSecondary)
             }
+            if let verification = model.verificationImage {
+                AssetImageView(assetImage: verification, size: .list.textIcon)
+            }
         }
     }
 
@@ -113,6 +116,7 @@ extension ListAssetItemView {
         let name: String
         let symbol: String?
         let assetImage: AssetImage
+        let verificationImage: AssetImage?
         let subtitleView: ListAssetItemSubtitleView
         let rightView: ListAssetItemRightView
         var action: ((ListAssetItemAction) -> Void)?
@@ -130,6 +134,7 @@ extension ListAssetItemView {
                     placeholder: .none,
                     chainPlaceholder: .none
                 ),
+                verificationImage: AssetImage(placeholder: Images.TokenStatus.verified),
                 subtitleView: .none,
                 rightView: .balance(
                     balance: TextValue(text: "test", style: TextStyle(font: .title, color: .accentColor)),
