@@ -11,6 +11,7 @@ import Transfer
 import SwapService
 
 struct SwapNavigationView: View {
+    @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
@@ -34,21 +35,26 @@ struct SwapNavigationView: View {
 
     var body: some View {
         SwapScene(model: model)
-            .onChange(of: model.swapState.swapTransferData.value) { oldValue, newValue in
-                guard let newValue else { return }
-                navigationPath.append(newValue)
+            .onChange(of: model.swapTransferData) { _, newValue in
+                if let newValue {
+                    navigationPath.append(newValue)
+                }
             }
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
                     model: ConfirmTransferViewModel(
                         wallet: model.wallet,
                         data: data,
-                        keystore: model.keystore,
+                        keystore: keystore,
                         chainService: ChainServiceFactory(nodeProvider: nodeService)
                             .service(for: data.chain),
                         scanService: scanService,
                         swapService: SwapService(nodeProvider: nodeService),
                         walletsService: model.walletsService,
+                        swapDataProvider: SwapQuoteDataProvider(
+                            keystore: keystore,
+                            swapService: SwapService(nodeProvider: nodeService)
+                        ),
                         onComplete: {
                             onSwapComplete(type: data.type)
                         }

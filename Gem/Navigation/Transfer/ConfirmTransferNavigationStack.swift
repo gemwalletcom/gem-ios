@@ -41,6 +41,10 @@ struct ConfirmTransferNavigationStack: View {
                     scanService: scanService,
                     swapService: SwapService(nodeProvider: nodeService),
                     walletsService: walletsService,
+                    swapDataProvider: SwapQuoteDataProvider(
+                        keystore: keystore,
+                        swapService: SwapService(nodeProvider: nodeService)
+                    ),
                     onComplete: onComplete
                 )
             )

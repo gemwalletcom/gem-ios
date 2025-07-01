@@ -19,6 +19,7 @@ import SwapService
 import Style
 import SwiftUI
 import Formatters
+import SwapService
 
 @Observable
 @MainActor
@@ -45,6 +46,7 @@ public final class ConfirmTransferViewModel {
     var isPresentingSheet: ConfirmTransferSheetType?
     var isPresentingErrorMessage: String?
 
+    private let swapDataProvider: any SwapQuoteDataProvidable
     private let explorerService: any ExplorerLinkFetchable
     private let metadataProvider: any TransferMetadataProvidable
     private let transferTransactionProvider: any TransferTransactionProvidable
@@ -52,11 +54,11 @@ public final class ConfirmTransferViewModel {
     private let keystore: any Keystore
     private let swapService: SwapService
 
-    private let data: TransferData
     private let wallet: Wallet
     private let onComplete: VoidAction
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate?
 
+    private var data: TransferData
     private var metadata: TransferDataMetadata?
 
     public init(
@@ -67,6 +69,7 @@ public final class ConfirmTransferViewModel {
         scanService: ScanService,
         swapService: SwapService,
         walletsService: WalletsService,
+        swapDataProvider: any SwapQuoteDataProvidable,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
         onComplete: VoidAction
@@ -101,7 +104,7 @@ public final class ConfirmTransferViewModel {
             chainService: chainService,
             walletsService: walletsService
         )
-
+        self.swapDataProvider = swapDataProvider
         self.metadata = try? metadataProvider.metadata(wallet: wallet, data: data)
     }
 
@@ -287,7 +290,7 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
-    func onSelectBuy() {
+    private func onSelectBuy() {
         isPresentingSheet = .fiatConnect(
             assetAddress: feeAssetAddress,
             walletId: wallet.walletId
@@ -335,8 +338,8 @@ extension ConfirmTransferViewModel {
         feeModel.reset()
 
         do {
-            let data = try await getTranserData(data: data)
-            
+            data = try await fetchTransferData()
+
             let metadata = try metadataProvider.metadata(wallet: wallet, data: data)
             let transferTransactionData = try await transferTransactionProvider.loadTransferTransactionData(
                 wallet: wallet, data: data,
@@ -365,6 +368,15 @@ extension ConfirmTransferViewModel {
                 NSLog("preload transaction error: \(error)")
             }
         }
+    }
+
+    private func fetchTransferData() async throws -> TransferData {
+        guard case let .swap(fromAsset, toAsset, quote, quoteData) = data.type,
+              quoteData == nil
+        else { return data }
+
+        let swapQuoteData = try await swapDataProvider.fetchQuoteData(wallet: wallet, quote: quote)
+        return SwapTransferDataFactory.swap(fromAsset: fromAsset, toAsset: toAsset, quote: quote, quoteData: swapQuoteData)
     }
 
     private func processConfirmation(transactionData: TransactionData, amount: TransferAmount) async {

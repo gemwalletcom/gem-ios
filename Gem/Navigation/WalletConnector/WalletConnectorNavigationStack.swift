@@ -41,6 +41,10 @@ struct WalletConnectorNavigationStack: View {
                             scanService: scanService,
                             swapService: SwapService(nodeProvider: nodeService),
                             walletsService: walletsService,
+                            swapDataProvider: SwapQuoteDataProvider(
+                                keystore: keystore,
+                                swapService: SwapService(nodeProvider: nodeService)
+                            ),
                             confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }
                         )

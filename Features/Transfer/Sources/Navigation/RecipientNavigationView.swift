@@ -5,6 +5,7 @@ import SwiftUI
 import Primitives
 import ChainService
 import QRScanner
+import SwapService
 
 public struct RecipientNavigationView: View {
     @State private var model: RecipientSceneViewModel
@@ -50,6 +51,10 @@ public struct RecipientNavigationView: View {
                     scanService: model.scanService,
                     swapService: model.swapService,
                     walletsService: model.walletsService,
+                    swapDataProvider: SwapQuoteDataProvider(
+                        keystore: model.keystore,
+                        swapService: SwapService(nodeProvider: model.nodeService)
+                    ),
                     onComplete: onComplete
                 )
             )
