@@ -3,12 +3,10 @@
 import Foundation
 import Store
 
-public actor DeviceObserverService: Sendable {
+public struct DeviceObserverService: Sendable {
     private let deviceService: DeviceService
     private let subscriptionsService: SubscriptionService
     private let subscriptionsObserver: SubscriptionsObserver
-    
-    private var updateTask: Task<Void, Error>? = nil
 
     public init(
         deviceService: DeviceService,
@@ -27,15 +25,9 @@ public actor DeviceObserverService: Sendable {
         }
     }
 
-
     private func onNewDeviceChange() {
-        updateTask = Task {
-            defer { updateTask = nil }
+        Task {
             try await deviceService.update()
         }
-    }
-
-    public func waitIfUpdating() async throws {
-        try await updateTask?.value
     }
 }

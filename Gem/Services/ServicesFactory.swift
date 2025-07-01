@@ -135,8 +135,7 @@ struct ServicesFactory {
             priceObserver: priceObserverService,
             transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
-            bannerSetupService: bannerSetupService,
-            deviceObserver: deviceObserverService
+            bannerSetupService: bannerSetupService
         )
 
         let configService = GemAPIService()
@@ -351,8 +350,7 @@ extension ServicesFactory {
         priceObserver: PriceObserverService,
         transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
-        bannerSetupService: BannerSetupService,
-        deviceObserver: DeviceObserverService
+        bannerSetupService: BannerSetupService
     ) -> WalletsService {
         WalletsService(
             walletStore: walletStore,
@@ -362,8 +360,7 @@ extension ServicesFactory {
             priceObserver: priceObserver,
             transactionService: transactionService,
             bannerSetupService: bannerSetupService,
-            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
-            deviceObserver: deviceObserver
+            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
         )
     }
 
