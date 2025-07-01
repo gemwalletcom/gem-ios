@@ -12,6 +12,7 @@ import DiscoverAssetsService
 import ChainService
 import Store
 import WalletSessionService
+import DeviceService
 
 public struct WalletsService: Sendable {
     // TODO: - remove public dependencies and remove them in future
@@ -37,7 +38,6 @@ public struct WalletsService: Sendable {
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        chainService: ChainServiceFactory,
         transactionService: TransactionService,
         bannerSetupService: BannerSetupService,
         addressStatusService: AddressStatusService,
@@ -57,12 +57,9 @@ public struct WalletsService: Sendable {
             priceUpdater: priceUpdater
         )
         let processor = DiscoveryAssetsProcessor(
-            discoverAssetService: DiscoverAssetsService(
-                balanceService: balanceService,
-                chainServiceFactory: chainService
-            ),
+            discoverAssetService: DiscoverAssetsService(balanceService: balanceService),
             assetsService: assetsService,
-            assetsEnabler: assetsEnabler,
+            priceUpdater: priceUpdater,
             walletSessionService: walletSessionService
         )
         self.assetsVisibilityManager = AssetVisibilityManager(service: balanceService)
@@ -70,7 +67,6 @@ public struct WalletsService: Sendable {
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
         self.discoveryProcessor = processor
-
 
         self.assetsService = assetsService
         self.balanceService = balanceService

@@ -7,6 +7,7 @@ import Store
 import Style
 import InfoSheet
 import PrimitivesComponents
+import Localization
 
 public struct WalletScene: View {
     private var model: WalletSceneViewModel
@@ -65,6 +66,15 @@ public struct WalletScene: View {
                     showBalancePrivacy: $preferences.isHideBalanceEnabled
                 )
                 .listRowInsets(.assetListRowInsets)
+            } header: {
+                if model.isLoadingAssets {
+                    HStack {
+                        Text(Localized.Common.loading + "...")
+                        ActivityIndicator(isAnimating: .constant(true), style: .medium)
+                    }
+                    .listRowInsets(.assetListRowInsets)
+                    .textCase(nil)
+                }
             } footer: {
                 ListButton(
                     title: model.manageTokenTitle,

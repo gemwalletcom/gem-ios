@@ -261,7 +261,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/WalletTab",
         "identifier" : "WalletTabTests",
