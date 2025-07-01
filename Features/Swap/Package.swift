@@ -50,7 +50,6 @@ let package = Package(
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "WalletsServiceTestKit", package: "WalletsService"),
-                .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "SwapServiceTestKit", package: "SwapService"),
                 "Swap"
             ]
