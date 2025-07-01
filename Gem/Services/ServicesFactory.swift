@@ -41,9 +41,8 @@ struct ServicesFactory {
             apiService: apiService,
             subscriptionService: subscriptionService
         )
-        let deviceSyncManager = DeviceSyncManager(deviceService: deviceService)
         let deviceObserverService = Self.makeDeviceObserverService(
-            deviceSyncManager: deviceSyncManager,
+            deviceService: deviceService,
             subscriptionService: subscriptionService,
             walletStore: storeManager.walletStore
         )
@@ -75,12 +74,14 @@ struct ServicesFactory {
         )
         let nftService = Self.makeNftService(
             apiService: apiService,
-            nftStore: storeManager.nftStore
+            nftStore: storeManager.nftStore,
+            deviceService: deviceService
         )
         let transactionsService = Self.makeTransactionsService(
             transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
-            walletStore: storeManager.walletStore
+            walletStore: storeManager.walletStore,
+            deviceService: deviceService
         )
         let transactionService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
@@ -137,7 +138,7 @@ struct ServicesFactory {
             transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
             bannerSetupService: bannerSetupService,
-            deviceSyncManager: deviceSyncManager
+            deviceService: deviceService
         )
 
         let configService = GemAPIService()
@@ -217,12 +218,12 @@ extension ServicesFactory {
     }
 
     private static func makeDeviceObserverService(
-        deviceSyncManager: DeviceSyncManager,
+        deviceService: any DeviceServiceable,
         subscriptionService: SubscriptionService,
         walletStore: WalletStore
     ) -> DeviceObserverService {
         DeviceObserverService(
-            deviceSyncManager: deviceSyncManager,
+            deviceService: deviceService,
             subscriptionsService: subscriptionService,
             subscriptionsObserver: walletStore.observer()
         )
@@ -279,12 +280,14 @@ extension ServicesFactory {
     private static func makeTransactionsService(
         transactionStore: TransactionStore,
         assetsService: AssetsService,
-        walletStore: WalletStore
+        walletStore: WalletStore,
+        deviceService: any DeviceServiceable
     ) -> TransactionsService {
         TransactionsService(
             transactionStore: transactionStore,
             assetsService: assetsService,
-            walletStore: walletStore
+            walletStore: walletStore,
+            deviceService: deviceService
         )
     }
 
@@ -353,7 +356,7 @@ extension ServicesFactory {
         transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
         bannerSetupService: BannerSetupService,
-        deviceSyncManager: DeviceSyncManager
+        deviceService: DeviceService
     ) -> WalletsService {
         WalletsService(
             walletStore: walletStore,
@@ -364,7 +367,7 @@ extension ServicesFactory {
             transactionService: transactionService,
             bannerSetupService: bannerSetupService,
             addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
-            deviceSyncManager: deviceSyncManager
+            deviceService: deviceService
         )
     }
 
@@ -413,11 +416,13 @@ extension ServicesFactory {
     
     private static func makeNftService(
         apiService: GemAPIService,
-        nftStore: NFTStore
+        nftStore: NFTStore,
+        deviceService: any DeviceServiceable
     ) -> NFTService {
         NFTService(
             apiService: apiService,
-            nftStore: nftStore
+            nftStore: nftStore,
+            deviceService: deviceService
         )
     }
 }

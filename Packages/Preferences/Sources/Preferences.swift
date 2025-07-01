@@ -14,6 +14,7 @@ public final class Preferences: @unchecked Sendable {
         static let swapAssetsVersion = "swap_assets_version"
         static let launchesCount = "launches_count"
         static let subscriptionsVersion = "subscriptions_version"
+        static let subscriptionsHasVersionChange = "subscriptions_has_version_change"
         static let currentWalletId = "currentWallet"
         static let isPushNotificationsEnabled = "is_push_notifications_enabled"
         static let isPriceAlertsEnabled = "is_price_alerts_enabled"
@@ -53,6 +54,9 @@ public final class Preferences: @unchecked Sendable {
     
     @ConfigurableDefaults(key: Keys.subscriptionsVersion, defaultValue: 0)
     public var subscriptionsVersion: Int
+    
+    @ConfigurableDefaults(key: Keys.subscriptionsHasVersionChange, defaultValue: true)
+    public var subscriptionsHasVersionChange: Bool
     
     @ConfigurableDefaults(key: Keys.currentWalletId, defaultValue: .none)
     public var currentWalletId: String?
@@ -133,6 +137,11 @@ public final class Preferences: @unchecked Sendable {
         defaults.dictionaryRepresentation().keys.forEach {
             defaults.removeObject(forKey: $0)
         }
+    }
+    
+    public func incrementSubscriptionVersion() {
+        subscriptionsVersion += 1
+        subscriptionsHasVersionChange = true
     }
 
     private struct ExplorerKeys {

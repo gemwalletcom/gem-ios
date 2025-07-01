@@ -32,7 +32,7 @@ public extension WalletsService {
         bannerSetupService: BannerSetupService = .mock(),
         addressStatusService: AddressStatusService = .mock(),
         preferences: ObservablePreferences = .mock(),
-        deviceSyncManager: DeviceSyncManager = .mock()
+        deviceService: DeviceService = .mock()
     ) -> WalletsService {
         WalletsService(
             walletStore: walletStore,
@@ -44,7 +44,7 @@ public extension WalletsService {
             bannerSetupService: bannerSetupService,
             addressStatusService: addressStatusService,
             preferences: preferences,
-            deviceSyncManager: deviceSyncManager
+            deviceService: deviceService
         )
     }
 }

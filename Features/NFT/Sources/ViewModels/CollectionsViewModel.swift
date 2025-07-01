@@ -3,7 +3,6 @@
 import Foundation
 import Components
 import NFTService
-import DeviceService
 import Primitives
 import Store
 import Localization
@@ -18,7 +17,6 @@ import WalletService
 public final class CollectionsViewModel: Sendable {
     private let walletService: WalletService
     private let nftService: NFTService
-    private let deviceService: any DeviceServiceable
 
     let columns: [GridItem] = Array(repeating: GridItem(spacing: .medium), count: 2)
     let sceneStep: Scenes.CollectionsScene.SceneStep
@@ -29,20 +27,17 @@ public final class CollectionsViewModel: Sendable {
 
     public init(
         nftService: NFTService,
-        deviceService: any DeviceServiceable,
         walletService: WalletService,
         wallet: Wallet,
         sceneStep: Scenes.CollectionsScene.SceneStep
     ) {
         self.nftService = nftService
-        self.deviceService = deviceService
         self.walletService = walletService
 
         self.wallet = wallet
         self.sceneStep = sceneStep
         self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
     }
-
 
     var title: String {
         switch sceneStep {
@@ -124,8 +119,7 @@ public final class CollectionsViewModel: Sendable {
     
     private func updateCollection() async {
         do {
-            let deviceId = try await deviceService.getDeviceId()
-            try await nftService.updateAssets(deviceId: deviceId, wallet: wallet)
+            try await nftService.updateAssets(wallet: wallet)
         } catch {
             NSLog("updateCollection error \(error)")
         }

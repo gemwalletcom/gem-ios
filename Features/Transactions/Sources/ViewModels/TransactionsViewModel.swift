@@ -5,7 +5,6 @@ import Primitives
 import Components
 import Store
 import Localization
-import Preferences
 import TransactionsService
 import ExplorerService
 import PrimitivesComponents
@@ -20,7 +19,6 @@ public final class TransactionsViewModel {
     private let walletService: WalletService
 
     private let type: TransactionsRequestType
-    private let preferences: SecurePreferences = .standard
 
     public private(set) var wallet: Wallet
 
@@ -77,10 +75,7 @@ extension TransactionsViewModel {
 
     public func fetch() async {
         do {
-            guard let deviceId = try preferences.get(key: .deviceId) else {
-                throw AnyError("deviceId is null")
-            }
-            try await transactionsService.updateAll(deviceId: deviceId, walletId: walletId)
+            try await transactionsService.updateAll(walletId: walletId)
         } catch {
             NSLog("fetch getTransactions error \(error)")
         }

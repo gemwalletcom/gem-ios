@@ -26,8 +26,7 @@ public struct WalletsService: Sendable {
     private let priceUpdater: any PriceUpdater
     private let balanceUpdater: any BalanceUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
-    private let deviceSyncManager: DeviceSyncManager
-
+    
     // TODO: - move to different place
     private let addressStatusService: AddressStatusService
     private let transactionService: TransactionService
@@ -43,7 +42,7 @@ public struct WalletsService: Sendable {
         bannerSetupService: BannerSetupService,
         addressStatusService: AddressStatusService,
         preferences: ObservablePreferences = .default,
-        deviceSyncManager: DeviceSyncManager
+        deviceService: any DeviceServiceable
     ) {
 
         let walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
@@ -59,6 +58,7 @@ public struct WalletsService: Sendable {
             priceUpdater: priceUpdater
         )
         let processor = DiscoveryAssetsProcessor(
+            deviceService: deviceService,
             discoverAssetService: DiscoverAssetsService(balanceService: balanceService),
             assetsService: assetsService,
             priceUpdater: priceUpdater,
@@ -69,7 +69,6 @@ public struct WalletsService: Sendable {
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
         self.discoveryProcessor = processor
-        self.deviceSyncManager = deviceSyncManager
 
         self.assetsService = assetsService
         self.balanceService = balanceService
@@ -89,8 +88,6 @@ public struct WalletsService: Sendable {
     }
 
     public func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
-        try await deviceSyncManager.ensureSynced()
-        
         async let updateAssets: () = try updateAssets(walletId: walletId, assetIds: assetIds)
         async let assets: () = try await discoveryProcessor.discoverAssets(for: walletId, preferences: WalletPreferences(walletId: walletId.id))
 

@@ -25,7 +25,6 @@ public final class AssetSceneViewModel: Sendable {
     private let priceObserverService: PriceObserverService
     private let bannerService: BannerService
 
-    private let securePreferences: SecurePreferences = .standard
     private let preferences: ObservablePreferences = .default
 
     let explorerService: ExplorerService = .standard
@@ -299,10 +298,7 @@ extension AssetSceneViewModel {
 
     private func fetchTransactions() async throws {
         do {
-            guard let deviceId = try securePreferences.get(key: .deviceId) else {
-                throw AnyError("deviceId is null")
-            }
-            try await transactionsService.updateForAsset(deviceId: deviceId, wallet: walletModel.wallet, assetId: assetModel.asset.id)
+            try await transactionsService.updateForAsset(wallet: walletModel.wallet, assetId: assetModel.asset.id)
         } catch {
             // TODO: - handle fetchTransactions error
             print("asset scene: fetchTransactions error \(error)")

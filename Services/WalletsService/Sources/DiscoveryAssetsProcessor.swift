@@ -7,19 +7,23 @@ import Primitives
 import Preferences
 import Store
 import WalletSessionService
+import DeviceService
 
 struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
+    private let deviceService: any DeviceServiceable
     private let discoverAssetService: DiscoverAssetsService
     private let assetsService: AssetsService
     private let priceUpdater: any PriceUpdater
     private let walletSessionService: any WalletSessionManageable
 
     init(
+        deviceService: any DeviceServiceable,
         discoverAssetService: DiscoverAssetsService,
         assetsService: AssetsService,
         priceUpdater: any PriceUpdater,
         walletSessionService: any WalletSessionManageable
     ) {
+        self.deviceService = deviceService
         self.discoverAssetService = discoverAssetService
         self.assetsService = assetsService
         self.priceUpdater = priceUpdater
@@ -47,7 +51,7 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
     }
 
     private func processTokenDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
-        let deviceId = try SecurePreferences.standard.getDeviceId()
+        let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         let tokenUpdate = try await discoverAssetService.updateTokens(
             deviceId: deviceId,

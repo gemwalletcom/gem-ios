@@ -4,16 +4,16 @@ import Foundation
 import Store
 
 public struct DeviceObserverService: Sendable {
-    private let deviceSyncManager: DeviceSyncManager
+    private let deviceService: any DeviceServiceable
     private let subscriptionsService: SubscriptionService
     private let subscriptionsObserver: SubscriptionsObserver
 
     public init(
-        deviceSyncManager: DeviceSyncManager,
+        deviceService: any DeviceServiceable,
         subscriptionsService: SubscriptionService,
         subscriptionsObserver: SubscriptionsObserver
     ) {
-        self.deviceSyncManager = deviceSyncManager
+        self.deviceService = deviceService
         self.subscriptionsService = subscriptionsService
         self.subscriptionsObserver = subscriptionsObserver
     }
@@ -21,8 +21,7 @@ public struct DeviceObserverService: Sendable {
     public func startSubscriptionsObserver() async throws {
         for try await _ in subscriptionsObserver.observe().dropFirst() {
             subscriptionsService.incrementSubscriptionsVersion()
-            // Сигнализируем о необходимости обновления, не запуская его напрямую.
-            await deviceSyncManager.setNeedsUpdate()
+            try await deviceService.update()
         }
     }
 }
