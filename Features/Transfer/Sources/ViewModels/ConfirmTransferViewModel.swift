@@ -317,20 +317,7 @@ extension ConfirmTransferViewModel {
             }
         }
     }
-    
-    private func getTranserData(data: TransferData) async throws -> TransferData {
-        guard case .swap(let from, let to, let quote, _) = data.type else {
-            return data
-        }
-        //TODO implement permit
-        let swapData = try await swapService.getQuoteData(quote, data: .none)
-        return TransferData(
-            type: .swap(from, to, quote, swapData),
-            recipientData: data.recipientData,
-            value: data.value,
-            canChangeValue: data.canChangeValue
-        )
-    }
+
 
     private func fetch() async {
         state = .loading
@@ -355,7 +342,6 @@ extension ConfirmTransferViewModel {
             self.feeModel.update(rates: transferTransactionData.rates)
             self.updateState(
                 with: transactionInputViewModel(
-                    data: data,
                     transferAmount: transferAmount,
                     input: transferTransactionData.transactionData,
                     metaData: metadata
@@ -424,13 +410,12 @@ extension ConfirmTransferViewModel {
     }
 
     private func transactionInputViewModel(
-        data: TransferData?,
         transferAmount: TransferAmountValidation,
         input: TransactionData? = nil,
         metaData: TransferDataMetadata? = nil
     ) -> TransactionInputViewModel {
         TransactionInputViewModel(
-            data: data!,
+            data: data,
             transactionData: input,
             metaData: metaData,
             transferAmount: transferAmount
