@@ -41,7 +41,7 @@ public struct AssetScoreViewModel {
         }
     }
     
-    public var assetImage: AssetImage? {
+    public var assetImage: AssetImage {
         switch scoreType {
         case .verified: AssetImage(placeholder: Images.TokenStatus.verified)
         case .unverified: AssetImage(placeholder: Images.TokenStatus.warning)
