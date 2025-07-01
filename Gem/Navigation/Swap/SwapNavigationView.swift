@@ -17,29 +17,20 @@ struct SwapNavigationView: View {
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.scanService) private var scanService
 
-
     @State private var model: SwapSceneViewModel
-    @Binding private var navigationPath: NavigationPath
 
     private let onComplete: VoidAction
 
     init(
         model: SwapSceneViewModel,
-        navigationPath: Binding<NavigationPath>,
         onComplete: VoidAction
     ) {
         self.model = model
         self.onComplete = onComplete
-        _navigationPath = navigationPath
     }
 
     var body: some View {
         SwapScene(model: model)
-            .onChange(of: model.swapTransferData) { _, newValue in
-                if let newValue {
-                    navigationPath.append(newValue)
-                }
-            }
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
                     model: ConfirmTransferViewModel(
