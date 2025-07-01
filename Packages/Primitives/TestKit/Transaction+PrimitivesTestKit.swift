@@ -7,7 +7,9 @@ public extension Transaction {
     static func mock(
         type: TransactionType = .transfer,
         state: TransactionState = .confirmed,
-        direction: TransactionDirection = .incoming
+        direction: TransactionDirection = .incoming,
+        value: String = "",
+        metadata: TransactionMetadata? = nil
     ) -> Transaction {
         Transaction(
             id: "1",
@@ -22,12 +24,12 @@ public extension Transaction {
             sequence: "",
             fee: "",
             feeAssetId: .mock(),
-            value: "",
+            value: value,
             memo: .none,
             direction: direction,
             utxoInputs: [],
             utxoOutputs: [],
-            metadata: .none,
+            metadata: metadata,
             createdAt: .now
         )
     }

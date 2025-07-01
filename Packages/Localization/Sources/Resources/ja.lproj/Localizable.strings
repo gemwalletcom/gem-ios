@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "この取引を完了するには%@が足りません。ウォレットにチャージ、受け取り、または交換して、もう一度お試しください。";
 "info.account_minimum_balance.title" = "最低残高";
 "asset.buy_asset" = "%@を購入";
+"wallet.import_address_warning" = "このアドレスの残高と取引は表示できますが、**資金を送信または売却することはできません**。";

@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "אין לך מספיק %@ כדי להשלים עסקה זו. אנא טען, קבל או החלף בארנק שלך ונסה שוב.";
 "info.account_minimum_balance.title" = "יתרה מינימלית";
 "asset.buy_asset" = "קנה %@";
+"wallet.import_address_warning" = "ניתן לצפות ביתרות ועסקאות עבור כתובת זו, אך **לא ניתן לשלוח או למכור כספים**.";

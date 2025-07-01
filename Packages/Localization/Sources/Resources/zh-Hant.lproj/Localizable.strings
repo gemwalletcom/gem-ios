@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "您的餘額不足%@ ，無法完成此交易。請充值、接收或兌換您的錢包，然後重試。";
 "info.account_minimum_balance.title" = "最低餘額";
 "asset.buy_asset" = "購買%@";
+"wallet.import_address_warning" = "您可以查看此地址的餘額和交易，但**不能發送或出售資金**。";

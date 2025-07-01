@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "Wala kang sapat na %@ upang makumpleto ang transaksyong ito. Mangyaring mag-top up, tumanggap, o magpalit sa iyong wallet at subukang muli.";
 "info.account_minimum_balance.title" = "Minimum na balanse";
 "asset.buy_asset" = "Bumili ng %@";
+"wallet.import_address_warning" = "Maaari mong tingnan ang mga balanse at transaksyon para sa address na ito, ngunit **hindi maaaring magpadala o magbenta ng mga pondo**.";

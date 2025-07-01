@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "Nu aveți suficienți %@ pentru a finaliza această tranzacție. Vă rugăm să încărcați, să primiți sau să schimbați contul în portofelul dvs. și să încercați din nou.";
 "info.account_minimum_balance.title" = "Sold minim";
 "asset.buy_asset" = "Cumpără %@";
+"wallet.import_address_warning" = "Puteți vizualiza soldurile și tranzacțiile pentru această adresă, dar **nu puteți trimite sau vinde fonduri**.";
