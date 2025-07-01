@@ -10,6 +10,7 @@ public final class WalletPreferences: @unchecked Sendable {
         static let transactionsTimestamp = "transactions_timestamp_v1"
         static let completeInitialLoadAssets = "complete_initial_load_assets"
         static let completeInitialAddressStatus = "complete_initial_address_status"
+        static let completeDiscoveryAssets = "complete_discovery_assets"
     }
 
     private let defaults: UserDefaults
@@ -36,6 +37,21 @@ public final class WalletPreferences: @unchecked Sendable {
     public var completeInitialAddressStatus: Bool {
         set { defaults.setValue(newValue, forKey: Keys.completeInitialAddressStatus) }
         get { defaults.bool(forKey: Keys.completeInitialAddressStatus) }
+    }
+    
+    public var completeDiscoveryAssets: Bool {
+        set { defaults.setValue(newValue, forKey: Keys.completeDiscoveryAssets) }
+        get { defaults.bool(forKey: Keys.completeDiscoveryAssets) }
+    }
+    
+    public func completeInitialSynchronization() {
+        completeInitialAddressStatus = true
+        completeInitialLoadAssets = true
+        completeDiscoveryAssets = true
+    }
+    
+    public func completeAssetDiscovery() {
+        completeDiscoveryAssets = true
     }
     
     // transactions

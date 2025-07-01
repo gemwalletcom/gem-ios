@@ -5,21 +5,22 @@ import Primitives
 import Store
 import ChainService
 import Formatters
+import AssetsService
 
 public struct BalanceService: BalancerUpdater, Sendable {
     private let balanceStore: BalanceStore
-    private let assersStore: AssetStore
-    private let chainServiceFactory: ChainServiceFactory
+    private let assetsService: AssetsService
+    private let fetcher: BalanceFetcher
     private let formatter = ValueFormatter(style: .full)
 
     public init(
         balanceStore: BalanceStore,
-        assertStore: AssetStore,
+        assetsService: AssetsService,
         chainServiceFactory: ChainServiceFactory
     ) {
         self.balanceStore = balanceStore
-        self.assersStore = assertStore
-        self.chainServiceFactory = chainServiceFactory
+        self.assetsService = assetsService
+        self.fetcher = BalanceFetcher(chainServiceFactory: chainServiceFactory)
     }
 }
 
@@ -48,23 +49,16 @@ extension BalanceService {
     }
 
     public func getBalance(assetId: AssetId, address: String) async throws -> AssetBalance  {
-        switch assetId.type {
-        case .native:
-            return try await getCoinBalance(chain: assetId.chain, address: address)
-        case .token:
-            guard let balance = try await getTokenBalance(chain: assetId.chain, address: address, tokenIds: [assetId.identifier]).first else {
-                throw AnyError("no balance available")
-            }
-            return balance
-        }
+        try await fetcher.getBalance(assetId: assetId, address: address)
     }
 
-    public func updateBalance(walletId: String, asset: AssetId, address: String) async throws {
+    @discardableResult
+    public func updateBalance(walletId: String, asset: AssetId, address: String) async throws -> AssetBalanceChange? {
         switch asset.type {
         case .native:
-            await updateCoinBalance(walletId: walletId, asset: asset, address: address)
+            await updateCoinBalance(walletId: walletId, asset: asset, address: address).first
         case .token:
-            await updateTokenBalances(walletId: walletId, chain: asset.chain, tokenIds: [asset], address: address)
+            await updateTokenBalances(walletId: walletId, chain: asset.chain, tokenIds: [asset], address: address).first
         }
     }
 
@@ -127,31 +121,34 @@ extension BalanceService {
         try balanceStore.getBalances(assetIds: assetIds)
     }
 
-    private func updateCoinBalance(walletId: String, asset: AssetId, address: String) async {
+    @discardableResult
+    private func updateCoinBalance(walletId: String, asset: AssetId, address: String) async -> [AssetBalanceChange] {
         let chain = asset.chain
-        await updateBalanceAsync(
+        return await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
-            fetchBalance: { [try await getCoinBalance(chain: chain, address: address).coinChange] },
+            fetchBalance: { [try await fetcher.getCoinBalance(chain: chain, address: address).coinChange] },
             mapBalance: { $0 }
         )
     }
 
-    private func updateCoinStakeBalance(walletId: String, asset: AssetId, address: String) async {
+    @discardableResult
+    private func updateCoinStakeBalance(walletId: String, asset: AssetId, address: String) async -> [AssetBalanceChange] {
         let chain = asset.chain
-        await updateBalanceAsync(
+        return await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
-            fetchBalance: { [try await getCoinStakeBalance(chain: chain, address: address)?.stakeChange] },
+            fetchBalance: { [try await fetcher.getCoinStakeBalance(chain: chain, address: address)?.stakeChange] },
             mapBalance: { $0 }
         )
     }
 
-    private func updateTokenBalances(walletId: String, chain: Chain, tokenIds: [AssetId], address: String) async {
+    @discardableResult
+    private func updateTokenBalances(walletId: String, chain: Chain, tokenIds: [AssetId], address: String) async -> [AssetBalanceChange] {
         await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
-            fetchBalance: { try await getTokenBalance(chain: chain, address: address, tokenIds: tokenIds.ids)
+            fetchBalance: { try await fetcher.getTokenBalance(chain: chain, address: address, tokenIds: tokenIds.ids)
             },
             mapBalance: { $0.tokenChange }
         )
@@ -162,28 +159,16 @@ extension BalanceService {
         chain: Chain,
         fetchBalance: () async throws -> [T],
         mapBalance: (T) -> AssetBalanceChange?
-    ) async {
+    ) async -> [AssetBalanceChange] {
         do {
             let balances = try await fetchBalance().compactMap { mapBalance($0) }
+            try await addAssetsIfNeeded(balances: balances)
             try storeBalances(balances: balances, walletId: walletId)
+            return balances
         } catch {
             NSLog("update balance error: chain: \(chain.id): \(error.localizedDescription)")
+            return []
         }
-    }
-
-    private func getCoinBalance(chain: Chain, address: String) async throws -> AssetBalance {
-        try await chainServiceFactory.service(for: chain)
-            .coinBalance(for: address)
-    }
-
-    private func getCoinStakeBalance(chain: Chain, address: String) async throws -> AssetBalance? {
-        try await chainServiceFactory.service(for: chain)
-            .getStakeBalance(for: address)
-    }
-
-    private func getTokenBalance(chain: Chain, address: String, tokenIds: [String]) async throws -> [AssetBalance] {
-        try await chainServiceFactory.service(for: chain)
-           .tokenBalance(for: address, tokenIds: tokenIds.compactMap { try? AssetId(id: $0) })
     }
 
     private func createUpdateBalanceType(asset: Asset, change: AssetBalanceChange) throws -> UpdateBalanceType {
@@ -242,8 +227,7 @@ extension BalanceService {
         for balance in balances {
             NSLog("update balance: \(balance.assetId.identifier): \(balance.type)")
         }
-        let assetIds = balances.map { $0.assetId }
-        let assets = try assersStore.getAssets(for: assetIds.ids)
+        let assets = try assetsService.getAssets(for: balances.map { $0.assetId })
         let updates = createBalanceUpdate(assets: assets, balances: balances)
 
         try updateBalances(updates, walletId: walletId)
@@ -268,6 +252,23 @@ extension BalanceService {
     }
 
     private func updateBalances(_ balances: [UpdateBalance], walletId: String) throws {
+        let assetIds = balances.map { $0.assetID }
+        let existBalances = try balanceStore.getBalances(walletId: walletId, assetIds: assetIds)
+        let missingBalances = assetIds.asSet().subtracting(existBalances.map { $0.assetId.identifier }).asArray()
+        let addBalances: [AddBalance] = try missingBalances.map {
+            AddBalance(assetId: try AssetId(id: $0), isEnabled: false)
+        }
+
+        try balanceStore.addBalance(addBalances, for: walletId)
         try balanceStore.updateBalances(balances, for: walletId)
+    }
+    
+    private func addAssetsIfNeeded(balances: [AssetBalanceChange]) async throws {
+        let assetIds = balances.map { $0.assetId }
+        let existAssets = try assetsService.getAssets(for: assetIds)
+        let missingIds = assetIds.asSet().subtracting(existAssets.map { $0.id }).asArray()
+        if missingIds.isNotEmpty {
+            try await assetsService.addAssets(assetIds: missingIds)
+        }
     }
 }

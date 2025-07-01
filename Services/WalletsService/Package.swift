@@ -28,7 +28,7 @@ let package = Package(
         .package(name: "TransactionService", path: "../TransactionService"),
         .package(name: "DiscoverAssetsService", path: "../DiscoverAssetsService"),
         .package(name: "ChainService", path: "../ChainService"),
-        .package(name: "WalletSessionService", path: "../WalletSessionService"),
+        .package(name: "WalletSessionService", path: "../WalletSessionService")
     ],
     targets: [
         .target(

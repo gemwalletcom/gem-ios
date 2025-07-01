@@ -26,7 +26,7 @@ public struct DeviceObserverService: Sendable {
     }
 
     private func onNewDeviceChange() {
-        Task.detached { [deviceService] in
+        Task {
             try await deviceService.update()
         }
     }
