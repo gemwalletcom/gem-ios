@@ -328,14 +328,14 @@ public extension TronService {
                 )
             case let .swap(_, _, quote, quoteData):
                 let estimatedEnergy: BigInt
-                if let approval = quoteData.approval {
+                if let approval = quoteData?.approval {
                     estimatedEnergy = try await estimateTRC20Approve(
                         ownerAddress: quote.request.walletAddress,
                         spender: approval.spender,
                         contractAddress: approval.token
                     )
                 } else {
-                    guard let swapEnergy = quoteData.gasLimit else {
+                    guard let swapEnergy = quoteData?.gasLimit else {
                         throw AnyError("Unable to fetch gas limit or energy fee")
                     }
                     estimatedEnergy = BigInt(stringLiteral: swapEnergy)

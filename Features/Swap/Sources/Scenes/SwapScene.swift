@@ -75,6 +75,11 @@ public struct SwapScene: View {
             if model.toValue.isEmpty {
                 model.focusField = .from
             }
+
+            // clean swapTransferData om back from confirm
+            if model.swapTransferData != nil {
+                model.swapTransferData = nil
+            }
         }
     }
 }
