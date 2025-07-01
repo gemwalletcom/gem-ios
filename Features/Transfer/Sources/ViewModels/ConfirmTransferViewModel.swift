@@ -19,7 +19,6 @@ import SwapService
 import Style
 import SwiftUI
 import Formatters
-import SwapService
 
 @Observable
 @MainActor
