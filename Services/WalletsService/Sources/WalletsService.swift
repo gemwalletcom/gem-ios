@@ -26,7 +26,7 @@ public struct WalletsService: Sendable {
     private let priceUpdater: any PriceUpdater
     private let balanceUpdater: any BalanceUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
-
+    
     // TODO: - move to different place
     private let addressStatusService: AddressStatusService
     private let transactionService: TransactionService
@@ -41,7 +41,8 @@ public struct WalletsService: Sendable {
         transactionService: TransactionService,
         bannerSetupService: BannerSetupService,
         addressStatusService: AddressStatusService,
-        preferences: ObservablePreferences = .default
+        preferences: ObservablePreferences = .default,
+        deviceService: any DeviceServiceable
     ) {
 
         let walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
@@ -57,6 +58,7 @@ public struct WalletsService: Sendable {
             priceUpdater: priceUpdater
         )
         let processor = DiscoveryAssetsProcessor(
+            deviceService: deviceService,
             discoverAssetService: DiscoverAssetsService(balanceService: balanceService),
             assetsService: assetsService,
             priceUpdater: priceUpdater,

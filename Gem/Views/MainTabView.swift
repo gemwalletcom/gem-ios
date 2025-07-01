@@ -23,7 +23,6 @@ struct MainTabView: View {
     @Environment(\.nftService) private var nftService
     @Environment(\.priceService) private var priceService
     @Environment(\.priceObserverService) private var priceObserverService
-    @Environment(\.deviceService) private var deviceService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.walletService) private var walletService
 
@@ -76,7 +75,6 @@ struct MainTabView: View {
                 CollectionsNavigationStack(
                     model: CollectionsViewModel(
                         nftService: nftService,
-                        deviceService: deviceService,
                         walletService: walletService,
                         wallet: model.wallet,
                         sceneStep: .collections

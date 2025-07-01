@@ -67,7 +67,7 @@ public struct PriceAlertService: Sendable {
     }
 
     private func getPriceAlerts() async throws -> [PriceAlert] {
-        try await apiService.getPriceAlerts(deviceId: try await deviceService.getDeviceId())
+        try await apiService.getPriceAlerts(deviceId: try deviceService.getDeviceId())
     }
     
     public func add(priceAlert: PriceAlert) async throws {

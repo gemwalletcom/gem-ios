@@ -28,7 +28,8 @@ let package = Package(
         .package(name: "TransactionService", path: "../TransactionService"),
         .package(name: "DiscoverAssetsService", path: "../DiscoverAssetsService"),
         .package(name: "ChainService", path: "../ChainService"),
-        .package(name: "WalletSessionService", path: "../WalletSessionService")
+        .package(name: "WalletSessionService", path: "../WalletSessionService"),
+        .package(name: "DeviceService", path: "../DeviceService"),
     ],
     targets: [
         .target(
@@ -44,7 +45,8 @@ let package = Package(
                 "TransactionService",
                 "DiscoverAssetsService",
                 "ChainService",
-                "WalletSessionService"
+                "WalletSessionService",
+                "DeviceService"
             ],
             path: "Sources"
         ),
@@ -59,6 +61,7 @@ let package = Package(
                 .product(name: "TransactionServiceTestKit", package: "TransactionService"),
                 .product(name: "BannerServiceTestKit", package: "BannerService"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "DeviceServiceTestKit", package: "DeviceService"),
                 "WalletsService"
             ],
             path: "TestKit"

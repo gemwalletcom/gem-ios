@@ -21,6 +21,7 @@ let package = Package(
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "GemAPI", path: "../../Packages/GemAPI"),
+        .package(name: "DeviceService", path: "../DeviceService"),
     ],
     targets: [
         .target(
@@ -28,7 +29,8 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Store",
-                "GemAPI"
+                "GemAPI",
+                "DeviceService",
             ],
             path: "Sources"
         ),
@@ -37,7 +39,8 @@ let package = Package(
             dependencies: [
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
-                "NFTService"
+                "NFTService",
+                .product(name: "DeviceServiceTestKit", package: "DeviceService"),
             ],
             path: "TestKit"
         ),

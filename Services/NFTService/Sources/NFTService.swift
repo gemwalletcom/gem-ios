@@ -4,20 +4,25 @@ import Foundation
 import Primitives
 import GemAPI
 import Store
+import DeviceService
 
 public struct NFTService: Sendable {
     private let apiService: any GemAPINFTService
     private let nftStore: NFTStore
+    private let deviceService: any DeviceServiceable
     
     public init(
         apiService: any GemAPINFTService = GemAPIService(),
-        nftStore: NFTStore
+        nftStore: NFTStore,
+        deviceService: any DeviceServiceable
     ) {
         self.apiService = apiService
         self.nftStore = nftStore
+        self.deviceService = deviceService
     }
     
-    public func updateAssets(deviceId: String, wallet: Wallet) async throws {
+    public func updateAssets(wallet: Wallet) async throws {
+        let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let nfts = try await apiService.getNFTAssets(deviceId: deviceId, walletIndex: wallet.index.asInt)
         try nftStore.save(nfts, for: wallet.id)
     }
