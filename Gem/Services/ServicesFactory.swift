@@ -41,8 +41,9 @@ struct ServicesFactory {
             apiService: apiService,
             subscriptionService: subscriptionService
         )
+        let deviceSyncManager = DeviceSyncManager(deviceService: deviceService)
         let deviceObserverService = Self.makeDeviceObserverService(
-            deviceService: deviceService,
+            deviceSyncManager: deviceSyncManager,
             subscriptionService: subscriptionService,
             walletStore: storeManager.walletStore
         )
@@ -136,7 +137,7 @@ struct ServicesFactory {
             transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
             bannerSetupService: bannerSetupService,
-            deviceObserver: deviceObserverService
+            deviceSyncManager: deviceSyncManager
         )
 
         let configService = GemAPIService()
@@ -216,12 +217,12 @@ extension ServicesFactory {
     }
 
     private static func makeDeviceObserverService(
-        deviceService: DeviceService,
+        deviceSyncManager: DeviceSyncManager,
         subscriptionService: SubscriptionService,
         walletStore: WalletStore
     ) -> DeviceObserverService {
         DeviceObserverService(
-            deviceService: deviceService,
+            deviceSyncManager: deviceSyncManager,
             subscriptionsService: subscriptionService,
             subscriptionsObserver: walletStore.observer()
         )
@@ -352,7 +353,7 @@ extension ServicesFactory {
         transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
         bannerSetupService: BannerSetupService,
-        deviceObserver: DeviceObserverService
+        deviceSyncManager: DeviceSyncManager
     ) -> WalletsService {
         WalletsService(
             walletStore: walletStore,
@@ -363,7 +364,7 @@ extension ServicesFactory {
             transactionService: transactionService,
             bannerSetupService: bannerSetupService,
             addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
-            deviceObserver: deviceObserver
+            deviceSyncManager: deviceSyncManager
         )
     }
 

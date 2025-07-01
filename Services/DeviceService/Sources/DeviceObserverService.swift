@@ -3,19 +3,17 @@
 import Foundation
 import Store
 
-public actor DeviceObserverService: Sendable {
-    private let deviceService: DeviceService
+public struct DeviceObserverService: Sendable {
+    private let deviceSyncManager: DeviceSyncManager
     private let subscriptionsService: SubscriptionService
     private let subscriptionsObserver: SubscriptionsObserver
-    
-    private var updateTask: Task<Void, Error>? = nil
 
     public init(
-        deviceService: DeviceService,
+        deviceSyncManager: DeviceSyncManager,
         subscriptionsService: SubscriptionService,
         subscriptionsObserver: SubscriptionsObserver
     ) {
-        self.deviceService = deviceService
+        self.deviceSyncManager = deviceSyncManager
         self.subscriptionsService = subscriptionsService
         self.subscriptionsObserver = subscriptionsObserver
     }
@@ -23,19 +21,8 @@ public actor DeviceObserverService: Sendable {
     public func startSubscriptionsObserver() async throws {
         for try await _ in subscriptionsObserver.observe().dropFirst() {
             subscriptionsService.incrementSubscriptionsVersion()
-            onNewDeviceChange()
+            // Сигнализируем о необходимости обновления, не запуская его напрямую.
+            await deviceSyncManager.setNeedsUpdate()
         }
-    }
-
-
-    private func onNewDeviceChange() {
-        updateTask = Task {
-            defer { updateTask = nil }
-            try await deviceService.update()
-        }
-    }
-
-    public func waitIfUpdating() async throws {
-        try await updateTask?.value
     }
 }

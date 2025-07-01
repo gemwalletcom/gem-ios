@@ -481,6 +481,16 @@
                ReferencedContainer = "container:Packages/Keychain">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DeviceServiceTests"
+               BuildableName = "DeviceServiceTests"
+               BlueprintName = "DeviceServiceTests"
+               ReferencedContainer = "container:Services/DeviceService">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

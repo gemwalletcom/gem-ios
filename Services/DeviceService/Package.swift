@@ -44,5 +44,13 @@ let package = Package(
             ],
             path: "TestKit"
         ),
+        .testTarget(
+            name: "DeviceServiceTests",
+            dependencies: [
+                "DeviceService",
+                "DeviceServiceTestKit"
+            ],
+            path: "Tests"
+        )
     ]
 )

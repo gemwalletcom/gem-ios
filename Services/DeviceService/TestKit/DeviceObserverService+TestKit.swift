@@ -7,12 +7,12 @@ import StoreTestKit
 
 public extension DeviceObserverService {
     static func mock(
-        deviceService: DeviceService = .mock(),
+        deviceSyncManager: DeviceSyncManager = .mock(),
         subscriptionsService: SubscriptionService = .mock(),
         subscriptionsObserver: SubscriptionsObserver = .mock()
     ) -> DeviceObserverService {
         DeviceObserverService(
-            deviceService: deviceService,
+            deviceSyncManager: deviceSyncManager,
             subscriptionsService: subscriptionsService,
             subscriptionsObserver: subscriptionsObserver
         )
