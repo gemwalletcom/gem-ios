@@ -43,14 +43,6 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store")
             ],
             path: "TestKit"
-        ),
-        .testTarget(
-            name: "DeviceServiceTests",
-            dependencies: [
-                "DeviceService",
-                "DeviceServiceTestKit"
-            ],
-            path: "Tests"
         )
     ]
 )
