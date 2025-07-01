@@ -26,6 +26,7 @@ public struct WalletsService: Sendable {
     private let priceUpdater: any PriceUpdater
     private let balanceUpdater: any BalanceUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
+    private let deviceObserver: DeviceObserverService
 
     // TODO: - move to different place
     private let addressStatusService: AddressStatusService
@@ -41,7 +42,8 @@ public struct WalletsService: Sendable {
         transactionService: TransactionService,
         bannerSetupService: BannerSetupService,
         addressStatusService: AddressStatusService,
-        preferences: ObservablePreferences = .default
+        preferences: ObservablePreferences = .default,
+        deviceObserver: DeviceObserverService
     ) {
 
         let walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
@@ -67,6 +69,7 @@ public struct WalletsService: Sendable {
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
         self.discoveryProcessor = processor
+        self.deviceObserver = deviceObserver
 
         self.assetsService = assetsService
         self.balanceService = balanceService
@@ -86,6 +89,8 @@ public struct WalletsService: Sendable {
     }
 
     public func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
+        try? await deviceObserver.waitIfUpdating()
+        
         async let updateAssets: () = try updateAssets(walletId: walletId, assetIds: assetIds)
         async let assets: () = try await discoveryProcessor.discoverAssets(for: walletId, preferences: WalletPreferences(walletId: walletId.id))
 
