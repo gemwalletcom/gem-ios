@@ -23,6 +23,7 @@ let package = Package(
         .package(name: "GemAPI", path: "../../Packages/GemAPI"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "AssetsService", path: "../AssetsService"),
+        .package(name: "DeviceService", path: "../DeviceService"),
     ],
     targets: [
         .target(
@@ -32,7 +33,8 @@ let package = Package(
                 "GemAPI",
                 "Store",
                 "Preferences",
-                "AssetsService"
+                "AssetsService",
+                "DeviceService",
             ],
             path: "Sources"
         ),
@@ -41,7 +43,8 @@ let package = Package(
             dependencies: [
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "AssetsServiceTestKit", package: "AssetsService"),
-                "TransactionsService"
+                "TransactionsService",
+                .product(name: "DeviceServiceTestKit", package: "DeviceService"),
             ],
             path: "TestKit"
         ),
