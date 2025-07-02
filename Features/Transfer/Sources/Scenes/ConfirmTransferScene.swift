@@ -171,7 +171,6 @@ extension ConfirmTransferScene {
                         }
                     )
                 }
-                .listRowInsets(.zero)
             }
         }
         .contentMargins([.top], .small, for: .scrollContent)
