@@ -5,10 +5,12 @@
 import Foundation
 
 public struct TransactionNFTTransferMetadata: Codable, Sendable {
-	public let assetId: NFTAssetId
+	public let assetId: String
+	public let name: String?
 
-	public init(assetId: NFTAssetId) {
+	public init(assetId: String, name: String?) {
 		self.assetId = assetId
+		self.name = name
 	}
 }
 

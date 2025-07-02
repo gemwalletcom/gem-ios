@@ -8,12 +8,14 @@ import Style
 import BigInt
 import Localization
 import Formatters
+import GemstonePrimitives
 
 public struct TransactionViewModel: Sendable {
     public let transaction: TransactionExtended
 
     private let formatter: ValueFormatter
     private let explorerService: any ExplorerLinkFetchable
+    private let assetImageFormatter = AssetImageFormatter()
 
     public init(
         explorerService: any ExplorerLinkFetchable,
@@ -26,17 +28,24 @@ public struct TransactionViewModel: Sendable {
     }
     
     public var assetImage: AssetImage {
-        let asset = AssetIdViewModel(assetId: assetId).assetImage
-        return AssetImage(
-            type: asset.type,
-            imageURL: asset.imageURL,
-            placeholder: asset.placeholder,
-            chainPlaceholder: overlayImage
-        )
-    }
-    
-    public var chainAssetImage: AssetImage {
-        AssetIdViewModel(assetId: assetId.chain.assetId).assetImage
+        switch transaction.transaction.metadata {
+        case .null, .swap, .none:
+            let asset = AssetIdViewModel(assetId: assetId).assetImage
+            return AssetImage(
+                type: asset.type,
+                imageURL: asset.imageURL,
+                placeholder: asset.placeholder,
+                chainPlaceholder: overlayImage
+            )
+        case .nft(let metadata):
+            let asset = AssetIdViewModel(assetId: assetId).assetImage
+            return AssetImage(
+                type: "",
+                imageURL: assetImageFormatter.getNFTUrl(for: metadata.assetId),
+                placeholder: asset.placeholder,
+                chainPlaceholder: overlayImage
+            )
+        }
     }
     
     public var overlayImage: Image? {
@@ -175,7 +184,7 @@ public struct TransactionViewModel: Sendable {
     
     public var subtitle: String? {
         switch transaction.transaction.type {
-        case .transfer, .transferNFT, .smartContractCall:
+        case .transfer, .smartContractCall:
             guard transaction.transaction.valueBigInt.isZero == false else {
                 return amountSymbolText
             }
@@ -187,19 +196,22 @@ public struct TransactionViewModel: Sendable {
             case .selfTransfer:
                 return amountSymbolText
             }
+        case .transferNFT:
+            return .none
         case .stakeRewards, .stakeWithdraw:
             return String(format: "+%@", amountSymbolText)
         case .stakeDelegate, .stakeUndelegate, .stakeRedelegate:
             return amountSymbolText
         case .swap:
             switch transaction.transaction.metadata {
-            case .null, .none:
+            case .null, .none, .nft:
                 return .none
             case .swap(let metadata):
                 guard let asset = transaction.assets.first(where: { $0.id == metadata.toAsset }) else {
                     return .none
                 }
                 return "+" + swapFormatter(asset: asset, value: BigInt(stringLiteral: metadata.toValue))
+                
             }
         case .assetActivation:
             return transaction.asset.symbol
@@ -254,7 +266,7 @@ public struct TransactionViewModel: Sendable {
             return .none
         case .swap:
             switch transaction.transaction.metadata {
-            case .null, .none:
+            case .null, .none, .nft:
                 return .none
             case .swap(let metadata):
                 guard let asset = transaction.assets.first(where: { $0.id == metadata.fromAsset }) else {
@@ -290,9 +302,9 @@ public struct TransactionViewModel: Sendable {
     }
 
     private var transactionLink: BlockExplorerLink {
-        let swapProvider: String? = switch transaction.transaction.type {
-            case .swap: transaction.transaction.metadata?.swap?.provider
-            default: .none
+        let swapProvider: String? = switch transaction.transaction.metadata {
+        case .swap(let metadata): metadata.provider
+        default: .none
         }
         return explorerService.transactionUrl(
             chain: assetId.chain,

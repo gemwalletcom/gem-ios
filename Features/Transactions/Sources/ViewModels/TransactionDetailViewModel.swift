@@ -202,7 +202,7 @@ struct TransactionDetailViewModel {
 
     var headerType: TransactionHeaderType {
         let swapMetadata: SwapMetadata? = {
-            guard let transactionSwapMetadata = model.transaction.transaction.metadata?.swap else {
+            guard let metadata = model.transaction.transaction.metadata, case let .swap(transactionSwapMetadata) = metadata else {
                 return .none
             }
             return SwapMetadata(
@@ -213,7 +213,7 @@ struct TransactionDetailViewModel {
         }()
         return TransactionHeaderTypeBuilder.build(
             infoModel: infoModel,
-            type: model.transaction.transaction.type,
+            transaction: model.transaction.transaction,
             swapMetadata: swapMetadata
         )
     }

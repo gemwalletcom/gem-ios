@@ -4,6 +4,8 @@ import Foundation
 import BigInt
 import Primitives
 import Formatters
+import GemstonePrimitives
+import Components
 
 public struct TransactionInfoViewModel: Sendable {
     private let asset: Asset
@@ -14,7 +16,7 @@ public struct TransactionInfoViewModel: Sendable {
     private let feeAsset: Asset
     private let feeAssetPrice: Price?
     private let feeValue: BigInt?
-
+    
     private let fullFormatter = ValueFormatter(style: .full)
     private let mediumFormatter = ValueFormatter(style: .medium)
     private let currencyFormatter: CurrencyFormatter
@@ -27,7 +29,7 @@ public struct TransactionInfoViewModel: Sendable {
         feeAssetPrice: Price?,
         value: BigInt,
         feeValue: BigInt?,
-        direction: TransactionDirection?
+        direction: TransactionDirection?,
     ) {
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currency)
         self.asset = asset
@@ -95,10 +97,15 @@ public struct TransactionInfoViewModel: Sendable {
                     title: amountValueText,
                     subtitle: showFiat ? amountFiatValueText : .none
                 )
-        case let .nft(nftAsset):
+        case let .nft(name, id):
                 .nft(
-                    name: nftAsset.name,
-                    image: NFTAssetViewModel(asset: nftAsset).assetImage
+                    name: name,
+                    image: AssetImage(
+                        type: "NFT",
+                        imageURL: AssetImageFormatter().getNFTUrl(for: id),
+                        placeholder: .none, //TODO Add nft placeholder
+                        chainPlaceholder: .none
+                    )
                 )
         case let .swap(swapInput):
                 .swap(
