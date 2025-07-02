@@ -93,7 +93,7 @@ struct SelectedAssetNavigationStack: View  {
                         ),
                         onComplete: {
                             isPresentingSelectedAssetInput = nil
-                        },
+                        }
                     )
                 case .stake:
                     StakeNavigationView(
