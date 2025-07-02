@@ -274,7 +274,7 @@ extension StellarService: ChainAddressStatusFetchable {
 }
 
 extension StellarAccount {
-    static let empty = StellarAccount(sequence: "", balances: [])
+    static let empty = StellarAccount(sequence: "0", balances: [])
     
     var isEmpty: Bool {
         sequence.isEmpty && balances.isEmpty

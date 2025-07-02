@@ -5,12 +5,12 @@
 import Foundation
 
 public struct SolanaAccount<T: Codable & Sendable>: Codable, Sendable {
-	public let lamports: Int
-	public let space: Int32
+	public let lamports: UInt64
+	public let space: UInt64
 	public let owner: String
 	public let data: T
 
-	public init(lamports: Int, space: Int32, owner: String, data: T) {
+	public init(lamports: UInt64, space: UInt64, owner: String, data: T) {
 		self.lamports = lamports
 		self.space = space
 		self.owner = owner

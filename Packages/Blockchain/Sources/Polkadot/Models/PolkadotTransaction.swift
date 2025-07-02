@@ -4,54 +4,6 @@
 
 import Foundation
 
-public struct PolkadotAccountBalance: Codable, Sendable {
-	public let free: String
-	public let reserved: String
-	public let nonce: String
-
-	public init(free: String, reserved: String, nonce: String) {
-		self.free = free
-		self.reserved = reserved
-		self.nonce = nonce
-	}
-}
-
-public struct PolkadotExtrinsic: Codable, Sendable {
-	public let hash: String
-	public let success: Bool
-
-	public init(hash: String, success: Bool) {
-		self.hash = hash
-		self.success = success
-	}
-}
-
-public struct PolkadotBlock: Codable, Sendable {
-	public let number: String
-	public let extrinsics: [PolkadotExtrinsic]
-
-	public init(number: String, extrinsics: [PolkadotExtrinsic]) {
-		self.number = number
-		self.extrinsics = extrinsics
-	}
-}
-
-public struct PolkadotEstimateFee: Codable, Sendable {
-	public let partialFee: String
-
-	public init(partialFee: String) {
-		self.partialFee = partialFee
-	}
-}
-
-public struct PolkadotNodeVersion: Codable, Sendable {
-	public let chain: String
-
-	public init(chain: String) {
-		self.chain = chain
-	}
-}
-
 public struct PolkadotTransactionBroadcast: Codable, Sendable {
 	public let hash: String
 

@@ -4,14 +4,6 @@
 
 import Foundation
 
-public struct TonResult<T: Codable & Sendable>: Codable, Sendable {
-	public let result: T
-
-	public init(result: T) {
-		self.result = result
-	}
-}
-
 public struct TonWalletInfo: Codable, Sendable {
 	public let seqno: Int32?
 	public let last_transaction_id: TonTransactionId

@@ -45,3 +45,11 @@ public struct CosmosNodeInfoResponse: Codable, Sendable {
 		self.default_node_info = default_node_info
 	}
 }
+
+public struct CosmosSyncing: Codable, Sendable {
+	public let syncing: Bool
+
+	public init(syncing: Bool) {
+		self.syncing = syncing
+	}
+}

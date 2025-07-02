@@ -4,37 +4,11 @@
 
 import Foundation
 
-public struct SuiCoin: Codable, Sendable {
-	public let coinType: String
-	public let coinObjectId: String
-	public let balance: String
-	public let version: String
+public struct SuiBroadcastTransaction: Codable, Sendable {
 	public let digest: String
 
-	public init(coinType: String, coinObjectId: String, balance: String, version: String, digest: String) {
-		self.coinType = coinType
-		self.coinObjectId = coinObjectId
-		self.balance = balance
-		self.version = version
+	public init(digest: String) {
 		self.digest = digest
-	}
-}
-
-public struct SuiCoinBalance: Codable, Sendable {
-	public let coinType: String
-	public let totalBalance: String
-
-	public init(coinType: String, totalBalance: String) {
-		self.coinType = coinType
-		self.totalBalance = totalBalance
-	}
-}
-
-public struct SuiData<T: Codable & Sendable>: Codable, Sendable {
-	public let data: T
-
-	public init(data: T) {
-		self.data = data
 	}
 }
 

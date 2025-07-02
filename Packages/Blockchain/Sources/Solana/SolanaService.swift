@@ -90,7 +90,7 @@ extension SolanaService {
         return AssetBalance.merge(assetIds: tokenIds, balances: balances)
     }
 
-    private func getPrioritizationFees() async throws -> [Int32] {
+    private func getPrioritizationFees() async throws -> [Int] {
         let fees = try await provider
             .request(.fees)
             .map(as: JSONRPCResponse<[SolanaPrioritizationFee]>.self)
@@ -173,7 +173,7 @@ extension SolanaService: ChainBalanceable {
 extension SolanaService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
         // filter out any large fees
-        let priorityFees = try await getPrioritizationFees().map { $0.asInt }.sorted(by: >).prefix(5)
+        let priorityFees = try await getPrioritizationFees().map { $0 }.sorted(by: >).prefix(5)
         
         let multipleOf = switch type {
         case .transfer(let asset): asset.type == .native ? 25_000 : 50_000
