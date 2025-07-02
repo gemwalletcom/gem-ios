@@ -261,7 +261,6 @@ extension AmountSceneViewModel {
                 validators: [
                     PositiveValueValidator<BigInt>().silent,
                     MinimumValueValidator<BigInt>(minimumValue: minimumValue, minimumValueText: minimumValueText),
-                    MinimumAccountReserveValidator<BigInt>(available: availableValue, reserve: minimumAccountReserve, asset: asset),
                     BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
                 ]
             )
