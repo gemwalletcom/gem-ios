@@ -45,7 +45,7 @@ public final class SwapSceneViewModel {
     var focusField: SwapScene.Field?
     var rateDirection: AssetRateFormatter.Direction = .direct
 
-    private let onSwap: ((TransferData) -> Void)?
+    private let onSwap: TransferDataAction
     private let swapQuotesProvider: any SwapQuotesProvidable
     private let preferences: Preferences
     private let formatter = SwapValueFormatter(valueFormatter: .full)
@@ -63,7 +63,7 @@ public final class SwapSceneViewModel {
         asset: Asset,
         walletsService: WalletsService,
         swapQuotesProvider: SwapQuotesProvidable,
-        onSwap: ((TransferData) -> Void)? = nil
+        onSwap: TransferDataAction = nil
     ) {
         let pairSelectorModel = SwapPairSelectorViewModel.defaultSwapPair(for: asset)
         self.pairSelectorModel = pairSelectorModel
