@@ -22,7 +22,7 @@ public enum TronTarget: TargetType {
     public var path: String {
         switch self {
         case .account: "/wallet/getaccount"
-        case .accountUsage: "/wallet/getaccountnet"
+        case .accountUsage: "/wallet/getaccountresource"
         case .latestBlock: "/wallet/getnowblock"
         case .transaction: "/wallet/gettransactionbyid"
         case .transactionReceipt: "/wallet/gettransactioninfobyid"
