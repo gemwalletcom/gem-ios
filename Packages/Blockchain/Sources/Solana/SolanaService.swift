@@ -176,9 +176,9 @@ extension SolanaService: ChainFeeRateFetchable {
         let priorityFees = try await getPrioritizationFees().map { $0.asInt }.sorted(by: >).prefix(5)
         
         let multipleOf = switch type {
-        case .transfer(let asset): asset.type == .native ? 50_000 : 100_000
-        case .stake, .transferNft: 50_000
-        case .generic, .swap: 250_000
+        case .transfer(let asset): asset.type == .native ? 25_000 : 50_000
+        case .stake, .transferNft: 25_000
+        case .generic, .swap: 100_000
         case .account, .tokenApprove: fatalError()
         }
         

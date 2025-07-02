@@ -5,6 +5,7 @@ import Primitives
 import Localization
 import WalletConnector
 import Transfer
+import SwapService
 
 struct WalletConnectorNavigationStack: View {
     @Environment(\.keystore) private var keystore
@@ -12,6 +13,7 @@ struct WalletConnectorNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.scanService) private var scanService
+    @Environment(\.nodeService) private var nodeService
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter
@@ -37,7 +39,12 @@ struct WalletConnectorNavigationStack: View {
                             chainService: chainServiceFactory
                                 .service(for: data.payload.tranferData.chain),
                             scanService: scanService,
+                            swapService: SwapService(nodeProvider: nodeService),
                             walletsService: walletsService,
+                            swapDataProvider: SwapQuoteDataProvider(
+                                keystore: keystore,
+                                swapService: SwapService(nodeProvider: nodeService)
+                            ),
                             confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }
                         )

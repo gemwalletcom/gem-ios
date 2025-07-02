@@ -40,7 +40,7 @@ public struct FeeInput: Sendable {
     
     public var gasLimit: BigInt? {
         switch type {
-        case .swap(_, _, _, let data): data.gasLimit.flatMap { BigInt(stringLiteral: $0) }
+        case .swap(_, _, _, let data): data?.gasLimit.flatMap { BigInt(stringLiteral: $0) }
         case .generic(_, _, let extra): extra.gasLimit
         default: .none
         }

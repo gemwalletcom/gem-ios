@@ -409,6 +409,13 @@
         "identifier" : "StyleTests",
         "name" : "StyleTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/DeviceService",
+        "identifier" : "DeviceServiceTests",
+        "name" : "DeviceServiceTests"
+      }
     }
   ],
   "version" : 1

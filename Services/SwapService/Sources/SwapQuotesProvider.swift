@@ -1,0 +1,38 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
+import Foundation
+import BigInt
+import Foundation
+import Primitives
+
+import struct Gemstone.SwapQuote
+
+public protocol SwapQuotesProvidable: Sendable {
+    func supportedAssets(for assetId: AssetId) -> ([Primitives.Chain], [Primitives.AssetId])
+    func fetchQuotes(wallet: Wallet, fromAsset: Asset, toAsset: Asset, amount: BigInt) async throws -> [SwapQuote]
+}
+
+public struct SwapQuotesProvider: SwapQuotesProvidable {
+    private let swapService: SwapService
+
+    public init(swapService: SwapService) {
+        self.swapService = swapService
+    }
+
+    public func supportedAssets(for assetId: AssetId) -> ([Primitives.Chain], [Primitives.AssetId]) {
+        swapService.supportedAssets(for: assetId)
+    }
+
+    public func fetchQuotes(wallet: Wallet, fromAsset: Asset, toAsset: Asset, amount: BigInt) async throws -> [SwapQuote] {
+        let walletAddress = try wallet.account(for: fromAsset.chain).address
+        let destinationAddress = try wallet.account(for: toAsset.chain).address
+        let quotes = try await swapService.getQuotes(
+            fromAsset: fromAsset,
+            toAsset: toAsset,
+            value: amount.description,
+            walletAddress: walletAddress,
+            destinationAddress: destinationAddress
+        )
+        return try quotes.sorted { try BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue) }
+    }
+}

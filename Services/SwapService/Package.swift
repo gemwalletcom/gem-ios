@@ -23,6 +23,7 @@ let package = Package(
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "Signer", path: "../../Packages/Signer"),
+        .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "ChainService", path: "../ChainService"),
         .package(name: "NativeProviderService", path: "../NativeProviderService"),
     ],
@@ -35,6 +36,7 @@ let package = Package(
                 "Primitives",
                 "ChainService",
                 "Signer",
+                "Keystore",
                 "NativeProviderService",
             ],
             path: "Sources"

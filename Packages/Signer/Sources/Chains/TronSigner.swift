@@ -120,6 +120,7 @@ public struct TronSigner: Signable {
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         guard
             case let .swap(_, _, quote, quoteData) = input.type,
+            let quoteData,
             let data = Data(fromHex: quoteData.data),
             let callValue = Int64(quoteData.value),
             let gasLimit = quoteData.gasLimit
