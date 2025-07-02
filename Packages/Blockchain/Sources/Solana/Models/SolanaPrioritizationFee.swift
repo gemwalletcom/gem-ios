@@ -5,9 +5,9 @@
 import Foundation
 
 public struct SolanaPrioritizationFee: Codable, Sendable {
-	public let prioritizationFee: Int32
+	public let prioritizationFee: Int
 
-	public init(prioritizationFee: Int32) {
+	public init(prioritizationFee: Int) {
 		self.prioritizationFee = prioritizationFee
 	}
 }

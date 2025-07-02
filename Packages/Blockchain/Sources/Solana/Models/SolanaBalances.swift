@@ -5,9 +5,9 @@
 import Foundation
 
 public struct SolanaBalance: Codable, Sendable {
-	public let value: Int
+	public let value: UInt64
 
-	public init(value: Int) {
+	public init(value: UInt64) {
 		self.value = value
 	}
 }

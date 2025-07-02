@@ -37,7 +37,7 @@ public struct DeviceService: DeviceServiceable {
         guard let deviceId = try await getOrCreateDeviceId() else { return }
         let device = try await getOrCreateDevice(deviceId)
         let localDevice = try currentDevice(deviceId: deviceId)
-        if device.subscriptionsVersion != localDevice.subscriptionsVersion {
+        if device.subscriptionsVersion != localDevice.subscriptionsVersion || preferences.subscriptionsVersionHasChange {
             try await subscriptionsService.update(deviceId: deviceId)
         }
         if device != localDevice  {

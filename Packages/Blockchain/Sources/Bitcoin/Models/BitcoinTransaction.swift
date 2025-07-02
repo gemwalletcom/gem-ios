@@ -5,9 +5,9 @@
 import Foundation
 
 public struct BitcoinTransaction: Codable, Sendable {
-	public let blockHeight: Int32
+	public let blockHeight: UInt64
 
-	public init(blockHeight: Int32) {
+	public init(blockHeight: UInt64) {
 		self.blockHeight = blockHeight
 	}
 }
@@ -27,5 +27,17 @@ public struct BitcoinTransactionBroacastResult: Codable, Sendable {
 	public init(error: BitcoinTransactionBroacastError?, result: String?) {
 		self.error = error
 		self.result = result
+	}
+}
+
+public struct BitcoinUTXO: Codable, Sendable {
+	public let txid: String
+	public let vout: Int32
+	public let value: String
+
+	public init(txid: String, vout: Int32, value: String) {
+		self.txid = txid
+		self.vout = vout
+		self.value = value
 	}
 }

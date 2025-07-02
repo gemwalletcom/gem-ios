@@ -5,11 +5,11 @@
 import Foundation
 
 public struct SolanaEpoch: Codable, Sendable {
-	public let epoch: Int32
-	public let slotIndex: Int32
-	public let slotsInEpoch: Int32
+	public let epoch: UInt64
+	public let slotIndex: UInt64
+	public let slotsInEpoch: UInt64
 
-	public init(epoch: Int32, slotIndex: Int32, slotsInEpoch: Int32) {
+	public init(epoch: UInt64, slotIndex: UInt64, slotsInEpoch: UInt64) {
 		self.epoch = epoch
 		self.slotIndex = slotIndex
 		self.slotsInEpoch = slotsInEpoch
