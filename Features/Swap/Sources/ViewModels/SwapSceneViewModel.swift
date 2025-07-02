@@ -26,7 +26,6 @@ public final class SwapSceneViewModel {
 
     public var swapState: SwapState = .init()
     public var isPresentedInfoSheet: SwapSheetType?
-    public var swapTransferData: TransferData?
 
     // db observation requests
     var fromAssetRequest: AssetRequestOptional
@@ -46,6 +45,7 @@ public final class SwapSceneViewModel {
     var focusField: SwapScene.Field?
     var rateDirection: AssetRateFormatter.Direction = .direct
 
+    private let onSwap: TransferDataAction
     private let swapQuotesProvider: any SwapQuotesProvidable
     private let preferences: Preferences
     private let formatter = SwapValueFormatter(valueFormatter: .full)
@@ -62,7 +62,8 @@ public final class SwapSceneViewModel {
         wallet: Wallet,
         asset: Asset,
         walletsService: WalletsService,
-        swapQuotesProvider: SwapQuotesProvidable
+        swapQuotesProvider: SwapQuotesProvidable,
+        onSwap: TransferDataAction = nil
     ) {
         let pairSelectorModel = SwapPairSelectorViewModel.defaultSwapPair(for: asset)
         self.pairSelectorModel = pairSelectorModel
@@ -79,6 +80,7 @@ public final class SwapSceneViewModel {
             assetId: pairSelectorModel.toAssetId
         )
         self.swapQuotesProvider = swapQuotesProvider
+        self.onSwap = onSwap
     }
 
     var title: String { Localized.Wallet.swap }
@@ -382,25 +384,26 @@ extension SwapSceneViewModel {
         )
     }
 
-    public func swap() {
+    private func swap() {
         guard let fromAsset = fromAsset,
               let toAsset = toAsset,
               let quote = selectedSwapQuote
         else {
             return
         }
-        swapTransferData = SwapTransferDataFactory.swap(
-            fromAsset: fromAsset.asset,
-            toAsset: toAsset.asset,
-            quote: quote,
-            quoteData: nil
+        onSwap?(
+            SwapTransferDataFactory.swap(
+                fromAsset: fromAsset.asset,
+                toAsset: toAsset.asset,
+                quote: quote,
+                quoteData: nil
+            )
         )
     }
 
     private func performFetch(input: SwapQuoteInput) async {
         do {
             // reset transfer data on quotes fetch
-            swapTransferData = nil
             swapState.quotes = .loading
             let swapQuotes = try await swapQuotesProvider.fetchQuotes(
                 wallet: wallet,

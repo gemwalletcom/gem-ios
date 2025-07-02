@@ -86,9 +86,11 @@ struct SelectedAssetNavigationStack: View  {
                             wallet: wallet,
                             asset: selectType.asset,
                             walletsService: walletsService,
-                            swapQuotesProvider: SwapQuotesProvider(swapService: SwapService(nodeProvider: nodeService))
+                            swapQuotesProvider: SwapQuotesProvider(swapService: SwapService(nodeProvider: nodeService)),
+                            onSwap: {
+                                navigationPath.append($0)
+                            }
                         ),
-                        navigationPath: $navigationPath,
                         onComplete: {
                             isPresentingSelectedAssetInput = nil
                         }
