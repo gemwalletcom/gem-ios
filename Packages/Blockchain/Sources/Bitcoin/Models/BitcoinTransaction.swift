@@ -5,9 +5,9 @@
 import Foundation
 
 public struct BitcoinTransaction: Codable, Sendable {
-	public let blockHeight: Int32
+	public let blockHeight: UInt64
 
-	public init(blockHeight: Int32) {
+	public init(blockHeight: UInt64) {
 		self.blockHeight = blockHeight
 	}
 }

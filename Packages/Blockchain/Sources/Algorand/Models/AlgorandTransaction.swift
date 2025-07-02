@@ -15,10 +15,10 @@ public struct AlgorandTransactionBroadcast: Codable, Sendable {
 }
 
 public struct AlgorandTransactionParams: Codable, Sendable {
-	public let min_fee: Int32
+	public let min_fee: UInt64
 	public let genesis_id: String
 	public let genesis_hash: String
-	public let last_round: Int32
+	public let last_round: UInt64
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case min_fee = "min-fee",
@@ -27,7 +27,7 @@ public struct AlgorandTransactionParams: Codable, Sendable {
 			last_round = "last-round"
 	}
 
-	public init(min_fee: Int32, genesis_id: String, genesis_hash: String, last_round: Int32) {
+	public init(min_fee: UInt64, genesis_id: String, genesis_hash: String, last_round: UInt64) {
 		self.min_fee = min_fee
 		self.genesis_id = genesis_id
 		self.genesis_hash = genesis_hash
@@ -36,13 +36,13 @@ public struct AlgorandTransactionParams: Codable, Sendable {
 }
 
 public struct AlgorandTransactionStatus: Codable, Sendable {
-	public let confirmed_round: Int32
+	public let confirmed_round: UInt64
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case confirmed_round = "confirmed-round"
 	}
 
-	public init(confirmed_round: Int32) {
+	public init(confirmed_round: UInt64) {
 		self.confirmed_round = confirmed_round
 	}
 }

@@ -5,9 +5,9 @@
 import Foundation
 
 public struct XRPLatestBlock: Codable, Sendable {
-	public let ledger_current_index: Int32
+	public let ledger_current_index: UInt64
 
-	public init(ledger_current_index: Int32) {
+	public init(ledger_current_index: UInt64) {
 		self.ledger_current_index = ledger_current_index
 	}
 }

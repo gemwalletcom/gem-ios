@@ -22,7 +22,7 @@ public struct AlgorandAccountAsset: Codable, Sendable {
 public struct AlgorandAccount: Codable, Sendable {
 	public let amount: UInt64
 	public let assets: [AlgorandAccountAsset]
-	public let min_balance: Int32
+	public let min_balance: UInt64
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case amount,
@@ -30,7 +30,7 @@ public struct AlgorandAccount: Codable, Sendable {
 			min_balance = "min-balance"
 	}
 
-	public init(amount: UInt64, assets: [AlgorandAccountAsset], min_balance: Int32) {
+	public init(amount: UInt64, assets: [AlgorandAccountAsset], min_balance: UInt64) {
 		self.amount = amount
 		self.assets = assets
 		self.min_balance = min_balance

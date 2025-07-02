@@ -5,9 +5,9 @@
 import Foundation
 
 public struct CardanoBlock: Codable, Sendable {
-	public let number: Int32
+	public let number: UInt64
 
-	public init(number: Int32) {
+	public init(number: UInt64) {
 		self.number = number
 	}
 }

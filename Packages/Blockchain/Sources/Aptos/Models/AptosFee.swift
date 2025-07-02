@@ -5,11 +5,11 @@
 import Foundation
 
 public struct AptosGasFee: Codable, Sendable {
-	public let deprioritized_gas_estimate: Int32
-	public let gas_estimate: Int32
-	public let prioritized_gas_estimate: Int32
+	public let deprioritized_gas_estimate: UInt64
+	public let gas_estimate: UInt64
+	public let prioritized_gas_estimate: UInt64
 
-	public init(deprioritized_gas_estimate: Int32, gas_estimate: Int32, prioritized_gas_estimate: Int32) {
+	public init(deprioritized_gas_estimate: UInt64, gas_estimate: UInt64, prioritized_gas_estimate: UInt64) {
 		self.deprioritized_gas_estimate = deprioritized_gas_estimate
 		self.gas_estimate = gas_estimate
 		self.prioritized_gas_estimate = prioritized_gas_estimate
