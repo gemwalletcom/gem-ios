@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "Bạn không có đủ %@ để hoàn tất giao dịch này. Vui lòng nạp tiền, nhận hoặc đổi trong ví của bạn và thử lại.";
 "info.account_minimum_balance.title" = "Số dư tối thiểu";
 "asset.buy_asset" = "Mua %@";
+"wallet.import_address_warning" = "Bạn có thể xem số dư và giao dịch của địa chỉ này, nhưng **không thể gửi hoặc bán tiền**.";

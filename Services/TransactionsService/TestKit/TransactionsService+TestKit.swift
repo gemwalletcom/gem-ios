@@ -4,13 +4,15 @@ import Foundation
 import TransactionsService
 import StoreTestKit
 import AssetsServiceTestKit
+import DeviceServiceTestKit
 
 public extension TransactionsService {
     static func mock() -> TransactionsService {
         TransactionsService(
             transactionStore: .mock(),
             assetsService: .mock(),
-            walletStore: .mock()
+            walletStore: .mock(),
+            deviceService: DeviceServiceMock()
         )
     }
 }

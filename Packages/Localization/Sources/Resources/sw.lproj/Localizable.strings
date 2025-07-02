@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "Huna %@ ya kutosha kukamilisha muamala huu. Tafadhali jaza, pokea, au ubadilishe pochi yako na ujaribu tena.";
 "info.account_minimum_balance.title" = "Kiwango cha chini cha usawa";
 "asset.buy_asset" = "Nunua %@";
+"wallet.import_address_warning" = "Unaweza kuangalia salio na miamala ya anwani hii, lakini **haiwezi kutuma au kuuza fedha**.";

@@ -4,12 +4,12 @@ import Foundation
 import Store
 
 public struct DeviceObserverService: Sendable {
-    private let deviceService: DeviceService
+    private let deviceService: any DeviceServiceable
     private let subscriptionsService: SubscriptionService
     private let subscriptionsObserver: SubscriptionsObserver
 
     public init(
-        deviceService: DeviceService,
+        deviceService: any DeviceServiceable,
         subscriptionsService: SubscriptionService,
         subscriptionsObserver: SubscriptionsObserver
     ) {
@@ -21,12 +21,6 @@ public struct DeviceObserverService: Sendable {
     public func startSubscriptionsObserver() async throws {
         for try await _ in subscriptionsObserver.observe().dropFirst() {
             subscriptionsService.incrementSubscriptionsVersion()
-            onNewDeviceChange()
-        }
-    }
-
-    private func onNewDeviceChange() {
-        Task.detached { [deviceService] in
             try await deviceService.update()
         }
     }

@@ -39,6 +39,8 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingSelectAssetType: SelectAssetType?
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingUrl: URL? = nil
+    
+    public var isLoadingAssets: Bool = false
 
     public init(
         walletsService: WalletsService,
@@ -112,10 +114,12 @@ public final class WalletSceneViewModel: Sendable {
 extension WalletSceneViewModel {
     func fetch() {
         Task {
+            shouldStartLoadingAssets()
             await fetch(
                 walletId: wallet.walletId,
                 assetIds: assets.map { $0.asset.id }
             )
+            isLoadingAssets = false
         }
     }
     
@@ -181,6 +185,11 @@ extension WalletSceneViewModel {
         if let newWallet, wallet != newWallet {
             refresh(for: newWallet)
         }
+    }
+    
+    func shouldStartLoadingAssets() {
+        let preferences = WalletPreferences(walletId: wallet.id)
+        isLoadingAssets = !preferences.completeDiscoveryAssets && preferences.assetsTimestamp == .zero
     }
 }
 

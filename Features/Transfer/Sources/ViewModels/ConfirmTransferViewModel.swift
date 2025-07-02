@@ -15,6 +15,7 @@ import WalletsService
 import InfoSheet
 import Signer
 import Validators
+import SwapService
 import Style
 import SwiftUI
 import Formatters
@@ -44,17 +45,19 @@ public final class ConfirmTransferViewModel {
     var isPresentingSheet: ConfirmTransferSheetType?
     var isPresentingErrorMessage: String?
 
+    private let swapDataProvider: any SwapQuoteDataProvidable
     private let explorerService: any ExplorerLinkFetchable
     private let metadataProvider: any TransferMetadataProvidable
     private let transferTransactionProvider: any TransferTransactionProvidable
     private let transerExecutor: any TransferExecutable
     private let keystore: any Keystore
+    private let swapService: SwapService
 
-    private let data: TransferData
     private let wallet: Wallet
     private let onComplete: VoidAction
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate?
 
+    private var data: TransferData
     private var metadata: TransferDataMetadata?
 
     public init(
@@ -63,7 +66,9 @@ public final class ConfirmTransferViewModel {
         keystore: any Keystore,
         chainService: any ChainServiceable,
         scanService: ScanService,
+        swapService: SwapService,
         walletsService: WalletsService,
+        swapDataProvider: any SwapQuoteDataProvidable,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
         onComplete: VoidAction
@@ -88,15 +93,17 @@ public final class ConfirmTransferViewModel {
 
         self.transferTransactionProvider = TransferTransactionProvider(
             chainService: chainService,
-            scanService: scanService
+            scanService: scanService,
+            swapService: swapService
         )
+        self.swapService = swapService
 
         self.transerExecutor = TransferExecutor(
             signer: TransactionSigner(keystore: keystore),
             chainService: chainService,
             walletsService: walletsService
         )
-
+        self.swapDataProvider = swapDataProvider
         self.metadata = try? metadataProvider.metadata(wallet: wallet, data: data)
     }
 
@@ -282,7 +289,7 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
-    func onSelectBuy() {
+    private func onSelectBuy() {
         isPresentingSheet = .fiatConnect(
             assetAddress: feeAssetAddress,
             walletId: wallet.walletId
@@ -311,11 +318,14 @@ extension ConfirmTransferViewModel {
         }
     }
 
+
     private func fetch() async {
         state = .loading
         feeModel.reset()
 
         do {
+            data = try await fetchTransferData()
+
             let metadata = try metadataProvider.metadata(wallet: wallet, data: data)
             let transferTransactionData = try await transferTransactionProvider.loadTransferTransactionData(
                 wallet: wallet, data: data,
@@ -345,11 +355,21 @@ extension ConfirmTransferViewModel {
         }
     }
 
+    private func fetchTransferData() async throws -> TransferData {
+        // if swap, we refetch swap quote data
+        guard case let .swap(fromAsset, toAsset, quote, quoteData) = data.type, quoteData == nil else {
+            return data
+        }
+
+        let swapQuoteData = try await swapDataProvider.fetchQuoteData(wallet: wallet, quote: quote)
+        return SwapTransferDataFactory.swap(fromAsset: fromAsset, toAsset: toAsset, quote: quote, quoteData: swapQuoteData)
+    }
+
     private func processConfirmation(transactionData: TransactionData, amount: TransferAmount) async {
         confirmingState = .loading
         do {
             let input = TransferConfirmationInput(
-                data: data,
+                data: state.value!.data,
                 wallet: wallet,
                 transactionData: transactionData,
                 amount: amount,

@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "Vous n'avez pas assez de %@ pour finaliser cette transaction. Veuillez recharger, recevoir ou échanger votre portefeuille et réessayer.";
 "info.account_minimum_balance.title" = "Solde minimum";
 "asset.buy_asset" = "Achetez %@";
+"wallet.import_address_warning" = "Vous pouvez consulter les soldes et les transactions pour cette adresse, mais **vous ne pouvez pas envoyer ou vendre des fonds**.";

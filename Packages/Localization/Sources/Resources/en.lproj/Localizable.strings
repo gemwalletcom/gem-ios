@@ -422,3 +422,4 @@
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
 "info.account_minimum_balance.title" = "Minimum balance";
 "asset.buy_asset" = "Buy %@";
+"wallet.import_address_warning" = "You can view balances and transactions for this address, but **cannot send or sell funds**.";

@@ -6,32 +6,37 @@ import Primitives
 import Store
 import Preferences
 import AssetsService
+import DeviceService
 
 public final class TransactionsService: Sendable {
     let provider: any GemAPITransactionService
     public let transactionStore: TransactionStore
     let assetsService: AssetsService
     let walletStore: WalletStore
-
+    private let deviceService: any DeviceServiceable
+    
     public init(
         provider: any GemAPITransactionService = GemAPIService(),
         transactionStore: TransactionStore,
         assetsService: AssetsService,
-        walletStore: WalletStore
+        walletStore: WalletStore,
+        deviceService: any DeviceServiceable
     ) {
         self.provider = provider
         self.transactionStore = transactionStore
         self.assetsService = assetsService
         self.walletStore = walletStore
+        self.deviceService = deviceService
     }
 
-    public func updateAll(deviceId: String, walletId: WalletId) async throws {
+    public func updateAll(walletId: WalletId) async throws {
         guard let wallet = try walletStore.getWallet(id: walletId.id) else {
             throw AnyError("Can't get a wallet, walletId: \(walletId.id)")
         }
         let store = WalletPreferences(walletId: wallet.id)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         
+        let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let transactions = try await provider.getTransactionsAll(
             deviceId: deviceId,
             walletIndex: wallet.index.asInt,
@@ -43,10 +48,10 @@ public final class TransactionsService: Sendable {
         store.transactionsTimestamp = newTimestamp
     }
     
-    public func updateForAsset(deviceId: String, wallet: Wallet, assetId: AssetId) async throws {
+    public func updateForAsset(wallet: Wallet, assetId: AssetId) async throws {
         let store = WalletPreferences(walletId: wallet.id)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
-        
+        let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let transactions = try await provider.getTransactionsForAsset(
             deviceId: deviceId,
             walletIndex: wallet.index.asInt,

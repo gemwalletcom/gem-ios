@@ -18,6 +18,8 @@ import BannerService
 import BannerServiceTestKit
 import Preferences
 import PreferencesTestKit
+import DeviceService
+import DeviceServiceTestKit
 
 public extension WalletsService {
     static func mock(
@@ -26,11 +28,11 @@ public extension WalletsService {
         balanceService: BalanceService = .mock(),
         priceService: PriceService = .mock(),
         priceObserver: PriceObserverService = .mock(),
-        chainService: ChainServiceFactory = .mock(),
         transactionService: TransactionService = .mock(),
         bannerSetupService: BannerSetupService = .mock(),
         addressStatusService: AddressStatusService = .mock(),
-        preferences: ObservablePreferences = .mock()
+        preferences: ObservablePreferences = .mock(),
+        deviceService: DeviceService = .mock()
     ) -> WalletsService {
         WalletsService(
             walletStore: walletStore,
@@ -38,11 +40,11 @@ public extension WalletsService {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            chainService: chainService,
             transactionService: transactionService,
             bannerSetupService: bannerSetupService,
             addressStatusService: addressStatusService,
-            preferences: preferences
+            preferences: preferences,
+            deviceService: deviceService
         )
     }
 }

@@ -8,7 +8,9 @@ import UIKit
 import Preferences
 
 public protocol DeviceServiceable: Sendable {
-    func getDeviceId() async throws -> String
+    func getDeviceId() throws -> String
+    // returns same device ID as getDeviceId(), but making sure subscriptions has been updated.
+    func getSubscriptionsDeviceId() async throws -> String
     func update() async throws
 }
 
@@ -18,7 +20,7 @@ public struct DeviceService: DeviceServiceable {
     private let subscriptionsService: SubscriptionService
     private let preferences: Preferences
     private let securePreferences: SecurePreferences
-
+    
     public init(
         deviceProvider: any GemAPIDeviceService,
         subscriptionsService: SubscriptionService,
@@ -35,7 +37,7 @@ public struct DeviceService: DeviceServiceable {
         guard let deviceId = try await getOrCreateDeviceId() else { return }
         let device = try await getOrCreateDevice(deviceId)
         let localDevice = try currentDevice(deviceId: deviceId)
-        if device.subscriptionsVersion != localDevice.subscriptionsVersion {
+        if device.subscriptionsVersion != localDevice.subscriptionsVersion || preferences.subscriptionsVersionHasChange {
             try await subscriptionsService.update(deviceId: deviceId)
         }
         if device != localDevice  {
@@ -53,8 +55,15 @@ public struct DeviceService: DeviceServiceable {
         }
     }
     
-    public func getDeviceId() async throws -> String {
+    public func getDeviceId() throws -> String {
         return try securePreferences.getDeviceId()
+    }
+    
+    public func getSubscriptionsDeviceId() async throws -> String {
+        if preferences.subscriptionsVersionHasChange {
+            try await update()
+        }
+        return try getDeviceId()
     }
     
     private func generateDeviceId() -> String {
@@ -63,7 +72,7 @@ public struct DeviceService: DeviceServiceable {
     
     private func getOrCreateDeviceId() async throws -> String?  {
         do {
-            let deviceId = try await getDeviceId()
+            let deviceId = try getDeviceId()
             return deviceId
         } catch {
             let newDeviceId = generateDeviceId()

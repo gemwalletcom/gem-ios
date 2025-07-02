@@ -43,15 +43,19 @@ public struct HeaderButtonsView: View {
                 ) {
                     action?(button.type)
                 }
-            case let .menuButton(items):
-                ActionMenu(items: items) {
-                    RoundButton(
-                        title: button.title,
-                        image: button.image,
-                        isEnabled: button.isEnabled,
-                        action: {} // action empty, handled by menu
-                    )
-                }
+            case let .menuButton(title, items):
+                AdaptiveActionMenu(
+                    title: title,
+                    items: items,
+                    label: {
+                        RoundButton(
+                            title: button.title,
+                            image: button.image,
+                            isEnabled: button.isEnabled,
+                            action: {} // action empty, handled by menu
+                        )
+                    }
+                )
             }
         }
         .accessibilityIdentifier(button.id)
