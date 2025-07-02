@@ -47,12 +47,12 @@ public struct TronTransactionBroadcastError: Codable, Sendable {
 }
 
 public struct TronTransactionReceipt: Codable, Sendable {
-	public let blockNumber: Int32
-	public let fee: Int32?
+	public let blockNumber: UInt64
+	public let fee: Int64?
 	public let result: String?
 	public let receipt: TronReceipt?
 
-	public init(blockNumber: Int32, fee: Int32?, result: String?, receipt: TronReceipt?) {
+	public init(blockNumber: UInt64, fee: Int64?, result: String?, receipt: TronReceipt?) {
 		self.blockNumber = blockNumber
 		self.fee = fee
 		self.result = result

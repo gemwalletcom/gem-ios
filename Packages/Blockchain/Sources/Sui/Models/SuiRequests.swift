@@ -30,26 +30,6 @@ public struct SuiBatchRequest: Codable, Sendable {
 	}
 }
 
-public struct SuiBroadcastTransaction: Codable, Sendable {
-	public let digest: String
-
-	public init(digest: String) {
-		self.digest = digest
-	}
-}
-
-public struct SuiCoinMetadata: Codable, Sendable {
-	public let decimals: Int32
-	public let name: String
-	public let symbol: String
-
-	public init(decimals: Int32, name: String, symbol: String) {
-		self.decimals = decimals
-		self.name = name
-		self.symbol = symbol
-	}
-}
-
 public struct SuiMoveCallRequest: Codable, Sendable {
 	public let senderAddress: String
 	public let objectId: String
@@ -108,48 +88,6 @@ public struct SuiSplitCoinRequest: Codable, Sendable {
 	}
 }
 
-public struct SuiStake: Codable, Sendable {
-	public let stakedSuiId: String
-	public let status: String
-	public let principal: String
-	public let stakeRequestEpoch: String
-	public let stakeActiveEpoch: String
-	public let estimatedReward: String?
-
-	public init(stakedSuiId: String, status: String, principal: String, stakeRequestEpoch: String, stakeActiveEpoch: String, estimatedReward: String?) {
-		self.stakedSuiId = stakedSuiId
-		self.status = status
-		self.principal = principal
-		self.stakeRequestEpoch = stakeRequestEpoch
-		self.stakeActiveEpoch = stakeActiveEpoch
-		self.estimatedReward = estimatedReward
-	}
-}
-
-public struct SuiStakeDelegation: Codable, Sendable {
-	public let validatorAddress: String
-	public let stakingPool: String
-	public let stakes: [SuiStake]
-
-	public init(validatorAddress: String, stakingPool: String, stakes: [SuiStake]) {
-		self.validatorAddress = validatorAddress
-		self.stakingPool = stakingPool
-		self.stakes = stakes
-	}
-}
-
-public struct SuiSystemState: Codable, Sendable {
-	public let epoch: String
-	public let epochStartTimestampMs: String
-	public let epochDurationMs: String
-
-	public init(epoch: String, epochStartTimestampMs: String, epochDurationMs: String) {
-		self.epoch = epoch
-		self.epochStartTimestampMs = epochStartTimestampMs
-		self.epochDurationMs = epochDurationMs
-	}
-}
-
 public struct SuiUnstakeRequest: Codable, Sendable {
 	public let senderAddress: String
 	public let delegationId: String
@@ -159,23 +97,5 @@ public struct SuiUnstakeRequest: Codable, Sendable {
 		self.senderAddress = senderAddress
 		self.delegationId = delegationId
 		self.gasBudget = gasBudget
-	}
-}
-
-public struct SuiValidator: Codable, Sendable {
-	public let address: String
-	public let apy: Double
-
-	public init(address: String, apy: Double) {
-		self.address = address
-		self.apy = apy
-	}
-}
-
-public struct SuiValidators: Codable, Sendable {
-	public let apys: [SuiValidator]
-
-	public init(apys: [SuiValidator]) {
-		self.apys = apys
 	}
 }
