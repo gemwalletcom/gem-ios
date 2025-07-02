@@ -25,7 +25,7 @@ struct SwapNavigationView: View {
         model: SwapSceneViewModel,
         onComplete: VoidAction
     ) {
-        self.model = model
+        _model = State(initialValue: model)
         self.onComplete = onComplete
     }
 
