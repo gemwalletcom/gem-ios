@@ -35,12 +35,12 @@ struct AmountValidatorTests {
               validators: [
                   MinimumValueValidator<BigInt>(
                       minimumValue: min,
-                      minimumValueText: minText
+                      asset: asset
                   )
               ]
           )
 
-          #expect(throws: TransferError.minimumAmount(string: minText)) {
+          #expect(throws: TransferError.minimumAmount(asset: asset, required: min)) {
               try validator.validate("0.5")
           }
       }
