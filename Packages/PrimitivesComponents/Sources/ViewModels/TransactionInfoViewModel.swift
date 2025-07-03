@@ -29,7 +29,7 @@ public struct TransactionInfoViewModel: Sendable {
         feeAssetPrice: Price?,
         value: BigInt,
         feeValue: BigInt?,
-        direction: TransactionDirection?,
+        direction: TransactionDirection?
     ) {
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currency)
         self.asset = asset
