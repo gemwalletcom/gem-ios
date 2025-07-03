@@ -27,8 +27,6 @@ struct AmountValidatorTests {
     @Test
       func testAssetAmountFailsMinimum() {
           let min = BigInt(1_000_000)
-          let minText = "1"
-
           let validator = AmountValidator.assetAmount(
               formatter: formatter,
               decimals: decimals,
