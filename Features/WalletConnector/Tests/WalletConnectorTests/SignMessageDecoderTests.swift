@@ -27,7 +27,7 @@ struct SignMessageDecoderTests {
         let message = SignMessage(signType: .eip712, data: data)
         let decoder = SignMessageDecoder(message: message)
 
-        #expect(try decoder.hash().map { String(format: "%02x", $0) }.joined() == "be609aee343fb3c4b28e1df9e632fca64fcfaede20f02e86244efddf30957bd2")
+        #expect(decoder.hash().map { String(format: "%02x", $0) }.joined() == "be609aee343fb3c4b28e1df9e632fca64fcfaede20f02e86244efddf30957bd2")
         #expect(decoder.plainPreview() == prettyString)
         #expect(try decoder.preview() == MessagePreview.eip712Mock())
     }

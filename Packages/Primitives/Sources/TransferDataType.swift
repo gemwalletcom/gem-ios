@@ -61,12 +61,14 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
                 provider: quote.data.provider.protocolId
             )
         )
+        case .transferNft(let asset): .nft(
+            TransactionNFTTransferMetadata(assetId: asset.id, name: asset.name)
+        )
         case .generic,
             .transfer,
             .tokenApprove,
             .stake,
-            .account,
-            .transferNft: .null
+            .account: .null
         }
     }
     

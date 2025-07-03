@@ -35,11 +35,23 @@ public struct SolanaInfo<T: Codable & Sendable>: Codable, Sendable {
 }
 
 public struct SolanaParsedSplTokenInfo: Codable, Sendable {
-    public init(decimals: Int32) {
+    public init(decimals: Int32, extensions: [Extension]? = nil) {
         self.decimals = decimals
+        self.extensions = extensions
     }
     
     public let decimals: Int32
+    public let extensions: [Extension]?
+}
+
+public struct Extension: Codable, Sendable {
+    public let `extension`: String
+    public let state: ExtensionState
+}
+
+public struct ExtensionState: Codable, Sendable {
+    public let name: String?
+    public let symbol: String?
 }
 
 public struct SolanaTokenOwner: Codable, Sendable {

@@ -94,7 +94,11 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     var emptyConentModel: EmptyContentTypeViewModel {
-        EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol, buy: onSelectBuy))
+        let buy = assetData.metadata.isBuyEnabled ? onSelectBuy : nil
+        return EmptyContentTypeViewModel(type: .asset(
+            symbol: assetModel.symbol,
+            buy: buy
+        ))
     }
 
     var assetDataModel: AssetDataViewModel {
