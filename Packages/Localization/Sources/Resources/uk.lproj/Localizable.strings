@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "Мінімальний баланс";
 "asset.buy_asset" = "Купити %@";
 "wallet.import_address_warning" = "Ви можете переглядати баланси та транзакції для цієї адреси, але **не можете надсилати або продавати кошти**.";
+"info.stake_minimum_amount.title" = "Мінімальна сума";
+"info.stake_minimum_amount.description" = "Деякі валідатори можуть мати вимогу щодо мінімального стейкінгу. Для %@ мінімальна сума стейкінгу становить %@.";

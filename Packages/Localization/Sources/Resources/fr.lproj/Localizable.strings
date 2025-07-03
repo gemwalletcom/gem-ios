@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "Solde minimum";
 "asset.buy_asset" = "Achetez %@";
 "wallet.import_address_warning" = "Vous pouvez consulter les soldes et les transactions pour cette adresse, mais **vous ne pouvez pas envoyer ou vendre des fonds**.";
+"info.stake_minimum_amount.title" = "Montant minimum";
+"info.stake_minimum_amount.description" = "Certains validateurs peuvent avoir une exigence de mise minimale. Pour %@, le montant minimum de mise est %@.";

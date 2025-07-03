@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "Số dư tối thiểu";
 "asset.buy_asset" = "Mua %@";
 "wallet.import_address_warning" = "Bạn có thể xem số dư và giao dịch của địa chỉ này, nhưng **không thể gửi hoặc bán tiền**.";
+"info.stake_minimum_amount.title" = "Số tiền tối thiểu";
+"info.stake_minimum_amount.description" = "Một số trình xác thực có thể có yêu cầu đặt cược tối thiểu. Đối với %@, số tiền đặt cược tối thiểu là %@.";

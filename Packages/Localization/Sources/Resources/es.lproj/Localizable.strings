@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "Saldo mínimo";
 "asset.buy_asset" = "Comprar %@";
 "wallet.import_address_warning" = "Puede ver los saldos y las transacciones de esta dirección, pero **no puede enviar ni vender fondos**.";
+"info.stake_minimum_amount.title" = "Cantidad mínima";
+"info.stake_minimum_amount.description" = "Algunos validadores pueden tener un requisito de staking mínimo. Para %@, el monto mínimo de staking es %@.";

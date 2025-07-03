@@ -188,7 +188,7 @@
 "wallets.watch" = "Watch";
 "transfer.minimum_amount" = "Minimum Amount is %@";
 "wallet_connect.no_active_connections" = "No active connections";
-"stake.minimum_amount" = "Minimum amount";
+"stake.minimum_amount" = "न्यूनतम राशि";
 "common.no_results_found" = "No Results Found";
 "social.x" = "X (formerly Twitter)";
 "social.discord" = "Discord";
@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "न्यूनतम शेष";
 "asset.buy_asset" = "%@ खरीदें";
 "wallet.import_address_warning" = "आप इस पते के लिए शेष राशि और लेनदेन देख सकते हैं, लेकिन **धन भेज या बेच नहीं सकते**।";
+"info.stake_minimum_amount.title" = "न्यूनतम राशि";
+"info.stake_minimum_amount.description" = "कुछ सत्यापनकर्ताओं के पास न्यूनतम स्टेकिंग आवश्यकता हो सकती है। %@ के लिए, न्यूनतम स्टेकिंग राशि %@ है।";

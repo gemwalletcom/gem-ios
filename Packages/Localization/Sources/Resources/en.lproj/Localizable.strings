@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "Minimum balance";
 "asset.buy_asset" = "Buy %@";
 "wallet.import_address_warning" = "You can view balances and transactions for this address, but **cannot send or sell funds**.";
+"info.stake_minimum_amount.title" = "Minimum Amount";
+"info.stake_minimum_amount.description" = "Some validators may have a minimum staking requirement. For %@, the minimum staking amount is %@.";

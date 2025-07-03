@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "최소 잔액";
 "asset.buy_asset" = "%@ 구매";
 "wallet.import_address_warning" = "이 주소에 대한 잔액과 거래 내역은 볼 수 있지만, **자금을 보내거나 판매할 수는 없습니다**.";
+"info.stake_minimum_amount.title" = "최소 금액";
+"info.stake_minimum_amount.description" = "일부 검증자는 최소 스테이킹 요건을 가질 수 있습니다. %@ 의 경우 최소 스테이킹 금액은 %@ 입니다.";

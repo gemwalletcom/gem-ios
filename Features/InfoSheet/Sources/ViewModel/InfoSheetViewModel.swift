@@ -54,7 +54,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             case .unverified: Localized.Asset.Verification.unverified
             }
         case .accountMinimalBalance: Localized.Info.AccountMinimumBalance.title
-        case .stakeMinimumAmount: Localized.Stake.minimumAmount
+        case .stakeMinimumAmount: Localized.Info.StakeMinimumAmount.title
         }
     }
 
@@ -90,7 +90,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             return Localized.Transfer.minimumAccountBalance(amount)
         case let .stakeMinimumAmount(asset, required):
             let amount = ValueFormatter(style: .auto).string(required, asset: asset)
-            return "Some validators may have a minimum staking requirement. For \(asset.name), the minimum staking amount is **\(amount)**."
+            return Localized.Info.StakeMinimumAmount.description(asset.name, "**\(amount)**")
         }
     }
 

@@ -188,7 +188,7 @@
 "wallets.watch" = "Watch";
 "transfer.minimum_amount" = "Minimum Amount is %@";
 "wallet_connect.no_active_connections" = "No active connections";
-"stake.minimum_amount" = "Minimum amount";
+"stake.minimum_amount" = "کم از کم رقم";
 "common.no_results_found" = "No Results Found";
 "social.x" = "X (formerly Twitter)";
 "social.discord" = "Discord";
@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "کم از کم بیلنس";
 "asset.buy_asset" = "خریدیں %@";
 "wallet.import_address_warning" = "آپ اس پتے کے بیلنس اور لین دین دیکھ سکتے ہیں، لیکن **فنڈز بھیج یا فروخت نہیں کر سکتے**۔";
+"info.stake_minimum_amount.title" = "کم از کم رقم";
+"info.stake_minimum_amount.description" = "کچھ توثیق کرنے والوں کے لیے کم از کم اسٹیکنگ کی ضرورت ہو سکتی ہے۔ %@ کے لیے، کم از کم اسٹیکنگ رقم %@ ہے۔";

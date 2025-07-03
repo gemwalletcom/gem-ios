@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "最低残高";
 "asset.buy_asset" = "%@を購入";
 "wallet.import_address_warning" = "このアドレスの残高と取引は表示できますが、**資金を送信または売却することはできません**。";
+"info.stake_minimum_amount.title" = "最低金額";
+"info.stake_minimum_amount.description" = "一部のバリデーターには最低ステーキング要件が設定されている場合があります。 %@の場合、最低ステーキング額は%@です。";

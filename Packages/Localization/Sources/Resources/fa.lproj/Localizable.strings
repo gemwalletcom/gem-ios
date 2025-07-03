@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "حداقل موجودی";
 "asset.buy_asset" = "خرید %@";
 "wallet.import_address_warning" = "شما می‌توانید موجودی و تراکنش‌های این آدرس را مشاهده کنید، اما **نمی‌توانید وجه ارسال یا بفروشید**.";
+"info.stake_minimum_amount.title" = "حداقل مقدار";
+"info.stake_minimum_amount.description" = "برخی از اعتبارسنج‌ها ممکن است حداقل میزان سپرده‌گذاری را تعیین کنند. برای %@ ، حداقل میزان سپرده‌گذاری %@ است.";
