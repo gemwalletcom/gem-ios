@@ -424,4 +424,4 @@
 "asset.buy_asset" = "קנה %@";
 "wallet.import_address_warning" = "ניתן לצפות ביתרות ועסקאות עבור כתובת זו, אך **לא ניתן לשלוח או למכור כספים**.";
 "info.stake_minimum_amount.title" = "סכום מינימלי";
-"info.stake_minimum_amount.description" = "ייתכן שלחלק מהמאמתים תהיה דרישת Staking מינימלית. עבור %@, סכום ה-Staking המינימלי הוא %@.";
+"info.stake_minimum_amount.description" = "ברשת %@, דרישת ההימור המינימלית היא ** %@ **.";

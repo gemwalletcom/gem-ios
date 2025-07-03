@@ -424,4 +424,4 @@
 "asset.buy_asset" = "شراء %@";
 "wallet.import_address_warning" = "يمكنك عرض الأرصدة والمعاملات لهذا العنوان، ولكن **لا يمكنك إرسال أو بيع الأموال**.";
 "info.stake_minimum_amount.title" = "الحد الأدنى للمبلغ";
-"info.stake_minimum_amount.description" = "قد يشترط بعض المدققين حدًا أدنى للمراهنة. بالنسبة لـ %@ ، الحد الأدنى للمراهنة هو %@.";
+"info.stake_minimum_amount.description" = "على شبكة %@ ، الحد الأدنى لمتطلبات المشاركة هو ** %@ **.";

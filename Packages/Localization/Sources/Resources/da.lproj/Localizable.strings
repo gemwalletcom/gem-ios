@@ -424,4 +424,4 @@
 "asset.buy_asset" = "Køb %@";
 "wallet.import_address_warning" = "Du kan se saldi og transaktioner for denne adresse, men **kan ikke sende eller sælge penge**.";
 "info.stake_minimum_amount.title" = "Minimumsbeløb";
-"info.stake_minimum_amount.description" = "Nogle validatorer kan have et minimumskrav til staking. For %@ er minimumsbeløbet for staking %@.";
+"info.stake_minimum_amount.description" = "På netværket %@ er minimumskravet for staking ** %@ **.";

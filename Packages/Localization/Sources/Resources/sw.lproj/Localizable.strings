@@ -424,4 +424,4 @@
 "asset.buy_asset" = "Nunua %@";
 "wallet.import_address_warning" = "Unaweza kuangalia salio na miamala ya anwani hii, lakini **haiwezi kutuma au kuuza fedha**.";
 "info.stake_minimum_amount.title" = "Kiasi cha chini";
-"info.stake_minimum_amount.description" = "Baadhi ya waidhinishaji wanaweza kuwa na mahitaji ya chini zaidi ya kuweka kiwango. Kwa %@, kiwango cha chini cha kuweka hisa ni %@.";
+"info.stake_minimum_amount.description" = "Kwenye mtandao %@, hitaji la chini kabisa la kuweka hisa ni ** %@ **.";

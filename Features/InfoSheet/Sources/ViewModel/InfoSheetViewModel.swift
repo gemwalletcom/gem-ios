@@ -90,7 +90,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             return Localized.Transfer.minimumAccountBalance(amount)
         case let .stakeMinimumAmount(asset, required):
             let amount = ValueFormatter(style: .auto).string(required, asset: asset)
-            return Localized.Info.StakeMinimumAmount.description(asset.name, "**\(amount)**")
+            return Localized.Info.StakeMinimumAmount.description(asset.name, amount)
         }
     }
 

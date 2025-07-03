@@ -424,4 +424,4 @@
 "asset.buy_asset" = "Bumili ng %@";
 "wallet.import_address_warning" = "Maaari mong tingnan ang mga balanse at transaksyon para sa address na ito, ngunit **hindi maaaring magpadala o magbenta ng mga pondo**.";
 "info.stake_minimum_amount.title" = "Minimum na halaga";
-"info.stake_minimum_amount.description" = "Ang ilang validator ay maaaring mayroong minimum na kinakailangan sa staking. Para sa %@, ang pinakamababang halaga ng staking ay %@.";
+"info.stake_minimum_amount.description" = "Sa %@ network, ang minimum na kinakailangan sa staking ay ** %@ **.";

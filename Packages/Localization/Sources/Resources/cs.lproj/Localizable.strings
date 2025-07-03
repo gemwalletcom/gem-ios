@@ -424,4 +424,4 @@
 "asset.buy_asset" = "Koupit %@";
 "wallet.import_address_warning" = "Pro tuto adresu si můžete prohlížet zůstatky a transakce, ale **nemůžete posílat ani prodávat finanční prostředky**.";
 "info.stake_minimum_amount.title" = "Minimální částka";
-"info.stake_minimum_amount.description" = "Někteří validátoři mohou mít požadavek na minimální vklad. Pro %@ je minimální vklad %@.";
+"info.stake_minimum_amount.description" = "V síti %@ je minimální požadavek na staking ** %@ **.";

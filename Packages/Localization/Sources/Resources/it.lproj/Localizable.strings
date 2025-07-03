@@ -424,4 +424,4 @@
 "asset.buy_asset" = "Acquista %@";
 "wallet.import_address_warning" = "Puoi visualizzare i saldi e le transazioni per questo indirizzo, ma **non puoi inviare o vendere fondi**.";
 "info.stake_minimum_amount.title" = "Importo minimo";
-"info.stake_minimum_amount.description" = "Alcuni validatori potrebbero avere un requisito minimo di staking. Per %@, l'importo minimo di staking è %@.";
+"info.stake_minimum_amount.description" = "Sulla rete %@, il requisito minimo di staking è ** %@ **.";

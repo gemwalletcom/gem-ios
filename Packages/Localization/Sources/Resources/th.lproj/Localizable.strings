@@ -424,4 +424,4 @@
 "asset.buy_asset" = "ซื้อ %@";
 "wallet.import_address_warning" = "คุณสามารถดูยอดคงเหลือและธุรกรรมสำหรับที่อยู่นี้ แต่ **ไม่สามารถส่งหรือขายเงินได้**";
 "info.stake_minimum_amount.title" = "จำนวนเงินขั้นต่ำ";
-"info.stake_minimum_amount.description" = "ผู้ตรวจสอบบางรายอาจมีข้อกำหนดการเดิมพันขั้นต่ำ สำหรับ %@ จำนวนการเดิมพันขั้นต่ำคือ %@";
+"info.stake_minimum_amount.description" = "บนเครือข่าย %@ ข้อกำหนดการเดิมพันขั้นต่ำคือ ** %@ **";

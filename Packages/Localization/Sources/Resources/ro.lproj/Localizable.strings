@@ -424,4 +424,4 @@
 "asset.buy_asset" = "Cumpără %@";
 "wallet.import_address_warning" = "Puteți vizualiza soldurile și tranzacțiile pentru această adresă, dar **nu puteți trimite sau vinde fonduri**.";
 "info.stake_minimum_amount.title" = "Suma minimă";
-"info.stake_minimum_amount.description" = "Unii validatori pot avea o cerință minimă de miză. Pentru %@, suma minimă de miză este %@.";
+"info.stake_minimum_amount.description" = "În rețeaua %@, cerința minimă de staking este ** %@ **.";
