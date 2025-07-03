@@ -36,8 +36,8 @@ public struct ImportWalletNavigationStack: View {
             .navigationDestination(for: ImportWalletType.self) { type in
                 ImportWalletScene(
                     model: ImportWalletViewModel(
-                        type: type,
                         walletService: model.walletService,
+                        type: type,
                         onFinish: {
                             model.acceptTerms()
                             isPresentingWallets = false
