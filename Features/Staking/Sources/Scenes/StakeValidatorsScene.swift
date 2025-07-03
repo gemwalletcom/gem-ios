@@ -4,14 +4,15 @@ import SwiftUI
 import Components
 import Style
 import Primitives
+import PrimitivesComponents
 
 public struct StakeValidatorsScene: View {
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject private var model: StakeValidatorsViewModel
+    @State private var model: StakeValidatorsViewModel
 
     public init(model: StakeValidatorsViewModel) {
-        _model = StateObject(wrappedValue: model)
+        _model = State(wrappedValue: model)
     }
 
     public var body: some View {
@@ -23,10 +24,12 @@ public struct StakeValidatorsScene: View {
                             model.selectValidator?($0)
                             dismiss()
                         }
+                        .contextMenu(model.contextMenu(for: value.value))
                     }
                 }
             }
         }
         .navigationTitle(model.title)
+        .safariSheet(url: $model.isPresentingUrl)
     }
 }
