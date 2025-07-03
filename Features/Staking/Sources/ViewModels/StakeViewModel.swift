@@ -79,6 +79,10 @@ public final class StakeViewModel {
     var delegationsRetryTitle: String { Localized.Common.tryAgain }
     var emptyDelegationsTitle: String { Localized.Stake.noActiveStaking }
 
+    var showManage: Bool {
+        !wallet.isViewOnly
+    }
+    
     var recommendedCurrentValidator: DelegationValidator? {
         guard let validatorId = recommendedValidators.randomValidatorId(chain: chain) else { return .none }
         return try? stakeService.getValidator(assetId: asset.id, validatorId: validatorId)

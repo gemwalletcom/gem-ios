@@ -27,7 +27,9 @@ public struct StakeScene: View {
     public var body: some View {
         List {
             stakeInfoSection
-            stakeSection
+            if model.showManage {
+                stakeSection
+            }
             delegationsSection
         }
         .refreshable {
