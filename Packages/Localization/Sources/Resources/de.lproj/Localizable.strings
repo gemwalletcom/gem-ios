@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "Mindestguthaben";
 "asset.buy_asset" = "Kaufen %@";
 "wallet.import_address_warning" = "Sie können Guthaben und Transaktionen für diese Adresse anzeigen, aber **kein Geld senden oder verkaufen**.";
+"info.stake_minimum_amount.title" = "Mindestbetrag";
+"info.stake_minimum_amount.description" = "Im %@ -Netzwerk beträgt die Mindesteinsatzanforderung ** %@ **.";

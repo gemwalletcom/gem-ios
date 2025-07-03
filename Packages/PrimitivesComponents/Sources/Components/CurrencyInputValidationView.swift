@@ -7,14 +7,18 @@ import Validators
 
 public struct CurrencyInputValidationView: View {
     @Binding private var model: InputValidationViewModel
+
     private let config: CurrencyInputConfigurable
+    private let infoAction: (any Error) -> (() -> Void)?
 
     public init(
         model: Binding<InputValidationViewModel>,
-        config: CurrencyInputConfigurable
+        config: CurrencyInputConfigurable,
+        infoAction: @escaping (any Error) -> (() -> Void)? = { _ in nil }
     ) {
         _model  = model
         self.config = config
+        self.infoAction = infoAction
     }
 
     public var body: some View {
@@ -25,9 +29,14 @@ public struct CurrencyInputValidationView: View {
             )
 
             if let error = model.error, !(error is SilentValidationError) {
-                Text(error.localizedDescription)
-                    .textStyle(TextStyle(font: .footnote, color: Colors.red))
-                    .transition(.opacity)
+                HStack {
+                    if let action = infoAction(error) {
+                        InfoButton(action: action)
+                    }
+                    Text(error.localizedDescription)
+                        .textStyle(TextStyle(font: .footnote, color: Colors.red))
+                        .transition(.opacity)
+                }
             }
         }
     }

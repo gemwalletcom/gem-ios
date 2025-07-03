@@ -9,13 +9,13 @@ import Primitives
 
 struct MinimumValueValidatorTests {
     private let min = BigInt(10)
-    private let minText = "10 SOL"
+    private let asset = Asset.mockBNB()
 
     @Test
     func testPassesEqualOrGreater() throws {
         let validator = MinimumValueValidator<BigInt>(
             minimumValue: min,
-            minimumValueText: minText
+            asset: asset
         )
         try validator.validate(min)
         try validator.validate(min + 1)
@@ -25,9 +25,9 @@ struct MinimumValueValidatorTests {
     func testThrowsBelowMinimum() {
         let validator = MinimumValueValidator<BigInt>(
             minimumValue: min,
-            minimumValueText: minText
+            asset: asset
         )
-        #expect(throws: TransferError.minimumAmount(string: minText)) {
+        #expect(throws: TransferError.minimumAmount(asset: asset, required: min)) {
             try validator.validate(min - 1)
         }
     }

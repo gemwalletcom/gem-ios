@@ -27,20 +27,18 @@ struct AmountValidatorTests {
     @Test
       func testAssetAmountFailsMinimum() {
           let min = BigInt(1_000_000)
-          let minText = "1"
-
           let validator = AmountValidator.assetAmount(
               formatter: formatter,
               decimals: decimals,
               validators: [
                   MinimumValueValidator<BigInt>(
                       minimumValue: min,
-                      minimumValueText: minText
+                      asset: asset
                   )
               ]
           )
 
-          #expect(throws: TransferError.minimumAmount(string: minText)) {
+          #expect(throws: TransferError.minimumAmount(asset: asset, required: min)) {
               try validator.validate("0.5")
           }
       }

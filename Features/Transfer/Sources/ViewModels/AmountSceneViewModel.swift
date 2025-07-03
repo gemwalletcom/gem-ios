@@ -14,6 +14,7 @@ import Style
 import Preferences
 import Validators
 import Formatters
+import InfoSheet
 
 @MainActor
 @Observable
@@ -28,6 +29,7 @@ public final class AmountSceneViewModel {
     var focusField: Bool = false
 
     var amountInputModel: InputValidationViewModel = InputValidationViewModel()
+    var isPresentingSheet: AmountSheetType?
 
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
@@ -196,12 +198,22 @@ extension AmountSceneViewModel {
         }
         cleanInput()
     }
+
+    func infoAction(for error: Error) -> (() -> Void)? {
+        guard let transferError = error as? TransferError,
+              let infoSheet = transferError.infoSheet
+        else {
+            return nil
+        }
+        return { [weak self] in
+            self?.onSelect(infoSheet: infoSheet)
+        }
+    }
 }
 
 // MARK: - Private
 
 extension AmountSceneViewModel {
-
     private func setMax() {
         amountInputType = .asset
         amountInputModel.update(text: maxBalance)
@@ -220,6 +232,31 @@ extension AmountSceneViewModel {
         let value = try value(for: amountTransferValue)
         let transfer = try getTransferData(value: value, canChangeValue: true)
         onTransferAction?(transfer)
+    }
+
+    private func onSelectBuy() {
+        let senderAddress = (try? wallet.account(for: input.asset.chain).address) ?? ""
+        let assetAddress = AssetAddress(asset: asset, address: senderAddress)
+
+        isPresentingSheet = .fiatConnect(
+            assetAddress: assetAddress,
+            walletId: wallet.walletId
+        )
+    }
+
+    private func onSelect(infoSheet: InfoSheetType) {
+        switch infoSheet {
+        case let .stakeMinimumAmount(asset, _):
+            isPresentingSheet = .infoAction(
+                infoSheet,
+                button: .action(
+                    title: Localized.Asset.buyAsset(asset.feeAsset.symbol),
+                    action: onSelectBuy
+                )
+            )
+        default:
+            break
+        }
     }
 
     private var recipientData: RecipientData {
@@ -260,7 +297,7 @@ extension AmountSceneViewModel {
                 decimals: asset.decimals.asInt,
                 validators: [
                     PositiveValueValidator<BigInt>().silent,
-                    MinimumValueValidator<BigInt>(minimumValue: minimumValue, minimumValueText: minimumValueText),
+                    MinimumValueValidator<BigInt>(minimumValue: minimumValue, asset: asset),
                     BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
                 ]
             )
@@ -391,14 +428,6 @@ extension AmountSceneViewModel {
         formatter.string(availableValue, decimals: asset.decimals.asInt)
     }
 
-    private var minimumValueText: String {
-        ValueFormatter(style: .short).string(
-            minimumValue,
-            decimals: asset.decimals.asInt,
-            currency: asset.symbol
-        )
-    }
-
     private var isAmountChangable: Bool {
         switch type {
         case .transfer,
@@ -424,5 +453,16 @@ extension AmountSceneViewModel {
 
     private var minimumAccountReserve: BigInt {
         asset.type == .native ? asset.chain.minimumAccountBalance : .zero
+    }
+}
+
+extension TransferError {
+    var infoSheet: InfoSheetType? {
+        switch self {
+        case let .minimumAmount(asset, required):
+                .stakeMinimumAmount(asset, required: required)
+        case .invalidAmount, .invalidAddress:
+            nil
+        }
     }
 }
