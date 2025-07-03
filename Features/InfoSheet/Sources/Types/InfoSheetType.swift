@@ -34,7 +34,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case .slippage: "slippage"
         case .assetStatus(let status): "assetStatus_\(status.rawValue)"
         case let .accountMinimalBalance(asset, amount): "accountMinimalBalance_\(asset.id.identifier)\(amount)"
-        case let .stakeMinimumAmount(asset, amount): "stakeMinimumAmount\(asset.id.identifier)\(amount)"
+        case let .stakeMinimumAmount(asset, amount): "stakeMinimumAmount_\(asset.id.identifier)\(amount)"
         }
     }
 }
