@@ -52,7 +52,7 @@ public final class Preferences: @unchecked Sendable {
     @ConfigurableDefaults(key: Keys.launchesCount, defaultValue: 0)
     public var launchesCount: Int
     
-    @ConfigurableDefaults(key: Keys.subscriptionsVersion, defaultValue: 0)
+    @ConfigurableDefaults(key: Keys.subscriptionsVersion, defaultValue: 1)
     public var subscriptionsVersion: Int
     
     @ConfigurableDefaults(key: Keys.subscriptionsVersionHasChange, defaultValue: true)
