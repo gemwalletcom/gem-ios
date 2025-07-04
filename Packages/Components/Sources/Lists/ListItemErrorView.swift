@@ -53,14 +53,14 @@ public struct ListItemErrorView: View {
         Section(header: Text("General Error")) {
             ListItemErrorView(
                 errorTitle: "Error Loading Data",
-                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "An unexpected error occurred. Please try again."]),
+                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "An unexpected error occurred. Please try again."])
             )
         }
 
         Section(header: Text("Network Error")) {
             ListItemErrorView(
                 errorTitle: "Network Error",
-                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to load data. Check your internet connection."]),
+                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to load data. Check your internet connection."])
             )
 
             ListItemErrorView(
@@ -73,7 +73,7 @@ public struct ListItemErrorView: View {
         Section(header: Text("Operation Error")) {
             ListItemErrorView(
                 errorTitle: "Operation Error",
-                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to complete the operation. Please try again later."]),
+                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to complete the operation. Please try again later."])
             )
         }
 
@@ -81,7 +81,7 @@ public struct ListItemErrorView: View {
             ListItemErrorView(
                 errorTitle: nil,
                 errorSystemNameImage: SystemImage.errorOccurred,
-                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "An error without a specific title."]),
+                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "An error without a specific title."])
             )
         }
 
@@ -89,7 +89,7 @@ public struct ListItemErrorView: View {
             ListItemErrorView(
                 errorTitle: nil,
                 errorSystemNameImage: SystemImage.ellipsis,
-                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "An error without a specific title."]),
+                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "An error without a specific title."])
             )
         }
     }
