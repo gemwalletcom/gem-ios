@@ -90,7 +90,7 @@ extension SolanaService {
         return AssetBalance.merge(assetIds: tokenIds, balances: balances)
     }
 
-    private func getPrioritizationFees() async throws -> [Int32] {
+    private func getPrioritizationFees() async throws -> [Int] {
         let fees = try await provider
             .request(.fees)
             .map(as: JSONRPCResponse<[SolanaPrioritizationFee]>.self)
@@ -173,12 +173,12 @@ extension SolanaService: ChainBalanceable {
 extension SolanaService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
         // filter out any large fees
-        let priorityFees = try await getPrioritizationFees().map { $0.asInt }.sorted(by: >).prefix(5)
+        let priorityFees = try await getPrioritizationFees().map { $0 }.sorted(by: >).prefix(5)
         
         let multipleOf = switch type {
-        case .transfer(let asset): asset.type == .native ? 50_000 : 100_000
-        case .stake, .transferNft: 50_000
-        case .generic, .swap: 250_000
+        case .transfer(let asset): asset.type == .native ? 25_000 : 50_000
+        case .stake, .transferNft: 25_000
+        case .generic, .swap: 100_000
         case .account, .tokenApprove: fatalError()
         }
         
@@ -375,16 +375,28 @@ extension SolanaService: ChainStakable {
 
 extension SolanaService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
+        let tokenInfo = try await provider.request(.getAccountInfo(account: tokenId))
+            .map(as: JSONRPCResponse<SolanaSplTokenInfo>.self).result.value.data.parsed.info
+        
+        // spl 2022
+        if let extensions = tokenInfo.extensions {
+            guard let ext = extensions.first(where: { $0.extension == "tokenMetadata"}), let name = ext.state.name, let symbol = ext.state.symbol else {
+                throw AnyError("no tokenMetadata")
+            }
+            return Asset(
+                id: AssetId(chain: chain, tokenId: tokenId),
+                name: name,
+                symbol: symbol,
+                decimals: tokenInfo.decimals,
+                type: .spl
+            )
+        }
         let metadataKey = try Gemstone.solanaDeriveMetadataPda(mint: tokenId)
-    
-        async let getTokenInfo = provider.request(.getAccountInfo(account: tokenId))
-            .map(as: JSONRPCResponse<SolanaSplTokenInfo>.self)
-        async let getMetadata = provider.request(.getAccountInfo(account: metadataKey))
+        let metadataEncoded = try await provider.request(.getAccountInfo(account: metadataKey))
             .map(as: JSONRPCResponse<SolanaMplRawData>.self)
         
-        let (tokenInfo, metadataEncoded) = try await (getTokenInfo, getMetadata)
         guard let base64Str = metadataEncoded.result.value.data.first else {
-            throw AnyError("no meta account found")
+            throw AnyError("no metaplex account found")
         }
         let metadata = try Gemstone.solanaDecodeMetadata(base64Str: base64Str)
 
@@ -392,7 +404,7 @@ extension SolanaService: ChainTokenable {
             id: AssetId(chain: chain, tokenId: tokenId),
             name: metadata.name,
             symbol: metadata.symbol,
-            decimals: tokenInfo.result.value.data.parsed.info.decimals,
+            decimals: tokenInfo.decimals,
             type: .spl
         )
     }

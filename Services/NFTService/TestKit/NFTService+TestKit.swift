@@ -3,9 +3,13 @@
 import Foundation
 import NFTService
 import StoreTestKit
+import DeviceServiceTestKit
 
 public extension NFTService {
     static func mock() -> NFTService {
-        NFTService(nftStore: .mock())
+        NFTService(
+            nftStore: .mock(),
+            deviceService: DeviceServiceMock()
+        )
     }
 }

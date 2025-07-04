@@ -70,9 +70,7 @@ public struct CosmosSigner: Signable {
     }
     
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case .swap(_, _, _, let data) = input.type else {
-            throw AnyError("invalid type")
-        }
+        let data = try input.type.swap().quoteData
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
         let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: input.asset.symbol, memo: data.data)]
         

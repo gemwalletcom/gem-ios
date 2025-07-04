@@ -86,10 +86,9 @@ public final class CollectibleViewModel {
             HeaderButton(
                 type: .more,
                 viewType: .menuButton(
-                    [
-                        .button(title: Localized.Nft.saveToPhotos, systemImage: SystemImage.gallery, action: onSelectSaveToGallery),
-                        .button(title: Localized.Nft.setAsAvatar, systemImage: SystemImage.emoji, action: onSelectSetAsAvatar)
-                    ]
+                    title: title,
+                    items: [.button(title: Localized.Nft.saveToPhotos, systemImage: SystemImage.gallery, action: onSelectSaveToGallery),
+                            .button(title: Localized.Nft.setAsAvatar, systemImage: SystemImage.emoji, action: onSelectSetAsAvatar)]
                 ),
                 isEnabled: true
             ),

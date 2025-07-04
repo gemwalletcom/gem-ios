@@ -261,7 +261,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/WalletTab",
         "identifier" : "WalletTabTests",
@@ -409,6 +408,13 @@
         "containerPath" : "container:Packages\/Style",
         "identifier" : "StyleTests",
         "name" : "StyleTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/DeviceService",
+        "identifier" : "DeviceServiceTests",
+        "name" : "DeviceServiceTests"
       }
     }
   ],

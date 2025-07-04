@@ -11,3 +11,23 @@ public struct BitcoinBlock: Codable, Sendable {
 		self.previousBlockHash = previousBlockHash
 	}
 }
+
+public struct BitcoinBlockbook: Codable, Sendable {
+	public let inSync: Bool
+	public let lastBlockTime: String
+	public let bestHeight: Int
+
+	public init(inSync: Bool, lastBlockTime: String, bestHeight: Int) {
+		self.inSync = inSync
+		self.lastBlockTime = lastBlockTime
+		self.bestHeight = bestHeight
+	}
+}
+
+public struct BitcoinNodeInfo: Codable, Sendable {
+	public let blockbook: BitcoinBlockbook
+
+	public init(blockbook: BitcoinBlockbook) {
+		self.blockbook = blockbook
+	}
+}

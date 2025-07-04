@@ -32,7 +32,7 @@ extension Transaction {
             return [assetId]
         case .swap:
             switch metadata {
-            case .null, .none: return []
+            case .null, .nft, .none: return []
             case .swap(let value):
                 return [value.fromAsset, value.toAsset]
             }

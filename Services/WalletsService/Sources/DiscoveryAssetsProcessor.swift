@@ -7,92 +7,67 @@ import Primitives
 import Preferences
 import Store
 import WalletSessionService
+import DeviceService
 
 struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
+    private let deviceService: any DeviceServiceable
     private let discoverAssetService: DiscoverAssetsService
     private let assetsService: AssetsService
-    private let assetsEnabler: any AssetsEnabler
+    private let priceUpdater: any PriceUpdater
     private let walletSessionService: any WalletSessionManageable
 
     init(
+        deviceService: any DeviceServiceable,
         discoverAssetService: DiscoverAssetsService,
         assetsService: AssetsService,
-        assetsEnabler: any AssetsEnabler,
+        priceUpdater: any PriceUpdater,
         walletSessionService: any WalletSessionManageable
     ) {
+        self.deviceService = deviceService
         self.discoverAssetService = discoverAssetService
         self.assetsService = assetsService
-        self.assetsEnabler = assetsEnabler
+        self.priceUpdater = priceUpdater
         self.walletSessionService = walletSessionService
     }
 
     func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
         let wallet = try walletSessionService.getWallet(walletId: walletId)
         async let coinProcess: () = processCoinDiscovery(for: wallet, preferences: preferences)
-        async let tokenProcess: () = {
-            // FIXME: temp solution to wait for 1 second (need to wait until subscriptions updated)
-            // otherwise it would return no assets
-            try await Task.sleep(nanoseconds: 1_000_000_000)
-            try await processTokenDiscovery(for: wallet, preferences: preferences)
-        }()
+        async let tokenProcess: () = processTokenDiscovery(for: wallet, preferences: preferences)
         _ = try await (coinProcess, tokenProcess)
+        
+        WalletPreferences(walletId: walletId.id).completeAssetDiscovery()
     }
+    
+    // MARK: - Private methods
 
     private func processCoinDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
         // Only perform coin discovery if it hasn’t been done before.
         guard !preferences.completeInitialLoadAssets else { return }
 
         let coinUpdates = await discoverAssetService.updateCoins(wallet: wallet)
-        await processAssetUpdates(coinUpdates)
+        await processAssetUpdate(for: coinUpdates)
         preferences.completeInitialLoadAssets = true
     }
 
     private func processTokenDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
-        let deviceId = try SecurePreferences.standard.getDeviceId()
+        let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
-        let tokenUpdates = try await discoverAssetService.updateTokens(
+        let tokenUpdate = try await discoverAssetService.updateTokens(
             deviceId: deviceId,
             wallet: wallet,
             fromTimestamp: preferences.assetsTimestamp
         )
         preferences.assetsTimestamp = newTimestamp
-        await processAssetUpdates(tokenUpdates)
+        await processAssetUpdate(for: tokenUpdate)
     }
-
-    private func processAssetUpdates(_ updates: [AssetUpdate]) async {
-        await withTaskGroup(of: Void.self) { group in
-            for update in updates {
-                group.addTask {
-                    NSLog("discover assets: \(update.walletId): \(update.assets)")
-                    do {
-                        try await addNewAssets(
-                            walletId: update.walletId,
-                            assetIds: update.assets.compactMap { try? AssetId(id: $0) }
-                        )
-                    } catch {
-                        NSLog("newAssetUpdate error: \(error)")
-                    }
-                }
-            }
-            for await _ in group { }
+    
+    private func processAssetUpdate(for update: AssetUpdate) async {
+        do {
+            try assetsService.updateEnabled(walletId: update.walletId, assetIds: update.assetIds, enabled: true)
+            try await priceUpdater.addPrices(assetIds: update.assetIds)
+        } catch {
+            NSLog("add new assets error: \(error)")
         }
-    }
-
-    // add fresh new asset: fetch asset and then activate balance
-    private func addNewAssets(walletId: WalletId, assetIds: [AssetId]) async throws {
-        let assets = try assetsService.getAssets(for: assetIds)
-        let missingIds = assetIds.asSet().subtracting(assets.map { $0.id }.asSet())
-
-        async let enableExisting: () = assetsEnabler.enableAssets(walletId: walletId, assetIds: assets.assetIds, enabled: true)
-        async let processMissing: () = withThrowingTaskGroup(of: Void.self) { group in
-            for assetId in missingIds {
-                group.addTask {
-                    try await assetsService.updateAsset(assetId: assetId)
-                    await assetsEnabler.enableAssets(walletId: walletId, assetIds: [assetId], enabled: true)
-                }
-            }
-            for try await _ in group { }
-        }
-        _ = try await (enableExisting, processMissing)
     }
 }

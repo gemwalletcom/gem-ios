@@ -107,7 +107,7 @@ extension AlgorandService: ChainTransactionPreloadable {
         let params = try await transactionsParams()
         return TransactionPreload(
             blockHash: params.genesis_hash,
-            sequence: params.last_round.asInt,
+            sequence: Int(params.last_round),
             chainId: params.genesis_id
         )
     }

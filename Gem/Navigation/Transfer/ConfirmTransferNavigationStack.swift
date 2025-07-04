@@ -6,6 +6,7 @@ import Primitives
 import ChainService
 import Localization
 import Transfer
+import SwapService
 
 struct ConfirmTransferNavigationStack: View {
     @Environment(\.keystore) private var keystore
@@ -38,7 +39,12 @@ struct ConfirmTransferNavigationStack: View {
                     chainService: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: transferData.chain),
                     scanService: scanService,
+                    swapService: SwapService(nodeProvider: nodeService),
                     walletsService: walletsService,
+                    swapDataProvider: SwapQuoteDataProvider(
+                        keystore: keystore,
+                        swapService: SwapService(nodeProvider: nodeService)
+                    ),
                     onComplete: onComplete
                 )
             )

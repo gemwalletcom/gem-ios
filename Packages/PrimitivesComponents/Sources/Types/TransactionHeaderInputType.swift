@@ -6,7 +6,7 @@ import BigInt
 
 public enum TransactionHeaderInputType: Sendable {
     case amount(showFiatSubtitle: Bool)
-    case nft(NFTAsset)
+    case nft(name: String?, id: String)
     case swap(SwapHeaderInput)
     case symbol
 }

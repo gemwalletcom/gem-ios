@@ -8,7 +8,7 @@ import Style
 public enum TransactionHeaderType {
     case amount(title: String, subtitle: String?)
     case swap(from: SwapAmountField, to: SwapAmountField)
-    case nft(name: String, image: AssetImage)
+    case nft(name: String?, image: AssetImage)
 }
 
 public struct TransactionHeaderView: View {
@@ -34,7 +34,9 @@ public struct TransactionHeaderView: View {
                     NftImageView(assetImage: image)
                         .frame(width: .image.large, height: .image.large)
                         .cornerRadius(.image.large/4)
-                    Text(name)
+                    if let name {
+                        Text(name)
+                    }
                 }
             }
         }

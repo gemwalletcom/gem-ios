@@ -188,7 +188,7 @@
 "wallets.watch" = "Watch";
 "transfer.minimum_amount" = "Minimum Amount is %@";
 "wallet_connect.no_active_connections" = "No active connections";
-"stake.minimum_amount" = "Minimum amount";
+"stake.minimum_amount" = "Minimální částka";
 "common.no_results_found" = "No Results Found";
 "social.x" = "X (formerly Twitter)";
 "social.discord" = "Discord";
@@ -422,3 +422,6 @@
 "info.insufficient_balance.description" = "Nemáte dostatek %@ k dokončení této transakce. Dobijte si prosím peněženku, přijměte ji nebo ji vyměňte a zkuste to znovu.";
 "info.account_minimum_balance.title" = "Minimální zůstatek";
 "asset.buy_asset" = "Koupit %@";
+"wallet.import_address_warning" = "Pro tuto adresu si můžete prohlížet zůstatky a transakce, ale **nemůžete posílat ani prodávat finanční prostředky**.";
+"info.stake_minimum_amount.title" = "Minimální částka";
+"info.stake_minimum_amount.description" = "V síti %@ je minimální požadavek na staking ** %@ **.";

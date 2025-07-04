@@ -1,10 +1,12 @@
 import Foundation
 import Primitives
 import Localization
+import BigInt
+import Formatters
 
 public enum TransferError: Equatable {
     case invalidAmount
-    case minimumAmount(string: String)
+    case minimumAmount(asset: Asset, required: BigInt)
     case invalidAddress(asset: Asset)
 }
 
@@ -13,8 +15,10 @@ extension TransferError: LocalizedError {
         switch self {
         case .invalidAmount:
             Localized.Errors.invalidAmount
-        case .minimumAmount(let string):
-            Localized.Transfer.minimumAmount(string)
+        case let .minimumAmount(asset, required):
+            Localized.Transfer.minimumAmount(
+                ValueFormatter(style: .auto).string(required, asset: asset)
+            )
         case .invalidAddress(let asset):
             Localized.Errors.invalidAssetAddress(asset.name)
         }

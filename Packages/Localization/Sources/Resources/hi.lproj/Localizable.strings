@@ -188,7 +188,7 @@
 "wallets.watch" = "Watch";
 "transfer.minimum_amount" = "Minimum Amount is %@";
 "wallet_connect.no_active_connections" = "No active connections";
-"stake.minimum_amount" = "Minimum amount";
+"stake.minimum_amount" = "न्यूनतम राशि";
 "common.no_results_found" = "No Results Found";
 "social.x" = "X (formerly Twitter)";
 "social.discord" = "Discord";
@@ -412,7 +412,7 @@
 "filter.has_balance" = "संतुलन है";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "कॉन्ट्रैक्ट या टोकन ID";
-"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "असत्यापित टोकन को विश्वसनीय तृतीय-पक्ष सेवाओं द्वारा पर्याप्त रूप से सत्यापित नहीं किया गया है। वे एयरड्रॉप, ट्रांसफ़र या मैन्युअल आयात के कारण आपके वॉलेट में दिखाई दे सकते हैं।";
 "info.asset_status.suspicious.description" = "संदिग्ध या स्पैम टोकन को संभावित घोटाले या हानिकारक संपत्ति के रूप में पहचाना जाता है। वे एयरड्रॉप, ट्रांसफ़र या मैन्युअल आयात के कारण आपके वॉलेट में दिखाई दे सकते हैं।";
 "errors.insufficient_funds" = "अपर्याप्त कोष";
 "info.insufficient_network_fee_balance.title" = "%@ आवश्यक";
@@ -422,3 +422,6 @@
 "info.insufficient_balance.description" = "इस लेनदेन को पूरा करने के लिए आपके पास पर्याप्त %@ नहीं है। कृपया अपने वॉलेट में टॉप अप करें, प्राप्त करें या स्वैप करें और फिर से प्रयास करें।";
 "info.account_minimum_balance.title" = "न्यूनतम शेष";
 "asset.buy_asset" = "%@ खरीदें";
+"wallet.import_address_warning" = "आप इस पते के लिए शेष राशि और लेनदेन देख सकते हैं, लेकिन **धन भेज या बेच नहीं सकते**।";
+"info.stake_minimum_amount.title" = "न्यूनतम राशि";
+"info.stake_minimum_amount.description" = "%@ नेटवर्क पर, न्यूनतम स्टेकिंग आवश्यकता ** %@ ** है.";

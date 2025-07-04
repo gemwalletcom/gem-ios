@@ -28,7 +28,7 @@ public final class NetworkFeeSceneViewModel {
     public var doneTitle: String { Localized.Common.done }
     public var infoIcon: String { Localized.FeeRates.info }
 
-    public var showFeeRatesSelector: Bool { rates.isNotEmpty }
+    public var showFeeRatesSelector: Bool { rates.count > 1 }
 
     public var feeRatesViewModels: [FeeRateViewModel] {
         rates.map {

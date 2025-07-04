@@ -51,6 +51,11 @@ struct ServicesFactory {
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
 
         let avatarService = AvatarService(store: storeManager.walletStore)
+        let assetsService = Self.makeAssetsService(
+            assetStore: storeManager.assetStore,
+            balanceStore: storeManager.balanceStore,
+            chainFactory: chainServiceFactory
+        )
 
         let walletService = Self.makewalletService(
             preferences: storages.observablePreferences,
@@ -60,26 +65,23 @@ struct ServicesFactory {
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
-            assetsStore: storeManager.assetStore,
+            assetsService: assetsService,
             chainFactory: chainServiceFactory
         )
         let stakeService = Self.makeStakeService(
             stakeStore: storeManager.stakeStore,
             chainFactory: chainServiceFactory
         )
-        let assetsService = Self.makeAssetsService(
-            assetStore: storeManager.assetStore,
-            balanceStore: storeManager.balanceStore,
-            chainFactory: chainServiceFactory
-        )
         let nftService = Self.makeNftService(
             apiService: apiService,
-            nftStore: storeManager.nftStore
+            nftStore: storeManager.nftStore,
+            deviceService: deviceService
         )
         let transactionsService = Self.makeTransactionsService(
             transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
-            walletStore: storeManager.walletStore
+            walletStore: storeManager.walletStore,
+            deviceService: deviceService
         )
         let transactionService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
@@ -135,7 +137,8 @@ struct ServicesFactory {
             priceObserver: priceObserverService,
             transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
-            bannerSetupService: bannerSetupService
+            bannerSetupService: bannerSetupService,
+            deviceService: deviceService
         )
 
         let configService = GemAPIService()
@@ -215,7 +218,7 @@ extension ServicesFactory {
     }
 
     private static func makeDeviceObserverService(
-        deviceService: DeviceService,
+        deviceService: any DeviceServiceable,
         subscriptionService: SubscriptionService,
         walletStore: WalletStore
     ) -> DeviceObserverService {
@@ -242,12 +245,12 @@ extension ServicesFactory {
 
     private static func makeBalanceService(
         balanceStore: BalanceStore,
-        assetsStore: AssetStore,
+        assetsService: AssetsService,
         chainFactory: ChainServiceFactory
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,
-            assertStore: assetsStore,
+            assetsService: assetsService,
             chainServiceFactory: chainFactory
         )
     }
@@ -277,12 +280,14 @@ extension ServicesFactory {
     private static func makeTransactionsService(
         transactionStore: TransactionStore,
         assetsService: AssetsService,
-        walletStore: WalletStore
+        walletStore: WalletStore,
+        deviceService: any DeviceServiceable
     ) -> TransactionsService {
         TransactionsService(
             transactionStore: transactionStore,
             assetsService: assetsService,
-            walletStore: walletStore
+            walletStore: walletStore,
+            deviceService: deviceService
         )
     }
 
@@ -350,7 +355,8 @@ extension ServicesFactory {
         priceObserver: PriceObserverService,
         transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
-        bannerSetupService: BannerSetupService
+        bannerSetupService: BannerSetupService,
+        deviceService: DeviceService
     ) -> WalletsService {
         WalletsService(
             walletStore: walletStore,
@@ -358,10 +364,10 @@ extension ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            chainService: chainServiceFactory,
             transactionService: transactionService,
             bannerSetupService: bannerSetupService,
-            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
+            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
+            deviceService: deviceService
         )
     }
 
@@ -410,11 +416,13 @@ extension ServicesFactory {
     
     private static func makeNftService(
         apiService: GemAPIService,
-        nftStore: NFTStore
+        nftStore: NFTStore,
+        deviceService: any DeviceServiceable
     ) -> NFTService {
         NFTService(
             apiService: apiService,
-            nftStore: nftStore
+            nftStore: nftStore,
+            deviceService: deviceService
         )
     }
 }

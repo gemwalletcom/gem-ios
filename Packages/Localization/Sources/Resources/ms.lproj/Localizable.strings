@@ -188,7 +188,7 @@
 "wallets.watch" = "Watch";
 "transfer.minimum_amount" = "Minimum Amount is %@";
 "wallet_connect.no_active_connections" = "No active connections";
-"stake.minimum_amount" = "Minimum amount";
+"stake.minimum_amount" = "Jumlah minimum";
 "common.no_results_found" = "No Results Found";
 "social.x" = "X (formerly Twitter)";
 "social.discord" = "Discord";
@@ -422,3 +422,6 @@
 "info.insufficient_balance.description" = "Anda tidak mempunyai cukup %@ untuk menyelesaikan transaksi ini. Sila tambah nilai, terima atau tukar dalam dompet anda dan cuba lagi.";
 "info.account_minimum_balance.title" = "Baki minimum";
 "asset.buy_asset" = "Beli %@";
+"wallet.import_address_warning" = "Anda boleh melihat baki dan urus niaga untuk alamat ini, tetapi **tidak boleh menghantar atau menjual dana**.";
+"info.stake_minimum_amount.title" = "Jumlah minimum";
+"info.stake_minimum_amount.description" = "Pada rangkaian %@, keperluan pertaruhan minimum ialah ** %@ **.";

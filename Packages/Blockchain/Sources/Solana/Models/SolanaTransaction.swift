@@ -42,9 +42,9 @@ public struct SolanaTransactionMeta: Codable, Sendable {
 
 public struct SolanaTransaction: Codable, Sendable {
 	public let meta: SolanaTransactionMeta
-	public let slot: Int32
+	public let slot: UInt64
 
-	public init(meta: SolanaTransactionMeta, slot: Int32) {
+	public init(meta: SolanaTransactionMeta, slot: UInt64) {
 		self.meta = meta
 		self.slot = slot
 	}

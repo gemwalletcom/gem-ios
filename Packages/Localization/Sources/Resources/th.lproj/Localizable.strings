@@ -188,7 +188,7 @@
 "wallets.watch" = "Watch";
 "transfer.minimum_amount" = "Minimum Amount is %@";
 "wallet_connect.no_active_connections" = "No active connections";
-"stake.minimum_amount" = "Minimum amount";
+"stake.minimum_amount" = "จำนวนเงินขั้นต่ำ";
 "common.no_results_found" = "No Results Found";
 "social.x" = "X (formerly Twitter)";
 "social.discord" = "Discord";
@@ -422,3 +422,6 @@
 "info.insufficient_balance.description" = "คุณมี %@ ไม่เพียงพอสำหรับการทำธุรกรรมนี้ โปรดเติมเงิน รับ หรือแลกเปลี่ยนในกระเป๋าสตางค์ของคุณแล้วลองอีกครั้ง";
 "info.account_minimum_balance.title" = "ยอดคงเหลือขั้นต่ำ";
 "asset.buy_asset" = "ซื้อ %@";
+"wallet.import_address_warning" = "คุณสามารถดูยอดคงเหลือและธุรกรรมสำหรับที่อยู่นี้ แต่ **ไม่สามารถส่งหรือขายเงินได้**";
+"info.stake_minimum_amount.title" = "จำนวนเงินขั้นต่ำ";
+"info.stake_minimum_amount.description" = "บนเครือข่าย %@ ข้อกำหนดการเดิมพันขั้นต่ำคือ ** %@ **";

@@ -4,8 +4,6 @@ import Testing
 import PrimitivesTestKit
 import WalletsServiceTestKit
 import SwapService
-import Keystore
-import KeystoreTestKit
 import StoreTestKit
 import ChainServiceTestKit
 import SwapServiceTestKit
@@ -91,8 +89,7 @@ extension SwapSceneViewModel {
             wallet: .mock(accounts: [.mock(chain: .ethereum)]),
             asset: .mockEthereum(),
             walletsService: .mock(),
-            swapService: .mock(swapper: swapper),
-            keystore: LocalKeystore.mock()
+            swapQuotesProvider: SwapQuotesProvider(swapService: .mock(swapper: swapper))
         )
         
         model.fromAsset = .mock(asset: .mockEthereum())

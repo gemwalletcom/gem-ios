@@ -27,7 +27,7 @@ public struct SubscriptionService: Sendable {
     }
 
     public func incrementSubscriptionsVersion() {
-        preferences.subscriptionsVersion += 1
+        preferences.incrementSubscriptionVersion()
     }
 
     public func update(deviceId: String) async throws {
@@ -50,6 +50,7 @@ public struct SubscriptionService: Sendable {
                 try await deleteSubscriptions(deviceId: deviceId, subscriptions: remoteSubscriptions.asArray())
             }
         }
+        preferences.subscriptionsVersionHasChange = false
     }
     
     private func localSubscription() throws -> [Primitives.Subscription] {

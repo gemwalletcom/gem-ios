@@ -8,45 +8,44 @@ import InfoSheet
 import Swap
 import Assets
 import Transfer
+import SwapService
 
 struct SwapNavigationView: View {
+    @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.scanService) private var scanService
 
-
     @State private var model: SwapSceneViewModel
-    @Binding private var navigationPath: NavigationPath
 
     private let onComplete: VoidAction
 
     init(
         model: SwapSceneViewModel,
-        navigationPath: Binding<NavigationPath>,
         onComplete: VoidAction
     ) {
-        self.model = model
+        _model = State(initialValue: model)
         self.onComplete = onComplete
-        _navigationPath = navigationPath
     }
 
     var body: some View {
         SwapScene(model: model)
-            .onChange(of: model.swapState.swapTransferData.value) { oldValue, newValue in
-                guard let newValue else { return }
-                navigationPath.append(newValue)
-            }
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
                     model: ConfirmTransferViewModel(
                         wallet: model.wallet,
                         data: data,
-                        keystore: model.keystore,
+                        keystore: keystore,
                         chainService: ChainServiceFactory(nodeProvider: nodeService)
                             .service(for: data.chain),
                         scanService: scanService,
+                        swapService: SwapService(nodeProvider: nodeService),
                         walletsService: model.walletsService,
+                        swapDataProvider: SwapQuoteDataProvider(
+                            keystore: keystore,
+                            swapService: SwapService(nodeProvider: nodeService)
+                        ),
                         onComplete: {
                             onSwapComplete(type: data.type)
                         }

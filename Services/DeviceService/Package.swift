@@ -43,6 +43,6 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store")
             ],
             path: "TestKit"
-        ),
+        )
     ]
 )

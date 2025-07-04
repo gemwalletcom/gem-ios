@@ -422,3 +422,6 @@
 "info.insufficient_balance.description" = "Nie masz wystarczająco %@ aby ukończyć tę transakcję. Doładuj, odbierz lub wymień w swoim portfelu i spróbuj ponownie.";
 "info.account_minimum_balance.title" = "Minimalne saldo";
 "asset.buy_asset" = "Kup %@";
+"wallet.import_address_warning" = "Możesz przeglądać salda i transakcje dla tego adresu, ale **nie możesz wysyłać ani sprzedawać środków**.";
+"info.stake_minimum_amount.title" = "Minimalna kwota";
+"info.stake_minimum_amount.description" = "W sieci %@ minimalne wymagania dotyczące stakingu to ** %@ **.";

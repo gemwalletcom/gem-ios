@@ -422,3 +422,6 @@
 "info.insufficient_balance.description" = "شما %@ کافی برای تکمیل این تراکنش ندارید. لطفاً کیف پول خود را شارژ، دریافت یا مبادله کنید و دوباره امتحان کنید.";
 "info.account_minimum_balance.title" = "حداقل موجودی";
 "asset.buy_asset" = "خرید %@";
+"wallet.import_address_warning" = "شما می‌توانید موجودی و تراکنش‌های این آدرس را مشاهده کنید، اما **نمی‌توانید وجه ارسال یا بفروشید**.";
+"info.stake_minimum_amount.title" = "حداقل مقدار";
+"info.stake_minimum_amount.description" = "در شبکه %@ ، حداقل میزان سپرده‌گذاری ** %@ ** است.";

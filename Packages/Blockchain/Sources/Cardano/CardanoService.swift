@@ -189,7 +189,7 @@ extension CardanoService: ChainTransactionStateFetchable {
             state: .confirmed,
             changes: [
                 .networkFee(BigInt(stringLiteral: transaction.fee)),
-                .blockNumber(transaction.block.number.asInt)
+                .blockNumber(Int(transaction.block.number))
             ]
         )
     }

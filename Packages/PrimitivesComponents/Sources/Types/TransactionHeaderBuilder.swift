@@ -7,27 +7,22 @@ import Primitives
 public struct TransactionHeaderTypeBuilder {
     public static func build(
         infoModel: TransactionInfoViewModel,
-        type: TransactionType,
+        transaction: Transaction,
         swapMetadata: SwapMetadata?
     ) -> TransactionHeaderType {
         let inputType: TransactionHeaderInputType = {
-            switch type {
+            switch transaction.type {
             case .transfer,
                     .stakeDelegate,
                     .stakeUndelegate,
                     .stakeRedelegate,
                     .stakeRewards,
                     .stakeWithdraw,
-                    .transferNFT,
                     .smartContractCall:
                 return .amount(showFiatSubtitle: true)
             case .swap:
-                guard let swapMetadata else {
+                guard let swapMetadata, let input = SwapMetadataViewModel(metadata: swapMetadata).headerInput else {
                     fatalError("swapMetadata is missed")
-                }
-                let model = SwapMetadataViewModel(metadata: swapMetadata)
-                guard let input = model.headerInput else {
-                    fatalError("fromAsset & toAsset missed")
                 }
                 return .swap(input)
             case .assetActivation:
@@ -38,6 +33,11 @@ public struct TransactionHeaderTypeBuilder {
                 } else {
                     return .symbol
                 }
+            case .transferNFT:
+                guard let metadata = transaction.metadata, case .nft(let metadata) = metadata else {
+                    return .amount(showFiatSubtitle: false)
+                }
+                return .nft(name: metadata.name, id: metadata.assetId)
             }
         }()
         return infoModel.headerType(input: inputType)
@@ -58,7 +58,7 @@ public struct TransactionHeaderTypeBuilder {
                     showFiatSubtitle: true
                 )
             case .transferNft(let asset):
-                return .nft(asset)
+                return .nft(name: asset.name, id: asset.id)
             case .account(_, let type):
                 switch type {
                 case .activate:

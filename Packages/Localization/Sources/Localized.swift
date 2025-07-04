@@ -513,6 +513,14 @@ public enum Localized {
       /// Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.
       public static let description = Localized.tr("Localizable", "info.slippage.description", fallback: "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.")
     }
+    public enum StakeMinimumAmount {
+      /// On the %@ network, the minimum staking requirement is **%@**.
+      public static func description(_ p1: Any, _ p2: Any) -> String {
+        return Localized.tr("Localizable", "info.stake_minimum_amount.description", String(describing: p1), String(describing: p2), fallback: "On the %@ network, the minimum staking requirement is **%@**.")
+      }
+      /// Minimum Amount
+      public static let title = Localized.tr("Localizable", "info.stake_minimum_amount.title", fallback: "Minimum Amount")
+    }
     public enum Transaction {
       public enum Error {
         /// The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.
@@ -1132,6 +1140,8 @@ public enum Localized {
     public static func defaultNameChain(_ p1: Any, _ p2: Int) -> String {
       return Localized.tr("Localizable", "wallet.default_name_chain", String(describing: p1), p2, fallback: "%@ Wallet #%d")
     }
+    /// You can view balances and transactions for this address, but **cannot send or sell funds**.
+    public static let importAddressWarning = Localized.tr("Localizable", "wallet.import_address_warning", fallback: "You can view balances and transactions for this address, but **cannot send or sell funds**.")
     /// Import an Existing Wallet
     public static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")
     /// Manage Tokens

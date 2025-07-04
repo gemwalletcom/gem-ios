@@ -145,7 +145,7 @@ struct TransactionInfoModelTests {
             direction: nil
         )
 
-        let header = model.headerType(input: .nft(nftAsset))
+        let header = model.headerType(input: .nft(name: nftAsset.name, id: nftAsset.id))
         guard case .nft(let name, _) = header else {
             Issue.record("Expected header type .nft")
             return

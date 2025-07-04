@@ -7,6 +7,7 @@ import Transfer
 import Staking
 import ChainService
 import NodeService
+import SwapService
 
 struct StakeNavigationView: View {
     @Environment(\.keystore) private var keystore
@@ -57,7 +58,12 @@ struct StakeNavigationView: View {
                     chainService: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.chain),
                     scanService: scanService,
+                    swapService: SwapService(nodeProvider: nodeService),
                     walletsService: walletsService,
+                    swapDataProvider: SwapQuoteDataProvider(
+                        keystore: keystore,
+                        swapService: SwapService(nodeProvider: nodeService)
+                    ),
                     onComplete: onComplete
                 )
             )

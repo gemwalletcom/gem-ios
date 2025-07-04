@@ -81,7 +81,7 @@ struct TronFeeService: Sendable {
         else {
             return .zero
         }
-        return max(energyLimit - energyUsed, 0)
+        return max(UInt64(energyLimit - energyUsed), 0)
     }
 }
 

@@ -71,11 +71,6 @@ public struct ListItemErrorView: View {
                     .buttonStyle(.clearBlue)
             }
         }
-        .padding()
-        .background(Colors.listStyleColor)
-        .cornerRadius(8)
-        .frame(maxWidth: .infinity)
-        .listRowInsets(EdgeInsets())
     }
 }
 

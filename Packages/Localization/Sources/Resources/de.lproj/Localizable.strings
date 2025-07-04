@@ -422,3 +422,6 @@
 "info.insufficient_balance.description" = "Sie haben nicht genügend %@, um diese Transaktion abzuschließen. Bitte laden Sie Ihr Wallet auf, empfangen Sie es oder tauschen Sie es um und versuchen Sie es erneut.";
 "info.account_minimum_balance.title" = "Mindestguthaben";
 "asset.buy_asset" = "Kaufen %@";
+"wallet.import_address_warning" = "Sie können Guthaben und Transaktionen für diese Adresse anzeigen, aber **kein Geld senden oder verkaufen**.";
+"info.stake_minimum_amount.title" = "Mindestbetrag";
+"info.stake_minimum_amount.description" = "Im %@ -Netzwerk beträgt die Mindesteinsatzanforderung ** %@ **.";
