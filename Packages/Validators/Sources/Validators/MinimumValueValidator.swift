@@ -2,20 +2,28 @@
 
 import Foundation
 import Primitives
+import BigInt
 
 public struct MinimumValueValidator<V>: ValueValidator where V: ValueValidatable
 {
     private let minimumValue: V
-    private let minimumValueText: String
+    private let asset: Asset
 
-    public init(minimumValue: V, minimumValueText: String) {
+    public init(minimumValue: V, asset: Asset) {
         self.minimumValue = minimumValue
-        self.minimumValueText = minimumValueText
+        self.asset = asset
     }
 
     public func validate(_ value: V) throws {
         guard value >= minimumValue else {
-            throw TransferError.minimumAmount(string: minimumValueText)
+            if let minimumValue = minimumValue as? BigInt {
+                throw TransferError
+                    .minimumAmount(
+                        asset: asset,
+                        required: minimumValue
+                    )
+            }
+            throw TransferError.invalidAmount
         }
     }
 

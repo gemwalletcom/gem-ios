@@ -24,7 +24,8 @@ struct AmountScene: View {
             List {
                 CurrencyInputValidationView(
                     model: $model.amountInputModel,
-                    config: model.inputConfig
+                    config: model.inputConfig,
+                    infoAction: model.infoAction(for:)
                 )
                 .padding(.top, .medium)
                 .listGroupRowStyle()

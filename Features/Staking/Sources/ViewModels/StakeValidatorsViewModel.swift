@@ -4,15 +4,19 @@ import Foundation
 import Primitives
 import Components
 import Localization
+import PrimitivesComponents
+import ExplorerService
 
-// TODO: - migrate to Observable macro, main actor
-public class StakeValidatorsViewModel: ObservableObject {
+@Observable
+public final class StakeValidatorsViewModel {
     
     private let type: StakeValidatorsType
     private let chain: Chain
     public let currentValidator: DelegationValidator?
     private let validators: [DelegationValidator]
     public var selectValidator: ((DelegationValidator) -> Void)?
+    private let exploreService: ExplorerService = .standard
+    public var isPresentingUrl: URL?
     
     private let recommendedValidators = StakeRecommendedValidators()
     
@@ -56,6 +60,21 @@ public class StakeValidatorsViewModel: ObservableObject {
                 )
             ]
         }
+    }
+    
+    public func contextMenu(for validator: DelegationValidator) -> [ContextMenuItemType] {
+        guard let explorerLink = exploreService.validatorUrl(chain: validator.chain, address: validator.id) else {
+            return []
+        }
+        return [
+            .copy(value: validator.id),
+            .url(
+                title: Localized.Transaction.viewOn(explorerLink.name),
+                onOpen: { [weak self] in
+                    self?.isPresentingUrl = explorerLink.url
+                }
+            )
+        ]
     }
     
     public func listSection(title: String, validators: [DelegationValidator]) -> ListItemValueSection<DelegationValidator> {

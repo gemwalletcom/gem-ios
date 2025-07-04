@@ -513,6 +513,14 @@ public enum Localized {
       /// Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.
       public static let description = Localized.tr("Localizable", "info.slippage.description", fallback: "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.")
     }
+    public enum StakeMinimumAmount {
+      /// On the %@ network, the minimum staking requirement is **%@**.
+      public static func description(_ p1: Any, _ p2: Any) -> String {
+        return Localized.tr("Localizable", "info.stake_minimum_amount.description", String(describing: p1), String(describing: p2), fallback: "On the %@ network, the minimum staking requirement is **%@**.")
+      }
+      /// Minimum Amount
+      public static let title = Localized.tr("Localizable", "info.stake_minimum_amount.title", fallback: "Minimum Amount")
+    }
     public enum Transaction {
       public enum Error {
         /// The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.

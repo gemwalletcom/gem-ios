@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "Minimum bakiye";
 "asset.buy_asset" = "%@ satın al";
 "wallet.import_address_warning" = "Bu adrese ait bakiyeleri ve işlemleri görüntüleyebilirsiniz, ancak **para gönderemez veya satamazsınız**.";
+"info.stake_minimum_amount.title" = "Asgari tutar";
+"info.stake_minimum_amount.description" = "%@ ağında, minimum stake gereksinimi ** %@ **'dir.";

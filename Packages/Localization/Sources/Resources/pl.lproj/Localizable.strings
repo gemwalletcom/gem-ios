@@ -423,3 +423,5 @@
 "info.account_minimum_balance.title" = "Minimalne saldo";
 "asset.buy_asset" = "Kup %@";
 "wallet.import_address_warning" = "Możesz przeglądać salda i transakcje dla tego adresu, ale **nie możesz wysyłać ani sprzedawać środków**.";
+"info.stake_minimum_amount.title" = "Minimalna kwota";
+"info.stake_minimum_amount.description" = "W sieci %@ minimalne wymagania dotyczące stakingu to ** %@ **.";
