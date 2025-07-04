@@ -24,7 +24,7 @@ public struct MarketsScene: View {
             case .data(let data):
                 PriceListItemView(model: data.marketCapViewModel)
             case .error(let error):
-                ListItemErrorView(error: error)
+                ListItemErrorView(errorTitle: .none, error: error)
             }
         }
         .refreshable {
