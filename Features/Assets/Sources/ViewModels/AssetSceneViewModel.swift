@@ -75,7 +75,7 @@ public final class AssetSceneViewModel: Sendable {
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showTransactions: Bool { transactions.isNotEmpty }
-    var showManageToken: Bool { true } //!assetData.metadata.isEnabled}
+    var showManageToken: Bool { !assetData.metadata.isEnabled }
     var pinText: String {
         assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
     }
