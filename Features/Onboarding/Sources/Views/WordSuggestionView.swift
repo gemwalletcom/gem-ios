@@ -25,3 +25,7 @@ struct WordSuggestionView: View {
         }
     }
 }
+
+extension String: @retroactive Identifiable {
+    public var id: String { self }
+}
