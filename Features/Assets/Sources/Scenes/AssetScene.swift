@@ -55,7 +55,7 @@ public struct AssetScene: View {
                     NavigationCustomLink(with:
                         ListItemView(
                             title: model.pinText,
-                            imageStyle: .list(assetImage: AssetImage(placeholder: model.pinImage),)
+                            imageStyle: .list(assetImage: AssetImage(placeholder: model.pinImage))
                         )
                     ) {
                         model.onSelectPin()
@@ -63,7 +63,7 @@ public struct AssetScene: View {
                     NavigationCustomLink(with:
                         ListItemView(
                             title: model.enableText,
-                            imageStyle: .list(assetImage: AssetImage(placeholder: model.enableImage),)
+                            imageStyle: .list(assetImage: AssetImage(placeholder: model.enableImage))
                         )
                     ) {
                         model.onSelectEnable()
