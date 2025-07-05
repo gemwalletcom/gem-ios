@@ -33,6 +33,8 @@ public enum Localized {
     public static let name = Localized.tr("Localizable", "application.name", fallback: "Gem")
   }
   public enum Asset {
+    /// Add to wallet
+    public static let addToWallet = Localized.tr("Localizable", "asset.add_to_wallet", fallback: "Add to wallet")
     /// Balances
     public static let balances = Localized.tr("Localizable", "asset.balances", fallback: "Balances")
     /// Buy %@
@@ -45,6 +47,8 @@ public enum Localized {
     public static let contract = Localized.tr("Localizable", "asset.contract", fallback: "Contract")
     /// Decimals
     public static let decimals = Localized.tr("Localizable", "asset.decimals", fallback: "Decimals")
+    /// Hide from wallet
+    public static let hideFromWallet = Localized.tr("Localizable", "asset.hide_from_wallet", fallback: "Hide from wallet")
     /// Latest Transactions
     public static let latestTransactions = Localized.tr("Localizable", "asset.latest_transactions", fallback: "Latest Transactions")
     /// Market Cap

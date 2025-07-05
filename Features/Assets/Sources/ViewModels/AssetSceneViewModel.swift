@@ -39,6 +39,8 @@ public final class AssetSceneViewModel: Sendable {
     public var assetData: AssetData
     public var transactions: [TransactionExtended] = []
     public var banners: [Banner] = []
+    private var asset: Asset { assetData.asset }
+    private var wallet: Wallet { walletModel.wallet }
 
     public init(
         walletsService: WalletsService,
@@ -73,7 +75,22 @@ public final class AssetSceneViewModel: Sendable {
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showTransactions: Bool { transactions.isNotEmpty }
-
+    var showManageToken: Bool { true } //!assetData.metadata.isEnabled}
+    var pinText: String {
+        assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
+    }
+    var pinImage: Image {
+        assetData.metadata.isPinned ? Image(systemName: SystemImage.unpin) : Image(systemName: SystemImage.pin)
+    }
+    var enableText: String {
+        assetData.metadata.isEnabled ? Localized.Asset.hideFromWallet : Localized.Asset.addToWallet
+    }
+    var enableImage: Image {
+        assetData.metadata.isEnabled ? Image(systemName: SystemImage.minusCircle) : Image(
+            systemName: SystemImage.plusCircle
+        )
+    }
+    
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
 
     var networkText: String { assetModel.networkFullName }
@@ -268,6 +285,29 @@ extension AssetSceneViewModel {
     
     public func onSelectTokenStatus() {
         isPresentingAssetSheet = .info(.assetStatus(scoreViewModel.scoreType))
+    }
+    
+    public func onSelectPin() {
+        do {
+            let isPinned = !assetData.metadata.isPinned
+            //isPresentingToastMessage = ToastMessage(title: pinText, image: pinImage)
+            try walletsService.setPinned(isPinned, walletId: wallet.walletId, assetId: asset.id)
+            if !assetData.metadata.isEnabled {
+                onSelectEnable()
+            }
+        } catch {
+            NSLog("onSelectPin error: \(error)")
+        }
+    }
+    
+    public func onSelectEnable() {
+        Task {
+            let isEnabled = !assetData.metadata.isEnabled
+            //isPresentingToastMessage = ToastMessage(title: enableText, image: enableImage)
+            do {
+                await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: isEnabled)
+            }
+        }
     }
 }
 

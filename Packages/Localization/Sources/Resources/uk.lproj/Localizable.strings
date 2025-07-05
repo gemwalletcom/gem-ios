@@ -425,3 +425,5 @@
 "wallet.import_address_warning" = "Ви можете переглядати баланси та транзакції для цієї адреси, але **не можете надсилати або продавати кошти**.";
 "info.stake_minimum_amount.title" = "Мінімальна сума";
 "info.stake_minimum_amount.description" = "У мережі %@ мінімальний розмір стейкінгу становить **%@**.";
+"asset.add_to_wallet" = "Додати до гаманця";
+"asset.hide_from_wallet" = "Приховати від гаманця";
