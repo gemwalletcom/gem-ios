@@ -63,7 +63,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
         case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol)
         case .insufficientBalance(let asset): return Localized.Info.InsufficientBalance.description(asset.symbol)
         case .insufficientNetworkFee(let asset, let required):
-            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+            let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Info.InsufficientNetworkFeeBalance.description(
                 "**\(amount)**",
                 asset.name,
@@ -86,10 +86,10 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             case .suspicious: return Localized.Info.AssetStatus.Suspicious.description
             }
         case let .accountMinimalBalance(asset, required):
-            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+            let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Transfer.minimumAccountBalance(amount)
         case let .stakeMinimumAmount(asset, required):
-            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+            let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Info.StakeMinimumAmount.description(asset.name, amount)
         }
     }
