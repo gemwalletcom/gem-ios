@@ -10,6 +10,10 @@ public extension AssetId {
         assetId
     }
     
+    static func mock(_ chain: Chain) -> AssetId {
+        AssetId(chain: chain, tokenId: .none)
+    }
+    
     static func mockEthereum() -> AssetId {
         AssetId(chain: .ethereum, tokenId: .none)
     }

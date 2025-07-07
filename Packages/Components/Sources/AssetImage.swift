@@ -3,7 +3,7 @@
 import SwiftUI
 import Style
 
-public struct AssetImage: Sendable {
+public struct AssetImage: Sendable, Equatable {
     public let type: String?
     public let imageURL: URL?
     public let placeholder: Image?
