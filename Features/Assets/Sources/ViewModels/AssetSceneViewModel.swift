@@ -32,7 +32,7 @@ public final class AssetSceneViewModel: Sendable {
 
     private var isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
 
-    public var isPresentingToastMessage: String?
+    public var isPresentingToastMessage: ToastMessage?
     public var isPresentingAssetSheet: AssetSheetType?
 
     public var input: AssetSceneInput
@@ -79,16 +79,20 @@ public final class AssetSceneViewModel: Sendable {
     var pinText: String {
         assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
     }
+    var pinSystemImage: String {
+        assetData.metadata.isPinned ? SystemImage.unpin : SystemImage.pin
+    }
     var pinImage: Image {
-        assetData.metadata.isPinned ? Image(systemName: SystemImage.unpin) : Image(systemName: SystemImage.pin)
+        Image(systemName: pinSystemImage)
     }
     var enableText: String {
         assetData.metadata.isEnabled ? Localized.Asset.hideFromWallet : Localized.Asset.addToWallet
     }
     var enableImage: Image {
-        assetData.metadata.isEnabled ? Image(systemName: SystemImage.minusCircle) : Image(
-            systemName: SystemImage.plusCircle
-        )
+        Image(systemName: enableSystemImage)
+    }
+    var enableSystemImage: String {
+        assetData.metadata.isEnabled ? SystemImage.minusCircle : SystemImage.plusCircle
     }
     
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
@@ -264,7 +268,7 @@ extension AssetSceneViewModel {
 
     public func onSetPriceAlertComplete(message: String) {
         isPresentingAssetSheet = .none
-        isPresentingToastMessage = message
+        isPresentingToastMessage = ToastMessage(title: message, image: priceAlertsSystemImage)
     }
 
     public func onSelectSetPriceAlerts() {
@@ -274,10 +278,16 @@ extension AssetSceneViewModel {
     public func onTogglePriceAlert() {
         Task {
             if assetData.isPriceAlertsEnabled {
-                isPresentingToastMessage = Localized.PriceAlerts.disabledFor(assetData.asset.name)
+                isPresentingToastMessage = ToastMessage(
+                    title: Localized.PriceAlerts.disabledFor(assetData.asset.name),
+                    image: priceAlertsSystemImage
+                )
                 await disablePriceAlert()
             } else {
-                isPresentingToastMessage = Localized.PriceAlerts.enabledFor(assetData.asset.name)
+                isPresentingToastMessage = ToastMessage(
+                    title: Localized.PriceAlerts.enabledFor(assetData.asset.name),
+                    image: priceAlertsSystemImage
+                )
                 await enablePriceAlert()
             }
         }
@@ -290,7 +300,7 @@ extension AssetSceneViewModel {
     public func onSelectPin() {
         do {
             let isPinned = !assetData.metadata.isPinned
-            //isPresentingToastMessage = ToastMessage(title: pinText, image: pinImage)
+            isPresentingToastMessage = ToastMessage(title: pinText, image: pinSystemImage)
             try walletsService.setPinned(isPinned, walletId: wallet.walletId, assetId: asset.id)
             if !assetData.metadata.isEnabled {
                 onSelectEnable()
@@ -303,7 +313,7 @@ extension AssetSceneViewModel {
     public func onSelectEnable() {
         Task {
             let isEnabled = !assetData.metadata.isEnabled
-            //isPresentingToastMessage = ToastMessage(title: enableText, image: enableImage)
+            isPresentingToastMessage = ToastMessage(title: enableText, image: enableSystemImage)
             do {
                 await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: isEnabled)
             }
