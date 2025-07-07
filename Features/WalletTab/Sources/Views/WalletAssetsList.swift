@@ -57,10 +57,26 @@ struct WalletAssetsList: View {
                     ]
                 )
                 .swipeActions(edge: .trailing) {
-                    Button(Localized.Common.hide, role: .destructive) {
+                    Button(role: .destructive) {
                         onHideAsset?(asset.asset.id)
+                    } label: {
+                        Label(
+                            Localized.Common.hide,
+                            systemImage: SystemImage.hide
+                        )
                     }
-                    .tint(Colors.gray)
+                    .tint(Colors.red)
+                }
+                .swipeActions(edge: .leading) {
+                    Button(role: .destructive) {
+                        onPinAsset?(asset.asset.id, !asset.metadata.isPinned)
+                    } label: {
+                        Label(
+                            asset.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin,
+                            systemImage: asset.metadata.isPinned ? SystemImage.unpin : SystemImage.pin
+                        )
+                    }
+                    .tint(Colors.green)
                 }
             }
         }
