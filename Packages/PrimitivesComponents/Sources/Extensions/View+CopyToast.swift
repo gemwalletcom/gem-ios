@@ -10,16 +10,12 @@ public extension View {
         isPresenting: Binding<Bool>,
         feedbackGenerator: UINotificationFeedbackGenerator = UINotificationFeedbackGenerator()
     ) -> some View {
-        self.toast(
-            isPresenting: isPresenting,
-            title: model.message,
-            systemImage: model.systemImage
-        )
-        .onChange(of: isPresenting.wrappedValue, initial: true) { oldValue, newValue in
-            if newValue {
-                model.copy()
-                feedbackGenerator.notificationOccurred(.success)
+        toast(isPresenting: isPresenting, message: ToastMessage(title: model.message, image: model.systemImage))
+            .onChange(of: isPresenting.wrappedValue, initial: true) { oldValue, newValue in
+                if newValue {
+                    model.copy()
+                    feedbackGenerator.notificationOccurred(.success)
+                }
             }
-        }
     }
 }

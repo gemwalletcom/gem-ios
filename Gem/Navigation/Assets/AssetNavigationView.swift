@@ -44,10 +44,7 @@ struct AssetNavigationView: View {
                 )
             }
         }
-        .toast(
-            message: $model.isPresentingToastMessage,
-            systemImage: model.priceAlertsSystemImage
-        )
+        .toast(message: $model.isPresentingToastMessage)
         .sheet(item: $model.isPresentingAssetSheet) {
             switch $0 {
             case let .info(type):
