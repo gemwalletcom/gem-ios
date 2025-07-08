@@ -89,6 +89,13 @@ public extension String {
         }
         return self
     }
+    
+    var trimLeadingZeros: String {
+        guard let firstNonZeroIndex = self.firstIndex(where: { $0 != "0" }) else {
+            return ""
+        }
+        return String(self[firstNonZeroIndex...])
+    }
 }
 
 extension Optional where Wrapped == String {
