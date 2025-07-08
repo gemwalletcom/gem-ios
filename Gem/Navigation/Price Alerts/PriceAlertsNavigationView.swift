@@ -7,6 +7,7 @@ import PriceAlerts
 import Assets
 import Localization
 import Primitives
+import Components
 
 struct PriceAlertsNavigationView: View {
     @Environment(\.dismiss) private var dismiss
@@ -17,7 +18,7 @@ struct PriceAlertsNavigationView: View {
     @Environment(\.walletService) private var walletService
 
     @State private var isPresentingAddAsset: Bool = false
-    @State private var isPresentingToastMessage: String?
+    @State private var isPresentingToastMessage: ToastMessage?
     @State private var assetPriceAlertsNavigationPath = NavigationPath()
 
     let model: PriceAlertsViewModel
@@ -45,14 +46,11 @@ struct PriceAlertsNavigationView: View {
                 )
             )
         }
-        .toast(
-            message: $isPresentingToastMessage,
-            systemImage: SystemImage.bellFill
-        )
+        .toast(message: $isPresentingToastMessage)
     }
     
     private func onSelectAsset(asset: Asset) {
         isPresentingAddAsset = false
-        isPresentingToastMessage = Localized.PriceAlerts.enabledFor(asset.name)
+        isPresentingToastMessage = ToastMessage(title: Localized.PriceAlerts.enabledFor(asset.name), image: SystemImage.bellFill)
     }
 }

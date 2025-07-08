@@ -21,8 +21,7 @@ public final class CollectibleViewModel {
 
     var isPresentingPhotoPermissionMessage: Bool = false
     var isPresentingErrorMessage: String?
-    var isPresentingSaveToPhotosToast = false
-    var isPresentingSetAsAvatarToast = false
+    var isPresentingToast: ToastMessage?
 
     public init(
         wallet: Wallet,
@@ -123,7 +122,7 @@ extension CollectibleViewModel {
         Task {
             do {
                 try await saveImageToGallery()
-                isPresentingSaveToPhotosToast = true
+                isPresentingToast = ToastMessage(title: Localized.Nft.saveToPhotos, image: SystemImage.checkmark)
             } catch let error as ImageGalleryServiceError {
                 switch error {
                 case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
@@ -139,7 +138,7 @@ extension CollectibleViewModel {
         Task {
             do {
                 try await setWalletAvatar()
-                isPresentingSetAsAvatarToast = true
+                isPresentingToast = ToastMessage(title: Localized.Nft.setAsAvatar, image: SystemImage.checkmark)
             } catch {
                 NSLog("Set nft avatar error: \(error)")
             }
