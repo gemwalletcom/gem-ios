@@ -442,7 +442,7 @@ extension TransferAmountCalculatorError {
         case .insufficientBalance(let asset):
             .insufficientBalance(asset)
         case .insufficientNetworkFee(let asset, let required):
-            .insufficientNetworkFee(asset, required: required)
+                .insufficientNetworkFee(asset, image: AssetViewModel(asset: asset).assetImage, required: required)
         case .minimumAccountBalanceTooLow(let asset, let required):
             .accountMinimalBalance(asset, required: required)
         }

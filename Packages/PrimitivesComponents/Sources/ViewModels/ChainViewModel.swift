@@ -13,7 +13,9 @@ public struct ChainViewModel: Sendable {
     }
 
     public var title: String { Asset(chain).name }
-    public var image: Image { ChainImage(chain: chain).image }
+    public var image: Image {
+        return ChainImage(chain: chain).placeholder
+    }
 }
 
 // MARK: - Identifiable
