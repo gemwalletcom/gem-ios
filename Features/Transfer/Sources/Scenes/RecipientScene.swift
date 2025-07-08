@@ -29,7 +29,7 @@ struct RecipientScene: View {
                     InputValidationField(
                         model: $model.addressInputModel,
                         placeholder: model.recipientField,
-                        allowClean: true,
+                        allowClean: false,
                         trailingView: {
                             HStack(spacing: .large/2) {
                                 NameRecordView(

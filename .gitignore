@@ -45,3 +45,5 @@ sources.png
 
 # Git-specific
 *.orig
+
+.claude/
