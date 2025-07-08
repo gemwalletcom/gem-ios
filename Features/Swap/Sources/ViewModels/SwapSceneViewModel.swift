@@ -447,7 +447,7 @@ extension SwapSceneViewModel {
         case .noData: return .noData
         case .data(let items):
             let priceViewModel = PriceViewModel(price: asset.price, currencyCode: preferences.currency)
-            let valueFormatter = ValueFormatter(style: .short)
+            let valueFormatter = ValueFormatter(style: .auto)
             return .data(.plain(
                 items.map {
                     SwapProviderItem(
