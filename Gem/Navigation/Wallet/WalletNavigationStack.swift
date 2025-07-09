@@ -12,6 +12,7 @@ import Assets
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.walletService) private var walletService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.priceService) private var priceService
     @Environment(\.priceAlertService) private var priceAlertService
@@ -117,7 +118,7 @@ struct WalletNavigationStack: View {
                     )
                 }
                 .sheet(isPresented: $model.isPresentingWallets) {
-                    WalletsNavigationStack(isPresentingWallets: $model.isPresentingWallets)
+                    WalletsNavigationStack(walletService: walletService, isPresentingWallets: $model.isPresentingWallets)
                 }
                 .sheet(item: $model.isPresentingInfoSheet) {
                     InfoSheetScene(model: InfoSheetViewModel(type: $0))

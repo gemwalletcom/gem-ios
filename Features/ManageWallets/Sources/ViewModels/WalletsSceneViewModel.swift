@@ -9,7 +9,6 @@ import Components
 @Observable
 @MainActor
 public final class WalletsSceneViewModel {
-    private let navigationPath: Binding<NavigationPath>
     let service: WalletService
     let currentWalletId: WalletId?
     
@@ -17,16 +16,14 @@ public final class WalletsSceneViewModel {
     var walletDelete: Wallet?
     public var isPresentingCreateWalletSheet: Bool = false
     public var isPresentingImportWalletSheet: Bool = false
+    public var walletToEdit: Wallet?
     
-    public init(
-        navigationPath: Binding<NavigationPath>,
-        walletService: WalletService
-    ) {
-        self.navigationPath = navigationPath
+    public init(walletService: WalletService) {
         self.service = walletService
         self.currentWalletId = service.currentWalletId
         self.isPresentingAlertMessage = nil
         self.walletDelete = nil
+        self.walletToEdit = nil
     }
     
     var title: String {
@@ -42,7 +39,7 @@ extension WalletsSceneViewModel {
     }
 
     func onEdit(wallet: Wallet) {
-        navigationPath.wrappedValue.append(Scenes.WalletDetail(wallet: wallet))
+        walletToEdit = wallet
     }
 
     func delete(_ wallet: Wallet) throws {

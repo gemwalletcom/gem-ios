@@ -22,6 +22,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
@@ -127,7 +128,7 @@ struct SettingsNavigationStack: View {
                 )
             }
             .sheet(isPresented: $isPresentingWallets) {
-                WalletsNavigationStack(isPresentingWallets: $isPresentingWallets)
+                WalletsNavigationStack(walletService: walletService, isPresentingWallets: $isPresentingWallets)
             }
         }
         .onChange(of: currencyModel.selectedCurrencyValue) { _, _ in
