@@ -72,7 +72,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/DiscoverAssetsService",
         "identifier" : "DiscoverAssetsServiceTests",

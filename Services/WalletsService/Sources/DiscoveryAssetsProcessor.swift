@@ -45,21 +45,24 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
         // Only perform coin discovery if it hasn’t been done before.
         guard !preferences.completeInitialLoadAssets else { return }
 
-        let coinUpdates = await discoverAssetService.updateCoins(wallet: wallet)
-        await processAssetUpdate(for: coinUpdates)
+        for await coinUpdate in discoverAssetService.updateCoins(wallet: wallet) {
+            await processAssetUpdate(for: coinUpdate)
+        }
         preferences.completeInitialLoadAssets = true
     }
 
     private func processTokenDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
-        let tokenUpdate = try await discoverAssetService.updateTokens(
+        let tokenUpdateStream = try await discoverAssetService.updateTokens(
             deviceId: deviceId,
             wallet: wallet,
             fromTimestamp: preferences.assetsTimestamp
         )
         preferences.assetsTimestamp = newTimestamp
-        await processAssetUpdate(for: tokenUpdate)
+        for await tokenUpdate in tokenUpdateStream {
+            await processAssetUpdate(for: tokenUpdate)
+        }
     }
     
     private func processAssetUpdate(for update: AssetUpdate) async {

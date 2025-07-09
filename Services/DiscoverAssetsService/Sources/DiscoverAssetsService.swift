@@ -22,7 +22,7 @@ public struct DiscoverAssetsService: Sendable {
         deviceId: String,
         wallet: Wallet,
         fromTimestamp: Int
-    ) async throws -> AssetUpdate {
+    ) async throws -> AsyncStream<AssetUpdate> {
         let tokenAddressIds: [(AssetId, String)] = try await assetsService
             .getAssetsByDeviceId(
                 deviceId: deviceId,
@@ -36,49 +36,64 @@ public struct DiscoverAssetsService: Sendable {
                 return nil
             }
 
-        return await updateBalances(tokenAddressIds, wallet)
+        return updateBalances(tokenAddressIds, wallet)
     }
 
-    public func updateCoins(wallet: Wallet) async -> AssetUpdate {
-        guard wallet.isMultiCoins else { return AssetUpdate(walletId: wallet.walletId, assetIds: []) }
+    public func updateCoins(wallet: Wallet) -> AsyncStream<AssetUpdate> {
+        guard wallet.isMultiCoins else { return AsyncStream.just(AssetUpdate(walletId: wallet.walletId, assetIds: [])) }
         
-        let coinAddressIds: [(AssetId, String)] = wallet.accounts.map {
+        let coinAddressIds: [(AssetId, String)] = wallet.accounts.excludeDefaultAccounts().map {
             ($0.chain.assetId, $0.address)
         }
 
-        return await updateBalances(coinAddressIds, wallet)
+        return updateBalances(coinAddressIds, wallet)
     }
     
     // MARK: - Private methods
     
-    private func updateBalances(_ assetAddressIds: [(AssetId, String)], _ wallet: Wallet) async -> AssetUpdate {
-        await withTaskGroup(of: AssetBalanceChange?.self) { group in
-            for (asset, address) in assetAddressIds {
-                group.addTask {
-                    do {
-                        return try await self.balanceService.updateBalance(
-                            walletId: wallet.id,
-                            asset: asset,
-                            address: address
-                        )
-                    } catch {
-                        NSLog("Error fetching token balance: \(error)")
-                        return nil
+    private func updateBalances(_ assetAddressIds: [(AssetId, String)], _ wallet: Wallet) -> AsyncStream<AssetUpdate> {
+        AsyncStream { continuation in
+            let task = Task {
+                await withTaskGroup(of: [AssetBalanceChange].self) { group in
+                    for (asset, address) in assetAddressIds {
+                        group.addTask {
+                            do {
+                                return try await self.balanceService.updateBalance(
+                                    walletId: wallet.id,
+                                    asset: asset,
+                                    address: address
+                                )
+                            } catch {
+                                NSLog("Error fetching token balance: \(error)")
+                                return []
+                            }
+                        }
                     }
+                    
+                    for await change in group {
+                        continuation.yield(
+                            AssetUpdate(
+                                walletId: wallet.walletId,
+                                assetIds: change.filter { $0.type.available.or(.zero) > 0}.map { $0.assetId }
+                            )
+                        )
+                    }
+                    
+                    continuation.finish()
                 }
             }
-
-            var updates: [AssetBalanceChange] = []
-            for await update in group {
-                if let update = update {
-                    updates.append(update)
-                }
+            
+            continuation.onTermination = { _ in
+                task.cancel()
             }
+        }
+    }
+}
 
-            return AssetUpdate(
-                walletId: wallet.walletId,
-                assetIds: updates.filter { $0.type.available.or(.zero) > 0 }.map { $0.assetId }
-            )
+extension Array where Element == Account {
+    func excludeDefaultAccounts() -> [Account] {
+        filter { account in
+            !AssetConfiguration.enabledByDefault.contains(where: { $0.chain == account.chain })
         }
     }
 }

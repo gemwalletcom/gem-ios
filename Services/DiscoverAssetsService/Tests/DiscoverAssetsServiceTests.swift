@@ -1,6 +1,16 @@
 import Testing
+import Primitives
+import PrimitivesTestKit
+
 @testable import DiscoverAssetsService
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+struct DiscoverAssetsServiceTests {
+    @Test
+    func excludeDefaultAccounts() throws {
+        let filteredAccounts: [Account] = [.mock(chain: .bitcoin), .mock(chain: .solana), .mock(chain: .ton), .mock(chain: .aptos)].excludeDefaultAccounts()
+
+        #expect(filteredAccounts.count == 2)
+        #expect(filteredAccounts.contains(.mock(chain: .ton)))
+        #expect(filteredAccounts.contains(.mock(chain: .aptos)))
+    }
 }
