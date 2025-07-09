@@ -130,7 +130,9 @@ struct SettingsNavigationStack: View {
             }
             .sheet(isPresented: $isPresentingWallets) {
                 WalletsNavigationStack(
-                    walletService: walletService,
+                    model: WalletsSceneViewModel(
+                        walletService: walletService
+                    ),
                     isPresentingWallets: $isPresentingWallets
                 )
             }

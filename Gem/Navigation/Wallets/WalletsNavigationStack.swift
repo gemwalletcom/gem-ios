@@ -11,14 +11,15 @@ import WalletService
 
 struct WalletsNavigationStack: View {
     @Environment(\.avatarService) private var avatarService
+    @Environment(\.walletService) private var walletService
 
     @State private var navigationPath = NavigationPath()
     @State private var model: WalletsSceneViewModel
     @Binding private var isPresentingWallets: Bool
 
-    init(walletService: WalletService, isPresentingWallets: Binding<Bool>) {
+    init(model: WalletsSceneViewModel, isPresentingWallets: Binding<Bool>) {
         _isPresentingWallets = isPresentingWallets
-        _model = State(initialValue: WalletsSceneViewModel(walletService: walletService))
+        _model = State(initialValue: model)
     }
 
     var body: some View {
