@@ -12,12 +12,19 @@ public struct SocialLinksView: View {
 
     public var body: some View {
         ForEach(model.links) { link in
-            SafariNavigationLink(url: link.url) {
-                ListItemView(
-                    title: link.title,
-                    subtitle: link.subtitle,
-                    imageStyle: .settings(assetImage: link.image)
-                )
+            let view = ListItemView(
+                title: link.title,
+                subtitle: link.subtitle,
+                imageStyle: .settings(assetImage: link.image)
+            )
+            if let deepLink = link.deepLink, UIApplication.shared.canOpenURL(deepLink) {
+                NavigationCustomLink(with: view) {
+                    UIApplication.shared.open(deepLink)
+                }
+            } else {
+                SafariNavigationLink(url: link.url) {
+                    view
+                }
             }
         }
     }

@@ -22,6 +22,7 @@ public struct AssetLinkViewModel {
             title: name,
             subtitle: host,
             url: url,
+            deepLink: deepLink,
             image: AssetImage.image(image)
         )
     }
@@ -68,6 +69,10 @@ public struct AssetLinkViewModel {
     
     public var url: URL? {
         assetLink.url.asURL
+    }
+    
+    public var deepLink: URL? {
+        DeepLinkViewModel(assetLink).deepLink
     }
     
     public var host: String? {
