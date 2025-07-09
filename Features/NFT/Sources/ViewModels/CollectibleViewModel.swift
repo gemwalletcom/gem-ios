@@ -20,7 +20,7 @@ public final class CollectibleViewModel {
     private let avatarService: AvatarService
 
     var isPresentingPhotoPermissionMessage: Bool = false
-    var isPresentingErrorMessage: String?
+    var isPresentingAlertMessage: AlertMessage?
     var isPresentingToast: ToastMessage?
 
     public init(
@@ -126,7 +126,7 @@ extension CollectibleViewModel {
             } catch let error as ImageGalleryServiceError {
                 switch error {
                 case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
-                    isPresentingErrorMessage = Localized.Errors.errorOccured
+                    isPresentingAlertMessage = AlertMessage(message: Localized.Errors.errorOccured)
                 case .permissionDenied:
                     isPresentingPhotoPermissionMessage = true
                 }
