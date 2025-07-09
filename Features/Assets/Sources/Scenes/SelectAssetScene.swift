@@ -7,16 +7,12 @@ import PrimitivesComponents
 
 public struct SelectAssetScene: View {
 
-    @Binding private var isPresentingAddToken: Bool
-
     @State private var model: SelectAssetViewModel
 
     public init(
-        model: SelectAssetViewModel,
-        isPresentingAddToken: Binding<Bool>
+        model: SelectAssetViewModel
     ) {
         _model = State(wrappedValue: model)
-        _isPresentingAddToken = isPresentingAddToken
     }
 
     public var body: some View {
@@ -45,7 +41,7 @@ public struct SelectAssetScene: View {
                     model: EmptyContentTypeViewModel(
                         type: .search(
                             type: .assets,
-                            action: model.showAddToken ? { onSelectAddCustomToken() } : nil
+                            action: model.showAddToken ? { model.onSelectAddCustomToken() } : nil
                         )
                     )
                 )
@@ -144,10 +140,3 @@ public struct SelectAssetScene: View {
     }
 }
 
-// MARK: - Actions
-
-extension SelectAssetScene {
-    private func onSelectAddCustomToken() {
-        isPresentingAddToken.toggle()
-    }
-}

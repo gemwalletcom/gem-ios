@@ -21,7 +21,6 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
 
-    @State private var isPresentingAddToken: Bool = false
     @State private var isPresentingFilteringView: Bool = false
 
     @State private var model: SelectAssetViewModel
@@ -39,8 +38,7 @@ struct SelectAssetSceneNavigationStack: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             SelectAssetScene(
-                model: model,
-                isPresentingAddToken: $isPresentingAddToken
+                model: model
             )
             .toolbar {
                 ToolbarDismissItem(
@@ -58,7 +56,7 @@ struct SelectAssetSceneNavigationStack: View {
                 if model.showAddToken {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
-                            isPresentingAddToken = true
+                            model.isPresentingAddToken = true
                         } label: {
                             Images.System.plus
                         }
@@ -113,10 +111,10 @@ struct SelectAssetSceneNavigationStack: View {
             }
             .navigationBarTitleDisplayMode(.inline)
         }
-        .sheet(isPresented: $isPresentingAddToken) {
+        .sheet(isPresented: $model.isPresentingAddToken) {
             AddTokenNavigationStack(
                 wallet: model.wallet,
-                isPresenting: $isPresentingAddToken
+                isPresenting: $model.isPresentingAddToken
             )
         }
         .sheet(isPresented: $isPresentingFilteringView) {
