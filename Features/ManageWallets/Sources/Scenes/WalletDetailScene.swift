@@ -13,27 +13,19 @@ import Store
 import Onboarding
 
 public struct WalletDetailScene: View {
-    let model: WalletDetailViewModel
-
     enum Field: Int, Hashable {
         case name
     }
 
     @Environment(\.dismiss) private var dismiss
-
-    @State private var name: String
-
-    @State private var isPresentingAlertMessage: AlertMessage?
-    @State private var isPresentingDeleteConfirmation: Bool?
-    @State private var isPresentingExportWallet: ExportWalletType?
     @FocusState private var focusedField: Field?
+    @State private var model: WalletDetailViewModel
     
     @Query<WalletRequest>
     var dbWallet: Wallet?
 
     public init(model: WalletDetailViewModel) {
-        self.model = model
-        _name = State(initialValue: self.model.name)
+        _model = State(initialValue: model)
         _dbWallet = Query(constant: model.walletRequest)
     }
     
@@ -41,7 +33,7 @@ public struct WalletDetailScene: View {
         VStack {
             List {
                 Section {
-                    FloatTextField(Localized.Wallet.name, text: $name, allowClean: focusedField == .name)
+                    FloatTextField(Localized.Wallet.name, text: $model.nameInput, allowClean: focusedField == .name)
                         .focused($focusedField, equals: .name)
                 } header: {
                     HStack {
@@ -51,7 +43,7 @@ public struct WalletDetailScene: View {
                                 AvatarView(
                                     avatarImage: model.avatarAssetImage(for: dbWallet),
                                     size: .image.extraLarge,
-                                    action: onSelectImage
+                                    action: model.onSelectImage
                                 )
                                 .padding(.bottom, .extraLarge)
                             }
@@ -64,7 +56,7 @@ public struct WalletDetailScene: View {
                     Section {
                         NavigationCustomLink(
                             with: ListItemView(title: Localized.Common.show(Localized.Common.secretPhrase)),
-                            action: onShowSecretPhrase
+                            action: model.onShowSecretPhrase
                         )
                     } header: {
                         Text(Localized.Common.secretPhrase)
@@ -73,7 +65,7 @@ public struct WalletDetailScene: View {
                     Section {
                         NavigationCustomLink(
                             with: ListItemView(title: Localized.Common.show(Localized.Common.privateKey)),
-                            action: onShowPrivateKey
+                            action: model.onShowPrivateKey
                         )
                     } header: {
                         Text(Localized.Common.privateKey)
@@ -99,7 +91,7 @@ public struct WalletDetailScene: View {
                 Section {
                     HStack {
                         Spacer()
-                        Button(role: .destructive, action: onSelectDelete) {
+                        Button(role: .destructive, action: model.onSelectDelete) {
                             Text(Localized.Common.delete)
                                 .foregroundStyle(Colors.red)
                         }
@@ -111,73 +103,28 @@ public struct WalletDetailScene: View {
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
-        .onChange(of: name, onChangeWalletName)
+        .onChange(of: model.nameInput, model.onChangeWalletName)
         .navigationTitle(model.title)
         .confirmationDialog(
             Localized.Common.deleteConfirmation(model.name),
-            presenting: $isPresentingDeleteConfirmation,
+            presenting: $model.isPresentingDeleteConfirmation,
             sensoryFeedback: .warning,
             actions: { _ in
                 Button(
                     Localized.Common.delete,
                     role: .destructive,
-                    action: onDeleteWallet
+                    action: {
+                        if model.onDelete() {
+                            dismiss()
+                        }
+                    }
                 )
             }
         )
-        .alertSheet($isPresentingAlertMessage)
-        .sheet(item: $isPresentingExportWallet) {
+        .alertSheet($model.isPresentingAlertMessage)
+        .sheet(item: $model.isPresentingExportWallet) {
             ExportWalletNavigationStack(flow: $0)
         }
     }
 }
 
-// MARK: - Actions
-
-extension WalletDetailScene {
-    private func onChangeWalletName() {
-        do {
-            try model.rename(name: name)
-        } catch {
-            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-        }
-    }
-
-    private func onShowSecretPhrase() {
-        Task {
-            do {
-                isPresentingExportWallet = .words(try model.getMnemonicWords())
-            } catch {
-                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-            }
-        }
-    }
-
-    private func onShowPrivateKey() {
-        Task {
-            do {
-                //In the future it should allow to export PK for multichain wallet and specify the chain
-                isPresentingExportWallet = .privateKey(try model.getPrivateKey())
-            } catch {
-                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-            }
-        }
-    }
-
-    private func onSelectDelete() {
-        isPresentingDeleteConfirmation = true
-    }
-
-    private func onDeleteWallet()  {
-        do {
-            try model.delete()
-            dismiss()
-        } catch {
-            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-        }
-    }
-
-    private func onSelectImage() {
-        model.onSelectImage()
-    }
-}
