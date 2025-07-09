@@ -1,17 +1,17 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
+import AppService
 import DeviceService
+import Foundation
+import LockManager
+import Onboarding
 import Primitives
 import SwiftUI
-import LockManager
-import WalletConnector
-import TransactionsService
 import TransactionService
+import TransactionsService
+import WalletConnector
 import WalletService
 import WalletsService
-import Onboarding
-import AppService
 
 @Observable
 @MainActor
@@ -30,11 +30,12 @@ final class RootSceneViewModel {
 
     var availableRelease: Release?
     var canSkipUpdate: Bool { availableRelease?.upgradeRequired == false }
-    
+
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
         set { walletConnectorPresenter.isPresentingError = newValue }
     }
+
     var isPresentingConnnectorSheet: WalletConnectorSheetType? {
         get { walletConnectorPresenter.isPresentingSheet }
         set { walletConnectorPresenter.isPresentingSheet = newValue }
@@ -105,6 +106,9 @@ extension RootSceneViewModel {
                 try await connectionsService.pair(uri: uri)
             case .walletConnectRequest:
                 isPresentingConnectorBar = true
+            case .walletConnectSession:
+                isPresentingConnectorBar = true
+                connectionsService.updateSessions()
             case .asset(let assetId):
                 notificationHandler.notify(notification: PushNotification.asset(assetId))
             }
@@ -113,7 +117,7 @@ extension RootSceneViewModel {
             isPresentingConnectorError = error.localizedDescription
         }
     }
-    
+
     func skipRelease() {
         guard let version = availableRelease?.version else { return }
         onstartAsyncService.skipRelease(version)
@@ -123,7 +127,6 @@ extension RootSceneViewModel {
 // MARK: - Private
 
 extension RootSceneViewModel {
-
     private func setup(wallet: Wallet) {
         onstartAsyncService.setup(wallet: wallet)
         do {
