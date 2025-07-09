@@ -11,7 +11,7 @@ import PrimitivesComponents
 
 public struct ConnectionsScene: View {
     @State private var isPresentingScanner: Bool = false
-    @State private var isPresentingErrorMessage: String?
+    @State private var isPresentingAlertMessage: AlertMessage?
 
     @State private var model: ConnectionsViewModel
 
@@ -71,13 +71,7 @@ public struct ConnectionsScene: View {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
         .toolbarInfoButton(url: model.docsUrl)
-        .alert("",
-               isPresented: $isPresentingErrorMessage.mappedToBool(),
-               actions: {},
-               message: {
-            Text(isPresentingErrorMessage ?? "")
-        }
-        )
+        .alertSheet($isPresentingAlertMessage)
         .navigationTitle(model.title)
         .taskOnce { model.updateSessions() }
     }
@@ -86,7 +80,7 @@ public struct ConnectionsScene: View {
         do {
             try await model.pair(uri: uri)
         } catch {
-            isPresentingErrorMessage = error.localizedDescription
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             NSLog("connectURI error: \(error)")
         }
     }
@@ -101,7 +95,7 @@ private extension ConnectionsScene {
             do {
                 try await model.disconnect(connection: connection)
             } catch {
-                isPresentingErrorMessage = error.localizedDescription
+                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
                 NSLog("disconnect error: \(error)")
             }
         }
