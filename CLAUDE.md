@@ -154,6 +154,7 @@ Services are injected via SwiftUI Environment:
 ### Running Tests
 - Unit tests: `just test`
 - UI tests: `just test_ui`
+- Specific test: `just test-specific TARGET` (e.g. `just test-specific AssetsTests`)
 - Tests use iPhone 16 simulator by default
 
 ### Writing Unit Tests
