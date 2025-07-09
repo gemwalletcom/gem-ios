@@ -15,6 +15,11 @@ public struct TransactionScene: View {
     @Query<TransactionsRequest>
     private var transactions: [Primitives.TransactionExtended]
 
+    @State private var isPresentingShareSheet = false
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
+
+    private let input: TransactionSceneInput
+
     private var model: TransactionDetailViewModel {
         return TransactionDetailViewModel(
             model: TransactionViewModel(
@@ -24,10 +29,6 @@ public struct TransactionScene: View {
             )
         )
     }
-    private let input: TransactionSceneInput
-
-    @State private var showShareSheet = false
-    @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     public init(input: TransactionSceneInput) {
         self.input = input
@@ -103,13 +104,13 @@ public struct TransactionScene: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        showShareSheet.toggle()
+                        isPresentingShareSheet.toggle()
                     } label: {
                         Images.System.share
                     }
                 }
             }
-            .sheet(isPresented: $showShareSheet) {
+            .sheet(isPresented: $isPresentingShareSheet) {
                 ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
             }
             .sheet(item: $isPresentingInfoSheet) {

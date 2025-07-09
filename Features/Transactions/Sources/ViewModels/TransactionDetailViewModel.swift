@@ -235,6 +235,7 @@ struct TransactionDetailViewModel {
     }
 }
 
+
 extension TransactionDetailViewModel: Identifiable {
     var id: String { model.transaction.id }
 }
