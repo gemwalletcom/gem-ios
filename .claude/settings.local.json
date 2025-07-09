@@ -20,7 +20,9 @@
       "Bash(gh pr edit:*)",
       "Bash(git merge:*)",
       "Bash(rg:*)",
-      "Bash(gh issue:*)"
+      "Bash(gh issue:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr checks:*)"
     ],
     "deny": []
   }
