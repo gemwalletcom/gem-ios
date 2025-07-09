@@ -9,15 +9,10 @@ import Localization
 public struct WalletsScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @State private var isPresentingAlertMessage: AlertMessage?
-    @State private var showingDeleteAlert = false
-
     @Binding private var isPresentingCreateWalletSheet: Bool
     @Binding private var isPresentingImportWalletSheet: Bool
 
-    @State var walletDelete: Wallet? = .none
-
-    var model: WalletsSceneViewModel
+    @State private var model: WalletsSceneViewModel
 
     @Query<WalletsRequest>
     private var pinnedWallets: [Wallet]
@@ -30,7 +25,7 @@ public struct WalletsScene: View {
         isPresentingCreateWalletSheet: Binding<Bool>,
         isPresentingImportWalletSheet: Binding<Bool>
     ) {
-        self.model = model
+        _model = State(initialValue: model)
         
         _pinnedWallets = Query(WalletsRequest(isPinned: true))
         _wallets = Query(WalletsRequest(isPinned: false))
@@ -71,8 +66,8 @@ public struct WalletsScene: View {
                             currentWalletId: model.currentWalletId,
                             onSelect: onSelect,
                             onEdit: onEdit,
-                            onPin: onPin,
-                            onDelete: onDelete
+                            onPin: model.onPin,
+                            onDelete: model.onDelete
                         )
                     }
                     .onMove(perform: onMovePinned)
@@ -92,8 +87,8 @@ public struct WalletsScene: View {
                         currentWalletId: model.currentWalletId,
                         onSelect: onSelect,
                         onEdit: onEdit,
-                        onPin: onPin,
-                        onDelete: onDelete
+                        onPin: model.onPin,
+                        onDelete: model.onDelete
                     )
                 }
                 .onMove(perform: onMove)
@@ -101,16 +96,16 @@ public struct WalletsScene: View {
             .listRowInsets(.assetListRowInsets)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
-        .alertSheet($isPresentingAlertMessage)
+        .alertSheet($model.isPresentingAlertMessage)
         .confirmationDialog(
-            Localized.Common.deleteConfirmation(walletDelete?.name ?? ""),
-            presenting: $walletDelete,
+            Localized.Common.deleteConfirmation(model.walletDelete?.name ?? ""),
+            presenting: $model.walletDelete,
             sensoryFeedback: .warning,
             actions: { wallet in
                 Button(
                     Localized.Common.delete,
                     role: .destructive,
-                    action: { delete(wallet: wallet) }
+                    action: { model.onDeleteConfirmed(wallet: wallet) }
                 )
             }
         )
@@ -130,10 +125,6 @@ extension WalletsScene {
         isPresentingImportWalletSheet.toggle()
     }
 
-    private func onDelete(wallet: Wallet) {
-        walletDelete = wallet
-    }
-
     private func onEdit(wallet: Wallet) {
         model.onEdit(wallet: wallet)
     }
@@ -143,20 +134,12 @@ extension WalletsScene {
         dismiss()
     }
 
-    private func onPin(wallet: Wallet) {
-        do {
-            try model.pin(wallet)
-        } catch {
-            NSLog("onPin error: \(error)")
-        }
-    }
-
     private func onMovePinned(from source: IndexSet, to destination: Int) {
         guard let source = source.first else { return }
         do {
             try swapOrder(wallets: pinnedWallets, source: source, destination: destination)
         } catch {
-            NSLog("onMovePinned error: \(error)")
+            model.isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 
@@ -165,7 +148,7 @@ extension WalletsScene {
         do {
             try swapOrder(wallets: wallets, source: source, destination: destination)
         } catch {
-            NSLog("onMove error: \(error)")
+            model.isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 
@@ -199,16 +182,3 @@ extension WalletsScene {
     }
 }
 
-// MARK: - Effects
-
-extension WalletsScene {
-    private func delete(wallet: Wallet) {
-        Task {
-            do {
-                try model.delete(wallet)
-            } catch {
-                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-            }
-        }
-    }
-}
