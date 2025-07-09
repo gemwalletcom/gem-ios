@@ -64,7 +64,7 @@ struct WalletsNavigationStack: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.done) {
-                        isPresentingWallets = false
+                        model.onDismiss()
                     }
                     .bold()
                 }
