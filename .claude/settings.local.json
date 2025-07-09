@@ -5,6 +5,8 @@
       "Bash(just test:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
       "Bash(rg:*)",
       "Bash(git merge:*)",
       "Bash(git push:*)",
@@ -18,7 +20,12 @@
       "Bash(gh pr edit:*)",
       "Bash(git merge:*)",
       "Bash(rg:*)",
-      "Bash(gh issue:*)"
+      "Bash(gh issue:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr:*)",
+      "Bash(find:*)",
+      "Bash(timeout 120 xcodebuild:*)"
     ],
     "deny": []
   }

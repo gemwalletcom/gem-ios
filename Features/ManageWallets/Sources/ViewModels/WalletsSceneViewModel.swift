@@ -9,22 +9,27 @@ import Components
 @Observable
 @MainActor
 public final class WalletsSceneViewModel {
-    private let navigationPath: Binding<NavigationPath>
-    let service: WalletService
+    private let walletService: WalletService
     let currentWalletId: WalletId?
+    
+    public var service: WalletService {
+        walletService
+    }
     
     var isPresentingAlertMessage: AlertMessage?
     var walletDelete: Wallet?
+    public var isPresentingCreateWalletSheet: Bool = false
+    public var isPresentingImportWalletSheet: Bool = false
+    public var walletToEdit: Wallet?
+    public var isPresentingWallets: Bool = false
     
-    public init(
-        navigationPath: Binding<NavigationPath>,
-        walletService: WalletService
-    ) {
-        self.navigationPath = navigationPath
-        self.service = walletService
-        self.currentWalletId = service.currentWalletId
+    public init(walletService: WalletService) {
+        self.walletService = walletService
+        self.currentWalletId = walletService.currentWalletId
         self.isPresentingAlertMessage = nil
         self.walletDelete = nil
+        self.walletToEdit = nil
+        self.isPresentingWallets = false
     }
     
     var title: String {
@@ -36,27 +41,27 @@ public final class WalletsSceneViewModel {
 
 extension WalletsSceneViewModel {
     func setCurrent(_ walletId: WalletId) {
-        service.setCurrent(for: walletId)
+        walletService.setCurrent(for: walletId)
     }
 
     func onEdit(wallet: Wallet) {
-        navigationPath.wrappedValue.append(Scenes.WalletDetail(wallet: wallet))
+        walletToEdit = wallet
     }
 
     func delete(_ wallet: Wallet) throws {
-        try service.delete(wallet)
+        try walletService.delete(wallet)
     }
 
     func pin(_ wallet: Wallet) throws {
         if wallet.isPinned {
-            try service.unpin(wallet: wallet)
+            try walletService.unpin(wallet: wallet)
         } else {
-            try service.pin(wallet: wallet)
+            try walletService.pin(wallet: wallet)
         }
     }
 
     func swapOrder(from: WalletId, to: WalletId) throws {
-        try service.swapOrder(from: from, to: to)
+        try walletService.swapOrder(from: from, to: to)
     }
 }
 
@@ -81,5 +86,17 @@ extension WalletsSceneViewModel {
         } catch {
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
+    }
+    
+    public func onCreateWallet() {
+        isPresentingCreateWalletSheet = true
+    }
+    
+    public func onImportWallet() {
+        isPresentingImportWalletSheet = true
+    }
+    
+    public func onDismiss() {
+        isPresentingWallets = false
     }
 }

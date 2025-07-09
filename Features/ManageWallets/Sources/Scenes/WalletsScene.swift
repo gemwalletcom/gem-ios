@@ -9,9 +9,6 @@ import Localization
 public struct WalletsScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @Binding private var isPresentingCreateWalletSheet: Bool
-    @Binding private var isPresentingImportWalletSheet: Bool
-
     @State private var model: WalletsSceneViewModel
 
     @Query<WalletsRequest>
@@ -21,17 +18,12 @@ public struct WalletsScene: View {
     private var wallets: [Wallet]
 
     public init(
-        model: WalletsSceneViewModel,
-        isPresentingCreateWalletSheet: Binding<Bool>,
-        isPresentingImportWalletSheet: Binding<Bool>
+        model: WalletsSceneViewModel
     ) {
         _model = State(initialValue: model)
         
         _pinnedWallets = Query(WalletsRequest(isPinned: true))
         _wallets = Query(WalletsRequest(isPinned: false))
-        
-        _isPresentingCreateWalletSheet = isPresentingCreateWalletSheet
-        _isPresentingImportWalletSheet = isPresentingImportWalletSheet
     }
 
     public var body: some View {
@@ -118,11 +110,11 @@ public struct WalletsScene: View {
 
 extension WalletsScene {
     private func onSelectCreateWallet() {
-        isPresentingCreateWalletSheet.toggle()
+        model.onCreateWallet()
     }
 
     private func onSelectImportWallet() {
-        isPresentingImportWalletSheet.toggle()
+        model.onImportWallet()
     }
 
     private func onEdit(wallet: Wallet) {
