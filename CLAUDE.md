@@ -203,7 +203,6 @@ Services are injected via SwiftUI Environment:
 - **Check for Patterns**: Don't blindly copy patterns from existing code without understanding their purpose
 - **Minimize API Surface**: Only make public what needs to be public
 - **Test-Driven Implementation**: Write tests that verify actual usage, not just coverage
-- **Fix Merge Conflicts Before Creating PRs**: Always resolve merge conflicts and ensure the branch is up to date before creating pull requests
 
 ## Platform Requirements
 

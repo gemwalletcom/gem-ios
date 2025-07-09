@@ -12,8 +12,6 @@ import MarketInsight
 import Settings
 import ChainSettings
 import PriceService
-import ManageWallets
-import WalletService
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -24,23 +22,21 @@ struct SettingsNavigationStack: View {
     @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.releaseService) private var releaseService
 
+    @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
-    @State private var walletsModel: WalletsSceneViewModel
 
     let walletId: WalletId
 
     init(
         walletId: WalletId,
         preferences: Preferences = .standard,
-        priceService: PriceService,
-        walletService: WalletService
+        priceService: PriceService
     ) {
         self.walletId = walletId
         _currencyModel = State(
@@ -48,9 +44,6 @@ struct SettingsNavigationStack: View {
                 currencyStorage: preferences,
                 priceService: priceService
             )
-        )
-        _walletsModel = State(
-            initialValue: WalletsSceneViewModel(walletService: walletService)
         )
     }
 
@@ -70,7 +63,7 @@ struct SettingsNavigationStack: View {
                     currencyModel: currencyModel,
                     observablePrefereces: observablePreferences
                 ),
-                isPresentingWallets: $walletsModel.isPresentingWallets
+                isPresentingWallets: $isPresentingWallets
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in
@@ -133,11 +126,8 @@ struct SettingsNavigationStack: View {
                     model: ChainSettingsViewModel(nodeService: nodeService, chain: $0.chain)
                 )
             }
-            .sheet(isPresented: $walletsModel.isPresentingWallets) {
-                WalletsNavigationStack(
-                    model: walletsModel,
-                    isPresentingWallets: $walletsModel.isPresentingWallets
-                )
+            .sheet(isPresented: $isPresentingWallets) {
+                WalletsNavigationStack(isPresentingWallets: $isPresentingWallets)
             }
         }
         .onChange(of: currencyModel.selectedCurrencyValue) { _, _ in

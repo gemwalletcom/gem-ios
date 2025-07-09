@@ -25,7 +25,7 @@ public struct TransactionScene: View {
             model: TransactionViewModel(
                 explorerService: ExplorerService.standard,
                 transaction: transactions.first!,
-                formatter: .medium
+                formatter: .auto
             )
         )
     }
@@ -82,7 +82,7 @@ public struct TransactionScene: View {
                             assetImage: item.assetImage
                         )
                     }
-
+                    
                     ListItemView(
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,

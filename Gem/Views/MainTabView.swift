@@ -102,8 +102,7 @@ struct MainTabView: View {
 
             SettingsNavigationStack(
                 walletId: model.wallet.walletId,
-                priceService: priceService,
-                walletService: walletService
+                priceService: priceService
             )
             .tabItem {
                 tabItem(Localized.Settings.title, Images.Tabs.settings)

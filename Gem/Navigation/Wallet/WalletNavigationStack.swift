@@ -9,11 +9,9 @@ import WalletTab
 import InfoSheet
 import Components
 import Assets
-import ManageWallets
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.walletService) private var walletService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.priceService) private var priceService
     @Environment(\.priceAlertService) private var priceAlertService
@@ -24,6 +22,7 @@ struct WalletNavigationStack: View {
     @Environment(\.priceObserverService) private var priceObserverService
 
     @State private var model: WalletSceneViewModel
+    @State private var isPresentingAssetSelectedInput: SelectedAssetInput?
 
     init(model: WalletSceneViewModel) {
         _model = State(initialValue: model)
@@ -79,7 +78,7 @@ struct WalletNavigationStack: View {
                                 wallet: model.wallet,
                                 asset: $0.asset
                             ),
-                            isPresentingAssetSelectedInput: $model.isPresentingAssetSelectedInput
+                            isPresentingAssetSelectedInput: $isPresentingAssetSelectedInput
                         )
                     )
                 }
@@ -111,20 +110,15 @@ struct WalletNavigationStack: View {
                         isPresentingSelectType: $model.isPresentingSelectAssetType
                     )
                 }
-                .sheet(item: $model.isPresentingAssetSelectedInput) {
+                .sheet(item: $isPresentingAssetSelectedInput) {
                     SelectedAssetNavigationStack(
                         selectType: $0,
                         wallet: model.wallet,
-                        isPresentingSelectedAssetInput: $model.isPresentingAssetSelectedInput
+                        isPresentingSelectedAssetInput: $isPresentingAssetSelectedInput
                     )
                 }
                 .sheet(isPresented: $model.isPresentingWallets) {
-                    WalletsNavigationStack(
-                        model: WalletsSceneViewModel(
-                            walletService: walletService
-                        ),
-                        isPresentingWallets: $model.isPresentingWallets
-                    )
+                    WalletsNavigationStack(isPresentingWallets: $model.isPresentingWallets)
                 }
                 .sheet(item: $model.isPresentingInfoSheet) {
                     InfoSheetScene(model: InfoSheetViewModel(type: $0))

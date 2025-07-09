@@ -8,11 +8,13 @@ import PrimitivesComponents
 
 public struct SignMessageScene: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var isPresentingUrl: URL? = nil
+    @State private var isPresentingMessage: Bool = false
     
-    @State private var model: SignMessageSceneViewModel
+    private let model: SignMessageSceneViewModel
 
     public init(model: SignMessageSceneViewModel) {
-        _model = State(wrappedValue: model)
+        self.model = model
     }
 
     public var body: some View {
@@ -27,7 +29,9 @@ public struct SignMessageScene: View {
                     if let appUrl = model.appUrl {
                         ListItemView(title: Localized.WalletConnect.website, subtitle: model.connectionViewModel.host)
                             .contextMenu(
-                                .url(title: Localized.WalletConnect.website, onOpen: model.onViewWebsite)
+                                .url(title: Localized.WalletConnect.website, onOpen: {
+                                    isPresentingUrl = appUrl
+                                })
                             )
                     }
                     ListItemView(title: Localized.Common.wallet, subtitle: model.walletText)
@@ -52,7 +56,7 @@ public struct SignMessageScene: View {
                         }
                     }
                     NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
-                        model.onViewFullMessage()
+                        isPresentingMessage = true
                     }
                 case .text(let string):
                     Section(Localized.SignMessage.message) {
@@ -74,8 +78,8 @@ public struct SignMessageScene: View {
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.title)
-        .safariSheet(url: $model.isPresentingUrl)
-        .sheet(isPresented: $model.isPresentingMessage) {
+        .safariSheet(url: $isPresentingUrl)
+        .sheet(isPresented: $isPresentingMessage) {
             NavigationStack {
                 TextMessageScene(model: model.textMessageViewModel)
             }

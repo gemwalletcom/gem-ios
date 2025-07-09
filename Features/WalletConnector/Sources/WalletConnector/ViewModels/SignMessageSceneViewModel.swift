@@ -9,16 +9,11 @@ import Components
 import WalletCore
 import class Gemstone.SignMessageDecoder
 
-@Observable
-@MainActor
-public final class SignMessageSceneViewModel {
+public struct SignMessageSceneViewModel {
     private let keystore: any Keystore
     private let payload: SignMessagePayload
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate
     private let decoder: SignMessageDecoder
-    
-    public var isPresentingUrl: URL? = nil
-    public var isPresentingMessage: Bool = false
     
     public init(
         keystore: any Keystore,
@@ -81,17 +76,5 @@ public final class SignMessageSceneViewModel {
         let signature = try keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
         let result = decoder.getResult(data: signature)
         confirmTransferDelegate(.success(result))
-    }
-}
-
-// MARK: - Actions
-
-extension SignMessageSceneViewModel {
-    public func onViewWebsite() {
-        isPresentingUrl = appUrl
-    }
-    
-    public func onViewFullMessage() {
-        isPresentingMessage = true
     }
 }

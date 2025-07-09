@@ -6,22 +6,28 @@ import Style
 import PrimitivesComponents
 
 public struct ReceiveScene: View {
-    @State private var model: ReceiveViewModel
+    @State private var isPresentingShareSheet = false
+    @State private var isPresentingCopyToast = false
+    @State private var renderedImage: UIImage?
+
+    private let model: ReceiveViewModel
 
     public init(model: ReceiveViewModel) {
-        _model = State(initialValue: model)
+        self.model = model
     }
 
     public var body: some View {
         VStack {
             VStack {
                 Spacer()
-                if let image = model.renderedImage {
+                if let image = renderedImage {
                     qrCodeView(image: image)
                         .frame(maxWidth: model.qrWidth)
                 }
                 Spacer()
-                Button(action: model.onShareSheet) {
+                Button(action: {
+                    isPresentingShareSheet.toggle()
+                }) {
                     Text(model.shareTitle)
                 }
                 .buttonStyle(.blue())
@@ -34,20 +40,25 @@ public struct ReceiveScene: View {
         .navigationBarTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: model.onShareSheet) {
+                Button {
+                    isPresentingShareSheet.toggle()
+                } label: {
                     Images.System.share
                 }
             }
         }
-        .sheet(isPresented: $model.isPresentingShareSheet) {
-            ShareSheet(activityItems: model.activityItems(qrImage: model.renderedImage))
+        .sheet(isPresented: $isPresentingShareSheet) {
+            ShareSheet(activityItems: model.activityItems(qrImage: renderedImage))
         }
         .copyToast(
             model: model.copyModel,
-            isPresenting: $model.isPresentingCopyToast
+            isPresenting: $isPresentingCopyToast
         )
         .task {
-            await model.onLoadImage()
+            let image = await model.generateQRCode()
+            await MainActor.run {
+                renderedImage = image
+            }
         }
         .taskOnce {
             Task {
@@ -61,7 +72,7 @@ public struct ReceiveScene: View {
 
 extension ReceiveScene {
     private func onCopyAddress() {
-        model.onCopyAddress()
+        isPresentingCopyToast = true
     }
 }
 

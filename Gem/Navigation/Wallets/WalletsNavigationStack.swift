@@ -7,51 +7,37 @@ import Primitives
 import Onboarding
 import ManageWallets
 import WalletAvatar
-import WalletService
 
 struct WalletsNavigationStack: View {
-    @Environment(\.avatarService) private var avatarService
     @Environment(\.walletService) private var walletService
+    @Environment(\.avatarService) private var avatarService
 
     @State private var navigationPath = NavigationPath()
-    @State private var model: WalletsSceneViewModel
+
+    @State private var isPresentingCreateWalletSheet = false
+    @State private var isPresentingImportWalletSheet = false
     @Binding private var isPresentingWallets: Bool
 
-    init(model: WalletsSceneViewModel, isPresentingWallets: Binding<Bool>) {
-        _model = State(initialValue: model)
+    init(isPresentingWallets: Binding<Bool>) {
         _isPresentingWallets = isPresentingWallets
     }
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
             WalletsScene(
-                model: model
+                model: WalletsSceneViewModel(
+                    navigationPath: $navigationPath,
+                    walletService: walletService
+                ),
+                isPresentingCreateWalletSheet: $isPresentingCreateWalletSheet,
+                isPresentingImportWalletSheet: $isPresentingImportWalletSheet
             )
-            .sheet(isPresented: $model.isPresentingCreateWalletSheet) {
-                CreateWalletNavigationStack(
-                    walletService: model.service,
-                    isPresentingWallets: $isPresentingWallets
-                )
-            }
-            .sheet(isPresented: $model.isPresentingImportWalletSheet) {
-                ImportWalletNavigationStack(
-                    model: ImportWalletTypeViewModel(walletService: model.service),
-                    isPresentingWallets: $isPresentingWallets
-                )
-            }
-            .onChange(of: model.walletToEdit) { _, wallet in
-                if let wallet = wallet {
-                    navigationPath.append(Scenes.WalletDetail(wallet: wallet))
-                    model.walletToEdit = nil
-                }
-            }
-        }
-        .navigationDestination(for: Scenes.WalletDetail.self) {
+            .navigationDestination(for: Scenes.WalletDetail.self) {
                 WalletDetailScene(
                     model: WalletDetailViewModel(
                         navigationPath: $navigationPath,
                         wallet: $0.wallet,
-                        walletService: model.service
+                        walletService: walletService
                     )
                 )
             }
@@ -61,14 +47,27 @@ struct WalletsNavigationStack: View {
                     avatarService: avatarService
                 ))
             }
+            .sheet(isPresented: $isPresentingCreateWalletSheet) {
+                CreateWalletNavigationStack(
+                    walletService: walletService,
+                    isPresentingWallets: $isPresentingWallets
+                )
+            }
+            .sheet(isPresented: $isPresentingImportWalletSheet) {
+                ImportWalletNavigationStack(
+                    model: ImportWalletTypeViewModel(walletService: walletService),
+                    isPresentingWallets: $isPresentingWallets
+                )
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.done) {
-                        model.onDismiss()
+                        isPresentingWallets.toggle()
                     }
                     .bold()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }
