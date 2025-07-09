@@ -24,7 +24,8 @@
       "Bash(gh pr view:*)",
       "Bash(gh pr checks:*)",
       "Bash(gh pr:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(timeout 120 xcodebuild:*)"
     ],
     "deny": []
   }

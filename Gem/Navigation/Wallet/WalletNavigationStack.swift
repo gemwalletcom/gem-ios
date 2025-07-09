@@ -122,7 +122,8 @@ struct WalletNavigationStack: View {
                     WalletsNavigationStack(
                         model: WalletsSceneViewModel(
                             walletService: walletService
-                        )
+                        ),
+                        isPresentingWallets: $model.isPresentingWallets
                     )
                 }
                 .sheet(item: $model.isPresentingInfoSheet) {
