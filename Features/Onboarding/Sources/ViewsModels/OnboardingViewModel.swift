@@ -4,14 +4,31 @@ import Foundation
 import Localization
 import WalletService
 
-public struct OnboardingViewModel {
+@Observable
+@MainActor
+public final class OnboardingViewModel {
+    let walletService: WalletService
+    
+    public var isPresentingCreateWalletSheet: Bool = false
+    public var isPresentingImportWalletSheet: Bool = false
+    
+    public init(walletService: WalletService) {
+        self.walletService = walletService
+    }
+    
     var title: String { Localized.Welcome.title }
     var createWalletTitle: String { Localized.Wallet.createNewWallet }
     var importWalletTitle: String { Localized.Wallet.importExistingWallet }
+}
 
-    let walletService: WalletService
+// MARK: - Actions
 
-    public init(walletService: WalletService) {
-        self.walletService = walletService
+extension OnboardingViewModel {
+    public func onCreateWallet() {
+        isPresentingCreateWalletSheet = true
+    }
+    
+    public func onImportWallet() {
+        isPresentingImportWalletSheet = true
     }
 }

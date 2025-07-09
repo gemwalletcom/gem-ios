@@ -15,20 +15,10 @@ public struct TransactionScene: View {
     @Query<TransactionsRequest>
     private var transactions: [Primitives.TransactionExtended]
 
-    @State private var isPresentingShareSheet = false
-    @State private var isPresentingInfoSheet: InfoSheetType? = .none
-
     private let input: TransactionSceneInput
 
-    private var model: TransactionDetailViewModel {
-        return TransactionDetailViewModel(
-            model: TransactionViewModel(
-                explorerService: ExplorerService.standard,
-                transaction: transactions.first!,
-                formatter: .auto
-            )
-        )
-    }
+    @State private var detailModel: TransactionDetailViewModel? = nil
+    @State private var sceneModel: TransactionSceneViewModel? = nil
 
     public init(input: TransactionSceneInput) {
         self.input = input
@@ -37,101 +27,119 @@ public struct TransactionScene: View {
 
     public var body: some View {
         VStack {
-            List {
-                TransactionHeaderListItemView(
-                    headerType: model.headerType,
-                    showClearHeader: model.showClearHeader
-                )
-                Section {
-                    ListItemView(title: model.dateField, subtitle: model.date)
-                    HStack(spacing: .small) {
-                        ListItemView(
-                            title: model.statusField,
-                            subtitle: model.statusText,
-                            subtitleStyle: model.statusTextStyle,
-                            infoAction: onStatusInfo
+            if let detailModel = detailModel, let sceneModel = sceneModel {
+                List {
+                    TransactionHeaderListItemView(
+                        headerType: detailModel.headerType,
+                        showClearHeader: detailModel.showClearHeader
+                    )
+                    Section {
+                        ListItemView(title: detailModel.dateField, subtitle: detailModel.date)
+                        HStack(spacing: .small) {
+                            ListItemView(
+                                title: detailModel.statusField,
+                                subtitle: detailModel.statusText,
+                                subtitleStyle: detailModel.statusTextStyle,
+                                infoAction: sceneModel.onStatusInfo
+                            )
+                            switch detailModel.statusType {
+                            case .none:
+                                EmptyView()
+                            case .progressView:
+                                LoadingView(tint: Colors.orange)
+                            case .image(let image):
+                                image
+                            }
+                        }
+
+                        if let recipientAddressViewModel = detailModel.recipientAddressViewModel {
+                            AddressListItemView(model: recipientAddressViewModel)
+                        }
+
+                        if detailModel.showMemoField {
+                            MemoListItemView(memo: detailModel.memo)
+                        }
+
+                        ListItemImageView(
+                            title: detailModel.networkField,
+                            subtitle: detailModel.network,
+                            assetImage: detailModel.networkAssetImage
                         )
-                        switch model.statusType {
-                        case .none:
-                            EmptyView()
-                        case .progressView:
-                            LoadingView(tint: Colors.orange)
-                        case .image(let image):
-                            image
+                        
+                        if let item = detailModel.providerListItem {
+                            ListItemImageView(
+                                title: item.title,
+                                subtitle: item.subtitle,
+                                assetImage: item.assetImage
+                            )
+                        }
+                        
+                        ListItemView(
+                            title: detailModel.networkFeeField,
+                            subtitle: detailModel.networkFeeText,
+                            subtitleExtra: detailModel.networkFeeFiatText,
+                            infoAction: sceneModel.onNetworkFeeInfo
+                        )
+                    }
+                    Section {
+                        SafariNavigationLink(url: detailModel.transactionExplorerUrl) {
+                            Text(detailModel.transactionExplorerText)
+                                .tint(Colors.black)
                         }
                     }
-
-                    if let recipientAddressViewModel = model.recipientAddressViewModel {
-                        AddressListItemView(model: recipientAddressViewModel)
-                    }
-
-                    if model.showMemoField {
-                        MemoListItemView(memo: model.memo)
-                    }
-
-                    ListItemImageView(
-                        title: model.networkField,
-                        subtitle: model.network,
-                        assetImage: model.networkAssetImage
-                    )
-                    
-                    if let item = model.providerListItem {
-                        ListItemImageView(
-                            title: item.title,
-                            subtitle: item.subtitle,
-                            assetImage: item.assetImage
-                        )
-                    }
-                    
-                    ListItemView(
-                        title: model.networkFeeField,
-                        subtitle: model.networkFeeText,
-                        subtitleExtra: model.networkFeeFiatText,
-                        infoAction: onNetworkFeeInfo
-                    )
                 }
-                Section {
-                    SafariNavigationLink(url: model.transactionExplorerUrl) {
-                        Text(model.transactionExplorerText)
-                            .tint(Colors.black)
+                .contentMargins([.top], .small, for: .scrollContent)
+                .listSectionSpacing(.compact)
+                .background(Colors.grayBackground)
+                .navigationTitle(detailModel.title)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: sceneModel.onShare) {
+                            Images.System.share
+                        }
                     }
                 }
-            }
-            .contentMargins([.top], .small, for: .scrollContent)
-            .listSectionSpacing(.compact)
-            .background(Colors.grayBackground)
-            .navigationTitle(model.title)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        isPresentingShareSheet.toggle()
-                    } label: {
-                        Images.System.share
-                    }
+                .sheet(isPresented: Binding(
+                    get: { sceneModel.isPresentingShareSheet },
+                    set: { sceneModel.isPresentingShareSheet = $0 }
+                )) {
+                    ShareSheet(activityItems: [detailModel.transactionExplorerUrl.absoluteString])
                 }
-            }
-            .sheet(isPresented: $isPresentingShareSheet) {
-                ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
-            }
-            .sheet(item: $isPresentingInfoSheet) {
-                InfoSheetScene(model: InfoSheetViewModel(type: $0))
+                .sheet(item: Binding(
+                    get: { sceneModel.isPresentingInfoSheet },
+                    set: { sceneModel.isPresentingInfoSheet = $0 }
+                )) {
+                    InfoSheetScene(model: InfoSheetViewModel(type: $0))
+                }
+            } else {
+                LoadingView()
             }
         }
-    }
-}
-
-// MARK: - Actions
-
-extension TransactionScene {
-    func onNetworkFeeInfo() {
-        isPresentingInfoSheet = .networkFee(model.chain)
-    }
-
-    func onStatusInfo() {
-        isPresentingInfoSheet = .transactionState(
-            imageURL: model.assetImage.imageURL,
-            placeholder: model.assetImage.placeholder,
-            state: model.transactionState
-        )
+        .onAppear {
+            if let transaction = transactions.first {
+                let detailViewModel = TransactionDetailViewModel(
+                    model: TransactionViewModel(
+                        explorerService: ExplorerService.standard,
+                        transaction: transaction,
+                        formatter: .auto
+                    )
+                )
+                self.detailModel = detailViewModel
+                self.sceneModel = TransactionSceneViewModel(detailViewModel: detailViewModel)
+            }
+        }
+        .onChange(of: transactions) { _, newTransactions in
+            if let transaction = newTransactions.first {
+                let detailViewModel = TransactionDetailViewModel(
+                    model: TransactionViewModel(
+                        explorerService: ExplorerService.standard,
+                        transaction: transaction,
+                        formatter: .auto
+                    )
+                )
+                self.detailModel = detailViewModel
+                self.sceneModel = TransactionSceneViewModel(detailViewModel: detailViewModel)
+            }
+        }
     }
 }

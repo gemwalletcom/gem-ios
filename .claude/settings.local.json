@@ -5,6 +5,8 @@
       "Bash(just test:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
       "Bash(rg:*)",
       "Bash(git merge:*)",
       "Bash(git push:*)",
