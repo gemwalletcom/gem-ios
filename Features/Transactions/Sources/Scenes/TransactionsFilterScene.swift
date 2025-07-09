@@ -19,11 +19,11 @@ public struct TransactionsFilterScene: View {
         List {
             SelectFilterView(
                 typeModel: model.chainsFilter.typeModel,
-                action: model.onSelectChainsFilter
+                action: { model.onSelectChainsFilter() }
             )
             SelectFilterView(
                 typeModel: model.transactionTypesFilter.typeModel,
-                action: model.onSelectTypesFilter
+                action: { model.onSelectTypesFilter() }
             )
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)

@@ -24,7 +24,7 @@ public struct SignMessageScene: View {
                         subtitle: model.appName,
                         assetImage: model.appAssetImage
                     )
-                    if let appUrl = model.appUrl {
+                    if let _ = model.appUrl {
                         ListItemView(title: Localized.WalletConnect.website, subtitle: model.connectionViewModel.host)
                             .contextMenu(
                                 .url(title: Localized.WalletConnect.website, onOpen: model.onViewWebsite)
