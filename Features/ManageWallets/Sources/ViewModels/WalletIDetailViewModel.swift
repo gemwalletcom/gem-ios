@@ -19,7 +19,7 @@ public final class WalletDetailViewModel {
     let walletService: WalletService
     let explorerService: any ExplorerLinkFetchable
 
-    var name: String
+    var nameInput: String
     var isPresentingAlertMessage: AlertMessage?
     var isPresentingDeleteConfirmation: Bool?
     var isPresentingExportWallet: ExportWalletType?
@@ -34,10 +34,14 @@ public final class WalletDetailViewModel {
         self.wallet = wallet
         self.walletService = walletService
         self.explorerService = explorerService
-        self.name = wallet.name
+        self.nameInput = wallet.name
         self.isPresentingAlertMessage = nil
         self.isPresentingDeleteConfirmation = nil
         self.isPresentingExportWallet = nil
+    }
+
+    var name: String {
+        wallet.name
     }
     
     var title: String {
@@ -110,29 +114,25 @@ extension WalletDetailViewModel {
 extension WalletDetailViewModel {
     func onChangeWalletName() {
         do {
-            try rename(name: name)
+            try rename(name: nameInput)
         } catch {
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 
     func onShowSecretPhrase() {
-        Task {
-            do {
-                isPresentingExportWallet = .words(try getMnemonicWords())
-            } catch {
-                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-            }
+        do {
+            isPresentingExportWallet = .words(try getMnemonicWords())
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 
     func onShowPrivateKey() {
-        Task {
-            do {
-                isPresentingExportWallet = .privateKey(try getPrivateKey())
-            } catch {
-                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-            }
+        do {
+            isPresentingExportWallet = .privateKey(try getPrivateKey())
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 

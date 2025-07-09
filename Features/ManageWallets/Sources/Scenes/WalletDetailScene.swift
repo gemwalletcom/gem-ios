@@ -33,7 +33,7 @@ public struct WalletDetailScene: View {
         VStack {
             List {
                 Section {
-                    FloatTextField(Localized.Wallet.name, text: $model.name, allowClean: focusedField == .name)
+                    FloatTextField(Localized.Wallet.name, text: $model.nameInput, allowClean: focusedField == .name)
                         .focused($focusedField, equals: .name)
                 } header: {
                     HStack {
@@ -103,10 +103,10 @@ public struct WalletDetailScene: View {
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
-        .onChange(of: model.name, model.onChangeWalletName)
+        .onChange(of: model.nameInput, model.onChangeWalletName)
         .navigationTitle(model.title)
         .confirmationDialog(
-            Localized.Common.deleteConfirmation(model.wallet.name),
+            Localized.Common.deleteConfirmation(model.name),
             presenting: $model.isPresentingDeleteConfirmation,
             sensoryFeedback: .warning,
             actions: { _ in
