@@ -73,11 +73,11 @@ public struct ConfirmTransferScene: View {
             }
         }
         .alert(
-            model.isPresentingAlertMessage?.title ?? "",
-            isPresented: $model.isPresentingAlertMessage.mappedToBool(),
+            Localized.Errors.transferError,
+            isPresented: $model.isPresentingErrorMessage.mappedToBool(),
             actions: {},
             message: {
-                Text(model.isPresentingAlertMessage?.message ?? "")
+                Text(model.isPresentingErrorMessage ?? "")
             }
         )
     }

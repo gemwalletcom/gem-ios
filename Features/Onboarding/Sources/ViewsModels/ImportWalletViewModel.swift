@@ -5,7 +5,6 @@ import Localization
 import WalletService
 import NameResolver
 import SwiftUI
-import Components
 import enum Keystore.KeystoreImportType
 import struct Keystore.Mnemonic
 
@@ -25,7 +24,7 @@ final class ImportWalletViewModel {
     var buttonState = ButtonState.normal
 
     var isPresentingScanner = false
-    var isPresentingAlertMessage: AlertMessage?
+    var isPresentingErrorMessage: String?
 
     private let onFinish: (() -> Void)?
 
@@ -105,10 +104,7 @@ extension ImportWalletViewModel {
             do {
                 try importWallet()
             } catch {
-                isPresentingAlertMessage = AlertMessage(
-                    title: alertTitle,
-                    message: error.localizedDescription
-                )
+                isPresentingErrorMessage = error.localizedDescription
                 buttonState = .normal
             }
         }

@@ -35,18 +35,15 @@ public final class ConfirmTransferViewModel {
     var confirmingState: StateViewType<Bool> = .noData {
         didSet {
             if case .error(let error) = confirmingState {
-                isPresentingAlertMessage = AlertMessage(
-                    title: Localized.Errors.transferError,
-                    message: error.localizedDescription
-                )
+                isPresentingErrorMessage = error.localizedDescription
             } else {
-                isPresentingAlertMessage = nil
+                isPresentingErrorMessage = nil
             }
         }
     }
 
     var isPresentingSheet: ConfirmTransferSheetType?
-    var isPresentingAlertMessage: AlertMessage?
+    var isPresentingErrorMessage: String?
 
     private let swapDataProvider: any SwapQuoteDataProvidable
     private let explorerService: any ExplorerLinkFetchable

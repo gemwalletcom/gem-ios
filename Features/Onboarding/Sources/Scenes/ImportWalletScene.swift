@@ -111,10 +111,10 @@ struct ImportWalletScene: View {
         .background(Colors.grayBackground)
         .navigationBarTitle(model.title)
         .alert(
-            model.isPresentingAlertMessage?.title ?? "",
-            isPresented: $model.isPresentingAlertMessage.mappedToBool(),
+            model.alertTitle,
+            isPresented: $model.isPresentingErrorMessage.mappedToBool(),
             actions: {},
-            message: { Text(model.isPresentingAlertMessage?.message ?? "")}
+            message: { Text(model.isPresentingErrorMessage ?? "")}
         )
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: model.onHandleScan)
