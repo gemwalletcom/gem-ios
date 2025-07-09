@@ -17,9 +17,3 @@ public struct AlertMessage: Identifiable, Sendable {
         self.message = message
     }
 }
-
-extension AlertMessage {
-    static func empty() -> AlertMessage {
-        AlertMessage(message: "")
-    }
-}
