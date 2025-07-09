@@ -176,6 +176,9 @@ Services are injected via SwiftUI Environment:
 - Prefer async/await over Combine for new code
 - Use protocol-based design for services
 
+### Code Organization
+- Use `// MARK: - Actions` to separate action methods in ViewModels
+
 ### Clean Code Principles
 - **YAGNI (You Aren't Gonna Need It)**: Don't add functionality until it's actually needed
 - **No Dead Code**: Remove unused methods, properties, and extensions
