@@ -22,7 +22,8 @@
       "Bash(rg:*)",
       "Bash(gh issue:*)",
       "Bash(gh pr view:*)",
-      "Bash(gh pr checks:*)"
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr:*)"
     ],
     "deny": []
   }
