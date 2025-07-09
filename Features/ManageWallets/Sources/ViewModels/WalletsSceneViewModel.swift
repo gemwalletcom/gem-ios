@@ -15,6 +15,8 @@ public final class WalletsSceneViewModel {
     
     var isPresentingAlertMessage: AlertMessage?
     var walletDelete: Wallet?
+    public var isPresentingCreateWalletSheet: Bool = false
+    public var isPresentingImportWalletSheet: Bool = false
     
     public init(
         navigationPath: Binding<NavigationPath>,
@@ -81,5 +83,13 @@ extension WalletsSceneViewModel {
         } catch {
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
+    }
+    
+    public func onCreateWallet() {
+        isPresentingCreateWalletSheet = true
+    }
+    
+    public func onImportWallet() {
+        isPresentingImportWalletSheet = true
     }
 }

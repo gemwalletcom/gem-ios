@@ -13,9 +13,7 @@ struct WalletsNavigationStack: View {
     @Environment(\.avatarService) private var avatarService
 
     @State private var navigationPath = NavigationPath()
-
-    @State private var isPresentingCreateWalletSheet = false
-    @State private var isPresentingImportWalletSheet = false
+    @State private var model: WalletsSceneViewModel? = nil
     @Binding private var isPresentingWallets: Bool
 
     init(isPresentingWallets: Binding<Bool>) {
@@ -24,15 +22,21 @@ struct WalletsNavigationStack: View {
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            WalletsScene(
-                model: WalletsSceneViewModel(
-                    navigationPath: $navigationPath,
-                    walletService: walletService
-                ),
-                isPresentingCreateWalletSheet: $isPresentingCreateWalletSheet,
-                isPresentingImportWalletSheet: $isPresentingImportWalletSheet
-            )
-            .navigationDestination(for: Scenes.WalletDetail.self) {
+            if let model = model {
+                WalletsScene(
+                    model: model
+                )
+            } else {
+                ProgressView()
+                    .task {
+                        model = WalletsSceneViewModel(
+                            navigationPath: $navigationPath,
+                            walletService: walletService
+                        )
+                    }
+            }
+        }
+        .navigationDestination(for: Scenes.WalletDetail.self) {
                 WalletDetailScene(
                     model: WalletDetailViewModel(
                         navigationPath: $navigationPath,
@@ -47,13 +51,19 @@ struct WalletsNavigationStack: View {
                     avatarService: avatarService
                 ))
             }
-            .sheet(isPresented: $isPresentingCreateWalletSheet) {
+            .sheet(isPresented: Binding(
+                get: { model?.isPresentingCreateWalletSheet ?? false },
+                set: { if let model = model { model.isPresentingCreateWalletSheet = $0 } }
+            )) {
                 CreateWalletNavigationStack(
                     walletService: walletService,
                     isPresentingWallets: $isPresentingWallets
                 )
             }
-            .sheet(isPresented: $isPresentingImportWalletSheet) {
+            .sheet(isPresented: Binding(
+                get: { model?.isPresentingImportWalletSheet ?? false },
+                set: { if let model = model { model.isPresentingImportWalletSheet = $0 } }
+            )) {
                 ImportWalletNavigationStack(
                     model: ImportWalletTypeViewModel(walletService: walletService),
                     isPresentingWallets: $isPresentingWallets
@@ -68,6 +78,5 @@ struct WalletsNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-        }
     }
 }

@@ -13,6 +13,7 @@ import PrimitivesComponents
 import InfoSheet
 import Components
 import WalletService
+import Assets
 
 @Observable
 @MainActor
@@ -39,6 +40,7 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingSelectAssetType: SelectAssetType?
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingUrl: URL? = nil
+    public var isPresentingAssetSelectedInput: SelectedAssetInput? = nil
     
     public var isLoadingAssets: Bool = false
 
