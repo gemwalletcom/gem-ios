@@ -72,14 +72,7 @@ public struct ConfirmTransferScene: View {
                 }
             }
         }
-        .alert(
-            model.isPresentingAlertMessage?.title ?? "",
-            isPresented: $model.isPresentingAlertMessage.mappedToBool(),
-            actions: {},
-            message: {
-                Text(model.isPresentingAlertMessage?.message ?? "")
-            }
-        )
+        .alertSheet($model.isPresentingAlertMessage)
     }
 }
 
