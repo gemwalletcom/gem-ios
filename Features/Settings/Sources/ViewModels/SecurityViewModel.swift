@@ -76,7 +76,7 @@ extension SecurityViewModel {
             }
             isEnabled.toggle()
         } catch {
-            isPresentingError = error.localizedDescription
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             isEnabled.toggle()
         }
     }
@@ -86,7 +86,7 @@ extension SecurityViewModel {
         do {
             try service.togglePrivacyLock(enbaled: isPrivacyLockEnabled)
         } catch {
-            isPresentingError = error.localizedDescription
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             isPrivacyLockEnabled.toggle()
         }
     }
@@ -95,7 +95,7 @@ extension SecurityViewModel {
         do {
             try service.update(period: lockPeriod)
         } catch {
-            isPresentingError = error.localizedDescription
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             lockPeriod = service.lockPeriod
         }
     }
