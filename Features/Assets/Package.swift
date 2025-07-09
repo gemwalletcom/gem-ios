@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
     name: "Assets",
     platforms: [
-        .iOS(.v17)
+        .iOS(.v17),
+        .macOS(.v12)
     ],
     products: [
         .library(
@@ -56,6 +57,19 @@ let package = Package(
                 "PriceService",
                 "BannerService",
                 "ChainService"
+            ]
+        ),
+        .testTarget(
+            name: "AssetsTests",
+            dependencies: [
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "WalletsServiceTestKit", package: "WalletsService"),
+                .product(name: "AssetsServiceTestKit", package: "AssetsService"),
+                .product(name: "TransactionsServiceTestKit", package: "TransactionsService"),
+                .product(name: "PriceServiceTestKit", package: "PriceService"),
+                .product(name: "PriceAlertServiceTestKit", package: "PriceAlertService"),
+                .product(name: "BannerServiceTestKit", package: "BannerService"),
+                "Assets"
             ]
         )
     ]

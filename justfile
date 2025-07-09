@@ -62,6 +62,14 @@ test_ui:
     -allowProvisioningDeviceRegistration \
     test | xcbeautify
 
+test-specific TARGET:
+    @set -o pipefail && xcodebuild -project Gem.xcodeproj \
+    -scheme Gem \
+    -sdk iphonesimulator \
+    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
+    -only-testing {{TARGET}} \
+    test | xcbeautify
+
 localize:
     @sh core/scripts/localize.sh ios Packages/Localization/Sources/Resources
     just generate-model

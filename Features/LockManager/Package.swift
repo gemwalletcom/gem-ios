@@ -6,6 +6,7 @@ let package = Package(
     name: "LockManager",
     platforms: [
         .iOS(.v17),
+        .macOS(.v12),
     ],
     products: [
         .library(

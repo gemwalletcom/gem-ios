@@ -156,6 +156,62 @@ Services are injected via SwiftUI Environment:
 - UI tests: `just test_ui`
 - Tests use iPhone 16 simulator by default
 
+### Writing Unit Tests
+
+#### Test Structure and Naming
+- Use simple, descriptive method names: `showManageToken` not `testShowManageToken_whenAssetIsEnabled_returnsFalse`
+- Consolidate related tests into single test methods instead of multiple verbose ones
+- Test multiple scenarios within single methods using descriptive variable names
+
+#### Mock Creation Guidelines
+- **Always use existing TestKit mocks** instead of creating custom mock services
+- **Create mock extensions in TestKit packages** when they don't exist, not in test files
+- **Use clean mock syntax**: `AssetSceneViewModel.mock(.mock(metadata: .mock(isEnabled: true)))`
+- If a struct/class doesn't have a `.mock()` method, create one in the appropriate TestKit
+
+#### Example Test Structure
+```swift
+struct AssetSceneViewModelTests {
+    
+    @Test
+    func showManageToken() {
+        #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(isEnabled: true))).showManageToken == false)
+        #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(isEnabled: false))).showManageToken == true)
+    }
+
+    @Test
+    func allBannersActive() {
+        let banners = [Banner.mock()]
+        let model = AssetSceneViewModel.mock(.mock(metadata: .mock(isActive: true)), banners: banners)
+        
+        #expect(model.allBanners.count == 1)
+        #expect(model.allBanners == banners)
+    }
+}
+```
+
+#### Example Mock Creation
+```swift
+// In Packages/Primitives/TestKit/Banner+PrimitivesTestKit.swift
+public extension Banner {
+    static func mock(
+        event: BannerEvent = .stake,
+        wallet: Wallet = .mock()
+    ) -> Banner {
+        Banner(
+            wallet: wallet,
+            event: event
+        )
+    }
+}
+```
+
+#### Mock Service Usage
+- Use existing service mocks: `WalletsService.mock()`, `AssetsService.mock()`, etc.
+- Use shorthand syntax: `.mock()` instead of `WalletsService.mock()`
+- Use `.constant(nil)` for bindings instead of creating custom ones
+- Follow the pattern of existing TestKit services like `BannerSetupService.mock()`
+
 ## Rust Core Integration
 
 ### Core Submodule
