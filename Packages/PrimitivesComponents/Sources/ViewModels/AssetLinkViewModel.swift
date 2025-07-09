@@ -72,13 +72,7 @@ public struct AssetLinkViewModel {
     }
     
     public var deepLink: URL? {
-        switch assetLink.linkType {
-        case .telegram: URL(string: "tg://resolve?domain=gemwallet")
-        case .x: URL(string: "twitter://user?screen_name=GemWalletApp")
-        case .youTube: URL(string: "youtube://www.youtube.com/@gemwallet")
-        case .none, .discord, .reddit, .gitHub, .facebook, .website, .coingecko, .openSea, .instagram, .magicEden, .coinMarketCap, .tikTok:
-            nil
-        }
+        DeepLinkViewModel(assetLink).deepLink
     }
     
     public var host: String? {
