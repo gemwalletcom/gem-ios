@@ -14,7 +14,7 @@ import Onboarding
 @MainActor
 public final class WalletDetailViewModel {
 
-    @Binding var navigationPath: NavigationPath
+    private let navigationPath: Binding<NavigationPath>
     let wallet: Wallet
     let walletService: WalletService
     let explorerService: any ExplorerLinkFetchable
@@ -30,7 +30,7 @@ public final class WalletDetailViewModel {
         walletService: WalletService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     ) {
-        _navigationPath = navigationPath
+        self.navigationPath = navigationPath
         self.wallet = wallet
         self.walletService = walletService
         self.explorerService = explorerService
@@ -105,7 +105,7 @@ extension WalletDetailViewModel {
     }
 
     func onSelectImage() {
-        navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
+        navigationPath.wrappedValue.append(Scenes.WalletSelectImage(wallet: wallet))
     }
 }
 
@@ -121,22 +121,18 @@ extension WalletDetailViewModel {
     }
 
     func onShowSecretPhrase() {
-        Task {
-            do {
-                isPresentingExportWallet = .words(try getMnemonicWords())
-            } catch {
-                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-            }
+        do {
+            isPresentingExportWallet = .words(try getMnemonicWords())
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 
     func onShowPrivateKey() {
-        Task {
-            do {
-                isPresentingExportWallet = .privateKey(try getPrivateKey())
-            } catch {
-                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-            }
+        do {
+            isPresentingExportWallet = .privateKey(try getPrivateKey())
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 
