@@ -4,11 +4,12 @@ import Foundation
 import Primitives
 import SwiftUI
 import BigInt
+import Components
 
 public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case networkFee(Chain)
     case insufficientBalance(Asset)
-    case insufficientNetworkFee(Asset, required: BigInt)
+    case insufficientNetworkFee(Asset, image: AssetImage, required: BigInt)
     case transactionState(imageURL: URL?, placeholder: Image?, state: TransactionState)
     case watchWallet
     case stakeLockTime(Image?)

@@ -252,7 +252,7 @@ extension SuiService: ChainBalanceable {
             .map(as: JSONRPCResponse<[SuiCoinBalance]>.self).result
         
         return tokenIds.compactMap { tokenId in
-            if let balance = balances.first(where: { $0.coinType == tokenId.tokenId }) {
+            if let balance = balances.first(where: { $0.isCoinType(tokenId: tokenId.tokenId) }) {
                 return AssetBalance(
                     assetId: tokenId,
                     balance: Balance(
@@ -511,5 +511,11 @@ extension Blockchain.SuiCoin {
 extension SuiService: ChainAddressStatusFetchable {
     public func getAddressStatus(address: String) async throws -> [AddressStatus] {
         []
+    }
+}
+
+extension SuiCoinBalance {
+    func isCoinType(tokenId: String?) -> Bool {
+        self.coinType.remove0x == tokenId?.remove0x.trimLeadingZeros
     }
 }

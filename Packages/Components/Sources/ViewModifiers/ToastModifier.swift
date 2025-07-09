@@ -7,17 +7,14 @@ import Style
 struct ToastModifier: ViewModifier {
     private var isPresenting: Binding<Bool>
 
-    private let value: String
-    private let systemImage: String
+    private let message: ToastMessage
 
     init(
         isPresenting: Binding<Bool>,
-        value: String,
-        systemImage: String
+        message: ToastMessage
     ) {
         self.isPresenting = isPresenting
-        self.value = value
-        self.systemImage = systemImage
+        self.message = message
     }
 
     func body(content: Content) -> some View {
@@ -25,16 +22,15 @@ struct ToastModifier: ViewModifier {
             .toast(isPresenting: isPresenting) {
                 AlertToast(
                     displayMode: .banner(.pop),
-                    type: .systemImage(systemImage, Colors.black),
-                    title: value
+                    type: .systemImage(message.image, Colors.black),
+                    title: message.title
                 )
             }
     }
 }
 
 private struct OptionalMessageToastModifier: ViewModifier {
-    @Binding var message: String?
-    let systemImage: String
+    @Binding var message: ToastMessage?
 
     func body(content: Content) -> some View {
         content.modifier(
@@ -45,8 +41,7 @@ private struct OptionalMessageToastModifier: ViewModifier {
                         if showing == false { message = nil }
                     }
                 ),
-                value: message ?? "",
-                systemImage: systemImage
+                message: message ?? .empty()
             )
         )
     }
@@ -55,21 +50,11 @@ private struct OptionalMessageToastModifier: ViewModifier {
 // MARK: - View Modifier
 
 public extension View {
-    func toast(isPresenting: Binding<Bool>, title: String, systemImage: String) -> some View {
-        self.modifier(
-            ToastModifier(
-                isPresenting: isPresenting,
-                value: title,
-                systemImage: systemImage)
-        )
+    func toast(isPresenting: Binding<Bool>, message: ToastMessage) -> some View {
+        modifier(ToastModifier(isPresenting: isPresenting, message: message))
     }
 
-    func toast(message: Binding<String?>, systemImage: String) -> some View {
-        self.modifier(
-            OptionalMessageToastModifier(
-                message: message,
-                systemImage: systemImage
-            )
-        )
+    func toast(message: Binding<ToastMessage?>) -> some View {
+        modifier(OptionalMessageToastModifier(message: message))
     }
 }

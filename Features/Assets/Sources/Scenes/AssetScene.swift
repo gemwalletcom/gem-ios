@@ -50,6 +50,27 @@ public struct AssetScene: View {
                 }
             }
             
+            if model.showManageToken {
+                Section(Localized.Common.manage) {
+                    NavigationCustomLink(with:
+                        ListItemView(
+                            title: model.pinText,
+                            imageStyle: .list(assetImage: AssetImage(placeholder: model.pinImage))
+                        )
+                    ) {
+                        model.onSelectPin()
+                    }
+                    NavigationCustomLink(with:
+                        ListItemView(
+                            title: model.enableText,
+                            imageStyle: .list(assetImage: AssetImage(placeholder: model.enableImage))
+                        )
+                    ) {
+                        model.onSelectEnable()
+                    }
+                }
+            }
+            
             Section {
                 NavigationLink(
                     value: Scenes.Price(asset: model.assetModel.asset),

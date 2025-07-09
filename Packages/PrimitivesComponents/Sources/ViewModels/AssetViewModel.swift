@@ -25,6 +25,10 @@ public struct AssetViewModel: Sendable {
         AssetIdViewModel(assetId: asset.id).assetImage
     }
     
+    public var networkAssetImage: AssetImage {
+        AssetIdViewModel(assetId: asset.id).networkAssetImage
+    }
+    
     public var networkName: String {
         asset.chain.asset.name
     }

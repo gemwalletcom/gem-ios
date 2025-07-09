@@ -45,18 +45,8 @@ public struct CollectibleScene: View {
                actions: {},
                message: {
             Text(model.isPresentingErrorMessage ?? "")
-        }
-        )
-        .toast(
-            isPresenting: $model.isPresentingSaveToPhotosToast,
-            title: Localized.Nft.saveToPhotos,
-            systemImage: SystemImage.checkmark
-        )
-        .toast(
-            isPresenting: $model.isPresentingSetAsAvatarToast,
-            title: Localized.Nft.setAsAvatar,
-            systemImage: SystemImage.checkmark
-        )
+        })
+        .toast(message: $model.isPresentingToast)
     }
 }
 

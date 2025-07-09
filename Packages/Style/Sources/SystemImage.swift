@@ -25,6 +25,8 @@ public struct SystemImage {
     public static let eyeglasses = "eyeglasses"
     public static let lockOpen = "lock.open"
     public static let plus = "plus"
+    public static let plusCircle = "plus.circle"
+    public static let minusCircle = "minus.circle"
     public static let eye = "eye.fill"
     public static let searchNoResults = "exclamationmark.magnifyingglass"
     public static let exclamationmarkTriangleFill = "exclamationmark.triangle.fill"

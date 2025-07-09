@@ -425,3 +425,5 @@
 "wallet.import_address_warning" = "このアドレスの残高と取引は表示できますが、**資金を送信または売却することはできません**。";
 "info.stake_minimum_amount.title" = "最低金額";
 "info.stake_minimum_amount.description" = "%@ネットワークでは、最小ステーキング要件は ** %@ ** です。";
+"asset.add_to_wallet" = "ウォレットに追加";
+"asset.hide_from_wallet" = "財布から隠す";

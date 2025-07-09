@@ -7,6 +7,7 @@ import GemstonePrimitives
 import Primitives
 import Onboarding
 import PriceService
+import Components
 
 struct RootScene: View {
     @State private var model: RootSceneViewModel
@@ -75,8 +76,10 @@ struct RootScene: View {
         )
         .toast(
             isPresenting: $model.isPresentingConnectorBar,
-            title: "\(Localized.WalletConnect.brandName)...",
-            systemImage: SystemImage.network
+            message: ToastMessage(
+                title: "\(Localized.WalletConnect.brandName)...",
+                image: SystemImage.network
+            )
         )
     }
 }

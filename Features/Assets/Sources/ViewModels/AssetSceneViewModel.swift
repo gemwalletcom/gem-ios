@@ -32,13 +32,15 @@ public final class AssetSceneViewModel: Sendable {
 
     private var isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
 
-    public var isPresentingToastMessage: String?
+    public var isPresentingToastMessage: ToastMessage?
     public var isPresentingAssetSheet: AssetSheetType?
 
     public var input: AssetSceneInput
     public var assetData: AssetData
     public var transactions: [TransactionExtended] = []
     public var banners: [Banner] = []
+    private var asset: Asset { assetData.asset }
+    private var wallet: Wallet { walletModel.wallet }
 
     public init(
         walletsService: WalletsService,
@@ -73,7 +75,26 @@ public final class AssetSceneViewModel: Sendable {
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showTransactions: Bool { transactions.isNotEmpty }
-
+    var showManageToken: Bool { !assetData.metadata.isEnabled }
+    var pinText: String {
+        assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
+    }
+    var pinSystemImage: String {
+        assetData.metadata.isPinned ? SystemImage.unpin : SystemImage.pin
+    }
+    var pinImage: Image {
+        Image(systemName: pinSystemImage)
+    }
+    var enableText: String {
+        assetData.metadata.isEnabled ? Localized.Asset.hideFromWallet : Localized.Asset.addToWallet
+    }
+    var enableImage: Image {
+        Image(systemName: enableSystemImage)
+    }
+    var enableSystemImage: String {
+        assetData.metadata.isEnabled ? SystemImage.minusCircle : SystemImage.plusCircle
+    }
+    
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
 
     var networkText: String { assetModel.networkFullName }
@@ -247,7 +268,7 @@ extension AssetSceneViewModel {
 
     public func onSetPriceAlertComplete(message: String) {
         isPresentingAssetSheet = .none
-        isPresentingToastMessage = message
+        isPresentingToastMessage = ToastMessage(title: message, image: priceAlertsSystemImage)
     }
 
     public func onSelectSetPriceAlerts() {
@@ -257,10 +278,16 @@ extension AssetSceneViewModel {
     public func onTogglePriceAlert() {
         Task {
             if assetData.isPriceAlertsEnabled {
-                isPresentingToastMessage = Localized.PriceAlerts.disabledFor(assetData.asset.name)
+                isPresentingToastMessage = ToastMessage(
+                    title: Localized.PriceAlerts.disabledFor(assetData.asset.name),
+                    image: priceAlertsSystemImage
+                )
                 await disablePriceAlert()
             } else {
-                isPresentingToastMessage = Localized.PriceAlerts.enabledFor(assetData.asset.name)
+                isPresentingToastMessage = ToastMessage(
+                    title: Localized.PriceAlerts.enabledFor(assetData.asset.name),
+                    image: priceAlertsSystemImage
+                )
                 await enablePriceAlert()
             }
         }
@@ -268,6 +295,29 @@ extension AssetSceneViewModel {
     
     public func onSelectTokenStatus() {
         isPresentingAssetSheet = .info(.assetStatus(scoreViewModel.scoreType))
+    }
+    
+    public func onSelectPin() {
+        do {
+            let isPinned = !assetData.metadata.isPinned
+            isPresentingToastMessage = ToastMessage(title: pinText, image: pinSystemImage)
+            try walletsService.setPinned(isPinned, walletId: wallet.walletId, assetId: asset.id)
+            if !assetData.metadata.isEnabled {
+                onSelectEnable()
+            }
+        } catch {
+            NSLog("onSelectPin error: \(error)")
+        }
+    }
+    
+    public func onSelectEnable() {
+        Task {
+            let isEnabled = !assetData.metadata.isEnabled
+            isPresentingToastMessage = ToastMessage(title: enableText, image: enableSystemImage)
+            do {
+                await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: isEnabled)
+            }
+        }
     }
 }
 

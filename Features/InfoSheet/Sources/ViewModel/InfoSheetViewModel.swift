@@ -35,7 +35,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
         switch type {
         case .networkFee: Localized.Info.NetworkFee.title
         case .insufficientBalance: Localized.Info.InsufficientBalance.title
-        case .insufficientNetworkFee(let asset, _): Localized.Info.InsufficientNetworkFeeBalance.title(asset.symbol)
+        case .insufficientNetworkFee(let asset, _, _): Localized.Info.InsufficientNetworkFeeBalance.title(asset.symbol)
         case .transactionState(_,_, let state):
             switch state {
             case .pending: Localized.Transaction.Status.pending
@@ -62,8 +62,8 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
         switch type {
         case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol)
         case .insufficientBalance(let asset): return Localized.Info.InsufficientBalance.description(asset.symbol)
-        case .insufficientNetworkFee(let asset, let required):
-            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+        case .insufficientNetworkFee(let asset, _, let required):
+            let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Info.InsufficientNetworkFeeBalance.description(
                 "**\(amount)**",
                 asset.name,
@@ -86,17 +86,18 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             case .suspicious: return Localized.Info.AssetStatus.Suspicious.description
             }
         case let .accountMinimalBalance(asset, required):
-            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+            let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Transfer.minimumAccountBalance(amount)
         case let .stakeMinimumAmount(asset, required):
-            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+            let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Info.StakeMinimumAmount.description(asset.name, amount)
         }
     }
 
     public var image: InfoSheetImage? {
         switch type {
-        case .networkFee, .insufficientNetworkFee: return .image(Images.Info.networkFee)
+        case .networkFee: return .image(Images.Info.networkFee)
+        case  .insufficientNetworkFee(_, let image, _): return InfoSheetImage.assetImage(image)
         case .insufficientBalance: return .none
         case .transactionState(let imageURL, let placeholder, let state):
             let stateImage = switch state {
