@@ -11,6 +11,7 @@ import PrimitivesComponents
 import Store
 import Preferences
 import ExplorerService
+import InfoSheet
 import class Gemstone.SwapProviderConfig
 
 struct TransactionDetailViewModel {
@@ -233,6 +234,7 @@ struct TransactionDetailViewModel {
         )
     }
 }
+
 
 extension TransactionDetailViewModel: Identifiable {
     var id: String { model.transaction.id }
