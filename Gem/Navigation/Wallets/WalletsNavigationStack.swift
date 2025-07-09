@@ -15,11 +15,9 @@ struct WalletsNavigationStack: View {
 
     @State private var navigationPath = NavigationPath()
     @State private var model: WalletsSceneViewModel
-    @Binding private var isPresentingWallets: Bool
 
-    init(model: WalletsSceneViewModel, isPresentingWallets: Binding<Bool>) {
+    init(model: WalletsSceneViewModel) {
         _model = State(initialValue: model)
-        _isPresentingWallets = isPresentingWallets
     }
 
     var body: some View {
@@ -30,13 +28,13 @@ struct WalletsNavigationStack: View {
             .sheet(isPresented: $model.isPresentingCreateWalletSheet) {
                 CreateWalletNavigationStack(
                     walletService: model.service,
-                    isPresentingWallets: $isPresentingWallets
+                    isPresentingWallets: $model.isPresentingWallets
                 )
             }
             .sheet(isPresented: $model.isPresentingImportWalletSheet) {
                 ImportWalletNavigationStack(
                     model: ImportWalletTypeViewModel(walletService: model.service),
-                    isPresentingWallets: $isPresentingWallets
+                    isPresentingWallets: $model.isPresentingWallets
                 )
             }
             .onChange(of: model.walletToEdit) { _, wallet in
@@ -64,7 +62,7 @@ struct WalletsNavigationStack: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.done) {
-                        isPresentingWallets.toggle()
+                        model.onDismiss()
                     }
                     .bold()
                 }

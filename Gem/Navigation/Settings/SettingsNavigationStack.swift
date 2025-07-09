@@ -135,8 +135,7 @@ struct SettingsNavigationStack: View {
             }
             .sheet(isPresented: $walletsModel.isPresentingWallets) {
                 WalletsNavigationStack(
-                    model: walletsModel,
-                    isPresentingWallets: $walletsModel.isPresentingWallets
+                    model: walletsModel
                 )
             }
         }
