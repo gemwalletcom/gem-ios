@@ -12,6 +12,7 @@ import MarketInsight
 import Settings
 import ChainSettings
 import PriceService
+import ManageWallets
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -128,7 +129,9 @@ struct SettingsNavigationStack: View {
                 )
             }
             .sheet(isPresented: $isPresentingWallets) {
-                WalletsNavigationStack(walletService: walletService, isPresentingWallets: $isPresentingWallets)
+                WalletsNavigationStack(
+                    isPresentingWallets: $isPresentingWallets
+                )
             }
         }
         .onChange(of: currencyModel.selectedCurrencyValue) { _, _ in

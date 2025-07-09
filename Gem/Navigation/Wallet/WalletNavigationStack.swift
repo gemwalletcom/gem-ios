@@ -9,6 +9,7 @@ import WalletTab
 import InfoSheet
 import Components
 import Assets
+import ManageWallets
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
@@ -118,7 +119,9 @@ struct WalletNavigationStack: View {
                     )
                 }
                 .sheet(isPresented: $model.isPresentingWallets) {
-                    WalletsNavigationStack(walletService: walletService, isPresentingWallets: $model.isPresentingWallets)
+                    WalletsNavigationStack(
+                        isPresentingWallets: $model.isPresentingWallets
+                    )
                 }
                 .sheet(item: $model.isPresentingInfoSheet) {
                     InfoSheetScene(model: InfoSheetViewModel(type: $0))
