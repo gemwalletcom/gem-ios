@@ -9,7 +9,7 @@ import Localization
 public struct WalletsScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @State private var isPresentingErrorMessage: String?
+    @State private var isPresentingAlertMessage: AlertMessage?
     @State private var showingDeleteAlert = false
 
     @Binding private var isPresentingCreateWalletSheet: Bool
@@ -101,13 +101,7 @@ public struct WalletsScene: View {
             .listRowInsets(.assetListRowInsets)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
-        .alert("",
-            isPresented: $isPresentingErrorMessage.mappedToBool(),
-            actions: {},
-            message: {
-                Text(isPresentingErrorMessage ?? "")
-            }
-        )
+        .alertSheet($isPresentingAlertMessage)
         .confirmationDialog(
             Localized.Common.deleteConfirmation(walletDelete?.name ?? ""),
             presenting: $walletDelete,
@@ -213,7 +207,7 @@ extension WalletsScene {
             do {
                 try model.delete(wallet)
             } catch {
-                isPresentingErrorMessage = error.localizedDescription
+                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             }
         }
     }

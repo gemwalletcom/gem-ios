@@ -10,7 +10,7 @@ struct VerifyPhraseWalletScene: View {
     
     @StateObject var model: VerifyPhraseViewModel
 
-    @State private var isPresentingErrorMessage: String?
+    @State private var isPresentingAlertMessage: AlertMessage?
 
     init(model: VerifyPhraseViewModel) {
         _model = StateObject(wrappedValue: model)
@@ -71,9 +71,7 @@ struct VerifyPhraseWalletScene: View {
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
-        .alert(item: $isPresentingErrorMessage) {
-            Alert(title: Text(Localized.Errors.createWallet("")), message: Text($0))
-        }
+        .alertSheet($isPresentingAlertMessage)
     }
 
 }
@@ -92,7 +90,10 @@ extension VerifyPhraseWalletScene {
                 }
             } catch {
                 await MainActor.run {
-                    isPresentingErrorMessage = error.localizedDescription
+                    isPresentingAlertMessage = AlertMessage(
+                        title: Localized.Errors.createWallet(""),
+                        message: error.localizedDescription
+                    )
                     model.buttonState = .normal
                 }
             }

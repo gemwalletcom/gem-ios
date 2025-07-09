@@ -20,7 +20,7 @@ public final class AddNodeSceneViewModel {
     public var urlInput: String = ""
     public var state: StateViewType<AddNodeResultViewModel> = .noData
     public var isPresentingScanner: Bool = false
-    public var isPresentingErrorAlert: String?
+    public var isPresentingAlertMessage: AlertMessage?
 
     public init(chain: Chain, nodeService: NodeService) {
         self.chain = chain

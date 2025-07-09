@@ -15,7 +15,7 @@ public final class SecurityViewModel {
 
     static let reason: String = Localized.Settings.Security.authentication
 
-    var isPresentingError: String?
+    var isPresentingAlertMessage: AlertMessage?
     var isEnabled: Bool
     var isPrivacyLockEnabled: Bool
     var isHideBalanceEnabled: Bool {
@@ -72,7 +72,7 @@ extension SecurityViewModel {
             lockPeriod = service.lockPeriod 
         } catch let error as BiometryAuthenticationError {
             if !error.isAuthenticationCancelled {
-                isPresentingError = error.localizedDescription
+                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             }
             isEnabled.toggle()
         } catch {

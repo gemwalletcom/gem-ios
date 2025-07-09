@@ -38,11 +38,7 @@ public struct SecurityScene: View {
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .onChange(of: model.isEnabled, onToggleBiometrics)
         .onChange(of: model.isPrivacyLockEnabled, onToggleSecurityLock)
-        .alert("",
-            isPresented: $model.isPresentingError.mappedToBool(),
-            actions: {},
-            message: { Text(model.errorTitle) }
-        )
+        .alertSheet($model.isPresentingAlertMessage)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
     }

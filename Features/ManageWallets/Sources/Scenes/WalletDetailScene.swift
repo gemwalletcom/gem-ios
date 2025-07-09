@@ -23,7 +23,7 @@ public struct WalletDetailScene: View {
 
     @State private var name: String
 
-    @State private var isPresentingErrorMessage: String?
+    @State private var isPresentingAlertMessage: AlertMessage?
     @State private var isPresentingDeleteConfirmation: Bool?
     @State private var isPresentingExportWallet: ExportWalletType?
     @FocusState private var focusedField: Field?
@@ -125,14 +125,7 @@ public struct WalletDetailScene: View {
                 )
             }
         )
-        .alert(
-            Localized.Errors.transfer(""),
-            isPresented: $isPresentingErrorMessage.mappedToBool(),
-            actions: {},
-            message: {
-                Text(isPresentingErrorMessage ?? "")
-            }
-        )
+        .alertSheet($isPresentingAlertMessage)
         .sheet(item: $isPresentingExportWallet) {
             ExportWalletNavigationStack(flow: $0)
         }
@@ -146,7 +139,7 @@ extension WalletDetailScene {
         do {
             try model.rename(name: name)
         } catch {
-            isPresentingErrorMessage = error.localizedDescription
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 
@@ -155,7 +148,7 @@ extension WalletDetailScene {
             do {
                 isPresentingExportWallet = .words(try model.getMnemonicWords())
             } catch {
-                isPresentingErrorMessage = error.localizedDescription
+                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             }
         }
     }
@@ -166,7 +159,7 @@ extension WalletDetailScene {
                 //In the future it should allow to export PK for multichain wallet and specify the chain
                 isPresentingExportWallet = .privateKey(try model.getPrivateKey())
             } catch {
-                isPresentingErrorMessage = error.localizedDescription
+                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             }
         }
     }
@@ -180,7 +173,7 @@ extension WalletDetailScene {
             try model.delete()
             dismiss()
         } catch {
-            isPresentingErrorMessage = error.localizedDescription
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 
