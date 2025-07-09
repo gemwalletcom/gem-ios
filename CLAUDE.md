@@ -34,6 +34,9 @@ The codebase is organized into three main layers:
 # Bootstrap the project (required for first setup)
 just bootstrap
 
+# Build the project
+just build
+
 # Build and run tests
 just test
 
