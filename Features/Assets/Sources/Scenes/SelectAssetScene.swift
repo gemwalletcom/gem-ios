@@ -7,9 +7,6 @@ import PrimitivesComponents
 
 public struct SelectAssetScene: View {
 
-    @State private var isPresentingCopyToast: Bool = false
-    @State private var copyTypeViewModel: CopyTypeViewModel?
-
     @Binding private var isPresentingAddToken: Bool
 
     @State private var model: SelectAssetViewModel
@@ -58,10 +55,10 @@ public struct SelectAssetScene: View {
         .onChange(of: model.filterModel, model.onChangeFilterModel)
         .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
         .onChange(of: model.isSearching, model.onChangeFocus)
-        .ifLet(copyTypeViewModel) {
+        .ifLet(model.copyTypeViewModel) {
             $0.copyToast(
                 model: $1,
-                isPresenting: $isPresentingCopyToast
+                isPresenting: $model.isPresentingCopyToast
             )
         }
         .listSectionSpacing(.compact)
@@ -121,7 +118,7 @@ public struct SelectAssetScene: View {
                         assetData: assetData,
                         currencyCode: model.currencyCode,
                         type: model.selectType.listType,
-                        action: onAsset
+                        action: model.onAssetAction
                     )
                 }
             case .manage:
@@ -129,7 +126,7 @@ public struct SelectAssetScene: View {
                     assetData: assetData,
                     currencyCode: model.currencyCode,
                     type: model.selectType.listType,
-                    action: onAsset
+                    action: model.onAssetAction
                 )
             case .swap, .priceAlert:
                 NavigationCustomLink(
@@ -137,7 +134,7 @@ public struct SelectAssetScene: View {
                         assetData: assetData,
                         currencyCode: model.currencyCode,
                         type: model.selectType.listType,
-                        action: onAsset
+                        action: model.onAssetAction
                     )
                 ) {
                     model.selectAsset(asset: assetData.asset)
@@ -152,25 +149,5 @@ public struct SelectAssetScene: View {
 extension SelectAssetScene {
     private func onSelectAddCustomToken() {
         isPresentingAddToken.toggle()
-    }
-
-    private func onAsset(action: ListAssetItemAction, assetData: AssetData) {
-        let asset = assetData.asset
-        switch action {
-        case .switcher(let enabled):
-            Task {
-                await model.handleAction(assetId: asset.id, enabled: enabled)
-            }
-        case .copy:
-            let address = assetData.account.address
-            copyTypeViewModel = CopyTypeViewModel(
-                type: .address(asset, address: address),
-                copyValue: address
-            )
-            isPresentingCopyToast = true
-            Task {
-                await model.handleAction(assetId: asset.id, enabled: true)
-            }
-        }
     }
 }
