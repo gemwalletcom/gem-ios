@@ -30,6 +30,10 @@ public final class SelectAssetViewModel {
     var isSearching: Bool = false
     var isDismissSearch: Bool = false
 
+    var isPresentingCopyToast: Bool = false
+    var copyTypeViewModel: CopyTypeViewModel?
+    public var isPresentingAddToken: Bool = false
+
     public var filterModel: AssetsFilterViewModel
     public var onSelectAssetAction: AssetAction
 
@@ -193,6 +197,34 @@ extension SelectAssetViewModel {
 
     func onChangeFilterModel(_: AssetsFilterViewModel, model: AssetsFilterViewModel) {
         request.filters = model.filters
+    }
+}
+
+// MARK: - Actions
+
+extension SelectAssetViewModel {
+    func onAssetAction(action: ListAssetItemAction, assetData: AssetData) {
+        let asset = assetData.asset
+        switch action {
+        case .switcher(let enabled):
+            Task {
+                await handleAction(assetId: asset.id, enabled: enabled)
+            }
+        case .copy:
+            let address = assetData.account.address
+            copyTypeViewModel = CopyTypeViewModel(
+                type: .address(asset, address: address),
+                copyValue: address
+            )
+            isPresentingCopyToast = true
+            Task {
+                await handleAction(assetId: asset.id, enabled: true)
+            }
+        }
+    }
+    
+    func onSelectAddCustomToken() {
+        isPresentingAddToken.toggle()
     }
 }
 

@@ -19,8 +19,7 @@ struct AddAssetPriceAlertsNavigationStack: View {
     var body: some View {
         NavigationStack {
             SelectAssetScene(
-                model: selectAssetModel,
-                isPresentingAddToken: .constant(false)
+                model: selectAssetModel
             )
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
