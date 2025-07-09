@@ -38,6 +38,13 @@ core-upgrade:
 spm-resolve-all:
     sh scripts/spm-resolve-all.sh
 
+build:
+    @set -o pipefail && xcodebuild -project Gem.xcodeproj \
+    -scheme Gem \
+    -sdk iphonesimulator \
+    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
+    build | xcbeautify
+
 test:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
