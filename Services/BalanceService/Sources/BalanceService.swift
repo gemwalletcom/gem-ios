@@ -53,12 +53,12 @@ extension BalanceService {
     }
 
     @discardableResult
-    public func updateBalance(walletId: String, asset: AssetId, address: String) async throws -> AssetBalanceChange? {
+    public func updateBalance(walletId: String, asset: AssetId, address: String) async throws -> [AssetBalanceChange] {
         switch asset.type {
         case .native:
-            await updateCoinBalance(walletId: walletId, asset: asset, address: address).first
+            await updateCoinBalance(walletId: walletId, asset: asset, address: address)
         case .token:
-            await updateTokenBalances(walletId: walletId, chain: asset.chain, tokenIds: [asset], address: address).first
+            await updateTokenBalances(walletId: walletId, chain: asset.chain, tokenIds: [asset], address: address)
         }
     }
 
