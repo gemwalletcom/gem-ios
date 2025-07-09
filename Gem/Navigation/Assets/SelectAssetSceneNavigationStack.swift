@@ -21,8 +21,6 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
 
-    @State private var isPresentingFilteringView: Bool = false
-
     @State private var model: SelectAssetViewModel
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectAssetType: SelectAssetType?
@@ -49,7 +47,7 @@ struct SelectAssetSceneNavigationStack: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         FilterButton(
                             isActive: model.filterModel.isAnyFilterSpecified,
-                            action: onSelectFilter
+                            action: model.onSelectFilter
                         )
                     }
                 }
@@ -117,7 +115,7 @@ struct SelectAssetSceneNavigationStack: View {
                 isPresenting: $model.isPresentingAddToken
             )
         }
-        .sheet(isPresented: $isPresentingFilteringView) {
+        .sheet(isPresented: $model.isPresentingFilteringView) {
             NavigationStack {
                 AssetsFilterScene(model: $model.filterModel)
             }
@@ -127,11 +125,4 @@ struct SelectAssetSceneNavigationStack: View {
     }
 }
 
-// MARK: - Actions
-
-extension SelectAssetSceneNavigationStack {
-    private func onSelectFilter() {
-        isPresentingFilteringView.toggle()
-    }
-}
 

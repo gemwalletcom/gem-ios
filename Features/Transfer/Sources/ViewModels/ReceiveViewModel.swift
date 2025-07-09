@@ -7,7 +7,9 @@ import WalletsService
 import Components
 import Formatters
 
-public struct ReceiveViewModel: Sendable {
+@Observable
+@MainActor
+public final class ReceiveViewModel: Sendable {
     let qrWidth: CGFloat = 300
     
     let assetModel: AssetViewModel
@@ -15,6 +17,10 @@ public struct ReceiveViewModel: Sendable {
     let address: String
     let walletsService: WalletsService
     let generator = QRCodeGenerator()
+    
+    public var isPresentingShareSheet: Bool = false
+    public var isPresentingCopyToast: Bool = false
+    public var renderedImage: UIImage? = nil
 
     public init(
         assetModel: AssetViewModel,
@@ -76,5 +82,21 @@ public struct ReceiveViewModel: Sendable {
             ),
             logo: UIImage.name("logo-dark")
         )
+    }
+}
+
+// MARK: - Actions
+
+extension ReceiveViewModel {
+    func onShareSheet() {
+        isPresentingShareSheet = true
+    }
+    
+    func onCopyAddress() {
+        isPresentingCopyToast = true
+    }
+    
+    func onLoadImage() async {
+        renderedImage = await generateQRCode()
     }
 }

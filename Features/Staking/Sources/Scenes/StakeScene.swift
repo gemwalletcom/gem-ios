@@ -11,7 +11,6 @@ import PrimitivesComponents
 
 public struct StakeScene: View {
     @State private var model: StakeViewModel
-    @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     @Query<StakeDelegationsRequest>
     private var delegations: [Delegation]
@@ -36,7 +35,7 @@ public struct StakeScene: View {
             await model.fetch()
         }
         .navigationTitle(model.title)
-        .sheet(item: $isPresentingInfoSheet) {
+        .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
         .taskOnce {
@@ -118,7 +117,7 @@ extension StakeScene {
     }
 
     private func onLockTimeAction() {
-        isPresentingInfoSheet =  model.lockTimeInfoSheet
+        model.onLockTimeInfo()
     }
 }
 

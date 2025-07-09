@@ -33,6 +33,7 @@ public final class SelectAssetViewModel {
     var isPresentingCopyToast: Bool = false
     var copyTypeViewModel: CopyTypeViewModel?
     public var isPresentingAddToken: Bool = false
+    public var isPresentingFilteringView: Bool = false
 
     public var filterModel: AssetsFilterViewModel
     public var onSelectAssetAction: AssetAction
@@ -225,6 +226,10 @@ extension SelectAssetViewModel {
     
     func onSelectAddCustomToken() {
         isPresentingAddToken.toggle()
+    }
+    
+    public func onSelectFilter() {
+        isPresentingFilteringView.toggle()
     }
 }
 

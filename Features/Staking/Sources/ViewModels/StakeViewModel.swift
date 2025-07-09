@@ -27,6 +27,8 @@ public final class StakeViewModel {
 
     let onTransferAction: TransferDataAction
     let onAmountInputAction: AmountInputAction
+    
+    public var isPresentingInfoSheet: InfoSheetType? = .none
 
     public init(
         wallet: Wallet,
@@ -161,6 +163,10 @@ extension StakeViewModel {
         let delegations = delegations.filter { $0.base.rewardsValue > 0 }
         let transferData = claimRewardsTransferData(delegations: delegations)
         onTransferAction?(transferData)
+    }
+    
+    func onLockTimeInfo() {
+        isPresentingInfoSheet = lockTimeInfoSheet
     }
 }
 
