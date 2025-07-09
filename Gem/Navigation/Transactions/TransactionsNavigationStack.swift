@@ -79,7 +79,7 @@ struct TransactionsNavigationStack: View {
                 }
                 .sheet(isPresented: $model.isPresentingFilteringView) {
                     NavigationStack {
-                        TransactionsFilterScene(model: $model.filterModel)
+                        TransactionsFilterScene(model: model.filterModel)
                     }
                     .presentationDetentsForCurrentDeviceSize(expandable: true)
                     .presentationDragIndicator(.visible)
