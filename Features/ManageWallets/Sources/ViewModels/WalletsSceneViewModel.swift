@@ -21,6 +21,7 @@ public final class WalletsSceneViewModel {
     public var isPresentingCreateWalletSheet: Bool = false
     public var isPresentingImportWalletSheet: Bool = false
     public var walletToEdit: Wallet?
+    public var isPresentingWallets: Bool = false
     
     public init(walletService: WalletService) {
         self.walletService = walletService
@@ -28,6 +29,7 @@ public final class WalletsSceneViewModel {
         self.isPresentingAlertMessage = nil
         self.walletDelete = nil
         self.walletToEdit = nil
+        self.isPresentingWallets = false
     }
     
     var title: String {

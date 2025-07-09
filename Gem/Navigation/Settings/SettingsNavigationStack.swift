@@ -13,6 +13,7 @@ import Settings
 import ChainSettings
 import PriceService
 import ManageWallets
+import WalletService
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -30,15 +31,16 @@ struct SettingsNavigationStack: View {
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.releaseService) private var releaseService
 
-    @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
+    @State private var walletsModel: WalletsSceneViewModel
 
     let walletId: WalletId
 
     init(
         walletId: WalletId,
         preferences: Preferences = .standard,
-        priceService: PriceService
+        priceService: PriceService,
+        walletService: WalletService
     ) {
         self.walletId = walletId
         _currencyModel = State(
@@ -46,6 +48,9 @@ struct SettingsNavigationStack: View {
                 currencyStorage: preferences,
                 priceService: priceService
             )
+        )
+        _walletsModel = State(
+            initialValue: WalletsSceneViewModel(walletService: walletService)
         )
     }
 
@@ -65,7 +70,7 @@ struct SettingsNavigationStack: View {
                     currencyModel: currencyModel,
                     observablePrefereces: observablePreferences
                 ),
-                isPresentingWallets: $isPresentingWallets
+                isPresentingWallets: $walletsModel.isPresentingWallets
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in
@@ -128,12 +133,9 @@ struct SettingsNavigationStack: View {
                     model: ChainSettingsViewModel(nodeService: nodeService, chain: $0.chain)
                 )
             }
-            .sheet(isPresented: $isPresentingWallets) {
+            .sheet(isPresented: $walletsModel.isPresentingWallets) {
                 WalletsNavigationStack(
-                    model: WalletsSceneViewModel(
-                        walletService: walletService
-                    ),
-                    isPresentingWallets: $isPresentingWallets
+                    model: walletsModel
                 )
             }
         }
