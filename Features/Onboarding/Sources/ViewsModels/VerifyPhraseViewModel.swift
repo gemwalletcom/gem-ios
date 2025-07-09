@@ -8,18 +8,21 @@ import Style
 import Localization
 import PrimitivesComponents
 import Preferences
+import Components
 
-// TODO: - migrate to @observable macro
-class VerifyPhraseViewModel: ObservableObject {
+@Observable
+@MainActor
+final class VerifyPhraseViewModel {
     
     private let words: [String]
     private let shuffledWords: [String]
     private let walletService: WalletService
     private let onFinish: VoidAction
 
-    @Published var wordsVerified: [String]
-    @Published var wordsIndex: Int = 0
-    @Published var buttonState = ButtonState.disabled
+    var wordsVerified: [String]
+    var wordsIndex: Int = 0
+    var buttonState = ButtonState.disabled
+    var isPresentingAlertMessage: AlertMessage?
     private var selectedIndexes = Set<WordIndex>()
 
     init(
@@ -32,6 +35,7 @@ class VerifyPhraseViewModel: ObservableObject {
         self.wordsVerified = Array(repeating: "", count: words.count)
         self.walletService = walletService
         self.onFinish = onFinish
+        self.isPresentingAlertMessage = nil
     }
     
     var title: String {
@@ -81,5 +85,30 @@ class VerifyPhraseViewModel: ObservableObject {
 
         WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
         onFinish?()
+    }
+}
+
+// MARK: - Actions
+
+extension VerifyPhraseViewModel {
+    func onImportWallet() {
+        buttonState = .loading(showProgress: true)
+
+        Task {
+            try await Task.sleep(for: .milliseconds(50))
+            do {
+                try await MainActor.run {
+                    try importWallet()
+                }
+            } catch {
+                await MainActor.run {
+                    isPresentingAlertMessage = AlertMessage(
+                        title: Localized.Errors.createWallet(""),
+                        message: error.localizedDescription
+                    )
+                    buttonState = .normal
+                }
+            }
+        }
     }
 }

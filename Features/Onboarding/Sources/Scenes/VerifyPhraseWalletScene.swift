@@ -8,12 +8,10 @@ import PrimitivesComponents
 
 struct VerifyPhraseWalletScene: View {
     
-    @StateObject var model: VerifyPhraseViewModel
-
-    @State private var isPresentingAlertMessage: AlertMessage?
+    @State private var model: VerifyPhraseViewModel
 
     init(model: VerifyPhraseViewModel) {
-        _model = StateObject(wrappedValue: model)
+        _model = State(initialValue: model)
     }
 
     var body: some View {
@@ -64,39 +62,15 @@ struct VerifyPhraseWalletScene: View {
             StateButton(
                 text: Localized.Common.continue,
                 type: .primary(model.buttonState),
-                action: onImportWallet
+                action: model.onImportWallet
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
-        .alertSheet($isPresentingAlertMessage)
+        .alertSheet($model.isPresentingAlertMessage)
     }
 
 }
 
-// MARK: - Actions
-
-extension VerifyPhraseWalletScene {
-    func onImportWallet() {
-        model.buttonState = .loading(showProgress: true)
-
-        Task {
-            try await Task.sleep(for: .milliseconds(50))
-            do {
-                try await MainActor.run {
-                    try model.importWallet()
-                }
-            } catch {
-                await MainActor.run {
-                    isPresentingAlertMessage = AlertMessage(
-                        title: Localized.Errors.createWallet(""),
-                        message: error.localizedDescription
-                    )
-                    model.buttonState = .normal
-                }
-            }
-        }
-    }
-}
