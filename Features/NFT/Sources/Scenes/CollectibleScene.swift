@@ -40,12 +40,7 @@ public struct CollectibleScene: View {
         } message: {
             Text(Localized.Permissions.Image.PhotoAccess.Denied.description)
         }
-        .alert("",
-               isPresented: $model.isPresentingErrorMessage.mappedToBool(),
-               actions: {},
-               message: {
-            Text(model.isPresentingErrorMessage ?? "")
-        })
+        .alertSheet($model.isPresentingAlertMessage)
         .toast(message: $model.isPresentingToast)
     }
 }

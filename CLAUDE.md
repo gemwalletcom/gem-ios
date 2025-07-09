@@ -173,6 +173,13 @@ Services are injected via SwiftUI Environment:
 - Prefer async/await over Combine for new code
 - Use protocol-based design for services
 
+### Clean Code Principles
+- **YAGNI (You Aren't Gonna Need It)**: Don't add functionality until it's actually needed
+- **No Dead Code**: Remove unused methods, properties, and extensions
+- **Single Responsibility**: Each class/struct should have one clear purpose
+- **Avoid Cargo Cult Programming**: Don't copy patterns from other files without understanding their necessity
+- **Code Should Be Self-Documenting**: Use clear, descriptive names instead of comments when possible
+
 ### Module Dependencies
 - Features should not directly depend on each other
 - Shared functionality goes in Packages/
@@ -184,6 +191,12 @@ Services are injected via SwiftUI Environment:
 3. Add navigation support in `Navigation/`
 4. Register with `AppResolver` if needed
 5. Include comprehensive tests
+
+### Code Review Guidelines
+- **Verify All Code Is Used**: Every method, property, and extension should be called/referenced somewhere
+- **Check for Patterns**: Don't blindly copy patterns from existing code without understanding their purpose
+- **Minimize API Surface**: Only make public what needs to be public
+- **Test-Driven Implementation**: Write tests that verify actual usage, not just coverage
 
 ## Platform Requirements
 

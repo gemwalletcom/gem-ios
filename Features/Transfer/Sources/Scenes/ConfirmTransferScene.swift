@@ -72,14 +72,7 @@ public struct ConfirmTransferScene: View {
                 }
             }
         }
-        .alert(
-            Localized.Errors.transferError,
-            isPresented: $model.isPresentingErrorMessage.mappedToBool(),
-            actions: {},
-            message: {
-                Text(model.isPresentingErrorMessage ?? "")
-            }
-        )
+        .alertSheet($model.isPresentingAlertMessage)
     }
 }
 
