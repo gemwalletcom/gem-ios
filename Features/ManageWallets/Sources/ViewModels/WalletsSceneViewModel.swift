@@ -95,4 +95,8 @@ extension WalletsSceneViewModel {
     public func onImportWallet() {
         isPresentingImportWalletSheet = true
     }
+    
+    public func onDismiss() {
+        isPresentingWallets = false
+    }
 }
