@@ -11,7 +11,6 @@ import PrimitivesComponents
 
 public struct StakeScene: View {
     @State private var model: StakeViewModel
-    @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     @Query<StakeDelegationsRequest>
     private var delegations: [Delegation]
@@ -36,12 +35,12 @@ public struct StakeScene: View {
             await model.fetch()
         }
         .navigationTitle(model.title)
-        .sheet(item: $isPresentingInfoSheet) {
+        .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
         .taskOnce {
             Task {
-                await fetch()
+                await model.fetch()
             }
         }
     }
@@ -54,7 +53,7 @@ extension StakeScene {
         Section(Localized.Common.manage) {
             NavigationCustomLink(
                 with: ListItemView(title: model.stakeTitle),
-                action: onSelectStake
+                action: model.onSelectStake
             )
 
             if model.showClaimRewards(delegations: delegations) {
@@ -63,7 +62,7 @@ extension StakeScene {
                         title: model.claimRewardsTitle,
                         subtitle: model.claimRewardsText(delegations: delegations)
                     ),
-                    action: onSelectDelegations
+                    action: { model.onSelectDelegations(delegations: delegations) }
                 )
             }
         }
@@ -100,32 +99,10 @@ extension StakeScene {
             ListItemView(
                 title: model.lockTimeTitle,
                 subtitle: model.lockTimeValue,
-                infoAction: onLockTimeAction
+                infoAction: model.onLockTimeInfo
             )
         }
     }
 }
 
-// MARK: - Actions
 
-extension StakeScene {
-    private func onSelectStake() {
-        model.onSelectStake()
-    }
-
-    private func onSelectDelegations() {
-        model.onSelectDelegations(delegations: delegations)
-    }
-
-    private func onLockTimeAction() {
-        isPresentingInfoSheet =  model.lockTimeInfoSheet
-    }
-}
-
-// MARK: - Effects
-
-extension StakeScene {
-    private func fetch() async {
-        await model.fetch()
-    }
-}
