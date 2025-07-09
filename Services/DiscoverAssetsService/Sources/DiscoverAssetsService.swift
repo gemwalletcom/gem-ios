@@ -42,7 +42,7 @@ public struct DiscoverAssetsService: Sendable {
     public func updateCoins(wallet: Wallet) -> AsyncStream<AssetUpdate> {
         guard wallet.isMultiCoins else { return AsyncStream.just(AssetUpdate(walletId: wallet.walletId, assetIds: [])) }
         
-        let coinAddressIds: [(AssetId, String)] = wallet.accounts.map {
+        let coinAddressIds: [(AssetId, String)] = wallet.accounts.excludeDefaultAccounts().map {
             ($0.chain.assetId, $0.address)
         }
 
@@ -86,6 +86,14 @@ public struct DiscoverAssetsService: Sendable {
             continuation.onTermination = { _ in
                 task.cancel()
             }
+        }
+    }
+}
+
+extension Array where Element == Account {
+    func excludeDefaultAccounts() -> [Account] {
+        filter { account in
+            !AssetConfiguration.enabledByDefault.contains(where: { $0.chain == account.chain })
         }
     }
 }
