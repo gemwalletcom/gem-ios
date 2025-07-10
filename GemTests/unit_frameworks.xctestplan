@@ -14,7 +14,6 @@
   },
   "testTargets" : [
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/TransactionsService",
         "identifier" : "TransactionsServiceTests",
@@ -29,7 +28,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/NFT",
         "identifier" : "NFTTests",
@@ -51,7 +49,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/BalanceService",
         "identifier" : "BalanceServiceTests",
@@ -73,7 +70,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/NativeProviderService",
         "identifier" : "NativeProviderServiceTests",
@@ -177,7 +173,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/WalletsService",
         "identifier" : "WalletsServiceTests",
@@ -192,7 +187,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/ChainService",
         "identifier" : "ChainServiceTests",
@@ -207,7 +201,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/NodeService",
         "identifier" : "NodeServiceTests",
@@ -215,7 +208,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/TransferService",
         "identifier" : "TransferServiceTests",
@@ -223,7 +215,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/Settings",
         "identifier" : "SettingsTests",
@@ -231,7 +222,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/TransactionService",
         "identifier" : "TransactionServiceTests",
@@ -260,7 +250,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Packages\/GemAPI",
         "identifier" : "GemAPITests",
@@ -268,7 +257,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/ManageWallets",
         "identifier" : "ManageWalletsTest",
@@ -290,7 +278,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/ChainSettings",
         "identifier" : "ChainSettingsTests",
@@ -312,7 +299,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/SwapService",
         "identifier" : "SwapServiceTests",
@@ -320,7 +306,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/WalletConnectorService",
         "identifier" : "WalletConnectorServiceTests",
@@ -335,7 +320,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/NFTService",
         "identifier" : "NFTServiceTests",
@@ -357,7 +341,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/QRScanner",
         "identifier" : "QRScannerTests",
@@ -365,7 +348,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Packages\/Style",
         "identifier" : "StyleTests",
@@ -387,7 +369,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/NameResolver",
         "identifier" : "NameResolverTests",
@@ -409,7 +390,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/StakeService",
         "identifier" : "StakeServiceTests",
