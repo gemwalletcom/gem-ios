@@ -21,7 +21,8 @@
       "Bash(gh issue:*)",
       "Bash(ls:*)",
       "Bash(mkdir:*)",
-      "Bash(swift test:*)"
+      "Bash(swift test:*)",
+      "Bash(cp:*)"
     ],
     "deny": []
   }
