@@ -42,6 +42,7 @@ public struct CollectibleScene: View {
         }
         .alertSheet($model.isPresentingAlertMessage)
         .toast(message: $model.isPresentingToast)
+        .safariSheet(url: $model.isPresentingTokenExplorerUrl)
     }
 }
 
@@ -91,10 +92,10 @@ extension CollectibleScene {
 
             if model.showContract {
                 ListItemView(title: model.contractTitle, subtitle: model.contractText)
-                    .contextMenu(.copy(value: model.contractValue))
+                    .contextMenu(model.contractContextMenu)
             }
             ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)
-                .contextMenu(tokenIdContextMenu)
+                .contextMenu(model.tokenIdContextMenu)
         }
     }
 
@@ -110,17 +111,6 @@ extension CollectibleScene {
         Section(Localized.Social.links) {
             SocialLinksView(model: model.socialLinksViewModel)
         }
-    }
-    
-    private var tokenIdContextMenu: [ContextMenuItemType] {
-        let items: [ContextMenuItemType] = [
-            .copy(value: model.tokenIdValue),
-            model.tokenExplorerUrl.map { explorerLink in
-                .url(title: Localized.Transaction.viewOn(explorerLink.name), onOpen: model.onSelectViewTokenInExplorer)
-            }
-        ].compactMap { $0 }
-        
-        return items
     }
 }
 

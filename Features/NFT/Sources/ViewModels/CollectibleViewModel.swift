@@ -25,6 +25,7 @@ public final class CollectibleViewModel {
     var isPresentingPhotoPermissionMessage: Bool = false
     var isPresentingAlertMessage: AlertMessage?
     var isPresentingToast: ToastMessage?
+    var isPresentingTokenExplorerUrl: URL?
 
     public init(
         wallet: Wallet,
@@ -54,6 +55,12 @@ public final class CollectibleViewModel {
 
     var contractText: String {
         AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
+    }
+    
+    var contractContextMenu: [ContextMenuItemType] {
+        [.copy(value: contractValue, onCopy: { [weak self] value in
+            self?.isPresentingToast = .copied(value)
+        })]
     }
 
     var tokenIdTitle: String { Localized.Asset.tokenId }
@@ -100,7 +107,10 @@ public final class CollectibleViewModel {
     }
 
     var showContract: Bool {
-        assetData.collection.contractAddress != assetData.asset.tokenId
+        let contractAddress = assetData.collection.contractAddress
+        let tokenId = assetData.asset.tokenId
+        
+        return !contractAddress.isEmpty && contractAddress != tokenId
     }
 
     var showAttributes: Bool {
@@ -117,6 +127,19 @@ public final class CollectibleViewModel {
     
     var tokenExplorerUrl: BlockExplorerLink? {
         explorerService.tokenUrl(chain: assetData.asset.chain, address: assetData.asset.tokenId)
+    }
+    
+    var tokenIdContextMenu: [ContextMenuItemType] {
+        let items: [ContextMenuItemType] = [
+            .copy(value: tokenIdValue, onCopy: { [weak self] value in
+                self?.isPresentingToast = .copied(value)
+            }),
+            tokenExplorerUrl.map { explorerLink in
+                .url(title: Localized.Transaction.viewOn(explorerLink.name), onOpen: onSelectViewTokenInExplorer)
+            }
+        ].compactMap { $0 }
+        
+        return items
     }
 }
 
@@ -157,7 +180,7 @@ extension CollectibleViewModel {
     func onSelectViewTokenInExplorer() {
         guard let explorerLink = tokenExplorerUrl else { return }
         guard let url = URL(string: explorerLink.link) else { return }
-        UIApplication.shared.open(url)
+        isPresentingTokenExplorerUrl = url
     }
 }
 

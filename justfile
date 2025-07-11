@@ -68,6 +68,7 @@ test-specific TARGET:
     -sdk iphonesimulator \
     -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
     -only-testing {{TARGET}} \
+    -parallel-testing-enabled YES \
     test | xcbeautify
 
 localize:

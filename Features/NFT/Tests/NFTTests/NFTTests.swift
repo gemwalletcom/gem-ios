@@ -1,4 +1,5 @@
 import Testing
+import Foundation
 import Primitives
 import PrimitivesTestKit
 import WalletServiceTestKit
@@ -37,6 +38,10 @@ struct CollectibleViewModelTests {
             collection: .mock(contractAddress: "0x123"),
             asset: .mock(tokenId: "0x123")
         )).showContract == false)
+        #expect(CollectibleViewModel.mock(assetData: .mock(
+            collection: .mock(contractAddress: ""),
+            asset: .mock(tokenId: "456")
+        )).showContract == false)
     }
     
     @Test
@@ -60,6 +65,15 @@ struct CollectibleViewModelTests {
         #expect(CollectibleViewModel.mock(assetData: .mock(collection: .mock(links: [
             AssetLink(name: "Website", url: "https://example.com")
         ]))).showLinks == true)
+    }
+    
+    @Test
+    func onSelectViewTokenInExplorer() {
+        let model = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "1234", chain: .ethereum)))
+        
+        #expect(model.isPresentingTokenExplorerUrl == nil)
+        model.onSelectViewTokenInExplorer()
+        #expect(model.isPresentingTokenExplorerUrl != nil)
     }
 }
 
