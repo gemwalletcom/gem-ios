@@ -29,19 +29,19 @@ struct CollectibleViewModelTests {
     }
     
     @Test
-    func showContract() {
+    func contractText() {
         #expect(CollectibleViewModel.mock(assetData: .mock(
             collection: .mock(contractAddress: "0x123"),
             asset: .mock(tokenId: "456")
-        )).showContract == true)
+        )).contractText == "")
         #expect(CollectibleViewModel.mock(assetData: .mock(
-            collection: .mock(contractAddress: "0x123"),
-            asset: .mock(tokenId: "0x123")
-        )).showContract == false)
+            collection: .mock(contractAddress: "0x12345678910"),
+            asset: .mock(tokenId: "")
+        )).contractText == "0x12345678910")
         #expect(CollectibleViewModel.mock(assetData: .mock(
             collection: .mock(contractAddress: ""),
             asset: .mock(tokenId: "456")
-        )).showContract == false)
+        )).contractText == nil)
     }
     
     @Test

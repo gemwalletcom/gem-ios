@@ -231,7 +231,7 @@ public extension Banner {
   #expect(CollectibleViewModel.mock(assetData: .mock(
       collection: .mock(contractAddress: "0x123"),
       asset: .mock(tokenId: "456")
-  )).showContract == true)
+  )).contractText == "0x123")
   ```
 - **Avoid unnecessary variables** for simple cases - only use when readability is compromised
 

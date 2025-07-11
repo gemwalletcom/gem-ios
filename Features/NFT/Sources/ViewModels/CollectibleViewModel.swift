@@ -22,7 +22,6 @@ public final class CollectibleViewModel {
     private let avatarService: AvatarService
     private let explorerService: ExplorerService
 
-    var isPresentingPhotoPermissionMessage: Bool = false
     var isPresentingAlertMessage: AlertMessage?
     var isPresentingToast: ToastMessage?
     var isPresentingTokenExplorerUrl: URL?
@@ -56,7 +55,7 @@ public final class CollectibleViewModel {
     }
 
     var contractText: String? {
-        if contractValue.isEmpty && contractValue != assetData.asset.tokenId {
+        if contractValue.isEmpty || contractValue == assetData.asset.tokenId {
             return .none
         }
         return AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
@@ -158,7 +157,21 @@ extension CollectibleViewModel {
                 case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
                     isPresentingAlertMessage = AlertMessage(message: Localized.Errors.errorOccured)
                 case .permissionDenied:
-                    isPresentingPhotoPermissionMessage = true
+                    isPresentingAlertMessage = AlertMessage(
+                        title: Localized.Permissions.accessDenied,
+                        message: Localized.Permissions.Image.PhotoAccess.Denied.description,
+                        actions: [
+                            AlertAction(
+                                title: Localized.Common.openSettings,
+                                action: { [weak self] in
+                                    Task { @MainActor in
+                                        self?.openSettings()
+                                    }
+                                }
+                            ),
+                            .cancel(title: Localized.Common.cancel)
+                        ]
+                    )
                 }
             }
         }
@@ -185,6 +198,11 @@ extension CollectibleViewModel {
 // MARK: - Private
 
 extension CollectibleViewModel {
+    private func openSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(settingsURL)
+    }
+    
     private func setWalletAvatar() async throws {
         guard let url = assetData.asset.images.preview.url.asURL else { return }
         try await avatarService.save(url: url, for: wallet.id)

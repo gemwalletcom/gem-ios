@@ -10,7 +10,15 @@ public struct AlertMessageModifier: ViewModifier {
             .alert(
                 alertMessage?.title ?? "",
                 isPresented: $alertMessage.mappedToBool(),
-                actions: {},
+                actions: {
+                    if let actions = alertMessage?.actions {
+                        ForEach(0..<actions.count, id: \.self) { index in
+                            Button(actions[index].title, role: actions[index].role) {
+                                actions[index].action()
+                            }
+                        }
+                    }
+                },
                 message: { Text(alertMessage?.message ?? "") }
             )
     }
