@@ -47,7 +47,11 @@ struct CollectibleViewModelTests {
     @Test
     func showAttributes() {
         #expect(CollectibleViewModel.mock(assetData: .mock(asset: .mock(attributes: []))).showAttributes == false)
-        #expect(CollectibleViewModel.mock(assetData: .mock(asset: .mock(attributes: [NFTAttribute(name: "Color", value: "Blue", percentage: nil)]))).showAttributes == true)
+        
+        let withAttributesModel = CollectibleViewModel.mock(assetData: .mock(asset: .mock(attributes: [
+            NFTAttribute(name: "Color", value: "Blue", percentage: nil)
+        ])))
+        #expect(withAttributesModel.showAttributes == true)
     }
     
     @Test
