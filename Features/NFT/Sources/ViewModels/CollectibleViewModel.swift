@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import UIKit
 import Primitives
 import PrimitivesComponents
 import Localization
@@ -10,6 +11,7 @@ import ImageGalleryService
 import Photos
 import AvatarService
 import Formatters
+import ExplorerService
 
 @Observable
 @MainActor
@@ -18,20 +20,24 @@ public final class CollectibleViewModel {
     private let assetData: NFTAssetData
     private let headerButtonAction: HeaderButtonAction?
     private let avatarService: AvatarService
+    private let explorerService: ExplorerService
 
     var isPresentingPhotoPermissionMessage: Bool = false
     var isPresentingAlertMessage: AlertMessage?
     var isPresentingToast: ToastMessage?
+    var isPresentingTokenExplorerUrl: URL?
 
     public init(
         wallet: Wallet,
         assetData: NFTAssetData,
         avatarService: AvatarService,
+        explorerService: ExplorerService = ExplorerService.standard,
         headerButtonAction: HeaderButtonAction?
     ) {
         self.wallet = wallet
         self.assetData = assetData
         self.avatarService = avatarService
+        self.explorerService = explorerService
         self.headerButtonAction = headerButtonAction
     }
 
@@ -49,6 +55,12 @@ public final class CollectibleViewModel {
 
     var contractText: String {
         AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
+    }
+    
+    var contractContextMenu: [ContextMenuItemType] {
+        [.copy(value: contractValue, onCopy: { [weak self] value in
+            self?.isPresentingToast = .copied(value)
+        })]
     }
 
     var tokenIdTitle: String { Localized.Asset.tokenId }
@@ -95,7 +107,10 @@ public final class CollectibleViewModel {
     }
 
     var showContract: Bool {
-        assetData.collection.contractAddress != assetData.asset.tokenId
+        let contractAddress = assetData.collection.contractAddress
+        let tokenId = assetData.asset.tokenId
+        
+        return !contractAddress.isEmpty && contractAddress != tokenId
     }
 
     var showAttributes: Bool {
@@ -108,6 +123,23 @@ public final class CollectibleViewModel {
 
     var socialLinksViewModel: SocialLinksViewModel {
         SocialLinksViewModel(assetLinks: assetData.collection.links)
+    }
+    
+    var tokenExplorerUrl: BlockExplorerLink? {
+        explorerService.tokenUrl(chain: assetData.asset.chain, address: assetData.asset.tokenId)
+    }
+    
+    var tokenIdContextMenu: [ContextMenuItemType] {
+        let items: [ContextMenuItemType] = [
+            .copy(value: tokenIdValue, onCopy: { [weak self] value in
+                self?.isPresentingToast = .copied(value)
+            }),
+            tokenExplorerUrl.map { explorerLink in
+                .url(title: Localized.Transaction.viewOn(explorerLink.name), onOpen: onSelectViewTokenInExplorer)
+            }
+        ].compactMap { $0 }
+        
+        return items
     }
 }
 
@@ -143,6 +175,12 @@ extension CollectibleViewModel {
                 NSLog("Set nft avatar error: \(error)")
             }
         }
+    }
+    
+    func onSelectViewTokenInExplorer() {
+        guard let explorerLink = tokenExplorerUrl else { return }
+        guard let url = URL(string: explorerLink.link) else { return }
+        isPresentingTokenExplorerUrl = url
     }
 }
 

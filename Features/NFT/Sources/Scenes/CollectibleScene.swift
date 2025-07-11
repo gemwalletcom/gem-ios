@@ -42,6 +42,7 @@ public struct CollectibleScene: View {
         }
         .alertSheet($model.isPresentingAlertMessage)
         .toast(message: $model.isPresentingToast)
+        .safariSheet(url: $model.isPresentingTokenExplorerUrl)
     }
 }
 
@@ -91,9 +92,10 @@ extension CollectibleScene {
 
             if model.showContract {
                 ListItemView(title: model.contractTitle, subtitle: model.contractText)
-                    .contextMenu(.copy(value: model.contractValue))
+                    .contextMenu(model.contractContextMenu)
             }
             ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)
+                .contextMenu(model.tokenIdContextMenu)
         }
     }
 

@@ -22,7 +22,8 @@
       "Bash(ls:*)",
       "Bash(mkdir:*)",
       "Bash(swift test:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

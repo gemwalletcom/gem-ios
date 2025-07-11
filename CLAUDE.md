@@ -213,6 +213,28 @@ public extension Banner {
 - Use `.constant(nil)` for bindings instead of creating custom ones
 - Follow the pattern of existing TestKit services like `BannerSetupService.mock()`
 
+#### Test Formatting Guidelines
+- **Short, simple tests**: Keep inline with direct assertions
+  ```swift
+  #expect(CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "12345"))).tokenIdValue == "12345")
+  ```
+- **Long lines**: Separate model creation from comparison for better readability
+  ```swift
+  let shortModel = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "123")))
+  let longModel = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "1234567890123456789")))
+  
+  #expect(shortModel.tokenIdText == "#123")
+  #expect(longModel.tokenIdText == "1234567890123456789")
+  ```
+- **Complex mock setups**: Use multiline formatting with proper indentation
+  ```swift
+  #expect(CollectibleViewModel.mock(assetData: .mock(
+      collection: .mock(contractAddress: "0x123"),
+      asset: .mock(tokenId: "456")
+  )).showContract == true)
+  ```
+- **Avoid unnecessary variables** for simple cases - only use when readability is compromised
+
 ## Rust Core Integration
 
 ### Core Submodule
