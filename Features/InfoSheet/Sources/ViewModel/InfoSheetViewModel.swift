@@ -61,7 +61,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
     public var description: String {
         switch type {
         case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol)
-        case .insufficientBalance(let asset): return Localized.Info.InsufficientBalance.description(asset.symbol)
+        case .insufficientBalance(let asset, _): return Localized.Info.InsufficientBalance.description(asset.symbol)
         case .insufficientNetworkFee(let asset, _, let required):
             let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Info.InsufficientNetworkFeeBalance.description(
@@ -98,7 +98,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
         switch type {
         case .networkFee: return .image(Images.Info.networkFee)
         case  .insufficientNetworkFee(_, let image, _): return InfoSheetImage.assetImage(image)
-        case .insufficientBalance: return .none
+        case .insufficientBalance(_, let image): return InfoSheetImage.assetImage(image)
         case .transactionState(let imageURL, let placeholder, let state):
             let stateImage = switch state {
             case .pending: Images.Transaction.State.pending

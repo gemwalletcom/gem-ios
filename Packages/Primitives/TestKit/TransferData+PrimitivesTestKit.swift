@@ -14,7 +14,7 @@ extension TransferData {
             recipientData: .mock(),
             value: value,
             canChangeValue: false,
-            ignoreValueCheck: false
+            ignoreValueCheck: type.shouldIgnoreValueCheck
         )
     }
 }
