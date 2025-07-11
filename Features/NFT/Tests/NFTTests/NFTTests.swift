@@ -20,8 +20,11 @@ struct CollectibleViewModelTests {
     
     @Test
     func tokenIdText() {
-        #expect(CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "123"))).tokenIdText == "#123")
-        #expect(CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "1234567890123456789"))).tokenIdText == "1234567890123456789")
+        let shortModel = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "123")))
+        let longModel = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "1234567890123456789")))
+        
+        #expect(shortModel.tokenIdText == "#123")
+        #expect(longModel.tokenIdText == "1234567890123456789")
     }
     
     @Test
