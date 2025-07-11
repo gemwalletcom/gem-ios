@@ -19,6 +19,7 @@ import SwapService
 import Style
 import SwiftUI
 import Formatters
+import Swap
 
 @Observable
 @MainActor
@@ -155,17 +156,8 @@ public final class ConfirmTransferViewModel {
     var shouldShowMemo: Bool { dataModel.shouldShowMemo }
     var memo: String? { dataModel.recipientData.recipient.memo }
 
-    var slippageField: String? { Localized.Swap.slippage }
     var progressMessage: String { Localized.Common.loading }
     var shouldShowFeeRatesSelector: Bool { feeModel.showFeeRatesSelector }
-
-    var slippageText: String? {
-        if let slippage = dataModel.slippage {
-            String("\(slippage)%")
-        } else {
-            .none
-        }
-    }
 
     var networkFeeFooterText: String? {
         return .none
@@ -228,6 +220,19 @@ public final class ConfirmTransferViewModel {
             }
         )
     }
+
+    var swapDetailsViewModel: SwapDetailsViewModel? {
+        guard case let .swap(fromAsset, toAsset, quote, _) = data.type else {
+            return nil
+        }
+
+        return SwapDetailsViewModel(
+            fromAssetPrice: SwapAssetPrice(asset: fromAsset, price: metadata?.assetPrice),
+            toAssetPrice: SwapAssetPrice(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
+            selectedQuote: quote,
+            availableQuotes: [quote]
+        )
+    }
 }
 
 // MARK: - Business Logic
@@ -273,6 +278,10 @@ extension ConfirmTransferViewModel {
 
     func onSelectFeePicker() {
         isPresentingSheet = .networkFeeSelector
+    }
+
+    func onSelectSwapDetails() {
+        isPresentingSheet = .swapDetails
     }
 
     func onChangeFeePriority(_ priority: FeePriority) async {

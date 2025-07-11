@@ -69,6 +69,12 @@ public struct SwapDetailsView: View {
                     model: model.priceImpactModel,
                     infoAction: { isPresentingInfoSheet = .priceImpact }
                 )
+                
+                ListItemView(
+                    title: model.slippageField,
+                    subtitle: model.slippageText,
+                    infoAction: { isPresentingInfoSheet = .slippage }
+                )
             }
         }
     }

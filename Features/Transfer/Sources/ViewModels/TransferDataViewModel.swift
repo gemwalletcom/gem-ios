@@ -113,7 +113,7 @@ struct TransferDataViewModel {
             case .stake, .unstake, .redelegate, .withdraw: true
             case .rewards: false
             }
-        case .account: false
+        case .account, .swap: false
         default: true
         }
     }
@@ -129,14 +129,6 @@ struct TransferDataViewModel {
                 .none
         case let .generic(_, session, _):
             AssetImage(imageURL: session.icon.asURL)
-        }
-    }
-
-    var slippage: Double? {
-        if case .swap(_, _, let quote, _) = type {
-            Double(Double(quote.request.options.slippage.bps) / 100).rounded(toPlaces: 2)
-        } else {
-            .none
         }
     }
 

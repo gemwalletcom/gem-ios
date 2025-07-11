@@ -8,6 +8,7 @@ import InfoSheet
 import PrimitivesComponents
 import FiatConnect
 import Validators
+import Swap
 
 public struct ConfirmTransferScene: View {
     @State private var model: ConfirmTransferViewModel
@@ -68,6 +69,13 @@ public struct ConfirmTransferScene: View {
                             title: .done,
                             placement: .topBarLeading
                         )
+                    }
+                }
+            case .swapDetails:
+                if let swapDetailsViewModel = model.swapDetailsViewModel {
+                    NavigationStack {
+                        SwapDetailsView(model: swapDetailsViewModel)
+                            .presentationDetentsForCurrentDeviceSize(expandable: true)
                     }
                 }
             }
@@ -134,12 +142,13 @@ extension ConfirmTransferScene {
                 if model.shouldShowMemo {
                     MemoListItemView(memo: model.memo)
                 }
-                
-                if let slippage = model.slippageText {
-                    ListItemView(
-                        title: model.slippageField,
-                        subtitle: slippage,
-                        infoAction: model.onSelectSlippageInfo
+            }
+            
+            if let swapDetailsViewModel = model.swapDetailsViewModel {
+                Section {
+                    NavigationCustomLink(
+                        with: SwapDetailsListView(model: swapDetailsViewModel),
+                        action: model.onSelectSwapDetails
                     )
                 }
             }

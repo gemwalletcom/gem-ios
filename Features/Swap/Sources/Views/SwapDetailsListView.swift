@@ -22,7 +22,7 @@ public struct SwapDetailsListView: View {
                     ListItemRotateView(
                         title: .empty,
                         subtitle: rate,
-                        action: model.switchRateDirection
+                        action: nil
                     )
                 }
                 ListItemImageView(

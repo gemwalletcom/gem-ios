@@ -7,6 +7,7 @@ import Preferences
 import BigInt
 import Primitives
 import Components
+import Formatters
 import struct Gemstone.SwapQuote
 
 @testable import Swap
@@ -15,19 +16,14 @@ import struct Gemstone.SwapQuote
 struct SwapDetailsViewModelTests {
     @Test
     func swapEstimationText() {
-        let model = SwapDetailsViewModel.mock(selectedQuote: .mock(etaInSeconds: nil))
-        #expect(model.swapEstimationText == nil)
-        
-        let modelShort = SwapDetailsViewModel.mock(selectedQuote: .mock(etaInSeconds: 30))
-        #expect(modelShort.swapEstimationText == nil)
-        
-        let modelLong = SwapDetailsViewModel.mock(selectedQuote: .mock(etaInSeconds: 180))
-        #expect(modelLong.swapEstimationText == "≈ 3 min")
+        #expect(SwapDetailsViewModel.mock(selectedQuote: .mock(etaInSeconds: nil)).swapEstimationText == nil)
+        #expect(SwapDetailsViewModel.mock(selectedQuote: .mock(etaInSeconds: 30)).swapEstimationText == nil)
+        #expect(SwapDetailsViewModel.mock(selectedQuote: .mock(etaInSeconds: 180)).swapEstimationText == "≈ 3 min")
     }
     
     @Test
     func switchRate() {
-        let model = SwapDetailsViewModel.mock(selectedQuote: .mock(toValue: "250000000000"))
+        let model = SwapDetailsViewModel.mock(selectedQuote: SwapQuote.mock(toValue: "250000000000"))
         
         #expect(model.rateText == "1 ETH ≈ 250,000.00 USDT")
         
@@ -37,23 +33,15 @@ struct SwapDetailsViewModelTests {
 }
 
 extension SwapDetailsViewModel {
-    static func mock(
-        state: StateViewType<Bool> = .data(true),
-        fromAsset: AssetData = .mock(asset: .mockEthereum()),
-        toAsset: AssetData = .mock(asset: .mockEthereumUSDT()),
-        selectedQuote: SwapQuote = .mock(),
-        availableQuotes: [SwapQuote] = [.mock()],
-        preferences: Preferences = .standard,
-        swapProviderSelectAction: @escaping (SwapProviderItem) -> Void = { _ in }
-    ) -> SwapDetailsViewModel {
+    static func mock(selectedQuote: SwapQuote = .mock(),) -> SwapDetailsViewModel {
         SwapDetailsViewModel(
-            state: state,
-            fromAsset: fromAsset,
-            toAsset: toAsset,
+            state: .data(true),
+            fromAssetPrice: SwapAssetPrice(asset: .mockEthereum(), price: .mock()),
+            toAssetPrice: SwapAssetPrice(asset: .mockEthereumUSDT(), price: .mock()),
             selectedQuote: selectedQuote,
-            availableQuotes: availableQuotes,
-            preferences: preferences,
-            swapProviderSelectAction: swapProviderSelectAction
+            availableQuotes: [.mock()],
+            preferences: .mock(),
+            swapProviderSelectAction: nil
         )
     }
 }

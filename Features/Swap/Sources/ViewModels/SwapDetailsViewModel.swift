@@ -24,35 +24,34 @@ public final class SwapDetailsViewModel {
     
     let state: StateViewType<Bool>
     private let availableQuotes: [SwapQuote]
-    private let fromAsset: AssetData
-    private let toAsset: AssetData
+    private let fromAssetPrice: SwapAssetPrice
+    private let toAssetPrice: SwapAssetPrice
     private let providerViewModel: SwapProviderViewModel
     private let selectedQuote: SwapQuote
     private var rateDirection: AssetRateFormatter.Direction = .direct
     private let priceViewModel: PriceViewModel
 
-    private let swapProviderSelectAction: (SwapProviderItem) -> Void
+    private let swapProviderSelectAction: ((SwapProviderItem) -> Void)?
 
     public init(
-        state: StateViewType<Bool>?,
-        fromAsset: AssetData,
-        toAsset: AssetData,
+        state: StateViewType<Bool>? = nil,
+        fromAssetPrice: SwapAssetPrice,
+        toAssetPrice: SwapAssetPrice,
         selectedQuote: SwapQuote,
         availableQuotes: [SwapQuote],
-        preferences: Preferences,
-        slippage: Double? = nil,
-        swapProviderSelectAction: @escaping (SwapProviderItem) -> Void
+        preferences: Preferences = .standard,
+        swapProviderSelectAction: ((SwapProviderItem) -> Void)? = nil
     ) {
         self.state = state ?? .data(true)
-        self.fromAsset = fromAsset
-        self.toAsset = toAsset
+        self.fromAssetPrice = fromAssetPrice
+        self.toAssetPrice = toAssetPrice
         self.providerViewModel = SwapProviderViewModel(provider: selectedQuote.data.provider)
         self.selectedQuote = selectedQuote
         self.availableQuotes = availableQuotes
-        self.slippage = slippage
+        self.priceViewModel = PriceViewModel(price: toAssetPrice.price, currencyCode: preferences.currency)
         self.swapProviderSelectAction = swapProviderSelectAction
-        self.priceViewModel = PriceViewModel(price: toAsset.price, currencyCode: preferences.currency)
     }
+    
     
     // MARK: - Provider
     var providerField: String { Localized.Common.provider }
@@ -61,7 +60,7 @@ public final class SwapDetailsViewModel {
     var providers: [SwapProviderItem] {
         Array(availableQuotes.prefix(3).map { quote in
             SwapProviderItem(
-                asset: toAsset.asset,
+                asset: toAssetPrice.asset,
                 swapQuote: quote,
                 selectedProvider: selectedQuote.data.provider.id,
                 priceViewModel: priceViewModel,
@@ -89,8 +88,8 @@ public final class SwapDetailsViewModel {
     var rateTitle: String { Localized.Buy.rate }
     var rateText: String? {
          try? AssetRateFormatter().rate(
-            fromAsset: fromAsset.asset,
-            toAsset: toAsset.asset,
+            fromAsset: fromAssetPrice.asset,
+            toAsset: toAssetPrice.asset,
             fromValue: selectedQuote.fromValueBigInt,
             toValue: selectedQuote.toValueBigInt,
             direction: rateDirection
@@ -100,15 +99,19 @@ public final class SwapDetailsViewModel {
     // MARK: - Price Impact
     var priceImpactModel: PriceImpactViewModel {
         PriceImpactViewModel(
-            fromAssetData: fromAsset,
+            fromAssetPrice: fromAssetPrice,
             fromValue: selectedQuote.fromValue,
-            toAssetData: toAsset,
+            toAssetPrice: toAssetPrice,
             toValue: selectedQuote.toValue
         )
     }
     
     // MARK: - Slippage
-    var slippage: Double?
+    var slippageField: String { Localized.Swap.slippage }
+    var slippageText: String {
+        let slippageValue = Double(selectedQuote.request.options.slippage.bps) / 100
+        return String(format: "%@ %@", "\(slippageValue.rounded(toPlaces: 2))", "%")
+    }
     
     // MARK: - Actions
     func switchRateDirection() {
@@ -119,6 +122,6 @@ public final class SwapDetailsViewModel {
     }
 
     func onFinishSwapProviderSelection(item: SwapProviderItem) {
-        swapProviderSelectAction(item)
+        swapProviderSelectAction?(item)
     }
 }
