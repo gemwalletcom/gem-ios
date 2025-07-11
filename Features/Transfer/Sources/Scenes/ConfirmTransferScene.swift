@@ -153,17 +153,13 @@ extension ConfirmTransferScene {
             }
 
             if let error = model.listError {
-                Button {
-                    model.onSelectListError(error: error)
-                } label: {
-                    ListItemErrorView(
-                        errorTitle: model.listErrorTitle,
-                        error: error,
-                        infoAction: {
-                            model.onSelectListError(error: error)
-                        }
-                    )
-                }
+                ListItemErrorView(
+                    errorTitle: model.listErrorTitle,
+                    error: error,
+                    infoAction: {
+                        model.onSelectListError(error: error)
+                    }
+                )
             }
         }
         .contentMargins([.top], .small, for: .scrollContent)
