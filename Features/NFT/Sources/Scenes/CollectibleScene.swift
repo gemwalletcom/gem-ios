@@ -94,6 +94,7 @@ extension CollectibleScene {
                     .contextMenu(.copy(value: model.contractValue))
             }
             ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)
+                .contextMenu(tokenIdContextMenu)
         }
     }
 
@@ -109,6 +110,17 @@ extension CollectibleScene {
         Section(Localized.Social.links) {
             SocialLinksView(model: model.socialLinksViewModel)
         }
+    }
+    
+    private var tokenIdContextMenu: [ContextMenuItemType] {
+        let items: [ContextMenuItemType] = [
+            .copy(value: model.tokenIdValue),
+            model.tokenExplorerUrl.map { explorerLink in
+                .url(title: Localized.Transaction.viewOn(explorerLink.name), onOpen: model.onSelectViewTokenInExplorer)
+            }
+        ].compactMap { $0 }
+        
+        return items
     }
 }
 
