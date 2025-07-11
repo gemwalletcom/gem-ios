@@ -26,8 +26,14 @@ struct CollectibleViewModelTests {
     
     @Test
     func showContract() {
-        #expect(CollectibleViewModel.mock(assetData: .mock(collection: .mock(contractAddress: "0x123"), asset: .mock(tokenId: "456"))).showContract == true)
-        #expect(CollectibleViewModel.mock(assetData: .mock(collection: .mock(contractAddress: "0x123"), asset: .mock(tokenId: "0x123"))).showContract == false)
+        #expect(CollectibleViewModel.mock(assetData: .mock(
+            collection: .mock(contractAddress: "0x123"),
+            asset: .mock(tokenId: "456")
+        )).showContract == true)
+        #expect(CollectibleViewModel.mock(assetData: .mock(
+            collection: .mock(contractAddress: "0x123"),
+            asset: .mock(tokenId: "0x123")
+        )).showContract == false)
     }
     
     @Test
@@ -44,7 +50,9 @@ struct CollectibleViewModelTests {
     @Test
     func showLinks() {
         #expect(CollectibleViewModel.mock(assetData: .mock(collection: .mock(links: []))).showLinks == false)
-        #expect(CollectibleViewModel.mock(assetData: .mock(collection: .mock(links: [AssetLink(name: "Website", url: "https://example.com")]))).showLinks == true)
+        #expect(CollectibleViewModel.mock(assetData: .mock(collection: .mock(links: [
+            AssetLink(name: "Website", url: "https://example.com")
+        ]))).showLinks == true)
     }
 }
 
