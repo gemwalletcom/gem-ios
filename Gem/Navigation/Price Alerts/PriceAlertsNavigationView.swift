@@ -19,7 +19,6 @@ struct PriceAlertsNavigationView: View {
 
     @State private var isPresentingAddAsset: Bool = false
     @State private var isPresentingToastMessage: ToastMessage?
-    @State private var assetPriceAlertsNavigationPath = NavigationPath()
 
     let model: PriceAlertsViewModel
 

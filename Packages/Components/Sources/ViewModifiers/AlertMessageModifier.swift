@@ -13,8 +13,16 @@ public struct AlertMessageModifier: ViewModifier {
                 actions: {
                     if let actions = alertMessage?.actions {
                         ForEach(0..<actions.count, id: \.self) { index in
-                            Button(actions[index].title, role: actions[index].role) {
-                                actions[index].action()
+                            let action = actions[index]
+                            if action.isDefaultAction {
+                                Button(action.title, role: action.role) {
+                                    action.action()
+                                }
+                                .keyboardShortcut(.defaultAction)
+                            } else {
+                                Button(action.title, role: action.role) {
+                                    action.action()
+                                }
                             }
                         }
                     }

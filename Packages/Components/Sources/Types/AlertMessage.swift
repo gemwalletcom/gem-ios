@@ -24,15 +24,18 @@ public struct AlertMessage: Identifiable, Sendable {
 public struct AlertAction: Sendable {
     public let title: String
     public let role: ButtonRole?
+    public let isDefaultAction: Bool
     public let action: @Sendable () -> Void
     
     public init(
         title: String,
         role: ButtonRole? = nil,
+        isDefaultAction: Bool = false,
         action: @escaping @Sendable () -> Void = {}
     ) {
         self.title = title
         self.role = role
+        self.isDefaultAction = isDefaultAction
         self.action = action
     }
 }
