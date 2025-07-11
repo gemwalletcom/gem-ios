@@ -8,7 +8,7 @@ import Components
 
 public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case networkFee(Chain)
-    case insufficientBalance(Asset)
+    case insufficientBalance(Asset, image: AssetImage)
     case insufficientNetworkFee(Asset, image: AssetImage, required: BigInt)
     case transactionState(imageURL: URL?, placeholder: Image?, state: TransactionState)
     case watchWallet
@@ -27,7 +27,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         switch self {
         case .networkFee: "networkFees"
         case .insufficientNetworkFee: "insufficientNetworkFee"
-        case .insufficientBalance: "insufficientBalance"
+        case .insufficientBalance(let asset, _): "insufficientBalance_\(asset.id.identifier)"
         case .transactionState(_, _, let state): state.id
         case .watchWallet: "watchWallet"
         case .stakeLockTime: "stakeLockTime"

@@ -443,7 +443,7 @@ extension TransferAmountCalculatorError {
     var infoSheet: InfoSheetType {
         switch self {
         case .insufficientBalance(let asset):
-            .insufficientBalance(asset)
+            .insufficientBalance(asset, image: AssetViewModel(asset: asset).assetImage)
         case .insufficientNetworkFee(let asset, let required):
                 .insufficientNetworkFee(asset, image: AssetViewModel(asset: asset).assetImage, required: required)
         case .minimumAccountBalanceTooLow(let asset, let required):
