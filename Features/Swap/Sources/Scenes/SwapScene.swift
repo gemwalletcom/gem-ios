@@ -27,7 +27,7 @@ public struct SwapScene: View {
             bottomActionView
         }
         .confirmationDialog(
-            model.priceImpactModel?.highImpactWarningTitle ?? "",
+            model.swapDetailsViewModel?.priceImpactModel.highImpactWarningTitle ?? "",
             presenting: $model.isPresentingPriceImpactConfirmation,
             sensoryFeedback: .warning,
             actions: { _ in
@@ -155,38 +155,10 @@ extension SwapScene {
     
     private var additionalInfoSectionView: some View {
         Section {
-            if let provider = model.providerText {
-                let view = ListItemImageView(
-                    title: model.providerField,
-                    subtitle: provider,
-                    assetImage: model.providerImage
-                )
-                if model.allowSelectProvider {
-                    NavigationCustomLink(
-                        with: view,
-                        action: model.onSelectProviderSelector
-                    )
-                } else {
-                    view
-                }
-            }
-            
-            if let swapEstimation = model.swapEstimationText {
-                ListItemView(title: model.swapEstimationTitle, subtitle: swapEstimation)
-            }
-            
-            if let rateText = model.rateText {
-                ListItemRotateView(
-                    title: model.rateTitle,
-                    subtitle: rateText,
-                    action: model.switchRateDirection
-                )
-            }
-
-            if let viewModel = model.priceImpactModel {
-                PriceImpactView(
-                    model: viewModel,
-                    infoAction: model.onSelectPriceImpactInfo
+            if let swapDetailsViewModel = model.swapDetailsViewModel {
+                NavigationCustomLink(
+                    with: SwapDetailsListView(model: swapDetailsViewModel),
+                    action: model.onSelectSwapDetails
                 )
             }
         }

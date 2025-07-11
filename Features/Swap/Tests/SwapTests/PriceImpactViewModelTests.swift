@@ -14,7 +14,7 @@ struct PriceImpactViewModelTests {
         let model = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "990000000")
         let value = model.value
 
-        #expect(value == nil)
+        #expect(value == PriceImpactValue(type: Swap.PriceImpactType.low, value: "-1.00%"))
     }
 
     @Test

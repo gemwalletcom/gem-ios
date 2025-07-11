@@ -11,9 +11,9 @@ public struct SwapProviderViewModel {
         self.provider = provider
     }
     
-    public var providerText: String? { provider.name }
+    public var providerText: String { provider.name }
 
-    public var providerImage: AssetImage? {
+    public var providerImage: AssetImage {
         AssetImage(
             imageURL: .none,
             placeholder: provider.image,

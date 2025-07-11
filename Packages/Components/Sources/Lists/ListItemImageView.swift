@@ -5,16 +5,16 @@ import SwiftUI
 import Style
 
 public struct ListItemImageView: View {
-    public let title: String
-    public let subtitle: String
+    public let title: String?
+    public let subtitle: String?
     public let subtitleStyle: TextStyle
     public let assetImage: AssetImage?
     public let imageSize: CGFloat
     public let infoAction: (() -> Void)?
     
     public init(
-        title: String,
-        subtitle: String,
+        title: String?,
+        subtitle: String?,
         subtitleStyle: TextStyle = .calloutSecondary,
         assetImage: AssetImage? = nil,
         imageSize: CGFloat = .list.image,

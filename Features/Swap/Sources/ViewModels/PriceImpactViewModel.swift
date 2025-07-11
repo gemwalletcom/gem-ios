@@ -42,13 +42,18 @@ struct PriceImpactViewModel {
         priceImpactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
     }
 
-    func priceImpactColor(for type: PriceImpactType) -> Color {
-        switch type {
-        case .low: Colors.black
+    var priceImpactStyle: TextStyle {
+        let color = switch value?.type {
+        case .low, nil: Colors.secondaryText
         case .medium: Colors.orange
         case .high: Colors.red
         case .positive: Colors.green
         }
+
+        return TextStyle(
+            font: .callout,
+            color: color
+        )
     }
 }
 
@@ -99,7 +104,7 @@ extension PriceImpactViewModel {
         case ..<0:
             return PriceImpactValue(type: .positive, value: priceImpactPercentage)
         case 0...1:
-            return nil
+            return PriceImpactValue(type: .low, value: priceImpactPercentage)
         case 1...5:
             return PriceImpactValue(type: .medium, value: priceImpactPercentage)
         default:

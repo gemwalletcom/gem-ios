@@ -68,12 +68,13 @@ struct SwapNavigationView: View {
                         ),
                         isPresentingSelectType: .constant(.swap(type))
                     )
-                case let .swapProvider(asset):
-                    SelectableListNavigationStack(
-                        model: model.swapProvidersViewModel(asset: asset),
-                        onFinishSelection: model.onFinishSwapProvderSelection,
-                        listContent: { SimpleListItemView(model: $0) }
-                    )
+                case .swapDetails:
+                    if let model = model.swapDetailsViewModel {
+                        NavigationStack {
+                            SwapDetailsView(model: model)
+                                .presentationDetentsForCurrentDeviceSize(expandable: true)
+                        }
+                    }
                 }
             }
     }
