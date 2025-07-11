@@ -24,7 +24,8 @@
       "Bash(swift test:*)",
       "Bash(cp:*)",
       "Bash(find:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }

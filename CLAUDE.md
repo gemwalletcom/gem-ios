@@ -156,6 +156,7 @@ Services are injected via SwiftUI Environment:
 - UI tests: `just test_ui`
 - Specific test: `just test-specific TARGET` (e.g. `just test-specific AssetsTests`)
 - Tests use iPhone 16 simulator by default
+- To run tests, always use the `just` commands above, not direct `xcrun swift test` commands
 
 ### Writing Unit Tests
 
@@ -254,6 +255,7 @@ public extension Banner {
 - Use `@Observable` for ViewModels instead of `ObservableObject`
 - Prefer async/await over Combine for new code
 - Use protocol-based design for services
+- Avoid adding explanatory comments in tests - test code should be self-documenting
 
 ### Code Organization
 - Use `// MARK: - Actions` to separate action methods in ViewModels
