@@ -90,8 +90,8 @@ extension CollectibleScene {
                 assetImage: model.networkAssetImage
             )
 
-            if model.showContract {
-                ListItemView(title: model.contractTitle, subtitle: model.contractText)
+            if let text = model.contractText {
+                ListItemView(title: model.contractTitle, subtitle: text)
                     .contextMenu(model.contractContextMenu)
             }
             ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)

@@ -25,10 +25,8 @@ extension TransferData: Identifiable {
 extension TransferDataType {
     public var shouldIgnoreValueCheck: Bool {
         switch self {
-        case .transferNft, .stake, .account:
-            return true
-        case .transfer, .swap, .tokenApprove, .generic:
-            return false
+        case .transferNft, .stake, .account, .tokenApprove: true
+        case .transfer, .swap, .generic: false
         }
     }
 }

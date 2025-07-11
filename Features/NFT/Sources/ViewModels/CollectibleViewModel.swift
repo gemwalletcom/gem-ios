@@ -51,10 +51,15 @@ public final class CollectibleViewModel {
     var networkText: String { assetData.asset.chain.asset.name }
 
     var contractTitle: String { Localized.Asset.contract }
-    var contractValue: String { assetData.collection.contractAddress }
+    var contractValue: String {
+        assetData.collection.contractAddress
+    }
 
-    var contractText: String {
-        AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
+    var contractText: String? {
+        if contractValue.isEmpty && contractValue != assetData.asset.tokenId {
+            return .none
+        }
+        return AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
     }
     
     var contractContextMenu: [ContextMenuItemType] {
@@ -104,13 +109,6 @@ public final class CollectibleViewModel {
                 isEnabled: true
             ),
         ]
-    }
-
-    var showContract: Bool {
-        let contractAddress = assetData.collection.contractAddress
-        let tokenId = assetData.asset.tokenId
-        
-        return !contractAddress.isEmpty && contractAddress != tokenId
     }
 
     var showAttributes: Bool {

@@ -28,20 +28,11 @@ struct CollectibleViewModelTests {
         #expect(longModel.tokenIdText == "1234567890123456789")
     }
     
+    
     @Test
-    func showContract() {
-        #expect(CollectibleViewModel.mock(assetData: .mock(
-            collection: .mock(contractAddress: "0x123"),
-            asset: .mock(tokenId: "456")
-        )).showContract == true)
-        #expect(CollectibleViewModel.mock(assetData: .mock(
-            collection: .mock(contractAddress: "0x123"),
-            asset: .mock(tokenId: "0x123")
-        )).showContract == false)
-        #expect(CollectibleViewModel.mock(assetData: .mock(
-            collection: .mock(contractAddress: ""),
-            asset: .mock(tokenId: "456")
-        )).showContract == false)
+    func contractText() {
+        #expect(CollectibleViewModel.mock(assetData: .mock(collection: .mock(contractAddress: "0x123456789abcdef"))).contractText == "0x1234...cdef")
+        #expect(CollectibleViewModel.mock(assetData: .mock(collection: .mock(contractAddress: ""))).contractText == nil)
     }
     
     @Test
