@@ -33,11 +33,11 @@ struct CollectibleViewModelTests {
         #expect(CollectibleViewModel.mock(assetData: .mock(
             collection: .mock(contractAddress: "0x123"),
             asset: .mock(tokenId: "456")
-        )).contractText == "")
+        )).contractText == "0x123")
         #expect(CollectibleViewModel.mock(assetData: .mock(
             collection: .mock(contractAddress: "0x12345678910"),
             asset: .mock(tokenId: "")
-        )).contractText == "0x12345678910")
+        )).contractText == "0x1234...78910")
         #expect(CollectibleViewModel.mock(assetData: .mock(
             collection: .mock(contractAddress: ""),
             asset: .mock(tokenId: "456")
