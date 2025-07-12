@@ -22,3 +22,23 @@ public extension WalletConnectionSession {
         )
     }
 }
+
+public extension WalletConnectionSessionAppMetadata {
+    static func mock(
+        name: String = "",
+        description: String = "",
+        url: String = "",
+        icon: String = "",
+        redirectNative: String? = nil,
+        redirectUniversal: String? = nil
+    ) -> WalletConnectionSessionAppMetadata {
+        WalletConnectionSessionAppMetadata(
+            name: name,
+            description: description,
+            url: url,
+            icon: icon,
+            redirectNative: redirectNative,
+            redirectUniversal: redirectUniversal
+        )
+    }
+}
