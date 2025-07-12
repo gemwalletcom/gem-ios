@@ -19,6 +19,6 @@ public enum AppDisplayFormatter {
             return host
         }
         
-        return Localized.common.unknown
+        return Localized.Errors.unknown
     }
 }
