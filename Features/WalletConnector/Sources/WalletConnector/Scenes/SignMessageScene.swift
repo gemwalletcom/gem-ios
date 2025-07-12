@@ -21,15 +21,12 @@ public struct SignMessageScene: View {
                 Section {
                     ListItemImageView(
                         title: Localized.WalletConnect.app,
-                        subtitle: model.appName,
+                        subtitle: model.appDisplayText,
                         assetImage: model.appAssetImage
                     )
-                    if let _ = model.appUrl {
-                        ListItemView(title: Localized.WalletConnect.website, subtitle: model.connectionViewModel.host)
-                            .contextMenu(
-                                .url(title: Localized.WalletConnect.website, onOpen: model.onViewWebsite)
-                            )
-                    }
+                    .contextMenu(
+                        .url(title: Localized.WalletConnect.website, onOpen: model.onViewWebsite)
+                    )
                     ListItemView(title: Localized.Common.wallet, subtitle: model.walletText)
                     ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
                 }

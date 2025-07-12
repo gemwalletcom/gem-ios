@@ -66,7 +66,7 @@ public final class AssetSceneViewModel: Sendable {
 
     public var title: String { assetModel.name }
 
-    var balancesTitle: String { Localized.Asset.Balances.available }
+    var balancesTitle: String { Localized.Asset.balances }
     var networkTitle: String { Localized.Transfer.network }
     var stakeTitle: String { Localized.Wallet.stake }
 

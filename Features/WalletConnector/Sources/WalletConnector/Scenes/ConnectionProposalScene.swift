@@ -32,10 +32,7 @@ public struct ConnectionProposalScene: View {
                             subtitle: model.walletName
                         )
                     }
-                    ListItemView(title: model.appTitle, subtitle: model.appText)
-                    if let website = model.websiteText {
-                        ListItemView(title: model.websiteTitle, subtitle: website)
-                    }
+                    ListItemView(title: model.appTitle, subtitle: model.appDisplayText)
                 }
             }
 

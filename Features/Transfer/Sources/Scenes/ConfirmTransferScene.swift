@@ -87,19 +87,15 @@ extension ConfirmTransferScene {
                 showClearHeader: model.showClearHeader
             )
             Section {
-                if let appValue = model.appValue {
+                if let appDisplayValue = model.appDisplayValue {
                     ListItemImageView(
                         title: model.appTitle,
-                        subtitle: appValue,
+                        subtitle: appDisplayValue,
                         assetImage: model.appAssetImage
                     )
-                }
-
-                if let websiteValue = model.websiteValue {
-                    ListItemView(title: model.websiteTitle, subtitle: websiteValue)
-                        .contextMenu(
-                            .url(title: websiteValue, onOpen: model.onSelectOpenWebsiteURL)
-                        )
+                    .contextMenu(
+                        .url(title: model.websiteValue ?? "", onOpen: model.onSelectOpenWebsiteURL)
+                    )
                 }
 
                 ListItemImageView(

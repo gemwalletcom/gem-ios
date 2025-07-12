@@ -126,6 +126,14 @@ public final class ConfirmTransferViewModel {
         }
         return host
     }
+    
+    var appDisplayValue: String? {
+        guard let appValue = appValue else { return nil }
+        if let websiteValue = websiteValue {
+            return "\(appValue) (\(websiteValue))"
+        }
+        return appValue
+    }
 
     var senderTitle: String { Localized.Wallet.title }
     var senderValue: String { wallet.name }

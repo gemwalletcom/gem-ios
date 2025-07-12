@@ -16,17 +16,11 @@ public struct ConnectionView: View {
     public var body: some View {
         HStack {
             AsyncImageView(url: model.imageUrl)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(model.name)
+            VStack(alignment: .leading) {
+                Text(model.displayName)
                     .font(.body)
                     .foregroundColor(.primary)
                     .lineLimit(2)
-                if let host = model.host {
-                    Text(host)
-                        .font(.callout)
-                        .foregroundColor(.secondary)
-                        .lineLimit(1)
-                }
             }
         }
         .contextMenu {

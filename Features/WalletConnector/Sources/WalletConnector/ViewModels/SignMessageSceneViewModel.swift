@@ -66,6 +66,13 @@ public final class SignMessageSceneViewModel {
         AssetImage(imageURL: connectionViewModel.imageUrl)
     }
     
+    public var appDisplayText: String {
+        if let host = connectionViewModel.host {
+            return "\(appName) (\(host))"
+        }
+        return appName
+    }
+    
     var textMessageViewModel: TextMessageViewModel {
         TextMessageViewModel(message: decoder.plainPreview())
     }
