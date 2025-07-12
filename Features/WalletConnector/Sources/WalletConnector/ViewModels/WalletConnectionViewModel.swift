@@ -11,7 +11,7 @@ public struct WalletConnectionViewModel: Sendable {
         self.connection = connection
     }
 
-    var shortName: String {
+    var name: String {
         connection.session.metadata.shortName
     }
     
