@@ -112,28 +112,12 @@ public final class ConfirmTransferViewModel {
 
     var title: String { dataModel.title }
     var appTitle: String { Localized.WalletConnect.app }
-    var appValue: String? { dataModel.appValue }
-
     var appAssetImage: AssetImage? { dataModel.appAssetImage }
-
+    var appText: String {
+        AppDisplayFormatter.format(name: dataModel.appValue, host: websiteURL?.cleanHost())
+    }
     var websiteURL: URL? { dataModel.websiteURL }
-    var websiteTitle: String { Localized.WalletConnect.website }
-    var websiteValue: String? {
-        guard let url = websiteURL,
-              let host = url.host(percentEncoded: true)
-        else {
-            return .none
-        }
-        return host
-    }
-    
-    var appDisplayValue: String? {
-        guard let appValue = appValue else { return nil }
-        if let websiteValue = websiteValue {
-            return "\(appValue) (\(websiteValue))"
-        }
-        return appValue
-    }
+    var websiteTitle: String {Localized.Settings.website }
 
     var senderTitle: String { Localized.Wallet.title }
     var senderValue: String { wallet.name }
@@ -176,16 +160,6 @@ public final class ConfirmTransferViewModel {
         } else {
             .none
         }
-    }
-
-    var networkFeeFooterText: String? {
-        return .none
-        //        TODO: Enable later
-        //        if let quoteFee = dataModel.quoteFee {
-        //            Localized.Swap.quoteFee("\(quoteFee)%")
-        //        } else {
-        //            .none
-        //        }
     }
 
     var listError: Error? {

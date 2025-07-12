@@ -87,16 +87,14 @@ extension ConfirmTransferScene {
                 showClearHeader: model.showClearHeader
             )
             Section {
-                if let appDisplayValue = model.appDisplayValue {
-                    ListItemImageView(
-                        title: model.appTitle,
-                        subtitle: appDisplayValue,
-                        assetImage: model.appAssetImage
-                    )
-                    .contextMenu(
-                        .url(title: model.websiteValue ?? "", onOpen: model.onSelectOpenWebsiteURL)
-                    )
-                }
+                ListItemImageView(
+                    title: model.appTitle,
+                    subtitle: model.appText,
+                    assetImage: model.appAssetImage
+                )
+                .contextMenu(
+                    .url(title: model.websiteTitle, onOpen: model.onSelectOpenWebsiteURL)
+                )
 
                 ListItemImageView(
                     title: model.senderTitle,
@@ -141,10 +139,6 @@ extension ConfirmTransferScene {
                     )
                 } else {
                     networkFeeView
-                }
-            } footer: {
-                if let footer = model.networkFeeFooterText {
-                    Text(footer)
                 }
             }
 

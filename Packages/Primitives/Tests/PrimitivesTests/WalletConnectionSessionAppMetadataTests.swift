@@ -9,6 +9,7 @@ struct WalletConnectionSessionAppMetadataTests {
     @Test
     func shortName() {
         #expect(WalletConnectionSessionAppMetadata.mock(name: "Polymarket - Buy & Sell Predictions").shortName == "Polymarket")
+        #expect(WalletConnectionSessionAppMetadata.mock(name: "Polymarket | Buy & Sell Predictions").shortName == "Polymarket")
         #expect(WalletConnectionSessionAppMetadata.mock(name: "Uniswap: Trade Crypto").shortName == "Uniswap")
         #expect(WalletConnectionSessionAppMetadata.mock(name: "OpenSea - NFT Marketplace").shortName == "OpenSea")
         #expect(WalletConnectionSessionAppMetadata.mock(name: "Aave: DeFi Lending").shortName == "Aave")

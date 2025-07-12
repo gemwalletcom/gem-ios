@@ -274,6 +274,7 @@ public extension Banner {
 - **Single Responsibility**: Each class/struct should have one clear purpose
 - **Avoid Cargo Cult Programming**: Don't copy patterns from other files without understanding their necessity
 - **Code Should Be Self-Documenting**: Use clear, descriptive names instead of comments when possible
+- **Keep It Simple**: Avoid over-engineering solutions. A single method is often better than multiple overloaded methods when the use case is straightforward. Don't create unnecessary abstractions or method variations unless they provide clear value
 
 ### Module Dependencies
 - Features should not directly depend on each other

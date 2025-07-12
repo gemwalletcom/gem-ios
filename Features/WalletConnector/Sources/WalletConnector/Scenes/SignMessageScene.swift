@@ -21,7 +21,7 @@ public struct SignMessageScene: View {
                 Section {
                     ListItemImageView(
                         title: Localized.WalletConnect.app,
-                        subtitle: model.appDisplayText,
+                        subtitle: model.appText,
                         assetImage: model.appAssetImage
                     )
                     .contextMenu(

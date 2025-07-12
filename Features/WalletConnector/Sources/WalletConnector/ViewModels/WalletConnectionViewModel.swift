@@ -11,7 +11,7 @@ public struct WalletConnectionViewModel: Sendable {
         self.connection = connection
     }
 
-    var name: String {
+    var nameText: String {
         connection.session.metadata.shortName
     }
     
@@ -25,18 +25,11 @@ public struct WalletConnectionViewModel: Sendable {
         return .none
     }
     
-    var host: String? {
-        url?.host(percentEncoded: false)
+    var hostText: String? {
+        url?.cleanHost()
     }
 
     var url: URL? {
         URL(string: connection.session.metadata.url)
-    }
-    
-    var displayName: String {
-        if let host = host {
-            return "\(name) (\(host))"
-        }
-        return name
     }
 }

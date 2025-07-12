@@ -32,7 +32,7 @@ public struct ConnectionProposalScene: View {
                             subtitle: model.walletName
                         )
                     }
-                    ListItemView(title: model.appTitle, subtitle: model.appDisplayText)
+                    ListItemView(title: model.appTitle, subtitle: model.appText)
                 }
             }
 
