@@ -4,6 +4,7 @@ import Foundation
 import Keystore
 import WalletConnectorService
 import Primitives
+import PrimitivesComponents
 import Localization
 import Components
 import WalletCore
@@ -64,6 +65,10 @@ public final class SignMessageSceneViewModel {
     
     public var appAssetImage: AssetImage {
         AssetImage(imageURL: connectionViewModel.imageUrl)
+    }
+    
+    public var appText: String {
+        AppDisplayFormatter.format(name: appName, host: connectionViewModel.hostText)
     }
     
     var textMessageViewModel: TextMessageViewModel {

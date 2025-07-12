@@ -31,13 +31,12 @@ public struct ConnectionProposalViewModel {
     var buttonTitle: String { Localized.Transfer.confirm }
     var walletTitle: String { Localized.Common.wallet }
     var appTitle: String { Localized.WalletConnect.app }
-    var websiteTitle: String { Localized.WalletConnect.website }
 
     var walletName: String {
         walletSelectorModel.selectedItems.first?.name ?? .empty
     }
 
-    var appText: String {
+    var appName: String {
         payload.metadata.shortName
     }
     
@@ -46,6 +45,10 @@ public struct ConnectionProposalViewModel {
             return .none
         }
         return host
+    }
+    
+    var appText: String {
+        AppDisplayFormatter.format(name: appName, host: websiteText)
     }
     
     var imageUrl: URL? {

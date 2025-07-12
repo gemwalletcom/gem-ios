@@ -16,8 +16,6 @@
       "Bash(just build)",
       "Bash(gh pr create:*)",
       "Bash(gh pr edit:*)",
-      "Bash(git merge:*)",
-      "Bash(rg:*)",
       "Bash(gh issue:*)",
       "Bash(ls:*)",
       "Bash(mkdir:*)",
@@ -25,7 +23,9 @@
       "Bash(cp:*)",
       "Bash(find:*)",
       "Bash(rm:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(git pull:*)",
+      "Bash(git restore:*)"
     ],
     "deny": []
   }

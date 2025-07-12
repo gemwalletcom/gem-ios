@@ -3,7 +3,7 @@
 import Foundation
 
 extension WalletConnectionSessionAppMetadata {
-    private static let separators = ["-", ":"]
+    private static let separators = ["-", ":", "|"]
     
     public var shortName: String {
         let name = name.trimmingCharacters(in: .whitespaces)

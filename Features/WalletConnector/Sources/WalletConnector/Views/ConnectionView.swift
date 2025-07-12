@@ -4,6 +4,7 @@ import SwiftUI
 import Components
 import Style
 import PrimitivesComponents
+import Localization
 
 public struct ConnectionView: View {
     @State private var isPresentingUrl: URL? = nil
@@ -16,12 +17,12 @@ public struct ConnectionView: View {
     public var body: some View {
         HStack {
             AsyncImageView(url: model.imageUrl)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(model.name)
+            VStack(alignment: .leading) {
+                Text(model.nameText)
                     .font(.body)
                     .foregroundColor(.primary)
                     .lineLimit(2)
-                if let host = model.host {
+                if let host = model.hostText {
                     Text(host)
                         .font(.callout)
                         .foregroundColor(.secondary)
@@ -30,9 +31,9 @@ public struct ConnectionView: View {
             }
         }
         .contextMenu {
-            if let title = model.host, let url = model.url {
+            if let url = model.url {
                 ContextMenuItem(
-                    title: title,
+                    title: Localized.Settings.website,
                     systemImage: SystemImage.globe
                 ) {
                     isPresentingUrl = url
