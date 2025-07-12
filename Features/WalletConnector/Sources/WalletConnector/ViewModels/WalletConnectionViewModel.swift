@@ -32,4 +32,11 @@ public struct WalletConnectionViewModel: Sendable {
     var url: URL? {
         URL(string: connection.session.metadata.url)
     }
+    
+    var displayName: String {
+        if let host = host {
+            return "\(name) (\(host))"
+        }
+        return name
+    }
 }

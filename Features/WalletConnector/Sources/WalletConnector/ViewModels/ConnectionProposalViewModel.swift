@@ -48,6 +48,13 @@ public struct ConnectionProposalViewModel {
         return host
     }
     
+    var appDisplayText: String {
+        if let websiteText = websiteText {
+            return "\(appText) (\(websiteText))"
+        }
+        return appText
+    }
+    
     var imageUrl: URL? {
         URL(string: payload.metadata.icon)
     }
