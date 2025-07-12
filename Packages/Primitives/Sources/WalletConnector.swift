@@ -32,18 +32,20 @@ extension WalletConnectionSessionAppMetadata {
 	private static let separators = ["-", ":"]
 	
 	public var shortName: String {
+		let trimmedName = name.trimmingCharacters(in: .whitespaces)
+		
 		for separator in Self.separators {
-			if let range = name.range(of: separator) {
-				return String(name[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
+			if let range = trimmedName.range(of: separator) {
+				return String(trimmedName[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
 			}
 		}
 		
-		if name.count > 80 {
-			let endIndex = name.index(name.startIndex, offsetBy: 80)
-			return String(name[..<endIndex]).trimmingCharacters(in: .whitespaces)
+		if trimmedName.count > 80 {
+			let endIndex = trimmedName.index(trimmedName.startIndex, offsetBy: 80)
+			return String(trimmedName[..<endIndex])
 		}
 		
-		return name.trimmingCharacters(in: .whitespaces)
+		return trimmedName
 	}
 }
 
