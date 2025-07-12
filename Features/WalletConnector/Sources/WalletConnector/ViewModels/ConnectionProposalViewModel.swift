@@ -38,7 +38,7 @@ public struct ConnectionProposalViewModel {
     }
 
     var appText: String {
-        payload.metadata.name
+        payload.metadata.shortName
     }
     
     var websiteText: String? {

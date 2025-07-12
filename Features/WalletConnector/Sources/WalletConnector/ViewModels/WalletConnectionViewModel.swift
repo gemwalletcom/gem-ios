@@ -11,8 +11,8 @@ public struct WalletConnectionViewModel: Sendable {
         self.connection = connection
     }
 
-    var name: String {
-        connection.session.metadata.name
+    var shortName: String {
+        connection.session.metadata.shortName
     }
     
     var imageUrl: URL? {

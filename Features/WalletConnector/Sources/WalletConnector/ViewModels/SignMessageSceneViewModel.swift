@@ -55,7 +55,7 @@ public final class SignMessageSceneViewModel {
     }
 
     public var appName: String {
-        payload.session.metadata.name
+        payload.session.metadata.shortName
     }
     
     public var appUrl: URL? {

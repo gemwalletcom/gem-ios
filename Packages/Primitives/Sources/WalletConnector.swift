@@ -28,6 +28,25 @@ public struct WalletConnectionSessionAppMetadata: Codable, Equatable, Hashable, 
 	}
 }
 
+extension WalletConnectionSessionAppMetadata {
+	private static let separators = ["-", ":"]
+	
+	public var shortName: String {
+		for separator in Self.separators {
+			if let range = name.range(of: separator) {
+				return String(name[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
+			}
+		}
+		
+		if name.count > 80 {
+			let endIndex = name.index(name.startIndex, offsetBy: 80)
+			return String(name[..<endIndex]).trimmingCharacters(in: .whitespaces)
+		}
+		
+		return name.trimmingCharacters(in: .whitespaces)
+	}
+}
+
 public struct WalletConnectionSession: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let sessionId: String

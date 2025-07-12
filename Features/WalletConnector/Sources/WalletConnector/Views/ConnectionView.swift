@@ -17,7 +17,7 @@ public struct ConnectionView: View {
         HStack {
             AsyncImageView(url: model.imageUrl)
             VStack(alignment: .leading, spacing: 4) {
-                Text(model.name)
+                Text(model.shortName)
                     .font(.body)
                     .foregroundColor(.primary)
                     .lineLimit(2)
