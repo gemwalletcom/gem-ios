@@ -2,11 +2,12 @@
 
 import struct Gemstone.ApprovalData
 
-extension ApprovalData {
+public extension ApprovalData {
     static func mock() -> ApprovalData {
         ApprovalData(
             token: "0x",
             spender: "0x",
             value: "1000000000000000000"
         )
-    }}
+    }
+}

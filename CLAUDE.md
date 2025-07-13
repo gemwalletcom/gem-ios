@@ -267,6 +267,19 @@ public extension Banner {
 - Prefer async/await over Combine for new code
 - Use protocol-based design for services
 - Avoid adding explanatory comments in tests - test code should be self-documenting
+- When extending types to conform to protocols, use explicit protocol conformance syntax:
+  ```swift
+  // Good - explicit protocol conformance
+  extension MyService: ServiceProtocol {
+      func performAction() { }
+  }
+  
+  // Bad - plain extension with comment
+  // MARK: - ServiceProtocol
+  extension MyService {
+      func performAction() { }
+  }
+  ```
 
 ### Code Organization
 - **One Type Per File**: Each service, type, view model, actor, or component must have its own separate file in the appropriate folder. Never inline multiple types in a single file
