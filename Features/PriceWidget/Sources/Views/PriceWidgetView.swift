@@ -7,7 +7,7 @@ import Components
 import Formatters
 
 public struct PriceWidgetView: View {
-    let entry: PriceWidgetEntry
+    public let entry: PriceWidgetEntry
     
     @Environment(\.widgetFamily) var widgetFamily
     

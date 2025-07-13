@@ -5,14 +5,19 @@ import Style
 import Components
 import Formatters
 
-struct CoinPriceView: View {
-    let coin: CoinPrice
-    let currency: String
+public struct CoinPriceView: View {
+    public let coin: CoinPrice
+    public let currency: String
+    
+    public init(coin: CoinPrice, currency: String) {
+        self.coin = coin
+        self.currency = currency
+    }
     
     private let currencyFormatter = CurrencyFormatter()
     private let percentFormatter = CurrencyFormatter.percent
     
-    var body: some View {
+    public var body: some View {
         HStack(spacing: Spacing.small) {
             // Coin icon
             if let imageURL = coin.imageURL {

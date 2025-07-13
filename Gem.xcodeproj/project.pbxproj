@@ -96,7 +96,7 @@
 		D829BF572CBF3E1900DEB2E8 /* DeviceService in Frameworks */ = {isa = PBXBuildFile; productRef = D829BF562CBF3E1900DEB2E8 /* DeviceService */; };
 		D832C80B2E246E6700871ED9 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80A2E246E6700871ED9 /* WidgetKit.framework */; };
 		D832C80D2E246E6700871ED9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80C2E246E6700871ED9 /* SwiftUI.framework */; };
-		D832C8182E246E6800871ED9 /* GemWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D832C8092E246E6700871ED9 /* GemWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D832C8182E246E6800871ED9 /* GemPriceWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D832C8092E246E6700871ED9 /* GemPriceWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D83D3C252D6E62F4002959EA /* ScanService in Frameworks */ = {isa = PBXBuildFile; productRef = D83D3C242D6E62F4002959EA /* ScanService */; };
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
@@ -169,7 +169,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				D832C8182E246E6800871ED9 /* GemWidget.appex in Embed Foundation Extensions */,
+				D832C8182E246E6800871ED9 /* GemPriceWidget.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -256,7 +256,7 @@
 		D829BF522CBF30A900DEB2E8 /* PriceAlertService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceAlertService; sourceTree = "<group>"; };
 		D829BF552CBF317300DEB2E8 /* DeviceService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DeviceService; sourceTree = "<group>"; };
 		D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GemUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D832C8092E246E6700871ED9 /* GemWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GemWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D832C8092E246E6700871ED9 /* GemPriceWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GemPriceWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D832C80A2E246E6700871ED9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D832C80C2E246E6700871ED9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		D832C8542E2471B100871ED9 /* PriceWidget */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceWidget; sourceTree = "<group>"; };
@@ -294,7 +294,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D83096AD2D5D4F1E00FFEE3E /* GemUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemUITests; sourceTree = "<group>"; };
-		D832C80E2E246E6700871ED9 /* GemWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemWidget; sourceTree = "<group>"; };
+		D832C80E2E246E6700871ED9 /* GemPriceWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemPriceWidget; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -548,7 +548,7 @@
 				C30952B2299C39D70004C0F9 /* Gem */,
 				C30952C4299C39D80004C0F9 /* GemTests */,
 				D83096AD2D5D4F1E00FFEE3E /* GemUITests */,
-				D832C80E2E246E6700871ED9 /* GemWidget */,
+				D832C80E2E246E6700871ED9 /* GemPriceWidget */,
 				C30952B1299C39D70004C0F9 /* Products */,
 				C3CF3B6429A9628100E96586 /* Frameworks */,
 			);
@@ -561,7 +561,7 @@
 				C30952C1299C39D80004C0F9 /* GemTests.xctest */,
 				D8A1F8732B17F21E00B15F54 /* Screenshots.xctest */,
 				D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */,
-				D832C8092E246E6700871ED9 /* GemWidget.appex */,
+				D832C8092E246E6700871ED9 /* GemPriceWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -905,9 +905,9 @@
 			productReference = D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		D832C8082E246E6700871ED9 /* GemWidget */ = {
+		D832C8082E246E6700871ED9 /* GemPriceWidget */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D832C81D2E246E6800871ED9 /* Build configuration list for PBXNativeTarget "GemWidget" */;
+			buildConfigurationList = D832C81D2E246E6800871ED9 /* Build configuration list for PBXNativeTarget "GemPriceWidget" */;
 			buildPhases = (
 				D832C8052E246E6700871ED9 /* Sources */,
 				D832C8062E246E6700871ED9 /* Frameworks */,
@@ -918,14 +918,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				D832C80E2E246E6700871ED9 /* GemWidget */,
+				D832C80E2E246E6700871ED9 /* GemPriceWidget */,
 			);
-			name = GemWidget;
+			name = GemPriceWidget;
 			packageProductDependencies = (
 				D8A54D222E24734C00EF2E73 /* PriceWidget */,
 			);
 			productName = GemWidgetExtension;
-			productReference = D832C8092E246E6700871ED9 /* GemWidget.appex */;
+			productReference = D832C8092E246E6700871ED9 /* GemPriceWidget.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		D8A1F8722B17F21E00B15F54 /* Screenshots */ = {
@@ -1027,7 +1027,7 @@
 				C30952C0299C39D80004C0F9 /* GemTests */,
 				D83096AB2D5D4F1E00FFEE3E /* GemUITests */,
 				D8A1F8722B17F21E00B15F54 /* Screenshots */,
-				D832C8082E246E6700871ED9 /* GemWidget */,
+				D832C8082E246E6700871ED9 /* GemPriceWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -1157,7 +1157,7 @@
 		};
 		D832C8172E246E6800871ED9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D832C8082E246E6700871ED9 /* GemWidget */;
+			target = D832C8082E246E6700871ED9 /* GemPriceWidget */;
 			targetProxy = D832C8162E246E6800871ED9 /* PBXContainerItemProxy */;
 		};
 		D8A1F87A2B17F21E00B15F54 /* PBXTargetDependency */ = {
@@ -1650,7 +1650,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D832C81D2E246E6800871ED9 /* Build configuration list for PBXNativeTarget "GemWidget" */ = {
+		D832C81D2E246E6800871ED9 /* Build configuration list for PBXNativeTarget "GemPriceWidget" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D832C81A2E246E6800871ED9 /* Debug */,
