@@ -11,6 +11,12 @@ public extension SwapQuoteDataProvider {
     }
 }
 
+public extension SwapQuoteDataProvidable where Self == SwapQuoteDataProviderMock {
+    static func mock() -> SwapQuoteDataProviderMock {
+        SwapQuoteDataProviderMock()
+    }
+}
+
 public struct SwapQuoteDataProviderMock: SwapQuoteDataProvidable {
     public let quoteData: SwapQuoteData
     
