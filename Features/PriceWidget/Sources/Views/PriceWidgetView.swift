@@ -72,7 +72,7 @@ public struct PriceWidgetView: View {
     }
 }
 
-struct CoinPriceRow: View {
+private struct CoinPriceRow: View {
     let coin: CoinPrice
     let currency: String
     

@@ -12,10 +12,6 @@ let package = Package(
             name: "PriceWidget",
             targets: ["PriceWidget"]
         ),
-        .library(
-            name: "PriceWidgetTestKit",
-            targets: ["PriceWidgetTestKit"]
-        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -44,25 +40,5 @@ let package = Package(
             ],
             path: "Sources"
         ),
-        .target(
-            name: "PriceWidgetTestKit",
-            dependencies: [
-                "PriceWidget",
-                .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "PriceServiceTestKit", package: "PriceService"),
-                .product(name: "StoreTestKit", package: "Store"),
-            ],
-            path: "TestKit"
-        ),
-        .testTarget(
-            name: "PriceWidgetTests",
-            dependencies: [
-                "PriceWidget",
-                "PriceWidgetTestKit",
-                .product(name: "Testing", package: "swift-testing"),
-            ],
-            path: "Tests"
-        ),
-    ],
-    swiftLanguageModes: [.v6]
+    ]
 )
