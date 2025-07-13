@@ -3,12 +3,10 @@
 import WidgetKit
 import SwiftUI
 
-public struct PriceWidget: Widget {
-    public let kind: String = "PriceWidget"
+struct PriceWidget: Widget {
+    let kind: String = "PriceWidget"
     
-    public init() {}
-    
-    public var body: some WidgetConfiguration {
+    var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: PriceWidgetProvider()) { entry in
             PriceWidgetView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
