@@ -55,7 +55,7 @@ public struct PriceWidgetView: View {
     private var coinPricesView: some View {
         VStack(spacing: Spacing.extraSmall) {
             ForEach(displayedCoins, id: \.assetId) { coin in
-                CoinPriceRow(coin: coin, currency: entry.currency)
+                CoinPriceView(coin: coin, currency: entry.currency)
             }
         }
     }
@@ -68,88 +68,6 @@ public struct PriceWidgetView: View {
             return entry.coinPrices
         default:
             return entry.coinPrices
-        }
-    }
-}
-
-private struct CoinPriceRow: View {
-    let coin: CoinPrice
-    let currency: String
-    
-    private let currencyFormatter = CurrencyFormatter()
-    private let percentFormatter = CurrencyFormatter.percent
-    
-    var body: some View {
-        HStack(spacing: Spacing.small) {
-            // Coin icon
-            if let imageURL = coin.imageURL {
-                AsyncImageView(url: imageURL)
-                    .frame(width: 32, height: 32)
-                    .cornerRadius(16)
-            } else {
-                Circle()
-                    .fill(Colors.grayLight)
-                    .frame(width: 32, height: 32)
-            }
-            
-            // Name and symbol
-            VStack(alignment: .leading, spacing: 2) {
-                Text(coin.name)
-                    .font(.system(size: 14, weight: .medium))
-                
-                Text(coin.symbol)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            
-            Spacer()
-            
-            // Price and change
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(formatPrice(coin.price))
-                    .font(.system(size: 14, weight: .medium))
-                
-                Text(formatPercentage(coin.priceChangePercentage24h))
-                    .font(.caption)
-                    .foregroundColor(percentageColor(coin.priceChangePercentage24h))
-            }
-        }
-        .padding(.vertical, Spacing.extraSmall)
-    }
-    
-    private func formatPrice(_ price: Double) -> String {
-        return currencyFormatter.string(
-            price,
-            currency: currency,
-            style: .currency
-        )
-    }
-    
-    private func formatPercentage(_ percentage: Double) -> String {
-        return percentFormatter.string(percentage)
-    }
-    
-    private func percentageColor(_ percentage: Double) -> Color {
-        if percentage > 0 {
-            return Colors.green
-        } else if percentage < 0 {
-            return Colors.red
-        } else {
-            return Colors.gray
-        }
-    }
-}
-
-struct PriceWidgetView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            PriceWidgetView(entry: .placeholder())
-                .previewContext(WidgetPreviewContext(family: .systemMedium))
-                .previewDisplayName("Medium")
-            
-            PriceWidgetView(entry: .placeholder())
-                .previewContext(WidgetPreviewContext(family: .systemLarge))
-                .previewDisplayName("Large")
         }
     }
 }

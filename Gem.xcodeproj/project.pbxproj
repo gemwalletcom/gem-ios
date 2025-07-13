@@ -108,6 +108,7 @@
 		D891DD412D3F359F00241222 /* CollectionsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */; };
 		D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */; };
 		D89CD7A92CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */; };
+		D8A54D232E24734C00EF2E73 /* PriceWidget in Frameworks */ = {isa = PBXBuildFile; productRef = D8A54D222E24734C00EF2E73 /* PriceWidget */; };
 		D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */; };
 		D8B738D42C59643D004EF083 /* MainTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B738D32C59643D004EF083 /* MainTabViewModel.swift */; };
 		D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */; };
@@ -415,6 +416,7 @@
 			files = (
 				D832C80D2E246E6700871ED9 /* SwiftUI.framework in Frameworks */,
 				D832C80B2E246E6700871ED9 /* WidgetKit.framework in Frameworks */,
+				D8A54D232E24734C00EF2E73 /* PriceWidget in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -930,6 +932,7 @@
 			);
 			name = GemWidget;
 			packageProductDependencies = (
+				D8A54D222E24734C00EF2E73 /* PriceWidget */,
 			);
 			productName = GemWidgetExtension;
 			productReference = D832C8092E246E6700871ED9 /* GemWidget.appex */;
@@ -1961,6 +1964,10 @@
 		D85AD2A52CD7017E0010DEF8 /* NativeProviderService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NativeProviderService;
+		};
+		D8A54D222E24734C00EF2E73 /* PriceWidget */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PriceWidget;
 		};
 		D8CF19E22CC747370025D6B4 /* Transfer */ = {
 			isa = XCSwiftPackageProductDependency;
