@@ -235,6 +235,7 @@ public extension Banner {
   )).contractText == "0x123")
   ```
 - **Avoid unnecessary variables** for simple cases - only use when readability is compromised
+- **Skip trivial tests**: Don't write tests for simple scenarios like empty collections or obvious behaviors unless they test critical business logic
 
 ## Rust Core Integration
 

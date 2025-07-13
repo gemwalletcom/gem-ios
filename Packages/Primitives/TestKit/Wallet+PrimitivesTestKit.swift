@@ -9,15 +9,16 @@ public extension Wallet {
         name: String = "",
         type: WalletType = .multicoin,
         accounts: [Account] = [],
-        index: Int = 0
+        index: Int = 0,
+        order: Int = 0
     ) -> Wallet {
         Wallet(
             id: id,
             name: name,
-            index: Int32(index),
+            index: index.asInt32,
             type: type,
             accounts: accounts,
-            order: 0,
+            order: order.asInt32,
             isPinned: false,
             imageUrl: nil
         )
