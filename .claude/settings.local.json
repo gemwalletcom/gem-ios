@@ -25,7 +25,9 @@
       "Bash(rm:*)",
       "Bash(mv:*)",
       "Bash(git pull:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(just spm-resolve-all:*)",
+      "Bash(gh pr checks:*)"
     ],
     "deny": []
   }
