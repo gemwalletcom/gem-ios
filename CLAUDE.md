@@ -162,8 +162,8 @@ Services are injected via SwiftUI Environment:
 
 #### Test Structure and Naming
 - Use simple, descriptive method names: `showManageToken` not `testShowManageToken_whenAssetIsEnabled_returnsFalse`
-- Consolidate related tests into single test methods instead of multiple verbose ones
-- Test multiple scenarios within single methods using descriptive variable names
+- Keep tests extremely concise - 2-3 assertions max per test
+- Test only the essential behavior, nothing extra
 
 #### Mock Creation Guidelines
 - **Always use existing TestKit mocks** instead of creating custom mock services
@@ -267,6 +267,7 @@ public extension Banner {
 - Avoid adding explanatory comments in tests - test code should be self-documenting
 
 ### Code Organization
+- **One Type Per File**: Each service, type, view model, actor, or component must have its own separate file in the appropriate folder. Never inline multiple types in a single file
 - Use `// MARK: - Actions` to separate action methods in ViewModels
 
 ### Clean Code Principles
