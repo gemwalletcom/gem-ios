@@ -3,7 +3,6 @@
 import WidgetKit
 import SwiftUI
 
-@main
 public struct PriceWidget: Widget {
     public let kind: String = "PriceWidget"
     
@@ -11,7 +10,12 @@ public struct PriceWidget: Widget {
     
     public var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: PriceWidgetProvider()) { entry in
-            PriceWidgetView(entry: entry)
+            if #available(iOS 17.0, *) {
+                PriceWidgetView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                PriceWidgetView(entry: entry)
+            }
         }
         .configurationDisplayName("Top Crypto Prices")
         .description("Track prices of top 5 cryptocurrencies")

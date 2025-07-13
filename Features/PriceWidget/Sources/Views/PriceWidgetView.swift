@@ -27,20 +27,18 @@ public struct PriceWidgetView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Colors.white)
     }
     
     private var headerView: some View {
         HStack {
             Text("Top Crypto")
                 .font(.headline)
-                .foregroundColor(Colors.black)
             
             Spacer()
             
             Text(entry.date, style: .time)
                 .font(.caption)
-                .foregroundColor(Colors.gray)
+                .foregroundColor(.secondary)
         }
     }
     
@@ -49,7 +47,7 @@ public struct PriceWidgetView: View {
             Spacer()
             Text("No price data available")
                 .font(.caption)
-                .foregroundColor(Colors.gray)
+                .foregroundColor(.secondary)
             Spacer()
         }
     }
@@ -98,11 +96,10 @@ struct CoinPriceRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(coin.name)
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Colors.black)
                 
                 Text(coin.symbol)
                     .font(.caption)
-                    .foregroundColor(Colors.gray)
+                    .foregroundColor(.secondary)
             }
             
             Spacer()
@@ -111,7 +108,6 @@ struct CoinPriceRow: View {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(formatPrice(coin.price))
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Colors.black)
                 
                 Text(formatPercentage(coin.priceChangePercentage24h))
                     .font(.caption)
