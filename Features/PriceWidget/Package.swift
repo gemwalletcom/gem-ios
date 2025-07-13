@@ -39,7 +39,8 @@ let package = Package(
                 "Formatters",
                 "Preferences",
             ],
-            path: "Sources"
+            path: "Sources",
+            exclude: ["Info.plist"]
         ),
     ]
 )
