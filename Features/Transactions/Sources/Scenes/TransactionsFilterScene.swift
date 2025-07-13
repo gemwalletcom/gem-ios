@@ -76,10 +76,16 @@ extension TransactionsFilterScene {
 
     private func onFinishSelection(value: SelectionResult<Chain>) {
         model.onFinishChainSelection(value: value)
+        if value.isConfirmed {
+            dismiss()
+        }
     }
 
     private func onFinishSelection(value: SelectionResult<TransactionFilterType>) {
         model.onFinishTypeSelection(value: value)
+        if value.isConfirmed {
+            dismiss()
+        }
     }
 
 }
