@@ -8,6 +8,7 @@ import WalletsService
 import WalletsServiceTestKit
 import BlockchainTestKit
 import ScanService
+import ScanServiceTestKit
 import SwapService
 import SwapServiceTestKit
 import KeystoreTestKit
@@ -55,24 +56,11 @@ private extension ConfirmTransferViewModel {
             data: data,
             keystore: KeystoreMock(),
             chainService: ChainServiceMock(),
-            scanService: ScanService(apiService: GemAPIScanServiceMock(), securePreferences: SecurePreferences.mock()),
+            scanService: .mock(),
             swapService: .mock(),
             walletsService: .mock(),
-            swapDataProvider: SwapQuoteDataProviderMock(),
+            swapDataProvider: .mock(),
             onComplete: {}
         )
     }
 }
-
-private struct SwapQuoteDataProviderMock: SwapQuoteDataProvidable {
-    func fetchQuoteData(wallet: Wallet, quote: SwapQuote) async throws -> SwapQuoteData {
-        .mock()
-    }
-}
-
-private struct GemAPIScanServiceMock: GemAPIScanService {
-    func getScanTransaction(payload: ScanTransactionPayload) async throws -> ScanTransaction {
-        ScanTransaction(isMalicious: false, isMemoRequired: false)
-    }
-}
-

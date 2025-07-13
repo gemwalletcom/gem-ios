@@ -23,6 +23,7 @@ public struct ChainServiceMock: ChainServiceable {
     public var tokenData: [String: Asset] = [:]
     public var transactionData: TransactionData = TransactionData(fee: Fee(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero))
     public var transactionPreload: TransactionPreload = TransactionPreload()
+    public var transactionState: TransactionChanges = TransactionChanges(state: .pending, changes: [])
     
     public init() {}
 }
@@ -99,6 +100,6 @@ extension ChainServiceMock {
     }
     
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        TransactionChanges(state: .pending, changes: [])
+        transactionState
     }
 }
