@@ -6,6 +6,7 @@ import Primitives
 import PriceService
 import Store
 import GemstonePrimitives
+import Preferences
 
 public struct PriceWidgetProvider: TimelineProvider {
     private let priceService: PriceService?
@@ -69,7 +70,8 @@ public struct PriceWidgetProvider: TimelineProvider {
         
         do {
             // Get current currency from preferences
-            let currency = UserDefaults.standard.string(forKey: "currency") ?? "USD"
+            let preferences = Preferences()
+            let currency = preferences.currency
             
             // Fetch prices
             let prices = try priceService.getPrices(for: topCoins)

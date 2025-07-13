@@ -24,6 +24,9 @@ let package = Package(
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "PriceService", path: "../../Services/PriceService"),
         .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
     ],
     targets: [
         .target(
@@ -35,6 +38,9 @@ let package = Package(
                 "Store",
                 "PriceService",
                 "Localization",
+                "GemstonePrimitives",
+                "Formatters",
+                "Preferences",
             ],
             path: "Sources"
         ),
