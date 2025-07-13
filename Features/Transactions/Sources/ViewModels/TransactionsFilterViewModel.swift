@@ -22,9 +22,7 @@ public final class TransactionsFilterViewModel: Equatable {
 
     public static func == (lhs: TransactionsFilterViewModel, rhs: TransactionsFilterViewModel) -> Bool {
         lhs.chainsFilter == rhs.chainsFilter &&
-        lhs.transactionTypesFilter == rhs.transactionTypesFilter &&
-        lhs.isPresentingChains == rhs.isPresentingChains &&
-        lhs.isPresentingTypes == rhs.isPresentingTypes
+        lhs.transactionTypesFilter == rhs.transactionTypesFilter
     }
 
     public var isAnyFilterSpecified: Bool {
