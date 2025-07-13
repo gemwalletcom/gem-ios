@@ -5,7 +5,7 @@ import SwiftUI
 import PriceWidget
 
 @main
-struct GemWidgetBundle: WidgetBundle {
+struct GemPriceWidgetBundle: WidgetBundle {
     var body: some Widget {
         PriceWidget()
     }

@@ -292,19 +292,9 @@
 		DFCB242D2D1A5223000A12CC /* Currency */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Currency; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D832C81C2E246E6800871ED9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = D832C8082E246E6700871ED9 /* GemWidget */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D83096AD2D5D4F1E00FFEE3E /* GemUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemUITests; sourceTree = "<group>"; };
-		D832C80E2E246E6700871ED9 /* GemWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (D832C81C2E246E6800871ED9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = GemWidget; sourceTree = "<group>"; };
+		D832C80E2E246E6700871ED9 /* GemWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemWidget; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
