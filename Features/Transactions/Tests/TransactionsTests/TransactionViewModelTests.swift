@@ -38,7 +38,8 @@ extension TransactionViewModel {
         toValue: String = "",
         type: TransactionType = .swap,
         direction: TransactionDirection = .incoming,
-        participant: String = ""
+        participant: String = "",
+        memo: String? = nil
     ) -> TransactionViewModel {
         let fromAsset = Asset.mockEthereum()
         let toAsset = Asset.mockEthereumUSDT()
@@ -58,6 +59,7 @@ extension TransactionViewModel {
             direction: direction,
             to: participant,
             value: "1000000000000000000",
+            memo: memo,
             metadata: swapMetadata
         )
         let extended = TransactionExtended.mock(
