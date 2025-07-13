@@ -98,8 +98,10 @@ Features/[FeatureName]/
 ├── Sources/
 │   ├── Scenes/               # SwiftUI Views
 │   ├── ViewModels/           # Observable ViewModels
+│   ├── Protocols/            # Protocols
 │   ├── Types/                # Feature-specific types
 │   └── Views/                # Reusable components
+│   ├── Services/             # Services
 ├── Tests/                    # Unit tests
 └── TestKit/                  # Testing utilities
 ```
