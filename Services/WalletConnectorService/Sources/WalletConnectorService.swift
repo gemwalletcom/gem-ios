@@ -6,18 +6,10 @@ import Foundation
 import Primitives
 import struct Gemstone.SignMessage
 
-public protocol WalletConnectorServiceable: Sendable {
-    func configure() throws
-    func setup() async
-    func pair(uri: String) async throws
-    func disconnect(sessionId: String) async throws
-    func disconnectAll() async throws
-    func updateSessions()
-}
-
 public final class WalletConnectorService {
     private let interactor = WCConnectionsInteractor()
     private let signer: WalletConnectorSignable
+    private let messageTracker = MessageTracker()
 
     public init(signer: WalletConnectorSignable) {
         self.signer = signer
@@ -147,6 +139,14 @@ extension WalletConnectorService {
     }
 
     private func handleRequest(request: WalletConnectSign.Request) async throws  {
+        let messageId = request.messageId
+        
+        guard await messageTracker.shouldProcess(messageId) else {
+            NSLog("Ignoring duplicate request with ID: \(messageId)")
+            try await rejectRequest(request)
+            return
+        }
+        
         guard let method = WalletConnectionMethods(rawValue: request.method) else {
             throw WalletConnectorServiceError.unresolvedMethod(request.method)
         }
@@ -163,8 +163,12 @@ extension WalletConnectorService {
             try await WalletKit.instance.respond(topic: request.topic, requestId: request.id, response: response)
         } catch {
             NSLog("handleMethod error: \(error)")
-            try await WalletKit.instance.respond(topic: request.topic ,requestId: request.id, response: .error(JSONRPCError(code: 0, message: "rejected")))
+            try await rejectRequest(request)
         }
+    }
+    
+    private func rejectRequest(_ request: WalletConnectSign.Request) async throws {
+        try await WalletKit.instance.respond(topic: request.topic, requestId: request.id, response: .error(JSONRPCError(code: 4001, message: "User rejected the request")))
     }
 
     private func handleMethod(method: WalletConnectionMethods, chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
@@ -186,6 +190,13 @@ extension WalletConnectorService {
     }
 
     private func processSession(proposal: Session.Proposal) async throws {
+        let messageId = proposal.messageId
+        
+        guard await messageTracker.shouldProcess(messageId) else {
+            NSLog("Ignoring duplicate proposal with ID: \(messageId)")
+            return
+        }
+        
         let wallets = try signer.getWallets(for: proposal)
         let currentWalletId = try signer.getCurrentWallet().walletId
 
@@ -351,5 +362,17 @@ extension Primitives.Account {
             return Account(blockchain: blockchain, address: address)
         }
         return .none
+    }
+}
+
+extension WalletConnectSign.Request {
+    var messageId: String {
+        "request-\(method)-\(topic)-\(id)"
+    }
+}
+
+extension Session.Proposal {
+    var messageId: String {
+        "proposal-\(id)"
     }
 }

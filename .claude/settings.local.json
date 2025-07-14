@@ -16,14 +16,18 @@
       "Bash(just build)",
       "Bash(gh pr create:*)",
       "Bash(gh pr edit:*)",
-      "Bash(git merge:*)",
-      "Bash(rg:*)",
       "Bash(gh issue:*)",
       "Bash(ls:*)",
       "Bash(mkdir:*)",
       "Bash(swift test:*)",
       "Bash(cp:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(rm:*)",
+      "Bash(mv:*)",
+      "Bash(git pull:*)",
+      "Bash(git restore:*)",
+      "Bash(just spm-resolve-all:*)",
+      "Bash(gh pr checks:*)"
     ],
     "deny": []
   }

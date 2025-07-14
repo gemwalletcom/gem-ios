@@ -82,7 +82,7 @@ struct TransferDataViewModel {
             .stake,
             .account: .none
         case .generic(_, let metadata, _):
-            metadata.name
+            metadata.shortName
         }
     }
 

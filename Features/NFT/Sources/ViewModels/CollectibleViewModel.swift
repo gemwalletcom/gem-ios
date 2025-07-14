@@ -22,7 +22,6 @@ public final class CollectibleViewModel {
     private let avatarService: AvatarService
     private let explorerService: ExplorerService
 
-    var isPresentingPhotoPermissionMessage: Bool = false
     var isPresentingAlertMessage: AlertMessage?
     var isPresentingToast: ToastMessage?
     var isPresentingTokenExplorerUrl: URL?
@@ -51,10 +50,15 @@ public final class CollectibleViewModel {
     var networkText: String { assetData.asset.chain.asset.name }
 
     var contractTitle: String { Localized.Asset.contract }
-    var contractValue: String { assetData.collection.contractAddress }
+    var contractValue: String {
+        assetData.collection.contractAddress
+    }
 
-    var contractText: String {
-        AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
+    var contractText: String? {
+        if contractValue.isEmpty || contractValue == assetData.asset.tokenId {
+            return .none
+        }
+        return AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
     }
     
     var contractContextMenu: [ContextMenuItemType] {
@@ -106,13 +110,6 @@ public final class CollectibleViewModel {
         ]
     }
 
-    var showContract: Bool {
-        let contractAddress = assetData.collection.contractAddress
-        let tokenId = assetData.asset.tokenId
-        
-        return !contractAddress.isEmpty && contractAddress != tokenId
-    }
-
     var showAttributes: Bool {
         !attributes.isEmpty
     }
@@ -160,7 +157,22 @@ extension CollectibleViewModel {
                 case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
                     isPresentingAlertMessage = AlertMessage(message: Localized.Errors.errorOccured)
                 case .permissionDenied:
-                    isPresentingPhotoPermissionMessage = true
+                    isPresentingAlertMessage = AlertMessage(
+                        title: Localized.Permissions.accessDenied,
+                        message: Localized.Permissions.Image.PhotoAccess.Denied.description,
+                        actions: [
+                            AlertAction(
+                                title: Localized.Common.openSettings,
+                                isDefaultAction: true,
+                                action: { [weak self] in
+                                    Task { @MainActor in
+                                        self?.openSettings()
+                                    }
+                                }
+                            ),
+                            .cancel(title: Localized.Common.cancel)
+                        ]
+                    )
                 }
             }
         }
@@ -187,6 +199,11 @@ extension CollectibleViewModel {
 // MARK: - Private
 
 extension CollectibleViewModel {
+    private func openSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(settingsURL)
+    }
+    
     private func setWalletAvatar() async throws {
         guard let url = assetData.asset.images.preview.url.asURL else { return }
         try await avatarService.save(url: url, for: wallet.id)

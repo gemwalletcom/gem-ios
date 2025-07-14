@@ -94,6 +94,9 @@
 		D829BF512CBF2C4900DEB2E8 /* NotificationService in Frameworks */ = {isa = PBXBuildFile; productRef = D829BF502CBF2C4900DEB2E8 /* NotificationService */; };
 		D829BF542CBF314100DEB2E8 /* PriceAlertService in Frameworks */ = {isa = PBXBuildFile; productRef = D829BF532CBF314100DEB2E8 /* PriceAlertService */; };
 		D829BF572CBF3E1900DEB2E8 /* DeviceService in Frameworks */ = {isa = PBXBuildFile; productRef = D829BF562CBF3E1900DEB2E8 /* DeviceService */; };
+		D832C80B2E246E6700871ED9 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80A2E246E6700871ED9 /* WidgetKit.framework */; };
+		D832C80D2E246E6700871ED9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80C2E246E6700871ED9 /* SwiftUI.framework */; };
+		D832C8182E246E6800871ED9 /* GemPriceWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D832C8092E246E6700871ED9 /* GemPriceWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D83D3C252D6E62F4002959EA /* ScanService in Frameworks */ = {isa = PBXBuildFile; productRef = D83D3C242D6E62F4002959EA /* ScanService */; };
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
@@ -105,6 +108,7 @@
 		D891DD412D3F359F00241222 /* CollectionsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */; };
 		D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */; };
 		D89CD7A92CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */; };
+		D8A54D232E24734C00EF2E73 /* PriceWidget in Frameworks */ = {isa = PBXBuildFile; productRef = D8A54D222E24734C00EF2E73 /* PriceWidget */; };
 		D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */; };
 		D8B738D42C59643D004EF083 /* MainTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B738D32C59643D004EF083 /* MainTabViewModel.swift */; };
 		D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */; };
@@ -142,6 +146,13 @@
 			remoteGlobalIDString = C30952AF299C39D70004C0F9;
 			remoteInfo = Gem;
 		};
+		D832C8162E246E6800871ED9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C30952A8299C39D70004C0F9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D832C8082E246E6700871ED9;
+			remoteInfo = GemWidgetExtension;
+		};
 		D8A1F8792B17F21E00B15F54 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C30952A8299C39D70004C0F9 /* Project object */;
@@ -150,6 +161,20 @@
 			remoteInfo = Gem;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D832C8192E246E6800871ED9 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D832C8182E246E6800871ED9 /* GemPriceWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		074168342D3AF81E00AC26A4 /* NFT */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NFT; sourceTree = "<group>"; };
@@ -231,6 +256,10 @@
 		D829BF522CBF30A900DEB2E8 /* PriceAlertService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceAlertService; sourceTree = "<group>"; };
 		D829BF552CBF317300DEB2E8 /* DeviceService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DeviceService; sourceTree = "<group>"; };
 		D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GemUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D832C8092E246E6700871ED9 /* GemPriceWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GemPriceWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D832C80A2E246E6700871ED9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		D832C80C2E246E6700871ED9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		D832C8542E2471B100871ED9 /* PriceWidget */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceWidget; sourceTree = "<group>"; };
 		D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetPriceAlertNavigationStack.swift; sourceTree = "<group>"; };
 		D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertsNavigationView.swift; sourceTree = "<group>"; };
 		D85AD29B2CD3370D0010DEF8 /* SwapService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwapService; sourceTree = "<group>"; };
@@ -265,6 +294,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D83096AD2D5D4F1E00FFEE3E /* GemUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemUITests; sourceTree = "<group>"; };
+		D832C80E2E246E6700871ED9 /* GemPriceWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemPriceWidget; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +397,16 @@
 				B68BD2DC2DE05FB600687F09 /* Keystore in Frameworks */,
 				B68BD2D82DE05F7500687F09 /* KeystoreTestKit in Frameworks */,
 				B62F6B9D2DE61ADF00AF56AB /* Onboarding in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D832C8062E246E6700871ED9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D832C80D2E246E6700871ED9 /* SwiftUI.framework in Frameworks */,
+				D832C80B2E246E6700871ED9 /* WidgetKit.framework in Frameworks */,
+				D8A54D232E24734C00EF2E73 /* PriceWidget in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,6 +548,7 @@
 				C30952B2299C39D70004C0F9 /* Gem */,
 				C30952C4299C39D80004C0F9 /* GemTests */,
 				D83096AD2D5D4F1E00FFEE3E /* GemUITests */,
+				D832C80E2E246E6700871ED9 /* GemPriceWidget */,
 				C30952B1299C39D70004C0F9 /* Products */,
 				C3CF3B6429A9628100E96586 /* Frameworks */,
 			);
@@ -520,6 +561,7 @@
 				C30952C1299C39D80004C0F9 /* GemTests.xctest */,
 				D8A1F8732B17F21E00B15F54 /* Screenshots.xctest */,
 				D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */,
+				D832C8092E246E6700871ED9 /* GemPriceWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -554,6 +596,8 @@
 		C3CF3B6429A9628100E96586 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D832C80A2E246E6700871ED9 /* WidgetKit.framework */,
+				D832C80C2E246E6700871ED9 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -616,6 +660,7 @@
 				C366791B2A1860E500F1D74D /* QRScanner */,
 				834B38182D1D858D009D58D4 /* LockManager */,
 				C370289B2A9C3B0E009AE123 /* Settings */,
+				D832C8542E2471B100871ED9 /* PriceWidget */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -723,10 +768,12 @@
 				C30952AC299C39D70004C0F9 /* Sources */,
 				C30952AD299C39D70004C0F9 /* Frameworks */,
 				C30952AE299C39D70004C0F9 /* Resources */,
+				D832C8192E246E6800871ED9 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D832C8172E246E6800871ED9 /* PBXTargetDependency */,
 			);
 			name = Gem;
 			packageProductDependencies = (
@@ -858,6 +905,29 @@
 			productReference = D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		D832C8082E246E6700871ED9 /* GemPriceWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D832C81D2E246E6800871ED9 /* Build configuration list for PBXNativeTarget "GemPriceWidget" */;
+			buildPhases = (
+				D832C8052E246E6700871ED9 /* Sources */,
+				D832C8062E246E6700871ED9 /* Frameworks */,
+				D832C8072E246E6700871ED9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D832C80E2E246E6700871ED9 /* GemPriceWidget */,
+			);
+			name = GemPriceWidget;
+			packageProductDependencies = (
+				D8A54D222E24734C00EF2E73 /* PriceWidget */,
+			);
+			productName = GemWidgetExtension;
+			productReference = D832C8092E246E6700871ED9 /* GemPriceWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		D8A1F8722B17F21E00B15F54 /* Screenshots */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8A1F87B2B17F21E00B15F54 /* Build configuration list for PBXNativeTarget "Screenshots" */;
@@ -886,7 +956,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					C30952AF299C39D70004C0F9 = {
@@ -899,6 +969,9 @@
 					D83096AB2D5D4F1E00FFEE3E = {
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = C30952AF299C39D70004C0F9;
+					};
+					D832C8082E246E6700871ED9 = {
+						CreatedOnToolsVersion = 16.4;
 					};
 					D8A1F8722B17F21E00B15F54 = {
 						CreatedOnToolsVersion = 15.0.1;
@@ -954,6 +1027,7 @@
 				C30952C0299C39D80004C0F9 /* GemTests */,
 				D83096AB2D5D4F1E00FFEE3E /* GemUITests */,
 				D8A1F8722B17F21E00B15F54 /* Screenshots */,
+				D832C8082E246E6700871ED9 /* GemPriceWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -977,6 +1051,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D83096AA2D5D4F1E00FFEE3E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D832C8072E246E6700871ED9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1046,6 +1127,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D832C8052E246E6700871ED9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D8A1F86F2B17F21E00B15F54 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1066,6 +1154,11 @@
 			isa = PBXTargetDependency;
 			target = C30952AF299C39D70004C0F9 /* Gem */;
 			targetProxy = D83096B22D5D4F1E00FFEE3E /* PBXContainerItemProxy */;
+		};
+		D832C8172E246E6800871ED9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D832C8082E246E6700871ED9 /* GemPriceWidget */;
+			targetProxy = D832C8162E246E6800871ED9 /* PBXContainerItemProxy */;
 		};
 		D8A1F87A2B17F21E00B15F54 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1406,6 +1499,72 @@
 			};
 			name = Release;
 		};
+		D832C81A2E246E6800871ED9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U2D6XV88CZ;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GemPriceWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Price Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.3.196;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.GemPriceWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D832C81B2E246E6800871ED9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GemPriceWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Price Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.3.196;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.GemPriceWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		D8A1F87C2B17F21E00B15F54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1487,6 +1646,15 @@
 			buildConfigurations = (
 				D83096B52D5D4F1E00FFEE3E /* Debug */,
 				D83096B62D5D4F1E00FFEE3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D832C81D2E246E6800871ED9 /* Build configuration list for PBXNativeTarget "GemPriceWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D832C81A2E246E6800871ED9 /* Debug */,
+				D832C81B2E246E6800871ED9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1786,6 +1954,10 @@
 		D85AD2A52CD7017E0010DEF8 /* NativeProviderService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NativeProviderService;
+		};
+		D8A54D222E24734C00EF2E73 /* PriceWidget */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PriceWidget;
 		};
 		D8CF19E22CC747370025D6B4 /* Transfer */ = {
 			isa = XCSwiftPackageProductDependency;

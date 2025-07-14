@@ -97,7 +97,11 @@ public extension ButtonType {
         case .loading: return .primary(.loading(showProgress: showProgress))
         case .noData: return .primary(.disabled)
         case .data: return .primary(.normal)
-        case .error: return .primary(.disabled)
+        case .error: 
+            if let isDisabled, !isDisabled {
+                return .primary(.normal)
+            }
+            return .primary(.disabled)
         }
     }
 }

@@ -10,7 +10,23 @@ public struct AlertMessageModifier: ViewModifier {
             .alert(
                 alertMessage?.title ?? "",
                 isPresented: $alertMessage.mappedToBool(),
-                actions: {},
+                actions: {
+                    if let actions = alertMessage?.actions {
+                        ForEach(0..<actions.count, id: \.self) { index in
+                            let action = actions[index]
+                            if action.isDefaultAction {
+                                Button(action.title, role: action.role) {
+                                    action.action()
+                                }
+                                .keyboardShortcut(.defaultAction)
+                            } else {
+                                Button(action.title, role: action.role) {
+                                    action.action()
+                                }
+                            }
+                        }
+                    }
+                },
                 message: { Text(alertMessage?.message ?? "") }
             )
     }

@@ -87,20 +87,14 @@ extension ConfirmTransferScene {
                 showClearHeader: model.showClearHeader
             )
             Section {
-                if let appValue = model.appValue {
-                    ListItemImageView(
-                        title: model.appTitle,
-                        subtitle: appValue,
-                        assetImage: model.appAssetImage
-                    )
-                }
-
-                if let websiteValue = model.websiteValue {
-                    ListItemView(title: model.websiteTitle, subtitle: websiteValue)
-                        .contextMenu(
-                            .url(title: websiteValue, onOpen: model.onSelectOpenWebsiteURL)
-                        )
-                }
+                ListItemImageView(
+                    title: model.appTitle,
+                    subtitle: model.appText,
+                    assetImage: model.appAssetImage
+                )
+                .contextMenu(
+                    .url(title: model.websiteTitle, onOpen: model.onSelectOpenWebsiteURL)
+                )
 
                 ListItemImageView(
                     title: model.senderTitle,
@@ -146,24 +140,16 @@ extension ConfirmTransferScene {
                 } else {
                     networkFeeView
                 }
-            } footer: {
-                if let footer = model.networkFeeFooterText {
-                    Text(footer)
-                }
             }
 
             if let error = model.listError {
-                Button {
-                    model.onSelectListError(error: error)
-                } label: {
-                    ListItemErrorView(
-                        errorTitle: model.listErrorTitle,
-                        error: error,
-                        infoAction: {
-                            model.onSelectListError(error: error)
-                        }
-                    )
-                }
+                ListItemErrorView(
+                    errorTitle: model.listErrorTitle,
+                    error: error,
+                    infoAction: {
+                        model.onSelectListError(error: error)
+                    }
+                )
             }
         }
         .contentMargins([.top], .small, for: .scrollContent)

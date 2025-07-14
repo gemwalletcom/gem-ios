@@ -22,25 +22,37 @@ public struct ListItemErrorView: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: .small) {
-            HStack(spacing: .small) {
-                Image(systemName: errorSystemNameImage)
-                    .foregroundColor(Colors.red)
-                    .frame(width: .list.image, height: .list.image)
-                Text(errorTitle ?? error.localizedDescription)
-                    .textStyle(.headline)
-                Spacer()
+        if let infoAction {
+            Button(action: infoAction) {
+                errorContent
             }
-            HStack(alignment: .firstTextBaseline, spacing: .small) {
-                if let infoAction {
-                    InfoButton(
-                        action: infoAction
-                    )
+            .tint(Colors.black)
+        } else {
+            errorContent
+        }
+    }
+    
+    @ViewBuilder
+    private var errorContent: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: .small) {
+                HStack(spacing: .small) {
+                    Image(systemName: errorSystemNameImage)
+                        .foregroundColor(Colors.red)
+                        .frame(width: .list.image, height: .list.image)
+                    Text(errorTitle ?? error.localizedDescription)
+                        .textStyle(.headline)
+                    Spacer()
                 }
                 if errorTitle != nil {
                     Text(error.localizedDescription)
                         .textStyle(.subheadline)
                 }
+            }
+            .layoutPriority(1)
+            
+            if infoAction != nil {
+                NavigationLink.empty
             }
         }
     }
@@ -90,6 +102,20 @@ public struct ListItemErrorView: View {
                 errorTitle: nil,
                 errorSystemNameImage: SystemImage.ellipsis,
                 error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "An error without a specific title."])
+            )
+        }
+        
+        Section(header: Text("Error with Chevron (has infoAction)")) {
+            ListItemErrorView(
+                errorTitle: "Transaction Error",
+                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Transaction failed due to insufficient funds."]),
+                infoAction: {}
+            )
+            
+            ListItemErrorView(
+                errorTitle: "Network Error",
+                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to connect to the network."]),
+                infoAction: {}
             )
         }
     }

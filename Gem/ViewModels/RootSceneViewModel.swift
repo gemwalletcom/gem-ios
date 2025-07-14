@@ -1,9 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import AppService
+import Components
 import DeviceService
 import Foundation
+import GemstonePrimitives
 import LockManager
+import Localization
 import Onboarding
 import Primitives
 import SwiftUI
@@ -28,8 +31,7 @@ final class RootSceneViewModel {
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
 
-    var availableRelease: Release?
-    var canSkipUpdate: Bool { availableRelease?.upgradeRequired == false }
+    var updateVersionAlertMessage: AlertMessage?
 
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -74,8 +76,7 @@ final class RootSceneViewModel {
 extension RootSceneViewModel {
     func setup() {
         onstartAsyncService.releaseAction = { [weak self] in
-            guard let self else { return }
-            self.availableRelease = $0
+            self?.setupUpdateReleaseAlert($0)
         }
         onstartAsyncService.setup()
         transactionService.setup()
@@ -117,10 +118,37 @@ extension RootSceneViewModel {
             isPresentingConnectorError = error.localizedDescription
         }
     }
-
-    func skipRelease() {
-        guard let version = availableRelease?.version else { return }
-        onstartAsyncService.skipRelease(version)
+    
+    private func setupUpdateReleaseAlert(_ release: Release) {
+        let skipAction = AlertAction(
+            title: Localized.Common.skip,
+            role: .cancel,
+            action: { [weak self] in
+                Task { @MainActor in
+                    self?.onstartAsyncService.skipRelease(release.version)
+                }
+            }
+        )
+        let updateAction = AlertAction(
+            title: Localized.UpdateApp.action,
+            isDefaultAction: true,
+            action: {
+                Task { @MainActor in
+                    UIApplication.shared.open(PublicConstants.url(.appStore))
+                }
+            }
+        )
+        let actions = if release.upgradeRequired {
+            [updateAction]
+        } else {
+            [skipAction, updateAction]
+        }
+        
+        updateVersionAlertMessage = AlertMessage(
+            title: Localized.UpdateApp.title,
+            message: Localized.UpdateApp.description(release.version),
+            actions: actions
+        )
     }
 }
 

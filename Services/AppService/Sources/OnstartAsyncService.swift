@@ -126,10 +126,9 @@ public final class OnstartAsyncService: Sendable {
             return
         }
         
-        NSLog("Newer version available")
+        NSLog("Newer version available: \(release)")
         Task { @MainActor [weak self] in
-            guard let self else { return }
-            releaseAction?(release)
+            self?.releaseAction?(release)
         }
     }
     

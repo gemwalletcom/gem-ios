@@ -12,6 +12,7 @@ import Store
 import Style
 import SwapService
 import WalletsService
+import enum Gemstone.SwapperError
 import struct Gemstone.SwapQuote
 import Formatters
 import Validators
@@ -141,7 +142,15 @@ public final class SwapSceneViewModel {
     }
 
     var shouldDisableActionButton: Bool {
-        amountInputModel.isValid == false
+        if amountInputModel.isValid == false {
+            return true
+        }
+        
+        if ((swapState.error as? ErrorWrapper)?.error as? RetryableError)?.isRetryAvailable == true {
+            return false
+        }
+
+        return swapState.error != nil
     }
 
     var isSwitchAssetButtonDisabled: Bool {

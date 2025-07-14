@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 
-public struct TransactionChanges {
+public struct TransactionChanges: Sendable {
     public let state: TransactionState
     public let changes: [TransactionChange]
     
@@ -13,7 +13,7 @@ public struct TransactionChanges {
     }
 }
 
-public enum TransactionChange {
+public enum TransactionChange: Sendable {
     case networkFee(BigInt)
     case blockNumber(Int)
     case createdAt(Date)

@@ -35,14 +35,17 @@ public final class ConnectionsViewModel {
     var docsUrl: URL { Docs.url(.walletConnect) }
     
     var sections: [ListSection<WalletConnection>] {
-        Dictionary(grouping: connections, by: { $0.wallet }).map { wallet, connections in
-            ListSection(
-                id: wallet.id,
-                title: wallet.name,
-                image: nil,
-                values: connections
-            )
-        }
+        let grouped = Dictionary(grouping: connections, by: { $0.wallet })
+        return grouped.keys
+            .sorted { $0.order < $1.order }
+            .map { wallet in
+                ListSection(
+                    id: wallet.id,
+                    title: wallet.name,
+                    image: nil,
+                    values: grouped[wallet]?.sorted { $0.session.createdAt > $1.session.createdAt } ?? []
+                )
+            }
     }
 
     var emptyContentModel: EmptyContentTypeViewModel {

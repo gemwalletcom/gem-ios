@@ -9,6 +9,9 @@ let package = Package(
         .library(
             name: "Blockchain",
             targets: ["Blockchain"]),
+        .library(
+            name: "BlockchainTestKit",
+            targets: ["BlockchainTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -34,10 +37,20 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "BlockchainTestKit",
+            dependencies: [
+                "Blockchain",
+                "Primitives",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "BlockchainTests",
             dependencies: [
                 "Blockchain",
+                "BlockchainTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             resources: [.process("Resources")]
