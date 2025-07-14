@@ -33,7 +33,7 @@ struct SwapDetailsViewModelTests {
 }
 
 extension SwapDetailsViewModel {
-    static func mock(selectedQuote: SwapQuote = .mock(),) -> SwapDetailsViewModel {
+    static func mock(selectedQuote: SwapQuote = .mock()) -> SwapDetailsViewModel {
         SwapDetailsViewModel(
             state: .data(true),
             fromAssetPrice: AssetPriceValue(asset: .mockEthereum(), price: .mock()),
