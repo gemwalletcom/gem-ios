@@ -122,11 +122,12 @@ struct CoinPriceRow: View {
     }
     
     private func formatPrice(_ price: Double) -> String {
-        return currencyFormatter.string(
-            price,
-            currency: currency,
-            style: .currency
-        )
+//        return currencyFormatter.string(
+//            price,
+//            currency: currency,
+//            style: .currency
+//        )
+        return ""
     }
     
     private func formatPercentage(_ percentage: Double) -> String {

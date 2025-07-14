@@ -74,7 +74,7 @@ public struct CoinPrice: Sendable {
                 symbol: symbol,
                 price: price,
                 priceChangePercentage24h: change,
-                imageURL: AssetImageFormatter.url(for: assetId)
+                imageURL: AssetImageFormatter().getURL(for: assetId)
             )
         }
     }

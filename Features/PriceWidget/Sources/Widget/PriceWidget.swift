@@ -3,7 +3,6 @@
 import WidgetKit
 import SwiftUI
 
-@main
 public struct PriceWidget: Widget {
     public let kind: String = "PriceWidget"
     

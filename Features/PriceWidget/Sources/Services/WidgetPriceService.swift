@@ -6,27 +6,19 @@ import Store
 import PriceService
 
 public struct WidgetPriceService {
-    private let priceService: PriceService?
+    private let priceService: PriceService
     
     public init() {
-        do {
-            let db = DB()
-            let priceStore = PriceStore(db: db)
-            let fiatRateStore = FiatRateStore(db: db)
-            self.priceService = PriceService(
-                priceStore: priceStore,
-                fiatRateStore: fiatRateStore
-            )
-        } catch {
-            self.priceService = nil
-        }
+        let db = DB()
+        let priceStore = PriceStore(db: db)
+        let fiatRateStore = FiatRateStore(db: db)
+        self.priceService = PriceService(
+            priceStore: priceStore,
+            fiatRateStore: fiatRateStore
+        )
     }
     
     public func fetchTopCoinPrices() async -> [CoinPrice] {
-        guard let priceService = priceService else {
-            return CoinPrice.placeholders()
-        }
-        
         let topCoins = [
             AssetId(chain: .bitcoin, tokenId: nil),
             AssetId(chain: .ethereum, tokenId: nil),
@@ -49,7 +41,7 @@ public struct WidgetPriceService {
                     symbol: symbol,
                     price: price.price,
                     priceChangePercentage24h: price.priceChangePercentage24h,
-                    imageURL: chain.assetImage
+                    imageURL: .none //chain.assetImage
                 )
             }
         } catch {
