@@ -12,18 +12,16 @@ let package = Package(
             name: "PriceWidget",
             targets: ["PriceWidget"]
         ),
-        .library(
-            name: "PriceWidgetTestKit",
-            targets: ["PriceWidgetTestKit"]
-        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "PriceService", path: "../../Services/PriceService"),
         .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
     ],
     targets: [
         .target(
@@ -31,32 +29,21 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Components",
+                "Formatters",
                 "Style",
                 "Store",
                 "PriceService",
                 "Localization",
+                "GemstonePrimitives",
             ],
             path: "Sources"
-        ),
-        .target(
-            name: "PriceWidgetTestKit",
-            dependencies: [
-                "PriceWidget",
-                .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "PriceServiceTestKit", package: "PriceService"),
-                .product(name: "StoreTestKit", package: "Store"),
-            ],
-            path: "TestKit"
         ),
         .testTarget(
             name: "PriceWidgetTests",
             dependencies: [
                 "PriceWidget",
-                "PriceWidgetTestKit",
-                .product(name: "Testing", package: "swift-testing"),
             ],
             path: "Tests"
         ),
-    ],
-    swiftLanguageModes: [.v6]
+    ]
 )

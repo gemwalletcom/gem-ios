@@ -122,11 +122,11 @@ public struct TronSigner: Signable {
             case let .swap(_, _, quote, quoteData) = input.type,
             let quoteData,
             let data = Data(fromHex: quoteData.data),
-            let callValue = Int64(quoteData.value),
-            let gasLimit = quoteData.gasLimit
+            let callValue = Int64(quoteData.value)
         else {
             throw AnyError("Invalid input type for swapping")
         }
+        let gasLimit = try quoteData.gasLimitBigInt()
 
         let contract = TronTriggerSmartContract.with {
             $0.ownerAddress = quote.request.walletAddress
@@ -147,7 +147,7 @@ public struct TronSigner: Signable {
                 $0.data = callData
             }
 
-            let swapFee = BigInt(stringLiteral: gasLimit) * input.fee.gasPrice
+            let swapFee = gasLimit * input.fee.gasPrice
 
             return try [
                 sign(input: input, contract: .triggerSmartContract(approvalContract), feeLimit: Int(input.fee.fee), privateKey: privateKey),
