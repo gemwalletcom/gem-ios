@@ -4,7 +4,6 @@ import Foundation
 import Primitives
 import BigInt
 import struct Gemstone.SwapQuote
-import struct Gemstone.SwapQuoteData
 
 public struct SwapTransferDataFactory: Sendable {
     public static func swap(

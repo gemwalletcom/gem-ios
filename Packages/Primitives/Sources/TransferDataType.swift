@@ -2,7 +2,6 @@
 
 import Foundation
 import struct Gemstone.SwapQuote
-import struct Gemstone.SwapQuoteData
 
 public enum AccountDataType: Hashable, Equatable, Sendable {
     case activate

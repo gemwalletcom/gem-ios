@@ -5,7 +5,6 @@ import Keystore
 import Primitives
 
 import struct Gemstone.SwapQuote
-import struct Gemstone.SwapQuoteData
 
 public protocol SwapQuoteDataProvidable: Sendable {
     func fetchQuoteData(wallet: Wallet, quote: SwapQuote) async throws -> SwapQuoteData
@@ -23,14 +22,14 @@ public struct SwapQuoteDataProvider: SwapQuoteDataProvidable {
     public func fetchQuoteData(wallet: Wallet, quote: SwapQuote) async throws -> SwapQuoteData {
         switch try await swapService.getPermit2Approval(quote: quote) {
         case .none:
-            return try await swapService.getQuoteData(quote, data: .none)
+            return try await swapService.getQuoteData(quote, data: .none).asPrimitive
         case .some(let approval):
             let permit2Data = try permit2DataProvider.getPermit2Data(
                 wallet: wallet,
                 chain: try AssetId(id: quote.request.fromAsset.id).chain,
                 approval: approval
             )
-            return try await swapService.getQuoteData(quote, data: .permit2(permit2Data))
+            return try await swapService.getQuoteData(quote, data: .permit2(permit2Data)).asPrimitive
         }
     }
 }

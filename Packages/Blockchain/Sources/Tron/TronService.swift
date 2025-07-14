@@ -338,6 +338,7 @@ public extension TronService {
                     guard let swapEnergy = quoteData?.gasLimit else {
                         throw AnyError("Unable to fetch gas limit or energy fee")
                     }
+                    
                     estimatedEnergy = BigInt(stringLiteral: swapEnergy)
                 }
 

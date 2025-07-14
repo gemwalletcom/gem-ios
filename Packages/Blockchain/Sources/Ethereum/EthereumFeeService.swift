@@ -133,7 +133,7 @@ extension EthereumService {
         case .swap(_, _, _, let data):
             guard let data else { return .zero }
             switch data.approval {
-            case .some: return try data.gasLimit()
+            case .some: return try data.gasLimitBigInt()
             case .none: return .zero
             }
         default: return .zero
