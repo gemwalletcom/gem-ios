@@ -192,6 +192,13 @@ struct TransactionDetailViewModel {
         }
     }
 
+    var showSwapAgain: Bool {
+        switch headerType {
+        case .amount, .nft: false
+        case .swap: true
+        }
+    }
+
     var headerType: TransactionHeaderType {
         let swapMetadata: SwapMetadata? = {
             guard let metadata = model.transaction.transaction.metadata, case let .swap(transactionSwapMetadata) = metadata else {

@@ -23,7 +23,7 @@ public struct TransactionScene: View {
     private let input: TransactionSceneInput
 
     private var model: TransactionDetailViewModel {
-        return TransactionDetailViewModel(
+        TransactionDetailViewModel(
             model: TransactionViewModel(
                 explorerService: ExplorerService.standard,
                 transaction: transactions.first!,
@@ -78,7 +78,7 @@ public struct TransactionScene: View {
                         subtitle: model.network,
                         assetImage: model.networkAssetImage
                     )
-                    
+
                     if let item = model.providerListItem {
                         ListItemImageView(
                             title: item.title,
@@ -86,7 +86,7 @@ public struct TransactionScene: View {
                             assetImage: item.assetImage
                         )
                     }
-                    
+
                     ListItemView(
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
@@ -104,22 +104,35 @@ public struct TransactionScene: View {
             .contentMargins([.top], .small, for: .scrollContent)
             .listSectionSpacing(.compact)
             .background(Colors.grayBackground)
-            .navigationTitle(model.title)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        isPresentingShareSheet.toggle()
-                    } label: {
-                        Images.System.share
-                    }
+
+            if model.showSwapAgain {
+                Spacer()
+                StateButton(
+                    text: "Swap again",
+                    type: .primary(.normal),
+                    action: onSelectTransactionHeader
+                )
+                .frame(maxWidth: .scene.button.maxWidth)
+            }
+        }
+        .if(model.showSwapAgain) {
+            $0.padding(.bottom, .scene.bottom)
+        }
+        .navigationTitle(model.title)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    isPresentingShareSheet.toggle()
+                } label: {
+                    Images.System.share
                 }
             }
-            .sheet(isPresented: $isPresentingShareSheet) {
-                ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
-            }
-            .sheet(item: $isPresentingInfoSheet) {
-                InfoSheetScene(model: InfoSheetViewModel(type: $0))
-            }
+        }
+        .sheet(isPresented: $isPresentingShareSheet) {
+            ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
+        }
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
     }
 }

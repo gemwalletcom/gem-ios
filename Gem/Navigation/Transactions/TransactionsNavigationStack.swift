@@ -99,6 +99,7 @@ struct TransactionsNavigationStack: View {
                             ),
                             onComplete: {
                                 navigationState.selectedTab = .wallet
+                                navigationState.wallet.removeAll()
                                 navigationState.wallet.append(Scenes.Asset(asset: fromAsset))
                                 model.isPresentingSelectedAssetType = nil
                             }
