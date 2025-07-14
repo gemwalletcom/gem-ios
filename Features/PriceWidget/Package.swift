@@ -53,10 +53,8 @@ let package = Package(
             dependencies: [
                 "PriceWidget",
                 "PriceWidgetTestKit",
-                .product(name: "Testing", package: "swift-testing"),
             ],
             path: "Tests"
         ),
-    ],
-    swiftLanguageModes: [.v6]
+    ]
 )
