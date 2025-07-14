@@ -41,7 +41,8 @@ extension MessagePreview {
                     name: "Ether Mail",
                     version: "1",
                     chainId: 1,
-                    verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
+                    verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+                    salts: nil
                 ),
                 message: [
                     GemEip712Section(

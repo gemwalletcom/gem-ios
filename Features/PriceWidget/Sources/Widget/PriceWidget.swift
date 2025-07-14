@@ -11,10 +11,9 @@ public struct PriceWidget: Widget {
     public var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: PriceWidgetProvider()) { entry in
             PriceWidgetView(entry: entry, widgetFamily: entry.widgetFamily)
-                .widgetURL(URL(string: "gemwallet://prices"))
         }
         .configurationDisplayName("Top Crypto Prices")
         .description("Track prices of top 5 cryptocurrencies")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .systemExtraLarge])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }

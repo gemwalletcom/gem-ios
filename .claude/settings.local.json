@@ -27,7 +27,12 @@
       "Bash(git pull:*)",
       "Bash(git restore:*)",
       "Bash(just spm-resolve-all:*)",
-      "Bash(gh pr checks:*)"
+      "Bash(gh pr checks:*)",
+      "Bash(rustc:*)",
+      "Bash(cargo --version)",
+      "Bash(rustup:*)",
+      "Bash(cargo clean:*)",
+      "Bash(just generate-stone:*)"
     ],
     "deny": []
   }
