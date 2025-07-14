@@ -7,7 +7,7 @@ public enum SelectedAssetType: Sendable, Hashable {
     case receive(ReceiveAssetType)
     case stake(Asset)
     case buy(Asset)
-    case swap(Asset)
+    case swap(Asset, Asset?)
 }
 
 extension SelectedAssetType: Identifiable {

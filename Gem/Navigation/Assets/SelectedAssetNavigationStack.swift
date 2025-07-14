@@ -83,8 +83,10 @@ struct SelectedAssetNavigationStack: View  {
                 case .swap:
                     SwapNavigationView(
                         model: SwapSceneViewModel(
-                            wallet: wallet,
-                            asset: selectType.asset,
+                            input: SwapInput(
+                                wallet: wallet,
+                                pairSelector: SwapPairSelectorViewModel.defaultSwapPair(for: selectType.asset)
+                            ),
                             walletsService: walletsService,
                             swapQuotesProvider: SwapQuotesProvider(swapService: SwapService(nodeProvider: nodeService)),
                             onSwap: {

@@ -37,6 +37,7 @@ public final class WalletSceneViewModel: Sendable {
 
     public var isPresentingWallets = false
     public var isPresentingSelectAssetType: SelectAssetType?
+    public var isPresentingSelectedAssetType: SelectedAssetType?
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingUrl: URL? = nil
     

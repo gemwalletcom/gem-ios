@@ -199,7 +199,7 @@ extension AssetSceneViewModel {
         let selectType: SelectedAssetType = switch buttonType {
         case .buy: .buy(assetData.asset)
         case .send: .send(.asset(assetData.asset))
-        case .swap: .swap(assetData.asset)
+        case .swap: .swap(assetData.asset, nil)
         case .receive: .receive(.asset)
         case .stake: .stake(assetData.asset)
         case .more:

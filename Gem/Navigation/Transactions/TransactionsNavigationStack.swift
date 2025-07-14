@@ -7,6 +7,7 @@ import Components
 import Transactions
 import Store
 import Assets
+import Swap
 
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -57,7 +58,8 @@ struct TransactionsNavigationStack: View {
                         input: TransactionSceneInput(
                             transactionId: $0.id,
                             walletId: model.walletId
-                        )
+                        ),
+                        isPresentingSelectedAssetType: $model.isPresentingSelectedAssetType
                     )
                 }
                 .navigationDestination(for: Scenes.Asset.self) {
@@ -83,6 +85,26 @@ struct TransactionsNavigationStack: View {
                     }
                     .presentationDetentsForCurrentDeviceSize(expandable: true)
                     .presentationDragIndicator(.visible)
+                }
+                .sheet(item: $model.isPresentingSelectedAssetType) { type in
+                    switch type {
+                    case let .swap(fromAsset, toAsset):
+                        SwapNavigationStack(
+                            input: SwapInput(
+                                wallet: model.wallet,
+                                pairSelector: SwapPairSelectorViewModel(
+                                    fromAssetId: fromAsset.id,
+                                    toAssetId: toAsset?.id
+                                )
+                            ),
+                            onComplete: {
+                                navigationState.selectedTab = .wallet
+                                navigationState.wallet.append(Scenes.Asset(asset: fromAsset))
+                                model.isPresentingSelectedAssetType = nil
+                            }
+                        )
+                    default: EmptyView()
+                    }
                 }
                 .sheet(item: $model.isPresentingSelectAssetType) {
                     SelectAssetSceneNavigationStack(

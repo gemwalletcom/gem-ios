@@ -9,6 +9,7 @@ import WalletTab
 import InfoSheet
 import Components
 import Assets
+import Swap
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
@@ -23,6 +24,7 @@ struct WalletNavigationStack: View {
 
     @State private var model: WalletSceneViewModel
     @State private var isPresentingAssetSelectedInput: SelectedAssetInput?
+
 
     init(model: WalletSceneViewModel) {
         _model = State(initialValue: model)
@@ -86,8 +88,9 @@ struct WalletNavigationStack: View {
                     TransactionScene(
                         input: TransactionSceneInput(
                             transactionId: $0.id,
-                            walletId: model.wallet.walletId
-                        )
+                            walletId: model.wallet.walletId,
+                        ),
+                        isPresentingSelectedAssetType: $model.isPresentingSelectedAssetType
                     )
                 }
                 .navigationDestination(for: Scenes.Price.self) {
@@ -122,6 +125,25 @@ struct WalletNavigationStack: View {
                 }
                 .sheet(item: $model.isPresentingInfoSheet) {
                     InfoSheetScene(model: InfoSheetViewModel(type: $0))
+                }
+                .sheet(item: $model.isPresentingSelectedAssetType) { type in
+                    switch type {
+                    case let .swap(fromAsset, toAsset):
+                        SwapNavigationStack(
+                            input: SwapInput(
+                                wallet: model.wallet,
+                                pairSelector: SwapPairSelectorViewModel(
+                                    fromAssetId: fromAsset.id,
+                                    toAssetId: toAsset?.id
+                                )
+                            ),
+                            onComplete: {
+                                navigationState.wallet.removeLast()
+                                model.isPresentingSelectedAssetType = nil
+                            }
+                        )
+                    default: EmptyView()
+                    }
                 }
                 .safariSheet(url: $model.isPresentingUrl)
         }

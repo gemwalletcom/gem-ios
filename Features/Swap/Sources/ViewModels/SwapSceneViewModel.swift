@@ -60,16 +60,16 @@ public final class SwapSceneViewModel {
 
     public init(
         preferences: Preferences = Preferences.standard,
-        wallet: Wallet,
-        asset: Asset,
+        input: SwapInput,
         walletsService: WalletsService,
         swapQuotesProvider: SwapQuotesProvidable,
         onSwap: TransferDataAction = nil
     ) {
-        let pairSelectorModel = SwapPairSelectorViewModel.defaultSwapPair(for: asset)
+
+        let pairSelectorModel = input.pairSelector
         self.pairSelectorModel = pairSelectorModel
         self.preferences = preferences
-        self.wallet = wallet
+        self.wallet = input.wallet
         self.walletsService = walletsService
 
         self.fromAssetRequest = AssetRequestOptional(

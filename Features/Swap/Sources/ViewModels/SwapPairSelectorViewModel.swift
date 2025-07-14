@@ -3,11 +3,11 @@
 import Foundation
 import Primitives
 
-struct SwapPairSelectorViewModel: Equatable {
+public struct SwapPairSelectorViewModel: Equatable {
     var fromAssetId: AssetId?
     var toAssetId: AssetId?
 
-    init(
+    public init(
         fromAssetId: AssetId?,
         toAssetId: AssetId?
     ) {
@@ -16,7 +16,7 @@ struct SwapPairSelectorViewModel: Equatable {
     }
 }
 
-extension SwapPairSelectorViewModel {
+public extension SwapPairSelectorViewModel {
     static func defaultSwapPair(for asset: Asset) -> SwapPairSelectorViewModel {
         if asset.type == .native {
             if ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] != nil {

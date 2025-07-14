@@ -25,8 +25,10 @@ public final class TransactionsViewModel {
     public var transactions: [TransactionExtended] = []
     public var request: TransactionsRequest
     public var filterModel: TransactionsFilterViewModel
+
     public var isPresentingFilteringView: Bool = false
     public var isPresentingSelectAssetType: SelectAssetType?
+    public var isPresentingSelectedAssetType: SelectedAssetType?
 
     public init(
         transactionsService: TransactionsService,

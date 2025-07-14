@@ -11,12 +11,14 @@ import InfoSheet
 import PrimitivesComponents
 import ExplorerService
 
+// TODO: - move related logic to view model, e.g. @Query, presenation states, make model as observable
 public struct TransactionScene: View {
     @Query<TransactionsRequest>
     private var transactions: [Primitives.TransactionExtended]
 
     @State private var isPresentingShareSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
+    @Binding private var isPresentingSelectedAssetType: SelectedAssetType?
 
     private let input: TransactionSceneInput
 
@@ -30,9 +32,10 @@ public struct TransactionScene: View {
         )
     }
 
-    public init(input: TransactionSceneInput) {
+    public init(input: TransactionSceneInput, isPresentingSelectedAssetType: Binding<SelectedAssetType?>) {
         self.input = input
         _transactions = Query(input.transactionRequest)
+        _isPresentingSelectedAssetType = isPresentingSelectedAssetType
     }
 
     public var body: some View {
@@ -40,7 +43,8 @@ public struct TransactionScene: View {
             List {
                 TransactionHeaderListItemView(
                     headerType: model.headerType,
-                    showClearHeader: model.showClearHeader
+                    showClearHeader: model.showClearHeader,
+                    action: onSelectTransactionHeader
                 )
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
@@ -49,7 +53,7 @@ public struct TransactionScene: View {
                             title: model.statusField,
                             subtitle: model.statusText,
                             subtitleStyle: model.statusTextStyle,
-                            infoAction: onStatusInfo
+                            infoAction: onSelectStatusInfo
                         )
                         switch model.statusType {
                         case .none:
@@ -87,7 +91,7 @@ public struct TransactionScene: View {
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
                         subtitleExtra: model.networkFeeFiatText,
-                        infoAction: onNetworkFeeInfo
+                        infoAction: onSelectNetworkFeeInfo
                     )
                 }
                 Section {
@@ -123,11 +127,27 @@ public struct TransactionScene: View {
 // MARK: - Actions
 
 extension TransactionScene {
-    func onNetworkFeeInfo() {
+    func onSelectTransactionHeader() {
+        switch model.headerType {
+        case .swap:
+            let type: SelectedAssetType =  {
+                let transaction = model.model.transaction
+                let fromAsset = transaction.asset
+                let toAsset = transaction.assets.first(where: { $0.id != fromAsset.id })
+                return SelectedAssetType.swap(fromAsset, toAsset)
+
+            }()
+            isPresentingSelectedAssetType = type
+        case .nft, .amount:
+            break
+        }
+    }
+
+    func onSelectNetworkFeeInfo() {
         isPresentingInfoSheet = .networkFee(model.chain)
     }
 
-    func onStatusInfo() {
+    func onSelectStatusInfo() {
         isPresentingInfoSheet = .transactionState(
             imageURL: model.assetImage.imageURL,
             placeholder: model.assetImage.placeholder,
