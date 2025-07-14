@@ -9,8 +9,8 @@ import Formatters
 public struct PriceWidgetView: View {
     private let viewModel: PriceWidgetViewModel
     
-    public init(entry: PriceWidgetEntry) {
-        self.viewModel = PriceWidgetViewModel(entry: entry, widgetFamily: .systemMedium)
+    public init(entry: PriceWidgetEntry, widgetFamily: WidgetFamily) {
+        self.viewModel = PriceWidgetViewModel(entry: entry, widgetFamily: widgetFamily)
     }
     
     init(viewModel: PriceWidgetViewModel) {
@@ -18,69 +18,51 @@ public struct PriceWidgetView: View {
     }
     
     public var body: some View {
-        VStack(spacing: Spacing.small) {
-            headerView
-            
-            if !viewModel.hasData {
-                emptyView
+        VStack(spacing: 0) {
+            if let error = viewModel.entry.error {
+                VStack {
+                    Spacer()
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.title2)
+                        .foregroundColor(Colors.gray)
+                    Text(error)
+                        .font(.caption)
+                        .foregroundColor(Colors.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, Spacing.small)
+                    Spacer()
+                }
+            } else if !viewModel.prices.isEmpty {
+                ForEach(viewModel.prices, id: \.assetId) { coin in
+                    CoinPriceRow(model: CoinPriceRowViewModel(coin: coin, currency: viewModel.entry.currency))
+                }
             } else {
-                coinPricesView
+                VStack {
+                    Spacer()
+                    Text("No price data available")
+                        .font(.caption)
+                        .foregroundColor(Colors.gray)
+                    Spacer()
+                }
             }
         }
-        .padding()
+        .padding(0)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Colors.white)
-    }
-    
-    private var headerView: some View {
-        HStack {
-            Text("Top Crypto")
-                .font(.headline)
-                .foregroundColor(Colors.black)
-            
-            Spacer()
-            
-            Text(viewModel.entry.date, style: .time)
-                .font(.caption)
-                .foregroundColor(Colors.gray)
-        }
-    }
-    
-    private var emptyView: some View {
-        VStack {
-            Spacer()
-            Text("No price data available")
-                .font(.caption)
-                .foregroundColor(Colors.gray)
-            Spacer()
-        }
-    }
-    
-    private var coinPricesView: some View {
-        VStack(spacing: Spacing.extraSmall) {
-            ForEach(viewModel.displayedCoins, id: \.assetId) { coin in
-                CoinPriceRow(coin: coin, currency: viewModel.entry.currency)
-            }
-        }
     }
 }
 
 // MARK: - Widget Extension
 
-public extension PriceWidgetView {
-    init(entry: PriceWidgetEntry, widgetFamily: WidgetFamily) {
-        self.viewModel = PriceWidgetViewModel(entry: entry, widgetFamily: widgetFamily)
-    }
-}
 
 struct PriceWidgetView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PriceWidgetView(entry: .placeholder())
+            PriceWidgetView(entry: .placeholder(), widgetFamily: .systemMedium)
                 .previewContext(WidgetPreviewContext(family: .systemMedium))
                 .previewDisplayName("Medium")
             
-            PriceWidgetView(entry: .placeholder())
+            PriceWidgetView(entry: .placeholder(), widgetFamily: .systemMedium)
                 .previewContext(WidgetPreviewContext(family: .systemLarge))
                 .previewDisplayName("Large")
         }

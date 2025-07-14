@@ -2,6 +2,7 @@
 
 import SwiftUI
 import WidgetKit
+import Components
 
 @Observable
 final class PriceWidgetViewModel {
@@ -13,7 +14,7 @@ final class PriceWidgetViewModel {
         self.widgetFamily = widgetFamily
     }
     
-    var displayedCoins: [CoinPrice] {
+    var prices: [CoinPrice] {
         switch widgetFamily {
         case .systemSmall:
             return Array(entry.coinPrices.prefix(1))
@@ -24,9 +25,5 @@ final class PriceWidgetViewModel {
         default:
             return entry.coinPrices
         }
-    }
-    
-    var hasData: Bool {
-        !entry.coinPrices.isEmpty
     }
 }

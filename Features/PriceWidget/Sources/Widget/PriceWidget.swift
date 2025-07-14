@@ -13,7 +13,7 @@ public struct PriceWidget: Widget {
             PriceWidgetView(entry: entry, widgetFamily: entry.widgetFamily)
         }
         .configurationDisplayName("Top Crypto Prices")
-        .description("Track prices of top 5 cryptocurrencies")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .description("Track prices of top cryptocurrencies")
+        .supportedFamilies([.systemMedium])
     }
 }
