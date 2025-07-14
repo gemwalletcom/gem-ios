@@ -100,8 +100,7 @@ extension SuiService {
             case .redelegate, .rewards, .withdraw:
                 fatalError()
             }
-        case .swap(_, _, _, let data): try {
-            guard let data else { throw AnyError("SwapQuoteData nil") }
+        case .swap(_, _, let data): try {
             let output = try Gemstone.suiValidateAndHash(encoded: data.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()

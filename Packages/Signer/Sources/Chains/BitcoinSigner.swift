@@ -20,24 +20,24 @@ public struct BitcoinSigner: Signable {
     }
 
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let (_, _, quote, data) = try input.type.swap()
-        let providers = Set([SwapProvider.thorchain, .chainflip].map { $0.rawValue })
+        let (_, _, data) = try input.type.swap()
+        let providers = Set([SwapProvider.thorchain, .chainflip])
         
-        if providers.contains(quote.data.provider.protocolId) == false {
+        if providers.contains(data.quote.provider) == false {
             throw AnyError("Invalid signing input type or not supported provider id")
         }
 
-        if input.useMaxAmount && quote.data.provider.id == .chainflip {
+        if input.useMaxAmount && data.quote.provider == .chainflip {
             throw AnyError("Doesn't support swapping all amounts on Chainflip yet")
         }
 
-        let opReturnIndex: UInt32? = switch quote.data.provider.id {
+        let opReturnIndex: UInt32? = switch data.quote.provider {
         case .thorchain: .none
         case .chainflip: 1
         default: .none
         }
 
-        let opReturnData: Data = switch quote.data.provider.id {
+        let opReturnData: Data = switch data.quote.provider {
         case .thorchain:
             try data.data.encodedData()
         case .chainflip: try {

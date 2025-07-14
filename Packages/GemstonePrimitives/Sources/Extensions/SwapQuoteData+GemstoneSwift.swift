@@ -5,8 +5,9 @@ import Primitives
 import Gemstone
 
 public extension Gemstone.SwapQuoteData {
-    var asPrimitive: Primitives.SwapQuoteData {
+    func asPrimitive(quote: Primitives.SwapQuote) -> Primitives.SwapQuoteData {
         Primitives.SwapQuoteData(
+            quote: quote,
             to: to,
             value: value,
             data: data,

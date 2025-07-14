@@ -76,7 +76,7 @@ public struct AptosSigner: Signable {
     }
     
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let data = try input.type.swap().quoteData
+        let data = try input.type.swap().data
         return [
             try sign(payload: .anyData(data.data), input: input, privateKey: privateKey)
         ]

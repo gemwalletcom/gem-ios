@@ -4,18 +4,18 @@ import Foundation
 import Primitives
 import BigInt
 import struct Gemstone.SwapQuote
+import struct Gemstone.SwapQuoteData
 
 public struct SwapTransferDataFactory: Sendable {
     public static func swap(
         fromAsset: Asset,
         toAsset: Asset,
-        quote: SwapQuote,
-        quoteData: SwapQuoteData?
+        quote: Gemstone.SwapQuote,
+        quoteData: Gemstone.SwapQuoteData
     ) -> TransferData {
-
         let recipient = Recipient(
             name: quote.data.provider.name,
-            address: quoteData?.to ?? "",
+            address: quoteData.to,
             memo: .none
         )
 
@@ -23,8 +23,7 @@ public struct SwapTransferDataFactory: Sendable {
             type: .swap(
                 fromAsset,
                 toAsset,
-                quote,
-                quoteData
+                quoteData.asPrimitive(quote: quote.asPrimitive)
             ),
             recipientData: RecipientData(recipient: recipient, amount: .none),
             value: BigInt(stringLiteral: quote.request.value),

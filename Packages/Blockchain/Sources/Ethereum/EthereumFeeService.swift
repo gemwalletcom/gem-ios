@@ -39,8 +39,7 @@ extension EthereumService {
             case .spl, .jetton:
                 fatalError()
             }
-        case .swap(_, _, _, let data):
-            guard let data else { return .none}
+        case .swap(_, _, let data):
             switch data.approval {
             case .some(let approvalData):
                 return EthereumAbi.approve(spender: try Data.from(hex: approvalData.spender), value: .MAX_256)
@@ -73,8 +72,8 @@ extension EthereumService {
             }
         case .transferNft(let asset):
             return try asset.getContractAddress()
-        case .swap(_, _, _, let data):
-            switch data?.approval {
+        case .swap(_, _, let data):
+            switch data.approval {
             case .some(let approvalData): return approvalData.token
             case .none: return input.destinationAddress
             }
@@ -103,8 +102,7 @@ extension EthereumService {
             case .token: return .none
             }
         case .transferNft: return .zero
-        case .swap(_, _, _, let data):
-            guard let data else { return .none }
+        case .swap(_, _, let data):
             switch data.approval {
             case .some: return .zero
             case .none: return BigInt(stringLiteral: data.value)
@@ -130,8 +128,7 @@ extension EthereumService {
     // Special case for sending two transactions approve + swap (calculating total gas limit fee)
     public func extraFeeGasLimit(input: FeeInput) throws -> BigInt {
         switch input.type {
-        case .swap(_, _, _, let data):
-            guard let data else { return .zero }
+        case .swap(_, _, let data):
             switch data.approval {
             case .some: return try data.gasLimitBigInt()
             case .none: return .zero
