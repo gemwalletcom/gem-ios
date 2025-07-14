@@ -6,21 +6,16 @@ import Components
 import Formatters
 
 public struct CoinPriceView: View {
-    public let coin: CoinPrice
-    public let currency: String
+    private let viewModel: CoinPriceViewModel
     
     public init(coin: CoinPrice, currency: String) {
-        self.coin = coin
-        self.currency = currency
+        self.viewModel = CoinPriceViewModel(coin: coin, currency: currency)
     }
-    
-    private let currencyFormatter = CurrencyFormatter()
-    private let percentFormatter = CurrencyFormatter.percent
     
     public var body: some View {
         HStack(spacing: Spacing.small) {
             // Coin icon
-            if let imageURL = coin.imageURL {
+            if let imageURL = viewModel.imageURL {
                 AsyncImageView(url: imageURL)
                     .frame(width: 32, height: 32)
                     .cornerRadius(16)
@@ -32,10 +27,10 @@ public struct CoinPriceView: View {
             
             // Name and symbol
             VStack(alignment: .leading, spacing: 2) {
-                Text(coin.name)
+                Text(viewModel.name)
                     .font(.system(size: 14, weight: .medium))
                 
-                Text(coin.symbol)
+                Text(viewModel.symbol)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -44,36 +39,14 @@ public struct CoinPriceView: View {
             
             // Price and change
             VStack(alignment: .trailing, spacing: 2) {
-                Text(formatPrice(coin.price))
+                Text(viewModel.priceText)
                     .font(.system(size: 14, weight: .medium))
                 
-                Text(formatPercentage(coin.priceChangePercentage24h))
+                Text(viewModel.percentageText)
                     .font(.caption)
-                    .foregroundColor(percentageColor(coin.priceChangePercentage24h))
+                    .foregroundColor(viewModel.percentageColor)
             }
         }
         .padding(.vertical, Spacing.extraSmall)
-    }
-    
-    private func formatPrice(_ price: Double) -> String {
-        return currencyFormatter.string(
-            price,
-            currency: currency,
-            style: .currency
-        )
-    }
-    
-    private func formatPercentage(_ percentage: Double) -> String {
-        return percentFormatter.string(percentage)
-    }
-    
-    private func percentageColor(_ percentage: Double) -> Color {
-        if percentage > 0 {
-            return Colors.green
-        } else if percentage < 0 {
-            return Colors.red
-        } else {
-            return Colors.gray
-        }
     }
 }

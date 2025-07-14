@@ -5,25 +5,22 @@ import SwiftUI
 import Primitives
 import PriceService
 import Store
-import GemstonePrimitives
 import Preferences
+import GemstonePrimitives
 
 public struct PriceWidgetProvider: TimelineProvider {
-    private let priceService: PriceService?
+    public typealias Entry = PriceWidgetEntry
+    
+    private let priceService: PriceService
     private let topCoins: [AssetId]
+    private let imageFormatter = AssetImageFormatter()
     
     public init() {
-        do {
-            let db = DB()
-            let priceStore = PriceStore(db: db)
-            let fiatRateStore = FiatRateStore(db: db)
-            self.priceService = PriceService(
-                priceStore: priceStore,
-                fiatRateStore: fiatRateStore
-            )
-        } catch {
-            self.priceService = nil
-        }
+        let db = DB()
+        self.priceService = PriceService(
+            priceStore: PriceStore(db: db),
+            fiatRateStore: FiatRateStore(db: db)
+        )
         
         // Define top 5 coins
         self.topCoins = [
@@ -43,31 +40,25 @@ public struct PriceWidgetProvider: TimelineProvider {
         if context.isPreview {
             completion(PriceWidgetEntry.placeholder())
         } else {
-            Task {
-                let entry = await fetchPrices()
-                completion(entry)
-            }
+            let entry = fetchPrices()
+            completion(entry)
         }
     }
     
     public func getTimeline(in context: Context, completion: @escaping (Timeline<PriceWidgetEntry>) -> Void) {
-        Task {
-            let currentDate = Date()
-            let entry = await fetchPrices()
-            
-            // Update every 15 minutes
-            let nextUpdateDate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate)!
-            
-            let timeline = Timeline(entries: [entry], policy: .after(nextUpdateDate))
-            completion(timeline)
-        }
+        let currentDate = Date()
+        let entry = fetchPrices()
+        
+        NSLog("entry \(entry)")
+        
+        // Update every 15 minutes
+        let nextUpdateDate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate)!
+        
+        let timeline = Timeline(entries: [entry], policy: .after(nextUpdateDate))
+        completion(timeline)
     }
     
-    private func fetchPrices() async -> PriceWidgetEntry {
-        guard let priceService = priceService else {
-            return PriceWidgetEntry.empty()
-        }
-        
+    private func fetchPrices() -> PriceWidgetEntry {
         do {
             // Get current currency from preferences
             let preferences = Preferences()
@@ -81,7 +72,7 @@ public struct PriceWidgetProvider: TimelineProvider {
                 let chain = price.assetId.chain
                 let name = chain.asset.name
                 let symbol = chain.asset.symbol
-                let imageURL = AssetImageFormatter.url(for: price.assetId)
+                let imageURL = imageFormatter.getURL(for: price.assetId)
                 
                 return CoinPrice(
                     assetId: price.assetId,

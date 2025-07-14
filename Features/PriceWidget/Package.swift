@@ -21,9 +21,9 @@ let package = Package(
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "PriceService", path: "../../Services/PriceService"),
         .package(name: "Localization", path: "../../Packages/Localization"),
-        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
     ],
     targets: [
         .target(
@@ -35,12 +35,18 @@ let package = Package(
                 "Store",
                 "PriceService",
                 "Localization",
-                "GemstonePrimitives",
                 "Formatters",
                 "Preferences",
+                "GemstonePrimitives",
             ],
-            path: "Sources",
-            exclude: ["Info.plist"]
+            path: "Sources"
+        ),
+        .testTarget(
+            name: "PriceWidgetTests",
+            dependencies: [
+                "PriceWidget",
+            ],
+            path: "Tests"
         ),
     ]
 )

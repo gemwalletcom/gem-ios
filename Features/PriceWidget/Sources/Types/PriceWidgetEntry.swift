@@ -66,15 +66,19 @@ public struct CoinPrice: Sendable {
             (.smartChain, "BNB", "BNB", 320, -0.5),
         ]
         
+        let imageFormatter = AssetImageFormatter()
+        
         return placeholders.map { chain, name, symbol, price, change in
             let assetId = AssetId(chain: chain, tokenId: nil)
+            let imageURL = imageFormatter.getURL(for: assetId)!
+            
             return CoinPrice(
                 assetId: assetId,
                 name: name,
                 symbol: symbol,
                 price: price,
                 priceChangePercentage24h: change,
-                imageURL: AssetImageFormatter.url(for: assetId)
+                imageURL: imageURL
             )
         }
     }

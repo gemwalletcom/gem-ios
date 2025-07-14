@@ -27,7 +27,10 @@
       "Bash(git pull:*)",
       "Bash(git restore:*)",
       "Bash(just spm-resolve-all:*)",
-      "Bash(gh pr checks:*)"
+      "Bash(gh pr checks:*)",
+      "Bash(just build-specific:*)",
+      "Bash(just:*)",
+      "Bash(swift-format lint:*)"
     ],
     "deny": []
   }
