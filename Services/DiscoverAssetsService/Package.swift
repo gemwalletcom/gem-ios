@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
     name: "DiscoverAssetsService",
     platforms: [
-        .iOS(.v17)
+        .iOS(.v17),
+        .macOS(.v12)
     ],
     products: [
         .library(
@@ -31,7 +32,10 @@ let package = Package(
         ),
         .testTarget(
             name: "DiscoverAssetsServiceTests",
-            dependencies: ["DiscoverAssetsService"]
+            dependencies: [
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                "DiscoverAssetsService"
+            ]
         ),
     ]
 )

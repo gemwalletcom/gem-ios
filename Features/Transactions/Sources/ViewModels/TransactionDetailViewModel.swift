@@ -11,6 +11,7 @@ import PrimitivesComponents
 import Store
 import Preferences
 import ExplorerService
+import InfoSheet
 import class Gemstone.SwapProviderConfig
 
 struct TransactionDetailViewModel {
@@ -59,15 +60,18 @@ struct TransactionDetailViewModel {
     
     var participantField: String? {
         switch model.transaction.transaction.type {
-        case .transfer, .transferNFT, .tokenApproval, .smartContractCall:
+        case .transfer, .transferNFT:
             switch model.transaction.transaction.direction {
             case .incoming:
                 return Localized.Transaction.sender
             case .outgoing, .selfTransfer:
                 return Localized.Transaction.recipient
             }
+        case .tokenApproval, .smartContractCall:
+            return Localized.Asset.contract
+        case .stakeDelegate:
+            return Localized.Stake.validator
         case .swap,
-            .stakeDelegate,
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeRewards,
@@ -79,10 +83,9 @@ struct TransactionDetailViewModel {
     
     var participant: String? {
         switch model.transaction.transaction.type {
-        case .transfer, .transferNFT, .tokenApproval, .smartContractCall:
+        case .transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate:
             return model.participant
         case .swap,
-            .stakeDelegate,
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeRewards,
@@ -167,18 +170,7 @@ struct TransactionDetailViewModel {
     }
 
     var showMemoField: Bool {
-        switch model.transaction.transaction.type {
-        case .transfer, .transferNFT: model.transaction.asset.chain.isMemoSupported
-        case .swap,
-                .tokenApproval,
-                .assetActivation,
-                .smartContractCall,
-                .stakeRewards,
-                .stakeWithdraw,
-                .stakeDelegate,
-                .stakeUndelegate,
-                .stakeRedelegate: false
-        }
+        memo != nil
     }
 
     var memo: String? {
@@ -231,6 +223,7 @@ struct TransactionDetailViewModel {
         )
     }
 }
+
 
 extension TransactionDetailViewModel: Identifiable {
     var id: String { model.transaction.id }

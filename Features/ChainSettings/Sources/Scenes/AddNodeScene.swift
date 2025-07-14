@@ -55,13 +55,7 @@ public struct AddNodeScene: View {
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
-        .alert("",
-            isPresented: $model.isPresentingErrorAlert.mappedToBool(),
-            actions: {},
-            message: {
-                Text(model.isPresentingErrorAlert ?? "")
-            }
-        )
+        .alertSheet($model.isPresentingAlertMessage)
     }
 }
 
@@ -134,7 +128,7 @@ extension AddNodeScene {
             try model.importFoundNode()
             onDismiss?()
         } catch {
-            model.isPresentingErrorAlert = error.localizedDescription
+            model.isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 

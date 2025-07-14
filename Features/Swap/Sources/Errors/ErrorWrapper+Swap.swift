@@ -5,7 +5,7 @@ import Localization
 import enum Gemstone.SwapperError
 
 public struct ErrorWrapper: Error, LocalizedError {
-    private let error: Error
+    public let error: Error
 
     public init(_ error: Error) {
         self.error = error

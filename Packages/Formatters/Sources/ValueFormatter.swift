@@ -34,6 +34,18 @@ public struct ValueFormatter: Sendable {
         return formatter
     }
     
+    private var formatterMiddle: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumSignificantDigits = 4
+        formatter.usesSignificantDigits = true
+        formatter.roundingIncrement = 0
+        formatter.roundingMode = .down
+        return formatter
+    }
+    
     private var formatterMedium: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.locale = locale
@@ -132,8 +144,7 @@ public struct ValueFormatter: Sendable {
         switch number.doubleValue.magnitude {
         case 0: formatterShort
         case 1...: formatterShort
-        case 0.01..<1: formatterShort
-        case 0.0001..<0.01: formatterMedium
+        case 0.0001..<1: formatterMiddle
         default: formatterFull
         }
     }

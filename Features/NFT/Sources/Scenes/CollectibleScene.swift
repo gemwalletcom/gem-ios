@@ -10,8 +10,6 @@ import Localization
 import ImageGalleryService
 
 public struct CollectibleScene: View {
-    @Environment(\.openURL) private var openURL
-
     @State private var model: CollectibleViewModel
 
     public init(model: CollectibleViewModel) {
@@ -32,31 +30,9 @@ public struct CollectibleScene: View {
         .environment(\.defaultMinListHeaderHeight, 0)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .alert(Localized.Permissions.accessDenied, isPresented: $model.isPresentingPhotoPermissionMessage) {
-            Button(Localized.Common.openSettings) {
-                onSelectOpenSettings()
-            }
-            Button(Localized.Common.cancel, role: .cancel) {}
-        } message: {
-            Text(Localized.Permissions.Image.PhotoAccess.Denied.description)
-        }
-        .alert("",
-               isPresented: $model.isPresentingErrorMessage.mappedToBool(),
-               actions: {},
-               message: {
-            Text(model.isPresentingErrorMessage ?? "")
-        }
-        )
-        .toast(
-            isPresenting: $model.isPresentingSaveToPhotosToast,
-            title: Localized.Nft.saveToPhotos,
-            systemImage: SystemImage.checkmark
-        )
-        .toast(
-            isPresenting: $model.isPresentingSetAsAvatarToast,
-            title: Localized.Nft.setAsAvatar,
-            systemImage: SystemImage.checkmark
-        )
+        .alertSheet($model.isPresentingAlertMessage)
+        .toast(message: $model.isPresentingToast)
+        .safariSheet(url: $model.isPresentingTokenExplorerUrl)
     }
 }
 
@@ -104,11 +80,12 @@ extension CollectibleScene {
                 assetImage: model.networkAssetImage
             )
 
-            if model.showContract {
-                ListItemView(title: model.contractTitle, subtitle: model.contractText)
-                    .contextMenu(.copy(value: model.contractValue))
+            if let text = model.contractText {
+                ListItemView(title: model.contractTitle, subtitle: text)
+                    .contextMenu(model.contractContextMenu)
             }
             ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)
+                .contextMenu(model.tokenIdContextMenu)
         }
     }
 
@@ -127,11 +104,3 @@ extension CollectibleScene {
     }
 }
 
-// MARK: - Actions
-
-extension CollectibleScene {
-    private func onSelectOpenSettings() {
-        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-        openURL(settingsURL)
-    }
-}

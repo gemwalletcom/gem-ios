@@ -15,7 +15,6 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
 
     public init(type: InfoSheetType, button: InfoSheetButton? = .none) {
         self.type = type
-        //self.button = button
         
         switch button {
         case .none:
@@ -36,7 +35,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
         switch type {
         case .networkFee: Localized.Info.NetworkFee.title
         case .insufficientBalance: Localized.Info.InsufficientBalance.title
-        case .insufficientNetworkFee(let asset, _): Localized.Info.InsufficientNetworkFeeBalance.title(asset.symbol)
+        case .insufficientNetworkFee(let asset, _, _): Localized.Info.InsufficientNetworkFeeBalance.title(asset.symbol)
         case .transactionState(_,_, let state):
             switch state {
             case .pending: Localized.Transaction.Status.pending
@@ -55,15 +54,16 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             case .unverified: Localized.Asset.Verification.unverified
             }
         case .accountMinimalBalance: Localized.Info.AccountMinimumBalance.title
+        case .stakeMinimumAmount: Localized.Info.StakeMinimumAmount.title
         }
     }
 
     public var description: String {
         switch type {
         case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol)
-        case .insufficientBalance(let asset): return Localized.Info.InsufficientBalance.description(asset.symbol)
-        case .insufficientNetworkFee(let asset, let required):
-            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+        case .insufficientBalance(let asset, _): return Localized.Info.InsufficientBalance.description(asset.symbol)
+        case .insufficientNetworkFee(let asset, _, let required):
+            let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Info.InsufficientNetworkFeeBalance.description(
                 "**\(amount)**",
                 asset.name,
@@ -85,16 +85,20 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             case .unverified: return Localized.Info.AssetStatus.Unverified.description
             case .suspicious: return Localized.Info.AssetStatus.Suspicious.description
             }
-        case .accountMinimalBalance(let asset, let required):
-            let amount = ValueFormatter(style: .auto).string(required, asset: asset)
+        case let .accountMinimalBalance(asset, required):
+            let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Transfer.minimumAccountBalance(amount)
+        case let .stakeMinimumAmount(asset, required):
+            let amount = ValueFormatter(style: .full).string(required, asset: asset)
+            return Localized.Info.StakeMinimumAmount.description(asset.name, amount)
         }
     }
 
     public var image: InfoSheetImage? {
         switch type {
-        case .networkFee, .insufficientNetworkFee: return .image(Images.Info.networkFee)
-        case .insufficientBalance: return .none
+        case .networkFee: return .image(Images.Info.networkFee)
+        case  .insufficientNetworkFee(_, let image, _): return InfoSheetImage.assetImage(image)
+        case .insufficientBalance(_, let image): return InfoSheetImage.assetImage(image)
         case .transactionState(let imageURL, let placeholder, let state):
             let stateImage = switch state {
             case .pending: Images.Transaction.State.pending
@@ -128,6 +132,8 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             return .image(Images.Logo.logo)
         case .accountMinimalBalance:
             return .image(Images.Logo.logo)
+        case .stakeMinimumAmount:
+            return .image(Images.Logo.logo)
         case .assetStatus(let status):
             switch status {
             case .verified: return .image(Images.Logo.logo)
@@ -158,7 +164,9 @@ private extension InfoSheetViewModel {
         case .slippage: Docs.url(.slippage)
         case .assetStatus: Docs.url(.tokenVerification)
         case .accountMinimalBalance: Docs.url(.accountMinimalBalance)
-        case .insufficientBalance: Docs.url(.networkFees) // Which one to use?
+        // Which one to use?
+        case .insufficientBalance: Docs.url(.networkFees)
+        case .stakeMinimumAmount: Docs.url(.accountMinimalBalance)
         }
     }
 }

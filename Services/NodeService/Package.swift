@@ -5,6 +5,7 @@ let package = Package(
     name: "NodeService",
     platforms: [
         .iOS(.v17),
+        .macOS(.v12),
     ],
     products: [
         .library(

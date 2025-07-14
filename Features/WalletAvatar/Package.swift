@@ -7,6 +7,7 @@ let package = Package(
     name: "WalletAvatar",
     platforms: [
         .iOS(.v17),
+        .macOS(.v12),
     ],
     products: [
         .library(

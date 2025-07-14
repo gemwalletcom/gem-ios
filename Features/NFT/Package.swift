@@ -6,6 +6,7 @@ let package = Package(
     name: "NFT",
     platforms: [
         .iOS(.v17),
+        .macOS(.v12),
     ],
     products: [
         .library(
@@ -24,6 +25,8 @@ let package = Package(
         .package(name: "ImageGalleryService", path: "../../Services/ImageGalleryService"),
         .package(name: "WalletService", path: "../../Services/WalletService"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
+        .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
+        .package(name: "AvatarService", path: "../../Services/AvatarService"),
     ],
     targets: [
         .target(
@@ -39,13 +42,23 @@ let package = Package(
                 "Store",
                 "ImageGalleryService",
                 "WalletService",
-                "Formatters"
+                "Formatters",
+                "ExplorerService",
+                "AvatarService"
             ],
             path: "Sources"
         ),
         .testTarget(
             name: "NFTTests",
-            dependencies: ["NFT"]
+            dependencies: [
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "WalletServiceTestKit", package: "WalletService"),
+                "NFT",
+                "PrimitivesComponents",
+                "AvatarService",
+                "Store"
+            ]
         )
     ]
 )

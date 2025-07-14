@@ -14,32 +14,10 @@
   },
   "testTargets" : [
     {
-      "enabled" : false,
       "target" : {
-        "containerPath" : "container:Features\/QRScanner",
-        "identifier" : "QRScannerTests",
-        "name" : "QRScannerTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Features\/Transfer",
-        "identifier" : "TransferTests",
-        "name" : "TransferTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Features\/FiatConnect",
-        "identifier" : "FiatConnectTests",
-        "name" : "FiatConnectTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Features\/PriceAlerts",
-        "identifier" : "PriceAlertsTests",
-        "name" : "PriceAlertsTests"
+        "containerPath" : "container:Services\/TransactionsService",
+        "identifier" : "TransactionsServiceTests",
+        "name" : "TransactionsServiceTests"
       }
     },
     {
@@ -50,65 +28,6 @@
       }
     },
     {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/ChainService",
-        "identifier" : "ChainServiceTests",
-        "name" : "ChainServiceTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Services\/WalletSessionService",
-        "identifier" : "WalletSessionServiceTests",
-        "name" : "WalletSessionServiceTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Features\/Onboarding",
-        "identifier" : "OnboardingTest",
-        "name" : "OnboardingTest"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/DiscoverAssetsService",
-        "identifier" : "DiscoverAssetsServiceTests",
-        "name" : "DiscoverAssetsServiceTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Packages\/Validators",
-        "identifier" : "ValidatorsTests",
-        "name" : "ValidatorsTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Packages\/Primitives",
-        "identifier" : "PrimitivesTests",
-        "name" : "PrimitivesTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Packages\/PrimitivesComponents",
-        "identifier" : "PrimitivesComponentsTests",
-        "name" : "PrimitivesComponentsTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Features\/WalletConnector",
-        "identifier" : "WalletConnectorTests",
-        "name" : "WalletConnectorTests"
-      }
-    },
-    {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/NFT",
         "identifier" : "NFTTests",
@@ -117,39 +36,23 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Features\/Staking",
-        "identifier" : "StakingTests",
-        "name" : "StakingTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/SwapService",
-        "identifier" : "SwapServiceTests",
-        "name" : "SwapServiceTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/StakeService",
-        "identifier" : "StakeServiceTests",
-        "name" : "StakeServiceTests"
+        "containerPath" : "container:Packages\/Components",
+        "identifier" : "ComponentsTests",
+        "name" : "ComponentsTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/Signer",
-        "identifier" : "SignerTests",
-        "name" : "SignerTests"
+        "containerPath" : "container:Packages\/Preferences",
+        "identifier" : "PreferencesTest",
+        "name" : "PreferencesTest"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/JobRunner",
-        "identifier" : "JobRunnerTests",
-        "name" : "JobRunnerTests"
+        "containerPath" : "container:Services\/BalanceService",
+        "identifier" : "BalanceServiceTests",
+        "name" : "BalanceServiceTests"
       }
     },
     {
@@ -161,32 +64,44 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Services\/AppService",
-        "identifier" : "AppServiceTests",
-        "name" : "AppServiceTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/WalletConnectorService",
-        "identifier" : "WalletConnectorServiceTests",
-        "name" : "WalletConnectorServiceTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:Packages\/GemstonePrimitives",
         "identifier" : "GemstonePrimitivesTests",
         "name" : "GemstonePrimitivesTests"
       }
     },
     {
-      "enabled" : false,
       "target" : {
-        "containerPath" : "container:Services\/WalletsService",
-        "identifier" : "WalletsServiceTests",
-        "name" : "WalletsServiceTests"
+        "containerPath" : "container:Services\/NativeProviderService",
+        "identifier" : "NativeProviderServiceTests",
+        "name" : "NativeProviderServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Signer",
+        "identifier" : "SignerTests",
+        "name" : "SignerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Keystore",
+        "identifier" : "KeystoreTests",
+        "name" : "KeystoreTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/WalletTab",
+        "identifier" : "WalletTabTests",
+        "name" : "WalletTabTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/LockManager",
+        "identifier" : "LockManagerTests",
+        "name" : "LockManagerTests"
       }
     },
     {
@@ -198,17 +113,30 @@
     },
     {
       "target" : {
+        "containerPath" : "container:Services\/AssetsService",
+        "identifier" : "AssetsServiceTests",
+        "name" : "AssetsServiceTests"
+      }
+    },
+    {
+      "target" : {
         "containerPath" : "container:Packages\/WalletCorePrimitives",
         "identifier" : "WalletCorePrimitivesTests",
         "name" : "WalletCorePrimitivesTests"
       }
     },
     {
-      "enabled" : false,
       "target" : {
-        "containerPath" : "container:Packages\/GemAPI",
-        "identifier" : "GemAPITests",
-        "name" : "GemAPITests"
+        "containerPath" : "container:Packages\/Formatters",
+        "identifier" : "FormattersTests",
+        "name" : "FormattersTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/WalletConnector",
+        "identifier" : "WalletConnectorTests",
+        "name" : "WalletConnectorTests"
       }
     },
     {
@@ -225,24 +153,86 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Services\/PriceAlertService",
-        "identifier" : "PriceAlertServiceTests",
-        "name" : "PriceAlertServiceTests"
+        "containerPath" : "container:Features\/PriceAlerts",
+        "identifier" : "PriceAlertsTests",
+        "name" : "PriceAlertsTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/Components",
-        "identifier" : "ComponentsTests",
-        "name" : "ComponentsTests"
+        "containerPath" : "container:Packages\/PrimitivesComponents",
+        "identifier" : "PrimitivesComponentsTests",
+        "name" : "PrimitivesComponentsTests"
       }
     },
     {
-      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Features\/FiatConnect",
+        "identifier" : "FiatConnectTests",
+        "name" : "FiatConnectTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/WalletsService",
+        "identifier" : "WalletsServiceTests",
+        "name" : "WalletsServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Primitives",
+        "identifier" : "PrimitivesTests",
+        "name" : "PrimitivesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/ChainService",
+        "identifier" : "ChainServiceTests",
+        "name" : "ChainServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Validators",
+        "identifier" : "ValidatorsTests",
+        "name" : "ValidatorsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/NodeService",
+        "identifier" : "NodeServiceTests",
+        "name" : "NodeServiceTests"
+      }
+    },
+    {
       "target" : {
         "containerPath" : "container:Services\/TransferService",
         "identifier" : "TransferServiceTests",
         "name" : "TransferServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/Settings",
+        "identifier" : "SettingsTests",
+        "name" : "SettingsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/TransactionService",
+        "identifier" : "TransactionServiceTests",
+        "name" : "TransactionServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/Swap",
+        "identifier" : "SwapTests",
+        "name" : "SwapTests"
       }
     },
     {
@@ -253,18 +243,24 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
-        "containerPath" : "container:Services\/TransactionsService",
-        "identifier" : "TransactionsServiceTests",
-        "name" : "TransactionsServiceTests"
+        "containerPath" : "container:Packages\/JobRunner",
+        "identifier" : "JobRunnerTests",
+        "name" : "JobRunnerTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:Features\/WalletTab",
-        "identifier" : "WalletTabTests",
-        "name" : "WalletTabTests"
+        "containerPath" : "container:Packages\/GemAPI",
+        "identifier" : "GemAPITests",
+        "name" : "GemAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/ManageWallets",
+        "identifier" : "ManageWalletsTest",
+        "name" : "ManageWalletsTest"
       }
     },
     {
@@ -276,21 +272,12 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/Keystore",
-        "identifier" : "KeystoreTests",
-        "name" : "KeystoreTests"
+        "containerPath" : "container:Features\/Onboarding",
+        "identifier" : "OnboardingTest",
+        "name" : "OnboardingTest"
       }
     },
     {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/BalanceService",
-        "identifier" : "BalanceServiceTests",
-        "name" : "BalanceServiceTests"
-      }
-    },
-    {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Features\/ChainSettings",
         "identifier" : "ChainSettingsTests",
@@ -299,93 +286,9 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Services\/AssetsService",
-        "identifier" : "AssetsServiceTests",
-        "name" : "AssetsServiceTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Features\/Settings",
-        "identifier" : "SettingsTests",
-        "name" : "SettingsTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/NativeProviderService",
-        "identifier" : "NativeProviderServiceTests",
-        "name" : "NativeProviderServiceTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Features\/Swap",
-        "identifier" : "SwapTests",
-        "name" : "SwapTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Features\/NameResolver",
-        "identifier" : "NameResolverTests",
-        "name" : "NameResolverTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Packages\/Formatters",
-        "identifier" : "FormattersTests",
-        "name" : "FormattersTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Packages\/Preferences",
-        "identifier" : "PreferencesTest",
-        "name" : "PreferencesTest"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Features\/LockManager",
-        "identifier" : "LockManagerTests",
-        "name" : "LockManagerTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/NodeService",
-        "identifier" : "NodeServiceTests",
-        "name" : "NodeServiceTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Features\/ManageWallets",
-        "identifier" : "ManageWalletsTest",
-        "name" : "ManageWalletsTest"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/NFTService",
-        "identifier" : "NFTServiceTests",
-        "name" : "NFTServiceTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Services\/TransactionService",
-        "identifier" : "TransactionServiceTests",
-        "name" : "TransactionServiceTests"
+        "containerPath" : "container:Services\/AppService",
+        "identifier" : "AppServiceTests",
+        "name" : "AppServiceTests"
       }
     },
     {
@@ -397,13 +300,54 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/Blockchain",
-        "identifier" : "BlockchainTests",
-        "name" : "BlockchainTests"
+        "containerPath" : "container:Services\/SwapService",
+        "identifier" : "SwapServiceTests",
+        "name" : "SwapServiceTests"
       }
     },
     {
-      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Services\/WalletConnectorService",
+        "identifier" : "WalletConnectorServiceTests",
+        "name" : "WalletConnectorServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/Transfer",
+        "identifier" : "TransferTests",
+        "name" : "TransferTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/NFTService",
+        "identifier" : "NFTServiceTests",
+        "name" : "NFTServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/PriceAlertService",
+        "identifier" : "PriceAlertServiceTests",
+        "name" : "PriceAlertServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/Assets",
+        "identifier" : "AssetsTests",
+        "name" : "AssetsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/QRScanner",
+        "identifier" : "QRScannerTests",
+        "name" : "QRScannerTests"
+      }
+    },
+    {
       "target" : {
         "containerPath" : "container:Packages\/Style",
         "identifier" : "StyleTests",
@@ -412,9 +356,44 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Services\/DeviceService",
-        "identifier" : "DeviceServiceTests",
-        "name" : "DeviceServiceTests"
+        "containerPath" : "container:Features\/Staking",
+        "identifier" : "StakingTests",
+        "name" : "StakingTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/DiscoverAssetsService",
+        "identifier" : "DiscoverAssetsServiceTests",
+        "name" : "DiscoverAssetsServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/NameResolver",
+        "identifier" : "NameResolverTests",
+        "name" : "NameResolverTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/WalletSessionService",
+        "identifier" : "WalletSessionServiceTests",
+        "name" : "WalletSessionServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Blockchain",
+        "identifier" : "BlockchainTests",
+        "name" : "BlockchainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/StakeService",
+        "identifier" : "StakeServiceTests",
+        "name" : "StakeServiceTests"
       }
     }
   ],

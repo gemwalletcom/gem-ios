@@ -8,13 +8,21 @@ import Localization
 import PrimitivesComponents
 import ExplorerService
 import Store
+import Onboarding
 
-public class WalletDetailViewModel {
+@Observable
+@MainActor
+public final class WalletDetailViewModel {
 
-    @Binding var navigationPath: NavigationPath
+    private let navigationPath: Binding<NavigationPath>
     let wallet: Wallet
     let walletService: WalletService
     let explorerService: any ExplorerLinkFetchable
+
+    var nameInput: String
+    var isPresentingAlertMessage: AlertMessage?
+    var isPresentingDeleteConfirmation: Bool?
+    var isPresentingExportWallet: ExportWalletType?
 
     public init(
         navigationPath: Binding<NavigationPath>,
@@ -22,10 +30,14 @@ public class WalletDetailViewModel {
         walletService: WalletService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     ) {
-        _navigationPath = navigationPath
+        self.navigationPath = navigationPath
         self.wallet = wallet
         self.walletService = walletService
         self.explorerService = explorerService
+        self.nameInput = wallet.name
+        self.isPresentingAlertMessage = nil
+        self.isPresentingDeleteConfirmation = nil
+        self.isPresentingExportWallet = nil
     }
 
     var name: String {
@@ -93,6 +105,48 @@ extension WalletDetailViewModel {
     }
 
     func onSelectImage() {
-        navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
+        navigationPath.wrappedValue.append(Scenes.WalletSelectImage(wallet: wallet))
+    }
+}
+
+// MARK: - Actions
+
+extension WalletDetailViewModel {
+    func onChangeWalletName() {
+        do {
+            try rename(name: nameInput)
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+        }
+    }
+
+    func onShowSecretPhrase() {
+        do {
+            isPresentingExportWallet = .words(try getMnemonicWords())
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+        }
+    }
+
+    func onShowPrivateKey() {
+        do {
+            isPresentingExportWallet = .privateKey(try getPrivateKey())
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+        }
+    }
+
+    func onSelectDelete() {
+        isPresentingDeleteConfirmation = true
+    }
+
+    func onDelete() -> Bool {
+        do {
+            try delete()
+            return true
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+            return false
+        }
     }
 }

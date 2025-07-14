@@ -10,13 +10,10 @@ import Style
 import PrimitivesComponents
 
 public struct ConnectionsScene: View {
-    @State private var isPresentingScanner: Bool = false
-    @State private var isPresentingErrorMessage: String?
-
     @State private var model: ConnectionsViewModel
 
     public init(model: ConnectionsViewModel) {
-        self.model = model
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
@@ -25,12 +22,12 @@ public struct ConnectionsScene: View {
                 ButtonListItem(
                     title: model.pasteButtonTitle,
                     image: Images.System.paste,
-                    action: onPaste
+                    action: model.onPaste
                 )
                 ButtonListItem(
                     title: model.scanQRCodeButtonTitle,
                     image: Images.System.qrCode,
-                    action: onScan
+                    action: model.onScan
                 )
             }
             .listRowInsets(.assetListRowInsets)
@@ -44,7 +41,7 @@ public struct ConnectionsScene: View {
                                     Button(
                                         model.disconnectTitle,
                                         role: .destructive,
-                                        action: { onSelectDisconnect(connection) }
+                                        action: { model.onSelectDisconnect(connection) }
                                     )
                                     .tint(Colors.red)
                                 }
@@ -67,63 +64,13 @@ public struct ConnectionsScene: View {
         .navigationDestination(for: WalletConnection.self) { connection in
             ConnectionScene(model: model.connectionSceneModel(connection: connection))
         }
-        .sheet(isPresented: $isPresentingScanner) {
-            ScanQRCodeNavigationStack(action: onHandleScan(_:))
+        .sheet(isPresented: $model.isPresentingScanner) {
+            ScanQRCodeNavigationStack(action: model.onHandleScan(_:))
         }
         .toolbarInfoButton(url: model.docsUrl)
-        .alert("",
-               isPresented: $isPresentingErrorMessage.mappedToBool(),
-               actions: {},
-               message: {
-            Text(isPresentingErrorMessage ?? "")
-        }
-        )
+        .alertSheet($model.isPresentingAlertMessage)
         .navigationTitle(model.title)
         .taskOnce { model.updateSessions() }
     }
 
-    private func connectURI(uri: String) async {
-        do {
-            try await model.pair(uri: uri)
-        } catch {
-            isPresentingErrorMessage = error.localizedDescription
-            NSLog("connectURI error: \(error)")
-        }
-    }
-}
-
-// MARK: Actions
-
-private extension ConnectionsScene {
-
-    private func onSelectDisconnect(_ connection: WalletConnection) {
-        Task {
-            do {
-                try await model.disconnect(connection: connection)
-            } catch {
-                isPresentingErrorMessage = error.localizedDescription
-                NSLog("disconnect error: \(error)")
-            }
-        }
-    }
-
-    private func onHandleScan(_ result: String) {
-        Task {
-            await connectURI(uri: result)
-        }
-    }
-
-    private func onScan() {
-        isPresentingScanner = true
-    }
-
-    private func onPaste() {
-        guard let content = UIPasteboard.general.string else {
-            return
-        }
-
-        Task {
-            await connectURI(uri: content)
-        }
-    }
 }

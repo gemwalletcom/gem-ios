@@ -4,19 +4,27 @@ import SwiftUI
 import Localization
 import Preferences
 import WalletService
+import Components
 
-public class WalletsSceneViewModel {
-    @Binding var navigationPath: NavigationPath
+@Observable
+@MainActor
+public final class WalletsSceneViewModel {
+    private let navigationPath: Binding<NavigationPath>
     let service: WalletService
     let currentWalletId: WalletId?
+    
+    var isPresentingAlertMessage: AlertMessage?
+    var walletDelete: Wallet?
     
     public init(
         navigationPath: Binding<NavigationPath>,
         walletService: WalletService
     ) {
-        _navigationPath = navigationPath
+        self.navigationPath = navigationPath
         self.service = walletService
         self.currentWalletId = service.currentWalletId
+        self.isPresentingAlertMessage = nil
+        self.walletDelete = nil
     }
     
     var title: String {
@@ -32,7 +40,7 @@ extension WalletsSceneViewModel {
     }
 
     func onEdit(wallet: Wallet) {
-        navigationPath.append(Scenes.WalletDetail(wallet: wallet))
+        navigationPath.wrappedValue.append(Scenes.WalletDetail(wallet: wallet))
     }
 
     func delete(_ wallet: Wallet) throws {
@@ -49,5 +57,29 @@ extension WalletsSceneViewModel {
 
     func swapOrder(from: WalletId, to: WalletId) throws {
         try service.swapOrder(from: from, to: to)
+    }
+}
+
+// MARK: - Actions
+
+extension WalletsSceneViewModel {
+    func onDelete(wallet: Wallet) {
+        walletDelete = wallet
+    }
+    
+    func onPin(wallet: Wallet) {
+        do {
+            try pin(wallet)
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+        }
+    }
+    
+    func onDeleteConfirmed(wallet: Wallet) {
+        do {
+            try delete(wallet)
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+        }
     }
 }

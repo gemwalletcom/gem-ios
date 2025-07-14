@@ -15,3 +15,13 @@ public struct Subscription: Codable, Equatable, Hashable, Sendable {
 		self.address = address
 	}
 }
+
+public struct DeviceSubscription: Codable, Equatable, Hashable, Sendable {
+	public let device: Device
+	public let subscription: Subscription
+
+	public init(device: Device, subscription: Subscription) {
+		self.device = device
+		self.subscription = subscription
+	}
+}

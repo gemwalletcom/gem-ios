@@ -9,6 +9,7 @@ import ChainServiceTestKit
 import SwapServiceTestKit
 import BigInt
 import protocol Gemstone.GemSwapperProtocol
+import enum Gemstone.SwapperError
 
 @testable import Swap
 
@@ -45,6 +46,18 @@ struct SwapSceneViewModelTests {
         model.amountInputModel.text = "0.9"
         #expect(!model.actionButtonState.isError)
         #expect(model.actionButtonTitle == "Swap")
+    }
+    
+    @Test
+    func tryAgainButtonEnabledWhenError() {
+        let model = SwapSceneViewModel.mock()
+        
+        model.swapState.quotes = .error(ErrorWrapper(Gemstone.SwapperError.NoQuoteAvailable))
+        #expect(model.shouldDisableActionButton == false)
+        
+        model.swapState.quotes = .data([])
+        model.amountInputModel.text = ""
+        #expect(model.shouldDisableActionButton == false)
     }
     
     // MARK: - Private methods

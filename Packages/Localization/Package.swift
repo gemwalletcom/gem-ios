@@ -5,6 +5,10 @@ import PackageDescription
 let package = Package(
     name: "Localization",
     defaultLocalization: "en",
+    platforms: [
+        .iOS(.v17),
+        .macOS(.v12)
+    ],
     products: [
         .library(
             name: "Localization",

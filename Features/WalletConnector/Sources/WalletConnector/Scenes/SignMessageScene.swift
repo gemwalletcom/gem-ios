@@ -8,13 +8,11 @@ import PrimitivesComponents
 
 public struct SignMessageScene: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var isPresentingUrl: URL? = nil
-    @State private var isPresentingMessage: Bool = false
     
-    private let model: SignMessageSceneViewModel
+    @State private var model: SignMessageSceneViewModel
 
     public init(model: SignMessageSceneViewModel) {
-        self.model = model
+        _model = State(wrappedValue: model)
     }
 
     public var body: some View {
@@ -23,17 +21,12 @@ public struct SignMessageScene: View {
                 Section {
                     ListItemImageView(
                         title: Localized.WalletConnect.app,
-                        subtitle: model.appName,
+                        subtitle: model.appText,
                         assetImage: model.appAssetImage
                     )
-                    if let appUrl = model.appUrl {
-                        ListItemView(title: Localized.WalletConnect.website, subtitle: model.connectionViewModel.host)
-                            .contextMenu(
-                                .url(title: Localized.WalletConnect.website, onOpen: {
-                                    isPresentingUrl = appUrl
-                                })
-                            )
-                    }
+                    .contextMenu(
+                        .url(title: Localized.WalletConnect.website, onOpen: model.onViewWebsite)
+                    )
                     ListItemView(title: Localized.Common.wallet, subtitle: model.walletText)
                     ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
                 }
@@ -56,7 +49,7 @@ public struct SignMessageScene: View {
                         }
                     }
                     NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
-                        isPresentingMessage = true
+                        model.onViewFullMessage()
                     }
                 case .text(let string):
                     Section(Localized.SignMessage.message) {
@@ -78,8 +71,8 @@ public struct SignMessageScene: View {
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.title)
-        .safariSheet(url: $isPresentingUrl)
-        .sheet(isPresented: $isPresentingMessage) {
+        .safariSheet(url: $model.isPresentingUrl)
+        .sheet(isPresented: $model.isPresentingMessage) {
             NavigationStack {
                 TextMessageScene(model: model.textMessageViewModel)
             }

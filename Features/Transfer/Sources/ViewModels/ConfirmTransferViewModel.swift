@@ -36,15 +36,18 @@ public final class ConfirmTransferViewModel {
     var confirmingState: StateViewType<Bool> = .noData {
         didSet {
             if case .error(let error) = confirmingState {
-                isPresentingErrorMessage = error.localizedDescription
+                isPresentingAlertMessage = AlertMessage(
+                    title: Localized.Errors.transferError,
+                    message: error.localizedDescription
+                )
             } else {
-                isPresentingErrorMessage = nil
+                isPresentingAlertMessage = nil
             }
         }
     }
 
     var isPresentingSheet: ConfirmTransferSheetType?
-    var isPresentingErrorMessage: String?
+    var isPresentingAlertMessage: AlertMessage?
 
     private let swapDataProvider: any SwapQuoteDataProvidable
     private let explorerService: any ExplorerLinkFetchable
@@ -110,20 +113,12 @@ public final class ConfirmTransferViewModel {
 
     var title: String { dataModel.title }
     var appTitle: String { Localized.WalletConnect.app }
-    var appValue: String? { dataModel.appValue }
-
     var appAssetImage: AssetImage? { dataModel.appAssetImage }
-
-    var websiteURL: URL? { dataModel.websiteURL }
-    var websiteTitle: String { Localized.WalletConnect.website }
-    var websiteValue: String? {
-        guard let url = websiteURL,
-              let host = url.host(percentEncoded: true)
-        else {
-            return .none
-        }
-        return host
+    var appText: String {
+        AppDisplayFormatter.format(name: dataModel.appValue, host: websiteURL?.cleanHost())
     }
+    var websiteURL: URL? { dataModel.websiteURL }
+    var websiteTitle: String {Localized.Settings.website }
 
     var senderTitle: String { Localized.Wallet.title }
     var senderValue: String { wallet.name }
@@ -449,9 +444,9 @@ extension TransferAmountCalculatorError {
     var infoSheet: InfoSheetType {
         switch self {
         case .insufficientBalance(let asset):
-            .insufficientBalance(asset)
+            .insufficientBalance(asset, image: AssetViewModel(asset: asset).assetImage)
         case .insufficientNetworkFee(let asset, let required):
-            .insufficientNetworkFee(asset, required: required)
+                .insufficientNetworkFee(asset, image: AssetViewModel(asset: asset).assetImage, required: required)
         case .minimumAccountBalanceTooLow(let asset, let required):
             .accountMinimalBalance(asset, required: required)
         }

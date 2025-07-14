@@ -27,6 +27,8 @@ public final class StakeViewModel {
 
     let onTransferAction: TransferDataAction
     let onAmountInputAction: AmountInputAction
+    
+    public var isPresentingInfoSheet: InfoSheetType? = .none
 
     public init(
         wallet: Wallet,
@@ -79,6 +81,10 @@ public final class StakeViewModel {
     var delegationsRetryTitle: String { Localized.Common.tryAgain }
     var emptyDelegationsTitle: String { Localized.Stake.noActiveStaking }
 
+    var showManage: Bool {
+        !wallet.isViewOnly
+    }
+    
     var recommendedCurrentValidator: DelegationValidator? {
         guard let validatorId = recommendedValidators.randomValidatorId(chain: chain) else { return .none }
         return try? stakeService.getValidator(assetId: asset.id, validatorId: validatorId)
@@ -157,6 +163,10 @@ extension StakeViewModel {
         let delegations = delegations.filter { $0.base.rewardsValue > 0 }
         let transferData = claimRewardsTransferData(delegations: delegations)
         onTransferAction?(transferData)
+    }
+    
+    func onLockTimeInfo() {
+        isPresentingInfoSheet = lockTimeInfoSheet
     }
 }
 

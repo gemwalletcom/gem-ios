@@ -8,7 +8,9 @@ public extension Transaction {
         type: TransactionType = .transfer,
         state: TransactionState = .confirmed,
         direction: TransactionDirection = .incoming,
+        to: String = "",
         value: String = "",
+        memo: String? = nil,
         metadata: TransactionMetadata? = nil
     ) -> Transaction {
         Transaction(
@@ -16,7 +18,7 @@ public extension Transaction {
             hash: "2",
             assetId: .mock(),
             from: "",
-            to: "",
+            to: to,
             contract: .none,
             type: type,
             state: state,
@@ -25,7 +27,7 @@ public extension Transaction {
             fee: "",
             feeAssetId: .mock(),
             value: value,
-            memo: .none,
+            memo: memo,
             direction: direction,
             utxoInputs: [],
             utxoOutputs: [],

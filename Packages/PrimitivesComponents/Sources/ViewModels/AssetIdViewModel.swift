@@ -21,7 +21,7 @@ public struct AssetIdViewModel: Sendable {
         AssetImage(
             type: .empty,
             imageURL: .none,
-            placeholder: imagePlaceholder,
+            placeholder: ChainImage(chain: assetId.chain).l2Image ?? imagePlaceholder,
             chainPlaceholder: .none
         )
     }
@@ -42,21 +42,17 @@ public struct AssetIdViewModel: Sendable {
         }
     }
 
-    private var chainImagePlaceholder: Image {
-        ChainImage(chain: assetId.chain).image
-    }
-
     private var imagePlaceholder: Image? {
         switch assetId.type {
-        case .native: chainImagePlaceholder
+        case .native: ChainImage(chain: assetId.chain).image
         case .token: .none
         }
     }
 
     private var chainPlaceholder: Image? {
         switch assetId.type {
-        case .native: .none
-        case .token: chainImagePlaceholder
+        case .native: ChainImage(chain: assetId.chain).l2Image
+        case .token: ChainImage(chain: assetId.chain).placeholder
         }
     }
 }

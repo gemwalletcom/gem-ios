@@ -33,9 +33,6 @@ public struct ConnectionProposalScene: View {
                         )
                     }
                     ListItemView(title: model.appTitle, subtitle: model.appText)
-                    if let website = model.websiteText {
-                        ListItemView(title: model.websiteTitle, subtitle: website)
-                    }
                 }
             }
 
