@@ -7,19 +7,21 @@ import Components
 import Formatters
 
 public struct PriceWidgetView: View {
-    let entry: PriceWidgetEntry
-    
-    @Environment(\.widgetFamily) var widgetFamily
+    private let viewModel: PriceWidgetViewModel
     
     public init(entry: PriceWidgetEntry) {
-        self.entry = entry
+        self.viewModel = PriceWidgetViewModel(entry: entry, widgetFamily: .systemMedium)
+    }
+    
+    init(viewModel: PriceWidgetViewModel) {
+        self.viewModel = viewModel
     }
     
     public var body: some View {
         VStack(spacing: Spacing.small) {
             headerView
             
-            if entry.coinPrices.isEmpty {
+            if !viewModel.hasData {
                 emptyView
             } else {
                 coinPricesView
@@ -38,7 +40,7 @@ public struct PriceWidgetView: View {
             
             Spacer()
             
-            Text(entry.date, style: .time)
+            Text(viewModel.entry.date, style: .time)
                 .font(.caption)
                 .foregroundColor(Colors.gray)
         }
@@ -56,92 +58,18 @@ public struct PriceWidgetView: View {
     
     private var coinPricesView: some View {
         VStack(spacing: Spacing.extraSmall) {
-            ForEach(displayedCoins, id: \.assetId) { coin in
-                CoinPriceRow(coin: coin, currency: entry.currency)
+            ForEach(viewModel.displayedCoins, id: \.assetId) { coin in
+                CoinPriceRow(coin: coin, currency: viewModel.entry.currency)
             }
-        }
-    }
-    
-    private var displayedCoins: [CoinPrice] {
-        switch widgetFamily {
-        case .systemMedium:
-            return Array(entry.coinPrices.prefix(3))
-        case .systemLarge:
-            return entry.coinPrices
-        default:
-            return entry.coinPrices
         }
     }
 }
 
-struct CoinPriceRow: View {
-    let coin: CoinPrice
-    let currency: String
-    
-    private let currencyFormatter = CurrencyFormatter()
-    private let percentFormatter = CurrencyFormatter.percent
-    
-    var body: some View {
-        HStack(spacing: Spacing.small) {
-            // Coin icon
-            if let imageURL = coin.imageURL {
-                AsyncImageView(url: imageURL)
-                    .frame(width: 32, height: 32)
-                    .cornerRadius(16)
-            } else {
-                Circle()
-                    .fill(Colors.grayLight)
-                    .frame(width: 32, height: 32)
-            }
-            
-            // Name and symbol
-            VStack(alignment: .leading, spacing: 2) {
-                Text(coin.name)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Colors.black)
-                
-                Text(coin.symbol)
-                    .font(.caption)
-                    .foregroundColor(Colors.gray)
-            }
-            
-            Spacer()
-            
-            // Price and change
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(formatPrice(coin.price))
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Colors.black)
-                
-                Text(formatPercentage(coin.priceChangePercentage24h))
-                    .font(.caption)
-                    .foregroundColor(percentageColor(coin.priceChangePercentage24h))
-            }
-        }
-        .padding(.vertical, Spacing.extraSmall)
-    }
-    
-    private func formatPrice(_ price: Double) -> String {
-//        return currencyFormatter.string(
-//            price,
-//            currency: currency,
-//            style: .currency
-//        )
-        return ""
-    }
-    
-    private func formatPercentage(_ percentage: Double) -> String {
-        return percentFormatter.string(percentage)
-    }
-    
-    private func percentageColor(_ percentage: Double) -> Color {
-        if percentage > 0 {
-            return Colors.green
-        } else if percentage < 0 {
-            return Colors.red
-        } else {
-            return Colors.gray
-        }
+// MARK: - Widget Extension
+
+public extension PriceWidgetView {
+    init(entry: PriceWidgetEntry, widgetFamily: WidgetFamily) {
+        self.viewModel = PriceWidgetViewModel(entry: entry, widgetFamily: widgetFamily)
     }
 }
 

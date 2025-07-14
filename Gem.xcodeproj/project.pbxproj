@@ -292,9 +292,19 @@
 		DFCB242D2D1A5223000A12CC /* Currency */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Currency; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D8877F6C2E256D5F008440EB /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D83819482E256A5A0076CDB3 /* GemPriceWidget */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D83096AD2D5D4F1E00FFEE3E /* GemUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemUITests; sourceTree = "<group>"; };
-		D838194C2E256A5A0076CDB3 /* GemPriceWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemPriceWidget; sourceTree = "<group>"; };
+		D838194C2E256A5A0076CDB3 /* GemPriceWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (D8877F6C2E256D5F008440EB /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = GemPriceWidget; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -957,7 +967,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					C30952AF299C39D70004C0F9 = {
 						CreatedOnToolsVersion = 14.2;

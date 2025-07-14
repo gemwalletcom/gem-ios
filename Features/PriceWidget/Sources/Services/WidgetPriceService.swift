@@ -4,6 +4,8 @@ import Foundation
 import Primitives
 import Store
 import PriceService
+import GemstonePrimitives
+import WidgetKit
 
 public struct WidgetPriceService {
     private let priceService: PriceService
@@ -18,7 +20,13 @@ public struct WidgetPriceService {
         )
     }
     
-    public func fetchTopCoinPrices() async -> [CoinPrice] {
+    public func fetchTopCoinPrices(widgetFamily: WidgetFamily = .systemMedium) -> PriceWidgetEntry {
+        // For now, always return placeholder data to test the widget
+        return PriceWidgetEntry.placeholder(widgetFamily: widgetFamily)
+        
+        // TODO: Implement actual price fetching
+        // The code below needs to be adjusted to work in widget extension context
+        /*
         let topCoins = [
             AssetId(chain: .bitcoin, tokenId: nil),
             AssetId(chain: .ethereum, tokenId: nil),
@@ -28,12 +36,14 @@ public struct WidgetPriceService {
         ]
         
         do {
+            let currency = getCurrency()
             let prices = try priceService.getPrices(for: topCoins)
             
-            return prices.compactMap { price -> CoinPrice? in
+            let coinPrices = prices.compactMap { price -> CoinPrice? in
                 let chain = price.assetId.chain
                 let name = chain.asset.name
                 let symbol = chain.asset.symbol
+                let imageURL = AssetImageFormatter().getURL(for: price.assetId)
                 
                 return CoinPrice(
                     assetId: price.assetId,
@@ -41,13 +51,21 @@ public struct WidgetPriceService {
                     symbol: symbol,
                     price: price.price,
                     priceChangePercentage24h: price.priceChangePercentage24h,
-                    imageURL: .none //chain.assetImage
+                    imageURL: imageURL
                 )
             }
+            
+            return PriceWidgetEntry(
+                date: Date(),
+                coinPrices: coinPrices,
+                currency: currency,
+                widgetFamily: widgetFamily
+            )
         } catch {
             // Return placeholder data on error
-            return CoinPrice.placeholders()
+            return PriceWidgetEntry.placeholder(widgetFamily: widgetFamily)
         }
+        */
     }
     
     public func getCurrency() -> String {
