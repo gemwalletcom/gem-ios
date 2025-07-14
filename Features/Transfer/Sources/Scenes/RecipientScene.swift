@@ -29,7 +29,7 @@ struct RecipientScene: View {
                     InputValidationField(
                         model: $model.addressInputModel,
                         placeholder: model.recipientField,
-                        allowClean: false,
+                        allowClean: true,
                         trailingView: {
                             HStack(spacing: .large/2) {
                                 NameRecordView(
@@ -37,14 +37,16 @@ struct RecipientScene: View {
                                     state: $model.nameResolveState,
                                     address: $model.addressInputModel.text
                                 )
-                                ListButton(
-                                    image: model.pasteImage,
-                                    action: { model.onSelectPaste(field: .address) }
-                                )
-                                ListButton(
-                                    image: model.qrImage,
-                                    action: { model.onSelectScan(field: .address) }
-                                )
+                                if model.shouldShowInputActions {
+                                    ListButton(
+                                        image: model.pasteImage,
+                                        action: { model.onSelectPaste(field: .address) }
+                                    )
+                                    ListButton(
+                                        image: model.qrImage,
+                                        action: { model.onSelectScan(field: .address) }
+                                    )
+                                }
                             }
                         }
                     )
