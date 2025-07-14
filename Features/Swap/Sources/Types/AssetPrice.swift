@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public struct SwapAssetPrice {
+public struct AssetPriceValue {
     public let asset: Asset
     public let price: Price?
     

@@ -188,7 +188,7 @@
 "wallets.watch" = "Watch";
 "transfer.minimum_amount" = "Minimum Amount is %@";
 "wallet_connect.no_active_connections" = "No active connections";
-"stake.minimum_amount" = "Minimum amount";
+"stake.minimum_amount" = "Minimumbedrag";
 "common.no_results_found" = "No Results Found";
 "social.x" = "X (formerly Twitter)";
 "social.discord" = "Discord";
@@ -423,3 +423,8 @@
 "info.account_minimum_balance.title" = "Minimumsaldo";
 "asset.buy_asset" = "Koop %@";
 "wallet.import_address_warning" = "U kunt het saldo en de transacties voor dit adres bekijken, maar u kunt geen geld verzenden of verkopen.";
+"info.stake_minimum_amount.title" = "Minimumbedrag";
+"info.stake_minimum_amount.description" = "Op het %@ netwerk is de minimale inzetvereiste ** %@ **.";
+"asset.add_to_wallet" = "Toevoegen aan portemonnee";
+"asset.hide_from_wallet" = "Verbergen voor portemonnee";
+"common.details" = "Details";

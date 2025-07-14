@@ -188,7 +188,7 @@
 "wallets.watch" = "Watch";
 "transfer.minimum_amount" = "Minimum Amount is %@";
 "wallet_connect.no_active_connections" = "No active connections";
-"stake.minimum_amount" = "Minimum amount";
+"stake.minimum_amount" = "סכום מינימלי";
 "common.no_results_found" = "No Results Found";
 "social.x" = "X (formerly Twitter)";
 "social.discord" = "Discord";
@@ -423,3 +423,8 @@
 "info.account_minimum_balance.title" = "יתרה מינימלית";
 "asset.buy_asset" = "קנה %@";
 "wallet.import_address_warning" = "ניתן לצפות ביתרות ועסקאות עבור כתובת זו, אך **לא ניתן לשלוח או למכור כספים**.";
+"info.stake_minimum_amount.title" = "סכום מינימלי";
+"info.stake_minimum_amount.description" = "ברשת %@, דרישת ההימור המינימלית היא ** %@ **.";
+"asset.add_to_wallet" = "הוסף לארנק";
+"asset.hide_from_wallet" = "הסתר מהארנק";
+"common.details" = "פרטים";

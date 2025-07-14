@@ -227,8 +227,8 @@ public final class ConfirmTransferViewModel {
         }
 
         return SwapDetailsViewModel(
-            fromAssetPrice: SwapAssetPrice(asset: fromAsset, price: metadata?.assetPrice),
-            toAssetPrice: SwapAssetPrice(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
+            fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
+            toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
             selectedQuote: quote,
             availableQuotes: [quote]
         )

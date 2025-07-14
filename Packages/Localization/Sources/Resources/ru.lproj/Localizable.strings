@@ -135,7 +135,7 @@
 "swap.approve_token" = "Одобрить %@ на обмен";
 "swap.approve_token_permission" = "Одобрите токен %@ для доступа к обмену.";
 "common.phrase" = "Фраза";
-"stake.active" = "Active";
+"stake.active" = "Активный";
 "stake.pending" = "В ожидании";
 "stake.rewards" = "Награды";
 "assets.no_assets_found" = "Активы не найдены";
@@ -410,7 +410,7 @@
 "transfer.smart_contract.title" = "Smart Contract";
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Имеет баланс";
-"swap.estimated_time.title" = "Estimated Time";
+"swap.estimated_time.title" = "Расчетное время";
 "wallet.import.contract_address_field" = "Контракт или токен ID";
 "info.asset_status.unverified.description" = "Неподтверждённые токены не прошли достаточную проверку со стороны надёжных сторонних сервисов. Они могут появиться в вашем кошельке в результате airdrop’ов, переводов или ручного импорта.";
 "info.asset_status.suspicious.description" = "Подозрительные или спам‑токены помечаются как потенциальные мошеннические или вредоносные активы. Они могут появиться в вашем кошельке в результате airdrop‑раздач, переводов или ручного добавления.";
@@ -423,3 +423,8 @@
 "info.account_minimum_balance.title" = "Минимальный баланс";
 "asset.buy_asset" = "Купить %@";
 "wallet.import_address_warning" = "Вы можете просматривать балансы и транзакции для этого адреса, но **не можете отправлять или продавать средства**.";
+"info.stake_minimum_amount.title" = "Минимальная сумма";
+"info.stake_minimum_amount.description" = "В сети %@ минимальное требование к стейкингу составляет ** %@ **.";
+"asset.add_to_wallet" = "Добавить в кошелек";
+"asset.hide_from_wallet" = "Скрыть из кошелька";
+"common.details" = "Детали";

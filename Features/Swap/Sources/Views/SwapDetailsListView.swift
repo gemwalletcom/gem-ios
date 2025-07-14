@@ -3,6 +3,7 @@
 import SwiftUI
 import Style
 import Components
+import Localization
 
 public struct SwapDetailsListView: View {
     private let model: SwapDetailsViewModel
@@ -13,17 +14,13 @@ public struct SwapDetailsListView: View {
 
     public var body: some View {
         HStack {
-            ListItemView(title: "Details")
+            ListItemView(title: Localized.Common.details)
             
             Spacer()
             
-            VStack {
+            VStack(spacing: .tiny) {
                 if let rate = model.rateText {
-                    ListItemRotateView(
-                        title: .empty,
-                        subtitle: rate,
-                        action: nil
-                    )
+                    ListItemView(subtitle: rate)
                 }
                 ListItemImageView(
                     title: nil,

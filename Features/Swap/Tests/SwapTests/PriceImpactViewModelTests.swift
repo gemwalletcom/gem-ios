@@ -58,14 +58,10 @@ struct PriceImpactViewModelTests {
 
 extension PriceImpactViewModel {
     static func mock(fromValue: String, toValue: String) -> PriceImpactViewModel {
-        let fromAsset = Asset.mockEthereum()
-        let toAsset = Asset.mockEthereum()
-        let mockPrice = Price.mock()
-        
-        return PriceImpactViewModel(
-            fromAssetPrice: SwapAssetPrice(asset: fromAsset, price: mockPrice),
+        PriceImpactViewModel(
+            fromAssetPrice: AssetPriceValue(asset: .mockEthereum(), price: .mock()),
             fromValue: fromValue,
-            toAssetPrice: SwapAssetPrice(asset: toAsset, price: mockPrice),
+            toAssetPrice: AssetPriceValue(asset: .mockEthereum(), price: .mock()),
             toValue: toValue
         )
     }

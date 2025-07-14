@@ -86,8 +86,8 @@ public final class SwapSceneViewModel {
 
         return SwapDetailsViewModel(
             state: swapState.quotes.map { _ in true },
-            fromAssetPrice: SwapAssetPrice(asset: fromAsset.asset, price: fromAsset.price),
-            toAssetPrice: SwapAssetPrice(asset: toAsset.asset, price: toAsset.price),
+            fromAssetPrice: AssetPriceValue(asset: fromAsset.asset, price: fromAsset.price),
+            toAssetPrice: AssetPriceValue(asset: toAsset.asset, price: toAsset.price),
             selectedQuote: selectedSwapQuote,
             availableQuotes: swapState.quotes.value.or([]),
             preferences: preferences,

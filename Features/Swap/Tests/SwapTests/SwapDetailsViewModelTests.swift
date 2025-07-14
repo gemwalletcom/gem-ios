@@ -36,8 +36,8 @@ extension SwapDetailsViewModel {
     static func mock(selectedQuote: SwapQuote = .mock(),) -> SwapDetailsViewModel {
         SwapDetailsViewModel(
             state: .data(true),
-            fromAssetPrice: SwapAssetPrice(asset: .mockEthereum(), price: .mock()),
-            toAssetPrice: SwapAssetPrice(asset: .mockEthereumUSDT(), price: .mock()),
+            fromAssetPrice: AssetPriceValue(asset: .mockEthereum(), price: .mock()),
+            toAssetPrice: AssetPriceValue(asset: .mockEthereumUSDT(), price: .mock()),
             selectedQuote: selectedQuote,
             availableQuotes: [.mock()],
             preferences: .mock(),

@@ -21,14 +21,14 @@ public struct SwapDetailsView: View {
         VStack {
             switch model.state {
             case .data: listView
-            case .error(let error): ListItemErrorView(error: error)
+            case .error(let error): List { ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error) }
             case .loading: LoadingView()
             case .noData: EmptyView()
             }
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .toolbarDismissItem(title: .done, placement: .topBarLeading)
-        .navigationTitle("Details")
+        .navigationTitle(Localized.Common.details)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))

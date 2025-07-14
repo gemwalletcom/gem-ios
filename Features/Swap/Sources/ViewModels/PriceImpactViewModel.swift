@@ -10,16 +10,16 @@ import GemstonePrimitives
 import Formatters
 
 struct PriceImpactViewModel {
-    let fromAssetPrice: SwapAssetPrice
+    let fromAssetPrice: AssetPriceValue
     let fromValue: String
-    let toAssetPrice: SwapAssetPrice
+    let toAssetPrice: AssetPriceValue
     let toValue: String
 
     private let swapConfig = GemstoneConfig.shared.getSwapConfig()
     private let valueFormatter = ValueFormatter(style: .full)
     private let percentFormatter = CurrencyFormatter(type: .percent)
 
-    init(fromAssetPrice: SwapAssetPrice, fromValue: String, toAssetPrice: SwapAssetPrice, toValue: String) {
+    init(fromAssetPrice: AssetPriceValue, fromValue: String, toAssetPrice: AssetPriceValue, toValue: String) {
         self.fromAssetPrice = fromAssetPrice
         self.fromValue = fromValue
         self.toAssetPrice = toAssetPrice

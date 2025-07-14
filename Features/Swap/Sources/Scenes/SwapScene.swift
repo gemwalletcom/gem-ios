@@ -27,7 +27,7 @@ public struct SwapScene: View {
             bottomActionView
         }
         .confirmationDialog(
-            model.swapDetailsViewModel?.priceImpactModel.highImpactWarningTitle ?? "",
+            model.swapDetailsViewModel?.highImpactWarningTitle ?? "",
             presenting: $model.isPresentingPriceImpactConfirmation,
             sensoryFeedback: .warning,
             actions: { _ in

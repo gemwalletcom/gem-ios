@@ -21,11 +21,12 @@ public final class SwapDetailsViewModel {
         return formatter
     }()
     private let valueFormatter = ValueFormatter(style: .auto)
+    private let rateFormatter = AssetRateFormatter()
     
     let state: StateViewType<Bool>
     private let availableQuotes: [SwapQuote]
-    private let fromAssetPrice: SwapAssetPrice
-    private let toAssetPrice: SwapAssetPrice
+    private let fromAssetPrice: AssetPriceValue
+    private let toAssetPrice: AssetPriceValue
     private let providerViewModel: SwapProviderViewModel
     private let selectedQuote: SwapQuote
     private var rateDirection: AssetRateFormatter.Direction = .direct
@@ -35,8 +36,8 @@ public final class SwapDetailsViewModel {
 
     public init(
         state: StateViewType<Bool>? = nil,
-        fromAssetPrice: SwapAssetPrice,
-        toAssetPrice: SwapAssetPrice,
+        fromAssetPrice: AssetPriceValue,
+        toAssetPrice: AssetPriceValue,
         selectedQuote: SwapQuote,
         availableQuotes: [SwapQuote],
         preferences: Preferences = .standard,
@@ -56,7 +57,7 @@ public final class SwapDetailsViewModel {
     // MARK: - Provider
     var providerField: String { Localized.Common.provider }
     var providerText: String { providerViewModel.providerText }
-    var providerImage: AssetImage? { providerViewModel.providerImage }
+    var providerImage: AssetImage { providerViewModel.providerImage }
     var providers: [SwapProviderItem] {
         Array(availableQuotes.prefix(3).map { quote in
             SwapProviderItem(
@@ -87,7 +88,7 @@ public final class SwapDetailsViewModel {
     // MARK: - Rate
     var rateTitle: String { Localized.Buy.rate }
     var rateText: String? {
-         try? AssetRateFormatter().rate(
+         try? rateFormatter.rate(
             fromAsset: fromAssetPrice.asset,
             toAsset: toAssetPrice.asset,
             fromValue: selectedQuote.fromValueBigInt,
@@ -97,6 +98,9 @@ public final class SwapDetailsViewModel {
     }
     
     // MARK: - Price Impact
+    var highImpactWarningTitle: String {
+        priceImpactModel.highImpactWarningTitle
+    }
     var priceImpactModel: PriceImpactViewModel {
         PriceImpactViewModel(
             fromAssetPrice: fromAssetPrice,
