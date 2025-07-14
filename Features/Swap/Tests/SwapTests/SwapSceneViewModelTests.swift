@@ -10,6 +10,8 @@ import SwapServiceTestKit
 import BigInt
 import protocol Gemstone.GemSwapperProtocol
 import enum Gemstone.SwapperError
+import Keystore
+import KeystoreTestKit
 
 @testable import Swap
 
@@ -102,7 +104,8 @@ extension SwapSceneViewModel {
             wallet: .mock(accounts: [.mock(chain: .ethereum)]),
             asset: .mockEthereum(),
             walletsService: .mock(),
-            swapQuotesProvider: SwapQuotesProvider(swapService: .mock(swapper: swapper))
+            swapQuotesProvider: SwapQuotesProvider(swapService: .mock(swapper: swapper)),
+            swapQuoteDataProvider: SwapQuoteDataProvider(keystore: LocalKeystore.mock(), swapService: .mock(swapper: swapper))
         )
         
         model.fromAsset = .mock(asset: .mockEthereum())
