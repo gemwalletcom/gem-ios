@@ -58,8 +58,7 @@ struct TransactionsNavigationStack: View {
                         input: TransactionSceneInput(
                             transactionId: $0.id,
                             walletId: model.walletId
-                        ),
-                        isPresentingSelectedAssetType: $model.isPresentingSelectedAssetType
+                        )
                     )
                 }
                 .navigationDestination(for: Scenes.Asset.self) {
@@ -86,22 +85,6 @@ struct TransactionsNavigationStack: View {
                     .presentationDetentsForCurrentDeviceSize(expandable: true)
                     .presentationDragIndicator(.visible)
                 }
-                .sheet(item: $model.isPresentingSelectedAssetType) { type in
-                    switch type {
-                    case let .swap(fromAsset, toAsset):
-                        SwapNavigationStack(
-                            input: SwapInput(
-                                wallet: model.wallet,
-                                pairSelector: SwapPairSelectorViewModel(
-                                    fromAssetId: fromAsset.id,
-                                    toAssetId: toAsset?.id
-                                )
-                            ),
-                            onComplete: { onSwapComplete(fromAsset: fromAsset) }
-                        )
-                    default: EmptyView()
-                    }
-                }
                 .sheet(item: $model.isPresentingSelectAssetType) {
                     SelectAssetSceneNavigationStack(
                         model: SelectAssetViewModel(
@@ -115,16 +98,5 @@ struct TransactionsNavigationStack: View {
                     )
                 }
         }
-    }
-}
-
-// MARK: - Private
-
-extension TransactionsNavigationStack {
-    private func onSwapComplete(fromAsset: Asset) {
-        navigationState.selectedTab = .wallet
-        navigationState.wallet.removeAll()
-        navigationState.wallet.append(Scenes.Asset(asset: fromAsset))
-        model.isPresentingSelectedAssetType = nil
     }
 }

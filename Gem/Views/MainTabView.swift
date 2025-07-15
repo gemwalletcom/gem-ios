@@ -12,6 +12,7 @@ import NFT
 import TransactionsService
 import WalletTab
 import Transactions
+import Swap
 
 struct MainTabView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -41,6 +42,8 @@ struct MainTabView: View {
             }
         )
     }
+
+    @State private var isPresentingSwapSheet: SwapInput?
 
     init(model: MainTabViewModel) {
         self.model = model
@@ -108,6 +111,12 @@ struct MainTabView: View {
                 tabItem(Localized.Settings.title, Images.Tabs.settings)
             }
             .tag(TabItem.settings)
+        }
+        .sheet(item: $isPresentingSwapSheet) { input in
+            SwapNavigationStack(
+                input: input,
+                onComplete: { onSwapComplete(input: input) }
+            )
         }
         .onChange(of: model.walletId, onWalletIdChange)
         .onChange(
@@ -186,12 +195,12 @@ extension MainTabView {
             case .asset(let assetId), .buyAsset(let assetId):
                 let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Asset(asset: asset))
-            case .swapAsset(_, _):
-                //let fromAsset = try walletsService.assetsService.getAsset(for: fromAssetId)
-                //let toAsset = try walletsService.assetsService.getAsset(for: toAssetId)
-                //TODO:
-                //navigationStateManager.wallet.append(Scenes.Asset(asset: fromAsset))
-                break
+            case let .swapAsset(from, to):
+                isPresentingSwapSheet = SwapInput(
+                    wallet: model.wallet,
+                    pairSelector: SwapPairSelectorViewModel(fromAssetId: from, toAssetId: to)
+                )
+                return
             case .test, .unknown:
                 break
             }
@@ -210,6 +219,18 @@ extension MainTabView {
         
         Task {
             try await priceObserverService.setupAssets()
+        }
+    }
+
+    private func onSwapComplete(input: SwapInput) {
+        guard let assetId = input.pairSelector.fromAssetId else { return }
+
+        Task {
+            let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)
+            navigationState.wallet.removeAll()
+            navigationState.wallet.append(Scenes.Asset(asset: asset))
+            isPresentingSwapSheet = nil
+            navigationState.selectedTab = .wallet
         }
     }
 }

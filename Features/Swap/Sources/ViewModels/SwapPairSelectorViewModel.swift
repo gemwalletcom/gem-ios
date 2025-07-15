@@ -4,8 +4,8 @@ import Foundation
 import Primitives
 
 public struct SwapPairSelectorViewModel: Equatable {
-    var fromAssetId: AssetId?
-    var toAssetId: AssetId?
+    public var fromAssetId: AssetId?
+    public var toAssetId: AssetId?
 
     public init(
         fromAssetId: AssetId?,

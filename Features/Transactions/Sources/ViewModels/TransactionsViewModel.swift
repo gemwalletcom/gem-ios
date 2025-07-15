@@ -29,7 +29,6 @@ public final class TransactionsViewModel {
     // TODO: - separate presenting sheet state logic to separate type
     public var isPresentingFilteringView: Bool = false
     public var isPresentingSelectAssetType: SelectAssetType?
-    public var isPresentingSelectedAssetType: SelectedAssetType?
 
     public init(
         transactionsService: TransactionsService,

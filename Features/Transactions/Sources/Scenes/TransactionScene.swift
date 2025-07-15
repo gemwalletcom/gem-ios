@@ -13,12 +13,13 @@ import ExplorerService
 
 // TODO: - move related logic to view model, e.g. @Query, presenation states, make model as observable
 public struct TransactionScene: View {
+    @Environment(\.openURL) private var openURL
+
     @Query<TransactionsRequest>
     private var transactions: [Primitives.TransactionExtended]
 
     @State private var isPresentingShareSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
-    @Binding private var isPresentingSelectedAssetType: SelectedAssetType?
 
     private let input: TransactionSceneInput
 
@@ -32,10 +33,9 @@ public struct TransactionScene: View {
         )
     }
 
-    public init(input: TransactionSceneInput, isPresentingSelectedAssetType: Binding<SelectedAssetType?>) {
+    public init(input: TransactionSceneInput) {
         self.input = input
         _transactions = Query(input.transactionRequest)
-        _isPresentingSelectedAssetType = isPresentingSelectedAssetType
     }
 
     public var body: some View {
@@ -142,10 +142,8 @@ public struct TransactionScene: View {
 extension TransactionScene {
     func onSelectTransactionHeader() {
         switch model.headerType {
-        case .swap:
-            isPresentingSelectedAssetType = .swap(model.swapAssets.from, model.swapAssets.to)
-        case .nft, .amount:
-            break
+        case .swap: openURL(model.swapAssetsLink)
+        case .nft, .amount: break
         }
     }
 

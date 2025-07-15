@@ -200,11 +200,12 @@ struct TransactionDetailViewModel {
         }
     }
 
-    var swapAssets: (from: Asset, to: Asset?) {
+    var swapAssetsLink: URL {
         let transaction = model.transaction
         let fromAsset = transaction.asset
         let toAsset = transaction.assets.first(where: { $0.id != fromAsset.id })
-        return (fromAsset, toAsset)
+
+        return DeepLink.swap(fromAsset.id, toAsset?.id).localUrl
     }
 
     var headerType: TransactionHeaderType {

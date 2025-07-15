@@ -38,7 +38,6 @@ public final class WalletSceneViewModel: Sendable {
     // TODO: - separate presenting sheet state logic to separate type
     public var isPresentingWallets = false
     public var isPresentingSelectAssetType: SelectAssetType?
-    public var isPresentingSelectedAssetType: SelectedAssetType?
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingUrl: URL? = nil
     

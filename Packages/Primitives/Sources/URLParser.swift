@@ -11,6 +11,12 @@ public enum URLParser {
                 let chain = try Chain(id: urlComponents.getElement(safe: 1))
                 return .asset(AssetId(chain: chain, tokenId: urlComponents.element(at: 2)))
             }
+
+            if urlComponents.first == "swap", urlComponents.count >= 2 {
+                let fromId = try AssetId(id: urlComponents[1])
+                let toId: AssetId? = (urlComponents.count >= 3) ? try AssetId(id: urlComponents[2]) : nil
+                return .swap(fromId, toId)
+            }
         }
         if url.absoluteString.contains("wc?uri") {
             guard let components = url.absoluteString.components(separatedBy: "://").last?.removingPercentEncoding, components.count > 1 else {
