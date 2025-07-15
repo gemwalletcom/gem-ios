@@ -2,7 +2,8 @@
 
 import BigInt
 import Foundation
-import Gemstone
+import struct Gemstone.EvmChainConfig
+import struct Gemstone.EvmHistoryRewardPercentiles
 import GemstonePrimitives
 import Primitives
 import WalletCore
