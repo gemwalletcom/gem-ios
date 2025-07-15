@@ -99,12 +99,15 @@ struct SwapSceneViewModelTests {
 extension SwapSceneViewModel {
     static func mock(swapper: GemSwapperProtocol = GemSwapperMock()) -> SwapSceneViewModel {
         let model = SwapSceneViewModel(
-            wallet: .mock(accounts: [.mock(chain: .ethereum)]),
-            asset: .mockEthereum(),
+            preferences: .mock(),
+            input: .init(
+                wallet: .mock(accounts: [.mock(chain: .ethereum)]),
+                pairSelector: SwapPairSelectorViewModel(fromAssetId: .mockEthereum(), toAssetId: nil)
+            ),
             walletsService: .mock(),
             swapQuotesProvider: SwapQuotesProvider(swapService: .mock(swapper: swapper))
         )
-        
+
         model.fromAsset = .mock(asset: .mockEthereum())
         model.toAsset = .mock(asset: .mockEthereumUSDT())
         
