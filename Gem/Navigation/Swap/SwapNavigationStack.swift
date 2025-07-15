@@ -30,7 +30,7 @@ struct SwapNavigationStack: View {
                 model: SwapSceneViewModel(
                     input: input,
                     walletsService: walletsService,
-                    swapQuotesProvider: SwapQuotesProvider(swapService: SwapService(nodeProvider: nodeService)),
+                    swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
                     swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
                     onSwap: {
                         navigationPath.append($0)

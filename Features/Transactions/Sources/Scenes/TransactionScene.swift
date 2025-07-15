@@ -143,14 +143,10 @@ extension TransactionScene {
     func onSelectTransactionHeader() {
         switch model.headerType {
         case .swap:
-            let type: SelectedAssetType =  {
-                let transaction = model.model.transaction
-                let fromAsset = transaction.asset
-                let toAsset = transaction.assets.first(where: { $0.id != fromAsset.id })
-                return SelectedAssetType.swap(fromAsset, toAsset)
-
-            }()
-            isPresentingSelectedAssetType = type
+            let transaction = model.model.transaction
+            let fromAsset = transaction.asset
+            let toAsset = transaction.assets.first(where: { $0.id != fromAsset.id })
+            isPresentingSelectedAssetType = .swap(fromAsset, toAsset)
         case .nft, .amount:
             break
         }
