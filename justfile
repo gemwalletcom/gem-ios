@@ -1,7 +1,5 @@
-SIMULATOR_NAME := "iPhone 16"
-ARCH := "arm64"
-XCBEAUTIFY_ARGS := "--disable-logging --quiet"
-SIMULATOR_DEST := "platform=iOS Simulator,name={{SIMULATOR_NAME}},arch={{ARCH}}"
+XCBEAUTIFY_ARGS := ""
+SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 16,arch=arm64"
 
 xcbeautify:
     @xcbeautify {{XCBEAUTIFY_ARGS}}
