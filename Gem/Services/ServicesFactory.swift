@@ -27,6 +27,7 @@ import AvatarService
 import WalletSessionService
 import AppService
 import ScanService
+import SwapService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -113,6 +114,7 @@ struct ServicesFactory {
             preferences: preferences
         )
         let explorerService = ExplorerService.standard
+        let swapService = SwapService(nodeProvider: nodeService)
 
         let presenter = WalletConnectorPresenter()
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)
@@ -184,6 +186,7 @@ struct ServicesFactory {
             scanService: ScanService(securePreferences: .standard),
             nftService: nftService,
             avatarService: avatarService,
+            swapService: swapService,
             appReleaseService: releaseService,
             subscriptionsService: subscriptionService,
             deviceObserverService: deviceObserverService,

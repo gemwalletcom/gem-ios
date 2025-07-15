@@ -35,7 +35,7 @@ extension EthereumFeeCalculator: EthereumFeeCalculetable {
             throw AnyError("eth feeHistory: baseFeePerGas array might be empty or its last element is not a valid hex string")
         }
 
-        let priorityFees = try calculator.caluclateBasePriorityFees(
+        let priorityFees = try calculator.calculateBasePriorityFees(
             chain: chain.rawValue,
             history: GemEthereumFeeHistory(
                 reward: feeHistory.reward,

@@ -132,14 +132,6 @@ struct TransferDataViewModel {
         }
     }
 
-    var quoteFee: Double? {
-        if case .swap(_, _, let quote, _) = type, let fee = quote.request.options.fee {
-            Double(Double(fee.evm.bps) / 100).rounded(toPlaces: 2)
-        } else {
-            .none
-        }
-    }
-
     func availableValue(metadata: TransferDataMetadata?) -> BigInt {
         switch type {
         case .transfer,

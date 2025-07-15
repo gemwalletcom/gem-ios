@@ -328,8 +328,6 @@ extension ConfirmTransferViewModel {
         feeModel.reset()
 
         do {
-            data = try await fetchTransferData()
-
             let metadata = try metadataProvider.metadata(wallet: wallet, data: data)
             let transferTransactionData = try await transferTransactionProvider.loadTransferTransactionData(
                 wallet: wallet, data: data,
@@ -357,16 +355,6 @@ extension ConfirmTransferViewModel {
                 NSLog("preload transaction error: \(error)")
             }
         }
-    }
-
-    private func fetchTransferData() async throws -> TransferData {
-        // if swap, we refetch swap quote data
-        guard case let .swap(fromAsset, toAsset, quote, quoteData) = data.type, quoteData == nil else {
-            return data
-        }
-
-        let swapQuoteData = try await swapDataProvider.fetchQuoteData(wallet: wallet, quote: quote)
-        return SwapTransferDataFactory.swap(fromAsset: fromAsset, toAsset: toAsset, quote: quote, quoteData: swapQuoteData)
     }
 
     private func processConfirmation(transactionData: TransactionData, amount: TransferAmount) async {

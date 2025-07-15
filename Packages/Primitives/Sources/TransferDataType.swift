@@ -1,10 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import struct Gemstone.SwapQuote
-import struct Gemstone.SwapProviderType
-import struct Gemstone.SwapQuoteData
-import struct Gemstone.ApprovalData
 
 public enum AccountDataType: Hashable, Equatable, Sendable {
     case activate
@@ -13,7 +9,7 @@ public enum AccountDataType: Hashable, Equatable, Sendable {
 public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
     case transferNft(NFTAsset)
-    case swap(Asset, Asset, SwapQuote, SwapQuoteData?)
+    case swap(Asset, Asset, SwapData)
     case tokenApprove(Asset, ApprovalData)
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
@@ -41,7 +37,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     public var chain: Chain {
         switch self {
         case .transfer(let asset),
-            .swap(let asset, _, _, _),
+            .swap(let asset, _, _),
             .stake(let asset, _),
             .account(let asset, _),
             .tokenApprove(let asset, _),
@@ -52,13 +48,13 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     
     public var metadata: TransactionMetadata {
         switch self {
-        case let .swap(fromAsset, toAsset, quote, _): .swap(
+        case let .swap(fromAsset, toAsset, data): .swap(
             TransactionSwapMetadata(
                 fromAsset: fromAsset.id,
-                fromValue: quote.fromValue,
+                fromValue: data.quote.fromValue,
                 toAsset: toAsset.id,
-                toValue: quote.toValue,
-                provider: quote.data.provider.protocolId
+                toValue: data.quote.toValue,
+                provider: data.quote.provider.rawValue
             )
         )
         case .transferNft(let asset): .nft(
@@ -79,7 +75,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             .stake(let asset, _),
             .generic(let asset, _, _),
             .account(let asset, _): [asset.id]
-        case let .swap(from, to, _, _): [from.id, to.id]
+        case let .swap(from, to, _): [from.id, to.id]
         case .transferNft: []
         }
     }
@@ -91,10 +87,10 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         }
     }
     
-    public func swap() throws -> (Asset, Asset, SwapQuote, quoteData: SwapQuoteData) {
-        guard case .swap(let fromAsset, let toAsset, let quote, let swapData) = self, let swapData else {
+    public func swap() throws -> (Asset, Asset, data: SwapData) {
+        guard case .swap(let fromAsset, let toAsset, let data) = self else {
             throw AnyError("SwapQuoteData missed")
         }
-        return (fromAsset, toAsset, quote, swapData)
+        return (fromAsset, toAsset, data)
     }
 }

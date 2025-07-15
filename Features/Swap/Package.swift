@@ -25,7 +25,8 @@ let package = Package(
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "WalletsService", path: "../../Services/WalletsService"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
-        .package(name: "InfoSheet", path: "../InfoSheet")
+        .package(name: "InfoSheet", path: "../InfoSheet"),
+        .package(name: "Keystore", path: "../../Packages/Keystore"),
     ],
     targets: [
         .target(
@@ -42,7 +43,8 @@ let package = Package(
                 "Preferences",
                 "WalletsService",
                 "PrimitivesComponents",
-                "InfoSheet"
+                "InfoSheet",
+                "Keystore",
             ],
             path: "Sources"
         ),
@@ -52,6 +54,7 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "WalletsServiceTestKit", package: "WalletsService"),
                 .product(name: "SwapServiceTestKit", package: "SwapService"),
+                .product(name: "KeystoreTestKit", package: "Keystore"),
                 "Swap"
             ]
         )

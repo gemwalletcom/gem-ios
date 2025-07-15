@@ -20,8 +20,8 @@ struct TransactionFactory {
         let direction: TransactionDirection = senderAddress == recipientAddress ? .selfTransfer : .outgoing
 
         let data: (type: TransactionType, metadata: TransactionMetadata) = switch transferData.type {
-        case .swap(_, _, _, let data):
-            switch data?.approval {
+        case .swap(_, _, let data):
+            switch data.approval {
             case .some: transactionIndex == 0 ? (.tokenApproval, .null) : (.swap, metadata)
             case .none: (.swap, transferData.type.metadata)
             }

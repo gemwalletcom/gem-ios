@@ -20,6 +20,7 @@ import AppService
 import ScanService
 import NFTService
 import AvatarService
+import SwapService
 
 extension AppResolver {
     struct Services: Sendable {
@@ -44,6 +45,7 @@ extension AppResolver {
         let scanService: ScanService
         let nftService: NFTService
         let avatarService: AvatarService
+        let swapService: SwapService
         let subscriptionsService: SubscriptionService
         let appReleaseService: AppReleaseService
         let deviceObserverService: DeviceObserverService
@@ -72,6 +74,7 @@ extension AppResolver {
             scanService: ScanService,
             nftService: NFTService,
             avatarService: AvatarService,
+            swapService: SwapService,
             appReleaseService: AppReleaseService,
             subscriptionsService: SubscriptionService,
             deviceObserverService: DeviceObserverService,
@@ -99,6 +102,7 @@ extension AppResolver {
             self.scanService = scanService
             self.nftService = nftService
             self.avatarService = avatarService
+            self.swapService = swapService
             self.appReleaseService = appReleaseService
             self.deviceObserverService = deviceObserverService
             self.subscriptionsService = subscriptionsService

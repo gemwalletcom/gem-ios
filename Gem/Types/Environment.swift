@@ -25,6 +25,7 @@ import WalletService
 import AvatarService
 import AppService
 import ScanService
+import SwapService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
@@ -49,4 +50,5 @@ extension EnvironmentValues {
     @Entry var avatarService: AvatarService = AppResolver.main.services.avatarService
     @Entry var releaseService: AppReleaseService = AppResolver.main.services.appReleaseService
     @Entry var scanService: ScanService = AppResolver.main.services.scanService
+    @Entry var swapService: SwapService = AppResolver.main.services.swapService
 }
