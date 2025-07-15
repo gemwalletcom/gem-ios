@@ -5,6 +5,9 @@ import struct Gemstone.GemEip712Message
 import struct Gemstone.GemEip712MessageDomain
 import struct Gemstone.GemEip712Section
 import struct Gemstone.GemEip712Value
+import struct Gemstone.SignMessage
+import class Gemstone.SignMessageDecoder
+import enum Gemstone.MessagePreview
 import Testing
 import Primitives
 

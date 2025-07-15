@@ -58,7 +58,7 @@ build-package PACKAGE:
     -destination "{{SIMULATOR_DEST}}" \
     build | xcbeautify
 
-test:
+test_all:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
@@ -77,7 +77,7 @@ test_ui:
     -allowProvisioningDeviceRegistration \
     test | xcbeautify
 
-test-specific TARGET:
+test TARGET:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \

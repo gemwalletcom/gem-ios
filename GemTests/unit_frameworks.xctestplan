@@ -9,8 +9,11 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : false,
     "language" : "en",
-    "region" : "US"
+    "region" : "US",
+    "uiTestingScreenshotsLifetime" : "keepNever",
+    "userAttachmentLifetime" : "keepNever"
   },
   "testTargets" : [
     {
