@@ -3,9 +3,9 @@
 import Foundation
 import BigInt
 import Primitives
-import struct Gemstone.SwapQuote
+import struct Gemstone.SwapperQuote
 
-public extension SwapQuote {
+public extension SwapperQuote {
     var asPrimitive: Primitives.SwapQuote {
         Primitives.SwapQuote(
             fromValue: fromValue,
