@@ -169,7 +169,7 @@ public struct SolanaSigner: Signable {
         let price = input.fee.priorityFee
         let limit = input.fee.gasLimit
         
-        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: data.data, price: price.description) else {
+        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: data.data.data, price: price.description) else {
             throw AnyError("Unable to set compute unit price")
         }
         guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {

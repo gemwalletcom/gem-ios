@@ -335,7 +335,7 @@ public extension TronService {
                         contractAddress: approval.token
                     )
                 } else {
-                    estimatedEnergy = try data.gasLimitBigInt()
+                    estimatedEnergy = try data.data.gasLimitBigInt()
                 }
 
                 let accountEnergy = feeService.accountEnergy(usage: try await accountUsage(address: input.senderAddress))

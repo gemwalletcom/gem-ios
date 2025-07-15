@@ -100,12 +100,12 @@ public struct XrpSigner: Signable {
             let json = """
                 {
                         "TransactionType": "Payment",
-                        "Destination": "\(data.to)",
-                        "Amount": "\(data.value)",
+                        "Destination": "\(data.data.to)",
+                        "Amount": "\(data.data.value)",
                         "Memos": [
                             {
                                 "Memo": {
-                                    "MemoData": "\(Data(data.data.remove0x.utf8).hexString.remove0x)"
+                                    "MemoData": "\(Data(data.data.data.remove0x.utf8).hexString.remove0x)"
                                 }
                             }
                         ]

@@ -64,7 +64,7 @@ public struct TonSigner: Signable {
     }
     
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let data = try input.type.swap().data
+        let data = try input.type.swap().data.data
         let transfer = try TheOpenNetworkTransfer.with {
             $0.dest = data.to
             $0.amount = try BigInt.from(string: data.value).serialize()

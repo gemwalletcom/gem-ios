@@ -140,7 +140,7 @@ public class EthereumSigner: Signable {
     }
     
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let swapData = try input.type.swap().data
+        let swapData = try input.type.swap().data.data
         switch swapData.approval {
         case .some(let approvalData):
             return [

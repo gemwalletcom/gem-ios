@@ -8,7 +8,6 @@ extension SwapQuoteData {
         quote: SwapQuote = .mock()
     ) -> SwapQuoteData {
         SwapQuoteData(
-            quote: quote,
             to: "",
             value: "",
             data: "",

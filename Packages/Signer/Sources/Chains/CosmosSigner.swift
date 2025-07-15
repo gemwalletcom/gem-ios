@@ -72,10 +72,10 @@ public struct CosmosSigner: Signable {
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let data = try input.type.swap().data
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
-        let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: input.asset.symbol, memo: data.data)]
+        let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: input.asset.symbol, memo: data.data.data)]
         
         return [
-            try sign(input: input, messages: messages, chain: chain, memo: data.data, privateKey: privateKey),
+            try sign(input: input, messages: messages, chain: chain, memo: data.data.data, privateKey: privateKey),
         ]
     }
     

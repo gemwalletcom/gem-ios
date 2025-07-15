@@ -39,9 +39,9 @@ public struct BitcoinSigner: Signable {
 
         let opReturnData: Data = switch data.quote.provider {
         case .thorchain:
-            try data.data.encodedData()
+            try data.data.data.encodedData()
         case .chainflip: try {
-                guard let data = Data(hexString: data.data) else {
+            guard let data = Data(hexString: data.data.data) else {
                     throw AnyError("Invalid Chainflip swap data")
                 }
                 return data

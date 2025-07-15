@@ -44,7 +44,7 @@ extension EthereumService {
             case .some(let approvalData):
                 return EthereumAbi.approve(spender: try Data.from(hex: approvalData.spender), value: .MAX_256)
             case .none:
-                return Data(fromHex: data.data)
+                return Data(fromHex: data.data.data)
             }
         case .tokenApprove(_, let data):
             return EthereumAbi.approve(spender: try Data.from(hex: data.spender), value: .MAX_256)
@@ -105,7 +105,7 @@ extension EthereumService {
         case .swap(_, _, let data):
             switch data.approval {
             case .some: return .zero
-            case .none: return BigInt(stringLiteral: data.value)
+            case .none: return BigInt(stringLiteral: data.data.value)
             }
         case .tokenApprove: return .zero
         case .generic: return input.value
@@ -130,7 +130,7 @@ extension EthereumService {
         switch input.type {
         case .swap(_, _, let data):
             switch data.approval {
-            case .some: return try data.gasLimitBigInt()
+            case .some: return try data.data.gasLimitBigInt()
             case .none: return .zero
             }
         default: return .zero
