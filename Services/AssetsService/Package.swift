@@ -25,7 +25,7 @@ let package = Package(
         .package(name: "ChainService", path: "../ChainService"),
         .package(name: "NodeService", path: "../NodeService"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
-        .package(name: "GemstonePrimitives", path: ".../GemstonePrimitives")
+        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives")
     ],
     targets: [
         .target(

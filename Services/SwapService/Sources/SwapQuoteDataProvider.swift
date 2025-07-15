@@ -5,10 +5,10 @@ import Keystore
 import Primitives
 
 import struct Gemstone.SwapQuote
-import struct Gemstone.SwapQuoteData
+import struct Gemstone.GemSwapQuoteData
 
 public protocol SwapQuoteDataProvidable: Sendable {
-    func fetchQuoteData(wallet: Wallet, quote: SwapQuote) async throws -> SwapQuoteData
+    func fetchQuoteData(wallet: Wallet, quote: SwapQuote) async throws -> Gemstone.GemSwapQuoteData
 }
 
 public struct SwapQuoteDataProvider: SwapQuoteDataProvidable {
@@ -20,7 +20,7 @@ public struct SwapQuoteDataProvider: SwapQuoteDataProvidable {
         self.swapService = swapService
     }
 
-    public func fetchQuoteData(wallet: Wallet, quote: SwapQuote) async throws -> SwapQuoteData {
+    public func fetchQuoteData(wallet: Wallet, quote: SwapQuote) async throws -> Gemstone.GemSwapQuoteData {
         switch try await swapService.getPermit2Approval(quote: quote) {
         case .none:
             return try await swapService.getQuoteData(quote, data: .none)

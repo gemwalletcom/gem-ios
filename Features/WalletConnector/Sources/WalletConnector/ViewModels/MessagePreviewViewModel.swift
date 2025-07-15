@@ -18,15 +18,15 @@ public struct MessagePreviewViewModel {
         switch message {
         case .text(let text): return .text(text)
         case .eip712(let message):
+            let domainValues = [KeyValueItem(title: Localized.Wallet.name, value: message.domain.name)]
+                + (message.domain.verifyingContract.map { [KeyValueItem(title: Localized.Asset.contract, value: $0)] } ?? [])
+
             let sections = [
                 ListSection(
-                    id: message.domain.verifyingContract,
+                    id: message.domain.verifyingContract ?? message.domain.name,
                     title: Localized.WalletConnect.domain,
                     image: nil,
-                    values: [
-                        KeyValueItem(title: Localized.Wallet.name, value: message.domain.name),
-                        KeyValueItem(title: Localized.Asset.contract, value: message.domain.verifyingContract)
-                    ]
+                    values: domainValues
                 )
             ] +
             message.message.map {

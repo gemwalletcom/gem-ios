@@ -41,7 +41,7 @@ public struct ScanService: Sendable {
             address: try wallet.account(for: chain).address
         )
         let target = switch transferType {
-        case .swap(_, let toAsset, _, _):
+        case .swap(_, let toAsset, _):
             ScanAddressTarget(chain: toAsset.chain, address: try wallet.account(for: toAsset.chain).address)
         default :
             ScanAddressTarget(chain: chain, address: recipient.recipient.address)

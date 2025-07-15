@@ -280,6 +280,16 @@ public extension Banner {
       func performAction() { }
   }
   ```
+- **Spacing Guidelines**: Always use `Spacing` constants from the `Style` package instead of hardcoded numeric values:
+  ```swift
+  // Good - using Style constants
+  VStack(spacing: Spacing.small) { ... }
+  .padding(.vertical, Spacing.extraSmall)
+  
+  // Bad - hardcoded values
+  VStack(spacing: 2) { ... }
+  .padding(.vertical, 4)
+  ```
 
 ### Code Organization
 - **One Type Per File**: Each service, type, view model, actor, or component must have its own separate file in the appropriate folder. Never inline multiple types in a single file

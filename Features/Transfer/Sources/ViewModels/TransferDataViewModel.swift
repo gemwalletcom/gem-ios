@@ -133,16 +133,8 @@ struct TransferDataViewModel {
     }
 
     var slippage: Double? {
-        if case .swap(_, _, let quote, _) = type {
-            Double(Double(quote.request.options.slippage.bps) / 100).rounded(toPlaces: 2)
-        } else {
-            .none
-        }
-    }
-
-    var quoteFee: Double? {
-        if case .swap(_, _, let quote, _) = type, let fee = quote.request.options.fee {
-            Double(Double(fee.evm.bps) / 100).rounded(toPlaces: 2)
+        if case .swap(_, _, let quote) = type {
+            Double(Double(quote.quote.slippageBps) / 100).rounded(toPlaces: 2)
         } else {
             .none
         }

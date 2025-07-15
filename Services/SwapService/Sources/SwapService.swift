@@ -60,7 +60,7 @@ public final class SwapService: Sendable {
         return quotes
     }
 
-    public func getQuoteData(_ request: Gemstone.SwapQuote, data: FetchQuoteData) async throws -> Gemstone.SwapQuoteData {
+    public func getQuoteData(_ request: Gemstone.SwapQuote, data: FetchQuoteData) async throws -> Gemstone.GemSwapQuoteData {
         let quoteData = try await swapper.fetchQuoteData(quote: request, data: data)
         try Task.checkCancellation()
         return quoteData
