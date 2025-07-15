@@ -5,7 +5,7 @@ import BigInt
 import Gemstone
 import Primitives
 
-public extension SwapperQuoteAsset {
+public extension GemQuoteAsset {
     init(asset: Asset) {
         self.init(
             id: asset.id.identifier,

@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import Gemstone
 
-public extension SwapperQuoteData {
+public extension GemSwapQuoteData {
     func asPrimitive(quote: Primitives.SwapQuote) -> Primitives.SwapQuoteData {
         Primitives.SwapQuoteData(
             to: to,

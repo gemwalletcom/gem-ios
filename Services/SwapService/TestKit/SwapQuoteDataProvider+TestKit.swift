@@ -18,13 +18,13 @@ public extension SwapQuoteDataProvidable where Self == SwapQuoteDataProviderMock
 }
 
 public struct SwapQuoteDataProviderMock: SwapQuoteDataProvidable {
-    public let quoteData: Gemstone.SwapperQuoteData
+    public let quoteData: Gemstone.GemSwapQuoteData
     
-    public init(quoteData: Gemstone.SwapperQuoteData = .mock()) {
+    public init(quoteData: Gemstone.GemSwapQuoteData = .mock()) {
         self.quoteData = quoteData
     }
     
-    public func fetchQuoteData(wallet: Wallet, quote: Gemstone.SwapQuote) async throws -> Gemstone.SwapperQuoteData {
+    public func fetchQuoteData(wallet: Wallet, quote: Gemstone.SwapQuote) async throws -> Gemstone.GemSwapQuoteData {
         quoteData
     }
 }
