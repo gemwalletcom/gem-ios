@@ -8,12 +8,12 @@ import BigInt
 
 public extension Primitives.Chain {
     var asset: Asset {
-        let assetWrapper = assetWrapper(chain: id)
+        let wrapper = assetWrapper(chain: id)
         return Asset(
             id: assetId,
-            name: assetWrapper.name,
-            symbol: assetWrapper.symbol,
-            decimals: assetWrapper.decimals,
+            name: wrapper.name,
+            symbol: wrapper.symbol,
+            decimals: wrapper.decimals,
             type: .native
         )
     }
