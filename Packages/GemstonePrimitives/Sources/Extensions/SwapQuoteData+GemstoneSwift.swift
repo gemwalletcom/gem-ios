@@ -2,9 +2,9 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import struct Gemstone.SwapperQuoteData
 
-public extension GemSwapQuoteData {
+public extension Gemstone.SwapperQuoteData {
     func asPrimitive(quote: Primitives.SwapQuote) -> Primitives.SwapQuoteData {
         Primitives.SwapQuoteData(
             to: to,

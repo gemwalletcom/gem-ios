@@ -3,10 +3,10 @@
 import Foundation
 import BigInt
 import Primitives
-import struct Gemstone.SwapQuote
-import struct Gemstone.SwapProviderType
+import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperProviderType
 
-public extension SwapQuote {
+public extension Gemstone.SwapperQuote {
     var asPrimitive: Primitives.SwapQuote {
         Primitives.SwapQuote(
             fromValue: fromValue,
@@ -27,7 +27,7 @@ public extension SwapQuote {
     }
 }
 
-extension SwapProviderType {
+extension Gemstone.SwapperProviderType {
     var asPrimitive: Primitives.SwapProviderData {
         Primitives.SwapProviderData(
             provider: SwapProvider(rawValue: protocolId)!,

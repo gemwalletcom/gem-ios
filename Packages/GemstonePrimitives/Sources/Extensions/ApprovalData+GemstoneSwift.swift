@@ -2,9 +2,9 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import struct Gemstone.SwapperApprovalData
 
-public extension GemApprovalData {
+public extension SwapperApprovalData {
     var asPrimitive: Primitives.ApprovalData {
         Primitives.ApprovalData(token: token, spender: spender, value: value)
     }
