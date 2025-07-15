@@ -107,15 +107,14 @@ extension FloatTextField {
     }
 
     private var trailingContent: some View {
-        Group {
+        HStack(spacing: .small) {
+            trailingView
             if shouldShowClean {
                 Button(action: onSelectClean) {
                     Images.System.clear
                         .foregroundStyle(Colors.gray)
                 }
                 .buttonStyle(.plain)
-            } else {
-                trailingView
             }
         }
     }
