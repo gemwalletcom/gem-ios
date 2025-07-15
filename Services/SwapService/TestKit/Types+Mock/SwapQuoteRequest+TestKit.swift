@@ -2,7 +2,7 @@
 
 import Foundation
 import struct Gemstone.SwapQuoteRequest
-import struct Gemstone.GemQuoteAsset
+import struct Gemstone.SwapperQuoteAsset
 import enum Gemstone.GemSwapMode
 import struct Gemstone.GemSwapOptions
 
