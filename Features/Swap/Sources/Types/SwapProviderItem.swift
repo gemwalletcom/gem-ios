@@ -7,20 +7,20 @@ import PrimitivesComponents
 import Style
 import Formatters
 
-import enum Gemstone.GemSwapProvider
-import struct Gemstone.SwapQuote
+import enum Gemstone.SwapperProvider
+import struct Gemstone.SwapperQuote
 
 public struct SwapProviderItem: Sendable {
     public let asset: Asset
-    public let swapQuote: SwapQuote
-    public let selectedProvider: GemSwapProvider?
+    public let swapQuote: Gemstone.SwapperQuote
+    public let selectedProvider: Gemstone.SwapperProvider?
     public let priceViewModel: PriceViewModel
     public let valueFormatter: ValueFormatter
     
     public init(
         asset: Asset,
-        swapQuote: SwapQuote,
-        selectedProvider: GemSwapProvider?,
+        swapQuote: Gemstone.SwapperQuote,
+        selectedProvider: Gemstone.SwapperProvider?,
         priceViewModel: PriceViewModel,
         valueFormatter: ValueFormatter
     ) {

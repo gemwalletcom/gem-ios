@@ -54,7 +54,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
                 fromValue: data.quote.fromValue,
                 toAsset: toAsset.id,
                 toValue: data.quote.toValue,
-                provider: data.quote.provider.rawValue
+                provider: data.quote.providerData.provider.rawValue
             )
         )
         case .transferNft(let asset): .nft(

@@ -37,6 +37,7 @@ extension TransactionViewModel {
         fromValue: String = "",
         toValue: String = "",
         type: TransactionType = .swap,
+        state: TransactionState = .confirmed,
         direction: TransactionDirection = .incoming,
         participant: String = "",
         memo: String? = nil
@@ -56,6 +57,7 @@ extension TransactionViewModel {
         
         let transaction = Transaction.mock(
             type: type,
+            state: state,
             direction: direction,
             to: participant,
             value: "1000000000000000000",

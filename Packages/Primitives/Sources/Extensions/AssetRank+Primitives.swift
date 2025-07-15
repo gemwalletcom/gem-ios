@@ -16,7 +16,7 @@ extension AssetRank {
         case .migrated: -10
         case .deprecated: -12
         case .spam: -15
-        case .fradulent: -20
+        case .fraudulent: -20
         }
     }
 }

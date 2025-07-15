@@ -3,7 +3,8 @@
 import Foundation
 import SwapService
 import Primitives
-import Gemstone
+import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperQuoteData
 
 public extension SwapQuoteDataProvider {
     static func mock() -> SwapQuoteDataProviderMock {
@@ -18,13 +19,13 @@ public extension SwapQuoteDataProvidable where Self == SwapQuoteDataProviderMock
 }
 
 public struct SwapQuoteDataProviderMock: SwapQuoteDataProvidable {
-    public let quoteData: Gemstone.GemSwapQuoteData
+    public let quoteData: SwapperQuoteData
     
-    public init(quoteData: Gemstone.GemSwapQuoteData = .mock()) {
+    public init(quoteData: SwapperQuoteData = .mock()) {
         self.quoteData = quoteData
     }
     
-    public func fetchQuoteData(wallet: Wallet, quote: Gemstone.SwapQuote) async throws -> Gemstone.GemSwapQuoteData {
+    public func fetchQuoteData(wallet: Wallet, quote: SwapperQuote) async throws -> SwapperQuoteData {
         quoteData
     }
 }

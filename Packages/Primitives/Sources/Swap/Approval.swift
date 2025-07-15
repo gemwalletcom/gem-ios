@@ -28,19 +28,33 @@ public struct QuoteAsset: Codable {
 	}
 }
 
+public struct SwapProviderData: Codable, Equatable, Hashable, Sendable {
+	public let provider: SwapProvider
+	public let name: String
+	public let protocolName: String
+
+	public init(provider: SwapProvider, name: String, protocolName: String) {
+		self.provider = provider
+		self.name = name
+		self.protocolName = protocolName
+	}
+}
+
 public struct SwapQuote: Codable, Equatable, Hashable, Sendable {
 	public let fromValue: String
 	public let toValue: String
-	public let provider: SwapProvider
+	public let providerData: SwapProviderData
 	public let walletAddress: String
 	public let slippageBps: UInt32
+	public let etaInSeconds: UInt32?
 
-	public init(fromValue: String, toValue: String, provider: SwapProvider, walletAddress: String, slippageBps: UInt32) {
+	public init(fromValue: String, toValue: String, providerData: SwapProviderData, walletAddress: String, slippageBps: UInt32, etaInSeconds: UInt32?) {
 		self.fromValue = fromValue
 		self.toValue = toValue
-		self.provider = provider
+		self.providerData = providerData
 		self.walletAddress = walletAddress
 		self.slippageBps = slippageBps
+		self.etaInSeconds = etaInSeconds
 	}
 }
 

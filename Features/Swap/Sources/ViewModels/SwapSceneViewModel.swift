@@ -13,7 +13,7 @@ import Style
 import SwapService
 import WalletsService
 import enum Gemstone.SwapperError
-import struct Gemstone.SwapQuote
+import struct Gemstone.SwapperQuote
 import Formatters
 import Validators
 
@@ -40,7 +40,7 @@ public final class SwapSceneViewModel {
     var isPresentingPriceImpactConfirmation: String?
     var pairSelectorModel: SwapPairSelectorViewModel
 
-    var selectedSwapQuote: SwapQuote?
+    var selectedSwapQuote: SwapperQuote?
     var amountInputModel: InputValidationViewModel = InputValidationViewModel(mode: .onDemand)
     var toValue: String = ""
     var focusField: SwapScene.Field?
@@ -117,7 +117,7 @@ public final class SwapSceneViewModel {
         }
     }
 
-    var actionButtonState: StateViewType<[SwapQuote]> {
+    var actionButtonState: StateViewType<[SwapperQuote]> {
         if let error = amountInputModel.error {
             return .error(error)
         }
@@ -262,7 +262,7 @@ extension SwapSceneViewModel {
         toAssetRequest.assetId = newModel.toAssetId
     }
 
-    func onChangeSwapQuoute(_ _: SwapQuote?, _ newQuote: SwapQuote?) {
+    func onChangeSwapQuoute(_ _: SwapperQuote?, _ newQuote: SwapperQuote?) {
         guard let newQuote, let toAsset else { return }
         applyQuote(newQuote, asset: toAsset.asset)
     }
@@ -383,7 +383,7 @@ extension SwapSceneViewModel {
         toValue = ""
     }
 
-    private func applyQuote(_ quote: SwapQuote, asset: Asset) {
+    private func applyQuote(_ quote: SwapperQuote, asset: Asset) {
         do {
             toValue = try toValueFormatter.format(
                 quoteValue: quote.toValue,

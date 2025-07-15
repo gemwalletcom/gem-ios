@@ -2,10 +2,10 @@
 
 import Foundation
 import BigInt
-import Gemstone
+import struct Gemstone.SwapperQuoteAsset
 import Primitives
 
-public extension GemQuoteAsset {
+public extension SwapperQuoteAsset {
     init(asset: Asset) {
         self.init(
             id: asset.id.identifier,

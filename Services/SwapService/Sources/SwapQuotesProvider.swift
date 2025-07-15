@@ -5,11 +5,11 @@ import BigInt
 import Foundation
 import Primitives
 
-import struct Gemstone.SwapQuote
+import struct Gemstone.SwapperQuote
 
 public protocol SwapQuotesProvidable: Sendable {
     func supportedAssets(for assetId: AssetId) -> ([Primitives.Chain], [Primitives.AssetId])
-    func fetchQuotes(wallet: Wallet, fromAsset: Asset, toAsset: Asset, amount: BigInt) async throws -> [SwapQuote]
+    func fetchQuotes(wallet: Wallet, fromAsset: Asset, toAsset: Asset, amount: BigInt) async throws -> [Gemstone.SwapperQuote]
 }
 
 public struct SwapQuotesProvider: SwapQuotesProvidable {
@@ -23,7 +23,7 @@ public struct SwapQuotesProvider: SwapQuotesProvidable {
         swapService.supportedAssets(for: assetId)
     }
 
-    public func fetchQuotes(wallet: Wallet, fromAsset: Asset, toAsset: Asset, amount: BigInt) async throws -> [SwapQuote] {
+    public func fetchQuotes(wallet: Wallet, fromAsset: Asset, toAsset: Asset, amount: BigInt) async throws -> [Gemstone.SwapperQuote] {
         let walletAddress = try wallet.account(for: fromAsset.chain).address
         let destinationAddress = try wallet.account(for: toAsset.chain).address
         let quotes = try await swapService.getQuotes(
