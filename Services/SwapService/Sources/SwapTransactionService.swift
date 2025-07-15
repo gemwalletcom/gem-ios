@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
+import class Gemstone.GemSwapper
 import GemstonePrimitives
 import ChainService
 import NativeProviderService
