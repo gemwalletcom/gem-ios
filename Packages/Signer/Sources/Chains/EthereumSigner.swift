@@ -140,9 +140,8 @@ public class EthereumSigner: Signable {
     }
     
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let swapData = try input.type.swap().quoteData
+        let swapData = try input.type.swap().data.data
         switch swapData.approval {
-            
         case .some(let approvalData):
             return [
                 try sign(coinType: input.coinType, input: buildBaseInput(
@@ -160,13 +159,13 @@ public class EthereumSigner: Signable {
                     input: input,
                     transaction: .with {
                         $0.contractGeneric = try EthereumTransaction.ContractGeneric.with {
-                            $0.amount = swapData.value().magnitude.serialize()
+                            $0.amount = swapData.asValue().magnitude.serialize()
                             $0.data = try Data.from(hex: swapData.data)
                         }
                     },
                     toAddress: swapData.to,
                     nonce: input.sequence.asBigInt + 1,
-                    gasLimit: swapData.gasLimit(),
+                    gasLimit: swapData.gasLimitBigInt(),
                     privateKey: privateKey
                 )),
             ]
@@ -176,7 +175,7 @@ public class EthereumSigner: Signable {
                     input: input,
                     transaction: .with {
                         $0.contractGeneric = try EthereumTransaction.ContractGeneric.with {
-                            $0.amount = swapData.value().magnitude.serialize()
+                            $0.amount = swapData.asValue().magnitude.serialize()
                             $0.data = try Data.from(hex: swapData.data)
                         }
                     },

@@ -3,7 +3,7 @@
 import enum Gemstone.SwapperError
 import Primitives
 
-extension Gemstone.SwapperError: RetryableError {
+extension Gemstone.SwapperError: @retroactive RetryableError {
     public var isRetryAvailable: Bool {
         switch self {
         case .NoQuoteAvailable, .NetworkError:

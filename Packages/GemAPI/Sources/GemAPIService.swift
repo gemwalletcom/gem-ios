@@ -12,6 +12,10 @@ public protocol GemAPIFiatService: Sendable {
     func getQuotes(asset: Asset, request: FiatQuoteRequest) async throws -> [FiatQuote]
 }
 
+public protocol GemAPIPricesService: Sendable {
+    func getPrices(currency: String?, assetIds: [AssetId]) async throws -> [AssetPrice]
+}
+
 public protocol GemAPIAssetsListService: Sendable {
     func getAssetsByDeviceId(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [AssetId]
     func getBuyableFiatAssets() async throws -> FiatAssets
@@ -265,5 +269,13 @@ extension GemAPIService: GemAPIMarketService {
         try await provider
             .request(.markets)
             .map(as: ResponseResult<Markets>.self).data
+    }
+}
+
+extension GemAPIService: GemAPIPricesService {
+    public func getPrices(currency: String?, assetIds: [AssetId]) async throws -> [AssetPrice] {
+        try await provider
+            .request(.getPrices(AssetPricesRequest(currency: currency, assetIds: assetIds)))
+            .map(as: AssetPrices.self).prices
     }
 }

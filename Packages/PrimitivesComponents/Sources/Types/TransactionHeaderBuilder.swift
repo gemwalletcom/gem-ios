@@ -66,7 +66,7 @@ public struct TransactionHeaderTypeBuilder {
                         showFiatSubtitle: false
                     )
                 }
-            case .swap(let fromAsset, let toAsset, let quote, _):
+            case .swap(let fromAsset, let toAsset, let data):
                 let assetPrices = (metadata?.assetPrices ?? [:]).map { (assetId, price) in
                     price.mapToAssetPrice(assetId: assetId)
                 }
@@ -77,10 +77,10 @@ public struct TransactionHeaderTypeBuilder {
                         assetPrices: assetPrices,
                         transactionMetadata: TransactionSwapMetadata(
                             fromAsset: fromAsset.id,
-                            fromValue: quote.fromValue,
+                            fromValue: data.quote.fromValue,
                             toAsset: toAsset.id,
-                            toValue: quote.toValue,
-                            provider: quote.data.provider.protocolId
+                            toValue: data.quote.toValue,
+                            provider: data.quote.provider.rawValue
                         )
                     )
                 )

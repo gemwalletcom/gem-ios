@@ -15,6 +15,7 @@ struct StakeNavigationView: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.scanService) private var scanService
+    @Environment(\.swapService) private var swapService
 
     private let wallet: Wallet
     private let assetId: AssetId
@@ -58,11 +59,11 @@ struct StakeNavigationView: View {
                     chainService: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.chain),
                     scanService: scanService,
-                    swapService: SwapService(nodeProvider: nodeService),
+                    swapService: swapService,
                     walletsService: walletsService,
                     swapDataProvider: SwapQuoteDataProvider(
                         keystore: keystore,
-                        swapService: SwapService(nodeProvider: nodeService)
+                        swapService: swapService
                     ),
                     onComplete: onComplete
                 )
