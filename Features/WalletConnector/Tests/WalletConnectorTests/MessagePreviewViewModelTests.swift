@@ -2,7 +2,8 @@
 
 import Testing
 import Components
-import Gemstone
+import struct Gemstone.GemEip712MessageDomain
+import struct Gemstone.GemEip712Message
 @testable import WalletConnector
 
 struct MessagePreviewViewModelTests {

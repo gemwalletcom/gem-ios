@@ -1,7 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
+import struct Gemstone.GemEip712Message
+import struct Gemstone.GemEip712MessageDomain
+import struct Gemstone.GemEip712Section
+import struct Gemstone.GemEip712Value
 import Testing
 import Primitives
 

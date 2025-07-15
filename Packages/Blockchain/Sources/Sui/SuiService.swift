@@ -4,7 +4,18 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import BigInt
-import Gemstone
+import func Gemstone.suiValidateAndHash
+import struct Gemstone.SuiTransferInput
+import struct Gemstone.SuiGas
+import func Gemstone.suiEncodeTransfer
+import struct Gemstone.SuiTokenTransferInput
+import func Gemstone.suiEncodeTokenTransfer
+import struct Gemstone.SuiStakeInput
+import func Gemstone.suiEncodeSplitStake
+import struct Gemstone.SuiUnstakeInput
+import func Gemstone.suiEncodeUnstake
+import struct Gemstone.SuiCoin
+import struct Gemstone.SuiObjectRef
 import GemstonePrimitives
 
 public struct SuiService: Sendable {
@@ -101,7 +112,7 @@ extension SuiService {
                 fatalError()
             }
         case .swap(_, _, let data): try {
-            let output = try Gemstone.suiValidateAndHash(encoded: data.data.data)
+            let output = try suiValidateAndHash(encoded: data.data.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()
         case .generic, .account, .tokenApprove: fatalError()
