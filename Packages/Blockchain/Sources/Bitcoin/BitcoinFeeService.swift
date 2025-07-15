@@ -6,7 +6,7 @@ import SwiftHTTPClient
 import BigInt
 import WalletCore
 import WalletCorePrimitives
-import Gemstone
+import class Gemstone.Config
 import GemstonePrimitives
 import Formatters
 
