@@ -88,7 +88,7 @@ struct WalletNavigationStack: View {
                     TransactionScene(
                         input: TransactionSceneInput(
                             transactionId: $0.id,
-                            walletId: model.wallet.walletId,
+                            walletId: model.wallet.walletId
                         ),
                         isPresentingSelectedAssetType: $model.isPresentingSelectedAssetType
                     )
