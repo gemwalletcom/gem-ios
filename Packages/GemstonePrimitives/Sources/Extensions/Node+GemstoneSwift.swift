@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Primitives
-import Gemstone
+import struct Gemstone.Node
 
-extension Gemstone.Node {
+extension Node {
     public var node: Primitives.Node {
         let priority = switch priority {
         case .high: 10
