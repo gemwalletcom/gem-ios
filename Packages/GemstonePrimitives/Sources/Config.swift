@@ -11,7 +11,6 @@ import enum Gemstone.SocialUrl
 import struct Gemstone.StakeChainConfig
 import struct Gemstone.ChainConfig
 import struct Gemstone.WalletConnectConfig
-import enum Gemstone.SolanaTokenProgramId
 import Primitives
 
 extension Config {
