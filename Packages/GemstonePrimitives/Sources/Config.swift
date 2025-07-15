@@ -1,7 +1,17 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
+import class Gemstone.Config
+import struct Gemstone.EvmChainConfig
+import struct Gemstone.BitcoinChainConfig
+import struct Gemstone.SwapConfig
+import enum Gemstone.DocsUrl
+import enum Gemstone.PublicUrl
+import enum Gemstone.SocialUrl
+import struct Gemstone.StakeChainConfig
+import struct Gemstone.ChainConfig
+import struct Gemstone.WalletConnectConfig
+import enum Gemstone.SolanaTokenProgramId
 import Primitives
 
 extension Config {
@@ -15,7 +25,7 @@ extension Config {
         getBitcoinChainConfig(chain: bitcoinChain.rawValue)
     }
     
-    public func swapConfig() -> Gemstone.SwapConfig {
+    public func swapConfig() -> SwapConfig {
         getSwapConfig()
     }
 }
@@ -25,21 +35,21 @@ public struct GemstoneConfig {
 }
 
 public struct Docs {
-    public static func url(_ item: Gemstone.DocsUrl) -> URL {
+    public static func url(_ item: DocsUrl) -> URL {
         return URL(string: Config.shared.getDocsUrl(item: item))!
             .withUTM(source: "gemwallet_ios")
     }
 }
 
 public struct PublicConstants {
-    public static func url(_ item: Gemstone.PublicUrl) -> URL {
+    public static func url(_ item: PublicUrl) -> URL {
         return URL(string: Config.shared.getPublicUrl(item: item))!
             .withUTM(source: "gemwallet_ios")
     }
 }
 
 public struct Social {
-    public static func url(_ item: Gemstone.SocialUrl) -> URL? {
+    public static func url(_ item: SocialUrl) -> URL? {
         if let socialUrl = Config.shared.getSocialUrl(item: item), let url = URL(string: socialUrl) {
             return url
         }
@@ -48,26 +58,26 @@ public struct Social {
 }
 
 public struct StakeConfig {
-    public static func config(chain: StakeChain) -> Gemstone.StakeChainConfig {
+    public static func config(chain: StakeChain) -> StakeChainConfig {
         Config.shared.getStakeConfig(chain: chain.rawValue)
     }
 }
 
 public struct ChainConfig {
     // store in memory for fast access
-    private static let chainConfigs: [Primitives.Chain: Gemstone.ChainConfig] = {
+    private static let chainConfigs: [Primitives.Chain: ChainConfig] = {
         Primitives.Chain.allCases.reduce(into: [:]) { result, chain in
             result[chain] = Config.shared.getChainConfig(chain: chain.rawValue)
         }
     }()
 
-    public static func config(chain: Primitives.Chain) -> Gemstone.ChainConfig {
+    public static func config(chain: Primitives.Chain) -> ChainConfig {
         chainConfigs[chain]!
     }
 }
 
 public struct WalletConnectConfig {
-    public static func config() -> Gemstone.WalletConnectConfig {
+    public static func config() -> WalletConnectConfig {
         Config.shared.getWalletConnectConfig()
     }
 }
