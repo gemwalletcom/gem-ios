@@ -17,14 +17,13 @@ public final class TransactionsViewModel {
     public let transactionsService: TransactionsService
 
     private let walletService: WalletService
-
     private let type: TransactionsRequestType
 
     public private(set) var wallet: Wallet
 
     public var transactions: [TransactionExtended] = []
-    public var request: TransactionsRequest
     public var filterModel: TransactionsFilterViewModel
+
     public var isPresentingFilteringView: Bool = false
     public var isPresentingSelectAssetType: SelectAssetType?
 
@@ -39,8 +38,7 @@ public final class TransactionsViewModel {
 
         self.type = type
         self.wallet = wallet
-        self.filterModel = TransactionsFilterViewModel(wallet: wallet)
-        self.request = TransactionsRequest(walletId: wallet.id, type: type)
+        self.filterModel = TransactionsFilterViewModel(wallet: wallet, type: type)
     }
 
     public var title: String { Localized.Activity.title }
@@ -65,10 +63,6 @@ extension TransactionsViewModel {
         }
     }
 
-    public func onChangeFilter(_ _: TransactionsFilterViewModel, filter: TransactionsFilterViewModel) {
-        request.filters = filter.requestFilters
-    }
-
     public func onSelectFilterButton() {
         isPresentingFilteringView.toggle()
     }
@@ -87,8 +81,7 @@ extension TransactionsViewModel {
 extension TransactionsViewModel {
     private func refresh(for wallet: Wallet) {
         self.wallet = wallet
-        filterModel = TransactionsFilterViewModel(wallet: wallet)
-        request = TransactionsRequest(walletId: wallet.id, type: type)
+        filterModel = TransactionsFilterViewModel(wallet: wallet, type: type)
     }
 
     private func onSelectCleanFilters() {

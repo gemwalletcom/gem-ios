@@ -101,3 +101,5 @@ extension TransactionsRequest {
         }
     }
 }
+
+extension TransactionsRequest: Equatable {}

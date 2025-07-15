@@ -34,10 +34,9 @@ struct TransactionsNavigationStack: View {
         NavigationStack(path: navigationPath) {
             TransactionsScene(model: model)
                 .observeQuery(
-                    request: $model.request,
+                    request: $model.filterModel.request,
                     value: $model.transactions
                 )
-                .onChange(of: model.filterModel, model.onChangeFilter)
                 .onChange(
                     of: model.currentWallet,
                     initial: true,

@@ -99,20 +99,3 @@ extension TransactionsFilterScene {
         isPresentingTypes.toggle()
     }
 }
-
-#Preview {
-    NavigationStack {
-        TransactionsFilterScene(
-            model:.constant(
-                TransactionsFilterViewModel(
-                    chainsFilterModel: ChainsFilterViewModel(
-                        chains: [.aptos, .arbitrum]
-                    ),
-                    transactionTypesFilter: TransactionTypesFilterViewModel(
-                        types: [.swap, .stakeDelegate]
-                    )
-                )
-            )
-        )
-    }
-}

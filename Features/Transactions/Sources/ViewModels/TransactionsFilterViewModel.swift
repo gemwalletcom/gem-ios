@@ -7,13 +7,29 @@ import Localization
 import PrimitivesComponents
 
 public struct TransactionsFilterViewModel: Equatable {
-    public var chainsFilter: ChainsFilterViewModel
-    public var transactionTypesFilter: TransactionTypesFilterViewModel
+    private let wallet: Wallet
+    private let type: TransactionsRequestType
+    
+    public var chainsFilter: ChainsFilterViewModel {
+        didSet { request.filters = requestFilters }
+    }
+    public var transactionTypesFilter: TransactionTypesFilterViewModel {
+        didSet { request.filters = requestFilters }
+    }
+    
+    public var request: TransactionsRequest
 
-    public init(chainsFilterModel: ChainsFilterViewModel,
-         transactionTypesFilter: TransactionTypesFilterViewModel) {
-        self.chainsFilter = chainsFilterModel
-        self.transactionTypesFilter = transactionTypesFilter
+    public init(
+        wallet: Wallet,
+        type: TransactionsRequestType
+    ) {
+        self.wallet = wallet
+        self.type = type
+        
+        self.chainsFilter = ChainsFilterViewModel(chains: wallet.chains)
+        self.transactionTypesFilter = TransactionTypesFilterViewModel(types: TransactionType.allCases)
+        
+        self.request = TransactionsRequest(walletId: wallet.id, type: type)
     }
 
     public var isAnyFilterSpecified: Bool {
@@ -40,7 +56,7 @@ public struct TransactionsFilterViewModel: Equatable {
         )
     }
     
-    public var requestFilters: [TransactionsRequestFilter] {
+    private var requestFilters: [TransactionsRequestFilter] {
         var filters: [TransactionsRequestFilter] = []
         
         if !chainsFilter.selectedChains.isEmpty {
@@ -54,18 +70,5 @@ public struct TransactionsFilterViewModel: Equatable {
         }
         
         return filters
-    }
-}
-
-extension TransactionsFilterViewModel {
-    init(wallet: Wallet) {
-        self.init(
-            chainsFilterModel: ChainsFilterViewModel(
-                chains: wallet.chains
-            ),
-            transactionTypesFilter: TransactionTypesFilterViewModel(
-                types: TransactionType.allCases
-            )
-        )
     }
 }
