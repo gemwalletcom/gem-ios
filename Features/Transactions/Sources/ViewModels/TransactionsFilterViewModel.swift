@@ -11,8 +11,6 @@ import Components
 public final class TransactionsFilterViewModel: Equatable {
     public var chainsFilter: ChainsFilterViewModel
     public var transactionTypesFilter: TransactionTypesFilterViewModel
-    public var isPresentingChains: Bool = false
-    public var isPresentingTypes: Bool = false
 
     public init(chainsFilterModel: ChainsFilterViewModel,
          transactionTypesFilter: TransactionTypesFilterViewModel) {
@@ -22,9 +20,7 @@ public final class TransactionsFilterViewModel: Equatable {
 
     public static func == (lhs: TransactionsFilterViewModel, rhs: TransactionsFilterViewModel) -> Bool {
         lhs.chainsFilter == rhs.chainsFilter &&
-        lhs.transactionTypesFilter == rhs.transactionTypesFilter &&
-        lhs.isPresentingChains == rhs.isPresentingChains &&
-        lhs.isPresentingTypes == rhs.isPresentingTypes
+        lhs.transactionTypesFilter == rhs.transactionTypesFilter
     }
 
     public var isAnyFilterSpecified: Bool {
@@ -82,14 +78,6 @@ extension TransactionsFilterViewModel {
     
     public func onFinishTypeSelection(value: SelectionResult<TransactionFilterType>) {
         transactionTypesFilter.selectedTypes = value.items
-    }
-    
-    public func onSelectChainsFilter() {
-        isPresentingChains.toggle()
-    }
-    
-    public func onSelectTypesFilter() {
-        isPresentingTypes.toggle()
     }
 }
 

@@ -15,11 +15,6 @@ public struct TransactionScene: View {
     @Query<TransactionsRequest>
     private var transactions: [Primitives.TransactionExtended]
 
-    @State private var isPresentingShareSheet = false
-    @State private var isPresentingInfoSheet: InfoSheetType? = .none
-
-    private let input: TransactionSceneInput
-
     private var model: TransactionDetailViewModel {
         return TransactionDetailViewModel(
             model: TransactionViewModel(
@@ -29,6 +24,10 @@ public struct TransactionScene: View {
             )
         )
     }
+    private let input: TransactionSceneInput
+
+    @State private var isPresentingShareSheet = false
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     public init(input: TransactionSceneInput) {
         self.input = input
@@ -135,3 +134,4 @@ extension TransactionScene {
         )
     }
 }
+

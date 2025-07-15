@@ -10,6 +10,8 @@ public struct TransactionsFilterScene: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var model: TransactionsFilterViewModel
+    @State private var isPresentingChains: Bool = false
+    @State private var isPresentingTypes: Bool = false
 
     public init(model: TransactionsFilterViewModel) {
         _model = State(wrappedValue: model)
@@ -19,11 +21,11 @@ public struct TransactionsFilterScene: View {
         List {
             SelectFilterView(
                 typeModel: model.chainsFilter.typeModel,
-                action: { model.onSelectChainsFilter() }
+                action: onSelectChainsFilter
             )
             SelectFilterView(
                 typeModel: model.transactionTypesFilter.typeModel,
-                action: { model.onSelectTypesFilter() }
+                action: onSelectTypesFilter
             )
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
@@ -44,14 +46,14 @@ public struct TransactionsFilterScene: View {
                     .buttonStyle(.plain)
             }
         }
-        .sheet(isPresented: $model.isPresentingChains) {
+        .sheet(isPresented: $isPresentingChains) {
             SelectableSheet(
                 model: model.networksModel,
                 onFinishSelection: onFinishSelection(value:),
                 listContent: { ChainView(model: ChainViewModel(chain: $0)) }
             )
         }
-        .sheet(isPresented: $model.isPresentingTypes) {
+        .sheet(isPresented: $isPresentingTypes) {
             SelectableSheet(
                 model: model.typesModel,
                 onFinishSelection: onFinishSelection(value:),
@@ -88,6 +90,13 @@ extension TransactionsFilterScene {
         }
     }
 
+    private func onSelectChainsFilter() {
+        isPresentingChains.toggle()
+    }
+
+    private func onSelectTypesFilter() {
+        isPresentingTypes.toggle()
+    }
 }
 
 #Preview {
