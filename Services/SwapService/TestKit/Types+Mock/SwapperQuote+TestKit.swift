@@ -1,15 +1,15 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import struct Gemstone.SwapQuote
+import struct Gemstone.SwapperQuote
 
-public extension SwapQuote {
+public extension SwapperQuote {
     static func mock(
         fromValue: String = "1000000000000000000",
         toValue: String = "250000000000",
         etaInSeconds: UInt32? = nil
-    ) -> SwapQuote {
-        SwapQuote(
+    ) -> SwapperQuote {
+        SwapperQuote(
             fromValue: fromValue,
             toValue: toValue,
             data: .mock(),
