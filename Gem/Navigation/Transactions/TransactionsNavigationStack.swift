@@ -7,7 +7,6 @@ import Components
 import Transactions
 import Store
 import Assets
-import Swap
 
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState

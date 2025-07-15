@@ -9,7 +9,6 @@ import WalletTab
 import InfoSheet
 import Components
 import Assets
-import Swap
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
