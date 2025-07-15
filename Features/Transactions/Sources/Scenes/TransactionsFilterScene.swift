@@ -8,13 +8,13 @@ import PrimitivesComponents
 
 public struct TransactionsFilterScene: View {
     @Environment(\.dismiss) private var dismiss
+    @Binding private var model: TransactionsFilterViewModel
 
-    @State private var model: TransactionsFilterViewModel
     @State private var isPresentingChains: Bool = false
     @State private var isPresentingTypes: Bool = false
 
-    public init(model: TransactionsFilterViewModel) {
-        _model = State(wrappedValue: model)
+    public init(model: Binding<TransactionsFilterViewModel>) {
+        _model = model
     }
 
     public var body: some View {
@@ -69,7 +69,8 @@ public struct TransactionsFilterScene: View {
 
 extension TransactionsFilterScene {
     private func onSelectClear() {
-        model.onClear()
+        model.chainsFilter.selectedChains = []
+        model.transactionTypesFilter.selectedTypes = []
     }
 
     private func onSelectDone() {
@@ -77,14 +78,14 @@ extension TransactionsFilterScene {
     }
 
     private func onFinishSelection(value: SelectionResult<Chain>) {
-        model.onFinishChainSelection(value: value)
+        model.chainsFilter.selectedChains = value.items
         if value.isConfirmed {
             dismiss()
         }
     }
 
     private func onFinishSelection(value: SelectionResult<TransactionFilterType>) {
-        model.onFinishTypeSelection(value: value)
+        model.transactionTypesFilter.selectedTypes = value.items
         if value.isConfirmed {
             dismiss()
         }
@@ -102,12 +103,14 @@ extension TransactionsFilterScene {
 #Preview {
     NavigationStack {
         TransactionsFilterScene(
-            model: TransactionsFilterViewModel(
-                chainsFilterModel: ChainsFilterViewModel(
-                    chains: [.aptos, .arbitrum]
-                ),
-                transactionTypesFilter: TransactionTypesFilterViewModel(
-                    types: [.swap, .stakeDelegate]
+            model:.constant(
+                TransactionsFilterViewModel(
+                    chainsFilterModel: ChainsFilterViewModel(
+                        chains: [.aptos, .arbitrum]
+                    ),
+                    transactionTypesFilter: TransactionTypesFilterViewModel(
+                        types: [.swap, .stakeDelegate]
+                    )
                 )
             )
         )
