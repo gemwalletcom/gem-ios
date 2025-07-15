@@ -4,15 +4,17 @@ import Foundation
 import BigInt
 import Primitives
 import struct Gemstone.SwapQuote
+import struct Gemstone.SwapProviderType
 
 public extension SwapQuote {
     var asPrimitive: Primitives.SwapQuote {
         Primitives.SwapQuote(
             fromValue: fromValue,
             toValue: toValue,
-            provider: SwapProvider(rawValue: data.provider.protocolId)!,
+            providerData: data.provider.asPrimitive,
             walletAddress: request.walletAddress,
-            slippageBps: data.slippageBps
+            slippageBps: data.slippageBps,
+            etaInSeconds: self.etaInSeconds
         )
     }
     
@@ -22,5 +24,15 @@ public extension SwapQuote {
 
     var fromValueBigInt: BigInt {
         (try? BigInt.from(string: fromValue)) ?? .zero
+    }
+}
+
+extension SwapProviderType {
+    var asPrimitive: Primitives.SwapProviderData {
+        Primitives.SwapProviderData(
+            provider: SwapProvider(rawValue: protocolId)!,
+            name: self.name,
+            protocolName: self.protocol
+        )
     }
 }
