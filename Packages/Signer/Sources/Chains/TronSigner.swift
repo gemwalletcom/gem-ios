@@ -119,18 +119,17 @@ public struct TronSigner: Signable {
 
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         guard
-            case let .swap(_, _, quote, quoteData) = input.type,
-            let quoteData,
-            let data = Data(fromHex: quoteData.data),
-            let callValue = Int64(quoteData.value)
+            case let .swap(_, _, quoteData) = input.type,
+            let data = Data(fromHex: quoteData.data.data),
+            let callValue = Int64(quoteData.data.value)
         else {
             throw AnyError("Invalid input type for swapping")
         }
-        let gasLimit = try quoteData.gasLimitBigInt()
+        let gasLimit = try quoteData.data.gasLimitBigInt()
 
         let contract = TronTriggerSmartContract.with {
-            $0.ownerAddress = quote.request.walletAddress
-            $0.contractAddress = quoteData.to
+            $0.ownerAddress = quoteData.quote.walletAddress
+            $0.contractAddress = quoteData.data.to
             $0.data = data
             $0.callValue = callValue
         }
@@ -142,7 +141,7 @@ public struct TronSigner: Signable {
 
             let callData = EthereumAbi.approve(spender: spender, value: .MAX_256)
             let approvalContract = TronTriggerSmartContract.with {
-                $0.ownerAddress = quote.request.walletAddress
+                $0.ownerAddress = quoteData.quote.walletAddress
                 $0.contractAddress = approval.token
                 $0.data = callData
             }

@@ -2,32 +2,19 @@
 
 import Foundation
 import Primitives
-import Store
-import PriceService
+import GemAPI
 import GemstonePrimitives
 import WidgetKit
 
 public struct WidgetPriceService {
-    private let priceService: PriceService
+    private let pricesService: GemAPIPricesService
     
     public init() {
-        let db = DB()
-        let priceStore = PriceStore(db: db)
-        let fiatRateStore = FiatRateStore(db: db)
-        self.priceService = PriceService(
-            priceStore: priceStore,
-            fiatRateStore: fiatRateStore
-        )
+        self.pricesService = GemAPIService()
     }
     
-    public func fetchTopCoinPrices(widgetFamily: WidgetFamily = .systemMedium) -> PriceWidgetEntry {
-        // For now, always return placeholder data to test the widget
-        return PriceWidgetEntry.placeholder(widgetFamily: widgetFamily)
-        
-        // TODO: Implement actual price fetching
-        // The code below needs to be adjusted to work in widget extension context
-        /*
-        let topCoins = [
+    public func fetchTopCoinPrices(widgetFamily: WidgetFamily = .systemMedium) async -> PriceWidgetEntry {
+        let coins = [
             AssetId(chain: .bitcoin, tokenId: nil),
             AssetId(chain: .ethereum, tokenId: nil),
             AssetId(chain: .solana, tokenId: nil),
@@ -35,18 +22,21 @@ public struct WidgetPriceService {
             AssetId(chain: .smartChain, tokenId: nil),
         ]
         
+        NSLog("coins \(coins)")
+        
         do {
-            let currency = getCurrency()
-            let prices = try priceService.getPrices(for: topCoins)
+            let prices = try await pricesService.getPrices(currency: "USD", assetIds: coins)
             
-            let coinPrices = prices.compactMap { price -> CoinPrice? in
-                let chain = price.assetId.chain
+            let coinPrices = coins.enumerated().compactMap { index, assetId -> CoinPrice? in
+                guard index < prices.count else { return nil }
+                let price = prices[index]
+                let chain = assetId.chain
                 let name = chain.asset.name
                 let symbol = chain.asset.symbol
-                let imageURL = AssetImageFormatter().getURL(for: price.assetId)
+                let imageURL = AssetImageFormatter().getURL(for: assetId)
                 
                 return CoinPrice(
-                    assetId: price.assetId,
+                    assetId: assetId,
                     name: name,
                     symbol: symbol,
                     price: price.price,
@@ -54,21 +44,16 @@ public struct WidgetPriceService {
                     imageURL: imageURL
                 )
             }
-            
             return PriceWidgetEntry(
                 date: Date(),
                 coinPrices: coinPrices,
-                currency: currency,
                 widgetFamily: widgetFamily
             )
         } catch {
-            // Return placeholder data on error
-            return PriceWidgetEntry.placeholder(widgetFamily: widgetFamily)
+            NSLog("Widget price fetch error: \(error)")
+            NSLog("Error type: \(type(of: error))")
+            NSLog("Error description: \(error.localizedDescription)")
+            return PriceWidgetEntry.error(error: error.localizedDescription, widgetFamily: widgetFamily)
         }
-        */
-    }
-    
-    public func getCurrency() -> String {
-        UserDefaults(suiteName: "group.com.gemwallet.ios")?.string(forKey: "currency") ?? "USD"
     }
 }

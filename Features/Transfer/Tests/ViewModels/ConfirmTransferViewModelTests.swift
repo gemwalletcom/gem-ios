@@ -36,7 +36,7 @@ struct ConfirmTransferViewModelTests {
     func title() async {
         #expect(ConfirmTransferViewModel.mock(data: .mock(type: .transfer(.mock()))).title == Localized.Transfer.Send.title)
         #expect(ConfirmTransferViewModel.mock(data: .mock(type: .transferNft(.mock()))).title == Localized.Transfer.Send.title)
-        #expect(ConfirmTransferViewModel.mock(data: .mock(type: .swap(.mock(), .mock(), .mock(), nil))).title == Localized.Wallet.swap)
+        #expect(ConfirmTransferViewModel.mock(data: .mock(type: .swap(.mock(), .mock(), .mock()))).title == Localized.Wallet.swap)
         #expect(ConfirmTransferViewModel.mock(data: .mock(type: .tokenApprove(.mock(), .mock()))).title == Localized.Wallet.swap)
     }
     

@@ -53,7 +53,7 @@ public struct RecipientNavigationView: View {
                     walletsService: model.walletsService,
                     swapDataProvider: SwapQuoteDataProvider(
                         keystore: model.keystore,
-                        swapService: SwapService(nodeProvider: model.nodeService)
+                        swapService: model.swapService
                     ),
                     onComplete: onComplete
                 )

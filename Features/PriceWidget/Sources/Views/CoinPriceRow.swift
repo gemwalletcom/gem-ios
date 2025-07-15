@@ -5,30 +5,22 @@ import Components
 import Style
 
 struct CoinPriceRow: View {
-    let viewModel: CoinPriceRowViewModel
+    private let model: CoinPriceRowViewModel
     
-    init(coin: CoinPrice, currency: String) {
-        self.viewModel = CoinPriceRowViewModel(coin: coin, currency: currency)
+    init(model: CoinPriceRowViewModel) {
+        self.model = model
     }
     
     var body: some View {
         HStack(spacing: Spacing.small) {
-            if let imageURL = viewModel.imageURL {
-                AsyncImageView(url: imageURL)
-                    .frame(width: 32, height: 32)
-                    .cornerRadius(16)
-            } else {
-                Circle()
-                    .fill(Colors.grayLight)
-                    .frame(width: 32, height: 32)
-            }
+            AsyncImageView(url: model.imageURL)
     
             VStack(alignment: .leading, spacing: Spacing.extraSmall) {
-                Text(viewModel.name)
+                Text(model.name)
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(Colors.black)
                 
-                Text(viewModel.symbol)
+                Text(model.symbol)
                     .font(.caption)
                     .foregroundColor(Colors.gray)
             }
@@ -36,15 +28,15 @@ struct CoinPriceRow: View {
             Spacer()
         
             VStack(alignment: .trailing, spacing: Spacing.extraSmall) {
-                Text(viewModel.priceText)
+                Text(model.priceText)
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(Colors.black)
                 
-                Text(viewModel.percentageText)
+                Text(model.percentageText)
                     .font(.caption)
-                    .foregroundColor(viewModel.percentageColor)
+                    .foregroundColor(model.percentageColor)
             }
         }
-        .padding(.vertical, Spacing.extraSmall)
+        .padding(.vertical, Spacing.tiny)
     }
 }

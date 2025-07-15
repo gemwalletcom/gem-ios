@@ -4,6 +4,7 @@ import Foundation
 import BigInt
 
 public extension SwapQuoteData {
+    //TODO: Rename to gasLimit()
     func gasLimitBigInt() throws -> BigInt {
         if let gasLimit = self.gasLimit {
             return BigInt(stringLiteral: gasLimit)

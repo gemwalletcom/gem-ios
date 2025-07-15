@@ -18,7 +18,7 @@ public struct CoinPrice: Sendable {
         symbol: String,
         price: Double,
         priceChangePercentage24h: Double,
-        imageURL: URL? = nil
+        imageURL: URL?
     ) {
         self.assetId = assetId
         self.name = name

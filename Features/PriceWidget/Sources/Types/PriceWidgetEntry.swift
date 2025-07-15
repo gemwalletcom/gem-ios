@@ -9,12 +9,20 @@ public struct PriceWidgetEntry: TimelineEntry, Sendable {
     public let date: Date
     public let coinPrices: [CoinPrice]
     public let currency: String
+    public let error: String?
     public let widgetFamily: WidgetFamily
     
-    public init(date: Date, coinPrices: [CoinPrice], currency: String, widgetFamily: WidgetFamily = .systemMedium) {
+    public init(
+        date: Date,
+        coinPrices: [CoinPrice],
+        currency: String = "USD",
+        error: String? = .none,
+        widgetFamily: WidgetFamily = .systemMedium
+    ) {
         self.date = date
         self.coinPrices = coinPrices
         self.currency = currency
+        self.error = error
         self.widgetFamily = widgetFamily
     }
     
@@ -22,7 +30,16 @@ public struct PriceWidgetEntry: TimelineEntry, Sendable {
         PriceWidgetEntry(
             date: Date(),
             coinPrices: [],
-            currency: "USD",
+            error: "Empty",
+            widgetFamily: widgetFamily
+        )
+    }
+    
+    public static func error(error: String, widgetFamily: WidgetFamily = .systemMedium) -> PriceWidgetEntry {
+        PriceWidgetEntry(
+            date: Date(),
+            coinPrices: [],
+            error: error,
             widgetFamily: widgetFamily
         )
     }
@@ -31,7 +48,7 @@ public struct PriceWidgetEntry: TimelineEntry, Sendable {
         PriceWidgetEntry(
             date: Date(),
             coinPrices: CoinPrice.placeholders(),
-            currency: "USD",
+            error: .none,
             widgetFamily: widgetFamily
         )
     }

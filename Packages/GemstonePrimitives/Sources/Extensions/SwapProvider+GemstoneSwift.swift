@@ -5,16 +5,6 @@ import BigInt
 import Gemstone
 import Primitives
 
-public extension SwapQuote {
-    var toValueBigInt: BigInt {
-        (try? BigInt.from(string: toValue)) ?? .zero
-    }
-
-    var fromValueBigInt: BigInt {
-        (try? BigInt.from(string: fromValue)) ?? .zero
-    }
-}
-
 public extension GemQuoteAsset {
     init(asset: Asset) {
         self.init(

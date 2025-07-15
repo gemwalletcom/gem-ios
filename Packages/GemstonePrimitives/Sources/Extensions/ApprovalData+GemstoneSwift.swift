@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import Gemstone
 
-public extension Gemstone.ApprovalData {
+public extension Gemstone.GemApprovalData {
     var asPrimitive: Primitives.ApprovalData {
         Primitives.ApprovalData(token: token, spender: spender, value: value)
     }

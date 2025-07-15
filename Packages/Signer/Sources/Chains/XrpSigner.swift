@@ -93,19 +93,19 @@ public struct XrpSigner: Signable {
     }
     
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let (_, _, quote, swapData) = try input.type.swap()
+        let (_, _, data) = try input.type.swap()
         
-        switch quote.data.provider.id {
+        switch data.quote.provider {
         case .thorchain:
             let json = """
                 {
                         "TransactionType": "Payment",
-                        "Destination": "\(swapData.to)",
-                        "Amount": "\(swapData.value)",
+                        "Destination": "\(data.data.to)",
+                        "Amount": "\(data.data.value)",
                         "Memos": [
                             {
                                 "Memo": {
-                                    "MemoData": "\(Data(swapData.data.remove0x.utf8).hexString.remove0x)"
+                                    "MemoData": "\(Data(data.data.data.remove0x.utf8).hexString.remove0x)"
                                 }
                             }
                         ]

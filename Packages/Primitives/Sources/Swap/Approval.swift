@@ -16,6 +16,34 @@ public struct ApprovalData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct QuoteAsset: Codable {
+	public let id: String
+	public let symbol: String
+	public let decimals: UInt32
+
+	public init(id: String, symbol: String, decimals: UInt32) {
+		self.id = id
+		self.symbol = symbol
+		self.decimals = decimals
+	}
+}
+
+public struct SwapQuote: Codable, Equatable, Hashable, Sendable {
+	public let fromValue: String
+	public let toValue: String
+	public let provider: SwapProvider
+	public let walletAddress: String
+	public let slippageBps: UInt32
+
+	public init(fromValue: String, toValue: String, provider: SwapProvider, walletAddress: String, slippageBps: UInt32) {
+		self.fromValue = fromValue
+		self.toValue = toValue
+		self.provider = provider
+		self.walletAddress = walletAddress
+		self.slippageBps = slippageBps
+	}
+}
+
 public struct SwapQuoteData: Codable, Equatable, Hashable, Sendable {
 	public let to: String
 	public let value: String
@@ -29,5 +57,15 @@ public struct SwapQuoteData: Codable, Equatable, Hashable, Sendable {
 		self.data = data
 		self.approval = approval
 		self.gasLimit = gasLimit
+	}
+}
+
+public struct SwapData: Codable, Equatable, Hashable, Sendable {
+	public let quote: SwapQuote
+	public let data: SwapQuoteData
+
+	public init(quote: SwapQuote, data: SwapQuoteData) {
+		self.quote = quote
+		self.data = data
 	}
 }
