@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "على شبكة %@ ، الحد الأدنى لمتطلبات المشاركة هو ** %@ **.";
 "asset.add_to_wallet" = "أضف إلى المحفظة";
 "asset.hide_from_wallet" = "إخفاء من المحفظة";
+"common.details" = "تفاصيل";
+"transaction.swap_again" = "التبديل مرة أخرى";

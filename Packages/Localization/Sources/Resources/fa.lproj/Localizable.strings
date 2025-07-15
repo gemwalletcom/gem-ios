@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "در شبکه %@ ، حداقل میزان سپرده‌گذاری ** %@ ** است.";
 "asset.add_to_wallet" = "اضافه کردن به کیف پول";
 "asset.hide_from_wallet" = "پنهان شدن از کیف پول";
+"common.details" = "جزئیات";
+"transaction.swap_again" = "دوباره مبادله کنید";

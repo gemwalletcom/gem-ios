@@ -33,7 +33,8 @@ struct TransactionDetailViewModel {
     var networkFeeField: String { Localized.Transfer.networkFee }
     var dateField: String { Localized.Transaction.date }
     var memoField: String { Localized.Transfer.memo }
-    
+    var swapAgain: String { Localized.Transaction.swapAgain }
+
     var providerListItem: ListItemImageValue? {
         guard
             let metadata = model.transaction.transaction.metadata,

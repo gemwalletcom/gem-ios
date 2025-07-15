@@ -8,6 +8,8 @@ import Primitives
 struct SwapNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
+    @Environment(\.keystore) private var keystore
+    @Environment(\.swapService) private var swapService
 
     @State private var navigationPath: NavigationPath = NavigationPath()
 
@@ -29,6 +31,7 @@ struct SwapNavigationStack: View {
                     input: input,
                     walletsService: walletsService,
                     swapQuotesProvider: SwapQuotesProvider(swapService: SwapService(nodeProvider: nodeService)),
+                    swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
                     onSwap: {
                         navigationPath.append($0)
                     }

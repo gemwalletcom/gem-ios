@@ -410,7 +410,7 @@
 "transfer.smart_contract.title" = "Smart Contract";
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Имеет баланс";
-"swap.estimated_time.title" = "Estimated Time";
+"swap.estimated_time.title" = "Расчетное время";
 "wallet.import.contract_address_field" = "Контракт или токен ID";
 "info.asset_status.unverified.description" = "Неподтверждённые токены не прошли достаточную проверку со стороны надёжных сторонних сервисов. Они могут появиться в вашем кошельке в результате airdrop’ов, переводов или ручного импорта.";
 "info.asset_status.suspicious.description" = "Подозрительные или спам‑токены помечаются как потенциальные мошеннические или вредоносные активы. Они могут появиться в вашем кошельке в результате airdrop‑раздач, переводов или ручного добавления.";
@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "В сети %@ минимальное требование к стейкингу составляет ** %@ **.";
 "asset.add_to_wallet" = "Добавить в кошелек";
 "asset.hide_from_wallet" = "Скрыть из кошелька";
+"common.details" = "Детали";
+"transaction.swap_again" = "Поменять снова";

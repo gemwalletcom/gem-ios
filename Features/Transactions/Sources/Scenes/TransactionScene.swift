@@ -108,7 +108,7 @@ public struct TransactionScene: View {
             if model.showSwapAgain {
                 Spacer()
                 StateButton(
-                    text: "Swap again",
+                    text: model.swapAgain,
                     type: .primary(.normal),
                     action: onSelectTransactionHeader
                 )

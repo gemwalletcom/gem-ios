@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "Sulla rete %@, il requisito minimo di staking è ** %@ **.";
 "asset.add_to_wallet" = "Aggiungi al portafoglio";
 "asset.hide_from_wallet" = "Nascondi dal portafoglio";
+"common.details" = "Dettagli";
+"transaction.swap_again" = "Scambia di nuovo";

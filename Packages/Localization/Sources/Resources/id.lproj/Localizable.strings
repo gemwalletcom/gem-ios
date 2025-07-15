@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "Pada jaringan %@, persyaratan staking minimum adalah ** %@ **.";
 "asset.add_to_wallet" = "Tambahkan ke dompet";
 "asset.hide_from_wallet" = "Sembunyikan dari dompet";
+"common.details" = "Rincian";
+"transaction.swap_again" = "Tukar Lagi";

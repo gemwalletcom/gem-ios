@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "Kwenye mtandao %@, hitaji la chini kabisa la kuweka hisa ni ** %@ **.";
 "asset.add_to_wallet" = "Ongeza kwenye mkoba";
 "asset.hide_from_wallet" = "Ficha kutoka kwa mkoba";
+"common.details" = "Maelezo";
+"transaction.swap_again" = "Badilika Tena";

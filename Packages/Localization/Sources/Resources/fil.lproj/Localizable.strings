@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "Sa %@ network, ang minimum na kinakailangan sa staking ay ** %@ **.";
 "asset.add_to_wallet" = "Idagdag sa wallet";
 "asset.hide_from_wallet" = "Itago sa wallet";
+"common.details" = "Mga Detalye";
+"transaction.swap_again" = "Magpalit muli";

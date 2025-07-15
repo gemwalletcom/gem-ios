@@ -35,6 +35,7 @@ public final class WalletSceneViewModel: Sendable {
     public var assets: [AssetData] = []
     public var banners: [Banner] = []
 
+    // TODO: - separate presenting sheet state logic to separate type
     public var isPresentingWallets = false
     public var isPresentingSelectAssetType: SelectAssetType?
     public var isPresentingSelectedAssetType: SelectedAssetType?

@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "%@ 네트워크에서 최소 스테이킹 요구 사항은 ** %@ **입니다.";
 "asset.add_to_wallet" = "지갑에 추가";
 "asset.hide_from_wallet" = "지갑에서 숨기기";
+"common.details" = "세부";
+"transaction.swap_again" = "다시 바꾸기";
