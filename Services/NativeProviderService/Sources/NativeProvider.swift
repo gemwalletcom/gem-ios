@@ -3,7 +3,10 @@
 import ChainService
 import CryptoKit
 import Foundation
-import Gemstone
+import protocol Gemstone.AlienProvider
+import struct Gemstone.AlienTarget
+import enum Gemstone.AlienError
+import enum Gemstone.Chain
 import Primitives
 
 public actor NativeProvider {
@@ -22,7 +25,7 @@ public actor NativeProvider {
 }
 
 extension NativeProvider: AlienProvider {
-    public func request(target: Gemstone.AlienTarget) async throws -> Data {
+    public func request(target: AlienTarget) async throws -> Data {
         let results = try await self.batchRequest(targets: [target])
         guard
             results.count == 1
@@ -32,7 +35,7 @@ extension NativeProvider: AlienProvider {
         return results[0]
     }
 
-    public nonisolated func getEndpoint(chain: Gemstone.Chain) throws -> String {
+    public nonisolated func getEndpoint(chain: Chain) throws -> String {
         self.nodeProvider.node(for: Primitives.Chain(rawValue: chain)!).absoluteString
     }
 
