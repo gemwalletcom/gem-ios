@@ -16,6 +16,7 @@ struct SwapNavigationView: View {
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.scanService) private var scanService
+    @Environment(\.swapService) private var swapService
 
     @State private var model: SwapSceneViewModel
 
@@ -40,11 +41,11 @@ struct SwapNavigationView: View {
                         chainService: ChainServiceFactory(nodeProvider: nodeService)
                             .service(for: data.chain),
                         scanService: scanService,
-                        swapService: SwapService(nodeProvider: nodeService),
+                        swapService: swapService,
                         walletsService: model.walletsService,
                         swapDataProvider: SwapQuoteDataProvider(
                             keystore: keystore,
-                            swapService: SwapService(nodeProvider: nodeService)
+                            swapService: swapService
                         ),
                         onComplete: {
                             onSwapComplete(type: data.type)

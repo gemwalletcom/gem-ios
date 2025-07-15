@@ -19,6 +19,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.walletService) private var walletService
     @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
+    @Environment(\.swapService) private var swapService
 
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
@@ -51,7 +52,7 @@ struct SelectedAssetNavigationStack: View  {
                             nodeService: nodeService,
                             stakeService: stakeService,
                             scanService: scanService,
-                            swapService: SwapService(nodeProvider: nodeService),
+                            swapService: swapService,
                             type: type,
                             onRecipientDataAction: {
                                 navigationPath.append($0)
@@ -86,8 +87,8 @@ struct SelectedAssetNavigationStack: View  {
                             wallet: wallet,
                             asset: selectType.asset,
                             walletsService: walletsService,
-                            swapQuotesProvider: SwapQuotesProvider(swapService: SwapService(nodeProvider: nodeService)),
-                            swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: SwapService(nodeProvider: nodeService)),
+                            swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
+                            swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
                             onSwap: {
                                 navigationPath.append($0)
                             }
