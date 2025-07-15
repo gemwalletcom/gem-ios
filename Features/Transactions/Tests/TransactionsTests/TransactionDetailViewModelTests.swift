@@ -6,6 +6,7 @@ import Primitives
 import Preferences
 import PreferencesTestKit
 import PrimitivesComponents
+import Style
 
 @testable import Transactions
 @testable import Store
@@ -64,15 +65,24 @@ struct TransactionDetailViewModelTests {
             #expect(TransactionDetailViewModel.mock(type: type, memo: "Test memo").showMemoField == true)
         }
     }
+
+    @Test
+    func statusTextStyle() {
+        #expect(TransactionDetailViewModel.mock(state: .confirmed).statusTextStyle.color == Colors.green)
+        #expect(TransactionDetailViewModel.mock(state: .pending).statusTextStyle.color == Colors.orange)
+        #expect(TransactionDetailViewModel.mock(state: .failed).statusTextStyle.color == Colors.red)
+        #expect(TransactionDetailViewModel.mock(state: .reverted).statusTextStyle.color == Colors.red)
+    }
 }
 
 extension TransactionDetailViewModel {
     static func mock(
-        type: TransactionType,
+        type: TransactionType = .transfer,
+        state: TransactionState = .confirmed,
         direction: TransactionDirection = .outgoing,
         participant: String = "participant_address",
         memo: String? = nil
     ) -> TransactionDetailViewModel {
-        TransactionDetailViewModel(model: TransactionViewModel.mock(type: type, direction: direction, participant: participant, memo: memo))
+        TransactionDetailViewModel(model: TransactionViewModel.mock(type: type, state: state, direction: direction, participant: participant, memo: memo))
     }
 }

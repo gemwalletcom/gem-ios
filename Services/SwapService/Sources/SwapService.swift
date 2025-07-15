@@ -41,15 +41,15 @@ public final class SwapService: Sendable {
         )
     }
 
-    public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String) async throws -> [Gemstone.SwapQuote] {
-        let swapRequest = Gemstone.SwapQuoteRequest(
-            fromAsset: GemQuoteAsset(asset: fromAsset),
-            toAsset: GemQuoteAsset(asset: toAsset),
+    public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String) async throws -> [Gemstone.SwapperQuote] {
+        let swapRequest = Gemstone.SwapperQuoteRequest(
+            fromAsset: SwapperQuoteAsset(asset: fromAsset),
+            toAsset: SwapperQuoteAsset(asset: toAsset),
             walletAddress: walletAddress,
             destinationAddress: destinationAddress,
             value: value,
             mode: .exactIn,
-            options: GemSwapOptions(
+            options: SwapperOptions(
                 slippage: getDefaultSlippage(chain: fromAsset.id.chain.rawValue),
                 fee: getReferralFees(),
                 preferredProviders: []
@@ -60,13 +60,13 @@ public final class SwapService: Sendable {
         return quotes
     }
 
-    public func getQuoteData(_ request: Gemstone.SwapQuote, data: FetchQuoteData) async throws -> Gemstone.GemSwapQuoteData {
+    public func getQuoteData(_ request: Gemstone.SwapperQuote, data: FetchQuoteData) async throws -> Gemstone.SwapperQuoteData {
         let quoteData = try await swapper.fetchQuoteData(quote: request, data: data)
         try Task.checkCancellation()
         return quoteData
     }
 
-    public func getPermit2Approval(quote: Gemstone.SwapQuote) async throws -> Permit2ApprovalData? {
+    public func getPermit2Approval(quote: Gemstone.SwapperQuote) async throws -> Permit2ApprovalData? {
         try await swapper.fetchPermit2ForQuote(quote: quote)
     }
 }

@@ -2,12 +2,12 @@
 
 import Foundation
 import Components
-import struct Gemstone.SwapProviderType
+import struct Gemstone.SwapperProviderType
 
 public struct SwapProviderViewModel {
-    private let provider: SwapProviderType
+    private let provider: Gemstone.SwapperProviderType
 
-    public init(provider: SwapProviderType) {
+    public init(provider: Gemstone.SwapperProviderType) {
         self.provider = provider
     }
     

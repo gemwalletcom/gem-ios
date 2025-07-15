@@ -23,7 +23,7 @@ public enum AssetRank: String, Codable, CaseIterable, Equatable, Sendable {
 	case migrated
 	case deprecated
 	case spam
-	case fradulent
+	case fraudulent
 	case unknown
 }
 

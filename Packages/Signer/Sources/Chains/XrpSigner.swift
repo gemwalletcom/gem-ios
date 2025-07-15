@@ -95,7 +95,7 @@ public struct XrpSigner: Signable {
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let (_, _, data) = try input.type.swap()
         
-        switch data.quote.provider {
+        switch data.quote.providerData.provider {
         case .thorchain:
             let json = """
                 {

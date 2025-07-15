@@ -23,21 +23,21 @@ public struct BitcoinSigner: Signable {
         let (_, _, data) = try input.type.swap()
         let providers = Set([SwapProvider.thorchain, .chainflip])
         
-        if providers.contains(data.quote.provider) == false {
+        if providers.contains(data.quote.providerData.provider) == false {
             throw AnyError("Invalid signing input type or not supported provider id")
         }
 
-        if input.useMaxAmount && data.quote.provider == .chainflip {
+        if input.useMaxAmount && data.quote.providerData.provider == .chainflip {
             throw AnyError("Doesn't support swapping all amounts on Chainflip yet")
         }
 
-        let opReturnIndex: UInt32? = switch data.quote.provider {
+        let opReturnIndex: UInt32? = switch data.quote.providerData.provider {
         case .thorchain: .none
         case .chainflip: 1
         default: .none
         }
 
-        let opReturnData: Data = switch data.quote.provider {
+        let opReturnData: Data = switch data.quote.providerData.provider {
         case .thorchain:
             try data.data.data.encodedData()
         case .chainflip: try {

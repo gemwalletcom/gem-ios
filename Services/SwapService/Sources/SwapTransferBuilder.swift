@@ -3,15 +3,15 @@
 import Foundation
 import Primitives
 import BigInt
-import struct Gemstone.SwapQuote
-import struct Gemstone.GemSwapQuoteData
+import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperQuoteData
 
 public struct SwapTransferDataFactory: Sendable {
     public static func swap(
         fromAsset: Asset,
         toAsset: Asset,
-        quote: Gemstone.SwapQuote,
-        quoteData: Gemstone.GemSwapQuoteData
+        quote: Gemstone.SwapperQuote,
+        quoteData: Gemstone.SwapperQuoteData
     ) -> TransferData {
         let recipient = Recipient(
             name: quote.data.provider.name,
