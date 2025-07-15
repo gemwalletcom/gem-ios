@@ -4,7 +4,13 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import BigInt
-import Gemstone
+import func Gemstone.suiValidateAndHash
+import struct Gemstone.SuiCoin
+import struct Gemstone.SuiTransferInput
+import struct Gemstone.SuiGas
+import struct Gemstone.SuiObjectRef
+import struct Gemstone.SuiData
+import struct Gemstone.SuiEncodedOutput
 import GemstonePrimitives
 
 public struct SuiService: Sendable {
@@ -101,7 +107,7 @@ extension SuiService {
                 fatalError()
             }
         case .swap(_, _, let data): try {
-            let output = try Gemstone.suiValidateAndHash(encoded: data.data.data)
+            let output = try suiValidateAndHash(encoded: data.data.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()
         case .generic, .account, .tokenApprove: fatalError()
@@ -492,8 +498,8 @@ extension SuiSystemState {
 // FIXME: - update uniffi to latest to extension Codable
 
 extension Blockchain.SuiCoin {
-    func toGemstone() -> Gemstone.SuiCoin {
-        Gemstone.SuiCoin(
+    func toGemstone() -> SuiCoin {
+        SuiCoin(
             coinType: coinType,
             balance: BigInt(stringLiteral: balance).asUInt,
             objectRef: SuiObjectRef(
