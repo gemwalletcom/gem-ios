@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AssetProperties: Codable, Sendable {
+public struct AssetProperties: Codable, Sendable, Hashable {
 	public let isEnabled: Bool
 	public let isBuyable: Bool
 	public let isSellable: Bool
@@ -22,7 +22,7 @@ public struct AssetProperties: Codable, Sendable {
 	}
 }
 
-public struct AssetBasic: Codable, Sendable {
+public struct AssetBasic: Codable, Sendable, Hashable {
 	public let asset: Asset
 	public let properties: AssetProperties
 	public let score: AssetScore

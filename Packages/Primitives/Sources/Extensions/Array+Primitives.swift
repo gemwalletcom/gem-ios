@@ -67,6 +67,11 @@ public extension Sequence where Iterator.Element: Hashable {
         var elements = Set<Iterator.Element>()
         return self.filter { elements.insert($0).inserted }
     }
+
+    func uniqued<Key: Hashable>(by keyPath: KeyPath<Element, Key>) -> [Element] {
+        var seen = Set<Key>()
+        return filter { seen.insert($0[keyPath: keyPath]).inserted }
+    }
 }
 
 public enum ArrayError: Error {

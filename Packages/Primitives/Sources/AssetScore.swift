@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AssetScore: Codable, Equatable, Sendable {
+public struct AssetScore: Codable, Equatable, Sendable, Hashable {
 	public let rank: Int32
 
 	public init(rank: Int32) {

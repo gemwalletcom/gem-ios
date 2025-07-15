@@ -256,10 +256,7 @@ extension SelectAssetViewModel {
                 try assetsService.assetStore.addAssetsSearch(query: priorityAssetsQuery, assets: assets)
             }
             try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
-
-            await MainActor.run { [self] in
-                self.state = .data(assets)
-            }
+            self.state = .data(assets)
         } catch {
             await handle(error: error)
         }

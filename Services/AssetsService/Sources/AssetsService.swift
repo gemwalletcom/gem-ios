@@ -125,8 +125,6 @@ public final class AssetsService: Sendable {
 
     public func searchAssets(query: String, chains: [Chain], tags: [AssetTag]) async throws -> [AssetBasic] {
         let assets = try await withThrowingTaskGroup(of: [AssetBasic]?.self) { group in
-            var assets = [AssetBasic]()
-
             group.addTask { [weak self] in
                 guard let self = self else { return [] }
                 return try await self.searchAPIAssets(query: query, chains: chains, tags: tags)
@@ -136,6 +134,7 @@ public final class AssetsService: Sendable {
                 return try await self.searchNetworkAsset(tokenId: query, chains: chains.isEmpty ? Chain.allCases : chains)
             }
 
+            var assets = [AssetBasic]()
             for try await result in group {
                 if let result = result, result.count > 0 {
                     assets.append(contentsOf: result)
@@ -143,7 +142,7 @@ public final class AssetsService: Sendable {
             }
             return assets
         }
-        return assets
+        return assets.uniqued(by: \.asset.id)
     }
 
     func searchAPIAssets(query: String, chains: [Chain], tags: [AssetTag]) async throws -> [AssetBasic] {

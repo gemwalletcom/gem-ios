@@ -152,6 +152,7 @@ extension AssetsRequest {
             .filter(
                 TableAlias(name: AccountRecord.databaseTableName)[BalanceRecord.Columns.walletId] == walletId
             )
+            .group(AssetRecord.Columns.id)
             .order(
                 TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isPinned].desc,
                 TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isEnabled].desc,
