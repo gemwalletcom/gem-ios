@@ -1,4 +1,10 @@
 SIMULATOR_NAME := "iPhone 16"
+ARCH := "arm64"
+XCBEAUTIFY_ARGS := "--disable-logging --quiet"
+SIMULATOR_DEST := "platform=iOS Simulator,name={{SIMULATOR_NAME}},arch={{ARCH}}"
+
+xcbeautify:
+    @xcbeautify {{XCBEAUTIFY_ARGS}}
 
 list:
     just --list
@@ -42,34 +48,34 @@ build:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
-    build | xcbeautify
+    -destination "{{SIMULATOR_DEST}}" \
+    build | just xcbeautify
 
 test:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
+    -destination "{{SIMULATOR_DEST}}" \
     -parallel-testing-enabled YES \
-    test | xcbeautify
+    test | just xcbeautify
 
 test_ui:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
+    -destination "{{SIMULATOR_DEST}}" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
-    test | xcbeautify
+    test | just xcbeautify
 
 test-specific TARGET:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
+    -destination "{{SIMULATOR_DEST}}" \
     -only-testing {{TARGET}} \
     -parallel-testing-enabled YES \
-    test | xcbeautify
+    test | just xcbeautify
 
 localize:
     @sh core/scripts/localize.sh ios Packages/Localization/Sources/Resources
