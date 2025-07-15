@@ -146,13 +146,6 @@
 			remoteGlobalIDString = C30952AF299C39D70004C0F9;
 			remoteInfo = Gem;
 		};
-		D83819542E256A5B0076CDB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C30952A8299C39D70004C0F9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D83819482E256A5A0076CDB3;
-			remoteInfo = GemPriceWidgetExtension;
-		};
 		D8A1F8792B17F21E00B15F54 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C30952A8299C39D70004C0F9 /* Project object */;
@@ -783,7 +776,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D83819552E256A5B0076CDB3 /* PBXTargetDependency */,
 			);
 			name = Gem;
 			packageProductDependencies = (
@@ -1164,11 +1156,6 @@
 			isa = PBXTargetDependency;
 			target = C30952AF299C39D70004C0F9 /* Gem */;
 			targetProxy = D83096B22D5D4F1E00FFEE3E /* PBXContainerItemProxy */;
-		};
-		D83819552E256A5B0076CDB3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D83819482E256A5A0076CDB3 /* GemPriceWidget */;
-			targetProxy = D83819542E256A5B0076CDB3 /* PBXContainerItemProxy */;
 		};
 		D8A1F87A2B17F21E00B15F54 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
