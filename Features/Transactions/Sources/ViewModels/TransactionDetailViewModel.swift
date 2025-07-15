@@ -200,6 +200,13 @@ struct TransactionDetailViewModel {
         }
     }
 
+    var swapAssets: (from: Asset, to: Asset?) {
+        let transaction = model.transaction
+        let fromAsset = transaction.asset
+        let toAsset = transaction.assets.first(where: { $0.id != fromAsset.id })
+        return (fromAsset, toAsset)
+    }
+
     var headerType: TransactionHeaderType {
         let swapMetadata: SwapMetadata? = {
             guard let metadata = model.transaction.transaction.metadata, case let .swap(transactionSwapMetadata) = metadata else {

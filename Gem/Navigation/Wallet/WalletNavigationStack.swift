@@ -137,15 +137,21 @@ struct WalletNavigationStack: View {
                                     toAssetId: toAsset?.id
                                 )
                             ),
-                            onComplete: {
-                                navigationState.wallet.removeLast()
-                                model.isPresentingSelectedAssetType = nil
-                            }
+                            onComplete: onSwapComplete
                         )
                     default: EmptyView()
                     }
                 }
                 .safariSheet(url: $model.isPresentingUrl)
         }
+    }
+}
+
+// MARK: - Private
+
+extension WalletNavigationStack {
+    private func onSwapComplete() {
+        navigationState.wallet.removeLast()
+        model.isPresentingSelectedAssetType = nil
     }
 }

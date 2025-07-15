@@ -97,12 +97,7 @@ struct TransactionsNavigationStack: View {
                                     toAssetId: toAsset?.id
                                 )
                             ),
-                            onComplete: {
-                                navigationState.selectedTab = .wallet
-                                navigationState.wallet.removeAll()
-                                navigationState.wallet.append(Scenes.Asset(asset: fromAsset))
-                                model.isPresentingSelectedAssetType = nil
-                            }
+                            onComplete: { onSwapComplete(fromAsset: fromAsset) }
                         )
                     default: EmptyView()
                     }
@@ -120,5 +115,16 @@ struct TransactionsNavigationStack: View {
                     )
                 }
         }
+    }
+}
+
+// MARK: - Private
+
+extension TransactionsNavigationStack {
+    private func onSwapComplete(fromAsset: Asset) {
+        navigationState.selectedTab = .wallet
+        navigationState.wallet.removeAll()
+        navigationState.wallet.append(Scenes.Asset(asset: fromAsset))
+        model.isPresentingSelectedAssetType = nil
     }
 }
