@@ -37,14 +37,16 @@ struct RecipientScene: View {
                                     state: $model.nameResolveState,
                                     address: $model.addressInputModel.text
                                 )
-                                ListButton(
-                                    image: model.pasteImage,
-                                    action: { model.onSelectPaste(field: .address) }
-                                )
-                                ListButton(
-                                    image: model.qrImage,
-                                    action: { model.onSelectScan(field: .address) }
-                                )
+                                if model.shouldShowInputActions {
+                                    ListButton(
+                                        image: model.pasteImage,
+                                        action: { model.onSelectPaste(field: .address) }
+                                    )
+                                    ListButton(
+                                        image: model.qrImage,
+                                        action: { model.onSelectScan(field: .address) }
+                                    )
+                                }
                             }
                         }
                     )

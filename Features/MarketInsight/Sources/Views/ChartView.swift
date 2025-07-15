@@ -98,24 +98,30 @@ struct ChartView: View {
                 GeometryReader { geo in
                     let maxWidth = 88.0
 
-                    // lower
-                    if let lowerBoundX = proxy.position(forX: model.values.lowerBoundDate), let lowerBoundY1 = proxy.position(forY: model.values.lowerBoundValue) {
-                        let x = calculateX(x: lowerBoundX, maxWidth: maxWidth, geoWidth: geo.size.width)
-                        Text(model.lowerBoundValueText)
-                            .font(.caption2)
-                            .foregroundColor(Colors.gray)
-                            .frame(width: maxWidth)
-                            .offset(x: x, y: lowerBoundY1 + .extraLarge)
-                    }
-                    // upper
-                    if let lowerBoundX = proxy.position(forX: model.values.upperBoundDate) {
-                        let x = calculateX(x: lowerBoundX, maxWidth: maxWidth, geoWidth: geo.size.width)
+                    // Get chart bounds
+                    if let plotFrame = proxy.plotFrame {
+                        let chartBounds = geo[plotFrame]
                         
-                        Text(model.upperBoundValueText)
-                            .font(.caption2)
-                            .foregroundColor(Colors.gray)
-                            .frame(maxWidth: maxWidth)
-                            .offset(x: x, y: 0)
+                        // lower bound
+                        if let lowerBoundX = proxy.position(forX: model.values.lowerBoundDate) {
+                            let x = calculateX(x: lowerBoundX, maxWidth: maxWidth, geoWidth: geo.size.width)
+                            Text(model.lowerBoundValueText)
+                                .font(.caption2)
+                                .foregroundColor(Colors.gray)
+                                .frame(width: maxWidth)
+                                .offset(x: x, y: chartBounds.maxY + .small) // Plus spacing (8px) below chart
+                        }
+
+                        // upper bound
+                        if let upperBoundX = proxy.position(forX: model.values.upperBoundDate) {
+                            let x = calculateX(x: upperBoundX, maxWidth: maxWidth, geoWidth: geo.size.width)
+                            
+                            Text(model.upperBoundValueText)
+                                .font(.caption2)
+                                .foregroundColor(Colors.gray)
+                                .frame(width: maxWidth)
+                                .offset(x: x, y: chartBounds.minY - .large) // Minus text height (~16px) + spacing (8px)
+                        }
                     }
                 }
             }
