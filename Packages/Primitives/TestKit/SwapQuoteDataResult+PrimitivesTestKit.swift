@@ -3,9 +3,9 @@
 import Foundation
 import Primitives
 
-public extension SwapQuoteDataResult {
-    static func mock() -> SwapQuoteDataResult {
-        SwapQuoteDataResult(
+public extension SwapData {
+    static func mock() -> SwapData {
+        SwapData(
             quote: .mock(),
             data: .mock()
         )

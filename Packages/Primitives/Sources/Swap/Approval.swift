@@ -60,7 +60,7 @@ public struct SwapQuoteData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct SwapQuoteDataResult: Codable, Equatable, Hashable, Sendable {
+public struct SwapData: Codable, Equatable, Hashable, Sendable {
 	public let quote: SwapQuote
 	public let data: SwapQuoteData
 

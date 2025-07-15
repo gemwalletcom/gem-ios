@@ -19,7 +19,7 @@ public struct SwapTransferDataFactory: Sendable {
             memo: .none
         )
         
-        let result = SwapQuoteDataResult(
+        let result = SwapData(
             quote: quote.asPrimitive,
             data: quoteData.asPrimitive(quote: quote.asPrimitive)
         )

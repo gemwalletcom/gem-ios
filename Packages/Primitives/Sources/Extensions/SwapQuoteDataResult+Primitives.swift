@@ -2,7 +2,7 @@
 
 import Foundation
 
-public extension SwapQuoteDataResult {
+public extension SwapData {
     var approval: ApprovalData? {
         data.approval
     }

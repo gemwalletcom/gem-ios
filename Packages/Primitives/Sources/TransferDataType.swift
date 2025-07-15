@@ -9,7 +9,7 @@ public enum AccountDataType: Hashable, Equatable, Sendable {
 public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
     case transferNft(NFTAsset)
-    case swap(Asset, Asset, SwapQuoteDataResult)
+    case swap(Asset, Asset, SwapData)
     case tokenApprove(Asset, ApprovalData)
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
@@ -87,7 +87,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         }
     }
     
-    public func swap() throws -> (Asset, Asset, data: SwapQuoteDataResult) {
+    public func swap() throws -> (Asset, Asset, data: SwapData) {
         guard case .swap(let fromAsset, let toAsset, let data) = self else {
             throw AnyError("SwapQuoteData missed")
         }
