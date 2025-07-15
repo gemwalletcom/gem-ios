@@ -1,5 +1,5 @@
 XCBEAUTIFY_ARGS := ""
-SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 16,arch=arm64"
+SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 16"
 
 xcbeautify:
     @xcbeautify {{XCBEAUTIFY_ARGS}}
