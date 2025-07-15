@@ -1,7 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Primitives
-import Gemstone
+import struct Gemstone.Node
+import enum Gemstone.NodePriority
 
 extension Gemstone.Node {
     public var node: Primitives.Node {

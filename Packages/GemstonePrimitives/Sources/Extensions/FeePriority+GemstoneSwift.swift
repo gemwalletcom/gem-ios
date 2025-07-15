@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
+import enum Gemstone.GemFeePriority
 import Primitives
 
 extension FeePriority {

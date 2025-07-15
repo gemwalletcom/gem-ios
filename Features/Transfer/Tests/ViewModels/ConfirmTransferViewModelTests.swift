@@ -13,7 +13,6 @@ import SwapService
 import SwapServiceTestKit
 import KeystoreTestKit
 import Localization
-import Gemstone
 import Preferences
 import PreferencesTestKit
 import GemAPI
