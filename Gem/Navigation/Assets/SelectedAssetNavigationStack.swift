@@ -22,19 +22,19 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.swapService) private var swapService
 
     @State private var navigationPath = NavigationPath()
-    @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
 
     private let selectType: SelectedAssetInput
     private let wallet: Wallet
-        
+    private let onComplete: VoidAction
+
     init(
         selectType: SelectedAssetInput,
         wallet: Wallet,
-        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
+        onComplete: VoidAction
     ) {
         self.selectType = selectType
         self.wallet = wallet
-        _isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
+        self.onComplete = onComplete
     }
 
     var body: some View {
@@ -61,9 +61,7 @@ struct SelectedAssetNavigationStack: View  {
                                 navigationPath.append($0)
                             }
                         ),
-                        onComplete: {
-                            isPresentingSelectedAssetInput = nil
-                        }
+                        onComplete: onComplete
                     )
                 case .receive:
                     ReceiveScene(
@@ -81,12 +79,15 @@ struct SelectedAssetNavigationStack: View  {
                             walletId: wallet.id
                         )
                     )
-                case .swap:
+                case let .swap(fromAsset, toAsset):
                     SwapNavigationView(
                         model: SwapSceneViewModel(
                             input: SwapInput(
                                 wallet: wallet,
-                                pairSelector: SwapPairSelectorViewModel.defaultSwapPair(for: selectType.asset)
+                                pairSelector: SwapPairSelectorViewModel(
+                                    fromAssetId: fromAsset.id,
+                                    toAssetId: toAsset?.id
+                                )
                             ),
                             walletsService: walletsService,
                             swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
@@ -95,28 +96,18 @@ struct SelectedAssetNavigationStack: View  {
                                 navigationPath.append($0)
                             }
                         ),
-                        onComplete: {
-                            isPresentingSelectedAssetInput = nil
-                        }
+                        onComplete: onComplete
                     )
                 case .stake:
                     StakeNavigationView(
                         wallet: wallet,
                         assetId: selectType.asset.id,
                         navigationPath: $navigationPath,
-                        onComplete: {
-                            isPresentingSelectedAssetInput = nil
-                        }
+                        onComplete: onComplete
                     )
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.done) {
-                        isPresentingSelectedAssetInput = nil
-                    }.bold()
-                }
-            }
+            .toolbarDismissItem(title: .done, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

@@ -22,7 +22,6 @@ struct WalletNavigationStack: View {
     @Environment(\.priceObserverService) private var priceObserverService
 
     @State private var model: WalletSceneViewModel
-    @State private var isPresentingAssetSelectedInput: SelectedAssetInput?
 
     init(model: WalletSceneViewModel) {
         _model = State(initialValue: model)
@@ -78,7 +77,7 @@ struct WalletNavigationStack: View {
                                 wallet: model.wallet,
                                 asset: $0.asset
                             ),
-                            isPresentingAssetSelectedInput: $isPresentingAssetSelectedInput
+                            isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput
                         )
                     )
                 }
@@ -108,13 +107,6 @@ struct WalletNavigationStack: View {
                             priceAlertService: priceAlertService
                         ),
                         isPresentingSelectType: $model.isPresentingSelectAssetType
-                    )
-                }
-                .sheet(item: $isPresentingAssetSelectedInput) {
-                    SelectedAssetNavigationStack(
-                        selectType: $0,
-                        wallet: model.wallet,
-                        isPresentingSelectedAssetInput: $isPresentingAssetSelectedInput
                     )
                 }
                 .sheet(isPresented: $model.isPresentingWallets) {

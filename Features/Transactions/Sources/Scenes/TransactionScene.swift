@@ -141,9 +141,8 @@ public struct TransactionScene: View {
 
 extension TransactionScene {
     func onSelectTransactionHeader() {
-        switch model.headerType {
-        case .swap: openURL(model.swapAssetsLink)
-        case .nft, .amount: break
+        if let headerLink = model.headerLink {
+            openURL(headerLink)
         }
     }
 

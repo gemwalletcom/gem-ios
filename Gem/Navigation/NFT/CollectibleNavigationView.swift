@@ -6,7 +6,6 @@ import NFT
 import Primitives
 import Components
 import Localization
-import struct Assets.SelectedAssetInput
 
 struct CollectibleNavigationView: View {
     
@@ -34,7 +33,7 @@ struct CollectibleNavigationView: View {
             SelectedAssetNavigationStack(
                 selectType: $0,
                 wallet: model.wallet,
-                isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
+                onComplete: onComplete
             )
         }
     }
@@ -43,6 +42,10 @@ struct CollectibleNavigationView: View {
 // MARK: - Actions
 
 extension CollectibleNavigationView {
+    private func onComplete() {
+        isPresentingSelectedAssetInput = nil
+    }
+
     private func onHeaderButtonAction(type: HeaderButtonType) {
         guard let account = try? model.wallet.account(for: model.assetData.asset.chain) else {
             return
