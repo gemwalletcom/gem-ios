@@ -15,8 +15,8 @@ public struct ConnectionView: View {
     }
 
     public var body: some View {
-        HStack {
-            AsyncImageView(url: model.imageUrl)
+        HStack(spacing: .space12) {
+            AsyncImageView(url: model.imageUrl, size: Sizing.image.app)
             VStack(alignment: .leading) {
                 Text(model.nameText)
                     .font(.body)
