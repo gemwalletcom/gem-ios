@@ -22,8 +22,7 @@ struct ConfirmTransferViewModelTests {
     
     @Test
     func appText() async {
-        let model = ConfirmTransferViewModel.mock()
-        #expect(model.appText == Localized.Errors.unknown)
+        #expect(ConfirmTransferViewModel.mock().appText == .none)
         
         let modelWithWebsite = ConfirmTransferViewModel.mock(
             data: .mock(type: .generic(asset: .mock(), metadata: .mock(name: "Gem Wallet", url: "https://example.com"), extra: .mock()))
