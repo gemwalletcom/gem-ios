@@ -429,3 +429,4 @@
 "asset.hide_from_wallet" = "財布から隠す";
 "common.details" = "詳細";
 "transaction.swap_again" = "再び交換";
+"common.select" = "選択";

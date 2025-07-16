@@ -429,3 +429,4 @@
 "asset.hide_from_wallet" = "Se cacher du portefeuille";
 "common.details" = "Détails";
 "transaction.swap_again" = "Échanger à nouveau";
+"common.select" = "Sélectionner";

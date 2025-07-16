@@ -429,3 +429,4 @@
 "asset.hide_from_wallet" = "Skjul fra tegnebogen";
 "common.details" = "Detaljer";
 "transaction.swap_again" = "Byt igen";
+"common.select" = "Vælge";

@@ -4,6 +4,7 @@ import SwiftUI
 import Style
 import Localization
 import Primitives
+import Components
 
 struct SwapTokenEmptyView: View {
     private let onSelectAssetAction: (() -> Void)
@@ -18,9 +19,14 @@ struct SwapTokenEmptyView: View {
         } label: {
             HStack {
                 Spacer()
-                Text(Localized.Assets.selectAsset)
+                AssetImageView(assetImage: .image(Images.Placeholders.addAsset))
+                Text(Localized.Common.select)
+                    .textStyle(
+                        TextStyle(font: .body, color: .primary, fontWeight: .semibold)
+                    )
                     .padding(.horizontal, .extraSmall)
                     .padding(.vertical, .medium)
+                    .lineLimit(1)
                 SwapChevronView()
             }
         }

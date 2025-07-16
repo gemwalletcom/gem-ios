@@ -429,3 +429,4 @@
 "asset.hide_from_wallet" = "지갑에서 숨기기";
 "common.details" = "세부";
 "transaction.swap_again" = "다시 바꾸기";
+"common.select" = "선택하다";

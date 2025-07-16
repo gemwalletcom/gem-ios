@@ -429,3 +429,4 @@
 "asset.hide_from_wallet" = "Verbergen voor portemonnee";
 "common.details" = "Details";
 "transaction.swap_again" = "Opnieuw ruilen";
+"common.select" = "Selecteer";

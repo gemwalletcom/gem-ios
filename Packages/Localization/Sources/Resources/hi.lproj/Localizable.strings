@@ -429,3 +429,4 @@
 "asset.hide_from_wallet" = "बटुए से छिपाएँ";
 "common.details" = "विवरण";
 "transaction.swap_again" = "फिर से स्वैप करें";
+"common.select" = "चुनना";
