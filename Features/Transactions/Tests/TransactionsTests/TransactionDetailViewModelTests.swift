@@ -62,6 +62,7 @@ struct TransactionDetailViewModelTests {
         let allTypes: [TransactionType] = [.transfer, .transferNFT, .swap, .tokenApproval, .assetActivation, .smartContractCall, .stakeRewards, .stakeWithdraw, .stakeDelegate, .stakeUndelegate, .stakeRedelegate]
         for type in allTypes {
             #expect(TransactionDetailViewModel.mock(type: type, memo: nil).showMemoField == false)
+            #expect(TransactionDetailViewModel.mock(type: type, memo: "").showMemoField == false)
             #expect(TransactionDetailViewModel.mock(type: type, memo: "Test memo").showMemoField == true)
         }
     }

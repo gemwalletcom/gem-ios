@@ -171,7 +171,10 @@ struct TransactionDetailViewModel {
     }
 
     var showMemoField: Bool {
-        memo != nil
+        if let memo {
+            return memo.isNotEmpty
+        }
+        return false
     }
 
     var memo: String? {
