@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import Gemstone
+import struct Gemstone.PaymentWrapper
 
 @testable import GemstonePrimitives
 

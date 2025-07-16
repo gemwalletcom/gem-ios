@@ -2,12 +2,12 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import func Gemstone.assetWrapper
 import BigInt
 
 public extension Primitives.Chain {
     var asset: Asset {
-        let assetWrapper = Gemstone.assetWrapper(chain: id)
+        let assetWrapper = assetWrapper(chain: id)
         return Asset(
             id: assetId,
             name: assetWrapper.name,

@@ -8,7 +8,7 @@ import struct Gemstone.SwapperQuote
 import struct Gemstone.SwapperQuoteData
 
 public protocol SwapQuoteDataProvidable: Sendable {
-    func fetchQuoteData(wallet: Wallet, quote: Gemstone.SwapperQuote) async throws -> Gemstone.SwapperQuoteData
+    func fetchQuoteData(wallet: Wallet, quote: SwapperQuote) async throws -> SwapperQuoteData
 }
 
 public struct SwapQuoteDataProvider: SwapQuoteDataProvidable {
@@ -20,7 +20,7 @@ public struct SwapQuoteDataProvider: SwapQuoteDataProvidable {
         self.swapService = swapService
     }
 
-    public func fetchQuoteData(wallet: Wallet, quote: Gemstone.SwapperQuote) async throws -> SwapperQuoteData {
+    public func fetchQuoteData(wallet: Wallet, quote: SwapperQuote) async throws -> SwapperQuoteData {
         switch try await swapService.getPermit2Approval(quote: quote) {
         case .none:
             return try await swapService.getQuoteData(quote, data: .none)

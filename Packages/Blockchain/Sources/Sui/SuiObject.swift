@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
+import struct Gemstone.SuiObjectRef
 
 public struct SuiObject: Codable {
     public struct Data: Codable {

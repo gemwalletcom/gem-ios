@@ -114,8 +114,11 @@ public final class ConfirmTransferViewModel {
     var title: String { dataModel.title }
     var appTitle: String { Localized.WalletConnect.app }
     var appAssetImage: AssetImage? { dataModel.appAssetImage }
-    var appText: String {
-        AppDisplayFormatter.format(name: dataModel.appValue, host: websiteURL?.cleanHost())
+    var appText: String? {
+        if let value = dataModel.appValue {
+            return AppDisplayFormatter.format(name: dataModel.appValue, host: websiteURL?.cleanHost())
+        }
+        return .none
     }
     var websiteURL: URL? { dataModel.websiteURL }
     var websiteTitle: String {Localized.Settings.website }

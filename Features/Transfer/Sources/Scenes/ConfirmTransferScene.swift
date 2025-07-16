@@ -95,14 +95,16 @@ extension ConfirmTransferScene {
                 showClearHeader: model.showClearHeader
             )
             Section {
-                ListItemImageView(
-                    title: model.appTitle,
-                    subtitle: model.appText,
-                    assetImage: model.appAssetImage
-                )
-                .contextMenu(
-                    .url(title: model.websiteTitle, onOpen: model.onSelectOpenWebsiteURL)
-                )
+                if let appText = model.appText {
+                    ListItemImageView(
+                        title: model.appTitle,
+                        subtitle: appText,
+                        assetImage: model.appAssetImage
+                    )
+                    .contextMenu(
+                        .url(title: model.websiteTitle, onOpen: model.onSelectOpenWebsiteURL)
+                    )
+                }
 
                 ListItemImageView(
                     title: model.senderTitle,

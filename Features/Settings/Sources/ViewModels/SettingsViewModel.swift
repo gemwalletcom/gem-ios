@@ -3,7 +3,7 @@
 import Foundation
 import SwiftUI
 import GemstonePrimitives
-import Gemstone
+import enum Gemstone.SocialUrl
 import Primitives
 import Localization
 import Style

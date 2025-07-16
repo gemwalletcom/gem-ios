@@ -2,7 +2,6 @@
 
 
 import Foundation
-import Gemstone
 import Primitives
 
 extension AssetLink {
