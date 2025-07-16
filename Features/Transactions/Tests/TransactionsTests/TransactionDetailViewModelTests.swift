@@ -11,6 +11,8 @@ import Style
 @testable import Transactions
 @testable import Store
 
+
+@MainActor
 struct TransactionDetailViewModelTests {
 
     @Test
