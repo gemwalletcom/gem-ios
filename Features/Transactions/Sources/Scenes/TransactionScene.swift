@@ -11,7 +11,6 @@ import InfoSheet
 import PrimitivesComponents
 import ExplorerService
 
-// TODO: - move related logic to view model, e.g. @Query, presenation states, make model as observable
 public struct TransactionScene: View {
     @State private var model: TransactionDetailViewModel
 
@@ -25,7 +24,7 @@ public struct TransactionScene: View {
                 TransactionHeaderListItemView(
                     headerType: model.headerType,
                     showClearHeader: model.showClearHeader,
-                    action: onSelectTransactionHeader
+                    action: model.onSelectTransactionHeader
                 )
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)

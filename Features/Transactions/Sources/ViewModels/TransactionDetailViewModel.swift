@@ -15,6 +15,7 @@ import class Gemstone.SwapProviderConfig
 import InfoSheet
 
 @Observable
+@MainActor
 public final class TransactionDetailViewModel {
     private var model: TransactionViewModel
     private let preferences: Preferences
@@ -216,13 +217,6 @@ public final class TransactionDetailViewModel {
         }
     }
 
-    var headerLink: URL? {
-        switch model.transaction.transaction.metadata {
-        case .null, .nft, .none: .none
-        case .swap(let metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
-        }
-    }
-
     var headerType: TransactionHeaderType {
         let swapMetadata: SwapMetadata? = {
             guard let metadata = model.transaction.transaction.metadata, case let .swap(transactionSwapMetadata) = metadata else {
@@ -265,12 +259,19 @@ public final class TransactionDetailViewModel {
     }
 }
 
-extension TransactionDetailViewModel: Identifiable {
+extension TransactionDetailViewModel: @preconcurrency Identifiable {
     public var id: String { model.transaction.id }
 }
 
 // MARK: - Actions
+
 extension TransactionDetailViewModel {
+    func onSelectTransactionHeader() {
+        if let headerLink = headerLink {
+            UIApplication.shared.open(headerLink)
+        }
+    }
+
     func onSelectShare() {
         isPresentingShareSheet = true
     }
@@ -285,5 +286,16 @@ extension TransactionDetailViewModel {
             placeholder: model.assetImage.placeholder,
             state: transactionState
         )
+    }
+}
+
+// MARK: - Private
+
+extension TransactionDetailViewModel {
+    private var headerLink: URL? {
+        switch model.transaction.transaction.metadata {
+        case .null, .nft, .none: .none
+        case .swap(let metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
+        }
     }
 }
