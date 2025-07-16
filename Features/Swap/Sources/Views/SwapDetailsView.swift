@@ -6,49 +6,51 @@ import Components
 import PrimitivesComponents
 import InfoSheet
 import Localization
+import Primitives
 
 public struct SwapDetailsView: View {
-    
-    private let model: SwapDetailsViewModel
-    
-    @State private var isPresentingInfoSheet: InfoSheetType?
-    
-    public init(model: SwapDetailsViewModel) {
-        self.model = model
+    @Bindable private var model: SwapDetailsViewModel
+    public init(model: Bindable<SwapDetailsViewModel>) {
+        _model = model
     }
-    
+
     public var body: some View {
         VStack {
             switch model.state {
             case .data: listView
             case .error(let error): List { ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error) }
             case .loading: LoadingView()
-            case .noData: EmptyView()
+            case .noData: List { ListItemErrorView(errorTitle: nil, error: AnyError(Localized.Errors.errorOccured)) }
             }
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .toolbarDismissItem(title: .done, placement: .topBarLeading)
         .navigationTitle(Localized.Common.details)
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(item: $isPresentingInfoSheet) {
+        .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
+        .sheet(isPresented: $model.isPresentingSwapProviderSelectionSheet) {
+            SelectableListNavigationStack(
+                model: model.swapProvidersViewModel,
+                onFinishSelection: model.onFinishSwapProviderSelection,
+                listContent: { SimpleListItemView(model: $0) }
+            )
         }
     }
 
     private var listView: some View {
         List {
             Section {
-                ForEach(model.providers) { item in
-                    let view = SimpleListItemView(model: item)
-                    if model.allowSelectProvider {
-                        NavigationCustomLink(
-                            with: view
-                        ) {
-                            model.onFinishSwapProviderSelection(item: item)
-                        }
-                    } else {
-                        view
+                let view = SimpleListItemView(model: model.selectedProviderItem)
+                if model.allowSelectProvider {
+                    NavigationCustomLink(
+                        with: view
+                    ) {
+                        model.onSelectProvidersSelection()
                     }
+                } else {
+                    view
                 }
             }
             
@@ -67,13 +69,13 @@ public struct SwapDetailsView: View {
                 
                 PriceImpactView(
                     model: model.priceImpactModel,
-                    infoAction: { isPresentingInfoSheet = .priceImpact }
+                    infoAction: model.onSelectPriceImpactInfoSheet
                 )
                 
                 ListItemView(
                     title: model.slippageField,
                     subtitle: model.slippageText,
-                    infoAction: { isPresentingInfoSheet = .slippage }
+                    infoAction: model.onSelectSlippageInfoSheet
                 )
             }
         }

@@ -27,16 +27,6 @@ public struct PriceAlert: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct DevicePriceAlert: Codable, Equatable, Hashable, Sendable {
-	public let device: Device
-	public let priceAlert: PriceAlert
-
-	public init(device: Device, priceAlert: PriceAlert) {
-		self.device = device
-		self.priceAlert = priceAlert
-	}
-}
-
 public struct PriceAlertData: Codable, Equatable, Hashable, Sendable {
 	public let asset: Asset
 	public let price: Price?

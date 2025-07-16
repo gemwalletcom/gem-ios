@@ -74,7 +74,7 @@ public struct ConfirmTransferScene: View {
             case .swapDetails:
                 if let swapDetailsViewModel = model.swapDetailsViewModel {
                     NavigationStack {
-                        SwapDetailsView(model: swapDetailsViewModel)
+                        SwapDetailsView(model: Bindable(swapDetailsViewModel))
                             .presentationDetentsForCurrentDeviceSize(expandable: true)
                     }
                 }

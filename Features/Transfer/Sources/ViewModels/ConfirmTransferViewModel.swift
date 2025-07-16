@@ -220,11 +220,14 @@ public final class ConfirmTransferViewModel {
     }
 
     var swapDetailsViewModel: SwapDetailsViewModel? {
-        guard case let .swap(fromAsset, toAsset, quote) = data.type else {
+        guard case let .swap(fromAsset, toAsset, swapData) = data.type else {
             return nil
         }
-
-        return nil
+        return SwapDetailsViewModel(
+            fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
+            toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
+            selectedQuote: swapData.quote
+        )
     }
 }
 

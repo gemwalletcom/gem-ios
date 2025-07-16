@@ -1,8 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import struct Gemstone.SwapQuote
-import struct Gemstone.SwapProviderType
+import struct Gemstone.SwapperQuote
 import Localization
 import Primitives
 import Formatters
@@ -23,54 +22,52 @@ public final class SwapDetailsViewModel {
     private let valueFormatter = ValueFormatter(style: .auto)
     private let rateFormatter = AssetRateFormatter()
     
-    let state: StateViewType<Bool>
-    private let availableQuotes: [SwapQuote]
+    let state: StateViewType<[SwapperQuote]>
     private let fromAssetPrice: AssetPriceValue
     private let toAssetPrice: AssetPriceValue
     private let providerViewModel: SwapProviderViewModel
-    private let selectedQuote: SwapQuote
+    private var selectedQuote: SwapQuote
     private var rateDirection: AssetRateFormatter.Direction = .direct
     private let priceViewModel: PriceViewModel
-
-    private let swapProviderSelectAction: ((SwapProviderItem) -> Void)?
+    private let swapProviderSelectAction: ((SwapperQuote) -> Void)?
+    
+    var isPresentingInfoSheet: InfoSheetType?
+    var isPresentingSwapProviderSelectionSheet: Bool = false
 
     public init(
-        state: StateViewType<Bool>? = nil,
+        state: StateViewType<[SwapperQuote]>? = nil,
         fromAssetPrice: AssetPriceValue,
         toAssetPrice: AssetPriceValue,
         selectedQuote: SwapQuote,
-        availableQuotes: [SwapQuote],
         preferences: Preferences = .standard,
-        swapProviderSelectAction: ((SwapProviderItem) -> Void)? = nil
+        swapProviderSelectAction: ((SwapperQuote) -> Void)? = nil
     ) {
-        self.state = state ?? .data(true)
+        self.state = state ?? .data([])
         self.fromAssetPrice = fromAssetPrice
         self.toAssetPrice = toAssetPrice
-        self.providerViewModel = SwapProviderViewModel(provider: selectedQuote.data.provider)
+        self.providerViewModel = SwapProviderViewModel(providerData: selectedQuote.providerData)
         self.selectedQuote = selectedQuote
-        self.availableQuotes = availableQuotes
         self.priceViewModel = PriceViewModel(price: toAssetPrice.price, currencyCode: preferences.currency)
         self.swapProviderSelectAction = swapProviderSelectAction
     }
     
     
     // MARK: - Provider
-    var providerField: String { Localized.Common.provider }
     var providerText: String { providerViewModel.providerText }
     var providerImage: AssetImage { providerViewModel.providerImage }
-    var providers: [SwapProviderItem] {
-        Array(availableQuotes.prefix(3).map { quote in
-            SwapProviderItem(
-                asset: toAssetPrice.asset,
-                swapQuote: quote,
-                selectedProvider: selectedQuote.data.provider.id,
-                priceViewModel: priceViewModel,
-                valueFormatter: valueFormatter
-            )
-        })
+    var selectedProviderItem: SwapProviderItem {
+        SwapProviderItem(
+            asset: toAssetPrice.asset,
+            swapQuote: selectedQuote,
+            selectedProvider: nil,
+            priceViewModel: priceViewModel,
+            valueFormatter: valueFormatter
+        )
     }
-    var allowSelectProvider: Bool {
-        providers.count > 1
+
+    var allowSelectProvider: Bool { state.value.or([]).count > 1 }
+    var swapProvidersViewModel: SwapProvidersViewModel {
+        SwapProvidersViewModel(state: state.map { .plain(swapProviderItems($0)) })
     }
     
     // MARK: - Estimation
@@ -113,7 +110,7 @@ public final class SwapDetailsViewModel {
     // MARK: - Slippage
     var slippageField: String { Localized.Swap.slippage }
     var slippageText: String {
-        let slippageValue = Double(selectedQuote.request.options.slippage.bps) / 100
+        let slippageValue = Double(selectedQuote.slippageBps) / 100
         return String(format: "%@ %@", "\(slippageValue.rounded(toPlaces: 2))", "%")
     }
     
@@ -125,7 +122,35 @@ public final class SwapDetailsViewModel {
         }
     }
 
-    func onFinishSwapProviderSelection(item: SwapProviderItem) {
-        swapProviderSelectAction?(item)
+    func onFinishSwapProviderSelection(item: [SwapProviderItem]) {
+        guard let quote = item.first?.swapperQuote else { return }
+        swapProviderSelectAction?(quote)
+        selectedQuote = quote.asPrimitive
+        isPresentingSwapProviderSelectionSheet = false
+    }
+    
+    func onSelectPriceImpactInfoSheet() {
+        isPresentingInfoSheet = .priceImpact
+    }
+    
+    func onSelectSlippageInfoSheet() {
+        isPresentingInfoSheet = .slippage
+    }
+    
+    func onSelectProvidersSelection() {
+        isPresentingSwapProviderSelectionSheet = true
+    }
+
+    // MARK: - Private methods
+    private func swapProviderItems(_ quotes: [SwapperQuote]) -> [SwapProviderItem] {
+        quotes.compactMap {
+            SwapProviderItem(
+                asset: toAssetPrice.asset,
+                swapperQuote: $0,
+                selectedProvider: selectedQuote.providerData.provider,
+                priceViewModel: priceViewModel,
+                valueFormatter: valueFormatter
+            )
+        }
     }
 }

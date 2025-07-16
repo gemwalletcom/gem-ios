@@ -87,16 +87,14 @@ public final class SwapSceneViewModel {
 
     public var swapDetailsViewModel: SwapDetailsViewModel? {
         guard let selectedSwapQuote, let fromAsset, let toAsset else { return nil }
-
         return SwapDetailsViewModel(
-            state: swapState.quotes.map { _ in true },
+            state: swapState.quotes,
             fromAssetPrice: AssetPriceValue(asset: fromAsset.asset, price: fromAsset.price),
             toAssetPrice: AssetPriceValue(asset: toAsset.asset, price: toAsset.price),
-            selectedQuote: selectedSwapQuote,
-            availableQuotes: swapState.quotes.value.or([]),
+            selectedQuote: selectedSwapQuote.asPrimitive,
             preferences: preferences,
-            swapProviderSelectAction: { [weak self] provider in
-                self?.onFinishSwapProviderSelection(provider)
+            swapProviderSelectAction: { [weak self] quote in
+                self?.onFinishSwapProviderSelection(quote)
             }
         )
     }
@@ -302,9 +300,8 @@ extension SwapSceneViewModel {
         isPresentedInfoSheet = .swapDetails
     }
 
-    func onFinishSwapProviderSelection(_ provider: SwapProviderItem) {
-        selectedSwapQuote = provider.swapQuote
-        isPresentedInfoSheet = nil
+    func onFinishSwapProviderSelection(_ quote: SwapperQuote) {
+        selectedSwapQuote = quote
     }
 
     public func onFinishAssetSelection(asset: Asset) {

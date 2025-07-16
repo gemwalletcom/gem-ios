@@ -72,7 +72,7 @@ struct SwapNavigationView: View {
                 case .swapDetails:
                     if let model = model.swapDetailsViewModel {
                         NavigationStack {
-                            SwapDetailsView(model: model)
+                            SwapDetailsView(model: Bindable(model))
                                 .presentationDetentsForCurrentDeviceSize(expandable: true)
                         }
                     }

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Device: Codable, Equatable, Hashable, Sendable {
+public struct Device: Codable, Equatable, Sendable {
 	public let id: String
 	public let platform: Platform
 	public let platformStore: PlatformStore?
