@@ -19,10 +19,9 @@ struct SwapTokenEmptyView: View {
         } label: {
             HStack {
                 Spacer()
-                AssetImageView(assetImage: .image(Images.Placeholders.addAsset))
-                Text(Localized.Common.select)
+                Text(Localized.Assets.selectAsset)
                     .textStyle(
-                        TextStyle(font: .body, color: .primary, fontWeight: .semibold)
+                        TextStyle(font: .body, color: .primary, fontWeight: .medium)
                     )
                     .padding(.horizontal, .extraSmall)
                     .padding(.vertical, .medium)

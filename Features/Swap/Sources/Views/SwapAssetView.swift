@@ -38,7 +38,7 @@ struct SwapTokenView: View {
                             AssetImageView(assetImage: model.assetImage)
                             Text(model.symbol)
                                 .textStyle(
-                                    TextStyle(font: .body, color: .primary, fontWeight: .semibold)
+                                    TextStyle(font: .body, color: .primary, fontWeight: .medium)
                                 )
                                 .lineLimit(1)
                             SwapChevronView()

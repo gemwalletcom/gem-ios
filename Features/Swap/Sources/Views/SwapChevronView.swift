@@ -8,9 +8,8 @@ struct SwapChevronView: View {
     init() {}
 
     var body: some View {
-        Images.Actions.receive
-            .colorMultiply(Colors.gray)
-            .frame(width: 12, height: 12)
-            .opacity(0.8)
+        Images.System.chevronDown
+            .font(.system(.body, weight: .medium))
+            .foregroundStyle(Colors.gray)
     }
 }

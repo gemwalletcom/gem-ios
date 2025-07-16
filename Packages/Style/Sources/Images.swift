@@ -9,10 +9,6 @@ public enum Images {
         public static let icon = Image(.gemIcon)
     }
 
-    public enum Placeholders {
-        public static let addAsset = Image(.addAssetPlaceholder)
-    }
-
     public enum Chains {
         public static let aptos = Image(.aptos)
         public static let arbitrum = Image(.arbitrum)
