@@ -8,7 +8,7 @@ import BigInt
 import Primitives
 import Components
 import Formatters
-import struct Gemstone.SwapQuote
+import struct Gemstone.SwapperQuote
 
 @testable import Swap
 
@@ -16,14 +16,14 @@ import struct Gemstone.SwapQuote
 struct SwapDetailsViewModelTests {
     @Test
     func swapEstimationText() {
-        #expect(SwapDetailsViewModel.mock(selectedQuote: .mock(etaInSeconds: nil)).swapEstimationText == nil)
-        #expect(SwapDetailsViewModel.mock(selectedQuote: .mock(etaInSeconds: 30)).swapEstimationText == nil)
-        #expect(SwapDetailsViewModel.mock(selectedQuote: .mock(etaInSeconds: 180)).swapEstimationText == "≈ 3 min")
+        #expect(SwapDetailsViewModel.mock(selectedQuote: SwapperQuote.mock(etaInSeconds: nil).asPrimitive).swapEstimationText == nil)
+        #expect(SwapDetailsViewModel.mock(selectedQuote: SwapperQuote.mock(etaInSeconds: 30).asPrimitive).swapEstimationText == nil)
+        #expect(SwapDetailsViewModel.mock(selectedQuote: SwapperQuote.mock(etaInSeconds: 180).asPrimitive).swapEstimationText == "≈ 3 min")
     }
     
     @Test
     func switchRate() {
-        let model = SwapDetailsViewModel.mock(selectedQuote: SwapQuote.mock(toValue: "250000000000"))
+        let model = SwapDetailsViewModel.mock(selectedQuote: SwapperQuote.mock(toValue: "250000000000").asPrimitive)
         
         #expect(model.rateText == "1 ETH ≈ 250,000.00 USDT")
         
@@ -33,13 +33,12 @@ struct SwapDetailsViewModelTests {
 }
 
 extension SwapDetailsViewModel {
-    static func mock(selectedQuote: SwapQuote = .mock()) -> SwapDetailsViewModel {
+    static func mock(selectedQuote: SwapQuote = SwapperQuote.mock().asPrimitive) -> SwapDetailsViewModel {
         SwapDetailsViewModel(
-            state: .data(true),
+            state: .data([SwapperQuote.mock()]),
             fromAssetPrice: AssetPriceValue(asset: .mockEthereum(), price: .mock()),
             toAssetPrice: AssetPriceValue(asset: .mockEthereumUSDT(), price: .mock()),
             selectedQuote: selectedQuote,
-            availableQuotes: [.mock()],
             preferences: .mock(),
             swapProviderSelectAction: nil
         )
