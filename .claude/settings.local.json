@@ -32,7 +32,13 @@
       "Bash(cargo --version)",
       "Bash(rustup:*)",
       "Bash(cargo clean:*)",
-      "Bash(just generate-stone:*)"
+      "Bash(just generate-stone:*)",
+      "Bash(gh pr view:*)",
+      "Bash(git fetch:*)",
+      "Bash(just)",
+      "Bash(echo $?)",
+      "Bash(gh pr merge:*)",
+      "Bash(just build-package:*)"
     ],
     "deny": []
   }

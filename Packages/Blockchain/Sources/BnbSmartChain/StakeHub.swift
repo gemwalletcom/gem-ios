@@ -2,7 +2,19 @@
 
 import Foundation
 import BigInt
-import Gemstone
+import func Gemstone.bscEncodeValidatorsCall
+import func Gemstone.bscDecodeValidatorsReturn
+import func Gemstone.bscEncodeDelegationsCall
+import func Gemstone.bscDecodeDelegationsReturn
+import func Gemstone.bscEncodeUndelegationsCall
+import func Gemstone.bscDecodeUndelegationsReturn
+import func Gemstone.bscEncodeDelegateCall
+import func Gemstone.bscEncodeUndelegateCall
+import func Gemstone.bscEncodeRedelegateCall
+import func Gemstone.bscEncodeClaimCall
+import struct Gemstone.BscValidator
+import struct Gemstone.BscDelegation
+import enum Gemstone.BscDelegationStatus
 import Primitives
 
 // https://github.com/bnb-chain/bsc-genesis-contract/blob/v1.2.2/abi/stakehub.abi
@@ -37,41 +49,41 @@ public struct StakeHub: Sendable {
     }
 
     public func encodeValidatorsCall(offset: UInt16, limit: UInt16) -> String {
-        return Gemstone.bscEncodeValidatorsCall(offset: offset, limit: limit).hexString.append0x
+        return bscEncodeValidatorsCall(offset: offset, limit: limit).hexString.append0x
     }
 
     public func decodeValidatorsReturn(data: Data) throws -> [DelegationValidator] {
-        return try Gemstone.bscDecodeValidatorsReturn(result: data).map { $0.into() }
+        return try bscDecodeValidatorsReturn(result: data).map { $0.into() }
     }
 
     public func encodeDelegationsCall(address: String, limit: UInt16) throws -> String {
-        return try Gemstone.bscEncodeDelegationsCall(delegator: address, offset: 0, limit: limit).hexString.append0x
+        return try bscEncodeDelegationsCall(delegator: address, offset: 0, limit: limit).hexString.append0x
     }
 
     public func decodeDelegationsResult(data: Data) throws -> [DelegationBase] {
-        return try Gemstone.bscDecodeDelegationsReturn(result: data).map { $0.into() }
+        return try bscDecodeDelegationsReturn(result: data).map { $0.into() }
     }
 
     public func encodeUndelegationsCall(address: String, limit: UInt16) throws -> String {
-        return try Gemstone.bscEncodeUndelegationsCall(delegator: address, offset: 0, limit: limit).hexString.append0x
+        return try bscEncodeUndelegationsCall(delegator: address, offset: 0, limit: limit).hexString.append0x
     }
 
     public func decodeUnelegationsResult(data: Data) throws -> [DelegationBase] {
-        return try Gemstone.bscDecodeUndelegationsReturn(result: data).map { $0.into() }
+        return try bscDecodeUndelegationsReturn(result: data).map { $0.into() }
     }
 
     // Actions
     public func encodeDelegateCall(validator: String, delegateVote: Bool) throws -> Data {
-        return try Gemstone.bscEncodeDelegateCall(operatorAddress: validator, delegateVotePower: delegateVote)
+        return try bscEncodeDelegateCall(operatorAddress: validator, delegateVotePower: delegateVote)
     }
 
     public func encodeUndelegateCall(validator: String, shares: BigInt) throws -> Data {
-        return try Gemstone.bscEncodeUndelegateCall(operatorAddress: validator, shares: shares.description)
+        return try bscEncodeUndelegateCall(operatorAddress: validator, shares: shares.description)
     }
 
 
     public func encodeRedelegateCall(shares: BigInt, fromValidator: String, toValidator: String, delegateVote: Bool) throws -> Data {
-        return try Gemstone.bscEncodeRedelegateCall(
+        return try bscEncodeRedelegateCall(
             srcValidator: fromValidator,
             dstValidator: toValidator, 
             shares: shares.description,
@@ -80,7 +92,7 @@ public struct StakeHub: Sendable {
     }
 
     public func encodeClaim(validator: String, requestNumber: UInt64) throws -> Data {
-        return try Gemstone.bscEncodeClaimCall(operatorAddress: validator, requestNumber: requestNumber)
+        return try bscEncodeClaimCall(operatorAddress: validator, requestNumber: requestNumber)
     }
 }
 

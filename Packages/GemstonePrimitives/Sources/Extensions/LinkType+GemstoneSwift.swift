@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import func Gemstone.linkTypeOrder
 
 extension LinkType {
     public var order: Int {

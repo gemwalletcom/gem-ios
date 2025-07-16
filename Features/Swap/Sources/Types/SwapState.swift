@@ -3,16 +3,16 @@
 import Foundation
 import Components
 import Primitives
-import struct Gemstone.SwapQuote
+import struct Gemstone.SwapperQuote
 
 public struct SwapState {
     public var fetch: SwapFetchState
-    public var quotes: StateViewType<[SwapQuote]>
+    public var quotes: StateViewType<[SwapperQuote]>
     public var swapTransferData: StateViewType<TransferData>
     
     public init(
         fetch: SwapFetchState = .idle,
-        availability: StateViewType<[SwapQuote]> = .noData,
+        availability: StateViewType<[SwapperQuote]> = .noData,
         swapTransferData: StateViewType<TransferData> = .noData
     ) {
         self.fetch = fetch

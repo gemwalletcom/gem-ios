@@ -3,7 +3,7 @@
 import Testing
 import Primitives
 import GemstonePrimitives
-import Gemstone
+import enum Gemstone.SocialUrl
 
 @testable import PrimitivesComponents
 

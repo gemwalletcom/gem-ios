@@ -138,7 +138,7 @@ struct TransactionDetailViewModel {
         let color: Color = {
             switch model.transaction.transaction.state {
             case .confirmed:
-                return TextStyle.calloutSecondary.color
+                return Colors.green
             case .pending:
                 return Colors.orange
             case .failed, .reverted:
