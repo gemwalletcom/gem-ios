@@ -32,7 +32,7 @@ public struct TransactionScene: View {
                         StateButton(
                             text: model.swapAgain,
                             type: .primary(.normal),
-                            action: onSelectTransactionHeader
+                            action: model.onSelectTransactionHeader
                         )
                     }
                     .cleanListRow(topOffset: .zero)
