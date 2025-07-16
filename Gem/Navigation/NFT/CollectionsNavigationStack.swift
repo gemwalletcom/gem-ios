@@ -55,7 +55,7 @@ struct CollectionsNavigationStack: View {
                             wallet: model.wallet,
                             assetData: $0.assetData,
                             avatarService: avatarService,
-                            isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput,
+                            isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput
                         )
                     )
                 }
