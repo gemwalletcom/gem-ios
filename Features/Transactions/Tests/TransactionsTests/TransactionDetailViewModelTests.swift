@@ -83,6 +83,11 @@ extension TransactionDetailViewModel {
         participant: String = "participant_address",
         memo: String? = nil
     ) -> TransactionDetailViewModel {
-        TransactionDetailViewModel(model: TransactionViewModel.mock(type: type, state: state, direction: direction, participant: participant, memo: memo))
+        TransactionDetailViewModel(
+            transaction: TransactionExtended.mock(
+                transaction: Transaction.mock(type: type, state: state, direction: direction, to: participant, memo: memo)
+            ),
+            walletId: "test_wallet_id"
+        )
     }
 }
