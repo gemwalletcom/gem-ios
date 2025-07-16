@@ -61,7 +61,7 @@ public final class AssetSceneViewModel: Sendable {
 
         self.input = input
         self.assetData = AssetData.with(asset: input.asset)
-        _isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
+        self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
     public var title: String { assetModel.name }

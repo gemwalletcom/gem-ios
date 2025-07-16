@@ -72,7 +72,7 @@ public final class WalletSceneViewModel: Sendable {
                 .accountBlockedMultiSignature,
             ]
         )
-        _isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
+        self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
     public var currentWallet: Wallet? { walletService.currentWallet }

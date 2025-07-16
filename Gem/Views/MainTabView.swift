@@ -78,7 +78,8 @@ struct MainTabView: View {
                         nftService: nftService,
                         walletService: walletService,
                         wallet: model.wallet,
-                        sceneStep: .collections
+                        sceneStep: .collections,
+                        isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
                     )
                 )
                 .tabItem {
@@ -110,11 +111,11 @@ struct MainTabView: View {
             }
             .tag(TabItem.settings)
         }
-        .sheet(item: $isPresentingSelectedAssetInput) { type in
+        .sheet(item: $isPresentingSelectedAssetInput) { input in
             SelectedAssetNavigationStack(
-                selectType: type,
+                input: input,
                 wallet: model.wallet,
-                onComplete: { onComplete(input: type) }
+                onComplete: { onComplete(type: input.type) }
             )
         }
         .onChange(of: model.walletId, onWalletIdChange)
@@ -233,9 +234,21 @@ extension MainTabView {
         }
     }
 
-    private func onComplete(input: SelectedAssetInput) {
-        switch input.type {
-        case .send, .receive, .stake, .buy:
+    private func onComplete(type: SelectedAssetType) {
+        switch type {
+        case .receive, .stake, .buy:
+            isPresentingSelectedAssetInput = nil
+        case let .send(type):
+            switch type {
+            case .nft:
+                if navigationState.selectedTab == .collections {
+                    navigationState.collections.removeAll()
+                    navigationState.activity.removeAll()
+                    navigationState.selectedTab = .activity
+                }
+            case .asset:
+                break
+            }
             isPresentingSelectedAssetInput = nil
         case let .swap(fromAsset, _):
             Task {

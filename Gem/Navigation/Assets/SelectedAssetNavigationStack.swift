@@ -23,16 +23,16 @@ struct SelectedAssetNavigationStack: View  {
 
     @State private var navigationPath = NavigationPath()
 
-    private let selectType: SelectedAssetInput
+    private let input: SelectedAssetInput
     private let wallet: Wallet
     private let onComplete: VoidAction
 
     init(
-        selectType: SelectedAssetInput,
+        input: SelectedAssetInput,
         wallet: Wallet,
         onComplete: VoidAction
     ) {
-        self.selectType = selectType
+        self.input = input
         self.wallet = wallet
         self.onComplete = onComplete
     }
@@ -40,12 +40,12 @@ struct SelectedAssetNavigationStack: View  {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             Group {
-                switch selectType.type {
+                switch input.type {
                 case .send(let type):
                     RecipientNavigationView(
                         model: RecipientSceneViewModel(
                             wallet: wallet,
-                            asset: selectType.asset,
+                            asset: input.asset,
                             keystore: keystore,
                             walletService: walletService,
                             walletsService: walletsService,
@@ -66,16 +66,16 @@ struct SelectedAssetNavigationStack: View  {
                 case .receive:
                     ReceiveScene(
                         model: ReceiveViewModel(
-                            assetModel: AssetViewModel(asset: selectType.asset),
+                            assetModel: AssetViewModel(asset: input.asset),
                             walletId: wallet.walletId,
-                            address: selectType.address,
+                            address: input.address,
                             walletsService: walletsService
                         )
                     )
                 case .buy:
                     FiatConnectNavigationView(
                         model: FiatSceneViewModel(
-                            assetAddress: selectType.assetAddress,
+                            assetAddress: input.assetAddress,
                             walletId: wallet.id
                         )
                     )
@@ -101,7 +101,7 @@ struct SelectedAssetNavigationStack: View  {
                 case .stake:
                     StakeNavigationView(
                         wallet: wallet,
-                        assetId: selectType.asset.id,
+                        assetId: input.asset.id,
                         navigationPath: $navigationPath,
                         onComplete: onComplete
                     )
