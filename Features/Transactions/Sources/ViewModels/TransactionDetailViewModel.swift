@@ -11,20 +11,34 @@ import PrimitivesComponents
 import Store
 import Preferences
 import ExplorerService
-import InfoSheet
 import class Gemstone.SwapProviderConfig
+import InfoSheet
 
-struct TransactionDetailViewModel {
-    let model: TransactionViewModel
-
+@Observable
+@MainActor
+public final class TransactionDetailViewModel {
+    private var model: TransactionViewModel
     private let preferences: Preferences
+    
+    var request: TransactionRequest
+    var transactionExtended: TransactionExtended? = nil
+    
+    var isPresentingShareSheet = false
+    var isPresentingInfoSheet: InfoSheetType? = .none
 
-    init(
-        model: TransactionViewModel,
+    public init(
+        transaction: TransactionExtended,
+        walletId: String,
         preferences: Preferences = Preferences.standard
     ) {
-        self.model = model
+        self.model = TransactionViewModel(
+            explorerService: ExplorerService.standard,
+            transaction: transaction,
+            formatter: .auto
+        )
         self.preferences = preferences
+        self.transactionExtended = transaction
+        self.request = TransactionRequest(walletId: walletId, transactionId: transaction.id)
     }
     
     var title: String { model.title }
@@ -203,13 +217,6 @@ struct TransactionDetailViewModel {
         }
     }
 
-    var headerLink: URL? {
-        switch model.transaction.transaction.metadata {
-        case .null, .nft, .none: .none
-        case .swap(let metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
-        }
-    }
-
     var headerType: TransactionHeaderType {
         let swapMetadata: SwapMetadata? = {
             guard let metadata = model.transaction.transaction.metadata, case let .swap(transactionSwapMetadata) = metadata else {
@@ -240,9 +247,55 @@ struct TransactionDetailViewModel {
             direction: model.transaction.transaction.type == .transfer ? model.transaction.transaction.direction : nil
         )
     }
+    
+    func onChangeTransaction(old: TransactionExtended?, new: TransactionExtended?) {
+        if old != new, let new {
+            model = TransactionViewModel(
+                explorerService: ExplorerService.standard,
+                transaction: new,
+                formatter: .auto
+            )
+        }
+    }
 }
 
+extension TransactionDetailViewModel: @preconcurrency Identifiable {
+    public var id: String { model.transaction.id }
+}
 
-extension TransactionDetailViewModel: Identifiable {
-    var id: String { model.transaction.id }
+// MARK: - Actions
+
+extension TransactionDetailViewModel {
+    func onSelectTransactionHeader() {
+        if let headerLink = headerLink {
+            UIApplication.shared.open(headerLink)
+        }
+    }
+
+    func onSelectShare() {
+        isPresentingShareSheet = true
+    }
+    
+    func onNetworkFeeInfo() {
+        isPresentingInfoSheet = .networkFee(chain)
+    }
+
+    func onStatusInfo() {
+        isPresentingInfoSheet = .transactionState(
+            imageURL: model.assetImage.imageURL,
+            placeholder: model.assetImage.placeholder,
+            state: transactionState
+        )
+    }
+}
+
+// MARK: - Private
+
+extension TransactionDetailViewModel {
+    private var headerLink: URL? {
+        switch model.transaction.transaction.metadata {
+        case .null, .nft, .none: .none
+        case .swap(let metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
+        }
+    }
 }

@@ -11,31 +11,11 @@ import InfoSheet
 import PrimitivesComponents
 import ExplorerService
 
-// TODO: - move related logic to view model, e.g. @Query, presenation states, make model as observable
 public struct TransactionScene: View {
-    @Environment(\.openURL) private var openURL
+    @State private var model: TransactionDetailViewModel
 
-    @Query<TransactionsRequest>
-    private var transactions: [Primitives.TransactionExtended]
-
-    @State private var isPresentingShareSheet = false
-    @State private var isPresentingInfoSheet: InfoSheetType? = .none
-
-    private let input: TransactionSceneInput
-
-    private var model: TransactionDetailViewModel {
-        TransactionDetailViewModel(
-            model: TransactionViewModel(
-                explorerService: ExplorerService.standard,
-                transaction: transactions.first!,
-                formatter: .auto
-            )
-        )
-    }
-
-    public init(input: TransactionSceneInput) {
-        self.input = input
-        _transactions = Query(input.transactionRequest)
+    public init(model: TransactionDetailViewModel) {
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
@@ -44,7 +24,7 @@ public struct TransactionScene: View {
                 TransactionHeaderListItemView(
                     headerType: model.headerType,
                     showClearHeader: model.showClearHeader,
-                    action: onSelectTransactionHeader
+                    action: model.onSelectTransactionHeader
                 )
 
                 if model.showSwapAgain {
@@ -52,7 +32,7 @@ public struct TransactionScene: View {
                         StateButton(
                             text: model.swapAgain,
                             type: .primary(.normal),
-                            action: onSelectTransactionHeader
+                            action: model.onSelectTransactionHeader
                         )
                     }
                     .cleanListRow(topOffset: .zero)
@@ -65,7 +45,7 @@ public struct TransactionScene: View {
                             title: model.statusField,
                             subtitle: model.statusText,
                             subtitleStyle: model.statusTextStyle,
-                            infoAction: onSelectStatusInfo
+                            infoAction: model.onStatusInfo
                         )
                         switch model.statusType {
                         case .none:
@@ -103,7 +83,7 @@ public struct TransactionScene: View {
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
                         subtitleExtra: model.networkFeeFiatText,
-                        infoAction: onSelectNetworkFeeInfo
+                        infoAction: model.onNetworkFeeInfo
                     )
                 }
                 Section {
@@ -116,44 +96,24 @@ public struct TransactionScene: View {
             .contentMargins([.top], .small, for: .scrollContent)
             .listSectionSpacing(.compact)
             .background(Colors.grayBackground)
-        }
-        .navigationTitle(model.title)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    isPresentingShareSheet.toggle()
-                } label: {
-                    Images.System.share
+            .navigationTitle(model.title)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        model.onSelectShare()
+                    } label: {
+                        Images.System.share
+                    }
                 }
             }
+            .sheet(isPresented: $model.isPresentingShareSheet) {
+                ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
+            }
+            .sheet(item: $model.isPresentingInfoSheet) {
+                InfoSheetScene(model: InfoSheetViewModel(type: $0))
+            }
         }
-        .sheet(isPresented: $isPresentingShareSheet) {
-            ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
-        }
-        .sheet(item: $isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
-        }
-    }
-}
-
-// MARK: - Actions
-
-extension TransactionScene {
-    func onSelectTransactionHeader() {
-        if let headerLink = model.headerLink {
-            openURL(headerLink)
-        }
-    }
-
-    func onSelectNetworkFeeInfo() {
-        isPresentingInfoSheet = .networkFee(model.chain)
-    }
-
-    func onSelectStatusInfo() {
-        isPresentingInfoSheet = .transactionState(
-            imageURL: model.assetImage.imageURL,
-            placeholder: model.assetImage.placeholder,
-            state: model.transactionState
-        )
+        .observeQuery(request: $model.request, value: $model.transactionExtended)
+        .onChange(of: model.transactionExtended, model.onChangeTransaction)
     }
 }

@@ -34,10 +34,9 @@ struct TransactionsNavigationStack: View {
         NavigationStack(path: navigationPath) {
             TransactionsScene(model: model)
                 .observeQuery(
-                    request: $model.request,
+                    request: $model.filterModel.request,
                     value: $model.transactions
                 )
-                .onChange(of: model.filterModel, model.onChangeFilter)
                 .onChange(
                     of: model.currentWallet,
                     initial: true,
@@ -54,9 +53,9 @@ struct TransactionsNavigationStack: View {
                 .navigationTitle(model.title)
                 .navigationDestination(for: TransactionExtended.self) {
                     TransactionScene(
-                        input: TransactionSceneInput(
-                            transactionId: $0.id,
-                            walletId: model.walletId
+                        model: TransactionDetailViewModel(
+                            transaction: $0,
+                            walletId: model.wallet.id
                         )
                     )
                 }
@@ -79,7 +78,7 @@ struct TransactionsNavigationStack: View {
                 }
                 .sheet(isPresented: $model.isPresentingFilteringView) {
                     NavigationStack {
-                        TransactionsFilterScene(model: model.filterModel)
+                        TransactionsFilterScene(model: $model.filterModel)
                     }
                     .presentationDetentsForCurrentDeviceSize(expandable: true)
                     .presentationDragIndicator(.visible)

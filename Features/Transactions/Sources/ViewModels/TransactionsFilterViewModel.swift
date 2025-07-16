@@ -5,26 +5,36 @@ import Primitives
 import Store
 import Localization
 import PrimitivesComponents
-import Components
 
 @Observable
-public final class TransactionsFilterViewModel: Equatable {
-    public var chainsFilter: ChainsFilterViewModel
-    public var transactionTypesFilter: TransactionTypesFilterViewModel
-    public var isPresentingChains: Bool = false
-    public var isPresentingTypes: Bool = false
-
-    public init(chainsFilterModel: ChainsFilterViewModel,
-         transactionTypesFilter: TransactionTypesFilterViewModel) {
-        self.chainsFilter = chainsFilterModel
-        self.transactionTypesFilter = transactionTypesFilter
+@MainActor
+public final class TransactionsFilterViewModel {
+    private let wallet: Wallet
+    private let type: TransactionsRequestType
+    
+    public var chainsFilter: ChainsFilterViewModel {
+        didSet { request.filters = requestFilters }
     }
+    public var transactionTypesFilter: TransactionTypesFilterViewModel {
+        didSet { request.filters = requestFilters }
+    }
+    
+    public var request: TransactionsRequest
+    
+    var isPresentingChains: Bool = false
+    var isPresentingTypes: Bool = false
 
-    public static func == (lhs: TransactionsFilterViewModel, rhs: TransactionsFilterViewModel) -> Bool {
-        lhs.chainsFilter == rhs.chainsFilter &&
-        lhs.transactionTypesFilter == rhs.transactionTypesFilter &&
-        lhs.isPresentingChains == rhs.isPresentingChains &&
-        lhs.isPresentingTypes == rhs.isPresentingTypes
+    public init(
+        wallet: Wallet,
+        type: TransactionsRequestType
+    ) {
+        self.wallet = wallet
+        self.type = type
+        
+        self.chainsFilter = ChainsFilterViewModel(chains: wallet.chains)
+        self.transactionTypesFilter = TransactionTypesFilterViewModel(types: TransactionType.allCases)
+        
+        self.request = TransactionsRequest(walletId: wallet.id, type: type)
     }
 
     public var isAnyFilterSpecified: Bool {
@@ -51,7 +61,7 @@ public final class TransactionsFilterViewModel: Equatable {
         )
     }
     
-    public var requestFilters: [TransactionsRequestFilter] {
+    private var requestFilters: [TransactionsRequestFilter] {
         var filters: [TransactionsRequestFilter] = []
         
         if !chainsFilter.selectedChains.isEmpty {
@@ -69,39 +79,12 @@ public final class TransactionsFilterViewModel: Equatable {
 }
 
 // MARK: - Actions
-
 extension TransactionsFilterViewModel {
-    public func onClear() {
-        chainsFilter.selectedChains = []
-        transactionTypesFilter.selectedTypes = []
+    func onSelectChainsFilter() {
+        isPresentingChains = true
     }
-    
-    public func onFinishChainSelection(value: SelectionResult<Chain>) {
-        chainsFilter.selectedChains = value.items
-    }
-    
-    public func onFinishTypeSelection(value: SelectionResult<TransactionFilterType>) {
-        transactionTypesFilter.selectedTypes = value.items
-    }
-    
-    public func onSelectChainsFilter() {
-        isPresentingChains.toggle()
-    }
-    
-    public func onSelectTypesFilter() {
-        isPresentingTypes.toggle()
-    }
-}
 
-extension TransactionsFilterViewModel {
-    convenience init(wallet: Wallet) {
-        self.init(
-            chainsFilterModel: ChainsFilterViewModel(
-                chains: wallet.chains
-            ),
-            transactionTypesFilter: TransactionTypesFilterViewModel(
-                types: TransactionType.allCases
-            )
-        )
+    func onSelectTypesFilter() {
+        isPresentingTypes = true
     }
 }
