@@ -3,7 +3,17 @@
 import BigInt
 import ChainService
 import Foundation
-import Gemstone
+import class Gemstone.GemSwapper
+import protocol Gemstone.GemSwapperProtocol
+import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperQuoteRequest
+import struct Gemstone.SwapperQuoteAsset
+import struct Gemstone.SwapperOptions
+import struct Gemstone.SwapperQuoteData
+import struct Gemstone.SwapReferralFees
+import enum Gemstone.FetchQuoteData
+import struct Gemstone.Permit2ApprovalData
+import func Gemstone.getDefaultSlippage
 import GemstonePrimitives
 import NativeProviderService
 import Primitives
@@ -41,8 +51,8 @@ public final class SwapService: Sendable {
         )
     }
 
-    public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String) async throws -> [Gemstone.SwapperQuote] {
-        let swapRequest = Gemstone.SwapperQuoteRequest(
+    public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String) async throws -> [SwapperQuote] {
+        let swapRequest = SwapperQuoteRequest(
             fromAsset: SwapperQuoteAsset(asset: fromAsset),
             toAsset: SwapperQuoteAsset(asset: toAsset),
             walletAddress: walletAddress,
@@ -60,13 +70,13 @@ public final class SwapService: Sendable {
         return quotes
     }
 
-    public func getQuoteData(_ request: Gemstone.SwapperQuote, data: FetchQuoteData) async throws -> Gemstone.SwapperQuoteData {
+    public func getQuoteData(_ request: SwapperQuote, data: FetchQuoteData) async throws -> SwapperQuoteData {
         let quoteData = try await swapper.fetchQuoteData(quote: request, data: data)
         try Task.checkCancellation()
         return quoteData
     }
 
-    public func getPermit2Approval(quote: Gemstone.SwapperQuote) async throws -> Permit2ApprovalData? {
+    public func getPermit2Approval(quote: SwapperQuote) async throws -> Permit2ApprovalData? {
         try await swapper.fetchPermit2ForQuote(quote: quote)
     }
 }

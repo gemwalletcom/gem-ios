@@ -37,8 +37,14 @@ just bootstrap
 # Build the project
 just build
 
+# Build a specific package
+just build-package $PACKAGE. Example: just build-package Primitives
+
 # Build and run tests
-just test
+just test_all
+
+# Build and run tests for a specific package
+just test $PACKAGE. Example: just test PrimitivesTests
 
 # Run UI tests
 just test_ui

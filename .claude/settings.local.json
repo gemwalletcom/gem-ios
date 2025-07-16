@@ -37,7 +37,8 @@
       "Bash(git fetch:*)",
       "Bash(just)",
       "Bash(echo $?)",
-      "Bash(gh pr merge:*)"
+      "Bash(gh pr merge:*)",
+      "Bash(just build-package:*)"
     ],
     "deny": []
   }

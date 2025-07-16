@@ -1,4 +1,8 @@
-SIMULATOR_NAME := "iPhone 16"
+XCBEAUTIFY_ARGS := ""
+SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 16"
+
+xcbeautify:
+    @xcbeautify {{XCBEAUTIFY_ARGS}}
 
 list:
     just --list
@@ -42,14 +46,24 @@ build:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
+    ONLY_ACTIVE_ARCH=YES \
+    -destination "{{SIMULATOR_DEST}}" \
     build | xcbeautify
 
-test:
+build-package PACKAGE:
+    @set -o pipefail && xcodebuild -project Gem.xcodeproj \
+    -scheme {{PACKAGE}} \
+    -sdk iphonesimulator \
+    ONLY_ACTIVE_ARCH=YES \
+    -destination "{{SIMULATOR_DEST}}" \
+    build | xcbeautify
+
+test_all:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
+    ONLY_ACTIVE_ARCH=YES \
+    -destination "{{SIMULATOR_DEST}}" \
     -parallel-testing-enabled YES \
     test | xcbeautify
 
@@ -57,16 +71,18 @@ test_ui:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
+    ONLY_ACTIVE_ARCH=YES \
+    -destination "{{SIMULATOR_DEST}}" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     test | xcbeautify
 
-test-specific TARGET:
+test TARGET:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
+    ONLY_ACTIVE_ARCH=YES \
+    -destination "{{SIMULATOR_DEST}}" \
     -only-testing {{TARGET}} \
     -parallel-testing-enabled YES \
     test | xcbeautify

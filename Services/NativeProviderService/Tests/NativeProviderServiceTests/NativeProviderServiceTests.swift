@@ -1,5 +1,8 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
-import Gemstone
+import enum Gemstone.AlienError
+import struct Gemstone.AlienTarget
 @testable import NativeProviderService
 import Testing
 

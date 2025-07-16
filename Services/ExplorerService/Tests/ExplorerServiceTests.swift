@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
+import enum Gemstone.SwapperProvider
 import Preferences
 import PreferencesTestKit
 import Primitives

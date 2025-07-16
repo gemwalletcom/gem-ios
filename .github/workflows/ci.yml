@@ -67,4 +67,4 @@ jobs:
         run: just generate-stone
 
       - name: Unit Tests
-        run: just test
+        run: just test_all
