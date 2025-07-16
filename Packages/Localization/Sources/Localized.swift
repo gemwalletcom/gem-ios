@@ -281,8 +281,6 @@ public enum Localized {
     public static let secretPhrase = Localized.tr("Localizable", "common.secret_phrase", fallback: "Secret Phrase")
     /// See All
     public static let seeAll = Localized.tr("Localizable", "common.see_all", fallback: "See All")
-    /// Select
-    public static let select = Localized.tr("Localizable", "common.select", fallback: "Select")
     /// Share
     public static let share = Localized.tr("Localizable", "common.share", fallback: "Share")
     /// Gem
