@@ -46,6 +46,18 @@ public struct TransactionScene: View {
                     showClearHeader: model.showClearHeader,
                     action: onSelectTransactionHeader
                 )
+
+                if model.showSwapAgain {
+                    Section {
+                        StateButton(
+                            text: model.swapAgain,
+                            type: .primary(.normal),
+                            action: onSelectTransactionHeader
+                        )
+                    }
+                    .cleanListRow(topOffset: .zero)
+                }
+
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
                     HStack(spacing: .small) {
@@ -104,19 +116,6 @@ public struct TransactionScene: View {
             .contentMargins([.top], .small, for: .scrollContent)
             .listSectionSpacing(.compact)
             .background(Colors.grayBackground)
-
-            if model.showSwapAgain {
-                Spacer()
-                StateButton(
-                    text: model.swapAgain,
-                    type: .primary(.normal),
-                    action: onSelectTransactionHeader
-                )
-                .frame(maxWidth: .scene.button.maxWidth)
-            }
-        }
-        .if(model.showSwapAgain) {
-            $0.padding(.bottom, .scene.bottom)
         }
         .navigationTitle(model.title)
         .toolbar {
