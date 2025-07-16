@@ -1,7 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
+import struct Gemstone.AlienTarget
+import enum Gemstone.AlienError
+import func Gemstone.alienMethodToString
 
 protocol URLRequestConvertible {
     func asRequest() throws -> URLRequest

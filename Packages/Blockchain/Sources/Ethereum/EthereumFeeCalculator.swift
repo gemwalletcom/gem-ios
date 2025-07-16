@@ -2,7 +2,9 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import protocol Gemstone.GemFeeCalculatorProtocol
+import class Gemstone.GemFeeCalculator
+import struct Gemstone.GemEthereumFeeHistory
 import GemstonePrimitives
 import BigInt
 

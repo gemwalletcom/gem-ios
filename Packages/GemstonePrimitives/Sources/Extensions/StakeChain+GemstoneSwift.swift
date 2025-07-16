@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import class Gemstone.Config
 
 extension StakeChain {
     public var canChangeAmountOnUnstake: Bool {

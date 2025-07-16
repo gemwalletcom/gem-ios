@@ -46,13 +46,23 @@ build:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
+    ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     build | xcbeautify
 
-test:
+build-package PACKAGE:
+    @set -o pipefail && xcodebuild -project Gem.xcodeproj \
+    -scheme {{PACKAGE}} \
+    -sdk iphonesimulator \
+    ONLY_ACTIVE_ARCH=YES \
+    -destination "{{SIMULATOR_DEST}}" \
+    build | xcbeautify
+
+test_all:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
+    ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -parallel-testing-enabled YES \
     test | xcbeautify
@@ -61,15 +71,17 @@ test_ui:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
     -sdk iphonesimulator \
+    ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     test | xcbeautify
 
-test-specific TARGET:
+test TARGET:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
+    ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -only-testing {{TARGET}} \
     -parallel-testing-enabled YES \
