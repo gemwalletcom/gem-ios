@@ -6,7 +6,9 @@ import Store
 import Localization
 import PrimitivesComponents
 
-public struct TransactionsFilterViewModel: Equatable {
+@Observable
+@MainActor
+public final class TransactionsFilterViewModel {
     private let wallet: Wallet
     private let type: TransactionsRequestType
     
@@ -18,6 +20,9 @@ public struct TransactionsFilterViewModel: Equatable {
     }
     
     public var request: TransactionsRequest
+    
+    var isPresentingChains: Bool = false
+    var isPresentingTypes: Bool = false
 
     public init(
         wallet: Wallet,
@@ -70,5 +75,16 @@ public struct TransactionsFilterViewModel: Equatable {
         }
         
         return filters
+    }
+}
+
+// MARK: - Actions
+extension TransactionsFilterViewModel {
+    func onSelectChainsFilter() {
+        isPresentingChains = true
+    }
+
+    func onSelectTypesFilter() {
+        isPresentingTypes = true
     }
 }

@@ -28,6 +28,16 @@ public struct TransactionsRequest: ValueObservationQueryable {
     }
 
     public func fetch(_ db: Database) throws -> [TransactionExtended] {
+        try Self.fetch(db, type: type, filters: filters, walletId: walletId, limit: limit)
+    }
+
+    public static func fetch(
+        _ db: Database,
+        type: TransactionsRequestType,
+        filters: [TransactionsRequestFilter],
+        walletId: String,
+        limit: Int
+    ) throws -> [TransactionExtended] {
         let states = states(type: type)
         let types = types(type: type)
         var request = TransactionRecord
@@ -81,7 +91,7 @@ extension TransactionsRequest {
         }
     }
 
-    private func states(type: TransactionsRequestType) -> [String] {
+    private static func states(type: TransactionsRequestType) -> [String] {
         switch type {
         case .pending:
             [TransactionState.pending.rawValue]
@@ -92,7 +102,7 @@ extension TransactionsRequest {
         }
     }
 
-    private func types(type: TransactionsRequestType) -> [String] {
+    private static func types(type: TransactionsRequestType) -> [String] {
         switch type {
         case .assetsTransactionType(_, let type, _):
             [type.rawValue]
