@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "บนเครือข่าย %@ ข้อกำหนดการเดิมพันขั้นต่ำคือ ** %@ **";
 "asset.add_to_wallet" = "เพิ่มลงในกระเป๋าสตางค์";
 "asset.hide_from_wallet" = "ซ่อนจากกระเป๋าสตางค์";
+"common.details" = "รายละเอียด";
+"transaction.swap_again" = "สลับอีกครั้ง";

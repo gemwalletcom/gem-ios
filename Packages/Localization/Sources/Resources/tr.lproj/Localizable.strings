@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "%@ ağında, minimum stake gereksinimi ** %@ **'dir.";
 "asset.add_to_wallet" = "Cüzdana ekle";
 "asset.hide_from_wallet" = "Cüzdandan gizle";
+"common.details" = "Detaylar";
+"transaction.swap_again" = "Tekrar Değiştir";

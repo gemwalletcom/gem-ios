@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "%@ नेटवर्क पर, न्यूनतम स्टेकिंग आवश्यकता ** %@ ** है.";
 "asset.add_to_wallet" = "वॉलेट में जोड़ें";
 "asset.hide_from_wallet" = "बटुए से छिपाएँ";
+"common.details" = "विवरण";
+"transaction.swap_again" = "फिर से स्वैप करें";

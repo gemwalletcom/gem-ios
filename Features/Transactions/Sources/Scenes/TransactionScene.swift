@@ -11,7 +11,10 @@ import InfoSheet
 import PrimitivesComponents
 import ExplorerService
 
+// TODO: - move related logic to view model, e.g. @Query, presenation states, make model as observable
 public struct TransactionScene: View {
+    @Environment(\.openURL) private var openURL
+
     @Query<TransactionsRequest>
     private var transactions: [Primitives.TransactionExtended]
 
@@ -21,7 +24,7 @@ public struct TransactionScene: View {
     private let input: TransactionSceneInput
 
     private var model: TransactionDetailViewModel {
-        return TransactionDetailViewModel(
+        TransactionDetailViewModel(
             model: TransactionViewModel(
                 explorerService: ExplorerService.standard,
                 transaction: transactions.first!,
@@ -40,7 +43,8 @@ public struct TransactionScene: View {
             List {
                 TransactionHeaderListItemView(
                     headerType: model.headerType,
-                    showClearHeader: model.showClearHeader
+                    showClearHeader: model.showClearHeader,
+                    action: onSelectTransactionHeader
                 )
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
@@ -49,7 +53,7 @@ public struct TransactionScene: View {
                             title: model.statusField,
                             subtitle: model.statusText,
                             subtitleStyle: model.statusTextStyle,
-                            infoAction: onStatusInfo
+                            infoAction: onSelectStatusInfo
                         )
                         switch model.statusType {
                         case .none:
@@ -74,7 +78,7 @@ public struct TransactionScene: View {
                         subtitle: model.network,
                         assetImage: model.networkAssetImage
                     )
-                    
+
                     if let item = model.providerListItem {
                         ListItemImageView(
                             title: item.title,
@@ -82,12 +86,12 @@ public struct TransactionScene: View {
                             assetImage: item.assetImage
                         )
                     }
-                    
+
                     ListItemView(
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
                         subtitleExtra: model.networkFeeFiatText,
-                        infoAction: onNetworkFeeInfo
+                        infoAction: onSelectNetworkFeeInfo
                     )
                 }
                 Section {
@@ -100,22 +104,35 @@ public struct TransactionScene: View {
             .contentMargins([.top], .small, for: .scrollContent)
             .listSectionSpacing(.compact)
             .background(Colors.grayBackground)
-            .navigationTitle(model.title)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        isPresentingShareSheet.toggle()
-                    } label: {
-                        Images.System.share
-                    }
+
+            if model.showSwapAgain {
+                Spacer()
+                StateButton(
+                    text: model.swapAgain,
+                    type: .primary(.normal),
+                    action: onSelectTransactionHeader
+                )
+                .frame(maxWidth: .scene.button.maxWidth)
+            }
+        }
+        .if(model.showSwapAgain) {
+            $0.padding(.bottom, .scene.bottom)
+        }
+        .navigationTitle(model.title)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    isPresentingShareSheet.toggle()
+                } label: {
+                    Images.System.share
                 }
             }
-            .sheet(isPresented: $isPresentingShareSheet) {
-                ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
-            }
-            .sheet(item: $isPresentingInfoSheet) {
-                InfoSheetScene(model: InfoSheetViewModel(type: $0))
-            }
+        }
+        .sheet(isPresented: $isPresentingShareSheet) {
+            ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
+        }
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
     }
 }
@@ -123,11 +140,17 @@ public struct TransactionScene: View {
 // MARK: - Actions
 
 extension TransactionScene {
-    func onNetworkFeeInfo() {
+    func onSelectTransactionHeader() {
+        if let headerLink = model.headerLink {
+            openURL(headerLink)
+        }
+    }
+
+    func onSelectNetworkFeeInfo() {
         isPresentingInfoSheet = .networkFee(model.chain)
     }
 
-    func onStatusInfo() {
+    func onSelectStatusInfo() {
         isPresentingInfoSheet = .transactionState(
             imageURL: model.assetImage.imageURL,
             placeholder: model.assetImage.placeholder,

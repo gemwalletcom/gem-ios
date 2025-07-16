@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "On the %@ network, the minimum staking requirement is **%@**.";
 "asset.add_to_wallet" = "Add to wallet";
 "asset.hide_from_wallet" = "Hide from wallet";
+"common.details" = "Details";
+"transaction.swap_again" = "Swap Again";

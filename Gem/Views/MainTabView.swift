@@ -12,6 +12,8 @@ import NFT
 import TransactionsService
 import WalletTab
 import Transactions
+import Swap
+import Assets
 
 struct MainTabView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -26,21 +28,19 @@ struct MainTabView: View {
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.walletService) private var walletService
 
-    let model: MainTabViewModel
+    private let model: MainTabViewModel
 
     @Query<TransactionsCountRequest>
     private var transactions: Int
 
     private var tabViewSelection: Binding<TabItem> {
-        return Binding(
-            get: {
-                navigationState.selectedTab
-            },
-            set: {
-                onSelect(tab: $0)
-            }
+        Binding(
+            get: { navigationState.selectedTab },
+            set: { onSelect(tab: $0) }
         )
     }
+
+    @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
 
     init(model: MainTabViewModel) {
         self.model = model
@@ -55,7 +55,8 @@ struct MainTabView: View {
                     bannerService: bannerService,
                     walletService: walletService,
                     observablePreferences: observablePreferences,
-                    wallet: model.wallet
+                    wallet: model.wallet,
+                    isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
                 )
             )
             .tabItem {
@@ -77,7 +78,8 @@ struct MainTabView: View {
                         nftService: nftService,
                         walletService: walletService,
                         wallet: model.wallet,
-                        sceneStep: .collections
+                        sceneStep: .collections,
+                        isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
                     )
                 )
                 .tabItem {
@@ -108,6 +110,13 @@ struct MainTabView: View {
                 tabItem(Localized.Settings.title, Images.Tabs.settings)
             }
             .tag(TabItem.settings)
+        }
+        .sheet(item: $isPresentingSelectedAssetInput) { input in
+            SelectedAssetNavigationStack(
+                input: input,
+                wallet: model.wallet,
+                onComplete: { onComplete(type: input.type) }
+            )
         }
         .onChange(of: model.walletId, onWalletIdChange)
         .onChange(
@@ -186,12 +195,24 @@ extension MainTabView {
             case .asset(let assetId), .buyAsset(let assetId):
                 let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Asset(asset: asset))
-            case .swapAsset(_, _):
-                //let fromAsset = try walletsService.assetsService.getAsset(for: fromAssetId)
-                //let toAsset = try walletsService.assetsService.getAsset(for: toAssetId)
-                //TODO:
-                //navigationStateManager.wallet.append(Scenes.Asset(asset: fromAsset))
-                break
+            case let .swapAsset(fromAsetId, toAssetId):
+                async let getFromAsset = try await walletsService.assetsService.getOrFetchAsset(for: fromAsetId)
+                async let getToAsset: Asset? = {
+                    guard let id = toAssetId else { return nil }
+                    return try await walletsService.assetsService.getOrFetchAsset(for: id)
+                }()
+
+                let (fromAsset, toAsset) = try await (getFromAsset, getToAsset)
+                let account = try model.wallet.account(for: fromAsset.chain)
+
+                isPresentingSelectedAssetInput = SelectedAssetInput(
+                    type: .swap(fromAsset, toAsset),
+                    assetAddress: AssetAddress(
+                        asset: account.chain.asset,
+                        address: account.address
+                    )
+                )
+                return
             case .test, .unknown:
                 break
             }
@@ -210,6 +231,40 @@ extension MainTabView {
         
         Task {
             try await priceObserverService.setupAssets()
+        }
+    }
+
+    private func onComplete(type: SelectedAssetType) {
+        switch type {
+        case .receive, .stake, .buy:
+            isPresentingSelectedAssetInput = nil
+        case let .send(type):
+            switch type {
+            case .nft:
+                if navigationState.selectedTab == .collections {
+                    navigationState.collections.removeAll()
+                    navigationState.activity.removeAll()
+                    navigationState.selectedTab = .activity
+                }
+            case .asset:
+                break
+            }
+            isPresentingSelectedAssetInput = nil
+        case let .swap(fromAsset, _):
+            Task {
+                let asset = try await walletsService.assetsService.getOrFetchAsset(for: fromAsset.id)
+
+                switch navigationState.selectedTab {
+                case .wallet:
+                    navigationState.wallet = NavigationPath([Scenes.Asset(asset: asset)])
+                case .activity:
+                    navigationState.wallet = NavigationPath([Scenes.Asset(asset: asset)])
+                    navigationState.selectedTab = .wallet
+                case .markets, .settings, .collections:
+                    break
+                }
+                isPresentingSelectedAssetInput = nil
+            }
         }
     }
 }

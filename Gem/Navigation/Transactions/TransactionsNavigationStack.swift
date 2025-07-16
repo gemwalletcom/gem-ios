@@ -73,7 +73,7 @@ struct TransactionsNavigationStack: View {
                                 wallet: model.wallet,
                                 asset: $0.asset
                             ),
-                            isPresentingAssetSelectedInput: .constant(.none)
+                            isPresentingSelectedAssetInput: .constant(.none)
                         )
                     )
                 }
