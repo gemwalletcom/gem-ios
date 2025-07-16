@@ -12,7 +12,6 @@ public enum TransactionHeaderType {
 }
 
 public struct TransactionHeaderView: View {
-    
     public let type: TransactionHeaderType
     
     public init(type: TransactionHeaderType) {

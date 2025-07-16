@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "En la red %@, el requisito mínimo de staking es ** %@ **.";
 "asset.add_to_wallet" = "Añadir a la billetera";
 "asset.hide_from_wallet" = "Ocultar de la billetera";
+"common.details" = "Detalles";
+"transaction.swap_again" = "Intercambiar de nuevo";

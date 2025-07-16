@@ -86,7 +86,6 @@ public struct AssetScene: View {
                 } else {
                     networkView
                 }
-                
             }
 
             if model.showBalances {

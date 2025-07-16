@@ -46,7 +46,8 @@ public final class TransactionDetailViewModel {
     var networkFeeField: String { Localized.Transfer.networkFee }
     var dateField: String { Localized.Transaction.date }
     var memoField: String { Localized.Transfer.memo }
-    
+    var swapAgain: String { Localized.Transaction.swapAgain }
+
     var providerListItem: ListItemImageValue? {
         guard
             let metadata = model.transaction.transaction.metadata,
@@ -183,7 +184,10 @@ public final class TransactionDetailViewModel {
     }
 
     var showMemoField: Bool {
-        memo != nil
+        if let memo {
+            return memo.isNotEmpty
+        }
+        return false
     }
 
     var memo: String? {
@@ -202,6 +206,20 @@ public final class TransactionDetailViewModel {
         switch headerType {
         case .amount, .nft: true
         case .swap: false
+        }
+    }
+
+    var showSwapAgain: Bool {
+        switch headerType {
+        case .amount, .nft: false
+        case .swap: true
+        }
+    }
+
+    var headerLink: URL? {
+        switch model.transaction.transaction.metadata {
+        case .null, .nft, .none: .none
+        case .swap(let metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
         }
     }
 

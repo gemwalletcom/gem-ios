@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "%@ নেটওয়ার্কে, ন্যূনতম স্টেকিং প্রয়োজনীয়তা হল ** %@ **।";
 "asset.add_to_wallet" = "ওয়ালেটে যোগ করুন";
 "asset.hide_from_wallet" = "মানিব্যাগ থেকে লুকান";
+"common.details" = "বিস্তারিত";
+"transaction.swap_again" = "আবার অদলবদল করুন";

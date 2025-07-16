@@ -3,17 +3,22 @@
 import Foundation
 import SwiftUI
 import Style
+import Primitives
+import Components
 
 public struct TransactionHeaderListItemView: View {
     let headerType: TransactionHeaderType
     let showClearHeader: Bool
+    let action: VoidAction
 
     public init(
         headerType: TransactionHeaderType,
-        showClearHeader: Bool
+        showClearHeader: Bool,
+        action: VoidAction = nil
     ) {
         self.headerType = headerType
         self.showClearHeader = showClearHeader
+        self.action = action
     }
 
     public var body: some View {
@@ -27,6 +32,11 @@ public struct TransactionHeaderListItemView: View {
         } else {
             Section {
                 TransactionHeaderView(type: headerType)
+            }
+            .ifLet(action) { view, action in
+                Button(action: action) {
+                    view
+                }
             }
         }
     }

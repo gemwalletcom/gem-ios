@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "%@ネットワークでは、最小ステーキング要件は ** %@ ** です。";
 "asset.add_to_wallet" = "ウォレットに追加";
 "asset.hide_from_wallet" = "財布から隠す";
+"common.details" = "詳細";
+"transaction.swap_again" = "再び交換";

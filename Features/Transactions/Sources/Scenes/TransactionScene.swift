@@ -11,6 +11,7 @@ import InfoSheet
 import PrimitivesComponents
 import ExplorerService
 
+// TODO: - move related logic to view model, e.g. @Query, presenation states, make model as observable
 public struct TransactionScene: View {
     @State private var model: TransactionDetailViewModel
 
@@ -23,7 +24,8 @@ public struct TransactionScene: View {
             List {
                 TransactionHeaderListItemView(
                     headerType: model.headerType,
-                    showClearHeader: model.showClearHeader
+                    showClearHeader: model.showClearHeader,
+                    action: onSelectTransactionHeader
                 )
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
@@ -57,7 +59,7 @@ public struct TransactionScene: View {
                         subtitle: model.network,
                         assetImage: model.networkAssetImage
                     )
-                    
+
                     if let item = model.providerListItem {
                         ListItemImageView(
                             title: item.title,
@@ -65,7 +67,7 @@ public struct TransactionScene: View {
                             assetImage: item.assetImage
                         )
                     }
-                    
+
                     ListItemView(
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
@@ -104,4 +106,3 @@ public struct TransactionScene: View {
         .onChange(of: model.transactionExtended, model.onChangeTransaction)
     }
 }
-

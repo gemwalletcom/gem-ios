@@ -83,9 +83,11 @@ public extension Sizing {
         public static let semiExtraLarge: CGFloat = 102
         /// 120
         public static let extraLarge: CGFloat = 120
-        
+
         /// 44
         public static let asset: CGFloat = 44
+        /// 44
+        public static let app: CGFloat = Self.asset
         
         public struct overlayImage {
             /// 16

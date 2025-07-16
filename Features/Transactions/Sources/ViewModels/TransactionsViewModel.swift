@@ -24,6 +24,7 @@ public final class TransactionsViewModel {
     public var transactions: [TransactionExtended] = []
     public var filterModel: TransactionsFilterViewModel
 
+    // TODO: - separate presenting sheet state logic to separate type
     public var isPresentingFilteringView: Bool = false
     public var isPresentingSelectAssetType: SelectAssetType?
 
