@@ -26,6 +26,18 @@ public struct TransactionScene: View {
                     showClearHeader: model.showClearHeader,
                     action: model.onSelectTransactionHeader
                 )
+
+                if model.showSwapAgain {
+                    Section {
+                        StateButton(
+                            text: model.swapAgain,
+                            type: .primary(.normal),
+                            action: onSelectTransactionHeader
+                        )
+                    }
+                    .cleanListRow(topOffset: .zero)
+                }
+
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
                     HStack(spacing: .small) {

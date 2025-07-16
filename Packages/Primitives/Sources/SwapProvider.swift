@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum SwapProvider: String, Codable, Equatable, Sendable {
+public enum SwapProvider: String, Codable, Equatable, Hashable, Sendable {
 	case uniswapV3 = "uniswap_v3"
 	case uniswapV4 = "uniswap_v4"
 	case pancakeswapV3 = "pancakeswap_v3"
