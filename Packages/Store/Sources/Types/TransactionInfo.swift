@@ -8,8 +8,8 @@ public struct TransactionInfo: Codable, FetchableRecord {
     public let transaction: TransactionRecord
     public let asset: AssetRecord
     public let feeAsset: AssetRecord
-    public let price: Price?
-    public let feePrice: Price?
+    public let price: PriceRecord?
+    public let feePrice: PriceRecord?
     public let assets: [AssetRecord]
     public let prices: [PriceRecord]
 }
@@ -20,8 +20,8 @@ extension TransactionInfo {
             transaction: transaction.mapToTransaction(),
             asset: asset.mapToAsset(),
             feeAsset: feeAsset.mapToAsset(),
-            price: price,
-            feePrice: feePrice,
+            price: price?.mapToPrice(),
+            feePrice: feePrice?.mapToPrice(),
             assets: assets.map { $0.mapToAsset() },
             prices: prices.map { $0.mapToAssetPrice() }
         )
