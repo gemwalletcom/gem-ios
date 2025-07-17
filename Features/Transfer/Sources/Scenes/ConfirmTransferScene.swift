@@ -133,16 +133,14 @@ extension ConfirmTransferScene {
                 }
             }
             
-            if let swapDetailsViewModel = model.swapDetailsViewModel {
-                Section {
+
+            Section {
+                if let swapDetailsViewModel = model.swapDetailsViewModel {
                     NavigationCustomLink(
                         with: SwapDetailsListView(model: swapDetailsViewModel),
                         action: model.onSelectSwapDetails
                     )
                 }
-            }
-
-            Section {
                 if model.shouldShowFeeRatesSelector {
                     NavigationCustomLink(
                         with: networkFeeView,

@@ -297,7 +297,7 @@ extension SwapSceneViewModel {
     }
 
     func onSelectSwapDetails() {
-        isPresentedInfoSheet = .swapDetails
+        isPresentingInfoSheet = .swapDetails
     }
 
     func onFinishSwapProviderSelection(_ quote: SwapperQuote) {

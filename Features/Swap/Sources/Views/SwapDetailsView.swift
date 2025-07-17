@@ -23,10 +23,11 @@ public struct SwapDetailsView: View {
             case .noData: List { ListItemErrorView(errorTitle: nil, error: AnyError(Localized.Errors.errorOccured)) }
             }
         }
-        .contentMargins(.top, .scene.top, for: .scrollContent)
         .toolbarDismissItem(title: .done, placement: .topBarLeading)
         .navigationTitle(Localized.Common.details)
         .navigationBarTitleDisplayMode(.inline)
+        .listSectionSpacing(.compact)
+        .contentMargins([.top], .extraSmall, for: .scrollContent)
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
@@ -52,6 +53,9 @@ public struct SwapDetailsView: View {
                 } else {
                     view
                 }
+            } header: {
+                Text(Localized.Common.provider)
+                    .listRowInsets(.horizontalMediumInsets)
             }
             
             Section {

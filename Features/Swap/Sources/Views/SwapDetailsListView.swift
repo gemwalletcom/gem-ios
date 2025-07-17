@@ -18,15 +18,18 @@ public struct SwapDetailsListView: View {
             
             Spacer()
             
-            VStack(spacing: .tiny) {
+            VStack(alignment: .trailing, spacing: .tiny) {
                 if let rate = model.rateText {
-                    ListItemView(subtitle: rate)
+                    HStack(spacing: .zero) {
+                        Text(rate)
+                            .textStyle(.calloutSecondary)
+                        if model.shouldShowPriceImpactInDetails, let value = model.priceImpactValue {
+                            Text(value)
+                                .textStyle(model.priceImpactModel.priceImpactStyle)
+                        }
+                    }
                 }
-                ListItemImageView(
-                    title: nil,
-                    subtitle: model.providerText,
-                    assetImage: model.providerImage
-                )
+                ListItemView(subtitle: model.providerText)
             }
         }
     }

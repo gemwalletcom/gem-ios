@@ -106,6 +106,16 @@ public final class SwapDetailsViewModel {
             toValue: selectedQuote.toValue
         )
     }
+    var shouldShowPriceImpactInDetails: Bool {
+        switch priceImpactModel.value?.type {
+        case .low, .positive, nil: false
+        case .medium, .high: true
+        }
+    }
+    var priceImpactValue: String? {
+        guard let value = priceImpactModel.value?.value else { return nil }
+        return " (\(value))"
+    }
     
     // MARK: - Slippage
     var slippageField: String { Localized.Swap.slippage }
