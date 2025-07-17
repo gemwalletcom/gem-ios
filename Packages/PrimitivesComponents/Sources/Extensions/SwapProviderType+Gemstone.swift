@@ -4,11 +4,10 @@ import Foundation
 import Primitives
 import Style
 import SwiftUI
-import struct Gemstone.SwapperProviderType
 
-public extension Gemstone.SwapperProviderType {
+public extension SwapProvider {
     var image: Image {
-        switch id {
+        switch self {
         case .uniswapV3, .uniswapV4: Images.SwapProviders.uniswap
         case .jupiter: Images.SwapProviders.jupiter
         case .orca: Images.SwapProviders.orca

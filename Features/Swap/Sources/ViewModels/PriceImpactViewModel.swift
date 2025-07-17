@@ -10,19 +10,19 @@ import GemstonePrimitives
 import Formatters
 
 struct PriceImpactViewModel {
-    let fromAssetData: AssetData
+    let fromAssetPrice: AssetPriceValue
     let fromValue: String
-    let toAssetData: AssetData
+    let toAssetPrice: AssetPriceValue
     let toValue: String
 
     private let swapConfig = GemstoneConfig.shared.getSwapConfig()
     private let valueFormatter = ValueFormatter(style: .full)
     private let percentFormatter = CurrencyFormatter(type: .percent)
 
-    init(fromAssetData: AssetData, fromValue: String, toAssetData: AssetData, toValue: String) {
-        self.fromAssetData = fromAssetData
+    init(fromAssetPrice: AssetPriceValue, fromValue: String, toAssetPrice: AssetPriceValue, toValue: String) {
+        self.fromAssetPrice = fromAssetPrice
         self.fromValue = fromValue
-        self.toAssetData = toAssetData
+        self.toAssetPrice = toAssetPrice
         self.toValue = toValue
     }
 
@@ -32,7 +32,7 @@ struct PriceImpactViewModel {
     }
     var highImpactWarningDescription: String? {
         guard let priceImpactText else { return nil }
-        return Localized.Swap.PriceImpactWarning.description(priceImpactText, fromAssetData.asset.symbol)
+        return Localized.Swap.PriceImpactWarning.description(priceImpactText, fromAssetPrice.asset.symbol)
     }
 
     var priceImpactTitle: String { Localized.Swap.priceImpact }
@@ -42,13 +42,18 @@ struct PriceImpactViewModel {
         priceImpactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
     }
 
-    func priceImpactColor(for type: PriceImpactType) -> Color {
-        switch type {
-        case .low: Colors.black
+    var priceImpactStyle: TextStyle {
+        let color = switch value?.type {
+        case .low, nil: Colors.secondaryText
         case .medium: Colors.orange
         case .high: Colors.red
         case .positive: Colors.green
         }
+
+        return TextStyle(
+            font: .callout,
+            color: color
+        )
     }
 }
 
@@ -64,10 +69,10 @@ extension PriceImpactViewModel {
 
     private var rawImpactPercentage: Double? {
         guard
-            let fromAmount = getSwapAmount(value: fromValue, decimals: fromAssetData.asset.decimals.asInt),
-            let toAmount = getSwapAmount(value: toValue, decimals: toAssetData.asset.decimals.asInt),
-            let fromValue = assetFiatValue(value: fromAmount, price: fromAssetData.price?.price),
-            let toValue = assetFiatValue(value: toAmount, price: toAssetData.price?.price)
+            let fromAmount = getSwapAmount(value: fromValue, decimals: fromAssetPrice.asset.decimals.asInt),
+            let toAmount = getSwapAmount(value: toValue, decimals: toAssetPrice.asset.decimals.asInt),
+            let fromValue = assetFiatValue(value: fromAmount, price: fromAssetPrice.price?.price),
+            let toValue = assetFiatValue(value: toAmount, price: toAssetPrice.price?.price)
         else {
             return nil
         }
@@ -99,7 +104,7 @@ extension PriceImpactViewModel {
         case ..<0:
             return PriceImpactValue(type: .positive, value: priceImpactPercentage)
         case 0...1:
-            return nil
+            return PriceImpactValue(type: .low, value: priceImpactPercentage)
         case 1...5:
             return PriceImpactValue(type: .medium, value: priceImpactPercentage)
         default:

@@ -44,7 +44,6 @@ public final class SwapSceneViewModel {
     var amountInputModel: InputValidationViewModel = InputValidationViewModel(mode: .onDemand)
     var toValue: String = ""
     var focusField: SwapScene.Field?
-    var rateDirection: AssetRateFormatter.Direction = .direct
 
     private let onSwap: TransferDataAction
     private let swapQuotesProvider: any SwapQuotesProvidable
@@ -52,12 +51,6 @@ public final class SwapSceneViewModel {
     private let preferences: Preferences
     private let formatter = SwapValueFormatter(valueFormatter: .full)
     private let toValueFormatter = SwapValueFormatter(valueFormatter: ValueFormatter(style: .auto))
-    private static let timeFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.minute]
-        formatter.unitsStyle = .short
-        return formatter
-    }()
 
     public init(
         preferences: Preferences = Preferences.standard,
@@ -88,26 +81,23 @@ public final class SwapSceneViewModel {
     }
 
     var title: String { Localized.Wallet.swap }
-
     var swapFromTitle: String { Localized.Swap.youPay }
     var swapToTitle: String { Localized.Swap.youReceive }
     var errorTitle: String { Localized.Errors.errorOccured }
 
-    var providerField: String { Localized.Common.provider }
-
-    var swapEstimationTitle: String { Localized.Swap.EstimatedTime.title }
-    var swapEstimationText: String? {
-        guard
-            let estimation = selectedSwapQuote?.etaInSeconds, estimation > 60,
-            let estimationTime = Self.timeFormatter.string(from: TimeInterval(estimation))
-        else {
-            return nil
-        }
-        return String(format: "%@ %@", "≈", estimationTime)
+    public var swapDetailsViewModel: SwapDetailsViewModel? {
+        guard let selectedSwapQuote, let fromAsset, let toAsset else { return nil }
+        return SwapDetailsViewModel(
+            state: swapState.quotes,
+            fromAssetPrice: AssetPriceValue(asset: fromAsset.asset, price: fromAsset.price),
+            toAssetPrice: AssetPriceValue(asset: toAsset.asset, price: toAsset.price),
+            selectedQuote: selectedSwapQuote.asPrimitive,
+            preferences: preferences,
+            swapProviderSelectAction: { [weak self] quote in
+                self?.onFinishSwapProviderSelection(quote)
+            }
+        )
     }
-
-    var providerText: String? { selectedProvderModel?.providerText }
-    var providerImage: AssetImage? { selectedProvderModel?.providerImage }
 
     var actionButtonTitle: String {
         if amountInputModel.isValid == false, let fromAsset {
@@ -168,35 +158,8 @@ public final class SwapSceneViewModel {
         swapState.quotes.isLoading
     }
 
-    var allowSelectProvider: Bool {
-        swapState.quotes.value.or([]).count > 1
-    }
-
     var assetIds: [AssetId] {
         [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
-    }
-
-    var rateTitle: String { Localized.Buy.rate }
-    var rateText: String? {
-        guard let selectedSwapQuote, let fromAsset, let toAsset else { return nil }
-
-        return try? AssetRateFormatter().rate(
-            fromAsset: fromAsset.asset,
-            toAsset: toAsset.asset,
-            fromValue: selectedSwapQuote.fromValueBigInt,
-            toValue: selectedSwapQuote.toValueBigInt,
-            direction: rateDirection
-        )
-    }
-
-    var priceImpactModel: PriceImpactViewModel? {
-        guard let selectedSwapQuote, let fromAsset, let toAsset else { return nil }
-        return PriceImpactViewModel(
-            fromAssetData: fromAsset,
-            fromValue: selectedSwapQuote.fromValue,
-            toAssetData: toAsset,
-            toValue: selectedSwapQuote.toValue
-        )
     }
 
     func swapTokenModel(type: SelectAssetSwapType) -> SwapTokenViewModel? {
@@ -211,17 +174,7 @@ public final class SwapSceneViewModel {
             type: type
         )
     }
-    
-    func switchRateDirection() {
-        switch rateDirection {
-        case .direct: rateDirection = .inverse
-        case .inverse: rateDirection = .direct
-        }
-    }
 
-    public func swapProvidersViewModel(asset: AssetData) -> SwapProvidersViewModel {
-        SwapProvidersViewModel(state: swapProvidersViewModelState(for: asset))
-    }
 }
 
 // MARK: - Business Logic
@@ -310,7 +263,7 @@ extension SwapSceneViewModel {
             return
         }
 
-        if let priceImpactModel,
+        if let priceImpactModel = swapDetailsViewModel?.priceImpactModel,
            let text = priceImpactModel.highImpactWarningDescription,
            priceImpactModel.showPriceImpactWarning
         {
@@ -343,14 +296,12 @@ extension SwapSceneViewModel {
         isPresentingInfoSheet = .selectAsset(.receive(chains: chains, assetIds: assetIds))
     }
 
-    func onSelectProviderSelector() {
-        guard let toAsset else { return }
-        isPresentingInfoSheet = .swapProvider(toAsset)
+    func onSelectSwapDetails() {
+        isPresentingInfoSheet = .swapDetails
     }
 
-    public func onFinishSwapProvderSelection(list: [SwapProviderItem]) {
-        selectedSwapQuote = list.first?.swapQuote
-        isPresentingInfoSheet = nil
+    func onFinishSwapProviderSelection(_ quote: SwapperQuote) {
+        selectedSwapQuote = quote
     }
 
     public func onFinishAssetSelection(asset: Asset) {
@@ -469,33 +420,6 @@ extension SwapSceneViewModel {
         }
     }
 
-    private func swapProvidersViewModelState(for asset: AssetData) -> StateViewType<SelectableListType<SwapProvidersViewModel.Item>> {
-        switch swapState.quotes {
-        case .error(let error): return .error(error)
-        case .noData: return .noData
-        case .data(let items):
-            let priceViewModel = PriceViewModel(price: asset.price, currencyCode: preferences.currency)
-            let valueFormatter = ValueFormatter(style: .auto)
-            return .data(.plain(
-                items.map {
-                    SwapProviderItem(
-                        asset: asset.asset,
-                        swapQuote: $0,
-                        selectedProvider: selectedSwapQuote?.data.provider.id,
-                        priceViewModel: priceViewModel,
-                        valueFormatter: valueFormatter
-                    )
-                }
-            ))
-        case .loading: return .loading
-        }
-    }
-
-    private var selectedProvderModel: SwapProviderViewModel? {
-        guard let selectedSwapQuote else { return nil }
-        return SwapProviderViewModel(provider: selectedSwapQuote.data.provider)
-    }
-    
     private func updateValidators(for assetData: AssetData?) {
         guard let assetData else { return }
         amountInputModel.update(

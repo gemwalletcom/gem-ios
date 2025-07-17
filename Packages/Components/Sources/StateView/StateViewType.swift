@@ -35,4 +35,13 @@ public enum StateViewType<T: Sendable>: Sendable {
         }
         return t
     }
+    
+    public func map<U: Sendable>(_ transform: (T) -> U) -> StateViewType<U> {
+        switch self {
+        case .noData: .noData
+        case .loading: .loading
+        case .data(let value): .data(transform(value))
+        case .error(let error): .error(error)
+        }
+    }
 }
