@@ -1,24 +1,24 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-@preconcurrency import WalletCore
-import Primitives
 import struct Formatters.MnemonicFormatter
+import Foundation
+import Primitives
+@preconcurrency import WalletCore
 
 public struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore
     private let directory: URL
-    
+
     func createWallet() -> [String] {
         let wallet = HDWallet(strength: 128, passphrase: "")!
-        return wallet.mnemonic.split(separator: " ").map{String($0)}
+        return wallet.mnemonic.split(separator: " ").map { String($0) }
     }
-    
+
     public init(directory: URL) {
         self.directory = directory
-        self.keyStore = try! WalletCore.KeyStore(keyDirectory: directory)
+        keyStore = try! WalletCore.KeyStore(keyDirectory: directory)
     }
-    
+
     public func importWallet(name: String, words: [String], chains: [Chain], password: String) throws -> Primitives.Wallet {
         let wallet = try keyStore.import(
             mnemonic: MnemonicFormatter.fromArray(words: words),
@@ -42,6 +42,8 @@ public struct WalletKeyStore: Sendable {
                 }
             case .hex:
                 data = Data(hexString: key)
+            case .base32:
+                data = try decodeBase32Key(string: key, chain: chain)
             }
         }
 
@@ -53,6 +55,27 @@ public struct WalletKeyStore: Sendable {
             throw AnyError("Invalid private key format")
         }
         return key
+    }
+
+    static func decodeBase32Key(string: String, chain: Chain) throws -> Data {
+        switch chain {
+        case .stellar:
+            // test against https://lab.stellar.org/account/create
+            guard
+                string.count == 56,
+                string.hasPrefix("S"),
+                let decoded = Base32.decode(string: string),
+                decoded.count == 35,
+                decoded[0] == 0x90 // Mainnet
+            else {
+                throw KeystoreError.invalidPrivateKeyEncoding
+            }
+            // 35-byte format: [1 version] + [32 payload] + [2 checksum/padding]
+            return Data(decoded[1 ..< 33])
+
+        default:
+            throw KeystoreError.invalidPrivateKeyEncoding
+        }
     }
 
     public func importPrivateKey(name: String, key: String, chain: Chain, password: String) throws -> Primitives.Wallet {
@@ -69,7 +92,7 @@ public struct WalletKeyStore: Sendable {
         return Primitives.Wallet(
             id: wallet.id,
             name: wallet.key.name,
-            index: 0, 
+            index: 0,
             type: .privateKey,
             accounts: [account],
             order: 0,
@@ -80,15 +103,15 @@ public struct WalletKeyStore: Sendable {
 
     func addCoins(wallet: WalletCore.Wallet, chains: [Chain], password: String) throws -> Primitives.Wallet {
         let exclude = [Chain.solana]
-        let coins = chains.filter { !exclude.contains($0) } .map { $0.coinType }.asSet().asArray()
-        
+        let coins = chains.filter { !exclude.contains($0) }.map { $0.coinType }.asSet().asArray()
+
         // Tricky wallet core implementation. By default is coins: [], it will create ethereum
         let _ = try keyStore.removeAccounts(wallet: wallet, coins: [.ethereum] + exclude.map { $0.coinType }, password: password)
         if chains.contains(.solana) {
             // By default solana derived a wrong derivation path, need to adjust use a new one
             let _ = try wallet.getAccount(password: password, coin: .solana, derivation: .solanaSolana)
         }
-        
+
         let _ = try keyStore.addAccounts(wallet: wallet, coins: coins, password: password)
 
         let type: Primitives.WalletType = {
@@ -115,30 +138,31 @@ public struct WalletKeyStore: Sendable {
             imageUrl: nil
         )
     }
-    
+
     func addChains(chains: [Chain], wallet: Primitives.Wallet, password: String) throws -> Primitives.Wallet {
         let wallet = try getWallet(id: wallet.id)
         return try addCoins(wallet: wallet, chains: chains, password: password)
     }
-    
+
     private func getWallet(id: String) throws -> WalletCore.Wallet {
-        guard let wallet = keyStore.wallets.filter({ $0.id == id}).first else {
+        guard let wallet = keyStore.wallets.filter({ $0.id == id }).first else {
             throw KeystoreError.unknownWalletInWalletCoreList
         }
         return wallet
     }
-    
+
     func deleteWallet(id: String, password: String) throws {
         let wallet = try getWallet(id: id)
         try keyStore.delete(wallet: wallet, password: password)
     }
-    
+
     func getPrivateKey(id: String, type: Primitives.WalletType, chain: Chain, password: String) throws -> Data {
         let wallet = try getWallet(id: id)
         switch type {
         case .multicoin, .single:
             guard
-                let hdwallet = wallet.key.wallet(password: Data(password.utf8)) else {
+                let hdwallet = wallet.key.wallet(password: Data(password.utf8))
+            else {
                 throw KeystoreError.unknownWalletInWalletCore
             }
             switch chain {
@@ -153,17 +177,18 @@ public struct WalletKeyStore: Sendable {
             throw KeystoreError.invalidPrivateKey
         }
     }
-    
+
     func getMnemonic(wallet: Primitives.Wallet, password: String) throws -> [String] {
         let wallet = try getWallet(id: wallet.id)
         guard
-            let hdwallet = wallet.key.wallet(password: Data(password.utf8)) else {
+            let hdwallet = wallet.key.wallet(password: Data(password.utf8))
+        else {
             throw KeystoreError.unknownWalletInWalletCore
         }
-        
+
         return MnemonicFormatter.toArray(string: hdwallet.mnemonic)
     }
-    
+
     public func sign(hash: Data, walletId: String, type: Primitives.WalletType, password: String, chain: Chain) throws -> Data {
         let key = try getPrivateKey(id: walletId, type: type, chain: chain, password: password)
         guard
@@ -174,7 +199,7 @@ public struct WalletKeyStore: Sendable {
         }
         return signature
     }
-    
+
     func destroy() throws {
         try keyStore.destroy()
     }
