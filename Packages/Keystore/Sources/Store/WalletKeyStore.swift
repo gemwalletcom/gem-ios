@@ -43,7 +43,9 @@ public struct WalletKeyStore: Sendable {
             case .hex:
                 data = Data(hexString: key)
             case .base32:
-                data = try decodeBase32Key(string: key, chain: chain)
+                if let decoded = try? decodeBase32Key(string: key, chain: chain) {
+                    data = decoded
+                }
             }
         }
 
