@@ -13,8 +13,8 @@ public struct SolanaService: Sendable {
     
     let chain: Primitives.Chain
     let provider: Provider<SolanaProvider>
+    let feeService: SolanaFeeService
     
-    let staticBaseFee = BigInt(5000)
     let tokenAccountSize = 165
     
     public init(
@@ -23,6 +23,7 @@ public struct SolanaService: Sendable {
     ) {
         self.chain = chain
         self.provider = provider
+        self.feeService = SolanaFeeService()
     }
 }
 
@@ -115,18 +116,6 @@ extension SolanaService {
             .request(.stakeDelegations(address: address))
             .map(as: JSONRPCResponse<[SolanaStakeAccount]>.self).result
     }
-
-    // https://solana.com/docs/core/fees#compute-unit-limit
-    private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) throws -> Fee {
-        let gasLimit = switch type {
-        case .transfer, .stake, .transferNft: BigInt(100_000)
-        case .generic, .swap: BigInt(420_000)
-        case .account, .tokenApprove: fatalError()
-        }
-        let totalFee = gasPrice.gasPrice + (gasPrice.priorityFee * gasLimit / BigInt(1_000_000))
-        
-        return Fee(fee: totalFee, gasPriceType: gasPrice, gasLimit: gasLimit)
-    }
     
     private func getSlot() async throws -> BigInt {
         try await provider
@@ -172,37 +161,7 @@ extension SolanaService: ChainBalanceable {
 
 extension SolanaService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        // filter out any large fees
-        let priorityFees = try await getPrioritizationFees().map { $0 }.sorted(by: >).prefix(5)
-        
-        let multipleOf = switch type {
-        case .transfer(let asset): asset.type == .native ? 25_000 : 50_000
-        case .stake, .transferNft: 25_000
-        case .generic, .swap: 100_000
-        case .account, .tokenApprove: fatalError()
-        }
-        
-        let priorityFee = {
-            if priorityFees.isEmpty {
-                BigInt(multipleOf)
-            } else {
-                BigInt(
-                    max(
-                        (priorityFees.reduce(0, +) / priorityFees.count).roundToNearest(
-                            multipleOf: multipleOf,
-                            mode: .up
-                        ),
-                        multipleOf
-                    )
-                )
-            }
-        }()
-        
-        return [
-            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee / 2)),
-            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee)),
-            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 3)),
-        ]
+        try feeService.feeRates(type: type, prioritizationFees: try await getPrioritizationFees())
     }
 }
 
@@ -220,7 +179,7 @@ extension SolanaService: ChainTransactionPreloadable {
 
 extension SolanaService: ChainTransactionDataLoadable {
     public func load(input: TransactionInput) async throws -> TransactionData {
-        let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
+        let fee = try feeService.getBaseFee(type: input.type, gasPrice: input.gasPrice)
         switch input.type {
         case .generic, .transfer:
             switch input.asset.id.type {
