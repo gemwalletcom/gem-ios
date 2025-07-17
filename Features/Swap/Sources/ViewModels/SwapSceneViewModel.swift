@@ -26,7 +26,7 @@ public final class SwapSceneViewModel {
     public let walletsService: WalletsService
 
     public var swapState: SwapState = .init()
-    public var isPresentedInfoSheet: SwapSheetType?
+    public var isPresentingInfoSheet: SwapSheetType?
 
     // db observation requests
     var fromAssetRequest: AssetRequestOptional
@@ -54,17 +54,17 @@ public final class SwapSceneViewModel {
 
     public init(
         preferences: Preferences = Preferences.standard,
-        wallet: Wallet,
-        asset: Asset,
+        input: SwapInput,
         walletsService: WalletsService,
         swapQuotesProvider: SwapQuotesProvidable,
         swapQuoteDataProvider: any SwapQuoteDataProvidable,
         onSwap: TransferDataAction = nil
     ) {
-        let pairSelectorModel = SwapPairSelectorViewModel.defaultSwapPair(for: asset)
+
+        let pairSelectorModel = input.pairSelector
         self.pairSelectorModel = pairSelectorModel
         self.preferences = preferences
-        self.wallet = wallet
+        self.wallet = input.wallet
         self.walletsService = walletsService
 
         self.fromAssetRequest = AssetRequestOptional(
@@ -283,17 +283,17 @@ extension SwapSceneViewModel {
     }
 
     func onSelectPriceImpactInfo() {
-        isPresentedInfoSheet = .info(.priceImpact)
+        isPresentingInfoSheet = .info(.priceImpact)
     }
 
     func onSelectAssetPay() {
-        isPresentedInfoSheet = .selectAsset(.pay)
+        isPresentingInfoSheet = .selectAsset(.pay)
     }
 
     func onSelectAssetReceive() {
         guard let fromAsset = fromAsset else { return }
         let (chains, assetIds) = swapQuotesProvider.supportedAssets(for: fromAsset.asset.id)
-        isPresentedInfoSheet = .selectAsset(.receive(chains: chains, assetIds: assetIds))
+        isPresentingInfoSheet = .selectAsset(.receive(chains: chains, assetIds: assetIds))
     }
 
     func onSelectSwapDetails() {
@@ -305,7 +305,7 @@ extension SwapSceneViewModel {
     }
 
     public func onFinishAssetSelection(asset: Asset) {
-        guard case let .selectAsset(type) = isPresentedInfoSheet else { return }
+        guard case let .selectAsset(type) = isPresentingInfoSheet else { return }
         switch type {
         case .pay:
             if asset.id == pairSelectorModel.toAssetId {
@@ -318,7 +318,7 @@ extension SwapSceneViewModel {
             }
             pairSelectorModel.toAssetId = asset.id
         }
-        isPresentedInfoSheet = nil
+        isPresentingInfoSheet = nil
     }
 }
 

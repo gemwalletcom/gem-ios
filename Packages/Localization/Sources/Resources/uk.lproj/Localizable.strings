@@ -428,3 +428,4 @@
 "asset.add_to_wallet" = "Додати до гаманця";
 "asset.hide_from_wallet" = "Приховати від гаманця";
 "common.details" = "Деталі";
+"transaction.swap_again" = "Знову обміняти";

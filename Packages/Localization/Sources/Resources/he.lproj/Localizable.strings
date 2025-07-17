@@ -428,3 +428,4 @@
 "asset.add_to_wallet" = "הוסף לארנק";
 "asset.hide_from_wallet" = "הסתר מהארנק";
 "common.details" = "פרטים";
+"transaction.swap_again" = "החלפה נוספת";

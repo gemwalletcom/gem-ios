@@ -428,3 +428,4 @@
 "asset.add_to_wallet" = "Adicionar à carteira";
 "asset.hide_from_wallet" = "Esconder da carteira";
 "common.details" = "Detalhes";
+"transaction.swap_again" = "Troque novamente";

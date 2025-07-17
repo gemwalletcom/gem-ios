@@ -21,7 +21,9 @@ public final class CollectionsViewModel: Sendable {
     let columns: [GridItem] = Array(repeating: GridItem(spacing: .medium), count: 2)
     let sceneStep: Scenes.CollectionsScene.SceneStep
     var request: NFTRequest
+
     public var isPresentingReceiveSelectAssetType: SelectAssetType?
+    public var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
 
     public private(set) var wallet: Wallet
 
@@ -29,7 +31,8 @@ public final class CollectionsViewModel: Sendable {
         nftService: NFTService,
         walletService: WalletService,
         wallet: Wallet,
-        sceneStep: Scenes.CollectionsScene.SceneStep
+        sceneStep: Scenes.CollectionsScene.SceneStep,
+        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.nftService = nftService
         self.walletService = walletService
@@ -37,6 +40,7 @@ public final class CollectionsViewModel: Sendable {
         self.wallet = wallet
         self.sceneStep = sceneStep
         self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
+        self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
     var title: String {

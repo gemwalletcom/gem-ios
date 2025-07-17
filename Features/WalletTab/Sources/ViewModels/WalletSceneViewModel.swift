@@ -35,6 +35,8 @@ public final class WalletSceneViewModel: Sendable {
     public var assets: [AssetData] = []
     public var banners: [Banner] = []
 
+    // TODO: - separate presenting sheet state logic to separate type
+    public var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     public var isPresentingWallets = false
     public var isPresentingSelectAssetType: SelectAssetType?
     public var isPresentingInfoSheet: InfoSheetType?
@@ -47,7 +49,8 @@ public final class WalletSceneViewModel: Sendable {
         bannerService: BannerService,
         walletService: WalletService,
         observablePreferences: ObservablePreferences,
-        wallet: Wallet
+        wallet: Wallet,
+        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.wallet = wallet
         self.walletsService = walletsService
@@ -69,7 +72,7 @@ public final class WalletSceneViewModel: Sendable {
                 .accountBlockedMultiSignature,
             ]
         )
-
+        self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
     public var currentWallet: Wallet? { walletService.currentWallet }

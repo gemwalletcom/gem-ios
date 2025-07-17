@@ -12,27 +12,10 @@ import PrimitivesComponents
 import ExplorerService
 
 public struct TransactionScene: View {
-    @Query<TransactionsRequest>
-    private var transactions: [Primitives.TransactionExtended]
+    @State private var model: TransactionDetailViewModel
 
-    @State private var isPresentingShareSheet = false
-    @State private var isPresentingInfoSheet: InfoSheetType? = .none
-
-    private let input: TransactionSceneInput
-
-    private var model: TransactionDetailViewModel {
-        return TransactionDetailViewModel(
-            model: TransactionViewModel(
-                explorerService: ExplorerService.standard,
-                transaction: transactions.first!,
-                formatter: .auto
-            )
-        )
-    }
-
-    public init(input: TransactionSceneInput) {
-        self.input = input
-        _transactions = Query(input.transactionRequest)
+    public init(model: TransactionDetailViewModel) {
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
@@ -40,8 +23,21 @@ public struct TransactionScene: View {
             List {
                 TransactionHeaderListItemView(
                     headerType: model.headerType,
-                    showClearHeader: model.showClearHeader
+                    showClearHeader: model.showClearHeader,
+                    action: model.onSelectTransactionHeader
                 )
+
+                if model.showSwapAgain {
+                    Section {
+                        StateButton(
+                            text: model.swapAgain,
+                            type: .primary(.normal),
+                            action: model.onSelectTransactionHeader
+                        )
+                    }
+                    .cleanListRow(topOffset: .zero)
+                }
+
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
                     HStack(spacing: .small) {
@@ -49,7 +45,7 @@ public struct TransactionScene: View {
                             title: model.statusField,
                             subtitle: model.statusText,
                             subtitleStyle: model.statusTextStyle,
-                            infoAction: onStatusInfo
+                            infoAction: model.onStatusInfo
                         )
                         switch model.statusType {
                         case .none:
@@ -74,7 +70,7 @@ public struct TransactionScene: View {
                         subtitle: model.network,
                         assetImage: model.networkAssetImage
                     )
-                    
+
                     if let item = model.providerListItem {
                         ListItemImageView(
                             title: item.title,
@@ -82,12 +78,12 @@ public struct TransactionScene: View {
                             assetImage: item.assetImage
                         )
                     }
-                    
+
                     ListItemView(
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
                         subtitleExtra: model.networkFeeFiatText,
-                        infoAction: onNetworkFeeInfo
+                        infoAction: model.onNetworkFeeInfo
                     )
                 }
                 Section {
@@ -104,34 +100,20 @@ public struct TransactionScene: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        isPresentingShareSheet.toggle()
+                        model.onSelectShare()
                     } label: {
                         Images.System.share
                     }
                 }
             }
-            .sheet(isPresented: $isPresentingShareSheet) {
+            .sheet(isPresented: $model.isPresentingShareSheet) {
                 ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
             }
-            .sheet(item: $isPresentingInfoSheet) {
+            .sheet(item: $model.isPresentingInfoSheet) {
                 InfoSheetScene(model: InfoSheetViewModel(type: $0))
             }
         }
-    }
-}
-
-// MARK: - Actions
-
-extension TransactionScene {
-    func onNetworkFeeInfo() {
-        isPresentingInfoSheet = .networkFee(model.chain)
-    }
-
-    func onStatusInfo() {
-        isPresentingInfoSheet = .transactionState(
-            imageURL: model.assetImage.imageURL,
-            placeholder: model.assetImage.placeholder,
-            state: model.transactionState
-        )
+        .observeQuery(request: $model.request, value: $model.transactionExtended)
+        .onChange(of: model.transactionExtended, model.onChangeTransaction)
     }
 }

@@ -44,15 +44,18 @@ struct CollectionsNavigationStack: View {
                             nftService: nftService,
                             walletService: walletService,
                             wallet: model.wallet,
-                            sceneStep: $0.sceneStep
+                            sceneStep: $0.sceneStep,
+                            isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput
                         )
                     )
                 }
                 .navigationDestination(for: Scenes.Collectible.self) {
-                    CollectibleNavigationView(
-                        model: CollectibleNavigationViewModel(
+                    CollectibleScene(
+                        model: CollectibleViewModel(
                             wallet: model.wallet,
-                            assetData: $0.assetData
+                            assetData: $0.assetData,
+                            avatarService: avatarService,
+                            isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput
                         )
                     )
                 }

@@ -428,3 +428,4 @@
 "asset.add_to_wallet" = "Thêm vào ví";
 "asset.hide_from_wallet" = "Ẩn khỏi ví";
 "common.details" = "Chi tiết";
+"transaction.swap_again" = "Hoán đổi lần nữa";

@@ -53,7 +53,7 @@ struct SwapNavigationView: View {
                     )
                 )
             }
-            .sheet(item: $model.isPresentedInfoSheet) {
+            .sheet(item: $model.isPresentingInfoSheet) {
                 switch $0 {
                 case let .info(type):
                     InfoSheetScene(model: InfoSheetViewModel(type: type))

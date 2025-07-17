@@ -428,3 +428,4 @@
 "asset.add_to_wallet" = "Přidat do peněženky";
 "asset.hide_from_wallet" = "Skrýt z peněženky";
 "common.details" = "Podrobnosti";
+"transaction.swap_again" = "Znovu vyměnit";

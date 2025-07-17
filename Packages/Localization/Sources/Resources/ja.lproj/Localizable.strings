@@ -428,3 +428,4 @@
 "asset.add_to_wallet" = "ウォレットに追加";
 "asset.hide_from_wallet" = "財布から隠す";
 "common.details" = "詳細";
+"transaction.swap_again" = "再び交換";

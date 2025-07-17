@@ -428,3 +428,4 @@
 "asset.add_to_wallet" = "Ongeza kwenye mkoba";
 "asset.hide_from_wallet" = "Ficha kutoka kwa mkoba";
 "common.details" = "Maelezo";
+"transaction.swap_again" = "Badilika Tena";

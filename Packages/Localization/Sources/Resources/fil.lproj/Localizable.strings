@@ -428,3 +428,4 @@
 "asset.add_to_wallet" = "Idagdag sa wallet";
 "asset.hide_from_wallet" = "Itago sa wallet";
 "common.details" = "Mga Detalye";
+"transaction.swap_again" = "Magpalit muli";

@@ -11,6 +11,8 @@ import Style
 @testable import Transactions
 @testable import Store
 
+
+@MainActor
 struct TransactionDetailViewModelTests {
 
     @Test
@@ -62,6 +64,7 @@ struct TransactionDetailViewModelTests {
         let allTypes: [TransactionType] = [.transfer, .transferNFT, .swap, .tokenApproval, .assetActivation, .smartContractCall, .stakeRewards, .stakeWithdraw, .stakeDelegate, .stakeUndelegate, .stakeRedelegate]
         for type in allTypes {
             #expect(TransactionDetailViewModel.mock(type: type, memo: nil).showMemoField == false)
+            #expect(TransactionDetailViewModel.mock(type: type, memo: "").showMemoField == false)
             #expect(TransactionDetailViewModel.mock(type: type, memo: "Test memo").showMemoField == true)
         }
     }
@@ -83,6 +86,11 @@ extension TransactionDetailViewModel {
         participant: String = "participant_address",
         memo: String? = nil
     ) -> TransactionDetailViewModel {
-        TransactionDetailViewModel(model: TransactionViewModel.mock(type: type, state: state, direction: direction, participant: participant, memo: memo))
+        TransactionDetailViewModel(
+            transaction: TransactionExtended.mock(
+                transaction: Transaction.mock(type: type, state: state, direction: direction, to: participant, memo: memo)
+            ),
+            walletId: "test_wallet_id"
+        )
     }
 }

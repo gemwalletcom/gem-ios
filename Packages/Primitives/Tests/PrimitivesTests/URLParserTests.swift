@@ -5,7 +5,8 @@ import Foundation
 import Testing
 
 struct URLParserTests {
-    @Test func assetUrl() async throws {
+    @Test
+    func assetUrl() async throws {
         let chainAction = try URLParser.from(url: URL(string: "https://gemwallet.com/tokens/bitcoin")!)
 
         #expect(chainAction == URLAction.asset(AssetId(chain: .bitcoin, tokenId: .none)))
@@ -13,6 +14,20 @@ struct URLParserTests {
         let tokenAction = try URLParser.from(url: URL(string: "https://gemwallet.com/tokens/ethereum/0xdAC17F958D2ee523a2206206994597C13D831ec7")!)
 
         #expect(tokenAction == URLAction.asset(AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7")))
+    }
+
+    @Test
+    func swapUrl() async throws {
+        let swapFromOnly = try URLParser.from(url: URL(string: "https://gemwallet.com/swap/ethereum")!)
+
+        #expect(swapFromOnly == .swap(AssetId(chain: .ethereum, tokenId: nil), nil))
+
+        let swapFromTo = try URLParser.from(url: URL(string: "https://gemwallet.com/swap/ethereum/ethereum_0xdAC17F958D2ee523a2206206994597C13D831ec7")!)
+
+        #expect(swapFromTo == .swap(
+            AssetId(chain: .ethereum, tokenId: nil),
+            AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7")
+        ))
     }
 
     @Test func walletConnectSessionTopicUrl() async throws {

@@ -428,3 +428,4 @@
 "asset.add_to_wallet" = "ওয়ালেটে যোগ করুন";
 "asset.hide_from_wallet" = "মানিব্যাগ থেকে লুকান";
 "common.details" = "বিস্তারিত";
+"transaction.swap_again" = "আবার অদলবদল করুন";

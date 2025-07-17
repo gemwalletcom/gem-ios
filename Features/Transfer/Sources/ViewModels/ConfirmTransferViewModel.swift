@@ -116,7 +116,7 @@ public final class ConfirmTransferViewModel {
     var appAssetImage: AssetImage? { dataModel.appAssetImage }
     var appText: String? {
         if let value = dataModel.appValue {
-            return AppDisplayFormatter.format(name: dataModel.appValue, host: websiteURL?.cleanHost())
+            return AppDisplayFormatter.format(name: value, host: websiteURL?.cleanHost())
         }
         return .none
     }

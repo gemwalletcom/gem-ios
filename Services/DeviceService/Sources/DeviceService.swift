@@ -7,19 +7,13 @@ import Store
 import UIKit
 import Preferences
 
-public protocol DeviceServiceable: Sendable {
-    func getDeviceId() throws -> String
-    // returns same device ID as getDeviceId(), but making sure subscriptions has been updated.
-    func getSubscriptionsDeviceId() async throws -> String
-    func update() async throws
-}
-
 public struct DeviceService: DeviceServiceable {
 
     private let deviceProvider: any GemAPIDeviceService
     private let subscriptionsService: SubscriptionService
     private let preferences: Preferences
     private let securePreferences: SecurePreferences
+    private static let serialExecutor = SerialExecutor()
     
     public init(
         deviceProvider: any GemAPIDeviceService,
@@ -34,14 +28,20 @@ public struct DeviceService: DeviceServiceable {
     }
     
     public func update() async throws  {
-        guard let deviceId = try await getOrCreateDeviceId() else { return }
-        let device = try await getOrCreateDevice(deviceId)
-        let localDevice = try currentDevice(deviceId: deviceId)
-        if device.subscriptionsVersion != localDevice.subscriptionsVersion || preferences.subscriptionsVersionHasChange {
-            try await subscriptionsService.update(deviceId: deviceId)
+        try await Self.serialExecutor.execute {
+            try await updateDevice()
+        }
+    }
+    
+    private func updateDevice() async throws {
+        guard let deviceId = try await self.getOrCreateDeviceId() else { return }
+        let device = try await self.getOrCreateDevice(deviceId)
+        let localDevice = try self.currentDevice(deviceId: deviceId)
+        if device.subscriptionsVersion != localDevice.subscriptionsVersion || self.preferences.subscriptionsVersionHasChange {
+            try await self.subscriptionsService.update(deviceId: deviceId)
         }
         if device != localDevice  {
-            try await updateDevice(localDevice)
+            try await self.updateDevice(localDevice)
         }
     }
     

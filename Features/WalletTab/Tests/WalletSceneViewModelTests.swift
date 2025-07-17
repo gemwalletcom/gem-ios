@@ -34,7 +34,8 @@ extension WalletSceneViewModel {
             bannerService: .mock(),
             walletService: .mock(),
             observablePreferences: .mock(),
-            wallet: .mock()
+            wallet: .mock(),
+            isPresentingSelectedAssetInput: .constant(.none)
         )
     }
 }
