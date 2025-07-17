@@ -83,15 +83,14 @@ extension CollectibleViewModel {
     static func mock(
         wallet: Wallet = .mock(),
         assetData: NFTAssetData = .mock(),
-        explorerService: ExplorerService = ExplorerService.standard,
-        headerButtonAction: HeaderButtonAction? = nil
+        explorerService: ExplorerService = ExplorerService.standard
     ) -> CollectibleViewModel {
         CollectibleViewModel(
             wallet: wallet,
             assetData: assetData,
             avatarService: AvatarService(store: WalletStore.mock()),
             explorerService: explorerService,
-            headerButtonAction: headerButtonAction
+            isPresentingSelectedAssetInput: .constant(.none)
         )
     }
 }

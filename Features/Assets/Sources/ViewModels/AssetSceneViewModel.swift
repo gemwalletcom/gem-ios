@@ -30,7 +30,7 @@ public final class AssetSceneViewModel: Sendable {
     let explorerService: ExplorerService = .standard
     public let priceAlertService: PriceAlertService
 
-    private var isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
+    private var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
 
     public var isPresentingToastMessage: ToastMessage?
     public var isPresentingAssetSheet: AssetSheetType?
@@ -50,7 +50,7 @@ public final class AssetSceneViewModel: Sendable {
         priceAlertService: PriceAlertService,
         bannerService: BannerService,
         input: AssetSceneInput,
-        isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
+        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.walletsService = walletsService
         self.assetsService = assetsService
@@ -61,7 +61,7 @@ public final class AssetSceneViewModel: Sendable {
 
         self.input = input
         self.assetData = AssetData.with(asset: input.asset)
-        _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
+        self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
     public var title: String { assetModel.name }
@@ -199,13 +199,13 @@ extension AssetSceneViewModel {
         let selectType: SelectedAssetType = switch buttonType {
         case .buy: .buy(assetData.asset)
         case .send: .send(.asset(assetData.asset))
-        case .swap: .swap(assetData.asset)
+        case .swap: .swap(assetData.asset, nil)
         case .receive: .receive(.asset)
         case .stake: .stake(assetData.asset)
         case .more:
             fatalError()
         }
-        isPresentingAssetSelectedInput.wrappedValue = SelectedAssetInput(
+        isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
             type: selectType,
             assetAddress: assetData.assetAddress
         )
@@ -252,7 +252,7 @@ extension AssetSceneViewModel {
     }
 
     func onSelectBuy() {
-        isPresentingAssetSelectedInput.wrappedValue = SelectedAssetInput(
+        isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
             type: .buy(assetModel.asset),
             assetAddress: assetDataModel.assetAddress
         )

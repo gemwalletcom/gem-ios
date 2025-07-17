@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import UIKit
+import SwiftUI
 import Primitives
 import PrimitivesComponents
 import Localization
@@ -18,26 +18,26 @@ import ExplorerService
 public final class CollectibleViewModel {
     private let wallet: Wallet
     private let assetData: NFTAssetData
-    private let headerButtonAction: HeaderButtonAction?
     private let avatarService: AvatarService
     private let explorerService: ExplorerService
 
     var isPresentingAlertMessage: AlertMessage?
     var isPresentingToast: ToastMessage?
     var isPresentingTokenExplorerUrl: URL?
+    var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
 
     public init(
         wallet: Wallet,
         assetData: NFTAssetData,
         avatarService: AvatarService,
         explorerService: ExplorerService = ExplorerService.standard,
-        headerButtonAction: HeaderButtonAction?
+        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.wallet = wallet
         self.assetData = assetData
         self.avatarService = avatarService
         self.explorerService = explorerService
-        self.headerButtonAction = headerButtonAction
+        self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
     var title: String { assetData.asset.name }
@@ -143,8 +143,19 @@ public final class CollectibleViewModel {
 // MARK: - Business Logic
 
 extension CollectibleViewModel {
-    func onHeaderAction(type: HeaderButtonType) {
-        headerButtonAction?(type)
+    func onSelectHeaderButton(type: HeaderButtonType) {
+        guard let account = try? wallet.account(for: assetData.asset.chain) else {
+            return
+        }
+        switch type {
+        case .send:
+            isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
+                type: .send(.nft(assetData.asset)),
+                assetAddress: AssetAddress(asset: account.chain.asset, address: account.address)
+            )
+        case .buy, .receive, .swap, .stake, .more:
+            fatalError()
+        }
     }
 
     func onSelectSaveToGallery() {

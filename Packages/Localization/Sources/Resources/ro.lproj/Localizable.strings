@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "În rețeaua %@, cerința minimă de staking este ** %@ **.";
 "asset.add_to_wallet" = "Adaugă în portofel";
 "asset.hide_from_wallet" = "Ascunde din portofel";
+"common.details" = "Detalii";
+"transaction.swap_again" = "Schimbați din nou";

@@ -427,3 +427,5 @@
 "info.stake_minimum_amount.description" = "在%@網路上，最低質押要求為 ** %@ **。";
 "asset.add_to_wallet" = "加入錢包";
 "asset.hide_from_wallet" = "隱藏錢包";
+"common.details" = "細節";
+"transaction.swap_again" = "再次交換";
