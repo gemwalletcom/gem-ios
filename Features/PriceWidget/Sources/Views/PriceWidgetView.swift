@@ -48,7 +48,9 @@ public struct PriceWidgetView: View {
         }
         .padding(0)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Colors.white)
+        .containerBackground(for: .widget) {
+            Color.clear
+        }
     }
 }
 
