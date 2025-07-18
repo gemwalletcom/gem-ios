@@ -271,9 +271,8 @@ public struct Migrations {
             }
         }
         
-        migrator.registerMigration("Add \(AddressRecord.databaseTableName) table33") { db in
-            try? db.drop(table: AddressRecord.databaseTableName)
-            try AddressRecord.create(db: db)
+        migrator.registerMigration("Add \(AddressRecord.databaseTableName) table") { db in
+            try? AddressRecord.create(db: db)
         }
         
         try migrator.migrate(dbQueue)
