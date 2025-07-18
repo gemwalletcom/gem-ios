@@ -143,7 +143,15 @@ public final class ConfirmTransferViewModel {
     }
 
     var networkTitle: String { Localized.Transfer.network }
-    var networkValue: String { AssetViewModel(asset: dataModel.asset).networkFullName }
+    var networkText: String {
+        let model = AssetViewModel(asset: dataModel.asset)
+        switch data.type {
+        case .transfer:
+            return model.networkFullName
+        case .transferNft, .swap, .tokenApprove, .stake, .account, .generic:
+            return model.networkName
+        }
+    }
     var networkAssetImage: AssetImage { AssetIdViewModel(assetId: dataModel.chainAsset.id).networkAssetImage }
 
     var networkFeeTitle: String { feeModel.title }

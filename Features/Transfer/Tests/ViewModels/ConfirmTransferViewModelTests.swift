@@ -42,6 +42,31 @@ struct ConfirmTransferViewModelTests {
     func senderTitle() async {
         #expect(ConfirmTransferViewModel.mock().senderTitle == Localized.Wallet.title)
     }
+    
+    @Test
+    func networkText() async {
+        #expect(
+            ConfirmTransferViewModel
+                .mock(data: .mock(type: .transfer(.mockEthereum()))
+            ).networkText == "Ethereum"
+        )
+        #expect(
+            ConfirmTransferViewModel
+                .mock(data: .mock(type: .transfer(.mockEthereumUSDT()))
+            ).networkText == "Ethereum (ERC20)"
+        )
+        
+        #expect(
+            ConfirmTransferViewModel
+                .mock(data: .mock(type: .generic(asset: .mockEthereum(), metadata: .mock(), extra: .mock()))
+            ).networkText == "Ethereum"
+        )
+        #expect(
+            ConfirmTransferViewModel
+                .mock( data: .mock(type: .generic(asset: .mockEthereumUSDT(), metadata: .mock(), extra: .mock()) )
+            ).networkText == "Ethereum"
+        )
+    }
 }
 
 private extension ConfirmTransferViewModel {
