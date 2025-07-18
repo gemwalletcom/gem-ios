@@ -28,6 +28,7 @@ import WalletSessionService
 import AppService
 import ScanService
 import SwapService
+import AddressNameService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -165,6 +166,9 @@ struct ServicesFactory {
             configService: configService,
             releaseService: AppReleaseService(configService: configService)
         )
+        let addressNameService = AddressNameService(
+            addressStore: storeManager.addressStore
+        )
 
         return AppResolver.Services(
             assetsService: assetsService,
@@ -193,7 +197,8 @@ struct ServicesFactory {
             deviceObserverService: deviceObserverService,
             onstartService: onStartService,
             onstartAsyncService: onstartAsyncService,
-            walletConnectorManager: walletConnectorManager
+            walletConnectorManager: walletConnectorManager,
+            addressNameService: addressNameService
         )
     }
 }

@@ -19,6 +19,7 @@ import SwapService
 import Style
 import SwiftUI
 import Formatters
+import AddressNameService
 
 @Observable
 @MainActor
@@ -55,6 +56,7 @@ public final class ConfirmTransferViewModel {
     private let transerExecutor: any TransferExecutable
     private let keystore: any Keystore
     private let swapService: SwapService
+    private let addressNameService: AddressNameService
 
     private let wallet: Wallet
     private let onComplete: VoidAction
@@ -73,6 +75,7 @@ public final class ConfirmTransferViewModel {
         walletsService: WalletsService,
         swapDataProvider: any SwapQuoteDataProvidable,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard,
+        addressNameService: AddressNameService,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
         onComplete: VoidAction
     ) {
@@ -100,6 +103,7 @@ public final class ConfirmTransferViewModel {
             swapService: swapService
         )
         self.swapService = swapService
+        self.addressNameService = addressNameService
 
         self.transerExecutor = TransferExecutor(
             signer: TransactionSigner(keystore: keystore),
@@ -399,7 +403,7 @@ extension ConfirmTransferViewModel {
         )
     }
 
-    private var dataModel: TransferDataViewModel { TransferDataViewModel(data: data) }
+    private var dataModel: TransferDataViewModel { TransferDataViewModel(data: data, addressNameService: addressNameService) }
     private var availableValue: BigInt { dataModel.availableValue(metadata: metadata) }
     private var senderLink: BlockExplorerLink { explorerService.addressUrl(chain: dataModel.chain, address: senderAddress) }
     private var feeAssetAddress: AssetAddress { AssetAddress(asset: dataModel.asset.feeAsset, address: senderAddress)}

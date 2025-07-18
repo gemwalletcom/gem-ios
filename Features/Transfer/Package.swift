@@ -45,7 +45,8 @@ let package = Package(
         .package(name: "BalanceService", path: "../../Services/BalanceService"),
         .package(name: "PriceService", path: "../../Services/PriceService"),
         .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
-        .package(name: "SwapService", path: "../../Services/SwapService")
+        .package(name: "SwapService", path: "../../Services/SwapService"),
+        .package(name: "AddressNameService", path: "../../Services/AddressNameService")
     ],
     targets: [
         .target(
@@ -81,7 +82,8 @@ let package = Package(
                 "BalanceService",
                 "PriceService",
                 "ExplorerService",
-                "SwapService"
+                "SwapService",
+                "AddressNameService"
             ],
             path: "Sources"
         ),

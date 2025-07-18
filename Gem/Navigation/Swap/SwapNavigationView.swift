@@ -17,6 +17,7 @@ struct SwapNavigationView: View {
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.scanService) private var scanService
     @Environment(\.swapService) private var swapService
+    @Environment(\.addressNameService) private var addressNameService
 
     @State private var model: SwapSceneViewModel
 
@@ -47,6 +48,7 @@ struct SwapNavigationView: View {
                             keystore: keystore,
                             swapService: swapService
                         ),
+                        addressNameService: addressNameService,
                         onComplete: {
                             onSwapComplete(type: data.type)
                         }

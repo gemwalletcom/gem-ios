@@ -20,6 +20,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
     @Environment(\.swapService) private var swapService
+    @Environment(\.addressNameService) private var addressNameService
 
     @State private var navigationPath = NavigationPath()
 
@@ -54,6 +55,7 @@ struct SelectedAssetNavigationStack: View  {
                             scanService: scanService,
                             swapService: swapService,
                             type: type,
+                            addressNameService: addressNameService,
                             onRecipientDataAction: {
                                 navigationPath.append($0)
                             },

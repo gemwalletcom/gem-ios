@@ -15,6 +15,7 @@ struct WalletConnectorNavigationStack: View {
     @Environment(\.scanService) private var scanService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.swapService) private var swapService
+    @Environment(\.addressNameService) private var addressNameService
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter
@@ -46,6 +47,7 @@ struct WalletConnectorNavigationStack: View {
                                 keystore: keystore,
                                 swapService: swapService
                             ),
+                            addressNameService: addressNameService,
                             confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }
                         )
