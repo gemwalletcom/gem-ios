@@ -53,7 +53,9 @@ public struct TransactionStateUpdateJob: Job {
                 return .complete
             }
         } catch {
-            let isTimedOut = Date.now.timeIntervalSince(transaction.createdAt) > Double(transaction.assetId.chain.transactionTimeout) && isNetworkError(error) == false
+            let isTimedOut = Date.now.timeIntervalSince(transaction.createdAt) > Double(transaction.assetId.chain.transactionTimeoutSeconds) && isNetworkError(
+                error
+            ) == false
             if isTimedOut {
                 try? stateService.updateState(state: .failed, for: transaction)
                 return .complete
