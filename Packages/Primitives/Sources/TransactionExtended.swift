@@ -12,8 +12,10 @@ public struct TransactionExtended: Codable, Sendable {
 	public let feePrice: Price?
 	public let assets: [Asset]
 	public let prices: [AssetPrice]
+	public let fromAddress: AddressName?
+	public let toAddress: AddressName?
 
-	public init(transaction: Transaction, asset: Asset, feeAsset: Asset, price: Price?, feePrice: Price?, assets: [Asset], prices: [AssetPrice]) {
+	public init(transaction: Transaction, asset: Asset, feeAsset: Asset, price: Price?, feePrice: Price?, assets: [Asset], prices: [AssetPrice], fromAddress: AddressName?, toAddress: AddressName?) {
 		self.transaction = transaction
 		self.asset = asset
 		self.feeAsset = feeAsset
@@ -21,5 +23,7 @@ public struct TransactionExtended: Codable, Sendable {
 		self.feePrice = feePrice
 		self.assets = assets
 		self.prices = prices
+		self.fromAddress = fromAddress
+		self.toAddress = toAddress
 	}
 }

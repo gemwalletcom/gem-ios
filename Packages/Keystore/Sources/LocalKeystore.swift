@@ -113,6 +113,8 @@ public struct LocalKeystore: Keystore {
             return Base58.encodeNoCheck(data: data)
         case .hex:
             return data.hexString.append0x
+        case .base32:
+            throw AnyError("unable to convert private key to base32")
         }
     }
 

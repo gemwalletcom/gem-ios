@@ -29,6 +29,7 @@ public struct Migrations {
             // transactions
             try TransactionRecord.create(db: db)
             try TransactionAssetAssociationRecord.create(db: db)
+            try AddressRecord.create(db: db)
             
             // nodes
             try NodeRecord.create(db: db)
@@ -268,6 +269,11 @@ public struct Migrations {
             try? db.alter(table: PriceRecord.databaseTableName) {
                 $0.add(column: PriceRecord.Columns.updatedAt.name, .date)
             }
+        }
+        
+        migrator.registerMigration("Add \(AddressRecord.databaseTableName) table33") { db in
+            try db.drop(table: AddressRecord.databaseTableName)
+            try AddressRecord.create(db: db)
         }
         
         try migrator.migrate(dbQueue)

@@ -42,6 +42,8 @@ public struct WalletKeyStore: Sendable {
                 }
             case .hex:
                 data = Data(hexString: key)
+            case .base32:
+                throw AnyError("Unsupported encoding")
             }
         }
 
