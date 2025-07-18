@@ -108,7 +108,7 @@ public enum GemAPI: TargetType {
         case .updateDevice(let device):
             return "/v1/devices/\(device.id)"
         case .getTransactions(let deviceId, _):
-            return "/v1/transactions/device/\(deviceId)"
+            return "/v2/transactions/device/\(deviceId)"
         case .getAsset(let id):
             return "/v1/assets/\(id.identifier.replacingOccurrences(of: "/", with: "%2F"))"
         case .getAssets:

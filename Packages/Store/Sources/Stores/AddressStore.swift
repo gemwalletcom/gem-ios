@@ -12,13 +12,15 @@ public struct AddressStore: Sendable {
         self.db = db.dbQueue
     }
     
-    public func addAddress(chain: Chain, address: String, name: String) throws {
+    public func addAddressNames(_ addressNames: [AddressName]) throws {
         try db.write { db in
-            try AddressRecord(
-                chain: chain,
-                address: address,
-                name: name
-            ).save(db, onConflict: .replace)
+            for addressName in addressNames {
+                try AddressRecord(
+                    chain: addressName.chain,
+                    address: addressName.address,
+                    name: addressName.name
+                ).save(db, onConflict: .replace)
+            }
         }
     }
     
