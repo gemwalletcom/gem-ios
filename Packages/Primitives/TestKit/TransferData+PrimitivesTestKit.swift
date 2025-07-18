@@ -7,11 +7,12 @@ import BigInt
 extension TransferData {
     public static func mock(
         type: TransferDataType = .transfer(.mock()),
-        value: BigInt = .zero
+        value: BigInt = .zero,
+        recipientData: RecipientData = .mock()
     ) -> Self {
         .init(
             type: type,
-            recipientData: .mock(),
+            recipientData: recipientData,
             value: value,
             canChangeValue: false,
             ignoreValueCheck: type.shouldIgnoreValueCheck

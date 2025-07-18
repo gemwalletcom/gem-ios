@@ -55,6 +55,7 @@ public struct RecipientNavigationView: View {
                         keystore: model.keystore,
                         swapService: model.swapService
                     ),
+                    addressNameService: model.addressNameService,
                     onComplete: onComplete
                 )
             )

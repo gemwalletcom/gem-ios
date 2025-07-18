@@ -28,6 +28,7 @@ import WalletSessionService
 import AppService
 import ScanService
 import SwapService
+import AddressNameService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -82,7 +83,8 @@ struct ServicesFactory {
             transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
             walletStore: storeManager.walletStore,
-            deviceService: deviceService
+            deviceService: deviceService,
+            addressStore: storeManager.addressStore
         )
         let transactionService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
@@ -164,6 +166,9 @@ struct ServicesFactory {
             configService: configService,
             releaseService: AppReleaseService(configService: configService)
         )
+        let addressNameService = AddressNameService(
+            addressStore: storeManager.addressStore
+        )
 
         return AppResolver.Services(
             assetsService: assetsService,
@@ -192,7 +197,8 @@ struct ServicesFactory {
             deviceObserverService: deviceObserverService,
             onstartService: onStartService,
             onstartAsyncService: onstartAsyncService,
-            walletConnectorManager: walletConnectorManager
+            walletConnectorManager: walletConnectorManager,
+            addressNameService: addressNameService
         )
     }
 }
@@ -284,13 +290,15 @@ extension ServicesFactory {
         transactionStore: TransactionStore,
         assetsService: AssetsService,
         walletStore: WalletStore,
-        deviceService: any DeviceServiceable
+        deviceService: any DeviceServiceable,
+        addressStore: AddressStore
     ) -> TransactionsService {
         TransactionsService(
             transactionStore: transactionStore,
             assetsService: assetsService,
             walletStore: walletStore,
-            deviceService: deviceService
+            deviceService: deviceService,
+            addressStore: addressStore
         )
     }
 

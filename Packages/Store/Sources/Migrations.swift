@@ -272,7 +272,7 @@ public struct Migrations {
         }
         
         migrator.registerMigration("Add \(AddressRecord.databaseTableName) table33") { db in
-            try db.drop(table: AddressRecord.databaseTableName)
+            try? db.drop(table: AddressRecord.databaseTableName)
             try AddressRecord.create(db: db)
         }
         
