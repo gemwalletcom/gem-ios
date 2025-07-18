@@ -61,11 +61,8 @@ public extension Chain {
     }
     
     func checksumAddress(_ address: String) -> String {
-        if let chain = EVMChain(rawValue: self.rawValue) {
-            if let address = AnyAddress(string: address, coin: chain.chain.coinType) {
-                return address.description
-            }
-            return address
+        if let chain = EVMChain(rawValue: self.rawValue), let address = AnyAddress(string: address, coin: chain.chain.coinType) {
+            return address.description
         }
         return address
     }
