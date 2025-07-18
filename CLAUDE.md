@@ -273,6 +273,7 @@ public extension Banner {
 - Prefer async/await over Combine for new code
 - Use protocol-based design for services
 - Avoid adding explanatory comments in tests - test code should be self-documenting
+- Never add comments for obvious or simple code operations (e.g., "Check if column exists", "Add column to table", "Verify tables were created")
 - When extending types to conform to protocols, use explicit protocol conformance syntax:
   ```swift
   // Good - explicit protocol conformance
