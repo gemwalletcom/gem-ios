@@ -43,27 +43,27 @@ public struct LocalKeystore: Keystore {
                 name: name,
                 words: words,
                 chains: chains,
-                password: try getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
+                password: getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
             )
         case .single(let words, let chain):
             try walletKeyStore.importWallet(
                 name: name,
                 words: words,
                 chains: [chain],
-                password: try getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
+                password: getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
             )
         case .privateKey(let text, let chain):
             try walletKeyStore.importPrivateKey(
                 name: name,
                 key: text,
                 chain: chain,
-                password: try getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
+                password: getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
             )
         case .address(let chain, let address):
             Wallet.makeView(name: name, chain: chain, address: address)
         }
     }
-    
+
     public func setupChains(chains: [Chain], for wallets: [Primitives.Wallet]) throws -> [Primitives.Wallet] {
         let wallets = wallets.filter {
             let enabled = Set($0.accounts.map(\.chain)).intersection(chains).map { $0 }
@@ -77,13 +77,13 @@ public struct LocalKeystore: Keystore {
         return try wallets
             .map {
                 try walletKeyStore.addChains(
-                    chains:   chains,
-                    wallet:   $0,
+                    chains: chains,
+                    wallet: $0,
                     password: password
                 )
             }
     }
-    
+
     public func deleteKey(for wallet: Primitives.Wallet) throws {
         switch wallet.type {
         case .view: break
@@ -92,15 +92,15 @@ public struct LocalKeystore: Keystore {
             do {
                 try walletKeyStore.deleteWallet(id: wallet.id, password: password)
             } catch let error as KeystoreError {
-                //in some cases wallet already deleted, just ignore
+                // in some cases wallet already deleted, just ignore
                 switch error {
-                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList, .invalidPrivateKey:
+                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList, .invalidPrivateKey, .invalidPrivateKeyEncoding:
                     break
                 }
             }
         }
     }
-    
+
     public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain) throws -> Data {
         let password = try keystorePassword.getPassword()
         return try walletKeyStore.getPrivateKey(id: wallet.id, type: wallet.type, chain: chain, password: password)
@@ -114,34 +114,34 @@ public struct LocalKeystore: Keystore {
         case .hex:
             return data.hexString.append0x
         case .base32:
-            throw AnyError("unable to convert private key to base32")
+            // not allow exporting to Base32
+            throw KeystoreError.invalidPrivateKeyEncoding
         }
     }
 
     public func getMnemonic(wallet: Primitives.Wallet) throws -> [String] {
         try walletKeyStore.getMnemonic(
             wallet: wallet,
-            password: try keystorePassword.getPassword()
+            password: keystorePassword.getPassword()
         )
     }
-    
+
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {
         try keystorePassword.getAuthentication()
     }
-    
+
     public func sign(hash: Data, wallet: Primitives.Wallet, chain: Chain) throws -> Data {
         try walletKeyStore.sign(
             hash: hash,
             walletId: wallet.id,
             type: wallet.type,
-            password: try keystorePassword.getPassword(),
+            password: keystorePassword.getPassword(),
             chain: chain
         )
     }
-    
+
     public func destroy() throws {
         try walletKeyStore.destroy()
-        //try keystorePassword.remove()
     }
 
     private func getOrCreatePassword(createPasswordIfNone: Bool) throws -> String {

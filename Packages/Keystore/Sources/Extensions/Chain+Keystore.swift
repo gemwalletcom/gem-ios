@@ -16,6 +16,8 @@ public extension Chain {
         switch self {
         case .solana:
             [.base58, .hex]
+        case .stellar:
+            [.base32, .hex]
         default:
             [.hex]
         }
