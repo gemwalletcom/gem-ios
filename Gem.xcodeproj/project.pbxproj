@@ -152,6 +152,13 @@
 			remoteGlobalIDString = C30952AF299C39D70004C0F9;
 			remoteInfo = Gem;
 		};
+		D8D5DF0A2E2A1CFE00BFDDCB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C30952A8299C39D70004C0F9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D83819482E256A5A0076CDB3;
+			remoteInfo = GemPriceWidget;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -771,6 +778,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D8D5DF0B2E2A1CFE00BFDDCB /* PBXTargetDependency */,
 			);
 			name = Gem;
 			packageProductDependencies = (
@@ -1156,6 +1164,11 @@
 			target = C30952AF299C39D70004C0F9 /* Gem */;
 			targetProxy = D8A1F8792B17F21E00B15F54 /* PBXContainerItemProxy */;
 		};
+		D8D5DF0B2E2A1CFE00BFDDCB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D83819482E256A5A0076CDB3 /* GemPriceWidget */;
+			targetProxy = D8D5DF0A2E2A1CFE00BFDDCB /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -1495,9 +1508,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U2D6XV88CZ;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = U2D6XV88CZ;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GemPriceWidget/Info.plist;
@@ -1511,8 +1526,10 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.3.197;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.pricewidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.widget.price;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.gemwallet.ios.widget.price";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1528,9 +1545,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U2D6XV88CZ;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = U2D6XV88CZ;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GemPriceWidget/Info.plist;
@@ -1544,9 +1563,10 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.3.197;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.pricewidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.widget.price;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.gemwallet.ios.widget.price";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
