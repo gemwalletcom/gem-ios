@@ -16,6 +16,7 @@ import Localization
 import Preferences
 import PreferencesTestKit
 import GemAPI
+import AddressNameServiceTestKit
 
 @MainActor
 struct ConfirmTransferViewModelTests {
@@ -58,6 +59,7 @@ private extension ConfirmTransferViewModel {
             swapService: .mock(),
             walletsService: .mock(),
             swapDataProvider: .mock(),
+            addressNameService: .mock(),
             onComplete: {}
         )
     }

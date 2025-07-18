@@ -99,6 +99,7 @@ let package = Package(
                 .product(name: "ScanServiceTestKit", package: "ScanService"),
                 .product(name: "SwapServiceTestKit", package: "SwapService"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "AddressNameServiceTestKit", package: "AddressNameService"),
             ],
             path: "Tests"
         ),

@@ -3,6 +3,7 @@
 import Testing
 @testable import Transfer
 @testable import Primitives
+import AddressNameServiceTestKit
 
 struct TransferDataViewModelTests {
 
@@ -23,7 +24,8 @@ private extension TransferDataViewModel {
         type: TransferDataType = .transfer(.mock())
     ) -> TransferDataViewModel {
         return TransferDataViewModel(
-            data: TransferData.mock(type: type)
+            data: TransferData.mock(type: type),
+            addressNameService: .mock()
         )
     }
 }
