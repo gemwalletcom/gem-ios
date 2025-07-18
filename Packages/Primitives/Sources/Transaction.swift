@@ -59,3 +59,13 @@ public struct TransactionsFetchOption: Codable, Equatable, Sendable {
 		self.from_timestamp = from_timestamp
 	}
 }
+
+public struct TransactionsResponse: Codable, Equatable, Sendable {
+	public let transactions: [Transaction]
+	public let addressNames: [AddressName]
+
+	public init(transactions: [Transaction], addressNames: [AddressName]) {
+		self.transactions = transactions
+		self.addressNames = addressNames
+	}
+}
