@@ -30,9 +30,7 @@ struct CoinPriceRowViewModel {
     }
     
     var priceText: String {
-        currencyFormatter.string(
-            coin.price
-        )
+        currencyFormatter.string(coin.price)
     }
     
     var percentageText: String {
@@ -47,5 +45,9 @@ struct CoinPriceRowViewModel {
         } else {
             return Colors.gray
         }
+    }
+    
+    var percentageChange: Double {
+        coin.priceChangePercentage24h
     }
 }

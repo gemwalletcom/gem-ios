@@ -9,14 +9,12 @@ import Formatters
 final class PriceWidgetViewModel {
     let entry: PriceWidgetEntry
     let widgetFamily: WidgetFamily
-    let currencyFormatter: CurrencyFormatter
     init(
         entry: PriceWidgetEntry,
         widgetFamily: WidgetFamily
     ) {
         self.entry = entry
         self.widgetFamily = widgetFamily
-        self.currencyFormatter = CurrencyFormatter(currencyCode: entry.currency)
     }
     
     var prices: [CoinPrice] {
@@ -29,6 +27,15 @@ final class PriceWidgetViewModel {
             return entry.coinPrices
         default:
             return entry.coinPrices
+        }
+    }
+    
+    var emptyMessage: String {
+        switch widgetFamily {
+        case .systemSmall:
+            return "No data"
+        default:
+            return "No price data available"
         }
     }
 }

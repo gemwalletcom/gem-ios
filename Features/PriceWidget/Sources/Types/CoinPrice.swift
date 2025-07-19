@@ -4,13 +4,15 @@ import Foundation
 import Primitives
 import GemstonePrimitives
 
-public struct CoinPrice: Sendable {
+public struct CoinPrice: Sendable, Identifiable {
     public let assetId: AssetId
     public let name: String
     public let symbol: String
     public let price: Double
     public let priceChangePercentage24h: Double
     public let imageURL: URL?
+    
+    public var id: AssetId { assetId }
     
     public init(
         assetId: AssetId,
@@ -30,22 +32,21 @@ public struct CoinPrice: Sendable {
     
     public static func placeholders() -> [CoinPrice] {
         let placeholders: [(Chain, String, String, Double, Double)] = [
-            (.bitcoin, "Bitcoin", "BTC", 45000, 2.5),
-            (.ethereum, "Ethereum", "ETH", 2500, -1.2),
-            (.solana, "Solana", "SOL", 150, 5.3),
-            (.xrp, "XRP", "XRP", 0.65, 0.8),
-            (.smartChain, "BNB", "BNB", 320, -0.5),
+            (.bitcoin, "Bitcoin", "BTC", 169000, 4.20),
+            (.ethereum, "Ethereum", "ETH", 5120, 1.2),
+            (.solana, "Solana", "SOL", 159, 5.3),
+            (.xrp, "XRP", "XRP", 2.65, 0.8),
+            (.smartChain, "BNB", "BNB", 699, 2.5),
         ]
         
         return placeholders.map { chain, name, symbol, price, change in
-            let assetId = AssetId(chain: chain, tokenId: nil)
             return CoinPrice(
-                assetId: assetId,
+                assetId: chain.assetId,
                 name: name,
                 symbol: symbol,
                 price: price,
                 priceChangePercentage24h: change,
-                imageURL: AssetImageFormatter().getURL(for: assetId)
+                imageURL: AssetImageFormatter().getURL(for: chain.assetId)
             )
         }
     }

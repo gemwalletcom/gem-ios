@@ -9,22 +9,30 @@ import Preferences
 
 public struct WidgetPriceService {
     private let pricesService: GemAPIPricesService
+    private let preferences = SharedPreferences()
     
     public init() {
         self.pricesService = GemAPIService()
     }
     
+    public func coins(_ widgetFamily: WidgetFamily) -> [AssetId] {
+        switch widgetFamily {
+        case .systemSmall:
+            [AssetId(chain: .bitcoin, tokenId: nil)]
+        default:
+            [
+                AssetId(chain: .bitcoin, tokenId: nil),
+                AssetId(chain: .ethereum, tokenId: nil),
+                AssetId(chain: .solana, tokenId: nil),
+                AssetId(chain: .xrp, tokenId: nil),
+                AssetId(chain: .smartChain, tokenId: nil),
+            ]
+        }
+    }
+    
     public func fetchTopCoinPrices(widgetFamily: WidgetFamily = .systemMedium) async -> PriceWidgetEntry {
-        let sharedPreferences = SharedPreferences()
-        let currency = sharedPreferences.currency
-        
-        let coins = [
-            AssetId(chain: .bitcoin, tokenId: nil),
-            AssetId(chain: .ethereum, tokenId: nil),
-            AssetId(chain: .solana, tokenId: nil),
-            AssetId(chain: .xrp, tokenId: nil),
-            AssetId(chain: .smartChain, tokenId: nil),
-        ]
+        let coins = coins(widgetFamily)
+        let currency = preferences.currency
         
         do {
             let prices = try await pricesService.getPrices(currency: currency, assetIds: coins)
