@@ -27,7 +27,7 @@ public struct ErrorWrapper: Error, LocalizedError {
                  .NotImplemented,
                  .ComputeQuoteError,
                  .InvalidRoute,
-                 .TransactionError: swapperError.underlayingError
+                 .TransactionError: swapperError.underlyingError
             }
         default: error.localizedDescription
         }
@@ -35,7 +35,7 @@ public struct ErrorWrapper: Error, LocalizedError {
 }
 
 public extension Gemstone.SwapperError {
-    var underlayingError: String {
+    var underlyingError: String {
         switch self {
         case .NotSupportedChain,
              .NotSupportedAsset,

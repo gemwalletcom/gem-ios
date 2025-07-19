@@ -17,7 +17,7 @@ struct SwapperErrorTests {
     }
     
     @Test
-    func underlayingError() {
+    func underlyingError() {
         let swapperError = SwapperError.TransactionError("Attempt to debit an account but found no record of a prior credit")
         let errorWrapper = ErrorWrapper(swapperError)
         
