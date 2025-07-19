@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Localization
 import enum Gemstone.SwapperError
+import Localization
 
 public struct ErrorWrapper: Error, LocalizedError {
     public let error: Error
@@ -27,9 +27,32 @@ public struct ErrorWrapper: Error, LocalizedError {
                  .NotImplemented,
                  .ComputeQuoteError,
                  .InvalidRoute,
-                 .TransactionError: error.localizedDescription
+                 .TransactionError: swapperError.underlayingError
             }
         default: error.localizedDescription
+        }
+    }
+}
+
+public extension Gemstone.SwapperError {
+    var underlayingError: String {
+        switch self {
+        case .NotSupportedChain,
+             .NotSupportedAsset,
+             .NotSupportedPair,
+             .NoAvailableProvider,
+             .InputAmountTooSmall,
+             .InvalidRoute,
+             .NoQuoteAvailable,
+             .NotImplemented:
+            return localizedDescription
+        case .InvalidAddress(let error),
+             .InvalidAmount(let error),
+             .NetworkError(let error),
+             .AbiError(let error),
+             .ComputeQuoteError(let error),
+             .TransactionError(let error):
+            return error
         }
     }
 }
