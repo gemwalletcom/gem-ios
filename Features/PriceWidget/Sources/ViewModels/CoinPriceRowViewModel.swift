@@ -6,13 +6,15 @@ import Style
 
 struct CoinPriceRowViewModel {
     private let coin: CoinPrice
-    private let currency: String
-    private let currencyFormatter = CurrencyFormatter()
+    private let currencyFormatter: CurrencyFormatter
     private let percentFormatter = CurrencyFormatter.percent
     
-    init(coin: CoinPrice, currency: String) {
+    init(
+        coin: CoinPrice,
+        currencyFormatter: CurrencyFormatter = CurrencyFormatter()
+    ) {
         self.coin = coin
-        self.currency = currency
+        self.currencyFormatter = currencyFormatter
     }
     
     var name: String {

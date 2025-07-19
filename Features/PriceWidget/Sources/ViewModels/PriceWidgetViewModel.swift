@@ -3,15 +3,20 @@
 import SwiftUI
 import WidgetKit
 import Components
+import Formatters
 
 @Observable
 final class PriceWidgetViewModel {
     let entry: PriceWidgetEntry
     let widgetFamily: WidgetFamily
-    
-    init(entry: PriceWidgetEntry, widgetFamily: WidgetFamily) {
+    let currencyFormatter: CurrencyFormatter
+    init(
+        entry: PriceWidgetEntry,
+        widgetFamily: WidgetFamily
+    ) {
         self.entry = entry
         self.widgetFamily = widgetFamily
+        self.currencyFormatter = CurrencyFormatter(currencyCode: entry.currency)
     }
     
     var prices: [CoinPrice] {

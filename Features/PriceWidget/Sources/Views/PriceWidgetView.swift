@@ -34,7 +34,7 @@ public struct PriceWidgetView: View {
                 }
             } else if !viewModel.prices.isEmpty {
                 ForEach(viewModel.prices, id: \.assetId) { coin in
-                    CoinPriceRow(model: CoinPriceRowViewModel(coin: coin, currency: viewModel.entry.currency))
+                    CoinPriceRow(model: CoinPriceRowViewModel(coin: coin, currencyFormatter: viewModel.currencyFormatter))
                 }
             } else {
                 VStack {

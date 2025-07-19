@@ -5,6 +5,7 @@ import Primitives
 import GemAPI
 import GemstonePrimitives
 import WidgetKit
+import Preferences
 
 public struct WidgetPriceService {
     private let pricesService: GemAPIPricesService
@@ -14,6 +15,9 @@ public struct WidgetPriceService {
     }
     
     public func fetchTopCoinPrices(widgetFamily: WidgetFamily = .systemMedium) async -> PriceWidgetEntry {
+        let sharedPreferences = SharedPreferences()
+        let currency = sharedPreferences.currency
+        
         let coins = [
             AssetId(chain: .bitcoin, tokenId: nil),
             AssetId(chain: .ethereum, tokenId: nil),
@@ -22,10 +26,8 @@ public struct WidgetPriceService {
             AssetId(chain: .smartChain, tokenId: nil),
         ]
         
-        NSLog("coins \(coins)")
-        
         do {
-            let prices = try await pricesService.getPrices(currency: "USD", assetIds: coins)
+            let prices = try await pricesService.getPrices(currency: currency, assetIds: coins)
             
             let coinPrices = coins.enumerated().compactMap { index, assetId -> CoinPrice? in
                 guard index < prices.count else { return nil }
@@ -47,6 +49,7 @@ public struct WidgetPriceService {
             return PriceWidgetEntry(
                 date: Date(),
                 coinPrices: coinPrices,
+                currency: currency,
                 widgetFamily: widgetFamily
             )
         } catch {
