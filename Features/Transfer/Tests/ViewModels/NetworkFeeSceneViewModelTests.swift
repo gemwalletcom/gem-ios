@@ -40,4 +40,14 @@ struct NetworkFeeSceneViewModelTests {
         model.update(rates: [FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: 5000, priorityFee: 100000))])
         #expect(model.selectedFeeRateViewModel?.valueText == "0.000105 SOL")
     }
+    
+    @Test
+    func valueMatchesSelectedFeeRateBitcoinValueText() {
+        let model = NetworkFeeSceneViewModel(
+            chain: .bitcoin,
+            priority: .normal
+        )
+        model.update(rates: [.defaultRate()])
+        #expect(model.selectedFeeRateViewModel?.valueText == "1 sat/vB")
+    }
 }
