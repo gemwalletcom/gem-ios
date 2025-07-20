@@ -7,15 +7,18 @@ public struct ConfigurableDefaults<T>: @unchecked Sendable {
     private let key: String
     private let defaultValue: T
     private let defaults: UserDefaults
+    private let sharedDefaults: UserDefaults?
 
     public init(
         key: String,
         defaultValue: T,
-        defaults: UserDefaults = .standard
+        defaults: UserDefaults = .standard,
+        sharedDefaults: UserDefaults? = nil
     ) {
         self.key = key
         self.defaultValue = defaultValue
         self.defaults = defaults
+        self.sharedDefaults = sharedDefaults
     }
 
     public var wrappedValue: T {
@@ -23,10 +26,11 @@ public struct ConfigurableDefaults<T>: @unchecked Sendable {
             defaults.object(forKey: key) as? T ?? defaultValue
         }
         set {
-            defaults.set(
-                (newValue as? AnyOptional)?.isNil == true ? nil : newValue,
-                forKey: key
-            )
+            let value = (newValue as? AnyOptional)?.isNil == true ? nil : newValue
+            defaults.set(value, forKey: key)
+            if let sharedDefaults = sharedDefaults {
+                sharedDefaults.set(value, forKey: key)
+            }
         }
     }
 }

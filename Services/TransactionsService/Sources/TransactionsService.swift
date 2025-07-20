@@ -14,19 +14,22 @@ public final class TransactionsService: Sendable {
     let assetsService: AssetsService
     let walletStore: WalletStore
     private let deviceService: any DeviceServiceable
+    private let addressStore: AddressStore
     
     public init(
         provider: any GemAPITransactionService = GemAPIService(),
         transactionStore: TransactionStore,
         assetsService: AssetsService,
         walletStore: WalletStore,
-        deviceService: any DeviceServiceable
+        deviceService: any DeviceServiceable,
+        addressStore: AddressStore
     ) {
         self.provider = provider
         self.transactionStore = transactionStore
         self.assetsService = assetsService
         self.walletStore = walletStore
         self.deviceService = deviceService
+        self.addressStore = addressStore
     }
 
     public func updateAll(walletId: WalletId) async throws {
@@ -37,13 +40,15 @@ public final class TransactionsService: Sendable {
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
-        let transactions = try await provider.getTransactionsAll(
+        let response = try await provider.getTransactionsAll(
             deviceId: deviceId,
             walletIndex: wallet.index.asInt,
             fromTimestamp: store.transactionsTimestamp
         )
-        try await prefetchAssets(walletId: wallet.walletId, transactions: transactions)
-        try transactionStore.addTransactions(walletId: wallet.id, transactions: transactions)
+        
+        try await prefetchAssets(walletId: wallet.walletId, transactions: response.transactions)
+        try transactionStore.addTransactions(walletId: wallet.id, transactions: response.transactions)
+        try addressStore.addAddressNames(response.addressNames)
         
         store.transactionsTimestamp = newTimestamp
     }
@@ -52,18 +57,19 @@ public final class TransactionsService: Sendable {
         let store = WalletPreferences(walletId: wallet.id)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
-        let transactions = try await provider.getTransactionsForAsset(
+        let response = try await provider.getTransactionsForAsset(
             deviceId: deviceId,
             walletIndex: wallet.index.asInt,
             asset: assetId,
             fromTimestamp: store.transactionsForAssetTimestamp(assetId: assetId.identifier)
         )
-        if transactions.isEmpty {
+        if response.transactions.isEmpty {
             return
         }
-        try await prefetchAssets(walletId: wallet.walletId, transactions: transactions)
 
-        try transactionStore.addTransactions(walletId: wallet.id, transactions: transactions)
+        try await prefetchAssets(walletId: wallet.walletId, transactions: response.transactions)
+        try transactionStore.addTransactions(walletId: wallet.id, transactions: response.transactions)
+        try addressStore.addAddressNames(response.addressNames)
         
         store.setTransactionsForAssetTimestamp(assetId: assetId.identifier, value: newTimestamp)
     }

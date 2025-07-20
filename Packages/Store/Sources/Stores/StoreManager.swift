@@ -15,6 +15,7 @@ public struct StoreManager: Sendable {
     public let bannerStore: BannerStore
     public let priceAlertStore: PriceAlertStore
     public let nftStore: NFTStore
+    public let addressStore: AddressStore
     
     public init(db: DB) {
         self.assetStore = AssetStore(db: db)
@@ -29,5 +30,6 @@ public struct StoreManager: Sendable {
         self.bannerStore = BannerStore(db: db)
         self.priceAlertStore = PriceAlertStore(db: db)
         self.nftStore = NFTStore(db: db)
+        self.addressStore = AddressStore(db: db)
     }
 }

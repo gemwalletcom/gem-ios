@@ -3,13 +3,16 @@
 import SwiftUI
 import WidgetKit
 import Components
+import Formatters
 
 @Observable
 final class PriceWidgetViewModel {
     let entry: PriceWidgetEntry
     let widgetFamily: WidgetFamily
-    
-    init(entry: PriceWidgetEntry, widgetFamily: WidgetFamily) {
+    init(
+        entry: PriceWidgetEntry,
+        widgetFamily: WidgetFamily
+    ) {
         self.entry = entry
         self.widgetFamily = widgetFamily
     }
@@ -24,6 +27,15 @@ final class PriceWidgetViewModel {
             return entry.coinPrices
         default:
             return entry.coinPrices
+        }
+    }
+    
+    var emptyMessage: String {
+        switch widgetFamily {
+        case .systemSmall:
+            return "No data"
+        default:
+            return "No price data available"
         }
     }
 }

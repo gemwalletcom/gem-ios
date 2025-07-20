@@ -5,27 +5,37 @@ import Primitives
 import GemAPI
 import GemstonePrimitives
 import WidgetKit
+import Preferences
 
 public struct WidgetPriceService {
     private let pricesService: GemAPIPricesService
+    private let preferences = SharedPreferences()
     
     public init() {
         self.pricesService = GemAPIService()
     }
     
+    public func coins(_ widgetFamily: WidgetFamily) -> [AssetId] {
+        switch widgetFamily {
+        case .systemSmall:
+            [AssetId(chain: .bitcoin, tokenId: nil)]
+        default:
+            [
+                AssetId(chain: .bitcoin, tokenId: nil),
+                AssetId(chain: .ethereum, tokenId: nil),
+                AssetId(chain: .solana, tokenId: nil),
+                AssetId(chain: .xrp, tokenId: nil),
+                AssetId(chain: .smartChain, tokenId: nil),
+            ]
+        }
+    }
+    
     public func fetchTopCoinPrices(widgetFamily: WidgetFamily = .systemMedium) async -> PriceWidgetEntry {
-        let coins = [
-            AssetId(chain: .bitcoin, tokenId: nil),
-            AssetId(chain: .ethereum, tokenId: nil),
-            AssetId(chain: .solana, tokenId: nil),
-            AssetId(chain: .xrp, tokenId: nil),
-            AssetId(chain: .smartChain, tokenId: nil),
-        ]
-        
-        NSLog("coins \(coins)")
+        let coins = coins(widgetFamily)
+        let currency = preferences.currency
         
         do {
-            let prices = try await pricesService.getPrices(currency: "USD", assetIds: coins)
+            let prices = try await pricesService.getPrices(currency: currency, assetIds: coins)
             
             let coinPrices = coins.enumerated().compactMap { index, assetId -> CoinPrice? in
                 guard index < prices.count else { return nil }
@@ -47,6 +57,7 @@ public struct WidgetPriceService {
             return PriceWidgetEntry(
                 date: Date(),
                 coinPrices: coinPrices,
+                currency: currency,
                 widgetFamily: widgetFamily
             )
         } catch {

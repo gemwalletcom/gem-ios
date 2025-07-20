@@ -12,7 +12,8 @@ public extension TransactionsService {
             transactionStore: .mock(),
             assetsService: .mock(),
             walletStore: .mock(),
-            deviceService: DeviceServiceMock()
+            deviceService: DeviceServiceMock(),
+            addressStore: .mock()
         )
     }
 }

@@ -38,7 +38,9 @@
       "Bash(just)",
       "Bash(echo $?)",
       "Bash(gh pr merge:*)",
-      "Bash(just build-package:*)"
+      "Bash(just build-package:*)",
+      "Bash(just generate-model:*)",
+      "Bash(just:*)"
     ],
     "deny": []
   }

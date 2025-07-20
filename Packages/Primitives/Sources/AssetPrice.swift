@@ -24,7 +24,7 @@ public struct AssetMarket: Codable, Sendable {
 	}
 }
 
-public struct AssetPrice: Codable, Sendable {
+public struct AssetPrice: Codable, Equatable, Hashable, Sendable {
 	public let assetId: AssetId
 	public let price: Double
 	public let priceChangePercentage24h: Double

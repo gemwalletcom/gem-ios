@@ -129,13 +129,13 @@ public struct TransactionViewModel: Sendable {
                 return String(
                     format: "%@ %@", 
                     Localized.Transfer.from,
-                    AddressFormatter(address: transaction.transaction.from, chain: chain).value()
+                    getDisplayName(address: transaction.transaction.from, chain: chain)
                 )
             case .outgoing, .selfTransfer:
                 return String(
                     format: "%@ %@",
                     Localized.Transfer.to,
-                    AddressFormatter(address: transaction.transaction.to, chain: chain).value()
+                    getDisplayName(address: transaction.transaction.to, chain: chain)
                 )
             }
         case .stakeDelegate,
@@ -143,13 +143,13 @@ public struct TransactionViewModel: Sendable {
             return String(
                 format: "%@ %@",
                 Localized.Transfer.to,
-                AddressFormatter(address: transaction.transaction.to, chain: chain).value()
+                getDisplayName(address: transaction.transaction.to, chain: chain)
             )
         case .stakeUndelegate:
             return String(
                 format: "%@ %@",
                 Localized.Transfer.from,
-                AddressFormatter(address: transaction.transaction.to, chain: chain).value()
+                getDisplayName(address: transaction.transaction.to, chain: chain)
             )
         case .swap,
             .stakeRewards,
@@ -296,6 +296,25 @@ public struct TransactionViewModel: Sendable {
 
     public var addressExplorerUrl: URL { addressLink.url }
     public var transactionExplorerUrl: URL { transactionLink.url }
+    
+    public func getDisplayName(address: String, chain: Chain) -> String {
+        if let name = getAddressName(address: address) {
+            return name
+        }
+        return AddressFormatter(address: address, chain: chain).value()
+    }
+    
+    public func getAddressName(address: String) -> String? {
+        if address == transaction.transaction.from {
+            return transaction.fromAddress?.name
+        }
+        
+        if address == transaction.transaction.to {
+            return transaction.toAddress?.name
+        }
+        
+        return .none
+    }
 
     private var assetId: AssetId {
         transaction.transaction.assetId
