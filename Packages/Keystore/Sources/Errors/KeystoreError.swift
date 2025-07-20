@@ -1,11 +1,12 @@
 import Foundation
 
 enum KeystoreError: LocalizedError {
-    //case unknownWallet
+    // case unknownWallet
     case unknownWalletIdInWalletCore
     case unknownWalletInWalletCoreList
     case unknownWalletInWalletCore
     case invalidPrivateKey
+    case invalidPrivateKeyEncoding
 
     var errorDescription: String? {
         switch self {
@@ -19,6 +20,8 @@ enum KeystoreError: LocalizedError {
             "Unknown wallet in Wallet core"
         case .invalidPrivateKey:
             "Invalid private key"
+        case .invalidPrivateKeyEncoding:
+            "Invalid private key encoding"
         }
     }
 }

@@ -21,6 +21,7 @@ let package = Package(
         .package(name: "GemAPI", path: "../../Packages/GemAPI"),
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
     ],
     targets: [
         .target(
@@ -33,6 +34,7 @@ let package = Package(
                 "GemAPI",
                 "Localization",
                 "GemstonePrimitives",
+                "Preferences",
             ],
             path: "Sources"
         ),

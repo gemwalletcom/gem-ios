@@ -7,4 +7,5 @@ import Foundation
 public enum EncodingType: String, Codable, CaseIterable, Equatable, Sendable {
 	case hex = "Hex"
 	case base58 = "Base58"
+	case base32 = "Base32"
 }

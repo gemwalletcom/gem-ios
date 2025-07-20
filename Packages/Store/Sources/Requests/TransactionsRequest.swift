@@ -50,6 +50,8 @@ public struct TransactionsRequest: ValueObservationQueryable {
             .including(optional: TransactionRecord.feePrice)
             .including(all: TransactionRecord.assets)
             .including(all: TransactionRecord.prices)
+            .including(optional: TransactionRecord.fromAddress)
+            .including(optional: TransactionRecord.toAddress)
             .order(TransactionRecord.Columns.date.desc)
             .distinct()
             .limit(limit)

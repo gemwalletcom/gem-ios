@@ -120,7 +120,7 @@ extension ConfirmTransferScene {
 
                 ListItemImageView(
                     title: model.networkTitle,
-                    subtitle: model.networkValue,
+                    subtitle: model.networkText,
                     assetImage: model.networkAssetImage
                 )
                 

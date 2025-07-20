@@ -4,7 +4,11 @@ import Foundation
 import Primitives
 
 public final class Preferences: @unchecked Sendable {
-    private struct Keys {
+    public enum Constants {
+        public static let appGroupIdentifier = "group.com.gemwallet.ios"
+    }
+    
+    public struct Keys {
         static let currency = "currency"
         static let importFiatMappingsVersion = "migrate_fiat_mappings_version"
         static let importFiatPurchaseAssetsVersion = "migrate_fiat_purchase_assets_version"
@@ -100,10 +104,12 @@ public final class Preferences: @unchecked Sendable {
     }
 
     private func configureAllProperties(with defaults: UserDefaults) {
-        func configure<T>(_ keyPath: ReferenceWritableKeyPath<Preferences, ConfigurableDefaults<T>>, key: String, defaultValue: T) {
-            self[keyPath: keyPath] = ConfigurableDefaults(key: key, defaultValue: defaultValue, defaults: defaults)
+        let sharedDefaults = UserDefaults(suiteName: Constants.appGroupIdentifier)
+        
+        func configure<T>(_ keyPath: ReferenceWritableKeyPath<Preferences, ConfigurableDefaults<T>>, key: String, defaultValue: T, sharedDefaults: UserDefaults? = nil) {
+            self[keyPath: keyPath] = ConfigurableDefaults(key: key, defaultValue: defaultValue, defaults: defaults, sharedDefaults: sharedDefaults)
         }
-        configure(\._currency, key: Keys.currency, defaultValue: Currency.usd.rawValue)
+        configure(\._currency, key: Keys.currency, defaultValue: Currency.usd.rawValue, sharedDefaults: sharedDefaults)
         configure(\._importFiatMappingsVersion, key: Keys.importFiatMappingsVersion, defaultValue: 0)
         configure(\._importFiatPurchaseAssetsVersion, key: Keys.importFiatPurchaseAssetsVersion, defaultValue: 0)
         configure(\._localAssetsVersion, key: Keys.localAssetsVersion, defaultValue: 0)
@@ -112,6 +118,7 @@ public final class Preferences: @unchecked Sendable {
         configure(\._swapAssetsVersion, key: Keys.swapAssetsVersion, defaultValue: 0)
         configure(\._launchesCount, key: Keys.launchesCount, defaultValue: 0)
         configure(\._subscriptionsVersion, key: Keys.subscriptionsVersion, defaultValue: 0)
+        configure(\._subscriptionsVersionHasChange, key: Keys.subscriptionsVersionHasChange, defaultValue: true)
         configure(\._currentWalletId, key: Keys.currentWalletId, defaultValue: nil)
         configure(\._isPushNotificationsEnabled, key: Keys.isPushNotificationsEnabled, defaultValue: false)
         configure(\._isPriceAlertsEnabled, key: Keys.isPriceAlertsEnabled, defaultValue: false)

@@ -7,6 +7,7 @@ import PriceWidget
 @main
 struct GemPriceWidgetBundle: WidgetBundle {
     var body: some Widget {
-        PriceWidget()
+        SmallPriceWidget()
+        MediumPriceWidget()
     }
 }

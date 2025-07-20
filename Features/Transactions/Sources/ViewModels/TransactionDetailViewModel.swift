@@ -117,7 +117,7 @@ public final class TransactionDetailViewModel {
         return AddressListItemViewModel(
             title: title,
             account: account,
-            mode: .auto(addressStyle: .full),
+            mode: .nameOrAddress,
             explorerService: ExplorerService.standard
         )
     }
@@ -126,9 +126,10 @@ public final class TransactionDetailViewModel {
         guard let participant = participant else {
             return .none
         }
+        let name = model.getAddressName(address: participant)
         return SimpleAccount(
-            name: .none,
-            chain: model.transaction.transaction.assetId.chain,
+            name: name,
+            chain: chain,
             address: participant,
             assetImage: .none
         )

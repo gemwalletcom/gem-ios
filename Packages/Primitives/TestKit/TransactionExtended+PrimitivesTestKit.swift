@@ -7,7 +7,9 @@ public extension TransactionExtended {
     static func mock(
         transaction: Transaction = .mock(),
         asset: Asset = .mock(),
-        assets: [Asset] = []
+        assets: [Asset] = [],
+        fromAddress: AddressName? = nil,
+        toAddress: AddressName? = nil
     ) -> TransactionExtended {
         TransactionExtended(
             transaction: transaction,
@@ -16,7 +18,9 @@ public extension TransactionExtended {
             price: .none,
             feePrice: .none,
             assets: assets,
-            prices: []
+            prices: [],
+            fromAddress: fromAddress,
+            toAddress: toAddress
         )
     }
 }

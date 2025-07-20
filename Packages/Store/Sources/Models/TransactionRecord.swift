@@ -62,6 +62,9 @@ public struct TransactionRecord: Codable, TableRecord, FetchableRecord, Persista
     static let price = belongsTo(PriceRecord.self, key: "price", using: ForeignKey(["assetId"], to: ["assetId"]))
     static let feePrice = belongsTo(PriceRecord.self, key: "feePrice", using: ForeignKey(["feeAssetId"], to: ["assetId"]))
     
+    static let fromAddress = belongsTo(AddressRecord.self, key: "fromAddress", using: ForeignKey(["chain", "from"], to: ["chain", "address"]))
+    static let toAddress = belongsTo(AddressRecord.self, key: "toAddress", using: ForeignKey(["chain", "to"], to: ["chain", "address"]))
+    
     static let assetsAssociation = hasMany(TransactionAssetAssociationRecord.self)
     static let pricesAssociation = hasMany(TransactionAssetAssociationRecord.self)
     static let assets = hasMany(AssetRecord.self, through: assetsAssociation, using: TransactionAssetAssociationRecord.asset)

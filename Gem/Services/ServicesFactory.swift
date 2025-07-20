@@ -82,7 +82,8 @@ struct ServicesFactory {
             transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
             walletStore: storeManager.walletStore,
-            deviceService: deviceService
+            deviceService: deviceService,
+            addressStore: storeManager.addressStore
         )
         let transactionService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
@@ -284,13 +285,15 @@ extension ServicesFactory {
         transactionStore: TransactionStore,
         assetsService: AssetsService,
         walletStore: WalletStore,
-        deviceService: any DeviceServiceable
+        deviceService: any DeviceServiceable,
+        addressStore: AddressStore
     ) -> TransactionsService {
         TransactionsService(
             transactionStore: transactionStore,
             assetsService: assetsService,
             walletStore: walletStore,
-            deviceService: deviceService
+            deviceService: deviceService,
+            addressStore: addressStore
         )
     }
 
