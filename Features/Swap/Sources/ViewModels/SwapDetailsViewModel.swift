@@ -123,8 +123,23 @@ public final class SwapDetailsViewModel {
         let slippageValue = Double(selectedQuote.slippageBps) / 100
         return String(format: "%@ %@", "\(slippageValue.rounded(toPlaces: 2))", "%")
     }
-    
-    // MARK: - Actions
+
+    // MARK: - Private methods
+    private func swapProviderItems(_ quotes: [SwapperQuote]) -> [SwapProviderItem] {
+        quotes.compactMap {
+            SwapProviderItem(
+                asset: toAssetPrice.asset,
+                swapperQuote: $0,
+                selectedProvider: selectedQuote.providerData.provider,
+                priceViewModel: priceViewModel,
+                valueFormatter: valueFormatter
+            )
+        }
+    }
+}
+
+// MARK: - Actions
+extension SwapDetailsViewModel {
     func switchRateDirection() {
         switch rateDirection {
         case .direct: rateDirection = .inverse
@@ -149,18 +164,5 @@ public final class SwapDetailsViewModel {
     
     func onSelectProvidersSelection() {
         isPresentingSwapProviderSelectionSheet = true
-    }
-
-    // MARK: - Private methods
-    private func swapProviderItems(_ quotes: [SwapperQuote]) -> [SwapProviderItem] {
-        quotes.compactMap {
-            SwapProviderItem(
-                asset: toAssetPrice.asset,
-                swapperQuote: $0,
-                selectedProvider: selectedQuote.providerData.provider,
-                priceViewModel: priceViewModel,
-                valueFormatter: valueFormatter
-            )
-        }
     }
 }

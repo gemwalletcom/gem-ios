@@ -15,8 +15,6 @@ public struct SwapProviderItem: Sendable {
     public let selectedProvider: SwapProvider?
     public let priceViewModel: PriceViewModel
     public let valueFormatter: ValueFormatter
-    
-    // selection item
     public let swapperQuote: SwapperQuote?
     
     public init(
