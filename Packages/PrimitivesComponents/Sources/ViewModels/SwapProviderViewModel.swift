@@ -2,21 +2,21 @@
 
 import Foundation
 import Components
-import struct Gemstone.SwapperProviderType
+import Primitives
 
 public struct SwapProviderViewModel {
-    private let provider: Gemstone.SwapperProviderType
+    private let providerData: SwapProviderData
 
-    public init(provider: Gemstone.SwapperProviderType) {
-        self.provider = provider
+    public init(providerData: SwapProviderData) {
+        self.providerData = providerData
     }
     
-    public var providerText: String? { provider.name }
+    public var providerText: String { providerData.name }
 
-    public var providerImage: AssetImage? {
+    public var providerImage: AssetImage {
         AssetImage(
             imageURL: .none,
-            placeholder: provider.image,
+            placeholder: providerData.provider.image,
             chainPlaceholder: .none
         )
     }

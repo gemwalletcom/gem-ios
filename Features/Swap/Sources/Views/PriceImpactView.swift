@@ -20,10 +20,7 @@ struct PriceImpactView: View {
             ListItemView(
                 title: model.priceImpactTitle,
                 subtitle: priceImpactValue.value,
-                subtitleStyle: TextStyle(
-                    font: .callout,
-                    color: model.priceImpactColor(for: priceImpactValue.type)
-                ),
+                subtitleStyle: model.priceImpactStyle,
                 infoAction: infoAction
             )
         }

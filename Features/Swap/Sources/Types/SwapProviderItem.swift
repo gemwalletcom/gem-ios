@@ -7,25 +7,42 @@ import PrimitivesComponents
 import Style
 import Formatters
 
-import enum Gemstone.SwapperProvider
 import struct Gemstone.SwapperQuote
 
 public struct SwapProviderItem: Sendable {
     public let asset: Asset
-    public let swapQuote: Gemstone.SwapperQuote
-    public let selectedProvider: Gemstone.SwapperProvider?
+    public let swapQuote: SwapQuote
+    public let selectedProvider: SwapProvider?
     public let priceViewModel: PriceViewModel
     public let valueFormatter: ValueFormatter
+    public let swapperQuote: SwapperQuote?
     
     public init(
         asset: Asset,
-        swapQuote: Gemstone.SwapperQuote,
-        selectedProvider: Gemstone.SwapperProvider?,
+        swapQuote: SwapQuote,
+        selectedProvider: SwapProvider?,
         priceViewModel: PriceViewModel,
         valueFormatter: ValueFormatter
     ) {
         self.asset = asset
         self.swapQuote = swapQuote
+        self.selectedProvider = selectedProvider
+        self.priceViewModel = priceViewModel
+        self.valueFormatter = valueFormatter
+        self.swapperQuote = nil
+    }
+    
+    public init?(
+        asset: Asset,
+        swapperQuote: Gemstone.SwapperQuote?,
+        selectedProvider: SwapProvider?,
+        priceViewModel: PriceViewModel,
+        valueFormatter: ValueFormatter
+    ) {
+        guard let swapperQuote else { return nil }
+        self.asset = asset
+        self.swapQuote = swapperQuote.asPrimitive
+        self.swapperQuote = swapperQuote
         self.selectedProvider = selectedProvider
         self.priceViewModel = priceViewModel
         self.valueFormatter = valueFormatter
@@ -36,7 +53,7 @@ public struct SwapProviderItem: Sendable {
     }
     
     private var isSelected: Bool {
-        selectedProvider == swapQuote.data.provider.id
+        selectedProvider == swapQuote.providerData.provider
     }
 
     private func fiatBalance() -> String {
@@ -54,7 +71,7 @@ public struct SwapProviderItem: Sendable {
 
 extension SwapProviderItem: SimpleListItemViewable {
     public var title: String {
-        swapQuote.data.provider.protocol
+        swapQuote.providerData.protocolName
     }
     
     public var titleStyle: TextStyle {
@@ -67,7 +84,7 @@ extension SwapProviderItem: SimpleListItemViewable {
     
     public var assetImage: AssetImage {
         AssetImage(
-            placeholder: swapQuote.data.provider.image,
+            placeholder: swapQuote.providerData.provider.image,
             chainPlaceholder: isSelected ? Images.Wallets.selected : nil
         )
     }
@@ -92,7 +109,7 @@ extension SwapProviderItem: Identifiable {
         [
             swapQuote.toValue,
             swapQuote.fromValue,
-            swapQuote.data.provider.name
+            swapQuote.providerData.provider.rawValue
         ].joined(separator: "_")
     }
 }

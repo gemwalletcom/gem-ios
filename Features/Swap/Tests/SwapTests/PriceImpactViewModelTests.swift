@@ -14,7 +14,7 @@ struct PriceImpactViewModelTests {
         let model = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "990000000")
         let value = model.value
 
-        #expect(value == nil)
+        #expect(value == PriceImpactValue(type: Swap.PriceImpactType.low, value: "-1.00%"))
     }
 
     @Test
@@ -58,18 +58,10 @@ struct PriceImpactViewModelTests {
 
 extension PriceImpactViewModel {
     static func mock(fromValue: String, toValue: String) -> PriceImpactViewModel {
-        let fromAssetData = AssetData.mock(
-            price: .mock()
-        )
-        
-        let toAssetData = AssetData.mock(
-            price: .mock()
-        )
-        
-        return PriceImpactViewModel(
-            fromAssetData: fromAssetData,
+        PriceImpactViewModel(
+            fromAssetPrice: AssetPriceValue(asset: .mockEthereum(), price: .mock()),
             fromValue: fromValue,
-            toAssetData: toAssetData,
+            toAssetPrice: AssetPriceValue(asset: .mockEthereum(), price: .mock()),
             toValue: toValue
         )
     }
