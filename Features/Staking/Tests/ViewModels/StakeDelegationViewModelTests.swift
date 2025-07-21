@@ -10,21 +10,26 @@ struct StakeDelegationViewModelTests {
 
     @Test
     func balance() {
-        #expect(StakeDelegationViewModel.mock().balanceText == "1,500.00 TRX")
-        #expect(StakeDelegationViewModel.mock().balanceFiatValueText == "$3,000.00")
+        let model = StakeDelegationViewModel.mock()
+
+        #expect(model.balanceText == "1,500.00 TRX")
+        #expect(model.balanceFiatValueText == "$3,000.00")
+        #expect(model.subtitleExtraText == "$3,000.00")
     }
     
     @Test
     func rewards() {
-        #expect(StakeDelegationViewModel.mock().rewardsText == "500.00 TRX")
-        #expect(StakeDelegationViewModel.mock().rewardsFiatValueText == "$1,000.00")
+        let model = StakeDelegationViewModel.mock()
+
+        #expect(model.rewardsText == "500.00 TRX")
+        #expect(model.rewardsFiatValueText == "$1,000.00")
     }
     
     @Test
     func subtitleExtraTextWithCompletion() {
-        let viewModel = StakeDelegationViewModel.mock(state: .undelegating, completionDate: Date.now.addingTimeInterval(86400))
+        let model = StakeDelegationViewModel.mock(state: .undelegating, completionDate: Date.now.addingTimeInterval(86400))
 
-        #expect(viewModel.subtitleExtraText == viewModel.completionDateText)
+        #expect(model.subtitleExtraText == model.completionDateText)
     }
 }
 
