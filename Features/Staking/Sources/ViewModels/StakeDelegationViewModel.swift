@@ -16,6 +16,7 @@ public struct StakeDelegationViewModel: Sendable {
     private let formatter = ValueFormatter(style: .medium)
     private let validatorImageFormatter = AssetImageFormatter()
     private let exploreService: ExplorerService = .standard
+    private let priceFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
 
     private static let dateFormatterDefault: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
@@ -73,7 +74,7 @@ public struct StakeDelegationViewModel: Sendable {
             let price = delegation.price,
             let balance = try? formatter.double(from: delegation.base.balanceValue, decimals: asset.decimals.asInt)
         else { return nil }
-        return fiatValue(for: price.price * balance)
+        return priceFormatter.string(price.price * balance)
     }
     
     public var rewardsText: String? {
@@ -100,7 +101,7 @@ public struct StakeDelegationViewModel: Sendable {
             delegation.base.rewardsValue > 0,
             let rewards = try? formatter.double(from: delegation.base.rewardsValue, decimals: asset.decimals.asInt)
         else { return nil }
-        return fiatValue(for: price.price * rewards)
+        return priceFormatter.string(price.price * rewards)
     }
     
     public var balanceTextStyle: TextStyle {
@@ -135,13 +136,6 @@ public struct StakeDelegationViewModel: Sendable {
             return Self.dateFormatterDefault.string(from: .now, to: completionDate)
         }
         return .none
-    }
-}
-
-// MARK: - Private methods
-extension StakeDelegationViewModel {
-    private func fiatValue(for amount: Double) -> String {
-        CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency).string(amount)
     }
 }
 
