@@ -68,6 +68,14 @@ public struct StakeDelegationViewModel: Sendable {
         formatter.string(delegation.base.balanceValue, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
     
+    public var balanceFialValueText: String? {
+        guard
+            let price = delegation.price,
+            let balance = try? formatter.double(from: delegation.base.balanceValue, decimals: asset.decimals.asInt)
+        else { return nil }
+        return fiatValue(for: price.price * balance)
+    }
+    
     public var rewardsText: String? {
         switch delegation.base.state {
         case .active:
@@ -84,6 +92,15 @@ public struct StakeDelegationViewModel: Sendable {
             .awaitingWithdrawal:
             return .none
         }
+    }
+    
+    public var rewardsFialValueText: String? {
+        guard
+            let price = delegation.price,
+            delegation.base.rewardsValue > 0,
+            let rewards = try? formatter.double(from: delegation.base.rewardsValue, decimals: asset.decimals.asInt)
+        else { return nil }
+        return fiatValue(for: price.price * rewards)
     }
     
     public var balanceTextStyle: TextStyle {
@@ -105,6 +122,10 @@ public struct StakeDelegationViewModel: Sendable {
         exploreService.validatorUrl(chain: asset.chain, address: delegation.validator.id)?.url
     }
     
+    public var subtitleExtraText: String? {
+        completionDateText ?? balanceFialValueText
+    }
+    
     public var completionDateText: String? {
         let now = Date.now
         if let completionDate = delegation.base.completionDate, completionDate > now {
@@ -114,6 +135,13 @@ public struct StakeDelegationViewModel: Sendable {
             return Self.dateFormatterDefault.string(from: .now, to: completionDate)
         }
         return .none
+    }
+}
+
+// MARK: - Private methods
+extension StakeDelegationViewModel {
+    private func fiatValue(for amount: Double) -> String {
+        CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency).string(amount)
     }
 }
 

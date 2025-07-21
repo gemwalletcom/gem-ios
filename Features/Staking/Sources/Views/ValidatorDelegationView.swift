@@ -21,7 +21,7 @@ public struct ValidatorDelegationView: View {
                 titleExtra: delegation.stateText,
                 titleStyleExtra: TextStyle(font: .footnote, color: delegation.stateTextColor),
                 subtitle: delegation.balanceText,
-                subtitleExtra: delegation.completionDateText,
+                subtitleExtra: delegation.subtitleExtraText,
                 subtitleStyleExtra: .footnote
             )
         }
