@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Hide from wallet";
 "common.details" = "Details";
 "transaction.swap_again" = "Swap Again";
+"errors.scan_transaction.malicious" = "Transaction identified as suspicion";
+"errors.scan_transaction.memo_required" = "%@ address requires a destination tag / memo";

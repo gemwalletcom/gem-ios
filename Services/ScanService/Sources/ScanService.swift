@@ -17,28 +17,8 @@ public struct ScanService: Sendable {
         self.securePreferences = securePreferences
     }
 
-    public func scanTransaction(_ payload: ScanTransactionPayload) async throws -> ScanTransaction {
+    public func getScanTransaction(_ payload: ScanTransactionPayload) async throws -> ScanTransaction {
         try await apiService.getScanTransaction(payload: payload)
-    }
-
-    public func validate(_ payload: ScanTransactionPayload) async throws {
-        do {
-            let transaction = try await scanTransaction(payload)
-
-            if transaction.isMalicious {
-                throw ScanError.malicious
-            }
-
-            if payload.type == .transfer, transaction.isMemoRequired {
-                throw ScanError.memoRequired(chain: payload.target.chain)
-            }
-        } catch {
-            // For swap transactions, re-throw the error. For all other types, an error
-            // from scanTransaction is ignored, and the transaction is considered valid.
-            if payload.type == .swap {
-                throw error
-            }
-        }
     }
 
     public func getTransactionPayload(wallet: Wallet, transferType: TransferDataType, recipient: RecipientData) throws -> ScanTransactionPayload {

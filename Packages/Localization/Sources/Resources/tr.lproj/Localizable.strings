@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Cüzdandan gizle";
 "common.details" = "Detaylar";
 "transaction.swap_again" = "Tekrar Değiştir";
+"errors.scan_transaction.malicious" = "İşlem şüpheli olarak belirlendi";
+"errors.scan_transaction.memo_required" = "%@ adresi bir hedef etiketi / notu gerektiriyor";

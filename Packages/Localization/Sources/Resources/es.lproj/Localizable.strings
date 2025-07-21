@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Ocultar de la billetera";
 "common.details" = "Detalles";
 "transaction.swap_again" = "Intercambiar de nuevo";
+"errors.scan_transaction.malicious" = "Transacción identificada como sospechosa";
+"errors.scan_transaction.memo_required" = "La dirección %@ requiere una etiqueta/memo de destino";

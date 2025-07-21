@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "財布から隠す";
 "common.details" = "詳細";
 "transaction.swap_again" = "再び交換";
+"errors.scan_transaction.malicious" = "疑わしい取引として特定された";
+"errors.scan_transaction.memo_required" = "%@アドレスには宛先タグ/メモが必要です";
