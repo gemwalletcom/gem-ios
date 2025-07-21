@@ -22,19 +22,22 @@ public struct ScanService: Sendable {
     }
 
     public func validate(_ payload: ScanTransactionPayload) async throws {
-        let scanResult: Result<ScanTransaction, Error> = await {
-            do   { return .success(try await scanTransaction(payload)) }
-            catch { return .failure(error) }
-        }()
-        switch (payload.type, scanResult) {
-        case (_, .success(let transaciton)) where transaciton.isMalicious:
-            throw ScanError.malicious
-        case (.transfer, .success(let transaciton)) where transaciton.isMemoRequired:
-            throw ScanError.memoRequired(chain: payload.target.chain)
-        case (.swap, .failure(let error)): // swap: API failed / unreachable, fallback error
-            throw error
-        case (_, .success), (_, .failure):
-            return
+        do {
+            let transaction = try await scanTransaction(payload)
+
+            if transaction.isMalicious {
+                throw ScanError.malicious
+            }
+
+            if payload.type == .transfer, transaction.isMemoRequired {
+                throw ScanError.memoRequired(chain: payload.target.chain)
+            }
+        } catch {
+            // For swap transactions, re-throw the error. For all other types, an error
+            // from scanTransaction is ignored, and the transaction is considered valid.
+            if payload.type == .swap {
+                throw error
+            }
         }
     }
 
