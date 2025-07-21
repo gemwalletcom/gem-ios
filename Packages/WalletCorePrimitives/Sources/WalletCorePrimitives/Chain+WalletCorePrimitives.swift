@@ -33,7 +33,8 @@ public extension Chain {
             .ink,
             .unichain,
             .hyperliquid,
-            .monad: .ethereum
+            .monad,
+            .hyperCore: .ethereum
         case .solana: .solana
         case .thorchain: .thorchain
         case .cosmos: .cosmos
