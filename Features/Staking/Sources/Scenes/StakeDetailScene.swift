@@ -35,13 +35,13 @@ public struct StakeDetailScene: View {
                 ListItemView(
                     title: model.title,
                     subtitle: model.model.balanceText,
-                    subtitleExtra: model.model.balanceFialValueText
+                    subtitleExtra: model.model.balanceFiatValueText
                 )
                 if let rewardsText = model.model.rewardsText {
                     ListItemView(
                         title: model.rewardsTitle,
                         subtitle: rewardsText,
-                        subtitleExtra: model.model.rewardsFialValueText
+                        subtitleExtra: model.model.rewardsFiatValueText
                     )
                 }
             }

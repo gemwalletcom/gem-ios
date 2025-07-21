@@ -68,7 +68,7 @@ public struct StakeDelegationViewModel: Sendable {
         formatter.string(delegation.base.balanceValue, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
     
-    public var balanceFialValueText: String? {
+    public var balanceFiatValueText: String? {
         guard
             let price = delegation.price,
             let balance = try? formatter.double(from: delegation.base.balanceValue, decimals: asset.decimals.asInt)
@@ -94,7 +94,7 @@ public struct StakeDelegationViewModel: Sendable {
         }
     }
     
-    public var rewardsFialValueText: String? {
+    public var rewardsFiatValueText: String? {
         guard
             let price = delegation.price,
             delegation.base.rewardsValue > 0,
@@ -123,7 +123,7 @@ public struct StakeDelegationViewModel: Sendable {
     }
     
     public var subtitleExtraText: String? {
-        completionDateText ?? balanceFialValueText
+        completionDateText ?? balanceFiatValueText
     }
     
     public var completionDateText: String? {
