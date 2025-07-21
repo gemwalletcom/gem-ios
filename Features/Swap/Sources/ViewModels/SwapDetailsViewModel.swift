@@ -113,8 +113,7 @@ public final class SwapDetailsViewModel {
         }
     }
     var priceImpactValue: String? {
-        guard let value = priceImpactModel.value?.value else { return nil }
-        return " (\(value))"
+        priceImpactModel.value?.value
     }
     
     // MARK: - Slippage
