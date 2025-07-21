@@ -101,14 +101,11 @@ extension TransferTransactionProvider {
     }
 
     private func validateTransaction(wallet: Wallet, data: TransferData) async throws {
-        let scanPayload = try scanService.getTransactionPayload(
+        let payload = try scanService.getTransactionPayload(
             wallet: wallet,
             transferType: data.type,
             recipient: data.recipientData
         )
-        let isValid = try await scanService.isValidTransaction(scanPayload)
-        if !isValid {
-            throw AnyError("Transaction is invalid")
-        }
+        try await scanService.validate(payload)
     }
 }
