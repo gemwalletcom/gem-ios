@@ -36,15 +36,10 @@ public struct PerpetualService: PerpetualServiceable {
         let existingPositionIds = Set(existingPositions.map { $0.id })
         
         let newPositionIds = Set(allPositions.map { $0.id })
-        
         let positionsToDelete = existingPositionIds.subtracting(newPositionIds)
-        if !positionsToDelete.isEmpty {
-            try store.deletePositions(ids: Array(positionsToDelete))
-        }
         
-        if !allPositions.isEmpty {
-            try store.upsertPositions(allPositions, walletId: wallet.id)
-        }
+        try store.deletePositions(ids: Array(positionsToDelete))
+        try store.upsertPositions(allPositions, walletId: wallet.id)
     }
     
     private func fetchPositionsFromAllProviders(wallet: Wallet) async -> [PerpetualPosition] {
@@ -54,7 +49,6 @@ public struct PerpetualService: PerpetualServiceable {
                     do {
                         return try await provider.getPositions(wallet: wallet)
                     } catch {
-                        // Log error but continue with other providers
                         print("PerpetualService: Failed to fetch positions from provider: \(error)")
                         return []
                     }
@@ -71,10 +65,7 @@ public struct PerpetualService: PerpetualServiceable {
     
     public func updateMarkets() async throws {
         let allMarkets = await fetchMarketsFromAllProviders()
-        
-        if !allMarkets.isEmpty {
-            try store.upsertPerpetuals(allMarkets)
-        }
+        try store.upsertPerpetuals(allMarkets)
     }
     
     private func fetchMarketsFromAllProviders() async -> [Perpetual] {
@@ -84,7 +75,6 @@ public struct PerpetualService: PerpetualServiceable {
                     do {
                         return try await provider.getMarkets()
                     } catch {
-                        // Log error but continue with other providers
                         print("PerpetualService: Failed to fetch markets from provider: \(error)")
                         return []
                     }

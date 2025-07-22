@@ -85,12 +85,6 @@ public struct PerpetualStore: Sendable {
         }
     }
     
-    public func deletePosition(id: String) throws -> Bool {
-        try db.write { db in
-            try PerpetualPositionRecord.deleteOne(db, key: id)
-        }
-    }
-    
     public func deletePositions(ids: [String]) throws {
         try db.write { db in
             for id in ids {

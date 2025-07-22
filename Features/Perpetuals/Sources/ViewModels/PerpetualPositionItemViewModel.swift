@@ -11,7 +11,7 @@ import Formatters
 public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     public let position: PerpetualPosition
     public let perpetual: Perpetual
-    
+    public let currencyFormatter: CurrencyFormatter = CurrencyFormatter(type: .currency)
     public init(position: PerpetualPosition, perpetual: Perpetual) {
         self.position = position
         self.perpetual = perpetual
@@ -69,8 +69,7 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     
     private var positionValueText: String {
         let value = abs(position.size) * perpetual.price
-        let formatter = CurrencyFormatter(type: .currency)
-        return formatter.string(value)
+        return currencyFormatter.string(value)
     }
     
     public var pnlPercent: Double {
