@@ -10,42 +10,42 @@ import PrimitivesTestKit
 struct ScanTransactionValidatorTests {
     @Test
     func throwsMalicious() throws {
-        let tx = ScanTransaction.mock(malicious: true)
+        let transaction = ScanTransaction.mock(malicious: true)
         let payload = ScanTransactionPayload.mock()
-        try expectScanError(tx: tx, payload: payload, expected: .malicious)
+        try expectScanError(transaction: transaction, payload: payload, expected: .malicious)
     }
 
     @Test
     func throwsMemoRequiredForTransfer() throws {
-        let tx = ScanTransaction.mock(memoRequired: true)
+        let transaction = ScanTransaction.mock(memoRequired: true)
         let payload = ScanTransactionPayload.mock(type: .transfer, chain: .sui)
-        try expectScanError(tx: tx, payload: payload, expected: .memoRequired(chain: .sui))
+        try expectScanError(transaction: transaction, payload: payload, expected: .memoRequired(chain: .sui))
     }
 
     @Test
     func passesWhenNoIssues() throws {
-        let tx = ScanTransaction.mock()
+        let transaction = ScanTransaction.mock()
         let payload = ScanTransactionPayload.mock()
-        try ScanTransactionValidator.validate(transaction: tx, with: payload)
+        try ScanTransactionValidator.validate(transaction: transaction, with: payload)
     }
 
     @Test
     func swapIgnoresMemoRequired() throws {
-        let tx = ScanTransaction.mock(memoRequired: true)
+        let transaction = ScanTransaction.mock(memoRequired: true)
         let payload = ScanTransactionPayload.mock(type: .swap)
-        try ScanTransactionValidator.validate(transaction: tx, with: payload)
+        try ScanTransactionValidator.validate(transaction: transaction, with: payload)
     }
 
     @Test
     func maliciousPriority() throws {
-        let tx = ScanTransaction.mock(malicious: true, memoRequired: true)
+        let transaction = ScanTransaction.mock(malicious: true, memoRequired: true)
         let payload = ScanTransactionPayload.mock()
-        try expectScanError(tx: tx, payload: payload, expected: .malicious)
+        try expectScanError(transaction: transaction, payload: payload, expected: .malicious)
     }
 
-    private func expectScanError(tx: ScanTransaction, payload: ScanTransactionPayload, expected: ScanTransactionError) throws {
+    private func expectScanError(transaction: ScanTransaction, payload: ScanTransactionPayload, expected: ScanTransactionError) throws {
         do {
-            try ScanTransactionValidator.validate(transaction: tx, with: payload)
+            try ScanTransactionValidator.validate(transaction: transaction, with: payload)
         } catch let error as ScanTransactionError {
             #expect(error == expected)
         }
