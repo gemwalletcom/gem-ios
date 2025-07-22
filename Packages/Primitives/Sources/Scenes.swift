@@ -150,4 +150,9 @@ public struct Scenes {
             self.assetData = assetData
         }
     }
+    
+    public struct Perpetuals: Hashable {
+        public init() {
+        }
+    }
 }

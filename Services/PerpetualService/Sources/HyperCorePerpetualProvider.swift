@@ -1,0 +1,37 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
+import Foundation
+import Primitives
+import Blockchain
+
+struct HyperCorePerpetualProvider: PerpetualProvidable {
+    
+    let hyperCoreService: HyperCoreService
+    
+    init(hyperCoreService: HyperCoreService) {
+        self.hyperCoreService = hyperCoreService
+    }
+    
+    func getPositions(wallet: Wallet) async throws -> [PerpetualPosition] {
+        guard let account = wallet.accounts.first(where: { 
+            $0.chain == .arbitrum || $0.chain == .hyperCore 
+        }) else {
+            return []
+        }
+        
+        return try await hyperCoreService
+            .getPositions(user: account.address)
+            .mapToPerpetualPositions(walletId: wallet.id)
+    }
+    
+    func getMarkets() async throws -> [Perpetual] {
+        let metadata = try await hyperCoreService.getMetadata()
+        
+        return zip(metadata.universe.universe, metadata.assetMetadata).compactMap { universeAsset, assetMetadata in
+            assetMetadata.mapToPerpetual(
+                symbol: universeAsset.name,
+                maxLeverage: universeAsset.maxLeverage
+            )
+        }
+    }
+}

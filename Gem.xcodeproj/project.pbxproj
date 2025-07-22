@@ -83,6 +83,7 @@
 		C3CF3BDB29BBE45D00E96586 /* Style in Frameworks */ = {isa = PBXBuildFile; productRef = C3CF3BDA29BBE45D00E96586 /* Style */; };
 		C3D1C4E22A2A9485006E8EEA /* Signer in Frameworks */ = {isa = PBXBuildFile; productRef = C3D1C4E12A2A9485006E8EEA /* Signer */; };
 		C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = C3E99BBE2A71E932005DF35F /* WalletCorePrimitives */; };
+		D80312AF2E2EE3E1005A5C77 /* PerpetualService in Frameworks */ = {isa = PBXBuildFile; productRef = D80312AE2E2EE3E1005A5C77 /* PerpetualService */; };
 		D807004A2BBB1FB600ED770B /* SettingsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80700492BBB1FB600ED770B /* SettingsNavigationStack.swift */; };
 		D807004C2BBB26DD00ED770B /* TransactionsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807004B2BBB26DD00ED770B /* TransactionsNavigationStack.swift */; };
 		D807004E2BBB283400ED770B /* WalletNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807004D2BBB283400ED770B /* WalletNavigationStack.swift */; };
@@ -104,8 +105,11 @@
 		D85AD2A32CD442A40010DEF8 /* TransferService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD2A22CD442A40010DEF8 /* TransferService */; };
 		D85AD2A62CD7017E0010DEF8 /* NativeProviderService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD2A52CD7017E0010DEF8 /* NativeProviderService */; };
 		D873DA512D7933AF0003F5CE /* MarketsNavigtionStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D873DA502D7933AF0003F5CE /* MarketsNavigtionStack.swift */; };
+		D88BB2692E2EE09F006310B9 /* Perpetuals in Resources */ = {isa = PBXBuildFile; fileRef = D88BB2682E2EE09F006310B9 /* Perpetuals */; };
 		D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */; };
 		D891DD412D3F359F00241222 /* CollectionsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */; };
+		D896B57E2E2EE2D300ADE083 /* Perpetuals in Frameworks */ = {isa = PBXBuildFile; productRef = D896B57D2E2EE2D300ADE083 /* Perpetuals */; };
+		D896B5802E2EE38F00ADE083 /* PerpetualService in Resources */ = {isa = PBXBuildFile; fileRef = D896B57F2E2EE38F00ADE083 /* PerpetualService */; };
 		D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */; };
 		D89CD7A92CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */; };
 		D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */; };
@@ -264,8 +268,10 @@
 		D85AD2A12CD441D50010DEF8 /* TransferService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TransferService; sourceTree = "<group>"; };
 		D85AD2A42CD7013D0010DEF8 /* NativeProviderService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NativeProviderService; sourceTree = "<group>"; };
 		D873DA502D7933AF0003F5CE /* MarketsNavigtionStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketsNavigtionStack.swift; sourceTree = "<group>"; };
+		D88BB2682E2EE09F006310B9 /* Perpetuals */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Perpetuals; sourceTree = "<group>"; };
 		D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsNavigationStack.swift; sourceTree = "<group>"; };
 		D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsNavigationStack.swift; sourceTree = "<group>"; };
+		D896B57F2E2EE38F00ADE083 /* PerpetualService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PerpetualService; sourceTree = "<group>"; };
 		D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransferNavigationStack.swift; sourceTree = "<group>"; };
 		D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedAssetNavigationStack.swift; sourceTree = "<group>"; };
 		D8A1F8732B17F21E00B15F54 /* Screenshots.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Screenshots.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -315,6 +321,7 @@
 				D85AD2A62CD7017E0010DEF8 /* NativeProviderService in Frameworks */,
 				D85AD2A32CD442A40010DEF8 /* TransferService in Frameworks */,
 				8361BB6D2D400E4F008D89CF /* AssetsService in Frameworks */,
+				D80312AF2E2EE3E1005A5C77 /* PerpetualService in Frameworks */,
 				D8D83C842CECFA610083AA53 /* Swap in Frameworks */,
 				8342EA032DB67EE3001B3780 /* WalletService in Frameworks */,
 				833931A82D2D663C0063BB6A /* PriceService in Frameworks */,
@@ -352,6 +359,7 @@
 				D83D3C252D6E62F4002959EA /* ScanService in Frameworks */,
 				D8F5B86C2CCD52EB0007E615 /* Staking in Frameworks */,
 				C36679162A119C6200F1D74D /* GemAPI in Frameworks */,
+				D896B57E2E2EE2D300ADE083 /* Perpetuals in Frameworks */,
 				C3CF3B7729A98C7B00E96586 /* Blockchain in Frameworks */,
 				8352C8D52D393E05000DEDD9 /* ExplorerService in Frameworks */,
 				83CA4BA72D2F02440064A4AF /* NameResolver in Frameworks */,
@@ -667,6 +675,7 @@
 				834B38182D1D858D009D58D4 /* LockManager */,
 				C370289B2A9C3B0E009AE123 /* Settings */,
 				D832C8542E2471B100871ED9 /* PriceWidget */,
+				D88BB2682E2EE09F006310B9 /* Perpetuals */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -700,6 +709,7 @@
 				D829BF4C2CBF025400DEB2E8 /* BannerService */,
 				D8F5B8702CCD6C010007E615 /* StakeService */,
 				B617D6092D5B73B7001697A6 /* AvatarService */,
+				D896B57F2E2EE38F00ADE083 /* PerpetualService */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -854,6 +864,8 @@
 				836281AF2DEF34DC00CA5C75 /* Assets */,
 				8327CBF02DF9E088000BF1E1 /* Validators */,
 				83EF67E42E005F48009C690F /* Formatters */,
+				D896B57D2E2EE2D300ADE083 /* Perpetuals */,
+				D80312AE2E2EE3E1005A5C77 /* PerpetualService */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -1042,8 +1054,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D88BB2692E2EE09F006310B9 /* Perpetuals in Resources */,
 				D8C4A3672C8BA114006FABE8 /* Images.xcassets in Resources */,
 				DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */,
+				D896B5802E2EE38F00ADE083 /* PerpetualService in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1924,6 +1938,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletCorePrimitives;
 		};
+		D80312AE2E2EE3E1005A5C77 /* PerpetualService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PerpetualService;
+		};
 		D829BF2C2CBDBC5300DEB2E8 /* Localization */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Localization;
@@ -1971,6 +1989,10 @@
 		D85AD2A52CD7017E0010DEF8 /* NativeProviderService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NativeProviderService;
+		};
+		D896B57D2E2EE2D300ADE083 /* Perpetuals */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Perpetuals;
 		};
 		D8CF19E22CC747370025D6B4 /* Transfer */ = {
 			isa = XCSwiftPackageProductDependency;

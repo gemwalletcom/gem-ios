@@ -9,6 +9,7 @@ import WalletTab
 import InfoSheet
 import Components
 import Assets
+import Perpetuals
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
@@ -95,6 +96,12 @@ struct WalletNavigationStack: View {
                             priceService: walletsService.priceService,
                             assetModel: AssetViewModel(asset: $0.asset)
                         )
+                    )
+                }
+                .navigationDestination(for: Scenes.Perpetuals.self) { _ in
+                    PerpetualsScene(
+                        wallet: model.wallet,
+                        perpetualService: AppResolver.main.services.perpetualService
                     )
                 }
                 .sheet(item: $model.isPresentingSelectAssetType) { value in
