@@ -42,7 +42,7 @@ struct AddressResolverTests {
         )
         #expect(
             AddressResolver.resolve(
-                for: .mock(.solana),
+                for: .mock(.sui),
                 in: .mock(type: .swap, from: "solFrom", to: "suiTo", metadata: metadata)
             ) == "suiTo")
     }
