@@ -32,11 +32,15 @@ struct TransactionStateUpdatePostJob: Sendable {
 
         for walletIdentifier in walletIdentifiers {
             for assetIdentifier in assetIdentifiers {
+                guard let address = AddressResolver.resolve(for: assetIdentifier, in: transaction) else {
+                    NSLog("Swap address empty for asset \(assetIdentifier) in \(transaction)")
+                    continue
+                }
                 Task {
                     try await balanceUpdater.updateBalance(
                         walletId: walletIdentifier,
                         asset: assetIdentifier,
-                        address: transaction.from
+                        address: address
                     )
                 }
 
@@ -46,7 +50,7 @@ struct TransactionStateUpdatePostJob: Sendable {
                         try await stakeService.update(
                             walletId: walletIdentifier,
                             chain: assetIdentifier.chain,
-                            address: transaction.from
+                            address: address
                         )
                     }
                 case .transferNFT:

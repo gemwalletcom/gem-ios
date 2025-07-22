@@ -59,7 +59,10 @@ let package = Package(
         ),
         .testTarget(
             name: "TransactionServiceTests",
-            dependencies: ["TransactionService"]
+            dependencies: [
+                "TransactionService",
+                .product(name: "PrimitivesTestKit", package: "Primitives")
+            ]
         ),
     ]
 )

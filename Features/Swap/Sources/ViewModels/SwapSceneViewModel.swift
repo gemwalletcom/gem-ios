@@ -362,7 +362,8 @@ extension SwapSceneViewModel {
                 swapState.swapTransferData = .loading
                 let data = try await swapQuoteDataProvider.fetchQuoteData(wallet: wallet, quote: quote)
                 onSwap?(
-                    SwapTransferDataFactory.swap(
+                    try SwapTransferDataFactory.swap(
+                        wallet: wallet,
                         fromAsset: fromAsset.asset,
                         toAsset: toAsset.asset,
                         quote: quote,
