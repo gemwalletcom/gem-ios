@@ -33,7 +33,7 @@ struct TransactionStateUpdatePostJob: Sendable {
         for walletIdentifier in walletIdentifiers {
             for assetIdentifier in assetIdentifiers {
                 guard let address = AddressResolver.resolve(for: assetIdentifier, in: transaction) else {
-NSLog("Could not resolve address for asset \(assetIdentifier) in transaction with id: \(transaction.id)")
+                    NSLog("Could not resolve address for asset \(assetIdentifier) in transaction with id: \(transaction.id)")
                     continue
                 }
                 Task {

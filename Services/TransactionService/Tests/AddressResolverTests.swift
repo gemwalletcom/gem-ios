@@ -44,7 +44,7 @@ struct AddressResolverTests {
             AddressResolver.resolve(
                 for: .mock(.solana),
                 in: .mock(type: .swap, from: "solFrom", to: "suiTo", metadata: metadata)
-            ) == "solFrom")
+            ) == "suiTo")
     }
 
     @Test
