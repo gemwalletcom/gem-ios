@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Ficha kutoka kwa mkoba";
 "common.details" = "Maelezo";
 "transaction.swap_again" = "Badilika Tena";
+"errors.scan_transaction.malicious" = "Muamala umetambuliwa kama tuhuma";
+"errors.scan_transaction.memo_required" = "%@ anwani inahitaji lebo/memo lengwa";

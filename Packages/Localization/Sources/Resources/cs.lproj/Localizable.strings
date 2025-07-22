@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Skrýt z peněženky";
 "common.details" = "Podrobnosti";
 "transaction.swap_again" = "Znovu vyměnit";
+"errors.scan_transaction.malicious" = "Transakce označena jako podezřelá";
+"errors.scan_transaction.memo_required" = "Adresa %@ vyžaduje tag / poznámku cíle";

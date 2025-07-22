@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "پنهان شدن از کیف پول";
 "common.details" = "جزئیات";
 "transaction.swap_again" = "دوباره مبادله کنید";
+"errors.scan_transaction.malicious" = "تراکنش مشکوک شناسایی شد";
+"errors.scan_transaction.memo_required" = "آدرس %@ به یک برچسب / یادداشت مقصد نیاز دارد.";

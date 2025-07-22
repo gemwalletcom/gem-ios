@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Sembunyi dari dompet";
 "common.details" = "Butiran";
 "transaction.swap_again" = "Tukar Lagi";
+"errors.scan_transaction.malicious" = "Transaksi dikenal pasti sebagai syak wasangka";
+"errors.scan_transaction.memo_required" = "Alamat %@ memerlukan teg / memo destinasi";

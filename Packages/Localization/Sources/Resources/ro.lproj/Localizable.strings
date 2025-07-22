@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Ascunde din portofel";
 "common.details" = "Detalii";
 "transaction.swap_again" = "Schimbați din nou";
+"errors.scan_transaction.malicious" = "Tranzacția identificată ca suspectă";
+"errors.scan_transaction.memo_required" = "Adresa %@ necesită o etichetă/notă de destinație";

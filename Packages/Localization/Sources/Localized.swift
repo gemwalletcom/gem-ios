@@ -405,6 +405,14 @@ public enum Localized {
         return Localized.tr("Localizable", "errors.import.invalid_secret_phrase_word", String(describing: p1), fallback: "Invalid Secret Phrase word: %@")
       }
     }
+    public enum ScanTransaction {
+      /// Transaction identified as suspicion
+      public static let malicious = Localized.tr("Localizable", "errors.scan_transaction.malicious", fallback: "Transaction identified as suspicion")
+      /// %@ address requires a destination tag / memo
+      public static func memoRequired(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "errors.scan_transaction.memo_required", String(describing: p1), fallback: "%@ address requires a destination tag / memo")
+      }
+    }
     public enum Swap {
       /// Amount too small
       public static let amountTooSmall = Localized.tr("Localizable", "errors.swap.amount_too_small", fallback: "Amount too small")

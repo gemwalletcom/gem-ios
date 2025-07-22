@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "ซ่อนจากกระเป๋าสตางค์";
 "common.details" = "รายละเอียด";
 "transaction.swap_again" = "สลับอีกครั้ง";
+"errors.scan_transaction.malicious" = "ธุรกรรมถูกระบุว่าน่าสงสัย";
+"errors.scan_transaction.memo_required" = "ที่อยู่ %@ ต้องมีแท็กปลายทาง / บันทึกช่วยจำ";
