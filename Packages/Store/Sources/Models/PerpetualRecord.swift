@@ -21,7 +21,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
     
     public var id: String
     public var name: String
-    public var provider: String
+    public var provider: PerpetualProvider
     public var assetId: String
     public var price: Double
     public var pricePercentChange24h: Double
@@ -32,7 +32,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
     public init(
         id: String,
         name: String,
-        provider: String,
+        provider: PerpetualProvider,
         assetId: String,
         price: Double,
         pricePercentChange24h: Double,
@@ -75,7 +75,7 @@ extension PerpetualRecord {
         return Perpetual(
             id: id,
             name: name,
-            provider: PerpetualProvider(rawValue: provider)!,
+            provider: provider,
             asset_id: try AssetId(id: assetId),
             price: price,
             price_percent_change_24h: pricePercentChange24h,
@@ -91,7 +91,7 @@ extension Perpetual {
         return PerpetualRecord(
             id: id,
             name: name,
-            provider: provider.rawValue,
+            provider: provider,
             assetId: asset_id.identifier,
             price: price,
             pricePercentChange24h: price_percent_change_24h,

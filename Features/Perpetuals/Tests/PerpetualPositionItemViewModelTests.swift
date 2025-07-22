@@ -48,14 +48,3 @@ struct PerpetualPositionItemViewModelTests {
         ).pnlPercent == 0)
     }
 }
-
-// Add extensions to make private properties testable
-extension PerpetualPositionItemViewModel {
-    var pnlColor: Color { position.pnl >= 0 ? Colors.green : Colors.red }
-    var positionTypeText: String {
-        let leverageText = "\(Int(position.leverage))x"
-        let direction = position.size > 0 ? "Long" : "Short"
-        return "\(direction) \(leverageText)"
-    }
-    var positionTypeColor: Color { position.size > 0 ? Colors.green : Colors.red }
-}

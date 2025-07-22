@@ -48,17 +48,24 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
         )
     }
     
-    // MARK: - Private
+    public var leverageText: String {
+        "\(Int(position.leverage))x"
+    }
     
-    private var positionTypeText: String {
-        let leverageText = "\(Int(position.leverage))x"
+    public var positionTypeText: String {
         let direction = position.size > 0 ? "Long" : "Short"
         return "\(direction) \(leverageText)"
     }
     
-    private var positionTypeColor: Color {
+    public var positionTypeColor: Color {
         position.size > 0 ? Colors.green : Colors.red
     }
+    
+    public var pnlColor: Color {
+        position.pnl >= 0 ? Colors.green : Colors.red
+    }
+    
+    // MARK: - Private
     
     private var positionValueText: String {
         let value = abs(position.size) * perpetual.price
@@ -84,10 +91,6 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
         } else {
             return "-\(pnlAmount) (\(pnlPercentText))"
         }
-    }
-    
-    private var pnlColor: Color {
-        position.pnl >= 0 ? Colors.green : Colors.red
     }
 }
 
