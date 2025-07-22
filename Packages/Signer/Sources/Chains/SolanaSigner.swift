@@ -103,25 +103,16 @@ public struct SolanaSigner: Signable {
     }
 
     func signData(bytes: Data, privateKey: Data, outputType: TransferDataExtra.OutputType) throws -> String {
-        var offset = 0
-        // read number of signature neede
-        let numRequiredSignatures = bytes[offset]
-        offset = 1
+        let rawTxDecoder = SolanaRawTxDecoder(rawData: bytes)
+        let numRequiredSignatures = rawTxDecoder.signatureCount()
+        var signatures: [Data] = rawTxDecoder.signatures()
 
-        // read all the signatures
-        var signatures: [Data] = []
-        for _ in 0..<Int(numRequiredSignatures) {
-            signatures.append(Data(bytes[offset..<offset + 64]))
-            offset += 64
-        }
-
-        assert(offset == 1 + 64 * numRequiredSignatures)
         guard signatures[0] == Data(repeating: 0x0, count: 64) else {
             throw AnyError("user signature should be first")
         }
 
         // read message to sign
-        let message = bytes[offset...]
+        let message = rawTxDecoder.messageData()
         guard
             let signature = PrivateKey(data: privateKey)?.sign(digest: message, curve: .ed25519)
         else {
@@ -171,16 +162,16 @@ public struct SolanaSigner: Signable {
         let encodedTx = data.data.data
 
         guard
-            let encodedTxData = Base64.decode(string: encodedTx)
+            let encodedTxData = Base64.decode(string: encodedTx),
+            !encodedTxData.isEmpty
         else {
-            throw AnyError("unable to decode base64 string")
+            throw AnyError("unable to decode base64 string or empty transaction data")
         }
 
-        // if numRequiredSignatures > 1 -> other signers' signatures already prefilled, any change like inserting new
-        // instructions would lead signature verification failure
-        // swap providers should set ComputeUnitPrice / ComputeUnitLimit in this case
-        let numRequiredSignatures = encodedTxData[0]
+        let rawTxDecoder = SolanaRawTxDecoder(rawData: encodedTxData)
+        let numRequiredSignatures = rawTxDecoder.signatureCount()
         if numRequiredSignatures > 1 {
+            // other signers' signatures already prefilled, changing instructions would lead signature verification failure
             return try [
                 signRawTransaction(transaction: encodedTx, privateKey: privateKey),
             ]
@@ -261,5 +252,42 @@ extension String {
         let offset = count % 4
         guard offset != 0 else { return self }
         return padding(toLength: count + 4 - offset, withPad: "=", startingAt: 0)
+    }
+}
+
+public struct SolanaRawTxDecoder {
+    let rawData: Data
+
+    /// Decode a “short-vec” (compact-U16) length at `offset`, advancing the offset.
+    private func decodeShortVecLength(offset: inout Int) -> UInt8 {
+        let byte = rawData[offset]
+        offset += 1
+        return byte & 0x7F
+    }
+
+    func signatureCount() -> UInt8 {
+        var offset = 0
+        return decodeShortVecLength(offset: &offset)
+    }
+
+    func signatures() -> [Data] {
+        var offset = 0
+        let count = decodeShortVecLength(offset: &offset)
+        var result: [Data] = []
+        for _ in 0..<count {
+            let sig = rawData.subdata(in: offset..<(offset + 64))
+            result.append(sig)
+            offset += 64
+        }
+        return result
+    }
+
+    /// The serialized message bytes that every signer signs.
+    /// (Everything after the sig-array: length byte + N×64-byte sigs.)
+    func messageData() -> Data {
+        var offset = 0
+        let sigCount = Int(decodeShortVecLength(offset: &offset))
+        offset += sigCount * 64
+        return rawData.subdata(in: offset..<rawData.count)
     }
 }
