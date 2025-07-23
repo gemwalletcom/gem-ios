@@ -18,7 +18,10 @@ public extension TransactionWallet {
     func address(for asset: AssetId) -> String? {
         switch transaction.type {
         case .swap:
-            guard case let .swap(meta) = transaction.metadata else { return nil }
+            guard case let .swap(meta) = transaction.metadata else {
+                NSLog("Metadat not available for swap transaction:\(transaction) in wallet: \(wallet.id)")
+                return nil
+            }
             if asset.chain == meta.fromAsset.chain { return transaction.from }
             if asset.chain == meta.toAsset.chain {
                 return try? wallet.account(for: meta.toAsset.chain).address

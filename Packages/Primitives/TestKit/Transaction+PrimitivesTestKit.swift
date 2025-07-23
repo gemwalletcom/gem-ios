@@ -18,7 +18,7 @@ public extension Transaction {
         Transaction(
             id: "1",
             hash: "2",
-            assetId: .mock(),
+            assetId: assetId,
             from: from,
             to: to,
             contract: .none,
