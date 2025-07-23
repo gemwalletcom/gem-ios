@@ -33,7 +33,7 @@ struct WalletTransactionTests {
         #expect(
             TransactionWallet(
                 transaction: .mock(type: .swap, assetId: Self.sol, from: "solSender", metadata: Self.metadata),
-                wallet:.mock()
+                wallet: .mock()
             ).address(for: Self.sol)
             == "solSender"
         )
@@ -44,7 +44,7 @@ struct WalletTransactionTests {
         #expect(
             TransactionWallet(
                 transaction: .mock(type: .swap, assetId: Self.sol, metadata: Self.metadata),
-                wallet:.mock(accounts: [.mock(chain: .sui, address: "walletSui")])
+                wallet: .mock(accounts: [.mock(chain: .sui, address: "walletSui")])
             ).address(for: Self.sui)
             == "walletSui"
         )
