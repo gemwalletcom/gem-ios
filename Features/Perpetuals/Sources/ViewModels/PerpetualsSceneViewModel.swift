@@ -7,6 +7,7 @@ import Store
 import PerpetualService
 import Preferences
 import PrimitivesComponents
+import Components
 
 @Observable
 @MainActor
@@ -21,16 +22,20 @@ public final class PerpetualsSceneViewModel {
     public var isLoading: Bool = false
     public let preferences: Preferences = .standard
     
+    private let onSelectAssetType: ((SelectAssetType) -> Void)?
+    
     public init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
         positions: [PerpetualPositionData],
-        perpetuals: [Perpetual]
+        perpetuals: [Perpetual],
+        onSelectAssetType: ((SelectAssetType) -> Void)? = nil
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
         self.positions = positions
         self.perpetuals = perpetuals
+        self.onSelectAssetType = onSelectAssetType
     }
     
     public var positionViewModels: [PerpetualPositionItemViewModel] {
@@ -75,6 +80,17 @@ extension PerpetualsSceneViewModel {
             try await perpetualService.updateMarkets()
         } catch {
             NSLog("Failed to update markets: \(error)")
+        }
+    }
+    
+    public func onHeaderAction(type: HeaderButtonType) {
+        switch type {
+        case .deposit:
+            onSelectAssetType?(.deposit)
+        case .withdraw:
+            onSelectAssetType?(.deposit)
+        default:
+            break
         }
     }
 }

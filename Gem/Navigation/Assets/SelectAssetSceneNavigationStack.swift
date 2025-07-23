@@ -106,6 +106,26 @@ struct SelectAssetSceneNavigationStack: View {
                             walletId: model.wallet.id
                         )
                     )
+                case .deposit:
+                    AmountNavigationView(
+                        model: AmountSceneViewModel(
+                            input: AmountInput(
+                                type: .deposit(
+                                    recipient: RecipientData(
+                                        recipient: Recipient(name: "Hyperliqud", address: "", memo: .none),
+                                        amount: .none
+                                    )
+                                ),
+                                asset: input.asset
+                            ),
+                            wallet: model.wallet,
+                            walletsService: walletsService,
+                            stakeService: stakeService,
+                            onTransferAction: {
+                                navigationPath.append($0)
+                            }
+                        )
+                    )
                 case .manage, .priceAlert, .swap:
                     EmptyView()
                 }

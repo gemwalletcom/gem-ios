@@ -32,21 +32,27 @@ struct CandlestickChartView: View {
         let padding = priceRange * 0.02 // Add 2% padding
         
         VStack {
-            // Price display
-            VStack {
-                if let selectedCandle {
-                    ChartPriceView.from(model: selectedCandle)
-                } else if let currentPrice = currentPriceModel {
-                    ChartPriceView.from(model: currentPrice)
-                }
+            priceHeader
+            chartView(minPrice: minPrice - padding, maxPrice: maxPrice + padding)
+        }
+    }
+    
+    private var priceHeader: some View {
+        VStack {
+            if let selectedCandle {
+                ChartPriceView.from(model: selectedCandle)
+            } else if let currentPrice = currentPriceModel {
+                ChartPriceView.from(model: currentPrice)
             }
-            .padding(.top, Spacing.small)
-            .padding(.bottom, Spacing.tiny)
-            
-            let dateRange = (data.first?.date ?? Date())...(data.last?.date ?? Date())
-            
-            // Main candlestick chart
-            Chart(data, id: \.date) { candle in
+        }
+        .padding(.top, Spacing.small)
+        .padding(.bottom, Spacing.tiny)
+    }
+    
+    private func chartView(minPrice: Double, maxPrice: Double) -> some View {
+        let dateRange = (data.first?.date ?? Date())...(data.last?.date ?? Date())
+        
+        return Chart(data, id: \.date) { candle in
                 // High-Low line (wick)
                 RuleMark(
                     x: .value("Date", candle.date),
@@ -106,13 +112,13 @@ struct CandlestickChartView: View {
                 }
             }
             .chartXAxis {
-                AxisMarks(position: .bottom, values: xAxisValues) { value in
+                AxisMarks(position: .bottom, values: .automatic(desiredCount: 6)) { value in
                     AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
                         .foregroundStyle(Colors.gray.opacity(0.5))
                 }
             }
             .chartYAxis {
-                AxisMarks(position: .trailing) { _ in
+                AxisMarks(position: .trailing, values: .automatic(desiredCount: 5)) { _ in
                     AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
                         .foregroundStyle(Colors.gray.opacity(0.5))
                     AxisTick(stroke: StrokeStyle(lineWidth: 1))
@@ -123,26 +129,7 @@ struct CandlestickChartView: View {
                 }
             }
             .chartXScale(domain: dateRange)
-            .chartYScale(domain: (minPrice - padding)...(maxPrice + padding))
-        }
-    }
-    
-    
-    private var xAxisValues: AxisMarkValues {
-        switch period {
-        case .hour:
-            return .stride(by: .minute, count: 10)
-        case .day:
-            return .stride(by: .hour, count: 3)
-        case .week:
-            return .stride(by: .day, count: 1)
-        case .month:
-            return .stride(by: .day, count: 5)
-        case .year:
-            return .stride(by: .month, count: 2)
-        case .all:
-            return .automatic
-        }
+            .chartYScale(domain: minPrice...maxPrice)
     }
     
     private func formatAxisDate(_ date: Date) -> String {

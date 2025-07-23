@@ -864,7 +864,6 @@
 				83EF67E42E005F48009C690F /* Formatters */,
 				D896B57D2E2EE2D300ADE083 /* Perpetuals */,
 				D80312AE2E2EE3E1005A5C77 /* PerpetualService */,
-				D88E5B072E313CAC00D82652 /* ChartViews */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -1986,10 +1985,6 @@
 		D85AD2A52CD7017E0010DEF8 /* NativeProviderService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NativeProviderService;
-		};
-		D88E5B072E313CAC00D82652 /* ChartViews */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ChartViews;
 		};
 		D896B57D2E2EE2D300ADE083 /* Perpetuals */ = {
 			isa = XCSwiftPackageProductDependency;

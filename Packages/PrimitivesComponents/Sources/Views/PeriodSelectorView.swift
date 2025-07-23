@@ -36,18 +36,3 @@ public struct PeriodSelectorView: View {
         .padding(.bottom, Spacing.medium)
     }
 }
-
-extension ChartPeriod: Identifiable {
-    public var id: String { rawValue }
-    
-    public var title: String {
-        switch self {
-        case .hour: return Localized.Charts.hour
-        case .day: return Localized.Charts.day
-        case .week: return Localized.Charts.week
-        case .month: return Localized.Charts.month
-        case .year: return Localized.Charts.year
-        case .all: return Localized.Charts.all
-        }
-    }
-}

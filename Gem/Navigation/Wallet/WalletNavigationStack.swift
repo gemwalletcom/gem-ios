@@ -101,7 +101,8 @@ struct WalletNavigationStack: View {
                 .navigationDestination(for: Scenes.Perpetuals.self) { _ in
                     PerpetualsNavigationView(
                         wallet: model.wallet,
-                        perpetualService: AppResolver.main.services.perpetualService
+                        perpetualService: AppResolver.main.services.perpetualService,
+                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType
                     )
                 }
                 .navigationDestination(for: Scenes.Perpetual.self) { scene in

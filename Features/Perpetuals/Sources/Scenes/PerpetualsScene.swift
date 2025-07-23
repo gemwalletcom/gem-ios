@@ -23,7 +23,7 @@ public struct PerpetualsScene: View {
                 WalletHeaderView(
                     model: model.headerViewModel,
                     isHideBalanceEnalbed: .constant(model.preferences.isHideBalanceEnabled),
-                    onHeaderAction: { _ in },
+                    onHeaderAction: model.onHeaderAction,
                     onInfoAction: { }
                 )
                 .padding(.top, Spacing.small)
@@ -67,6 +67,14 @@ public struct PerpetualsScene: View {
             Task {
                 await model.fetch()
             }
+        }
+        .onReceive(Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()) { _ in
+            Task {
+                await model.fetch()
+            }
+        }
+        .refreshable {
+            await model.fetch()
         }
     }
 }

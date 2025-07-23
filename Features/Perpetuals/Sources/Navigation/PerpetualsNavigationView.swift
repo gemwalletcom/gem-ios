@@ -9,20 +9,22 @@ public struct PerpetualsNavigationView: View {
     
     @State private var positionsRequest: PerpetualPositionsRequest
     @State private var perpetualsRequest: PerpetualsRequest
+
     @State private var positions: [PerpetualPositionData] = []
     @State private var perpetuals: [Perpetual] = []
     
     let wallet: Wallet
     let perpetualService: PerpetualServiceable
-    
-    private let updateTimer = Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()
+    @Binding var isPresentingSelectAssetType: SelectAssetType?
     
     public init(
         wallet: Wallet,
-        perpetualService: PerpetualServiceable
+        perpetualService: PerpetualServiceable,
+        isPresentingSelectAssetType: Binding<SelectAssetType?>
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
+        _isPresentingSelectAssetType = isPresentingSelectAssetType
         _positionsRequest = State(initialValue: PerpetualPositionsRequest(walletId: wallet.id))
         _perpetualsRequest = State(initialValue: PerpetualsRequest())
     }
@@ -33,42 +35,11 @@ public struct PerpetualsNavigationView: View {
                 wallet: wallet,
                 perpetualService: perpetualService,
                 positions: positions,
-                perpetuals: perpetuals
+                perpetuals: perpetuals,
+                onSelectAssetType: { isPresentingSelectAssetType = $0 }
             )
         )
         .observeQuery(request: $positionsRequest, value: $positions)
         .observeQuery(request: $perpetualsRequest, value: $perpetuals)
-        .task {
-            await updateData()
-        }
-        .onReceive(updateTimer) { _ in
-            Task {
-                await updateData()
-            }
-        }
-        .refreshable {
-            await updateData()
-        }
-    }
-    
-    private func updateData() async {
-        await updateMarkets()
-        await updatePositions()
-    }
-    
-    private func updateMarkets() async {
-        do {
-            try await perpetualService.updateMarkets()
-        } catch {
-            print("Failed to update markets: \(error)")
-        }
-    }
-    
-    private func updatePositions() async {
-        do {
-            try await perpetualService.updatePositions(wallet: wallet)
-        } catch {
-            print("Failed to update positions: \(error)")
-        }
     }
 }
