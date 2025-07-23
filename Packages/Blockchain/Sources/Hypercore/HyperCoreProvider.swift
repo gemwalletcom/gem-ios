@@ -7,6 +7,7 @@ public enum HypercoreProvider: TargetType {
     
     case clearinghouseState(user: String)
     case metaAndAssetCtxs
+    case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int,)
     
     public var baseUrl: URL {
         return URL(string: "")!
@@ -31,6 +32,16 @@ public enum HypercoreProvider: TargetType {
             return .encodable([
                 "type": "metaAndAssetCtxs"
             ])
+        case .candleSnapshot(let coin, let interval, let startTime, let endTime,):
+            return .encodable(JSON<String>.dictionary([
+                "type": .value("candleSnapshot"),
+                "req": .dictionary([
+                    "coin": .value(coin),
+                    "interval": .value(interval),
+                    "startTime": .integer(startTime),
+                    "endTime": .integer(endTime)
+                ])
+            ]))
         }
     }
     

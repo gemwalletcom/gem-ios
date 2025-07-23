@@ -10,7 +10,7 @@ public func mapHypercoreCoinToAssetId(_ coin: String) -> AssetId? {
     case "SUI": AssetId(chain: .sui, tokenId: nil)
     case "HYPE": AssetId(chain: .hyperCore, tokenId: nil)
     case "SOL": AssetId(chain: .solana, tokenId: nil)
-    case "XRP": AssetId(chain: .solana, tokenId: nil)
+    case "XRP": AssetId(chain: .xrp, tokenId: nil)
     case "BNB": AssetId(chain: .smartChain, tokenId: nil)
     case "PENGU":AssetId(chain: .solana, tokenId: "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv")
     case "FARTCOIN":AssetId(chain: .solana, tokenId: "9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump")

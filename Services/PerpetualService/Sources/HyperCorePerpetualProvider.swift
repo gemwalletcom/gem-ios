@@ -38,4 +38,14 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
             )
         }
     }
+    
+    func getCandlesticks(coin: String, startTime: Int, endTime: Int, interval: String) async throws -> [ChartCandleStick] {
+        try await hyperCoreService.getCandlesticks(
+            coin: coin,
+            interval: interval,
+            startTime: startTime,
+            endTime: endTime
+        )
+        .compactMap { $0.toCandlestick() }
+    }
 }

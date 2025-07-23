@@ -3,10 +3,11 @@ import Primitives
 import Components
 import Style
 import PerpetualService
+import PrimitivesComponents
 
 public struct PerpetualScene: View {
     
-    let model: PerpetualSceneViewModel
+    @Bindable var model: PerpetualSceneViewModel
     
     public init(model: PerpetualSceneViewModel) {
         self.model = model
@@ -14,6 +15,29 @@ public struct PerpetualScene: View {
     
     public var body: some View {
         List {
+            Section { } header: {
+                VStack {
+                    VStack {
+                        switch model.state {
+                        case .noData:
+                            StateEmptyView.noData()
+                        case .loading:
+                            LoadingView()
+                        case .data(let candlesticks):
+                            CandlestickChartView(data: candlesticks, period: model.currentPeriod)
+                        case .error(let error):
+                            StateEmptyView.error(error)
+                        }
+                    }
+                    .frame(height: 320)
+                    
+                    PeriodSelectorView(selectedPeriod: $model.currentPeriod)
+                        .padding(.horizontal, Spacing.medium)
+                        .padding(.top, Spacing.medium)
+                }
+            }
+            .cleanListRow()
+            
             ForEach(model.positionViewModels) { position in
                 Section {
                     ListAssetItemView(model: PerpetualPositionItemViewModel(

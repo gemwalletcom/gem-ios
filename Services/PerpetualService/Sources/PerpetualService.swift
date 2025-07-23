@@ -11,19 +11,20 @@ public protocol PerpetualServiceable: Sendable {
     func getMarkets() async throws -> [Perpetual]
     func updatePositions(wallet: Wallet) async throws
     func updateMarkets() async throws
+    func getCandlesticks(coin: String, startTime: Int, endTime: Int, interval: String) async throws -> [ChartCandleStick]
 }
 
 public struct PerpetualService: PerpetualServiceable {
     
     private let store: PerpetualStore
-    private let providers: [PerpetualProvidable]
+    private let provider: PerpetualProvidable
     
     public init(
         store: PerpetualStore,
         providerFactory: PerpetualProviderFactory
     ) {
         self.store = store
-        self.providers = providerFactory.createProviders()
+        self.provider = providerFactory.createProvider()
     }
     
     public func getPositions(walletId: WalletId) async throws -> [PerpetualPosition] {
@@ -35,24 +36,12 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     public func updatePositions(wallet: Wallet) async throws {
-        for provider in providers {
-            Task {
-                await updatePositionsForProvider(provider, wallet: wallet)
-            }
-        }
-    }
-    
-    private func updatePositionsForProvider(_ provider: PerpetualProvidable, wallet: Wallet) async {
-        do {
-            let positions = try await provider.getPositions(wallet: wallet)
-            try await syncProviderPositions(
-                positions: positions,
-                provider: provider.provider(),
-                walletId: wallet.id
-            )
-        } catch {
-            print("PerpetualService: Failed to update positions from provider: \(error)")
-        }
+        let positions = try await provider.getPositions(wallet: wallet)
+        try await syncProviderPositions(
+            positions: positions,
+            provider: provider.provider(),
+            walletId: wallet.id
+        )
     }
     
     private func syncProviderPositions(positions: [PerpetualPosition], provider: PerpetualProvider, walletId: String) async throws {
@@ -74,28 +63,16 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     public func updateMarkets() async throws {
-        let allMarkets = await fetchMarketsFromAllProviders()
-        try store.upsertPerpetuals(allMarkets)
+        let markets = try await provider.getMarkets()
+        try store.upsertPerpetuals(markets)
     }
     
-    private func fetchMarketsFromAllProviders() async -> [Perpetual] {
-        await withTaskGroup(of: [Perpetual].self) { group in
-            for provider in providers {
-                group.addTask { [provider] in
-                    do {
-                        return try await provider.getMarkets()
-                    } catch {
-                        print("PerpetualService: Failed to fetch markets from provider: \(error)")
-                        return []
-                    }
-                }
-            }
-            
-            var allMarkets: [Perpetual] = []
-            for await markets in group {
-                allMarkets.append(contentsOf: markets)
-            }
-            return allMarkets
-        }
+    public func getCandlesticks(coin: String, startTime: Int, endTime: Int, interval: String = "1m") async throws -> [ChartCandleStick] {
+        return try await provider.getCandlesticks(
+            coin: coin,
+            startTime: startTime,
+            endTime: endTime,
+            interval: interval
+        )
     }
 }

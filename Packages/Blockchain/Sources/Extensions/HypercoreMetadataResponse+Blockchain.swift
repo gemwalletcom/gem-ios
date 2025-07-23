@@ -21,6 +21,10 @@ extension HypercoreAssetMetadata {
         let hourlyFunding = Double(funding) ?? 0
         let annualFunding = hourlyFunding * 24 * 365 * 100
         
+        // Convert open interest from coin amount to USD value
+        let openInterestInCoins = Double(openInterest) ?? 0
+        let openInterestInUSD = openInterestInCoins * currentPrice
+        
         return Perpetual(
             id: "\(provider.rawValue)_\(symbol)",
             name: symbol,
@@ -28,7 +32,7 @@ extension HypercoreAssetMetadata {
             assetId: assetId,
             price: currentPrice,
             pricePercentChange24h: priceChange24h,
-            openInterest: Double(openInterest) ?? 0,
+            openInterest: openInterestInUSD,
             volume24h: Double(dayNtlVlm) ?? 0,
             funding: annualFunding,
             leverage: [UInt8(maxLeverage)]

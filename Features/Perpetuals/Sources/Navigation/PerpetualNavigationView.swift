@@ -7,41 +7,26 @@ import PerpetualService
 
 public struct PerpetualNavigationView: View {
     
-    @State private var positionsRequest: PerpetualPositionsRequest
-    @State private var positions: [PerpetualPositionData] = []
-    
-    let perpetual: Perpetual
-    let wallet: Wallet
-    let perpetualService: PerpetualServiceable
+    @State private var model: PerpetualSceneViewModel
     
     public init(
         perpetual: Perpetual,
         wallet: Wallet,
         perpetualService: PerpetualServiceable
     ) {
-        self.perpetual = perpetual
-        self.wallet = wallet
-        self.perpetualService = perpetualService
-        _positionsRequest = State(initialValue: PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetual.id))
+        _model = State(initialValue: PerpetualSceneViewModel(
+            wallet: wallet,
+            perpetual: perpetual,
+            perpetualService: perpetualService
+        ))
     }
     
     public var body: some View {
-        PerpetualScene(
-            model: PerpetualSceneViewModel(
-                wallet: wallet,
-                perpetualViewModel: PerpetualViewModel(perpetual: positions.first?.perpetual ?? perpetual),
-                positionViewModels: positions.flatMap { $0.positions }.map {
-                    PerpetualPositionViewModel(position: $0)
-                },
-                perpetualService: perpetualService
-            )
-        )
-        .observeQuery(request: $positionsRequest, value: $positions)
-        .task {
-            Task {
-                try await perpetualService.updateMarkets()
-                try await perpetualService.updatePositions(wallet: wallet)
+        PerpetualScene(model: model)
+            .observeQuery(request: $model.perpetualsRequest, value: $model.perpetuals)
+            .observeQuery(request: $model.positionsRequest, value: $model.positions)
+            .task {
+                await model.loadData()
             }
-        }
     }
 }

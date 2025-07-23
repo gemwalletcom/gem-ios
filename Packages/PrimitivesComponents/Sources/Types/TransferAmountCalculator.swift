@@ -17,7 +17,7 @@ public struct TransferAmountCalculator {
             return .failure(error)
         }
     }
-
+    
     func calculate(input: TransferAmountInput) throws(TransferAmountCalculatorError) -> TransferAmount {
         if input.assetBalance.available == 0 && !input.ignoreValueCheck {
             guard input.fee.isZero else {

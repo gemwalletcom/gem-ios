@@ -14,18 +14,11 @@ public struct PerpetualProviderFactory {
         self.nodeProvider = nodeProvider
     }
     
-    public func createProviders() -> [PerpetualProvidable] {
-        [createProvider(for: .hypercore)]
-    }
-    
-    private func createProvider(for type: PerpetualProvider) -> PerpetualProvidable {
-        switch type {
-        case .hypercore:
-            return HyperCorePerpetualProvider(
-                hyperCoreService: HyperCoreService(
-                    provider: ProviderFactory.create(with: nodeProvider.node(for: .hyperCore))
-                )
+    public func createProvider() -> PerpetualProvidable {
+        HyperCorePerpetualProvider(
+            hyperCoreService: HyperCoreService(
+                provider: ProviderFactory.create(with: nodeProvider.node(for: .hyperCore))
             )
-        }
+        )
     }
 }
