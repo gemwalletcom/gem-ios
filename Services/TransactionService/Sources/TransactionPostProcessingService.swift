@@ -12,7 +12,7 @@ struct TransactionStateUpdatePostJob: Sendable {
     private let balanceUpdater: any BalancerUpdater
     private let stakeService: StakeService
     private let nftService: NFTService
-
+    
     init(
         transactionStore: TransactionStore,
         balanceUpdater: any BalancerUpdater,
@@ -24,39 +24,33 @@ struct TransactionStateUpdatePostJob: Sendable {
         self.stakeService = stakeService
         self.nftService = nftService
     }
-
+    
     // Once transaction is completed, update nessesary states internally, balances, stakes, nft ownership
     func process(transactionWallet: TransactionWallet) async throws {
-        for assetIdentifier in transactionWallet.assetIdentifiers {
-            guard let address = transactionWallet.address(for: assetIdentifier) else {
-                NSLog("TransactionStateUpdatePostJob: no address for transaction: \(transactionWallet)")
-                continue
-            }
-
-            Task {
-                try await balanceUpdater.updateBalance(
-                    walletId: transactionWallet.wallet.id,
-                    asset: assetIdentifier,
-                    address: address
-                )
-            }
-
-            switch transactionWallet.type {
-            case .stakeDelegate, .stakeUndelegate, .stakeRewards:
+        Task {
+            await balanceUpdater.updateBalance(
+                for: transactionWallet.wallet,
+                assetIds: transactionWallet.assetIdentifiers
+            )
+        }
+        
+        switch transactionWallet.type {
+        case .stakeDelegate, .stakeUndelegate, .stakeRewards:
+            for assetIdentifier in transactionWallet.assetIdentifiers {
                 Task {
                     try await stakeService.update(
                         walletId: transactionWallet.wallet.id,
                         chain: assetIdentifier.chain,
-                        address: address
+                        address: transactionWallet.transaction.from
                     )
                 }
-            case .transferNFT:
-                Task {
-                    // TODO: implement nftService.update when ready
-                }
-            default:
-                break
             }
+        case .transferNFT:
+            Task {
+                // TODO: implement nftService.update when ready
+            }
+        default:
+            break
         }
     }
 }
