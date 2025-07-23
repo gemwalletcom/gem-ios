@@ -12,7 +12,7 @@ struct TransactionStateUpdatePostJob: Sendable {
     private let balanceUpdater: any BalancerUpdater
     private let stakeService: StakeService
     private let nftService: NFTService
-    
+
     init(
         transactionStore: TransactionStore,
         balanceUpdater: any BalancerUpdater,
@@ -24,24 +24,28 @@ struct TransactionStateUpdatePostJob: Sendable {
         self.stakeService = stakeService
         self.nftService = nftService
     }
-    
+
     // Once transaction is completed, update nessesary states internally, balances, stakes, nft ownership
-    func process(transactionWallet: TransactionWallet) async throws {
+
+    /*
+     (transaction.assetIds + [transaction.feeAssetId]).unique()
+     */
+    func process(wallet: Wallet, transaction: Transaction) async throws {
         Task {
             await balanceUpdater.updateBalance(
-                for: transactionWallet.wallet,
-                assetIds: transactionWallet.assetIdentifiers
+                for: wallet,
+                assetIds: transaction.assetIds
             )
         }
-        
-        switch transactionWallet.type {
-        case .stakeDelegate, .stakeUndelegate, .stakeRewards:
-            for assetIdentifier in transactionWallet.assetIdentifiers {
+
+        switch transaction.type {
+        case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw:
+            for assetIdentifier in transaction.assetIds {
                 Task {
                     try await stakeService.update(
-                        walletId: transactionWallet.wallet.id,
+                        walletId: wallet.id,
                         chain: assetIdentifier.chain,
-                        address: transactionWallet.transaction.from
+                        address: transaction.from
                     )
                 }
             }

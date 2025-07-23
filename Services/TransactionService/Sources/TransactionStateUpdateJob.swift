@@ -66,6 +66,9 @@ public struct TransactionStateUpdateJob: Job {
     }
 
     public func onComplete() async throws {
-        try await postProcessingService.process(transactionWallet: transactionWallet)
+        try await postProcessingService.process(
+            wallet: transactionWallet.wallet,
+            transaction: transactionWallet.transaction
+        )
     }
 }
