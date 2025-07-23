@@ -53,7 +53,7 @@ struct TransferExecutor: TransferExecutable {
                     transactionIndex: index
                 )
 
-                try walletsService.addTransactions(walletId: input.wallet.id, transactions: [transaction])
+                try walletsService.addTransactions(wallet: input.wallet, transactions: [transaction])
                 Task {
                     try walletsService.enableBalances(
                         for: input.wallet.walletId,
