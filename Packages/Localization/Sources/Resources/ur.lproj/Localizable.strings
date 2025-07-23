@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "بٹوے سے چھپائیں۔";
 "common.details" = "تفصیلات";
 "transaction.swap_again" = "دوبارہ تبدیل کریں۔";
+"errors.scan_transaction.malicious" = "لین دین کی شناخت مشتبہ کے طور پر ہوئی۔";
+"errors.scan_transaction.memo_required" = "%@ ایڈریس کے لیے منزل کا ٹیگ / میمو درکار ہے۔";

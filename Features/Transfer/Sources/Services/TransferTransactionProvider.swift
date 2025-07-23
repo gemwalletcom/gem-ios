@@ -5,6 +5,7 @@ import Primitives
 import ScanService
 import BigInt
 import SwapService
+import Validators
 
 public protocol TransferTransactionProvidable: Sendable {
     func loadTransferTransactionData(
@@ -101,14 +102,25 @@ extension TransferTransactionProvider {
     }
 
     private func validateTransaction(wallet: Wallet, data: TransferData) async throws {
-        let scanPayload = try scanService.getTransactionPayload(
+        let payload = try scanService.getTransactionPayload(
             wallet: wallet,
             transferType: data.type,
             recipient: data.recipientData
         )
-        let isValid = try await scanService.isValidTransaction(scanPayload)
-        if !isValid {
-            throw AnyError("Transaction is invalid")
+        do {
+            let transaction = try await scanService.getScanTransaction(payload)
+            try ScanTransactionValidator.validate(
+                transaction: transaction,
+                with: payload
+            )
+        } catch let error as ScanTransactionError {
+            throw error
+        } catch {
+            // For swap transactions, re-throw the error. For all other types, an error
+            // from scanTransaction is ignored, and the transaction is considered valid.
+            if payload.type == .swap {
+                throw error
+            }
         }
     }
 }

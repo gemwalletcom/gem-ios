@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "إخفاء من المحفظة";
 "common.details" = "تفاصيل";
 "transaction.swap_again" = "التبديل مرة أخرى";
+"errors.scan_transaction.malicious" = "تم تحديد المعاملة على أنها اشتباه";
+"errors.scan_transaction.memo_required" = "يتطلب عنوان %@ علامة وجهة/مذكرة";

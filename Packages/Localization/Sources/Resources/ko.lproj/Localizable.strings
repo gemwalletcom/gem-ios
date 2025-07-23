@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "지갑에서 숨기기";
 "common.details" = "세부";
 "transaction.swap_again" = "다시 바꾸기";
+"errors.scan_transaction.malicious" = "의심 거래로 확인됨";
+"errors.scan_transaction.memo_required" = "%@ 주소에는 목적지 태그/메모가 필요합니다.";

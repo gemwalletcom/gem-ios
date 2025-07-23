@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Se cacher du portefeuille";
 "common.details" = "Détails";
 "transaction.swap_again" = "Échanger à nouveau";
+"errors.scan_transaction.malicious" = "Transaction identifiée comme suspecte";
+"errors.scan_transaction.memo_required" = "L'adresse %@ nécessite une balise de destination / un mémo";

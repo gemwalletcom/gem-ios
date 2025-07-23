@@ -131,16 +131,17 @@ extension ConfirmTransferScene {
                 if model.shouldShowMemo {
                     MemoListItemView(memo: model.memo)
                 }
-            }
-            
-
-            Section {
+                
                 if let swapDetailsViewModel = model.swapDetailsViewModel {
                     NavigationCustomLink(
                         with: SwapDetailsListView(model: swapDetailsViewModel),
                         action: model.onSelectSwapDetails
                     )
                 }
+            }
+            
+
+            Section {
                 if model.shouldShowFeeRatesSelector {
                     NavigationCustomLink(
                         with: networkFeeView,
