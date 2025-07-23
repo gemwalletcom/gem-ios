@@ -5,15 +5,30 @@ import WalletConnectSign
 import Primitives
 import struct Gemstone.SignMessage
 
-final class EthereumWalletConnectorService: Sendable {
+final class EthereumWalletConnectorService: BlockchainWalletConnectServiciable {
     private let signer: WalletConnectorSignable
     
     init(signer: WalletConnectorSignable) {
         self.signer = signer
     }
     
+    func handle(request: WalletConnectSign.Request) async throws -> RPCResult {
+        guard let method = WalletConnectionMethods(rawValue: request.method)?.blockchainMethod?.ethereum else {
+            throw WalletConnectorServiceError.unresolvedMethod(request.method)
+        }
+        guard let chain = signer.allChains.first(where: { $0.blockchain == request.chainId }) else {
+            throw WalletConnectorServiceError.unresolvedChainId(request.chainId.absoluteString)
+        }
+        
+        return try await handle(method: method, chain: chain, request: request)
+    }
+}
+
+// MARK: - Private Methods
+
+private extension EthereumWalletConnectorService {
     func handle(
-        method: EthereumMethods,
+        method: WalletConnectBlockchainEthereumMethods,
         chain: Chain,
         request: WalletConnectSign.Request
     ) async throws -> RPCResult {
@@ -59,7 +74,9 @@ extension EthereumWalletConnectorService {
 
     private func ethSignTypedData(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
         let params = try request.params.get([String].self)
-        let data = params[1].data(using: .utf8)!
+        guard let data = params[1].data(using: .utf8) else {
+            throw WalletConnectorServiceError.wrongSignParameters
+        }
         let message = SignMessage(signType: .eip712, data: data)
         let digest = try await signer.signMessage(sessionId: request.topic, chain: chain, message: message)
         return .response(AnyCodable(digest))
@@ -82,17 +99,6 @@ extension EthereumWalletConnectorService {
         let transactionId = try await signer.sendTransaction(sessionId: request.topic, chain: chain, transaction: .ethereum(transaction))
         return .response(AnyCodable(transactionId))
     }
-}
-
-// TODO: - Implement Methods
-extension EthereumWalletConnectorService {
-    private func chainId() throws -> RPCResult {
-        .error(.methodNotFound)
-    }
-    
-    private func sendRawTransaction(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
-        .error(.methodNotFound)
-    }
 
     private func walletAddEthereumChain(chain: Chain, request: WalletConnectSign.Request) -> RPCResult {
         .response(AnyCodable(any: NSNull()))
@@ -101,4 +107,14 @@ extension EthereumWalletConnectorService {
     private func walletSwitchEthereumChain(chain: Chain, request: WalletConnectSign.Request) -> RPCResult {
         .response(AnyCodable(any: NSNull()))
     }
+        
+    // TODO: - Implement methods
+    private func chainId() throws -> RPCResult {
+        .error(.methodNotFound)
+    }
+
+    private func sendRawTransaction(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
+        .error(.methodNotFound)
+    }
 }
+

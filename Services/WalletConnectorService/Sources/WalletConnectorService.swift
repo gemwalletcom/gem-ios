@@ -10,11 +10,11 @@ public final class WalletConnectorService {
     private let interactor = WCConnectionsInteractor()
     private let signer: WalletConnectorSignable
     private let messageTracker = MessageTracker()
-    private let blockchainCoordinator: BlockchainMethodCoordinator
+    private let serviceFactory: BlockchainWalletConnectServiceFactory
 
     public init(signer: WalletConnectorSignable) {
         self.signer = signer
-        self.blockchainCoordinator = BlockchainMethodCoordinator(signer: signer)
+        self.serviceFactory = BlockchainWalletConnectServiceFactory(signer: signer)
     }
 }
 
@@ -148,20 +148,15 @@ extension WalletConnectorService {
             try await rejectRequest(request)
             return
         }
-        
-        guard let method = WalletConnectionMethods(rawValue: request.method) else {
-            throw WalletConnectorServiceError.unresolvedMethod(request.method)
-        }
-        guard let chain = signer.allChains.filter({ $0.blockchain == request.chainId }).first else {
-            throw WalletConnectorServiceError.unresolvedChainId(request.chainId.absoluteString)
-        }
 
-        NSLog("handleMethod received: \(method) ")
+        NSLog("handleMethod received: \(request.method) ")
         NSLog("handleMethod received params: \(request.params) ")
 
         do {
-            let response = try await blockchainCoordinator.handleMethod(method: method, chain: chain, request: request)
-            NSLog("handleMethod result: \(method) \(response)")
+            let service = try serviceFactory.service(for: request.method)
+            let response = try await service.handle(request: request)
+
+            NSLog("handleMethod result: \(request.method) \(response)")
             try await WalletKit.instance.respond(topic: request.topic, requestId: request.id, response: response)
         } catch {
             NSLog("handleMethod error: \(error)")

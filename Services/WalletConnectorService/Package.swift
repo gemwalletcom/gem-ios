@@ -43,23 +43,12 @@ let package = Package(
         ),
         .target(
             name: "WalletConnectorServiceTestKit",
-            dependencies: [
-                .product(name: "ReownWalletKit", package: "reown-swift"),
-                .product(name: "PrimitivesTestKit", package: "Primitives"),
-                "WalletConnectorService",
-                "Gemstone"
-            ],
+            dependencies: ["WalletConnectorService"],
             path: "TestKit"
         ),
         .testTarget(
             name: "WalletConnectorServiceTests",
-            dependencies: [
-                .product(name: "ReownWalletKit", package: "reown-swift"),
-                .product(name: "PrimitivesTestKit", package: "Primitives"),
-                "WalletConnectorService",
-                "WalletConnectorServiceTestKit",
-                "Gemstone"
-            ]
+            dependencies: ["WalletConnectorService"]
         ),
     ]
 )

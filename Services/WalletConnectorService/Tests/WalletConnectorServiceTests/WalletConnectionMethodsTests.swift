@@ -8,7 +8,7 @@ struct WalletConnectionMethodsTests {
     
     @Test
     func ethereumMethodMappings() async throws {
-        let expectedMappings: [(WalletConnectionMethods, EthereumMethods)] = [
+        let expectedMappings: [(WalletConnectionMethods, WalletConnectBlockchainEthereumMethods)] = [
             (.ethChainId, .chainId),
             (.ethSign, .sign),
             (.personalSign, .personalSign),
@@ -32,7 +32,7 @@ struct WalletConnectionMethodsTests {
     
     @Test
     func solanaMethodMappings() async throws {
-        let expectedMappings: [(WalletConnectionMethods, SolanaMethods)] = [
+        let expectedMappings: [(WalletConnectionMethods, WalletConnectBlockchainSolanaMethods)] = [
             (.solanaSignMessage, .signMessage),
             (.solanaSignTransaction, .signTransaction),
             (.solanaSignAndSendTransaction, .signAndSendTransaction),
