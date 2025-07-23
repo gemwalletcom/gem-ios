@@ -349,7 +349,8 @@ extension ConfirmTransferViewModel {
 
         do {
             let metadata = try metadataProvider.metadata(wallet: wallet, data: data)
-            try FeeAvailabilityGuard.ensureAvialble(fee: metadata.feeAvailable, chain: data.chain)
+            try TransferAmountCalculator().validateNetworkFee(metadata.feeAvailable, feeAssetId: metadata.feeAssetId)
+
             let transferTransactionData = try await transferTransactionProvider.loadTransferTransactionData(
                 wallet: wallet, data: data,
                 priority: feeModel.priority,
