@@ -7,7 +7,7 @@ import Localization
 
 public enum TransferAmountCalculatorError: Equatable {
     case insufficientBalance(Asset)
-    case insufficientNetworkFee(Asset, required: BigInt)
+    case insufficientNetworkFee(Asset, required: BigInt?)
     case minimumAccountBalanceTooLow(Asset, required: BigInt)
 }
 
