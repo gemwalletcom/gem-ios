@@ -16,6 +16,6 @@ public struct PerpetualsRequest: ValueObservationQueryable {
         return try PerpetualRecord
             .order(PerpetualRecord.Columns.volume24h.desc)
             .fetchAll(db)
-            .compactMap { try $0.mapToPerpetual() }
+            .map { $0.mapToPerpetual() }
     }
 }

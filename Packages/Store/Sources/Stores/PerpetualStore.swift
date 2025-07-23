@@ -33,7 +33,7 @@ public struct PerpetualStore: Sendable {
         try db.read { db in
             try PerpetualRecord
                 .fetchAll(db)
-                .compactMap { try $0.mapToPerpetual() }
+                .map { $0.mapToPerpetual() }
         }
     }
     
