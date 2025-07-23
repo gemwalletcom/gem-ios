@@ -4,12 +4,12 @@
 
 import Foundation
 
-public enum PerpetualMarginType: String, Codable, Equatable, Sendable {
+public enum PerpetualMarginType: String, Codable, Equatable, Hashable, Sendable {
 	case cross
 	case isolated
 }
 
-public struct PriceTarget: Codable, Equatable, Sendable {
+public struct PriceTarget: Codable, Equatable, Hashable, Sendable {
 	public let price: Double?
 	public let percentage: Double?
 
@@ -19,29 +19,31 @@ public struct PriceTarget: Codable, Equatable, Sendable {
 	}
 }
 
-public struct PerpetualPosition: Codable, Equatable, Sendable {
+public struct PerpetualPosition: Codable, Equatable, Hashable, Sendable {
 	public let id: String
-	public let perpetual_id: String
+	public let perpetualId: String
 	public let size: Double
+	public let sizeValue: Double
 	public let leverage: UInt8
-	public let liquidation_price: Double?
-	public let margin_type: PerpetualMarginType
-	public let margin_amount: Double
-	public let take_profit: PriceTarget?
-	public let stop_loss: PriceTarget?
+	public let liquidationPrice: Double?
+	public let marginType: PerpetualMarginType
+	public let marginAmount: Double
+	public let takeProfit: PriceTarget?
+	public let stopLoss: PriceTarget?
 	public let pnl: Double
 	public let funding: Float?
 
-	public init(id: String, perpetual_id: String, size: Double, leverage: UInt8, liquidation_price: Double?, margin_type: PerpetualMarginType, margin_amount: Double, take_profit: PriceTarget?, stop_loss: PriceTarget?, pnl: Double, funding: Float?) {
+	public init(id: String, perpetualId: String, size: Double, sizeValue: Double, leverage: UInt8, liquidationPrice: Double?, marginType: PerpetualMarginType, marginAmount: Double, takeProfit: PriceTarget?, stopLoss: PriceTarget?, pnl: Double, funding: Float?) {
 		self.id = id
-		self.perpetual_id = perpetual_id
+		self.perpetualId = perpetualId
 		self.size = size
+		self.sizeValue = sizeValue
 		self.leverage = leverage
-		self.liquidation_price = liquidation_price
-		self.margin_type = margin_type
-		self.margin_amount = margin_amount
-		self.take_profit = take_profit
-		self.stop_loss = stop_loss
+		self.liquidationPrice = liquidationPrice
+		self.marginType = marginType
+		self.marginAmount = marginAmount
+		self.takeProfit = takeProfit
+		self.stopLoss = stopLoss
 		self.pnl = pnl
 		self.funding = funding
 	}

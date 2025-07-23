@@ -1,39 +1,45 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 import Primitives
 import Components
 import Style
 import Store
 import PerpetualService
+import PrimitivesComponents
+import Preferences
 
 public struct PerpetualsScene: View {
     
-    @State private var model: PerpetualsSceneViewModel
+    let model: PerpetualsSceneViewModel
     
-    public init(
-        wallet: Wallet,
-        perpetualService: PerpetualServiceable
-    ) {
-        self._model = State(initialValue: PerpetualsSceneViewModel(
-            wallet: wallet,
-            perpetualService: perpetualService
-        ))
+    public init(model: PerpetualsSceneViewModel) {
+        self.model = model
     }
     
     public var body: some View {
         List {
+            Section { } header: {
+                WalletHeaderView(
+                    model: model.headerViewModel,
+                    isHideBalanceEnalbed: .constant(model.preferences.isHideBalanceEnabled),
+                    onHeaderAction: { _ in },
+                    onInfoAction: { }
+                )
+                .padding(.top, Spacing.small)
+            }
+            .cleanListRow()
+            
             if !model.positionViewModels.isEmpty {
                 Section {
                     ForEach(model.positionViewModels) { viewModel in
-                        ListAssetItemView(model: viewModel)
+                        NavigationLink(value: Scenes.Perpetual(perpetual: viewModel.perpetual)) {
+                            ListAssetItemView(model: viewModel)
+                        }
+                        .listRowInsets(.assetListRowInsets)
                     }
-                    .listRowInsets(.assetListRowInsets)
                 } header: {
-                    HStack {
-                        Text("Positions")
-                        Spacer()
-                        .font(.footnote)
-                        .foregroundColor(.blue)
-                    }
+                    Text("Positions")
                 }
             }
             
@@ -42,10 +48,12 @@ public struct PerpetualsScene: View {
                     Text("No markets")
                         .foregroundColor(.secondary)
                 } else {
-                    ForEach(model.perpetuals, id: \.id) {
-                        ListAssetItemView(
-                            model: PerpetualMarketItemViewModel(perpetual: $0)
-                        )
+                    ForEach(model.perpetuals, id: \.id) { perpetual in
+                        NavigationLink(value: Scenes.Perpetual(perpetual: perpetual)) {
+                            ListAssetItemView(
+                                model: PerpetualItemViewModel(perpetual: perpetual)
+                            )
+                        }
                     }
                     .listRowInsets(.assetListRowInsets)
                 }
@@ -55,19 +63,10 @@ public struct PerpetualsScene: View {
         }
         .navigationTitle("Perpetuals")
         .navigationBarTitleDisplayMode(.inline)
-        .task {
-            model.fetch()
-            
-            // Update every 5 seconds
-            for await _ in Timer.publish(every: 5, on: .main, in: .common).autoconnect().values {
-                await model.updatePositions()
-                await model.updateMarkets()
+        .taskOnce {
+            Task {
+                await model.fetch()
             }
-        }
-        .observeQuery(request: $model.positionsRequest, value: $model.positions)
-        .observeQuery(request: $model.perpetualsRequest, value: $model.perpetuals)
-        .refreshable {
-            await model.updatePositions()
         }
     }
 }

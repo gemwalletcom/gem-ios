@@ -139,7 +139,7 @@ extension WalletSceneViewModel {
         case .buy: .buy
         case .send: .send
         case .receive: .receive(.asset)
-        case .swap, .more, .stake:
+        case .swap, .more, .stake, .deposit, .withdraw:
             fatalError()
         }
         isPresentingSelectAssetType = selectType

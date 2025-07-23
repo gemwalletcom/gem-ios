@@ -5,6 +5,8 @@ import SwiftUI
 import Primitives
 import Store
 import PerpetualService
+import Preferences
+import PrimitivesComponents
 
 @Observable
 @MainActor
@@ -13,63 +15,66 @@ public final class PerpetualsSceneViewModel {
     private let perpetualService: PerpetualServiceable
     
     public let wallet: Wallet
-    
-    // Requests
-    public var positionsRequest: PerpetualPositionsRequest
-    public var perpetualsRequest: PerpetualsRequest
-    
-    // Observed values
-    public var positions: [PerpetualPositionData] = []
-    public var perpetuals: [Perpetual] = []
+    public let positions: [PerpetualPositionData]
+    public let perpetuals: [Perpetual]
     
     public var isLoading: Bool = false
+    public let preferences: Preferences = .standard
     
     public init(
         wallet: Wallet,
-        perpetualService: PerpetualServiceable
+        perpetualService: PerpetualServiceable,
+        positions: [PerpetualPositionData],
+        perpetuals: [Perpetual]
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id)
-        self.perpetualsRequest = PerpetualsRequest()
+        self.positions = positions
+        self.perpetuals = perpetuals
+    }
+    
+    public var positionViewModels: [PerpetualPositionItemViewModel] {
+        positions.flatMap { positionData in
+            let perpetualViewModel = PerpetualViewModel(perpetual: positionData.perpetual, currencyStyle: .currency)
+            return positionData.positions.map { position in
+                PerpetualPositionItemViewModel(
+                    position: position,
+                    perpetualViewModel: perpetualViewModel
+                )
+            }
+        }
+    }
+    
+    public var headerViewModel: PerpetualsHeaderViewModel {
+        PerpetualsHeaderViewModel(
+            walletType: wallet.type,
+            totalValue: 10,
+            currencyCode: "USD"
+        )
     }
 }
 
 // MARK: - Actions
 
 extension PerpetualsSceneViewModel {
-    public func fetch() {
-        Task {
-            await updateMarkets()
-            await updatePositions()
-        }
+    public func fetch() async {
+        await updatePositions()
+        await updateMarkets()
     }
     
-    public func updatePositions() async {
-        isLoading = true
-        defer { isLoading = false }
-        
+    private func updatePositions() async {
         do {
             try await perpetualService.updatePositions(wallet: wallet)
         } catch {
-            print("PerpetualsSceneViewModel: Failed to update positions: \(error)")
+            NSLog("Failed to update positions: \(error)")
         }
     }
     
-    public func updateMarkets() async {
+    private func updateMarkets() async {
         do {
             try await perpetualService.updateMarkets()
         } catch {
-            print("PerpetualsSceneViewModel: Failed to update markets: \(error)")
-        }
-    }
-    
-    public var positionViewModels: [PerpetualPositionItemViewModel] {
-        positions.map {
-            PerpetualPositionItemViewModel(
-                position: $0.position,
-                perpetual: $0.perpetual
-            )
+            NSLog("Failed to update markets: \(error)")
         }
     }
 }

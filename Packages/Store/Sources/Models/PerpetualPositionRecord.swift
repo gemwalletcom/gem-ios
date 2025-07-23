@@ -12,6 +12,7 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         static let walletId = Column("walletId")
         static let perpetualId = Column("perpetualId")
         static let size = Column("size")
+        static let sizeValue = Column("sizeValue")
         static let leverage = Column("leverage")
         static let liquidationPrice = Column("liquidationPrice")
         static let marginType = Column("marginType")
@@ -27,9 +28,10 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
     public var walletId: String
     public var perpetualId: String
     public var size: Double
+    public var sizeValue: Double
     public var leverage: Int
     public var liquidationPrice: Double?
-    public var marginType: String
+    public var marginType: PerpetualMarginType
     public var marginAmount: Double
     public var takeProfit: PriceTarget?
     public var stopLoss: PriceTarget?
@@ -42,9 +44,10 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         walletId: String,
         perpetualId: String,
         size: Double,
+        sizeValue: Double,
         leverage: Int,
         liquidationPrice: Double?,
-        marginType: String,
+        marginType: PerpetualMarginType,
         marginAmount: Double,
         takeProfit: PriceTarget?,
         stopLoss: PriceTarget?,
@@ -56,6 +59,7 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         self.walletId = walletId
         self.perpetualId = perpetualId
         self.size = size
+        self.sizeValue = sizeValue
         self.leverage = leverage
         self.liquidationPrice = liquidationPrice
         self.marginType = marginType
@@ -69,7 +73,7 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
     
     // MARK: - Associations
     
-    static let perpetual = belongsTo(PerpetualRecord.self)
+    static let perpetual = belongsTo(PerpetualRecord.self, using: ForeignKey([Columns.perpetualId]))
 }
 
 extension PerpetualPositionRecord: CreateTable {
@@ -81,6 +85,7 @@ extension PerpetualPositionRecord: CreateTable {
             t.column(Columns.perpetualId.name, .text).notNull()
                 .references(PerpetualRecord.databaseTableName, onDelete: .cascade)
             t.column(Columns.size.name, .double).notNull()
+            t.column(Columns.sizeValue.name, .double).notNull()
             t.column(Columns.leverage.name, .integer).notNull()
             t.column(Columns.liquidationPrice.name, .double)
             t.column(Columns.marginType.name, .text).notNull()
@@ -100,14 +105,15 @@ extension PerpetualPositionRecord {
     func mapToPerpetualPosition() -> PerpetualPosition {
         return PerpetualPosition(
             id: id,
-            perpetual_id: perpetualId,
+            perpetualId: perpetualId,
             size: size,
+            sizeValue: sizeValue,
             leverage: UInt8(leverage),
-            liquidation_price: liquidationPrice,
-            margin_type: PerpetualMarginType(rawValue: marginType) ?? .cross,
-            margin_amount: marginAmount,
-            take_profit: takeProfit,
-            stop_loss: stopLoss,
+            liquidationPrice: liquidationPrice,
+            marginType: marginType,
+            marginAmount: marginAmount,
+            takeProfit: takeProfit,
+            stopLoss: stopLoss,
             pnl: pnl,
             funding: funding
         )
@@ -119,14 +125,15 @@ extension PerpetualPosition {
         return PerpetualPositionRecord(
             id: id,
             walletId: walletId,
-            perpetualId: perpetual_id,
+            perpetualId: perpetualId,
             size: size,
+            sizeValue: sizeValue,
             leverage: Int(leverage),
-            liquidationPrice: liquidation_price,
-            marginType: margin_type.rawValue,
-            marginAmount: margin_amount,
-            takeProfit: take_profit,
-            stopLoss: stop_loss,
+            liquidationPrice: liquidationPrice,
+            marginType: marginType,
+            marginAmount: marginAmount,
+            takeProfit: takeProfit,
+            stopLoss: stopLoss,
             pnl: pnl,
             funding: funding
         )

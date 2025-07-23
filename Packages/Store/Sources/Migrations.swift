@@ -281,37 +281,12 @@ public struct Migrations {
         
         migrator
             .registerMigration(
-                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 1"
+                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 3"
             ) { db in
-                try? db.drop(table: PerpetualRecord.databaseTableName)
-                try? db.drop(table: PerpetualPositionRecord.databaseTableName)
+            try? db.drop(table: PerpetualRecord.databaseTableName)
+            try? db.drop(table: PerpetualPositionRecord.databaseTableName)
             try? PerpetualRecord.create(db: db)
             try? PerpetualPositionRecord.create(db: db)
-        }
-        
-        migrator.registerMigration("Add name to \(PerpetualRecord.databaseTableName)") { db in
-            if try db.tableExists(PerpetualRecord.databaseTableName) {
-                // Check if column already exists
-                let columns = try db.columns(in: PerpetualRecord.databaseTableName)
-                if !columns.contains(where: { $0.name == PerpetualRecord.Columns.name.name }) {
-                    try db.alter(table: PerpetualRecord.databaseTableName) {
-                        $0.add(column: PerpetualRecord.Columns.name.name, .text)
-                            .notNull()
-                            .defaults(to: "")
-                    }
-                }
-            }
-        }
-        
-        migrator.registerMigration("Add funding to \(PerpetualPositionRecord.databaseTableName)") { db in
-            if try db.tableExists(PerpetualPositionRecord.databaseTableName) {
-                let columns = try db.columns(in: PerpetualPositionRecord.databaseTableName)
-                if !columns.contains(where: { $0.name == PerpetualPositionRecord.Columns.funding.name }) {
-                    try db.alter(table: PerpetualPositionRecord.databaseTableName) {
-                        $0.add(column: PerpetualPositionRecord.Columns.funding.name, .double)
-                    }
-                }
-            }
         }
         
         try migrator.migrate(dbQueue)

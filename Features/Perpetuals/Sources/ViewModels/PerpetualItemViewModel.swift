@@ -8,7 +8,10 @@ import SwiftUI
 import PrimitivesComponents
 import Formatters
 
-public struct PerpetualMarketItemViewModel: ListAssetItemViewable {
+public struct PerpetualItemViewModel: ListAssetItemViewable {
+    
+    let formatter = CurrencyFormatter(type: .abbreviated)
+    
     public let perpetual: Perpetual
     
     public init(perpetual: Perpetual) {
@@ -21,7 +24,7 @@ public struct PerpetualMarketItemViewModel: ListAssetItemViewable {
     public var action: ((ListAssetItemAction) -> Void)?
     
     public var assetImage: AssetImage {
-        AssetIdViewModel(assetId: perpetual.asset_id).assetImage
+        AssetIdViewModel(assetId: perpetual.assetId).assetImage
     }
     
     public var subtitleView: ListAssetItemSubtitleView {
@@ -49,7 +52,6 @@ public struct PerpetualMarketItemViewModel: ListAssetItemViewable {
     }
     
     private var volume24Text: String {
-        let formatter = CurrencyFormatter(type: .abbreviated)
-        return formatter.string(perpetual.volume_24h)
+        return formatter.string(perpetual.volume24h)
     }
 }

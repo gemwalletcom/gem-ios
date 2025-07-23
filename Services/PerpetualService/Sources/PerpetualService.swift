@@ -8,6 +8,7 @@ import SwiftHTTPClient
 
 public protocol PerpetualServiceable: Sendable {
     func getPositions(walletId: WalletId) async throws -> [PerpetualPosition]
+    func getMarkets() async throws -> [Perpetual]
     func updatePositions(wallet: Wallet) async throws
     func updateMarkets() async throws
 }
@@ -29,38 +30,47 @@ public struct PerpetualService: PerpetualServiceable {
         return try store.getPositions(walletId: walletId.id)
     }
     
-    public func updatePositions(wallet: Wallet) async throws {
-        let allPositions = await fetchPositionsFromAllProviders(wallet: wallet)
-        
-        let existingPositions = try store.getPositions(walletId: wallet.id)
-        let existingPositionIds = Set(existingPositions.map { $0.id })
-        
-        let newPositionIds = Set(allPositions.map { $0.id })
-        let positionsToDelete = existingPositionIds.subtracting(newPositionIds)
-        
-        try store.deletePositions(ids: Array(positionsToDelete))
-        try store.upsertPositions(allPositions, walletId: wallet.id)
+    public func getMarkets() async throws -> [Perpetual] {
+        return try store.getPerpetuals()
     }
     
-    private func fetchPositionsFromAllProviders(wallet: Wallet) async -> [PerpetualPosition] {
-        await withTaskGroup(of: [PerpetualPosition].self) { group in
-            for provider in providers {
-                group.addTask { [provider] in
-                    do {
-                        return try await provider.getPositions(wallet: wallet)
-                    } catch {
-                        print("PerpetualService: Failed to fetch positions from provider: \(error)")
-                        return []
-                    }
-                }
+    public func updatePositions(wallet: Wallet) async throws {
+        for provider in providers {
+            Task {
+                await updatePositionsForProvider(provider, wallet: wallet)
             }
-            
-            var allPositions: [PerpetualPosition] = []
-            for await positions in group {
-                allPositions.append(contentsOf: positions)
-            }
-            return allPositions
         }
+    }
+    
+    private func updatePositionsForProvider(_ provider: PerpetualProvidable, wallet: Wallet) async {
+        do {
+            let positions = try await provider.getPositions(wallet: wallet)
+            try await syncProviderPositions(
+                positions: positions,
+                provider: provider.provider(),
+                walletId: wallet.id
+            )
+        } catch {
+            print("PerpetualService: Failed to update positions from provider: \(error)")
+        }
+    }
+    
+    private func syncProviderPositions(positions: [PerpetualPosition], provider: PerpetualProvider, walletId: String) async throws {
+        let existingPositions = try store.getPositions(walletId: walletId, provider: provider)
+        let existingIds = existingPositions.map { $0.id }.asSet()
+        let newIds = positions.map { $0.id }.asSet()
+        
+        let changes = SyncDiff.calculate(
+            primary: .remote,
+            local: existingIds,
+            remote: newIds
+        )
+        
+        try store.diffPositions(
+            deleteIds: changes.toDelete.asArray(),
+            positions: positions,
+            walletId: walletId
+        )
     }
     
     public func updateMarkets() async throws {

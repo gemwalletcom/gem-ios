@@ -6,27 +6,29 @@ import Primitives
 public extension PerpetualPosition {
     static func mock(
         id: String = "position_1",
-        perpetual_id: String = "hypercore_ETH-USD",
+        perpetualId: String = "hypercore_ETH-USD",
         size: Double = 1.0,
+        sizeValue: Double = 1000.0,
         leverage: UInt8 = 10,
-        liquidation_price: Double? = nil,
-        margin_type: PerpetualMarginType = .isolated,
-        margin_amount: Double = 100.0,
-        take_profit: PriceTarget? = nil,
-        stop_loss: PriceTarget? = nil,
+        liquidationPrice: Double? = nil,
+        marginType: PerpetualMarginType = .isolated,
+        marginAmount: Double = 100.0,
+        takeProfit: PriceTarget? = nil,
+        stopLoss: PriceTarget? = nil,
         pnl: Double = 0,
         funding: Float? = nil
     ) -> PerpetualPosition {
         PerpetualPosition(
             id: id,
-            perpetual_id: perpetual_id,
+            perpetualId: perpetualId,
             size: size,
+            sizeValue: sizeValue,
             leverage: leverage,
-            liquidation_price: liquidation_price,
-            margin_type: margin_type,
-            margin_amount: margin_amount,
-            take_profit: take_profit,
-            stop_loss: stop_loss,
+            liquidationPrice: liquidationPrice,
+            marginType: marginType,
+            marginAmount: marginAmount,
+            takeProfit: takeProfit,
+            stopLoss: stopLoss,
             pnl: pnl,
             funding: funding
         )

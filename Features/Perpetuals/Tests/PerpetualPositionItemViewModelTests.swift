@@ -1,50 +1,20 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-@testable import Perpetuals
 import Primitives
 import PrimitivesTestKit
-import Components
 import Style
+@testable import Perpetuals
 
 struct PerpetualPositionItemViewModelTests {
     
     @Test
-    func pnlColor() {
-        #expect(PerpetualPositionItemViewModel(position: .mock(pnl: 10), perpetual: .mock()).pnlColor == Colors.green)
-        #expect(PerpetualPositionItemViewModel(position: .mock(pnl: -10), perpetual: .mock()).pnlColor == Colors.red)
+    func name() {
+        #expect(PerpetualPositionItemViewModel(position: .mock(), perpetualViewModel: PerpetualViewModel(perpetual: .mock(name: "BTC-USD"))).name == "BTC-USD")
     }
     
     @Test
-    func positionType() {
-        #expect(PerpetualPositionItemViewModel(position: .mock(size: 1.0, leverage: 20), perpetual: .mock()).positionTypeText == "Long 20x")
-        #expect(PerpetualPositionItemViewModel(position: .mock(size: -1.0, leverage: 10), perpetual: .mock()).positionTypeText == "Short 10x")
-    }
-    
-    @Test
-    func positionTypeColor() {
-        #expect(PerpetualPositionItemViewModel(position: .mock(size: 1.0), perpetual: .mock()).positionTypeColor == Colors.green)
-        #expect(PerpetualPositionItemViewModel(position: .mock(size: -1.0), perpetual: .mock()).positionTypeColor == Colors.red)
-    }
-    
-    @Test
-    func pnlPercentCalculation() {
-        // 10x leverage: $10 PnL on $100 margin = 10%
-        #expect(PerpetualPositionItemViewModel(
-            position: .mock(size: 1.0, leverage: 10, pnl: 10),
-            perpetual: .mock(price: 1000)
-        ).pnlPercent == 10.0)
-        
-        // 20x leverage: -$40 PnL on $200 margin = -20%
-        #expect(PerpetualPositionItemViewModel(
-            position: .mock(size: 2.0, leverage: 20, pnl: -40),
-            perpetual: .mock(price: 2000)
-        ).pnlPercent == -20.0)
-        
-        // Zero size edge case
-        #expect(PerpetualPositionItemViewModel(
-            position: .mock(size: 0, leverage: 10, pnl: 10),
-            perpetual: .mock(price: 1000)
-        ).pnlPercent == 0)
+    func perpetualProperty() {
+        #expect(PerpetualPositionItemViewModel(position: .mock(), perpetualViewModel: PerpetualViewModel(perpetual: .mock(id: "BTC-USD"))).perpetual.id == "BTC-USD")
     }
 }

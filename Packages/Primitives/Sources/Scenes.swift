@@ -155,4 +155,12 @@ public struct Scenes {
         public init() {
         }
     }
+    
+    public struct Perpetual: Hashable {
+        public let perpetual: Primitives.Perpetual
+        
+        public init(perpetual: Primitives.Perpetual) {
+            self.perpetual = perpetual
+        }
+    }
 }

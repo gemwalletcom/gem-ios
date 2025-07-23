@@ -15,18 +15,24 @@ extension HypercoreAssetPositions {
                 return nil
             }
             
+            let rawFunding = Float(position.cumFunding.allTime) ?? 0
+            let positionSize = Double(position.szi) ?? 0
+            
+            let fundingValue = positionSize > 0 ? -rawFunding : rawFunding
+            
             return PerpetualPosition(
                 id: positionId,
-                perpetual_id: perpetualId,
+                perpetualId: perpetualId,
                 size: Double(position.szi) ?? 0,
+                sizeValue: Double(position.positionValue) ?? 0,
                 leverage: UInt8(position.leverage.value),
-                liquidation_price: Double(position.liquidationPx ?? "") ?? 0,
-                margin_type: position.leverage.type == .cross ? .cross : .isolated,
-                margin_amount: Double(position.marginUsed) ?? 0,
-                take_profit: nil, // Not provided by Hypercore
-                stop_loss: nil, // Not provided by Hypercore
+                liquidationPrice: Double(position.liquidationPx ?? "") ?? 0,
+                marginType: position.leverage.type == .cross ? .cross : .isolated,
+                marginAmount: Double(position.marginUsed) ?? 0,
+                takeProfit: nil,
+                stopLoss: nil,
                 pnl: Double(position.unrealizedPnl) ?? 0,
-                funding: Float(position.cumFunding.allTime)
+                funding: fundingValue
             )
         }
     }

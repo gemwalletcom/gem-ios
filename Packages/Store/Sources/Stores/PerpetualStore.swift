@@ -11,13 +11,6 @@ public struct PerpetualStore: Sendable {
         self.db = db.dbQueue
     }
     
-    public func addPerpetuals(_ perpetuals: [Perpetual]) throws {
-        try db.write { db in
-            for perpetual in perpetuals {
-                try perpetual.record.insert(db)
-            }
-        }
-    }
     
     public func upsertPerpetuals(_ perpetuals: [Perpetual]) throws {
         try db.write { db in
@@ -62,26 +55,13 @@ public struct PerpetualStore: Sendable {
         }
     }
     
-    public func getPosition(id: String) throws -> PerpetualPosition? {
-        try db.read { db in
-            try PerpetualPositionRecord
-                .including(required: PerpetualPositionRecord.perpetual)
-                .filter(PerpetualPositionRecord.Columns.id == id)
-                .asRequest(of: PositionInfo.self)
-                .fetchOne(db)?
-                .mapToPerpetualPosition()
-        }
-    }
-    
     public func getPositions(walletId: String) throws -> [PerpetualPosition] {
         try db.read { db in
             try PerpetualPositionRecord
-                .including(required: PerpetualPositionRecord.perpetual)
                 .filter(PerpetualPositionRecord.Columns.walletId == walletId)
                 .order(PerpetualPositionRecord.Columns.updatedAt.desc)
-                .asRequest(of: PositionInfo.self)
                 .fetchAll(db)
-                .compactMap { try $0.mapToPerpetualPosition() }
+                .map { $0.mapToPerpetualPosition() }
         }
     }
     
@@ -89,6 +69,34 @@ public struct PerpetualStore: Sendable {
         try db.write { db in
             for id in ids {
                 try PerpetualPositionRecord.deleteOne(db, key: id)
+            }
+        }
+    }
+    
+    public func getPositions(walletId: String, provider: PerpetualProvider) throws -> [PerpetualPosition] {
+        try db.read { db in
+            try PerpetualPositionRecord
+                .joining(required: PerpetualPositionRecord.perpetual
+                    .filter(PerpetualRecord.Columns.provider == provider.rawValue)
+                )
+                .filter(PerpetualPositionRecord.Columns.walletId == walletId)
+                .order(PerpetualPositionRecord.Columns.updatedAt.desc)
+                .fetchAll(db)
+                .map { $0.mapToPerpetualPosition() }
+        }
+    }
+    
+    public func diffPositions(deleteIds: [String], positions: [PerpetualPosition], walletId: String) throws {
+        if deleteIds.isEmpty && positions.isEmpty {
+            return
+        }
+        try db.write { db in
+            try PerpetualPositionRecord
+                .filter(deleteIds.contains(PerpetualPositionRecord.Columns.id))
+                .deleteAll(db)
+            
+            for position in positions {
+                try position.record(walletId: walletId).upsert(db)
             }
         }
     }

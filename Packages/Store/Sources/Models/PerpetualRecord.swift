@@ -16,28 +16,31 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         static let pricePercentChange24h = Column("pricePercentChange24h")
         static let openInterest = Column("openInterest")
         static let volume24h = Column("volume24h")
+        static let funding = Column("funding")
         static let leverage = Column("leverage")
     }
     
     public var id: String
     public var name: String
     public var provider: PerpetualProvider
-    public var assetId: String
+    public var assetId: AssetId
     public var price: Double
     public var pricePercentChange24h: Double
     public var openInterest: Double
     public var volume24h: Double
+    public var funding: Double
     public var leverage: Data
     
     public init(
         id: String,
         name: String,
         provider: PerpetualProvider,
-        assetId: String,
+        assetId: AssetId,
         price: Double,
         pricePercentChange24h: Double,
         openInterest: Double,
         volume24h: Double,
+        funding: Double,
         leverage: Data
     ) {
         self.id = id
@@ -48,8 +51,13 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         self.pricePercentChange24h = pricePercentChange24h
         self.openInterest = openInterest
         self.volume24h = volume24h
+        self.funding = funding
         self.leverage = leverage
     }
+    
+    // MARK: - Associations
+    
+    static let positions = hasMany(PerpetualPositionRecord.self).forKey("positions")
 }
 
 extension PerpetualRecord: CreateTable {
@@ -63,6 +71,7 @@ extension PerpetualRecord: CreateTable {
             t.column(Columns.pricePercentChange24h.name, .double).notNull()
             t.column(Columns.openInterest.name, .double).notNull()
             t.column(Columns.volume24h.name, .double).notNull()
+            t.column(Columns.funding.name, .double).notNull()
             t.column(Columns.leverage.name, .blob).notNull()
         }
     }
@@ -71,16 +80,17 @@ extension PerpetualRecord: CreateTable {
 // MARK: - Mapping
 
 extension PerpetualRecord {
-    func mapToPerpetual() throws -> Perpetual {
+    func mapToPerpetual() -> Perpetual {
         return Perpetual(
             id: id,
             name: name,
             provider: provider,
-            asset_id: try AssetId(id: assetId),
+            assetId: assetId,
             price: price,
-            price_percent_change_24h: pricePercentChange24h,
-            open_interest: openInterest,
-            volume_24h: volume24h,
+            pricePercentChange24h: pricePercentChange24h,
+            openInterest: openInterest,
+            volume24h: volume24h,
+            funding: funding,
             leverage: [UInt8](leverage)
         )
     }
@@ -92,11 +102,12 @@ extension Perpetual {
             id: id,
             name: name,
             provider: provider,
-            assetId: asset_id.identifier,
+            assetId: assetId,
             price: price,
-            pricePercentChange24h: price_percent_change_24h,
-            openInterest: open_interest,
-            volume24h: volume_24h,
+            pricePercentChange24h: pricePercentChange24h,
+            openInterest: openInterest,
+            volume24h: volume24h,
+            funding: funding,
             leverage: Data(leverage)
         )
     }

@@ -4,36 +4,38 @@
 
 import Foundation
 
-public struct Perpetual: Codable, Equatable, Sendable {
+public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let name: String
 	public let provider: PerpetualProvider
-	public let asset_id: AssetId
+	public let assetId: AssetId
 	public let price: Double
-	public let price_percent_change_24h: Double
-	public let open_interest: Double
-	public let volume_24h: Double
+	public let pricePercentChange24h: Double
+	public let openInterest: Double
+	public let volume24h: Double
+	public let funding: Double
 	public let leverage: [UInt8]
 
-	public init(id: String, name: String, provider: PerpetualProvider, asset_id: AssetId, price: Double, price_percent_change_24h: Double, open_interest: Double, volume_24h: Double, leverage: [UInt8]) {
+	public init(id: String, name: String, provider: PerpetualProvider, assetId: AssetId, price: Double, pricePercentChange24h: Double, openInterest: Double, volume24h: Double, funding: Double, leverage: [UInt8]) {
 		self.id = id
 		self.name = name
 		self.provider = provider
-		self.asset_id = asset_id
+		self.assetId = assetId
 		self.price = price
-		self.price_percent_change_24h = price_percent_change_24h
-		self.open_interest = open_interest
-		self.volume_24h = volume_24h
+		self.pricePercentChange24h = pricePercentChange24h
+		self.openInterest = openInterest
+		self.volume24h = volume24h
+		self.funding = funding
 		self.leverage = leverage
 	}
 }
 
-public struct PerpetualPositionData: Codable, Equatable, Sendable {
-	public let position: PerpetualPosition
+public struct PerpetualPositionData: Codable, Equatable, Hashable, Sendable {
 	public let perpetual: Perpetual
+	public let positions: [PerpetualPosition]
 
-	public init(position: PerpetualPosition, perpetual: Perpetual) {
-		self.position = position
+	public init(perpetual: Perpetual, positions: [PerpetualPosition]) {
 		self.perpetual = perpetual
+		self.positions = positions
 	}
 }

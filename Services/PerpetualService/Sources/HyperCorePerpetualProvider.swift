@@ -12,9 +12,13 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
         self.hyperCoreService = hyperCoreService
     }
     
+    func provider() -> PerpetualProvider {
+        .hypercore
+    }
+    
     func getPositions(wallet: Wallet) async throws -> [PerpetualPosition] {
         guard let account = wallet.accounts.first(where: { 
-            $0.chain == .arbitrum || $0.chain == .hyperCore 
+            $0.chain == .arbitrum || $0.chain == .hyperCore
         }) else {
             return []
         }

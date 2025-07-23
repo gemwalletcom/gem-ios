@@ -22,6 +22,7 @@ let package = Package(
         .package(name: "PerpetualService", path: "../../Services/PerpetualService"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
     ],
     targets: [
         .target(
@@ -35,6 +36,7 @@ let package = Package(
                 "PerpetualService",
                 "Store",
                 "Formatters",
+                "Preferences",
             ],
             path: "Sources"
         ),
