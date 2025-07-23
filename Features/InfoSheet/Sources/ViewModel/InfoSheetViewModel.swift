@@ -63,9 +63,16 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
         case .networkFee(let chain): return Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol)
         case .insufficientBalance(let asset, _): return Localized.Info.InsufficientBalance.description(asset.symbol)
         case .insufficientNetworkFee(let asset, _, let required):
-            let amount = ValueFormatter(style: .full).string(required, asset: asset)
+            let text: String = {
+                if let required {
+                    let amount = ValueFormatter(style: .full).string(required, asset: asset)
+                    return "**\(amount)**"
+                }
+                return asset.symbol
+            }()
+
             return Localized.Info.InsufficientNetworkFeeBalance.description(
-                "**\(amount)**",
+                text,
                 asset.name,
                 asset.symbol
             )
