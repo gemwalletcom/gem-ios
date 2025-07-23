@@ -9,14 +9,13 @@ import ChainService
 import Blockchain
 
 public struct TransactionStateUpdateJob: Job {
-    private let transaction: Transaction
+    private let transactionWallet: TransactionWallet
     private let stateService: TransactionStateService
     private let postProcessingService: TransactionStateUpdatePostJob
+    private let minInitialInterval: Duration = .seconds(5)
 
     public var id: String { transaction.hash }
-    
-    private let minInitialInterval: Duration = .seconds(5)
-    
+
     public var configuration: JobConfiguration {
         .adaptive(
             configuration: AdaptiveConfiguration(
@@ -31,12 +30,14 @@ public struct TransactionStateUpdateJob: Job {
         )
     }
 
+    private var transaction: Transaction { transactionWallet.transaction}
+
     init(
-        transaction: Transaction,
+        transactionWallet: TransactionWallet,
         stateService: TransactionStateService,
         postProcessingService: TransactionStateUpdatePostJob
     ) {
-        self.transaction = transaction
+        self.transactionWallet = transactionWallet
         self.stateService = stateService
         self.postProcessingService = postProcessingService
     }
@@ -65,6 +66,6 @@ public struct TransactionStateUpdateJob: Job {
     }
 
     public func onComplete() async throws {
-        try await postProcessingService.process(transaction: transaction)
+        try await postProcessingService.process(transactionWallet: transactionWallet)
     }
 }

@@ -26,36 +26,36 @@ struct TransactionStateUpdatePostJob: Sendable {
     }
 
     // Once transaction is completed, update nessesary states internally, balances, stakes, nft ownership
-    func process(transaction: Transaction) async throws {
-        let assetIdentifiers = (transaction.assetIds + [transaction.feeAssetId]).unique()
-        let walletIdentifiers = try transactionStore.getWalletIds(for: transaction.id)
+    func process(transactionWallet: TransactionWallet) async throws {
+        for assetIdentifier in transactionWallet.assetIdentifiers {
+            guard let address = transactionWallet.address(for: assetIdentifier) else {
+                NSLog("TransactionStateUpdatePostJob: no address for transaction: \(transactionWallet)")
+                continue
+            }
 
-        for walletIdentifier in walletIdentifiers {
-            for assetIdentifier in assetIdentifiers {
+            Task {
+                try await balanceUpdater.updateBalance(
+                    walletId: transactionWallet.wallet.id,
+                    asset: assetIdentifier,
+                    address: address
+                )
+            }
+
+            switch transactionWallet.type {
+            case .stakeDelegate, .stakeUndelegate, .stakeRewards:
                 Task {
-                    try await balanceUpdater.updateBalance(
-                        walletId: walletIdentifier,
-                        asset: assetIdentifier,
-                        address: transaction.from
+                    try await stakeService.update(
+                        walletId: transactionWallet.wallet.id,
+                        chain: assetIdentifier.chain,
+                        address: address
                     )
                 }
-
-                switch transaction.type {
-                case .stakeDelegate, .stakeUndelegate, .stakeRewards:
-                    Task {
-                        try await stakeService.update(
-                            walletId: walletIdentifier,
-                            chain: assetIdentifier.chain,
-                            address: transaction.from
-                        )
-                    }
-                case .transferNFT:
-                    Task {
-                        // TODO: implement nftService.update when ready
-                    }
-                default:
-                    break
+            case .transferNFT:
+                Task {
+                    // TODO: implement nftService.update when ready
                 }
+            default:
+                break
             }
         }
     }
