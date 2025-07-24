@@ -7,7 +7,7 @@ public enum HypercoreProvider: TargetType {
     
     case clearinghouseState(user: String)
     case metaAndAssetCtxs
-    case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int,)
+    case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
     
     public var baseUrl: URL {
         return URL(string: "")!
