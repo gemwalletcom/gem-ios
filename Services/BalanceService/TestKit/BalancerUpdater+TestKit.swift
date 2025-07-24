@@ -9,4 +9,7 @@ public struct BalancerUpdaterMock: BalancerUpdater {
     public func updateBalance(walletId: String, asset: AssetId, address: String) async throws -> [AssetBalanceChange] {
         []
     }
+    public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async {
+
+    }
 }

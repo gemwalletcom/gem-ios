@@ -98,8 +98,8 @@ public struct WalletsService: Sendable {
         try enableBalances(for: wallet.walletId, chains: wallet.chains)
     }
 
-    public func addTransactions(walletId: String, transactions: [Primitives.Transaction]) throws {
-        try transactionService.addTransactions(walletId: walletId, transactions: transactions)
+    public func addTransactions(wallet: Wallet, transactions: [Primitives.Transaction]) throws {
+        try transactionService.addTransactions(wallet: wallet, transactions: transactions)
     }
 
     // In the future move into separate service
