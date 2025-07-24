@@ -16,16 +16,10 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
         .hypercore
     }
     
-    func getPositions(wallet: Wallet) async throws -> [PerpetualPosition] {
-        guard let account = wallet.accounts.first(where: { 
-            $0.chain == .arbitrum || $0.chain == .hyperCore
-        }) else {
-            return []
-        }
-        
+    func getPositions(address: String, walletId: String) async throws -> [PerpetualPosition] {
         return try await hyperCoreService
-            .getPositions(user: account.address)
-            .mapToPerpetualPositions(walletId: wallet.id)
+            .getPositions(user: address)
+            .mapToPerpetualPositions(walletId: walletId)
     }
     
     func getPerpetuals() async throws -> [Perpetual] {
@@ -47,13 +41,28 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
         return perpetual
     }
     
-    func getCandlesticks(coin: String, startTime: Int, endTime: Int, interval: String) async throws -> [ChartCandleStick] {
-        try await hyperCoreService.getCandlesticks(
-            coin: coin,
-            interval: interval,
+    func getCandlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
+        let interval = hyperliquidInterval(for: period)
+        let endTime = Int(Date().timeIntervalSince1970 * 1000)
+        let startTime = endTime - (60 * interval.durationMs)
+        
+        return try await hyperCoreService.getCandlesticks(
+            coin: symbol,
+            interval: interval.name,
             startTime: startTime,
             endTime: endTime
         )
         .compactMap { $0.toCandlestick() }
+    }
+    
+    private func hyperliquidInterval(for period: ChartPeriod) -> (name: String, durationMs: Int) {
+        switch period {
+        case .hour: ("1m", 60_000)
+        case .day: ("5m", 300_000)
+        case .week: ("1h", 3_600_000)
+        case .month: ("4h", 14_400_000)
+        case .year: ("1d", 86_400_000)
+        case .all: ("1w", 604_800_000)
+        }
     }
 }

@@ -28,7 +28,13 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     public func updatePositions(wallet: Wallet) async throws {
-        let positions = try await provider.getPositions(wallet: wallet)
+        guard let account = wallet.accounts.first(where: { 
+            $0.chain == .arbitrum || $0.chain == .hyperCore
+        }) else {
+            return
+        }
+        
+        let positions = try await provider.getPositions(address: account.address, walletId: wallet.id)
         try await syncProviderPositions(
             positions: positions,
             provider: provider.provider(),
@@ -65,26 +71,6 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     public func candlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
-        let interval = hyperliquidInterval(for: period)
-        let endTime = Int(Date().timeIntervalSince1970 * 1000)
-        let startTime = endTime - (60 * interval.durationMs)
-        
-        return try await provider.getCandlesticks(
-            coin: symbol,
-            startTime: startTime,
-            endTime: endTime,
-            interval: interval.name
-        )
-    }
-    
-    private func hyperliquidInterval(for period: ChartPeriod) -> (name: String, durationMs: Int) {
-        switch period {
-        case .hour: ("1m", 60_000)
-        case .day: ("5m", 300_000)
-        case .week: ("1h", 3_600_000)
-        case .month: ("4h", 14_400_000)
-        case .year: ("1d", 86_400_000)
-        case .all: ("1w", 604_800_000)
-        }
+        return try await provider.getCandlesticks(symbol: symbol, period: period)
     }
 }
