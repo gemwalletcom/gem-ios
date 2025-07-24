@@ -161,6 +161,20 @@ public final class SwapSceneViewModel {
     var assetIds: [AssetId] {
         [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
     }
+    
+    var errorInfoAction: VoidAction {
+        switch swapState.quotes {
+        case .error(let error):
+            switch error.swapperError {
+            case .NoQuoteAvailable:
+                VoidAction { [weak self] in
+                    self?.isPresentingInfoSheet = .info(.noQuote)
+                }
+            default: nil
+            }
+        default: nil
+        }
+    }
 
     func swapTokenModel(type: SelectAssetSwapType) -> SwapTokenViewModel? {
         guard let assetData: AssetData = type == .pay ? fromAsset : toAsset else { return nil }
@@ -431,5 +445,11 @@ extension SwapSceneViewModel {
                 ]
             )]
         )
+    }
+}
+
+extension Error {
+    var swapperError: Gemstone.SwapperError? {
+        (self as? ErrorWrapper)?.error as? Gemstone.SwapperError
     }
 }
