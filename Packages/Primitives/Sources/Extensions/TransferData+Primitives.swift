@@ -30,8 +30,8 @@ extension TransferDataType {
 
     public var canChangeValue: Bool {
         switch self {
-        case .transfer,
-                .swap: true
+        case let .transfer(_, isScanned): !isScanned
+        case .swap: true
             // TODO: - transfer on QR canCHangeVlue false
         case .stake(_, let stakeType):
             switch stakeType {
