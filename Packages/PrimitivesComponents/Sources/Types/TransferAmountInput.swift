@@ -24,8 +24,31 @@ public struct TransferAmountInput {
         assetFee: Asset,
         assetFeeBalance: Balance,
         fee: BigInt,
+        type: TransferDataType
+    ) {
+        self.init(
+            asset: asset,
+            assetBalance: assetBalance,
+            value: value,
+            availableValue: availableValue,
+            assetFee: assetFee,
+            assetFeeBalance: assetFeeBalance,
+            fee: fee,
+            canChangeValue: type.canChangeValue,
+            ignoreValueCheck: type.shouldIgnoreValueCheck
+        )
+    }
+
+    public init(
+        asset: Asset,
+        assetBalance: Balance,
+        value: BigInt,
+        availableValue: BigInt,
+        assetFee: Asset,
+        assetFeeBalance: Balance,
+        fee: BigInt,
         canChangeValue: Bool,
-        ignoreValueCheck: Bool = false
+        ignoreValueCheck: Bool
     ) {
         self.asset = asset
         self.assetBalance = assetBalance
@@ -37,7 +60,7 @@ public struct TransferAmountInput {
         self.canChangeValue = canChangeValue
         self.ignoreValueCheck = ignoreValueCheck
     }
-    
+
     public var isMaxValue: Bool {
         value == availableValue
     }

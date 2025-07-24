@@ -230,7 +230,7 @@ extension AmountSceneViewModel {
 
     private func onNext() throws {
         let value = try value(for: amountTransferValue)
-        let transfer = try getTransferData(value: value, canChangeValue: true)
+        let transfer = try getTransferData(value: value)
         onTransferAction?(transfer)
     }
 
@@ -329,14 +329,13 @@ extension AmountSceneViewModel {
         )).or(.zero)
     }
 
-    private func getTransferData(value: BigInt, canChangeValue: Bool) throws -> TransferData {
+    private func getTransferData(value: BigInt) throws -> TransferData {
         switch type {
         case .transfer:
             return TransferData(
-                type: .transfer(asset),
+                type: .transfer(asset, isScanned: false),
                 recipientData: recipientData,
-                value: value,
-                canChangeValue: canChangeValue
+                value: value
             )
         case .stake:
             guard let validator = currentValidator else {
@@ -345,15 +344,13 @@ extension AmountSceneViewModel {
             return TransferData(
                 type: .stake(asset, .stake(validator: validator)),
                 recipientData: recipientData,
-                value: value,
-                canChangeValue: canChangeValue
+                value: value
             )
         case .unstake(let delegation):
             return TransferData(
                 type: .stake(asset, .unstake(delegation: delegation)),
                 recipientData: recipientData,
-                value: value,
-                canChangeValue: canChangeValue
+                value: value
             )
         case .redelegate(let delegation, _, _):
             guard let validator = currentValidator else {
@@ -362,15 +359,13 @@ extension AmountSceneViewModel {
             return TransferData(
                 type: .stake(asset, .redelegate(delegation: delegation, toValidator: validator)),
                 recipientData: recipientData,
-                value: value,
-                canChangeValue: canChangeValue
+                value: value
             )
         case .withdraw(let delegation):
             return TransferData(
                 type: .stake(asset, .withdraw(delegation: delegation)),
                 recipientData: recipientData,
-                value: value,
-                canChangeValue: canChangeValue
+                value: value
             )
         }
     }

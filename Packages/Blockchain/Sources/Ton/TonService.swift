@@ -74,7 +74,7 @@ extension TonService {
     
     private func fee(input: FeeInput) async throws -> Fee {
         switch input.type {
-        case .transfer(let asset):
+        case let .transfer(asset, _):
             switch asset.id.type {
             case .native:
                 return Fee(

@@ -280,7 +280,7 @@ public extension TronService {
     func fee(input: FeeInput) async throws -> Fee {
         return try await {
             switch input.type {
-            case let .transfer(asset):
+            case let .transfer(asset, _):
                 async let getParameters = parameters()
                 async let getAccountUsage = accountUsage(address: input.senderAddress)
                 async let getIsNewAccount = isNewAccount(address: input.destinationAddress)

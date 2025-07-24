@@ -24,7 +24,7 @@ struct SolanaFeeService {
         let priorityFees = prioritizationFees.map { $0 }.sorted(by: >).prefix(5)
         
         let multipleOf = switch type {
-        case .transfer(let asset): asset.type == .native ? 25_000 : 50_000
+        case let .transfer(asset, _): asset.type == .native ? 25_000 : 50_000
         case .stake, .transferNft: 25_000
         case .generic, .swap: 100_000
         case .account, .tokenApprove: fatalError()

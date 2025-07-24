@@ -134,14 +134,13 @@ public struct StakeDetailViewModel {
     }
     
     public func withdrawStakeTransferData() throws -> TransferData {
-        TransferData(
+        return TransferData(
             type: .stake(asset, .withdraw(delegation: model.delegation)),
             recipientData: RecipientData(
                 recipient: Recipient(name: validatorText, address: model.delegation.validator.id, memo: ""),
                 amount: .none
             ),
-            value: model.delegation.base.balanceValue,
-            canChangeValue: false
+            value: model.delegation.base.balanceValue
         )
     }
 }

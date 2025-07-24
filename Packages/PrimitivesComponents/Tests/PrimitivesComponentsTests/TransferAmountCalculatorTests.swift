@@ -30,7 +30,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(10)),
                 fee: BigInt(1),
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
         }
 
@@ -43,7 +44,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: .zero),
                 fee: BigInt(1),
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
         }
 
@@ -56,7 +58,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(100)),
                 fee: BigInt(0),
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
         }
 
@@ -69,7 +72,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: .zero,
                 fee: .zero,
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
         }
 
@@ -82,7 +86,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: .zero),
                 fee: .zero,
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
             #expect(result == TransferAmount(value: .zero, networkFee: .zero, useMaxAmount: true))
         }
@@ -96,7 +101,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(100)),
                 fee: .zero,
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
             #expect(result == TransferAmount(value: 50, networkFee: .zero, useMaxAmount: false))
         }
@@ -110,7 +116,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(1),
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
             #expect(result == TransferAmount(value: 10, networkFee: 1, useMaxAmount: false))
         }
@@ -124,7 +131,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(1),
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
             #expect(result == TransferAmount(value: 11, networkFee: 1, useMaxAmount: false))
         }
@@ -138,7 +146,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(3),
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
             #expect(result == TransferAmount(value: 9, networkFee: 3, useMaxAmount: true))
         }
@@ -155,7 +164,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(1),
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
             #expect(result == TransferAmount(value: 1000, networkFee: 1, useMaxAmount: true))
         }
@@ -169,7 +179,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(1),
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
         }
     }
@@ -184,7 +195,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(3),
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
             #expect(result == TransferAmount(value: 9, networkFee: 3, useMaxAmount: true))
         }
@@ -198,7 +210,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(3),
-                canChangeValue: false
+                canChangeValue: false,
+                ignoreValueCheck: false
             ))
         }
     }
@@ -248,7 +261,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: asset1.feeAsset,
                 assetFeeBalance: Balance(available: .zero),
                 fee: .zero,
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
         }
 
@@ -263,7 +277,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: asset2.feeAsset,
                 assetFeeBalance: Balance(available: .zero),
                 fee: .zero,
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
         }
     }
@@ -282,7 +297,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: assetCoin,
                 assetFeeBalance: Balance(available: .zero),
                 fee: .zero,
-                canChangeValue: true
+                canChangeValue: true,
+                ignoreValueCheck: false
             ))
         }
     }
@@ -301,6 +317,26 @@ struct TransferAmountCalculatorTests {
                 BigInt(123_456),
                 feeAssetId: .mockEthereum()
             )
+        }
+    }
+
+    @Test
+    func testWithdraw() throws {
+        let asset = Asset(.solana)
+        let input = TransferAmountInput(
+            asset: asset,
+            assetBalance: Balance(available: BigInt(1_060_000)),
+            value: BigInt(100_000),
+            availableValue: BigInt(1_000_000),
+            assetFee: asset.feeAsset,
+            assetFeeBalance: Balance(available: BigInt(1_000_000)),
+            fee: BigInt(5_000),
+            canChangeValue: false,
+            ignoreValueCheck: false
+        )
+
+        #expect(throws: Never.self) {
+            try service.calculate(input: input)
         }
     }
 }

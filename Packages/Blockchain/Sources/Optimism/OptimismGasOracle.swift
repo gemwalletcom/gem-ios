@@ -65,7 +65,7 @@ extension OptimismGasOracle {
         
         let value = {
             switch input.type {
-            case .transfer(let asset):
+            case let .transfer(asset, _):
                 asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
             case .transferNft, .generic, .swap, .tokenApprove:
                 input.value
@@ -125,7 +125,7 @@ extension OptimismGasOracle {
         var encoded = signed.encoded.dropLast(Self.signatureLenInRlp)
         
         switch feeInput.type {
-        case .transfer(let asset):
+        case let .transfer(asset, _):
             switch asset.id.type {
             case .native:
                 // not 100% accurate without RLP decoding (0x02f8740a...)

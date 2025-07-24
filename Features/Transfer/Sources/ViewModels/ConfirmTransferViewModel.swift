@@ -418,8 +418,7 @@ extension ConfirmTransferViewModel {
             assetFee: dataModel.asset.feeAsset,
             assetFeeBalance: assetFeeBalance,
             fee: fee,
-            canChangeValue: dataModel.data.canChangeValue,
-            ignoreValueCheck: dataModel.data.ignoreValueCheck
+            type: dataModel.data.type
         )
         return TransferAmountCalculator().validate(input: input)
     }

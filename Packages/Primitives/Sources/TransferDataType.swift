@@ -7,7 +7,7 @@ public enum AccountDataType: Hashable, Equatable, Sendable {
 }
 
 public enum TransferDataType: Hashable, Equatable, Sendable {
-    case transfer(Asset)
+    case transfer(Asset, isScanned: Bool)
     case transferNft(NFTAsset)
     case swap(Asset, Asset, SwapData)
     case tokenApprove(Asset, ApprovalData)
@@ -36,7 +36,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     
     public var chain: Chain {
         switch self {
-        case .transfer(let asset),
+        case .transfer(let asset, _),
             .swap(let asset, _, _),
             .stake(let asset, _),
             .account(let asset, _),
@@ -70,7 +70,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     
     public var assetIds: [AssetId] {
         switch self {
-        case .transfer(let asset),
+        case .transfer(let asset, _),
             .tokenApprove(let asset, _),
             .stake(let asset, _),
             .generic(let asset, _, _),

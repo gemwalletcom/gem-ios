@@ -10,9 +10,7 @@ extension TransferData {
         TransferData(
             type: type,
             recipientData: recipientData,
-            value: newValue,
-            canChangeValue: canChangeValue,
-            ignoreValueCheck: ignoreValueCheck
+            value: newValue
         )
     }
 }
@@ -27,6 +25,23 @@ extension TransferDataType {
         switch self {
         case .transferNft, .stake, .account, .tokenApprove: true
         case .transfer, .swap, .generic: false
+        }
+    }
+
+    public var canChangeValue: Bool {
+        switch self {
+        case .transfer,
+                .swap: true
+            // TODO: - transfer on QR canCHangeVlue false
+        case .stake(_, let stakeType):
+            switch stakeType {
+            case .stake, .redelegate: true
+            case .unstake, .withdraw, .rewards: false
+            }
+        case .transferNft,
+                .tokenApprove,
+                .account,
+                .generic: false
         }
     }
 }
