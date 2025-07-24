@@ -431,3 +431,15 @@
 "transaction.swap_again" = "আবার অদলবদল করুন";
 "errors.scan_transaction.malicious" = "লেনদেন সন্দেহজনক হিসেবে চিহ্নিত";
 "errors.scan_transaction.memo_required" = "%@ ঠিকানার জন্য একটি গন্তব্য ট্যাগ / মেমো প্রয়োজন।";
+"common.info" = "তথ্য";
+"wallet.deposit" = "Deposit";
+"wallet.withdraw" = "";
+"info.funding_payments.title" = "Funding Payments";
+"info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
+"info.funding_rate.title" = "Funding";
+"info.funding_rate.description" = "The funding rate determines the cost of holding a perpetual position. It is calculated hourly and helps maintain price equilibrium between the perpetual contract and the underlying asset's spot price.";
+"info.liquidation_price.title" = "Liquidation Price";
+"info.liquidation_price.description" = "The liquidation price is the price level at which your position will be automatically closed to prevent further losses. When the market price reaches this level, your position is liquidated and you lose your margin.";
+"info.open_interest.title" = "Open Interest";
+"info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
+"info.no_quote.description" = "নির্বাচিত টোকেন জোড়ার জন্য একটি উদ্ধৃতি ফেরত দিতে অক্ষম, সম্ভবত কম পরিমাণ, তারল্যের অভাব, অথবা প্রযুক্তিগত সীমাবদ্ধতার কারণে।";

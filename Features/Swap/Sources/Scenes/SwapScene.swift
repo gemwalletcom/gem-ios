@@ -91,7 +91,7 @@ extension SwapScene {
             }
 
             if let error = model.swapState.error {
-                ListItemErrorView(errorTitle: model.errorTitle, error: error)
+                ListItemErrorView(errorTitle: model.errorTitle, error: error, infoAction: model.errorInfoAction)
             }
         }
     }
