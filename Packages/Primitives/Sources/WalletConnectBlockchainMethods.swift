@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum WalletConnectBlockchainEthereumMethods: String, Codable, CaseIterable, Sendable {
+public enum WalletConnectEthereumMethods: String, Codable, CaseIterable, Sendable {
 	case chainId
 	case sign
 	case personalSign
@@ -17,7 +17,7 @@ public enum WalletConnectBlockchainEthereumMethods: String, Codable, CaseIterabl
 	case addChain
 }
 
-public enum WalletConnectBlockchainSolanaMethods: String, Codable, CaseIterable, Sendable {
+public enum WalletConnectSolanaMethods: String, Codable, CaseIterable, Sendable {
 	case signMessage
 	case signTransaction
 	case signAndSendTransaction

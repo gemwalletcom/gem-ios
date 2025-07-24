@@ -11,7 +11,7 @@ final class BlockchainWalletConnectServiceFactory: Sendable {
         self.signer = signer
     }
     
-    func service(for method: String) throws -> any BlockchainWalletConnectServiciable {
+    func service(for method: String) throws -> any BlockchainServiciable {
         switch WalletConnectionMethods(rawValue: method)?.blockchainMethod {
         case .ethereum: EthereumWalletConnectorService(signer: signer)
         case .solana: SolanaWalletConnectorService(signer: signer)

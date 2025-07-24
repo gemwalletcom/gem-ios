@@ -4,17 +4,17 @@ import Foundation
 import Primitives
 
 enum BlockchainMethod: Sendable {
-    case ethereum(WalletConnectBlockchainEthereumMethods)
-    case solana(WalletConnectBlockchainSolanaMethods)
+    case ethereum(WalletConnectEthereumMethods)
+    case solana(WalletConnectSolanaMethods)
     
-    var ethereum: WalletConnectBlockchainEthereumMethods? {
+    var ethereum: WalletConnectEthereumMethods? {
         switch self {
         case .ethereum(let method): method
         case .solana: nil
         }
     }
     
-    var solana: WalletConnectBlockchainSolanaMethods? {
+    var solana: WalletConnectSolanaMethods? {
         switch self {
         case .ethereum: nil
         case .solana(let method): method

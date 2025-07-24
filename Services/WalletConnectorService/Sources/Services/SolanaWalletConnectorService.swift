@@ -5,7 +5,7 @@ import WalletConnectSign
 import Primitives
 import struct Gemstone.SignMessage
 
-final class SolanaWalletConnectorService: BlockchainWalletConnectServiciable {
+final class SolanaWalletConnectorService: BlockchainServiciable {
     private let signer: WalletConnectorSignable
     
     init(signer: WalletConnectorSignable) {
@@ -25,7 +25,7 @@ final class SolanaWalletConnectorService: BlockchainWalletConnectServiciable {
 
 private extension SolanaWalletConnectorService {
     func handle(
-        method: WalletConnectBlockchainSolanaMethods,
+        method: WalletConnectSolanaMethods,
         request: WalletConnectSign.Request
     ) async throws -> RPCResult {
         switch method {
