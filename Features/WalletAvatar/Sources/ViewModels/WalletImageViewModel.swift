@@ -151,7 +151,10 @@ public final class WalletImageViewModel: Sendable {
     
     private func setImage(_ image: UIImage) {
         do {
-            try avatarService.save(image: image, for: wallet.id)
+            guard let data = image.compress() else {
+                throw AnyError("Compression image failed")
+            }
+            try avatarService.save(data: data, for: wallet.id)
         } catch {
             print("Set image error:", error)
         }
