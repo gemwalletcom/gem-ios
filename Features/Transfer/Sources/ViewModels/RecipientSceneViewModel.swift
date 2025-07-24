@@ -216,7 +216,7 @@ extension RecipientSceneViewModel {
         )
     }
 
-    private func getRecipientScanResult(payment: PaymentScanResult) throws -> RecipientScanResult {
+     func getRecipientScanResult(payment: PaymentScanResult) throws -> RecipientScanResult {
         if let amount = payment.amount, (showMemo ? ((payment.memo?.isEmpty) == nil) : true),
            asset.chain.isValidAddress(payment.address)
         {
