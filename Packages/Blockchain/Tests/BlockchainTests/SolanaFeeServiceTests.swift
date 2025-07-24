@@ -16,7 +16,7 @@ struct SolanaFeeServiceTests {
     
     @Test
     func getBaseFeeForTransfer() throws {
-        #expect(try service.getBaseFee(type: .transfer(.mock()), gasPrice: .eip1559Mock()) == fee100_000)
+        #expect(try service.getBaseFee(type: .transfer(.mock(), isScanned: false), gasPrice: .eip1559Mock()) == fee100_000)
     }
     
     @Test
@@ -37,7 +37,7 @@ struct SolanaFeeServiceTests {
     @Test
     func feeRatesForNativeTransfer() throws {
         let feeRates = try service.feeRates(
-            type: .transfer(.mock(type: .native)),
+            type: .transfer(.mock(type: .native), isScanned: false),
             prioritizationFees: [60_000]
         )
 
@@ -50,7 +50,7 @@ struct SolanaFeeServiceTests {
     @Test
     func feeRatesForTokenTransfer() throws {
         let feeRates = try service.feeRates(
-            type: .transfer(.mock(type: .spl)),
+            type: .transfer(.mock(type: .spl), isScanned: false),
             prioritizationFees: [60_000]
         )
 
@@ -72,7 +72,7 @@ struct SolanaFeeServiceTests {
     @Test
     func feeRatesWithEmptyPrioritizationFees() throws {
         let feeRates = try service.feeRates(
-            type: .transfer(.mock(type: .native)),
+            type: .transfer(.mock(type: .native), isScanned: false),
             prioritizationFees: []
         )
         
@@ -82,7 +82,7 @@ struct SolanaFeeServiceTests {
     @Test
     func feeRatesCount() throws {
         let feeRates = try service.feeRates(
-            type: .transfer(.mock(type: .native)),
+            type: .transfer(.mock(type: .native), isScanned: false),
             prioritizationFees: [1, 2 ,3, 4, 5]
         )
         

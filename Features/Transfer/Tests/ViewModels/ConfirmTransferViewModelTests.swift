@@ -32,7 +32,7 @@ struct ConfirmTransferViewModelTests {
     
     @Test
     func title() async {
-        #expect(ConfirmTransferViewModel.mock(data: .mock(type: .transfer(.mock()))).title == Localized.Transfer.Send.title)
+        #expect(ConfirmTransferViewModel.mock(data: .mock(type: .transfer(.mock(), isScanned: false))).title == Localized.Transfer.Send.title)
         #expect(ConfirmTransferViewModel.mock(data: .mock(type: .transferNft(.mock()))).title == Localized.Transfer.Send.title)
         #expect(ConfirmTransferViewModel.mock(data: .mock(type: .swap(.mock(), .mock(), .mock()))).title == Localized.Wallet.swap)
         #expect(ConfirmTransferViewModel.mock(data: .mock(type: .tokenApprove(.mock(), .mock()))).title == Localized.Wallet.swap)
@@ -47,12 +47,12 @@ struct ConfirmTransferViewModelTests {
     func networkText() async {
         #expect(
             ConfirmTransferViewModel
-                .mock(data: .mock(type: .transfer(.mockEthereum()))
+                .mock(data: .mock(type: .transfer(.mockEthereum(), isScanned: false))
             ).networkText == "Ethereum"
         )
         #expect(
             ConfirmTransferViewModel
-                .mock(data: .mock(type: .transfer(.mockEthereumUSDT()))
+                .mock(data: .mock(type: .transfer(.mockEthereumUSDT(), isScanned: false))
             ).networkText == "Ethereum (ERC20)"
         )
         
