@@ -86,7 +86,7 @@ extension TransferExecutor {
         switch data.chain {
         case .solana:
             switch data.type {
-            case .transfer, .transferNft, .stake, .account, .tokenApprove: .standard
+            case .transfer, .deposit, .transferNft, .stake, .account, .tokenApprove: .standard
             case .swap, .generic: BroadcastOptions(skipPreflight: true)
             }
         default: .standard

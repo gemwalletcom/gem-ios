@@ -11,6 +11,7 @@ import Keystore
 import Assets
 import Transfer
 import SwapService
+import ChainService
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
@@ -112,7 +113,7 @@ struct SelectAssetSceneNavigationStack: View {
                             input: AmountInput(
                                 type: .deposit(
                                     recipient: RecipientData(
-                                        recipient: Recipient(name: "Hyperliqud", address: "", memo: .none),
+                                        recipient: Recipient(name: "Hyperliquid", address: "0x2Df1c51E09aECF9cacB7bc98cB1742757f163dF7", memo: .none),
                                         amount: .none
                                     )
                                 ),
@@ -131,6 +132,27 @@ struct SelectAssetSceneNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: TransferData.self) { data in
+                ConfirmTransferScene(
+                    model: ConfirmTransferViewModel(
+                        wallet: model.wallet,
+                        data: data,
+                        keystore: keystore,
+                        chainService: ChainServiceFactory(nodeProvider: nodeService)
+                            .service(for: data.chain),
+                        scanService: scanService,
+                        swapService: swapService,
+                        walletsService: walletsService,
+                        swapDataProvider: SwapQuoteDataProvider(
+                            keystore: keystore,
+                            swapService: swapService
+                        ),
+                        onComplete: {
+                            isPresentingSelectAssetType = nil
+                        }
+                    )
+                )
+            }
         }
         .sheet(isPresented: $model.isPresentingAddToken) {
             AddTokenNavigationStack(

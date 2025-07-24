@@ -50,9 +50,7 @@ public struct ChartPriceModel {
     }
     
     public var priceChangeText: String? {
-        let percentageFormatted = CurrencyFormatter.percent.string(priceChangePercentage)
-        let sign = priceChange >= 0 ? "+" : ""
-        return "\(sign)\(percentageFormatted)"
+        CurrencyFormatter.percent.string(priceChangePercentage)
     }
     
     public var priceChangeTextColor: Color {

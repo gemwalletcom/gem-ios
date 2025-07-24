@@ -25,7 +25,9 @@ struct TransferDataViewModel {
 
     var title: String {
         switch type {
-        case .transfer, .transferNft: Localized.Transfer.Send.title
+        case .transfer: Localized.Transfer.Send.title
+        case .deposit: "Deposit"
+        case .transferNft: Localized.Transfer.Send.title
         case .swap, .tokenApprove: Localized.Wallet.swap
         //case .approval: Localized.Transfer.Approve.title
         case .generic: Localized.Transfer.Approve.title
@@ -64,6 +66,7 @@ struct TransferDataViewModel {
     var recipientMode: AddressListItemViewModel.Mode {
         switch type {
         case .transfer,
+                .deposit,
                 .transferNft,
                 .tokenApprove,
                 .stake,
@@ -76,6 +79,7 @@ struct TransferDataViewModel {
     var appValue: String? {
         switch type {
         case .transfer,
+            .deposit,
             .transferNft,
             .swap,
             .tokenApprove,
@@ -89,6 +93,7 @@ struct TransferDataViewModel {
     var websiteURL: URL? {
         switch type {
         case .transfer,
+            .deposit,
             .transferNft,
             .swap,
             .tokenApprove,
@@ -101,7 +106,7 @@ struct TransferDataViewModel {
 
     var shouldShowMemo: Bool {
         switch type {
-        case .transfer: chain.isMemoSupported
+        case .transfer, .deposit: chain.isMemoSupported
         case .transferNft, .swap, .tokenApprove, .generic, .account, .stake: false
         }
     }
@@ -121,6 +126,7 @@ struct TransferDataViewModel {
     var appAssetImage: AssetImage? {
         switch type {
         case .transfer,
+                .deposit,
                 .transferNft,
                 .swap,
                 .tokenApprove,
@@ -135,6 +141,7 @@ struct TransferDataViewModel {
     func availableValue(metadata: TransferDataMetadata?) -> BigInt {
         switch type {
         case .transfer,
+                .deposit,
                 .swap,
                 .tokenApprove,
                 .generic,
@@ -159,6 +166,7 @@ extension TransferDataViewModel {
     private var recipientName: String? {
         switch type {
         case .transfer,
+                .deposit,
                 .transferNft,
                 .swap,
                 .tokenApprove,

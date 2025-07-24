@@ -28,7 +28,7 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
             .mapToPerpetualPositions(walletId: wallet.id)
     }
     
-    func getMarkets() async throws -> [Perpetual] {
+    func getPerpetuals() async throws -> [Perpetual] {
         let metadata = try await hyperCoreService.getMetadata()
         
         return zip(metadata.universe.universe, metadata.assetMetadata).compactMap { universeAsset, assetMetadata in
@@ -37,6 +37,14 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
                 maxLeverage: universeAsset.maxLeverage
             )
         }
+    }
+    
+    func getPerpetual(symbol: String) async throws -> Perpetual {
+        let perpetuals = try await getPerpetuals()
+        guard let perpetual = perpetuals.first(where: { $0.name == symbol }) else {
+            throw PerpetualError.marketNotFound(symbol: symbol)
+        }
+        return perpetual
     }
     
     func getCandlesticks(coin: String, startTime: Int, endTime: Int, interval: String) async throws -> [ChartCandleStick] {

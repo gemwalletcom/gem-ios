@@ -23,10 +23,9 @@ public struct PerpetualNavigationView: View {
     
     public var body: some View {
         PerpetualScene(model: model)
-            .observeQuery(request: $model.perpetualsRequest, value: $model.perpetuals)
             .observeQuery(request: $model.positionsRequest, value: $model.positions)
             .task {
-                await model.loadData()
+                await model.fetch()
             }
     }
 }

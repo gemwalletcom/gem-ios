@@ -51,6 +51,7 @@ public struct TransactionHeaderTypeBuilder {
         let inputType: TransactionHeaderInputType = {
             switch dataType {
             case .transfer,
+                    .deposit,
                     .generic,
                     .stake,
                     .tokenApprove:

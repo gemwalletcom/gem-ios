@@ -19,14 +19,10 @@ public struct PerpetualScene: View {
                 VStack {
                     VStack {
                         switch model.state {
-                        case .noData:
-                            StateEmptyView.noData()
-                        case .loading:
-                            LoadingView()
-                        case .data(let candlesticks):
-                            CandlestickChartView(data: candlesticks, period: model.currentPeriod)
-                        case .error(let error):
-                            StateEmptyView.error(error)
+                        case .noData: StateEmptyView.noData()
+                        case .loading: LoadingView()
+                        case .data(let data): CandlestickChartView(data: data, period: model.currentPeriod)
+                        case .error(let error): StateEmptyView.error(error)
                         }
                     }
                     .frame(height: 320)
