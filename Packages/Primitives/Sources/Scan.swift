@@ -4,6 +4,32 @@
 
 import Foundation
 
+public enum AddressType: String, Codable, Equatable, Sendable {
+	case address
+	case contract
+	case validator
+}
+
+public struct ScanAddress: Codable, Equatable, Sendable {
+	public let chain: Chain
+	public let address: String
+	public let name: String?
+	public let type: AddressType?
+	public let isMalicious: Bool?
+	public let isMemoRequired: Bool?
+	public let isVerified: Bool?
+
+	public init(chain: Chain, address: String, name: String?, type: AddressType?, isMalicious: Bool?, isMemoRequired: Bool?, isVerified: Bool?) {
+		self.chain = chain
+		self.address = address
+		self.name = name
+		self.type = type
+		self.isMalicious = isMalicious
+		self.isMemoRequired = isMemoRequired
+		self.isVerified = isVerified
+	}
+}
+
 public struct ScanAddressTarget: Codable, Equatable, Sendable {
 	public let chain: Chain
 	public let address: String
