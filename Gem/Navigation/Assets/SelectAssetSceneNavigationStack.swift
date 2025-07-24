@@ -113,7 +113,7 @@ struct SelectAssetSceneNavigationStack: View {
                             input: AmountInput(
                                 type: .deposit(
                                     recipient: RecipientData(
-                                        recipient: Recipient(name: "Hyperliquid", address: "0x2Df1c51E09aECF9cacB7bc98cB1742757f163dF7", memo: .none),
+                                        recipient: .hyperliquid,
                                         amount: .none
                                     )
                                 ),

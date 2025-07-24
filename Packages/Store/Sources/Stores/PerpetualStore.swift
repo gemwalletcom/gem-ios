@@ -20,14 +20,6 @@ public struct PerpetualStore: Sendable {
         }
     }
     
-    public func getPerpetual(id: String) throws -> Perpetual? {
-        try db.read { db in
-            try PerpetualRecord
-                .filter(PerpetualRecord.Columns.id == id)
-                .fetchOne(db)?
-                .mapToPerpetual()
-        }
-    }
     
     public func getPerpetuals() throws -> [Perpetual] {
         try db.read { db in
@@ -39,21 +31,6 @@ public struct PerpetualStore: Sendable {
     
     // MARK: - Position Operations
     
-    public func addPositions(_ positions: [PerpetualPosition], walletId: String) throws {
-        try db.write { db in
-            for position in positions {
-                try position.record(walletId: walletId).insert(db)
-            }
-        }
-    }
-    
-    public func upsertPositions(_ positions: [PerpetualPosition], walletId: String) throws {
-        try db.write { db in
-            for position in positions {
-                try position.record(walletId: walletId).upsert(db)
-            }
-        }
-    }
     
     public func getPositions(walletId: String) throws -> [PerpetualPosition] {
         try db.read { db in
@@ -65,13 +42,6 @@ public struct PerpetualStore: Sendable {
         }
     }
     
-    public func deletePositions(ids: [String]) throws {
-        try db.write { db in
-            for id in ids {
-                try PerpetualPositionRecord.deleteOne(db, key: id)
-            }
-        }
-    }
     
     public func getPositions(walletId: String, provider: PerpetualProvider) throws -> [PerpetualPosition] {
         try db.read { db in

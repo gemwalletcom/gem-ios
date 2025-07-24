@@ -65,39 +65,26 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     public func candlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
+        let interval = hyperliquidInterval(for: period)
         let endTime = Int(Date().timeIntervalSince1970 * 1000)
-        let candleCount = 60
-        let interval = intervalForPeriod(period)
-        let intervalDuration = intervalDurationInSeconds(for: period) * 1000
-        let startTime = endTime - (candleCount * intervalDuration)
+        let startTime = endTime - (60 * interval.durationMs)
         
         return try await provider.getCandlesticks(
             coin: symbol,
             startTime: startTime,
             endTime: endTime,
-            interval: interval
+            interval: interval.name
         )
     }
     
-    private func intervalForPeriod(_ period: ChartPeriod) -> String {
+    private func hyperliquidInterval(for period: ChartPeriod) -> (name: String, durationMs: Int) {
         switch period {
-        case .hour: "1m"
-        case .day: "5m"
-        case .week: "1h"
-        case .month: "4h"
-        case .year: "1d"
-        case .all: "1w"
-        }
-    }
-    
-    private func intervalDurationInSeconds(for period: ChartPeriod) -> Int {
-        switch period {
-        case .hour: 60
-        case .day: 5 * 60
-        case .week: 60 * 60
-        case .month: 4 * 60 * 60
-        case .year: 24 * 60 * 60
-        case .all: 7 * 24 * 60 * 60
+        case .hour: ("1m", 60_000)
+        case .day: ("5m", 300_000)
+        case .week: ("1h", 3_600_000)
+        case .month: ("4h", 14_400_000)
+        case .year: ("1d", 86_400_000)
+        case .all: ("1w", 604_800_000)
         }
     }
 }
