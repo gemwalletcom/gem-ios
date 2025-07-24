@@ -16,24 +16,11 @@ public struct ScanService: Sendable {
         self.apiService = apiService
         self.securePreferences = securePreferences
     }
-    
-    public func scanTransaction(_ payload: ScanTransactionPayload) async throws -> ScanTransaction {
+
+    public func getScanTransaction(_ payload: ScanTransactionPayload) async throws -> ScanTransaction {
         try await apiService.getScanTransaction(payload: payload)
     }
-    
-    public func isValidTransaction(_ payload: ScanTransactionPayload) async throws -> Bool {
-        switch payload.type {
-        case .swap:
-            return try await scanTransaction(payload).isMalicious == false
-        default:
-            do {
-                return try await scanTransaction(payload).isMalicious == false
-            } catch {
-                return true
-            }
-        }
-    }
-    
+
     public func getTransactionPayload(wallet: Wallet, transferType: TransferDataType, recipient: RecipientData) throws -> ScanTransactionPayload {
         let chain = transferType.chain
         let origin = ScanAddressTarget(
@@ -46,7 +33,7 @@ public struct ScanService: Sendable {
         default :
             ScanAddressTarget(chain: chain, address: recipient.recipient.address)
         }
-        
+
         return ScanTransactionPayload(
             deviceId: try securePreferences.getDeviceId(),
             walletIndex: UInt32(wallet.index),

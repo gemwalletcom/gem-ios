@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Nascondi dal portafoglio";
 "common.details" = "Dettagli";
 "transaction.swap_again" = "Scambia di nuovo";
+"errors.scan_transaction.malicious" = "Transazione identificata come sospetta";
+"errors.scan_transaction.memo_required" = "L'indirizzo %@ richiede un tag di destinazione / promemoria";

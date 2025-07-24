@@ -68,7 +68,7 @@ public struct PerpetualService: PerpetualServiceable {
         let endTime = Int(Date().timeIntervalSince1970 * 1000)
         let candleCount = 60
         let interval = intervalForPeriod(period)
-        let intervalDuration = intervalDurationInSeconds(for: interval) * 1000
+        let intervalDuration = intervalDurationInSeconds(for: period) * 1000
         let startTime = endTime - (candleCount * intervalDuration)
         
         return try await provider.getCandlesticks(
@@ -90,15 +90,14 @@ public struct PerpetualService: PerpetualServiceable {
         }
     }
     
-    private func intervalDurationInSeconds(for interval: String) -> Int {
-        switch interval {
-        case "1m": 60
-        case "5m": 5 * 60
-        case "1h": 60 * 60
-        case "4h": 4 * 60 * 60
-        case "1d": 24 * 60 * 60
-        case "1w": 7 * 24 * 60 * 60
-        default: 60
+    private func intervalDurationInSeconds(for period: ChartPeriod) -> Int {
+        switch period {
+        case .hour: 60
+        case .day: 5 * 60
+        case .week: 60 * 60
+        case .month: 4 * 60 * 60
+        case .year: 24 * 60 * 60
+        case .all: 7 * 24 * 60 * 60
         }
     }
 }

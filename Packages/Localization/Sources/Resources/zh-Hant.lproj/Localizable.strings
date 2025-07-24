@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "隱藏錢包";
 "common.details" = "細節";
 "transaction.swap_again" = "再次交換";
+"errors.scan_transaction.malicious" = "交易被認定為可疑";
+"errors.scan_transaction.memo_required" = "%@地址需要目的地標籤/備忘錄";

@@ -17,7 +17,13 @@ public struct TransferAmountCalculator {
             return .failure(error)
         }
     }
-    
+
+    public func validateNetworkFee(_ feeBalance: BigInt, feeAssetId: AssetId) throws(TransferAmountCalculatorError) {
+        if feeBalance.isZero && feeAssetId.type == .native {
+            throw TransferAmountCalculatorError.insufficientNetworkFee(feeAssetId.chain.asset, required: nil)
+        }
+    }
+
     func calculate(input: TransferAmountInput) throws(TransferAmountCalculatorError) -> TransferAmount {
         if input.assetBalance.available == 0 && !input.ignoreValueCheck {
             guard input.fee.isZero else {

@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "बटुए से छिपाएँ";
 "common.details" = "विवरण";
 "transaction.swap_again" = "फिर से स्वैप करें";
+"errors.scan_transaction.malicious" = "लेनदेन को संदिग्ध माना गया";
+"errors.scan_transaction.memo_required" = "%@ पते के लिए गंतव्य टैग / मेमो आवश्यक है";

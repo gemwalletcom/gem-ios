@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Ukryj w portfelu";
 "common.details" = "Bliższe dane";
 "transaction.swap_again" = "Zamień ponownie";
+"errors.scan_transaction.malicious" = "Transakcja zidentyfikowana jako podejrzana";
+"errors.scan_transaction.memo_required" = "Adres %@ wymaga znacznika/notatki docelowej";

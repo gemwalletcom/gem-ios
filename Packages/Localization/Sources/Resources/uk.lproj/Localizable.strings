@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Приховати від гаманця";
 "common.details" = "Деталі";
 "transaction.swap_again" = "Знову обміняти";
+"errors.scan_transaction.malicious" = "Транзакцію визначено як підозрілу";
+"errors.scan_transaction.memo_required" = "Адреса %@ потребує тегу / примітки призначення";

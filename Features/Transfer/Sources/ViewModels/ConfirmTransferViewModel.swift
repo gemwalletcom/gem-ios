@@ -27,9 +27,7 @@ public final class ConfirmTransferViewModel {
     var feeModel: NetworkFeeSceneViewModel
     var state: StateViewType<TransactionInputViewModel> = .loading {
         didSet {
-            if case .data(let data) = state, case .failure(let error) =  data.transferAmount {
-                onSelectListError(error: error)
-            }
+            onStateChange(state: state)
         }
     }
 
@@ -302,6 +300,19 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
+    private func onStateChange(state: StateViewType<TransactionInputViewModel>) {
+        switch state {
+        case .data(let data):
+            if case .failure(let error) = data.transferAmount {
+                onSelectListError(error: error)
+            }
+        case .error(let error as TransferAmountCalculatorError):
+            onSelectListError(error: error)
+        case .error, .loading, .noData:
+            break
+        }
+    }
+
     private func onSelectBuy() {
         isPresentingSheet = .fiatConnect(
             assetAddress: feeAssetAddress,
@@ -338,6 +349,8 @@ extension ConfirmTransferViewModel {
 
         do {
             let metadata = try metadataProvider.metadata(wallet: wallet, data: data)
+            try TransferAmountCalculator().validateNetworkFee(metadata.feeAvailable, feeAssetId: metadata.feeAssetId)
+
             let transferTransactionData = try await transferTransactionProvider.loadTransferTransactionData(
                 wallet: wallet, data: data,
                 priority: feeModel.priority,

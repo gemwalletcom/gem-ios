@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Itago sa wallet";
 "common.details" = "Mga Detalye";
 "transaction.swap_again" = "Magpalit muli";
+"errors.scan_transaction.malicious" = "Natukoy ang transaksyon bilang hinala";
+"errors.scan_transaction.memo_required" = "Nangangailangan ang %@ address ng patutunguhang tag / memo";

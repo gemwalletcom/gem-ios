@@ -54,7 +54,9 @@ public struct TransactionRecord: Codable, TableRecord, FetchableRecord, Persista
     public var metadata: TransactionMetadata?
     public var createdAt: Date
     public var updatedAt: Date
-    
+
+    static let wallet = belongsTo(WalletRecord.self, key: "wallet", using: ForeignKey(["walletId"], to: ["id"]))
+
     // delete asset / price properties as they could be fetched from assets / prics
     static let asset = belongsTo(AssetRecord.self, key: "asset", using: ForeignKey(["assetId"], to: ["id"]))
     static let feeAsset = belongsTo(AssetRecord.self, key: "feeAsset", using: ForeignKey(["feeAssetId"], to: ["id"]))

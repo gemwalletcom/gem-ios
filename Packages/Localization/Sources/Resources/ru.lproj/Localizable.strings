@@ -429,3 +429,5 @@
 "asset.hide_from_wallet" = "Скрыть из кошелька";
 "common.details" = "Детали";
 "transaction.swap_again" = "Поменять снова";
+"errors.scan_transaction.malicious" = "Транзакция определена как подозрительная";
+"errors.scan_transaction.memo_required" = "%@ адрес требует тега назначения / заметки";
