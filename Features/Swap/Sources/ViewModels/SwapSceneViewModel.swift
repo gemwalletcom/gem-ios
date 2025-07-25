@@ -163,16 +163,12 @@ public final class SwapSceneViewModel {
     }
     
     var errorInfoAction: VoidAction {
-        switch swapState.quotes {
-        case .error(let error):
-            switch error.swapperError {
-            case .NoQuoteAvailable:
-                VoidAction { [weak self] in
-                    self?.isPresentingInfoSheet = .info(.noQuote)
-                }
-            default: nil
-            }
-        default: nil
+        guard case .error(let error) = swapState.quotes, error.swapperError == .NoQuoteAvailable else {
+            return nil
+        }
+        
+        return VoidAction { [weak self] in
+            self?.isPresentingInfoSheet = .info(.noQuote)
         }
     }
 

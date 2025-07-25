@@ -99,7 +99,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
         case let .stakeMinimumAmount(asset, required):
             let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Info.StakeMinimumAmount.description(asset.name, amount)
-        case .noQuote: return "The provider is unable to return a quote for the selected token pair, possibly due to low amount, lack of liquidity, or technical limitations."
+        case .noQuote: return Localized.Info.NoQuote.description
         }
     }
 
