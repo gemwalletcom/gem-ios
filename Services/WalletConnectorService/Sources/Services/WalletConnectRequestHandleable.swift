@@ -7,4 +7,3 @@ import Primitives
 protocol WalletConnectRequestHandleable: Sendable {
     func handle(request: WalletConnectSign.Request) async throws -> RPCResult
 }
-

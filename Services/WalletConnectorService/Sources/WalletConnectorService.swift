@@ -10,11 +10,11 @@ public final class WalletConnectorService {
     private let interactor = WCConnectionsInteractor()
     private let signer: WalletConnectorSignable
     private let messageTracker = MessageTracker()
-    private let serviceFactory: BlockchainWalletConnectServiceFactory
+    private let serviceFactory: WalletConnectServiceFactory
 
     public init(signer: WalletConnectorSignable) {
         self.signer = signer
-        self.serviceFactory = BlockchainWalletConnectServiceFactory(signer: signer)
+        self.serviceFactory = WalletConnectServiceFactory(signer: signer)
     }
 }
 

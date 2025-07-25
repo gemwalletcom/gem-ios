@@ -13,8 +13,8 @@ final class WalletConnectServiceFactory: Sendable {
     
     func service(for method: String) throws -> any WalletConnectRequestHandleable {
         switch WalletConnectionMethods(rawValue: method)?.blockchainMethod {
-        case .ethereum: EthereumWalletConnectorService(signer: signer)
-        case .solana: SolanaWalletConnectorService(signer: signer)
+        case .ethereum: EthereumWalletConnectService(signer: signer)
+        case .solana: SolanaWalletConnectService(signer: signer)
         case nil: throw WalletConnectorServiceError.unresolvedMethod(method)
         }
     }
