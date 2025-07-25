@@ -32,7 +32,7 @@ public enum HypercoreProvider: TargetType {
             return .encodable([
                 "type": "metaAndAssetCtxs"
             ])
-        case .candleSnapshot(let coin, let interval, let startTime, let endTime,):
+        case .candleSnapshot(let coin, let interval, let startTime, let endTime):
             return .encodable(JSON<String>.dictionary([
                 "type": .value("candleSnapshot"),
                 "req": .dictionary([
