@@ -2,57 +2,73 @@
 
 import Testing
 import Primitives
-import PrimitivesTestKit
 import Style
+import PerpetualsTestKit
 @testable import Perpetuals
 
 struct PerpetualPositionViewModelTests {
     
+    private func createViewModel(position: PerpetualPosition) -> PerpetualPositionViewModel {
+        let asset = Asset(
+            id: AssetId(chain: .bitcoin, tokenId: nil),
+            name: "Bitcoin", 
+            symbol: "BTC",
+            decimals: 8,
+            type: .native
+        )
+        let positionData = PerpetualPositionData(
+            perpetual: Perpetual.mock(),
+            asset: asset,
+            position: position
+        )
+        return PerpetualPositionViewModel(data: positionData)
+    }
+    
     @Test
     func leverageText() {
-        #expect(PerpetualPositionViewModel(position: .mock(leverage: 10)).leverageText == "10x")
+        #expect(createViewModel(position: PerpetualPosition.mock(leverage: 10)).leverageText == "10x")
     }
     
     @Test
     func directionText() {
-        #expect(PerpetualPositionViewModel(position: .mock(size: 100)).directionText == "Long")
-        #expect(PerpetualPositionViewModel(position: .mock(size: -100)).directionText == "Short")
+        #expect(createViewModel(position: PerpetualPosition.mock(size: 100)).directionText == "Long")
+        #expect(createViewModel(position: PerpetualPosition.mock(size: -100)).directionText == "Short")
     }
     
     @Test
     func positionTypeText() {
-        #expect(PerpetualPositionViewModel(position: .mock(size: 100, leverage: 5)).positionTypeText == "Long 5x")
+        #expect(createViewModel(position: PerpetualPosition.mock(size: 100, leverage: 5)).positionTypeText == "Long 5x")
     }
     
     @Test
     func marginText() {
-        #expect(PerpetualPositionViewModel(position: .mock(marginAmount: 1000)).marginText == "$1K")
+        #expect(createViewModel(position: PerpetualPosition.mock(marginAmount: 1000)).marginText == "$1,000.00 (isolated)")
     }
     
     @Test
     func pnlText() {
-        #expect(PerpetualPositionViewModel(position: .mock(pnl: 500)).pnlText == "+$500")
-        #expect(PerpetualPositionViewModel(position: .mock(pnl: -200)).pnlText == "-$200")
+        #expect(createViewModel(position: PerpetualPosition.mock(pnl: 500)).pnlText == "+$500")
+        #expect(createViewModel(position: PerpetualPosition.mock(pnl: -200)).pnlText == "-$200")
     }
     
     @Test
     func pnlPercent() {
-        #expect(PerpetualPositionViewModel(position: .mock(marginAmount: 1000, pnl: 100)).pnlPercent == 10.0)
+        #expect(createViewModel(position: PerpetualPosition.mock(marginAmount: 1000, pnl: 100)).pnlPercent == 0.1)
     }
     
     @Test
     func liquidationPriceText() {
-        #expect(PerpetualPositionViewModel(position: .mock(liquidationPrice: 35000)).liquidationPriceText == "$35K")
-        #expect(PerpetualPositionViewModel(position: .mock(liquidationPrice: 0)).liquidationPriceText == "--")
-        #expect(PerpetualPositionViewModel(position: .mock(liquidationPrice: nil)).liquidationPriceText == "--")
+        #expect(createViewModel(position: PerpetualPosition.mock(liquidationPrice: 35000)).liquidationPriceText == "$35,000.00")
+        #expect(createViewModel(position: PerpetualPosition.mock(liquidationPrice: 0)).liquidationPriceText == nil)
+        #expect(createViewModel(position: PerpetualPosition.mock(liquidationPrice: nil)).liquidationPriceText == nil)
     }
     
     @Test
     func liquidationPriceColor() {
-        #expect(PerpetualPositionViewModel(position: .mock(marginAmount: 100, pnl: 10, liquidationPrice: 40000)).liquidationPriceColor == .secondary)
-        #expect(PerpetualPositionViewModel(position: .mock(marginAmount: 100, pnl: -20, liquidationPrice: 40000)).liquidationPriceColor == .secondary)
-        #expect(PerpetualPositionViewModel(position: .mock(marginAmount: 100, pnl: -30, liquidationPrice: 40000)).liquidationPriceColor == Colors.orange)
-        #expect(PerpetualPositionViewModel(position: .mock(marginAmount: 100, pnl: -60, liquidationPrice: 40000)).liquidationPriceColor == Colors.red)
+        #expect(createViewModel(position: PerpetualPosition.mock(liquidationPrice: 40000, marginAmount: 100, pnl: 10)).liquidationPriceColor == .secondary)
+        #expect(createViewModel(position: PerpetualPosition.mock(liquidationPrice: 40000, marginAmount: 100, pnl: -20)).liquidationPriceColor == .secondary)
+        #expect(createViewModel(position: PerpetualPosition.mock(liquidationPrice: 40000, marginAmount: 100, pnl: -30)).liquidationPriceColor == Colors.orange)
+        #expect(createViewModel(position: PerpetualPosition.mock(liquidationPrice: 40000, marginAmount: 100, pnl: -60)).liquidationPriceColor == Colors.red)
     }
     
 }

@@ -30,11 +30,18 @@ public struct PerpetualsScene: View {
             }
             .cleanListRow()
             
-            if !model.positionViewModels.isEmpty {
+            if !model.positions.isEmpty {
                 Section {
-                    ForEach(model.positionViewModels) { viewModel in
-                        NavigationLink(value: Scenes.Perpetual(perpetualData: PerpetualData(perpetual: viewModel.perpetual, asset: viewModel.asset))) {
-                            ListAssetItemView(model: viewModel)
+                    ForEach(model.positions) { positionData in
+                        NavigationLink(
+                            value: Scenes
+                                .Perpetual(perpetualData: PerpetualData(perpetual: positionData.perpetual, asset: positionData.asset))
+                        ) {
+                            ListAssetItemView(model: PerpetualPositionItemViewModel(
+                                model: PerpetualPositionViewModel(
+                                    data: positionData
+                                )
+                            ))
                         }
                         .listRowInsets(.assetListRowInsets)
                     }
@@ -51,7 +58,12 @@ public struct PerpetualsScene: View {
                     ForEach(model.perpetuals) { perpetualData in
                         NavigationLink(value: Scenes.Perpetual(perpetualData: perpetualData)) {
                             ListAssetItemView(
-                                model: PerpetualItemViewModel(perpetual: perpetualData.perpetual)
+                                model: PerpetualItemViewModel(
+                                    model: PerpetualViewModel(
+                                        perpetual: perpetualData.perpetual,
+                                        currencyStyle: .abbreviated
+                                    )
+                                )
                             )
                         }
                     }
@@ -66,6 +78,9 @@ public struct PerpetualsScene: View {
         .taskOnce {
             Task {
                 await model.fetch()
+            }
+            Task {
+                await model.updateMarkets()
             }
         }
         .onReceive(Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()) { _ in

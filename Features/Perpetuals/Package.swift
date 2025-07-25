@@ -12,6 +12,9 @@ let package = Package(
         .library(
             name: "Perpetuals",
             targets: ["Perpetuals"]),
+        .library(
+            name: "PerpetualsTestKit",
+            targets: ["PerpetualsTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -42,10 +45,18 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "PerpetualsTestKit",
+            dependencies: [
+                "Primitives",
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "PerpetualsTests",
             dependencies: [
                 "Perpetuals",
+                "PerpetualsTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             path: "Tests"

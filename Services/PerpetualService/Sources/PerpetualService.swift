@@ -39,15 +39,8 @@ public struct PerpetualService: PerpetualServiceable {
         }) else {
             return
         }
-        
-        // First, ensure markets are up to date
-        try await updateMarkets()
-        
         let positions = try await provider.getPositions(address: account.address, walletId: wallet.id)
-        
-        // Ensure balance records exist for all perpetual assets
-        let perpetualsData = try await provider.getPerpetualsData()
-        let assetIds = perpetualsData.map { $0.asset.id } + [Chain.hyperCore.asset.id]
+        let assetIds = positions.map { $0.assetId } + [Chain.hyperCore.asset.id]
         try balanceStore.addMissingBalances(walletId: wallet.id, assetIds: assetIds, isEnabled: false)
         
         try await syncProviderPositions(

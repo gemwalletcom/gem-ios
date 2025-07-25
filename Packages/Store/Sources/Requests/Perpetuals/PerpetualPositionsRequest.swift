@@ -32,12 +32,12 @@ public struct PerpetualPositionsRequest: ValueObservationQueryable {
         }
         
         return try query
-            .asRequest(of: PerpetualInfo.self)
+            .asRequest(of: PerpetualPositionsInfo.self)
             .fetchAll(db)
-            .map { $0.mapToPerpetualPositionData() }
+            .compactMap { $0.mapToPerpetualPositionData() }
             .sorted { lhs, rhs in
-                let lhsValue = lhs.positions.reduce(0) { $0 + abs($1.size) * lhs.perpetual.price }
-                let rhsValue = rhs.positions.reduce(0) { $0 + abs($1.size) * rhs.perpetual.price }
+                let lhsValue = abs(lhs.position.size) * lhs.perpetual.price
+                let rhsValue = abs(rhs.position.size) * rhs.perpetual.price
                 return lhsValue > rhsValue
             }
     }

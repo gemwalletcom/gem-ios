@@ -41,18 +41,6 @@ public final class PerpetualsSceneViewModel {
         self.onTransferComplete = onTransferComplete
     }
     
-    public var positionViewModels: [PerpetualPositionItemViewModel] {
-        positions.flatMap { positionData in
-            positionData.positions.map { position in
-                PerpetualPositionItemViewModel(
-                    position: position,
-                    perpetual: positionData.perpetual,
-                    asset: positionData.asset
-                )
-            }
-        }
-    }
-    
     public var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
             walletType: wallet.type,
@@ -66,7 +54,6 @@ public final class PerpetualsSceneViewModel {
 
 extension PerpetualsSceneViewModel {
     public func fetch() async {
-        await updateMarkets()
         await updatePositions()
     }
     
@@ -78,7 +65,7 @@ extension PerpetualsSceneViewModel {
         }
     }
     
-    private func updateMarkets() async {
+    func updateMarkets() async {
         do {
             try await perpetualService.updateMarkets()
         } catch {

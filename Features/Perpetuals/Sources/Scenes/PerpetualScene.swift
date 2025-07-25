@@ -37,32 +37,39 @@ public struct PerpetualScene: View {
             
             ForEach(model.positionViewModels) { position in
                 Section {
-                    ListAssetItemView(model: position)
-                        .listRowInsets(.assetListRowInsets)
+                    ListAssetItemView(
+                        model: PerpetualPositionItemViewModel(model: position)
+                    )
                     
                     ListItemView(
                         title: "Size",
-                        subtitle: position.positionViewModel.sizeValueText
+                        subtitle: position.sizeValueText
                     )
                     
                     ListItemView(
                         title: "Margin",
-                        subtitle: position.positionViewModel.marginText
+                        subtitle: position.marginText
                     )
                     
-                    if let text = position.positionViewModel.liquidationPriceText {
+                    ListItemView(
+                        title: "PnL",
+                        subtitle: position.pnlText,
+                        subtitleStyle: TextStyle(font: .callout, color: position.pnlColor)
+                    )
+                    
+                    if let text = position.liquidationPriceText {
                         ListItemView(
                             title: "Liquidation Price",
                             subtitle: text,
-                            subtitleStyle: TextStyle(font: .callout, color: position.positionViewModel.liquidationPriceColor),
+                            subtitleStyle: TextStyle(font: .callout, color: position.liquidationPriceColor),
                             infoAction: { model.onSelectLiquidationPriceInfo() }
                         )
                     }
                     
                     ListItemView(
                         title: "Funding Payments",
-                        subtitle: position.positionViewModel.fundingPaymentsText,
-                        subtitleStyle: TextStyle(font: .callout, color: position.positionViewModel.fundingPaymentsColor),
+                        subtitle: position.fundingPaymentsText,
+                        subtitleStyle: TextStyle(font: .callout, color: position.fundingPaymentsColor),
                         infoAction: { model.onSelectFundingPaymentsInfo() }
                     )
                 } header: {
@@ -106,13 +113,16 @@ public struct PerpetualScene: View {
                     infoAction: { model.onSelectFundingRateInfo() }
                 )
             }
-            
-            
         }
         .navigationTitle(model.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
+        .taskOnce {
+            Task {
+                await model.fetch()
+            }
         }
     }
 }

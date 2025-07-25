@@ -20,6 +20,15 @@ public class HyperCoreSigner: Signable {
             throw AnyError("Invalid input type for perpetual signing")
         }
         
+        switch type {
+        case .close: break
+        case .open(let direction):
+            switch direction {
+            case .long: break
+            case .short: break
+            }
+        }
+        
         NSLog("asset \(asset), type \(type)")
         
         fatalError()

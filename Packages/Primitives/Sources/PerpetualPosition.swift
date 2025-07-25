@@ -22,6 +22,7 @@ public struct PriceTarget: Codable, Equatable, Hashable, Sendable {
 public struct PerpetualPosition: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let perpetualId: String
+	public let assetId: AssetId
 	public let size: Double
 	public let sizeValue: Double
 	public let leverage: UInt8
@@ -35,9 +36,10 @@ public struct PerpetualPosition: Codable, Equatable, Hashable, Sendable {
 	public let pnl: Double
 	public let funding: Float?
 
-	public init(id: String, perpetualId: String, size: Double, sizeValue: Double, leverage: UInt8, entryPrice: Double?, liquidationPrice: Double?, marginType: PerpetualMarginType, direction: PerpetualDirection, marginAmount: Double, takeProfit: PriceTarget?, stopLoss: PriceTarget?, pnl: Double, funding: Float?) {
+	public init(id: String, perpetualId: String, assetId: AssetId, size: Double, sizeValue: Double, leverage: UInt8, entryPrice: Double?, liquidationPrice: Double?, marginType: PerpetualMarginType, direction: PerpetualDirection, marginAmount: Double, takeProfit: PriceTarget?, stopLoss: PriceTarget?, pnl: Double, funding: Float?) {
 		self.id = id
 		self.perpetualId = perpetualId
+		self.assetId = assetId
 		self.size = size
 		self.sizeValue = sizeValue
 		self.leverage = leverage

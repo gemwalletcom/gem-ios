@@ -39,7 +39,6 @@ just clean
 
 # Build the project
 just build
-# NOTE: Always run builds using the Task tool with the test-build-fixer agent to handle any build errors
 
 # Build a specific package
 just build-package $PACKAGE. Example: just build-package Primitives

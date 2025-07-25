@@ -11,6 +11,7 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         static let id = Column("id")
         static let walletId = Column("walletId")
         static let perpetualId = Column("perpetualId")
+        static let assetId = Column("assetId")
         static let size = Column("size")
         static let sizeValue = Column("sizeValue")
         static let leverage = Column("leverage")
@@ -29,6 +30,7 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
     public var id: String
     public var walletId: String
     public var perpetualId: String
+    public var assetId: AssetId
     public var size: Double
     public var sizeValue: Double
     public var leverage: Int
@@ -47,6 +49,7 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         id: String,
         walletId: String,
         perpetualId: String,
+        assetId: AssetId,
         size: Double,
         sizeValue: Double,
         leverage: Int,
@@ -64,6 +67,7 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         self.id = id
         self.walletId = walletId
         self.perpetualId = perpetualId
+        self.assetId = assetId
         self.size = size
         self.sizeValue = sizeValue
         self.leverage = leverage
@@ -92,6 +96,8 @@ extension PerpetualPositionRecord: CreateTable {
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
             t.column(Columns.perpetualId.name, .text).notNull()
                 .references(PerpetualRecord.databaseTableName, onDelete: .cascade)
+            t.column(Columns.assetId.name, .jsonText).notNull()
+                .references(AssetRecord.databaseTableName, onDelete: .cascade)
             t.column(Columns.size.name, .double).notNull()
             t.column(Columns.sizeValue.name, .double).notNull()
             t.column(Columns.leverage.name, .integer).notNull()
@@ -116,6 +122,7 @@ extension PerpetualPositionRecord {
         return PerpetualPosition(
             id: id,
             perpetualId: perpetualId,
+            assetId: assetId,
             size: size,
             sizeValue: sizeValue,
             leverage: UInt8(leverage),
@@ -138,6 +145,7 @@ extension PerpetualPosition {
             id: id,
             walletId: walletId,
             perpetualId: perpetualId,
+            assetId: assetId,
             size: size,
             sizeValue: sizeValue,
             leverage: Int(leverage),

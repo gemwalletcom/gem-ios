@@ -10,21 +10,21 @@ import Formatters
 
 public struct PerpetualItemViewModel: ListAssetItemViewable {
     
-    private let formatter = CurrencyFormatter(type: .abbreviated)
+    public let model: PerpetualViewModel
     
-    public let perpetual: Perpetual
-    
-    public init(perpetual: Perpetual) {
-        self.perpetual = perpetual
+    public init(
+        model: PerpetualViewModel
+    ) {
+        self.model = model
     }
     
     public var showBalancePrivacy: Binding<Bool> { .constant(false) }
-    public var name: String { perpetual.name }
-    public var symbol: String? { leverageText }
+    public var name: String { model.name }
+    public var symbol: String? { .none }
     public var action: ((ListAssetItemAction) -> Void)?
     
     public var assetImage: AssetImage {
-        AssetIdViewModel(assetId: perpetual.assetId).assetImage
+        model.assetImage
     }
     
     public var subtitleView: ListAssetItemSubtitleView {
@@ -34,7 +34,7 @@ public struct PerpetualItemViewModel: ListAssetItemViewable {
     public var rightView: ListAssetItemRightView {
         .balance(
             balance: TextValue(
-                text: formatter.string(perpetual.volume24h),
+                text: model.volumeText,
                 style: TextStyle(font: .body, color: .primary, fontWeight: .semibold)
             ),
             totalFiat: TextValue(
@@ -42,10 +42,5 @@ public struct PerpetualItemViewModel: ListAssetItemViewable {
                 style: TextStyle(font: .footnote, color: .secondary)
             )
         )
-    }
-    
-    private var leverageText: String {
-        guard let maxLeverage = perpetual.leverage.max() else { return "" }
-        return "\(maxLeverage)x"
     }
 }

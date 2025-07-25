@@ -19,15 +19,9 @@ public final class PerpetualSceneViewModel {
     private let onPresentTransferData: ((TransferData) -> Void)?
     
     public let wallet: Wallet
-    public var perpetualData: PerpetualData
+    public let asset: Asset
     public var positionsRequest: PerpetualPositionsRequest
-    public var positions: [PerpetualPositionData] = [] {
-        didSet {
-            if let data = positions.first {
-                self.perpetualData = PerpetualData(perpetual: data.perpetual, asset: data.asset)
-            }
-        }
-    }
+    public var positions: [PerpetualPositionData] = []
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .hour {
         didSet {
@@ -41,16 +35,13 @@ public final class PerpetualSceneViewModel {
     
     public let perpetualViewModel: PerpetualViewModel
     
-    public var positionViewModels: [PerpetualPositionItemViewModel] {
-        positions.flatMap { positionData in
-            positionData.positions.map { position in
-                PerpetualPositionItemViewModel(
-                    position: position,
-                    perpetual: positionData.perpetual,
-                    asset: positionData.asset
-                )
-            }
+    public var positionViewModels: [PerpetualPositionViewModel] {
+        guard let positionData = positions.first else {
+            return []
         }
+        return [
+            PerpetualPositionViewModel(data: positionData)
+        ]
     }
     
     public init(
@@ -60,11 +51,11 @@ public final class PerpetualSceneViewModel {
         onPresentTransferData: ((TransferData) -> Void)? = nil
     ) {
         self.wallet = wallet
-        self.perpetualData = perpetualData
+        self.asset = perpetualData.asset
         self.perpetualService = perpetualService
         self.onPresentTransferData = onPresentTransferData
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
         self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
     }
     
     public var navigationTitle: String {
@@ -75,14 +66,19 @@ public final class PerpetualSceneViewModel {
         !positionViewModels.isEmpty
     }
     
-    
     public func fetch() async {
-        do {
-            try await perpetualService.updateMarket(symbol: perpetualData.perpetual.name)
-            try await perpetualService.updatePositions(wallet: wallet)
+        Task {
             await fetchCandlesticks()
-        } catch {
-            print("Failed to load data: \(error)")
+        }
+        Task {
+            try await perpetualService.updateMarket(symbol: perpetualViewModel.perpetual.name)
+        }
+        Task {
+            do {
+                try await perpetualService.updatePositions(wallet: wallet)
+            } catch {
+                print("Failed to load data: \(error)")
+            }
         }
     }
     
@@ -91,7 +87,7 @@ public final class PerpetualSceneViewModel {
         
         do {
             let candlesticks = try await perpetualService.candlesticks(
-                symbol: perpetualData.perpetual.name,
+                symbol: perpetualViewModel.perpetual.name,
                 period: currentPeriod
             )
             state = .data(candlesticks)
@@ -122,7 +118,7 @@ extension PerpetualSceneViewModel {
     
     public func onClosePosition() {
         let transferData = TransferData(
-            type: .perpetual(perpetualData.asset, .close),
+            type: .perpetual(asset, .close),
             recipientData: RecipientData(
                 recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
                 amount: .none
@@ -137,7 +133,7 @@ extension PerpetualSceneViewModel {
     
     public func onOpenLongPosition() {
         let transferData = TransferData(
-            type: .perpetual(perpetualData.asset, .open(.long)),
+            type: .perpetual(asset, .open(.long)),
             recipientData: RecipientData(
                 recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
                 amount: .none
@@ -152,7 +148,7 @@ extension PerpetualSceneViewModel {
     
     public func onOpenShortPosition() {
         let transferData = TransferData(
-            type: .perpetual(perpetualData.asset, .open(.short)),
+            type: .perpetual(asset, .open(.short)),
             recipientData: RecipientData(
                 recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
                 amount: .none

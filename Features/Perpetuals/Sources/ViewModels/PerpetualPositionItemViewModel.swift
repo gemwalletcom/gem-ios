@@ -9,34 +9,28 @@ import PrimitivesComponents
 
 public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     
-    public let positionViewModel: PerpetualPositionViewModel
-    public let perpetual: Perpetual
-    public let asset: Asset
+    public let model: PerpetualPositionViewModel
     public var action: ((ListAssetItemAction) -> Void)?
     
     public init(
-        position: PerpetualPosition,
-        perpetual: Perpetual,
-        asset: Asset
+        model: PerpetualPositionViewModel
     ) {
-        self.positionViewModel = PerpetualPositionViewModel(position: position)
-        self.perpetual = perpetual
-        self.asset = asset
+        self.model = model
     }
     
     public var showBalancePrivacy: Binding<Bool> { .constant(false) }
-    public var name: String { perpetual.name }
+    public var name: String { model.name }
     public var symbol: String? { nil }
     
     public var assetImage: AssetImage {
-        AssetIdViewModel(assetId: perpetual.assetId).assetImage
+        model.assetImage
     }
     
     public var subtitleView: ListAssetItemSubtitleView {
         .type(
             TextValue(
-                text: positionViewModel.positionTypeText,
-                style: TextStyle(font: .footnote, color: positionViewModel.positionTypeColor)
+                text: model.positionTypeText,
+                style: TextStyle(font: .footnote, color: model.positionTypeColor)
             )
         )
     }
@@ -44,17 +38,17 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     public var rightView: ListAssetItemRightView {
         .balance(
             balance: TextValue(
-                text: positionViewModel.marginAmountText,
-                style: TextStyle(font: .body, color: .primary, fontWeight: .semibold)
+                text: model.marginAmountText,
+                style: TextStyle(font: .body, color: .primary, fontWeight: .medium)
             ),
             totalFiat: TextValue(
-                text: positionViewModel.pnlWithPercentText,
-                style: TextStyle(font: .footnote, color: positionViewModel.pnlColor)
+                text: model.pnlWithPercentText,
+                style: TextStyle(font: .footnote, color: model.pnlColor)
             )
         )
     }
 }
 
 extension PerpetualPositionItemViewModel: Identifiable {
-    public var id: String { positionViewModel.id }
+    public var id: String { model.id }
 }

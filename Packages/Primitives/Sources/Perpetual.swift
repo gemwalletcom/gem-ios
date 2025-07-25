@@ -43,12 +43,12 @@ public struct PerpetualData: Codable, Equatable, Hashable, Sendable {
 public struct PerpetualPositionData: Codable, Equatable, Hashable, Sendable {
 	public let perpetual: Perpetual
 	public let asset: Asset
-	public let positions: [PerpetualPosition]
+	public let position: PerpetualPosition
 
-	public init(perpetual: Perpetual, asset: Asset, positions: [PerpetualPosition]) {
+	public init(perpetual: Perpetual, asset: Asset, position: PerpetualPosition) {
 		self.perpetual = perpetual
 		self.asset = asset
-		self.positions = positions
+		self.position = position
 	}
 }
 

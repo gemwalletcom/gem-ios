@@ -30,6 +30,7 @@ extension HypercoreAssetPositions {
             return PerpetualPosition(
                 id: positionId,
                 perpetualId: perpetualId,
+                assetId: mapHypercoreCoinToAssetId(position.coin),
                 size: Double(position.szi) ?? 0,
                 sizeValue: Double(position.positionValue) ?? 0,
                 leverage: UInt8(position.leverage.value),

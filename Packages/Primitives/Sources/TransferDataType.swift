@@ -124,7 +124,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             .tokenApprove(let asset, _),
             .generic(let asset, _, _): 
             return asset
-        case .transferNft(let nftAsset):
+        case .transferNft:
             fatalError("NFT asset not supported")
         }
     }

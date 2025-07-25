@@ -281,14 +281,13 @@ public struct Migrations {
         
         migrator
             .registerMigration(
-                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 6"
+                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 8"
             ) { db in
             try? db.drop(table: PerpetualRecord.databaseTableName)
             try? db.drop(table: PerpetualPositionRecord.databaseTableName)
             try? PerpetualRecord.create(db: db)
             try? PerpetualPositionRecord.create(db: db)
         }
-        
         
         try migrator.migrate(dbQueue)
     }
