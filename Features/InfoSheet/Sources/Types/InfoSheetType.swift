@@ -16,6 +16,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     // swaps
     case priceImpact
     case slippage
+    case noQuote
     // asset
     case assetStatus(AssetScoreType)
     case accountMinimalBalance(Asset, required: BigInt)
@@ -36,6 +37,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case .assetStatus(let status): "assetStatus_\(status.rawValue)"
         case let .accountMinimalBalance(asset, amount): "accountMinimalBalance_\(asset.id.identifier)\(amount)"
         case let .stakeMinimumAmount(asset, amount): "stakeMinimumAmount_\(asset.id.identifier)\(amount)"
+        case .noQuote: "noQuote"
         }
     }
 }
