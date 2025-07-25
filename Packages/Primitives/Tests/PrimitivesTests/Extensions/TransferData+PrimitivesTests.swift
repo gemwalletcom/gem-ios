@@ -11,6 +11,7 @@ struct TransferDataTypeTests {
         #expect(TransferData.mock(type: .stake(.mock(), .stake(validator: .mock()))).type.shouldIgnoreValueCheck == true)
         #expect(TransferData.mock(type: .account(.mock(), .activate)).type.shouldIgnoreValueCheck == true)
         #expect(TransferData.mock(type: .transfer(.mock(), mode: .flexible)).type.shouldIgnoreValueCheck == false)
+        #expect(TransferData.mock(type: .transfer(.mock(), mode: .fixed)).type.shouldIgnoreValueCheck == true)
     }
     // MARK: - canChangeValue
 
