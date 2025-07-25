@@ -3,7 +3,6 @@
 import Foundation
 import Store
 import Primitives
-import UIKit
 
 public struct AvatarService: Sendable {
     private let store: WalletStore
@@ -15,10 +14,7 @@ public struct AvatarService: Sendable {
     
     // MARK: - Store
 
-    public func save(image: UIImage, for walletId: String) throws {
-        guard let data = image.compress() else {
-            throw AnyError("Compression image failed")
-        }
+    public func save(data: Data, for walletId: String) throws {
         try write(data: data, for: walletId)
     }
     
