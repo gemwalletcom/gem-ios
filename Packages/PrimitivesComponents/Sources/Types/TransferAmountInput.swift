@@ -26,17 +26,15 @@ public struct TransferAmountInput {
         fee: BigInt,
         type: TransferDataType
     ) {
-        self.init(
-            asset: asset,
-            assetBalance: assetBalance,
-            value: value,
-            availableValue: availableValue,
-            assetFee: assetFee,
-            assetFeeBalance: assetFeeBalance,
-            fee: fee,
-            canChangeValue: type.canChangeValue,
-            ignoreValueCheck: type.shouldIgnoreValueCheck
-        )
+        self.asset = asset
+        self.assetBalance = assetBalance
+        self.value = value
+        self.availableValue = availableValue
+        self.assetFee = assetFee
+        self.assetFeeBalance = assetFeeBalance
+        self.fee = fee
+        self.canChangeValue = type.canChangeValue
+        self.ignoreValueCheck = type.shouldIgnoreValueCheck
     }
 
     public init(

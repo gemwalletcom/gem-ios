@@ -3,9 +3,9 @@
 import Foundation
 import BigInt
 
-public struct TransferData: Sendable, Hashable {
+public struct TransferData: Identifiable, Sendable, Hashable {
     public let type: TransferDataType
-    public let recipientData: RecipientData //TODO: Unless used in a few places
+    public let recipientData: RecipientData
     public let value: BigInt
     
     public init(
@@ -16,6 +16,15 @@ public struct TransferData: Sendable, Hashable {
         self.type = type
         self.recipientData = recipientData
         self.value = value
+    }
+
+    public var id: String {
+        let components = [
+            type.transactionType.rawValue,
+            recipientData.recipient.address,
+            String(value)
+        ]
+        return components.joined(separator: "-")
     }
     
     public var chain: Chain {

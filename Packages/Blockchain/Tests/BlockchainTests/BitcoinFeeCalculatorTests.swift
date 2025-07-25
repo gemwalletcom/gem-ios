@@ -30,7 +30,7 @@ struct BitcoinFeeTests {
 
     var feeInput: FeeInput {
         FeeInput(
-            type: .transfer(.init(.bitcoin), isScanned: false),
+            type: .transfer(.init(.bitcoin), mode: .flexible),
             senderAddress: "bc1qgxe8qnqpuz0zqtgztxl77t5egf2xzh2l4ylx90",
             destinationAddress: "bc1qhgxl7yjhaazdhrfh0tzge572wkyp43h7t64fal",
             value: BigInt(105910),

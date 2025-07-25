@@ -10,7 +10,7 @@ final class XrpSignerTests {
     func testTransfer() throws {
         let asset = Asset(.xrp).chain.asset
         let input = SignerInput(
-            type: .transfer(Asset(.xrp).chain.asset, isScanned: false),
+            type: .transfer(Asset(.xrp).chain.asset, mode: .flexible),
             asset: asset,
             value: .zero,
             fee: Fee(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero),
@@ -37,7 +37,7 @@ final class XrpSignerTests {
     func testTransferWithMemo() throws {
         let asset = Asset(.xrp).chain.asset
         let input = SignerInput(
-            type: .transfer(Asset(.xrp).chain.asset, isScanned: false),
+            type: .transfer(Asset(.xrp).chain.asset, mode: .flexible),
             asset: asset,
             value: .zero,
             fee: Fee(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero),

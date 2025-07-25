@@ -221,24 +221,22 @@ extension RecipientSceneViewModel {
            asset.chain.isValidAddress(payment.address)
         {
             let transferType: TransferDataType = switch type {
-            case .asset(let asset): .transfer(asset, isScanned: true)
+            case .asset(let asset): .transfer(asset, mode: .fixed)
             case .nft(let asset): .transferNft(asset)
             }
 
             let value = try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
-            let data = TransferData(
-                type: transferType,
-                recipientData: RecipientData(
-                    recipient: Recipient(
-                        name: .none,
-                        address: payment.address,
-                        memo: payment.memo
-                    ),
-                    amount: .none
+            let recipientData = RecipientData(
+                recipient: Recipient(
+                    name: .none,
+                    address: payment.address,
+                    memo: payment.memo
                 ),
-                value: value
+                amount: .none
             )
-            return .transferData(data)
+            return .transferData(
+                TransferData(type: transferType, recipientData: recipientData, value: value)
+            )
         }
 
         return .recipient(address: payment.address, memo: payment.memo, amount: payment.amount)
@@ -298,13 +296,7 @@ extension RecipientSceneViewModel {
         case .asset:
             onRecipientDataAction?(recipientData)
         case .nft(let asset):
-            handle(
-                transferData: TransferData(
-                    type: .transferNft(asset),
-                    recipientData: recipientData,
-                    value: .zero
-                )
-            )
+            handle(transferData: TransferData(type: .transferNft(asset), recipientData: recipientData, value: .zero))
         }
     }
 

@@ -185,6 +185,7 @@ struct TransferAmountCalculatorTests {
         }
     }
 
+    @Test
     func testCanChangeValue() {
         #expect(throws: Never.self) {
             let result = try service.calculate(input: TransferAmountInput(
@@ -312,6 +313,19 @@ struct TransferAmountCalculatorTests {
             )
         }
 
+        #expect(throws: TransferAmountCalculatorError.insufficientNetworkFee(coinAsset, required: BigInt(10))) {
+            try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(100)),
+                value: BigInt(50),
+                availableValue: BigInt(100),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(5)),
+                fee: BigInt(10),
+                type: .transfer(coinAsset, mode: .flexible)
+            ))
+        }
+
         #expect(throws: Never.self) {
             try service.validateNetworkFee(
                 BigInt(123_456),
@@ -337,6 +351,160 @@ struct TransferAmountCalculatorTests {
 
         #expect(throws: Never.self) {
             try service.calculate(input: input)
+        }
+    }
+
+    @Test
+    func testTransferFlexible() {
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(100)),
+                value: BigInt(50),
+                availableValue: BigInt(100),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(100)),
+                fee: BigInt(5),
+                type: .transfer(coinAsset, mode: .flexible)
+            ))
+            #expect(result.value == 50)
+            #expect(result.networkFee == 5)
+            #expect(result.useMaxAmount == false)
+        }
+    }
+
+    @Test
+    func testTransferFixed() {
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(100)),
+                value: BigInt(50),
+                availableValue: BigInt(100),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(100)),
+                fee: BigInt(5),
+                type: .transfer(coinAsset, mode: .fixed)
+            ))
+            #expect(result.value == 50)
+            #expect(result.networkFee == 5)
+            #expect(result.useMaxAmount == false)
+        }
+    }
+
+    @Test
+    func testSwapCalculation() {
+        let swapData = SwapData.mock()
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(200)),
+                value: BigInt(100),
+                availableValue: BigInt(200),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(50)),
+                fee: BigInt(10),
+                type: .swap(coinAsset, tokenAsset, swapData)
+            ))
+            #expect(result.value == 100)
+            #expect(result.networkFee == 10)
+            #expect(result.useMaxAmount == false)
+        }
+    }
+
+    @Test
+    func testNftTransfer() {
+        let nftAsset = NFTAsset.mock()
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(50)),
+                value: BigInt(1),
+                availableValue: BigInt(50),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(20)),
+                fee: BigInt(3),
+                type: .transferNft(nftAsset)
+            ))
+            #expect(result.value == 1)
+            #expect(result.networkFee == 3)
+            #expect(result.useMaxAmount == false)
+        }
+    }
+
+    @Test
+    func testStakeFlexible() {
+        let stakeType = StakeType.stake(validator: .mock())
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(1000)),
+                value: BigInt(500),
+                availableValue: BigInt(1000),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(100)),
+                fee: BigInt(5),
+                type: .stake(coinAsset, stakeType)
+            ))
+            #expect(result.value == 500)
+            #expect(result.networkFee == 5)
+            #expect(result.useMaxAmount == false)
+        }
+    }
+
+    @Test
+    func testUnstakeFixed() {
+        let delegation = Delegation.mock(state: .active)
+        let stakeType = StakeType.unstake(delegation: delegation)
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(800)),
+                value: BigInt(300),
+                availableValue: BigInt(800),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(50)),
+                fee: BigInt(2),
+                type: .stake(coinAsset, stakeType)
+            ))
+            #expect(result.value == 300)
+            #expect(result.networkFee == 2)
+            #expect(result.useMaxAmount == false)
+        }
+    }
+
+    @Test
+    func testMaxAmountTransfer() {
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(100)),
+                value: BigInt(100),
+                availableValue: BigInt(100),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(100)),
+                fee: BigInt(5),
+                type: .transfer(coinAsset, mode: .flexible)
+            ))
+            #expect(result.value == 95)
+            #expect(result.networkFee == 5)
+            #expect(result.useMaxAmount == true)
+        }
+    }
+
+    @Test
+    func testInsufficientBalanceError() {
+        #expect(throws: TransferAmountCalculatorError.insufficientBalance(coinAsset)) {
+            try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(50)),
+                value: BigInt(100),
+                availableValue: BigInt(50),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(20)),
+                fee: BigInt(3),
+                type: .transfer(coinAsset, mode: .flexible)
+            ))
         }
     }
 }
