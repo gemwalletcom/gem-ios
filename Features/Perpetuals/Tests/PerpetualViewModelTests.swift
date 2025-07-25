@@ -55,6 +55,6 @@ struct PerpetualViewModelTests {
     
     @Test
     func priceText() {
-        #expect(PerpetualViewModel(perpetual: mock(price: 45000)).priceText == "$45,000")
+        #expect(PerpetualViewModel(perpetual: mock(price: 45000)).priceText == "$45,000.00")
     }
 }
