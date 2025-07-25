@@ -31,8 +31,7 @@ public struct SwapTransferDataFactory: Sendable {
                 result
             ),
             recipientData: RecipientData(recipient: recipient, amount: .none),
-            value: BigInt(stringLiteral: quote.request.value),
-            canChangeValue: true
+            value: BigInt(stringLiteral: quote.request.value)
         )
     }
 }

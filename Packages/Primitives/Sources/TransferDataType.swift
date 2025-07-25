@@ -6,8 +6,16 @@ public enum AccountDataType: Hashable, Equatable, Sendable {
     case activate
 }
 
+public enum TransferMode: Hashable, Equatable, Sendable {
+    // Used for manual transfers, staking operations, and swaps
+    case flexible
+
+    // Used for preset amounts, claim rewards, scanning and specific contract calls
+    case fixed
+}
+
 public enum TransferDataType: Hashable, Equatable, Sendable {
-    case transfer(Asset)
+    case transfer(Asset, mode: TransferMode)
     case transferNft(NFTAsset)
     case swap(Asset, Asset, SwapData)
     case tokenApprove(Asset, ApprovalData)
@@ -36,7 +44,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     
     public var chain: Chain {
         switch self {
-        case .transfer(let asset),
+        case .transfer(let asset, _),
             .swap(let asset, _, _),
             .stake(let asset, _),
             .account(let asset, _),
@@ -70,11 +78,11 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     
     public var assetIds: [AssetId] {
         switch self {
-        case .transfer(let asset),
-            .tokenApprove(let asset, _),
-            .stake(let asset, _),
-            .generic(let asset, _, _),
-            .account(let asset, _): [asset.id]
+        case .transfer(let asset, _),
+             .tokenApprove(let asset, _),
+             .stake(let asset, _),
+             .generic(let asset, _, _),
+             .account(let asset, _): [asset.id]
         case let .swap(from, to, _): [from.id, to.id]
         case .transferNft: []
         }
@@ -92,5 +100,25 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             throw AnyError("SwapQuoteData missed")
         }
         return (fromAsset, toAsset, data)
+    }
+    
+    public var shouldIgnoreValueCheck: Bool {
+        switch self {
+        case .transferNft, .stake, .account, .tokenApprove: true
+        case .transfer, .swap, .generic: false
+        }
+    }
+
+    public var canChangeValue: Bool {
+        switch self {
+        case let .transfer(_, mode): mode == .flexible
+        case .swap: true
+        case .stake(_, let stakeType):
+            switch stakeType {
+            case .stake, .redelegate: true
+            case .unstake, .withdraw, .rewards: false
+            }
+        case .transferNft, .tokenApprove, .account, .generic: false
+        }
     }
 }

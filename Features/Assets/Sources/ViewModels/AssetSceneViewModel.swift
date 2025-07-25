@@ -232,9 +232,7 @@ extension AssetSceneViewModel {
                         ),
                         amount: .none
                     ),
-                    value: 0,
-                    canChangeValue: false,
-                    ignoreValueCheck: true
+                    value: 0
                 )
             )
         case .enableNotifications,

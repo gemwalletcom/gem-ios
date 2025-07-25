@@ -121,9 +121,7 @@ public final class StakeViewModel {
                 recipient: Recipient(name: .none, address: "", memo: .none),
                 amount: .none
             ),
-            value: value,
-            canChangeValue: false,
-            ignoreValueCheck: true
+            value: value
         )
     }
 

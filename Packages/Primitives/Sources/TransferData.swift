@@ -3,28 +3,30 @@
 import Foundation
 import BigInt
 
-public struct TransferData: Sendable, Hashable {
+public struct TransferData: Identifiable, Sendable, Hashable {
     public let type: TransferDataType
-    public let recipientData: RecipientData //TODO: Unless used in a few places
+    public let recipientData: RecipientData
     public let value: BigInt
-    public let canChangeValue: Bool
-    public let ignoreValueCheck: Bool
     
     public init(
         type: TransferDataType,
         recipientData: RecipientData,
-        value: BigInt,
-        canChangeValue: Bool,
-        ignoreValueCheck: Bool = false
+        value: BigInt
     ) {
         self.type = type
         self.recipientData = recipientData
         self.value = value
-        self.canChangeValue = canChangeValue
-        self.ignoreValueCheck = ignoreValueCheck
+    }
+
+    public var id: String {
+        let components = [
+            type.transactionType.rawValue,
+            recipientData.recipient.address,
+            String(value)
+        ]
+        return components.joined(separator: "-")
     }
     
-
     public var chain: Chain {
         type.chain
     }
