@@ -418,7 +418,7 @@ extension ConfirmTransferViewModel {
             assetFee: dataModel.asset.feeAsset,
             assetFeeBalance: assetFeeBalance,
             fee: fee,
-            type: dataModel.data.type
+            transferData: data
         ))
     }
 

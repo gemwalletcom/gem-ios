@@ -6,14 +6,16 @@ import BigInt
 
 extension TransferData {
     public static func mock(
-        type: TransferDataType = .transfer(.mock(), mode: .flexible),
+        type: TransferDataType = .transfer(.mock()),
         recipient: RecipientData = .mock(),
-        value: BigInt = .zero
+        value: BigInt = .zero,
+        canChangeValue: Bool = true
     ) -> TransferData {
         TransferData(
             type: type,
             recipientData: recipient,
-            value: value
+            value: value,
+            canChangeValue: canChangeValue
         )
     }
 }

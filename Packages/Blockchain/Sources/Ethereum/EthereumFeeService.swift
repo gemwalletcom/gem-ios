@@ -11,7 +11,7 @@ import WalletCore
 extension EthereumService {
     public func getData(input: FeeInput) throws -> Data? {
         switch input.type {
-        case let .transfer(asset, _):
+        case let .transfer(asset):
             switch asset.id.type {
             case .native:
                 return .none
@@ -64,7 +64,7 @@ extension EthereumService {
 
     public func getTo(input: FeeInput) throws -> String {
         switch input.type {
-        case let .transfer(asset, _):
+        case let .transfer(asset):
             switch asset.id.type {
             case .native:
                 return input.destinationAddress
@@ -97,7 +97,7 @@ extension EthereumService {
 
     func getValue(input: FeeInput) -> BigInt? {
         switch input.type {
-        case let .transfer(asset, _):
+        case let .transfer(asset):
             switch asset.id.type {
             case .native: return input.value
             case .token: return .none
@@ -140,7 +140,7 @@ extension EthereumService {
     
     internal static func getPriorityFeeByType(_ type: TransferDataType, isMaxAmount: Bool, gasPriceType: GasPriceType) -> BigInt {
         return switch type {
-        case let .transfer(asset, _):
+        case let .transfer(asset):
             asset.type == .native && isMaxAmount ? gasPriceType.totalFee : gasPriceType.priorityFee
         case .transferNft, .generic, .swap, .tokenApprove, .stake:
             gasPriceType.priorityFee

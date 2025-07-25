@@ -67,7 +67,7 @@ extension SuiService {
 
     private func getData(input: FeeInput) async throws -> String {
         switch input.type {
-        case let .transfer(asset, _):
+        case let .transfer(asset):
             switch asset.id.type {
             case .native:
                 try await encodeTransfer(

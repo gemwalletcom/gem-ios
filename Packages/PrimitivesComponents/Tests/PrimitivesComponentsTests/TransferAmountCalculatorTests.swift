@@ -322,7 +322,7 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(5)),
                 fee: BigInt(10),
-                type: .transfer(coinAsset, mode: .flexible)
+                transferData: TransferData.mock(type: .transfer(coinAsset), value: BigInt(50))
             ))
         }
 
@@ -365,7 +365,7 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(100)),
                 fee: BigInt(5),
-                type: .transfer(coinAsset, mode: .flexible)
+                transferData: TransferData.mock(type: .transfer(coinAsset), value: BigInt(50))
             ))
             #expect(result.value == 50)
             #expect(result.networkFee == 5)
@@ -384,7 +384,8 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(100)),
                 fee: BigInt(5),
-                type: .transfer(coinAsset, mode: .fixed)
+                canChangeValue: false,
+                ignoreValueCheck: false
             ))
             #expect(result.value == 50)
             #expect(result.networkFee == 5)
@@ -404,7 +405,7 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(50)),
                 fee: BigInt(10),
-                type: .swap(coinAsset, tokenAsset, swapData)
+                transferData: TransferData.mock(type: .swap(coinAsset, tokenAsset, swapData), value: BigInt(100))
             ))
             #expect(result.value == 100)
             #expect(result.networkFee == 10)
@@ -424,7 +425,7 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(20)),
                 fee: BigInt(3),
-                type: .transferNft(nftAsset)
+                transferData: TransferData.mock(type: .transferNft(nftAsset), value: BigInt(1))
             ))
             #expect(result.value == 1)
             #expect(result.networkFee == 3)
@@ -444,7 +445,7 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(100)),
                 fee: BigInt(5),
-                type: .stake(coinAsset, stakeType)
+                transferData: TransferData.mock(type: .stake(coinAsset, stakeType), value: BigInt(500))
             ))
             #expect(result.value == 500)
             #expect(result.networkFee == 5)
@@ -465,7 +466,7 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(50)),
                 fee: BigInt(2),
-                type: .stake(coinAsset, stakeType)
+                transferData: TransferData.mock(type: .stake(coinAsset, stakeType), value: BigInt(300), canChangeValue: false)
             ))
             #expect(result.value == 300)
             #expect(result.networkFee == 2)
@@ -484,7 +485,7 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(100)),
                 fee: BigInt(5),
-                type: .transfer(coinAsset, mode: .flexible)
+                transferData: TransferData.mock(type: .transfer(coinAsset), value: BigInt(100))
             ))
             #expect(result.value == 95)
             #expect(result.networkFee == 5)
@@ -503,7 +504,7 @@ struct TransferAmountCalculatorTests {
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(20)),
                 fee: BigInt(3),
-                type: .transfer(coinAsset, mode: .flexible)
+                transferData: TransferData.mock(type: .transfer(coinAsset), value: BigInt(100))
             ))
         }
     }

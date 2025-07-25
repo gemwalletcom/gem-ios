@@ -24,7 +24,7 @@ public struct TransferAmountInput {
         assetFee: Asset,
         assetFeeBalance: Balance,
         fee: BigInt,
-        type: TransferDataType
+        transferData: TransferData
     ) {
         self.asset = asset
         self.assetBalance = assetBalance
@@ -33,8 +33,8 @@ public struct TransferAmountInput {
         self.assetFee = assetFee
         self.assetFeeBalance = assetFeeBalance
         self.fee = fee
-        self.canChangeValue = type.canChangeValue
-        self.ignoreValueCheck = type.shouldIgnoreValueCheck
+        self.canChangeValue = transferData.canChangeValue
+        self.ignoreValueCheck = transferData.type.shouldIgnoreValueCheck
     }
 
     public init(

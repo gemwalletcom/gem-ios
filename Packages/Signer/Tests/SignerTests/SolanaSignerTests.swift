@@ -13,7 +13,7 @@ final class SolanaSignerTests {
     func testTransfer() throws {
         let asset = Asset(.solana).chain.asset
         let input = SignerInput(
-            type: .transfer(asset, mode: .flexible),
+            type: .transfer(asset),
             asset: asset,
             value: .zero,
             fee: fee,
@@ -39,7 +39,7 @@ final class SolanaSignerTests {
     func tokenTransfer() throws {
         let asset = Asset.mock(id: AssetId(chain: .solana, tokenId: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"))
         let input = SignerInput(
-            type: .transfer(asset, mode: .flexible),
+            type: .transfer(asset),
             asset: asset,
             value: .zero,
             fee: fee,
@@ -65,7 +65,7 @@ final class SolanaSignerTests {
     func tokenTransferNewAccount() throws {
         let asset = Asset.mock(id: AssetId(chain: .solana, tokenId: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"))
         let input = SignerInput(
-            type: .transfer(asset, mode: .flexible),
+            type: .transfer(asset),
             asset: asset,
             value: .zero,
             fee: fee,

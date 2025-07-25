@@ -333,9 +333,10 @@ extension AmountSceneViewModel {
         switch type {
         case .transfer:
             return TransferData(
-                type: .transfer(asset, mode: .flexible),
+                type: .transfer(asset),
                 recipientData: recipientData,
-                value: value
+                value: value,
+                canChangeValue: canChangeValue
             )
         case .stake:
             guard let validator = currentValidator else {
@@ -344,13 +345,15 @@ extension AmountSceneViewModel {
             return TransferData(
                 type: .stake(asset, .stake(validator: validator)),
                 recipientData: recipientData,
-                value: value
+                value: value,
+                canChangeValue: canChangeValue
             )
         case .unstake(let delegation):
             return TransferData(
                 type: .stake(asset, .unstake(delegation: delegation)),
                 recipientData: recipientData,
-                value: value
+                value: value,
+                canChangeValue: canChangeValue
             )
         case .redelegate(let delegation, _, _):
             guard let validator = currentValidator else {
@@ -359,13 +362,15 @@ extension AmountSceneViewModel {
             return TransferData(
                 type: .stake(asset, .redelegate(delegation: delegation, toValidator: validator)),
                 recipientData: recipientData,
-                value: value
+                value: value,
+                canChangeValue: canChangeValue
             )
         case .withdraw(let delegation):
             return TransferData(
                 type: .stake(asset, .withdraw(delegation: delegation)),
                 recipientData: recipientData,
-                value: value
+                value: value,
+                canChangeValue: canChangeValue
             )
         }
     }

@@ -6,7 +6,7 @@ import Primitives
 extension TransferDataType {
     public var asset: Asset {
         switch self {
-        case let .transfer(asset, _),
+        case let .transfer(asset),
             .swap(let asset, _, _),
             .tokenApprove(let asset, _),
             .stake(let asset, _),
