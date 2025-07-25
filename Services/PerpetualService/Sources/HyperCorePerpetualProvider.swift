@@ -58,9 +58,10 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
                   ) else { return .none }
             
             let assetId = mapHypercoreCoinToAssetId(universeAsset.name)
+            let name = "\(universeAsset.name)-USD"
             let asset = Asset(
                 id: assetId,
-                name: universeAsset.name,
+                name: name,
                 symbol: universeAsset.name,
                 decimals: Int32(universeAsset.szDecimals),
                 type: .erc20

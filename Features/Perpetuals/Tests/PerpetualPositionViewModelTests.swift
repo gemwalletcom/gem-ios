@@ -47,8 +47,8 @@ struct PerpetualPositionViewModelTests {
     
     @Test
     func pnlText() {
-        #expect(createViewModel(position: PerpetualPosition.mock(pnl: 500)).pnlText == "+$500")
-        #expect(createViewModel(position: PerpetualPosition.mock(pnl: -200)).pnlText == "-$200")
+        #expect(createViewModel(position: PerpetualPosition.mock(pnl: 500)).pnlText == "+$500.00")
+        #expect(createViewModel(position: PerpetualPosition.mock(pnl: -200)).pnlText == "-$200.00")
     }
     
     @Test

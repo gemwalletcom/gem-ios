@@ -42,6 +42,7 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingUrl: URL? = nil
     public var isPresentingTransferData: TransferData?
+    public var isPresentingPerpetualRecipientData: PerpetualRecipientData?
     
     public var isLoadingAssets: Bool = false
 

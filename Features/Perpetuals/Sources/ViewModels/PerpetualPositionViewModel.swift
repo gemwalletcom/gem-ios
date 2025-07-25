@@ -24,8 +24,12 @@ public struct PerpetualPositionViewModel {
         AssetIdViewModel(assetId: data.perpetual.assetId).assetImage
     }
     
-    public var name: String {
-        "\(directionText) \(data.position.leverage)x"
+    public var nameText: String {
+        data.asset.name
+    }
+    
+    public var symbolText: String {
+        data.asset.symbol
     }
     
     public var leverageText: String {

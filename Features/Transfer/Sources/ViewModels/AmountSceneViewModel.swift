@@ -98,6 +98,11 @@ public final class AmountSceneViewModel {
         switch type {
         case .transfer: Localized.Transfer.Send.title
         case .deposit: "Deposit"
+        case .perpetual(_, let type):
+            switch type {
+            case .short: "Short"
+            case .long: "Long"
+            }
         case .stake: Localized.Transfer.Stake.title
         case .unstake: Localized.Transfer.Unstake.title
         case .redelegate: Localized.Transfer.Redelegate.title
@@ -122,7 +127,7 @@ public final class AmountSceneViewModel {
 
     var validators: [DelegationValidator] {
         switch type {
-        case .transfer, .deposit: []
+        case .transfer, .deposit, .perpetual: []
         case .stake(let validators, _): validators
         case .unstake(let delegation): [delegation.validator]
         case .redelegate(_, let validators, _): validators
@@ -132,7 +137,7 @@ public final class AmountSceneViewModel {
     
     var stakeValidatorsType: StakeValidatorsType {
         switch type {
-        case .transfer, .deposit, .stake, .redelegate: .stake
+        case .transfer, .deposit, .perpetual, .stake, .redelegate: .stake
         case .unstake, .withdraw: .unstake
         }
     }
@@ -144,7 +149,7 @@ public final class AmountSceneViewModel {
     
     var delegations: [Delegation] {
         switch type {
-        case .transfer, .deposit, .stake: []
+        case .transfer, .deposit, .perpetual, .stake: []
         case .unstake(let delegation): [delegation]
         case .redelegate(let delegation, _, _): [delegation]
         case .withdraw(let delegation): [delegation]
@@ -153,7 +158,7 @@ public final class AmountSceneViewModel {
     
     var isSelectValidatorEnabled: Bool {
         switch type {
-        case .transfer, .deposit, .stake, .redelegate: true
+        case .transfer, .deposit, .perpetual, .stake, .redelegate: true
         case .unstake, .withdraw: false
         }
     }
@@ -266,6 +271,8 @@ extension AmountSceneViewModel {
             return recipient
         case .deposit(recipient: let recipient):
             return recipient
+        case .perpetual(recipient: let recipient, _):
+            return recipient
         case .stake,
             .unstake,
             .redelegate,
@@ -348,6 +355,13 @@ extension AmountSceneViewModel {
                 value: value,
                 canChangeValue: canChangeValue
             )
+        case .perpetual(_, let direction):
+            return TransferData(
+                type: .perpetual(asset, .open(direction)),
+                recipientData: recipientData,
+                value: value,
+                canChangeValue: canChangeValue
+            )
         case .stake:
             guard let validator = currentValidator else {
                 throw TransferError.invalidAmount
@@ -410,7 +424,7 @@ extension AmountSceneViewModel {
             if asset.symbol == "USDC" {
                 return BigInt(5_000_000) // 5 USDC with 6 decimals
             }
-        case .unstake, .withdraw, .transfer:
+        case .unstake, .withdraw, .transfer, .perpetual:
             break
         }
         return BigInt(0)
@@ -420,14 +434,14 @@ extension AmountSceneViewModel {
         let recommended: DelegationValidator? = switch type {
         case .stake(_, let recommendedValidator): recommendedValidator
         case .redelegate(_, _, let recommendedValidator): recommendedValidator
-        case .transfer, .deposit, .unstake, .withdraw: .none
+        case .transfer, .deposit, .perpetual, .unstake, .withdraw: .none
         }
         return recommended ?? validators.first
     }
 
     private var availableValue: BigInt {
         switch input.type {
-        case .transfer, .deposit, .stake:
+        case .transfer, .deposit, .perpetual, .stake:
             guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
             return balance.available
         case .unstake(let delegation):
@@ -447,6 +461,7 @@ extension AmountSceneViewModel {
         switch type {
         case .transfer,
             .deposit,
+            .perpetual,
             .stake,
             .redelegate:
             return true

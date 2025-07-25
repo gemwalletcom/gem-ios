@@ -16,7 +16,8 @@ import InfoSheet
 public final class PerpetualSceneViewModel {
     
     private let perpetualService: PerpetualServiceable
-    private let onPresentTransferData: ((TransferData) -> Void)?
+    private let onTransferData: TransferDataAction
+    private let onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)?
     
     public let wallet: Wallet
     public let asset: Asset
@@ -48,12 +49,14 @@ public final class PerpetualSceneViewModel {
         wallet: Wallet,
         perpetualData: PerpetualData,
         perpetualService: PerpetualServiceable,
-        onPresentTransferData: ((TransferData) -> Void)? = nil
+        onTransferData: TransferDataAction = nil,
+        onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)? = nil
     ) {
         self.wallet = wallet
         self.asset = perpetualData.asset
         self.perpetualService = perpetualService
-        self.onPresentTransferData = onPresentTransferData
+        self.onTransferData = onTransferData
+        self.onPerpetualRecipientData = onPerpetualRecipientData
         self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
     }
@@ -128,36 +131,32 @@ extension PerpetualSceneViewModel {
             ignoreValueCheck: true
         )
         
-        onPresentTransferData?(transferData)
+        onTransferData?(transferData)
     }
     
     public func onOpenLongPosition() {
-        let transferData = TransferData(
-            type: .perpetual(asset, .open(.long)),
-            recipientData: RecipientData(
-                recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
-                amount: .none
-            ),
-            value: .zero,
-            canChangeValue: true,
-            ignoreValueCheck: false
+        let recipientData = RecipientData(
+            recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
+            amount: .none
         )
         
-        onPresentTransferData?(transferData)
+        onPerpetualRecipientData?(PerpetualRecipientData(
+            recipientData: recipientData,
+            direction: .long,
+            asset: asset
+        ))
     }
     
     public func onOpenShortPosition() {
-        let transferData = TransferData(
-            type: .perpetual(asset, .open(.short)),
-            recipientData: RecipientData(
-                recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
-                amount: .none
-            ),
-            value: .zero,
-            canChangeValue: true,
-            ignoreValueCheck: false
+        let recipientData = RecipientData(
+            recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
+            amount: .none
         )
         
-        onPresentTransferData?(transferData)
+        onPerpetualRecipientData?(PerpetualRecipientData(
+            recipientData: recipientData,
+            direction: .short,
+            asset: asset
+        ))
     }
 }

@@ -19,7 +19,7 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     }
     
     public var showBalancePrivacy: Binding<Bool> { .constant(false) }
-    public var name: String { model.name }
+    public var name: String { model.symbolText }
     public var symbol: String? { nil }
     
     public var assetImage: AssetImage {
@@ -29,7 +29,7 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     public var subtitleView: ListAssetItemSubtitleView {
         .type(
             TextValue(
-                text: model.positionTypeText,
+                text: model.leverageText,
                 style: TextStyle(font: .footnote, color: model.positionTypeColor)
             )
         )

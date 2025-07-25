@@ -9,27 +9,33 @@ public struct PerpetualNavigationView: View {
     
     @State private var model: PerpetualSceneViewModel
     @Binding var isPresentingTransferData: TransferData?
+    @Binding var isPresentingPerpetualRecipientData: PerpetualRecipientData?
     
     public init(
         perpetualData: PerpetualData,
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
-        isPresentingTransferData: Binding<TransferData?>
+        isPresentingTransferData: Binding<TransferData?>,
+        isPresentingPerpetualRecipientData: Binding<PerpetualRecipientData?>
     ) {
         _isPresentingTransferData = isPresentingTransferData
+        _isPresentingPerpetualRecipientData = isPresentingPerpetualRecipientData
         _model = State(initialValue: PerpetualSceneViewModel(
             wallet: wallet,
             perpetualData: perpetualData,
             perpetualService: perpetualService,
-            onPresentTransferData: { isPresentingTransferData.wrappedValue = $0 }
+            onTransferData: { isPresentingTransferData.wrappedValue = $0 },
+            onPerpetualRecipientData: { isPresentingPerpetualRecipientData.wrappedValue = $0 }
         ))
     }
     
     public init(
         model: PerpetualSceneViewModel,
-        isPresentingTransferData: Binding<TransferData?>
+        isPresentingTransferData: Binding<TransferData?>,
+        isPresentingPerpetualRecipientData: Binding<PerpetualRecipientData?>
     ) {
         _isPresentingTransferData = isPresentingTransferData
+        _isPresentingPerpetualRecipientData = isPresentingPerpetualRecipientData
         _model = State(initialValue: model)
     }
     
