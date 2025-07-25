@@ -39,17 +39,15 @@ public final class PerpetualSceneViewModel {
     
     public var isPresentingInfoSheet: InfoSheetType?
     
-    public var perpetualViewModel: PerpetualViewModel {
-        PerpetualViewModel(perpetual: perpetualData.perpetual)
-    }
+    public let perpetualViewModel: PerpetualViewModel
     
-    public var positionsViewModels: [PerpetualPositionItemViewModel] {
+    public var positionViewModels: [PositionItemViewModel] {
         positions.flatMap { positionData in
-            let perpetualData = PerpetualData(perpetual: positionData.perpetual, asset: positionData.asset)
-            return positionData.positions.map { position in
-                PerpetualPositionItemViewModel(
+            positionData.positions.map { position in
+                PositionItemViewModel(
                     position: position,
-                    perpetualData: perpetualData
+                    perpetual: positionData.perpetual,
+                    asset: positionData.asset
                 )
             }
         }
@@ -66,6 +64,7 @@ public final class PerpetualSceneViewModel {
         self.perpetualService = perpetualService
         self.onPresentTransferData = onPresentTransferData
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
+        self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
     }
     
     public var navigationTitle: String {
@@ -73,7 +72,7 @@ public final class PerpetualSceneViewModel {
     }
     
     public var hasOpenPosition: Bool {
-        !positionsViewModels.isEmpty
+        !positionViewModels.isEmpty
     }
     
     

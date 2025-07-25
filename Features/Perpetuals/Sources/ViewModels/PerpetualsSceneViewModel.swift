@@ -41,13 +41,13 @@ public final class PerpetualsSceneViewModel {
         self.onTransferComplete = onTransferComplete
     }
     
-    public var positionViewModels: [PerpetualPositionItemViewModel] {
+    public var positionViewModels: [PositionItemViewModel] {
         positions.flatMap { positionData in
-            let perpetualData = PerpetualData(perpetual: positionData.perpetual, asset: positionData.asset)
-            return positionData.positions.map { position in
-                PerpetualPositionItemViewModel(
+            positionData.positions.map { position in
+                PositionItemViewModel(
                     position: position,
-                    perpetualData: perpetualData
+                    perpetual: positionData.perpetual,
+                    asset: positionData.asset
                 )
             }
         }

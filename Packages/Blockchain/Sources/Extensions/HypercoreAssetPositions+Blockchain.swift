@@ -14,7 +14,17 @@ extension HypercoreAssetPositions {
             let rawFunding = Float(position.cumFunding.allTime) ?? 0
             let positionSize = Double(position.szi) ?? 0
             
-            let fundingValue = positionSize > 0 ? -rawFunding : rawFunding
+            // Funding sign reversal logic:
+            // - For long positions (positive size): always negate
+            // - For short positions (negative size): negate only if funding is negative
+            let fundingValue: Float
+            if positionSize >= 0 {
+                // Long position: always negate
+                fundingValue = -rawFunding
+            } else {
+                // Short position: negate only if negative, keep positive as is
+                fundingValue = rawFunding < 0 ? -rawFunding : rawFunding
+            }
             let direction: PerpetualDirection = positionSize >= 0 ? .long : .short
             
             return PerpetualPosition(

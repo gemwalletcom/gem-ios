@@ -73,12 +73,12 @@ public struct PerpetualPositionViewModel {
         }
     }
     
-    public var fundingText: String {
+    public var fundingPaymentsText: String {
         guard let funding = position.funding else { return "--" }
         return currencyFormatter.string(Double(funding))
     }
     
-    public var fundingColor: Color {
+    public var fundingPaymentsColor: Color {
         guard let funding = position.funding else { return .secondary }
         return funding >= 0 ? Colors.green : Colors.red
     }

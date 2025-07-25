@@ -1,35 +1,42 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Components
 import Primitives
+import Components
+import PrimitivesComponents
 import Style
 import SwiftUI
-import PrimitivesComponents
-import Formatters
 
-public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
-    private let perpetualViewModel: PerpetualViewModel
-    public let positionViewModel: PerpetualPositionViewModel
+public struct PositionItemViewModel {
+    public let position: PerpetualPosition
+    public let perpetual: Perpetual
     public let asset: Asset
-    
-    public init(
-        position: PerpetualPosition,
-        perpetualData: PerpetualData
-    ) {
-        self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
-        self.positionViewModel = PerpetualPositionViewModel(position: position, currencyStyle: .currency)
-        self.asset = perpetualData.asset
-    }
-    
-    public var perpetual: Perpetual { perpetualViewModel.perpetual }
-    public var showBalancePrivacy: Binding<Bool> { .constant(false) }
-    public var name: String { perpetualViewModel.name }
-    public var symbol: String? { nil }
     public var action: ((ListAssetItemAction) -> Void)?
     
+    public init(position: PerpetualPosition, perpetual: Perpetual, asset: Asset) {
+        self.position = position
+        self.perpetual = perpetual
+        self.asset = asset
+    }
+    
+    public var positionViewModel: PerpetualPositionViewModel {
+        PerpetualPositionViewModel(position: position)
+    }
+}
+
+extension PositionItemViewModel: Identifiable {
+    public var id: String { position.id }
+}
+
+extension PositionItemViewModel: ListAssetItemViewable {
+    public var showBalancePrivacy: Binding<Bool> { .constant(false) }
+    
+    public var name: String { perpetual.name }
+    
+    public var symbol: String? { nil }
+    
     public var assetImage: AssetImage {
-        perpetualViewModel.assetImage
+        AssetIdViewModel(assetId: perpetual.assetId).assetImage
     }
     
     public var subtitleView: ListAssetItemSubtitleView {
@@ -54,8 +61,3 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
         )
     }
 }
-
-extension PerpetualPositionItemViewModel: Identifiable {
-    public var id: String { positionViewModel.id }
-}
-

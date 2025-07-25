@@ -10,7 +10,7 @@ import Formatters
 
 public struct PerpetualItemViewModel: ListAssetItemViewable {
     
-    let formatter = CurrencyFormatter(type: .abbreviated)
+    private let formatter = CurrencyFormatter(type: .abbreviated)
     
     public let perpetual: Perpetual
     
@@ -34,7 +34,7 @@ public struct PerpetualItemViewModel: ListAssetItemViewable {
     public var rightView: ListAssetItemRightView {
         .balance(
             balance: TextValue(
-                text: volume24Text,
+                text: formatter.string(perpetual.volume24h),
                 style: TextStyle(font: .body, color: .primary, fontWeight: .semibold)
             ),
             totalFiat: TextValue(
@@ -44,14 +44,8 @@ public struct PerpetualItemViewModel: ListAssetItemViewable {
         )
     }
     
-    // MARK: - Private
-    
     private var leverageText: String {
         guard let maxLeverage = perpetual.leverage.max() else { return "" }
         return "\(maxLeverage)x"
-    }
-    
-    private var volume24Text: String {
-        return formatter.string(perpetual.volume24h)
     }
 }

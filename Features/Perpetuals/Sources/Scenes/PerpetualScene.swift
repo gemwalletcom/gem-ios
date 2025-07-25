@@ -35,40 +35,38 @@ public struct PerpetualScene: View {
             }
             .cleanListRow()
             
-            if !model.positionsViewModels.isEmpty {
+            ForEach(model.positionViewModels) { position in
                 Section {
-                    ForEach(model.positionsViewModels) { position in
-                        ListAssetItemView(model: position)
-                            .listRowInsets(.assetListRowInsets)
-                        
+                    ListAssetItemView(model: position)
+                        .listRowInsets(.assetListRowInsets)
+                    
+                    ListItemView(
+                        title: "Size",
+                        subtitle: position.positionViewModel.sizeValueText
+                    )
+                    
+                    ListItemView(
+                        title: "Margin",
+                        subtitle: position.positionViewModel.marginText
+                    )
+                    
+                    if let text = position.positionViewModel.liquidationPriceText {
                         ListItemView(
-                            title: "Size",
-                            subtitle: position.positionViewModel.sizeValueText
-                        )
-                        
-                        ListItemView(
-                            title: "Margin",
-                            subtitle: position.positionViewModel.marginText
-                        )
-                        
-                        if let text = position.positionViewModel.liquidationPriceText {
-                            ListItemView(
-                                title: "Liquidation Price",
-                                subtitle: text,
-                                subtitleStyle: TextStyle(font: .callout, color: position.positionViewModel.liquidationPriceColor),
-                                infoAction: { model.onSelectLiquidationPriceInfo() }
-                            )
-                        }
-                        
-                        ListItemView(
-                            title: "Funding",
-                            subtitle: position.positionViewModel.fundingText,
-                            subtitleStyle: TextStyle(font: .callout, color: position.positionViewModel.fundingColor),
-                            infoAction: { model.onSelectFundingPaymentsInfo() }
+                            title: "Liquidation Price",
+                            subtitle: text,
+                            subtitleStyle: TextStyle(font: .callout, color: position.positionViewModel.liquidationPriceColor),
+                            infoAction: { model.onSelectLiquidationPriceInfo() }
                         )
                     }
+                    
+                    ListItemView(
+                        title: "Funding Payments",
+                        subtitle: position.positionViewModel.fundingPaymentsText,
+                        subtitleStyle: TextStyle(font: .callout, color: position.positionViewModel.fundingPaymentsColor),
+                        infoAction: { model.onSelectFundingPaymentsInfo() }
+                    )
                 } header: {
-                    Text("Positions")
+                    Text("Position")
                 }
             }
             

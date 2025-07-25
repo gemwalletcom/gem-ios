@@ -14,7 +14,7 @@ extension HypercoreAssetMetadata {
         let prevPrice = Double(prevDayPx) ?? 0
         let currentPrice = Double(midPx ?? markPx) ?? 0
         let priceChange24h = prevPrice > 0 ? ((currentPrice - prevPrice) / prevPrice) * 100 : 0
-        let funding = Double(funding) ?? 0
+        let fundingRate = (Double(funding) ?? 0) * 100
         
         let openInterestInCoins = Double(openInterest) ?? 0
         let openInterestInUSD = openInterestInCoins * currentPrice
@@ -30,7 +30,7 @@ extension HypercoreAssetMetadata {
             pricePercentChange24h: priceChange24h,
             openInterest: openInterestInUSD,
             volume24h: volume24h,
-            funding: funding,
+            funding: fundingRate,
             leverage: [UInt8(maxLeverage)]
         )
     }
