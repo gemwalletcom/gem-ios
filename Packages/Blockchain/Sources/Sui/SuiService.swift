@@ -114,7 +114,7 @@ extension SuiService {
             let output = try suiValidateAndHash(encoded: data.data.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()
-        case .generic, .account, .tokenApprove: fatalError()
+        case .generic, .account, .tokenApprove, .perpetual: fatalError()
         }
     }
 

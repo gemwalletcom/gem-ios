@@ -9,13 +9,19 @@ import SwiftHTTPClient
 public struct PerpetualService: PerpetualServiceable {
     
     private let store: PerpetualStore
+    private let assetStore: AssetStore
+    private let balanceStore: BalanceStore
     private let provider: PerpetualProvidable
     
     public init(
         store: PerpetualStore,
+        assetStore: AssetStore,
+        balanceStore: BalanceStore,
         providerFactory: PerpetualProviderFactory
     ) {
         self.store = store
+        self.assetStore = assetStore
+        self.balanceStore = balanceStore
         self.provider = providerFactory.createProvider()
     }
     
@@ -35,6 +41,12 @@ public struct PerpetualService: PerpetualServiceable {
         }
         
         let positions = try await provider.getPositions(address: account.address, walletId: wallet.id)
+        
+        // Ensure balance records exist for all perpetual assets
+        let perpetualsData = try await provider.getPerpetualsData()
+        let assetIds = perpetualsData.map { $0.asset.id }
+        try balanceStore.addMissingBalances(walletId: wallet.id, assetIds: assetIds, isEnabled: false)
+        
         try await syncProviderPositions(
             positions: positions,
             provider: provider.provider(),
@@ -61,16 +73,42 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     public func updateMarkets() async throws {
-        let markets = try await provider.getPerpetuals()
-        try store.upsertPerpetuals(markets)
+        let perpetualsData = try await provider.getPerpetualsData()
+        let perpetuals = perpetualsData.map { $0.perpetual }
+        let assets = perpetualsData.map { createPerpetualAssetBasic(from: $0.asset) }
+        
+        try assetStore.add(assets: assets)
+        try store.upsertPerpetuals(perpetuals)
     }
     
     public func updateMarket(symbol: String) async throws {
-        let market = try await provider.getPerpetual(symbol: symbol)
-        try store.upsertPerpetuals([market])
+        let perpetualsData = try await provider.getPerpetualsData()
+        
+        guard let data = perpetualsData.first(where: { $0.perpetual.name == symbol }) else {
+            throw PerpetualError.marketNotFound(symbol: symbol)
+        }
+        
+        let asset = createPerpetualAssetBasic(from: data.asset)
+        try assetStore.add(assets: [asset])
+        try store.upsertPerpetuals([data.perpetual])
     }
     
     public func candlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
         return try await provider.getCandlesticks(symbol: symbol, period: period)
+    }
+    
+    private func createPerpetualAssetBasic(from asset: Asset) -> AssetBasic {
+        AssetBasic(
+            asset: asset,
+            properties: AssetProperties(
+                isEnabled: false,
+                isBuyable: false,
+                isSellable: false,
+                isSwapable: false,
+                isStakeable: false,
+                stakingApr: nil
+            ),
+            score: AssetScore(rank: 0)
+        )
     }
 }

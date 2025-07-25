@@ -4,6 +4,7 @@ import Components
 import Style
 import PerpetualService
 import PrimitivesComponents
+import InfoSheet
 
 public struct PerpetualScene: View {
     
@@ -56,14 +57,16 @@ public struct PerpetualScene: View {
                         ListItemView(
                             title: "Liquidation Price",
                             subtitle: text,
-                            subtitleStyle: TextStyle(font: .callout, color: position.liquidationPriceColor)
+                            subtitleStyle: TextStyle(font: .callout, color: position.liquidationPriceColor),
+                            infoAction: { model.onSelectLiquidationPriceInfo() }
                         )
                     }
                     
                     ListItemView(
                         title: "Funding",
                         subtitle: position.fundingText,
-                        subtitleStyle: TextStyle(font: .callout, color: position.fundingColor)
+                        subtitleStyle: TextStyle(font: .callout, color: position.fundingColor),
+                        infoAction: { model.onSelectFundingPaymentsInfo() }
                     )
                 } header: {
                     Text("Position")
@@ -78,12 +81,14 @@ public struct PerpetualScene: View {
                 
                 ListItemView(
                     title: "Open Interest",
-                    subtitle: model.perpetualViewModel.openInterestText
+                    subtitle: model.perpetualViewModel.openInterestText,
+                    infoAction: { model.onSelectOpenInterestInfo() }
                 )
                 
                 ListItemView(
                     title: "Funding Rate (Annual)",
-                    subtitle: model.perpetualViewModel.fundingRateText
+                    subtitle: model.perpetualViewModel.fundingRateText,
+                    infoAction: { model.onSelectFundingRateInfo() }
                 )
             } header: {
                 Text("Info")
@@ -91,5 +96,8 @@ public struct PerpetualScene: View {
         }
         .navigationTitle(model.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $model.isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
     }
 }

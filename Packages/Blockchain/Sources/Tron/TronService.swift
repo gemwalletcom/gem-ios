@@ -344,7 +344,7 @@ public extension TronService {
                     accountEnergy: accountEnergy,
                     parameters: try await parameters()
                 )
-            case .generic, .tokenApprove, .account:
+            case .generic, .tokenApprove, .account, .perpetual:
                 fatalError()
             }
         }()

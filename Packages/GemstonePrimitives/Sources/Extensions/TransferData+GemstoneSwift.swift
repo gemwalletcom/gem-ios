@@ -12,6 +12,7 @@ extension TransferDataType {
             .tokenApprove(let asset, _),
             .stake(let asset, _),
             .account(let asset, _),
+            .perpetual(let asset, _),
             .generic(let asset, _, _): asset
         case .transferNft(let asset): asset.chain.asset
         }

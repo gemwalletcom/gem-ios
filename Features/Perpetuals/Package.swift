@@ -23,6 +23,7 @@ let package = Package(
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "InfoSheet", path: "../InfoSheet"),
     ],
     targets: [
         .target(
@@ -37,6 +38,7 @@ let package = Package(
                 "Store",
                 "Formatters",
                 "Preferences",
+                "InfoSheet",
             ],
             path: "Sources"
         ),

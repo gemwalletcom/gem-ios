@@ -11,10 +11,6 @@ extension HypercoreAssetPositions {
             let provider = PerpetualProvider.hypercore
             let perpetualId = "\(provider.rawValue)_\(position.coin)"
             
-            guard let _ = mapHypercoreCoinToAssetId(position.coin) else {
-                return nil
-            }
-            
             let rawFunding = Float(position.cumFunding.allTime) ?? 0
             let positionSize = Double(position.szi) ?? 0
             
@@ -27,7 +23,7 @@ extension HypercoreAssetPositions {
                 size: Double(position.szi) ?? 0,
                 sizeValue: Double(position.positionValue) ?? 0,
                 leverage: UInt8(position.leverage.value),
-                entryPrice: Double(position.entryPx ?? ""),
+                entryPrice: Double(position.entryPx),
                 liquidationPrice: Double(position.liquidationPx ?? ""),
                 marginType: position.leverage.type == .cross ? .cross : .isolated,
                 direction: direction,

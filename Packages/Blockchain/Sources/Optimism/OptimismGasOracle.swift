@@ -69,7 +69,7 @@ extension OptimismGasOracle {
                 asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
             case .transferNft, .generic, .swap, .tokenApprove:
                 input.value
-            case .stake, .account: fatalError()
+            case .stake, .account, .perpetual: fatalError()
             }
         }()
         
@@ -136,7 +136,7 @@ extension OptimismGasOracle {
             }
         case .generic, .swap, .tokenApprove:
             break
-        case .transferNft, .stake, .account:
+        case .transferNft, .stake, .account, .perpetual:
             fatalError()
         }
         

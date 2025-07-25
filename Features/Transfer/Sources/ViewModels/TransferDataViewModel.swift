@@ -43,6 +43,11 @@ struct TransferDataViewModel {
             switch type {
             case .activate: Localized.Transfer.ActivateAsset.title
             }
+        case .perpetual(_, let type):
+            switch type {
+            case .open: "Open Position"
+            case .close: "Close Position"
+            }
         }
     }
 

@@ -212,7 +212,7 @@ extension SolanaService: ChainTransactionDataLoadable {
                 block: SignerInputBlock(hash: input.preload.blockHash),
                 fee: fee
             )
-        case .account, .tokenApprove: fatalError()
+        case .account, .tokenApprove, .perpetual: fatalError()
         }
     }
 }

@@ -9,7 +9,7 @@ extension HypercoreAssetMetadata {
         maxLeverage: Int
     ) -> Perpetual? {
         let provider = PerpetualProvider.hypercore
-        guard let assetId = mapHypercoreCoinToAssetId(symbol) else { return nil }
+        let assetId = mapHypercoreCoinToAssetId(symbol)
         
         let prevPrice = Double(prevDayPx) ?? 0
         let currentPrice = Double(midPx ?? markPx) ?? 0

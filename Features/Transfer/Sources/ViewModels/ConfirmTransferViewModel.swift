@@ -147,7 +147,7 @@ public final class ConfirmTransferViewModel {
         switch data.type {
         case .transfer, .deposit:
             return model.networkFullName
-        case .transferNft, .swap, .tokenApprove, .stake, .account, .generic:
+        case .transferNft, .swap, .tokenApprove, .stake, .account, .generic, .perpetual:
             return model.networkName
         }
     }

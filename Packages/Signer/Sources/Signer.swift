@@ -38,6 +38,8 @@ public struct Signer: Sendable {
             return try signer.signStake(input: input, privateKey: privateKey)
         case .account:
             return [try signer.signAccountAction(input: input, privateKey: privateKey)]
+        case .perpetual:
+            return [try signer.signPerpetual(input: input, privateKey: privateKey)]
         }
     }
 
@@ -73,7 +75,7 @@ public struct Signer: Sendable {
         case .algorand: AlgorandSigner()
         case .polkadot: PolkadotSigner()
         case .cardano: CardanoSigner()
-        case .hyperCore: fatalError()
+        case .hyperCore: HyperCoreSigner()
         }
     }
 }

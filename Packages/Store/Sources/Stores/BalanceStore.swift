@@ -154,4 +154,29 @@ public struct BalanceStore: Sendable {
                 .updateAll(db, BalanceRecord.Columns.isPinned.set(to: value))
         }
     }
+    
+    public func getMissingAssetIds(walletId: String, assetIds: [String]) throws -> [String] {
+        try db.read { db in
+            let existingAssetIds = try BalanceRecord
+                .filter(BalanceRecord.Columns.walletId == walletId)
+                .filter(assetIds.contains(BalanceRecord.Columns.assetId))
+                .select(BalanceRecord.Columns.assetId)
+                .fetchAll(db)
+                .map { $0[BalanceRecord.Columns.assetId] as String }
+                .asSet()
+            
+            return assetIds.filter { !existingAssetIds.contains($0) }
+        }
+    }
+    
+    public func addMissingBalances(walletId: String, assetIds: [AssetId], isEnabled: Bool = false) throws {
+        let missingAssetIds = try getMissingAssetIds(walletId: walletId, assetIds: assetIds.map { $0.identifier })
+        let missingBalances = try missingAssetIds.compactMap { assetId in
+            AddBalance(assetId: try AssetId(id: assetId), isEnabled: isEnabled)
+        }
+        
+        if !missingBalances.isEmpty {
+            try addBalance(missingBalances, for: walletId)
+        }
+    }
 }

@@ -22,24 +22,6 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
             .mapToPerpetualPositions(walletId: walletId)
     }
     
-    func getPerpetuals() async throws -> [Perpetual] {
-        let metadata = try await hyperCoreService.getMetadata()
-        
-        return zip(metadata.universe.universe, metadata.assetMetadata).compactMap { universeAsset, assetMetadata in
-            assetMetadata.mapToPerpetual(
-                symbol: universeAsset.name,
-                maxLeverage: universeAsset.maxLeverage
-            )
-        }
-    }
-    
-    func getPerpetual(symbol: String) async throws -> Perpetual {
-        let perpetuals = try await getPerpetuals()
-        guard let perpetual = perpetuals.first(where: { $0.name == symbol }) else {
-            throw PerpetualError.marketNotFound(symbol: symbol)
-        }
-        return perpetual
-    }
     
     func getCandlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
         let interval = hyperliquidInterval(for: period)
@@ -63,6 +45,28 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
         case .month: ("4h", 14_400_000)
         case .year: ("1d", 86_400_000)
         case .all: ("1w", 604_800_000)
+        }
+    }
+    
+    func getPerpetualsData() async throws -> [PerpetualData] {
+        let metadata = try await hyperCoreService.getMetadata()
+        
+        return zip(metadata.universe.universe, metadata.assetMetadata).compactMap { universeAsset, assetMetadata in
+            guard let perpetual = assetMetadata.mapToPerpetual(
+                      symbol: universeAsset.name,
+                      maxLeverage: universeAsset.maxLeverage
+                  ) else { return .none }
+            
+            let assetId = mapHypercoreCoinToAssetId(universeAsset.name)
+            let asset = Asset(
+                id: assetId,
+                name: universeAsset.name,
+                symbol: universeAsset.name,
+                decimals: Int32(universeAsset.szDecimals),
+                type: .erc20
+            )
+            
+            return PerpetualData(perpetual: perpetual, asset: asset)
         }
     }
 }

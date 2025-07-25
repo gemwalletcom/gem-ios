@@ -107,7 +107,7 @@ extension TonService {
                 gasLimit: 1,
                 options: [.tokenAccountCreation: jettonTokenAccountCreation]
             )
-        case .transferNft, .tokenApprove, .generic, .stake, .account:
+        case .transferNft, .tokenApprove, .generic, .stake, .account, .perpetual:
             fatalError()
         }
     }

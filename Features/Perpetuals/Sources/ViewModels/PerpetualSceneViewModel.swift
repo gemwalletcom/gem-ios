@@ -9,6 +9,7 @@ import PrimitivesComponents
 import Formatters
 import Components
 import Localization
+import InfoSheet
 
 @Observable
 @MainActor
@@ -34,6 +35,8 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
+    
+    public var isPresentingInfoSheet: InfoSheetType?
     
     public var perpetualViewModel: PerpetualViewModel {
         PerpetualViewModel(perpetual: perpetual)
@@ -83,5 +86,25 @@ public final class PerpetualSceneViewModel {
         } catch {
             state = .error(error)
         }
+    }
+}
+
+// MARK: - Actions
+
+extension PerpetualSceneViewModel {
+    public func onSelectFundingRateInfo() {
+        isPresentingInfoSheet = .fundingRate
+    }
+    
+    public func onSelectFundingPaymentsInfo() {
+        isPresentingInfoSheet = .fundingPayments
+    }
+    
+    public func onSelectLiquidationPriceInfo() {
+        isPresentingInfoSheet = .liquidationPrice
+    }
+    
+    public func onSelectOpenInterestInfo() {
+        isPresentingInfoSheet = .openInterest
     }
 }

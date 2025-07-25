@@ -86,27 +86,27 @@ extension CosmosService {
         case .cosmos: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(25_000)
-            case .transferNft, .account, .tokenApprove: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
         }
         case .osmosis: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(10_000)
             case .stake: BigInt(100_000)
-            case .transferNft, .account, .tokenApprove: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
         }
         case .celestia: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(10_000)
-            case .transferNft, .account, .tokenApprove: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
         }
         case .sei: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(100_000)
             case .stake: BigInt(200_000)
-            case .transferNft, .account, .tokenApprove: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
         }
         case .injective: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(100_000_000_000_000)
             case .stake: BigInt(1_000_000_000_000_000)
-            case .transferNft, .account, .tokenApprove: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
         }
         case .noble: BigInt(25_000)
         }
@@ -125,7 +125,7 @@ extension CosmosService {
                 case .thorchain, .cosmos: BigInt(200_000)
                 default: fatalError()
                 }
-            case .transferNFT, .tokenApproval, .stakeWithdraw, .assetActivation, .smartContractCall:
+            case .transferNFT, .tokenApproval, .stakeWithdraw, .assetActivation, .smartContractCall, .perpetualOpenPosition, .perpetualClosePosition:
                 fatalError()
             }
         }()

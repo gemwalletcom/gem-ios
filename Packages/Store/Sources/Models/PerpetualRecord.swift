@@ -58,6 +58,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
     // MARK: - Associations
     
     static let positions = hasMany(PerpetualPositionRecord.self).forKey("positions")
+    static let asset = belongsTo(AssetRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
 }
 
 extension PerpetualRecord: CreateTable {
@@ -67,6 +68,7 @@ extension PerpetualRecord: CreateTable {
             t.column(Columns.name.name, .text).notNull()
             t.column(Columns.provider.name, .text).notNull()
             t.column(Columns.assetId.name, .text).notNull()
+                .references(AssetRecord.databaseTableName, column: AssetRecord.Columns.id.name, onDelete: .cascade)
             t.column(Columns.price.name, .double).notNull()
             t.column(Columns.pricePercentChange24h.name, .double).notNull()
             t.column(Columns.openInterest.name, .double).notNull()
