@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "QRScanner",
     platforms: [.iOS(.v17),
-        .macOS(.v12)],
+        .macOS(.v15)],
     products: [
         .library(
             name: "QRScanner",

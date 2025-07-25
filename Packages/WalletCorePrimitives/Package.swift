@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "WalletCorePrimitives",
-    platforms: [.iOS(.v17), .macOS(.v12)],
+    platforms: [.iOS(.v17), .macOS(.v15)],
     products: [
         .library(
             name: "WalletCorePrimitives",

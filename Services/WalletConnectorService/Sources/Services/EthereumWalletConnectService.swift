@@ -5,7 +5,7 @@ import WalletConnectSign
 import Primitives
 import struct Gemstone.SignMessage
 
-final class EthereumWalletConnectorService: BlockchainServiciable {
+final class EthereumWalletConnectService: WalletConnectRequestHandleable {
     private let signer: WalletConnectorSignable
     
     init(signer: WalletConnectorSignable) {
@@ -26,7 +26,7 @@ final class EthereumWalletConnectorService: BlockchainServiciable {
 
 // MARK: - Private Methods
 
-private extension EthereumWalletConnectorService {
+private extension EthereumWalletConnectService {
     func handle(
         method: WalletConnectEthereumMethods,
         chain: Chain,
@@ -48,7 +48,7 @@ private extension EthereumWalletConnectorService {
 
 // MARK: - Private Methods
 
-extension EthereumWalletConnectorService {
+extension EthereumWalletConnectService {
     private func ethSign(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
         let params = try request.params.get([String].self)
         let data = Data(hex: params[1])

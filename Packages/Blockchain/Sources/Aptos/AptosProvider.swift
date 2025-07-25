@@ -6,6 +6,7 @@ import SwiftHTTPClient
 public enum AptosProvider: TargetType {
     case ledger
     case account(address: String)
+    case balance(address: String, asset: String)
     case transaction(id: String)
     case resource(address: String, resource: String)
     case resources(address: String)
@@ -22,6 +23,7 @@ public enum AptosProvider: TargetType {
         switch self {
         case .ledger,
             .account,
+            .balance,
             .transaction,
             .gasPrice,
             .resource,
@@ -38,6 +40,7 @@ public enum AptosProvider: TargetType {
         switch self {
         case .ledger: "/v1"
         case .account(let address): "/v1/accounts/\(address)"
+        case .balance(let address, let assetType): "/v1/accounts/\(address)/balance/\(assetType)"
         case .transaction(let id): "/v1/transactions/by_hash/\(id)"
         case .gasPrice: "/v1/estimate_gas_price"
         case .simulate: "/v1/transactions/simulate?estimate_max_gas_amount=true"
@@ -52,6 +55,7 @@ public enum AptosProvider: TargetType {
         switch self {
         case .ledger,
             .account,
+            .balance,
             .transaction,
             .gasPrice,
             .resource,

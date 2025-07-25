@@ -4,7 +4,7 @@ import Foundation
 import WalletConnectSign
 import Primitives
 
-protocol BlockchainServiciable: Sendable {
+protocol WalletConnectRequestHandleable: Sendable {
     func handle(request: WalletConnectSign.Request) async throws -> RPCResult
 }
 

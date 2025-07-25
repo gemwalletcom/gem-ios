@@ -5,12 +5,15 @@ let package = Package(
     name: "NodeService",
     platforms: [
         .iOS(.v17),
-        .macOS(.v12),
+        .macOS(.v15),
     ],
     products: [
         .library(
             name: "NodeService",
             targets: ["NodeService"]),
+        .library(
+            name: "NodeServiceTestKit",
+            targets: ["NodeServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -28,6 +31,14 @@ let package = Package(
                 "ChainService",
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "NodeServiceTestKit",
+            dependencies: [
+                "NodeService",
+                .product(name: "StoreTestKit", package: "Store"),
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "NodeServiceTests",

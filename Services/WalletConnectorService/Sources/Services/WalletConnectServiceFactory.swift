@@ -4,14 +4,14 @@ import Foundation
 import WalletConnectSign
 import Primitives
 
-final class BlockchainWalletConnectServiceFactory: Sendable {
+final class WalletConnectServiceFactory: Sendable {
     private let signer: WalletConnectorSignable
     
     init(signer: WalletConnectorSignable) {
         self.signer = signer
     }
     
-    func service(for method: String) throws -> any BlockchainServiciable {
+    func service(for method: String) throws -> any WalletConnectRequestHandleable {
         switch WalletConnectionMethods(rawValue: method)?.blockchainMethod {
         case .ethereum: EthereumWalletConnectorService(signer: signer)
         case .solana: SolanaWalletConnectorService(signer: signer)
