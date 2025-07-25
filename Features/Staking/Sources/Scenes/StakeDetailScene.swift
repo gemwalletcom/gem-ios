@@ -32,9 +32,17 @@ public struct StakeDetailScene: View {
                 }
             }
             Section(model.balancesTitle) {
-                ListItemView(title: model.title, subtitle: model.model.balanceText)
+                ListItemView(
+                    title: model.title,
+                    subtitle: model.model.balanceText,
+                    subtitleExtra: model.model.balanceFiatValueText
+                )
                 if let rewardsText = model.model.rewardsText {
-                    ListItemView(title: model.rewardsTitle, subtitle: rewardsText)
+                    ListItemView(
+                        title: model.rewardsTitle,
+                        subtitle: rewardsText,
+                        subtitleExtra: model.model.rewardsFiatValueText
+                    )
                 }
             }
             //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()

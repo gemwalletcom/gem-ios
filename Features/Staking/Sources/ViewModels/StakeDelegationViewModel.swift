@@ -16,6 +16,7 @@ public struct StakeDelegationViewModel: Sendable {
     private let formatter = ValueFormatter(style: .medium)
     private let validatorImageFormatter = AssetImageFormatter()
     private let exploreService: ExplorerService = .standard
+    private let priceFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
 
     private static let dateFormatterDefault: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
@@ -68,6 +69,14 @@ public struct StakeDelegationViewModel: Sendable {
         formatter.string(delegation.base.balanceValue, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
     
+    public var balanceFiatValueText: String? {
+        guard
+            let price = delegation.price,
+            let balance = try? formatter.double(from: delegation.base.balanceValue, decimals: asset.decimals.asInt)
+        else { return nil }
+        return priceFormatter.string(price.price * balance)
+    }
+    
     public var rewardsText: String? {
         switch delegation.base.state {
         case .active:
@@ -84,6 +93,15 @@ public struct StakeDelegationViewModel: Sendable {
             .awaitingWithdrawal:
             return .none
         }
+    }
+    
+    public var rewardsFiatValueText: String? {
+        guard
+            let price = delegation.price,
+            delegation.base.rewardsValue > 0,
+            let rewards = try? formatter.double(from: delegation.base.rewardsValue, decimals: asset.decimals.asInt)
+        else { return nil }
+        return priceFormatter.string(price.price * rewards)
     }
     
     public var balanceTextStyle: TextStyle {
@@ -103,6 +121,10 @@ public struct StakeDelegationViewModel: Sendable {
     
     public var validatorUrl: URL? {
         exploreService.validatorUrl(chain: asset.chain, address: delegation.validator.id)?.url
+    }
+    
+    public var subtitleExtraText: String? {
+        completionDateText ?? balanceFiatValueText
     }
     
     public var completionDateText: String? {

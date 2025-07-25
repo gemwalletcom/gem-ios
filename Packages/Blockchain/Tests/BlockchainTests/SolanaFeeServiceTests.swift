@@ -11,27 +11,27 @@ import PrimitivesTestKit
 struct SolanaFeeServiceTests {
     let service = SolanaFeeService()
     
-    let fee100_000 = Fee(fee: 15_000, gasPriceType: .eip1559Mock(), gasLimit: 100_000)
-    let fee420_000 = Fee(fee: 15_000, gasPriceType: .eip1559Mock(), gasLimit: 420_000)
+    let fee100_000 = Fee(fee: 15_000, gasPriceType: .mockEip1559(), gasLimit: 100_000)
+    let fee420_000 = Fee(fee: 15_000, gasPriceType: .mockEip1559(), gasLimit: 420_000)
     
     @Test
     func getBaseFeeForTransfer() throws {
-        #expect(try service.getBaseFee(type: .transfer(.mock()), gasPrice: .eip1559Mock()) == fee100_000)
+        #expect(try service.getBaseFee(type: .transfer(.mock()), gasPrice: .mockEip1559()) == fee100_000)
     }
     
     @Test
     func getBaseFeeForStake() throws {
-        #expect(try service.getBaseFee(type: .stake(.mock(), .stake(validator: .mock())), gasPrice: .eip1559Mock()) == fee100_000)
+        #expect(try service.getBaseFee(type: .stake(.mock(), .stake(validator: .mock())), gasPrice: .mockEip1559()) == fee100_000)
     }
     
     @Test
     func getBaseFeeForSwap() throws {
-        #expect(try service.getBaseFee(type: .swap(.mock(), .mock(), .mock()), gasPrice: .eip1559Mock()) == fee420_000)
+        #expect(try service.getBaseFee(type: .swap(.mock(), .mock(), .mock()), gasPrice: .mockEip1559()) == fee420_000)
     }
     
     @Test
     func getBaseFeeForGeneric() throws {
-        #expect(try service.getBaseFee(type: .generic(asset: .mock(), metadata: .mock(), extra: .mock()), gasPrice: .eip1559Mock()) == fee420_000)
+        #expect(try service.getBaseFee(type: .generic(asset: .mock(), metadata: .mock(), extra: .mock()), gasPrice: .mockEip1559()) == fee420_000)
     }
     
     @Test
