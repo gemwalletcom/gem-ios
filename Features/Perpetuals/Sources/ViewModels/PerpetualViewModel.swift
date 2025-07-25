@@ -9,6 +9,13 @@ import Components
 public struct PerpetualViewModel {
     public let perpetual: Perpetual
     private let currencyFormatter: CurrencyFormatter
+    private let fundingRateFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 5
+        return formatter
+    }()
     
     public init(perpetual: Perpetual, currencyStyle: CurrencyFormatterType = .abbreviated) {
         self.perpetual = perpetual
@@ -32,6 +39,9 @@ public struct PerpetualViewModel {
     }
     
     public var fundingRateText: String {
+        if let formattedNumber = fundingRateFormatter.string(from: NSNumber(value: perpetual.funding)) {
+            return "\(formattedNumber)%"
+        }
         return CurrencyFormatter(type: .percent).string(perpetual.funding)
     }
     

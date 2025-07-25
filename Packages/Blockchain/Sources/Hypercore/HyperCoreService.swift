@@ -48,7 +48,7 @@ extension HyperCoreService: ChainServiceable {}
 
 // MARK: - ChainAddressStatusFetchable
 
-extension HyperCoreService: ChainAddressStatusFetchable {
+extension HyperCoreService {
     public func getAddressStatus(address: String) async throws -> [AddressStatus] {
         return []
     }
@@ -56,9 +56,9 @@ extension HyperCoreService: ChainAddressStatusFetchable {
 
 // MARK: - ChainBalanceable
 
-extension HyperCoreService: ChainBalanceable {
+extension HyperCoreService {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        throw AnyError("Not implemented")
+        AssetBalance(assetId: AssetId(chain: chain), balance: Balance(available: .zero))
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
@@ -72,7 +72,7 @@ extension HyperCoreService: ChainBalanceable {
 
 // MARK: - ChainBroadcastable
 
-extension HyperCoreService: ChainBroadcastable {
+extension HyperCoreService {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         throw AnyError("Not implemented")
     }
@@ -80,15 +80,17 @@ extension HyperCoreService: ChainBroadcastable {
 
 // MARK: - ChainFeeRateFetchable
 
-extension HyperCoreService: ChainFeeRateFetchable {
+extension HyperCoreService {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        return []
+        return [
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: 0))
+        ]
     }
 }
 
 // MARK: - ChainIDFetchable
 
-extension HyperCoreService: ChainIDFetchable {
+extension HyperCoreService {
     public func getChainID() async throws -> String {
         return "42161" // Arbitrum chain ID
     }
@@ -96,7 +98,7 @@ extension HyperCoreService: ChainIDFetchable {
 
 // MARK: - ChainLatestBlockFetchable
 
-extension HyperCoreService: ChainLatestBlockFetchable {
+extension HyperCoreService {
     public func getLatestBlock() async throws -> BigInt {
         return BigInt(0)
     }
@@ -104,7 +106,7 @@ extension HyperCoreService: ChainLatestBlockFetchable {
 
 // MARK: - ChainStakable
 
-extension HyperCoreService: ChainStakable {
+extension HyperCoreService {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
         return []
     }
@@ -116,7 +118,7 @@ extension HyperCoreService: ChainStakable {
 
 // MARK: - ChainSyncable
 
-extension HyperCoreService: ChainSyncable {
+extension HyperCoreService {
     public func getInSync() async throws -> Bool {
         return true
     }
@@ -124,7 +126,7 @@ extension HyperCoreService: ChainSyncable {
 
 // MARK: - ChainTokenable
 
-extension HyperCoreService: ChainTokenable {
+extension HyperCoreService {
     public func getTokenData(tokenId: String) async throws -> Asset {
         throw AnyError("Not implemented")
     }
@@ -136,7 +138,7 @@ extension HyperCoreService: ChainTokenable {
 
 // MARK: - ChainTransactionDataLoadable
 
-extension HyperCoreService: ChainTransactionDataLoadable {
+extension HyperCoreService {
     public func load(input: TransactionInput) async throws -> TransactionData {
         throw AnyError("Not implemented")
     }
@@ -144,7 +146,7 @@ extension HyperCoreService: ChainTransactionDataLoadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension HyperCoreService: ChainTransactionPreloadable {
+extension HyperCoreService {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
         throw AnyError("Not implemented")
     }
@@ -152,7 +154,7 @@ extension HyperCoreService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionStateFetchable
 
-extension HyperCoreService: ChainTransactionStateFetchable {
+extension HyperCoreService {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         throw AnyError("Not implemented")
     }

@@ -14,9 +14,9 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     
     public init(
         position: PerpetualPosition,
-        perpetualViewModel: PerpetualViewModel
+        perpetualData: PerpetualData
     ) {
-        self.perpetualViewModel = perpetualViewModel
+        self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
         self.positionViewModel = PerpetualPositionViewModel(position: position, currencyStyle: .currency)
     }
     

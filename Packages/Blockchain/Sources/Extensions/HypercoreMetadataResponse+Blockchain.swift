@@ -14,21 +14,12 @@ extension HypercoreAssetMetadata {
         let prevPrice = Double(prevDayPx) ?? 0
         let currentPrice = Double(midPx ?? markPx) ?? 0
         let priceChange24h = prevPrice > 0 ? ((currentPrice - prevPrice) / prevPrice) * 100 : 0
+        let funding = Double(funding) ?? 0
         
-        // Convert hourly funding rate to annual percentage
-        // hourlyFunding is a decimal (e.g., 0.0000794237)
-        // Annual percentage = hourly * 24 * 365 * 100
-        let hourlyFunding = Double(funding) ?? 0
-        let annualFunding = hourlyFunding * 24 * 365 * 100
-        
-        // Convert open interest from coin amount to USD value
         let openInterestInCoins = Double(openInterest) ?? 0
         let openInterestInUSD = openInterestInCoins * currentPrice
         
         let volume24h = Double(dayNtlVlm) ?? 0
-        if volume24h < 200_000_000 {
-            return .none
-        }
          
         return Perpetual(
             id: "\(provider.rawValue)_\(symbol)",
@@ -39,7 +30,7 @@ extension HypercoreAssetMetadata {
             pricePercentChange24h: priceChange24h,
             openInterest: openInterestInUSD,
             volume24h: volume24h,
-            funding: annualFunding,
+            funding: funding,
             leverage: [UInt8(maxLeverage)]
         )
     }

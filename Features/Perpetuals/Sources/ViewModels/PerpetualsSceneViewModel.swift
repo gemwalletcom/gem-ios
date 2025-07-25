@@ -17,34 +17,37 @@ public final class PerpetualsSceneViewModel {
     
     public let wallet: Wallet
     public let positions: [PerpetualPositionData]
-    public let perpetuals: [Perpetual]
+    public let perpetuals: [PerpetualData]
     
     public var isLoading: Bool = false
     public let preferences: Preferences = .standard
     
     private let onSelectAssetType: ((SelectAssetType) -> Void)?
+    private let onTransferComplete: ((TransferData) -> Void)?
     
     public init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
         positions: [PerpetualPositionData],
-        perpetuals: [Perpetual],
-        onSelectAssetType: ((SelectAssetType) -> Void)? = nil
+        perpetuals: [PerpetualData],
+        onSelectAssetType: ((SelectAssetType) -> Void)? = nil,
+        onTransferComplete: ((TransferData) -> Void)? = nil
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
         self.positions = positions
         self.perpetuals = perpetuals
         self.onSelectAssetType = onSelectAssetType
+        self.onTransferComplete = onTransferComplete
     }
     
     public var positionViewModels: [PerpetualPositionItemViewModel] {
         positions.flatMap { positionData in
-            let perpetualViewModel = PerpetualViewModel(perpetual: positionData.perpetual, currencyStyle: .currency)
+            let perpetualData = PerpetualData(perpetual: positionData.perpetual, asset: positionData.asset)
             return positionData.positions.map { position in
                 PerpetualPositionItemViewModel(
                     position: position,
-                    perpetualViewModel: perpetualViewModel
+                    perpetualData: perpetualData
                 )
             }
         }
@@ -63,8 +66,8 @@ public final class PerpetualsSceneViewModel {
 
 extension PerpetualsSceneViewModel {
     public func fetch() async {
-        await updatePositions()
         await updateMarkets()
+        await updatePositions()
     }
     
     private func updatePositions() async {

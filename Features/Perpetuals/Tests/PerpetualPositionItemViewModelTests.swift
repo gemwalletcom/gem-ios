@@ -10,11 +10,16 @@ struct PerpetualPositionItemViewModelTests {
     
     @Test
     func name() {
-        #expect(PerpetualPositionItemViewModel(position: .mock(), perpetualViewModel: PerpetualViewModel(perpetual: .mock(name: "BTC-USD"))).name == "BTC-USD")
+        #expect(PerpetualPositionItemViewModel(position: .mock(), perpetualData: .mock(perpetual: .mock(name: "BTC-USD"))).name == "BTC-USD")
     }
     
     @Test
     func perpetualProperty() {
-        #expect(PerpetualPositionItemViewModel(position: .mock(), perpetualViewModel: PerpetualViewModel(perpetual: .mock(id: "BTC-USD"))).perpetual.id == "BTC-USD")
+        #expect(PerpetualPositionItemViewModel(position: .mock(), perpetualData: .mock(perpetual: .mock(id: "BTC-USD"))).perpetual.id == "BTC-USD")
+    }
+    
+    @Test
+    func assetProperty() {
+        #expect(PerpetualPositionItemViewModel(position: .mock(), perpetualData: .mock(asset: .mock(id: .hyperCore))).asset.id == .hyperCore)
     }
 }

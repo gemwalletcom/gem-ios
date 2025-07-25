@@ -6,7 +6,7 @@ let package = Package(
     name: "PerpetualService",
     platforms: [
         .iOS(.v17),
-        .macOS(.v12)
+        .macOS(.v15)
     ],
     products: [
         .library(

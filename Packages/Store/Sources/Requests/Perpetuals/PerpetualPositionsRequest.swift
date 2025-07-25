@@ -23,6 +23,7 @@ public struct PerpetualPositionsRequest: ValueObservationQueryable {
     
     public func fetch(_ db: Database) throws -> [PerpetualPositionData] {
         var query = PerpetualRecord
+            .including(required: PerpetualRecord.asset)
             .including(all: PerpetualRecord.positions
                 .filter(PerpetualPositionRecord.Columns.walletId == walletId))
         

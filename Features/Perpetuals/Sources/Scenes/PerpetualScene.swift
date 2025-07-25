@@ -37,10 +37,7 @@ public struct PerpetualScene: View {
             
             ForEach(model.positionViewModels) { position in
                 Section {
-                    ListAssetItemView(model: PerpetualPositionItemViewModel(
-                        position: position.position,
-                        perpetualViewModel: model.perpetualViewModel
-                    ))
+                    ListAssetItemView(model: position)
                         .listRowInsets(.assetListRowInsets)
                     
                     ListItemView(
@@ -74,6 +71,24 @@ public struct PerpetualScene: View {
             }
             
             Section {
+                if model.hasOpenPosition {
+                    Button("Close Position", action: model.onClosePosition)
+                        .frame(maxWidth: .infinity)
+                        .buttonStyle(.red())
+                } else {
+                    HStack(spacing: Spacing.medium) {
+                        Button("Long", action: model.onOpenLongPosition)
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(.green())
+                        
+                        Button("Short", action: model.onOpenShortPosition)
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(.red())
+                    }
+                }
+            }
+            
+            Section {
                 ListItemView(
                     title: "24h Volume",
                     subtitle: model.perpetualViewModel.volumeText
@@ -86,13 +101,15 @@ public struct PerpetualScene: View {
                 )
                 
                 ListItemView(
-                    title: "Funding Rate (Annual)",
+                    title: "Funding Rate",
                     subtitle: model.perpetualViewModel.fundingRateText,
                     infoAction: { model.onSelectFundingRateInfo() }
                 )
             } header: {
                 Text("Info")
             }
+            
+            
         }
         .navigationTitle(model.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)

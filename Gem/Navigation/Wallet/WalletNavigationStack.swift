@@ -102,14 +102,16 @@ struct WalletNavigationStack: View {
                     PerpetualsNavigationView(
                         wallet: model.wallet,
                         perpetualService: AppResolver.main.services.perpetualService,
-                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType
+                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType,
+                        isPresentingTransferData: $model.isPresentingTransferData
                     )
                 }
                 .navigationDestination(for: Scenes.Perpetual.self) { scene in
                     PerpetualNavigationView(
-                        perpetual: scene.perpetual,
+                        perpetualData: scene.perpetualData,
                         wallet: model.wallet,
-                        perpetualService: AppResolver.main.services.perpetualService
+                        perpetualService: AppResolver.main.services.perpetualService,
+                        isPresentingTransferData: $model.isPresentingTransferData
                     )
                 }
                 .sheet(item: $model.isPresentingSelectAssetType) { value in
@@ -129,6 +131,13 @@ struct WalletNavigationStack: View {
                 }
                 .sheet(item: $model.isPresentingInfoSheet) {
                     InfoSheetScene(model: InfoSheetViewModel(type: $0))
+                }
+                .sheet(item: $model.isPresentingTransferData) { data in
+                    ConfirmTransferNavigationStack(
+                        wallet: model.wallet,
+                        transferData: data,
+                        onComplete: model.onTransferComplete
+                    )
                 }
                 .safariSheet(url: $model.isPresentingUrl)
         }

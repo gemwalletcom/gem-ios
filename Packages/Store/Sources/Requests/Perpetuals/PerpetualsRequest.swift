@@ -8,14 +8,29 @@ import Primitives
 
 public struct PerpetualsRequest: ValueObservationQueryable {
     
-    public static var defaultValue: [Perpetual] { [] }
+    public static var defaultValue: [PerpetualData] { [] }
     
     public init() {}
     
-    public func fetch(_ db: Database) throws -> [Perpetual] {
+    public func fetch(_ db: Database) throws -> [PerpetualData] {
+        struct PerpetualInfo: FetchableRecord, Decodable {
+            var perpetual: PerpetualRecord
+            var asset: AssetRecord
+            
+            func mapToPerpetualData() -> PerpetualData {
+                PerpetualData(
+                    perpetual: perpetual.mapToPerpetual(),
+                    asset: asset.mapToAsset()
+                )
+            }
+        }
+        
         return try PerpetualRecord
+            .including(required: PerpetualRecord.asset)
             .order(PerpetualRecord.Columns.volume24h.desc)
+            .limit(10)
+            .asRequest(of: PerpetualInfo.self)
             .fetchAll(db)
-            .map { $0.mapToPerpetual() }
+            .map { $0.mapToPerpetualData() }
     }
 }

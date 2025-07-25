@@ -35,7 +35,7 @@ public struct PerpetualService: PerpetualServiceable {
     
     public func updatePositions(wallet: Wallet) async throws {
         guard let account = wallet.accounts.first(where: { 
-            $0.chain == .arbitrum || $0.chain == .hyperCore
+            $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid
         }) else {
             return
         }
@@ -47,7 +47,7 @@ public struct PerpetualService: PerpetualServiceable {
         
         // Ensure balance records exist for all perpetual assets
         let perpetualsData = try await provider.getPerpetualsData()
-        let assetIds = perpetualsData.map { $0.asset.id }
+        let assetIds = perpetualsData.map { $0.asset.id } + [Chain.hyperCore.asset.id]
         try balanceStore.addMissingBalances(walletId: wallet.id, assetIds: assetIds, isEnabled: false)
         
         try await syncProviderPositions(
@@ -78,7 +78,7 @@ public struct PerpetualService: PerpetualServiceable {
     public func updateMarkets() async throws {
         let perpetualsData = try await provider.getPerpetualsData()
         let perpetuals = perpetualsData.map { $0.perpetual }
-        let assets = perpetualsData.map { createPerpetualAssetBasic(from: $0.asset) }
+        let assets = perpetualsData.map { createPerpetualAssetBasic(from: $0.asset) } + [createPerpetualAssetBasic(from: Chain.hyperCore.asset)]
         
         try assetStore.add(assets: assets)
         try store.upsertPerpetuals(perpetuals)
@@ -88,11 +88,9 @@ public struct PerpetualService: PerpetualServiceable {
         let perpetualsData = try await provider.getPerpetualsData()
         
         guard let data = perpetualsData.first(where: { $0.perpetual.name == symbol }) else {
-            throw PerpetualError.marketNotFound(symbol: symbol)
+            throw AnyError("Market not found: \(symbol)")
         }
         
-        let asset = createPerpetualAssetBasic(from: data.asset)
-        try assetStore.add(assets: [asset])
         try store.upsertPerpetuals([data.perpetual])
     }
     

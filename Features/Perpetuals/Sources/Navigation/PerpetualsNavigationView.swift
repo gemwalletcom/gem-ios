@@ -11,20 +11,23 @@ public struct PerpetualsNavigationView: View {
     @State private var perpetualsRequest: PerpetualsRequest
 
     @State private var positions: [PerpetualPositionData] = []
-    @State private var perpetuals: [Perpetual] = []
+    @State private var perpetuals: [PerpetualData] = []
     
     let wallet: Wallet
     let perpetualService: PerpetualServiceable
     @Binding var isPresentingSelectAssetType: SelectAssetType?
+    @Binding var isPresentingTransferData: TransferData?
     
     public init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
-        isPresentingSelectAssetType: Binding<SelectAssetType?>
+        isPresentingSelectAssetType: Binding<SelectAssetType?>,
+        isPresentingTransferData: Binding<TransferData?>
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
         _isPresentingSelectAssetType = isPresentingSelectAssetType
+        _isPresentingTransferData = isPresentingTransferData
         _positionsRequest = State(initialValue: PerpetualPositionsRequest(walletId: wallet.id))
         _perpetualsRequest = State(initialValue: PerpetualsRequest())
     }
@@ -36,7 +39,8 @@ public struct PerpetualsNavigationView: View {
                 perpetualService: perpetualService,
                 positions: positions,
                 perpetuals: perpetuals,
-                onSelectAssetType: { isPresentingSelectAssetType = $0 }
+                onSelectAssetType: { isPresentingSelectAssetType = $0 },
+                onTransferComplete: { isPresentingTransferData = $0 }
             )
         )
         .observeQuery(request: $positionsRequest, value: $positions)

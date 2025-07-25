@@ -33,7 +33,7 @@ public struct PerpetualsScene: View {
             if !model.positionViewModels.isEmpty {
                 Section {
                     ForEach(model.positionViewModels) { viewModel in
-                        NavigationLink(value: Scenes.Perpetual(perpetual: viewModel.perpetual)) {
+                        NavigationLink(value: Scenes.Perpetual(perpetualData: PerpetualData(perpetual: viewModel.perpetual, asset: viewModel.asset))) {
                             ListAssetItemView(model: viewModel)
                         }
                         .listRowInsets(.assetListRowInsets)
@@ -48,10 +48,10 @@ public struct PerpetualsScene: View {
                     Text("No markets")
                         .foregroundColor(.secondary)
                 } else {
-                    ForEach(model.perpetuals, id: \.id) { perpetual in
-                        NavigationLink(value: Scenes.Perpetual(perpetual: perpetual)) {
+                    ForEach(model.perpetuals) { perpetualData in
+                        NavigationLink(value: Scenes.Perpetual(perpetualData: perpetualData)) {
                             ListAssetItemView(
-                                model: PerpetualItemViewModel(perpetual: perpetual)
+                                model: PerpetualItemViewModel(perpetual: perpetualData.perpetual)
                             )
                         }
                     }

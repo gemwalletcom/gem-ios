@@ -41,6 +41,7 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingSelectAssetType: SelectAssetType?
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingUrl: URL? = nil
+    public var isPresentingTransferData: TransferData?
     
     public var isLoadingAssets: Bool = false
 
@@ -193,6 +194,10 @@ extension WalletSceneViewModel {
     func shouldStartLoadingAssets() {
         let preferences = WalletPreferences(walletId: wallet.id)
         isLoadingAssets = !preferences.completeDiscoveryAssets && preferences.assetsTimestamp == .zero
+    }
+    
+    public func onTransferComplete() {
+        isPresentingTransferData = nil
     }
 }
 
