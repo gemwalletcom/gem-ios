@@ -40,6 +40,9 @@ public struct PerpetualService: PerpetualServiceable {
             return
         }
         
+        // First, ensure markets are up to date
+        try await updateMarkets()
+        
         let positions = try await provider.getPositions(address: account.address, walletId: wallet.id)
         
         // Ensure balance records exist for all perpetual assets

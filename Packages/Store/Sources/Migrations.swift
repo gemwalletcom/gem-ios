@@ -281,7 +281,7 @@ public struct Migrations {
         
         migrator
             .registerMigration(
-                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 3"
+                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 5"
             ) { db in
             try? db.drop(table: PerpetualRecord.databaseTableName)
             try? db.drop(table: PerpetualPositionRecord.databaseTableName)
@@ -289,12 +289,6 @@ public struct Migrations {
             try? PerpetualPositionRecord.create(db: db)
         }
         
-        migrator.registerMigration("Add entryPrice and direction to \(PerpetualPositionRecord.databaseTableName)") { db in
-            try? db.alter(table: PerpetualPositionRecord.databaseTableName) {
-                $0.add(column: PerpetualPositionRecord.Columns.entryPrice.name, .double)
-                $0.add(column: PerpetualPositionRecord.Columns.direction.name, .text).defaults(to: "long")
-            }
-        }
         
         try migrator.migrate(dbQueue)
     }

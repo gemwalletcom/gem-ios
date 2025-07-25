@@ -25,6 +25,11 @@ extension HypercoreAssetMetadata {
         let openInterestInCoins = Double(openInterest) ?? 0
         let openInterestInUSD = openInterestInCoins * currentPrice
         
+        let volume24h = Double(dayNtlVlm) ?? 0
+        if volume24h < 200_000_000 {
+            return .none
+        }
+         
         return Perpetual(
             id: "\(provider.rawValue)_\(symbol)",
             name: symbol,
@@ -33,7 +38,7 @@ extension HypercoreAssetMetadata {
             price: currentPrice,
             pricePercentChange24h: priceChange24h,
             openInterest: openInterestInUSD,
-            volume24h: Double(dayNtlVlm) ?? 0,
+            volume24h: volume24h,
             funding: annualFunding,
             leverage: [UInt8(maxLeverage)]
         )
