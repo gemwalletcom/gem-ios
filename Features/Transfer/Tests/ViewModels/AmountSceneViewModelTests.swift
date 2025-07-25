@@ -41,11 +41,11 @@ struct AmountSceneViewModelTests {
         let model = AmountSceneViewModel.mock(type: .deposit(recipient: .mock()), asset: usdcAsset)
         
         model.amountInputModel.update(text: "4.99")
-        model.amountInputModel.validate()
+        let _ = model.amountInputModel.validate()
         #expect(!model.amountInputModel.isValid)
         
         model.amountInputModel.update(text: "5")
-        model.amountInputModel.validate()
+        let _ = model.amountInputModel.validate()
         #expect(model.amountInputModel.isValid)
     }
 }

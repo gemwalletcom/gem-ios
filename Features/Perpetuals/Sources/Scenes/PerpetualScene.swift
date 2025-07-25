@@ -35,38 +35,40 @@ public struct PerpetualScene: View {
             }
             .cleanListRow()
             
-            ForEach(model.positionViewModels) { position in
+            if !model.positionsViewModels.isEmpty {
                 Section {
-                    ListAssetItemView(model: position)
-                        .listRowInsets(.assetListRowInsets)
-                    
-                    ListItemView(
-                        title: "Size",
-                        subtitle: position.sizeValueText
-                    )
-                    
-                    ListItemView(
-                        title: "Margin",
-                        subtitle: position.marginText
-                    )
-                    
-                    if let text = position.liquidationPriceText {
+                    ForEach(model.positionsViewModels) { position in
+                        ListAssetItemView(model: position)
+                            .listRowInsets(.assetListRowInsets)
+                        
                         ListItemView(
-                            title: "Liquidation Price",
-                            subtitle: text,
-                            subtitleStyle: TextStyle(font: .callout, color: position.liquidationPriceColor),
-                            infoAction: { model.onSelectLiquidationPriceInfo() }
+                            title: "Size",
+                            subtitle: position.positionViewModel.sizeValueText
+                        )
+                        
+                        ListItemView(
+                            title: "Margin",
+                            subtitle: position.positionViewModel.marginText
+                        )
+                        
+                        if let text = position.positionViewModel.liquidationPriceText {
+                            ListItemView(
+                                title: "Liquidation Price",
+                                subtitle: text,
+                                subtitleStyle: TextStyle(font: .callout, color: position.positionViewModel.liquidationPriceColor),
+                                infoAction: { model.onSelectLiquidationPriceInfo() }
+                            )
+                        }
+                        
+                        ListItemView(
+                            title: "Funding",
+                            subtitle: position.positionViewModel.fundingText,
+                            subtitleStyle: TextStyle(font: .callout, color: position.positionViewModel.fundingColor),
+                            infoAction: { model.onSelectFundingPaymentsInfo() }
                         )
                     }
-                    
-                    ListItemView(
-                        title: "Funding",
-                        subtitle: position.fundingText,
-                        subtitleStyle: TextStyle(font: .callout, color: position.fundingColor),
-                        infoAction: { model.onSelectFundingPaymentsInfo() }
-                    )
                 } header: {
-                    Text("Position")
+                    Text("Positions")
                 }
             }
             
@@ -88,7 +90,7 @@ public struct PerpetualScene: View {
                 }
             }
             
-            Section {
+            Section(header: Text("Info")) {
                 ListItemView(
                     title: "24h Volume",
                     subtitle: model.perpetualViewModel.volumeText
@@ -105,8 +107,6 @@ public struct PerpetualScene: View {
                     subtitle: model.perpetualViewModel.fundingRateText,
                     infoAction: { model.onSelectFundingRateInfo() }
                 )
-            } header: {
-                Text("Info")
             }
             
             

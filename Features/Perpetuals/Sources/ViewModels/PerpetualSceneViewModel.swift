@@ -43,7 +43,7 @@ public final class PerpetualSceneViewModel {
         PerpetualViewModel(perpetual: perpetualData.perpetual)
     }
     
-    public var positionViewModels: [PerpetualPositionItemViewModel] {
+    public var positionsViewModels: [PerpetualPositionItemViewModel] {
         positions.flatMap { positionData in
             let perpetualData = PerpetualData(perpetual: positionData.perpetual, asset: positionData.asset)
             return positionData.positions.map { position in
@@ -73,7 +73,7 @@ public final class PerpetualSceneViewModel {
     }
     
     public var hasOpenPosition: Bool {
-        !positionViewModels.isEmpty
+        !positionsViewModels.isEmpty
     }
     
     

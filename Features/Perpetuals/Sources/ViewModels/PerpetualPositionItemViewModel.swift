@@ -10,7 +10,8 @@ import Formatters
 
 public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     private let perpetualViewModel: PerpetualViewModel
-    private let positionViewModel: PerpetualPositionViewModel
+    public let positionViewModel: PerpetualPositionViewModel
+    public let asset: Asset
     
     public init(
         position: PerpetualPosition,
@@ -18,6 +19,7 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     ) {
         self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
         self.positionViewModel = PerpetualPositionViewModel(position: position, currencyStyle: .currency)
+        self.asset = perpetualData.asset
     }
     
     public var perpetual: Perpetual { perpetualViewModel.perpetual }
@@ -56,3 +58,4 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
 extension PerpetualPositionItemViewModel: Identifiable {
     public var id: String { positionViewModel.id }
 }
+

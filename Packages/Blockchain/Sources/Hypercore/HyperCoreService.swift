@@ -140,7 +140,9 @@ extension HyperCoreService {
 
 extension HyperCoreService {
     public func load(input: TransactionInput) async throws -> TransactionData {
-        throw AnyError("Not implemented")
+        TransactionData(
+            fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+        )
     }
 }
 
@@ -148,7 +150,7 @@ extension HyperCoreService {
 
 extension HyperCoreService {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        throw AnyError("Not implemented")
+        TransactionPreload()
     }
 }
 
@@ -156,6 +158,6 @@ extension HyperCoreService {
 
 extension HyperCoreService {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        throw AnyError("Not implemented")
+        TransactionChanges(state: .confirmed)
     }
 }
