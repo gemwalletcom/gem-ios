@@ -36,25 +36,27 @@ public struct TransactionService: Sendable {
     }
 
     public func setup() {
-        if let pendingTransactions = try? transactionStore.getTransactions(state: .pending) {
-            runUpdate(for: pendingTransactions)
+        if let walletsTransactions = try? transactionStore.getTransactionWallets(state: .pending) {
+            runUpdate(for: walletsTransactions)
         }
     }
 
-    public func addTransactions(walletId: String, transactions: [Transaction]) throws {
-        try transactionStore.addTransactions(walletId: walletId, transactions: transactions)
-        let pendingTransactions = transactions.filter({ $0.state.isPending })
-        runUpdate(for: pendingTransactions)
+    public func addTransactions(wallet: Wallet, transactions: [Transaction]) throws {
+        try transactionStore.addTransactions(
+            walletId: wallet.walletId.id,
+            transactions: transactions
+        )
+        runUpdate(for: transactions.map({ TransactionWallet(transaction: $0, wallet: wallet) }))
     }
 }
 
 // MARK: - Private
 
 extension TransactionService {
-    private func runUpdate(for pendingTransactions: [Transaction]) {
-        let jobs = pendingTransactions.map {
+    private func runUpdate(for transactionWallets: [TransactionWallet]) {
+        let jobs = transactionWallets.map {
             TransactionStateUpdateJob(
-                transaction: $0,
+                transactionWallet: $0,
                 stateService: stateService,
                 postProcessingService: postProcessingService
             )

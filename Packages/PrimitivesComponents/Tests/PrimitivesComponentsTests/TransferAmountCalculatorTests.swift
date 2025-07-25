@@ -234,11 +234,11 @@ struct TransferAmountCalculatorTests {
             ))
         }
     }
-    
+
     @Test
     func testMinimumAccountBalance() {
         let asset1 = Asset(.solana)
-        
+
         #expect(throws: TransferAmountCalculatorError.minimumAccountBalanceTooLow(asset1, required: BigInt(890880))) {
             try service.calculate(input: TransferAmountInput(
                 asset: asset1,
@@ -251,9 +251,9 @@ struct TransferAmountCalculatorTests {
                 canChangeValue: true
             ))
         }
-        
+
         let asset2 = Asset(.bitcoin)
-        
+
         #expect(throws: Never.self) {
             try service.calculate(input: TransferAmountInput(
                 asset: asset2,
@@ -267,12 +267,12 @@ struct TransferAmountCalculatorTests {
             ))
         }
     }
-    
+
     @Test
     func testMinimumAccountBalanceForToken() {
         let assetCoin = Asset.mockEthereum()
         let assetToken = Asset.mockEthereumUSDT()
-        
+
         #expect(throws: Never.self) {
             try service.calculate(input: TransferAmountInput(
                 asset: assetToken,
@@ -284,6 +284,23 @@ struct TransferAmountCalculatorTests {
                 fee: .zero,
                 canChangeValue: true
             ))
+        }
+    }
+
+    @Test
+    func testValidateNetworkFee() {
+        #expect(throws: TransferAmountCalculatorError.insufficientNetworkFee(.mockEthereum(), required: nil)) {
+            try service.validateNetworkFee(
+                .zero,
+                feeAssetId: .mockEthereum()
+            )
+        }
+
+        #expect(throws: Never.self) {
+            try service.validateNetworkFee(
+                BigInt(123_456),
+                feeAssetId: .mockEthereum()
+            )
         }
     }
 }

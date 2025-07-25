@@ -27,14 +27,14 @@ struct SmallCoinView: View {
             
             Text(model.name)
                 .font(.system(size: 16, weight: .regular))
-                .foregroundColor(.white)
+                .foregroundColor(Colors.black)
             
             Spacer()
                 .frame(height: Spacing.tiny)
             
             Text(model.priceText)
                 .font(.system(size: 32, weight: .bold))
-                .foregroundColor(.white)
+                .foregroundColor(Colors.black)
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
             
@@ -44,7 +44,7 @@ struct SmallCoinView: View {
             HStack {
                 Text(model.percentageText)
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Colors.black)
                     .padding(.vertical, Spacing.tiny + Spacing.extraSmall)
                     .padding(.horizontal, Spacing.tiny + Spacing.extraSmall)
                     .background(model.percentageColor)

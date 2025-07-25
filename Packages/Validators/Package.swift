@@ -6,7 +6,7 @@ let package = Package(
     name: "Validators",
     platforms: [
         .iOS(.v17),
-        .macOS(.v12)
+        .macOS(.v15)
     ],
     products: [
         .library(
@@ -18,7 +18,8 @@ let package = Package(
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Localization", path: "../Localization"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
-        .package(name: "Formatters", path: "../Formatters")
+        .package(name: "Formatters", path: "../Formatters"),
+        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives")
     ],
     targets: [
         .target(
@@ -27,7 +28,8 @@ let package = Package(
                 "Primitives",
                 "Localization",
                 "WalletCorePrimitives",
-                "Formatters"
+                "Formatters",
+                "GemstonePrimitives"
             ],
             path: "Sources"
         ),
