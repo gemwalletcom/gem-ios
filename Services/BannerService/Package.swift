@@ -6,7 +6,7 @@ let package = Package(
     name: "BannerService",
     platforms: [
         .iOS(.v17),
-        .macOS(.v12)
+        .macOS(.v15)
     ],
     products: [
         .library(

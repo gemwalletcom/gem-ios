@@ -2,8 +2,14 @@
 
 import Foundation
 
-struct PaymentScanResult {
-    let address: String
-    let amount: String?
-    let memo: String?
+public struct PaymentScanResult {
+    public let address: String
+    public let amount: String?
+    public let memo: String?
+    
+    public init(address: String, amount: String?, memo: String?) {
+        self.address = address
+        self.amount = amount
+        self.memo = memo
+    }
 }

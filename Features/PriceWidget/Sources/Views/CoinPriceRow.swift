@@ -18,11 +18,11 @@ struct CoinPriceRow: View {
             VStack(alignment: .leading, spacing: Spacing.extraSmall) {
                 Text(model.name)
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.white)
+                    .foregroundColor(Colors.black)
                 
                 Text(model.symbol)
                     .font(.caption)
-                    .foregroundColor(Colors.grayLight)
+                    .foregroundColor(Colors.secondaryText)
             }
             
             Spacer()
@@ -30,7 +30,7 @@ struct CoinPriceRow: View {
             VStack(alignment: .trailing, spacing: Spacing.extraSmall) {
                 Text(model.priceText)
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.white)
+                    .foregroundColor(Colors.black)
                 
                 Text(model.percentageText)
                     .font(.caption)

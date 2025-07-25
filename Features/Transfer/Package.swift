@@ -6,7 +6,7 @@ let package = Package(
     name: "Transfer",
     platforms: [
         .iOS(.v17),
-        .macOS(.v12)
+        .macOS(.v15)
     ],
     products: [
         .library(
@@ -99,6 +99,7 @@ let package = Package(
                 .product(name: "ScanServiceTestKit", package: "ScanService"),
                 .product(name: "SwapServiceTestKit", package: "SwapService"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "WalletServiceTestKit", package: "WalletService"),
             ],
             path: "Tests"
         ),

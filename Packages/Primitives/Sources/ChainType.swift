@@ -19,4 +19,5 @@ public enum ChainType: String, Codable, CaseIterable, Equatable, Hashable, Senda
 	case algorand
 	case polkadot
 	case cardano
+	case hyperCore = "hypercore"
 }

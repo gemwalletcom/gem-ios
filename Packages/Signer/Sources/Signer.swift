@@ -73,6 +73,7 @@ public struct Signer: Sendable {
         case .algorand: AlgorandSigner()
         case .polkadot: PolkadotSigner()
         case .cardano: CardanoSigner()
+        case .hyperCore: fatalError()
         }
     }
 }
