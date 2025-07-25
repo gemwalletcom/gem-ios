@@ -55,6 +55,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             }
         case .accountMinimalBalance: Localized.Info.AccountMinimumBalance.title
         case .stakeMinimumAmount: Localized.Info.StakeMinimumAmount.title
+        case .noQuote: Localized.Errors.Swap.noQuoteAvailable
         }
     }
 
@@ -98,6 +99,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
         case let .stakeMinimumAmount(asset, required):
             let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Info.StakeMinimumAmount.description(asset.name, amount)
+        case .noQuote: return Localized.Info.NoQuote.description
         }
     }
 
@@ -147,6 +149,8 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             case .unverified: return .image(Images.TokenStatus.warning)
             case .suspicious: return .image(Images.TokenStatus.risk)
             }
+        case .noQuote:
+            return .image(Images.Logo.logo)
         }
     }
     
@@ -171,6 +175,7 @@ private extension InfoSheetViewModel {
         case .slippage: Docs.url(.slippage)
         case .assetStatus: Docs.url(.tokenVerification)
         case .accountMinimalBalance: Docs.url(.accountMinimalBalance)
+        case .noQuote: Docs.url(.noQuotes)
         // Which one to use?
         case .insufficientBalance: Docs.url(.networkFees)
         case .stakeMinimumAmount: Docs.url(.accountMinimalBalance)
