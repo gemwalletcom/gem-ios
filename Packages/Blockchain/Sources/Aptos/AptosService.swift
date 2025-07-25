@@ -6,6 +6,8 @@ import SwiftHTTPClient
 import BigInt
 
 public struct AptosService: Sendable {
+    
+    private let aptosCoin = "0x1::aptos_coin::AptosCoin"
     let chain: Chain
     let provider: Provider<AptosProvider>
     
@@ -93,16 +95,10 @@ public struct AptosService: Sendable {
 
 extension AptosService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let resourceName = "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>"
-        let resource = try await provider.request(.resource(address: address, resource: resourceName))
-            .mapOrCatch(
-                as: AptosResource<AptosResourceBalance>.self,
-                codes: [404],
-                result: AptosResource(type: resourceName, data: AptosResourceBalance(coin: AptosResourceCoin(value: "0")))
-            )
-        
-        let balance = BigInt(stringLiteral: resource.data.coin.value)
-        return AssetBalance(assetId: chain.assetId, balance: Balance(available: balance))
+        let balance = try await provider
+            .request(.balance(address: address, asset: aptosCoin))
+            .map(as: BigIntable.self)
+        return AssetBalance(assetId: chain.assetId, balance: Balance(available: balance.value))
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
