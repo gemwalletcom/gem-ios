@@ -13,14 +13,16 @@ final class EthereumWalletConnectService: WalletConnectRequestHandleable {
     }
     
     func handle(request: WalletConnectSign.Request) async throws -> RPCResult {
-        guard let method = WalletConnectionMethods(rawValue: request.method)?.blockchainMethod?.ethereum else {
+        switch WalletConnectionMethods(rawValue: request.method)?.blockchainMethod {
+        case .ethereum(let method):
+            guard let chain = signer.allChains.first(where: { $0.blockchain == request.chainId }) else {
+                throw WalletConnectorServiceError.unresolvedChainId(request.chainId.absoluteString)
+            }
+            
+            return try await handle(method: method, chain: chain, request: request)
+        case .solana, nil:
             throw WalletConnectorServiceError.unresolvedMethod(request.method)
         }
-        guard let chain = signer.allChains.first(where: { $0.blockchain == request.chainId }) else {
-            throw WalletConnectorServiceError.unresolvedChainId(request.chainId.absoluteString)
-        }
-        
-        return try await handle(method: method, chain: chain, request: request)
     }
 }
 

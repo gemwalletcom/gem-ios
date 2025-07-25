@@ -10,8 +10,8 @@ extension AppMetadata {
             name: name,
             description: description,
             url: url,
-            icon: icons.first {
-                $0.contains(".png") || $0.contains(".jpg") || $0.contains(".jpeg")
+            icon: icons.first { icon in
+                [".png", ".jpg", ".jpeg"].contains { icon.contains($0) }
             } ?? icons.first ?? .empty,
             redirectNative: redirect?.native,
             redirectUniversal: redirect?.universal

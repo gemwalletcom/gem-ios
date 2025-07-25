@@ -13,11 +13,10 @@ final class SolanaWalletConnectService: WalletConnectRequestHandleable {
     }
     
     func handle(request: WalletConnectSign.Request) async throws -> RPCResult {
-        guard let method = WalletConnectionMethods(rawValue: request.method)?.blockchainMethod?.solana else {
-            throw WalletConnectorServiceError.unresolvedMethod(request.method)
+        switch WalletConnectionMethods(rawValue: request.method)?.blockchainMethod {
+        case .solana(let method): try await handle(method: method, request: request)
+        case .ethereum, nil: throw WalletConnectorServiceError.unresolvedMethod(request.method)
         }
-        
-        return try await handle(method: method, request: request)
     }
 }
 
