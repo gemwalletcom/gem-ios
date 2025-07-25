@@ -41,10 +41,10 @@ public final class PerpetualSceneViewModel {
     
     public let perpetualViewModel: PerpetualViewModel
     
-    public var positionViewModels: [PositionItemViewModel] {
+    public var positionViewModels: [PerpetualPositionItemViewModel] {
         positions.flatMap { positionData in
             positionData.positions.map { position in
-                PositionItemViewModel(
+                PerpetualPositionItemViewModel(
                     position: position,
                     perpetual: positionData.perpetual,
                     asset: positionData.asset

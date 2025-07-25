@@ -1,38 +1,31 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 import Components
-import PrimitivesComponents
+import Primitives
 import Style
 import SwiftUI
+import PrimitivesComponents
 
-public struct PositionItemViewModel {
-    public let position: PerpetualPosition
+public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
+    
+    public let positionViewModel: PerpetualPositionViewModel
     public let perpetual: Perpetual
     public let asset: Asset
     public var action: ((ListAssetItemAction) -> Void)?
     
-    public init(position: PerpetualPosition, perpetual: Perpetual, asset: Asset) {
-        self.position = position
+    public init(
+        position: PerpetualPosition,
+        perpetual: Perpetual,
+        asset: Asset
+    ) {
+        self.positionViewModel = PerpetualPositionViewModel(position: position)
         self.perpetual = perpetual
         self.asset = asset
     }
     
-    public var positionViewModel: PerpetualPositionViewModel {
-        PerpetualPositionViewModel(position: position)
-    }
-}
-
-extension PositionItemViewModel: Identifiable {
-    public var id: String { position.id }
-}
-
-extension PositionItemViewModel: ListAssetItemViewable {
     public var showBalancePrivacy: Binding<Bool> { .constant(false) }
-    
     public var name: String { perpetual.name }
-    
     public var symbol: String? { nil }
     
     public var assetImage: AssetImage {
@@ -60,4 +53,8 @@ extension PositionItemViewModel: ListAssetItemViewable {
             )
         )
     }
+}
+
+extension PerpetualPositionItemViewModel: Identifiable {
+    public var id: String { positionViewModel.id }
 }
