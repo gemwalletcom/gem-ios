@@ -141,7 +141,8 @@ public struct StakeDetailViewModel {
                 amount: .none
             ),
             value: model.delegation.base.balanceValue,
-            canChangeValue: false
+            canChangeValue: false,
+            ignoreValueCheck: true
         )
     }
 }

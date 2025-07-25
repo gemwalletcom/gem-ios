@@ -10,7 +10,7 @@ public extension DelegationBase {
         DelegationBase(
             assetId: .mock(),
             state: state,
-            balance: .empty,
+            balance: "1",
             shares: .empty,
             rewards: .empty,
             completionDate: nil,
