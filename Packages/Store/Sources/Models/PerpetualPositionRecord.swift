@@ -14,8 +14,10 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         static let size = Column("size")
         static let sizeValue = Column("sizeValue")
         static let leverage = Column("leverage")
+        static let entryPrice = Column("entryPrice")
         static let liquidationPrice = Column("liquidationPrice")
         static let marginType = Column("marginType")
+        static let direction = Column("direction")
         static let marginAmount = Column("marginAmount")
         static let takeProfit = Column("takeProfit")
         static let stopLoss = Column("stopLoss")
@@ -30,8 +32,10 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
     public var size: Double
     public var sizeValue: Double
     public var leverage: Int
+    public var entryPrice: Double?
     public var liquidationPrice: Double?
     public var marginType: PerpetualMarginType
+    public var direction: PerpetualDirection
     public var marginAmount: Double
     public var takeProfit: PriceTarget?
     public var stopLoss: PriceTarget?
@@ -46,8 +50,10 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         size: Double,
         sizeValue: Double,
         leverage: Int,
+        entryPrice: Double?,
         liquidationPrice: Double?,
         marginType: PerpetualMarginType,
+        direction: PerpetualDirection,
         marginAmount: Double,
         takeProfit: PriceTarget?,
         stopLoss: PriceTarget?,
@@ -61,8 +67,10 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         self.size = size
         self.sizeValue = sizeValue
         self.leverage = leverage
+        self.entryPrice = entryPrice
         self.liquidationPrice = liquidationPrice
         self.marginType = marginType
+        self.direction = direction
         self.marginAmount = marginAmount
         self.takeProfit = takeProfit
         self.stopLoss = stopLoss
@@ -87,8 +95,10 @@ extension PerpetualPositionRecord: CreateTable {
             t.column(Columns.size.name, .double).notNull()
             t.column(Columns.sizeValue.name, .double).notNull()
             t.column(Columns.leverage.name, .integer).notNull()
+            t.column(Columns.entryPrice.name, .double)
             t.column(Columns.liquidationPrice.name, .double)
             t.column(Columns.marginType.name, .text).notNull()
+            t.column(Columns.direction.name, .text).notNull()
             t.column(Columns.marginAmount.name, .double).notNull()
             t.column(Columns.takeProfit.name, .jsonText)
             t.column(Columns.stopLoss.name, .jsonText)
@@ -109,8 +119,10 @@ extension PerpetualPositionRecord {
             size: size,
             sizeValue: sizeValue,
             leverage: UInt8(leverage),
+            entryPrice: entryPrice,
             liquidationPrice: liquidationPrice,
             marginType: marginType,
+            direction: direction,
             marginAmount: marginAmount,
             takeProfit: takeProfit,
             stopLoss: stopLoss,
@@ -129,8 +141,10 @@ extension PerpetualPosition {
             size: size,
             sizeValue: sizeValue,
             leverage: Int(leverage),
+            entryPrice: entryPrice,
             liquidationPrice: liquidationPrice,
             marginType: marginType,
+            direction: direction,
             marginAmount: marginAmount,
             takeProfit: takeProfit,
             stopLoss: stopLoss,

@@ -289,6 +289,13 @@ public struct Migrations {
             try? PerpetualPositionRecord.create(db: db)
         }
         
+        migrator.registerMigration("Add entryPrice and direction to \(PerpetualPositionRecord.databaseTableName)") { db in
+            try? db.alter(table: PerpetualPositionRecord.databaseTableName) {
+                $0.add(column: PerpetualPositionRecord.Columns.entryPrice.name, .double)
+                $0.add(column: PerpetualPositionRecord.Columns.direction.name, .text).defaults(to: "long")
+            }
+        }
+        
         try migrator.migrate(dbQueue)
     }
 }

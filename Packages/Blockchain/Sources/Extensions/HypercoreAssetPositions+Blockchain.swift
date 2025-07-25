@@ -19,6 +19,7 @@ extension HypercoreAssetPositions {
             let positionSize = Double(position.szi) ?? 0
             
             let fundingValue = positionSize > 0 ? -rawFunding : rawFunding
+            let direction: PerpetualDirection = positionSize >= 0 ? .long : .short
             
             return PerpetualPosition(
                 id: positionId,
@@ -26,8 +27,10 @@ extension HypercoreAssetPositions {
                 size: Double(position.szi) ?? 0,
                 sizeValue: Double(position.positionValue) ?? 0,
                 leverage: UInt8(position.leverage.value),
-                liquidationPrice: Double(position.liquidationPx ?? "") ?? 0,
+                entryPrice: Double(position.entryPx ?? ""),
+                liquidationPrice: Double(position.liquidationPx ?? ""),
                 marginType: position.leverage.type == .cross ? .cross : .isolated,
+                direction: direction,
                 marginAmount: Double(position.marginUsed) ?? 0,
                 takeProfit: nil,
                 stopLoss: nil,

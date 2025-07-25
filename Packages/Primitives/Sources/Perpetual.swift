@@ -30,12 +30,29 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct PerpetualData: Codable, Equatable, Hashable, Sendable {
+	public let perpetual: Perpetual
+	public let asset: Asset
+
+	public init(perpetual: Perpetual, asset: Asset) {
+		self.perpetual = perpetual
+		self.asset = asset
+	}
+}
+
 public struct PerpetualPositionData: Codable, Equatable, Hashable, Sendable {
 	public let perpetual: Perpetual
+	public let asset: Asset
 	public let positions: [PerpetualPosition]
 
-	public init(perpetual: Perpetual, positions: [PerpetualPosition]) {
+	public init(perpetual: Perpetual, asset: Asset, positions: [PerpetualPosition]) {
 		self.perpetual = perpetual
+		self.asset = asset
 		self.positions = positions
 	}
+}
+
+public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
+	case short
+	case long
 }

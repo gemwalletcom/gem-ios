@@ -25,9 +25,11 @@ public struct HypercoreLeverage: Codable, Sendable {
 
 public struct HypercoreCumulativeFunding: Codable, Sendable {
 	public let allTime: String
+	public let sinceOpen: String
 
-	public init(allTime: String) {
+	public init(allTime: String, sinceOpen: String) {
 		self.allTime = allTime
+		self.sinceOpen = sinceOpen
 	}
 }
 

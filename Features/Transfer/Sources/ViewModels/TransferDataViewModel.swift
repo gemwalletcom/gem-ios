@@ -71,7 +71,8 @@ struct TransferDataViewModel {
                 .tokenApprove,
                 .stake,
                 .account,
-                .generic: .auto(addressStyle: .short)
+                .generic,
+                .perpetual: .auto(addressStyle: .short)
         case .swap: .nameOrAddress
         }
     }
@@ -84,7 +85,8 @@ struct TransferDataViewModel {
             .swap,
             .tokenApprove,
             .stake,
-            .account: .none
+            .account,
+            .perpetual: .none
         case .generic(_, let metadata, _):
             metadata.shortName
         }
@@ -98,7 +100,8 @@ struct TransferDataViewModel {
             .swap,
             .tokenApprove,
             .stake,
-            .account: .none
+            .account,
+            .perpetual: .none
         case .generic(_, let metadata, _):
             URL(string: metadata.url)
         }
@@ -107,7 +110,7 @@ struct TransferDataViewModel {
     var shouldShowMemo: Bool {
         switch type {
         case .transfer, .deposit: chain.isMemoSupported
-        case .transferNft, .swap, .tokenApprove, .generic, .account, .stake: false
+        case .transferNft, .swap, .tokenApprove, .generic, .account, .stake, .perpetual: false
         }
     }
 
@@ -131,7 +134,8 @@ struct TransferDataViewModel {
                 .swap,
                 .tokenApprove,
                 .stake,
-                .account:
+                .account,
+                .perpetual:
                 .none
         case let .generic(_, session, _):
             AssetImage(imageURL: session.icon.asURL)
@@ -145,7 +149,8 @@ struct TransferDataViewModel {
                 .swap,
                 .tokenApprove,
                 .generic,
-                .transferNft: metadata?.available ?? .zero
+                .transferNft,
+                .perpetual: metadata?.available ?? .zero
         case .account(_, let type):
             switch type {
             case .activate: metadata?.available ?? .zero
@@ -171,7 +176,8 @@ extension TransferDataViewModel {
                 .swap,
                 .tokenApprove,
                 .generic,
-                .account:
+                .account,
+                .perpetual:
             recipient.name ?? recipient.address
         case .stake(_, let stakeType):
             switch stakeType {
