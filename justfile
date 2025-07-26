@@ -1,4 +1,4 @@
-XCBEAUTIFY_ARGS := ""
+XCBEAUTIFY_ARGS := "--quieter"
 BUILD_THREADS := `sysctl -n hw.ncpu`
 SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 16"
 
@@ -57,7 +57,7 @@ build:
     SWIFT_OPTIMIZATION_LEVEL=-Onone \
     SWIFT_COMPILATION_MODE=incremental \
     ENABLE_TESTABILITY=NO \
-    build | xcbeautify
+    build | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 # Clean build cache
 clean:
@@ -75,7 +75,7 @@ build-package PACKAGE:
     -jobs {{BUILD_THREADS}} \
     GCC_OPTIMIZATION_LEVEL=0 \
     SWIFT_OPTIMIZATION_LEVEL=-Onone \
-    build | xcbeautify
+    build | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 test_all:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -87,7 +87,7 @@ test_all:
     -parallel-testing-enabled YES \
     -parallelizeTargets \
     -jobs {{BUILD_THREADS}} \
-    test | xcbeautify
+    test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 test_ui:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -97,7 +97,7 @@ test_ui:
     -destination "{{SIMULATOR_DEST}}" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
-    test | xcbeautify
+    test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 test TARGET:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -110,7 +110,7 @@ test TARGET:
     -parallel-testing-enabled YES \
     -parallelizeTargets \
     -jobs {{BUILD_THREADS}} \
-    test | xcbeautify
+    test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 localize:
     @sh core/scripts/localize.sh ios Packages/Localization/Sources/Resources
