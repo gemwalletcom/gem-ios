@@ -88,13 +88,6 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/JobRunner",
-        "identifier" : "JobRunnerTests",
-        "name" : "JobRunnerTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:Services\/WalletConnectorService",
         "identifier" : "WalletConnectorServiceTests",
         "name" : "WalletConnectorServiceTests"
