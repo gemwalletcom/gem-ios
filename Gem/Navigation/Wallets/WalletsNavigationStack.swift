@@ -6,7 +6,6 @@ import Localization
 import Primitives
 import Onboarding
 import ManageWallets
-import WalletAvatar
 
 struct WalletsNavigationStack: View {
     @Environment(\.walletService) private var walletService

@@ -23,7 +23,8 @@ let package = Package(
         .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
         .package(name: "WalletService", path: "../../Services/WalletService"),
-        .package(name: "WalletAvatar", path: "../WalletAvatar"),
+        .package(name: "ImageGalleryService", path: "../../Services/ImageGalleryService"),
+        .package(name: "AvatarService", path: "../../Services/AvatarService"),
         .package(name: "Onboarding", path: "../Onboarding")
     ],
     targets: [
@@ -39,7 +40,8 @@ let package = Package(
                 "Keystore",
                 "ExplorerService",
                 "WalletService",
-                "WalletAvatar",
+                "ImageGalleryService",
+                "AvatarService",
                 "Onboarding"
             ],
             path: "Sources"

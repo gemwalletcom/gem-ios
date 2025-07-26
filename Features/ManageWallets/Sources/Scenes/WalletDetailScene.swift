@@ -7,7 +7,6 @@ import Style
 import Primitives
 import Localization
 import PrimitivesComponents
-import WalletAvatar
 import GRDBQuery
 import Store
 import Onboarding
