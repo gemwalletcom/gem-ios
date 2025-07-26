@@ -119,6 +119,12 @@ public struct PerpetualPositionViewModel {
         currencyFormatter.string(data.position.sizeValue)
     }
     
+    public var entryPriceTitle: String { "Entry Price" }
+    public var entryPriceText: String? {
+        guard let price = data.position.entryPrice, price > 0 else { return .none }
+        return currencyFormatter.string(price)
+    }
+    
     public var liquidationPriceTitle: String { Localized.Info.LiquidationPrice.title }
     public var liquidationPriceText: String? {
         guard let price = data.position.liquidationPrice, price > 0 else { return .none }
@@ -126,22 +132,26 @@ public struct PerpetualPositionViewModel {
     }
     
     public var liquidationPriceColor: Color {
-        guard data.position.liquidationPrice != nil else {
-            return .secondary
+        guard let entryPrice = data.position.entryPrice,
+              let liquidationPrice = data.position.liquidationPrice,
+              entryPrice > 0, liquidationPrice > 0 else {
+            return Colors.secondaryText
         }
         
-        let leverage = Double(data.position.leverage)
-        let liquidationThreshold = (1.0 / leverage) * 100
-        let currentPnlPercent = abs(pnlPercent)
-        let proximityToLiquidation = currentPnlPercent / liquidationThreshold
+        let currentPrice = entryPrice + (data.position.pnl / abs(data.position.size))
+        let priceRange = abs(entryPrice - liquidationPrice)
         
-        switch proximityToLiquidation {
-        case 0.8...:
-            return Colors.red
-        case 0.5...:
-            return Colors.orange
-        default:
-            return .secondary
+        let currentDistance = switch data.position.direction {
+        case .long: currentPrice - liquidationPrice
+        case .short: liquidationPrice - currentPrice
+        }
+        
+        let proximityToLiquidation = 1.0 - (currentDistance / priceRange)
+        
+        return switch proximityToLiquidation {
+        case 0.8...: Colors.red
+        case 0.5...: Colors.orange
+        default: Colors.secondaryText
         }
     }
     

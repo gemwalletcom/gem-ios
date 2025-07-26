@@ -3,8 +3,7 @@
 import Foundation
 import Testing
 import Primitives
-
-@testable import Currency
+@testable import Settings
 
 struct CurrencyViewModelTests {
     @Test

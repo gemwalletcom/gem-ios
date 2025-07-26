@@ -52,6 +52,13 @@ public struct PerpetualScene: View {
                         subtitle: position.sizeValueText
                     )
                     
+                    if let text = position.entryPriceText {
+                        ListItemView(
+                            title: position.entryPriceTitle,
+                            subtitle: text
+                        )
+                    }
+                    
                     ListItemView(
                         title: position.marginTitle,
                         subtitle: position.marginText

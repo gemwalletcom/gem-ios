@@ -72,5 +72,8 @@ let package = Package(
         .testTarget(
             name: "SettingsTests",
             dependencies: ["Settings"]),
+        .testTarget(
+            name: "CurrencyTests",
+            dependencies: ["Settings"]),
     ]
 )

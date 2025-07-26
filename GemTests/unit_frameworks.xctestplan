@@ -247,13 +247,6 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Features\/ChainSettings",
-        "identifier" : "ChainSettingsTests",
-        "name" : "ChainSettingsTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:Features\/Perpetuals",
         "identifier" : "PerpetualsTests",
         "name" : "PerpetualsTests"

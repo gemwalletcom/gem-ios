@@ -452,3 +452,4 @@
 "perpetual.long" = "Long";
 "perpetual.short" = "Short";
 "markets.daily_volume" = "24小时交易量";
+"perpetual.entry_price" = "入场价格";

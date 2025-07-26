@@ -452,3 +452,4 @@
 "perpetual.long" = "Long";
 "perpetual.short" = "Short";
 "markets.daily_volume" = "Objętość 24h";
+"perpetual.entry_price" = "Cena wejścia";

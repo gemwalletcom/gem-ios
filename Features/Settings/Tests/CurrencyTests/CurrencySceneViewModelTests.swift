@@ -4,8 +4,7 @@ import Foundation
 import Primitives
 import Testing
 import PriceServiceTestKit
-
-@testable import Currency
+@testable import Settings
 
 private final class MockCurrencyStorage: CurrencyStorable, @unchecked Sendable {
     var currency: String
