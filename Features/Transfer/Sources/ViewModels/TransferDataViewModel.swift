@@ -126,8 +126,14 @@ struct TransferDataViewModel {
             case .stake, .unstake, .redelegate, .withdraw: true
             case .rewards: false
             }
-        case .account, .swap: false
-        default: true
+        case .account,
+            .swap,
+            .perpetual: false
+        case .transfer,
+            .transferNft,
+            .deposit,
+            .generic,
+            .tokenApprove: true
         }
     }
     

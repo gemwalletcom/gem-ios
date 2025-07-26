@@ -30,14 +30,17 @@ public struct PerpetualViewModel {
         AssetIdViewModel(assetId: perpetual.assetId).assetImage
     }
     
+    public var volumeTitle: String { "24h Volume" }
     public var volumeText: String {
         currencyFormatter.string(perpetual.volume24h)
     }
     
+    public var openInterestTitle: String { "Open Interest" }
     public var openInterestText: String {
         currencyFormatter.string(perpetual.openInterest)
     }
     
+    public var fundingRateTitle: String { "Funding Rate" }
     public var fundingRateText: String {
         if let formattedNumber = fundingRateFormatter.string(from: NSNumber(value: perpetual.funding)) {
             return "\(formattedNumber)%"

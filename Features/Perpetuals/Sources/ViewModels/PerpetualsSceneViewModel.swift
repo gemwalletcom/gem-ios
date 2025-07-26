@@ -41,6 +41,11 @@ public final class PerpetualsSceneViewModel {
         self.onTransferComplete = onTransferComplete
     }
     
+    public var navigationTitle: String { "Perpetuals" }
+    public var positionsSectionTitle: String { "Positions" }
+    public var marketsSectionTitle: String { "Markets" }
+    public var noMarketsText: String { "No markets" }
+    
     public var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
             walletType: wallet.type,

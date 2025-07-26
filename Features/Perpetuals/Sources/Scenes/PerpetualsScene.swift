@@ -46,13 +46,13 @@ public struct PerpetualsScene: View {
                         .listRowInsets(.assetListRowInsets)
                     }
                 } header: {
-                    Text("Positions")
+                    Text(model.positionsSectionTitle)
                 }
             }
             
             Section {
                 if model.perpetuals.isEmpty {
-                    Text("No markets")
+                    Text(model.noMarketsText)
                         .foregroundColor(.secondary)
                 } else {
                     ForEach(model.perpetuals) { perpetualData in
@@ -70,10 +70,10 @@ public struct PerpetualsScene: View {
                     .listRowInsets(.assetListRowInsets)
                 }
             } header: {
-                Text("Markets")
+                Text(model.marketsSectionTitle)
             }
         }
-        .navigationTitle("Perpetuals")
+        .navigationTitle(model.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .taskOnce {
             Task {

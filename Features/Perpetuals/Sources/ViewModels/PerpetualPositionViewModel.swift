@@ -7,6 +7,7 @@ import SwiftUI
 import Style
 import Components
 import PrimitivesComponents
+import Localization
 
 public struct PerpetualPositionViewModel {
     public let data: PerpetualPositionData
@@ -51,10 +52,16 @@ public struct PerpetualPositionViewModel {
         data.position.size > 0 ? Colors.green : Colors.red
     }
     
+    public var pnlTitle: String { "PnL" }
     public var pnlColor: Color {
         data.position.pnl >= 0 ? Colors.green : Colors.red
     }
     
+    public var pnlTextStyle: TextStyle {
+        TextStyle(font: .callout, color: pnlColor)
+    }
+    
+    public var marginTitle: String { "Margin" }
     public var marginAmountText: String {
         return currencyFormatter.string(data.position.marginAmount)
     }
@@ -71,7 +78,7 @@ public struct PerpetualPositionViewModel {
     
     public var pnlPercent: Double {
         guard data.position.marginAmount > 0 else { return 0 }
-        return (data.position.pnl / data.position.marginAmount)
+        return (data.position.pnl / data.position.marginAmount) * 100
     }
     
     public var pnlPercentText: String {
@@ -90,24 +97,29 @@ public struct PerpetualPositionViewModel {
         }
     }
     
+    public var fundingPaymentsTitle: String { Localized.Info.FundingPayments.title }
     public var fundingPaymentsText: String {
         guard let funding = data.position.funding else { return "--" }
         return currencyFormatter.string(Double(funding))
     }
-    
     public var fundingPaymentsColor: Color {
         guard let funding = data.position.funding else { return .secondary }
         return funding >= 0 ? Colors.green : Colors.red
     }
     
+    public var fundingPaymentsTextStyle: TextStyle {
+        TextStyle(font: .callout, color: fundingPaymentsColor)
+    }
+    
+    public var sizeTitle: String { "Size" }
     public var sizeText: String {
         currencyFormatter.string(abs(data.position.size))
     }
-    
     public var sizeValueText: String {
         currencyFormatter.string(data.position.sizeValue)
     }
     
+    public var liquidationPriceTitle: String { "Liquidation Price" }
     public var liquidationPriceText: String? {
         guard let price = data.position.liquidationPrice, price > 0 else { return .none }
         return currencyFormatter.string(price)
@@ -117,16 +129,24 @@ public struct PerpetualPositionViewModel {
         guard data.position.liquidationPrice != nil else {
             return .secondary
         }
-        let pnlPercent = pnlPercent
         
-        switch pnlPercent {
-        case ..<(-0.50):
+        let leverage = Double(data.position.leverage)
+        let liquidationThreshold = (1.0 / leverage) * 100
+        let currentPnlPercent = abs(pnlPercent)
+        let proximityToLiquidation = currentPnlPercent / liquidationThreshold
+        
+        switch proximityToLiquidation {
+        case 0.8...:
             return Colors.red
-        case ..<(-0.25):
+        case 0.5...:
             return Colors.orange
         default:
             return .secondary
         }
+    }
+    
+    public var liquidationPriceTextStyle: TextStyle {
+        TextStyle(font: .callout, color: liquidationPriceColor)
     }
 }
 

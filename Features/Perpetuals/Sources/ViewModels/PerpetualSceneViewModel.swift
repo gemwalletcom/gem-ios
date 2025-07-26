@@ -37,12 +37,7 @@ public final class PerpetualSceneViewModel {
     public let perpetualViewModel: PerpetualViewModel
     
     public var positionViewModels: [PerpetualPositionViewModel] {
-        guard let positionData = positions.first else {
-            return []
-        }
-        return [
-            PerpetualPositionViewModel(data: positionData)
-        ]
+        positions.map { PerpetualPositionViewModel(data: $0) }
     }
     
     public init(
@@ -68,6 +63,12 @@ public final class PerpetualSceneViewModel {
     public var hasOpenPosition: Bool {
         !positionViewModels.isEmpty
     }
+    
+    public var positionSectionTitle: String { "Position" }
+    public var infoSectionTitle: String { "Info" }
+    public var closePositionTitle: String { "Close Position" }
+    public var longButtonTitle: String { "Long" }
+    public var shortButtonTitle: String { "Short" }
     
     public func fetch() async {
         Task {
@@ -122,10 +123,7 @@ extension PerpetualSceneViewModel {
     public func onClosePosition() {
         let transferData = TransferData(
             type: .perpetual(asset, .close),
-            recipientData: RecipientData(
-                recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
-                amount: .none
-            ),
+            recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false,
             ignoreValueCheck: true
@@ -135,28 +133,27 @@ extension PerpetualSceneViewModel {
     }
     
     public func onOpenLongPosition() {
-        let recipientData = RecipientData(
-            recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
-            amount: .none
-        )
-        
         onPerpetualRecipientData?(PerpetualRecipientData(
-            recipientData: recipientData,
+            recipientData: .hyperliquid(),
             direction: .long,
             asset: asset
         ))
     }
     
     public func onOpenShortPosition() {
-        let recipientData = RecipientData(
-            recipient: Recipient(name: "Hyperliquid", address: "0x", memo: .none),
-            amount: .none
-        )
-        
         onPerpetualRecipientData?(PerpetualRecipientData(
-            recipientData: recipientData,
+            recipientData: .hyperliquid(),
             direction: .short,
             asset: asset
         ))
+    }
+}
+
+private extension RecipientData {
+    static func hyperliquid() -> RecipientData {
+        RecipientData(
+            recipient: Recipient(name: "Hyperliquid", address: "", memo: .none),
+            amount: .none
+        )
     }
 }

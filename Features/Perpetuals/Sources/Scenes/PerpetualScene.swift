@@ -42,73 +42,73 @@ public struct PerpetualScene: View {
                     )
                     
                     ListItemView(
-                        title: "Size",
+                        title: position.pnlTitle,
+                        subtitle: position.pnlWithPercentText,
+                        subtitleStyle: position.pnlTextStyle
+                    )
+                    
+                    ListItemView(
+                        title: position.sizeTitle,
                         subtitle: position.sizeValueText
                     )
                     
                     ListItemView(
-                        title: "Margin",
+                        title: position.marginTitle,
                         subtitle: position.marginText
-                    )
-                    
-                    ListItemView(
-                        title: "PnL",
-                        subtitle: position.pnlText,
-                        subtitleStyle: TextStyle(font: .callout, color: position.pnlColor)
                     )
                     
                     if let text = position.liquidationPriceText {
                         ListItemView(
-                            title: "Liquidation Price",
+                            title: position.liquidationPriceTitle,
                             subtitle: text,
-                            subtitleStyle: TextStyle(font: .callout, color: position.liquidationPriceColor),
+                            subtitleStyle: position.liquidationPriceTextStyle,
                             infoAction: { model.onSelectLiquidationPriceInfo() }
                         )
                     }
                     
                     ListItemView(
-                        title: "Funding Payments",
+                        title: position.fundingPaymentsTitle,
                         subtitle: position.fundingPaymentsText,
-                        subtitleStyle: TextStyle(font: .callout, color: position.fundingPaymentsColor),
+                        subtitleStyle: position.fundingPaymentsTextStyle,
                         infoAction: { model.onSelectFundingPaymentsInfo() }
                     )
                 } header: {
-                    Text("Position")
+                    Text(model.positionSectionTitle)
                 }
             }
             
             Section {
                 if model.hasOpenPosition {
-                    Button("Close Position", action: model.onClosePosition)
+                    Button(model.closePositionTitle, action: model.onClosePosition)
                         .frame(maxWidth: .infinity)
                         .buttonStyle(.red())
                 } else {
                     HStack(spacing: Spacing.medium) {
-                        Button("Long", action: model.onOpenLongPosition)
+                        Button(model.longButtonTitle, action: model.onOpenLongPosition)
                             .frame(maxWidth: .infinity)
                             .buttonStyle(.green())
                         
-                        Button("Short", action: model.onOpenShortPosition)
+                        Button(model.shortButtonTitle, action: model.onOpenShortPosition)
                             .frame(maxWidth: .infinity)
                             .buttonStyle(.red())
                     }
                 }
             }
             
-            Section(header: Text("Info")) {
+            Section(header: Text(model.infoSectionTitle)) {
                 ListItemView(
-                    title: "24h Volume",
+                    title: model.perpetualViewModel.volumeTitle,
                     subtitle: model.perpetualViewModel.volumeText
                 )
                 
                 ListItemView(
-                    title: "Open Interest",
+                    title: model.perpetualViewModel.openInterestTitle,
                     subtitle: model.perpetualViewModel.openInterestText,
                     infoAction: { model.onSelectOpenInterestInfo() }
                 )
                 
                 ListItemView(
-                    title: "Funding Rate",
+                    title: model.perpetualViewModel.fundingRateTitle,
                     subtitle: model.perpetualViewModel.fundingRateText,
                     infoAction: { model.onSelectFundingRateInfo() }
                 )
