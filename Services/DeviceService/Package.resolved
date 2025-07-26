@@ -1,5 +1,5 @@
 {
-  "originHash" : "c1f5e744dcf0f8ee914ee63d95652d98fa44cf16b3ec7c53b463f1d82d76953c",
+  "originHash" : "94e453f99d04c522c69f093b088f0244663f9a80d76a7c37e6724d772375ba4b",
   "pins" : [
     {
       "identity" : "bigint",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift.git",
       "state" : {
-        "revision" : "04e73c26c4ce8218ab85aaf791942bb0b204f330",
-        "version" : "7.4.1"
+        "revision" : "a5a1be26b4513dc7ec360eb56bc08a345bac6649",
+        "version" : "7.5.0"
       }
     },
     {
@@ -26,15 +26,6 @@
       "state" : {
         "revision" : "540dc48e86af2972b4f1815616aa1ed8ac97845a",
         "version" : "0.11.0"
-      }
-    },
-    {
-      "identity" : "keychainaccess",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gemwalletcom/KeychainAccess",
-      "state" : {
-        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
-        "version" : "4.2.2"
       }
     }
   ],

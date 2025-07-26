@@ -3,7 +3,7 @@
 import Foundation
 import Testing
 
-@testable import JobRunner
+@testable import Primitives
 
 @MainActor
 struct RetryIntervalCalculatorTests {

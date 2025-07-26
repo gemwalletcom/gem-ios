@@ -2,7 +2,6 @@
 
 import Foundation
 import Primitives
-import JobRunner
 import GemstonePrimitives
 import Store
 import ChainService

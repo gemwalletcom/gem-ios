@@ -175,7 +175,6 @@
 		833931A32D2D54060063BB6A /* PriceAlerts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceAlerts; sourceTree = "<group>"; };
 		833931A62D2D64BA0063BB6A /* PriceService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceService; sourceTree = "<group>"; };
 		833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesFactory.swift; sourceTree = "<group>"; };
-		833F6F292DA7E5590013F9E7 /* JobRunner */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = JobRunner; sourceTree = "<group>"; };
 		8349F1452D5E4D04003A0A93 /* ManageWallets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ManageWallets; sourceTree = "<group>"; };
 		834B38182D1D858D009D58D4 /* LockManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = LockManager; sourceTree = "<group>"; };
 		83518CCC2D1C998300B339E5 /* PrimitivesComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PrimitivesComponents; sourceTree = "<group>"; };
@@ -586,7 +585,6 @@
 			isa = PBXGroup;
 			children = (
 				837D7DE62E005D2800BBBDDA /* Formatters */,
-				833F6F292DA7E5590013F9E7 /* JobRunner */,
 				832F57E92D36A6D50066024D /* Preferences */,
 				DFBDD9AE2C77EC90002A1706 /* WalletCore */,
 				D8EFE3EA2BAB580300608363 /* GemstonePrimitives */,

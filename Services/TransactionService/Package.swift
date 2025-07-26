@@ -27,7 +27,6 @@ let package = Package(
         .package(name: "BalanceService", path: "../BalanceService"),
         .package(name: "NFTService", path: "../NFTService"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
-        .package(name: "JobRunner", path: "../../Packages/JobRunner"),
     ],
     targets: [
         .target(
@@ -40,8 +39,7 @@ let package = Package(
                 "StakeService",
                 "BalanceService",
                 "NFTService",
-                "GemstonePrimitives",
-                "JobRunner"
+                "GemstonePrimitives"
             ],
             path: "Sources"
         ),

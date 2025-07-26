@@ -32,7 +32,7 @@ let package = Package(
         .package(name: "NotificationService", path: "../../Services/NotificationService"),
         .package(name: "DeviceService", path: "../../Services/DeviceService"),
         .package(name: "PriceService", path: "../../Services/PriceService"),
-        .package(name: "AppService", path: "../../AppService"),
+        .package(name: "AppService", path: "../../Services/AppService"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "ChainService", path: "../../Services/ChainService"),
         .package(name: "NodeService", path: "../../Services/NodeService"),
