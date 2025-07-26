@@ -16,4 +16,6 @@ public enum TransactionType: String, Codable, CaseIterable, Equatable, Sendable 
 	case stakeWithdraw
 	case assetActivation
 	case smartContractCall
+	case perpetualOpenPosition
+	case perpetualClosePosition
 }

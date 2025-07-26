@@ -5,11 +5,11 @@
 import Foundation
 
 public struct TransactionWallet: Codable, Equatable, Sendable {
-    public let transaction: Transaction
-    public let wallet: Wallet
+	public let transaction: Transaction
+	public let wallet: Wallet
 
-    public init(transaction: Transaction, wallet: Wallet) {
-        self.transaction = transaction
-        self.wallet = wallet
-    }
+	public init(transaction: Transaction, wallet: Wallet) {
+		self.transaction = transaction
+		self.wallet = wallet
+	}
 }

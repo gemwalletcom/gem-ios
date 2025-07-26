@@ -1,4 +1,5 @@
 XCBEAUTIFY_ARGS := ""
+BUILD_THREADS := `sysctl -n hw.ncpu`
 SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 16"
 
 xcbeautify:
@@ -48,7 +49,20 @@ build:
     -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath build/DerivedData \
+    -parallelizeTargets \
+    -jobs {{BUILD_THREADS}} \
+    -showBuildTimingSummary \
+    GCC_OPTIMIZATION_LEVEL=0 \
+    SWIFT_OPTIMIZATION_LEVEL=-Onone \
+    SWIFT_COMPILATION_MODE=incremental \
+    ENABLE_TESTABILITY=NO \
     build | xcbeautify
+
+# Clean build cache
+clean:
+    @rm -rf build/DerivedData
+    @echo "Build cache cleaned"
 
 build-package PACKAGE:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -56,6 +70,11 @@ build-package PACKAGE:
     -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath build/DerivedData \
+    -parallelizeTargets \
+    -jobs {{BUILD_THREADS}} \
+    GCC_OPTIMIZATION_LEVEL=0 \
+    SWIFT_OPTIMIZATION_LEVEL=-Onone \
     build | xcbeautify
 
 test_all:
@@ -64,7 +83,10 @@ test_all:
     -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath build/DerivedData \
     -parallel-testing-enabled YES \
+    -parallelizeTargets \
+    -jobs {{BUILD_THREADS}} \
     test | xcbeautify
 
 test_ui:
@@ -83,8 +105,11 @@ test TARGET:
     -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath build/DerivedData \
     -only-testing {{TARGET}} \
     -parallel-testing-enabled YES \
+    -parallelizeTargets \
+    -jobs {{BUILD_THREADS}} \
     test | xcbeautify
 
 localize:

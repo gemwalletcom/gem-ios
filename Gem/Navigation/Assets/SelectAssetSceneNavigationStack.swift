@@ -11,6 +11,7 @@ import Keystore
 import Assets
 import Transfer
 import SwapService
+import ChainService
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
@@ -106,11 +107,52 @@ struct SelectAssetSceneNavigationStack: View {
                             walletId: model.wallet.id
                         )
                     )
+                case .deposit:
+                    AmountNavigationView(
+                        model: AmountSceneViewModel(
+                            input: AmountInput(
+                                type: .deposit(
+                                    recipient: RecipientData(
+                                        recipient: .hyperliquid,
+                                        amount: .none
+                                    )
+                                ),
+                                asset: input.asset
+                            ),
+                            wallet: model.wallet,
+                            walletsService: walletsService,
+                            stakeService: stakeService,
+                            onTransferAction: {
+                                navigationPath.append($0)
+                            }
+                        )
+                    )
                 case .manage, .priceAlert, .swap:
                     EmptyView()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: TransferData.self) { data in
+                ConfirmTransferScene(
+                    model: ConfirmTransferViewModel(
+                        wallet: model.wallet,
+                        data: data,
+                        keystore: keystore,
+                        chainService: ChainServiceFactory(nodeProvider: nodeService)
+                            .service(for: data.chain),
+                        scanService: scanService,
+                        swapService: swapService,
+                        walletsService: walletsService,
+                        swapDataProvider: SwapQuoteDataProvider(
+                            keystore: keystore,
+                            swapService: swapService
+                        ),
+                        onComplete: {
+                            isPresentingSelectAssetType = nil
+                        }
+                    )
+                )
+            }
         }
         .sheet(isPresented: $model.isPresentingAddToken) {
             AddTokenNavigationStack(

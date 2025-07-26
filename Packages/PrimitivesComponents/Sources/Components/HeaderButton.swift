@@ -43,6 +43,8 @@ public struct HeaderButton: Identifiable {
         case .swap: Localized.Wallet.swap
         case .stake: Localized.Wallet.stake
         case .more: Localized.Wallet.more
+        case .deposit: "Deposit"
+        case .withdraw: "Withdraw"
         }
     }
     
@@ -54,6 +56,8 @@ public struct HeaderButton: Identifiable {
         case .swap: Images.Actions.swap
         case .stake: Images.Actions.swap
         case .more: Images.Actions.more
+        case .deposit: Images.Actions.buy
+        case .withdraw: Images.Actions.send
         }
     }
 }

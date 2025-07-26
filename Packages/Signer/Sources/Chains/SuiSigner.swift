@@ -20,17 +20,14 @@ public struct SuiSigner: Signable {
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        switch input.type.transactionType {
-        case .transfer,
-                .swap,
-                .tokenApproval,
-                .stakeRewards,
-                .stakeRedelegate,
-                .stakeWithdraw, .assetActivation, .transferNFT, .smartContractCall:
+        guard case .stake(_, let type) = input.type else {
             fatalError()
-        case .stakeDelegate,
-                .stakeUndelegate:
+        }
+        switch type {
+        case .stake, .unstake:
             return [signTxDataDigest(data: input.messageBytes, privateKey: privateKey)]
+        case .redelegate, .rewards, .withdraw:
+            fatalError()
         }
     }
     

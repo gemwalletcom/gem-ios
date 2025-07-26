@@ -98,6 +98,22 @@ extension ButtonStylePalette {
         backgroundPressed: Colors.grayVeryLight,
         backgroundDisabled: .clear
     )
+    
+    static let red = ButtonStylePalette(
+        foreground: Colors.whiteSolid,
+        foregroundPressed: Colors.whiteSolid,
+        background: Colors.red,
+        backgroundPressed: Colors.red.opacity(0.8),
+        backgroundDisabled: Colors.red.opacity(0.6)
+    )
+    
+    static let green = ButtonStylePalette(
+        foreground: Colors.whiteSolid,
+        foregroundPressed: Colors.whiteSolid,
+        background: Colors.green,
+        backgroundPressed: Colors.green.opacity(0.8),
+        backgroundDisabled: Colors.green.opacity(0.6)
+    )
 
 }
 // MARK: – Preview

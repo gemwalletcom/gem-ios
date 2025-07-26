@@ -60,7 +60,7 @@ public struct AptosService: Sendable {
     
     public func gasLimit(input: TransactionInput, sequence: Int) async throws -> BigInt {
         switch input.type {
-        case .transfer(let asset):
+        case .transfer(let asset), .deposit(let asset):
             switch asset.id.type {
             case .native:
                 let transaction = try await simulateTransaction(
@@ -76,7 +76,7 @@ public struct AptosService: Sendable {
                 return BigInt(1500)
             }
         case .swap: return BigInt(1500)
-        case .transferNft, .stake, .generic, .account, .tokenApprove: fatalError()
+        case .transferNft, .stake, .generic, .account, .tokenApprove, .perpetual: fatalError()
         }
     }
     

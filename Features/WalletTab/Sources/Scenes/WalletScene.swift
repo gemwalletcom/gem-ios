@@ -31,6 +31,14 @@ public struct WalletScene: View {
             }
             .cleanListRow()
 
+            if $preferences.isDeveloperEnabled.wrappedValue {
+                Section {
+                    NavigationLink(value: Scenes.Perpetuals()) {
+                        ListItemView(title: "Perpetuals")
+                    }
+                }
+            }
+            
             Section {
                 BannerView(
                     banners: model.banners,

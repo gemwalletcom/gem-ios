@@ -62,7 +62,7 @@ extension ChainService {
                 graphql: GraphqlService(provider: ProviderFactory.create(with: url))
             )
         case .hyperCore:
-            fatalError()
+            HyperCoreService(chain: chain, provider: ProviderFactory.create(with: url))
         }
     }
 }

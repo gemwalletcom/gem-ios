@@ -45,7 +45,6 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
             case .collection: [.chainsOrAssets([], Chain.allCases.filter { $0.isNFTSupported }.map { $0.rawValue})]
             }
         case .buy: [.buyable]
-
         case .swap(let type):
             switch type {
             case .pay: [.swappable, .hasBalance]
@@ -60,12 +59,13 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
             }
         case .manage: []
         case .priceAlert: [.priceAlerts]
+        case .deposit: [ .chainsOrAssets([], ["arbitrum_0xaf88d065e77c8cC2239327C5EDb3A432268e5831"])] // USDC arbitrum
         }
     }
 
     var showHasBalanceToggle: Bool {
         switch type {
-        case .send, .receive, .buy, .swap, .priceAlert: false
+        case .send, .receive, .buy, .swap, .priceAlert, .deposit: false
         case .manage: true
         }
     }

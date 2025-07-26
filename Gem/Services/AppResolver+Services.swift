@@ -21,6 +21,7 @@ import ScanService
 import NFTService
 import AvatarService
 import SwapService
+import PerpetualService
 
 extension AppResolver {
     struct Services: Sendable {
@@ -52,6 +53,7 @@ extension AppResolver {
         let onstartService: OnstartService
         let onstartAsyncService: OnstartAsyncService
         let walletConnectorManager: WalletConnectorManager
+        let perpetualService: PerpetualService
 
         init(
             assetsService: AssetsService,
@@ -80,7 +82,8 @@ extension AppResolver {
             deviceObserverService: DeviceObserverService,
             onstartService: OnstartService,
             onstartAsyncService: OnstartAsyncService,
-            walletConnectorManager: WalletConnectorManager
+            walletConnectorManager: WalletConnectorManager,
+            perpetualService: PerpetualService
         ) {
             self.assetsService = assetsService
             self.balanceService = balanceService
@@ -109,6 +112,7 @@ extension AppResolver {
             self.onstartService = onstartService
             self.onstartAsyncService = onstartAsyncService
             self.walletConnectorManager = walletConnectorManager
+            self.perpetualService = perpetualService
         }
     }
 }

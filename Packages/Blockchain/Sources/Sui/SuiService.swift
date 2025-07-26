@@ -67,7 +67,7 @@ extension SuiService {
 
     private func getData(input: FeeInput) async throws -> String {
         switch input.type {
-        case .transfer(let asset):
+        case .transfer(let asset), .deposit(let asset):
             switch asset.id.type {
             case .native:
                 try await encodeTransfer(
@@ -114,7 +114,7 @@ extension SuiService {
             let output = try suiValidateAndHash(encoded: data.data.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()
-        case .generic, .account, .tokenApprove: fatalError()
+        case .generic, .account, .tokenApprove, .perpetual: fatalError()
         }
     }
 

@@ -22,6 +22,11 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case accountMinimalBalance(Asset, required: BigInt)
     // stake
     case stakeMinimumAmount(Asset, required: BigInt)
+    // perpetuals
+    case fundingRate
+    case fundingPayments
+    case liquidationPrice
+    case openInterest
 
 
     public var id: String {
@@ -38,6 +43,10 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case let .accountMinimalBalance(asset, amount): "accountMinimalBalance_\(asset.id.identifier)\(amount)"
         case let .stakeMinimumAmount(asset, amount): "stakeMinimumAmount_\(asset.id.identifier)\(amount)"
         case .noQuote: "noQuote"
+        case .fundingRate: "fundingRate"
+        case .fundingPayments: "fundingPayments"
+        case .liquidationPrice: "liquidationPrice"
+        case .openInterest: "openInterest"
         }
     }
 }

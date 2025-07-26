@@ -12,9 +12,16 @@ struct TransferDataViewModelTests {
         #expect(TransferDataViewModel.mock(type: .transfer(.mock(id: .mockSolana()))).shouldShowMemo == true)
         #expect(TransferDataViewModel.mock(type: .transfer(.mock(id: .mockSolana()))).shouldShowMemo == true)
         
+        #expect(TransferDataViewModel.mock(type: .deposit(.mock(id: .mockEthereum()))).shouldShowMemo == false)
+        #expect(TransferDataViewModel.mock(type: .deposit(.mock(id: .mockSolana()))).shouldShowMemo == true)
+        
         #expect(TransferDataViewModel.mock(type: .transferNft(.mock())).shouldShowMemo == false)
         #expect(TransferDataViewModel.mock(type: .transferNft(.mock())).shouldShowMemo == false)
         #expect(TransferDataViewModel.mock(type: .transferNft(.mock())).shouldShowMemo == false)
+    }
+    
+    func depositTitle() {
+        #expect(TransferDataViewModel.mock(type: .deposit(.mock())).title == "Deposit")
     }
 }
 

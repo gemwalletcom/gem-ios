@@ -56,6 +56,10 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
         case .accountMinimalBalance: Localized.Info.AccountMinimumBalance.title
         case .stakeMinimumAmount: Localized.Info.StakeMinimumAmount.title
         case .noQuote: Localized.Errors.Swap.noQuoteAvailable
+        case .fundingRate: Localized.Info.FundingRate.title
+        case .fundingPayments: Localized.Info.FundingPayments.title
+        case .liquidationPrice: Localized.Info.LiquidationPrice.title
+        case .openInterest: Localized.Info.OpenInterest.title
         }
     }
 
@@ -100,6 +104,10 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             let amount = ValueFormatter(style: .full).string(required, asset: asset)
             return Localized.Info.StakeMinimumAmount.description(asset.name, amount)
         case .noQuote: return Localized.Info.NoQuote.description
+        case .fundingRate: return Localized.Info.FundingRate.description
+        case .fundingPayments: return Localized.Info.FundingPayments.description
+        case .liquidationPrice: return Localized.Info.LiquidationPrice.description
+        case .openInterest: return Localized.Info.OpenInterest.description
         }
     }
 
@@ -149,7 +157,7 @@ public struct InfoSheetViewModel: InfoSheetModelViewable {
             case .unverified: return .image(Images.TokenStatus.warning)
             case .suspicious: return .image(Images.TokenStatus.risk)
             }
-        case .noQuote:
+        case .noQuote, .fundingRate, .fundingPayments, .liquidationPrice, .openInterest:
             return .image(Images.Logo.logo)
         }
     }
@@ -179,6 +187,11 @@ private extension InfoSheetViewModel {
         // Which one to use?
         case .insufficientBalance: Docs.url(.networkFees)
         case .stakeMinimumAmount: Docs.url(.accountMinimalBalance)
+        // TODO: Add these to DocsUrl in Gemstone
+        case .fundingRate: Docs.url(.networkFees) // placeholder
+        case .fundingPayments: Docs.url(.networkFees) // placeholder
+        case .liquidationPrice: Docs.url(.networkFees) // placeholder
+        case .openInterest: Docs.url(.networkFees) // placeholder
         }
     }
 }

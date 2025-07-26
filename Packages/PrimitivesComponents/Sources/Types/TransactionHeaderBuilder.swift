@@ -38,6 +38,8 @@ public struct TransactionHeaderTypeBuilder {
                     return .amount(showFiatSubtitle: false)
                 }
                 return .nft(name: metadata.name, id: metadata.assetId)
+            case .perpetualOpenPosition, .perpetualClosePosition:
+                return .amount(showFiatSubtitle: true)
             }
         }()
         return infoModel.headerType(input: inputType)
@@ -51,6 +53,7 @@ public struct TransactionHeaderTypeBuilder {
         let inputType: TransactionHeaderInputType = {
             switch dataType {
             case .transfer,
+                    .deposit,
                     .generic,
                     .stake,
                     .tokenApprove:
@@ -89,6 +92,8 @@ public struct TransactionHeaderTypeBuilder {
                     fatalError("fromAsset & toAsset missed")
                 }
                 return .swap(input)
+            case .perpetual:
+                return .amount(showFiatSubtitle: true)
             }
         }()
         return infoModel.headerType(input: inputType)

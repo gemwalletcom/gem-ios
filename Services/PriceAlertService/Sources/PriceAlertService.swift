@@ -54,15 +54,15 @@ public struct PriceAlertService: Sendable {
         let remote = try await getPriceAlerts()
         let local = try store.getPriceAlerts()
         
-        let changes = SyncValues.changes(
+        let changes = SyncDiff.calculate(
             primary: .remote,
             local: local.map { $0.id }.asSet(),
             remote: remote.map { $0.id }.asSet()
         )
         
         try store.diffPriceAlerts(
-            deleteIds: changes.delete.asArray(),
-            alerts: remote.filter { changes.missing.contains($0.id)}
+            deleteIds: changes.toDelete.asArray(),
+            alerts: remote.filter { changes.toAdd.contains($0.id)}
         )
     }
 

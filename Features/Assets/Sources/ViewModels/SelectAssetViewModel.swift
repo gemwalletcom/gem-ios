@@ -85,6 +85,7 @@ public final class SelectAssetViewModel {
             }
         case .manage: Localized.Wallet.manageTokenList
         case .priceAlert: Localized.Assets.selectAsset
+        case .deposit: "Deposit"
         }
     }
 
@@ -108,7 +109,7 @@ public final class SelectAssetViewModel {
                 wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
             case .collection: false
             }
-        case .buy, .manage, .priceAlert, .send, .swap:
+        case .buy, .manage, .priceAlert, .send, .swap, .deposit:
             wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
         }
     }
@@ -121,7 +122,7 @@ public final class SelectAssetViewModel {
             case .pay: return false
             case .receive: return true
             }
-        case .send: return false
+        case .send, .deposit: return false
         }
     }
 
@@ -143,7 +144,7 @@ extension SelectAssetViewModel {
             Task {
                 await setPriceAlert(assetId: asset.id, enabled: true)
             }
-            case .manage, .send, .receive, .buy, .swap: break
+            case .manage, .send, .receive, .buy, .swap, .deposit: break
         }
         onSelectAssetAction?(asset)
     }
@@ -164,7 +165,7 @@ extension SelectAssetViewModel {
         switch selectType {
         case .manage:
             await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
-        case .send, .receive, .buy, .swap, .priceAlert: break
+        case .send, .receive, .buy, .swap, .priceAlert, .deposit: break
         }
     }
 
@@ -233,7 +234,7 @@ extension SelectAssetViewModel {
 extension SelectAssetViewModel {
     private func searchChains(for type: WalletType) -> [Chain] {
         switch selectType {
-        case .send, .receive, .manage, .buy, .swap:
+        case .send, .receive, .manage, .buy, .swap, .deposit:
             switch wallet.type {
             case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }
             case .multicoin: []
@@ -295,7 +296,8 @@ extension SelectAssetType {
         switch self {
         case .send,
                 .buy,
-                .swap: .view
+                .swap,
+                .deposit: .view
         case .receive: .copy
         case .manage: .manage
         case .priceAlert: .price

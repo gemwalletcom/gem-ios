@@ -45,8 +45,7 @@ public struct ChartDateFormatter {
             .week,
             .month:
             return ChartDateFormatter.dateWithTime
-        case .quarter,
-            .year,
+        case .year,
             .all:
             return ChartDateFormatter.dateNoTime
         }

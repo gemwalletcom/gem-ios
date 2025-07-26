@@ -41,6 +41,8 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingSelectAssetType: SelectAssetType?
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingUrl: URL? = nil
+    public var isPresentingTransferData: TransferData?
+    public var isPresentingPerpetualRecipientData: PerpetualRecipientData?
     
     public var isLoadingAssets: Bool = false
 
@@ -139,7 +141,7 @@ extension WalletSceneViewModel {
         case .buy: .buy
         case .send: .send
         case .receive: .receive(.asset)
-        case .swap, .more, .stake:
+        case .swap, .more, .stake, .deposit, .withdraw:
             fatalError()
         }
         isPresentingSelectAssetType = selectType
@@ -193,6 +195,10 @@ extension WalletSceneViewModel {
     func shouldStartLoadingAssets() {
         let preferences = WalletPreferences(walletId: wallet.id)
         isLoadingAssets = !preferences.completeDiscoveryAssets && preferences.assetsTimestamp == .zero
+    }
+    
+    public func onTransferComplete() {
+        isPresentingTransferData = nil
     }
 }
 
