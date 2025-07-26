@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 
 public struct RetryIntervalCalculator {
     static func initialInterval(for config: JobConfiguration) -> Duration {

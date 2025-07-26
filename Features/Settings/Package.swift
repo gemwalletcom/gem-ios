@@ -74,6 +74,10 @@ let package = Package(
             dependencies: ["Settings"]),
         .testTarget(
             name: "CurrencyTests",
-            dependencies: ["Settings"]),
+            dependencies: [
+                "Settings",
+                "Primitives",
+                .product(name: "PriceServiceTestKit", package: "PriceService")
+            ]),
     ]
 )

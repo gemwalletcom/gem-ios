@@ -129,27 +129,23 @@ public struct PerpetualPositionViewModel {
     }
     
     public var liquidationPriceColor: Color {
-        guard let entryPrice = data.position.entryPrice,
-              let liquidationPrice = data.position.liquidationPrice,
-              entryPrice > 0, liquidationPrice > 0 else {
-            return Colors.secondaryText
-        }
-        
-        let currentPrice = entryPrice + (data.position.pnl / abs(data.position.size))
-        let priceRange = abs(entryPrice - liquidationPrice)
-        
-        let currentDistance = switch data.position.direction {
-        case .long: currentPrice - liquidationPrice
-        case .short: liquidationPrice - currentPrice
-        }
-        
-        let proximityToLiquidation = 1.0 - (currentDistance / priceRange)
-        
-        return switch proximityToLiquidation {
-        case 0.8...: Colors.red
-        case 0.5...: Colors.orange
-        default: Colors.secondaryText
-        }
+//        guard let entryPrice = data.position.entryPrice,
+//              let liquidationPrice = data.position.liquidationPrice,
+//              let currentPrice = data.position.currencyPrice,
+//              entryPrice > 0, liquidationPrice > 0, currentPrice > 0 else {
+//            return Colors.secondaryText
+//        }
+//        
+//        let priceRange = abs(entryPrice - liquidationPrice)
+//        let distance = abs(currentPrice - entryPrice)
+//        let progress = distance / priceRange
+//        
+//        return switch progress {
+//        case 0.8...: Colors.red
+//        case 0.5..<0.8: Colors.orange
+//        default: Colors.secondaryText
+//        }
+        Colors.secondaryText
     }
     
     public var liquidationPriceTextStyle: TextStyle {

@@ -13,13 +13,11 @@ let package = Package(
             targets: ["JobRunner"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives")
     ],
     targets: [
         .target(
             name: "JobRunner",
             dependencies: [
-                "Primitives"
             ]
         ),
         .testTarget(
