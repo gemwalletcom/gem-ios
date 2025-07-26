@@ -17,7 +17,6 @@ let package = Package(
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "Blockchain", path: "../../Packages/Blockchain"),
-        .package(name: "SwiftHTTPClient", path: "../../Packages/SwiftHTTPClient"),
         .package(name: "ChainService", path: "../../Services/ChainService"),
     ],
     targets: [
@@ -27,7 +26,6 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "Blockchain",
-                "SwiftHTTPClient",
                 "ChainService",
             ],
             path: "Sources"

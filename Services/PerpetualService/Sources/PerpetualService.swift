@@ -4,7 +4,6 @@ import Foundation
 import Primitives
 import Store
 import Blockchain
-import SwiftHTTPClient
 
 public struct PerpetualService: PerpetualServiceable {
     

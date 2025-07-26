@@ -4,7 +4,6 @@ import Foundation
 import Blockchain
 import ChainService
 import Primitives
-import SwiftHTTPClient
 
 public struct PerpetualProviderFactory {
     
