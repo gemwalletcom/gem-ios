@@ -7,7 +7,6 @@ import enum Gemstone.SocialUrl
 import Primitives
 import Localization
 import Style
-import Currency
 import Preferences
 import WalletsService
 import PrimitivesComponents

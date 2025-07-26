@@ -20,7 +20,6 @@ let package = Package(
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
-        .package(name: "Currency", path: "../Currency"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
 
@@ -45,7 +44,6 @@ let package = Package(
                 "Localization",
                 "PrimitivesComponents",
                 "Preferences",
-                "Currency",
                 "GemstonePrimitives",
                 "Gemstone",
                 "Keystore",
