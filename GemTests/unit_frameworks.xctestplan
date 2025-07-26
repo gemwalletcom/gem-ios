@@ -25,13 +25,6 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Services\/TransferService",
-        "identifier" : "TransferServiceTests",
-        "name" : "TransferServiceTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:Packages\/GemAPI",
         "identifier" : "GemAPITests",
         "name" : "GemAPITests"

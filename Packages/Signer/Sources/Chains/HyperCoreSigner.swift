@@ -6,7 +6,6 @@ import WalletCorePrimitives
 import BigInt
 import Keystore
 import Primitives
-import Blockchain
 import GemstonePrimitives
 
 public class HyperCoreSigner: Signable {

@@ -15,7 +15,6 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
@@ -25,7 +24,6 @@ let package = Package(
             name: "ExplorerService",
             dependencies: [
                 "Primitives",
-                "Gemstone",
                 "GemstonePrimitives",
                 "Preferences"
             ]

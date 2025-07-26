@@ -4,7 +4,6 @@ import Foundation
 import WalletCore
 import WalletCorePrimitives
 import Primitives
-import Blockchain
 import Keystore
 
 // https://github.com/trustwallet/wallet-core/blob/master/swift/Tests/Blockchains/THORChainTests.swift#L27
