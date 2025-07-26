@@ -7,7 +7,7 @@ public enum HypercoreProvider: TargetType {
     case clearinghouseState(user: String)
     case metaAndAssetCtxs
     case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
-    case exchange(action: String, signature: String, nonce: UInt64)
+    case exchange(action: String, signature: String, nonce: Int)
 
     public var baseUrl: URL {
         return URL(string: "")!
@@ -48,14 +48,11 @@ public enum HypercoreProvider: TargetType {
                 ])
             ]))
         case .exchange(let action, let signature, let nonce):
-            let action = try! JSONSerialization.jsonObject(with: action.data(using: .utf8)!, options: [])
-            let object: [String: Any] = [
-                "action": action,
-                "signature": signature,
-                "nonce": nonce
-            ]
-            let data = try! JSONSerialization.data(withJSONObject: object, options: [])
-            return .data(data)
+            return .encodable(JSON<String>.dictionary([
+                "action": .value(action),
+                "signature": .value(signature),
+                "nonce": .integer(nonce),
+            ]))
         }
     }
 
