@@ -102,7 +102,6 @@
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
 		D85AD29D2CD337BE0010DEF8 /* SwapService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD29C2CD337BE0010DEF8 /* SwapService */; };
-		D85AD2A32CD442A40010DEF8 /* TransferService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD2A22CD442A40010DEF8 /* TransferService */; };
 		D85AD2A62CD7017E0010DEF8 /* NativeProviderService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD2A52CD7017E0010DEF8 /* NativeProviderService */; };
 		D873DA512D7933AF0003F5CE /* MarketsNavigtionStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D873DA502D7933AF0003F5CE /* MarketsNavigtionStack.swift */; };
 		D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */; };
@@ -316,7 +315,6 @@
 				833809D02D273E450055D91F /* WalletConnectorService in Frameworks */,
 				C3D1C4E22A2A9485006E8EEA /* Signer in Frameworks */,
 				D85AD2A62CD7017E0010DEF8 /* NativeProviderService in Frameworks */,
-				D85AD2A32CD442A40010DEF8 /* TransferService in Frameworks */,
 				8361BB6D2D400E4F008D89CF /* AssetsService in Frameworks */,
 				D80312AF2E2EE3E1005A5C77 /* PerpetualService in Frameworks */,
 				D8D83C842CECFA610083AA53 /* Swap in Frameworks */,
@@ -815,7 +813,6 @@
 				D8F5B86B2CCD52EB0007E615 /* Staking */,
 				D8F5B86E2CCD639A0007E615 /* StakeService */,
 				D85AD29C2CD337BE0010DEF8 /* SwapService */,
-				D85AD2A22CD442A40010DEF8 /* TransferService */,
 				D85AD2A52CD7017E0010DEF8 /* NativeProviderService */,
 				D8D83C832CECFA610083AA53 /* Swap */,
 				83CE0F5F2D11C50A00A55BBF /* Currency */,
@@ -1975,10 +1972,6 @@
 		D85AD29C2CD337BE0010DEF8 /* SwapService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwapService;
-		};
-		D85AD2A22CD442A40010DEF8 /* TransferService */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = TransferService;
 		};
 		D85AD2A52CD7017E0010DEF8 /* NativeProviderService */ = {
 			isa = XCSwiftPackageProductDependency;
