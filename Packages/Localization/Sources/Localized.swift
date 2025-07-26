@@ -619,6 +619,8 @@ public enum Localized {
     public static let unlock = Localized.tr("Localizable", "lock.unlock", fallback: "Unlock")
   }
   public enum Markets {
+    /// 24h Volume
+    public static let dailyVolume = Localized.tr("Localizable", "markets.daily_volume", fallback: "24h Volume")
     /// Markets
     public static let title = Localized.tr("Localizable", "markets.title", fallback: "Markets")
     public enum State {
@@ -735,6 +737,24 @@ public enum Localized {
         }
       }
     }
+  }
+  public enum Perpetual {
+    /// Close position
+    public static let closePosition = Localized.tr("Localizable", "perpetual.close_position", fallback: "Close position")
+    /// Long
+    public static let long = Localized.tr("Localizable", "perpetual.long", fallback: "Long")
+    /// Margin
+    public static let margin = Localized.tr("Localizable", "perpetual.margin", fallback: "Margin")
+    /// PnL
+    public static let pnl = Localized.tr("Localizable", "perpetual.pnl", fallback: "PnL")
+    /// Position
+    public static let position = Localized.tr("Localizable", "perpetual.position", fallback: "Position")
+    /// Positions
+    public static let positions = Localized.tr("Localizable", "perpetual.positions", fallback: "Positions")
+    /// Short
+    public static let short = Localized.tr("Localizable", "perpetual.short", fallback: "Short")
+    /// Size
+    public static let size = Localized.tr("Localizable", "perpetual.size", fallback: "Size")
   }
   public enum PriceAlerts {
     /// Set price alert %@

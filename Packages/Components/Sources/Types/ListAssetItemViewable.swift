@@ -42,3 +42,9 @@ extension ListAssetItemViewable {
         }
     }
 }
+
+extension ListAssetItemViewable {
+    public var showBalancePrivacy: Binding<Bool> {
+        .constant(false)
+    }
+}

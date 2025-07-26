@@ -443,3 +443,12 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "선택된 토큰 쌍에 대한 견적을 반환할 수 없습니다. 금액이 부족하거나, 유동성이 부족하거나, 기술적 한계가 있을 수 있습니다.";
+"perpetual.positions" = "위치";
+"perpetual.size" = "크기";
+"perpetual.margin" = "여유";
+"perpetual.position" = "위치";
+"perpetual.close_position" = "닫기 위치";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "24시간 볼륨";

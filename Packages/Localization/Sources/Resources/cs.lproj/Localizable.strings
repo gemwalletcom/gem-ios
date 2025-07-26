@@ -443,3 +443,12 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "Nelze vrátit cenovou nabídku pro vybraný pár tokenů, pravděpodobně z důvodu nízkého množství, nedostatku likvidity nebo technických omezení.";
+"perpetual.positions" = "Pozice";
+"perpetual.size" = "Velikost";
+"perpetual.margin" = "Okraj";
+"perpetual.position" = "Pozice";
+"perpetual.close_position" = "Zavřít pozici";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "24hodinový objem";

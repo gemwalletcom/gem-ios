@@ -443,3 +443,12 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "Không thể trả về báo giá cho cặp mã thông báo đã chọn, có thể do số lượng thấp, thiếu thanh khoản hoặc hạn chế về mặt kỹ thuật.";
+"perpetual.positions" = "Vị trí";
+"perpetual.size" = "Kích cỡ";
+"perpetual.margin" = "Lề";
+"perpetual.position" = "Chức vụ";
+"perpetual.close_position" = "Đóng vị trí";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "Khối lượng 24 giờ";

@@ -443,3 +443,12 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "Impossible de renvoyer un devis pour la paire de jetons sélectionnée, probablement en raison d'un faible montant, d'un manque de liquidité ou de limitations techniques.";
+"perpetual.positions" = "Postes";
+"perpetual.size" = "Taille";
+"perpetual.margin" = "Marge";
+"perpetual.position" = "Position";
+"perpetual.close_position" = "Position fermée";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "Volume 24h";

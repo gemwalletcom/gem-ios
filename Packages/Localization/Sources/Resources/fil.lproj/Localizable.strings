@@ -443,3 +443,12 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "Hindi maibalik ang isang quote para sa napiling pares ng token, posibleng dahil sa mababang halaga, kakulangan ng pagkatubig, o mga teknikal na limitasyon.";
+"perpetual.positions" = "Mga posisyon";
+"perpetual.size" = "Sukat";
+"perpetual.margin" = "Margin";
+"perpetual.position" = "Posisyon";
+"perpetual.close_position" = "Isara ang posisyon";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "24h Volume";

@@ -8,22 +8,6 @@ import PerpetualsTestKit
 
 struct PerpetualPositionViewModelTests {
     
-    private func createViewModel(position: PerpetualPosition) -> PerpetualPositionViewModel {
-        let asset = Asset(
-            id: AssetId(chain: .bitcoin, tokenId: nil),
-            name: "Bitcoin", 
-            symbol: "BTC",
-            decimals: 8,
-            type: .native
-        )
-        let positionData = PerpetualPositionData(
-            perpetual: Perpetual.mock(),
-            asset: asset,
-            position: position
-        )
-        return PerpetualPositionViewModel(data: positionData)
-    }
-    
     @Test
     func leverageText() {
         #expect(createViewModel(position: PerpetualPosition.mock(leverage: 10)).leverageText == "10x")
@@ -70,5 +54,20 @@ struct PerpetualPositionViewModelTests {
         #expect(createViewModel(position: PerpetualPosition.mock(liquidationPrice: 40000, marginAmount: 100, pnl: -30)).liquidationPriceColor == Colors.orange)
         #expect(createViewModel(position: PerpetualPosition.mock(liquidationPrice: 40000, marginAmount: 100, pnl: -60)).liquidationPriceColor == Colors.red)
     }
-    
+}
+
+private func createViewModel(position: PerpetualPosition) -> PerpetualPositionViewModel {
+    let asset = Asset(
+        id: AssetId(chain: .bitcoin, tokenId: nil),
+        name: "Bitcoin",
+        symbol: "BTC",
+        decimals: 8,
+        type: .native
+    )
+    let positionData = PerpetualPositionData(
+        perpetual: Perpetual.mock(),
+        asset: asset,
+        position: position
+    )
+    return PerpetualPositionViewModel(data: positionData)
 }

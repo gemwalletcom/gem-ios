@@ -443,3 +443,12 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "Er kan geen offerte worden geretourneerd voor het geselecteerde tokenpaar, mogelijk vanwege een te laag bedrag, gebrek aan liquiditeit of technische beperkingen.";
+"perpetual.positions" = "Posities";
+"perpetual.size" = "Maat";
+"perpetual.margin" = "Marge";
+"perpetual.position" = "Positie";
+"perpetual.close_position" = "Sluit positie";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "24-uurs volume";

@@ -8,6 +8,7 @@ import PerpetualService
 import Preferences
 import PrimitivesComponents
 import Components
+import Localization
 
 @Observable
 @MainActor
@@ -42,7 +43,7 @@ public final class PerpetualsSceneViewModel {
     }
     
     public var navigationTitle: String { "Perpetuals" }
-    public var positionsSectionTitle: String { "Positions" }
+    public var positionsSectionTitle: String { Localized.Perpetual.positions }
     public var marketsSectionTitle: String { "Markets" }
     public var noMarketsText: String { "No markets" }
     

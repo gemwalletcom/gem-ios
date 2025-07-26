@@ -64,11 +64,11 @@ public final class PerpetualSceneViewModel {
         !positionViewModels.isEmpty
     }
     
-    public var positionSectionTitle: String { "Position" }
-    public var infoSectionTitle: String { "Info" }
-    public var closePositionTitle: String { "Close Position" }
-    public var longButtonTitle: String { "Long" }
-    public var shortButtonTitle: String { "Short" }
+    public var positionSectionTitle: String { Localized.Perpetual.position }
+    public var infoSectionTitle: String { Localized.Common.info }
+    public var closePositionTitle: String { Localized.Perpetual.closePosition }
+    public var longButtonTitle: String { Localized.Perpetual.long }
+    public var shortButtonTitle: String { Localized.Perpetual.short }
     
     public func fetch() async {
         Task {

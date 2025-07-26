@@ -39,8 +39,8 @@ public struct PerpetualPositionViewModel {
     
     public var directionText: String {
         switch data.position.direction {
-        case .short: "Short"
-        case .long: "Long"
+        case .short: Localized.Perpetual.short
+        case .long: Localized.Perpetual.long
         }
     }
     
@@ -52,7 +52,7 @@ public struct PerpetualPositionViewModel {
         data.position.size > 0 ? Colors.green : Colors.red
     }
     
-    public var pnlTitle: String { "PnL" }
+    public var pnlTitle: String { Localized.Perpetual.pnl }
     public var pnlColor: Color {
         data.position.pnl >= 0 ? Colors.green : Colors.red
     }
@@ -61,7 +61,7 @@ public struct PerpetualPositionViewModel {
         TextStyle(font: .callout, color: pnlColor)
     }
     
-    public var marginTitle: String { "Margin" }
+    public var marginTitle: String { Localized.Perpetual.margin }
     public var marginAmountText: String {
         return currencyFormatter.string(data.position.marginAmount)
     }
@@ -111,7 +111,7 @@ public struct PerpetualPositionViewModel {
         TextStyle(font: .callout, color: fundingPaymentsColor)
     }
     
-    public var sizeTitle: String { "Size" }
+    public var sizeTitle: String { Localized.Perpetual.size }
     public var sizeText: String {
         currencyFormatter.string(abs(data.position.size))
     }
@@ -119,7 +119,7 @@ public struct PerpetualPositionViewModel {
         currencyFormatter.string(data.position.sizeValue)
     }
     
-    public var liquidationPriceTitle: String { "Liquidation Price" }
+    public var liquidationPriceTitle: String { Localized.Info.LiquidationPrice.title }
     public var liquidationPriceText: String? {
         guard let price = data.position.liquidationPrice, price > 0 else { return .none }
         return currencyFormatter.string(price)

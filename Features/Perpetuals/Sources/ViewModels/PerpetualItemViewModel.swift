@@ -17,8 +17,7 @@ public struct PerpetualItemViewModel: ListAssetItemViewable {
     ) {
         self.model = model
     }
-    
-    public var showBalancePrivacy: Binding<Bool> { .constant(false) }
+
     public var name: String { model.name }
     public var symbol: String? { .none }
     public var action: ((ListAssetItemAction) -> Void)?
