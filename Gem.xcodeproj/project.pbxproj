@@ -126,8 +126,6 @@
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
 		DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = DF93C4ED2C969F4F00204ABD /* Gemstone */; };
-		DFA0B5192D16C86E00355594 /* Currency in Frameworks */ = {isa = PBXBuildFile; productRef = DFA0B5182D16C86E00355594 /* Currency */; };
-		DFA0B51E2D16C94400355594 /* Currency in Frameworks */ = {isa = PBXBuildFile; productRef = DFA0B51D2D16C94400355594 /* Currency */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -317,7 +315,6 @@
 				D8D83C842CECFA610083AA53 /* Swap in Frameworks */,
 				8342EA032DB67EE3001B3780 /* WalletService in Frameworks */,
 				833931A82D2D663C0063BB6A /* PriceService in Frameworks */,
-				DFA0B51E2D16C94400355594 /* Currency in Frameworks */,
 				83759DF72D384AF5002FECBA /* PreferencesTestKit in Frameworks */,
 				839C794B2D1C42A500E32072 /* PrimitivesComponents in Frameworks */,
 				C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */,
@@ -346,7 +343,6 @@
 				B69C53BB2DE8685D00BBD95D /* WalletTabTestKit in Frameworks */,
 				8361BB6A2D400DB6008D89CF /* TransactionsService in Frameworks */,
 				D829BF422CBDD65A00DEB2E8 /* MarketInsight in Frameworks */,
-				DFA0B5192D16C86E00355594 /* Currency in Frameworks */,
 				D83D3C252D6E62F4002959EA /* ScanService in Frameworks */,
 				D8F5B86C2CCD52EB0007E615 /* Staking in Frameworks */,
 				C36679162A119C6200F1D74D /* GemAPI in Frameworks */,
