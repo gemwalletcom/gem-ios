@@ -53,17 +53,6 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C30952CA299C39D80004C0F9"
-               BuildableName = "walletUITests.xctest"
-               BlueprintName = "walletUITests"
-               ReferencedContainer = "container:Gem.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "D8A1F8722B17F21E00B15F54"
                BuildableName = "Screenshots.xctest"
                BlueprintName = "Screenshots"
@@ -79,16 +68,6 @@
                BuildableName = "GemUITests.xctest"
                BlueprintName = "GemUITests"
                ReferencedContainer = "container:Gem.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ChainSettingsTests"
-               BuildableName = "ChainSettingsTests"
-               BlueprintName = "ChainSettingsTests"
-               ReferencedContainer = "container:Features/ChainSettings">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -119,16 +98,6 @@
                BuildableName = "DiscoverAssetsServiceTests"
                BlueprintName = "DiscoverAssetsServiceTests"
                ReferencedContainer = "container:Services/DiscoverAssetsService">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CurrencyTests"
-               BuildableName = "CurrencyTests"
-               BlueprintName = "CurrencyTests"
-               ReferencedContainer = "container:Features/Currency">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -179,16 +148,6 @@
                BuildableName = "LockManagerTests"
                BlueprintName = "LockManagerTests"
                ReferencedContainer = "container:Features/LockManager">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ManageWalletServiceTests"
-               BuildableName = "ManageWalletServiceTests"
-               BlueprintName = "ManageWalletServiceTests"
-               ReferencedContainer = "container:Services/ManageWalletService">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -375,16 +334,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "TransferServiceTests"
-               BuildableName = "TransferServiceTests"
-               BlueprintName = "TransferServiceTests"
-               ReferencedContainer = "container:Services/TransferService">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "WalletConnectorTests"
                BuildableName = "WalletConnectorTests"
                BlueprintName = "WalletConnectorTests"
@@ -469,26 +418,6 @@
                BuildableName = "OnboardingTest"
                BlueprintName = "OnboardingTest"
                ReferencedContainer = "container:Features/Onboarding">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "KeychainTests"
-               BuildableName = "KeychainTests"
-               BlueprintName = "KeychainTests"
-               ReferencedContainer = "container:Packages/Keychain">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DeviceServiceTests"
-               BuildableName = "DeviceServiceTests"
-               BlueprintName = "DeviceServiceTests"
-               ReferencedContainer = "container:Services/DeviceService">
             </BuildableReference>
          </TestableReference>
       </Testables>

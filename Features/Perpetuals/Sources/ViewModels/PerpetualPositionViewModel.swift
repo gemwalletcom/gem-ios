@@ -112,14 +112,11 @@ public struct PerpetualPositionViewModel {
     }
     
     public var sizeTitle: String { Localized.Perpetual.size }
-    public var sizeText: String {
-        currencyFormatter.string(abs(data.position.size))
-    }
     public var sizeValueText: String {
         currencyFormatter.string(data.position.sizeValue)
     }
     
-    public var entryPriceTitle: String { "Entry Price" }
+    public var entryPriceTitle: String { Localized.Perpetual.entryPrice }
     public var entryPriceText: String? {
         guard let price = data.position.entryPrice, price > 0 else { return .none }
         return currencyFormatter.string(price)

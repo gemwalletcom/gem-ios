@@ -801,12 +801,8 @@
 				D85AD29C2CD337BE0010DEF8 /* SwapService */,
 				D85AD2A52CD7017E0010DEF8 /* NativeProviderService */,
 				D8D83C832CECFA610083AA53 /* Swap */,
-				83CE0F5F2D11C50A00A55BBF /* Currency */,
 				83863EE62D19B93E005048A7 /* NodeService */,
-				DFA0B5182D16C86E00355594 /* Currency */,
-				DFA0B51D2D16C94400355594 /* Currency */,
 				839C794A2D1C42A500E32072 /* PrimitivesComponents */,
-				839C794C2D1C42AE00E32072 /* ChainSettings */,
 				834B38192D1D85E2009D58D4 /* LockManager */,
 				833931A42D2D5B1D0063BB6A /* PriceAlerts */,
 				833931A72D2D663C0063BB6A /* PriceService */,
@@ -1763,10 +1759,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = PrimitivesComponents;
 		};
-		839C794C2D1C42AE00E32072 /* ChainSettings */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ChainSettings;
-		};
 		83B6C20F2D5E3F2600F9DF8A /* WalletTab */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletTab;
@@ -1774,10 +1766,6 @@
 		83CA4BA62D2F02440064A4AF /* NameResolver */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NameResolver;
-		};
-		83CE0F5F2D11C50A00A55BBF /* Currency */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Currency;
 		};
 		83D6808A2CCA90D900B45089 /* InfoSheet */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2002,14 +1990,6 @@
 		DF93C4ED2C969F4F00204ABD /* Gemstone */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Gemstone;
-		};
-		DFA0B5182D16C86E00355594 /* Currency */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Currency;
-		};
-		DFA0B51D2D16C94400355594 /* Currency */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Currency;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

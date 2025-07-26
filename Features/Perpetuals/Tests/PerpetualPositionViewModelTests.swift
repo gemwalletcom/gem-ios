@@ -62,7 +62,7 @@ struct PerpetualPositionViewModelTests {
         
         #expect(createPositionViewModel(.mock(size: -100, entryPrice: 1.27, liquidationPrice: 1.91, direction: .short, pnl: 0)).liquidationPriceColor == Colors.secondaryText)
         #expect(createPositionViewModel(.mock(size: -100, entryPrice: 1.27, liquidationPrice: 1.91, direction: .short, pnl: -32)).liquidationPriceColor == Colors.orange)
-        #expect(createPositionViewModel(.mock(size: -100, entryPrice: 1.27, liquidationPrice: 1.91, direction: .short, pnl: -51.2)).liquidationPriceColor == Colors.red)
+        #expect(createPositionViewModel(.mock(size: -100, entryPrice: 1.27, liquidationPrice: 1.91, direction: .short, pnl: -51)).liquidationPriceColor == Colors.red)
     }
 }
 
