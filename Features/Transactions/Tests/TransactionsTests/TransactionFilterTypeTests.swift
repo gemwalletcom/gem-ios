@@ -23,6 +23,8 @@ struct TransactionFilterTypeTests {
                 #expect(type.filterType == .stake)
             case .assetActivation:
                 #expect(type.filterType == .others)
+            case .perpetualOpenPosition, .perpetualClosePosition:
+                #expect(type.filterType == .others)
             }
         }
     }

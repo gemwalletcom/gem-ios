@@ -147,6 +147,32 @@ extension ButtonStyle where Self == ColorButtonStyle {
             cornerRadius: cornerRadius
         )
     }
+    
+    public static func red(
+        paddingHorizontal: CGFloat = .medium,
+        paddingVertical: CGFloat = .medium,
+        cornerRadius: CGFloat = Sizing.space12
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            palette: .red,
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            cornerRadius: cornerRadius
+        )
+    }
+    
+    public static func green(
+        paddingHorizontal: CGFloat = .medium,
+        paddingVertical: CGFloat = .medium,
+        cornerRadius: CGFloat = Sizing.space12
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            palette: .green,
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            cornerRadius: cornerRadius
+        )
+    }
 }
 
 // MARK: – Previews

@@ -34,6 +34,9 @@ The codebase is organized into three main layers:
 # Bootstrap the project (required for first setup)
 just bootstrap
 
+# Clean build artifacts and DerivedData
+just clean
+
 # Build the project
 just build
 

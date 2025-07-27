@@ -1,6 +1,5 @@
 import SwiftUI
 import WalletService
-import WalletAvatar
 import Primitives
 import Components
 import Style

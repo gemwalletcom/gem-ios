@@ -2,6 +2,7 @@
 
 import Foundation
 import NodeService
+import Store
 import StoreTestKit
 
 public extension NodeService {

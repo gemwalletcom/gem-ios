@@ -64,6 +64,9 @@ public struct AddressListItemViewModel {
             return name
         } else if let name = account.name {
             let address = address(for: .short)
+            if address.isEmpty {
+                return name
+            }
             return "\(name) (\(address))"
         }
         return account.address

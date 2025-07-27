@@ -443,3 +443,13 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "Não é possível retornar uma cotação para o par de tokens selecionado, possivelmente devido à baixa quantidade, falta de liquidez ou limitações técnicas.";
+"perpetual.positions" = "Posições";
+"perpetual.size" = "Tamanho";
+"perpetual.margin" = "Margem";
+"perpetual.position" = "Posição";
+"perpetual.close_position" = "Posição próxima";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "Volume 24h";
+"perpetual.entry_price" = "Preço de entrada";

@@ -45,22 +45,7 @@ public struct ChartScene: View {
                     }
                     .frame(height: 320)
 
-                    HStack(alignment: .center, spacing: .medium) {
-                        ForEach(model.periods) { period in
-                            Button {
-                                model.currentPeriod = period.period
-                            } label: {
-                                Text(period.title)
-                                    .fontWeight(.medium)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(6)
-                                    .background(model.currentPeriod == period.period ? Colors.white : .clear)
-                                    .cornerRadius(8)
-                            }
-                            .buttonStyle(.borderless)
-                        }
-                    }
-                    .padding(.bottom, .medium)
+                    PeriodSelectorView(selectedPeriod: $model.currentPeriod)
                 }
             }
             .cleanListRow()

@@ -91,7 +91,9 @@ public final class TransactionDetailViewModel {
             .stakeRedelegate,
             .stakeRewards,
             .stakeWithdraw,
-            .assetActivation:
+            .assetActivation,
+            .perpetualOpenPosition,
+            .perpetualClosePosition:
             return .none
         }
     }
@@ -105,7 +107,9 @@ public final class TransactionDetailViewModel {
             .stakeRedelegate,
             .stakeRewards,
             .stakeWithdraw,
-            .assetActivation:
+            .assetActivation,
+            .perpetualOpenPosition,
+            .perpetualClosePosition:
             return .none
         }
     }

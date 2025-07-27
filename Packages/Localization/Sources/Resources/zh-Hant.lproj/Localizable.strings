@@ -443,3 +443,13 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "無法返回所選代幣對的報價，可能是由於數量少、缺乏流動性或技術限制。";
+"perpetual.positions" = "職位";
+"perpetual.size" = "尺寸";
+"perpetual.margin" = "利潤";
+"perpetual.position" = "位置";
+"perpetual.close_position" = "平倉";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "24小時交易量";
+"perpetual.entry_price" = "入場價格";
