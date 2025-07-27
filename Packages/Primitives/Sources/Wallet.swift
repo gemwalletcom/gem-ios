@@ -33,7 +33,7 @@ public struct Wallet: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct WalletId: Codable, Equatable, Sendable {
+public struct WalletId: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 
 	public init(id: String) {

@@ -2,7 +2,6 @@
 
 import SwiftUI
 import Primitives
-import Currency
 import Store
 import PrimitivesComponents
 import PriceAlerts
@@ -10,7 +9,6 @@ import WalletConnector
 import Preferences
 import MarketInsight
 import Settings
-import ChainSettings
 import PriceService
 
 struct SettingsNavigationStack: View {

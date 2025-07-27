@@ -443,3 +443,13 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "Tidak dapat mengembalikan sebut harga untuk pasangan token yang dipilih, mungkin disebabkan oleh jumlah yang rendah, kekurangan kecairan atau pengehadan teknikal.";
+"perpetual.positions" = "jawatan";
+"perpetual.size" = "Saiz";
+"perpetual.margin" = "Margin";
+"perpetual.position" = "kedudukan";
+"perpetual.close_position" = "Tutup kedudukan";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "Kelantangan 24j";
+"perpetual.entry_price" = "Harga Kemasukan";

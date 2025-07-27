@@ -9,6 +9,7 @@ public enum SelectAssetType: Identifiable, Hashable, Sendable {
     case swap(SelectAssetSwapType)
     case manage
     case priceAlert
+    case deposit
 
     public var id: String {
         switch self {
@@ -18,6 +19,7 @@ public enum SelectAssetType: Identifiable, Hashable, Sendable {
         case .swap(let type): "swap_\(type.id)"
         case .manage: "manage"
         case .priceAlert:"priceAlert"
+        case .deposit: "perps"
         }
     }
 }

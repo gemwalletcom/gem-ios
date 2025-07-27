@@ -89,7 +89,6 @@ public enum ChartPeriod: String, Codable, Sendable {
 	case day
 	case week
 	case month
-	case quarter
 	case year
 	case all
 }

@@ -24,10 +24,10 @@ struct SolanaFeeService {
         let priorityFees = prioritizationFees.map { $0 }.sorted(by: >).prefix(5)
         
         let multipleOf = switch type {
-        case .transfer(let asset): asset.type == .native ? 25_000 : 50_000
+        case .transfer(let asset), .deposit(let asset): asset.type == .native ? 25_000 : 50_000
         case .stake, .transferNft: 25_000
         case .generic, .swap: 100_000
-        case .account, .tokenApprove: fatalError()
+        case .account, .tokenApprove, .perpetual: fatalError()
         }
         
         let priorityFeeBase = {
@@ -66,9 +66,9 @@ struct SolanaFeeService {
     
     private func gasLimit(for type: TransferDataType) -> BigInt {
         switch type {
-        case .transfer, .stake, .transferNft: BigInt(100_000)
+        case .transfer, .deposit, .stake, .transferNft: BigInt(100_000)
         case .generic, .swap: BigInt(420_000)
-        case .account, .tokenApprove: fatalError()
+        case .account, .tokenApprove, .perpetual: fatalError()
         }
     }
 }

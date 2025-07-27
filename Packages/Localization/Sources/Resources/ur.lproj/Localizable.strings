@@ -443,3 +443,13 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "ممکنہ طور پر کم رقم، لیکویڈیٹی کی کمی، یا تکنیکی حدود کی وجہ سے منتخب کردہ ٹوکن جوڑے کے لیے کوئی اقتباس واپس کرنے سے قاصر ہے۔";
+"perpetual.positions" = "عہدے";
+"perpetual.size" = "سائز";
+"perpetual.margin" = "مارجن";
+"perpetual.position" = "پوزیشن";
+"perpetual.close_position" = "قریبی پوزیشن";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "24h والیوم";
+"perpetual.entry_price" = "داخلے کی قیمت";

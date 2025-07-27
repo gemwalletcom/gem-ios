@@ -202,7 +202,7 @@ extension AssetSceneViewModel {
         case .swap: .swap(assetData.asset, nil)
         case .receive: .receive(.asset)
         case .stake: .stake(assetData.asset)
-        case .more:
+        case .more, .deposit, .withdraw:
             fatalError()
         }
         isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(

@@ -20,7 +20,6 @@ let package = Package(
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
-        .package(name: "Currency", path: "../Currency"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
 
@@ -33,7 +32,12 @@ let package = Package(
         .package(name: "NotificationService", path: "../../Services/NotificationService"),
         .package(name: "DeviceService", path: "../../Services/DeviceService"),
         .package(name: "PriceService", path: "../../Services/PriceService"),
-        .package(name: "AppService", path: "../../AppService")
+        .package(name: "AppService", path: "../../Services/AppService"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
+        .package(name: "ChainService", path: "../../Services/ChainService"),
+        .package(name: "NodeService", path: "../../Services/NodeService"),
+        .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
+        .package(name: "QRScanner", path: "../QRScanner")
     ],
     targets: [
         .target(
@@ -45,7 +49,6 @@ let package = Package(
                 "Localization",
                 "PrimitivesComponents",
                 "Preferences",
-                "Currency",
                 "GemstonePrimitives",
                 "Gemstone",
                 "Keystore",
@@ -57,12 +60,24 @@ let package = Package(
                 "NotificationService",
                 "DeviceService",
                 "PriceService",
-                "AppService"
+                "AppService",
+                "Formatters",
+                "ChainService",
+                "NodeService",
+                "ExplorerService",
+                "QRScanner"
             ],
             path: "Sources"
         ),
         .testTarget(
             name: "SettingsTests",
             dependencies: ["Settings"]),
+        .testTarget(
+            name: "CurrencyTests",
+            dependencies: [
+                "Settings",
+                "Primitives",
+                .product(name: "PriceServiceTestKit", package: "PriceService")
+            ]),
     ]
 )

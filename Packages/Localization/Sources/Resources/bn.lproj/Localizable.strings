@@ -443,3 +443,13 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "নির্বাচিত টোকেন জোড়ার জন্য একটি উদ্ধৃতি ফেরত দিতে অক্ষম, সম্ভবত কম পরিমাণ, তারল্যের অভাব, অথবা প্রযুক্তিগত সীমাবদ্ধতার কারণে।";
+"perpetual.positions" = "পদ";
+"perpetual.size" = "আকার";
+"perpetual.margin" = "মার্জিন";
+"perpetual.position" = "অবস্থান";
+"perpetual.close_position" = "বন্ধ অবস্থান";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "২৪ ঘন্টা ভলিউম";
+"perpetual.entry_price" = "প্রবেশ মূল্য";

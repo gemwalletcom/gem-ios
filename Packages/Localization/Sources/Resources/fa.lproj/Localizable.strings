@@ -443,3 +443,13 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "امکان ارائه قیمت برای جفت توکن انتخاب شده وجود ندارد، احتمالاً به دلیل مبلغ کم، کمبود نقدینگی یا محدودیت‌های فنی.";
+"perpetual.positions" = "موقعیت‌ها";
+"perpetual.size" = "اندازه";
+"perpetual.margin" = "حاشیه";
+"perpetual.position" = "موقعیت";
+"perpetual.close_position" = "بستن موقعیت";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "حجم ۲۴ ساعته";
+"perpetual.entry_price" = "قیمت ورودی";
