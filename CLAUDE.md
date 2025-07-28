@@ -165,7 +165,8 @@ Services are injected via SwiftUI Environment:
 ### Running Tests
 - Unit tests: `just test`
 - UI tests: `just test-ui`
-- Specific test: `just test-specific TARGET` (e.g. `just test-specific AssetsTests`)
+- Specific test: `just test TARGET` (e.g. `just test AssetsTests`)
+- Run all tests: `just test-all`
 - Tests use iPhone 16 simulator by default
 - To run tests, always use the `just` commands above, not direct `xcrun swift test` commands
 
