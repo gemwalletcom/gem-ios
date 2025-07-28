@@ -250,6 +250,22 @@ struct TransferAmountCalculatorTests {
     }
 
     @Test
+    func testInsufficientBalanceError() {
+        #expect(throws: TransferAmountCalculatorError.insufficientBalance(coinAsset)) {
+            try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(50)),
+                value: BigInt(100),
+                availableValue: BigInt(50),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(20)),
+                fee: BigInt(3),
+                transferData: TransferData.mock(type: .transfer(coinAsset), value: BigInt(100))
+            ))
+        }
+    }
+
+    @Test
     func testMinimumAccountBalance() {
         let asset1 = Asset(.solana)
 
@@ -367,9 +383,7 @@ struct TransferAmountCalculatorTests {
                 fee: BigInt(5),
                 transferData: TransferData.mock(type: .transfer(coinAsset), value: BigInt(50))
             ))
-            #expect(result.value == 50)
-            #expect(result.networkFee == 5)
-            #expect(result.useMaxAmount == false)
+            #expect(result == TransferAmount(value: 50, networkFee: 5, useMaxAmount: false))
         }
     }
 
@@ -387,9 +401,7 @@ struct TransferAmountCalculatorTests {
                 canChangeValue: false,
                 ignoreValueCheck: false
             ))
-            #expect(result.value == 50)
-            #expect(result.networkFee == 5)
-            #expect(result.useMaxAmount == false)
+            #expect(result == TransferAmount(value: 50, networkFee: 5, useMaxAmount: false))
         }
     }
 
@@ -407,9 +419,7 @@ struct TransferAmountCalculatorTests {
                 fee: BigInt(10),
                 transferData: TransferData.mock(type: .swap(coinAsset, tokenAsset, swapData), value: BigInt(100))
             ))
-            #expect(result.value == 100)
-            #expect(result.networkFee == 10)
-            #expect(result.useMaxAmount == false)
+            #expect(result == TransferAmount(value: 100, networkFee: 10, useMaxAmount: false))
         }
     }
 
@@ -427,9 +437,7 @@ struct TransferAmountCalculatorTests {
                 fee: BigInt(3),
                 transferData: TransferData.mock(type: .transferNft(nftAsset), value: BigInt(1))
             ))
-            #expect(result.value == 1)
-            #expect(result.networkFee == 3)
-            #expect(result.useMaxAmount == false)
+            #expect(result == TransferAmount(value: 1, networkFee: 3, useMaxAmount: false))
         }
     }
 
@@ -447,9 +455,7 @@ struct TransferAmountCalculatorTests {
                 fee: BigInt(5),
                 transferData: TransferData.mock(type: .stake(coinAsset, stakeType), value: BigInt(500))
             ))
-            #expect(result.value == 500)
-            #expect(result.networkFee == 5)
-            #expect(result.useMaxAmount == false)
+            #expect(result == TransferAmount(value: 500, networkFee: 5, useMaxAmount: false))
         }
     }
 
@@ -468,9 +474,7 @@ struct TransferAmountCalculatorTests {
                 fee: BigInt(2),
                 transferData: TransferData.mock(type: .stake(coinAsset, stakeType), value: BigInt(300), canChangeValue: false)
             ))
-            #expect(result.value == 300)
-            #expect(result.networkFee == 2)
-            #expect(result.useMaxAmount == false)
+            #expect(result == TransferAmount(value: 300, networkFee: 2, useMaxAmount: false))
         }
     }
 
@@ -487,25 +491,65 @@ struct TransferAmountCalculatorTests {
                 fee: BigInt(5),
                 transferData: TransferData.mock(type: .transfer(coinAsset), value: BigInt(100))
             ))
-            #expect(result.value == 95)
-            #expect(result.networkFee == 5)
-            #expect(result.useMaxAmount == true)
+            #expect(result == TransferAmount(value: 95, networkFee: 5, useMaxAmount: true))
         }
     }
 
     @Test
-    func testInsufficientBalanceError() {
-        #expect(throws: TransferAmountCalculatorError.insufficientBalance(coinAsset)) {
-            try service.calculate(input: TransferAmountInput(
+    func testDeposit() {
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(200)),
+                value: BigInt(100),
+                availableValue: BigInt(200),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(50)),
+                fee: BigInt(5),
+                transferData: TransferData.mock(type: .deposit(coinAsset), value: BigInt(100))
+            ))
+            #expect(result == TransferAmount(value: 100, networkFee: 5, useMaxAmount: false))
+        }
+    }
+
+
+    @Test
+    func testPerpetualOpen() {
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(500)),
+                value: BigInt(200),
+                availableValue: BigInt(500),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(100)),
+                fee: BigInt(8),
+                transferData: TransferData.mock(
+                    type: .perpetual(coinAsset, .open(.long)),
+                    value: BigInt(200)
+                )
+            ))
+            #expect(result == TransferAmount(value: 200, networkFee: 8, useMaxAmount: false))
+        }
+    }
+
+    @Test
+    func testPerpetualClose() {
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: BigInt(50)),
-                value: BigInt(100),
-                availableValue: BigInt(50),
+                value: BigInt(999_999),
+                availableValue: BigInt(0),
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(20)),
-                fee: BigInt(3),
-                transferData: TransferData.mock(type: .transfer(coinAsset), value: BigInt(100))
+                fee: BigInt(4),
+                transferData: TransferData.mock(
+                    type: .perpetual(coinAsset, .close),
+                    value: BigInt(999_999)
+                )
             ))
+            #expect(result == TransferAmount(value: 999_999, networkFee: 4, useMaxAmount: false))
         }
     }
 }
