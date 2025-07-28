@@ -3,7 +3,6 @@
 import SwiftUI
 import WidgetKit
 import Style
-import Components
 import Formatters
 
 struct WidgetContentView: View {

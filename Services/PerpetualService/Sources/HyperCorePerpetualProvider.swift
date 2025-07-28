@@ -58,16 +58,21 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
                   ) else { return .none }
             
             let assetId = mapHypercoreCoinToAssetId(universeAsset.name)
-            let name = "\(universeAsset.name)-USD"
-            let asset = Asset(
-                id: assetId,
-                name: name,
-                symbol: universeAsset.name,
-                decimals: Int32(universeAsset.szDecimals),
-                type: .erc20
-            )
+            let asset = universeAsset.asset(assetId: assetId)
             
             return PerpetualData(perpetual: perpetual, asset: asset)
         }
+    }
+}
+extension HypercoreUniverseAsset {
+    func asset(assetId: AssetId) -> Asset {
+        let name = "\(name)-USD"
+        return Asset(
+            id: assetId,
+            name: name,
+            symbol: name,
+            decimals: Int32(szDecimals),
+            type: .perpetual
+        )
     }
 }

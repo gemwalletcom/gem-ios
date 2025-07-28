@@ -127,8 +127,7 @@ public extension PerpetualSceneViewModel {
             type: .perpetual(asset, .close(asset: hyperliquidAsset, price: price.description, size: size)),
             recipientData: .hyperliquid(),
             value: .zero,
-            canChangeValue: false,
-            ignoreValueCheck: true
+            canChangeValue: false
         )
 
         onTransferData?(transferData)

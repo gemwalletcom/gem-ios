@@ -2,7 +2,6 @@
 
 import WidgetKit
 import SwiftUI
-import PriceWidget
 
 @main
 struct GemPriceWidgetBundle: WidgetBundle {

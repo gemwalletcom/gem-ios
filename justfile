@@ -77,7 +77,7 @@ build-package PACKAGE:
     SWIFT_OPTIMIZATION_LEVEL=-Onone \
     build | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test_all:
+test-all:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
@@ -89,7 +89,7 @@ test_all:
     -jobs {{BUILD_THREADS}} \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test_ui:
+test-ui:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
     -sdk iphonesimulator \

@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import GemstonePrimitives
 
 public struct ScanTransactionValidator {
     public static func validate(
@@ -13,7 +14,7 @@ public struct ScanTransactionValidator {
         }
 
         if payload.type == .transfer, transaction.isMemoRequired {
-            throw ScanTransactionError.memoRequired(chain: payload.target.chain)
+            throw ScanTransactionError.memoRequired(symbol: payload.target.chain.asset.symbol)
         }
     }
 }

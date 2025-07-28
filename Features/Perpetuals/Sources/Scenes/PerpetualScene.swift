@@ -59,11 +59,6 @@ public struct PerpetualScene: View {
                         )
                     }
                     
-                    ListItemView(
-                        title: position.marginTitle,
-                        subtitle: position.marginText
-                    )
-                    
                     if let text = position.liquidationPriceText {
                         ListItemView(
                             title: position.liquidationPriceTitle,
@@ -72,6 +67,11 @@ public struct PerpetualScene: View {
                             infoAction: { model.onSelectLiquidationPriceInfo() }
                         )
                     }
+                    
+                    ListItemView(
+                        title: position.marginTitle,
+                        subtitle: position.marginText
+                    )
                     
                     ListItemView(
                         title: position.fundingPaymentsTitle,

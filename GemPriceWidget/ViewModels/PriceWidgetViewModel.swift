@@ -3,10 +3,10 @@
 import SwiftUI
 import WidgetKit
 import Components
-import Formatters
 
 @Observable
-final class PriceWidgetViewModel {
+@MainActor
+internal final class PriceWidgetViewModel {
     let entry: PriceWidgetEntry
     let widgetFamily: WidgetFamily
     init(

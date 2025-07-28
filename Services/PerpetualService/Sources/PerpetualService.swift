@@ -77,13 +77,7 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     public func updateMarket(symbol: String) async throws {
-        let perpetualsData = try await provider.getPerpetualsData()
-        
-        guard let data = perpetualsData.first(where: { $0.perpetual.name == symbol }) else {
-            throw AnyError("Market not found: \(symbol)")
-        }
-        
-        try store.upsertPerpetuals([data.perpetual])
+        try await updateMarkets()
     }
     
     public func candlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {

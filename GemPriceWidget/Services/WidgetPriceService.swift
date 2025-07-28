@@ -7,15 +7,15 @@ import GemstonePrimitives
 import WidgetKit
 import Preferences
 
-public struct WidgetPriceService {
-    private let pricesService: GemAPIPricesService
+internal struct WidgetPriceService {
+    private let pricesService: any GemAPIPricesService
     private let preferences = SharedPreferences()
     
-    public init() {
+    init() {
         self.pricesService = GemAPIService()
     }
     
-    public func coins(_ widgetFamily: WidgetFamily) -> [AssetId] {
+    internal func coins(_ widgetFamily: WidgetFamily) -> [AssetId] {
         switch widgetFamily {
         case .systemSmall:
             [AssetId(chain: .bitcoin, tokenId: nil)]
@@ -30,7 +30,7 @@ public struct WidgetPriceService {
         }
     }
     
-    public func fetchTopCoinPrices(widgetFamily: WidgetFamily = .systemMedium) async -> PriceWidgetEntry {
+    internal func fetchTopCoinPrices(widgetFamily: WidgetFamily = .systemMedium) async -> PriceWidgetEntry {
         let coins = coins(widgetFamily)
         let currency = preferences.currency
         
@@ -61,9 +61,6 @@ public struct WidgetPriceService {
                 widgetFamily: widgetFamily
             )
         } catch {
-            NSLog("Widget price fetch error: \(error)")
-            NSLog("Error type: \(type(of: error))")
-            NSLog("Error description: \(error.localizedDescription)")
             return PriceWidgetEntry.error(error: error.localizedDescription, widgetFamily: widgetFamily)
         }
     }

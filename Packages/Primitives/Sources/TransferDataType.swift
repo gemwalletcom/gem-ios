@@ -116,6 +116,13 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         }
         return (fromAsset, toAsset, data)
     }
+    
+    public var shouldIgnoreValueCheck: Bool {
+        switch self {
+        case .transferNft, .stake, .account, .tokenApprove, .perpetual: true
+        case .transfer, .deposit, .swap, .generic: false
+        }
+    }
 
     public var asset: Asset {
         switch self {
