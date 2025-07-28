@@ -21,16 +21,16 @@ public class HyperCoreSigner: Signable {
         NSLog("asset \(asset), type \(type)")
 
         let hyperCore = HyperCore()
-        let modelFactory = HyperCoreModelFactory()
+        let factory = HyperCoreModelFactory()
         let timestamp = UInt64(Date().timeIntervalSince1970 * 1000)
 
         switch type {
         case .approveAgent(let name, let address):
-            let agent = modelFactory.makeApproveAgent(name: name, address: address, nonce: timestamp)
+            let agent = factory.makeApproveAgent(name: name, address: address, nonce: timestamp)
             let eip712Message = hyperCore.encodeApproveAgent(agent: agent)
             return try signEIP712(messageJson: eip712Message, privateKey: privateKey)
         case .close(let asset, let price, let size):
-            let order = modelFactory.makeMarketClose(asset: asset, price: price, size: size, reduceOnly: true)
+            let order = factory.makeMarketClose(asset: asset, price: price, size: size, reduceOnly: true)
             let eip712Message = hyperCore.encodePlaceOrder(order: order, nonce: timestamp)
             return try signEIP712(messageJson: eip712Message, privateKey: privateKey)
         case .open(let direction, let asset, let price, let size):
@@ -38,12 +38,12 @@ public class HyperCoreSigner: Signable {
             case .long: true
             case .short: false
             }
-            let order = modelFactory.makeMarketOpen(asset: asset, isBuy: isBuy, price: price, size: size, reduceOnly: true)
+            let order = factory.makeMarketOpen(asset: asset, isBuy: isBuy, price: price, size: size, reduceOnly: true)
             let eip712Message = hyperCore.encodePlaceOrder(order: order, nonce: timestamp)
             return try signEIP712(messageJson: eip712Message, privateKey: privateKey)
         case .withdraw:
             // FIXME: make sure input.amount is correct  ("2" means 2 USD)
-            let request = modelFactory.makeWithdraw(amount: input.value.description, address: input.senderAddress, nonce: timestamp)
+            let request = factory.makeWithdraw(amount: input.value.description, address: input.senderAddress, nonce: timestamp)
             let eip712_json = hyperCore.encodeWithdrawalRequest(request: request)
             return try signEIP712(messageJson: eip712_json, privateKey: privateKey)
         }

@@ -10,7 +10,7 @@ public struct AssetConfiguration: Sendable {
             .tron,
             .aptos,
             .algorand,
-            // .xrp, Not complete
+            .xrp,
             .stellar,
             .xrp,
         ],
@@ -18,7 +18,7 @@ public struct AssetConfiguration: Sendable {
     ]
     .flatMap { $0 }
 
-    public static let allChains: [Chain] = Chain.allCases.filter { $0 != .hyperCore }
+    public static let allChains: [Chain] = Chain.allCases
 
     public static let enabledByDefault: [AssetId] = [
         AssetId(chain: .bitcoin, tokenId: .none),
