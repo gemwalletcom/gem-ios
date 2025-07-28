@@ -51,12 +51,28 @@ public struct StakeDelegationViewModel: Sendable {
         delegation.base.state.title
     }
     
+    public var titleStyle: TextStyle {
+        TextStyle(font: .body, color: .primary, fontWeight: .semibold)
+    }
+    
     public var stateTagStyle: TextStyle {
         TextStyle(
             font: .footnote,
             color: stateTextColor,
             background: stateTextColor.opacity(0.15)
         )
+    }
+    
+    public var titleExtraStyle: TextStyle {
+        TextStyle(font: .footnote, color: Colors.gray)
+    }
+    
+    public var subtitleStyle: TextStyle {
+        TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold)
+    }
+    
+    public var subtitleExtraStyle: TextStyle {
+        TextStyle(font: .footnote, color: Colors.gray)
     }
     
     public var stateTextColor: Color {
@@ -78,7 +94,7 @@ public struct StakeDelegationViewModel: Sendable {
         formatter.string(delegation.base.balanceValue, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
     
-    public var balanceFiatValueText: String? {
+    public var fiatValueText: String? {
         guard
             let price = delegation.price,
             let balance = try? formatter.double(from: delegation.base.balanceValue, decimals: asset.decimals.asInt)

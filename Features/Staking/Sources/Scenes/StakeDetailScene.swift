@@ -31,24 +31,34 @@ public struct StakeDetailScene: View {
                     ListItemView(title: title, subtitle: subtitle)
                 }
             }
+            .listRowInsets(.assetListRowInsets)
+
             Section(model.balancesTitle) {
                 HStack {
                     ValidatorImageView(validator: model.validator)
                     ListItemView(
                         title: model.title,
+                        titleStyle: model.model.titleStyle,
                         subtitle: model.model.balanceText,
-                        subtitleExtra: model.model.balanceFiatValueText
+                        subtitleStyle: model.model.subtitleStyle,
+                        subtitleExtra: model.model.fiatValueText,
+                        subtitleStyleExtra: model.model.subtitleExtraStyle
                     )
                 }
                 if let rewardsText = model.model.rewardsText {
                     ListItemView(
                         title: model.rewardsTitle,
+                        titleStyle: model.model.titleStyle,
                         subtitle: rewardsText,
+                        subtitleStyle: model.model.subtitleStyle,
                         subtitleExtra: model.model.rewardsFiatValueText,
+                        subtitleStyleExtra: model.model.subtitleExtraStyle,
                         imageStyle: model.assetImageStyle
                     )
                 }
             }
+            .listRowInsets(.assetListRowInsets)
+
             //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()
             if model.showManage {
                 Section(model.manageTitle) {
@@ -81,6 +91,7 @@ public struct StakeDetailScene: View {
                         }
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
         }
         .navigationTitle(model.title)

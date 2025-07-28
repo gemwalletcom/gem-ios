@@ -13,7 +13,7 @@ struct StakeDelegationViewModelTests {
         let model = StakeDelegationViewModel.mock()
 
         #expect(model.balanceText == "1,500.00 TRX")
-        #expect(model.balanceFiatValueText == "$3,000.00")
+        #expect(model.fiatValueText == "$3,000.00")
     }
     
     @Test
