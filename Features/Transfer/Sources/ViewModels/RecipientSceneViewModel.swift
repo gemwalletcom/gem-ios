@@ -226,20 +226,17 @@ extension RecipientSceneViewModel {
             }
 
             let value = try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
-            let data = TransferData(
-                type: transferType,
-                recipientData: RecipientData(
-                    recipient: Recipient(
-                        name: .none,
-                        address: payment.address,
-                        memo: payment.memo
-                    ),
-                    amount: .none
+            let recipientData = RecipientData(
+                recipient: Recipient(
+                    name: .none,
+                    address: payment.address,
+                    memo: payment.memo
                 ),
-                value: value,
-                canChangeValue: false
+                amount: .none
             )
-            return .transferData(data)
+            return .transferData(
+                TransferData(type: transferType, recipientData: recipientData, value: value, canChangeValue: false)
+            )
         }
 
         return .recipient(address: payment.address, memo: payment.memo, amount: payment.amount)
@@ -299,8 +296,7 @@ extension RecipientSceneViewModel {
         case .asset:
             onRecipientDataAction?(recipientData)
         case .nft(let asset):
-            let data = TransferData(type: .transferNft(asset), recipientData: recipientData, value: .zero, canChangeValue: false, ignoreValueCheck: true)
-            handle(transferData: data)
+            handle(transferData: TransferData(type: .transferNft(asset), recipientData: recipientData, value: .zero, canChangeValue: true))
         }
     }
 

@@ -111,8 +111,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                     recipient: Recipient(name: .none, address: "", memo: .none),
                     amount: .none
                 ),
-                value: .zero,
-                canChangeValue: false
+                value: .zero
             )
             return try await walletConnectorInteractor.signTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         }
@@ -152,7 +151,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                 }
                 return .none
             }()
-            
+
             let transferData = TransferData(
                 type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(
                     gasLimit: gasLimit,
@@ -163,8 +162,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                     recipient: Recipient(name: .none, address: address, memo: .none),
                     amount: .none
                 ),
-                value: value,
-                canChangeValue: false
+                value: value
             )
 
             return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
@@ -175,8 +173,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                     recipient: Recipient(name: .none, address: "", memo: .none),
                     amount: .none
                 ),
-                value: .zero,
-                canChangeValue: false
+                value: .zero
             )
             return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         }

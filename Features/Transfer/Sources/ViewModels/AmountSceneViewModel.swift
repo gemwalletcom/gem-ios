@@ -69,7 +69,7 @@ public final class AmountSceneViewModel {
     var assetImage: AssetImage { AssetViewModel(asset: asset).assetImage }
     var assetName: String { asset.name }
 
-    var isInputDisabled: Bool { !isAmountChangable }
+    var isInputDisabled: Bool { !canChangeValue }
     var isBalanceViewEnabled: Bool { !isInputDisabled }
     var isNextEnabled: Bool { actionButtonState == .normal }
 
@@ -168,7 +168,7 @@ public final class AmountSceneViewModel {
 
 extension AmountSceneViewModel {
     func onAppear() {
-        if isAmountChangable {
+        if canChangeValue {
             focusField = true
         } else {
             setMax()
@@ -236,7 +236,7 @@ extension AmountSceneViewModel {
 
     private func onNext() throws {
         let value = try value(for: amountTransferValue)
-        let transfer = try getTransferData(value: value, canChangeValue: true)
+        let transfer = try getTransferData(value: value)
         onTransferAction?(transfer)
     }
 
@@ -339,7 +339,7 @@ extension AmountSceneViewModel {
         )).or(.zero)
     }
 
-    private func getTransferData(value: BigInt, canChangeValue: Bool) throws -> TransferData {
+    private func getTransferData(value: BigInt) throws -> TransferData {
         switch type {
         case .transfer:
             return TransferData(
@@ -457,7 +457,7 @@ extension AmountSceneViewModel {
         formatter.string(availableValue, decimals: asset.decimals.asInt)
     }
 
-    private var isAmountChangable: Bool {
+    private var canChangeValue: Bool {
         switch type {
         case .transfer,
             .deposit,

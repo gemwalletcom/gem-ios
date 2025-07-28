@@ -30,6 +30,7 @@ public final class Preferences: @unchecked Sendable {
         static let isAcceptTermsCompleted = "is_accepted_terms"
         static let skippedReleaseVersion = "skipped_release_version"
         static let isWalletConnectActivated = "is_walletconnect_activated"
+        static let perpetualsMarketsUpadtedAt = "perpetual_markets_upadted_at"
     }
 
     @ConfigurableDefaults(key: Keys.currency, defaultValue: Currency.usd.rawValue)
@@ -94,6 +95,9 @@ public final class Preferences: @unchecked Sendable {
     
     @ConfigurableDefaults(key: Keys.isWalletConnectActivated, defaultValue: nil)
     public var isWalletConnectActivated: Bool?
+    
+    @ConfigurableDefaults(key: Keys.perpetualsMarketsUpadtedAt, defaultValue: nil)
+    public var perpetualMarketsUpadtedAt: Date?
 
     public static let standard = Preferences()
     private let defaults: UserDefaults
@@ -130,6 +134,7 @@ public final class Preferences: @unchecked Sendable {
         configure(\._isAcceptTermsCompleted, key: Keys.isAcceptTermsCompleted, defaultValue: false)
         configure(\._skippedReleaseVersion, key: Keys.skippedReleaseVersion, defaultValue: nil)
         configure(\._isWalletConnectActivated, key: Keys.isWalletConnectActivated, defaultValue: nil)
+        configure(\._perpetualMarketsUpadtedAt, key: Keys.perpetualsMarketsUpadtedAt, defaultValue: nil)
     }
 
     public func incrementLaunchesCount() {

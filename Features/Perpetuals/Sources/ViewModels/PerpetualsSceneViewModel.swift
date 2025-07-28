@@ -60,6 +60,7 @@ public final class PerpetualsSceneViewModel {
 
 extension PerpetualsSceneViewModel {
     public func fetch() async {
+        await updateMarkets()
         await updatePositions()
     }
     
@@ -72,8 +73,11 @@ extension PerpetualsSceneViewModel {
     }
     
     func updateMarkets() async {
+        guard preferences.perpetualMarketsUpadtedAt.isOutdated(byDays: 7) else { return }
+        
         do {
             try await perpetualService.updateMarkets()
+            preferences.perpetualMarketsUpadtedAt = .now
         } catch {
             NSLog("Failed to update markets: \(error)")
         }

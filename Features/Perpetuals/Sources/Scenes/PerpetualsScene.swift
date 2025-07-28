@@ -79,9 +79,6 @@ public struct PerpetualsScene: View {
             Task {
                 await model.fetch()
             }
-            Task {
-                await model.updateMarkets()
-            }
         }
         .onReceive(Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()) { _ in
             Task {
