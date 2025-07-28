@@ -1,14 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
-import Components
-import SwiftUI
-import Style
 import BigInt
-import Localization
+import Components
 import Formatters
+import Foundation
 import GemstonePrimitives
+import Localization
+import Primitives
+import Style
+import SwiftUI
 
 public struct TransactionViewModel: Sendable {
     public let transaction: TransactionExtended
@@ -26,7 +26,7 @@ public struct TransactionViewModel: Sendable {
         self.formatter = formatter
         self.explorerService = explorerService
     }
-    
+
     public var assetImage: AssetImage {
         switch transaction.transaction.metadata {
         case .null, .swap, .none:
@@ -47,7 +47,7 @@ public struct TransactionViewModel: Sendable {
             )
         }
     }
-    
+
     public var overlayImage: Image? {
         switch transaction.transaction.type {
         case .transfer, .transferNFT, .smartContractCall:
@@ -58,15 +58,17 @@ public struct TransactionViewModel: Sendable {
                 return Images.Transaction.outgoing
             }
         case .swap,
-            .tokenApproval,
-            .stakeDelegate,
-            .stakeUndelegate,
-            .stakeRewards,
-            .stakeRedelegate,
-            .stakeWithdraw,
-            .assetActivation,
-            .perpetualOpenPosition,
-            .perpetualClosePosition:
+             .tokenApproval,
+             .stakeDelegate,
+             .stakeUndelegate,
+             .stakeRewards,
+             .stakeRedelegate,
+             .stakeWithdraw,
+             .assetActivation,
+             .perpetualApproval,
+             .perpetualOpenPosition,
+             .perpetualClosePosition,
+             .perpetualWithdraw:
             return .none
         }
     }
@@ -76,9 +78,9 @@ public struct TransactionViewModel: Sendable {
         case .transfer, .transferNFT, .smartContractCall:
             switch transaction.transaction.state {
             case .confirmed: switch transaction.transaction.direction {
-            case .incoming: Localized.Transaction.Title.received
-            case .outgoing, .selfTransfer: Localized.Transaction.Title.sent
-            }
+                case .incoming: Localized.Transaction.Title.received
+                case .outgoing, .selfTransfer: Localized.Transaction.Title.sent
+                }
             case .failed, .pending, .reverted:
                 Localized.Transfer.title
             }
@@ -90,30 +92,32 @@ public struct TransactionViewModel: Sendable {
         case .stakeRewards: Localized.Transfer.Rewards.title
         case .stakeWithdraw: Localized.Transfer.Withdraw.title
         case .assetActivation: Localized.Transfer.ActivateAsset.title
+        case .perpetualApproval: "Approve Agent"
         case .perpetualOpenPosition: "Open Position"
         case .perpetualClosePosition: "Close Position"
+        case .perpetualWithdraw: "Withdraw from Perpetual"
         }
     }
 
     public var titleTextStyle: TextStyle {
         TextStyle(font: Font.system(.body, weight: .medium), color: .primary)
     }
-    
+
     public var titleTag: String? {
         switch transaction.transaction.state {
         case .confirmed: .none
         case .pending, .failed, .reverted: TransactionStateViewModel(state: transaction.transaction.state).title
         }
     }
-    
+
     public var titleTagType: TitleTagType {
         switch transaction.transaction.state {
         case .confirmed: .none
         case .pending: .progressView()
-        case .failed, .reverted: .none //TODO Image
+        case .failed, .reverted: .none // TODO: Image
         }
     }
-    
+
     public var titleTagStyle: TextStyle {
         let model = TransactionStateViewModel(state: transaction.transaction.state)
         return TextStyle(
@@ -122,8 +126,7 @@ public struct TransactionViewModel: Sendable {
             background: model.background
         )
     }
-    
-    
+
     public var titleExtra: String? {
         let chain = assetId.chain
         switch transaction.transaction.type {
@@ -131,7 +134,7 @@ public struct TransactionViewModel: Sendable {
             switch transaction.transaction.direction {
             case .incoming:
                 return String(
-                    format: "%@ %@", 
+                    format: "%@ %@",
                     Localized.Transfer.from,
                     getDisplayName(address: transaction.transaction.from, chain: chain)
                 )
@@ -143,7 +146,7 @@ public struct TransactionViewModel: Sendable {
                 )
             }
         case .stakeDelegate,
-            .stakeRedelegate:
+             .stakeRedelegate:
             return String(
                 format: "%@ %@",
                 Localized.Transfer.to,
@@ -156,19 +159,21 @@ public struct TransactionViewModel: Sendable {
                 getDisplayName(address: transaction.transaction.to, chain: chain)
             )
         case .swap,
-            .stakeRewards,
-            .stakeWithdraw,
-            .assetActivation,
-            .perpetualOpenPosition,
-            .perpetualClosePosition:
+             .stakeRewards,
+             .stakeWithdraw,
+             .assetActivation,
+             .perpetualApproval,
+             .perpetualOpenPosition,
+             .perpetualClosePosition,
+             .perpetualWithdraw:
             return .none
         }
     }
-    
+
     public var titleTextStyleExtra: TextStyle {
         TextStyle(font: Font.system(.footnote), color: .secondary)
     }
-    
+
     public var amountSymbolText: String {
         formatter.string(
             transaction.transaction.valueBigInt,
@@ -176,18 +181,17 @@ public struct TransactionViewModel: Sendable {
             currency: transaction.asset.symbol
         )
     }
-    
+
     public var networkFeeText: String {
         formatter.string(transaction.transaction.feeBigInt, decimals: transaction.feeAsset.decimals.asInt)
     }
-    
+
     public var networkFeeSymbolText: String {
         String(format: "%@ %@",
-            networkFeeText,
-            transaction.feeAsset.symbol
-        )
+               networkFeeText,
+               transaction.feeAsset.symbol)
     }
-    
+
     public var subtitle: String? {
         switch transaction.transaction.type {
         case .transfer, .smartContractCall:
@@ -217,7 +221,6 @@ public struct TransactionViewModel: Sendable {
                     return .none
                 }
                 return "+" + swapFormatter(asset: asset, value: BigInt(stringLiteral: metadata.toValue))
-                
             }
         case .assetActivation:
             return transaction.asset.symbol
@@ -227,22 +230,24 @@ public struct TransactionViewModel: Sendable {
             } else {
                 return transaction.asset.symbol
             }
-        case .perpetualOpenPosition, .perpetualClosePosition:
+        case .perpetualApproval:
+            return nil
+        case .perpetualOpenPosition, .perpetualClosePosition, .perpetualWithdraw:
             return amountSymbolText
         }
     }
-    
+
     public var subtitleTextStyle: TextStyle {
         switch transaction.transaction.type {
         case .transfer,
-            .transferNFT,
-            .tokenApproval,
-            .stakeDelegate,
-            .stakeUndelegate,
-            .stakeRedelegate,
-            .stakeWithdraw,
-            .assetActivation,
-            .smartContractCall:
+             .transferNFT,
+             .tokenApproval,
+             .stakeDelegate,
+             .stakeUndelegate,
+             .stakeRedelegate,
+             .stakeWithdraw,
+             .assetActivation,
+             .smartContractCall:
             switch transaction.transaction.direction {
             case .incoming:
                 return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.green)
@@ -250,31 +255,33 @@ public struct TransactionViewModel: Sendable {
                 return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.black)
             }
         case .stakeRewards,
-            .swap:
+             .swap:
             return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.green)
-        case .perpetualOpenPosition, .perpetualClosePosition:
+        case .perpetualOpenPosition, .perpetualClosePosition, .perpetualApproval, .perpetualWithdraw:
             return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.black)
         }
     }
-    
+
     public func swapFormatter(asset: Asset, value: BigInt) -> String {
         formatter.string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
-    
+
     public var subtitleExtra: String? {
         switch transaction.transaction.type {
         case .transfer,
-            .transferNFT,
-            .tokenApproval,
-            .stakeDelegate,
-            .stakeUndelegate,
-            .stakeRedelegate,
-            .stakeRewards,
-            .stakeWithdraw,
-            .assetActivation,
-            .smartContractCall,
-            .perpetualOpenPosition,
-            .perpetualClosePosition:
+             .transferNFT,
+             .tokenApproval,
+             .stakeDelegate,
+             .stakeUndelegate,
+             .stakeRedelegate,
+             .stakeRewards,
+             .stakeWithdraw,
+             .assetActivation,
+             .smartContractCall,
+             .perpetualApproval,
+             .perpetualOpenPosition,
+             .perpetualClosePosition,
+             .perpetualWithdraw:
             return .none
         case .swap:
             switch transaction.transaction.metadata {
@@ -288,7 +295,7 @@ public struct TransactionViewModel: Sendable {
             }
         }
     }
-    
+
     public var subtitleExtraStyle: TextStyle { .footnote }
 
     public var participant: String {
@@ -308,23 +315,23 @@ public struct TransactionViewModel: Sendable {
 
     public var addressExplorerUrl: URL { addressLink.url }
     public var transactionExplorerUrl: URL { transactionLink.url }
-    
+
     public func getDisplayName(address: String, chain: Chain) -> String {
         if let name = getAddressName(address: address) {
             return name
         }
         return AddressFormatter(address: address, chain: chain).value()
     }
-    
+
     public func getAddressName(address: String) -> String? {
         if address == transaction.transaction.from {
             return transaction.fromAddress?.name
         }
-        
+
         if address == transaction.transaction.to {
             return transaction.toAddress?.name
         }
-        
+
         return .none
     }
 

@@ -1,15 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Primitives
 import SwiftHTTPClient
-import BigInt
 
 public struct CosmosService: Sendable {
-    
     let chain: CosmosChain
     let provider: Provider<CosmosProvider>
-    
+
     public init(
         chain: CosmosChain,
         provider: Provider<CosmosProvider>
@@ -25,11 +24,11 @@ extension CosmosService {
     private func getAccount(address: String) async throws -> CosmosAccount {
         switch chain {
         case .cosmos,
-            .osmosis,
-            .celestia,
-            .thorchain,
-            .sei,
-            .noble:
+             .osmosis,
+             .celestia,
+             .thorchain,
+             .sei,
+             .noble:
             return try await provider
                 .request(.account(address: address))
                 .map(as: CosmosAccountResponse<CosmosAccount>.self).account
@@ -52,14 +51,14 @@ extension CosmosService {
             .map(as: CosmosBalances.self)
     }
 
-    private func getDelegations(address: String) async throws  -> [CosmosDelegation] {
+    private func getDelegations(address: String) async throws -> [CosmosDelegation] {
         try await provider
             .request(.delegations(address: address))
             .map(as: CosmosDelegations.self)
             .delegation_responses
     }
 
-    private func getUnboundingDelegations(address: String) async throws  -> [CosmosUnboundingDelegation] {
+    private func getUnboundingDelegations(address: String) async throws -> [CosmosUnboundingDelegation] {
         try await provider
             .request(.undelegations(address: address))
             .map(as: CosmosUnboundingDelegations.self)
@@ -87,37 +86,37 @@ extension CosmosService {
             case .transfer, .deposit, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(25_000)
             case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
-        }
+            }
         case .osmosis: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(10_000)
             case .stake: BigInt(100_000)
             case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
-        }
+            }
         case .celestia: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(10_000)
             case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
-        }
+            }
         case .sei: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(100_000)
             case .stake: BigInt(200_000)
             case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
-        }
+            }
         case .injective: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(100_000_000_000_000)
             case .stake: BigInt(1_000_000_000_000_000)
             case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
-        }
+            }
         case .noble: BigInt(25_000)
         }
     }
-    
+
     private func getGasLimit(type: TransactionType) -> BigInt {
         return {
             switch type {
             case .transfer: BigInt(200_000)
             case .stakeDelegate,
-                .stakeUndelegate: BigInt(1_000_000)
+                 .stakeUndelegate: BigInt(1_000_000)
             case .stakeRedelegate: BigInt(1_250_000)
             case .stakeRewards: BigInt(750_000)
             case .swap:
@@ -125,7 +124,7 @@ extension CosmosService {
                 case .thorchain, .cosmos: BigInt(200_000)
                 default: fatalError()
                 }
-            case .transferNFT, .tokenApproval, .stakeWithdraw, .assetActivation, .smartContractCall, .perpetualOpenPosition, .perpetualClosePosition:
+            case .transferNFT, .tokenApproval, .stakeWithdraw, .assetActivation, .smartContractCall, .perpetualOpenPosition, .perpetualClosePosition, .perpetualApproval, .perpetualWithdraw:
                 fatalError()
             }
         }()
@@ -143,11 +142,11 @@ extension CosmosService: ChainTransactionPreloadable {
 extension CosmosService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
         let denom = chain.denom
-        
+
         switch chain {
         case .thorchain, .noble:
             let balances = try await getBalance(address: address)
-            let balance = balances.balances.filter ({ $0.denom == denom.rawValue }).compactMap { BigInt($0.amount) }.reduce(0, +)
+            let balance = balances.balances.filter { $0.denom == denom.rawValue }.compactMap { BigInt($0.amount) }.reduce(0, +)
             return Primitives.AssetBalance(
                 assetId: chain.chain.assetId,
                 balance: Balance(
@@ -155,13 +154,12 @@ extension CosmosService: ChainBalanceable {
                 )
             )
         case .cosmos,
-            .osmosis,
-            .celestia,
-            .injective,
-            .sei:
-
+             .osmosis,
+             .celestia,
+             .injective,
+             .sei:
             let balances = try await getBalance(address: address)
-            let balance = balances.balances.filter ({ $0.denom == denom.rawValue }).compactMap { BigInt($0.amount) }.reduce(0, +)
+            let balance = balances.balances.filter { $0.denom == denom.rawValue }.compactMap { BigInt($0.amount) }.reduce(0, +)
             return AssetBalance(
                 assetId: chain.chain.assetId,
                 balance: Balance(
@@ -170,32 +168,31 @@ extension CosmosService: ChainBalanceable {
             )
         }
     }
-    
+
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        let balances = try await getBalance(address: address);
+        let balances = try await getBalance(address: address)
         return tokenIds.compactMap { assetId in
-            let balance = balances.balances.filter ({ $0.denom == assetId.tokenId }).first?.amount ?? .zero
+            let balance = balances.balances.filter { $0.denom == assetId.tokenId }.first?.amount ?? .zero
             return AssetBalance(assetId: assetId, balance: Balance(available: BigInt(stringLiteral: balance)))
         }
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let denom = chain.denom
-        
+
         switch chain {
         case .thorchain, .noble:
             return .none
         case .cosmos,
-            .osmosis,
-            .celestia,
-            .injective,
-            .sei:
-            
+             .osmosis,
+             .celestia,
+             .injective,
+             .sei:
             async let getDelegations = getDelegations(address: address)
             async let getUnboundingDelegations = getUnboundingDelegations(address: address)
             async let getRewards = getRewards(address: address)
 
-            let (delegations, unboundingDelegations, delegationsRewards) = try await(getDelegations, getUnboundingDelegations, getRewards)
+            let (delegations, unboundingDelegations, delegationsRewards) = try await (getDelegations, getUnboundingDelegations, getRewards)
 
             let staked = delegations
                 .filter { $0.balance.denom == denom.rawValue }
@@ -203,7 +200,7 @@ extension CosmosService: ChainBalanceable {
                 .reduce(0, +)
 
             let pending = unboundingDelegations.compactMap {
-                $0.entries.compactMap { BigInt($0.balance)}.reduce(0, +)
+                $0.entries.compactMap { BigInt($0.balance) }.reduce(0, +)
             }.reduce(0, +)
 
             let rewards = delegationsRewards
@@ -266,11 +263,11 @@ extension CosmosService: ChainBroadcastable {
         let response = try await provider
             .request(.broadcast(data: data))
             .map(as: CosmosBroadcastResponse.self).tx_response
-        
+
         if response.code != 0 {
             throw AnyError(response.raw_log)
         }
-        
+
         return response.txhash
     }
 }
@@ -303,18 +300,17 @@ extension CosmosService: ChainSyncable {
 // MARK: - ChainStakable
 
 extension CosmosService: ChainStakable {
-    
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
         async let getValidators = getValidatorsList()
-        
-        let (validators) = try await (
+
+        let validators = try await (
             getValidators
         )
         return validators.map {
             let comission = Double($0.commission.commission_rates.rate) ?? 0
-            let isActive =  $0.jailed == false && $0.status == "BOND_STATUS_BONDED"
+            let isActive = $0.jailed == false && $0.status == "BOND_STATUS_BONDED"
             let apr = isActive ? apr - (apr * comission) : 0
-            
+
             return DelegationValidator(
                 chain: chain.chain,
                 id: $0.operator_address,
@@ -325,34 +321,34 @@ extension CosmosService: ChainStakable {
             )
         }
     }
-    
+
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
         async let getDelegations = getDelegations(address: address)
         async let getUnboundingDelegations = getUnboundingDelegations(address: address)
         async let getRewards = getRewards(address: address)
         async let getValidators = getValidators(apr: 0)
-        
+
         let (delegations, unboundingDelegations, rewards, validators) = try await (
             getDelegations,
             getUnboundingDelegations,
             getRewards,
             getValidators
         )
-        
+
         NSLog("delegations \(delegations)")
         NSLog("getUnboundingDelegations \(unboundingDelegations)")
         NSLog("getRewards \(rewards)")
         NSLog("validators \(validators.count)")
-        
+
         let validatorsMap = validators.toMap { $0.id }
-        
+
         let rewardsMap = rewards.toMap {
             $0.validator_address
         }.mapValues {
             $0.reward.filter { $0.denom == chain.denom.rawValue }
-                .compactMap { BigInt(stringLiteral: $0.amount.components(separatedBy: ".")[0])}.reduce(0, +)
+                .compactMap { BigInt(stringLiteral: $0.amount.components(separatedBy: ".")[0]) }.reduce(0, +)
         }
-        
+
         let baseDelegations = delegations.compactMap { delegation in
             let validator = validatorsMap[delegation.delegation.validator_address]
             let state: DelegationState = validator?.isActive ?? false ? .active : .inactive
@@ -367,7 +363,7 @@ extension CosmosService: ChainStakable {
                 validatorId: delegation.delegation.validator_address
             )
         }.filter { $0.balanceValue > 0 }
-        
+
         let baseUnbondingDelegations = unboundingDelegations.map { unboundDelegation in
             unboundDelegation.entries.map { entry in
                 DelegationBase(
@@ -382,12 +378,12 @@ extension CosmosService: ChainStakable {
                 )
             }
         }.flatMap { $0 }
-        
+
         return [
             baseDelegations,
             baseUnbondingDelegations,
         ]
-        .flatMap{ $0 }
+        .flatMap { $0 }
     }
 }
 
@@ -397,14 +393,14 @@ extension CosmosService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
         throw AnyError("Not Implemented")
     }
-    
+
     public func getIsTokenAddress(tokenId: String) -> Bool {
         false
     }
 }
 
 // MARK: - ChainIDFetchable
- 
+
 extension CosmosService: ChainIDFetchable {
     public func getChainID() async throws -> String {
         return try await provider
@@ -417,7 +413,7 @@ extension CosmosService: ChainIDFetchable {
 
 extension CosmosService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        BigInt(stringLiteral: try await getLatestCosmosBlock().header.height)
+        try BigInt(stringLiteral: await getLatestCosmosBlock().header.height)
     }
 }
 

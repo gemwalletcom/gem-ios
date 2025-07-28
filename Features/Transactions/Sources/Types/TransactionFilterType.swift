@@ -29,7 +29,7 @@ extension TransactionType {
         case .smartContractCall: .smartContract
         case .swap, .tokenApproval: .swaps
         case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw: .stake
-        case .assetActivation, .perpetualOpenPosition, .perpetualClosePosition: .others
+        case .assetActivation, .perpetualOpenPosition, .perpetualClosePosition, .perpetualApproval, .perpetualWithdraw : .others
         }
     }
 }

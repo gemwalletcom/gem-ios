@@ -1,24 +1,23 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import SwiftUI
-import Primitives
-import Store
-import PerpetualService
-import PrimitivesComponents
-import Formatters
 import Components
-import Localization
+import Formatters
+import Foundation
 import InfoSheet
+import Localization
+import PerpetualService
+import Primitives
+import PrimitivesComponents
+import Store
+import SwiftUI
 
 @Observable
 @MainActor
 public final class PerpetualSceneViewModel {
-    
     private let perpetualService: PerpetualServiceable
     private let onTransferData: TransferDataAction
     private let onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)?
-    
+
     public let wallet: Wallet
     public let asset: Asset
     public var positionsRequest: PerpetualPositionsRequest
@@ -31,15 +30,15 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
-    
+
     public var isPresentingInfoSheet: InfoSheetType?
-    
+
     public let perpetualViewModel: PerpetualViewModel
-    
+
     public var positionViewModels: [PerpetualPositionViewModel] {
         positions.map { PerpetualPositionViewModel(data: $0) }
     }
-    
+
     public init(
         wallet: Wallet,
         perpetualData: PerpetualData,
@@ -55,21 +54,21 @@ public final class PerpetualSceneViewModel {
         self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
     }
-    
+
     public var navigationTitle: String {
         perpetualViewModel.name
     }
-    
+
     public var hasOpenPosition: Bool {
         !positionViewModels.isEmpty
     }
-    
+
     public var positionSectionTitle: String { Localized.Perpetual.position }
     public var infoSectionTitle: String { Localized.Common.info }
     public var closePositionTitle: String { Localized.Perpetual.closePosition }
     public var longButtonTitle: String { Localized.Perpetual.long }
     public var shortButtonTitle: String { Localized.Perpetual.short }
-    
+
     public func fetch() async {
         Task {
             await fetchCandlesticks()
@@ -85,10 +84,10 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
-    
+
     public func fetchCandlesticks() async {
         state = .loading
-        
+
         do {
             let candlesticks = try await perpetualService.candlesticks(
                 symbol: perpetualViewModel.perpetual.name,
@@ -103,44 +102,47 @@ public final class PerpetualSceneViewModel {
 
 // MARK: - Actions
 
-extension PerpetualSceneViewModel {
-    public func onSelectFundingRateInfo() {
+public extension PerpetualSceneViewModel {
+    func onSelectFundingRateInfo() {
         isPresentingInfoSheet = .fundingRate
     }
-    
-    public func onSelectFundingPaymentsInfo() {
+
+    func onSelectFundingPaymentsInfo() {
         isPresentingInfoSheet = .fundingPayments
     }
-    
-    public func onSelectLiquidationPriceInfo() {
+
+    func onSelectLiquidationPriceInfo() {
         isPresentingInfoSheet = .liquidationPrice
     }
-    
-    public func onSelectOpenInterestInfo() {
+
+    func onSelectOpenInterestInfo() {
         isPresentingInfoSheet = .openInterest
     }
-    
-    public func onClosePosition() {
+
+    func onClosePosition() {
+        let hyperliquidAsset: UInt32 = 0 // FIXME: perpetualViewModel.perpetual.assetId.hyperliquidAssetId
+        let price = perpetualViewModel.perpetual.price // Current Market price
+        let size = "0" // FIXME: perpetualViewModel.perpetualPostion.size, need to know the size when close
         let transferData = TransferData(
-            type: .perpetual(asset, .close),
+            type: .perpetual(asset, .close(asset: hyperliquidAsset, price: price.description, size: size)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false,
             ignoreValueCheck: true
         )
-        
+
         onTransferData?(transferData)
     }
-    
-    public func onOpenLongPosition() {
+
+    func onOpenLongPosition() {
         onPerpetualRecipientData?(PerpetualRecipientData(
             recipientData: .hyperliquid(),
             direction: .long,
             asset: asset
         ))
     }
-    
-    public func onOpenShortPosition() {
+
+    func onOpenShortPosition() {
         onPerpetualRecipientData?(PerpetualRecipientData(
             recipientData: .hyperliquid(),
             direction: .short,
