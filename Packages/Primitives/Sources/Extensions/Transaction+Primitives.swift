@@ -29,7 +29,6 @@ extension Transaction {
             .assetActivation,
             .transferNFT,
             .smartContractCall,
-            .perpetualApproval,
             .perpetualOpenPosition,
             .perpetualClosePosition,
             .perpetualWithdraw:

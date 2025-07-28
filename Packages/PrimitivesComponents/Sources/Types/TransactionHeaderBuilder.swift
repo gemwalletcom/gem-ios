@@ -40,8 +40,6 @@ public struct TransactionHeaderTypeBuilder {
                 return .nft(name: metadata.name, id: metadata.assetId)
             case .perpetualOpenPosition, .perpetualClosePosition, .perpetualWithdraw:
                 return .amount(showFiatSubtitle: true)
-            case .perpetualApproval:
-                return .amount(showFiatSubtitle: false)
             }
         }()
         return infoModel.headerType(input: inputType)

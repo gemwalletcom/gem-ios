@@ -8,7 +8,7 @@ public enum HypercoreProvider: TargetType {
     case clearinghouseState(user: String)
     case metaAndAssetCtxs
     case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
-    case exchange(action: String, signature: String, nonce: UInt64)
+    case exchange(action: String, signature: String, nonce: UInt64) // Action is JSON string
 
     public var baseUrl: URL {
         return URL(string: "")!

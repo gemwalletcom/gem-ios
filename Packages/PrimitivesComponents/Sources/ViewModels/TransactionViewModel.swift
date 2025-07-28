@@ -65,7 +65,6 @@ public struct TransactionViewModel: Sendable {
              .stakeRedelegate,
              .stakeWithdraw,
              .assetActivation,
-             .perpetualApproval,
              .perpetualOpenPosition,
              .perpetualClosePosition,
              .perpetualWithdraw:
@@ -92,7 +91,6 @@ public struct TransactionViewModel: Sendable {
         case .stakeRewards: Localized.Transfer.Rewards.title
         case .stakeWithdraw: Localized.Transfer.Withdraw.title
         case .assetActivation: Localized.Transfer.ActivateAsset.title
-        case .perpetualApproval: "Approve Agent"
         case .perpetualOpenPosition: "Open Position"
         case .perpetualClosePosition: "Close Position"
         case .perpetualWithdraw: "Withdraw from Perpetual"
@@ -162,7 +160,6 @@ public struct TransactionViewModel: Sendable {
              .stakeRewards,
              .stakeWithdraw,
              .assetActivation,
-             .perpetualApproval,
              .perpetualOpenPosition,
              .perpetualClosePosition,
              .perpetualWithdraw:
@@ -230,8 +227,6 @@ public struct TransactionViewModel: Sendable {
             } else {
                 return transaction.asset.symbol
             }
-        case .perpetualApproval:
-            return nil
         case .perpetualOpenPosition, .perpetualClosePosition, .perpetualWithdraw:
             return amountSymbolText
         }
@@ -257,7 +252,7 @@ public struct TransactionViewModel: Sendable {
         case .stakeRewards,
              .swap:
             return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.green)
-        case .perpetualOpenPosition, .perpetualClosePosition, .perpetualApproval, .perpetualWithdraw:
+        case .perpetualOpenPosition, .perpetualClosePosition, .perpetualWithdraw:
             return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.black)
         }
     }
@@ -278,7 +273,6 @@ public struct TransactionViewModel: Sendable {
              .stakeWithdraw,
              .assetActivation,
              .smartContractCall,
-             .perpetualApproval,
              .perpetualOpenPosition,
              .perpetualClosePosition,
              .perpetualWithdraw:

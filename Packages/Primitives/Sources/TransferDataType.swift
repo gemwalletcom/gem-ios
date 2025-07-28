@@ -45,7 +45,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             switch type {
             case .open: .perpetualOpenPosition
             case .close: .perpetualClosePosition
-            case .approveAgent: .perpetualApproval
+            case .approveAgent: .smartContractCall
             case .withdraw: .perpetualWithdraw
             }
         }

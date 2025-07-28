@@ -124,7 +124,7 @@ extension CosmosService {
                 case .thorchain, .cosmos: BigInt(200_000)
                 default: fatalError()
                 }
-            case .transferNFT, .tokenApproval, .stakeWithdraw, .assetActivation, .smartContractCall, .perpetualOpenPosition, .perpetualClosePosition, .perpetualApproval, .perpetualWithdraw:
+            case .transferNFT, .tokenApproval, .stakeWithdraw, .assetActivation, .smartContractCall, .perpetualOpenPosition, .perpetualClosePosition, .perpetualWithdraw:
                 fatalError()
             }
         }()

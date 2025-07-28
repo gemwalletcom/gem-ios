@@ -93,7 +93,6 @@ public final class TransactionDetailViewModel {
              .stakeRewards,
              .stakeWithdraw,
              .assetActivation,
-             .perpetualApproval,
              .perpetualOpenPosition,
              .perpetualClosePosition,
              .perpetualWithdraw:
@@ -111,7 +110,6 @@ public final class TransactionDetailViewModel {
              .stakeRewards,
              .stakeWithdraw,
              .assetActivation,
-             .perpetualApproval,
              .perpetualOpenPosition,
              .perpetualClosePosition,
              .perpetualWithdraw:
