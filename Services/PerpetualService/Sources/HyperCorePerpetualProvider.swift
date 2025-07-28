@@ -51,10 +51,12 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
     func getPerpetualsData() async throws -> [PerpetualData] {
         let metadata = try await hyperCoreService.getMetadata()
         
-        return zip(metadata.universe.universe, metadata.assetMetadata).compactMap { universeAsset, assetMetadata in
+        return zip(metadata.universe.universe, metadata.assetMetadata).enumerated().compactMap { index, pair in
+            let (universeAsset, assetMetadata) = pair
             guard let perpetual = assetMetadata.mapToPerpetual(
                       symbol: universeAsset.name,
-                      maxLeverage: universeAsset.maxLeverage
+                      maxLeverage: universeAsset.maxLeverage,
+                      index: index
                   ) else { return .none }
             
             let assetId = mapHypercoreCoinToAssetId(universeAsset.name)

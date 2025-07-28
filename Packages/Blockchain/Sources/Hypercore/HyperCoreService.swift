@@ -88,7 +88,8 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        throw AnyError("Not implemented")
+        //TODO: Perpetual. Handle different responses based on the action
+        try await self.provider.request(.broadcast(data: data)).map(as: String.self)
     }
 }
 

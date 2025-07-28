@@ -66,8 +66,7 @@ public struct TransactionViewModel: Sendable {
              .stakeWithdraw,
              .assetActivation,
              .perpetualOpenPosition,
-             .perpetualClosePosition,
-             .perpetualWithdraw:
+             .perpetualClosePosition:
             return .none
         }
     }
@@ -93,7 +92,6 @@ public struct TransactionViewModel: Sendable {
         case .assetActivation: Localized.Transfer.ActivateAsset.title
         case .perpetualOpenPosition: "Open Position"
         case .perpetualClosePosition: "Close Position"
-        case .perpetualWithdraw: "Withdraw from Perpetual"
         }
     }
 
@@ -161,8 +159,7 @@ public struct TransactionViewModel: Sendable {
              .stakeWithdraw,
              .assetActivation,
              .perpetualOpenPosition,
-             .perpetualClosePosition,
-             .perpetualWithdraw:
+             .perpetualClosePosition:
             return .none
         }
     }
@@ -227,7 +224,7 @@ public struct TransactionViewModel: Sendable {
             } else {
                 return transaction.asset.symbol
             }
-        case .perpetualOpenPosition, .perpetualClosePosition, .perpetualWithdraw:
+        case .perpetualOpenPosition, .perpetualClosePosition:
             return amountSymbolText
         }
     }
@@ -252,7 +249,7 @@ public struct TransactionViewModel: Sendable {
         case .stakeRewards,
              .swap:
             return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.green)
-        case .perpetualOpenPosition, .perpetualClosePosition, .perpetualWithdraw:
+        case .perpetualOpenPosition, .perpetualClosePosition:
             return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.black)
         }
     }
@@ -274,8 +271,7 @@ public struct TransactionViewModel: Sendable {
              .assetActivation,
              .smartContractCall,
              .perpetualOpenPosition,
-             .perpetualClosePosition,
-             .perpetualWithdraw:
+             .perpetualClosePosition:
             return .none
         case .swap:
             switch transaction.transaction.metadata {

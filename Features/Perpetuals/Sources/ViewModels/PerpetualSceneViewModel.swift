@@ -120,11 +120,15 @@ public extension PerpetualSceneViewModel {
     }
 
     func onClosePosition() {
-        let hyperliquidAsset: UInt32 = 0 // FIXME: perpetualViewModel.perpetual.assetId.hyperliquidAssetId
-        let price = perpetualViewModel.perpetual.price // Current Market price
-        let size = "0" // FIXME: perpetualViewModel.perpetualPostion.size, need to know the size when close
+        guard
+            let position = positions.first,
+            let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
+            return
+        }
+        let size = position.position.size
+        let price = perpetualViewModel.perpetual.price //TODO: Perpetual Current Market price
         let transferData = TransferData(
-            type: .perpetual(asset, .close(asset: hyperliquidAsset, price: price.description, size: size)),
+            type: .perpetual(asset, .close(asset: assetIndex, price: price.description, size: size.description)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false

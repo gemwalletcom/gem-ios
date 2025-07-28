@@ -9,6 +9,7 @@ public enum HypercoreProvider: TargetType {
     case metaAndAssetCtxs
     case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
     case exchange(action: String, signature: String, nonce: UInt64) // Action is JSON string
+    case broadcast(data: String)
 
     public var baseUrl: URL {
         return URL(string: "")!
@@ -22,7 +23,7 @@ public enum HypercoreProvider: TargetType {
         switch self {
         case .clearinghouseState, .metaAndAssetCtxs, .candleSnapshot:
             return "/info"
-        case .exchange:
+        case .exchange, .broadcast:
             return "/exchange"
         }
     }
@@ -76,6 +77,8 @@ public enum HypercoreProvider: TargetType {
                 return .plain
             }
             return .data(data)
+        case .broadcast(let data):
+            return .data(try! data.encodedData())
         }
     }
 

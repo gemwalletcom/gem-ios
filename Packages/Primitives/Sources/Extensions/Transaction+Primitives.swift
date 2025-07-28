@@ -30,8 +30,7 @@ extension Transaction {
             .transferNFT,
             .smartContractCall,
             .perpetualOpenPosition,
-            .perpetualClosePosition,
-            .perpetualWithdraw:
+            .perpetualClosePosition:
             return [assetId]
         case .swap:
             switch metadata {

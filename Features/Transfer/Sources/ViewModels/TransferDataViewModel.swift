@@ -48,7 +48,6 @@ struct TransferDataViewModel {
             case .approveAgent: "Approve Agent"
             case .open: "Open Position"
             case .close: "Close Position"
-            case .withdraw: "Withdraw"
             }
         }
     }

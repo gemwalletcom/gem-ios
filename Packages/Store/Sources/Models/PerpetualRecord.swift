@@ -12,6 +12,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         static let name = Column("name")
         static let provider = Column("provider")
         static let assetId = Column("assetId")
+        static let identifier = Column("identifier")
         static let price = Column("price")
         static let pricePercentChange24h = Column("pricePercentChange24h")
         static let openInterest = Column("openInterest")
@@ -24,6 +25,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
     public var name: String
     public var provider: PerpetualProvider
     public var assetId: AssetId
+    public var identifier: String
     public var price: Double
     public var pricePercentChange24h: Double
     public var openInterest: Double
@@ -36,6 +38,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         name: String,
         provider: PerpetualProvider,
         assetId: AssetId,
+        identifier: String,
         price: Double,
         pricePercentChange24h: Double,
         openInterest: Double,
@@ -47,6 +50,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         self.name = name
         self.provider = provider
         self.assetId = assetId
+        self.identifier = identifier
         self.price = price
         self.pricePercentChange24h = pricePercentChange24h
         self.openInterest = openInterest
@@ -69,6 +73,7 @@ extension PerpetualRecord: CreateTable {
             t.column(Columns.provider.name, .text).notNull()
             t.column(Columns.assetId.name, .text).notNull()
                 .references(AssetRecord.databaseTableName, column: AssetRecord.Columns.id.name, onDelete: .cascade)
+            t.column(Columns.identifier.name, .text).notNull()
             t.column(Columns.price.name, .double).notNull()
             t.column(Columns.pricePercentChange24h.name, .double).notNull()
             t.column(Columns.openInterest.name, .double).notNull()
@@ -88,6 +93,7 @@ extension PerpetualRecord {
             name: name,
             provider: provider,
             assetId: assetId,
+            identifier: identifier,
             price: price,
             pricePercentChange24h: pricePercentChange24h,
             openInterest: openInterest,
@@ -105,6 +111,7 @@ extension Perpetual {
             name: name,
             provider: provider,
             assetId: assetId,
+            identifier: identifier,
             price: price,
             pricePercentChange24h: pricePercentChange24h,
             openInterest: openInterest,
