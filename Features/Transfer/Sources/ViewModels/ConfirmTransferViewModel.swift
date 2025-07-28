@@ -410,7 +410,7 @@ extension ConfirmTransferViewModel {
         assetFeeBalance: Balance,
         fee: BigInt
     ) -> TransferAmountValidation {
-        let input = TransferAmountInput(
+        TransferAmountCalculator().validate(input: TransferAmountInput(
             asset: dataModel.asset,
             assetBalance: assetBalance,
             value: dataModel.data.value,
@@ -418,10 +418,8 @@ extension ConfirmTransferViewModel {
             assetFee: dataModel.asset.feeAsset,
             assetFeeBalance: assetFeeBalance,
             fee: fee,
-            canChangeValue: dataModel.data.canChangeValue,
-            ignoreValueCheck: dataModel.data.ignoreValueCheck
-        )
-        return TransferAmountCalculator().validate(input: input)
+            transferData: data
+        ))
     }
 
     private func transactionInputViewModel(
