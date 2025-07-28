@@ -8,6 +8,7 @@ import Components
 import Localization
 import StakeService
 import Formatters
+import PrimitivesComponents
 
 public struct StakeDetailViewModel {
     public let model: StakeDelegationViewModel
@@ -48,6 +49,10 @@ public struct StakeDetailViewModel {
     
     public var stateTextStyle: TextStyle {
         TextStyle(font: .callout, color: model.stateTextColor)
+    }
+    
+    public var validator: DelegationValidator {
+        model.delegation.validator
     }
     
     public var validatorText: String {
@@ -105,6 +110,10 @@ public struct StakeDetailViewModel {
         model.validatorUrl
     }
     
+    public var assetImageStyle: ListItemImageStyle? {
+        .asset(assetImage: AssetViewModel(asset: asset).assetImage)
+    }
+    
     public func stakeRecipientData() throws -> AmountInput {
         AmountInput(
             type: .stake(
@@ -123,7 +132,7 @@ public struct StakeDetailViewModel {
     }
     
     public func redelegateRecipientData() throws -> AmountInput {
-        return AmountInput(
+        AmountInput(
             type: .redelegate(
                 delegation: model.delegation,
                 validators: try service.getActiveValidators(assetId: asset.id),

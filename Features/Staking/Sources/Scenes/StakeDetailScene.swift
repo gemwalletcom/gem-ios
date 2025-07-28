@@ -32,16 +32,20 @@ public struct StakeDetailScene: View {
                 }
             }
             Section(model.balancesTitle) {
-                ListItemView(
-                    title: model.title,
-                    subtitle: model.model.balanceText,
-                    subtitleExtra: model.model.balanceFiatValueText
-                )
+                HStack {
+                    ValidatorImageView(validator: model.validator)
+                    ListItemView(
+                        title: model.title,
+                        subtitle: model.model.balanceText,
+                        subtitleExtra: model.model.balanceFiatValueText
+                    )
+                }
                 if let rewardsText = model.model.rewardsText {
                     ListItemView(
                         title: model.rewardsTitle,
                         subtitle: rewardsText,
-                        subtitleExtra: model.model.rewardsFiatValueText
+                        subtitleExtra: model.model.rewardsFiatValueText,
+                        imageStyle: model.assetImageStyle
                     )
                 }
             }

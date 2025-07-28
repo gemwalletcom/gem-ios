@@ -14,7 +14,6 @@ struct StakeDelegationViewModelTests {
 
         #expect(model.balanceText == "1,500.00 TRX")
         #expect(model.balanceFiatValueText == "$3,000.00")
-        #expect(model.subtitleExtraText == "$3,000.00")
     }
     
     @Test
@@ -26,10 +25,8 @@ struct StakeDelegationViewModelTests {
     }
     
     @Test
-    func subtitleExtraTextWithCompletion() {
-        let model = StakeDelegationViewModel.mock(state: .undelegating, completionDate: Date.now.addingTimeInterval(86400))
-
-        #expect(model.subtitleExtraText == model.completionDateText)
+    func completionDate() {
+        #expect(StakeDelegationViewModel.mock(state: .undelegating, completionDate: Date.now.addingTimeInterval(86400)).completionDateText == "23 hours, 59 minutes")
     }
 }
 

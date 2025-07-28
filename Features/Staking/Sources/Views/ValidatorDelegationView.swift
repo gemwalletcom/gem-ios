@@ -18,10 +18,11 @@ public struct ValidatorDelegationView: View {
             ValidatorImageView(validator: delegation.delegation.validator)
             ListItemView(
                 title: delegation.validatorText,
-                titleExtra: delegation.stateText,
-                titleStyleExtra: TextStyle(font: .footnote, color: delegation.stateTextColor),
+                titleTag: delegation.stateText,
+                titleTagStyle: delegation.stateTagStyle,
+                titleExtra: delegation.completionDateText,
                 subtitle: delegation.balanceText,
-                subtitleExtra: delegation.subtitleExtraText,
+                subtitleExtra: delegation.balanceFiatValueText,
                 subtitleStyleExtra: .footnote
             )
         }

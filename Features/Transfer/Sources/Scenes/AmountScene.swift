@@ -65,6 +65,7 @@ struct AmountScene: View {
                                 ValidatorView(model: viewModel)
                             }
                         }
+                        .listRowInsets(.assetListRowInsets)
                     }
                 }
             }

@@ -9,6 +9,7 @@ import Preferences
 import ExplorerService
 import GemstonePrimitives
 import Formatters
+import PrimitivesComponents
 
 public struct StakeDelegationViewModel: Sendable {
     
@@ -48,6 +49,14 @@ public struct StakeDelegationViewModel: Sendable {
     
     public var stateText: String {
         delegation.base.state.title
+    }
+    
+    public var stateTagStyle: TextStyle {
+        TextStyle(
+            font: .footnote,
+            color: stateTextColor,
+            background: stateTextColor.opacity(0.15)
+        )
     }
     
     public var stateTextColor: Color {
@@ -120,11 +129,8 @@ public struct StakeDelegationViewModel: Sendable {
     }
     
     public var validatorUrl: URL? {
-        exploreService.validatorUrl(chain: asset.chain, address: delegation.validator.id)?.url
-    }
-    
-    public var subtitleExtraText: String? {
-        completionDateText ?? balanceFiatValueText
+        guard delegation.validator.id != DelegationValidator.systemId else { return nil }
+        return exploreService.validatorUrl(chain: asset.chain, address: delegation.validator.id)?.url
     }
     
     public var completionDateText: String? {
