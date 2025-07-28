@@ -20,7 +20,7 @@ public enum WalletSceneSheetType: Identifiable, Sendable {
         case let .info(type): "info-\(type.id)"
         case let .url(url): "url-\(url)"
         case let .transferData(data): "transfer-data-\(data.id)"
-        case let .perpetualRecipientData(data): "perpetual-recipient-data-\(data.asset.id.identifier)"
+        case let .perpetualRecipientData(data): "perpetual-recipient-data-\(data.id)"
         }
     }
 }
@@ -70,7 +70,7 @@ extension Binding where Value == WalletSceneSheetType? {
         )
     }
 
-    var wallets: Binding<Bool> {
+    public var wallets: Binding<Bool> {
         Binding<Bool>(
             get: {
                 if case .wallets = wrappedValue { return true }

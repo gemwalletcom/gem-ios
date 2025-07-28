@@ -156,7 +156,7 @@ struct WalletNavigationStack: View {
                     case let .url(url):
                         SFSafariView(url: url)
                     case .wallets:
-                        WalletsNavigationStack(isPresentingWallets: $model.isPresentingSheet.mappedToBool())
+                        WalletsNavigationStack(isPresentingWallets: $model.isPresentingSheet.wallets)
                     }
                 }
         }
