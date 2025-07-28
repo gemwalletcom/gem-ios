@@ -3,12 +3,10 @@
 import WidgetKit
 import SwiftUI
 
-public struct SmallPriceWidget: Widget {
-    public let kind: String = "SmallPriceWidget"
+struct SmallPriceWidget: Widget {
+    let kind: String = "SmallPriceWidget"
     
-    public init() {}
-    
-    public var body: some WidgetConfiguration {
+    var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: PriceWidgetProvider()) { entry in
             PriceWidgetView(entry: entry, widgetFamily: .systemSmall)
         }
@@ -18,12 +16,10 @@ public struct SmallPriceWidget: Widget {
     }
 }
 
-public struct MediumPriceWidget: Widget {
-    public let kind: String = "MediumPriceWidget"
+struct MediumPriceWidget: Widget {
+    let kind: String = "MediumPriceWidget"
     
-    public init() {}
-    
-    public var body: some WidgetConfiguration {
+    var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: PriceWidgetProvider()) { entry in
             PriceWidgetView(entry: entry, widgetFamily: .systemMedium)
         }

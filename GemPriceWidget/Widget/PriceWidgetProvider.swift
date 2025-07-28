@@ -3,14 +3,12 @@
 import WidgetKit
 import SwiftUI
 
-public struct PriceWidgetProvider: TimelineProvider {
-    public init() {}
-    
-    public func placeholder(in context: Context) -> PriceWidgetEntry {
+struct PriceWidgetProvider: TimelineProvider {
+    func placeholder(in context: Context) -> PriceWidgetEntry {
         PriceWidgetEntry.placeholder(widgetFamily: context.family)
     }
     
-    public func getSnapshot(in context: Context, completion: @escaping @Sendable (PriceWidgetEntry) -> Void) {
+    func getSnapshot(in context: Context, completion: @escaping @Sendable (PriceWidgetEntry) -> Void) {
         let widgetFamily = context.family
         let isPreview = context.isPreview
         
@@ -25,7 +23,7 @@ public struct PriceWidgetProvider: TimelineProvider {
         }
     }
     
-    public func getTimeline(in context: Context, completion: @escaping @Sendable (Timeline<PriceWidgetEntry>) -> Void) {
+    func getTimeline(in context: Context, completion: @escaping @Sendable (Timeline<PriceWidgetEntry>) -> Void) {
         let widgetFamily = context.family
         let currentDate = Date()
         

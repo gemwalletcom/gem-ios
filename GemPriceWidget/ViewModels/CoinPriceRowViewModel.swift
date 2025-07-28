@@ -3,13 +3,16 @@
 import SwiftUI
 import Formatters
 import Style
+import Components
 
-struct CoinPriceRowViewModel {
+@Observable
+@MainActor
+internal final class CoinPriceRowViewModel {
     private let coin: CoinPrice
     private let currencyFormatter: CurrencyFormatter
     private let percentFormatter = CurrencyFormatter.percent
     
-    init(
+    internal init(
         coin: CoinPrice,
         currencyFormatter: CurrencyFormatter = CurrencyFormatter()
     ) {
@@ -38,13 +41,7 @@ struct CoinPriceRowViewModel {
     }
     
     var percentageColor: Color {
-        if coin.priceChangePercentage24h > 0 {
-            return Colors.green
-        } else if coin.priceChangePercentage24h < 0 {
-            return Colors.red
-        } else {
-            return Colors.gray
-        }
+        PriceChangeColor.color(for: coin.priceChangePercentage24h)
     }
     
     var percentageChange: Double {

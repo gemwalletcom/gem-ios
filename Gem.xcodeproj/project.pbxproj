@@ -86,7 +86,6 @@
 		D838194A2E256A5A0076CDB3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80A2E246E6700871ED9 /* WidgetKit.framework */; };
 		D838194B2E256A5A0076CDB3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80C2E246E6700871ED9 /* SwiftUI.framework */; };
 		D83819562E256A5B0076CDB3 /* GemPriceWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		D838195C2E256A630076CDB3 /* PriceWidget in Frameworks */ = {isa = PBXBuildFile; productRef = D838195B2E256A630076CDB3 /* PriceWidget */; settings = {ATTRIBUTES = (Required, ); }; };
 		D83D3C252D6E62F4002959EA /* ScanService in Frameworks */ = {isa = PBXBuildFile; productRef = D83D3C242D6E62F4002959EA /* ScanService */; };
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
@@ -106,6 +105,13 @@
 		D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */; };
 		D8C4A3A52C9696FE006FABE8 /* AssetNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */; };
 		D8CF19E32CC747370025D6B4 /* Transfer in Frameworks */ = {isa = PBXBuildFile; productRef = D8CF19E22CC747370025D6B4 /* Transfer */; };
+		D8CFDE9E2E37FC2500D27283 /* Style in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDE9D2E37FC2500D27283 /* Style */; };
+		D8CFDEA02E37FC3B00D27283 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDE9F2E37FC3B00D27283 /* Primitives */; };
+		D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEA72E37FC8800D27283 /* Preferences */; };
+		D8CFDEAA2E37FC8C00D27283 /* GemAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEA92E37FC8C00D27283 /* GemAPI */; };
+		D8CFDEAC2E37FC9F00D27283 /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAB2E37FC9F00D27283 /* GemstonePrimitives */; };
+		D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAD2E37FCA800D27283 /* Formatters */; };
+		D8CFDEB02E37FCB000D27283 /* Components in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAF2E37FCB000D27283 /* Components */; };
 		D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */; };
 		D8D726BD2C7157A000A6B559 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8D726BC2C7157A000A6B559 /* Primitives */; };
 		D8D726C02C716DED00A6B559 /* ScreenshotsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F8772B17F21E00B15F54 /* ScreenshotsLaunchTests.swift */; };
@@ -241,7 +247,6 @@
 		D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GemUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D832C80A2E246E6700871ED9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D832C80C2E246E6700871ED9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		D832C8542E2471B100871ED9 /* PriceWidget */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceWidget; sourceTree = "<group>"; };
 		D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GemPriceWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetPriceAlertNavigationStack.swift; sourceTree = "<group>"; };
 		D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertsNavigationView.swift; sourceTree = "<group>"; };
@@ -384,9 +389,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8CFDE9E2E37FC2500D27283 /* Style in Frameworks */,
+				D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */,
+				D8CFDEB02E37FCB000D27283 /* Components in Frameworks */,
+				D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */,
 				D838194B2E256A5A0076CDB3 /* SwiftUI.framework in Frameworks */,
+				D8CFDEAA2E37FC8C00D27283 /* GemAPI in Frameworks */,
+				D8CFDEAC2E37FC9F00D27283 /* GemstonePrimitives in Frameworks */,
+				D8CFDEA02E37FC3B00D27283 /* Primitives in Frameworks */,
 				D838194A2E256A5A0076CDB3 /* WidgetKit.framework in Frameworks */,
-				D838195C2E256A630076CDB3 /* PriceWidget in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -635,7 +646,6 @@
 				C366791B2A1860E500F1D74D /* QRScanner */,
 				834B38182D1D858D009D58D4 /* LockManager */,
 				C370289B2A9C3B0E009AE123 /* Settings */,
-				D832C8542E2471B100871ED9 /* PriceWidget */,
 				D88BB2682E2EE09F006310B9 /* Perpetuals */,
 			);
 			path = Features;
@@ -919,9 +929,6 @@
 				D838194C2E256A5A0076CDB3 /* GemPriceWidget */,
 			);
 			name = GemPriceWidget;
-			packageProductDependencies = (
-				D838195B2E256A630076CDB3 /* PriceWidget */,
-			);
 			productName = GemPriceWidgetExtension;
 			productReference = D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -2041,10 +2048,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = DeviceService;
 		};
-		D838195B2E256A630076CDB3 /* PriceWidget */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PriceWidget;
-		};
 		D83D3C242D6E62F4002959EA /* ScanService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ScanService;
@@ -2168,6 +2171,34 @@
 		D8CF19E22CC747370025D6B4 /* Transfer */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Transfer;
+		};
+		D8CFDE9D2E37FC2500D27283 /* Style */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Style;
+		};
+		D8CFDE9F2E37FC3B00D27283 /* Primitives */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Primitives;
+		};
+		D8CFDEA72E37FC8800D27283 /* Preferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Preferences;
+		};
+		D8CFDEA92E37FC8C00D27283 /* GemAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GemAPI;
+		};
+		D8CFDEAB2E37FC9F00D27283 /* GemstonePrimitives */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GemstonePrimitives;
+		};
+		D8CFDEAD2E37FCA800D27283 /* Formatters */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Formatters;
+		};
+		D8CFDEAF2E37FCB000D27283 /* Components */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Components;
 		};
 		D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */ = {
 			isa = XCSwiftPackageProductDependency;
