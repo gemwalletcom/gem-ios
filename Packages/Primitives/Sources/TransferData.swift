@@ -22,12 +22,7 @@ public struct TransferData: Identifiable, Sendable, Hashable {
     }
 
     public var id: String {
-        let components = [
-            type.transactionType.rawValue,
-            recipientData.recipient.address,
-            String(value)
-        ]
-        return components.joined(separator: "-")
+        [type.transactionType.rawValue, recipientData.recipient.address, String(value)].joined(separator: "-")
     }
     
     public var chain: Chain {
