@@ -104,8 +104,8 @@ struct WalletNavigationStack: View {
                     PerpetualsNavigationView(
                         wallet: model.wallet,
                         perpetualService: AppResolver.main.services.perpetualService,
-                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType,
-                        isPresentingTransferData: $model.isPresentingTransferData
+                        isPresentingSelectAssetType: $model.isPresentingSheet.selectAssetType,
+                        isPresentingTransferData: $model.isPresentingSheet.transferData
                     )
                 }
                 .navigationDestination(for: Scenes.Perpetual.self) { scene in
@@ -113,53 +113,52 @@ struct WalletNavigationStack: View {
                         perpetualData: scene.perpetualData,
                         wallet: model.wallet,
                         perpetualService: AppResolver.main.services.perpetualService,
-                        isPresentingTransferData: $model.isPresentingTransferData,
-                        isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
+                        isPresentingTransferData: $model.isPresentingSheet.transferData,
+                        isPresentingPerpetualRecipientData: $model.isPresentingSheet.perpetualRecipientData
                     )
                 }
-                .sheet(item: $model.isPresentingSelectAssetType) { value in
-                    SelectAssetSceneNavigationStack(
-                        model: SelectAssetViewModel(
-                            wallet: model.wallet,
-                            selectType: value,
-                            assetsService: walletsService.assetsService,
-                            walletsService: walletsService,
-                            priceAlertService: priceAlertService
-                        ),
-                        isPresentingSelectType: $model.isPresentingSelectAssetType
-                    )
-                }
-                .sheet(isPresented: $model.isPresentingWallets) {
-                    WalletsNavigationStack(isPresentingWallets: $model.isPresentingWallets)
-                }
-                .sheet(item: $model.isPresentingInfoSheet) {
-                    InfoSheetScene(model: InfoSheetViewModel(type: $0))
-                }
-                .sheet(item: $model.isPresentingTransferData) { data in
-                    ConfirmTransferNavigationStack(
-                        wallet: model.wallet,
-                        transferData: data,
-                        onComplete: model.onTransferComplete
-                    )
-                }
-                .sheet(item: $model.isPresentingPerpetualRecipientData) { perpetualRecipientData in
-                    AmountNavigationStack(
-                        model: AmountSceneViewModel(
-                            input: AmountInput(
-                                type: .perpetual(recipient: perpetualRecipientData.recipientData, perpetualRecipientData.direction),
-                                asset: perpetualRecipientData.asset
+                .sheet(item: $model.isPresentingSheet) { sheet in
+                    switch sheet {
+                    case let .selectAssetType(value):
+                        SelectAssetSceneNavigationStack(
+                            model: SelectAssetViewModel(
+                                wallet: model.wallet,
+                                selectType: value,
+                                assetsService: walletsService.assetsService,
+                                walletsService: walletsService,
+                                priceAlertService: priceAlertService
                             ),
-                            wallet: model.wallet,
-                            walletsService: walletsService,
-                            stakeService: AppResolver.main.services.stakeService,
-                            onTransferAction: { transferData in
-                                model.isPresentingPerpetualRecipientData = nil
-                                model.isPresentingTransferData = transferData
-                            }
+                            isPresentingSelectType: $model.isPresentingSheet.selectAssetType
                         )
-                    )
+                    case let .info(type):
+                        InfoSheetScene(model: InfoSheetViewModel(type: type))
+                    case let .perpetualRecipientData(perpetualRecipientData):
+                        AmountNavigationStack(
+                            model: AmountSceneViewModel(
+                                input: AmountInput(
+                                    type: .perpetual(recipient: perpetualRecipientData.recipientData, perpetualRecipientData.direction),
+                                    asset: perpetualRecipientData.asset
+                                ),
+                                wallet: model.wallet,
+                                walletsService: walletsService,
+                                stakeService: AppResolver.main.services.stakeService,
+                                onTransferAction: { transferData in
+                                    model.isPresentingSheet = .transferData(transferData)
+                                }
+                            )
+                        )
+                    case let .transferData(transferData):
+                        ConfirmTransferNavigationStack(
+                            wallet: model.wallet,
+                            transferData: transferData,
+                            onComplete: model.onTransferComplete
+                        )
+                    case let .url(url):
+                        SFSafariView(url: url)
+                    case .wallets:
+                        WalletsNavigationStack(isPresentingWallets: $model.isPresentingSheet.mappedToBool())
+                    }
                 }
-                .safariSheet(url: $model.isPresentingUrl)
         }
     }
 }
