@@ -103,11 +103,11 @@ extension EthereumWalletConnectService {
     }
 
     private func walletAddEthereumChain(chain: Chain, request: WalletConnectSign.Request) -> RPCResult {
-        .response(AnyCodable(any: NSNull()))
+        .response(AnyCodable.null())
     }
 
     private func walletSwitchEthereumChain(chain: Chain, request: WalletConnectSign.Request) -> RPCResult {
-        .response(AnyCodable(any: NSNull()))
+        .response(AnyCodable.null())
     }
         
     // TODO: - Implement methods
