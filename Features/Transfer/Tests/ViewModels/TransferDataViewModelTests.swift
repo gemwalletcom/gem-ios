@@ -3,6 +3,7 @@
 import Testing
 @testable import Transfer
 @testable import Primitives
+import PrimitivesTestKit
 
 struct TransferDataViewModelTests {
 
@@ -11,12 +12,10 @@ struct TransferDataViewModelTests {
         #expect(TransferDataViewModel.mock(type: .transfer(.mock(id: .mockEthereum()))).shouldShowMemo == false)
         #expect(TransferDataViewModel.mock(type: .transfer(.mock(id: .mockSolana()))).shouldShowMemo == true)
         #expect(TransferDataViewModel.mock(type: .transfer(.mock(id: .mockSolana()))).shouldShowMemo == true)
-        
+
         #expect(TransferDataViewModel.mock(type: .deposit(.mock(id: .mockEthereum()))).shouldShowMemo == false)
         #expect(TransferDataViewModel.mock(type: .deposit(.mock(id: .mockSolana()))).shouldShowMemo == true)
         
-        #expect(TransferDataViewModel.mock(type: .transferNft(.mock())).shouldShowMemo == false)
-        #expect(TransferDataViewModel.mock(type: .transferNft(.mock())).shouldShowMemo == false)
         #expect(TransferDataViewModel.mock(type: .transferNft(.mock())).shouldShowMemo == false)
     }
     

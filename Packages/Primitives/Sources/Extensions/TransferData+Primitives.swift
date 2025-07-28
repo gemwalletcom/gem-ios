@@ -10,23 +10,7 @@ extension TransferData {
         TransferData(
             type: type,
             recipientData: recipientData,
-            value: newValue,
-            canChangeValue: canChangeValue,
-            ignoreValueCheck: ignoreValueCheck
+            value: newValue
         )
-    }
-}
-
-extension TransferData: Identifiable {
-    //FIX: Improve
-    public var id: String { recipientData.recipient.address }
-}
-
-extension TransferDataType {
-    public var shouldIgnoreValueCheck: Bool {
-        switch self {
-        case .transferNft, .stake, .account, .tokenApprove, .perpetual: true
-        case .transfer, .deposit, .swap, .generic: false
-        }
     }
 }
