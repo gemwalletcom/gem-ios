@@ -9,6 +9,9 @@ import WalletTab
 import InfoSheet
 import Components
 import Assets
+import Perpetuals
+import Transfer
+import StakeService
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
@@ -97,6 +100,23 @@ struct WalletNavigationStack: View {
                         )
                     )
                 }
+                .navigationDestination(for: Scenes.Perpetuals.self) { _ in
+                    PerpetualsNavigationView(
+                        wallet: model.wallet,
+                        perpetualService: AppResolver.main.services.perpetualService,
+                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType,
+                        isPresentingTransferData: $model.isPresentingTransferData
+                    )
+                }
+                .navigationDestination(for: Scenes.Perpetual.self) { scene in
+                    PerpetualNavigationView(
+                        perpetualData: scene.perpetualData,
+                        wallet: model.wallet,
+                        perpetualService: AppResolver.main.services.perpetualService,
+                        isPresentingTransferData: $model.isPresentingTransferData,
+                        isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
+                    )
+                }
                 .sheet(item: $model.isPresentingSelectAssetType) { value in
                     SelectAssetSceneNavigationStack(
                         model: SelectAssetViewModel(
@@ -114,6 +134,30 @@ struct WalletNavigationStack: View {
                 }
                 .sheet(item: $model.isPresentingInfoSheet) {
                     InfoSheetScene(model: InfoSheetViewModel(type: $0))
+                }
+                .sheet(item: $model.isPresentingTransferData) { data in
+                    ConfirmTransferNavigationStack(
+                        wallet: model.wallet,
+                        transferData: data,
+                        onComplete: model.onTransferComplete
+                    )
+                }
+                .sheet(item: $model.isPresentingPerpetualRecipientData) { perpetualRecipientData in
+                    AmountNavigationStack(
+                        model: AmountSceneViewModel(
+                            input: AmountInput(
+                                type: .perpetual(recipient: perpetualRecipientData.recipientData, perpetualRecipientData.direction),
+                                asset: perpetualRecipientData.asset
+                            ),
+                            wallet: model.wallet,
+                            walletsService: walletsService,
+                            stakeService: AppResolver.main.services.stakeService,
+                            onTransferAction: { transferData in
+                                model.isPresentingPerpetualRecipientData = nil
+                                model.isPresentingTransferData = transferData
+                            }
+                        )
+                    )
                 }
                 .safariSheet(url: $model.isPresentingUrl)
         }

@@ -145,9 +145,9 @@ public final class ConfirmTransferViewModel {
     var networkText: String {
         let model = AssetViewModel(asset: dataModel.asset)
         switch data.type {
-        case .transfer:
+        case .transfer, .deposit:
             return model.networkFullName
-        case .transferNft, .swap, .tokenApprove, .stake, .account, .generic:
+        case .transferNft, .swap, .tokenApprove, .stake, .account, .generic, .perpetual:
             return model.networkName
         }
     }

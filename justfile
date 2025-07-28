@@ -1,4 +1,5 @@
-XCBEAUTIFY_ARGS := ""
+XCBEAUTIFY_ARGS := "--quieter"
+BUILD_THREADS := `sysctl -n hw.ncpu`
 SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 16"
 
 xcbeautify:
@@ -48,7 +49,20 @@ build:
     -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
-    build | xcbeautify
+    -derivedDataPath build/DerivedData \
+    -parallelizeTargets \
+    -jobs {{BUILD_THREADS}} \
+    -showBuildTimingSummary \
+    GCC_OPTIMIZATION_LEVEL=0 \
+    SWIFT_OPTIMIZATION_LEVEL=-Onone \
+    SWIFT_COMPILATION_MODE=incremental \
+    ENABLE_TESTABILITY=NO \
+    build | xcbeautify {{XCBEAUTIFY_ARGS}}
+
+# Clean build cache
+clean:
+    @rm -rf build/DerivedData
+    @echo "Build cache cleaned"
 
 build-package PACKAGE:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -56,7 +70,12 @@ build-package PACKAGE:
     -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
-    build | xcbeautify
+    -derivedDataPath build/DerivedData \
+    -parallelizeTargets \
+    -jobs {{BUILD_THREADS}} \
+    GCC_OPTIMIZATION_LEVEL=0 \
+    SWIFT_OPTIMIZATION_LEVEL=-Onone \
+    build | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 test_all:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -64,8 +83,11 @@ test_all:
     -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath build/DerivedData \
     -parallel-testing-enabled YES \
-    test | xcbeautify
+    -parallelizeTargets \
+    -jobs {{BUILD_THREADS}} \
+    test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 test_ui:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -75,7 +97,7 @@ test_ui:
     -destination "{{SIMULATOR_DEST}}" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
-    test | xcbeautify
+    test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 test TARGET:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -83,9 +105,12 @@ test TARGET:
     -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath build/DerivedData \
     -only-testing {{TARGET}} \
     -parallel-testing-enabled YES \
-    test | xcbeautify
+    -parallelizeTargets \
+    -jobs {{BUILD_THREADS}} \
+    test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 localize:
     @sh core/scripts/localize.sh ios Packages/Localization/Sources/Resources

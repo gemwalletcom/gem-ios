@@ -50,6 +50,10 @@ public struct Migrations {
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
+            
+            // perpetuals
+            try PerpetualRecord.create(db: db)
+            try PerpetualPositionRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)
     }
@@ -273,6 +277,16 @@ public struct Migrations {
         
         migrator.registerMigration("Add \(AddressRecord.databaseTableName) table") { db in
             try? AddressRecord.create(db: db)
+        }
+        
+        migrator
+            .registerMigration(
+                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 8"
+            ) { db in
+            try? db.drop(table: PerpetualRecord.databaseTableName)
+            try? db.drop(table: PerpetualPositionRecord.databaseTableName)
+            try? PerpetualRecord.create(db: db)
+            try? PerpetualPositionRecord.create(db: db)
         }
         
         try migrator.migrate(dbQueue)

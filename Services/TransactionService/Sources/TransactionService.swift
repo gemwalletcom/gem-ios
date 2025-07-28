@@ -7,7 +7,6 @@ import ChainService
 import StakeService
 import BalanceService
 import NFTService
-import JobRunner
 
 public struct TransactionService: Sendable {
     private let transactionStore: TransactionStore

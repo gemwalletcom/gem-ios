@@ -65,11 +65,11 @@ extension OptimismGasOracle {
         
         let value = {
             switch input.type {
-            case let .transfer(asset):
+            case .transfer(let asset), .deposit(let asset):
                 asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
             case .transferNft, .generic, .swap, .tokenApprove:
                 input.value
-            case .stake, .account: fatalError()
+            case .stake, .account, .perpetual: fatalError()
             }
         }()
         
@@ -125,7 +125,7 @@ extension OptimismGasOracle {
         var encoded = signed.encoded.dropLast(Self.signatureLenInRlp)
         
         switch feeInput.type {
-        case let .transfer(asset):
+        case .transfer(let asset), .deposit(let asset):
             switch asset.id.type {
             case .native:
                 // not 100% accurate without RLP decoding (0x02f8740a...)
@@ -136,7 +136,7 @@ extension OptimismGasOracle {
             }
         case .generic, .swap, .tokenApprove:
             break
-        case .transferNft, .stake, .account:
+        case .transferNft, .stake, .account, .perpetual:
             fatalError()
         }
         

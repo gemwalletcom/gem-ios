@@ -28,6 +28,7 @@ import WalletSessionService
 import AppService
 import ScanService
 import SwapService
+import PerpetualService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -166,6 +167,13 @@ struct ServicesFactory {
             releaseService: AppReleaseService(configService: configService)
         )
 
+        let perpetualService = Self.makePerpetualService(
+            perpetualStore: storeManager.perpetualStore,
+            assetStore: storeManager.assetStore,
+            balanceStore: storeManager.balanceStore,
+            nodeProvider: nodeService
+        )
+
         return AppResolver.Services(
             assetsService: assetsService,
             balanceService: balanceService,
@@ -193,7 +201,8 @@ struct ServicesFactory {
             deviceObserverService: deviceObserverService,
             onstartService: onStartService,
             onstartAsyncService: onstartAsyncService,
-            walletConnectorManager: walletConnectorManager
+            walletConnectorManager: walletConnectorManager,
+            perpetualService: perpetualService
         )
     }
 }
@@ -429,6 +438,22 @@ extension ServicesFactory {
             apiService: apiService,
             nftStore: nftStore,
             deviceService: deviceService
+        )
+    }
+    
+    private static func makePerpetualService(
+        perpetualStore: PerpetualStore,
+        assetStore: AssetStore,
+        balanceStore: BalanceStore,
+        nodeProvider: any NodeURLFetchable
+    ) -> PerpetualService {
+        let providerFactory = PerpetualProviderFactory(nodeProvider: nodeProvider)
+        
+        return PerpetualService(
+            store: perpetualStore,
+            assetStore: assetStore,
+            balanceStore: balanceStore,
+            providerFactory: providerFactory
         )
     }
 }

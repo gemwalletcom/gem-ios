@@ -6,19 +6,26 @@ public enum AccountDataType: Hashable, Equatable, Sendable {
     case activate
 }
 
+public enum PerpetualType: Hashable, Equatable, Sendable {
+    case open(PerpetualDirection)
+    case close
+}
 
 public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
+    case deposit(Asset)
     case transferNft(NFTAsset)
     case swap(Asset, Asset, SwapData)
     case tokenApprove(Asset, ApprovalData)
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
+    case perpetual(Asset, PerpetualType)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
     
     public var transactionType: TransactionType {
         switch self {
         case .transfer: .transfer
+        case .deposit: .transfer
         case .generic: .smartContractCall
         case .transferNft: .transferNFT
         case .tokenApprove: .tokenApproval
@@ -32,15 +39,22 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .withdraw: .stakeWithdraw
             }
         case .account: .assetActivation
+        case .perpetual(_, let type):
+            switch type {
+            case .open: .perpetualOpenPosition
+            case .close: .perpetualClosePosition
+            }
         }
     }
     
     public var chain: Chain {
         switch self {
         case .transfer(let asset),
+            .deposit(let asset),
             .swap(let asset, _, _),
             .stake(let asset, _),
             .account(let asset, _),
+            .perpetual(let asset, _),
             .tokenApprove(let asset, _),
             .generic(let asset, _, _): asset.chain
         case .transferNft(let asset): asset.chain
@@ -63,19 +77,23 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         )
         case .generic,
             .transfer,
+            .deposit,
             .tokenApprove,
             .stake,
-            .account: .null
+            .account,
+            .perpetual: .null
         }
     }
     
     public var assetIds: [AssetId] {
         switch self {
         case .transfer(let asset),
-             .tokenApprove(let asset, _),
-             .stake(let asset, _),
-             .generic(let asset, _, _),
-             .account(let asset, _): [asset.id]
+            .deposit(let asset),
+            .tokenApprove(let asset, _),
+            .stake(let asset, _),
+            .generic(let asset, _, _),
+            .account(let asset, _),
+            .perpetual(let asset, _): [asset.id]
         case let .swap(from, to, _): [from.id, to.id]
         case .transferNft: []
         }
@@ -102,4 +120,19 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         }
     }
 
+    public var asset: Asset {
+        switch self {
+        case .transfer(let asset),
+            .deposit(let asset),
+            .swap(let asset, _, _),
+            .stake(let asset, _),
+            .account(let asset, _),
+            .perpetual(let asset, _),
+            .tokenApprove(let asset, _),
+            .generic(let asset, _, _): 
+            return asset
+        case .transferNft:
+            fatalError("NFT asset not supported")
+        }
+    }
 }

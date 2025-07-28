@@ -7,7 +7,6 @@ import GRDBQuery
 import Store
 import Localization
 import Style
-import Currency
 import NFT
 import TransactionsService
 import WalletTab

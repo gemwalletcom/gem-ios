@@ -24,7 +24,6 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
         }
     }
 
-    public var showBalancePrivacy: Binding<Bool> { .constant(false) }
     public var name: String { data.asset.name }
     public var symbol: String? { data.asset.symbol }
     public var rightView: ListAssetItemRightView { .none }

@@ -181,7 +181,7 @@ extension SolanaService: ChainTransactionDataLoadable {
     public func load(input: TransactionInput) async throws -> TransactionData {
         let fee = try feeService.getBaseFee(type: input.type, gasPrice: input.gasPrice)
         switch input.type {
-        case .generic, .transfer:
+        case .generic, .transfer, .deposit:
             switch input.asset.id.type {
             case .native:
                 return TransactionData(
@@ -212,7 +212,7 @@ extension SolanaService: ChainTransactionDataLoadable {
                 block: SignerInputBlock(hash: input.preload.blockHash),
                 fee: fee
             )
-        case .account, .tokenApprove: fatalError()
+        case .account, .tokenApprove, .perpetual: fatalError()
         }
     }
 }

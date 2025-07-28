@@ -19,15 +19,6 @@ public final class ChartsViewModel {
 
     private let preferences: Preferences = .standard
 
-    let periods: [ChartSelection] = [
-        ChartSelection(period: .hour, title: Localized.Charts.hour),
-        ChartSelection(period: .day, title: Localized.Charts.day),
-        ChartSelection(period: .week, title: Localized.Charts.week),
-        ChartSelection(period: .month, title: Localized.Charts.month),
-        ChartSelection(period: .year, title: Localized.Charts.year),
-        ChartSelection(period: .all, title: Localized.Charts.all),
-    ]
-
     var state: StateViewType<ChartValuesViewModel> = .loading
     var currentPeriod: ChartPeriod {
         didSet {

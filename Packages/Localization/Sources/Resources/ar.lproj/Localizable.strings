@@ -443,3 +443,13 @@
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
 "info.no_quote.description" = "تعذر إرجاع عرض الأسعار لزوج الرمز المميز المحدد، ربما بسبب انخفاض المبلغ، أو نقص السيولة، أو القيود الفنية.";
+"perpetual.positions" = "المناصب";
+"perpetual.size" = "مقاس";
+"perpetual.margin" = "هامِش";
+"perpetual.position" = "موضع";
+"perpetual.close_position" = "إغلاق الوضع";
+"perpetual.pnl" = "PnL";
+"perpetual.long" = "Long";
+"perpetual.short" = "Short";
+"markets.daily_volume" = "حجم 24 ساعة";
+"perpetual.entry_price" = "سعر الدخول";

@@ -19,7 +19,6 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "GemAPI", path: "../../Packages/GemAPI"),
-        .package(name: "Preferences", path: "../../Packages/Preferences"),
     ],
     targets: [
         .target(
@@ -27,7 +26,6 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "GemAPI",
-                "Preferences",
             ],
             path: "Sources"
         ),
@@ -37,7 +35,6 @@ let package = Package(
                 "ScanService",
                 "Primitives",
                 "GemAPI",
-                .product(name: "PreferencesTestKit", package: "Preferences"),
             ],
             path: "TestKit"
         ),
