@@ -44,13 +44,13 @@ just build
 just build-package $PACKAGE. Example: just build-package Primitives
 
 # Build and run tests
-just test_all
+just test-all
 
 # Build and run tests for a specific package
 just test $PACKAGE. Example: just test PrimitivesTests
 
 # Run UI tests
-just test_ui
+just test-ui
 
 # Generate code (models, SwiftGen assets)
 just generate
@@ -164,7 +164,7 @@ Services are injected via SwiftUI Environment:
 
 ### Running Tests
 - Unit tests: `just test`
-- UI tests: `just test_ui`
+- UI tests: `just test-ui`
 - Specific test: `just test-specific TARGET` (e.g. `just test-specific AssetsTests`)
 - Tests use iPhone 16 simulator by default
 - To run tests, always use the `just` commands above, not direct `xcrun swift test` commands
