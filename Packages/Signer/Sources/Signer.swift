@@ -39,7 +39,7 @@ public struct Signer: Sendable {
         case .account:
             return [try signer.signAccountAction(input: input, privateKey: privateKey)]
         case .perpetual:
-            return [try signer.signPerpetual(input: input, privateKey: privateKey)]
+            return try signer.signPerpetual(input: input, privateKey: privateKey)
         }
     }
 

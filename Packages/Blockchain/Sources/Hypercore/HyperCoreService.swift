@@ -6,14 +6,13 @@ import Keychain
 import Primitives
 import SwiftHTTPClient
 
-let HLAgentName: String = "GemWallet"
-let HLAgentAddress: String = "HyperliquidAgentAddress"
-let HLAgentKey: String = "HyperliquidAgentKey"
-
 public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
-    let keychain: KeychainDefault
+    let keychain = KeychainDefault()
+    
+    public static let HLAgentAddress: String = "hyperliquid_agent_address"
+    public static let HLAgentKey: String = "hyperliquid_agent_private_key"
 
     public init(
         chain: Primitives.Chain = .hyperCore,
@@ -21,7 +20,6 @@ public struct HyperCoreService: Sendable {
     ) {
         self.chain = chain
         self.provider = provider
-        self.keychain = KeychainDefault()
     }
 }
 
@@ -44,15 +42,6 @@ public extension HyperCoreService {
         return try await provider
             .request(.candleSnapshot(coin: coin, interval: interval, startTime: startTime, endTime: endTime))
             .map(as: [HypercoreCandlestick].self)
-    }
-
-    func getAgentKey() async throws -> String {
-        if let key = try keychain.get(HLAgentKey) {
-            return key
-        }
-        let newKey = try SecureRandom.generateKey()
-        try keychain.set(newKey, key: HLAgentKey)
-        return newKey
     }
 }
 
@@ -88,8 +77,13 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        //TODO: Perpetual. Handle different responses based on the action
-        try await self.provider.request(.broadcast(data: data)).map(as: String.self)
+        let response = try await self.provider
+            .request(.broadcast(data: data))
+            .map(as: HypercoreResponse.self)
+        if response.status == "ok" {
+            return data
+        }
+        throw ChainServiceErrors.broadcastError(chain)
     }
 }
 
@@ -156,7 +150,8 @@ public extension HyperCoreService {
 public extension HyperCoreService {
     func load(input: TransactionInput) async throws -> TransactionData {
         TransactionData(
-            fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+            sequence: input.preload.isDestinationAddressExist ? 1 : 0,
+            fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero),
         )
     }
 }
@@ -165,7 +160,18 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        TransactionPreload()
+        let keychain = KeychainDefault()
+        if let address = try keychain.get(Self.HLAgentAddress) {
+            let result = try await self.provider
+                .request(.userRole(address: address))
+                .map(as: HypercoreUserRole.self)
+            
+            return TransactionPreload(
+                isDestinationAddressExist: result.role == "agent"
+            )
+        } else {
+            return TransactionPreload(isDestinationAddressExist: false)
+        }
     }
 }
 

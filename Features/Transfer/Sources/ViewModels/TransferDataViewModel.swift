@@ -45,7 +45,6 @@ struct TransferDataViewModel {
             }
         case .perpetual(_, let type):
             switch type {
-            case .approveAgent: "Approve Agent"
             case .open: "Open Position"
             case .close: "Close Position"
             }

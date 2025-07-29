@@ -8,7 +8,7 @@ public enum HypercoreProvider: TargetType {
     case clearinghouseState(user: String)
     case metaAndAssetCtxs
     case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
-    case exchange(action: String, signature: String, nonce: UInt64) // Action is JSON string
+    case userRole(address: String)
     case broadcast(data: String)
 
     public var baseUrl: URL {
@@ -21,9 +21,12 @@ public enum HypercoreProvider: TargetType {
 
     public var path: String {
         switch self {
-        case .clearinghouseState, .metaAndAssetCtxs, .candleSnapshot:
+        case .clearinghouseState,
+            .metaAndAssetCtxs,
+            .candleSnapshot,
+            .userRole:
             return "/info"
-        case .exchange, .broadcast:
+        case .broadcast:
             return "/exchange"
         }
     }
@@ -49,34 +52,11 @@ public enum HypercoreProvider: TargetType {
                     "endTime": .integer(endTime)
                 ])
             ]))
-        case .exchange(let action, let signature, let nonce):
-            guard
-                let data = action.data(using: .utf8),
-                let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
-            else {
-                return .plain
-            }
-
-            guard let (r, s, v) = try? SignatureParser.parseSignature(signature) else {
-                return .plain
-            }
-
-            let signatureDict: [String: Any] = [
-                "r": r,
-                "s": s,
-                "v": v
-            ]
-            let dictionary: [String: Any] = [
-                "action": object,
-                "signature": signatureDict,
-                "nonce": nonce,
-                "isFrontend": true,
-                "vaultAddress": NSNull()
-            ]
-            guard let data = try? JSONSerialization.data(withJSONObject: dictionary, options: [.sortedKeys]) else {
-                return .plain
-            }
-            return .data(data)
+        case .userRole(let address):
+            return .encodable([
+                "type": "userRole",
+                "user": address
+            ])
         case .broadcast(let data):
             return .data(try! data.encodedData())
         }

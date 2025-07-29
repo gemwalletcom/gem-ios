@@ -15,7 +15,7 @@ public protocol Signable {
     func signStake(input: SignerInput, privateKey: Data) throws -> [String]
     func signMessage(message: SignMessage, privateKey: Data) throws -> String
     func signAccountAction(input: SignerInput, privateKey: Data) throws -> String
-    func signPerpetual(input: SignerInput, privateKey: Data) throws -> String
+    func signPerpetual(input: SignerInput, privateKey: Data) throws -> [String]
 }
 
 extension Signable {
@@ -51,7 +51,7 @@ extension Signable {
         throw AnyError("unimplemented")
     }
     
-    public func signPerpetual(input: SignerInput, privateKey: Data) throws -> String {
+    public func signPerpetual(input: SignerInput, privateKey: Data) throws -> [String] {
         throw AnyError("unimplemented")
     }
 }

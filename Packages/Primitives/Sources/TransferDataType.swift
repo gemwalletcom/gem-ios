@@ -7,7 +7,6 @@ public enum AccountDataType: Hashable, Equatable, Sendable {
 }
 
 public enum PerpetualType: Hashable, Equatable, Sendable {
-    case approveAgent(name: String, address: String)
     case open(direction: PerpetualDirection, asset: UInt32, price: String, size: String)
     case close(asset: UInt32, price: String, size: String)
     //case withdraw(amount: String)
@@ -45,7 +44,6 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             switch type {
             case .open: .perpetualOpenPosition
             case .close: .perpetualClosePosition
-            case .approveAgent: .smartContractCall
             }
         }
     }
