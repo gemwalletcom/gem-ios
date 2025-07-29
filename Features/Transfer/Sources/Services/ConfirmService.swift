@@ -24,7 +24,6 @@ public struct ConfirmService: Sendable {
     private let keystore: any Keystore
     private let swapService: SwapService
     private let chainService: any ChainServiceable
-
     private let explorerService: any ExplorerLinkFetchable
 
     public init(
