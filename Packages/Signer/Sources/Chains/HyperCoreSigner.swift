@@ -24,29 +24,45 @@ public class HyperCoreSigner: Signable {
         let factory = HyperCoreModelFactory()
         let timestamp = UInt64(Date().timeIntervalSince1970 * 1000)
 
+        let signature: String
+        let eip712Message: String
         switch type {
         case .approveAgent(let name, let address):
             let agent = factory.makeApproveAgent(name: name, address: address, nonce: timestamp)
-            let eip712Message = hyperCore.encodeApproveAgent(agent: agent)
-            return try signEIP712(messageJson: eip712Message, privateKey: privateKey)
+            eip712Message = hyperCore.encodeApproveAgent(agent: agent)
+            signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
         case .close(let asset, let price, let size):
             let order = factory.makeMarketClose(asset: asset, price: price, size: size, reduceOnly: true)
-            let eip712Message = hyperCore.encodePlaceOrder(order: order, nonce: timestamp)
-            return try signEIP712(messageJson: eip712Message, privateKey: privateKey)
+            eip712Message = hyperCore.encodePlaceOrder(order: order, nonce: timestamp)
+            signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
         case .open(let direction, let asset, let price, let size):
             let isBuy = switch direction {
             case .long: true
             case .short: false
             }
             let order = factory.makeMarketOpen(asset: asset, isBuy: isBuy, price: price, size: size, reduceOnly: true)
-            let eip712Message = hyperCore.encodePlaceOrder(order: order, nonce: timestamp)
-            return try signEIP712(messageJson: eip712Message, privateKey: privateKey)
-        case .withdraw:
-            // FIXME: make sure input.amount is correct  ("2" means 2 USD)
-            let request = factory.makeWithdraw(amount: input.value.description, address: input.senderAddress, nonce: timestamp)
-            let eip712_json = hyperCore.encodeWithdrawalRequest(request: request)
-            return try signEIP712(messageJson: eip712_json, privateKey: privateKey)
+            eip712Message = hyperCore.encodePlaceOrder(order: order, nonce: timestamp)
+            signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
+//        case .withdraw:
+//            // FIXME: make sure input.amount is correct  ("2" means 2 USD)
+//            let request = factory.makeWithdraw(amount: input.value.description, address: input.senderAddress.lowercased(), nonce: timestamp)
+//            let eip712_json = hyperCore.encodeWithdrawalRequest(request: request)
+//            signature = try signEIP712(messageJson: eip712_json, privateKey: privateKey)
         }
+
+        let eip712Json = try JSONSerialization.jsonObject(with: eip712Message.data(using: .utf8)!) as! [String: Any]
+        let (r, s, v) = try SignatureParser.parseSignature(signature)
+        let dictionary: [String: Any] = [
+            "action": eip712Json["message"]!,
+            "signature": [
+                "r": r,
+                "s": s,
+                "v": v,
+            ],
+            "nonce": timestamp,
+            "isFrontend": true,
+        ]
+        return try JSONSerialization.data(withJSONObject: dictionary, options: [.sortedKeys]).encodeString()
     }
 
     private func signEIP712(messageJson: String, privateKey: Data) throws -> String {
