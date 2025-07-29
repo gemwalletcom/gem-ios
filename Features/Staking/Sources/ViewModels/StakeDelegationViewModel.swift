@@ -10,6 +10,7 @@ import ExplorerService
 import GemstonePrimitives
 import Formatters
 import PrimitivesComponents
+import Localization
 
 public struct StakeDelegationViewModel: Sendable {
     
@@ -140,13 +141,20 @@ public struct StakeDelegationViewModel: Sendable {
         return delegation.validator.name
     }
     
-    public var validatorImageUrl: URL? {
-        validatorImageFormatter.getValidatorUrl(chain: asset.chain, id: delegation.validator.id)
+    public var validatorImage: AssetImage? {
+        AssetImage(
+            type: String(validatorText.first ?? " "),
+            imageURL: validatorImageFormatter.getValidatorUrl(chain: asset.chain, id: delegation.validator.id)
+        )
     }
     
     public var validatorUrl: URL? {
         guard delegation.validator.id != DelegationValidator.systemId else { return nil }
         return exploreService.validatorUrl(chain: asset.chain, address: delegation.validator.id)?.url
+    }
+    
+    public var validatorAprText: String {
+        Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(delegation.validator.apr))
     }
     
     public var completionDateText: String? {

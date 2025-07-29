@@ -15,36 +15,15 @@ public struct StakeDetailScene: View {
             Section {
                 if let url = model.validatorUrl {
                     SafariNavigationLink(url: url) {
-                        ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
+                        validatorView
                     }
                 } else {
-                    ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
-                }
-
-                if model.showValidatorApr {
-                    ListItemView(title: model.aprTitle, subtitle: model.validatorAprText)
-                }
-
-                ListItemView(title: model.stateTitle, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
-
-                if let title = model.completionDateTitle, let subtitle = model.completionDateText {
-                    ListItemView(title: title, subtitle: subtitle)
+                    validatorView
                 }
             }
             .listRowInsets(.assetListRowInsets)
 
-            Section(model.balancesTitle) {
-                HStack {
-                    ValidatorImageView(validator: model.validator)
-                    ListItemView(
-                        title: model.title,
-                        titleStyle: model.model.titleStyle,
-                        subtitle: model.model.balanceText,
-                        subtitleStyle: model.model.subtitleStyle,
-                        subtitleExtra: model.model.fiatValueText,
-                        subtitleStyleExtra: model.model.subtitleExtraStyle
-                    )
-                }
+            Section {
                 if let rewardsText = model.model.rewardsText {
                     ListItemView(
                         title: model.rewardsTitle,
@@ -95,5 +74,9 @@ public struct StakeDetailScene: View {
             }
         }
         .navigationTitle(model.title)
+    }
+    
+    private var validatorView: some View {
+        ValidatorDelegationView(delegation: model.model)
     }
 }
