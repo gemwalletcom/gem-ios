@@ -152,7 +152,7 @@ public extension HyperCoreService {
     func load(input: TransactionInput) async throws -> TransactionData {
         TransactionData(
             sequence: input.preload.isDestinationAddressExist ? 1 : 0,
-            fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero),
+            fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
         )
     }
 }
