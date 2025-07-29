@@ -58,6 +58,29 @@ struct WalletConnectorSignerTests {
 
         #expect(wallets.count == 1)
     }
+
+    @Test
+    func testGetWalletsMultiOptinalNamespaces() throws {
+        let db = DB.mock()
+        let walletStore = WalletStore(db: db)
+        let sessionService = WalletSessionService.mock(store: walletStore)
+        let signer = WalletConnectorSigner.mock(
+            connectionsStore: ConnectionsStore(db: db),
+            walletSessionService: sessionService
+        )
+        let solWallet = Wallet.mock(id: "1", accounts: [.mock(chain: .solana)])
+        let solEthWallet = Wallet.mock(id: "2", accounts: [.mock(chain: .solana), .mock(chain: .ethereum)])
+        let solEthBnbWallet = Wallet.mock(id: "3", accounts: [.mock(chain: .solana), .mock(chain: .ethereum), .mock(chain: .smartChain)])
+
+        try walletStore.addWallet(solWallet)
+        try walletStore.addWallet(solEthWallet)
+        try walletStore.addWallet(solEthBnbWallet)
+
+        let wallets = try signer.getWallets(for: .multiOptionalNamespaces())
+        #expect(wallets.count == 2)
+        #expect(wallets.contains(where: { $0.walletId == solEthWallet.walletId }))
+        #expect(wallets.contains(where: { $0.walletId == solEthBnbWallet.walletId }))
+    }
 }
 
 extension WalletConnectorSigner {
@@ -87,5 +110,9 @@ extension Session.Proposal {
     
     static func optionalNamespaces() throws -> Session.Proposal {
         try Bundle.decode(from: "OptionalNamespacesProposal", withExtension: "json", in: .module)
+    }
+    
+    static func multiOptionalNamespaces() throws -> Session.Proposal {
+        try Bundle.decode(from: "MultiOptionalNamespacesProposal", withExtension: "json", in: .module)
     }
 }
