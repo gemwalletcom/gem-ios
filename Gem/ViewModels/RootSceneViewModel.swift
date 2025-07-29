@@ -164,8 +164,5 @@ extension RootSceneViewModel {
         } catch {
             NSLog("RootSceneViewModel setupWallet error: \(error)")
         }
-        Task {
-            await walletsService.runAddressStatusCheck(wallet)
-        }
     }
 }

@@ -25,6 +25,7 @@ let package = Package(
         .package(name: "SwapService", path: "../../Services/SwapService"),
         .package(name: "AssetsService", path: "../AssetsService"),
         .package(name: "WalletService", path: "../WalletService"),
+        .package(name: "ChainService", path: "../ChainService"),
     ],
     targets: [
         .target(
@@ -52,6 +53,7 @@ let package = Package(
                 .product(name: "AssetsServiceTestKit", package: "AssetsService"),
                 .product(name: "DeviceServiceTestKit", package: "DeviceService"),
                 .product(name: "BannerServiceTestKit", package: "BannerService"),
+                .product(name: "ChainServiceTestKit", package: "ChainService"),
                 "Primitives",
                 "AppService"
             ]

@@ -34,7 +34,8 @@ let package = Package(
             name: "NodeServiceTestKit",
             dependencies: [
                 "NodeService",
-                .product(name: "StoreTestKit", package: "Store"),
+                "Store",
+                .product(name: "StoreTestKit", package: "Store")
             ],
             path: "TestKit"
         ),

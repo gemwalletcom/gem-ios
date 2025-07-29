@@ -100,6 +100,10 @@ let package = Package(
                 .product(name: "SwapServiceTestKit", package: "SwapService"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "WalletServiceTestKit", package: "WalletService"),
+                .product(name: "NodeServiceTestKit", package: "NodeService"),
+                .product(name: "BalanceServiceTestKit", package: "BalanceService"),
+                .product(name: "PriceServiceTestKit", package: "PriceService"),
+                .product(name: "ChainServiceTestKit", package: "ChainService")
             ],
             path: "Tests"
         ),

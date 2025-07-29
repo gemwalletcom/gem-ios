@@ -13,21 +13,20 @@ import Store
 
 @MainActor
 struct AmountSceneViewModelTests {
-    
     @Test
     func testMaxButton() {
         let model = AmountSceneViewModel.mock()
-        
+
         #expect(model.amountInputModel.isValid)
-        
+
         model.onSelectMaxButton()
         #expect(model.amountInputModel.isValid)
-        
+
         model.onSelectInputButton()
         model.onSelectMaxButton()
         #expect(model.amountInputModel.isValid)
     }
-    
+
     @Test
     func depositTitle() {
         #expect(AmountSceneViewModel.mock(type: .deposit(recipient: .mock())).title == "Deposit")
@@ -57,15 +56,21 @@ extension AmountSceneViewModel {
         type: AmountType = .transfer(recipient: .mock()),
         asset: Asset = .mockEthereum()
     ) -> AmountSceneViewModel {
-        AmountSceneViewModel(
+        let balanceStore = BalanceStore.mock(db: .mockAssets())
+        return AmountSceneViewModel(
             input: AmountInput(type: type, asset: asset),
             wallet: .mock(),
             amountService: AmountService(
                 priceService: .mock(),
-                balanceService: .mock(),
+                balanceService:.mock(
+                    balanceStore: balanceStore,
+                    assetsService: .mock(balanceStore: balanceStore),
+                    chainServiceFactory: .mock()
+                ),
                 stakeService: .mock()
             ),
-            onTransferAction: { _ in }
+            onTransferAction: { _ in
+            }
         )
     }
 }

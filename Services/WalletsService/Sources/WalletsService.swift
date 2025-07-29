@@ -2,13 +2,11 @@
 
 import Foundation
 import Primitives
-import BannerService
 import PriceService
 import Preferences
 import BalanceService
 import AssetsService
 import DiscoverAssetsService
-import ChainService
 import Store
 import WalletSessionService
 import DeviceService
@@ -21,9 +19,6 @@ public struct WalletsService: Sendable {
     private let balanceUpdater: any BalanceUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
     
-    // TODO: - create separate service for both (AddressStatusService, BannerSetupService)
-    private let addressStatusService: AddressStatusService
-    private let bannerSetupService: BannerSetupService
 
     public init(
         walletStore: WalletStore,
@@ -31,8 +26,6 @@ public struct WalletsService: Sendable {
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        bannerSetupService: BannerSetupService,
-        addressStatusService: AddressStatusService,
         preferences: ObservablePreferences = .default,
         deviceService: any DeviceServiceable
     ) {
@@ -61,8 +54,6 @@ public struct WalletsService: Sendable {
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
         self.discoveryProcessor = processor
-        self.bannerSetupService = bannerSetupService
-        self.addressStatusService = addressStatusService
         self.walletSessionService = walletSessionService
     }
 
@@ -85,23 +76,6 @@ public struct WalletsService: Sendable {
         try enableBalances(for: wallet.walletId, chains: wallet.chains)
     }
 
-    // In the future move into separate service
-    public func runAddressStatusCheck(_ wallet: Wallet) async {
-        guard !wallet.preferences.completeInitialAddressStatus else { return }
-
-        do {
-            let results = try await addressStatusService.getAddressStatus(accounts: wallet.accounts)
-
-            for (account, statuses) in results {
-                if statuses.contains(.multiSignature) {
-                    try bannerSetupService.setupAccountMultiSignatureWallet(walletId: wallet.walletId, chain: account.chain)
-                }
-            }
-            wallet.preferences.completeInitialAddressStatus = true
-        } catch {
-            NSLog("runAddressStatusCheck: \(error)")
-        }
-    }
 }
 
 // MARK: - DiscoveryAssetsProcessing
@@ -150,13 +124,5 @@ extension WalletsService: AssetVisibilityServiceable {
 
     public func hideAsset(walletId: WalletId, assetId: AssetId) throws {
         try assetsVisibilityManager.hideAsset(walletId: walletId, assetId: assetId)
-    }
-}
-
-// MARK: - Models extensions
-
-extension Wallet {
-    var preferences: WalletPreferences {
-        WalletPreferences(walletId: id)
     }
 }
