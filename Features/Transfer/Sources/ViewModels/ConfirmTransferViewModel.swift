@@ -99,7 +99,7 @@ public final class ConfirmTransferViewModel {
             title: dataModel.recipientTitle,
             account: dataModel.recepientAccount,
             mode: dataModel.recipientMode,
-            explorerService: confirmService.explorerService
+            addressLink: confirmService.getExplorerLink(chain: dataModel.recepientAccount.chain, address: dataModel.recepientAccount.address)
         )
     }
 

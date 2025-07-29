@@ -25,8 +25,7 @@ public struct ConfirmService: Sendable {
     private let swapService: SwapService
     private let chainService: any ChainServiceable
 
-    // TODO: - should be private
-    let explorerService: any ExplorerLinkFetchable
+    private let explorerService: any ExplorerLinkFetchable
 
     public init(
         swapDataProvider: any SwapQuoteDataProvidable,

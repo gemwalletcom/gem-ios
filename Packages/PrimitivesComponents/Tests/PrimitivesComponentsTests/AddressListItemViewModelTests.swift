@@ -11,11 +11,12 @@ struct AddressListItemViewModelTests {
     
     @Test
     func subtitleWithName() {
+        let account = SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil)
         let model = AddressListItemViewModel(
             title: "Recipient",
-            account: SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil),
+            account: account,
             mode: .auto(addressStyle: .short),
-            explorerService: MockExplorerLink()
+            addressLink: MockExplorerLink().addressUrl(chain: account.chain, address: account.address)
         )
         
         #expect(model.subtitle == "Alice (0x12345...01112)")
@@ -23,11 +24,12 @@ struct AddressListItemViewModelTests {
 
     @Test
     func subtitleWithoutAddress() {
+        let account = SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: AssetImage())
         let model = AddressListItemViewModel(
             title: "Recipient",
-            account: SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: AssetImage()),
+            account: account,
             mode: .auto(addressStyle: .short),
-            explorerService: MockExplorerLink()
+            addressLink: MockExplorerLink().addressUrl(chain: account.chain, address: account.address)
         )
         
         #expect(model.subtitle == "Alice")
@@ -35,44 +37,48 @@ struct AddressListItemViewModelTests {
     
     @Test
     func subtitleWithoutName() {
+        let account = SimpleAccount(name: nil, chain: .ethereum, address: "0x123456789101112", assetImage: nil)
         let model = AddressListItemViewModel(
             title: "Recipient",
-            account: SimpleAccount(name: nil, chain: .ethereum, address: "0x123456789101112", assetImage: nil),
+            account: account,
             mode: .auto(addressStyle: .full),
-            explorerService: MockExplorerLink()
+            addressLink: MockExplorerLink().addressUrl(chain: account.chain, address: account.address)
         )
         #expect(model.subtitle == "0x123456789101112")
     }
 
     @Test
     func subtitleAddressMode() {
+        let account = SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil)
         let model = AddressListItemViewModel(
             title: "Recipient",
-            account: SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil),
+            account: account,
             mode: .address(addressStyle: .short),
-            explorerService: MockExplorerLink()
+            addressLink: MockExplorerLink().addressUrl(chain: account.chain, address: account.address)
         )
         #expect(model.subtitle == "0x12345...01112")
     }
 
     @Test
     func subtitleNameOrAddressWithName() {
+        let account = SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil)
         let model = AddressListItemViewModel(
             title: "Recipient",
-            account: SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil),
+            account: account,
             mode: .nameOrAddress,
-            explorerService: MockExplorerLink()
+            addressLink: MockExplorerLink().addressUrl(chain: account.chain, address: account.address)
         )
         #expect(model.subtitle == "Alice")
     }
 
     @Test
     func subtitleNameOrAddressWithoutName() {
+        let account = SimpleAccount(name: nil, chain: .ethereum, address: "0x123456789101112", assetImage: nil)
         let model = AddressListItemViewModel(
             title: "Recipient",
-            account: SimpleAccount(name: nil, chain: .ethereum, address: "0x123456789101112", assetImage: nil),
+            account: account,
             mode: .nameOrAddress,
-            explorerService: MockExplorerLink()
+            addressLink: MockExplorerLink().addressUrl(chain: account.chain, address: account.address)
         )
         #expect(model.subtitle == "0x123456789101112")
     }

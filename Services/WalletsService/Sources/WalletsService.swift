@@ -19,7 +19,6 @@ public struct WalletsService: Sendable {
     private let balanceUpdater: any BalanceUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
     
-
     public init(
         walletStore: WalletStore,
         assetsService: AssetsService,

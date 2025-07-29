@@ -122,7 +122,7 @@ public final class TransactionDetailViewModel {
             title: title,
             account: account,
             mode: .nameOrAddress,
-            explorerService: ExplorerService.standard
+            addressLink: ExplorerService.standard.addressUrl(chain: account.chain, address: account.address)
         )
     }
     
