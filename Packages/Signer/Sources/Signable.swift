@@ -20,38 +20,38 @@ public protocol Signable {
 
 extension Signable {
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        throw AnyError("unimplemented")
+        throw AnyError("unimplemented: signTokenTransfer method")
     }
     
     public func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        throw AnyError("unimplemented")
+        throw AnyError("unimplemented: signNftTransfer method")
     }
     
     public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
-        throw AnyError("unimplemented")
+        throw AnyError("unimplemented: signAccountAction method")
     }
     
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        throw AnyError("unimplemented")
+        throw AnyError("unimplemented: signData method")
     }
     
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        throw AnyError("unimplemented")
+        throw AnyError("unimplemented: signSwap method")
     }
     
     public func signTokenApproval(input: SignerInput, privateKey: Data) throws -> String {
-        throw AnyError("unimplemented")
+        throw AnyError("unimplemented: signTokenApproval method")
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        throw AnyError("unimplemented")
+        throw AnyError("unimplemented: signStake method")
     }
     
     public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        throw AnyError("unimplemented")
+        throw AnyError("unimplemented: signMessage method")
     }
     
     public func signPerpetual(input: SignerInput, privateKey: Data) throws -> [String] {
-        throw AnyError("unimplemented")
+        throw AnyError("unimplemented: signPerpetual method")
     }
 }
