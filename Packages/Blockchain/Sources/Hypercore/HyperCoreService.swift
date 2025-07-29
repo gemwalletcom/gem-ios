@@ -79,7 +79,8 @@ public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         let response = try await self.provider
             .request(.broadcast(data: data))
-            .map(as: HypercoreResponse.self)
+            .mapOrError(as: HypercoreResponse.self .self, asError: HypercoreErrorResponse.self)
+
         if response.status == "ok" {
             return data
         }
@@ -180,5 +181,11 @@ public extension HyperCoreService {
 public extension HyperCoreService {
     func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         TransactionChanges(state: .confirmed)
+    }
+}
+
+extension HypercoreErrorResponse: LocalizedError {
+    public var errorDescription: String? {
+        response
     }
 }

@@ -4,6 +4,14 @@
 
 import Foundation
 
+public struct HypercoreErrorResponse: Codable, Sendable {
+	public let response: String
+
+	public init(response: String) {
+		self.response = response
+	}
+}
+
 public struct HypercoreResponse: Codable, Sendable {
 	public let status: String
 
