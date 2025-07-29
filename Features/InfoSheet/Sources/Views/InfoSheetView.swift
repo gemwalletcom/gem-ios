@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Style
+import Components
 
 struct InfoSheetView: View {
     private let image: InfoSheetImage?
@@ -76,14 +77,4 @@ struct InfoSheetView: View {
         }
         .frame(maxWidth: .infinity, alignment: .top)
     }
-}
-
-// MARK: - Previews
-
-#Preview {
-    InfoSheetView(
-        title: "Network Fee",
-        description: "The Tron network charges a transaction fee which varies based on blockhain usage",
-        image: .image(Images.System.bellFill)
-    )
 }

@@ -110,7 +110,7 @@ public struct TransactionScene: View {
                 ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
             }
             .sheet(item: $model.isPresentingInfoSheet) {
-                InfoSheetScene(model: InfoSheetViewModel(type: $0))
+                InfoSheetScene(model: InfoSheetFactory.viewModel(for: $0))
             }
         }
         .observeQuery(request: $model.request, value: $model.transactionExtended)

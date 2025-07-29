@@ -29,7 +29,7 @@ public struct SwapDetailsView: View {
         .listSectionSpacing(.compact)
         .contentMargins([.top], .extraSmall, for: .scrollContent)
         .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+            InfoSheetScene(model: InfoSheetFactory.viewModel(for: $0))
         }
         .sheet(isPresented: $model.isPresentingSwapProviderSelectionSheet) {
             SelectableListNavigationStack(

@@ -23,11 +23,7 @@ public struct AmountNavigationView: View {
         .sheet(item: $model.isPresentingSheet) {
             switch $0 {
             case let .infoAction(type, button):
-                let infoModel = InfoSheetViewModel(
-                    type: type,
-                    button: button
-                )
-                InfoSheetScene(model: infoModel)
+                InfoSheetScene(model: InfoSheetFactory.viewModel(for: type, button: button))
             case .fiatConnect(let assetAddress, let walletId):
                 NavigationStack {
                     FiatConnectNavigationView(

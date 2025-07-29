@@ -124,7 +124,7 @@ public struct PerpetualScene: View {
         .navigationTitle(model.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+            InfoSheetScene(model: InfoSheetFactory.viewModel(for: $0))
         }
         .taskOnce {
             Task {

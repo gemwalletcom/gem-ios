@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Style
+import Components
 
 public struct InfoSheetScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -71,40 +72,4 @@ extension InfoSheetScene {
             action()
         }
     }
-}
-
-// MARK: - Previews
-
-struct InfoSheetPreviewModel: InfoSheetModelViewable {
-    var title: String
-    var description: String
-    var buttonTitle: String
-    var button: InfoSheetButton?
-    var image: InfoSheetImage?
-
-    init(
-        title: String,
-        description: String,
-        buttonTitle: String,
-        button: InfoSheetButton? = nil,
-        image: InfoSheetImage? = nil
-    ) {
-        self.title = title
-        self.description = description
-        self.buttonTitle = buttonTitle
-        self.button = button
-        self.image = image
-    }
-}
-
-#Preview {
-    InfoSheetScene(
-        model: InfoSheetPreviewModel(
-            title: "Network Fees",
-            description: "Network fees needed to pay the miners, quite a long message, double, triple, quadruple, quintuple, etc.",
-            buttonTitle: "Continue",
-            button: .action(title: "test", action: { print("Action") }),
-            image: .image(Image(systemName: "bell"))
-        )
-    )
 }
