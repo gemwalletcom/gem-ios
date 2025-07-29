@@ -2,19 +2,18 @@
 
 import Foundation
 import Primitives
-import GemstonePrimitives
 import Localization
 
 public enum ScanTransactionError: Error, Equatable, Sendable {
     case malicious
-    case memoRequired(chain: Chain)
+    case memoRequired(symbol: String)
 }
 
 extension ScanTransactionError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .malicious: Localized.Errors.ScanTransaction.malicious
-        case .memoRequired(let chain): Localized.Errors.ScanTransaction.memoRequired(chain.asset.symbol)
+        case .memoRequired(let symbol): Localized.Errors.ScanTransaction.memoRequired(symbol)
         }
     }
 }

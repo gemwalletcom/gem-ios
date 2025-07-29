@@ -49,12 +49,12 @@ public struct PerpetualPositionViewModel {
     }
     
     public var positionTypeColor: Color {
-        data.position.size > 0 ? Colors.green : Colors.red
+        PriceChangeColor.color(for: data.position.size)
     }
     
     public var pnlTitle: String { Localized.Perpetual.pnl }
     public var pnlColor: Color {
-        data.position.pnl >= 0 ? Colors.green : Colors.red
+        PriceChangeColor.color(for: data.position.pnl)
     }
     
     public var pnlTextStyle: TextStyle {
@@ -104,7 +104,7 @@ public struct PerpetualPositionViewModel {
     }
     public var fundingPaymentsColor: Color {
         guard let funding = data.position.funding else { return .secondary }
-        return funding >= 0 ? Colors.green : Colors.red
+        return PriceChangeColor.color(for: Double(funding))
     }
     
     public var fundingPaymentsTextStyle: TextStyle {

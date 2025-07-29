@@ -19,7 +19,6 @@ let package = Package(
         .package(name: "Localization", path: "../Localization"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(name: "Formatters", path: "../Formatters"),
-        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives")
     ],
     targets: [
         .target(
@@ -29,7 +28,6 @@ let package = Package(
                 "Localization",
                 "WalletCorePrimitives",
                 "Formatters",
-                "GemstonePrimitives"
             ],
             path: "Sources"
         ),

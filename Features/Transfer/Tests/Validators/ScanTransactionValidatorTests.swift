@@ -5,7 +5,7 @@ import Testing
 import Primitives
 import PrimitivesTestKit
 
-@testable import Validators
+@testable import Transfer
 
 struct ScanTransactionValidatorTests {
     @Test
@@ -19,7 +19,7 @@ struct ScanTransactionValidatorTests {
     func throwsMemoRequiredForTransfer() throws {
         let transaction = ScanTransaction.mock(memoRequired: true)
         let payload = ScanTransactionPayload.mock(type: .transfer, chain: .sui)
-        try expectScanError(transaction: transaction, payload: payload, expected: .memoRequired(chain: .sui))
+        try expectScanError(transaction: transaction, payload: payload, expected: .memoRequired(symbol: "SUI"))
     }
 
     @Test
