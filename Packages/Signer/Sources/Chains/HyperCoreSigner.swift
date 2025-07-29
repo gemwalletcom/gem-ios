@@ -21,14 +21,15 @@ public class HyperCoreSigner: Signable {
     }
 
     func getAgentKey() throws -> (address: String, key: Data) {
-        if let key = try Self.keychain.get(HyperCoreService.HLAgentKey), let address = try Self.keychain.get(HyperCoreService.HLAgentAddress) {
+        if let key = try Self.keychain.get(HyperCoreService.HLAgentKey),
+           let address = try Self.keychain.get(HyperCoreService.HLAgentAddress)
+        {
             return try (address: address, Data.from(hex: key))
         }
-        let newKeyHex = try SecureRandom.generateKey()
-        let newKey = try Data.from(hex: newKeyHex)
+        let newKey = try SecureRandom.generateKey()
         let newAddress = CoinType.ethereum.deriveAddress(privateKey: PrivateKey(data: newKey)!)
 
-        try Self.keychain.set(newKeyHex, key: HyperCoreService.HLAgentKey)
+        try Self.keychain.set(newKey.hexString, key: HyperCoreService.HLAgentKey)
         try Self.keychain.set(newAddress, key: HyperCoreService.HLAgentAddress)
 
         return (address: newAddress, key: newKey)

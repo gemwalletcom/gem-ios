@@ -23,6 +23,7 @@ let package = Package(
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Formatters", path: "../Formatters"),
+        .package(name: "Keychain", path: "../Keychain"),
     ],
     targets: [
         .target(
@@ -35,6 +36,7 @@ let package = Package(
                 "Gemstone",
                 "GemstonePrimitives",
                 "Formatters",
+                "Keychain",
             ],
             path: "Sources"
         ),
