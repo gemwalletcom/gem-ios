@@ -7,7 +7,7 @@ extension HypercoreAssetMetadata {
     public func mapToPerpetual(
         symbol: String,
         maxLeverage: Int,
-        index: Int,
+        index: Int
     ) -> Perpetual? {
         let provider = PerpetualProvider.hypercore
         let assetId = mapHypercoreCoinToAssetId(symbol)
