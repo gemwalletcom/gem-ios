@@ -1,6 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import WalletCorePrimitives
 import Primitives
 import WalletCore
 import Testing

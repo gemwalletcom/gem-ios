@@ -1,14 +1,17 @@
-// swift-tools-version:5.3
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
     name: "WalletCore",
-    platforms: [.iOS(.v13), .macOS(.v10_15)],
+    platforms: [.iOS(.v17), .macOS(.v15)],
     products: [
         .library(name: "WalletCore", targets: ["WalletCore"]),
-        .library(name: "WalletCoreSwiftProtobuf", targets: ["WalletCoreSwiftProtobuf"])
+        .library(name: "WalletCoreSwiftProtobuf", targets: ["WalletCoreSwiftProtobuf"]),
+        .library(name: "WalletCorePrimitives", targets: ["WalletCorePrimitives"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(name: "Primitives", path: "../Primitives")
+    ],
     targets: [
         .binaryTarget(
             name: "WalletCore",
@@ -19,6 +22,21 @@ let package = Package(
             name: "WalletCoreSwiftProtobuf",
             url: "https://github.com/trustwallet/wallet-core/releases/download/4.3.6/WalletCoreSwiftProtobuf.xcframework.zip",
             checksum: "6896d872919d7cb2b25f7883ba0e31e4faf20b66ff4ef5053c8a93add48f73e0"
+        ),
+        .target(
+            name: "WalletCorePrimitives",
+            dependencies: [
+                "Primitives",
+                "WalletCore",
+                "WalletCoreSwiftProtobuf"
+            ]
+        ),
+        .testTarget(
+            name: "WalletCorePrimitivesTests",
+            dependencies: [
+                "WalletCorePrimitives",
+                .product(name: "PrimitivesTestKit", package: "Primitives")
+            ]
         )
     ]
 )

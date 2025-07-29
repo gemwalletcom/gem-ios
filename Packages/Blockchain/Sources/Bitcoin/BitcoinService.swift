@@ -5,7 +5,6 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 import WalletCore
-import WalletCorePrimitives
 
 public struct BitcoinService: Sendable {
     
