@@ -7,7 +7,6 @@ import PriceService
 import Preferences
 import BalanceService
 import AssetsService
-import TransactionService
 import DiscoverAssetsService
 import ChainService
 import Store
@@ -15,11 +14,6 @@ import WalletSessionService
 import DeviceService
 
 public struct WalletsService: Sendable {
-    // TODO: - remove public dependencies and remove them in future
-    public let assetsService: AssetsService
-    public let priceService: PriceService
-    public let balanceService: BalanceService
-
     private let walletSessionService: any WalletSessionManageable
     private let discoveryProcessor: any DiscoveryAssetsProcessing
     private let assetsEnabler: any AssetsEnabler
@@ -27,9 +21,8 @@ public struct WalletsService: Sendable {
     private let balanceUpdater: any BalanceUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
     
-    // TODO: - move to different place
+    // TODO: - create separate service for both (AddressStatusService, BannerSetupService)
     private let addressStatusService: AddressStatusService
-    private let transactionService: TransactionService
     private let bannerSetupService: BannerSetupService
 
     public init(
@@ -38,7 +31,6 @@ public struct WalletsService: Sendable {
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        transactionService: TransactionService,
         bannerSetupService: BannerSetupService,
         addressStatusService: AddressStatusService,
         preferences: ObservablePreferences = .default,
@@ -69,11 +61,6 @@ public struct WalletsService: Sendable {
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
         self.discoveryProcessor = processor
-
-        self.assetsService = assetsService
-        self.balanceService = balanceService
-        self.priceService = priceService
-        self.transactionService = transactionService
         self.bannerSetupService = bannerSetupService
         self.addressStatusService = addressStatusService
         self.walletSessionService = walletSessionService
@@ -96,10 +83,6 @@ public struct WalletsService: Sendable {
 
     public func setup(wallet: Wallet) throws {
         try enableBalances(for: wallet.walletId, chains: wallet.chains)
-    }
-
-    public func addTransactions(wallet: Wallet, transactions: [Primitives.Transaction]) throws {
-        try transactionService.addTransactions(wallet: wallet, transactions: transactions)
     }
 
     // In the future move into separate service

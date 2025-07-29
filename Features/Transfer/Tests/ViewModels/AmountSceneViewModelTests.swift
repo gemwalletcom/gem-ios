@@ -4,6 +4,8 @@ import Testing
 import WalletsServiceTestKit
 import StakeServiceTestKit
 import PrimitivesTestKit
+import BalanceServiceTestKit
+import PriceServiceTestKit
 import Primitives
 import Store
 
@@ -58,8 +60,11 @@ extension AmountSceneViewModel {
         AmountSceneViewModel(
             input: AmountInput(type: type, asset: asset),
             wallet: .mock(),
-            walletsService: .mock(balanceService: .mock(balanceStore: .mock(db: DB.mockAssets()))),
-            stakeService: .mock(),
+            amountService: AmountService(
+                priceService: .mock(),
+                balanceService: .mock(),
+                stakeService: .mock()
+            ),
             onTransferAction: { _ in }
         )
     }

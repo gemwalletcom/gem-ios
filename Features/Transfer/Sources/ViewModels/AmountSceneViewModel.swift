@@ -15,21 +15,17 @@ import Preferences
 import Validators
 import Formatters
 import InfoSheet
+import PriceService
+import BalanceService
 
 @MainActor
 @Observable
 public final class AmountSceneViewModel {
-    let input: AmountInput
-    let wallet: Wallet
-    let walletsService: WalletsService
-    let stakeService: StakeService
-    let onTransferAction: TransferDataAction
+    private let input: AmountInput
+    private let wallet: Wallet
 
-    var delegation: DelegationValidator?
-    var focusField: Bool = false
-
-    var amountInputModel: InputValidationViewModel = InputValidationViewModel()
-    var isPresentingSheet: AmountSheetType?
+    private let amountService: AmountService
+    private let onTransferAction: TransferDataAction
 
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
@@ -42,17 +38,20 @@ public final class AmountSceneViewModel {
         didSet { amountInputModel.update(validators: inputValidators) }
     }
 
+    var amountInputModel: InputValidationViewModel = InputValidationViewModel()
+    var delegation: DelegationValidator?
+    var isPresentingSheet: AmountSheetType?
+    var focusField: Bool = false
+
     public init(
         input: AmountInput,
         wallet: Wallet,
-        walletsService: WalletsService,
-        stakeService: StakeService,
+        amountService: AmountService,
         onTransferAction: TransferDataAction
     ) {
         self.input = input
         self.wallet = wallet
-        self.walletsService = walletsService
-        self.stakeService = stakeService
+        self.amountService = amountService
         self.onTransferAction = onTransferAction
         self.currentValidator = defaultValidator
 
@@ -278,7 +277,7 @@ extension AmountSceneViewModel {
             .redelegate,
             .withdraw:
 
-            let recipientAddress = stakeService.getRecipientAddress(
+            let recipientAddress = amountService.getRecipientAddress(
                 chain: asset.chain.stakeChain,
                 type: type,
                 validatorId: currentValidator?.id
@@ -404,7 +403,7 @@ extension AmountSceneViewModel {
     }
 
     private func getAssetPrice() -> AssetPrice? {
-        try? walletsService.priceService.getPrice(for: asset.id)
+        try? amountService.getPrice(for: asset.id)
     }
 
     private var minimumValue: BigInt {
@@ -442,7 +441,9 @@ extension AmountSceneViewModel {
     private var availableValue: BigInt {
         switch input.type {
         case .transfer, .deposit, .perpetual, .stake:
-            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
+            guard let balance = try? amountService.getBalance(walletId: wallet.walletId, assetId: asset.id.identifier) else {
+                return .zero
+            }
             return balance.available
         case .unstake(let delegation):
             return delegation.base.balanceValue

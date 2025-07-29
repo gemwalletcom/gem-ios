@@ -16,20 +16,12 @@ import StakeService
 import SwiftUI
 import ScanService
 import Formatters
-import SwapService
 
 public typealias RecipientDataAction = ((RecipientData) -> Void)?
 
 @Observable
 @MainActor
 public final class RecipientSceneViewModel {
-    let keystore: any Keystore
-    let walletsService: WalletsService
-    let nodeService: NodeService
-    let stakeService: StakeService
-    let scanService: ScanService
-    let swapService: SwapService
-
     let wallet: Wallet
     let asset: Asset
     let type: RecipientAssetType
@@ -49,28 +41,14 @@ public final class RecipientSceneViewModel {
     public init(
         wallet: Wallet,
         asset: Asset,
-        keystore: any Keystore,
         walletService: WalletService,
-        walletsService: WalletsService,
-        nodeService: NodeService,
-        stakeService: StakeService,
-        scanService: ScanService,
-        swapService: SwapService,
         type: RecipientAssetType,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
     ) {
-
         self.wallet = wallet
         self.asset = asset
         self.walletService = walletService
-        self.walletsService = walletsService
-        self.keystore = keystore
-        self.nodeService = nodeService
-        self.stakeService = stakeService
-        self.scanService = scanService
-        self.swapService = swapService
-
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction

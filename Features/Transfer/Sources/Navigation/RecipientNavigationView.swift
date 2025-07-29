@@ -5,17 +5,22 @@ import SwiftUI
 import Primitives
 import ChainService
 import QRScanner
-import SwapService
 
 public struct RecipientNavigationView: View {
     @State private var model: RecipientSceneViewModel
 
+    private let amountService: AmountService
+    private let confirmService: ConfirmService
     private let onComplete: VoidAction
 
     public init(
+        amountService: AmountService,
+        confirmService: ConfirmService,
         model: RecipientSceneViewModel,
         onComplete: VoidAction
     ) {
+        self.amountService = amountService
+        self.confirmService = confirmService
         _model = State(initialValue: model)
         self.onComplete = onComplete
     }
@@ -34,8 +39,7 @@ public struct RecipientNavigationView: View {
                 model: AmountSceneViewModel(
                     input: AmountInput(type: .transfer(recipient: data), asset: model.asset),
                     wallet: model.wallet,
-                    walletsService: model.walletsService,
-                    stakeService: model.stakeService,
+                    amountService: amountService,
                     onTransferAction: model.onTransferAction
                 )
             )
@@ -45,16 +49,7 @@ public struct RecipientNavigationView: View {
                 model: ConfirmTransferViewModel(
                     wallet: model.wallet,
                     data: data,
-                    keystore: model.keystore,
-                    chainService: ChainServiceFactory(nodeProvider: model.nodeService)
-                        .service(for: data.chain),
-                    scanService: model.scanService,
-                    swapService: model.swapService,
-                    walletsService: model.walletsService,
-                    swapDataProvider: SwapQuoteDataProvider(
-                        keystore: model.keystore,
-                        swapService: model.swapService
-                    ),
+                    confirmService: confirmService,
                     onComplete: onComplete
                 )
             )

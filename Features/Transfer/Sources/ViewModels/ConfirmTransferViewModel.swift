@@ -4,18 +4,12 @@ import Foundation
 import BigInt
 import Blockchain
 import Components
-import ExplorerService
-import Keystore
 import Localization
 import Primitives
 import PrimitivesComponents
-import ScanService
 import WalletConnector
-import WalletsService
 import InfoSheet
-import Signer
 import Validators
-import SwapService
 import Style
 import SwiftUI
 import Formatters
@@ -47,13 +41,7 @@ public final class ConfirmTransferViewModel {
     var isPresentingSheet: ConfirmTransferSheetType?
     var isPresentingAlertMessage: AlertMessage?
 
-    private let swapDataProvider: any SwapQuoteDataProvidable
-    private let explorerService: any ExplorerLinkFetchable
-    private let metadataProvider: any TransferMetadataProvidable
-    private let transferTransactionProvider: any TransferTransactionProvidable
-    private let transerExecutor: any TransferExecutable
-    private let keystore: any Keystore
-    private let swapService: SwapService
+    private let confirmService: ConfirmService
 
     private let wallet: Wallet
     private let onComplete: VoidAction
@@ -65,48 +53,22 @@ public final class ConfirmTransferViewModel {
     public init(
         wallet: Wallet,
         data: TransferData,
-        keystore: any Keystore,
-        chainService: any ChainServiceable,
-        scanService: ScanService,
-        swapService: SwapService,
-        walletsService: WalletsService,
-        swapDataProvider: any SwapQuoteDataProvidable,
-        explorerService: any ExplorerLinkFetchable = ExplorerService.standard,
+        confirmService: ConfirmService,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
         onComplete: VoidAction
     ) {
         self.wallet = wallet
-        self.keystore = keystore
         self.data = data
-
-        self.explorerService = explorerService
+        self.confirmService = confirmService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.onComplete = onComplete
 
         self.feeModel = NetworkFeeSceneViewModel(
             chain: data.chain,
-            priority: chainService.defaultPriority(for: data.type)
+            priority: confirmService.defaultPriority(for: data.type)
         )
 
-        self.metadataProvider = TransferMetadataProvider(
-            balanceService: walletsService.balanceService,
-            priceService: walletsService.priceService
-        )
-
-        self.transferTransactionProvider = TransferTransactionProvider(
-            chainService: chainService,
-            scanService: scanService,
-            swapService: swapService
-        )
-        self.swapService = swapService
-
-        self.transerExecutor = TransferExecutor(
-            signer: TransactionSigner(keystore: keystore),
-            chainService: chainService,
-            walletsService: walletsService
-        )
-        self.swapDataProvider = swapDataProvider
-        self.metadata = try? metadataProvider.metadata(wallet: wallet, data: data)
+        self.metadata = try? confirmService.getMetadata(wallet: wallet, data: data)
     }
 
     var title: String { dataModel.title }
@@ -137,7 +99,7 @@ public final class ConfirmTransferViewModel {
             title: dataModel.recipientTitle,
             account: dataModel.recepientAccount,
             mode: dataModel.recipientMode,
-            explorerService: explorerService
+            explorerService: confirmService.explorerService
         )
     }
 
@@ -348,10 +310,10 @@ extension ConfirmTransferViewModel {
         feeModel.reset()
 
         do {
-            let metadata = try metadataProvider.metadata(wallet: wallet, data: data)
+            let metadata = try confirmService.getMetadata(wallet: wallet, data: data)
             try TransferAmountCalculator().validateNetworkFee(metadata.feeAvailable, feeAssetId: metadata.feeAssetId)
 
-            let transferTransactionData = try await transferTransactionProvider.loadTransferTransactionData(
+            let transferTransactionData = try await confirmService.loadTransferTransactionData(
                 wallet: wallet, data: data,
                 priority: feeModel.priority,
                 available: metadata.available
@@ -389,7 +351,7 @@ extension ConfirmTransferViewModel {
                 amount: amount,
                 delegate: confirmTransferDelegate
             )
-            try await transerExecutor.execute(input: input)
+            try await confirmService.executeTransfer(input: input)
             confirmingState = .data(true)
         } catch {
             confirmingState = .error(error)
@@ -437,11 +399,11 @@ extension ConfirmTransferViewModel {
 
     private var dataModel: TransferDataViewModel { TransferDataViewModel(data: data) }
     private var availableValue: BigInt { dataModel.availableValue(metadata: metadata) }
-    private var senderLink: BlockExplorerLink { explorerService.addressUrl(chain: dataModel.chain, address: senderAddress) }
+    private var senderLink: BlockExplorerLink { confirmService.getExplorerLink(chain: dataModel.chain, address: senderAddress) }
     private var feeAssetAddress: AssetAddress { AssetAddress(asset: dataModel.asset.feeAsset, address: senderAddress)}
     private var confirmButtonIcon: Image? {
         guard !state.isError, state.value?.transferAmount?.isSuccess ?? false,
-              let auth = try? keystore.getPasswordAuthentication(),
+              let auth = try? confirmService.getPasswordAuthentication(),
               let systemName = KeystoreAuthenticationViewModel(authentication: auth).authenticationImage
         else { return nil }
         return Image(systemName: systemName)

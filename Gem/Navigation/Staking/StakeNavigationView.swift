@@ -8,6 +8,8 @@ import Staking
 import ChainService
 import NodeService
 import SwapService
+import ExplorerService
+import Signer
 
 struct StakeNavigationView: View {
     @Environment(\.keystore) private var keystore
@@ -16,6 +18,9 @@ struct StakeNavigationView: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.scanService) private var scanService
     @Environment(\.swapService) private var swapService
+    @Environment(\.balanceService) private var balanceService
+    @Environment(\.priceService) private var priceService
+    @Environment(\.transactionService) private var transactionService
 
     private let wallet: Wallet
     private let assetId: AssetId
@@ -55,15 +60,16 @@ struct StakeNavigationView: View {
                 model: ConfirmTransferViewModel(
                     wallet: wallet,
                     data: $0,
-                    keystore: keystore,
-                    chainService: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: $0.chain),
-                    scanService: scanService,
-                    swapService: swapService,
-                    walletsService: walletsService,
-                    swapDataProvider: SwapQuoteDataProvider(
+                    confirmService: ConfirmServiceFactory.create(
                         keystore: keystore,
-                        swapService: swapService
+                        nodeService: nodeService,
+                        walletsService: walletsService,
+                        scanService: scanService,
+                        swapService: swapService,
+                        balanceService: balanceService,
+                        priceService: priceService,
+                        transactionService: transactionService,
+                        chain: $0.chain
                     ),
                     onComplete: onComplete
                 )
@@ -74,8 +80,7 @@ struct StakeNavigationView: View {
                 model: AmountSceneViewModel(
                     input: $0,
                     wallet: wallet,
-                    walletsService: walletsService,
-                    stakeService: stakeService,
+                    amountService: AmountService(priceService: priceService, balanceService: balanceService, stakeService: stakeService),
                     onTransferAction: {
                         navigationPath.append($0)
                     }

@@ -9,6 +9,8 @@ import Swap
 import Assets
 import Transfer
 import SwapService
+import ExplorerService
+import Signer
 
 struct SwapNavigationView: View {
     @Environment(\.keystore) private var keystore
@@ -17,6 +19,9 @@ struct SwapNavigationView: View {
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.scanService) private var scanService
     @Environment(\.swapService) private var swapService
+    @Environment(\.balanceService) private var balanceService
+    @Environment(\.priceService) private var priceService
+    @Environment(\.transactionService) private var transactionService
 
     @State private var model: SwapSceneViewModel
 
@@ -37,15 +42,16 @@ struct SwapNavigationView: View {
                     model: ConfirmTransferViewModel(
                         wallet: model.wallet,
                         data: data,
-                        keystore: keystore,
-                        chainService: ChainServiceFactory(nodeProvider: nodeService)
-                            .service(for: data.chain),
-                        scanService: scanService,
-                        swapService: swapService,
-                        walletsService: model.walletsService,
-                        swapDataProvider: SwapQuoteDataProvider(
+                        confirmService: ConfirmServiceFactory.create(
                             keystore: keystore,
-                            swapService: swapService
+                            nodeService: nodeService,
+                            walletsService: model.walletsService,
+                            scanService: scanService,
+                            swapService: swapService,
+                            balanceService: balanceService,
+                            priceService: priceService,
+                            transactionService: transactionService,
+                            chain: data.chain
                         ),
                         onComplete: {
                             onSwapComplete(type: data.type)

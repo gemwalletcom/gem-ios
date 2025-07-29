@@ -12,8 +12,6 @@ import PriceService
 import PriceServiceTestKit
 import ChainService
 import ChainServiceTestKit
-import TransactionService
-import TransactionServiceTestKit
 import BannerService
 import BannerServiceTestKit
 import Preferences
@@ -28,7 +26,6 @@ public extension WalletsService {
         balanceService: BalanceService = .mock(),
         priceService: PriceService = .mock(),
         priceObserver: PriceObserverService = .mock(),
-        transactionService: TransactionService = .mock(),
         bannerSetupService: BannerSetupService = .mock(),
         addressStatusService: AddressStatusService = .mock(),
         preferences: ObservablePreferences = .mock(),
@@ -40,7 +37,6 @@ public extension WalletsService {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            transactionService: transactionService,
             bannerSetupService: bannerSetupService,
             addressStatusService: addressStatusService,
             preferences: preferences,

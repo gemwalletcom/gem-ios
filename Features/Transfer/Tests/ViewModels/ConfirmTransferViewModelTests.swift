@@ -4,18 +4,16 @@ import Testing
 @testable import Transfer
 import Primitives
 import PrimitivesTestKit
-import WalletsService
 import WalletsServiceTestKit
 import BlockchainTestKit
-import ScanService
 import ScanServiceTestKit
-import SwapService
 import SwapServiceTestKit
 import KeystoreTestKit
+import BalanceServiceTestKit
+import PriceServiceTestKit
+import TransactionServiceTestKit  
+import NodeServiceTestKit
 import Localization
-import Preferences
-import PreferencesTestKit
-import GemAPI
 
 @MainActor
 struct ConfirmTransferViewModelTests {
@@ -77,12 +75,17 @@ private extension ConfirmTransferViewModel {
         ConfirmTransferViewModel(
             wallet: wallet,
             data: data,
-            keystore: KeystoreMock(),
-            chainService: ChainServiceMock(),
-            scanService: .mock(),
-            swapService: .mock(),
-            walletsService: .mock(),
-            swapDataProvider: .mock(),
+            confirmService: ConfirmServiceFactory.create(
+                keystore: KeystoreMock(),
+                nodeService: .mock(),
+                walletsService: .mock(),
+                scanService: .mock(),
+                swapService: .mock(),
+                balanceService: .mock(),
+                priceService: .mock(),
+                transactionService: .mock(),
+                chain: data.chain
+            ),
             onComplete: {}
         )
     }

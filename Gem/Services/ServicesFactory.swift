@@ -139,7 +139,6 @@ struct ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserverService,
-            transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
             bannerSetupService: bannerSetupService,
             deviceService: deviceService
@@ -368,7 +367,6 @@ extension ServicesFactory {
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
         bannerSetupService: BannerSetupService,
         deviceService: DeviceService
@@ -379,7 +377,6 @@ extension ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            transactionService: transactionService,
             bannerSetupService: bannerSetupService,
             addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
             deviceService: deviceService
