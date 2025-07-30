@@ -36,7 +36,7 @@ public struct StakeScene: View {
         }
         .navigationTitle(model.title)
         .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetFactory.viewModel(for: $0))
+            InfoSheetScene(type: $0)
         }
         .taskOnce {
             Task {

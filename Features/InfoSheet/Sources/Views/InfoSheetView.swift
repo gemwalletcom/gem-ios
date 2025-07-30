@@ -5,50 +5,16 @@ import Style
 import Components
 
 struct InfoSheetView: View {
-    private let image: InfoSheetImage?
+    private let model: InfoSheetModel
 
-    private let title: TextValue
-    private let description: TextValue
-
-    init(model: any InfoSheetModelViewable) {
-        self.init(
-            title: model.title,
-            description: model.description,
-            image: model.image
-        )
-    }
-
-    init(
-        title: String,
-        titleStyle: TextStyle = .boldTitle,
-        description: String,
-        descriptionStyle: TextStyle = .bodySecondary,
-        image: InfoSheetImage?
-    ) {
-        let titleValue = TextValue(text: title, style: titleStyle)
-        let descriptionValue = TextValue(text: description, style: descriptionStyle)
-
-        self.init(
-            titleValue: titleValue,
-            descriptionValue: descriptionValue,
-            image: image
-        )
-    }
-
-    init(
-        titleValue: TextValue,
-        descriptionValue: TextValue,
-        image: InfoSheetImage? = nil
-    ) {
-        self.title = titleValue
-        self.description = descriptionValue
-        self.image = image
+    init(model: InfoSheetModel) {
+        self.model = model
     }
 
     var body: some View {
         VStack(spacing: .medium) {
             Group {
-                switch image {
+                switch model.image {
                 case .image(let image):
                     image
                         .resizable()
@@ -64,13 +30,12 @@ struct InfoSheetView: View {
             .frame(size: .image.large)
 
             VStack(spacing: .small) {
-                Text(title.text)
-                    .textStyle(title.style)
-                if let descriptionText = try? AttributedString(markdown: description.text) {
+                Text(model.title)
+                    .textStyle(model.titleStyle)
+                if let descriptionText = try? AttributedString(markdown: model.description) {
                     Text(descriptionText)
-                        .textStyle(description.style)
+                        .textStyle(model.descriptionStyle)
                 }
-                
             }
             .multilineTextAlignment(.center)
             .minimumScaleFactor(0.85)

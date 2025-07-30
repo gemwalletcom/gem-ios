@@ -40,9 +40,9 @@ public struct ConfirmTransferScene: View {
         .sheet(item: $model.isPresentingSheet) {
             switch $0 {
             case .info(let type):
-                InfoSheetScene(model: InfoSheetFactory.viewModel(for: type))
+                InfoSheetScene(type: type)
             case .infoAction(let type, let button):
-                InfoSheetScene(model: InfoSheetFactory.viewModel(for: type, button: button))
+                InfoSheetScene(type: type, button: button)
             case .url(let url):
                 SFSafariView(url: url)
             case .networkFeeSelector:
