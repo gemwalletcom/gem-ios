@@ -8,7 +8,7 @@ public enum AccountDataType: Hashable, Equatable, Sendable {
 
 public enum PerpetualType: Hashable, Equatable, Sendable {
     case open(direction: PerpetualDirection, asset: UInt32, price: String, size: String)
-    case close(asset: UInt32, price: String, size: String)
+    case close(direction: PerpetualDirection, asset: UInt32, price: String, size: String)
     //case withdraw(amount: String)
 }
 

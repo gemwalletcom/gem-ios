@@ -545,7 +545,7 @@ struct TransferAmountCalculatorTests {
                 assetFeeBalance: Balance(available: BigInt(20)),
                 fee: BigInt(4),
                 transferData: TransferData.mock(
-                    type: .perpetual(coinAsset, .close(asset: 0, price: "100", size: "1")),
+                    type: .perpetual(coinAsset, .close(direction: .long, asset: 0, price: "100", size: "1")),
                     value: BigInt(999_999)
                 )
             ))

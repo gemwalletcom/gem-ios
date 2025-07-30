@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Components
-import Formatters
 import Foundation
 import InfoSheet
 import Localization
@@ -121,14 +120,22 @@ public extension PerpetualSceneViewModel {
 
     func onClosePosition() {
         guard
-            let position = positions.first,
+            let position = positions.first?.position,
             let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
             return
         }
-        let size = position.position.size
-        let price = perpetualViewModel.perpetual.price //TODO: Perpetual Current Market price
+        // Add 2% slippage for market-like execution
+        // For closing long: sell 2% below market
+        // For closing short: buy 2% above market
+        let positionPrice = switch position.direction {
+        case .long: perpetualViewModel.perpetual.price * 0.98
+        case .short: perpetualViewModel.perpetual.price * 1.02
+        }
+        let formatter = PerpetualPriceFormatter()
+        let price = formatter.formatPrice(positionPrice, decimals: Int(asset.decimals))
+        let size = formatter.formatSize(abs(position.size))
         let transferData = TransferData(
-            type: .perpetual(asset, .close(asset: assetIndex, price: price.description, size: size.description)),
+            type: .perpetual(asset, .close( direction: position.direction, asset: assetIndex, price: price, size: size)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false

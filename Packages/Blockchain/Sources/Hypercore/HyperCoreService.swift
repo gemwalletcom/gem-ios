@@ -77,14 +77,16 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        let response = try await self.provider
-            .request(.broadcast(data: data))
-            .mapOrError(as: HypercoreResponse.self .self, asError: HypercoreErrorResponse.self)
-
-        if response.status == "ok" {
-            return data
+        let response = try await self.provider.request(.broadcast(data: data))
+        let result = try response.map(as: HypercoreResponse.self)
+        
+        switch result.status {
+        case "ok": return data
+        case "err":
+            throw try response.map(as: HypercoreErrorResponse.self)
+        default:
+            throw ChainServiceErrors.broadcastError(chain)
         }
-        throw ChainServiceErrors.broadcastError(chain)
     }
 }
 

@@ -31,15 +31,14 @@ public class HyperCoreSigner: Signable {
 
         try Self.keychain.set(newKey.hexString, key: HyperCoreService.HLAgentKey)
         try Self.keychain.set(newAddress, key: HyperCoreService.HLAgentAddress)
-
+        
         return (address: newAddress, key: newKey)
     }
 
     public func signPerpetual(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case .perpetual(let asset, let type) = input.type else {
+        guard case .perpetual(_, let type) = input.type else {
             throw AnyError("Invalid input type for perpetual signing")
         }
-        NSLog("asset \(asset), type \(type)")
 
         let (agentAddress, agentKey) = try getAgentKey()
         let timestamp = Date.getTimestampInMs()
@@ -47,7 +46,7 @@ public class HyperCoreSigner: Signable {
         // simple check for now, passed from hypercore service.
         if input.sequence > 0 {
             return try [
-                signMarketMessage(type: type, agentKey: agentKey),
+                signMarketMessage(type: type, agentKey: agentKey, timestamp: timestamp),
             ]
         } else {
             let agentName = "gemwallet_" + agentAddress.suffix(6)
@@ -57,7 +56,7 @@ public class HyperCoreSigner: Signable {
 
             return try [
                 actionMessage(signature: signature, eip712Message: eip712Message, timestamp: timestamp),
-                signMarketMessage(type: type, agentKey: agentKey),
+                signMarketMessage(type: type, agentKey: agentKey, timestamp: timestamp),
             ]
         }
     }
@@ -80,29 +79,19 @@ public class HyperCoreSigner: Signable {
         return signature.hexString.append0x
     }
 
-    private func signMarketMessage(type: PerpetualType, agentKey: Data) throws -> String {
-        let timestamp = Date.getTimestampInMs()
-
-        let signature: String
-        let actionJson: String
-        switch type {
-        case .close(let asset, let price, let size):
-            let order = factory.makeMarketClose(asset: asset, price: price, size: size, reduceOnly: true)
-            let eip712Message = hyperCore.placeOrderTypedData(order: order, nonce: timestamp)
-            signature = try signEIP712(messageJson: eip712Message, privateKey: agentKey)
-            actionJson = factory.serializeOrder(order: order)
-
-        case .open(let direction, let asset, let price, let size):
-            let isBuy = switch direction {
-            case .long: true
-            case .short: false
-            }
-            let order = factory.makeMarketOpen(asset: asset, isBuy: isBuy, price: price, size: size, reduceOnly: true)
-            let eip712Message = hyperCore.placeOrderTypedData(order: order, nonce: timestamp)
-            signature = try signEIP712(messageJson: eip712Message, privateKey: agentKey)
-            actionJson = factory.serializeOrder(order: order)
+    private func signMarketMessage(type: PerpetualType, agentKey: Data, timestamp: UInt64) throws -> String {
+        let order = switch type {
+        case let .close(direction, asset, price, size):
+            factory.makeMarketOrder(asset: asset, isBuy: direction == .short, price: price, size: size, reduceOnly: true)
+        case let .open(direction, asset, price, size):
+            factory.makeMarketOrder(asset: asset, isBuy: direction == .long, price: price, size: size, reduceOnly: false)
         }
-        return factory.buildSignedRequest(signature: signature, action: actionJson, timestamp: timestamp)
+        let eip712 = hyperCore.placeOrderTypedData(order: order, nonce: timestamp)
+        return factory.buildSignedRequest(
+            signature: try signEIP712(messageJson: eip712, privateKey: agentKey),
+            action: factory.serializeOrder(order: order),
+            timestamp: timestamp
+        )
     }
 
     private func actionMessage(signature: String, eip712Message: String, timestamp: UInt64) throws -> String {

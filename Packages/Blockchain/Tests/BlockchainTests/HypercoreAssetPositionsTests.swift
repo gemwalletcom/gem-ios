@@ -25,7 +25,7 @@ struct HypercoreAssetPositionsTests {
                         liquidationPx: "558.9517436098",
                         marginUsed: "101.46",
                         maxLeverage: 20,
-                        cumFunding: HypercoreCumulativeFunding(allTime: "-1.3358", sinceOpen: "0")
+                        cumFunding: HypercoreCumulativeFunding(allTime: "-1.3358", sinceOpen: "-1.3")
                     )
                 ),
                 HypercoreAssetPosition(
@@ -41,7 +41,7 @@ struct HypercoreAssetPositionsTests {
                         liquidationPx: nil,
                         marginUsed: "233.22",
                         maxLeverage: 10,
-                        cumFunding: HypercoreCumulativeFunding(allTime: "1.686397", sinceOpen: "0")
+                        cumFunding: HypercoreCumulativeFunding(allTime: "1.686397", sinceOpen: "1.1")
                     )
                 )
             ],
@@ -72,7 +72,7 @@ struct HypercoreAssetPositionsTests {
         #expect(solPosition.marginType == PerpetualMarginType.cross)
         #expect(solPosition.marginAmount == 101.46)
         #expect(solPosition.pnl == -75.3)
-        #expect(solPosition.funding == 1.3358)
+        #expect(solPosition.funding == 1.3)
         
         let btcPosition = perpetualPositions.first { $0.perpetualId.contains("BTC") }!
         #expect(btcPosition.size == 3.0)
@@ -81,7 +81,7 @@ struct HypercoreAssetPositionsTests {
         #expect(btcPosition.marginType == PerpetualMarginType.isolated)
         #expect(btcPosition.marginAmount == 233.22)
         #expect(btcPosition.pnl == 33.18)
-        #expect(btcPosition.funding == -1.686397)
+        #expect(btcPosition.funding == -1.1)
     }
     
     @Test
@@ -111,7 +111,7 @@ struct HypercoreAssetPositionsTests {
                             liquidationPx: nil,
                             marginUsed: "100",
                             maxLeverage: 10,
-                            cumFunding: HypercoreCumulativeFunding(allTime: testCase.funding, sinceOpen: "0")
+                            cumFunding: HypercoreCumulativeFunding(allTime: testCase.funding, sinceOpen: testCase.funding)
                         )
                     )
                 ],
