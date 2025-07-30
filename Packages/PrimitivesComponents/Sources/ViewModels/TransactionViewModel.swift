@@ -289,6 +289,10 @@ public struct TransactionViewModel: Sendable {
         }
     }
     
+    public func addressLink(account: SimpleAccount) -> BlockExplorerLink {
+        explorerService.addressUrl(chain: account.chain, address: account.address)
+    }
+
     public var subtitleExtraStyle: TextStyle { .footnote }
 
     public var participant: String {
