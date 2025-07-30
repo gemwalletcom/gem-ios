@@ -74,7 +74,6 @@ public struct WalletsService: Sendable {
     public func setup(wallet: Wallet) throws {
         try enableBalances(for: wallet.walletId, chains: wallet.chains)
     }
-
 }
 
 // MARK: - DiscoveryAssetsProcessing
