@@ -7,7 +7,7 @@ import GemstonePrimitives
 import Components
 import Style
 
-public struct AssetScoreViewModel {
+public struct AssetScoreTypeViewModel {
     public let scoreType: AssetScoreType
 
     public init(score: Int32) {
