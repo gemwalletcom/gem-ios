@@ -31,22 +31,29 @@ public class HyperCoreSigner: Signable {
 
         try Self.keychain.set(newKey.hexString, key: HyperCoreService.HLAgentKey)
         try Self.keychain.set(newAddress, key: HyperCoreService.HLAgentAddress)
-        
+
         return (address: newAddress, key: newKey)
     }
 
+    func getBuilder() throws -> HyperBuilder {
+        // FIXME: need to approve and save builder fee first
+        // return HyperBuilder(builderAddress: "", fee: 50) // 5bp
+        throw AnyError("Not implemented yet")
+    }
+
     public func signPerpetual(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case .perpetual(_, let type) = input.type else {
+        guard case let .perpetual(_, type) = input.type else {
             throw AnyError("Invalid input type for perpetual signing")
         }
 
         let (agentAddress, agentKey) = try getAgentKey()
+        let builder = try? getBuilder()
         let timestamp = Date.getTimestampInMs()
 
         // simple check for now, passed from hypercore service.
         if input.sequence > 0 {
             return try [
-                signMarketMessage(type: type, agentKey: agentKey, timestamp: timestamp),
+                signMarketMessage(type: type, agentKey: agentKey, timestamp: timestamp, builder: builder),
             ]
         } else {
             let agentName = "gemwallet_" + agentAddress.suffix(6)
@@ -56,7 +63,7 @@ public class HyperCoreSigner: Signable {
 
             return try [
                 actionMessage(signature: signature, eip712Message: eip712Message, timestamp: timestamp),
-                signMarketMessage(type: type, agentKey: agentKey, timestamp: timestamp),
+                signMarketMessage(type: type, agentKey: agentKey, timestamp: timestamp, builder: builder),
             ]
         }
     }
@@ -79,16 +86,27 @@ public class HyperCoreSigner: Signable {
         return signature.hexString.append0x
     }
 
-    private func signMarketMessage(type: PerpetualType, agentKey: Data, timestamp: UInt64) throws -> String {
+    private func signSetReferer(agentKey: Data, timestamp: UInt64) throws -> String {
+        let referer = factory.makeSetReferrer(referrer: "GemWallet")
+        let eip712Message = hyperCore.setReferrerTypedData(referrer: referer, nonce: timestamp)
+        let signature = try signEIP712(messageJson: eip712Message, privateKey: agentKey)
+        return factory.buildSignedRequest(
+            signature: signature,
+            action: factory.serializeSetReferrer(setReferrer: referer),
+            timestamp: timestamp
+        )
+    }
+
+    private func signMarketMessage(type: PerpetualType, agentKey: Data, timestamp: UInt64, builder: HyperBuilder?) throws -> String {
         let order = switch type {
         case let .close(direction, asset, price, size):
-            factory.makeMarketOrder(asset: asset, isBuy: direction == .short, price: price, size: size, reduceOnly: true)
+            factory.makeMarketOrder(asset: asset, isBuy: direction == .short, price: price, size: size, reduceOnly: true, builder: builder)
         case let .open(direction, asset, price, size):
-            factory.makeMarketOrder(asset: asset, isBuy: direction == .long, price: price, size: size, reduceOnly: false)
+            factory.makeMarketOrder(asset: asset, isBuy: direction == .long, price: price, size: size, reduceOnly: false, builder: builder)
         }
         let eip712 = hyperCore.placeOrderTypedData(order: order, nonce: timestamp)
-        return factory.buildSignedRequest(
-            signature: try signEIP712(messageJson: eip712, privateKey: agentKey),
+        return try factory.buildSignedRequest(
+            signature: signEIP712(messageJson: eip712, privateKey: agentKey),
             action: factory.serializeOrder(order: order),
             timestamp: timestamp
         )
