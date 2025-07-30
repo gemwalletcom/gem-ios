@@ -3,7 +3,6 @@
 import Foundation
 import Primitives
 import WalletCore
-import WalletCorePrimitives
 
 public extension Chain {
 

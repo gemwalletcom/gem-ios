@@ -5,7 +5,6 @@ import Blockchain
 import Foundation
 import Primitives
 import WalletCore
-import WalletCorePrimitives
 
 public struct TronSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
