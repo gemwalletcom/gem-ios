@@ -6,7 +6,6 @@ import Foundation
 import Keystore
 import Primitives
 import WalletCore
-import WalletCorePrimitives
 
 public struct SolanaSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {

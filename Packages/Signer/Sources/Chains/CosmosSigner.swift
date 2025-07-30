@@ -2,7 +2,6 @@
 
 import Foundation
 import WalletCore
-import WalletCorePrimitives
 import Primitives
 import Keystore
 

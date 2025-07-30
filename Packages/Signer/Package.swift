@@ -15,7 +15,6 @@ let package = Package(
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "Blockchain", path: "../Blockchain"),
         .package(name: "WalletCore", path: "../WalletCore"),
-        .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
     ],
     targets: [
         .target(
@@ -26,7 +25,7 @@ let package = Package(
                 "Blockchain",
                 .product(name: "WalletCore", package: "WalletCore"),
                 .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
-                "WalletCorePrimitives",
+                .product(name: "WalletCorePrimitives", package: "WalletCore"),
             ],
             path: "Sources"
         ),

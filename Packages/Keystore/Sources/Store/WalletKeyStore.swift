@@ -4,6 +4,7 @@ import struct Formatters.MnemonicFormatter
 import Foundation
 import Primitives
 @preconcurrency import WalletCore
+import WalletCorePrimitives
 
 public struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore
