@@ -3,7 +3,6 @@
 import Foundation
 import Primitives
 import WalletCore
-import WalletCorePrimitives
 
 public struct BitcoinSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
