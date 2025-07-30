@@ -24,7 +24,7 @@ public struct OpenInterestInfoSheetViewModel: InfoSheetModelViewable {
     }
     
     public var button: InfoSheetButton? {
-        .url(Docs.url(.networkFees))
+        .url(Docs.url(.perpetualsOpenInterest))
     }
     
     public var buttonTitle: String {

@@ -24,7 +24,7 @@ public struct FundingRateInfoSheetViewModel: InfoSheetModelViewable {
     }
     
     public var button: InfoSheetButton? {
-        .url(Docs.url(.networkFees))
+        .url(Docs.url(.perpetualsFundingRate))
     }
     
     public var buttonTitle: String {

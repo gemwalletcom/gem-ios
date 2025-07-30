@@ -24,7 +24,7 @@ public struct LiquidationPriceInfoSheetViewModel: InfoSheetModelViewable {
     }
     
     public var button: InfoSheetButton? {
-        .url(Docs.url(.networkFees))
+        .url(Docs.url(.perpetualsLiquidationPrice))
     }
     
     public var buttonTitle: String {
