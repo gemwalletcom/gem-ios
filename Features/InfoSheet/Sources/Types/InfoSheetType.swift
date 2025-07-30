@@ -54,28 +54,41 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         }
     }
     
+    private var defaultButton: InfoSheetButton? {
+        switch self {
+        case .networkFee: .url(Docs.url(.networkFees))
+        case .priceImpact: .url(Docs.url(.priceImpact))
+        case .slippage: .url(Docs.url(.slippage))
+        case .transactionState: .url(Docs.url(.transactionStatus))
+        case .watchWallet: .url(Docs.url(.whatIsWatchWallet))
+        case .stakeLockTime: .url(Docs.url(.stakingLockTime))
+        case .noQuote: .url(Docs.url(.noQuotes))
+        case .assetStatus: .url(Docs.url(.tokenVerification))
+        case .fundingRate: .url(Docs.url(.perpetualsFundingRate))
+        case .fundingPayments: .url(Docs.url(.perpetualsFundingPayments))
+        case .liquidationPrice: .url(Docs.url(.perpetualsLiquidationPrice))
+        case .openInterest: .url(Docs.url(.perpetualsOpenInterest))
+        default: nil
+        }
+    }
+    
     public func model(button: InfoSheetButton? = nil) -> InfoSheetModel {
+        let button = button ?? defaultButton
+        
         switch self {
         case let .networkFee(chain):
             return InfoSheetModel(
                 title: Localized.Info.NetworkFee.title,
                 description: Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol),
                 image: .image(Images.Info.networkFee),
-                button: button ?? .url(Docs.url(.networkFees)),
-                buttonTitle: Localized.Common.learnMore
+                button: button
             )
         case let .insufficientBalance(asset, image):
             return InfoSheetModel(
                 title: Localized.Info.InsufficientBalance.title,
                 description: Localized.Info.InsufficientBalance.description(asset.symbol),
                 image: .assetImage(image),
-                button: button,
-                buttonTitle: {
-                    switch button {
-                    case .action(let title, _): return title
-                    case .url, .none: return Localized.Wallet.buy
-                    }
-                }()
+                button: button
             )
         case let .insufficientNetworkFee(asset, image, required):
             let formatter = ValueFormatter(style: .full)
@@ -92,13 +105,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
                 title: Localized.Info.InsufficientNetworkFeeBalance.title(asset.chain.asset.symbol),
                 description: description,
                 image: .assetImage(image),
-                button: button,
-                buttonTitle: {
-                    switch button {
-                    case .action(let title, _): return title
-                    case .url, .none: return Localized.Wallet.buy
-                    }
-                }()
+                button: button
             )
         case let .transactionState(imageURL, placeholder, state):
             let stateImage = switch state {
@@ -127,41 +134,42 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
             return InfoSheetModel(
                 title: title,
                 description: description,
-                image: image
-            )
+                image: image,
+                button: button)
         case .watchWallet:
             return InfoSheetModel(
                 title: Localized.Info.WatchWallet.title,
                 description: Localized.Info.WatchWallet.description,
-                image: nil
+                image: nil,
+                button: button
             )
         case let .stakeLockTime(placeholder):
             return InfoSheetModel(
                 title: Localized.Stake.lockTime,
                 description: Localized.Info.LockTime.description,
-                image: placeholder.map { .image($0) }
+                image: placeholder.map { .image($0) },
+                button: button
             )
         case .priceImpact:
             return InfoSheetModel(
                 title: Localized.Swap.priceImpact,
                 description: Localized.Info.PriceImpact.description,
                 image: .image(Images.Logo.logo),
-                button: button ?? .url(Docs.url(.priceImpact)),
-                buttonTitle: Localized.Common.learnMore
+                button: button
             )
         case .slippage:
             return InfoSheetModel(
                 title: Localized.Swap.slippage,
                 description: Localized.Info.Slippage.description,
                 image: .image(Images.Logo.logo),
-                button: button ?? .url(Docs.url(.slippage)),
-                buttonTitle: Localized.Common.learnMore
+                button: button
             )
         case .noQuote:
             return InfoSheetModel(
                 title: Localized.Errors.Swap.noQuoteAvailable,
                 description: Localized.Info.NoQuote.description,
-                image: .image(Images.Logo.logo)
+                image: .image(Images.Logo.logo),
+                button: button
             )
         case let .assetStatus(status):
             let image: InfoSheetImage = switch status {
@@ -182,7 +190,8 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
             return InfoSheetModel(
                 title: title,
                 description: description,
-                image: image
+                image: image,
+                button: button
             )
         case let .accountMinimalBalance(asset, required):
             let formatter = ValueFormatter(style: .full)
@@ -191,13 +200,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
                 title: Localized.Info.AccountMinimumBalance.title,
                 description: Localized.Transfer.minimumAccountBalance(amount),
                 image: .image(Images.Logo.logo),
-                button: button,
-                buttonTitle: {
-                    switch button {
-                    case .action(let title, _): return title
-                    case .url, .none: return Localized.Common.done
-                    }
-                }()
+                button: button
             )
         case let .stakeMinimumAmount(asset, required):
             let formatter = ValueFormatter(style: .full)
@@ -206,37 +209,35 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
                 title: Localized.Info.StakeMinimumAmount.title,
                 description: Localized.Info.StakeMinimumAmount.description(asset.name, amount),
                 image: .image(Images.Logo.logo),
-                button: button,
-                buttonTitle: {
-                    switch button {
-                    case .action(let title, _): return title
-                    case .url, .none: return Localized.Common.done
-                    }
-                }()
+                button: button
             )
         case .fundingRate:
             return InfoSheetModel(
                 title: Localized.Info.FundingRate.title,
                 description: Localized.Info.FundingRate.description,
-                image: .image(Images.Logo.logo)
+                image: .image(Images.Logo.logo),
+                button: button
             )
         case .fundingPayments:
             return InfoSheetModel(
                 title: Localized.Info.FundingPayments.title,
                 description: Localized.Info.FundingPayments.description,
-                image: .image(Images.Logo.logo)
+                image: .image(Images.Logo.logo),
+                button: button
             )
         case .liquidationPrice:
             return InfoSheetModel(
                 title: Localized.Info.LiquidationPrice.title,
                 description: Localized.Info.LiquidationPrice.description,
-                image: .image(Images.Logo.logo)
+                image: .image(Images.Logo.logo),
+                button: button
             )
         case .openInterest:
             return InfoSheetModel(
                 title: Localized.Info.OpenInterest.title,
                 description: Localized.Info.OpenInterest.description,
-                image: .image(Images.Logo.logo)
+                image: .image(Images.Logo.logo),
+                button: button
             )
         }
     }

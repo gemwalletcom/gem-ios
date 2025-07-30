@@ -22,16 +22,25 @@ public struct InfoSheetModel: Sendable {
     public let description: String
     public let image: InfoSheetImage?
     public let button: InfoSheetButton?
-    public let buttonTitle: String
     public let titleStyle: TextStyle
     public let descriptionStyle: TextStyle
+    
+    public var buttonTitle: String {
+        switch button {
+        case .url:
+            return Localized.Common.learnMore
+        case .action(let title, _):
+            return title
+        case .none:
+            return Localized.Common.done
+        }
+    }
     
     public init(
         title: String, 
         description: String, 
         image: InfoSheetImage? = nil,
         button: InfoSheetButton? = nil,
-        buttonTitle: String = Localized.Common.done,
         titleStyle: TextStyle = .boldTitle,
         descriptionStyle: TextStyle = .bodySecondary
     ) {
@@ -39,7 +48,6 @@ public struct InfoSheetModel: Sendable {
         self.description = description
         self.image = image
         self.button = button
-        self.buttonTitle = buttonTitle
         self.titleStyle = titleStyle
         self.descriptionStyle = descriptionStyle
     }
