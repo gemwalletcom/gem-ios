@@ -15,15 +15,20 @@ public struct StakeDetailScene: View {
             Section {
                 if let url = model.validatorUrl {
                     SafariNavigationLink(url: url) {
-                        validatorView
+                        ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
                     }
                 } else {
-                    validatorView
+                    ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
+                }
+
+                if model.showValidatorApr {
+                    ListItemView(title: model.aprTitle, subtitle: model.validatorAprText)
                 }
             }
             .listRowInsets(.assetListRowInsets)
 
-            Section {
+            Section(model.balancesTitle) {
+                ValidatorDelegationView(delegation: model.model)
                 if let rewardsText = model.model.rewardsText {
                     ListItemView(
                         title: model.rewardsTitle,
@@ -74,9 +79,5 @@ public struct StakeDetailScene: View {
             }
         }
         .navigationTitle(model.title)
-    }
-    
-    private var validatorView: some View {
-        ValidatorDelegationView(delegation: model.model)
     }
 }

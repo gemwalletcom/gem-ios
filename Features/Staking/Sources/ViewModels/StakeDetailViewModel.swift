@@ -36,7 +36,7 @@ public struct StakeDetailViewModel {
     public var validatorTitle: String { Localized.Stake.validator }
     public var aprTitle: String { Localized.Stake.apr("") }
     public var stateTitle: String { Localized.Transaction.status }
-    public var balancesTitle: String { Localized.Asset.balances }
+    public var balancesTitle: String { Localized.Stake.yourStaking }
     public var manageTitle: String { Localized.Common.manage }
     public var rewardsTitle: String { Localized.Stake.rewards }
     public var unstakeTitle: String { Localized.Transfer.Unstake.title }

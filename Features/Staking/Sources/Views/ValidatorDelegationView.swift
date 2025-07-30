@@ -19,7 +19,7 @@ public struct ValidatorDelegationView: View {
             titleStyle: delegation.titleStyle,
             titleTag: delegation.stateText,
             titleTagStyle: delegation.stateTagStyle,
-            titleExtra: delegation.completionDateText ?? delegation.validatorAprText,
+            titleExtra: delegation.completionDateText,
             titleStyleExtra: delegation.titleExtraStyle,
             subtitle: delegation.balanceText,
             subtitleStyle: delegation.subtitleStyle,

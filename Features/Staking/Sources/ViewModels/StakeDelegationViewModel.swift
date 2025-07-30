@@ -153,10 +153,6 @@ public struct StakeDelegationViewModel: Sendable {
         return exploreService.validatorUrl(chain: asset.chain, address: delegation.validator.id)?.url
     }
     
-    public var validatorAprText: String {
-        Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(delegation.validator.apr))
-    }
-    
     public var completionDateText: String? {
         let now = Date.now
         if let completionDate = delegation.base.completionDate, completionDate > now {
