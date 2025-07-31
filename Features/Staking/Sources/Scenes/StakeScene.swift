@@ -35,6 +35,7 @@ public struct StakeScene: View {
             await model.fetch()
         }
         .navigationTitle(model.title)
+        .toolbarInfoButton(url: model.stakeInfoUrl)
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
@@ -66,12 +67,12 @@ extension StakeScene {
                 )
             }
         }
+        .listRowInsets(.assetListRowInsets)
     }
 
     private var delegationsSection: some View {
-        let state = model.stakeDelegateionState(delegationModels: delegationsModel)
-        return Section {
-            switch state {
+        Section {
+            switch model.stakeDelegateionState(delegationModels: delegationsModel) {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)
                     .cleanListRow()
@@ -88,6 +89,7 @@ extension StakeScene {
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
         }
+        .listRowInsets(.assetListRowInsets)
     }
 
     private var stakeInfoSection: some View {
@@ -102,6 +104,7 @@ extension StakeScene {
                 infoAction: model.onLockTimeInfo
             )
         }
+        .listRowInsets(.assetListRowInsets)
     }
 }
 

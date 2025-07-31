@@ -1,13 +1,15 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 import SwiftHTTPClient
 
 public enum HypercoreProvider: TargetType {
     case clearinghouseState(user: String)
     case metaAndAssetCtxs
     case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
-    case exchange(action: String, signature: String, nonce: Int)
+    case userRole(address: String)
+    case broadcast(data: String)
 
     public var baseUrl: URL {
         return URL(string: "")!
@@ -19,9 +21,12 @@ public enum HypercoreProvider: TargetType {
 
     public var path: String {
         switch self {
-        case .clearinghouseState, .metaAndAssetCtxs, .candleSnapshot:
+        case .clearinghouseState,
+            .metaAndAssetCtxs,
+            .candleSnapshot,
+            .userRole:
             return "/info"
-        case .exchange:
+        case .broadcast:
             return "/exchange"
         }
     }
@@ -47,12 +52,13 @@ public enum HypercoreProvider: TargetType {
                     "endTime": .integer(endTime)
                 ])
             ]))
-        case .exchange(let action, let signature, let nonce):
-            return .encodable(JSON<String>.dictionary([
-                "action": .value(action),
-                "signature": .value(signature),
-                "nonce": .integer(nonce),
-            ]))
+        case .userRole(let address):
+            return .encodable([
+                "type": "userRole",
+                "user": address
+            ])
+        case .broadcast(let data):
+            return .data(try! data.encodedData())
         }
     }
 
