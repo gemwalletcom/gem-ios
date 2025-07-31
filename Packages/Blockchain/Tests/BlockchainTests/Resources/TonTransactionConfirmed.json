@@ -1,0 +1,21 @@
+{
+  "transactions": [{
+    "hash": "confirmed_transaction_hash",
+    "out_msgs": [{
+      "hash": "out_msg_hash",
+      "bounce": false,
+      "bounced": false
+    }],
+    "description": {
+      "action": {
+        "valid": true,
+        "success": true
+      },
+      "compute_ph": {
+        "success": true,
+        "exit_code": 0
+      },
+      "aborted": false
+    }
+  }]
+}
