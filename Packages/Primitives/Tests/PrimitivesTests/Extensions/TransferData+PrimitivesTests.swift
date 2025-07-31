@@ -13,11 +13,11 @@ struct TransferDataTypeTests {
         #expect(TransferData.mock(type: .transfer(.mock())).type.shouldIgnoreValueCheck == false)
 
         #expect(TransferData.mock(type: .deposit(.mock())).type.shouldIgnoreValueCheck == false)
-        #expect(TransferData.mock(type: .perpetual(.mock(), .open(direction: .long, asset: 0, price: "100", size: "1"))).type.shouldIgnoreValueCheck == true)
+        #expect(TransferData.mock(type: .perpetual(.mock(), .open(.mock(direction: .long, assetIndex: 0, price: "100", size: "1")))).type.shouldIgnoreValueCheck == true)
         #expect(
             TransferData
                 .mock(
-                    type: .perpetual(.mock(), .close(direction: .long, asset: 0, price: "100", size: "1"))
+                    type: .perpetual(.mock(), .close(.mock(direction: .long, assetIndex: 0, price: "100", size: "1")))
                 ).type.shouldIgnoreValueCheck == true
         )
     }
@@ -44,11 +44,11 @@ struct TransferDataTypeTests {
 
         #expect(TransferData.mock(type: .deposit(.mock())).canChangeValue == true)
         #expect(TransferData.mock(type: .deposit(.mock()), canChangeValue: false).canChangeValue == false)
-        #expect(TransferData.mock(type: .perpetual(.mock(), .open(direction: .long, asset: 0, price: "100", size: "1"))).canChangeValue == true)
+        #expect(TransferData.mock(type: .perpetual(.mock(), .open(.mock(direction: .long, assetIndex: 0, price: "100", size: "1")))).canChangeValue == true)
         #expect(
             TransferData
                 .mock(
-                    type: .perpetual(.mock(), .close(direction: .long, asset: 0, price: "100", size: "1")),
+                    type: .perpetual(.mock(), .close(.mock(direction: .long, assetIndex: 0, price: "100", size: "1"))),
                     canChangeValue: false
                 ).canChangeValue == false
         )
