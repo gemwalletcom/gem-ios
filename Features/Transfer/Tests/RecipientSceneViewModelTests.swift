@@ -4,7 +4,7 @@ import Testing
 import Primitives
 import PrimitivesTestKit
 import WalletServiceTestKit
-import NameResolver
+import NameServiceTestKit
 import Components
 import Formatters
 @testable import Transfer
@@ -125,6 +125,7 @@ extension RecipientSceneViewModel {
             wallet: wallet,
             asset: asset,
             walletService: .mock(),
+            nameService: .mock(),
             type: type,
             onRecipientDataAction: onRecipientDataAction,
             onTransferAction: onTransferAction

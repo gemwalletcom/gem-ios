@@ -8,7 +8,7 @@ import PrimitivesComponents
 import WalletService
 import Components
 import Style
-import NameResolver
+import NameService
 import Keystore
 import WalletsService
 import NodeService
@@ -29,6 +29,7 @@ public final class RecipientSceneViewModel {
     let onTransferAction: TransferDataAction
 
     private let walletService: WalletService
+    private let nameService: any NameServiceable
     private let onRecipientDataAction: RecipientDataAction
     private let formatter = ValueFormatter(style: .full)
 
@@ -42,6 +43,7 @@ public final class RecipientSceneViewModel {
         wallet: Wallet,
         asset: Asset,
         walletService: WalletService,
+        nameService: any NameServiceable,
         type: RecipientAssetType,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
@@ -49,6 +51,7 @@ public final class RecipientSceneViewModel {
         self.wallet = wallet
         self.asset = asset
         self.walletService = walletService
+        self.nameService = nameService
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
@@ -77,6 +80,10 @@ public final class RecipientSceneViewModel {
 
     var showMemo: Bool { asset.chain.isMemoSupported }
     var chain: Chain { asset.chain }
+    
+    var nameRecordViewModel: NameRecordViewModel {
+        NameRecordViewModel(chain: chain, nameService: nameService)
+    }
 
     var pasteImage: Image { Images.System.paste }
     var qrImage: Image { Images.System.qrCode }

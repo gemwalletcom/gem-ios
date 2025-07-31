@@ -4,6 +4,7 @@ import Primitives
 import WalletCore
 import Testing
 import PrimitivesTestKit
+import WalletCorePrimitives
 
 final class Chain_WalletCorePrimitiveTests {
     @Test(arguments: Chain.allCases)

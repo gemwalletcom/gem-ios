@@ -6,7 +6,7 @@ import Style
 import Components
 import QRScanner
 import Localization
-import NameResolver
+import PrimitivesComponents
 
 struct ImportWalletScene: View {
     enum Field: Int, Hashable {
@@ -65,9 +65,9 @@ struct ImportWalletScene: View {
                             }
                             .padding(.top, .small + .tiny)
 
-                            if let chain = model.chain, model.importType == .address {
+                            if let nameRecordViewModel = model.nameRecordViewModel, model.importType == .address {
                                 NameRecordView(
-                                    model: NameRecordViewModel(chain: chain),
+                                    model: nameRecordViewModel,
                                     state: $model.nameResolveState,
                                     address: $model.input
                                 )

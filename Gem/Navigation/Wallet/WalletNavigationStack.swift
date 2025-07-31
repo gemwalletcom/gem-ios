@@ -148,8 +148,11 @@ struct WalletNavigationStack: View {
                     AmountNavigationStack(
                         model: AmountSceneViewModel(
                             input: AmountInput(
-                                type: .perpetual(recipient: perpetualRecipientData.recipientData, perpetualRecipientData.direction),
-                                asset: perpetualRecipientData.asset
+                                type: .perpetual(
+                                    recipient: perpetualRecipientData.recipient,
+                                    perpetual: perpetualRecipientData.data
+                                ),
+                                asset: perpetualRecipientData.data.asset
                             ),
                             wallet: model.wallet,
                             amountService: AmountService(
@@ -159,7 +162,7 @@ struct WalletNavigationStack: View {
                             ),
                             onTransferAction: { transferData in
                                 model.isPresentingPerpetualRecipientData = nil
-                                model.isPresentingTransferData = transferData
+                                model.isPresentingTransferData = $0
                             }
                         )
                     )
@@ -168,3 +171,6 @@ struct WalletNavigationStack: View {
         }
     }
 }
+
+
+

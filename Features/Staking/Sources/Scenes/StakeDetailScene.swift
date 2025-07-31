@@ -24,19 +24,25 @@ public struct StakeDetailScene: View {
                 if model.showValidatorApr {
                     ListItemView(title: model.aprTitle, subtitle: model.validatorAprText)
                 }
-
-                ListItemView(title: model.stateTitle, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
-
-                if let title = model.completionDateTitle, let subtitle = model.completionDateText {
-                    ListItemView(title: title, subtitle: subtitle)
-                }
             }
+            .listRowInsets(.assetListRowInsets)
+
             Section(model.balancesTitle) {
-                ListItemView(title: model.title, subtitle: model.model.balanceText)
+                ValidatorDelegationView(delegation: model.model)
                 if let rewardsText = model.model.rewardsText {
-                    ListItemView(title: model.rewardsTitle, subtitle: rewardsText)
+                    ListItemView(
+                        title: model.rewardsTitle,
+                        titleStyle: model.model.titleStyle,
+                        subtitle: rewardsText,
+                        subtitleStyle: model.model.subtitleStyle,
+                        subtitleExtra: model.model.rewardsFiatValueText,
+                        subtitleStyleExtra: model.model.subtitleExtraStyle,
+                        imageStyle: model.assetImageStyle
+                    )
                 }
             }
+            .listRowInsets(.assetListRowInsets)
+
             //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()
             if model.showManage {
                 Section(model.manageTitle) {
@@ -69,6 +75,7 @@ public struct StakeDetailScene: View {
                         }
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
         }
         .navigationTitle(model.title)

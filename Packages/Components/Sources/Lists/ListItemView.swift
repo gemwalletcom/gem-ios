@@ -173,7 +173,7 @@ extension ListItemView {
                     Text(title.text)
                         .textStyle(title.style)
                         .lineLimit(title.lineLimit)
-                        .truncationMode(.middle)
+                        .truncationMode(.tail)
 
                     if let infoAction {
                         InfoButton(

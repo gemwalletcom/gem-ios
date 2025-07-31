@@ -6,7 +6,8 @@ import Primitives
 extension HypercoreAssetMetadata {
     public func mapToPerpetual(
         symbol: String,
-        maxLeverage: Int
+        maxLeverage: Int,
+        index: Int
     ) -> Perpetual? {
         let provider = PerpetualProvider.hypercore
         let assetId = mapHypercoreCoinToAssetId(symbol)
@@ -26,6 +27,7 @@ extension HypercoreAssetMetadata {
             name: symbol,
             provider: provider,
             assetId: assetId,
+            identifier: index.description,
             price: currentPrice,
             pricePercentChange24h: priceChange24h,
             openInterest: openInterestInUSD,

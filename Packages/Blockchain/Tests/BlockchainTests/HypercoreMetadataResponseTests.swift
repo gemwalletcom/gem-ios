@@ -21,7 +21,7 @@ struct HypercoreMetadataResponseTests {
             dayBaseVlm: "0"
         )
         
-        let perpetual = metadata.mapToPerpetual(symbol: "BTC", maxLeverage: 100)!
+        let perpetual = metadata.mapToPerpetual(symbol: "BTC", maxLeverage: 100, index: 0)!
         #expect(abs(perpetual.funding - 0.00794237) < 0.0001)
     }
     
@@ -40,7 +40,7 @@ struct HypercoreMetadataResponseTests {
             dayBaseVlm: "0"
         )
         
-        let perpetual = metadata.mapToPerpetual(symbol: "ETH", maxLeverage: 50)!
+        let perpetual = metadata.mapToPerpetual(symbol: "ETH", maxLeverage: 50, index: 1)!
         #expect(abs(perpetual.funding - (-0.00125)) < 0.0001)
     }
     
@@ -59,7 +59,7 @@ struct HypercoreMetadataResponseTests {
             dayBaseVlm: "0"
         )
         
-        let perpetual = metadata.mapToPerpetual(symbol: "SOL", maxLeverage: 20)!
+        let perpetual = metadata.mapToPerpetual(symbol: "SOL", maxLeverage: 20, index: 2)!
         #expect(perpetual.price == 110)
         #expect(perpetual.pricePercentChange24h == 10.0)
     }

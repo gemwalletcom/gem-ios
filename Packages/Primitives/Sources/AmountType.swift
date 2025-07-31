@@ -9,5 +9,5 @@ public enum AmountType: Equatable, Hashable, Sendable {
     case unstake(delegation: Delegation)
     case redelegate(delegation: Delegation, validators: [DelegationValidator], recommendedValidator: DelegationValidator?)
     case withdraw(delegation: Delegation)
-    case perpetual(recipient: RecipientData, PerpetualDirection)
+    case perpetual(recipient: RecipientData, perpetual: PerpetualTransferData)
 }

@@ -9,6 +9,7 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	public let name: String
 	public let provider: PerpetualProvider
 	public let assetId: AssetId
+	public let identifier: String
 	public let price: Double
 	public let pricePercentChange24h: Double
 	public let openInterest: Double
@@ -16,11 +17,12 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	public let funding: Double
 	public let leverage: [UInt8]
 
-	public init(id: String, name: String, provider: PerpetualProvider, assetId: AssetId, price: Double, pricePercentChange24h: Double, openInterest: Double, volume24h: Double, funding: Double, leverage: [UInt8]) {
+	public init(id: String, name: String, provider: PerpetualProvider, assetId: AssetId, identifier: String, price: Double, pricePercentChange24h: Double, openInterest: Double, volume24h: Double, funding: Double, leverage: [UInt8]) {
 		self.id = id
 		self.name = name
 		self.provider = provider
 		self.assetId = assetId
+		self.identifier = identifier
 		self.price = price
 		self.pricePercentChange24h = pricePercentChange24h
 		self.openInterest = openInterest

@@ -26,6 +26,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
     @Environment(\.transactionService) private var transactionService
+    @Environment(\.nameService) private var nameService
 
     @State private var navigationPath = NavigationPath()
 
@@ -68,6 +69,7 @@ struct SelectedAssetNavigationStack: View  {
                             wallet: wallet,
                             asset: input.asset,
                             walletService: walletService,
+                            nameService: nameService,
                             type: type,
                             onRecipientDataAction: {
                                 navigationPath.append($0)

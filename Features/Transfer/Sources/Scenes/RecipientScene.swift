@@ -4,7 +4,6 @@ import SwiftUI
 import Style
 import Components
 import PrimitivesComponents
-import NameResolver
 
 struct RecipientScene: View {
     enum Field: Int, Hashable, Identifiable {
@@ -33,7 +32,7 @@ struct RecipientScene: View {
                         trailingView: {
                             HStack(spacing: .large/2) {
                                 NameRecordView(
-                                    model: NameRecordViewModel(chain: model.chain),
+                                    model: model.nameRecordViewModel,
                                     state: $model.nameResolveState,
                                     address: $model.addressInputModel.text
                                 )

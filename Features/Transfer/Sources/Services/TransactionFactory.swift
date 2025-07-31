@@ -27,6 +27,10 @@ struct TransactionFactory {
             }
         default: (transferData.type.transactionType, metadata)
         }
+        let state: TransactionState = switch transferData.chain {
+        case .hyperCore: .confirmed
+        default: .pending
+        }
 
         return Transaction(
             id: Transaction.id(chain: transferData.chain, hash: hash),
@@ -36,7 +40,7 @@ struct TransactionFactory {
             to: recipientAddress,
             contract: nil,
             type: data.type,
-            state: .pending,
+            state: state,
             blockNumber: String(transactionData.block.number),
             sequence: transactionData.sequence.asString,
             fee: amount.networkFee.description,
