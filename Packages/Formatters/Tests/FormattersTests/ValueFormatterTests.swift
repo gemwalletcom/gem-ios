@@ -203,4 +203,16 @@ final class ValueFormatterTests {
         #expect(formatter.string(1, decimals: 5) == "0.00001")
         #expect(formatter.string(4162, decimals: 18) == "0.000000000000004162")
     }
+    
+    @Test
+    func testAbbreviated() {
+        let formatter = ValueFormatter(locale: .US, style: .abbreviated)
+        
+        #expect(formatter.string(100_000, decimals: 0) == "100K")
+        #expect(formatter.string(1_500_000, decimals: 0) == "1.5M")
+        #expect(formatter.string(2_300_000_000, decimals: 0) == "2.3B")
+        #expect(formatter.string(1_200_000_000_000, decimals: 0) == "1.2T")
+        #expect(formatter.string(500_000, decimals: 0, currency: "BTC") == "500K BTC")
+        #expect(formatter.string(2_000_000, decimals: 0, currency: "ETH") == "2M ETH")
+    }
 }
