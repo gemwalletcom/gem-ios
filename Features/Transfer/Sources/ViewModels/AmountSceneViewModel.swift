@@ -299,20 +299,27 @@ extension AmountSceneViewModel {
         case .asset: .asset
         case .fiat: .fiat(price: getAssetPrice(), converter: valueConverter)
         }
-        
-        return []
-
-        return [
-            .amount(
-                source: source,
-                decimals: asset.decimals.asInt,
-                validators: [
-                    PositiveValueValidator<BigInt>().silent,
-                    MinimumValueValidator<BigInt>(minimumValue: minimumValue, asset: asset),
-                    BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
-                ]
-            )
-        ]
+        switch input.type {
+        case .transfer,
+            .deposit,
+            .stake,
+            .unstake,
+            .redelegate,
+            .withdraw:
+                return [
+                .amount(
+                    source: source,
+                    decimals: asset.decimals.asInt,
+                    validators: [
+                        PositiveValueValidator<BigInt>().silent,
+                        MinimumValueValidator<BigInt>(minimumValue: minimumValue, asset: asset),
+                        BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
+                    ]
+                )
+            ]
+        case .perpetual:
+            return [] //TODO: Perpetual.
+        }
     }
 
     private var fiatValueText: String {
