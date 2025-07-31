@@ -4,7 +4,6 @@ import Keystore
 import Primitives
 import Testing
 import WalletCore
-import WalletCorePrimitives
 
 final class WalletKeyStoreTests {
     // phantom

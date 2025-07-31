@@ -8,7 +8,7 @@ import PrimitivesComponents
 import WalletService
 import Components
 import Style
-import NameResolver
+import NameService
 import Keystore
 import WalletsService
 import NodeService
@@ -29,6 +29,7 @@ public final class RecipientSceneViewModel {
     let stakeService: StakeService
     let scanService: ScanService
     let swapService: SwapService
+    let nameService: any NameServiceable
 
     let wallet: Wallet
     let asset: Asset
@@ -56,6 +57,7 @@ public final class RecipientSceneViewModel {
         stakeService: StakeService,
         scanService: ScanService,
         swapService: SwapService,
+        nameService: any NameServiceable,
         type: RecipientAssetType,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
@@ -70,6 +72,7 @@ public final class RecipientSceneViewModel {
         self.stakeService = stakeService
         self.scanService = scanService
         self.swapService = swapService
+        self.nameService = nameService
 
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
@@ -99,6 +102,10 @@ public final class RecipientSceneViewModel {
 
     var showMemo: Bool { asset.chain.isMemoSupported }
     var chain: Chain { asset.chain }
+    
+    var nameRecordViewModel: NameRecordViewModel {
+        NameRecordViewModel(chain: chain, nameService: nameService)
+    }
 
     var pasteImage: Image { Images.System.paste }
     var qrImage: Image { Images.System.qrCode }

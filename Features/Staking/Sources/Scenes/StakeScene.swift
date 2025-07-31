@@ -35,6 +35,7 @@ public struct StakeScene: View {
             await model.fetch()
         }
         .navigationTitle(model.title)
+        .toolbarInfoButton(url: model.stakeInfoUrl)
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }

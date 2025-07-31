@@ -26,6 +26,7 @@ import AvatarService
 import AppService
 import ScanService
 import SwapService
+import NameService
 import PerpetualService
 
 extension EnvironmentValues {
@@ -53,4 +54,5 @@ extension EnvironmentValues {
     @Entry var scanService: ScanService = AppResolver.main.services.scanService
     @Entry var swapService: SwapService = AppResolver.main.services.swapService
     @Entry var perpetualService: PerpetualService = AppResolver.main.services.perpetualService
+    @Entry var nameService: NameService = AppResolver.main.services.nameService
 }

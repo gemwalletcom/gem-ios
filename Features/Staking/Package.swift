@@ -18,8 +18,7 @@ let package = Package(
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "Localization", path: "../../Packages/Localization"),
-        .package(name: "StakeService", path: "../../Services/StakeService"),
-        .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
@@ -35,8 +34,8 @@ let package = Package(
                 "Components",
                 "GemstonePrimitives",
                 "Localization",
-                "StakeService",
-                "ExplorerService",
+                .product(name: "StakeService", package: "ChainServices"),
+                .product(name: "ExplorerService", package: "ChainServices"),
                 "Preferences",
                 "Store",
                 "InfoSheet",
@@ -49,7 +48,7 @@ let package = Package(
             name: "StakingTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "StakeServiceTestKit", package: "StakeService"),
+                .product(name: "StakeServiceTestKit", package: "ChainServices"),
                 "Staking"
             ],
             path: "Tests"
