@@ -5,6 +5,8 @@ import Keychain
 import LocalAuthentication
 
 public struct KeychainMock: Keychain {
+    public init() {}
+    
     public func accessibility(_ accessibility: Accessibility, authenticationPolicy: AuthenticationPolicy) -> Keychain {
         KeychainMock()
     }
