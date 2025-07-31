@@ -22,7 +22,7 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
 
     public init(
         chainService: any ChainServiceable,
-        scanService: ScanService,
+        scanService: ScanService
     ) {
         self.feeRatesProvider = FeeRateService(service: chainService)
         self.chainService = chainService
