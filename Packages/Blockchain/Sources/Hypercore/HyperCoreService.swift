@@ -38,7 +38,7 @@ public extension HyperCoreService {
             .map(as: HypercoreMetadataResponse.self)
     }
 
-    func getCandlesticks(coin: String, interval: String = "1m", startTime: Int, endTime: Int) async throws -> [HypercoreCandlestick] {
+    func getCandlesticks(coin: String, interval: String, startTime: Int, endTime: Int) async throws -> [HypercoreCandlestick] {
         return try await provider
             .request(.candleSnapshot(coin: coin, interval: interval, startTime: startTime, endTime: endTime))
             .map(as: [HypercoreCandlestick].self)

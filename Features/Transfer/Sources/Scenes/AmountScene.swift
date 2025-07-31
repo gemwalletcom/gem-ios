@@ -51,7 +51,7 @@ struct AmountScene: View {
                 }
 
                 switch model.type {
-                case .transfer, .deposit, .perpetual:
+                case .transfer, .deposit:
                     EmptyView()
                 case .stake, .unstake, .redelegate, .withdraw:
                     if let viewModel = model.stakeValidatorViewModel  {
@@ -66,6 +66,9 @@ struct AmountScene: View {
                             }
                         }
                     }
+                case .perpetual:
+                    // PositionView()
+                    EmptyView()
                 }
             }
             .contentMargins([.top], .zero, for: .scrollContent)

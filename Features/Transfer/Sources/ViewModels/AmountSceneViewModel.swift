@@ -98,8 +98,8 @@ public final class AmountSceneViewModel {
         switch type {
         case .transfer: Localized.Transfer.Send.title
         case .deposit: "Deposit"
-        case .perpetual(_, let type):
-            switch type {
+        case .perpetual(_, let data):
+            switch data.direction {
             case .short: "Short"
             case .long: "Long"
             }
@@ -271,7 +271,7 @@ extension AmountSceneViewModel {
             return recipient
         case .deposit(recipient: let recipient):
             return recipient
-        case .perpetual(recipient: let recipient, _):
+        case .perpetual(let recipient, _):
             return recipient
         case .stake,
              .unstake,
@@ -299,6 +299,8 @@ extension AmountSceneViewModel {
         case .asset: .asset
         case .fiat: .fiat(price: getAssetPrice(), converter: valueConverter)
         }
+        
+        return []
 
         return [
             .amount(
@@ -354,14 +356,20 @@ extension AmountSceneViewModel {
                 value: value,
                 canChangeValue: canChangeValue
             )
-        case .perpetual(_, let direction):
+        case .perpetual(_, let perpetual):
+            //TODO: Perpetual
+            let price = ""
+            let size = ""
             return TransferData(
                 type: .perpetual(
                     asset, .open(
-                        direction: direction,
-                        asset: 0, // FIXME: asset is hardcoded here, 0: BTC, 25: USD?
-                        price: "0", // FIXME: need market price
-                        size: value.description
+                        PerpetualConfirmData(
+                            direction: perpetual.direction,
+                            asset: perpetual.asset,
+                            assetIndex: perpetual.assetIndex,
+                            price: price,
+                            size: size
+                        )
                     )
                 ),
                 recipientData: recipientData,

@@ -28,17 +28,7 @@ public struct PerpetualNavigationView: View {
             onPerpetualRecipientData: { isPresentingPerpetualRecipientData.wrappedValue = $0 }
         ))
     }
-    
-    public init(
-        model: PerpetualSceneViewModel,
-        isPresentingTransferData: Binding<TransferData?>,
-        isPresentingPerpetualRecipientData: Binding<PerpetualRecipientData?>
-    ) {
-        _isPresentingTransferData = isPresentingTransferData
-        _isPresentingPerpetualRecipientData = isPresentingPerpetualRecipientData
-        _model = State(initialValue: model)
-    }
-    
+
     public var body: some View {
         PerpetualScene(model: model)
             .observeQuery(request: $model.positionsRequest, value: $model.positions)

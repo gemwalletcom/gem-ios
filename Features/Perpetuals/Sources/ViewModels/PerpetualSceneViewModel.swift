@@ -29,6 +29,7 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
+    let formatter = PerpetualPriceFormatter()
 
     public var isPresentingInfoSheet: InfoSheetType?
 
@@ -131,11 +132,19 @@ public extension PerpetualSceneViewModel {
         case .long: perpetualViewModel.perpetual.price * 0.98
         case .short: perpetualViewModel.perpetual.price * 1.02
         }
-        let formatter = PerpetualPriceFormatter()
+        
         let price = formatter.formatPrice(positionPrice, decimals: Int(asset.decimals))
         let size = formatter.formatSize(abs(position.size))
+        let data = PerpetualConfirmData(
+            direction: position.direction,
+            asset: asset,
+            assetIndex: Int(assetIndex),
+            price: price,
+            size: size
+        )
+        
         let transferData = TransferData(
-            type: .perpetual(asset, .close( direction: position.direction, asset: assetIndex, price: price, size: size)),
+            type: .perpetual(asset, .close(data)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false
@@ -145,23 +154,39 @@ public extension PerpetualSceneViewModel {
     }
 
     func onOpenLongPosition() {
-        onPerpetualRecipientData?(PerpetualRecipientData(
-            recipientData: .hyperliquid(),
-            direction: .long,
-            asset: asset
-        ))
+        guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
+            return
+        }
+        let data = PerpetualRecipientData(
+            recipient: .hyperliquid(),
+            data: PerpetualTransferData(
+                direction: .long,
+                asset: asset,
+                assetIndex: Int(assetIndex),
+                price: perpetualViewModel.perpetual.price
+            )
+        )
+        onPerpetualRecipientData?(data)
     }
 
     func onOpenShortPosition() {
-        onPerpetualRecipientData?(PerpetualRecipientData(
-            recipientData: .hyperliquid(),
-            direction: .short,
-            asset: asset
-        ))
+        guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
+            return
+        }
+        let data = PerpetualRecipientData(
+            recipient: .hyperliquid(),
+            data: PerpetualTransferData(
+                direction: .short,
+                asset: asset,
+                assetIndex: Int(assetIndex),
+                price: perpetualViewModel.perpetual.price
+            )
+        )
+        onPerpetualRecipientData?(data)
     }
 }
 
-private extension RecipientData {
+extension RecipientData {
     static func hyperliquid() -> RecipientData {
         RecipientData(
             recipient: Recipient(name: "Hyperliquid", address: "", memo: .none),
@@ -169,3 +194,4 @@ private extension RecipientData {
         )
     }
 }
+
