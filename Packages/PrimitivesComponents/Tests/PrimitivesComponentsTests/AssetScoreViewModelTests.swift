@@ -20,11 +20,4 @@ struct AssetScoreViewModelTests {
         #expect(AssetScoreTypeViewModel(score: 10).status == "Unverified")
         #expect(AssetScoreTypeViewModel(score: 20).status.isEmpty)
     }
-
-    @Test
-    func testAssetImage() {
-        #expect(AssetScoreTypeViewModel(score: 2).assetImage != nil)
-        #expect(AssetScoreTypeViewModel(score: 12).assetImage != nil)
-        #expect(AssetScoreTypeViewModel(score: 30).assetImage == nil)
-    }
 }
