@@ -9,14 +9,10 @@ public struct InfoSheetScene: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isPresentedUrl: URL? = nil
 
-    private let type: InfoSheetType
-    private let button: InfoSheetButton?
     private let model: InfoSheetModel
 
-    public init(type: InfoSheetType, button: InfoSheetButton? = nil) {
-        self.type = type
-        self.button = button
-        self.model = type.model(button: button)
+    public init(type: InfoSheetType) {
+        self.model = InfoSheetModelFactory.create(from: type)
     }
 
     public var body: some View {
@@ -30,7 +26,7 @@ public struct InfoSheetScene: View {
                 closeButton
                     .padding([.trailing, .top], .medium)
             }
-            .if(shouldShowButton) {
+            .if(model.shouldShowButton) {
                 $0.safeAreaInset(edge: .bottom) {
                     actionButton
                         .padding([.bottom], .medium)
@@ -49,10 +45,6 @@ public struct InfoSheetScene: View {
                 .foregroundStyle(.secondary)
         }
         .buttonStyle(.plain)
-    }
-    
-    private var shouldShowButton: Bool {
-        model.button != nil
     }
     
     private var actionButton: some View {

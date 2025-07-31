@@ -41,8 +41,6 @@ public struct ConfirmTransferScene: View {
             switch $0 {
             case .info(let type):
                 InfoSheetScene(type: type)
-            case .infoAction(let type, let button):
-                InfoSheetScene(type: type, button: button)
             case .url(let url):
                 SFSafariView(url: url)
             case .networkFeeSelector:

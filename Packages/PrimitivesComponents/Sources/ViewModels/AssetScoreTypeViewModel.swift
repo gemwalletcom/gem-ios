@@ -18,6 +18,10 @@ public struct AssetScoreTypeViewModel {
         }
     }
     
+    public init (scoreType: AssetScoreType) {
+        self.scoreType = scoreType
+    }
+    
     public var hasWarning: Bool {
         switch scoreType {
         case .suspicious, .unverified: true
@@ -33,6 +37,14 @@ public struct AssetScoreTypeViewModel {
         }
     }
     
+    public var description: String {
+        switch scoreType {
+        case .verified: String.empty
+        case .unverified: Localized.Info.AssetStatus.Unverified.description
+        case .suspicious: Localized.Info.AssetStatus.Suspicious.description
+        }
+    }
+    
     public var statusStyle: TextStyle {
         switch scoreType {
         case .verified: .calloutSecondary
@@ -41,9 +53,9 @@ public struct AssetScoreTypeViewModel {
         }
     }
     
-    public var assetImage: AssetImage? {
+    public var assetImage: AssetImage {
         switch scoreType {
-        case .verified: nil
+        case .verified: AssetImage()
         case .unverified: AssetImage(placeholder: Images.TokenStatus.warning)
         case .suspicious: AssetImage(placeholder: Images.TokenStatus.risk)
         }

@@ -22,8 +22,8 @@ public struct AmountNavigationView: View {
         )
         .sheet(item: $model.isPresentingSheet) {
             switch $0 {
-            case let .infoAction(type, button):
-                InfoSheetScene(type: type, button: button)
+            case let .infoAction(type):
+                InfoSheetScene(type: type)
             case .fiatConnect(let assetAddress, let walletId):
                 NavigationStack {
                     FiatConnectNavigationView(

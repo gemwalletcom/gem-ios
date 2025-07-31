@@ -27,12 +27,8 @@ public struct InfoSheetModel: Sendable {
     
     public var buttonTitle: String {
         switch button {
-        case .url:
-            return Localized.Common.learnMore
-        case .action(let title, _):
-            return title
-        case .none:
-            return Localized.Common.done
+        case .url, .none: Localized.Common.learnMore
+        case .action(let title, _): title
         }
     }
     
@@ -51,4 +47,6 @@ public struct InfoSheetModel: Sendable {
         self.titleStyle = titleStyle
         self.descriptionStyle = descriptionStyle
     }
+    
+    var shouldShowButton: Bool { button != nil }
 }

@@ -13,7 +13,7 @@ import GemstonePrimitives
 public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case networkFee(Chain)
     case insufficientBalance(Asset, image: AssetImage)
-    case insufficientNetworkFee(Asset, image: AssetImage, required: BigInt?)
+    case insufficientNetworkFee(Asset, image: AssetImage, required: BigInt?, action: InfoSheetAction)
     case transactionState(imageURL: URL?, placeholder: Image?, state: TransactionState)
     case watchWallet
     case stakeLockTime(Image?)
@@ -25,7 +25,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case assetStatus(AssetScoreType)
     case accountMinimalBalance(Asset, required: BigInt)
     // stake
-    case stakeMinimumAmount(Asset, required: BigInt)
+    case stakeMinimumAmount(Asset, required: BigInt, action: InfoSheetAction)
     // perpetuals
     case fundingRate
     case fundingPayments
@@ -37,15 +37,15 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         switch self {
         case .networkFee: "networkFees"
         case .insufficientNetworkFee: "insufficientNetworkFee"
-        case .insufficientBalance(let asset, _): "insufficientBalance_\(asset.id.identifier)"
-        case .transactionState(_, _, let state): state.id
+        case let .insufficientBalance(asset, _): "insufficientBalance_\(asset.id.identifier)"
+        case let .transactionState(_, _, state): state.id
         case .watchWallet: "watchWallet"
         case .stakeLockTime: "stakeLockTime"
         case .priceImpact: "priceImpact"
         case .slippage: "slippage"
-        case .assetStatus(let status): "assetStatus_\(status.rawValue)"
+        case let .assetStatus(status): "assetStatus_\(status.rawValue)"
         case let .accountMinimalBalance(asset, amount): "accountMinimalBalance_\(asset.id.identifier)\(amount)"
-        case let .stakeMinimumAmount(asset, amount): "stakeMinimumAmount_\(asset.id.identifier)\(amount)"
+        case let .stakeMinimumAmount(asset, amount, _): "stakeMinimumAmount_\(asset.id.identifier)\(amount)"
         case .noQuote: "noQuote"
         case .fundingRate: "fundingRate"
         case .fundingPayments: "fundingPayments"
@@ -54,191 +54,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         }
     }
     
-    private var defaultButton: InfoSheetButton? {
-        switch self {
-        case .networkFee: .url(Docs.url(.networkFees))
-        case .priceImpact: .url(Docs.url(.priceImpact))
-        case .slippage: .url(Docs.url(.slippage))
-        case .transactionState: .url(Docs.url(.transactionStatus))
-        case .watchWallet: .url(Docs.url(.whatIsWatchWallet))
-        case .stakeLockTime: .url(Docs.url(.stakingLockTime))
-        case .noQuote: .url(Docs.url(.noQuotes))
-        case .assetStatus: .url(Docs.url(.tokenVerification))
-        case .fundingRate: .url(Docs.url(.perpetualsFundingRate))
-        case .fundingPayments: .url(Docs.url(.perpetualsFundingPayments))
-        case .liquidationPrice: .url(Docs.url(.perpetualsLiquidationPrice))
-        case .openInterest: .url(Docs.url(.perpetualsOpenInterest))
-        default: nil
-        }
-    }
-    
-    public func model(button: InfoSheetButton? = nil) -> InfoSheetModel {
-        let button = button ?? defaultButton
-        
-        switch self {
-        case let .networkFee(chain):
-            return InfoSheetModel(
-                title: Localized.Info.NetworkFee.title,
-                description: Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol),
-                image: .image(Images.Info.networkFee),
-                button: button
-            )
-        case let .insufficientBalance(asset, image):
-            return InfoSheetModel(
-                title: Localized.Info.InsufficientBalance.title,
-                description: Localized.Info.InsufficientBalance.description(asset.symbol),
-                image: .assetImage(image),
-                button: button
-            )
-        case let .insufficientNetworkFee(asset, image, required):
-            let formatter = ValueFormatter(style: .full)
-            let description = if let required = required {
-                Localized.Info.InsufficientNetworkFeeBalance.description(
-                    formatter.string(required, decimals: asset.chain.asset.decimals.asInt),
-                    asset.chain.asset.name,
-                    asset.chain.asset.symbol
-                )
-            } else {
-                Localized.Info.InsufficientNetworkFeeBalance.description("", asset.chain.asset.name, asset.chain.asset.symbol)
-            }
-            return InfoSheetModel(
-                title: Localized.Info.InsufficientNetworkFeeBalance.title(asset.chain.asset.symbol),
-                description: description,
-                image: .assetImage(image),
-                button: button
-            )
-        case let .transactionState(imageURL, placeholder, state):
-            let stateImage = switch state {
-            case .pending: Images.Transaction.State.pending
-            case .confirmed: Images.Transaction.State.success
-            case .failed, .reverted: Images.Transaction.State.error
-            }
-            let image: InfoSheetImage = .assetImage(
-                AssetImage(
-                    imageURL: imageURL,
-                    placeholder: placeholder,
-                    chainPlaceholder: stateImage
-                )
-            )
-            let title = switch state {
-            case .pending: Localized.Transaction.Status.pending
-            case .confirmed: Localized.Transaction.Status.confirmed
-            case .failed: Localized.Transaction.Status.failed
-            case .reverted: Localized.Transaction.Status.reverted
-            }
-            let description = switch state {
-            case .pending: Localized.Info.Transaction.Pending.description
-            case .confirmed: Localized.Info.Transaction.Success.description
-            case .failed, .reverted: Localized.Info.Transaction.Error.description
-            }
-            return InfoSheetModel(
-                title: title,
-                description: description,
-                image: image,
-                button: button)
-        case .watchWallet:
-            return InfoSheetModel(
-                title: Localized.Info.WatchWallet.title,
-                description: Localized.Info.WatchWallet.description,
-                image: nil,
-                button: button
-            )
-        case let .stakeLockTime(placeholder):
-            return InfoSheetModel(
-                title: Localized.Stake.lockTime,
-                description: Localized.Info.LockTime.description,
-                image: placeholder.map { .image($0) },
-                button: button
-            )
-        case .priceImpact:
-            return InfoSheetModel(
-                title: Localized.Swap.priceImpact,
-                description: Localized.Info.PriceImpact.description,
-                image: .image(Images.Logo.logo),
-                button: button
-            )
-        case .slippage:
-            return InfoSheetModel(
-                title: Localized.Swap.slippage,
-                description: Localized.Info.Slippage.description,
-                image: .image(Images.Logo.logo),
-                button: button
-            )
-        case .noQuote:
-            return InfoSheetModel(
-                title: Localized.Errors.Swap.noQuoteAvailable,
-                description: Localized.Info.NoQuote.description,
-                image: .image(Images.Logo.logo),
-                button: button
-            )
-        case let .assetStatus(status):
-            let image: InfoSheetImage = switch status {
-            case .verified: .image(Images.Logo.logo)
-            case .unverified: .image(Images.TokenStatus.warning)
-            case .suspicious: .image(Images.TokenStatus.risk)
-            }
-            let title = switch status {
-            case .verified: String.empty
-            case .unverified: Localized.Asset.Verification.unverified
-            case .suspicious: Localized.Asset.Verification.suspicious
-            }
-            let description = switch status {
-            case .verified: String.empty
-            case .unverified: Localized.Info.AssetStatus.Unverified.description
-            case .suspicious: Localized.Info.AssetStatus.Suspicious.description
-            }
-            return InfoSheetModel(
-                title: title,
-                description: description,
-                image: image,
-                button: button
-            )
-        case let .accountMinimalBalance(asset, required):
-            let formatter = ValueFormatter(style: .full)
-            let amount = formatter.string(required, asset: asset)
-            return InfoSheetModel(
-                title: Localized.Info.AccountMinimumBalance.title,
-                description: Localized.Transfer.minimumAccountBalance(amount),
-                image: .image(Images.Logo.logo),
-                button: button
-            )
-        case let .stakeMinimumAmount(asset, required):
-            let formatter = ValueFormatter(style: .full)
-            let amount = formatter.string(required, asset: asset)
-            return InfoSheetModel(
-                title: Localized.Info.StakeMinimumAmount.title,
-                description: Localized.Info.StakeMinimumAmount.description(asset.name, amount),
-                image: .image(Images.Logo.logo),
-                button: button
-            )
-        case .fundingRate:
-            return InfoSheetModel(
-                title: Localized.Info.FundingRate.title,
-                description: Localized.Info.FundingRate.description,
-                image: .image(Images.Logo.logo),
-                button: button
-            )
-        case .fundingPayments:
-            return InfoSheetModel(
-                title: Localized.Info.FundingPayments.title,
-                description: Localized.Info.FundingPayments.description,
-                image: .image(Images.Logo.logo),
-                button: button
-            )
-        case .liquidationPrice:
-            return InfoSheetModel(
-                title: Localized.Info.LiquidationPrice.title,
-                description: Localized.Info.LiquidationPrice.description,
-                image: .image(Images.Logo.logo),
-                button: button
-            )
-        case .openInterest:
-            return InfoSheetModel(
-                title: Localized.Info.OpenInterest.title,
-                description: Localized.Info.OpenInterest.description,
-                image: .image(Images.Logo.logo),
-                button: button
-            )
-        }
+    public static func == (lhs: InfoSheetType, rhs: InfoSheetType) -> Bool {
+        lhs.id == rhs.id
     }
 }
