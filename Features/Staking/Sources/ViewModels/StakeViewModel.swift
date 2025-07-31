@@ -51,6 +51,7 @@ public final class StakeViewModel {
     var stakeTitle: String { Localized.Transfer.Stake.title }
     var claimRewardsTitle: String { Localized.Transfer.ClaimRewards.title }
     var assetTitle: String { assetModel.title }
+    var stakeInfoUrl: URL { Docs.url(.staking) }
 
     var stakeAprTitle: String { Localized.Stake.apr("") }
     var stakeAprValue: String {

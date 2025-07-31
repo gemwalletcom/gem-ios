@@ -21,6 +21,7 @@ public extension Perpetual {
             name: name,
             provider: provider,
             assetId: assetId,
+            identifier: "0",
             price: price,
             pricePercentChange24h: pricePercentChange24h,
             openInterest: openInterest,

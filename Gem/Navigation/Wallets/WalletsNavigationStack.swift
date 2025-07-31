@@ -10,6 +10,7 @@ import ManageWallets
 struct WalletsNavigationStack: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.avatarService) private var avatarService
+    @Environment(\.nameService) private var nameService
 
     @State private var navigationPath = NavigationPath()
 
@@ -55,6 +56,7 @@ struct WalletsNavigationStack: View {
             .sheet(isPresented: $isPresentingImportWalletSheet) {
                 ImportWalletNavigationStack(
                     model: ImportWalletTypeViewModel(walletService: walletService),
+                    nameService: nameService,
                     isPresentingWallets: $isPresentingWallets
                 )
             }
