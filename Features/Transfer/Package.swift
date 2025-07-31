@@ -84,7 +84,6 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
                 .product(name: "WalletsServiceTestKit", package: "SystemServices"),
-                .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "BlockchainTestKit", package: "Blockchain"),
                 .product(name: "ScanServiceTestKit", package: "ChainServices"),
                 .product(name: "SwapServiceTestKit", package: "FeatureServices"),
