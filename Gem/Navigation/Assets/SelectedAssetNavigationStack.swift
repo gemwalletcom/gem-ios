@@ -59,7 +59,6 @@ struct SelectedAssetNavigationStack: View  {
                             nodeService: nodeService,
                             walletsService: walletsService,
                             scanService: scanService,
-                            swapService: swapService,
                             balanceService: balanceService,
                             priceService: priceService,
                             transactionService: transactionService,

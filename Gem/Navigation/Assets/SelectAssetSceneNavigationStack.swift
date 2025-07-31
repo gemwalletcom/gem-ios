@@ -10,7 +10,6 @@ import PrimitivesComponents
 import Keystore
 import Assets
 import Transfer
-import SwapService
 import ChainService
 import ExplorerService
 import Signer
@@ -23,7 +22,6 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.keystore) private var keystore
     @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
     @Environment(\.transactionService) private var transactionService
@@ -84,7 +82,6 @@ struct SelectAssetSceneNavigationStack: View {
                             nodeService: nodeService,
                             walletsService: walletsService,
                             scanService: scanService,
-                            swapService: swapService,
                             balanceService: balanceService,
                             priceService: priceService,
                             transactionService: transactionService,
@@ -160,7 +157,6 @@ struct SelectAssetSceneNavigationStack: View {
                             nodeService: nodeService,
                             walletsService: walletsService,
                             scanService: scanService,
-                            swapService: swapService,
                             balanceService: balanceService,
                             priceService: priceService,
                             transactionService: transactionService,

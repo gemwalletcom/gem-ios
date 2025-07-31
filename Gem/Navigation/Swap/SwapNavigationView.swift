@@ -8,7 +8,6 @@ import InfoSheet
 import Swap
 import Assets
 import Transfer
-import SwapService
 import ExplorerService
 import Signer
 
@@ -18,7 +17,6 @@ struct SwapNavigationView: View {
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
     @Environment(\.transactionService) private var transactionService
@@ -47,7 +45,6 @@ struct SwapNavigationView: View {
                             nodeService: nodeService,
                             walletsService: model.walletsService,
                             scanService: scanService,
-                            swapService: swapService,
                             balanceService: balanceService,
                             priceService: priceService,
                             transactionService: transactionService,

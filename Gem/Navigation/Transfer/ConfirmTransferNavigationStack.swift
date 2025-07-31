@@ -6,7 +6,6 @@ import Primitives
 import ChainService
 import Localization
 import Transfer
-import SwapService
 import ExplorerService
 import Signer
 
@@ -16,7 +15,6 @@ struct ConfirmTransferNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
     @Environment(\.transactionService) private var transactionService
@@ -46,7 +44,6 @@ struct ConfirmTransferNavigationStack: View {
                         nodeService: nodeService,
                         walletsService: walletsService,
                         scanService: scanService,
-                        swapService: swapService,
                         balanceService: balanceService,
                         priceService: priceService,
                         transactionService: transactionService,

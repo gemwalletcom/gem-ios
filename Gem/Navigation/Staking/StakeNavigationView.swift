@@ -7,7 +7,6 @@ import Transfer
 import Staking
 import ChainService
 import NodeService
-import SwapService
 import ExplorerService
 import Signer
 
@@ -17,7 +16,6 @@ struct StakeNavigationView: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
     @Environment(\.transactionService) private var transactionService
@@ -65,7 +63,6 @@ struct StakeNavigationView: View {
                         nodeService: nodeService,
                         walletsService: walletsService,
                         scanService: scanService,
-                        swapService: swapService,
                         balanceService: balanceService,
                         priceService: priceService,
                         transactionService: transactionService,

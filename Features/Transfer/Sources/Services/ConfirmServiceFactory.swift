@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import SwapService
 import BalanceService
 import PriceService
 import TransactionService
@@ -20,7 +19,6 @@ public struct ConfirmServiceFactory {
         nodeService: NodeService,
         walletsService: WalletsService,
         scanService: ScanService,
-        swapService: SwapService,
         balanceService: BalanceService,
         priceService: PriceService,
         transactionService: TransactionService,
@@ -29,10 +27,6 @@ public struct ConfirmServiceFactory {
         let chainService = ChainServiceFactory(nodeProvider: nodeService).service(for: chain)
 
         return ConfirmService(
-            swapDataProvider: SwapQuoteDataProvider(
-                keystore: keystore,
-                swapService: swapService
-            ),
             explorerService: ExplorerService.standard,
             metadataProvider: TransferMetadataProvider(
                 balanceService: balanceService,
@@ -40,8 +34,7 @@ public struct ConfirmServiceFactory {
             ),
             transferTransactionProvider: TransferTransactionProvider(
                 chainService: chainService,
-                scanService: scanService,
-                swapService: swapService
+                scanService: scanService
             ),
             transferExecutor: TransferExecutor(
                 signer: TransactionSigner(keystore: keystore),
@@ -50,7 +43,6 @@ public struct ConfirmServiceFactory {
                 transactionService: transactionService
             ),
             keystore: keystore,
-            swapService: swapService,
             chainService: chainService
         )
     }

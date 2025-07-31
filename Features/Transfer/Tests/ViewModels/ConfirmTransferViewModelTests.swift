@@ -7,7 +7,6 @@ import PrimitivesTestKit
 import WalletsServiceTestKit
 import BlockchainTestKit
 import ScanServiceTestKit
-import SwapServiceTestKit
 import KeystoreTestKit
 import BalanceServiceTestKit
 import PriceServiceTestKit
@@ -80,7 +79,6 @@ private extension ConfirmTransferViewModel {
                 nodeService: .mock(),
                 walletsService: .mock(),
                 scanService: .mock(),
-                swapService: .mock(),
                 balanceService: .mock(),
                 priceService: .mock(),
                 transactionService: .mock(),

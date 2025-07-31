@@ -4,7 +4,6 @@ import Blockchain
 import Primitives
 import ScanService
 import BigInt
-import SwapService
 import Validators
 
 public protocol TransferTransactionProvidable: Sendable {
@@ -20,17 +19,14 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
     private let feeRatesProvider: any FeeRateProviding
     private let chainService: any ChainServiceable
     private let scanService: ScanService
-    private let swapService: SwapService
 
     public init(
         chainService: any ChainServiceable,
         scanService: ScanService,
-        swapService: SwapService
     ) {
         self.feeRatesProvider = FeeRateService(service: chainService)
         self.chainService = chainService
         self.scanService = scanService
-        self.swapService = swapService
     }
 
     public func loadTransferTransactionData(

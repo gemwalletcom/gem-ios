@@ -5,7 +5,6 @@ import Primitives
 import Localization
 import WalletConnector
 import Transfer
-import SwapService
 import TransactionService
 import ExplorerService
 import Signer
@@ -17,7 +16,6 @@ struct WalletConnectorNavigationStack: View {
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.scanService) private var scanService
     @Environment(\.nodeService) private var nodeService
-    @Environment(\.swapService) private var swapService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
     @Environment(\.transactionService) private var transactionService
@@ -47,7 +45,6 @@ struct WalletConnectorNavigationStack: View {
                                 nodeService: nodeService,
                                 walletsService: walletsService,
                                 scanService: scanService,
-                                swapService: swapService,
                                 balanceService: balanceService,
                                 priceService: priceService,
                                 transactionService: transactionService,

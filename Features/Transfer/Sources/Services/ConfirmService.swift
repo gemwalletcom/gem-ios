@@ -1,13 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import SwapService
 import BalanceService
 import PriceService
 import TransactionService
 import ExplorerService
 import Keystore
-import Swap
 import WalletsService
 import ScanService
 import Primitives
@@ -17,32 +15,26 @@ import Blockchain
 import ChainService
 
 public struct ConfirmService: Sendable {
-    private let swapDataProvider: any SwapQuoteDataProvidable
     private let metadataProvider: any TransferMetadataProvidable
     private let transferTransactionProvider: any TransferTransactionProvidable
     private let transferExecutor: any TransferExecutable
     private let keystore: any Keystore
-    private let swapService: SwapService
     private let chainService: any ChainServiceable
     private let explorerService: any ExplorerLinkFetchable
 
     public init(
-        swapDataProvider: any SwapQuoteDataProvidable,
         explorerService: any ExplorerLinkFetchable,
         metadataProvider: any TransferMetadataProvidable,
         transferTransactionProvider: any TransferTransactionProvidable,
         transferExecutor: any TransferExecutable,
         keystore: any Keystore,
-        swapService: SwapService,
         chainService: any ChainServiceable
     ) {
-        self.swapDataProvider = swapDataProvider
         self.explorerService = explorerService
         self.metadataProvider = metadataProvider
         self.transferTransactionProvider = transferTransactionProvider
         self.transferExecutor = transferExecutor
         self.keystore = keystore
-        self.swapService = swapService
         self.chainService = chainService
     }
 
