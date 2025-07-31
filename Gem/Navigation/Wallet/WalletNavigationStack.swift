@@ -110,20 +110,20 @@ struct WalletNavigationStack: View {
                         isPresentingTransferData: $model.isPresentingTransferData
                     )
                 }
-                .navigationDestination(for: Scenes.Perpetual.self) { scene in
+                .navigationDestination(for: Scenes.Perpetual.self) {
                     PerpetualNavigationView(
-                        perpetualData: scene.perpetualData,
+                        perpetualData: $0.perpetualData,
                         wallet: model.wallet,
                         perpetualService: perpetualService,
                         isPresentingTransferData: $model.isPresentingTransferData,
                         isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
                     )
                 }
-                .sheet(item: $model.isPresentingSelectAssetType) { value in
+                .sheet(item: $model.isPresentingSelectAssetType) {
                     SelectAssetSceneNavigationStack(
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
-                            selectType: value,
+                            selectType: $0,
                             assetsService: assetsService,
                             walletsService: walletsService,
                             priceAlertService: priceAlertService
@@ -137,10 +137,10 @@ struct WalletNavigationStack: View {
                 .sheet(item: $model.isPresentingInfoSheet) {
                     InfoSheetScene(model: InfoSheetViewModel(type: $0))
                 }
-                .sheet(item: $model.isPresentingTransferData) { data in
+                .sheet(item: $model.isPresentingTransferData) {
                     ConfirmTransferNavigationStack(
                         wallet: model.wallet,
-                        transferData: data,
+                        transferData: $0,
                         onComplete: model.onTransferComplete
                     )
                 }
@@ -160,7 +160,7 @@ struct WalletNavigationStack: View {
                                 balanceService: balanceService,
                                 stakeService: stakeService
                             ),
-                            onTransferAction: { transferData in
+                            onTransferAction: {
                                 model.isPresentingPerpetualRecipientData = nil
                                 model.isPresentingTransferData = $0
                             }

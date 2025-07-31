@@ -9,7 +9,6 @@ import Keystore
 import WalletsService
 import ScanService
 import Primitives
-import PrimitivesComponents
 import BigInt
 import Blockchain
 import ChainService

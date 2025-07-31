@@ -7,7 +7,6 @@ import Localization
 import InfoSheet
 import PrimitivesComponents
 import FiatConnect
-import Validators
 import Swap
 
 public struct ConfirmTransferScene: View {
