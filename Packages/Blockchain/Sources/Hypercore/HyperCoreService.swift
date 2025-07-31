@@ -1,15 +1,19 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
+import Keychain
 import Primitives
 import SwiftHTTPClient
-import BigInt
 
 public struct HyperCoreService: Sendable {
-    
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
+    let keychain = KeychainDefault()
     
+    public static let HLAgentAddress: String = "hyperliquid_agent_address"
+    public static let HLAgentKey: String = "hyperliquid_agent_private_key"
+
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>
@@ -21,21 +25,20 @@ public struct HyperCoreService: Sendable {
 
 // MARK: - Business Logic
 
-extension HyperCoreService {
-    
-    public func getPositions(user: String) async throws -> HypercoreAssetPositions {
+public extension HyperCoreService {
+    func getPositions(user: String) async throws -> HypercoreAssetPositions {
         return try await provider
             .request(.clearinghouseState(user: user))
             .map(as: HypercoreAssetPositions.self)
     }
-    
-    public func getMetadata() async throws -> HypercoreMetadataResponse {
+
+    func getMetadata() async throws -> HypercoreMetadataResponse {
         return try await provider
             .request(.metaAndAssetCtxs)
             .map(as: HypercoreMetadataResponse.self)
     }
-    
-    public func getCandlesticks(coin: String, interval: String = "1m", startTime: Int, endTime: Int) async throws -> [HypercoreCandlestick] {
+
+    func getCandlesticks(coin: String, interval: String, startTime: Int, endTime: Int) async throws -> [HypercoreCandlestick] {
         return try await provider
             .request(.candleSnapshot(coin: coin, interval: interval, startTime: startTime, endTime: endTime))
             .map(as: [HypercoreCandlestick].self)
@@ -48,40 +51,49 @@ extension HyperCoreService: ChainServiceable {}
 
 // MARK: - ChainAddressStatusFetchable
 
-extension HyperCoreService {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+public extension HyperCoreService {
+    func getAddressStatus(address: String) async throws -> [AddressStatus] {
         return []
     }
 }
 
 // MARK: - ChainBalanceable
 
-extension HyperCoreService {
-    public func coinBalance(for address: String) async throws -> AssetBalance {
+public extension HyperCoreService {
+    func coinBalance(for address: String) async throws -> AssetBalance {
         AssetBalance(assetId: AssetId(chain: chain), balance: Balance(available: .zero))
     }
-    
-    public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
+
+    func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         return []
     }
-    
-    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
+
+    func getStakeBalance(for address: String) async throws -> AssetBalance? {
         return nil
     }
 }
 
 // MARK: - ChainBroadcastable
 
-extension HyperCoreService {
-    public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        throw AnyError("Not implemented")
+public extension HyperCoreService {
+    func broadcast(data: String, options: BroadcastOptions) async throws -> String {
+        let response = try await self.provider.request(.broadcast(data: data))
+        let result = try response.map(as: HypercoreResponse.self)
+        
+        switch result.status {
+        case "ok": return data
+        case "err":
+            throw try response.map(as: HypercoreErrorResponse.self)
+        default:
+            throw ChainServiceErrors.broadcastError(chain)
+        }
     }
 }
 
 // MARK: - ChainFeeRateFetchable
 
-extension HyperCoreService {
-    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+public extension HyperCoreService {
+    func feeRates(type: TransferDataType) async throws -> [FeeRate] {
         return [
             FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: 0))
         ]
@@ -90,57 +102,58 @@ extension HyperCoreService {
 
 // MARK: - ChainIDFetchable
 
-extension HyperCoreService {
-    public func getChainID() async throws -> String {
+public extension HyperCoreService {
+    func getChainID() async throws -> String {
         return "42161" // Arbitrum chain ID
     }
 }
 
 // MARK: - ChainLatestBlockFetchable
 
-extension HyperCoreService {
-    public func getLatestBlock() async throws -> BigInt {
+public extension HyperCoreService {
+    func getLatestBlock() async throws -> BigInt {
         return BigInt(0)
     }
 }
 
 // MARK: - ChainStakable
 
-extension HyperCoreService {
-    public func getValidators(apr: Double) async throws -> [DelegationValidator] {
+public extension HyperCoreService {
+    func getValidators(apr: Double) async throws -> [DelegationValidator] {
         return []
     }
-    
-    public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
+
+    func getStakeDelegations(address: String) async throws -> [DelegationBase] {
         return []
     }
 }
 
 // MARK: - ChainSyncable
 
-extension HyperCoreService {
-    public func getInSync() async throws -> Bool {
+public extension HyperCoreService {
+    func getInSync() async throws -> Bool {
         return true
     }
 }
 
 // MARK: - ChainTokenable
 
-extension HyperCoreService {
-    public func getTokenData(tokenId: String) async throws -> Asset {
+public extension HyperCoreService {
+    func getTokenData(tokenId: String) async throws -> Asset {
         throw AnyError("Not implemented")
     }
-    
-    public func getIsTokenAddress(tokenId: String) -> Bool {
+
+    func getIsTokenAddress(tokenId: String) -> Bool {
         return false
     }
 }
 
 // MARK: - ChainTransactionDataLoadable
 
-extension HyperCoreService {
-    public func load(input: TransactionInput) async throws -> TransactionData {
+public extension HyperCoreService {
+    func load(input: TransactionInput) async throws -> TransactionData {
         TransactionData(
+            sequence: input.preload.isDestinationAddressExist ? 1 : 0,
             fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
         )
     }
@@ -148,16 +161,33 @@ extension HyperCoreService {
 
 // MARK: - ChainTransactionPreloadable
 
-extension HyperCoreService {
-    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        TransactionPreload()
+public extension HyperCoreService {
+    func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        let keychain = KeychainDefault()
+        if let address = try keychain.get(Self.HLAgentAddress) {
+            let result = try await self.provider
+                .request(.userRole(address: address))
+                .map(as: HypercoreUserRole.self)
+            
+            return TransactionPreload(
+                isDestinationAddressExist: result.role == "agent"
+            )
+        } else {
+            return TransactionPreload(isDestinationAddressExist: false)
+        }
     }
 }
 
 // MARK: - ChainTransactionStateFetchable
 
-extension HyperCoreService {
-    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
+public extension HyperCoreService {
+    func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         TransactionChanges(state: .confirmed)
+    }
+}
+
+extension HypercoreErrorResponse: LocalizedError {
+    public var errorDescription: String? {
+        response
     }
 }

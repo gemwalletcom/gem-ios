@@ -25,36 +25,38 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
     
     func getCandlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
         let interval = hyperliquidInterval(for: period)
-        let endTime = Int(Date().timeIntervalSince1970 * 1000)
-        let startTime = endTime - (60 * interval.durationMs)
+        let endTime = Int(Date().timeIntervalSince1970)
+        let startTime = endTime - (interval.hours * 60 * 60)
         
         return try await hyperCoreService.getCandlesticks(
             coin: symbol,
             interval: interval.name,
-            startTime: startTime,
-            endTime: endTime
+            startTime: startTime * 1000,
+            endTime: endTime * 1000
         )
         .compactMap { $0.toCandlestick() }
     }
     
-    private func hyperliquidInterval(for period: ChartPeriod) -> (name: String, durationMs: Int) {
+    private func hyperliquidInterval(for period: ChartPeriod) -> (name: String, hours: Int) {
         switch period {
-        case .hour: ("1m", 60_000)
-        case .day: ("5m", 300_000)
-        case .week: ("1h", 3_600_000)
-        case .month: ("4h", 14_400_000)
-        case .year: ("1d", 86_400_000)
-        case .all: ("1w", 604_800_000)
+        case .hour: ("1m", 1)
+        case .day: ("30m", 24)
+        case .week: ("4h", 7 * 24)
+        case .month: ("12h", 30 * 24)
+        case .year: ("1w", 365 * 24)
+        case .all: ("1M", 365 * 5 * 24)
         }
     }
     
     func getPerpetualsData() async throws -> [PerpetualData] {
         let metadata = try await hyperCoreService.getMetadata()
         
-        return zip(metadata.universe.universe, metadata.assetMetadata).compactMap { universeAsset, assetMetadata in
+        return zip(metadata.universe.universe, metadata.assetMetadata).enumerated().compactMap { index, pair in
+            let (universeAsset, assetMetadata) = pair
             guard let perpetual = assetMetadata.mapToPerpetual(
                       symbol: universeAsset.name,
-                      maxLeverage: universeAsset.maxLeverage
+                      maxLeverage: universeAsset.maxLeverage,
+                      index: index
                   ) else { return .none }
             
             let assetId = mapHypercoreCoinToAssetId(universeAsset.name)

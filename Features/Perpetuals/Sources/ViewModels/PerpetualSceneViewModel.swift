@@ -1,24 +1,22 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import SwiftUI
-import Primitives
-import Store
-import PerpetualService
-import PrimitivesComponents
-import Formatters
 import Components
-import Localization
+import Foundation
 import InfoSheet
+import Localization
+import PerpetualService
+import Primitives
+import PrimitivesComponents
+import Store
+import SwiftUI
 
 @Observable
 @MainActor
 public final class PerpetualSceneViewModel {
-    
     private let perpetualService: PerpetualServiceable
     private let onTransferData: TransferDataAction
     private let onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)?
-    
+
     public let wallet: Wallet
     public let asset: Asset
     public var positionsRequest: PerpetualPositionsRequest
@@ -31,15 +29,16 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
-    
+    let formatter = PerpetualPriceFormatter()
+
     public var isPresentingInfoSheet: InfoSheetType?
-    
+
     public let perpetualViewModel: PerpetualViewModel
-    
+
     public var positionViewModels: [PerpetualPositionViewModel] {
         positions.map { PerpetualPositionViewModel(data: $0) }
     }
-    
+
     public init(
         wallet: Wallet,
         perpetualData: PerpetualData,
@@ -55,21 +54,21 @@ public final class PerpetualSceneViewModel {
         self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
     }
-    
+
     public var navigationTitle: String {
         perpetualViewModel.name
     }
-    
+
     public var hasOpenPosition: Bool {
         !positionViewModels.isEmpty
     }
-    
+
     public var positionSectionTitle: String { Localized.Perpetual.position }
     public var infoSectionTitle: String { Localized.Common.info }
     public var closePositionTitle: String { Localized.Perpetual.closePosition }
     public var longButtonTitle: String { Localized.Perpetual.long }
     public var shortButtonTitle: String { Localized.Perpetual.short }
-    
+
     public func fetch() async {
         Task {
             await fetchCandlesticks()
@@ -85,10 +84,10 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
-    
+
     public func fetchCandlesticks() async {
         state = .loading
-        
+
         do {
             let candlesticks = try await perpetualService.candlesticks(
                 symbol: perpetualViewModel.perpetual.name,
@@ -103,52 +102,91 @@ public final class PerpetualSceneViewModel {
 
 // MARK: - Actions
 
-extension PerpetualSceneViewModel {
-    public func onSelectFundingRateInfo() {
+public extension PerpetualSceneViewModel {
+    func onSelectFundingRateInfo() {
         isPresentingInfoSheet = .fundingRate
     }
-    
-    public func onSelectFundingPaymentsInfo() {
+
+    func onSelectFundingPaymentsInfo() {
         isPresentingInfoSheet = .fundingPayments
     }
-    
-    public func onSelectLiquidationPriceInfo() {
+
+    func onSelectLiquidationPriceInfo() {
         isPresentingInfoSheet = .liquidationPrice
     }
-    
-    public func onSelectOpenInterestInfo() {
+
+    func onSelectOpenInterestInfo() {
         isPresentingInfoSheet = .openInterest
     }
-    
-    public func onClosePosition() {
+
+    func onClosePosition() {
+        guard
+            let position = positions.first?.position,
+            let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
+            return
+        }
+        // Add 2% slippage for market-like execution
+        // For closing long: sell 2% below market
+        // For closing short: buy 2% above market
+        let positionPrice = switch position.direction {
+        case .long: perpetualViewModel.perpetual.price * 0.98
+        case .short: perpetualViewModel.perpetual.price * 1.02
+        }
+        
+        let price = formatter.formatPrice(positionPrice, decimals: Int(asset.decimals))
+        let size = formatter.formatSize(abs(position.size))
+        let data = PerpetualConfirmData(
+            direction: position.direction,
+            asset: asset,
+            assetIndex: Int(assetIndex),
+            price: price,
+            size: size
+        )
+        
         let transferData = TransferData(
-            type: .perpetual(asset, .close),
+            type: .perpetual(asset, .close(data)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false
         )
-        
+
         onTransferData?(transferData)
     }
-    
-    public func onOpenLongPosition() {
-        onPerpetualRecipientData?(PerpetualRecipientData(
-            recipientData: .hyperliquid(),
-            direction: .long,
-            asset: asset
-        ))
+
+    func onOpenLongPosition() {
+        guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
+            return
+        }
+        let data = PerpetualRecipientData(
+            recipient: .hyperliquid(),
+            data: PerpetualTransferData(
+                direction: .long,
+                asset: asset,
+                assetIndex: Int(assetIndex),
+                price: perpetualViewModel.perpetual.price
+            )
+        )
+        onPerpetualRecipientData?(data)
     }
-    
-    public func onOpenShortPosition() {
-        onPerpetualRecipientData?(PerpetualRecipientData(
-            recipientData: .hyperliquid(),
-            direction: .short,
-            asset: asset
-        ))
+
+    func onOpenShortPosition() {
+        guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
+            return
+        }
+        let data = PerpetualRecipientData(
+            recipient: .hyperliquid(),
+            data: PerpetualTransferData(
+                direction: .short,
+                asset: asset,
+                assetIndex: Int(assetIndex),
+                price: perpetualViewModel.perpetual.price
+            )
+        )
+        onPerpetualRecipientData?(data)
     }
 }
 
-private extension RecipientData {
+extension RecipientData {
     static func hyperliquid() -> RecipientData {
         RecipientData(
             recipient: Recipient(name: "Hyperliquid", address: "", memo: .none),
@@ -156,3 +194,4 @@ private extension RecipientData {
         )
     }
 }
+

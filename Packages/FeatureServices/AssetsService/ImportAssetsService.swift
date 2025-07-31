@@ -48,11 +48,16 @@ public struct ImportAssetsService: Sendable {
                 let isStakable = GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).isStakeSupported
                 let isSwapable = GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).isSwapSupported
                 let isBuyable = score.rank >= 40
+                // Disable hypercore to show up in search
+                let isEnabled = switch chain {
+                case .hyperCore: false
+                default: true
+                }
             
                 return AssetBasic(
                     asset: $0.asset,
                     properties: AssetProperties(
-                        isEnabled: true,
+                        isEnabled: isEnabled,
                         isBuyable: isBuyable,
                         isSellable: false,
                         isSwapable: isSwapable,

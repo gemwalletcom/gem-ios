@@ -281,7 +281,7 @@ public struct Migrations {
         
         migrator
             .registerMigration(
-                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 8"
+                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 10"
             ) { db in
             try? db.drop(table: PerpetualRecord.databaseTableName)
             try? db.drop(table: PerpetualPositionRecord.databaseTableName)

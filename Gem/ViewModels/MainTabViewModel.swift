@@ -18,7 +18,7 @@ struct MainTabViewModel {
     }
     
     var isMarketEnabled: Bool {
-        Preferences.standard.isDeveloperEnabled && wallet.type == .multicoin
+        false //TODO: Disabled. Preferences.standard.isDeveloperEnabled && wallet.type == .multicoin
     }
         
     var isCollectionsEnabled: Bool {

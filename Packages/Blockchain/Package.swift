@@ -8,10 +8,12 @@ let package = Package(
     products: [
         .library(
             name: "Blockchain",
-            targets: ["Blockchain"]),
+            targets: ["Blockchain"]
+        ),
         .library(
             name: "BlockchainTestKit",
-            targets: ["BlockchainTestKit"]),
+            targets: ["BlockchainTestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -19,7 +21,8 @@ let package = Package(
         .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
-        .package(name: "Formatters", path: "../Formatters")
+        .package(name: "Formatters", path: "../Formatters"),
+        .package(name: "Keychain", path: "../Keychain"),
     ],
     targets: [
         .target(
@@ -31,7 +34,8 @@ let package = Package(
                 .product(name: "WalletCorePrimitives", package: "WalletCore"),
                 "Gemstone",
                 "GemstonePrimitives",
-                "Formatters"
+                "Formatters",
+                "Keychain",
             ],
             path: "Sources"
         ),
@@ -52,6 +56,6 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             resources: [.process("Resources")]
-        )
+        ),
     ]
 )

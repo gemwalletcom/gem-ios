@@ -11,7 +11,7 @@ extension HypercoreAssetPositions {
             let provider = PerpetualProvider.hypercore
             let perpetualId = "\(provider.rawValue)_\(position.coin)"
             
-            let rawFunding = Float(position.cumFunding.allTime) ?? 0
+            let rawFunding = Float(position.cumFunding.sinceOpen) ?? 0
             let positionSize = Double(position.szi) ?? 0
             
             let direction: PerpetualDirection = positionSize >= 0 ? .long : .short
