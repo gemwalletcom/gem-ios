@@ -742,7 +742,6 @@
 				83385DDD2D27147900D76803 /* WalletConnectorService */,
 				83FE37B32D273CC80048D54C /* WalletConnector */,
 				83EB5E2F2D2ECF00006A7CFB /* Onboarding */,
-				83759DF62D384AF5002FECBA /* PreferencesTestKit */,
 				8352C8D42D393E05000DEDD9 /* ExplorerService */,
 				07A9FE3C2D3565CD00ACDB94 /* NFTService */,
 				074168392D3AFDBB00AC26A4 /* NFT */,
@@ -761,13 +760,6 @@
 				834EC8092D7F1FCD00D8FA39 /* WalletSessionService */,
 				8342EA022DB67EE3001B3780 /* WalletService */,
 				B66AFC6B2DDB260A0082C026 /* AppService */,
-				B68BD2A92DDF5FF900687F09 /* WalletServiceTestKit */,
-				B68BD2CF2DE0558500687F09 /* KeystoreTestKit */,
-				B62F6C4E2DE6F0FD00AF56AB /* AssetsServiceTestKit */,
-				B69C517F2DE6F91800BBD95D /* WalletsServiceTestKit */,
-				B69C51812DE6F93700BBD95D /* PriceAlertServiceTestKit */,
-				B69C53B82DE8493300BBD95D /* TransactionsServiceTestKit */,
-				B69C53BA2DE8685D00BBD95D /* WalletTabTestKit */,
 				836281AF2DEF34DC00CA5C75 /* Assets */,
 				8327CBF02DF9E088000BF1E1 /* Validators */,
 				83EF67E42E005F48009C690F /* Formatters */,
@@ -1804,10 +1796,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Assets;
 		};
-		83759DF62D384AF5002FECBA /* PreferencesTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PreferencesTestKit;
-		};
 		83863EE62D19B93E005048A7 /* NodeService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NodeService;
@@ -1848,10 +1836,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Onboarding;
 		};
-		B62F6C4E2DE6F0FD00AF56AB /* AssetsServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AssetsServiceTestKit;
-		};
 		B66AFC6B2DDB260A0082C026 /* AppService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppService;
@@ -1860,17 +1844,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ImageGalleryService;
 		};
-		B68BD2A92DDF5FF900687F09 /* WalletServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletServiceTestKit;
-		};
 		B68BD2C92DE04B5B00687F09 /* Components */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Components;
-		};
-		B68BD2CF2DE0558500687F09 /* KeystoreTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = KeystoreTestKit;
 		};
 		B68BD2D72DE05F7500687F09 /* KeystoreTestKit */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1888,25 +1864,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Primitives;
 		};
-		B69C517F2DE6F91800BBD95D /* WalletsServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletsServiceTestKit;
-		};
-		B69C51812DE6F93700BBD95D /* PriceAlertServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PriceAlertServiceTestKit;
-		};
 		B69C52F22DE72B1000BBD95D /* ManageWallets */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ManageWallets;
-		};
-		B69C53B82DE8493300BBD95D /* TransactionsServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = TransactionsServiceTestKit;
-		};
-		B69C53BA2DE8685D00BBD95D /* WalletTabTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletTabTestKit;
 		};
 		C35DA07B2A9C3B4B008CCEFA /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;
