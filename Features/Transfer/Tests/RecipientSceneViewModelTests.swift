@@ -10,10 +10,10 @@ import WalletsServiceTestKit
 import StakeServiceTestKit
 import ScanServiceTestKit
 import SwapServiceTestKit
+import NameServiceTestKit
 import StoreTestKit
 import NodeService
 import SwapService
-import NameResolver
 import Components
 import Formatters
 @testable import Transfer
@@ -140,6 +140,7 @@ extension RecipientSceneViewModel {
             stakeService: .mock(),
             scanService: .mock(),
             swapService: .mock(),
+            nameService: .mock(),
             type: type,
             onRecipientDataAction: onRecipientDataAction,
             onTransferAction: onTransferAction

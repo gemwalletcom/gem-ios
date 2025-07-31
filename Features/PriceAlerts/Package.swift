@@ -22,7 +22,7 @@ let package = Package(
 
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
-        .package(name: "PriceAlertService", path: "../../Services/PriceAlertService"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
     ],
     targets: [
         .target(
@@ -34,7 +34,7 @@ let package = Package(
                 "Localization",
                 "PrimitivesComponents",
                 "Store",
-                "PriceAlertService",
+                .product(name: "PriceAlertService", package: "FeatureServices"),
                 "Preferences"
             ],
             path: "Sources"
@@ -43,7 +43,7 @@ let package = Package(
             name: "PriceAlertsTests",
             dependencies: [
                 "PriceAlerts",
-                .product(name: "PriceAlertServiceTestKit", package: "PriceAlertService")
+                .product(name: "PriceAlertServiceTestKit", package: "FeatureServices")
             ]
         ),
     ]

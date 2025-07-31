@@ -24,19 +24,10 @@ let package = Package(
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
 
         .package(name: "Keystore", path: "../../Packages/Keystore"),
-        .package(name: "WalletsService", path: "../../Services/WalletsService"),
-        .package(name: "BannerService", path: "../../Services/BannerService"),
-        .package(name: "StakeService", path: "../../Services/StakeService"),
-        .package(name: "AssetsService", path: "../../Services/AssetsService"),
-        .package(name: "TransactionsService", path: "../../Services/TransactionsService"),
-        .package(name: "NotificationService", path: "../../Services/NotificationService"),
-        .package(name: "DeviceService", path: "../../Services/DeviceService"),
-        .package(name: "PriceService", path: "../../Services/PriceService"),
-        .package(name: "AppService", path: "../../Services/AppService"),
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
+        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
-        .package(name: "ChainService", path: "../../Services/ChainService"),
-        .package(name: "NodeService", path: "../../Services/NodeService"),
-        .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
         .package(name: "QRScanner", path: "../QRScanner")
     ],
     targets: [
@@ -52,19 +43,19 @@ let package = Package(
                 "GemstonePrimitives",
                 "Gemstone",
                 "Keystore",
-                "WalletsService",
-                "BannerService",
-                "StakeService",
-                "AssetsService",
-                "TransactionsService",
-                "NotificationService",
-                "DeviceService",
-                "PriceService",
-                "AppService",
+                .product(name: "WalletsService", package: "SystemServices"),
+                .product(name: "BannerService", package: "SystemServices"),
+                .product(name: "StakeService", package: "ChainServices"),
+                .product(name: "AssetsService", package: "FeatureServices"),
+                .product(name: "TransactionsService", package: "FeatureServices"),
+                .product(name: "NotificationService", package: "SystemServices"),
+                .product(name: "DeviceService", package: "SystemServices"),
+                .product(name: "PriceService", package: "FeatureServices"),
+                .product(name: "AppService", package: "SystemServices"),
                 "Formatters",
-                "ChainService",
-                "NodeService",
-                "ExplorerService",
+                .product(name: "ChainService", package: "ChainServices"),
+                .product(name: "NodeService", package: "ChainServices"),
+                .product(name: "ExplorerService", package: "ChainServices"),
                 "QRScanner"
             ],
             path: "Sources"
@@ -77,7 +68,7 @@ let package = Package(
             dependencies: [
                 "Settings",
                 "Primitives",
-                .product(name: "PriceServiceTestKit", package: "PriceService")
+                .product(name: "PriceServiceTestKit", package: "FeatureServices")
             ]),
     ]
 )

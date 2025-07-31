@@ -21,10 +21,9 @@ let package = Package(
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "Keystore", path: "../../Packages/Keystore"),
-        .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
-        .package(name: "WalletService", path: "../../Services/WalletService"),
-        .package(name: "ImageGalleryService", path: "../../Services/ImageGalleryService"),
-        .package(name: "AvatarService", path: "../../Services/AvatarService"),
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
+        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Onboarding", path: "../Onboarding")
     ],
     targets: [
@@ -38,10 +37,10 @@ let package = Package(
                 "PrimitivesComponents",
                 "Store",
                 "Keystore",
-                "ExplorerService",
-                "WalletService",
-                "ImageGalleryService",
-                "AvatarService",
+                .product(name: "ExplorerService", package: "ChainServices"),
+                .product(name: "WalletService", package: "SystemServices"),
+                .product(name: "ImageGalleryService", package: "SystemServices"),
+                .product(name: "AvatarService", package: "FeatureServices"),
                 "Onboarding"
             ],
             path: "Sources"

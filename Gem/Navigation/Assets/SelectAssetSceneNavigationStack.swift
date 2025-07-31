@@ -22,6 +22,7 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
     @Environment(\.swapService) private var swapService
+    @Environment(\.nameService) private var nameService
 
     @State private var isPresentingFilteringView: Bool = false
 
@@ -79,6 +80,7 @@ struct SelectAssetSceneNavigationStack: View {
                             stakeService: stakeService,
                             scanService: scanService,
                             swapService: swapService,
+                            nameService: nameService,
                             type: .asset(input.asset),
                             onRecipientDataAction: {
                                 navigationPath.append($0)

@@ -31,7 +31,7 @@ public struct WalletScene: View {
             }
             .cleanListRow()
 
-            if $preferences.isDeveloperEnabled.wrappedValue {
+            if $preferences.isDeveloperEnabled.wrappedValue && model.wallet.isMultiCoins {
                 Section {
                     NavigationLink(value: Scenes.Perpetuals()) {
                         ListItemView(title: "Perpetuals")

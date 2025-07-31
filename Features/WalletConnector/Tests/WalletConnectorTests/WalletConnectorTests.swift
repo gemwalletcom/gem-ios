@@ -6,7 +6,7 @@ import Store
 import PrimitivesTestKit
 import StoreTestKit
 import PreferencesTestKit
-import WalletSessionServiceTeskKit
+import WalletSessionServiceTestKit
 import WalletSessionService
 
 @testable import WalletConnector

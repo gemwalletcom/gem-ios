@@ -28,6 +28,7 @@ import WalletSessionService
 import AppService
 import ScanService
 import SwapService
+import NameService
 import PerpetualService
 
 struct ServicesFactory {
@@ -173,6 +174,8 @@ struct ServicesFactory {
             balanceStore: storeManager.balanceStore,
             nodeProvider: nodeService
         )
+        
+        let nameService = NameService()
 
         return AppResolver.Services(
             assetsService: assetsService,
@@ -202,7 +205,8 @@ struct ServicesFactory {
             onstartService: onStartService,
             onstartAsyncService: onstartAsyncService,
             walletConnectorManager: walletConnectorManager,
-            perpetualService: perpetualService
+            perpetualService: perpetualService,
+            nameService: nameService
         )
     }
 }
