@@ -292,7 +292,8 @@ extension AmountSceneViewModel {
             .stake,
             .unstake,
             .redelegate,
-            .withdraw:
+            .withdraw,
+            .perpetual:
                 return [
                 .amount(
                     source: source,
@@ -304,8 +305,6 @@ extension AmountSceneViewModel {
                     ]
                 )
             ]
-        case .perpetual:
-            return [] //TODO: Perpetual.
         }
     }
 
@@ -452,7 +451,7 @@ extension AmountSceneViewModel {
                 return BigInt(10_000_000) // 5 USDC with 6 decimals
             }
         case .perpetual:
-            return BigInt(15_000_000) // 15 USDC with 6 decimals
+            return BigInt(12_000_000) // 15 USDC with 6 decimals
         case .unstake, .withdraw, .transfer:
             break
         }

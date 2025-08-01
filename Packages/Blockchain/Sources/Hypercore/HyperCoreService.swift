@@ -2,6 +2,7 @@
 
 import BigInt
 import Foundation
+import Formatters
 import Keychain
 import Primitives
 import SwiftHTTPClient
@@ -13,7 +14,7 @@ public struct HyperCoreService: Sendable {
     
     public static let agentAddressKey: String = "hyperliquid_agent_address"
     public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
-    public static let builderFeeBps = 50 // 50 tenths of bps = 5.0 bps = 0.05%
+    public static let builderFeeBps = 45 // 0.05%
     public static let maxBuilderFeeBps = 50
     public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
     public static let referralCode = "GEMWALLET"
@@ -74,6 +75,18 @@ public extension HyperCoreService {
             .request(.builderFee(address: address, builder: builder))
             .map(as: Int.self)
     }
+    
+    func getSpotBalances(user: String) async throws -> HypercoreBalances {
+        try await provider
+            .request(.spotClearinghouseState(user: user))
+            .map(as: HypercoreBalances.self)
+    }
+    
+    func getSpotMetadata() async throws -> HypercoreTokens {
+        try await provider
+            .request(.spotMetaAndAssetCtxs)
+            .map(as: HypercoreTokens.self)
+    }
 }
 
 // MARK: - ChainServiceable
@@ -92,10 +105,19 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func coinBalance(for address: String) async throws -> AssetBalance {
-        AssetBalance(assetId: AssetId(chain: chain), balance: Balance(available: .zero))
+        let balances = try await getSpotBalances(user: address).balances
+        guard let coin = balances.first(where: { $0.token == 150 }) else {
+            throw AnyError("")
+        }
+        return AssetBalance(
+            assetId: AssetId(chain: chain),
+            balance: Balance(available: try BigInt.from(coin.total, decimals: 18))
+        )
     }
 
     func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
+        // let balances = try await getSpotBalances(user: address).balances
+        // let tokens = try await getSpotMetadata().tokens
         return []
     }
 
@@ -205,7 +227,7 @@ public extension HyperCoreService {
         case .open(let data): data.fiatValue
         case .close(let data): data.fiatValue
         }
-        let feeAmount = Int(fiatValue * Double(totalFeeTenthsBps))
+        let feeAmount = Int(fiatValue * Double(totalFeeTenthsBps) * 10)
         
         return TransactionData(
             data: .hyperliquid(
