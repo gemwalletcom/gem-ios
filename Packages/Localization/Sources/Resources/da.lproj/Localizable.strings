@@ -454,3 +454,7 @@
 "markets.daily_volume" = "24-timers volumen";
 "perpetual.entry_price" = "Indgangspris";
 "stake.your_staking" = "Din indsats";
+"widget.small.name" = "Bitcoin-pris";
+"widget.small.description" = "Spor Bitcoin-prisen";
+"widget.medium.name" = "Top Kryptopris";
+"widget.medium.description" = "Spor priserne på de bedste kryptovalutaer";

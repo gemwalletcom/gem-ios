@@ -454,3 +454,7 @@
 "markets.daily_volume" = "24小时交易量";
 "perpetual.entry_price" = "入场价格";
 "stake.your_staking" = "您的质押";
+"widget.small.name" = "比特币价格";
+"widget.small.description" = "追踪比特币价格";
+"widget.medium.name" = "最高加密货币价格";
+"widget.medium.description" = "追踪顶级加密货币的价格";

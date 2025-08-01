@@ -49,6 +49,7 @@
 		B62F6B9D2DE61ADF00AF56AB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = B62F6B9C2DE61ADF00AF56AB /* Onboarding */; };
 		B66AFC6C2DDB260A0082C026 /* AppService in Frameworks */ = {isa = PBXBuildFile; productRef = B66AFC6B2DDB260A0082C026 /* AppService */; };
 		B66DEDB02D49F0EA00309D53 /* ImageGalleryService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */; };
+		B677B1F52E3CA15100AD893A /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = B677B1F42E3CA15100AD893A /* Localization */; };
 		B67ED5472DDB5DCC009F74E6 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */; };
 		B68BD2CA2DE04B5B00687F09 /* Components in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2C92DE04B5B00687F09 /* Components */; };
 		B68BD2D82DE05F7500687F09 /* KeystoreTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2D72DE05F7500687F09 /* KeystoreTestKit */; };
@@ -365,6 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8CFDE9E2E37FC2500D27283 /* Style in Frameworks */,
+				B677B1F52E3CA15100AD893A /* Localization in Frameworks */,
 				D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */,
 				D8CFDEB02E37FCB000D27283 /* Components in Frameworks */,
 				D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */,
@@ -1843,6 +1845,10 @@
 		B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ImageGalleryService;
+		};
+		B677B1F42E3CA15100AD893A /* Localization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Localization;
 		};
 		B68BD2C92DE04B5B00687F09 /* Components */ = {
 			isa = XCSwiftPackageProductDependency;

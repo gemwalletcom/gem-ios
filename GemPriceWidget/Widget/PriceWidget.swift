@@ -2,6 +2,7 @@
 
 import WidgetKit
 import SwiftUI
+import Localization
 
 struct SmallPriceWidget: Widget {
     let kind: String = "SmallPriceWidget"
@@ -10,8 +11,8 @@ struct SmallPriceWidget: Widget {
         StaticConfiguration(kind: kind, provider: PriceWidgetProvider()) { entry in
             PriceWidgetView(entry: entry, widgetFamily: .systemSmall)
         }
-        .configurationDisplayName("Bitcoin Price")
-        .description("Track Bitcoin price")
+        .configurationDisplayName(Localized.Widget.Small.name)
+        .description(Localized.Widget.Small.description)
         .supportedFamilies([.systemSmall])
     }
 }
@@ -23,8 +24,8 @@ struct MediumPriceWidget: Widget {
         StaticConfiguration(kind: kind, provider: PriceWidgetProvider()) { entry in
             PriceWidgetView(entry: entry, widgetFamily: .systemMedium)
         }
-        .configurationDisplayName("Top Crypto Prices")
-        .description("Track prices of top cryptocurrencies")
+        .configurationDisplayName(Localized.Widget.Medium.name)
+        .description(Localized.Widget.Medium.description)
         .supportedFamilies([.systemMedium])
     }
 }

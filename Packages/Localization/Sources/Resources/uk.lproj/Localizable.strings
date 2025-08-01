@@ -454,3 +454,7 @@
 "markets.daily_volume" = "24-годинний обсяг";
 "perpetual.entry_price" = "Вхідна ціна";
 "stake.your_staking" = "Ваш стейкінг";
+"widget.small.name" = "Ціна Bitcoin";
+"widget.small.description" = "Відстежуйте ціну Bitcoin";
+"widget.medium.name" = "Найвища ціна криптовалюти";
+"widget.medium.description" = "Відстежуйте ціни на провідні криптовалюти";
