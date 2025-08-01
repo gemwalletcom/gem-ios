@@ -10,8 +10,9 @@ import PrimitivesComponents
 import Keystore
 import Assets
 import Transfer
-import SwapService
 import ChainService
+import ExplorerService
+import Signer
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
@@ -21,6 +22,9 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.keystore) private var keystore
     @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
+    @Environment(\.balanceService) private var balanceService
+    @Environment(\.priceService) private var priceService
+    @Environment(\.transactionService) private var transactionService
     @Environment(\.swapService) private var swapService
     @Environment(\.nameService) private var nameService
 
@@ -70,16 +74,25 @@ struct SelectAssetSceneNavigationStack: View {
                 switch input.type {
                 case .send:
                     RecipientNavigationView(
+                        amountService: AmountService(
+                            priceService: priceService,
+                            balanceService: balanceService,
+                            stakeService: stakeService
+                        ),
+                        confirmService: ConfirmServiceFactory.create(
+                            keystore: keystore,
+                            nodeService: nodeService,
+                            walletsService: walletsService,
+                            scanService: scanService,
+                            balanceService: balanceService,
+                            priceService: priceService,
+                            transactionService: transactionService,
+                            chain: input.asset.chain
+                        ),
                         model: RecipientSceneViewModel(
                             wallet: model.wallet,
                             asset: input.asset,
-                            keystore: keystore,
                             walletService: walletService,
-                            walletsService: walletsService,
-                            nodeService: nodeService,
-                            stakeService: stakeService,
-                            scanService: scanService,
-                            swapService: swapService,
                             nameService: nameService,
                             type: .asset(input.asset),
                             onRecipientDataAction: {
@@ -122,8 +135,11 @@ struct SelectAssetSceneNavigationStack: View {
                                 asset: input.asset
                             ),
                             wallet: model.wallet,
-                            walletsService: walletsService,
-                            stakeService: stakeService,
+                            amountService: AmountService(
+                                priceService: priceService,
+                                balanceService: balanceService,
+                                stakeService: stakeService
+                            ),
                             onTransferAction: {
                                 navigationPath.append($0)
                             }
@@ -139,15 +155,15 @@ struct SelectAssetSceneNavigationStack: View {
                     model: ConfirmTransferViewModel(
                         wallet: model.wallet,
                         data: data,
-                        keystore: keystore,
-                        chainService: ChainServiceFactory(nodeProvider: nodeService)
-                            .service(for: data.chain),
-                        scanService: scanService,
-                        swapService: swapService,
-                        walletsService: walletsService,
-                        swapDataProvider: SwapQuoteDataProvider(
+                        confirmService: ConfirmServiceFactory.create(
                             keystore: keystore,
-                            swapService: swapService
+                            nodeService: nodeService,
+                            walletsService: walletsService,
+                            scanService: scanService,
+                            balanceService: balanceService,
+                            priceService: priceService,
+                            transactionService: transactionService,
+                            chain: data.chain
                         ),
                         onComplete: {
                             isPresentingSelectAssetType = nil

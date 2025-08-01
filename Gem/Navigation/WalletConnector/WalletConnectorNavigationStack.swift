@@ -5,7 +5,9 @@ import Primitives
 import Localization
 import WalletConnector
 import Transfer
-import SwapService
+import TransactionService
+import ExplorerService
+import Signer
 
 struct WalletConnectorNavigationStack: View {
     @Environment(\.keystore) private var keystore
@@ -14,7 +16,9 @@ struct WalletConnectorNavigationStack: View {
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.scanService) private var scanService
     @Environment(\.nodeService) private var nodeService
-    @Environment(\.swapService) private var swapService
+    @Environment(\.balanceService) private var balanceService
+    @Environment(\.priceService) private var priceService
+    @Environment(\.transactionService) private var transactionService
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter
@@ -36,15 +40,15 @@ struct WalletConnectorNavigationStack: View {
                         model: ConfirmTransferViewModel(
                             wallet: data.payload.wallet,
                             data: data.payload.tranferData,
-                            keystore: keystore,
-                            chainService: chainServiceFactory
-                                .service(for: data.payload.tranferData.chain),
-                            scanService: scanService,
-                            swapService: swapService,
-                            walletsService: walletsService,
-                            swapDataProvider: SwapQuoteDataProvider(
+                            confirmService: ConfirmServiceFactory.create(
                                 keystore: keystore,
-                                swapService: swapService
+                                nodeService: nodeService,
+                                walletsService: walletsService,
+                                scanService: scanService,
+                                balanceService: balanceService,
+                                priceService: priceService,
+                                transactionService: transactionService,
+                                chain: data.payload.tranferData.chain
                             ),
                             confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }

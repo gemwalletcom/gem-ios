@@ -6,7 +6,8 @@ import Primitives
 import ChainService
 import Localization
 import Transfer
-import SwapService
+import ExplorerService
+import Signer
 
 struct ConfirmTransferNavigationStack: View {
     @Environment(\.keystore) private var keystore
@@ -14,7 +15,9 @@ struct ConfirmTransferNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
+    @Environment(\.balanceService) private var balanceService
+    @Environment(\.priceService) private var priceService
+    @Environment(\.transactionService) private var transactionService
 
     private let wallet: Wallet
     private let transferData: TransferData
@@ -36,15 +39,15 @@ struct ConfirmTransferNavigationStack: View {
                 model: ConfirmTransferViewModel(
                     wallet: wallet,
                     data: transferData,
-                    keystore: keystore,
-                    chainService: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: transferData.chain),
-                    scanService: scanService,
-                    swapService: swapService,
-                    walletsService: walletsService,
-                    swapDataProvider: SwapQuoteDataProvider(
+                    confirmService: ConfirmServiceFactory.create(
                         keystore: keystore,
-                        swapService: swapService
+                        nodeService: nodeService,
+                        walletsService: walletsService,
+                        scanService: scanService,
+                        balanceService: balanceService,
+                        priceService: priceService,
+                        transactionService: transactionService,
+                        chain: transferData.chain
                     ),
                     onComplete: onComplete
                 )

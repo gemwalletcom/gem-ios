@@ -6,7 +6,6 @@ import Components
 import Style
 import Localization
 
-// TODO: - remove explorerService dependency get address link in init
 public struct AddressListItemView: View {
     @State private var isPresentingUrl: URL? = nil
     private let model: AddressListItemViewModel

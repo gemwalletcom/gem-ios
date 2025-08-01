@@ -3,17 +3,8 @@
 import Testing
 import Primitives
 import PrimitivesTestKit
-import Keystore
-import KeystoreTestKit
 import WalletServiceTestKit
-import WalletsServiceTestKit
-import StakeServiceTestKit
-import ScanServiceTestKit
-import SwapServiceTestKit
 import NameServiceTestKit
-import StoreTestKit
-import NodeService
-import SwapService
 import Components
 import Formatters
 @testable import Transfer
@@ -133,13 +124,7 @@ extension RecipientSceneViewModel {
         RecipientSceneViewModel(
             wallet: wallet,
             asset: asset,
-            keystore: LocalKeystore.mock(),
             walletService: .mock(),
-            walletsService: .mock(),
-            nodeService: NodeService(nodeStore: .mock()),
-            stakeService: .mock(),
-            scanService: .mock(),
-            swapService: .mock(),
             nameService: .mock(),
             type: type,
             onRecipientDataAction: onRecipientDataAction,

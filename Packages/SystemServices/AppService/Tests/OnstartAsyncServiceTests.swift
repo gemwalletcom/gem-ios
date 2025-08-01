@@ -5,6 +5,7 @@ import AssetsServiceTestKit
 import DeviceServiceTestKit
 import BannerServiceTestKit
 import GemAPITestKit
+import ChainServiceTestKit
 
 @testable import AppService
 
@@ -47,7 +48,8 @@ extension OnstartAsyncService {
             deviceService: .mock(),
             bannerSetupService: .mock(),
             configService: GemAPIConfigServiceMock(config: .mock()),
-            releaseService: AppReleaseService(configService: GemAPIConfigServiceMock(config: .mock()))
+            releaseService: AppReleaseService(configService: GemAPIConfigServiceMock(config: .mock())),
+            addressStatusService: .mock()
         )
     }
 }
