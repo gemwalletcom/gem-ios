@@ -9,11 +9,11 @@ import SwiftHTTPClient
 public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
-    let keychain: Keychain
+    let cacheService: HyperCoreCacheService
     
     public static let agentAddressKey: String = "hyperliquid_agent_address"
     public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
-    public static let feeRateBps = 10
+    public static let feeRateBps = 50
     public static let maxFeeRateBps = 50
     public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
     public static let referralCode = "GEMWALLET"
@@ -21,11 +21,14 @@ public struct HyperCoreService: Sendable {
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>,
-        keychain: Keychain = KeychainDefault()
+        cacheService: BlockchainCacheService
     ) {
         self.chain = chain
         self.provider = provider
-        self.keychain = keychain
+        self.cacheService = HyperCoreCacheService(
+            cacheService: cacheService,
+            keychain: KeychainDefault()
+        )
     }
     
     public static func feeRate(_ tenthsBps: Int) -> String {
@@ -180,25 +183,26 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func load(input: TransactionInput) async throws -> TransactionData {
-        let referral = try await getReferral(address: input.senderAddress)
-        let builderFee = try await getBuilderFee(address: input.senderAddress, builder: Self.builderAddress)
-        
-        var approveAgentRequired: Bool = true
-        
-        if let address = try keychain.get(Self.agentAddressKey) {
-            let role = try await getUserRole(address: address)
-            approveAgentRequired = role.role != "agent"
+        async let approveAgentRequired = cacheService.needsAgentApproval { address in
+            try await getUserRole(address: address)
         }
         
-        let approveReferralRequired = referral.referredBy == .none && (Double(referral.cumVlm) ?? 0) < 10_000
-        let approveBuilderRequired = builderFee < Self.maxFeeRateBps
+        async let approveReferralRequired = cacheService.needsReferralApproval(address: input.senderAddress) {
+            try await getReferral(address: input.senderAddress)
+        }
+        
+        async let approveBuilderRequired = cacheService.needsBuilderFeeApproval(address: input.senderAddress) {
+            try await getBuilderFee(address: input.senderAddress, builder: Self.builderAddress)
+        }
+        
+        let (agentRequired, referralRequired, builderRequired) = try await (approveAgentRequired, approveReferralRequired, approveBuilderRequired)
         
         return TransactionData(
             data: .hyperliquid(
                 SigningData.Hyperliquid(
-                    approveAgentRequired: approveAgentRequired,
-                    approveReferralRequired: approveReferralRequired,
-                    approveBuilderRequired: approveBuilderRequired,
+                    approveAgentRequired: agentRequired,
+                    approveReferralRequired: referralRequired,
+                    approveBuilderRequired: builderRequired,
                     timestamp: Date.getTimestampInMs()
                 )
             ),
