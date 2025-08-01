@@ -86,7 +86,7 @@ public struct TonSigner: Signable {
 
 extension TheOpenNetworkSendMode {
     static func sendMaxTon() -> UInt32 {
-        UInt32(TheOpenNetworkSendMode.attachAllContractBalance.rawValue | TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
+        UInt32(TheOpenNetworkSendMode.attachAllContractBalance.rawValue) | TheOpenNetworkSendMode.defaultSendMode()
     }
     
     static func defaultSendMode() -> UInt32 {
