@@ -6,6 +6,8 @@ import PrimitivesComponents
 import Formatters
 import Components
 import Localization
+import Style
+import SwiftUI
 
 public struct PerpetualViewModel {
     public let perpetual: Perpetual
@@ -51,5 +53,13 @@ public struct PerpetualViewModel {
     
     public var priceText: String {
         currencyFormatter.string(perpetual.price)
+    }
+    
+    public var priceChangeText: String {
+        CurrencyFormatter.percent.string(perpetual.pricePercentChange24h)
+    }
+    
+    public var priceChangeTextColor: Color {
+        PriceChangeColor.color(for: perpetual.pricePercentChange24h)
     }
 }

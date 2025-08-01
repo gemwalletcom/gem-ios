@@ -9,9 +9,11 @@ public struct PerpetualsNavigationView: View {
     
     @State private var positionsRequest: PerpetualPositionsRequest
     @State private var perpetualsRequest: PerpetualsRequest
+    @State private var perpetualTotalValueRequest: TotalValueRequest
 
     @State private var positions: [PerpetualPositionData] = []
     @State private var perpetuals: [PerpetualData] = []
+    @State private var perpetualTotalValue: Double = .zero
     
     let wallet: Wallet
     let perpetualService: PerpetualServiceable
@@ -30,6 +32,7 @@ public struct PerpetualsNavigationView: View {
         _isPresentingTransferData = isPresentingTransferData
         _positionsRequest = State(initialValue: PerpetualPositionsRequest(walletId: wallet.id))
         _perpetualsRequest = State(initialValue: PerpetualsRequest())
+        _perpetualTotalValueRequest = State(initialValue: TotalValueRequest(walletId: wallet.id, balanceType: .perpetual))
     }
     
     public var body: some View {
@@ -39,11 +42,13 @@ public struct PerpetualsNavigationView: View {
                 perpetualService: perpetualService,
                 positions: positions,
                 perpetuals: perpetuals,
+                perpetualTotalValue: perpetualTotalValue,
                 onSelectAssetType: { isPresentingSelectAssetType = $0 },
                 onTransferComplete: { isPresentingTransferData = $0 }
             )
         )
         .observeQuery(request: $positionsRequest, value: $positions)
         .observeQuery(request: $perpetualsRequest, value: $perpetuals)
+        .observeQuery(request: $perpetualTotalValueRequest, value: $perpetualTotalValue)
     }
 }

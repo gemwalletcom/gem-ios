@@ -56,9 +56,6 @@ public struct PriceViewModel: Sendable {
 
     public static func priceChangeTextColor(value: Double?) -> Color {
         guard let value = value else { return Colors.gray }
-        if value == 0 {
-            return Colors.grayLight
-        }
         return PriceChangeColor.color(for: value)
     }
 

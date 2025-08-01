@@ -60,7 +60,7 @@ public final class WalletSceneViewModel: Sendable {
         self.walletService = walletService
         self.observablePreferences = observablePreferences
 
-        self.totalFiatRequest = TotalValueRequest(walletId: wallet.id)
+        self.totalFiatRequest = TotalValueRequest(walletId: wallet.id, balanceType: .wallet)
         self.assetsRequest = AssetsRequest(
             walletId: wallet.id,
             filters: [.enabled]

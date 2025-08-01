@@ -19,6 +19,7 @@ public final class PerpetualsSceneViewModel {
     public let wallet: Wallet
     public let positions: [PerpetualPositionData]
     public let perpetuals: [PerpetualData]
+    public let perpetualTotalValue: Double
     
     public var isLoading: Bool = false
     public let preferences: Preferences = .standard
@@ -31,6 +32,7 @@ public final class PerpetualsSceneViewModel {
         perpetualService: PerpetualServiceable,
         positions: [PerpetualPositionData],
         perpetuals: [PerpetualData],
+        perpetualTotalValue: Double,
         onSelectAssetType: ((SelectAssetType) -> Void)? = nil,
         onTransferComplete: ((TransferData) -> Void)? = nil
     ) {
@@ -38,6 +40,7 @@ public final class PerpetualsSceneViewModel {
         self.perpetualService = perpetualService
         self.positions = positions
         self.perpetuals = perpetuals
+        self.perpetualTotalValue = perpetualTotalValue
         self.onSelectAssetType = onSelectAssetType
         self.onTransferComplete = onTransferComplete
     }
@@ -50,8 +53,8 @@ public final class PerpetualsSceneViewModel {
     public var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
             walletType: wallet.type,
-            totalValue: 10,
-            currencyCode: "USD"
+            totalValue: perpetualTotalValue,
+            currencyCode: Currency.usd.rawValue
         )
     }
 }

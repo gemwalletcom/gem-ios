@@ -16,10 +16,13 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
         .hypercore
     }
     
-    func getPositions(address: String, walletId: String) async throws -> [PerpetualPosition] {
-        return try await hyperCoreService
-            .getPositions(user: address)
-            .mapToPerpetualPositions(walletId: walletId)
+    func getPositions(address: String, walletId: String) async throws -> PerpetualPositionsSummary {
+        let response = try await hyperCoreService.getPositions(user: address)
+        
+        return PerpetualPositionsSummary(
+            positions: response.mapToPerpetualPositions(walletId: walletId),
+            balance: try response.mapToPerpetualBalance()
+        )
     }
     
     
@@ -74,6 +77,18 @@ extension HypercoreUniverseAsset {
             name: name,
             symbol: name,
             decimals: Int32(szDecimals),
+            type: .perpetual
+        )
+    }
+}
+
+extension Asset {
+    public static func hyperliquidUSD() -> Asset {
+        Asset(
+            id: mapHypercoreCoinToAssetId("USD"),
+            name: "USD",
+            symbol: "USD",
+            decimals: 6,
             type: .perpetual
         )
     }

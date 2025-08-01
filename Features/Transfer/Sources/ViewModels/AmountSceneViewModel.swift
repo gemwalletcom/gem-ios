@@ -351,8 +351,10 @@ extension AmountSceneViewModel {
             )
         case .perpetual(_, let perpetual):
             //TODO: Perpetual
+            
             let price = ""
             let size = ""
+            
             return TransferData(
                 type: .perpetual(
                     asset, .open(

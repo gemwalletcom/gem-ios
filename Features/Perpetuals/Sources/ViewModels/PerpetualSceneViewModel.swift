@@ -20,7 +20,9 @@ public final class PerpetualSceneViewModel {
     public let wallet: Wallet
     public let asset: Asset
     public var positionsRequest: PerpetualPositionsRequest
+    public var perpetualTotalValueRequest: TotalValueRequest
     public var positions: [PerpetualPositionData] = []
+    public var perpetualTotalValue: Double = .zero
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .hour {
         didSet {
@@ -53,6 +55,7 @@ public final class PerpetualSceneViewModel {
         self.onPerpetualRecipientData = onPerpetualRecipientData
         self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
+        self.perpetualTotalValueRequest = TotalValueRequest(walletId: wallet.id, balanceType: .perpetual)
     }
 
     public var navigationTitle: String {
@@ -61,6 +64,14 @@ public final class PerpetualSceneViewModel {
 
     public var hasOpenPosition: Bool {
         !positionViewModels.isEmpty
+    }
+
+    var perpetualHeaderModel: WalletHeaderViewModel {
+        WalletHeaderViewModel(
+            walletType: wallet.type,
+            value: perpetualTotalValue,
+            currencyCode: Currency.usd.rawValue
+        )
     }
 
     public var positionSectionTitle: String { Localized.Perpetual.position }
@@ -144,7 +155,7 @@ public extension PerpetualSceneViewModel {
         )
         
         let transferData = TransferData(
-            type: .perpetual(asset, .close(data)),
+            type: .perpetual(.hyperliquidUSD(), .close(data)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false
@@ -161,7 +172,7 @@ public extension PerpetualSceneViewModel {
             recipient: .hyperliquid(),
             data: PerpetualTransferData(
                 direction: .long,
-                asset: asset,
+                asset: .hyperliquidUSD(),
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price
             )
@@ -177,7 +188,7 @@ public extension PerpetualSceneViewModel {
             recipient: .hyperliquid(),
             data: PerpetualTransferData(
                 direction: .short,
-                asset: asset,
+                asset: .hyperliquidUSD(),
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price
             )
@@ -194,4 +205,3 @@ extension RecipientData {
         )
     }
 }
-
