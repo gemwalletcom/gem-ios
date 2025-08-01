@@ -1,0 +1,11 @@
+{
+  "transactions": [{
+    "hash": "bounced_transaction_hash",
+    "out_msgs": [{
+      "hash": "bounced_msg",
+      "bounce": true,
+      "bounced": true
+    }],
+    "description": null
+  }]
+}

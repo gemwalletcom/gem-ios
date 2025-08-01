@@ -1,0 +1,11 @@
+{
+  "transactions": [{
+    "hash": "aborted_transaction_hash",
+    "out_msgs": [],
+    "description": {
+      "action": null,
+      "compute_ph": null,
+      "aborted": true
+    }
+  }]
+}
