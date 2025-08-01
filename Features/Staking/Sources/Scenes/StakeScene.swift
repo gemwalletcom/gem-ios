@@ -37,7 +37,7 @@ public struct StakeScene: View {
         .navigationTitle(model.title)
         .toolbarInfoButton(url: model.stakeInfoUrl)
         .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+            InfoSheetScene(type: $0)
         }
         .taskOnce {
             Task {

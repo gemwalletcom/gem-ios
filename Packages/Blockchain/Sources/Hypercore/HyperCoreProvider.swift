@@ -9,6 +9,8 @@ public enum HypercoreProvider: TargetType {
     case metaAndAssetCtxs
     case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
     case userRole(address: String)
+    case referral(address: String)
+    case builderFee(address: String, builder: String)
     case broadcast(data: String)
 
     public var baseUrl: URL {
@@ -24,7 +26,9 @@ public enum HypercoreProvider: TargetType {
         case .clearinghouseState,
             .metaAndAssetCtxs,
             .candleSnapshot,
-            .userRole:
+            .userRole,
+            .referral,
+            .builderFee:
             return "/info"
         case .broadcast:
             return "/exchange"
@@ -56,6 +60,17 @@ public enum HypercoreProvider: TargetType {
             return .encodable([
                 "type": "userRole",
                 "user": address
+            ])
+        case .referral(let address):
+            return .encodable([
+                "type": "referral",
+                "user": address
+            ])
+        case .builderFee(let address, let builder):
+            return .encodable([
+                "type": "maxBuilderFee",
+                "user": address,
+                "builder": builder
             ])
         case .broadcast(let data):
             return .data(try! data.encodedData())
