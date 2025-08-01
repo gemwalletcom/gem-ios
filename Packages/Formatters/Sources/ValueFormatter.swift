@@ -10,17 +10,21 @@ public struct ValueFormatter: Sendable {
         case medium
         case full
         case auto
+        case abbreviated
     }
     
     private let locale: Locale
     private let style: Style
+    private let abbreviationThreshold: Decimal
     
     public init(
         locale: Locale = .current,
-        style: Style
+        style: Style,
+        abbreviationThreshold: Decimal = 100_000
     ) {
         self.locale = locale
         self.style = style
+        self.abbreviationThreshold = abbreviationThreshold
     }
     
     private var formatterShort: NumberFormatter {
@@ -87,6 +91,10 @@ public struct ValueFormatter: Sendable {
             return ""
         }
         let number = NSDecimalNumber(decimal: decimal)
+
+        if let abbreviated = abbreviatedString(from: decimal, currency: currency) {
+            return abbreviated
+        }
         
         let formatter = {
             let formatter = self.formatter(style: style, number: number)
@@ -107,10 +115,7 @@ public struct ValueFormatter: Sendable {
         guard let value = formatter.string(from: number) else {
             return ""
         }
-        if currency.isEmpty {
-            return value
-        }
-        return String(format: "%@ %@", value, currency)
+        return combined(value, currency: currency)
     }
     
     public func number(amount: String) throws -> Decimal {
@@ -137,6 +142,7 @@ public struct ValueFormatter: Sendable {
         case .medium: formatterMedium
         case .full: formatterFull
         case .auto: autoFormatter(for: number)
+        case .abbreviated: formatterShort
         }
     }
     
@@ -147,5 +153,29 @@ public struct ValueFormatter: Sendable {
         case 0.0001..<1: formatterMiddle
         default: formatterFull
         }
+    }
+
+    private func abbreviatedString(from decimal: Decimal, currency: String) -> String? {
+        guard case .abbreviated = style,
+              abs(decimal) >= abbreviationThreshold,
+              #available(iOS 18, *)
+        else {
+            return nil
+        }
+        
+        let formattedValue = decimal.formatted(
+            .number
+            .notation(.compactName)
+            .locale(locale)
+            .precision(.fractionLength(0...2))
+        )
+        return combined(formattedValue, currency: currency)
+    }
+
+    private func combined(_ value: String, currency: String) -> String {
+        if currency.isEmpty {
+            return value
+        }
+        return String(format: "%@ %@", value, currency)
     }
 }
