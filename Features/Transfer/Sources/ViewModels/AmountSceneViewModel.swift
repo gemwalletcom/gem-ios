@@ -207,12 +207,13 @@ extension AmountSceneViewModel {
 
     func infoAction(for error: Error) -> (() -> Void)? {
         guard let transferError = error as? TransferError,
-              let infoSheet = transferError.infoSheet
+              case let .minimumAmount(asset, required) = transferError
         else {
             return nil
         }
         return { [weak self] in
-            self?.onSelect(infoSheet: infoSheet)
+            guard let self else { return }
+            self.isPresentingSheet = .infoAction(.stakeMinimumAmount(asset, required: required, action: self.onSelectBuy))
         }
     }
 }
@@ -248,21 +249,6 @@ extension AmountSceneViewModel {
             assetAddress: assetAddress,
             walletId: wallet.walletId
         )
-    }
-
-    private func onSelect(infoSheet: InfoSheetType) {
-        switch infoSheet {
-        case .stakeMinimumAmount(let asset, _):
-            isPresentingSheet = .infoAction(
-                infoSheet,
-                button: .action(
-                    title: Localized.Asset.buyAsset(asset.feeAsset.symbol),
-                    action: onSelectBuy
-                )
-            )
-        default:
-            break
-        }
     }
 
     private var recipientData: RecipientData {
@@ -505,16 +491,5 @@ extension AmountSceneViewModel {
 
     private var minimumAccountReserve: BigInt {
         asset.type == .native ? asset.chain.minimumAccountBalance : .zero
-    }
-}
-
-extension TransferError {
-    var infoSheet: InfoSheetType? {
-        switch self {
-        case .minimumAmount(let asset, let required):
-            .stakeMinimumAmount(asset, required: required)
-        case .invalidAmount, .invalidAddress:
-            nil
-        }
     }
 }
