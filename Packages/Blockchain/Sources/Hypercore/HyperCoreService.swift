@@ -183,7 +183,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func load(input: TransactionInput) async throws -> TransactionData {
-        async let approveAgentRequired = cacheService.needsAgentApproval { address in
+        async let approveAgentRequired = cacheService.needsAgentApproval(walletAddress: input.senderAddress) { address in
             try await getUserRole(address: address)
         }
         

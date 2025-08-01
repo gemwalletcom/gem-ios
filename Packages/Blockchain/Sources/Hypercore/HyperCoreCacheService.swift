@@ -17,8 +17,9 @@ public struct HyperCoreCacheService: Sendable {
         self.keychain = keychain
     }
     
-    public func needsAgentApproval(checker: (String) async throws -> HypercoreUserRole) async throws -> Bool {
-        guard let address = try? keychain.get(HyperCoreService.agentAddressKey) else { return true }
+    public func needsAgentApproval(walletAddress: String, checker: (String) async throws -> HypercoreUserRole) async throws -> Bool {
+        let agentAddressKey = "\(HyperCoreService.agentAddressKey)_\(walletAddress)"
+        guard let address = try? keychain.get(agentAddressKey) else { return true }
         let role = try await checker(address)
         return role.role != "agent"
     }

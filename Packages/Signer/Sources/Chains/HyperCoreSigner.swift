@@ -25,17 +25,20 @@ public class HyperCoreSigner: Signable {
         fatalError()
     }
 
-    func getAgentKey() throws -> (address: String, key: Data) {
-        if let key = try keychain.get(HyperCoreService.agentPrivateKey),
-           let address = try keychain.get(HyperCoreService.agentAddressKey)
+    func getAgentKey(for walletAddress: String) throws -> (address: String, key: Data) {
+        let agentPrivateKeyName = "\(HyperCoreService.agentPrivateKey)_\(walletAddress)"
+        let agentAddressKeyName = "\(HyperCoreService.agentAddressKey)_\(walletAddress)"
+        
+        if let key = try keychain.get(agentPrivateKeyName),
+           let address = try keychain.get(agentAddressKeyName)
         {
             return try (address: address, Data.from(hex: key))
         }
         let newKey = try SecureRandom.generateKey()
         let newAddress = CoinType.ethereum.deriveAddress(privateKey: PrivateKey(data: newKey)!)
 
-        try keychain.set(newKey.hexString, key: HyperCoreService.agentPrivateKey)
-        try keychain.set(newAddress, key: HyperCoreService.agentAddressKey)
+        try keychain.set(newKey.hexString, key: agentPrivateKeyName)
+        try keychain.set(newAddress, key: agentAddressKeyName)
 
         return (address: newAddress, key: newKey)
     }
@@ -49,7 +52,7 @@ public class HyperCoreSigner: Signable {
             throw AnyError("Invalid input type for perpetual signing")
         }
 
-        let (agentAddress, agentKey) = try getAgentKey()
+        let (agentAddress, agentKey) = try getAgentKey(for: input.senderAddress)
         let builder = try? getBuilder(
             builder: HyperCoreService.builderAddress,
             fee: HyperCoreService.feeRateBps
