@@ -48,7 +48,7 @@ struct AssetNavigationView: View {
         .sheet(item: $model.isPresentingAssetSheet) {
             switch $0 {
             case let .info(type):
-                InfoSheetScene(model: InfoSheetViewModel(type: type))
+                InfoSheetScene(type: type)
             case let .transfer(data):
                 ConfirmTransferNavigationStack(
                     wallet: model.walletModel.wallet,

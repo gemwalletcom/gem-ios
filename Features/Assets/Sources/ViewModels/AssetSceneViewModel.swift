@@ -169,8 +169,8 @@ public final class AssetSceneViewModel: Sendable {
          .button(title: Localized.Common.share, systemImage: SystemImage.share, action: onSelectShareAsset)].compactMap { $0 }
     }
 
-    var scoreViewModel: AssetScoreViewModel {
-        AssetScoreViewModel(score: assetData.metadata.rankScore)
+    var scoreViewModel: AssetScoreTypeViewModel {
+        AssetScoreTypeViewModel(score: assetData.metadata.rankScore)
     }
 
     var showStatus: Bool {

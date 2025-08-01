@@ -9,17 +9,30 @@ import SwiftHTTPClient
 public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
-    let keychain = KeychainDefault()
+    let cacheService: HyperCoreCacheService
     
-    public static let HLAgentAddress: String = "hyperliquid_agent_address"
-    public static let HLAgentKey: String = "hyperliquid_agent_private_key"
-
+    public static let agentAddressKey: String = "hyperliquid_agent_address"
+    public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
+    public static let feeRateBps = 50
+    public static let maxFeeRateBps = 50
+    public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
+    public static let referralCode = "GEMWALLET"
+    
     public init(
         chain: Primitives.Chain = .hyperCore,
-        provider: Provider<HypercoreProvider>
+        provider: Provider<HypercoreProvider>,
+        cacheService: BlockchainCacheService
     ) {
         self.chain = chain
         self.provider = provider
+        self.cacheService = HyperCoreCacheService(
+            cacheService: cacheService,
+            keychain: KeychainDefault()
+        )
+    }
+    
+    public static func feeRate(_ tenthsBps: Int) -> String {
+        String(format: "%g%%", Double(tenthsBps) * 0.001)
     }
 }
 
@@ -42,6 +55,24 @@ public extension HyperCoreService {
         return try await provider
             .request(.candleSnapshot(coin: coin, interval: interval, startTime: startTime, endTime: endTime))
             .map(as: [HypercoreCandlestick].self)
+    }
+    
+    func getUserRole(address: String) async throws -> HypercoreUserRole {
+        try await self.provider
+            .request(.userRole(address: address))
+            .map(as: HypercoreUserRole.self)
+    }
+    
+    func getReferral(address: String) async throws -> HypercoreReferral {
+        try await self.provider
+            .request(.referral(address: address))
+            .map(as: HypercoreReferral.self)
+    }
+    
+    func getBuilderFee(address: String, builder: String) async throws -> Int {
+        try await self.provider
+            .request(.builderFee(address: address, builder: builder))
+            .map(as: Int.self)
     }
 }
 
@@ -152,8 +183,29 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func load(input: TransactionInput) async throws -> TransactionData {
-        TransactionData(
-            sequence: input.preload.isDestinationAddressExist ? 1 : 0,
+        async let approveAgentRequired = cacheService.needsAgentApproval(walletAddress: input.senderAddress) { address in
+            try await getUserRole(address: address)
+        }
+        
+        async let approveReferralRequired = cacheService.needsReferralApproval(address: input.senderAddress) {
+            try await getReferral(address: input.senderAddress)
+        }
+        
+        async let approveBuilderRequired = cacheService.needsBuilderFeeApproval(address: input.senderAddress) {
+            try await getBuilderFee(address: input.senderAddress, builder: Self.builderAddress)
+        }
+        
+        let (agentRequired, referralRequired, builderRequired) = try await (approveAgentRequired, approveReferralRequired, approveBuilderRequired)
+        
+        return TransactionData(
+            data: .hyperliquid(
+                SigningData.Hyperliquid(
+                    approveAgentRequired: agentRequired,
+                    approveReferralRequired: referralRequired,
+                    approveBuilderRequired: builderRequired,
+                    timestamp: Date.getTimestampInMs()
+                )
+            ),
             fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
         )
     }
@@ -163,18 +215,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        let keychain = KeychainDefault()
-        if let address = try keychain.get(Self.HLAgentAddress) {
-            let result = try await self.provider
-                .request(.userRole(address: address))
-                .map(as: HypercoreUserRole.self)
-            
-            return TransactionPreload(
-                isDestinationAddressExist: result.role == "agent"
-            )
-        } else {
-            return TransactionPreload(isDestinationAddressExist: false)
-        }
+        TransactionPreload()
     }
 }
 

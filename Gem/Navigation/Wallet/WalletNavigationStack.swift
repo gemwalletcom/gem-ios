@@ -133,7 +133,7 @@ struct WalletNavigationStack: View {
                     WalletsNavigationStack(isPresentingWallets: $model.isPresentingWallets)
                 }
                 .sheet(item: $model.isPresentingInfoSheet) {
-                    InfoSheetScene(model: InfoSheetViewModel(type: $0))
+                    InfoSheetScene(type: $0)
                 }
                 .sheet(item: $model.isPresentingTransferData) { data in
                     ConfirmTransferNavigationStack(

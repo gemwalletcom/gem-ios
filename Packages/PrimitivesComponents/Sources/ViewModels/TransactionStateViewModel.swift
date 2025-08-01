@@ -21,6 +21,22 @@ public struct TransactionStateViewModel {
         case .reverted: Localized.Transaction.Status.reverted
         }
     }
+    
+    public var description: String {
+        switch state {
+        case .pending: Localized.Info.Transaction.Pending.description
+        case .confirmed: Localized.Info.Transaction.Success.description
+        case .failed, .reverted: Localized.Info.Transaction.Error.description
+        }
+    }
+    
+    public var stateImage: Image {
+        switch state {
+        case .pending: Images.Transaction.State.pending
+        case .confirmed: Images.Transaction.State.success
+        case .failed, .reverted: Images.Transaction.State.error
+        }
+    }
 
     public var color: Color {
         switch state {
