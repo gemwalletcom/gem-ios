@@ -52,6 +52,7 @@ public final class SecurityViewModel {
     var privacyLockTitle: String { Localized.Lock.privacyLock }
     var hideBalanceTitle: String { Localized.Settings.hideBalance }
     var lockPeriodTitle: String { Localized.Lock.requireAuthentication }
+    var authenticationFooter: String { "Protect access to this app on your device" }
 
     var authenticationTitle: String {
         switch service.availableAuthentication {
