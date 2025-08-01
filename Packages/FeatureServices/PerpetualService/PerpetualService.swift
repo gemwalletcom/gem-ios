@@ -10,17 +10,20 @@ public struct PerpetualService: PerpetualServiceable {
     
     private let store: PerpetualStore
     private let assetStore: AssetStore
+    private let priceStore: PriceStore
     private let balanceStore: BalanceStore
     private let provider: PerpetualProvidable
     
     public init(
         store: PerpetualStore,
         assetStore: AssetStore,
+        priceStore: PriceStore,
         balanceStore: BalanceStore,
         providerFactory: PerpetualProviderFactory
     ) {
         self.store = store
         self.assetStore = assetStore
+        self.priceStore = priceStore
         self.balanceStore = balanceStore
         self.provider = providerFactory.createProvider()
     }
@@ -50,14 +53,14 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     private func syncProviderBalances(walletId: String, balance: PerpetualBalance) throws {
-        let usd = Asset.hyperliquidUSD()
+        let usd = Asset.hyperliquidUSDC()
         let formatter = ValueFormatter.full
         try balanceStore.addMissingBalances(walletId: walletId, assetIds: [usd.id], isEnabled: false)
         
         try balanceStore.updateBalances(
             [
              UpdateBalance(
-                assetID: Asset.hyperliquidUSD().id.identifier,
+                assetID: usd.id.identifier,
                 type: .coin(UpdateCoinBalance(
                     available: UpdateBalanceValue(
                         value: try formatter.inputNumber(from: balance.available.description, decimals: 6).description,
@@ -98,11 +101,18 @@ public struct PerpetualService: PerpetualServiceable {
         let perpetualsData = try await provider.getPerpetualsData()
         let perpetuals = perpetualsData.map { $0.perpetual }
         let assets = perpetualsData.map { createPerpetualAssetBasic(from: $0.asset) } + [
-            createPerpetualAssetBasic(from: .hyperliquidUSD()),
+            createPerpetualAssetBasic(from: .hyperliquidUSDC()),
         ]
         
         try assetStore.add(assets: assets)
         try store.upsertPerpetuals(perpetuals)
+        // setup prices
+        try priceStore.updatePrice(price: AssetPrice(
+            assetId: Asset.hyperliquidUSDC().id,
+            price: 1,
+            priceChangePercentage24h: 0,
+            updatedAt: .now
+        ), currency: Currency.usd.rawValue)
     }
     
     public func updateMarket(symbol: String) async throws {

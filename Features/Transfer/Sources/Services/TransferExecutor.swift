@@ -52,14 +52,16 @@ struct TransferExecutor: TransferExecutable {
                     hash: hash,
                     transactionIndex: index
                 )
+                let excludeChains = [Chain.hyperCore]
+                let assetIds = transaction.assetIds.filter { !excludeChains.contains($0.chain) }
 
                 try walletsService.addTransactions(wallet: input.wallet, transactions: [transaction])
                 Task {
                     try walletsService.enableBalances(
                         for: input.wallet.walletId,
-                        assetIds: transaction.assetIds
+                        assetIds: assetIds
                     )
-                    await walletsService.enableAssets(walletId: input.wallet.walletId, assetIds: transaction.assetIds, enabled: true)
+                    await walletsService.enableAssets(walletId: input.wallet.walletId, assetIds: assetIds, enabled: true)
                 }
 
                 if signedData.count > 1, transactionData != signedData.last {

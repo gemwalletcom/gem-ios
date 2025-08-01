@@ -13,8 +13,8 @@ public struct HyperCoreService: Sendable {
     
     public static let agentAddressKey: String = "hyperliquid_agent_address"
     public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
-    public static let feeRateBps = 50
-    public static let maxFeeRateBps = 50
+    public static let builderFeeBps = 50 // 50 tenths of bps = 5.0 bps = 0.05%
+    public static let maxBuilderFeeBps = 50
     public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
     public static let referralCode = "GEMWALLET"
     
@@ -135,7 +135,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func getChainID() async throws -> String {
-        return "42161" // Arbitrum chain ID
+        return ""
     }
 }
 
@@ -143,7 +143,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func getLatestBlock() async throws -> BigInt {
-        return BigInt(0)
+        return BigInt(1)
     }
 }
 
@@ -197,6 +197,16 @@ public extension HyperCoreService {
         
         let (agentRequired, referralRequired, builderRequired) = try await (approveAgentRequired, approveReferralRequired, approveBuilderRequired)
         
+        guard case let .perpetual(_, type)  = input.type else {
+            throw AnyError.notImplemented
+        }
+        let totalFeeTenthsBps = 45 + Self.builderFeeBps
+        let fiatValue = switch type {
+        case .open(let data): data.fiatValue
+        case .close(let data): data.fiatValue
+        }
+        let feeAmount = Int(fiatValue * Double(totalFeeTenthsBps))
+        
         return TransactionData(
             data: .hyperliquid(
                 SigningData.Hyperliquid(
@@ -206,7 +216,7 @@ public extension HyperCoreService {
                     timestamp: Date.getTimestampInMs()
                 )
             ),
-            fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+            fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
         )
     }
 }

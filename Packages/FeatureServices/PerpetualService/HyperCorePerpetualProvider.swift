@@ -81,15 +81,3 @@ extension HypercoreUniverseAsset {
         )
     }
 }
-
-extension Asset {
-    public static func hyperliquidUSD() -> Asset {
-        Asset(
-            id: mapHypercoreCoinToAssetId("USD"),
-            name: "USD",
-            symbol: "USD",
-            decimals: 6,
-            type: .perpetual
-        )
-    }
-}

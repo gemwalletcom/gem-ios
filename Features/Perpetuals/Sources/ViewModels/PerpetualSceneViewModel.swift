@@ -9,6 +9,7 @@ import Primitives
 import PrimitivesComponents
 import Store
 import SwiftUI
+import Formatters
 
 @Observable
 @MainActor
@@ -144,18 +145,19 @@ public extension PerpetualSceneViewModel {
         case .short: perpetualViewModel.perpetual.price * 1.02
         }
         
-        let price = formatter.formatPrice(positionPrice, decimals: Int(asset.decimals))
-        let size = formatter.formatSize(abs(position.size))
+        let price = formatter.formatPrice(provider: perpetualViewModel.perpetual.provider, positionPrice, decimals: Int(asset.decimals))
+        let size = formatter.formatSize(provider: perpetualViewModel.perpetual.provider, abs(position.size), decimals: Int(asset.decimals))
         let data = PerpetualConfirmData(
             direction: position.direction,
             asset: asset,
             assetIndex: Int(assetIndex),
             price: price,
+            fiatValue: abs(position.size) * positionPrice,
             size: size
         )
         
         let transferData = TransferData(
-            type: .perpetual(.hyperliquidUSD(), .close(data)),
+            type: .perpetual(.hyperliquidUSDC(), .close(data)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false
@@ -171,10 +173,13 @@ public extension PerpetualSceneViewModel {
         let data = PerpetualRecipientData(
             recipient: .hyperliquid(),
             data: PerpetualTransferData(
+                provider: perpetualViewModel.perpetual.provider,
                 direction: .long,
-                asset: .hyperliquidUSD(),
+                asset: .hyperliquidUSDC(),
+                perpetualAsset: asset,
                 assetIndex: Int(assetIndex),
-                price: perpetualViewModel.perpetual.price
+                price: perpetualViewModel.perpetual.price,
+                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
             )
         )
         onPerpetualRecipientData?(data)
@@ -187,10 +192,13 @@ public extension PerpetualSceneViewModel {
         let data = PerpetualRecipientData(
             recipient: .hyperliquid(),
             data: PerpetualTransferData(
+                provider: perpetualViewModel.perpetual.provider,
                 direction: .short,
-                asset: .hyperliquidUSD(),
+                asset: .hyperliquidUSDC(),
+                perpetualAsset: asset,
                 assetIndex: Int(assetIndex),
-                price: perpetualViewModel.perpetual.price
+                price: perpetualViewModel.perpetual.price,
+                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
             )
         )
         onPerpetualRecipientData?(data)

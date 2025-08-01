@@ -17,9 +17,14 @@ extension Asset {
     }
     
     public var feeAsset: Asset {
-        switch id.type {
-        case .native: self
-        case .token: id.chain.asset
+        switch id.chain {
+        case .hyperCore:
+            return Asset.hyperliquidUSDC()
+        default:
+            switch id.type {
+            case .native: return self
+            case .token: return id.chain.asset
+            }
         }
     }
 }
