@@ -454,3 +454,7 @@
 "markets.daily_volume" = "Objętość 24h";
 "perpetual.entry_price" = "Cena wejścia";
 "stake.your_staking" = "Twoje stakowanie";
+"widget.small.name" = "Cena Bitcoina";
+"widget.small.description" = "Śledź cenę Bitcoina";
+"widget.medium.name" = "Najwyższa cena kryptowaluty";
+"widget.medium.description" = "Śledź ceny najlepszych kryptowalut";
