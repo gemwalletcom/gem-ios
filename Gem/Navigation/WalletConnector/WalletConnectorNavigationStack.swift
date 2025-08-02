@@ -8,13 +8,9 @@ import Transfer
 import SwapService
 
 struct WalletConnectorNavigationStack: View {
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.keystore) private var keystore
-    @Environment(\.chainServiceFactory) private var chainServiceFactory
-    @Environment(\.walletsService) private var walletsService
     @Environment(\.connectionsService) private var connectionsService
-    @Environment(\.scanService) private var scanService
-    @Environment(\.nodeService) private var nodeService
-    @Environment(\.swapService) private var swapService
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter
@@ -33,20 +29,9 @@ struct WalletConnectorNavigationStack: View {
                 switch type {
                 case .transferData(let data):
                     ConfirmTransferScene(
-                        model: ConfirmTransferViewModel(
+                        model: viewModelFactory.confirmTransfer(
                             wallet: data.payload.wallet,
                             data: data.payload.tranferData,
-                            keystore: keystore,
-                            chainService: chainServiceFactory
-                                .service(for: data.payload.tranferData.chain),
-                            scanService: scanService,
-                            swapService: swapService,
-                            walletsService: walletsService,
-                            swapDataProvider: SwapQuoteDataProvider(
-                                keystore: keystore,
-                                swapService: swapService
-                            ),
-                            confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }
                         )
                     )

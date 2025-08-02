@@ -126,9 +126,11 @@ let package = Package(
         .target(
             name: "ScanServiceTestKit",
             dependencies: [
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
                 "ScanService",
                 "Primitives",
                 "GemAPI",
+                .product(name: "PreferencesTestKit", package: "Preferences"),
             ],
             path: "ScanService/TestKit"
         ),

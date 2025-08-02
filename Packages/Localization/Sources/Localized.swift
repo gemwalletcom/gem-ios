@@ -1196,6 +1196,10 @@ public enum Localized {
     public static let title = Localized.tr("Localizable", "verify_phrase.title", fallback: "Confirm")
   }
   public enum Wallet {
+    /// Available: %@
+    public static func availableBalance(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "wallet.available_balance", String(describing: p1), fallback: "Available: %@")
+    }
     /// Buy
     public static let buy = Localized.tr("Localizable", "wallet.buy", fallback: "Buy")
     /// Copy Address
@@ -1338,6 +1342,20 @@ public enum Localized {
       public static func concent(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>) -> String {
         return Localized.tr("Localizable", "welcome.legal.concent", p1, p2, fallback: "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)")
       }
+    }
+  }
+  public enum Widget {
+    public enum Medium {
+      /// Track prices of top cryptocurrencies
+      public static let description = Localized.tr("Localizable", "widget.medium.description", fallback: "Track prices of top cryptocurrencies")
+      /// Top Crypto Price
+      public static let name = Localized.tr("Localizable", "widget.medium.name", fallback: "Top Crypto Price")
+    }
+    public enum Small {
+      /// Track Bitcoin price
+      public static let description = Localized.tr("Localizable", "widget.small.description", fallback: "Track Bitcoin price")
+      /// Bitcoin Price
+      public static let name = Localized.tr("Localizable", "widget.small.name", fallback: "Bitcoin Price")
     }
   }
 }

@@ -5,19 +5,20 @@ import Components
 import Primitives
 import PrimitivesComponents
 import Formatters
+import Localization
 
 public struct PerpetualsHeaderViewModel {
     let walletType: WalletType
-    let totalValue: Double
+    let balance: WalletBalance
     let currencyFormatter: CurrencyFormatter
     
     public init(
         walletType: WalletType,
-        totalValue: Double,
+        balance: WalletBalance,
         currencyCode: String
     ) {
         self.walletType = walletType
-        self.totalValue = totalValue
+        self.balance = balance
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
     }
 }
@@ -25,9 +26,12 @@ public struct PerpetualsHeaderViewModel {
 extension PerpetualsHeaderViewModel: HeaderViewModel {
     public var allowHiddenBalance: Bool { true }
     public var isWatchWallet: Bool { walletType == .view }
-    public var title: String { currencyFormatter.string(totalValue) }
+    public var title: String { currencyFormatter.string(balance.total) }
     public var assetImage: AssetImage? { .none }
-    public var subtitle: String? { .none }
+    public var subtitle: String? {
+        Localized.Wallet
+            .availableBalance(currencyFormatter.string(balance.available))
+    }
 
     public var buttons: [HeaderButton] {
         [

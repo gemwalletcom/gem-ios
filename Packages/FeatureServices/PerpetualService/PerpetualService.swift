@@ -4,22 +4,26 @@ import Foundation
 import Primitives
 import Store
 import Blockchain
+import Formatters
 
 public struct PerpetualService: PerpetualServiceable {
     
     private let store: PerpetualStore
     private let assetStore: AssetStore
+    private let priceStore: PriceStore
     private let balanceStore: BalanceStore
     private let provider: PerpetualProvidable
     
     public init(
         store: PerpetualStore,
         assetStore: AssetStore,
+        priceStore: PriceStore,
         balanceStore: BalanceStore,
         providerFactory: PerpetualProviderFactory
     ) {
         self.store = store
         self.assetStore = assetStore
+        self.priceStore = priceStore
         self.balanceStore = balanceStore
         self.provider = providerFactory.createProvider()
     }
@@ -38,18 +42,44 @@ public struct PerpetualService: PerpetualServiceable {
         }) else {
             return
         }
-        let positions = try await provider.getPositions(address: account.address, walletId: wallet.id)
-        let assetIds = positions.map { $0.assetId } + [Chain.hyperCore.asset.id]
-        try balanceStore.addMissingBalances(walletId: wallet.id, assetIds: assetIds, isEnabled: false)
+        let summary = try await provider.getPositions(address: account.address, walletId: wallet.id)
         
-        try await syncProviderPositions(
-            positions: positions,
+        try syncProviderBalances(walletId: wallet.id, balance: summary.balance)
+        try syncProviderPositions(
+            positions: summary.positions,
             provider: provider.provider(),
             walletId: wallet.id
         )
     }
     
-    private func syncProviderPositions(positions: [PerpetualPosition], provider: PerpetualProvider, walletId: String) async throws {
+    private func syncProviderBalances(walletId: String, balance: PerpetualBalance) throws {
+        let usd = Asset.hyperliquidUSDC()
+        let formatter = ValueFormatter.full
+        try balanceStore.addMissingBalances(walletId: walletId, assetIds: [usd.id], isEnabled: false)
+        
+        try balanceStore.updateBalances(
+            [
+             UpdateBalance(
+                assetID: usd.id.identifier,
+                type: .coin(UpdateCoinBalance(
+                    available: UpdateBalanceValue(
+                        value: try formatter.inputNumber(from: balance.available.description, decimals: 6).description,
+                        amount: balance.available
+                    ),
+                    reserved: UpdateBalanceValue(
+                        value: try formatter.inputNumber(from: balance.reserved.description, decimals: 6).description,
+                        amount: balance.reserved
+                    )
+                )),
+                updatedAt: .now,
+                isActive: true
+             ),
+            ],
+            for: walletId
+        )
+    }
+    
+    private func syncProviderPositions(positions: [PerpetualPosition], provider: PerpetualProvider, walletId: String) throws {
         let existingPositions = try store.getPositions(walletId: walletId, provider: provider)
         let existingIds = existingPositions.map { $0.id }.asSet()
         let newIds = positions.map { $0.id }.asSet()
@@ -70,10 +100,19 @@ public struct PerpetualService: PerpetualServiceable {
     public func updateMarkets() async throws {
         let perpetualsData = try await provider.getPerpetualsData()
         let perpetuals = perpetualsData.map { $0.perpetual }
-        let assets = perpetualsData.map { createPerpetualAssetBasic(from: $0.asset) } + [createPerpetualAssetBasic(from: Chain.hyperCore.asset)]
+        let assets = perpetualsData.map { createPerpetualAssetBasic(from: $0.asset) } + [
+            createPerpetualAssetBasic(from: .hyperliquidUSDC()),
+        ]
         
         try assetStore.add(assets: assets)
         try store.upsertPerpetuals(perpetuals)
+        // setup prices
+        try priceStore.updatePrice(price: AssetPrice(
+            assetId: Asset.hyperliquidUSDC().id,
+            price: 1,
+            priceChangePercentage24h: 0,
+            updatedAt: .now
+        ), currency: Currency.usd.rawValue)
     }
     
     public func updateMarket(symbol: String) async throws {

@@ -142,24 +142,13 @@ struct WalletNavigationStack: View {
                         onComplete: model.onTransferComplete
                     )
                 }
-                .sheet(item: $model.isPresentingPerpetualRecipientData) { perpetualRecipientData in
-                    AmountNavigationStack(
-                        model: AmountSceneViewModel(
-                            input: AmountInput(
-                                type: .perpetual(
-                                    recipient: perpetualRecipientData.recipient,
-                                    perpetual: perpetualRecipientData.data
-                                ),
-                                asset: perpetualRecipientData.data.asset
-                            ),
-                            wallet: model.wallet,
-                            walletsService: walletsService,
-                            stakeService: AppResolver.main.services.stakeService,
-                            onTransferAction: {
-                                model.isPresentingPerpetualRecipientData = nil
-                                model.isPresentingTransferData = $0
-                            }
-                        )
+                .sheet(item: $model.isPresentingPerpetualRecipientData) {
+                    PerpetualPositionNavigationStack(
+                        perpetualRecipientData: $0,
+                        wallet: model.wallet,
+                        onComplete: {
+                            model.isPresentingPerpetualRecipientData = nil
+                        }
                     )
                 }
                 .safariSheet(url: $model.isPresentingUrl)

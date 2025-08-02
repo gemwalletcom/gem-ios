@@ -454,3 +454,8 @@
 "markets.daily_volume" = "২৪ ঘন্টা ভলিউম";
 "perpetual.entry_price" = "প্রবেশ মূল্য";
 "stake.your_staking" = "ততোমার স্টেকিং";
+"widget.small.name" = "বিটকয়েনের দাম";
+"widget.small.description" = "বিটকয়েনের দাম ট্র্যাক করুন";
+"widget.medium.name" = "শীর্ষ ক্রিপ্টো মূল্য";
+"widget.medium.description" = "শীর্ষ ক্রিপ্টোকারেন্সির দাম ট্র্যাক করুন";
+"wallet.available_balance" = "উপলব্ধ: %@";

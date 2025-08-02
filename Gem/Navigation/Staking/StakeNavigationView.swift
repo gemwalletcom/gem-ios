@@ -10,12 +10,9 @@ import NodeService
 import SwapService
 
 struct StakeNavigationView: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.nodeService) private var nodeService
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.stakeService) private var stakeService
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
 
     private let wallet: Wallet
     private let assetId: AssetId
@@ -52,19 +49,9 @@ struct StakeNavigationView: View {
         )
         .navigationDestination(for: TransferData.self) {
             ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
+                model: viewModelFactory.confirmTransfer(
                     wallet: wallet,
                     data: $0,
-                    keystore: keystore,
-                    chainService: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: $0.chain),
-                    scanService: scanService,
-                    swapService: swapService,
-                    walletsService: walletsService,
-                    swapDataProvider: SwapQuoteDataProvider(
-                        keystore: keystore,
-                        swapService: swapService
-                    ),
                     onComplete: onComplete
                 )
             )

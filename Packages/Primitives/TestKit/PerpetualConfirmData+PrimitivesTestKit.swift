@@ -9,6 +9,7 @@ public extension PerpetualConfirmData {
         asset: Asset = .mock(),
         assetIndex: Int = 0,
         price: String = "100",
+        fiatValue: Double = 100.0,
         size: String = "1"
     ) -> PerpetualConfirmData {
         PerpetualConfirmData(
@@ -16,6 +17,7 @@ public extension PerpetualConfirmData {
             asset: asset,
             assetIndex: assetIndex,
             price: price,
+            fiatValue: fiatValue,
             size: size
         )
     }

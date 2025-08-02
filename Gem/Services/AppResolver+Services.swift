@@ -56,6 +56,7 @@ extension AppResolver {
         let walletConnectorManager: WalletConnectorManager
         let perpetualService: PerpetualService
         let nameService: NameService
+        let viewModelFactory: ViewModelFactory
 
         init(
             assetsService: AssetsService,
@@ -86,7 +87,8 @@ extension AppResolver {
             onstartAsyncService: OnstartAsyncService,
             walletConnectorManager: WalletConnectorManager,
             perpetualService: PerpetualService,
-            nameService: NameService
+            nameService: NameService,
+            viewModelFactory: ViewModelFactory
         ) {
             self.assetsService = assetsService
             self.balanceService = balanceService
@@ -117,6 +119,7 @@ extension AppResolver {
             self.walletConnectorManager = walletConnectorManager
             self.perpetualService = perpetualService
             self.nameService = nameService
+            self.viewModelFactory = viewModelFactory
         }
     }
 }
