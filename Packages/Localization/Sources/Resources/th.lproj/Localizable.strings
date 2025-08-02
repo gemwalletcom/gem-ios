@@ -458,3 +458,4 @@
 "widget.small.description" = "ติดตามราคา Bitcoin";
 "widget.medium.name" = "ราคาคริปโตสูงสุด";
 "widget.medium.description" = "ติดตามราคาของสกุลเงินดิจิทัลชั้นนำ";
+"wallet.available_balance" = "พร้อมใช้งาน: %@";

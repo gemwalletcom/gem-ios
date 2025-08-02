@@ -458,3 +458,4 @@
 "widget.small.description" = "Spor Bitcoin-prisen";
 "widget.medium.name" = "Top Kryptopris";
 "widget.medium.description" = "Spor priserne på de bedste kryptovalutaer";
+"wallet.available_balance" = "Tilgængelig: %@";

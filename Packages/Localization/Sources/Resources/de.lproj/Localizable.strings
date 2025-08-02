@@ -458,3 +458,4 @@
 "widget.small.description" = "Bitcoin-Preis verfolgen";
 "widget.medium.name" = "Top-Krypto-Preis";
 "widget.medium.description" = "Verfolgen Sie die Preise der wichtigsten Kryptowährungen";
+"wallet.available_balance" = "Verfügbar: %@";

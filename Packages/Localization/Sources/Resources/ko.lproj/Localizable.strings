@@ -458,3 +458,4 @@
 "widget.small.description" = "비트코인 가격 추적";
 "widget.medium.name" = "최고 암호화폐 가격";
 "widget.medium.description" = "주요 암호화폐 가격 추적";
+"wallet.available_balance" = "사용 가능: %@";

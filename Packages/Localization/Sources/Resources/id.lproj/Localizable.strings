@@ -458,3 +458,4 @@
 "widget.small.description" = "Lacak harga Bitcoin";
 "widget.medium.name" = "Harga Kripto Teratas";
 "widget.medium.description" = "Lacak harga mata uang kripto teratas";
+"wallet.available_balance" = "Tersedia: %@";

@@ -458,3 +458,4 @@
 "widget.small.description" = "Отслеживайте цену Bitcoin";
 "widget.medium.name" = "Цены топ криптовалют";
 "widget.medium.description" = "Отслеживайте цены топ криптовалют";
+"wallet.available_balance" = "Доступно: %@";

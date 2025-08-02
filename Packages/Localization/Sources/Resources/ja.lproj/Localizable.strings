@@ -458,3 +458,4 @@
 "widget.small.description" = "ビットコインの価格を追跡する";
 "widget.medium.name" = "トップ暗号通貨価格";
 "widget.medium.description" = "主要暗号通貨の価格を追跡する";
+"wallet.available_balance" = "利用可能: %@";

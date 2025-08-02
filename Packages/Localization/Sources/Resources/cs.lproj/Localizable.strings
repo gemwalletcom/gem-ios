@@ -458,3 +458,4 @@
 "widget.small.description" = "Sledování ceny Bitcoinu";
 "widget.medium.name" = "Nejlepší cena kryptoměn";
 "widget.medium.description" = "Sledujte ceny nejoblíbenějších kryptoměn";
+"wallet.available_balance" = "Dostupné: %@";

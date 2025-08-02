@@ -458,3 +458,4 @@
 "widget.small.description" = "Theo dõi giá Bitcoin";
 "widget.medium.name" = "Giá tiền điện tử hàng đầu";
 "widget.medium.description" = "Theo dõi giá của các loại tiền điện tử hàng đầu";
+"wallet.available_balance" = "Có sẵn: %@";

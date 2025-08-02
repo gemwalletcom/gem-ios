@@ -458,3 +458,4 @@
 "widget.small.description" = "Bitcoin fiyatını takip edin";
 "widget.medium.name" = "En İyi Kripto Fiyatı";
 "widget.medium.description" = "En iyi kripto para birimlerinin fiyatlarını takip edin";
+"wallet.available_balance" = "Mevcut: %@";

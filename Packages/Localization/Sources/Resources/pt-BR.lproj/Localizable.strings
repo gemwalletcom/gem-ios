@@ -458,3 +458,4 @@
 "widget.small.description" = "Acompanhe o preço do Bitcoin";
 "widget.medium.name" = "Preço máximo de criptomoedas";
 "widget.medium.description" = "Acompanhe os preços das principais criptomoedas";
+"wallet.available_balance" = "Disponível: %@";
