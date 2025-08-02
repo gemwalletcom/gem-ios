@@ -29,9 +29,7 @@ public class HyperCoreSigner: Signable {
         let agentPrivateKeyName = "\(HyperCoreService.agentPrivateKey)_\(walletAddress)"
         let agentAddressKeyName = "\(HyperCoreService.agentAddressKey)_\(walletAddress)"
         
-        if let key = try keychain.get(agentPrivateKeyName),
-           let address = try keychain.get(agentAddressKeyName)
-        {
+        if let key = try keychain.get(agentPrivateKeyName), let address = try keychain.get(agentAddressKeyName) {
             return try (address: address, Data.from(hex: key))
         }
         let newKey = try SecureRandom.generateKey()
@@ -55,7 +53,7 @@ public class HyperCoreSigner: Signable {
         let (agentAddress, agentKey) = try getAgentKey(for: input.senderAddress)
         let builder = try? getBuilder(
             builder: HyperCoreService.builderAddress,
-            fee: HyperCoreService.feeRateBps
+            fee: HyperCoreService.builderFeeBps
         )
         let timestamp = data.timestamp
 
@@ -76,7 +74,7 @@ public class HyperCoreSigner: Signable {
                 try signApproveBuilderAddress(
                     agentKey: privateKey,
                     builderAddress: HyperCoreService.builderAddress,
-                    rateBps: HyperCoreService.feeRateBps,
+                    rateBps: HyperCoreService.builderFeeBps,
                     timestamp: timestamp
                 ),
             )

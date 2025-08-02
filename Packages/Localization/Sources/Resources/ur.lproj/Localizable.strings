@@ -454,3 +454,8 @@
 "markets.daily_volume" = "24h والیوم";
 "perpetual.entry_price" = "داخلے کی قیمت";
 "stake.your_staking" = "آپ کا Staking";
+"widget.small.name" = "بٹ کوائن کی قیمت";
+"widget.small.description" = "بٹ کوائن کی قیمت کو ٹریک کریں۔";
+"widget.medium.name" = "ٹاپ کریپٹو قیمت";
+"widget.medium.description" = "سرفہرست کریپٹو کرنسیوں کی قیمتوں کو ٹریک کریں۔";
+"wallet.available_balance" = "دستیاب: %@";

@@ -454,3 +454,8 @@
 "markets.daily_volume" = "24小時交易量";
 "perpetual.entry_price" = "入場價格";
 "stake.your_staking" = "您的質押";
+"widget.small.name" = "比特幣價格";
+"widget.small.description" = "追蹤比特幣價格";
+"widget.medium.name" = "最高加密貨幣價格";
+"widget.medium.description" = "追蹤頂級加密貨幣的價格";
+"wallet.available_balance" = "可用： %@";

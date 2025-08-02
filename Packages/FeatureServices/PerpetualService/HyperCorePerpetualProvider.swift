@@ -16,10 +16,13 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
         .hypercore
     }
     
-    func getPositions(address: String, walletId: String) async throws -> [PerpetualPosition] {
-        return try await hyperCoreService
-            .getPositions(user: address)
-            .mapToPerpetualPositions(walletId: walletId)
+    func getPositions(address: String, walletId: String) async throws -> PerpetualPositionsSummary {
+        let response = try await hyperCoreService.getPositions(user: address)
+        
+        return PerpetualPositionsSummary(
+            positions: response.mapToPerpetualPositions(walletId: walletId),
+            balance: try response.mapToPerpetualBalance()
+        )
     }
     
     

@@ -5,7 +5,7 @@ import Primitives
 
 public protocol PerpetualProvidable: Sendable {
     func provider() -> PerpetualProvider
-    func getPositions(address: String, walletId: String) async throws -> [PerpetualPosition]
+    func getPositions(address: String, walletId: String) async throws -> PerpetualPositionsSummary
     func getPerpetualsData() async throws -> [PerpetualData]
     func getCandlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick]
 }
