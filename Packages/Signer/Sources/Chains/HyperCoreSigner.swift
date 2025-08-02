@@ -29,9 +29,7 @@ public class HyperCoreSigner: Signable {
         let agentPrivateKeyName = "\(HyperCoreService.agentPrivateKey)_\(walletAddress)"
         let agentAddressKeyName = "\(HyperCoreService.agentAddressKey)_\(walletAddress)"
         
-        if let key = try keychain.get(agentPrivateKeyName),
-           let address = try keychain.get(agentAddressKeyName)
-        {
+        if let key = try keychain.get(agentPrivateKeyName), let address = try keychain.get(agentAddressKeyName) {
             return try (address: address, Data.from(hex: key))
         }
         let newKey = try SecureRandom.generateKey()

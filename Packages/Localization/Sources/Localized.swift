@@ -1196,6 +1196,10 @@ public enum Localized {
     public static let title = Localized.tr("Localizable", "verify_phrase.title", fallback: "Confirm")
   }
   public enum Wallet {
+    /// Available: %@
+    public static func availableBalance(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "wallet.available_balance", String(describing: p1), fallback: "Available: %@")
+    }
     /// Buy
     public static let buy = Localized.tr("Localizable", "wallet.buy", fallback: "Buy")
     /// Copy Address
