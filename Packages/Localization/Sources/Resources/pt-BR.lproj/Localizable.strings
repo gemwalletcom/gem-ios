@@ -454,3 +454,7 @@
 "markets.daily_volume" = "Volume 24h";
 "perpetual.entry_price" = "Preço de entrada";
 "stake.your_staking" = "Sua participação";
+"widget.small.name" = "Preço do Bitcoin";
+"widget.small.description" = "Acompanhe o preço do Bitcoin";
+"widget.medium.name" = "Preço máximo de criptomoedas";
+"widget.medium.description" = "Acompanhe os preços das principais criptomoedas";

@@ -454,3 +454,7 @@
 "markets.daily_volume" = "24h Volume";
 "perpetual.entry_price" = "Entry Price";
 "stake.your_staking" = "Your Staking";
+"widget.small.name" = "Bitcoin Price";
+"widget.small.description" = "Track Bitcoin price";
+"widget.medium.name" = "Top Crypto Price";
+"widget.medium.description" = "Track prices of top cryptocurrencies";
