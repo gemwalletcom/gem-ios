@@ -45,8 +45,8 @@ struct TransferDataViewModel {
             }
         case .perpetual(_, let type):
             switch type {
-            case .open: "Open Position"
-            case .close: "Close Position"
+            case .open: Localized.Perpetual.short
+            case .close: Localized.Perpetual.long
             }
         }
     }

@@ -86,6 +86,7 @@
 		D838194A2E256A5A0076CDB3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80A2E246E6700871ED9 /* WidgetKit.framework */; };
 		D838194B2E256A5A0076CDB3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80C2E246E6700871ED9 /* SwiftUI.framework */; };
 		D83819562E256A5B0076CDB3 /* GemPriceWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D83BDCB72E3E878A00E41807 /* PerpetualPositionNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83BDCB52E3E878A00E41807 /* PerpetualPositionNavigationStack.swift */; };
 		D83D3C252D6E62F4002959EA /* ScanService in Frameworks */ = {isa = PBXBuildFile; productRef = D83D3C242D6E62F4002959EA /* ScanService */; };
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
@@ -227,6 +228,7 @@
 		D832C80A2E246E6700871ED9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D832C80C2E246E6700871ED9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GemPriceWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D83BDCB52E3E878A00E41807 /* PerpetualPositionNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerpetualPositionNavigationStack.swift; sourceTree = "<group>"; };
 		D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetPriceAlertNavigationStack.swift; sourceTree = "<group>"; };
 		D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertsNavigationView.swift; sourceTree = "<group>"; };
 		D87316532E3AF1F000C11634 /* ChainServices */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ChainServices; sourceTree = "<group>"; };
@@ -445,6 +447,7 @@
 				D891DD3C2D3EDD7300241222 /* Staking */,
 				D8C4A3812C9388AC006FABE8 /* Price Alerts */,
 				830FDA442C224316003DA605 /* NavigationStateManager.swift */,
+				D83BDCB62E3E878A00E41807 /* Perpetuals */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -627,6 +630,14 @@
 				D88BB2682E2EE09F006310B9 /* Perpetuals */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		D83BDCB62E3E878A00E41807 /* Perpetuals */ = {
+			isa = PBXGroup;
+			children = (
+				D83BDCB52E3E878A00E41807 /* PerpetualPositionNavigationStack.swift */,
+			);
+			path = Perpetuals;
 			sourceTree = "<group>";
 		};
 		D86BA4CE2DF9FEC600A8EE9A /* Scenes */ = {
@@ -1031,6 +1042,7 @@
 				D807004E2BBB283400ED770B /* WalletNavigationStack.swift in Sources */,
 				D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */,
 				D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */,
+				D83BDCB72E3E878A00E41807 /* PerpetualPositionNavigationStack.swift in Sources */,
 				D807004A2BBB1FB600ED770B /* SettingsNavigationStack.swift in Sources */,
 				D8C4A3A52C9696FE006FABE8 /* AssetNavigationView.swift in Sources */,
 				D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */,
