@@ -14,7 +14,7 @@ public struct TonSigner: Signable {
             if let memo = input.memo {
                 $0.comment = memo
             }
-            $0.mode = input.useMaxAmount ? TheOpenNetworkSendMode.sendMaxTon() : TheOpenNetworkSendMode.defaultSendMode()
+            $0.mode = input.useMaxAmount ? TheOpenNetworkSendMode.transferAllTonMode() : TheOpenNetworkSendMode.defaultMode()
             $0.bounceable = false
         }
 
@@ -32,7 +32,7 @@ public struct TonSigner: Signable {
             if let memo = input.memo {
                 $0.comment = memo
             }
-            $0.mode = TheOpenNetworkSendMode.defaultSendMode()
+            $0.mode = TheOpenNetworkSendMode.defaultMode()
             $0.bounceable = true
             $0.jettonTransfer = .with {
                 $0.jettonAmount = input.value.serialize()
@@ -53,7 +53,7 @@ public struct TonSigner: Signable {
             if let memo = input.memo {
                 $0.comment = memo
             }
-            $0.mode = TheOpenNetworkSendMode.defaultSendMode()
+            $0.mode = TheOpenNetworkSendMode.defaultMode()
             $0.bounceable = true
             $0.customPayload = data.data
         }
@@ -85,11 +85,11 @@ public struct TonSigner: Signable {
 }
 
 extension TheOpenNetworkSendMode {
-    static func sendMaxTon() -> UInt32 {
-        UInt32(TheOpenNetworkSendMode.attachAllContractBalance.rawValue) | TheOpenNetworkSendMode.defaultSendMode()
+    static func transferAllTonMode() -> UInt32 {
+        UInt32(TheOpenNetworkSendMode.attachAllContractBalance.rawValue) | TheOpenNetworkSendMode.defaultMode()
     }
     
-    static func defaultSendMode() -> UInt32 {
+    static func defaultMode() -> UInt32 {
         UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
     }
 }
