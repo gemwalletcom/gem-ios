@@ -222,6 +222,7 @@ public extension HyperCoreService {
         guard case let .perpetual(_, type)  = input.type else {
             throw AnyError.notImplemented
         }
+        //TODO: Perpetual. Get 45 from the api
         let totalFeeTenthsBps = 45 + Self.builderFeeBps
         let fiatValue = switch type {
         case .open(let data): data.fiatValue
@@ -234,8 +235,7 @@ public extension HyperCoreService {
                 SigningData.Hyperliquid(
                     approveAgentRequired: agentRequired,
                     approveReferralRequired: referralRequired,
-                    approveBuilderRequired: builderRequired,
-                    timestamp: Date.getTimestampInMs()
+                    approveBuilderRequired: builderRequired
                 )
             ),
             fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)

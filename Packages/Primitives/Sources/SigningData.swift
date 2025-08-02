@@ -33,8 +33,7 @@ public enum SigningData: Sendable {
         public init(
             approveAgentRequired: Bool,
             approveReferralRequired: Bool,
-            approveBuilderRequired: Bool,
-            timestamp: UInt64
+            approveBuilderRequired: Bool
         ) {
             self.approveAgentRequired = approveAgentRequired
             self.approveReferralRequired = approveReferralRequired
