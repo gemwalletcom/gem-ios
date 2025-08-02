@@ -51,22 +51,23 @@ public class HyperCoreSigner: Signable {
         }
 
         let (agentAddress, agentKey) = try getAgentKey(for: input.senderAddress)
-        let builder = try? getBuilder(
-            builder: HyperCoreService.builderAddress,
-            fee: HyperCoreService.builderFeeBps
-        )
-        let timestamp = data.timestamp
-
+        let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: HyperCoreService.builderFeeBps)
+        // timestamp for each transaction should be increase to avoid duplicate nonce
+        let timestamp = Date.getTimestampInMs()
         var transactions: [String] = []
         
         if data.approveReferralRequired {
             transactions.append(
-                try signSetReferer(agentKey: agentKey, code: HyperCoreService.referralCode, timestamp: timestamp)
+                try signSetReferer(
+                    agentKey: privateKey,
+                    code: HyperCoreService.referralCode,
+                    timestamp: timestamp
+                )
             )
         }
         if data.approveAgentRequired {
             transactions.append(
-                try signApproveAgent(agentAddress: agentAddress, privateKey: privateKey, timestamp: timestamp)
+                try signApproveAgent(agentAddress: agentAddress, privateKey: privateKey, timestamp: timestamp + 1)
             )
         }
         if data.approveBuilderRequired {
@@ -75,13 +76,12 @@ public class HyperCoreSigner: Signable {
                     agentKey: privateKey,
                     builderAddress: HyperCoreService.builderAddress,
                     rateBps: HyperCoreService.builderFeeBps,
-                    timestamp: timestamp
+                    timestamp: timestamp + 2
                 )
             )
         }
-        
         transactions.append(
-            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestamp)
+            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestamp + 3)
         )
         
         return transactions

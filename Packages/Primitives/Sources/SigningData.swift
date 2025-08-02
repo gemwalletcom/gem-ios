@@ -29,7 +29,6 @@ public enum SigningData: Sendable {
         public let approveAgentRequired: Bool
         public let approveReferralRequired: Bool
         public let approveBuilderRequired: Bool
-        public let timestamp: UInt64
         
         public init(
             approveAgentRequired: Bool,
@@ -40,7 +39,6 @@ public enum SigningData: Sendable {
             self.approveAgentRequired = approveAgentRequired
             self.approveReferralRequired = approveReferralRequired
             self.approveBuilderRequired = approveBuilderRequired
-            self.timestamp = timestamp
         }
     }
 }
