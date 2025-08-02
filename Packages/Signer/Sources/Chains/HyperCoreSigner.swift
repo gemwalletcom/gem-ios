@@ -76,7 +76,7 @@ public class HyperCoreSigner: Signable {
                     builderAddress: HyperCoreService.builderAddress,
                     rateBps: HyperCoreService.builderFeeBps,
                     timestamp: timestamp
-                ),
+                )
             )
         }
         
