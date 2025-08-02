@@ -177,6 +177,19 @@ struct ServicesFactory {
         )
         
         let nameService = NameService()
+        let scanService = ScanService(securePreferences: .standard)
+        
+        let viewModelFactory = ViewModelFactory(
+            keystore: storages.keystore,
+            nodeService: nodeService,
+            scanService: scanService,
+            swapService: swapService,
+            walletsService: walletsService,
+            walletService: walletService,
+            stakeService: stakeService,
+            nameService: nameService,
+            chainServiceFactory: chainServiceFactory
+        )
 
         return AppResolver.Services(
             assetsService: assetsService,
@@ -196,7 +209,7 @@ struct ServicesFactory {
             walletService: walletService,
             walletsService: walletsService,
             explorerService: explorerService,
-            scanService: ScanService(securePreferences: .standard),
+            scanService: scanService,
             nftService: nftService,
             avatarService: avatarService,
             swapService: swapService,
@@ -207,7 +220,8 @@ struct ServicesFactory {
             onstartAsyncService: onstartAsyncService,
             walletConnectorManager: walletConnectorManager,
             perpetualService: perpetualService,
-            nameService: nameService
+            nameService: nameService,
+            viewModelFactory: viewModelFactory
         )
     }
 }

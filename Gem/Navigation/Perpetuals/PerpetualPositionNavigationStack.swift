@@ -12,10 +12,7 @@ import Swap
 import StakeService
 
 struct PerpetualPositionNavigationStack: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.nodeService) private var nodeService
-    @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.walletsService) private var walletsService
     @Environment(\.stakeService) private var stakeService
     
@@ -60,20 +57,11 @@ struct PerpetualPositionNavigationStack: View {
                     placement: .navigationBarLeading
                 )
             }
-            .navigationDestination(for: TransferData.self) { data in
+            .navigationDestination(for: TransferData.self) {
                 ConfirmTransferScene(
-                    model: ConfirmTransferViewModel(
+                    model: viewModelFactory.confirmTransfer(
                         wallet: wallet,
-                        data: data,
-                        keystore: keystore,
-                        chainService: ChainServiceFactory(nodeProvider: nodeService).service(for: data.chain),
-                        scanService: scanService,
-                        swapService: swapService,
-                        walletsService: walletsService,
-                        swapDataProvider: SwapQuoteDataProvider(
-                            keystore: keystore,
-                            swapService: swapService
-                        ),
+                        data: $0,
                         onComplete: {
                             onComplete?()
                         }

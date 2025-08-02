@@ -11,12 +11,9 @@ import Transfer
 import SwapService
 
 struct SwapNavigationView: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.nodeService) private var nodeService
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
-    @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
 
     @State private var model: SwapSceneViewModel
 
@@ -34,19 +31,9 @@ struct SwapNavigationView: View {
         SwapScene(model: model)
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
-                    model: ConfirmTransferViewModel(
+                    model: viewModelFactory.confirmTransfer(
                         wallet: model.wallet,
                         data: data,
-                        keystore: keystore,
-                        chainService: ChainServiceFactory(nodeProvider: nodeService)
-                            .service(for: data.chain),
-                        scanService: scanService,
-                        swapService: swapService,
-                        walletsService: model.walletsService,
-                        swapDataProvider: SwapQuoteDataProvider(
-                            keystore: keystore,
-                            swapService: swapService
-                        ),
                         onComplete: {
                             onSwapComplete(type: data.type)
                         }
