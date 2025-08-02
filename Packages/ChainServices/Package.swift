@@ -130,6 +130,7 @@ let package = Package(
                 "ScanService",
                 "Primitives",
                 "GemAPI",
+                .product(name: "PreferencesTestKit", package: "Preferences"),
             ],
             path: "ScanService/TestKit"
         ),

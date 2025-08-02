@@ -6,7 +6,9 @@ import SwiftHTTPClient
 
 public enum HypercoreProvider: TargetType {
     case clearinghouseState(user: String)
+    case spotClearinghouseState(user: String)
     case metaAndAssetCtxs
+    case spotMetaAndAssetCtxs
     case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
     case userRole(address: String)
     case referral(address: String)
@@ -24,7 +26,9 @@ public enum HypercoreProvider: TargetType {
     public var path: String {
         switch self {
         case .clearinghouseState,
+            .spotClearinghouseState,
             .metaAndAssetCtxs,
+            .spotMetaAndAssetCtxs,
             .candleSnapshot,
             .userRole,
             .referral,
@@ -42,9 +46,18 @@ public enum HypercoreProvider: TargetType {
                 "type": "clearinghouseState",
                 "user": user
             ])
+        case .spotClearinghouseState(let user):
+            return .encodable([
+                "type": "spotClearinghouseState",
+                "user": user
+            ])
         case .metaAndAssetCtxs:
             return .encodable([
                 "type": "metaAndAssetCtxs"
+            ])
+        case .spotMetaAndAssetCtxs:
+            return .encodable([
+                "type": "spotMetaAndAssetCtxs"
             ])
         case .candleSnapshot(let coin, let interval, let startTime, let endTime):
             return .encodable(JSON<String>.dictionary([

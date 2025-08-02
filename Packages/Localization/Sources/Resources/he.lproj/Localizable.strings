@@ -454,3 +454,8 @@
 "markets.daily_volume" = "נפח של 24 שעות";
 "perpetual.entry_price" = "מחיר כניסה";
 "stake.your_staking" = "ההימור שלך";
+"widget.small.name" = "מחיר ביטקוין";
+"widget.small.description" = "מעקב אחר מחיר הביטקוין";
+"widget.medium.name" = "מחיר הקריפטו הגבוה ביותר";
+"widget.medium.description" = "מעקב אחר מחירי מטבעות קריפטוגרפיים מובילים";
+"wallet.available_balance" = "זמין: %@";

@@ -454,3 +454,8 @@
 "markets.daily_volume" = "24h Volume";
 "perpetual.entry_price" = "Entry Price";
 "stake.your_staking" = "Ang iyong Staking";
+"widget.small.name" = "Presyo ng Bitcoin";
+"widget.small.description" = "Subaybayan ang presyo ng Bitcoin";
+"widget.medium.name" = "Nangungunang Presyo ng Crypto";
+"widget.medium.description" = "Subaybayan ang mga presyo ng mga nangungunang cryptocurrencies";
+"wallet.available_balance" = "Available: %@";

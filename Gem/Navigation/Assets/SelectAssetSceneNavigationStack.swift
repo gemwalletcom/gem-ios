@@ -14,6 +14,7 @@ import SwapService
 import ChainService
 
 struct SelectAssetSceneNavigationStack: View {
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.assetsService) private var assetsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletService) private var walletService
@@ -70,17 +71,9 @@ struct SelectAssetSceneNavigationStack: View {
                 switch input.type {
                 case .send:
                     RecipientNavigationView(
-                        model: RecipientSceneViewModel(
+                        model: viewModelFactory.recipientScene(
                             wallet: model.wallet,
                             asset: input.asset,
-                            keystore: keystore,
-                            walletService: walletService,
-                            walletsService: walletsService,
-                            nodeService: nodeService,
-                            stakeService: stakeService,
-                            scanService: scanService,
-                            swapService: swapService,
-                            nameService: nameService,
                             type: .asset(input.asset),
                             onRecipientDataAction: {
                                 navigationPath.append($0)
@@ -134,21 +127,11 @@ struct SelectAssetSceneNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: TransferData.self) { data in
+            .navigationDestination(for: TransferData.self) {
                 ConfirmTransferScene(
-                    model: ConfirmTransferViewModel(
+                    model: viewModelFactory.confirmTransfer(
                         wallet: model.wallet,
-                        data: data,
-                        keystore: keystore,
-                        chainService: ChainServiceFactory(nodeProvider: nodeService)
-                            .service(for: data.chain),
-                        scanService: scanService,
-                        swapService: swapService,
-                        walletsService: walletsService,
-                        swapDataProvider: SwapQuoteDataProvider(
-                            keystore: keystore,
-                            swapService: swapService
-                        ),
+                        data: $0,
                         onComplete: {
                             isPresentingSelectAssetType = nil
                         }

@@ -34,7 +34,7 @@ public struct HyperCoreCacheService: Sendable {
     public func needsBuilderFeeApproval(address: String, checker: () async throws -> Int) async throws -> Bool {
         try await checkApproval(address: address, key: Self.builderFeeApprovedKey) {
             let fee = try await checker()
-            return fee < HyperCoreService.maxFeeRateBps
+            return fee < HyperCoreService.maxBuilderFeeBps
         }
     }
     

@@ -40,14 +40,14 @@ public struct RecipientNavigationView: View {
                 )
             )
         }
-        .navigationDestination(for: TransferData.self) { data in
+        .navigationDestination(for: TransferData.self) {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: model.wallet,
-                    data: data,
+                    data: $0,
                     keystore: model.keystore,
                     chainService: ChainServiceFactory(nodeProvider: model.nodeService)
-                        .service(for: data.chain),
+                        .service(for: $0.chain),
                     scanService: model.scanService,
                     swapService: model.swapService,
                     walletsService: model.walletsService,
