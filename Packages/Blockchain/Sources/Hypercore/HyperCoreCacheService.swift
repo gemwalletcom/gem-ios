@@ -34,12 +34,12 @@ public struct HyperCoreCacheService: Sendable {
     public func needsBuilderFeeApproval(address: String, checker: () async throws -> Int) async throws -> Bool {
         try await checkApproval(address: address, key: Self.builderFeeApprovedKey) {
             let fee = try await checker()
-            return fee < HyperCoreService.maxBuilderFeeBps
+            return HyperCoreService.builderFeeBps > fee
         }
     }
     
     private func checkApproval(address: String, key: String, needsApprovalChecker: () async throws -> Bool) async rethrows -> Bool {
-        if cacheService.getBool(address: address, key: key) == true {
+        if cacheService.hasKey(address, key: key) {
             return false
         }
         

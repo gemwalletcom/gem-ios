@@ -15,6 +15,11 @@ public struct BlockchainCacheService: @unchecked Sendable {
         self.userDefaults = userDefaults
     }
     
+    public func hasKey(_ address: String, key: String) -> Bool {
+        let key = cacheKey(address: address, key: key)
+        return userDefaults.object(forKey: key) != nil
+    }
+    
     public func getBool(address: String, key: String) -> Bool? {
         let key = cacheKey(address: address, key: key)
         guard userDefaults.object(forKey: key) != nil else { return nil }

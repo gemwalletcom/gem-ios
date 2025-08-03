@@ -14,8 +14,7 @@ public struct HyperCoreService: Sendable {
     
     public static let agentAddressKey: String = "hyperliquid_agent_address"
     public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
-    public static let builderFeeBps = 45 // 0.05%
-    public static let maxBuilderFeeBps = 50
+    public static let builderFeeBps = 45 // 0.045%
     public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
     public static let referralCode = "GEMWALLET"
     
