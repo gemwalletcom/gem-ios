@@ -12,6 +12,7 @@ import SwiftUI
 public struct PerpetualViewModel {
     public let perpetual: Perpetual
     private let currencyFormatter: CurrencyFormatter
+    private let percentFormatter = CurrencyFormatter.percent
     private let fundingRateFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -20,9 +21,10 @@ public struct PerpetualViewModel {
         return formatter
     }()
     
+    
     public init(perpetual: Perpetual, currencyStyle: CurrencyFormatterType = .abbreviated) {
         self.perpetual = perpetual
-        self.currencyFormatter = CurrencyFormatter(type: currencyStyle)
+        self.currencyFormatter = CurrencyFormatter(type: currencyStyle, currencyCode: Currency.usd.rawValue)
     }
     
     public var name: String {
@@ -48,7 +50,7 @@ public struct PerpetualViewModel {
         if let formattedNumber = fundingRateFormatter.string(from: NSNumber(value: perpetual.funding)) {
             return "\(formattedNumber)%"
         }
-        return CurrencyFormatter(type: .percent).string(perpetual.funding)
+        return percentFormatter.string(perpetual.funding)
     }
     
     public var priceText: String {
@@ -56,7 +58,7 @@ public struct PerpetualViewModel {
     }
     
     public var priceChangeText: String {
-        CurrencyFormatter.percent.string(perpetual.pricePercentChange24h)
+        percentFormatter.string(perpetual.pricePercentChange24h)
     }
     
     public var priceChangeTextColor: Color {
