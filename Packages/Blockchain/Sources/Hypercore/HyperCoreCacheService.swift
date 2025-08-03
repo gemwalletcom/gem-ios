@@ -8,20 +8,31 @@ public struct HyperCoreCacheService: Sendable {
     private let cacheService: BlockchainCacheService
     private let keychain: Keychain
     
-    // Cache keys
     private static let referralApprovedKey = "referral_approved"
     private static let builderFeeApprovedKey = "builder_fee_approved"
+    private static let agentValidUntilKey = "agent_valid_until"
     
     public init(cacheService: BlockchainCacheService, keychain: Keychain = KeychainDefault()) {
         self.cacheService = cacheService
         self.keychain = keychain
     }
     
-    public func needsAgentApproval(walletAddress: String, checker: (String) async throws -> HypercoreUserRole) async throws -> Bool {
-        let agentAddressKey = "\(HyperCoreService.agentAddressKey)_\(walletAddress)"
-        guard let address = try? keychain.get(agentAddressKey) else { return true }
-        let role = try await checker(address)
-        return role.role != "agent"
+    public func needsAgentApproval(walletAddress: String, checker: () async throws -> [HypercoreAgentSession]) async throws -> Bool {
+        guard let agentAddress = try? keychain.get("\(HyperCoreService.agentAddressKey)_\(walletAddress)") else { return true }
+        
+        let currentTime = Int(Date().timeIntervalSince1970)
+        if let value = cacheService.getInt(address: agentAddress, key: Self.agentValidUntilKey), currentTime < value {
+            return false
+        }
+        let agents = try await checker()
+        
+        if let agent = agents.first(where: { $0.address.lowercased() == agentAddress.lowercased() }) {
+            let validUntil = Int(agent.validUntil / 1000)
+            cacheService.setInt(validUntil, address: agentAddress, key: Self.agentValidUntilKey)
+            return currentTime >= validUntil
+        }
+        
+        return true
     }
     
     public func needsReferralApproval(address: String, checker: () async throws -> HypercoreReferral) async throws -> Bool {

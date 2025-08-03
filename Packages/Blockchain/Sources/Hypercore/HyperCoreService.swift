@@ -69,6 +69,12 @@ public extension HyperCoreService {
             .map(as: HypercoreReferral.self)
     }
     
+    func getExtraAgents(user: String) async throws -> [HypercoreAgentSession] {
+        try await self.provider
+            .request(.extraAgents(user: user))
+            .map(as: [HypercoreAgentSession].self)
+    }
+    
     func getBuilderFee(address: String, builder: String) async throws -> Int {
         try await self.provider
             .request(.builderFee(address: address, builder: builder))
@@ -204,8 +210,8 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func load(input: TransactionInput) async throws -> TransactionData {
-        async let approveAgentRequired = cacheService.needsAgentApproval(walletAddress: input.senderAddress) { address in
-            try await getUserRole(address: address)
+        async let approveAgentRequired = cacheService.needsAgentApproval(walletAddress: input.senderAddress) {
+            try await getExtraAgents(user: input.senderAddress)
         }
         
         async let approveReferralRequired = cacheService.needsReferralApproval(address: input.senderAddress) {

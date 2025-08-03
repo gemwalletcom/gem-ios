@@ -29,6 +29,16 @@ public struct BlockchainCacheService: @unchecked Sendable {
     public func setBool(_ value: Bool, address: String, key: String) {
         userDefaults.set(value, forKey: cacheKey(address: address, key: key))
     }
+
+    public func getInt(address: String, key: String) -> Int? {
+        let key = cacheKey(address: address, key: key)
+        guard userDefaults.object(forKey: key) != nil else { return nil }
+        return userDefaults.integer(forKey: key)
+    }
+    
+    public func setInt(_ value: Int, address: String, key: String) {
+        userDefaults.set(value, forKey: cacheKey(address: address, key: key))
+    }
     
     private func cacheKey(address: String, key: String) -> String {
         "blockchain_\(chain.rawValue)_\(address.lowercased())_\(key)"
