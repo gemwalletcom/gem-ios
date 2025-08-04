@@ -74,6 +74,10 @@ public struct ValueFormatter: Sendable {
         return formatter
     }
     
+    private var abbreviatedFormatter: AbbreviatedFormatter {
+        AbbreviatedFormatter(locale: locale, threshold: abbreviationThreshold)
+    }
+    
     public func inputNumber(from string: String, decimals: Int) throws -> BigInt {
         // use standart formatter, which are en_US for getting correct BigInt value
         try BigNumberFormatter.standard.number(
@@ -156,20 +160,14 @@ public struct ValueFormatter: Sendable {
     }
 
     private func abbreviatedString(from decimal: Decimal, currency: String) -> String? {
-        guard case .abbreviated = style,
-              abs(decimal) >= abbreviationThreshold,
-              #available(iOS 18, *)
-        else {
+        guard case .abbreviated = style else {
             return nil
         }
-        
-        let formattedValue = decimal.formatted(
-            .number
-            .notation(.compactName)
-            .locale(locale)
-            .precision(.fractionLength(0...2))
-        )
-        return combined(formattedValue, currency: currency)
+
+        if let result = abbreviatedFormatter.string(from: decimal) {
+            return combined(result, currency: currency)
+        }
+        return nil
     }
 
     private func combined(_ value: String, currency: String) -> String {
