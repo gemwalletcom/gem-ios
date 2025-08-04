@@ -407,8 +407,8 @@
 "asset.verification.suspicious" = "Подозрительный";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
-"transfer.smart_contract.title" = "Smart Contract";
-"transfer.other.title" = "Other";
+"transfer.smart_contract.title" = "Смарт-контракт";
+"transfer.other.title" = "Прочее";
 "filter.has_balance" = "Имеет баланс";
 "swap.estimated_time.title" = "Расчетное время";
 "wallet.import.contract_address_field" = "Контракт или токен ID";
@@ -454,3 +454,9 @@
 "markets.daily_volume" = "24-часовой объем";
 "perpetual.entry_price" = "Цена входа";
 "stake.your_staking" = "Ваш Стейкинг";
+"widget.small.name" = "Цена Bitcoin";
+"widget.small.description" = "Отслеживайте цену Bitcoin";
+"widget.medium.name" = "Цены топ криптовалют";
+"widget.medium.description" = "Отслеживайте цены топ криптовалют";
+"wallet.available_balance" = "Доступно: %@";
+"lock.footer" = "Защитите доступ к этому приложению на вашем устройстве";

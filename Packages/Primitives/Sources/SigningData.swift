@@ -5,6 +5,7 @@ import Foundation
 public enum SigningData: Sendable {
     case none
     case polkadot(Polkadot)
+    case hyperliquid(Hyperliquid)
     
     public struct Polkadot: Sendable {
         public let genesisHash: Data
@@ -21,6 +22,22 @@ public enum SigningData: Sendable {
             self.specVersion = specVersion
             self.transactionVersion = transactionVersion
             self.period = period
+        }
+    }
+    
+    public struct Hyperliquid: Sendable {
+        public let approveAgentRequired: Bool
+        public let approveReferralRequired: Bool
+        public let approveBuilderRequired: Bool
+        
+        public init(
+            approveAgentRequired: Bool,
+            approveReferralRequired: Bool,
+            approveBuilderRequired: Bool
+        ) {
+            self.approveAgentRequired = approveAgentRequired
+            self.approveReferralRequired = approveReferralRequired
+            self.approveBuilderRequired = approveBuilderRequired
         }
     }
 }

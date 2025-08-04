@@ -13,6 +13,7 @@ import Assets
 import Transfer
 
 struct SelectedAssetNavigationStack: View  {
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
@@ -44,17 +45,9 @@ struct SelectedAssetNavigationStack: View  {
                 switch input.type {
                 case .send(let type):
                     RecipientNavigationView(
-                        model: RecipientSceneViewModel(
+                        model: viewModelFactory.recipientScene(
                             wallet: wallet,
                             asset: input.asset,
-                            keystore: keystore,
-                            walletService: walletService,
-                            walletsService: walletsService,
-                            nodeService: nodeService,
-                            stakeService: stakeService,
-                            scanService: scanService,
-                            swapService: swapService,
-                            nameService: nameService,
                             type: type,
                             onRecipientDataAction: {
                                 navigationPath.append($0)

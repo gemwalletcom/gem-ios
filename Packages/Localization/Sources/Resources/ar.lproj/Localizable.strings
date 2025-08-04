@@ -454,3 +454,9 @@
 "markets.daily_volume" = "حجم 24 ساعة";
 "perpetual.entry_price" = "سعر الدخول";
 "stake.your_staking" = "الستيكينج الخاص بك";
+"widget.small.name" = "سعر البيتكوين";
+"widget.small.description" = "تتبع سعر البيتكوين";
+"widget.medium.name" = "أعلى سعر للعملات المشفرة";
+"widget.medium.description" = "تتبع أسعار العملات المشفرة الرائدة";
+"wallet.available_balance" = "متاح: %@";
+"lock.footer" = "حماية الوصول إلى هذا التطبيق على جهازك";

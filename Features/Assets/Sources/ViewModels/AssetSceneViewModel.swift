@@ -100,7 +100,7 @@ public final class AssetSceneViewModel: Sendable {
     var networkText: String { assetModel.networkFullName }
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
-        return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
+        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -169,8 +169,8 @@ public final class AssetSceneViewModel: Sendable {
          .button(title: Localized.Common.share, systemImage: SystemImage.share, action: onSelectShareAsset)].compactMap { $0 }
     }
 
-    var scoreViewModel: AssetScoreViewModel {
-        AssetScoreViewModel(score: assetData.metadata.rankScore)
+    var scoreViewModel: AssetScoreTypeViewModel {
+        AssetScoreTypeViewModel(score: assetData.metadata.rankScore)
     }
 
     var showStatus: Bool {

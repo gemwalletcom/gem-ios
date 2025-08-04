@@ -133,7 +133,8 @@ extension TransactionInfoViewModel {
             fiatAmount: formattedFiatText(
                 price: input.price,
                 value: input.value,
-                decimals: input.asset.decimals.asInt)
+                decimals: input.asset.decimals.asInt
+            )
         )
     }
 

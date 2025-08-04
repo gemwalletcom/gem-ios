@@ -7,7 +7,7 @@ import GemstonePrimitives
 import Components
 import Style
 
-public struct AssetScoreViewModel {
+public struct AssetScoreTypeViewModel {
     public let scoreType: AssetScoreType
 
     public init(score: Int32) {
@@ -16,6 +16,10 @@ public struct AssetScoreViewModel {
         case 6...15: scoreType = .unverified
         default: scoreType = .verified
         }
+    }
+    
+    public init (scoreType: AssetScoreType) {
+        self.scoreType = scoreType
     }
     
     public var hasWarning: Bool {
@@ -33,6 +37,14 @@ public struct AssetScoreViewModel {
         }
     }
     
+    public var description: String {
+        switch scoreType {
+        case .verified: String.empty
+        case .unverified: Localized.Info.AssetStatus.Unverified.description
+        case .suspicious: Localized.Info.AssetStatus.Suspicious.description
+        }
+    }
+    
     public var statusStyle: TextStyle {
         switch scoreType {
         case .verified: .calloutSecondary
@@ -41,9 +53,9 @@ public struct AssetScoreViewModel {
         }
     }
     
-    public var assetImage: AssetImage? {
+    public var assetImage: AssetImage {
         switch scoreType {
-        case .verified: nil
+        case .verified: AssetImage()
         case .unverified: AssetImage(placeholder: Images.TokenStatus.warning)
         case .suspicious: AssetImage(placeholder: Images.TokenStatus.risk)
         }

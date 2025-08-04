@@ -38,6 +38,7 @@ let package = Package(
                 "Signer",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "KeychainTestKit", package: "Keychain"),
             ]
         ),
     ]

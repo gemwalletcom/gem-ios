@@ -62,7 +62,11 @@ extension ChainService {
                 graphql: GraphqlService(provider: ProviderFactory.create(with: url))
             )
         case .hyperCore:
-            HyperCoreService(chain: chain, provider: ProviderFactory.create(with: url))
+            HyperCoreService(
+                chain: chain,
+                provider: ProviderFactory.create(with: url),
+                cacheService: BlockchainCacheService(chain: chain)
+            )
         }
     }
 }

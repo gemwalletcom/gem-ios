@@ -35,6 +35,7 @@ public final class AmountSceneViewModel {
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
     private let numberSanitizer = NumberSanitizer()
     private let valueConverter = ValueConverter()
+    private let perpetualPriceFormatter = PerpetualPriceFormatter()
 
     private var currentValidator: DelegationValidator?
     private var currentDelegation: Delegation?
@@ -207,12 +208,13 @@ extension AmountSceneViewModel {
 
     func infoAction(for error: Error) -> (() -> Void)? {
         guard let transferError = error as? TransferError,
-              let infoSheet = transferError.infoSheet
+              case let .minimumAmount(asset, required) = transferError
         else {
             return nil
         }
         return { [weak self] in
-            self?.onSelect(infoSheet: infoSheet)
+            guard let self else { return }
+            self.isPresentingSheet = .infoAction(.stakeMinimumAmount(asset, required: required, action: self.onSelectBuy))
         }
     }
 }
@@ -248,21 +250,6 @@ extension AmountSceneViewModel {
             assetAddress: assetAddress,
             walletId: wallet.walletId
         )
-    }
-
-    private func onSelect(infoSheet: InfoSheetType) {
-        switch infoSheet {
-        case .stakeMinimumAmount(let asset, _):
-            isPresentingSheet = .infoAction(
-                infoSheet,
-                button: .action(
-                    title: Localized.Asset.buyAsset(asset.feeAsset.symbol),
-                    action: onSelectBuy
-                )
-            )
-        default:
-            break
-        }
     }
 
     private var recipientData: RecipientData {
@@ -305,7 +292,8 @@ extension AmountSceneViewModel {
             .stake,
             .unstake,
             .redelegate,
-            .withdraw:
+            .withdraw,
+            .perpetual:
                 return [
                 .amount(
                     source: source,
@@ -317,8 +305,6 @@ extension AmountSceneViewModel {
                     ]
                 )
             ]
-        case .perpetual:
-            return [] //TODO: Perpetual.
         }
     }
 
@@ -364,9 +350,27 @@ extension AmountSceneViewModel {
                 canChangeValue: canChangeValue
             )
         case .perpetual(_, let perpetual):
-            //TODO: Perpetual
-            let price = ""
-            let size = ""
+            // Add 2% slippage for market-like execution
+            // For long: buy 2% above market (more conservative)
+            // For short: sell 2% below market (more conservative)
+            let slippagePrice = switch perpetual.direction {
+            case .long: perpetual.price * 1.02
+            case .short: perpetual.price * 0.98
+            }
+            let price = perpetualPriceFormatter.formatPrice(
+                provider: perpetual.provider,
+                slippagePrice,
+                decimals: perpetual.perpetualAsset.decimals.asInt
+            )
+            // Convert USDC amount to USD value
+            let usdAmount = Double(value) / pow(10.0, Double(asset.decimals))
+            // Size = (USD amount * leverage) / price (use original price for size calculation)
+            let sizeAsAsset = (usdAmount * Double(perpetual.leverage)) / perpetual.price
+            let size = perpetualPriceFormatter.formatSize(
+                provider: perpetual.provider,
+                sizeAsAsset,
+                decimals: Int(perpetual.perpetualAsset.decimals)
+            )
             return TransferData(
                 type: .perpetual(
                     asset, .open(
@@ -375,6 +379,7 @@ extension AmountSceneViewModel {
                             asset: perpetual.asset,
                             assetIndex: perpetual.assetIndex,
                             price: price,
+                            fiatValue: perpetual.price * sizeAsAsset,
                             size: size
                         )
                     )
@@ -443,9 +448,11 @@ extension AmountSceneViewModel {
         case .deposit:
             // For deposits, require minimum 5 USDC
             if asset.symbol == "USDC" {
-                return BigInt(5_000_000) // 5 USDC with 6 decimals
+                return BigInt(10_000_000) // 5 USDC with 6 decimals
             }
-        case .unstake, .withdraw, .transfer, .perpetual:
+        case .perpetual:
+            return BigInt(12_000_000) // 15 USDC with 6 decimals
+        case .unstake, .withdraw, .transfer:
             break
         }
         return BigInt(0)
@@ -505,16 +512,5 @@ extension AmountSceneViewModel {
 
     private var minimumAccountReserve: BigInt {
         asset.type == .native ? asset.chain.minimumAccountBalance : .zero
-    }
-}
-
-extension TransferError {
-    var infoSheet: InfoSheetType? {
-        switch self {
-        case .minimumAmount(let asset, let required):
-            .stakeMinimumAmount(asset, required: required)
-        case .invalidAmount, .invalidAddress:
-            nil
-        }
     }
 }

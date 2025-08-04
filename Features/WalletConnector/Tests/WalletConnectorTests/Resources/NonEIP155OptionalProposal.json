@@ -1,30 +1,26 @@
 {
-  "id": "mock-id",
-  "pairingTopic": "mock-topic",
+  "id": "non-eip155-optional-test",
+  "pairingTopic": "non-eip155-optional-topic",
   "proposer": {
-    "name": "MockApp",
-    "description": "A sample app for testing",
-    "url": "https://mock.app",
-    "icons": [
-      "https://mock.app/icon1.png",
-      "https://mock.app/icon2.png"
-    ],
+    "name": "CosmosApp",
+    "description": "App with non-EIP155 optional chains",
+    "url": "https://cosmos.app",
+    "icons": ["https://cosmos.app/icon.png"],
     "redirect": {
-      "native": "mockapp://open",
-      "universal": "https://mock.app/deeplink",
+      "native": "cosmosapp://open",
+      "universal": "https://cosmos.app/deeplink",
       "linkMode": true
     }
   },
   "requiredNamespaces": {},
   "optionalNamespaces": {
-      "eip155": {
-        "chains": [
-          "eip155:1",
-          "eip155:137",
-        ],
-        "methods": ["eth_sendTransaction", "personal_sign"],
-        "events": ["chainChanged", "accountsChanged"]
-      }
+    "cosmos": {
+      "chains": [
+        "cosmos:cosmoshub-4"
+      ],
+      "methods": ["cosmos_sendTransaction"],
+      "events": ["cosmos_signMessage"]
+    }
   },
   "sessionProperties": {
     "theme": "dark",
@@ -38,18 +34,15 @@
       }
     ],
     "proposer": {
-      "publicKey": "mockPublicKey",
+      "publicKey": "cosmosPublicKey",
       "metadata": {
-        "name": "MockApp",
-        "description": "A sample app for testing",
-        "url": "https://mock.app",
-        "icons": [
-          "https://mock.app/icon1.png",
-          "https://mock.app/icon2.png"
-        ],
+        "name": "CosmosApp",
+        "description": "App with non-EIP155 optional chains",
+        "url": "https://cosmos.app",
+        "icons": ["https://cosmos.app/icon.png"],
         "redirect": {
-          "native": "mockapp://open",
-          "universal": "https://mock.app/deeplink",
+          "native": "cosmosapp://open",
+          "universal": "https://cosmos.app/deeplink",
           "linkMode": true
         }
       }

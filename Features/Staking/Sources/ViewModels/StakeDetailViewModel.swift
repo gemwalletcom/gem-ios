@@ -60,7 +60,7 @@ public struct StakeDetailViewModel {
     }
     
     public var validatorAprText: String {
-        CurrencyFormatter(type: .percentSignLess).string(model.delegation.validator.apr)
+        CurrencyFormatter.percentSignLess.string(model.delegation.validator.apr)
     }
     
     public var showManage: Bool {

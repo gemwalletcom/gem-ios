@@ -13,10 +13,11 @@ public struct PerpetualProviderFactory {
         self.nodeProvider = nodeProvider
     }
     
-    public func createProvider() -> PerpetualProvidable {
+    public func createProvider(chain: Chain = .hyperCore) -> PerpetualProvidable {
         HyperCorePerpetualProvider(
             hyperCoreService: HyperCoreService(
-                provider: ProviderFactory.create(with: nodeProvider.node(for: .hyperCore))
+                provider: ProviderFactory.create(with: nodeProvider.node(for: chain)),
+                cacheService: BlockchainCacheService(chain: chain)
             )
         )
     }

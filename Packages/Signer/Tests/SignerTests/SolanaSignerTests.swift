@@ -6,7 +6,7 @@ import PrimitivesTestKit
 import Testing
 import WalletCore
 
-final class SolanaSignerTests {
+struct SolanaSignerTests {
     let fee = Fee(fee: .zero, gasPriceType: .eip1559(gasPrice: 5_000, priorityFee: 10_000), gasLimit: 125_000)
 
     @Test

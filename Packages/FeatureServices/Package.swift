@@ -41,6 +41,7 @@ let package = Package(
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "Signer", path: "../Signer"),
         .package(name: "Keystore", path: "../Keystore"),
+        .package(name: "Formatters", path: "../Formatters"),
     ],
     targets: [
         .target(
@@ -49,6 +50,7 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "Blockchain",
+                "Formatters",
                 .product(name: "ChainService", package: "ChainServices"),
             ],
             path: "PerpetualService",

@@ -28,7 +28,8 @@ struct WidgetContentView: View {
                             currencyFormatter: CurrencyFormatter(
                                 type: .abbreviated,
                                 currencyCode: viewModel.entry.currency
-                            )
+                            ),
+                            percentFormatter: CurrencyFormatter.percent
                         )
                     )
                 }
@@ -37,7 +38,10 @@ struct WidgetContentView: View {
                     CoinPriceRow(
                         model: CoinPriceRowViewModel(
                             coin: coin,
-                            currencyFormatter: CurrencyFormatter(currencyCode: viewModel.entry.currency)
+                            currencyFormatter: CurrencyFormatter(
+                                currencyCode: viewModel.entry.currency
+                            ),
+                            percentFormatter: CurrencyFormatter.percent
                         )
                     )
                 }

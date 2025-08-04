@@ -1,21 +1,28 @@
 {
-  "id": "mock-id",
-  "pairingTopic": "mock-topic",
+  "id": "mixed-required-optional-test",
+  "pairingTopic": "mixed-required-optional-topic",
   "proposer": {
-    "name": "MockApp",
-    "description": "A sample app for testing",
-    "url": "https://mock.app",
-    "icons": [
-      "https://mock.app/icon1.png",
-      "https://mock.app/icon2.png"
-    ],
+    "name": "MixedApp",
+    "description": "App with both required and optional chains",
+    "url": "https://mixed.app",
+    "icons": ["https://mixed.app/icon.png"],
     "redirect": {
-      "native": "mockapp://open",
-      "universal": "https://mock.app/deeplink",
+      "native": "mixedapp://open",
+      "universal": "https://mixed.app/deeplink",
       "linkMode": true
     }
   },
-  "requiredNamespaces": {},
+  "requiredNamespaces": {
+    "eip155": {
+      "chains": [
+        "eip155:1",
+        "eip155:137",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "methods": ["eth_sendTransaction", "personal_sign"],
+      "events": ["chainChanged", "accountsChanged"]
+    }
+  },
   "optionalNamespaces": {
     "cosmos": {
       "chains": [
@@ -37,18 +44,15 @@
       }
     ],
     "proposer": {
-      "publicKey": "mockPublicKey",
+      "publicKey": "mixedPublicKey",
       "metadata": {
-        "name": "MockApp",
-        "description": "A sample app for testing",
-        "url": "https://mock.app",
-        "icons": [
-          "https://mock.app/icon1.png",
-          "https://mock.app/icon2.png"
-        ],
+        "name": "MixedApp",
+        "description": "App with both required and optional chains",
+        "url": "https://mixed.app",
+        "icons": ["https://mixed.app/icon.png"],
         "redirect": {
-          "native": "mockapp://open",
-          "universal": "https://mock.app/deeplink",
+          "native": "mixedapp://open",
+          "universal": "https://mixed.app/deeplink",
           "linkMode": true
         }
       }

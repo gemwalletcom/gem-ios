@@ -9,6 +9,7 @@ import Primitives
 import PrimitivesComponents
 import Store
 import SwiftUI
+import Formatters
 
 @Observable
 @MainActor
@@ -20,7 +21,9 @@ public final class PerpetualSceneViewModel {
     public let wallet: Wallet
     public let asset: Asset
     public var positionsRequest: PerpetualPositionsRequest
+    public var perpetualTotalValueRequest: TotalValueRequest
     public var positions: [PerpetualPositionData] = []
+    public var perpetualTotalValue: Double = .zero
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .hour {
         didSet {
@@ -53,6 +56,7 @@ public final class PerpetualSceneViewModel {
         self.onPerpetualRecipientData = onPerpetualRecipientData
         self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
+        self.perpetualTotalValueRequest = TotalValueRequest(walletId: wallet.id, balanceType: .perpetual)
     }
 
     public var navigationTitle: String {
@@ -61,6 +65,14 @@ public final class PerpetualSceneViewModel {
 
     public var hasOpenPosition: Bool {
         !positionViewModels.isEmpty
+    }
+
+    var perpetualHeaderModel: WalletHeaderViewModel {
+        WalletHeaderViewModel(
+            walletType: wallet.type,
+            value: perpetualTotalValue,
+            currencyCode: Currency.usd.rawValue
+        )
     }
 
     public var positionSectionTitle: String { Localized.Perpetual.position }
@@ -133,18 +145,19 @@ public extension PerpetualSceneViewModel {
         case .short: perpetualViewModel.perpetual.price * 1.02
         }
         
-        let price = formatter.formatPrice(positionPrice, decimals: Int(asset.decimals))
-        let size = formatter.formatSize(abs(position.size))
+        let price = formatter.formatPrice(provider: perpetualViewModel.perpetual.provider, positionPrice, decimals: Int(asset.decimals))
+        let size = formatter.formatSize(provider: perpetualViewModel.perpetual.provider, abs(position.size), decimals: Int(asset.decimals))
         let data = PerpetualConfirmData(
             direction: position.direction,
             asset: asset,
             assetIndex: Int(assetIndex),
             price: price,
+            fiatValue: abs(position.size) * positionPrice,
             size: size
         )
         
         let transferData = TransferData(
-            type: .perpetual(asset, .close(data)),
+            type: .perpetual(.hyperliquidUSDC(), .close(data)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false
@@ -160,10 +173,13 @@ public extension PerpetualSceneViewModel {
         let data = PerpetualRecipientData(
             recipient: .hyperliquid(),
             data: PerpetualTransferData(
+                provider: perpetualViewModel.perpetual.provider,
                 direction: .long,
-                asset: asset,
+                asset: .hyperliquidUSDC(),
+                perpetualAsset: asset,
                 assetIndex: Int(assetIndex),
-                price: perpetualViewModel.perpetual.price
+                price: perpetualViewModel.perpetual.price,
+                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
             )
         )
         onPerpetualRecipientData?(data)
@@ -176,10 +192,13 @@ public extension PerpetualSceneViewModel {
         let data = PerpetualRecipientData(
             recipient: .hyperliquid(),
             data: PerpetualTransferData(
+                provider: perpetualViewModel.perpetual.provider,
                 direction: .short,
-                asset: asset,
+                asset: .hyperliquidUSDC(),
+                perpetualAsset: asset,
                 assetIndex: Int(assetIndex),
-                price: perpetualViewModel.perpetual.price
+                price: perpetualViewModel.perpetual.price,
+                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
             )
         )
         onPerpetualRecipientData?(data)
@@ -194,4 +213,3 @@ extension RecipientData {
         )
     }
 }
-

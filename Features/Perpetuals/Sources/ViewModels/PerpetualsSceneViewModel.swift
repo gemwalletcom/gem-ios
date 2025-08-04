@@ -19,6 +19,7 @@ public final class PerpetualsSceneViewModel {
     public let wallet: Wallet
     public let positions: [PerpetualPositionData]
     public let perpetuals: [PerpetualData]
+    public let walletBalance: WalletBalance
     
     public var isLoading: Bool = false
     public let preferences: Preferences = .standard
@@ -31,6 +32,7 @@ public final class PerpetualsSceneViewModel {
         perpetualService: PerpetualServiceable,
         positions: [PerpetualPositionData],
         perpetuals: [PerpetualData],
+        walletBalance: WalletBalance,
         onSelectAssetType: ((SelectAssetType) -> Void)? = nil,
         onTransferComplete: ((TransferData) -> Void)? = nil
     ) {
@@ -38,6 +40,7 @@ public final class PerpetualsSceneViewModel {
         self.perpetualService = perpetualService
         self.positions = positions
         self.perpetuals = perpetuals
+        self.walletBalance = walletBalance
         self.onSelectAssetType = onSelectAssetType
         self.onTransferComplete = onTransferComplete
     }
@@ -50,8 +53,8 @@ public final class PerpetualsSceneViewModel {
     public var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
             walletType: wallet.type,
-            totalValue: 10,
-            currencyCode: "USD"
+            balance: walletBalance,
+            currencyCode: Currency.usd.rawValue
         )
     }
 }
@@ -73,11 +76,11 @@ extension PerpetualsSceneViewModel {
     }
     
     func updateMarkets() async {
-        guard preferences.perpetualMarketsUpadtedAt.isOutdated(byDays: 7) else { return }
+        guard preferences.perpetualMarketsUpdatedAt.isOutdated(byDays: 7) else { return }
         
         do {
             try await perpetualService.updateMarkets()
-            preferences.perpetualMarketsUpadtedAt = .now
+            preferences.perpetualMarketsUpdatedAt = .now
         } catch {
             NSLog("Failed to update markets: \(error)")
         }
