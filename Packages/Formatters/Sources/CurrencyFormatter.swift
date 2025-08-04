@@ -54,7 +54,8 @@ public struct CurrencyFormatter: Sendable, Hashable {
         return formatter
     }
     
-    public static let percent = CurrencyFormatter(type: .percent)
+    public static let percent = CurrencyFormatter(type: .percent, currencyCode: .empty)
+    public static let percentSignLess = CurrencyFormatter(type: .percentSignLess, currencyCode: .empty)
 
     public var currencyCode: String
     public var abbreviationThreshold: Double = 100_000
@@ -62,7 +63,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
     public init(
         type: CurrencyFormatterType = .currency,
         locale: Locale = Locale.current,
-        currencyCode: String = Locale.current.currency?.identifier ?? .empty
+        currencyCode: String
     ) {
         self.type = type
         self.locale = locale

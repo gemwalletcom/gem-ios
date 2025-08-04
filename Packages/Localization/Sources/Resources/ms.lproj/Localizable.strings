@@ -459,3 +459,4 @@
 "widget.medium.name" = "Harga Kripto Tertinggi";
 "widget.medium.description" = "Jejaki harga mata wang kripto teratas";
 "wallet.available_balance" = "Tersedia: %@";
+"lock.footer" = "Lindungi akses kepada apl ini pada peranti anda";

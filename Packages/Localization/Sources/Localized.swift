@@ -603,6 +603,8 @@ public enum Localized {
     public static let fifteenMinutes = Localized.tr("Localizable", "lock.fifteen_minutes", fallback: "15 minutes")
     /// 5 minutes
     public static let fiveMinutes = Localized.tr("Localizable", "lock.five_minutes", fallback: "5 minutes")
+    /// Protect access to this app on your device
+    public static let footer = Localized.tr("Localizable", "lock.footer", fallback: "Protect access to this app on your device")
     /// Immediately
     public static let immediately = Localized.tr("Localizable", "lock.immediately", fallback: "Immediately")
     /// 1 hour

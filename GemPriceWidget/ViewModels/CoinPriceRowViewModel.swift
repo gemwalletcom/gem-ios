@@ -10,14 +10,16 @@ import Components
 internal final class CoinPriceRowViewModel {
     private let coin: CoinPrice
     private let currencyFormatter: CurrencyFormatter
-    private let percentFormatter = CurrencyFormatter.percent
+    private let percentFormatter: CurrencyFormatter
     
     internal init(
         coin: CoinPrice,
-        currencyFormatter: CurrencyFormatter = CurrencyFormatter()
+        currencyFormatter: CurrencyFormatter,
+        percentFormatter: CurrencyFormatter
     ) {
         self.coin = coin
         self.currencyFormatter = currencyFormatter
+        self.percentFormatter = percentFormatter
     }
     
     var name: String {

@@ -459,3 +459,4 @@
 "widget.medium.name" = "Цены топ криптовалют";
 "widget.medium.description" = "Отслеживайте цены топ криптовалют";
 "wallet.available_balance" = "Доступно: %@";
+"lock.footer" = "Защитите доступ к этому приложению на вашем устройстве";

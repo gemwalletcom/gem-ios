@@ -459,3 +459,4 @@
 "widget.medium.name" = "Prezzo massimo delle criptovalute";
 "widget.medium.description" = "Tieni traccia dei prezzi delle principali criptovalute";
 "wallet.available_balance" = "Disponibile: %@";
+"lock.footer" = "Proteggi l'accesso a questa app sul tuo dispositivo";

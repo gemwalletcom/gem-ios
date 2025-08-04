@@ -14,8 +14,7 @@ public struct HyperCoreService: Sendable {
     
     public static let agentAddressKey: String = "hyperliquid_agent_address"
     public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
-    public static let builderFeeBps = 45 // 0.05%
-    public static let maxBuilderFeeBps = 50
+    public static let builderFeeBps = 45 // 0.045%
     public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
     public static let referralCode = "GEMWALLET"
     
@@ -68,6 +67,12 @@ public extension HyperCoreService {
         try await self.provider
             .request(.referral(address: address))
             .map(as: HypercoreReferral.self)
+    }
+    
+    func getExtraAgents(user: String) async throws -> [HypercoreAgentSession] {
+        try await self.provider
+            .request(.extraAgents(user: user))
+            .map(as: [HypercoreAgentSession].self)
     }
     
     func getBuilderFee(address: String, builder: String) async throws -> Int {
@@ -205,8 +210,8 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func load(input: TransactionInput) async throws -> TransactionData {
-        async let approveAgentRequired = cacheService.needsAgentApproval(walletAddress: input.senderAddress) { address in
-            try await getUserRole(address: address)
+        async let approveAgentRequired = cacheService.needsAgentApproval(walletAddress: input.senderAddress) {
+            try await getExtraAgents(user: input.senderAddress)
         }
         
         async let approveReferralRequired = cacheService.needsReferralApproval(address: input.senderAddress) {
@@ -222,6 +227,7 @@ public extension HyperCoreService {
         guard case let .perpetual(_, type)  = input.type else {
             throw AnyError.notImplemented
         }
+        //TODO: Perpetual. Get 45 from the api
         let totalFeeTenthsBps = 45 + Self.builderFeeBps
         let fiatValue = switch type {
         case .open(let data): data.fiatValue
@@ -234,8 +240,7 @@ public extension HyperCoreService {
                 SigningData.Hyperliquid(
                     approveAgentRequired: agentRequired,
                     approveReferralRequired: referralRequired,
-                    approveBuilderRequired: builderRequired,
-                    timestamp: Date.getTimestampInMs()
+                    approveBuilderRequired: builderRequired
                 )
             ),
             fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)

@@ -459,3 +459,4 @@
 "widget.medium.name" = "Meilleur prix des cryptomonnaies";
 "widget.medium.description" = "Suivez les prix des principales crypto-monnaies";
 "wallet.available_balance" = "Disponible : %@";
+"lock.footer" = "Protégez l'accès à cette application sur votre appareil";

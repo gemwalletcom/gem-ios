@@ -459,3 +459,4 @@
 "widget.medium.name" = "ٹاپ کریپٹو قیمت";
 "widget.medium.description" = "سرفہرست کریپٹو کرنسیوں کی قیمتوں کو ٹریک کریں۔";
 "wallet.available_balance" = "دستیاب: %@";
+"lock.footer" = "اپنے آلے پر اس ایپ تک رسائی کی حفاظت کریں۔";

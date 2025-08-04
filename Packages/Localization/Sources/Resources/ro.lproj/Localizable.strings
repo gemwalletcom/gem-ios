@@ -459,3 +459,4 @@
 "widget.medium.name" = "Preț maxim al criptomonedelor";
 "widget.medium.description" = "Urmărește prețurile criptomonedelor de top";
 "wallet.available_balance" = "Disponibil: %@";
+"lock.footer" = "Protejați accesul la această aplicație pe dispozitivul dvs.";

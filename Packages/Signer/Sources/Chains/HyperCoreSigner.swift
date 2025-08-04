@@ -51,22 +51,23 @@ public class HyperCoreSigner: Signable {
         }
 
         let (agentAddress, agentKey) = try getAgentKey(for: input.senderAddress)
-        let builder = try? getBuilder(
-            builder: HyperCoreService.builderAddress,
-            fee: HyperCoreService.builderFeeBps
-        )
-        let timestamp = data.timestamp
-
+        let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: HyperCoreService.builderFeeBps)
+        // timestamp for each transaction should be increase to avoid duplicate nonce
+        let timestamp = Date.getTimestampInMs()
         var transactions: [String] = []
         
         if data.approveReferralRequired {
             transactions.append(
-                try signSetReferer(agentKey: agentKey, code: HyperCoreService.referralCode, timestamp: timestamp)
+                try signSetReferer(
+                    agentKey: privateKey,
+                    code: HyperCoreService.referralCode,
+                    timestamp: timestamp
+                )
             )
         }
         if data.approveAgentRequired {
             transactions.append(
-                try signApproveAgent(agentAddress: agentAddress, privateKey: privateKey, timestamp: timestamp)
+                try signApproveAgent(agentAddress: agentAddress, privateKey: privateKey, timestamp: timestamp + 1)
             )
         }
         if data.approveBuilderRequired {
@@ -75,13 +76,12 @@ public class HyperCoreSigner: Signable {
                     agentKey: privateKey,
                     builderAddress: HyperCoreService.builderAddress,
                     rateBps: HyperCoreService.builderFeeBps,
-                    timestamp: timestamp
+                    timestamp: timestamp + 2
                 )
             )
         }
-        
         transactions.append(
-            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestamp)
+            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestamp + 3)
         )
         
         return transactions
@@ -98,9 +98,8 @@ public class HyperCoreSigner: Signable {
         )
     }
 
-    public func signWithdraw(input: SignerInput, privateKey: Data) throws -> String {
+    public func signWithdraw(input: SignerInput, privateKey: Data, timestamp: UInt64) throws -> String {
         // FIXME: make sure input.amount is correct  ("2" means 2 USD)
-        let timestamp = Date.getTimestampInMs()
         let request = factory.makeWithdraw(amount: input.value.description, address: input.senderAddress.lowercased(), nonce: timestamp)
         let eip712Message = hyperCore.withdrawalRequestTypedData(request: request)
         let signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
@@ -110,7 +109,6 @@ public class HyperCoreSigner: Signable {
     
     // "0.05%" = 50bps. 1 means 0.001%
     public func signApproveBuilderAddress(agentKey: Data, builderAddress: String, rateBps: Int, timestamp: UInt64) throws -> String {
-        let timestamp = Date.getTimestampInMs()
         let maxFeeRate = HyperCoreService.feeRate(rateBps)
         let request = factory.makeApproveBuilder(maxFeeRate: maxFeeRate, builder: builderAddress, nonce: timestamp)
         let eip712Message = hyperCore.approveBuilderFeeTypedData(fee: request)

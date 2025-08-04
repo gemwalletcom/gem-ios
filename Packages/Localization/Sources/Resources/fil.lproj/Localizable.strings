@@ -459,3 +459,4 @@
 "widget.medium.name" = "Nangungunang Presyo ng Crypto";
 "widget.medium.description" = "Subaybayan ang mga presyo ng mga nangungunang cryptocurrencies";
 "wallet.available_balance" = "Available: %@";
+"lock.footer" = "Protektahan ang access sa app na ito sa iyong device";

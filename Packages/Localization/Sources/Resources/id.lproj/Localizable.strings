@@ -459,3 +459,4 @@
 "widget.medium.name" = "Harga Kripto Teratas";
 "widget.medium.description" = "Lacak harga mata uang kripto teratas";
 "wallet.available_balance" = "Tersedia: %@";
+"lock.footer" = "Lindungi akses ke aplikasi ini di perangkat Anda";

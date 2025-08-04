@@ -100,7 +100,7 @@ public final class AssetSceneViewModel: Sendable {
     var networkText: String { assetModel.networkFullName }
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
-        return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
+        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
     }
 
     var priceItemViewModel: PriceListItemViewModel {

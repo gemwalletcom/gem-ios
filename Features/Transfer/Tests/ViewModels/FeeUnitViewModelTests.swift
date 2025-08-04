@@ -9,8 +9,8 @@ import Formatters
 @testable import Transfer
 
 struct FeeUnitViewModelTests {
-    let formatter = CurrencyFormatter()
-    let usFormatter = CurrencyFormatter(locale: .US)
+    let formatter = CurrencyFormatter(currencyCode: .empty)
+    let usFormatter = CurrencyFormatter(locale: .US, currencyCode: .empty)
     let asset = Asset.mock()
 
     @Test
