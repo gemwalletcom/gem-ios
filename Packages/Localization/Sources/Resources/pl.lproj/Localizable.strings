@@ -459,3 +459,4 @@
 "widget.medium.name" = "Najwyższa cena kryptowaluty";
 "widget.medium.description" = "Śledź ceny najlepszych kryptowalut";
 "wallet.available_balance" = "Dostępne: %@";
+"lock.footer" = "Chroń dostęp do tej aplikacji na swoim urządzeniu";

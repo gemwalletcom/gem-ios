@@ -459,3 +459,4 @@
 "widget.medium.name" = "최고 암호화폐 가격";
 "widget.medium.description" = "주요 암호화폐 가격 추적";
 "wallet.available_balance" = "사용 가능: %@";
+"lock.footer" = "기기에서 이 앱에 대한 액세스를 보호하세요";

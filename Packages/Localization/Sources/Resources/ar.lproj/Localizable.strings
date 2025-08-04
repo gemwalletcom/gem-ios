@@ -459,3 +459,4 @@
 "widget.medium.name" = "أعلى سعر للعملات المشفرة";
 "widget.medium.description" = "تتبع أسعار العملات المشفرة الرائدة";
 "wallet.available_balance" = "متاح: %@";
+"lock.footer" = "حماية الوصول إلى هذا التطبيق على جهازك";

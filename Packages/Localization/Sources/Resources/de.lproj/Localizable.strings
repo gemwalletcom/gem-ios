@@ -459,3 +459,4 @@
 "widget.medium.name" = "Top-Krypto-Preis";
 "widget.medium.description" = "Verfolgen Sie die Preise der wichtigsten Kryptowährungen";
 "wallet.available_balance" = "Verfügbar: %@";
+"lock.footer" = "Schützen Sie den Zugriff auf diese App auf Ihrem Gerät";
