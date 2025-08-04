@@ -459,3 +459,4 @@
 "widget.medium.name" = "Top Crypto Price";
 "widget.medium.description" = "Track prices of top cryptocurrencies";
 "wallet.available_balance" = "Available: %@";
+"lock.footer" = "Protect access to this app on your device";

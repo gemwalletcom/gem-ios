@@ -459,3 +459,4 @@
 "widget.medium.name" = "最高加密貨幣價格";
 "widget.medium.description" = "追蹤頂級加密貨幣的價格";
 "wallet.available_balance" = "可用： %@";
+"lock.footer" = "保護您設備上對此應用的訪問";

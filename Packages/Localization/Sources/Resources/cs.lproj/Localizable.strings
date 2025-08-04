@@ -459,3 +459,4 @@
 "widget.medium.name" = "Nejlepší cena kryptoměn";
 "widget.medium.description" = "Sledujte ceny nejoblíbenějších kryptoměn";
 "wallet.available_balance" = "Dostupné: %@";
+"lock.footer" = "Chraňte přístup k této aplikaci na svém zařízení";

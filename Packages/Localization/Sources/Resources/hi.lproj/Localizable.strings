@@ -459,3 +459,4 @@
 "widget.medium.name" = "शीर्ष क्रिप्टो मूल्य";
 "widget.medium.description" = "शीर्ष क्रिप्टोकरेंसी की कीमतों पर नज़र रखें";
 "wallet.available_balance" = "उपलब्ध: %@";
+"lock.footer" = "अपने डिवाइस पर इस ऐप तक पहुंच सुरक्षित रखें";

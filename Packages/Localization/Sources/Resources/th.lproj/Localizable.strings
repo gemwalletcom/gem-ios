@@ -459,3 +459,4 @@
 "widget.medium.name" = "ราคาคริปโตสูงสุด";
 "widget.medium.description" = "ติดตามราคาของสกุลเงินดิจิทัลชั้นนำ";
 "wallet.available_balance" = "พร้อมใช้งาน: %@";
+"lock.footer" = "ป้องกันการเข้าถึงแอปนี้บนอุปกรณ์ของคุณ";

@@ -459,3 +459,4 @@
 "widget.medium.name" = "শীর্ষ ক্রিপ্টো মূল্য";
 "widget.medium.description" = "শীর্ষ ক্রিপ্টোকারেন্সির দাম ট্র্যাক করুন";
 "wallet.available_balance" = "উপলব্ধ: %@";
+"lock.footer" = "আপনার ডিভাইসে এই অ্যাপের অ্যাক্সেস সুরক্ষিত করুন";

@@ -459,3 +459,4 @@
 "widget.medium.name" = "بالاترین قیمت کریپتو";
 "widget.medium.description" = "قیمت ارزهای دیجیتال برتر را پیگیری کنید";
 "wallet.available_balance" = "موجود: %@";
+"lock.footer" = "دسترسی به این برنامه را در دستگاه خود محافظت کنید";
