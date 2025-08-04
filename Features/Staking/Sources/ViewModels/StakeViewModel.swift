@@ -59,7 +59,7 @@ public final class StakeViewModel {
         guard apr > 0 else {
             return .empty
         }
-        return CurrencyFormatter(type: .percentSignLess).string(apr)
+        return CurrencyFormatter.percentSignLess.string(apr)
     }
 
     var lockTimeTitle: String { Localized.Stake.lockTime }

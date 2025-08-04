@@ -454,3 +454,8 @@
 "markets.daily_volume" = "24 घंटे की मात्रा";
 "perpetual.entry_price" = "प्रवेश मूल्य";
 "stake.your_staking" = "आपका दांव";
+"widget.small.name" = "बिटकॉइन की कीमत";
+"widget.small.description" = "बिटकॉइन की कीमत पर नज़र रखें";
+"widget.medium.name" = "शीर्ष क्रिप्टो मूल्य";
+"widget.medium.description" = "शीर्ष क्रिप्टोकरेंसी की कीमतों पर नज़र रखें";
+"wallet.available_balance" = "उपलब्ध: %@";

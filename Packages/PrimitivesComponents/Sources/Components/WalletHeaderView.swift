@@ -55,8 +55,8 @@ public struct WalletHeaderView: View {
                     subtitle,
                     isEnabled: isEnabled
                 )
-                .font(.system(size: 18))
-                .fontWeight(.semibold)
+                .font(.system(size: 16))
+                .fontWeight(.medium)
                 .foregroundStyle(Colors.gray)
             }
 

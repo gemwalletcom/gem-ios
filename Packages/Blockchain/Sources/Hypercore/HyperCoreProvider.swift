@@ -6,11 +6,14 @@ import SwiftHTTPClient
 
 public enum HypercoreProvider: TargetType {
     case clearinghouseState(user: String)
+    case spotClearinghouseState(user: String)
     case metaAndAssetCtxs
+    case spotMetaAndAssetCtxs
     case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
     case userRole(address: String)
     case referral(address: String)
     case builderFee(address: String, builder: String)
+    case extraAgents(user: String)
     case broadcast(data: String)
 
     public var baseUrl: URL {
@@ -24,11 +27,14 @@ public enum HypercoreProvider: TargetType {
     public var path: String {
         switch self {
         case .clearinghouseState,
+            .spotClearinghouseState,
             .metaAndAssetCtxs,
+            .spotMetaAndAssetCtxs,
             .candleSnapshot,
             .userRole,
             .referral,
-            .builderFee:
+            .builderFee,
+            .extraAgents:
             return "/info"
         case .broadcast:
             return "/exchange"
@@ -42,9 +48,18 @@ public enum HypercoreProvider: TargetType {
                 "type": "clearinghouseState",
                 "user": user
             ])
+        case .spotClearinghouseState(let user):
+            return .encodable([
+                "type": "spotClearinghouseState",
+                "user": user
+            ])
         case .metaAndAssetCtxs:
             return .encodable([
                 "type": "metaAndAssetCtxs"
+            ])
+        case .spotMetaAndAssetCtxs:
+            return .encodable([
+                "type": "spotMetaAndAssetCtxs"
             ])
         case .candleSnapshot(let coin, let interval, let startTime, let endTime):
             return .encodable(JSON<String>.dictionary([
@@ -71,6 +86,11 @@ public enum HypercoreProvider: TargetType {
                 "type": "maxBuilderFee",
                 "user": address,
                 "builder": builder
+            ])
+        case .extraAgents(let user):
+            return .encodable([
+                "type": "extraAgents",
+                "user": user
             ])
         case .broadcast(let data):
             return .data(try! data.encodedData())

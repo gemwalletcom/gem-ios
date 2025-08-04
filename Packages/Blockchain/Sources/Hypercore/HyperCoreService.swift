@@ -2,6 +2,7 @@
 
 import BigInt
 import Foundation
+import Formatters
 import Keychain
 import Primitives
 import SwiftHTTPClient
@@ -13,8 +14,7 @@ public struct HyperCoreService: Sendable {
     
     public static let agentAddressKey: String = "hyperliquid_agent_address"
     public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
-    public static let feeRateBps = 50
-    public static let maxFeeRateBps = 50
+    public static let builderFeeBps = 45 // 0.045%
     public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
     public static let referralCode = "GEMWALLET"
     
@@ -69,10 +69,28 @@ public extension HyperCoreService {
             .map(as: HypercoreReferral.self)
     }
     
+    func getExtraAgents(user: String) async throws -> [HypercoreAgentSession] {
+        try await self.provider
+            .request(.extraAgents(user: user))
+            .map(as: [HypercoreAgentSession].self)
+    }
+    
     func getBuilderFee(address: String, builder: String) async throws -> Int {
         try await self.provider
             .request(.builderFee(address: address, builder: builder))
             .map(as: Int.self)
+    }
+    
+    func getSpotBalances(user: String) async throws -> HypercoreBalances {
+        try await provider
+            .request(.spotClearinghouseState(user: user))
+            .map(as: HypercoreBalances.self)
+    }
+    
+    func getSpotMetadata() async throws -> HypercoreTokens {
+        try await provider
+            .request(.spotMetaAndAssetCtxs)
+            .map(as: HypercoreTokens.self)
     }
 }
 
@@ -92,10 +110,19 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func coinBalance(for address: String) async throws -> AssetBalance {
-        AssetBalance(assetId: AssetId(chain: chain), balance: Balance(available: .zero))
+        let balances = try await getSpotBalances(user: address).balances
+        guard let coin = balances.first(where: { $0.token == 150 }) else {
+            throw AnyError("")
+        }
+        return AssetBalance(
+            assetId: AssetId(chain: chain),
+            balance: Balance(available: try BigInt.from(coin.total, decimals: 18))
+        )
     }
 
     func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
+        // let balances = try await getSpotBalances(user: address).balances
+        // let tokens = try await getSpotMetadata().tokens
         return []
     }
 
@@ -135,7 +162,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func getChainID() async throws -> String {
-        return "42161" // Arbitrum chain ID
+        return ""
     }
 }
 
@@ -143,7 +170,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func getLatestBlock() async throws -> BigInt {
-        return BigInt(0)
+        return BigInt(1)
     }
 }
 
@@ -183,8 +210,8 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func load(input: TransactionInput) async throws -> TransactionData {
-        async let approveAgentRequired = cacheService.needsAgentApproval(walletAddress: input.senderAddress) { address in
-            try await getUserRole(address: address)
+        async let approveAgentRequired = cacheService.needsAgentApproval(walletAddress: input.senderAddress) {
+            try await getExtraAgents(user: input.senderAddress)
         }
         
         async let approveReferralRequired = cacheService.needsReferralApproval(address: input.senderAddress) {
@@ -197,16 +224,26 @@ public extension HyperCoreService {
         
         let (agentRequired, referralRequired, builderRequired) = try await (approveAgentRequired, approveReferralRequired, approveBuilderRequired)
         
+        guard case let .perpetual(_, type)  = input.type else {
+            throw AnyError.notImplemented
+        }
+        //TODO: Perpetual. Get 45 from the api
+        let totalFeeTenthsBps = 45 + Self.builderFeeBps
+        let fiatValue = switch type {
+        case .open(let data): data.fiatValue
+        case .close(let data): data.fiatValue
+        }
+        let feeAmount = Int(fiatValue * Double(totalFeeTenthsBps) * 10)
+        
         return TransactionData(
             data: .hyperliquid(
                 SigningData.Hyperliquid(
                     approveAgentRequired: agentRequired,
                     approveReferralRequired: referralRequired,
-                    approveBuilderRequired: builderRequired,
-                    timestamp: Date.getTimestampInMs()
+                    approveBuilderRequired: builderRequired
                 )
             ),
-            fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+            fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
         )
     }
 }

@@ -39,11 +39,12 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
         priority: FeePriority,
         available: BigInt
     ) async throws -> TransferTransactionData {
-        async let getTransactionValidation: () = validateTransaction(wallet: wallet, data: data)
+        //TODO: Enable later?
+        //async let getTransactionValidation: () = validateTransaction(wallet: wallet, data: data)
         async let getFeeRates = getFeeRates(type: data.type, priority: priority)
         async let getTransactionPreload = getTransactionPreload(wallet: wallet, data: data)
 
-        let (rates, preload, _) = try await (getFeeRates, getTransactionPreload, getTransactionValidation)
+        let (rates, preload) = try await (getFeeRates, getTransactionPreload) //, getTransactionValidation)
 
         return try await TransferTransactionData(
             allRates: rates.rates,

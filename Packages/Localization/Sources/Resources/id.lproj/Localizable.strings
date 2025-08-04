@@ -454,3 +454,8 @@
 "markets.daily_volume" = "Volume 24 jam";
 "perpetual.entry_price" = "Harga Masuk";
 "stake.your_staking" = "Taruhan Anda";
+"widget.small.name" = "Harga Bitcoin";
+"widget.small.description" = "Lacak harga Bitcoin";
+"widget.medium.name" = "Harga Kripto Teratas";
+"widget.medium.description" = "Lacak harga mata uang kripto teratas";
+"wallet.available_balance" = "Tersedia: %@";

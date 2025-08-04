@@ -32,6 +32,16 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct PerpetualBalance: Codable, Equatable, Hashable, Sendable {
+	public let available: Double
+	public let reserved: Double
+
+	public init(available: Double, reserved: Double) {
+		self.available = available
+		self.reserved = reserved
+	}
+}
+
 public struct PerpetualData: Codable, Equatable, Hashable, Sendable {
 	public let perpetual: Perpetual
 	public let asset: Asset
@@ -51,6 +61,16 @@ public struct PerpetualPositionData: Codable, Equatable, Hashable, Sendable {
 		self.perpetual = perpetual
 		self.asset = asset
 		self.position = position
+	}
+}
+
+public struct PerpetualPositionsSummary: Codable, Equatable, Hashable, Sendable {
+	public let positions: [PerpetualPosition]
+	public let balance: PerpetualBalance
+
+	public init(positions: [PerpetualPosition], balance: PerpetualBalance) {
+		self.positions = positions
+		self.balance = balance
 	}
 }
 
