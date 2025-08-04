@@ -116,14 +116,14 @@ struct SelectAssetSceneNavigationStack: View {
                     )
                 case .buy:
                     FiatConnectNavigationView(
-                        model: FiatSceneViewModel(
+                        model: viewModelFactory.fiatScene(
                             assetAddress: input.assetAddress,
-                            walletId: model.wallet.id
+                            walletId: model.wallet.walletId
                         )
                     )
                 case .deposit:
                     AmountNavigationView(
-                        model: AmountSceneViewModel(
+                        model: viewModelFactory.amountScene(
                             input: AmountInput(
                                 type: .deposit(
                                     recipient: RecipientData(
@@ -134,11 +134,6 @@ struct SelectAssetSceneNavigationStack: View {
                                 asset: input.asset
                             ),
                             wallet: model.wallet,
-                            amountService: AmountService(
-                                priceService: priceService,
-                                balanceService: balanceService,
-                                stakeService: stakeService
-                            ),
                             onTransferAction: {
                                 navigationPath.append($0)
                             }
@@ -151,7 +146,7 @@ struct SelectAssetSceneNavigationStack: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
-                    model: viewModelFactory.confirmTransfer(
+                    model: viewModelFactory.confirmTransferScene(
                         wallet: model.wallet,
                         data: data,
                         onComplete: {

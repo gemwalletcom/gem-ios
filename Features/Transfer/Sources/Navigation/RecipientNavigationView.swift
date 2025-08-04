@@ -46,7 +46,7 @@ public struct RecipientNavigationView: View {
         }
         .navigationDestination(for: TransferData.self) { data in
             ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
+                model: ConfirmTransferSceneViewModel(
                     wallet: model.wallet,
                     data: data,
                     confirmService: confirmService,

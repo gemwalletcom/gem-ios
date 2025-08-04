@@ -17,7 +17,7 @@ import Swap
 
 @Observable
 @MainActor
-public final class ConfirmTransferViewModel {
+public final class ConfirmTransferSceneViewModel {
     var feeModel: NetworkFeeSceneViewModel
     var state: StateViewType<TransactionInputViewModel> = .loading {
         didSet {
@@ -201,7 +201,7 @@ public final class ConfirmTransferViewModel {
 
 // MARK: - Business Logic
 
-extension ConfirmTransferViewModel {
+extension ConfirmTransferSceneViewModel {
     func onSelectListError(error: Error) {
         switch error {
         case let error as TransferAmountCalculatorError:
@@ -258,7 +258,7 @@ extension ConfirmTransferViewModel {
 
 // MARK: - Private
 
-extension ConfirmTransferViewModel {
+extension ConfirmTransferSceneViewModel {
     private func onStateChange(state: StateViewType<TransactionInputViewModel>) {
         switch state {
         case .data(let data):

@@ -186,6 +186,9 @@ struct ServicesFactory {
             walletService: walletService,
             stakeService: stakeService,
             nameService: nameService,
+            balanceService: balanceService,
+            priceService: priceService,
+            transactionService: transactionService,
             chainServiceFactory: chainServiceFactory
         )
 

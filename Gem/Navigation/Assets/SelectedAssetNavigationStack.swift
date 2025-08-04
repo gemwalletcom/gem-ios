@@ -90,14 +90,14 @@ struct SelectedAssetNavigationStack: View  {
                     )
                 case .buy:
                     FiatConnectNavigationView(
-                        model: FiatSceneViewModel(
+                        model: viewModelFactory.fiatScene(
                             assetAddress: input.assetAddress,
-                            walletId: wallet.id
+                            walletId: wallet.walletId
                         )
                     )
                 case let .swap(fromAsset, toAsset):
                     SwapNavigationView(
-                        model: SwapSceneViewModel(
+                        model: viewModelFactory.swapScene(
                             input: SwapInput(
                                 wallet: wallet,
                                 pairSelector: SwapPairSelectorViewModel(
@@ -105,9 +105,6 @@ struct SelectedAssetNavigationStack: View  {
                                     toAssetId: toAsset?.id ?? SwapPairSelectorViewModel.defaultSwapPair(for: fromAsset).toAssetId
                                 )
                             ),
-                            walletsService: walletsService,
-                            swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
-                            swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
                             onSwap: {
                                 navigationPath.append($0)
                             }

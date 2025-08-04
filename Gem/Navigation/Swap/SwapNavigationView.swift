@@ -32,7 +32,7 @@ struct SwapNavigationView: View {
         SwapScene(model: model)
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
-                    model: viewModelFactory.confirmTransfer(
+                    model: viewModelFactory.confirmTransferScene(
                         wallet: model.wallet,
                         data: data,
                         onComplete: {

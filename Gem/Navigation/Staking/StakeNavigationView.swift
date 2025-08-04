@@ -13,7 +13,6 @@ import Signer
 struct StakeNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.stakeService) private var stakeService
-    @Environment(\.walletsService) private var walletsService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
 
@@ -52,31 +51,30 @@ struct StakeNavigationView: View {
         )
         .navigationDestination(for: TransferData.self) { data in
             ConfirmTransferScene(
-                model: viewModelFactory.confirmTransfer(
+                model: viewModelFactory.confirmTransferScene(
                     wallet: wallet,
                     data: data,
+                    confirmTransferDelegate: nil,
                     onComplete: onComplete
                 )
             )
         }
-        .navigationDestination(for: AmountInput.self) {
+        .navigationDestination(for: AmountInput.self) { input in
             AmountNavigationView(
-                model: AmountSceneViewModel(
-                    input: $0,
+                model: viewModelFactory.amountScene(
+                    input: input,
                     wallet: wallet,
-                    amountService: AmountService(priceService: priceService, balanceService: balanceService, stakeService: stakeService),
                     onTransferAction: {
                         navigationPath.append($0)
                     }
                 )
             )
         }
-        .navigationDestination(for: Delegation.self) { value in
+        .navigationDestination(for: Delegation.self) { delegation in
             StakeDetailScene(
-                model: StakeDetailViewModel(
+                model: viewModelFactory.stakeDetailScene(
                     wallet: wallet,
-                    model: StakeDelegationViewModel(delegation: value),
-                    service: stakeService,
+                    delegation: delegation,
                     onAmountInputAction: {
                         navigationPath.append($0)
                     },
