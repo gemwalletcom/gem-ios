@@ -11,14 +11,11 @@ import ExplorerService
 import Signer
 
 struct StakeNavigationView: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.nodeService) private var nodeService
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.stakeService) private var stakeService
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.scanService) private var scanService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
-    @Environment(\.transactionService) private var transactionService
 
     private let wallet: Wallet
     private let assetId: AssetId
@@ -53,21 +50,11 @@ struct StakeNavigationView: View {
                 }
             )
         )
-        .navigationDestination(for: TransferData.self) {
+        .navigationDestination(for: TransferData.self) { data in
             ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
+                model: viewModelFactory.confirmTransfer(
                     wallet: wallet,
-                    data: $0,
-                    confirmService: ConfirmServiceFactory.create(
-                        keystore: keystore,
-                        nodeService: nodeService,
-                        walletsService: walletsService,
-                        scanService: scanService,
-                        balanceService: balanceService,
-                        priceService: priceService,
-                        transactionService: transactionService,
-                        chain: $0.chain
-                    ),
+                    data: data,
                     onComplete: onComplete
                 )
             )

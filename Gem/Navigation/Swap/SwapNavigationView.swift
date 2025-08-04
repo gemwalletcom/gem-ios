@@ -12,14 +12,9 @@ import ExplorerService
 import Signer
 
 struct SwapNavigationView: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.nodeService) private var nodeService
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
-    @Environment(\.scanService) private var scanService
-    @Environment(\.balanceService) private var balanceService
-    @Environment(\.priceService) private var priceService
-    @Environment(\.transactionService) private var transactionService
 
     @State private var model: SwapSceneViewModel
 
@@ -37,19 +32,9 @@ struct SwapNavigationView: View {
         SwapScene(model: model)
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
-                    model: ConfirmTransferViewModel(
+                    model: viewModelFactory.confirmTransfer(
                         wallet: model.wallet,
                         data: data,
-                        confirmService: ConfirmServiceFactory.create(
-                            keystore: keystore,
-                            nodeService: nodeService,
-                            walletsService: model.walletsService,
-                            scanService: scanService,
-                            balanceService: balanceService,
-                            priceService: priceService,
-                            transactionService: transactionService,
-                            chain: data.chain
-                        ),
                         onComplete: {
                             onSwapComplete(type: data.type)
                         }
@@ -59,7 +44,7 @@ struct SwapNavigationView: View {
             .sheet(item: $model.isPresentingInfoSheet) {
                 switch $0 {
                 case let .info(type):
-                    InfoSheetScene(model: InfoSheetViewModel(type: type))
+                    InfoSheetScene(type: type)
                 case let .selectAsset(type):
                     SelectAssetSceneNavigationStack(
                         model: SelectAssetViewModel(

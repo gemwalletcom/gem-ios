@@ -454,3 +454,9 @@
 "markets.daily_volume" = "24-uurs volume";
 "perpetual.entry_price" = "Toegangsprijs";
 "stake.your_staking" = "Uw inzet";
+"widget.small.name" = "Bitcoin-prijs";
+"widget.small.description" = "Volg de Bitcoin-prijs";
+"widget.medium.name" = "Top Crypto-prijs";
+"widget.medium.description" = "Volg de prijzen van de beste cryptovaluta's";
+"wallet.available_balance" = "Beschikbaar: %@";
+"lock.footer" = "Beveilig de toegang tot deze app op uw apparaat";

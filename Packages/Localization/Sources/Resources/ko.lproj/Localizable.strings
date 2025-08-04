@@ -454,3 +454,9 @@
 "markets.daily_volume" = "24시간 볼륨";
 "perpetual.entry_price" = "입장료";
 "stake.your_staking" = "귀하의 스테이킹";
+"widget.small.name" = "비트코인 가격";
+"widget.small.description" = "비트코인 가격 추적";
+"widget.medium.name" = "최고 암호화폐 가격";
+"widget.medium.description" = "주요 암호화폐 가격 추적";
+"wallet.available_balance" = "사용 가능: %@";
+"lock.footer" = "기기에서 이 앱에 대한 액세스를 보호하세요";

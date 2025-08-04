@@ -454,3 +454,9 @@
 "markets.daily_volume" = "Volum 24h";
 "perpetual.entry_price" = "Preț de intrare";
 "stake.your_staking" = "Staking-ul tău";
+"widget.small.name" = "Prețul Bitcoinului";
+"widget.small.description" = "Urmărește prețul Bitcoinului";
+"widget.medium.name" = "Preț maxim al criptomonedelor";
+"widget.medium.description" = "Urmărește prețurile criptomonedelor de top";
+"wallet.available_balance" = "Disponibil: %@";
+"lock.footer" = "Protejați accesul la această aplicație pe dispozitivul dvs.";

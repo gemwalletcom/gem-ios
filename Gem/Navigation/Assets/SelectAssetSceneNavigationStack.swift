@@ -15,6 +15,7 @@ import ExplorerService
 import Signer
 
 struct SelectAssetSceneNavigationStack: View {
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.assetsService) private var assetsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletService) private var walletService
@@ -89,11 +90,9 @@ struct SelectAssetSceneNavigationStack: View {
                             transactionService: transactionService,
                             chain: input.asset.chain
                         ),
-                        model: RecipientSceneViewModel(
+                        model: viewModelFactory.recipientScene(
                             wallet: model.wallet,
                             asset: input.asset,
-                            walletService: walletService,
-                            nameService: nameService,
                             type: .asset(input.asset),
                             onRecipientDataAction: {
                                 navigationPath.append($0)
@@ -152,19 +151,9 @@ struct SelectAssetSceneNavigationStack: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
-                    model: ConfirmTransferViewModel(
+                    model: viewModelFactory.confirmTransfer(
                         wallet: model.wallet,
                         data: data,
-                        confirmService: ConfirmServiceFactory.create(
-                            keystore: keystore,
-                            nodeService: nodeService,
-                            walletsService: walletsService,
-                            scanService: scanService,
-                            balanceService: balanceService,
-                            priceService: priceService,
-                            transactionService: transactionService,
-                            chain: data.chain
-                        ),
                         onComplete: {
                             isPresentingSelectAssetType = nil
                         }

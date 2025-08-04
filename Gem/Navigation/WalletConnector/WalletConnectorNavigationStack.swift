@@ -10,15 +10,9 @@ import ExplorerService
 import Signer
 
 struct WalletConnectorNavigationStack: View {
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.keystore) private var keystore
-    @Environment(\.chainServiceFactory) private var chainServiceFactory
-    @Environment(\.walletsService) private var walletsService
     @Environment(\.connectionsService) private var connectionsService
-    @Environment(\.scanService) private var scanService
-    @Environment(\.nodeService) private var nodeService
-    @Environment(\.balanceService) private var balanceService
-    @Environment(\.priceService) private var priceService
-    @Environment(\.transactionService) private var transactionService
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter
@@ -37,20 +31,9 @@ struct WalletConnectorNavigationStack: View {
                 switch type {
                 case .transferData(let data):
                     ConfirmTransferScene(
-                        model: ConfirmTransferViewModel(
+                        model: viewModelFactory.confirmTransfer(
                             wallet: data.payload.wallet,
                             data: data.payload.tranferData,
-                            confirmService: ConfirmServiceFactory.create(
-                                keystore: keystore,
-                                nodeService: nodeService,
-                                walletsService: walletsService,
-                                scanService: scanService,
-                                balanceService: balanceService,
-                                priceService: priceService,
-                                transactionService: transactionService,
-                                chain: data.payload.tranferData.chain
-                            ),
-                            confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }
                         )
                     )

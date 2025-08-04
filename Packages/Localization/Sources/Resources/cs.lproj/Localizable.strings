@@ -454,3 +454,9 @@
 "markets.daily_volume" = "24hodinový objem";
 "perpetual.entry_price" = "Vstupní cena";
 "stake.your_staking" = "Vaše sázka";
+"widget.small.name" = "Cena bitcoinu";
+"widget.small.description" = "Sledování ceny Bitcoinu";
+"widget.medium.name" = "Nejlepší cena kryptoměn";
+"widget.medium.description" = "Sledujte ceny nejoblíbenějších kryptoměn";
+"wallet.available_balance" = "Dostupné: %@";
+"lock.footer" = "Chraňte přístup k této aplikaci na svém zařízení";

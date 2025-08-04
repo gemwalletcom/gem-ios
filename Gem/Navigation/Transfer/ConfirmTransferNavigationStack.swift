@@ -10,14 +10,7 @@ import ExplorerService
 import Signer
 
 struct ConfirmTransferNavigationStack: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.chainServiceFactory) private var chainServiceFactory
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.nodeService) private var nodeService
-    @Environment(\.scanService) private var scanService
-    @Environment(\.balanceService) private var balanceService
-    @Environment(\.priceService) private var priceService
-    @Environment(\.transactionService) private var transactionService
+    @Environment(\.viewModelFactory) private var viewModelFactory
 
     private let wallet: Wallet
     private let transferData: TransferData
@@ -36,19 +29,9 @@ struct ConfirmTransferNavigationStack: View {
     var body: some View {
         NavigationStack {
             ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
+                model: viewModelFactory.confirmTransfer(
                     wallet: wallet,
                     data: transferData,
-                    confirmService: ConfirmServiceFactory.create(
-                        keystore: keystore,
-                        nodeService: nodeService,
-                        walletsService: walletsService,
-                        scanService: scanService,
-                        balanceService: balanceService,
-                        priceService: priceService,
-                        transactionService: transactionService,
-                        chain: transferData.chain
-                    ),
                     onComplete: onComplete
                 )
             )

@@ -32,5 +32,6 @@ public struct PerpetualNavigationView: View {
     public var body: some View {
         PerpetualScene(model: model)
             .observeQuery(request: $model.positionsRequest, value: $model.positions)
+            .observeQuery(request: $model.perpetualTotalValueRequest, value: $model.perpetualTotalValue)
     }
 }

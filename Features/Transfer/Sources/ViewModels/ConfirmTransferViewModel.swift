@@ -206,15 +206,12 @@ extension ConfirmTransferViewModel {
         switch error {
         case let error as TransferAmountCalculatorError:
             switch error {
-            case .insufficientBalance, .minimumAccountBalanceTooLow:
-                isPresentingSheet = .info(error.infoSheet)
-            case .insufficientNetworkFee(let asset, _):
-                isPresentingSheet = .infoAction(
-                    error.infoSheet,
-                    button: .action(title: Localized.Asset.buyAsset(asset.feeAsset.symbol)) {
-                        self.onSelectBuy()
-                    }
-                )
+            case let .insufficientBalance(asset):
+                isPresentingSheet = .info(.insufficientBalance(asset, image: AssetViewModel(asset: asset).assetImage))
+            case let .insufficientNetworkFee(asset, required):
+                isPresentingSheet = .info(.insufficientNetworkFee(asset, image: AssetViewModel(asset: asset).assetImage, required: required, action: onSelectBuy))
+            case let .minimumAccountBalanceTooLow(asset, required):
+                isPresentingSheet = .info(.accountMinimalBalance(asset, required: required))
             }
         default:
             break
@@ -407,18 +404,5 @@ extension ConfirmTransferViewModel {
               let systemName = KeystoreAuthenticationViewModel(authentication: auth).authenticationImage
         else { return nil }
         return Image(systemName: systemName)
-    }
-}
-
-extension TransferAmountCalculatorError {
-    var infoSheet: InfoSheetType {
-        switch self {
-        case .insufficientBalance(let asset):
-            .insufficientBalance(asset, image: AssetViewModel(asset: asset).assetImage)
-        case .insufficientNetworkFee(let asset, let required):
-                .insufficientNetworkFee(asset, image: AssetViewModel(asset: asset).assetImage, required: required)
-        case .minimumAccountBalanceTooLow(let asset, let required):
-            .accountMinimalBalance(asset, required: required)
-        }
     }
 }

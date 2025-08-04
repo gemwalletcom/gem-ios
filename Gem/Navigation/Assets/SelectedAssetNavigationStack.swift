@@ -16,6 +16,7 @@ import ExplorerService
 import Signer
 
 struct SelectedAssetNavigationStack: View  {
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
@@ -65,11 +66,9 @@ struct SelectedAssetNavigationStack: View  {
                             transactionService: transactionService,
                             chain: input.asset.chain
                         ),
-                        model: RecipientSceneViewModel(
+                        model: viewModelFactory.recipientScene(
                             wallet: wallet,
                             asset: input.asset,
-                            walletService: walletService,
-                            nameService: nameService,
                             type: type,
                             onRecipientDataAction: {
                                 navigationPath.append($0)

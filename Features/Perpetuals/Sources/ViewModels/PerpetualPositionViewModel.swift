@@ -12,13 +12,15 @@ import Localization
 public struct PerpetualPositionViewModel {
     public let data: PerpetualPositionData
     private let currencyFormatter: CurrencyFormatter
+    private let percentFormatter: CurrencyFormatter
     
     public init(
         data: PerpetualPositionData,
         currencyStyle: CurrencyFormatterType = .abbreviated
     ) {
         self.data = data
-        self.currencyFormatter = CurrencyFormatter(type: currencyStyle)
+        self.currencyFormatter = CurrencyFormatter(type: currencyStyle, currencyCode: Currency.usd.rawValue)
+        self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
     }
     
     public var assetImage: AssetImage {
@@ -82,12 +84,11 @@ public struct PerpetualPositionViewModel {
     }
     
     public var pnlPercentText: String {
-        CurrencyFormatter(type: .percent).string(pnlPercent)
+        percentFormatter.string(pnlPercent)
     }
     
     public var pnlWithPercentText: String {
         let pnlAmount = currencyFormatter.string(abs(data.position.pnl))
-        let percentFormatter = CurrencyFormatter(type: .percent)
         let percentText = percentFormatter.string(pnlPercent)
         
         if data.position.pnl >= 0 {

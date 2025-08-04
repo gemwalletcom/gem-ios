@@ -4,6 +4,16 @@
 
 import Foundation
 
+public struct HypercoreAgentSession: Codable, Sendable {
+	public let address: String
+	public let validUntil: UInt64
+
+	public init(address: String, validUntil: UInt64) {
+		self.address = address
+		self.validUntil = validUntil
+	}
+}
+
 public struct HypercoreUserRole: Codable, Sendable {
 	public let role: String
 

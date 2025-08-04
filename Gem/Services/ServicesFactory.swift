@@ -169,11 +169,25 @@ struct ServicesFactory {
         let perpetualService = Self.makePerpetualService(
             perpetualStore: storeManager.perpetualStore,
             assetStore: storeManager.assetStore,
+            priceAstore: storeManager.priceStore,
             balanceStore: storeManager.balanceStore,
             nodeProvider: nodeService
         )
         
         let nameService = NameService()
+        let scanService = ScanService(securePreferences: .standard)
+        
+        let viewModelFactory = ViewModelFactory(
+            keystore: storages.keystore,
+            nodeService: nodeService,
+            scanService: scanService,
+            swapService: swapService,
+            walletsService: walletsService,
+            walletService: walletService,
+            stakeService: stakeService,
+            nameService: nameService,
+            chainServiceFactory: chainServiceFactory
+        )
 
         return AppResolver.Services(
             assetsService: assetsService,
@@ -193,7 +207,7 @@ struct ServicesFactory {
             walletService: walletService,
             walletsService: walletsService,
             explorerService: explorerService,
-            scanService: ScanService(securePreferences: .standard),
+            scanService: scanService,
             nftService: nftService,
             avatarService: avatarService,
             swapService: swapService,
@@ -204,7 +218,8 @@ struct ServicesFactory {
             onstartAsyncService: onstartAsyncService,
             walletConnectorManager: walletConnectorManager,
             perpetualService: perpetualService,
-            nameService: nameService
+            nameService: nameService,
+            viewModelFactory: viewModelFactory
         )
     }
 }
@@ -442,6 +457,7 @@ extension ServicesFactory {
     private static func makePerpetualService(
         perpetualStore: PerpetualStore,
         assetStore: AssetStore,
+        priceAstore: PriceStore,
         balanceStore: BalanceStore,
         nodeProvider: any NodeURLFetchable
     ) -> PerpetualService {
@@ -450,6 +466,7 @@ extension ServicesFactory {
         return PerpetualService(
             store: perpetualStore,
             assetStore: assetStore,
+            priceStore: priceAstore,
             balanceStore: balanceStore,
             providerFactory: providerFactory
         )

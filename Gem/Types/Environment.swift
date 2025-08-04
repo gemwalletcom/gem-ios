@@ -57,4 +57,5 @@ extension EnvironmentValues {
     @Entry var perpetualService: PerpetualService = AppResolver.main.services.perpetualService
     @Entry var transactionService: TransactionService = AppResolver.main.services.transactionService
     @Entry var nameService: NameService = AppResolver.main.services.nameService
+    @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
 }

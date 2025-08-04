@@ -135,7 +135,7 @@ struct WalletNavigationStack: View {
                     WalletsNavigationStack(isPresentingWallets: $model.isPresentingWallets)
                 }
                 .sheet(item: $model.isPresentingInfoSheet) {
-                    InfoSheetScene(model: InfoSheetViewModel(type: $0))
+                    InfoSheetScene(type: $0)
                 }
                 .sheet(item: $model.isPresentingTransferData) {
                     ConfirmTransferNavigationStack(
@@ -144,27 +144,13 @@ struct WalletNavigationStack: View {
                         onComplete: model.onTransferComplete
                     )
                 }
-                .sheet(item: $model.isPresentingPerpetualRecipientData) { perpetualRecipientData in
-                    AmountNavigationStack(
-                        model: AmountSceneViewModel(
-                            input: AmountInput(
-                                type: .perpetual(
-                                    recipient: perpetualRecipientData.recipient,
-                                    perpetual: perpetualRecipientData.data
-                                ),
-                                asset: perpetualRecipientData.data.asset
-                            ),
-                            wallet: model.wallet,
-                            amountService: AmountService(
-                                priceService: priceService,
-                                balanceService: balanceService,
-                                stakeService: stakeService
-                            ),
-                            onTransferAction: {
-                                model.isPresentingPerpetualRecipientData = nil
-                                model.isPresentingTransferData = $0
-                            }
-                        )
+                .sheet(item: $model.isPresentingPerpetualRecipientData) {
+                    PerpetualPositionNavigationStack(
+                        perpetualRecipientData: $0,
+                        wallet: model.wallet,
+                        onComplete: {
+                            model.isPresentingPerpetualRecipientData = nil
+                        }
                     )
                 }
                 .safariSheet(url: $model.isPresentingUrl)
