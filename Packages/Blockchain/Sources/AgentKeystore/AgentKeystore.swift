@@ -31,7 +31,10 @@ public struct LocalAgentKeystore: AgentKeystore {
 
     public func createAgent(walletAddress: String) throws -> AgentKey {
         let privateKey = try SecureRandom.generateKey()
-        let address = config.chain.coinType.deriveAddress(privateKey: PrivateKey(data: privateKey)!)
+        guard let walletPrivateKey = PrivateKey(data: privateKey) else {
+            throw AnyError("Failed to create private key")
+        }
+        let address = config.chain.coinType.deriveAddress(privateKey: walletPrivateKey)
         
         try keychain.set(privateKey.hexString, key: self.privateKey(walletAddress))
         try keychain.set(address, key: addressKey(walletAddress))

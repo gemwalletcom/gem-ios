@@ -18,7 +18,7 @@ public struct HyperCoreService: Sendable {
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>,
-        cacheService: BlockchainCacheService,
+        cacheService: BlockchainCacheService
     ) {
         self.chain = chain
         self.provider = provider
