@@ -44,7 +44,7 @@ let package = Package(
             dependencies: [
                 "Blockchain",
                 "Primitives",
-                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "PrimitivesTestKit", package: "Primitives")
             ],
             path: "TestKit"
         ),
