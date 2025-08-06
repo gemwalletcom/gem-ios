@@ -9,7 +9,12 @@ public struct KeystoreMock: Keystore {
     public init() {}
     public func createWallet() -> [String] { LocalKeystore.words }
     public func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool) throws -> Wallet { .mock() }
-    public func setupChains(chains: [Primitives.Chain], for wallets: [Primitives.Wallet]) throws -> [Wallet] { [.mock()] }
+    public func setupChains(chains: [Primitives.Chain], for wallets: [Primitives.Wallet]) -> AsyncThrowingStream<Wallet, Error> {
+        AsyncThrowingStream { continuation in
+            continuation.yield(.mock())
+            continuation.finish()
+        }
+    }
     public func deleteKey(for wallet: Primitives.Wallet) throws {}
     public func getPrivateKey(wallet: Primitives.Wallet, chain: Primitives.Chain) throws -> Data { Data() }
     public func getPrivateKey(wallet: Primitives.Wallet, chain: Primitives.Chain, encoding: Primitives.EncodingType) throws -> String { .empty }

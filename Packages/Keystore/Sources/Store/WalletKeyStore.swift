@@ -125,7 +125,7 @@ public struct WalletKeyStore: Sendable {
         }()
 
         let accounts = chains.compactMap { chain in
-            if let account = wallet.accounts.filter({ $0.coin == chain.coinType }).first {
+            if let account = wallet.accounts.first(where: { $0.coin == chain.coinType }) {
                 return account.mapToAccount(chain: chain)
             }
             return .none
@@ -148,7 +148,7 @@ public struct WalletKeyStore: Sendable {
     }
 
     private func getWallet(id: String) throws -> WalletCore.Wallet {
-        guard let wallet = keyStore.wallets.filter({ $0.id == id }).first else {
+        guard let wallet = keyStore.wallets.first(where: { $0.id == id }) else {
             throw KeystoreError.unknownWalletInWalletCoreList
         }
         return wallet

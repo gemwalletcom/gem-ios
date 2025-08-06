@@ -33,10 +33,12 @@ public struct OnstartService: Sendable {
     }
 
     public func migrations() {
-        do {
-            try walletService.setup(chains: AssetConfiguration.allChains)
-        } catch {
-            NSLog("Setup chains: \(error)")
+        Task {
+            do {
+                try await walletService.setup(chains: AssetConfiguration.allChains)
+            } catch {
+                NSLog("Setup chains: \(error)")
+            }
         }
         do {
             try ImportAssetsService(

@@ -222,8 +222,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testSetupChainsAddsMissingChains() {
-        #expect(throws: Never.self) {
+    func testSetupChainsAddsMissingChains() async throws {
             let keystore = LocalKeystore.mock()
             let ethWallet = try keystore.importWallet(
                 name: "ETH only",
@@ -235,22 +234,25 @@ struct LocalKeystoreTests {
                 type: .phrase(words: LocalKeystore.words, chains: [.solana]),
                 isWalletsEmpty: false
             )
-            let updated = try keystore.setupChains(
+            let stream = keystore.setupChains(
                 chains: chains,
                 for: [ethWallet, solWallet]
             )
+            
+            var updated: [Primitives.Wallet] = []
+            for try await wallet in stream {
+                updated.append(wallet)
+            }
 
             #expect(updated.count == 2)
 
             for wallet in updated {
                 #expect(wallet.accounts.map(\.chain) == chains)
             }
-        }
     }
 
     @Test
-    func testSetupChainsAddNoMissingChains() {
-        #expect(throws: Never.self) {
+    func testSetupChainsAddNoMissingChains() async throws {
             let keystore = LocalKeystore.mock()
             let wallet = try keystore.importWallet(
                 name: "Complete wallet",
@@ -258,12 +260,16 @@ struct LocalKeystoreTests {
                 isWalletsEmpty: true
             )
 
-            let result = try keystore.setupChains(
+            let stream = keystore.setupChains(
                 chains: chains,
                 for: [wallet]
             )
+            
+            var result: [Primitives.Wallet] = []
+            for try await wallet in stream {
+                result.append(wallet)
+            }
 
             #expect(result.isEmpty)
-        }
     }
 }

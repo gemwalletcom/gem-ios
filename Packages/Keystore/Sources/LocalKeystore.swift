@@ -64,24 +64,43 @@ public struct LocalKeystore: Keystore {
         }
     }
 
-    public func setupChains(chains: [Chain], for wallets: [Primitives.Wallet]) throws -> [Primitives.Wallet] {
-        let wallets = wallets.filter {
-            let enabled = Set($0.accounts.map(\.chain)).intersection(chains).map { $0 }
-            let missing = Set(chains).subtracting(enabled)
-            return missing.isNotEmpty
-        }
-        guard wallets.isNotEmpty else {
-            return []
-        }
-        let password = try keystorePassword.getPassword()
-        return try wallets
-            .map {
-                try walletKeyStore.addChains(
-                    chains: chains,
-                    wallet: $0,
-                    password: password
-                )
+    public func setupChains(chains: [Chain], for wallets: [Primitives.Wallet]) -> AsyncThrowingStream<Primitives.Wallet, Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    let password = try keystorePassword.getPassword()
+                    
+                    let wallets = wallets.filter {
+                        let enabled = Set($0.accounts.map(\.chain)).intersection(chains).map { $0 }
+                        let missing = Set(chains).subtracting(enabled)
+                        return missing.isNotEmpty
+                    }
+                    guard wallets.isNotEmpty else {
+                        continuation.finish()
+                        return
+                    }
+
+                    try await withThrowingTaskGroup(of: Primitives.Wallet.self) { group in
+                        for wallet in wallets {
+                            group.addTask {
+                                try self.walletKeyStore.addChains(
+                                    chains: chains,
+                                    wallet: wallet,
+                                    password: password
+                                )
+                            }
+                        }
+
+                        for try await updatedWallet in group {
+                            continuation.yield(updatedWallet)
+                        }
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
             }
+        }
     }
 
     public func deleteKey(for wallet: Primitives.Wallet) throws {

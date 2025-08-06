@@ -94,13 +94,19 @@ public struct WalletService: Sendable {
          */
     }
 
-    public func setup(chains: [Chain]) throws {
+    public func setup(chains: [Chain]) async throws {
         let multicoinWallets = walletSessionService.wallets.filter { $0.type == .multicoin }
         guard !multicoinWallets.isEmpty else { return }
 
-        let setupWallets = try keystore.setupChains(chains: chains, for: multicoinWallets)
-        for wallet in setupWallets {
-            try walletStore.addWallet(wallet)
+        let stream = keystore.setupChains(chains: chains, for: multicoinWallets)
+        
+        for try await updatedWallet in stream {
+            do {
+                try walletStore.addWallet(updatedWallet)
+                NSLog("Updated wallet \(updatedWallet.name) with new chains")
+            } catch {
+                NSLog("Failed to save wallet \(updatedWallet.name): \(error)")
+            }
         }
     }
 

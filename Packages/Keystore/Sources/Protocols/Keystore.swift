@@ -8,7 +8,7 @@ public protocol Keystore: Sendable {
     func createWallet() -> [String]
     @discardableResult
     func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool) throws -> Wallet
-    func setupChains(chains: [Chain], for wallets: [Wallet]) throws -> [Wallet]
+    func setupChains(chains: [Chain], for wallets: [Wallet]) -> AsyncThrowingStream<Wallet, Error>
     func deleteKey(for wallet: Wallet) throws
     func getPrivateKey(wallet: Wallet, chain: Chain) throws -> Data
     func getPrivateKey(wallet: Wallet, chain: Chain, encoding: EncodingType) throws -> String
