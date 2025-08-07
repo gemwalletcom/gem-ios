@@ -5,31 +5,28 @@ import SwiftUI
 import Style
 
 public struct AmountView: View {
-    
-    public let title: String
-    public let subtitle: String?
-    
-    public init(title: String, subtitle: String?) {
-        self.title = title
-        self.subtitle = subtitle
+    private let viewModel: any AmountDisplayable
+
+    public init(viewModel: any AmountDisplayable) {
+        self.viewModel = viewModel
     }
-    
+
     public var body: some View {
         VStack(alignment: .center, spacing: 2) {
-            Text(title)
-                .foregroundColor(Colors.black)
+            Text(viewModel.amount.text)
+                .foregroundStyle(viewModel.amount.style.color)
                 .font(.system(size: 52))
                 .scaledToFit()
-                .fontWeight(.semibold)
+                .fontWeight(viewModel.amount.style.fontWeight ?? .semibold)
                 .minimumScaleFactor(0.4)
                 .truncationMode(.middle)
                 .lineLimit(1)
 
-            if let subtitle = subtitle {
-                Text(subtitle)
+            if let fiat = viewModel.fiat, viewModel.showFiat {
+                Text(fiat.text)
                     .font(.system(size: 16))
-                    .fontWeight(.medium)
-                    .foregroundColor(Colors.gray)
+                    .fontWeight(viewModel.fiat?.style.fontWeight ?? .medium)
+                    .foregroundStyle(viewModel.fiat?.style.color ?? Colors.gray)
             }
         }
     }

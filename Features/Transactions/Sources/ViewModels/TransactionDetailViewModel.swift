@@ -187,7 +187,7 @@ public final class TransactionDetailViewModel {
     }
 
     var networkFeeFiatText: String? {
-        infoModel.feeFiatValueText
+        infoModel.feeDisplay?.fiat?.text
     }
 
     var showMemoField: Bool {
@@ -242,7 +242,14 @@ public final class TransactionDetailViewModel {
     }
 
     var infoModel: TransactionInfoViewModel {
-        TransactionInfoViewModel(
+        let direction: TransactionDirection? = {
+            switch model.transaction.transaction.type {
+            case .transfer: model.transaction.transaction.direction
+            case .stakeRewards, .stakeWithdraw: .incoming
+            default: nil
+            }
+        }()
+        return TransactionInfoViewModel(
             currency: preferences.currency,
             asset: model.transaction.asset,
             assetPrice: model.transaction.price,
@@ -250,7 +257,7 @@ public final class TransactionDetailViewModel {
             feeAssetPrice: model.transaction.feePrice,
             value: model.transaction.transaction.valueBigInt,
             feeValue: model.transaction.transaction.feeBigInt,
-            direction: model.transaction.transaction.type == .transfer ? model.transaction.transaction.direction : nil
+            direction: direction
         )
     }
 
