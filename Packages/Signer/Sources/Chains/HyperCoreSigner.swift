@@ -5,40 +5,30 @@ import Blockchain
 import Foundation
 import Gemstone
 import GemstonePrimitives
-import Keychain
-import Keystore
 import Primitives
 import WalletCore
 import WalletCorePrimitives
 
 public class HyperCoreSigner: Signable {
-    let keychain: Keychain
+    let agentKeystore: AgentKeystore
     let hyperCore = HyperCore()
     let factory = HyperCoreModelFactory()
     private let agentNamePrefix = "gemwallet_"
     
-    public init(keychain: Keychain = KeychainDefault()) {
-        self.keychain = keychain
+    public init(agentKeystore: AgentKeystore) {
+        self.agentKeystore = agentKeystore
     }
 
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         fatalError()
     }
 
-    func getAgentKey(for walletAddress: String) throws -> (address: String, key: Data) {
-        let agentPrivateKeyName = "\(HyperCoreService.agentPrivateKey)_\(walletAddress)"
-        let agentAddressKeyName = "\(HyperCoreService.agentAddressKey)_\(walletAddress)"
-        
-        if let key = try keychain.get(agentPrivateKeyName), let address = try keychain.get(agentAddressKeyName) {
-            return try (address: address, Data.from(hex: key))
+    func getAgentKey(for walletAddress: String) throws -> AgentKey {
+        if let agent = try agentKeystore.getAgent(walletAddress: walletAddress) {
+            return agent
         }
-        let newKey = try SecureRandom.generateKey()
-        let newAddress = CoinType.ethereum.deriveAddress(privateKey: PrivateKey(data: newKey)!)
 
-        try keychain.set(newKey.hexString, key: agentPrivateKeyName)
-        try keychain.set(newAddress, key: agentAddressKeyName)
-
-        return (address: newAddress, key: newKey)
+        return try agentKeystore.createAgent(walletAddress: walletAddress)
     }
     
     private func getBuilder(builder: String, fee: Int) throws -> HyperBuilder {
@@ -50,7 +40,7 @@ public class HyperCoreSigner: Signable {
             throw AnyError("Invalid input type for perpetual signing")
         }
 
-        let (agentAddress, agentKey) = try getAgentKey(for: input.senderAddress)
+        let agent = try getAgentKey(for: input.senderAddress)
         let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: HyperCoreService.builderFeeBps)
         // timestamp for each transaction should be increase to avoid duplicate nonce
         let timestamp = Date.getTimestampInMs()
@@ -67,7 +57,7 @@ public class HyperCoreSigner: Signable {
         }
         if data.approveAgentRequired {
             transactions.append(
-                try signApproveAgent(agentAddress: agentAddress, privateKey: privateKey, timestamp: timestamp + 1)
+                try signApproveAgent(agentAddress: agent.address, privateKey: privateKey, timestamp: timestamp + 1)
             )
         }
         if data.approveBuilderRequired {
@@ -81,7 +71,7 @@ public class HyperCoreSigner: Signable {
             )
         }
         transactions.append(
-            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestamp + 3)
+            try signMarketMessage(type: type, agentKey: agent.privateKey, builder: builder, timestamp: timestamp + 3)
         )
         
         return transactions
