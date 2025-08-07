@@ -62,7 +62,7 @@ private struct TransactionsListView: View {
                     model: .init(
                         explorerService: explorerService,
                         transaction: transaction,
-                        formatter: .short
+                        currency: ""
                     )
                 )
             }

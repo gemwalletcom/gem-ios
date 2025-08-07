@@ -5,28 +5,61 @@ import SwiftUI
 import Style
 
 public struct AmountView: View {
-    private let viewModel: any AmountDisplayable
-
-    public init(viewModel: any AmountDisplayable) {
-        self.viewModel = viewModel
+    
+    public let title: String
+    public let subtitle: String?
+    public let titleStyle: TextStyle
+    public let subtitleStyle: TextStyle
+    
+    public init(
+        title: String,
+        subtitle: String? = nil,
+        titleStyle: TextStyle? = nil,
+        subtitleStyle: TextStyle? = nil
+    ) {
+        self.title = title
+        self.subtitle = subtitle
+        self.titleStyle = titleStyle ?? TextStyle(
+            font: .system(size: 52),
+            color: Colors.black,
+            fontWeight: .semibold
+        )
+        self.subtitleStyle = subtitleStyle ?? TextStyle(
+            font: .system(size: 16),
+            color: Colors.gray,
+            fontWeight: .medium
+        )
     }
-
+    
+    // Convenience init for backward compatibility
+    public init(title: String, subtitle: String?, titleColor: Color) {
+        self.title = title
+        self.subtitle = subtitle
+        self.titleStyle = TextStyle(
+            font: .system(size: 52),
+            color: titleColor,
+            fontWeight: .semibold
+        )
+        self.subtitleStyle = TextStyle(
+            font: .system(size: 16),
+            color: Colors.gray,
+            fontWeight: .medium
+        )
+    }
+    
     public var body: some View {
-        VStack(alignment: .center, spacing: 2) {
-            Text(viewModel.amount.text)
-                .foregroundStyle(viewModel.amount.style.color)
-                .font(.system(size: 52))
+        VStack(alignment: .center, spacing: Spacing.extraSmall) {
+            Text(title)
+                .textStyle(titleStyle)
                 .scaledToFit()
-                .fontWeight(viewModel.amount.style.fontWeight ?? .semibold)
                 .minimumScaleFactor(0.4)
                 .truncationMode(.middle)
                 .lineLimit(1)
 
-            if let fiat = viewModel.fiat, viewModel.showFiat {
-                Text(fiat.text)
-                    .font(.system(size: 16))
-                    .fontWeight(viewModel.fiat?.style.fontWeight ?? .medium)
-                    .foregroundStyle(viewModel.fiat?.style.color ?? Colors.gray)
+            if let subtitle = subtitle {
+                Text(subtitle)
+                    .textStyle(subtitleStyle)
+                    .lineLimit(1)
             }
         }
     }

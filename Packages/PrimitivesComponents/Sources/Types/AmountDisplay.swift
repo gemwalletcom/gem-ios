@@ -7,6 +7,11 @@ import Style
 import Components
 import Foundation
 
+public protocol AmountDisplayable: Sendable {
+    var amount: TextValue { get }
+    var fiat: TextValue? { get }
+}
+
 public enum AmountDisplaySign: Sendable {
     case incoming, outgoing, none
 
@@ -19,25 +24,26 @@ public enum AmountDisplaySign: Sendable {
     }
 }
 
-public struct AmountDisplayFormatting: Sendable {
+public struct AmountDisplayStyle: Sendable {
     public let sign: AmountDisplaySign
-    public let style: ValueFormatter
+    public let formatter: ValueFormatter
     public let currencyCode: String
-    public let showFiat: Bool
+    public let textStyle: TextStyle?
 
     public init(
         sign: AmountDisplaySign = .none,
-        style: ValueFormatter = .auto,
+        formatter: ValueFormatter = .auto,
         currencyCode: String,
-        showFiat: Bool = true
+        textStyle: TextStyle? = nil,
     ) {
         self.sign = sign
-        self.style = style
+        self.formatter = formatter
         self.currencyCode = currencyCode
-        self.showFiat = showFiat
+        self.textStyle = textStyle
     }
 }
 
+public enum AmountDisplay: Sendable {
     case numeric(NumericViewModel)
     case symbol(SymbolViewModel)
 }
@@ -57,25 +63,63 @@ extension AmountDisplay: AmountDisplayable {
         }
     }
 
-    public var showFiat: Bool {
+    func fiatVisibility(_ visible: Bool) -> AmountDisplay {
         switch self {
-        case .numeric(let viewModel): viewModel.showFiat
-        case .symbol(let viewModel): viewModel.showFiat
-        }
-    }
-
-    func withFiatVisibility(_ visible: Bool) -> AmountDisplay {
-        switch self {
-        case .numeric(let vm):
-            let fmt = AmountDisplayFormatting(
-                sign: vm.formatting.sign,
-                style: vm.formatting.style,
-                currencyCode: vm.formatting.currencyCode,
-                showFiat: visible
+        case .numeric(let model):
+            let style = AmountDisplayStyle(
+                sign: model.style.sign,
+                formatter: model.style.formatter,
+                currencyCode: model.style.currencyCode,
+                textStyle: model.style.textStyle,
             )
-            return .numeric(NumericViewModel(data: vm.data, formatting: fmt))
+            return .numeric(
+                NumericViewModel(
+                    data: AssetValuePrice(
+                        asset: model.data.asset,
+                        value: model.data.value,
+                        price: visible ? model.data.price : nil),
+                    style: style
+                )
+            )
         case .symbol:
             return self
         }
+    }
+}
+
+// MARK: - FACTORY
+
+extension AmountDisplay {
+    static func symbol(
+        asset: Asset
+    ) -> AmountDisplay {
+        .symbol(SymbolViewModel(symbol: asset.symbol))
+    }
+
+    static func numeric(
+        data: AssetValuePrice,
+        style: AmountDisplayStyle
+    ) -> AmountDisplay {
+        .numeric(NumericViewModel(data: data, style: style))
+    }
+
+    static func numeric(
+        asset: Asset,
+        price: Price? = nil,
+        value: BigInt,
+        direction: TransactionDirection? = nil,
+        currency: String,
+        formatter: ValueFormatter = .full,
+        textStyle: TextStyle? = nil
+    ) -> AmountDisplay {
+        .numeric(
+            data: AssetValuePrice(asset: asset, value: value, price: price),
+            style: AmountDisplayStyle(
+                sign: .init(direction),
+                formatter: formatter,
+                currencyCode: currency,
+                textStyle: textStyle,
+            )
+        )
     }
 }

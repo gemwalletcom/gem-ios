@@ -7,42 +7,40 @@ import SwiftUI
 
 public struct NumericViewModel: Sendable, AmountDisplayable {
     public let data: AssetValuePrice
-    public let formatting: AmountDisplayFormatting
+    public let style: AmountDisplayStyle
 
-    public init(data: AssetValuePrice, formatting: AmountDisplayFormatting) {
+    public init(data: AssetValuePrice, style: AmountDisplayStyle) {
         self.data = data
-        self.formatting = formatting
+        self.style = style
     }
 
-    public var showFiat: Bool { formatting.showFiat }
-
     public var amount: TextValue {
-        let prefix: String = switch formatting.sign {
+        let prefix: String = switch style.sign {
         case .incoming where !data.value.isZero:  "+"
         case .outgoing where !data.value.isZero:  "-"
         case .none, .incoming, .outgoing: ""
         }
 
-        let crypto = formatting.style.string(
+        let crypto = style.formatter.string(
             data.value,
             decimals: data.asset.decimals.asInt,
             currency: data.asset.symbol
         )
-
+        let viewStyle = style.textStyle ?? TextStyle(
+            font: .body,
+            color: color,
+            fontWeight: .semibold
+        )
         return TextValue(
             text: prefix + crypto,
-            style: TextStyle(
-                font: .body,
-                color: color,
-                fontWeight: .semibold
-            ),
+            style: viewStyle,
             lineLimit: 1
         )
     }
 
     public var fiat: TextValue? {
         guard let quote = data.price,
-              let value = try? formatting.style.double(
+              let value = try? style.formatter.double(
                 from: data.value,
                 decimals: data.asset.decimals.asInt
               )
@@ -50,25 +48,25 @@ public struct NumericViewModel: Sendable, AmountDisplayable {
 
         let currencyFormatter = CurrencyFormatter(
             type: .currency,
-            currencyCode: formatting.currencyCode
+            currencyCode: style.currencyCode
+        )
+        let style = style.textStyle ?? TextStyle(
+            font: .footnote,
+            color: Colors.gray,
+            fontWeight: .medium
         )
 
         return TextValue(
             text: currencyFormatter.string(quote.price * value),
-            style: TextStyle(
-                font: .body,
-                color: Colors.gray,
-                fontWeight: .medium
-            ),
+            style: style,
             lineLimit: 1
         )
     }
 
     private var color: Color {
-        switch formatting.sign {
+        switch style.sign {
         case .incoming: Colors.green
-        case .outgoing: Colors.red
-        case .none: Colors.black
+        case .outgoing, .none: Colors.black
         }
     }
 }
