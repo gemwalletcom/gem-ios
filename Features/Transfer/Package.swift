@@ -26,7 +26,6 @@ let package = Package(
         .package(name: "Signer", path: "../../Packages/Signer"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "Validators", path: "../../Packages/Validators"),
-        .package(name: "Store", path: "../../Packages/Store"),
 
         .package(name: "Staking", path: "../Staking"),
         .package(name: "QRScanner", path: "../QRScanner"),
@@ -74,7 +73,6 @@ let package = Package(
                 .product(name: "BalanceService", package: "FeatureServices"),
                 .product(name: "PriceService", package: "FeatureServices"),
                 .product(name: "ExplorerService", package: "ChainServices"),
-                .product(name: "SwapService", package: "FeatureServices"),
                 .product(name: "NameService", package: "ChainServices")
             ],
             path: "Sources"
@@ -86,13 +84,13 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
                 .product(name: "WalletsServiceTestKit", package: "SystemServices"),
-                .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "BlockchainTestKit", package: "Blockchain"),
                 .product(name: "ScanServiceTestKit", package: "ChainServices"),
                 .product(name: "SwapServiceTestKit", package: "FeatureServices"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "WalletServiceTestKit", package: "SystemServices"),
                 .product(name: "NameServiceTestKit", package: "ChainServices"),
+                .product(name: "NodeServiceTestKit", package: "ChainServices"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
