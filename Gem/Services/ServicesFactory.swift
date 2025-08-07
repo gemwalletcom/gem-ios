@@ -30,6 +30,7 @@ import ScanService
 import SwapService
 import NameService
 import PerpetualService
+import AddressNameService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -179,6 +180,10 @@ struct ServicesFactory {
         let nameService = NameService()
         let scanService = ScanService(securePreferences: .standard)
         
+        let addressNameService = AddressNameService(
+            addressStore: storeManager.addressStore
+        )
+        
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
             nodeService: nodeService,
@@ -188,6 +193,7 @@ struct ServicesFactory {
             walletService: walletService,
             stakeService: stakeService,
             nameService: nameService,
+            addressNameService: addressNameService,
             chainServiceFactory: chainServiceFactory
         )
 
@@ -221,6 +227,7 @@ struct ServicesFactory {
             walletConnectorManager: walletConnectorManager,
             perpetualService: perpetualService,
             nameService: nameService,
+            addressNameService: addressNameService,
             viewModelFactory: viewModelFactory
         )
     }

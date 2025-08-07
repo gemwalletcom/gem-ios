@@ -6,12 +6,15 @@ import Localization
 import PrimitivesComponents
 import Components
 import BigInt
+import AddressNameService
 
 struct TransferDataViewModel {
     let data: TransferData
+    let addressNameService: AddressNameService
 
-    init(data: TransferData) {
+    init(data: TransferData, addressNameService: AddressNameService) {
         self.data = data
+        self.addressNameService = addressNameService
     }
 
     var type: TransferDataType { data.type }
@@ -192,7 +195,7 @@ extension TransferDataViewModel {
                 .generic,
                 .account,
                 .perpetual:
-            recipient.name ?? recipient.address
+            getRecipientName()
         case .stake(_, let stakeType):
             switch stakeType {
             case .stake(let validator):
@@ -207,5 +210,11 @@ extension TransferDataViewModel {
                     .none
             }
         }
+    }
+    
+    private func getRecipientName() -> String {
+        recipient.name ??
+        (try? addressNameService.getAddressName(chain: chain, address: recipient.address)?.name) ??
+        recipient.address
     }
 }

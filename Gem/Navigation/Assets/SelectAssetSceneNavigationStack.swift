@@ -24,6 +24,7 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.scanService) private var scanService
     @Environment(\.swapService) private var swapService
     @Environment(\.nameService) private var nameService
+    @Environment(\.addressNameService) private var addressNameService
 
     @State private var isPresentingFilteringView: Bool = false
 

@@ -28,6 +28,8 @@ let package = Package(
         .library(name: "SwapServiceTestKit", targets: ["SwapServiceTestKit"]),
         .library(name: "AssetsService", targets: ["AssetsService"]),
         .library(name: "AssetsServiceTestKit", targets: ["AssetsServiceTestKit"]),
+        .library(name: "AddressNameService", targets: ["AddressNameService"]),
+        .library(name: "AddressNameServiceTestKit", targets: ["AddressNameServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -263,6 +265,24 @@ let package = Package(
                 "GemstonePrimitives"
             ],
             path: "AssetsService/TestKit"
+        ),
+        .target(
+            name: "AddressNameService",
+            dependencies: [
+                "Primitives",
+                "Store",
+            ],
+            path: "AddressNameService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "AddressNameServiceTestKit",
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                "Primitives",
+                "AddressNameService"
+            ],
+            path: "AddressNameService/TestKit"
         ),
     ]
 )

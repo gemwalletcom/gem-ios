@@ -11,6 +11,7 @@ struct WalletConnectorNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.keystore) private var keystore
     @Environment(\.connectionsService) private var connectionsService
+    @Environment(\.addressNameService) private var addressNameService
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter

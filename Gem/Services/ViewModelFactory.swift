@@ -15,6 +15,7 @@ import WalletService
 import NodeService
 import StakeService
 import NameService
+import AddressNameService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -25,6 +26,7 @@ public struct ViewModelFactory: Sendable {
     let walletService: WalletService
     let stakeService: StakeService
     let nameService: NameService
+    let addressNameService: AddressNameService
     let chainServiceFactory: ChainServiceFactory
     
     public init(
@@ -36,6 +38,7 @@ public struct ViewModelFactory: Sendable {
         walletService: WalletService,
         stakeService: StakeService,
         nameService: NameService,
+        addressNameService: AddressNameService,
         chainServiceFactory: ChainServiceFactory
     ) {
         self.keystore = keystore
@@ -46,6 +49,7 @@ public struct ViewModelFactory: Sendable {
         self.walletService = walletService
         self.stakeService = stakeService
         self.nameService = nameService
+        self.addressNameService = addressNameService
         self.chainServiceFactory = chainServiceFactory
     }
     
@@ -67,6 +71,7 @@ public struct ViewModelFactory: Sendable {
                 keystore: keystore,
                 swapService: swapService
             ),
+            addressNameService: addressNameService,
             onComplete: onComplete
         )
     }
@@ -91,6 +96,7 @@ public struct ViewModelFactory: Sendable {
             swapService: swapService,
             nameService: nameService,
             type: type,
+            addressNameService: addressNameService,
             onRecipientDataAction: onRecipientDataAction,
             onTransferAction: onTransferAction
         )

@@ -14,6 +14,7 @@ struct SwapNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
+    @Environment(\.addressNameService) private var addressNameService
 
     @State private var model: SwapSceneViewModel
 
