@@ -225,31 +225,33 @@ extension TonService: ChainTransactionStateFetchable {
             throw AnyError("transaction not found")
         }
 
-        let state: TransactionState = {
-            if let description = transaction.description {
-                if description.aborted == true {
-                    return .failed
-                }
-                if let computePhase = description.compute_ph {
-                    if computePhase.success == false || (computePhase.exit_code != nil && computePhase.exit_code != 0 && computePhase.exit_code != 1) {
-                        return .failed
-                    }
-                }
-                if description.action?.success == false {
-                    return .failed
-                }
-            }
-
-            if transaction.out_msgs.isEmpty || transaction.out_msgs.contains(where: { $0.bounce && $0.bounced }) {
-                return .failed
-            }
-            
-            return .confirmed
-        }()
+        let state = Self.transactionState(from: transaction)
 
         return TransactionChanges(
             state: state
         )
+    }
+    
+    static func transactionState(from transaction: TonTransactionMessage) -> TransactionState {
+        if let description = transaction.description {
+            if description.aborted == true {
+                return .failed
+            }
+            if let computePhase = description.compute_ph {
+                if computePhase.success == false || (computePhase.exit_code != nil && computePhase.exit_code != 0 && computePhase.exit_code != 1) {
+                    return .failed
+                }
+            }
+            if description.action?.success == false {
+                return .failed
+            }
+        }
+
+        if transaction.out_msgs.isEmpty || transaction.out_msgs.contains(where: { $0.bounce && $0.bounced }) {
+            return .failed
+        }
+        
+        return .confirmed
     }
 }
 
