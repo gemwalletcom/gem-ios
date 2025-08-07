@@ -552,4 +552,41 @@ struct TransferAmountCalculatorTests {
             #expect(result == TransferAmount(value: 999_999, networkFee: 4, useMaxAmount: false))
         }
     }
+
+    @Test
+    func testNegativeBalanceAfterFeeDeduction() {
+        let asset = Asset(.solana)
+        
+        #expect(throws: TransferAmountCalculatorError.minimumAccountBalanceTooLow(asset, required: BigInt(890880))) {
+            try service.calculate(input: TransferAmountInput(
+                asset: asset,
+                assetBalance: Balance(available: BigInt(100)),
+                value: BigInt(80),
+                availableValue: BigInt(100),
+                assetFee: asset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(100)),
+                fee: BigInt(25),
+                canChangeValue: true,
+                ignoreValueCheck: false
+            ))
+        }
+    }
+
+    @Test
+    func testMaxAmountTokenDoesNotApplyMinimumBalance() {
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: tokenAsset,
+                assetBalance: Balance(available: BigInt(100)),
+                value: BigInt(100),
+                availableValue: BigInt(100),
+                assetFee: coinAsset,
+                assetFeeBalance: Balance(available: BigInt(50)),
+                fee: BigInt(5),
+                canChangeValue: true,
+                ignoreValueCheck: false
+            ))
+            #expect(result == TransferAmount(value: 100, networkFee: 5, useMaxAmount: true))
+        }
+    }
 }
