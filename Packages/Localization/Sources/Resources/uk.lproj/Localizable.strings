@@ -433,7 +433,7 @@
 "errors.scan_transaction.memo_required" = "Адреса %@ потребує тегу / примітки призначення";
 "common.info" = "Інформація";
 "wallet.deposit" = "Deposit";
-"wallet.withdraw" = "";
+"wallet.withdraw" = "Withdraw";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -460,3 +460,5 @@
 "widget.medium.description" = "Відстежуйте ціни на провідні криптовалюти";
 "wallet.available_balance" = "Доступно: %@";
 "lock.footer" = "Захистіть доступ до цієї програми на своєму пристрої";
+"errors.wallets.limit.title" = "Досягнуто ліміту гаманців";
+"errors.wallets.limit.description" = "Ви досягли максимальної дозволеної кількості гаманців ( %d ). Будь ласка, видаліть існуючий гаманець, щоб додати або створити новий.";

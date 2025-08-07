@@ -433,7 +433,7 @@
 "errors.scan_transaction.memo_required" = "%@ 주소에는 목적지 태그/메모가 필요합니다.";
 "common.info" = "정보";
 "wallet.deposit" = "Deposit";
-"wallet.withdraw" = "";
+"wallet.withdraw" = "Withdraw";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -460,3 +460,5 @@
 "widget.medium.description" = "주요 암호화폐 가격 추적";
 "wallet.available_balance" = "사용 가능: %@";
 "lock.footer" = "기기에서 이 앱에 대한 액세스를 보호하세요";
+"errors.wallets.limit.title" = "지갑 한도에 도달했습니다";
+"errors.wallets.limit.description" = "허용된 최대 지갑 수( %d )에 도달했습니다. 기존 지갑을 제거한 후 추가하거나 새 지갑을 만드세요.";

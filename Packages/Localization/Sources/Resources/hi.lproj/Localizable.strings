@@ -433,7 +433,7 @@
 "errors.scan_transaction.memo_required" = "%@ पते के लिए गंतव्य टैग / मेमो आवश्यक है";
 "common.info" = "जानकारी";
 "wallet.deposit" = "Deposit";
-"wallet.withdraw" = "";
+"wallet.withdraw" = "Withdraw";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -460,3 +460,5 @@
 "widget.medium.description" = "शीर्ष क्रिप्टोकरेंसी की कीमतों पर नज़र रखें";
 "wallet.available_balance" = "उपलब्ध: %@";
 "lock.footer" = "अपने डिवाइस पर इस ऐप तक पहुंच सुरक्षित रखें";
+"errors.wallets.limit.title" = "वॉलेट की सीमा पूरी हो गई";
+"errors.wallets.limit.description" = "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.";
