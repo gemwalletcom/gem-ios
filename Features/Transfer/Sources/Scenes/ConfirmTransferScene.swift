@@ -7,13 +7,12 @@ import Localization
 import InfoSheet
 import PrimitivesComponents
 import FiatConnect
-import Validators
 import Swap
 
 public struct ConfirmTransferScene: View {
-    @State private var model: ConfirmTransferViewModel
+    @State private var model: ConfirmTransferSceneViewModel
 
-    public init(model: ConfirmTransferViewModel) {
+    public init(model: ConfirmTransferSceneViewModel) {
         _model = State(initialValue: model)
     }
 

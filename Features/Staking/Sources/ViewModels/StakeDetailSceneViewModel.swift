@@ -10,7 +10,7 @@ import StakeService
 import Formatters
 import PrimitivesComponents
 
-public struct StakeDetailViewModel {
+public struct StakeDetailSceneViewModel {
     public let model: StakeDelegationViewModel
     public let onAmountInputAction: AmountInputAction
     public let onTransferAction: TransferDataAction
@@ -156,7 +156,7 @@ public struct StakeDetailViewModel {
 
 // MARK: - Private
 
-extension StakeDetailViewModel {
+extension StakeDetailSceneViewModel {
     private var asset: Asset {
         model.delegation.base.assetId.chain.asset
     }

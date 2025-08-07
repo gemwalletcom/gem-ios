@@ -6,7 +6,8 @@ import Primitives
 import ChainService
 import Localization
 import Transfer
-import SwapService
+import ExplorerService
+import Signer
 
 struct ConfirmTransferNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -28,7 +29,7 @@ struct ConfirmTransferNavigationStack: View {
     var body: some View {
         NavigationStack {
             ConfirmTransferScene(
-                model: viewModelFactory.confirmTransfer(
+                model: viewModelFactory.confirmTransferScene(
                     wallet: wallet,
                     data: transferData,
                     onComplete: onComplete

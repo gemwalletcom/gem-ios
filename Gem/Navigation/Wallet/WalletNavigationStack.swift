@@ -18,11 +18,13 @@ struct WalletNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
     @Environment(\.priceService) private var priceService
     @Environment(\.priceAlertService) private var priceAlertService
-
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.priceObserverService) private var priceObserverService
+    @Environment(\.stakeService) private var stakeService
+    @Environment(\.perpetualService) private var perpetualService
+    @Environment(\.balanceService) private var balanceService
 
     @State private var model: WalletSceneViewModel
 
@@ -95,7 +97,7 @@ struct WalletNavigationStack: View {
                 .navigationDestination(for: Scenes.Price.self) {
                     ChartScene(
                         model: ChartsViewModel(
-                            priceService: walletsService.priceService,
+                            priceService: priceService,
                             assetModel: AssetViewModel(asset: $0.asset)
                         )
                     )
@@ -103,26 +105,26 @@ struct WalletNavigationStack: View {
                 .navigationDestination(for: Scenes.Perpetuals.self) { _ in
                     PerpetualsNavigationView(
                         wallet: model.wallet,
-                        perpetualService: AppResolver.main.services.perpetualService,
+                        perpetualService: perpetualService,
                         isPresentingSelectAssetType: $model.isPresentingSelectAssetType,
                         isPresentingTransferData: $model.isPresentingTransferData
                     )
                 }
-                .navigationDestination(for: Scenes.Perpetual.self) { scene in
+                .navigationDestination(for: Scenes.Perpetual.self) {
                     PerpetualNavigationView(
-                        perpetualData: scene.perpetualData,
+                        perpetualData: $0.perpetualData,
                         wallet: model.wallet,
-                        perpetualService: AppResolver.main.services.perpetualService,
+                        perpetualService: perpetualService,
                         isPresentingTransferData: $model.isPresentingTransferData,
                         isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
                     )
                 }
-                .sheet(item: $model.isPresentingSelectAssetType) { value in
+                .sheet(item: $model.isPresentingSelectAssetType) {
                     SelectAssetSceneNavigationStack(
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
-                            selectType: value,
-                            assetsService: walletsService.assetsService,
+                            selectType: $0,
+                            assetsService: assetsService,
                             walletsService: walletsService,
                             priceAlertService: priceAlertService
                         ),
@@ -135,10 +137,10 @@ struct WalletNavigationStack: View {
                 .sheet(item: $model.isPresentingInfoSheet) {
                     InfoSheetScene(type: $0)
                 }
-                .sheet(item: $model.isPresentingTransferData) { data in
+                .sheet(item: $model.isPresentingTransferData) {
                     ConfirmTransferNavigationStack(
                         wallet: model.wallet,
-                        transferData: data,
+                        transferData: $0,
                         onComplete: model.onTransferComplete
                     )
                 }
