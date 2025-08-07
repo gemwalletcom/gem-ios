@@ -14,6 +14,7 @@ import NameServiceTestKit
 import StoreTestKit
 import NodeService
 import SwapService
+import AddressNameServiceTestKit
 import Components
 import Formatters
 @testable import Transfer
@@ -142,6 +143,7 @@ extension RecipientSceneViewModel {
             swapService: .mock(),
             nameService: .mock(),
             type: type,
+            addressNameService: .mock(),
             onRecipientDataAction: onRecipientDataAction,
             onTransferAction: onTransferAction
         )

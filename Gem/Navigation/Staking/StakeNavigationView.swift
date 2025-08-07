@@ -13,6 +13,7 @@ struct StakeNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.stakeService) private var stakeService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.addressNameService) private var addressNameService
 
     private let wallet: Wallet
     private let assetId: AssetId

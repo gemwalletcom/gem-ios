@@ -28,6 +28,7 @@ import ScanService
 import SwapService
 import NameService
 import PerpetualService
+import AddressNameService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
@@ -55,5 +56,6 @@ extension EnvironmentValues {
     @Entry var swapService: SwapService = AppResolver.main.services.swapService
     @Entry var perpetualService: PerpetualService = AppResolver.main.services.perpetualService
     @Entry var nameService: NameService = AppResolver.main.services.nameService
+    @Entry var addressNameService: AddressNameService = AppResolver.main.services.addressNameService
     @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
 }

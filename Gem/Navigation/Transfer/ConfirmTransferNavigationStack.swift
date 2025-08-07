@@ -10,6 +10,7 @@ import SwapService
 
 struct ConfirmTransferNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
+    @Environment(\.addressNameService) private var addressNameService
 
     private let wallet: Wallet
     private let transferData: TransferData

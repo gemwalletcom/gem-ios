@@ -17,6 +17,7 @@ import SwiftUI
 import ScanService
 import Formatters
 import SwapService
+import AddressNameService
 
 public typealias RecipientDataAction = ((RecipientData) -> Void)?
 
@@ -30,6 +31,7 @@ public final class RecipientSceneViewModel {
     let scanService: ScanService
     let swapService: SwapService
     let nameService: any NameServiceable
+    let addressNameService: AddressNameService
 
     let wallet: Wallet
     let asset: Asset
@@ -59,6 +61,7 @@ public final class RecipientSceneViewModel {
         swapService: SwapService,
         nameService: any NameServiceable,
         type: RecipientAssetType,
+        addressNameService: AddressNameService,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
     ) {
@@ -73,6 +76,7 @@ public final class RecipientSceneViewModel {
         self.scanService = scanService
         self.swapService = swapService
         self.nameService = nameService
+        self.addressNameService = addressNameService
 
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction

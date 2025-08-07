@@ -24,6 +24,16 @@ public struct AddressStore: Sendable {
         }
     }
     
+    public func getAddressName(chain: Chain, address: String) throws -> AddressName? {
+        try db.read { db in
+            try AddressRecord
+                .filter(AddressRecord.Columns.chain == chain.rawValue)
+                .filter(AddressRecord.Columns.address == address)
+                .fetchOne(db)
+                .map { $0.asPrimitive() }
+        }
+    }
+    
     public func deleteAddress(chain: Chain, address: String) throws -> Int {
         try db.write { db in
             try AddressRecord
