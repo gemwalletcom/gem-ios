@@ -29,7 +29,7 @@ public struct NumericViewModel: Sendable, AmountDisplayable {
         let viewStyle = style.textStyle ?? TextStyle(
             font: .body,
             color: color,
-            fontWeight: .semibold
+            fontWeight: .medium
         )
         return TextValue(
             text: prefix + crypto,

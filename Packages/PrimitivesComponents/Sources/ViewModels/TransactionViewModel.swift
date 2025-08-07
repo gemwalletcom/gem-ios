@@ -187,7 +187,7 @@ public struct TransactionViewModel: Sendable {
         return title.map {
             TextValue(
                 text: $0,
-                style: TextStyle(font: Font.system(.footnote), color: .secondary)
+                style: .footnote
             )
         }
     }
