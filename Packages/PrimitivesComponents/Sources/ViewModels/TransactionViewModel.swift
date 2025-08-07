@@ -233,6 +233,10 @@ public struct TransactionViewModel: Sendable {
         }
         return nil
     }
+    
+    public func addressLink(account: SimpleAccount) -> BlockExplorerLink {
+        explorerService.addressUrl(chain: account.chain, address: account.address)
+    }
 
     public var participant: String {
         switch transaction.transaction.direction {
