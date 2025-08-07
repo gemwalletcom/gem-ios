@@ -21,5 +21,4 @@ public struct SymbolViewModel: Sendable, AmountDisplayable {
     }
     
     public var fiat: TextValue? { nil }
-    public var showFiat: Bool { false }
 }

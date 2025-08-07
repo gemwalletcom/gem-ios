@@ -34,7 +34,7 @@ public struct AmountDisplayStyle: Sendable {
         sign: AmountDisplaySign = .none,
         formatter: ValueFormatter = .auto,
         currencyCode: String,
-        textStyle: TextStyle? = nil,
+        textStyle: TextStyle? = nil
     ) {
         self.sign = sign
         self.formatter = formatter
@@ -70,7 +70,7 @@ extension AmountDisplay: AmountDisplayable {
                 sign: model.style.sign,
                 formatter: model.style.formatter,
                 currencyCode: model.style.currencyCode,
-                textStyle: model.style.textStyle,
+                textStyle: model.style.textStyle
             )
             return .numeric(
                 NumericViewModel(
@@ -118,7 +118,7 @@ extension AmountDisplay {
                 sign: .init(direction),
                 formatter: formatter,
                 currencyCode: currency,
-                textStyle: textStyle,
+                textStyle: textStyle
             )
         )
     }
