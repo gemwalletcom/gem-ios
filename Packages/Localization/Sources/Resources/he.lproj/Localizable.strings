@@ -461,4 +461,4 @@
 "wallet.available_balance" = "זמין: %@";
 "lock.footer" = "הגן על הגישה לאפליקציה הזו במכשיר שלך";
 "errors.wallets.limit.title" = "הגעת למגבלת הארנקים";
-"errors.wallets.limit.description" = "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.";
+"errors.wallets.limit.description" = "הגעת למספר הארנקים המרבי המותר ( %d ). אנא הסר ארנק קיים כדי להוסיף או ליצור ארנק חדש.";

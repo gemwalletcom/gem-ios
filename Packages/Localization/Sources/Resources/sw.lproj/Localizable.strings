@@ -461,4 +461,4 @@
 "wallet.available_balance" = "Inapatikana: %@";
 "lock.footer" = "Linda ufikiaji wa programu hii kwenye kifaa chako";
 "errors.wallets.limit.title" = "Kikomo cha Wallet Kimefikiwa";
-"errors.wallets.limit.description" = "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.";
+"errors.wallets.limit.description" = "Umefikia idadi ya juu zaidi ya pochi inayoruhusiwa ( %d ). Tafadhali ondoa pochi iliyopo ili kuongeza au kuunda mpya.";

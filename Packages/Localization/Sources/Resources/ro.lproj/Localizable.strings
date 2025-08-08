@@ -461,4 +461,4 @@
 "wallet.available_balance" = "Disponibil: %@";
 "lock.footer" = "Protejați accesul la această aplicație pe dispozitivul dvs.";
 "errors.wallets.limit.title" = "Limita de portofele a fost atinsă";
-"errors.wallets.limit.description" = "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.";
+"errors.wallets.limit.description" = "Ați atins numărul maxim de portofele permise ( %d ). Vă rugăm să eliminați un portofel existent pentru a adăuga sau a crea unul nou.";

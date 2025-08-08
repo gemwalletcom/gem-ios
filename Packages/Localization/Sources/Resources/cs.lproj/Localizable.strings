@@ -461,4 +461,4 @@
 "wallet.available_balance" = "Dostupné: %@";
 "lock.footer" = "Chraňte přístup k této aplikaci na svém zařízení";
 "errors.wallets.limit.title" = "Dosažen limit peněženek";
-"errors.wallets.limit.description" = "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.";
+"errors.wallets.limit.description" = "Dosáhli jste maximálního povoleného počtu peněženek ( %d ). Chcete-li přidat nebo vytvořit novou peněženku, odeberte existující peněženku.";

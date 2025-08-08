@@ -461,4 +461,4 @@
 "wallet.available_balance" = "دستیاب: %@";
 "lock.footer" = "اپنے آلے پر اس ایپ تک رسائی کی حفاظت کریں۔";
 "errors.wallets.limit.title" = "بٹوے کی حد تک پہنچ گئی۔";
-"errors.wallets.limit.description" = "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.";
+"errors.wallets.limit.description" = "آپ بٹوے کی اجازت کی زیادہ سے زیادہ تعداد تک پہنچ گئے ہیں ( %d )۔ ایک نیا شامل کرنے یا بنانے کے لیے براہ کرم موجودہ پرس کو ہٹا دیں۔";

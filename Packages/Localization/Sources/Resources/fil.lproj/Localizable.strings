@@ -461,4 +461,4 @@
 "wallet.available_balance" = "Available: %@";
 "lock.footer" = "Protektahan ang access sa app na ito sa iyong device";
 "errors.wallets.limit.title" = "Naabot na ang Limitasyon ng Wallets";
-"errors.wallets.limit.description" = "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.";
+"errors.wallets.limit.description" = "Naabot mo na ang maximum na bilang ng mga wallet na pinapayagan ( %d ). Mangyaring alisin ang isang umiiral na wallet upang magdagdag o gumawa ng bago.";

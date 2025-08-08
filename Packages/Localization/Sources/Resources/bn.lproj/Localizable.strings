@@ -461,4 +461,4 @@
 "wallet.available_balance" = "উপলব্ধ: %@";
 "lock.footer" = "আপনার ডিভাইসে এই অ্যাপের অ্যাক্সেস সুরক্ষিত করুন";
 "errors.wallets.limit.title" = "ওয়ালেটের সীমা পৌঁছে গেছে";
-"errors.wallets.limit.description" = "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.";
+"errors.wallets.limit.description" = "আপনি সর্বাধিক অনুমোদিত ওয়ালেটের সংখ্যা ( %d ) এ পৌঁছে গেছেন। নতুন একটি ওয়ালেট যোগ করতে বা তৈরি করতে অনুগ্রহ করে বিদ্যমান একটি ওয়ালেট সরিয়ে ফেলুন।";

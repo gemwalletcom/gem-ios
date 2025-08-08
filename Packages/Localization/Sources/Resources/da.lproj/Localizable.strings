@@ -461,4 +461,4 @@
 "wallet.available_balance" = "Tilgængelig: %@";
 "lock.footer" = "Beskyt adgangen til denne app på din enhed";
 "errors.wallets.limit.title" = "Grænsen for tegnebøger er nået";
-"errors.wallets.limit.description" = "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.";
+"errors.wallets.limit.description" = "Du har nået det maksimale antal tilladte tegnebøger ( %d ). Fjern venligst en eksisterende tegnebog for at tilføje eller oprette en ny.";
