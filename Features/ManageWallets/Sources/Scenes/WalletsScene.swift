@@ -118,11 +118,29 @@ public struct WalletsScene: View {
 
 extension WalletsScene {
     private func onSelectCreateWallet() {
+        guard validate() else {
+            return
+        }
         isPresentingCreateWalletSheet.toggle()
     }
 
     private func onSelectImportWallet() {
+        guard validate() else {
+            return
+        }
         isPresentingImportWalletSheet.toggle()
+    }
+    
+    private func validate() -> Bool {
+        // fix: https://github.com/gemwalletcom/gem-ios/issues/1067
+        if wallets.count > WalletsSceneViewModel.walletsLimit {
+            model.isPresentingAlertMessage = AlertMessage(
+                title: Localized.Errors.Wallets.Limit.title,
+                message: Localized.Errors.Wallets.Limit.description(WalletsSceneViewModel.walletsLimit)
+            )
+            return false
+        }
+        return true
     }
 
     private func onEdit(wallet: Wallet) {

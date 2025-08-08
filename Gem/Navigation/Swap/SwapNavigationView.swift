@@ -8,7 +8,8 @@ import InfoSheet
 import Swap
 import Assets
 import Transfer
-import SwapService
+import ExplorerService
+import Signer
 
 struct SwapNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -31,7 +32,7 @@ struct SwapNavigationView: View {
         SwapScene(model: model)
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
-                    model: viewModelFactory.confirmTransfer(
+                    model: viewModelFactory.confirmTransferScene(
                         wallet: model.wallet,
                         data: data,
                         onComplete: {

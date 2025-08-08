@@ -11,22 +11,25 @@ public protocol TransferExecutable: Sendable {
     func execute(input: TransferConfirmationInput) async throws
 }
 
-struct TransferExecutor: TransferExecutable {
+public struct TransferExecutor: TransferExecutable {
     private let signer: any TransactionSigneable
     private let chainService: any ChainServiceable
     private let walletsService: WalletsService
+    private let transactionService: TransactionService
 
-    init(
+    public init(
         signer: any TransactionSigneable,
         chainService: any ChainServiceable,
-        walletsService: WalletsService
+        walletsService: WalletsService,
+        transactionService: TransactionService
     ) {
         self.signer = signer
         self.chainService = chainService
         self.walletsService = walletsService
+        self.transactionService = transactionService
     }
 
-    func execute(input: TransferConfirmationInput) async throws  {
+    public func execute(input: TransferConfirmationInput) async throws  {
         let signedData = try sign(input: input)
         let options = broadcastOptions(data: input.data)
 
@@ -55,7 +58,7 @@ struct TransferExecutor: TransferExecutable {
                 let excludeChains = [Chain.hyperCore]
                 let assetIds = transaction.assetIds.filter { !excludeChains.contains($0.chain) }
 
-                try walletsService.addTransactions(wallet: input.wallet, transactions: [transaction])
+                try transactionService.addTransactions(wallet: input.wallet, transactions: [transaction])
                 Task {
                     try walletsService.enableBalances(
                         for: input.wallet.walletId,

@@ -95,10 +95,10 @@ public struct WalletService: Sendable {
     }
 
     public func setup(chains: [Chain]) throws {
-        let multicoinWallets = walletSessionService.wallets.filter { $0.type == .multicoin }
-        guard !multicoinWallets.isEmpty else { return }
+        let wallets = walletSessionService.wallets.filter { $0.type == .multicoin }
+        guard !wallets.isEmpty else { return }
 
-        let setupWallets = try keystore.setupChains(chains: chains, for: multicoinWallets)
+        let setupWallets = try keystore.setupChains(chains: chains, for: wallets)
         for wallet in setupWallets {
             try walletStore.addWallet(wallet)
         }

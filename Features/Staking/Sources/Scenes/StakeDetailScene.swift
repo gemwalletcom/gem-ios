@@ -4,9 +4,9 @@ import SwiftUI
 import Components
 
 public struct StakeDetailScene: View {
-    private let model: StakeDetailViewModel
+    private let model: StakeDetailSceneViewModel
 
-    public init(model: StakeDetailViewModel) {
+    public init(model: StakeDetailSceneViewModel) {
         self.model = model
     }
 

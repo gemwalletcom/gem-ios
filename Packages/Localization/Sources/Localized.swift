@@ -439,6 +439,16 @@ public enum Localized {
         return Localized.tr("Localizable", "errors.token.unable_fetch_token_information", String(describing: p1), fallback: "Unable to fetch token information: %@")
       }
     }
+    public enum Wallets {
+      public enum Limit {
+        /// You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.
+        public static func description(_ p1: Int) -> String {
+          return Localized.tr("Localizable", "errors.wallets.limit.description", p1, fallback: "You’ve reached the maximum number of wallets allowed (%d). Please remove an existing wallet to add or create a new one.")
+        }
+        /// Wallets Limit Reached
+        public static let title = Localized.tr("Localizable", "errors.wallets.limit.title", fallback: "Wallets Limit Reached")
+      }
+    }
   }
   public enum FeeRate {
     /// %@ gwei
@@ -1248,8 +1258,8 @@ public enum Localized {
     public static let swap = Localized.tr("Localizable", "wallet.swap", fallback: "Swap")
     /// Wallet
     public static let title = Localized.tr("Localizable", "wallet.title", fallback: "Wallet")
-    /// 
-    public static let withdraw = Localized.tr("Localizable", "wallet.withdraw", fallback: "")
+    /// Withdraw
+    public static let withdraw = Localized.tr("Localizable", "wallet.withdraw", fallback: "Withdraw")
     public enum AddToken {
       /// Add Token
       public static let title = Localized.tr("Localizable", "wallet.add_token.title", fallback: "Add Token")

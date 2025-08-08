@@ -76,9 +76,11 @@ public struct LocalKeystore: Keystore {
         let password = try keystorePassword.getPassword()
         return try wallets
             .map {
-                try walletKeyStore.addChains(
-                    chains: chains,
+                let existingChains = $0.accounts.map(\.chain)
+                return try walletKeyStore.addChains(
                     wallet: $0,
+                    existingChains: existingChains,
+                    newChains: chains.asSet().subtracting(existingChains.asSet()).asArray(),
                     password: password
                 )
             }

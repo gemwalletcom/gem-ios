@@ -433,7 +433,7 @@
 "errors.scan_transaction.memo_required" = "L'adresse %@ nécessite une balise de destination / un mémo";
 "common.info" = "Informations";
 "wallet.deposit" = "Deposit";
-"wallet.withdraw" = "";
+"wallet.withdraw" = "Withdraw";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -460,3 +460,5 @@
 "widget.medium.description" = "Suivez les prix des principales crypto-monnaies";
 "wallet.available_balance" = "Disponible : %@";
 "lock.footer" = "Protégez l'accès à cette application sur votre appareil";
+"errors.wallets.limit.title" = "Limite de portefeuilles atteinte";
+"errors.wallets.limit.description" = "Vous avez atteint le nombre maximal de portefeuilles autorisés ( %d ). Veuillez supprimer un portefeuille existant pour en ajouter ou en créer un nouveau.";

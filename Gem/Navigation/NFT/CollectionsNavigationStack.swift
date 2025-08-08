@@ -16,6 +16,7 @@ struct CollectionsNavigationStack: View {
     @Environment(\.avatarService) private var avatarService
     @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
+    @Environment(\.assetsService) private var assetsService
 
     @State private var model: CollectionsViewModel
 
@@ -64,7 +65,7 @@ struct CollectionsNavigationStack: View {
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             selectType: $0,
-                            assetsService: walletsService.assetsService,
+                            assetsService: assetsService,
                             walletsService: walletsService,
                             priceAlertService: priceAlertService
                         ),

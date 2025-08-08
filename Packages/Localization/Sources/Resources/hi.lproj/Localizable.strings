@@ -416,7 +416,7 @@
 "info.asset_status.suspicious.description" = "संदिग्ध या स्पैम टोकन को संभावित घोटाले या हानिकारक संपत्ति के रूप में पहचाना जाता है। वे एयरड्रॉप, ट्रांसफ़र या मैन्युअल आयात के कारण आपके वॉलेट में दिखाई दे सकते हैं।";
 "errors.insufficient_funds" = "अपर्याप्त कोष";
 "info.insufficient_network_fee_balance.title" = "%@ आवश्यक";
-"info.insufficient_network_fee_balance.description" = "इस लेनदेन के लिए %@ माइनर्स को भुगतान किए गए नेटवर्क शुल्क को कवर करने के लिए %@ की आवश्यकता है, न कि Gem Wallet । सुनिश्चित करें कि आपके पास पर्याप्त %@ है।";
+"info.insufficient_network_fee_balance.description" = "इस लेन-देन के लिए %@ माइनर्स को दिए गए नेटवर्क शुल्क को कवर करने के लिए %@ की आवश्यकता है, न कि Gem Wallet । सुनिश्चित करें कि आपके पास पर्याप्त %@ हैं।";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "अपर्याप्त शेषराशि";
 "info.insufficient_balance.description" = "इस लेनदेन को पूरा करने के लिए आपके पास पर्याप्त %@ नहीं है। कृपया अपने वॉलेट में टॉप अप करें, प्राप्त करें या स्वैप करें और फिर से प्रयास करें।";
@@ -433,7 +433,7 @@
 "errors.scan_transaction.memo_required" = "%@ पते के लिए गंतव्य टैग / मेमो आवश्यक है";
 "common.info" = "जानकारी";
 "wallet.deposit" = "Deposit";
-"wallet.withdraw" = "";
+"wallet.withdraw" = "Withdraw";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -460,3 +460,5 @@
 "widget.medium.description" = "शीर्ष क्रिप्टोकरेंसी की कीमतों पर नज़र रखें";
 "wallet.available_balance" = "उपलब्ध: %@";
 "lock.footer" = "अपने डिवाइस पर इस ऐप तक पहुंच सुरक्षित रखें";
+"errors.wallets.limit.title" = "वॉलेट की सीमा पूरी हो गई";
+"errors.wallets.limit.description" = "आप अनुमत वॉलेट की अधिकतम संख्या ( %d ) तक पहुँच गए हैं। कृपया नया वॉलेट जोड़ने या बनाने के लिए मौजूदा वॉलेट हटाएँ।";

@@ -2,24 +2,16 @@
 
 import Foundation
 import Primitives
-import BannerService
 import PriceService
 import Preferences
 import BalanceService
 import AssetsService
-import TransactionService
 import DiscoverAssetsService
-import ChainService
 import Store
 import WalletSessionService
 import DeviceService
 
 public struct WalletsService: Sendable {
-    // TODO: - remove public dependencies and remove them in future
-    public let assetsService: AssetsService
-    public let priceService: PriceService
-    public let balanceService: BalanceService
-
     private let walletSessionService: any WalletSessionManageable
     private let discoveryProcessor: any DiscoveryAssetsProcessing
     private let assetsEnabler: any AssetsEnabler
@@ -27,20 +19,12 @@ public struct WalletsService: Sendable {
     private let balanceUpdater: any BalanceUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
     
-    // TODO: - move to different place
-    private let addressStatusService: AddressStatusService
-    private let transactionService: TransactionService
-    private let bannerSetupService: BannerSetupService
-
     public init(
         walletStore: WalletStore,
         assetsService: AssetsService,
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        transactionService: TransactionService,
-        bannerSetupService: BannerSetupService,
-        addressStatusService: AddressStatusService,
         preferences: ObservablePreferences = .default,
         deviceService: any DeviceServiceable
     ) {
@@ -69,13 +53,6 @@ public struct WalletsService: Sendable {
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
         self.discoveryProcessor = processor
-
-        self.assetsService = assetsService
-        self.balanceService = balanceService
-        self.priceService = priceService
-        self.transactionService = transactionService
-        self.bannerSetupService = bannerSetupService
-        self.addressStatusService = addressStatusService
         self.walletSessionService = walletSessionService
     }
 
@@ -96,28 +73,6 @@ public struct WalletsService: Sendable {
 
     public func setup(wallet: Wallet) throws {
         try enableBalances(for: wallet.walletId, chains: wallet.chains)
-    }
-
-    public func addTransactions(wallet: Wallet, transactions: [Primitives.Transaction]) throws {
-        try transactionService.addTransactions(wallet: wallet, transactions: transactions)
-    }
-
-    // In the future move into separate service
-    public func runAddressStatusCheck(_ wallet: Wallet) async {
-        guard !wallet.preferences.completeInitialAddressStatus else { return }
-
-        do {
-            let results = try await addressStatusService.getAddressStatus(accounts: wallet.accounts)
-
-            for (account, statuses) in results {
-                if statuses.contains(.multiSignature) {
-                    try bannerSetupService.setupAccountMultiSignatureWallet(walletId: wallet.walletId, chain: account.chain)
-                }
-            }
-            wallet.preferences.completeInitialAddressStatus = true
-        } catch {
-            NSLog("runAddressStatusCheck: \(error)")
-        }
     }
 }
 
@@ -167,13 +122,5 @@ extension WalletsService: AssetVisibilityServiceable {
 
     public func hideAsset(walletId: WalletId, assetId: AssetId) throws {
         try assetsVisibilityManager.hideAsset(walletId: walletId, assetId: assetId)
-    }
-}
-
-// MARK: - Models extensions
-
-extension Wallet {
-    var preferences: WalletPreferences {
-        WalletPreferences(walletId: id)
     }
 }

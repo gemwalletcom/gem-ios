@@ -88,7 +88,7 @@ struct TransactionsNavigationStack: View {
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             selectType: $0,
-                            assetsService: walletsService.assetsService,
+                            assetsService: assetsService,
                             walletsService: walletsService,
                             priceAlertService: priceAlertService
                         ),

@@ -80,7 +80,7 @@ public struct WalletDetailScene: View {
                                 title: Localized.Common.address,
                                 account: account,
                                 mode: .auto(addressStyle: .short),
-                                explorerService: model.explorerService
+                                addressLink: model.addressLink(account: account)
                             )
                         )
                     case .none:

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI assistants (Claude Code, Gemini, Codex, etc.) when working with code in this repository.
 
 ## Project Overview
 
@@ -82,6 +82,13 @@ just core-upgrade
 # Generate UML diagrams
 just uml-app
 ```
+
+## Debugging and Troubleshooting
+
+- **Build Logs:** Build logs can be found in `build/DerivedData`. When a `just build` command fails, examine the output in the console for specific Xcode errors.
+- **Failing Tests:** When a test fails using `just test TARGET`, first try running the test directly in Xcode to use the interactive debugger.
+- **Environment Issues:** If you encounter issues after pulling new changes, run `just bootstrap` again to ensure all dependencies and generated files are up to date.
+- **Rust Core Issues:** If you suspect an issue in the `core/` submodule, consult the `core/README.md` for specific Rust-related debugging steps.
 
 ## Key Dependencies
 
@@ -331,6 +338,23 @@ public extension Banner {
 - **Check for Patterns**: Don't blindly copy patterns from existing code without understanding their purpose
 - **Minimize API Surface**: Only make public what needs to be public
 - **Test-Driven Implementation**: Write tests that verify actual usage, not just coverage
+
+## Release Process
+
+### Branching Strategy
+This project follows a GitFlow-like branching strategy:
+- `main`: Represents the latest production release.
+- `develop`: The primary branch for ongoing development. All feature branches are merged into `develop`.
+- `feature/...`: Branches for new features, branched from `develop`.
+- `release/...`: Branches for preparing a new production release.
+- `hotfix/...`: Branches for critical production fixes.
+
+### Versioning
+The project uses semantic versioning (Major.Minor.Patch). The version can be updated using the `just bump-version` command, which leverages the `scripts/bump-version.sh` script.
+
+### Committing Changes
+- Before committing, ensure your changes are compliant with the project's style by running formatters and linters if available.
+- Write clear, concise commit messages that explain the "why" behind the change.
 
 ## Platform Requirements
 

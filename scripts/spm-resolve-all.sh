@@ -2,7 +2,7 @@
 #!/bin/bash
 
 # Base directories containing Swift packages
-BASE_DIRS=("./Packages" "./Features" "./Services")
+BASE_DIRS=("./Packages" "./Features")
 
 for base_dir in "${BASE_DIRS[@]}"; do
     echo "Searching in $base_dir"

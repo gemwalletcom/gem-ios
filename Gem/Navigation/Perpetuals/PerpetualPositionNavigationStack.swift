@@ -5,16 +5,9 @@ import Primitives
 import PrimitivesComponents
 import Components
 import Transfer
-import ChainService
-import Keystore
-import SwapService
-import Swap
-import StakeService
 
 struct PerpetualPositionNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.stakeService) private var stakeService
     
     @State private var navigationPath = NavigationPath()
     
@@ -35,7 +28,7 @@ struct PerpetualPositionNavigationStack: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             AmountNavigationView(
-                model: AmountSceneViewModel(
+                model: viewModelFactory.amountScene(
                     input: AmountInput(
                         type: .perpetual(
                             recipient: perpetualRecipientData.recipient,
@@ -44,8 +37,6 @@ struct PerpetualPositionNavigationStack: View {
                         asset: perpetualRecipientData.data.asset
                     ),
                     wallet: wallet,
-                    walletsService: walletsService,
-                    stakeService: stakeService,
                     onTransferAction: { transferData in
                         navigationPath.append(transferData)
                     }
@@ -59,7 +50,7 @@ struct PerpetualPositionNavigationStack: View {
             }
             .navigationDestination(for: TransferData.self) {
                 ConfirmTransferScene(
-                    model: viewModelFactory.confirmTransfer(
+                    model: viewModelFactory.confirmTransferScene(
                         wallet: wallet,
                         data: $0,
                         onComplete: {

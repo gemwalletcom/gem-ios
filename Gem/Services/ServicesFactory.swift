@@ -140,9 +140,6 @@ struct ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserverService,
-            transactionService: transactionService,
-            chainServiceFactory: chainServiceFactory,
-            bannerSetupService: bannerSetupService,
             deviceService: deviceService
         )
 
@@ -165,7 +162,8 @@ struct ServicesFactory {
             deviceService: deviceService,
             bannerSetupService: bannerSetupService,
             configService: configService,
-            releaseService: AppReleaseService(configService: configService)
+            releaseService: AppReleaseService(configService: configService),
+            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
         )
 
         let perpetualService = Self.makePerpetualService(
@@ -188,6 +186,9 @@ struct ServicesFactory {
             walletService: walletService,
             stakeService: stakeService,
             nameService: nameService,
+            balanceService: balanceService,
+            priceService: priceService,
+            transactionService: transactionService,
             chainServiceFactory: chainServiceFactory
         )
 
@@ -387,9 +388,6 @@ extension ServicesFactory {
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        transactionService: TransactionService,
-        chainServiceFactory: ChainServiceFactory,
-        bannerSetupService: BannerSetupService,
         deviceService: DeviceService
     ) -> WalletsService {
         WalletsService(
@@ -398,9 +396,6 @@ extension ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            transactionService: transactionService,
-            bannerSetupService: bannerSetupService,
-            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
             deviceService: deviceService
         )
     }
@@ -434,7 +429,8 @@ extension ServicesFactory {
         deviceService: DeviceService,
         bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
-        releaseService: AppReleaseService
+        releaseService: AppReleaseService,
+        addressStatusService: AddressStatusService
     ) -> OnstartAsyncService {
         OnstartAsyncService(
             assetStore: assetStore,
@@ -444,7 +440,8 @@ extension ServicesFactory {
             deviceService: deviceService,
             bannerSetupService: bannerSetupService,
             configService: configService,
-            releaseService: releaseService
+            releaseService: releaseService,
+            addressStatusService: addressStatusService
         )
     }
     

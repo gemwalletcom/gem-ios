@@ -5,7 +5,9 @@ import Primitives
 import Localization
 import WalletConnector
 import Transfer
-import SwapService
+import TransactionService
+import ExplorerService
+import Signer
 
 struct WalletConnectorNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -29,16 +31,16 @@ struct WalletConnectorNavigationStack: View {
                 switch type {
                 case .transferData(let data):
                     ConfirmTransferScene(
-                        model: viewModelFactory.confirmTransfer(
+                        model: viewModelFactory.confirmTransferScene(
                             wallet: data.payload.wallet,
                             data: data.payload.tranferData,
+                            confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }
                         )
                     )
                 case .signMessage(let data):
                     SignMessageScene(
-                        model: SignMessageSceneViewModel(
-                            keystore: keystore,
+                        model: viewModelFactory.signMessageScene(
                             payload: data.payload,
                             confirmTransferDelegate: data.delegate
                         )

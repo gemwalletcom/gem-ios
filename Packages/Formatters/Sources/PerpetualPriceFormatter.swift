@@ -11,6 +11,7 @@ public struct PerpetualPriceFormatter {
     public func formatPrice(provider: PerpetualProvider, _ price: Double, decimals: Int) -> String {
         // Prices: up to 5 significant figures, max decimal places = 6 - szDecimals
         let formatter = NumberFormatter()
+        formatter.locale = .US
         formatter.numberStyle = .decimal
         formatter.usesSignificantDigits = true
         formatter.maximumSignificantDigits = 5
@@ -35,6 +36,7 @@ public struct PerpetualPriceFormatter {
     public func formatSize(provider: PerpetualProvider, _ size: Double, decimals: Int) -> String {
         // Sizes: rounded to szDecimals
         let formatter = NumberFormatter()
+        formatter.locale = .US
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = decimals
