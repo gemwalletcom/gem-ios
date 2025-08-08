@@ -24,6 +24,7 @@ public extension SwapProvider {
         case .chainflip: Images.SwapProviders.chainflip
         case .relay: Images.SwapProviders.relay
         case .aerodrome: Images.SwapProviders.aerodrome
+        case .nearIntents: Images.Chains.near
         }
     }
 }
