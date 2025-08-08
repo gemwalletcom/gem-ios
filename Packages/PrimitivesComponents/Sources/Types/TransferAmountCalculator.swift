@@ -35,8 +35,8 @@ public struct TransferAmountCalculator {
         }
 
         if input.ignoreValueCheck {
-            if input.assetFeeBalance.available < input.fee {
-                throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee, required: input.fee)
+            if let error = insufficientNetworkFeeError(input) {
+                throw error
             }
 
             return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
@@ -46,8 +46,8 @@ public struct TransferAmountCalculator {
             throw TransferAmountCalculatorError.insufficientBalance(input.asset)
         }
 
-        if input.assetFeeBalance.available < input.fee {
-            throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee, required: input.fee)
+        if let error = insufficientNetworkFeeError(input) {
+            throw error
         }
 
         if !input.canChangeValue && input.asset == input.assetFee {
@@ -59,22 +59,40 @@ public struct TransferAmountCalculator {
         // max value transfer
         if input.assetBalance.available == input.value {
             if input.asset == input.asset.feeAsset && input.canChangeValue  {
+                let minimumAccountBalance = input.asset.chain.isSendMaxSupported ? 0 : input.asset.chain.minimumAccountBalance
+                let value = input.assetBalance.available - input.fee - minimumAccountBalance
+                if let error = minimumAccountBalanceTooLowError(value: value, input: input) {
+                    throw error
+                }
                 return TransferAmount(
-                    value: input.assetBalance.available - input.fee,
+                    value: value,
                     networkFee: input.fee,
                     useMaxAmount: true
                 )
             }
             return TransferAmount(value: input.assetBalance.available, networkFee: input.fee, useMaxAmount: true)
         }
-        if input.asset.type == .native && input.asset.chain.minimumAccountBalance > 0 &&
-            (input.availableValue - input.value - input.fee).isBetween(1, and: input.asset.chain.minimumAccountBalance)
-        {
-            throw TransferAmountCalculatorError.minimumAccountBalanceTooLow(input.asset, required: input.asset.chain.minimumAccountBalance)
+
+        if let error = minimumAccountBalanceTooLowError(value: input.availableValue - input.value - input.fee, input: input) {
+            throw error
         }
 
-        let useMaxAmount = input.availableValue == input.value
-
-        return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: useMaxAmount)
+        return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: input.availableValue == input.value)
+    }
+    
+    private func insufficientNetworkFeeError(_ input: TransferAmountInput) -> TransferAmountCalculatorError? {
+        if input.assetFeeBalance.available < input.fee {
+            return TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee, required: input.fee)
+        }
+        return nil
+    }
+    
+    private func minimumAccountBalanceTooLowError(value: BigInt, input: TransferAmountInput) -> TransferAmountCalculatorError? {
+        if input.asset.type == .native && input.asset.chain.minimumAccountBalance > 0 &&
+            (value.isBetween(1, and: input.asset.chain.minimumAccountBalance) || value < 0)
+        {
+            return TransferAmountCalculatorError.minimumAccountBalanceTooLow(input.asset, required: input.asset.chain.minimumAccountBalance)
+        }
+        return nil
     }
 }
