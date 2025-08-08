@@ -108,7 +108,9 @@ public struct WalletKeyStore: Sendable {
         let allChains = existingChains + newChains
         let exclude = [Chain.solana]
         let coins = allChains.filter { !exclude.contains($0) }.map { $0.coinType }.asSet().asArray()
-
+        let existingCoinTypes = existingChains.map({ $0.coinType }).asSet()
+        let newCoinTypes = newChains.map({ $0.coinType }).asSet()
+        
         // Tricky wallet core implementation. By default is coins: [], it will create ethereum
         // if single chain, remove all to simplify
         if existingChains.isEmpty && newChains.count == 1 {
@@ -118,7 +120,7 @@ public struct WalletKeyStore: Sendable {
             // By default solana derived a wrong derivation path, need to adjust use a new one
             let _ = try wallet.getAccount(password: password, coin: .solana, derivation: .solanaSolana)
         }
-        if newChains.isNotEmpty {
+        if newChains.isNotEmpty && newCoinTypes.subtracting(existingCoinTypes).isNotEmpty {
             let _ = try keyStore.addAccounts(wallet: wallet, coins: coins, password: password)
         }
 
