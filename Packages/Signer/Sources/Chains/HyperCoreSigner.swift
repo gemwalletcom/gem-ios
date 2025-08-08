@@ -52,8 +52,7 @@ public class HyperCoreSigner: Signable {
 
         let (agentAddress, agentKey) = try getAgentKey(for: input.senderAddress)
         let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: HyperCoreService.builderFeeBps)
-        // timestamp for each transaction should be increase to avoid duplicate nonce
-        let timestamp = Date.getTimestampInMs()
+        let timestampIncrementer = NumberIncrementer(Int(Date.getTimestampInMs()))
         var transactions: [String] = []
         
         if data.approveReferralRequired {
@@ -61,13 +60,17 @@ public class HyperCoreSigner: Signable {
                 try signSetReferer(
                     agentKey: privateKey,
                     code: HyperCoreService.referralCode,
-                    timestamp: timestamp
+                    timestamp: timestampIncrementer.next().asUInt64
                 )
             )
         }
         if data.approveAgentRequired {
             transactions.append(
-                try signApproveAgent(agentAddress: agentAddress, privateKey: privateKey, timestamp: timestamp + 1)
+                try signApproveAgent(
+                    agentAddress: agentAddress,
+                    privateKey: privateKey,
+                    timestamp: timestampIncrementer.next().asUInt64
+                )
             )
         }
         if data.approveBuilderRequired {
@@ -76,12 +79,12 @@ public class HyperCoreSigner: Signable {
                     agentKey: privateKey,
                     builderAddress: HyperCoreService.builderAddress,
                     rateBps: HyperCoreService.builderFeeBps,
-                    timestamp: timestamp + 2
+                    timestamp: timestampIncrementer.next().asUInt64
                 )
             )
         }
         transactions.append(
-            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestamp + 3)
+            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestampIncrementer.next().asUInt64)
         )
         
         return transactions
