@@ -52,6 +52,10 @@ public extension Primitives.Chain {
         ChainConfig.config(chain: self).isNftSupported
     }
     
+    var isSendMaxSupported: Bool {
+        ChainConfig.config(chain: self).isSendMaxSupported
+    }
+    
     var type: ChainType {
         ChainType(rawValue: ChainConfig.config(chain: self).chainType)!
     }

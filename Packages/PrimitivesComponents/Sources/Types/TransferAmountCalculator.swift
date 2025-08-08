@@ -59,7 +59,8 @@ public struct TransferAmountCalculator {
         // max value transfer
         if input.assetBalance.available == input.value {
             if input.asset == input.asset.feeAsset && input.canChangeValue  {
-                let value = input.assetBalance.available - input.fee - input.asset.chain.minimumAccountBalance
+                let minimumAccountBalance = input.asset.chain.isSendMaxSupported ? 0 : input.asset.chain.minimumAccountBalance
+                let value = input.assetBalance.available - input.fee - minimumAccountBalance
                 if let error = minimumAccountBalanceTooLowError(value: value, input: input) {
                     throw error
                 }

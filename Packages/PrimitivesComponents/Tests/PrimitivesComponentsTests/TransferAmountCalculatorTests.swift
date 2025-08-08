@@ -589,4 +589,59 @@ struct TransferAmountCalculatorTests {
             #expect(result == TransferAmount(value: 100, networkFee: 5, useMaxAmount: true))
         }
     }
+    
+    @Test
+    func testSendMaxSupportedChains() {
+        let ethAsset = Asset(.ethereum)
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: ethAsset,
+                assetBalance: Balance(available: BigInt(1000000)),
+                value: BigInt(1000000),
+                availableValue: BigInt(1000000),
+                assetFee: ethAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(1000000)),
+                fee: BigInt(5000),
+                canChangeValue: true,
+                ignoreValueCheck: false
+            ))
+            #expect(result == TransferAmount(value: 995000, networkFee: 5000, useMaxAmount: true))
+        }
+    }
+    
+    @Test
+    func testSendMaxNotSupportedChains() {
+        let solAsset = Asset(.solana)
+        let minimumBalance = solAsset.chain.minimumAccountBalance
+        
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: solAsset,
+                assetBalance: Balance(available: BigInt(10000000)),
+                value: BigInt(10000000),
+                availableValue: BigInt(10000000),
+                assetFee: solAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(10000000)),
+                fee: BigInt(5000),
+                canChangeValue: true,
+                ignoreValueCheck: false
+            ))
+            let expectedValue = BigInt(10000000) - BigInt(5000) - minimumBalance
+            #expect(result == TransferAmount(value: expectedValue, networkFee: 5000, useMaxAmount: true))
+        }
+
+        #expect(throws: TransferAmountCalculatorError.minimumAccountBalanceTooLow(solAsset, required: minimumBalance)) {
+            try service.calculate(input: TransferAmountInput(
+                asset: solAsset,
+                assetBalance: Balance(available: BigInt(900000)),
+                value: BigInt(900000),
+                availableValue: BigInt(900000),
+                assetFee: solAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(900000)),
+                fee: BigInt(5000),
+                canChangeValue: true,
+                ignoreValueCheck: false
+            ))
+        }
+    }
 }
