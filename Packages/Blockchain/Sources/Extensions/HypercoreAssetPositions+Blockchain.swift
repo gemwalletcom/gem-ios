@@ -45,7 +45,7 @@ extension HypercoreAssetPositions {
         let total = try Double.from(string: marginSummary.accountValue)
         let crossMargin = try Double.from(string: crossMarginSummary.totalMarginUsed)
         let withdrawable = try Double.from(string: withdrawable)
-        let available = total - crossMargin
+        let available = max(total - crossMargin, 0)
     
         return PerpetualBalance(
             available: available,
