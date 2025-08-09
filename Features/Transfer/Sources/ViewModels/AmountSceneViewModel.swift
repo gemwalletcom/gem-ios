@@ -445,7 +445,7 @@ extension AmountSceneViewModel {
         case .deposit:
             // For deposits, require minimum 5 USDC
             if asset.symbol == "USDC" {
-                return BigInt(10_000_000) // 5 USDC with 6 decimals
+                return BigInt(5_000_000) // 5 USDC with 6 decimals
             }
         case .perpetual:
             return BigInt(12_000_000) // 15 USDC with 6 decimals
