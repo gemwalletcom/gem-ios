@@ -19,3 +19,20 @@ public extension Array where Element == UpdateBalance {
         }
     }
 }
+
+public extension UpdateBalance {
+    static func mockStake(assetId: AssetId) -> UpdateBalance {
+        UpdateBalance(
+            assetID: assetId.identifier,
+            type: .stake(UpdateStakeBalance(
+                staked: UpdateBalanceValue(value: "100", amount: 100.0),
+                pending: UpdateBalanceValue(value: "0", amount: 0.0),
+                frozen: UpdateBalanceValue(value: "0", amount: 0.0),
+                locked: UpdateBalanceValue(value: "0", amount: 0.0),
+                rewards: UpdateBalanceValue(value: "0", amount: 0.0)
+            )),
+            updatedAt: .now,
+            isActive: true
+        )
+    }
+}
