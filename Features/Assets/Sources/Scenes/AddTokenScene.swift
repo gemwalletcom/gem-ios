@@ -27,43 +27,6 @@ public struct AddTokenScene: View {
     }
 
     public var body: some View {
-        VStack {
-            addTokenList
-            Spacer()
-            StateButton(
-                text: model.actionButtonTitle,
-                type: .primary(model.state),
-                action: onSelectImportToken
-            )
-            .frame(maxWidth: .scene.button.maxWidth)
-        }
-        .toolbarInfoButton(url: model.customTokenUrl)
-        .onAppear {
-            focusedField = .address
-        }
-        .onChange(of: model.input.address, onAddressClean)
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
-        .listSectionSpacing(.compact)
-        .navigationTitle(model.title)
-        .navigationDestination(for: Scenes.NetworksSelector.self) { _ in
-            NetworkSelectorScene(
-                model: $networksModel,
-                onFinishSelection: onFinishChainSelection(chains:)
-            )
-        }
-        .sheet(isPresented: $model.isPresentingScanner) {
-            ScanQRCodeNavigationStack(action: onHandleScan(_:))
-        }
-        .safariSheet(url: $isPresentingUrl)
-    }
-}
-
-// MARK: - UI Components
-
-extension AddTokenScene {
-    @ViewBuilder
-    private var addTokenList: some View {
         List {
             if let chain = model.input.chain {
                 Section(model.networkTitle) {
@@ -129,6 +92,30 @@ extension AddTokenScene {
                 )
             }
         }
+        .toolbarActionButton(
+            StateButton(
+                text: model.actionButtonTitle,
+                type: .primary(model.state),
+                action: onSelectImportToken
+            )
+        )
+        .toolbarInfoButton(url: model.customTokenUrl)
+        .onAppear {
+            focusedField = .address
+        }
+        .onChange(of: model.input.address, onAddressClean)
+        .listSectionSpacing(.compact)
+        .navigationTitle(model.title)
+        .navigationDestination(for: Scenes.NetworksSelector.self) { _ in
+            NetworkSelectorScene(
+                model: $networksModel,
+                onFinishSelection: onFinishChainSelection(chains:)
+            )
+        }
+        .sheet(isPresented: $model.isPresentingScanner) {
+            ScanQRCodeNavigationStack(action: onHandleScan(_:))
+        }
+        .safariSheet(url: $isPresentingUrl)
     }
 }
 

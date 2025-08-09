@@ -13,42 +13,38 @@ struct ShowSecretDataScene: View {
     @State private var isPresentingCopyToast = false
 
     var body: some View {
-        VStack {
-            List {
-                if let calloutViewStyle = model.calloutViewStyle {
-                    CalloutView(style: calloutViewStyle)
-                        .cleanListRow()
-                }
-
-                Section {
-                    SecretDataTypeView(
-                        type: model.type
-                    )
-                }
-                .cleanListRow()
-
-                ListButton(
-                    title: Localized.Common.copy,
-                    image: Images.System.copy,
-                    action: copy
-                )
-                .frame(maxWidth: .infinity, alignment: .center)
-                .cleanListRow()
+        List {
+            if let calloutViewStyle = model.calloutViewStyle {
+                CalloutView(style: calloutViewStyle)
+                    .cleanListRow()
             }
-            .contentMargins([.top], .extraSmall, for: .scrollContent)
-            .listSectionSpacing(.custom(.medium))
             
-            if model.continueAction != nil {
+            Section {
+                SecretDataTypeView(
+                    type: model.type
+                )
+            }
+            .cleanListRow()
+            
+            ListButton(
+                title: Localized.Common.copy,
+                image: Images.System.copy,
+                action: copy
+            )
+            .frame(maxWidth: .infinity, alignment: .center)
+            .cleanListRow()
+        }
+        .ifLet(model.continueAction) { view, _ in
+            view.toolbarActionButton(
                 StateButton(
                     text: Localized.Common.continue,
                     action: continueAction
                 )
-                .frame(maxWidth: .scene.button.maxWidth)
-            }
+            )
         }
+        .contentMargins([.top], .extraSmall, for: .scrollContent)
+        .listSectionSpacing(.custom(.medium))
         .toolbarInfoButton(url: model.docsUrl)
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .copyToast(
             model: model.copyModel,

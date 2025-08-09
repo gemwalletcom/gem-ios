@@ -24,39 +24,33 @@ public struct SetPriceAlertScene: View {
     }
     
     public var body: some View {
-        VStack(spacing: .zero) {
-            List {
-                Section {
-                    VStack(spacing: .small) {
-                        Text(model.alertDirectionTitle)
-                            .textStyle(.subheadline)
-                        
-                        CurrencyInputView(
-                            text: $model.state.amount,
-                            config: model.currencyInputConfig(for: assetData)
-                        )
-                        .focused($focusedField)
-                    }
+        List {
+            Section {
+                VStack(spacing: .small) {
+                    Text(model.alertDirectionTitle)
+                        .textStyle(.subheadline)
                     
-                    if model.showPercentagePreselectedPicker {
-                        preselectedPercentagePickerView
-                            .padding(.top, Spacing.medium)
-                    }
+                    CurrencyInputView(
+                        text: $model.state.amount,
+                        config: model.currencyInputConfig(for: assetData)
+                    )
+                    .focused($focusedField)
                 }
-                .cleanListRow()
+                
+                if model.showPercentagePreselectedPicker {
+                    preselectedPercentagePickerView
+                        .padding(.top, Spacing.medium)
+                }
             }
-            
-            Spacer()
-            
+            .cleanListRow()
+        }
+        .toolbarActionButton(
             StateButton(
                 text: Localized.Transfer.confirm,
                 type: .primary(model.confirmButtonState),
                 action: confirm
             )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
-        }
-        .padding(.bottom, Spacing.scene.bottom)
-        .background(Colors.grayBackground)
+        )
         .toolbar {
             ToolbarItem(placement: .principal) {
                 alertTypePickerView
