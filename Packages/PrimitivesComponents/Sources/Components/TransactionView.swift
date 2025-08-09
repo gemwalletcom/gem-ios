@@ -15,17 +15,12 @@ public struct TransactionView: View {
 
     public var body: some View {
         ListItemView(
-            title: model.title,
-            titleStyle: model.titleTextStyle,
-            titleTag: model.titleTag,
-            titleTagStyle: model.titleTagStyle,
+            title: model.titleTextValue,
+            titleExtra: model.titleExtraTextValue,
+            titleTag: model.titleTagTextValue,
             titleTagType: model.titleTagType,
-            titleExtra: model.titleExtra,
-            titleStyleExtra: model.titleTextStyleExtra,
-            subtitle: model.subtitle,
-            subtitleStyle: model.subtitleTextStyle,
-            subtitleExtra: model.subtitleExtra,
-            subtitleStyleExtra: model.subtitleExtraStyle,
+            subtitle: model.subtitleTextValue,
+            subtitleExtra: model.subtitleExtraTextValue,
             imageStyle: .asset(assetImage: model.assetImage)
         )
         .contextMenu(
@@ -83,7 +78,7 @@ private struct ExplorerMock: ExplorerLinkFetchable {
     let transactionVMMock = TransactionViewModel(
         explorerService: ExplorerMock(),
         transaction: pendingTransactionExtendedMock,
-        formatter: .short
+        currency: Currency.usd.rawValue
     )
 
     TransactionView(model: transactionVMMock)

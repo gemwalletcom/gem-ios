@@ -16,7 +16,7 @@ import Style
 struct TransactionDetailViewModelTests {
 
     @Test
-    func participantField_transfer() {
+    func participantFieldTransfer() {
         #expect(TransactionDetailViewModel.mock(type: .transfer, direction: .incoming).participantField == Localized.Transaction.sender)
         #expect(TransactionDetailViewModel.mock(type: .transfer, direction: .outgoing).participantField == Localized.Transaction.recipient)
         #expect(TransactionDetailViewModel.mock(type: .transferNFT, direction: .incoming).participantField == Localized.Transaction.sender)
@@ -24,18 +24,18 @@ struct TransactionDetailViewModelTests {
     }
 
     @Test
-    func participantField_contract() {
+    func participantFieldContract() {
         #expect(TransactionDetailViewModel.mock(type: .tokenApproval).participantField == Localized.Asset.contract)
         #expect(TransactionDetailViewModel.mock(type: .smartContractCall).participantField == Localized.Asset.contract)
     }
 
     @Test
-    func participantField_stakeDelegate() {
+    func participantFieldStakeDelegate() {
         #expect(TransactionDetailViewModel.mock(type: .stakeDelegate).participantField == Localized.Stake.validator)
     }
 
     @Test
-    func participantField_isNilForOthers() {
+    func participantFieldIsNilForOthers() {
         let nilTypes: [TransactionType] = [.swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation]
         for type in nilTypes {
             #expect(TransactionDetailViewModel.mock(type: type).participantField == nil)
@@ -43,7 +43,7 @@ struct TransactionDetailViewModelTests {
     }
 
     @Test
-    func participant_returnsValue() {
+    func participantReturnsValue() {
         let participantTypes: [TransactionType] = [.transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate]
 
         for type in participantTypes {
@@ -52,7 +52,7 @@ struct TransactionDetailViewModelTests {
     }
 
     @Test
-    func participant_isNilForOthers() {
+    func participantIsNilForOthers() {
         let nilTypes: [TransactionType] = [.swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation]
         for type in nilTypes {
             #expect(TransactionDetailViewModel.mock(type: type).participant == nil)
@@ -90,7 +90,8 @@ extension TransactionDetailViewModel {
             transaction: TransactionExtended.mock(
                 transaction: Transaction.mock(type: type, state: state, direction: direction, to: participant, memo: memo)
             ),
-            walletId: "test_wallet_id"
+            walletId: "test_wallet_id",
+            preferences: Preferences.standard
         )
     }
 }

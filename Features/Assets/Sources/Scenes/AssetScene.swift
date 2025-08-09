@@ -115,7 +115,8 @@ public struct AssetScene: View {
             if model.showTransactions {
                 TransactionsList(
                     explorerService: model.explorerService,
-                    model.transactions
+                    model.transactions,
+                    currency: model.assetDataModel.currencyCode
                 )
                 .listRowInsets(.assetListRowInsets)
             } else {

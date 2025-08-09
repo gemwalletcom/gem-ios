@@ -8,28 +8,58 @@ public struct AmountView: View {
     
     public let title: String
     public let subtitle: String?
+    public let titleStyle: TextStyle
+    public let subtitleStyle: TextStyle
     
-    public init(title: String, subtitle: String?) {
+    public init(
+        title: String,
+        subtitle: String? = nil,
+        titleStyle: TextStyle? = nil,
+        subtitleStyle: TextStyle? = nil
+    ) {
         self.title = title
         self.subtitle = subtitle
+        self.titleStyle = titleStyle ?? TextStyle(
+            font: .system(size: 52),
+            color: Colors.black,
+            fontWeight: .semibold
+        )
+        self.subtitleStyle = subtitleStyle ?? TextStyle(
+            font: .system(size: 16),
+            color: Colors.gray,
+            fontWeight: .medium
+        )
+    }
+    
+    // Convenience init for backward compatibility
+    public init(title: String, subtitle: String?, titleColor: Color) {
+        self.title = title
+        self.subtitle = subtitle
+        self.titleStyle = TextStyle(
+            font: .system(size: 52),
+            color: titleColor,
+            fontWeight: .semibold
+        )
+        self.subtitleStyle = TextStyle(
+            font: .system(size: 16),
+            color: Colors.gray,
+            fontWeight: .medium
+        )
     }
     
     public var body: some View {
-        VStack(alignment: .center, spacing: 2) {
+        VStack(alignment: .center, spacing: Spacing.extraSmall) {
             Text(title)
-                .foregroundColor(Colors.black)
-                .font(.system(size: 52))
+                .textStyle(titleStyle)
                 .scaledToFit()
-                .fontWeight(.semibold)
                 .minimumScaleFactor(0.4)
                 .truncationMode(.middle)
                 .lineLimit(1)
 
             if let subtitle = subtitle {
                 Text(subtitle)
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
-                    .foregroundColor(Colors.gray)
+                    .textStyle(subtitleStyle)
+                    .lineLimit(1)
             }
         }
     }
