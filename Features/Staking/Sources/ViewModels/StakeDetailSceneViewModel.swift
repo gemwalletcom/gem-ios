@@ -126,7 +126,7 @@ public struct StakeDetailSceneViewModel {
     
     public func redelegateRecipientData() throws -> AmountInput {
         AmountInput(
-            type: .redelegate(
+            type: .stakeRedelegate(
                 delegation: model.delegation,
                 validators: try service.getActiveValidators(assetId: asset.id),
                 recommendedValidator: recommendedCurrentValidator
@@ -153,7 +153,7 @@ extension StakeDetailSceneViewModel {
     func onUnstakeAction() {
         if chain.canChangeAmountOnUnstake {
             let data = AmountInput(
-                type: .unstake(delegation: model.delegation),
+                type: .stakeUnstake(delegation: model.delegation),
                 asset: asset
             )
             onAmountInputAction?(data)

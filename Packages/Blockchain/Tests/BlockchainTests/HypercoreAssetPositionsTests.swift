@@ -137,4 +137,58 @@ struct HypercoreAssetPositionsTests {
             #expect(result[0].funding == testCase.expectedFunding)
         }
     }
+    
+    @Test
+    func mapToPerpetualBalance() throws {
+        let positions = HypercoreAssetPositions(
+            assetPositions: [],
+            marginSummary: HypercoreMarginSummary(
+                accountValue: "5000.50",
+                totalNtlPos: "100",
+                totalRawUsd: "100",
+                totalMarginUsed: "100"
+            ),
+            crossMarginSummary: HypercoreMarginSummary(
+                accountValue: "1000",
+                totalNtlPos: "100",
+                totalRawUsd: "100",
+                totalMarginUsed: "1500.25"
+            ),
+            crossMaintenanceMarginUsed: "50",
+            withdrawable: "2500.75"
+        )
+        
+        let balance = try positions.mapToPerpetualBalance()
+        
+        #expect(balance.reserved == 1500.25)
+        #expect(balance.available == 3500.25)
+        #expect(balance.withdrawable == 2500.75)
+    }
+    
+    @Test
+    func mapToPerpetualBalanceWithRealData() throws {
+        let positions = HypercoreAssetPositions(
+            assetPositions: [],
+            marginSummary: HypercoreMarginSummary(
+                accountValue: "706.364534",
+                totalNtlPos: "12013.47849",
+                totalRawUsd: "2737.835324",
+                totalMarginUsed: "926.155026"
+            ),
+            crossMarginSummary: HypercoreMarginSummary(
+                accountValue: "706.364534",
+                totalNtlPos: "12013.47849",
+                totalRawUsd: "2737.835324",
+                totalMarginUsed: "926.155026"
+            ),
+            crossMaintenanceMarginUsed: "400.689965",
+            withdrawable: "305.674569"
+        )
+        
+        let balance = try positions.mapToPerpetualBalance()
+        
+        #expect(balance.reserved == 706.364534)
+        #expect(balance.available == 0)
+        #expect(balance.withdrawable == 305.674569)
+    }
 }

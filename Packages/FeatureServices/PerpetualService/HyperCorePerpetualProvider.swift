@@ -25,7 +25,6 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
         )
     }
     
-    
     func getCandlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
         let interval = hyperliquidInterval(for: period)
         let endTime = Int(Date().timeIntervalSince1970)

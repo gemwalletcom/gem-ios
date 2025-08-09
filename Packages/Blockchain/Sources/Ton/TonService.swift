@@ -99,6 +99,8 @@ extension TonService {
                     options: [.tokenAccountCreation: BigInt(jettonAccountFee)]
                 )
             }
+        case .withdrawal:
+            throw AnyError.notImplemented
         case .swap:
             let fee = baseFee + jettonTokenAccountCreation
             return Fee(

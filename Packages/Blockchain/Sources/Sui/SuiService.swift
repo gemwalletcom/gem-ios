@@ -88,8 +88,8 @@ extension SuiService {
                     gasPrice: input.gasPrice.gasPrice
                 ).data
             }
-        case .transferNft:
-            fatalError()
+        case .transferNft, .withdrawal:
+            throw AnyError.notImplemented
         case .stake(_, let stakeType):
             switch stakeType {
             case .stake(let validator):

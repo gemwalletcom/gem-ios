@@ -15,6 +15,7 @@ public enum PerpetualType: Hashable, Equatable, Sendable {
 public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
     case deposit(Asset)
+    case withdrawal(Asset)
     case transferNft(NFTAsset)
     case swap(Asset, Asset, SwapData)
     case tokenApprove(Asset, ApprovalData)
@@ -27,6 +28,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         switch self {
         case .transfer: .transfer
         case .deposit: .transfer
+        case .withdrawal: .transfer
         case .generic: .smartContractCall
         case .transferNft: .transferNFT
         case .tokenApprove: .tokenApproval
@@ -52,6 +54,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         switch self {
         case .transfer(let asset),
              .deposit(let asset),
+             .withdrawal(let asset),
              .swap(let asset, _, _),
              .stake(let asset, _),
              .account(let asset, _),
@@ -79,6 +82,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         case .generic,
              .transfer,
              .deposit,
+             .withdrawal,
              .tokenApprove,
              .stake,
              .account,
@@ -90,6 +94,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         switch self {
         case .transfer(let asset),
              .deposit(let asset),
+             .withdrawal(let asset),
              .tokenApprove(let asset, _),
              .stake(let asset, _),
              .generic(let asset, _, _),
@@ -117,7 +122,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     public var shouldIgnoreValueCheck: Bool {
         switch self {
         case .transferNft, .stake, .account, .tokenApprove, .perpetual: true
-        case .transfer, .deposit, .swap, .generic: false
+        case .transfer, .deposit, .withdrawal, .swap, .generic: false
         }
     }
 
@@ -125,6 +130,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         switch self {
         case .transfer(let asset),
              .deposit(let asset),
+             .withdrawal(let asset),
              .swap(let asset, _, _),
              .stake(let asset, _),
              .account(let asset, _),

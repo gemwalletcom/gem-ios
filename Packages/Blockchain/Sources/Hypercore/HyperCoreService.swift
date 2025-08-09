@@ -224,27 +224,41 @@ public extension HyperCoreService {
         
         let (agentRequired, referralRequired, builderRequired) = try await (approveAgentRequired, approveReferralRequired, approveBuilderRequired)
         
-        guard case let .perpetual(_, type)  = input.type else {
+        switch input.type {
+        case .perpetual(_, let type):
+            //TODO: Perpetual. Get 45 from the api
+            let totalFeeTenthsBps = 45 + Self.builderFeeBps
+            let fiatValue = switch type {
+            case .open(let data): data.fiatValue
+            case .close(let data): data.fiatValue
+            }
+            let feeAmount = Int(fiatValue * Double(totalFeeTenthsBps) * 10)
+            
+            return TransactionData(
+                data: .hyperliquid(
+                    SigningData.Hyperliquid(
+                        approveAgentRequired: agentRequired,
+                        approveReferralRequired: referralRequired,
+                        approveBuilderRequired: builderRequired
+                    )
+                ),
+                fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+            )
+        case .withdrawal:
+            // Withdrawal doesn't require additional approvals
+            return TransactionData(
+                data: .hyperliquid(
+                    SigningData.Hyperliquid(
+                        approveAgentRequired: false,
+                        approveReferralRequired: false,
+                        approveBuilderRequired: false
+                    )
+                ),
+                fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+            )
+        default:
             throw AnyError.notImplemented
         }
-        //TODO: Perpetual. Get 45 from the api
-        let totalFeeTenthsBps = 45 + Self.builderFeeBps
-        let fiatValue = switch type {
-        case .open(let data): data.fiatValue
-        case .close(let data): data.fiatValue
-        }
-        let feeAmount = Int(fiatValue * Double(totalFeeTenthsBps) * 10)
-        
-        return TransactionData(
-            data: .hyperliquid(
-                SigningData.Hyperliquid(
-                    approveAgentRequired: agentRequired,
-                    approveReferralRequired: referralRequired,
-                    approveBuilderRequired: builderRequired
-                )
-            ),
-            fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
-        )
     }
 }
 

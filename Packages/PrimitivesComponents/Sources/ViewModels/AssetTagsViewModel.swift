@@ -26,7 +26,7 @@ public struct AssetTagsViewModel {
             .swap: [.trending, .stablecoins]
         case .buy: [.trendingFiatPurchase, .stablecoins]
         case .send: [.stablecoins]
-        case .deposit: [.stablecoins]
+        case .deposit, .withdraw: [.stablecoins]
         }
     }
     
