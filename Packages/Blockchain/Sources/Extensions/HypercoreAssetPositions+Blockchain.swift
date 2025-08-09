@@ -43,11 +43,14 @@ extension HypercoreAssetPositions {
     
     public func mapToPerpetualBalance() throws -> PerpetualBalance {
         let total = try Double.from(string: marginSummary.accountValue)
+        let crossMargin = try Double.from(string: crossMarginSummary.totalMarginUsed)
         let withdrawable = try Double.from(string: withdrawable)
+        let available = total - crossMargin
     
         return PerpetualBalance(
-            available: withdrawable,
-            reserved: total - withdrawable
+            available: available,
+            reserved: crossMargin,
+            withdrawable: withdrawable
         )
     }
 }
