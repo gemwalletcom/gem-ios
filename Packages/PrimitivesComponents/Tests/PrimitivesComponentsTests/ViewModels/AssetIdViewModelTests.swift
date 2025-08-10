@@ -56,19 +56,17 @@ struct AssetIdViewModelTests {
     @Test
     func assetImageHyperCorePerpetual() {
         let btcPerpetualAssetId = AssetId(chain: .hyperCore, tokenId: "perpetual::BTC")
-        let btcImage = AssetIdViewModel(assetId: .mock(.bitcoin)).assetImage
         let btcPerpetualImage = AssetIdViewModel(assetId: btcPerpetualAssetId).assetImage
         
-        #expect(btcPerpetualImage.type == "PERPETUAL")
-        #expect(btcPerpetualImage.placeholder == btcImage.placeholder)
+        #expect(btcPerpetualImage.type == "ERC20")
+        #expect(btcPerpetualImage.placeholder == ChainImage(chain: .bitcoin).image)
         #expect(btcPerpetualImage.chainPlaceholder == ChainImage(chain: .hyperCore).placeholder)
         
         let ethPerpetualAssetId = AssetId(chain: .hyperCore, tokenId: "perpetual::ETH")
-        let ethImage = AssetIdViewModel(assetId: .mock(.ethereum)).assetImage  
         let ethPerpetualImage = AssetIdViewModel(assetId: ethPerpetualAssetId).assetImage
         
-        #expect(ethPerpetualImage.type == "PERPETUAL")
-        #expect(ethPerpetualImage.placeholder == ethImage.placeholder)
+        #expect(ethPerpetualImage.type == "ERC20")
+        #expect(ethPerpetualImage.placeholder == ChainImage(chain: .ethereum).image)
         #expect(ethPerpetualImage.chainPlaceholder == ChainImage(chain: .hyperCore).placeholder)
     }
 }

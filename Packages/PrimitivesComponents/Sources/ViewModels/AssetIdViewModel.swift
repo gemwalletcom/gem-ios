@@ -35,7 +35,7 @@ public struct AssetIdViewModel: Sendable {
         )
         switch (assetId.chain, assetId.type) {
         case (.hyperCore, .token):
-            if assetId.assetType == .perpetual, let token = try? assetId.twoSubTokenIds(), let chain = Chain.allCases.first(where: { $0.asset.symbol == token.1} ) {
+            if let token = try? assetId.twoSubTokenIds(), let chain = Chain.allCases.first(where: { $0.asset.symbol == token.1} ) {
                 let chainAssetImage = AssetIdViewModel(assetId: chain.assetId).assetImage
                 return AssetImage(
                     type: defaultAssetImage.type,
