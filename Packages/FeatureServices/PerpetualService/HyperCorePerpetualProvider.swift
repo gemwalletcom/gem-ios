@@ -70,10 +70,9 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
 }
 extension HypercoreUniverseAsset {
     func asset(assetId: AssetId) -> Asset {
-        let name = "\(name)-USD"
         return Asset(
             id: assetId,
-            name: name,
+            name: "\(name)-USD",
             symbol: name,
             decimals: Int32(szDecimals),
             type: .perpetual

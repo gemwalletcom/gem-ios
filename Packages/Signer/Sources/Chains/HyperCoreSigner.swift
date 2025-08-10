@@ -51,7 +51,7 @@ public class HyperCoreSigner: Signable {
         }
 
         let (agentAddress, agentKey) = try getAgentKey(for: input.senderAddress)
-        let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: HyperCoreService.builderFeeBps)
+        let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: data.builderFeeBps)
         let timestampIncrementer = NumberIncrementer(Int(Date.getTimestampInMs()))
         var transactions: [String] = []
         
@@ -78,7 +78,7 @@ public class HyperCoreSigner: Signable {
                 try signApproveBuilderAddress(
                     agentKey: privateKey,
                     builderAddress: HyperCoreService.builderAddress,
-                    rateBps: HyperCoreService.builderFeeBps,
+                    rateBps: HyperCoreService.maxBuilderFeeBps,
                     timestamp: timestampIncrementer.next().asUInt64
                 )
             )

@@ -14,6 +14,16 @@ public struct HypercoreAgentSession: Codable, Sendable {
 	}
 }
 
+public struct HypercoreUserFee: Codable, Sendable {
+	public let userCrossRate: String
+	public let activeReferralDiscount: String
+
+	public init(userCrossRate: String, activeReferralDiscount: String) {
+		self.userCrossRate = userCrossRate
+		self.activeReferralDiscount = activeReferralDiscount
+	}
+}
+
 public struct HypercoreUserRole: Codable, Sendable {
 	public let role: String
 

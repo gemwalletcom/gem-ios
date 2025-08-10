@@ -13,6 +13,7 @@ public enum HypercoreProvider: TargetType {
     case userRole(address: String)
     case referral(address: String)
     case builderFee(address: String, builder: String)
+    case userFees(user: String)
     case extraAgents(user: String)
     case broadcast(data: String)
 
@@ -34,6 +35,7 @@ public enum HypercoreProvider: TargetType {
             .userRole,
             .referral,
             .builderFee,
+            .userFees,
             .extraAgents:
             return "/info"
         case .broadcast:
@@ -86,6 +88,11 @@ public enum HypercoreProvider: TargetType {
                 "type": "maxBuilderFee",
                 "user": address,
                 "builder": builder
+            ])
+        case .userFees(let user):
+            return .encodable([
+                "type": "userFees",
+                "user": user
             ])
         case .extraAgents(let user):
             return .encodable([
