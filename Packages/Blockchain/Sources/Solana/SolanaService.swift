@@ -138,7 +138,7 @@ extension SolanaService: ChainBalanceable {
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: balance
+                available: max(balance - chain.minimumAccountBalance, .zero) // Keeping rent to avoid account closure
             )
         )
     }
