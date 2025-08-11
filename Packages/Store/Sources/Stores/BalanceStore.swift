@@ -56,6 +56,15 @@ public struct BalanceStore: Sendable {
                         BalanceRecord.Columns.rewards.set(to: balance.rewards.value),
                         BalanceRecord.Columns.rewardsAmount.set(to: balance.rewards.amount),
                     ]
+                case .perpetual(let balance):
+                    [
+                        BalanceRecord.Columns.available.set(to: balance.available.value),
+                        BalanceRecord.Columns.availableAmount.set(to: balance.available.amount),
+                        BalanceRecord.Columns.reserved.set(to: balance.reserved.value),
+                        BalanceRecord.Columns.reservedAmount.set(to: balance.reserved.amount),
+                        BalanceRecord.Columns.withdrawable.set(to: balance.withdrawable.value),
+                        BalanceRecord.Columns.withdrawableAmount.set(to: balance.withdrawable.amount)
+                    ]
                 }
                 
                 let defaultFields: [ColumnAssignment] = [

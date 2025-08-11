@@ -60,12 +60,13 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
         case .manage: []
         case .priceAlert: [.priceAlerts]
         case .deposit: [ .chainsOrAssets([], ["arbitrum_0xaf88d065e77c8cC2239327C5EDb3A432268e5831"])] // USDC arbitrum
+        case .withdraw: [ .chainsOrAssets([], ["hypercore_perpetual::USDC"])]
         }
     }
 
     var showHasBalanceToggle: Bool {
         switch type {
-        case .send, .receive, .buy, .swap, .priceAlert, .deposit: false
+        case .send, .receive, .buy, .swap, .priceAlert, .deposit, .withdraw: false
         case .manage: true
         }
     }

@@ -11,6 +11,9 @@ import PriceAlerts
 import Swap
 import Assets
 import Transfer
+import ChainService
+import ExplorerService
+import Signer
 
 struct SelectedAssetNavigationStack: View  {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -21,6 +24,9 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
     @Environment(\.swapService) private var swapService
+    @Environment(\.balanceService) private var balanceService
+    @Environment(\.priceService) private var priceService
+    @Environment(\.transactionService) private var transactionService
     @Environment(\.nameService) private var nameService
 
     @State private var navigationPath = NavigationPath()
@@ -45,6 +51,21 @@ struct SelectedAssetNavigationStack: View  {
                 switch input.type {
                 case .send(let type):
                     RecipientNavigationView(
+                        amountService: AmountService(
+                            priceService: priceService,
+                            balanceService: balanceService,
+                            stakeService: stakeService
+                        ),
+                        confirmService: ConfirmServiceFactory.create(
+                            keystore: keystore,
+                            nodeService: nodeService,
+                            walletsService: walletsService,
+                            scanService: scanService,
+                            balanceService: balanceService,
+                            priceService: priceService,
+                            transactionService: transactionService,
+                            chain: input.asset.chain
+                        ),
                         model: viewModelFactory.recipientScene(
                             wallet: wallet,
                             asset: input.asset,
@@ -69,14 +90,14 @@ struct SelectedAssetNavigationStack: View  {
                     )
                 case .buy:
                     FiatConnectNavigationView(
-                        model: FiatSceneViewModel(
+                        model: viewModelFactory.fiatScene(
                             assetAddress: input.assetAddress,
-                            walletId: wallet.id
+                            walletId: wallet.walletId
                         )
                     )
                 case let .swap(fromAsset, toAsset):
                     SwapNavigationView(
-                        model: SwapSceneViewModel(
+                        model: viewModelFactory.swapScene(
                             input: SwapInput(
                                 wallet: wallet,
                                 pairSelector: SwapPairSelectorViewModel(
@@ -84,9 +105,6 @@ struct SelectedAssetNavigationStack: View  {
                                     toAssetId: toAsset?.id ?? SwapPairSelectorViewModel.defaultSwapPair(for: fromAsset).toAssetId
                                 )
                             ),
-                            walletsService: walletsService,
-                            swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
-                            swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
                             onSwap: {
                                 navigationPath.append($0)
                             }

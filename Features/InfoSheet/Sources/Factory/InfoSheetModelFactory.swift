@@ -32,7 +32,7 @@ public struct InfoSheetModelFactory {
             let formatter = ValueFormatter(style: .full)
             let description = if let required = required {
                 Localized.Info.InsufficientNetworkFeeBalance.description(
-                    formatter.string(required, decimals: asset.chain.asset.decimals.asInt),
+                    formatter.string(required, decimals: asset.chain.asset.decimals.asInt, currency: asset.chain.asset.symbol).wrap("**"),
                     asset.chain.asset.name,
                     asset.chain.asset.symbol
                 )

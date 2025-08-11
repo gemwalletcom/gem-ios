@@ -53,8 +53,7 @@ public final class PerpetualsSceneViewModel {
     public var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
             walletType: wallet.type,
-            balance: walletBalance,
-            currencyCode: Currency.usd.rawValue
+            balance: walletBalance
         )
     }
 }
@@ -91,7 +90,7 @@ extension PerpetualsSceneViewModel {
         case .deposit:
             onSelectAssetType?(.deposit)
         case .withdraw:
-            onSelectAssetType?(.deposit)
+            onSelectAssetType?(.withdraw)
         default:
             break
         }

@@ -23,18 +23,7 @@ public final class AssetBannersViewModel: Sendable {
     }
     
     // MARK: - Private
-    
-    private var filteredBanners: [Banner] {
-        banners.filter { shouldShowBanner($0) }
-    }
-    
-    private func shouldShowBanner(_ banner: Banner) -> Bool {
-        switch banner.event {
-        case .stake: assetData.balance.staked.isZero
-        case .enableNotifications, .accountActivation, .accountBlockedMultiSignature, .activateAsset: true
-        }
-    }
-    
+
     private var activateAssetBanner: [Banner] {
         guard !assetData.metadata.isActive else { return [] }
         
@@ -45,5 +34,16 @@ public final class AssetBannersViewModel: Sendable {
             event: .activateAsset,
             state: .alwaysActive
         )]
+    }
+
+    private var filteredBanners: [Banner] {
+        banners.filter { shouldShowBanner($0) }
+    }
+
+    private func shouldShowBanner(_ banner: Banner) -> Bool {
+        switch banner.event {
+        case .stake: assetData.balance.staked.isZero
+        case .enableNotifications, .accountActivation, .accountBlockedMultiSignature, .activateAsset: true
+        }
     }
 }

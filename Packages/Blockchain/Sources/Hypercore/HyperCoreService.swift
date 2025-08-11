@@ -14,9 +14,9 @@ public struct HyperCoreService: Sendable {
     
     public static let agentAddressKey: String = "hyperliquid_agent_address"
     public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
-    public static let builderFeeBps = 45 // 0.045%
     public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
     public static let referralCode = "GEMWALLET"
+    public static let maxBuilderFeeBps = 45 // 0.045%
     
     public init(
         chain: Primitives.Chain = .hyperCore,
@@ -79,6 +79,12 @@ public extension HyperCoreService {
         try await self.provider
             .request(.builderFee(address: address, builder: builder))
             .map(as: Int.self)
+    }
+    
+    func getUserFees(user: String) async throws -> HypercoreUserFee {
+        try await self.provider
+            .request(.userFees(user: user))
+            .map(as: HypercoreUserFee.self)
     }
     
     func getSpotBalances(user: String) async throws -> HypercoreBalances {
@@ -222,29 +228,46 @@ public extension HyperCoreService {
             try await getBuilderFee(address: input.senderAddress, builder: Self.builderAddress)
         }
         
-        let (agentRequired, referralRequired, builderRequired) = try await (approveAgentRequired, approveReferralRequired, approveBuilderRequired)
+        async let totalFeeTenthsBps = cacheService.getUserFeeRate(address: input.senderAddress) {
+            try await getUserFees(user: input.senderAddress)
+        }
         
-        guard case let .perpetual(_, type)  = input.type else {
+        let (agentRequired, referralRequired, builderRequired, feeRate) = try await (approveAgentRequired, approveReferralRequired, approveBuilderRequired, totalFeeTenthsBps)
+        
+        switch input.type {
+        case .perpetual(_, let type):
+            let fiatValue = switch type {
+            case .open(let data): data.fiatValue
+            case .close(let data): data.fiatValue
+            }
+            let feeAmount = Int(fiatValue * Double(feeRate * 2) * 10)
+            
+            return TransactionData(
+                data: .hyperliquid(
+                    SigningData.Hyperliquid(
+                        approveAgentRequired: agentRequired,
+                        approveReferralRequired: referralRequired,
+                        approveBuilderRequired: builderRequired,
+                        builderFeeBps: feeRate
+                    )
+                ),
+                fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+            )
+        case .withdrawal:
+            return TransactionData(
+                data: .hyperliquid(
+                    SigningData.Hyperliquid(
+                        approveAgentRequired: false,
+                        approveReferralRequired: false,
+                        approveBuilderRequired: false,
+                        builderFeeBps: 0
+                    )
+                ),
+                fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+            )
+        default:
             throw AnyError.notImplemented
         }
-        //TODO: Perpetual. Get 45 from the api
-        let totalFeeTenthsBps = 45 + Self.builderFeeBps
-        let fiatValue = switch type {
-        case .open(let data): data.fiatValue
-        case .close(let data): data.fiatValue
-        }
-        let feeAmount = Int(fiatValue * Double(totalFeeTenthsBps) * 10)
-        
-        return TransactionData(
-            data: .hyperliquid(
-                SigningData.Hyperliquid(
-                    approveAgentRequired: agentRequired,
-                    approveReferralRequired: referralRequired,
-                    approveBuilderRequired: builderRequired
-                )
-            ),
-            fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
-        )
     }
 }
 

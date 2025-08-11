@@ -6,6 +6,7 @@ public enum UpdateBalanceType {
     case coin(UpdateCoinBalance)
     case token(UpdateTokenBalance)
     case stake(UpdateStakeBalance)
+    case perpetual(UpdatePerpetualBalance)
 }
 
 public struct UpdateCoinBalance {
@@ -48,5 +49,21 @@ public struct UpdateStakeBalance {
         self.frozen = frozen
         self.locked = locked
         self.rewards = rewards
+    }
+}
+
+public struct UpdatePerpetualBalance {
+    public let available: UpdateBalanceValue
+    public let reserved: UpdateBalanceValue
+    public let withdrawable: UpdateBalanceValue
+    
+    public init(
+        available: UpdateBalanceValue,
+        reserved: UpdateBalanceValue,
+        withdrawable: UpdateBalanceValue
+    ) {
+        self.available = available
+        self.reserved = reserved
+        self.withdrawable = withdrawable
     }
 }

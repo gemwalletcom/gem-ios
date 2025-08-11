@@ -16,7 +16,7 @@ public final class WalletDetailViewModel {
     private let navigationPath: Binding<NavigationPath>
     let wallet: Wallet
     let walletService: WalletService
-    let explorerService: any ExplorerLinkFetchable
+    private let explorerService: any ExplorerLinkFetchable
 
     var nameInput: String
     var isPresentingAlertMessage: AlertMessage?
@@ -63,7 +63,11 @@ public final class WalletDetailViewModel {
             )
         }
     }
-    
+
+    func addressLink(account: SimpleAccount) -> BlockExplorerLink {
+        explorerService.addressUrl(chain: account.chain, address: account.address)
+    }
+
     var walletRequest: WalletRequest {
         WalletRequest(walletId: wallet.id)
     }
