@@ -67,8 +67,8 @@ public final class WalletSceneViewModel: Sendable {
         )
         self.bannersRequest = BannersRequest(
             walletId: wallet.id,
-            assetId: nil,
-            chain: nil,
+            assetId: .none,
+            chain: .none,
             events: [
                 .enableNotifications,
                 .accountBlockedMultiSignature,
@@ -224,15 +224,7 @@ extension WalletSceneViewModel {
         wallet = newWallet
         totalFiatRequest.walletId = newWallet.id
         assetsRequest.walletId = newWallet.id
-        bannersRequest = BannersRequest(
-            walletId: newWallet.id,
-            assetId: nil,
-            chain: nil,
-            events: [
-                .enableNotifications,
-                .accountBlockedMultiSignature,
-            ]
-        )
+        bannersRequest.walletId = newWallet.id
 
         fetch()
     }
