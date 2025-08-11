@@ -78,7 +78,7 @@ public struct Signer: Sendable {
         case .algorand: AlgorandSigner()
         case .polkadot: PolkadotSigner()
         case .cardano: CardanoSigner()
-        case .hyperCore: HyperCoreSigner(agentKeystore: LocalAgentKeystore(config: AgentConfig(chain: chain)))
+        case .hyperCore: HyperCoreSigner(preferences: HyperliquidSecurePreferences())
         }
     }
 }

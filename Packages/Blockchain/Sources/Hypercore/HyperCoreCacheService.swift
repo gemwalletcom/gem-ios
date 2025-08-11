@@ -5,7 +5,7 @@ import Primitives
 
 public struct HyperCoreCacheService: Sendable {
     private let cacheService: BlockchainCacheService
-    private let agentKeystore: AgentKeystore
+    private let preferences: HyperliquidSecurePreferences
     
     private static let referralApprovedKey = "referral_approved"
     private static let builderFeeApprovedKey = "builder_fee_approved"
@@ -15,14 +15,14 @@ public struct HyperCoreCacheService: Sendable {
     
     public init(
         cacheService: BlockchainCacheService,
-        agentKeystore: AgentKeystore
+        preferences: HyperliquidSecurePreferences
     ) {
         self.cacheService = cacheService
-        self.agentKeystore = agentKeystore
+        self.preferences = preferences
     }
     
     public func needsAgentApproval(walletAddress: String, checker: () async throws -> [HypercoreAgentSession]) async throws -> Bool {
-        guard let agentAddress = try? agentKeystore.getAgent(walletAddress: walletAddress)?.address else { return true }
+        guard let agentAddress = try? preferences.getKey(walletAddress: walletAddress)?.address else { return true }
 
         let currentTime = Int(Date().timeIntervalSince1970)
         if let value = cacheService.getInt(address: agentAddress, key: Self.agentValidUntilKey), currentTime < value {

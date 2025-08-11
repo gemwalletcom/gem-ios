@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct AgentKey: Equatable, Sendable {
+public struct HyperliquidKey: Equatable, Sendable {
     public let address: String
     public let privateKey: Data
     

@@ -11,8 +11,6 @@ public struct HyperCoreService: Sendable {
     let provider: Provider<HypercoreProvider>
     let cacheService: HyperCoreCacheService
     
-    public static let agentAddressKey: String = "hyperliquid_agent_address"
-    public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
     public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
     public static let referralCode = "GEMWALLET"
     public static let maxBuilderFeeBps = 45 // 0.045%
@@ -26,7 +24,7 @@ public struct HyperCoreService: Sendable {
         self.provider = provider
         self.cacheService = HyperCoreCacheService(
             cacheService: cacheService,
-            agentKeystore: LocalAgentKeystore(config: AgentConfig(chain: chain))
+            preferences: HyperliquidSecurePreferences()
         )
     }
     
