@@ -85,27 +85,27 @@ extension CosmosService {
         case .cosmos: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(25_000)
-            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual, .withdrawal: fatalError()
             }
         case .osmosis: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(10_000)
             case .stake: BigInt(100_000)
-            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual, .withdrawal: fatalError()
             }
         case .celestia: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(10_000)
-            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual, .withdrawal: fatalError()
             }
         case .sei: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(100_000)
             case .stake: BigInt(200_000)
-            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual, .withdrawal: fatalError()
             }
         case .injective: switch type {
             case .transfer, .deposit, .swap, .generic: BigInt(100_000_000_000_000)
             case .stake: BigInt(1_000_000_000_000_000)
-            case .transferNft, .account, .tokenApprove, .perpetual: fatalError()
+            case .transferNft, .account, .tokenApprove, .perpetual, .withdrawal: fatalError()
             }
         case .noble: BigInt(25_000)
         }

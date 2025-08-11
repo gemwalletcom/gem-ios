@@ -62,13 +62,47 @@ public struct TonTransactionOutMessage: Codable, Sendable {
 	}
 }
 
+public struct TonTransactionAction: Codable, Sendable {
+	public let valid: Bool?
+	public let success: Bool?
+
+	public init(valid: Bool?, success: Bool?) {
+		self.valid = valid
+		self.success = success
+	}
+}
+
+public struct TonTransactionComputePhase: Codable, Sendable {
+	public let success: Bool?
+	public let exit_code: Int32?
+
+	public init(success: Bool?, exit_code: Int32?) {
+		self.success = success
+		self.exit_code = exit_code
+	}
+}
+
+public struct TonTransactionDescription: Codable, Sendable {
+	public let action: TonTransactionAction?
+	public let compute_ph: TonTransactionComputePhase?
+	public let aborted: Bool?
+
+	public init(action: TonTransactionAction?, compute_ph: TonTransactionComputePhase?, aborted: Bool?) {
+		self.action = action
+		self.compute_ph = compute_ph
+		self.aborted = aborted
+	}
+}
+
 public struct TonTransactionMessage: Codable, Sendable {
 	public let hash: String
 	public let out_msgs: [TonTransactionOutMessage]
+	public let description: TonTransactionDescription?
 
-	public init(hash: String, out_msgs: [TonTransactionOutMessage]) {
+	public init(hash: String, out_msgs: [TonTransactionOutMessage], description: TonTransactionDescription?) {
 		self.hash = hash
 		self.out_msgs = out_msgs
+		self.description = description
 	}
 }
 

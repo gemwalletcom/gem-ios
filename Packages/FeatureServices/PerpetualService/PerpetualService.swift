@@ -61,7 +61,7 @@ public struct PerpetualService: PerpetualServiceable {
             [
              UpdateBalance(
                 assetID: usd.id.identifier,
-                type: .coin(UpdateCoinBalance(
+                type: .perpetual(UpdatePerpetualBalance(
                     available: UpdateBalanceValue(
                         value: try formatter.inputNumber(from: balance.available.description, decimals: 6).description,
                         amount: balance.available
@@ -69,6 +69,10 @@ public struct PerpetualService: PerpetualServiceable {
                     reserved: UpdateBalanceValue(
                         value: try formatter.inputNumber(from: balance.reserved.description, decimals: 6).description,
                         amount: balance.reserved
+                    ),
+                    withdrawable: UpdateBalanceValue(
+                        value: try formatter.inputNumber(from: balance.withdrawable.description, decimals: 6).description,
+                        amount: balance.withdrawable
                     )
                 )),
                 updatedAt: .now,

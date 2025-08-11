@@ -35,10 +35,12 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 public struct PerpetualBalance: Codable, Equatable, Hashable, Sendable {
 	public let available: Double
 	public let reserved: Double
+	public let withdrawable: Double
 
-	public init(available: Double, reserved: Double) {
+	public init(available: Double, reserved: Double, withdrawable: Double) {
 		self.available = available
 		self.reserved = reserved
+		self.withdrawable = withdrawable
 	}
 }
 

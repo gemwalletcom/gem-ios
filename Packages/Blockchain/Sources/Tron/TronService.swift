@@ -312,8 +312,8 @@ public extension TronService {
                         isNewAccount: isNewAccount
                     )
                 }
-            case .transferNft:
-                fatalError()
+            case .transferNft, .withdrawal:
+                throw AnyError.notImplemented
             case let .stake(_, type):
                 async let getAccountUsage = accountUsage(address: input.senderAddress)
                 async let getBalance = accountBalance(address: input.senderAddress)

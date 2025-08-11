@@ -20,7 +20,7 @@ extension SelectAssetInput: Identifiable {
     public var address: String { assetAddress.address }
     public var fiatType: FiatQuoteType  {
         switch type {
-        case .send, .receive, .swap, .manage, .priceAlert, .deposit:
+        case .send, .receive, .swap, .manage, .priceAlert, .deposit, .withdraw:
             fatalError("fiat operations not supported")
         case .buy: .buy
         }

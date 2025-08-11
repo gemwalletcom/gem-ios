@@ -126,6 +126,9 @@ public struct PerpetualScene: View {
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(type: $0)
         }
+        .refreshable {
+            await model.fetch()
+        }
         .taskOnce {
             Task {
                 await model.fetch()

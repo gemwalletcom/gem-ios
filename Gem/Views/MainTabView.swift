@@ -26,6 +26,7 @@ struct MainTabView: View {
     @Environment(\.priceObserverService) private var priceObserverService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.walletService) private var walletService
+    @Environment(\.assetsService) private var assetsService
 
     private let model: MainTabViewModel
 
@@ -186,19 +187,19 @@ extension MainTabView {
                     walletService.setCurrent(for: walletIndex)
                 }
 
-                let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)
+                let asset = try await assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Asset(asset: asset))
             case .priceAlert(let assetId):
-                let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)
+                let asset = try await assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Price(asset: asset))
             case .asset(let assetId), .buyAsset(let assetId):
-                let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)
+                let asset = try await assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Asset(asset: asset))
             case let .swapAsset(fromAsetId, toAssetId):
-                async let getFromAsset = try await walletsService.assetsService.getOrFetchAsset(for: fromAsetId)
+                async let getFromAsset = try await assetsService.getOrFetchAsset(for: fromAsetId)
                 async let getToAsset: Asset? = {
                     guard let id = toAssetId else { return nil }
-                    return try await walletsService.assetsService.getOrFetchAsset(for: id)
+                    return try await assetsService.getOrFetchAsset(for: id)
                 }()
 
                 let (fromAsset, toAsset) = try await (getFromAsset, getToAsset)
@@ -251,7 +252,7 @@ extension MainTabView {
             isPresentingSelectedAssetInput = nil
         case let .swap(fromAsset, _):
             Task {
-                let asset = try await walletsService.assetsService.getOrFetchAsset(for: fromAsset.id)
+                let asset = try await assetsService.getOrFetchAsset(for: fromAsset.id)
 
                 switch navigationState.selectedTab {
                 case .wallet:

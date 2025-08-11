@@ -10,7 +10,7 @@ import StakeService
 import Formatters
 import PrimitivesComponents
 
-public struct StakeDetailViewModel {
+public struct StakeDetailSceneViewModel {
     public let model: StakeDelegationViewModel
     public let onAmountInputAction: AmountInputAction
     public let onTransferAction: TransferDataAction
@@ -124,16 +124,9 @@ public struct StakeDetailViewModel {
         )
     }
     
-    public func unstakeRecipientData() throws -> AmountInput {
-        AmountInput(
-            type: .unstake(delegation: model.delegation),
-            asset: asset
-        )
-    }
-    
     public func redelegateRecipientData() throws -> AmountInput {
         AmountInput(
-            type: .redelegate(
+            type: .stakeRedelegate(
                 delegation: model.delegation,
                 validators: try service.getActiveValidators(assetId: asset.id),
                 recommendedValidator: recommendedCurrentValidator
@@ -154,9 +147,33 @@ public struct StakeDetailViewModel {
     }
 }
 
+// MARK: - Actions
+
+extension StakeDetailSceneViewModel {
+    func onUnstakeAction() {
+        if chain.canChangeAmountOnUnstake {
+            let data = AmountInput(
+                type: .stakeUnstake(delegation: model.delegation),
+                asset: asset
+            )
+            onAmountInputAction?(data)
+        } else {
+            let data = TransferData(
+                type: .stake(asset, .unstake(delegation: model.delegation)),
+                recipientData: RecipientData(
+                    recipient: Recipient(name: validatorText, address: model.delegation.validator.id, memo: ""),
+                    amount: .none
+                ),
+                value: model.delegation.base.balanceValue
+            )
+            onTransferAction?(data)
+        }
+    }
+}
+
 // MARK: - Private
 
-extension StakeDetailViewModel {
+extension StakeDetailSceneViewModel {
     private var asset: Asset {
         model.delegation.base.assetId.chain.asset
     }

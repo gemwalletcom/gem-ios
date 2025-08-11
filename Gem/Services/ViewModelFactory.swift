@@ -15,6 +15,13 @@ import WalletService
 import NodeService
 import StakeService
 import NameService
+import BalanceService
+import PriceService
+import TransactionService
+import Staking
+import Assets
+import FiatConnect
+import WalletConnectorService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -25,6 +32,9 @@ public struct ViewModelFactory: Sendable {
     let walletService: WalletService
     let stakeService: StakeService
     let nameService: NameService
+    let balanceService: BalanceService
+    let priceService: PriceService
+    let transactionService: TransactionService
     let chainServiceFactory: ChainServiceFactory
     
     public init(
@@ -36,6 +46,9 @@ public struct ViewModelFactory: Sendable {
         walletService: WalletService,
         stakeService: StakeService,
         nameService: NameService,
+        balanceService: BalanceService,
+        priceService: PriceService,
+        transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory
     ) {
         self.keystore = keystore
@@ -46,27 +59,35 @@ public struct ViewModelFactory: Sendable {
         self.walletService = walletService
         self.stakeService = stakeService
         self.nameService = nameService
+        self.balanceService = balanceService
+        self.priceService = priceService
+        self.transactionService = transactionService
         self.chainServiceFactory = chainServiceFactory
     }
     
     @MainActor
-    public func confirmTransfer(
+    public func confirmTransferScene(
         wallet: Wallet,
         data: TransferData,
+        confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = nil,
         onComplete: VoidAction
-    ) -> ConfirmTransferViewModel {
-        ConfirmTransferViewModel(
+    ) -> ConfirmTransferSceneViewModel {
+        let confirmService = ConfirmServiceFactory.create(
+            keystore: keystore,
+            nodeService: nodeService,
+            walletsService: walletsService,
+            scanService: scanService,
+            balanceService: balanceService,
+            priceService: priceService,
+            transactionService: transactionService,
+            chain: data.chain
+        )
+        
+        return ConfirmTransferSceneViewModel(
             wallet: wallet,
             data: data,
-            keystore: keystore,
-            chainService: chainServiceFactory.service(for: data.chain),
-            scanService: scanService,
-            swapService: swapService,
-            walletsService: walletsService,
-            swapDataProvider: SwapQuoteDataProvider(
-                keystore: keystore,
-                swapService: swapService
-            ),
+            confirmService: confirmService,
+            confirmTransferDelegate: confirmTransferDelegate,
             onComplete: onComplete
         )
     }
@@ -82,17 +103,85 @@ public struct ViewModelFactory: Sendable {
         RecipientSceneViewModel(
             wallet: wallet,
             asset: asset,
-            keystore: keystore,
             walletService: walletService,
-            walletsService: walletsService,
-            nodeService: nodeService,
-            stakeService: stakeService,
-            scanService: scanService,
-            swapService: swapService,
             nameService: nameService,
             type: type,
             onRecipientDataAction: onRecipientDataAction,
             onTransferAction: onTransferAction
         )
     }
+    
+    @MainActor
+    public func amountScene(
+        input: AmountInput,
+        wallet: Wallet,
+        onTransferAction: TransferDataAction
+    ) -> AmountSceneViewModel {
+        let amountService = AmountService(
+            priceService: priceService,
+            balanceService: balanceService,
+            stakeService: stakeService
+        )
+        
+        return AmountSceneViewModel(
+            input: input,
+            wallet: wallet,
+            amountService: amountService,
+            onTransferAction: onTransferAction
+        )
+    }
+    
+    @MainActor
+    public func fiatScene(
+        assetAddress: AssetAddress,
+        walletId: WalletId
+    ) -> FiatSceneViewModel {
+        FiatSceneViewModel(
+            assetAddress: assetAddress,
+            walletId: walletId.id
+        )
+    }
+    
+    @MainActor
+    public func swapScene(
+        input: SwapInput,
+        onSwap: @escaping (TransferData) -> Void
+    ) -> SwapSceneViewModel {
+        SwapSceneViewModel(
+            input: input,
+            walletsService: walletsService,
+            swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
+            swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
+            onSwap: onSwap
+        )
+    }
+    
+    @MainActor
+    public func signMessageScene(
+        payload: SignMessagePayload,
+        confirmTransferDelegate: @escaping TransferDataCallback.ConfirmTransferDelegate
+    ) -> SignMessageSceneViewModel {
+        SignMessageSceneViewModel(
+            keystore: keystore,
+            payload: payload,
+            confirmTransferDelegate: confirmTransferDelegate
+        )
+    }
+    
+    @MainActor
+    public func stakeDetailScene(
+        wallet: Wallet,
+        delegation: Delegation,
+        onAmountInputAction: AmountInputAction,
+        onTransferAction: TransferDataAction
+    ) -> StakeDetailSceneViewModel {
+        StakeDetailSceneViewModel(
+            wallet: wallet,
+            model: StakeDelegationViewModel(delegation: delegation),
+            service: stakeService,
+            onAmountInputAction: onAmountInputAction,
+            onTransferAction: onTransferAction
+        )
+    }
+    
 }

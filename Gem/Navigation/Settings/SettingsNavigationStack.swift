@@ -83,7 +83,7 @@ struct SettingsNavigationStack: View {
             .navigationDestination(for: Scenes.Price.self) { scene in
                 ChartScene(
                     model: ChartsViewModel(
-                        priceService: walletsService.priceService,
+                        priceService: priceService,
                         assetModel: AssetViewModel(asset: scene.asset)
                     )
                 )

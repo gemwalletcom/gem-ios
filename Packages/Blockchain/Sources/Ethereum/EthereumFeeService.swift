@@ -58,7 +58,7 @@ extension EthereumService {
             default:
                 fatalError()
             }
-        case .account, .perpetual: fatalError()
+        case .account, .perpetual, .withdrawal: fatalError()
         }
     }
 
@@ -91,7 +91,7 @@ extension EthereumService {
             default:
                 fatalError()
             }
-        case .account, .perpetual: fatalError()
+        case .account, .perpetual, .withdrawal: fatalError()
         }
     }
 
@@ -122,7 +122,7 @@ extension EthereumService {
                 }
             default: fatalError()
             }
-        case .account, .perpetual: fatalError()
+        case .account, .perpetual, .withdrawal: fatalError()
         }
     }
     
@@ -144,7 +144,7 @@ extension EthereumService {
             asset.type == .native && isMaxAmount ? gasPriceType.totalFee : gasPriceType.priorityFee
         case .transferNft, .generic, .swap, .tokenApprove, .stake:
             gasPriceType.priorityFee
-        case .account, .perpetual: fatalError()
+        case .account, .perpetual, .withdrawal: fatalError()
         }
     }
     

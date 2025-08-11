@@ -67,14 +67,6 @@ public final class PerpetualSceneViewModel {
         !positionViewModels.isEmpty
     }
 
-    var perpetualHeaderModel: WalletHeaderViewModel {
-        WalletHeaderViewModel(
-            walletType: wallet.type,
-            value: perpetualTotalValue,
-            currencyCode: Currency.usd.rawValue
-        )
-    }
-
     public var positionSectionTitle: String { Localized.Perpetual.position }
     public var infoSectionTitle: String { Localized.Common.info }
     public var closePositionTitle: String { Localized.Perpetual.closePosition }

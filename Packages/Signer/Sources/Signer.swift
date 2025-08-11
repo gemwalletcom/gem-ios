@@ -41,6 +41,8 @@ public struct Signer: Sendable {
             return [try signer.signAccountAction(input: input, privateKey: privateKey)]
         case .perpetual:
             return try signer.signPerpetual(input: input, privateKey: privateKey)
+        case .withdrawal:
+            return [try signer.signWithdrawal(input: input, privateKey: privateKey)]
         }
     }
 

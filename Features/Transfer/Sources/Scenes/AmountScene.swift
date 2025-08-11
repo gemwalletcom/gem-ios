@@ -51,9 +51,9 @@ struct AmountScene: View {
                 }
 
                 switch model.type {
-                case .transfer, .deposit:
+                case .transfer, .deposit, .withdraw:
                     EmptyView()
-                case .stake, .unstake, .redelegate, .withdraw:
+                case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
                     if let viewModel = model.stakeValidatorViewModel  {
                         Section(model.validatorTitle) {
                             if model.isSelectValidatorEnabled {

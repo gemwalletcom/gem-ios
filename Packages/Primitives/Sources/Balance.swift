@@ -12,6 +12,7 @@ public struct Balance: Codable, Equatable, Hashable, Sendable {
     public var pending: BigInt
     public var rewards: BigInt
     public var reserved: BigInt
+    public var withdrawable: BigInt
 
     public init(
         available: BigInt = .zero,
@@ -20,7 +21,8 @@ public struct Balance: Codable, Equatable, Hashable, Sendable {
         staked: BigInt = .zero,
         pending: BigInt = .zero,
         rewards: BigInt = .zero,
-        reserved: BigInt = .zero
+        reserved: BigInt = .zero,
+        withdrawable: BigInt = .zero
     ) {
         self.available = available
         self.frozen = frozen
@@ -29,5 +31,6 @@ public struct Balance: Codable, Equatable, Hashable, Sendable {
         self.pending = pending
         self.rewards = rewards
         self.reserved = reserved
+        self.withdrawable = withdrawable
     }
 }

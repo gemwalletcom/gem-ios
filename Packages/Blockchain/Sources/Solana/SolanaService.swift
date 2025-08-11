@@ -205,8 +205,8 @@ extension SolanaService: ChainTransactionDataLoadable {
                     fee: fee.withOptions(options)
                 )
             }
-        case .transferNft:
-            fatalError()
+        case .transferNft, .withdrawal:
+            throw AnyError.notImplemented
         case .swap, .stake:
             return TransactionData(
                 block: SignerInputBlock(hash: input.preload.blockHash),
