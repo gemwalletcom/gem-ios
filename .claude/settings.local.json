@@ -41,7 +41,7 @@
       "Bash(just build-package:*)",
       "Bash(just generate-model:*)",
       "Bash(just:*)",
-      "Bash(swift:*)"
+      "Bash(git stash push:*)"
     ],
     "deny": []
   }
