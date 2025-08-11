@@ -31,8 +31,9 @@ public struct AssetSceneInput: Sendable {
 
         self.bannersRequest = BannersRequest(
             walletId: wallet.id,
-            events: BannerEvent.allCases,
-            filters: [.asset(id: asset.id), .excludeActiveStaking]
+            assetId: asset.id.identifier,
+            chain: asset.id.chain.rawValue,
+            events: BannerEvent.allCases
         )
     }
 }
