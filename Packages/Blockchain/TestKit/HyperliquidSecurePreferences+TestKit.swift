@@ -3,33 +3,28 @@
 import Foundation
 import Blockchain
 import Primitives
+import WalletCore
 
-public struct MockHyperliquidSecurePreferences: Sendable {
-    public var getKeyResult: HyperliquidKey?
-    public var createKeyResult: HyperliquidKey
-    public var deleteKeyError: Error?
+public final class MockHyperliquidSecurePreferences: @unchecked Sendable {
+    private var storage: [String: HyperliquidKey] = [:]
     
-    public init(
-        getKeyResult: HyperliquidKey? = nil,
-        createKeyResult: HyperliquidKey = HyperliquidKey(address: "0x123", privateKey: Data(repeating: 1, count: 32)),
-        deleteKeyError: Error? = nil
-    ) {
-        self.getKeyResult = getKeyResult
-        self.createKeyResult = createKeyResult
-        self.deleteKeyError = deleteKeyError
-    }
+    public init() {}
     
     public func getKey(walletAddress: String) throws -> HyperliquidKey? {
-        getKeyResult
+        storage[walletAddress]
     }
     
     public func createKey(walletAddress: String) throws -> HyperliquidKey {
-        createKeyResult
+        let privateKey = try SecureRandom.generateKey()
+        let privateKeyWallet = PrivateKey(data: privateKey)!
+        let address = Chain.hyperCore.coinType.deriveAddress(privateKey: privateKeyWallet)
+        let key = HyperliquidKey(address: address, privateKey: privateKey)
+        
+        storage[walletAddress] = key
+        return key
     }
     
     public func deleteKey(walletAddress: String) throws {
-        if let error = deleteKeyError {
-            throw error
-        }
+        storage.removeValue(forKey: walletAddress)
     }
 }
