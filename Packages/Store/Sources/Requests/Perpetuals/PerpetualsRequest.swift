@@ -16,7 +16,7 @@ public struct PerpetualsRequest: ValueObservationQueryable {
         return try PerpetualRecord
             .including(required: PerpetualRecord.asset)
             .order(PerpetualRecord.Columns.volume24h.desc)
-            .limit(20)
+            .limit(100)
             .asRequest(of: PerpetualInfo.self)
             .fetchAll(db)
             .map { $0.mapToPerpetualData() }
