@@ -57,8 +57,9 @@ public struct TransferExecutor: TransferExecutable {
                 )
                 let excludeChains = [Chain.hyperCore]
                 let assetIds = transaction.assetIds.filter { !excludeChains.contains($0.chain) }
-
-                try transactionService.addTransactions(wallet: input.wallet, transactions: [transaction])
+                let transactions = [transaction].filter { !excludeChains.contains($0.assetId.chain) }
+                
+                try transactionService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {
                     try walletsService.enableBalances(
                         for: input.wallet.walletId,
@@ -91,7 +92,7 @@ extension TransferExecutor {
         switch data.chain {
         case .solana:
             switch data.type {
-            case .transfer, .deposit, .transferNft, .stake, .account, .tokenApprove, .perpetual: .standard
+            case .transfer, .deposit, .withdrawal, .transferNft, .stake, .account, .tokenApprove, .perpetual: .standard
             case .swap, .generic: BroadcastOptions(skipPreflight: true)
             }
         default: .standard

@@ -289,6 +289,15 @@ public struct Migrations {
             try? PerpetualPositionRecord.create(db: db)
         }
         
+        migrator.registerMigration("Add withdrawable to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) { t in
+                t.add(column: BalanceRecord.Columns.withdrawable.name, .text)
+                    .defaults(to: "0")
+                t.add(column: BalanceRecord.Columns.withdrawableAmount.name, .double)
+                    .defaults(to: 0)
+            }
+        }
+        
         try migrator.migrate(dbQueue)
     }
 }

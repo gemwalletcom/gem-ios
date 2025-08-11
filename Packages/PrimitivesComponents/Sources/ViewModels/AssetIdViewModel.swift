@@ -27,12 +27,26 @@ public struct AssetIdViewModel: Sendable {
     }
 
     public var assetImage: AssetImage {
-        AssetImage(
+        let defaultAssetImage = AssetImage(
             type: assetId.assetType?.rawValue ?? .empty,
             imageURL: imageURL,
             placeholder: imagePlaceholder,
             chainPlaceholder: chainPlaceholder
         )
+        switch (assetId.chain, assetId.type) {
+        case (.hyperCore, .token):
+            if let token = try? assetId.twoSubTokenIds(), let chain = Chain.allCases.first(where: { $0.asset.symbol == token.1} ) {
+                let chainAssetImage = AssetIdViewModel(assetId: chain.assetId).assetImage
+                return AssetImage(
+                    type: defaultAssetImage.type,
+                    imageURL: chainAssetImage.imageURL,
+                    placeholder: chainAssetImage.placeholder,
+                    chainPlaceholder: chainPlaceholder
+                )
+            }
+        default: return defaultAssetImage
+        }
+        return defaultAssetImage
     }
 
     private var imageURL: URL? {

@@ -11,6 +11,8 @@ public struct HyperCoreCacheService: Sendable {
     private static let referralApprovedKey = "referral_approved"
     private static let builderFeeApprovedKey = "builder_fee_approved"
     private static let agentValidUntilKey = "agent_valid_until"
+    private static let userFeesKey = "user_fees"
+    private static let userFeesCacheTimeSeconds = 86_400 * 7
     
     public init(cacheService: BlockchainCacheService, keychain: Keychain = KeychainDefault()) {
         self.cacheService = cacheService
@@ -45,8 +47,26 @@ public struct HyperCoreCacheService: Sendable {
     public func needsBuilderFeeApproval(address: String, checker: () async throws -> Int) async throws -> Bool {
         try await checkApproval(address: address, key: Self.builderFeeApprovedKey) {
             let fee = try await checker()
-            return HyperCoreService.builderFeeBps > fee
+            return HyperCoreService.maxBuilderFeeBps > fee
         }
+    }
+    
+    public func getUserFeeRate(address: String, fetcher: () async throws -> HypercoreUserFee) async throws -> Int {
+        let ttl = TimeInterval(Self.userFeesCacheTimeSeconds)
+        
+        if let cachedRate = cacheService.getInt(address: address, key: Self.userFeesKey, ttl: ttl) {
+            return cachedRate
+        }
+        
+        let userFees = try await fetcher()
+        let userCrossRate = try Double.from(string: userFees.userCrossRate)
+        let referralDiscountPercentage = try Double.from(string: userFees.activeReferralDiscount)
+        let effectiveRate = userCrossRate * (1 - referralDiscountPercentage)
+        let rateInTenthsBps = Int(effectiveRate * 100000)
+        
+        cacheService.setInt(rateInTenthsBps, address: address, key: Self.userFeesKey, ttl: ttl)
+        
+        return rateInTenthsBps
     }
     
     private func checkApproval(address: String, key: String, needsApprovalChecker: () async throws -> Bool) async rethrows -> Bool {

@@ -416,7 +416,7 @@
 "info.asset_status.suspicious.description" = "Token yang mencurigakan atau spam diidentifikasi sebagai potensi penipuan atau aset berbahaya. Token tersebut mungkin muncul di dompet Anda karena airdrop, transfer, atau impor manual.";
 "errors.insufficient_funds" = "Dana tidak mencukupi";
 "info.insufficient_network_fee_balance.title" = "%@ diperlukan";
-"info.insufficient_network_fee_balance.description" = "Transaksi ini memerlukan %@ untuk menutupi biaya jaringan yang dibayarkan kepada %@ penambang, bukan Gem Wallet. Pastikan Anda memiliki cukup %@.";
+"info.insufficient_network_fee_balance.description" = "Transaksi ini membutuhkan %@ untuk menutupi biaya jaringan yang dibayarkan kepada %@ penambang, bukan Gem Wallet. Pastikan Anda memiliki %@ yang cukup.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Saldo Tidak Cukup";
 "info.insufficient_balance.description" = "Anda tidak memiliki cukup %@ untuk menyelesaikan transaksi ini. Harap isi ulang, terima, atau tukarkan di dompet Anda dan coba lagi.";
@@ -433,7 +433,7 @@
 "errors.scan_transaction.memo_required" = "Alamat %@ memerlukan tag / memo tujuan";
 "common.info" = "Informasi";
 "wallet.deposit" = "Deposit";
-"wallet.withdraw" = "";
+"wallet.withdraw" = "Withdraw";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -460,3 +460,5 @@
 "widget.medium.description" = "Lacak harga mata uang kripto teratas";
 "wallet.available_balance" = "Tersedia: %@";
 "lock.footer" = "Lindungi akses ke aplikasi ini di perangkat Anda";
+"errors.wallets.limit.title" = "Batas Dompet Tercapai";
+"errors.wallets.limit.description" = "Anda telah mencapai jumlah maksimum dompet yang diizinkan ( %d ). Silakan hapus dompet yang ada untuk menambahkan atau membuat dompet baru.";

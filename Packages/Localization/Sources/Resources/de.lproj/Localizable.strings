@@ -416,7 +416,7 @@
 "info.asset_status.suspicious.description" = "Verdächtige oder Spam-Token werden als potenzieller Betrug oder schädliche Vermögenswerte identifiziert. Sie können aufgrund von Airdrops, Transfers oder manuellen Importen in Ihrer Wallet erscheinen.";
 "errors.insufficient_funds" = "Unzureichende Mittel";
 "info.insufficient_network_fee_balance.title" = "%@ erforderlich";
-"info.insufficient_network_fee_balance.description" = "Für diese Transaktion werden %@ benötigt, um die an %@ Miner gezahlte Netzwerkgebühr zu decken, nicht Gem Wallet. Stellen Sie sicher, dass Sie über genügend %@ verfügen.";
+"info.insufficient_network_fee_balance.description" = "Für diese Transaktion sind %@ erforderlich, um die an %@ Miner gezahlte Netzwerkgebühr zu decken, nicht Gem Wallet. Stellen Sie sicher, dass Sie über genügend %@ verfügen.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Unzureichendes Guthaben";
 "info.insufficient_balance.description" = "Sie haben nicht genügend %@, um diese Transaktion abzuschließen. Bitte laden Sie Ihr Wallet auf, empfangen Sie es oder tauschen Sie es um und versuchen Sie es erneut.";
@@ -433,7 +433,7 @@
 "errors.scan_transaction.memo_required" = "%@ Adresse erfordert ein Ziel-Tag/Memo";
 "common.info" = "Info";
 "wallet.deposit" = "Deposit";
-"wallet.withdraw" = "";
+"wallet.withdraw" = "Withdraw";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -460,3 +460,5 @@
 "widget.medium.description" = "Verfolgen Sie die Preise der wichtigsten Kryptowährungen";
 "wallet.available_balance" = "Verfügbar: %@";
 "lock.footer" = "Schützen Sie den Zugriff auf diese App auf Ihrem Gerät";
+"errors.wallets.limit.title" = "Wallet-Limit erreicht";
+"errors.wallets.limit.description" = "Sie haben die maximal zulässige Anzahl an Wallets erreicht ( %d ). Bitte entfernen Sie ein vorhandenes Wallet, um ein neues hinzuzufügen oder zu erstellen.";

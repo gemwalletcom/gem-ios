@@ -76,7 +76,8 @@ public struct AptosService: Sendable {
                 return BigInt(1500)
             }
         case .swap: return BigInt(1500)
-        case .transferNft, .stake, .generic, .account, .tokenApprove, .perpetual: fatalError()
+        case .transferNft, .stake, .generic, .account, .tokenApprove, .perpetual, .withdrawal: 
+            throw AnyError.notImplemented
         }
     }
     

@@ -55,6 +55,9 @@ public struct TransactionStore: Sendable {
     }
 
     public func addTransactions(walletId: String, transactions: [Transaction]) throws {
+        if transactions.isEmpty {
+            return
+        }
         try db.write { db in
             for transaction in transactions {
                 let record = try transaction.record(walletId: walletId).upsertAndFetch(db, as: TransactionRecord.self)

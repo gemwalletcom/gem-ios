@@ -55,9 +55,7 @@ public struct StakeDetailScene: View {
                     }
                     if model.isUnstakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: model.unstakeTitle)) {
-                            if let value = try? model.unstakeRecipientData() {
-                                model.onAmountInputAction?(value)
-                            }
+                            model.onUnstakeAction()
                         }
                     }
                     if model.isRedelegateAvailable {

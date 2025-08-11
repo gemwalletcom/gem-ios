@@ -54,6 +54,7 @@ public struct TransactionHeaderTypeBuilder {
             switch dataType {
             case .transfer,
                     .deposit,
+                    .withdrawal,
                     .generic,
                     .stake,
                     .tokenApprove:

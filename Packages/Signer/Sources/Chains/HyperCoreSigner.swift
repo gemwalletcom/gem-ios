@@ -22,7 +22,7 @@ public class HyperCoreSigner: Signable {
     }
 
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
+        throw AnyError.notImplemented
     }
 
     func getAgentKey(for walletAddress: String) throws -> (address: String, key: Data) {
@@ -51,9 +51,8 @@ public class HyperCoreSigner: Signable {
         }
 
         let (agentAddress, agentKey) = try getAgentKey(for: input.senderAddress)
-        let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: HyperCoreService.builderFeeBps)
-        // timestamp for each transaction should be increase to avoid duplicate nonce
-        let timestamp = Date.getTimestampInMs()
+        let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: data.builderFeeBps)
+        let timestampIncrementer = NumberIncrementer(Int(Date.getTimestampInMs()))
         var transactions: [String] = []
         
         if data.approveReferralRequired {
@@ -61,13 +60,17 @@ public class HyperCoreSigner: Signable {
                 try signSetReferer(
                     agentKey: privateKey,
                     code: HyperCoreService.referralCode,
-                    timestamp: timestamp
+                    timestamp: timestampIncrementer.next().asUInt64
                 )
             )
         }
         if data.approveAgentRequired {
             transactions.append(
-                try signApproveAgent(agentAddress: agentAddress, privateKey: privateKey, timestamp: timestamp + 1)
+                try signApproveAgent(
+                    agentAddress: agentAddress,
+                    privateKey: privateKey,
+                    timestamp: timestampIncrementer.next().asUInt64
+                )
             )
         }
         if data.approveBuilderRequired {
@@ -75,13 +78,13 @@ public class HyperCoreSigner: Signable {
                 try signApproveBuilderAddress(
                     agentKey: privateKey,
                     builderAddress: HyperCoreService.builderAddress,
-                    rateBps: HyperCoreService.builderFeeBps,
-                    timestamp: timestamp + 2
+                    rateBps: HyperCoreService.maxBuilderFeeBps,
+                    timestamp: timestampIncrementer.next().asUInt64
                 )
             )
         }
         transactions.append(
-            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestamp + 3)
+            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestampIncrementer.next().asUInt64)
         )
         
         return transactions
@@ -98,7 +101,8 @@ public class HyperCoreSigner: Signable {
         )
     }
 
-    public func signWithdraw(input: SignerInput, privateKey: Data, timestamp: UInt64) throws -> String {
+    public func signWithdrawal(input: SignerInput, privateKey: Data) throws -> String {
+        let timestamp = UInt64(Date.getTimestampInMs())
         // FIXME: make sure input.amount is correct  ("2" means 2 USD)
         let request = factory.makeWithdraw(amount: input.value.description, address: input.senderAddress.lowercased(), nonce: timestamp)
         let eip712Message = hyperCore.withdrawalRequestTypedData(request: request)

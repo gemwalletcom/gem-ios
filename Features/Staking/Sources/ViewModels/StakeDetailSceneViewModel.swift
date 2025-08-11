@@ -124,16 +124,9 @@ public struct StakeDetailSceneViewModel {
         )
     }
     
-    public func unstakeRecipientData() throws -> AmountInput {
-        AmountInput(
-            type: .unstake(delegation: model.delegation),
-            asset: asset
-        )
-    }
-    
     public func redelegateRecipientData() throws -> AmountInput {
         AmountInput(
-            type: .redelegate(
+            type: .stakeRedelegate(
                 delegation: model.delegation,
                 validators: try service.getActiveValidators(assetId: asset.id),
                 recommendedValidator: recommendedCurrentValidator
@@ -151,6 +144,30 @@ public struct StakeDetailSceneViewModel {
             ),
             value: model.delegation.base.balanceValue
         )
+    }
+}
+
+// MARK: - Actions
+
+extension StakeDetailSceneViewModel {
+    func onUnstakeAction() {
+        if chain.canChangeAmountOnUnstake {
+            let data = AmountInput(
+                type: .stakeUnstake(delegation: model.delegation),
+                asset: asset
+            )
+            onAmountInputAction?(data)
+        } else {
+            let data = TransferData(
+                type: .stake(asset, .unstake(delegation: model.delegation)),
+                recipientData: RecipientData(
+                    recipient: Recipient(name: validatorText, address: model.delegation.validator.id, memo: ""),
+                    amount: .none
+                ),
+                value: model.delegation.base.balanceValue
+            )
+            onTransferAction?(data)
+        }
     }
 }
 

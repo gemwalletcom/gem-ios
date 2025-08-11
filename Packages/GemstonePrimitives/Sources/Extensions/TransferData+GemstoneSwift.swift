@@ -8,6 +8,7 @@ extension TransferDataType {
         switch self {
         case .transfer(let asset),
             .deposit(let asset),
+            .withdrawal(let asset),
             .swap(let asset, _, _),
             .tokenApprove(let asset, _),
             .stake(let asset, _),

@@ -139,6 +139,24 @@ struct SelectAssetSceneNavigationStack: View {
                             }
                         )
                     )
+                case .withdraw:
+                    AmountNavigationView(
+                        model: viewModelFactory.amountScene(
+                            input: AmountInput(
+                                type: .withdraw(
+                                    recipient: RecipientData(
+                                        recipient: .hyperliquid,
+                                        amount: .none
+                                    )
+                                ),
+                                asset: input.asset
+                            ),
+                            wallet: model.wallet,
+                            onTransferAction: {
+                                navigationPath.append($0)
+                            }
+                        )
+                    )
                 case .manage, .priceAlert, .swap:
                     EmptyView()
                 }

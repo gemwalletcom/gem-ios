@@ -26,7 +26,8 @@ struct TransferDataViewModel {
     var title: String {
         switch type {
         case .transfer: Localized.Transfer.Send.title
-        case .deposit: "Deposit"
+        case .deposit: Localized.Wallet.deposit
+        case .withdrawal: Localized.Wallet.withdraw
         case .transferNft: Localized.Transfer.Send.title
         case .swap, .tokenApprove: Localized.Wallet.swap
         //case .approval: Localized.Transfer.Approve.title
@@ -75,6 +76,7 @@ struct TransferDataViewModel {
         switch type {
         case .transfer,
                 .deposit,
+                .withdrawal,
                 .transferNft,
                 .tokenApprove,
                 .stake,
@@ -89,6 +91,7 @@ struct TransferDataViewModel {
         switch type {
         case .transfer,
             .deposit,
+            .withdrawal,
             .transferNft,
             .swap,
             .tokenApprove,
@@ -104,6 +107,7 @@ struct TransferDataViewModel {
         switch type {
         case .transfer,
             .deposit,
+            .withdrawal,
             .transferNft,
             .swap,
             .tokenApprove,
@@ -117,7 +121,7 @@ struct TransferDataViewModel {
 
     var shouldShowMemo: Bool {
         switch type {
-        case .transfer, .deposit: chain.isMemoSupported
+        case .transfer, .deposit, .withdrawal: chain.isMemoSupported
         case .transferNft, .swap, .tokenApprove, .generic, .account, .stake, .perpetual: false
         }
     }
@@ -135,6 +139,7 @@ struct TransferDataViewModel {
         case .transfer,
             .transferNft,
             .deposit,
+            .withdrawal,
             .generic,
             .tokenApprove: true
         }
@@ -144,6 +149,7 @@ struct TransferDataViewModel {
         switch type {
         case .transfer,
                 .deposit,
+                .withdrawal,
                 .transferNft,
                 .swap,
                 .tokenApprove,
@@ -160,6 +166,7 @@ struct TransferDataViewModel {
         switch type {
         case .transfer,
                 .deposit,
+                .withdrawal,
                 .swap,
                 .tokenApprove,
                 .generic,
@@ -186,6 +193,7 @@ extension TransferDataViewModel {
         switch type {
         case .transfer,
                 .deposit,
+                .withdrawal,
                 .transferNft,
                 .swap,
                 .tokenApprove,

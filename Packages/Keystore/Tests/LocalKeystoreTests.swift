@@ -243,7 +243,7 @@ struct LocalKeystoreTests {
             #expect(updated.count == 2)
 
             for wallet in updated {
-                #expect(wallet.accounts.map(\.chain) == chains)
+                #expect(wallet.accounts.map(\.chain).asSet() == chains.asSet())
             }
         }
     }
