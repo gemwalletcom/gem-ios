@@ -10,6 +10,7 @@ import PrimitivesComponents
 import Store
 import SwiftUI
 import Formatters
+import ExplorerService
 
 @Observable
 @MainActor
@@ -20,12 +21,15 @@ public final class PerpetualSceneViewModel {
 
     public let wallet: Wallet
     public let asset: Asset
+    public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     public var positionsRequest: PerpetualPositionsRequest
     public var perpetualTotalValueRequest: TotalValueRequest
+    public var transactionsRequest: TransactionsRequest
     public var positions: [PerpetualPositionData] = []
     public var perpetualTotalValue: Double = .zero
+    public var transactions: [TransactionExtended] = []
     public var state: StateViewType<[ChartCandleStick]> = .loading
-    public var currentPeriod: ChartPeriod = .hour {
+    public var currentPeriod: ChartPeriod = .day {
         didSet {
             Task {
                 await fetchCandlesticks()
@@ -57,6 +61,17 @@ public final class PerpetualSceneViewModel {
         self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
         self.perpetualTotalValueRequest = TotalValueRequest(walletId: wallet.id, balanceType: .perpetual)
+        
+        self.transactionsRequest = TransactionsRequest(
+            walletId: wallet.id,
+            type: .asset(assetId: asset.id),
+            filters: [
+                .types([
+                    TransactionType.perpetualOpenPosition,
+                    TransactionType.perpetualClosePosition
+                ].map { $0.rawValue })
+            ]
+        )
     }
 
     public var navigationTitle: String {
@@ -69,6 +84,7 @@ public final class PerpetualSceneViewModel {
 
     public var positionSectionTitle: String { Localized.Perpetual.position }
     public var infoSectionTitle: String { Localized.Common.info }
+    public var transactionsSectionTitle: String { Localized.Activity.title }
     public var closePositionTitle: String { Localized.Perpetual.closePosition }
     public var longButtonTitle: String { Localized.Perpetual.long }
     public var shortButtonTitle: String { Localized.Perpetual.short }

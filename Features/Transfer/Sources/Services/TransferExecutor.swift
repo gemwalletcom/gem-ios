@@ -101,7 +101,7 @@ extension TransferExecutor {
 
     private func transactionDelay(for type: ChainType) -> Duration {
         switch type {
-        case .ethereum: .milliseconds(0)
+        case .ethereum, .hyperCore: .milliseconds(0)
         case .tron: .milliseconds(500)
         default: .milliseconds(500)
         }
