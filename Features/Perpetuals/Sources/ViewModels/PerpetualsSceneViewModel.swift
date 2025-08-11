@@ -9,6 +9,7 @@ import Preferences
 import PrimitivesComponents
 import Components
 import Localization
+import Style
 
 @Observable
 @MainActor
@@ -45,7 +46,13 @@ public final class PerpetualsSceneViewModel {
     public var navigationTitle: String { "Perpetuals" }
     public var positionsSectionTitle: String { Localized.Perpetual.positions }
     public var marketsSectionTitle: String { "Markets" }
+    public var pinnedSectionTitle: String { Localized.Common.pinned }
     public var noMarketsText: String { "No markets" }
+    public var pinImage: Image { Images.System.pin }
+    
+    public var sections: PerpetualsSections {
+        PerpetualsSections.from(perpetuals)
+    }
     
     public var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
@@ -72,7 +79,7 @@ extension PerpetualsSceneViewModel {
     }
     
     func updateMarkets() async {
-        guard preferences.perpetualMarketsUpdatedAt.isOutdated(byDays: 7) else { return }
+        guard preferences.perpetualMarketsUpdatedAt.isOutdated(byDays: 1) else { return }
         
         do {
             try await perpetualService.updateMarkets()
@@ -90,6 +97,14 @@ extension PerpetualsSceneViewModel {
             onSelectAssetType?(.withdraw)
         default:
             break
+        }
+    }
+    
+    public func onPinPerpetual(_ perpetualId: String, value: Bool) {
+        do {
+            try perpetualService.setPinned(value, perpetualId: perpetualId)
+        } catch {
+            NSLog("PerpetualsSceneViewModel pin perpetual error: \(error)")
         }
     }
 }
