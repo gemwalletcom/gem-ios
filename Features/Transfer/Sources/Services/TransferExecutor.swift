@@ -57,7 +57,7 @@ public struct TransferExecutor: TransferExecutable {
                 )
                 let excludeChains = [Chain.hyperCore]
                 let assetIds = transaction.assetIds.filter { !excludeChains.contains($0.chain) }
-                let transactions = [transaction].filter { !excludeChains.contains($0.assetId.chain) }
+                let transactions = [transaction]
                 
                 try transactionService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {

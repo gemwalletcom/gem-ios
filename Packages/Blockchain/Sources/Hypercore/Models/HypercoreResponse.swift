@@ -12,6 +12,60 @@ public struct HypercoreErrorResponse: Codable, Sendable {
 	}
 }
 
+public struct HypercoreOrderFilled: Codable, Sendable {
+	public let oid: UInt64
+
+	public init(oid: UInt64) {
+		self.oid = oid
+	}
+}
+
+public struct HypercoreOrderResting: Codable, Sendable {
+	public let oid: UInt64
+
+	public init(oid: UInt64) {
+		self.oid = oid
+	}
+}
+
+public struct HypercoreOrderStatus: Codable, Sendable {
+	public let filled: HypercoreOrderFilled?
+	public let resting: HypercoreOrderResting?
+	public let error: String?
+
+	public init(filled: HypercoreOrderFilled?, resting: HypercoreOrderResting?, error: String?) {
+		self.filled = filled
+		self.resting = resting
+		self.error = error
+	}
+}
+
+public struct HypercoreOrderData: Codable, Sendable {
+	public let statuses: [HypercoreOrderStatus]?
+
+	public init(statuses: [HypercoreOrderStatus]?) {
+		self.statuses = statuses
+	}
+}
+
+public struct HypercoreOrderResponseData: Codable, Sendable {
+	public let data: HypercoreOrderData?
+
+	public init(data: HypercoreOrderData?) {
+		self.data = data
+	}
+}
+
+public struct HypercoreOrderResponse: Codable, Sendable {
+	public let status: String
+	public let response: HypercoreOrderResponseData?
+
+	public init(status: String, response: HypercoreOrderResponseData?) {
+		self.status = status
+		self.response = response
+	}
+}
+
 public struct HypercoreResponse: Codable, Sendable {
 	public let status: String
 
