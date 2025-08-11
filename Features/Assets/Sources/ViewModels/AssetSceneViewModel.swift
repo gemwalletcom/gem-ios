@@ -131,17 +131,7 @@ public final class AssetSceneViewModel: Sendable {
     }
     
     var allBanners: [Banner] {
-        let allBanners = (assetDataModel.isActive ? [] : [
-            Banner(
-                wallet: .none,
-                asset: assetDataModel.asset,
-                chain: .none,
-                event: .activateAsset,
-                state: .alwaysActive
-            )
-        ])
-        
-        return allBanners + banners
+        AssetBannersViewModel(assetData: assetData, banners: banners).allBanners
     }
     
     var assetHeaderModel: AssetHeaderViewModel {
