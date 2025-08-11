@@ -33,5 +33,10 @@ public struct PerpetualNavigationView: View {
         PerpetualScene(model: model)
             .observeQuery(request: $model.positionsRequest, value: $model.positions)
             .observeQuery(request: $model.perpetualTotalValueRequest, value: $model.perpetualTotalValue)
+            .onChange(of: isPresentingTransferData) { _, newValue in
+                if newValue == .none {
+                    Task { await model.fetch() }
+                }
+            }
     }
 }
