@@ -24,6 +24,10 @@ public final class TransactionsFilterViewModel {
     private static let excludeTransactionTypes: [TransactionType] = [.perpetualOpenPosition, .perpetualClosePosition]
     private let transactionTypes = TransactionType.allCases.filter( { !excludeTransactionTypes.contains($0) })
     
+    private let defaultFilters: [TransactionsRequestFilter] = [
+        .assetRankGreaterThan(AssetScore.defaultScore),
+    ]
+    
     var isPresentingChains: Bool = false
     var isPresentingTypes: Bool = false
 
@@ -40,7 +44,7 @@ public final class TransactionsFilterViewModel {
         self.request = TransactionsRequest(
             walletId: wallet.id,
             type: type,
-            filters: [.types(transactionTypes.map { $0.rawValue })] // FIX: pass requestFilters for consistency
+            filters: defaultFilters + [.types(transactionTypes.map { $0.rawValue })] // FIX: pass requestFilters for consistency
         )
     }
 
@@ -69,7 +73,7 @@ public final class TransactionsFilterViewModel {
     }
     
     private var requestFilters: [TransactionsRequestFilter] {
-        var filters: [TransactionsRequestFilter] = []
+        var filters: [TransactionsRequestFilter] = defaultFilters
         
         if !chainsFilter.selectedChains.isEmpty {
             let chainIds = chainsFilter.selectedChains.map { $0.rawValue }
