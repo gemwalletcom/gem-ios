@@ -25,7 +25,6 @@ public final class PerpetualsSceneViewModel {
     public let preferences: Preferences = .standard
     
     private let onSelectAssetType: ((SelectAssetType) -> Void)?
-    private let onTransferComplete: ((TransferData) -> Void)?
     
     public init(
         wallet: Wallet,
@@ -33,8 +32,7 @@ public final class PerpetualsSceneViewModel {
         positions: [PerpetualPositionData],
         perpetuals: [PerpetualData],
         walletBalance: WalletBalance,
-        onSelectAssetType: ((SelectAssetType) -> Void)? = nil,
-        onTransferComplete: ((TransferData) -> Void)? = nil
+        onSelectAssetType: ((SelectAssetType) -> Void)? = nil
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
@@ -42,7 +40,6 @@ public final class PerpetualsSceneViewModel {
         self.perpetuals = perpetuals
         self.walletBalance = walletBalance
         self.onSelectAssetType = onSelectAssetType
-        self.onTransferComplete = onTransferComplete
     }
     
     public var navigationTitle: String { "Perpetuals" }
