@@ -27,6 +27,8 @@ public final class PerpetualsSceneViewModel {
     
     private let onSelectAssetType: ((SelectAssetType) -> Void)?
     
+    let timer = Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()
+    
     public init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
