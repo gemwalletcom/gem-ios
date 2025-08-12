@@ -8,7 +8,8 @@ public extension BannerAction {
         case .stake,
                 .accountActivation,
                 .accountBlockedMultiSignature,
-                .activateAsset: false
+                .activateAsset,
+                .suspiciousAsset: false
         case .enableNotifications: true
         }
     }

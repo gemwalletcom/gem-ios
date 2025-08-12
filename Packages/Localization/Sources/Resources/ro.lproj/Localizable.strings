@@ -462,3 +462,5 @@
 "lock.footer" = "Protejați accesul la această aplicație pe dispozitivul dvs.";
 "errors.wallets.limit.title" = "Limita de portofele a fost atinsă";
 "errors.wallets.limit.description" = "Ați atins numărul maxim de portofele permise ( %d ). Vă rugăm să eliminați un portofel existent pentru a adăuga sau a crea unul nou.";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
