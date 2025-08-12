@@ -3,7 +3,6 @@
 import BigInt
 import Foundation
 import Formatters
-import GemstonePrimitives
 import Primitives
 import SwiftHTTPClient
 
@@ -12,28 +11,35 @@ public struct HyperCoreService: Sendable {
     let provider: Provider<HypercoreProvider>
     let cacheService: HyperCoreCacheService
     
-    private static let perpetualConfig = GemstoneConfig.shared.perpetualConfig()
+    private static let defaultConfig = HyperCoreServiceConfig(
+        builderAddress: "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc",
+        referralCode: "GEMWALLET",
+        maxBuilderFeeBps: 45
+    )
+    
+    public let config: HyperCoreServiceConfig
     
     public static var builderAddress: String {
-        GemstoneConfig.shared.perpetualConfig().builderAddress
+        defaultConfig.builderAddress
     }
-
+    
     public static var referralCode: String {
-        GemstoneConfig.shared.perpetualConfig().referralCode
+        defaultConfig.referralCode
     }
-
+    
     public static var maxBuilderFeeBps: Int {
-        Int(GemstoneConfig.shared.perpetualConfig().maxBuilderFeeBps)
+        defaultConfig.maxBuilderFeeBps
     }
     
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>,
-        cacheService: BlockchainCacheService
+        cacheService: BlockchainCacheService,
+        config: HyperCoreServiceConfig? = nil
     ) {
-
         self.chain = chain
         self.provider = provider
+        self.config = config ?? Self.defaultConfig
         self.cacheService = HyperCoreCacheService(
             cacheService: cacheService,
             preferences: HyperCoreSecurePreferences()

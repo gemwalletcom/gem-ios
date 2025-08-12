@@ -65,7 +65,8 @@ extension ChainService {
             HyperCoreService(
                 chain: chain,
                 provider: ProviderFactory.create(with: url),
-                cacheService: BlockchainCacheService(chain: chain)
+                cacheService: BlockchainCacheService(chain: chain),
+                config: HyperCoreServiceConfigProvider.createConfig()
             )
         }
     }
