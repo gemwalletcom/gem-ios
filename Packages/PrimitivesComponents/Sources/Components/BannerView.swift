@@ -23,32 +23,52 @@ public struct BannerView: View {
     }
 
     public var body: some View {
-        if let banner = banners.map({ BannerViewModel(banner: $0) }).first {
-            Button(
-                action: { action(banner.banner) },
-                label: {
-                    HStack(spacing: 0) {
-                        ListItemView(
-                            title: banner.title,
-                            titleExtra: banner.description,
-                            imageStyle: banner.imageStyle
-                        )
-
-                        if banner.canClose {
-                            Spacer()
-
-                            ListButton(
-                                image: Images.System.xmarkCircle,
-                                action: {
-                                    closeAction(banner.banner)
-                                }
-                            )
-                            .padding(.vertical, .small)
-                            .foregroundColor(Colors.gray)
-                        }
-                    }
-                })
+        let bannerViewModels = banners.map { BannerViewModel(banner: $0) }
+        
+        if bannerViewModels.isEmpty {
+            EmptyView()
+        } else if bannerViewModels.count == 1, let banner = bannerViewModels.first {
+            bannerItem(for: banner)
+        } else {
+            TabView {
+                ForEach(bannerViewModels) { banner in
+                    bannerItem(for: banner)
+                }
+            }
+            .tabViewStyle(.page(indexDisplayMode: .automatic))
+            .frame(height: bannerHeight)
         }
+    }
+    
+    private func bannerItem(for banner: BannerViewModel) -> some View {
+        Button(
+            action: { action(banner.banner) },
+            label: {
+                HStack(spacing: 0) {
+                    ListItemView(
+                        title: banner.title,
+                        titleExtra: banner.description,
+                        imageStyle: banner.imageStyle
+                    )
+
+                    if banner.canClose {
+                        Spacer()
+
+                        ListButton(
+                            image: Images.System.xmarkCircle,
+                            action: {
+                                closeAction(banner.banner)
+                            }
+                        )
+                        .padding(.vertical, Spacing.small)
+                        .foregroundColor(Colors.gray)
+                    }
+                }
+            })
+    }
+    
+    private var bannerHeight: CGFloat {
+        60
     }
 }
 
