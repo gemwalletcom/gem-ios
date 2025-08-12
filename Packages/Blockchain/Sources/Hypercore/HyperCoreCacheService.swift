@@ -6,6 +6,7 @@ import Primitives
 public struct HyperCoreCacheService: Sendable {
     private let cacheService: BlockchainCacheService
     private let preferences: HyperCoreSecurePreferences
+    private let config: HyperCoreServiceConfig
 
     private static let referralApprovedKey = "referral_approved"
     private static let builderFeeApprovedKey = "builder_fee_approved"
@@ -15,10 +16,12 @@ public struct HyperCoreCacheService: Sendable {
     
     public init(
         cacheService: BlockchainCacheService,
-        preferences: HyperCoreSecurePreferences
+        preferences: HyperCoreSecurePreferences,
+        config: HyperCoreServiceConfig
     ) {
         self.cacheService = cacheService
         self.preferences = preferences
+        self.config = config
     }
     
     public func needsAgentApproval(walletAddress: String, checker: () async throws -> [HypercoreAgentSession]) async throws -> Bool {
@@ -49,7 +52,7 @@ public struct HyperCoreCacheService: Sendable {
     public func needsBuilderFeeApproval(address: String, checker: () async throws -> Int) async throws -> Bool {
         try await checkApproval(address: address, key: Self.builderFeeApprovedKey) {
             let fee = try await checker()
-            return HyperCoreService.maxBuilderFeeBps > fee
+            return config.maxBuilderFeeBps > fee
         }
     }
     

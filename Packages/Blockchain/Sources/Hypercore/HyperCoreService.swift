@@ -10,39 +10,21 @@ public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
     let cacheService: HyperCoreCacheService
-    
-    private static let defaultConfig = HyperCoreServiceConfig(
-        builderAddress: "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc",
-        referralCode: "GEMWALLET",
-        maxBuilderFeeBps: 45
-    )
-    
     public let config: HyperCoreServiceConfig
-    
-    public static var builderAddress: String {
-        defaultConfig.builderAddress
-    }
-    
-    public static var referralCode: String {
-        defaultConfig.referralCode
-    }
-    
-    public static var maxBuilderFeeBps: Int {
-        defaultConfig.maxBuilderFeeBps
-    }
     
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>,
         cacheService: BlockchainCacheService,
-        config: HyperCoreServiceConfig? = nil
+        config: HyperCoreServiceConfig
     ) {
         self.chain = chain
         self.provider = provider
-        self.config = config ?? Self.defaultConfig
+        self.config = config
         self.cacheService = HyperCoreCacheService(
             cacheService: cacheService,
-            preferences: HyperCoreSecurePreferences()
+            preferences: HyperCoreSecurePreferences(),
+            config: config
         )
     }
     
@@ -259,7 +241,7 @@ public extension HyperCoreService {
         }
         
         async let approveBuilderRequired = cacheService.needsBuilderFeeApproval(address: input.senderAddress) {
-            try await getBuilderFee(address: input.senderAddress, builder: Self.builderAddress)
+            try await getBuilderFee(address: input.senderAddress, builder: config.builderAddress)
         }
         
         async let totalFeeTenthsBps = cacheService.getUserFeeRate(address: input.senderAddress) {

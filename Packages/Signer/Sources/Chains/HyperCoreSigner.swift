@@ -11,12 +11,14 @@ import WalletCorePrimitives
 
 public class HyperCoreSigner: Signable {
     private let preferences: HyperCoreSecurePreferences
+    private let config: HyperCoreServiceConfig
     private let hyperCore = HyperCore()
     private let factory = HyperCoreModelFactory()
     private let agentNamePrefix = "gemwallet_"
     
-    public init(preferences: HyperCoreSecurePreferences) {
+    public init(preferences: HyperCoreSecurePreferences, config: HyperCoreServiceConfig) {
         self.preferences = preferences
+        self.config = config
     }
 
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
@@ -41,7 +43,7 @@ public class HyperCoreSigner: Signable {
         }
 
         let agentKey = try getAgentKey(for: input.senderAddress)
-        let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: data.builderFeeBps)
+        let builder = try? getBuilder(builder: config.builderAddress, fee: data.builderFeeBps)
         let timestampIncrementer = NumberIncrementer(Int(Date.getTimestampInMs()))
         var transactions: [String] = []
         
@@ -49,7 +51,7 @@ public class HyperCoreSigner: Signable {
             transactions.append(
                 try signSetReferer(
                     agentKey: privateKey,
-                    code: HyperCoreService.referralCode,
+                    code: config.referralCode,
                     timestamp: timestampIncrementer.next().asUInt64
                 )
             )
@@ -67,8 +69,8 @@ public class HyperCoreSigner: Signable {
             transactions.append(
                 try signApproveBuilderAddress(
                     agentKey: privateKey,
-                    builderAddress: HyperCoreService.builderAddress,
-                    rateBps: HyperCoreService.maxBuilderFeeBps,
+                    builderAddress: config.builderAddress,
+                    rateBps: config.maxBuilderFeeBps,
                     timestamp: timestampIncrementer.next().asUInt64
                 )
             )
