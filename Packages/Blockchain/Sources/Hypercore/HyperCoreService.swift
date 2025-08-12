@@ -3,6 +3,7 @@
 import BigInt
 import Foundation
 import Formatters
+import GemstonePrimitives
 import Primitives
 import SwiftHTTPClient
 
@@ -11,9 +12,19 @@ public struct HyperCoreService: Sendable {
     let provider: Provider<HypercoreProvider>
     let cacheService: HyperCoreCacheService
     
-    public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
-    public static let referralCode = "GEMWALLET"
-    public static let maxBuilderFeeBps = 45 // 0.045%
+    private static let perpetualConfig = GemstoneConfig.shared.perpetualConfig()
+    
+    public static var builderAddress: String {
+        perpetualConfig.builderAddress
+    }
+    
+    public static var referralCode: String {
+        perpetualConfig.referralCode
+    }
+    
+    public static var maxBuilderFeeBps: Int {
+        Int(perpetualConfig.maxBuilderFeeBps)
+    }
     
     public init(
         chain: Primitives.Chain = .hyperCore,
