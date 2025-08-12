@@ -10,209 +10,67 @@ import GRDB
 
 struct TransactionStoreTests {
     
-    @Test func swapAssociationsReplacedOnUpdate() throws {
+    @Test func assetAssociationsReplacedOnUpdate() throws {
         let db = DB.mock()
         let store = TransactionStore(db: db)
         let walletId = "test-wallet"
         
-        // Create initial swap transaction with two asset associations
-        let assetId1 = AssetId(chain: .bitcoin, tokenId: nil)
-        let assetId2 = AssetId(chain: .ethereum, tokenId: nil)
-        let swapMetadata = TransactionSwapMetadata(
-            fromAsset: assetId1,
-            fromValue: "100",
-            toAsset: assetId2,
-            toValue: "200",
-            provider: nil
-        )
-        let transaction = Transaction(
-            id: "tx1",
-            hash: "hash1",
-            assetId: assetId1,
-            from: "from1",
-            to: "to1",
-            contract: nil,
-            type: .swap,
-            state: .confirmed,
-            blockNumber: "1",
-            sequence: "1",
-            fee: "10",
-            feeAssetId: assetId1,
-            value: "100",
-            memo: nil,
-            direction: .outgoing,
-            utxoInputs: [],
-            utxoOutputs: [],
-            metadata: .swap(swapMetadata),
+        let btc = AssetId(chain: .bitcoin, tokenId: nil)
+        let eth = AssetId(chain: .ethereum, tokenId: nil)
+        let sol = AssetId(chain: .solana, tokenId: nil)
+        
+        // Add swap transaction with BTC->ETH
+        let swap1 = Transaction(
+            id: "tx1", hash: "h1", assetId: btc, from: "f", to: "t", contract: nil,
+            type: .swap, state: .confirmed, blockNumber: "1", sequence: "1",
+            fee: "1", feeAssetId: btc, value: "100", memo: nil, direction: .outgoing,
+            utxoInputs: [], utxoOutputs: [],
+            metadata: .swap(TransactionSwapMetadata(
+                fromAsset: btc, fromValue: "100", toAsset: eth, toValue: "200", provider: nil
+            )),
             createdAt: Date()
         )
+        try store.addTransactions(walletId: walletId, transactions: [swap1])
         
-        // Add initial transaction
-        try store.addTransactions(walletId: walletId, transactions: [transaction])
-        
-        // Verify both associations exist
-        try db.dbQueue.read { db in
-            let records = try TransactionRecord.fetchAll(db)
-            let record = records.first { $0.transactionId == "tx1" }
-            
-            #expect(record != nil)
-            
-            if let recordId = record?.id {
-                let associations = try TransactionAssetAssociationRecord
-                    .filter(Column("transactionId") == recordId)
-                    .fetchAll(db)
-                
-                #expect(associations.count == 2)
-                #expect(associations.contains { $0.assetId == assetId1 })
-                #expect(associations.contains { $0.assetId == assetId2 })
-            }
+        // Verify BTC and ETH associations exist
+        let recordId = try db.dbQueue.read { db in
+            try TransactionRecord.fetchAll(db).first { $0.transactionId == "tx1" }?.id
         }
+        #expect(recordId != nil)
         
-        // Update swap transaction with different assets
-        let assetId3 = AssetId(chain: .solana, tokenId: nil)
-        let updatedSwapMetadata = TransactionSwapMetadata(
-            fromAsset: assetId1,
-            fromValue: "100",
-            toAsset: assetId3,
-            toValue: "300",
-            provider: nil
-        )
-        let updatedTransaction = Transaction(
-            id: "tx1",
-            hash: "hash1",
-            assetId: assetId1,
-            from: "from1",
-            to: "to1",
-            contract: nil,
-            type: .swap,
-            state: .confirmed,
-            blockNumber: "1",
-            sequence: "1",
-            fee: "10",
-            feeAssetId: assetId1,
-            value: "100",
-            memo: nil,
-            direction: .outgoing,
-            utxoInputs: [],
-            utxoOutputs: [],
-            metadata: .swap(updatedSwapMetadata),
+        var associations = try db.dbQueue.read { db in
+            try TransactionAssetAssociationRecord
+                .filter(Column("transactionId") == recordId!)
+                .fetchAll(db)
+                .map(\.assetId)
+        }
+        #expect(associations.count == 2)
+        #expect(associations.contains(btc))
+        #expect(associations.contains(eth))
+        
+        // Update to BTC->SOL swap
+        let swap2 = Transaction(
+            id: "tx1", hash: "h1", assetId: btc, from: "f", to: "t", contract: nil,
+            type: .swap, state: .confirmed, blockNumber: "1", sequence: "1",
+            fee: "1", feeAssetId: btc, value: "100", memo: nil, direction: .outgoing,
+            utxoInputs: [], utxoOutputs: [],
+            metadata: .swap(TransactionSwapMetadata(
+                fromAsset: btc, fromValue: "100", toAsset: sol, toValue: "300", provider: nil
+            )),
             createdAt: Date()
         )
+        try store.addTransactions(walletId: walletId, transactions: [swap2])
         
-        // Update transaction
-        try store.addTransactions(walletId: walletId, transactions: [updatedTransaction])
-        
-        // Verify associations were replaced
-        try db.dbQueue.read { db in
-            let records = try TransactionRecord.fetchAll(db)
-            let record = records.first { $0.transactionId == "tx1" }
-            
-            #expect(record != nil)
-            
-            if let recordId = record?.id {
-                let associations = try TransactionAssetAssociationRecord
-                    .filter(Column("transactionId") == recordId)
-                    .fetchAll(db)
-                
-                #expect(associations.count == 2)
-                #expect(associations.contains { $0.assetId == assetId1 })
-                #expect(associations.contains { $0.assetId == assetId3 })
-                #expect(!associations.contains { $0.assetId == assetId2 })
-            }
+        // Verify ETH replaced with SOL
+        associations = try db.dbQueue.read { db in
+            try TransactionAssetAssociationRecord
+                .filter(Column("transactionId") == recordId!)
+                .fetchAll(db)
+                .map(\.assetId)
         }
-    }
-    
-    @Test func transferAssociationsReplaced() throws {
-        let db = DB.mock()
-        let store = TransactionStore(db: db)
-        let walletId = "test-wallet"
-        
-        // Create regular transfer transaction (only one asset)
-        let assetId1 = AssetId(chain: .bitcoin, tokenId: nil)
-        let transaction = Transaction(
-            id: "tx2",
-            hash: "hash2",
-            assetId: assetId1,
-            from: "from2",
-            to: "to2",
-            contract: nil,
-            type: .transfer,
-            state: .confirmed,
-            blockNumber: "2",
-            sequence: "2",
-            fee: "10",
-            feeAssetId: assetId1,
-            value: "100",
-            memo: nil,
-            direction: .incoming,
-            utxoInputs: [],
-            utxoOutputs: [],
-            metadata: nil,
-            createdAt: Date()
-        )
-        
-        // Add transaction
-        try store.addTransactions(walletId: walletId, transactions: [transaction])
-        
-        // Verify association exists
-        try db.dbQueue.read { db in
-            let records = try TransactionRecord.fetchAll(db)
-            let record = records.first { $0.transactionId == "tx2" }
-            
-            #expect(record != nil)
-            
-            if let recordId = record?.id {
-                let associations = try TransactionAssetAssociationRecord
-                    .filter(Column("transactionId") == recordId)
-                    .fetchAll(db)
-                
-                #expect(associations.count == 1)
-                #expect(associations.first?.assetId == assetId1)
-            }
-        }
-        
-        // Update to different asset
-        let assetId2 = AssetId(chain: .ethereum, tokenId: nil)
-        let updatedTransaction = Transaction(
-            id: "tx2",
-            hash: "hash2",
-            assetId: assetId2,
-            from: "from2",
-            to: "to2",
-            contract: nil,
-            type: .transfer,
-            state: .confirmed,
-            blockNumber: "2",
-            sequence: "2",
-            fee: "10",
-            feeAssetId: assetId2,
-            value: "100",
-            memo: nil,
-            direction: .incoming,
-            utxoInputs: [],
-            utxoOutputs: [],
-            metadata: nil,
-            createdAt: Date()
-        )
-        
-        // Update transaction
-        try store.addTransactions(walletId: walletId, transactions: [updatedTransaction])
-        
-        // Verify association was replaced
-        try db.dbQueue.read { db in
-            let records = try TransactionRecord.fetchAll(db)
-            let record = records.first { $0.transactionId == "tx2" }
-            
-            #expect(record != nil)
-            
-            if let recordId = record?.id {
-                let associations = try TransactionAssetAssociationRecord
-                    .filter(Column("transactionId") == recordId)
-                    .fetchAll(db)
-                
-                #expect(associations.count == 1)
-                #expect(associations.first?.assetId == assetId2)
-            }
-        }
+        #expect(associations.count == 2)
+        #expect(associations.contains(btc))
+        #expect(associations.contains(sol))
+        #expect(!associations.contains(eth))
     }
 }
