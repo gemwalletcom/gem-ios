@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct HyperliquidKey: Equatable, Sendable {
+public struct HyperCorePreferences: Equatable, Sendable {
     public let address: String
     public let privateKey: Data
     

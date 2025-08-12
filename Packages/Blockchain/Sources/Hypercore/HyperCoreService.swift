@@ -20,11 +20,12 @@ public struct HyperCoreService: Sendable {
         provider: Provider<HypercoreProvider>,
         cacheService: BlockchainCacheService
     ) {
+
         self.chain = chain
         self.provider = provider
         self.cacheService = HyperCoreCacheService(
             cacheService: cacheService,
-            preferences: HyperliquidSecurePreferences()
+            preferences: HyperCoreSecurePreferences()
         )
     }
     

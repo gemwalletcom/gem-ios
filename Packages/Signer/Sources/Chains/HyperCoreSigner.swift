@@ -10,12 +10,12 @@ import WalletCore
 import WalletCorePrimitives
 
 public class HyperCoreSigner: Signable {
-    private let preferences: HyperliquidSecurePreferences
+    private let preferences: HyperCoreSecurePreferences
     private let hyperCore = HyperCore()
     private let factory = HyperCoreModelFactory()
     private let agentNamePrefix = "gemwallet_"
     
-    public init(preferences: HyperliquidSecurePreferences) {
+    public init(preferences: HyperCoreSecurePreferences) {
         self.preferences = preferences
     }
 
@@ -23,12 +23,12 @@ public class HyperCoreSigner: Signable {
         throw AnyError.notImplemented
     }
 
-    func getHyperliquidKey(for walletAddress: String) throws -> HyperliquidKey {
-        if let key = try preferences.getKey(walletAddress: walletAddress) {
+    func getAgentKey(for walletAddress: String) throws -> HyperCorePreferences {
+        if let key = try preferences.get(walletAddress: walletAddress) {
             return key
         }
 
-        return try preferences.createKey(walletAddress: walletAddress)
+        return try preferences.create(walletAddress: walletAddress)
     }
     
     private func getBuilder(builder: String, fee: Int) throws -> HyperBuilder {
@@ -40,7 +40,7 @@ public class HyperCoreSigner: Signable {
             throw AnyError("Invalid input type for perpetual signing")
         }
 
-        let hyperliquidKey = try getHyperliquidKey(for: input.senderAddress)
+        let agentKey = try getAgentKey(for: input.senderAddress)
         let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: data.builderFeeBps)
         let timestampIncrementer = NumberIncrementer(Int(Date.getTimestampInMs()))
         var transactions: [String] = []
@@ -57,7 +57,7 @@ public class HyperCoreSigner: Signable {
         if data.approveAgentRequired {
             transactions.append(
                 try signApproveAgent(
-                    agentAddress: hyperliquidKey.address,
+                    agentAddress: agentKey.address,
                     privateKey: privateKey,
                     timestamp: timestampIncrementer.next().asUInt64
                 )
@@ -74,7 +74,7 @@ public class HyperCoreSigner: Signable {
             )
         }
         transactions.append(
-            try signMarketMessage(type: type, agentKey: hyperliquidKey.privateKey, builder: builder, timestamp: timestampIncrementer.next().asUInt64)
+            try signMarketMessage(type: type, agentKey: agentKey.privateKey, builder: builder, timestamp: timestampIncrementer.next().asUInt64)
         )
         
         return transactions
