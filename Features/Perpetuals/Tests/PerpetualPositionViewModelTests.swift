@@ -21,7 +21,7 @@ struct PerpetualPositionViewModelTests {
     
     @Test
     func positionTypeText() {
-        #expect(createPositionViewModel(.mock(size: 100, leverage: 5)).positionTypeText == "Long 5x")
+        #expect(createPositionViewModel(.mock(size: 100, leverage: 5)).positionTypeText == "LONG 5x")
     }
     
     @Test
