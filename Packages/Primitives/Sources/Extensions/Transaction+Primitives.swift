@@ -33,11 +33,10 @@ extension Transaction {
             .perpetualClosePosition:
             return [assetId]
         case .swap:
-            switch metadata {
-            case .null, .nft, .none: return []
-            case .swap(let value):
-                return [value.fromAsset, value.toAsset]
+            guard case .swap(let metadata) = metadata else {
+                return []
             }
+            return [metadata.fromAsset, metadata.toAsset]
         }
     }
 }
