@@ -55,7 +55,7 @@ public struct BannerViewModel {
         case .activateAsset:
             return Localized.Transfer.ActivateAsset.title
         case .suspiciousAsset:
-            return "Suspicious Asset"
+            return Localized.Banner.AssetStatus.title
         }
     }
 
@@ -83,7 +83,7 @@ public struct BannerViewModel {
             }
             return Localized.Banner.ActivateAsset.description(asset.symbol, asset.chain.asset.name)
         case .suspiciousAsset:
-            return "Token may be unsafe or misleading. Proceed only if you fully trust it."
+            return Localized.Banner.AssetStatus.description
         }
     }
 

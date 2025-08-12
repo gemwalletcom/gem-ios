@@ -147,6 +147,12 @@ public enum Localized {
         return Localized.tr("Localizable", "banner.activate_asset.description", String(describing: p1), String(describing: p2), fallback: "To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.")
       }
     }
+    public enum AssetStatus {
+      /// Token may be unsafe or misleading. Proceed only if you fully trust it.
+      public static let description = Localized.tr("Localizable", "banner.asset_status.description", fallback: "Token may be unsafe or misleading. Proceed only if you fully trust it.")
+      /// Suspicious Asset
+      public static let title = Localized.tr("Localizable", "banner.asset_status.title", fallback: "Suspicious Asset")
+    }
     public enum EnableNotifications {
       /// Stay on top of your wallet activity.
       public static let description = Localized.tr("Localizable", "banner.enable_notifications.description", fallback: "Stay on top of your wallet activity.")

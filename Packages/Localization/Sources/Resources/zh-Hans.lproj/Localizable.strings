@@ -444,7 +444,7 @@
 "info.open_interest.description" = "未平仓合约代表所有尚未结算的永续合约的总价值，反映市场活动和流动性。";
 "info.no_quote.description" = "无法返回所选代币对的报价，可能是由于数量少、缺乏流动性或技术限制。";
 "perpetual.positions" = "仓位";
-"perpetual.size" = "尺寸";
+"perpetual.size" = "持仓量";
 "perpetual.margin" = "利润";
 "perpetual.position" = "仓位";
 "perpetual.close_position" = "平仓";
@@ -462,3 +462,5 @@
 "lock.footer" = "保护您设备上对此应用的访问";
 "errors.wallets.limit.title" = "钱包已达上限";
 "errors.wallets.limit.description" = "您已达到允许的最大钱包数量（ %d ）。请移除现有钱包以添加或创建新钱包。";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";

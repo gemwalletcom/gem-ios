@@ -462,3 +462,5 @@
 "lock.footer" = "अपने डिवाइस पर इस ऐप तक पहुंच सुरक्षित रखें";
 "errors.wallets.limit.title" = "वॉलेट की सीमा पूरी हो गई";
 "errors.wallets.limit.description" = "आप अनुमत वॉलेट की अधिकतम संख्या ( %d ) तक पहुँच गए हैं। कृपया नया वॉलेट जोड़ने या बनाने के लिए मौजूदा वॉलेट हटाएँ।";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
