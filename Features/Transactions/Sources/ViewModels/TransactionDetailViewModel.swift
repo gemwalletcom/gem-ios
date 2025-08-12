@@ -224,20 +224,20 @@ public final class TransactionDetailViewModel {
     }
 
     var headerType: TransactionHeaderType {
-        let swapMetadata: SwapMetadata? = {
-            guard let metadata = model.transaction.transaction.metadata, case let .swap(transactionSwapMetadata) = metadata else {
+        let metadata: TransactionExtendedMetadata? = {
+            guard let metadata = model.transaction.transaction.metadata else {
                 return .none
             }
-            return SwapMetadata(
+            return TransactionExtendedMetadata(
                 assets: model.transaction.assets,
                 assetPrices: model.transaction.prices,
-                transactionMetadata: transactionSwapMetadata
+                transactionMetadata: metadata
             )
         }()
         return TransactionHeaderTypeBuilder.build(
             infoModel: infoModel,
             transaction: model.transaction.transaction,
-            swapMetadata: swapMetadata
+            metadata: metadata
         )
     }
 

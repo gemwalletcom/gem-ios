@@ -18,6 +18,7 @@ public struct Migrations {
         try? db.execute(sql: "DELETE FROM \(PriceRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(AssetSearchRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(AssetLinkRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
+        try? db.execute(sql: "DELETE FROM \(PerpetualRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(AssetRecord.databaseTableName) WHERE chain = ?", arguments: [chain])
     }
     
@@ -290,11 +291,11 @@ public struct Migrations {
         }
         
         migrator.registerMigration("Add Perpetuals") { db in
+            try? Self.clearChainData(db, chain: "hypercore")
+            
             try? db.drop(table: PerpetualRecord.databaseTableName)
             try? db.drop(table: PerpetualPositionRecord.databaseTableName)
             
-            try? Self.clearChainData(db, chain: "hypercore")
-
             try? PerpetualRecord.create(db: db)
             try? PerpetualPositionRecord.create(db: db)
         }
