@@ -27,10 +27,7 @@ struct TransactionFactory {
             }
         default: (transferData.type.transactionType, metadata)
         }
-        let state: TransactionState = switch transferData.chain {
-        case .hyperCore: .confirmed
-        default: .pending
-        }
+        let state = TransactionState.pending
 
         return Transaction(
             id: Transaction.id(chain: transferData.chain, hash: hash),

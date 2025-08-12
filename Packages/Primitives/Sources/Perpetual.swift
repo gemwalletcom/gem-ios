@@ -44,13 +44,23 @@ public struct PerpetualBalance: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct PerpetualMetadata: Codable, Equatable, Hashable, Sendable {
+	public let isPinned: Bool
+
+	public init(isPinned: Bool) {
+		self.isPinned = isPinned
+	}
+}
+
 public struct PerpetualData: Codable, Equatable, Hashable, Sendable {
 	public let perpetual: Perpetual
 	public let asset: Asset
+	public let metadata: PerpetualMetadata
 
-	public init(perpetual: Perpetual, asset: Asset) {
+	public init(perpetual: Perpetual, asset: Asset, metadata: PerpetualMetadata) {
 		self.perpetual = perpetual
 		self.asset = asset
+		self.metadata = metadata
 	}
 }
 

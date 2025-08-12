@@ -140,6 +140,25 @@ public extension HyperCoreService {
 public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         let response = try await self.provider.request(.broadcast(data: data))
+        
+        // Try to parse as order response first to get oid
+        if let orderResult = try? response.map(as: HypercoreOrderResponse.self),
+           orderResult.status == "ok",
+           let responseData = orderResult.response,
+           let orderData = responseData.data,
+           let statuses = orderData.statuses,
+           let firstStatus = statuses.first {
+            
+            if let filled = firstStatus.filled {
+                return String(filled.oid)
+            } else if let resting = firstStatus.resting {
+                return String(resting.oid)
+            } else if let error = firstStatus.error {
+                throw AnyError(error)
+            }
+        }
+        
+        // Fallback to regular response handling
         let result = try response.map(as: HypercoreResponse.self)
         
         switch result.status {
@@ -281,7 +300,24 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        TransactionChanges(state: .confirmed)
+        guard let oid = UInt64(request.id) else {
+            return TransactionChanges(state: .pending)
+        }
+        
+        let startTime = Int((request.createdAt.timeIntervalSince1970 - 5) * 1000)
+        
+        let fills = try await provider
+            .request(.userFillsByTime(user: request.senderAddress, startTime: startTime))
+            .map(as: [HypercorePerpetualFill].self)
+        
+        guard let matchingFill = fills.first(where: { $0.oid == oid }) else {
+            return TransactionChanges(state: .pending)
+        }
+        
+        return TransactionChanges(
+            state: .confirmed,
+            changes: [.hashChange(old: request.id, new: matchingFill.hash)]
+        )
     }
 }
 

@@ -28,6 +28,7 @@ public enum TransactionMetadata: Codable, Sendable {
             return
         } else if let value = try? container.decode(TransactionNFTTransferMetadata.self) {
             self = .nft(value)
+            return
         } else if let string = try? container.decode(String.self), let data = string.data(using: .utf8) {
             if let value = try? JSONDecoder().decode(TransactionSwapMetadata.self, from: data) {
                 self = .swap(value)

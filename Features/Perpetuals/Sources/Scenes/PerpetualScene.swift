@@ -29,8 +29,6 @@ public struct PerpetualScene: View {
                     .frame(height: 320)
                     
                     PeriodSelectorView(selectedPeriod: $model.currentPeriod)
-                        .padding(.horizontal, Spacing.medium)
-                        .padding(.top, Spacing.medium)
                 }
             }
             .cleanListRow()
@@ -119,6 +117,16 @@ public struct PerpetualScene: View {
                     subtitle: model.perpetualViewModel.fundingRateText,
                     infoAction: { model.onSelectFundingRateInfo() }
                 )
+            }
+            
+            if !model.transactions.isEmpty {
+                Section(header: Text(model.transactionsSectionTitle)) {
+                    TransactionsList(
+                        explorerService: model.explorerService,
+                        model.transactions
+                    )
+                    .listRowInsets(.assetListRowInsets)
+                }
             }
         }
         .navigationTitle(model.navigationTitle)

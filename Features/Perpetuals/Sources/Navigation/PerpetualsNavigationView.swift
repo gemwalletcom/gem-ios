@@ -43,8 +43,7 @@ public struct PerpetualsNavigationView: View {
                 positions: positions,
                 perpetuals: perpetuals,
                 walletBalance: walletBalance,
-                onSelectAssetType: { isPresentingSelectAssetType = $0 },
-                onTransferComplete: { isPresentingTransferData = $0 }
+                onSelectAssetType: { isPresentingSelectAssetType = $0 }
             )
         )
         .observeQuery(request: $positionsRequest, value: $positions)

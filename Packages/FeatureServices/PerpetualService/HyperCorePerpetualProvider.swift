@@ -64,7 +64,7 @@ struct HyperCorePerpetualProvider: PerpetualProvidable {
             let assetId = mapHypercoreCoinToAssetId(universeAsset.name)
             let asset = universeAsset.asset(assetId: assetId)
             
-            return PerpetualData(perpetual: perpetual, asset: asset)
+            return PerpetualData(perpetual: perpetual, asset: asset, metadata: PerpetualMetadata(isPinned: false))
         }
     }
 }

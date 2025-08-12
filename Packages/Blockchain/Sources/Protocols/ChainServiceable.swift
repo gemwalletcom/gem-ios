@@ -46,17 +46,20 @@ public struct TransactionStateRequest: Sendable {
     public let senderAddress: String
     public let recipientAddress: String
     public let block: String
+    public let createdAt: Date
 
     public init(
         id: String,
         senderAddress: String,
         recipientAddress: String,
-        block: String
+        block: String,
+        createdAt: Date
     ) {
         self.id = id
         self.senderAddress = senderAddress
         self.recipientAddress = recipientAddress
         self.block = block
+        self.createdAt = createdAt
     }
 }
 
