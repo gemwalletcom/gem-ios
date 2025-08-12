@@ -7,7 +7,7 @@ import Primitives
 struct HypercoreAssetPositionsTests {
     
     @Test
-    func mapToPerpetualPositions() {
+    func mapToPerpetualPositions() throws {
         let positions = HypercoreAssetPositions(
             assetPositions: [
                 HypercoreAssetPosition(
@@ -59,7 +59,7 @@ struct HypercoreAssetPositionsTests {
             withdrawable: "500"
         )
         
-        let perpetualPositions = positions.mapToPerpetualPositions()
+        let perpetualPositions = try positions.mapToPerpetualPositions()
         
         #expect(perpetualPositions.count == 2)
         
@@ -83,7 +83,7 @@ struct HypercoreAssetPositionsTests {
     }
     
     @Test
-    func fundingSignReversal() {
+    func fundingSignReversal() throws {
         let testCases: [(coin: String, size: String, funding: String, expectedFunding: Float)] = [
             ("BTC", "3.0", "1.5", -1.5),
             ("BNB", "2.0", "-1.0", 1.0),
@@ -127,7 +127,7 @@ struct HypercoreAssetPositionsTests {
                 withdrawable: "500"
             )
             
-            let result = positions.mapToPerpetualPositions()
+            let result = try positions.mapToPerpetualPositions()
             
             #expect(result.count == 1)
             #expect(result[0].funding == testCase.expectedFunding)
