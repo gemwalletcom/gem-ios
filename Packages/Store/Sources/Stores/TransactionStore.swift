@@ -86,6 +86,14 @@ public struct TransactionStore: Sendable {
         try updateValues(id: transactionId, values: [TransactionRecord.Columns.createdAt.set(to: date)])
     }
 
+    public func updateMetadata(transactionId: String, metadata: TransactionMetadata) throws {
+        let string = try JSONEncoder().encode(metadata).encodeString()
+        try updateValues(
+            id: transactionId,
+            values: [TransactionRecord.Columns.metadata.set(to: string)]
+        )
+    }
+
     public func updateTransactionId(oldTransactionId: String, transactionId: String, hash: String) throws {
         if try isExist(transactionId: transactionId) {
             // should not exist in most cases. delete
@@ -97,8 +105,7 @@ public struct TransactionStore: Sendable {
                     .updateAll(db, [
                         TransactionRecord.Columns.transactionId.set(to: transactionId),
                         TransactionRecord.Columns.hash.set(to: hash),
-                    ]
-                    )
+                    ])
             }
         }
     }

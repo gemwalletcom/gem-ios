@@ -2,6 +2,7 @@ import Foundation
 import Primitives
 import WalletCore
 import Keystore
+import Blockchain
 
 public struct Signer: Sendable {
     
@@ -77,7 +78,7 @@ public struct Signer: Sendable {
         case .algorand: AlgorandSigner()
         case .polkadot: PolkadotSigner()
         case .cardano: CardanoSigner()
-        case .hyperCore: HyperCoreSigner()
+        case .hyperCore: HyperCoreSigner(preferences: HyperCoreSecurePreferences())
         }
     }
 }

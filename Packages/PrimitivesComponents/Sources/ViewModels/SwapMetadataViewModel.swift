@@ -5,33 +5,30 @@ import Primitives
 import BigInt
 
 public struct SwapMetadataViewModel: Sendable {
-    let metadata: SwapMetadata
+    let metadata: TransactionExtendedMetadata
 
-    public init(metadata: SwapMetadata) {
+    public init(metadata: TransactionExtendedMetadata) {
         self.metadata = metadata
-    }
-
-    private var transactionMetadata: TransactionSwapMetadata {
-        metadata.transactionMetadata
     }
 
     var headerInput: SwapHeaderInput? {
         guard
-            let fromAsset = metadata.asset(for: transactionMetadata.fromAsset),
-            let toAsset = metadata.asset(for: transactionMetadata.toAsset) else {
+            case let .swap(swapMetadata) = metadata.transactionMetadata,
+            let fromAsset = metadata.asset(for: swapMetadata.fromAsset),
+            let toAsset = metadata.asset(for: swapMetadata.toAsset) else {
             return .none
         }
         
         return SwapHeaderInput(
             from: AssetValuePrice(
                 asset: fromAsset,
-                value: BigInt(stringLiteral: transactionMetadata.fromValue),
-                price: metadata.price(for: transactionMetadata.fromAsset)
+                value: BigInt(stringLiteral: swapMetadata.fromValue),
+                price: metadata.price(for: swapMetadata.fromAsset)
             ),
             to: AssetValuePrice(
                 asset: toAsset,
-                value: BigInt(stringLiteral: transactionMetadata.toValue),
-                price: metadata.price(for: transactionMetadata.toAsset)
+                value: BigInt(stringLiteral: swapMetadata.toValue),
+                price: metadata.price(for: swapMetadata.toAsset)
             )
         )
     }

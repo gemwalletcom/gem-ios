@@ -41,13 +41,15 @@ public struct HypercorePerpetualFill: Codable, Sendable {
 	public let closedPnl: String
 	public let fee: String
 	public let builderFee: String?
+	public let px: String
 
-	public init(coin: String, hash: String, oid: UInt64, closedPnl: String, fee: String, builderFee: String?) {
+	public init(coin: String, hash: String, oid: UInt64, closedPnl: String, fee: String, builderFee: String?, px: String) {
 		self.coin = coin
 		self.hash = hash
 		self.oid = oid
 		self.closedPnl = closedPnl
 		self.fee = fee
 		self.builderFee = builderFee
+		self.px = px
 	}
 }
