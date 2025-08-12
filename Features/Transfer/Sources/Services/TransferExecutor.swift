@@ -57,7 +57,7 @@ public struct TransferExecutor: TransferExecutable {
                 )
                 let excludeChains = [Chain.hyperCore]
                 let assetIds = transaction.assetIds.filter { !excludeChains.contains($0.chain) }
-                let transactions = [transaction].filter { !excludeChains.contains($0.assetId.chain) }
+                let transactions = [transaction]
                 
                 try transactionService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {
@@ -101,7 +101,7 @@ extension TransferExecutor {
 
     private func transactionDelay(for type: ChainType) -> Duration {
         switch type {
-        case .ethereum: .milliseconds(0)
+        case .ethereum, .hyperCore: .milliseconds(0)
         case .tron: .milliseconds(500)
         default: .milliseconds(500)
         }

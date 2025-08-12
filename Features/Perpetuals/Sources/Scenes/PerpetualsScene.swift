@@ -35,7 +35,11 @@ public struct PerpetualsScene: View {
                     ForEach(model.positions) { positionData in
                         NavigationLink(
                             value: Scenes
-                                .Perpetual(perpetualData: PerpetualData(perpetual: positionData.perpetual, asset: positionData.asset))
+                                .Perpetual(perpetualData: PerpetualData(
+                                    perpetual: positionData.perpetual,
+                                    asset: positionData.asset,
+                                    metadata: PerpetualMetadata(isPinned: false)
+                                ))
                         ) {
                             ListAssetItemView(model: PerpetualPositionItemViewModel(
                                 model: PerpetualPositionViewModel(
@@ -50,25 +54,26 @@ public struct PerpetualsScene: View {
                 }
             }
             
-            Section {
-                if model.perpetuals.isEmpty {
-                    Text(model.noMarketsText)
-                        .foregroundColor(.secondary)
-                } else {
-                    ForEach(model.perpetuals) { perpetualData in
-                        NavigationLink(value: Scenes.Perpetual(perpetualData: perpetualData)) {
-                            ListAssetItemView(
-                                model: PerpetualItemViewModel(
-                                    model: PerpetualViewModel(
-                                        perpetual: perpetualData.perpetual,
-                                        currencyStyle: .abbreviated
-                                    )
-                                )
-                            )
-                        }
+            if !model.sections.pinned.isEmpty {
+                Section {
+                    PerpetualSectionView(
+                        perpetuals: model.sections.pinned,
+                        onPin: model.onPinPerpetual
+                    )
+                } header: {
+                    HStack {
+                        model.pinImage
+                        Text(model.pinnedSectionTitle)
                     }
-                    .listRowInsets(.assetListRowInsets)
                 }
+            }
+            
+            Section {
+                PerpetualSectionView(
+                    perpetuals: model.sections.markets,
+                    onPin: model.onPinPerpetual,
+                    emptyText: model.noMarketsText
+                )
             } header: {
                 Text(model.marketsSectionTitle)
             }

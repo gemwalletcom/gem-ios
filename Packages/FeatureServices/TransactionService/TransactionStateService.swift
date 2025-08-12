@@ -25,7 +25,8 @@ struct TransactionStateService: Sendable {
                 id: transaction.hash,
                 senderAddress: transaction.from,
                 recipientAddress: transaction.to,
-                block: transaction.blockNumber
+                block: transaction.blockNumber,
+                createdAt: transaction.createdAt
             )
         )
     }

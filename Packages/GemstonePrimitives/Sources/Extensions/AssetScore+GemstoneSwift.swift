@@ -6,6 +6,9 @@ import func Gemstone.assetDefaultRank
 
 extension AssetScore {
     
+    // default score of an asset, not assigned
+    public static let defaultScore = 15
+    
     public static func defaultScore(chain: Chain) -> AssetScore {
         return AssetScore(
             rank: AssetScore.defaultRank(chain: chain).asInt32

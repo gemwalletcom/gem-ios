@@ -11,6 +11,16 @@ public struct Migrations {
         self.migrator = migrator
     }
     
+    private static func clearChainData(_ db: Database, chain: String) throws {
+        try? db.execute(sql: "DELETE FROM \(TransactionAssetAssociationRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
+        try? db.execute(sql: "DELETE FROM \(TransactionRecord.databaseTableName) WHERE chain = ?", arguments: [chain])
+        try? db.execute(sql: "DELETE FROM \(BalanceRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
+        try? db.execute(sql: "DELETE FROM \(PriceRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
+        try? db.execute(sql: "DELETE FROM \(AssetSearchRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
+        try? db.execute(sql: "DELETE FROM \(AssetLinkRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
+        try? db.execute(sql: "DELETE FROM \(AssetRecord.databaseTableName) WHERE chain = ?", arguments: [chain])
+    }
+    
     mutating func run(dbQueue: DatabaseQueue) throws {
         migrator.registerMigration("Create all start table") { db in
             // wallet
@@ -279,12 +289,12 @@ public struct Migrations {
             try? AddressRecord.create(db: db)
         }
         
-        migrator
-            .registerMigration(
-                "Add \(PerpetualRecord.databaseTableName), \(PerpetualPositionRecord.databaseTableName) table 10"
-            ) { db in
+        migrator.registerMigration("Add Perpetuals") { db in
             try? db.drop(table: PerpetualRecord.databaseTableName)
             try? db.drop(table: PerpetualPositionRecord.databaseTableName)
+            
+            try? Self.clearChainData(db, chain: "hypercore")
+
             try? PerpetualRecord.create(db: db)
             try? PerpetualPositionRecord.create(db: db)
         }

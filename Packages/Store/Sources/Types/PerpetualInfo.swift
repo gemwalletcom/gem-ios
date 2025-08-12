@@ -13,7 +13,8 @@ extension PerpetualInfo {
     func mapToPerpetualData() -> PerpetualData {
         return PerpetualData(
             perpetual: perpetual.mapToPerpetual(),
-            asset: asset.mapToAsset()
+            asset: asset.mapToAsset(),
+            metadata: PerpetualMetadata(isPinned: perpetual.isPinned)
         )
     }
 }
