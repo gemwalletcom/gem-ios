@@ -29,7 +29,7 @@ public struct TransactionViewModel: Sendable {
 
     public var assetImage: AssetImage {
         switch transaction.transaction.metadata {
-        case .null, .swap, .none:
+        case .null, .swap, .perpetual, .none:
             let asset = AssetIdViewModel(assetId: assetId).assetImage
             return AssetImage(
                 type: asset.type,
@@ -208,13 +208,15 @@ public struct TransactionViewModel: Sendable {
             return amountSymbolText
         case .swap:
             switch transaction.transaction.metadata {
-            case .null, .none, .nft:
+            case .null, .nft, .none:
                 return .none
             case .swap(let metadata):
                 guard let asset = transaction.assets.first(where: { $0.id == metadata.toAsset }) else {
                     return .none
                 }
                 return "+" + swapFormatter(asset: asset, value: BigInt(stringLiteral: metadata.toValue))
+            case .perpetual(let metadata):
+                return "\(metadata.pnl)" //TODO: Perpetual
             }
         case .assetActivation:
             return transaction.asset.symbol
@@ -275,7 +277,7 @@ public struct TransactionViewModel: Sendable {
             return .none
         case .swap:
             switch transaction.transaction.metadata {
-            case .null, .none, .nft:
+            case .null, .none, .nft, .perpetual:
                 return .none
             case .swap(let metadata):
                 guard let asset = transaction.assets.first(where: { $0.id == metadata.fromAsset }) else {

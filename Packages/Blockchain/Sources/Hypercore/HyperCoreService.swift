@@ -318,7 +318,15 @@ public extension HyperCoreService {
         
         return TransactionChanges(
             state: .confirmed,
-            changes: [.hashChange(old: request.id, new: matchingFill.hash)]
+            changes: [
+                .hashChange(old: request.id, new: matchingFill.hash),
+                .metadata(TransactionMetadata.perpetual(
+                    TransactionPerpetualMetadata(
+                        pnl: try Double.from(string: matchingFill.closedPnl),
+                        price: try Double.from(string: matchingFill.px)
+                    )
+                ))
+            ]
         )
     }
 }

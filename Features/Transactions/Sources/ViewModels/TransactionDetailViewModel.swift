@@ -300,7 +300,7 @@ extension TransactionDetailViewModel {
 extension TransactionDetailViewModel {
     private var headerLink: URL? {
         switch model.transaction.transaction.metadata {
-        case .null, .nft, .none: .none
+        case .null, .nft, .none, .perpetual: .none
         case let .swap(metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
         }
     }
