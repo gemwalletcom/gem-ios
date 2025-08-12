@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 
 extension HypercoreAssetPositions {
-    public func mapToPerpetualPositions(walletId: String) -> [PerpetualPosition] {
-        assetPositions.compactMap { assetPosition in
+    public func mapToPerpetualPositions() throws -> [PerpetualPosition] {
+        try assetPositions.compactMap { assetPosition in
             let position = assetPosition.position
-            let positionId = "\(walletId)_\(position.coin)"
+            let positionId = position.coin
             let provider = PerpetualProvider.hypercore
             let perpetualId = "\(provider.rawValue)_\(position.coin)"
             
@@ -25,8 +25,8 @@ extension HypercoreAssetPositions {
                 id: positionId,
                 perpetualId: perpetualId,
                 assetId: mapHypercoreCoinToAssetId(position.coin),
-                size: Double(position.szi) ?? 0,
-                sizeValue: Double(position.positionValue) ?? 0,
+                size: try Double.from(string: position.szi),
+                sizeValue: try Double.from(string: position.positionValue),
                 leverage: UInt8(position.leverage.value),
                 entryPrice: Double(position.entryPx),
                 liquidationPrice: Double(position.liquidationPx ?? ""),
@@ -35,7 +35,7 @@ extension HypercoreAssetPositions {
                 marginAmount: Double(position.marginUsed) ?? 0,
                 takeProfit: nil,
                 stopLoss: nil,
-                pnl: Double(position.unrealizedPnl) ?? 0,
+                pnl: try Double.from(string: position.unrealizedPnl),
                 funding: fundingValue
             )
         }

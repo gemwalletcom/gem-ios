@@ -8,8 +8,6 @@ struct HypercoreAssetPositionsTests {
     
     @Test
     func mapToPerpetualPositions() {
-        let walletId = "wallet123"
-        
         let positions = HypercoreAssetPositions(
             assetPositions: [
                 HypercoreAssetPosition(
@@ -61,7 +59,7 @@ struct HypercoreAssetPositionsTests {
             withdrawable: "500"
         )
         
-        let perpetualPositions = positions.mapToPerpetualPositions(walletId: walletId)
+        let perpetualPositions = positions.mapToPerpetualPositions()
         
         #expect(perpetualPositions.count == 2)
         
@@ -86,8 +84,6 @@ struct HypercoreAssetPositionsTests {
     
     @Test
     func fundingSignReversal() {
-        let walletId = "wallet123"
-        
         let testCases: [(coin: String, size: String, funding: String, expectedFunding: Float)] = [
             ("BTC", "3.0", "1.5", -1.5),
             ("BNB", "2.0", "-1.0", 1.0),
@@ -131,7 +127,7 @@ struct HypercoreAssetPositionsTests {
                 withdrawable: "500"
             )
             
-            let result = positions.mapToPerpetualPositions(walletId: walletId)
+            let result = positions.mapToPerpetualPositions()
             
             #expect(result.count == 1)
             #expect(result[0].funding == testCase.expectedFunding)

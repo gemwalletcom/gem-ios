@@ -11,6 +11,10 @@ public extension Date? {
     func isOutdated(byDays days: Int) -> Bool {
         isOutdated(by: TimeInterval(days * 24 * 60 * 60))
     }
+    
+    func isOutdated(byHours hours: Int) -> Bool {
+        isOutdated(by: TimeInterval(hours * 60 * 60))
+    }
 }
 
 public extension Date {
