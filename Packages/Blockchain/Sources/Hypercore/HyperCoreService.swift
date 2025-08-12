@@ -15,15 +15,15 @@ public struct HyperCoreService: Sendable {
     private static let perpetualConfig = GemstoneConfig.shared.perpetualConfig()
     
     public static var builderAddress: String {
-        perpetualConfig.builderAddress
+        GemstoneConfig.shared.perpetualConfig().builderAddress
     }
-    
+
     public static var referralCode: String {
-        perpetualConfig.referralCode
+        GemstoneConfig.shared.perpetualConfig().referralCode
     }
-    
+
     public static var maxBuilderFeeBps: Int {
-        Int(perpetualConfig.maxBuilderFeeBps)
+        Int(GemstoneConfig.shared.perpetualConfig().maxBuilderFeeBps)
     }
     
     public init(
