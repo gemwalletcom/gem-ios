@@ -14,17 +14,9 @@ public struct HyperCoreService: Sendable {
     
     private static let perpetualConfig = GemstoneConfig.shared.perpetualConfig()
     
-    public static var builderAddress: String {
-        perpetualConfig.builderAddress
-    }
-    
-    public static var referralCode: String {
-        perpetualConfig.referralCode
-    }
-    
-    public static var maxBuilderFeeBps: Int {
-        Int(perpetualConfig.maxBuilderFeeBps)
-    }
+    public static let builderAddress = perpetualConfig.builderAddress
+    public static let referralCode = perpetualConfig.referralCode
+    public static let maxBuilderFeeBps = Int(perpetualConfig.maxBuilderFeeBps)
     
     public init(
         chain: Primitives.Chain = .hyperCore,
