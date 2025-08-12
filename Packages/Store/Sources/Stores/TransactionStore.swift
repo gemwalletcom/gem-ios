@@ -62,6 +62,12 @@ public struct TransactionStore: Sendable {
             for transaction in transactions {
                 let record = try transaction.record(walletId: walletId).upsertAndFetch(db, as: TransactionRecord.self)
                 if let id = record.id {
+                    // Delete old associations before inserting new ones
+                    try TransactionAssetAssociationRecord
+                        .filter(TransactionAssetAssociationRecord.Columns.transactionId == id)
+                        .deleteAll(db)
+                    
+                    // Insert new associations
                     try transaction.assetIds.forEach {
                         try TransactionAssetAssociationRecord(transactionId: id, assetId: $0).upsert(db)
                     }
