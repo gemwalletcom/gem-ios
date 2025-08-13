@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "ปริมาณ 24 ชั่วโมง";
 "perpetual.entry_price" = "ราคาเข้าชม";
-"stake.your_staking" = "การเดิมพันของคุณ";
 "widget.small.name" = "ราคา Bitcoin";
 "widget.small.description" = "ติดตามราคา Bitcoin";
 "widget.medium.name" = "ราคาคริปโตสูงสุด";

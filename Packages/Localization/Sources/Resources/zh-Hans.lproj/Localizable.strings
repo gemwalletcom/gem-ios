@@ -453,7 +453,6 @@
 "perpetual.short" = "做空";
 "markets.daily_volume" = "24小时交易量";
 "perpetual.entry_price" = "入场价格";
-"stake.your_staking" = "您的质押";
 "widget.small.name" = "比特币价格";
 "widget.small.description" = "追踪比特币价格";
 "widget.medium.name" = "最高加密货币价格";
@@ -462,5 +461,5 @@
 "lock.footer" = "保护您设备上对此应用的访问";
 "errors.wallets.limit.title" = "钱包已达上限";
 "errors.wallets.limit.description" = "您已达到允许的最大钱包数量（ %d ）。请移除现有钱包以添加或创建新钱包。";
-"banner.asset_status.title" = "Suspicious Asset";
-"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
+"banner.asset_status.title" = "可疑资产";
+"banner.asset_status.description" = "代币可能不安全或具有误导性。请仅在完全信任的情况下继续操作。";

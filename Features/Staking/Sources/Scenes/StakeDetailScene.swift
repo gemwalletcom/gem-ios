@@ -20,7 +20,7 @@ public struct StakeDetailScene: View {
                     onHeaderAction: nil,
                     onInfoAction: nil
                 )
-                .padding(.top, .medium)
+                .padding(.top, .small)
             }
             .cleanListRow()
 
