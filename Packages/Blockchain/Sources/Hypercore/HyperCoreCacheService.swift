@@ -6,7 +6,7 @@ import Primitives
 public struct HyperCoreCacheService: Sendable {
     private let cacheService: BlockchainCacheService
     private let preferences: HyperCoreSecurePreferences
-    private let config: HyperCoreServiceConfig
+    private let config: HyperCoreConfig
 
     private static let referralApprovedKey = "referral_approved"
     private static let builderFeeApprovedKey = "builder_fee_approved"
@@ -17,7 +17,7 @@ public struct HyperCoreCacheService: Sendable {
     public init(
         cacheService: BlockchainCacheService,
         preferences: HyperCoreSecurePreferences,
-        config: HyperCoreServiceConfig
+        config: HyperCoreConfig
     ) {
         self.cacheService = cacheService
         self.preferences = preferences

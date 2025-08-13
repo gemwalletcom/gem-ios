@@ -11,12 +11,12 @@ import WalletCorePrimitives
 
 public class HyperCoreSigner: Signable {
     private let preferences: HyperCoreSecurePreferences
-    private let config: HyperCoreServiceConfig
+    private let config: HyperCoreConfig
     private let hyperCore = HyperCore()
     private let factory = HyperCoreModelFactory()
     private let agentNamePrefix = "gemwallet_"
     
-    public init(preferences: HyperCoreSecurePreferences, config: HyperCoreServiceConfig) {
+    public init(preferences: HyperCoreSecurePreferences, config: HyperCoreConfig) {
         self.preferences = preferences
         self.config = config
     }

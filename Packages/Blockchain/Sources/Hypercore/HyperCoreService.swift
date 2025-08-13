@@ -10,13 +10,13 @@ public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
     let cacheService: HyperCoreCacheService
-    public let config: HyperCoreServiceConfig
+    public let config: HyperCoreConfig
     
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>,
         cacheService: BlockchainCacheService,
-        config: HyperCoreServiceConfig
+        config: HyperCoreConfig
     ) {
         self.chain = chain
         self.provider = provider

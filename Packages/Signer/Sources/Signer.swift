@@ -80,7 +80,7 @@ public struct Signer: Sendable {
         case .cardano: CardanoSigner()
         case .hyperCore: HyperCoreSigner(
             preferences: HyperCoreSecurePreferences(), 
-            config: HyperCoreServiceConfigProvider.createConfig()
+            config: HyperCoreConfig.create()
         )
         }
     }
