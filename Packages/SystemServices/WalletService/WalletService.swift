@@ -5,7 +5,7 @@ import Store
 import Primitives
 import Preferences
 import Keystore
-import AvatarService
+import ServicePrimitives
 import WalletSessionService
 
 public struct WalletService: Sendable {

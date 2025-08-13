@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import PriceService
+import ServicePrimitives
 import Preferences
 import Primitives
 

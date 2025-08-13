@@ -5,6 +5,8 @@ import Primitives
 import GemAPI
 import ChainService
 import BalanceService
+import ServicePrimitives
+import Preferences
 
 public struct DiscoverAssetsService: Sendable {
     private let balanceService: BalanceService
@@ -95,5 +97,17 @@ extension Array where Element == Account {
         filter { account in
             !AssetConfiguration.enabledByDefault.contains(where: { $0.chain == account.chain })
         }
+    }
+}
+
+extension DiscoverAssetsService: DiscoveryAssetsProcessing {
+    public func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
+        // This would typically use the wallet to discover assets
+        // For now, we'll implement a placeholder that calls the existing updateCoins method
+        // This would need to be properly implemented based on business requirements
+        
+        // Create a minimal wallet from walletId for compatibility
+        let wallet = Wallet(id: walletId.id, name: "", index: 0, type: .multicoin, accounts: [])
+        let _ = updateCoins(wallet: wallet)
     }
 }

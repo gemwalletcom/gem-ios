@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import BalanceService
+import ServicePrimitives
 import WalletSessionService
 
 struct BalanceUpdateService: BalanceUpdater {

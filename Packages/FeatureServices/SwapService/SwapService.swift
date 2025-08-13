@@ -20,6 +20,7 @@ import Primitives
 import enum Primitives.AnyError
 import enum Primitives.Chain
 import enum Primitives.EVMChain
+import ServicePrimitives
 
 public final class SwapService: Sendable {
     private let swapper: GemSwapperProtocol
@@ -79,4 +80,8 @@ public final class SwapService: Sendable {
     public func getPermit2Approval(quote: SwapperQuote) async throws -> Permit2ApprovalData? {
         try await swapper.fetchPermit2ForQuote(quote: quote)
     }
+}
+
+extension SwapService: SwapAssetsProvider {
+    // supportedChains() method already exists in the main class
 }

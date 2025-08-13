@@ -2,11 +2,8 @@
 
 import Foundation
 import Primitives
-import PriceService
+import ServicePrimitives
 import Preferences
-import BalanceService
-import AssetsService
-import DiscoverAssetsService
 import Store
 import WalletSessionService
 import DeviceService
