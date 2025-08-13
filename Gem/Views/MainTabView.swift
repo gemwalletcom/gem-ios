@@ -27,6 +27,7 @@ struct MainTabView: View {
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.walletService) private var walletService
     @Environment(\.assetsService) private var assetsService
+    @Environment(\.perpetualObserverService) private var perpetualObserverService
 
     private let model: MainTabViewModel
 
@@ -126,19 +127,19 @@ struct MainTabView: View {
         )
         .taskOnce {
             Task {
-                await priceObserverService.connect()
+                await connectObservers()
             }
         }
         .onChange(of: scenePhase) { (oldScene, newPhase) in
             switch newPhase {
             case .active:
                 Task {
-                    await priceObserverService.connect()
+                    await connectObservers()
                 }
                 print("App moved to active — restart websocket, refresh UI…")
             case .inactive:
                 Task {
-                    await priceObserverService.disconnect()
+                    await disconnectObservers()
                 }
                 print("App is inactive — e.g. transitioning or showing interruption UI")
             case .background:
@@ -231,7 +232,18 @@ extension MainTabView {
         
         Task {
             try await priceObserverService.setupAssets()
+            await perpetualObserverService.connect(for: model.wallet)
         }
+    }
+    
+    private func connectObservers() async {
+        await priceObserverService.connect()
+        await perpetualObserverService.connect(for: model.wallet)
+    }
+    
+    private func disconnectObservers() async {
+        await priceObserverService.disconnect()
+        await perpetualObserverService.disconnect()
     }
 
     private func onComplete(type: SelectedAssetType) {

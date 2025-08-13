@@ -173,6 +173,7 @@ struct ServicesFactory {
             balanceStore: storeManager.balanceStore,
             nodeProvider: nodeService
         )
+        let perpetualObserverService = PerpetualObserverService(perpetualService: perpetualService)
         
         let nameService = NameService()
         let scanService = ScanService(securePreferences: .standard)
@@ -221,6 +222,7 @@ struct ServicesFactory {
             onstartAsyncService: onstartAsyncService,
             walletConnectorManager: walletConnectorManager,
             perpetualService: perpetualService,
+            perpetualObserverService: perpetualObserverService,
             nameService: nameService,
             viewModelFactory: viewModelFactory
         )
@@ -471,7 +473,7 @@ extension ServicesFactory {
             assetStore: assetStore,
             priceStore: priceAstore,
             balanceStore: balanceStore,
-            providerFactory: providerFactory
+            provider: providerFactory.createProvider()
         )
     }
 }

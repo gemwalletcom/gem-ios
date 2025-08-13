@@ -44,7 +44,7 @@ public final class PerpetualSceneViewModel {
     public let perpetualViewModel: PerpetualViewModel
 
     public var positionViewModels: [PerpetualPositionViewModel] {
-        positions.map { PerpetualPositionViewModel(data: $0) }
+        positions.map { PerpetualPositionViewModel($0) }
     }
 
     public init(
