@@ -54,6 +54,15 @@ public struct TransactionStore: Sendable {
         }
     }
 
+    public func getTransactionAssetAssociations(for transactionId: String) throws -> [TransactionAssetAssociationRecord] {
+        try db.read { db in
+            try TransactionAssetAssociationRecord
+                .joining(required: TransactionAssetAssociationRecord.transaction)
+                .filter(TransactionRecord.Columns.transactionId == transactionId)
+                .fetchAll(db)
+        }
+    }
+
     public func addTransactions(walletId: String, transactions: [Transaction]) throws {
         if transactions.isEmpty {
             return
@@ -62,6 +71,10 @@ public struct TransactionStore: Sendable {
             for transaction in transactions {
                 let record = try transaction.record(walletId: walletId).upsertAndFetch(db, as: TransactionRecord.self)
                 if let id = record.id {
+                    try TransactionAssetAssociationRecord
+                        .filter(TransactionAssetAssociationRecord.Columns.transactionId == id)
+                        .deleteAll(db)
+                    
                     try transaction.assetIds.forEach {
                         try TransactionAssetAssociationRecord(transactionId: id, assetId: $0).upsert(db)
                     }
