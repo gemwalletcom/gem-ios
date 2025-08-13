@@ -62,6 +62,7 @@ let package = Package(
                 "Primitives",
                 "Store",
                 .product(name: "ChainService", package: "ChainServices"),
+                .product(name: "ServicePrimitives", package: "SystemServices"),
                 "AssetsService"
             ],
             path: "BalanceService",
@@ -103,7 +104,8 @@ let package = Package(
             name: "AvatarService",
             dependencies: [
                 "Primitives",
-                "Store"
+                "Store",
+                .product(name: "ServicePrimitives", package: "SystemServices")
             ],
             path: "AvatarService",
             exclude: ["Tests", "TestKit"]
@@ -114,7 +116,8 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "GemAPI",
-                "Preferences"
+                "Preferences",
+                .product(name: "ServicePrimitives", package: "SystemServices")
             ],
             path: "PriceService",
             exclude: ["TestKit"]
@@ -211,6 +214,7 @@ let package = Package(
                 .product(name: "ChainService", package: "ChainServices"),
                 "BalanceService",
                 "GemAPI",
+                .product(name: "ServicePrimitives", package: "SystemServices"),
             ],
             path: "DiscoverAssetsService",
             exclude: ["Tests", "TestKit"]
@@ -225,6 +229,7 @@ let package = Package(
                 "Signer",
                 "Keystore",
                 .product(name: "NativeProviderService", package: "SystemServices"),
+                .product(name: "ServicePrimitives", package: "SystemServices"),
             ],
             path: "SwapService",
             exclude: ["TestKit"]
@@ -246,7 +251,8 @@ let package = Package(
                 "GemAPI",
                 .product(name: "ChainService", package: "ChainServices"),
                 "Preferences",
-                "GemstonePrimitives"
+                "GemstonePrimitives",
+                .product(name: "ServicePrimitives", package: "SystemServices")
             ],
             path: "AssetsService",
             exclude: ["TestKit"]

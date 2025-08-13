@@ -1,8 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import AssetsService
-import DiscoverAssetsService
+import ServicePrimitives
 import Primitives
 import Preferences
 import Store

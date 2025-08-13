@@ -3,6 +3,7 @@ import Store
 import Primitives
 import GemAPI
 import ChainService
+import ServicePrimitives
 
 public final class AssetsService: Sendable {
     public let assetStore: AssetStore
@@ -180,4 +181,18 @@ public final class AssetsService: Sendable {
             )
         }
     }
+}
+
+extension AssetsService: AssetsEnabler {
+    public func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async {
+        do {
+            try updateEnabled(walletId: walletId, assetIds: assetIds, enabled: enabled)
+        } catch {
+            NSLog("Failed to enable assets: \(error)")
+        }
+    }
+}
+
+extension AssetsService: AssetsMetadataProvider {
+    // addBalanceIfMissing and updateEnabled methods already exist in the main class
 }

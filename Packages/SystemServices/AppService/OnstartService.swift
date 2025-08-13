@@ -4,7 +4,7 @@ import Foundation
 import Store
 import Primitives
 import NodeService
-import AssetsService
+import ServicePrimitives
 import Preferences
 import WalletService
 

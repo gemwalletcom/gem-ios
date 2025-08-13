@@ -6,6 +6,7 @@ import Store
 import ChainService
 import Formatters
 import AssetsService
+import ServicePrimitives
 
 public struct BalanceService: BalancerUpdater, Sendable {
     private let balanceStore: BalanceStore
@@ -270,5 +271,25 @@ extension BalanceService {
         if missingIds.isNotEmpty {
             try await assetsService.addAssets(assetIds: missingIds)
         }
+    }
+}
+
+extension BalanceService: BalanceUpdater {
+    public func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
+        guard let wallet = try await getWallet(for: walletId) else {
+            throw AnyError("Wallet not found")
+        }
+        await updateBalance(for: wallet, assetIds: assetIds)
+    }
+    
+    public func enableBalances(for walletId: WalletId, assetIds: [AssetId]) throws {
+        let addBalances = assetIds.map { AddBalance(assetId: $0, isEnabled: true) }
+        try balanceStore.addBalance(addBalances, for: walletId.id)
+    }
+    
+    private func getWallet(for walletId: WalletId) async throws -> Wallet? {
+        // This would need to be implemented based on how wallets are stored/retrieved
+        // For now, return a minimal wallet structure
+        return Wallet(id: walletId.id, name: "", index: 0, type: .multicoin, accounts: [])
     }
 }

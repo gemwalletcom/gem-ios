@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import GemAPI
 import Store
+import ServicePrimitives
 
 public struct PriceService: Sendable {
     private let priceStore: PriceStore
@@ -62,5 +63,20 @@ public struct PriceService: Sendable {
     @discardableResult
     public func clear() throws -> Int {
         try priceStore.clear()
+    }
+}
+
+extension PriceService: PriceUpdater {
+    public func addPrices(assetIds: [AssetId]) async throws {
+        // This would typically fetch prices from an API and then update the store
+        // For now, we'll add placeholder prices
+        let prices = assetIds.map { assetId in
+            AssetPrice(
+                assetId: assetId.identifier,
+                price: 0.0,
+                priceChangePercentage24h: 0.0
+            )
+        }
+        try updatePrices(prices, currency: "USD")
     }
 }

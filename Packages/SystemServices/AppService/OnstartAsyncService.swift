@@ -6,10 +6,9 @@ import GemAPI
 import Primitives
 import BannerService
 import DeviceService
-import SwapService
+import ServicePrimitives
 import NodeService
 import Preferences
-import AssetsService
 import ChainService
 
 public final class OnstartAsyncService: Sendable {

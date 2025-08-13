@@ -3,6 +3,7 @@
 import Foundation
 import Store
 import Primitives
+import ServicePrimitives
 
 public struct AvatarService: Sendable {
     private let store: WalletStore
@@ -43,4 +44,8 @@ public struct AvatarService: Sendable {
         }
         try localStore.remove(avatar)
     }
+}
+
+extension AvatarService: AvatarProvider {
+    // remove(for walletId: String) method already exists in the main class
 }

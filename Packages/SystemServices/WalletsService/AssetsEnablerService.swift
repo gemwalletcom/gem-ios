@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import AssetsService
+import ServicePrimitives
 
 struct AssetsEnablerService: AssetsEnabler {
     private let assetsService: AssetsService

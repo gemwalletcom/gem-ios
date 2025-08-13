@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import BalanceService
+import ServicePrimitives
 
 struct AssetVisibilityManager: AssetVisibilityServiceable {
     private let service: BalanceService
