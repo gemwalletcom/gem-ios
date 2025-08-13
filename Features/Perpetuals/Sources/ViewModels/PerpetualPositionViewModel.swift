@@ -16,7 +16,7 @@ public struct PerpetualPositionViewModel {
     
     public init(
         data: PerpetualPositionData,
-        currencyStyle: CurrencyFormatterType = .abbreviated
+        currencyStyle: CurrencyFormatterType = .currency
     ) {
         self.data = data
         self.currencyFormatter = CurrencyFormatter(type: currencyStyle, currencyCode: Currency.usd.rawValue)
