@@ -7,68 +7,112 @@ import Components
 import Style
 
 public struct BannerView: View {
-    private let banners: [Banner]
 
+    private static let autoAdvanceInterval: TimeInterval = 3.0
+    private static let animationDuration: TimeInterval = 0.3
+
+    let banners: [BannerViewModel]
     private let action: ((Banner) -> Void)
     private let closeAction: ((Banner) -> Void)
+    
+    @State private var currentIndex: Int = 0
+    @State private var isUserInteracting: Bool = false
+    
+    private let timer = Timer.publish(every: autoAdvanceInterval, on: .main, in: .common).autoconnect()
 
     public init(
         banners: [Banner],
         action: @escaping (Banner) -> Void,
         closeAction: @escaping (Banner) -> Void
     ) {
-        self.banners = banners
+        self.banners = banners.map(BannerViewModel.init)
         self.action = action
         self.closeAction = closeAction
     }
 
     public var body: some View {
-        let bannerViewModels = banners.map { BannerViewModel(banner: $0) }
-        
-        if bannerViewModels.isEmpty {
+        if banners.isEmpty {
             EmptyView()
-        } else if bannerViewModels.count == 1, let banner = bannerViewModels.first {
-            bannerItem(for: banner)
         } else {
-            TabView {
-                ForEach(bannerViewModels) { banner in
-                    bannerItem(for: banner)
+            VStack(spacing: 0) {
+                carouselTabView
+                if banners.count > 1 {
+                    carouselIndicators
                 }
             }
-            .tabViewStyle(.page(indexDisplayMode: .automatic))
-            .frame(height: bannerHeight)
+        }
+    }
+}
+
+// MARK: - Private Views
+
+private extension BannerView {
+    var carouselTabView: some View {
+        TabView(selection: $currentIndex) {
+            ForEach(banners.indices, id: \.self) { index in
+                bannerView(for: banners[index])
+                    .tag(index)
+            }
+        }
+        .frame(height: .scene.bannerHeight)
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .simultaneousGesture(
+            DragGesture(minimumDistance: .zero)
+                .onChanged { _ in
+                    isUserInteracting = true
+                }
+                .onEnded { _ in
+                    Task {
+                        try? await Task.sleep(for: .seconds(Int(Self.autoAdvanceInterval)))
+                        isUserInteracting = false
+                    }
+                }
+        )
+        .onReceive(timer) { _ in
+            guard banners.count > 1, !isUserInteracting else { return }
+            withAnimation(.easeInOut(duration: Self.animationDuration)) {
+                currentIndex = (currentIndex + 1) % banners.count
+            }
         }
     }
     
-    private func bannerItem(for banner: BannerViewModel) -> some View {
+    @ViewBuilder
+    var carouselIndicators: some View {
+        HStack(spacing: .tiny) {
+            ForEach(0..<banners.count, id: \.self) { index in
+                Circle()
+                    .fill(index == currentIndex ? Colors.blue : Colors.gray.opacity(0.3))
+                    .frame(size: .space6)
+            }
+        }
+        .padding(.top, Spacing.extraSmall)
+    }
+    
+    func bannerView(for model: BannerViewModel) -> some View {
         Button(
-            action: { action(banner.banner) },
+            action: { action(model.banner) },
             label: {
                 HStack(spacing: 0) {
                     ListItemView(
-                        title: banner.title,
-                        titleExtra: banner.description,
-                        imageStyle: banner.imageStyle
+                        title: model.title,
+                        titleExtra: model.description,
+                        imageStyle: model.imageStyle
                     )
 
-                    if banner.canClose {
+                    if model.canClose {
                         Spacer()
 
                         ListButton(
                             image: Images.System.xmarkCircle,
-                            action: {
-                                closeAction(banner.banner)
-                            }
+                            action: { closeAction(model.banner) }
                         )
-                        .padding(.vertical, Spacing.small)
+                        .padding(.vertical, .small)
                         .foregroundColor(Colors.gray)
                     }
                 }
-            })
-    }
-    
-    private var bannerHeight: CGFloat {
-        60
+            }
+        )
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
