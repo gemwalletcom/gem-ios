@@ -6,7 +6,7 @@ import PrimitivesTestKit
 
 public extension Transaction {
     static func mock(
-        id: String,
+        id: String = "1",
         type: TransactionType = .transfer,
         assetId: AssetId = .mock(),
         metadata: TransactionMetadata? = nil
