@@ -231,6 +231,7 @@ extension AssetSceneViewModel {
             Task {
                 try await bannerService.handleAction(action)
             }
+        case .suspiciousAsset: break
         }
         onSelect(url: action.url)
     }

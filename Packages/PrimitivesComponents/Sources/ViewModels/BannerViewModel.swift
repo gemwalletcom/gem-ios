@@ -27,6 +27,8 @@ public struct BannerViewModel {
             return AssetImage.image(Images.System.bell)
         case .accountBlockedMultiSignature:
             return AssetImage.image(Images.System.exclamationmarkTriangle)
+        case .suspiciousAsset:
+            return AssetImage.image(Images.TokenStatus.risk)
         }
     }
     
@@ -52,6 +54,8 @@ public struct BannerViewModel {
             return Localized.Common.warning
         case .activateAsset:
             return Localized.Transfer.ActivateAsset.title
+        case .suspiciousAsset:
+            return Localized.Banner.AssetStatus.title
         }
     }
 
@@ -78,6 +82,8 @@ public struct BannerViewModel {
                 return .none
             }
             return Localized.Banner.ActivateAsset.description(asset.symbol, asset.chain.asset.name)
+        case .suspiciousAsset:
+            return Localized.Banner.AssetStatus.description
         }
     }
 
@@ -93,7 +99,8 @@ public struct BannerViewModel {
         switch banner.event {
         case .stake,
             .accountActivation,
-            .activateAsset: 14
+            .activateAsset,
+            .suspiciousAsset: 14
         case .enableNotifications,
             .accountBlockedMultiSignature: 0
         }
@@ -113,6 +120,8 @@ public struct BannerViewModel {
             return asset?.chain.accountActivationFeeUrl
         case .accountBlockedMultiSignature:
             return Docs.url(.tronMultiSignature)
+        case .suspiciousAsset:
+            return Docs.url(.tokenVerification)
         }
     }
     

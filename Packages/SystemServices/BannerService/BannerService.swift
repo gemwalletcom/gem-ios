@@ -27,7 +27,7 @@ public struct BannerService: Sendable {
             case .accountActivation,
                 .accountBlockedMultiSignature:
                 return true
-            case .stake, .activateAsset:
+            case .stake, .activateAsset, .suspiciousAsset:
                 return false
             }
         }()

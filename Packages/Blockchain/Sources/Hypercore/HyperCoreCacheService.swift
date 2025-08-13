@@ -2,26 +2,31 @@
 
 import Foundation
 import Primitives
-import Keychain
 
 public struct HyperCoreCacheService: Sendable {
     private let cacheService: BlockchainCacheService
-    private let keychain: Keychain
-    
+    private let preferences: HyperCoreSecurePreferences
+    private let config: HyperCoreConfig
+
     private static let referralApprovedKey = "referral_approved"
     private static let builderFeeApprovedKey = "builder_fee_approved"
     private static let agentValidUntilKey = "agent_valid_until"
     private static let userFeesKey = "user_fees"
     private static let userFeesCacheTimeSeconds = 86_400 * 7
     
-    public init(cacheService: BlockchainCacheService, keychain: Keychain = KeychainDefault()) {
+    public init(
+        cacheService: BlockchainCacheService,
+        preferences: HyperCoreSecurePreferences,
+        config: HyperCoreConfig
+    ) {
         self.cacheService = cacheService
-        self.keychain = keychain
+        self.preferences = preferences
+        self.config = config
     }
     
     public func needsAgentApproval(walletAddress: String, checker: () async throws -> [HypercoreAgentSession]) async throws -> Bool {
-        guard let agentAddress = try? keychain.get("\(HyperCoreService.agentAddressKey)_\(walletAddress)") else { return true }
-        
+        guard let agentAddress = try? preferences.get(walletAddress: walletAddress)?.address else { return true }
+
         let currentTime = Int(Date().timeIntervalSince1970)
         if let value = cacheService.getInt(address: agentAddress, key: Self.agentValidUntilKey), currentTime < value {
             return false
@@ -47,7 +52,7 @@ public struct HyperCoreCacheService: Sendable {
     public func needsBuilderFeeApproval(address: String, checker: () async throws -> Int) async throws -> Bool {
         try await checkApproval(address: address, key: Self.builderFeeApprovedKey) {
             let fee = try await checker()
-            return HyperCoreService.maxBuilderFeeBps > fee
+            return config.maxBuilderFeeBps > fee
         }
     }
     

@@ -85,7 +85,7 @@ public struct PerpetualsScene: View {
                 await model.fetch()
             }
         }
-        .onReceive(Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()) { _ in
+        .onReceive(model.timer) { _ in
             Task {
                 await model.fetch()
             }
