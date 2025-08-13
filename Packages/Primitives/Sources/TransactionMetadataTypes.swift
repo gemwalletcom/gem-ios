@@ -14,6 +14,16 @@ public struct TransactionNFTTransferMetadata: Codable, Sendable {
 	}
 }
 
+public struct TransactionPerpetualMetadata: Codable, Sendable {
+	public let pnl: Double
+	public let price: Double
+
+	public init(pnl: Double, price: Double) {
+		self.pnl = pnl
+		self.price = price
+	}
+}
+
 public struct TransactionSwapMetadata: Codable, Sendable {
 	public let fromAsset: AssetId
 	public let fromValue: String

@@ -29,7 +29,7 @@ public struct TransactionViewModel: Sendable {
 
     public var assetImage: AssetImage {
         switch transaction.transaction.metadata {
-        case .null, .swap, .none:
+        case .null, .swap, .perpetual, .none:
             let asset = AssetIdViewModel(assetId: assetId).assetImage
             return AssetImage(
                 type: asset.type,
@@ -204,34 +204,52 @@ public struct TransactionViewModel: Sendable {
         case .tokenApproval:
             return AmountDisplay.symbol(asset: transaction.asset).amount
         case .swap:
-            if case .swap(let meta) = transaction.transaction.metadata,
-               let asset = transaction.assets.first(where: { $0.id == meta.toAsset }) {
-                return AmountDisplay.numeric(
-                    data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: meta.toValue), price: nil),
-                    style: AmountDisplayStyle(sign: .incoming, formatter: .auto, currencyCode: currency)
-                ).amount
+            switch transaction.transaction.metadata {
+            case .swap(let meta):
+                if let asset = transaction.assets.first(where: { $0.id == meta.toAsset }) {
+                    return AmountDisplay.numeric(
+                        data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: meta.toValue), price: nil),
+                        style: AmountDisplayStyle(sign: .incoming, formatter: .auto, currencyCode: currency)
+                    ).amount
+                }
+                return nil
+            case .perpetual(let metadata):
+                return TextValue(
+                    text: "\(metadata.pnl)",
+                    style: .footnote
+                ) // TODO: Perpetual - improve formatting
+            default:
+                return nil
             }
-            return nil
         case .transferNFT:
             return nil
         }
     }
 
 
-    var subtitleExtraTextValue: TextValue? {
-        if case .swap(let meta) = transaction.transaction.metadata,
-           let asset = transaction.assets.first(where: { $0.id == meta.fromAsset }) {
-            return AmountDisplay.numeric(
-                data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: meta.fromValue), price: nil),
-                style: AmountDisplayStyle(
-                    sign: .outgoing,
-                    formatter: .auto,
-                    currencyCode: currency,
-                    textStyle: .footnote
-                )
-            ).amount
+    public var subtitleExtraTextValue: TextValue? {
+        switch transaction.transaction.type {
+        case .swap:
+            switch transaction.transaction.metadata {
+            case .swap(let meta):
+                if let asset = transaction.assets.first(where: { $0.id == meta.fromAsset }) {
+                    return AmountDisplay.numeric(
+                        data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: meta.fromValue), price: nil),
+                        style: AmountDisplayStyle(
+                            sign: .outgoing,
+                            formatter: .auto,
+                            currencyCode: currency,
+                            textStyle: .footnote
+                        )
+                    ).amount
+                }
+                return nil
+            default:
+                return nil
+            }
+        default:
+            return nil
         }
-        return nil
     }
     
     public func addressLink(account: SimpleAccount) -> BlockExplorerLink {

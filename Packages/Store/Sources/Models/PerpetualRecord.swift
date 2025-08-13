@@ -19,6 +19,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         static let volume24h = Column("volume24h")
         static let funding = Column("funding")
         static let leverage = Column("leverage")
+        static let isPinned = Column("isPinned")
     }
     
     public var id: String
@@ -32,6 +33,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
     public var volume24h: Double
     public var funding: Double
     public var leverage: Data
+    public var isPinned: Bool
     
     public init(
         id: String,
@@ -44,7 +46,8 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         openInterest: Double,
         volume24h: Double,
         funding: Double,
-        leverage: Data
+        leverage: Data,
+        isPinned: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -57,9 +60,8 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         self.volume24h = volume24h
         self.funding = funding
         self.leverage = leverage
+        self.isPinned = isPinned
     }
-    
-    // MARK: - Associations
     
     static let positions = hasMany(PerpetualPositionRecord.self).forKey("positions")
     static let asset = belongsTo(AssetRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
@@ -80,11 +82,10 @@ extension PerpetualRecord: CreateTable {
             t.column(Columns.volume24h.name, .double).notNull()
             t.column(Columns.funding.name, .double).notNull()
             t.column(Columns.leverage.name, .blob).notNull()
+            t.column(Columns.isPinned.name, .boolean).notNull().defaults(to: false)
         }
     }
 }
-
-// MARK: - Mapping
 
 extension PerpetualRecord {
     func mapToPerpetual() -> Perpetual {

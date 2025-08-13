@@ -24,8 +24,15 @@ public struct AssetScoreTypeViewModel {
     
     public var hasWarning: Bool {
         switch scoreType {
-        case .suspicious, .unverified: true
-        case .verified: false
+        case .unverified: true
+        case .verified, .suspicious: false
+        }
+    }
+    
+    public var shouldShowBanner: Bool {
+        switch scoreType {
+        case .verified, .unverified: false
+        case .suspicious: true
         }
     }
     

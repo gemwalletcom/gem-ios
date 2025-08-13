@@ -3,7 +3,6 @@
 import BigInt
 import Foundation
 import Formatters
-import Keychain
 import Primitives
 import SwiftHTTPClient
 
@@ -12,8 +11,6 @@ public struct HyperCoreService: Sendable {
     let provider: Provider<HypercoreProvider>
     let cacheService: HyperCoreCacheService
     
-    public static let agentAddressKey: String = "hyperliquid_agent_address"
-    public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
     public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
     public static let referralCode = "GEMWALLET"
     public static let maxBuilderFeeBps = 45 // 0.045%
@@ -23,11 +20,12 @@ public struct HyperCoreService: Sendable {
         provider: Provider<HypercoreProvider>,
         cacheService: BlockchainCacheService
     ) {
+
         self.chain = chain
         self.provider = provider
         self.cacheService = HyperCoreCacheService(
             cacheService: cacheService,
-            keychain: KeychainDefault()
+            preferences: HyperCoreSecurePreferences()
         )
     }
     
@@ -142,6 +140,25 @@ public extension HyperCoreService {
 public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         let response = try await self.provider.request(.broadcast(data: data))
+        
+        // Try to parse as order response first to get oid
+        if let orderResult = try? response.map(as: HypercoreOrderResponse.self),
+           orderResult.status == "ok",
+           let responseData = orderResult.response,
+           let orderData = responseData.data,
+           let statuses = orderData.statuses,
+           let firstStatus = statuses.first {
+            
+            if let filled = firstStatus.filled {
+                return String(filled.oid)
+            } else if let resting = firstStatus.resting {
+                return String(resting.oid)
+            } else if let error = firstStatus.error {
+                throw AnyError(error)
+            }
+        }
+        
+        // Fallback to regular response handling
         let result = try response.map(as: HypercoreResponse.self)
         
         switch result.status {
@@ -283,7 +300,32 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        TransactionChanges(state: .confirmed)
+        guard let oid = UInt64(request.id) else {
+            return TransactionChanges(state: .pending)
+        }
+        
+        let startTime = Int((request.createdAt.timeIntervalSince1970 - 5) * 1000)
+        
+        let fills = try await provider
+            .request(.userFillsByTime(user: request.senderAddress, startTime: startTime))
+            .map(as: [HypercorePerpetualFill].self)
+        
+        guard let matchingFill = fills.first(where: { $0.oid == oid }) else {
+            return TransactionChanges(state: .pending)
+        }
+        
+        return TransactionChanges(
+            state: .confirmed,
+            changes: [
+                .hashChange(old: request.id, new: matchingFill.hash),
+                .metadata(TransactionMetadata.perpetual(
+                    TransactionPerpetualMetadata(
+                        pnl: try Double.from(string: matchingFill.closedPnl),
+                        price: try Double.from(string: matchingFill.px)
+                    )
+                ))
+            ]
+        )
     }
 }
 

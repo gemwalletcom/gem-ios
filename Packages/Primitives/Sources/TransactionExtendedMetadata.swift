@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct SwapMetadata: Sendable {
+public struct TransactionExtendedMetadata: Sendable {
     public let assets: [Asset]
     public let assetPrices: [AssetPrice]
     public let transactionMetadata: TransactionSwapMetadata
@@ -10,7 +10,7 @@ public struct SwapMetadata: Sendable {
     public init(
         assets: [Asset],
         assetPrices: [AssetPrice],
-        transactionMetadata: TransactionSwapMetadata
+        transactionMetadata: TransactionMetadata
     ) {
         self.assets = assets
         self.assetPrices = assetPrices

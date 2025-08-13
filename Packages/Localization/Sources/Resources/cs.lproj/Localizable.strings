@@ -462,3 +462,5 @@
 "lock.footer" = "Chraňte přístup k této aplikaci na svém zařízení";
 "errors.wallets.limit.title" = "Dosažen limit peněženek";
 "errors.wallets.limit.description" = "Dosáhli jste maximálního povoleného počtu peněženek ( %d ). Chcete-li přidat nebo vytvořit novou peněženku, odeberte existující peněženku.";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";

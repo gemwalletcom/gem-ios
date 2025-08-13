@@ -47,7 +47,7 @@ public struct PerpetualPositionViewModel {
     }
     
     public var positionTypeText: String {
-        "\(directionText) \(leverageText)"
+        "\(directionText.uppercased()) \(leverageText)"
     }
     
     public var positionTypeColor: Color {

@@ -127,6 +127,10 @@ public struct PerpetualService: PerpetualServiceable {
         return try await provider.getCandlesticks(symbol: symbol, period: period)
     }
     
+    public func setPinned(_ isPinned: Bool, perpetualId: String) throws {
+        try store.setPinned(for: [perpetualId], value: isPinned)
+    }
+    
     private func createPerpetualAssetBasic(from asset: Asset) -> AssetBasic {
         AssetBasic(
             asset: asset,
