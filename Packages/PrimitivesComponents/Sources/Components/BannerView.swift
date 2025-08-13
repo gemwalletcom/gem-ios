@@ -31,9 +31,7 @@ public struct BannerView: View {
     }
 
     public var body: some View {
-        if banners.isEmpty {
-            EmptyView()
-        } else {
+        if banners.isNotEmpty {
             VStack(spacing: 0) {
                 carouselTabView
                 if banners.count > 1 {
