@@ -224,20 +224,20 @@ public final class TransactionDetailViewModel {
     }
 
     var headerType: TransactionHeaderType {
-        let swapMetadata: SwapMetadata? = {
-            guard let metadata = model.transaction.transaction.metadata, case let .swap(transactionSwapMetadata) = metadata else {
+        let metadata: TransactionExtendedMetadata? = {
+            guard let metadata = model.transaction.transaction.metadata else {
                 return .none
             }
-            return SwapMetadata(
+            return TransactionExtendedMetadata(
                 assets: model.transaction.assets,
                 assetPrices: model.transaction.prices,
-                transactionMetadata: transactionSwapMetadata
+                transactionMetadata: metadata
             )
         }()
         return TransactionHeaderTypeBuilder.build(
             infoModel: infoModel,
             transaction: model.transaction.transaction,
-            swapMetadata: swapMetadata
+            metadata: metadata
         )
     }
 
@@ -300,7 +300,7 @@ extension TransactionDetailViewModel {
 extension TransactionDetailViewModel {
     private var headerLink: URL? {
         switch model.transaction.transaction.metadata {
-        case .null, .nft, .none: .none
+        case .null, .nft, .none, .perpetual: .none
         case let .swap(metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
         }
     }

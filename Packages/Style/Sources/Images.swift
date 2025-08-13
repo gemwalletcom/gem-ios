@@ -85,6 +85,7 @@ public enum Images {
         public static let banxa = Image(.banxa)
         public static let mercuryo = Image(.mercuryo)
         public static let ramp = Image(.ramp)
+        public static let paybis = Image(.paybis)
     }
 
     public enum Actions {

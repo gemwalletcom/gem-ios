@@ -42,7 +42,7 @@ public struct PerpetualService: PerpetualServiceable {
         }) else {
             return
         }
-        let summary = try await provider.getPositions(address: account.address, walletId: wallet.id)
+        let summary = try await provider.getPositions(address: account.address)
         
         try syncProviderBalances(walletId: wallet.id, balance: summary.balance)
         try syncProviderPositions(
@@ -134,7 +134,7 @@ public struct PerpetualService: PerpetualServiceable {
     private func createPerpetualAssetBasic(from asset: Asset) -> AssetBasic {
         AssetBasic(
             asset: asset,
-            properties: AssetProperties(
+            properties: AssetProperties (
                 isEnabled: false,
                 isBuyable: false,
                 isSellable: false,

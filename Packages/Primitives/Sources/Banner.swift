@@ -10,6 +10,7 @@ public enum BannerEvent: String, Codable, CaseIterable, Equatable, Sendable {
 	case enableNotifications
 	case accountBlockedMultiSignature
 	case activateAsset
+	case suspiciousAsset
 }
 
 public enum BannerState: String, Codable, CaseIterable, Equatable, Sendable {

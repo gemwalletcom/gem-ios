@@ -162,7 +162,8 @@ extension WalletSceneViewModel {
                 .enableNotifications,
                 .accountActivation,
                 .accountBlockedMultiSignature,
-                .activateAsset:
+                .activateAsset,
+                .suspiciousAsset:
             Task {
                 try await handleBanner(action: action)
             }
