@@ -35,7 +35,7 @@ public struct TransactionHeaderTypeBuilder {
                 }
             case .transferNFT:
                 guard case let .nft(metadata) = transaction.metadata else {
-                    return .amount(showFiatSubtitle: false)
+                    return .amount(showFiat: false)
                 }
                 return .nft(name: metadata.name, id: metadata.assetId)
             case .perpetualOpenPosition, .perpetualClosePosition:
@@ -74,7 +74,7 @@ public struct TransactionHeaderTypeBuilder {
                 let assetPrices = (metadata?.assetPrices ?? [:]).map { (assetId, price) in
                     price.mapToAssetPrice(assetId: assetId)
                 }
-                
+
                 let model = SwapMetadataViewModel(
                     metadata: TransactionExtendedMetadata(
                         assets: [fromAsset, toAsset],

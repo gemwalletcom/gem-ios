@@ -5,7 +5,7 @@ import Foundation
 public struct TransactionExtendedMetadata: Sendable {
     public let assets: [Asset]
     public let assetPrices: [AssetPrice]
-    public let transactionMetadata: TransactionSwapMetadata
+    public let transactionMetadata: TransactionMetadata
 
     public init(
         assets: [Asset],

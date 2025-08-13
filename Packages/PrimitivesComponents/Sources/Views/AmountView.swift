@@ -14,7 +14,7 @@ public struct AmountView: View {
     public var body: some View {
         VStack(alignment: .center, spacing: 2) {
             Text(viewModel.amount.text)
-                .foregroundStyle(viewModel.amount.style.color)
+                .foregroundStyle(Colors.black)
                 .font(.system(size: 52))
                 .scaledToFit()
                 .fontWeight(viewModel.amount.style.fontWeight ?? .semibold)

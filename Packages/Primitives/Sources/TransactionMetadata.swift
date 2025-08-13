@@ -7,7 +7,7 @@ public enum TransactionMetadata: Codable, Sendable {
     case swap(TransactionSwapMetadata)
     case nft(TransactionNFTTransferMetadata)
     case perpetual(TransactionPerpetualMetadata)
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -47,7 +47,7 @@ public enum TransactionMetadata: Codable, Sendable {
                 return
             }
         }
-    
+
         self = .null
     }
 }
