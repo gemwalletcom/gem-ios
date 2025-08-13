@@ -4,19 +4,19 @@ import Foundation
 import BigInt
 
 extension Transaction {
-    
+
     public static func id(chain: Chain, hash: String) -> String {
         return String(format: "%@_%@", chain.rawValue, hash)
     }
-    
+
     public var valueBigInt: BigInt {
         return BigInt(value) ?? .zero
     }
-    
+
     public var feeBigInt: BigInt {
         return BigInt(fee) ?? .zero
     }
-    
+
     public var assetIds: [AssetId] {
         switch type {
         case .transfer,

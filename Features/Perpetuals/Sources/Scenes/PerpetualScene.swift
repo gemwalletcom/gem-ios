@@ -123,7 +123,8 @@ public struct PerpetualScene: View {
                 Section(header: Text(model.transactionsSectionTitle)) {
                     TransactionsList(
                         explorerService: model.explorerService,
-                        model.transactions
+                        model.transactions,
+                        currency: model.currency
                     )
                     .listRowInsets(.assetListRowInsets)
                 }
