@@ -14,35 +14,31 @@ struct TransactionStoreTests {
         let db = DB.mock()
         let store = TransactionStore(db: db)
         
-        // Add swap BTC->ETH
         let btc = AssetId(chain: .bitcoin, tokenId: nil)
         let eth = AssetId(chain: .ethereum, tokenId: nil)
         let sol = AssetId(chain: .solana, tokenId: nil)
         
+        // Add swap BTC->ETH
         try store.addTransactions(walletId: "w1", transactions: [
-            Transaction(
-                id: "tx1", hash: "h1", assetId: btc, from: "f", to: "t", contract: nil,
-                type: .swap, state: .confirmed, blockNumber: "1", sequence: "1",
-                fee: "1", feeAssetId: btc, value: "100", memo: nil, direction: .outgoing,
-                utxoInputs: [], utxoOutputs: [],
+            .mock(
+                id: "tx1",
+                type: .swap,
+                assetId: btc,
                 metadata: .swap(TransactionSwapMetadata(
                     fromAsset: btc, fromValue: "100", toAsset: eth, toValue: "200", provider: nil
-                )),
-                createdAt: Date()
+                ))
             )
         ])
         
         // Update to BTC->SOL
         try store.addTransactions(walletId: "w1", transactions: [
-            Transaction(
-                id: "tx1", hash: "h1", assetId: btc, from: "f", to: "t", contract: nil,
-                type: .swap, state: .confirmed, blockNumber: "1", sequence: "1",
-                fee: "1", feeAssetId: btc, value: "100", memo: nil, direction: .outgoing,
-                utxoInputs: [], utxoOutputs: [],
+            .mock(
+                id: "tx1",
+                type: .swap,
+                assetId: btc,
                 metadata: .swap(TransactionSwapMetadata(
                     fromAsset: btc, fromValue: "100", toAsset: sol, toValue: "300", provider: nil
-                )),
-                createdAt: Date()
+                ))
             )
         ])
         
