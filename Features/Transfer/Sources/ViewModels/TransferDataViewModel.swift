@@ -63,30 +63,6 @@ struct TransferDataViewModel {
         }
     }
 
-    var recepientAccount: SimpleAccount {
-        SimpleAccount(
-            name: recipientName,
-            chain: chain,
-            address: recipient.address,
-            assetImage: .none
-        )
-    }
-
-    var recipientMode: AddressListItemViewModel.Mode {
-        switch type {
-        case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .tokenApprove,
-                .stake,
-                .account,
-                .generic,
-                .perpetual: .auto(addressStyle: .short)
-        case .swap: .nameOrAddress
-        }
-    }
-
     var appValue: String? {
         switch type {
         case .transfer,

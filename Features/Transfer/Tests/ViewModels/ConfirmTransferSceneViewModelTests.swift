@@ -13,6 +13,9 @@ import PriceServiceTestKit
 import TransactionServiceTestKit  
 import NodeServiceTestKit
 import Localization
+import AddressNameService
+import AddressNameServiceTestKit
+import Store
 
 @MainActor
 struct ConfirmTransferSceneViewModelTests {
@@ -38,6 +41,34 @@ struct ConfirmTransferSceneViewModelTests {
     @Test
     func senderTitle() async {
         #expect(ConfirmTransferSceneViewModel.mock().senderTitle == Localized.Wallet.title)
+    }
+    
+    @Test
+    func recipientAddress() async {
+        let address = "0x1234567890123456789012345678901234567890"
+        let model = ConfirmTransferSceneViewModel.mock(data: .mock(
+            type: .transfer(.mock()),
+            recipient: RecipientData.mock(recipient: .mock(address: address))
+        ))
+
+        #expect(model.recipientAddressViewModel.account.address == address)
+        #expect(model.recipientAddressViewModel.account.name == nil)
+    }
+    
+    @Test
+    func recipientName() async {
+        let db = DB.mockAssets()
+        let address = "bc1qml9s2f9k8wc0882x63lyplzp97srzg2c39fyaw"
+        let model = ConfirmTransferSceneViewModel.mock(
+            data: .mock(
+                type: .transfer(.mock()),
+                recipient: RecipientData.mock(recipient: .mock(address: address))
+            ),
+            addressNameService: .mock(addressStore: .mockAddresses(db: db))
+        )
+
+        #expect(model.recipientAddressViewModel.account.address == address)
+        #expect(model.recipientAddressViewModel.account.name == "Bitcoin")
     }
     
     @Test
@@ -69,7 +100,8 @@ struct ConfirmTransferSceneViewModelTests {
 private extension ConfirmTransferSceneViewModel {
     static func mock(
         wallet: Wallet = .mock(),
-        data: TransferData = .mock()
+        data: TransferData = .mock(),
+        addressNameService: AddressNameService = .mock(addressStore: .mock())
     ) -> ConfirmTransferSceneViewModel {
         ConfirmTransferSceneViewModel(
             wallet: wallet,
@@ -82,6 +114,7 @@ private extension ConfirmTransferSceneViewModel {
                 balanceService: .mock(),
                 priceService: .mock(),
                 transactionService: .mock(),
+                addressNameService: addressNameService,
                 chain: data.chain
             ),
             onComplete: {}
