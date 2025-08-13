@@ -17,7 +17,8 @@ public struct PerpetualProviderFactory {
         HyperCorePerpetualProvider(
             hyperCoreService: HyperCoreService(
                 provider: ProviderFactory.create(with: nodeProvider.node(for: chain)),
-                cacheService: BlockchainCacheService(chain: chain)
+                cacheService: BlockchainCacheService(chain: chain),
+                config: HyperCoreConfig.create()
             )
         )
     }
