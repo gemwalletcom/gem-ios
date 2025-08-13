@@ -6,30 +6,22 @@ import Foundation
 
 public struct HypercoreOrder: Codable, Sendable {
 	public let coin: String
-	public let side: String
 	public let limitPx: String
 	public let sz: String
 	public let oid: UInt64
-	public let timestamp: UInt64
 	public let isTrigger: Bool
 	public let triggerPx: String?
-	public let children: [HypercoreOrder]
 	public let isPositionTpsl: Bool
-	public let orderType: String
 	public let origSz: String
 
-	public init(coin: String, side: String, limitPx: String, sz: String, oid: UInt64, timestamp: UInt64, isTrigger: Bool, triggerPx: String?, children: [HypercoreOrder], isPositionTpsl: Bool, orderType: String, origSz: String) {
+	public init(coin: String, limitPx: String, sz: String, oid: UInt64, isTrigger: Bool, triggerPx: String?, isPositionTpsl: Bool, origSz: String) {
 		self.coin = coin
-		self.side = side
 		self.limitPx = limitPx
 		self.sz = sz
 		self.oid = oid
-		self.timestamp = timestamp
 		self.isTrigger = isTrigger
 		self.triggerPx = triggerPx
-		self.children = children
 		self.isPositionTpsl = isPositionTpsl
-		self.orderType = orderType
 		self.origSz = origSz
 	}
 }

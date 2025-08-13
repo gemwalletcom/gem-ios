@@ -95,6 +95,12 @@ public extension HyperCoreService {
             .request(.spotMetaAndAssetCtxs)
             .map(as: HypercoreTokens.self)
     }
+    
+    func getOpenOrders(user: String) async throws -> [HypercoreOrder] {
+        try await provider
+            .request(.openOrders(user: user))
+            .map(as: [HypercoreOrder].self)
+    }
 }
 
 // MARK: - ChainServiceable
