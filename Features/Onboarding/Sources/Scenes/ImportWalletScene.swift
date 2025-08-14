@@ -21,84 +21,82 @@ struct ImportWalletScene: View {
     }
 
     var body: some View {
-        VStack {
-            Form {
-                Section {
-                    FloatTextField(
-                        model.walletFieldTitle,
-                        text: $model.name,
-                        allowClean: focusedField == .name
-                    )
-                    .focused($focusedField, equals: .name)
-                }
-                Section {
-                    VStack {
-                        if model.showImportTypes {
-                            Picker("", selection: $model.importType) {
-                                ForEach(model.importTypes) { type in
-                                    Text(type.title).tag(type)
-                                }
-                            }
-                            .pickerStyle(.segmented)
-                        }
-                        HStack {
-                            TextField(
-                                model.importType.description,
-                                text: $model.input,
-                                axis: .vertical
-                            )
-                            .autocorrectionDisabled(true)
-                            .textInputAutocapitalization(.never)
-                            .lineLimit(8)
-                            .keyboardType(.asciiCapable)
-                            .frame(minHeight: 80, alignment: .top)
-                            .focused($focusedField, equals: .input)
-                            .toolbar {
-                                if model.importType.showToolbar {
-                                    ToolbarItem(placement: .keyboard) {
-                                        WordSuggestionView(
-                                            words: model.wordsSuggestion,
-                                            selectWord: model.onSelectWord
-                                        )
-                                    }
-                                }
-                            }
-                            .padding(.top, .small + .tiny)
-
-                            if let nameRecordViewModel = model.nameRecordViewModel, model.importType == .address {
-                                NameRecordView(
-                                    model: nameRecordViewModel,
-                                    state: $model.nameResolveState,
-                                    address: $model.input
-                                )
+        Form {
+            Section {
+                FloatTextField(
+                    model.walletFieldTitle,
+                    text: $model.name,
+                    allowClean: focusedField == .name
+                )
+                .focused($focusedField, equals: .name)
+            }
+            Section {
+                VStack {
+                    if model.showImportTypes {
+                        Picker("", selection: $model.importType) {
+                            ForEach(model.importTypes) { type in
+                                Text(type.title).tag(type)
                             }
                         }
-
-                        HStack(alignment: .center, spacing: .medium) {
-                            ListButton(
-                                title: model.pasteButtonTitle,
-                                image: model.pasteButtonImage,
-                                action: model.onPaste
-                            )
-                            if model.type != .multicoin {
-                                ListButton(
-                                    title: model.qrButtonTitle,
-                                    image: model.qrButtonImage,
-                                    action: model.onSelectScanQR
-                                )
+                        .pickerStyle(.segmented)
+                    }
+                    HStack {
+                        TextField(
+                            model.importType.description,
+                            text: $model.input,
+                            axis: .vertical
+                        )
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
+                        .lineLimit(8)
+                        .keyboardType(.asciiCapable)
+                        .frame(minHeight: 80, alignment: .top)
+                        .focused($focusedField, equals: .input)
+                        .toolbar {
+                            if model.importType.showToolbar {
+                                ToolbarItem(placement: .keyboard) {
+                                    WordSuggestionView(
+                                        words: model.wordsSuggestion,
+                                        selectWord: model.onSelectWord
+                                    )
+                                }
                             }
+                        }
+                        .padding(.top, .small + .tiny)
+
+                        if let nameRecordViewModel = model.nameRecordViewModel, model.importType == .address {
+                            NameRecordView(
+                                model: nameRecordViewModel,
+                                state: $model.nameResolveState,
+                                address: $model.input
+                            )
                         }
                     }
-                    .listRowBackground(Colors.white)
-                } footer: {
-                    if let text = model.footerText {
-                        Text(text)
-                    } 
-                }
-            }
-            .listSectionSpacing(.compact)
 
-            Spacer()
+                    HStack(alignment: .center, spacing: .medium) {
+                        ListButton(
+                            title: model.pasteButtonTitle,
+                            image: model.pasteButtonImage,
+                            action: model.onPaste
+                        )
+                        if model.type != .multicoin {
+                            ListButton(
+                                title: model.qrButtonTitle,
+                                image: model.qrButtonImage,
+                                action: model.onSelectScanQR
+                            )
+                        }
+                    }
+                }
+                .listRowBackground(Colors.white)
+            } footer: {
+                if let text = model.footerText {
+                    Text(text)
+                } 
+            }
+        }
+        .listSectionSpacing(.compact)
+        .footerView {
             StateButton(
                 text: Localized.Wallet.Import.action,
                 type: .primary(model.buttonState),
@@ -107,8 +105,6 @@ struct ImportWalletScene: View {
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
         .navigationBarTitle(model.title)
         .alertSheet($model.isPresentingAlertMessage)
         .sheet(isPresented: $model.isPresentingScanner) {

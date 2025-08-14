@@ -17,14 +17,11 @@ public struct ConfirmTransferScene: View {
     }
 
     public var body: some View {
-        VStack {
-            transactionsList
-            Spacer()
+        transactionsList
+        .footerView {
             StateButton(model.confirmButtonModel)
             .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .debounce(
             value: model.feeModel.priority,
