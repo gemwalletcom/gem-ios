@@ -10,17 +10,20 @@ import WalletCorePrimitives
 public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
+    let gateway: GetewayService
     let cacheService: HyperCoreCacheService
     public let config: HyperCoreConfig
     
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>,
+        gateway: GetewayService,
         cacheService: BlockchainCacheService,
         config: HyperCoreConfig
     ) {
         self.chain = chain
         self.provider = provider
+        self.gateway = gateway
         self.config = config
         self.cacheService = HyperCoreCacheService(
             cacheService: cacheService,
@@ -85,12 +88,6 @@ public extension HyperCoreService {
             .map(as: HypercoreUserFee.self)
     }
     
-    func getSpotBalances(user: String) async throws -> HypercoreBalances {
-        try await provider
-            .request(.spotClearinghouseState(user: user))
-            .map(as: HypercoreBalances.self)
-    }
-    
     func getSpotMetadata() async throws -> HypercoreTokens {
         try await provider
             .request(.spotMetaAndAssetCtxs)
@@ -101,12 +98,6 @@ public extension HyperCoreService {
         try await provider
             .request(.openOrders(user: user))
             .map(as: [HypercoreOrder].self)
-    }
-    
-    func getDelegatorSummary(user: String) async throws -> HypercoreStakeBalance {
-        try await provider
-            .request(.delegatorSummary(user: user))
-            .map(as: HypercoreStakeBalance.self)
     }
     
     func getDelegations(user: String) async throws -> [HypercoreDelegationBalance] {
@@ -138,31 +129,15 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func coinBalance(for address: String) async throws -> AssetBalance {
-        let balances = try await getSpotBalances(user: address).balances
-        guard let coin = balances.first(where: { $0.token == 150 }) else {
-            throw AnyError("")
-        }
-        return AssetBalance(
-            assetId: AssetId(chain: chain),
-            balance: Balance(available: try BigInt.from(coin.total, decimals: 18))
-        )
+        try await gateway.coinBalance(for: address)
     }
 
     func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        // let balances = try await getSpotBalances(user: address).balances
-        // let tokens = try await getSpotMetadata().tokens
-        return []
+        try await gateway.tokenBalance(for: address, tokenIds: tokenIds)
     }
 
     func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        let balance = try await getDelegatorSummary(user: address)
-        return AssetBalance(
-            assetId: chain.assetId,
-            balance: Balance(
-                staked: try BigInt.from(balance.delegated, decimals: chain.asset.decimals.asInt),
-                pending: try BigInt.from(balance.totalPendingWithdrawal, decimals: chain.asset.decimals.asInt)
-            )
-        )
+        try await gateway.getStakeBalance(for: address)
     }
 }
 

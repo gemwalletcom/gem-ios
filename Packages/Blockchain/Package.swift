@@ -37,7 +37,7 @@ let package = Package(
                 "Formatters",
                 "Preferences",
             ],
-            path: "Sources"
+            path: "Sources",
         ),
         .target(
             name: "BlockchainTestKit",
