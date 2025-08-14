@@ -5,6 +5,7 @@ import Foundation
 import Formatters
 import Primitives
 import SwiftHTTPClient
+import WalletCorePrimitives
 
 public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
@@ -102,10 +103,22 @@ public extension HyperCoreService {
             .map(as: [HypercoreOrder].self)
     }
     
-    func getDelegatorSummary(user: String) async throws -> HypercoreDelegationBalance {
+    func getDelegatorSummary(user: String) async throws -> HypercoreStakeBalance {
         try await provider
             .request(.delegatorSummary(user: user))
-            .map(as: HypercoreDelegationBalance.self)
+            .map(as: HypercoreStakeBalance.self)
+    }
+    
+    func getDelegations(user: String) async throws -> [HypercoreDelegationBalance] {
+        try await provider
+            .request(.delegations(user: user))
+            .map(as: [HypercoreDelegationBalance].self)
+    }
+    
+    func getValidators() async throws -> [HypercoreValidator] {
+        try await provider
+            .request(.validators)
+            .map(as: [HypercoreValidator].self)
     }
 }
 
@@ -219,11 +232,39 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return []
+        let validators = try await getValidators()
+        return try validators.map { validator in
+            let commission = try Double.from(string: validator.commission)
+            let id = chain.checksumAddress(validator.validator)
+            return DelegationValidator(
+                chain: chain,
+                id: id,
+                name: validator.name,
+                isActive: validator.isActive,
+                commision: commission,
+                apr: apr
+            )
+        }
     }
 
     func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        return []
+        let delegations = try await getDelegations(user: address)
+        return try delegations.map { delegation in
+            let state: DelegationState = .active
+            let balance = try BigInt.from(delegation.amount, decimals: chain.asset.decimals.asInt).description
+            let validator = chain.checksumAddress(delegation.validator)
+            
+            return DelegationBase(
+                assetId: chain.assetId,
+                state: state,
+                balance: balance,
+                shares: balance,
+                rewards: "0",
+                completionDate: .none,
+                delegationId: validator,
+                validatorId: validator
+            )
+        }
     }
 }
 
@@ -352,3 +393,4 @@ extension HypercoreErrorResponse: LocalizedError {
         response
     }
 }
+

@@ -197,14 +197,6 @@ extension AssetSceneViewModel {
         case .more, .deposit, .withdraw:
             fatalError()
         }
-        
-        // guard to avoid crashing if displaying balance
-        if case .stake(let asset) = selectType {
-            guard let _ = StakeChain(rawValue: asset.chain.rawValue) else {
-                return
-            }
-        }
-        
         isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
             type: selectType,
             assetAddress: assetData.assetAddress
