@@ -22,7 +22,7 @@ struct PerpetualListItem: View {
     }
     
     var body: some View {
-        NavigationLink(value: Scenes.Perpetual(perpetualData: perpetualData)) {
+        NavigationLink(value: Scenes.Perpetual(perpetualData)) {
             ListAssetItemView(
                 model: PerpetualItemViewModel(
                     model: PerpetualViewModel(

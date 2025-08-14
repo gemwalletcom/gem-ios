@@ -95,6 +95,18 @@ public extension HyperCoreService {
             .request(.spotMetaAndAssetCtxs)
             .map(as: HypercoreTokens.self)
     }
+    
+    func getOpenOrders(user: String) async throws -> [HypercoreOrder] {
+        try await provider
+            .request(.openOrders(user: user))
+            .map(as: [HypercoreOrder].self)
+    }
+    
+    func getDelegatorSummary(user: String) async throws -> HypercoreDelegationBalance {
+        try await provider
+            .request(.delegatorSummary(user: user))
+            .map(as: HypercoreDelegationBalance.self)
+    }
 }
 
 // MARK: - ChainServiceable
@@ -130,7 +142,14 @@ public extension HyperCoreService {
     }
 
     func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        return nil
+        let balance = try await getDelegatorSummary(user: address)
+        return AssetBalance(
+            assetId: chain.assetId,
+            balance: Balance(
+                staked: try BigInt.from(balance.delegated, decimals: chain.asset.decimals.asInt),
+                pending: try BigInt.from(balance.totalPendingWithdrawal, decimals: chain.asset.decimals.asInt)
+            )
+        )
     }
 }
 

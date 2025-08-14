@@ -24,6 +24,18 @@ public struct HypercoreBalances: Codable, Equatable, Sendable {
 	}
 }
 
+public struct HypercoreDelegationBalance: Codable, Equatable, Sendable {
+	public let delegated: String
+	public let undelegated: String
+	public let totalPendingWithdrawal: String
+
+	public init(delegated: String, undelegated: String, totalPendingWithdrawal: String) {
+		self.delegated = delegated
+		self.undelegated = undelegated
+		self.totalPendingWithdrawal = totalPendingWithdrawal
+	}
+}
+
 public struct HypercoreToken: Codable, Equatable, Sendable {
 	public let name: String
 	public let weiDecimals: Int32

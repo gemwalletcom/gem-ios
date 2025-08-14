@@ -19,13 +19,13 @@ public struct PerpetualService: PerpetualServiceable {
         assetStore: AssetStore,
         priceStore: PriceStore,
         balanceStore: BalanceStore,
-        providerFactory: PerpetualProviderFactory
+        provider: PerpetualProvidable
     ) {
         self.store = store
         self.assetStore = assetStore
         self.priceStore = priceStore
         self.balanceStore = balanceStore
-        self.provider = providerFactory.createProvider()
+        self.provider = provider
     }
     
     public func getPositions(walletId: WalletId) async throws -> [PerpetualPosition] {
