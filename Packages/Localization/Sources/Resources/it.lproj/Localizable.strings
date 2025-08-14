@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "Volume 24 ore";
 "perpetual.entry_price" = "Prezzo d'ingresso";
-"stake.your_staking" = "Il tuo staking";
 "widget.small.name" = "Prezzo del Bitcoin";
 "widget.small.description" = "Tieni traccia del prezzo del Bitcoin";
 "widget.medium.name" = "Prezzo massimo delle criptovalute";

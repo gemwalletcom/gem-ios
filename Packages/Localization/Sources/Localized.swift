@@ -1012,8 +1012,6 @@ public enum Localized {
     public static let validators = Localized.tr("Localizable", "stake.validators", fallback: "Validators")
     /// Stake via Gem Wallet
     public static let viagem = Localized.tr("Localizable", "stake.viagem", fallback: "Stake via Gem Wallet")
-    /// Your Staking
-    public static let yourStaking = Localized.tr("Localizable", "stake.your_staking", fallback: "Your Staking")
     public enum State {
       public enum Empty {
         /// Stake your first %@

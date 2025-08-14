@@ -36,12 +36,15 @@ public struct StakeDetailSceneViewModel {
     public var validatorTitle: String { Localized.Stake.validator }
     public var aprTitle: String { Localized.Stake.apr("") }
     public var stateTitle: String { Localized.Transaction.status }
-    public var balancesTitle: String { Localized.Stake.yourStaking }
     public var manageTitle: String { Localized.Common.manage }
     public var rewardsTitle: String { Localized.Stake.rewards }
     public var unstakeTitle: String { Localized.Transfer.Unstake.title }
     public var redelegateTitle: String { Localized.Transfer.Redelegate.title }
     public var withdrawTitle: String { Localized.Transfer.Withdraw.title }
+    
+    public var validatorHeaderViewModel: HeaderViewModel {
+        ValidatorHeaderViewModel(model: StakeDelegationViewModel(delegation: model.delegation, formatter: .auto))
+    }
 
     public var stateText: String {
         model.state.title
@@ -167,6 +170,30 @@ extension StakeDetailSceneViewModel {
                 value: model.delegation.base.balanceValue
             )
             onTransferAction?(data)
+        }
+    }
+    
+    func onStakeAmountAction() {
+        do {
+            onAmountInputAction?(try stakeRecipientData())
+        } catch {
+            NSLog("staking: unable to create recipient data: \(error)")
+        }
+    }
+    
+    func onRedelegateAction() {
+        do {
+            onAmountInputAction?(try redelegateRecipientData())
+        } catch {
+            NSLog("staking: unable to create recipient data: \(error)")
+        }
+    }
+    
+    func onWithdrawAction() {
+        do {
+            onTransferAction?(try withdrawStakeTransferData())
+        } catch {
+            NSLog("staking: unable to create transfer data: \(error)")
         }
     }
 }
