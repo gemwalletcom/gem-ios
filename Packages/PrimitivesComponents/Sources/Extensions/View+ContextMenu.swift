@@ -3,6 +3,7 @@
 import SwiftUI
 import Style
 import Localization
+import Components
 
 public extension View {
     func contextMenu(_ items: [ContextMenuItemType]) -> some View {

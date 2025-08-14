@@ -197,6 +197,66 @@ public final class ConfirmTransferSceneViewModel {
             selectedQuote: swapData.quote
         )
     }
+    
+    @SectionBuilder<TransferSection>
+    var listSections: [TransferSection] {
+        TransferSection(type: .main) {
+            if let appText = appText {
+                .app(
+                    title: appTitle, 
+                    name: appText, 
+                    image: appAssetImage,
+                    contextMenu: ContextMenuConfiguration(
+                        item: .url(title: websiteTitle, onOpen: onSelectOpenWebsiteURL)
+                    )
+                )
+            }
+            
+            TransferItemContent.wallet(
+                title: senderTitle, 
+                name: senderValue, 
+                image: senderAssetImage,
+                contextMenu: ContextMenuConfiguration(items: [
+                    .copy(value: senderAddress),
+                    .url(title: senderExplorerText, onOpen: onSelectOpenSenderAddressURL)
+                ])
+            )
+            TransferItemContent.network(title: networkTitle, name: networkText, image: networkAssetImage)
+
+            if shouldShowRecipient {
+                .address(viewModel: recipientAddressViewModel)
+            }
+            
+            if shouldShowMemo, let memo = memo {
+                .memo(text: memo)
+            }
+            
+            if let swapDetailsViewModel = swapDetailsViewModel {
+                .swapDetails(viewModel: swapDetailsViewModel)
+            }
+        }
+        
+        TransferSection(type: .fee) {
+            TransferItemContent.fee(
+                title: networkFeeTitle,
+                value: networkFeeValue,
+                fiatValue: networkFeeFiatValue,
+                selectable: shouldShowFeeRatesSelector
+            )
+        }
+
+        if let error = listError {
+            TransferSection(type: .error) {
+                .error(
+                    title: listErrorTitle,
+                    error: error,
+                    action: { [weak self] in
+                        self?.onSelectListError(error: error)
+                    }
+                )
+            }
+        }
+    }
 }
 
 // MARK: - Business Logic
