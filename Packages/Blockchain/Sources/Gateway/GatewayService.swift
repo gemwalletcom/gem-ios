@@ -22,33 +22,33 @@ public struct GetewayService {
 // MARK: - ChainBalanceable
 
 extension GetewayService: ChainBalanceable {
-    public func coinBalance(for address: String) async throws -> Primitives.AssetBalance {
+    public func coinBalance(for address: String) async throws -> AssetBalance {
         try await gateway.coinBalance(address: address).map()
     }
 
-    public func tokenBalance(for address: String, tokenIds: [Primitives.AssetId]) async throws -> [Primitives.AssetBalance] {
+    public func tokenBalance(for address: String, tokenIds: [Primitives.AssetId]) async throws -> [AssetBalance] {
         try await gateway.tokenBalance(address: address, tokenIds: tokenIds.map(\.id)).map {
             try $0.map()
         }
     }
 
-    public func getStakeBalance(for address: String) async throws -> Primitives.AssetBalance? {
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         try await gateway.getStakeBalance(address: address)?.map()
     }
 }
 
-extension AssetBalanceWrapper {
-    func map() throws -> Primitives.AssetBalance {
-        Primitives.AssetBalance(
+extension GemAssetBalance {
+    func map() throws -> AssetBalance {
+        AssetBalance(
             assetId: try AssetId(id: assetId),
             balance: try balance.map()
         )
     }
 }
 
-extension BalanceWrapper {
-    func map() throws -> Primitives.Balance {
-        Primitives.Balance(
+extension GemBalance {
+    func map() throws -> Balance {
+        Balance(
             available: try BigInt.from(string: available),
             frozen: try BigInt.from(string: frozen),
             locked: try BigInt.from(string: locked),
