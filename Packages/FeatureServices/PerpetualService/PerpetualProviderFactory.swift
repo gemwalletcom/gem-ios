@@ -4,6 +4,7 @@ import Foundation
 import Blockchain
 import ChainService
 import Primitives
+import NativeProviderService
 
 public struct PerpetualProviderFactory {
     
@@ -17,6 +18,9 @@ public struct PerpetualProviderFactory {
         HyperCorePerpetualProvider(
             hyperCoreService: HyperCoreService(
                 provider: ProviderFactory.create(with: nodeProvider.node(for: chain)),
+                gateway: GetewayService(
+                    provider: NativeProvider(nodeProvider: nodeProvider)
+                ),
                 cacheService: BlockchainCacheService(chain: chain),
                 config: HyperCoreConfig.create()
             )
