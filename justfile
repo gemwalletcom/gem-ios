@@ -79,7 +79,7 @@ build-package PACKAGE:
 
 show-simulator:
     @echo "Destination: {{SIMULATOR_DEST}}"
-    @xcrun simctl list devices | grep "iPhone 16" | head -1 || true
+    @xcrun simctl list devices | grep "iPhone" | head -5 || true
 
 test-all: show-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
