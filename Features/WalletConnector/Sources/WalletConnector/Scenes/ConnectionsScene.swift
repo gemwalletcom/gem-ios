@@ -22,11 +22,13 @@ public struct ConnectionsScene: View {
                 ButtonListItem(
                     title: model.pasteButtonTitle,
                     image: Images.System.paste,
+                    isLoading: model.isPasteLoading,
                     action: model.onPaste
                 )
                 ButtonListItem(
                     title: model.scanQRCodeButtonTitle,
                     image: Images.System.qrCode,
+                    isLoading: model.isScanLoading,
                     action: model.onScan
                 )
             }
@@ -71,6 +73,10 @@ public struct ConnectionsScene: View {
         .alertSheet($model.isPresentingAlertMessage)
         .navigationTitle(model.title)
         .taskOnce { model.updateSessions() }
+        .onChange(of: model.walletConnectorPresenter?.isPresentingSheet?.id) { _, newValue in
+            if newValue != nil {
+                model.stopLoading()
+            }
+        }
     }
-
 }

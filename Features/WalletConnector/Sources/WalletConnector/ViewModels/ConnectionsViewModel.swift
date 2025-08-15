@@ -12,20 +12,30 @@ import GemstonePrimitives
 @Observable
 @MainActor
 public final class ConnectionsViewModel {
+    enum LoadingAction {
+        case paste
+        case scan
+    }
+
     let service: ConnectionsService
+    let walletConnectorPresenter: WalletConnectorPresenter?
     
     var request: ConnectionsRequest
     var connections: [WalletConnection] = []
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
 
+    var loadingAction: LoadingAction?
+    var isPasteLoading: Bool { loadingAction == .paste }
+    var isScanLoading: Bool { loadingAction == .scan }
+
     public init(
-        service: ConnectionsService
+        service: ConnectionsService,
+        walletConnectorPresenter: WalletConnectorPresenter? = nil
     ) {
         self.service = service
+        self.walletConnectorPresenter = walletConnectorPresenter
         self.request = ConnectionsRequest()
-        self.isPresentingScanner = false
-        self.isPresentingAlertMessage = nil
     }
 
     var title: String { Localized.WalletConnect.title }
@@ -70,6 +80,10 @@ public final class ConnectionsViewModel {
     func updateSessions() {
         service.updateSessions()
     }
+    
+    func stopLoading() {
+        loadingAction = nil
+    }
 }
 
 // MARK: - Actions
@@ -85,12 +99,14 @@ extension ConnectionsViewModel {
         }
 
         Task {
+            loadingAction = .paste
             await connectURI(uri: content)
         }
     }
     
     func onHandleScan(_ result: String) {
         Task {
+            loadingAction = .scan
             await connectURI(uri: result)
         }
     }
@@ -110,6 +126,7 @@ extension ConnectionsViewModel {
         do {
             try await pair(uri: uri)
         } catch {
+            loadingAction = nil
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             NSLog("connectURI error: \(error)")
         }
