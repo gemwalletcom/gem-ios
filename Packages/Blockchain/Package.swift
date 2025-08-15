@@ -23,6 +23,7 @@ let package = Package(
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Formatters", path: "../Formatters"),
         .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "SystemServices", path: "../SystemServices"),
     ],
     targets: [
         .target(
@@ -36,8 +37,9 @@ let package = Package(
                 "GemstonePrimitives",
                 "Formatters",
                 "Preferences",
+                .product(name: "NativeProviderService", package: "SystemServices"),
             ],
-            path: "Sources"
+            path: "Sources",
         ),
         .target(
             name: "BlockchainTestKit",

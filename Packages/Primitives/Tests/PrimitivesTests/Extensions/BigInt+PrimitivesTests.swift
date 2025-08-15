@@ -30,4 +30,10 @@ struct BigInt_PrimitivesTests {
         #expect(BigInt(100).isBetween(0, and: 10) == false)
         #expect(BigInt(0).isBetween(0, and: 1))
     }
+    
+    @Test
+    func testFromString() throws {
+        #expect(try BigInt.from(string: "111").description == "111")
+        #expect(try BigInt.from(string: "0.1").description == "0")
+    }
 }

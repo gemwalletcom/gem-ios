@@ -1,6 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import ChainService
 import CryptoKit
 import Foundation
 import protocol Gemstone.AlienProvider
@@ -8,6 +7,7 @@ import struct Gemstone.AlienTarget
 import enum Gemstone.AlienError
 import typealias Gemstone.Chain
 import Primitives
+import WalletCore
 
 public actor NativeProvider {
     let session: URLSession
@@ -21,6 +21,25 @@ public actor NativeProvider {
         self.session = session
         self.nodeProvider = nodeProvider
         self.cache = MemoryCache()
+    }
+    
+    public init(session: URLSession = .shared, url: URL) {
+        self.session = session
+        self.nodeProvider = StaticNode(url: url)
+        self.cache = MemoryCache()
+    }
+}
+
+public struct StaticNode: NodeURLFetchable {
+    
+    let url: URL
+    
+    public init(url: URL) {
+        self.url = url
+    }
+    
+    public func node(for chain: Primitives.Chain) -> URL {
+        url
     }
 }
 

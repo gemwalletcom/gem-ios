@@ -6,7 +6,6 @@ import SwiftHTTPClient
 
 public enum HypercoreProvider: TargetType {
     case clearinghouseState(user: String)
-    case spotClearinghouseState(user: String)
     case metaAndAssetCtxs
     case spotMetaAndAssetCtxs
     case candleSnapshot(coin: String, interval: String, startTime: Int, endTime: Int)
@@ -17,7 +16,6 @@ public enum HypercoreProvider: TargetType {
     case userFillsByTime(user: String, startTime: Int)
     case extraAgents(user: String)
     case openOrders(user: String)
-    case delegatorSummary(user: String)
     case delegations(user: String)
     case validators
     case broadcast(data: String)
@@ -33,7 +31,6 @@ public enum HypercoreProvider: TargetType {
     public var path: String {
         switch self {
         case .clearinghouseState,
-            .spotClearinghouseState,
             .metaAndAssetCtxs,
             .spotMetaAndAssetCtxs,
             .candleSnapshot,
@@ -44,7 +41,6 @@ public enum HypercoreProvider: TargetType {
             .userFillsByTime,
             .extraAgents,
             .openOrders,
-            .delegatorSummary,
             .delegations,
             .validators:
             return "/info"
@@ -58,11 +54,6 @@ public enum HypercoreProvider: TargetType {
         case .clearinghouseState(let user):
             return .encodable([
                 "type": "clearinghouseState",
-                "user": user
-            ])
-        case .spotClearinghouseState(let user):
-            return .encodable([
-                "type": "spotClearinghouseState",
                 "user": user
             ])
         case .metaAndAssetCtxs:
@@ -118,11 +109,6 @@ public enum HypercoreProvider: TargetType {
         case .openOrders(let user):
             return .encodable([
                 "type": "frontendOpenOrders",
-                "user": user
-            ])
-        case .delegatorSummary(let user):
-            return .encodable([
-                "type": "delegatorSummary",
                 "user": user
             ])
         case .delegations(let user):
