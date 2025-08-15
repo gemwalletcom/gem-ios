@@ -99,18 +99,6 @@ public extension HyperCoreService {
             .request(.openOrders(user: user))
             .map(as: [HypercoreOrder].self)
     }
-    
-    func getDelegations(user: String) async throws -> [HypercoreDelegationBalance] {
-        try await provider
-            .request(.delegations(user: user))
-            .map(as: [HypercoreDelegationBalance].self)
-    }
-    
-    func getValidators() async throws -> [HypercoreValidator] {
-        try await provider
-            .request(.validators)
-            .map(as: [HypercoreValidator].self)
-    }
 }
 
 // MARK: - ChainServiceable
@@ -145,35 +133,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        let response = try await self.provider.request(.broadcast(data: data))
-        
-        // Try to parse as order response first to get oid
-        if let orderResult = try? response.map(as: HypercoreOrderResponse.self),
-           orderResult.status == "ok",
-           let responseData = orderResult.response,
-           let orderData = responseData.data,
-           let statuses = orderData.statuses,
-           let firstStatus = statuses.first {
-            
-            if let filled = firstStatus.filled {
-                return String(filled.oid)
-            } else if let resting = firstStatus.resting {
-                return String(resting.oid)
-            } else if let error = firstStatus.error {
-                throw AnyError(error)
-            }
-        }
-        
-        // Fallback to regular response handling
-        let result = try response.map(as: HypercoreResponse.self)
-        
-        switch result.status {
-        case "ok": return data
-        case "err":
-            throw try response.map(as: HypercoreErrorResponse.self)
-        default:
-            throw ChainServiceErrors.broadcastError(chain)
-        }
+        try await gateway.transactionBroadcast(chain: chain, data: data)
     }
 }
 
@@ -207,39 +167,11 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        let validators = try await getValidators()
-        return try validators.map { validator in
-            let commission = try Double.from(string: validator.commission)
-            let id = chain.checksumAddress(validator.validator)
-            return DelegationValidator(
-                chain: chain,
-                id: id,
-                name: validator.name,
-                isActive: validator.isActive,
-                commision: commission,
-                apr: apr
-            )
-        }
+        try await gateway.validators(chain: chain)
     }
 
     func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        let delegations = try await getDelegations(user: address)
-        return try delegations.map { delegation in
-            let state: DelegationState = .active
-            let balance = try BigInt.from(delegation.amount, decimals: chain.asset.decimals.asInt).description
-            let validator = chain.checksumAddress(delegation.validator)
-            
-            return DelegationBase(
-                assetId: chain.assetId,
-                state: state,
-                balance: balance,
-                shares: balance,
-                rewards: "0",
-                completionDate: .none,
-                delegationId: validator,
-                validatorId: validator
-            )
-        }
+        try await gateway.delegations(chain: chain, address: address)
     }
 }
 
