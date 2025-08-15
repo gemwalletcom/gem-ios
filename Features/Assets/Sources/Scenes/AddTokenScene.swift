@@ -27,9 +27,8 @@ public struct AddTokenScene: View {
     }
 
     public var body: some View {
-        VStack {
-            addTokenList
-            Spacer()
+        addTokenList
+        .footerView {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.state),
@@ -42,8 +41,6 @@ public struct AddTokenScene: View {
             focusedField = .address
         }
         .onChange(of: model.input.address, onAddressClean)
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationDestination(for: Scenes.NetworksSelector.self) { _ in

@@ -16,60 +16,53 @@ public struct SignMessageScene: View {
     }
 
     public var body: some View {
-        VStack {
-            List {
-                Section {
-                    ListItemImageView(
-                        title: Localized.WalletConnect.app,
-                        subtitle: model.appText,
-                        assetImage: model.appAssetImage
-                    )
-                    .contextMenu(
-                        .url(title: Localized.WalletConnect.website, onOpen: model.onViewWebsite)
-                    )
-                    ListItemView(title: Localized.Common.wallet, subtitle: model.walletText)
-                    ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
-                }
+        List {
+            Section {
+                ListItemImageView(
+                    title: Localized.WalletConnect.app,
+                    subtitle: model.appText,
+                    assetImage: model.appAssetImage
+                )
+                .contextMenu(
+                    .url(title: Localized.WalletConnect.website, onOpen: model.onViewWebsite)
+                )
+                ListItemView(title: Localized.Common.wallet, subtitle: model.walletText)
+                ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
+            }
 
-                switch model.messageDisplayType {
-                case .sections(let sections):
-                    ForEach(sections) { section in
-                        Section {
-                            ForEach(section.values) { item in
-                                ListItemView(
-                                    title: item.title,
-                                    subtitle: item.value
-                                )
-                                
-                            }
-                        } header: {
-                            if let title = section.title {
-                                Text(title)
-                            }
+            switch model.messageDisplayType {
+            case .sections(let sections):
+                ForEach(sections) { section in
+                    Section {
+                        ForEach(section.values) { item in
+                            ListItemView(
+                                title: item.title,
+                                subtitle: item.value
+                            )
+                            
+                        }
+                    } header: {
+                        if let title = section.title {
+                            Text(title)
                         }
                     }
-                    NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
-                        model.onViewFullMessage()
-                    }
-                case .text(let string):
-                    Section(Localized.SignMessage.message) {
-                        Text(string)
-                    }
+                }
+                NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
+                    model.onViewFullMessage()
+                }
+            case .text(let string):
+                Section(Localized.SignMessage.message) {
+                    Text(string)
                 }
             }
-            
-            Button(role: .none) { sign() } label: {
-                HStack {
-                    //Image(systemName: model.buttonImage)
-                    Text(model.buttonTitle)
-                }
-            }
-            .buttonStyle(.blue())
-            .padding(.bottom, .scene.bottom)
+        }
+        .footerView {
+            StateButton(
+                text: model.buttonTitle,
+                action: sign
+            )
             .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.title)
         .safariSheet(url: $model.isPresentingUrl)
         .sheet(isPresented: $model.isPresentingMessage) {

@@ -21,20 +21,18 @@ public struct FiatScene: View {
 
     public var body: some View {
         @Bindable var model = model
-        VStack {
-            List {
-                CurrencyInputView(
-                    text: $model.amountText,
-                    config: model.currencyInputConfig
-                )
-                .focused($focusedField, equals: model.input.type == .buy ? .amountBuy : .amountSell)
-                .padding(.top, .medium)
-                .listGroupRowStyle()
-                amountSelectorSection
-                providerSection
-            }
-            .contentMargins([.top], .zero, for: .scrollContent)
-            Spacer()
+        List {
+            CurrencyInputView(
+                text: $model.amountText,
+                config: model.currencyInputConfig
+            )
+            .focused($focusedField, equals: model.input.type == .buy ? .amountBuy : .amountSell)
+            .padding(.top, .medium)
+            .listGroupRowStyle()
+            amountSelectorSection
+            providerSection
+        }
+        .footerView {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.state, showProgress: false),
@@ -42,8 +40,7 @@ public struct FiatScene: View {
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
+        .contentMargins([.top], .zero, for: .scrollContent)
         .frame(maxWidth: .infinity)
         .onChange(of: model.focusField, onChangeFocus)
         .onChange(of: model.input.type, model.onChangeType)
