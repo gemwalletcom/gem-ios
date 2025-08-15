@@ -39,7 +39,7 @@ let package = Package(
                 "Preferences",
                 .product(name: "NativeProviderService", package: "SystemServices"),
             ],
-            path: "Sources"
+            path: "Sources",
         ),
         .target(
             name: "BlockchainTestKit",

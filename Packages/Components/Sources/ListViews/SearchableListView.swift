@@ -24,17 +24,20 @@ public struct SearchableListView<Item: Identifiable & Hashable, Content: View, E
     }
 
     public var body: some View {
-        ListView(
-            items: filteredItems,
-            content: content
-        )
-        .searchable(
-            text: $searchQuery,
-            placement: .navigationBarDrawer(displayMode: .always)
-        )
+        VStack {
+            ListView(
+                items: filteredItems,
+                content: content
+            )
+            .searchable(
+                text: $searchQuery,
+                placement: .navigationBarDrawer(displayMode: .always)
+            )
+        }
         .autocorrectionDisabled(true)
         .scrollDismissesKeyboard(.interactively)
         .scrollContentBackground(.hidden)
+        .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
         .overlay {
             if filteredItems.isEmpty {
                 emptyContent()
