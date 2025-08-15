@@ -197,6 +197,71 @@ public final class ConfirmTransferSceneViewModel {
             selectedQuote: swapData.quote
         )
     }
+    
+    @SectionBuilder<TransferSection>
+    var listSections: [TransferSection] {
+        [
+            .main {
+                if let appText = appText {
+                    .entity(
+                        appTitle,
+                        name: appText,
+                        image: appAssetImage,
+                        contextMenu: ContextMenuConfiguration(
+                            item: .url(title: websiteTitle, onOpen: onSelectOpenWebsiteURL)
+                        )
+                    )
+                }
+
+                [
+                    .sender(
+                        senderTitle,
+                        name: senderValue,
+                        image: senderAssetImage,
+                        menu: ContextMenuConfiguration(items: [
+                            .copy(value: senderAddress),
+                            .url(title: senderExplorerText, onOpen: onSelectOpenSenderAddressURL)
+                        ])
+                    ),
+                    .network(networkTitle, name: networkText, image: networkAssetImage)
+                ]
+
+                if shouldShowRecipient {
+                    .address(viewModel: recipientAddressViewModel)
+                }
+
+                if shouldShowMemo, let memo = memo {
+                    .memo(memo)
+                }
+
+                if let swapDetailsViewModel = swapDetailsViewModel {
+                    .swapDetails(viewModel: swapDetailsViewModel)
+                }
+            },
+            .fee {
+                .fee(
+                    networkFeeTitle,
+                    value: networkFeeValue,
+                    fiat: networkFeeFiatValue,
+                    selectable: shouldShowFeeRatesSelector,
+                    onSelect: onSelectFeePicker,
+                    onInfo: onSelectNetworkFeeInfo
+                )
+            }
+        ]
+
+        if let error = listError {
+            TransferSection.error {
+                .error(
+                    listErrorTitle,
+                    error: error,
+                    action: { [weak self] in
+                        self?.onSelectListError(error: error)
+                    }
+                )
+            }
+        }
+    }
 }
 
 // MARK: - Business Logic

@@ -1,3 +1,4 @@
+
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import BigInt
@@ -88,13 +89,13 @@ public final class TransactionDetailViewModel {
         case .stakeDelegate:
             return Localized.Stake.validator
         case .swap,
-             .stakeUndelegate,
-             .stakeRedelegate,
-             .stakeRewards,
-             .stakeWithdraw,
-             .assetActivation,
-             .perpetualOpenPosition,
-             .perpetualClosePosition:
+                .stakeUndelegate,
+                .stakeRedelegate,
+                .stakeRewards,
+                .stakeWithdraw,
+                .assetActivation,
+                .perpetualOpenPosition,
+                .perpetualClosePosition:
             return .none
         }
     }
@@ -104,13 +105,13 @@ public final class TransactionDetailViewModel {
         case .transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate:
             return model.participant
         case .swap,
-             .stakeUndelegate,
-             .stakeRedelegate,
-             .stakeRewards,
-             .stakeWithdraw,
-             .assetActivation,
-             .perpetualOpenPosition,
-             .perpetualClosePosition:
+                .stakeUndelegate,
+                .stakeRedelegate,
+                .stakeRewards,
+                .stakeWithdraw,
+                .assetActivation,
+                .perpetualOpenPosition,
+                .perpetualClosePosition:
             return .none
         }
     }
@@ -136,7 +137,7 @@ public final class TransactionDetailViewModel {
             name: name,
             chain: chain,
             address: participant,
-            assetImage: .none
+            assetImage: nil
         )
     }
 
@@ -290,5 +291,51 @@ extension TransactionDetailViewModel {
         case .null, .nft, .none, .perpetual: .none
         case let .swap(metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
         }
+    }
+
+    @SectionBuilder<TransactionSection>
+    var listSections: [TransactionSection] {
+        if showSwapAgain {
+            .swapAction {
+                .swapButton(
+                    text: swapAgain,
+                    action: onSelectTransactionHeader
+                )
+            }
+        }
+        
+        [
+            .details {
+                [
+                    .date(dateField, value: date),
+                    .status(
+                        title: statusField,
+                        value: statusText,
+                        style: statusTextStyle,
+                        showProgressView: model.transaction.transaction.state == .pending,
+                        infoAction: onStatusInfo
+                    )
+                ]
+
+                if let recipientAddressViewModel = recipientAddressViewModel {
+                    .address(viewModel: recipientAddressViewModel)
+                }
+
+                if let memo = memo, showMemoField {
+                    .memo(memo)
+                }
+
+                .network(networkField, name: network, image: networkAssetImage)
+
+                if let item = providerListItem {
+                    .provider(item.title, name: item.subtitle, image: item.assetImage)
+                }
+
+                .fee(networkFeeField, value: networkFeeText, fiat: networkFeeFiatText, info: onNetworkFeeInfo)
+            },
+            .explorer {
+                .explorerLink(text: transactionExplorerText, url: transactionExplorerUrl)
+            }
+        ]
     }
 }

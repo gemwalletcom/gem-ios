@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Components
 
 public struct ActionMenuItemView: View {
     private let item: ActionMenuItemType
