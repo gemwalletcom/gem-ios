@@ -72,7 +72,7 @@ public final class RecipientSceneViewModel {
     var actionButtonTitle: String { Localized.Common.continue }
     var actionButtonState: ButtonState {
         switch nameResolveState {
-        case .none: addressInputModel.isValid || addressInputModel.text.isEmpty ? .normal : .disabled
+        case .none: addressInputModel.isValid && addressInputModel.text.isNotEmpty ? .normal : .disabled
         case .loading, .error: .disabled
         case .complete: .normal
         }
