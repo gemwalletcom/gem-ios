@@ -16,9 +16,6 @@ public enum HypercoreProvider: TargetType {
     case userFillsByTime(user: String, startTime: Int)
     case extraAgents(user: String)
     case openOrders(user: String)
-    case delegations(user: String)
-    case validators
-    case broadcast(data: String)
 
     public var baseUrl: URL {
         return URL(string: "")!
@@ -40,12 +37,8 @@ public enum HypercoreProvider: TargetType {
             .userFees,
             .userFillsByTime,
             .extraAgents,
-            .openOrders,
-            .delegations,
-            .validators:
+            .openOrders:
             return "/info"
-        case .broadcast:
-            return "/exchange"
         }
     }
 
@@ -111,17 +104,6 @@ public enum HypercoreProvider: TargetType {
                 "type": "frontendOpenOrders",
                 "user": user
             ])
-        case .delegations(let user):
-            return .encodable([
-                "type": "delegations",
-                "user": user
-            ])
-        case .validators:
-            return .encodable([
-                "type": "validatorSummaries"
-            ])
-        case .broadcast(let data):
-            return .data(try! data.encodedData())
         }
     }
 
