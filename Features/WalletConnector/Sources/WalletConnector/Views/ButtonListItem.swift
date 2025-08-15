@@ -2,10 +2,12 @@
 
 import Foundation
 import SwiftUI
+import Components
 
 struct ButtonListItem: View {
     let title: String
     let image: Image
+    let isLoading: Bool
     let action: () -> Void
     
     var body: some View {
@@ -13,6 +15,7 @@ struct ButtonListItem: View {
             HStack {
                 image
                 Text(title)
+                ActivityIndicator(isAnimating: .constant(isLoading), style: .medium)
             }
         }
     }
