@@ -10,12 +10,15 @@ public struct BitcoinService: Sendable {
     
     let chain: BitcoinChain
     let provider: Provider<BitcoinProvider>
+    let gateway: GetewayService
     
     public init(
         chain: BitcoinChain,
-        provider: Provider<BitcoinProvider>
+        provider: Provider<BitcoinProvider>,
+        gateway: GetewayService,
     ) {
         self.chain = chain
+        self.gateway = gateway
         self.provider = provider
     }
 }
@@ -23,13 +26,6 @@ public struct BitcoinService: Sendable {
 // MARK: - Business Logic
 
 extension BitcoinService {
-    private func account(address: String) async throws -> BitcoinAccount {
-        let address = chain.chain.fullAddress(address: address)
-        return try await provider
-            .request(.balance(address: address))
-            .map(as: BitcoinAccount.self)
-    }
-    
     func getUtxos(address: String) async throws -> [UTXO] {
         let address = chain.chain.fullAddress(address: address)
         return try await provider
@@ -38,18 +34,6 @@ extension BitcoinService {
             .map { $0.mapToUTXO(address: address) }
     }
     
-    private func block(block: Int) async throws -> BitcoinBlock {
-        try await provider
-            .request(.block(block: block))
-            .map(as: BitcoinBlock.self)
-    }
-
-    private func latestBlock() async throws -> BigInt {
-        try await provider
-            .request(.nodeInfo)
-            .map(as: BitcoinNodeInfo.self).blockbook.bestHeight.asBigInt
-    }
-
     func getFeePriority(for blocks: Int) async throws -> String {
         try await provider
             .request(.fee(priority: blocks))
@@ -61,12 +45,7 @@ extension BitcoinService {
 
 extension BitcoinService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let account = try await account(address: address)
-         
-        return Primitives.AssetBalance(
-            assetId: chain.chain.assetId,
-            balance: Balance(available: BigInt(stringLiteral: account.balance))
-        )
+        try await gateway.coinBalance(chain: chain.chain, address: address)
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
@@ -103,18 +82,7 @@ extension BitcoinService: ChainTransactionDataLoadable {
 
 extension BitcoinService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        let result = try await provider
-            .request(.broadcast(data: data))
-            .map(as: BitcoinTransactionBroacastResult.self)
-        
-        if let error = result.error {
-            throw AnyError(error.message)
-        }
-        guard let hash = result.result else {
-            throw AnyError("unknown hash")
-        }
-        
-        return hash
+        try await gateway.transactionBroadcast(chain: chain.chain, data: data)
     }
 }
 
@@ -122,23 +90,7 @@ extension BitcoinService: ChainBroadcastable {
 
 extension BitcoinService: ChainTransactionStateFetchable {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        let transaction = try await provider
-            .request(.transaction(id: request.id))
-            .map(as: BitcoinTransaction.self)
-        
-        return TransactionChanges(
-            state: transaction.blockHeight > 0 ? .confirmed : .pending
-        )
-    }
-}
-
-// MARK: - ChainSyncable
-
-extension BitcoinService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        try await provider
-            .request(.nodeInfo)
-            .map(as: BitcoinNodeInfo.self).blockbook.inSync
+        try await gateway.transactionStatus(chain: chain.chain, hash: request.id)
     }
 }
 
@@ -150,7 +102,7 @@ extension BitcoinService: ChainStakable {
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
+        []
     }
 }
 
@@ -170,11 +122,7 @@ extension BitcoinService: ChainTokenable {
  
 extension BitcoinService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        let block = try await block(block: 1)
-        guard let hash = block.previousBlockHash else {
-            throw AnyError("Unable to get block hash")
-        }
-        return hash
+        try await gateway.chainId(chain: chain.chain)
     }
 }
 
@@ -182,7 +130,7 @@ extension BitcoinService: ChainIDFetchable {
 
 extension BitcoinService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        try await latestBlock()
+        try await gateway.latestBlock(chain: chain.chain)
     }
 }
 

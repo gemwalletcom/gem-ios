@@ -155,15 +155,6 @@ extension AlgorandService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension AlgorandService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        //TODO: Add getInSync check later
-        true
-    }
-}
-
 // MARK: - ChainStakable
 
 extension AlgorandService: ChainStakable {

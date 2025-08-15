@@ -10,7 +10,6 @@ public typealias ChainServiceable =
     ChainIDFetchable &
     ChainLatestBlockFetchable &
     ChainStakable &
-    ChainSyncable &
     ChainTokenable &
     ChainTransactionDataLoadable &
     ChainTransactionPreloadable &
@@ -65,10 +64,6 @@ public struct TransactionStateRequest: Sendable {
 
 public protocol ChainTransactionStateFetchable: Sendable {
     func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges
-}
-
-public protocol ChainSyncable: Sendable {
-    func getInSync() async throws -> Bool
 }
 
 public protocol ChainIDFetchable: Sendable {

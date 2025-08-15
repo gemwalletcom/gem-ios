@@ -175,14 +175,6 @@ public extension HyperCoreService {
     }
 }
 
-// MARK: - ChainSyncable
-
-public extension HyperCoreService {
-    func getInSync() async throws -> Bool {
-        return true
-    }
-}
-
 // MARK: - ChainTokenable
 
 public extension HyperCoreService {

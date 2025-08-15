@@ -379,15 +379,6 @@ extension SuiService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension SuiService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        // TODO: Add getInSync check later
-        true
-    }
-}
-
 // MARK: - ChainStakable
 
 extension SuiService: ChainStakable {

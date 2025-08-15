@@ -287,16 +287,6 @@ extension CosmosService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension CosmosService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        return try await provider
-            .request(.syncing)
-            .map(as: CosmosSyncing.self).syncing.inverted
-    }
-}
-
 // MARK: - ChainStakable
 
 extension CosmosService: ChainStakable {

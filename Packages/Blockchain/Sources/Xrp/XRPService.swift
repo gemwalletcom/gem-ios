@@ -189,15 +189,6 @@ extension XRPService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension XRPService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        //TODO: Add getInSync check later
-        true
-    }
-}
-
 // MARK: - ChainStakable
 
 extension XRPService: ChainStakable {

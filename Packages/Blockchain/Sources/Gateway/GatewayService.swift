@@ -41,8 +41,25 @@ extension GetewayService {
         try await gateway.transactionBroadcast(chain: chain.rawValue, data: data)
     }
     
-    public func transactionStatus(chain: Primitives.Chain, hash: String) async throws -> String {
-        try await gateway.getTransactionStatus(chain: chain.rawValue, hash: hash)
+    public func transactionStatus(chain: Primitives.Chain, hash: String) async throws -> TransactionChanges {
+        let update = try await gateway.getTransactionStatus(chain: chain.rawValue, hash: hash)
+        return TransactionChanges(
+            state: try TransactionState(id: update.state),
+            changes: []
+        )
+    }
+}
+
+// MARK: - State
+
+extension GetewayService {
+    public func chainId(chain: Primitives.Chain) async throws -> String {
+        try await gateway.getChainId(chain: chain.rawValue)
+    }
+    
+    public func latestBlock(chain: Primitives.Chain) async throws -> BigInt {
+        let block = try await gateway.getBlockNumber(chain: chain.rawValue)
+        return BigInt(block)
     }
 }
 
@@ -127,9 +144,18 @@ extension GemDelegationBase {
 }
 
 extension DelegationState {
-    
     public init(id: String) throws {
         if let state = DelegationState(rawValue: id) {
+            self = state
+        } else {
+            throw AnyError("invalid state: \(id)")
+        }
+    }
+}
+
+extension TransactionState {
+    public init(id: String) throws {
+        if let state = TransactionState(rawValue: id) {
             self = state
         } else {
             throw AnyError("invalid state: \(id)")

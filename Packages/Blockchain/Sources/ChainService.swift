@@ -41,7 +41,8 @@ extension ChainService {
         case .bitcoin:
             BitcoinService(
                 chain: BitcoinChain(rawValue: chain.rawValue)!,
-                provider: ProviderFactory.create(with: url)
+                provider: ProviderFactory.create(with: url),
+                gateway: GetewayService(provider: NativeProvider(url: url))
             )
         case .aptos:
             AptosService(chain: chain, provider: ProviderFactory.create(with: url))
