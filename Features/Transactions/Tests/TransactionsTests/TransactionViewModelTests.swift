@@ -84,10 +84,12 @@ final class TransactionViewModelTests {
         #expect(sections[1].type == .explorer)
         
         let detailsSection = sections[0]
+
         #expect(detailsSection.items.contains(where: { item in
-            if case .date = item { return true }
+            if case .common(.detail) = item { return true }
             return false
-        }))
+        })) 
+
         #expect(detailsSection.items.contains(where: { item in
             if case .status = item { return true }
             return false
@@ -96,18 +98,22 @@ final class TransactionViewModelTests {
     
     @Test
     func listSectionsWithSwap() {
+        let fromAsset = Asset.mockEthereum()
+        let toAsset = Asset.mockEthereumUSDT()
         let swapMetadata = TransactionMetadata.swap(
             TransactionSwapMetadata(
-                fromAsset: Asset.mockEthereum().id,
+                fromAsset: fromAsset.id,
                 fromValue: "1000000000000000000",
-                toAsset: Asset.mockEthereumUSDT().id,
+                toAsset: toAsset.id,
                 toValue: "1000000",
-                provider: "uniswap"
+                provider: "across"
             )
         )
         let model = TransactionDetailViewModel.mock(
             transaction: .mock(
-                transaction: .mock(type: .swap, metadata: swapMetadata)
+                transaction: .mock(type: .swap, metadata: swapMetadata),
+                asset: fromAsset,
+                assets: [fromAsset, toAsset]
             )
         )
         let sections = model.listSections
@@ -165,18 +171,22 @@ final class TransactionViewModelTests {
     
     @Test
     func listSectionsWithProvider() {
+        let fromAsset = Asset.mockEthereum()
+        let toAsset = Asset.mockEthereumUSDT()
         let swapMetadata = TransactionMetadata.swap(
             TransactionSwapMetadata(
-                fromAsset: Asset.mockEthereum().id,
+                fromAsset: fromAsset.id,
                 fromValue: "1000000000000000000",
-                toAsset: Asset.mockEthereumUSDT().id,
+                toAsset: toAsset.id,
                 toValue: "1000000",
-                provider: "uniswap"
+                provider: "across"
             )
         )
         let model = TransactionDetailViewModel.mock(
             transaction: .mock(
-                transaction: .mock(type: .swap, metadata: swapMetadata)
+                transaction: .mock(type: .swap, metadata: swapMetadata),
+                asset: fromAsset,
+                assets: [fromAsset, toAsset]
             )
         )
         let sections = model.listSections
@@ -190,9 +200,27 @@ final class TransactionViewModelTests {
     
     @Test
     func listSectionsAlwaysHasExplorer() {
+        let fromAsset = Asset.mockEthereum()
+        let toAsset = Asset.mockEthereumUSDT()
+        let swapMetadata = TransactionMetadata.swap(
+            TransactionSwapMetadata(
+                fromAsset: fromAsset.id,
+                fromValue: "1000000000000000000",
+                toAsset: toAsset.id,
+                toValue: "1000000",
+                provider: "across"
+            )
+        )
+        
         let models = [
             TransactionDetailViewModel.mock(transaction: .mock(transaction: .mock(type: .transfer))),
-            TransactionDetailViewModel.mock(transaction: .mock(transaction: .mock(type: .swap))),
+            TransactionDetailViewModel.mock(
+                transaction: .mock(
+                    transaction: .mock(type: .swap, metadata: swapMetadata),
+                    asset: fromAsset,
+                    assets: [fromAsset, toAsset]
+                )
+            ),
             TransactionDetailViewModel.mock(transaction: .mock(transaction: .mock(type: .tokenApproval)))
         ]
         
