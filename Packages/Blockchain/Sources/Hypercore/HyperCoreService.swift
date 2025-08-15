@@ -258,32 +258,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        guard let oid = UInt64(request.id) else {
-            return TransactionChanges(state: .pending)
-        }
-        
-        let startTime = Int((request.createdAt.timeIntervalSince1970 - 5) * 1000)
-        
-        let fills = try await provider
-            .request(.userFillsByTime(user: request.senderAddress, startTime: startTime))
-            .map(as: [HypercorePerpetualFill].self)
-        
-        guard let matchingFill = fills.first(where: { $0.oid == oid }) else {
-            return TransactionChanges(state: .pending)
-        }
-        
-        return TransactionChanges(
-            state: .confirmed,
-            changes: [
-                .hashChange(old: request.id, new: matchingFill.hash),
-                .metadata(TransactionMetadata.perpetual(
-                    TransactionPerpetualMetadata(
-                        pnl: try Double.from(string: matchingFill.closedPnl),
-                        price: try Double.from(string: matchingFill.px)
-                    )
-                ))
-            ]
-        )
+        try await gateway.transactionStatus(chain: chain, request: request)
     }
 }
 

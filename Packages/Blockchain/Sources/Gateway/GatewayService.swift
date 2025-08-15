@@ -41,14 +41,42 @@ extension GetewayService {
         try await gateway.transactionBroadcast(chain: chain.rawValue, data: data)
     }
     
-    public func transactionStatus(chain: Primitives.Chain, hash: String) async throws -> TransactionChanges {
-        let update = try await gateway.getTransactionStatus(chain: chain.rawValue, hash: hash)
+    public func transactionStatus(chain: Primitives.Chain, request: TransactionStateRequest) async throws -> TransactionChanges {
+        let update = try await gateway.getTransactionStatus(chain: chain.rawValue, request: request.map())
+        let changes: [TransactionChange] = update.changes.compactMap {
+            do {
+                switch $0 {
+                case .hashChange(old: let old, new: let new):
+                    return TransactionChange.hashChange(old: old, new: new)
+                case .metadata(let metadata):
+                    return TransactionChange.metadata(metadata.map())
+                case .blockNumber(let number):
+                    return TransactionChange.blockNumber(try Int.from(string: number))
+                case .networkFee(let fee):
+                    return TransactionChange.networkFee(try BigInt.from(string: fee))
+                }
+            } catch {
+                return nil
+            }
+        }
         return TransactionChanges(
             state: try TransactionState(id: update.state),
-            changes: []
+            changes: changes
         )
     }
 }
+
+// MARK: - Account
+
+extension GetewayService {
+    public func utxos(chain: Primitives.Chain, address: String) async throws -> [UTXO] {
+        try await gateway.getUtxos(chain: chain.rawValue, address: address).map {
+            try $0.map()
+        }
+    }
+}
+
+// TransactionPreload
 
 // MARK: - State
 
@@ -60,6 +88,10 @@ extension GetewayService {
     public func latestBlock(chain: Primitives.Chain) async throws -> BigInt {
         let block = try await gateway.getBlockNumber(chain: chain.rawValue)
         return BigInt(block)
+    }
+    
+    public func fees(chain: Primitives.Chain) async throws -> [FeePriorityValue] {
+        try await gateway.getFees(chain: chain.rawValue).map { try $0.map() }
     }
 }
 
@@ -143,22 +175,44 @@ extension GemDelegationBase {
     }
 }
 
-extension DelegationState {
-    public init(id: String) throws {
-        if let state = DelegationState(rawValue: id) {
-            self = state
-        } else {
-            throw AnyError("invalid state: \(id)")
+extension GemUtxo {
+    func map() throws -> UTXO {
+        UTXO(
+            transaction_id: transactionId,
+            vout: vout,
+            value: value,
+            address: address
+        )
+    }
+}
+
+extension GemFeePriorityValue {
+    func map() throws -> FeePriorityValue {
+        FeePriorityValue(
+            priority: try FeePriority(id: priority),
+            value: try BigInt.from(string: value)
+        )
+    }
+}
+
+extension GemTransactionMetadata {
+    func map() -> TransactionMetadata {
+        switch self {
+        case .perpetual(let perpetualMetadata):
+            return .perpetual(TransactionPerpetualMetadata(
+                pnl: perpetualMetadata.pnl,
+                price: perpetualMetadata.price
+            ))
         }
     }
 }
 
-extension TransactionState {
-    public init(id: String) throws {
-        if let state = TransactionState(rawValue: id) {
-            self = state
-        } else {
-            throw AnyError("invalid state: \(id)")
-        }
+extension TransactionStateRequest {
+    func map() -> GemTransactionStateRequest {
+        GemTransactionStateRequest(
+            id: id,
+            senderAddress: senderAddress,
+            createdAt: Int64(createdAt.timeIntervalSince1970)
+        )
     }
 }

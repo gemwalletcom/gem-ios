@@ -16,24 +16,17 @@ extension BitcoinService {
     public func fee(input: FeeInput, utxos: [UTXO]) throws -> Fee {
         return try BitcoinFeeCalculator.calculate(chain: chain, feeInput: input, utxos: utxos)
     }
-
-    private func getFeeRate(priority: FeePriority) async throws -> FeeRate {
-        let blocksFeePriority = Config.shared.config(for: chain).blocksFeePriority
-        let feePriority = switch priority {
-        case .slow: blocksFeePriority.slow
-        case .normal: blocksFeePriority.normal
-        case .fast: blocksFeePriority.fast
-        }
-        let feePriorityValue = try await getFeePriority(for: feePriority.asInt)
-        let rate = try BigInt.from(feePriorityValue, decimals: Int(chain.chain.asset.decimals)) / 1000
-        return FeeRate(priority: priority, gasPriceType: .regular(gasPrice: max(rate, BigInt(chain.minimumByteFee))))
-    }
 }
 
 extension BitcoinService: ChainFeeRateFetchable {
-    public func feeRates(type: TransferDataType) async -> [FeeRate] {
-        await ConcurrentTask.results(for: FeePriority.allCases) {
-            try await getFeeRate(priority: $0)
+    public func feeRates(type: TransferDataType) async throws  -> [FeeRate] {
+        let rates = try await gateway.fees(chain: chain.chain)
+        return rates.map {
+            let rate = $0.value / 1_000
+            return FeeRate(
+                priority: $0.priority,
+                gasPriceType: .regular(gasPrice: max(rate, BigInt(chain.minimumByteFee)))
+            )
         }
     }
 }
