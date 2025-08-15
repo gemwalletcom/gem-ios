@@ -72,21 +72,6 @@ struct TransferDataViewModel {
         )
     }
 
-    var recipientMode: AddressListItemViewModel.Mode {
-        switch type {
-        case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .tokenApprove,
-                .stake,
-                .account,
-                .generic,
-                .perpetual: .auto(addressStyle: .short)
-        case .swap: .nameOrAddress
-        }
-    }
-
     var appValue: String? {
         switch type {
         case .transfer,

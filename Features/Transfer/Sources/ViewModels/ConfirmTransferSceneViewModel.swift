@@ -98,7 +98,7 @@ public final class ConfirmTransferSceneViewModel {
         AddressListItemViewModel(
             title: dataModel.recipientTitle,
             account: dataModel.recepientAccount,
-            mode: dataModel.recipientMode,
+            mode: .nameOrAddress,
             addressLink: confirmService.getExplorerLink(chain: dataModel.recepientAccount.chain, address: dataModel.recepientAccount.address)
         )
     }
