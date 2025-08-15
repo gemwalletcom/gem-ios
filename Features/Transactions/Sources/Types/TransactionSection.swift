@@ -7,7 +7,6 @@ import PrimitivesComponents
 import Style
 
 public enum TransactionSectionType: String {
-    case header
     case swapAction
     case details
     case explorer
@@ -38,12 +37,6 @@ public struct TransactionSection: ListSectionRepresentable {
 // MARK: - Section Convenience Methods
 
 public extension TransactionSection {
-    static func header(
-        @ListItemBuilder<TransactionListItem> _ items: () -> [TransactionListItem]
-    ) -> Self { 
-        .init(type: .header, items: items()) 
-    }
-
     static func swapAction(
         @ListItemBuilder<TransactionListItem> _ items: () -> [TransactionListItem]
     ) -> Self { 
