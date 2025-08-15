@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import BigInt
+import NativeProviderService
 
 public struct ChainService {
     
@@ -65,7 +66,7 @@ extension ChainService {
             HyperCoreService(
                 chain: chain,
                 provider: ProviderFactory.create(with: url),
-                gateway: GetewayService(chain: chain),
+                gateway: GetewayService(provider: NativeProvider(url: url)),
                 cacheService: BlockchainCacheService(chain: chain),
                 config: HyperCoreConfig.create()
             )

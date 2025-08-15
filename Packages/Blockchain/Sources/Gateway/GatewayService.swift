@@ -1,39 +1,36 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Foundation
 import Gemstone
 import Primitives
 import BigInt
+import NativeProviderService
 
-public struct GetewayService {
-    let chain: Primitives.Chain
+public struct GetewayService: Sendable {
     let gateway: GemGateway
     
     public init(
-        chain: Primitives.Chain
+        provider: NativeProvider
     ) {
-        self.chain = chain
-        self.gateway = GemGateway(
-            chain: chain.rawValue
-            //rpcProvider: NativeProvider(nodeProvider: nodeProvider)
-        )
+        self.gateway = GemGateway(provider: provider)
     }
 }
 
 // MARK: - ChainBalanceable
 
-extension GetewayService: ChainBalanceable {
-    public func coinBalance(for address: String) async throws -> AssetBalance {
-        try await gateway.coinBalance(address: address).map()
+extension GetewayService {
+    public func coinBalance(chain: Primitives.Chain, address: String) async throws -> AssetBalance {
+        try await gateway.coinBalance(chain: chain.rawValue, address: address).map()
     }
 
-    public func tokenBalance(for address: String, tokenIds: [Primitives.AssetId]) async throws -> [AssetBalance] {
-        try await gateway.tokenBalance(address: address, tokenIds: tokenIds.map(\.id)).map {
+    public func tokenBalance(chain: Primitives.Chain, address: String, tokenIds: [Primitives.AssetId]) async throws -> [AssetBalance] {
+        try await gateway.tokenBalance(chain: chain.rawValue, address: address, tokenIds: tokenIds.map(\.id)).map {
             try $0.map()
         }
     }
 
-    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        try await gateway.getStakeBalance(address: address)?.map()
+    public func getStakeBalance(chain: Primitives.Chain, address: String) async throws -> AssetBalance? {
+        try await gateway.getStakeBalance(chain: chain.rawValue, address: address)?.map()
     }
 }
 

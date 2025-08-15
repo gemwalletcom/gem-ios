@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 import BannerService
 import ChainService
 import DeviceService
@@ -21,15 +22,15 @@ import AssetsService
 import TransactionsService
 import TransactionService
 import NFTService
-import WalletsService
 import WalletService
 import AvatarService
 import WalletSessionService
-import AppService
 import ScanService
 import SwapService
 import NameService
 import PerpetualService
+import WalletsService
+import AppService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {

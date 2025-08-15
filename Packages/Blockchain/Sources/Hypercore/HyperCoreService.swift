@@ -129,15 +129,15 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func coinBalance(for address: String) async throws -> AssetBalance {
-        try await gateway.coinBalance(for: address)
+        try await gateway.coinBalance(chain: chain, address: address)
     }
 
     func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        try await gateway.tokenBalance(for: address, tokenIds: tokenIds)
+        try await gateway.tokenBalance(chain: chain, address: address, tokenIds: tokenIds)
     }
 
     func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        try await gateway.getStakeBalance(for: address)
+        try await gateway.getStakeBalance(chain: chain, address: address)
     }
 }
 

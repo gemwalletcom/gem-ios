@@ -28,6 +28,9 @@ let package = Package(
         .library(name: "SwapServiceTestKit", targets: ["SwapServiceTestKit"]),
         .library(name: "AssetsService", targets: ["AssetsService"]),
         .library(name: "AssetsServiceTestKit", targets: ["AssetsServiceTestKit"]),
+        .library(name: "WalletsService", targets: ["WalletsService"]),
+        .library(name: "WalletsServiceTestKit", targets: ["WalletsServiceTestKit"]),
+        .library(name: "AppService", targets: ["AppService"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -263,6 +266,54 @@ let package = Package(
                 "GemstonePrimitives"
             ],
             path: "AssetsService/TestKit"
+        ),
+        .target(
+            name: "WalletsService",
+            dependencies: [
+                "Primitives",
+                "Store",
+                .product(name: "BannerService", package: "SystemServices"),
+                "PriceService",
+                "Preferences",
+                "BalanceService",
+                "AssetsService",
+                "TransactionService",
+                "DiscoverAssetsService",
+                .product(name: "ChainService", package: "ChainServices"),
+                .product(name: "WalletSessionService", package: "SystemServices"),
+                .product(name: "DeviceService", package: "SystemServices")
+            ],
+            path: "WalletsService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "WalletsServiceTestKit",
+            dependencies: [
+                .product(name: "DeviceServiceTestKit", package: "SystemServices"),
+                .product(name: "BannerServiceTestKit", package: "SystemServices"),
+                .product(name: "StoreTestKit", package: "Store"),
+                "BalanceServiceTestKit",
+                "TransactionServiceTestKit",
+                "WalletsService"
+            ],
+            path: "WalletsService/TestKit"
+        ),
+        .target(
+            name: "AppService",
+            dependencies: [
+                "Primitives",
+                "Store",
+                "GemAPI",
+                .product(name: "NodeService", package: "ChainServices"),
+                "Preferences",
+                .product(name: "BannerService", package: "SystemServices"),
+                .product(name: "DeviceService", package: "SystemServices"),
+                "SwapService",
+                "AssetsService",
+                .product(name: "WalletService", package: "SystemServices")
+            ],
+            path: "AppService",
+            exclude: ["Tests"]
         ),
     ]
 )
