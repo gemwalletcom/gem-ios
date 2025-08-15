@@ -14,4 +14,5 @@ public enum StakeChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case sui
 	case smartChain = "smartchain"
 	case tron
+	case hyperCore = "hypercore"
 }

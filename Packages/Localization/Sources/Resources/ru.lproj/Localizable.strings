@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "24-часовой объем";
 "perpetual.entry_price" = "Цена входа";
-"stake.your_staking" = "Ваш Стейкинг";
 "widget.small.name" = "Цена Bitcoin";
 "widget.small.description" = "Отслеживайте цену Bitcoin";
 "widget.medium.name" = "Цены топ криптовалют";

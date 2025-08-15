@@ -177,7 +177,7 @@ public struct ViewModelFactory: Sendable {
     ) -> StakeDetailSceneViewModel {
         StakeDetailSceneViewModel(
             wallet: wallet,
-            model: StakeDelegationViewModel(delegation: delegation),
+            model: StakeDelegationViewModel(delegation: delegation, formatter: .auto),
             service: stakeService,
             onAmountInputAction: onAmountInputAction,
             onTransferAction: onTransferAction

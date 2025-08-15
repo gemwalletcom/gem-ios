@@ -25,6 +25,18 @@ public struct HypercoreBalances: Codable, Equatable, Sendable {
 }
 
 public struct HypercoreDelegationBalance: Codable, Equatable, Sendable {
+	public let validator: String
+	public let amount: String
+	public let lockedUntilTimestamp: UInt64
+
+	public init(validator: String, amount: String, lockedUntilTimestamp: UInt64) {
+		self.validator = validator
+		self.amount = amount
+		self.lockedUntilTimestamp = lockedUntilTimestamp
+	}
+}
+
+public struct HypercoreStakeBalance: Codable, Equatable, Sendable {
 	public let delegated: String
 	public let undelegated: String
 	public let totalPendingWithdrawal: String
@@ -53,5 +65,19 @@ public struct HypercoreTokens: Codable, Equatable, Sendable {
 
 	public init(tokens: [HypercoreToken]) {
 		self.tokens = tokens
+	}
+}
+
+public struct HypercoreValidator: Codable, Equatable, Sendable {
+	public let validator: String
+	public let name: String
+	public let commission: String
+	public let isActive: Bool
+
+	public init(validator: String, name: String, commission: String, isActive: Bool) {
+		self.validator = validator
+		self.name = name
+		self.commission = commission
+		self.isActive = isActive
 	}
 }
