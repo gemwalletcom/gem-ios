@@ -4,9 +4,11 @@ import Testing
 import PrimitivesTestKit
 import PrimitivesComponents
 import Primitives
+import Preferences
 
 @testable import Transactions
 
+@MainActor
 final class TransactionViewModelTests {
 
     @Test
@@ -69,6 +71,136 @@ final class TransactionViewModelTests {
         #expect(unknownViewModel.titleExtraTextValue?.text.contains("0x1234") == true)
         #expect(unknownViewModel.titleExtraTextValue?.text.contains("5678") == true)
     }
+    
+    @Test
+    func listSections() {
+        let model = TransactionDetailViewModel.mock(
+            transaction: .mock(transaction: .mock(type: .transfer))
+        )
+        let sections = model.listSections
+        
+        #expect(sections.count == 2)
+        #expect(sections[0].type == .details)
+        #expect(sections[1].type == .explorer)
+        
+        let detailsSection = sections[0]
+        #expect(detailsSection.items.contains(where: { item in
+            if case .date = item { return true }
+            return false
+        }))
+        #expect(detailsSection.items.contains(where: { item in
+            if case .status = item { return true }
+            return false
+        }))
+    }
+    
+    @Test
+    func listSectionsWithSwap() {
+        let swapMetadata = TransactionMetadata.swap(
+            TransactionSwapMetadata(
+                fromAsset: Asset.mockEthereum().id,
+                fromValue: "1000000000000000000",
+                toAsset: Asset.mockEthereumUSDT().id,
+                toValue: "1000000",
+                provider: "uniswap"
+            )
+        )
+        let model = TransactionDetailViewModel.mock(
+            transaction: .mock(
+                transaction: .mock(type: .swap, metadata: swapMetadata)
+            )
+        )
+        let sections = model.listSections
+        
+        #expect(sections.count == 3)
+        #expect(sections[0].type == .swapAction)
+        #expect(sections[1].type == .details)
+        #expect(sections[2].type == .explorer)
+        
+        let swapActionSection = sections[0]
+        #expect(swapActionSection.items.contains(where: { item in
+            if case .swapButton = item { return true }
+            return false
+        }))
+    }
+    
+    @Test
+    func listSectionsWithRecipient() {
+        let model = TransactionDetailViewModel.mock(
+            transaction: .mock(
+                transaction: .mock(
+                    type: .transfer,
+                    direction: .outgoing,
+                    to: "0x1234567890123456789012345678901234567890"
+                )
+            )
+        )
+        let sections = model.listSections
+        
+        let hasAddress = sections[0].items.contains(where: { item in
+            if case .address = item { return true }
+            return false
+        })
+        #expect(hasAddress)
+    }
+    
+    @Test
+    func listSectionsWithMemo() {
+        let model = TransactionDetailViewModel.mock(
+            transaction: .mock(
+                transaction: .mock(
+                    type: .transfer,
+                    memo: "Test memo"
+                )
+            )
+        )
+        let sections = model.listSections
+        
+        let hasMemo = sections[0].items.contains(where: { item in
+            if case .memo = item { return true }
+            return false
+        })
+        #expect(hasMemo)
+    }
+    
+    @Test
+    func listSectionsWithProvider() {
+        let swapMetadata = TransactionMetadata.swap(
+            TransactionSwapMetadata(
+                fromAsset: Asset.mockEthereum().id,
+                fromValue: "1000000000000000000",
+                toAsset: Asset.mockEthereumUSDT().id,
+                toValue: "1000000",
+                provider: "uniswap"
+            )
+        )
+        let model = TransactionDetailViewModel.mock(
+            transaction: .mock(
+                transaction: .mock(type: .swap, metadata: swapMetadata)
+            )
+        )
+        let sections = model.listSections
+        
+        let hasProvider = sections[1].items.contains(where: { item in
+            if case .common(.detail) = item { return true }
+            return false
+        })
+        #expect(hasProvider)
+    }
+    
+    @Test
+    func listSectionsAlwaysHasExplorer() {
+        let models = [
+            TransactionDetailViewModel.mock(transaction: .mock(transaction: .mock(type: .transfer))),
+            TransactionDetailViewModel.mock(transaction: .mock(transaction: .mock(type: .swap))),
+            TransactionDetailViewModel.mock(transaction: .mock(transaction: .mock(type: .tokenApproval)))
+        ]
+        
+        for model in models {
+            let sections = model.listSections
+            #expect(sections.contains(where: { $0.type == .explorer }))
+        }
+    }
 
     func testTransactionTitle(expectedTitle: String, transaction: Transaction) {
         #expect(TransactionViewModel(explorerService: MockExplorerLink(), transaction: .mock(transaction: transaction), currency: "USD").titleTextValue.text == expectedTitle)
@@ -121,6 +253,18 @@ extension TransactionViewModel {
             explorerService: MockExplorerLink(),
             transaction: extended,
             currency: "USD"
+        )
+    }
+}
+
+private extension TransactionDetailViewModel {
+    static func mock(
+        transaction: TransactionExtended = .mock(),
+        walletId: String = "wallet123"
+    ) -> TransactionDetailViewModel {
+        TransactionDetailViewModel(
+            transaction: transaction,
+            walletId: walletId
         )
     }
 }

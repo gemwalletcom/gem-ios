@@ -9,7 +9,7 @@ public extension View {
     func contextMenu(_ items: [ContextMenuItemType]) -> some View {
         self.contextMenu {
             ForEach(Array(items.enumerated()), id: \.offset) { _, item in
-                build(item)
+                buildContextMenuItem(item)
             }
         }
     }
@@ -18,9 +18,21 @@ public extension View {
         contextMenu([item])
     }
 
-    @ViewBuilder
-    private func build(_ item: ContextMenuItemType) -> some View {
-        switch item {
+    func contextMenu(configuration: ContextMenuConfiguration?) -> some View {
+        Group {
+            if let configuration = configuration {
+                self.contextMenu(configuration.items)
+            } else {
+                self
+            }
+        }
+    }
+}
+
+@MainActor
+@ViewBuilder
+private func buildContextMenuItem(_ item: ContextMenuItemType) -> some View {
+    switch item {
         case let .copy(title, value, onCopied):
             ContextMenuItem(
                 title: title ?? Localized.Common.copy,
@@ -71,4 +83,3 @@ public extension View {
             }
         }
     }
-}

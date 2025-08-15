@@ -77,11 +77,11 @@ struct ConfirmTransferSceneViewModelTests {
         
         let mainSection = sections[0]
         #expect(mainSection.items.contains(where: { item in
-            if case .common(.standard) = item { return true }
+            if case .common(.detail) = item { return true }
             return false
         }))
         #expect(mainSection.items.contains(where: { item in
-            if case .network = item { return true }
+            if case .common(.detail(title: _, subtitle: _, image: _, contextMenu: _)) = item { return true }
             return false
         }))
     }
@@ -135,7 +135,7 @@ struct ConfirmTransferSceneViewModelTests {
         let sections = model.listSections
         
         let hasMemo = sections[0].items.contains(where: { item in
-            if case .common(.text) = item { return true }
+            if case .memo = item { return true }
             return false
         })
         #expect(hasMemo)

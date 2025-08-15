@@ -16,16 +16,16 @@ public enum TransferSectionType: String {
 
 public struct TransferSection: ListSectionRepresentable {
     public let type: TransferSectionType
-    public let items: [TransferItemContent]
+    public let items: [TransferListItem]
 
-    public init(type: TransferSectionType, items: [TransferItemContent]) {
+    public init(type: TransferSectionType, items: [TransferListItem]) {
         self.type = type
         self.items = items
     }
 
     public init(
         type: TransferSectionType,
-        @ListItemBuilder<TransferItemContent> items: () -> [TransferItemContent]
+        @ListItemBuilder<TransferListItem> items: () -> [TransferListItem]
     ) {
         self.type = type
         self.items = items()
@@ -34,41 +34,70 @@ public struct TransferSection: ListSectionRepresentable {
     public var id: String { type.id }
 }
 
-public enum TransferItemContent: ListItemRepresentable {
+// MARK: - Section Convenience Methods
+
+public extension TransferSection {
+    static func main(
+        @ListItemBuilder<TransferListItem> _ items: () -> [TransferListItem]
+    ) -> Self {
+        .init(type: .main, items: items())
+    }
+    
+    static func fee(
+        @ListItemBuilder<TransferListItem> _ items: () -> [TransferListItem]
+    ) -> Self {
+        .init(type: .fee, items: items())
+    }
+    
+    static func error(
+        @ListItemBuilder<TransferListItem> _ items: () -> [TransferListItem]
+    ) -> Self {
+        .init(type: .error, items: items())
+    }
+}
+
+public enum TransferListItem: ListItemRepresentable, CommonListItemFactory {
     case common(CommonListItem)
 
-    case network(title: String, name: String, image: AssetImage)
-    case fee(title: String, value: String? = nil, fiatValue: String? = nil, selectable: Bool = false)
+    case memo(String)
     case address(viewModel: AddressListItemViewModel)
     case swapDetails(viewModel: SwapDetailsViewModel)
+    case selectableFee(title: String, value: String?, fiat: String?, onSelect: VoidAction)
     
     public var id: String {
         switch self {
         case let .common(item): item.id
-        case let .network(_, name, _): "transfer-network-\(name)"
-        case let .fee(title, _, _, _): "transfer-fee-\(title)"
+        case let .memo(text): "transfer-memo-\(text.hashValue)"
         case let .address(viewModel): "transfer-address-\(viewModel.account.address)"
         case .swapDetails: "transfer-swap-details"
+        case let .selectableFee(title, value, fiat, _): "transfer-fee-selectable-\(title)-\((value ?? "").hashValue)"
         }
     }
 }
 
-// MARK: - Content Factory
+// MARK: - Factory Methods
 
-public extension TransferItemContent {
-    static func app(title: String, name: String, image: AssetImage?, contextMenu: ContextMenuConfiguration? = nil) -> Self {
-        .common(.standard(title: title, subtitle: name, image: image, contextMenu: contextMenu))
+public extension TransferListItem {
+    static func sender(_ title: String, name: String, image: AssetImage? = nil, menu: ContextMenuConfiguration? = nil) -> Self {
+        .entity(title, name: name, image: image, contextMenu: menu)
     }
     
-    static func wallet(title: String, name: String, image: AssetImage?, contextMenu: ContextMenuConfiguration? = nil) -> Self {
-        .common(.standard(title: title, subtitle: name, image: image, contextMenu: contextMenu))
+    static func network(_ title: String, name: String, image: AssetImage) -> Self {
+        .entity(title, name: name, image: image)
     }
     
-    static func memo(text: String) -> Self {
-        .common(.text(text))
-    }
-    
-    static func error(title: String, error: Error, action: VoidAction) -> Self {
-        .common(.error(title: title, error: error, action: action))
+    static func fee(
+        _ title: String,
+        value: String? = nil,
+        fiat: String? = nil,
+        selectable: Bool = false,
+        onSelect: VoidAction = nil,
+        onInfo: VoidAction = nil
+    ) -> Self {
+        if selectable {
+            .selectableFee(title: title, value: value, fiat: fiat, onSelect: onSelect)
+        } else {
+            .amount(title, value: value, fiat: fiat, infoAction: onInfo)
+        }
     }
 }

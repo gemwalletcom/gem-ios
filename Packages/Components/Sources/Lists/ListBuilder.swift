@@ -43,8 +43,6 @@ public struct ListItemBuilder<Item: ListItemRepresentable> {
     }
 }
 
-// MARK: - Result Builder for Sections
-
 @resultBuilder
 public struct SectionBuilder<Section: ListSectionRepresentable> {
     public static func buildBlock(_ components: Section...) -> [Section] {

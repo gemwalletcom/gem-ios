@@ -95,58 +95,28 @@ extension ConfirmTransferScene {
     }
     
     @ViewBuilder
-    private func rowContent(_ content: TransferItemContent) -> some View {
+    private func rowContent(_ content: TransferListItem) -> some View {
         switch content {
         case let .common(commonItem):
-            switch commonItem {
-            case let .standard(title: title, subtitle: subtitle, image: image, contextMenu: contextMenu):
-                let view = ListItemImageView(
-                    title: title,
-                    subtitle: subtitle,
-                    assetImage: image
-                )
-                
-                if let contextMenu = contextMenu {
-                    view.contextMenu(contextMenu.items)
-                } else {
-                    view
+            CommonListItemView(item: commonItem)
+                .ifLet(commonItem.contextMenu) { view, menu in
+                    view.contextMenu(menu.items)
                 }
-                
-            case let .error(title: title, error: error, action: action):
-                ListItemErrorView(
-                    errorTitle: title,
-                    error: error,
-                    infoAction: action
-                )
-                
-            case let .text(text):
-                MemoListItemView(memo: text)
-            }
             
-        case let .network(title: title, name: name, image: image):
-            ListItemImageView(
-                title: title,
-                subtitle: name,
-                assetImage: image
+        case let .memo(text):
+            MemoListItemView(memo: text)
+            
+        case let .selectableFee(title, value, fiat, onSelect):
+            NavigationCustomLink(
+                with: ListItemView(
+                    title: title,
+                    subtitle: value,
+                    subtitleExtra: fiat,
+                    placeholders: value == nil ? [.subtitle] : [],
+                    infoAction: model.onSelectNetworkFeeInfo
+                ),
+                action: { @MainActor @Sendable in onSelect?() }
             )
-            
-        case let .fee(title: title, value: value, fiatValue: fiatValue, selectable: selectable):
-            let feeView = ListItemView(
-                title: title,
-                subtitle: value,
-                subtitleExtra: fiatValue,
-                placeholders: value == nil ? [.subtitle] : [],
-                infoAction: model.onSelectNetworkFeeInfo
-            )
-            
-            if selectable {
-                NavigationCustomLink(
-                    with: feeView,
-                    action: model.onSelectFeePicker
-                )
-            } else {
-                feeView
-            }
             
         case let .address(viewModel):
             AddressListItemView(model: viewModel)
