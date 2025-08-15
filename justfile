@@ -77,7 +77,11 @@ build-package PACKAGE:
     SWIFT_OPTIMIZATION_LEVEL=-Onone \
     build | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test-all:
+show-simulator:
+    @echo "Destination: {{SIMULATOR_DEST}}"
+    @xcrun simctl list devices | grep "iPhone 16" | head -1 || true
+
+test-all: show-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
@@ -99,7 +103,7 @@ test-ui:
     -allowProvisioningDeviceRegistration \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test TARGET:
+test TARGET: show-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
