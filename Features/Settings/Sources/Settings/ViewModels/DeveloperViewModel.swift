@@ -11,6 +11,7 @@ import TransactionsService
 import Primitives
 import BigInt
 import PriceService
+import PerpetualService
 
 public struct DeveloperViewModel: Sendable {
     private let walletId: WalletId
@@ -19,6 +20,7 @@ public struct DeveloperViewModel: Sendable {
     private let stakeService: StakeService
     private let bannerService: BannerService
     private let priceService: PriceService
+    private let perpetualService: PerpetualService
 
     public init(
         walletId: WalletId,
@@ -26,7 +28,8 @@ public struct DeveloperViewModel: Sendable {
         assetService: AssetsService,
         stakeService: StakeService,
         bannerService: BannerService,
-        priceService: PriceService
+        priceService: PriceService,
+        perpetualService: PerpetualService
     ) {
         self.walletId = walletId
         self.transactionsService = transactionsService
@@ -34,6 +37,7 @@ public struct DeveloperViewModel: Sendable {
         self.stakeService = stakeService
         self.bannerService = bannerService
         self.priceService = priceService
+        self.perpetualService = perpetualService
     }
 
     var title: String {
@@ -122,6 +126,13 @@ public struct DeveloperViewModel: Sendable {
     func clearPrices() {
         do {
             try priceService.clear()
+        } catch { }
+    }
+    
+    func clearPerpetuals() {
+        do {
+            try perpetualService.clear()
+            Preferences.standard.perpetualMarketsUpdatedAt = .none
         } catch { }
     }
     

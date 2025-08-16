@@ -10,14 +10,14 @@ import WalletCorePrimitives
 public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
-    let gateway: GetewayService
+    let gateway: GatewayService
     let cacheService: HyperCoreCacheService
     public let config: HyperCoreConfig
     
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>,
-        gateway: GetewayService,
+        gateway: GatewayService,
         cacheService: BlockchainCacheService,
         config: HyperCoreConfig
     ) {
@@ -40,23 +40,6 @@ public struct HyperCoreService: Sendable {
 // MARK: - Business Logic
 
 public extension HyperCoreService {
-    func getPositions(user: String) async throws -> HypercoreAssetPositions {
-        return try await provider
-            .request(.clearinghouseState(user: user))
-            .map(as: HypercoreAssetPositions.self)
-    }
-
-    func getMetadata() async throws -> HypercoreMetadataResponse {
-        return try await provider
-            .request(.metaAndAssetCtxs)
-            .map(as: HypercoreMetadataResponse.self)
-    }
-
-    func getCandlesticks(coin: String, interval: String, startTime: Int, endTime: Int) async throws -> [HypercoreCandlestick] {
-        return try await provider
-            .request(.candleSnapshot(coin: coin, interval: interval, startTime: startTime, endTime: endTime))
-            .map(as: [HypercoreCandlestick].self)
-    }
     
     func getUserRole(address: String) async throws -> HypercoreUserRole {
         try await self.provider
@@ -88,17 +71,6 @@ public extension HyperCoreService {
             .map(as: HypercoreUserFee.self)
     }
     
-    func getSpotMetadata() async throws -> HypercoreTokens {
-        try await provider
-            .request(.spotMetaAndAssetCtxs)
-            .map(as: HypercoreTokens.self)
-    }
-    
-    func getOpenOrders(user: String) async throws -> [HypercoreOrder] {
-        try await provider
-            .request(.openOrders(user: user))
-            .map(as: [HypercoreOrder].self)
-    }
 }
 
 // MARK: - ChainServiceable
@@ -261,10 +233,3 @@ public extension HyperCoreService {
         try await gateway.transactionStatus(chain: chain, request: request)
     }
 }
-
-extension HypercoreErrorResponse: LocalizedError {
-    public var errorDescription: String? {
-        response
-    }
-}
-

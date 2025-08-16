@@ -9,11 +9,11 @@ import WalletCore
 public struct BitcoinService: Sendable {
     
     let chain: BitcoinChain
-    let gateway: GetewayService
+    let gateway: GatewayService
     
     public init(
         chain: BitcoinChain,
-        gateway: GetewayService,
+        gateway: GatewayService,
     ) {
         self.chain = chain
         self.gateway = gateway

@@ -41,7 +41,7 @@ extension ChainService {
         case .bitcoin:
             BitcoinService(
                 chain: BitcoinChain(rawValue: chain.rawValue)!,
-                gateway: GetewayService(provider: NativeProvider(url: url))
+                gateway: GatewayService(provider: NativeProvider(url: url))
             )
         case .aptos:
             AptosService(chain: chain, provider: ProviderFactory.create(with: url))
@@ -66,7 +66,7 @@ extension ChainService {
             HyperCoreService(
                 chain: chain,
                 provider: ProviderFactory.create(with: url),
-                gateway: GetewayService(provider: NativeProvider(url: url)),
+                gateway: GatewayService(provider: NativeProvider(url: url)),
                 cacheService: BlockchainCacheService(chain: chain),
                 config: HyperCoreConfig.create()
             )

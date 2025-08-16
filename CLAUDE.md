@@ -278,6 +278,16 @@ public extension Banner {
 
 ## Development Guidelines
 
+### Build Verification
+**CRITICAL REQUIREMENT**: Always verify the project builds successfully before claiming work is complete.
+
+- **ALWAYS run `just build`** before stating that tasks are finished
+- **Fix all build errors** before marking tasks as completed  
+- **Test core changes** with `just generate-stone` when modifying Rust core
+- **Verify iOS integration** after any core modifications
+- If build fails, identify and fix all errors before proceeding
+- Never claim "migration complete" or "tasks done" without a successful build
+
 ### Code Style
 - Follow existing SwiftUI and Swift concurrency patterns
 - Use `@Observable` for ViewModels instead of `ObservableObject`
