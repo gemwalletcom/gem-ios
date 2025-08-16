@@ -47,20 +47,13 @@ extension ChainService {
             AptosService(chain: chain, provider: ProviderFactory.create(with: url))
         case .sui:
             SuiService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .xrp:
-            GatewayChainService(
-                chain: chain,
-                gateway: GatewayService(provider: NativeProvider(url: url))
-            )
         case .near:
             NearService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .stellar:
+        case .algorand, .xrp, .stellar:
             GatewayChainService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))
             )
-        case .algorand:
-            AlgorandService(chain: chain, provider: ProviderFactory.create(with: url))
         case .polkadot:
             PolkadotService(chain: chain, provider: ProviderFactory.create(with: url))
         case .cardano:
