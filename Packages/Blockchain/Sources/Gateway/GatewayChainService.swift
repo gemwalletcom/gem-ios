@@ -103,7 +103,13 @@ extension GatewayChainService: ChainTransactionDataLoadable {
     public func load(input: TransactionInput) async throws -> TransactionData {
         return TransactionData(
             sequence: input.preload.sequence,
-            fee: input.defaultFee
+            block: SignerInputBlock(
+                number: input.preload.blockNumber,
+                hash: input.preload.blockHash
+            ),
+            chainId: input.preload.chainId,
+            fee: input.defaultFee,
+            utxos: input.preload.utxos
         )
     }
 }

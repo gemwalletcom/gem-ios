@@ -48,7 +48,10 @@ extension ChainService {
         case .sui:
             SuiService(chain: chain, provider: ProviderFactory.create(with: url))
         case .xrp:
-            XRPService(chain: chain, provider: ProviderFactory.create(with: url))
+            GatewayChainService(
+                chain: chain,
+                gateway: GatewayService(provider: NativeProvider(url: url))
+            )
         case .near:
             NearService(chain: chain, provider: ProviderFactory.create(with: url))
         case .stellar:
