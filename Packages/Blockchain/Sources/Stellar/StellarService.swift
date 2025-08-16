@@ -197,18 +197,6 @@ extension StellarService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainStakable
-
-extension StellarService: ChainStakable {
-    public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return []
-    }
-
-    public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
-    }
-}
-
 // MARK: - ChainTokenable
 
 extension StellarService: ChainTokenable {
@@ -258,11 +246,7 @@ extension StellarService: ChainLatestBlockFetchable {
 
 // MARK: - ChainAddressStatusFetchable
 
-extension StellarService: ChainAddressStatusFetchable {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
-        []
-    }
-}
+extension StellarService: ChainStakable, ChainAddressStatusFetchable {}
 
 extension StellarAccount {
     static let empty = StellarAccount(sequence: "0", balances: [])

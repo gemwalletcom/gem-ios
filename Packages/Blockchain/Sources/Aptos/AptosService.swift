@@ -190,18 +190,6 @@ extension AptosService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainStakable
-
-extension AptosService: ChainStakable {
-    public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return []
-    }
-
-    public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
-    }
-}
-
 // MARK: - ChainTokenable
 
 extension AptosService: ChainTokenable {
@@ -247,11 +235,7 @@ extension AptosService: ChainLatestBlockFetchable {
 
 // MARK: - ChainAddressStatusFetchable
 
-extension AptosService: ChainAddressStatusFetchable {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
-        []
-    }
-}
+extension AptosService: ChainStakable, ChainAddressStatusFetchable {}
 
 extension AptosAccount {
     static let empty = AptosAccount(sequence_number: "")

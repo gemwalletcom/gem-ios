@@ -181,7 +181,7 @@ extension GemUtxo {
             transaction_id: transactionId,
             vout: Int32(vout),
             value: value,
-            address: "" // TODO: Add address field to GemUtxo
+            address: address
         )
     }
 }

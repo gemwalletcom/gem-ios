@@ -30,6 +30,10 @@ public struct CardanoSigner: Signable {
             throw AnyError(output.errorMessage)
         }
 
+        if output.encoded.hexString.isEmpty {
+            throw AnyError("CardanoSigner: Transaction encoding failed - no data produced")
+        }
+
         return output.encoded.hexString
     }
 }

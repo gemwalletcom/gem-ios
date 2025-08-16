@@ -60,7 +60,7 @@ extension ChainService {
         case .cardano:
             CardanoService(
                 chain: chain,
-                graphql: GraphqlService(provider: ProviderFactory.create(with: url))
+                gateway: GatewayService(provider: NativeProvider(url: url))
             )
         case .hyperCore:
             HyperCoreService(

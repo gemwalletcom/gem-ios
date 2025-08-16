@@ -73,29 +73,7 @@ extension BitcoinService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainStakable
-
-extension BitcoinService: ChainStakable {
-    public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        []
-    }
-
-    public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        []
-    }
-}
-
-// MARK: - ChainTokenable
-
-extension BitcoinService: ChainTokenable {
-    public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
-    }
-    
-    public func getIsTokenAddress(tokenId: String) -> Bool {
-        false
-    }
-}
+extension BitcoinService: ChainStakable, ChainTokenable {}
 
 // MARK: - ChainIDFetchable
  

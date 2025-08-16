@@ -155,18 +155,6 @@ extension AlgorandService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainStakable
-
-extension AlgorandService: ChainStakable {
-    public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return []
-    }
-
-    public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
-    }
-}
-
 // MARK: - ChainTokenable
 
 extension AlgorandService: ChainTokenable {
@@ -209,10 +197,4 @@ extension AlgorandService: ChainLatestBlockFetchable {
 }
 
 
-// MARK: - ChainAddressStatusFetchable
-
-extension AlgorandService: ChainAddressStatusFetchable {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
-        []
-    }
-}
+extension AlgorandService: ChainStakable, ChainAddressStatusFetchable {}

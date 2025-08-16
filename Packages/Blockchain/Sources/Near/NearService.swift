@@ -171,18 +171,6 @@ extension NearService: ChainStakable {
     }
 }
 
-// MARK: - ChainTokenable
-
-extension NearService: ChainTokenable {
-    public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
-    }
-    
-    public func getIsTokenAddress(tokenId: String) -> Bool {
-        false
-    }
-}
-
 // MARK: - ChainIDFetchable
  
 extension NearService: ChainIDFetchable {
@@ -210,10 +198,4 @@ extension NearRPCError: LocalizedError {
     }
 }
 
-// MARK: - ChainAddressStatusFetchable
-
-extension NearService: ChainAddressStatusFetchable {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
-        []
-    }
-}
+extension NearService: ChainTokenable, ChainAddressStatusFetchable {}

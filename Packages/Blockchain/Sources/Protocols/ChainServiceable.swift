@@ -98,3 +98,29 @@ public extension ChainFeeRateFetchable {
         }
     }
 }
+
+public extension ChainStakable {
+    func getValidators(apr: Double) async throws -> [DelegationValidator] {
+        return []
+    }
+
+    func getStakeDelegations(address: String) async throws -> [DelegationBase] {
+        return []
+    }
+}
+
+public extension ChainTokenable {
+    func getTokenData(tokenId: String) async throws -> Asset {
+        throw AnyError("Not Implemented")
+    }
+    
+    func getIsTokenAddress(tokenId: String) -> Bool {
+        return false
+    }
+}
+
+public extension ChainAddressStatusFetchable {
+    func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        return []
+    }
+}
