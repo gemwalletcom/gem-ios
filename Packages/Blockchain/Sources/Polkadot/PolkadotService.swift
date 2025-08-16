@@ -222,18 +222,6 @@ extension PolkadotService: ChainStakable {
     }
 }
 
-// MARK: - ChainTokenable
-
-extension PolkadotService: ChainTokenable {
-    public func getTokenData(tokenId: String) async throws -> Asset {
-        fatalError("unimplemented")
-    }
-    
-    public func getIsTokenAddress(tokenId: String) -> Bool {
-        return false
-    }
-}
-
 // MARK: - ChainIDFetchable
  
 extension PolkadotService: ChainIDFetchable {
@@ -250,14 +238,7 @@ extension PolkadotService: ChainLatestBlockFetchable {
     }
 }
 
-
-// MARK: - ChainAddressStatusFetchable
-
-extension PolkadotService: ChainAddressStatusFetchable {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
-        []
-    }
-}
+extension PolkadotService: ChainTokenable, ChainAddressStatusFetchable { }
 
 extension PolkadotTransactionBroadcastError: LocalizedError {
     public var errorDescription: String? {

@@ -77,7 +77,7 @@ public protocol ChainStakable: Sendable {
 
 public protocol ChainTokenable: Sendable {
     func getTokenData(tokenId: String) async throws -> Asset
-    func getIsTokenAddress(tokenId: String) -> Bool
+    func getIsTokenAddress(tokenId: String) async throws -> Bool
 }
 
 public protocol ChainLatestBlockFetchable: Sendable {

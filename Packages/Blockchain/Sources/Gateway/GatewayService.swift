@@ -24,7 +24,9 @@ extension GatewayService {
     }
 
     public func tokenBalance(chain: Primitives.Chain, address: String, tokenIds: [Primitives.AssetId]) async throws -> [AssetBalance] {
-        try await gateway.getBalanceTokens(chain: chain.rawValue, address: address, tokenIds: tokenIds.map(\.id)).map {
+        try await gateway
+            .getBalanceTokens(chain: chain.rawValue, address: address, tokenIds: tokenIds.compactMap(\.tokenId))
+            .map {
             try $0.map()
         }
     }
@@ -95,6 +97,26 @@ extension GatewayService {
     }
 }
 
+// MARK: - Token
+
+extension GatewayService {
+    public func tokenData(chain: Primitives.Chain, tokenId: String) async throws -> Asset {
+        try await gateway.getTokenData(chain: chain.rawValue, tokenId: tokenId).map()
+    }
+    
+    public func isTokenAddress(chain: Primitives.Chain, tokenId: String) async throws -> Bool {
+        try await gateway.getIsTokenAddress(chain: chain.rawValue, tokenId: tokenId)
+    }
+}
+
+// MARK: - Transaction Preload
+
+extension GatewayService {
+    public func transactionPreload(chain: Primitives.Chain, input: TransactionPreloadInput) async throws -> TransactionPreload {
+        try await gateway.getTransactionPreload(chain: chain.rawValue, input: input.map()).map()
+    }
+}
+
 // MARK: - Staking
 
 extension GatewayService {
@@ -127,7 +149,30 @@ extension GemAssetBalance {
     func map() throws -> AssetBalance {
         AssetBalance(
             assetId: try AssetId(id: assetId),
-            balance: try balance.map()
+            balance: try balance.map(),
+            isActive: isActive
+        )
+    }
+}
+
+extension TransactionPreloadInput {
+    func map() -> GemTransactionPreloadInput {
+        GemTransactionPreloadInput(
+            senderAddress: senderAddress,
+            destinationAddress: destinationAddress
+        )
+    }
+}
+
+extension GemTransactionPreload {
+    func map() throws -> TransactionPreload {
+        TransactionPreload(
+            blockHash: blockHash,
+            blockNumber: Int(blockNumber),
+            utxos: try utxos.map { try $0.map() },
+            sequence: Int(sequence),
+            chainId: chainId,
+            isDestinationAddressExist: isDestinationAddressExist
         )
     }
 }
@@ -150,7 +195,7 @@ extension GemBalance {
 extension GemDelegationValidator {
     func map() throws -> DelegationValidator {
         DelegationValidator(
-            chain: .hyperCore, // TODO: Pass chain context from gateway call
+            chain: try Chain(id: chain),
             id: id,
             name: name,
             isActive: isActive,
@@ -163,10 +208,10 @@ extension GemDelegationValidator {
 extension GemDelegationBase {
     func map() throws -> DelegationBase {
         DelegationBase(
-            assetId: AssetId(chain: .hyperCore, tokenId: nil), // TODO: Pass asset context from gateway call
+            assetId: try AssetId(id: assetId),
             state: try DelegationState(id: delegationState),
             balance: balance,
-            shares: "0", // TODO: Add shares field to GemDelegationBase
+            shares: shares,
             rewards: rewards,
             completionDate: completionDate.map { Date(timeIntervalSince1970: TimeInterval($0)) },
             delegationId: delegationId,
@@ -342,4 +387,3 @@ extension GemChartCandleStick {
         )
     }
 }
-

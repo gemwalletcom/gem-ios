@@ -45,3 +45,6 @@ sources.png
 
 # Git-specific
 *.orig
+
+# rust
+target/

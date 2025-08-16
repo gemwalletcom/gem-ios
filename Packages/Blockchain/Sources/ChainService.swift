@@ -52,7 +52,10 @@ extension ChainService {
         case .near:
             NearService(chain: chain, provider: ProviderFactory.create(with: url))
         case .stellar:
-            StellarService(chain: chain, provider: ProviderFactory.create(with: url))
+            GatewayChainService(
+                chain: chain,
+                gateway: GatewayService(provider: NativeProvider(url: url))
+            )
         case .algorand:
             AlgorandService(chain: chain, provider: ProviderFactory.create(with: url))
         case .polkadot:
