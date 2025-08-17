@@ -47,9 +47,7 @@ extension ChainService {
             AptosService(chain: chain, provider: ProviderFactory.create(with: url))
         case .sui:
             SuiService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .near:
-            NearService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .algorand, .xrp, .stellar:
+        case .algorand, .xrp, .stellar, .near:
             GatewayChainService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))
