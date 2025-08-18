@@ -31,10 +31,18 @@ public struct WalletScene: View {
             }
             .cleanListRow()
 
-            if $preferences.isDeveloperEnabled.wrappedValue && model.wallet.isMultiCoins {
+            if ($preferences.isDeveloperEnabled.wrappedValue || preferences.preferences.isPerpetualEnabled) && model.wallet.isMultiCoins {
                 Section {
-                    NavigationLink(value: Scenes.Perpetuals()) {
-                        ListItemView(title: "Perpetuals")
+                    PerpetualsPreviewView(wallet: model.wallet)
+                        .listRowInsets(.assetListRowInsets)
+                } header: {
+                    HStack {
+                        Text("PERPETUALS")
+                        Spacer()
+                        NavigationLink(value: Scenes.Perpetuals()) {
+                            SectionHeaderActionView(title: Localized.Common.manage)
+                        }
+                        .buttonStyle(.borderless)
                     }
                 }
             }

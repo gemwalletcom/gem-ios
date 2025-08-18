@@ -74,7 +74,10 @@ public struct LocalKeystore: Keystore {
             return []
         }
         let password = try keystorePassword.getPassword()
+        
+        // Some users might expirience long launch time due to large number of wallets to process, each one takes 100-300ms to process.
         return try wallets
+            .prefix(25)
             .map {
                 let existingChains = $0.accounts.map(\.chain)
                 return try walletKeyStore.addChains(

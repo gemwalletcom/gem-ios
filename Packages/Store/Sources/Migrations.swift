@@ -18,6 +18,7 @@ public struct Migrations {
         try? db.execute(sql: "DELETE FROM \(PriceRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(AssetSearchRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(AssetLinkRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
+        try? db.execute(sql: "DELETE FROM \(PerpetualRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(AssetRecord.databaseTableName) WHERE chain = ?", arguments: [chain])
     }
     
@@ -107,56 +108,56 @@ public struct Migrations {
         }
         
         migrator.registerMigration("Add rewards to \(BalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: BalanceRecord.Columns.rewards.name, .text)
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.rewards.name, .text)
                     .defaults(to: "0")
             }
         }
         
         migrator.registerMigration("Add reserved to \(BalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: BalanceRecord.Columns.reserved.name, .text)
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.reserved.name, .text)
                     .defaults(to: "0")
             }
         }
         
         migrator.registerMigration("Add updatedAt to \(BalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: BalanceRecord.Columns.updatedAt.name, .date)
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.updatedAt.name, .date)
             }
         }
         
         migrator.registerMigration("Add isSellable to \(AssetRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetRecord.databaseTableName) { t in
-                t.add(column: AssetRecord.Columns.isSellable.name, .boolean)
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.isSellable.name, .boolean)
                     .defaults(to: false)
             }
         }
         
         migrator.registerMigration("Add isStakeable to \(AssetRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetRecord.databaseTableName) { t in
-                t.add(column: AssetRecord.Columns.isStakeable.name, .boolean)
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.isStakeable.name, .boolean)
                     .defaults(to: false)
             }
         }
         
         migrator.registerMigration("Add rank to \(AssetRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetRecord.databaseTableName) { t in
-                t.add(column: AssetRecord.Columns.rank.name, .numeric).defaults(to: 0)
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.rank.name, .numeric).defaults(to: 0)
             }
         }
         
         migrator.registerMigration("Add isHidden to \(BalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: BalanceRecord.Columns.isHidden.name, .boolean)
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.isHidden.name, .boolean)
                     .defaults(to: false)
                     .indexed()
             }
         }
         
         migrator.registerMigration("Add lastUsedAt to \(BalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: BalanceRecord.Columns.lastUsedAt.name, .date)
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.lastUsedAt.name, .date)
             }
         }
         
@@ -289,21 +290,21 @@ public struct Migrations {
             try? AddressRecord.create(db: db)
         }
         
-        migrator.registerMigration("Add Perpetuals") { db in
+        migrator.registerMigration("Add Perpetuals tables") { db in
+            try? Self.clearChainData(db, chain: "hypercore")
+            
             try? db.drop(table: PerpetualRecord.databaseTableName)
             try? db.drop(table: PerpetualPositionRecord.databaseTableName)
             
-            try? Self.clearChainData(db, chain: "hypercore")
-
             try? PerpetualRecord.create(db: db)
             try? PerpetualPositionRecord.create(db: db)
         }
         
         migrator.registerMigration("Add withdrawable to \(BalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: BalanceRecord.Columns.withdrawable.name, .text)
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.withdrawable.name, .text)
                     .defaults(to: "0")
-                t.add(column: BalanceRecord.Columns.withdrawableAmount.name, .double)
+                $0.add(column: BalanceRecord.Columns.withdrawableAmount.name, .double)
                     .defaults(to: 0)
             }
         }

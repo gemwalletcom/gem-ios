@@ -27,6 +27,7 @@ public final class PerpetualsSceneViewModel {
     
     private let onSelectAssetType: ((SelectAssetType) -> Void)?
     
+    
     public init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
@@ -79,7 +80,7 @@ extension PerpetualsSceneViewModel {
     }
     
     func updateMarkets() async {
-        guard preferences.perpetualMarketsUpdatedAt.isOutdated(byDays: 1) else { return }
+        guard preferences.perpetualMarketsUpdatedAt.isOutdated(byHours: 12) else { return }
         
         do {
             try await perpetualService.updateMarkets()

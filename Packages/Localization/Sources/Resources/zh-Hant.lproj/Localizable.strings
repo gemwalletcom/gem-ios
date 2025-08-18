@@ -444,7 +444,7 @@
 "info.open_interest.description" = "未平倉合約量代表所有尚未結算的永續合約總價值，提供市場活動和流動性的參考。";
 "info.no_quote.description" = "無法返回所選代幣對的報價，可能是由於數量少、缺乏流動性或技術限制。";
 "perpetual.positions" = "倉位";
-"perpetual.size" = "尺寸";
+"perpetual.size" = "倉位大小";
 "perpetual.margin" = "利潤";
 "perpetual.position" = "倉位";
 "perpetual.close_position" = "平倉";
@@ -453,7 +453,6 @@
 "perpetual.short" = "做空";
 "markets.daily_volume" = "24小時交易量";
 "perpetual.entry_price" = "入場價格";
-"stake.your_staking" = "您的質押";
 "widget.small.name" = "比特幣價格";
 "widget.small.description" = "追蹤比特幣價格";
 "widget.medium.name" = "最高加密貨幣價格";
@@ -462,3 +461,5 @@
 "lock.footer" = "保護您設備上對此應用的訪問";
 "errors.wallets.limit.title" = "錢包已達上限";
 "errors.wallets.limit.description" = "您已達到允許的最大錢包數量（ %d ）。請移除現有錢包以新增或建立新錢包。";
+"banner.asset_status.title" = "可疑資產";
+"banner.asset_status.description" = "代幣可能不安全或具有誤導性。請僅在完全信任的情況下繼續操作。";

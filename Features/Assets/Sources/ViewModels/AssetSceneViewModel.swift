@@ -72,7 +72,9 @@ public final class AssetSceneViewModel: Sendable {
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
     var showBalances: Bool { assetDataModel.showBalances }
-    var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
+    var showStakedBalance: Bool {
+        assetDataModel.isStakeEnabled || assetData.balances.contains(where: { $0.key == .staked || $0.key == .pending })
+    }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showTransactions: Bool { transactions.isNotEmpty }
     var showManageToken: Bool { !assetData.metadata.isEnabled }
@@ -231,6 +233,7 @@ extension AssetSceneViewModel {
             Task {
                 try await bannerService.handleAction(action)
             }
+        case .suspiciousAsset: break
         }
         onSelect(url: action.url)
     }

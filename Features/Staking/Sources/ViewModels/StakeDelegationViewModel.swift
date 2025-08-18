@@ -15,7 +15,7 @@ import Localization
 public struct StakeDelegationViewModel: Sendable {
     
     public let delegation: Delegation
-    private let formatter = ValueFormatter(style: .medium)
+    private let formatter: ValueFormatter
     private let validatorImageFormatter = AssetImageFormatter()
     private let exploreService: ExplorerService = .standard
     private let priceFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
@@ -36,8 +36,9 @@ public struct StakeDelegationViewModel: Sendable {
         return formatter
     }()
     
-    public init(delegation: Delegation) {
+    public init(delegation: Delegation, formatter: ValueFormatter = ValueFormatter(style: .short)) {
         self.delegation = delegation
+        self.formatter = formatter
     }
     
     private var asset: Asset {
@@ -48,8 +49,11 @@ public struct StakeDelegationViewModel: Sendable {
         delegation.base.state
     }
     
-    public var stateText: String {
-        delegation.base.state.title
+    public var stateText: String? {
+        switch state {
+        case .active: nil
+        case .pending, .undelegating, .inactive, .activating, .deactivating, .awaitingWithdrawal: delegation.base.state.title
+        }
     }
     
     public var titleStyle: TextStyle {
@@ -141,7 +145,7 @@ public struct StakeDelegationViewModel: Sendable {
         return delegation.validator.name
     }
     
-    public var validatorImage: AssetImage? {
+    public var validatorImage: AssetImage {
         AssetImage(
             type: String(validatorText.first ?? " "),
             imageURL: validatorImageFormatter.getValidatorUrl(chain: asset.chain, id: delegation.validator.id)

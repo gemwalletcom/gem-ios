@@ -13,3 +13,13 @@ extension FeePriority: Identifiable {
         }
     }
 }
+
+extension FeePriority {
+    public init(id: String) throws {
+        if let priority = FeePriority(rawValue: id) {
+            self = priority
+        } else {
+            throw AnyError("invalid priority: \(id)")
+        }
+    }
+}

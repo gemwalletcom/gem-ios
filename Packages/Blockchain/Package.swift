@@ -22,7 +22,8 @@ let package = Package(
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Formatters", path: "../Formatters"),
-        .package(name: "Keychain", path: "../Keychain"),
+        .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "SystemServices", path: "../SystemServices"),
     ],
     targets: [
         .target(
@@ -35,16 +36,17 @@ let package = Package(
                 "Gemstone",
                 "GemstonePrimitives",
                 "Formatters",
-                "Keychain",
+                "Preferences",
+                .product(name: "NativeProviderService", package: "SystemServices"),
             ],
-            path: "Sources"
+            path: "Sources",
         ),
         .target(
             name: "BlockchainTestKit",
             dependencies: [
                 "Blockchain",
                 "Primitives",
-                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "PrimitivesTestKit", package: "Primitives")
             ],
             path: "TestKit"
         ),
@@ -54,7 +56,6 @@ let package = Package(
                 "Blockchain",
                 "BlockchainTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "KeychainTestKit", package: "Keychain"),
             ],
             resources: [.process("Resources")]
         ),

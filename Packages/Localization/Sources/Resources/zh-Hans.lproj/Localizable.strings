@@ -444,7 +444,7 @@
 "info.open_interest.description" = "未平仓合约代表所有尚未结算的永续合约的总价值，反映市场活动和流动性。";
 "info.no_quote.description" = "无法返回所选代币对的报价，可能是由于数量少、缺乏流动性或技术限制。";
 "perpetual.positions" = "仓位";
-"perpetual.size" = "尺寸";
+"perpetual.size" = "持仓量";
 "perpetual.margin" = "利润";
 "perpetual.position" = "仓位";
 "perpetual.close_position" = "平仓";
@@ -453,7 +453,6 @@
 "perpetual.short" = "做空";
 "markets.daily_volume" = "24小时交易量";
 "perpetual.entry_price" = "入场价格";
-"stake.your_staking" = "您的质押";
 "widget.small.name" = "比特币价格";
 "widget.small.description" = "追踪比特币价格";
 "widget.medium.name" = "最高加密货币价格";
@@ -462,3 +461,5 @@
 "lock.footer" = "保护您设备上对此应用的访问";
 "errors.wallets.limit.title" = "钱包已达上限";
 "errors.wallets.limit.description" = "您已达到允许的最大钱包数量（ %d ）。请移除现有钱包以添加或创建新钱包。";
+"banner.asset_status.title" = "可疑资产";
+"banner.asset_status.description" = "代币可能不安全或具有误导性。请仅在完全信任的情况下继续操作。";

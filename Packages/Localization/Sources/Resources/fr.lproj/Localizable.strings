@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "Volume 24h";
 "perpetual.entry_price" = "Prix d'entrée";
-"stake.your_staking" = "Votre jalonnement";
 "widget.small.name" = "Prix du Bitcoin";
 "widget.small.description" = "Suivre le prix du Bitcoin";
 "widget.medium.name" = "Meilleur prix des cryptomonnaies";
@@ -462,3 +461,5 @@
 "lock.footer" = "Protégez l'accès à cette application sur votre appareil";
 "errors.wallets.limit.title" = "Limite de portefeuilles atteinte";
 "errors.wallets.limit.description" = "Vous avez atteint le nombre maximal de portefeuilles autorisés ( %d ). Veuillez supprimer un portefeuille existant pour en ajouter ou en créer un nouveau.";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";

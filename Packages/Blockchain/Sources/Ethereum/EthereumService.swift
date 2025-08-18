@@ -171,16 +171,6 @@ extension EthereumService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension EthereumService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        return try await provider
-            .request(.syncing)
-            .map(as: JSONRPCResponse<Bool>.self).result.inverted
-    }
-}
-
 // MARK: - ChainStakable
 
 extension EthereumService: ChainStakable {

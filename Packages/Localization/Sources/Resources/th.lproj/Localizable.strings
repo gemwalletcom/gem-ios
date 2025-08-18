@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "ปริมาณ 24 ชั่วโมง";
 "perpetual.entry_price" = "ราคาเข้าชม";
-"stake.your_staking" = "การเดิมพันของคุณ";
 "widget.small.name" = "ราคา Bitcoin";
 "widget.small.description" = "ติดตามราคา Bitcoin";
 "widget.medium.name" = "ราคาคริปโตสูงสุด";
@@ -462,3 +461,5 @@
 "lock.footer" = "ป้องกันการเข้าถึงแอปนี้บนอุปกรณ์ของคุณ";
 "errors.wallets.limit.title" = "ถึงขีดจำกัดของกระเป๋าเงินแล้ว";
 "errors.wallets.limit.description" = "คุณมีจำนวนกระเป๋าสตางค์ถึงจำนวนสูงสุดที่อนุญาตแล้ว ( %d ) กรุณาลบกระเป๋าสตางค์ที่มีอยู่เพื่อเพิ่มหรือสร้างใหม่";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";

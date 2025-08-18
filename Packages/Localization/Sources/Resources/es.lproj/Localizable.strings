@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "Volumen de 24 horas";
 "perpetual.entry_price" = "Precio de entrada";
-"stake.your_staking" = "Su participación";
 "widget.small.name" = "Precio de Bitcoin";
 "widget.small.description" = "Seguimiento del precio de Bitcoin";
 "widget.medium.name" = "Precio máximo de las criptomonedas";
@@ -462,3 +461,5 @@
 "lock.footer" = "Proteger el acceso a esta aplicación en su dispositivo";
 "errors.wallets.limit.title" = "Límite de billeteras alcanzado";
 "errors.wallets.limit.description" = "Has alcanzado el número máximo de billeteras permitidas ( %d ). Elimina una billetera existente para agregar o crear una nueva.";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";

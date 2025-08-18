@@ -3,31 +3,32 @@
 import BigInt
 import Foundation
 import Formatters
-import Keychain
 import Primitives
 import SwiftHTTPClient
+import WalletCorePrimitives
 
 public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
+    let gateway: GatewayService
     let cacheService: HyperCoreCacheService
-    
-    public static let agentAddressKey: String = "hyperliquid_agent_address"
-    public static let agentPrivateKey: String = "hyperliquid_agent_private_key"
-    public static let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
-    public static let referralCode = "GEMWALLET"
-    public static let maxBuilderFeeBps = 45 // 0.045%
+    public let config: HyperCoreConfig
     
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>,
-        cacheService: BlockchainCacheService
+        gateway: GatewayService,
+        cacheService: BlockchainCacheService,
+        config: HyperCoreConfig
     ) {
         self.chain = chain
         self.provider = provider
+        self.gateway = gateway
+        self.config = config
         self.cacheService = HyperCoreCacheService(
             cacheService: cacheService,
-            keychain: KeychainDefault()
+            preferences: HyperCoreSecurePreferences(),
+            config: config
         )
     }
     
@@ -39,23 +40,6 @@ public struct HyperCoreService: Sendable {
 // MARK: - Business Logic
 
 public extension HyperCoreService {
-    func getPositions(user: String) async throws -> HypercoreAssetPositions {
-        return try await provider
-            .request(.clearinghouseState(user: user))
-            .map(as: HypercoreAssetPositions.self)
-    }
-
-    func getMetadata() async throws -> HypercoreMetadataResponse {
-        return try await provider
-            .request(.metaAndAssetCtxs)
-            .map(as: HypercoreMetadataResponse.self)
-    }
-
-    func getCandlesticks(coin: String, interval: String, startTime: Int, endTime: Int) async throws -> [HypercoreCandlestick] {
-        return try await provider
-            .request(.candleSnapshot(coin: coin, interval: interval, startTime: startTime, endTime: endTime))
-            .map(as: [HypercoreCandlestick].self)
-    }
     
     func getUserRole(address: String) async throws -> HypercoreUserRole {
         try await self.provider
@@ -87,17 +71,6 @@ public extension HyperCoreService {
             .map(as: HypercoreUserFee.self)
     }
     
-    func getSpotBalances(user: String) async throws -> HypercoreBalances {
-        try await provider
-            .request(.spotClearinghouseState(user: user))
-            .map(as: HypercoreBalances.self)
-    }
-    
-    func getSpotMetadata() async throws -> HypercoreTokens {
-        try await provider
-            .request(.spotMetaAndAssetCtxs)
-            .map(as: HypercoreTokens.self)
-    }
 }
 
 // MARK: - ChainServiceable
@@ -116,24 +89,15 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func coinBalance(for address: String) async throws -> AssetBalance {
-        let balances = try await getSpotBalances(user: address).balances
-        guard let coin = balances.first(where: { $0.token == 150 }) else {
-            throw AnyError("")
-        }
-        return AssetBalance(
-            assetId: AssetId(chain: chain),
-            balance: Balance(available: try BigInt.from(coin.total, decimals: 18))
-        )
+        try await gateway.coinBalance(chain: chain, address: address)
     }
 
     func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        // let balances = try await getSpotBalances(user: address).balances
-        // let tokens = try await getSpotMetadata().tokens
-        return []
+        try await gateway.tokenBalance(chain: chain, address: address, tokenIds: tokenIds)
     }
 
     func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        return nil
+        try await gateway.getStakeBalance(chain: chain, address: address)
     }
 }
 
@@ -141,35 +105,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        let response = try await self.provider.request(.broadcast(data: data))
-        
-        // Try to parse as order response first to get oid
-        if let orderResult = try? response.map(as: HypercoreOrderResponse.self),
-           orderResult.status == "ok",
-           let responseData = orderResult.response,
-           let orderData = responseData.data,
-           let statuses = orderData.statuses,
-           let firstStatus = statuses.first {
-            
-            if let filled = firstStatus.filled {
-                return String(filled.oid)
-            } else if let resting = firstStatus.resting {
-                return String(resting.oid)
-            } else if let error = firstStatus.error {
-                throw AnyError(error)
-            }
-        }
-        
-        // Fallback to regular response handling
-        let result = try response.map(as: HypercoreResponse.self)
-        
-        switch result.status {
-        case "ok": return data
-        case "err":
-            throw try response.map(as: HypercoreErrorResponse.self)
-        default:
-            throw ChainServiceErrors.broadcastError(chain)
-        }
+        try await gateway.transactionBroadcast(chain: chain, data: data)
     }
 }
 
@@ -203,19 +139,11 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return []
+        try await gateway.validators(chain: chain)
     }
 
     func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        return []
-    }
-}
-
-// MARK: - ChainSyncable
-
-public extension HyperCoreService {
-    func getInSync() async throws -> Bool {
-        return true
+        try await gateway.delegations(chain: chain, address: address)
     }
 }
 
@@ -244,7 +172,7 @@ public extension HyperCoreService {
         }
         
         async let approveBuilderRequired = cacheService.needsBuilderFeeApproval(address: input.senderAddress) {
-            try await getBuilderFee(address: input.senderAddress, builder: Self.builderAddress)
+            try await getBuilderFee(address: input.senderAddress, builder: config.builderAddress)
         }
         
         async let totalFeeTenthsBps = cacheService.getUserFeeRate(address: input.senderAddress) {
@@ -302,29 +230,6 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        guard let oid = UInt64(request.id) else {
-            return TransactionChanges(state: .pending)
-        }
-        
-        let startTime = Int((request.createdAt.timeIntervalSince1970 - 5) * 1000)
-        
-        let fills = try await provider
-            .request(.userFillsByTime(user: request.senderAddress, startTime: startTime))
-            .map(as: [HypercorePerpetualFill].self)
-        
-        guard let matchingFill = fills.first(where: { $0.oid == oid }) else {
-            return TransactionChanges(state: .pending)
-        }
-        
-        return TransactionChanges(
-            state: .confirmed,
-            changes: [.hashChange(old: request.id, new: matchingFill.hash)]
-        )
-    }
-}
-
-extension HypercoreErrorResponse: LocalizedError {
-    public var errorDescription: String? {
-        response
+        try await gateway.transactionStatus(chain: chain, request: request)
     }
 }

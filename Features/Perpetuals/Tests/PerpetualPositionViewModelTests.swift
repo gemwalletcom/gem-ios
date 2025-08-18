@@ -81,5 +81,5 @@ private func createPositionViewModel(_ position: PerpetualPosition) -> Perpetual
         asset: asset,
         position: position
     )
-    return PerpetualPositionViewModel(data: positionData)
+    return PerpetualPositionViewModel(positionData)
 }

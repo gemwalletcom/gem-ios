@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "נפח של 24 שעות";
 "perpetual.entry_price" = "מחיר כניסה";
-"stake.your_staking" = "ההימור שלך";
 "widget.small.name" = "מחיר ביטקוין";
 "widget.small.description" = "מעקב אחר מחיר הביטקוין";
 "widget.medium.name" = "מחיר הקריפטו הגבוה ביותר";
@@ -462,3 +461,5 @@
 "lock.footer" = "הגן על הגישה לאפליקציה הזו במכשיר שלך";
 "errors.wallets.limit.title" = "הגעת למגבלת הארנקים";
 "errors.wallets.limit.description" = "הגעת למספר הארנקים המרבי המותר ( %d ). אנא הסר ארנק קיים כדי להוסיף או ליצור ארנק חדש.";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";

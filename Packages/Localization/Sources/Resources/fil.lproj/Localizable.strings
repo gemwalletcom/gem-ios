@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "24h Volume";
 "perpetual.entry_price" = "Entry Price";
-"stake.your_staking" = "Ang iyong Staking";
 "widget.small.name" = "Presyo ng Bitcoin";
 "widget.small.description" = "Subaybayan ang presyo ng Bitcoin";
 "widget.medium.name" = "Nangungunang Presyo ng Crypto";
@@ -462,3 +461,5 @@
 "lock.footer" = "Protektahan ang access sa app na ito sa iyong device";
 "errors.wallets.limit.title" = "Naabot na ang Limitasyon ng Wallets";
 "errors.wallets.limit.description" = "Naabot mo na ang maximum na bilang ng mga wallet na pinapayagan ( %d ). Mangyaring alisin ang isang umiiral na wallet upang magdagdag o gumawa ng bago.";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";

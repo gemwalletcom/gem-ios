@@ -15,8 +15,8 @@ public struct PerpetualPositionViewModel {
     private let percentFormatter: CurrencyFormatter
     
     public init(
-        data: PerpetualPositionData,
-        currencyStyle: CurrencyFormatterType = .abbreviated
+        _ data: PerpetualPositionData,
+        currencyStyle: CurrencyFormatterType = .currency
     ) {
         self.data = data
         self.currencyFormatter = CurrencyFormatter(type: currencyStyle, currencyCode: Currency.usd.rawValue)

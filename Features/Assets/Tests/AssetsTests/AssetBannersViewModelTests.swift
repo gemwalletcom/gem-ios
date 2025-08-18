@@ -28,4 +28,13 @@ struct AssetBannersViewModelTests {
         let active = AssetBannersViewModel(assetData: .mock(metadata: .mock(isActive: true)), banners: [])
         #expect(active.allBanners.isEmpty)
     }
+    
+    @Test
+    func suspiciousAssetBanner() {
+        let suspicious = AssetBannersViewModel(assetData: .mock(metadata: .mock(rankScore: 5)), banners: [])
+        #expect(suspicious.allBanners.count == 1)
+        #expect(suspicious.allBanners.first?.event == .suspiciousAsset)
+
+        #expect(AssetBannersViewModel(assetData: .mock(metadata: .mock(rankScore: 50)), banners: []).allBanners.isEmpty)
+    }
 }

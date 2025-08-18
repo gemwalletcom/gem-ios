@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "24시간 볼륨";
 "perpetual.entry_price" = "입장료";
-"stake.your_staking" = "귀하의 스테이킹";
 "widget.small.name" = "비트코인 가격";
 "widget.small.description" = "비트코인 가격 추적";
 "widget.medium.name" = "최고 암호화폐 가격";
@@ -462,3 +461,5 @@
 "lock.footer" = "기기에서 이 앱에 대한 액세스를 보호하세요";
 "errors.wallets.limit.title" = "지갑 한도에 도달했습니다";
 "errors.wallets.limit.description" = "허용된 최대 지갑 수( %d )에 도달했습니다. 기존 지갑을 제거한 후 추가하거나 새 지갑을 만드세요.";
+"banner.asset_status.title" = "Suspicious Asset";
+"banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";

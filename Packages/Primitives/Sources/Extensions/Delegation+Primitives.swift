@@ -50,3 +50,13 @@ extension DelegationValidator {
         id == Self.systemId
     }
 }
+
+extension DelegationState {
+    public init(id: String) throws {
+        if let state = DelegationState(rawValue: id) {
+            self = state
+        } else {
+            throw AnyError("invalid state: \(id)")
+        }
+    }
+}

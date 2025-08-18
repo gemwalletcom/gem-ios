@@ -91,4 +91,11 @@ public struct PerpetualStore: Sendable {
                 .updateAll(db, column.set(to: value))
         }
     }
+    
+    public func clear() throws {
+        try db.write { db in
+            try PerpetualPositionRecord.deleteAll(db)
+            try PerpetualRecord.deleteAll(db)
+        }
+    }
 }

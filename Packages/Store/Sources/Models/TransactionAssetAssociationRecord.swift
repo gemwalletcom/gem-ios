@@ -15,6 +15,7 @@ public struct TransactionAssetAssociationRecord: Codable, TableRecord, Fetchable
     public var transactionId: Int
     public var assetId: AssetId
     
+    static let transaction = belongsTo(TransactionRecord.self, using: ForeignKey(["transactionId"], to: ["id"]))
     static let asset = belongsTo(AssetRecord.self)
     static let price = belongsTo(PriceRecord.self, using: ForeignKey(["assetId"], to: ["assetId"]))
 }
