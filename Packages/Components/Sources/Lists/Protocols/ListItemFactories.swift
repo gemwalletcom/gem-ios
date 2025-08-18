@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 
 public protocol CommonListItemFactory: ListItemRepresentable {
     static func common(_ item: CommonListItem) -> Self
