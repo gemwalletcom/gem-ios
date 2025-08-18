@@ -210,15 +210,6 @@ extension PolkadotService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension PolkadotService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        //TODO: Add getInSync check later
-        true
-    }
-}
-
 // MARK: - ChainStakable
 
 extension PolkadotService: ChainStakable {
@@ -228,18 +219,6 @@ extension PolkadotService: ChainStakable {
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
         fatalError()
-    }
-}
-
-// MARK: - ChainTokenable
-
-extension PolkadotService: ChainTokenable {
-    public func getTokenData(tokenId: String) async throws -> Asset {
-        fatalError("unimplemented")
-    }
-    
-    public func getIsTokenAddress(tokenId: String) -> Bool {
-        return false
     }
 }
 
@@ -259,14 +238,7 @@ extension PolkadotService: ChainLatestBlockFetchable {
     }
 }
 
-
-// MARK: - ChainAddressStatusFetchable
-
-extension PolkadotService: ChainAddressStatusFetchable {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
-        []
-    }
-}
+extension PolkadotService: ChainTokenable, ChainAddressStatusFetchable { }
 
 extension PolkadotTransactionBroadcastError: LocalizedError {
     public var errorDescription: String? {

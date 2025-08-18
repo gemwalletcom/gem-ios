@@ -28,6 +28,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.priceService) private var priceService
     @Environment(\.transactionService) private var transactionService
     @Environment(\.nameService) private var nameService
+    @Environment(\.addressNameService) private var addressNameService
 
     @State private var navigationPath = NavigationPath()
 
@@ -64,6 +65,7 @@ struct SelectedAssetNavigationStack: View  {
                             balanceService: balanceService,
                             priceService: priceService,
                             transactionService: transactionService,
+                            addressNameService: addressNameService,
                             chain: input.asset.chain
                         ),
                         model: viewModelFactory.recipientScene(

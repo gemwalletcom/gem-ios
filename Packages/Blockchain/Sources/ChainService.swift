@@ -41,32 +41,29 @@ extension ChainService {
         case .bitcoin:
             BitcoinService(
                 chain: BitcoinChain(rawValue: chain.rawValue)!,
-                provider: ProviderFactory.create(with: url)
+                gateway: GatewayService(provider: NativeProvider(url: url))
             )
         case .aptos:
             AptosService(chain: chain, provider: ProviderFactory.create(with: url))
         case .sui:
             SuiService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .xrp:
-            XRPService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .near:
-            NearService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .stellar:
-            StellarService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .algorand:
-            AlgorandService(chain: chain, provider: ProviderFactory.create(with: url))
+        case .algorand, .xrp, .stellar, .near:
+            GatewayChainService(
+                chain: chain,
+                gateway: GatewayService(provider: NativeProvider(url: url))
+            )
         case .polkadot:
             PolkadotService(chain: chain, provider: ProviderFactory.create(with: url))
         case .cardano:
             CardanoService(
                 chain: chain,
-                graphql: GraphqlService(provider: ProviderFactory.create(with: url))
+                gateway: GatewayService(provider: NativeProvider(url: url))
             )
         case .hyperCore:
             HyperCoreService(
                 chain: chain,
                 provider: ProviderFactory.create(with: url),
-                gateway: GetewayService(provider: NativeProvider(url: url)),
+                gateway: GatewayService(provider: NativeProvider(url: url)),
                 cacheService: BlockchainCacheService(chain: chain),
                 config: HyperCoreConfig.create()
             )

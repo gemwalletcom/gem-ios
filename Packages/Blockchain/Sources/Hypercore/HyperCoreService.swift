@@ -10,14 +10,14 @@ import WalletCorePrimitives
 public struct HyperCoreService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<HypercoreProvider>
-    let gateway: GetewayService
+    let gateway: GatewayService
     let cacheService: HyperCoreCacheService
     public let config: HyperCoreConfig
     
     public init(
         chain: Primitives.Chain = .hyperCore,
         provider: Provider<HypercoreProvider>,
-        gateway: GetewayService,
+        gateway: GatewayService,
         cacheService: BlockchainCacheService,
         config: HyperCoreConfig
     ) {
@@ -40,23 +40,6 @@ public struct HyperCoreService: Sendable {
 // MARK: - Business Logic
 
 public extension HyperCoreService {
-    func getPositions(user: String) async throws -> HypercoreAssetPositions {
-        return try await provider
-            .request(.clearinghouseState(user: user))
-            .map(as: HypercoreAssetPositions.self)
-    }
-
-    func getMetadata() async throws -> HypercoreMetadataResponse {
-        return try await provider
-            .request(.metaAndAssetCtxs)
-            .map(as: HypercoreMetadataResponse.self)
-    }
-
-    func getCandlesticks(coin: String, interval: String, startTime: Int, endTime: Int) async throws -> [HypercoreCandlestick] {
-        return try await provider
-            .request(.candleSnapshot(coin: coin, interval: interval, startTime: startTime, endTime: endTime))
-            .map(as: [HypercoreCandlestick].self)
-    }
     
     func getUserRole(address: String) async throws -> HypercoreUserRole {
         try await self.provider
@@ -88,29 +71,6 @@ public extension HyperCoreService {
             .map(as: HypercoreUserFee.self)
     }
     
-    func getSpotMetadata() async throws -> HypercoreTokens {
-        try await provider
-            .request(.spotMetaAndAssetCtxs)
-            .map(as: HypercoreTokens.self)
-    }
-    
-    func getOpenOrders(user: String) async throws -> [HypercoreOrder] {
-        try await provider
-            .request(.openOrders(user: user))
-            .map(as: [HypercoreOrder].self)
-    }
-    
-    func getDelegations(user: String) async throws -> [HypercoreDelegationBalance] {
-        try await provider
-            .request(.delegations(user: user))
-            .map(as: [HypercoreDelegationBalance].self)
-    }
-    
-    func getValidators() async throws -> [HypercoreValidator] {
-        try await provider
-            .request(.validators)
-            .map(as: [HypercoreValidator].self)
-    }
 }
 
 // MARK: - ChainServiceable
@@ -145,35 +105,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        let response = try await self.provider.request(.broadcast(data: data))
-        
-        // Try to parse as order response first to get oid
-        if let orderResult = try? response.map(as: HypercoreOrderResponse.self),
-           orderResult.status == "ok",
-           let responseData = orderResult.response,
-           let orderData = responseData.data,
-           let statuses = orderData.statuses,
-           let firstStatus = statuses.first {
-            
-            if let filled = firstStatus.filled {
-                return String(filled.oid)
-            } else if let resting = firstStatus.resting {
-                return String(resting.oid)
-            } else if let error = firstStatus.error {
-                throw AnyError(error)
-            }
-        }
-        
-        // Fallback to regular response handling
-        let result = try response.map(as: HypercoreResponse.self)
-        
-        switch result.status {
-        case "ok": return data
-        case "err":
-            throw try response.map(as: HypercoreErrorResponse.self)
-        default:
-            throw ChainServiceErrors.broadcastError(chain)
-        }
+        try await gateway.transactionBroadcast(chain: chain, data: data)
     }
 }
 
@@ -207,47 +139,11 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        let validators = try await getValidators()
-        return try validators.map { validator in
-            let commission = try Double.from(string: validator.commission)
-            let id = chain.checksumAddress(validator.validator)
-            return DelegationValidator(
-                chain: chain,
-                id: id,
-                name: validator.name,
-                isActive: validator.isActive,
-                commision: commission,
-                apr: apr
-            )
-        }
+        try await gateway.validators(chain: chain)
     }
 
     func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        let delegations = try await getDelegations(user: address)
-        return try delegations.map { delegation in
-            let state: DelegationState = .active
-            let balance = try BigInt.from(delegation.amount, decimals: chain.asset.decimals.asInt).description
-            let validator = chain.checksumAddress(delegation.validator)
-            
-            return DelegationBase(
-                assetId: chain.assetId,
-                state: state,
-                balance: balance,
-                shares: balance,
-                rewards: "0",
-                completionDate: .none,
-                delegationId: validator,
-                validatorId: validator
-            )
-        }
-    }
-}
-
-// MARK: - ChainSyncable
-
-public extension HyperCoreService {
-    func getInSync() async throws -> Bool {
-        return true
+        try await gateway.delegations(chain: chain, address: address)
     }
 }
 
@@ -334,38 +230,6 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        guard let oid = UInt64(request.id) else {
-            return TransactionChanges(state: .pending)
-        }
-        
-        let startTime = Int((request.createdAt.timeIntervalSince1970 - 5) * 1000)
-        
-        let fills = try await provider
-            .request(.userFillsByTime(user: request.senderAddress, startTime: startTime))
-            .map(as: [HypercorePerpetualFill].self)
-        
-        guard let matchingFill = fills.first(where: { $0.oid == oid }) else {
-            return TransactionChanges(state: .pending)
-        }
-        
-        return TransactionChanges(
-            state: .confirmed,
-            changes: [
-                .hashChange(old: request.id, new: matchingFill.hash),
-                .metadata(TransactionMetadata.perpetual(
-                    TransactionPerpetualMetadata(
-                        pnl: try Double.from(string: matchingFill.closedPnl),
-                        price: try Double.from(string: matchingFill.px)
-                    )
-                ))
-            ]
-        )
+        try await gateway.transactionStatus(chain: chain, request: request)
     }
 }
-
-extension HypercoreErrorResponse: LocalizedError {
-    public var errorDescription: String? {
-        response
-    }
-}
-

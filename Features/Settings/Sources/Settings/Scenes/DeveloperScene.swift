@@ -63,6 +63,10 @@ public struct DeveloperScene: View {
                     action: model.clearBanners
                 )
                 NavigationCustomLink(
+                    with: ListItemView(title: "Clear Perpetuals"),
+                    action: model.clearPerpetuals
+                )
+                NavigationCustomLink(
                     with: ListItemView(title: "Clear Prices"),
                     action: model.clearPrices
                 )

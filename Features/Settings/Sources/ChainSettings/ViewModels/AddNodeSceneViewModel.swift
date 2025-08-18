@@ -68,10 +68,9 @@ extension AddNodeSceneViewModel {
 
         do {
             async let (requestLatency, networkId) = fetchChainID(service: service)
-            async let inSync = service.getInSync()
             async let latestBlock = service.getLatestBlock()
 
-            let (latency, chainId, isNodeInSync, blockNumber) = try await (requestLatency, networkId, inSync, latestBlock)
+            let (latency, chainId, isNodeInSync, blockNumber) = try await (requestLatency, networkId, true, latestBlock)
 
             let result = AddNodeResult(url: url, chainID: chainId, blockNumber: blockNumber, isInSync: isNodeInSync, latency: latency)
             let resultVM = AddNodeResultViewModel(addNodeResult: result)

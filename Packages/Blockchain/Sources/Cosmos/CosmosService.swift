@@ -287,16 +287,6 @@ extension CosmosService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension CosmosService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        return try await provider
-            .request(.syncing)
-            .map(as: CosmosSyncing.self).syncing.inverted
-    }
-}
-
 // MARK: - ChainStakable
 
 extension CosmosService: ChainStakable {
@@ -387,18 +377,6 @@ extension CosmosService: ChainStakable {
     }
 }
 
-// MARK: - ChainTokenable
-
-extension CosmosService: ChainTokenable {
-    public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
-    }
-
-    public func getIsTokenAddress(tokenId: String) -> Bool {
-        false
-    }
-}
-
 // MARK: - ChainIDFetchable
 
 extension CosmosService: ChainIDFetchable {
@@ -419,8 +397,4 @@ extension CosmosService: ChainLatestBlockFetchable {
 
 // MARK: - ChainAddressStatusFetchable
 
-extension CosmosService: ChainAddressStatusFetchable {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
-        []
-    }
-}
+extension CosmosService: ChainTokenable, ChainAddressStatusFetchable {}
