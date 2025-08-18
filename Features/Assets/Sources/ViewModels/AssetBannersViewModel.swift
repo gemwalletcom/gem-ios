@@ -20,7 +20,9 @@ public final class AssetBannersViewModel: Sendable {
     }
     
     public var allBanners: [Banner] {
-        (extraBanners + banners).filter { shouldShowBanner($0) }
+        (extraBanners + banners)
+            .filter { shouldShowBanner($0) }
+            .sorted { $0.state < $1.state }
     }
     
     // MARK: - Private

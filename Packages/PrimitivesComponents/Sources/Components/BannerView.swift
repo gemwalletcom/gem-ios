@@ -7,18 +7,11 @@ import Components
 import Style
 
 public struct BannerView: View {
-
-    private static let autoAdvanceInterval: TimeInterval = 3.0
-    private static let animationDuration: TimeInterval = 0.3
-
     let banners: [BannerViewModel]
     private let action: ((Banner) -> Void)
     private let closeAction: ((Banner) -> Void)
     
     @State private var currentIndex: Int = 0
-    @State private var isUserInteracting: Bool = false
-    
-    private let timer = Timer.publish(every: autoAdvanceInterval, on: .main, in: .common).autoconnect()
 
     public init(
         banners: [Banner],
@@ -32,7 +25,7 @@ public struct BannerView: View {
 
     public var body: some View {
         if banners.isNotEmpty {
-            VStack(spacing: 0) {
+            VStack(spacing: .small) {
                 carouselTabView
                 if banners.count > 1 {
                     carouselIndicators
@@ -54,24 +47,6 @@ private extension BannerView {
         }
         .frame(height: .scene.bannerHeight)
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-        .simultaneousGesture(
-            DragGesture(minimumDistance: .zero)
-                .onChanged { _ in
-                    isUserInteracting = true
-                }
-                .onEnded { _ in
-                    Task {
-                        try? await Task.sleep(for: .seconds(Int(Self.autoAdvanceInterval)))
-                        isUserInteracting = false
-                    }
-                }
-        )
-        .onReceive(timer) { _ in
-            guard banners.count > 1, !isUserInteracting else { return }
-            withAnimation(.easeInOut(duration: Self.animationDuration)) {
-                currentIndex = (currentIndex + 1) % banners.count
-            }
-        }
     }
     
     @ViewBuilder
@@ -83,7 +58,6 @@ private extension BannerView {
                     .frame(size: .space6)
             }
         }
-        .padding(.top, Spacing.extraSmall)
     }
     
     func bannerView(for model: BannerViewModel) -> some View {

@@ -51,8 +51,8 @@ public extension Spacing {
         /// 8
         public static let bottom: CGFloat = space8
         
-        /// 70
-        public static let bannerHeight: CGFloat = 70
+        /// 72
+        public static let bannerHeight: CGFloat = 72
 
         public struct button {
             /// 340
