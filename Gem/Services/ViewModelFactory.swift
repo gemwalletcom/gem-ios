@@ -22,6 +22,7 @@ import Staking
 import Assets
 import FiatConnect
 import WalletConnectorService
+import AddressNameService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -36,6 +37,7 @@ public struct ViewModelFactory: Sendable {
     let priceService: PriceService
     let transactionService: TransactionService
     let chainServiceFactory: ChainServiceFactory
+    let addressNameService: AddressNameService
     
     public init(
         keystore: any Keystore,
@@ -49,7 +51,8 @@ public struct ViewModelFactory: Sendable {
         balanceService: BalanceService,
         priceService: PriceService,
         transactionService: TransactionService,
-        chainServiceFactory: ChainServiceFactory
+        chainServiceFactory: ChainServiceFactory,
+        addressNameService: AddressNameService
     ) {
         self.keystore = keystore
         self.nodeService = nodeService
@@ -63,6 +66,7 @@ public struct ViewModelFactory: Sendable {
         self.priceService = priceService
         self.transactionService = transactionService
         self.chainServiceFactory = chainServiceFactory
+        self.addressNameService = addressNameService
     }
     
     @MainActor
@@ -80,6 +84,7 @@ public struct ViewModelFactory: Sendable {
             balanceService: balanceService,
             priceService: priceService,
             transactionService: transactionService,
+            addressNameService: addressNameService,
             chain: data.chain
         )
         
@@ -177,7 +182,7 @@ public struct ViewModelFactory: Sendable {
     ) -> StakeDetailSceneViewModel {
         StakeDetailSceneViewModel(
             wallet: wallet,
-            model: StakeDelegationViewModel(delegation: delegation),
+            model: StakeDelegationViewModel(delegation: delegation, formatter: .auto),
             service: stakeService,
             onAmountInputAction: onAmountInputAction,
             onTransferAction: onTransferAction

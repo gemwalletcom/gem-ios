@@ -15,12 +15,9 @@ let package = Package(
         .library(name: "DeviceServiceTestKit", targets: ["DeviceServiceTestKit"]),
         .library(name: "BannerService", targets: ["BannerService"]),
         .library(name: "BannerServiceTestKit", targets: ["BannerServiceTestKit"]),
-        .library(name: "AppService", targets: ["AppService"]),
         .library(name: "ImageGalleryService", targets: ["ImageGalleryService"]),
         .library(name: "WalletService", targets: ["WalletService"]),
         .library(name: "WalletServiceTestKit", targets: ["WalletServiceTestKit"]),
-        .library(name: "WalletsService", targets: ["WalletsService"]),
-        .library(name: "WalletsServiceTestKit", targets: ["WalletsServiceTestKit"]),
         .library(name: "NativeProviderService", targets: ["NativeProviderService"]),
         .library(name: "WalletSessionService", targets: ["WalletSessionService"]),
         .library(name: "WalletSessionServiceTestKit", targets: ["WalletSessionServiceTestKit"]),
@@ -30,9 +27,10 @@ let package = Package(
         .package(name: "Preferences", path: "../Preferences"),
         .package(name: "Store", path: "../Store"),
         .package(name: "GemAPI", path: "../GemAPI"),
-        .package(name: "ChainServices", path: "../ChainServices"),
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "FeatureServices", path: "../FeatureServices"),
+        .package(name: "Gemstone", path: "../Gemstone"),
+        .package(name: "WalletCore", path: "../WalletCore"),
     ],
     targets: [
         .target(
@@ -92,23 +90,6 @@ let package = Package(
             path: "BannerService/TestKit"
         ),
         .target(
-            name: "AppService",
-            dependencies: [
-                "Primitives",
-                "Store",
-                "GemAPI",
-                .product(name: "NodeService", package: "ChainServices"),
-                "Preferences",
-                "BannerService",
-                "DeviceService",
-                .product(name: "SwapService", package: "FeatureServices"),
-                .product(name: "AssetsService", package: "FeatureServices"),
-                "WalletService"
-            ],
-            path: "AppService",
-            exclude: ["Tests"]
-        ),
-        .target(
             name: "ImageGalleryService",
             dependencies: [],
             path: "ImageGalleryService",
@@ -138,41 +119,11 @@ let package = Package(
             path: "WalletService/TestKit"
         ),
         .target(
-            name: "WalletsService",
-            dependencies: [
-                "Primitives",
-                "Store",
-                "BannerService",
-                .product(name: "PriceService", package: "FeatureServices"),
-                "Preferences",
-                .product(name: "BalanceService", package: "FeatureServices"),
-                .product(name: "AssetsService", package: "FeatureServices"),
-                .product(name: "TransactionService", package: "FeatureServices"),
-                .product(name: "DiscoverAssetsService", package: "FeatureServices"),
-                .product(name: "ChainService", package: "ChainServices"),
-                "WalletSessionService",
-                "DeviceService"
-            ],
-            path: "WalletsService",
-            exclude: ["TestKit"]
-        ),
-        .target(
-            name: "WalletsServiceTestKit",
-            dependencies: [
-                "DeviceServiceTestKit",
-                "BannerServiceTestKit",
-                .product(name: "StoreTestKit", package: "Store"),
-                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
-                .product(name: "TransactionServiceTestKit", package: "FeatureServices"),
-                "WalletsService"
-            ],
-            path: "WalletsService/TestKit"
-        ),
-        .target(
             name: "NativeProviderService",
             dependencies: [
                 "Primitives",
-                .product(name: "ChainService", package: "ChainServices"),
+                "Gemstone",
+                .product(name: "WalletCore", package: "WalletCore"),
             ],
             path: "NativeProviderService",
             exclude: ["Tests", "TestKit"]

@@ -252,16 +252,6 @@ extension SolanaService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension SolanaService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        return try await provider
-            .request(.health)
-            .map(as: JSONRPCResponse<String>.self).result == "ok"
-    }
-}
-
 // MARK: - ChainStakable
 
 extension SolanaService: ChainStakable {

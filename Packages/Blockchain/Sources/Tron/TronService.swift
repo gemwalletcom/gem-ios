@@ -457,15 +457,6 @@ extension TronService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension TronService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        // TODO: Add getInSync check later
-        true
-    }
-}
-
 // MARK: - ChainStakable
 
 extension TronService: ChainStakable {

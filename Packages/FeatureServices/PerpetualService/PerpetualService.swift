@@ -19,13 +19,13 @@ public struct PerpetualService: PerpetualServiceable {
         assetStore: AssetStore,
         priceStore: PriceStore,
         balanceStore: BalanceStore,
-        providerFactory: PerpetualProviderFactory
+        provider: PerpetualProvidable
     ) {
         self.store = store
         self.assetStore = assetStore
         self.priceStore = priceStore
         self.balanceStore = balanceStore
-        self.provider = providerFactory.createProvider()
+        self.provider = provider
     }
     
     public func getPositions(walletId: WalletId) async throws -> [PerpetualPosition] {
@@ -83,7 +83,7 @@ public struct PerpetualService: PerpetualServiceable {
         )
     }
     
-    private func syncProviderPositions(positions: [PerpetualPosition], provider: PerpetualProvider, walletId: String) throws {
+    private func syncProviderPositions(positions: [PerpetualPosition], provider: Primitives.PerpetualProvider, walletId: String) throws {
         let existingPositions = try store.getPositions(walletId: walletId, provider: provider)
         let existingIds = existingPositions.map { $0.id }.asSet()
         let newIds = positions.map { $0.id }.asSet()
@@ -129,6 +129,10 @@ public struct PerpetualService: PerpetualServiceable {
     
     public func setPinned(_ isPinned: Bool, perpetualId: String) throws {
         try store.setPinned(for: [perpetualId], value: isPinned)
+    }
+    
+    public func clear() throws {
+        try store.clear()
     }
     
     private func createPerpetualAssetBasic(from asset: Asset) -> AssetBasic {

@@ -19,7 +19,7 @@ public struct TransactionHeaderTypeBuilder {
                     .stakeRewards,
                     .stakeWithdraw,
                     .smartContractCall:
-                return .amount(showFiatSubtitle: true)
+                return .amount(showFiat: true)
             case .swap:
                 guard let metadata, let input = SwapMetadataViewModel(metadata: metadata).headerInput else {
                     fatalError("swapMetadata is missed")
@@ -29,17 +29,17 @@ public struct TransactionHeaderTypeBuilder {
                 return .symbol
             case .tokenApproval:
                 if infoModel.isZero {
-                    return .amount(showFiatSubtitle: false)
+                    return .amount(showFiat: false)
                 } else {
                     return .symbol
                 }
             case .transferNFT:
                 guard case let .nft(metadata) = transaction.metadata else {
-                    return .amount(showFiatSubtitle: false)
+                    return .amount(showFiat: false)
                 }
                 return .nft(name: metadata.name, id: metadata.assetId)
             case .perpetualOpenPosition, .perpetualClosePosition:
-                return .amount(showFiatSubtitle: true)
+                return .amount(showFiat: true)
             }
         }()
         return infoModel.headerType(input: inputType)
@@ -59,7 +59,7 @@ public struct TransactionHeaderTypeBuilder {
                     .stake,
                     .tokenApprove:
                 return .amount(
-                    showFiatSubtitle: true
+                    showFiat: true
                 )
             case .transferNft(let asset):
                 return .nft(name: asset.name, id: asset.id)
@@ -67,14 +67,14 @@ public struct TransactionHeaderTypeBuilder {
                 switch type {
                 case .activate:
                     return .amount(
-                        showFiatSubtitle: false
+                        showFiat: false
                     )
                 }
             case .swap(let fromAsset, let toAsset, let data):
                 let assetPrices = (metadata?.assetPrices ?? [:]).map { (assetId, price) in
                     price.mapToAssetPrice(assetId: assetId)
                 }
-                
+
                 let model = SwapMetadataViewModel(
                     metadata: TransactionExtendedMetadata(
                         assets: [fromAsset, toAsset],
@@ -94,7 +94,7 @@ public struct TransactionHeaderTypeBuilder {
                 }
                 return .swap(input)
             case .perpetual:
-                return .amount(showFiatSubtitle: true)
+                return .amount(showFiat: true)
             }
         }()
         return infoModel.headerType(input: inputType)

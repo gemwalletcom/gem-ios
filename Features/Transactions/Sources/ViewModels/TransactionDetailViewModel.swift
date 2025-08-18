@@ -34,14 +34,14 @@ public final class TransactionDetailViewModel {
         model = TransactionViewModel(
             explorerService: ExplorerService.standard,
             transaction: transaction,
-            formatter: .auto
+            currency: preferences.currency
         )
         self.preferences = preferences
         transactionExtended = transaction
         request = TransactionRequest(walletId: walletId, transactionId: transaction.id)
     }
 
-    var title: String { model.title }
+    var title: String { model.titleTextValue.text }
     var statusField: String { Localized.Transaction.status }
     var networkField: String { Localized.Transfer.network }
     var networkFeeField: String { Localized.Transfer.networkFee }
@@ -183,11 +183,11 @@ public final class TransactionDetailViewModel {
     }
 
     var networkFeeText: String {
-        model.networkFeeSymbolText
+        model.infoModel.feeDisplay?.amount.text ?? ""
     }
 
     var networkFeeFiatText: String? {
-        infoModel.feeFiatValueText
+        model.infoModel.feeDisplay?.fiat?.text
     }
 
     var showMemoField: Bool {
@@ -235,22 +235,9 @@ public final class TransactionDetailViewModel {
             )
         }()
         return TransactionHeaderTypeBuilder.build(
-            infoModel: infoModel,
+            infoModel: model.infoModel,
             transaction: model.transaction.transaction,
             metadata: metadata
-        )
-    }
-
-    var infoModel: TransactionInfoViewModel {
-        TransactionInfoViewModel(
-            currency: preferences.currency,
-            asset: model.transaction.asset,
-            assetPrice: model.transaction.price,
-            feeAsset: model.transaction.feeAsset,
-            feeAssetPrice: model.transaction.feePrice,
-            value: model.transaction.transaction.valueBigInt,
-            feeValue: model.transaction.transaction.feeBigInt,
-            direction: model.transaction.transaction.type == .transfer ? model.transaction.transaction.direction : nil
         )
     }
 
@@ -259,7 +246,7 @@ public final class TransactionDetailViewModel {
             model = TransactionViewModel(
                 explorerService: ExplorerService.standard,
                 transaction: new,
-                formatter: .auto
+                currency: preferences.currency
             )
         }
     }

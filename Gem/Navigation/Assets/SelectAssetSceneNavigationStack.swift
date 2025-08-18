@@ -28,6 +28,7 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.transactionService) private var transactionService
     @Environment(\.swapService) private var swapService
     @Environment(\.nameService) private var nameService
+    @Environment(\.addressNameService) private var addressNameService
 
     @State private var isPresentingFilteringView: Bool = false
 
@@ -88,6 +89,7 @@ struct SelectAssetSceneNavigationStack: View {
                             balanceService: balanceService,
                             priceService: priceService,
                             transactionService: transactionService,
+                            addressNameService: addressNameService,
                             chain: input.asset.chain
                         ),
                         model: viewModelFactory.recipientScene(

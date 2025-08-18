@@ -453,7 +453,6 @@
 "perpetual.short" = "Short";
 "markets.daily_volume" = "24hodinový objem";
 "perpetual.entry_price" = "Vstupní cena";
-"stake.your_staking" = "Vaše sázka";
 "widget.small.name" = "Cena bitcoinu";
 "widget.small.description" = "Sledování ceny Bitcoinu";
 "widget.medium.name" = "Nejlepší cena kryptoměn";

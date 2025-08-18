@@ -11,6 +11,7 @@ import Store
 import SwiftUI
 import Formatters
 import ExplorerService
+import Preferences
 
 @Observable
 @MainActor
@@ -37,13 +38,13 @@ public final class PerpetualSceneViewModel {
         }
     }
     let formatter = PerpetualPriceFormatter()
-
+    let preference = Preferences.standard
     public var isPresentingInfoSheet: InfoSheetType?
 
     public let perpetualViewModel: PerpetualViewModel
 
     public var positionViewModels: [PerpetualPositionViewModel] {
-        positions.map { PerpetualPositionViewModel(data: $0) }
+        positions.map { PerpetualPositionViewModel($0) }
     }
 
     public init(
@@ -74,13 +75,9 @@ public final class PerpetualSceneViewModel {
         )
     }
 
-    public var navigationTitle: String {
-        perpetualViewModel.name
-    }
-
-    public var hasOpenPosition: Bool {
-        !positionViewModels.isEmpty
-    }
+    public var navigationTitle: String { perpetualViewModel.name }
+    public var currency: String { preference.currency }
+    public var hasOpenPosition: Bool { !positionViewModels.isEmpty }
 
     public var positionSectionTitle: String { Localized.Perpetual.position }
     public var infoSectionTitle: String { Localized.Common.info }

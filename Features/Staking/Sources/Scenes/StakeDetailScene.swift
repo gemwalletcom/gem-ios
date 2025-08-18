@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Components
+import PrimitivesComponents
 
 public struct StakeDetailScene: View {
     private let model: StakeDetailSceneViewModel
@@ -12,6 +13,17 @@ public struct StakeDetailScene: View {
 
     public var body: some View {
         List {
+            Section { } header: {
+                WalletHeaderView(
+                    model: model.validatorHeaderViewModel,
+                    isHideBalanceEnalbed: .constant(false),
+                    onHeaderAction: nil,
+                    onInfoAction: nil
+                )
+                .padding(.top, .small)
+            }
+            .cleanListRow()
+
             Section {
                 if let url = model.validatorUrl {
                     SafariNavigationLink(url: url) {
@@ -24,12 +36,17 @@ public struct StakeDetailScene: View {
                 if model.showValidatorApr {
                     ListItemView(title: model.aprTitle, subtitle: model.validatorAprText)
                 }
+
+                ListItemView(title: model.stateTitle, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
+
+                if let title = model.completionDateTitle, let subtitle = model.completionDateText {
+                    ListItemView(title: title, subtitle: subtitle)
+                }
             }
             .listRowInsets(.assetListRowInsets)
 
-            Section(model.balancesTitle) {
-                ValidatorDelegationView(delegation: model.model)
-                if let rewardsText = model.model.rewardsText {
+            if let rewardsText = model.model.rewardsText {
+                Section {
                     ListItemView(
                         title: model.rewardsTitle,
                         titleStyle: model.model.titleStyle,
@@ -40,17 +57,15 @@ public struct StakeDetailScene: View {
                         imageStyle: model.assetImageStyle
                     )
                 }
+                .listRowInsets(.assetListRowInsets)
             }
-            .listRowInsets(.assetListRowInsets)
 
             //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()
             if model.showManage {
                 Section(model.manageTitle) {
                     if model.isStakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: model.title)) {
-                            if let value = try? model.stakeRecipientData() {
-                                model.onAmountInputAction?(value)
-                            }
+                            model.onStakeAmountAction()
                         }
                     }
                     if model.isUnstakeAvailable {
@@ -60,16 +75,12 @@ public struct StakeDetailScene: View {
                     }
                     if model.isRedelegateAvailable {
                         NavigationCustomLink(with: ListItemView(title: model.redelegateTitle)) {
-                            if let value = try? model.redelegateRecipientData() {
-                                model.onAmountInputAction?(value)
-                            }
+                            model.onRedelegateAction()
                         }
                     }
                     if model.isWithdrawStakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: model.withdrawTitle)) {
-                            if let value = try? model.withdrawStakeTransferData() {
-                                model.onTransferAction?(value)
-                            }
+                            model.onWithdrawAction()
                         }
                     }
                 }
@@ -77,5 +88,6 @@ public struct StakeDetailScene: View {
             }
         }
         .navigationTitle(model.title)
+        .listSectionSpacing(.compact)
     }
 }

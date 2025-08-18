@@ -13,7 +13,7 @@ public struct AssetDataViewModel: Sendable {
     private let balanceViewModel: BalanceViewModel
 
     public let priceViewModel: PriceViewModel
-    let currencyCode: String
+    public let currencyCode: String
 
     public init(
         assetData: AssetData,

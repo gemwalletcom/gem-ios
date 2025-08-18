@@ -6,7 +6,7 @@ import Primitives
 import Style
 
 public enum TransactionHeaderType {
-    case amount(title: String, subtitle: String?)
+    case amount(AmountDisplay)
     case swap(from: SwapAmountField, to: SwapAmountField)
     case nft(name: String?, image: AssetImage)
 }
@@ -21,11 +21,8 @@ public struct TransactionHeaderView: View {
     public var body: some View {
         VStack(alignment: .center) {
             switch type {
-            case .amount(let title, let subtitle):
-                AmountView(
-                    title: title,
-                    subtitle: subtitle
-                )
+            case let .amount(display):
+                AmountView(viewModel: display)
             case .swap(let from, let to):
                 SwapAmountView(from: from, to: to)
             case .nft(let name, let image):

@@ -65,7 +65,7 @@ let package = Package(
 
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "WalletService", package: "SystemServices"),
-                .product(name: "WalletsService", package: "SystemServices"),
+                .product(name: "WalletsService", package: "FeatureServices"),
                 .product(name: "StakeService", package: "ChainServices"),
                 .product(name: "NodeService", package: "ChainServices"),
                 .product(name: "TransactionService", package: "FeatureServices"),
@@ -73,7 +73,8 @@ let package = Package(
                 .product(name: "BalanceService", package: "FeatureServices"),
                 .product(name: "PriceService", package: "FeatureServices"),
                 .product(name: "ExplorerService", package: "ChainServices"),
-                .product(name: "NameService", package: "ChainServices")
+                .product(name: "NameService", package: "ChainServices"),
+                .product(name: "AddressNameService", package: "FeatureServices")
             ],
             path: "Sources"
         ),
@@ -83,7 +84,7 @@ let package = Package(
                 "Transfer",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
-                .product(name: "WalletsServiceTestKit", package: "SystemServices"),
+                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BlockchainTestKit", package: "Blockchain"),
                 .product(name: "ScanServiceTestKit", package: "ChainServices"),
                 .product(name: "SwapServiceTestKit", package: "FeatureServices"),
@@ -95,6 +96,7 @@ let package = Package(
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "TransactionServiceTestKit", package: "FeatureServices"),
+                .product(name: "AddressNameServiceTestKit", package: "FeatureServices"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
             ],

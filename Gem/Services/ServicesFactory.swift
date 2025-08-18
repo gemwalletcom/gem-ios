@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 import BannerService
 import ChainService
 import DeviceService
@@ -21,15 +22,16 @@ import AssetsService
 import TransactionsService
 import TransactionService
 import NFTService
-import WalletsService
 import WalletService
 import AvatarService
 import WalletSessionService
-import AppService
 import ScanService
 import SwapService
 import NameService
 import PerpetualService
+import WalletsService
+import AppService
+import AddressNameService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -173,9 +175,11 @@ struct ServicesFactory {
             balanceStore: storeManager.balanceStore,
             nodeProvider: nodeService
         )
+        let perpetualObserverService = PerpetualObserverService(perpetualService: perpetualService)
         
         let nameService = NameService()
         let scanService = ScanService(securePreferences: .standard)
+        let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
         
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
@@ -189,7 +193,8 @@ struct ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             transactionService: transactionService,
-            chainServiceFactory: chainServiceFactory
+            chainServiceFactory: chainServiceFactory,
+            addressNameService: addressNameService
         )
 
         return AppResolver.Services(
@@ -221,7 +226,9 @@ struct ServicesFactory {
             onstartAsyncService: onstartAsyncService,
             walletConnectorManager: walletConnectorManager,
             perpetualService: perpetualService,
+            perpetualObserverService: perpetualObserverService,
             nameService: nameService,
+            addressNameService: addressNameService,
             viewModelFactory: viewModelFactory
         )
     }
@@ -471,7 +478,7 @@ extension ServicesFactory {
             assetStore: assetStore,
             priceStore: priceAstore,
             balanceStore: balanceStore,
-            providerFactory: providerFactory
+            provider: providerFactory.createProvider()
         )
     }
 }

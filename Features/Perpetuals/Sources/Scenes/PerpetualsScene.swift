@@ -32,19 +32,13 @@ public struct PerpetualsScene: View {
             
             if !model.positions.isEmpty {
                 Section {
-                    ForEach(model.positions) { positionData in
+                    ForEach(model.positions) { position in
                         NavigationLink(
                             value: Scenes
-                                .Perpetual(perpetualData: PerpetualData(
-                                    perpetual: positionData.perpetual,
-                                    asset: positionData.asset,
-                                    metadata: PerpetualMetadata(isPinned: false)
-                                ))
+                                .Perpetual(position.perpetualData)
                         ) {
                             ListAssetItemView(model: PerpetualPositionItemViewModel(
-                                model: PerpetualPositionViewModel(
-                                    data: positionData
-                                )
+                                model: PerpetualPositionViewModel(position)
                             ))
                         }
                         .listRowInsets(.assetListRowInsets)
@@ -81,11 +75,6 @@ public struct PerpetualsScene: View {
         .navigationTitle(model.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .taskOnce {
-            Task {
-                await model.fetch()
-            }
-        }
-        .onReceive(model.timer) { _ in
             Task {
                 await model.fetch()
             }
