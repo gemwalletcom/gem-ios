@@ -10,87 +10,18 @@ import WalletCore
 public struct CardanoService: Sendable {
     
     let chain: Chain
-    let graphql: GraphqlService
+    let gateway: GatewayService
     
     public init(
         chain: Chain,
-        graphql: GraphqlService
+        gateway: GatewayService
     ) {
         self.chain = chain
-        self.graphql = graphql
+        self.gateway = gateway
     }
 }
 
-// MARK: - Business Logic
-
 extension CardanoService {
-    private func latestBlock() async throws -> BigInt {
-        let request = GraphqlRequest(
-            operationName: "GetBlockNumber",
-            variables: [:],
-            query: "query GetBlockNumber { cardano { tip { number } } }"
-        )
-        let result: CardanoBlockData = try await graphql.requestData(request)
-        return BigInt(result.cardano.tip.number)
-    }
-    
-    private func balance(address: String) async throws -> BigInt {
-        let request = GraphqlRequest(
-            operationName: "GetBalance",
-            variables: ["address": address],
-            query: "query GetBalance($address: String!) { utxos: utxos_aggregate(where: { address: { _eq: $address }  } ) { aggregate { sum { value } } } }"
-        )
-        let result: CardanoUTXOS<CardanoAggregateBalance> = try await graphql.requestData(request)
-        if let value = result.utxos.aggregate.sum.value {
-            return BigInt(stringLiteral: value)
-        }
-        return .zero
-    }
-    
-    private func transaction(hash: String) async throws -> CardanoTransaction {
-        let request = GraphqlRequest(
-            operationName: "TransactionsByHash",
-            variables: ["hash": hash],
-            query: "query TransactionsByHash($hash: Hash32Hex!) { transactions(where: { hash: { _eq: $hash }  } ) { block { number } fee } }"
-        )
-        let result: CardanoTransactions = try await graphql.requestData(request)
-        if let transaction = result.transactions.first {
-            return transaction
-        }
-        throw AnyError("no transaction for hash \(hash)")
-    }
-    
-    private func utxos(address: String) async throws -> [UTXO] {
-        let request = GraphqlRequest(
-            operationName: "UtxoSetForAddress",
-            variables: ["address": address],
-            query: "query UtxoSetForAddress($address: String!) { utxos(order_by: { value: desc } , where: { address: { _eq: $address }  } ) { address value txHash index tokens { quantity asset { fingerprint policyId assetName } } } }"
-        )
-        let result: CardanoUTXOS<[CardanoUTXO]> = try await graphql.requestData(request)
-        return result.utxos.map {
-            UTXO(transaction_id: $0.txHash, vout: $0.index, value: $0.value, address: $0.address)
-        }
-    }
-    
-    private func broadcast(data: String) async throws -> GraphqlData<CardanoTransactionBroadcast> {
-        let request = GraphqlRequest(
-            operationName: "SubmitTransaction",
-            variables: ["transaction": data],
-            query: "mutation SubmitTransaction($transaction: String!) { submitTransaction(transaction: $transaction) { hash } }"
-        )
-        return try await graphql.request(request)
-    }
-    
-    private func networkMagic() async throws -> BigInt {
-        let request = GraphqlRequest(
-            operationName: "GetNetworkMagic",
-            variables: [:],
-            query: "query GetNetworkMagic { genesis { shelley { networkMagic } } }"
-        )
-        let result: CardanoGenesisData = try await graphql.requestData(request)
-        return BigInt(result.genesis.shelley.networkMagic)
-    }
-
     private func calculateFee(input: TransactionInput, utxos: [UTXO]) throws -> BigInt {
         let signingInput = try CardanoSigningInput.with {
             $0.utxos = try utxos.map { utxo in
@@ -116,22 +47,15 @@ extension CardanoService {
 
 extension CardanoService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let available = try await balance(address: address)
-        
-        return Primitives.AssetBalance(
-            assetId: chain.assetId,
-            balance: Balance(
-                available: available
-            )
-        )
+        try await gateway.coinBalance(chain: chain, address: address)
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        []
+        try await gateway.tokenBalance(chain: chain, address: address, tokenIds: tokenIds)
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        .none
+        try await gateway.getStakeBalance(chain: chain, address: address)
     }
 }
 
@@ -145,7 +69,9 @@ extension CardanoService: ChainFeeRateFetchable {
 
 extension CardanoService: ChainTransactionPreloadable {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        .none
+        return TransactionPreload(
+            utxos: try await gateway.utxos(chain: chain, address: input.senderAddress)
+        )
     }
 }
 
@@ -153,7 +79,7 @@ extension CardanoService: ChainTransactionPreloadable {
 
 extension CardanoService: ChainTransactionDataLoadable {
     public func load(input: TransactionInput) async throws -> TransactionData {
-        let utxos = try await utxos(address: input.senderAddress)
+        let utxos = input.preload.utxos
         let fee = try calculateFee(input: input, utxos: utxos)
         
         return TransactionData(
@@ -167,15 +93,7 @@ extension CardanoService: ChainTransactionDataLoadable {
 
 extension CardanoService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        let transaction = try await self.broadcast(data: data)
-        
-        if let error = transaction.errors?.first {
-            throw AnyError(error.message)
-        } else if let transaction = transaction.data?.submitTransaction {
-            return transaction.hash
-        }
-
-        throw ChainServiceErrors.broadcastError(chain)
+        try await gateway.transactionBroadcast(chain: chain, data: data)
     }
 }
 
@@ -183,48 +101,7 @@ extension CardanoService: ChainBroadcastable {
 
 extension CardanoService: ChainTransactionStateFetchable {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        let transaction = try await transaction(hash: request.id)
-        
-        return TransactionChanges(
-            state: .confirmed,
-            changes: [
-                .networkFee(BigInt(stringLiteral: transaction.fee)),
-                .blockNumber(Int(transaction.block.number))
-            ]
-        )
-    }
-}
-
-// MARK: - ChainSyncable
-
-extension CardanoService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        //TODO: Add getInSync check later
-        true
-    }
-}
-
-// MARK: - ChainStakable
-
-extension CardanoService: ChainStakable {
-    public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return []
-    }
-
-    public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
-    }
-}
-
-// MARK: - ChainTokenable
-
-extension CardanoService: ChainTokenable {
-    public func getTokenData(tokenId: String) async throws -> Asset {
-        fatalError()
-    }
-    
-    public func getIsTokenAddress(tokenId: String) -> Bool {
-        return false
+        try await gateway.transactionStatus(chain: chain, request: request)
     }
 }
 
@@ -232,7 +109,7 @@ extension CardanoService: ChainTokenable {
  
 extension CardanoService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        try await networkMagic().description
+        try await gateway.chainId(chain: chain)
     }
 }
 
@@ -240,14 +117,8 @@ extension CardanoService: ChainIDFetchable {
 
 extension CardanoService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        try await latestBlock()
+        try await gateway.latestBlock(chain: chain)
     }
 }
 
-// MARK: - ChainAddressStatusFetchable
-
-extension CardanoService: ChainAddressStatusFetchable {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
-        []
-    }
-}
+extension CardanoService: ChainStakable, ChainTokenable, ChainAddressStatusFetchable {}

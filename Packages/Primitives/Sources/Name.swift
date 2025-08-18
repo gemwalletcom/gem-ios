@@ -34,4 +34,5 @@ public enum NameProvider: String, Codable, Sendable {
 	case lens
 	case basenames
 	case hyperliquid
+	case allDomains = "alldomains"
 }

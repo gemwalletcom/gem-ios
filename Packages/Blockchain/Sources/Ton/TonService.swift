@@ -257,15 +257,6 @@ extension TonService: ChainTransactionStateFetchable {
     }
 }
 
-// MARK: - ChainSyncable
-
-extension TonService: ChainSyncable {
-    public func getInSync() async throws -> Bool {
-        //TODO: Add getInSync check later
-        true
-    }
-}
-
 // MARK: - ChainStakable
 
 extension TonService: ChainStakable {

@@ -25,6 +25,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.releaseService) private var releaseService
+    @Environment(\.perpetualService) private var perpetualService
     @Environment(\.walletConnectorManager) private var walletConnectorManager
 
     @State private var isPresentingWallets = false
@@ -115,7 +116,8 @@ struct SettingsNavigationStack: View {
                     assetService: assetsService,
                     stakeService: stakeService,
                     bannerService: bannerService,
-                    priceService: priceService
+                    priceService: priceService,
+                    perpetualService: perpetualService
                 ))
             }
             .navigationDestination(for: Scenes.Currency.self) { _ in
