@@ -22,13 +22,13 @@ public struct ConnectionsScene: View {
                 ButtonListItem(
                     title: model.pasteButtonTitle,
                     image: Images.System.paste,
-                    isLoading: model.isPasteLoading,
+                    isLoading: model.loadingAction == .paste,
                     action: model.onPaste
                 )
                 ButtonListItem(
                     title: model.scanQRCodeButtonTitle,
                     image: Images.System.qrCode,
-                    isLoading: model.isScanLoading,
+                    isLoading: model.loadingAction == .scan,
                     action: model.onScan
                 )
             }

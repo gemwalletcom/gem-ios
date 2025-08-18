@@ -24,10 +24,7 @@ public final class ConnectionsViewModel {
     var connections: [WalletConnection] = []
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
-
     var loadingAction: LoadingAction?
-    var isPasteLoading: Bool { loadingAction == .paste }
-    var isScanLoading: Bool { loadingAction == .scan }
 
     public init(
         service: ConnectionsService,
