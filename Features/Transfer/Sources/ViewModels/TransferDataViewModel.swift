@@ -63,15 +63,6 @@ struct TransferDataViewModel {
         }
     }
 
-    var recepientAccount: SimpleAccount {
-        SimpleAccount(
-            name: recipientName,
-            chain: chain,
-            address: recipient.address,
-            assetImage: .none
-        )
-    }
-
     var appValue: String? {
         switch type {
         case .transfer,
