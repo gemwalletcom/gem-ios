@@ -116,8 +116,8 @@ extension GatewayService {
         try await gateway.getTransactionPreload(chain: chain.rawValue, input: input.map()).map()
     }
     
-    public func transactionLoad(chain: Primitives.Chain, input: TransactionLoadInput) async throws -> TransactionData {
-        try await gateway.getTransactionLoad(chain: chain.rawValue, input: input.map()).map()
+    public func transactionLoad(chain: Primitives.Chain, input: GemTransactionLoadInput) async throws -> TransactionData {
+        try await gateway.getTransactionLoad(chain: chain.rawValue, input: input).map()
     }
 }
 

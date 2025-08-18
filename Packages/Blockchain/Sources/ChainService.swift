@@ -32,8 +32,6 @@ extension ChainService {
                 chain: EVMChain(rawValue: chain.rawValue)!,
                 provider: ProviderFactory.create(with: url)
             )
-        case .cosmos:
-            CosmosService(chain: CosmosChain(rawValue: chain.rawValue)!, provider: ProviderFactory.create(with: url))
         case .ton:
             TonService(chain: chain, provider: ProviderFactory.create(with: url))
         case .tron:
@@ -45,7 +43,12 @@ extension ChainService {
             )
         case .sui:
             SuiService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .aptos, .algorand, .xrp, .stellar, .near:
+        case .aptos,
+            .algorand,
+            .xrp,
+            .stellar,
+            .near,
+            .cosmos:
             GatewayChainService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))

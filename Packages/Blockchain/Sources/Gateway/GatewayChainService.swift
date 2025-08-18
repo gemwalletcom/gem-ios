@@ -105,6 +105,18 @@ extension GatewayChainService: ChainTransactionDataLoadable {
     }
 }
 
+// MARK: - ChainStakable
+
+extension GatewayChainService: ChainStakable {
+    public func getValidators(apr: Double) async throws -> [DelegationValidator] {
+        try await gateway.validators(chain: chain)
+    }
+    
+    public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
+        try await gateway.delegations(chain: chain, address: address)
+    }
+}
+
 // MARK: - Default Protocol Conformances
 
-extension GatewayChainService: ChainStakable, ChainAddressStatusFetchable {}
+extension GatewayChainService: ChainAddressStatusFetchable {}
