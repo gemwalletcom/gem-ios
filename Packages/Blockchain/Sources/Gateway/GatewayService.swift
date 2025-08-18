@@ -26,9 +26,7 @@ extension GatewayService {
     public func tokenBalance(chain: Primitives.Chain, address: String, tokenIds: [Primitives.AssetId]) async throws -> [AssetBalance] {
         try await gateway
             .getBalanceTokens(chain: chain.rawValue, address: address, tokenIds: tokenIds.compactMap(\.tokenId))
-            .map {
-            try $0.map()
-        }
+            .map { try $0.map() }
     }
 
     public func getStakeBalance(chain: Primitives.Chain, address: String) async throws -> AssetBalance? {
@@ -88,8 +86,14 @@ extension GatewayService {
         return BigInt(block)
     }
     
-    public func fees(chain: Primitives.Chain) async throws -> [FeePriorityValue] {
-        try await gateway.getFees(chain: chain.rawValue).map { try $0.map() }
+    public func feeRates(chain: Primitives.Chain) async throws -> [FeePriorityValue] {
+        try await gateway.getFeeRates(chain: chain.rawValue).map { try $0.map() }
+    }
+    
+    public func feeRatesFormatted(chain: Primitives.Chain) async throws -> [FeeRate] {
+        try await feeRates(chain: chain).map {
+            FeeRate(priority: $0.priority, gasPriceType: .regular(gasPrice: $0.value))
+        }
     }
 }
 
@@ -110,6 +114,10 @@ extension GatewayService {
 extension GatewayService {
     public func transactionPreload(chain: Primitives.Chain, input: TransactionPreloadInput) async throws -> TransactionPreload {
         try await gateway.getTransactionPreload(chain: chain.rawValue, input: input.map()).map()
+    }
+    
+    public func transactionLoad(chain: Primitives.Chain, input: TransactionLoadInput) async throws -> TransactionData {
+        try await gateway.getTransactionLoad(chain: chain.rawValue, input: input.map()).map()
     }
 }
 
@@ -380,6 +388,27 @@ extension GemChartCandleStick {
             low: low,
             close: close,
             volume: volume
+        )
+    }
+}
+
+extension GemTransactionData {
+    func map() throws -> TransactionData {
+        TransactionData(
+            accountNumber: Int(accountNumber),
+            sequence: Int(sequence),
+            block: SignerInputBlock(
+                number: Int(blockNumber),
+                hash: blockHash
+            ),
+            chainId: chainId,
+            fee: Fee(
+                fee: try BigInt.from(string: fee.fee),
+                gasPriceType: .regular(gasPrice: try BigInt.from(string: fee.gasPrice)),
+                gasLimit: try BigInt.from(string: fee.gasLimit)
+            ),
+            utxos: try utxos.map { try $0.map() },
+            messageBytes: messageBytes
         )
     }
 }

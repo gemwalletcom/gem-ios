@@ -43,11 +43,9 @@ extension ChainService {
                 chain: BitcoinChain(rawValue: chain.rawValue)!,
                 gateway: GatewayService(provider: NativeProvider(url: url))
             )
-        case .aptos:
-            AptosService(chain: chain, provider: ProviderFactory.create(with: url))
         case .sui:
             SuiService(chain: chain, provider: ProviderFactory.create(with: url))
-        case .algorand, .xrp, .stellar, .near:
+        case .aptos, .algorand, .xrp, .stellar, .near:
             GatewayChainService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))

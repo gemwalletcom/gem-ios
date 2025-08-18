@@ -39,7 +39,7 @@ extension GatewayChainService: ChainBalanceable {
 
 extension GatewayChainService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        try await gateway.fees(chain: chain).map {
+        try await gateway.feeRates(chain: chain).map {
             FeeRate(priority: $0.priority, gasPriceType: .regular(gasPrice: $0.value))
         }
     }
@@ -101,16 +101,7 @@ extension GatewayChainService: ChainTransactionPreloadable {
 
 extension GatewayChainService: ChainTransactionDataLoadable {
     public func load(input: TransactionInput) async throws -> TransactionData {
-        return TransactionData(
-            sequence: input.preload.sequence,
-            block: SignerInputBlock(
-                number: input.preload.blockNumber,
-                hash: input.preload.blockHash
-            ),
-            chainId: input.preload.chainId,
-            fee: input.defaultFee,
-            utxos: input.preload.utxos
-        )
+        try await gateway.transactionLoad(chain: chain, input: input.map())
     }
 }
 

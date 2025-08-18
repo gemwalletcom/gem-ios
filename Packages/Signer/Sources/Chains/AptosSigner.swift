@@ -21,8 +21,7 @@ public struct AptosSigner: Signable {
             case .anyData(let string):
                 $0.anyEncoded = string
             }
-            // TODO: - 3664390082 = 2086-22:08:02 +UTC, probably need to adjust
-            $0.expirationTimestampSecs = 3664390082
+            $0.expirationTimestampSecs = UInt64(Date.now.timeIntervalSince1970) + 3_600
             $0.gasUnitPrice = input.fee.gasPrice.asUInt
             $0.maxGasAmount = input.fee.gasLimit.asUInt
             $0.sequenceNumber = Int64(input.sequence)

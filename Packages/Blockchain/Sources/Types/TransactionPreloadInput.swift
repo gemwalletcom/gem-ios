@@ -66,4 +66,20 @@ extension TransactionInput {
             gasLimit: gasLimit
         )
     }
+    
+    public func map() -> TransactionLoadInput {
+        TransactionLoadInput(
+            inputType: TransactionInputType.transfer(asset),
+            senderAddress: senderAddress,
+            destinationAddress: destinationAddress,
+            value: value.description,
+            gasPrice: GasPrice(gasPrice: gasPrice.gasPrice),
+            sequence: UInt64(preload.sequence),
+            blockHash: preload.blockHash,
+            blockNumber: Int64(preload.blockNumber),
+            chainId: preload.chainId,
+            utxos: preload.utxos
+        )
+    }
 }
+
