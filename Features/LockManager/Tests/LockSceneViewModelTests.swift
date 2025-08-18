@@ -447,7 +447,7 @@ struct LockSceneViewModelTests {
         viewModel.handleSceneChange(to: .active)
 
         #expect(viewModel.state == .locked)
-        #expect(viewModel.shouldShowLockScreen == true)
+        #expect(viewModel.shouldShowLockScreen)
     }
 }
 
