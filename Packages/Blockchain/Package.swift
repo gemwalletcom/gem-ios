@@ -56,8 +56,7 @@ let package = Package(
                 "Blockchain",
                 "BlockchainTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-            ],
-            resources: [.process("Resources")]
+            ]
         ),
     ]
 )
