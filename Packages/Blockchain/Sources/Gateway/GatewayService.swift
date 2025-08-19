@@ -86,12 +86,12 @@ extension GatewayService {
         return BigInt(block)
     }
     
-    public func feeRates(chain: Primitives.Chain) async throws -> [FeePriorityValue] {
+    public func feePriorityRates(chain: Primitives.Chain) async throws -> [FeePriorityValue] {
         try await gateway.getFeeRates(chain: chain.rawValue).map { try $0.map() }
     }
     
-    public func feeRatesFormatted(chain: Primitives.Chain) async throws -> [FeeRate] {
-        try await feeRates(chain: chain).map {
+    public func feeRates(chain: Primitives.Chain) async throws -> [FeeRate] {
+        try await feePriorityRates(chain: chain).map {
             FeeRate(priority: $0.priority, gasPriceType: .regular(gasPrice: $0.value))
         }
     }
@@ -261,7 +261,8 @@ extension TransactionStateRequest {
         GemTransactionStateRequest(
             id: id,
             senderAddress: senderAddress,
-            createdAt: Int64(createdAt.timeIntervalSince1970)
+            createdAt: Int64(createdAt.timeIntervalSince1970),
+            blockNumber: Int64(block)
         )
     }
 }

@@ -23,11 +23,3 @@ public struct PolkadotBlock: Codable, Sendable {
 		self.extrinsics = extrinsics
 	}
 }
-
-public struct PolkadotNodeVersion: Codable, Sendable {
-	public let chain: String
-
-	public init(chain: String) {
-		self.chain = chain
-	}
-}

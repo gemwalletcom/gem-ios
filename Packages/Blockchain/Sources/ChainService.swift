@@ -53,7 +53,11 @@ extension ChainService {
                 gateway: GatewayService(provider: NativeProvider(url: url))
             )
         case .polkadot:
-            PolkadotService(chain: chain, provider: ProviderFactory.create(with: url))
+            PolkadotService(
+                chain: chain,
+                provider: ProviderFactory.create(with: url),
+                gateway: GatewayService(provider: NativeProvider(url: url))
+            )
         case .cardano:
             CardanoService(
                 chain: chain,
