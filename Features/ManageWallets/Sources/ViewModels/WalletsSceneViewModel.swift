@@ -13,7 +13,11 @@ public final class WalletsSceneViewModel {
     let service: WalletService
     let currentWalletId: WalletId?
     
+    #if DEBUG
+    public static let walletsLimit = 1000
+    #else
     public static let walletsLimit = 50
+    #endif
     
     var isPresentingAlertMessage: AlertMessage?
     var walletDelete: Wallet?

@@ -401,11 +401,24 @@ extension GemTransactionData {
                 number: Int(blockNumber),
                 hash: blockHash
             ),
+            token: SignerInputToken(
+                senderTokenAddress: token.senderTokenAddress,
+                recipientTokenAddress: token.recipientTokenAddress,
+                tokenProgram: .init(rawValue: token.tokenProgram) ?? .token
+            ),
             chainId: chainId,
             fee: Fee(
                 fee: try BigInt.from(string: fee.fee),
                 gasPriceType: .regular(gasPrice: try BigInt.from(string: fee.gasPrice)),
-                gasLimit: try BigInt.from(string: fee.gasLimit)
+                gasLimit: try BigInt.from(string: fee.gasLimit),
+                options: try fee.options.reduce(into: [:]) { result, pair in
+                    let feeOption: FeeOption
+                    switch pair.key {
+                    case .tokenAccountCreation:
+                        feeOption = .tokenAccountCreation
+                    }
+                    result[feeOption] = try BigInt.from(string: pair.value)
+                }
             ),
             utxos: try utxos.map { try $0.map() },
             messageBytes: messageBytes

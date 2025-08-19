@@ -32,8 +32,6 @@ extension ChainService {
                 chain: EVMChain(rawValue: chain.rawValue)!,
                 provider: ProviderFactory.create(with: url)
             )
-        case .ton:
-            TonService(chain: chain, provider: ProviderFactory.create(with: url))
         case .tron:
             TronService(chain: chain, provider: ProviderFactory.create(with: url))
         case .bitcoin:
@@ -48,7 +46,8 @@ extension ChainService {
             .xrp,
             .stellar,
             .near,
-            .cosmos:
+            .cosmos,
+            .ton:
             GatewayChainService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))
