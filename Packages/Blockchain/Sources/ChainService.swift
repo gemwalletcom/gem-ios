@@ -40,7 +40,11 @@ extension ChainService {
                 gateway: GatewayService(provider: NativeProvider(url: url))
             )
         case .sui:
-            SuiService(chain: chain, provider: ProviderFactory.create(with: url))
+            SuiService(
+                chain: chain, 
+                provider: ProviderFactory.create(with: url),
+                gateway: GatewayService(provider: NativeProvider(url: url))
+            )
         case .aptos,
             .algorand,
             .xrp,
