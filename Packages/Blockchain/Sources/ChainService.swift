@@ -26,7 +26,11 @@ extension ChainService {
     public static func service(chain: Chain, with url: URL) -> ChainServiceable {
         switch chain.type {
         case .solana:
-            SolanaService(chain: chain, provider: ProviderFactory.create(with: url))
+            SolanaService(
+                chain: chain, 
+                provider: ProviderFactory.create(with: url),
+                gateway: GatewayService(provider: NativeProvider(url: url))
+            )
         case .ethereum:
             EthereumService(
                 chain: EVMChain(rawValue: chain.rawValue)!,

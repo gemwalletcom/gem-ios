@@ -13,16 +13,19 @@ public struct SolanaService: Sendable {
     
     let chain: Primitives.Chain
     let provider: Provider<SolanaProvider>
+    let gateway: GatewayService
     let feeService: SolanaFeeService
     
     let tokenAccountSize = 165
     
     public init(
         chain: Primitives.Chain,
-        provider: Provider<SolanaProvider>
+        provider: Provider<SolanaProvider>,
+        gateway: GatewayService
     ) {
         self.chain = chain
         self.provider = provider
+        self.gateway = gateway
         self.feeService = SolanaFeeService()
     }
 }
@@ -30,17 +33,6 @@ public struct SolanaService: Sendable {
 // MARK: - Business Logic
 
 extension SolanaService {
-    private func getAccounts(token: String, owner: String) async throws -> [SolanaTokenAccountPubkey] {
-        return try await provider
-            .request(.getTokenAccountsByOwner(owner: owner, token: token))
-            .map(as: JSONRPCResponse<SolanaValue<[SolanaTokenAccountPubkey]>>.self).result.value
-    }
-    
-    private func getTokenAccounts(token: String, owner: String) async throws -> [SolanaTokenAccount] {
-        return try await provider
-            .request(.getTokenAccountsByOwner(owner: owner, token: token))
-            .map(as: JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>.self).result.value
-    }
 
     private func getTokenTransferType(
         tokenId: String,
@@ -77,19 +69,6 @@ extension SolanaService {
         )
     }
 
-    private func getTokenBalances(tokenIds: [AssetId], address: String) async throws -> [Primitives.AssetBalance] {
-        let balances = try await provider.requestBatch(
-            tokenIds.map { .getTokenAccountsByOwner(owner: address, token: try $0.getTokenId()) })
-            .map(as: [JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>].self)
-            .map {
-                if let account = $0.result.value.first {
-                    return BigInt(stringLiteral: account.account.data.parsed.info.tokenAmount.amount)
-                }
-                return BigInt.zero
-            }
-    
-        return AssetBalance.merge(assetIds: tokenIds, balances: balances)
-    }
 
     private func getPrioritizationFees() async throws -> [Int] {
         let fees = try await provider
@@ -99,63 +78,21 @@ extension SolanaService {
         return fees.map { $0.prioritizationFee }
     }
 
-    private func getBalance(address: String) async throws -> BigInt {
-        try await provider
-            .request(.balance(address: address))
-            .map(as: JSONRPCResponse<SolanaBalance>.self).result.value.asBigInt
-    }
-
-    private func getEpoch() async throws -> SolanaEpoch {
-        try await provider
-            .request(.epoch)
-            .map(as: JSONRPCResponse<SolanaEpoch>.self).result
-    }
-
-    private func getDelegations(address: String) async throws -> [SolanaStakeAccount] {
-        try await provider
-            .request(.stakeDelegations(address: address))
-            .map(as: JSONRPCResponse<[SolanaStakeAccount]>.self).result
-    }
-    
-    private func getSlot() async throws -> BigInt {
-        try await provider
-            .request(.slot)
-            .map(as: JSONRPCResponse<Int>.self).result.asBigInt
-    }
-    
-    private func getGenesisHash() async throws -> String {
-        try await provider
-            .request(.genesisHash)
-            .map(as: JSONRPCResponse<String>.self).result
-    }
 }
 
 // MARK: - ChainBalanceable
 
 extension SolanaService: ChainBalanceable {    
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let balance = try await getBalance(address: address)
-        return AssetBalance(
-            assetId: chain.assetId,
-            balance: Balance(
-                available: balance
-            )
-        )
+        try await gateway.coinBalance(chain: chain, address: address)
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        try await getTokenBalances(tokenIds: tokenIds, address: address)
+        try await gateway.tokenBalance(chain: chain, address: address, tokenIds: tokenIds)
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        let staked = try await getDelegations(address: address)
-            .map { $0.account.lamports }
-            .reduce(0, +)
-
-        return AssetBalance(
-            assetId: chain.assetId,
-            balance: Balance(staked: BigInt(staked))
-        )
+        try await gateway.getStakeBalance(chain: chain, address: address)
     }
 }
 
@@ -169,11 +106,7 @@ extension SolanaService: ChainFeeRateFetchable {
 
 extension SolanaService: ChainTransactionPreloadable {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        let blockhash = try await provider
-            .request(.latestBlockhash)
-            .map(as: JSONRPCResponse<SolanaBlockhashResult>.self).result.value.blockhash
-        
-        return TransactionPreload(blockHash: blockhash)
+        try await gateway.transactionPreload(chain: chain, input: input)
     }
 }
 
@@ -238,17 +171,7 @@ extension SolanaService: ChainBroadcastable {
 
 extension SolanaService: ChainTransactionStateFetchable {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        let transaction = try await provider
-            .request(.transaction(id: request.id))
-            .map(as: JSONRPCResponse<SolanaTransaction>.self).result
-        
-        if transaction.slot > 0 {
-            if let _ = transaction.meta.err {
-                return TransactionChanges(state: .failed)
-            }
-            return TransactionChanges(state: .confirmed)
-        }
-        return TransactionChanges(state: .pending)
+        try await gateway.transactionStatus(chain: chain, request: request)
     }
 }
 
@@ -256,67 +179,11 @@ extension SolanaService: ChainTransactionStateFetchable {
 
 extension SolanaService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        let validators = try await provider
-            .request(.stakeValidators)
-            .map(as: JSONRPCResponse<SolanaValidators>.self).result.current
-            
-        return validators.compactMap {
-            let isActive = $0.epochVoteAccount
-            let apr = isActive ? apr - (apr * (Double($0.commission) / 100)) : 0
-            return DelegationValidator(
-                chain: chain,
-                id: $0.votePubkey,
-                name: .empty,
-                isActive: isActive,
-                commision: Double($0.commission),
-                apr: apr
-            )
-        }
+        try await gateway.validators(chain: chain)
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        async let getEpoch = getEpoch()
-        async let getDelegations = getDelegations(address: address)
-        let (epoch, delegations) = try await (getEpoch, getDelegations)
-        
-        return delegations.map { delegation in
-            let info = delegation.account.data.parsed.info
-            
-            let state: DelegationState = {
-                if let deactivationEpoch = Int(info.stake.delegation.deactivationEpoch) {
-                    if deactivationEpoch == epoch.epoch {
-                        return .deactivating
-                    } else if deactivationEpoch < epoch.epoch {
-                        return .awaitingWithdrawal
-                    }
-                } else if let activationEpoch = Int(info.stake.delegation.activationEpoch) {
-                    if activationEpoch == epoch.epoch {
-                        return .activating
-                    } else if activationEpoch <= epoch.epoch {
-                        return .active
-                    }
-                }
-                return .pending
-            }()
-            let completionDate: Date? = switch state {
-            case .activating, .deactivating: Date().addingTimeInterval(TimeInterval(epoch.slotsInEpoch - epoch.slotIndex) * 0.420)
-            default: .none
-            }
-            let balance = delegation.account.lamports
-            //TODO: Fix
-            //let rewards = BigInt(delegation.account.lamports) - BigInt(stringLiteral: info.stake.delegation.stake)
-            
-            return DelegationBase(
-                assetId: chain.assetId,
-                state: state,
-                balance: balance.description,
-                shares: "0",
-                rewards: .zero, //rewards.description,
-                completionDate: completionDate,
-                delegationId: delegation.pubkey,
-                validatorId: info.stake.delegation.voter
-            )
-        }
+        try await gateway.delegations(chain: chain, address: address)
     }
 }
 
@@ -324,38 +191,7 @@ extension SolanaService: ChainStakable {
 
 extension SolanaService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        let tokenInfo = try await provider.request(.getAccountInfo(account: tokenId))
-            .map(as: JSONRPCResponse<SolanaSplTokenInfo>.self).result.value.data.parsed.info
-        
-        // spl 2022
-        if let extensions = tokenInfo.extensions {
-            guard let ext = extensions.first(where: { $0.extension == "tokenMetadata"}), let name = ext.state.name, let symbol = ext.state.symbol else {
-                throw AnyError("no tokenMetadata")
-            }
-            return Asset(
-                id: AssetId(chain: chain, tokenId: tokenId),
-                name: name,
-                symbol: symbol,
-                decimals: tokenInfo.decimals,
-                type: .spl
-            )
-        }
-        let metadataKey = try Gemstone.solanaDeriveMetadataPda(mint: tokenId)
-        let metadataEncoded = try await provider.request(.getAccountInfo(account: metadataKey))
-            .map(as: JSONRPCResponse<SolanaMplRawData>.self)
-        
-        guard let base64Str = metadataEncoded.result.value.data.first else {
-            throw AnyError("no metaplex account found")
-        }
-        let metadata = try Gemstone.solanaDecodeMetadata(base64Str: base64Str)
-
-        return Asset(
-            id: AssetId(chain: chain, tokenId: tokenId),
-            name: metadata.name,
-            symbol: metadata.symbol,
-            decimals: tokenInfo.decimals,
-            type: .spl
-        )
+        try await gateway.tokenData(chain: chain, tokenId: tokenId)
     }
 
     public func getIsTokenAddress(tokenId: String) -> Bool {
@@ -367,7 +203,7 @@ extension SolanaService: ChainTokenable {
  
 extension SolanaService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        try await getGenesisHash()
+        try await gateway.chainId(chain: chain)
     }
 }
 
@@ -375,7 +211,7 @@ extension SolanaService: ChainIDFetchable {
 
 extension SolanaService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        try await getSlot()
+        try await gateway.latestBlock(chain: chain)
     }
 }
 
