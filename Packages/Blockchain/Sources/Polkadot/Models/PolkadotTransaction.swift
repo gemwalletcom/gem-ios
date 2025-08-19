@@ -4,24 +4,6 @@
 
 import Foundation
 
-public struct PolkadotTransactionBroadcast: Codable, Sendable {
-	public let hash: String
-
-	public init(hash: String) {
-		self.hash = hash
-	}
-}
-
-public struct PolkadotTransactionBroadcastError: Codable, Sendable {
-	public let error: String
-	public let cause: String
-
-	public init(error: String, cause: String) {
-		self.error = error
-		self.cause = cause
-	}
-}
-
 public struct PolkadotTransactionMaterialBlock: Codable, Sendable {
 	public let height: String
 	public let hash: String

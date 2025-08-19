@@ -13,13 +13,16 @@ public struct PolkadotService: Sendable {
     
     let chain: Chain
     let provider: Provider<PolkadotProvider>
+    let gateway: GatewayService
     
     public init(
         chain: Chain,
-        provider: Provider<PolkadotProvider>
+        provider: Provider<PolkadotProvider>,
+        gateway: GatewayService
     ) {
         self.chain = chain
         self.provider = provider
+        self.gateway = gateway
     }
 }
 
@@ -30,30 +33,6 @@ extension PolkadotService {
         try await provider
             .request(.balance(address: address))
             .map(as: PolkadotAccountBalance.self)
-    }
-    
-    private func block(number: String) async throws -> PolkadotBlock {
-        try await provider
-            .request(.block(id: number))
-            .map(as: PolkadotBlock.self)
-    }
-    
-    private func blocks(from: String, to: String) async throws -> [PolkadotBlock] {
-        try await provider
-            .request(.blocks(range: "\(from)-\(to)"))
-            .map(as: [PolkadotBlock].self)
-    }
-    
-    private func blockHead() async throws -> PolkadotBlock {
-        try await provider
-            .request(.blockHead)
-            .map(as: PolkadotBlock.self)
-    }
-    
-    private func nodeVersion() async throws -> PolkadotNodeVersion {
-        try await provider
-            .request(.nodeVersion)
-            .map(as: PolkadotNodeVersion.self)
     }
     
     private func transactionMaterial() async throws -> PolkadotTransactionMaterial {
@@ -95,40 +74,29 @@ extension PolkadotService {
 
 extension PolkadotService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let balance = try await balance(address: address)
-        let free = BigInt(stringLiteral: balance.free)
-        let reserved = BigInt(stringLiteral: balance.reserved)
-        let available = max(free - reserved, .zero)
-
-        return Primitives.AssetBalance(
-            assetId: chain.assetId,
-            balance: Balance(
-                available: available,
-                reserved: reserved
-            )
-        )
+        try await gateway.coinBalance(chain: chain, address: address)
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        []
+        try await gateway.tokenBalance(chain: chain, address: address, tokenIds: tokenIds)
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        .none
+        try await gateway.getStakeBalance(chain: chain, address: address)
     }
 }
 
 extension PolkadotService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        return [
-            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: 1))
-        ]
+        try await gateway.feePriorityRates(chain: chain).map {
+            FeeRate(priority: $0.priority, gasPriceType: .regular(gasPrice: $0.value))
+        }
     }
 }
 
 extension PolkadotService: ChainTransactionPreloadable {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        .none
+        try await gateway.transactionPreload(chain: chain, input: input)
     }
 }
 
@@ -141,8 +109,6 @@ extension PolkadotService: ChainTransactionDataLoadable {
         async let getNonce = BigInt(stringLiteral: balance(address: input.senderAddress).nonce)
         
         let (nonce, transactionMaterial, _) = try await (getNonce, getTransactionMaterial, getDestinationAccount)
-        
-        //TODO: Add check for min 1 DOT
         
         let transactionPayload = SigningData.Polkadot(
             genesisHash: try Data.from(hex: transactionMaterial.genesisHash),
@@ -173,10 +139,7 @@ extension PolkadotService: ChainTransactionDataLoadable {
 
 extension PolkadotService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        try await provider
-            .request(.broadcast(data: data))
-            .mapOrError(as: PolkadotTransactionBroadcast.self, asError: PolkadotTransactionBroadcastError.self)
-            .hash
+        try await gateway.transactionBroadcast(chain: chain, data: data)
     }
 }
 
@@ -184,29 +147,7 @@ extension PolkadotService: ChainBroadcastable {
 
 extension PolkadotService: ChainTransactionStateFetchable {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        guard let blockNumber = Int(request.block), blockNumber > 0 else {
-            throw AnyError("Invalid block number")
-        }
-        let blockHead = BigInt(stringLiteral: try await blockHead().number)
-        let fromBlock = String(blockNumber)
-        let toBlock = min(blockHead, BigInt(blockNumber+Int(Self.periodLength)))
-        let blocks = try await blocks(from: fromBlock, to: toBlock.description)
-        
-        for block in blocks {
-            for extrinsic in block.extrinsics {
-                if extrinsic.hash == request.id {
-                    let state: TransactionState = extrinsic.success ? .confirmed : .failed
-                    return TransactionChanges(state: state)
-                }
-            }
-        }
-        
-        return TransactionChanges(
-            state: .pending,
-            changes: [
-                .blockNumber(blockNumber),
-            ]
-        )
+        try await gateway.transactionStatus(chain: chain, request: request)
     }
 }
 
@@ -214,11 +155,11 @@ extension PolkadotService: ChainTransactionStateFetchable {
 
 extension PolkadotService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return []
+        try await gateway.validators(chain: chain)
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
+        try await gateway.delegations(chain: chain, address: address)
     }
 }
 
@@ -226,7 +167,7 @@ extension PolkadotService: ChainStakable {
  
 extension PolkadotService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        try await nodeVersion().chain
+        try await gateway.chainId(chain: chain)
     }
 }
 
@@ -234,14 +175,8 @@ extension PolkadotService: ChainIDFetchable {
 
 extension PolkadotService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        BigInt(stringLiteral: try await blockHead().number)
+        try await gateway.latestBlock(chain: chain)
     }
 }
 
 extension PolkadotService: ChainTokenable, ChainAddressStatusFetchable { }
-
-extension PolkadotTransactionBroadcastError: LocalizedError {
-    public var errorDescription: String? {
-        cause
-    }
-}

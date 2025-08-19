@@ -39,7 +39,7 @@ extension GatewayChainService: ChainBalanceable {
 
 extension GatewayChainService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        try await gateway.fees(chain: chain).map {
+        try await gateway.feePriorityRates(chain: chain).map {
             FeeRate(priority: $0.priority, gasPriceType: .regular(gasPrice: $0.value))
         }
     }
@@ -101,19 +101,22 @@ extension GatewayChainService: ChainTransactionPreloadable {
 
 extension GatewayChainService: ChainTransactionDataLoadable {
     public func load(input: TransactionInput) async throws -> TransactionData {
-        return TransactionData(
-            sequence: input.preload.sequence,
-            block: SignerInputBlock(
-                number: input.preload.blockNumber,
-                hash: input.preload.blockHash
-            ),
-            chainId: input.preload.chainId,
-            fee: input.defaultFee,
-            utxos: input.preload.utxos
-        )
+        try await gateway.transactionLoad(chain: chain, input: input.map())
+    }
+}
+
+// MARK: - ChainStakable
+
+extension GatewayChainService: ChainStakable {
+    public func getValidators(apr: Double) async throws -> [DelegationValidator] {
+        try await gateway.validators(chain: chain)
+    }
+    
+    public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
+        try await gateway.delegations(chain: chain, address: address)
     }
 }
 
 // MARK: - Default Protocol Conformances
 
-extension GatewayChainService: ChainStakable, ChainAddressStatusFetchable {}
+extension GatewayChainService: ChainAddressStatusFetchable {}

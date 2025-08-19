@@ -107,7 +107,7 @@ extension BitcoinService {
 
 extension BitcoinService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws  -> [FeeRate] {
-        let rates = try await gateway.fees(chain: chain.chain)
+        let rates = try await gateway.feePriorityRates(chain: chain.chain)
         return rates.map {
             let rate = $0.value / 1_000
             return FeeRate(
