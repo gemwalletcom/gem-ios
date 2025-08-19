@@ -395,34 +395,89 @@ extension GemChartCandleStick {
 
 extension GemTransactionData {
     func map() throws -> TransactionData {
-        TransactionData(
-            accountNumber: Int(accountNumber),
-            sequence: Int(sequence),
-            block: SignerInputBlock(
-                number: Int(blockNumber),
-                hash: blockHash
-            ),
-            token: SignerInputToken(
-                senderTokenAddress: token.senderTokenAddress,
-                recipientTokenAddress: token.recipientTokenAddress,
-                tokenProgram: .init(rawValue: token.tokenProgram) ?? .token
-            ),
-            chainId: chainId,
-            fee: Fee(
-                fee: try BigInt.from(string: fee.fee),
-                gasPriceType: .regular(gasPrice: try BigInt.from(string: fee.gasPrice)),
-                gasLimit: try BigInt.from(string: fee.gasLimit),
-                options: try fee.options.reduce(into: [:]) { result, pair in
-                    let feeOption: FeeOption
-                    switch pair.key {
-                    case .tokenAccountCreation:
-                        feeOption = .tokenAccountCreation
-                    }
-                    result[feeOption] = try BigInt.from(string: pair.value)
+        let transactionFee = Fee(
+            fee: try BigInt.from(string: fee.fee),
+            gasPriceType: .regular(gasPrice: try BigInt.from(string: fee.gasPrice)),
+            gasLimit: try BigInt.from(string: fee.gasLimit),
+            options: try fee.options.reduce(into: [:]) { result, pair in
+                let feeOption: FeeOption
+                switch pair.key {
+                case .tokenAccountCreation:
+                    feeOption = .tokenAccountCreation
                 }
-            ),
-            utxos: try utxos.map { try $0.map() },
-            messageBytes: messageBytes
+                result[feeOption] = try BigInt.from(string: pair.value)
+            }
         )
+        switch metadata {
+        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let sequence):
+            return TransactionData(
+                sequence: Int(sequence),
+                token: SignerInputToken(
+                    senderTokenAddress: senderTokenAddress,
+                    recipientTokenAddress: recipientTokenAddress,
+                    tokenProgram: try SolanaTokenProgramId.from(string: tokenProgram)
+                ),
+                fee: transactionFee
+            )
+            
+        case .ton(let jettonWalletAddress, let sequence):
+            return TransactionData(
+                sequence: Int(sequence),
+                token: SignerInputToken(
+                    senderTokenAddress: jettonWalletAddress,
+                    recipientTokenAddress: nil,
+                    tokenProgram: .token
+                ),
+                fee: transactionFee
+            )
+        case .cosmos(let accountNumber, let sequence, let chainId):
+            return TransactionData(
+                accountNumber: Int(accountNumber),
+                sequence: Int(sequence),
+                chainId: chainId,
+                fee: transactionFee
+            )
+        case .bitcoin(let utxos),
+            .cardano(let utxos):
+            return TransactionData(
+                fee: transactionFee,
+                utxos: try utxos.map { try $0.map() }
+            )
+            
+        case .evm(let chainId, let blockHash, let blockNumber):
+            return TransactionData(
+                block: SignerInputBlock(
+                    number: Int(blockNumber),
+                    hash: blockHash
+                ),
+                chainId: chainId,
+                fee: transactionFee
+            )
+            
+        case .near(let sequence, let blockHash, _):
+            return TransactionData(
+                sequence: Int(sequence),
+                block: SignerInputBlock(
+                    number: 0,
+                    hash: blockHash
+                ),
+                fee: transactionFee
+            )
+            
+        case .stellar(let sequence),
+            .xrp(let sequence),
+            .algorand(let sequence),
+            .aptos(let sequence):
+            return TransactionData(
+                sequence: Int(sequence),
+                fee: transactionFee
+            )
+            
+        case .polkadot(let sequence):
+            return TransactionData(
+                sequence: Int(sequence),
+                fee: transactionFee
+            )
+        }
     }
 }
