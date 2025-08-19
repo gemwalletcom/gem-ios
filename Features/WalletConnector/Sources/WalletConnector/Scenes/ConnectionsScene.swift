@@ -22,15 +22,18 @@ public struct ConnectionsScene: View {
                 ButtonListItem(
                     title: model.pasteButtonTitle,
                     image: Images.System.paste,
-                    isLoading: model.loadingAction == .paste,
                     action: model.onPaste
                 )
                 ButtonListItem(
                     title: model.scanQRCodeButtonTitle,
                     image: Images.System.qrCode,
-                    isLoading: model.loadingAction == .scan,
                     action: model.onScan
                 )
+            } footer: {
+                if !model.isLoading {
+                    LoadingTextView(isAnimating: .constant(true))
+                        .textCase(nil)
+                }
             }
             .listRowInsets(.assetListRowInsets)
             

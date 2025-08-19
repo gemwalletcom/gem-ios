@@ -84,12 +84,9 @@ public struct WalletScene: View {
                 .listRowInsets(.assetListRowInsets)
             } header: {
                 if model.isLoadingAssets {
-                    HStack {
-                        Text(Localized.Common.loading + "...")
-                        ActivityIndicator(isAnimating: .constant(true), style: .medium)
-                    }
-                    .listRowInsets(.assetListRowInsets)
-                    .textCase(nil)
+                    LoadingTextView(isAnimating: .constant(true))
+                        .listRowInsets(.assetListRowInsets)
+                        .textCase(nil)
                 }
             } footer: {
                 ListButton(
