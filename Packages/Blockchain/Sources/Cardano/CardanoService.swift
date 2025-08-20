@@ -61,9 +61,9 @@ extension CardanoService: ChainBalanceable {
 
 extension CardanoService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        return [
-            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: 1)),
-        ]
+        try await gateway.feeRates(chain: chain).map {
+            FeeRate(priority: $0.priority, gasPriceType: .regular(gasPrice: $0.value))
+        }
     }
 }
 

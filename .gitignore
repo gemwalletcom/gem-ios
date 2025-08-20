@@ -7,6 +7,7 @@
 xcuserdata/
 DerivedData/
 build/
+.build/
 .xcframework/
 
 # Swift Package Manager
