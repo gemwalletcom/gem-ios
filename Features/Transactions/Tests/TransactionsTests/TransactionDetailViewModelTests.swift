@@ -11,16 +11,20 @@ import Style
 @testable import Transactions
 @testable import Store
 
-
 @MainActor
 struct TransactionDetailViewModelTests {
 
     @Test
     func participantFieldTransfer() {
-        #expect(TransactionDetailViewModel.mock(type: .transfer, direction: .incoming).participantField == Localized.Transaction.sender)
-        #expect(TransactionDetailViewModel.mock(type: .transfer, direction: .outgoing).participantField == Localized.Transaction.recipient)
-        #expect(TransactionDetailViewModel.mock(type: .transferNFT, direction: .incoming).participantField == Localized.Transaction.sender)
-        #expect(TransactionDetailViewModel.mock(type: .transferNFT, direction: .outgoing).participantField == Localized.Transaction.recipient)
+        let incomingTransfer = TransactionDetailViewModel.mock(type: .transfer, direction: .incoming)
+        let outgoingTransfer = TransactionDetailViewModel.mock(type: .transfer, direction: .outgoing)
+        let incomingNFT = TransactionDetailViewModel.mock(type: .transferNFT, direction: .incoming)
+        let outgoingNFT = TransactionDetailViewModel.mock(type: .transferNFT, direction: .outgoing)
+        
+        #expect(incomingTransfer.participantField == Localized.Transaction.sender)
+        #expect(outgoingTransfer.participantField == Localized.Transaction.recipient)
+        #expect(incomingNFT.participantField == Localized.Transaction.sender)
+        #expect(outgoingNFT.participantField == Localized.Transaction.recipient)
     }
 
     @Test
@@ -36,7 +40,10 @@ struct TransactionDetailViewModelTests {
 
     @Test
     func participantFieldIsNilForOthers() {
-        let nilTypes: [TransactionType] = [.swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation]
+        let nilTypes: [TransactionType] = [
+            .swap, .stakeUndelegate, .stakeRedelegate, 
+            .stakeRewards, .stakeWithdraw, .assetActivation
+        ]
         for type in nilTypes {
             #expect(TransactionDetailViewModel.mock(type: type).participantField == nil)
         }
@@ -44,37 +51,58 @@ struct TransactionDetailViewModelTests {
 
     @Test
     func participantReturnsValue() {
-        let participantTypes: [TransactionType] = [.transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate]
+        let participantTypes: [TransactionType] = [
+            .transfer, .transferNFT, .tokenApproval, 
+            .smartContractCall, .stakeDelegate
+        ]
 
         for type in participantTypes {
-            #expect(TransactionDetailViewModel.mock(type: type).participant == "participant_address")
+            let model = TransactionDetailViewModel.mock(type: type)
+            #expect(model.participant == "participant_address")
         }
     }
 
     @Test
     func participantIsNilForOthers() {
-        let nilTypes: [TransactionType] = [.swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation]
+        let nilTypes: [TransactionType] = [
+            .swap, .stakeUndelegate, .stakeRedelegate, 
+            .stakeRewards, .stakeWithdraw, .assetActivation
+        ]
         for type in nilTypes {
             #expect(TransactionDetailViewModel.mock(type: type).participant == nil)
         }
     }
 
     @Test
-    func showMemoField() {
-        let allTypes: [TransactionType] = [.transfer, .transferNFT, .swap, .tokenApproval, .assetActivation, .smartContractCall, .stakeRewards, .stakeWithdraw, .stakeDelegate, .stakeUndelegate, .stakeRedelegate]
+    func memoField() {
+        let allTypes: [TransactionType] = [
+            .transfer, .transferNFT, .swap, .tokenApproval, .assetActivation,
+            .smartContractCall, .stakeRewards, .stakeWithdraw, .stakeDelegate,
+            .stakeUndelegate, .stakeRedelegate
+        ]
         for type in allTypes {
-            #expect(TransactionDetailViewModel.mock(type: type, memo: nil).showMemoField == false)
-            #expect(TransactionDetailViewModel.mock(type: type, memo: "").showMemoField == false)
-            #expect(TransactionDetailViewModel.mock(type: type, memo: "Test memo").showMemoField == true)
+            #expect(TransactionDetailViewModel.mock(type: type, memo: nil).memo == nil)
+            #expect(TransactionDetailViewModel.mock(type: type, memo: "").memo == "")
+            #expect(TransactionDetailViewModel.mock(type: type, memo: "Test memo").memo == "Test memo")
         }
     }
 
     @Test
-    func statusTextStyle() {
-        #expect(TransactionDetailViewModel.mock(state: .confirmed).statusTextStyle.color == Colors.green)
-        #expect(TransactionDetailViewModel.mock(state: .pending).statusTextStyle.color == Colors.orange)
-        #expect(TransactionDetailViewModel.mock(state: .failed).statusTextStyle.color == Colors.red)
-        #expect(TransactionDetailViewModel.mock(state: .reverted).statusTextStyle.color == Colors.red)
+    func statusListItemStyle() {
+        let confirmed = TransactionDetailViewModel.mock(state: .confirmed)
+        let pending = TransactionDetailViewModel.mock(state: .pending)
+        let failed = TransactionDetailViewModel.mock(state: .failed)
+        let reverted = TransactionDetailViewModel.mock(state: .reverted)
+        
+        let confirmedModel = confirmed.model(for: .status) as? StatusListItemViewModel
+        let pendingModel = pending.model(for: .status) as? StatusListItemViewModel
+        let failedModel = failed.model(for: .status) as? StatusListItemViewModel
+        let revertedModel = reverted.model(for: .status) as? StatusListItemViewModel
+        
+        #expect(confirmedModel?.style.color == Colors.green)
+        #expect(pendingModel?.style.color == Colors.orange)
+        #expect(failedModel?.style.color == Colors.red)
+        #expect(revertedModel?.style.color == Colors.red)
     }
 }
 
@@ -88,7 +116,10 @@ extension TransactionDetailViewModel {
     ) -> TransactionDetailViewModel {
         TransactionDetailViewModel(
             transaction: TransactionExtended.mock(
-                transaction: Transaction.mock(type: type, state: state, direction: direction, to: participant, memo: memo)
+                transaction: Transaction.mock(
+                    type: type, state: state, direction: direction, 
+                    to: participant, memo: memo
+                )
             ),
             walletId: "test_wallet_id",
             preferences: Preferences.standard

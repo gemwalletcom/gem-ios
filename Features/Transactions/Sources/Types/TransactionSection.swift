@@ -3,7 +3,7 @@
 import Foundation
 import Components
 
-public enum TransactionSectionType: Identifiable {
+public enum TransactionSectionType: Identifiable, Equatable {
     case swapAction
     case details
     case explorer
@@ -11,14 +11,14 @@ public enum TransactionSectionType: Identifiable {
     public var id: Self { self }
 }
 
-public struct TransactionSection: ListSectionRepresentable {
+public struct TransactionSection: ListSectionRepresentable, Equatable {
     public let type: TransactionSectionType
     public let items: [TransactionListItem]
 
     public var id: TransactionSectionType.ID { type.id }
 }
 
-public enum TransactionListItem: ListItemRepresentable {
+public enum TransactionListItem: ListItemRepresentable, Equatable {
     case date
     case status
     case sender
