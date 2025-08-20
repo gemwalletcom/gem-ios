@@ -487,6 +487,24 @@ extension GemTransactionData {
                 block: SignerInputBlock(number: Int(blockNumber)),
                 fee: transactionFee
             )
+        case .tron(
+            let blockNumber,
+            let blockVersion,
+            let blockTimestamp,
+            let transactionTreeRoot,
+            let parentHash,
+            let witnessAddress):
+            return TransactionData(
+                block: SignerInputBlock(
+                    number: Int(blockNumber),
+                    version: Int(blockVersion),
+                    timestamp: Int(blockTimestamp),
+                    transactionTreeRoot: transactionTreeRoot,
+                    parentHash: parentHash,
+                    widnessAddress: witnessAddress
+                ),
+                fee: transactionFee
+            )
         }
     }
 }

@@ -36,7 +36,10 @@ extension ChainService {
                 provider: ProviderFactory.create(with: url)
             )
         case .tron:
-            TronService(chain: chain, provider: ProviderFactory.create(with: url))
+            GatewayChainService(
+                chain: chain,
+                gateway: GatewayService(provider: NativeProvider(url: url))
+            )
         case .bitcoin:
             BitcoinService(
                 chain: BitcoinChain(rawValue: chain.rawValue)!,
