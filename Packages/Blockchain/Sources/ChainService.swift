@@ -40,11 +40,6 @@ extension ChainService {
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))
             )
-        case .bitcoin:
-            BitcoinService(
-                chain: BitcoinChain(rawValue: chain.rawValue)!,
-                gateway: GatewayService(provider: NativeProvider(url: url))
-            )
         case .sui:
             SuiService(
                 chain: chain, 
@@ -58,13 +53,10 @@ extension ChainService {
             .near,
             .cosmos,
             .ton,
-            .polkadot:
+            .polkadot,
+            .bitcoin,
+            .cardano:
             GatewayChainService(
-                chain: chain,
-                gateway: GatewayService(provider: NativeProvider(url: url))
-            )
-        case .cardano:
-            CardanoService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))
             )

@@ -12,7 +12,7 @@ public struct GatewayChainService: Sendable {
     
     public init(
         chain: Chain,
-        gateway: GatewayService
+        gateway: GatewayService,
     ) {
         self.chain = chain
         self.gateway = gateway
@@ -90,7 +90,7 @@ extension GatewayChainService: ChainLatestBlockFetchable {
 // MARK: - ChainTransactionPreloadable
 
 extension GatewayChainService: ChainTransactionPreloadable {
-    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
         try await gateway.transactionPreload(chain: chain, input: input)
     }
 }

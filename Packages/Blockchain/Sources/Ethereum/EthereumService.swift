@@ -106,10 +106,10 @@ extension EthereumService: ChainBalanceable {
 // MARK: - ChainTransactionPreloadable
 
 extension EthereumService: ChainTransactionPreloadable {
-    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        try await TransactionPreload(
-            sequence: getNonce(senderAddress: input.senderAddress)
-        )
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
+        let nonce = try await getNonce(senderAddress: input.senderAddress)
+        let chainId = try getChainId()
+        return .evm(nonce: Int64(nonce), chainId: Int64(chainId))
     }
 }
 
@@ -118,8 +118,8 @@ extension EthereumService: ChainTransactionDataLoadable {
         async let fee = fee(input: input.feeInput)
         
         return try await TransactionData(
-            sequence: input.preload.sequence,
-            chainId: getChainId().asString,
+            sequence: Int(input.metadata.getSequence()),
+            chainId: try getChainId().asString,
             fee: fee,
             extra: .none
         )

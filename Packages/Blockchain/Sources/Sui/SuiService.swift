@@ -265,8 +265,8 @@ extension SuiService: ChainFeeRateFetchable {
 }
 
 extension SuiService: ChainTransactionPreloadable {
-    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        .none
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
+        return .none
     }
 }
 
