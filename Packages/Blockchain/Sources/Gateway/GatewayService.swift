@@ -86,12 +86,12 @@ extension GatewayService {
         return BigInt(block)
     }
     
-    public func feeRates(chain: Primitives.Chain) async throws -> [FeePriorityValue] {
+    public func feePriorityRates(chain: Primitives.Chain) async throws -> [FeePriorityValue] {
         try await gateway.getFeeRates(chain: chain.rawValue).map { try $0.map() }
     }
     
-    public func feeRatesFormatted(chain: Primitives.Chain) async throws -> [FeeRate] {
-        try await feeRates(chain: chain).map {
+    public func feeRates(chain: Primitives.Chain) async throws -> [FeeRate] {
+        try await feePriorityRates(chain: chain).map {
             FeeRate(priority: $0.priority, gasPriceType: .regular(gasPrice: $0.value))
         }
     }
@@ -261,7 +261,8 @@ extension TransactionStateRequest {
         GemTransactionStateRequest(
             id: id,
             senderAddress: senderAddress,
-            createdAt: Int64(createdAt.timeIntervalSince1970)
+            createdAt: Int64(createdAt.timeIntervalSince1970),
+            blockNumber: Int64(block)
         )
     }
 }
@@ -394,21 +395,98 @@ extension GemChartCandleStick {
 
 extension GemTransactionData {
     func map() throws -> TransactionData {
-        TransactionData(
-            accountNumber: Int(accountNumber),
-            sequence: Int(sequence),
-            block: SignerInputBlock(
-                number: Int(blockNumber),
-                hash: blockHash
-            ),
-            chainId: chainId,
-            fee: Fee(
-                fee: try BigInt.from(string: fee.fee),
-                gasPriceType: .regular(gasPrice: try BigInt.from(string: fee.gasPrice)),
-                gasLimit: try BigInt.from(string: fee.gasLimit)
-            ),
-            utxos: try utxos.map { try $0.map() },
-            messageBytes: messageBytes
+        let transactionFee = Fee(
+            fee: try BigInt.from(string: fee.fee),
+            gasPriceType: .regular(gasPrice: try BigInt.from(string: fee.gasPrice)),
+            gasLimit: try BigInt.from(string: fee.gasLimit),
+            options: try fee.options.reduce(into: [:]) { result, pair in
+                let feeOption: FeeOption
+                switch pair.key {
+                case .tokenAccountCreation:
+                    feeOption = .tokenAccountCreation
+                }
+                result[feeOption] = try BigInt.from(string: pair.value)
+            }
         )
+        switch metadata {
+        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let sequence):
+            return TransactionData(
+                sequence: Int(sequence),
+                token: SignerInputToken(
+                    senderTokenAddress: senderTokenAddress,
+                    recipientTokenAddress: recipientTokenAddress,
+                    tokenProgram: try SolanaTokenProgramId.from(string: tokenProgram)
+                ),
+                fee: transactionFee
+            )
+            
+        case .ton(let jettonWalletAddress, let sequence):
+            return TransactionData(
+                sequence: Int(sequence),
+                token: SignerInputToken(
+                    senderTokenAddress: jettonWalletAddress,
+                    recipientTokenAddress: nil,
+                    tokenProgram: .token
+                ),
+                fee: transactionFee
+            )
+        case .cosmos(let accountNumber, let sequence, let chainId):
+            return TransactionData(
+                accountNumber: Int(accountNumber),
+                sequence: Int(sequence),
+                chainId: chainId,
+                fee: transactionFee
+            )
+        case .bitcoin(let utxos),
+            .cardano(let utxos):
+            return TransactionData(
+                fee: transactionFee,
+                utxos: try utxos.map { try $0.map() }
+            )
+            
+        case .evm(let chainId, let blockHash, let blockNumber):
+            return TransactionData(
+                block: SignerInputBlock(
+                    number: Int(blockNumber),
+                    hash: blockHash
+                ),
+                chainId: chainId,
+                fee: transactionFee
+            )
+            
+        case .near(let sequence, let blockHash, _):
+            return TransactionData(
+                sequence: Int(sequence),
+                block: SignerInputBlock(
+                    number: 0,
+                    hash: blockHash
+                ),
+                fee: transactionFee
+            )
+            
+        case .stellar(let sequence),
+            .xrp(let sequence),
+            .algorand(let sequence),
+            .aptos(let sequence):
+            return TransactionData(
+                sequence: Int(sequence),
+                fee: transactionFee
+            )
+            
+        case .polkadot(let sequence, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
+            return TransactionData(
+                sequence: Int(sequence),
+                data: .polkadot(SigningData.Polkadot(
+                    genesisHash: try Data.from(hex: genesisHash),
+                    blockHash: try Data.from(hex: blockHash),
+                    blockNumber: UInt64(blockNumber),
+                    specVersion: UInt32(specVersion),
+                    transactionVersion: UInt32(transactionVersion),
+                    period: UInt64(period)
+                )),
+                block: SignerInputBlock(number: Int(blockNumber)),
+                fee: transactionFee
+            )
+        }
     }
 }

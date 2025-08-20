@@ -26,14 +26,15 @@ extension ChainService {
     public static func service(chain: Chain, with url: URL) -> ChainServiceable {
         switch chain.type {
         case .solana:
-            SolanaService(chain: chain, provider: ProviderFactory.create(with: url))
+            GatewayChainService(
+                chain: chain,
+                gateway: GatewayService(provider: NativeProvider(url: url))
+            )
         case .ethereum:
             EthereumService(
                 chain: EVMChain(rawValue: chain.rawValue)!,
                 provider: ProviderFactory.create(with: url)
             )
-        case .ton:
-            TonService(chain: chain, provider: ProviderFactory.create(with: url))
         case .tron:
             TronService(chain: chain, provider: ProviderFactory.create(with: url))
         case .bitcoin:
@@ -42,19 +43,23 @@ extension ChainService {
                 gateway: GatewayService(provider: NativeProvider(url: url))
             )
         case .sui:
-            SuiService(chain: chain, provider: ProviderFactory.create(with: url))
+            SuiService(
+                chain: chain, 
+                provider: ProviderFactory.create(with: url),
+                gateway: GatewayService(provider: NativeProvider(url: url))
+            )
         case .aptos,
             .algorand,
             .xrp,
             .stellar,
             .near,
-            .cosmos:
+            .cosmos,
+            .ton,
+            .polkadot:
             GatewayChainService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))
             )
-        case .polkadot:
-            PolkadotService(chain: chain, provider: ProviderFactory.create(with: url))
         case .cardano:
             CardanoService(
                 chain: chain,

@@ -49,6 +49,7 @@ extension EnvironmentValues {
     @Entry var notificationHandler: NotificationHandler =  AppResolver.main.services.notificationHandler
     @Entry var stakeService: StakeService = AppResolver.main.services.stakeService
     @Entry var connectionsService: ConnectionsService = AppResolver.main.services.connectionsService
+    @Entry var walletConnectorManager: WalletConnectorManager = AppResolver.main.services.walletConnectorManager
     @Entry var chainServiceFactory: ChainServiceFactory = AppResolver.main.services.chainServiceFactory
     @Entry var nftService: NFTService = AppResolver.main.services.nftService
     @Entry var avatarService: AvatarService = AppResolver.main.services.avatarService

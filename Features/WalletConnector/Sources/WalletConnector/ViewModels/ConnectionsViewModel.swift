@@ -13,19 +13,21 @@ import GemstonePrimitives
 @MainActor
 public final class ConnectionsViewModel {
     let service: ConnectionsService
+    let walletConnectorPresenter: WalletConnectorPresenter?
     
     var request: ConnectionsRequest
     var connections: [WalletConnection] = []
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
+    var isLoading: Bool = false
 
     public init(
-        service: ConnectionsService
+        service: ConnectionsService,
+        walletConnectorPresenter: WalletConnectorPresenter? = nil
     ) {
         self.service = service
+        self.walletConnectorPresenter = walletConnectorPresenter
         self.request = ConnectionsRequest()
-        self.isPresentingScanner = false
-        self.isPresentingAlertMessage = nil
     }
 
     var title: String { Localized.WalletConnect.title }
@@ -70,6 +72,10 @@ public final class ConnectionsViewModel {
     func updateSessions() {
         service.updateSessions()
     }
+    
+    func stopLoading() {
+        isLoading = false
+    }
 }
 
 // MARK: - Actions
@@ -85,12 +91,14 @@ extension ConnectionsViewModel {
         }
 
         Task {
+            isLoading = true
             await connectURI(uri: content)
         }
     }
     
     func onHandleScan(_ result: String) {
         Task {
+            isLoading = true
             await connectURI(uri: result)
         }
     }
@@ -110,6 +118,7 @@ extension ConnectionsViewModel {
         do {
             try await pair(uri: uri)
         } catch {
+            isLoading = false
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             NSLog("connectURI error: \(error)")
         }

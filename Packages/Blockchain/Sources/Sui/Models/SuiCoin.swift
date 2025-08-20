@@ -20,24 +20,3 @@ public struct SuiCoin: Codable, Sendable {
 	}
 }
 
-public struct SuiCoinBalance: Codable, Sendable {
-	public let coinType: String
-	public let totalBalance: String
-
-	public init(coinType: String, totalBalance: String) {
-		self.coinType = coinType
-		self.totalBalance = totalBalance
-	}
-}
-
-public struct SuiCoinMetadata: Codable, Sendable {
-	public let decimals: Int32
-	public let name: String
-	public let symbol: String
-
-	public init(decimals: Int32, name: String, symbol: String) {
-		self.decimals = decimals
-		self.name = name
-		self.symbol = symbol
-	}
-}

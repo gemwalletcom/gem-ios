@@ -16,7 +16,8 @@ extension TransactionInput {
             blockHash: preload.blockHash,
             blockNumber: Int64(preload.blockNumber),
             chainId: preload.chainId,
-            utxos: preload.utxos.map { $0.map() }
+            utxos: preload.utxos.map { $0.map() },
+            memo: memo
         )
     }
 }
