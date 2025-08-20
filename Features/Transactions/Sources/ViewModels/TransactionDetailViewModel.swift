@@ -102,6 +102,7 @@ public final class TransactionDetailViewModel {
         AssetIdViewModel(assetId: model.transaction.asset.chain.assetId).networkAssetImage
     }
 
+
     var memo: String? {
         model.transaction.transaction.memo
     }
@@ -252,8 +253,10 @@ extension TransactionDetailViewModel {
             return memo
             
         case .fee:
+            let feeValue = model.infoModel.feeDisplay?.fiat?.text ?? model.infoModel.feeDisplay?.amount.text
             return FeeListItemViewModel(
-                feeDisplay: model.infoModel.feeDisplay,
+                value: feeValue,
+                fiat: nil,
                 onInfo: onNetworkFeeInfo
             )
             

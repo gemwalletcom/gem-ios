@@ -11,17 +11,6 @@ public struct FeeListItemViewModel: ListItemViewModelRepresentable {
     public let onSelect: VoidAction
     
     public init(
-        feeDisplay: AmountDisplay?,
-        onInfo: VoidAction = nil,
-        onSelect: VoidAction = nil
-    ) {
-        self.value = feeDisplay?.amount.text
-        self.fiat = feeDisplay?.fiat?.text
-        self.onInfo = onInfo
-        self.onSelect = onSelect
-    }
-    
-    public init(
         value: String?,
         fiat: String? = nil,
         onInfo: VoidAction = nil,
