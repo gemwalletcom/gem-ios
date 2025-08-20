@@ -11,7 +11,7 @@ import InfoSheet
 import Preferences
 
 @Observable
-public final class SwapDetailsViewModel {
+public final class SwapDetailsViewModel: ListItemViewModelRepresentable {
     
     private static let timeFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()

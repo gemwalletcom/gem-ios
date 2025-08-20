@@ -6,7 +6,7 @@ import Localization
 import Components
 import Formatters
 
-public struct AddressListItemViewModel {
+public struct AddressListItemViewModel: ListItemViewModelRepresentable {
     
     public enum Mode {
         case auto(addressStyle: AddressFormatter.Style)

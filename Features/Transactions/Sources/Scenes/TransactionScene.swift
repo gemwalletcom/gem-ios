@@ -10,6 +10,7 @@ import Primitives
 import InfoSheet
 import PrimitivesComponents
 import ExplorerService
+import Localization
 
 public struct TransactionScene: View {
     @State private var model: TransactionDetailViewModel
@@ -27,8 +28,8 @@ public struct TransactionScene: View {
             )
             
             SectionListView(
-                sections: model.listSections,
-                rowContent: rowContent(_:)
+                sections: model.sections,
+                listItemView: listItemView(_:)
             )
         }
         .contentMargins([.top], .small, for: .scrollContent)
@@ -55,44 +56,57 @@ public struct TransactionScene: View {
     }
     
     @ViewBuilder
-    private func rowContent(_ content: TransactionListItem) -> some View {
-        switch content {
-        case let .common(commonItem):
-            CommonListItemView(item: commonItem)
-                .ifLet(commonItem.contextMenu) { view, menu in
-                    view.contextMenu(menu.items)
-                }
+    private func listItemView(_ item: TransactionListItem) -> some View {
+        switch item {
+        case .date:
+            ListItemView(
+                title: model.dateField,
+                subtitle: model.date
+            )
             
-        case let .memo(text):
-            MemoListItemView(memo: text)
+        case .network:
+            ListItemImageView(
+                title: model.networkField,
+                subtitle: model.network,
+                assetImage: model.networkAssetImage
+            )
             
-        case let .status(title, value, style, showProgressView, infoAction):
-            HStack(spacing: Spacing.small) {
-                ListItemView(
-                    title: title,
-                    subtitle: value,
-                    subtitleStyle: style,
-                    infoAction: infoAction
-                )
-                if showProgressView {
-                    LoadingView(tint: Colors.orange)
-                }
+        case .provider:
+            if let viewModel = model.model(for: item) as? ProviderListItemViewModel {
+                ProviderListItemView(model: viewModel)
             }
             
-        case let .address(viewModel):
-            AddressListItemView(model: viewModel)
+        case .status:
+            if let viewModel = model.model(for: item) as? StatusListItemViewModel {
+                StatusListItemView(model: viewModel)
+            }
             
-        case let .explorerLink(text, url):
-            SafariNavigationLink(url: url) {
-                Text(text)
+        case .sender, .recipient, .contract, .validator:
+            if let viewModel = model.model(for: item) as? AddressListItemViewModel {
+                AddressListItemView(model: viewModel)
+            }
+            
+        case .memo:
+            if let memo = model.model(for: item) as? String {
+                MemoListItemView(memo: memo)
+            }
+            
+        case .fee:
+            if let viewModel = model.model(for: item) as? FeeListItemViewModel {
+                FeeListItemView(model: viewModel)
+            }
+            
+        case .explorerLink:
+            SafariNavigationLink(url: model.transactionExplorerUrl) {
+                Text(model.transactionExplorerText)
                     .tint(Colors.black)
             }
             
-        case let .swapButton(text, action):
+        case .swapAgainButton:
             StateButton(
-                text: text,
+                text: model.swapAgain,
                 type: .primary(.normal),
-                action: action ?? {}
+                action: model.onSelectTransactionHeader
             )
             .cleanListRow(topOffset: .zero)
         }

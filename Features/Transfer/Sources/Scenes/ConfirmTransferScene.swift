@@ -87,7 +87,7 @@ extension ConfirmTransferScene {
             )
             SectionListView(
                 sections: model.listSections,
-                rowContent: rowContent(_:)
+                listItemView: listItemView(_:)
             )
         }
         .contentMargins([.top], .small, for: .scrollContent)
@@ -95,37 +95,75 @@ extension ConfirmTransferScene {
     }
     
     @ViewBuilder
-    private func rowContent(_ content: TransferListItem) -> some View {
-        switch content {
-        case let .common(commonItem):
-            CommonListItemView(item: commonItem)
-                .ifLet(commonItem.contextMenu) { view, menu in
-                    view.contextMenu(menu.items)
+    private func listItemView(_ item: TransferListItem) -> some View {
+        switch item {
+        case .app:
+            if let appText = model.appText {
+                ListItemImageView(
+                    title: model.appTitle,
+                    subtitle: appText,
+                    assetImage: model.appAssetImage
+                )
+                .contextMenu([
+                    .url(title: model.websiteTitle, onOpen: model.onSelectOpenWebsiteURL)
+                ])
+            }
+            
+        case .sender:
+            ListItemImageView(
+                title: model.senderTitle,
+                subtitle: model.senderValue,
+                assetImage: model.senderAssetImage
+            )
+            .contextMenu([
+                .copy(value: model.senderAddress),
+                .url(title: model.senderExplorerText, onOpen: model.onSelectOpenSenderAddressURL)
+            ])
+            
+        case .network:
+            ListItemImageView(
+                title: model.networkTitle,
+                subtitle: model.networkText,
+                assetImage: model.networkAssetImage
+            )
+        case .address:
+            if let viewModel = model.model(for: item) as? AddressListItemViewModel {
+                AddressListItemView(model: viewModel)
+            }
+            
+        case .memo:
+            if let memo = model.model(for: item) as? String {
+                MemoListItemView(memo: memo)
+            }
+            
+        case .swapDetails:
+            if let viewModel = model.model(for: item) as? SwapDetailsViewModel {
+                NavigationCustomLink(
+                    with: SwapDetailsListView(model: viewModel),
+                    action: model.onSelectSwapDetails
+                )
+            }
+            
+        case .fee:
+            if let viewModel = model.model(for: item) as? FeeListItemViewModel {
+                if let onSelect = viewModel.onSelect {
+                    NavigationCustomLink(
+                        with: FeeListItemView(model: viewModel),
+                        action: { @Sendable @MainActor in onSelect() }
+                    )
+                } else {
+                    FeeListItemView(model: viewModel)
                 }
+            }
             
-        case let .memo(text):
-            MemoListItemView(memo: text)
-            
-        case let .selectableFee(title, value, fiat, onSelect):
-            NavigationCustomLink(
-                with: ListItemView(
-                    title: title,
-                    subtitle: value,
-                    subtitleExtra: fiat,
-                    placeholders: value == nil ? [.subtitle] : [],
-                    infoAction: model.onSelectNetworkFeeInfo
-                ),
-                action: { @MainActor @Sendable in onSelect?() }
-            )
-            
-        case let .address(viewModel):
-            AddressListItemView(model: viewModel)
-            
-        case let .swapDetails(viewModel):
-            NavigationCustomLink(
-                with: SwapDetailsListView(model: viewModel),
-                action: model.onSelectSwapDetails
-            )
+        case .error:
+            if let error = model.listError {
+                ListItemErrorView(
+                    errorTitle: model.listErrorTitle,
+                    error: error,
+                    infoAction: { model.onSelectListError(error: error) }
+                )
+            }
         }
     }
 }

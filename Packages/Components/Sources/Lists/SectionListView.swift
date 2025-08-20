@@ -2,30 +2,30 @@
 
 import SwiftUI
 
-public struct SectionListView<Section, SectionHeader, RowContent>: View
+public struct SectionListView<Section, SectionHeader, ListItemView>: View
     where Section: ListSectionRepresentable,
           SectionHeader: View,
-          RowContent: View {
-    
+          ListItemView: View {
+
     let sections: [Section]
     let sectionHeader: ((Section) -> SectionHeader)?
-    let rowContent: (Section.Item) -> RowContent
-    
+    let listItemView: (Section.Item) -> ListItemView
+
     public init(
         sections: [Section],
         @ViewBuilder sectionHeader: @escaping (Section) -> SectionHeader,
-        @ViewBuilder rowContent: @escaping (Section.Item) -> RowContent
+        @ViewBuilder listItemView: @escaping (Section.Item) -> ListItemView
     ) {
         self.sections = sections
         self.sectionHeader = sectionHeader
-        self.rowContent = rowContent
+        self.listItemView = listItemView
     }
     
     public var body: some View {
         ForEach(sections) { section in
             SwiftUI.Section {
                 ForEach(section.items) { item in
-                    rowContent(item)
+                    listItemView(item)
                 }
             } header: {
                 if let sectionHeader = sectionHeader {
@@ -40,33 +40,33 @@ public struct SectionListView<Section, SectionHeader, RowContent>: View
 public extension SectionListView where SectionHeader == EmptyView {
     init(
         sections: [Section],
-        @ViewBuilder rowContent: @escaping (Section.Item) -> RowContent
+        @ViewBuilder listItemView: @escaping (Section.Item) -> ListItemView
     ) {
         self.sections = sections
         self.sectionHeader = nil
-        self.rowContent = rowContent
+        self.listItemView = listItemView
     }
 }
 
 // Single section view for simple cases
-public struct ListSingleSectionView<Item, RowContent>: View
+public struct ListSingleSectionView<Item, ListItemView>: View
     where Item: ListItemRepresentable,
-          RowContent: View {
+          ListItemView: View {
     
     let items: [Item]
-    let rowContent: (Item) -> RowContent
+    let listItemView: (Item) -> ListItemView
     
     public init(
         items: [Item],
-        @ViewBuilder rowContent: @escaping (Item) -> RowContent
+        @ViewBuilder listItemView: @escaping (Item) -> ListItemView
     ) {
         self.items = items
-        self.rowContent = rowContent
+        self.listItemView = listItemView
     }
     
     public var body: some View {
         ForEach(items) { item in
-            rowContent(item)
+            listItemView(item)
         }
     }
 }

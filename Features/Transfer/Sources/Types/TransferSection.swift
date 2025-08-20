@@ -6,12 +6,12 @@ import Primitives
 import PrimitivesComponents
 import Swap
 
-public enum TransferSectionType: String {
+public enum TransferSectionType: Identifiable {
     case main
     case fee
     case error
-    
-    var id: String { "transfer-section-\(rawValue)" }
+
+    public var id: Self { self }
 }
 
 public struct TransferSection: ListSectionRepresentable {
@@ -23,81 +23,51 @@ public struct TransferSection: ListSectionRepresentable {
         self.items = items
     }
 
-    public init(
-        type: TransferSectionType,
-        @ListItemBuilder<TransferListItem> items: () -> [TransferListItem]
-    ) {
-        self.type = type
-        self.items = items()
-    }
-
-    public var id: String { type.id }
+    public var id: TransferSectionType.ID { type.id }
 }
 
-// MARK: - Section Convenience Methods
+// MARK: - Section Factory
 
 public extension TransferSection {
-    static func main(
-        @ListItemBuilder<TransferListItem> _ items: () -> [TransferListItem]
-    ) -> Self {
-        .init(type: .main, items: items())
+    static func main(_ items: [TransferListItem]) -> Self? {
+        items.isEmpty ? nil : Self(type: .main, items: items)
     }
     
-    static func fee(
-        @ListItemBuilder<TransferListItem> _ items: () -> [TransferListItem]
-    ) -> Self {
-        .init(type: .fee, items: items())
+    static func fee(_ items: [TransferListItem]) -> Self? {
+        items.isEmpty ? nil : Self(type: .fee, items: items)
     }
     
-    static func error(
-        @ListItemBuilder<TransferListItem> _ items: () -> [TransferListItem]
-    ) -> Self {
-        .init(type: .error, items: items())
+    static func error(_ items: [TransferListItem]) -> Self? {
+        items.isEmpty ? nil : Self(type: .error, items: items)
     }
 }
 
-public enum TransferListItem: ListItemRepresentable, CommonListItemFactory {
-    case common(CommonListItem)
+public enum TransferListItem: ListItemRepresentable {
+    case app
+    case sender
+    case network
+    case address
+    case memo
+    case swapDetails
 
-    case memo(String)
-    case address(viewModel: AddressListItemViewModel)
-    case swapDetails(viewModel: SwapDetailsViewModel)
-    case selectableFee(title: String, value: String?, fiat: String?, onSelect: VoidAction)
+    case fee
+
+    case error
     
-    public var id: String {
-        switch self {
-        case let .common(item): item.id
-        case let .memo(text): "transfer-memo-\(text.hashValue)"
-        case let .address(viewModel): "transfer-address-\(viewModel.account.address)"
-        case .swapDetails: "transfer-swap-details"
-        case let .selectableFee(title, value, fiat, _): "transfer-fee-selectable-\(title)-\((value ?? "").hashValue)"
+    public var id: Self {
+        self
+    }
+}
+
+// MARK: - Filtering
+
+public extension Array where Element == TransferSection? {
+    func filterItems(_ predicate: (TransferListItem) -> Bool) -> [TransferSection?] {
+        map { section in
+            guard let section = section else { return nil }
+            let filteredItems = section.items.filter(predicate)
+            return filteredItems.isEmpty ? nil : TransferSection(type: section.type, items: filteredItems)
         }
     }
 }
 
-// MARK: - Factory Methods
-
-public extension TransferListItem {
-    static func sender(_ title: String, name: String, image: AssetImage? = nil, menu: ContextMenuConfiguration? = nil) -> Self {
-        .entity(title, name: name, image: image, contextMenu: menu)
-    }
-    
-    static func network(_ title: String, name: String, image: AssetImage) -> Self {
-        .entity(title, name: name, image: image)
-    }
-    
-    static func fee(
-        _ title: String,
-        value: String? = nil,
-        fiat: String? = nil,
-        selectable: Bool = false,
-        onSelect: VoidAction = nil,
-        onInfo: VoidAction = nil
-    ) -> Self {
-        if selectable {
-            .selectableFee(title: title, value: value, fiat: fiat, onSelect: onSelect)
-        } else {
-            .amount(title, value: value, fiat: fiat, infoAction: onInfo)
-        }
-    }
-}
