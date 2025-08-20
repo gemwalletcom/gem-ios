@@ -16,7 +16,7 @@ import SwiftUI
 
 @Observable
 @MainActor
-public final class TransactionDetailViewModel: Identifiable {
+public final class TransactionDetailViewModel {
     private var model: TransactionViewModel
     private let preferences: Preferences
 
@@ -40,7 +40,6 @@ public final class TransactionDetailViewModel: Identifiable {
         transactionExtended = transaction
         request = TransactionRequest(walletId: walletId, transactionId: transaction.id)
     }
-    public var id: String { model.transaction.id }
 
     var title: String { model.titleTextValue.text }
     var networkField: String { Localized.Transfer.network }
