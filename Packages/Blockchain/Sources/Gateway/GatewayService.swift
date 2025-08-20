@@ -86,14 +86,8 @@ extension GatewayService {
         return BigInt(block)
     }
     
-    public func feePriorityRates(chain: Primitives.Chain) async throws -> [FeePriorityValue] {
-        try await gateway.getFeeRates(chain: chain.rawValue).map { try $0.map() }
-    }
-    
     public func feeRates(chain: Primitives.Chain) async throws -> [FeeRate] {
-        try await feePriorityRates(chain: chain).map {
-            FeeRate(priority: $0.priority, gasPriceType: .regular(gasPrice: $0.value))
-        }
+        try await gateway.getFeeRates(chain: chain.rawValue).map { try $0.map() }
     }
 }
 
@@ -126,7 +120,7 @@ extension GatewayService {
 extension GatewayService {
     public func validators(chain: Primitives.Chain) async throws -> [DelegationValidator] {
         do {
-            let validators = try await gateway.getStakingValidators(chain: chain.rawValue)
+            let validators = try await gateway.getStakingValidators(chain: chain.rawValue, apy: nil)
                 .map { try $0.map() }
             NSLog("validators \(validators)")
             return validators
@@ -235,11 +229,20 @@ extension GemUtxo {
     }
 }
 
-extension GemFeePriorityValue {
-    func map() throws -> FeePriorityValue {
-        FeePriorityValue(
-            priority: try FeePriority(id: priority),
-            value: try BigInt.from(string: value)
+extension GemFeeRate {
+    func map() throws -> FeeRate {
+        let gasPrice = try BigInt.from(string: gasPriceType.gasPrice)
+        let gasPriceType: GasPriceType = try {
+            if let priorityFee = self.gasPriceType.priorityFee {
+                return .eip1559(gasPrice: gasPrice, priorityFee: try BigInt.from(string: priorityFee))
+            } else {
+                return .regular(gasPrice: gasPrice)
+            }
+        }()
+       
+        return FeeRate(
+            priority: try FeePriority(id: priority), 
+            gasPriceType: gasPriceType
         )
     }
 }

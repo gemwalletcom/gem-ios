@@ -38,9 +38,7 @@ extension BitcoinService: ChainBalanceable {
 
 extension BitcoinService: ChainTransactionPreloadable {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        return TransactionPreload(
-            utxos: try await gateway.utxos(chain: chain.chain, address: input.senderAddress)
-        )
+        try await gateway.transactionPreload(chain: chain.chain, input: input)
     }
 }
 
@@ -119,8 +117,8 @@ extension BitcoinService: ChainFeeRateFetchable {
     }
 }
 
-struct BitcoinFeeCalculator {
-    static func calculate(
+public struct BitcoinFeeCalculator {
+    public static func calculate(
         chain: BitcoinChain,
         senderAddress: String,
         destinationAddress: String,
