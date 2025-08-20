@@ -54,15 +54,10 @@ extension ChainService {
             .stellar,
             .near,
             .cosmos,
-            .ton:
+            .ton,
+            .polkadot:
             GatewayChainService(
                 chain: chain,
-                gateway: GatewayService(provider: NativeProvider(url: url))
-            )
-        case .polkadot:
-            PolkadotService(
-                chain: chain,
-                provider: ProviderFactory.create(with: url),
                 gateway: GatewayService(provider: NativeProvider(url: url))
             )
         case .cardano:

@@ -473,9 +473,18 @@ extension GemTransactionData {
                 fee: transactionFee
             )
             
-        case .polkadot(let sequence):
+        case .polkadot(let sequence, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
             return TransactionData(
                 sequence: Int(sequence),
+                data: .polkadot(SigningData.Polkadot(
+                    genesisHash: try Data.from(hex: genesisHash),
+                    blockHash: try Data.from(hex: blockHash),
+                    blockNumber: UInt64(blockNumber),
+                    specVersion: UInt32(specVersion),
+                    transactionVersion: UInt32(transactionVersion),
+                    period: UInt64(period)
+                )),
+                block: SignerInputBlock(number: Int(blockNumber)),
                 fee: transactionFee
             )
         }
