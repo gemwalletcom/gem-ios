@@ -16,7 +16,7 @@ import SwiftUI
 
 @Observable
 @MainActor
-public final class TransactionDetailViewModel {
+public final class TransactionDetailViewModel: Identifiable {
     private var model: TransactionViewModel
     private let preferences: Preferences
 
@@ -40,6 +40,7 @@ public final class TransactionDetailViewModel {
         transactionExtended = transaction
         request = TransactionRequest(walletId: walletId, transactionId: transaction.id)
     }
+    public var id: String { model.transaction.id }
 
     var title: String { model.titleTextValue.text }
     var networkField: String { Localized.Transfer.network }
@@ -157,15 +158,16 @@ public final class TransactionDetailViewModel {
     }
 }
 
-extension TransactionDetailViewModel: @preconcurrency Identifiable {
-    public var id: String { model.transaction.id }
-}
-
 // MARK: - Actions
 
 extension TransactionDetailViewModel {
     func onSelectTransactionHeader() {
-        if let headerLink = headerLink {
+        let url: URL? = switch model.transaction.transaction.metadata {
+        case .null, .nft, .none, .perpetual: .none
+        case let .swap(metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
+        }
+
+        if let headerLink = url {
             UIApplication.shared.open(headerLink)
         }
     }
@@ -190,19 +192,6 @@ extension TransactionDetailViewModel {
         model.addressLink(account: account)
     }
 }
-
-// MARK: - Private
-
-extension TransactionDetailViewModel {
-    private var headerLink: URL? {
-        switch model.transaction.transaction.metadata {
-        case .null, .nft, .none, .perpetual: .none
-        case let .swap(metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
-        }
-    }
-}
-
-// MARK: - Sections and Data
 
 extension TransactionDetailViewModel {
     var sections: [TransactionSection] {
