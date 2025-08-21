@@ -165,7 +165,8 @@ extension GemAssetBalance {
 
 extension TransactionPreloadInput {
     func map() -> GemTransactionPreloadInput {
-        GemTransactionPreloadInput(
+        return GemTransactionPreloadInput(
+            asset: asset.map(),
             senderAddress: senderAddress,
             destinationAddress: destinationAddress
         )
@@ -396,13 +397,13 @@ extension GemTransactionData {
         switch metadata {
         case .none:
             return TransactionData(fee: transactionFee)
-        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let sequence):
+        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash):
             return TransactionData(
-                sequence: Int(sequence),
+                block: SignerInputBlock(hash: blockHash),
                 token: SignerInputToken(
-                    senderTokenAddress: senderTokenAddress,
+                    senderTokenAddress: senderTokenAddress ?? "",
                     recipientTokenAddress: recipientTokenAddress,
-                    tokenProgram: tokenProgram.map()
+                    tokenProgram: tokenProgram?.map() ?? .token
                 ),
                 fee: transactionFee
             )
@@ -411,7 +412,7 @@ extension GemTransactionData {
             return TransactionData(
                 sequence: Int(sequence),
                 token: SignerInputToken(
-                    senderTokenAddress: jettonWalletAddress,
+                    senderTokenAddress: jettonWalletAddress ?? "",
                     recipientTokenAddress: nil,
                     tokenProgram: .token
                 ),

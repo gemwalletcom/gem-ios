@@ -83,6 +83,7 @@ extension TransferTransactionProvider {
     private func getTransactionMetadata(wallet: Wallet, data: TransferData) async throws -> TransactionLoadMetadata {
         try await chainService.preload(
             input: TransactionPreloadInput(
+                asset: data.type.asset,
                 senderAddress: try wallet.account(for: data.chain).address,
                 destinationAddress: data.recipientData.recipient.address
             )

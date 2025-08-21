@@ -5,13 +5,13 @@ import Foundation
 public enum TransactionLoadMetadata: Sendable {
     case none
     case solana(
-        senderTokenAddress: String,
+        senderTokenAddress: String?,
         recipientTokenAddress: String?,
-        tokenProgram: SolanaTokenProgramId,
-        sequence: Int64
+        tokenProgram: SolanaTokenProgramId?,
+        blockHash: String
     )
     case ton(
-        jettonWalletAddress: String,
+        jettonWalletAddress: String?,
         sequence: Int64
     )
     case cosmos(
@@ -53,8 +53,7 @@ public enum TransactionLoadMetadata: Sendable {
 extension TransactionLoadMetadata {
     public func getSequence() throws -> Int64 {
         switch self {
-        case .solana(_, _, _, let sequence),
-             .ton(_, let sequence),
+        case .ton(_, let sequence),
              .cosmos(_, let sequence, _),
              .near(let sequence, _, _),
              .stellar(let sequence, _),
@@ -64,7 +63,7 @@ extension TransactionLoadMetadata {
              .polkadot(let sequence, _, _, _, _, _, _),
              .evm(let sequence, _):
             return sequence
-        case .none, .bitcoin, .cardano, .tron:
+        case .none, .bitcoin, .cardano, .tron, .solana:
             throw AnyError("Sequence not available for this metadata type")
         }
     }
@@ -81,7 +80,8 @@ extension TransactionLoadMetadata {
     
     public func getBlockHash() throws -> String {
         switch self {
-        case .near(_, let blockHash, _),
+        case .solana(_, _, _, let blockHash),
+            .near(_, let blockHash, _),
              .polkadot(_, _, let blockHash, _, _, _, _):
             return blockHash
         default:
