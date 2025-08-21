@@ -77,6 +77,12 @@ public extension HyperCoreService {
 
 extension HyperCoreService: ChainServiceable {}
 
+public extension HyperCoreService {
+    func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
+        return .none
+    }
+}
+
 // MARK: - ChainAddressStatusFetchable
 
 public extension HyperCoreService {
@@ -218,13 +224,6 @@ public extension HyperCoreService {
     }
 }
 
-// MARK: - ChainTransactionPreloadable
-
-public extension HyperCoreService {
-    func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        TransactionPreload()
-    }
-}
 
 // MARK: - ChainTransactionStateFetchable
 

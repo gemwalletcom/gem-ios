@@ -6,13 +6,23 @@ import Primitives
 import BigInt
 import NativeProviderService
 
-public struct GatewayService: Sendable {
+public actor GatewayService: Sendable {
     let gateway: GemGateway
     
     public init(
         provider: NativeProvider
     ) {
         self.gateway = GemGateway(provider: provider)
+    }
+}
+
+extension GatewayService: GemGatewayEstimateFee {
+    public func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
+        try await EstimateFeeService().getFee(chain: chain, input: input)
+    }
+    
+    public func getFeeData(chain: Gemstone.Chain, input: GemTransactionLoadInput) async throws -> String? {
+        try await EstimateFeeService().getFeeData(chain: chain, input: input)
     }
 }
 
@@ -106,12 +116,12 @@ extension GatewayService {
 // MARK: - Transaction Preload
 
 extension GatewayService {
-    public func transactionPreload(chain: Primitives.Chain, input: TransactionPreloadInput) async throws -> TransactionPreload {
+    public func transactionPreload(chain: Primitives.Chain, input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
         try await gateway.getTransactionPreload(chain: chain.rawValue, input: input.map()).map()
     }
     
     public func transactionLoad(chain: Primitives.Chain, input: GemTransactionLoadInput) async throws -> TransactionData {
-        try await gateway.getTransactionLoad(chain: chain.rawValue, input: input).map()
+        try await gateway.getTransactionLoad(chain: chain.rawValue, input: input, provider: self).map()
     }
 }
 
@@ -162,18 +172,6 @@ extension TransactionPreloadInput {
     }
 }
 
-extension GemTransactionPreload {
-    func map() throws -> TransactionPreload {
-        TransactionPreload(
-            blockHash: blockHash,
-            blockNumber: Int(blockNumber),
-            utxos: try utxos.map { try $0.map() },
-            sequence: Int(sequence),
-            chainId: chainId,
-            isDestinationAddressExist: isDestinationAddressExist
-        )
-    }
-}
 
 extension GemBalance {
     func map() throws -> Balance {
@@ -231,18 +229,9 @@ extension GemUtxo {
 
 extension GemFeeRate {
     func map() throws -> FeeRate {
-        let gasPrice = try BigInt.from(string: gasPriceType.gasPrice)
-        let gasPriceType: GasPriceType = try {
-            if let priorityFee = self.gasPriceType.priorityFee {
-                return .eip1559(gasPrice: gasPrice, priorityFee: try BigInt.from(string: priorityFee))
-            } else {
-                return .regular(gasPrice: gasPrice)
-            }
-        }()
-       
         return FeeRate(
             priority: try FeePriority(id: priority), 
-            gasPriceType: gasPriceType
+            gasPriceType: try gasPriceType.map()
         )
     }
 }
@@ -386,7 +375,7 @@ extension GemPerpetualMetadata {
 extension GemChartCandleStick {
     func map() throws -> ChartCandleStick {
         ChartCandleStick(
-            date: Date(timeIntervalSince1970: TimeInterval(timestamp / 1000)),
+            date: Date(timeIntervalSince1970: TimeInterval(timestamp)),
             open: open,
             high: high,
             low: low,
@@ -402,23 +391,18 @@ extension GemTransactionData {
             fee: try BigInt.from(string: fee.fee),
             gasPriceType: .regular(gasPrice: try BigInt.from(string: fee.gasPrice)),
             gasLimit: try BigInt.from(string: fee.gasLimit),
-            options: try fee.options.reduce(into: [:]) { result, pair in
-                let feeOption: FeeOption
-                switch pair.key {
-                case .tokenAccountCreation:
-                    feeOption = .tokenAccountCreation
-                }
-                result[feeOption] = try BigInt.from(string: pair.value)
-            }
+            options: try fee.options.map()
         )
         switch metadata {
+        case .none:
+            return TransactionData(fee: transactionFee)
         case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let sequence):
             return TransactionData(
                 sequence: Int(sequence),
                 token: SignerInputToken(
                     senderTokenAddress: senderTokenAddress,
                     recipientTokenAddress: recipientTokenAddress,
-                    tokenProgram: try SolanaTokenProgramId.from(string: tokenProgram)
+                    tokenProgram: tokenProgram.map()
                 ),
                 fee: transactionFee
             )
@@ -447,13 +431,10 @@ extension GemTransactionData {
                 utxos: try utxos.map { try $0.map() }
             )
             
-        case .evm(let chainId, let blockHash, let blockNumber):
+        case .evm(let nonce, let chainId):
             return TransactionData(
-                block: SignerInputBlock(
-                    number: Int(blockNumber),
-                    hash: blockHash
-                ),
-                chainId: chainId,
+                sequence: Int(nonce),
+                chainId: String(chainId),
                 fee: transactionFee
             )
             
@@ -467,7 +448,7 @@ extension GemTransactionData {
                 fee: transactionFee
             )
             
-        case .stellar(let sequence),
+        case .stellar(let sequence, _),
             .xrp(let sequence),
             .algorand(let sequence),
             .aptos(let sequence):

@@ -29,7 +29,7 @@ public protocol ChainFeeRateFetchable: Sendable {
 }
 
 public protocol ChainTransactionPreloadable: Sendable {
-    func preload(input: TransactionPreloadInput) async throws -> TransactionPreload
+    func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata
 }
 
 public protocol ChainTransactionDataLoadable: Sendable {
@@ -124,3 +124,4 @@ public extension ChainAddressStatusFetchable {
         return []
     }
 }
+
