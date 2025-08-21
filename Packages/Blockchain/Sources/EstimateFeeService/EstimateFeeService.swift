@@ -13,7 +13,7 @@ public struct EstimateFeeService: Sendable {
         case .bitcoin: BitcoinService(chain: try BitcoinChain(id: chain.rawValue))
         case .cardano: CardanoService()
         case .polkadot: PolkadotService()
-        default: throw AnyError("no get data")
+        default: EmptyService()
         }
     }
     
@@ -23,5 +23,22 @@ public struct EstimateFeeService: Sendable {
     
     public func getFeeData(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> String? {
         try await provider(chain: try Chain(id: chain)).getFeeData(chain: chain, input: input)
+    }
+}
+
+public final class EmptyService: Sendable {
+    
+    public init() {
+        
+    }
+}
+
+extension EmptyService: GemGatewayEstimateFee {
+    public func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
+        return .none
+    }
+    
+    public func getFeeData(chain: Gemstone.Chain, input: GemTransactionLoadInput) async throws -> String? {
+        .none
     }
 }

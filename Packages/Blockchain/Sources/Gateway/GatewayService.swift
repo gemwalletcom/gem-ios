@@ -229,18 +229,9 @@ extension GemUtxo {
 
 extension GemFeeRate {
     func map() throws -> FeeRate {
-        let gasPrice = try BigInt.from(string: gasPriceType.gasPrice)
-        let gasPriceType: GasPriceType = try {
-            if let priorityFee = self.gasPriceType.priorityFee {
-                return .eip1559(gasPrice: gasPrice, priorityFee: try BigInt.from(string: priorityFee))
-            } else {
-                return .regular(gasPrice: gasPrice)
-            }
-        }()
-       
         return FeeRate(
             priority: try FeePriority(id: priority), 
-            gasPriceType: gasPriceType
+            gasPriceType: try gasPriceType.map()
         )
     }
 }

@@ -12,7 +12,7 @@ extension TransactionInput {
             senderAddress: senderAddress,
             destinationAddress: destinationAddress,
             value: value.description,
-            gasPrice: GemGasPrice(gasPrice: gasPrice.gasPrice.description),
+            gasPrice: GemGasPriceType(gasPrice: gasPrice.gasPrice.description, priorityFee: nil),
             memo: memo,
             isMaxValue: feeInput.isMaxAmount,
             metadata: self.metadata.map() 
@@ -21,8 +21,6 @@ extension TransactionInput {
 }
 
 extension GemStakeOperation {
-    // Remove getAsset() since asset is now at the transaction input level
-    
     public func mapToStakeType(asset: Asset) throws -> StakeType {
         switch self {
         case .delegate(let validatorAddress):
@@ -103,9 +101,14 @@ extension GemStakeOperation {
     }
 }
 
-extension GemGasPrice {
+extension GemGasPriceType {
     public func map() throws -> GasPriceType {
-        return GasPriceType.regular(gasPrice: try BigInt.from(string: gasPrice))
+        let gasPrice = try BigInt.from(string: gasPrice)
+        if let priorityFee = priorityFee {
+            return GasPriceType.eip1559(gasPrice: gasPrice, priorityFee: try BigInt.from(string: priorityFee))
+        } else {
+            return GasPriceType.regular(gasPrice: gasPrice)
+        }
     }
 }
 
@@ -133,8 +136,8 @@ extension GemTransactionInputType {
             let swapData = SwapData(quote: swapQuote, data: swapQuoteData)
             return TransferDataType.swap(try fromAsset.map(), try toAsset.map(), swapData)
         case .stake(let asset, let operation):
-            let mappedAsset = try asset.map()
-            return TransferDataType.stake(mappedAsset, try operation.mapToStakeType(asset: mappedAsset))
+            let asset = try asset.map()
+            return TransferDataType.stake(asset, try operation.mapToStakeType(asset: asset))
         }
     }
 }
