@@ -109,7 +109,7 @@ extension WalletsSceneViewModel {
         do {
             try performSwapOrder(wallets: pinnedWallets, source: source, destination: destination)
         } catch {
-            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+            NSLog("WalletsSceneViewModel move pinned error: \(error)")
         }
     }
 
@@ -118,7 +118,7 @@ extension WalletsSceneViewModel {
         do {
             try performSwapOrder(wallets: wallets, source: source, destination: destination)
         } catch {
-            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+            NSLog("WalletsSceneViewModel move error: \(error)")
         }
     }
     
