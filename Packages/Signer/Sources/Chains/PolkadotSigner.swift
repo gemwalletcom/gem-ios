@@ -10,10 +10,10 @@ public struct PolkadotSigner: Signable {
         guard case let .polkadot(data) = input.data else {
             throw SignerError.incompleteData
         }
-        let input = PolkadotSigningInput.with {
+        let input = try PolkadotSigningInput.with {
             $0.genesisHash = data.genesisHash
             $0.blockHash = data.blockHash
-            $0.nonce = input.sequence.asUInt64
+            $0.nonce = UInt64(try input.metadata.getSequence())
             $0.specVersion = data.specVersion
             $0.network = CoinType.polkadot.ss58Prefix
             $0.transactionVersion = data.transactionVersion

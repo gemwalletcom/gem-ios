@@ -109,7 +109,7 @@ extension EthereumService: ChainTransactionPreloadable {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
         let nonce = try await getNonce(senderAddress: input.senderAddress)
         let chainId = try getChainId()
-        return .evm(nonce: Int64(nonce), chainId: Int64(chainId))
+        return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
     }
 }
 
@@ -118,10 +118,8 @@ extension EthereumService: ChainTransactionDataLoadable {
         async let fee = fee(input: input.feeInput)
         
         return try await TransactionData(
-            sequence: Int(input.metadata.getSequence()),
-            chainId: try getChainId().asString,
             fee: fee,
-            extra: .none
+            metadata: input.metadata
         )
     }
 }

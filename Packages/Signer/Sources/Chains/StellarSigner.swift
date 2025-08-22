@@ -8,10 +8,10 @@ import Primitives
 public struct StellarSigner: Signable {
     
     func sign(input: SignerInput, operation: StellarSigningInput.OneOf_OperationOneof,  privateKey: Data) throws -> String {
-        let input = StellarSigningInput.with {
+        let input = try StellarSigningInput.with {
             $0.passphrase = StellarPassphrase.stellar.description
             $0.fee = Int32(input.fee.totalFee)
-            $0.sequence = Int64(input.sequence)
+            $0.sequence = Int64(try input.metadata.getSequence())
             $0.account = input.senderAddress
             if let memo = input.memo {
                 $0.memoText = .with {

@@ -245,9 +245,9 @@ extension TransactionLoadMetadata {
                 blockHash: blockHash
             )
         case .ton(let jettonWalletAddress, let sequence):
-            return .ton(jettonWalletAddress: jettonWalletAddress, sequence: UInt64(sequence))
+            return .ton(jettonWalletAddress: jettonWalletAddress, sequence: sequence)
         case .cosmos(let accountNumber, let sequence, let chainId):
-            return .cosmos(accountNumber: UInt64(accountNumber), sequence: UInt64(sequence), chainId: chainId)
+            return .cosmos(accountNumber: UInt64(accountNumber), sequence: sequence, chainId: chainId)
         case .bitcoin(let utxos):
             return .bitcoin(utxos: utxos.map { $0.map() })
         case .cardano(let utxos):
@@ -255,18 +255,18 @@ extension TransactionLoadMetadata {
         case .evm(let nonce, let chainId):
             return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
         case .near(let sequence, let blockHash, let isDestinationAddressExist):
-            return .near(sequence: UInt64(sequence), blockHash: blockHash, isDestinationAddressExist: isDestinationAddressExist)
+            return .near(sequence: sequence, blockHash: blockHash, isDestinationAddressExist: isDestinationAddressExist)
         case .stellar(let sequence, let isDestinationAddressExist):
-            return .stellar(sequence: UInt64(sequence), isDestinationAddressExist: isDestinationAddressExist)
+            return .stellar(sequence: sequence, isDestinationAddressExist: isDestinationAddressExist)
         case .xrp(let sequence):
-            return .xrp(sequence: UInt64(sequence))
-        case .algorand(let sequence):
-            return .algorand(sequence: UInt64(sequence))
+            return .xrp(sequence: sequence)
+        case .algorand(let sequence, let blockHash, let chainId):
+            return .algorand(sequence: sequence, blockHash: blockHash, chainId: chainId)
         case .aptos(let sequence):
-            return .aptos(sequence: UInt64(sequence))
+            return .aptos(sequence: sequence)
         case .polkadot(let sequence, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
             return .polkadot(
-                sequence: UInt64(sequence),
+                sequence: sequence,
                 genesisHash: genesisHash,
                 blockHash: blockHash,
                 blockNumber: UInt64(blockNumber),
@@ -311,40 +311,40 @@ extension GemTransactionLoadMetadata {
                 blockHash: blockHash
             )
         case .ton(let jettonWalletAddress, let sequence):
-            return .ton(jettonWalletAddress: jettonWalletAddress, sequence: Int64(sequence))
+            return .ton(jettonWalletAddress: jettonWalletAddress, sequence: sequence)
         case .cosmos(let accountNumber, let sequence, let chainId):
-            return .cosmos(accountNumber: Int64(accountNumber), sequence: Int64(sequence), chainId: chainId)
+            return .cosmos(accountNumber: UInt64(accountNumber), sequence: sequence, chainId: chainId)
         case .bitcoin(let utxos):
             return .bitcoin(utxos: try utxos.map { try $0.map() })
         case .cardano(let utxos):
             return .cardano(utxos: try utxos.map { try $0.map() })
         case .evm(let nonce, let chainId):
-            return .evm(nonce: Int64(nonce), chainId: Int64(chainId))
+            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
         case .near(let sequence, let blockHash, let isDestinationAddressExist):
-            return .near(sequence: Int64(sequence), blockHash: blockHash, isDestinationAddressExist: isDestinationAddressExist)
+            return .near(sequence: sequence, blockHash: blockHash, isDestinationAddressExist: isDestinationAddressExist)
         case .stellar(let sequence, let isDestinationAddressExist):
-            return .stellar(sequence: Int64(sequence), isDestinationAddressExist: isDestinationAddressExist)
+            return .stellar(sequence: sequence, isDestinationAddressExist: isDestinationAddressExist)
         case .xrp(let sequence):
-            return .xrp(sequence: Int64(sequence))
-        case .algorand(let sequence):
-            return .algorand(sequence: Int64(sequence))
+            return .xrp(sequence: sequence)
+        case .algorand(let sequence, let blockHash, let chainId):
+            return .algorand(sequence: sequence, blockHash: blockHash, chainId: chainId)
         case .aptos(let sequence):
-            return .aptos(sequence: Int64(sequence))
+            return .aptos(sequence: sequence)
         case .polkadot(let sequence, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
             return .polkadot(
-                sequence: Int64(sequence),
+                sequence: sequence,
                 genesisHash: genesisHash,
                 blockHash: blockHash,
-                blockNumber: Int64(blockNumber),
+                blockNumber: UInt64(blockNumber),
                 specVersion: specVersion,
                 transactionVersion: transactionVersion,
-                period: Int64(period)
+                period: UInt64(period)
             )
         case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress):
             return .tron(
-                blockNumber: Int64(blockNumber),
-                blockVersion: Int64(blockVersion),
-                blockTimestamp: Int64(blockTimestamp),
+                blockNumber: UInt64(blockNumber),
+                blockVersion: UInt64(blockVersion),
+                blockTimestamp: UInt64(blockTimestamp),
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
                 witnessAddress: witnessAddress

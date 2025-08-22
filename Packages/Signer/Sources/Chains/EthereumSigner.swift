@@ -81,12 +81,12 @@ public class EthereumSigner: Signable {
         guard case let .eip1559(gasPrice,priorityFee) = input.fee.gasPriceType else {
             throw AnyError("no longer supported")
         }
-        return EthereumSigningInput.with {
+        return try EthereumSigningInput.with {
             $0.txMode = .enveloped
             $0.maxFeePerGas = gasPrice.magnitude.serialize()
             $0.maxInclusionFeePerGas = priorityFee.magnitude.serialize()
             $0.gasLimit = gasLimit.magnitude.serialize()
-            $0.chainID = BigInt(stringLiteral: input.chainId).magnitude.serialize()
+            $0.chainID = BigInt(stringLiteral: try input.metadata.getChainId()).magnitude.serialize()
             $0.nonce = nonce.magnitude.serialize()
             $0.transaction = transaction
             $0.toAddress = toAddress
@@ -104,7 +104,7 @@ public class EthereumSigner: Signable {
             input: input,
             transaction: transaction,
             toAddress: toAddress,
-            nonce: BigInt(input.sequence),
+            nonce: BigInt(try input.metadata.getSequence()),
             gasLimit: input.fee.gasLimit,
             privateKey: privateKey
         )
@@ -162,7 +162,7 @@ public class EthereumSigner: Signable {
                         }
                     },
                     toAddress: swapData.to,
-                    nonce: input.sequence.asBigInt + 1,
+                    nonce: BigInt(try input.metadata.getSequence()) + 1,
                     gasLimit: swapData.gasLimitBigInt(),
                     privateKey: privateKey
                 )),

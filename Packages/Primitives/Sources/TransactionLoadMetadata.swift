@@ -12,38 +12,42 @@ public enum TransactionLoadMetadata: Sendable {
     )
     case ton(
         jettonWalletAddress: String?,
-        sequence: Int64
+        sequence: UInt64
     )
     case cosmos(
-        accountNumber: Int64,
-        sequence: Int64,
+        accountNumber: UInt64,
+        sequence: UInt64,
         chainId: String
     )
     case bitcoin(utxos: [UTXO])
     case cardano(utxos: [UTXO])
-    case evm(nonce: Int64, chainId: Int64)
+    case evm(nonce: UInt64, chainId: UInt64)
     case near(
-        sequence: Int64,
+        sequence: UInt64,
         blockHash: String,
         isDestinationAddressExist: Bool
     )
-    case stellar(sequence: Int64, isDestinationAddressExist: Bool)
-    case xrp(sequence: Int64)
-    case algorand(sequence: Int64)
-    case aptos(sequence: Int64)
+    case stellar(sequence: UInt64, isDestinationAddressExist: Bool)
+    case xrp(sequence: UInt64)
+    case algorand(
+        sequence: UInt64,
+        blockHash: String,
+        chainId: String
+    )
+    case aptos(sequence: UInt64)
     case polkadot(
-        sequence: Int64,
+        sequence: UInt64,
         genesisHash: String,
         blockHash: String,
-        blockNumber: Int64,
+        blockNumber: UInt64,
         specVersion: UInt64,
         transactionVersion: UInt64,
-        period: Int64
+        period: UInt64
     )
     case tron(
-        blockNumber: Int64,
-        blockVersion: Int64,
-        blockTimestamp: Int64,
+        blockNumber: UInt64,
+        blockVersion: UInt64,
+        blockTimestamp: UInt64,
         transactionTreeRoot: String,
         parentHash: String,
         witnessAddress: String
@@ -51,14 +55,14 @@ public enum TransactionLoadMetadata: Sendable {
 }
 
 extension TransactionLoadMetadata {
-    public func getSequence() throws -> Int64 {
+    public func getSequence() throws -> UInt64 {
         switch self {
         case .ton(_, let sequence),
              .cosmos(_, let sequence, _),
              .near(let sequence, _, _),
              .stellar(let sequence, _),
              .xrp(let sequence),
-             .algorand(let sequence),
+             .algorand(let sequence, _, _),
              .aptos(let sequence),
              .polkadot(let sequence, _, _, _, _, _, _),
              .evm(let sequence, _):
@@ -68,7 +72,7 @@ extension TransactionLoadMetadata {
         }
     }
     
-    public func getBlockNumber() throws -> Int64 {
+    public func getBlockNumber() throws -> UInt64 {
         switch self {
         case .polkadot(_, _, _, let blockNumber, _, _, _),
              .tron(let blockNumber, _, _, _, _, _):
@@ -82,6 +86,7 @@ extension TransactionLoadMetadata {
         switch self {
         case .solana(_, _, _, let blockHash),
             .near(_, let blockHash, _),
+             .algorand(_, let blockHash, _),
              .polkadot(_, _, let blockHash, _, _, _, _):
             return blockHash
         default:
@@ -92,6 +97,8 @@ extension TransactionLoadMetadata {
     public func getChainId() throws -> String {
         switch self {
         case .cosmos(_, _, let chainId):
+            return chainId
+        case .algorand(_, _, let chainId):
             return chainId
         case .evm(_, let chainId):
             return String(chainId)
@@ -117,6 +124,15 @@ extension TransactionLoadMetadata {
             return isDestinationAddressExist
         default:
             throw AnyError("Destination existence flag not available for this metadata type")
+        }
+    }
+    
+    public func getAccountNumber() throws -> UInt64 {
+        switch self {
+        case .cosmos(let accountNumber, _, _):
+            return accountNumber
+        default:
+            throw AnyError("Account number not available for this metadata type")
         }
     }
 }

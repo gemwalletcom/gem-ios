@@ -13,7 +13,7 @@ enum AptosPayload {
 public struct AptosSigner: Signable {
     
     func sign(payload: AptosPayload, input: SignerInput , privateKey: Data) throws -> String {
-        let signingInput = AptosSigningInput.with {
+        let signingInput = try AptosSigningInput.with {
             $0.chainID = 1
             switch payload {
             case .payload(let payload):
@@ -24,7 +24,7 @@ public struct AptosSigner: Signable {
             $0.expirationTimestampSecs = UInt64(Date.now.timeIntervalSince1970) + 3_600
             $0.gasUnitPrice = input.fee.gasPrice.asUInt
             $0.maxGasAmount = input.fee.gasLimit.asUInt
-            $0.sequenceNumber = Int64(input.sequence)
+            $0.sequenceNumber = Int64(try input.metadata.getSequence())
             $0.sender = input.senderAddress
             $0.privateKey = privateKey
         }
