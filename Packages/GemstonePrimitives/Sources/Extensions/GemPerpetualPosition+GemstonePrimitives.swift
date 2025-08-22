@@ -6,11 +6,10 @@ import Primitives
 
 extension GemPerpetualPosition {
     public func map() throws -> PerpetualPosition {
-        let assetId = try AssetId(id: assetId)
         return PerpetualPosition(
             id: symbol,
             perpetualId: perpetualId,
-            assetId: assetId,
+            assetId: try AssetId(id: assetId),
             size: size,
             sizeValue: size * entryPrice,
             leverage: UInt8(leverage),
