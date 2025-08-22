@@ -95,8 +95,8 @@ extension GatewayService {
         try await gateway.getBlockNumber(chain: chain.rawValue).asBigInt
     }
     
-    public func feeRates(chain: Primitives.Chain) async throws -> [FeeRate] {
-        try await gateway.getFeeRates(chain: chain.rawValue).map { try $0.map() }
+    public func feeRates(chain: Primitives.Chain, input: TransferDataType) async throws -> [FeeRate] {
+        try await gateway.getFeeRates(chain: chain.rawValue, input: input.map()).map { try $0.map() }
     }
 }
 

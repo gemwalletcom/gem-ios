@@ -260,7 +260,7 @@ public extension SuiService {
 
 extension SuiService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        try await gateway.feeRates(chain: chain)
+        try await gateway.feeRates(chain: chain, input: type)
     }
 }
 
