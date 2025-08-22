@@ -279,7 +279,7 @@ extension SuiService: ChainTransactionDataLoadable {
 
         return TransactionData(
             fee: fee,
-            messageBytes: data
+            metadata: .sui(messageBytes: data)
         )
     }
 }

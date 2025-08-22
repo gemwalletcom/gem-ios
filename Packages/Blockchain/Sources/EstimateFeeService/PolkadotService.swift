@@ -30,14 +30,14 @@ public final class PolkadotService: Sendable {
         let input = try PolkadotSigningInput.with {
             $0.genesisHash = try genesisHash.encodedData()
             $0.blockHash = try blockHash.encodedData()
-            $0.nonce = UInt64(sequence)
+            $0.nonce = sequence
             $0.specVersion = UInt32(specVersion)
             $0.network = CoinType.polkadot.ss58Prefix
             $0.transactionVersion = UInt32(transactionVersion)
             $0.privateKey = PrivateKey().data
             $0.era = PolkadotEra.with {
-                $0.blockNumber = UInt64(blockNumber)
-                $0.period = UInt64(period)
+                $0.blockNumber = blockNumber
+                $0.period = period
             }
             $0.balanceCall.transfer = PolkadotBalance.Transfer.with {
                 $0.toAddress = input.destinationAddress

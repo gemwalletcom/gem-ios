@@ -22,7 +22,7 @@ public struct ChainServiceMock: ChainServiceable {
     public var inSync: Bool = true
     public var tokenData: [String: Asset] = [:]
     public var transactionData: TransactionData = TransactionData(fee: Fee(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero))
-    public var transactionPreload: TransactionPreload = TransactionPreload()
+    public var transactionPreload: TransactionLoadMetadata = .none
     public var transactionState: TransactionChanges = TransactionChanges(state: .pending, changes: [])
     
     public init() {}
@@ -95,7 +95,7 @@ extension ChainServiceMock {
         transactionData
     }
     
-    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
         transactionPreload
     }
     

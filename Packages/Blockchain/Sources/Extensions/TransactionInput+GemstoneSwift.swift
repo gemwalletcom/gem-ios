@@ -12,7 +12,7 @@ extension TransactionInput {
             senderAddress: senderAddress,
             destinationAddress: destinationAddress,
             value: value.description,
-            gasPrice: GemGasPriceType(gasPrice: gasPrice.gasPrice.description, priorityFee: nil),
+            gasPrice: gasPrice.map(),
             memo: memo,
             isMaxValue: feeInput.isMaxAmount,
             metadata: self.metadata.map() 
@@ -20,21 +20,12 @@ extension TransactionInput {
     }
 }
 
-extension GemStakeOperation {
+extension GemStakeType {
     public func mapToStakeType(asset: Asset) throws -> StakeType {
         switch self {
-        case .delegate(let validatorAddress):
-            // For delegate, we need a DelegationValidator - using placeholder for now
-            let validator = DelegationValidator(
-                chain: asset.chain, // Use the asset's chain
-                id: validatorAddress,
-                name: "",
-                isActive: true,
-                commision: 0,
-                apr: 0
-            )
-            return .stake(validator: validator)
-        case .undelegate(let validatorAddress):
+        case .delegate(let validator):
+            return .stake(validator: try validator.map())
+        case .undelegate(let validator):
             // For undelegate, we need a Delegation - using placeholder for now
             let base = DelegationBase(
                 assetId: asset.id,
@@ -44,70 +35,43 @@ extension GemStakeOperation {
                 rewards: "",
                 completionDate: nil,
                 delegationId: "",
-                validatorId: validatorAddress
+                validatorId: validator.id
             )
-            let validator = DelegationValidator(
-                chain: asset.chain,
-                id: validatorAddress,
-                name: "",
-                isActive: true,
-                commision: 0,
-                apr: 0
-            )
-            let delegation = Delegation(base: base, validator: validator, price: nil)
+            let delegation = Delegation(base: base, validator: try validator.map(), price: nil)
             return .unstake(delegation: delegation)
-        case .redelegate(let srcValidatorAddress, let dstValidatorAddress):
-            let base = DelegationBase(
-                assetId: asset.id,
-                state: .active,
-                balance: "",
-                shares: "",
-                rewards: "",
-                completionDate: nil,
-                delegationId: "",
-                validatorId: srcValidatorAddress
-            )
-            let srcValidator = DelegationValidator(
-                chain: asset.chain,
-                id: srcValidatorAddress,
-                name: "",
-                isActive: true,
-                commision: 0,
-                apr: 0
-            )
-            let delegation = Delegation(base: base, validator: srcValidator, price: nil)
-            let toValidator = DelegationValidator(
-                chain: asset.chain,
-                id: dstValidatorAddress,
-                name: "",
-                isActive: true,
-                commision: 0,
-                apr: 0
-            )
-            return .redelegate(delegation: delegation, toValidator: toValidator)
-        case .withdrawRewards(let validatorAddresses):
-            let validators = validatorAddresses.map { address in
-                DelegationValidator(
-                    chain: asset.chain,
-                    id: address,
-                    name: "",
-                    isActive: true,
-                    commision: 0,
-                    apr: 0
-                )
-            }
-            return .rewards(validators: validators)
+        case .redelegate(let delegation, let toValidator):
+            return .redelegate(delegation: try delegation.map(), toValidator: try toValidator.map())
+        case .withdrawRewards(let validators):
+            let mappedValidators = try validators.map { try $0.map() }
+            return .rewards(validators: mappedValidators)
+        case .withdraw(let delegation):
+            return .withdraw(delegation: try delegation.map())
+        }
+    }
+}
+
+extension GasPriceType {
+    public func map() -> GemGasPriceType {
+        switch self {
+        case .regular(let gasPrice):
+            return .regular(gasPrice: gasPrice.description)
+        case .eip1559(let gasPrice, let priorityFee):
+            return .eip1559(gasPrice: gasPrice.description, priorityFee: priorityFee.description)
+        case .solana(let gasPrice, let priorityFee, let unitPrice):
+            return .solana(gasPrice: gasPrice.description, priorityFee: priorityFee.description, unitPrice: unitPrice.description)
         }
     }
 }
 
 extension GemGasPriceType {
     public func map() throws -> GasPriceType {
-        let gasPrice = try BigInt.from(string: gasPrice)
-        if let priorityFee = priorityFee {
-            return GasPriceType.eip1559(gasPrice: gasPrice, priorityFee: try BigInt.from(string: priorityFee))
-        } else {
-            return GasPriceType.regular(gasPrice: gasPrice)
+        switch self {
+        case .regular(let gasPrice):
+            return GasPriceType.regular(gasPrice: try BigInt.from(string: gasPrice))
+        case .eip1559(let gasPrice, let priorityFee):
+            return GasPriceType.eip1559(gasPrice: try BigInt.from(string: gasPrice), priorityFee: try BigInt.from(string: priorityFee))
+        case .solana(let gasPrice, let priorityFee, let unitPrice):
+            return GasPriceType.solana(gasPrice: try BigInt.from(string: gasPrice), priorityFee: try BigInt.from(string: priorityFee), unitPrice: try BigInt.from(string: unitPrice))
         }
     }
 }
@@ -166,7 +130,7 @@ extension TransferDataType {
         case .swap(let fromAsset, let toAsset, _):
             return .swap(fromAsset: fromAsset.map(), toAsset: toAsset.map())
         case .stake(let asset, let stakeType):
-            return .stake(asset: asset.map(), operation: stakeType.mapToStakeOperation(asset: asset))
+            return .stake(asset: asset.map(), operation: stakeType.map())
         case .deposit, .withdrawal, .transferNft, .tokenApprove, .account, .perpetual, .generic:
             fatalError("Unsupported transaction type: \(self)")
         }
@@ -174,19 +138,18 @@ extension TransferDataType {
 }
 
 extension StakeType {
-    public func mapToStakeOperation(asset: Asset) -> GemStakeOperation {
+    public func map() -> GemStakeType {
         switch self {
         case .stake(let validator):
-            return .delegate(validatorAddress: validator.id)
+            return .delegate(validator: validator.map())
         case .unstake(let delegation):
-            return .undelegate(validatorAddress: delegation.validator.id)
+            return .undelegate(validator: delegation.validator.map())
         case .redelegate(let delegation, let toValidator):
-            return .redelegate(srcValidatorAddress: delegation.validator.id, dstValidatorAddress: toValidator.id)
+            return .redelegate(delegation: delegation.map(), toValidator: toValidator.map())
         case .rewards(let validators):
-            let validatorIds = validators.map { $0.id }
-            return .withdrawRewards(validatorAddresses: validatorIds)
+            return .withdrawRewards(validators: validators.map { $0.map() })
         case .withdraw(let delegation):
-            return .withdrawRewards(validatorAddresses: [delegation.validator.id])
+            return .withdraw(delegation: delegation.map())
         }
     }
 }
@@ -283,6 +246,8 @@ extension TransactionLoadMetadata {
                 parentHash: parentHash,
                 witnessAddress: witnessAddress
             )
+        case .sui(let messageBytes):
+            return .sui(messageBytes: messageBytes)
         }
     }
 }
@@ -291,12 +256,61 @@ extension Fee {
     public func map() -> Gemstone.GemTransactionLoadFee {
         return Gemstone.GemTransactionLoadFee(
             fee: fee.description,
-            gasPrice: gasPrice.description,
+            gasPriceType: gasPriceType.map(),
             gasLimit: gasLimit.description,
             options: options.map()
         )
     }
 }
+
+extension DelegationValidator {
+    public func map() -> GemDelegationValidator {
+        return GemDelegationValidator(
+            chain: chain.rawValue,
+            id: id,
+            name: name,
+            isActive: isActive,
+            commission: commision,
+            apr: apr
+        )
+    }
+}
+
+
+extension Delegation {
+    public func map() -> GemDelegation {
+        return GemDelegation(
+            base: base.map(),
+            validator: validator.map()
+        )
+    }
+}
+
+extension GemDelegation {
+    func map() throws -> Delegation {
+        return Delegation(
+            base: try base.map(),
+            validator: try validator.map(),
+            price: nil
+        )
+    }
+}
+
+extension DelegationBase {
+    public func map() -> GemDelegationBase {
+        return GemDelegationBase(
+            assetId: assetId.identifier,
+            delegationId: delegationId,
+            validatorId: validatorId,
+            balance: balance,
+            shares: shares,
+            completionDate: completionDate.map { UInt64($0.timeIntervalSince1970) },
+            delegationState: state.rawValue,
+            rewards: rewards
+        )
+    }
+}
+
 
 extension GemTransactionLoadMetadata {
     public func map() throws -> TransactionLoadMetadata {
@@ -349,6 +363,8 @@ extension GemTransactionLoadMetadata {
                 parentHash: parentHash,
                 witnessAddress: witnessAddress
             )
+        case .sui(let messageBytes):
+            return .sui(messageBytes: messageBytes)
         }
     }
 }

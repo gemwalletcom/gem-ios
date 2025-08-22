@@ -51,6 +51,7 @@ public enum TransactionLoadMetadata: Sendable {
         parentHash: String,
         witnessAddress: String
     )
+    case sui(messageBytes: String)
 }
 
 extension TransactionLoadMetadata {
@@ -66,7 +67,7 @@ extension TransactionLoadMetadata {
              .polkadot(let sequence, _, _, _, _, _, _),
              .evm(let sequence, _):
             return sequence
-        case .none, .bitcoin, .cardano, .tron, .solana:
+        case .none, .bitcoin, .cardano, .tron, .solana, .sui:
             throw AnyError("Sequence not available for this metadata type")
         }
     }
@@ -132,6 +133,15 @@ extension TransactionLoadMetadata {
             return accountNumber
         default:
             throw AnyError("Account number not available for this metadata type")
+        }
+    }
+    
+    public func getMessageBytes() throws -> String {
+        switch self {
+        case .sui(let messageBytes):
+            return messageBytes
+        default:
+            throw AnyError("Message bytes not available for this metadata type")
         }
     }
 }

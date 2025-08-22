@@ -92,8 +92,7 @@ extension GatewayService {
     }
     
     public func latestBlock(chain: Primitives.Chain) async throws -> BigInt {
-        let block = try await gateway.getBlockNumber(chain: chain.rawValue)
-        return BigInt(block)
+        try await gateway.getBlockNumber(chain: chain.rawValue).asBigInt
     }
     
     public func feeRates(chain: Primitives.Chain) async throws -> [FeeRate] {
@@ -129,27 +128,13 @@ extension GatewayService {
 
 extension GatewayService {
     public func validators(chain: Primitives.Chain) async throws -> [DelegationValidator] {
-        do {
-            let validators = try await gateway.getStakingValidators(chain: chain.rawValue, apy: nil)
-                .map { try $0.map() }
-            NSLog("validators \(validators)")
-            return validators
-        } catch {
-            NSLog("validators \(error)")
-            throw AnyError(error.localizedDescription)
-        }
+        try await gateway.getStakingValidators(chain: chain.rawValue, apy: nil)
+            .map { try $0.map() }
     }
 
     public func delegations(chain: Primitives.Chain, address: String) async throws -> [DelegationBase] {
-        do {
-            let delegations = try await gateway.getStakingDelegations(chain: chain.rawValue, address: address)
-                .map { try $0.map() }
-            NSLog("delegations \(delegations)")
-            return delegations
-        } catch {
-            NSLog("delegations \(error)")
-            throw AnyError(error.localizedDescription)
-        }
+        try await gateway.getStakingDelegations(chain: chain.rawValue, address: address)
+            .map { try $0.map() }
     }
 }
 
@@ -386,33 +371,22 @@ extension GemChartCandleStick {
     }
 }
 
+extension GemTransactionLoadFee {
+    func map() throws -> Fee {
+        Fee(
+            fee: try BigInt.from(string: fee),
+            gasPriceType: try gasPriceType.map(),
+            gasLimit: try BigInt.from(string: gasLimit),
+            options: try options.map()
+        )
+    }
+}
+
 extension GemTransactionData {
     func map() throws -> TransactionData {
-        let transactionFee = Fee(
-            fee: try BigInt.from(string: fee.fee),
-            gasPriceType: .regular(gasPrice: try BigInt.from(string: fee.gasPrice)),
-            gasLimit: try BigInt.from(string: fee.gasLimit),
-            options: try fee.options.map()
+        return TransactionData(
+            fee: try fee.map(),
+            metadata: try metadata.map()
         )
-        switch metadata {
-        case .polkadot(_, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
-            return TransactionData(
-                data: .polkadot(SigningData.Polkadot(
-                    genesisHash: try Data.from(hex: genesisHash),
-                    blockHash: try Data.from(hex: blockHash),
-                    blockNumber: UInt64(blockNumber),
-                    specVersion: UInt32(specVersion),
-                    transactionVersion: UInt32(transactionVersion),
-                    period: UInt64(period)
-                )),
-                fee: transactionFee,
-                metadata: try metadata.map()
-            )
-        default:
-            return TransactionData(
-                fee: transactionFee,
-                metadata: try metadata.map()
-            )
-        }
     }
 }

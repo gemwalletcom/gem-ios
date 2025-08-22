@@ -79,21 +79,19 @@ public struct SolanaSigner: Signable {
     }
 
     public func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
+        throw AnyError.notImplemented
     }
 
     private func sign(input: SignerInput, type: SolanaSigningInput.OneOf_TransactionType, coinType: CoinType, privateKey: Data) throws -> String {
-        let signingInput = SolanaSigningInput.with {
+        let signingInput = try SolanaSigningInput.with {
             $0.transactionType = type
-            if case .solana(_, _, _, let blockHash) = input.metadata {
-                $0.recentBlockhash = blockHash
-            }
+            $0.recentBlockhash = try input.metadata.getBlockHash()
             $0.priorityFeeLimit = .with {
                 $0.limit = UInt32(input.fee.gasLimit)
             }
-            if input.fee.priorityFee > 0 {
+            if input.fee.unitPrice > 0 {
                 $0.priorityFeePrice = .with {
-                    $0.price = input.fee.priorityFee.asUInt
+                    $0.price = input.fee.unitPrice.asUInt
                 }
             }
             $0.privateKey = privateKey
@@ -173,7 +171,7 @@ public struct SolanaSigner: Signable {
 
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let (_, _, data) = try input.type.swap()
-        let price = input.fee.priorityFee
+        let price = input.fee.unitPrice
         let limit = input.fee.gasLimit
         let encodedTx = data.data.data
 

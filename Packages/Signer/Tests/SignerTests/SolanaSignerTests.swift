@@ -22,7 +22,6 @@ struct SolanaSignerTests {
             senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
             destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
             data: .none,
-            messageBytes: "",
             metadata: .solana(
                 senderTokenAddress: nil,
                 recipientTokenAddress: nil,
@@ -48,7 +47,6 @@ struct SolanaSignerTests {
             senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
             destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
             data: .none,
-            messageBytes: "",
             metadata: .solana(
                 senderTokenAddress: nil,
                 recipientTokenAddress: nil,
@@ -74,7 +72,6 @@ struct SolanaSignerTests {
             senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
             destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
             data: .none,
-            messageBytes: "",
             metadata: .solana(
                 senderTokenAddress: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
                 recipientTokenAddress: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK",
