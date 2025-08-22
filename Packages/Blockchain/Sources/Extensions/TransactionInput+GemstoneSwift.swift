@@ -254,8 +254,8 @@ extension TransactionLoadMetadata {
             return .cardano(utxos: utxos.map { $0.map() })
         case .evm(let nonce, let chainId):
             return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
-        case .near(let sequence, let blockHash, let isDestinationAddressExist):
-            return .near(sequence: sequence, blockHash: blockHash, isDestinationAddressExist: isDestinationAddressExist)
+        case .near(let sequence, let blockHash):
+            return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):
             return .stellar(sequence: sequence, isDestinationAddressExist: isDestinationAddressExist)
         case .xrp(let sequence):
@@ -320,8 +320,8 @@ extension GemTransactionLoadMetadata {
             return .cardano(utxos: try utxos.map { try $0.map() })
         case .evm(let nonce, let chainId):
             return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
-        case .near(let sequence, let blockHash, let isDestinationAddressExist):
-            return .near(sequence: sequence, blockHash: blockHash, isDestinationAddressExist: isDestinationAddressExist)
+        case .near(let sequence, let blockHash):
+            return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):
             return .stellar(sequence: sequence, isDestinationAddressExist: isDestinationAddressExist)
         case .xrp(let sequence):

@@ -433,7 +433,7 @@ extension GemTransactionData {
                 metadata: try metadata.map()
             )
             
-        case .near(_, let blockHash, _):
+        case .near(_, let blockHash):
             return TransactionData(
                 block: SignerInputBlock(
                     number: 0,

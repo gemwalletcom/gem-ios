@@ -24,8 +24,7 @@ public enum TransactionLoadMetadata: Sendable {
     case evm(nonce: UInt64, chainId: UInt64)
     case near(
         sequence: UInt64,
-        blockHash: String,
-        isDestinationAddressExist: Bool
+        blockHash: String
     )
     case stellar(sequence: UInt64, isDestinationAddressExist: Bool)
     case xrp(sequence: UInt64)
@@ -59,7 +58,7 @@ extension TransactionLoadMetadata {
         switch self {
         case .ton(_, let sequence),
              .cosmos(_, let sequence, _),
-             .near(let sequence, _, _),
+             .near(let sequence, _),
              .stellar(let sequence, _),
              .xrp(let sequence),
              .algorand(let sequence, _, _),
@@ -85,7 +84,7 @@ extension TransactionLoadMetadata {
     public func getBlockHash() throws -> String {
         switch self {
         case .solana(_, _, _, let blockHash),
-            .near(_, let blockHash, _),
+            .near(_, let blockHash),
              .algorand(_, let blockHash, _),
              .polkadot(_, _, let blockHash, _, _, _, _):
             return blockHash
@@ -119,8 +118,7 @@ extension TransactionLoadMetadata {
     
     public func getIsDestinationAddressExist() throws -> Bool {
         switch self {
-        case .near(_, _, let isDestinationAddressExist),
-             .stellar(_, let isDestinationAddressExist):
+            case .stellar(_, let isDestinationAddressExist):
             return isDestinationAddressExist
         default:
             throw AnyError("Destination existence flag not available for this metadata type")
