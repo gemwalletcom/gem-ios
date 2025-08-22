@@ -38,7 +38,7 @@ struct TransactionFactory {
             contract: nil,
             type: data.type,
             state: state,
-            blockNumber: String(transactionData.block.number),
+            blockNumber: (try? String(transactionData.metadata.getBlockNumber())) ?? "0",
             sequence: (try? String(transactionData.metadata.getSequence())) ?? "0",
             fee: amount.networkFee.description,
             feeAssetId: transferData.type.asset.feeAsset.id,

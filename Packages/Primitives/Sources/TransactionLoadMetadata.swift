@@ -27,7 +27,7 @@ public enum TransactionLoadMetadata: Sendable {
         blockHash: String
     )
     case stellar(sequence: UInt64, isDestinationAddressExist: Bool)
-    case xrp(sequence: UInt64)
+    case xrp(sequence: UInt64, blockNumber: UInt64)
     case algorand(
         sequence: UInt64,
         blockHash: String,
@@ -60,7 +60,7 @@ extension TransactionLoadMetadata {
              .cosmos(_, let sequence, _),
              .near(let sequence, _),
              .stellar(let sequence, _),
-             .xrp(let sequence),
+             .xrp(let sequence, _),
              .algorand(let sequence, _, _),
              .aptos(let sequence),
              .polkadot(let sequence, _, _, _, _, _, _),
@@ -74,7 +74,8 @@ extension TransactionLoadMetadata {
     public func getBlockNumber() throws -> UInt64 {
         switch self {
         case .polkadot(_, _, _, let blockNumber, _, _, _),
-             .tron(let blockNumber, _, _, _, _, _):
+             .tron(let blockNumber, _, _, _, _, _),
+             .xrp(_, let blockNumber):
             return blockNumber
         default:
             throw AnyError("Block number not available for this metadata type")

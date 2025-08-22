@@ -17,7 +17,7 @@ public struct XrpSigner: Signable {
         let signingInput = try RippleSigningInput.with {
             $0.fee = input.fee.fee.asInt64
             $0.sequence = UInt32(try input.metadata.getSequence())
-            $0.lastLedgerSequence = (input.block.number + 12).asUInt32
+            $0.lastLedgerSequence = UInt32(try input.metadata.getBlockNumber()) + 12
             $0.account = input.senderAddress
             $0.privateKey = privateKey
             switch operation {

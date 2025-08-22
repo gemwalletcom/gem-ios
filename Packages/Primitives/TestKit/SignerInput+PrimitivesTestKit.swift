@@ -15,8 +15,6 @@ public extension SignerInput {
         senderAddress: String = "0x1234567890123456789012345678901234567890",
         destinationAddress: String = "0x1234567890123456789012345678901234567890",
         data: SigningData = .none,
-        block: SignerInputBlock = SignerInputBlock(hash: ""),
-        token: SignerInputToken = SignerInputToken(),
         messageBytes: String = "",
         metadata: TransactionLoadMetadata = .none
     ) -> SignerInput {
@@ -30,8 +28,6 @@ public extension SignerInput {
             senderAddress: senderAddress,
             destinationAddress: destinationAddress,
             data: data,
-            block: block,
-            token: token,
             messageBytes: messageBytes,
             metadata: metadata
         )

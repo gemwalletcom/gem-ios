@@ -258,8 +258,8 @@ extension TransactionLoadMetadata {
             return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):
             return .stellar(sequence: sequence, isDestinationAddressExist: isDestinationAddressExist)
-        case .xrp(let sequence):
-            return .xrp(sequence: sequence)
+        case .xrp(let sequence, let blockNumber):
+            return .xrp(sequence: sequence, blockNumber: blockNumber)
         case .algorand(let sequence, let blockHash, let chainId):
             return .algorand(sequence: sequence, blockHash: blockHash, chainId: chainId)
         case .aptos(let sequence):
@@ -324,8 +324,8 @@ extension GemTransactionLoadMetadata {
             return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):
             return .stellar(sequence: sequence, isDestinationAddressExist: isDestinationAddressExist)
-        case .xrp(let sequence):
-            return .xrp(sequence: sequence)
+        case .xrp(let sequence, let blockNumber):
+            return .xrp(sequence: sequence, blockNumber: blockNumber)
         case .algorand(let sequence, let blockHash, let chainId):
             return .algorand(sequence: sequence, blockHash: blockHash, chainId: chainId)
         case .aptos(let sequence):

@@ -18,17 +18,17 @@ struct SolanaSignerTests {
             value: .zero,
             fee: fee,
             isMaxAmount: false,
-            chainId: "",
             memo: .none,
-            accountNumber: 0,
-            sequence: 0,
             senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
             destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
             data: .none,
-            block: SignerInputBlock(hash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"),
-            token: SignerInputToken(),
-            utxos: [],
-            messageBytes: ""
+            messageBytes: "",
+            metadata: .solana(
+                senderTokenAddress: nil,
+                recipientTokenAddress: nil,
+                tokenProgram: nil,
+                blockHash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"
+            )
         )
 
         let result = try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey)
@@ -44,17 +44,17 @@ struct SolanaSignerTests {
             value: .zero,
             fee: fee,
             isMaxAmount: false,
-            chainId: "",
             memo: .none,
-            accountNumber: 0,
-            sequence: 0,
             senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
             destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
             data: .none,
-            block: SignerInputBlock(hash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"),
-            token: SignerInputToken(),
-            utxos: [],
-            messageBytes: ""
+            messageBytes: "",
+            metadata: .solana(
+                senderTokenAddress: nil,
+                recipientTokenAddress: nil,
+                tokenProgram: nil,
+                blockHash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"
+            )
         )
 
         let result = try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey)
@@ -70,17 +70,17 @@ struct SolanaSignerTests {
             value: .zero,
             fee: fee,
             isMaxAmount: false,
-            chainId: "",
             memo: .none,
-            accountNumber: 0,
-            sequence: 0,
             senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
             destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
             data: .none,
-            block: SignerInputBlock(hash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"),
-            token: SignerInputToken(senderTokenAddress: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", recipientTokenAddress: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK", tokenProgram: .token),
-            utxos: [],
-            messageBytes: ""
+            messageBytes: "",
+            metadata: .solana(
+                senderTokenAddress: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+                recipientTokenAddress: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK",
+                tokenProgram: .token,
+                blockHash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"
+            )
         )
 
         let result = try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey)

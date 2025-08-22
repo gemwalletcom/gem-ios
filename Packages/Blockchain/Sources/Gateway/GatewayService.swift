@@ -395,63 +395,6 @@ extension GemTransactionData {
             options: try fee.options.map()
         )
         switch metadata {
-        case .none:
-            return TransactionData(fee: transactionFee, metadata: try metadata.map())
-        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash):
-            return TransactionData(
-                block: SignerInputBlock(hash: blockHash),
-                token: SignerInputToken(
-                    senderTokenAddress: senderTokenAddress ?? "",
-                    recipientTokenAddress: recipientTokenAddress,
-                    tokenProgram: tokenProgram?.map() ?? .token
-                ),
-                fee: transactionFee,
-                metadata: try metadata.map()
-            )
-            
-        case .ton:
-            return TransactionData(
-                token: SignerInputToken(),
-                fee: transactionFee,
-                metadata: try metadata.map()
-            )
-        case .cosmos:
-            return TransactionData(
-                fee: transactionFee,
-                metadata: try metadata.map()
-            )
-        case .bitcoin,
-            .cardano:
-            return TransactionData(
-                fee: transactionFee,
-                metadata: try metadata.map()
-            )
-            
-        case .evm:
-            return TransactionData(
-                fee: transactionFee,
-                metadata: try metadata.map()
-            )
-            
-        case .near(_, let blockHash):
-            return TransactionData(
-                block: SignerInputBlock(
-                    number: 0,
-                    hash: blockHash
-                ),
-                fee: transactionFee,
-                metadata: try metadata.map()
-            )
-            
-        case .stellar,
-            .xrp,
-            .algorand,
-            .aptos:
-            return TransactionData(
-                fee: transactionFee,
-                metadata: try metadata.map()
-            )
-            
         case .polkadot(_, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
             return TransactionData(
                 data: .polkadot(SigningData.Polkadot(
@@ -462,26 +405,11 @@ extension GemTransactionData {
                     transactionVersion: UInt32(transactionVersion),
                     period: UInt64(period)
                 )),
-                block: SignerInputBlock(number: Int(blockNumber)),
                 fee: transactionFee,
                 metadata: try metadata.map()
             )
-        case .tron(
-            let blockNumber,
-            let blockVersion,
-            let blockTimestamp,
-            let transactionTreeRoot,
-            let parentHash,
-            let witnessAddress):
+        default:
             return TransactionData(
-                block: SignerInputBlock(
-                    number: Int(blockNumber),
-                    version: Int(blockVersion),
-                    timestamp: Int(blockTimestamp),
-                    transactionTreeRoot: transactionTreeRoot,
-                    parentHash: parentHash,
-                    widnessAddress: witnessAddress
-                ),
                 fee: transactionFee,
                 metadata: try metadata.map()
             )

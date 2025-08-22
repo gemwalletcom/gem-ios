@@ -26,8 +26,13 @@ public struct TonSigner: Signable {
             throw AnyError("Invalid token creation fee")
         }
 
+        guard case .ton(let jettonWalletAddress, _) = input.metadata, 
+              let address = jettonWalletAddress else {
+            throw AnyError("Missing jetton wallet address in TON metadata")
+        }
+        
         let transfer = TheOpenNetworkTransfer.with {
-            $0.dest = input.token.senderTokenAddress // My Jetton Wallet address
+            $0.dest = address
             $0.amount = jettonCreationFee.serialize()
             if let memo = input.memo {
                 $0.comment = memo

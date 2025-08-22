@@ -13,12 +13,8 @@ public struct SignerInput {
     public let senderAddress: String
     public let destinationAddress: String
 
-    // token: Solana only
     public let data: SigningData
-    public let token: SignerInputToken
     public let messageBytes: String
-    public let extra: SigningdExtra?
-    public let block: SignerInputBlock
     public let metadata: TransactionLoadMetadata
 
     public init(
@@ -31,10 +27,7 @@ public struct SignerInput {
         senderAddress: String,
         destinationAddress: String,
         data: SigningData,
-        block: SignerInputBlock,
-        token: SignerInputToken,
         messageBytes: String,
-        extra: SigningdExtra? = nil,
         metadata: TransactionLoadMetadata = .none
     ) {
         self.type = type
@@ -46,10 +39,7 @@ public struct SignerInput {
         self.senderAddress = senderAddress
         self.destinationAddress = destinationAddress
         self.data = data
-        self.block = block
-        self.token = token
         self.messageBytes = messageBytes
-        self.extra = extra
         self.metadata = metadata
     }
 }
