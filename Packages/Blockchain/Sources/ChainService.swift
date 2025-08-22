@@ -25,20 +25,10 @@ public struct ChainService {
 extension ChainService {
     public static func service(chain: Chain, with url: URL) -> ChainServiceable {
         switch chain.type {
-        case .solana:
-            GatewayChainService(
-                chain: chain,
-                gateway: GatewayService(provider: NativeProvider(url: url))
-            )
         case .ethereum:
             EthereumService(
                 chain: EVMChain(rawValue: chain.rawValue)!,
                 provider: ProviderFactory.create(with: url)
-            )
-        case .tron:
-            GatewayChainService(
-                chain: chain,
-                gateway: GatewayService(provider: NativeProvider(url: url))
             )
         case .sui:
             SuiService(
@@ -55,7 +45,9 @@ extension ChainService {
             .ton,
             .polkadot,
             .bitcoin,
-            .cardano:
+            .cardano,
+            .tron,
+            .solana:
             GatewayChainService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))

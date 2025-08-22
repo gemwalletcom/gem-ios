@@ -5,6 +5,7 @@ import Gemstone
 import Primitives
 import BigInt
 import NativeProviderService
+import GemstonePrimitives
 
 public actor GatewayService: Sendable {
     let gateway: GemGateway
@@ -138,15 +139,6 @@ extension GatewayService {
     }
 }
 
-extension GemAssetBalance {
-    func map() throws -> AssetBalance {
-        AssetBalance(
-            assetId: try AssetId(id: assetId),
-            balance: try balance.map(),
-            isActive: isActive
-        )
-    }
-}
 
 extension TransactionPreloadInput {
     func map() -> GemTransactionPreloadInput {
@@ -159,80 +151,11 @@ extension TransactionPreloadInput {
 }
 
 
-extension GemBalance {
-    func map() throws -> Balance {
-        Balance(
-            available: try BigInt.from(string: available),
-            frozen: try BigInt.from(string: frozen),
-            locked: try BigInt.from(string: locked),
-            staked: try BigInt.from(string: staked),
-            pending: try BigInt.from(string: pending),
-            rewards: try BigInt.from(string: rewards),
-            reserved: try BigInt.from(string: reserved),
-            withdrawable: try BigInt.from(string: withdrawable)
-        )
-    }
-}
 
-extension GemDelegationValidator {
-    func map() throws -> DelegationValidator {
-        DelegationValidator(
-            chain: try Chain(id: chain),
-            id: id,
-            name: name,
-            isActive: isActive,
-            commision: commission,
-            apr: apr
-        )
-    }
-}
 
-extension GemDelegationBase {
-    func map() throws -> DelegationBase {
-        DelegationBase(
-            assetId: try AssetId(id: assetId),
-            state: try DelegationState(id: delegationState),
-            balance: balance,
-            shares: shares,
-            rewards: rewards,
-            completionDate: completionDate.map { Date(timeIntervalSince1970: TimeInterval($0)) },
-            delegationId: delegationId,
-            validatorId: validatorId
-        )
-    }
-}
 
-extension GemUtxo {
-    func map() throws -> UTXO {
-        UTXO(
-            transaction_id: transactionId,
-            vout: Int32(vout),
-            value: value,
-            address: address
-        )
-    }
-}
 
-extension GemFeeRate {
-    func map() throws -> FeeRate {
-        return FeeRate(
-            priority: try FeePriority(id: priority), 
-            gasPriceType: try gasPriceType.map()
-        )
-    }
-}
 
-extension GemTransactionMetadata {
-    func map() -> TransactionMetadata {
-        switch self {
-        case .perpetual(let perpetualMetadata):
-            return .perpetual(TransactionPerpetualMetadata(
-                pnl: perpetualMetadata.pnl,
-                price: perpetualMetadata.price
-            ))
-        }
-    }
-}
 
 extension TransactionStateRequest {
     func map() -> GemTransactionStateRequest {
@@ -267,126 +190,3 @@ extension GatewayService {
 
 // MARK: - Perpetual Mapping Extensions
 
-extension GemPerpetualPositionsSummary {
-    func map() throws -> PerpetualPositionsSummary {
-        PerpetualPositionsSummary(
-            positions: try positions.map { try $0.map() },
-            balance: balance.map()
-        )
-    }
-}
-
-extension GemPerpetualPosition {
-    func map() throws -> PerpetualPosition {
-        let assetId = try AssetId(id: assetId)
-        return PerpetualPosition(
-            id: symbol,
-            perpetualId: perpetualId,
-            assetId: assetId,
-            size: size,
-            sizeValue: size * entryPrice,
-            leverage: UInt8(leverage),
-            entryPrice: entryPrice,
-            liquidationPrice: liquidationPrice,
-            marginType: try PerpetualMarginType(id: marginType),
-            direction: try PerpetualDirection(id: direction),
-            marginAmount: margin,
-            takeProfit: nil,
-            stopLoss: nil,
-            pnl: pnl,
-            funding: funding
-        )
-    }
-}
-
-
-extension GemPerpetualBalance {
-    func map() -> PerpetualBalance {
-        PerpetualBalance(
-            available: available,
-            reserved: reserved,
-            withdrawable: withdrawable
-        )
-    }
-}
-
-extension GemPerpetualData {
-    func map() throws -> PerpetualData {
-        PerpetualData(
-            perpetual: try perpetual.map(),
-            asset: try asset.map(),
-            metadata: metadata.map()
-        )
-    }
-}
-
-extension GemPerpetual {
-    func map() throws -> Perpetual {
-        Perpetual(
-            id: id,
-            name: name,
-            provider: try PerpetualProvider(id: provider),
-            assetId: try AssetId(id: assetId),
-            identifier: identifier,
-            price: price,
-            pricePercentChange24h: pricePercentChange24h,
-            openInterest: openInterest,
-            volume24h: volume24h,
-            funding: funding,
-            leverage: [UInt8](leverage)
-        )
-    }
-}
-
-
-extension GemAsset {
-    func map() throws -> Asset {
-        Asset(
-            id: try AssetId(id: id),
-            name: name,
-            symbol: symbol,
-            decimals: decimals,
-            type: try AssetType(id: assetType)
-        )
-    }
-}
-
-
-extension GemPerpetualMetadata {
-    func map() -> PerpetualMetadata {
-        PerpetualMetadata(isPinned: isPinned)
-    }
-}
-
-extension GemChartCandleStick {
-    func map() throws -> ChartCandleStick {
-        ChartCandleStick(
-            date: Date(timeIntervalSince1970: TimeInterval(timestamp)),
-            open: open,
-            high: high,
-            low: low,
-            close: close,
-            volume: volume
-        )
-    }
-}
-
-extension GemTransactionLoadFee {
-    func map() throws -> Fee {
-        Fee(
-            fee: try BigInt.from(string: fee),
-            gasPriceType: try gasPriceType.map(),
-            gasLimit: try BigInt.from(string: gasLimit),
-            options: try options.map()
-        )
-    }
-}
-
-extension GemTransactionData {
-    func map() throws -> TransactionData {
-        return TransactionData(
-            fee: try fee.map(),
-            metadata: try metadata.map()
-        )
-    }
-}
