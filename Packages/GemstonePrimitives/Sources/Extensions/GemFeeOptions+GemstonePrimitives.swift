@@ -5,8 +5,23 @@ import Gemstone
 import Primitives
 import BigInt
 
-extension GemFeeOptions {
-    public func map() throws -> FeeOptionMap {
+public extension GemFeeOptions {
+    static func empty() -> GemFeeOptions {
+        GemFeeOptions(options: [:])
+    }
+    
+    static func from(_ feeOptionMap: FeeOptionMap) -> GemFeeOptions {
+        var gemOptions: [GemFeeOption: String] = [:]
+        for (option, value) in feeOptionMap {
+            switch option {
+            case .tokenAccountCreation:
+                gemOptions[.tokenAccountCreation] = value.description
+            }
+        }
+        return GemFeeOptions(options: gemOptions)
+    }
+    
+    func map() throws -> FeeOptionMap {
         var feeOptions: FeeOptionMap = [:]
         for (option, value) in options {
             let feeOption: FeeOption
@@ -17,5 +32,11 @@ extension GemFeeOptions {
             feeOptions[feeOption] = try BigInt.from(string: value)
         }
         return feeOptions
+    }
+}
+
+extension FeeOptionMap {
+    public func map() -> GemFeeOptions {
+        return GemFeeOptions.from(self)
     }
 }

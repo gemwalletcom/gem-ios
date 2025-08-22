@@ -51,7 +51,10 @@ public struct PerpetualPositionViewModel {
     }
     
     public var positionTypeColor: Color {
-        PriceChangeColor.color(for: data.position.size)
+        switch data.position.direction {
+        case .short: Colors.red
+        case .long: Colors.green
+        }
     }
     
     public var pnlTitle: String { Localized.Perpetual.pnl }

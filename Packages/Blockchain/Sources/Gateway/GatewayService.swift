@@ -139,35 +139,6 @@ extension GatewayService {
     }
 }
 
-
-extension TransactionPreloadInput {
-    func map() -> GemTransactionPreloadInput {
-        return GemTransactionPreloadInput(
-            asset: asset.map(),
-            senderAddress: senderAddress,
-            destinationAddress: destinationAddress
-        )
-    }
-}
-
-
-
-
-
-
-
-
-extension TransactionStateRequest {
-    func map() -> GemTransactionStateRequest {
-        GemTransactionStateRequest(
-            id: id,
-            senderAddress: senderAddress,
-            createdAt: Int64(createdAt.timeIntervalSince1970),
-            blockNumber: Int64(block)
-        )
-    }
-}
-
 // MARK: - Perpetual
 
 extension GatewayService {

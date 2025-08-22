@@ -18,3 +18,18 @@ extension GemDelegationBase {
         )
     }
 }
+
+extension DelegationBase {
+    public func map() -> GemDelegationBase {
+        return GemDelegationBase(
+            assetId: assetId.identifier,
+            delegationId: delegationId,
+            validatorId: validatorId,
+            balance: balance,
+            shares: shares,
+            completionDate: completionDate.map { UInt64($0.timeIntervalSince1970) },
+            delegationState: state.rawValue,
+            rewards: rewards
+        )
+    }
+}

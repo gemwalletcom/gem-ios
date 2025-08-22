@@ -17,3 +17,16 @@ extension GemGasPriceType {
         }
     }
 }
+
+extension GasPriceType {
+    public func map() -> GemGasPriceType {
+        switch self {
+        case .regular(let gasPrice):
+            return .regular(gasPrice: gasPrice.description)
+        case .eip1559(let gasPrice, let priorityFee):
+            return .eip1559(gasPrice: gasPrice.description, priorityFee: priorityFee.description)
+        case .solana(let gasPrice, let priorityFee, let unitPrice):
+            return .solana(gasPrice: gasPrice.description, priorityFee: priorityFee.description, unitPrice: unitPrice.description)
+        }
+    }
+}

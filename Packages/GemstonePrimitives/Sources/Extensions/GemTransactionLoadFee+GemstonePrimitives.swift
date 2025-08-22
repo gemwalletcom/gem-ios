@@ -15,3 +15,14 @@ extension GemTransactionLoadFee {
         )
     }
 }
+
+extension Fee {
+    public func map() -> Gemstone.GemTransactionLoadFee {
+        return Gemstone.GemTransactionLoadFee(
+            fee: fee.description,
+            gasPriceType: gasPriceType.map(),
+            gasLimit: gasLimit.description,
+            options: options.map()
+        )
+    }
+}

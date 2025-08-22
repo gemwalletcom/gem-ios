@@ -14,3 +14,14 @@ extension GemUtxo {
         )
     }
 }
+
+extension UTXO {
+    public func map() -> GemUtxo {
+        GemUtxo(
+            transactionId: transaction_id,
+            vout: UInt32(vout),
+            value: value,
+            address: address
+        )
+    }
+}

@@ -12,3 +12,12 @@ extension GemSolanaTokenProgramId {
         }
     }
 }
+
+extension SolanaTokenProgramId {
+    public func map() -> GemSolanaTokenProgramId {
+        switch self {
+        case .token: .token
+        case .token2022: .token2022
+        }
+    }
+}

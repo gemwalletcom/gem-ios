@@ -15,3 +15,15 @@ extension GemAsset {
         )
     }
 }
+
+extension Asset {
+    public func map() -> GemAsset {
+        GemAsset(
+            id: id.identifier,
+            name: name,
+            symbol: symbol,
+            decimals: decimals,
+            assetType: type.rawValue
+        )
+    }
+}

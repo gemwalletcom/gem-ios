@@ -16,3 +16,16 @@ extension GemDelegationValidator {
         )
     }
 }
+
+extension DelegationValidator {
+    public func map() -> GemDelegationValidator {
+        return GemDelegationValidator(
+            chain: chain.rawValue,
+            id: id,
+            name: name,
+            isActive: isActive,
+            commission: commision,
+            apr: apr
+        )
+    }
+}
