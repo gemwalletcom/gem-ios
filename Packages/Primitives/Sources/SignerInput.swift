@@ -13,7 +13,6 @@ public struct SignerInput {
     public let senderAddress: String
     public let destinationAddress: String
 
-    public let data: SigningData
     public let metadata: TransactionLoadMetadata
 
     public init(
@@ -25,7 +24,6 @@ public struct SignerInput {
         memo: String?,
         senderAddress: String,
         destinationAddress: String,
-        data: SigningData,
         metadata: TransactionLoadMetadata = .none
     ) {
         self.type = type
@@ -36,7 +34,6 @@ public struct SignerInput {
         self.memo = memo
         self.senderAddress = senderAddress
         self.destinationAddress = destinationAddress
-        self.data = data
         self.metadata = metadata
     }
 }

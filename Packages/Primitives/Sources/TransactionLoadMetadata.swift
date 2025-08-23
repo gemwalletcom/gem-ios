@@ -52,6 +52,12 @@ public enum TransactionLoadMetadata: Sendable {
         witnessAddress: String
     )
     case sui(messageBytes: String)
+    case hyperliquid(
+        approveAgentRequired: Bool,
+        approveReferralRequired: Bool,
+        approveBuilderRequired: Bool,
+        builderFeeBps: Int32
+    )
 }
 
 extension TransactionLoadMetadata {
@@ -67,7 +73,7 @@ extension TransactionLoadMetadata {
              .polkadot(let sequence, _, _, _, _, _, _),
              .evm(let sequence, _):
             return sequence
-        case .none, .bitcoin, .cardano, .tron, .solana, .sui:
+        case .none, .bitcoin, .cardano, .tron, .solana, .sui, .hyperliquid:
             throw AnyError("Sequence not available for this metadata type")
         }
     }

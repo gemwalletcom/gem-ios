@@ -2,16 +2,6 @@
 
 import Foundation
 
-public enum AccountDataType: Hashable, Equatable, Sendable {
-    case activate
-}
-
-public enum PerpetualType: Hashable, Equatable, Sendable {
-    case open(PerpetualConfirmData)
-    case close(PerpetualConfirmData)
-    //case withdraw(amount: String)
-}
-
 public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
     case deposit(Asset)

@@ -14,7 +14,6 @@ public extension SignerInput {
         memo: String? = nil,
         senderAddress: String = "0x1234567890123456789012345678901234567890",
         destinationAddress: String = "0x1234567890123456789012345678901234567890",
-        data: SigningData = .none,
         metadata: TransactionLoadMetadata = .none
     ) -> SignerInput {
         SignerInput(
@@ -26,7 +25,6 @@ public extension SignerInput {
             memo: memo,
             senderAddress: senderAddress,
             destinationAddress: destinationAddress,
-            data: data,
             metadata: metadata
         )
     }

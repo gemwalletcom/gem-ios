@@ -4,18 +4,16 @@ import Foundation
 
 
 public struct TransactionData: Sendable {
-    public let data: SigningData
     public var fee: Fee
     public let metadata: TransactionLoadMetadata
 
     public init(
-        data: SigningData = .none,
         fee: Fee,
         metadata: TransactionLoadMetadata = .none
     ) {
-        self.data = data
         self.fee = fee
         self.metadata = metadata
     }
+    
 }
 

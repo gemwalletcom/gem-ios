@@ -154,7 +154,9 @@ struct TransferDataViewModel {
             }
         case .stake(_, let stakeType):
             switch stakeType {
-            case .unstake(let delegation), .redelegate(let delegation, _), .withdraw(let delegation): delegation.base.balanceValue
+            case .unstake(let delegation): delegation.base.balanceValue
+            case .redelegate(let data): data.delegation.base.balanceValue
+            case .withdraw(let delegation): delegation.base.balanceValue
             case .rewards: data.value
             case .stake: metadata?.available ?? .zero
             }
@@ -183,8 +185,8 @@ extension TransferDataViewModel {
                 validator.name
             case .unstake(let delegation):
                 delegation.validator.name
-            case .redelegate(_, let toValidator):
-                toValidator.name
+            case .redelegate(let data):
+                data.toValidator.name
             case .withdraw(let delegation):
                 delegation.validator.name
             case .rewards:

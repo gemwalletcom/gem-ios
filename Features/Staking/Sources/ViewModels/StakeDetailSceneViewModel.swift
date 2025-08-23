@@ -140,7 +140,7 @@ public struct StakeDetailSceneViewModel {
 
     public func withdrawStakeTransferData() throws -> TransferData {
         TransferData(
-            type: .stake(asset, .withdraw(delegation: model.delegation)),
+            type: .stake(asset, .withdraw(model.delegation)),
             recipientData: RecipientData(
                 recipient: Recipient(name: validatorText, address: model.delegation.validator.id, memo: ""),
                 amount: .none
@@ -162,7 +162,7 @@ extension StakeDetailSceneViewModel {
             onAmountInputAction?(data)
         } else {
             let data = TransferData(
-                type: .stake(asset, .unstake(delegation: model.delegation)),
+                type: .stake(asset, .unstake(model.delegation)),
                 recipientData: RecipientData(
                     recipient: Recipient(name: validatorText, address: model.delegation.validator.id, memo: ""),
                     amount: .none

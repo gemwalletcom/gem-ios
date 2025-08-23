@@ -30,13 +30,13 @@ public struct StakeHub: Sendable {
         switch type {
         case .stake(let validator):
             return try encodeDelegateCall(validator: validator.id, delegateVote: false)
-        case .unstake(delegation: let delegation):
+        case .unstake(let delegation):
             let amountShare = amount * delegation.base.sharesValue / delegation.base.balanceValue
             return try encodeUndelegateCall(validator: delegation.validator.id, shares: amountShare)
-        case .redelegate(delegation: let delegation, toValidator: let toValidator):
-            let amountShare = amount * delegation.base.sharesValue / delegation.base.balanceValue
-            return try encodeRedelegateCall(shares: amountShare, fromValidator: delegation.base.validatorId, toValidator: toValidator.id, delegateVote: false)
-        case .withdraw(delegation: let delegation):
+        case .redelegate(let data):
+            let amountShare = amount * data.delegation.base.sharesValue / data.delegation.base.balanceValue
+            return try encodeRedelegateCall(shares: amountShare, fromValidator: data.delegation.base.validatorId, toValidator: data.toValidator.id, delegateVote: false)
+        case .withdraw(let delegation):
             return try encodeClaim(validator: delegation.validator.id, requestNumber: 0) // 0 means all
         case .rewards:
             fatalError()

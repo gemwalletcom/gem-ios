@@ -46,31 +46,6 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
     }
 }
 
-public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
-    public let direction: PerpetualDirection
-    public let asset: Asset
-    public let assetIndex: Int
-    public let price: String
-    public let fiatValue: Double
-    public let size: String
-    
-    public init(
-        direction: PerpetualDirection,
-        asset: Asset,
-        assetIndex: Int,
-        price: String,
-        fiatValue: Double,
-        size: String
-    ) {
-        self.direction = direction
-        self.asset = asset
-        self.assetIndex = assetIndex
-        self.price = price
-        self.fiatValue = fiatValue
-        self.size = size
-    }
-}
-
 extension PerpetualTransferData: Identifiable {
     public var id: String {
         "\(assetIndex)_\(direction)"

@@ -35,7 +35,6 @@ public struct TransactionSigner: TransactionSigneable {
             memo: transfer.recipientData.recipient.memo,
             senderAddress: try wallet.account(for: transfer.type.chain).address,
             destinationAddress: transfer.recipientData.recipient.address,
-            data: transactionData.data,
             metadata: transactionData.metadata
         )
 

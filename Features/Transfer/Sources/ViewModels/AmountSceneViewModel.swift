@@ -385,7 +385,7 @@ extension AmountSceneViewModel {
                         PerpetualConfirmData(
                             direction: perpetual.direction,
                             asset: perpetual.asset,
-                            assetIndex: perpetual.assetIndex,
+                            assetIndex: Int32(perpetual.assetIndex),
                             price: price,
                             fiatValue: perpetual.price * sizeAsAsset,
                             size: size
@@ -401,14 +401,14 @@ extension AmountSceneViewModel {
                 throw TransferError.invalidAmount
             }
             return TransferData(
-                type: .stake(asset, .stake(validator: validator)),
+                type: .stake(asset, .stake(validator)),
                 recipientData: recipientData,
                 value: value,
                 canChangeValue: canChangeValue
             )
         case .stakeUnstake(let delegation):
             return TransferData(
-                type: .stake(asset, .unstake(delegation: delegation)),
+                type: .stake(asset, .unstake(delegation)),
                 recipientData: recipientData,
                 value: value,
                 canChangeValue: canChangeValue
@@ -418,14 +418,14 @@ extension AmountSceneViewModel {
                 throw TransferError.invalidAmount
             }
             return TransferData(
-                type: .stake(asset, .redelegate(delegation: delegation, toValidator: validator)),
+                type: .stake(asset, .redelegate(RedelegateData(delegation: delegation, toValidator: validator))),
                 recipientData: recipientData,
                 value: value,
                 canChangeValue: canChangeValue
             )
         case .stakeWithdraw(let delegation):
             return TransferData(
-                type: .stake(asset, .withdraw(delegation: delegation)),
+                type: .stake(asset, .withdraw(delegation)),
                 recipientData: recipientData,
                 value: value,
                 canChangeValue: canChangeValue

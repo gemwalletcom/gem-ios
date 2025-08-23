@@ -155,7 +155,7 @@ public extension PerpetualSceneViewModel {
         let data = PerpetualConfirmData(
             direction: position.direction,
             asset: asset,
-            assetIndex: Int(assetIndex),
+            assetIndex: Int32(assetIndex),
             price: price,
             fiatValue: abs(position.size) * positionPrice,
             size: size

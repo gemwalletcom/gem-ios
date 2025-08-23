@@ -57,6 +57,13 @@ extension GemTransactionLoadMetadata {
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
+        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps):
+            return .hyperliquid(
+                approveAgentRequired: approveAgentRequired,
+                approveReferralRequired: approveReferralRequired,
+                approveBuilderRequired: approveBuilderRequired,
+                builderFeeBps: Int32(builderFeeBps)
+            )
         }
     }
 }
@@ -114,6 +121,13 @@ extension TransactionLoadMetadata {
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
+        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps):
+            return .hyperliquid(
+                approveAgentRequired: approveAgentRequired,
+                approveReferralRequired: approveReferralRequired,
+                approveBuilderRequired: approveBuilderRequired,
+                builderFeeBps: builderFeeBps
+            )
         }
     }
 }

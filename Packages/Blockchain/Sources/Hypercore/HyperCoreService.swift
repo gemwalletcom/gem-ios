@@ -196,27 +196,18 @@ public extension HyperCoreService {
             let feeAmount = Int(fiatValue * Double(feeRate * 2) * 10)
             
             return TransactionData(
-                data: .hyperliquid(
-                    SigningData.Hyperliquid(
-                        approveAgentRequired: agentRequired,
-                        approveReferralRequired: referralRequired,
-                        approveBuilderRequired: builderRequired,
-                        builderFeeBps: feeRate
-                    )
-                ),
-                fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+                fee: .init(fee: BigInt(feeAmount), gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero),
+                metadata: .hyperliquid(
+                    approveAgentRequired: agentRequired,
+                    approveReferralRequired: referralRequired,
+                    approveBuilderRequired: builderRequired,
+                    builderFeeBps: Int32(feeRate)
+                )
             )
         case .withdrawal:
             return TransactionData(
-                data: .hyperliquid(
-                    SigningData.Hyperliquid(
-                        approveAgentRequired: false,
-                        approveReferralRequired: false,
-                        approveBuilderRequired: false,
-                        builderFeeBps: 0
-                    )
-                ),
-                fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
+                fee: .init(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero),
+                metadata: .none
             )
         default:
             throw AnyError.notImplemented
