@@ -91,7 +91,7 @@ extension ChainServiceMock {
         tokenData[tokenId] != nil
     }
     
-    public func load(input: Blockchain.TransactionInput) async throws -> TransactionData {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         transactionData
     }
     

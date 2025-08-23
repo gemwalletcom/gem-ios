@@ -18,7 +18,6 @@ struct XrpSignerTests {
             memo: .none,
             senderAddress: "rfX929wcdJfbjGaoB2heUFu35WBjwYyu4p",
             destinationAddress: "rNxp4h8apvRis6mJf9Sh8C6iRxfrDWN7AV",
-            data: .none,
             metadata: .xrp(sequence: 0, blockNumber: 12)
         )
         let signer = XrpSigner()
@@ -40,7 +39,6 @@ struct XrpSignerTests {
             memo: "1",
             senderAddress: "rfX929wcdJfbjGaoB2heUFu35WBjwYyu4p",
             destinationAddress: "rNxp4h8apvRis6mJf9Sh8C6iRxfrDWN7AV",
-            data: .none,
             metadata: .xrp(sequence: 0, blockNumber: 12)
         )
         let signer = XrpSigner()
