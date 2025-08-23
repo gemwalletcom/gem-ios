@@ -14,6 +14,5 @@ public struct TransactionData: Sendable {
         self.fee = fee
         self.metadata = metadata
     }
-    
 }
 

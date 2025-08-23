@@ -73,7 +73,7 @@ public final class AssetSceneViewModel: Sendable {
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
     var showBalances: Bool { assetDataModel.showBalances }
     var showStakedBalance: Bool {
-        assetDataModel.isStakeEnabled && assetData.balances.contains(where: { $0.key == .staked || $0.key == .pending })
+        assetDataModel.isStakeEnabled || assetData.balances.contains(where: { $0.key == .staked && $0.value > 0 })
     }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showTransactions: Bool { transactions.isNotEmpty }

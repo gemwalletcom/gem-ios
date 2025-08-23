@@ -30,7 +30,7 @@ public struct ConnectionsScene: View {
                     action: model.onScan
                 )
             } footer: {
-                if !model.isLoading {
+                if model.isLoading {
                     LoadingTextView(isAnimating: .constant(true))
                         .textCase(nil)
                 }

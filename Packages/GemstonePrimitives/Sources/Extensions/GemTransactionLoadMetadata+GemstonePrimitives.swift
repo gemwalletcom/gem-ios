@@ -16,8 +16,12 @@ extension GemTransactionLoadMetadata {
                 tokenProgram: tokenProgram?.map(),
                 blockHash: blockHash
             )
-        case .ton(let jettonWalletAddress, let sequence):
-            return .ton(jettonWalletAddress: jettonWalletAddress, sequence: sequence)
+        case .ton(let senderTokenAddress, let recipientTokenAddress, let sequence):
+            return .ton(
+                senderTokenAddress: senderTokenAddress,
+                recipientTokenAddress: recipientTokenAddress,
+                sequence: sequence
+            )
         case .cosmos(let accountNumber, let sequence, let chainId):
             return .cosmos(accountNumber: UInt64(accountNumber), sequence: sequence, chainId: chainId)
         case .bitcoin(let utxos):
@@ -80,8 +84,8 @@ extension TransactionLoadMetadata {
                 tokenProgram: tokenProgram?.map(),
                 blockHash: blockHash
             )
-        case .ton(let jettonWalletAddress, let sequence):
-            return .ton(jettonWalletAddress: jettonWalletAddress, sequence: sequence)
+        case .ton(let senderTokenAddress, let recipientTokenAddress, let sequence):
+            return .ton(senderTokenAddress: senderTokenAddress, recipientTokenAddress: recipientTokenAddress, sequence: sequence)
         case .cosmos(let accountNumber, let sequence, let chainId):
             return .cosmos(accountNumber: UInt64(accountNumber), sequence: sequence, chainId: chainId)
         case .bitcoin(let utxos):

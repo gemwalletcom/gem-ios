@@ -25,23 +25,13 @@ public struct SolanaSigner: Signable {
         let tokenId = try input.asset.getTokenId()
         let amount = input.value.asUInt
         let destinationAddress = input.destinationAddress
-        let tokenProgram: WalletCore.SolanaTokenProgramId
-        let senderTokenAddress: String
-        let recipientTokenAddress: String?
         
-        if case .solana(let senderAddr, let recipientAddr, let program, _) = input.metadata {
-            tokenProgram = switch program {
-            case .token: .tokenProgram
-            case .token2022: .token2022Program
-            case .none: .tokenProgram
-            }
-            senderTokenAddress = senderAddr ?? ""
-            recipientTokenAddress = recipientAddr
-        } else {
-            tokenProgram = .tokenProgram
-            senderTokenAddress = ""
-            recipientTokenAddress = nil
+        guard case let .solana(senderTokenAddress, recipientTokenAddress, solanaTokenProgram, _) = input.metadata,
+            let token = solanaTokenProgram, let senderTokenAddress = senderTokenAddress
+        else {
+            throw AnyError("unknown solana metadata")
         }
+        
         switch recipientTokenAddress {
         case .some(let recipientTokenAddress):
             let type = SolanaSigningInput.OneOf_TransactionType.tokenTransferTransaction(.with {
@@ -51,18 +41,16 @@ public struct SolanaSigner: Signable {
                 $0.senderTokenAddress = senderTokenAddress
                 $0.recipientTokenAddress = recipientTokenAddress
                 $0.memo = input.memo.valueOrEmpty
-                $0.tokenProgramID = tokenProgram
+                $0.tokenProgramID = token.program
             })
             return try sign(input: input, type: type, coinType: coinType, privateKey: privateKey)
         case .none:
             let walletAddress = SolanaAddress(string: destinationAddress)!
-            let calculatedRecipientTokenAddress = switch tokenProgram {
-            case .tokenProgram:
+            let calculatedRecipientTokenAddress = switch token {
+            case .token:
                 walletAddress.defaultTokenAddress(tokenMintAddress: tokenId)!
-            case .token2022Program:
+            case .token2022:
                 walletAddress.token2022Address(tokenMintAddress: tokenId)!
-            default:
-                walletAddress.defaultTokenAddress(tokenMintAddress: tokenId)!
             }
             let type = SolanaSigningInput.OneOf_TransactionType.createAndTransferTokenTransaction(.with {
                 $0.amount = amount
@@ -72,7 +60,7 @@ public struct SolanaSigner: Signable {
                 $0.senderTokenAddress = senderTokenAddress
                 $0.recipientTokenAddress = calculatedRecipientTokenAddress
                 $0.memo = input.memo.valueOrEmpty
-                $0.tokenProgramID = tokenProgram
+                $0.tokenProgramID = token.program
             })
             return try sign(input: input, type: type, coinType: coinType, privateKey: privateKey)
         }

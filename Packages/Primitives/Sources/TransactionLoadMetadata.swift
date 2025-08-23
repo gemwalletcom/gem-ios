@@ -11,7 +11,8 @@ public enum TransactionLoadMetadata: Sendable {
         blockHash: String
     )
     case ton(
-        jettonWalletAddress: String?,
+        senderTokenAddress: String?,
+        recipientTokenAddress: String?,
         sequence: UInt64
     )
     case cosmos(
@@ -63,7 +64,7 @@ public enum TransactionLoadMetadata: Sendable {
 extension TransactionLoadMetadata {
     public func getSequence() throws -> UInt64 {
         switch self {
-        case .ton(_, let sequence),
+        case .ton(_, _, let sequence),
              .cosmos(_, let sequence, _),
              .near(let sequence, _),
              .stellar(let sequence, _),
@@ -148,6 +149,15 @@ extension TransactionLoadMetadata {
             return messageBytes
         default:
             throw AnyError("Message bytes not available for this metadata type")
+        }
+    }
+    
+    public func senderTokenAddress() throws -> String? {
+        switch self {
+        case .ton(let senderTokenAddress, _, _):
+            return senderTokenAddress
+        default:
+            throw AnyError("Sender token address not available for this metadata type")
         }
     }
 }
