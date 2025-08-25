@@ -37,14 +37,16 @@ extension JobRunner {
 
     private func runJob(_ job: Job) async {
         var interval = RetryIntervalCalculator.initialInterval(for: job.configuration)
-        let startTime = clock.now
+        let jobStart = clock.now
 
         while !Task.isCancelled {
             if let limit = job.configuration.timeLimit,
-               startTime.duration(to: clock.now) >= limit {
+               jobStart.duration(to: clock.now) >= limit {
                 NSLog("job \(job.id) completed by time limit")
                 return
             }
+
+            let attemptStart = clock.now
 
             switch await job.run() {
             case .complete:
@@ -55,14 +57,18 @@ extension JobRunner {
                     NSLog("job \(job.id) completed with error: \(error)")
                 }
                 return
-
             case .retry:
+                let nextAttempt = attemptStart.advanced(by: interval)
+                let deadline = job.configuration.timeLimit.map { jobStart.advanced(by: $0) }
+                let sleepUntil = deadline.map { min(nextAttempt, $0) } ?? nextAttempt
+
+                if clock.now < sleepUntil {
+                    try? await clock.sleep(until: sleepUntil)
+                }
+
                 interval = RetryIntervalCalculator.nextInterval(
                     config: job.configuration,
                     currentInterval: interval
-                )
-                try? await clock.sleep(
-                    until: clock.now.advanced(by: interval)
                 )
             }
         }
