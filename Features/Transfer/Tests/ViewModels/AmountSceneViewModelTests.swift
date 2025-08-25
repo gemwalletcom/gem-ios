@@ -60,15 +60,7 @@ extension AmountSceneViewModel {
         return AmountSceneViewModel(
             input: AmountInput(type: type, asset: asset),
             wallet: .mock(),
-            amountService: AmountService(
-                priceService: .mock(),
-                balanceService:.mock(
-                    balanceStore: balanceStore,
-                    assetsService: .mock(balanceStore: balanceStore),
-                    chainServiceFactory: .mock()
-                ),
-                stakeService: .mock()
-            ),
+            stakeService: .mock(),
             onTransferAction: { _ in
             }
         )

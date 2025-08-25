@@ -76,11 +76,7 @@ struct SelectAssetSceneNavigationStack: View {
                 switch input.type {
                 case .send:
                     RecipientNavigationView(
-                        amountService: AmountService(
-                            priceService: priceService,
-                            balanceService: balanceService,
-                            stakeService: stakeService
-                        ),
+                        stakeService: stakeService,
                         confirmService: ConfirmServiceFactory.create(
                             keystore: keystore,
                             nodeService: nodeService,

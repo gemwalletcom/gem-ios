@@ -122,16 +122,10 @@ public struct ViewModelFactory: Sendable {
         wallet: Wallet,
         onTransferAction: TransferDataAction
     ) -> AmountSceneViewModel {
-        let amountService = AmountService(
-            priceService: priceService,
-            balanceService: balanceService,
-            stakeService: stakeService
-        )
-        
         return AmountSceneViewModel(
             input: input,
             wallet: wallet,
-            amountService: amountService,
+            stakeService: stakeService,
             onTransferAction: onTransferAction
         )
     }

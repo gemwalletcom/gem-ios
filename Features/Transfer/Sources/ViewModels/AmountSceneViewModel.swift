@@ -12,6 +12,7 @@ import Primitives
 import PrimitivesComponents
 import StakeService
 import Staking
+import Store
 import Style
 import Validators
 import WalletsService
@@ -22,7 +23,7 @@ public final class AmountSceneViewModel {
     private let input: AmountInput
     private let wallet: Wallet
 
-    private let amountService: AmountService
+    private let stakeService: StakeService
     private let onTransferAction: TransferDataAction
 
     private let formatter = ValueFormatter(style: .full)
@@ -32,10 +33,12 @@ public final class AmountSceneViewModel {
     private let perpetualPriceFormatter = PerpetualPriceFormatter()
 
     private var currentValidator: DelegationValidator?
-    private var currentDelegation: Delegation?
     private var amountInputType: AmountInputType = .asset {
         didSet { amountInputModel.update(validators: inputValidators) }
     }
+
+    var assetBalancePriceRequest: AssetBalancePriceRequest
+    var assetBalancePrice: AssetBalancePrice?
 
     var amountInputModel: InputValidationViewModel = InputValidationViewModel()
     var delegation: DelegationValidator?
@@ -45,15 +48,19 @@ public final class AmountSceneViewModel {
     public init(
         input: AmountInput,
         wallet: Wallet,
-        amountService: AmountService,
+        stakeService: StakeService,
         onTransferAction: TransferDataAction
     ) {
         self.input = input
         self.wallet = wallet
-        self.amountService = amountService
+        self.stakeService = stakeService
         self.onTransferAction = onTransferAction
-        self.currentValidator = defaultValidator
+        self.assetBalancePriceRequest = AssetBalancePriceRequest(
+            walletId: wallet.walletId.id,
+            assetId: input.asset.id
+        )
 
+        self.currentValidator = defaultValidator
         self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: inputValidators)
 
         // set amount if avaialbe in recipientData
@@ -69,7 +76,6 @@ public final class AmountSceneViewModel {
 
     var isInputDisabled: Bool { !canChangeValue }
     var isBalanceViewEnabled: Bool { !isInputDisabled }
-    var isNextEnabled: Bool { actionButtonState == .normal }
 
     var actionButtonState: ButtonState {
         amountInputModel.text.isNotEmpty && amountInputModel.isValid ? .normal : .disabled
@@ -79,6 +85,7 @@ public final class AmountSceneViewModel {
     var maxTitle: String { Localized.Transfer.max }
     var nextTitle: String { Localized.Common.next }
     var continueTitle: String { Localized.Common.continue }
+    var isNextEnabled: Bool { actionButtonState == .normal }
 
     var inputConfig: any CurrencyInputConfigurable {
         AmountInputConfig(
@@ -174,6 +181,10 @@ extension AmountSceneViewModel {
         }
     }
 
+    func onChangeAssetBalance(_: AssetBalancePrice?, _: AssetBalancePrice?) {
+        amountInputModel.update(validators: inputValidators)
+    }
+
     func onSelectNextButton() {
         do {
             try onNext()
@@ -264,7 +275,7 @@ extension AmountSceneViewModel {
              .stakeUnstake,
              .stakeRedelegate,
              .stakeWithdraw:
-            let recipientAddress = amountService.getRecipientAddress(
+            let recipientAddress = stakeService.getRecipientAddress(
                 chain: asset.chain.stakeChain,
                 type: type,
                 validatorId: currentValidator?.id
@@ -284,7 +295,7 @@ extension AmountSceneViewModel {
     private var inputValidators: [any TextValidator] {
         let source: AmountValidator.Source = switch amountInputType {
         case .asset: .asset
-        case .fiat: .fiat(price: getAssetPrice(), converter: valueConverter)
+        case .fiat: .fiat(price: assetBalancePrice?.price, converter: valueConverter)
         }
         switch input.type {
         case .transfer,
@@ -318,7 +329,7 @@ extension AmountSceneViewModel {
     }
 
     private var amountValue: String {
-        guard let price = getAssetPrice() else { return .zero }
+        guard let price = assetBalancePrice?.price else { return .zero }
         return (try? valueConverter.convertToAmount(
             fiatValue: amountInputModel.text,
             price: price,
@@ -327,7 +338,7 @@ extension AmountSceneViewModel {
     }
 
     private var fiatValue: Decimal {
-        guard let price = getAssetPrice() else { return .zero }
+        guard let price = assetBalancePrice?.price else { return .zero }
         return (try? valueConverter.convertToFiat(
             amount: amountInputModel.text,
             price: price
@@ -437,9 +448,6 @@ extension AmountSceneViewModel {
         try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
     }
 
-    private func getAssetPrice() -> AssetPrice? {
-        try? amountService.getPrice(for: asset.id)
-    }
 
     private var minimumValue: BigInt {
         let stakeChain = asset.chain.stakeChain
@@ -483,15 +491,9 @@ extension AmountSceneViewModel {
     private var availableValue: BigInt {
         switch input.type {
         case .transfer, .deposit, .perpetual, .stake:
-            guard let balance = try? amountService.getBalance(walletId: wallet.walletId, assetId: asset.id.identifier) else {
-                return .zero
-            }
-            return balance.available
+            return assetBalancePrice?.balance.available ?? .zero
         case .withdraw:
-            guard let balance = try? amountService.getBalance(walletId: wallet.walletId, assetId: asset.id.identifier) else {
-                return .zero
-            }
-            return balance.withdrawable
+            return assetBalancePrice?.balance.withdrawable ?? .zero
         case .stakeUnstake(let delegation):
             return delegation.base.balanceValue
         case .stakeRedelegate(let delegation, _, _):

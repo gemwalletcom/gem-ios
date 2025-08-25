@@ -5,21 +5,22 @@ import SwiftUI
 import Primitives
 import ChainService
 import QRScanner
+import StakeService
 
 public struct RecipientNavigationView: View {
     @State private var model: RecipientSceneViewModel
 
-    private let amountService: AmountService
+    private let stakeService: StakeService
     private let confirmService: ConfirmService
     private let onComplete: VoidAction
 
     public init(
-        amountService: AmountService,
+        stakeService: StakeService,
         confirmService: ConfirmService,
         model: RecipientSceneViewModel,
         onComplete: VoidAction
     ) {
-        self.amountService = amountService
+        self.stakeService = stakeService
         self.confirmService = confirmService
         _model = State(initialValue: model)
         self.onComplete = onComplete
@@ -39,7 +40,7 @@ public struct RecipientNavigationView: View {
                 model: AmountSceneViewModel(
                     input: AmountInput(type: .transfer(recipient: data), asset: model.asset),
                     wallet: model.wallet,
-                    amountService: amountService,
+                    stakeService: stakeService,
                     onTransferAction: model.onTransferAction
                 )
             )
