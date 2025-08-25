@@ -28,10 +28,9 @@ public struct AssetBalancePriceRequest: ValueObservationQueryable {
         }
         
         let request = AssetRecord
-            .including(optional: AssetRecord.balance)
-            .including(optional: AssetRecord.price)
-            .joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId))
             .filter(AssetRecord.Columns.id == assetId.identifier)
+            .including(optional: AssetRecord.price)
+            .including(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId))
             .asRequest(of: BalancePriceInfo.self)
 
         guard let record = try request.fetchOne(database) else {
