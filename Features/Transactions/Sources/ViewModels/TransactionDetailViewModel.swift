@@ -42,29 +42,9 @@ public final class TransactionDetailViewModel {
     }
 
     var title: String { model.titleTextValue.text }
-    var statusField: String { Localized.Transaction.status }
     var networkField: String { Localized.Transfer.network }
-    var networkFeeField: String { Localized.Transfer.networkFee }
     var dateField: String { Localized.Transaction.date }
-    var memoField: String { Localized.Transfer.memo }
     var swapAgain: String { Localized.Transaction.swapAgain }
-
-    var providerListItem: ListItemImageValue? {
-        guard
-            let metadata = model.transaction.transaction.metadata,
-            case let .swap(metadata) = metadata,
-            let providerId = metadata.provider
-        else {
-            return .none
-        }
-        let config = SwapProviderConfig.fromString(id: providerId).inner()
-
-        return ListItemImageValue(
-            title: Localized.Common.provider,
-            subtitle: config.name,
-            assetImage: nil
-        )
-    }
 
     var chain: Chain {
         model.transaction.transaction.assetId.chain
@@ -78,53 +58,22 @@ public final class TransactionDetailViewModel {
         switch model.transaction.transaction.type {
         case .transfer, .transferNFT:
             switch model.transaction.transaction.direction {
-            case .incoming:
-                return Localized.Transaction.sender
-            case .outgoing, .selfTransfer:
-                return Localized.Transaction.recipient
+            case .incoming: Localized.Transaction.sender
+            case .outgoing, .selfTransfer: Localized.Transaction.recipient
             }
-        case .tokenApproval, .smartContractCall:
-            return Localized.Asset.contract
-        case .stakeDelegate:
-            return Localized.Stake.validator
-        case .swap,
-             .stakeUndelegate,
-             .stakeRedelegate,
-             .stakeRewards,
-             .stakeWithdraw,
-             .assetActivation,
-             .perpetualOpenPosition,
-             .perpetualClosePosition:
-            return .none
+        case .tokenApproval, .smartContractCall: Localized.Asset.contract
+        case .stakeDelegate: Localized.Stake.validator
+        default: .none
         }
     }
 
     var participant: String? {
         switch model.transaction.transaction.type {
         case .transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate:
-            return model.participant
-        case .swap,
-             .stakeUndelegate,
-             .stakeRedelegate,
-             .stakeRewards,
-             .stakeWithdraw,
-             .assetActivation,
-             .perpetualOpenPosition,
-             .perpetualClosePosition:
-            return .none
+            model.participant
+        default:
+            .none
         }
-    }
-
-    var recipientAddressViewModel: AddressListItemViewModel? {
-        guard let title = participantField, let account = participantAccount else {
-            return .none
-        }
-        return AddressListItemViewModel(
-            title: title,
-            account: account,
-            mode: .nameOrAddress,
-            addressLink: model.addressLink(account: account)
-        )
     }
 
     var participantAccount: SimpleAccount? {
@@ -136,39 +85,10 @@ public final class TransactionDetailViewModel {
             name: name,
             chain: chain,
             address: participant,
-            assetImage: .none
+            assetImage: nil
         )
     }
 
-    var transactionState: TransactionState {
-        model.transaction.transaction.state
-    }
-
-    var statusText: String {
-        TransactionStateViewModel(state: model.transaction.transaction.state).title
-    }
-
-    var statusType: TitleTagType {
-        switch model.transaction.transaction.state {
-        case .confirmed: .none
-        case .failed, .reverted: .none // TODO:
-        case .pending: .progressView()
-        }
-    }
-
-    var statusTextStyle: TextStyle {
-        let color: Color = {
-            switch model.transaction.transaction.state {
-            case .confirmed:
-                return Colors.green
-            case .pending:
-                return Colors.orange
-            case .failed, .reverted:
-                return Colors.red
-            }
-        }()
-        return TextStyle(font: .callout, color: color)
-    }
 
     var network: String {
         model.transaction.asset.chain.asset.name
@@ -182,20 +102,6 @@ public final class TransactionDetailViewModel {
         AssetIdViewModel(assetId: model.transaction.asset.chain.assetId).networkAssetImage
     }
 
-    var networkFeeText: String {
-        model.infoModel.feeDisplay?.amount.text ?? ""
-    }
-
-    var networkFeeFiatText: String? {
-        model.infoModel.feeDisplay?.fiat?.text
-    }
-
-    var showMemoField: Bool {
-        if let memo {
-            return memo.isNotEmpty
-        }
-        return false
-    }
 
     var memo: String? {
         model.transaction.transaction.memo
@@ -211,15 +117,15 @@ public final class TransactionDetailViewModel {
 
     var showClearHeader: Bool {
         switch headerType {
-        case .amount, .nft: true
         case .swap: false
+        default: true
         }
     }
 
     var showSwapAgain: Bool {
         switch headerType {
-        case .amount, .nft: false
         case .swap: true
+        default: false
         }
     }
 
@@ -252,15 +158,16 @@ public final class TransactionDetailViewModel {
     }
 }
 
-extension TransactionDetailViewModel: @preconcurrency Identifiable {
-    public var id: String { model.transaction.id }
-}
-
 // MARK: - Actions
 
 extension TransactionDetailViewModel {
     func onSelectTransactionHeader() {
-        if let headerLink = headerLink {
+        let url: URL? = switch model.transaction.transaction.metadata {
+        case .null, .nft, .none, .perpetual: .none
+        case let .swap(metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
+        }
+
+        if let headerLink = url {
             UIApplication.shared.open(headerLink)
         }
     }
@@ -277,18 +184,97 @@ extension TransactionDetailViewModel {
         isPresentingInfoSheet = .transactionState(
             imageURL: model.assetImage.imageURL,
             placeholder: model.assetImage.placeholder,
-            state: transactionState
+            state: model.transaction.transaction.state
         )
+    }
+
+    func addressLink(account: SimpleAccount) -> BlockExplorerLink {
+        model.addressLink(account: account)
     }
 }
 
-// MARK: - Private
-
 extension TransactionDetailViewModel {
-    private var headerLink: URL? {
-        switch model.transaction.transaction.metadata {
-        case .null, .nft, .none, .perpetual: .none
-        case let .swap(metadata): DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
+    var sections: [TransactionSection] {
+        [
+            .swapAction(
+                [.swapAgainButton]
+            ),
+            .details(
+                [.date, .status, .sender, .recipient, .validator, .contract, .memo, .provider, .network, .fee]
+            ),
+            .explorer(
+                [.explorerLink]
+            )
+        ]
+            .filterItems(shouldShow)
+            .compactMap { $0 }
+    }
+    
+    private func shouldShow(_ item: TransactionListItem) -> Bool {
+        switch item {
+        case .date, .status, .network, .fee, .explorerLink:  return true
+        case .sender: return model.transaction.transaction.direction == .incoming && participantAccount != nil
+        case .recipient: return [.outgoing, .selfTransfer].contains(model.transaction.transaction.direction) && participantAccount != nil
+        case .validator: return model.transaction.transaction.type == .stakeDelegate && participant != nil
+        case .contract: return [.tokenApproval, .smartContractCall].contains(model.transaction.transaction.type) && participant != nil
+        case .memo: return memo != nil
+        case .provider:
+            if let metadata = model.transaction.transaction.metadata,
+               case let .swap(metadata) = metadata {
+                return metadata.provider != nil
+            }
+            return false
+        case .swapAgainButton: return showSwapAgain
+        }
+    }
+    
+    func model(for item: TransactionListItem) -> ListItemViewModelRepresentable? {
+        guard shouldShow(item) else { return nil }
+        
+        switch item {
+        case .status:
+            return StatusListItemViewModel(
+                state: model.transaction.transaction.state,
+                assetImage: model.assetImage,
+                infoAction: onStatusInfo
+            )
+            
+        case .sender, .recipient, .validator, .contract:
+            guard let title = participantField,
+                  let account = participantAccount else { return nil }
+            return AddressListItemViewModel(
+                title: title,
+                account: account,
+                mode: .nameOrAddress,
+                addressLink: addressLink(account: account)
+            )
+            
+        case .memo:
+            return memo
+            
+        case .fee:
+            let feeValue = model.infoModel.feeDisplay?.fiat?.text ?? model.infoModel.feeDisplay?.amount.text
+            return FeeListItemViewModel(
+                value: feeValue,
+                fiat: nil,
+                onInfo: onNetworkFeeInfo
+            )
+            
+        case .provider:
+            guard
+                let metadata = model.transaction.transaction.metadata,
+                case let .swap(metadata) = metadata,
+                let providerId = metadata.provider
+            else {
+                return nil
+            }
+            return ProviderListItemViewModel(providerId: providerId)
+            
+        case .date,
+                .network,
+                .explorerLink,
+                .swapAgainButton:
+            return .none
         }
     }
 }
