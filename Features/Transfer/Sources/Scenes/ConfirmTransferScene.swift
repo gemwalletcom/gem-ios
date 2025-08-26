@@ -5,9 +5,9 @@ import Components
 import Style
 import Localization
 import InfoSheet
-import PrimitivesComponents
 import FiatConnect
 import Swap
+import PrimitivesComponents
 
 public struct ConfirmTransferScene: View {
     @State private var model: ConfirmTransferSceneViewModel
@@ -33,7 +33,6 @@ public struct ConfirmTransferScene: View {
         )
         .taskOnce { model.fetch() }
         .navigationTitle(model.title)
-        // TODO: - move to navigation view
         .navigationBarTitleDisplayMode(.inline)
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .sheet(item: $model.isPresentingSheet) {
@@ -86,85 +85,85 @@ extension ConfirmTransferScene {
                 headerType: model.headerType,
                 showClearHeader: model.showClearHeader
             )
-            Section {
-                if let appText = model.appText {
-                    ListItemImageView(
-                        title: model.appTitle,
-                        subtitle: appText,
-                        assetImage: model.appAssetImage
-                    )
-                    .contextMenu(
-                        .url(title: model.websiteTitle, onOpen: model.onSelectOpenWebsiteURL)
-                    )
-                }
-
-                ListItemImageView(
-                    title: model.senderTitle,
-                    subtitle: model.senderValue,
-                    assetImage: model.senderAssetImage
-                )
-                .contextMenu(
-                    [
-                        .copy(value: model.senderAddress),
-                        .url(title: model.senderExplorerText, onOpen: model.onSelectOpenSenderAddressURL)
-                    ]
-                )
-
-                ListItemImageView(
-                    title: model.networkTitle,
-                    subtitle: model.networkText,
-                    assetImage: model.networkAssetImage
-                )
-                
-                if model.shouldShowRecipient {
-                    AddressListItemView(model: model.recipientAddressViewModel)
-                }
-
-                if model.shouldShowMemo {
-                    MemoListItemView(memo: model.memo)
-                }
-                
-                if let swapDetailsViewModel = model.swapDetailsViewModel {
-                    NavigationCustomLink(
-                        with: SwapDetailsListView(model: swapDetailsViewModel),
-                        action: model.onSelectSwapDetails
-                    )
-                }
-            }
-            
-
-            Section {
-                if model.shouldShowFeeRatesSelector {
-                    NavigationCustomLink(
-                        with: networkFeeView,
-                        action: model.onSelectFeePicker
-                    )
-                } else {
-                    networkFeeView
-                }
-            }
-
-            if let error = model.listError {
-                ListItemErrorView(
-                    errorTitle: model.listErrorTitle,
-                    error: error,
-                    infoAction: {
-                        model.onSelectListError(error: error)
-                    }
-                )
-            }
+            SectionListView(
+                sections: model.listSections,
+                listItemView: listItemView(_:)
+            )
         }
         .contentMargins([.top], .small, for: .scrollContent)
         .listSectionSpacing(.compact)
     }
-
-    private var networkFeeView: some  View {
-        ListItemView(
-            title: model.networkFeeTitle,
-            subtitle: model.networkFeeValue,
-            subtitleExtra: model.networkFeeFiatValue,
-            placeholders: [.subtitle],
-            infoAction: model.onSelectNetworkFeeInfo
-        )
+    
+    @ViewBuilder
+    private func listItemView(_ item: TransferListItem) -> some View {
+        switch item {
+        case .app:
+            if let appText = model.appText {
+                ListItemImageView(
+                    title: model.appTitle,
+                    subtitle: appText,
+                    assetImage: model.appAssetImage
+                )
+                .contextMenu([
+                    .url(title: model.websiteTitle, onOpen: model.onSelectOpenWebsiteURL)
+                ])
+            }
+            
+        case .sender:
+            ListItemImageView(
+                title: model.senderTitle,
+                subtitle: model.senderValue,
+                assetImage: model.senderAssetImage
+            )
+            .contextMenu([
+                .copy(value: model.senderAddress),
+                .url(title: model.senderExplorerText, onOpen: model.onSelectOpenSenderAddressURL)
+            ])
+            
+        case .network:
+            ListItemImageView(
+                title: model.networkTitle,
+                subtitle: model.networkText,
+                assetImage: model.networkAssetImage
+            )
+        case .address:
+            if let viewModel = model.model(for: item) as? AddressListItemViewModel {
+                AddressListItemView(model: viewModel)
+            }
+            
+        case .memo:
+            if let memo = model.model(for: item) as? String {
+                MemoListItemView(memo: memo)
+            }
+            
+        case .swapDetails:
+            if let viewModel = model.model(for: item) as? SwapDetailsViewModel {
+                NavigationCustomLink(
+                    with: SwapDetailsListView(model: viewModel),
+                    action: model.onSelectSwapDetails
+                )
+            }
+            
+        case .fee:
+            if let viewModel = model.model(for: item) as? FeeListItemViewModel {
+                if let onSelect = viewModel.onSelect {
+                    NavigationCustomLink(
+                        with: FeeListItemView(model: viewModel),
+                        action: { @Sendable @MainActor in onSelect() }
+                    )
+                } else {
+                    FeeListItemView(model: viewModel)
+                }
+            }
+            
+        case .error:
+            if let error = model.listError {
+                ListItemErrorView(
+                    errorTitle: model.listErrorTitle,
+                    error: error,
+                    infoAction: { model.onSelectListError(error: error) }
+                )
+            }
+        }
     }
 }

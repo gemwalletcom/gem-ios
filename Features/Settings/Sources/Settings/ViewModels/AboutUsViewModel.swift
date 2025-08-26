@@ -6,7 +6,6 @@ import Localization
 import Preferences
 import GemstonePrimitives
 import Components
-import PrimitivesComponents
 import AppService
 import Primitives
 

@@ -121,8 +121,17 @@ public final class ConfirmTransferSceneViewModel {
     var networkAssetImage: AssetImage { AssetIdViewModel(assetId: dataModel.chainAsset.id).networkAssetImage }
 
     var networkFeeTitle: String { feeModel.title }
-    var networkFeeValue: String? { state.isError ? "-" : feeModel.value }
-    var networkFeeFiatValue: String? { state.isError ? nil : feeModel.fiatValue }
+    var networkFeeValue: String? {
+        if state.isError { return "-" }
+        if shouldShowListErrorInfo { return feeModel.value }
+        return feeModel.fiatValue ?? feeModel.value
+    }
+
+    var networkFeeFiatValue: String? {
+        if state.isError { return nil }
+        if shouldShowListErrorInfo { return feeModel.fiatValue }
+        return nil
+    }
 
     var shouldShowMemo: Bool { dataModel.shouldShowMemo }
     var memo: String? { dataModel.recipientData.recipient.memo }
@@ -130,26 +139,12 @@ public final class ConfirmTransferSceneViewModel {
     var progressMessage: String { Localized.Common.loading }
     var shouldShowFeeRatesSelector: Bool { feeModel.showFeeRatesSelector }
 
-    var networkFeeFooterText: String? {
-        return .none
-        //        TODO: Enable later
-        //        if let quoteFee = dataModel.quoteFee {
-        //            Localized.Swap.quoteFee("\(quoteFee)%")
-        //        } else {
-        //            .none
-        //        }
-    }
-
     var listError: Error? {
-        if case let .error(error) = state {
-            return error
-        }
-        if case let .failure(error) = state.value?.transferAmount {
-            return error
-        }
-
+        if case let .error(error) = state { return error }
+        if case let .failure(error) = state.value?.transferAmount { return error }
         return nil
     }
+
     var listErrorTitle: String { Localized.Errors.errorOccured }
     var shouldShowListErrorInfo: Bool {
         switch state.value?.transferAmount {
@@ -201,6 +196,50 @@ public final class ConfirmTransferSceneViewModel {
             toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
             selectedQuote: swapData.quote
         )
+    }
+    
+    var listSections: [TransferSection] {
+        [
+            .main(
+                [.app, .sender, .network, .address, .memo, .swapDetails]
+            ),
+            .fee(
+                [.fee]
+            ),
+            .error(
+                [.error]
+            )
+        ]
+        .filterItems(shouldShow)
+        .compactMap { $0 }
+    }
+    
+    private func shouldShow(_ item: TransferListItem) -> Bool {
+        switch item {
+        case .app: appText != nil
+        case .sender, .network, .fee: true
+        case .address: shouldShowRecipient
+        case .memo: shouldShowMemo && memo != nil
+        case .swapDetails: swapDetailsViewModel != nil
+        case .error: listError != nil
+        }
+    }
+    
+    func model(for item: TransferListItem) -> ListItemViewModelRepresentable? {
+        guard shouldShow(item) else { return nil }
+        
+        switch item {
+        case .address: return recipientAddressViewModel
+        case .memo: return memo
+        case .swapDetails: return swapDetailsViewModel
+        case .fee: return FeeListItemViewModel(
+            value: networkFeeValue,
+            fiat: networkFeeFiatValue,
+            onInfo: { [weak self] in self?.onSelectNetworkFeeInfo() },
+            onSelect: shouldShowFeeRatesSelector ? { [weak self] in self?.onSelectFeePicker() } : nil
+        )
+        case .app, .sender, .network, .error: return nil
+        }
     }
 }
 
