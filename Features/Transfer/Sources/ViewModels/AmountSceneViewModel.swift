@@ -10,12 +10,12 @@ import Localization
 import Preferences
 import Primitives
 import PrimitivesComponents
-import StakeService
 import Staking
 import Store
 import Style
 import Validators
 import WalletsService
+import Blockchain
 
 @MainActor
 @Observable
@@ -23,7 +23,6 @@ public final class AmountSceneViewModel {
     private let input: AmountInput
     private let wallet: Wallet
 
-    private let stakeService: StakeService
     private let onTransferAction: TransferDataAction
 
     private let formatter = ValueFormatter(style: .full)
@@ -48,12 +47,10 @@ public final class AmountSceneViewModel {
     public init(
         input: AmountInput,
         wallet: Wallet,
-        stakeService: StakeService,
         onTransferAction: TransferDataAction
     ) {
         self.input = input
         self.wallet = wallet
-        self.stakeService = stakeService
         self.onTransferAction = onTransferAction
         self.assetBalancePriceRequest = AssetBalancePriceRequest(
             walletId: wallet.walletId.id,
@@ -263,28 +260,17 @@ extension AmountSceneViewModel {
 
     private var recipientData: RecipientData {
         switch type {
-        case .transfer(recipient: let recipient):
-            return recipient
-        case .deposit(recipient: let recipient):
-            return recipient
-        case .withdraw(recipient: let recipient):
-            return recipient
-        case .perpetual(let recipient, _):
-            return recipient
+        case .transfer(recipient: let recipient): recipient
+        case .deposit(recipient: let recipient): recipient
+        case .withdraw(recipient: let recipient): recipient
+        case .perpetual(let recipient, _): recipient
         case .stake,
              .stakeUnstake,
              .stakeRedelegate,
-             .stakeWithdraw:
-            let recipientAddress = stakeService.getRecipientAddress(
-                chain: asset.chain.stakeChain,
-                type: type,
-                validatorId: currentValidator?.id
-            )
-
-            return RecipientData(
+             .stakeWithdraw: RecipientData(
                 recipient: Recipient(
                     name: currentValidator?.name,
-                    address: recipientAddress ?? "",
+                    address: currentValidator?.id ?? "",
                     memo: Localized.Stake.viagem
                 ),
                 amount: .none
@@ -317,6 +303,20 @@ extension AmountSceneViewModel {
                     ]
                 )
             ]
+        }
+    }
+
+    private func getRecipientAddress(chain: StakeChain?, type: AmountType, validatorId: String?) -> String? {
+        guard let id = validatorId else {
+            return nil
+        }
+        switch chain {
+        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron:
+            return id
+        case .smartChain:
+            return StakeHub.address
+        default:
+            fatalError()
         }
     }
 

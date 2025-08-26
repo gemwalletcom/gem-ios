@@ -125,7 +125,6 @@ public struct ViewModelFactory: Sendable {
         return AmountSceneViewModel(
             input: input,
             wallet: wallet,
-            stakeService: stakeService,
             onTransferAction: onTransferAction
         )
     }

@@ -59,7 +59,6 @@ extension AmountSceneViewModel {
         let model = AmountSceneViewModel(
             input: AmountInput(type: type, asset: asset),
             wallet: .mock(),
-            stakeService: .mock(),
             onTransferAction: { _ in }
         )
         model.assetBalancePrice = balancePrice
