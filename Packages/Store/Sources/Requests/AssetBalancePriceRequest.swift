@@ -37,10 +37,7 @@ public struct AssetBalancePriceRequest: ValueObservationQueryable {
             return nil
         }
 
-
-
         return AssetBalancePrice(
-            assetId: record.asset.mapToAsset().id,
             balance: record.balance?.mapToBalance() ?? .zero,
             price: record.price?.mapToAssetPrice()
         )

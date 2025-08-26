@@ -16,7 +16,6 @@ struct AmountSceneViewModelTests {
     @Test
     func testMaxButton() {
         let model = AmountSceneViewModel.mock()
-
         #expect(model.amountInputModel.isValid)
 
         model.onSelectMaxButton()
@@ -54,15 +53,16 @@ struct AmountSceneViewModelTests {
 extension AmountSceneViewModel {
     static func mock(
         type: AmountType = .transfer(recipient: .mock()),
+        balancePrice: AssetBalancePrice = .mock(),
         asset: Asset = .mockEthereum()
     ) -> AmountSceneViewModel {
-        let balanceStore = BalanceStore.mock(db: .mockAssets())
-        return AmountSceneViewModel(
+        let model = AmountSceneViewModel(
             input: AmountInput(type: type, asset: asset),
             wallet: .mock(),
             stakeService: .mock(),
-            onTransferAction: { _ in
-            }
+            onTransferAction: { _ in }
         )
+        model.assetBalancePrice = balancePrice
+        return model
     }
 }
