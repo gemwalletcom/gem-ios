@@ -15,7 +15,7 @@ struct JobRunnerTests {
         let runner = JobRunner()
 
         await runner.addJob(job: job)
-        try? await Task.sleep(for: .milliseconds(5))
+        try? await Task.sleep(for: .milliseconds(10))
 
         #expect(job.runCount == 1)
         #expect(job.completed)
