@@ -270,7 +270,11 @@ extension AmountSceneViewModel {
              .stakeWithdraw: RecipientData(
                 recipient: Recipient(
                     name: currentValidator?.name,
-                    address: currentValidator?.id ?? "",
+                    address: getRecipientAddress(
+                        chain: asset.chain.stakeChain,
+                        type: type,
+                        validatorId: currentValidator?.id
+                    ) ?? "",
                     memo: Localized.Stake.viagem
                 ),
                 amount: .none
