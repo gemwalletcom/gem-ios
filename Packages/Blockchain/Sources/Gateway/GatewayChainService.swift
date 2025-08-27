@@ -47,7 +47,7 @@ extension GatewayChainService: ChainFeeRateFetchable {
 
 extension GatewayChainService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        try await gateway.transactionBroadcast(chain: chain, data: data)
+        try await gateway.transactionBroadcast(chain: chain, data: data, options: options)
     }
 }
 

@@ -111,7 +111,7 @@ public extension HyperCoreService {
 
 public extension HyperCoreService {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        try await gateway.transactionBroadcast(chain: chain, data: data)
+        try await gateway.transactionBroadcast(chain: chain, data: data, options: options)
     }
 }
 
