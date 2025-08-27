@@ -11,11 +11,13 @@ import StoreTestKit
 public extension StakeService {
     static func mock(
         store: StakeStore = .mock(),
+        addressStore: AddressStore = .mock(),
         chainServiceFactory: ChainServiceFactory = .mock(),
         assetsService: GemAPIStaticService = GemAPIStaticService()
     ) -> Self {
         StakeService(
             store: store,
+            addressStore: addressStore,
             chainServiceFactory: chainServiceFactory,
             assetsService: assetsService
         )
