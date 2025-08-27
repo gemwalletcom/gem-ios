@@ -36,8 +36,8 @@ public final class AmountSceneViewModel {
         didSet { amountInputModel.update(validators: inputValidators) }
     }
 
-    var assetBalancePriceRequest: AssetBalancePriceRequest
-    var assetBalancePrice: AssetBalancePrice?
+    var assetRequest: AssetRequest
+    var assetData: AssetData = .empty
 
     var amountInputModel: InputValidationViewModel = InputValidationViewModel()
     var delegation: DelegationValidator?
@@ -52,7 +52,7 @@ public final class AmountSceneViewModel {
         self.input = input
         self.wallet = wallet
         self.onTransferAction = onTransferAction
-        self.assetBalancePriceRequest = AssetBalancePriceRequest(
+        self.assetRequest = AssetRequest(
             walletId: wallet.walletId.id,
             assetId: input.asset.id
         )
@@ -178,7 +178,7 @@ extension AmountSceneViewModel {
         }
     }
 
-    func onChangeAssetBalance(_: AssetBalancePrice?, _: AssetBalancePrice?) {
+    func onChangeAssetBalance(_: AssetData, _: AssetData) {
         amountInputModel.update(validators: inputValidators)
     }
 
@@ -289,7 +289,7 @@ extension AmountSceneViewModel {
     private var inputValidators: [any TextValidator] {
         let source: AmountValidator.Source = switch amountInputType {
         case .asset: .asset
-        case .fiat: .fiat(price: assetBalancePrice?.price, converter: valueConverter)
+        case .fiat: .fiat(price: assetData.price?.mapToAssetPrice(assetId: asset.id), converter: valueConverter)
         }
         switch input.type {
         case .transfer,
@@ -323,19 +323,19 @@ extension AmountSceneViewModel {
     }
 
     private var amountValue: String {
-        guard let price = assetBalancePrice?.price else { return .zero }
+        guard let price = assetData.price else { return .zero }
         return (try? valueConverter.convertToAmount(
             fiatValue: amountInputModel.text,
-            price: price,
+            price: price.mapToAssetPrice(assetId: asset.id),
             decimals: asset.decimals.asInt
         )).or(.zero)
     }
 
     private var fiatValue: Decimal {
-        guard let price = assetBalancePrice?.price else { return .zero }
+        guard let price = assetData.price else { return .zero }
         return (try? valueConverter.convertToFiat(
             amount: amountInputModel.text,
-            price: price
+            price: price.mapToAssetPrice(assetId: asset.id)
         )).or(.zero)
     }
 
@@ -484,9 +484,9 @@ extension AmountSceneViewModel {
     private var availableValue: BigInt {
         switch input.type {
         case .transfer, .deposit, .perpetual, .stake:
-            return assetBalancePrice?.balance.available ?? .zero
+            return assetData.balance.available
         case .withdraw:
-            return assetBalancePrice?.balance.withdrawable ?? .zero
+            return assetData.balance.withdrawable
         case .stakeUnstake(let delegation):
             return delegation.base.balanceValue
         case .stakeRedelegate(let delegation, _, _):

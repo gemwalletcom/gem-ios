@@ -22,8 +22,8 @@ public struct AmountNavigationView: View {
             model: model
         )
         .onChangeObserveQuery(
-            request: $model.assetBalancePriceRequest,
-            value: $model.assetBalancePrice,
+            request: $model.assetRequest,
+            value: $model.assetData,
             action: model.onChangeAssetBalance
         )
         .sheet(item: $model.isPresentingSheet) {

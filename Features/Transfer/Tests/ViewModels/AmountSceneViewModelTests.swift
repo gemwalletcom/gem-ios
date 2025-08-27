@@ -53,15 +53,14 @@ struct AmountSceneViewModelTests {
 extension AmountSceneViewModel {
     static func mock(
         type: AmountType = .transfer(recipient: .mock()),
-        balancePrice: AssetBalancePrice = .mock(),
-        asset: Asset = .mockEthereum()
+        assetData: AssetData = .mock(balance: .mock())
     ) -> AmountSceneViewModel {
         let model = AmountSceneViewModel(
-            input: AmountInput(type: type, asset: asset),
+            input: AmountInput(type: type, asset: assetData.asset),
             wallet: .mock(),
             onTransferAction: { _ in }
         )
-        model.assetBalancePrice = balancePrice
+        model.assetData = assetData
         return model
     }
 }

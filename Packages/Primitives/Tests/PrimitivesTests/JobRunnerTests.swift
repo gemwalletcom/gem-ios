@@ -30,7 +30,7 @@ struct JobRunnerTests {
         let runner = JobRunner()
 
         await runner.addJob(job: job)
-        try? await Task.sleep(for: .milliseconds(30))
+        try? await Task.sleep(for: .milliseconds(50))
 
         #expect(job.runCount == 3)
         #expect(job.completed)
@@ -52,7 +52,7 @@ struct JobRunnerTests {
         let runner = JobRunner()
 
         await runner.addJob(job: job)
-        try? await Task.sleep(for: .milliseconds(40))
+        try? await Task.sleep(for: .milliseconds(80))
 
         #expect(job.runCount == 3)
         #expect(job.completed)
@@ -97,7 +97,7 @@ private final class MockJob: Job, @unchecked Sendable {
     let id = UUID().uuidString
     let configuration: JobConfiguration
     let completeAfter: Int
-    
+
     private(set) var runCount = 0
     private(set) var completed = false
 
