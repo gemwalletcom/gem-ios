@@ -9,15 +9,18 @@ import Blockchain
 
 public struct StakeService: StakeServiceable {
     private let store: StakeStore
+    private let addressStore: AddressStore
     private let chainServiceFactory: ChainServiceFactory
     private let assetsService: GemAPIStaticService
     
     public init(
         store: StakeStore,
+        addressStore: AddressStore,
         chainServiceFactory: ChainServiceFactory,
         assetsService: GemAPIStaticService = GemAPIStaticService()
     ) {
         self.store = store
+        self.addressStore = addressStore
         self.chainServiceFactory = chainServiceFactory
         self.assetsService = assetsService
     }
@@ -94,8 +97,10 @@ extension StakeService {
                 apr: $0.apr
             )
         }
-
         try store.updateValidators(updateValidators)
+        
+        let addressNames = updateValidators.map { AddressName(chain: $0.chain, address: $0.id, name: $0.name)}
+        try addressStore.addAddressNames(addressNames)
     }
 
     private func updateDelegations(walletId: String, chain: Chain, address: String) async throws {
