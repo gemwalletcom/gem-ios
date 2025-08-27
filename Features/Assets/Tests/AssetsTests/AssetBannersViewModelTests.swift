@@ -53,5 +53,18 @@ struct AssetBannersViewModelTests {
                 .mock(event: .accountActivation)
             ]
         ).allBanners.isEmpty)
+	}
+
+	@Test
+    func nonClosableBannersShowFirst() {
+        let model = AssetBannersViewModel(
+            assetData: .mock(metadata: .mock(rankScore: 5)),
+            banners: [.mock(event: .stake, state: .active), .mock(event: .accountActivation, state: .alwaysActive)]
+        )
+
+        #expect(model.allBanners.count == 3)
+        #expect(model.allBanners[0].state == .alwaysActive)
+        #expect(model.allBanners[1].state == .alwaysActive)
+        #expect(model.allBanners[2].state == .active)
     }
 }
