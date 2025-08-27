@@ -44,6 +44,29 @@ public struct PerpetualBalance: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
+	case short
+	case long
+}
+
+public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
+	public let direction: PerpetualDirection
+	public let asset: Asset
+	public let assetIndex: Int32
+	public let price: String
+	public let fiatValue: Double
+	public let size: String
+
+	public init(direction: PerpetualDirection, asset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String) {
+		self.direction = direction
+		self.asset = asset
+		self.assetIndex = assetIndex
+		self.price = price
+		self.fiatValue = fiatValue
+		self.size = size
+	}
+}
+
 public struct PerpetualMetadata: Codable, Equatable, Hashable, Sendable {
 	public let isPinned: Bool
 
@@ -86,7 +109,51 @@ public struct PerpetualPositionsSummary: Codable, Equatable, Hashable, Sendable 
 	}
 }
 
-public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
-	case short
-	case long
+public enum AccountDataType: String, Codable, Equatable, Hashable, Sendable {
+	case activate = "Activate"
+}
+
+public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
+	case open(PerpetualConfirmData)
+	case close(PerpetualConfirmData)
+
+	enum CodingKeys: String, CodingKey, Codable {
+		case open = "Open",
+			close = "Close"
+	}
+
+	private enum ContainerCodingKeys: String, CodingKey {
+		case type, content
+	}
+
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: ContainerCodingKeys.self)
+		if let type = try? container.decode(CodingKeys.self, forKey: .type) {
+			switch type {
+			case .open:
+				if let content = try? container.decode(PerpetualConfirmData.self, forKey: .content) {
+					self = .open(content)
+					return
+				}
+			case .close:
+				if let content = try? container.decode(PerpetualConfirmData.self, forKey: .content) {
+					self = .close(content)
+					return
+				}
+			}
+		}
+		throw DecodingError.typeMismatch(PerpetualType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for PerpetualType"))
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: ContainerCodingKeys.self)
+		switch self {
+		case .open(let content):
+			try container.encode(CodingKeys.open, forKey: .type)
+			try container.encode(content, forKey: .content)
+		case .close(let content):
+			try container.encode(CodingKeys.close, forKey: .type)
+			try container.encode(content, forKey: .content)
+		}
+	}
 }

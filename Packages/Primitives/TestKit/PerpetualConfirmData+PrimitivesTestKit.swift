@@ -7,7 +7,7 @@ public extension PerpetualConfirmData {
     static func mock(
         direction: PerpetualDirection = .long,
         asset: Asset = .mock(),
-        assetIndex: Int = 0,
+        assetIndex: Int32 = 0,
         price: String = "100",
         fiatValue: Double = 100.0,
         size: String = "1"

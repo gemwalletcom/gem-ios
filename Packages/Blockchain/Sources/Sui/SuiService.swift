@@ -21,43 +21,24 @@ import SwiftHTTPClient
 public struct SuiService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<SuiProvider>
+    let gateway: GatewayService
 
     private static let coinId = "0x2::sui::SUI"
 
     public init(
         chain: Primitives.Chain,
-        provider: Provider<SuiProvider>
+        provider: Provider<SuiProvider>,
+        gateway: GatewayService
     ) {
         self.chain = chain
         self.provider = provider
+        self.gateway = gateway
     }
 }
 
 // MARK: - Business Logic
 
 extension SuiService {
-    private func getBalance(address: String) async throws -> SuiCoinBalance {
-        try await provider.request(.balance(address: address))
-            .mapOrError(as: JSONRPCResponse<SuiCoinBalance>.self, asError: JSONRPCError.self).result
-    }
-
-    private func getSystemState() async throws -> SuiSystemState {
-        try await provider
-            .request(.systemState)
-            .mapOrError(as: JSONRPCResponse<SuiSystemState>.self, asError: JSONRPCError.self).result
-    }
-
-    private func getDelegations(address: String) async throws -> [SuiStakeDelegation] {
-        try await provider
-            .request(.stakeDelegations(address: address))
-            .mapOrError(as: JSONRPCResponse<[SuiStakeDelegation]>.self, asError: JSONRPCError.self).result
-    }
-
-    private func getGasPrice() async throws -> BigInt {
-        return try await provider
-            .request(.gasPrice)
-            .mapOrError(as: JSONRPCResponse<BigIntable>.self, asError: JSONRPCError.self).result.value
-    }
 
     private func getCoins(senderAddress: String, coinType: String) async throws -> [SuiCoin] {
         return try await provider
@@ -231,62 +212,22 @@ extension SuiService {
         return SuiTxData(txData: output.txData, digest: output.hash)
     }
 
-    private func getCoinMetadata(id: String) async throws -> SuiCoinMetadata {
-        try await provider.request(.coinMetadata(id: id))
-            .mapOrError(as: JSONRPCResponse<SuiCoinMetadata>.self, asError: JSONRPCError.self).result
-    }
 
-    private func getLatestCheckpoint() async throws -> BigInt {
-        try await provider
-            .request(.latestCheckpoint)
-            .mapOrError(as: JSONRPCResponse<BigIntable>.self, asError: JSONRPCError.self).result.value
-    }
 }
 
 // MARK: - ChainBalanceable
 
 extension SuiService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let getBalance = try await getBalance(address: address)
-
-        return AssetBalance(
-            assetId: chain.assetId,
-            balance: Balance(
-                available: BigInt(stringLiteral: getBalance.totalBalance)
-            )
-        )
+        try await gateway.coinBalance(chain: chain, address: address)
     }
 
     public func tokenBalance(for address: String, tokenIds: [Primitives.AssetId]) async throws -> [AssetBalance] {
-        let balances = try await provider.request(.balances(address: address))
-            .mapOrError(as: JSONRPCResponse<[SuiCoinBalance]>.self, asError: JSONRPCError.self).result
-
-        return tokenIds.compactMap { tokenId in
-            if let balance = balances.first(where: { $0.isCoinType(tokenId: tokenId.tokenId) }) {
-                return AssetBalance(
-                    assetId: tokenId,
-                    balance: Balance(
-                        available: BigInt(stringLiteral: balance.totalBalance)
-                    )
-                )
-            }
-            return AssetBalance(
-                assetId: tokenId,
-                balance: Balance(available: .zero)
-            )
-        }
+        try await gateway.tokenBalance(chain: chain, address: address, tokenIds: tokenIds)
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        let delegations = try await getDelegations(address: address)
-        let staked = delegations.map { $0.stakes.map { $0.total }.reduce(0, +) }.reduce(0, +)
-
-        return AssetBalance(
-            assetId: chain.assetId,
-            balance: Balance(
-                staked: staked
-            )
-        )
+        try await gateway.getStakeBalance(chain: chain, address: address)
     }
 }
 
@@ -319,15 +260,13 @@ public extension SuiService {
 
 extension SuiService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        try [
-            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: await getGasPrice()))
-        ]
+        try await gateway.feeRates(chain: chain, input: type)
     }
 }
 
 extension SuiService: ChainTransactionPreloadable {
-    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        .none
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
+        return .none
     }
 }
 
@@ -340,7 +279,7 @@ extension SuiService: ChainTransactionDataLoadable {
 
         return TransactionData(
             fee: fee,
-            messageBytes: data
+            metadata: .sui(messageBytes: data)
         )
     }
 }
@@ -367,15 +306,7 @@ extension SuiService: ChainBroadcastable {
 
 extension SuiService: ChainTransactionStateFetchable {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        let transaction = try await provider
-            .request(.transaction(id: request.id))
-            .mapOrError(as: JSONRPCResponse<SuiTransaction>.self, asError: JSONRPCError.self).result
-        let state: TransactionState = switch transaction.effects.status.status {
-        case "success": .confirmed
-        case "failure": .reverted
-        default: .pending
-        }
-        return TransactionChanges(state: state)
+        try await gateway.transactionStatus(chain: chain, request: request)
     }
 }
 
@@ -383,46 +314,11 @@ extension SuiService: ChainTransactionStateFetchable {
 
 extension SuiService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        try await provider
-            .request(.stakeValidators)
-            .mapOrError(as: JSONRPCResponse<SuiValidators>.self, asError: JSONRPCError.self).result.apys
-            .map {
-                DelegationValidator(
-                    chain: chain,
-                    id: $0.address,
-                    name: .empty,
-                    isActive: true,
-                    commision: 0,
-                    apr: apr
-                )
-            }
+        try await gateway.validators(chain: chain)
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        async let getSystemState = getSystemState()
-        async let getDelegations = getDelegations(address: address)
-        let (systemState, delegations) = try await (getSystemState, getDelegations)
-
-        return delegations.map { delegation in
-            delegation.stakes.map { stake in
-                let completionDate: Date? = switch stake.state {
-                case .activating: systemState.epochStartDate.addingTimeInterval(systemState.epochDuration)
-                default: .none
-                }
-
-                return DelegationBase(
-                    assetId: chain.assetId,
-                    state: stake.state,
-                    balance: stake.principal,
-                    shares: "0",
-                    rewards: stake.estimatedReward ?? .zero,
-                    completionDate: completionDate,
-                    delegationId: stake.stakedSuiId,
-                    validatorId: delegation.validatorAddress
-                )
-            }
-
-        }.flatMap { $0 }
+        try await gateway.delegations(chain: chain, address: address)
     }
 }
 
@@ -430,9 +326,7 @@ extension SuiService: ChainStakable {
 
 extension SuiService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        try await provider
-            .request(.chainID)
-            .mapOrError(as: JSONRPCResponse<String>.self, asError: JSONRPCError.self).result
+        try await gateway.chainId(chain: chain)
     }
 }
 
@@ -440,7 +334,7 @@ extension SuiService: ChainIDFetchable {
 
 extension SuiService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        try await getLatestCheckpoint()
+        try await gateway.latestBlock(chain: chain)
     }
 }
 
@@ -448,50 +342,15 @@ extension SuiService: ChainLatestBlockFetchable {
 
 extension SuiService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        let data = try await getCoinMetadata(id: tokenId)
-        let assetId = AssetId(chain: chain, tokenId: tokenId)
-
-        return try Asset(
-            id: assetId,
-            name: data.name,
-            symbol: data.symbol,
-            decimals: data.decimals,
-            type: assetId.getAssetType()
-        )
+        try await gateway.tokenData(chain: chain, tokenId: tokenId)
     }
 
-    public func getIsTokenAddress(tokenId: String) -> Bool {
-        tokenId.hasPrefix("0x") && tokenId.count.isBetween(66, and: 100)
+    public func getIsTokenAddress(tokenId: String) async throws -> Bool {
+        try await gateway.isTokenAddress(chain: chain, tokenId: tokenId)
     }
 }
 
 // MARK: - Models extensions
-
-extension SuiStake {
-    var state: DelegationState {
-        switch status {
-        case "Active": return .active
-        case "Pending": return .activating
-        default: return .pending
-        }
-    }
-
-    var total: BigInt {
-        BigInt(stringLiteral: principal) + BigInt(stringLiteral: estimatedReward ?? .zero)
-    }
-}
-
-extension SuiSystemState {
-    var epochStartDate: Date {
-        Date(timeIntervalSince1970: (TimeInterval(epochStartTimestampMs) ?? 0) / 1000)
-    }
-
-    var epochDuration: TimeInterval {
-        (TimeInterval(epochDurationMs) ?? 0) / 1000
-    }
-}
-
-// FIXME: - update uniffi to latest to extension Codable
 
 extension Blockchain.SuiCoin {
     func toGemstone() -> Gemstone.SuiCoin {
@@ -509,14 +368,5 @@ extension Blockchain.SuiCoin {
 
 // MARK: - ChainAddressStatusFetchable
 
-extension SuiService: ChainAddressStatusFetchable {
-    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
-        []
-    }
-}
+extension SuiService: ChainAddressStatusFetchable { }
 
-extension SuiCoinBalance {
-    func isCoinType(tokenId: String?) -> Bool {
-        coinType.remove0x == tokenId?.remove0x.trimLeadingZeros
-    }
-}

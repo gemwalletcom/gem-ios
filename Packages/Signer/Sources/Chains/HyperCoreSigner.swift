@@ -38,16 +38,16 @@ public class HyperCoreSigner: Signable {
     }
 
     public func signPerpetual(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case let .perpetual(_, type) = input.type, case let .hyperliquid(data) = input.data else {
+        guard case let .perpetual(_, type) = input.type, case let .hyperliquid(approveAgentRequired, approveReferralRequired, approveBuilderRequired, builderFeeBps) = input.metadata else {
             throw AnyError("Invalid input type for perpetual signing")
         }
 
         let agentKey = try getAgentKey(for: input.senderAddress)
-        let builder = try? getBuilder(builder: config.builderAddress, fee: data.builderFeeBps)
+        let builder = try? getBuilder(builder: config.builderAddress, fee: Int(builderFeeBps))
         let timestampIncrementer = NumberIncrementer(Int(Date.getTimestampInMs()))
         var transactions: [String] = []
         
-        if data.approveReferralRequired {
+        if approveReferralRequired {
             transactions.append(
                 try signSetReferer(
                     agentKey: privateKey,
@@ -56,7 +56,7 @@ public class HyperCoreSigner: Signable {
                 )
             )
         }
-        if data.approveAgentRequired {
+        if approveAgentRequired {
             transactions.append(
                 try signApproveAgent(
                     agentAddress: agentKey.address,
@@ -65,7 +65,7 @@ public class HyperCoreSigner: Signable {
                 )
             )
         }
-        if data.approveBuilderRequired {
+        if approveBuilderRequired {
             transactions.append(
                 try signApproveBuilderAddress(
                     agentKey: privateKey,
@@ -135,7 +135,7 @@ public class HyperCoreSigner: Signable {
         let order = switch type {
         case .close(let data):
             factory.makeMarketOrder(
-                asset: data.assetIndex.asUInt32,
+                asset: UInt32(data.assetIndex),
                 isBuy: data.direction == .short,
                 price: data.price,
                 size: data.size,
@@ -144,7 +144,7 @@ public class HyperCoreSigner: Signable {
             )
         case .open(let data):
             factory.makeMarketOrder(
-                asset: data.assetIndex.asUInt32,
+                asset: UInt32(data.assetIndex),
                 isBuy: data.direction == .long,
                 price: data.price,
                 size: data.size,

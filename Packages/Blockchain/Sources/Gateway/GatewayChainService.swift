@@ -12,7 +12,7 @@ public struct GatewayChainService: Sendable {
     
     public init(
         chain: Chain,
-        gateway: GatewayService
+        gateway: GatewayService,
     ) {
         self.chain = chain
         self.gateway = gateway
@@ -39,9 +39,7 @@ extension GatewayChainService: ChainBalanceable {
 
 extension GatewayChainService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        try await gateway.feePriorityRates(chain: chain).map {
-            FeeRate(priority: $0.priority, gasPriceType: .regular(gasPrice: $0.value))
-        }
+        try await gateway.feeRates(chain: chain, input: type)
     }
 }
 
@@ -92,7 +90,7 @@ extension GatewayChainService: ChainLatestBlockFetchable {
 // MARK: - ChainTransactionPreloadable
 
 extension GatewayChainService: ChainTransactionPreloadable {
-    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
         try await gateway.transactionPreload(chain: chain, input: input)
     }
 }

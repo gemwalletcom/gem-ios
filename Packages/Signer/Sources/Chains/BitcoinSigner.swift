@@ -59,7 +59,7 @@ public struct BitcoinSigner: Signable {
 
     func sign(input: SignerInput, privateKey: Data, signingOverride: ((inout BitcoinSigningInput) -> Void)? = nil) throws -> String {
         let coinType = input.coinType
-        let utxos = input.utxos.map {
+        let utxos = try input.metadata.getUtxos().map {
             $0.mapToUnspendTransaction(address: input.senderAddress, coinType: coinType)
         }
 

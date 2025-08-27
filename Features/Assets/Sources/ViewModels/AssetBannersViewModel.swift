@@ -36,7 +36,8 @@ public final class AssetBannersViewModel: Sendable {
 
     private func shouldShowBanner(_ banner: Banner) -> Bool {
         switch banner.event {
-        case .enableNotifications, .accountActivation, .accountBlockedMultiSignature: true
+        case .enableNotifications, .accountBlockedMultiSignature: true
+        case .accountActivation: assetData.balance.available == 0
         case .stake: assetData.balance.staked.isZero
         case .activateAsset: !assetData.metadata.isActive
         case .suspiciousAsset: AssetScoreTypeViewModel(score: assetData.metadata.rankScore).shouldShowBanner

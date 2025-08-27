@@ -29,6 +29,11 @@ public struct ConnectionsScene: View {
                     image: Images.System.qrCode,
                     action: model.onScan
                 )
+            } footer: {
+                if model.isLoading {
+                    LoadingTextView(isAnimating: .constant(true))
+                        .textCase(nil)
+                }
             }
             .listRowInsets(.assetListRowInsets)
             
@@ -71,6 +76,10 @@ public struct ConnectionsScene: View {
         .alertSheet($model.isPresentingAlertMessage)
         .navigationTitle(model.title)
         .taskOnce { model.updateSessions() }
+        .onChange(of: model.walletConnectorPresenter?.isPresentingSheet?.id) { _, newValue in
+            if newValue != nil {
+                model.stopLoading()
+            }
+        }
     }
-
 }

@@ -29,6 +29,7 @@ public struct Fee: Sendable {
 
     public var gasPrice: BigInt { gasPriceType.gasPrice }
     public var priorityFee: BigInt { gasPriceType.priorityFee }
+    public var unitPrice: BigInt { gasPriceType.unitPrice }
     public var totalFee: BigInt { fee + optionsFee }
     public var optionsFee: BigInt { options.map { $0.value }.reduce(0, +) }
 

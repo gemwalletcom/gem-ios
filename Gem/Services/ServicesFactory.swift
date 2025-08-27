@@ -75,6 +75,7 @@ struct ServicesFactory {
         )
         let stakeService = Self.makeStakeService(
             stakeStore: storeManager.stakeStore,
+            addressStore: storeManager.addressStore,
             chainFactory: chainServiceFactory
         )
         let nftService = Self.makeNftService(
@@ -297,10 +298,12 @@ extension ServicesFactory {
 
     private static func makeStakeService(
         stakeStore: StakeStore,
+        addressStore: AddressStore,
         chainFactory: ChainServiceFactory
     ) -> StakeService {
         StakeService(
             store: stakeStore,
+            addressStore: addressStore,
             chainServiceFactory: chainFactory
         )
     }

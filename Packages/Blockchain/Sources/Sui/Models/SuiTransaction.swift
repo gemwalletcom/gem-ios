@@ -34,31 +34,14 @@ public struct SuiStatus: Codable, Sendable {
 	}
 }
 
-public struct SuiObjectReference: Codable, Sendable {
-	public let objectId: String
-
-	public init(objectId: String) {
-		self.objectId = objectId
-	}
-}
-
-public struct SuiObjectChange: Codable, Sendable {
-	public let reference: SuiObjectReference
-
-	public init(reference: SuiObjectReference) {
-		self.reference = reference
-	}
-}
 
 public struct SuiEffects: Codable, Sendable {
 	public let gasUsed: SuiGasUsed
 	public let status: SuiStatus
-	public let created: [SuiObjectChange]?
 
-	public init(gasUsed: SuiGasUsed, status: SuiStatus, created: [SuiObjectChange]?) {
+	public init(gasUsed: SuiGasUsed, status: SuiStatus) {
 		self.gasUsed = gasUsed
 		self.status = status
-		self.created = created
 	}
 }
 

@@ -54,6 +54,12 @@ struct PerpetualPositionViewModelTests {
         #expect(createPositionViewModel(.mock(liquidationPrice: nil)).liquidationPriceText == nil)
     }
     
+    @Test
+    func positionTypeColor() {
+        #expect(createPositionViewModel(.mock(direction: .short)).positionTypeColor == Colors.red)
+        #expect(createPositionViewModel(.mock(direction: .long)).positionTypeColor == Colors.green)
+    }
+    
 //    @Test
 //    func liquidationPriceColor() {
 //        // Long position: entry $2.00, liquidation $1.50

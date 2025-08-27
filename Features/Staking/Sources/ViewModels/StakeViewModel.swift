@@ -117,7 +117,7 @@ public final class StakeViewModel {
         let value = value(delegations: delegations)
 
         return TransferData(
-            type: .stake(chain.asset, .rewards(validators: validators)),
+            type: .stake(chain.asset, .rewards(validators)),
             recipientData: RecipientData(
                 recipient: Recipient(name: .none, address: "", memo: .none),
                 amount: .none

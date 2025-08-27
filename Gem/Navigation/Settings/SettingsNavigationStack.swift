@@ -26,6 +26,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.releaseService) private var releaseService
     @Environment(\.perpetualService) private var perpetualService
+    @Environment(\.walletConnectorManager) private var walletConnectorManager
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -103,7 +104,8 @@ struct SettingsNavigationStack: View {
             .navigationDestination(for: Scenes.WalletConnect.self) { _ in
                 ConnectionsScene(
                     model: ConnectionsViewModel(
-                        service: connectionsService
+                        service: connectionsService,
+                        walletConnectorPresenter: walletConnectorManager.presenter
                     )
                 )
             }

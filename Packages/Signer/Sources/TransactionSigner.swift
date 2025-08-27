@@ -32,18 +32,10 @@ public struct TransactionSigner: TransactionSigneable {
             value: amount.value,
             fee: fee,
             isMaxAmount: amount.useMaxAmount,
-            chainId: transactionData.chainId,
             memo: transfer.recipientData.recipient.memo,
-            accountNumber: transactionData.accountNumber,
-            sequence: transactionData.sequence,
             senderAddress: try wallet.account(for: transfer.type.chain).address,
             destinationAddress: transfer.recipientData.recipient.address,
-            data: transactionData.data,
-            block: transactionData.block,
-            token: transactionData.token,
-            utxos: transactionData.utxos,
-            messageBytes: transactionData.messageBytes,
-            extra: transactionData.extra
+            metadata: transactionData.metadata
         )
 
         return try signer.sign(input: input)

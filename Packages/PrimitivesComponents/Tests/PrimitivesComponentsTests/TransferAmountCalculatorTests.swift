@@ -443,7 +443,7 @@ struct TransferAmountCalculatorTests {
 
     @Test
     func testStakeFlexible() {
-        let stakeType = StakeType.stake(validator: .mock())
+        let stakeType = StakeType.stake(.mock())
         #expect(throws: Never.self) {
             let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
@@ -462,7 +462,7 @@ struct TransferAmountCalculatorTests {
     @Test
     func testUnstakeFixed() {
         let delegation = Delegation.mock(state: .active)
-        let stakeType = StakeType.unstake(delegation: delegation)
+        let stakeType = StakeType.unstake(delegation)
         #expect(throws: Never.self) {
             let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,

@@ -42,12 +42,12 @@ public struct CosmosSigner: Signable {
             }
         }
 
-        let signerInput = CosmosSigningInput.with {
+        let signerInput = try CosmosSigningInput.with {
             $0.mode = .sync
-            $0.accountNumber = UInt64(input.accountNumber)
-            $0.chainID = input.chainId
+            $0.accountNumber = UInt64(try input.metadata.getAccountNumber())
+            $0.chainID = try input.metadata.getChainId()
             $0.memo = memo.valueOrEmpty
-            $0.sequence = UInt64(input.sequence)
+            $0.sequence = try input.metadata.getSequence()
             $0.messages = messages
             $0.fee = fee
             $0.privateKey = privateKey
@@ -95,13 +95,13 @@ public struct CosmosSigner: Signable {
             messages = [
                 getUnstakeMessage(delegatorAddress: input.senderAddress, validatorAddress: delegation.validator.id, amount: amount)
             ]
-        case .redelegate(let delegation, let toValidator):
+        case .redelegate(let data):
             let amount = getAmount(input: input, denom: denom)
             messages = [
                 getRedelegateMessage(
                     delegatorAddress: input.senderAddress,
-                    validatorSourceAddress: delegation.validator.id,
-                    validatorDestinationAddress: toValidator.id,
+                    validatorSourceAddress: data.delegation.validator.id,
+                    validatorDestinationAddress: data.toValidator.id,
                     amount: amount
                 )
             ]

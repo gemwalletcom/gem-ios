@@ -39,6 +39,23 @@ struct AssetBannersViewModelTests {
     }
     
     @Test
+    func accountActivationBanner() {
+        #expect(AssetBannersViewModel(
+            assetData: .mock(asset: .mockXRP(), balance: .zero, metadata: .mock(rankScore: 16)),
+            banners: [
+                .mock(event: .accountActivation)
+            ]
+        ).allBanners.first?.event == .accountActivation)
+        
+        #expect(AssetBannersViewModel(
+            assetData: .mock(balance: Balance(available: BigInt(1)), metadata: .mock(rankScore: 16)),
+            banners: [
+                .mock(event: .accountActivation)
+            ]
+        ).allBanners.isEmpty)
+	}
+
+	@Test
     func nonClosableBannersShowFirst() {
         let model = AssetBannersViewModel(
             assetData: .mock(metadata: .mock(rankScore: 5)),
