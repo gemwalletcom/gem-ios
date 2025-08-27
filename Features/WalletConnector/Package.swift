@@ -24,6 +24,8 @@ let package = Package(
         .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "SystemServices", path: "../../Packages/SystemServices"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
+        .package(name: "GemAPI", path: "../../Packages/GemAPI"),
     ],
     targets: [
         .target(
@@ -52,6 +54,9 @@ let package = Package(
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "WalletSessionServiceTestKit", package: "SystemServices"),
                 .product(name: "WalletConnectorServiceTestKit", package: "ChainServices"),
+                .product(name: "ChainServiceTestKit", package: "ChainServices"),
+                .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
                 "WalletConnector",
                 "Gemstone"
             ],

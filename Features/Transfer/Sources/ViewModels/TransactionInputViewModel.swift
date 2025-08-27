@@ -30,9 +30,14 @@ struct TransactionInputViewModel: Sendable {
     }
 
     var value: BigInt {
-        switch transferAmount {
-        case .success(let amount): amount.value
-        case .failure, .none: data.value
+        switch data.type {
+        case .generic(_, _, let extra):
+            if let decodedAmount = extra.decodedCall?.amount {
+                return BigInt(decodedAmount) ?? data.value
+            }
+            return transferAmountValue
+        case .transfer, .deposit, .withdrawal, .transferNft, .swap, .tokenApprove, .stake, .account, .perpetual:
+            return transferAmountValue
         }
     }
 
@@ -65,5 +70,12 @@ struct TransactionInputViewModel: Sendable {
             return true
         }
         return false
+    }
+
+    private var transferAmountValue: BigInt {
+        switch transferAmount {
+        case .success(let amount): return amount.value
+        case .failure, .none: return data.value
+        }
     }
 }

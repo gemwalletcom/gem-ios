@@ -16,7 +16,23 @@ struct TransferDataViewModel {
 
     var type: TransferDataType { data.type }
     var recipientData: RecipientData { data.recipientData }
-    var recipient: Recipient { recipientData.recipient }
+    
+    var recipient: Recipient { 
+        switch type {
+        case .generic(_, _, let extra):
+            if let address = extra.decodedCall?.recipient {
+                return Recipient(
+                    name: recipientData.recipient.name, 
+                    address: address,
+                    memo: recipientData.recipient.memo
+                )
+            }
+            return recipientData.recipient
+        case .transfer, .deposit, .withdrawal, .transferNft, .swap, .tokenApprove, .stake, .account, .perpetual:
+            return recipientData.recipient
+        }
+    }
+    
     var asset: Asset { data.type.asset }
     var memo: String? { recipientData.recipient.memo }
     var chain: Chain { data.chain }
@@ -159,38 +175,6 @@ struct TransferDataViewModel {
             case .withdraw(let delegation): delegation.base.balanceValue
             case .rewards: data.value
             case .stake: metadata?.available ?? .zero
-            }
-        }
-    }
-}
-
-// MARK: - Private
-
-extension TransferDataViewModel {
-    private var recipientName: String? {
-        switch type {
-        case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .swap,
-                .tokenApprove,
-                .generic,
-                .account,
-                .perpetual:
-            recipient.name ?? recipient.address
-        case .stake(_, let stakeType):
-            switch stakeType {
-            case .stake(let validator):
-                validator.name
-            case .unstake(let delegation):
-                delegation.validator.name
-            case .redelegate(let data):
-                data.toValidator.name
-            case .withdraw(let delegation):
-                delegation.validator.name
-            case .rewards:
-                    .none
             }
         }
     }

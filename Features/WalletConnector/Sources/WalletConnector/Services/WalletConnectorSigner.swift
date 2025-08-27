@@ -10,20 +10,25 @@ import class Gemstone.Config
 import WalletConnectSign
 import WalletSessionService
 import struct Gemstone.SignMessage
+import AssetsService
 
 public final class WalletConnectorSigner: WalletConnectorSignable {
     private let connectionsStore: ConnectionsStore
     private let walletConnectorInteractor: any WalletConnectorInteractable
     private let walletSessionService: any WalletSessionManageable
+    private let assetsService: AssetsService
+    private let ethereumDecoder = EthereumCallDecoder()
 
     public init(
         connectionsStore: ConnectionsStore,
         walletSessionService: any WalletSessionManageable,
-        walletConnectorInteractor: any WalletConnectorInteractable
+        walletConnectorInteractor: any WalletConnectorInteractable,
+        assetsService: AssetsService
     ) {
         self.connectionsStore = connectionsStore
         self.walletConnectorInteractor = walletConnectorInteractor
         self.walletSessionService = walletSessionService
+        self.assetsService = assetsService
     }
 
     public var allChains: [Primitives.Chain]  {
@@ -158,11 +163,24 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                 return .none
             }()
 
+            let decodedCall: DecodedCall? = {
+                guard let data else { return nil }
+                return ethereumDecoder.decode(data: data.hexString)
+            }()
+
+            let asset: Asset = {
+                switch decodedCall?.method {
+                case .transfer: (try? assetsService.getAsset(for: .init(chain: chain, tokenId: address))) ?? chain.asset
+                case .none: chain.asset
+                }
+            }()
+
             let transferData = TransferData(
-                type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(
+                type: .generic(asset: asset, metadata: session.session.metadata, extra: TransferDataExtra(
                     gasLimit: gasLimit,
                     gasPrice: gasPrice,
-                    data: data
+                    data: data,
+                    decodedCall: decodedCall
                 )),
                 recipientData: RecipientData(
                     recipient: Recipient(name: .none, address: address, memo: .none),

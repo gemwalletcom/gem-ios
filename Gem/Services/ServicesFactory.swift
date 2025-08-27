@@ -129,7 +129,8 @@ struct ServicesFactory {
                 walletStore: storeManager.walletStore,
                 preferences: storages.observablePreferences
             ),
-            interactor: walletConnectorManager
+            interactor: walletConnectorManager,
+            assetsService: assetsService
         )
 
         let bannerSetupService = BannerSetupService(
@@ -376,12 +377,14 @@ extension ServicesFactory {
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
         walletSessionService: WalletSessionService,
-        interactor: any WalletConnectorInteractable
+        interactor: any WalletConnectorInteractable,
+        assetsService: AssetsService
     ) -> ConnectionsService {
         let signer = WalletConnectorSigner(
             connectionsStore: connectionsStore,
             walletSessionService: walletSessionService,
-            walletConnectorInteractor: interactor
+            walletConnectorInteractor: interactor,
+            assetsService: assetsService
         )
         return ConnectionsService(
             store: connectionsStore,

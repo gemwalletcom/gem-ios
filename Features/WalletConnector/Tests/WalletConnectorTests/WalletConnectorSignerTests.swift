@@ -8,6 +8,8 @@ import StoreTestKit
 import PreferencesTestKit
 import WalletSessionServiceTestKit
 import WalletSessionService
+import AssetsService
+import AssetsServiceTestKit
 
 @testable import WalletConnector
 
@@ -94,12 +96,14 @@ extension WalletConnectorSigner {
         walletSessionService: any WalletSessionManageable = WalletSessionService.mock(
             store: .mock(),
             preferences: .mock()
-        )
+        ),
+        assetsService: AssetsService = .mock()
     ) -> WalletConnectorSigner {
         WalletConnectorSigner(
             connectionsStore: connectionsStore,
             walletSessionService: walletSessionService,
-            walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
+            walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter()),
+            assetsService: assetsService
         )
     }
     
@@ -112,7 +116,8 @@ extension WalletConnectorSigner {
         
         return WalletConnectorSigner.mock(
             connectionsStore: ConnectionsStore(db: db),
-            walletSessionService: WalletSessionService.mock(store: walletStore))
+            walletSessionService: WalletSessionService.mock(store: walletStore),
+            assetsService: .mock())
     }
 }
 
