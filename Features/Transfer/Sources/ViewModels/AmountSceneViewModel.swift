@@ -258,6 +258,14 @@ extension AmountSceneViewModel {
         )
     }
 
+    private func recipientAddress(chain: StakeChain?, validatorId: String) throws -> String {
+        switch chain {
+        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron: validatorId
+        case .smartChain: StakeHub.address
+        default: throw AnyError.message("not supported")
+        }
+    }
+    
     private var recipientData: RecipientData {
         switch type {
         case .transfer(recipient: let recipient): recipient
@@ -270,11 +278,7 @@ extension AmountSceneViewModel {
              .stakeWithdraw: RecipientData(
                 recipient: Recipient(
                     name: currentValidator?.name,
-                    address: getRecipientAddress(
-                        chain: asset.chain.stakeChain,
-                        type: type,
-                        validatorId: currentValidator?.id
-                    ) ?? "",
+                    address: (currentValidator?.id).flatMap { try? recipientAddress(chain: asset.chain.stakeChain, validatorId: $0) } ?? "",
                     memo: Localized.Stake.viagem
                 ),
                 amount: .none
@@ -307,20 +311,6 @@ extension AmountSceneViewModel {
                     ]
                 )
             ]
-        }
-    }
-
-    private func getRecipientAddress(chain: StakeChain?, type: AmountType, validatorId: String?) -> String? {
-        guard let id = validatorId else {
-            return nil
-        }
-        switch chain {
-        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron:
-            return id
-        case .smartChain:
-            return StakeHub.address
-        default:
-            fatalError()
         }
     }
 
@@ -451,7 +441,6 @@ extension AmountSceneViewModel {
     private func value(for amount: String) throws -> BigInt {
         try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
     }
-
 
     private var minimumValue: BigInt {
         let stakeChain = asset.chain.stakeChain
