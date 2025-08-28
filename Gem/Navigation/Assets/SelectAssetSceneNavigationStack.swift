@@ -21,7 +21,6 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.keystore) private var keystore
-    @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
@@ -76,11 +75,6 @@ struct SelectAssetSceneNavigationStack: View {
                 switch input.type {
                 case .send:
                     RecipientNavigationView(
-                        amountService: AmountService(
-                            priceService: priceService,
-                            balanceService: balanceService,
-                            stakeService: stakeService
-                        ),
                         confirmService: ConfirmServiceFactory.create(
                             keystore: keystore,
                             nodeService: nodeService,
