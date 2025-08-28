@@ -13,8 +13,7 @@ public extension StakeService {
         store: StakeStore = .mock(),
         addressStore: AddressStore = .mock(),
         chainServiceFactory: ChainServiceFactory = .mock(),
-        assetsService: GemAPIStaticService = GemAPIStaticService(),
-        addressStore: AddressStore = .mock()
+        assetsService: GemAPIStaticService = GemAPIStaticService()
     ) -> Self {
         StakeService(
             store: store,
