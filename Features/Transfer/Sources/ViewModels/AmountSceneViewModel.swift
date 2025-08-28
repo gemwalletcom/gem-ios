@@ -258,11 +258,11 @@ extension AmountSceneViewModel {
         )
     }
 
-    private func recipientAddress(chain: StakeChain?, validatorId: String) throws -> String {
+    private func recipientAddress(chain: StakeChain?, validatorId: String) -> String {
         switch chain {
         case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron: validatorId
         case .smartChain: StakeHub.address
-        default: throw AnyError.message("not supported")
+        case .none, .some(.hyperCore): ""
         }
     }
     
@@ -278,7 +278,7 @@ extension AmountSceneViewModel {
              .stakeWithdraw: RecipientData(
                 recipient: Recipient(
                     name: currentValidator?.name,
-                    address: (currentValidator?.id).flatMap { try? recipientAddress(chain: asset.chain.stakeChain, validatorId: $0) } ?? "",
+                    address: (currentValidator?.id).flatMap { recipientAddress(chain: asset.chain.stakeChain, validatorId: $0) } ?? "",
                     memo: Localized.Stake.viagem
                 ),
                 amount: .none
