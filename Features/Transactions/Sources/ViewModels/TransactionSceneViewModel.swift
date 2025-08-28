@@ -16,7 +16,7 @@ import SwiftUI
 
 @Observable
 @MainActor
-public final class TransactionDetailViewModel {
+public final class TransactionSceneViewModel {
     private let preferences: Preferences
     private let explorerService: ExplorerService
 
@@ -245,13 +245,13 @@ public final class TransactionDetailViewModel {
     }
 }
 
-extension TransactionDetailViewModel: @preconcurrency Identifiable {
+extension TransactionSceneViewModel: @preconcurrency Identifiable {
     public var id: String { model.transaction.id }
 }
 
 // MARK: - Actions
 
-extension TransactionDetailViewModel {
+extension TransactionSceneViewModel {
     func onSelectTransactionHeader() {
         if let headerLink = headerLink {
             UIApplication.shared.open(headerLink)
@@ -277,7 +277,7 @@ extension TransactionDetailViewModel {
 
 // MARK: - Private
 
-extension TransactionDetailViewModel {
+extension TransactionSceneViewModel {
     private var model: TransactionViewModel {
         TransactionViewModel(
             explorerService: ExplorerService.standard,

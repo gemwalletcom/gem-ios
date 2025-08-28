@@ -11,9 +11,9 @@ import ExplorerService
 import Style
 
 public struct TransactionNavigationView: View {
-    @State private var model: TransactionDetailViewModel
+    @State private var model: TransactionSceneViewModel
 
-    public init(model: TransactionDetailViewModel) {
+    public init(model: TransactionSceneViewModel) {
         _model = State(initialValue: model)
     }
 

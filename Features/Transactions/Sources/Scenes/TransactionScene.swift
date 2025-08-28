@@ -12,9 +12,9 @@ import PrimitivesComponents
 import ExplorerService
 
 public struct TransactionScene: View {
-    private let model: TransactionDetailViewModel
+    private let model: TransactionSceneViewModel
 
-    public init(model: TransactionDetailViewModel) {
+    public init(model: TransactionSceneViewModel) {
         self.model = model
     }
 
