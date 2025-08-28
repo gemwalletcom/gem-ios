@@ -17,11 +17,11 @@ import SwiftUI
 @Observable
 @MainActor
 public final class TransactionDetailViewModel {
-    private var model: TransactionViewModel
     private let preferences: Preferences
+    private let explorerService: ExplorerService
 
     var request: TransactionRequest
-    var transactionExtended: TransactionExtended?
+    var transactionExtended: TransactionExtended
 
     var isPresentingShareSheet = false
     var isPresentingInfoSheet: InfoSheetType? = .none
@@ -29,16 +29,13 @@ public final class TransactionDetailViewModel {
     public init(
         transaction: TransactionExtended,
         walletId: String,
-        preferences: Preferences = Preferences.standard
+        preferences: Preferences = Preferences.standard,
+        explorerService: ExplorerService = ExplorerService.standard
     ) {
-        model = TransactionViewModel(
-            explorerService: ExplorerService.standard,
-            transaction: transaction,
-            currency: preferences.currency
-        )
         self.preferences = preferences
-        transactionExtended = transaction
-        request = TransactionRequest(walletId: walletId, transactionId: transaction.id)
+        self.explorerService = explorerService
+        self.transactionExtended = transaction
+        self.request = TransactionRequest(walletId: walletId, transactionId: transaction.id)
     }
 
     var title: String { model.titleTextValue.text }
@@ -241,13 +238,9 @@ public final class TransactionDetailViewModel {
         )
     }
 
-    func onChangeTransaction(old: TransactionExtended?, new: TransactionExtended?) {
-        if old != new, let new {
-            model = TransactionViewModel(
-                explorerService: ExplorerService.standard,
-                transaction: new,
-                currency: preferences.currency
-            )
+    func onChangeTransaction(_ oldValue: TransactionExtended, _ newValue: TransactionExtended) {
+        if oldValue != newValue {
+            transactionExtended = newValue
         }
     }
 }
@@ -285,6 +278,14 @@ extension TransactionDetailViewModel {
 // MARK: - Private
 
 extension TransactionDetailViewModel {
+    private var model: TransactionViewModel {
+        TransactionViewModel(
+            explorerService: ExplorerService.standard,
+            transaction: transactionExtended,
+            currency: preferences.currency
+        )
+    }
+
     private var headerLink: URL? {
         switch model.transaction.transaction.metadata {
         case .null, .nft, .none, .perpetual: .none

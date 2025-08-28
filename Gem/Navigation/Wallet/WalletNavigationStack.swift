@@ -87,7 +87,7 @@ struct WalletNavigationStack: View {
                     )
                 }
                 .navigationDestination(for: TransactionExtended.self) {
-                    TransactionScene(
+                    TransactionNavigationView(
                         model: TransactionDetailViewModel(
                             transaction: $0,
                             walletId: model.wallet.id
