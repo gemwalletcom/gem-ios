@@ -112,7 +112,6 @@
 		D8CFDEA02E37FC3B00D27283 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDE9F2E37FC3B00D27283 /* Primitives */; };
 		D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEA72E37FC8800D27283 /* Preferences */; };
 		D8CFDEAA2E37FC8C00D27283 /* GemAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEA92E37FC8C00D27283 /* GemAPI */; };
-		D8CFDEAC2E37FC9F00D27283 /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAB2E37FC9F00D27283 /* GemstonePrimitives */; };
 		D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAD2E37FCA800D27283 /* Formatters */; };
 		D8CFDEB02E37FCB000D27283 /* Components in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAF2E37FCB000D27283 /* Components */; };
 		D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */; };
@@ -376,7 +375,6 @@
 				D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */,
 				D838194B2E256A5A0076CDB3 /* SwiftUI.framework in Frameworks */,
 				D8CFDEAA2E37FC8C00D27283 /* GemAPI in Frameworks */,
-				D8CFDEAC2E37FC9F00D27283 /* GemstonePrimitives in Frameworks */,
 				D8CFDEA02E37FC3B00D27283 /* Primitives in Frameworks */,
 				D838194A2E256A5A0076CDB3 /* WidgetKit.framework in Frameworks */,
 			);
@@ -2100,10 +2098,6 @@
 		D8CFDEA92E37FC8C00D27283 /* GemAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GemAPI;
-		};
-		D8CFDEAB2E37FC9F00D27283 /* GemstonePrimitives */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = GemstonePrimitives;
 		};
 		D8CFDEAD2E37FCA800D27283 /* Formatters */ = {
 			isa = XCSwiftPackageProductDependency;
