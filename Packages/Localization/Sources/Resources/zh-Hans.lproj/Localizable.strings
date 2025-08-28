@@ -463,3 +463,4 @@
 "errors.wallets.limit.description" = "您已达到允许的最大钱包数量（ %d ）。请移除现有钱包以添加或创建新钱包。";
 "banner.asset_status.title" = "可疑资产";
 "banner.asset_status.description" = "代币可能不安全或具有误导性。请仅在完全信任的情况下继续操作。";
+"transfer.maximum_amount" = "Maximum Amount is %@";
