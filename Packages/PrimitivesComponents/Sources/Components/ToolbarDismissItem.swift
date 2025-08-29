@@ -35,7 +35,6 @@ public struct ToolbarDismissItem: ToolbarContent {
         ToolbarItem(placement: placement) {
             Button(title.localized, action: { dismiss() })
                 .bold()
-                .buttonStyle(.plain)
         }
     }
 }

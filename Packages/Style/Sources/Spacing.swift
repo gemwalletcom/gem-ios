@@ -119,9 +119,4 @@ public extension Sizing {
             public static let height: CGFloat = Sizing.image.asset
         }
     }
-    
-    struct presentation {
-        /// 24
-        public static let cornerRadius: CGFloat = 24
-    }
 }

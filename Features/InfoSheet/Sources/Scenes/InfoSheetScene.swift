@@ -33,7 +33,6 @@ public struct InfoSheetScene: View {
                 }
             }
             .presentationDetentsForCurrentDeviceSize()
-            .presentationCornerRadius(.presentation.cornerRadius)
             .safariSheet(url: $isPresentedUrl)
     }
 
