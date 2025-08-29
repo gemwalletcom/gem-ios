@@ -463,3 +463,4 @@
 "errors.wallets.limit.description" = "شما به حداکثر تعداد کیف پول مجاز ( %d ) رسیده‌اید. لطفاً برای اضافه کردن یا ایجاد کیف پول جدید، کیف پول موجود را حذف کنید.";
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
+"transfer.maximum_amount" = "Maximum Amount is %@";
