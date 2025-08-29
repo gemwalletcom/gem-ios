@@ -50,14 +50,15 @@ extension GemTransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress):
+        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let votes):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
                 blockTimestamp: UInt64(blockTimestamp),
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
-                witnessAddress: witnessAddress
+                witnessAddress: witnessAddress,
+                votes: votes
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
@@ -116,14 +117,15 @@ extension TransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress):
+        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let votes):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
                 blockTimestamp: UInt64(blockTimestamp),
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
-                witnessAddress: witnessAddress
+                witnessAddress: witnessAddress,
+                votes: votes
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
