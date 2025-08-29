@@ -13,7 +13,11 @@ public actor GatewayService: Sendable {
     public init(
         provider: NativeProvider
     ) {
-        self.gateway = GemGateway(provider: provider)
+        self.gateway = GemGateway(
+            provider: provider,
+            preferences: GemstonePreferences(namespace: "gateway"),
+            securePreferences: GemstoneSecurePreferences(namespace: "gateway")
+        )
     }
 }
 

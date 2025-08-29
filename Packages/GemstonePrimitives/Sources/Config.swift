@@ -5,7 +5,6 @@ import class Gemstone.Config
 import struct Gemstone.EvmChainConfig
 import struct Gemstone.BitcoinChainConfig
 import struct Gemstone.SwapConfig
-import struct Gemstone.PerpetualConfig
 import enum Gemstone.DocsUrl
 import enum Gemstone.PublicUrl
 import enum Gemstone.SocialUrl
@@ -27,10 +26,6 @@ extension Config {
     
     public func swapConfig() -> SwapConfig {
         getSwapConfig()
-    }
-    
-    public func perpetualConfig() -> Gemstone.PerpetualConfig {
-        getPerpetualConfig()
     }
 }
 

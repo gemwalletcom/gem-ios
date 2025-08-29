@@ -47,18 +47,11 @@ extension ChainService {
             .bitcoin,
             .cardano,
             .tron,
-            .solana:
+            .solana,
+            .hyperCore:
             GatewayChainService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))
-            )
-        case .hyperCore:
-            HyperCoreService(
-                chain: chain,
-                provider: ProviderFactory.create(with: url),
-                gateway: GatewayService(provider: NativeProvider(url: url)),
-                cacheService: BlockchainCacheService(chain: chain),
-                config: HyperCoreConfig.create()
             )
         }
     }

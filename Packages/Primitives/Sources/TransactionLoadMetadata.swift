@@ -57,7 +57,9 @@ public enum TransactionLoadMetadata: Sendable {
         approveAgentRequired: Bool,
         approveReferralRequired: Bool,
         approveBuilderRequired: Bool,
-        builderFeeBps: Int32
+        builderFeeBps: UInt32,
+        agentAddress: String,
+        agentPrivateKey: String
     )
 }
 
