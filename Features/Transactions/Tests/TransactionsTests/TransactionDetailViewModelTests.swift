@@ -13,32 +13,32 @@ import Style
 
 
 @MainActor
-struct TransactionDetailViewModelTests {
+struct TransactionSceneViewModelTests {
 
     @Test
     func participantFieldTransfer() {
-        #expect(TransactionDetailViewModel.mock(type: .transfer, direction: .incoming).participantField == Localized.Transaction.sender)
-        #expect(TransactionDetailViewModel.mock(type: .transfer, direction: .outgoing).participantField == Localized.Transaction.recipient)
-        #expect(TransactionDetailViewModel.mock(type: .transferNFT, direction: .incoming).participantField == Localized.Transaction.sender)
-        #expect(TransactionDetailViewModel.mock(type: .transferNFT, direction: .outgoing).participantField == Localized.Transaction.recipient)
+        #expect(TransactionSceneViewModel.mock(type: .transfer, direction: .incoming).participantField == Localized.Transaction.sender)
+        #expect(TransactionSceneViewModel.mock(type: .transfer, direction: .outgoing).participantField == Localized.Transaction.recipient)
+        #expect(TransactionSceneViewModel.mock(type: .transferNFT, direction: .incoming).participantField == Localized.Transaction.sender)
+        #expect(TransactionSceneViewModel.mock(type: .transferNFT, direction: .outgoing).participantField == Localized.Transaction.recipient)
     }
 
     @Test
     func participantFieldContract() {
-        #expect(TransactionDetailViewModel.mock(type: .tokenApproval).participantField == Localized.Asset.contract)
-        #expect(TransactionDetailViewModel.mock(type: .smartContractCall).participantField == Localized.Asset.contract)
+        #expect(TransactionSceneViewModel.mock(type: .tokenApproval).participantField == Localized.Asset.contract)
+        #expect(TransactionSceneViewModel.mock(type: .smartContractCall).participantField == Localized.Asset.contract)
     }
 
     @Test
     func participantFieldStakeDelegate() {
-        #expect(TransactionDetailViewModel.mock(type: .stakeDelegate).participantField == Localized.Stake.validator)
+        #expect(TransactionSceneViewModel.mock(type: .stakeDelegate).participantField == Localized.Stake.validator)
     }
 
     @Test
     func participantFieldIsNilForOthers() {
         let nilTypes: [TransactionType] = [.swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation]
         for type in nilTypes {
-            #expect(TransactionDetailViewModel.mock(type: type).participantField == nil)
+            #expect(TransactionSceneViewModel.mock(type: type).participantField == nil)
         }
     }
 
@@ -47,7 +47,7 @@ struct TransactionDetailViewModelTests {
         let participantTypes: [TransactionType] = [.transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate]
 
         for type in participantTypes {
-            #expect(TransactionDetailViewModel.mock(type: type).participant == "participant_address")
+            #expect(TransactionSceneViewModel.mock(type: type).participant == "participant_address")
         }
     }
 
@@ -55,7 +55,7 @@ struct TransactionDetailViewModelTests {
     func participantIsNilForOthers() {
         let nilTypes: [TransactionType] = [.swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation]
         for type in nilTypes {
-            #expect(TransactionDetailViewModel.mock(type: type).participant == nil)
+            #expect(TransactionSceneViewModel.mock(type: type).participant == nil)
         }
     }
 
@@ -63,30 +63,30 @@ struct TransactionDetailViewModelTests {
     func showMemoField() {
         let allTypes: [TransactionType] = [.transfer, .transferNFT, .swap, .tokenApproval, .assetActivation, .smartContractCall, .stakeRewards, .stakeWithdraw, .stakeDelegate, .stakeUndelegate, .stakeRedelegate]
         for type in allTypes {
-            #expect(TransactionDetailViewModel.mock(type: type, memo: nil).showMemoField == false)
-            #expect(TransactionDetailViewModel.mock(type: type, memo: "").showMemoField == false)
-            #expect(TransactionDetailViewModel.mock(type: type, memo: "Test memo").showMemoField == true)
+            #expect(TransactionSceneViewModel.mock(type: type, memo: nil).showMemoField == false)
+            #expect(TransactionSceneViewModel.mock(type: type, memo: "").showMemoField == false)
+            #expect(TransactionSceneViewModel.mock(type: type, memo: "Test memo").showMemoField == true)
         }
     }
 
     @Test
     func statusTextStyle() {
-        #expect(TransactionDetailViewModel.mock(state: .confirmed).statusTextStyle.color == Colors.green)
-        #expect(TransactionDetailViewModel.mock(state: .pending).statusTextStyle.color == Colors.orange)
-        #expect(TransactionDetailViewModel.mock(state: .failed).statusTextStyle.color == Colors.red)
-        #expect(TransactionDetailViewModel.mock(state: .reverted).statusTextStyle.color == Colors.red)
+        #expect(TransactionSceneViewModel.mock(state: .confirmed).statusTextStyle.color == Colors.green)
+        #expect(TransactionSceneViewModel.mock(state: .pending).statusTextStyle.color == Colors.orange)
+        #expect(TransactionSceneViewModel.mock(state: .failed).statusTextStyle.color == Colors.red)
+        #expect(TransactionSceneViewModel.mock(state: .reverted).statusTextStyle.color == Colors.red)
     }
 }
 
-extension TransactionDetailViewModel {
+extension TransactionSceneViewModel {
     static func mock(
         type: TransactionType = .transfer,
         state: TransactionState = .confirmed,
         direction: TransactionDirection = .outgoing,
         participant: String = "participant_address",
         memo: String? = nil
-    ) -> TransactionDetailViewModel {
-        TransactionDetailViewModel(
+    ) -> TransactionSceneViewModel {
+        TransactionSceneViewModel(
             transaction: TransactionExtended.mock(
                 transaction: Transaction.mock(type: type, state: state, direction: direction, to: participant, memo: memo)
             ),
