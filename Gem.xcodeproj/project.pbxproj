@@ -124,6 +124,7 @@
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
 		DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = DF93C4ED2C969F4F00204ABD /* Gemstone */; };
+		D8WIDGBF12345678901234 /* WidgetLocalization in Frameworks */ = {isa = PBXBuildFile; productRef = D8WIDGET12345678901234 /* WidgetLocalization */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -369,7 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8CFDE9E2E37FC2500D27283 /* Style in Frameworks */,
-				B677B1F52E3CA15100AD893A /* Localization in Frameworks */,
+				D8WIDGBF12345678901234 /* WidgetLocalization in Frameworks */,
 				D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */,
 				D8CFDEB02E37FCB000D27283 /* Components in Frameworks */,
 				D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */,
@@ -874,6 +875,9 @@
 				D838194C2E256A5A0076CDB3 /* GemPriceWidget */,
 			);
 			name = GemPriceWidget;
+			packageProductDependencies = (
+				D8WIDGET12345678901234 /* WidgetLocalization */,
+			);
 			productName = GemPriceWidgetExtension;
 			productReference = D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -2138,6 +2142,10 @@
 		DF93C4ED2C969F4F00204ABD /* Gemstone */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Gemstone;
+		};
+		D8WIDGET12345678901234 /* WidgetLocalization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WidgetLocalization;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

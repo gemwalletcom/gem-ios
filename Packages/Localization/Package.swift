@@ -13,12 +13,23 @@ let package = Package(
         .library(
             name: "Localization",
             targets: ["Localization"]
+        ),
+        .library(
+            name: "WidgetLocalization",
+            targets: ["WidgetLocalization"]
         )
     ],
     targets: [
         .target(
             name: "Localization",
             path: "Sources",
+            resources: [
+                .process("Resources")
+            ]
+        ),
+        .target(
+            name: "WidgetLocalization",
+            path: "WidgetSources",
             resources: [
                 .process("Resources")
             ]
