@@ -13,7 +13,7 @@ public final class WalletsSceneViewModel {
 #if DEBUG
     public static let walletsLimit = 1000
 #else
-    public static let walletsLimit = 50
+    public static let walletsLimit = 100
 #endif
     
     private let service: WalletService

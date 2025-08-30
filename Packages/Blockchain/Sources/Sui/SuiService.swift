@@ -288,17 +288,7 @@ extension SuiService: ChainTransactionDataLoadable {
 
 extension SuiService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        let parts = data.split(separator: "_")
-        let data = String(parts[0])
-        let signature = String(parts[1])
-
-        return try await provider
-            .request(.broadcast(data: data, signature: signature))
-            .mapOrError(
-                as: JSONRPCResponse<SuiBroadcastTransaction>.self,
-                asError: JSONRPCError.self
-            )
-            .result.digest
+        try await gateway.transactionBroadcast(chain: chain, data: data)
     }
 }
 
