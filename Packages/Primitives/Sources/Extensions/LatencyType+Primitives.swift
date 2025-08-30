@@ -2,11 +2,7 @@
 
 import Foundation
 
-public enum LatencyType: Sendable {
-    case fast
-    case normal
-    case slow
-
+public extension LatencyType {
     static func from(duration: Double) -> LatencyType {
         switch duration {
         case ..<1024:
@@ -16,5 +12,16 @@ public enum LatencyType: Sendable {
         default:
             return .slow
         }
+    }
+}
+
+public extension Latency {
+    var type: LatencyType { latency_type }
+    
+    static func from(duration: Double) -> Latency {
+        Latency(
+            latency_type: LatencyType.from(duration: duration),
+            value: duration
+        )
     }
 }

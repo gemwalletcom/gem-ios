@@ -103,6 +103,10 @@ extension GatewayService {
     public func feeRates(chain: Primitives.Chain, input: TransferDataType) async throws -> [FeeRate] {
         try await gateway.getFeeRates(chain: chain.rawValue, input: input.map()).map { try $0.map() }
     }
+    
+    public func nodeStatus(chain: Primitives.Chain, url: String) async throws -> NodeStatus {
+        try await gateway.getNodeStatus(chain: chain.rawValue, url: url).map()
+    }
 }
 
 // MARK: - Token
