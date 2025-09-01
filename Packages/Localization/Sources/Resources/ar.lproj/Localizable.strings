@@ -463,3 +463,4 @@
 "errors.wallets.limit.description" = "لقد وصلت إلى الحد الأقصى لعدد المحافظ المسموح به ( %d ). يُرجى إزالة محفظة موجودة لإضافة محفظة جديدة أو إنشائها.";
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
+"transfer.maximum_amount" = "Maximum Amount is %@";
