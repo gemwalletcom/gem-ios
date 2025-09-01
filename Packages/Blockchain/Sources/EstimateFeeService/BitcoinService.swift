@@ -5,6 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 import WalletCore
+import WalletCorePrimitives
 import Gemstone
 import GemstonePrimitives
 

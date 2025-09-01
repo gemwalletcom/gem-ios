@@ -30,13 +30,8 @@ extension ChainService {
                 chain: EVMChain(rawValue: chain.rawValue)!,
                 provider: ProviderFactory.create(with: url)
             )
-        case .sui:
-            SuiService(
-                chain: chain, 
-                provider: ProviderFactory.create(with: url),
-                gateway: GatewayService(provider: NativeProvider(url: url))
-            )
-        case .aptos,
+        case .sui,
+            .aptos,
             .algorand,
             .xrp,
             .stellar,
@@ -47,18 +42,11 @@ extension ChainService {
             .bitcoin,
             .cardano,
             .tron,
-            .solana:
+            .solana,
+            .hyperCore:
             GatewayChainService(
                 chain: chain,
                 gateway: GatewayService(provider: NativeProvider(url: url))
-            )
-        case .hyperCore:
-            HyperCoreService(
-                chain: chain,
-                provider: ProviderFactory.create(with: url),
-                gateway: GatewayService(provider: NativeProvider(url: url)),
-                cacheService: BlockchainCacheService(chain: chain),
-                config: HyperCoreConfig.create()
             )
         }
     }

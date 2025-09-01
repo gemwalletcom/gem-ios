@@ -50,23 +50,26 @@ extension GemTransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress):
+        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let votes):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
                 blockTimestamp: UInt64(blockTimestamp),
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
-                witnessAddress: witnessAddress
+                witnessAddress: witnessAddress,
+                votes: votes
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
-        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps):
+        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps, let agentAddress, let agentPrivateKey):
             return .hyperliquid(
                 approveAgentRequired: approveAgentRequired,
                 approveReferralRequired: approveReferralRequired,
                 approveBuilderRequired: approveBuilderRequired,
-                builderFeeBps: Int32(builderFeeBps)
+                builderFeeBps: UInt32(builderFeeBps),
+                agentAddress: agentAddress,
+                agentPrivateKey: agentPrivateKey
             )
         }
     }
@@ -114,23 +117,26 @@ extension TransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress):
+        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let votes):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
                 blockTimestamp: UInt64(blockTimestamp),
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
-                witnessAddress: witnessAddress
+                witnessAddress: witnessAddress,
+                votes: votes
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
-        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps):
+        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps, let agentAddress, let agentPrivateKey):
             return .hyperliquid(
                 approveAgentRequired: approveAgentRequired,
                 approveReferralRequired: approveReferralRequired,
                 approveBuilderRequired: approveBuilderRequired,
-                builderFeeBps: builderFeeBps
+                builderFeeBps: builderFeeBps,
+                agentAddress: agentAddress,
+                agentPrivateKey: agentPrivateKey
             )
         }
     }

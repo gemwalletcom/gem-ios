@@ -41,24 +41,21 @@ internal struct PriceWidgetEntry: TimelineEntry, Sendable {
                 name: "Bitcoin",
                 symbol: "BTC",
                 price: 69000,
-                priceChangePercentage24h: 2.5,
-                imageURL: nil
+                priceChangePercentage24h: 2.5
             ),
             CoinPrice(
                 assetId: AssetId(chain: .ethereum, tokenId: nil),
                 name: "Ethereum",
                 symbol: "ETH",
                 price: 3500,
-                priceChangePercentage24h: 1.2,
-                imageURL: nil
+                priceChangePercentage24h: 1.2
             ),
             CoinPrice(
                 assetId: AssetId(chain: .solana, tokenId: nil),
                 name: "Solana",
                 symbol: "SOL",
                 price: 150,
-                priceChangePercentage24h: -0.8,
-                imageURL: nil
+                priceChangePercentage24h: -0.8
             )
         ]
         

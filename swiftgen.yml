@@ -1,9 +1,16 @@
 # localized
 strings:
-  inputs: Packages/Localization/Sources/Resources/en.lproj/Localizable.strings
-  outputs:
-    - templateName: structured-swift5
-      output: Packages/Localization/Sources/Localized.swift
-      params:
-        enumName: Localized
-        publicAccess: true
+  - inputs: Packages/Localization/Sources/Resources/en.lproj/Localizable.strings
+    outputs:
+      - templateName: structured-swift5
+        output: Packages/Localization/Sources/Localized.swift
+        params:
+          enumName: Localized
+          publicAccess: true
+  - inputs: Packages/Localization/WidgetSources/Resources/en.lproj/Localizable.strings
+    outputs:
+      - templateName: structured-swift5
+        output: Packages/Localization/WidgetSources/Localized.swift
+        params:
+          enumName: Localized
+          publicAccess: true
