@@ -30,13 +30,8 @@ extension ChainService {
                 chain: EVMChain(rawValue: chain.rawValue)!,
                 provider: ProviderFactory.create(with: url)
             )
-        case .sui:
-            SuiService(
-                chain: chain, 
-                provider: ProviderFactory.create(with: url),
-                gateway: GatewayService(provider: NativeProvider(url: url))
-            )
-        case .aptos,
+        case .sui,
+            .aptos,
             .algorand,
             .xrp,
             .stellar,

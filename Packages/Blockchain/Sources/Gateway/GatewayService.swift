@@ -52,7 +52,7 @@ extension GatewayService {
 // MARK: - Transactions
 
 extension GatewayService {
-    public func transactionBroadcast(chain: Primitives.Chain, data: String, options: BroadcastOptions) async throws -> String {
+    public func transactionBroadcast(chain: Primitives.Chain, data: String, options: BroadcastOptions = BroadcastOptions(skipPreflight: false)) async throws -> String {
         try await gateway.transactionBroadcast(chain: chain.rawValue, data: data, options: options.map())
     }
     
@@ -102,6 +102,10 @@ extension GatewayService {
     
     public func feeRates(chain: Primitives.Chain, input: TransferDataType) async throws -> [FeeRate] {
         try await gateway.getFeeRates(chain: chain.rawValue, input: input.map()).map { try $0.map() }
+    }
+    
+    public func nodeStatus(chain: Primitives.Chain, url: String) async throws -> NodeStatus {
+        try await gateway.getNodeStatus(chain: chain.rawValue, url: url).map()
     }
 }
 
