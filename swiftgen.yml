@@ -10,7 +10,7 @@ strings:
   - inputs: Packages/Localization/WidgetSources/Resources/en.lproj/Localizable.strings
     outputs:
       - templateName: structured-swift5
-        output: Packages/Localization/WidgetSources/WidgetLocalized.swift
+        output: Packages/Localization/WidgetSources/Localized.swift
         params:
-          enumName: WidgetLocalized
+          enumName: Localized
           publicAccess: true
