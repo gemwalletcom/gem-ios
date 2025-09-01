@@ -163,7 +163,7 @@ extension EthereumService {
     public func fee(input: FeeInput) async throws -> Fee {
         if chain.isOpStack {
             // gas oracle estimates for enveloped tx only
-            return try await OptimismGasOracle(chain: chain, provider: provider).fee(input: input)
+            return try await OptimismGasOracle(chain: chain, provider: provider, gatewayService: gatewayChainService.gateway).fee(input: input)
         }
         
         let extraFeeGasLimit = try extraFeeGasLimit(input: input)

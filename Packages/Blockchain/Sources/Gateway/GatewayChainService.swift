@@ -8,7 +8,7 @@ import GemstonePrimitives
 public struct GatewayChainService: Sendable {
     
     private let chain: Chain
-    private let gateway: GatewayService
+    public let gateway: GatewayService
     
     public init(
         chain: Chain,
