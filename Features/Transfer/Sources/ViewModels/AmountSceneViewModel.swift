@@ -4,6 +4,7 @@ import BigInt
 import Components
 import Formatters
 import Foundation
+import Gemstone
 import GemstonePrimitives
 import InfoSheet
 import Localization
@@ -83,6 +84,15 @@ public final class AmountSceneViewModel {
     var nextTitle: String { Localized.Common.next }
     var continueTitle: String { Localized.Common.continue }
     var isNextEnabled: Bool { actionButtonState == .normal }
+    
+    var reservedFeesText: String? {
+        guard case .stake = type,
+              amountInputModel.text == maxBalance,
+              availableBalanceForStaking > .zero
+        else { return nil }
+
+        return "We've left \(formatter.string(stakingReservedForFees, asset: asset)) out so you can pay for withdrawal fees."
+    }
 
     var inputConfig: any CurrencyInputConfigurable {
         AmountInputConfig(
@@ -483,8 +493,10 @@ extension AmountSceneViewModel {
 
     private var availableValue: BigInt {
         switch input.type {
-        case .transfer, .deposit, .perpetual, .stake:
+        case .transfer, .deposit, .perpetual:
             return assetData.balance.available
+        case .stake:
+            return availableBalanceForStaking
         case .withdraw:
             return assetData.balance.withdrawable
         case .stakeUnstake(let delegation):
@@ -528,5 +540,15 @@ extension AmountSceneViewModel {
 
     private var minimumAccountReserve: BigInt {
         asset.type == .native ? asset.chain.minimumAccountBalance : .zero
+    }
+    
+    private var stakingReservedForFees: BigInt {
+        BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
+    }
+    
+    private var availableBalanceForStaking: BigInt {
+        assetData.balance.available > stakingReservedForFees
+        ? assetData.balance.available - stakingReservedForFees
+        : .zero
     }
 }

@@ -49,6 +49,13 @@ struct AmountScene: View {
                         )
                     }
                 }
+                
+                if let infoText = model.reservedFeesText {
+                    Section {
+                        Text(infoText)
+                            .textStyle(.calloutSecondary)
+                    }
+                }
 
                 switch model.type {
                 case .transfer, .deposit, .withdraw:
