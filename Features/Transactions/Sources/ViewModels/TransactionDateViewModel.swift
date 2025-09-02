@@ -4,22 +4,26 @@ import Foundation
 import Primitives
 import PrimitivesComponents
 import Localization
+import Components
 
 public struct TransactionDateViewModel: Sendable {
     private let date: Date
-    
     public init(date: Date) {
         self.date = date
     }
-    
-    private var formattedDate: String {
-        TransactionDateFormatter(date: date).row
-    }
-    
-    public var itemModel: TransactionDateItemModel {
-        TransactionDateItemModel(
+
+    public var itemModel: TransactionItemModel {
+        .listItem(.basic(
             title: Localized.Transaction.date,
             subtitle: formattedDate
-        )
+        ))
+    }
+}
+
+// MARK: - Private
+
+extension TransactionDateViewModel {
+    private var formattedDate: String {
+        TransactionDateFormatter(date: date).row
     }
 }

@@ -28,22 +28,14 @@ public enum TransactionItem: Identifiable, Equatable, Sendable {
     public var id: Self { self }
 }
 
-// MARK: - Item Models
-
 public enum TransactionItemModel {
+    case listItem(ListItemType)
     case header(TransactionHeaderItemModel)
-    case swapButton(TransactionSwapButtonItemModel)
-    case date(TransactionDateItemModel)
-    case status(TransactionStatusItemModel)
     case participant(TransactionParticipantItemModel)
-    case memo(TransactionMemoItemModel)
-    case network(TransactionNetworkItemModel)
-    case provider(TransactionProviderItemModel)
-    case fee(TransactionNetworkFeeItemModel)
-    case explorer(TransactionExplorerItemModel)
+    case explorer(url: URL, text: String)
+    case swapButton(text: String, url: URL?)
+    case empty
 }
-
-// MARK: - Convenience Initializers
 
 extension ListSection where T == TransactionItem {
     init(type: TransactionSectionType, _ items: [TransactionItem]) {

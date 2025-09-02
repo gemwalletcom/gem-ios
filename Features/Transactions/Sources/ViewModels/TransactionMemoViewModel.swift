@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import PrimitivesComponents
 import Localization
+import Components
 
 public struct TransactionMemoViewModel: Sendable {
     private let transaction: Transaction
@@ -21,14 +22,14 @@ public struct TransactionMemoViewModel: Sendable {
         return value.isEmpty ? "-" : value
     }
     
-    public var itemModel: TransactionMemoItemModel? {
+    public var itemModel: TransactionItemModel {
         guard showMemo else {
-            return nil
+            return .empty
         }
         
-        return TransactionMemoItemModel(
+        return .listItem(.basic(
             title: Localized.Transfer.memo,
             subtitle: formattedMemo
-        )
+        ))
     }
 }

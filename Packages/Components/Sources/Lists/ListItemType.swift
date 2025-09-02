@@ -12,6 +12,7 @@ public enum ListItemType {
     case tag(title: String, subtitle: String? = nil, tag: String, tagStyle: TextStyle)
     case loading(title: String, placeholders: [ListItemViewPlaceholderType])
     case custom(ListItemConfiguration)
+    case empty
 }
 
 // MARK: - ListItemConfiguration
@@ -75,14 +76,14 @@ extension ListItemType {
                 title: title,
                 subtitle: subtitle
             )
-            
+
         case let .image(title, subtitle, image):
             ListItemConfiguration(
                 title: title,
                 subtitle: subtitle,
                 imageStyle: .list(assetImage: image)
             )
-            
+
         case let .detailed(title, titleExtra, subtitle, subtitleExtra):
             ListItemConfiguration(
                 title: title,
@@ -90,7 +91,7 @@ extension ListItemType {
                 subtitle: subtitle,
                 subtitleExtra: subtitleExtra
             )
-            
+
         case let .tag(title, subtitle, tag, tagStyle):
             ListItemConfiguration(
                 title: title,
@@ -98,15 +99,18 @@ extension ListItemType {
                 titleTagStyle: tagStyle,
                 subtitle: subtitle
             )
-            
+
         case let .loading(title, placeholders):
             ListItemConfiguration(
                 title: title,
                 placeholders: placeholders
             )
-            
+
         case let .custom(configuration):
             configuration
+
+        case .empty:
+            ListItemConfiguration()
         }
     }
 }
@@ -139,8 +143,45 @@ public extension ListItemView {
             infoAction: config.infoAction
         )
     }
-    
     init(model: any ListItemViewable) {
         self.init(type: model.listItemModel)
+    }
+}
+
+// MARK: - Factory Methods
+
+public extension ListItemType {
+    /// Factory method for settings items with an icon
+    static func settingsItem(title: String, subtitle: String? = nil, image: AssetImage) -> Self {
+        .image(title: title, subtitle: subtitle, image: image)
+    }
+
+    /// Factory method for financial amounts with optional fiat conversion
+    static func financialAmount(title: String, amount: String, fiatAmount: String? = nil) -> Self {
+        .detailed(title: title, titleExtra: nil, subtitle: amount, subtitleExtra: fiatAmount)
+    }
+
+    /// Factory method for items with info actions
+    static func withInfo(title: String, subtitle: String, info: @escaping @MainActor @Sendable () -> Void) -> Self {
+        .custom(ListItemConfiguration(
+            title: title,
+            subtitle: subtitle,
+            infoAction: info
+        ))
+    }
+
+    /// Factory method for status items with custom styling
+    static func status(
+        title: String,
+        status: String,
+        statusStyle: TextStyle,
+        info: (@MainActor @Sendable () -> Void)? = nil
+    ) -> Self {
+        .custom(ListItemConfiguration(
+            title: title,
+            subtitle: status,
+            subtitleStyle: statusStyle,
+            infoAction: info
+        ))
     }
 }

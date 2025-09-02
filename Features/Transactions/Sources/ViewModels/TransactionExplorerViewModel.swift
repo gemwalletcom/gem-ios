@@ -32,8 +32,12 @@ public struct TransactionExplorerViewModel: Sendable {
         )
     }
     
-    public var itemModel: TransactionExplorerItemModel {
-        TransactionExplorerItemModel(
+    public var url: URL {
+        transactionLink.url
+    }
+    
+    public var itemModel: TransactionItemModel {
+        .explorer(
             url: transactionLink.url,
             text: Localized.Transaction.viewOn(transactionLink.name)
         )

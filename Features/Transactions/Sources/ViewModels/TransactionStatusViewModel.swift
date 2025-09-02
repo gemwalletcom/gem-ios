@@ -19,18 +19,17 @@ public struct TransactionStatusViewModel: Sendable {
         self.state = state
         self.onInfoAction = onInfoAction
     }
-    
+
     private var stateViewModel: TransactionStateViewModel {
         TransactionStateViewModel(state: state)
     }
-    
-    public var itemModel: TransactionStatusItemModel {
-        TransactionStatusItemModel(
+    public var itemModel: TransactionItemModel {
+        .listItem(.custom(ListItemConfiguration(
             title: Localized.Transaction.status,
             titleTagType: state == .pending ? .progressView() : .image(stateViewModel.stateImage),
             subtitle: stateViewModel.title,
             subtitleStyle: TextStyle(font: .callout, color: stateViewModel.color),
             infoAction: onInfoAction
-        )
+        )))
     }
 }

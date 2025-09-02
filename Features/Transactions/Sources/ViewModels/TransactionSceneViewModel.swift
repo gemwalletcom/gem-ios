@@ -35,7 +35,7 @@ public final class TransactionSceneViewModel {
     }
 
     var title: String { model.titleTextValue.text }
-    var explorerURL: URL { explorerViewModel.itemModel.url }
+    var explorerURL: URL { explorerViewModel.url }
 
     var sections: [ListSection<TransactionItem>] {
         [
@@ -46,29 +46,25 @@ public final class TransactionSceneViewModel {
         ]
     }
 
-    func itemModel(for item: TransactionItem) -> TransactionItemModel? {
+    func itemModel(for item: TransactionItem) -> TransactionItemModel {
         switch item {
-        case .header: .header(headerViewModel.itemModel)
-        case .swapButton: TransactionSwapButtonViewModel(transaction: transactionExtended).itemModel.map { .swapButton($0) }
-        case .date: .date(TransactionDateViewModel(date: model.transaction.transaction.createdAt).itemModel)
-        case .status: .status(TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onStatusInfo).itemModel)
-        case .participant: TransactionParticipantViewModel(transactionViewModel: model).itemModel.map { .participant($0) }
-        case .memo: TransactionMemoViewModel(transaction: model.transaction.transaction).itemModel.map { .memo($0) }
-        case .network: .network(TransactionNetworkViewModel(chain: model.transaction.asset.chain).itemModel)
-        case .provider: TransactionProviderViewModel(transaction: model.transaction.transaction).itemModel.map { .provider($0) }
-        case .fee: .fee(
-            TransactionNetworkFeeViewModel(
-                feeAmount: model.infoModel.feeDisplay?.amount.text ?? "",
-                feeFiat: model.infoModel.feeDisplay?.fiat?.text,
-                onInfoAction: onNetworkFeeInfo
-            ).itemModel
-        )
-        case .explorerLink: .explorer(
-            TransactionExplorerViewModel(
-                transactionViewModel: model,
-                explorerService: explorerService
-            ).itemModel
-        )
+        case .header: headerViewModel.itemModel
+        case .swapButton: TransactionSwapButtonViewModel(transaction: transactionExtended).itemModel
+        case .date: TransactionDateViewModel(date: model.transaction.transaction.createdAt).itemModel
+        case .status: TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onStatusInfo).itemModel
+        case .participant: TransactionParticipantViewModel(transactionViewModel: model).itemModel
+        case .memo: TransactionMemoViewModel(transaction: model.transaction.transaction).itemModel
+        case .network: TransactionNetworkViewModel(chain: model.transaction.asset.chain).itemModel
+        case .provider: TransactionProviderViewModel(transaction: model.transaction.transaction).itemModel
+        case .fee: TransactionNetworkFeeViewModel(
+            feeAmount: model.infoModel.feeDisplay?.amount.text ?? "",
+            feeFiat: model.infoModel.feeDisplay?.fiat?.text,
+            onInfoAction: onNetworkFeeInfo
+        ).itemModel
+        case .explorerLink: TransactionExplorerViewModel(
+            transactionViewModel: model,
+            explorerService: explorerService
+        ).itemModel
         }
     }
 }

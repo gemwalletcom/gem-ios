@@ -8,16 +8,15 @@ import Components
 
 public struct TransactionNetworkViewModel: Sendable {
     private let chain: Chain
-    
+
     public init(chain: Chain) {
         self.chain = chain
     }
-    
-    public var itemModel: TransactionNetworkItemModel {
-        TransactionNetworkItemModel(
+    public var itemModel: TransactionItemModel {
+        .listItem(.settingsItem(
             title: Localized.Transfer.network,
             subtitle: chain.asset.name,
-            networkAssetImage: AssetIdViewModel(assetId: chain.assetId).networkAssetImage
-        )
+            image: AssetIdViewModel(assetId: chain.assetId).networkAssetImage
+        ))
     }
 }

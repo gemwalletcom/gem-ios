@@ -4,12 +4,13 @@ import Foundation
 import Primitives
 import PrimitivesComponents
 import Localization
+import Components
 
 public struct TransactionNetworkFeeViewModel: Sendable {
     private let feeAmount: String
     private let feeFiat: String?
     private let onInfoAction: (@MainActor @Sendable() -> Void)?
-    
+
     public init(
         feeAmount: String,
         feeFiat: String?,
@@ -19,13 +20,12 @@ public struct TransactionNetworkFeeViewModel: Sendable {
         self.feeFiat = feeFiat
         self.onInfoAction = onInfoAction
     }
-    
-    public var itemModel: TransactionNetworkFeeItemModel {
-        TransactionNetworkFeeItemModel(
+    public var itemModel: TransactionItemModel {
+        .listItem(.custom(ListItemConfiguration(
             title: Localized.Transfer.networkFee,
             subtitle: feeAmount,
             subtitleExtra: feeFiat,
             infoAction: onInfoAction
-        )
+        )))
     }
 }

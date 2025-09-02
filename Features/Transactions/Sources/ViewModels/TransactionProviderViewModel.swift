@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import PrimitivesComponents
 import Localization
+import Components
 import class Gemstone.SwapProviderConfig
 
 public struct TransactionProviderViewModel: Sendable {
@@ -13,17 +14,17 @@ public struct TransactionProviderViewModel: Sendable {
         self.transaction = transaction
     }
 
-    public var itemModel: TransactionProviderItemModel? {
+    public var itemModel: TransactionItemModel {
         guard
             let metadata = transaction.metadata, case let .swap(metadata) = metadata,
             let providerId = metadata.provider
         else {
-            return nil
+            return .empty
         }
 
-        return TransactionProviderItemModel(
+        return .listItem(.basic(
             title: Localized.Common.provider,
             subtitle: SwapProviderConfig.fromString(id: providerId).inner().name
-        )
+        ))
     }
 }

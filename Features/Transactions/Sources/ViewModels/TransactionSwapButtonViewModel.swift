@@ -11,10 +11,12 @@ public struct TransactionSwapButtonViewModel {
         self.transaction = transaction
     }
 
-    public var itemModel: TransactionSwapButtonItemModel? {
-        guard case let .swap(metadata) = transaction.transaction.metadata else { return nil }
+    public var itemModel: TransactionItemModel {
+        guard case let .swap(metadata) = transaction.transaction.metadata else {
+            return .empty
+        }
 
-        return TransactionSwapButtonItemModel(
+        return .swapButton(
             text: Localized.Transaction.swapAgain,
             url: DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
         )
