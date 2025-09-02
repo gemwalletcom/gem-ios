@@ -3,19 +3,23 @@
 import Foundation
 import Components
 import Style
-import Localization
 
 public struct TransactionDateItemModel: ListItemViewable {
-    private let date: Date
+    public let title: String
+    public let subtitle: String
     
-    public init(date: Date) {
-        self.date = date
+    public init(
+        title: String,
+        subtitle: String
+    ) {
+        self.title = title
+        self.subtitle = subtitle
     }
     
     public var listItemModel: ListItemType {
         .basic(
-            title: Localized.Transaction.date,
-            subtitle: TransactionDateFormatter(date: date).row
+            title: title,
+            subtitle: subtitle
         )
     }
 }

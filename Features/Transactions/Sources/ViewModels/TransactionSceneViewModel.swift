@@ -36,8 +36,12 @@ public final class TransactionSceneViewModel {
 
     var title: String { model.titleTextValue.text }
 
+    var dateViewModel: TransactionDateViewModel {
+        TransactionDateViewModel(date: model.transaction.transaction.createdAt)
+    }
+    
     var dateItemModel: TransactionDateItemModel {
-        TransactionDateItemModel(date: model.transaction.transaction.createdAt)
+        dateViewModel.itemModel
     }
 
     var participantViewModel: TransactionParticipantViewModel {
@@ -48,39 +52,62 @@ public final class TransactionSceneViewModel {
         participantViewModel.itemModel
     }
 
-    var statusItemModel: TransactionStatusItemModel {
-        TransactionStatusItemModel(
+    var statusViewModel: TransactionStatusViewModel {
+        TransactionStatusViewModel(
             state: model.transaction.transaction.state,
-            onInfoAction: { [weak self] in self?.onStatusInfo() }
+            onInfoAction: onStatusInfo
         )
     }
+    
+    var statusItemModel: TransactionStatusItemModel {
+        statusViewModel.itemModel
+    }
 
+    var networkViewModel: TransactionNetworkViewModel {
+        TransactionNetworkViewModel(chain: model.transaction.asset.chain)
+    }
+    
     var networkItemModel: TransactionNetworkItemModel {
-        TransactionNetworkItemModel(chain: model.transaction.asset.chain)
+        networkViewModel.itemModel
+    }
+    
+    var providerViewModel: TransactionProviderViewModel {
+        TransactionProviderViewModel(transaction: model.transaction.transaction)
     }
     
     var providerItemModel: TransactionProviderItemModel? {
-        TransactionProviderItemModel(transaction: model.transaction.transaction)
+        providerViewModel.itemModel
     }
 
-    var networkFeeItemModel: TransactionNetworkFeeItemModel {
-        TransactionNetworkFeeItemModel(
+    var networkFeeViewModel: TransactionNetworkFeeViewModel {
+        TransactionNetworkFeeViewModel(
             feeAmount: model.infoModel.feeDisplay?.amount.text ?? "",
             feeFiat: model.infoModel.feeDisplay?.fiat?.text,
-            onInfoAction: { [weak self] in self?.onNetworkFeeInfo() }
+            onInfoAction: onNetworkFeeInfo
         )
     }
+    
+    var networkFeeItemModel: TransactionNetworkFeeItemModel {
+        networkFeeViewModel.itemModel
+    }
 
+    var memoViewModel: TransactionMemoViewModel {
+        TransactionMemoViewModel(transaction: model.transaction.transaction)
+    }
+    
     var memoItemModel: TransactionMemoItemModel? {
-        let memoModel = TransactionMemoItemModel(memo: model.transaction.transaction.memo)
-        return memoModel.showMemo ? memoModel : nil
+        memoViewModel.itemModel
+    }
+    
+    var explorerViewModel: TransactionExplorerViewModel {
+        TransactionExplorerViewModel(
+            transactionViewModel: model,
+            explorerService: explorerService
+        )
     }
     
     var explorerItemModel: TransactionExplorerItemModel {
-        TransactionExplorerItemModel(
-            transaction: model.transaction,
-            explorerService: explorerService
-        )
+        explorerViewModel.itemModel
     }
     
     var headerViewModel: TransactionHeaderViewModel {

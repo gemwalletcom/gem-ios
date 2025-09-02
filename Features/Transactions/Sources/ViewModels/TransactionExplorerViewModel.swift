@@ -1,0 +1,41 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
+import Foundation
+import Primitives
+import PrimitivesComponents
+import Localization
+
+public struct TransactionExplorerViewModel: Sendable {
+    private let transactionViewModel: TransactionViewModel
+    private let explorerService: any ExplorerLinkFetchable
+    
+    public init(
+        transactionViewModel: TransactionViewModel,
+        explorerService: any ExplorerLinkFetchable
+    ) {
+        self.transactionViewModel = transactionViewModel
+        self.explorerService = explorerService
+    }
+    
+    private var swapProvider: String? {
+        guard case let .swap(metadata) = transactionViewModel.transaction.transaction.metadata else {
+            return nil
+        }
+        return metadata.provider
+    }
+    
+    private var transactionLink: BlockExplorerLink {
+        explorerService.transactionUrl(
+            chain: transactionViewModel.transaction.transaction.assetId.chain,
+            hash: transactionViewModel.transaction.transaction.hash,
+            swapProvider: swapProvider
+        )
+    }
+    
+    public var itemModel: TransactionExplorerItemModel {
+        TransactionExplorerItemModel(
+            url: transactionLink.url,
+            text: Localized.Transaction.viewOn(transactionLink.name)
+        )
+    }
+}

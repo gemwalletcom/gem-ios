@@ -30,8 +30,8 @@ public struct ListItemConfiguration {
     public var subtitleStyleExtra: TextStyle
     public var imageStyle: ListItemImageStyle?
     public var placeholders: [ListItemViewPlaceholderType]
-    public var infoAction: (() -> Void)?
-    
+    public var infoAction: (@MainActor @Sendable () -> Void)?
+
     public init(
         title: String? = nil,
         titleStyle: TextStyle = .body,
@@ -46,7 +46,7 @@ public struct ListItemConfiguration {
         subtitleStyleExtra: TextStyle = .calloutSecondary,
         imageStyle: ListItemImageStyle? = nil,
         placeholders: [ListItemViewPlaceholderType] = [],
-        infoAction: (() -> Void)? = nil
+        infoAction: (@MainActor @Sendable () -> Void)? = nil
     ) {
         self.title = title
         self.titleStyle = titleStyle

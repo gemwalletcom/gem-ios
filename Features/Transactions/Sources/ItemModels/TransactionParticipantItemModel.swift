@@ -3,6 +3,7 @@
 import Foundation
 import Components
 import Primitives
+import PrimitivesComponents
 
 public struct TransactionParticipantItemModel: ListItemViewable {
     public let title: String

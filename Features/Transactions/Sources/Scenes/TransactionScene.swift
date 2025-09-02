@@ -45,7 +45,7 @@ public struct TransactionScene: View {
                 }
 
                 if let memoModel = model.memoItemModel {
-                    MemoListItemView(memo: memoModel.memo)
+                    ListItemView(model: memoModel)
                 }
 
                 ListItemImageView(
