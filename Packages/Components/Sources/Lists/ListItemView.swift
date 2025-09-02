@@ -3,6 +3,11 @@
 import SwiftUI
 import Style
 
+public enum ListItemType {
+    case text(title: String, subtitle: String? = nil)
+    case custom(ListItemConfiguration)
+}
+
 public enum TitleTagType {
     case none
     case progressView(scale: CGFloat = 1.0)
@@ -281,8 +286,6 @@ public extension ListItemView {
                 placeholders: config.placeholders,
                 infoAction: config.infoAction
             )
-        case .empty:
-            self.init()
         }
     }
 }
@@ -314,8 +317,6 @@ public extension ListItemView {
                 title: "Loading State",
                 placeholders: [.subtitle]
             )))
-
-            ListItemView(type: .empty)
         }
         
         Section("Complex Custom Examples") {
