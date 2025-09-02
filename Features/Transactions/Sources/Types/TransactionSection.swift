@@ -32,8 +32,9 @@ public enum TransactionItemModel {
     case listItem(ListItemType)
     case header(TransactionHeaderItemModel)
     case participant(TransactionParticipantItemModel)
+    case network(title: String, subtitle: String, image: AssetImage)
     case explorer(url: URL, text: String)
-    case swapButton(text: String, url: URL?)
+    case swapAgain(text: String)
     case empty
 }
 

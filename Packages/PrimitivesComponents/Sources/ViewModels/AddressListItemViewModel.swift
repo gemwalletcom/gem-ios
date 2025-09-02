@@ -7,7 +7,7 @@ import Components
 import Formatters
 import Style
 
-public struct AddressListItemViewModel: ListItemViewable {
+public struct AddressListItemViewModel {
     
     public enum Mode {
         case auto(addressStyle: AddressFormatter.Style)
@@ -51,14 +51,6 @@ public struct AddressListItemViewModel: ListItemViewable {
 
     public var addressExplorerUrl: URL {
         addressLink.url
-    }
-    
-    public var listItemModel: ListItemType {
-        if let assetImage = assetImage {
-            return .image(title: title, subtitle: subtitle, image: assetImage)
-        } else {
-            return .basic(title: title, subtitle: subtitle)
-        }
     }
     
     // MARK: - Private methods

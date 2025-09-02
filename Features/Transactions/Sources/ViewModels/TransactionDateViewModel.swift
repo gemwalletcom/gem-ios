@@ -8,15 +8,18 @@ import Components
 
 public struct TransactionDateViewModel: Sendable {
     private let date: Date
+
     public init(date: Date) {
         self.date = date
     }
 
     public var itemModel: TransactionItemModel {
-        .listItem(.basic(
-            title: Localized.Transaction.date,
-            subtitle: formattedDate
-        ))
+        .listItem(
+            .text(
+                title: Localized.Transaction.date,
+                subtitle: formattedDate
+            )
+        )
     }
 }
 

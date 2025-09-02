@@ -21,10 +21,12 @@ public struct TransactionProviderViewModel: Sendable {
         else {
             return .empty
         }
-
-        return .listItem(.basic(
-            title: Localized.Common.provider,
-            subtitle: SwapProviderConfig.fromString(id: providerId).inner().name
-        ))
+        
+        return .listItem(
+            .text(
+                title: Localized.Common.provider,
+                subtitle: SwapProviderConfig.fromString(id: providerId).inner().name
+            )
+        )
     }
 }

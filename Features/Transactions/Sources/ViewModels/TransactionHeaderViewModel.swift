@@ -54,9 +54,11 @@ public struct TransactionHeaderViewModel: Sendable {
     }
 
     public var itemModel: TransactionItemModel {
-        .header(TransactionHeaderItemModel(
-            headerType: headerType,
-            showClearHeader: showClearHeader
-        ))
+        .header(
+            TransactionHeaderItemModel(
+                headerType: headerType,
+                showClearHeader: showClearHeader
+            )
+        )
     }
 }

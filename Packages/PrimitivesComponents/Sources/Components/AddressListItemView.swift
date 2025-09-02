@@ -17,13 +17,17 @@ public struct AddressListItemView: View {
     }
 
     public var body: some View {
-        ListItemView(model: model)
-            .contextMenu(
-                [
-                    .copy(value: model.account.address),
-                    .url(title: model.addressExplorerText, onOpen: { isPresentingUrl = model.addressExplorerUrl })
-                ]
-            )
-            .safariSheet(url: $isPresentingUrl)
+        ListItemImageView(
+            title: model.title,
+            subtitle: model.subtitle,
+            assetImage: model.assetImage
+        )
+        .contextMenu(
+            [
+                .copy(value: model.account.address),
+                .url(title: model.addressExplorerText, onOpen: { isPresentingUrl = model.addressExplorerUrl })
+            ]
+        )
+        .safariSheet(url: $isPresentingUrl)
     }
 }

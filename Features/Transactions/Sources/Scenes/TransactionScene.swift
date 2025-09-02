@@ -36,31 +36,36 @@ public struct TransactionScene: View {
 
     @ViewBuilder
     private func itemView(for item: TransactionItem) -> some View {
-        let itemModel = model.itemModel(for: item)
-        switch itemModel {
-        case .listItem(let listItemType):
-            ListItemView(type: listItemType)
-        case .header(let model):
+        switch model.itemModel(for: item) {
+        case let .listItem(type):
+            ListItemView(type: type)
+        case let .header(model):
             TransactionHeaderListItemView(
                 model: model,
                 action: self.model.onSelectTransactionHeader
             )
-        case .participant(let model):
+        case let .participant(model):
             AddressListItemView(model: model.addressViewModel)
-        case .explorer(let url, let text):
+        case let .network(title, subtitle, image):
+            ListItemImageView(
+                title: title,
+                subtitle: subtitle,
+                assetImage: image
+            )
+        case let .explorer(url, text):
             SafariNavigationLink(url: url) {
                 Text(text)
                     .tint(Colors.black)
             }
-        case .swapButton(let text, let url):
+        case let .swapAgain(text):
             StateButton(
                 text: text,
                 type: .primary(.normal),
-                action: self.model.onSelectTransactionHeader
+                action: model.onSelectTransactionHeader
             )
             .cleanListRow(topOffset: .zero)
         case .empty:
             EmptyView()
         }
-        }
+    }
 }

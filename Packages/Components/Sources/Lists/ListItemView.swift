@@ -256,169 +256,79 @@ extension ListItemView {
     }
 }
 
+public extension ListItemView {
+    init(type: ListItemType) {
+        switch type {
+        case let .text(title, subtitle):
+            self.init(
+                title: title,
+                subtitle: subtitle
+            )
+        case let .custom(config):
+            self.init(
+                title: config.title,
+                titleStyle: config.titleStyle,
+                titleTag: config.titleTag,
+                titleTagStyle: config.titleTagStyle,
+                titleTagType: config.titleTagType,
+                titleExtra: config.titleExtra,
+                titleStyleExtra: config.titleStyleExtra,
+                subtitle: config.subtitle,
+                subtitleStyle: config.subtitleStyle,
+                subtitleExtra: config.subtitleExtra,
+                subtitleStyleExtra: config.subtitleStyleExtra,
+                imageStyle: config.imageStyle,
+                placeholders: config.placeholders,
+                infoAction: config.infoAction
+            )
+        case .empty:
+            self.init()
+        }
+    }
+}
+
 
 // MARK: - Previews
 
 #Preview {
-    let defaultTitle = "Title"
-    let defaultSubtitle = "Subtitle"
-    let longTitle = "Long Title Long Title Long Title Long Title Long Title"
-    let longSubtitle = "Long Subtitle Long Subtitle Long Subtitle Long Subtitle Long Subtitle"
-    let titleExtra = "Title Extra"
-    let longTitleExtra = "Long Title Extra Long Title Extra Long Title Extra Long Title Extra"
-    let longSubtitleExtra = "Long Subtitle Extra Long Subtitle Extra Long Subtitle Extra"
-
-    let defaultTextStyle = TextStyle.body
-    let extraTextStyle = TextStyle.footnote
-    let tagTextStyleWhite = TextStyle(font: .footnote, color: .white, background: .gray)
-    let tagTextStyleBlue = TextStyle(font: Font.system(.footnote), color: .blue, background: .blue.opacity(0.2))
-
-    return List {
-        Section("Basic States") {
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle
-            )
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle
-            )
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                titleExtra: titleExtra,
-                titleStyleExtra: extraTextStyle,
-                subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle
-            )
-        }
-
-        Section("Long Text States") {
-            ListItemView(
-                title: longTitle,
-                titleStyle: defaultTextStyle,
-                subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle
-            )
-            ListItemView(
-                title: longTitle,
-                titleStyle: defaultTextStyle,
-                subtitle: longSubtitle,
-                subtitleStyle: defaultTextStyle
-            )
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                titleExtra: longTitleExtra,
-                titleStyleExtra: extraTextStyle,
-                subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle,
-                subtitleExtra: longSubtitleExtra,
-                subtitleStyleExtra: extraTextStyle
-            )
-        }
-
-        Section("Tag States") {
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                titleTag: "Tag",
-                titleTagStyle: tagTextStyleWhite,
-                titleTagType: .none,
-                subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle
-            )
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                titleTag: "Loading",
-                titleTagStyle: tagTextStyleWhite,
-                titleTagType: .progressView(),
-                subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle
-            )
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                titleTag: "Image",
-                titleTagStyle: tagTextStyleWhite,
-                titleTagType: .image(Images.System.faceid),
-                subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle
-            )
-        }
-
-        Section("Image States") {
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                titleTag: "Tag",
-                titleTagStyle: tagTextStyleBlue,
-                titleTagType: .none,
-                titleExtra: titleExtra,
-                titleStyleExtra: extraTextStyle,
-                subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle,
-                subtitleExtra: "Subtitle Extra",
-                subtitleStyleExtra: extraTextStyle,
+    List {
+        Section("ListItemType Cases") {
+            // .text cases
+            ListItemView(type: .text(title: "Simple Title"))
+            ListItemView(type: .text(title: "Title with Subtitle", subtitle: "This is a subtitle"))
+            ListItemView(type: .text(title: "Long Title Long Title Long Title", subtitle: "Long Subtitle Long Subtitle"))
+            ListItemView(type: .custom(ListItemConfiguration(
+                title: "Custom with Tag",
+                titleTag: "NEW",
+                titleTagStyle: TextStyle(font: .footnote, color: .white, background: .blue),
+                subtitle: "Custom configuration example"
+            )))
+            
+            ListItemView(type: .custom(ListItemConfiguration(
+                title: "With Image",
+                subtitle: "Custom with left image",
                 imageStyle: .list(assetImage: AssetImage.image(Images.System.faceid))
-            )
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                subtitle: longSubtitle,
-                subtitleStyle: defaultTextStyle,
-                imageStyle: .list(assetImage: AssetImage.image(Images.System.eye))
-            )
-        }
-
-        Section("Combined States") {
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                titleTag: "Loading",
-                titleTagStyle: tagTextStyleBlue,
-                titleTagType: .progressView(),
-                titleExtra: titleExtra,
-                titleStyleExtra: extraTextStyle,
-                subtitle: longSubtitle,
-                subtitleStyle: defaultTextStyle
-            )
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
-                titleTag: "Image",
-                titleTagStyle: tagTextStyleBlue,
-                titleTagType: .image(Images.System.faceid),
-                titleExtra: titleExtra,
-                titleStyleExtra: extraTextStyle,
-                subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle,
-                subtitleExtra: longSubtitleExtra,
-                subtitleStyleExtra: extraTextStyle
-            )
-        }
-
-        Section("Loadable States") {
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
+            )))
+            
+            ListItemView(type: .custom(ListItemConfiguration(
+                title: "Loading State",
                 placeholders: [.subtitle]
-            )
-        }
+            )))
 
-        Section("Additional Scenarios") {
-            ListItemView(
-                title: "Large Title with No Subtitle, Tag, or Extra",
-                titleStyle: TextStyle(font: Font.system(.headline), color: .red)
-            )
-            ListItemView(
-                title: defaultTitle,
-                titleStyle: defaultTextStyle,
+            ListItemView(type: .empty)
+        }
+        
+        Section("Complex Custom Examples") {
+            ListItemView(type: .custom(ListItemConfiguration(
+                title: "Full Featured",
+                titleTag: "PRO",
+                titleTagStyle: TextStyle(font: .footnote, color: .white, background: .purple),
+                titleTagType: .image(Images.System.book),
+                titleExtra: "Extra info",
+                subtitle: "Main subtitle",
+                subtitleExtra: "Extra subtitle",
                 imageStyle: .list(assetImage: AssetImage.image(Images.System.eye))
-            )
+            )))
         }
     }.listStyle(.insetGrouped)
 }

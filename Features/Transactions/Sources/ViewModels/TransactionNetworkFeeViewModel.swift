@@ -21,11 +21,15 @@ public struct TransactionNetworkFeeViewModel: Sendable {
         self.onInfoAction = onInfoAction
     }
     public var itemModel: TransactionItemModel {
-        .listItem(.custom(ListItemConfiguration(
-            title: Localized.Transfer.networkFee,
-            subtitle: feeAmount,
-            subtitleExtra: feeFiat,
-            infoAction: onInfoAction
-        )))
+        .listItem(
+            .custom(
+                ListItemConfiguration(
+                    title: Localized.Transfer.networkFee,
+                    subtitle: feeAmount,
+                    subtitleExtra: feeFiat,
+                    infoAction: onInfoAction
+                )
+            )
+        )
     }
 }

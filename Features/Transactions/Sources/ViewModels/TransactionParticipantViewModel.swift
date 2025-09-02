@@ -28,11 +28,13 @@ public struct TransactionParticipantViewModel: Sendable {
             assetImage: nil
         )
 
-        return .participant(TransactionParticipantItemModel(
-            title: participantTitle,
-            account: account,
-            addressLink: transactionViewModel.addressLink(account: account)
-        ))
+        return .participant(
+            TransactionParticipantItemModel(
+                title: participantTitle,
+                account: account,
+                addressLink: transactionViewModel.addressLink(account: account)
+            )
+        )
     }
 }
 

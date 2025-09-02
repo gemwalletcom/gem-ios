@@ -5,7 +5,7 @@ import Components
 import Primitives
 import PrimitivesComponents
 
-public struct TransactionParticipantItemModel: ListItemViewable {
+public struct TransactionParticipantItemModel {
     public let title: String
     public let account: SimpleAccount
     public let addressLink: BlockExplorerLink
@@ -27,9 +27,5 @@ public struct TransactionParticipantItemModel: ListItemViewable {
             mode: .nameOrAddress,
             addressLink: addressLink
         )
-    }
-    
-    public var listItemModel: ListItemType {
-        addressViewModel.listItemModel
     }
 }

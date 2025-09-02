@@ -13,10 +13,10 @@ public struct TransactionNetworkViewModel: Sendable {
         self.chain = chain
     }
     public var itemModel: TransactionItemModel {
-        .listItem(.settingsItem(
+        .network(
             title: Localized.Transfer.network,
             subtitle: chain.asset.name,
             image: AssetIdViewModel(assetId: chain.assetId).networkAssetImage
-        ))
+        )
     }
 }

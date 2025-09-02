@@ -13,23 +13,29 @@ public struct TransactionMemoViewModel: Sendable {
         self.transaction = transaction
     }
     
-    private var showMemo: Bool {
-        transaction.memo?.isEmpty == false
-    }
-    
-    private var formattedMemo: String {
-        let value = transaction.memo ?? ""
-        return value.isEmpty ? "-" : value
-    }
-    
     public var itemModel: TransactionItemModel {
         guard showMemo else {
             return .empty
         }
-        
-        return .listItem(.basic(
-            title: Localized.Transfer.memo,
-            subtitle: formattedMemo
-        ))
+
+        return .listItem(
+            .text(
+                title: Localized.Transfer.memo,
+                subtitle: formattedMemo
+            )
+        )
+    }
+}
+
+// MARK: - Private
+
+extension TransactionMemoViewModel {
+    private var showMemo: Bool {
+        transaction.memo?.isEmpty == false
+    }
+
+    private var formattedMemo: String {
+        let value = transaction.memo ?? ""
+        return value.isEmpty ? "-" : value
     }
 }
