@@ -35,91 +35,40 @@ public final class TransactionSceneViewModel {
     }
 
     var title: String { model.titleTextValue.text }
+    var explorerURL: URL { explorerViewModel.itemModel.url }
 
-    var dateViewModel: TransactionDateViewModel {
-        TransactionDateViewModel(date: model.transaction.transaction.createdAt)
-    }
-    
-    var dateItemModel: TransactionDateItemModel {
-        dateViewModel.itemModel
-    }
-
-    var participantViewModel: TransactionParticipantViewModel {
-        TransactionParticipantViewModel(transactionViewModel: model)
-    }
-    
-    var participantItemModel: TransactionParticipantItemModel? {
-        participantViewModel.itemModel
+    var sections: [ListSection<TransactionItem>] {
+        [
+            ListSection(type: .header, [.header]),
+            ListSection(type: .swapAction, [.swapButton]),
+            ListSection(type: .details, [.date, .status, .participant, .memo, .network, .provider, .fee]),
+            ListSection(type: .explorer, [.explorerLink])
+        ]
     }
 
-    var statusViewModel: TransactionStatusViewModel {
-        TransactionStatusViewModel(
-            state: model.transaction.transaction.state,
-            onInfoAction: onStatusInfo
+    func itemModel(for item: TransactionItem) -> TransactionItemModel? {
+        switch item {
+        case .header: .header(headerViewModel.itemModel)
+        case .swapButton: TransactionSwapButtonViewModel(transaction: transactionExtended).itemModel.map { .swapButton($0) }
+        case .date: .date(TransactionDateViewModel(date: model.transaction.transaction.createdAt).itemModel)
+        case .status: .status(TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onStatusInfo).itemModel)
+        case .participant: TransactionParticipantViewModel(transactionViewModel: model).itemModel.map { .participant($0) }
+        case .memo: TransactionMemoViewModel(transaction: model.transaction.transaction).itemModel.map { .memo($0) }
+        case .network: .network(TransactionNetworkViewModel(chain: model.transaction.asset.chain).itemModel)
+        case .provider: TransactionProviderViewModel(transaction: model.transaction.transaction).itemModel.map { .provider($0) }
+        case .fee: .fee(
+            TransactionNetworkFeeViewModel(
+                feeAmount: model.infoModel.feeDisplay?.amount.text ?? "",
+                feeFiat: model.infoModel.feeDisplay?.fiat?.text,
+                onInfoAction: onNetworkFeeInfo
+            ).itemModel
         )
-    }
-    
-    var statusItemModel: TransactionStatusItemModel {
-        statusViewModel.itemModel
-    }
-
-    var networkViewModel: TransactionNetworkViewModel {
-        TransactionNetworkViewModel(chain: model.transaction.asset.chain)
-    }
-    
-    var networkItemModel: TransactionNetworkItemModel {
-        networkViewModel.itemModel
-    }
-    
-    var providerViewModel: TransactionProviderViewModel {
-        TransactionProviderViewModel(transaction: model.transaction.transaction)
-    }
-    
-    var providerItemModel: TransactionProviderItemModel? {
-        providerViewModel.itemModel
-    }
-
-    var networkFeeViewModel: TransactionNetworkFeeViewModel {
-        TransactionNetworkFeeViewModel(
-            feeAmount: model.infoModel.feeDisplay?.amount.text ?? "",
-            feeFiat: model.infoModel.feeDisplay?.fiat?.text,
-            onInfoAction: onNetworkFeeInfo
+        case .explorerLink: .explorer(
+            TransactionExplorerViewModel(
+                transactionViewModel: model,
+                explorerService: explorerService
+            ).itemModel
         )
-    }
-    
-    var networkFeeItemModel: TransactionNetworkFeeItemModel {
-        networkFeeViewModel.itemModel
-    }
-
-    var memoViewModel: TransactionMemoViewModel {
-        TransactionMemoViewModel(transaction: model.transaction.transaction)
-    }
-    
-    var memoItemModel: TransactionMemoItemModel? {
-        memoViewModel.itemModel
-    }
-    
-    var explorerViewModel: TransactionExplorerViewModel {
-        TransactionExplorerViewModel(
-            transactionViewModel: model,
-            explorerService: explorerService
-        )
-    }
-    
-    var explorerItemModel: TransactionExplorerItemModel {
-        explorerViewModel.itemModel
-    }
-    
-    var headerViewModel: TransactionHeaderViewModel {
-        TransactionHeaderViewModel(
-            transaction: model.transaction,
-            infoModel: model.infoModel
-        )
-    }
-
-    func onChangeTransaction(_ oldValue: TransactionExtended, _ newValue: TransactionExtended) {
-        if oldValue != newValue {
-            transactionExtended = newValue
         }
     }
 }
@@ -127,6 +76,12 @@ public final class TransactionSceneViewModel {
 // MARK: - Actions
 
 extension TransactionSceneViewModel {
+    func onChangeTransaction(_ oldValue: TransactionExtended, _ newValue: TransactionExtended) {
+        if oldValue != newValue {
+            transactionExtended = newValue
+        }
+    }
+
     func onSelectTransactionHeader() {
         if let headerLink = headerViewModel.headerLink {
             UIApplication.shared.open(headerLink)
@@ -160,6 +115,20 @@ extension TransactionSceneViewModel {
             explorerService: ExplorerService.standard,
             transaction: transactionExtended,
             currency: preferences.currency
+        )
+    }
+    
+    private var headerViewModel: TransactionHeaderViewModel {
+        TransactionHeaderViewModel(
+            transaction: model.transaction,
+            infoModel: model.infoModel
+        )
+    }
+
+    private var explorerViewModel: TransactionExplorerViewModel {
+        TransactionExplorerViewModel(
+            transactionViewModel: model,
+            explorerService: explorerService
         )
     }
 }

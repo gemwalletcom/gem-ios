@@ -35,7 +35,7 @@ public struct TransactionNavigationView: View {
             }
         }
         .sheet(isPresented: $model.isPresentingShareSheet) {
-            ShareSheet(activityItems: [model.explorerItemModel.url.absoluteString])
+            ShareSheet(activityItems: [model.explorerURL.absoluteString])
         }
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(type: $0)

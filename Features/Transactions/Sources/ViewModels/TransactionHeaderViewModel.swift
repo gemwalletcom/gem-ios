@@ -18,8 +18,6 @@ public struct TransactionHeaderViewModel: Sendable {
         self.infoModel = infoModel
     }
 
-    public var swapAgainText: String { Localized.Transaction.swapAgain }
-
     public var headerType: TransactionHeaderType {
         let metadata: TransactionExtendedMetadata? = {
             guard let metadata = transaction.transaction.metadata else {
@@ -43,13 +41,6 @@ public struct TransactionHeaderViewModel: Sendable {
         switch headerType {
         case .amount, .nft: true
         case .swap: false
-        }
-    }
-    
-    public var showSwapAgain: Bool {
-        switch headerType {
-        case .amount, .nft: false
-        case .swap: true
         }
     }
 
