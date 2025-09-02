@@ -21,14 +21,14 @@ public struct TransactionScene: View {
     public var body: some View {
         List {
             TransactionHeaderListItemView(
-                model: model.headerItemModel,
+                model: model.headerViewModel.itemModel,
                 action: model.onSelectTransactionHeader
             )
 
-            if model.headerItemModel.showSwapAgain {
+            if model.headerViewModel.showSwapAgain {
                 Section {
                     StateButton(
-                        text: model.headerItemModel.swapAgainText,
+                        text: model.headerViewModel.swapAgainText,
                         type: .primary(.normal),
                         action: model.onSelectTransactionHeader
                     )

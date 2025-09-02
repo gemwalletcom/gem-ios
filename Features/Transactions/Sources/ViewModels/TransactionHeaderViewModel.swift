@@ -2,14 +2,25 @@
 
 import Foundation
 import Primitives
+import PrimitivesComponents
 import SwiftUI
 import Localization
 
-public struct TransactionHeaderItemModel {
-    public let headerType: TransactionHeaderType
-    public let headerLink: URL?
+public struct TransactionHeaderViewModel: Sendable {
+    private let transaction: TransactionExtended
+    private let infoModel: TransactionInfoViewModel
     
-    public init(transaction: TransactionExtended, infoModel: TransactionInfoViewModel) {
+    public init(
+        transaction: TransactionExtended,
+        infoModel: TransactionInfoViewModel
+    ) {
+        self.transaction = transaction
+        self.infoModel = infoModel
+    }
+
+    public var swapAgainText: String { Localized.Transaction.swapAgain }
+
+    public var headerType: TransactionHeaderType {
         let metadata: TransactionExtendedMetadata? = {
             guard let metadata = transaction.transaction.metadata else {
                 return nil
@@ -21,13 +32,11 @@ public struct TransactionHeaderItemModel {
             )
         }()
         
-        self.headerType = TransactionHeaderTypeBuilder.build(
+        return TransactionHeaderTypeBuilder.build(
             infoModel: infoModel,
             transaction: transaction.transaction,
             metadata: metadata
         )
-        
-        self.headerLink = Self.getHeaderLink(for: transaction.transaction)
     }
     
     public var showClearHeader: Bool {
@@ -43,24 +52,20 @@ public struct TransactionHeaderItemModel {
         case .swap: true
         }
     }
-    
-    public var swapAgainText: String {
-        Localized.Transaction.swapAgain
-    }
-    
-    @MainActor
-    public func onSelectHeader() {
-        if let headerLink {
-            UIApplication.shared.open(headerLink)
-        }
-    }
-    
-    private static func getHeaderLink(for transaction: Primitives.Transaction) -> URL? {
-        switch transaction.metadata {
+
+    public var headerLink: URL? {
+        switch transaction.transaction.metadata {
         case .null, .nft, .none, .perpetual: 
             nil
         case let .swap(metadata): 
             DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
         }
+    }
+
+    public var itemModel: TransactionHeaderItemModel {
+        TransactionHeaderItemModel(
+            headerType: headerType,
+            showClearHeader: showClearHeader
+        )
     }
 }

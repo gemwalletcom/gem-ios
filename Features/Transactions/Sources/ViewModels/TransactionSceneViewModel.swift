@@ -40,43 +40,12 @@ public final class TransactionSceneViewModel {
         TransactionDateItemModel(date: model.transaction.transaction.createdAt)
     }
 
+    var participantViewModel: TransactionParticipantViewModel {
+        TransactionParticipantViewModel(transactionViewModel: model)
+    }
+    
     var participantItemModel: TransactionParticipantItemModel? {
-        let participantAddress: String? = {
-            switch model.transaction.transaction.type {
-            case .transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate:
-                return model.participant
-            case .swap,
-                 .stakeUndelegate,
-                 .stakeRedelegate,
-                 .stakeRewards,
-                 .stakeWithdraw,
-                 .assetActivation,
-                 .perpetualOpenPosition,
-                 .perpetualClosePosition:
-                return nil
-            }
-        }()
-        
-        guard let address = participantAddress else {
-            return nil
-        }
-        
-        let chain = model.transaction.transaction.assetId.chain
-        let name = model.getAddressName(address: address)
-        let account = SimpleAccount(
-            name: name,
-            chain: chain,
-            address: address,
-            assetImage: nil
-        )
-        
-        return TransactionParticipantItemModel(
-            transaction: model.transaction.transaction,
-            participantAddress: address,
-            chain: chain,
-            addressName: name,
-            addressLink: model.addressLink(account: account)
-        )
+        participantViewModel.itemModel
     }
 
     var statusItemModel: TransactionStatusItemModel {
@@ -114,8 +83,8 @@ public final class TransactionSceneViewModel {
         )
     }
     
-    var headerItemModel: TransactionHeaderItemModel {
-        TransactionHeaderItemModel(
+    var headerViewModel: TransactionHeaderViewModel {
+        TransactionHeaderViewModel(
             transaction: model.transaction,
             infoModel: model.infoModel
         )
@@ -132,7 +101,9 @@ public final class TransactionSceneViewModel {
 
 extension TransactionSceneViewModel {
     func onSelectTransactionHeader() {
-        headerItemModel.onSelectHeader()
+        if let headerLink = headerViewModel.headerLink {
+            UIApplication.shared.open(headerLink)
+        }
     }
 
     func onSelectShare() {
