@@ -21,15 +21,14 @@ public struct TransactionScene: View {
     public var body: some View {
         List {
             TransactionHeaderListItemView(
-                headerType: model.headerType,
-                showClearHeader: model.showClearHeader,
+                model: model.headerItemModel,
                 action: model.onSelectTransactionHeader
             )
 
-            if model.showSwapAgain {
+            if model.headerItemModel.showSwapAgain {
                 Section {
                     StateButton(
-                        text: model.swapAgain,
+                        text: model.headerItemModel.swapAgainText,
                         type: .primary(.normal),
                         action: model.onSelectTransactionHeader
                     )
@@ -38,56 +37,32 @@ public struct TransactionScene: View {
             }
 
             Section {
-                ListItemView(title: model.dateField, subtitle: model.date)
-                HStack(spacing: .small) {
-                    ListItemView(
-                        title: model.statusField,
-                        subtitle: model.statusText,
-                        subtitleStyle: model.statusTextStyle,
-                        infoAction: model.onStatusInfo
-                    )
-                    switch model.statusType {
-                    case .none:
-                        EmptyView()
-                    case .progressView:
-                        LoadingView(tint: Colors.orange)
-                    case .image(let image):
-                        image
-                    }
+                ListItemView(model: model.dateItemModel)
+                ListItemView(model: model.statusItemModel)
+
+                if let participantModel = model.participantItemModel {
+                    AddressListItemView(model: participantModel.addressViewModel)
                 }
 
-                if let recipientAddressViewModel = model.recipientAddressViewModel {
-                    AddressListItemView(model: recipientAddressViewModel)
-                }
-
-                if model.showMemoField {
-                    MemoListItemView(memo: model.memo)
+                if let memoModel = model.memoItemModel {
+                    MemoListItemView(memo: memoModel.memo)
                 }
 
                 ListItemImageView(
-                    title: model.networkField,
-                    subtitle: model.network,
-                    assetImage: model.networkAssetImage
+                    title: model.networkItemModel.listItemModel.configuration.title,
+                    subtitle:model.networkItemModel.listItemModel.configuration.subtitle,
+                    assetImage: model.networkItemModel.networkAssetImage
                 )
 
-                if let item = model.providerListItem {
-                    ListItemImageView(
-                        title: item.title,
-                        subtitle: item.subtitle,
-                        assetImage: item.assetImage
-                    )
+                if let providerModel = model.providerItemModel {
+                    ListItemView(model: providerModel)
                 }
 
-                ListItemView(
-                    title: model.networkFeeField,
-                    subtitle: model.networkFeeText,
-                    subtitleExtra: model.networkFeeFiatText,
-                    infoAction: model.onNetworkFeeInfo
-                )
+                ListItemView(model: model.networkFeeItemModel)
             }
             Section {
-                SafariNavigationLink(url: model.transactionExplorerUrl) {
-                    Text(model.transactionExplorerText)
+                SafariNavigationLink(url: model.explorerItemModel.url) {
+                    Text(model.explorerItemModel.text)
                         .tint(Colors.black)
                 }
             }

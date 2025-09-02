@@ -5,8 +5,9 @@ import Primitives
 import Localization
 import Components
 import Formatters
+import Style
 
-public struct AddressListItemViewModel {
+public struct AddressListItemViewModel: ListItemViewable {
     
     public enum Mode {
         case auto(addressStyle: AddressFormatter.Style)
@@ -52,6 +53,14 @@ public struct AddressListItemViewModel {
         addressLink.url
     }
     
+    public var listItemModel: ListItemType {
+        if let assetImage = assetImage {
+            return .image(title: title, subtitle: subtitle, image: assetImage)
+        } else {
+            return .basic(title: title, subtitle: subtitle)
+        }
+    }
+    
     // MARK: - Private methods
     
     private func auto(for style: AddressFormatter.Style) -> String {
@@ -70,6 +79,6 @@ public struct AddressListItemViewModel {
     }
 
     private func address(for style: AddressFormatter.Style) -> String {
-        return AddressFormatter(style: style, address: account.address, chain: account.chain).value()
+        AddressFormatter(style: style, address: account.address, chain: account.chain).value()
     }
 }
