@@ -61,8 +61,6 @@ extension EthereumService {
             .request(.maxPriorityFeePerGas)
             .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
-
-
 }
 
 // MARK: - ChainBalanceable
@@ -87,13 +85,7 @@ extension EthereumService: ChainBalanceable {
     }
     
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        switch chain {
-        case .smartChain:
-            return try await SmartChainService(provider: provider).getStakeBalance(for: address)
-        default:
-            break
-        }
-        return .none
+        try await gatewayChainService.getStakeBalance(for: address)
     }
 }
 
@@ -136,21 +128,11 @@ extension EthereumService: ChainTransactionStateFetchable {
 
 extension EthereumService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        switch chain {
-        case .smartChain:
-            return try await SmartChainService(provider: provider).getValidators(apr: 0)
-        default:
-            return []
-        }
+        try await gatewayChainService.getValidators(apr: apr)
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        switch chain {
-        case .smartChain:
-            return try await SmartChainService(provider: provider).getStakeDelegations(address: address)
-        default:
-            return []
-        }
+        try await gatewayChainService.getStakeDelegations(address: address)
     }
 }
 
@@ -158,16 +140,11 @@ extension EthereumService: ChainStakable {
 
 extension EthereumService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        guard let address = WalletCore.AnyAddress(string: tokenId, coin: chain.chain.coinType)?.description else {
-            throw TokenValidationError.invalidTokenId
-        }
-        let assetId = AssetId(chain: chain.chain, tokenId: address)
-
-        return try await ERC20Service(provider: provider).decode(assetId: assetId, address: address)
+        try await gatewayChainService.getTokenData(tokenId: tokenId)
     }
 
-    public func getIsTokenAddress(tokenId: String) -> Bool {
-        tokenId.hasPrefix("0x") && Data(fromHex: tokenId) != nil && tokenId.count == 42
+    public func getIsTokenAddress(tokenId: String) async throws -> Bool {
+        try await gatewayChainService.getIsTokenAddress(tokenId: tokenId)
     }
 }
 
