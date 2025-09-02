@@ -7,17 +7,14 @@ import Localization
 import Components
 
 public struct TransactionNetworkFeeViewModel: Sendable {
-    private let feeAmount: String
-    private let feeFiat: String?
+    private let feeDisplay: AmountDisplay?
     private let onInfoAction: (@MainActor @Sendable() -> Void)?
 
     public init(
-        feeAmount: String,
-        feeFiat: String?,
+        feeDisplay: AmountDisplay?,
         onInfoAction: (@MainActor @Sendable () -> Void)? = nil
     ) {
-        self.feeAmount = feeAmount
-        self.feeFiat = feeFiat
+        self.feeDisplay = feeDisplay
         self.onInfoAction = onInfoAction
     }
     public var itemModel: TransactionItemModel {
@@ -25,8 +22,8 @@ public struct TransactionNetworkFeeViewModel: Sendable {
             .custom(
                 ListItemConfiguration(
                     title: Localized.Transfer.networkFee,
-                    subtitle: feeAmount,
-                    subtitleExtra: feeFiat,
+                    subtitle: feeDisplay?.amount.text ?? "-",
+                    subtitleExtra: feeDisplay?.fiat?.text,
                     infoAction: onInfoAction
                 )
             )

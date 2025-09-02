@@ -57,8 +57,7 @@ public final class TransactionSceneViewModel {
         case .network: TransactionNetworkViewModel(chain: model.transaction.asset.chain).itemModel
         case .provider: TransactionProviderViewModel(transaction: model.transaction.transaction).itemModel
         case .fee: TransactionNetworkFeeViewModel(
-            feeAmount: model.infoModel.feeDisplay?.amount.text ?? "",
-            feeFiat: model.infoModel.feeDisplay?.fiat?.text,
+            feeDisplay: model.infoModel.feeDisplay,
             onInfoAction: onNetworkFeeInfo
         ).itemModel
         case .explorerLink: TransactionExplorerViewModel(
