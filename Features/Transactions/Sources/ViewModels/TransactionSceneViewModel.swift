@@ -51,19 +51,13 @@ public final class TransactionSceneViewModel {
         case .header: headerViewModel.itemModel
         case .swapButton: TransactionSwapButtonViewModel(transaction: transactionExtended).itemModel
         case .date: TransactionDateViewModel(date: model.transaction.transaction.createdAt).itemModel
-        case .status: TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onStatusInfo).itemModel
+        case .status: TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onSelectStatusInfo).itemModel
         case .participant: TransactionParticipantViewModel(transactionViewModel: model).itemModel
         case .memo: TransactionMemoViewModel(transaction: model.transaction.transaction).itemModel
         case .network: TransactionNetworkViewModel(chain: model.transaction.asset.chain).itemModel
         case .provider: TransactionProviderViewModel(transaction: model.transaction.transaction).itemModel
-        case .fee: TransactionNetworkFeeViewModel(
-            feeDisplay: model.infoModel.feeDisplay,
-            onInfoAction: onNetworkFeeInfo
-        ).itemModel
-        case .explorerLink: TransactionExplorerViewModel(
-            transactionViewModel: model,
-            explorerService: explorerService
-        ).itemModel
+        case .fee: TransactionNetworkFeeViewModel(feeDisplay: model.infoModel.feeDisplay, onInfoAction: onSelectFee).itemModel
+        case .explorerLink: TransactionExplorerViewModel(transactionViewModel: model, explorerService: explorerService).itemModel
         }
     }
 }
@@ -87,12 +81,12 @@ extension TransactionSceneViewModel {
         isPresentingShareSheet = true
     }
 
-    func onNetworkFeeInfo() {
+    private func onSelectFee() {
         let chain = model.transaction.transaction.assetId.chain
         isPresentingInfoSheet = .networkFee(chain)
     }
 
-    func onStatusInfo() {
+    private func onSelectStatusInfo() {
         let assetImage = model.assetImage
         isPresentingInfoSheet = .transactionState(
             imageURL: assetImage.imageURL,
