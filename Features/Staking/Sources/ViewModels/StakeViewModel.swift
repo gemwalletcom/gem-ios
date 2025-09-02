@@ -135,6 +135,22 @@ public final class StakeViewModel {
             asset: chain.asset
         )
     }
+    
+    func navigationDestination(for delegation: StakeDelegationViewModel) -> any Hashable {
+        switch delegation.state {
+        case .active, .pending, .undelegating, .inactive, .activating, .deactivating:
+            delegation.delegation
+        case .awaitingWithdrawal:
+            TransferData(
+                type: .stake(asset, .withdraw(delegation.delegation)),
+                recipientData: RecipientData(
+                    recipient: Recipient(name: delegation.validatorText, address: delegation.delegation.validator.id, memo: ""),
+                    amount: .none
+                ),
+                value: delegation.delegation.base.balanceValue
+            )
+        }
+    }
 }
 
 // MARK: - Business Logic

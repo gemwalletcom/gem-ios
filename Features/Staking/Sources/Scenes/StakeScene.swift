@@ -81,7 +81,7 @@ extension StakeScene {
                     .id(UUID())
             case .data(let delegations):
                 ForEach(delegations) { delegation in
-                    NavigationLink(value: delegation.delegation) {
+                    NavigationLink(value: model.navigationDestination(for: delegation)) {
                         ValidatorDelegationView(delegation: delegation)
                     }
                 }
