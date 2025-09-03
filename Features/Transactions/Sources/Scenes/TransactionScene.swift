@@ -14,9 +14,10 @@ public struct TransactionScene: View {
     }
 
     public var body: some View {
-        ListSectionView(provider: model) { itemModel in
-            itemView(for: itemModel)
-        }
+        ListSectionView(
+            provider: model,
+            content: content(for:)
+        )
         .contentMargins([.top], .small, for: .scrollContent)
         .listSectionSpacing(.compact)
         .background(Colors.grayBackground)
@@ -24,7 +25,7 @@ public struct TransactionScene: View {
     }
 
     @ViewBuilder
-    private func itemView(for itemModel: TransactionItemModel) -> some View {
+    private func content(for itemModel: TransactionItemModel) -> some View {
         switch itemModel {
         case let .listItem(model):
             ListItemView(model: model)

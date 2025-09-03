@@ -18,12 +18,12 @@ struct TransactionSceneViewModelTests {
     func itemModelReturnsNonEmpty() {
         let model = TransactionSceneViewModel.mock()
 
-        verifyNonEmpty(model.itemModel(for: TransactionItem.header))
-        verifyNonEmpty(model.itemModel(for: TransactionItem.date))
-        verifyNonEmpty(model.itemModel(for: TransactionItem.status))
-        verifyNonEmpty(model.itemModel(for: TransactionItem.network))
-        verifyNonEmpty(model.itemModel(for: TransactionItem.fee))
-        verifyNonEmpty(model.itemModel(for: TransactionItem.explorerLink))
+        verifyNonEmpty(model.item(for: TransactionItem.header))
+        verifyNonEmpty(model.item(for: TransactionItem.date))
+        verifyNonEmpty(model.item(for: TransactionItem.status))
+        verifyNonEmpty(model.item(for: TransactionItem.network))
+        verifyNonEmpty(model.item(for: TransactionItem.fee))
+        verifyNonEmpty(model.item(for: TransactionItem.explorerLink))
     }
 
     @Test
@@ -32,7 +32,7 @@ struct TransactionSceneViewModelTests {
             type: TransactionType.transfer,
             direction: TransactionDirection.outgoing
         )
-        let itemModel = model.itemModel(for: TransactionItem.header)
+        let itemModel = model.item(for: TransactionItem.header)
 
         verifyNonEmpty(itemModel)
     }
@@ -40,7 +40,7 @@ struct TransactionSceneViewModelTests {
     @Test
     func swapButtonItemModel() {
         let swapModel = TransactionSceneViewModel.mock(type: TransactionType.swap, state: TransactionState.confirmed)
-        let swapItem = swapModel.itemModel(for: TransactionItem.swapButton)
+        let swapItem = swapModel.item(for: TransactionItem.swapButton)
 
         if case .empty = swapItem {
         } else if case .swapAgain = swapItem {
@@ -49,7 +49,7 @@ struct TransactionSceneViewModelTests {
         }
 
         let transferModel = TransactionSceneViewModel.mock(type: TransactionType.transfer)
-        let transferItem = transferModel.itemModel(for: TransactionItem.swapButton)
+        let transferItem = transferModel.item(for: TransactionItem.swapButton)
 
         if case .empty = transferItem {
         } else {
@@ -62,7 +62,7 @@ struct TransactionSceneViewModelTests {
         let testDate = Date(timeIntervalSince1970: 1609459200)
         let model = TransactionSceneViewModel.mock(createdAt: testDate)
 
-        if case .listItem(let item) = model.itemModel(for: TransactionItem.date) {
+        if case .listItem(let item) = model.item(for: TransactionItem.date) {
             #expect(item.title == Localized.Transaction.date)
             #expect(item.subtitle != nil)
         } else {
@@ -73,7 +73,7 @@ struct TransactionSceneViewModelTests {
     @Test
     func statusItemModel() {
         let confirmedModel = TransactionSceneViewModel.mock(state: TransactionState.confirmed)
-        if case .listItem(let item) = confirmedModel.itemModel(for: TransactionItem.status) {
+        if case .listItem(let item) = confirmedModel.item(for: TransactionItem.status) {
             #expect(item.title == Localized.Transaction.status)
             #expect(item.subtitleStyle.color == Colors.gray)
         } else {
@@ -81,8 +81,8 @@ struct TransactionSceneViewModelTests {
         }
 
         let pendingModel = TransactionSceneViewModel.mock(state: TransactionState.pending)
-        if case .listItem(let item) = pendingModel.itemModel(for: TransactionItem.status) {
-                if case .progressView = item.titleTagType {
+        if case .listItem(let item) = pendingModel.item(for: TransactionItem.status) {
+            if case .progressView = item.titleTagType {
             } else {
                 Issue.record("Expected progress indicator for pending status")
             }
@@ -108,7 +108,7 @@ struct TransactionSceneViewModelTests {
             preferences: Preferences.standard
         )
 
-        if case .participant(let item) = modelWithAddresses.itemModel(for: TransactionItem.participant) {
+        if case .participant(let item) = modelWithAddresses.item(for: TransactionItem.participant) {
             #expect(item.title == Localized.Transaction.sender)
             #expect(item.account.address == "0xSenderAddress")
         } else {
@@ -116,7 +116,7 @@ struct TransactionSceneViewModelTests {
         }
 
         let swapModel = TransactionSceneViewModel.mock(type: TransactionType.swap)
-        if case .empty = swapModel.itemModel(for: TransactionItem.participant) {
+        if case .empty = swapModel.item(for: TransactionItem.participant) {
         } else {
             Issue.record("Expected empty for swap participant")
         }
@@ -125,7 +125,7 @@ struct TransactionSceneViewModelTests {
     @Test
     func memoItemModel() {
         let modelWithMemo = TransactionSceneViewModel.mock(memo: "Test memo")
-        if case .listItem(let item) = modelWithMemo.itemModel(for: TransactionItem.memo) {
+        if case .listItem(let item) = modelWithMemo.item(for: TransactionItem.memo) {
             #expect(item.title == Localized.Transfer.memo)
             #expect(item.subtitle == "Test memo")
         } else {
@@ -133,13 +133,13 @@ struct TransactionSceneViewModelTests {
         }
 
         let modelNoMemo = TransactionSceneViewModel.mock(memo: nil)
-        if case .empty = modelNoMemo.itemModel(for: TransactionItem.memo) {
+        if case .empty = modelNoMemo.item(for: TransactionItem.memo) {
         } else {
             Issue.record("Expected empty for nil memo")
         }
 
         let modelEmptyMemo = TransactionSceneViewModel.mock(memo: "")
-        if case .empty = modelEmptyMemo.itemModel(for: TransactionItem.memo) {
+        if case .empty = modelEmptyMemo.item(for: TransactionItem.memo) {
         } else {
             Issue.record("Expected empty for empty memo")
         }
@@ -149,7 +149,7 @@ struct TransactionSceneViewModelTests {
     func networkItemModel() {
         let model = TransactionSceneViewModel.mock()
 
-        if case .network(let title, let subtitle, _) = model.itemModel(for: TransactionItem.network) {
+        if case .network(let title, let subtitle, _) = model.item(for: TransactionItem.network) {
             #expect(title == Localized.Transfer.network)
             #expect(subtitle == "Bitcoin")
         } else {
@@ -160,7 +160,7 @@ struct TransactionSceneViewModelTests {
     @Test
     func providerItemModel() {
         let model = TransactionSceneViewModel.mock()
-        if case .empty = model.itemModel(for: TransactionItem.provider) {
+        if case .empty = model.item(for: TransactionItem.provider) {
         } else {
             Issue.record("Expected empty for provider")
         }
@@ -170,7 +170,7 @@ struct TransactionSceneViewModelTests {
     func feeItemModel() {
         let model = TransactionSceneViewModel.mock()
 
-        if case .listItem(let item) = model.itemModel(for: TransactionItem.fee) {
+        if case .listItem(let item) = model.item(for: TransactionItem.fee) {
             #expect(item.title == Localized.Transfer.networkFee)
             #expect(item.infoAction != nil)
         } else {
@@ -182,7 +182,7 @@ struct TransactionSceneViewModelTests {
     func explorerLinkItemModel() {
         let model = TransactionSceneViewModel.mock()
 
-        if case .explorer(let url, let text) = model.itemModel(for: TransactionItem.explorerLink) {
+        if case .explorer(let url, let text) = model.item(for: TransactionItem.explorerLink) {
             #expect(url.absoluteString == "https://blockchair.com/bitcoin/transaction/2")
             #expect(text == "View on Blockchair")
         } else {

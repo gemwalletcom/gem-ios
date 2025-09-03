@@ -2,7 +2,7 @@
 
 import Foundation
 
-public protocol ItemModelProvidable {
+public protocol ItemModelProvidable<ItemModel> {
     associatedtype ItemModel
     var itemModel: ItemModel { get }
 }
@@ -13,5 +13,11 @@ public protocol ListSectionProvideable: Sendable {
     associatedtype ItemModel
     
     var sections: [ListSection<Item>] { get }
-    func itemModel(for item: Item) -> ItemModel
+    func itemModel(for type: Item) -> any ItemModelProvidable<ItemModel>
+}
+
+public extension ListSectionProvideable {
+    func item(for type: Item) -> ItemModel {
+        itemModel(for: type).itemModel
+    }
 }
