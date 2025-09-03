@@ -92,15 +92,3 @@ extension AddTokenViewModel {
         }
     }
 }
-
-// MARK: - Models extensions
-
-extension TokenValidationError: @retroactive LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .invalidTokenId: Localized.Errors.Token.invalidId
-        case .invalidMetadata: Localized.Errors.Token.invalidMetadata
-        case .other(let error): Localized.Errors.Token.unableFetchTokenInformation(error.localizedDescription)
-        }
-    }
-}
