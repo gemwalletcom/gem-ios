@@ -4,13 +4,15 @@ import Foundation
 import Primitives
 import Localization
 
-public struct FiatRangeValidator: ValueValidator {
-    private let range: ClosedRange<Int>
+public struct FiatRangeValidator<T: Comparable & Sendable>: ValueValidator {
+    public typealias Formatted = T
+    
+    private let range: ClosedRange<T>
     private let minimumValueText: String
     private let maximumValueText: String
 
     public init(
-        range: ClosedRange<Int>,
+        range: ClosedRange<T>,
         minimumValueText: String,
         maximumValueText: String
     ) {
@@ -19,7 +21,7 @@ public struct FiatRangeValidator: ValueValidator {
         self.maximumValueText = maximumValueText
     }
 
-    public func validate(_ value: Int) throws {
+    public func validate(_ value: T) throws {
         guard value >= range.lowerBound else {
             throw AnyError(Localized.Transfer.minimumAmount(minimumValueText))
         }

@@ -15,8 +15,8 @@ import Validators
 @MainActor
 @Observable
 public final class FiatSceneViewModel {
-    private static let minimumFiatAmount = 10
-    private static let maximumFiatAmount = 10000
+    private static let minimumFiatAmount: Double = 10
+    private static let maximumFiatAmount: Double = 10000
 
     private let fiatService: any GemAPIFiatService
     private let assetAddress: AssetAddress
@@ -63,10 +63,10 @@ public final class FiatSceneViewModel {
             mode: .onDemand,
             validators: [
                 .fiat(validators: [
-                    FiatRangeValidator(
+                    FiatRangeValidator<Double>(
                         range: Self.minimumFiatAmount...Self.maximumFiatAmount,
-                        minimumValueText: currencyFormatter.string(Double(Self.minimumFiatAmount)),
-                        maximumValueText: currencyFormatter.string(Double(Self.maximumFiatAmount))
+                        minimumValueText: currencyFormatter.string(Self.minimumFiatAmount),
+                        maximumValueText: currencyFormatter.string(Self.maximumFiatAmount)
                     )
                 ])
             ]

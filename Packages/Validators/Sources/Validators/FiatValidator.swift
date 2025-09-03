@@ -4,14 +4,14 @@ import Foundation
 import Primitives
 
 public struct FiatValidator: TextValidator {
-    private let validators: [any ValueValidator<Int>]
+    private let validators: [any ValueValidator<Double>]
     
-    public init(validators: [any ValueValidator<Int>]) {
+    public init(validators: [any ValueValidator<Double>]) {
         self.validators = validators
     }
     
     public func validate(_ text: String) throws {
-        guard let value = Int(text) else {
+        guard let value = Double(text) else {
             throw AnyError("Invalid number")
         }
         
@@ -24,7 +24,7 @@ public struct FiatValidator: TextValidator {
 }
 
 public extension TextValidator where Self == FiatValidator {
-    static func fiat(validators: [any ValueValidator<Int>]) -> Self {
+    static func fiat(validators: [any ValueValidator<Double>]) -> Self {
         .init(validators: validators)
     }
 }

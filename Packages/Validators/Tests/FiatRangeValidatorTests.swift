@@ -8,12 +8,12 @@ import Localization
 @testable import Validators
 
 struct FiatRangeValidatorTests {
-    private let range = 10...10000
+    private let range = 10.0...10000.0
     private let minimumText = "$10"
     private let maximumText = "$10,000"
 
-    var validator: FiatRangeValidator {
-        FiatRangeValidator(
+    var validator: FiatRangeValidator<Double> {
+        FiatRangeValidator<Double>(
             range: range,
             minimumValueText: minimumText,
             maximumValueText: maximumText
