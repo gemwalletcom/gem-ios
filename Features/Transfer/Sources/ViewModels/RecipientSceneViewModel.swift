@@ -12,7 +12,6 @@ import NameService
 import Keystore
 import WalletsService
 import NodeService
-import StakeService
 import SwiftUI
 import ScanService
 import Formatters

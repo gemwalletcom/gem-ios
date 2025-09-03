@@ -112,7 +112,6 @@
 		D8CFDEA02E37FC3B00D27283 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDE9F2E37FC3B00D27283 /* Primitives */; };
 		D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEA72E37FC8800D27283 /* Preferences */; };
 		D8CFDEAA2E37FC8C00D27283 /* GemAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEA92E37FC8C00D27283 /* GemAPI */; };
-		D8CFDEAC2E37FC9F00D27283 /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAB2E37FC9F00D27283 /* GemstonePrimitives */; };
 		D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAD2E37FCA800D27283 /* Formatters */; };
 		D8CFDEB02E37FCB000D27283 /* Components in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAF2E37FCB000D27283 /* Components */; };
 		D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */; };
@@ -125,6 +124,7 @@
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
 		DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = DF93C4ED2C969F4F00204ABD /* Gemstone */; };
+		D8WIDGBF12345678901234 /* WidgetLocalization in Frameworks */ = {isa = PBXBuildFile; productRef = D8WIDGET12345678901234 /* WidgetLocalization */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -370,13 +370,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8CFDE9E2E37FC2500D27283 /* Style in Frameworks */,
-				B677B1F52E3CA15100AD893A /* Localization in Frameworks */,
+				D8WIDGBF12345678901234 /* WidgetLocalization in Frameworks */,
 				D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */,
 				D8CFDEB02E37FCB000D27283 /* Components in Frameworks */,
 				D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */,
 				D838194B2E256A5A0076CDB3 /* SwiftUI.framework in Frameworks */,
 				D8CFDEAA2E37FC8C00D27283 /* GemAPI in Frameworks */,
-				D8CFDEAC2E37FC9F00D27283 /* GemstonePrimitives in Frameworks */,
 				D8CFDEA02E37FC3B00D27283 /* Primitives in Frameworks */,
 				D838194A2E256A5A0076CDB3 /* WidgetKit.framework in Frameworks */,
 			);
@@ -876,6 +875,9 @@
 				D838194C2E256A5A0076CDB3 /* GemPriceWidget */,
 			);
 			name = GemPriceWidget;
+			packageProductDependencies = (
+				D8WIDGET12345678901234 /* WidgetLocalization */,
+			);
 			productName = GemPriceWidgetExtension;
 			productReference = D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -1405,7 +1407,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.225;
+				MARKETING_VERSION = 1.3.232;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -1456,7 +1458,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.225;
+				MARKETING_VERSION = 1.3.232;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -1579,7 +1581,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.3.225;
+				MARKETING_VERSION = 1.3.232;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.widgetprice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1614,7 +1616,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.3.225;
+				MARKETING_VERSION = 1.3.232;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.widgetprice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2101,10 +2103,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = GemAPI;
 		};
-		D8CFDEAB2E37FC9F00D27283 /* GemstonePrimitives */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = GemstonePrimitives;
-		};
 		D8CFDEAD2E37FCA800D27283 /* Formatters */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Formatters;
@@ -2144,6 +2142,10 @@
 		DF93C4ED2C969F4F00204ABD /* Gemstone */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Gemstone;
+		};
+		D8WIDGET12345678901234 /* WidgetLocalization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WidgetLocalization;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

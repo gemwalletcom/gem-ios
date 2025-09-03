@@ -12,16 +12,16 @@ public struct EthereumService: Sendable {
 
     let chain: EVMChain
     let provider: Provider<EthereumTarget>
-    let calculator: any EthereumFeeCalculetable
+    let gatewayChainService: GatewayChainService
 
     public init(
         chain: EVMChain,
         provider: Provider<EthereumTarget>,
-        calculator: any EthereumFeeCalculetable = EthereumFeeCalculator()
+        gatewayChainService: GatewayChainService
     ) {
         self.chain = chain
         self.provider = provider
-        self.calculator = calculator
+        self.gatewayChainService = gatewayChainService
     }
 }
 
@@ -52,30 +52,13 @@ extension EthereumService {
         }
         throw AnyError("Unable to get chainId")
     }
-
-    private func getMaxPriorityFeePerGas() async throws -> BigInt {
-        try await provider
-            .request(.maxPriorityFeePerGas)
-            .map(as: JSONRPCResponse<BigIntable>.self).result.value
-    }
-
-
-    private func getBalance(address: String) async throws -> BigInt {
-        try await provider.request(.balance(address: address))
-           .mapResult(BigIntable.self).value
-    }
 }
 
 // MARK: - ChainBalanceable
 
 extension EthereumService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let balance = try await getBalance(address: address)
-
-        return AssetBalance(
-            assetId: chain.chain.assetId,
-            balance: Balance(available: balance)
-        )
+        return try await gatewayChainService.coinBalance(for: address)
     }
 
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
@@ -93,13 +76,7 @@ extension EthereumService: ChainBalanceable {
     }
     
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        switch chain {
-        case .smartChain:
-            return try await SmartChainService(provider: provider).getStakeBalance(for: address)
-        default:
-            break
-        }
-        return .none
+        try await gatewayChainService.getStakeBalance(for: address)
     }
 }
 
@@ -107,9 +84,7 @@ extension EthereumService: ChainBalanceable {
 
 extension EthereumService: ChainTransactionPreloadable {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
-        let nonce = try await getNonce(senderAddress: input.senderAddress)
-        let chainId = try getChainId()
-        return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
+        return try await gatewayChainService.preload(input: input)
     }
 }
 
@@ -124,16 +99,19 @@ extension EthereumService: ChainTransactionDataLoadable {
     }
 }
 
+// MARK: - ChainFeeRateFetchable
+
+extension EthereumService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        try await gatewayChainService.feeRates(type: type)
+    }
+}
+
 // MARK: - ChainBroadcastable
 
 extension EthereumService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        return try await provider
-            .request(.broadcast(data: data))
-            .mapOrError(
-                as: JSONRPCResponse<String>.self,
-                asError: JSONRPCError.self
-            ).result
+        return try await gatewayChainService.broadcast(data: data, options: options)
     }
 }
 
@@ -141,31 +119,7 @@ extension EthereumService: ChainBroadcastable {
 
 extension EthereumService: ChainTransactionStateFetchable {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        let transaction = try await provider
-            .request(.transactionReceipt(id: request.id))
-            .map(as: JSONRPCResponse<EthereumTransactionReciept>.self).result
-
-        if transaction.status == "0x0" || transaction.status == "0x1"  {
-            let state: TransactionState = switch transaction.status {
-                case "0x0": .reverted
-                case "0x1": .confirmed
-                default: .confirmed
-            }
-            let gasUsed = try BigInt.fromHex(transaction.gasUsed)
-            let effectiveGasPrice = try BigInt.fromHex(transaction.effectiveGasPrice)
-            let l1Fee: BigInt = try {
-                guard let fee = transaction.l1Fee else { return .zero }
-                return try BigInt.fromHex(fee)
-            }()
-            let networkFee = gasUsed * effectiveGasPrice + l1Fee
-
-            return TransactionChanges(
-                state: state,
-                changes: [.networkFee(networkFee)]
-            )
-        }
-
-        return TransactionChanges(state: .pending)
+        return try await gatewayChainService.transactionState(for: request)
     }
 }
 
@@ -173,21 +127,11 @@ extension EthereumService: ChainTransactionStateFetchable {
 
 extension EthereumService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        switch chain {
-        case .smartChain:
-            return try await SmartChainService(provider: provider).getValidators(apr: 0)
-        default:
-            return []
-        }
+        try await gatewayChainService.getValidators(apr: apr)
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        switch chain {
-        case .smartChain:
-            return try await SmartChainService(provider: provider).getStakeDelegations(address: address)
-        default:
-            return []
-        }
+        try await gatewayChainService.getStakeDelegations(address: address)
     }
 }
 
@@ -195,16 +139,11 @@ extension EthereumService: ChainStakable {
 
 extension EthereumService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        guard let address = WalletCore.AnyAddress(string: tokenId, coin: chain.chain.coinType)?.description else {
-            throw TokenValidationError.invalidTokenId
-        }
-        let assetId = AssetId(chain: chain.chain, tokenId: address)
-
-        return try await ERC20Service(provider: provider).decode(assetId: assetId, address: address)
+        try await gatewayChainService.getTokenData(tokenId: tokenId)
     }
 
-    public func getIsTokenAddress(tokenId: String) -> Bool {
-        tokenId.hasPrefix("0x") && Data(fromHex: tokenId) != nil && tokenId.count == 42
+    public func getIsTokenAddress(tokenId: String) async throws -> Bool {
+        try await gatewayChainService.getIsTokenAddress(tokenId: tokenId)
     }
 }
 
@@ -212,9 +151,7 @@ extension EthereumService: ChainTokenable {
 
 extension EthereumService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        return try await provider
-            .request(.chainId)
-            .map(as: JSONRPCResponse<BigIntable>.self).result.value.description
+        return try await gatewayChainService.getChainID()
     }
 }
 
@@ -222,9 +159,7 @@ extension EthereumService: ChainIDFetchable {
 
 extension EthereumService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        return try await provider
-            .request(.latestBlock)
-            .map(as: JSONRPCResponse<BigIntable>.self).result.value
+        return try await gatewayChainService.getLatestBlock()
     }
 }
 

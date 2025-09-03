@@ -1112,6 +1112,10 @@ public enum Localized {
     }
     /// Max
     public static let max = Localized.tr("Localizable", "transfer.max", fallback: "Max")
+    /// Maximum Amount is %@
+    public static func maximumAmount(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "transfer.maximum_amount", String(describing: p1), fallback: "Maximum Amount is %@")
+    }
     /// Memo
     public static let memo = Localized.tr("Localizable", "transfer.memo", fallback: "Memo")
     /// A minimum %@ balance must remain after this, unless you’re using your full balance.

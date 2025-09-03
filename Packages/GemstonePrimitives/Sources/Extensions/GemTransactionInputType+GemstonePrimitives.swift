@@ -10,7 +10,7 @@ extension GemTransactionInputType {
         switch self {
         case .transfer(let asset): asset
         case .deposit(let asset): asset
-        case .swap(let fromAsset, _): fromAsset
+        case .swap(let fromAsset, _, _): fromAsset
         case .stake(let asset, _): asset
         case .tokenApprove(let asset, _): asset
         case .generic(let asset, _, _): asset
@@ -26,13 +26,8 @@ extension GemTransactionInputType {
             return TransferDataType.transfer(try asset.map())
         case .deposit(let asset):
             return TransferDataType.deposit(try asset.map())
-        case .swap(let fromAsset, let toAsset):
-            // For mapping purposes, create a placeholder SwapData - in real usage this would contain actual swap information
-            let swapQuoteData = SwapQuoteData(to: "", value: "", data: "", approval: nil, gasLimit: nil)
-            let providerData = SwapProviderData(provider: .uniswapV4, name: "", protocolName: "")
-            let swapQuote = SwapQuote(fromValue: "0", toValue: "0", providerData: providerData, walletAddress: "", slippageBps: 0, etaInSeconds: nil)
-            let swapData = SwapData(quote: swapQuote, data: swapQuoteData)
-            return TransferDataType.swap(try fromAsset.map(), try toAsset.map(), swapData)
+        case .swap(let fromAsset, let toAsset, let gemSwapData):
+            return TransferDataType.swap(try fromAsset.map(), try toAsset.map(), try gemSwapData.map())
         case .stake(let asset, let type):
             return TransferDataType.stake(try asset.map(), try type.map())
         case .tokenApprove(let asset, let approvalData):
@@ -52,8 +47,8 @@ extension TransferDataType {
             return .transfer(asset: asset.map())
         case .deposit(let asset):
             return .deposit(asset: asset.map())
-        case .swap(let fromAsset, let toAsset, _):
-            return .swap(fromAsset: fromAsset.map(), toAsset: toAsset.map())
+        case .swap(let fromAsset, let toAsset, let swapData):
+            return .swap(fromAsset: fromAsset.map(), toAsset: toAsset.map(), swapData: swapData.map())
         case .stake(let asset, let stakeType):
             return .stake(asset: asset.map(), stakeType: stakeType.map())
         case .tokenApprove(let asset, let approvalData):
