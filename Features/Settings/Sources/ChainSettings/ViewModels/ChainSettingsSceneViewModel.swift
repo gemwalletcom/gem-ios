@@ -10,7 +10,7 @@ import Formatters
 
 @Observable
 @MainActor
-public final class ChainSettingsViewModel {
+public final class ChainSettingsSceneViewModel {
     let explorerService: ExplorerService
     let nodeService: NodeService
 
@@ -26,7 +26,7 @@ public final class ChainSettingsViewModel {
 
     private let defaultNodes: [ChainNode]
     private var nodes: [ChainNode] = []
-    private var nodeStatusByNodeId: [String: NodeStatus] = [:]
+    private var statusStateByNodeId: [String: NodeStatusState] = [:]
 
     private static let formatter = ValueFormatter.full_US
 
@@ -53,7 +53,7 @@ public final class ChainSettingsViewModel {
         nodes.map { node in
             ChainNodeViewModel(
                 chainNode: node,
-                nodeStatus: nodeStatusByNodeId[node.id] ?? .none,
+                statusState: statusStateByNodeId[node.id] ?? .none,
                 formatter: Self.formatter
             )
         }
@@ -69,27 +69,27 @@ public final class ChainSettingsViewModel {
 
 // MARK: - Business logic
 
-extension ChainSettingsViewModel {
+extension ChainSettingsSceneViewModel {
     func fetchNodes() throws {
         nodes = try nodeService.nodes(for: chain)
     }
-    
+
     func clear() {
-        nodeStatusByNodeId = [:]
+        statusStateByNodeId = [:]
     }
 
-    func fetchNodesStatusInfo() async {
-        await withTaskGroup(of: (ChainNode, NodeStatus?).self) { [weak self] group in
+    func fetchNodesStates() async {
+        await withTaskGroup(of: (ChainNode, NodeStatusState).self) { [weak self] group in
             guard let self else { return }
             for node in self.nodes {
                 group.addTask { [weak self] in
-                    guard let self else { return (node, nil) }
-                    return (node, await fetchNodeStatusInfo(for: node))
+                    guard let self else { return (node, .none) }
+                    return (node, await fetchNodeStatusState(for: node))
                 }
             }
 
-            for await (node, data) in group {
-                nodeStatusByNodeId[node.id] = data
+            for await (node, state) in group {
+                statusStateByNodeId[node.id] = state
             }
         }
     }
@@ -118,29 +118,19 @@ extension ChainSettingsViewModel {
 
 // MARK: - Private
 
-extension ChainSettingsViewModel {
-    private func fetchNodeStatusInfo(for node: ChainNode) async -> NodeStatus? {
-        guard let url = URL(string: node.node.url) else { return nil }
+extension ChainSettingsSceneViewModel {
+    private func fetchNodeStatusState(for node: ChainNode) async -> NodeStatusState {
+        guard let url = URL(string: node.node.url) else {
+            return .error(error: URLError(.badURL))
+        }
         let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
         let service = provider.service(for: chain)
 
         do {
-            let measure = try await LatencyMeasureService.measure(for: service.getLatestBlock)
-            return .result(blockNumber: measure.value, latency: .from(duration: measure.duration))
+            let nodeStatus = try await service.getNodeStatus(url: node.node.url)
+            return .result(nodeStatus)
         } catch {
             return .error(error: error)
-        }
-    }
-}
-
-// MARK: - NodeURLFetchable
-
-extension ChainSettingsViewModel {
-    struct CustomNodeULRFetchable: NodeURLFetchable {
-        let url: URL
-
-        func node(for chain: Chain) -> URL {
-            return url
         }
     }
 }

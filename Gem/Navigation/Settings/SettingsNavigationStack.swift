@@ -125,7 +125,7 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.ChainSettings.self) {
                 ChainSettingsScene(
-                    model: ChainSettingsViewModel(nodeService: nodeService, chain: $0.chain)
+                    model: ChainSettingsSceneViewModel(nodeService: nodeService, chain: $0.chain)
                 )
             }
             .sheet(isPresented: $isPresentingWallets) {

@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import BigInt
+import Primitives
 
-public enum NodeStatus: Sendable {
-    case result(blockNumber: BigInt, latency: Latency)
+enum NodeStatusState: Sendable {
+    case result(NodeStatus)
     case error(error: any Error)
     case none
 }

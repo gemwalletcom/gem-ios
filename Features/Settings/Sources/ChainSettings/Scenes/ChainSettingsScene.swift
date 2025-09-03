@@ -9,9 +9,9 @@ import Localization
 import PrimitivesComponents
 
 public struct ChainSettingsScene: View {
-    @State private var model: ChainSettingsViewModel
+    @State private var model: ChainSettingsSceneViewModel
 
-    public init(model: ChainSettingsViewModel) {
+    public init(model: ChainSettingsSceneViewModel) {
         _model = State(initialValue: model)
     }
 
@@ -153,7 +153,7 @@ extension ChainSettingsScene {
         do {
             model.clear()
             try model.fetchNodes()
-            await model.fetchNodesStatusInfo()
+            await model.fetchNodesStates()
         } catch {
             // TODO: - handle error
             print("chain settings scene: fetch error \(error)")
