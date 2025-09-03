@@ -53,7 +53,7 @@ public final class TransactionsViewModel {
 
     public var emptyContentModel: EmptyContentTypeViewModel {
         if !filterModel.isAnyFilterSpecified {
-            EmptyContentTypeViewModel(type: .activity(receive: onSelectReceive, buy: onSelectBuy, isWatchOnly: wallet.type.isWatchOnly))
+            EmptyContentTypeViewModel(type: .activity(receive: onSelectReceive, buy: onSelectBuy, walletType: wallet.type))
         } else {
             EmptyContentTypeViewModel(type: .search(type: .activity, action: onSelectCleanFilters))
         }
