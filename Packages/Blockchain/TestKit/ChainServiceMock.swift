@@ -24,8 +24,8 @@ public struct ChainServiceMock: ChainServiceable {
     public var transactionData: TransactionData = TransactionData(fee: Fee(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero))
     public var transactionPreload: TransactionLoadMetadata = .none
     public var transactionState: TransactionChanges = TransactionChanges(state: .pending, changes: [])
-    public var nodeStatus: NodeStatus = .none
-    
+    public var nodeStatus: NodeStatus = NodeStatus(chainId: "1", latestBlockNumber: .zero, latency: .from(duration: 1000))
+
     public init() {}
 }
 
