@@ -51,7 +51,6 @@ extension TransactionSceneViewModel: ListSectionProvideable {
     }
 
     public func itemModel(for item: TransactionItem) -> TransactionItemModel {
-        item.itemModel
         switch item {
         case .header: headerViewModel.itemModel
         case .swapButton: TransactionSwapButtonViewModel(transaction: transactionExtended).itemModel
