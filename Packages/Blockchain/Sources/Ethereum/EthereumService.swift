@@ -58,21 +58,11 @@ extension EthereumService {
 
 extension EthereumService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        return try await gatewayChainService.coinBalance(for: address)
+        try await gatewayChainService.coinBalance(for: address)
     }
 
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        let requests = try tokenIds.map {
-            EthereumTarget.call([
-                "to": try $0.getTokenId(),
-                "data": "0x70a08231000000000000000000000000\(address.remove0x)",
-            ])
-        }
-        let balances = try await provider.requestBatch(requests)
-            .map(as: [JSONRPCResponse<BigIntable>].self)
-            .map(\.result.value)
-        
-        return AssetBalance.merge(assetIds: tokenIds, balances: balances)
+        try await gatewayChainService.tokenBalance(for: address, tokenIds: tokenIds)
     }
     
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
