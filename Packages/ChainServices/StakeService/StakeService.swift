@@ -48,20 +48,6 @@ public struct StakeService: StakeServiceable {
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
         try store.getValidator(assetId: assetId, validatorId: validatorId)
     }
-
-    public func getRecipientAddress(chain: StakeChain?, type: AmountType, validatorId: String?) -> String? {
-        guard let id = validatorId else {
-            return nil
-        }
-        switch chain {
-        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron:
-            return id
-        case .smartChain:
-            return StakeHub.address
-        default:
-            fatalError()
-        }
-    }
     
     public func clearDelegations() throws {
         try store.clearDelegations()

@@ -66,7 +66,6 @@ let package = Package(
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "WalletService", package: "SystemServices"),
                 .product(name: "WalletsService", package: "FeatureServices"),
-                .product(name: "StakeService", package: "ChainServices"),
                 .product(name: "NodeService", package: "ChainServices"),
                 .product(name: "TransactionService", package: "FeatureServices"),
                 .product(name: "ScanService", package: "ChainServices"),
@@ -83,7 +82,6 @@ let package = Package(
             dependencies: [
                 "Transfer",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "StakeServiceTestKit", package: "ChainServices"),
                 .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BlockchainTestKit", package: "Blockchain"),
                 .product(name: "ScanServiceTestKit", package: "ChainServices"),

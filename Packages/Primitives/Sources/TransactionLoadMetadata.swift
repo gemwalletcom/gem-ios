@@ -50,14 +50,17 @@ public enum TransactionLoadMetadata: Sendable {
         blockTimestamp: UInt64,
         transactionTreeRoot: String,
         parentHash: String,
-        witnessAddress: String
+        witnessAddress: String,
+        votes: [String: UInt64]
     )
     case sui(messageBytes: String)
     case hyperliquid(
         approveAgentRequired: Bool,
         approveReferralRequired: Bool,
         approveBuilderRequired: Bool,
-        builderFeeBps: Int32
+        builderFeeBps: UInt32,
+        agentAddress: String,
+        agentPrivateKey: String
     )
 }
 
@@ -82,7 +85,7 @@ extension TransactionLoadMetadata {
     public func getBlockNumber() throws -> UInt64 {
         switch self {
         case .polkadot(_, _, _, let blockNumber, _, _, _),
-             .tron(let blockNumber, _, _, _, _, _),
+             .tron(let blockNumber, _, _, _, _, _, _),
              .xrp(_, let blockNumber):
             return blockNumber
         default:
@@ -158,6 +161,15 @@ extension TransactionLoadMetadata {
             return senderTokenAddress
         default:
             throw AnyError("Sender token address not available for this metadata type")
+        }
+    }
+    
+    public func getVotes() throws -> [String: UInt64] {
+        switch self {
+        case .tron(_, _, _, _, _, _, let votes):
+            return votes
+        default:
+            throw AnyError("Votes not available for this metadata type")
         }
     }
 }

@@ -23,6 +23,7 @@ let package = Package(
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Formatters", path: "../Formatters"),
         .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "Keychain", path: "../Keychain"),
         .package(name: "SystemServices", path: "../SystemServices"),
     ],
     targets: [
@@ -37,6 +38,7 @@ let package = Package(
                 "GemstonePrimitives",
                 "Formatters",
                 "Preferences",
+                "Keychain",
                 .product(name: "NativeProviderService", package: "SystemServices"),
             ],
             path: "Sources",
