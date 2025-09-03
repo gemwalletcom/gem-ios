@@ -17,6 +17,11 @@ public struct TransactionNetworkFeeViewModel {
         self.feeDisplay = feeDisplay
         self.onInfoAction = onInfoAction
     }
+}
+
+// MARK: - ItemModelProvidable
+
+extension TransactionNetworkFeeViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
         .listItem(
             ListItemModel(

@@ -3,6 +3,7 @@
 import Foundation
 import PrimitivesComponents
 import Localization
+import Components
 
 public struct TransactionDateViewModel: Sendable {
     private let date: Date
@@ -10,7 +11,11 @@ public struct TransactionDateViewModel: Sendable {
     public init(date: Date) {
         self.date = date
     }
+}
 
+// MARK: - ItemModelProvidable
+
+extension TransactionDateViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
         .listItem(
             .text(

@@ -12,6 +12,11 @@ public struct TransactionNetworkViewModel: Sendable {
     public init(chain: Chain) {
         self.chain = chain
     }
+}
+
+// MARK: - ItemModelProvidable
+
+extension TransactionNetworkViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
         .network(
             title: Localized.Transfer.network,

@@ -13,7 +13,11 @@ public struct TransactionProviderViewModel: Sendable {
     public init(transaction: Transaction) {
         self.transaction = transaction
     }
+}
 
+// MARK: - ItemModelProvidable
+
+extension TransactionProviderViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
         guard
             let metadata = transaction.metadata, case let .swap(metadata) = metadata,

@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import Localization
+import Components
 
 public struct TransactionSwapButtonViewModel {
     private let transaction: TransactionExtended
@@ -10,7 +11,11 @@ public struct TransactionSwapButtonViewModel {
     public init(transaction: TransactionExtended) {
         self.transaction = transaction
     }
+}
 
+// MARK: - ItemModelProvidable
+
+extension TransactionSwapButtonViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
         guard case .swap(_) = transaction.transaction.metadata,
               transaction.transaction.state == .confirmed else {

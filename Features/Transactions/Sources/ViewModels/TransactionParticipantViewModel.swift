@@ -4,14 +4,19 @@ import Foundation
 import Primitives
 import PrimitivesComponents
 import Localization
+import Components
 
-public struct TransactionParticipantViewModel: Sendable {
+public struct TransactionParticipantViewModel {
     private let transactionViewModel: TransactionViewModel
 
     public init(transactionViewModel: TransactionViewModel) {
         self.transactionViewModel = transactionViewModel
     }
+}
 
+// MARK: - ItemModelProvidable
+
+extension TransactionParticipantViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
         guard transactionViewModel.participant.isNotEmpty,
               let participantTitle

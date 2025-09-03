@@ -36,8 +36,12 @@ public final class TransactionSceneViewModel {
 
     var title: String { model.titleTextValue.text }
     var explorerURL: URL { explorerViewModel.url }
+}
 
-    var sections: [ListSection<TransactionItem>] {
+// MAKR: - ListSectionProvideable
+
+extension TransactionSceneViewModel: ListSectionProvideable {
+    public var sections: [ListSection<TransactionItem>] {
         [
             ListSection(type: .header, [.header]),
             ListSection(type: .swapAction, [.swapButton]),
@@ -46,18 +50,28 @@ public final class TransactionSceneViewModel {
         ]
     }
 
-    func itemModel(for item: TransactionItem) -> TransactionItemModel {
+    public func itemModel(for item: TransactionItem) -> TransactionItemModel {
+        item.itemModel
         switch item {
         case .header: headerViewModel.itemModel
         case .swapButton: TransactionSwapButtonViewModel(transaction: transactionExtended).itemModel
         case .date: TransactionDateViewModel(date: model.transaction.transaction.createdAt).itemModel
-        case .status: TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onSelectStatusInfo).itemModel
+        case .status: TransactionStatusViewModel(
+            state: model.transaction.transaction.state,
+            onInfoAction: onSelectStatusInfo
+        ).itemModel
         case .participant: TransactionParticipantViewModel(transactionViewModel: model).itemModel
         case .memo: TransactionMemoViewModel(transaction: model.transaction.transaction).itemModel
         case .network: TransactionNetworkViewModel(chain: model.transaction.asset.chain).itemModel
         case .provider: TransactionProviderViewModel(transaction: model.transaction.transaction).itemModel
-        case .fee: TransactionNetworkFeeViewModel(feeDisplay: model.infoModel.feeDisplay, onInfoAction: onSelectFee).itemModel
-        case .explorerLink: TransactionExplorerViewModel(transactionViewModel: model, explorerService: explorerService).itemModel
+        case .fee: TransactionNetworkFeeViewModel(
+            feeDisplay: model.infoModel.feeDisplay,
+            onInfoAction: onSelectFee
+        ).itemModel
+        case .explorerLink: TransactionExplorerViewModel(
+            transactionViewModel: model,
+            explorerService: explorerService
+        ).itemModel
         }
     }
 }

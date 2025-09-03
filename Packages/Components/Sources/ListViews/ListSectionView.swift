@@ -44,3 +44,16 @@ public struct ListSectionView<Item: Identifiable & Sendable, Content: View>: Vie
         }
     }
 }
+
+// MARK: - SectionedItemProvider Support
+
+public extension ListSectionView {
+    init<Provider: ListSectionProvideable>(
+        provider: Provider,
+        @ViewBuilder content: @escaping (Provider.ItemModel) -> Content
+    ) where Item == Provider.Item {
+        self.init(sections: provider.sections) { item in
+            content(provider.itemModel(for: item))
+        }
+    }
+}

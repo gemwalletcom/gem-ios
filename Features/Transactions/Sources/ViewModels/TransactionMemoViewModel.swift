@@ -12,7 +12,11 @@ public struct TransactionMemoViewModel: Sendable {
     public init(transaction: Transaction) {
         self.transaction = transaction
     }
-    
+}
+
+// MARK: - ItemModelProvidable
+
+extension TransactionMemoViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
         guard showMemo else {
             return .empty

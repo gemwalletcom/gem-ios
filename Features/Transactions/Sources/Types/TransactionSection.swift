@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import SwiftUI
 import Components
 import PrimitivesComponents
 
@@ -24,7 +25,7 @@ public enum TransactionItem: Identifiable, Equatable, Sendable {
     case provider
     case fee
     case explorerLink
-    
+
     public var id: Self { self }
 }
 
@@ -38,7 +39,7 @@ public enum TransactionItemModel {
     case empty
 }
 
-extension ListSection where T == TransactionItem {
+public extension ListSection where T == TransactionItem {
     init(type: TransactionSectionType, _ items: [TransactionItem]) {
         self.init(type: type, values: items)
     }

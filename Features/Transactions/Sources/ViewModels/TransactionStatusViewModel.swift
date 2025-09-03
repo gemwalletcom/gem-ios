@@ -23,6 +23,11 @@ public struct TransactionStatusViewModel {
     private var stateViewModel: TransactionStateViewModel {
         TransactionStateViewModel(state: state)
     }
+}
+
+// MARK: - ItemModelProvidable
+
+extension TransactionStatusViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
         .listItem(ListItemModel(
             title: Localized.Transaction.status,

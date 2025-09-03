@@ -5,6 +5,7 @@ import Primitives
 import PrimitivesComponents
 import SwiftUI
 import Localization
+import Components
 
 public struct TransactionHeaderViewModel: Sendable {
     private let transaction: TransactionExtended
@@ -52,7 +53,11 @@ public struct TransactionHeaderViewModel: Sendable {
             DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
         }
     }
+}
 
+// MARK: - ItemModelProvidable
+
+extension TransactionHeaderViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
         .header(
             TransactionHeaderItemModel(

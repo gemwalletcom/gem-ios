@@ -14,14 +14,8 @@ public struct TransactionScene: View {
     }
 
     public var body: some View {
-        List {
-            ForEach(model.sections) { section in
-                Section {
-                    ForEach(section.values) { item in
-                        itemView(for: item)
-                    }
-                }
-            }
+        ListSectionView(provider: model) { itemModel in
+            itemView(for: itemModel)
         }
         .contentMargins([.top], .small, for: .scrollContent)
         .listSectionSpacing(.compact)
@@ -30,8 +24,8 @@ public struct TransactionScene: View {
     }
 
     @ViewBuilder
-    private func itemView(for item: TransactionItem) -> some View {
-        switch model.itemModel(for: item) {
+    private func itemView(for itemModel: TransactionItemModel) -> some View {
+        switch itemModel {
         case let .listItem(model):
             ListItemView(model: model)
         case let .header(model):
