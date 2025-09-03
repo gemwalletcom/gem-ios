@@ -153,6 +153,14 @@ extension EthereumService: ChainLatestBlockFetchable {
     }
 }
 
+// MARK: - ChainNodeStatusFetchable
+
+extension EthereumService: ChainNodeStatusFetchable {
+    public func getNodeStatus(url: String) async throws -> NodeStatus {
+        try await gatewayChainService.getNodeStatus(url: url)
+    }
+}
+
 // MARK: - ChainAddressStatusFetchable
 
 extension EthereumService: ChainAddressStatusFetchable {
