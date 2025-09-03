@@ -5,6 +5,7 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import WalletCore
+import NativeProviderService
 
 public struct OptimismGasOracle: Sendable {
     // https://optimistic.etherscan.io/address/0x420000000000000000000000000000000000000F#readProxyContract
@@ -20,11 +21,19 @@ public struct OptimismGasOracle: Sendable {
     
     public init(
         chain: EVMChain,
-        provider: Provider<EthereumTarget>
+        provider: Provider<EthereumTarget>,
+        gatewayService: GatewayService
     ) {
         self.chain = chain
         self.provider = provider
-        self.service = EthereumService(chain: chain, provider: provider)
+        self.service = EthereumService(
+            chain: chain,
+            provider: provider,
+            gatewayChainService: GatewayChainService(
+                chain: chain.chain,
+                gateway: gatewayService
+            )
+        )
     }
 
     func getL1Fee(data: Data) async throws -> BigInt {
