@@ -12,18 +12,15 @@ public struct EthereumService: Sendable {
 
     let chain: EVMChain
     let provider: Provider<EthereumTarget>
-    let calculator: any EthereumFeeCalculetable
     let gatewayChainService: GatewayChainService
 
     public init(
         chain: EVMChain,
         provider: Provider<EthereumTarget>,
-        calculator: any EthereumFeeCalculetable = EthereumFeeCalculator(),
         gatewayChainService: GatewayChainService
     ) {
         self.chain = chain
         self.provider = provider
-        self.calculator = calculator
         self.gatewayChainService = gatewayChainService
     }
 }
@@ -54,12 +51,6 @@ extension EthereumService {
             return networkId
         }
         throw AnyError("Unable to get chainId")
-    }
-
-    private func getMaxPriorityFeePerGas() async throws -> BigInt {
-        try await provider
-            .request(.maxPriorityFeePerGas)
-            .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
 }
 
@@ -105,6 +96,14 @@ extension EthereumService: ChainTransactionDataLoadable {
             fee: fee,
             metadata: input.metadata
         )
+    }
+}
+
+// MARK: - ChainFeeRateFetchable
+
+extension EthereumService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        try await gatewayChainService.feeRates(type: type)
     }
 }
 

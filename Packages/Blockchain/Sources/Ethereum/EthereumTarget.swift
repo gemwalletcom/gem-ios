@@ -8,9 +8,6 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
     case estimateGasLimit(from: String, to: String, value: String?, data: String?)
     case transactionsCount(address: String)
     case call([String: String])
-    case feeHistory(blocks: Int, rewardPercentiles: [Int], blockParameter: EthereumBlockParameter)
-    case maxPriorityFeePerGas
-    case syncing
 
     public var baseUrl: URL {
         return URL(string: "")!
@@ -26,12 +23,6 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
             return "eth_getTransactionCount"
         case .call:
             return "eth_call"
-        case .feeHistory:
-            return "eth_feeHistory"
-        case .maxPriorityFeePerGas:
-            return "eth_maxPriorityFeePerGas"
-        case .syncing:
-            return "eth_syncing"
         }
     }
     
@@ -45,9 +36,7 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
     
     public var data: RequestData {
         switch self {
-        case .gasPrice,
-            .maxPriorityFeePerGas,
-            .syncing:
+        case .gasPrice:
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [] as [String])
             )
@@ -72,18 +61,6 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
                 JSONRPCRequest(
                     method: rpc_method,
                     params: json
-                )
-            )
-        case let .feeHistory(blocks, rewardPercentiles, param):
-            let params: [JSON] = [
-                .string("\(blocks)"),
-                .string(param.rawValue),
-                .array(rewardPercentiles.map { .value($0) })
-            ]
-            return .encodable(
-                JSONRPCRequest(
-                    method: rpc_method,
-                    params: params
                 )
             )
         }
