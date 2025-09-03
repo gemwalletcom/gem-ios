@@ -40,13 +40,7 @@ struct StakeNavigationView: View {
             model: StakeViewModel(
                 wallet: wallet,
                 chain: assetId.chain,
-                stakeService: stakeService,
-                onTransferAction: {
-                    navigationPath.append($0)
-                },
-                onAmountInputAction: {
-                    navigationPath.append($0)
-                }
+                stakeService: stakeService
             )
         )
         .navigationDestination(for: TransferData.self) { data in
