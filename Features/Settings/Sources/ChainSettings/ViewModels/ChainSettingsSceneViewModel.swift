@@ -11,24 +11,22 @@ import Formatters
 @Observable
 @MainActor
 public final class ChainSettingsSceneViewModel {
-    let explorerService: ExplorerService
+    private let explorerService: ExplorerService
+
     let nodeService: NodeService
-
     let chain: Chain
-
-    var isPresentingImportNode: Bool = false
 
     var selectedExplorer: String?
     var selectedNode: ChainNode
     var nodeDelete: ChainNode?
-
     var explorers: [String]
+    var isPresentingImportNode: Bool = false
 
     private let defaultNodes: [ChainNode]
+    private let formatter = ValueFormatter.full_US
+
     private var nodes: [ChainNode] = []
     private var statusStateByNodeId: [String: NodeStatusState] = [:]
-
-    private static let formatter = ValueFormatter.full_US
 
     public init(
         nodeService: NodeService,
@@ -54,31 +52,86 @@ public final class ChainSettingsSceneViewModel {
             ChainNodeViewModel(
                 chainNode: node,
                 statusState: statusStateByNodeId[node.id] ?? .none,
-                formatter: Self.formatter
+                formatter: formatter
             )
         }
         .sorted(by: { !canDelete(node: $0.chainNode) && canDelete(node: $1.chainNode) })
     }
 
     var explorerTitle: String { Localized.Settings.Networks.explorer }
+    var deleteButtonTitle: String { Localized.Common.delete }
+    
+    func deleteConfirmationTitle(for nodeName: String) -> String { Localized.Common.deleteConfirmation(nodeName) }
 
-    func canDelete(node: ChainNode) -> Bool {
-        !node.isGemNode && !defaultNodes.contains(where: { $0 == node })
+    func canDelete(node: ChainNode) -> Bool { !node.isGemNode && !defaultNodes.contains(where: { $0 == node }) }
+}
+
+// MARL: - Actions
+
+extension ChainSettingsSceneViewModel {
+    func fetch() async {
+        do {
+            clear()
+            try fetchNodes()
+            await fetchNodesStates()
+        } catch {
+            // TODO: - handle error
+            print("chain settings scene: fetch error \(error)")
+        }
+    }
+
+    func onSelectExplorer(name: String) {
+        selectedExplorer = name
+        explorerService.set(chain: chain, name: name)
+    }
+
+    func onSelectNode(_ node: ChainNode) {
+        do {
+            selectedNode = node
+            try nodeService.setNodeSelected(chain: chain, node: selectedNode.node)
+        } catch {
+            // TODO: - handle error
+            print("chain settings scene: on chain select error \(error)")
+        }
+    }
+
+    func onSelectNodeForDeletion(_ chainNode: ChainNode) {
+        nodeDelete = chainNode
+    }
+
+    func onPresentImportNode() {
+        isPresentingImportNode = true
+    }
+
+    func onDismissImportNode() {
+        isPresentingImportNode = false
+        Task {
+            await fetch()
+        }
+    }
+
+    func onDeleteNode() {
+        do {
+            try delete()
+        } catch {
+            // TODO: - handle error
+            print("chain settings scene: on delete error \(error)")
+        }
     }
 }
 
-// MARK: - Business logic
+// MARK: - Private
 
 extension ChainSettingsSceneViewModel {
-    func fetchNodes() throws {
+    private func fetchNodes() throws {
         nodes = try nodeService.nodes(for: chain)
     }
 
-    func clear() {
+    private func clear() {
         statusStateByNodeId = [:]
     }
 
-    func fetchNodesStates() async {
+    private func fetchNodesStates() async {
         await withTaskGroup(of: (ChainNode, NodeStatusState).self) { [weak self] group in
             guard let self else { return }
             for node in self.nodes {
@@ -94,12 +147,7 @@ extension ChainSettingsSceneViewModel {
         }
     }
 
-    func select(node: ChainNode) throws {
-        selectedNode = node
-        try nodeService.setNodeSelected(chain: chain, node: selectedNode.node)
-    }
-
-    func delete() throws {
+    private func delete() throws {
         guard let nodeDelete else { return }
         try nodeService.delete(chain: chain, node: nodeDelete.node)
 
@@ -110,15 +158,6 @@ extension ChainSettingsSceneViewModel {
         try fetchNodes()
     }
 
-    func selectExplorer(name: String) {
-        selectedExplorer = name
-        explorerService.set(chain: chain, name: name)
-    }
-}
-
-// MARK: - Private
-
-extension ChainSettingsSceneViewModel {
     private func fetchNodeStatusState(for node: ChainNode) async -> NodeStatusState {
         guard let url = URL(string: node.node.url) else {
             return .error(error: URLError(.badURL))
