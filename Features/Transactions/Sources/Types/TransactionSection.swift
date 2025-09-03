@@ -29,7 +29,7 @@ public enum TransactionItem: Identifiable, Equatable, Sendable {
 }
 
 public enum TransactionItemModel {
-    case listItem(ListItemType)
+    case listItem(ListItemModel)
     case header(TransactionHeaderItemModel)
     case participant(TransactionParticipantItemModel)
     case network(title: String, subtitle: String, image: AssetImage)

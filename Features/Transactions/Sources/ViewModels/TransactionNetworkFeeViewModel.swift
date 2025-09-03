@@ -6,26 +6,24 @@ import PrimitivesComponents
 import Localization
 import Components
 
-public struct TransactionNetworkFeeViewModel: Sendable {
+public struct TransactionNetworkFeeViewModel {
     private let feeDisplay: AmountDisplay?
-    private let onInfoAction: (@MainActor @Sendable() -> Void)?
+    private let onInfoAction: VoidAction
 
     public init(
         feeDisplay: AmountDisplay?,
-        onInfoAction: (@MainActor @Sendable () -> Void)? = nil
+        onInfoAction: VoidAction = nil
     ) {
         self.feeDisplay = feeDisplay
         self.onInfoAction = onInfoAction
     }
     public var itemModel: TransactionItemModel {
         .listItem(
-            .custom(
-                ListItemConfiguration(
-                    title: Localized.Transfer.networkFee,
-                    subtitle: feeDisplay?.amount.text ?? "-",
-                    subtitleExtra: feeDisplay?.fiat?.text,
-                    infoAction: onInfoAction
-                )
+            ListItemModel(
+                title: Localized.Transfer.networkFee,
+                subtitle: feeDisplay?.amount.text ?? "-",
+                subtitleExtra: feeDisplay?.fiat?.text,
+                infoAction: onInfoAction
             )
         )
     }

@@ -1,10 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 import PrimitivesComponents
 import Localization
-import Components
 
 public struct TransactionDateViewModel: Sendable {
     private let date: Date

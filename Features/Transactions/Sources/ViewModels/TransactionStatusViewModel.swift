@@ -8,13 +8,13 @@ import Localization
 import Components
 import Style
 
-public struct TransactionStatusViewModel: Sendable {
+public struct TransactionStatusViewModel {
     private let state: TransactionState
-    private let onInfoAction: (@MainActor @Sendable () -> Void)?
+    private let onInfoAction: VoidAction
 
     public init(
         state: TransactionState,
-        onInfoAction: (@MainActor @Sendable () -> Void)? = nil
+        onInfoAction: VoidAction
     ) {
         self.state = state
         self.onInfoAction = onInfoAction
@@ -24,12 +24,12 @@ public struct TransactionStatusViewModel: Sendable {
         TransactionStateViewModel(state: state)
     }
     public var itemModel: TransactionItemModel {
-        .listItem(.custom(ListItemConfiguration(
+        .listItem(ListItemModel(
             title: Localized.Transaction.status,
             titleTagType: state == .pending ? .progressView() : .image(stateViewModel.stateImage),
             subtitle: stateViewModel.title,
             subtitleStyle: TextStyle(font: .callout, color: stateViewModel.color),
             infoAction: onInfoAction
-        )))
+        ))
     }
 }

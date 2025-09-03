@@ -4,12 +4,7 @@ import Foundation
 import SwiftUI
 import Components
 import Style
-import Store
-import GRDBQuery
-import Primitives
-import InfoSheet
 import PrimitivesComponents
-import ExplorerService
 
 public struct TransactionScene: View {
     private let model: TransactionSceneViewModel
@@ -37,8 +32,8 @@ public struct TransactionScene: View {
     @ViewBuilder
     private func itemView(for item: TransactionItem) -> some View {
         switch model.itemModel(for: item) {
-        case let .listItem(type):
-            ListItemView(type: type)
+        case let .listItem(model):
+            ListItemView(model: model)
         case let .header(model):
             TransactionHeaderListItemView(
                 model: model,
