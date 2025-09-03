@@ -28,7 +28,11 @@ extension ChainService {
         case .ethereum:
             EthereumService(
                 chain: EVMChain(rawValue: chain.rawValue)!,
-                provider: ProviderFactory.create(with: url)
+                provider: ProviderFactory.create(with: url),
+                gatewayChainService: GatewayChainService(
+                    chain: chain,
+                    gateway: GatewayService(provider: NativeProvider(url: url))
+                )
             )
         case .sui,
             .aptos,

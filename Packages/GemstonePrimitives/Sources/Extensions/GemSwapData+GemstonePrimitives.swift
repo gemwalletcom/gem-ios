@@ -58,7 +58,7 @@ public extension Gemstone.GemSwapQuoteData {
             to: to,
             value: value,
             data: data,
-            approval: try approval?.map(),
+            approval: approval?.map(),
             gasLimit: gasLimit
         )
     }

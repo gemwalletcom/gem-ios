@@ -43,36 +43,14 @@ public struct StakeHub: Sendable {
         }
     }
 
-    public func encodeMaxElectedValidators() -> String {
-        // cast calldata "maxElectedValidators()"
-        return "0xc473318f"
-    }
-
-    public func encodeValidatorsCall(offset: UInt16, limit: UInt16) -> String {
-        return bscEncodeValidatorsCall(offset: offset, limit: limit).hexString.append0x
-    }
-
-    public func decodeValidatorsReturn(data: Data) throws -> [DelegationValidator] {
-        return try bscDecodeValidatorsReturn(result: data).map { $0.into() }
-    }
-
     public func encodeDelegationsCall(address: String, limit: UInt16) throws -> String {
         return try bscEncodeDelegationsCall(delegator: address, offset: 0, limit: limit).hexString.append0x
-    }
-
-    public func decodeDelegationsResult(data: Data) throws -> [DelegationBase] {
-        return try bscDecodeDelegationsReturn(result: data).map { $0.into() }
     }
 
     public func encodeUndelegationsCall(address: String, limit: UInt16) throws -> String {
         return try bscEncodeUndelegationsCall(delegator: address, offset: 0, limit: limit).hexString.append0x
     }
 
-    public func decodeUnelegationsResult(data: Data) throws -> [DelegationBase] {
-        return try bscDecodeUndelegationsReturn(result: data).map { $0.into() }
-    }
-
-    // Actions
     public func encodeDelegateCall(validator: String, delegateVote: Bool) throws -> Data {
         return try bscEncodeDelegateCall(operatorAddress: validator, delegateVotePower: delegateVote)
     }
@@ -80,7 +58,6 @@ public struct StakeHub: Sendable {
     public func encodeUndelegateCall(validator: String, shares: BigInt) throws -> Data {
         return try bscEncodeUndelegateCall(operatorAddress: validator, shares: shares.description)
     }
-
 
     public func encodeRedelegateCall(shares: BigInt, fromValidator: String, toValidator: String, delegateVote: Bool) throws -> Data {
         return try bscEncodeRedelegateCall(
@@ -93,65 +70,5 @@ public struct StakeHub: Sendable {
 
     public func encodeClaim(validator: String, requestNumber: UInt64) throws -> Data {
         return try bscEncodeClaimCall(operatorAddress: validator, requestNumber: requestNumber)
-    }
-}
-
-public extension BscValidator {
-    func into() -> DelegationValidator {
-        return DelegationValidator(
-            chain: .smartChain,
-            id: operatorAddress,
-            name: moniker,
-            isActive: !jailed,
-            commision: Double(commission) / 100,
-            apr: Double(apy) / 100
-        )
-    }
-}
-
-public extension BscDelegation {
-    func into() -> DelegationBase {
-        let completionDate: Date? = {
-            switch status {
-            case .active:
-                return nil
-            case .undelegating:
-                guard let unlock = unlockTime else {
-                    return nil
-                }
-                return Date(timeIntervalSince1970: Double(unlock))
-            }
-        }()
-
-        let state: DelegationState = {
-            switch status {
-            case .active: 
-                return .active
-            case .undelegating:
-                guard let date = completionDate else {
-                    return .undelegating
-                }
-                guard date.distance(to: Date()) >= 0 else {
-                    return .undelegating
-                }
-                return .awaitingWithdrawal
-            }
-        }()
-
-        let delegationId: String = switch status {
-            case .active: .empty
-            case .undelegating: "\(validatorAddress)-\(unlockTime ?? 0)"
-        }
-
-        return DelegationBase(
-            assetId: Chain.smartChain.assetId,
-            state: state,
-            balance: amount,
-            shares: shares,
-            rewards: "0",
-            completionDate: completionDate,
-            delegationId: delegationId,
-            validatorId: validatorAddress
-        )
     }
 }
