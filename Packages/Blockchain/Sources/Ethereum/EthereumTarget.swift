@@ -4,7 +4,6 @@ import Foundation
 import SwiftHTTPClient
 
 public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
-    case gasPrice
     case estimateGasLimit(from: String, to: String, value: String?, data: String?)
     case transactionsCount(address: String)
     case call([String: String])
@@ -15,8 +14,6 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
     
     public var rpc_method: String {
         switch self {
-        case .gasPrice:
-            return "eth_gasPrice"
         case .estimateGasLimit:
             return "eth_estimateGas"
         case .transactionsCount:
@@ -36,10 +33,6 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
     
     public var data: RequestData {
         switch self {
-        case .gasPrice:
-            return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [] as [String])
-            )
         case .estimateGasLimit(let from, let to, let value, let data):
             let params = [
                 "from": from,

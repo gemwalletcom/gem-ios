@@ -9,16 +9,17 @@ import Formatters
 
 public struct ChainNodeViewModel: Sendable {
     public let chainNode: ChainNode
-    private let nodeStatus: NodeStatus
+
+    private let statusState: NodeStatusState
     private let formatter: ValueFormatter
 
-    public init(
+    init(
         chainNode: ChainNode,
-        nodeStatus: NodeStatus,
+        statusState: NodeStatusState,
         formatter: ValueFormatter
     ) {
         self.chainNode = chainNode
-        self.nodeStatus = nodeStatus
+        self.statusState = statusState
         self.formatter = formatter
     }
 
@@ -40,7 +41,7 @@ public struct ChainNodeViewModel: Sendable {
     }
 
     public var titleTagType: TitleTagType {
-        switch nodeStatus {
+        switch statusState {
         case .result, .error: .none
         case .none: .progressView(scale: 1.24)
         }
@@ -54,8 +55,8 @@ public struct ChainNodeViewModel: Sendable {
         )
     }
 
-    private var nodeStatusModel: NodeStatusViewModel {
-        NodeStatusViewModel(nodeStatus: nodeStatus)
+    private var nodeStatusModel: NodeStatusStateViewModel {
+        NodeStatusStateViewModel(nodeStatus: statusState)
     }
 }
 
