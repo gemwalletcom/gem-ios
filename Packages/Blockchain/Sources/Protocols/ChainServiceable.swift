@@ -9,6 +9,7 @@ public typealias ChainServiceable =
     ChainFeeRateFetchable &
     ChainIDFetchable &
     ChainLatestBlockFetchable &
+    ChainNodeStatusFetchable &
     ChainStakable &
     ChainTokenable &
     ChainTransactionDataLoadable &
@@ -65,6 +66,10 @@ public protocol ChainLatestBlockFetchable: Sendable {
 
 public protocol ChainAddressStatusFetchable: Sendable {
     func getAddressStatus(address: String) async throws -> [AddressStatus]
+}
+
+public protocol ChainNodeStatusFetchable: Sendable {
+    func getNodeStatus(url: String) async throws -> NodeStatus
 }
 
 public protocol ChainFeePriorityPreference: Sendable {}

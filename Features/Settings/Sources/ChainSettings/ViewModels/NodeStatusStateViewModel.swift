@@ -6,12 +6,12 @@ import Localization
 import SwiftUI
 import Formatters
 
-struct NodeStatusViewModel: Sendable {
-    let nodeStatus: NodeStatus
+struct NodeStatusStateViewModel: Sendable {
+    let nodeStatus: NodeStatusState
 
     public func latestBlockText(title: String, formatter: ValueFormatter) -> String {
         let value = switch nodeStatus {
-        case .result(let blockNumber, _): formatter.string(blockNumber, decimals: 0)
+        case .result(let nodeStatus): formatter.string(nodeStatus.latestBlockNumber, decimals: 0)
         case .error, .none: "-"
         }
         return "\(title): \(value)"
@@ -19,9 +19,9 @@ struct NodeStatusViewModel: Sendable {
 
     public var latencyText: String? {
         switch nodeStatus {
-        case .result(let block, let latency):
-            if block > 0 {
-                return LatencyViewModel(latency: latency).title
+        case .result(let nodeStatus):
+            if nodeStatus.latestBlockNumber > 0 {
+                return LatencyViewModel(latency: nodeStatus.latency).title
             }
             return Localized.Errors.error
         case .error:
@@ -35,8 +35,8 @@ struct NodeStatusViewModel: Sendable {
         switch nodeStatus {
         case .error: Colors.red
         case .none: Colors.gray
-        case .result(let block, let latency):
-            block.isZero ? Colors.red : LatencyViewModel(latency: latency).color
+        case .result(let nodeStatus):
+            nodeStatus.latestBlockNumber.isZero ? Colors.red : LatencyViewModel(latency: nodeStatus.latency).color
         }
     }
 
@@ -44,8 +44,8 @@ struct NodeStatusViewModel: Sendable {
         switch nodeStatus {
         case .error: Colors.red.opacity(0.15)
         case .none: .clear
-        case .result(let block, let latency):
-            block.isZero ? Colors.red.opacity(0.15) : LatencyViewModel(latency: latency).background
+        case .result(let nodeStatus):
+            nodeStatus.latestBlockNumber.isZero ? Colors.red.opacity(0.15) : LatencyViewModel(latency: nodeStatus.latency).background
         }
     }
 }
