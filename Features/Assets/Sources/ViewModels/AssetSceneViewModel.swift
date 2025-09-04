@@ -116,12 +116,11 @@ public final class AssetSceneViewModel: Sendable {
         AssetIdViewModel(assetId: assetModel.asset.chain.assetId).networkAssetImage
     }
 
-    var emptyConentModel: EmptyContentTypeViewModel {
+    var emptyContentModel: EmptyContentTypeViewModel {
         let buy = assetData.metadata.isBuyEnabled ? onSelectBuy : nil
-        return EmptyContentTypeViewModel(type: .asset(
-            symbol: assetModel.symbol,
-            buy: buy
-        ))
+        return EmptyContentTypeViewModel(
+            type: .asset(symbol: assetModel.symbol, buy: buy, isViewOnly: wallet.isViewOnly)
+        )
     }
 
     var assetDataModel: AssetDataViewModel {
