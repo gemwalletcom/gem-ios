@@ -127,8 +127,9 @@ public final class ConfirmTransferSceneViewModel {
         return feeModel.fiatValue ?? feeModel.value
     }
     var networkFeeFiatValue: String? {
-        if state.isError { return nil }
-        if shouldShowListErrorInfo { return feeModel.fiatValue }
+        if shouldShowListErrorInfo {
+            return feeModel.fiatValue
+        }
         return nil
     }
 
