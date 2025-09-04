@@ -7,7 +7,6 @@ import Style
 import Components
 import Localization
 
-// TODO: - integrate localization texts
 public struct EmptyContentTypeViewModel: EmptyContentViewable {
     public let type: EmptyContentType
 
@@ -19,15 +18,15 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         switch type {
         case .nfts: Localized.Nft.State.Empty.title
         case .priceAlerts: Localized.PriceAlerts.State.Empty.title
-        case let .asset(_, _, walletType):
-            switch walletType {
-            case .view: Localized.Wallet.Watch.Tooltip.title
-            case .multicoin, .single, .privateKey: Localized.Asset.State.Empty.title
+        case let .asset(_, _, isViewOnly):
+            switch isViewOnly {
+            case true: Localized.Wallet.Watch.Tooltip.title
+            case false: Localized.Asset.State.Empty.title
             }
-        case let .activity(_, _, walletType):
-            switch walletType {
-            case .view: Localized.Wallet.Watch.Tooltip.title
-            case .multicoin, .single, .privateKey: Localized.Activity.State.Empty.title
+        case let .activity(_, _, isViewOnly):
+            switch isViewOnly {
+            case true: Localized.Wallet.Watch.Tooltip.title
+            case false: Localized.Activity.State.Empty.title
             }
         case .stake: Localized.Stake.State.Empty.title
         case .walletConnect: Localized.WalletConnect.State.Empty.title
@@ -45,15 +44,15 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         switch type {
         case let .nfts(action): action != nil ? Localized.Nft.State.Empty.description : nil
         case .priceAlerts: Localized.PriceAlerts.State.Empty.description
-        case let .asset(symbol, _, walletType):
-            switch walletType {
-            case .view: Localized.Info.WatchWallet.description
-            case .multicoin, .single, .privateKey: Localized.Asset.State.Empty.description(symbol)
+        case let .asset(symbol, _, isViewOnly):
+            switch isViewOnly {
+            case true: Localized.Info.WatchWallet.description
+            case false: Localized.Asset.State.Empty.description(symbol)
             }
-        case let .activity(_, _, walletType):
-            switch walletType {
-            case .view: Localized.Info.WatchWallet.description
-            case .multicoin, .single, .privateKey: Localized.Activity.State.Empty.description
+        case let .activity(_, _, isViewOnly):
+            switch isViewOnly {
+            case true: Localized.Info.WatchWallet.description
+            case false: Localized.Activity.State.Empty.description
             }
         case let .stake(symbol): Localized.Stake.State.Empty.description(symbol)
         case .walletConnect: Localized.WalletConnect.State.Empty.description
@@ -85,21 +84,17 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         switch type {
         case .priceAlerts, .stake, .walletConnect, .markets:
             actions = []
-        case let .asset(_, buy, walletType):
-            switch walletType {
-            case .view:
-                actions = []
-            case .multicoin, .single, .privateKey:
-                actions = [EmptyAction(title: Localized.Wallet.buy, action: buy)]
+        case let .asset(_, buy, isViewOnly):
+            switch isViewOnly {
+            case true: actions = []
+            case false: actions = [EmptyAction(title: Localized.Wallet.buy, action: buy)]
             }
         case let .nfts(action):
             actions = [EmptyAction(title: Localized.Wallet.receive, action: action)]
-        case let .activity(receive, buy, walletType):
-            switch walletType {
-            case .view:
-                actions = []
-            case .multicoin, .single, .privateKey:
-                actions = [
+        case let .activity(receive, buy, isViewOnly):
+            switch isViewOnly {
+            case true: actions = []
+            case false : actions = [
                     EmptyAction(title: Localized.Wallet.buy, action: buy),
                     EmptyAction(title: Localized.Wallet.receive, action: receive)
                 ]
