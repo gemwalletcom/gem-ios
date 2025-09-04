@@ -5,6 +5,7 @@ import Primitives
 import Localization
 import Components
 import Formatters
+import Style
 
 public struct AddressListItemViewModel {
     
@@ -70,6 +71,6 @@ public struct AddressListItemViewModel {
     }
 
     private func address(for style: AddressFormatter.Style) -> String {
-        return AddressFormatter(style: style, address: account.address, chain: account.chain).value()
+        AddressFormatter(style: style, address: account.address, chain: account.chain).value()
     }
 }

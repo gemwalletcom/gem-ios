@@ -20,6 +20,12 @@ public struct TransactionHeaderListItemView: View {
         self.showClearHeader = showClearHeader
         self.action = action
     }
+    
+    public init(model: TransactionHeaderItemModel, action: VoidAction = nil) {
+        self.headerType = model.headerType
+        self.showClearHeader = model.showClearHeader
+        self.action = action
+    }
 
     public var body: some View {
         if showClearHeader {
