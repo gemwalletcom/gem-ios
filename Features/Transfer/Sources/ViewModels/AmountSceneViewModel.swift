@@ -85,13 +85,14 @@ public final class AmountSceneViewModel {
     var continueTitle: String { Localized.Common.continue }
     var isNextEnabled: Bool { actionButtonState == .normal }
     
-    var reservedFeesText: String? {
-        guard case .stake = type,
-              amountInputModel.text == maxBalance,
-              availableBalanceForStaking > .zero
-        else { return nil }
-
-        return "We've left \(formatter.string(stakingReservedForFees, asset: asset)) out so you can pay for withdrawal fees."
+    var infoText: String? {
+        switch type {
+        case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual:
+            return nil
+        case .stake:
+            guard amountInputModel.text == maxBalance, availableBalanceForStaking > .zero else { return nil }
+            return Localized.Transfer.reservedFees(formatter.string(stakingReservedForFees, asset: asset))
+        }
     }
 
     var inputConfig: any CurrencyInputConfigurable {

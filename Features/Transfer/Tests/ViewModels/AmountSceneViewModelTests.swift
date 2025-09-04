@@ -38,7 +38,7 @@ struct AmountSceneViewModelTests {
         
         model.onSelectMaxButton()
 
-        #expect(model.reservedFeesText != nil)
+        #expect(model.infoText != nil)
         #expect(model.amountInputModel.text == "0.999979")
     }
     
@@ -48,7 +48,7 @@ struct AmountSceneViewModelTests {
         let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
         
         model.onSelectMaxButton()
-        #expect(model.reservedFeesText == nil)
+        #expect(model.infoText == nil)
         #expect(model.amountInputModel.text == "0")
     }
     

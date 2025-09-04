@@ -50,7 +50,7 @@ struct AmountScene: View {
                     }
                 }
                 
-                if let infoText = model.reservedFeesText {
+                if let infoText = model.infoText {
                     Section {
                         Text(infoText)
                             .textStyle(.calloutSecondary)

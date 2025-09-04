@@ -2,9 +2,6 @@
 
 import BigInt
 import Foundation
-import struct Gemstone.EvmChainConfig
-import struct Gemstone.EvmHistoryRewardPercentiles
-import GemstonePrimitives
 import Primitives
 import WalletCore
 
@@ -178,51 +175,5 @@ extension EthereumService {
             ),
             gasLimit: gasLimit
         )
-    }
-}
-
-extension EthereumService: ChainFeeRateFetchable {
-    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        let config = GemstoneConfig.shared.config(for: chain)
-        let (baseFee, priorityFees) = try await getBasePriorityFees(config: config)
-        let feeRates = FeePriority.allCases.compactMap { priority in
-            priorityFees[priority].map {
-                FeeRate(
-                    priority: priority,
-                    gasPriceType: .eip1559(gasPrice: baseFee, priorityFee: $0)
-                )
-            }
-        }
-        return feeRates
-    }
-
-    private func getBasePriorityFees(config: EvmChainConfig) async throws -> (base: BigInt, priority: [FeePriority: BigInt]) {
-        let feeHistory = try await provider
-            .request(
-                .feeHistory(
-                    blocks: Int(config.feeHistoryBlocks),
-                    rewardPercentiles: config.rewardsPercentiles.all,
-                    blockParameter: .pending
-                )
-            )
-            .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
-
-        return try calculator.basePriorityFees(chain: chain, feeHistory: feeHistory)
-    }
-}
-
-// MARK: - Model extensions
-
-extension EvmHistoryRewardPercentiles {
-    var all: [Int] { [slow, normal, fast].map { Int($0) } }
-}
-
-extension Array where Element == [String] {
-    func toBigInts() -> [[BigInt]] {
-        map { values in
-            values.compactMap { feeHex in
-                try? BigInt.fromHex(feeHex)
-            }
-        }
     }
 }
