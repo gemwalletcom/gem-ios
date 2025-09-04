@@ -49,6 +49,13 @@ struct AmountScene: View {
                         )
                     }
                 }
+                
+                if let infoText = model.infoText {
+                    Section {
+                        Text(infoText)
+                            .textStyle(.calloutSecondary)
+                    }
+                }
 
                 switch model.type {
                 case .transfer, .deposit, .withdraw:
