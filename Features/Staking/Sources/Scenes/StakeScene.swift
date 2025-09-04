@@ -52,12 +52,12 @@ public struct StakeScene: View {
 extension StakeScene {
     private var stakeSection: some View {
         Section(Localized.Common.manage) {
-            NavigationLink(value: model.makeStakeDestination()) {
+            NavigationLink(value: model.stakeDestination()) {
                 ListItemView(title: model.stakeTitle)
             }
 
-            if model.showClaimRewards(delegations: delegations) {
-                NavigationLink(value: model.makeClaimRewardsDestination(delegations: delegations)) {
+            if let claimRewardsDestination = model.claimRewardsDestination(delegations: delegations) {
+                NavigationLink(value: claimRewardsDestination) {
                     ListItemView(
                         title: model.claimRewardsTitle,
                         subtitle: model.claimRewardsText(delegations: delegations)
@@ -79,7 +79,7 @@ extension StakeScene {
                     .id(UUID())
             case .data(let delegations):
                 ForEach(delegations) { delegation in
-                    NavigationLink(value: model.makeDelegationDestination(for: delegation)) {
+                    NavigationLink(value: delegation.navigationDestination) {
                         ValidatorDelegationView(delegation: delegation)
                     }
                 }

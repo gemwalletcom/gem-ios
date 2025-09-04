@@ -96,16 +96,14 @@ public final class StakeViewModel {
         case .error(let error): return .error(error)
         }
     }
-
-    func showClaimRewards(delegations: [Delegation]) -> Bool {
-        value(delegations: delegations) > 0 && ![Chain.solana, Chain.sui].contains(chain)
-    }
     
     func claimRewardsText(delegations: [Delegation]) -> String {
         formatter.string(value(delegations: delegations), decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
-    func makeClaimRewardsDestination(delegations: [Delegation]) -> any Hashable {
+    func claimRewardsDestination(delegations: [Delegation]) -> (any Hashable)? {
+        guard value(delegations: delegations) > 0 && ![Chain.solana, Chain.sui].contains(chain) else { return nil }
+
         let validators = delegations
             .filter { $0.base.rewardsValue > 0 }
             .map { $0.validator }
@@ -120,7 +118,7 @@ public final class StakeViewModel {
         )
     }
 
-    func makeStakeDestination() -> any Hashable {
+    func stakeDestination() -> any Hashable {
         AmountInput(
             type: .stake(
                 validators: (try? stakeService.getActiveValidators(assetId: chain.assetId)) ?? [],
@@ -128,22 +126,6 @@ public final class StakeViewModel {
             ),
             asset: chain.asset
         )
-    }
-    
-    func makeDelegationDestination(for delegation: StakeDelegationViewModel) -> any Hashable {
-        switch delegation.state {
-        case .active, .pending, .undelegating, .inactive, .activating, .deactivating:
-            delegation.delegation
-        case .awaitingWithdrawal:
-            TransferData(
-                type: .stake(asset, .withdraw(delegation.delegation)),
-                recipientData: RecipientData(
-                    recipient: Recipient(name: delegation.validatorText, address: delegation.delegation.validator.id, memo: ""),
-                    amount: .none
-                ),
-                value: delegation.delegation.base.balanceValue
-            )
-        }
     }
 }
 
