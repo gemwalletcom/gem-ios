@@ -6,9 +6,11 @@ import BigInt
 
 public extension Gemstone.GemNodeStatus {
     func map() throws -> NodeStatus {
-        .result(
-            blockNumber: latestBlockNumber.asBigInt,
-            latency: Latency.from(duration: Double(latencyMs) / 1000.0)
+        NodeStatus(
+            chainId: chainId,
+            latestBlockNumber: latestBlockNumber.asBigInt,
+            latency: Latency.from(duration: Double(latencyMs))
         )
     }
 }
+
