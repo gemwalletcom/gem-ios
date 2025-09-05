@@ -16,7 +16,7 @@ public struct Price: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct PriceData: Codable, Sendable {
+public struct PriceData: Codable, Equatable, Sendable {
 	public let asset: Asset
 	public let price: Price?
 	public let priceAlerts: [PriceAlert]

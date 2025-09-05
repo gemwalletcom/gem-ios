@@ -147,7 +147,7 @@ let package = Package(
                 "Preferences"
             ],
             path: "PriceAlertService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "PriceAlertServiceTestKit",
@@ -155,7 +155,8 @@ let package = Package(
                 "PriceAlertService",
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "DeviceServiceTestKit", package: "SystemServices"),
-                "PriceServiceTestKit"
+                "PriceServiceTestKit",
+                .product(name: "GemAPITestKit", package: "GemAPI")
             ],
             path: "PriceAlertService/TestKit"
         ),
@@ -333,6 +334,19 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store")
             ],
             path: "AddressNameService/TestKit"
+        ),
+        .testTarget(
+            name: "PriceAlertServiceTests",
+            dependencies: [
+                "PriceAlertService",
+                "PriceAlertServiceTestKit",
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "DeviceServiceTestKit", package: "SystemServices"),
+                "PriceServiceTestKit",
+                .product(name: "PrimitivesTestKit", package: "Primitives")
+            ],
+            path: "PriceAlertService/Tests"
         ),
     ]
 )

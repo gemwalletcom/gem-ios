@@ -7,7 +7,7 @@ import Combine
 import Primitives
 
 public struct PriceRequest: ValueObservationQueryable {
-    public static var defaultValue: PriceData { fatalError() }
+    public static var defaultValue: PriceData? { nil }
 
     public var assetId: AssetId
 
@@ -15,7 +15,7 @@ public struct PriceRequest: ValueObservationQueryable {
         self.assetId = assetId
     }
 
-    public func fetch(_ db: Database) throws -> PriceData {
+    public func fetch(_ db: Database) throws -> PriceData? {
         try AssetRecord
             .including(optional: AssetRecord.price)
             .including(all: AssetRecord.priceAlerts)
@@ -23,6 +23,6 @@ public struct PriceRequest: ValueObservationQueryable {
             .filter(AssetRecord.Columns.id == assetId.identifier)
             .asRequest(of: PriceRecordInfo.self)
             .fetchOne(db)
-            .map { $0.priceData }!
+            .map { $0.priceData }
     }
 }

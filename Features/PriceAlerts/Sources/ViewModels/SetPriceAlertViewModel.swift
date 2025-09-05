@@ -13,7 +13,7 @@ import Formatters
 @MainActor
 @Observable
 public final class SetPriceAlertViewModel {
-    private let wallet: Wallet
+    private let walletId: WalletId
     private let assetId: AssetId
     private let priceAlertService: PriceAlertService
     private let onComplete: StringAction
@@ -24,12 +24,12 @@ public final class SetPriceAlertViewModel {
     let preselectedPercentages: [String] = ["5", "10", "15"]
     
     public init(
-        wallet: Wallet,
+        walletId: WalletId,
         assetId: AssetId,
         priceAlertService: PriceAlertService,
         onComplete: StringAction
     ) {
-        self.wallet = wallet
+        self.walletId = walletId
         self.assetId = assetId
         self.priceAlertService = priceAlertService
         self.onComplete = onComplete
@@ -38,7 +38,7 @@ public final class SetPriceAlertViewModel {
 
     var assetRequest: AssetRequest {
         AssetRequest(
-            walletId: wallet.id,
+            walletId: walletId.id,
             assetId: assetId
         )
     }
@@ -168,10 +168,25 @@ public final class SetPriceAlertViewModel {
 extension SetPriceAlertViewModel {
     func setPriceAlert() async {
         do {
+            await updateNotificationsIfNeeded()
             onComplete?(completeMessage)
             try await priceAlertService.add(priceAlert: priceAlert())
         } catch {
             NSLog("Set price alert error: \(error.localizedDescription)")
         }
+    }
+    
+    private func updateNotificationsIfNeeded() async {
+        guard !preferences.isPushNotificationsEnabled else { return }
+        
+        do {
+            preferences.isPushNotificationsEnabled = try await requestPermissions()
+        } catch {
+            NSLog("pushesUpdate error: \(error)")
+        }
+    }
+    
+    private func requestPermissions() async throws -> Bool {
+        try await priceAlertService.requestPermissions()
     }
 }

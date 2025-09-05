@@ -27,7 +27,7 @@ public extension AssetData {
             balance: balance,
             account: account,
             price: price,
-            price_alerts: priceAlerts,
+            priceAlerts: priceAlerts,
             metadata: metadata
         )
     }
