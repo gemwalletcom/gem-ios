@@ -35,7 +35,7 @@ public final class AssetPriceAlertsViewModel: Sendable {
 
     var alertsModel: [PriceAlertItemViewModel] {
         priceAlerts
-            .filter { $0.priceAlert.type != .auto && $0.priceAlert.lastNotifiedAt == nil }
+            .filter { $0.priceAlert.shouldDisplay }
             .map { PriceAlertItemViewModel(data: $0) }
     }
 }

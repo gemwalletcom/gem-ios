@@ -40,7 +40,7 @@ public final class ChartsViewModel {
     var emptyTitle: String { Localized.Common.notAvailable }
     var errorTitle: String { Localized.Errors.errorOccured }
 
-    var priceAlerts: [PriceAlert] { priceData?.priceAlerts.filter { $0.type != .auto && $0.lastNotifiedAt == nil } ?? [] }
+    var priceAlerts: [PriceAlert] { priceData?.priceAlerts.filter { $0.shouldDisplay } ?? [] }
     var hasPriceAlerts: Bool { priceAlerts.isNotEmpty }
     var setPriceAlertTitle: String { "Set Price Alert" }
     var viewPriceAlertsTitle: String { Localized.Settings.PriceAlerts.title }

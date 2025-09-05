@@ -148,7 +148,7 @@ public final class AssetSceneViewModel: Sendable {
     public var walletModel: WalletViewModel { WalletViewModel(wallet: input.wallet) }
 
     public var optionsImage: Image { Images.System.ellipsis }
-    public var priceAlertsSystemImage: String { assetData.isPriceAlertsEnabled ? SystemImage.starFill : SystemImage.star }
+    public var priceAlertsSystemImage: String { assetData.isPriceAlertsEnabled ? SystemImage.bellFill : SystemImage.bell }
     public var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
 
     public var menuItems: [ActionMenuItemType] {
