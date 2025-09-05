@@ -82,11 +82,22 @@ struct SettingsNavigationStack: View {
                     model: PriceAlertsViewModel(priceAlertService: priceAlertService)
                 )
             }
+            .navigationDestination(for: Scenes.AssetPriceAlert.self) {
+                AssetPriceAlertsScene(
+                    model: AssetPriceAlertsViewModel(
+                        priceAlertService: priceAlertService,
+                        walletId: walletId,
+                        asset: $0.asset
+                    )
+                )
+            }
             .navigationDestination(for: Scenes.Price.self) { scene in
                 ChartScene(
                     model: ChartsViewModel(
                         priceService: priceService,
-                        assetModel: AssetViewModel(asset: scene.asset)
+                        assetModel: AssetViewModel(asset: scene.asset),
+                        priceAlertService: priceAlertService,
+                        walletId: walletId
                     )
                 )
             }
