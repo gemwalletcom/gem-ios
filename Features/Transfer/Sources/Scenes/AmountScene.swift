@@ -52,9 +52,15 @@ struct AmountScene: View {
                 
                 if let infoText = model.infoText {
                     Section {
-                        Text(infoText)
-                            .textStyle(.calloutSecondary)
+                        HStack {
+                            Images.System.info
+                                .foregroundStyle(Colors.gray)
+                                .frame(width: .list.image, height: .list.image)
+                            Text(infoText)
+                                .textStyle(.calloutSecondary)
+                        }
                     }
+                    .listRowInsets(.assetListRowInsets)
                 }
 
                 switch model.type {
