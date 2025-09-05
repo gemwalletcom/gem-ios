@@ -183,11 +183,7 @@ public final class TransactionDetailViewModel {
     }
 
     var networkFeeText: String {
-        model.infoModel.feeDisplay?.amount.text ?? ""
-    }
-
-    var networkFeeFiatText: String? {
-        model.infoModel.feeDisplay?.fiat?.text
+        model.infoModel.feeDisplay?.fiat?.text ?? model.infoModel.feeDisplay?.amount.text ?? ""
     }
 
     var showMemoField: Bool {
