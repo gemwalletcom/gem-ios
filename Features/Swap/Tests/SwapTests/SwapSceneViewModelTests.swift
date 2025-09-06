@@ -54,7 +54,7 @@ struct SwapSceneViewModelTests {
     func tryAgainButtonEnabledWhenError() {
         let model = SwapSceneViewModel.mock()
         
-        model.swapState.quotes = .error(ErrorWrapper(Gemstone.SwapperError.NoQuoteAvailable))
+        model.swapState.quotes = .error(Gemstone.SwapperError.NoQuoteAvailable)
         #expect(model.shouldDisableActionButton == false)
         
         model.swapState.quotes = .data([])
