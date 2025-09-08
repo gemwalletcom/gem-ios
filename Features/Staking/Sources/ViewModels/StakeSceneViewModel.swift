@@ -15,16 +15,18 @@ import Formatters
 
 @MainActor
 @Observable
-public final class StakeViewModel {
-    private let wallet: Wallet
-
+public final class StakeSceneViewModel {
+    private let stakeService: any StakeServiceable
     private var delegatitonsState: StateViewType<Bool> = .loading
     private let chain: Chain
-    private let stakeService: any StakeServiceable
 
     private let formatter = ValueFormatter(style: .medium)
     private let recommendedValidators = StakeRecommendedValidators()
-    
+
+    public let wallet: Wallet
+
+    public var request: StakeDelegationsRequest
+    public var delegations: [Delegation] = []
     public var isPresentingInfoSheet: InfoSheetType? = .none
 
     public init(
@@ -35,16 +37,16 @@ public final class StakeViewModel {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
+        self.request = StakeDelegationsRequest(walletId: wallet.id, assetId: chain.id)
     }
 
-    var title: String { Localized.Transfer.Stake.title }
+    public var stakeInfoUrl: URL { Docs.url(.staking) }
 
-    var request: StakeDelegationsRequest { StakeDelegationsRequest(walletId: wallet.id, assetId: chain.id) }
+    var title: String { Localized.Transfer.Stake.title }
 
     var stakeTitle: String { Localized.Transfer.Stake.title }
     var claimRewardsTitle: String { Localized.Transfer.ClaimRewards.title }
     var assetTitle: String { assetModel.title }
-    var stakeInfoUrl: URL { Docs.url(.staking) }
 
     var stakeAprTitle: String { Localized.Stake.apr("") }
     var stakeAprValue: String {
@@ -88,7 +90,9 @@ public final class StakeViewModel {
         EmptyContentTypeViewModel(type: .stake(symbol: assetModel.symbol))
     }
 
-    func stakeDelegateionState(delegationModels: [StakeDelegationViewModel]) -> StateViewType<[StakeDelegationViewModel]> {
+    var delegationsState: StateViewType<[StakeDelegationViewModel]> {
+        let delegationModels = delegations.map { StakeDelegationViewModel(delegation: $0) }
+        
         switch delegatitonsState {
         case .noData: return .noData
         case .loading: return delegationModels.isEmpty ? .loading : .data(delegationModels)
@@ -97,12 +101,12 @@ public final class StakeViewModel {
         }
     }
     
-    func claimRewardsText(delegations: [Delegation]) -> String {
-        formatter.string(value(delegations: delegations), decimals: asset.decimals.asInt, currency: asset.symbol)
+    var claimRewardsText: String {
+        formatter.string(rewardsValue, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
-    func claimRewardsDestination(delegations: [Delegation]) -> (any Hashable)? {
-        guard value(delegations: delegations) > 0 && ![Chain.solana, Chain.sui].contains(chain) else { return nil }
+    var claimRewardsDestination: (any Hashable)? {
+        guard rewardsValue > 0 && ![Chain.solana, Chain.sui].contains(chain) else { return nil }
 
         let validators = delegations
             .filter { $0.base.rewardsValue > 0 }
@@ -114,11 +118,11 @@ public final class StakeViewModel {
                 recipient: Recipient(name: .none, address: "", memo: .none),
                 amount: .none
             ),
-            value: value(delegations: delegations)
+            value: rewardsValue
         )
     }
 
-    func stakeDestination() -> any Hashable {
+    var stakeDestination: any Hashable {
         AmountInput(
             type: .stake(
                 validators: (try? stakeService.getActiveValidators(assetId: chain.assetId)) ?? [],
@@ -131,7 +135,7 @@ public final class StakeViewModel {
 
 // MARK: - Business Logic
 
-extension StakeViewModel {
+extension StakeSceneViewModel {
     func fetch() async {
         delegatitonsState = .loading
         do {
@@ -151,7 +155,7 @@ extension StakeViewModel {
 
 // MARK: - Private
 
-extension StakeViewModel {
+extension StakeSceneViewModel {
     private static let lockTimeFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.day]
@@ -175,8 +179,7 @@ extension StakeViewModel {
         chain.asset
     }
 
-    private func value(delegations: [Delegation]) -> BigInt {
+    private var rewardsValue: BigInt {
         delegations.map { $0.base.rewardsValue }.reduce(0, +)
     }
 }
-

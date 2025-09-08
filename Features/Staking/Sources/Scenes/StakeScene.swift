@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import GRDBQuery
 import Store
 import Primitives
 import Components
@@ -10,17 +9,10 @@ import InfoSheet
 import PrimitivesComponents
 
 public struct StakeScene: View {
-    @State private var model: StakeViewModel
+    private let model: StakeSceneViewModel
 
-    @Query<StakeDelegationsRequest>
-    private var delegations: [Delegation]
-    private var delegationsModel: [StakeDelegationViewModel] {
-        delegations.map { StakeDelegationViewModel(delegation: $0) }
-    }
-
-    public init(model: StakeViewModel) {
-        _model = State(initialValue: model)
-        _delegations = Query(model.request)
+    public init(model: StakeSceneViewModel) {
+        self.model = model
     }
 
     public var body: some View {
@@ -36,10 +28,6 @@ public struct StakeScene: View {
             await model.fetch()
         }
         .navigationTitle(model.title)
-        .toolbarInfoButton(url: model.stakeInfoUrl)
-        .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(type: $0)
-        }
         .taskOnce {
             Task {
                 await model.fetch()
@@ -53,15 +41,15 @@ public struct StakeScene: View {
 extension StakeScene {
     private var stakeSection: some View {
         Section(Localized.Common.manage) {
-            NavigationLink(value: model.stakeDestination()) {
+            NavigationLink(value: model.stakeDestination) {
                 ListItemView(title: model.stakeTitle)
             }
 
-            if let claimRewardsDestination = model.claimRewardsDestination(delegations: delegations) {
+            if let claimRewardsDestination = model.claimRewardsDestination {
                 NavigationLink(value: claimRewardsDestination) {
                     ListItemView(
                         title: model.claimRewardsTitle,
-                        subtitle: model.claimRewardsText(delegations: delegations)
+                        subtitle: model.claimRewardsText
                     )
                 }
             }
@@ -71,7 +59,7 @@ extension StakeScene {
 
     private var delegationsSection: some View {
         Section {
-            switch model.stakeDelegateionState(delegationModels: delegationsModel) {
+            switch model.delegationsState {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)
                     .cleanListRow()
