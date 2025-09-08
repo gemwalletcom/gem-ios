@@ -34,6 +34,7 @@ public struct TransactionsScene: View {
         .overlay {
             if model.transactions.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
+                    .padding(.horizontal, .medium)
             }
         }
         .task { await model.fetch() }

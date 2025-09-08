@@ -14,7 +14,7 @@ final class ChainTests {
     
     @Test
     func transactionTimeoutSeconds() {
-        #expect(Chain.ethereum.transactionTimeoutSeconds == 7200)
+        #expect(Chain.ethereum.transactionTimeoutSeconds == 1440)
         #expect(Chain.solana.transactionTimeoutSeconds == 75)
     }
 }
