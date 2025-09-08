@@ -92,12 +92,12 @@ public struct CosmosSigner: Signable {
             ]
         case .unstake(let delegation):
             let amount = getAmount(input: input, denom: denom)
-            messages = [
+            messages = getRewardMessage(delegatorAddress: input.senderAddress, validators: [delegation.validator]) + [
                 getUnstakeMessage(delegatorAddress: input.senderAddress, validatorAddress: delegation.validator.id, amount: amount)
             ]
         case .redelegate(let data):
             let amount = getAmount(input: input, denom: denom)
-            messages = [
+            messages = getRewardMessage(delegatorAddress: input.senderAddress, validators: [data.delegation.validator]) + [
                 getRedelegateMessage(
                     delegatorAddress: input.senderAddress,
                     validatorSourceAddress: data.delegation.validator.id,
