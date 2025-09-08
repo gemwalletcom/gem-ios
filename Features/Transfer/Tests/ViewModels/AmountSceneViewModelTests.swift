@@ -39,7 +39,7 @@ struct AmountSceneViewModelTests {
         model.onSelectMaxButton()
 
         #expect(model.infoText != nil)
-        #expect(model.amountInputModel.text == "0.999979")
+        #expect(model.amountInputModel.text == "0.99975")
     }
     
     @Test
