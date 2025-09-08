@@ -49,6 +49,22 @@ public struct StakeDelegationViewModel: Sendable {
         delegation.base.state
     }
     
+    public var navigationDestination: any Hashable {
+        switch state {
+        case .active, .pending, .undelegating, .inactive, .activating, .deactivating:
+            delegation
+        case .awaitingWithdrawal:
+            TransferData(
+                type: .stake(asset, .withdraw(delegation)),
+                recipientData: RecipientData(
+                    recipient: Recipient(name: validatorText, address: delegation.validator.id, memo: ""),
+                    amount: .none
+                ),
+                value: delegation.base.balanceValue
+            )
+        }
+    }
+    
     public var stateText: String? {
         switch state {
         case .active: nil
