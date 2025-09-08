@@ -37,16 +37,21 @@ public final class FiatSceneViewModel {
         fiatService: any GemAPIFiatService = GemAPIService(),
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
-        walletId: String
+        walletId: String,
+        type: FiatQuoteType = .buy
     ) {
         self.fiatService = fiatService
         self.currencyFormatter = currencyFormatter
         self.assetAddress = assetAddress
         self.walletId = walletId
 
-        let buyAmount = FiatQuoteTypeViewModel(type: .buy).defaultAmount
-        self.input = FiatInput(type: .buy, buyAmount: buyAmount)
-        self.amountText = String(Int(buyAmount))
+        let defaultAmount = FiatQuoteTypeViewModel(type: type).defaultAmount
+        self.input = FiatInput(type: type, buyAmount: defaultAmount)
+        switch type {
+        case .buy: self.amountText = String(Int(defaultAmount))
+        case .sell: self.amountText = .empty
+        }
+        self.focusField = type == .buy ? .amountBuy : .amountSell
 
         self.amountFormatter = FiatAmountFormatter(
             valueFormatter: ValueFormatter(locale: .US, style: .medium),

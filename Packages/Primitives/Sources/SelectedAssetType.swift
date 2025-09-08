@@ -7,6 +7,7 @@ public enum SelectedAssetType: Sendable, Hashable {
     case receive(ReceiveAssetType)
     case stake(Asset)
     case buy(Asset)
+    case sell(Asset)
     case swap(Asset, Asset?)
 }
 
@@ -17,6 +18,7 @@ extension SelectedAssetType: Identifiable {
         case .receive(let type): "receive_\(type.id)"
         case .stake: "stake"
         case .buy: "buy"
+        case .sell: "sell"
         case .swap: "swap"
         }
     }
