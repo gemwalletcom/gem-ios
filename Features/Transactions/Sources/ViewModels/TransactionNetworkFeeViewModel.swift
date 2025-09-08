@@ -26,8 +26,8 @@ extension TransactionNetworkFeeViewModel: ItemModelProvidable {
         .listItem(
             ListItemModel(
                 title: Localized.Transfer.networkFee,
-                subtitle: feeDisplay?.amount.text ?? "-",
-                subtitleExtra: feeDisplay?.fiat?.text,
+                subtitle: feeDisplay?.fiat?.text ?? feeDisplay?.amount.text ?? "-",
+                subtitleExtra: nil,
                 infoAction: onInfoAction
             )
         )
