@@ -82,7 +82,6 @@ public struct TransactionScene: View {
                     ListItemView(
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
-                        subtitleExtra: model.networkFeeFiatText,
                         infoAction: model.onNetworkFeeInfo
                     )
                 }
