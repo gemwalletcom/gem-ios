@@ -11,8 +11,8 @@ public enum EmptyContentType {
 
     case nfts(action: (() -> Void)? = nil)
     case priceAlerts
-    case asset(symbol: String, buy: (() -> Void)? = nil)
-    case activity(receive: (() -> Void)? = nil, buy: (() -> Void)? = nil)
+    case asset(symbol: String, buy: (() -> Void)? = nil, isViewOnly: Bool)
+    case activity(receive: (() -> Void)? = nil, buy: (() -> Void)? = nil, isViewOnly: Bool)
     case stake(symbol: String)
     case walletConnect
     case search(type: SearchType, action: (() -> Void)? = nil)

@@ -122,7 +122,7 @@ public struct AssetScene: View {
             } else {
                 Section {
                     Spacer()
-                    EmptyContentView(model: model.emptyConentModel)
+                    EmptyContentView(model: model.emptyContentModel)
                 }
                 .cleanListRow()
             }
