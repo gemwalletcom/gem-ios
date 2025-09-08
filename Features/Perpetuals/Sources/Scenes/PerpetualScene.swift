@@ -62,7 +62,7 @@ public struct PerpetualScene: View {
                             title: position.liquidationPriceTitle,
                             subtitle: text,
                             subtitleStyle: position.liquidationPriceTextStyle,
-                            infoAction: { model.onSelectLiquidationPriceInfo() }
+                            infoAction: model.onSelectLiquidationPriceInfo
                         )
                     }
                     
@@ -75,7 +75,7 @@ public struct PerpetualScene: View {
                         title: position.fundingPaymentsTitle,
                         subtitle: position.fundingPaymentsText,
                         subtitleStyle: position.fundingPaymentsTextStyle,
-                        infoAction: { model.onSelectFundingPaymentsInfo() }
+                        infoAction: model.onSelectFundingPaymentsInfo
                     )
                 } header: {
                     Text(model.positionSectionTitle)
@@ -109,13 +109,13 @@ public struct PerpetualScene: View {
                 ListItemView(
                     title: model.perpetualViewModel.openInterestTitle,
                     subtitle: model.perpetualViewModel.openInterestText,
-                    infoAction: { model.onSelectOpenInterestInfo() }
+                    infoAction: model.onSelectOpenInterestInfo
                 )
                 
                 ListItemView(
                     title: model.perpetualViewModel.fundingRateTitle,
                     subtitle: model.perpetualViewModel.fundingRateText,
-                    infoAction: { model.onSelectFundingRateInfo() }
+                    infoAction: model.onSelectFundingRateInfo
                 )
             }
             
