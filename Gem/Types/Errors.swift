@@ -8,7 +8,10 @@ import Primitives
 extension Gemstone.GatewayError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .NetworkError(let string): return string
+        case .NetworkError(let string),
+                .InvalidChain(let string),
+                .ParseError(let string),
+                .BalanceNotFound(let string): string
         }
     }
 }
