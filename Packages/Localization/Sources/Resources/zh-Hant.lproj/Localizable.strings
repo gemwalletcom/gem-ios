@@ -464,3 +464,5 @@
 "banner.asset_status.title" = "可疑資產";
 "banner.asset_status.description" = "代幣可能不安全或具有誤導性。請僅在完全信任的情況下繼續操作。";
 "transfer.maximum_amount" = "最高金額為 %@";
+"transfer.reserved_fees" = "我們省略了%@以便您可以支付提款費用。";
+"swap.min_receive" = "最小接收";
