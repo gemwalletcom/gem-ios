@@ -45,13 +45,18 @@ public final class FiatSceneViewModel {
         self.assetAddress = assetAddress
         self.walletId = walletId
 
-        let defaultAmount = FiatQuoteTypeViewModel(type: type).defaultAmount
-        self.input = FiatInput(type: type, buyAmount: defaultAmount)
+        let input = FiatInput(
+            type: type,
+            buyAmount: FiatQuoteTypeViewModel(type: .buy).defaultAmount,
+            sellAmount: FiatQuoteTypeViewModel(type: .sell).defaultAmount
+        )
+        self.input = input
         switch type {
-        case .buy: self.amountText = String(Int(defaultAmount))
-        case .sell: self.amountText = .empty
+        case .buy:
+            self.amountText = String(Int(input.amount))
+        case .sell:
+            self.amountText = .empty
         }
-        self.focusField = type == .buy ? .amountBuy : .amountSell
 
         self.amountFormatter = FiatAmountFormatter(
             valueFormatter: ValueFormatter(locale: .US, style: .medium),
