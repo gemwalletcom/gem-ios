@@ -32,7 +32,7 @@ public final class FiatSceneViewModel {
     var state: StateViewType<[FiatQuote]> = .loading
 
     var input: FiatInput
-    var inputValidationModel: InputValidationViewModel
+    var inputValidationModel: InputValidationViewModel = InputValidationViewModel()
 
     var focusField: FiatScene.Field?
     var isPresentingFiatProvider: Bool = false
@@ -61,15 +61,7 @@ public final class FiatSceneViewModel {
 
         self.inputValidationModel = InputValidationViewModel(
             mode: .onDemand,
-            validators: [
-                .fiat(validators: [
-                    FiatRangeValidator<Double>(
-                        range: Self.minimumFiatAmount...Self.maximumFiatAmount,
-                        minimumValueText: currencyFormatter.string(Self.minimumFiatAmount),
-                        maximumValueText: currencyFormatter.string(Self.maximumFiatAmount)
-                    )
-                ])
-            ]
+            validators: inputValidation
         )
         self.inputValidationModel.text = String(Int(buyAmount))
     }
@@ -202,6 +194,7 @@ extension FiatSceneViewModel {
 
     func onChangeType(_: FiatQuoteType, type: FiatQuoteType) {
         inputValidationModel.text = amountFormatter.format(amount: input.amount, for: type)
+        inputValidationModel.update(validators: inputValidation)
         focusField = type == .buy ? .amountBuy : .amountSell
     }
 
@@ -286,6 +279,20 @@ extension FiatSceneViewModel {
         case .data(let items): .data(.plain(items.map { FiatQuoteViewModel(asset: asset, quote: $0, selectedQuote: input.quote, formatter: currencyFormatter) }))
         case .loading: .loading
         case .noData: .noData
+        }
+    }
+    
+    private var inputValidation: [any TextValidator] {
+        switch input.type {
+        case .buy:
+            [.fiat(validators: [
+                FiatRangeValidator<Double>(
+                    range: Self.minimumFiatAmount...Self.maximumFiatAmount,
+                    minimumValueText: currencyFormatter.string(Self.minimumFiatAmount),
+                    maximumValueText: currencyFormatter.string(Self.maximumFiatAmount)
+                )
+            ])]
+        case .sell: []
         }
     }
 
