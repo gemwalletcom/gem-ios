@@ -95,6 +95,7 @@ struct AmountScene: View {
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
+        .listSectionSpacing(.compact)
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)

@@ -31,6 +31,7 @@ public struct StakeScene: View {
             }
             delegationsSection
         }
+        .listSectionSpacing(.compact)
         .refreshable {
             await model.fetch()
         }
