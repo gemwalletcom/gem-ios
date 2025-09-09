@@ -47,13 +47,22 @@ public struct ChartScene: View {
             }
             .cleanListRow()
             
-            if model.hasPriceAlerts, let asset = model.priceData?.asset {
+            if model.priceAlertsViewModel.hasPriceAlerts, let asset = model.priceData?.asset {
                 NavigationLink(
                     value: Scenes.AssetPriceAlert(asset: asset),
-                    label: { ListItemView(title: model.viewPriceAlertsTitle, subtitle: model.priceAlertCount) }
+                    label: {
+                        ListItemView(
+                            title: model.priceAlertsViewModel.priceAlertsTitle,
+                            subtitle: model.priceAlertsViewModel.priceAlertCount
+                        )
+                    }
                 )
             } else {
-                NavigationCustomLink(with: ListItemView(title: model.setPriceAlertTitle)) {
+                NavigationCustomLink(
+                    with: ListItemView(
+                        title: model.priceAlertsViewModel.setPriceAlertTitle
+                    )
+                ) {
                     model.onSelectSetPriceAlerts()
                 }
             }

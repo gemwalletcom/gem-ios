@@ -17,14 +17,23 @@ public struct AssetPriceAlertsScene: View {
     
     public var body: some View {
         List {
-            ForEach(model.alertsModel, id: \.data.priceAlert.id) { alert in
-                ListAssetItemView(model: alert)
-                    .swipeActions(edge: .trailing) {
-                        Button(Localized.Common.delete, role: .destructive) {
-                            onDelete(alert: alert.data.priceAlert)
-                        }
-                        .tint(Colors.red)
-                    }
+            if let autoAlertModel = model.autoAlertModel {
+                Section {
+                    alertView(model: autoAlertModel)
+                } footer: {
+                    Text(Localized.PriceAlerts.autoFooter)
+                }
+            }
+            
+            Section {
+                ForEach(model.alertsModel, id: \.data.priceAlert.id) { model in
+                    alertView(model: model)
+                }
+            }
+        }
+        .overlay {
+            if let emptyContentModel = model.emptyContentModel {
+                EmptyContentView(model: emptyContentModel)
             }
         }
         .observeQuery(request: $model.request, value: $model.priceAlerts)
@@ -52,6 +61,16 @@ public struct AssetPriceAlertsScene: View {
                 )
             )
         }
+    }
+    
+    private func alertView(model: PriceAlertItemViewModel) -> some View {
+        ListAssetItemView(model: model)
+            .swipeActions(edge: .trailing) {
+                Button(Localized.Common.delete, role: .destructive) {
+                    onDelete(alert: model.data.priceAlert)
+                }
+                .tint(Colors.red)
+            }
     }
 }
 

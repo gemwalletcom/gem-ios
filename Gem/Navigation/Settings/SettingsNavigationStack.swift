@@ -79,7 +79,7 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.PriceAlerts.self) { _ in
                 PriceAlertsNavigationView(
-                    model: PriceAlertsViewModel(priceAlertService: priceAlertService)
+                    model: PriceAlertsSceneViewModel(priceAlertService: priceAlertService)
                 )
             }
             .navigationDestination(for: Scenes.AssetPriceAlert.self) {

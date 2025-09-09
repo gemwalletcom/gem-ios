@@ -7,6 +7,7 @@ import Localization
 import PriceAlertService
 import GRDB
 import GRDBQuery
+import PrimitivesComponents
 
 @Observable
 @MainActor
@@ -32,11 +33,22 @@ public final class AssetPriceAlertsViewModel: Sendable {
     }
     
     var title: String { Localized.Settings.PriceAlerts.title }
-
+    
+    var autoAlertModel: PriceAlertItemViewModel? {
+        priceAlerts
+            .first(where: { $0.priceAlert.type == .auto })
+            .map { PriceAlertItemViewModel(data: $0) }
+    }
+    
     var alertsModel: [PriceAlertItemViewModel] {
         priceAlerts
-            .filter { $0.priceAlert.shouldDisplay }
+            .filter { $0.priceAlert.shouldDisplay && $0.priceAlert.type != .auto }
             .map { PriceAlertItemViewModel(data: $0) }
+    }
+    
+    var emptyContentModel: EmptyContentTypeViewModel? {
+        guard alertsModel.isEmpty else { return nil }
+        return EmptyContentTypeViewModel(type: .priceAlerts)
     }
 }
 

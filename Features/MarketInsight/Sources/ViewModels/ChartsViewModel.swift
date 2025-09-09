@@ -39,12 +39,10 @@ public final class ChartsViewModel {
     var title: String { assetModel.name }
     var emptyTitle: String { Localized.Common.notAvailable }
     var errorTitle: String { Localized.Errors.errorOccured }
-
-    var priceAlerts: [PriceAlert] { priceData?.priceAlerts.filter { $0.shouldDisplay } ?? [] }
-    var hasPriceAlerts: Bool { priceAlerts.isNotEmpty }
-    var setPriceAlertTitle: String { "Set Price Alert" }
-    var viewPriceAlertsTitle: String { Localized.Settings.PriceAlerts.title }
-    var priceAlertCount: String? { "\(priceAlerts.count)" }
+    
+    var priceAlertsViewModel: PriceAlertsViewModel {
+        PriceAlertsViewModel(priceAlerts: priceData?.priceAlerts ?? [])
+    }
 
     public init(
         service: ChartService = ChartService(),

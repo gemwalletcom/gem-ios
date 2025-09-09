@@ -164,6 +164,10 @@ public final class AssetSceneViewModel: Sendable {
     var showStatus: Bool {
         scoreViewModel.hasWarning
     }
+    
+    var priceAlertsViewModel: PriceAlertsViewModel {
+        PriceAlertsViewModel(priceAlerts: assetData.priceAlerts)
+    }
 }
 
 
