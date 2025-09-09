@@ -44,18 +44,18 @@ struct SwapButtonViewModel: StateButtonViewable {
     }
 
     var buttonAction: SwapButtonAction {
-        if case .error = swapState.quotes, canRetry { return .retryQuotes }
-        if case .error = swapState.swapTransferData, canRetry { return .retrySwap }
+        if canRetryQuotes { return .retryQuotes }
+        if canRetrySwap { return .retrySwap }
         if !isAmountValid, let fromAsset { return .insufficientBalance(fromAsset.asset.symbol) }
         return .swap
     }
 
     var icon: Image? { nil }
     var type: ButtonType {
-        if case .error = swapState.swapTransferData, canRetry {
+        if canRetrySwap {
             return .primary(.normal)
         }
-        return .primary(swapState.quotes, isDisabled: !isAmountValid && !canRetry)
+        return .primary(swapState.quotes, isDisabled: !isAmountValid && !canRetryQuotes)
     }
     var isVisible: Bool { !swapState.quotes.isNoData }
 
@@ -65,15 +65,15 @@ struct SwapButtonViewModel: StateButtonViewable {
 // MARK: - Private
 
 extension SwapButtonViewModel {
-    private var canRetry: Bool {
-        if let swapError = swapState.error as? RetryableError, swapError.isRetryAvailable {
-            return true
-        }
-        if case .error(let quotesError) = swapState.quotes,
-           let retryableError = quotesError as? RetryableError,
-           retryableError.isRetryAvailable {
-            return true
-        }
-        return false
+    private var canRetryQuotes: Bool {
+        guard case .error(let error) = swapState.quotes,
+              let retryableError = error as? RetryableError else { return false }
+        return retryableError.isRetryAvailable
+    }
+    
+    private var canRetrySwap: Bool {
+        guard case .error(let error) = swapState.swapTransferData,
+              let retryableError = error as? RetryableError else { return false }
+        return retryableError.isRetryAvailable
     }
 }

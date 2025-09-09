@@ -73,6 +73,16 @@ struct SwapButtonViewModelTests {
         #expect(viewModel.type == ButtonType.primary(.loading()))
         #expect(viewModel.isVisible == true)
     }
+    
+    @Test
+    func canRetryLogicEdgeCase() {
+        let swapState = SwapState(
+            availability: .error(MockNonRetryableError()),
+            swapTransferData: .error(MockRetryableError())
+        )
+        let viewModel = SwapButtonViewModel.mock(swapState: swapState)
+        #expect(viewModel.buttonAction == SwapButtonAction.retrySwap)
+    }
 }
 
 extension SwapButtonViewModel {
@@ -93,3 +103,5 @@ extension SwapButtonViewModel {
 private struct MockRetryableError: Error, RetryableError {
     var isRetryAvailable: Bool = true
 }
+
+private struct MockNonRetryableError: Error {}
