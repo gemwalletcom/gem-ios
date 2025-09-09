@@ -76,5 +76,4 @@ extension SwapButtonViewModel {
         }
         return false
     }
-
 }
