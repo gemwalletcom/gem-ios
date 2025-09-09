@@ -49,7 +49,6 @@
 		B62F6B9D2DE61ADF00AF56AB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = B62F6B9C2DE61ADF00AF56AB /* Onboarding */; };
 		B66AFC6C2DDB260A0082C026 /* AppService in Frameworks */ = {isa = PBXBuildFile; productRef = B66AFC6B2DDB260A0082C026 /* AppService */; };
 		B66DEDB02D49F0EA00309D53 /* ImageGalleryService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */; };
-		B677B1F52E3CA15100AD893A /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = B677B1F42E3CA15100AD893A /* Localization */; };
 		B67ED5472DDB5DCC009F74E6 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */; };
 		B68BD2CA2DE04B5B00687F09 /* Components in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2C92DE04B5B00687F09 /* Components */; };
 		B68BD2D82DE05F7500687F09 /* KeystoreTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2D72DE05F7500687F09 /* KeystoreTestKit */; };
@@ -115,16 +114,17 @@
 		D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAD2E37FCA800D27283 /* Formatters */; };
 		D8CFDEB02E37FCB000D27283 /* Components in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAF2E37FCB000D27283 /* Components */; };
 		D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */; };
+		D8D5C1D12E6CAC16007628A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D5C1D02E6CAC16007628A1 /* Errors.swift */; };
 		D8D726BD2C7157A000A6B559 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8D726BC2C7157A000A6B559 /* Primitives */; };
 		D8D726C02C716DED00A6B559 /* ScreenshotsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F8772B17F21E00B15F54 /* ScreenshotsLaunchTests.swift */; };
 		D8D83C842CECFA610083AA53 /* Swap in Frameworks */ = {isa = PBXBuildFile; productRef = D8D83C832CECFA610083AA53 /* Swap */; };
 		D8F5B8602CCA008E0007E615 /* ChainService in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B85F2CCA008E0007E615 /* ChainService */; };
 		D8F5B86C2CCD52EB0007E615 /* Staking in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86B2CCD52EB0007E615 /* Staking */; };
 		D8F5B86F2CCD639A0007E615 /* StakeService in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86E2CCD639A0007E615 /* StakeService */; };
+		D8WIDGBF12345678901234 /* WidgetLocalization in Frameworks */ = {isa = PBXBuildFile; productRef = D8WIDGET12345678901234 /* WidgetLocalization */; };
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
 		DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = DF93C4ED2C969F4F00204ABD /* Gemstone */; };
-		D8WIDGBF12345678901234 /* WidgetLocalization in Frameworks */ = {isa = PBXBuildFile; productRef = D8WIDGET12345678901234 /* WidgetLocalization */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -254,6 +254,7 @@
 		D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetNavigationView.swift; sourceTree = "<group>"; };
 		D8CF19E12CC745ED0025D6B4 /* Transfer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transfer; sourceTree = "<group>"; };
 		D8D203D12AE0813E00261CA2 /* SwiftHTTPClient */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwiftHTTPClient; sourceTree = "<group>"; };
+		D8D5C1D02E6CAC16007628A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		D8D83C822CECF90A0083AA53 /* Swap */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Swap; sourceTree = "<group>"; };
 		D8EFE3EA2BAB580300608363 /* GemstonePrimitives */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GemstonePrimitives; sourceTree = "<group>"; };
 		D8F5B8682CCD50650007E615 /* Staking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Staking; sourceTree = "<group>"; };
@@ -470,6 +471,7 @@
 				C36679092A0B7E5800F1D74D /* Environment.swift */,
 				830FDA472C22EEC4003DA605 /* TabItem.swift */,
 				B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */,
+				D8D5C1D02E6CAC16007628A1 /* Errors.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -1063,6 +1065,7 @@
 				C366790A2A0B7E5800F1D74D /* Environment.swift in Sources */,
 				D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */,
 				837A1E6D2D0B096600733AC1 /* WalletConnectorNavigationStack.swift in Sources */,
+				D8D5C1D12E6CAC16007628A1 /* Errors.swift in Sources */,
 				D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */,
 				D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */,
 				833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */,
@@ -1859,10 +1862,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ImageGalleryService;
 		};
-		B677B1F42E3CA15100AD893A /* Localization */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Localization;
-		};
 		B68BD2C92DE04B5B00687F09 /* Components */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Components;
@@ -2135,6 +2134,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = StakeService;
 		};
+		D8WIDGET12345678901234 /* WidgetLocalization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WidgetLocalization;
+		};
 		DF8421ED2C1526ED003F558C /* GemstonePrimitives */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GemstonePrimitives;
@@ -2142,10 +2145,6 @@
 		DF93C4ED2C969F4F00204ABD /* Gemstone */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Gemstone;
-		};
-		D8WIDGET12345678901234 /* WidgetLocalization */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WidgetLocalization;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -25,16 +25,8 @@ public struct ChainService {
 extension ChainService {
     public static func service(chain: Chain, with url: URL) -> ChainServiceable {
         switch chain.type {
-        case .ethereum:
-            EthereumService(
-                chain: EVMChain(rawValue: chain.rawValue)!,
-                provider: ProviderFactory.create(with: url),
-                gatewayChainService: GatewayChainService(
-                    chain: chain,
-                    gateway: GatewayService(provider: NativeProvider(url: url))
-                )
-            )
-        case .sui,
+        case .ethereum,
+            .sui,
             .aptos,
             .algorand,
             .xrp,

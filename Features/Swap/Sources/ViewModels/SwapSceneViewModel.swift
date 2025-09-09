@@ -139,7 +139,7 @@ public final class SwapSceneViewModel {
             return true
         }
         
-        if ((swapState.error as? ErrorWrapper)?.error as? RetryableError)?.isRetryAvailable == true {
+        if (swapState.error as? RetryableError)?.isRetryAvailable == true {
             return false
         }
 
@@ -382,7 +382,7 @@ extension SwapSceneViewModel {
                 swapState.swapTransferData = .noData
             } catch {
                 if !error.isCancelled {
-                    swapState.swapTransferData = .error(ErrorWrapper(error))
+                    swapState.swapTransferData = .error(error)
 
                     NSLog("SwapScene get swap data error: \(error)")
                 }
@@ -409,7 +409,7 @@ extension SwapSceneViewModel {
             }
         } catch {
             if !error.isCancelled {
-                swapState.quotes = .error(ErrorWrapper(error))
+                swapState.quotes = .error(error)
                 swapState.fetch = .data(quotes: [])
                 selectedSwapQuote = nil
 
@@ -446,6 +446,6 @@ extension SwapSceneViewModel {
 
 extension Error {
     var swapperError: Gemstone.SwapperError? {
-        (self as? ErrorWrapper)?.error as? Gemstone.SwapperError
+        self as? Gemstone.SwapperError
     }
 }

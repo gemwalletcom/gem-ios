@@ -49,6 +49,19 @@ struct AmountScene: View {
                         )
                     }
                 }
+                
+                if let infoText = model.infoText {
+                    Section {
+                        HStack {
+                            Images.System.info
+                                .foregroundStyle(Colors.gray)
+                                .frame(width: .list.image, height: .list.image)
+                            Text(infoText)
+                                .textStyle(.calloutSecondary)
+                        }
+                    }
+                    .listRowInsets(.assetListRowInsets)
+                }
 
                 switch model.type {
                 case .transfer, .deposit, .withdraw:
@@ -82,6 +95,7 @@ struct AmountScene: View {
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
+        .listSectionSpacing(.compact)
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
