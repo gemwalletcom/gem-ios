@@ -22,7 +22,7 @@ public enum TransactionLoadMetadata: Sendable {
     )
     case bitcoin(utxos: [UTXO])
     case cardano(utxos: [UTXO])
-    case evm(nonce: UInt64, chainId: UInt64)
+    case evm(nonce: UInt64, chainId: UInt64, stakeData: StakeData? = nil)
     case near(
         sequence: UInt64,
         blockHash: String
@@ -75,7 +75,7 @@ extension TransactionLoadMetadata {
              .algorand(let sequence, _, _),
              .aptos(let sequence),
              .polkadot(let sequence, _, _, _, _, _, _),
-             .evm(let sequence, _):
+             .evm(let sequence, _, _):
             return sequence
         case .none, .bitcoin, .cardano, .tron, .solana, .sui, .hyperliquid:
             throw AnyError("Sequence not available for this metadata type")
@@ -111,7 +111,7 @@ extension TransactionLoadMetadata {
             return chainId
         case .algorand(_, _, let chainId):
             return chainId
-        case .evm(_, let chainId):
+        case .evm(_, let chainId, _):
             return String(chainId)
         default:
             throw AnyError("Chain ID not available for this metadata type")

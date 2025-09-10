@@ -27,12 +27,6 @@ struct AssetNavigationView: View {
         .observeQuery(request: $model.input.transactionsRequest, value: $model.transactions)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-                if model.isDeveloperEnabled {
-                    Button(action: model.onSelectSetPriceAlerts) {
-                        model.addImage
-                    }
-                }
-
                 Button(action: model.onTogglePriceAlert) {
                     model.priceAlertsImage
                 }
@@ -54,15 +48,6 @@ struct AssetNavigationView: View {
                     wallet: model.walletModel.wallet,
                     transferData: data,
                     onComplete: model.onTransferComplete
-                )
-            case .setPriceAlert:
-                SetPriceAlertNavigationStack(
-                    model: SetPriceAlertViewModel(
-                        wallet: model.walletModel.wallet,
-                        assetId: model.assetModel.asset.id,
-                        priceAlertService: model.priceAlertService,
-                        onComplete: model.onSetPriceAlertComplete(message:)
-                    )
                 )
             case .share:
                 ShareSheet(activityItems: [model.shareAssetUrl.absoluteString])
