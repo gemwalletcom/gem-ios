@@ -11,12 +11,12 @@ import Localization
 import PrimitivesComponents
 
 public struct PriceAlertsScene: View {
-    @State private var model: PriceAlertsViewModel
+    @State private var model: PriceAlertsSceneViewModel
 
     @Query<PriceAlertsRequest>
     private var priceAlerts: [PriceAlertData]
 
-    public init(model: PriceAlertsViewModel) {
+    public init(model: PriceAlertsSceneViewModel) {
         _model = State(initialValue: model)
         _priceAlerts = Query(constant: model.request)
     }

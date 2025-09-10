@@ -51,7 +51,7 @@ extension AssetData {
                 extendedPublicKey: .none
             ),
             price: .none,
-            price_alerts: [],
+            priceAlerts: [],
             metadata: AssetMetaData(
                 isEnabled: false,
                 isBuyEnabled: false,
@@ -77,7 +77,7 @@ extension AssetData {
                 extendedPublicKey: .none
             ),
             price: .none,
-            price_alerts: [],
+            priceAlerts: [],
             metadata: AssetMetaData(
                 isEnabled: false,
                 isBuyEnabled: false,

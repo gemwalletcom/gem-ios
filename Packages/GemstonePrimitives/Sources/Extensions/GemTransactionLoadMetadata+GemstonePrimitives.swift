@@ -28,8 +28,8 @@ extension GemTransactionLoadMetadata {
             return .bitcoin(utxos: try utxos.map { try $0.map() })
         case .cardano(let utxos):
             return .cardano(utxos: try utxos.map { try $0.map() })
-        case .evm(let nonce, let chainId):
-            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
+        case .evm(let nonce, let chainId, let stakeData):
+            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId), stakeData: stakeData?.map())
         case .near(let sequence, let blockHash):
             return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):
@@ -95,8 +95,12 @@ extension TransactionLoadMetadata {
             return .bitcoin(utxos: utxos.map { $0.map() })
         case .cardano(let utxos):
             return .cardano(utxos: utxos.map { $0.map() })
-        case .evm(let nonce, let chainId):
-            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
+        case .evm(let nonce, let chainId, let stakeData):
+            return .evm(
+                nonce: UInt64(nonce),
+                chainId: UInt64(chainId),
+                stakeData: stakeData?.map()
+            )
         case .near(let sequence, let blockHash):
             return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):

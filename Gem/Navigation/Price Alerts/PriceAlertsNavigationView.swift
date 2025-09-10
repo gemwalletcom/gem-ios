@@ -20,7 +20,7 @@ struct PriceAlertsNavigationView: View {
     @State private var isPresentingAddAsset: Bool = false
     @State private var isPresentingToastMessage: ToastMessage?
 
-    let model: PriceAlertsViewModel
+    let model: PriceAlertsSceneViewModel
 
     var body: some View {
         PriceAlertsScene(model: model)

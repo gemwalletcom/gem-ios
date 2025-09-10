@@ -36,4 +36,11 @@ public extension PriceAlert {
         default: .auto
         }
     }
+    
+    var shouldDisplay: Bool {
+        switch type {
+        case .auto: true
+        case .price, .pricePercentChange: lastNotifiedAt == nil
+        }
+    }
 }
