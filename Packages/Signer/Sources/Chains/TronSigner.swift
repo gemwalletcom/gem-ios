@@ -134,13 +134,13 @@ public struct TronSigner: Signable {
     }
 
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard
-            case let .swap(_, _, quoteData) = input.type,
-            let data = Data(fromHex: quoteData.data.data),
-            let callValue = Int64(quoteData.data.value)
-        else {
-            throw AnyError("Invalid input type for swapping")
-        }
+//        guard
+//            case let .swap(_, _, _quoteData) = input.type,
+//            //let data = Data(fromHex: quoteData.data.data),
+//            //let callValue = Int64(quoteData.data.value)
+//        else {
+//            throw AnyError("Invalid input type for swapping")
+//        }
         throw AnyError.notImplemented
     }
 }
