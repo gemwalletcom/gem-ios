@@ -10,7 +10,7 @@ import Preferences
 import PrimitivesComponents
 
 @Observable
-public final class PriceAlertsViewModel: Sendable {
+public final class PriceAlertsSceneViewModel: Sendable {
     private let preferences: ObservablePreferences
     private let priceAlertService: PriceAlertService
     
@@ -60,7 +60,7 @@ public final class PriceAlertsViewModel: Sendable {
 
 // MARK: - Business Logic
 
-extension PriceAlertsViewModel {
+extension PriceAlertsSceneViewModel {
     public func fetch() async {
         do {
             try await priceAlertService.update()

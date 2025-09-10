@@ -202,9 +202,38 @@ public class EthereumSigner: Signable {
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard case .stake(_, let stakeType) = input.type else {
+            fatalError("Invalid type for staking")
+        }
+        
         switch input.asset.chain {
         case .smartChain:
-            return try SmartChainSigner().signStake(input: input, privateKey: privateKey)
+            guard
+                case .evm(_, _, let stakeData) = input.metadata,
+                let stakeData = stakeData,
+                let data = stakeData.data,
+                let to = stakeData.to else {
+                throw AnyError("Invalid metadata for SmartChain staking")
+            }
+            
+            let valueData: Data = switch stakeType {
+            case .stake: input.value.magnitude.serialize()
+            case .redelegate, .unstake, .rewards, .withdraw: Data()
+            }
+            let callData = try Data.from(hex: data)
+            
+            let signedData = try sign(coinType: input.coinType, input: buildBaseInput(
+                input: input,
+                transaction: .with {
+                    $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
+                        $0.amount = valueData
+                        $0.data = callData
+                    }
+                },
+                toAddress: to,
+                privateKey: privateKey
+            ))
+            return [signedData]
         default:
             fatalError("\(input.asset.name) native staking not supported")
         }

@@ -781,6 +781,8 @@ public enum Localized {
     public static func addedFor(_ p1: Any) -> String {
       return Localized.tr("Localizable", "price_alerts.added_for", String(describing: p1), fallback: "Set price alert %@")
     }
+    /// Alerts trigger on significant price moves.
+    public static let autoFooter = Localized.tr("Localizable", "price_alerts.auto_footer", fallback: "Alerts trigger on significant price moves.")
     /// Price alert disabled for %@
     public static func disabledFor(_ p1: Any) -> String {
       return Localized.tr("Localizable", "price_alerts.disabled_for", String(describing: p1), fallback: "Price alert disabled for %@")
@@ -814,6 +816,8 @@ public enum Localized {
       public static let priceUnder = Localized.tr("Localizable", "price_alerts.set_alert.price_under", fallback: "When price is under")
       /// Set target price
       public static let setTargetPrice = Localized.tr("Localizable", "price_alerts.set_alert.set_target_price", fallback: "Set target price")
+      /// Set Price Alert
+      public static let title = Localized.tr("Localizable", "price_alerts.set_alert.title", fallback: "Set Price Alert")
     }
     public enum State {
       public enum Empty {
@@ -1032,6 +1036,8 @@ public enum Localized {
     public static func approveTokenPermission(_ p1: Any) -> String {
       return Localized.tr("Localizable", "swap.approve_token_permission", String(describing: p1), fallback: "Approve %@ token for swap access.")
     }
+    /// Min Receive
+    public static let minReceive = Localized.tr("Localizable", "swap.min_receive", fallback: "Min Receive")
     /// Price Impact
     public static let priceImpact = Localized.tr("Localizable", "swap.price_impact", fallback: "Price Impact")
     /// Quote includes a %@ Gem fee.
