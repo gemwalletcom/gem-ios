@@ -52,10 +52,12 @@ struct SwapButtonViewModel: StateButtonViewable {
 
     var icon: Image? { nil }
     var type: ButtonType {
-        if canRetrySwap {
-            return .primary(.normal)
+        switch buttonAction {
+        case .retryQuotes: swapState.quotes.isLoading ? .primary(swapState.quotes) : .primary(.normal)
+        case .insufficientBalance: .primary(.disabled)
+        case .retrySwap: swapState.swapTransferData.isLoading ? .primary(swapState.swapTransferData) : .primary(.normal)
+        case .swap: swapState.swapTransferData.isLoading ? .primary(swapState.swapTransferData) : .primary(swapState.quotes)
         }
-        return .primary(swapState.quotes, isDisabled: !isAmountValid && !canRetryQuotes)
     }
     var isVisible: Bool { !swapState.quotes.isNoData }
 
@@ -70,7 +72,7 @@ extension SwapButtonViewModel {
               let retryableError = error as? RetryableError else { return false }
         return retryableError.isRetryAvailable
     }
-    
+
     private var canRetrySwap: Bool {
         guard case .error(let error) = swapState.swapTransferData,
               let retryableError = error as? RetryableError else { return false }
