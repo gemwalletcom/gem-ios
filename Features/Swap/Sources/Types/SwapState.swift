@@ -5,11 +5,11 @@ import Components
 import Primitives
 import struct Gemstone.SwapperQuote
 
-public struct SwapState {
+public struct SwapState: Sendable {
     public var fetch: SwapFetchState
     public var quotes: StateViewType<[SwapperQuote]>
     public var swapTransferData: StateViewType<TransferData>
-    
+
     public init(
         fetch: SwapFetchState = .idle,
         availability: StateViewType<[SwapperQuote]> = .noData,
