@@ -47,7 +47,7 @@ public struct ChartScene: View {
             }
             .cleanListRow()
             
-            if model.priceAlertsViewModel.hasPriceAlerts, let asset = model.priceData?.asset {
+            if model.showPriceAlerts, let asset = model.priceData?.asset {
                 NavigationLink(
                     value: Scenes.AssetPriceAlert(asset: asset),
                     label: {

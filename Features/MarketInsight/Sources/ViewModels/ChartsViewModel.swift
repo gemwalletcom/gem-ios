@@ -43,6 +43,7 @@ public final class ChartsViewModel {
     var priceAlertsViewModel: PriceAlertsViewModel {
         PriceAlertsViewModel(priceAlerts: priceData?.priceAlerts ?? [])
     }
+    var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts }
 
     public init(
         service: ChartService = ChartService(),

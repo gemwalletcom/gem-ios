@@ -78,7 +78,7 @@ public struct AssetScene: View {
                 )
                 .accessibilityIdentifier("price")
                 
-                if model.assetData.isPriceAlertsEnabled, model.priceAlertsViewModel.hasPriceAlerts {
+                if model.showPriceAlerts {
                     NavigationLink(
                         value: Scenes.AssetPriceAlert(asset: model.assetData.asset),
                         label: {
