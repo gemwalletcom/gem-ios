@@ -12,7 +12,7 @@ import struct Gemstone.SwapperQuote
 enum SwapButtonAction: Equatable {
     case retryQuotes
     case retrySwap
-    case insufficientBalance(String)
+    case insufficientBalance(asset: Asset)
     case swap
 }
 
@@ -38,7 +38,7 @@ struct SwapButtonViewModel: StateButtonViewable {
     var title: String {
         switch buttonAction {
         case .retryQuotes, .retrySwap: Localized.Common.tryAgain
-        case .insufficientBalance(let symbol): Localized.Transfer.insufficientBalance(symbol)
+        case .insufficientBalance(let asset): Localized.Transfer.insufficientBalance(asset.symbol)
         case .swap: Localized.Wallet.swap
         }
     }
@@ -46,7 +46,7 @@ struct SwapButtonViewModel: StateButtonViewable {
     var buttonAction: SwapButtonAction {
         if canRetryQuotes { return .retryQuotes }
         if canRetrySwap { return .retrySwap }
-        if !isAmountValid, let fromAsset { return .insufficientBalance(fromAsset.asset.symbol) }
+        if !isAmountValid, let fromAsset { return .insufficientBalance(asset: fromAsset.asset) }
         return .swap
     }
 
