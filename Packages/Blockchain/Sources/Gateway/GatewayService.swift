@@ -167,5 +167,8 @@ extension GatewayService {
     }
 }
 
-// MARK: - Perpetual Mapping Extensions
-
+extension GatewayService {
+    public func getAddressStatus(chain: Primitives.Chain, address: String) async throws -> [AddressStatus] {
+        try await gateway.getAddressStatus(chain: chain.rawValue, address: address).map { $0.map() }
+    }
+}

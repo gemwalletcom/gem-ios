@@ -123,6 +123,8 @@ extension GatewayChainService: ChainNodeStatusFetchable {
     }
 }
 
-// MARK: - Default Protocol Conformances
-
-extension GatewayChainService: ChainAddressStatusFetchable {}
+extension GatewayChainService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        try await gateway.getAddressStatus(chain: chain, address: address)
+    }
+}
