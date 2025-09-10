@@ -27,6 +27,7 @@ public struct RoundButton: View {
         } label: {
             VStack(alignment: .center) {
                 image
+                    .foregroundStyle(Colors.whiteSolid)
                     .frame(width: 48, height: 48)
                     .background(Colors.blue)
                     .cornerRadius(24)
