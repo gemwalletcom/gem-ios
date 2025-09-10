@@ -6,6 +6,7 @@ public enum HeaderButtonType: String, Identifiable, CaseIterable, Sendable {
     case send
     case receive
     case buy
+    case sell
     case swap
     case stake
     case more
