@@ -248,7 +248,7 @@ extension MainTabView {
 
     private func onComplete(type: SelectedAssetType) {
         switch type {
-        case .receive, .stake, .buy:
+        case .receive, .stake, .buy, .sell:
             isPresentingSelectedAssetInput = nil
         case let .send(type):
             switch type {

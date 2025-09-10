@@ -37,16 +37,26 @@ public final class FiatSceneViewModel {
         fiatService: any GemAPIFiatService = GemAPIService(),
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
-        walletId: String
+        walletId: String,
+        type: FiatQuoteType = .buy
     ) {
         self.fiatService = fiatService
         self.currencyFormatter = currencyFormatter
         self.assetAddress = assetAddress
         self.walletId = walletId
 
-        let buyAmount = FiatQuoteTypeViewModel(type: .buy).defaultAmount
-        self.input = FiatInput(type: .buy, buyAmount: buyAmount)
-        self.amountText = String(Int(buyAmount))
+        let input = FiatInput(
+            type: type,
+            buyAmount: FiatQuoteTypeViewModel(type: .buy).defaultAmount,
+            sellAmount: FiatQuoteTypeViewModel(type: .sell).defaultAmount
+        )
+        self.input = input
+        switch type {
+        case .buy:
+            self.amountText = String(Int(input.amount))
+        case .sell:
+            self.amountText = .empty
+        }
 
         self.amountFormatter = FiatAmountFormatter(
             valueFormatter: ValueFormatter(locale: .US, style: .medium),
@@ -214,7 +224,7 @@ extension FiatSceneViewModel {
                 let request = FiatQuoteRequest(
                     assetId: asset.id.identifier,
                     type: input.type,
-                    fiatCurrency: currencyFormatter.currencyCode,
+                    fiatCurrency: try Currency(id: currencyFormatter.currencyCode),
                     fiatAmount: input.type == .buy ? input.amount : nil,
                     cryptoValue: amountFormatter.formatCryptoValue(fiatAmount: input.amount, type: input.type),
                     walletAddress: assetAddress.address

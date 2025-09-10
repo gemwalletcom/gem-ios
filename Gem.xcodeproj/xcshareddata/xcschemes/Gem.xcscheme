@@ -410,26 +410,6 @@
                ReferencedContainer = "container:Features/Onboarding">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PriceAlertServiceTests"
-               BuildableName = "PriceAlertServiceTests"
-               BlueprintName = "PriceAlertServiceTests"
-               ReferencedContainer = "container:Packages/FeatureServices">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ManageWalletsTests"
-               BuildableName = "ManageWalletsTests"
-               BlueprintName = "ManageWalletsTests"
-               ReferencedContainer = "container:Features/ManageWallets">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
