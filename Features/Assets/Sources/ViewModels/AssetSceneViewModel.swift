@@ -147,12 +147,10 @@ public final class AssetSceneViewModel: Sendable {
     public var assetModel: AssetViewModel { AssetViewModel(asset: assetData.asset) }
     public var walletModel: WalletViewModel { WalletViewModel(wallet: input.wallet) }
 
-    public var addImage: Image { Images.System.plus }
     public var optionsImage: Image { Images.System.ellipsis }
     public var priceAlertsSystemImage: String { assetData.isPriceAlertsEnabled ? SystemImage.bellFill : SystemImage.bell }
     public var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
-
-    public var isDeveloperEnabled: Bool { preferences.isDeveloperEnabled }
+    public var showPriceAlerts: Bool { assetData.isPriceAlertsEnabled && priceAlertsViewModel.hasPriceAlerts }
 
     public var menuItems: [ActionMenuItemType] {
         [.button(title: viewAddressOnTitle, systemImage: SystemImage.globe, action: { self.onSelect(url: self.addressExplorerUrl) }),
@@ -166,6 +164,10 @@ public final class AssetSceneViewModel: Sendable {
 
     var showStatus: Bool {
         scoreViewModel.hasWarning
+    }
+    
+    var priceAlertsViewModel: PriceAlertsViewModel {
+        PriceAlertsViewModel(priceAlerts: assetData.priceAlerts)
     }
 }
 
@@ -255,15 +257,6 @@ extension AssetSceneViewModel {
 
     public func onTransferComplete() {
         isPresentingAssetSheet = .none
-    }
-
-    public func onSetPriceAlertComplete(message: String) {
-        isPresentingAssetSheet = .none
-        isPresentingToastMessage = ToastMessage(title: message, image: priceAlertsSystemImage)
-    }
-
-    public func onSelectSetPriceAlerts() {
-        isPresentingAssetSheet = .setPriceAlert
     }
 
     public func onTogglePriceAlert() {

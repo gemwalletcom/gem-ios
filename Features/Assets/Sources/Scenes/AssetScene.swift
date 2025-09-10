@@ -77,6 +77,18 @@ public struct AssetScene: View {
                     label: { PriceListItemView(model: model.priceItemViewModel) }
                 )
                 .accessibilityIdentifier("price")
+                
+                if model.showPriceAlerts {
+                    NavigationLink(
+                        value: Scenes.AssetPriceAlert(asset: model.assetData.asset),
+                        label: {
+                            ListItemView(
+                                title: model.priceAlertsViewModel.priceAlertsTitle,
+                                subtitle: model.priceAlertsViewModel.priceAlertCount
+                            )
+                        }
+                    )
+                }
 
                 if model.canOpenNetwork {
                     NavigationLink(

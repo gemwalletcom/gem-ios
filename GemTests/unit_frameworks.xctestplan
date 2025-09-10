@@ -244,6 +244,20 @@
         "identifier" : "PrimitivesComponentsTests",
         "name" : "PrimitivesComponentsTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/FeatureServices",
+        "identifier" : "PriceAlertServiceTests",
+        "name" : "PriceAlertServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/ManageWallets",
+        "identifier" : "ManageWalletsTests",
+        "name" : "ManageWalletsTests"
+      }
     }
   ],
   "version" : 1
