@@ -119,9 +119,24 @@ public struct AssetScene: View {
                             )
                         }
                     }
+                    
                 }
             } else if model.assetDataModel.isStakeEnabled {
                 stakeViewEmpty
+            }
+
+            if let resourcesModel = model.tronResourcesModel {
+                Section("Resources") {
+                    ListItemView(
+                        title: resourcesModel.energyTitle,
+                        subtitle: resourcesModel.energyText
+                    )
+                    
+                    ListItemView(
+                        title: resourcesModel.bandwidthTitle,
+                        subtitle: resourcesModel.bandwidthText
+                    )
+                }
             }
 
             if model.showTransactions {

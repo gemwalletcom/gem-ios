@@ -78,6 +78,7 @@ public final class AssetSceneViewModel: Sendable {
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showTransactions: Bool { transactions.isNotEmpty }
     var showManageToken: Bool { !assetData.metadata.isEnabled }
+
     var pinText: String {
         assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
     }
@@ -141,6 +142,15 @@ public final class AssetSceneViewModel: Sendable {
             walletModel: walletModel,
             bannerEventsViewModel: HeaderBannerEventViewModel(events: allBanners.map(\.event))
         )
+    }
+
+    var tronResourcesModel: TronResourcesViewModel? {
+        guard assetData.asset.chain == .tron,
+              assetData.balance.staked > 0,
+              let metadata = assetData.balance.metadata else {
+            return nil
+        }
+        return TronResourcesViewModel(metadata: metadata)
     }
 
     public var shareAssetUrl: URL { DeepLink.asset(assetDataModel.asset.id).url }
