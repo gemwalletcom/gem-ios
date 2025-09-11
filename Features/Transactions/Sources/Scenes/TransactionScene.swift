@@ -48,12 +48,15 @@ public struct TransactionScene: View {
                     .tint(Colors.black)
             }
         case let .swapAgain(text):
-            StateButton(
+            let button = StateButton(
                 text: text,
                 type: .primary(.normal),
                 action: model.onSelectTransactionHeader
             )
             .cleanListRow(topOffset: .zero)
+            if #available(iOS 26, *) {
+                button.cornerRadius(.scene.button.height / 2) // TODO: - Think about what to do with this button
+            }
         case .empty:
             EmptyView()
         }

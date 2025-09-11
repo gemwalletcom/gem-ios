@@ -34,13 +34,11 @@ public struct TransactionsFilterScene: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(model.clear, action: onSelectClear)
                         .bold()
-                        .buttonStyle(.plain)
                 }
             }
             ToolbarItem(placement: .primaryAction) {
                 Button(model.done, action: onSelectDone)
                     .bold()
-                    .buttonStyle(.plain)
             }
         }
         .sheet(isPresented: $model.isPresentingChains) {
