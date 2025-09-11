@@ -24,7 +24,8 @@ public struct ChainServiceMock: ChainServiceable {
     public var transactionData: TransactionData = TransactionData(fee: Fee(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero))
     public var transactionPreload: TransactionLoadMetadata = .none
     public var transactionState: TransactionChanges = TransactionChanges(state: .pending, changes: [])
-    
+    public var nodeStatus: NodeStatus = NodeStatus(chainId: "1", latestBlockNumber: .zero, latency: .from(duration: 1000))
+
     public init() {}
 }
 
@@ -101,5 +102,9 @@ extension ChainServiceMock {
     
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         transactionState
+    }
+    
+    public func getNodeStatus(url: String) async throws -> NodeStatus {
+        nodeStatus
     }
 }

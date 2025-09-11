@@ -32,7 +32,7 @@ public struct SwapScene: View {
             sensoryFeedback: .warning,
             actions: { _ in
                 Button(
-                    model.actionButtonTitle,
+                    model.buttonViewModel.title,
                     role: .destructive,
                     action: model.onSelectSwapConfirmation
                 )
@@ -166,11 +166,7 @@ extension SwapScene {
     
     private var buttonView: some View {
         VStack {
-            StateButton(
-                text: model.actionButtonTitle,
-                type: .primary(model.actionButtonState, isDisabled: model.shouldDisableActionButton),
-                action: model.onSelectActionButton
-            )
+            StateButton(model.buttonViewModel)
         }
         .frame(maxWidth: Spacing.scene.button.maxWidth)
     }
@@ -184,7 +180,7 @@ extension SwapScene {
                 .isVisible(focusedField == .from)
 
             Group {
-                if model.isVisibleActionButton {
+                if model.buttonViewModel.isVisible {
                     buttonView
                 } else if focusedField == .from {
                     PercentageAccessoryView(

@@ -7,12 +7,12 @@ import Foundation
 public struct FiatQuoteRequest: Codable, Sendable {
 	public let assetId: String
 	public let type: FiatQuoteType
-	public let fiatCurrency: String
+	public let fiatCurrency: Currency
 	public let fiatAmount: Double?
 	public let cryptoValue: String?
 	public let walletAddress: String
 
-	public init(assetId: String, type: FiatQuoteType, fiatCurrency: String, fiatAmount: Double?, cryptoValue: String?, walletAddress: String) {
+	public init(assetId: String, type: FiatQuoteType, fiatCurrency: Currency, fiatAmount: Double?, cryptoValue: String?, walletAddress: String) {
 		self.assetId = assetId
 		self.type = type
 		self.fiatCurrency = fiatCurrency

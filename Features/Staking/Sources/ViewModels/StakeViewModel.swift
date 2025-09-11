@@ -24,24 +24,17 @@ public final class StakeViewModel {
 
     private let formatter = ValueFormatter(style: .medium)
     private let recommendedValidators = StakeRecommendedValidators()
-
-    let onTransferAction: TransferDataAction
-    let onAmountInputAction: AmountInputAction
     
     public var isPresentingInfoSheet: InfoSheetType? = .none
 
     public init(
         wallet: Wallet,
         chain: Chain,
-        stakeService: any StakeServiceable,
-        onTransferAction: TransferDataAction,
-        onAmountInputAction: AmountInputAction
+        stakeService: any StakeServiceable
     ) {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
-        self.onTransferAction = onTransferAction
-        self.onAmountInputAction = onAmountInputAction
     }
 
     var title: String { Localized.Transfer.Stake.title }
@@ -103,18 +96,17 @@ public final class StakeViewModel {
         case .error(let error): return .error(error)
         }
     }
-
-    func showClaimRewards(delegations: [Delegation]) -> Bool {
-        value(delegations: delegations) > 0 && ![Chain.solana, Chain.sui].contains(chain)
-    }
     
     func claimRewardsText(delegations: [Delegation]) -> String {
         formatter.string(value(delegations: delegations), decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
-    func claimRewardsTransferData(delegations: [Delegation]) -> TransferData {
-        let validators = delegations.map { $0.validator }
-        let value = value(delegations: delegations)
+    func claimRewardsDestination(delegations: [Delegation]) -> (any Hashable)? {
+        guard value(delegations: delegations) > 0 && ![Chain.solana, Chain.sui].contains(chain) else { return nil }
+
+        let validators = delegations
+            .filter { $0.base.rewardsValue > 0 }
+            .map { $0.validator }
 
         return TransferData(
             type: .stake(chain.asset, .rewards(validators)),
@@ -122,14 +114,14 @@ public final class StakeViewModel {
                 recipient: Recipient(name: .none, address: "", memo: .none),
                 amount: .none
             ),
-            value: value
+            value: value(delegations: delegations)
         )
     }
 
-    func stakeRecipientData() throws -> AmountInput {
+    func stakeDestination() -> any Hashable {
         AmountInput(
             type: .stake(
-                validators: try stakeService.getActiveValidators(assetId: chain.assetId),
+                validators: (try? stakeService.getActiveValidators(assetId: chain.assetId)) ?? [],
                 recommendedValidator: recommendedCurrentValidator
             ),
             asset: chain.asset
@@ -150,18 +142,6 @@ extension StakeViewModel {
             print("Stake scene fetch error: \(error)")
             delegatitonsState = .error(error)
         }
-    }
-
-    func onSelectStake() {
-        if let value = try? stakeRecipientData() {
-            onAmountInputAction?(value)
-        }
-    }
-
-    func onSelectDelegations(delegations: [Delegation]) {
-        let delegations = delegations.filter { $0.base.rewardsValue > 0 }
-        let transferData = claimRewardsTransferData(delegations: delegations)
-        onTransferAction?(transferData)
     }
     
     func onLockTimeInfo() {

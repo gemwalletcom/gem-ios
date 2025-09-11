@@ -49,6 +49,7 @@ public struct SystemImage {
     public static let pencilLine = "pencil.line"
     public static let checkmarkCircle = "checkmark.circle"
     public static let circle = "circle"
+    public static let dollarsign = "dollarsign"
 
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill

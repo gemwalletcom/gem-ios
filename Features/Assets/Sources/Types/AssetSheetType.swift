@@ -8,7 +8,6 @@ public enum AssetSheetType: Identifiable, Sendable {
     case info(InfoSheetType)
     case transfer(TransferData)
     case share
-    case setPriceAlert
     case url(URL)
 
     public var id: String {
@@ -16,7 +15,6 @@ public enum AssetSheetType: Identifiable, Sendable {
         case let .info(type): "info-\(type.id)"
         case let .transfer(data): "transfer-\(data.id)"
         case .share: "share"
-        case .setPriceAlert: "priceAlert"
         case let .url(url): "url-\(url)"
         }
     }

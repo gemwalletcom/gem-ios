@@ -55,7 +55,7 @@ public struct FiatScene: View {
             action: model.onChangeAmountValue
         )
         .onAppear {
-            focusedField = .amountBuy
+            focusedField = model.focusField
         }
     }
 }

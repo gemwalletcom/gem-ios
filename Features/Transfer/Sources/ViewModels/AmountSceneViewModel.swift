@@ -4,6 +4,7 @@ import BigInt
 import Components
 import Formatters
 import Foundation
+import Gemstone
 import GemstonePrimitives
 import InfoSheet
 import Localization
@@ -83,6 +84,16 @@ public final class AmountSceneViewModel {
     var nextTitle: String { Localized.Common.next }
     var continueTitle: String { Localized.Common.continue }
     var isNextEnabled: Bool { actionButtonState == .normal }
+    
+    var infoText: String? {
+        switch type {
+        case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual:
+            return nil
+        case .stake:
+            guard amountInputModel.text == maxBalance, availableBalanceForStaking > .zero else { return nil }
+            return Localized.Transfer.reservedFees(formatter.string(stakingReservedForFees, asset: asset))
+        }
+    }
 
     var inputConfig: any CurrencyInputConfigurable {
         AmountInputConfig(
@@ -260,8 +271,7 @@ extension AmountSceneViewModel {
 
     private func recipientAddress(chain: StakeChain?, validatorId: String) -> String {
         switch chain {
-        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron: validatorId
-        case .smartChain: StakeHub.address
+        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron, .smartChain: validatorId
         case .none, .some(.hyperCore): ""
         }
     }
@@ -483,8 +493,10 @@ extension AmountSceneViewModel {
 
     private var availableValue: BigInt {
         switch input.type {
-        case .transfer, .deposit, .perpetual, .stake:
+        case .transfer, .deposit, .perpetual:
             return assetData.balance.available
+        case .stake:
+            return availableBalanceForStaking
         case .withdraw:
             return assetData.balance.withdrawable
         case .stakeUnstake(let delegation):
@@ -528,5 +540,15 @@ extension AmountSceneViewModel {
 
     private var minimumAccountReserve: BigInt {
         asset.type == .native ? asset.chain.minimumAccountBalance : .zero
+    }
+    
+    private var stakingReservedForFees: BigInt {
+        BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
+    }
+    
+    private var availableBalanceForStaking: BigInt {
+        assetData.balance.available > stakingReservedForFees
+        ? assetData.balance.available - stakingReservedForFees
+        : .zero
     }
 }

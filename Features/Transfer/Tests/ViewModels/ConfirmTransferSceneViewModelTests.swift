@@ -4,6 +4,7 @@ import Testing
 @testable import Transfer
 import Primitives
 import PrimitivesTestKit
+import PrimitivesComponents
 import WalletsServiceTestKit
 import BlockchainTestKit
 import ScanServiceTestKit
@@ -16,6 +17,7 @@ import Localization
 import AddressNameService
 import AddressNameServiceTestKit
 import Store
+import BigInt
 
 @MainActor
 struct ConfirmTransferSceneViewModelTests {
@@ -95,6 +97,24 @@ struct ConfirmTransferSceneViewModelTests {
             ).networkText == "Ethereum"
         )
     }
+
+    @Test
+    func networkFeeValue() async {
+        let model = ConfirmTransferSceneViewModel.mock()
+
+        model.state = .error(AnyError("test"))
+        #expect(model.networkFeeValue == "-")
+        #expect(model.networkFeeFiatValue == nil)
+
+        model.feeModel.update(value: "0.001 ETH", fiatValue: "$2.50")
+        model.state = .data(TransactionInputViewModel.mock())
+        #expect(model.networkFeeValue == "$2.50")
+        #expect(model.networkFeeFiatValue == nil)
+        
+        model.feeModel.update(value: "0.001 ETH", fiatValue: nil)
+        #expect(model.networkFeeValue == "0.001 ETH")
+        #expect(model.networkFeeFiatValue == nil)
+    }
 }
 
 private extension ConfirmTransferSceneViewModel {
@@ -118,6 +138,21 @@ private extension ConfirmTransferSceneViewModel {
                 chain: data.chain
             ),
             onComplete: {}
+        )
+    }
+}
+
+private extension TransactionInputViewModel {
+    static func mock(
+        validation: TransferAmountValidation = TransferAmountValidation.success(
+            TransferAmount(value: BigInt(100), networkFee: BigInt(21000), useMaxAmount: false)
+        )
+    ) -> TransactionInputViewModel {
+        TransactionInputViewModel(
+            data: .mock(),
+            transactionData: nil,
+            metaData: nil,
+            transferAmount: validation
         )
     }
 }

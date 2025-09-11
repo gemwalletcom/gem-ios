@@ -99,51 +99,13 @@ public final class SwapSceneViewModel {
         )
     }
 
-    var actionButtonTitle: String {
-        if amountInputModel.isValid == false, let fromAsset {
-            Localized.Transfer.insufficientBalance(fromAsset.asset.symbol)
-        } else {
-            swapState.error != nil ? Localized.Common.tryAgain : Localized.Wallet.swap
-        }
-    }
-
-    var actionButtonState: StateViewType<[SwapperQuote]> {
-        if let error = amountInputModel.error {
-            return .error(error)
-        }
-
-        if swapState.isLoading {
-            return .loading
-        }
-
-        if let error = swapState.error {
-            return .error(error)
-        }
-
-        if case .data(let data) = swapState.quotes {
-            return .data(data)
-        }
-
-        return swapState.quotes
-    }
-
-    var isVisibleActionButton: Bool {
-        switch swapState.quotes {
-        case .noData: false
-        case .data, .error, .loading: true
-        }
-    }
-
-    var shouldDisableActionButton: Bool {
-        if amountInputModel.isValid == false {
-            return true
-        }
-        
-        if ((swapState.error as? ErrorWrapper)?.error as? RetryableError)?.isRetryAvailable == true {
-            return false
-        }
-
-        return swapState.error != nil
+    var buttonViewModel: SwapButtonViewModel {
+        SwapButtonViewModel(
+            swapState: swapState,
+            isAmountValid: amountInputModel.isValid,
+            fromAsset: fromAsset,
+            onAction: onSelectActionButton
+        )
     }
 
     var isSwitchAssetButtonDisabled: Bool {
@@ -205,6 +167,7 @@ extension SwapSceneViewModel {
             )
         } catch {
             swapState.quotes = .noData
+            swapState.swapTransferData = .noData
             swapState.fetch = .idle
             selectedSwapQuote = nil
         }
@@ -260,28 +223,6 @@ extension SwapSceneViewModel {
         guard let fromAsset else { return }
         applyPercentToFromValue(percent: percent, assetData: fromAsset)
         focusField = .none
-    }
-
-    func onSelectActionButton() {
-        if swapState.swapTransferData.isError {
-            swap()
-            return
-        }
-        
-        if swapState.quotes.isError {
-            fetch()
-            return
-        }
-
-        if let priceImpactModel = swapDetailsViewModel?.priceImpactModel,
-           let text = priceImpactModel.highImpactWarningDescription,
-           priceImpactModel.showPriceImpactWarning
-        {
-            isPresentingPriceImpactConfirmation = text
-            return
-        }
-
-        swap()
     }
 
     func onSelectSwapConfirmation() {
@@ -382,7 +323,7 @@ extension SwapSceneViewModel {
                 swapState.swapTransferData = .noData
             } catch {
                 if !error.isCancelled {
-                    swapState.swapTransferData = .error(ErrorWrapper(error))
+                    swapState.swapTransferData = .error(error)
 
                     NSLog("SwapScene get swap data error: \(error)")
                 }
@@ -409,10 +350,10 @@ extension SwapSceneViewModel {
             }
         } catch {
             if !error.isCancelled {
-                swapState.quotes = .error(ErrorWrapper(error))
+                swapState.quotes = .error(error)
                 swapState.fetch = .data(quotes: [])
                 selectedSwapQuote = nil
-
+                amountInputModel.update(error: nil)
                 NSLog("SwapScene get quotes error: \(error)")
             }
         }
@@ -442,10 +383,26 @@ extension SwapSceneViewModel {
             )]
         )
     }
+
+    private func onSelectActionButton() {
+        switch buttonViewModel.buttonAction {
+        case .retryQuotes: fetch()
+        case .retrySwap: swap()
+        case .insufficientBalance: break
+        case .swap:
+            if let priceImpactModel = swapDetailsViewModel?.priceImpactModel,
+               let warningText = priceImpactModel.highImpactWarningDescription,
+               priceImpactModel.showPriceImpactWarning {
+                isPresentingPriceImpactConfirmation = warningText
+                return
+            }
+            swap()
+        }
+    }
 }
 
 extension Error {
     var swapperError: Gemstone.SwapperError? {
-        (self as? ErrorWrapper)?.error as? Gemstone.SwapperError
+        self as? Gemstone.SwapperError
     }
 }

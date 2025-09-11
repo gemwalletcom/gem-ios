@@ -14,12 +14,6 @@ public struct ProviderFactory {
     }
 }
 
-public struct ProviderEvmFactory {
-    public static func create(with baseUrl: URL) -> Provider<EthereumTarget> {
-        return Provider(options: ProviderOptions(baseUrl: baseUrl))
-    }
-}
-
 extension Chain {
     public var defaultBaseUrl: URL {
         return URL(string: "https://\(self.rawValue.lowercased()).gemnodes.com")!

@@ -123,9 +123,11 @@ public final class CollectionsViewModel: Sendable {
     
     private func updateCollection() async {
         do {
-            try await nftService.updateAssets(wallet: wallet)
+            let count = try await nftService.updateAssets(wallet: wallet)
+            
+            NSLog("update nfts: \(count)")
         } catch {
-            NSLog("updateCollection error \(error)")
+            NSLog("update nfts error: \(error)")
         }
     }
 

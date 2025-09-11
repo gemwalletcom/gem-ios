@@ -79,14 +79,25 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.PriceAlerts.self) { _ in
                 PriceAlertsNavigationView(
-                    model: PriceAlertsViewModel(priceAlertService: priceAlertService)
+                    model: PriceAlertsSceneViewModel(priceAlertService: priceAlertService)
+                )
+            }
+            .navigationDestination(for: Scenes.AssetPriceAlert.self) {
+                AssetPriceAlertsScene(
+                    model: AssetPriceAlertsViewModel(
+                        priceAlertService: priceAlertService,
+                        walletId: walletId,
+                        asset: $0.asset
+                    )
                 )
             }
             .navigationDestination(for: Scenes.Price.self) { scene in
                 ChartScene(
                     model: ChartsViewModel(
                         priceService: priceService,
-                        assetModel: AssetViewModel(asset: scene.asset)
+                        assetModel: AssetViewModel(asset: scene.asset),
+                        priceAlertService: priceAlertService,
+                        walletId: walletId
                     )
                 )
             }
@@ -125,7 +136,7 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.ChainSettings.self) {
                 ChainSettingsScene(
-                    model: ChainSettingsViewModel(nodeService: nodeService, chain: $0.chain)
+                    model: ChainSettingsSceneViewModel(nodeService: nodeService, chain: $0.chain)
                 )
             }
             .sheet(isPresented: $isPresentingWallets) {

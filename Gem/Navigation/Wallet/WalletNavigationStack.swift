@@ -12,6 +12,7 @@ import Assets
 import Perpetuals
 import Transfer
 import StakeService
+import PriceAlerts
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
@@ -87,8 +88,8 @@ struct WalletNavigationStack: View {
                     )
                 }
                 .navigationDestination(for: TransactionExtended.self) {
-                    TransactionScene(
-                        model: TransactionDetailViewModel(
+                    TransactionNavigationView(
+                        model: TransactionSceneViewModel(
                             transaction: $0,
                             walletId: model.wallet.id
                         )
@@ -98,7 +99,9 @@ struct WalletNavigationStack: View {
                     ChartScene(
                         model: ChartsViewModel(
                             priceService: priceService,
-                            assetModel: AssetViewModel(asset: $0.asset)
+                            assetModel: AssetViewModel(asset: $0.asset),
+                            priceAlertService: priceAlertService,
+                            walletId: model.wallet.walletId
                         )
                     )
                 }
@@ -117,6 +120,15 @@ struct WalletNavigationStack: View {
                         perpetualService: perpetualService,
                         isPresentingTransferData: $model.isPresentingTransferData,
                         isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
+                    )
+                }
+                .navigationDestination(for: Scenes.AssetPriceAlert.self) {
+                    AssetPriceAlertsScene(
+                        model: AssetPriceAlertsViewModel(
+                            priceAlertService: priceAlertService,
+                            walletId: model.wallet.walletId,
+                            asset: $0.asset
+                        )
                     )
                 }
                 .sheet(item: $model.isPresentingSelectAssetType) {

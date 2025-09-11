@@ -47,9 +47,7 @@ extension StakeViewModel {
         StakeViewModel(
             wallet: wallet,
             chain: chain,
-            stakeService: stakeService,
-            onTransferAction: .none,
-            onAmountInputAction: .none
+            stakeService: stakeService
         )
     }
 }

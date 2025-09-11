@@ -116,12 +116,11 @@ public final class AssetSceneViewModel: Sendable {
         AssetIdViewModel(assetId: assetModel.asset.chain.assetId).networkAssetImage
     }
 
-    var emptyConentModel: EmptyContentTypeViewModel {
+    var emptyContentModel: EmptyContentTypeViewModel {
         let buy = assetData.metadata.isBuyEnabled ? onSelectBuy : nil
-        return EmptyContentTypeViewModel(type: .asset(
-            symbol: assetModel.symbol,
-            buy: buy
-        ))
+        return EmptyContentTypeViewModel(
+            type: .asset(symbol: assetModel.symbol, buy: buy, isViewOnly: wallet.isViewOnly)
+        )
     }
 
     var assetDataModel: AssetDataViewModel {
@@ -148,12 +147,10 @@ public final class AssetSceneViewModel: Sendable {
     public var assetModel: AssetViewModel { AssetViewModel(asset: assetData.asset) }
     public var walletModel: WalletViewModel { WalletViewModel(wallet: input.wallet) }
 
-    public var addImage: Image { Images.System.plus }
     public var optionsImage: Image { Images.System.ellipsis }
     public var priceAlertsSystemImage: String { assetData.isPriceAlertsEnabled ? SystemImage.bellFill : SystemImage.bell }
     public var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
-
-    public var isDeveloperEnabled: Bool { preferences.isDeveloperEnabled }
+    public var showPriceAlerts: Bool { assetData.isPriceAlertsEnabled && priceAlertsViewModel.hasPriceAlerts }
 
     public var menuItems: [ActionMenuItemType] {
         [.button(title: viewAddressOnTitle, systemImage: SystemImage.globe, action: { self.onSelect(url: self.addressExplorerUrl) }),
@@ -167,6 +164,10 @@ public final class AssetSceneViewModel: Sendable {
 
     var showStatus: Bool {
         scoreViewModel.hasWarning
+    }
+    
+    var priceAlertsViewModel: PriceAlertsViewModel {
+        PriceAlertsViewModel(priceAlerts: assetData.priceAlerts)
     }
 }
 
@@ -190,6 +191,7 @@ extension AssetSceneViewModel {
     func onSelectHeader(_ buttonType: HeaderButtonType) {
         let selectType: SelectedAssetType = switch buttonType {
         case .buy: .buy(assetData.asset)
+        case .sell: .sell(assetData.asset)
         case .send: .send(.asset(assetData.asset))
         case .swap: .swap(assetData.asset, nil)
         case .receive: .receive(.asset)
@@ -255,15 +257,6 @@ extension AssetSceneViewModel {
 
     public func onTransferComplete() {
         isPresentingAssetSheet = .none
-    }
-
-    public func onSetPriceAlertComplete(message: String) {
-        isPresentingAssetSheet = .none
-        isPresentingToastMessage = ToastMessage(title: message, image: priceAlertsSystemImage)
-    }
-
-    public func onSelectSetPriceAlerts() {
-        isPresentingAssetSheet = .setPriceAlert
     }
 
     public func onTogglePriceAlert() {
