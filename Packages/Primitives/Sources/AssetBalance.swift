@@ -4,13 +4,20 @@ import BigInt
 public enum AssetBalanceType: Sendable {
     case coin(available: BigInt, reserved: BigInt)
     case token(available: BigInt)
-    case stake(staked: BigInt, pending: BigInt, rewards: BigInt, reserved: BigInt, locked: BigInt, frozen: BigInt)
+    case stake(staked: BigInt, pending: BigInt, rewards: BigInt, reserved: BigInt, locked: BigInt, frozen: BigInt, metadata: BalanceMetadata?)
     
     public var available: BigInt? {
         switch self {
         case .coin(let available, _): available
         case .token(let available): available
         case .stake: nil
+        }
+    }
+
+    public var metadata: BalanceMetadata? {
+        switch self {
+        case .coin, .token: .none
+        case let .stake(_, _, _, _, _, _, metadata): metadata
         }
     }
 }
@@ -21,9 +28,9 @@ public struct AssetBalanceChange: Sendable {
     public let isActive: Bool
     
     public init(
-        assetId: AssetId, type:
-        AssetBalanceType,
-        isActive: Bool
+        assetId: AssetId,
+        type: AssetBalanceType,
+        isActive: Bool,
     ) {
         self.assetId = assetId
         self.type = type
@@ -73,7 +80,8 @@ extension AssetBalance {
                 rewards: balance.rewards,
                 reserved: balance.reserved,
                 locked: balance.locked,
-                frozen: balance.frozen
+                frozen: balance.frozen,
+                metadata: balance.metadata
             ),
             isActive: isActive
         )

@@ -309,6 +309,12 @@ public struct Migrations {
             }
         }
         
+        migrator.registerMigration("Add metadata to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.metadata.name, .jsonText)
+            }
+        }
+        
         try migrator.migrate(dbQueue)
     }
 }
