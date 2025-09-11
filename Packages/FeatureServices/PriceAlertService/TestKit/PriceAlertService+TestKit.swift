@@ -10,20 +10,23 @@ import PriceService
 import PriceServiceTestKit
 import GemAPITestKit
 import GemAPI
+import Preferences
+import PreferencesTestKit
 
 public extension PriceAlertService {
     static func mock(
         store: PriceAlertStore = .mock(),
         apiService: any GemAPIPriceAlertService = GemAPIPriceAlertServiceMock(),
         deviceService: any DeviceServiceable = DeviceServiceMock(),
-        priceService: PriceService = .mock(),
-        priceObserverService: PriceObserverService = .mock()
+        priceObserverService: PriceObserverService = .mock(),
+        preferences: Preferences = .mock()
     ) -> PriceAlertService {
         PriceAlertService(
             store: store,
             apiService: apiService,
             deviceService: deviceService,
-            priceObserverService: priceObserverService
+            priceObserverService: priceObserverService,
+            preferences: preferences
         )
     }
 }

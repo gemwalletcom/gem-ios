@@ -156,7 +156,8 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "DeviceServiceTestKit", package: "SystemServices"),
                 "PriceServiceTestKit",
-                .product(name: "GemAPITestKit", package: "GemAPI")
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "PreferencesTestKit", package: "Preferences")
             ],
             path: "PriceAlertService/TestKit"
         ),
