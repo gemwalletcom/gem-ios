@@ -73,7 +73,7 @@ public struct BalanceStore: Sendable {
                         BalanceRecord.Columns.isActive.set(to: balance.isActive),
                     ]
 
-                    if let metadata = balance.metadata {
+                    if let metadata = balance.type.metadataa {
                         let metadataString = try JSONEncoder().encode(metadata).encodeString()
                         items.append(BalanceRecord.Columns.metadata.set(to: metadataString))
                     }

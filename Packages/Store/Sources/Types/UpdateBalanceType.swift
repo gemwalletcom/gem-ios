@@ -8,6 +8,13 @@ public enum UpdateBalanceType {
     case token(UpdateTokenBalance)
     case stake(UpdateStakeBalance)
     case perpetual(UpdatePerpetualBalance)
+
+    var metadataa: BalanceMetadata? {
+        switch self {
+        case .stake(let balance): balance.metadat
+        case .coin, .perpetual, .token: .none
+        }
+    }
 }
 
 public struct UpdateCoinBalance {

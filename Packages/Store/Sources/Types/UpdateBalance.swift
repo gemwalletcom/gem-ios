@@ -8,19 +8,16 @@ public struct UpdateBalance {
     public let type: UpdateBalanceType
     public let updatedAt: Date
     public let isActive: Bool
-    public let metadata: BalanceMetadata?
     
     public init(
         assetID: String,
         type: UpdateBalanceType,
         updatedAt: Date,
-        isActive: Bool,
-        metadata: BalanceMetadata? = nil
+        isActive: Bool
     ) {
         self.assetID = assetID
         self.type = type
         self.updatedAt = updatedAt
         self.isActive = isActive
-        self.metadata = metadata
     }
 }

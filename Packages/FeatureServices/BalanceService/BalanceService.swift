@@ -247,8 +247,7 @@ extension BalanceService {
                 assetID: balance.assetId.identifier,
                 type: update,
                 updatedAt: .now,
-                isActive: balance.isActive,
-                metadata: balance.type.metadata
+                isActive: balance.isActive
             )
         }
     }
