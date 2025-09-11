@@ -5,12 +5,13 @@ import Components
 import Primitives
 import Localization
 import PrimitivesComponents
+import Support
 
 public struct SettingsScene: View {
     @Environment(\.openURL) private var openURL
 
     @State private var model: SettingsViewModel
-
+    @State private var isPresentingSupport = false
     @Binding private var isPresentingWallets: Bool
 
     public init(
@@ -36,6 +37,9 @@ public struct SettingsScene: View {
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .sheet(isPresented: $isPresentingSupport) {
+            SupportScene(model: SupportSceneViewModel(isPresentingSupport: $isPresentingSupport))
+        }
     }
 }
 
@@ -123,19 +127,13 @@ extension SettingsScene {
 
     private var aboutSection: some View {
         Section {
-            SafariNavigationLink(url: model.helpCenterURL) {
-                ListItemView(
-                    title: model.helpCenterTitle,
-                    imageStyle: .settings(assetImage: model.helpCenterImage)
-                )
-            }
-
-            SafariNavigationLink(url: model.supportURL) {
-                ListItemView(
+            NavigationCustomLink(
+                with: ListItemView(
                     title: model.supportTitle,
                     imageStyle: .settings(assetImage: model.supportImage)
-                )
-            }
+                ),
+                action: onOpenSupport
+            )
 
             NavigationLink(value: Scenes.AboutUs()) {
                 ListItemView(
@@ -165,6 +163,10 @@ extension SettingsScene {
     }
 
     private func onOpenWallets() {
-        isPresentingWallets.toggle()
+        isPresentingWallets = true
+    }
+    
+    private func onOpenSupport() {
+        isPresentingSupport = true
     }
 }
