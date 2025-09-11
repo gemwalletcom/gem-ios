@@ -214,6 +214,9 @@ extension MainTabView {
                     )
                 )
                 return
+            case .support:
+                //TODO Open support
+                break
             case .test, .unknown:
                 break
             }
@@ -285,6 +288,7 @@ extension PushNotification {
     var selectTab: TabItem? {
         switch self {
         case .transaction, .asset, .priceAlert, .buyAsset, .swapAsset: .wallet
+        case .support: .settings
         case .test, .unknown: nil
         }
     }
