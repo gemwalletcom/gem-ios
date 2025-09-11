@@ -25,22 +25,22 @@ public struct SwapScene: View {
             swapList
                 .padding(.bottom, .scene.button.height)
             bottomActionView
-        }
-        .confirmationDialog(
-            model.swapDetailsViewModel?.highImpactWarningTitle ?? "",
-            presenting: $model.isPresentingPriceImpactConfirmation,
-            sensoryFeedback: .warning,
-            actions: { _ in
-                Button(
-                    model.buttonViewModel.title,
-                    role: .destructive,
-                    action: model.onSelectSwapConfirmation
+                .confirmationDialog(
+                    model.swapDetailsViewModel?.highImpactWarningTitle ?? "",
+                    presenting: $model.isPresentingPriceImpactConfirmation,
+                    sensoryFeedback: .warning,
+                    actions: { _ in
+                        Button(
+                            model.buttonViewModel.title,
+                            role: .destructive,
+                            action: model.onSelectSwapConfirmation
+                        )
+                    },
+                    message: {
+                        Text(model.isPresentingPriceImpactConfirmation ?? "")
+                    }
                 )
-            },
-            message: {
-                Text(model.isPresentingPriceImpactConfirmation ?? "")
-            }
-        )
+        }
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .onChangeObserveQuery(
