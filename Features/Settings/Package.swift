@@ -28,7 +28,8 @@ let package = Package(
         .package(name: "SystemServices", path: "../../Packages/SystemServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
-        .package(name: "QRScanner", path: "../QRScanner")
+        .package(name: "QRScanner", path: "../QRScanner"),
+        .package(name: "Support", path: "../Support")
     ],
     targets: [
         .target(
@@ -57,7 +58,8 @@ let package = Package(
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "NodeService", package: "ChainServices"),
                 .product(name: "ExplorerService", package: "ChainServices"),
-                "QRScanner"
+                "QRScanner",
+                "Support"
             ],
             path: "Sources"
         ),
