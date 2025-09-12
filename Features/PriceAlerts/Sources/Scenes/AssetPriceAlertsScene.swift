@@ -17,17 +17,32 @@ public struct AssetPriceAlertsScene: View {
     
     public var body: some View {
         List {
-            if let autoAlertModel = model.autoAlertModel {
+            if let autoAlert = model.sections.auto {
                 Section {
-                    alertView(model: autoAlertModel)
+                    alertView(model: autoAlert)
                 } footer: {
                     Text(Localized.PriceAlerts.autoFooter)
                 }
             }
             
-            Section {
-                ForEach(model.alertsModel, id: \.data.priceAlert.id) { model in
-                    alertView(model: model)
+            if model.sections.active.isNotEmpty {
+                Section {
+                    ForEach(model.sections.active, id: \.data.priceAlert.id) { alertModel in
+                        alertView(model: alertModel)
+                    }
+                } header: {
+                    Text(Localized.Stake.active)
+                }
+            }
+            
+            ForEach(model.sections.passedHeaders, id: \.self) { header in
+                Section {
+                    ForEach(model.sections.passedGroupedByDate[header] ?? [], id: \.data.priceAlert.id) { alertModel in
+                        alertView(model: alertModel)
+                            .opacity(0.6)
+                    }
+                } header: {
+                    Text(TransactionDateFormatter(date: header).section)
                 }
             }
         }

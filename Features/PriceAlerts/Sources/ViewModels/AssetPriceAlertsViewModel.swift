@@ -34,20 +34,12 @@ public final class AssetPriceAlertsViewModel: Sendable {
     
     var title: String { Localized.Settings.PriceAlerts.title }
     
-    var autoAlertModel: PriceAlertItemViewModel? {
-        priceAlerts
-            .first(where: { $0.priceAlert.type == .auto })
-            .map { PriceAlertItemViewModel(data: $0) }
-    }
-    
-    var alertsModel: [PriceAlertItemViewModel] {
-        priceAlerts
-            .filter { $0.priceAlert.shouldDisplay && $0.priceAlert.type != .auto }
-            .map { PriceAlertItemViewModel(data: $0) }
+    var sections: AssetPriceAlertSections {
+        AssetPriceAlertSections(from: priceAlerts)
     }
     
     var emptyContentModel: EmptyContentTypeViewModel? {
-        guard alertsModel.isEmpty else { return nil }
+        guard sections.isEmpty else { return nil }
         return EmptyContentTypeViewModel(type: .priceAlerts)
     }
 }
