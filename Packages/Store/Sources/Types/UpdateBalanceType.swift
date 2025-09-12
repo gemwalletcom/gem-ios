@@ -11,7 +11,7 @@ public enum UpdateBalanceType {
 
     var metadataa: BalanceMetadata? {
         switch self {
-        case .stake(let balance): balance.metadat
+        case .stake(let balance): balance.metadata
         case .coin, .perpetual, .token: .none
         }
     }
