@@ -11,15 +11,17 @@ public struct SettingsScene: View {
     @Environment(\.openURL) private var openURL
 
     @State private var model: SettingsViewModel
-    @State private var isPresentingSupport = false
     @Binding private var isPresentingWallets: Bool
+    @Binding private var isPresentingSupport: Bool
 
     public init(
         model: SettingsViewModel,
-        isPresentingWallets: Binding<Bool>
+        isPresentingWallets: Binding<Bool>,
+        isPresentingSupport: Binding<Bool>
     ) {
         _model = State(initialValue: model)
         _isPresentingWallets = isPresentingWallets
+        _isPresentingSupport = isPresentingSupport
     }
 
     public var body: some View {

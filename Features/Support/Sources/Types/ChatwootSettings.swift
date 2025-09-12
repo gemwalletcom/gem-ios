@@ -4,9 +4,9 @@ import Foundation
 
 public struct ChatwootSettings: Sendable {
     public enum DarkMode: String, Sendable {
-        case auto = "auto"
-        case light = "light"
-        case dark = "dark"
+        case auto
+        case light
+        case dark
     }
     
     let hideMessageBubble: Bool

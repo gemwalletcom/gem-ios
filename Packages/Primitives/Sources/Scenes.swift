@@ -34,10 +34,6 @@ public struct Scenes {
     public struct AboutUs: Hashable {
         public init() {}
     }
-    
-    public struct Support: Hashable {
-        public init() {}
-    }
 
     public struct Developer: Hashable {
         public init() {}
