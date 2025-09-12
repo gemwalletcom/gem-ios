@@ -89,7 +89,7 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
         return """
         window.addEventListener('chatwoot:ready', function () {
           window.$chatwoot.setCustomAttributes({
-            deviceToken: '\(deviceId)'
+            deviceId: '\(deviceId)'
           });
         });
         """
