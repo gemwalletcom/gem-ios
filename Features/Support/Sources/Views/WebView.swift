@@ -3,23 +3,20 @@
 import SwiftUI
 import WebKit
 
-public struct WebView: UIViewRepresentable {
-    let url: URL
+struct WebView: UIViewRepresentable {
+    let model: WebSceneViewModel
     
-    public init(url: URL) {
-        self.url = url
-    }
-    
-    public func makeUIView(context: Context) -> WKWebView {
+    func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
         webView.isOpaque = false
         webView.backgroundColor = UIColor.clear
         webView.scrollView.backgroundColor = UIColor.clear
+        webView.navigationDelegate = model
         return webView
     }
     
-    public func updateUIView(_ webView: WKWebView, context: Context) {
-        let request = URLRequest(url: url)
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        let request = URLRequest(url: model.url)
         webView.load(request)
     }
 }

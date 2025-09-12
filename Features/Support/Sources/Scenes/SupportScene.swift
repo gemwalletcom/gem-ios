@@ -16,14 +16,13 @@ public struct SupportScene: View {
     
     public var body: some View {
         NavigationView {
-            VStack {
-                switch model.selectedType {
-                case .support:
-                    ChatwootWebScene(model: model.chatwootModel)
-                case .docs:
-                    WebView(url: model.helpCenterURL)
-                }
+            TabView(selection: $model.selectedType) {
+                ChatwootWebScene(model: model.chatwootModel)
+                    .tag(SupportType.support)
+                WebViewScene(url: model.helpCenterURL)
+                    .tag(SupportType.docs)
             }
+            .tabViewStyle(.page(indexDisplayMode: .never))
             .background(Colors.grayBackground)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
