@@ -1036,8 +1036,8 @@ public enum Localized {
     public static func approveTokenPermission(_ p1: Any) -> String {
       return Localized.tr("Localizable", "swap.approve_token_permission", String(describing: p1), fallback: "Approve %@ token for swap access.")
     }
-    /// Min Receive
-    public static let minReceive = Localized.tr("Localizable", "swap.min_receive", fallback: "Min Receive")
+    /// Minimum Receive
+    public static let minReceive = Localized.tr("Localizable", "swap.min_receive", fallback: "Minimum Receive")
     /// Price Impact
     public static let priceImpact = Localized.tr("Localizable", "swap.price_impact", fallback: "Price Impact")
     /// Quote includes a %@ Gem fee.

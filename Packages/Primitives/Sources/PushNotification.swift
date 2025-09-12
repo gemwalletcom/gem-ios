@@ -19,6 +19,7 @@ public enum PushNotificationTypes: String, Codable, Equatable, Sendable {
 	case priceAlert
 	case buyAsset
 	case swapAsset
+	case support
 }
 
 public struct PushNotificationPayloadType: Codable, Equatable, Sendable {
