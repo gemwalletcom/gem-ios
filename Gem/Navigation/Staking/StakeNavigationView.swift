@@ -9,6 +9,7 @@ import ChainService
 import NodeService
 import ExplorerService
 import Signer
+import InfoSheet
 
 struct StakeNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -16,37 +17,36 @@ struct StakeNavigationView: View {
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
 
-    private let wallet: Wallet
-    private let assetId: AssetId
-
+    @State private var model: StakeSceneViewModel
     @Binding private var navigationPath: NavigationPath
 
     private let onComplete: VoidAction
 
-    init(
-        wallet: Wallet,
-        assetId: AssetId,
+    public init(
+        model: StakeSceneViewModel,
         navigationPath: Binding<NavigationPath>,
         onComplete: VoidAction
     ) {
-        self.wallet = wallet
-        self.assetId = assetId
+        _model = State(initialValue: model)
         _navigationPath = navigationPath
         self.onComplete = onComplete
     }
 
     var body: some View {
         StakeScene(
-            model: StakeViewModel(
-                wallet: wallet,
-                chain: assetId.chain,
-                stakeService: stakeService
-            )
+            model: model
+        )
+        .sheet(item: $model.isPresentingInfoSheet) {
+            InfoSheetScene(type: $0)
+        }
+        .observeQuery(
+            request: $model.request,
+            value: $model.delegations
         )
         .navigationDestination(for: TransferData.self) { data in
             ConfirmTransferScene(
                 model: viewModelFactory.confirmTransferScene(
-                    wallet: wallet,
+                    wallet: model.wallet,
                     data: data,
                     confirmTransferDelegate: nil,
                     onComplete: onComplete
@@ -57,7 +57,7 @@ struct StakeNavigationView: View {
             AmountNavigationView(
                 model: viewModelFactory.amountScene(
                     input: input,
-                    wallet: wallet,
+                    wallet: model.wallet,
                     onTransferAction: {
                         navigationPath.append($0)
                     }
@@ -67,7 +67,7 @@ struct StakeNavigationView: View {
         .navigationDestination(for: Delegation.self) { delegation in
             StakeDetailScene(
                 model: viewModelFactory.stakeDetailScene(
-                    wallet: wallet,
+                    wallet: model.wallet,
                     delegation: delegation,
                     onAmountInputAction: {
                         navigationPath.append($0)

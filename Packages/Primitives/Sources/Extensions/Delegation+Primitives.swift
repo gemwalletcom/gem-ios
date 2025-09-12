@@ -18,7 +18,6 @@ extension DelegationBase: Identifiable {
 extension DelegationValidator: Identifiable {}
 
 public extension DelegationBase {
-    
     var balanceValue: BigInt {
         BigInt(stringLiteral: balance)
     }
@@ -33,7 +32,8 @@ public extension DelegationBase {
 }
 
 extension DelegationValidator {
-    public static let systemId = "unstaking"
+    public static let systemId = "system"
+    public static let legacySystemId = "unstaking"
 
     public static func system(chain: Chain, name: String) -> DelegationValidator {
         DelegationValidator(
@@ -47,7 +47,7 @@ extension DelegationValidator {
     }
 
     public var isSystem: Bool {
-        id == Self.systemId
+        id == Self.systemId || id == Self.legacySystemId
     }
 }
 

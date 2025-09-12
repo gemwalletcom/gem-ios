@@ -155,7 +155,19 @@ public struct ViewModelFactory: Sendable {
             onSwap: onSwap
         )
     }
-    
+
+    @MainActor
+    public func stakeScene(
+        wallet: Wallet,
+        chain: Chain
+    ) -> StakeSceneViewModel {
+        StakeSceneViewModel(
+            wallet: wallet,
+            chain: chain,
+            stakeService: stakeService
+        )
+    }
+
     @MainActor
     public func signMessageScene(
         payload: SignMessagePayload,
