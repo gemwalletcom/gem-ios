@@ -97,7 +97,7 @@ public struct DeviceService: DeviceServiceable {
             id: deviceId,
             platform: .ios,
             os: UIDevice.current.systemVersion,
-            model: UIDevice.current.model,
+            model: UIDevice.current.machineIdentifier,
             platformStore: platformStore,
             token: deviceToken,
             locale: locale,
