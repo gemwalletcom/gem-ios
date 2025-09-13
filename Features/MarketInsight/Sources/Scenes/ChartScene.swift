@@ -10,7 +10,6 @@ import GRDBQuery
 import Store
 import PrimitivesComponents
 import Localization
-import PriceAlerts
 
 public struct ChartScene: View {
     private let fetchTimer = Timer.publish(every: 60, tolerance: 1, on: .main, in: .common).autoconnect()
