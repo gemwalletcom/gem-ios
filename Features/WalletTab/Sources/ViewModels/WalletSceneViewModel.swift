@@ -43,6 +43,8 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingUrl: URL? = nil
     public var isPresentingTransferData: TransferData?
     public var isPresentingPerpetualRecipientData: PerpetualRecipientData?
+    public var isPresentingSetPriceAlert: AssetId?
+    public var isPresentingToastMessage: ToastMessage?
     
     public var isLoadingAssets: Bool = false
 
@@ -200,6 +202,11 @@ extension WalletSceneViewModel {
     
     public func onTransferComplete() {
         isPresentingTransferData = nil
+    }
+    
+    public func onSetPriceAlertComplete(message: String) {
+        isPresentingSetPriceAlert = nil
+        isPresentingToastMessage = ToastMessage(title: message, image: SystemImage.bellFill)
     }
 }
 

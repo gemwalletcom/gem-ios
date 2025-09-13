@@ -101,7 +101,8 @@ struct SettingsNavigationStack: View {
                         priceService: priceService,
                         assetModel: AssetViewModel(asset: scene.asset),
                         priceAlertService: priceAlertService,
-                        walletId: walletId
+                        walletId: walletId,
+                        isPresentingSetPriceAlert: .constant(nil)
                     )
                 )
             }
