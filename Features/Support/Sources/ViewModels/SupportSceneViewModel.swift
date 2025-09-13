@@ -15,16 +15,13 @@ public final class SupportSceneViewModel: Sendable {
     var isPresentingSupport: Binding<Bool>
     
     private let pushNotificationService: PushNotificationEnablerService
-    private let preferences: Preferences
     
     public init(
         pushNotificationService: PushNotificationEnablerService = PushNotificationEnablerService(),
-        preferences: Preferences = .standard,
         isPresentingSupport: Binding<Bool>
     ) {
         self.isPresentingSupport = isPresentingSupport
         self.pushNotificationService = pushNotificationService
-        self.preferences = preferences
     }
     
     var title: String { Localized.Settings.support }
@@ -35,7 +32,6 @@ public final class SupportSceneViewModel: Sendable {
             websiteToken: "21yu9Az48rJHe1rg4poHqLSr",
             baseUrl: URL(string: "https://support.gemwallet.com")!,
             deviceId: try? SecurePreferences().get(key: .deviceId),
-            preferences: preferences,
             isPresentingSupport: isPresentingSupport
         )
     }
