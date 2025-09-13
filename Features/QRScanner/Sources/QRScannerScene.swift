@@ -78,7 +78,7 @@ public struct QRScannerScene: View {
         .onChange(of: model.imageState, onChangeImageState)
     }
 
-    private func photosPicker<Content: View>(@ViewBuilder content: @Sendable () -> Content) -> some View {
+    private func photosPicker<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         PhotosPicker(
             selection: $model.selectedPhoto,
             matching: .images,

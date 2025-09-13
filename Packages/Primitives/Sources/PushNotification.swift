@@ -30,6 +30,10 @@ public struct PushNotificationPayloadType: Codable, Equatable, Sendable {
 	}
 }
 
+public struct PushNotificationSupport: Codable, Equatable, Sendable {
+	public init() {}
+}
+
 public struct PushNotificationSwapAsset: Codable, Equatable, Sendable {
 	public let fromAssetId: String
 	public let toAssetId: String
