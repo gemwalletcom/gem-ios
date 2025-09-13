@@ -4,6 +4,8 @@ import Foundation
 import WebKit
 import SwiftUI
 import Primitives
+import UIKit
+import Preferences
 
 @Observable
 @MainActor
@@ -13,6 +15,7 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
     let baseUrl: URL
     let settings: ChatwootSettings
     let deviceId: String?
+    let preferences: Preferences
     
     var isPresentingSupport: Binding<Bool>
     var isLoading: Bool = true
@@ -21,12 +24,14 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
         websiteToken: String,
         baseUrl: URL,
         deviceId: String?,
+        preferences: Preferences = .standard,
         settings: ChatwootSettings = .defaultSettings,
         isPresentingSupport: Binding<Bool>
     ) {
         self.websiteToken = websiteToken
         self.baseUrl = baseUrl
         self.deviceId = deviceId
+        self.preferences = preferences
         self.settings = settings
         self.isPresentingSupport = isPresentingSupport
     }
@@ -45,7 +50,7 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
           <script src="\(sdkSourceURL)" async onload="
             \(sdkInitializationScript)
             \(toggleChatScript)
-            \(setDeviceIdScript)
+            \(setCustomAttributesScript)
             \(chatCloseEventHandler)
             \(chatOpenEventHandler)
           "></script>
@@ -84,12 +89,19 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
         """
     }
     
-    private var setDeviceIdScript: String {
-        guard let deviceId else { return .empty }
-        return """
+    private var setCustomAttributesScript: String {
+        """
         window.addEventListener('chatwoot:ready', function () {
           window.$chatwoot.setCustomAttributes({
-            deviceId: '\(deviceId)'
+            deviceId: '\(customAttributesJson.deviceId)',
+            iosVersion: '\(customAttributesJson.iosVersion)',
+            appVersion: '\(customAttributesJson.appVersion)',
+            device: '\(customAttributesJson.device)',
+            currency: '\(customAttributesJson.currency)',
+            language: '\(customAttributesJson.language)',
+            launchesCount: \(customAttributesJson.launchesCount),
+            isPushNotificationsEnabled: \(customAttributesJson.isPushEnabled),
+            isPriceAlertsEnabled: \(customAttributesJson.isPriceAlertsEnabled)
           });
         });
         """
@@ -109,6 +121,20 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
     
     private var chatOpenEventHandler: String {
         eventHandler(event: .ready, handler: .chatOpened, message: .ready)
+    }
+    
+    private var customAttributesJson: ChatwootCustomAttributes {
+        ChatwootCustomAttributes(
+            deviceId: deviceId ?? "",
+            iosVersion: UIDevice.current.systemVersion,
+            appVersion: Bundle.main.releaseVersionNumber,
+            device: UIDevice.current.name,
+            currency: preferences.currency,
+            language: Locale.current.usageLanguageIdentifier(),
+            launchesCount: preferences.launchesCount,
+            isPushEnabled: preferences.isPushNotificationsEnabled,
+            isPriceAlertsEnabled: preferences.isPriceAlertsEnabled
+        )
     }
     
     // MARK: - Private methods

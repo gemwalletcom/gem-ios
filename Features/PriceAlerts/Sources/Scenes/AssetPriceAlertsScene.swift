@@ -54,13 +54,11 @@ public struct AssetPriceAlertsScene: View {
                 model: SetPriceAlertViewModel(
                     walletId: model.walletId,
                     assetId: model.asset.id,
-                    priceAlertService: model.priceAlertService,
-                    onComplete: { _ in
-                        model.onSetPriceAlertComplete()
-                    }
-                )
+                    priceAlertService: model.priceAlertService
+                ) { model.onSetPriceAlertComplete(message: $0) }
             )
         }
+        .toast(message: $model.isPresentingToastMessage)
     }
     
     private func alertView(model: PriceAlertItemViewModel) -> some View {

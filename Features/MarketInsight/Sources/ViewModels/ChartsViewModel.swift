@@ -10,6 +10,7 @@ import PrimitivesComponents
 import PriceService
 import Preferences
 import PriceAlertService
+import SwiftUI
 
 @MainActor
 @Observable
@@ -33,8 +34,7 @@ public final class ChartsViewModel {
     var priceData: PriceData?
     var priceRequest: PriceRequest
 
-    public var isPresentingSetPriceAlert: Bool = false
-    public var isPresentingToastMessage: ToastMessage?
+    public var isPresentingSetPriceAlert: Binding<AssetId?>
 
     var title: String { assetModel.name }
     var emptyTitle: String { Localized.Common.notAvailable }
@@ -51,7 +51,8 @@ public final class ChartsViewModel {
         assetModel: AssetViewModel,
         priceAlertService: PriceAlertService,
         walletId: WalletId,
-        currentPeriod: ChartPeriod = ChartValuesViewModel.defaultPeriod
+        currentPeriod: ChartPeriod = ChartValuesViewModel.defaultPeriod,
+        isPresentingSetPriceAlert: Binding<AssetId?>
     ) {
         self.service = service
         self.priceService = priceService
@@ -60,6 +61,7 @@ public final class ChartsViewModel {
         self.walletId = walletId
         self.currentPeriod = currentPeriod
         self.priceRequest = PriceRequest(assetId: assetModel.asset.id)
+        self.isPresentingSetPriceAlert = isPresentingSetPriceAlert
     }
     
     var priceDataModel: AssetDetailsInfoViewModel? {
@@ -101,11 +103,6 @@ extension ChartsViewModel {
     }
 
     public func onSelectSetPriceAlerts() {
-        isPresentingSetPriceAlert = true
-    }
-
-    public func onSetPriceAlertComplete(message: String) {
-        isPresentingSetPriceAlert = false
-        isPresentingToastMessage = ToastMessage(title: message, image: SystemImage.bellFill)
+        isPresentingSetPriceAlert.wrappedValue = assetModel.asset.id
     }
 }
