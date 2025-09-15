@@ -73,6 +73,10 @@ public protocol GemAPIMarketService: Sendable {
     func getMarkets() async throws -> Markets
 }
 
+public protocol GemAPISupportService: Sendable {
+    func addSupportDevice(device: SupportDevice) async throws -> SupportDevice
+}
+
 public struct GemAPIService {
     
     let provider: Provider<GemAPI>
@@ -277,5 +281,14 @@ extension GemAPIService: GemAPIPricesService {
         try await provider
             .request(.getPrices(AssetPricesRequest(currency: currency, assetIds: assetIds)))
             .map(as: AssetPrices.self).prices
+    }
+}
+
+extension GemAPIService: GemAPISupportService {
+    @discardableResult
+    public func addSupportDevice(device: SupportDevice) async throws -> SupportDevice {
+        try await provider
+            .request(.addSupportDevice(device: device))
+            .map(as: ResponseResult<SupportDevice>.self).data
     }
 }

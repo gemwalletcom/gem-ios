@@ -37,6 +37,7 @@ public struct SupportScene: View {
             .task {
                 await model.requestPushNotifications()
             }
+            .taskOnce { Task { await model.registerSupport() } }
         }
     }
     
