@@ -122,7 +122,7 @@ public enum GemAPI: TargetType {
         case .getPriceAlerts(let deviceId), .addPriceAlerts(let deviceId, _), .deletePriceAlerts(let deviceId, _):
             return "/v1/price_alerts/\(deviceId)"
         case .getNFTAssets(deviceId: let deviceId, walletIndex: let walletIndex):
-            return "/v2/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
+            return "/v1/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
         case .scanTransaction:
             return "/v1/scan/transaction"
         case .markets:

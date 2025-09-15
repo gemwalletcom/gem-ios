@@ -36,7 +36,7 @@ public struct DeviceService: DeviceServiceable {
     private func updateDevice() async throws {
         guard let deviceId = try await self.getOrCreateDeviceId() else { return }
         let device = try await self.getOrCreateDevice(deviceId)
-        let localDevice = try self.currentDevice(deviceId: deviceId)
+        let localDevice = try await self.currentDevice(deviceId: deviceId)
         if device.subscriptionsVersion != localDevice.subscriptionsVersion || self.preferences.subscriptionsVersionHasChange {
             try await self.subscriptionsService.update(deviceId: deviceId)
         }
@@ -50,7 +50,7 @@ public struct DeviceService: DeviceServiceable {
             return try await getDevice(deviceId: deviceId)
         } catch {
             // create device if for any reason to get current device
-            let device = try currentDevice(deviceId: deviceId, ignoreSubscriptionsVersion: true)
+            let device = try await currentDevice(deviceId: deviceId, ignoreSubscriptionsVersion: true)
             return try await addDevice(device)
         }
     }
@@ -80,6 +80,7 @@ public struct DeviceService: DeviceServiceable {
         }
     }
     
+    @MainActor
     private func currentDevice(
         deviceId: String,
         ignoreSubscriptionsVersion: Bool = false
@@ -87,14 +88,18 @@ public struct DeviceService: DeviceServiceable {
         let deviceToken = try securePreferences.get(key: .deviceToken) ?? .empty
         let locale = Locale.current.usageLanguageIdentifier()
         #if targetEnvironment(simulator)
+        let model = "iOS Simulator"
         let platformStore = PlatformStore.local
         #else
         let platformStore = PlatformStore.appStore
+        let model = UIDevice.current.machineIdentifier
         #endif
         
         return Device(
             id: deviceId,
             platform: .ios,
+            os: UIDevice.current.systemVersion,
+            model: model,
             platformStore: platformStore,
             token: deviceToken,
             locale: locale,
@@ -112,7 +117,7 @@ public struct DeviceService: DeviceServiceable {
     
     @discardableResult
     private func updateDeviceId(_ deviceId: String) async throws -> Device   {
-        let device = try currentDevice(deviceId: deviceId)
+        let device = try await currentDevice(deviceId: deviceId)
         return try await updateDevice(device)
     }
     

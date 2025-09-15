@@ -167,6 +167,7 @@ extension SwapSceneViewModel {
             )
         } catch {
             swapState.quotes = .noData
+            swapState.swapTransferData = .noData
             swapState.fetch = .idle
             selectedSwapQuote = nil
         }

@@ -35,6 +35,15 @@ struct SwapButtonViewModelTests {
     }
     
     @Test
+    func retrySwapShowsLoadingWhenInProgress() {
+        let swapState = SwapState(availability: .data([]), swapTransferData: .loading)
+        let viewModel = SwapButtonViewModel.mock(swapState: swapState)
+
+        #expect(viewModel.type == ButtonType.primary(.loading()))
+        #expect(viewModel.isVisible == true)
+    }
+    
+    @Test
     func insufficientBalanceWhenAmountInvalid() {
         let asset = AssetData.mock(asset: .mock(symbol: "BTC"))
         let swapState = SwapState(availability: .data([]))

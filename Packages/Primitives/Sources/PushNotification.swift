@@ -19,6 +19,7 @@ public enum PushNotificationTypes: String, Codable, Equatable, Sendable {
 	case priceAlert
 	case buyAsset
 	case swapAsset
+	case support
 }
 
 public struct PushNotificationPayloadType: Codable, Equatable, Sendable {
@@ -27,6 +28,10 @@ public struct PushNotificationPayloadType: Codable, Equatable, Sendable {
 	public init(type: PushNotificationTypes) {
 		self.type = type
 	}
+}
+
+public struct PushNotificationSupport: Codable, Equatable, Sendable {
+	public init() {}
 }
 
 public struct PushNotificationSwapAsset: Codable, Equatable, Sendable {

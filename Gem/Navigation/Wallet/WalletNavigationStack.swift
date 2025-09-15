@@ -101,7 +101,8 @@ struct WalletNavigationStack: View {
                             priceService: priceService,
                             assetModel: AssetViewModel(asset: $0.asset),
                             priceAlertService: priceAlertService,
-                            walletId: model.wallet.walletId
+                            walletId: model.wallet.walletId,
+                            isPresentingSetPriceAlert: $model.isPresentingSetPriceAlert
                         )
                     )
                 }
@@ -165,7 +166,17 @@ struct WalletNavigationStack: View {
                         }
                     )
                 }
+                .sheet(item: $model.isPresentingSetPriceAlert) { assetId in
+                    SetPriceAlertNavigationStack(
+                        model: SetPriceAlertViewModel(
+                            walletId: model.wallet.walletId,
+                            assetId: assetId,
+                            priceAlertService: priceAlertService
+                        ) { model.onSetPriceAlertComplete(message: $0) }
+                    )
+                }
                 .safariSheet(url: $model.isPresentingUrl)
+                .toast(message: $model.isPresentingToastMessage)
         }
     }
 }
