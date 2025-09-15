@@ -32,7 +32,7 @@ public final class Preferences: @unchecked Sendable {
         static let isWalletConnectActivated = "is_walletconnect_activated"
         static let perpetualsMarketsUpdatedAt = "perpetual_markets_updated_at"
         static let isPerpetualEnabled = "is_perpetual_enabled"
-        static let supportDeviceId = "support_device_id1"
+        static let supportDeviceId = "support_device_id"
         static let supportDeviceRegistered = "support_device_registered"
     }
 
