@@ -42,6 +42,7 @@ struct MainTabView: View {
     }
 
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
+    @State private var isPresentingSupport = false
 
     init(model: MainTabViewModel) {
         self.model = model
@@ -105,7 +106,8 @@ struct MainTabView: View {
 
             SettingsNavigationStack(
                 walletId: model.wallet.walletId,
-                priceService: priceService
+                priceService: priceService,
+                isPresentingSupport: $isPresentingSupport
             )
             .tabItem {
                 tabItem(Localized.Settings.title, Images.Tabs.settings)
@@ -215,8 +217,7 @@ extension MainTabView {
                 )
                 return
             case .support:
-                //TODO Open support
-                break
+                isPresentingSupport = true
             case .test, .unknown:
                 break
             }

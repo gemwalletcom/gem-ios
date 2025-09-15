@@ -17,7 +17,7 @@ public struct AssetPriceAlertsScene: View {
     
     public var body: some View {
         List {
-            if let autoAlert = model.sections.auto {
+            if let autoAlert = model.autoAlertModel {
                 Section {
                     alertView(model: autoAlert)
                 } footer: {
@@ -25,24 +25,13 @@ public struct AssetPriceAlertsScene: View {
                 }
             }
             
-            if model.sections.active.isNotEmpty {
+            if model.alertsModel.isNotEmpty {
                 Section {
-                    ForEach(model.sections.active, id: \.data.priceAlert.id) { alertModel in
+                    ForEach(model.alertsModel, id: \.data.priceAlert.id) { alertModel in
                         alertView(model: alertModel)
                     }
                 } header: {
                     Text(Localized.Stake.active)
-                }
-            }
-            
-            ForEach(model.sections.passedHeaders, id: \.self) { header in
-                Section {
-                    ForEach(model.sections.passedGroupedByDate[header] ?? [], id: \.data.priceAlert.id) { alertModel in
-                        alertView(model: alertModel)
-                            .opacity(0.6)
-                    }
-                } header: {
-                    Text(TransactionDateFormatter(date: header).section)
                 }
             }
         }
@@ -69,13 +58,11 @@ public struct AssetPriceAlertsScene: View {
                 model: SetPriceAlertViewModel(
                     walletId: model.walletId,
                     assetId: model.asset.id,
-                    priceAlertService: model.priceAlertService,
-                    onComplete: { _ in
-                        model.onSetPriceAlertComplete()
-                    }
-                )
+                    priceAlertService: model.priceAlertService
+                ) { model.onSetPriceAlertComplete(message: $0) }
             )
         }
+        .toast(message: $model.isPresentingToastMessage)
     }
     
     private func alertView(model: PriceAlertItemViewModel) -> some View {

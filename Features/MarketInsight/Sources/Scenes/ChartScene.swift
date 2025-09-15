@@ -10,7 +10,6 @@ import GRDBQuery
 import Store
 import PrimitivesComponents
 import Localization
-import PriceAlerts
 
 public struct ChartScene: View {
     private let fetchTimer = Timer.publish(every: 60, tolerance: 1, on: .main, in: .common).autoconnect()
@@ -111,15 +110,5 @@ public struct ChartScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .toast(message: $model.isPresentingToastMessage)
-        .sheet(isPresented: $model.isPresentingSetPriceAlert) {
-            SetPriceAlertNavigationStack(
-                model: SetPriceAlertViewModel(
-                    walletId: model.walletId,
-                    assetId: model.assetModel.asset.id,
-                    priceAlertService: model.priceAlertService
-                ) { model.onSetPriceAlertComplete(message: $0) }
-            )
-        }
     }
 }

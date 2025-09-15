@@ -32,13 +32,16 @@ struct SettingsNavigationStack: View {
     @State private var currencyModel: CurrencySceneViewModel
 
     let walletId: WalletId
+    @Binding var isPresentingSupport: Bool
 
     init(
         walletId: WalletId,
         preferences: Preferences = .standard,
-        priceService: PriceService
+        priceService: PriceService,
+        isPresentingSupport: Binding<Bool>
     ) {
         self.walletId = walletId
+        _isPresentingSupport = isPresentingSupport
         _currencyModel = State(
             initialValue: CurrencySceneViewModel(
                 currencyStorage: preferences,
@@ -63,7 +66,8 @@ struct SettingsNavigationStack: View {
                     currencyModel: currencyModel,
                     observablePrefereces: observablePreferences
                 ),
-                isPresentingWallets: $isPresentingWallets
+                isPresentingWallets: $isPresentingWallets,
+                isPresentingSupport: $isPresentingSupport
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in
@@ -97,7 +101,8 @@ struct SettingsNavigationStack: View {
                         priceService: priceService,
                         assetModel: AssetViewModel(asset: scene.asset),
                         priceAlertService: priceAlertService,
-                        walletId: walletId
+                        walletId: walletId,
+                        isPresentingSetPriceAlert: .constant(nil)
                     )
                 )
             }
