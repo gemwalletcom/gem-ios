@@ -44,11 +44,7 @@ public struct StateButtonStyle: ButtonStyle {
             DefaultGlassEffectShape()
                 .fill(background(configuration: configuration))
                 .frame(maxHeight: Self.maxHeight)
-                .glassEffect(
-                    .regular.tint(
-                        isDisabled ? palette.backgroundDisabled : palette.background
-                    ).interactive(!isDisabled)
-                )
+                .glassEffect(.regular.interactive(!isDisabled))
         } else {
             primaryButtonShape(configuration: configuration)
         }
