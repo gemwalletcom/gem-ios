@@ -90,7 +90,7 @@ struct AmountScene: View {
             Spacer()
             StateButton(
                 text: model.continueTitle,
-                type: .primary(model.actionButtonState),
+                type: .adoptiveGlassEffect(model.actionButtonState),
                 action: model.onSelectNextButton
             )
             .frame(maxWidth: .scene.button.maxWidth)

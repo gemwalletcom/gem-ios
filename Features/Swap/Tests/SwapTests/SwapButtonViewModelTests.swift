@@ -19,7 +19,7 @@ struct SwapButtonViewModelTests {
         
         #expect(viewModel.buttonAction == SwapButtonAction.retryQuotes)
         #expect(viewModel.title == Localized.Common.tryAgain)
-        #expect(viewModel.type == ButtonType.primary(.normal))
+        #expect(viewModel.type == ButtonType.adoptiveGlassEffect(.normal))
         #expect(viewModel.isVisible == true)
     }
     
@@ -30,7 +30,7 @@ struct SwapButtonViewModelTests {
         
         #expect(viewModel.buttonAction == SwapButtonAction.retrySwap)
         #expect(viewModel.title == Localized.Common.tryAgain)
-        #expect(viewModel.type == ButtonType.primary(.normal))
+        #expect(viewModel.type == ButtonType.adoptiveGlassEffect(.normal))
         #expect(viewModel.isVisible == true)
     }
     
@@ -39,7 +39,7 @@ struct SwapButtonViewModelTests {
         let swapState = SwapState(availability: .data([]), swapTransferData: .loading)
         let viewModel = SwapButtonViewModel.mock(swapState: swapState)
 
-        #expect(viewModel.type == ButtonType.primary(.loading()))
+        #expect(viewModel.type == ButtonType.adoptiveGlassEffect(.loading()))
         #expect(viewModel.isVisible == true)
     }
     
@@ -51,7 +51,7 @@ struct SwapButtonViewModelTests {
         
         #expect(viewModel.buttonAction == SwapButtonAction.insufficientBalance(asset: asset.asset))
         #expect(viewModel.title == Localized.Transfer.insufficientBalance("BTC"))
-        #expect(viewModel.type == ButtonType.primary(.disabled))
+        #expect(viewModel.type == ButtonType.adoptiveGlassEffect(.disabled))
         #expect(viewModel.isVisible == true)
     }
     
@@ -62,7 +62,7 @@ struct SwapButtonViewModelTests {
         
         #expect(viewModel.buttonAction == SwapButtonAction.swap)
         #expect(viewModel.title == Localized.Wallet.swap)
-        #expect(viewModel.type == ButtonType.primary(.normal))
+        #expect(viewModel.type == ButtonType.adoptiveGlassEffect(.normal))
         #expect(viewModel.isVisible == true)
     }
     
@@ -79,7 +79,7 @@ struct SwapButtonViewModelTests {
         let swapState = SwapState(availability: .loading)
         let viewModel = SwapButtonViewModel.mock(swapState: swapState)
         
-        #expect(viewModel.type == ButtonType.primary(.loading()))
+        #expect(viewModel.type == ButtonType.adoptiveGlassEffect(.loading()))
         #expect(viewModel.isVisible == true)
     }
     

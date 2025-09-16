@@ -50,7 +50,7 @@ public struct TransactionScene: View {
         case let .swapAgain(text):
             let button = StateButton(
                 text: text,
-                type: .primary(.normal),
+                type: .adoptiveGlassEffect(.normal),
                 action: model.onSelectTransactionHeader
             )
             .cleanListRow(topOffset: .zero)

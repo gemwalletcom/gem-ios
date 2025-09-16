@@ -14,9 +14,7 @@ public struct StateButtonStyle: ButtonStyle {
 
     public func makeBody(configuration: Configuration) -> some View {
         ZStack {
-            RoundedRectangle(cornerRadius: Sizing.space12)
-                .fill(background(configuration: configuration))
-                .frame(maxHeight: Self.maxHeight)
+            buttonShape(configuration: configuration)
 
             if variant.state.showProgress {
                 ProgressView()
@@ -30,6 +28,40 @@ public struct StateButtonStyle: ButtonStyle {
                     .frame(maxWidth: .infinity, maxHeight: Self.maxHeight)
             }
         }
+    }
+    
+    @ViewBuilder
+    private func buttonShape(configuration: Configuration) -> some View {
+        switch variant {
+        case .primary: primaryButtonShape(configuration: configuration)
+        case .adoptiveGlassEffect: adoptiveShape(configuration: configuration)
+        }
+    }
+    
+    @ViewBuilder
+    private func adoptiveShape(configuration: Configuration) -> some View {
+        if #available(iOS 26, *) {
+            DefaultGlassEffectShape()
+                .fill(background(configuration: configuration))
+                .frame(maxHeight: Self.maxHeight)
+                .glassEffect(
+                    .regular.tint(
+                        isDisabled ? palette.backgroundDisabled : palette.background
+                    ).interactive(!isDisabled)
+                )
+        } else {
+            primaryButtonShape(configuration: configuration)
+        }
+    }
+    
+    private func primaryButtonShape(configuration: Configuration) -> some View {
+        RoundedRectangle(cornerRadius: Sizing.space12)
+            .fill(background(configuration: configuration))
+            .frame(maxHeight: Self.maxHeight)
+    }
+    
+    private var isDisabled: Bool {
+        variant.isDisabled
     }
 
     private func background(configuration: Configuration) -> Color {
@@ -55,10 +87,15 @@ extension ButtonStyle where Self == StateButtonStyle {
     public static func primary(_ state: ButtonState = .normal) -> Self {
         .init(.primary(state), palettee: .primary)
     }
+    
+    public static func adoptiveGlassEffect(_ state: ButtonState = .normal) -> Self {
+        .init(.adoptiveGlassEffect(state), palettee: .primary)
+    }
 
     public static func variant(_ variant: ButtonType) -> Self {
         switch variant {
         case .primary(let state): .primary(state)
+        case .adoptiveGlassEffect(let state): .adoptiveGlassEffect(state)
         }
     }
 }

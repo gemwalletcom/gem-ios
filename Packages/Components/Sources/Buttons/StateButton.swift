@@ -29,7 +29,7 @@ public struct StateButton: View {
     public init(
         text: String,
         textStyle: TextStyle = StateButton.defaultTextStyle,
-        type: ButtonType = .primary(),
+        type: ButtonType = .adoptiveGlassEffect(),
         image: Image? = nil,
         infoTitle: String? = nil,
         infoTitleStyle: TextStyle = .calloutSecondary,
@@ -61,13 +61,7 @@ public struct StateButton: View {
                 .font(textValue.style.font)
             }
             .buttonStyle(.variant(type))
-            .disabled(isDisabled)
-        }
-    }
-    
-    private var isDisabled: Bool {
-        switch type {
-        case .primary(let state): state != .normal
+            .disabled(type.isDisabled)
         }
     }
 }
@@ -102,6 +96,26 @@ public extension ButtonType {
                 return .primary(.normal)
             }
             return .primary(.disabled)
+        }
+    }
+    
+    static func adoptiveGlassEffect<T>(
+        _ viewState: StateViewType<T>,
+        showProgress: Bool = true,
+        isDisabled: Bool? = nil
+    ) -> Self {
+        if let isDisabled, isDisabled {
+            return .adoptiveGlassEffect(.disabled)
+        }
+        switch viewState {
+        case .loading: return .adoptiveGlassEffect(.loading(showProgress: showProgress))
+        case .noData: return .adoptiveGlassEffect(.disabled)
+        case .data: return .adoptiveGlassEffect(.normal)
+        case .error: 
+            if let isDisabled, !isDisabled {
+                return .adoptiveGlassEffect(.normal)
+            }
+            return .adoptiveGlassEffect(.disabled)
         }
     }
 }

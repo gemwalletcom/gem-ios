@@ -31,7 +31,7 @@
 
      var type: ButtonType {
         let isDisabled = state.value?.transferAmount?.isFailure ?? false
-        return .primary(state, isDisabled: isDisabled)
+        return .adoptiveGlassEffect(state, isDisabled: isDisabled)
     }
 
      func action() { perform() }

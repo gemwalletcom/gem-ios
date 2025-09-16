@@ -33,7 +33,7 @@ public struct AddNodeScene: View {
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
-                type: .primary(model.state),
+                type: .adoptiveGlassEffect(model.state),
                 action: onSelectImport
             )
             .frame(maxWidth: .scene.button.maxWidth)

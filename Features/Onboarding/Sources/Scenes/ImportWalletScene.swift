@@ -101,7 +101,7 @@ struct ImportWalletScene: View {
             Spacer()
             StateButton(
                 text: Localized.Wallet.Import.action,
-                type: .primary(model.buttonState),
+                type: .adoptiveGlassEffect(model.buttonState),
                 action: model.onSelectActionButton
             )
             .frame(maxWidth: .scene.button.maxWidth)

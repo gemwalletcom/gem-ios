@@ -95,7 +95,7 @@ struct RecipientScene: View {
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
-                type: .primary(model.actionButtonState),
+                type: .adoptiveGlassEffect(model.actionButtonState),
                 action: model.onContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)

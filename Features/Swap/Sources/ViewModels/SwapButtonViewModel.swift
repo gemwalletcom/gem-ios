@@ -53,10 +53,10 @@ struct SwapButtonViewModel: StateButtonViewable {
     var icon: Image? { nil }
     var type: ButtonType {
         switch buttonAction {
-        case .retryQuotes: swapState.quotes.isLoading ? .primary(swapState.quotes) : .primary(.normal)
-        case .insufficientBalance: .primary(.disabled)
-        case .retrySwap: swapState.swapTransferData.isLoading ? .primary(swapState.swapTransferData) : .primary(.normal)
-        case .swap: swapState.swapTransferData.isLoading ? .primary(swapState.swapTransferData) : .primary(swapState.quotes)
+        case .retryQuotes: swapState.quotes.isLoading ? .adoptiveGlassEffect(swapState.quotes) : .adoptiveGlassEffect(.normal)
+        case .insufficientBalance: .adoptiveGlassEffect(.disabled)
+        case .retrySwap: swapState.swapTransferData.isLoading ? .adoptiveGlassEffect(swapState.swapTransferData) : .adoptiveGlassEffect(.normal)
+        case .swap: swapState.swapTransferData.isLoading ? .adoptiveGlassEffect(swapState.swapTransferData) : .adoptiveGlassEffect(swapState.quotes)
         }
     }
     var isVisible: Bool { !swapState.quotes.isNoData }
