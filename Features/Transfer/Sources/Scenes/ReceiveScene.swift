@@ -21,10 +21,10 @@ public struct ReceiveScene: View {
                         .frame(maxWidth: model.qrWidth)
                 }
                 Spacer()
-                Button(action: model.onShareSheet) {
-                    Text(model.shareTitle)
-                }
-                .buttonStyle(.blue())
+                StateButton(
+                    text: model.shareTitle,
+                    action: model.onShareSheet
+                )
             }
             .frame(maxWidth: .scene.button.maxWidth)
         }

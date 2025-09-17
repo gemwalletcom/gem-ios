@@ -24,25 +24,23 @@ public struct AddNodeScene: View {
     }
 
     public var body: some View {
-        VStack {
-            List {
-                networkSection
-                inputView
-                nodeInfoView
-            }
-            Spacer()
+        List {
+            networkSection
+            inputView
+            nodeInfoView
+        }
+        .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.state),
                 action: onSelectImport
             )
             .frame(maxWidth: .scene.button.maxWidth)
+            .padding(.bottom, .scene.bottom)
         }
         .onAppear {
             focusedField = .address
         }
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
