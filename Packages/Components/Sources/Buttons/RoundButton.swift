@@ -31,6 +31,7 @@ public struct RoundButton: View {
                     .background(Colors.blue)
                     .cornerRadius(24)
                     .opacity(isEnabled ? 1 : 0.5)
+                    .liquidGlass()
                 Text(title)
                     .allowsTightening(true)
                     .truncationMode(.tail)
