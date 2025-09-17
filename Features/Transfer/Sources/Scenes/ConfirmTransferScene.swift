@@ -17,62 +17,60 @@ public struct ConfirmTransferScene: View {
     }
 
     public var body: some View {
-        VStack {
-            transactionsList
-            Spacer()
-            StateButton(model.confirmButtonModel)
-            .frame(maxWidth: .scene.button.maxWidth)
-        }
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
-        .frame(maxWidth: .infinity)
-        .debounce(
-            value: model.feeModel.priority,
-            interval: nil,
-            action: model.onChangeFeePriority
-        )
-        .taskOnce { model.fetch() }
-        .navigationTitle(model.title)
+        transactionsList
+            .safeAreaView {
+                StateButton(model.confirmButtonModel)
+                    .frame(maxWidth: .scene.button.maxWidth)
+                    .padding(.bottom, .scene.bottom)
+            }
+            .frame(maxWidth: .infinity)
+            .debounce(
+                value: model.feeModel.priority,
+                interval: nil,
+                action: model.onChangeFeePriority
+            )
+            .taskOnce { model.fetch() }
+            .navigationTitle(model.title)
         // TODO: - move to navigation view
-        .navigationBarTitleDisplayMode(.inline)
-        .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
-        .sheet(item: $model.isPresentingSheet) {
-            switch $0 {
-            case .info(let type):
-                InfoSheetScene(type: type)
-            case .url(let url):
-                SFSafariView(url: url)
-            case .networkFeeSelector:
-                NavigationStack {
-                    NetworkFeeScene(model: model.feeModel)
-                        .presentationDetentsForCurrentDeviceSize(expandable: true)
-                }
-            case .fiatConnect(let assetAddress, let walletId):
-                NavigationStack {
-                    FiatConnectNavigationView(
-                        model: FiatSceneViewModel(
-                            assetAddress: assetAddress,
-                            walletId: walletId.id
-                        )
-                    )
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarDismissItem(
-                            title: .done,
-                            placement: .topBarLeading
-                        )
-                    }
-                }
-            case .swapDetails:
-                if let swapDetailsViewModel = model.swapDetailsViewModel {
+            .navigationBarTitleDisplayMode(.inline)
+            .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
+            .sheet(item: $model.isPresentingSheet) {
+                switch $0 {
+                case .info(let type):
+                    InfoSheetScene(type: type)
+                case .url(let url):
+                    SFSafariView(url: url)
+                case .networkFeeSelector:
                     NavigationStack {
-                        SwapDetailsView(model: Bindable(swapDetailsViewModel))
+                        NetworkFeeScene(model: model.feeModel)
                             .presentationDetentsForCurrentDeviceSize(expandable: true)
+                    }
+                case .fiatConnect(let assetAddress, let walletId):
+                    NavigationStack {
+                        FiatConnectNavigationView(
+                            model: FiatSceneViewModel(
+                                assetAddress: assetAddress,
+                                walletId: walletId.id
+                            )
+                        )
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarDismissItem(
+                                title: .done,
+                                placement: .topBarLeading
+                            )
+                        }
+                    }
+                case .swapDetails:
+                    if let swapDetailsViewModel = model.swapDetailsViewModel {
+                        NavigationStack {
+                            SwapDetailsView(model: Bindable(swapDetailsViewModel))
+                                .presentationDetentsForCurrentDeviceSize(expandable: true)
+                        }
                     }
                 }
             }
-        }
-        .alertSheet($model.isPresentingAlertMessage)
+            .alertSheet($model.isPresentingAlertMessage)
     }
 }
 

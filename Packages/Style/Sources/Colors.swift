@@ -31,6 +31,22 @@ extension Colors {
     }
 }
 
+// MARK: - Faded Variants
+
+extension Colors {
+    public static let blueFaded = Color.dynamicColor("#6BA3F1", dark: "#5A96ED")
+    public static let blueDarkFaded = Color.dynamicColor("#6085E9", dark: "#5A7CE6")
+    public static let whiteFaded = Color.dynamicColor("#F0F0F0", dark: "#444444")
+    public static let grayFaded = Color.dynamicColor("#C0C0C0", dark: "#606060")
+    public static let grayLightFaded = Color.dynamicColor("#CACBCA", dark: "#4D524D")
+    public static let grayVeryLightFaded = Color.dynamicColor("#F9F9F9", dark: "#666666")
+    public static let blackFaded = Color.dynamicColor("#919191", dark: "#7F7F7F")
+    public static let redFaded = Color.dynamicColor("#FB7676", dark: "#FB7676")
+    public static let redFadedLight = Color.dynamicColor("#FC8E8E", dark: "#FC8E8E")
+    public static let greenFaded = Color.dynamicColor("#4EAC84", dark: "#4EAC84")
+    public static let greenFadedLight = Color.dynamicColor("#67B593", dark: "#67B593")
+}
+
 #Preview {
     let colors: [(name: String, color: Color)] = [
         ("White", Colors.white),

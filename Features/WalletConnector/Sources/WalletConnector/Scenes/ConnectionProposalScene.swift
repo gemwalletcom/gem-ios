@@ -15,34 +15,33 @@ public struct ConnectionProposalScene: View {
     }
 
     public var body: some View {
-        VStack {
-            List {
-                Section { } header: {
-                    VStack(alignment: .center) {
-                        AsyncImageView(url: model.imageUrl, size: 64)
-                    }
-                    .padding(.top, 8)
+        List {
+            Section { } header: {
+                VStack(alignment: .center) {
+                    AsyncImageView(url: model.imageUrl, size: 64)
                 }
-                .cleanListRow()
-
-                Section {
-                    NavigationLink(value: Scenes.SelectWallet()) {
-                        ListItemView(
-                            title: model.walletTitle,
-                            subtitle: model.walletName
-                        )
-                    }
-                    ListItemView(title: model.appTitle, subtitle: model.appText)
-                }
+                .padding(.top, 8)
             }
-
-            Button(model.buttonTitle, action: onAccept)
-                .buttonStyle(.blue())
-                .padding(.bottom, .scene.bottom)
-                .frame(maxWidth: .scene.button.maxWidth)
+            .cleanListRow()
+            
+            Section {
+                NavigationLink(value: Scenes.SelectWallet()) {
+                    ListItemView(
+                        title: model.walletTitle,
+                        subtitle: model.walletName
+                    )
+                }
+                ListItemView(title: model.appTitle, subtitle: model.appText)
+            }
         }
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
+        .safeAreaView {
+            StateButton(
+                text: model.buttonTitle,
+                action: onAccept
+            )
+            .padding(.bottom, .scene.bottom)
+            .frame(maxWidth: .scene.button.maxWidth)
+        }
         .navigationTitle(model.title)
         .navigationDestination(for: Scenes.SelectWallet.self) { _ in
             SelectWalletScene(model: $model.walletSelectorModel)
