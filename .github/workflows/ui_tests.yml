@@ -18,9 +18,12 @@ env:
 jobs:
   unit_test:
     name: Build and UI Test iPhone simulator
-    runs-on: macos-15
+    runs-on: macos-26
 
     steps:
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.0.app
+        
       - name: Checkout
         uses: actions/checkout@v4
         with:
