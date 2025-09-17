@@ -256,8 +256,11 @@ public struct AlertToast: View{
             .textColor(style?.titleColor ?? nil)
             .padding()
             .frame(maxWidth: 400, alignment: .leading)
-            .alertBackground(style?.backgroundColor ?? nil)
-            .cornerRadius(10)
+            .liquidGlass(fallback: { view in
+                view
+                    .alertBackground(style?.backgroundColor ?? nil)
+                    .cornerRadius(10)
+            })
             .padding([.horizontal, .bottom])
         }
     }
