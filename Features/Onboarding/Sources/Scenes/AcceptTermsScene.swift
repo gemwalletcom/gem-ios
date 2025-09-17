@@ -34,7 +34,7 @@ struct AcceptTermsScene: View {
         .safeAreaView {
             StateButton(
                 text: Localized.Onboarding.AcceptTerms.continue,
-                type: .adoptiveGlassEffect(model.state),
+                type: .primary(model.state),
                 action: { model.onNext?() }
             )
             .frame(maxWidth: .scene.button.maxWidth)

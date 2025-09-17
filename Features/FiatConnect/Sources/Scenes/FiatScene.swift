@@ -35,7 +35,7 @@ public struct FiatScene: View {
         .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,
-                type: .adoptiveGlassEffect(model.state, showProgress: false),
+                type: .primary(model.state, showProgress: false),
                 action: model.onSelectContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)

@@ -87,7 +87,7 @@ struct AmountScene: View {
         .safeAreaView {
             StateButton(
                 text: model.continueTitle,
-                type: .adoptiveGlassEffect(model.actionButtonState),
+                type: .primary(model.actionButtonState),
                 action: model.onSelectNextButton
             )
             .frame(maxWidth: .scene.button.maxWidth)

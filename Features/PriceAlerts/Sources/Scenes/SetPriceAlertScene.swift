@@ -47,7 +47,7 @@ public struct SetPriceAlertScene: View {
         .safeAreaView {
             StateButton(
                 text: Localized.Transfer.confirm,
-                type: .adoptiveGlassEffect(model.confirmButtonState),
+                type: .primary(model.confirmButtonState),
                 action: confirm
             )
             .frame(maxWidth: Spacing.scene.button.maxWidth)

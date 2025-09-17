@@ -98,7 +98,7 @@ struct ImportWalletScene: View {
         .safeAreaView {
             StateButton(
                 text: Localized.Wallet.Import.action,
-                type: .adoptiveGlassEffect(model.buttonState),
+                type: .primary(model.buttonState),
                 action: model.onSelectActionButton
             )
             .frame(maxWidth: .scene.button.maxWidth)

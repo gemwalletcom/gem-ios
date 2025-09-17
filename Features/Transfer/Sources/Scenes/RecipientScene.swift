@@ -94,7 +94,7 @@ struct RecipientScene: View {
         .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,
-                type: .adoptiveGlassEffect(model.actionButtonState),
+                type: .primary(model.actionButtonState),
                 action: model.onContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)

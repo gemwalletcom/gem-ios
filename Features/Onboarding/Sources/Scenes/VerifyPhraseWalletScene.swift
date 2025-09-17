@@ -58,7 +58,7 @@ struct VerifyPhraseWalletScene: View {
         .safeAreaView {
             StateButton(
                 text: Localized.Common.continue,
-                type: .adoptiveGlassEffect(model.buttonState),
+                type: .primary(model.buttonState),
                 action: model.onImportWallet
             )
             .frame(maxWidth: .scene.button.maxWidth)

@@ -32,7 +32,7 @@ public struct AddNodeScene: View {
         .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,
-                type: .adoptiveGlassEffect(model.state),
+                type: .primary(model.state),
                 action: onSelectImport
             )
             .frame(maxWidth: .scene.button.maxWidth)
