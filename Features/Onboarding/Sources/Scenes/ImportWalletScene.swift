@@ -59,6 +59,7 @@ struct ImportWalletScene: View {
                                         words: model.wordsSuggestion,
                                         selectWord: model.onSelectWord
                                     )
+                                    .padding(.horizontal, .medium)
                                 }
                             }
                         }
@@ -94,15 +95,16 @@ struct ImportWalletScene: View {
                     Text(text)
                 }
             }
-        }
-        .safeAreaView {
-            StateButton(
-                text: Localized.Wallet.Import.action,
-                type: .primary(model.buttonState),
-                action: model.onSelectActionButton
-            )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
+            
+            Section {} header: {
+                StateButton(
+                    text: Localized.Wallet.Import.action,
+                    type: .primary(model.buttonState),
+                    action: model.onSelectActionButton
+                )
+                .frame(height: .scene.button.height)
+                .frame(maxWidth: .scene.button.maxWidth)
+            }
         }
         .listSectionSpacing(.compact)
         .contentMargins(.top, .scene.top, for: .scrollContent)
