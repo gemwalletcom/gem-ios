@@ -156,7 +156,7 @@
 "transfer.redelegate.title" = "Redelegate";
 "stake.activating" = "تفعيل";
 "stake.deactivating" = "Deactivating";
-"transfer.withdraw.title" = "Withdraw";
+"transfer.withdraw.title" = "ينسحب";
 "transfer.step" = "Step %d";
 "sign_message.title" = "Sign Message";
 "sign_message.message" = "رسالة";
@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "يتم تشغيل التنبيهات عند حدوث تحركات كبيرة في الأسعار.";
 "price_alerts.set_alert.title" = "تعيين تنبيه السعر";
 "swap.min_receive" = "الحد الأدنى للاستقبال";
+"transfer.freeze.title" = "تجميد";
+"transfer.unfreeze.title" = "إزالة التجميد";
+"asset.resources" = "موارد";
+"stake.resource" = "الموارد";
+"stake.resource.energy" = "طاقة";
+"stake.resource.bandwidth" = "عرض النطاق الترددي";

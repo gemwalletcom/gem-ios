@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "当价格发生重大变动时，警报就会触发。";
 "price_alerts.set_alert.title" = "设置价格提醒";
 "swap.min_receive" = "最少接收";
+"transfer.freeze.title" = "冻结";
+"transfer.unfreeze.title" = "解冻";
+"asset.resources" = "资源";
+"stake.resource" = "资源";
+"stake.resource.energy" = "活力";
+"stake.resource.bandwidth" = "带宽";

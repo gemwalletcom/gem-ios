@@ -125,16 +125,16 @@ public struct AssetScene: View {
                 stakeViewEmpty
             }
 
-            if let resourcesModel = model.tronResourcesModel {
-                Section("Resources") {
+            if model.showResources {
+                Section(model.resourcesTitle) {
                     ListItemView(
-                        title: resourcesModel.energyTitle,
-                        subtitle: resourcesModel.energyText
+                        title: model.energyTitle,
+                        subtitle: model.assetDataModel.energyText
                     )
-                    
+
                     ListItemView(
-                        title: resourcesModel.bandwidthTitle,
-                        subtitle: resourcesModel.bandwidthText
+                        title: model.bandwidthTitle,
+                        subtitle: model.assetDataModel.bandwidthText
                     )
                 }
             }

@@ -5,6 +5,7 @@ import SwiftUI
 import Primitives
 import Style
 import Formatters
+import BigInt
 
 public struct BalanceViewModel: Sendable {
     private static let fullFormatter = ValueFormatter(style: .full)
@@ -62,7 +63,18 @@ public struct BalanceViewModel: Sendable {
     }
 
     public var stakingBalanceTextWithSymbol: String {
-        formatter.string(balance.staked + balance.pending, decimals: asset.decimals.asInt, currency: asset.symbol)
+        let amount = switch StakeChain(rawValue: asset.chain.rawValue) {
+        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .none: balance.staked + balance.pending
+        case .tron: balance.frozen + balance.locked + balance.pending
+        }
+        return formatter.string(amount, decimals: asset.decimals.asInt, currency: asset.symbol)
+    }
+
+    public var hasStakingResources: Bool {
+        switch StakeChain(rawValue: asset.chain.rawValue) {
+        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .none: false
+        case .tron: !balance.frozen.isZero || !balance.locked.isZero
+        }
     }
 
     public var hasReservedBalance: Bool {
@@ -78,5 +90,15 @@ public struct BalanceViewModel: Sendable {
             return Colors.gray
         }
         return Colors.black
+    }
+
+    public var energyText: String {
+        guard let metadata = balance.metadata else { return "" }
+        return "\(metadata.energyAvailable) / \(metadata.energyTotal)"
+    }
+
+    public var bandwidthText: String {
+        guard let metadata = balance.metadata else { return "" }
+        return "\(metadata.bandwidthAvailable) / \(metadata.bandwidthTotal)"
     }
 }

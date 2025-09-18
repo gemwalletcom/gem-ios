@@ -21,9 +21,7 @@ import Blockchain
 @MainActor
 @Observable
 public final class AmountSceneViewModel {
-    private let input: AmountInput
     private let wallet: Wallet
-
     private let onTransferAction: TransferDataAction
 
     private let formatter = ValueFormatter(style: .full)
@@ -37,11 +35,17 @@ public final class AmountSceneViewModel {
         didSet { amountInputModel.update(validators: inputValidators) }
     }
 
+    private var input: AmountInput
     var assetRequest: AssetRequest
     var assetData: AssetData = .empty
 
     var amountInputModel: InputValidationViewModel = InputValidationViewModel()
     var delegation: DelegationValidator?
+    var selectedResource: Resource = .bandwidth {
+        didSet {
+            onSelectResource(selectedResource)
+        }
+    }
     var isPresentingSheet: AmountSheetType?
     var focusField: Bool = false
 
@@ -60,6 +64,11 @@ public final class AmountSceneViewModel {
 
         self.currentValidator = defaultValidator
         self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: inputValidators)
+
+        // Initialize selectedResource based on current resource
+        if let currentResource = currentResource {
+            self.selectedResource = currentResource
+        }
 
         // set amount if avaialbe in recipientData
         if let recipientAmount = recipientData.amount {
@@ -80,6 +89,7 @@ public final class AmountSceneViewModel {
     }
 
     var validatorTitle: String { Localized.Stake.validator }
+    var resourceTitle: String { Localized.Stake.resource }
     var maxTitle: String { Localized.Transfer.max }
     var nextTitle: String { Localized.Common.next }
     var continueTitle: String { Localized.Common.continue }
@@ -87,7 +97,7 @@ public final class AmountSceneViewModel {
     
     var infoText: String? {
         switch type {
-        case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual:
+        case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual, .freeze:
             return nil
         case .stake:
             guard amountInputModel.text == maxBalance, availableBalanceForStaking > .zero else { return nil }
@@ -121,6 +131,11 @@ public final class AmountSceneViewModel {
         case .stakeUnstake: Localized.Transfer.Unstake.title
         case .stakeRedelegate: Localized.Transfer.Redelegate.title
         case .stakeWithdraw: Localized.Transfer.Withdraw.title
+        case .freeze(let data):
+            switch data.freezeType {
+            case .freeze: Localized.Transfer.Freeze.title
+            case .unfreeze: Localized.Transfer.Unfreeze.title
+            }
         }
     }
 
@@ -141,7 +156,7 @@ public final class AmountSceneViewModel {
 
     var validators: [DelegationValidator] {
         switch type {
-        case .transfer, .deposit, .withdraw, .perpetual: []
+        case .transfer, .deposit, .withdraw, .perpetual, .freeze: []
         case .stake(let validators, _): validators
         case .stakeUnstake(let delegation): [delegation.validator]
         case .stakeRedelegate(_, let validators, _): validators
@@ -153,6 +168,7 @@ public final class AmountSceneViewModel {
         switch type {
         case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate: .stake
         case .stakeUnstake, .stakeWithdraw: .unstake
+        case .freeze: fatalError("unsupported")
         }
     }
 
@@ -161,9 +177,32 @@ public final class AmountSceneViewModel {
         return StakeValidatorViewModel(validator: currentValidator)
     }
 
+    var tronResourceViewModel: ResourceViewModel? {
+        guard let currentResource else { return nil }
+        return ResourceViewModel(resource: currentResource)
+    }
+
+    var availableResources: [ResourceViewModel] {
+        [.bandwidth, .energy].map { ResourceViewModel(resource: $0) }
+    }
+
+    var currentResource: Resource? {
+        switch type {
+        case .freeze(let data): data.resource
+        default: nil
+        }
+    }
+
+    var freezeType: FreezeType? {
+        switch type {
+        case .freeze(let data): data.freezeType
+        default: nil
+        }
+    }
+
     var delegations: [Delegation] {
         switch type {
-        case .transfer, .deposit, .withdraw, .perpetual, .stake: []
+        case .transfer, .deposit, .withdraw, .perpetual, .stake, .freeze: []
         case .stakeUnstake(let delegation): [delegation]
         case .stakeRedelegate(let delegation, _, _): [delegation]
         case .stakeWithdraw(let delegation): [delegation]
@@ -173,7 +212,14 @@ public final class AmountSceneViewModel {
     var isSelectValidatorEnabled: Bool {
         switch type {
         case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate: true
-        case .stakeUnstake, .stakeWithdraw: false
+        case .stakeUnstake, .stakeWithdraw, .freeze: false
+        }
+    }
+
+    var isSelectResourceEnabled: Bool {
+        switch type {
+        case .freeze: true
+        case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw: false
         }
     }
 }
@@ -210,9 +256,21 @@ extension AmountSceneViewModel {
         delegation = currentValidator
     }
 
+
     func onSelectValidator(_ validator: DelegationValidator) {
         cleanInput()
         setSelectedValidator(validator)
+    }
+
+    func onSelectResource(_ resource: Resource) {
+        guard case .freeze(let data) = type else { return }
+        cleanInput()
+        input = AmountInput(
+            type: .freeze(
+                data: data.with(resource: resource)
+            ),
+            asset: input.asset
+        )
     }
 
     func onSelectInputButton() {
@@ -293,9 +351,19 @@ extension AmountSceneViewModel {
                 ),
                 amount: .none
             )
+        case .freeze(let data):
+             RecipientData(
+                recipient: Recipient(
+                    name: ResourceViewModel(resource: data.resource).title,
+                    address: ResourceViewModel(resource: data.resource).title,
+                    memo: nil
+                ),
+                amount: .none
+            )
         }
     }
 
+    // TODO: - simple int validator for tron voting(staking)
     private var inputValidators: [any TextValidator] {
         let source: AmountValidator.Source = switch amountInputType {
         case .asset: .asset
@@ -309,7 +377,8 @@ extension AmountSceneViewModel {
             .stakeUnstake,
             .stakeRedelegate,
             .stakeWithdraw,
-            .perpetual:
+            .perpetual,
+            .freeze:
                 return [
                 .amount(
                     source: source,
@@ -445,6 +514,17 @@ extension AmountSceneViewModel {
                 value: value,
                 canChangeValue: canChangeValue
             )
+        case .freeze:
+            // Use input.type to get the current resource selection
+            guard case .freeze(let data) = input.type else {
+                throw TransferError.invalidAmount
+            }
+            return TransferData(
+                type: .stake(asset, .freeze(data)),
+                recipientData: recipientData,
+                value: value,
+                canChangeValue: canChangeValue
+            )
         }
     }
 
@@ -457,6 +537,11 @@ extension AmountSceneViewModel {
         switch type {
         case .stake:
             return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
+        case .freeze(let data):
+            switch data.freezeType {
+            case .freeze: return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
+            case .unfreeze: return .zero
+            }
         case .stakeRedelegate:
             switch stakeChain {
             case .smartChain:
@@ -486,7 +571,7 @@ extension AmountSceneViewModel {
         let recommended: DelegationValidator? = switch type {
         case .stake(_, let recommendedValidator): recommendedValidator
         case .stakeRedelegate(_, _, let recommendedValidator): recommendedValidator
-        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeWithdraw: .none
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeWithdraw, .freeze: .none
         }
         return recommended ?? validators.first
     }
@@ -496,7 +581,19 @@ extension AmountSceneViewModel {
         case .transfer, .deposit, .perpetual:
             return assetData.balance.available
         case .stake:
+            if asset.chain == .tron {
+                return (assetData.balance.frozen + assetData.balance.locked) - assetData.balance.staked
+            }
             return availableBalanceForStaking
+        case let .freeze(data):
+            switch data.freezeType {
+            case .freeze: return availableBalanceForStaking
+            case .unfreeze:
+                switch data.resource {
+                case .bandwidth: return assetData.balance.frozen
+                case .energy: return assetData.balance.locked
+                }
+            }
         case .withdraw:
             return assetData.balance.withdrawable
         case .stakeUnstake(let delegation):
@@ -519,7 +616,8 @@ extension AmountSceneViewModel {
              .withdraw,
              .perpetual,
              .stake,
-             .stakeRedelegate:
+             .stakeRedelegate,
+             .freeze:
             return true
         case .stakeUnstake:
             if let chain = StakeChain(rawValue: asset.chain.rawValue) {

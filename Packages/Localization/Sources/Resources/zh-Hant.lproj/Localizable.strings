@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "當價格發生重大變動時，警報就會觸發。";
 "price_alerts.set_alert.title" = "設定價格提醒";
 "swap.min_receive" = "最少接收";
+"transfer.freeze.title" = "凍結";
+"transfer.unfreeze.title" = "解凍";
+"asset.resources" = "資源";
+"stake.resource" = "資源";
+"stake.resource.energy" = "活力";
+"stake.resource.bandwidth" = "頻寬";

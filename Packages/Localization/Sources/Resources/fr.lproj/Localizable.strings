@@ -156,7 +156,7 @@
 "transfer.redelegate.title" = "Redelegate";
 "stake.activating" = "Activation";
 "stake.deactivating" = "Deactivating";
-"transfer.withdraw.title" = "Withdraw";
+"transfer.withdraw.title" = "Retirer";
 "transfer.step" = "Step %d";
 "sign_message.title" = "Sign Message";
 "sign_message.message" = "Message";
@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "Les alertes se déclenchent en cas de mouvements de prix importants.";
 "price_alerts.set_alert.title" = "Définir une alerte de prix";
 "swap.min_receive" = "Minimum à recevoir";
+"transfer.freeze.title" = "Geler";
+"transfer.unfreeze.title" = "Dégeler";
+"asset.resources" = "Ressources";
+"stake.resource" = "Ressource";
+"stake.resource.energy" = "Énergie";
+"stake.resource.bandwidth" = "Bande passante";

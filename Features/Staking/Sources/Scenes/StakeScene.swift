@@ -21,6 +21,11 @@ public struct StakeScene: View {
             if model.showManage {
                 stakeSection
             }
+
+            if model.showTronResources {
+                resourcesSection
+            }
+
             delegationsSection
         }
         .listSectionSpacing(.compact)
@@ -41,8 +46,22 @@ public struct StakeScene: View {
 extension StakeScene {
     private var stakeSection: some View {
         Section(Localized.Common.manage) {
-            NavigationLink(value: model.stakeDestination) {
-                ListItemView(title: model.stakeTitle)
+            if model.showStake {
+                NavigationLink(value: model.stakeDestination) {
+                    ListItemView(title: model.stakeTitle)
+                }
+            }
+            
+            if model.showFreeze {
+                NavigationLink(value: model.freezeDestination) {
+                    ListItemView(title: model.freezeTitle)
+                }
+            }
+
+            if model.showUnfreeze {
+                NavigationLink(value: model.unfreezeDestination) {
+                    ListItemView(title: model.unfreezeTitle)
+                }
             }
 
             if let claimRewardsDestination = model.claimRewardsDestination {
@@ -89,6 +108,21 @@ extension StakeScene {
                 title: model.lockTimeTitle,
                 subtitle: model.lockTimeValue,
                 infoAction: model.onLockTimeInfo
+            )
+        }
+        .listRowInsets(.assetListRowInsets)
+    }
+
+    private var resourcesSection: some View {
+        Section(model.resourcesTitle) {
+            ListItemView(
+                title: model.energyTitle,
+                subtitle: model.energyText
+            )
+
+            ListItemView(
+                title: model.bandwidthTitle,
+                subtitle: model.bandwidthText
             )
         }
         .listRowInsets(.assetListRowInsets)

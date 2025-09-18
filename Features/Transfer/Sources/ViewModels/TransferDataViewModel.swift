@@ -39,6 +39,11 @@ struct TransferDataViewModel {
             case .redelegate: Localized.Transfer.Redelegate.title
             case .rewards: Localized.Transfer.ClaimRewards.title
             case .withdraw: Localized.Transfer.Withdraw.title
+            case .freeze(let data):
+                switch data.freezeType {
+                case .freeze: Localized.Transfer.Freeze.title
+                case .unfreeze: Localized.Transfer.Unfreeze.title
+                }
             }
         case .account(_, let type):
             switch type {
@@ -58,8 +63,12 @@ struct TransferDataViewModel {
     var recipientTitle: String {
         switch type {
         case .swap: Localized.Common.provider
-        case .stake: Localized.Stake.validator
-        default: Localized.Transfer.to
+        case .stake(_, let stakeType):
+            switch stakeType {
+            case .stake, .unstake, .redelegate, .rewards, .withdraw: Localized.Stake.validator
+            case .freeze: Localized.Stake.resource
+            }
+        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .generic, .account, .perpetual: Localized.Transfer.to
         }
     }
 
@@ -108,6 +117,7 @@ struct TransferDataViewModel {
             switch stakeType {
             case .stake, .unstake, .redelegate, .withdraw: true
             case .rewards: false
+            case .freeze: true
             }
         case .account,
             .swap,
@@ -159,6 +169,7 @@ struct TransferDataViewModel {
             case .withdraw(let delegation): delegation.base.balanceValue
             case .rewards: data.value
             case .stake: metadata?.available ?? .zero
+            case .freeze: metadata?.available ?? .zero
             }
         }
     }
@@ -190,6 +201,8 @@ extension TransferDataViewModel {
             case .withdraw(let delegation):
                 delegation.validator.name
             case .rewards:
+                    .none
+            case .freeze:
                     .none
             }
         }

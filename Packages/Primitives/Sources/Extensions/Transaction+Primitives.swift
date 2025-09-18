@@ -30,7 +30,9 @@ extension Transaction {
             .transferNFT,
             .smartContractCall,
             .perpetualOpenPosition,
-            .perpetualClosePosition:
+            .perpetualClosePosition,
+            .stakeFreeze,
+            .stakeUnfreeze:
             return [assetId]
         case .swap:
             guard case .swap(let metadata) = metadata else {

@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "هشدارها در صورت حرکت قابل توجه قیمت فعال می‌شوند.";
 "price_alerts.set_alert.title" = "تنظیم هشدار قیمت";
 "swap.min_receive" = "حداقل دریافت";
+"transfer.freeze.title" = "فریز کردن";
+"transfer.unfreeze.title" = "یخ‌زدایی";
+"asset.resources" = "منابع";
+"stake.resource" = "منبع";
+"stake.resource.energy" = "انرژی";
+"stake.resource.bandwidth" = "پهنای باند";

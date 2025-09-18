@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "Önemli fiyat hareketlerinde uyarılar tetiklenir.";
 "price_alerts.set_alert.title" = "Fiyat Uyarısı Ayarla";
 "swap.min_receive" = "Alınacak minimum";
+"transfer.freeze.title" = "Donmak";
+"transfer.unfreeze.title" = "Çözmek";
+"asset.resources" = "Kaynaklar";
+"stake.resource" = "Kaynak";
+"stake.resource.energy" = "Enerji";
+"stake.resource.bandwidth" = "Bant genişliği";

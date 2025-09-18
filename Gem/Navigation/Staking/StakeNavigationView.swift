@@ -36,13 +36,17 @@ struct StakeNavigationView: View {
         StakeScene(
             model: model
         )
-        .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(type: $0)
-        }
         .observeQuery(
             request: $model.request,
             value: $model.delegations
         )
+        .observeQuery(
+            request: $model.assetRequest,
+            value: $model.assetData
+        )
+        .sheet(item: $model.isPresentingInfoSheet) {
+            InfoSheetScene(type: $0)
+        }
         .navigationDestination(for: TransferData.self) { data in
             ConfirmTransferScene(
                 model: viewModelFactory.confirmTransferScene(

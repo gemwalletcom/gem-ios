@@ -41,7 +41,7 @@ struct AmountInputConfig: CurrencyInputConfigurable {
             position: .secondary,
             image: Images.Actions.swap.renderingMode(.template)
         )
-        case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw: nil
+        case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .freeze: nil
         }
     }
 

@@ -80,6 +80,19 @@ struct AmountScene: View {
                         }
                         .listRowInsets(.assetListRowInsets)
                     }
+                case .freeze:
+                    if model.isSelectResourceEnabled {
+                        Section {
+                            Picker("", selection: $model.selectedResource) {
+                                ForEach(model.availableResources) { resource in
+                                    Text(resource.title).tag(resource)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .fixedSize()
+                        }
+                        .cleanListRow()
+                    }
                 case .perpetual:
                     // PositionView()
                     EmptyView()

@@ -17,6 +17,7 @@ import Formatters
 @Observable
 public final class StakeSceneViewModel {
     private let stakeService: any StakeServiceable
+
     private var delegatitonsState: StateViewType<Bool> = .loading
     private let chain: Chain
 
@@ -24,9 +25,12 @@ public final class StakeSceneViewModel {
     private let recommendedValidators = StakeRecommendedValidators()
 
     public let wallet: Wallet
-
     public var request: StakeDelegationsRequest
     public var delegations: [Delegation] = []
+
+    public var assetRequest: AssetRequest
+    public var assetData: AssetData = .empty
+
     public var isPresentingInfoSheet: InfoSheetType? = .none
 
     public init(
@@ -38,6 +42,7 @@ public final class StakeSceneViewModel {
         self.chain = chain
         self.stakeService = stakeService
         self.request = StakeDelegationsRequest(walletId: wallet.id, assetId: chain.id)
+        self.assetRequest = AssetRequest(walletId: wallet.id, assetId: chain.assetId)
     }
 
     public var stakeInfoUrl: URL { Docs.url(.staking) }
@@ -56,6 +61,18 @@ public final class StakeSceneViewModel {
         }
         return CurrencyFormatter.percentSignLess.string(apr)
     }
+
+    var resourcesTitle: String { Localized.Asset.resources }
+
+    var energyTitle: String { ResourceViewModel(resource: .energy).title }
+    var energyText: String { balanceModel.energyText }
+
+    var bandwidthTitle: String { ResourceViewModel(resource: .bandwidth).title }
+    var bandwidthText: String { balanceModel.bandwidthText }
+
+    var freezeTitle: String { Localized.Transfer.Freeze.title }
+    var unfreezeTitle: String { Localized.Transfer.Unfreeze.title }
+
 
     var lockTimeTitle: String { Localized.Stake.lockTime }
     var lockTimeValue: String {
@@ -123,13 +140,47 @@ public final class StakeSceneViewModel {
     }
 
     var stakeDestination: any Hashable {
-        AmountInput(
+        destination(
             type: .stake(
                 validators: (try? stakeService.getActiveValidators(assetId: chain.assetId)) ?? [],
                 recommendedValidator: recommendedCurrentValidator
-            ),
-            asset: chain.asset
+            )
         )
+    }
+
+    var freezeDestination: any Hashable {
+        destination(
+            type: .freeze(
+                data: FreezeData(
+                    freezeType: .freeze,
+                    resource: .bandwidth
+                )
+            )
+        )
+    }
+
+    var unfreezeDestination: any Hashable {
+        destination(
+            type: .freeze(
+                data: FreezeData(
+                    freezeType: .unfreeze,
+                    resource: .bandwidth
+                )
+            )
+        )
+    }
+
+    var showFreeze: Bool { chain == .tron }
+    var showUnfreeze: Bool { balanceModel.hasStakingResources }
+    var showStake: Bool {
+        if showFreeze {
+            return balanceModel.hasStakingResources
+        }
+        return true
+    }
+
+    var showTronResources: Bool {
+        balanceModel.hasStakingResources
     }
 }
 
@@ -179,7 +230,18 @@ extension StakeSceneViewModel {
         chain.asset
     }
 
+    private var balanceModel: BalanceViewModel {
+        BalanceViewModel(asset: asset, balance: assetData.balance, formatter: formatter)
+    }
+
     private var rewardsValue: BigInt {
         delegations.map { $0.base.rewardsValue }.reduce(0, +)
+    }
+
+    private func destination(type: AmountType) -> any Hashable {
+        AmountInput(
+            type: type,
+            asset: chain.asset
+        )
     }
 }

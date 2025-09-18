@@ -4,7 +4,6 @@ import Foundation
 import Primitives
 
 struct TransactionFactory {
-
     public static func makePendingTransaction(
         wallet: Wallet,
         transferData: TransferData,
