@@ -61,13 +61,7 @@ public struct StateButton: View {
                 .font(textValue.style.font)
             }
             .buttonStyle(.variant(type))
-            .disabled(isDisabled)
-        }
-    }
-    
-    private var isDisabled: Bool {
-        switch type {
-        case .primary(let state): state != .normal
+            .disabled(type.isDisabled)
         }
     }
 }

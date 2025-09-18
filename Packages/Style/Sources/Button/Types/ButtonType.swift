@@ -10,4 +10,10 @@ public enum ButtonType: Hashable, Sendable {
         case .primary(let state): state
         }
     }
+    
+    public var isDisabled: Bool {
+        switch self {
+        case .primary(let state): state != .normal
+        }
+    }
 }

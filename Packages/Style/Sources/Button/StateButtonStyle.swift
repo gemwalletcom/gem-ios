@@ -14,9 +14,7 @@ public struct StateButtonStyle: ButtonStyle {
 
     public func makeBody(configuration: Configuration) -> some View {
         ZStack {
-            RoundedRectangle(cornerRadius: Sizing.space12)
-                .fill(background(configuration: configuration))
-                .frame(maxHeight: Self.maxHeight)
+            adoptiveShape(configuration: configuration)
 
             if variant.state.showProgress {
                 ProgressView()
@@ -29,6 +27,20 @@ public struct StateButtonStyle: ButtonStyle {
                     .padding(.horizontal, .medium)
                     .frame(maxWidth: .infinity, maxHeight: Self.maxHeight)
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func adoptiveShape(configuration: Configuration) -> some View {
+        if #available(iOS 26, *) {
+            DefaultGlassEffectShape()
+                .fill(background(configuration: configuration))
+                .frame(maxHeight: Self.maxHeight)
+                .glassEffect(.regular.interactive(!variant.isDisabled))
+        } else {
+            RoundedRectangle(cornerRadius: Sizing.space12)
+                .fill(background(configuration: configuration))
+                .frame(maxHeight: Self.maxHeight)
         }
     }
 
