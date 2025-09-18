@@ -15,7 +15,6 @@ struct AmountScene: View {
 
     public init(model: AmountSceneViewModel) {
         self.model = model
-        self.focusedField = focusedField
     }
 
     var body: some View {
@@ -30,7 +29,7 @@ struct AmountScene: View {
             .listGroupRowStyle()
             .disabled(model.isInputDisabled)
             .focused($focusedField)
-            
+
             if model.isBalanceViewEnabled {
                 Section {
                     AssetBalanceView(
@@ -48,7 +47,7 @@ struct AmountScene: View {
                     )
                 }
             }
-            
+
             if let infoText = model.infoText {
                 Section {
                     HStack {
@@ -61,12 +60,12 @@ struct AmountScene: View {
                 }
                 .listRowInsets(.assetListRowInsets)
             }
-            
+
             switch model.type {
             case .transfer, .deposit, .withdraw:
                 EmptyView()
             case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
-                if let viewModel = model.stakeValidatorViewModel  {
+                if let viewModel = model.stakeValidatorViewModel {
                     Section(model.validatorTitle) {
                         if model.isSelectValidatorEnabled {
                             NavigationCustomLink(
@@ -77,22 +76,20 @@ struct AmountScene: View {
                             ValidatorView(model: viewModel)
                         }
                     }
-                case .freeze:
-                    if model.isSelectResourceEnabled {
-                        Section {
-                            Picker("", selection: $model.selectedResource) {
-                                ForEach(model.availableResources) { resource in
-                                    Text(resource.title).tag(resource)
-                                }
+                    .listRowInsets(.assetListRowInsets)
+                }
+            case .freeze:
+                if model.isSelectResourceEnabled {
+                    Section {
+                        Picker("", selection: $model.selectedResource) {
+                            ForEach(model.availableResources) { resource in
+                                Text(resource.title).tag(resource)
                             }
-                            .pickerStyle(.segmented)
-                            .fixedSize()
                         }
-                        .cleanListRow()
+                        .pickerStyle(.segmented)
+                        .fixedSize()
                     }
-                case .perpetual:
-                    // PositionView()
-                    EmptyView()
+                    .cleanListRow()
                 }
             case .perpetual:
                 // PositionView()
