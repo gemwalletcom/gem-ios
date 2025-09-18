@@ -222,7 +222,7 @@ public struct AlertToast: View{
             
             //Banner view starts here
             VStack(alignment: .leading, spacing: 10){
-                HStack{
+                HStack(spacing: .medium) {
                     switch type{
                     case .complete(let color):
                         Image(systemName: "checkmark")
@@ -254,10 +254,13 @@ public struct AlertToast: View{
             }
             .multilineTextAlignment(.leading)
             .textColor(style?.titleColor ?? nil)
-            .padding()
+            .padding([.horizontal, .vertical], .medium)
             .frame(maxWidth: 400, alignment: .leading)
-            .alertBackground(style?.backgroundColor ?? nil)
-            .cornerRadius(10)
+            .liquidGlass(fallback: { view in
+                view
+                    .alertBackground(style?.backgroundColor ?? nil)
+                    .cornerRadius(10)
+            })
             .padding([.horizontal, .bottom])
         }
     }
