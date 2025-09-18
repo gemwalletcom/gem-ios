@@ -42,10 +42,15 @@ public final class AssetPriceAlertsViewModel: Sendable {
             .first(where: { $0.priceAlert.type == .auto })
             .map { PriceAlertItemViewModel(data: $0) }
     }
-    
+
     var alertsModel: [PriceAlertItemViewModel] {
         priceAlerts
             .filter { $0.priceAlert.shouldDisplay && $0.priceAlert.type != .auto }
+            .sorted(using: [
+                KeyPathComparator(\.priceAlert.price, order: .reverse),
+                KeyPathComparator(\.priceAlert.priceDirection, order: .reverse),
+                KeyPathComparator(\.priceAlert.pricePercentChange, order: .reverse)
+            ])
             .map { PriceAlertItemViewModel(data: $0) }
     }
     

@@ -41,7 +41,7 @@ let package = Package(
                 "Keychain",
                 .product(name: "NativeProviderService", package: "SystemServices"),
             ],
-            path: "Sources",
+            path: "Sources"
         ),
         .target(
             name: "BlockchainTestKit",

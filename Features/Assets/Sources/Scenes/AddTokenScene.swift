@@ -27,35 +27,33 @@ public struct AddTokenScene: View {
     }
 
     public var body: some View {
-        VStack {
-            addTokenList
-            Spacer()
-            StateButton(
-                text: model.actionButtonTitle,
-                type: .primary(model.state),
-                action: onSelectImportToken
-            )
-            .frame(maxWidth: .scene.button.maxWidth)
-        }
-        .toolbarInfoButton(url: model.customTokenUrl)
-        .onAppear {
-            focusedField = .address
-        }
-        .onChange(of: model.input.address, onAddressClean)
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
-        .listSectionSpacing(.compact)
-        .navigationTitle(model.title)
-        .navigationDestination(for: Scenes.NetworksSelector.self) { _ in
-            NetworkSelectorScene(
-                model: $networksModel,
-                onFinishSelection: onFinishChainSelection(chains:)
-            )
-        }
-        .sheet(isPresented: $model.isPresentingScanner) {
-            ScanQRCodeNavigationStack(action: onHandleScan(_:))
-        }
-        .safariSheet(url: $isPresentingUrl)
+        addTokenList
+            .safeAreaView {
+                StateButton(
+                    text: model.actionButtonTitle,
+                    type: .primary(model.state),
+                    action: onSelectImportToken
+                )
+                .frame(maxWidth: .scene.button.maxWidth)
+                .padding(.bottom, .scene.bottom)
+            }
+            .toolbarInfoButton(url: model.customTokenUrl)
+            .onAppear {
+                focusedField = .address
+            }
+            .onChange(of: model.input.address, onAddressClean)
+            .listSectionSpacing(.compact)
+            .navigationTitle(model.title)
+            .navigationDestination(for: Scenes.NetworksSelector.self) { _ in
+                NetworkSelectorScene(
+                    model: $networksModel,
+                    onFinishSelection: onFinishChainSelection(chains:)
+                )
+            }
+            .sheet(isPresented: $model.isPresentingScanner) {
+                ScanQRCodeNavigationStack(action: onHandleScan(_:))
+            }
+            .safariSheet(url: $isPresentingUrl)
     }
 }
 

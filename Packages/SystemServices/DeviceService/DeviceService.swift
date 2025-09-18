@@ -88,18 +88,16 @@ public struct DeviceService: DeviceServiceable {
         let deviceToken = try securePreferences.get(key: .deviceToken) ?? .empty
         let locale = Locale.current.usageLanguageIdentifier()
         #if targetEnvironment(simulator)
-        let model = "iOS Simulator"
         let platformStore = PlatformStore.local
         #else
         let platformStore = PlatformStore.appStore
-        let model = UIDevice.current.machineIdentifier
         #endif
         
         return Device(
             id: deviceId,
             platform: .ios,
-            os: UIDevice.current.systemVersion,
-            model: model,
+            os: UIDevice.current.osName,
+            model: UIDevice.current.modelName,
             platformStore: platformStore,
             token: deviceToken,
             locale: locale,
