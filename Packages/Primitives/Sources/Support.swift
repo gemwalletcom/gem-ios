@@ -7,9 +7,9 @@ import Foundation
 public struct SupportDevice: Codable, Equatable, Sendable {
 	public let supportId: String
 	public let deviceId: String
-	public let unread: Int32?
+	public let unread: Int32
 
-	public init(supportId: String, deviceId: String, unread: Int32?) {
+	public init(supportId: String, deviceId: String, unread: Int32) {
 		self.supportId = supportId
 		self.deviceId = deviceId
 		self.unread = unread

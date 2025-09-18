@@ -114,14 +114,14 @@ public struct TronSigner: Signable {
                     TronFreezeBalanceV2Contract.with {
                         $0.ownerAddress = input.senderAddress
                         $0.frozenBalance = input.value.asInt64
-                        $0.resource = data.resource.rawValue
+                        $0.resource = data.resource.rawValue.uppercased()
                     })
             case .unfreeze:
                 contract = .unfreezeBalanceV2(
                     TronUnfreezeBalanceV2Contract.with {
                         $0.ownerAddress = input.senderAddress
                         $0.unfreezeBalance = input.value.asInt64
-                        $0.resource = data.resource.rawValue
+                        $0.resource = data.resource.rawValue.uppercased()
                     })
             }
         }

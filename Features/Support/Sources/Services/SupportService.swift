@@ -33,7 +33,7 @@ public struct SupportService: Sendable {
         let device = SupportDevice(
             supportId: getOrCreateSupportDeviceId(),
             deviceId: try securePreferences.getDeviceId(),
-            unread: .none
+            unread: 0
         )
         let _ = try await api.addSupportDevice(device: device)
         preferences.isSupportDeviceRegistered = true
