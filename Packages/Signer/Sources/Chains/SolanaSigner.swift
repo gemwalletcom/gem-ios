@@ -232,6 +232,8 @@ public struct SolanaSigner: Signable {
         case .redelegate,
              .rewards:
             fatalError()
+        case .freeze(_):
+            throw AnyError("Solana does not support freeze operations")
         }
         return try [
             sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey),

@@ -69,15 +69,21 @@ public final class AssetSceneViewModel: Sendable {
     var balancesTitle: String { Localized.Asset.balances }
     var networkTitle: String { Localized.Transfer.network }
     var stakeTitle: String { Localized.Wallet.stake }
+    
+    var resourcesTitle: String { Localized.Asset.resources }
+    var energyTitle: String { ResourceViewModel(resource: .energy).title }
+    var bandwidthTitle: String { ResourceViewModel(resource: .bandwidth).title }
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
+
     var showBalances: Bool { assetDataModel.showBalances }
-    var showStakedBalance: Bool {
-        assetDataModel.isStakeEnabled || assetData.balances.contains(where: { $0.key == .staked && $0.value > 0 })
-    }
+    var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { $0.key == .staked && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
+    var showResources: Bool { assetDataModel.showResources }
+
     var showTransactions: Bool { transactions.isNotEmpty }
     var showManageToken: Bool { !assetData.metadata.isEnabled }
+
     var pinText: String {
         assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
     }

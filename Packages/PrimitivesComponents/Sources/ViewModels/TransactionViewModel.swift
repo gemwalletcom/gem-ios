@@ -64,7 +64,9 @@ public struct TransactionViewModel: Sendable {
                 .stakeWithdraw,
                 .assetActivation,
                 .perpetualOpenPosition,
-                .perpetualClosePosition: .none
+                .perpetualClosePosition,
+                .stakeFreeze,
+                .stakeUnfreeze: .none
         }
     }
 
@@ -106,6 +108,8 @@ public struct TransactionViewModel: Sendable {
         case .stakeRewards: Localized.Transfer.Rewards.title
         case .stakeWithdraw: Localized.Transfer.Withdraw.title
         case .assetActivation: Localized.Transfer.ActivateAsset.title
+        case .stakeFreeze: "Freeze"
+        case .stakeUnfreeze: "Unfreeze"
         case .perpetualOpenPosition: "Open Position"
         case .perpetualClosePosition: "Close Position"
         }
@@ -161,13 +165,15 @@ public struct TransactionViewModel: Sendable {
                     )
                 }
             case .stakeDelegate,
-                    .stakeRedelegate:
+                    .stakeRedelegate,
+                    .stakeFreeze:
                 return String(
                     format: "%@ %@",
                     Localized.Transfer.to,
                     getDisplayName(address: transaction.transaction.to, chain: chain)
                 )
-            case .stakeUndelegate:
+            case .stakeUndelegate,
+                    .stakeUnfreeze:
                 return String(
                     format: "%@ %@",
                     Localized.Transfer.from,
@@ -197,7 +203,7 @@ public struct TransactionViewModel: Sendable {
                 .stakeRewards, .stakeWithdraw,
                 .stakeDelegate, .stakeUndelegate, .stakeRedelegate,
                 .perpetualOpenPosition, .perpetualClosePosition,
-                .assetActivation:
+                .assetActivation, .stakeFreeze, .stakeUnfreeze:
             return infoModel.amountDisplay(formatter: .short).amount
 
         case .tokenApproval:
@@ -239,7 +245,9 @@ public struct TransactionViewModel: Sendable {
                 .assetActivation,
                 .smartContractCall,
                 .perpetualOpenPosition,
-                .perpetualClosePosition:
+                .perpetualClosePosition,
+                .stakeFreeze,
+                .stakeUnfreeze:
             return .none
         case .swap:
             switch transaction.transaction.metadata {

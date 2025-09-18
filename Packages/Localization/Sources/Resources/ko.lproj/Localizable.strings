@@ -156,7 +156,7 @@
 "transfer.redelegate.title" = "Redelegate";
 "stake.activating" = "활성화";
 "stake.deactivating" = "Deactivating";
-"transfer.withdraw.title" = "Withdraw";
+"transfer.withdraw.title" = "철회하다";
 "transfer.step" = "Step %d";
 "sign_message.title" = "Sign Message";
 "sign_message.message" = "메시지";
@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "가격이 크게 변동하면 알림이 울립니다.";
 "price_alerts.set_alert.title" = "가격 설정 알림";
 "swap.min_receive" = " 최소 수령";
+"transfer.freeze.title" = "꼭 매달리게 하다";
+"transfer.unfreeze.title" = "녹이다";
+"asset.resources" = "자원";
+"stake.resource" = "의지";
+"stake.resource.energy" = "에너지";
+"stake.resource.bandwidth" = "대역폭";

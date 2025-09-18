@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "Bei erheblichen Preisbewegungen werden Warnungen ausgelöst.";
 "price_alerts.set_alert.title" = "Preisalarm einstellen";
 "swap.min_receive" = "Mindestbetrag erhalten";
+"transfer.freeze.title" = "Einfrieren";
+"transfer.unfreeze.title" = "Auftauen";
+"asset.resources" = "Ressourcen";
+"stake.resource" = "Ressource";
+"stake.resource.energy" = "Energie";
+"stake.resource.bandwidth" = "Bandbreite";

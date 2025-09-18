@@ -30,6 +30,11 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .redelegate: .stakeRedelegate
             case .rewards: .stakeRewards
             case .withdraw: .stakeWithdraw
+            case .freeze(let data):
+                switch data.freezeType {
+                case .freeze: .stakeFreeze
+                case .unfreeze: .stakeUnfreeze
+                }
             }
         case .account: .assetActivation
         case .perpetual(_, let type):

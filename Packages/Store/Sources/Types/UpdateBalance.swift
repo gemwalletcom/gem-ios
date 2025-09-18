@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 
 public struct UpdateBalance {
     public let assetID: String

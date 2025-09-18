@@ -156,7 +156,7 @@
 "transfer.redelegate.title" = "Redelegate";
 "stake.activating" = "Kích hoạt";
 "stake.deactivating" = "Deactivating";
-"transfer.withdraw.title" = "Withdraw";
+"transfer.withdraw.title" = "Rút";
 "transfer.step" = "Step %d";
 "sign_message.title" = "Sign Message";
 "sign_message.message" = "Tin nhắn";
@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "Cảnh báo sẽ được kích hoạt khi giá biến động đáng kể.";
 "price_alerts.set_alert.title" = "Đặt cảnh báo giá";
 "swap.min_receive" = "Nhận tối thiểu";
+"transfer.freeze.title" = "Đông cứng";
+"transfer.unfreeze.title" = "Giải đông";
+"asset.resources" = "Tài nguyên";
+"stake.resource" = "Tài nguyên";
+"stake.resource.energy" = "Năng lượng";
+"stake.resource.bandwidth" = "Băng thông";

@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "Сповіщення спрацьовують у разі значних змін цін.";
 "price_alerts.set_alert.title" = "Встановити сповіщення про ціну";
 "swap.min_receive" = "Мінімум до отримання";
+"transfer.freeze.title" = "Заморозити";
+"transfer.unfreeze.title" = "Розморозити";
+"asset.resources" = "Ресурси";
+"stake.resource" = "Ресурс";
+"stake.resource.energy" = "Енергія";
+"stake.resource.bandwidth" = "Пропускна здатність";

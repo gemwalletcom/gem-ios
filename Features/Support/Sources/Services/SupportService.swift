@@ -32,7 +32,8 @@ public struct SupportService: Sendable {
         guard preferences.isSupportDeviceRegistered == false else { return }
         let device = SupportDevice(
             supportId: getOrCreateSupportDeviceId(),
-            deviceId: try securePreferences.getDeviceId()
+            deviceId: try securePreferences.getDeviceId(),
+            unread: 0
         )
         let _ = try await api.addSupportDevice(device: device)
         preferences.isSupportDeviceRegistered = true

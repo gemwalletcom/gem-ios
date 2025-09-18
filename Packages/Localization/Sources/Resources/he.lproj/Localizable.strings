@@ -146,7 +146,7 @@
 "stake.validator" = "Validator";
 "stake.validators" = "Validators";
 "stake.apr" = "APR %@";
-"asset.balances.reserved" = "Reserved";
+"asset.balances.reserved" = "שָׁמוּר";
 "wallet.receive.no_memo_required" = "No memo required";
 "wallet.receive.no_destination_tag_required" = "No destination tag required";
 "stake.available_in" = "Available In";
@@ -156,7 +156,7 @@
 "transfer.redelegate.title" = "Redelegate";
 "stake.activating" = "Activating";
 "stake.deactivating" = "Deactivating";
-"transfer.withdraw.title" = "Withdraw";
+"transfer.withdraw.title" = "לָסֶגֶת";
 "transfer.step" = "Step %d";
 "sign_message.title" = "Sign Message";
 "sign_message.message" = "Message";
@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "התראות מופעלות על תנודות משמעותיות במחיר.";
 "price_alerts.set_alert.title" = "הגדר התראת מחיר";
 "swap.min_receive" = "סכום מינימום לקבל";
+"transfer.freeze.title" = "הַקפָּאָה";
+"transfer.unfreeze.title" = "לְהַפְשִׁיר";
+"asset.resources" = "אֶמְצָעִי";
+"stake.resource" = "מַשׁאָב";
+"stake.resource.energy" = "אֵנֶרְגִיָה";
+"stake.resource.bandwidth" = "רוחב פס";

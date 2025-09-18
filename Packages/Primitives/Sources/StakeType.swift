@@ -4,6 +4,26 @@
 
 import Foundation
 
+public enum FreezeType: String, Codable, Equatable, Hashable, Sendable {
+	case freeze = "Freeze"
+	case unfreeze = "Unfreeze"
+}
+
+public enum Resource: String, Codable, Equatable, Hashable, Sendable {
+	case bandwidth
+	case energy
+}
+
+public struct FreezeData: Codable, Equatable, Hashable, Sendable {
+	public let freezeType: FreezeType
+	public let resource: Resource
+
+	public init(freezeType: FreezeType, resource: Resource) {
+		self.freezeType = freezeType
+		self.resource = resource
+	}
+}
+
 public struct RedelegateData: Codable, Equatable, Hashable, Sendable {
 	public let delegation: Delegation
 	public let toValidator: DelegationValidator
@@ -30,13 +50,15 @@ public enum StakeType: Codable, Equatable, Hashable, Sendable {
 	case redelegate(RedelegateData)
 	case rewards([DelegationValidator])
 	case withdraw(Delegation)
+	case freeze(FreezeData)
 
 	enum CodingKeys: String, CodingKey, Codable {
-		case stake,
-			unstake,
-			redelegate,
-			rewards,
-			withdraw
+		case stake = "Stake",
+			unstake = "Unstake",
+			redelegate = "Redelegate",
+			rewards = "Rewards",
+			withdraw = "Withdraw",
+			freeze = "Freeze"
 	}
 
 	private enum ContainerCodingKeys: String, CodingKey {
@@ -72,6 +94,11 @@ public enum StakeType: Codable, Equatable, Hashable, Sendable {
 					self = .withdraw(content)
 					return
 				}
+			case .freeze:
+				if let content = try? container.decode(FreezeData.self, forKey: .content) {
+					self = .freeze(content)
+					return
+				}
 			}
 		}
 		throw DecodingError.typeMismatch(StakeType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for StakeType"))
@@ -94,6 +121,9 @@ public enum StakeType: Codable, Equatable, Hashable, Sendable {
 			try container.encode(content, forKey: .content)
 		case .withdraw(let content):
 			try container.encode(CodingKeys.withdraw, forKey: .type)
+			try container.encode(content, forKey: .content)
+		case .freeze(let content):
+			try container.encode(CodingKeys.freeze, forKey: .type)
 			try container.encode(content, forKey: .content)
 		}
 	}

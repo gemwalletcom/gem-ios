@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "大幅な価格変動が発生するとアラートが発動します。";
 "price_alerts.set_alert.title" = "価格アラートを設定する";
 "swap.min_receive" = "最小受取額";
+"transfer.freeze.title" = "フリーズ";
+"transfer.unfreeze.title" = "解凍";
+"asset.resources" = "リソース";
+"stake.resource" = "リソース";
+"stake.resource.energy" = "エネルギー";
+"stake.resource.bandwidth" = "帯域幅";

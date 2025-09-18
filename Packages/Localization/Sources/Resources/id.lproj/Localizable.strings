@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "Peringatan dipicu pada pergerakan harga yang signifikan.";
 "price_alerts.set_alert.title" = "Tetapkan Peringatan Harga";
 "swap.min_receive" = "Penerimaan Minimum";
+"transfer.freeze.title" = "Membekukan";
+"transfer.unfreeze.title" = "Cairkan";
+"asset.resources" = "Sumber daya";
+"stake.resource" = "Sumber";
+"stake.resource.energy" = "Energi";
+"stake.resource.bandwidth" = "Lebar pita";

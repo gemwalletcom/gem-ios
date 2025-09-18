@@ -119,9 +119,24 @@ public struct AssetScene: View {
                             )
                         }
                     }
+                    
                 }
             } else if model.assetDataModel.isStakeEnabled {
                 stakeViewEmpty
+            }
+
+            if model.showResources {
+                Section(model.resourcesTitle) {
+                    ListItemView(
+                        title: model.energyTitle,
+                        subtitle: model.assetDataModel.energyText
+                    )
+
+                    ListItemView(
+                        title: model.bandwidthTitle,
+                        subtitle: model.assetDataModel.bandwidthText
+                    )
+                }
             }
 
             if model.showTransactions {

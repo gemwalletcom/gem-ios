@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "Alerts trigger on significant price moves.";
 "price_alerts.set_alert.title" = "Set Price Alert";
 "swap.min_receive" = "Minimum Receive";
+"transfer.freeze.title" = "Freeze";
+"transfer.unfreeze.title" = "Unfreeze";
+"asset.resources" = "Resources";
+"stake.resource" = "Resource";
+"stake.resource.energy" = "Energy";
+"stake.resource.bandwidth" = "Bandwidth";

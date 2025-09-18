@@ -59,6 +59,8 @@ public enum Localized {
     public static let name = Localized.tr("Localizable", "asset.name", fallback: "Name")
     /// Price
     public static let price = Localized.tr("Localizable", "asset.price", fallback: "Price")
+    /// Resources
+    public static let resources = Localized.tr("Localizable", "asset.resources", fallback: "Resources")
     /// Symbol
     public static let symbol = Localized.tr("Localizable", "asset.symbol", fallback: "Symbol")
     /// Token ID
@@ -1006,6 +1008,8 @@ public enum Localized {
     public static let noActiveStaking = Localized.tr("Localizable", "stake.no_active_staking", fallback: "No active staking yet.")
     /// Pending
     public static let pending = Localized.tr("Localizable", "stake.pending", fallback: "Pending")
+    /// Resource
+    public static let resource = Localized.tr("Localizable", "stake.resource", fallback: "Resource")
     /// Rewards
     public static let rewards = Localized.tr("Localizable", "stake.rewards", fallback: "Rewards")
     /// Stake
@@ -1016,6 +1020,12 @@ public enum Localized {
     public static let validators = Localized.tr("Localizable", "stake.validators", fallback: "Validators")
     /// Stake via Gem Wallet
     public static let viagem = Localized.tr("Localizable", "stake.viagem", fallback: "Stake via Gem Wallet")
+    public enum Resource {
+      /// Bandwidth
+      public static let bandwidth = Localized.tr("Localizable", "stake.resource.bandwidth", fallback: "Bandwidth")
+      /// Energy
+      public static let energy = Localized.tr("Localizable", "stake.resource.energy", fallback: "Energy")
+    }
     public enum State {
       public enum Empty {
         /// Stake your first %@
@@ -1168,6 +1178,10 @@ public enum Localized {
       /// Max total
       public static let maxtotal = Localized.tr("Localizable", "transfer.confirm.maxtotal", fallback: "Max total")
     }
+    public enum Freeze {
+      /// Freeze
+      public static let title = Localized.tr("Localizable", "transfer.freeze.title", fallback: "Freeze")
+    }
     public enum Other {
       /// Other
       public static let title = Localized.tr("Localizable", "transfer.other.title", fallback: "Other")
@@ -1201,6 +1215,10 @@ public enum Localized {
     public enum Stake {
       /// Stake
       public static let title = Localized.tr("Localizable", "transfer.stake.title", fallback: "Stake")
+    }
+    public enum Unfreeze {
+      /// Unfreeze
+      public static let title = Localized.tr("Localizable", "transfer.unfreeze.title", fallback: "Unfreeze")
     }
     public enum Unstake {
       /// Unstake

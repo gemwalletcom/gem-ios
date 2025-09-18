@@ -219,6 +219,7 @@ public class EthereumSigner: Signable {
             let valueData: Data = switch stakeType {
             case .stake: input.value.magnitude.serialize()
             case .redelegate, .unstake, .rewards, .withdraw: Data()
+            case .freeze: throw AnyError("Ethereum does not support freeze operations")
             }
             let callData = try Data.from(hex: data)
             

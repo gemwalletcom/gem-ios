@@ -146,7 +146,7 @@
 "stake.validator" = "Validator";
 "stake.validators" = "Validators";
 "stake.apr" = "APR %@";
-"asset.balances.reserved" = "Reserved";
+"asset.balances.reserved" = "Gereserveerd";
 "wallet.receive.no_memo_required" = "No memo required";
 "wallet.receive.no_destination_tag_required" = "No destination tag required";
 "stake.available_in" = "Available In";
@@ -156,7 +156,7 @@
 "transfer.redelegate.title" = "Redelegate";
 "stake.activating" = "Activating";
 "stake.deactivating" = "Deactivating";
-"transfer.withdraw.title" = "Withdraw";
+"transfer.withdraw.title" = "Terugtrekken";
 "transfer.step" = "Step %d";
 "sign_message.title" = "Sign Message";
 "sign_message.message" = "Message";
@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "Waarschuwingen worden geactiveerd bij aanzienlijke prijsbewegingen.";
 "price_alerts.set_alert.title" = "Prijswaarschuwing instellen";
 "swap.min_receive" = "Minimale ontvangst";
+"transfer.freeze.title" = "Bevriezen";
+"transfer.unfreeze.title" = "Ontdooien";
+"asset.resources" = "Bronnen";
+"stake.resource" = "Hulpbron";
+"stake.resource.energy" = "Energie";
+"stake.resource.bandwidth" = "Bandbreedte";

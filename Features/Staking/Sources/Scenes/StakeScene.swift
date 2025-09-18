@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import GRDBQuery
 import Store
 import Primitives
 import Components
@@ -10,17 +9,10 @@ import InfoSheet
 import PrimitivesComponents
 
 public struct StakeScene: View {
-    @State private var model: StakeViewModel
+    private let model: StakeSceneViewModel
 
-    @Query<StakeDelegationsRequest>
-    private var delegations: [Delegation]
-    private var delegationsModel: [StakeDelegationViewModel] {
-        delegations.map { StakeDelegationViewModel(delegation: $0) }
-    }
-
-    public init(model: StakeViewModel) {
-        _model = State(initialValue: model)
-        _delegations = Query(model.request)
+    public init(model: StakeSceneViewModel) {
+        self.model = model
     }
 
     public var body: some View {
@@ -29,6 +21,11 @@ public struct StakeScene: View {
             if model.showManage {
                 stakeSection
             }
+
+            if model.showTronResources {
+                resourcesSection
+            }
+
             delegationsSection
         }
         .listSectionSpacing(.compact)
@@ -36,10 +33,6 @@ public struct StakeScene: View {
             await model.fetch()
         }
         .navigationTitle(model.title)
-        .toolbarInfoButton(url: model.stakeInfoUrl)
-        .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(type: $0)
-        }
         .taskOnce {
             Task {
                 await model.fetch()
@@ -53,15 +46,29 @@ public struct StakeScene: View {
 extension StakeScene {
     private var stakeSection: some View {
         Section(Localized.Common.manage) {
-            NavigationLink(value: model.stakeDestination()) {
-                ListItemView(title: model.stakeTitle)
+            if model.showStake {
+                NavigationLink(value: model.stakeDestination) {
+                    ListItemView(title: model.stakeTitle)
+                }
+            }
+            
+            if model.showFreeze {
+                NavigationLink(value: model.freezeDestination) {
+                    ListItemView(title: model.freezeTitle)
+                }
             }
 
-            if let claimRewardsDestination = model.claimRewardsDestination(delegations: delegations) {
+            if model.showUnfreeze {
+                NavigationLink(value: model.unfreezeDestination) {
+                    ListItemView(title: model.unfreezeTitle)
+                }
+            }
+
+            if let claimRewardsDestination = model.claimRewardsDestination {
                 NavigationLink(value: claimRewardsDestination) {
                     ListItemView(
                         title: model.claimRewardsTitle,
-                        subtitle: model.claimRewardsText(delegations: delegations)
+                        subtitle: model.claimRewardsText
                     )
                 }
             }
@@ -71,7 +78,7 @@ extension StakeScene {
 
     private var delegationsSection: some View {
         Section {
-            switch model.stakeDelegateionState(delegationModels: delegationsModel) {
+            switch model.delegationsState {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)
                     .cleanListRow()
@@ -101,6 +108,21 @@ extension StakeScene {
                 title: model.lockTimeTitle,
                 subtitle: model.lockTimeValue,
                 infoAction: model.onLockTimeInfo
+            )
+        }
+        .listRowInsets(.assetListRowInsets)
+    }
+
+    private var resourcesSection: some View {
+        Section(model.resourcesTitle) {
+            ListItemView(
+                title: model.energyTitle,
+                subtitle: model.energyText
+            )
+
+            ListItemView(
+                title: model.bandwidthTitle,
+                subtitle: model.bandwidthText
             )
         }
         .listRowInsets(.assetListRowInsets)

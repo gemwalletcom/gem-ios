@@ -119,8 +119,10 @@ struct SelectedAssetNavigationStack: View  {
                     )
                 case .stake:
                     StakeNavigationView(
-                        wallet: wallet,
-                        assetId: input.asset.id,
+                        model: viewModelFactory.stakeScene(
+                            wallet: wallet,
+                            chain: input.asset.id.chain
+                        ),
                         navigationPath: $navigationPath,
                         onComplete: onComplete
                     )

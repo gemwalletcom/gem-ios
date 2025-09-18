@@ -146,7 +146,7 @@
 "stake.validator" = "Validator";
 "stake.validators" = "Validators";
 "stake.apr" = "APR %@";
-"asset.balances.reserved" = "Reserved";
+"asset.balances.reserved" = "Reserveret";
 "wallet.receive.no_memo_required" = "No memo required";
 "wallet.receive.no_destination_tag_required" = "No destination tag required";
 "stake.available_in" = "Available In";
@@ -156,7 +156,7 @@
 "transfer.redelegate.title" = "Redelegate";
 "stake.activating" = "Activating";
 "stake.deactivating" = "Deactivating";
-"transfer.withdraw.title" = "Withdraw";
+"transfer.withdraw.title" = "Hæv";
 "transfer.step" = "Step %d";
 "sign_message.title" = "Sign Message";
 "sign_message.message" = "Message";
@@ -468,3 +468,9 @@
 "price_alerts.auto_footer" = "Advarsler udløses ved betydelige prisbevægelser.";
 "price_alerts.set_alert.title" = "Indstil prisalarm";
 "swap.min_receive" = "Minimumsmodtagelse";
+"transfer.freeze.title" = "Fryse";
+"transfer.unfreeze.title" = "Optø";
+"asset.resources" = "Ressourcer";
+"stake.resource" = "Ressource";
+"stake.resource.energy" = "Energi";
+"stake.resource.bandwidth" = "Båndbredde";
