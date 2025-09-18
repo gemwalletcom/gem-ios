@@ -21,61 +21,59 @@ public struct SwapScene: View {
     }
 
     public var body: some View {
-        ZStack(alignment: .bottom) {
-            swapList
-                .padding(.bottom, .scene.button.height)
-            bottomActionView
-                .confirmationDialog(
-                    model.swapDetailsViewModel?.highImpactWarningTitle ?? "",
-                    presenting: $model.isPresentingPriceImpactConfirmation,
-                    sensoryFeedback: .warning,
-                    actions: { _ in
-                        Button(
-                            model.buttonViewModel.title,
-                            role: .destructive,
-                            action: model.onSelectSwapConfirmation
-                        )
-                    },
-                    message: {
-                        Text(model.isPresentingPriceImpactConfirmation ?? "")
-                    }
-                )
-        }
-        .background(Colors.grayBackground)
-        .navigationTitle(model.title)
-        .onChangeObserveQuery(
-            request: $model.fromAssetRequest,
-            value: $model.fromAsset,
-            action: model.onChangeFromAsset
-        )
-        .onChangeObserveQuery(
-            request: $model.toAssetRequest,
-            value: $model.toAsset,
-            action: model.onChangeToAsset
-        )
-        .debounce(
-            value: model.swapState.fetch,
-            interval: model.swapState.fetch.delay,
-            action: model.onFetchStateChange
-        )
-        .debounce(
-            value: model.assetIds,
-            initial: true,
-            interval: .none,
-            action: model.onAssetIdsChange
-        )
-        .onChange(of: model.amountInputModel.text, model.onChangeFromValue)
-        .onChange(of: model.pairSelectorModel, model.onChangePair)
-        .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
-        .onChange(of: model.focusField, onChangeFocus)
-        .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
-            model.fetch()
-        }
-        .onAppear {
-            if model.toValue.isEmpty {
-                model.focusField = .from
+        swapList
+            .safeAreaView {
+                bottomActionView
+                    .confirmationDialog(
+                        model.swapDetailsViewModel?.highImpactWarningTitle ?? "",
+                        presenting: $model.isPresentingPriceImpactConfirmation,
+                        sensoryFeedback: .warning,
+                        actions: { _ in
+                            Button(
+                                model.buttonViewModel.title,
+                                role: .destructive,
+                                action: model.onSelectSwapConfirmation
+                            )
+                        },
+                        message: {
+                            Text(model.isPresentingPriceImpactConfirmation ?? "")
+                        }
+                    )
             }
-        }
+            .navigationTitle(model.title)
+            .onChangeObserveQuery(
+                request: $model.fromAssetRequest,
+                value: $model.fromAsset,
+                action: model.onChangeFromAsset
+            )
+            .onChangeObserveQuery(
+                request: $model.toAssetRequest,
+                value: $model.toAsset,
+                action: model.onChangeToAsset
+            )
+            .debounce(
+                value: model.swapState.fetch,
+                interval: model.swapState.fetch.delay,
+                action: model.onFetchStateChange
+            )
+            .debounce(
+                value: model.assetIds,
+                initial: true,
+                interval: .none,
+                action: model.onAssetIdsChange
+            )
+            .onChange(of: model.amountInputModel.text, model.onChangeFromValue)
+            .onChange(of: model.pairSelectorModel, model.onChangePair)
+            .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
+            .onChange(of: model.focusField, onChangeFocus)
+            .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
+                model.fetch()
+            }
+            .onAppear {
+                if model.toValue.isEmpty {
+                    model.focusField = .from
+                }
+            }
     }
 }
 
