@@ -7,7 +7,7 @@ import Primitives
 
 struct SwapTokenView: View {
     
-    let model: SwapTokenViewModel?
+    let model: SwapTokenViewModel
     @Binding var text: String
     var showLoading: Bool = false
     var disabledTextField: Bool = false
@@ -15,14 +15,6 @@ struct SwapTokenView: View {
     var onSelectAssetAction: (() -> Void)
     
     var body: some View {
-        if let model {
-            inputView(model: model)
-        } else {
-            SwapTokenEmptyView(onSelectAssetAction: onSelectAssetAction)
-        }
-    }
-    
-    private func inputView(model: SwapTokenViewModel) -> some View {
         VStack(alignment: .leading) {
             HStack(alignment: .center) {
                 HStack {
@@ -53,8 +45,8 @@ struct SwapTokenView: View {
                         }
                     }
                 }
-                .padding(.vertical, 4)
-            }.padding(.bottom, 2)
+                .padding(.vertical, .tiny)
+            }.padding(.bottom, .extraSmall)
             
             HStack {
                 Text(model.fiatBalance(amount: text))
