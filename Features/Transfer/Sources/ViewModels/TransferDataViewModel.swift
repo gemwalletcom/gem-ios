@@ -202,8 +202,8 @@ extension TransferDataViewModel {
                 delegation.validator.name
             case .rewards:
                     .none
-            case .freeze:
-                    .none
+            case .freeze(let data):
+                ResourceViewModel(resource: data.resource).title
             }
         }
     }

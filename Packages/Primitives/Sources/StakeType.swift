@@ -10,8 +10,8 @@ public enum FreezeType: String, Codable, Equatable, Hashable, Sendable {
 }
 
 public enum Resource: String, Codable, Equatable, Hashable, Sendable {
-	case bandwidth = "Bandwidth"
-	case energy = "Energy"
+	case bandwidth = "BANDWIDTH"
+	case energy = "ENERGY"
 }
 
 public struct FreezeData: Codable, Equatable, Hashable, Sendable {

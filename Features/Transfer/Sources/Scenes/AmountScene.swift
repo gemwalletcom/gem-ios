@@ -87,7 +87,7 @@ struct AmountScene: View {
                             }
                         }
                         .pickerStyle(.segmented)
-                        .fixedSize()
+                        .frame(width: 200)
                     }
                     .cleanListRow()
                 }
