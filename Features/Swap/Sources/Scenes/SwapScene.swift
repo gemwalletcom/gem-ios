@@ -21,9 +21,19 @@ public struct SwapScene: View {
     }
 
     public var body: some View {
-        ZStack(alignment: .bottom) {
-            swapList
-                .padding(.bottom, .scene.button.height)
+        List {
+            swapFromSectionView
+            swapToSectionView
+            if model.shouldShowAdditionalInfo {
+                additionalInfoSectionView
+            }
+
+            if let error = model.swapState.error {
+                ListItemErrorView(errorTitle: model.errorTitle, error: error, infoAction: model.errorInfoAction)
+            }
+        }
+        .listSectionSpacing(.compact)
+        .safeAreaView {
             bottomActionView
                 .confirmationDialog(
                     model.swapDetailsViewModel?.highImpactWarningTitle ?? "",
@@ -41,7 +51,6 @@ public struct SwapScene: View {
                     }
                 )
         }
-        .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .onChangeObserveQuery(
             request: $model.fromAssetRequest,
@@ -82,20 +91,6 @@ public struct SwapScene: View {
 // MARK: - UI Components
 
 extension SwapScene {
-    private var swapList: some View {
-        List {
-            swapFromSectionView
-            swapToSectionView
-            if model.shouldShowAdditionalInfo {
-                additionalInfoSectionView
-            }
-
-            if let error = model.swapState.error {
-                ListItemErrorView(errorTitle: model.errorTitle, error: error, infoAction: model.errorInfoAction)
-            }
-        }
-    }
-    
     private var swapFromSectionView: some View {
         Section {
             if let swapModel = model.swapTokenModel(type: .pay) {
@@ -108,9 +103,7 @@ extension SwapScene {
                 .buttonStyle(.borderless)
                 .focused($focusedField, equals: .from)
             } else {
-                SwapTokenEmptyView(
-                    onSelectAssetAction: model.onSelectAssetPay
-                )
+                SwapTokenEmptyView(onSelectAssetAction: model.onSelectAssetPay)
             }
         } header: {
             Text(model.swapFromTitle)
@@ -143,9 +136,7 @@ extension SwapScene {
                 .buttonStyle(.borderless)
                 .focused($focusedField, equals: .to)
             } else {
-                SwapTokenEmptyView(
-                    onSelectAssetAction: model.onSelectAssetReceive
-                )
+                SwapTokenEmptyView(onSelectAssetAction: model.onSelectAssetReceive)
             }
         } header: {
             Text(model.swapToTitle)
