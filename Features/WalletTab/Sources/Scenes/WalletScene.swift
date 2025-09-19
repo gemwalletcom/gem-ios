@@ -53,6 +53,7 @@ public struct WalletScene: View {
                     action: model.onBannerAction,
                     closeAction: model.onCloseBanner
                 )
+                .listRowInsets(.zero)
             }
 
             if model.showPinnedSection {
