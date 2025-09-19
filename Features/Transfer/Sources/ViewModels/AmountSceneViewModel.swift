@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import BigInt
+import Blockchain
 import Components
 import Formatters
 import Foundation
@@ -16,7 +17,6 @@ import Store
 import Style
 import Validators
 import WalletsService
-import Blockchain
 
 @MainActor
 @Observable
@@ -39,13 +39,14 @@ public final class AmountSceneViewModel {
     var assetRequest: AssetRequest
     var assetData: AssetData = .empty
 
-    var amountInputModel: InputValidationViewModel = InputValidationViewModel()
+    var amountInputModel: InputValidationViewModel = .init()
     var delegation: DelegationValidator?
     var selectedResource: Resource = .bandwidth {
         didSet {
             onSelectResource(selectedResource)
         }
     }
+
     var isPresentingSheet: AmountSheetType?
     var focusField: Bool = false
 
@@ -94,7 +95,7 @@ public final class AmountSceneViewModel {
     var nextTitle: String { Localized.Common.next }
     var continueTitle: String { Localized.Common.continue }
     var isNextEnabled: Bool { actionButtonState == .normal }
-    
+
     var infoText: String? {
         switch type {
         case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual, .freeze:
@@ -256,7 +257,6 @@ extension AmountSceneViewModel {
         delegation = currentValidator
     }
 
-
     func onSelectValidator(_ validator: DelegationValidator) {
         cleanInput()
         setSelectedValidator(validator)
@@ -283,7 +283,7 @@ extension AmountSceneViewModel {
 
     func infoAction(for error: Error) -> (() -> Void)? {
         guard let transferError = error as? TransferError,
-              case let .minimumAmount(asset, required) = transferError
+              case .minimumAmount(let asset, let required) = transferError
         else {
             return nil
         }
@@ -329,11 +329,11 @@ extension AmountSceneViewModel {
 
     private func recipientAddress(chain: StakeChain?, validatorId: String) -> String {
         switch chain {
-        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron, .smartChain: validatorId
+        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron, .smartChain, .ethereum: validatorId
         case .none, .some(.hyperCore): ""
         }
     }
-    
+
     private var recipientData: RecipientData {
         switch type {
         case .transfer(recipient: let recipient): recipient
@@ -585,7 +585,7 @@ extension AmountSceneViewModel {
                 return (assetData.balance.frozen + assetData.balance.locked) - assetData.balance.staked
             }
             return availableBalanceForStaking
-        case let .freeze(data):
+        case .freeze(let data):
             switch data.freezeType {
             case .freeze: return availableBalanceForStaking
             case .unfreeze:
@@ -639,11 +639,11 @@ extension AmountSceneViewModel {
     private var minimumAccountReserve: BigInt {
         asset.type == .native ? asset.chain.minimumAccountBalance : .zero
     }
-    
+
     private var stakingReservedForFees: BigInt {
         BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
     }
-    
+
     private var availableBalanceForStaking: BigInt {
         assetData.balance.available > stakingReservedForFees
         ? assetData.balance.available - stakingReservedForFees
