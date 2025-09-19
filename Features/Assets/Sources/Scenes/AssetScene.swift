@@ -33,6 +33,7 @@ public struct AssetScene: View {
                     action: model.onSelectBanner,
                     closeAction: model.onCloseBanner
                 )
+                .listRowInsets(.zero)
             }
             if model.showStatus {
                 Section {

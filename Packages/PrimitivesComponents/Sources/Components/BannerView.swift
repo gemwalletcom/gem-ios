@@ -11,7 +11,7 @@ public struct BannerView: View {
     private let action: ((Banner) -> Void)
     private let closeAction: ((Banner) -> Void)
     
-    @State private var currentIndex: Int = 0
+    @State private var currentIndex: Int? = 0
 
     public init(
         banners: [Banner],
@@ -27,9 +27,6 @@ public struct BannerView: View {
         if banners.isNotEmpty {
             VStack(spacing: .small) {
                 carouselTabView
-                if banners.count > 1 {
-                    carouselIndicators
-                }
             }
         }
     }
@@ -39,14 +36,23 @@ public struct BannerView: View {
 
 private extension BannerView {
     var carouselTabView: some View {
-        TabView(selection: $currentIndex) {
-            ForEach(banners.indices, id: \.self) { index in
-                bannerView(for: banners[index])
-                    .tag(index)
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 0) {
+                ForEach(banners.indices, id: \.self) { index in
+                    bannerView(for: banners[index])
+                        .containerRelativeFrame(.horizontal)
+                }
+            }
+            .scrollTargetLayout()
+        }
+        .scrollTargetBehavior(.paging)
+        .scrollPosition(id: $currentIndex)
+        .overlay(alignment: .bottom) {
+            if banners.count > 1 {
+                carouselIndicators
+                    .padding(.bottom, .small)
             }
         }
-        .frame(height: .scene.bannerHeight)
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
     }
     
     @ViewBuilder
@@ -54,7 +60,7 @@ private extension BannerView {
         HStack(spacing: .tiny) {
             ForEach(0..<banners.count, id: \.self) { index in
                 Circle()
-                    .fill(index == currentIndex ? Colors.blue : Colors.gray.opacity(0.3))
+                    .fill(index == (currentIndex ?? 0) ? Colors.blue : Colors.gray.opacity(0.3))
                     .frame(size: .space6)
             }
         }
@@ -82,9 +88,13 @@ private extension BannerView {
                         .foregroundColor(Colors.gray)
                     }
                 }
+                .frame(maxHeight: .infinity)
+                .if(banners.count > 1) { view in
+                    view.padding(.bottom, .small)
+                }
             }
         )
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.listStyleColor())
     }
 }
 
