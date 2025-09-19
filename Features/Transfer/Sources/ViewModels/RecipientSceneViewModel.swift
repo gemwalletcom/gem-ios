@@ -256,7 +256,8 @@ extension RecipientSceneViewModel {
     private func sectionImage(for type: RecipientAddressType) -> Image? {
         switch type {
         case .pinned: Images.System.pin
-        case .wallets, .view: nil
+        case .wallets: Images.System.wallet
+        case .view: Images.System.eyeCircle
         }
     }
 
