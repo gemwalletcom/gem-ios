@@ -13,16 +13,19 @@ public struct WalletHeaderViewModel {
     //Remove WalletType from here
     let walletType: WalletType
     let value: Double
+    let bannerEventsViewModel: HeaderBannerEventViewModel
     
     let currencyFormatter: CurrencyFormatter
 
     public init(
         walletType: WalletType,
         value: Double,
-        currencyCode: String
+        currencyCode: String,
+        bannerEventsViewModel: HeaderBannerEventViewModel
     ) {
         self.walletType = walletType
         self.value = value
+        self.bannerEventsViewModel = bannerEventsViewModel
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
     }
     
@@ -41,16 +44,10 @@ extension WalletHeaderViewModel: HeaderViewModel {
     public var subtitle: String? { .none }
 
     public var buttons: [HeaderButton] {
-        let values: [(type: HeaderButtonType, isShown: Bool)] = [
-            (.send, true),
-            (.receive, true),
-            (.buy, true),
+        [
+            HeaderButton(type: .send, isEnabled: bannerEventsViewModel.isButtonsEnabled),
+            HeaderButton(type: .receive, isEnabled: bannerEventsViewModel.isButtonsEnabled),
+            HeaderButton(type: .buy, isEnabled: bannerEventsViewModel.isButtonsEnabled)
         ]
-        return values.compactMap {
-            if $0.isShown {
-                return HeaderButton(type: $0.type, isEnabled: true)
-            }
-            return .none
-        }
     }
 }
