@@ -31,7 +31,7 @@ public class HyperCoreSigner: Signable {
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        AnyError.notImplemented
+        throw AnyError.notImplemented
     }
 
     private func getBuilder(builder: String, fee: Int) throws -> HyperBuilder {
