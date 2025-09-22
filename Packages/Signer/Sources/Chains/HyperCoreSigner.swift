@@ -22,13 +22,16 @@ public class HyperCoreSigner: Signable {
 
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let amount = BigNumberFormatter.standard.string(from: input.value, decimals: Int(input.asset.decimals))
-        let token = input.asset.id.tokenId ?? nativeSpotToken
         return try signSpotSend(
             amount: amount,
             destination: input.destinationAddress,
-            token: token,
+            token: nativeSpotToken,
             privateKey: privateKey
         )
+    }
+    
+    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        AnyError.notImplemented
     }
 
     private func getBuilder(builder: String, fee: Int) throws -> HyperBuilder {
