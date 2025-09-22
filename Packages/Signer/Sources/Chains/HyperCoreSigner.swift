@@ -2,6 +2,7 @@
 
 import BigInt
 import Blockchain
+import Formatters
 import Foundation
 import Gemstone
 import GemstonePrimitives
@@ -15,12 +16,19 @@ public class HyperCoreSigner: Signable {
     private let agentNamePrefix = "gemwallet_"
     private let referralCode = "GEMWALLET"
     private let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
-    
-    public init() {
-    }
+    private let nativeSpotToken = "HYPE:0x0d01dc56dcaaca66ad901c959b4011ec"
+
+    public init() {}
 
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        throw AnyError.notImplemented
+        let amount = BigNumberFormatter.standard.string(from: input.value, decimals: Int(input.asset.decimals))
+        let token = input.asset.id.tokenId ?? nativeSpotToken
+        return try signSpotSend(
+            amount: amount,
+            destination: input.destinationAddress,
+            token: token,
+            privateKey: privateKey
+        )
     }
 
     private func getBuilder(builder: String, fee: Int) throws -> HyperBuilder {
@@ -36,10 +44,10 @@ public class HyperCoreSigner: Signable {
         let builder = try? getBuilder(builder: builderAddress, fee: Int(builderFeeBps))
         let timestampIncrementer = NumberIncrementer(Int(Date.getTimestampInMs()))
         var transactions: [String] = []
-        
+
         if approveReferralRequired {
-            transactions.append(
-                try signSetReferer(
+            try transactions.append(
+                signSetReferer(
                     agentKey: privateKey,
                     code: referralCode,
                     timestamp: timestampIncrementer.next().asUInt64
@@ -47,8 +55,8 @@ public class HyperCoreSigner: Signable {
             )
         }
         if approveAgentRequired {
-            transactions.append(
-                try signApproveAgent(
+            try transactions.append(
+                signApproveAgent(
                     agentAddress: agentAddress,
                     privateKey: privateKey,
                     timestamp: timestampIncrementer.next().asUInt64
@@ -56,8 +64,8 @@ public class HyperCoreSigner: Signable {
             )
         }
         if approveBuilderRequired {
-            transactions.append(
-                try signApproveBuilderAddress(
+            try transactions.append(
+                signApproveBuilderAddress(
                     agentKey: privateKey,
                     builderAddress: builderAddress,
                     rateBps: builderFeeBps,
@@ -65,24 +73,24 @@ public class HyperCoreSigner: Signable {
                 )
             )
         }
-        transactions.append(
-            try signMarketMessage(
+        try transactions.append(
+            signMarketMessage(
                 type: type,
                 agentKey: agentKey,
                 builder: builder,
                 timestamp: timestampIncrementer.next().asUInt64
             )
         )
-        
+
         return transactions
     }
-    
+
     public func signApproveAgent(agentAddress: String, privateKey: Data, timestamp: UInt64) throws -> String {
         let agentName = agentNamePrefix + agentAddress.suffix(6)
         let agent = factory.makeApproveAgent(name: agentName, address: agentAddress, nonce: timestamp)
         let eip712Message = hyperCore.approveAgentTypedData(agent: agent)
         return try actionMessage(
-            signature: try signEIP712(messageJson: eip712Message, privateKey: privateKey),
+            signature: signEIP712(messageJson: eip712Message, privateKey: privateKey),
             eip712Message: eip712Message,
             timestamp: timestamp
         )
@@ -97,11 +105,11 @@ public class HyperCoreSigner: Signable {
 
         return try actionMessage(signature: signature, eip712Message: eip712Message, timestamp: timestamp)
     }
-    
+
     public func feeRate(_ tenthsBps: UInt32) -> String {
         String(format: "%g%%", Double(tenthsBps) * 0.001)
     }
-    
+
     // "0.05%" = 50bps. 1 means 0.001%
     public func signApproveBuilderAddress(agentKey: Data, builderAddress: String, rateBps: UInt32, timestamp: UInt64) throws -> String {
         let maxFeeRate = feeRate(rateBps)
@@ -128,11 +136,24 @@ public class HyperCoreSigner: Signable {
             action: factory.serializeSetReferrer(setReferrer: referer),
             timestamp: timestamp
         )
-     }
+    }
+
+    private func signSpotSend(amount: String, destination: String, token: String, privateKey: Data) throws -> String {
+        let timestamp = UInt64(Date.getTimestampInMs())
+        let spotSend = factory.sendSpotTokenToAddress(
+            amount: amount,
+            destination: destination.lowercased(),
+            time: timestamp,
+            token: token
+        )
+        let eip712Message = hyperCore.sendSpotTokenToAddressTypedData(spotSend: spotSend)
+        let signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
+        return try actionMessage(signature: signature, eip712Message: eip712Message, timestamp: timestamp)
+    }
 
     private func signMarketMessage(type: PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
         let order = switch type {
-        case .close(let data):
+        case let .close(data):
             factory.makeMarketOrder(
                 asset: UInt32(data.assetIndex),
                 isBuy: data.direction == .short,
@@ -141,7 +162,7 @@ public class HyperCoreSigner: Signable {
                 reduceOnly: true,
                 builder: builder
             )
-        case .open(let data):
+        case let .open(data):
             factory.makeMarketOrder(
                 asset: UInt32(data.assetIndex),
                 isBuy: data.direction == .long,
