@@ -296,6 +296,7 @@ let package = Package(
                 .product(name: "DeviceServiceTestKit", package: "SystemServices"),
                 .product(name: "BannerServiceTestKit", package: "SystemServices"),
                 .product(name: "StoreTestKit", package: "Store"),
+                "PriceServiceTestKit",
                 "BalanceServiceTestKit",
                 "TransactionServiceTestKit",
                 "WalletsService"
