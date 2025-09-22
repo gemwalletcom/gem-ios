@@ -85,6 +85,7 @@ struct RecipientScene: View {
                 } header: {
                     HStack {
                         section.image
+                            .frame(size: .image.small)
                         Text(section.section)
                     }
                 }
