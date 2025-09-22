@@ -141,6 +141,7 @@ let package = Package(
         .target(
             name: "WalletSessionServiceTestKit",
             dependencies: [
+                "WalletSessionService",
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "StoreTestKit", package: "Store"),
             ],
