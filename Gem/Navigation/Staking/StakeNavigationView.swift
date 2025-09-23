@@ -16,16 +16,12 @@ struct StakeNavigationView: View {
     @State private var model: StakeSceneViewModel
     @Binding private var navigationPath: NavigationPath
 
-    private let onComplete: VoidAction
-
     public init(
         model: StakeSceneViewModel,
-        navigationPath: Binding<NavigationPath>,
-        onComplete: VoidAction
+        navigationPath: Binding<NavigationPath>
     ) {
         _model = State(initialValue: model)
         _navigationPath = navigationPath
-        self.onComplete = onComplete
     }
 
     var body: some View {

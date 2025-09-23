@@ -14,14 +14,8 @@ struct SwapNavigationView: View {
 
     @State private var model: SwapSceneViewModel
 
-    private let onComplete: VoidAction
-
-    init(
-        model: SwapSceneViewModel,
-        onComplete: VoidAction
-    ) {
+    init(model: SwapSceneViewModel) {
         _model = State(initialValue: model)
-        self.onComplete = onComplete
     }
 
     var body: some View {
@@ -51,17 +45,5 @@ struct SwapNavigationView: View {
                     }
                 }
             }
-    }
-}
-
-// MARK: - Actions
-
-extension SwapNavigationView {
-    private func onSwapComplete(type: TransferDataType) {
-        switch type {
-        case .swap, .tokenApprove:
-            onComplete?()
-        default: break
-        }
     }
 }
