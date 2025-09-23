@@ -73,7 +73,6 @@ extension StakeScene {
                 }
             }
         }
-        .listRowInsets(.assetListRowInsets)
     }
 
     private var delegationsSection: some View {
@@ -95,7 +94,6 @@ extension StakeScene {
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
         }
-        .listRowInsets(.assetListRowInsets)
     }
 
     private var stakeInfoSection: some View {
@@ -110,7 +108,6 @@ extension StakeScene {
                 infoAction: model.onLockTimeInfo
             )
         }
-        .listRowInsets(.assetListRowInsets)
     }
 
     private var resourcesSection: some View {
@@ -125,8 +122,6 @@ extension StakeScene {
                 subtitle: model.bandwidthText
             )
         }
-        .listRowInsets(.assetListRowInsets)
+        
     }
 }
-
-

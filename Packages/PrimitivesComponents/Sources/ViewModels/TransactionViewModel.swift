@@ -108,8 +108,8 @@ public struct TransactionViewModel: Sendable {
         case .stakeRewards: Localized.Transfer.Rewards.title
         case .stakeWithdraw: Localized.Transfer.Withdraw.title
         case .assetActivation: Localized.Transfer.ActivateAsset.title
-        case .stakeFreeze: "Freeze"
-        case .stakeUnfreeze: "Unfreeze"
+        case .stakeFreeze: Localized.Transfer.Freeze.title
+        case .stakeUnfreeze: Localized.Transfer.Unfreeze.title
         case .perpetualOpenPosition: "Open Position"
         case .perpetualClosePosition: "Close Position"
         }

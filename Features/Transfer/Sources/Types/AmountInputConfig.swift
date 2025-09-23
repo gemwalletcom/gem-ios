@@ -17,9 +17,16 @@ struct AmountInputConfig: CurrencyInputConfigurable {
     let numberSanitizer: NumberSanitizer
     let secondaryText: String
     let onTapActionButton: (() -> Void)?
-    
+
     var placeholder: String { .zero }
-    var keyboardType: UIKeyboardType { .decimalPad }
+    var keyboardType: UIKeyboardType {
+        switch sceneType {
+        case .stake, .stakeUnstake where asset.chain == .tron:
+            return .numberPad
+        default:
+            return .decimalPad
+        }
+    }
 
     var currencyPosition: CurrencyTextField.CurrencyPosition {
         switch inputType {
