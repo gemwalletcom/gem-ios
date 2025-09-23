@@ -136,12 +136,18 @@ struct SelectAssetSceneNavigationStack: View {
                         )
                     )
                 case .withdraw:
+                    let recipientAddress = (try? model.wallet.account(for: input.asset.chain).address) ?? ""
+                    let withdrawRecipient = Recipient(
+                        name: model.wallet.name,
+                        address: recipientAddress,
+                        memo: nil
+                    )
                     AmountNavigationView(
                         model: viewModelFactory.amountScene(
                             input: AmountInput(
                                 type: .withdraw(
                                     recipient: RecipientData(
-                                        recipient: .hyperliquid,
+                                        recipient: withdrawRecipient,
                                         amount: .none
                                     )
                                 ),
@@ -193,4 +199,3 @@ extension SelectAssetSceneNavigationStack {
         isPresentingFilteringView.toggle()
     }
 }
-

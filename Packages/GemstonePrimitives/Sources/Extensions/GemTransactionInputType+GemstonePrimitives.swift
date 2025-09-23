@@ -55,7 +55,12 @@ extension TransferDataType {
             return .tokenApprove(asset: asset.map(), approvalData: approvalData.map())
         case .generic(let asset, let metadata, let extra):
             return .generic(asset: asset.map(), metadata: metadata.map(), extra: extra.map())
-        case .withdrawal, .transferNft, .account:
+        case .withdrawal(let asset):
+            if asset.chain == .hyperCore {
+                return .transfer(asset: asset.map())
+            }
+            fatalError("Unsupported transaction type: \(self)")
+        case .transferNft, .account:
             fatalError("Unsupported transaction type: \(self)")
         case .perpetual(let asset, let perpetualType):
             return .perpetual(asset: asset.map(), perpetualType: perpetualType.map())
