@@ -34,7 +34,7 @@ struct SelectAssetSceneNavigationStack: View {
     @State private var model: SelectAssetViewModel
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectAssetType: SelectAssetType?
-    
+
     init(
         model: SelectAssetViewModel,
         isPresentingSelectType: Binding<SelectAssetType?>
@@ -136,10 +136,9 @@ struct SelectAssetSceneNavigationStack: View {
                         )
                     )
                 case .withdraw:
-                    let recipientAddress = (try? model.wallet.account(for: input.asset.chain).address) ?? ""
                     let withdrawRecipient = Recipient(
                         name: model.wallet.name,
-                        address: recipientAddress,
+                        address: input.assetAddress.address,
                         memo: nil
                     )
                     AmountNavigationView(

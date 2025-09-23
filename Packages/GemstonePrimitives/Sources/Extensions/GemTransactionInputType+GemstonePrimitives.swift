@@ -1,12 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Gemstone
 import Primitives
-import BigInt
 
-extension GemTransactionInputType {
-    public func getAsset() -> GemAsset {
+public extension GemTransactionInputType {
+    func getAsset() -> GemAsset {
         switch self {
         case .transfer(let asset): asset
         case .deposit(let asset): asset
@@ -19,29 +19,29 @@ extension GemTransactionInputType {
     }
 }
 
-extension GemTransactionInputType {
-    public func map() throws -> TransferDataType {
+public extension GemTransactionInputType {
+    func map() throws -> TransferDataType {
         switch self {
         case .transfer(let asset):
-            return TransferDataType.transfer(try asset.map())
+            return try TransferDataType.transfer(asset.map())
         case .deposit(let asset):
-            return TransferDataType.deposit(try asset.map())
+            return try TransferDataType.deposit(asset.map())
         case .swap(let fromAsset, let toAsset, let gemSwapData):
-            return TransferDataType.swap(try fromAsset.map(), try toAsset.map(), try gemSwapData.map())
+            return try TransferDataType.swap(fromAsset.map(), toAsset.map(), gemSwapData.map())
         case .stake(let asset, let type):
-            return TransferDataType.stake(try asset.map(), try type.map())
+            return try TransferDataType.stake(asset.map(), type.map())
         case .tokenApprove(let asset, let approvalData):
-            return TransferDataType.tokenApprove(try asset.map(), approvalData.map())
+            return try TransferDataType.tokenApprove(asset.map(), approvalData.map())
         case .generic(let asset, let metadata, let extra):
-            return TransferDataType.generic(asset: try asset.map(), metadata: metadata.map(), extra: try extra.map())
+            return try TransferDataType.generic(asset: asset.map(), metadata: metadata.map(), extra: extra.map())
         case .perpetual(asset: let asset, perpetualType: let perpetualType):
-            return TransferDataType.perpetual(try asset.map(), try perpetualType.map())
+            return try TransferDataType.perpetual(asset.map(), perpetualType.map())
         }
     }
 }
 
-extension TransferDataType {
-    public func map() -> GemTransactionInputType {
+public extension TransferDataType {
+    func map() throws -> GemTransactionInputType {
         switch self {
         case .transfer(let asset):
             return .transfer(asset: asset.map())
@@ -59,9 +59,9 @@ extension TransferDataType {
             if asset.chain == .hyperCore {
                 return .transfer(asset: asset.map())
             }
-            fatalError("Unsupported transaction type: \(self)")
+            throw AnyError("Unsupported transaction type: \(self)")
         case .transferNft, .account:
-            fatalError("Unsupported transaction type: \(self)")
+            throw AnyError("Unsupported transaction type: \(self)")
         case .perpetual(let asset, let perpetualType):
             return .perpetual(asset: asset.map(), perpetualType: perpetualType.map())
         }
