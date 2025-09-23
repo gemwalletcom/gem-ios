@@ -77,7 +77,8 @@ public final class AssetSceneViewModel: Sendable {
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
     var showBalances: Bool { assetDataModel.showBalances }
-    var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { $0.key == .staked && $0.value > 0 }) }
+    private var showStakedBalanceTypes: [BalanceType] = [.staked, .pending, .rewards]
+    var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showResources: Bool { assetDataModel.showResources }
 
