@@ -168,7 +168,7 @@ extension GatewayService {
 }
 
 extension GatewayService {
-    public func getAddressStatus(chain: Primitives.Chain, address: String) async throws -> [AddressStatus] {
+    public func getAddressStatus(chain: Primitives.Chain, address: String) async throws -> [Primitives.AddressStatus] {
         try await gateway.getAddressStatus(chain: chain.rawValue, address: address).map { $0.map() }
     }
 }

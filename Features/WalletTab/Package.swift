@@ -57,6 +57,7 @@ let package = Package(
             name: "WalletTabTestKit",
             dependencies: [
                 .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
+                .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "BannerServiceTestKit", package: "SystemServices"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),

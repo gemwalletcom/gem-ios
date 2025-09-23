@@ -83,10 +83,10 @@ struct RecipientScene: View {
                         )
                     }
                 } header: {
-                    Label {
-                        Text(section.section)
-                    } icon: {
+                    HStack {
                         section.image
+                            .frame(size: .image.small)
+                        Text(section.section)
                     }
                 }
             }

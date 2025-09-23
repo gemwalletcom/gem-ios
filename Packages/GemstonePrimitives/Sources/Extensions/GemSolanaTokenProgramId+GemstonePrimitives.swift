@@ -4,8 +4,8 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemSolanaTokenProgramId {
-    public func map() -> SolanaTokenProgramId {
+extension Gemstone.SolanaTokenProgramId {
+    public func map() -> Primitives.SolanaTokenProgramId {
         switch self {
         case .token: .token
         case .token2022: .token2022
@@ -13,8 +13,8 @@ extension GemSolanaTokenProgramId {
     }
 }
 
-extension SolanaTokenProgramId {
-    public func map() -> GemSolanaTokenProgramId {
+extension Primitives.SolanaTokenProgramId {
+    public func map() -> Gemstone.SolanaTokenProgramId {
         switch self {
         case .token: .token
         case .token2022: .token2022

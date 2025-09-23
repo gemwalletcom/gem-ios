@@ -111,7 +111,8 @@ public final class WalletSceneViewModel: Sendable {
         WalletHeaderViewModel(
             walletType: wallet.type,
             value: totalFiatValue,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: banners.map(\.event))
         )
     }
 }

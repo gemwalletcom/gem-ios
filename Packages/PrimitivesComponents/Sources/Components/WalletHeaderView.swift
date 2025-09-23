@@ -99,7 +99,8 @@ public struct WalletHeaderView: View {
     let model = WalletHeaderViewModel(
         walletType: .multicoin,
         value: 1_000,
-        currencyCode: Currency.usd.rawValue
+        currencyCode: Currency.usd.rawValue,
+        bannerEventsViewModel: HeaderBannerEventViewModel(events: [])
     )
 
     WalletHeaderView(

@@ -48,6 +48,7 @@ let package = Package(
             name: "TransactionsTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "Transactions",
                 "PrimitivesComponents"
             ]

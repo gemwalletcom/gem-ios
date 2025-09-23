@@ -47,5 +47,7 @@ public extension Images {
         public static let checkmarkCircle = Image(systemName: SystemImage.checkmarkCircle)
         public static let circle = Image(systemName: SystemImage.circle)
         public static let dollar = Image(systemName: SystemImage.dollarsign)
+        public static let wallet = Image(systemName: SystemImage.wallet)
+        public static let eyeCircle = Image(systemName: SystemImage.eyeCircle)
     }
 }
