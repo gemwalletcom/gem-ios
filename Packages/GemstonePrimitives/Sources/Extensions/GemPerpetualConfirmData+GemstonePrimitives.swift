@@ -15,8 +15,8 @@ extension GemPerpetualConfirmData {
     }
 }
 
-extension GemPerpetualDirection {
-    var asPrimitive: PerpetualDirection {
+extension Gemstone.PerpetualDirection {
+    var asPrimitive: Primitives.PerpetualDirection {
         switch self {
         case .short: .short
         case .long: .long

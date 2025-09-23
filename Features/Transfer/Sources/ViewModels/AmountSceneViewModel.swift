@@ -41,7 +41,7 @@ public final class AmountSceneViewModel {
 
     var amountInputModel: InputValidationViewModel = .init()
     var delegation: DelegationValidator?
-    var selectedResource: Resource = .bandwidth {
+    var selectedResource: Primitives.Resource = .bandwidth {
         didSet {
             onSelectResource(selectedResource)
         }
@@ -187,14 +187,14 @@ public final class AmountSceneViewModel {
         [.bandwidth, .energy].map { ResourceViewModel(resource: $0) }
     }
 
-    var currentResource: Resource? {
+    var currentResource: Primitives.Resource? {
         switch type {
         case .freeze(let data): data.resource
         default: nil
         }
     }
 
-    var freezeType: FreezeType? {
+    var freezeType: Primitives.FreezeType? {
         switch type {
         case .freeze(let data): data.freezeType
         default: nil
@@ -262,7 +262,7 @@ extension AmountSceneViewModel {
         setSelectedValidator(validator)
     }
 
-    func onSelectResource(_ resource: Resource) {
+    func onSelectResource(_ resource: Primitives.Resource) {
         guard case .freeze(let data) = type else { return }
         cleanInput()
         input = AmountInput(
