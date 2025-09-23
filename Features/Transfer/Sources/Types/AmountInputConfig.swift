@@ -21,10 +21,8 @@ struct AmountInputConfig: CurrencyInputConfigurable {
     var placeholder: String { .zero }
     var keyboardType: UIKeyboardType {
         switch sceneType {
-        case .stake, .stakeUnstake where asset.chain == .tron:
-            return .numberPad
-        default:
-            return .decimalPad
+        case .transfer, .deposit, .withdraw, .stakeWithdraw, .perpetual, .stakeRedelegate, .freeze: .decimalPad
+        case .stake, .stakeUnstake: asset.chain == .tron ? .numberPad : .decimalPad
         }
     }
 
