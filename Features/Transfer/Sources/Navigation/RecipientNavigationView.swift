@@ -39,15 +39,5 @@ public struct RecipientNavigationView: View {
                 )
             )
         }
-        .navigationDestination(for: TransferData.self) { data in
-            ConfirmTransferScene(
-                model: ConfirmTransferSceneViewModel(
-                    wallet: model.wallet,
-                    data: data,
-                    confirmService: confirmService,
-                    onComplete: onComplete
-                )
-            )
-        }
     }
 }

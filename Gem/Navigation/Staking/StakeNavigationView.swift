@@ -5,10 +5,6 @@ import Primitives
 import SwiftUI
 import Transfer
 import Staking
-import ChainService
-import NodeService
-import ExplorerService
-import Signer
 import InfoSheet
 
 struct StakeNavigationView: View {
@@ -46,16 +42,6 @@ struct StakeNavigationView: View {
         )
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(type: $0)
-        }
-        .navigationDestination(for: TransferData.self) { data in
-            ConfirmTransferScene(
-                model: viewModelFactory.confirmTransferScene(
-                    wallet: model.wallet,
-                    data: data,
-                    confirmTransferDelegate: nil,
-                    onComplete: onComplete
-                )
-            )
         }
         .navigationDestination(for: AmountInput.self) { input in
             AmountNavigationView(

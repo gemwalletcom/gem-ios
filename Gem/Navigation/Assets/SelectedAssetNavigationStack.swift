@@ -130,6 +130,15 @@ struct SelectedAssetNavigationStack: View  {
             }
             .toolbarDismissItem(title: .done, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: TransferData.self) { data in
+                ConfirmTransferScene(
+                    model: viewModelFactory.confirmTransferScene(
+                        wallet: wallet,
+                        data: data,
+                        onComplete: onComplete
+                    )
+                )
+            }
         }
     }
 }
