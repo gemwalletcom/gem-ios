@@ -63,6 +63,8 @@ struct WalletNavigationStack: View {
                             model: model.walletBarModel,
                             action: model.onSelectWalletBar
                         )
+                        .padding(.small)
+                        .liquidGlass()
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: model.onSelectManage) {
