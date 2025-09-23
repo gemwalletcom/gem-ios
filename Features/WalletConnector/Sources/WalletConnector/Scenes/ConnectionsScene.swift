@@ -35,7 +35,6 @@ public struct ConnectionsScene: View {
                         .textCase(nil)
                 }
             }
-            .listRowInsets(.assetListRowInsets)
             
             ForEach(model.sections) { section in
                 Section(section.title.or(.empty)) {
@@ -53,7 +52,6 @@ public struct ConnectionsScene: View {
                         }
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
         }
         .observeQuery(
