@@ -96,10 +96,7 @@ struct SelectAssetSceneNavigationStack: View {
                             onTransferAction: {
                                 navigationPath.append($0)
                             }
-                        ),
-                        onComplete: {
-                            isPresentingSelectAssetType = nil
-                        }
+                        )
                     )
                 case .receive:
                     ReceiveScene(

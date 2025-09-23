@@ -283,7 +283,7 @@ extension AmountSceneViewModel {
 
     func infoAction(for error: Error) -> (() -> Void)? {
         guard let transferError = error as? TransferError,
-              case let .minimumAmount(asset, required) = transferError
+              case .minimumAmount(let asset, let required) = transferError
         else {
             return nil
         }
@@ -329,7 +329,7 @@ extension AmountSceneViewModel {
 
     private func recipientAddress(chain: StakeChain?, validatorId: String) -> String {
         switch chain {
-        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron, .smartChain: validatorId
+        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron, .smartChain, .ethereum: validatorId
         case .none, .some(.hyperCore): ""
         }
     }
@@ -589,7 +589,7 @@ extension AmountSceneViewModel {
                 return (assetData.balance.frozen + assetData.balance.locked) - assetData.balance.staked
             }
             return availableBalanceForStaking
-        case let .freeze(data):
+        case .freeze(let data):
             switch data.freezeType {
             case .freeze: return availableBalanceForStaking
             case .unfreeze:
