@@ -22,9 +22,9 @@ extension GemTransactionLoadInput {
 }
 
 extension TransactionInput {
-    public func map() -> GemTransactionLoadInput {
+    public func map() throws -> GemTransactionLoadInput {
         GemTransactionLoadInput(
-            inputType: self.type.map(),
+            inputType: try self.type.map(),
             senderAddress: senderAddress,
             destinationAddress: destinationAddress,
             value: value.description,

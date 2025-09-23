@@ -28,7 +28,6 @@ struct AcceptTermsScene: View {
                     .accessibilityIdentifier(item.id)
                     .toggleStyle(CheckboxStyle(position: .left))
                 }
-                .listRowInsets(.assetListRowInsets)
             }
         }
         .safeAreaView {

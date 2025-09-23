@@ -36,7 +36,6 @@ public struct WalletScene: View {
             if ($preferences.isDeveloperEnabled.wrappedValue || preferences.preferences.isPerpetualEnabled) && model.wallet.isMultiCoins {
                 Section {
                     PerpetualsPreviewView(wallet: model.wallet)
-                        .listRowInsets(.assetListRowInsets)
                 } header: {
                     HStack {
                         Text("PERPETUALS")
