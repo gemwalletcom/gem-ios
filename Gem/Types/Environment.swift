@@ -62,4 +62,5 @@ extension EnvironmentValues {
     @Entry var nameService: NameService = AppResolver.main.services.nameService
     @Entry var addressNameService: AddressNameService = AppResolver.main.services.addressNameService
     @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
+    @Entry var bannerSetupService: BannerSetupService = AppResolver.main.services.bannerSetupService
 }

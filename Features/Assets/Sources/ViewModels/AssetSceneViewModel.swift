@@ -215,39 +215,47 @@ extension AssetSceneViewModel {
         isPresentingAssetSheet = .info(.watchWallet)
     }
 
-    func onSelectBanner(_ banner: Banner) {
-        let action = BannerViewModel(banner: banner).action
-        switch banner.event {
-        case .stake:
-            onSelectHeader(.stake)
-        case .activateAsset:
-            isPresentingAssetSheet = .transfer(
-                TransferData(
-                    type: .account(assetData.asset, .activate),
-                    recipientData: RecipientData(
-                        recipient: Recipient(
-                            name: .none,
-                            address: "",
-                            memo: .none
+    func onSelectBanner(_ action: BannerAction) {
+        switch action.type {
+        case .event(let event):
+            switch event {
+            case .stake:
+                onSelectHeader(.stake)
+            case .activateAsset:
+                isPresentingAssetSheet = .transfer(
+                    TransferData(
+                        type: .account(assetData.asset, .activate),
+                        recipientData: RecipientData(
+                            recipient: Recipient(
+                                name: .none,
+                                address: "",
+                                memo: .none
+                            ),
+                            amount: .none
                         ),
-                        amount: .none
-                    ),
-                    value: 0
+                        value: 0
+                    )
                 )
-            )
-        case .enableNotifications,
-                .accountActivation,
-                .accountBlockedMultiSignature:
+            case .enableNotifications,
+                    .accountActivation,
+                    .accountBlockedMultiSignature,
+                    .buyCrypto:
+                Task {
+                    try await bannerService.handleAction(action)
+                }
+            case .suspiciousAsset: break
+            }
+        case .button(let bannerButton):
+            switch bannerButton {
+            case .buy: onSelectHeader(.buy)
+            case .receive: onSelectHeader(.receive)
+            }
+        case .closeBanner:
             Task {
                 try await bannerService.handleAction(action)
             }
-        case .suspiciousAsset: break
         }
         onSelect(url: action.url)
-    }
-
-    func onCloseBanner(_ banner: Banner) {
-        bannerService.onClose(banner)
     }
 
     func onSelectBuy() {

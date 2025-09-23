@@ -60,6 +60,7 @@ extension AppResolver {
         let nameService: NameService
         let addressNameService: AddressNameService
         let viewModelFactory: ViewModelFactory
+        let bannerSetupService: BannerSetupService
 
         init(
             assetsService: AssetsService,
@@ -93,7 +94,8 @@ extension AppResolver {
             perpetualObserverService: PerpetualObserverService,
             nameService: NameService,
             addressNameService: AddressNameService,
-            viewModelFactory: ViewModelFactory
+            viewModelFactory: ViewModelFactory,
+            bannerSetupService: BannerSetupService
         ) {
             self.assetsService = assetsService
             self.balanceService = balanceService
@@ -127,6 +129,7 @@ extension AppResolver {
             self.nameService = nameService
             self.addressNameService = addressNameService
             self.viewModelFactory = viewModelFactory
+            self.bannerSetupService = bannerSetupService
         }
     }
 }

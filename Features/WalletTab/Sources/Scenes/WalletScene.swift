@@ -20,16 +20,18 @@ public struct WalletScene: View {
         @Bindable var preferences = model.observablePreferences
 
         List {
-            Section { } header: {
-                WalletHeaderView(
-                    model: model.walletHeaderModel,
-                    isHideBalanceEnalbed: $preferences.isHideBalanceEnabled,
-                    onHeaderAction: model.onHeaderAction,
-                    onInfoAction: model.onSelectWatchWalletInfo
-                )
-                .padding(.top, .small)
+            if model.showWalletHeader {
+                Section { } header: {
+                    WalletHeaderView(
+                        model: model.walletHeaderModel,
+                        isHideBalanceEnalbed: $preferences.isHideBalanceEnabled,
+                        onHeaderAction: model.onHeaderAction,
+                        onInfoAction: model.onSelectWatchWalletInfo
+                    )
+                    .padding(.top, .small)
+                }
+                .cleanListRow()
             }
-            .cleanListRow()
 
             if ($preferences.isDeveloperEnabled.wrappedValue || preferences.preferences.isPerpetualEnabled) && model.wallet.isMultiCoins {
                 Section {
@@ -50,10 +52,10 @@ public struct WalletScene: View {
             Section {
                 BannerView(
                     banners: model.banners,
-                    action: model.onBannerAction,
-                    closeAction: model.onCloseBanner
+                    action: model.onBanner
                 )
             }
+            .listRowInsets(.zero)
 
             if model.showPinnedSection {
                 Section {

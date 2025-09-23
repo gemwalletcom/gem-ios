@@ -230,7 +230,8 @@ struct ServicesFactory {
             perpetualObserverService: perpetualObserverService,
             nameService: nameService,
             addressNameService: addressNameService,
-            viewModelFactory: viewModelFactory
+            viewModelFactory: viewModelFactory,
+            bannerSetupService: bannerSetupService
         )
     }
 }

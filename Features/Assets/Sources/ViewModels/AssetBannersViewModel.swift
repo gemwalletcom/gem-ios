@@ -41,6 +41,7 @@ public final class AssetBannersViewModel: Sendable {
         case .stake: assetData.balance.staked.isZero
         case .activateAsset: !assetData.metadata.isActive
         case .suspiciousAsset: AssetScoreTypeViewModel(score: assetData.metadata.rankScore).shouldShowBanner
+        case .buyCrypto: false
         }
     }
 }

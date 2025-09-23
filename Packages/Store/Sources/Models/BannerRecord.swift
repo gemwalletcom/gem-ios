@@ -143,4 +143,12 @@ extension NewBanner {
             state: .alwaysActive
         )
     }
+    
+    public static func buyCrypto(walletId: WalletId) -> NewBanner {
+        NewBanner(
+            walletId: walletId.id,
+            event: .buyCrypto,
+            state: .active
+        )
+    }
 }

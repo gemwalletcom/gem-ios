@@ -30,10 +30,11 @@ public struct AssetScene: View {
             Section {
                 BannerView(
                     banners: model.allBanners,
-                    action: model.onSelectBanner,
-                    closeAction: model.onCloseBanner
+                    action: model.onSelectBanner
                 )
             }
+            .listRowInsets(.zero)
+
             if model.showStatus {
                 Section {
                     NavigationCustomLink(with:

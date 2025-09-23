@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "gm-pengu.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

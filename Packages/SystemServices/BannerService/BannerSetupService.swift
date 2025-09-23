@@ -46,4 +46,10 @@ public struct BannerSetupService: Sendable {
             NewBanner.accountBlockedMultiSignature(walletId: walletId, chain: chain)
         ])
     }
+    
+    public func setupBuyCryptoBanner(walletId: WalletId) throws {
+        try store.addBanners([
+            NewBanner.buyCrypto(walletId: walletId)
+        ])
+    }
 }

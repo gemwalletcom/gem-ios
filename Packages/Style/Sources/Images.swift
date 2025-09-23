@@ -196,6 +196,10 @@ public enum Images {
         public static let warning = Image(.verificationOrange)
         public static let risk = Image(.verificationRed)
     }
+    
+    public enum Banners {
+        public static let pengu = Image(.gmPengu)
+    }
 }
 
 // MARK: - Preview
