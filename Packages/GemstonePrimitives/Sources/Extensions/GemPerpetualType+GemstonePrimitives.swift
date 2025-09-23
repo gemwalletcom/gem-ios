@@ -33,8 +33,8 @@ extension PerpetualConfirmData {
     }
 }
 
-extension PerpetualDirection {
-    func map() -> GemPerpetualDirection {
+extension Primitives.PerpetualDirection {
+    func map() -> Gemstone.PerpetualDirection {
         switch self {
         case .short: .short
         case .long: .long

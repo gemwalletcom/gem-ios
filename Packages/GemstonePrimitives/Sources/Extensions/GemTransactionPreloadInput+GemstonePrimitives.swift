@@ -6,7 +6,7 @@ import Gemstone
 extension TransactionPreloadInput {
     public func map() -> GemTransactionPreloadInput {
         return GemTransactionPreloadInput(
-            inputType: inputType.map(),
+            inputType: inputType.transactionType.rawValue,
             senderAddress: senderAddress,
             destinationAddress: destinationAddress
         )

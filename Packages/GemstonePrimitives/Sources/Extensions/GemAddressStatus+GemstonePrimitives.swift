@@ -2,10 +2,10 @@
 
 import Foundation
 import Primitives
-import enum Gemstone.GemAddressStatus
+import enum Gemstone.AddressStatus
 
-extension GemAddressStatus {
-    public func map() -> AddressStatus {
+extension Gemstone.AddressStatus {
+    public func map() -> Primitives.AddressStatus {
         switch self {
         case .multiSignature: .multiSignature
         }
