@@ -65,7 +65,6 @@ private extension PriceAlertsScene {
         } footer: {
             Text(Localized.PriceAlerts.getNotifiedExplainMessage)
         }
-        .listRowInsets(.assetListRowInsets)
     }
     
     func alertView(alert: PriceAlertData) -> some View {
