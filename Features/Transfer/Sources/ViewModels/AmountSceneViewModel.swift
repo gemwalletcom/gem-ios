@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import BigInt
+import Blockchain
 import Components
 import Formatters
 import Foundation
@@ -16,7 +17,6 @@ import Store
 import Style
 import Validators
 import WalletsService
-import Blockchain
 
 @MainActor
 @Observable
@@ -39,13 +39,14 @@ public final class AmountSceneViewModel {
     var assetRequest: AssetRequest
     var assetData: AssetData = .empty
 
-    var amountInputModel: InputValidationViewModel = InputValidationViewModel()
+    var amountInputModel: InputValidationViewModel = .init()
     var delegation: DelegationValidator?
     var selectedResource: Primitives.Resource = .bandwidth {
         didSet {
             onSelectResource(selectedResource)
         }
     }
+
     var isPresentingSheet: AmountSheetType?
     var focusField: Bool = false
 
@@ -94,7 +95,7 @@ public final class AmountSceneViewModel {
     var nextTitle: String { Localized.Common.next }
     var continueTitle: String { Localized.Common.continue }
     var isNextEnabled: Bool { actionButtonState == .normal }
-    
+
     var infoText: String? {
         switch type {
         case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual, .freeze:
@@ -256,7 +257,6 @@ extension AmountSceneViewModel {
         delegation = currentValidator
     }
 
-
     func onSelectValidator(_ validator: DelegationValidator) {
         cleanInput()
         setSelectedValidator(validator)
@@ -333,7 +333,7 @@ extension AmountSceneViewModel {
         case .none, .some(.hyperCore): ""
         }
     }
-    
+
     private var recipientData: RecipientData {
         switch type {
         case .transfer(recipient: let recipient): recipient
@@ -554,13 +554,18 @@ extension AmountSceneViewModel {
                 return BigInt(5_000_000) // 5 USDC with 6 decimals
             }
         case .stakeWithdraw:
-            // For withdrawals, require minimum 5 USDC
+            // For staking withdrawals, require minimum 5 USDC
             if asset.symbol == "USDC" {
                 return BigInt(5_000_000) // 5 USDC with 6 decimals
             }
+        case .withdraw:
+            if asset.symbol == "USDC" {
+                // withdrawals require a minimum of 2 USDC
+                return BigInt(2_000_000)
+            }
         case .perpetual:
             return BigInt(12_000_000) // 15 USDC with 6 decimals
-        case .stakeUnstake, .withdraw, .transfer:
+        case .stakeUnstake, .transfer:
             break
         }
         return BigInt(0)
@@ -638,11 +643,11 @@ extension AmountSceneViewModel {
     private var minimumAccountReserve: BigInt {
         asset.type == .native ? asset.chain.minimumAccountBalance : .zero
     }
-    
+
     private var stakingReservedForFees: BigInt {
         BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
     }
-    
+
     private var availableBalanceForStaking: BigInt {
         assetData.balance.available > stakingReservedForFees
         ? assetData.balance.available - stakingReservedForFees

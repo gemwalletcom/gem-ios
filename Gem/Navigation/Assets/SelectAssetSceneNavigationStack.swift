@@ -34,7 +34,7 @@ struct SelectAssetSceneNavigationStack: View {
     @State private var model: SelectAssetViewModel
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectAssetType: SelectAssetType?
-    
+
     init(
         model: SelectAssetViewModel,
         isPresentingSelectType: Binding<SelectAssetType?>
@@ -136,12 +136,17 @@ struct SelectAssetSceneNavigationStack: View {
                         )
                     )
                 case .withdraw:
+                    let withdrawRecipient = Recipient(
+                        name: model.wallet.name,
+                        address: input.assetAddress.address,
+                        memo: nil
+                    )
                     AmountNavigationView(
                         model: viewModelFactory.amountScene(
                             input: AmountInput(
                                 type: .withdraw(
                                     recipient: RecipientData(
-                                        recipient: .hyperliquid,
+                                        recipient: withdrawRecipient,
                                         amount: .none
                                     )
                                 ),
@@ -193,4 +198,3 @@ extension SelectAssetSceneNavigationStack {
         isPresentingFilteringView.toggle()
     }
 }
-

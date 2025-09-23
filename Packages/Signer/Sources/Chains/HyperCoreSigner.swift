@@ -29,7 +29,7 @@ public class HyperCoreSigner: Signable {
             privateKey: privateKey
         )
     }
-    
+
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         throw AnyError.notImplemented
     }
@@ -101,8 +101,8 @@ public class HyperCoreSigner: Signable {
 
     public func signWithdrawal(input: SignerInput, privateKey: Data) throws -> String {
         let timestamp = UInt64(Date.getTimestampInMs())
-        // FIXME: make sure input.amount is correct  ("2" means 2 USD)
-        let request = factory.makeWithdraw(amount: input.value.description, address: input.senderAddress.lowercased(), nonce: timestamp)
+        let amount = BigNumberFormatter.standard.string(from: input.value, decimals: Int(input.asset.decimals))
+        let request = factory.makeWithdraw(amount: amount, address: input.senderAddress.lowercased(), nonce: timestamp)
         let eip712Message = hyperCore.withdrawalRequestTypedData(request: request)
         let signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
 
