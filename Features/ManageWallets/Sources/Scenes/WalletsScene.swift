@@ -40,7 +40,6 @@ public struct WalletsScene: View {
                     }
                 )
             }
-            .listRowInsets(.assetListRowInsets)
 
             if !model.pinnedWallets.isEmpty {
                 Section {
@@ -61,7 +60,6 @@ public struct WalletsScene: View {
                         Text(Localized.Common.pinned)
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
 
             Section {
@@ -77,7 +75,6 @@ public struct WalletsScene: View {
                 }
                 .onMove(perform: model.onMove)
             }
-            .listRowInsets(.assetListRowInsets)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .alertSheet($model.isPresentingAlertMessage)

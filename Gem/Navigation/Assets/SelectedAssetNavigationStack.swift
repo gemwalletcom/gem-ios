@@ -73,8 +73,7 @@ struct SelectedAssetNavigationStack: View  {
                             onTransferAction: {
                                 navigationPath.append($0)
                             }
-                        ),
-                        onComplete: onComplete
+                        )
                     )
                 case .receive:
                     ReceiveScene(
@@ -114,8 +113,7 @@ struct SelectedAssetNavigationStack: View  {
                             onSwap: {
                                 navigationPath.append($0)
                             }
-                        ),
-                        onComplete: onComplete
+                        )
                     )
                 case .stake:
                     StakeNavigationView(
@@ -123,13 +121,21 @@ struct SelectedAssetNavigationStack: View  {
                             wallet: wallet,
                             chain: input.asset.id.chain
                         ),
-                        navigationPath: $navigationPath,
-                        onComplete: onComplete
+                        navigationPath: $navigationPath
                     )
                 }
             }
             .toolbarDismissItem(title: .done, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: TransferData.self) { data in
+                ConfirmTransferScene(
+                    model: viewModelFactory.confirmTransferScene(
+                        wallet: wallet,
+                        data: data,
+                        onComplete: onComplete
+                    )
+                )
+            }
         }
     }
 }

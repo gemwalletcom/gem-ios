@@ -56,7 +56,6 @@ public struct NetworkFeeScene: View {
                 subtitleExtra: model.fiatValue,
                 placeholders: [.subtitle]
             )
-            .listRowInsets(.assetListRowInsets)
         }
         
         .contentMargins(.top, .scene.top, for: .scrollContent)

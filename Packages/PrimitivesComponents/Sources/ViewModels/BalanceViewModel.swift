@@ -1,11 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
+import Formatters
 import Foundation
-import SwiftUI
 import Primitives
 import Style
-import Formatters
-import BigInt
+import SwiftUI
 
 public struct BalanceViewModel: Sendable {
     private static let fullFormatter = ValueFormatter(style: .full)
@@ -64,7 +64,7 @@ public struct BalanceViewModel: Sendable {
 
     public var stakingBalanceTextWithSymbol: String {
         let amount = switch StakeChain(rawValue: asset.chain.rawValue) {
-        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .none: balance.staked + balance.pending
+        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .ethereum, .none: balance.staked + balance.pending
         case .tron: balance.frozen + balance.locked + balance.pending
         }
         return formatter.string(amount, decimals: asset.decimals.asInt, currency: asset.symbol)
@@ -72,7 +72,7 @@ public struct BalanceViewModel: Sendable {
 
     public var hasStakingResources: Bool {
         switch StakeChain(rawValue: asset.chain.rawValue) {
-        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .none: false
+        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .ethereum, .none: false
         case .tron: !balance.frozen.isZero || !balance.locked.isZero
         }
     }

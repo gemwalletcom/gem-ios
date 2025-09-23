@@ -5,8 +5,8 @@
 import Foundation
 
 public enum FreezeType: String, Codable, Equatable, Hashable, Sendable {
-	case freeze = "Freeze"
-	case unfreeze = "Unfreeze"
+	case freeze
+	case unfreeze
 }
 
 public enum Resource: String, Codable, Equatable, Hashable, Sendable {
