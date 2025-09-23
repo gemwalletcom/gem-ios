@@ -363,7 +363,6 @@ extension AmountSceneViewModel {
         }
     }
 
-    // TODO: - simple int validator for tron voting(staking)
     private var inputValidators: [any TextValidator] {
         let source: AmountValidator.Source = switch amountInputType {
         case .asset: .asset
