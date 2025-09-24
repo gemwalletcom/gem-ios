@@ -43,7 +43,6 @@ public struct StakeDetailScene: View {
                     ListItemView(title: title, subtitle: subtitle)
                 }
             }
-            .listRowInsets(.assetListRowInsets)
 
             if let rewardsText = model.model.rewardsText {
                 Section {
@@ -57,7 +56,6 @@ public struct StakeDetailScene: View {
                         imageStyle: model.assetImageStyle
                     )
                 }
-                .listRowInsets(.assetListRowInsets)
             }
 
             //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()
@@ -84,7 +82,6 @@ public struct StakeDetailScene: View {
                         }
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
         }
         .navigationTitle(model.title)

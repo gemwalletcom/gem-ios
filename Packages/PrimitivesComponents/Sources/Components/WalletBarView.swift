@@ -34,7 +34,7 @@ public struct WalletBarView: View {
                     .fontWeight(.medium)
                     .foregroundColor(Colors.gray)
             }
-            .padding(.horizontal, .tiny)
+            .padding(.small)
         }
         .buttonStyle(.plain)
     }
