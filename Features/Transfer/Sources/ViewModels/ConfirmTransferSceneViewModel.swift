@@ -73,15 +73,9 @@ public final class ConfirmTransferSceneViewModel {
 
     var title: String { dataModel.title }
     var appTitle: String { Localized.WalletConnect.app }
-    var appAssetImage: AssetImage? { dataModel.appAssetImage }
-    var appText: String? {
-        if let value = dataModel.appValue {
-            return AppDisplayFormatter.format(name: value, host: websiteURL?.cleanHost())
-        }
-        return .none
-    }
+
     var websiteURL: URL? { dataModel.websiteURL }
-    var websiteTitle: String {Localized.Settings.website }
+    var websiteTitle: String { Localized.Settings.website }
 
     var senderTitle: String { Localized.Wallet.title }
     var senderValue: String { wallet.name }
@@ -262,6 +256,33 @@ extension ConfirmTransferSceneViewModel {
     func fetch() {
         Task {
             await fetch()
+        }
+    }
+}
+
+// MAKR: - ListSectionProvideable
+
+extension ConfirmTransferSceneViewModel: ListSectionProvideable {
+    public var sections: [ListSection<ConfirmTransferItem>] {
+        [
+            ListSection(type: .header, [.header]),
+            ListSection(type: .details, [.app, .sender, .network, .recipient, .memo, .swapDetails]),
+            ListSection(type: .fee, [.networkFee]),
+            ListSection(type: .error, [.error])
+        ]
+    }
+
+    public func itemModel(for item: ConfirmTransferItem) -> any ItemModelProvidable<ConfirmTransferItemModel> {
+        switch item {
+        case .header: ConfirmTransferHeaderViewModel(inputModel: state.value, metadata: metadata, data: data)
+        case .app: ConfirmTransferAppViewModel(type: data.type)
+        case .sender: ConfirmTransferSenderViewModel(wallet: wallet)
+        case .network: fatalError("implemet")
+        case .recipient: fatalError("implemet")
+        case .memo: fatalError("implemet")
+        case .swapDetails: fatalError("implemet")
+        case .networkFee: fatalError("implemet")
+        case .error: fatalError("implemet")
         }
     }
 }

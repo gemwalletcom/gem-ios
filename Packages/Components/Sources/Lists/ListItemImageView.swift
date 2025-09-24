@@ -28,6 +28,21 @@ public struct ListItemImageView: View {
         self.infoAction = infoAction
     }
     
+    public init(
+        model: ListItemModel,
+        assetImage: AssetImage? = nil,
+        imageSize: CGFloat? = nil
+    ) {
+        self.init(
+            title: model.title,
+            subtitle: model.subtitle,
+            subtitleStyle: model.subtitleStyle,
+            assetImage: assetImage ?? model.imageStyle?.assetImage,
+            imageSize: imageSize ?? model.imageStyle?.imageSize ?? .list.image,
+            infoAction: model.infoAction
+        )
+    }
+
     public var body: some View {
         HStack {
             ListItemView(

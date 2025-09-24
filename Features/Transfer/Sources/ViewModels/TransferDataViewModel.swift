@@ -72,22 +72,6 @@ struct TransferDataViewModel {
         }
     }
 
-    var appValue: String? {
-        switch type {
-        case .transfer,
-            .deposit,
-            .withdrawal,
-            .transferNft,
-            .swap,
-            .tokenApprove,
-            .stake,
-            .account,
-            .perpetual: .none
-        case .generic(_, let metadata, _):
-            metadata.shortName
-        }
-    }
-
     var websiteURL: URL? {
         switch type {
         case .transfer,
@@ -131,22 +115,6 @@ struct TransferDataViewModel {
         }
     }
     
-    var appAssetImage: AssetImage? {
-        switch type {
-        case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .swap,
-                .tokenApprove,
-                .stake,
-                .account,
-                .perpetual:
-                .none
-        case let .generic(_, session, _):
-            AssetImage(imageURL: session.icon.asURL)
-        }
-    }
 
     func availableValue(metadata: TransferDataMetadata?) -> BigInt {
         switch type {

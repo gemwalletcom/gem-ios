@@ -7,9 +7,9 @@ import Primitives
 import Components
 
 public struct TransactionHeaderListItemView: View {
-    let headerType: TransactionHeaderType
-    let showClearHeader: Bool
-    let action: VoidAction
+    private let headerType: TransactionHeaderType
+    private let showClearHeader: Bool
+    private let action: VoidAction
 
     public init(
         headerType: TransactionHeaderType,

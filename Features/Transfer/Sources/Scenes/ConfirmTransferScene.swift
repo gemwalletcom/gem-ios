@@ -17,60 +17,65 @@ public struct ConfirmTransferScene: View {
     }
 
     public var body: some View {
-        transactionsList
-            .safeAreaView {
-                StateButton(model.confirmButtonModel)
-                    .frame(maxWidth: .scene.button.maxWidth)
-                    .padding(.bottom, .scene.bottom)
-            }
-            .frame(maxWidth: .infinity)
-            .debounce(
-                value: model.feeModel.priority,
-                interval: nil,
-                action: model.onChangeFeePriority
-            )
-            .taskOnce { model.fetch() }
-            .navigationTitle(model.title)
+        ListSectionView(
+            provider: model,
+            content: content(for:)
+        )
+        .contentMargins([.top], .small, for: .scrollContent)
+        .listSectionSpacing(.compact)
+        .safeAreaView {
+            StateButton(model.confirmButtonModel)
+                .frame(maxWidth: .scene.button.maxWidth)
+                .padding(.bottom, .scene.bottom)
+        }
+        .frame(maxWidth: .infinity)
+        .debounce(
+            value: model.feeModel.priority,
+            interval: nil,
+            action: model.onChangeFeePriority
+        )
+        .taskOnce { model.fetch() }
+        .navigationTitle(model.title)
         // TODO: - move to navigation view
-            .navigationBarTitleDisplayMode(.inline)
-            .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
-            .sheet(item: $model.isPresentingSheet) {
-                switch $0 {
-                case .info(let type):
-                    InfoSheetScene(type: type)
-                case .url(let url):
-                    SFSafariView(url: url)
-                case .networkFeeSelector:
-                    NavigationStack {
-                        NetworkFeeScene(model: model.feeModel)
-                            .presentationDetentsForCurrentDeviceSize(expandable: true)
-                    }
-                case .fiatConnect(let assetAddress, let walletId):
-                    NavigationStack {
-                        FiatConnectNavigationView(
-                            model: FiatSceneViewModel(
-                                assetAddress: assetAddress,
-                                walletId: walletId.id
-                            )
+        .navigationBarTitleDisplayMode(.inline)
+        .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
+        .sheet(item: $model.isPresentingSheet) {
+            switch $0 {
+            case .info(let type):
+                InfoSheetScene(type: type)
+            case .url(let url):
+                SFSafariView(url: url)
+            case .networkFeeSelector:
+                NavigationStack {
+                    NetworkFeeScene(model: model.feeModel)
+                        .presentationDetentsForCurrentDeviceSize(expandable: true)
+                }
+            case .fiatConnect(let assetAddress, let walletId):
+                NavigationStack {
+                    FiatConnectNavigationView(
+                        model: FiatSceneViewModel(
+                            assetAddress: assetAddress,
+                            walletId: walletId.id
                         )
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            ToolbarDismissItem(
-                                title: .done,
-                                placement: .topBarLeading
-                            )
-                        }
+                    )
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarDismissItem(
+                            title: .done,
+                            placement: .topBarLeading
+                        )
                     }
-                case .swapDetails:
-                    if let swapDetailsViewModel = model.swapDetailsViewModel {
-                        NavigationStack {
-                            SwapDetailsView(model: Bindable(swapDetailsViewModel))
-                                .presentationDetentsForCurrentDeviceSize(expandable: true)
-                        }
+                }
+            case .swapDetails:
+                if let swapDetailsViewModel = model.swapDetailsViewModel {
+                    NavigationStack {
+                        SwapDetailsView(model: Bindable(swapDetailsViewModel))
+                            .presentationDetentsForCurrentDeviceSize(expandable: true)
                     }
                 }
             }
-            .alertSheet($model.isPresentingAlertMessage)
+        }
+        .alertSheet($model.isPresentingAlertMessage)
     }
 }
 
@@ -78,13 +83,46 @@ public struct ConfirmTransferScene: View {
 
 extension ConfirmTransferScene {
 
-    private var transactionsList: some View {
-        List {
+    @ViewBuilder
+    private func content(for itemModel: ConfirmTransferItemModel) -> some View {
+        switch itemModel {
+        case let .header(model):
             TransactionHeaderListItemView(
                 headerType: model.headerType,
                 showClearHeader: model.showClearHeader
             )
+        case let .app(model):
+            ListItemImageView(model: model)
+                .contextMenu(
+                    .url(title: self.model.websiteTitle, onOpen: self.model.onSelectOpenWebsiteURL)
+                )
+        case let .sender(model):
+            ListItemImageView(model:model)
+                .contextMenu([
+                        .copy(value: self.model.senderAddress),
+                        .url(title: self.model.senderExplorerText, onOpen: self.model.onSelectOpenSenderAddressURL)
+                    ])
+        case .participant: fatalError("TODO")
+        case .network(let title, let subtitle, let image): fatalError("TODO")
+        case .swapDetails(let swapDetailsViewModel): fatalError("TODO")
+        case .networkFee(let listItemModel, let isSelectable): fatalError("TODO")
+        case .error(let title, let error, let onInfoAction): fatalError("TODO")
+        case let .listItem(model): fatalError("TODO")
+        case .empty: fatalError("TODO")
+        }
+    }
+
+    // LEGACY:
+    private var transactionsList: some View {
+        List {
+            /* DONE
+            TransactionHeaderListItemView(
+                headerType: model.headerType,
+                showClearHeader: model.showClearHeader
+            )
+             */
             Section {
+                /* DONE
                 if let appText = model.appText {
                     ListItemImageView(
                         title: model.appTitle,
@@ -107,6 +145,7 @@ extension ConfirmTransferScene {
                         .url(title: model.senderExplorerText, onOpen: model.onSelectOpenSenderAddressURL)
                     ]
                 )
+                 */
 
                 ListItemImageView(
                     title: model.networkTitle,
