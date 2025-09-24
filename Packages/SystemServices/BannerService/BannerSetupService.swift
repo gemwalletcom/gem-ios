@@ -47,9 +47,9 @@ public struct BannerSetupService: Sendable {
         ])
     }
     
-    public func setupBuyCryptoBanner(walletId: WalletId) throws {
+    public func setupOnboarding(walletId: WalletId) throws {
         try store.addBanners([
-            NewBanner.buyCrypto(walletId: walletId)
+            NewBanner.onboarding(walletId: walletId)
         ])
     }
 }

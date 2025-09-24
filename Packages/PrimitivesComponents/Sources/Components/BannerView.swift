@@ -7,24 +7,21 @@ import Components
 import Style
 
 public struct BannerView: View {
-    private let banners: [BannerViewModel]
+    private let model: BannerViewModel
     private let action: ((BannerAction) -> Void)
-    
-    @State private var currentIndex: Int? = 0
 
     public init(
-        banners: [Banner],
+        banner: Banner,
         action: @escaping (BannerAction) -> Void
     ) {
-        self.banners = banners.map(BannerViewModel.init)
+        self.model = BannerViewModel(banner: banner)
         self.action = action
     }
 
     public var body: some View {
-        if banners.isNotEmpty {
-            VStack(spacing: .small) {
-                carouselTabView
-            }
+        switch model.viewType {
+        case .list: listView
+        case .banner: bannerView
         }
     }
 }
@@ -32,51 +29,7 @@ public struct BannerView: View {
 // MARK: - Private Views
 
 private extension BannerView {
-    var carouselTabView: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 0) {
-                ForEach(banners.indices, id: \.self) { index in
-                    bannerContent(for: banners[index])
-                        .containerRelativeFrame(.horizontal)
-                        .if(banners.count > 1) { view in
-                            view.padding(.bottom, .small)
-                        }
-                }
-            }
-            .scrollTargetLayout()
-        }
-        .scrollTargetBehavior(.paging)
-        .scrollPosition(id: $currentIndex)
-        .scrollDisabled(banners.count == 1)
-        .overlay(alignment: .bottom) {
-            if banners.count > 1 {
-                carouselIndicators
-                    .padding(.bottom, .small)
-            }
-        }
-    }
-    
-    @ViewBuilder
-    var carouselIndicators: some View {
-        HStack(spacing: .tiny) {
-            ForEach(0..<banners.count, id: \.self) { index in
-                Circle()
-                    .fill(index == (currentIndex ?? 0) ? Colors.blue : Colors.gray.opacity(0.3))
-                    .frame(size: .space6)
-            }
-        }
-    }
-    
-    @ViewBuilder
-    func bannerContent(for model: BannerViewModel) -> some View {
-        switch model.viewType {
-        case .list: listView(for: model)
-        case .banner: bannerView(for: model)
-        }
-    }
-    
-    @ViewBuilder
-    private func listView(for model: BannerViewModel) -> some View {
+    private var listView: some View {
         Button(
             action: { action(model.action) },
             label: {
@@ -103,9 +56,8 @@ private extension BannerView {
         )
         .buttonStyle(.listStyleColor())
     }
-    
-    @ViewBuilder
-    private func bannerView(for model: BannerViewModel) -> some View {
+
+    private var bannerView: some View {
         VStack(spacing: .medium) {
             if let image = model.image {
                 AssetImageView(assetImage: image, size: model.imageSize)

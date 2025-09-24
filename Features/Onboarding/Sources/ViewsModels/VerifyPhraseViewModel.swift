@@ -88,7 +88,7 @@ final class VerifyPhraseViewModel {
         let wallet = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
 
         WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
-        try bannerSetupService.setupBuyCryptoBanner(walletId: wallet.walletId)
+        try bannerSetupService.setupOnboarding(walletId: wallet.walletId)
         onFinish?()
     }
 }

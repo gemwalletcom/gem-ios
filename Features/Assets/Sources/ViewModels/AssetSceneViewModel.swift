@@ -138,15 +138,15 @@ public final class AssetSceneViewModel: Sendable {
         )
     }
     
-    var allBanners: [Banner] {
-        AssetBannersViewModel(assetData: assetData, banners: banners).allBanners
+    var assetBannerViewModel: AssetBannersViewModel {
+        AssetBannersViewModel(assetData: assetData, banners: banners)
     }
     
     var assetHeaderModel: AssetHeaderViewModel {
         AssetHeaderViewModel(
             assetDataModel: assetDataModel,
             walletModel: walletModel,
-            bannerEventsViewModel: HeaderBannerEventViewModel(events: allBanners.map(\.event))
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: assetBannerViewModel.allBanners.map(\.event))
         )
     }
 

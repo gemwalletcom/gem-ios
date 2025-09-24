@@ -119,6 +119,12 @@ public final class WalletSceneViewModel: Sendable {
             bannerEventsViewModel: HeaderBannerEventViewModel(events: banners.map(\.event))
         )
     }
+    
+    var priorityBanner: Banner? {
+        banners
+            .sorted { $0.state < $1.state }
+            .first
+    }
 }
 
 // MARK: - Business Logic

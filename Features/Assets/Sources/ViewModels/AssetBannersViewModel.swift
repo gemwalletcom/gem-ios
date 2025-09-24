@@ -19,6 +19,10 @@ public final class AssetBannersViewModel: Sendable {
         self.banners = banners
     }
     
+    public var priorityBanner: Banner? {
+        allBanners.first
+    }
+    
     public var allBanners: [Banner] {
         (extraBanners + banners)
             .filter { shouldShowBanner($0) }

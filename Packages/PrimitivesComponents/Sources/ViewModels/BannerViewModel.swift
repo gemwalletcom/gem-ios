@@ -35,7 +35,7 @@ struct BannerViewModel {
         case .suspiciousAsset:
             return AssetImage.image(Images.TokenStatus.risk)
         case .buyCrypto:
-            return AssetImage.image(Images.Banners.pengu)
+            return AssetImage.image(Images.System.bitcoin)
         }
     }
 
@@ -101,7 +101,7 @@ struct BannerViewModel {
                 .accountBlockedMultiSignature,
                 .activateAsset,
                 .suspiciousAsset: 28
-        case .buyCrypto: .image.large
+        case .buyCrypto: .image.medium
         }
     }
 

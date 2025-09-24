@@ -27,13 +27,16 @@ public struct AssetScene: View {
                 .padding(.bottom, .medium)
             }
             .cleanListRow()
-            Section {
-                BannerView(
-                    banners: model.allBanners,
-                    action: model.onSelectBanner
-                )
+            
+            if let banner = model.assetBannerViewModel.priorityBanner {
+                Section {
+                    BannerView(
+                        banner: banner,
+                        action: model.onSelectBanner
+                    )
+                }
+                .listRowInsets(.zero)
             }
-            .listRowInsets(.zero)
 
             if model.showStatus {
                 Section {
