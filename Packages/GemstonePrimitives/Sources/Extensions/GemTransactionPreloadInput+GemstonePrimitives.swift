@@ -4,9 +4,9 @@ import Primitives
 import Gemstone
 
 extension TransactionPreloadInput {
-    public func map() -> GemTransactionPreloadInput {
+    public func map() throws -> GemTransactionPreloadInput {
         return GemTransactionPreloadInput(
-            inputType: inputType.transactionType.rawValue,
+            inputType: try inputType.map(),
             senderAddress: senderAddress,
             destinationAddress: destinationAddress
         )
