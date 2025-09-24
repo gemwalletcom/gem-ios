@@ -48,7 +48,6 @@ public struct NetworkFeeScene: View {
                     .multilineTextAlignment(.leading)
                     .headerProminence(.increased)
             }
-            .listRowInsets(.assetListRowInsets)
             
             ListItemView(
                 title: model.title,
