@@ -98,7 +98,7 @@ private extension BannerView {
             Images.System.xmark
                 .symbolRenderingMode(.hierarchical)
                 .foregroundColor(Colors.gray)
-                .padding(.small)
+                .padding(.tiny)
                 .liquidGlass { _ in
                     ListButton(
                         image: Images.System.xmarkCircle,
