@@ -67,9 +67,9 @@ public struct ConfirmTransferScene: View {
                     }
                 }
             case .swapDetails:
-                if let swapDetailsViewModel = model.swapDetailsViewModel {
+                if let model = model.swapDetailsViewModel.swapDetailsModel {
                     NavigationStack {
-                        SwapDetailsView(model: Bindable(swapDetailsViewModel))
+                        SwapDetailsView(model: Bindable(model))
                             .presentationDetentsForCurrentDeviceSize(expandable: true)
                     }
                 }

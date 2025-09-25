@@ -13,22 +13,26 @@ struct ConfirmTransferSwapDetailsViewModel {
         self.type = type
         self.metadata = metadata
     }
+
+    var swapDetailsModel: SwapDetailsViewModel? {
+        guard case let .swap(fromAsset, toAsset, swapData) = type else {
+            return nil
+        }
+        return SwapDetailsViewModel(
+            fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
+            toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
+            selectedQuote: swapData.quote
+        )
+    }
 }
 
 // MARK: - ItemModelProvidable
 
 extension ConfirmTransferSwapDetailsViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel {
-        guard case let .swap(fromAsset, toAsset, swapData) = type else {
+        guard let swapDetailsModel = swapDetailsModel else {
             return .empty
         }
-        return .swapDetails(
-            SwapDetailsViewModel(
-                fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
-                toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
-                selectedQuote: swapData.quote
-            )
-        )
+        return .swapDetails(swapDetailsModel)
     }
 }
-

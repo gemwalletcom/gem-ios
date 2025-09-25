@@ -95,16 +95,8 @@ public final class ConfirmTransferSceneViewModel {
         )
     }
 
-    // TODO: - remove and extend enum type with model - SwapDetailsViewModel
-    var swapDetailsViewModel: SwapDetailsViewModel? {
-        guard case let .swap(fromAsset, toAsset, swapData) = data.type else {
-            return nil
-        }
-        return SwapDetailsViewModel(
-            fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
-            toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
-            selectedQuote: swapData.quote
-        )
+    var swapDetailsViewModel: ConfirmTransferSwapDetailsViewModel {
+        ConfirmTransferSwapDetailsViewModel(type: data.type, metadata: metadata)
     }
 }
 
@@ -139,7 +131,7 @@ extension ConfirmTransferSceneViewModel: ListSectionProvideable {
         case .memo:
             ConfirmTransferMemoViewModel(type: data.type, recipientData: data.recipientData)
         case .swapDetails:
-            ConfirmTransferSwapDetailsViewModel(type: data.type, metadata: metadata)
+            swapDetailsViewModel
         case .networkFee:
             ConfirmTransferNetworkFeeViewModel(
                 state: state,
