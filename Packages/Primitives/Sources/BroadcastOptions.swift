@@ -6,8 +6,10 @@ import Foundation
 
 public struct BroadcastOptions: Codable, Equatable, Hashable, Sendable {
 	public let skipPreflight: Bool
+	public let fromAddress: String?
 
-	public init(skipPreflight: Bool) {
+	public init(skipPreflight: Bool, fromAddress: String?) {
 		self.skipPreflight = skipPreflight
+		self.fromAddress = fromAddress
 	}
 }
