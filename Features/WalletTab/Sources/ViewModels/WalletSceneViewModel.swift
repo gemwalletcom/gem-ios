@@ -74,7 +74,7 @@ public final class WalletSceneViewModel: Sendable {
             events: [
                 .enableNotifications,
                 .accountBlockedMultiSignature,
-                .buyCrypto
+                .onboarding
             ]
         )
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
@@ -108,9 +108,6 @@ public final class WalletSceneViewModel: Sendable {
         )
     }
 
-    var showWalletHeader: Bool {
-        !banners.contains(where: { $0.event == .buyCrypto })
-    }
     var walletHeaderModel: WalletHeaderViewModel {
         WalletHeaderViewModel(
             walletType: wallet.type,
@@ -119,11 +116,12 @@ public final class WalletSceneViewModel: Sendable {
             bannerEventsViewModel: HeaderBannerEventViewModel(events: banners.map(\.event))
         )
     }
-    
-    var priorityBanner: Banner? {
-        banners
-            .sorted { $0.state < $1.state }
-            .first
+
+    var walletBannersModel: WalletSceneBannersViewModel {
+        WalletSceneBannersViewModel(
+            banners: banners,
+            totalFiatValue: totalFiatValue
+        )
     }
 }
 

@@ -35,8 +35,9 @@ struct WalletSceneViewModelTests {
             .mock(event: .accountActivation, state: .alwaysActive)
         ]
 
-        #expect(model.priorityBanner?.state == .alwaysActive)
+        #expect(model.walletBannersModel.priorityBanner?.state == .alwaysActive)
     }
+
 }
 
 extension WalletSceneViewModel {

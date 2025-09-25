@@ -147,7 +147,7 @@ extension NewBanner {
     public static func onboarding(walletId: WalletId) -> NewBanner {
         NewBanner(
             walletId: walletId.id,
-            event: .buyCrypto,
+            event: .onboarding,
             state: .active
         )
     }

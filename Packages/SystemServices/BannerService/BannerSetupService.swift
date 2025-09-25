@@ -34,11 +34,8 @@ public struct BannerSetupService: Sendable {
     }
 
     public func setupWallet(wallet: Wallet) throws  {
-        let chains: [Chain] = [.xrp, .stellar, .algorand]
-        let banners = chains.map {
-            NewBanner.accountActivation(assetId: $0.assetId)
-        }
-        try store.addBanners(banners)
+        try setupAccountActivation()
+        try setupOnboarding(wallet: wallet)
     }
     
     public func setupAccountMultiSignatureWallet(walletId: WalletId, chain: Chain) throws {
@@ -47,9 +44,21 @@ public struct BannerSetupService: Sendable {
         ])
     }
     
-    public func setupOnboarding(walletId: WalletId) throws {
-        try store.addBanners([
-            NewBanner.onboarding(walletId: walletId)
-        ])
+    // MARK: - Private methods
+    
+    private func setupAccountActivation() throws {
+        let chains: [Chain] = [.xrp, .stellar, .algorand]
+        let banners = chains.map {
+            NewBanner.accountActivation(assetId: $0.assetId)
+        }
+        try store.addBanners(banners)
+    }
+    
+    private func setupOnboarding(wallet: Wallet) throws {
+        if WalletPreferences(walletId: wallet.id).isCompleteInitialSynchronization, !wallet.isViewOnly {
+            try store.addBanners([
+                NewBanner.onboarding(walletId: wallet.walletId)
+            ])
+        }
     }
 }

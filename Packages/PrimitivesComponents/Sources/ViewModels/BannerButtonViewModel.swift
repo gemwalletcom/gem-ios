@@ -3,6 +3,7 @@
 import Foundation
 import Localization
 import Primitives
+import Style
 
 struct BannerButtonViewModel: Identifiable {
     let button: BannerButton
@@ -16,6 +17,14 @@ struct BannerButtonViewModel: Identifiable {
         switch button {
         case .buy: Localized.Wallet.buy
         case .receive: Localized.Wallet.receive
+        }
+    }
+    
+    @MainActor
+    var style: ColorButtonStyle {
+        switch button {
+        case .buy: .blue(paddingVertical: .small, isGlassEffectEnabled: true)
+        case .receive: .lightGray(paddingVertical: .small, isGlassEffectEnabled: true)
         }
     }
     

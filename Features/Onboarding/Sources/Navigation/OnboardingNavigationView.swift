@@ -15,7 +15,6 @@ public struct OnboardingNavigationView: View {
             .sheet(isPresented: $model.isPresentingCreateWalletSheet) {
                 CreateWalletNavigationStack(
                     walletService: model.walletService,
-                    bannerSetupService: model.bannerSetupService,
                     isPresentingWallets: $model.isPresentingCreateWalletSheet
                 )
             }

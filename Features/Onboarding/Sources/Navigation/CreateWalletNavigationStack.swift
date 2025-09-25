@@ -11,15 +11,12 @@ public struct CreateWalletNavigationStack: View {
     @Binding private var isPresentingWallets: Bool
     
     private let walletService: WalletService
-    private let bannerSetupService: BannerSetupService
 
     public init(
         walletService: WalletService,
-        bannerSetupService: BannerSetupService,
         isPresentingWallets: Binding<Bool>
     ) {
         self.walletService = walletService
-        self.bannerSetupService = bannerSetupService
         _isPresentingWallets = isPresentingWallets
     }
 
@@ -42,11 +39,7 @@ public struct CreateWalletNavigationStack: View {
                     model: VerifyPhraseViewModel(
                         words: $0.words,
                         walletService: walletService,
-                        bannerSetupService: bannerSetupService,
-                        onFinish: {
-                            walletService.acceptTerms()
-                            isPresentingWallets.toggle()
-                        }
+                        onFinish: { isPresentingWallets.toggle() }
                     )
                 )
             }

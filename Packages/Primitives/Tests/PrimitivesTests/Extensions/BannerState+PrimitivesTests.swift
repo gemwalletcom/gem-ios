@@ -4,18 +4,6 @@ import Testing
 @testable import Primitives
 
 struct BannerStateComparableTests {
-    
-    @Test
-    func bannerStateSorting() {
-        let alwaysActive = BannerState.alwaysActive
-        let active = BannerState.active
-        let cancelled = BannerState.cancelled
-        
-        #expect(alwaysActive < active)
-        #expect(active < cancelled)
-        #expect(alwaysActive < cancelled)
-    }
-    
     @Test
     func bannerStateSortPriority() {
         let banners = [

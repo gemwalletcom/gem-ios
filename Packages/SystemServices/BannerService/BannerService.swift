@@ -29,7 +29,7 @@ public struct BannerService: Sendable {
                 case .accountActivation,
                     .accountBlockedMultiSignature:
                     true
-                case .stake, .activateAsset, .suspiciousAsset, .buyCrypto:
+                case .stake, .activateAsset, .suspiciousAsset, .onboarding:
                     false
                 }
             case .closeBanner: true

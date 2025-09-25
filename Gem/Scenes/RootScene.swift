@@ -25,7 +25,7 @@ struct RootScene: View {
                 .alertSheet($model.updateVersionAlertMessage)
             } else {
                 OnboardingNavigationView(
-                    model: .init(walletService: model.walletService, nameService: model.nameService, bannerSetupService: model.bannerSetupService)
+                    model: .init(walletService: model.walletService, nameService: model.nameService)
                 )
             }
         }

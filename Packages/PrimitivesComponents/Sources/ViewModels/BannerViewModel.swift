@@ -34,7 +34,7 @@ struct BannerViewModel {
             return AssetImage.image(Images.System.exclamationmarkTriangle)
         case .suspiciousAsset:
             return AssetImage.image(Images.TokenStatus.risk)
-        case .buyCrypto:
+        case .onboarding:
             return AssetImage.image(Images.System.bitcoin)
         }
     }
@@ -56,7 +56,7 @@ struct BannerViewModel {
             return Localized.Transfer.ActivateAsset.title
         case .suspiciousAsset:
             return Localized.Banner.AssetStatus.title
-        case .buyCrypto: return "Welcome Aboard"
+        case .onboarding: return "Welcome to the Gem Family"
         }
     }
 
@@ -85,7 +85,7 @@ struct BannerViewModel {
             return Localized.Banner.ActivateAsset.description(asset.symbol, asset.chain.asset.name)
         case .suspiciousAsset:
             return Localized.Banner.AssetStatus.description
-        case .buyCrypto: return "Add your first crypto and start your journey"
+        case .onboarding: return "Buy or Receive crypto to your wallet to get started"
         }
     }
 
@@ -101,7 +101,7 @@ struct BannerViewModel {
                 .accountBlockedMultiSignature,
                 .activateAsset,
                 .suspiciousAsset: 28
-        case .buyCrypto: .image.medium
+        case .onboarding: .image.medium
         }
     }
 
@@ -113,7 +113,7 @@ struct BannerViewModel {
             .suspiciousAsset: 14
         case .enableNotifications,
             .accountBlockedMultiSignature,
-            .buyCrypto: 0
+            .onboarding: 0
         }
     }
     
@@ -130,7 +130,7 @@ struct BannerViewModel {
         case .stake,
             .enableNotifications,
             .activateAsset,
-            .buyCrypto:
+            .onboarding:
             return.none
         case .accountActivation:
             return asset?.chain.accountActivationFeeUrl
@@ -157,7 +157,7 @@ struct BannerViewModel {
                 .accountBlockedMultiSignature,
                 .activateAsset,
                 .suspiciousAsset: .list
-        case .buyCrypto: .banner
+        case .onboarding: .banner
         }
     }
     
@@ -169,7 +169,7 @@ struct BannerViewModel {
                 .accountBlockedMultiSignature,
                 .activateAsset,
                 .suspiciousAsset: []
-        case .buyCrypto: [
+        case .onboarding: [
             BannerButtonViewModel(button: .buy, banner: banner),
             BannerButtonViewModel(button: .receive, banner: banner)
         ]

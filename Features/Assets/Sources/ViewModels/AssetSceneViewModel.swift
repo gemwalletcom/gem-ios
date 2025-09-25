@@ -240,7 +240,7 @@ extension AssetSceneViewModel {
             case .enableNotifications,
                     .accountActivation,
                     .accountBlockedMultiSignature,
-                    .buyCrypto:
+                    .onboarding:
                 Task {
                     try await bannerService.handleAction(action)
                 }

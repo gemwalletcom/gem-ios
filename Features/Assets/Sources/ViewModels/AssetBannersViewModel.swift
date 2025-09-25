@@ -26,7 +26,7 @@ public final class AssetBannersViewModel: Sendable {
     public var allBanners: [Banner] {
         (extraBanners + banners)
             .filter { shouldShowBanner($0) }
-            .sorted { $0.state < $1.state }
+            .sorted { $0 < $1 }
     }
     
     // MARK: - Private
@@ -45,7 +45,7 @@ public final class AssetBannersViewModel: Sendable {
         case .stake: assetData.balance.staked.isZero
         case .activateAsset: !assetData.metadata.isActive
         case .suspiciousAsset: AssetScoreTypeViewModel(score: assetData.metadata.rankScore).shouldShowBanner
-        case .buyCrypto: false
+        case .onboarding: false
         }
     }
 }

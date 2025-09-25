@@ -19,9 +19,16 @@ public struct BannerView: View {
     }
 
     public var body: some View {
-        switch model.viewType {
-        case .list: listView
-        case .banner: bannerView
+        ZStack(alignment: .topTrailing) {
+            switch model.viewType {
+            case .list: listView
+            case .banner: bannerView
+            }
+            
+            if model.canClose {
+                closeButton
+                    .padding([.top, .trailing], .medium)
+            }
         }
     }
 }
@@ -42,16 +49,8 @@ private extension BannerView {
 
                     if model.canClose {
                         Spacer()
-
-                        ListButton(
-                            image: Images.System.xmarkCircle,
-                            action: { action(model.closeAction) }
-                        )
-                        .padding(.vertical, .small)
-                        .foregroundColor(Colors.gray)
                     }
                 }
-                .frame(maxHeight: .infinity)
             }
         )
         .buttonStyle(.listStyleColor())
@@ -63,15 +62,18 @@ private extension BannerView {
                 AssetImageView(assetImage: image, size: model.imageSize)
             }
             
-            if let title = model.title {
-                Text(title)
-                    .textStyle(TextStyle(font: .body, color: .primary, fontWeight: .semibold))
+            VStack(spacing: .small) {
+                if let title = model.title {
+                    Text(title)
+                        .textStyle(TextStyle(font: .body, color: .primary, fontWeight: .semibold))
+                }
+                
+                if let subtitle = model.description {
+                    Text(subtitle)
+                        .textStyle(.bodySecondary)
+                }
             }
-            
-            if let subtitle = model.description {
-                Text(subtitle)
-                    .textStyle(.calloutSecondary)
-            }
+            .multilineTextAlignment(.center)
 
             HStack(spacing: .medium) {
                 ForEach(model.buttons) { button in
@@ -81,15 +83,31 @@ private extension BannerView {
                         Text(button.title)
                     }
                     .frame(maxWidth: .infinity)
-                    .buttonStyle(.blue(
-                        paddingVertical: .small,
-                        isGlassEffectEnabled: true
-                    ))
+                    .buttonStyle(button.style)
                 }
             }
         }
         .padding()
         .frame(maxWidth: .infinity)
+    }
+    
+    private var closeButton: some View {
+        Button {
+            action(model.closeAction)
+        } label: {
+            Images.System.xmark
+                .symbolRenderingMode(.hierarchical)
+                .foregroundColor(Colors.gray)
+                .padding(.small)
+                .liquidGlass { _ in
+                    ListButton(
+                        image: Images.System.xmarkCircle,
+                        action: { action(model.closeAction) }
+                    )
+                    .foregroundColor(Colors.gray)
+                }
+        }
+        .buttonStyle(.borderless)
     }
 }
 
