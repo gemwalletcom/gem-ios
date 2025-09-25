@@ -10,10 +10,12 @@ public extension GemTransactionInputType {
         switch self {
         case .transfer(let asset): asset
         case .deposit(let asset): asset
+        case .transferNft(let asset, _): asset
         case .swap(let fromAsset, _, _): fromAsset
         case .stake(let asset, _): asset
         case .tokenApprove(let asset, _): asset
         case .generic(let asset, _, _): asset
+        case .account(let asset, _): asset
         case .perpetual(asset: let asset, perpetualType: _): asset
         }
     }
@@ -28,12 +30,16 @@ public extension GemTransactionInputType {
             return try TransferDataType.deposit(asset.map())
         case .swap(let fromAsset, let toAsset, let gemSwapData):
             return try TransferDataType.swap(fromAsset.map(), toAsset.map(), gemSwapData.map())
+        case .transferNft(_, let nftAsset):
+            return try TransferDataType.transferNft(nftAsset.map())
         case .stake(let asset, let type):
             return try TransferDataType.stake(asset.map(), type.map())
         case .tokenApprove(let asset, let approvalData):
             return try TransferDataType.tokenApprove(asset.map(), approvalData.map())
         case .generic(let asset, let metadata, let extra):
             return try TransferDataType.generic(asset: asset.map(), metadata: metadata.map(), extra: extra.map())
+        case .account(let asset, let accountType):
+            return try TransferDataType.account(asset.map(), accountType.map())
         case .perpetual(asset: let asset, perpetualType: let perpetualType):
             return try TransferDataType.perpetual(asset.map(), perpetualType.map())
         }
@@ -49,6 +55,8 @@ public extension TransferDataType {
             return .deposit(asset: asset.map())
         case .swap(let fromAsset, let toAsset, let swapData):
             return .swap(fromAsset: fromAsset.map(), toAsset: toAsset.map(), swapData: swapData.map())
+        case .transferNft(let nftAsset):
+            return .transferNft(asset: Asset(nftAsset.chain).map(), nftAsset: nftAsset.map())
         case .stake(let asset, let stakeType):
             return .stake(asset: asset.map(), stakeType: stakeType.map())
         case .tokenApprove(let asset, let approvalData):
@@ -60,8 +68,8 @@ public extension TransferDataType {
                 return .transfer(asset: asset.map())
             }
             throw AnyError("Unsupported transaction type: \(self)")
-        case .transferNft, .account:
-            throw AnyError("Unsupported transaction type: \(self)")
+        case .account(let asset, let accountData):
+            return .account(asset: asset.map(), accountType: accountData.map())
         case .perpetual(let asset, let perpetualType):
             return .perpetual(asset: asset.map(), perpetualType: perpetualType.map())
         }
