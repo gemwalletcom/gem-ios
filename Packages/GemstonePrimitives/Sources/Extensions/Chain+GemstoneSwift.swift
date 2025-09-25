@@ -7,7 +7,7 @@ import BigInt
 
 public extension Primitives.Chain {
     var asset: Asset {
-        let assetWrapper = assetWrapper(chain: id)
+        let assetWrapper = try! assetWrapper(chain: self.rawValue).map()
         return Asset(
             id: assetId,
             name: assetWrapper.name,

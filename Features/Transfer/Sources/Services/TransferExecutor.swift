@@ -98,8 +98,6 @@ extension TransferExecutor {
                 )
             case .swap, .generic: BroadcastOptions(skipPreflight: true)
             }
-        case .hyperCore:
-            BroadcastOptions(skipPreflight: false, fromAddress: walletAddress)
         default: BroadcastOptions(skipPreflight: false)
         }
     }
