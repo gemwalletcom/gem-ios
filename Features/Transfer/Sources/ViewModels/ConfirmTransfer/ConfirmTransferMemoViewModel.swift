@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Primitives
-import Localization
+import PrimitivesComponents
 import Components
 
 struct ConfirmTransferMemoViewModel {
@@ -18,31 +18,18 @@ struct ConfirmTransferMemoViewModel {
 
 extension ConfirmTransferMemoViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel {
-        guard shouldShowMemo else { return .empty }
-        return .memo(
-            .text(
-                title: Localized.Transfer.memo,
-                subtitle: formattedMemo
-            )
-        )
+        guard showMemo else { return .empty }
+        return .memo(MemoViewModel(memo: recipientData.recipient.memo).listItemModel)
     }
 }
 
 // MARK: - Private
 
 extension ConfirmTransferMemoViewModel {
-    private var memo: String? { recipientData.recipient.memo }
-
-    private var shouldShowMemo: Bool {
+    private var showMemo: Bool {
         switch type {
         case .transfer, .deposit, .withdrawal: type.chain.isMemoSupported
         case .transferNft, .swap, .tokenApprove, .generic, .account, .stake, .perpetual: false
         }
     }
-
-    private var formattedMemo: String {
-        let value = memo ?? ""
-        return value.isEmpty ? "-" : value
-    }
 }
-

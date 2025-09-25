@@ -95,6 +95,7 @@ public final class ConfirmTransferSceneViewModel {
         )
     }
 
+    // TODO: - remove and extend enum type with model - SwapDetailsViewModel
     var swapDetailsViewModel: SwapDetailsViewModel? {
         guard case let .swap(fromAsset, toAsset, swapData) = data.type else {
             return nil
@@ -104,6 +105,56 @@ public final class ConfirmTransferSceneViewModel {
             toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
             selectedQuote: swapData.quote
         )
+    }
+}
+
+// MARK: - ListSectionProvideable
+
+extension ConfirmTransferSceneViewModel: ListSectionProvideable {
+    public var sections: [ListSection<ConfirmTransferItem>] {
+        [
+            ListSection(type: .header, [.header]),
+            ListSection(type: .details, [.app, .sender, .network, .recipient, .memo, .swapDetails]),
+            ListSection(type: .fee, [.networkFee]),
+            ListSection(type: .error, [.error])
+        ]
+    }
+
+    public func itemModel(for item: ConfirmTransferItem) -> any ItemModelProvidable<ConfirmTransferItemModel> {
+        switch item {
+        case .header:
+            ConfirmTransferHeaderViewModel(inputModel: state.value, metadata: metadata, data: data)
+        case .app:
+            ConfirmTransferAppViewModel(type: data.type)
+        case .sender:
+            ConfirmTransferSenderViewModel(wallet: wallet)
+        case .network:
+            ConfirmTransferNetworkViewModel(type: data.type)
+        case .recipient:
+            ConfirmTransferRecipientViewModel(
+                model: dataModel,
+                addressName: try? confirmService.getAddressName(chain: dataModel.chain, address: dataModel.recipient.address),
+                addressLink: confirmService.getExplorerLink(chain: dataModel.chain, address: dataModel.recipient.address)
+            )
+        case .memo:
+            ConfirmTransferMemoViewModel(type: data.type, recipientData: data.recipientData)
+        case .swapDetails:
+            ConfirmTransferSwapDetailsViewModel(type: data.type, metadata: metadata)
+        case .networkFee:
+            ConfirmTransferNetworkFeeViewModel(
+                state: state,
+                title: feeModel.title,
+                value: feeModel.value,
+                fiatValue: feeModel.fiatValue,
+                showFeeRatesSelector: feeModel.showFeeRatesSelector,
+                infoAction: onSelectNetworkFeeInfo
+            )
+        case .error:
+            ConfirmTransferErrorViewModel(
+                state: state,
+                onSelectListError: onSelectListError
+            )
+        }
     }
 }
 
@@ -156,56 +207,6 @@ extension ConfirmTransferSceneViewModel {
     func fetch() {
         Task {
             await fetch()
-        }
-    }
-}
-
-// MARK: - ListSectionProvideable
-
-extension ConfirmTransferSceneViewModel: ListSectionProvideable {
-    public var sections: [ListSection<ConfirmTransferItem>] {
-        [
-            ListSection(type: .header, [.header]),
-            ListSection(type: .details, [.app, .sender, .network, .recipient, .memo, .swapDetails]),
-            ListSection(type: .fee, [.networkFee]),
-            ListSection(type: .error, [.error])
-        ]
-    }
-
-    public func itemModel(for item: ConfirmTransferItem) -> any ItemModelProvidable<ConfirmTransferItemModel> {
-        switch item {
-        case .header:
-            ConfirmTransferHeaderViewModel(inputModel: state.value, metadata: metadata, data: data)
-        case .app:
-            ConfirmTransferAppViewModel(type: data.type)
-        case .sender:
-            ConfirmTransferSenderViewModel(wallet: wallet)
-        case .network:
-            ConfirmTransferNetworkViewModel(type: data.type)
-        case .recipient:
-            ConfirmTransferRecipientViewModel(
-                model: dataModel,
-                addressName: try? confirmService.getAddressName(chain: dataModel.chain, address: dataModel.recipient.address),
-                addressLink: confirmService.getExplorerLink(chain: dataModel.chain, address: dataModel.recipient.address)
-            )
-        case .memo:
-            ConfirmTransferMemoViewModel(type: data.type, recipientData: data.recipientData)
-        case .swapDetails:
-            ConfirmTransferSwapDetailsViewModel(type: data.type, metadata: metadata)
-        case .networkFee:
-            ConfirmTransferNetworkFeeViewModel(
-                state: state,
-                title: feeModel.title,
-                value: feeModel.value,
-                fiatValue: feeModel.fiatValue,
-                showFeeRatesSelector: feeModel.showFeeRatesSelector,
-                infoAction: onSelectNetworkFeeInfo
-            )
-        case .error:
-            ConfirmTransferErrorViewModel(
-                state: state,
-                onSelectListError: onSelectListError
-            )
         }
     }
 }

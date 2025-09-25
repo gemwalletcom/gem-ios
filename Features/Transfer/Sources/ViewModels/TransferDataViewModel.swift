@@ -104,37 +104,3 @@ struct TransferDataViewModel {
         }
     }
 }
-
-// MARK: - Private
-
-extension TransferDataViewModel {
-    private var recipientName: String? {
-        switch type {
-        case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .swap,
-                .tokenApprove,
-                .generic,
-                .account,
-                .perpetual:
-            recipient.name ?? recipient.address
-        case .stake(_, let stakeType):
-            switch stakeType {
-            case .stake(let validator):
-                validator.name
-            case .unstake(let delegation):
-                delegation.validator.name
-            case .redelegate(let data):
-                data.toValidator.name
-            case .withdraw(let delegation):
-                delegation.validator.name
-            case .rewards:
-                    .none
-            case .freeze(let data):
-                ResourceViewModel(resource: data.resource).title
-            }
-        }
-    }
-}
