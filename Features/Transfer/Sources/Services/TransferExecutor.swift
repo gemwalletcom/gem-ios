@@ -31,8 +31,7 @@ public struct TransferExecutor: TransferExecutable {
 
     public func execute(input: TransferConfirmationInput) async throws {
         let signedData = try sign(input: input)
-        let walletAddress = try? input.wallet.account(for: input.data.chain).address
-        let options = broadcastOptions(data: input.data, walletAddress: walletAddress)
+        let options = broadcastOptions(data: input.data)
 
         for (index, transactionData) in signedData.enumerated() {
             NSLog("TransferExecutor data \(transactionData)")
@@ -89,7 +88,7 @@ extension TransferExecutor {
         )
     }
 
-    private func broadcastOptions(data: TransferData, walletAddress: String? = nil) -> BroadcastOptions {
+    private func broadcastOptions(data: TransferData) -> BroadcastOptions {
         switch data.chain {
         case .solana:
             switch data.type {
