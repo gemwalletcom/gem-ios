@@ -31,14 +31,14 @@ public enum ConfirmTransferItem: Identifiable, Equatable, Sendable {
 }
 
 public enum ConfirmTransferItemModel {
-    case listItem(ListItemModel)
     case app(ListItemModel)
     case sender(ListItemModel)
     case header(TransactionHeaderItemModel)
-    case participant//(TransactionParticipantItemModel)
-    case network(title: String, subtitle: String, image: AssetImage)
+    case recipient(AddressListItemViewModel)
+    case network(ListItemModel)
+    case memo(ListItemModel)
     case swapDetails(SwapDetailsViewModel)
-    case networkFee(ListItemModel, isSelectable: Bool)
+    case networkFee(ListItemModel, selectable: Bool)
     case error(title: String, error: Error, onInfoAction: VoidAction)
     case empty
 }

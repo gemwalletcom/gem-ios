@@ -39,7 +39,6 @@ public struct ListSectionView<Item: Identifiable & Sendable, Content: View>: Vie
                         }
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
         }
     }

@@ -28,17 +28,13 @@ public struct ListItemImageView: View {
         self.infoAction = infoAction
     }
     
-    public init(
-        model: ListItemModel,
-        assetImage: AssetImage? = nil,
-        imageSize: CGFloat? = nil
-    ) {
+    public init(model: ListItemModel) {
         self.init(
             title: model.title,
             subtitle: model.subtitle,
             subtitleStyle: model.subtitleStyle,
-            assetImage: assetImage ?? model.imageStyle?.assetImage,
-            imageSize: imageSize ?? model.imageStyle?.imageSize ?? .list.image,
+            assetImage: model.imageStyle?.assetImage,
+            imageSize: model.imageStyle?.imageSize ?? .list.image,
             infoAction: model.infoAction
         )
     }

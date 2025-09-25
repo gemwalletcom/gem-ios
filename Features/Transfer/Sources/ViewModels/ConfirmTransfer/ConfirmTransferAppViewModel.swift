@@ -48,7 +48,7 @@ extension ConfirmTransferAppViewModel {
             ListItemModel(
                 title: Localized.WalletConnect.app,
                 subtitle: subtitle,
-                imageStyle: ListItemImageStyle.asset(assetImage: appAssetImage)
+                imageStyle: .list(assetImage: assetImage)
             )
         )
     }
@@ -73,7 +73,7 @@ extension ConfirmTransferAppViewModel {
         }
     }
 
-    private var appAssetImage: AssetImage? {
+    private var assetImage: AssetImage? {
         switch type {
         case .transfer,
                 .deposit,

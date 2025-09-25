@@ -99,109 +99,38 @@ extension ConfirmTransferScene {
         case let .sender(model):
             ListItemImageView(model:model)
                 .contextMenu([
-                        .copy(value: self.model.senderAddress),
-                        .url(title: self.model.senderExplorerText, onOpen: self.model.onSelectOpenSenderAddressURL)
-                    ])
-        case .participant: fatalError("TODO")
-        case .network(let title, let subtitle, let image): fatalError("TODO")
-        case .swapDetails(let swapDetailsViewModel): fatalError("TODO")
-        case .networkFee(let listItemModel, let isSelectable): fatalError("TODO")
-        case .error(let title, let error, let onInfoAction): fatalError("TODO")
-        case let .listItem(model): fatalError("TODO")
-        case .empty: fatalError("TODO")
-        }
-    }
-
-    // LEGACY:
-    private var transactionsList: some View {
-        List {
-            /* DONE
-            TransactionHeaderListItemView(
-                headerType: model.headerType,
-                showClearHeader: model.showClearHeader
+                    .copy(value: self.model.senderAddress),
+                    .url(title: self.model.senderExplorerText, onOpen: self.model.onSelectOpenSenderAddressURL)
+                ])
+        case let .recipient(model):
+            AddressListItemView(model: model)
+        case let .network(model):
+            ListItemImageView(model: model)
+        case let .memo(model):
+            ListItemView(model: model)
+                .contextMenu( model.subtitle.map ({ [.copy(value: $0)] }) ?? [] )
+        case .swapDetails(let swapDetailsViewModel):
+            NavigationCustomLink(
+                with: SwapDetailsListView(model: swapDetailsViewModel),
+                action: model.onSelectSwapDetails
             )
-             */
-            Section {
-                /* DONE
-                if let appText = model.appText {
-                    ListItemImageView(
-                        title: model.appTitle,
-                        subtitle: appText,
-                        assetImage: model.appAssetImage
-                    )
-                    .contextMenu(
-                        .url(title: model.websiteTitle, onOpen: model.onSelectOpenWebsiteURL)
-                    )
-                }
-
-                ListItemImageView(
-                    title: model.senderTitle,
-                    subtitle: model.senderValue,
-                    assetImage: model.senderAssetImage
+        case let .networkFee(model, selectable):
+            if selectable {
+                NavigationCustomLink(
+                    with: ListItemView(model: model),
+                    action: self.model.onSelectFeePicker
                 )
-                .contextMenu(
-                    [
-                        .copy(value: model.senderAddress),
-                        .url(title: model.senderExplorerText, onOpen: model.onSelectOpenSenderAddressURL)
-                    ]
-                )
-                 */
-
-                ListItemImageView(
-                    title: model.networkTitle,
-                    subtitle: model.networkText,
-                    assetImage: model.networkAssetImage
-                )
-                
-                if model.shouldShowRecipient {
-                    AddressListItemView(model: model.recipientAddressViewModel)
-                }
-
-                if model.shouldShowMemo {
-                    MemoListItemView(memo: model.memo)
-                }
-                
-                if let swapDetailsViewModel = model.swapDetailsViewModel {
-                    NavigationCustomLink(
-                        with: SwapDetailsListView(model: swapDetailsViewModel),
-                        action: model.onSelectSwapDetails
-                    )
-                }
+            } else {
+                ListItemView(model: model)
             }
-            
-
-            Section {
-                if model.shouldShowFeeRatesSelector {
-                    NavigationCustomLink(
-                        with: networkFeeView,
-                        action: model.onSelectFeePicker
-                    )
-                } else {
-                    networkFeeView
-                }
-            }
-
-            if let error = model.listError {
-                ListItemErrorView(
-                    errorTitle: model.listErrorTitle,
-                    error: error,
-                    infoAction: {
-                        model.onSelectListError(error: error)
-                    }
-                )
-            }
+        case let .error(title, error, onInfoAction):
+            ListItemErrorView(
+                errorTitle: title,
+                error: error,
+                infoAction: onInfoAction
+            )
+        case .empty:
+            EmptyView()
         }
-        .contentMargins([.top], .small, for: .scrollContent)
-        .listSectionSpacing(.compact)
-    }
-
-    private var networkFeeView: some  View {
-        ListItemView(
-            title: model.networkFeeTitle,
-            subtitle: model.networkFeeValue,
-            subtitleExtra: model.networkFeeFiatValue,
-            placeholders: [.subtitle],
-            infoAction: model.onSelectNetworkFeeInfo
-        )
     }
 }

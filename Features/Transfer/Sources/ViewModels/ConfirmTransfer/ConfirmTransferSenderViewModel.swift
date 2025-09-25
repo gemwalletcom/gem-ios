@@ -22,7 +22,7 @@ extension ConfirmTransferSenderViewModel: ItemModelProvidable {
             ListItemModel(
                 title: Localized.Wallet.title,
                 subtitle: wallet.name,
-                imageStyle: ListItemImageStyle.asset(
+                imageStyle: ListItemImageStyle.list(
                     assetImage: walletViewModel.hasAvatar ? walletViewModel.avatarImage : nil
                 )
             )

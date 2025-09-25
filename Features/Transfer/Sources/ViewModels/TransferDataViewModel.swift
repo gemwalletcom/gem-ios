@@ -60,17 +60,7 @@ struct TransferDataViewModel {
         }
     }
 
-    var recipientTitle: String {
-        switch type {
-        case .swap: Localized.Common.provider
-        case .stake(_, let stakeType):
-            switch stakeType {
-            case .stake, .unstake, .redelegate, .rewards, .withdraw: Localized.Stake.validator
-            case .freeze: Localized.Stake.resource
-            }
-        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .generic, .account, .perpetual: Localized.Transfer.to
-        }
-    }
+    
 
     var websiteURL: URL? {
         switch type {
@@ -87,34 +77,6 @@ struct TransferDataViewModel {
             URL(string: metadata.url)
         }
     }
-
-    var shouldShowMemo: Bool {
-        switch type {
-        case .transfer, .deposit, .withdrawal: chain.isMemoSupported
-        case .transferNft, .swap, .tokenApprove, .generic, .account, .stake, .perpetual: false
-        }
-    }
-
-    var shouldShowRecipient: Bool {
-        switch type {
-        case .stake(_, let stakeType):
-            switch stakeType {
-            case .stake, .unstake, .redelegate, .withdraw: true
-            case .rewards: false
-            case .freeze: true
-            }
-        case .account,
-            .swap,
-            .perpetual: false
-        case .transfer,
-            .transferNft,
-            .deposit,
-            .withdrawal,
-            .generic,
-            .tokenApprove: true
-        }
-    }
-    
 
     func availableValue(metadata: TransferDataMetadata?) -> BigInt {
         switch type {
