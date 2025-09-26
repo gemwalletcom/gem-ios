@@ -56,7 +56,7 @@ extension StakeValidatorRecord {
             id: validatorId,
             name: name,
             isActive: isActive,
-            commision: commission,
+            commission: commission,
             apr: apr
         )
     }
@@ -76,7 +76,7 @@ extension DelegationValidator {
             validatorId: id,
             name: name,
             isActive: isActive,
-            commission: commision,
+            commission: commission,
             apr: apr
         )
     }
