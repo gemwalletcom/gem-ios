@@ -10,9 +10,7 @@ extension GemWalletConnectionSessionAppMetadata {
             name: self.name,
             description: self.description,
             url: self.url,
-            icon: self.icon,
-            redirectNative: self.redirectNative,
-            redirectUniversal: self.redirectUniversal
+            icon: self.icon
         )
     }
 }
@@ -23,9 +21,7 @@ extension WalletConnectionSessionAppMetadata {
             name: self.name,
             description: self.description,
             url: self.url,
-            icon: self.icon,
-            redirectNative: self.redirectNative,
-            redirectUniversal: self.redirectUniversal
+            icon: self.icon
         )
     }
 }

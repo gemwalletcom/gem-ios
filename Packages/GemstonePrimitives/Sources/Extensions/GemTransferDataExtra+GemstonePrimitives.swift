@@ -11,7 +11,8 @@ extension GemTransferDataExtra {
             gasLimit: try gasLimit.map { try BigInt.from(string: $0) },
             gasPrice: try gasPrice?.map(),
             data: data,
-            outputType: outputType.map()
+            outputType: outputType.map(),
+            outputAction: outputAction.map()
         )
     }
 }
@@ -22,7 +23,8 @@ extension TransferDataExtra {
             gasLimit: gasLimit?.description,
             gasPrice: gasPrice?.map(),
             data: data,
-            outputType: outputType.map()
+            outputType: outputType.map(),
+            outputAction: outputAction.map()
         )
     }
 }
