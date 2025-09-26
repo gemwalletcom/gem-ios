@@ -46,12 +46,14 @@ public struct WalletScene: View {
                 }
             }
             
-            Section {
-                BannerView(
-                    banners: model.banners,
-                    action: model.onBannerAction,
-                    closeAction: model.onCloseBanner
-                )
+            if let banner = model.walletBannersModel.priorityBanner {
+                Section {
+                    BannerView(
+                        banner: banner,
+                        action: model.onBanner
+                    )
+                }
+                .listRowInsets(.zero)
             }
 
             if model.showPinnedSection {

@@ -4,16 +4,27 @@ import Foundation
 
 public struct BannerAction: Identifiable, Sendable {
     public let id: String
-    public let event: BannerEvent
+    public let type: BannerActionType
     public let url: URL?
     
     public init(
         id: String,
-        event: BannerEvent,
+        type: BannerActionType,
         url: URL?
     ) {
         self.id = id
-        self.event = event
+        self.type = type
         self.url = url
     }
+}
+
+public enum BannerActionType: Sendable {
+    case event(BannerEvent)
+    case button(BannerButton)
+    case closeBanner
+}
+
+public enum BannerButton: String, Sendable {
+    case buy
+    case receive
 }

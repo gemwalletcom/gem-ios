@@ -74,6 +74,7 @@ public final class WalletSceneViewModel: Sendable {
             events: [
                 .enableNotifications,
                 .accountBlockedMultiSignature,
+                .onboarding
             ]
         )
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
@@ -113,6 +114,13 @@ public final class WalletSceneViewModel: Sendable {
             value: totalFiatValue,
             currencyCode: currencyCode,
             bannerEventsViewModel: HeaderBannerEventViewModel(events: banners.map(\.event))
+        )
+    }
+
+    var walletBannersModel: WalletSceneBannersViewModel {
+        WalletSceneBannersViewModel(
+            banners: banners,
+            totalFiatValue: totalFiatValue
         )
     }
 }
@@ -158,17 +166,14 @@ extension WalletSceneViewModel {
         isPresentingInfoSheet = .watchWallet
     }
 
-    func onBannerAction(banner: Banner) {
-        let action = BannerViewModel(banner: banner).action
-        switch banner.event {
-        case .stake,
-                .enableNotifications,
-                .accountActivation,
-                .accountBlockedMultiSignature,
-                .activateAsset,
-                .suspiciousAsset:
-            Task {
-                try await handleBanner(action: action)
+    func onBanner(action: BannerAction) {
+        switch action.type {
+        case .event, .closeBanner:
+            Task { try await handleBanner(action: action) }
+        case .button(let bannerButton):
+            switch bannerButton {
+            case .buy: isPresentingSelectAssetType = .buy
+            case .receive: isPresentingSelectAssetType = .receive(.asset)
             }
         }
         isPresentingUrl = action.url

@@ -14,7 +14,10 @@ public final class OnboardingViewModel {
     public var isPresentingCreateWalletSheet: Bool = false
     public var isPresentingImportWalletSheet: Bool = false
     
-    public init(walletService: WalletService, nameService: any NameServiceable) {
+    public init(
+        walletService: WalletService,
+        nameService: any NameServiceable
+    ) {
         self.walletService = walletService
         self.nameService = nameService
     }

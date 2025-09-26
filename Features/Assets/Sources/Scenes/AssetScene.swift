@@ -27,13 +27,17 @@ public struct AssetScene: View {
                 .padding(.bottom, .medium)
             }
             .cleanListRow()
-            Section {
-                BannerView(
-                    banners: model.allBanners,
-                    action: model.onSelectBanner,
-                    closeAction: model.onCloseBanner
-                )
+            
+            if let banner = model.assetBannerViewModel.priorityBanner {
+                Section {
+                    BannerView(
+                        banner: banner,
+                        action: model.onSelectBanner
+                    )
+                }
+                .listRowInsets(.zero)
             }
+
             if model.showStatus {
                 Section {
                     NavigationCustomLink(with:

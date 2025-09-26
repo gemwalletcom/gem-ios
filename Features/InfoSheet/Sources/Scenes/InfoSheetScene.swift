@@ -44,16 +44,6 @@ public struct InfoSheetScene: View {
                 .safariSheet(url: $isPresentedUrl)
         }
     }
-
-    private var closeButton: some View {
-        Button(action: onClose) {
-            Images.System.xmarkCircle
-                .symbolRenderingMode(.hierarchical)
-                .font(.system(size: .large, weight: .bold))
-                .foregroundStyle(.secondary)
-        }
-        .buttonStyle(.plain)
-    }
     
     private var actionButton: some View {
         StateButton(

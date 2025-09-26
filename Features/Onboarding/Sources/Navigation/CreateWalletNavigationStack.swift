@@ -4,6 +4,7 @@ import SwiftUI
 import Localization
 import Primitives
 import WalletService
+import BannerService
 
 public struct CreateWalletNavigationStack: View {
     @State private var navigationPath: NavigationPath = NavigationPath()
@@ -39,10 +40,7 @@ public struct CreateWalletNavigationStack: View {
                     model: VerifyPhraseViewModel(
                         words: $0.words,
                         walletService: walletService,
-                        onFinish: {
-                            walletService.acceptTerms()
-                            isPresentingWallets.toggle()
-                        }
+                        onFinish: { isPresentingWallets.toggle() }
                     )
                 )
             }
