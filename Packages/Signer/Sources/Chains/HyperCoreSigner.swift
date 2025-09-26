@@ -34,6 +34,34 @@ public class HyperCoreSigner: Signable {
         throw AnyError.notImplemented
     }
 
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard case let .swap(_, _, swapData) = input.type else {
+            throw AnyError("Invalid Swap Data")
+        }
+
+        let signature = try signEIP712(messageJson: swapData.data.data, privateKey: privateKey)
+        let eip712Json = try JSONSerialization.jsonObject(with: swapData.data.data.data(using: .utf8)!) as! [String: Any]
+        let actionJson = eip712Json["message"] as! [String: Any]
+        return try [
+            factory.buildSignedRequest(
+                signature: signature,
+                action: JSONSerialization.data(withJSONObject: actionJson).encodeString(),
+                timestamp: actionJson["time"] as! UInt64
+            )
+        ]
+    }
+
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+        let timestamp = UInt64(Date.getTimestampInMs())
+        let request = factory.makeDelegate(validator: input.destinationAddress, wei: input.value.asUInt, nonce: timestamp)
+        let eip712Message = hyperCore.tokenDelegateTypedData(tokenDelegate: request)
+        let signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
+
+        return try [
+            actionMessage(signature: signature, eip712Message: eip712Message, timestamp: timestamp)
+        ]
+    }
+
     private func getBuilder(builder: String, fee: Int) throws -> HyperBuilder {
         return HyperBuilder(builderAddress: builder, fee: fee.asUInt32)
     }

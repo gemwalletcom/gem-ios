@@ -23,6 +23,7 @@ public extension SwapProvider {
         case .chainflip: Images.SwapProviders.chainflip
         case .relay: Images.SwapProviders.relay
         case .aerodrome: Images.SwapProviders.aerodrome
+        case .hyperliquid: Images.SwapProviders.hyperliquid
         }
     }
 }
