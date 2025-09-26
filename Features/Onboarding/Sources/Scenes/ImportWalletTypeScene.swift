@@ -27,7 +27,6 @@ struct ImportWalletTypeScene: View {
                     )
                 }
             }
-            .listRowInsets(.assetListRowInsets)
             
             if model.items(for: searchQuery).isEmpty {
                 StateEmptyView(title: Localized.Common.noResultsFound)
@@ -42,7 +41,6 @@ struct ImportWalletTypeScene: View {
                         }
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)

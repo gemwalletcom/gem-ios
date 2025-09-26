@@ -27,7 +27,6 @@ struct SecurityReminderScene: View {
                         imageStyle: item.image
                     )
                 }
-                .listRowInsets(.assetListRowInsets)
             }
         }
         .safeAreaView {
