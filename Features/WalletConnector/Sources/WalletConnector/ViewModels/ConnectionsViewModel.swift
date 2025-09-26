@@ -19,7 +19,7 @@ public final class ConnectionsViewModel {
     var connections: [WalletConnection] = []
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
-    var isLoading: Bool = false
+    var loadingButton: LoadingButton?
 
     public init(
         service: ConnectionsService,
@@ -74,7 +74,7 @@ public final class ConnectionsViewModel {
     }
     
     func stopLoading() {
-        isLoading = false
+        loadingButton = nil
     }
 }
 
@@ -90,15 +90,15 @@ extension ConnectionsViewModel {
             return
         }
 
+        loadingButton = .paste
         Task {
-            isLoading = true
             await connectURI(uri: content)
         }
     }
     
     func onHandleScan(_ result: String) {
+        loadingButton = .scan
         Task {
-            isLoading = true
             await connectURI(uri: result)
         }
     }
@@ -118,9 +118,16 @@ extension ConnectionsViewModel {
         do {
             try await pair(uri: uri)
         } catch {
-            isLoading = false
+            loadingButton = nil
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             NSLog("connectURI error: \(error)")
         }
+    }
+}
+
+extension ConnectionsViewModel {
+    enum LoadingButton: Equatable {
+        case paste
+        case scan
     }
 }
