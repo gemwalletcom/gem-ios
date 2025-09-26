@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import struct Gemstone.SwapperApprovalData
+import struct Gemstone.GemApprovalData
 
-public extension SwapperApprovalData {
-    static func mock() -> SwapperApprovalData {
-        SwapperApprovalData(
+public extension GemApprovalData {
+    static func mock() -> GemApprovalData {
+        GemApprovalData(
             token: "0x",
             spender: "0x",
             value: "1000000000000000000"

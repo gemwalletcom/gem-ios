@@ -9,7 +9,7 @@ public extension DelegationValidator {
         id: String = "1",
         name: String = "Test Delegation Validator",
         isActive: Bool = true,
-        commision: Double = 5,
+        commission: Double = 5,
         apr: Double = 1
     ) -> DelegationValidator {
         DelegationValidator(
@@ -17,7 +17,7 @@ public extension DelegationValidator {
             id: id,
             name: name,
             isActive: isActive,
-            commision: commision,
+            commission: commission,
             apr: apr
         )
     }

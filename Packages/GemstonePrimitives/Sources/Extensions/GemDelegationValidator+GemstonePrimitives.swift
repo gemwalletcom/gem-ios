@@ -11,7 +11,7 @@ extension GemDelegationValidator {
             id: id,
             name: name,
             isActive: isActive,
-            commision: commission,
+            commission: commission,
             apr: apr
         )
     }
@@ -24,7 +24,7 @@ extension DelegationValidator {
             id: id,
             name: name,
             isActive: isActive,
-            commission: commision,
+            commission: commission,
             apr: apr
         )
     }

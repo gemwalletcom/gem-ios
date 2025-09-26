@@ -64,7 +64,7 @@ public struct ChainSettingsScene: View {
         .refreshable {
             await model.fetch()
         }
-        .confirmationDialog(
+        .alert(
             model.deleteConfirmationTitle(for: model.nodeDelete?.host ?? ""),
             presenting: $model.nodeDelete,
             sensoryFeedback: .warning,

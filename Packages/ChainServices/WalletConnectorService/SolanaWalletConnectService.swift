@@ -31,7 +31,7 @@ private extension SolanaWalletConnectService {
         case .signMessage: try await solanaSignMessage(request: request)
         case .signTransaction: try await solanaSignTransaction(request: request)
         case .signAndSendTransaction: try await solanaSendTransaction(request: request)
-        case .signAllTransactions: try signAllTransactions()
+        case .signAllTransactions: try await signAllTransactions(request: request)
         }
     }
 }
@@ -41,14 +41,22 @@ private extension SolanaWalletConnectService {
 extension SolanaWalletConnectService {
     private func solanaSignTransaction(request: WalletConnectSign.Request) async throws -> RPCResult {
         let tx = try request.params.get(WCSolanaTransaction.self)
-        let signature = try await signer.signTransaction(sessionId: request.topic, chain: .solana, transaction: .solana(tx.transaction))
+        let signature = try await signer.signTransaction(
+            sessionId: request.topic,
+            chain: .solana,
+            transaction: .solana(tx.transaction, .signature)
+        )
         let result = WCSolanaSignMessageResult(signature: signature)
         return .response(AnyCodable(result))
     }
 
     private func solanaSendTransaction(request: WalletConnectSign.Request) async throws -> RPCResult {
         let tx = try request.params.get(WCSolanaTransaction.self)
-        let txId = try await signer.sendTransaction(sessionId: request.topic, chain: .solana, transaction: .solana(tx.transaction))
+        let txId = try await signer.sendTransaction(
+            sessionId: request.topic,
+            chain: .solana,
+            transaction: .solana(tx.transaction, .encodedTransaction)
+        )
         return .response(AnyCodable(txId))
     }
 
@@ -60,9 +68,17 @@ extension SolanaWalletConnectService {
         let result = WCSolanaSignMessageResult(signature: signature)
         return .response(AnyCodable(result))
     }
-    
-    // TODO: - Implement methods
-    private func signAllTransactions() throws -> RPCResult {
-        throw AnyError.notImplemented
+
+    private func signAllTransactions(request: WalletConnectSign.Request) async throws -> RPCResult {
+        let transactions = try request.params.get(WCSolanaTransactions.self).transactions
+        guard let transaction = transactions.first else {
+            throw AnyError("Only support single transaction. Will support more in the future")
+        }
+        let signature = try await signer.signTransaction(
+            sessionId: request.topic,
+            chain: .solana,
+            transaction: .solana(transaction, .encodedTransaction)
+        )
+        return .response(AnyCodable(WCSolanaTransactions(transactions: [signature])))
     }
 }

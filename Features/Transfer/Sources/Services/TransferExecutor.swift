@@ -35,10 +35,11 @@ public struct TransferExecutor: TransferExecutable {
 
         for (index, transactionData) in signedData.enumerated() {
             NSLog("TransferExecutor data \(transactionData)")
-            switch input.data.type.outputType {
-            case .signature:
+            
+            switch input.data.type.outputAction {
+            case .sign:
                 input.delegate?(.success(transactionData))
-            case .encodedTransaction:
+            case .send:
                 let hash = try await chainService.broadcast(
                     data: transactionData,
                     options: options

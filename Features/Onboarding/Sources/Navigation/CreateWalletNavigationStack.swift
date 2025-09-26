@@ -22,13 +22,14 @@ public struct CreateWalletNavigationStack: View {
     public var body: some View {
         NavigationStack(path: $navigationPath) {
             Group {
-                switch walletService.isAcceptTermsCompleted {
-                case true: securityReminderScene
-                case false: AcceptTermsScene(
-                    model: AcceptTermsViewModel(onNext: {
-                        navigationPath.append(Scenes.SecurityReminder())
-                    })
-                )
+                if walletService.isAcceptTermsCompleted {
+                    securityReminderScene
+                } else {
+                    AcceptTermsScene(
+                        model: AcceptTermsViewModel(
+                            onNext: { navigationPath.append(Scenes.SecurityReminder())
+                        })
+                    )
                 }
             }
             .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
@@ -65,9 +66,7 @@ public struct CreateWalletNavigationStack: View {
         SecurityReminderScene(
             model: SecurityReminderViewModelDefault(
                 title: Localized.Wallet.New.title,
-                onNext: {
-                    navigationPath.append(Scenes.CreateWallet())
-                }
+                onNext: { navigationPath.append(Scenes.CreateWallet()) }
             )
         )
     }
