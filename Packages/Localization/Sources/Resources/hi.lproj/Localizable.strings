@@ -474,3 +474,6 @@
 "stake.resource" = "संसाधन";
 "stake.resource.energy" = "ऊर्जा";
 "stake.resource.bandwidth" = "बैंडविड्थ";
+"perpetual.modify" = "संशोधित";
+"perpetual.reduce_position" = "स्थिति कम करें";
+"perpetual.increase_position" = "Increase Position";

@@ -474,3 +474,6 @@
 "stake.resource" = "Sumber";
 "stake.resource.energy" = "Energi";
 "stake.resource.bandwidth" = "Lebar pita";
+"perpetual.modify" = "Memodifikasi";
+"perpetual.reduce_position" = "Kurangi Posisi";
+"perpetual.increase_position" = "Tingkatkan Posisi";

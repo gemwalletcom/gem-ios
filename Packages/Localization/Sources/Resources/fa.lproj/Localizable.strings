@@ -474,3 +474,6 @@
 "stake.resource" = "منبع";
 "stake.resource.energy" = "انرژی";
 "stake.resource.bandwidth" = "پهنای باند";
+"perpetual.modify" = "اصلاح";
+"perpetual.reduce_position" = "کاهش موقعیت";
+"perpetual.increase_position" = "افزایش موقعیت";

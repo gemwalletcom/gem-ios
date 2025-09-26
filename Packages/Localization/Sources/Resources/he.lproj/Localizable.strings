@@ -474,3 +474,6 @@
 "stake.resource" = "מַשׁאָב";
 "stake.resource.energy" = "אֵנֶרְגִיָה";
 "stake.resource.bandwidth" = "רוחב פס";
+"perpetual.modify" = "לְשַׁנוֹת";
+"perpetual.reduce_position" = "הקטן את המיקום";
+"perpetual.increase_position" = "Increase Position";

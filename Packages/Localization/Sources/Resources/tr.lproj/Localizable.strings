@@ -474,3 +474,6 @@
 "stake.resource" = "Kaynak";
 "stake.resource.energy" = "Enerji";
 "stake.resource.bandwidth" = "Bant genişliği";
+"perpetual.modify" = "Değiştir";
+"perpetual.reduce_position" = "Pozisyonu Azalt";
+"perpetual.increase_position" = "Pozisyonu Artır";

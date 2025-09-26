@@ -474,3 +474,6 @@
 "stake.resource" = "sumber";
 "stake.resource.energy" = "Tenaga";
 "stake.resource.bandwidth" = "Lebar jalur";
+"perpetual.modify" = "Ubah suai";
+"perpetual.reduce_position" = "Kurangkan Kedudukan";
+"perpetual.increase_position" = "Tingkatkan Kedudukan";

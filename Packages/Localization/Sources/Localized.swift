@@ -763,16 +763,22 @@ public enum Localized {
     public static let closePosition = Localized.tr("Localizable", "perpetual.close_position", fallback: "Close position")
     /// Entry Price
     public static let entryPrice = Localized.tr("Localizable", "perpetual.entry_price", fallback: "Entry Price")
+    /// Increase Position
+    public static let increasePosition = Localized.tr("Localizable", "perpetual.increase_position", fallback: "Increase Position")
     /// Long
     public static let long = Localized.tr("Localizable", "perpetual.long", fallback: "Long")
     /// Margin
     public static let margin = Localized.tr("Localizable", "perpetual.margin", fallback: "Margin")
+    /// Modify
+    public static let modify = Localized.tr("Localizable", "perpetual.modify", fallback: "Modify")
     /// PnL
     public static let pnl = Localized.tr("Localizable", "perpetual.pnl", fallback: "PnL")
     /// Position
     public static let position = Localized.tr("Localizable", "perpetual.position", fallback: "Position")
     /// Positions
     public static let positions = Localized.tr("Localizable", "perpetual.positions", fallback: "Positions")
+    /// Reduce Position
+    public static let reducePosition = Localized.tr("Localizable", "perpetual.reduce_position", fallback: "Reduce Position")
     /// Short
     public static let short = Localized.tr("Localizable", "perpetual.short", fallback: "Short")
     /// Size

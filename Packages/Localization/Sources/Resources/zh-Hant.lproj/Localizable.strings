@@ -474,3 +474,6 @@
 "stake.resource" = "資源";
 "stake.resource.energy" = "活力";
 "stake.resource.bandwidth" = "頻寬";
+"perpetual.modify" = "調整";
+"perpetual.reduce_position" = "減倉";
+"perpetual.increase_position" = "增加職位";

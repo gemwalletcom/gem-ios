@@ -474,3 +474,6 @@
 "stake.resource" = "의지";
 "stake.resource.energy" = "에너지";
 "stake.resource.bandwidth" = "대역폭";
+"perpetual.modify" = "수정하다";
+"perpetual.reduce_position" = "위치 줄이기";
+"perpetual.increase_position" = "위치 증가";
