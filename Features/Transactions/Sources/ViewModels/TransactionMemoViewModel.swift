@@ -3,13 +3,12 @@
 import Foundation
 import Primitives
 import PrimitivesComponents
-import Localization
 import Components
 
-public struct TransactionMemoViewModel: Sendable {
+struct TransactionMemoViewModel: Sendable {
     private let transaction: Transaction
-    
-    public init(transaction: Transaction) {
+
+    init(transaction: Transaction) {
         self.transaction = transaction
     }
 }
@@ -17,16 +16,11 @@ public struct TransactionMemoViewModel: Sendable {
 // MARK: - ItemModelProvidable
 
 extension TransactionMemoViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
-        guard showMemo else {
-            return .empty
-        }
+    var itemModel: TransactionItemModel {
+        guard showMemo else { return .empty}
 
         return .listItem(
-            .text(
-                title: Localized.Transfer.memo,
-                subtitle: formattedMemo
-            )
+            MemoViewModel(memo: transaction.memo).listItemModel
         )
     }
 }
@@ -36,10 +30,5 @@ extension TransactionMemoViewModel: ItemModelProvidable {
 extension TransactionMemoViewModel {
     private var showMemo: Bool {
         transaction.memo?.isEmpty == false
-    }
-
-    private var formattedMemo: String {
-        let value = transaction.memo ?? ""
-        return value.isEmpty ? "-" : value
     }
 }
