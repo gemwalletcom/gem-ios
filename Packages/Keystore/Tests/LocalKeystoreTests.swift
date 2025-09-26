@@ -1,7 +1,7 @@
+import KeystoreTestKit
+import Primitives
 import Testing
 import WalletCore
-import Primitives
-import KeystoreTestKit
 
 @testable import Keystore
 
@@ -32,7 +32,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testImportSolanaWallet() {
+    func importSolanaWallet() {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let wallet = try keystore.importWallet(
@@ -48,7 +48,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testImportEthereumWallet() {
+    func importEthereumWallet() {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let chains: [Chain] = [.ethereum, .smartChain, .blast]
@@ -69,7 +69,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testExportSolanaPrivateKey() {
+    func exportSolanaPrivateKey() {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let hex = "0xb9095df5360714a69bc86ca92f6191e60355f206909982a8409f7b8358cf41b0"
@@ -98,7 +98,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testSignSolanaMessage() throws {
+    func signSolanaMessage() throws {
         let keystore = LocalKeystore.mock()
         let wallet = try keystore.importWallet(
             name: "Test Solana",
@@ -115,19 +115,19 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testImportWIF() {
+    func importWIF() {
         #expect(throws: Never.self) {
             let wif = "L1NGZutRxaVotZSfRzGnFYUj42LjEL66ZdAeSDA8CbyASZWizHLA"
             let decoded = Base58.decode(string: wif)!
             #expect(decoded.count == 34)
 
-            let key = decoded[1...32]
+            let key = decoded[1 ... 32]
             #expect(PrivateKey.isValid(data: key, curve: .secp256k1))
         }
     }
 
     @Test
-    func testDeriveAddress() {
+    func deriveAddress() {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let chains = Chain.allCases
@@ -172,7 +172,8 @@ struct LocalKeystoreTests {
                      .unichain,
                      .hyperliquid,
                      .monad,
-                     .hyperCore:
+                     .hyperCore,
+                     .plasma:
                     expected = "0x8f348F300873Fd5DA36950B2aC75a26584584feE"
                 case .solana:
                     expected = "57mwmnV2rFuVDmhiJEjonD7cfuFtcaP9QvYNGfDEWK71"
@@ -222,7 +223,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testSetupChainsAddsMissingChains() {
+    func setupChainsAddsMissingChains() {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let ethWallet = try keystore.importWallet(
@@ -249,7 +250,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testSetupChainsAddNoMissingChains() {
+    func setupChainsAddNoMissingChains() {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let wallet = try keystore.importWallet(
