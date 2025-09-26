@@ -26,11 +26,14 @@ public struct SettingsScene: View {
 
     public var body: some View {
         List {
-            walletsSection
-            deviceSection
-            walletConnectSection
-            communitySection
-            aboutSection
+            Group {
+                walletsSection
+                deviceSection
+                walletConnectSection
+                communitySection
+                aboutSection
+            }
+            .listRowInsets(.assetListRowInsets)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .listStyle(.insetGrouped)
