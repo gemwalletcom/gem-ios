@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
 import Primitives
 import Style
+import SwiftUI
 
 public struct ChainImage: Sendable {
     private let chain: Chain
@@ -59,13 +59,14 @@ public struct ChainImage: Sendable {
         case .berachain: Images.Chains.berachain
         case .hyperliquid, .hyperCore: Images.Chains.hyperliquid
         case .monad: Images.Chains.monad
+        case .plasma: Images.Chains.plasma
         }
     }
-    
+
     public var placeholder: Image {
         l2Image ?? image
     }
-    
+
     public var l2Image: Image? {
         switch chain {
         case .optimism: Images.Chains.optimism

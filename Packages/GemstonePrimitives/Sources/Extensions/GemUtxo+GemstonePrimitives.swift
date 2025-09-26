@@ -4,22 +4,22 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemUtxo {
-    public func map() throws -> UTXO {
+public extension GemUtxo {
+    func map() throws -> UTXO {
         UTXO(
             transaction_id: transactionId,
-            vout: Int32(vout),
+            vout: vout,
             value: value,
             address: address
         )
     }
 }
 
-extension UTXO {
-    public func map() -> GemUtxo {
+public extension UTXO {
+    func map() -> GemUtxo {
         GemUtxo(
             transactionId: transaction_id,
-            vout: UInt32(vout),
+            vout: vout,
             value: value,
             address: address
         )

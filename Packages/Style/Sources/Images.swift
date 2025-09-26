@@ -56,6 +56,7 @@ public enum Images {
         public static let unichain = Image(.unichain)
         public static let hyperliquid = Image(.hyperliquid)
         public static let monad = Image(.monad)
+        public static let plasma = Image(.plasma)
     }
 
     public enum SwapProviders {
@@ -190,8 +191,8 @@ public enum Images {
 
     public enum Filters {
         public static let balance = Image(.filtersBalance)
-	}
-    
+    }
+
     public enum TokenStatus {
         public static let warning = Image(.verificationOrange)
         public static let risk = Image(.verificationRed)
