@@ -104,7 +104,7 @@ public struct SolanaSigner: Signable {
         return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType)
     }
 
-    func signData(bytes: Data, privateKey: Data, outputType: TransferDataExtra.OutputType) throws -> String {
+    func signData(bytes: Data, privateKey: Data, outputType: TransferDataOutputType) throws -> String {
         let rawTxDecoder = SolanaRawTxDecoder(rawData: bytes)
         let numRequiredSignatures = rawTxDecoder.signatureCount()
         var signatures: [Data] = rawTxDecoder.signatures()

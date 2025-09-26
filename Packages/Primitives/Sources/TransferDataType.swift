@@ -100,10 +100,17 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         }
     }
 
-    public var outputType: TransferDataExtra.OutputType {
+    public var outputType: TransferDataOutputType {
         return switch self {
         case .generic(_, _, let extra): extra.outputType
         default: .encodedTransaction
+        }
+    }
+    
+    public var outputAction: TransferDataOutputAction {
+        return switch self {
+        case .generic(_, _, let extra): extra.outputAction
+        default: .send
         }
     }
 
