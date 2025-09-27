@@ -48,7 +48,6 @@ public struct TransferExecutor: TransferExecutable {
 
                 input.delegate?(.success(hash))
 
-                // FIXME: skip swap tx on HyperCore
                 let transaction = try TransactionFactory.makePendingTransaction(
                     wallet: input.wallet,
                     transferData: input.data,
