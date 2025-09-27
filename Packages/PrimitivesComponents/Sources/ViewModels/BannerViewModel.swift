@@ -56,7 +56,7 @@ struct BannerViewModel {
             return Localized.Transfer.ActivateAsset.title
         case .suspiciousAsset:
             return Localized.Banner.AssetStatus.title
-        case .onboarding: return "Welcome to the Gem Family"
+        case .onboarding: return Localized.Banner.Onboarding.title
         }
     }
 
@@ -85,7 +85,7 @@ struct BannerViewModel {
             return Localized.Banner.ActivateAsset.description(asset.symbol, asset.chain.asset.name)
         case .suspiciousAsset:
             return Localized.Banner.AssetStatus.description
-        case .onboarding: return "Buy or Receive crypto to your wallet to get started"
+        case .onboarding: return Localized.Banner.Onboarding.description
         }
     }
 

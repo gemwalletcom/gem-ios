@@ -474,3 +474,8 @@
 "stake.resource" = "mapagkukunan";
 "stake.resource.energy" = "Enerhiya";
 "stake.resource.bandwidth" = "Bandwidth";
+"perpetual.modify" = "Baguhin";
+"perpetual.reduce_position" = "Bawasan ang Posisyon";
+"perpetual.increase_position" = "Taasan ang Posisyon";
+"banner.onboarding.title" = "Maligayang pagdating sa Gem Family";
+"banner.onboarding.description" = "Bumili o Tumanggap ng crypto sa iyong wallet para makapagsimula";

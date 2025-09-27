@@ -474,3 +474,8 @@
 "stake.resource" = "Ресурс";
 "stake.resource.energy" = "Енергія";
 "stake.resource.bandwidth" = "Пропускна здатність";
+"perpetual.modify" = "Змінити";
+"perpetual.reduce_position" = "Зменшити позицію";
+"perpetual.increase_position" = "Збільшити позицію";
+"banner.onboarding.title" = "Ласкаво просимо до родини Gem";
+"banner.onboarding.description" = "Купуйте або отримуйте криптовалюту на свій гаманець, щоб розпочати";
