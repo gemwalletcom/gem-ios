@@ -52,14 +52,44 @@ public class HyperCoreSigner: Signable {
     }
 
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        let timestamp = UInt64(Date.getTimestampInMs())
-        let request = factory.makeDelegate(validator: input.destinationAddress, wei: input.value.asUInt, nonce: timestamp)
-        let eip712Message = hyperCore.tokenDelegateTypedData(tokenDelegate: request)
-        let signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
+        guard case let .stake(_, stakeType) = input.type else {
+            throw AnyError("Invalid input type for stake signing")
+        }
 
-        return try [
-            actionMessage(signature: signature, eip712Message: eip712Message, timestamp: timestamp)
-        ]
+        let timestamp = UInt64(Date.getTimestampInMs())
+        let denominator = BigInt(10).power(10)
+        switch stakeType {
+        case let .stake(validator):
+            let wei = input.value / denominator
+            let depositAction = try signStakingTransfer(wei: wei.asUInt, nonce: timestamp, privateKey: privateKey)
+            let delegateAction = try signTokenDelegate(
+                validator: validator.id,
+                wei: wei.asUInt,
+                nonce: timestamp + 1,
+                isUndelegate: false,
+                privateKey: privateKey
+            )
+            return [
+                depositAction,
+                delegateAction
+            ]
+        case let .unstake(delegation):
+            let wei = delegation.base.balanceValue / denominator
+            let undelegateAction = try signTokenDelegate(
+                validator: delegation.validator.id,
+                wei: wei.asUInt,
+                nonce: timestamp,
+                isUndelegate: true,
+                privateKey: privateKey
+            )
+            let withdrawAction = try signStakingWithdraw(wei: wei.asUInt, nonce: timestamp + 1, privateKey: privateKey)
+            return [
+                undelegateAction,
+                withdrawAction
+            ]
+        case .freeze, .redelegate, .rewards, .withdraw:
+            throw AnyError("Not supported stake type")
+        }
     }
 
     private func getBuilder(builder: String, fee: Int) throws -> HyperBuilder {
@@ -180,6 +210,32 @@ public class HyperCoreSigner: Signable {
         let eip712Message = hyperCore.sendSpotTokenToAddressTypedData(spotSend: spotSend)
         let signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
         return try actionMessage(signature: signature, eip712Message: eip712Message, timestamp: timestamp)
+    }
+
+    private func signStakingTransfer(wei: UInt64, nonce: UInt64, privateKey: Data) throws -> String {
+        let depositRequest = factory.makeTransferToStaking(wei: wei, nonce: nonce)
+        let depoistMessage = hyperCore.cDepositTypedData(cDeposit: depositRequest)
+        let depoistSignature = try signEIP712(messageJson: depoistMessage, privateKey: privateKey)
+        return try actionMessage(signature: depoistSignature, eip712Message: depoistMessage, timestamp: nonce)
+    }
+
+    private func signStakingWithdraw(wei: UInt64, nonce: UInt64, privateKey: Data) throws -> String {
+        let request = factory.makeWithdrawFromStaking(wei: wei, nonce: nonce)
+        let message = hyperCore.cWithdrawTypedData(cWithdraw: request)
+        let signature = try signEIP712(messageJson: message, privateKey: privateKey)
+        return try actionMessage(signature: signature, eip712Message: message, timestamp: nonce)
+    }
+
+    private func signTokenDelegate(validator: String, wei: UInt64, nonce: UInt64, isUndelegate: Bool, privateKey: Data) throws -> String {
+        let delegateRequest = switch isUndelegate {
+        case true:
+            factory.makeUndelegate(validator: validator, wei: wei, nonce: nonce)
+        case false:
+            factory.makeDelegate(validator: validator, wei: wei, nonce: nonce)
+        }
+        let delegateMessage = hyperCore.tokenDelegateTypedData(tokenDelegate: delegateRequest)
+        let delegateSignature = try signEIP712(messageJson: delegateMessage, privateKey: privateKey)
+        return try actionMessage(signature: delegateSignature, eip712Message: delegateMessage, timestamp: nonce)
     }
 
     private func signMarketMessage(type: PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
