@@ -8,6 +8,7 @@ public enum EVMChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case ethereum
 	case smartChain = "smartchain"
 	case polygon
+	case plasma
 	case arbitrum
 	case optimism
 	case base

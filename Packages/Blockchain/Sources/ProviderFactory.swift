@@ -26,4 +26,11 @@ extension Chain {
     public var defaultChainNode: ChainNode {
         return ChainNode(chain: self.rawValue, node: defaultNode)
     }
+    
+    public var asiaChainNode: ChainNode {
+        return ChainNode(
+            chain: rawValue,
+            node: Node(url: URL(string: "https://\(self.rawValue.lowercased())-asia.gemnodes.com")!.absoluteString, status: .active, priority: 10)
+        )
+    }
 }

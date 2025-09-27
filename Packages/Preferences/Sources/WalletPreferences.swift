@@ -51,11 +51,6 @@ public final class WalletPreferences: @unchecked Sendable {
     public func completeInitialSynchronization() {
         completeInitialAddressStatus = true
         completeInitialLoadAssets = true
-        completeDiscoveryAssets = true
-    }
-    
-    public func completeAssetDiscovery() {
-        completeDiscoveryAssets = true
     }
     
     // transactions

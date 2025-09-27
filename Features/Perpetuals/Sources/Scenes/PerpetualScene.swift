@@ -5,6 +5,7 @@ import Style
 import PerpetualService
 import PrimitivesComponents
 import InfoSheet
+import Localization
 
 public struct PerpetualScene: View {
     
@@ -84,9 +85,15 @@ public struct PerpetualScene: View {
             
             Section {
                 if model.hasOpenPosition {
-                    Button(model.closePositionTitle, action: model.onClosePosition)
-                        .frame(maxWidth: .infinity)
-                        .buttonStyle(.red())
+                    HStack(spacing: Spacing.medium) {
+                        Button(model.modifyPositionTitle, action: model.onModifyPosition)
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(.blue())
+
+                        Button(model.closePositionTitle, action: model.onClosePosition)
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(.red())
+                    }
                 } else {
                     HStack(spacing: Spacing.medium) {
                         Button(model.longButtonTitle, action: model.onOpenLongPosition)
@@ -135,6 +142,16 @@ public struct PerpetualScene: View {
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(type: $0)
         }
+        .alert(
+            model.modifyPositionTitle,
+            presenting: $model.isPresentingModifyAlert,
+            sensoryFeedback: .warning,
+            actions: { _ in
+                Button(model.increasePositionTitle, action: model.onIncreasePosition)
+                Button(model.reducePositionTitle, role: .destructive, action: model.onReducePosition)
+                Button(Localized.Common.cancel, role: .cancel) { }
+            }
+        )
         .refreshable {
             await model.fetch()
         }

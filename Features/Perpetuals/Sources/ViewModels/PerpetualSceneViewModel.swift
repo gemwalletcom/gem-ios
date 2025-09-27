@@ -40,6 +40,7 @@ public final class PerpetualSceneViewModel {
     let formatter = PerpetualPriceFormatter()
     let preference = Preferences.standard
     public var isPresentingInfoSheet: InfoSheetType?
+    public var isPresentingModifyAlert: Bool?
 
     public let perpetualViewModel: PerpetualViewModel
 
@@ -83,6 +84,9 @@ public final class PerpetualSceneViewModel {
     public var infoSectionTitle: String { Localized.Common.info }
     public var transactionsSectionTitle: String { Localized.Activity.title }
     public var closePositionTitle: String { Localized.Perpetual.closePosition }
+    public var modifyPositionTitle: String { Localized.Perpetual.modify }
+    public var increasePositionTitle: String { Localized.Perpetual.increasePosition }
+    public var reducePositionTitle: String { Localized.Perpetual.reducePosition }
     public var longButtonTitle: String { Localized.Perpetual.long }
     public var shortButtonTitle: String { Localized.Perpetual.short }
 
@@ -134,6 +138,10 @@ public extension PerpetualSceneViewModel {
 
     func onSelectOpenInterestInfo() {
         isPresentingInfoSheet = .openInterest
+    }
+
+    func onModifyPosition() {
+        isPresentingModifyAlert = true
     }
 
     func onClosePosition() {
@@ -207,6 +215,36 @@ public extension PerpetualSceneViewModel {
             )
         )
         onPerpetualRecipientData?(data)
+    }
+
+    func onIncreasePosition() {
+        isPresentingModifyAlert = false
+
+        guard let direction = positions.first?.position.direction else {
+            return
+        }
+
+        switch direction {
+        case .long:
+            onOpenLongPosition()
+        case .short:
+            onOpenShortPosition()
+        }
+    }
+
+    func onReducePosition() {
+        isPresentingModifyAlert = false
+
+        guard let direction = positions.first?.position.direction else {
+            return
+        }
+
+        switch direction {
+        case .long:
+            onOpenShortPosition()
+        case .short:
+            onOpenLongPosition()
+        }
     }
 }
 
