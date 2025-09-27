@@ -39,19 +39,9 @@ public final class WalletPreferences: @unchecked Sendable {
         get { defaults.bool(forKey: Keys.completeInitialAddressStatus) }
     }
     
-    public var completeDiscoveryAssets: Bool {
-        set { defaults.setValue(newValue, forKey: Keys.completeDiscoveryAssets) }
-        get { defaults.bool(forKey: Keys.completeDiscoveryAssets) }
-    }
-    
     public func completeInitialSynchronization() {
         completeInitialAddressStatus = true
         completeInitialLoadAssets = true
-        completeDiscoveryAssets = true
-    }
-    
-    public func completeAssetDiscovery() {
-        completeDiscoveryAssets = true
     }
     
     // transactions

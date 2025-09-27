@@ -198,7 +198,7 @@ extension WalletSceneViewModel {
     
     func shouldStartLoadingAssets() {
         let preferences = WalletPreferences(walletId: wallet.id)
-        isLoadingAssets = !preferences.completeDiscoveryAssets && preferences.assetsTimestamp == .zero
+        isLoadingAssets = !preferences.completeInitialLoadAssets && preferences.assetsTimestamp == .zero
     }
     
     public func onTransferComplete() {

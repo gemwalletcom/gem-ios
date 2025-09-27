@@ -474,3 +474,6 @@
 "stake.resource" = "الموارد";
 "stake.resource.energy" = "طاقة";
 "stake.resource.bandwidth" = "عرض النطاق الترددي";
+"perpetual.modify" = "يُعدِّل";
+"perpetual.reduce_position" = "تقليل الموضع";
+"perpetual.increase_position" = "زيادة الموقف";

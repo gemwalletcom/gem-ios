@@ -16,28 +16,40 @@ struct WalletsSceneViewModelTests {
     
     @Test
     func onDeleteConfirmed() throws {
-        let walletStore = WalletStore.mock(db: .mock())
-        let wallet1 = Wallet.mock(id: "1")
-        let wallet2 = Wallet.mock(id: "2")
-        let wallet3 = Wallet.mock(id: "3")
-        try walletStore.addWallet(wallet1)
-        try walletStore.addWallet(wallet2)
-        try walletStore.addWallet(wallet3)
+        let service: WalletService = try .mockWallets()
+        let model = WalletsSceneViewModel.mock(walletService: service)
+        model.wallets = service.wallets
 
-        let service = WalletService.mock(walletStore: walletStore)
-        service.setCurrent(for: wallet1.walletId)
+        #expect(model.currentWalletId == .mock(id: "1"))
 
-        let viewModel = WalletsSceneViewModel.mock(walletService: service)
-        #expect(viewModel.currentWalletId == wallet1.walletId)
+        model.onDeleteConfirmed(wallet: .mock(id: "1"))
+        #expect(model.currentWalletId == .mock(id: "2"))
 
-        viewModel.onDeleteConfirmed(wallet: wallet1)
-        #expect(viewModel.currentWalletId == wallet2.walletId)
+        model.onDeleteConfirmed(wallet: .mock(id: "2"))
+        #expect(model.currentWalletId == .mock(id: "3"))
 
-        viewModel.onDeleteConfirmed(wallet: wallet2)
-        #expect(viewModel.currentWalletId == wallet3.walletId)
+        model.onDeleteConfirmed(wallet: .mock(id: "3"))
+        #expect(model.currentWalletId == .none)
+    }
 
-        viewModel.onDeleteConfirmed(wallet: wallet3)
-        #expect(viewModel.currentWalletId == .none)
+    @Test
+    func onMove() throws {
+        let service: WalletService = try .mockWallets()
+        let model = WalletsSceneViewModel.mock(walletService: service)
+        model.wallets = service.wallets
+
+        model.onMove(from: IndexSet(integer: 0), to: 0)
+        #expect(service.sortedWallets.ids == ["1", "2", "3"])
+
+        model.onMove(from: IndexSet(integer: 1), to: 0)
+        #expect(service.sortedWallets.ids == ["2", "1", "3"])
+
+        model.onMove(from: IndexSet(integer: 0), to: 3)
+        #expect(service.sortedWallets.ids == ["3", "2", "1"])
+
+        model.onMove(from: IndexSet(integer: 2), to: 0)
+        #expect(service.sortedWallets.ids == ["2", "1", "3"])
+        
     }
 }
 
@@ -56,5 +68,26 @@ extension WalletsSceneViewModel {
             isPresentingCreateWalletSheet: isPresentingCreateWalletSheet,
             isPresentingImportWalletSheet: isPresentingImportWalletSheet
         )
+    }
+}
+
+extension WalletService {
+    static func mockWallets() throws -> Self {
+        let walletStore = WalletStore.mock(db: .mock())
+        let wallet1 = Wallet.mock(id: "1")
+        let wallet2 = Wallet.mock(id: "2")
+        let wallet3 = Wallet.mock(id: "3")
+        try walletStore.addWallet(wallet1)
+        try walletStore.addWallet(wallet2)
+        try walletStore.addWallet(wallet3)
+
+        let service = WalletService.mock(walletStore: walletStore)
+        service.setCurrent(for: wallet1.walletId)
+        
+        return service
+    }
+    
+    var sortedWallets: [Wallet] {
+        wallets.sorted { $0.order < $1.order }
     }
 }

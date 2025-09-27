@@ -474,3 +474,6 @@
 "stake.resource" = "Ресурс";
 "stake.resource.energy" = "Энергия";
 "stake.resource.bandwidth" = "Пропускная способность";
+"perpetual.modify" = "Изменить";
+"perpetual.reduce_position" = "Уменьшить позицию";
+"perpetual.increase_position" = "Увеличить позицию";
