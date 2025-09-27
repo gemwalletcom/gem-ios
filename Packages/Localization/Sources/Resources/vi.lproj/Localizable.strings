@@ -474,3 +474,6 @@
 "stake.resource" = "Tài nguyên";
 "stake.resource.energy" = "Năng lượng";
 "stake.resource.bandwidth" = "Băng thông";
+"perpetual.modify" = "Biến đổi";
+"perpetual.reduce_position" = "Giảm vị trí";
+"perpetual.increase_position" = "Increase Position";

@@ -474,3 +474,6 @@
 "stake.resource" = "Hulpbron";
 "stake.resource.energy" = "Energie";
 "stake.resource.bandwidth" = "Bandbreedte";
+"perpetual.modify" = "Bewerken";
+"perpetual.reduce_position" = "Positie verkleinen";
+"perpetual.increase_position" = "Positie verhogen";

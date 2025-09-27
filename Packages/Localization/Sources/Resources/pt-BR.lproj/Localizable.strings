@@ -474,3 +474,6 @@
 "stake.resource" = "Recurso";
 "stake.resource.energy" = "Energia";
 "stake.resource.bandwidth" = "Largura de banda";
+"perpetual.modify" = "Modificar";
+"perpetual.reduce_position" = "Reduzir posição";
+"perpetual.increase_position" = "Aumentar a posição";

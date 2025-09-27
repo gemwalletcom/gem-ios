@@ -474,3 +474,6 @@
 "stake.resource" = "Zdroj";
 "stake.resource.energy" = "Energie";
 "stake.resource.bandwidth" = "Šířka pásma";
+"perpetual.modify" = "Upravit";
+"perpetual.reduce_position" = "Snížit pozici";
+"perpetual.increase_position" = "Increase Position";

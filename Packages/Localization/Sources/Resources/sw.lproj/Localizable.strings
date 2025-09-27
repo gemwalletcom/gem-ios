@@ -474,3 +474,6 @@
 "stake.resource" = "Rasilimali";
 "stake.resource.energy" = "Nishati";
 "stake.resource.bandwidth" = "Bandwidth";
+"perpetual.modify" = "Rekebisha";
+"perpetual.reduce_position" = "Punguza Nafasi";
+"perpetual.increase_position" = "Increase Position";

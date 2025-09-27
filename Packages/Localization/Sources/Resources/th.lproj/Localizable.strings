@@ -474,3 +474,6 @@
 "stake.resource" = "ทรัพยากร";
 "stake.resource.energy" = "พลังงาน";
 "stake.resource.bandwidth" = "แบนด์วิดท์";
+"perpetual.modify" = "แก้ไข";
+"perpetual.reduce_position" = "ลดตำแหน่ง";
+"perpetual.increase_position" = "เพิ่มตำแหน่ง";

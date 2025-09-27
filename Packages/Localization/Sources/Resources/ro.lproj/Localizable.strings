@@ -474,3 +474,6 @@
 "stake.resource" = "Resursă";
 "stake.resource.energy" = "Energie";
 "stake.resource.bandwidth" = "Lățime de bandă";
+"perpetual.modify" = "Modifica";
+"perpetual.reduce_position" = "Reduceți poziția";
+"perpetual.increase_position" = "Increase Position";
