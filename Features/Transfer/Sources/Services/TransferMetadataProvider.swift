@@ -44,9 +44,7 @@ public final class TransferMetadataProvider: TransferMetadataProvidable {
         extraIds: [AssetId] = []
     ) throws -> TransferDataMetadata {
         let assetId = asset.id
-        // FIXME: check TransferDataType to get feeAssetId, perpetual is different
-        // let feeAssetId = asset.feeAsset.id
-        let feeAssetId = assetId
+        let feeAssetId = asset.feeAsset.id
 
         guard
             let balance = try balanceService.getBalance(
