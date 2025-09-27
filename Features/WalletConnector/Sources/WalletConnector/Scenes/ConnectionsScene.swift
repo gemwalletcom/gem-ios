@@ -22,18 +22,15 @@ public struct ConnectionsScene: View {
                 ButtonListItem(
                     title: model.pasteButtonTitle,
                     image: Images.System.paste,
+                    isLoading: model.loadingButton == .paste,
                     action: model.onPaste
                 )
                 ButtonListItem(
                     title: model.scanQRCodeButtonTitle,
                     image: Images.System.qrCode,
+                    isLoading: model.loadingButton == .scan,
                     action: model.onScan
                 )
-            } footer: {
-                if model.isLoading {
-                    LoadingTextView(isAnimating: .constant(true))
-                        .textCase(nil)
-                }
             }
             
             ForEach(model.sections) { section in
