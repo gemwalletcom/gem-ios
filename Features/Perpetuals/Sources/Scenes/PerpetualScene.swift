@@ -88,21 +88,21 @@ public struct PerpetualScene: View {
                     HStack(spacing: Spacing.medium) {
                         Button(model.modifyPositionTitle, action: model.onModifyPosition)
                             .frame(maxWidth: .infinity)
-                            .buttonStyle(.blue())
+                            .buttonStyle(.blue(isGlassEffectEnabled: true))
 
                         Button(model.closePositionTitle, action: model.onClosePosition)
                             .frame(maxWidth: .infinity)
-                            .buttonStyle(.red())
+                            .buttonStyle(.red(isGlassEffectEnabled: true))
                     }
                 } else {
                     HStack(spacing: Spacing.medium) {
                         Button(model.longButtonTitle, action: model.onOpenLongPosition)
                             .frame(maxWidth: .infinity)
-                            .buttonStyle(.green())
+                            .buttonStyle(.green(isGlassEffectEnabled: true))
                         
                         Button(model.shortButtonTitle, action: model.onOpenShortPosition)
                             .frame(maxWidth: .infinity)
-                            .buttonStyle(.red())
+                            .buttonStyle(.red(isGlassEffectEnabled: true))
                     }
                 }
             }

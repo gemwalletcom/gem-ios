@@ -56,8 +56,8 @@ public struct ColorButtonStyle: ButtonStyle {
 
 extension ButtonStyle where Self == ColorButtonStyle {
     public static func blue(
-        paddingHorizontal: CGFloat = .medium,
-        paddingVertical: CGFloat = .medium,
+        paddingHorizontal: CGFloat = .button.paddingHorizontal,
+        paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
         isGlassEffectEnabled: Bool = false
     ) -> ColorButtonStyle {
@@ -71,8 +71,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
     }
 
     public static func blueGrayPressed(
-        paddingHorizontal: CGFloat = .medium,
-        paddingVertical: CGFloat = .medium,
+        paddingHorizontal: CGFloat = .button.paddingHorizontal,
+        paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
         isGlassEffectEnabled: Bool = false
     ) -> ColorButtonStyle {
@@ -87,8 +87,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
     
 
     public static func gray(
-        paddingHorizontal: CGFloat = .medium,
-        paddingVertical: CGFloat = .medium,
+        paddingHorizontal: CGFloat = .button.paddingHorizontal,
+        paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
         isGlassEffectEnabled: Bool = false
     ) -> ColorButtonStyle {
@@ -102,8 +102,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
     }
 
     public static func lightGray(
-        paddingHorizontal: CGFloat = .medium,
-        paddingVertical: CGFloat = .medium,
+        paddingHorizontal: CGFloat = .button.paddingHorizontal,
+        paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
         isGlassEffectEnabled: Bool = false
     ) -> ColorButtonStyle {
@@ -117,8 +117,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
     }
 
     public static func white(
-        paddingHorizontal: CGFloat = .medium,
-        paddingVertical: CGFloat = .medium,
+        paddingHorizontal: CGFloat = .button.paddingHorizontal,
+        paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
         isGlassEffectEnabled: Bool = false
     ) -> ColorButtonStyle {
@@ -162,8 +162,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
     }
 
     public static func listStyleColor(
-        paddingHorizontal: CGFloat = .medium,
-        paddingVertical: CGFloat = .medium,
+        paddingHorizontal: CGFloat = .button.paddingHorizontal,
+        paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
         isGlassEffectEnabled: Bool = false
     ) -> ColorButtonStyle {
@@ -177,8 +177,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
     }
     
     public static func red(
-        paddingHorizontal: CGFloat = .medium,
-        paddingVertical: CGFloat = .medium,
+        paddingHorizontal: CGFloat = .button.paddingHorizontal,
+        paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
         isGlassEffectEnabled: Bool = false
     ) -> ColorButtonStyle {
@@ -192,8 +192,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
     }
     
     public static func green(
-        paddingHorizontal: CGFloat = .medium,
-        paddingVertical: CGFloat = .medium,
+        paddingHorizontal: CGFloat = .button.paddingHorizontal,
+        paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
         isGlassEffectEnabled: Bool = false
     ) -> ColorButtonStyle {
