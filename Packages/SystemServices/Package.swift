@@ -13,8 +13,6 @@ let package = Package(
         .library(name: "NotificationServiceTestKit", targets: ["NotificationServiceTestKit"]),
         .library(name: "DeviceService", targets: ["DeviceService"]),
         .library(name: "DeviceServiceTestKit", targets: ["DeviceServiceTestKit"]),
-        .library(name: "BannerService", targets: ["BannerService"]),
-        .library(name: "BannerServiceTestKit", targets: ["BannerServiceTestKit"]),
         .library(name: "ImageGalleryService", targets: ["ImageGalleryService"]),
         .library(name: "WalletService", targets: ["WalletService"]),
         .library(name: "WalletServiceTestKit", targets: ["WalletServiceTestKit"]),
@@ -68,26 +66,6 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store")
             ],
             path: "DeviceService/TestKit"
-        ),
-        .target(
-            name: "BannerService",
-            dependencies: [
-                "Primitives",
-                "Store",
-                "NotificationService",
-                "Preferences"
-            ],
-            path: "BannerService",
-            exclude: ["TestKit"]
-        ),
-        .target(
-            name: "BannerServiceTestKit",
-            dependencies: [
-                .product(name: "StoreTestKit", package: "Store"),
-                "NotificationServiceTestKit",
-                "BannerService"
-            ],
-            path: "BannerService/TestKit"
         ),
         .target(
             name: "ImageGalleryService",

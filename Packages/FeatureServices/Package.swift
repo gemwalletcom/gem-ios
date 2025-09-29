@@ -12,6 +12,8 @@ let package = Package(
         .library(name: "PerpetualService", targets: ["PerpetualService"]),
         .library(name: "BalanceService", targets: ["BalanceService"]),
         .library(name: "BalanceServiceTestKit", targets: ["BalanceServiceTestKit"]),
+        .library(name: "BannerService", targets: ["BannerService"]),
+        .library(name: "BannerServiceTestKit", targets: ["BannerServiceTestKit"]),
         .library(name: "NFTService", targets: ["NFTService"]),
         .library(name: "NFTServiceTestKit", targets: ["NFTServiceTestKit"]),
         .library(name: "AvatarService", targets: ["AvatarService"]),
@@ -82,6 +84,26 @@ let package = Package(
                 "Primitives"
             ],
             path: "BalanceService/TestKit"
+        ),
+        .target(
+            name: "BannerService",
+            dependencies: [
+                "Primitives",
+                "Store",
+                .product(name: "NotificationService", package: "SystemServices"),
+                "Preferences"
+            ],
+            path: "BannerService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "BannerServiceTestKit",
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "NotificationServiceTestKit", package: "SystemServices"),
+                "BannerService"
+            ],
+            path: "BannerService/TestKit"
         ),
         .target(
             name: "NFTService",
@@ -276,7 +298,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Store",
-                .product(name: "BannerService", package: "SystemServices"),
+                "BannerService",
                 "PriceService",
                 "Preferences",
                 "BalanceService",
@@ -294,7 +316,7 @@ let package = Package(
             name: "WalletsServiceTestKit",
             dependencies: [
                 .product(name: "DeviceServiceTestKit", package: "SystemServices"),
-                .product(name: "BannerServiceTestKit", package: "SystemServices"),
+                "BannerServiceTestKit",
                 .product(name: "StoreTestKit", package: "Store"),
                 "PriceServiceTestKit",
                 "BalanceServiceTestKit",
@@ -311,7 +333,7 @@ let package = Package(
                 "GemAPI",
                 .product(name: "NodeService", package: "ChainServices"),
                 "Preferences",
-                .product(name: "BannerService", package: "SystemServices"),
+                "BannerService",
                 .product(name: "DeviceService", package: "SystemServices"),
                 "SwapService",
                 "AssetsService",

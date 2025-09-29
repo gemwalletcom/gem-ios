@@ -47,7 +47,7 @@ let package = Package(
                 "Store",
                 "Preferences",
                 .product(name: "WalletsService", package: "FeatureServices"),
-                .product(name: "BannerService", package: "SystemServices"),
+                .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "WalletService", package: "SystemServices"),
                 "Perpetuals"
             ],
@@ -58,7 +58,7 @@ let package = Package(
             dependencies: [
                 .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
-                .product(name: "BannerServiceTestKit", package: "SystemServices"),
+                .product(name: "BannerServiceTestKit", package: "FeatureServices"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "WalletServiceTestKit", package: "SystemServices"),
@@ -70,7 +70,7 @@ let package = Package(
             name: "WalletTabTests",
             dependencies: [
                 .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
-                .product(name: "BannerServiceTestKit", package: "SystemServices"),
+                .product(name: "BannerServiceTestKit", package: "FeatureServices"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "WalletServiceTestKit", package: "SystemServices"),
