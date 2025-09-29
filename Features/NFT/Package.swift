@@ -34,7 +34,7 @@ let package = Package(
                 "PrimitivesComponents",
                 "Style",
                 "Localization",
-                .product(name: "DeviceService", package: "SystemServices"),
+                .product(name: "DeviceService", package: "FeatureServices"),
                 .product(name: "NFTService", package: "FeatureServices"),
                 "Store",
                 .product(name: "ImageGalleryService", package: "SystemServices"),

@@ -25,7 +25,6 @@ let package = Package(
 
         .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
-        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "QRScanner", path: "../QRScanner"),
@@ -49,8 +48,8 @@ let package = Package(
                 .product(name: "StakeService", package: "ChainServices"),
                 .product(name: "AssetsService", package: "FeatureServices"),
                 .product(name: "TransactionsService", package: "FeatureServices"),
-                .product(name: "NotificationService", package: "SystemServices"),
-                .product(name: "DeviceService", package: "SystemServices"),
+                .product(name: "NotificationService", package: "FeatureServices"),
+                .product(name: "DeviceService", package: "FeatureServices"),
                 .product(name: "PriceService", package: "FeatureServices"),
                 .product(name: "AppService", package: "FeatureServices"),
                 .product(name: "PerpetualService", package: "FeatureServices"),
