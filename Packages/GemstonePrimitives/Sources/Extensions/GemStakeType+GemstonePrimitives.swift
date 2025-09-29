@@ -23,7 +23,7 @@ extension FreezeData {
     }
 }
 
-extension Gemstone.FreezeType {
+extension GemFreezeType {
     public func map() throws -> Primitives.FreezeType {
         switch self {
         case .freeze: .freeze
@@ -33,7 +33,7 @@ extension Gemstone.FreezeType {
 }
 
 extension Primitives.FreezeType {
-    public func map() -> Gemstone.FreezeType {
+    public func map() -> GemFreezeType {
         switch self {
         case .freeze: .freeze
         case .unfreeze: .unfreeze
@@ -41,7 +41,7 @@ extension Primitives.FreezeType {
     }
 }
 
-extension Gemstone.Resource {
+extension GemResource {
     public func map() throws -> Primitives.Resource {
         switch self {
         case .bandwidth: .bandwidth
@@ -51,7 +51,7 @@ extension Gemstone.Resource {
 }
 
 extension Primitives.Resource {
-    public func map() -> Gemstone.Resource {
+    public func map() -> GemResource {
         switch self {
         case .bandwidth: .bandwidth
         case .energy: .energy

@@ -58,7 +58,6 @@ struct AmountScene: View {
                             .textStyle(.calloutSecondary)
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
 
             switch model.type {
@@ -76,7 +75,6 @@ struct AmountScene: View {
                             ValidatorView(model: viewModel)
                         }
                     }
-                    .listRowInsets(.assetListRowInsets)
                 }
             case .freeze:
                 if model.isSelectResourceEnabled {

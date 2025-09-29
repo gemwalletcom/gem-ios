@@ -4,6 +4,7 @@ import SwiftUI
 import Localization
 import Primitives
 import WalletService
+import BannerService
 
 public struct CreateWalletNavigationStack: View {
     @State private var navigationPath: NavigationPath = NavigationPath()
@@ -22,13 +23,14 @@ public struct CreateWalletNavigationStack: View {
     public var body: some View {
         NavigationStack(path: $navigationPath) {
             Group {
-                switch walletService.isAcceptTermsCompleted {
-                case true: securityReminderScene
-                case false: AcceptTermsScene(
-                    model: AcceptTermsViewModel(onNext: {
-                        navigationPath.append(Scenes.SecurityReminder())
-                    })
-                )
+                if walletService.isAcceptTermsCompleted {
+                    securityReminderScene
+                } else {
+                    AcceptTermsScene(
+                        model: AcceptTermsViewModel(
+                            onNext: { navigationPath.append(Scenes.SecurityReminder())
+                        })
+                    )
                 }
             }
             .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
@@ -38,10 +40,7 @@ public struct CreateWalletNavigationStack: View {
                     model: VerifyPhraseViewModel(
                         words: $0.words,
                         walletService: walletService,
-                        onFinish: {
-                            walletService.acceptTerms()
-                            isPresentingWallets.toggle()
-                        }
+                        onFinish: { isPresentingWallets.toggle() }
                     )
                 )
             }
@@ -65,9 +64,7 @@ public struct CreateWalletNavigationStack: View {
         SecurityReminderScene(
             model: SecurityReminderViewModelDefault(
                 title: Localized.Wallet.New.title,
-                onNext: {
-                    navigationPath.append(Scenes.CreateWallet())
-                }
+                onNext: { navigationPath.append(Scenes.CreateWallet()) }
             )
         )
     }

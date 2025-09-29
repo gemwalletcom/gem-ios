@@ -41,7 +41,7 @@ extension DelegationValidator {
             id: systemId,
             name: name,
             isActive: true,
-            commision: .zero,
+            commission: .zero,
             apr: .zero
         )
     }

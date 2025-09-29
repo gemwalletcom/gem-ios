@@ -474,3 +474,8 @@
 "stake.resource" = "وسیلہ";
 "stake.resource.energy" = "توانائی";
 "stake.resource.bandwidth" = "بینڈوتھ";
+"perpetual.modify" = "ترمیم کریں۔";
+"perpetual.reduce_position" = "پوزیشن کو کم کریں۔";
+"perpetual.increase_position" = "پوزیشن میں اضافہ کریں۔";
+"banner.onboarding.title" = "Gem خاندان میں خوش آمدید";
+"banner.onboarding.description" = "شروع کرنے کے لیے اپنے بٹوے میں کریپٹو خریدیں یا وصول کریں۔";

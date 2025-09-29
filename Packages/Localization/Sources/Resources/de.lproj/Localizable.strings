@@ -474,3 +474,8 @@
 "stake.resource" = "Ressource";
 "stake.resource.energy" = "Energie";
 "stake.resource.bandwidth" = "Bandbreite";
+"perpetual.modify" = "Ändern";
+"perpetual.reduce_position" = "Position reduzieren";
+"perpetual.increase_position" = "Position erhöhen";
+"banner.onboarding.title" = "Willkommen in der Gem-Familie";
+"banner.onboarding.description" = "Kaufen oder erhalten Sie Kryptowährungen in Ihr Wallet, um loszulegen";

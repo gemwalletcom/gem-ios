@@ -474,3 +474,8 @@
 "stake.resource" = "Tài nguyên";
 "stake.resource.energy" = "Năng lượng";
 "stake.resource.bandwidth" = "Băng thông";
+"perpetual.modify" = "Biến đổi";
+"perpetual.reduce_position" = "Giảm vị trí";
+"perpetual.increase_position" = "Tăng vị trí";
+"banner.onboarding.title" = "Chào mừng đến với gia đình Gem";
+"banner.onboarding.description" = "Mua hoặc nhận tiền điện tử vào ví của bạn để bắt đầu";

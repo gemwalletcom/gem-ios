@@ -160,6 +160,7 @@ extension WalletsSceneViewModel {
     }
 
     private func performSwapOrder(wallets: [Wallet], source: Int, destination: Int) throws {
+        guard source != destination else { return }
         NSLog("swapOrder source: \(source) destination: \(destination)")
 
         let from = try wallets.getElement(safe: source)

@@ -5,9 +5,9 @@
 import Foundation
 
 public enum LatencyType: String, Codable, Equatable, Hashable, Sendable {
-	case fast = "Fast"
-	case normal = "Normal"
-	case slow = "Slow"
+	case fast
+	case normal
+	case slow
 }
 
 public struct Latency: Codable, Equatable, Hashable, Sendable {

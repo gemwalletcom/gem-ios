@@ -474,3 +474,8 @@
 "stake.resource" = "منبع";
 "stake.resource.energy" = "انرژی";
 "stake.resource.bandwidth" = "پهنای باند";
+"perpetual.modify" = "اصلاح";
+"perpetual.reduce_position" = "کاهش موقعیت";
+"perpetual.increase_position" = "افزایش موقعیت";
+"banner.onboarding.title" = "به خانواده Gem خوش آمدید";
+"banner.onboarding.description" = "برای شروع، ارز دیجیتال را در کیف پول خود خریداری یا دریافت کنید";

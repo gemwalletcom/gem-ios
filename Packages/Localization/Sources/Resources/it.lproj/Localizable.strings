@@ -474,3 +474,8 @@
 "stake.resource" = "Risorsa";
 "stake.resource.energy" = "Energia";
 "stake.resource.bandwidth" = "Larghezza di banda";
+"perpetual.modify" = "Modificare";
+"perpetual.reduce_position" = "Ridurre la posizione";
+"perpetual.increase_position" = "Aumenta la posizione";
+"banner.onboarding.title" = "Benvenuto nella famiglia Gem";
+"banner.onboarding.description" = "Acquista o ricevi criptovalute sul tuo portafoglio per iniziare";

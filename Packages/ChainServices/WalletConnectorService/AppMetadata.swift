@@ -12,9 +12,7 @@ extension AppMetadata {
             url: url,
             icon: icons.first { icon in
                 [".png", ".jpg", ".jpeg"].contains { icon.contains($0) }
-            } ?? icons.first ?? .empty,
-            redirectNative: redirect?.native,
-            redirectUniversal: redirect?.universal
+            } ?? icons.first ?? .empty
         )
     }
 }

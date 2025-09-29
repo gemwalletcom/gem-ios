@@ -474,3 +474,8 @@
 "stake.resource" = "의지";
 "stake.resource.energy" = "에너지";
 "stake.resource.bandwidth" = "대역폭";
+"perpetual.modify" = "수정하다";
+"perpetual.reduce_position" = "위치 줄이기";
+"perpetual.increase_position" = "위치 증가";
+"banner.onboarding.title" = "Gem 패밀리에 오신 것을 환영합니다";
+"banner.onboarding.description" = "시작하려면 암호화폐를 구매하거나 지갑으로 받으세요";
