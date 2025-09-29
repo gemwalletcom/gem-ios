@@ -476,4 +476,6 @@
 "stake.resource.bandwidth" = "Båndbredde";
 "perpetual.modify" = "Modificere";
 "perpetual.reduce_position" = "Reducer position";
-"perpetual.increase_position" = "Increase Position";
+"perpetual.increase_position" = "Øg position";
+"banner.onboarding.title" = "Velkommen til Gem-familien";
+"banner.onboarding.description" = "Køb eller modtag krypto til din wallet for at komme i gang";

@@ -477,3 +477,5 @@
 "perpetual.modify" = "Değiştir";
 "perpetual.reduce_position" = "Pozisyonu Azalt";
 "perpetual.increase_position" = "Pozisyonu Artır";
+"banner.onboarding.title" = "Gem ailesine hoş geldiniz";
+"banner.onboarding.description" = "Başlamak için kripto paranızı cüzdanınıza satın alın veya alın";

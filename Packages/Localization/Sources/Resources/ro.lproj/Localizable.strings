@@ -476,4 +476,6 @@
 "stake.resource.bandwidth" = "Lățime de bandă";
 "perpetual.modify" = "Modifica";
 "perpetual.reduce_position" = "Reduceți poziția";
-"perpetual.increase_position" = "Increase Position";
+"perpetual.increase_position" = "Creșteți poziția";
+"banner.onboarding.title" = "Bine ai venit în familia Gem";
+"banner.onboarding.description" = "Cumpără sau primește criptomonede în portofelul tău pentru a începe";

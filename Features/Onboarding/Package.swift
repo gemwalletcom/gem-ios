@@ -38,6 +38,7 @@ let package = Package(
                 "QRScanner",
                 "Keystore",
                 .product(name: "WalletService", package: "SystemServices"),
+                .product(name: "BannerService", package: "SystemServices"),
                 "Formatters"
             ],
             path: "Sources"

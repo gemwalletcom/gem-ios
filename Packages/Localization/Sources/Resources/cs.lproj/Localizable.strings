@@ -476,4 +476,6 @@
 "stake.resource.bandwidth" = "Šířka pásma";
 "perpetual.modify" = "Upravit";
 "perpetual.reduce_position" = "Snížit pozici";
-"perpetual.increase_position" = "Increase Position";
+"perpetual.increase_position" = "Zvýšit pozici";
+"banner.onboarding.title" = "Vítejte v rodině Gem";
+"banner.onboarding.description" = "Kupte si kryptoměny nebo je přijměte do své peněženky a začněte";

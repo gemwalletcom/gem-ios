@@ -477,3 +477,5 @@
 "perpetual.modify" = "แก้ไข";
 "perpetual.reduce_position" = "ลดตำแหน่ง";
 "perpetual.increase_position" = "เพิ่มตำแหน่ง";
+"banner.onboarding.title" = "ยินดีต้อนรับสู่ครอบครัว Gem";
+"banner.onboarding.description" = "ซื้อหรือรับ crypto ลงในกระเป๋าเงินของคุณเพื่อเริ่มต้น";

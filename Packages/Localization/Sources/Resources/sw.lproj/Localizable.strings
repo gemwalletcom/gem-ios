@@ -476,4 +476,6 @@
 "stake.resource.bandwidth" = "Bandwidth";
 "perpetual.modify" = "Rekebisha";
 "perpetual.reduce_position" = "Punguza Nafasi";
-"perpetual.increase_position" = "Increase Position";
+"perpetual.increase_position" = "Ongeza Nafasi";
+"banner.onboarding.title" = "Karibu kwenye familia ya Gem";
+"banner.onboarding.description" = "Nunua au Pokea crypto kwenye pochi yako ili uanze";
