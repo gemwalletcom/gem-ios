@@ -477,3 +477,5 @@
 "perpetual.modify" = "Bewerken";
 "perpetual.reduce_position" = "Positie verkleinen";
 "perpetual.increase_position" = "Positie verhogen";
+"banner.onboarding.title" = "Welkom bij de Gem-familie";
+"banner.onboarding.description" = "Koop of ontvang crypto in uw portemonnee om te beginnen";

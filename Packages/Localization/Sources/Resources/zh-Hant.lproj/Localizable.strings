@@ -477,3 +477,5 @@
 "perpetual.modify" = "調整";
 "perpetual.reduce_position" = "減倉";
 "perpetual.increase_position" = "增加職位";
+"banner.onboarding.title" = "歡迎加入 Gem 家庭";
+"banner.onboarding.description" = "購買或接收加密貨幣到您的錢包即可開始使用";

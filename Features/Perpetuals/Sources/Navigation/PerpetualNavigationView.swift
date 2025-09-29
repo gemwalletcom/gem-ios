@@ -39,5 +39,10 @@ public struct PerpetualNavigationView: View {
                     Task { await model.fetch() }
                 }
             }
+            .onChange(of: isPresentingPerpetualRecipientData) { _, newValue in
+                if newValue == .none {
+                    Task { await model.fetch() }
+                }
+            }
     }
 }

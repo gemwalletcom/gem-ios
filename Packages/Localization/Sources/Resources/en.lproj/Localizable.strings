@@ -477,3 +477,5 @@
 "perpetual.modify" = "Modify";
 "perpetual.reduce_position" = "Reduce Position";
 "perpetual.increase_position" = "Increase Position";
+"banner.onboarding.title" = "Welcome to the Gem Family";
+"banner.onboarding.description" = "Buy or Receive crypto to your wallet to get started";

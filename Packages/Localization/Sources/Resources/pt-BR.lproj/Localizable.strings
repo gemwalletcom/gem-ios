@@ -477,3 +477,5 @@
 "perpetual.modify" = "Modificar";
 "perpetual.reduce_position" = "Reduzir posição";
 "perpetual.increase_position" = "Aumentar a posição";
+"banner.onboarding.title" = "Bem-vindo à família Gem";
+"banner.onboarding.description" = "Compre ou receba criptomoedas em sua carteira para começar";
