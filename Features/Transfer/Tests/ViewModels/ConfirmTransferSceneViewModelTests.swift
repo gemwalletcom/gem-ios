@@ -4,6 +4,7 @@ import Testing
 @testable import Transfer
 import Primitives
 import PrimitivesTestKit
+import TransferTestKit
 import PrimitivesComponents
 import WalletsServiceTestKit
 import BlockchainTestKit
