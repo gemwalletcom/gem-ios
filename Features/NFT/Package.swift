@@ -38,7 +38,7 @@ let package = Package(
                 .product(name: "NFTService", package: "FeatureServices"),
                 "Store",
                 .product(name: "ImageGalleryService", package: "SystemServices"),
-                .product(name: "WalletService", package: "SystemServices"),
+                .product(name: "WalletService", package: "FeatureServices"),
                 "Formatters",
                 .product(name: "ExplorerService", package: "ChainServices"),
                 .product(name: "AvatarService", package: "FeatureServices")
@@ -50,7 +50,7 @@ let package = Package(
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StoreTestKit", package: "Store"),
-                .product(name: "WalletServiceTestKit", package: "SystemServices"),
+                .product(name: "WalletServiceTestKit", package: "FeatureServices"),
                 "NFT",
                 "PrimitivesComponents",
                 .product(name: "AvatarService", package: "FeatureServices"),

@@ -14,8 +14,6 @@ let package = Package(
         .library(name: "DeviceService", targets: ["DeviceService"]),
         .library(name: "DeviceServiceTestKit", targets: ["DeviceServiceTestKit"]),
         .library(name: "ImageGalleryService", targets: ["ImageGalleryService"]),
-        .library(name: "WalletService", targets: ["WalletService"]),
-        .library(name: "WalletServiceTestKit", targets: ["WalletServiceTestKit"]),
         .library(name: "NativeProviderService", targets: ["NativeProviderService"]),
         .library(name: "WalletSessionService", targets: ["WalletSessionService"]),
         .library(name: "WalletSessionServiceTestKit", targets: ["WalletSessionServiceTestKit"]),
@@ -25,8 +23,6 @@ let package = Package(
         .package(name: "Preferences", path: "../Preferences"),
         .package(name: "Store", path: "../Store"),
         .package(name: "GemAPI", path: "../GemAPI"),
-        .package(name: "Keystore", path: "../Keystore"),
-        .package(name: "FeatureServices", path: "../FeatureServices"),
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "WalletCore", path: "../WalletCore"),
     ],
@@ -72,29 +68,6 @@ let package = Package(
             dependencies: [],
             path: "ImageGalleryService",
             exclude: ["Tests", "TestKit"]
-        ),
-        .target(
-            name: "WalletService",
-            dependencies: [
-                "Primitives",
-                "Keystore",
-                "Store",
-                "Preferences",
-                .product(name: "AvatarService", package: "FeatureServices"),
-                "WalletSessionService"
-            ],
-            path: "WalletService",
-            exclude: ["TestKit"]
-        ),
-        .target(
-            name: "WalletServiceTestKit",
-            dependencies: [
-                .product(name: "KeystoreTestKit", package: "Keystore"),
-                .product(name: "PreferencesTestKit", package: "Preferences"),
-                .product(name: "StoreTestKit", package: "Store"),
-                "WalletService"
-            ],
-            path: "WalletService/TestKit"
         ),
         .target(
             name: "NativeProviderService",

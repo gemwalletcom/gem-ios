@@ -32,6 +32,8 @@ let package = Package(
         .library(name: "AssetsServiceTestKit", targets: ["AssetsServiceTestKit"]),
         .library(name: "WalletsService", targets: ["WalletsService"]),
         .library(name: "WalletsServiceTestKit", targets: ["WalletsServiceTestKit"]),
+        .library(name: "WalletService", targets: ["WalletService"]),
+        .library(name: "WalletServiceTestKit", targets: ["WalletServiceTestKit"]),
         .library(name: "AppService", targets: ["AppService"]),
         .library(name: "AddressNameService", targets: ["AddressNameService"]),
         .library(name: "AddressNameServiceTestKit", targets: ["AddressNameServiceTestKit"]),
@@ -326,6 +328,29 @@ let package = Package(
             path: "WalletsService/TestKit"
         ),
         .target(
+            name: "WalletService",
+            dependencies: [
+                "Primitives",
+                "Keystore",
+                "Store",
+                "Preferences",
+                "AvatarService",
+                .product(name: "WalletSessionService", package: "SystemServices")
+            ],
+            path: "WalletService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "WalletServiceTestKit",
+            dependencies: [
+                .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "StoreTestKit", package: "Store"),
+                "WalletService"
+            ],
+            path: "WalletService/TestKit"
+        ),
+        .target(
             name: "AppService",
             dependencies: [
                 "Primitives",
@@ -337,7 +362,7 @@ let package = Package(
                 .product(name: "DeviceService", package: "SystemServices"),
                 "SwapService",
                 "AssetsService",
-                .product(name: "WalletService", package: "SystemServices")
+                "WalletService"
             ],
             path: "AppService",
             exclude: ["Tests"]

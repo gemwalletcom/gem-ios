@@ -28,7 +28,6 @@ let package = Package(
 
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
-        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "GemAPI", path: "../../Packages/GemAPI"),
@@ -48,7 +47,7 @@ let package = Package(
                 "Preferences",
                 .product(name: "WalletsService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
-                .product(name: "WalletService", package: "SystemServices"),
+                .product(name: "WalletService", package: "FeatureServices"),
                 "Perpetuals"
             ],
             path: "Sources"
@@ -61,7 +60,7 @@ let package = Package(
                 .product(name: "BannerServiceTestKit", package: "FeatureServices"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "WalletServiceTestKit", package: "SystemServices"),
+                .product(name: "WalletServiceTestKit", package: "FeatureServices"),
                 "WalletTab"
             ],
             path: "TestKit"
@@ -73,7 +72,7 @@ let package = Package(
                 .product(name: "BannerServiceTestKit", package: "FeatureServices"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "WalletServiceTestKit", package: "SystemServices"),
+                .product(name: "WalletServiceTestKit", package: "FeatureServices"),
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
