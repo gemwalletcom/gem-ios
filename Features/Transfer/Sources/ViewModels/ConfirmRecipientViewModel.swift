@@ -54,7 +54,9 @@ extension ConfirmRecipientViewModel {
     }
 
     private var showRecipient: Bool {
-        switch model.type {
+        guard !model.recipient.address.isEmpty else { return false }
+
+        return switch model.type {
         case .stake(_, let stakeType):
             switch stakeType {
             case .stake, .unstake, .redelegate, .withdraw: true
