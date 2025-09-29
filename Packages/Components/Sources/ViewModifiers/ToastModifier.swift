@@ -66,10 +66,12 @@ private struct OptionalMessageToastModifier: ViewModifier {
 // MARK: - View Modifier
 
 public extension View {
+    static var toastDuration: Double { 2 }
+
     func toast(
         isPresenting: Binding<Bool>,
         message: ToastMessage,
-        duration: Double = 2,
+        duration: Double = Self.toastDuration,
         tapToDismiss: Bool = true
     ) -> some View {
         modifier(ToastModifier(
@@ -82,7 +84,7 @@ public extension View {
 
     func toast(
         message: Binding<ToastMessage?>,
-        duration: Double = 2,
+        duration: Double = Self.toastDuration,
         tapToDismiss: Bool = true
     ) -> some View {
         modifier(OptionalMessageToastModifier(

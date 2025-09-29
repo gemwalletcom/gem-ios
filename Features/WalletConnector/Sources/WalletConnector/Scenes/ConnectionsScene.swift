@@ -79,10 +79,6 @@ public struct ConnectionsScene: View {
         )
         .navigationTitle(model.title)
         .taskOnce { model.updateSessions() }
-        .onChange(of: model.walletConnectorPresenter?.isPresentingSheet?.id) { _, newValue in
-            if newValue != nil {
-                model.hideConnectionBar()
-            }
-        }
+        .onChange(of: model.walletConnectorPresenter?.isPresentingSheet?.id, model.hideConnectionBar)
     }
 }
