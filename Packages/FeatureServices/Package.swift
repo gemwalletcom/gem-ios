@@ -32,6 +32,8 @@ let package = Package(
         .library(name: "AssetsServiceTestKit", targets: ["AssetsServiceTestKit"]),
         .library(name: "WalletsService", targets: ["WalletsService"]),
         .library(name: "WalletsServiceTestKit", targets: ["WalletsServiceTestKit"]),
+        .library(name: "WalletSessionService", targets: ["WalletSessionService"]),
+        .library(name: "WalletSessionServiceTestKit", targets: ["WalletSessionServiceTestKit"]),
         .library(name: "WalletService", targets: ["WalletService"]),
         .library(name: "WalletServiceTestKit", targets: ["WalletServiceTestKit"]),
         .library(name: "AppService", targets: ["AppService"]),
@@ -308,7 +310,7 @@ let package = Package(
                 "TransactionService",
                 "DiscoverAssetsService",
                 .product(name: "ChainService", package: "ChainServices"),
-                .product(name: "WalletSessionService", package: "SystemServices"),
+                "WalletSessionService",
                 .product(name: "DeviceService", package: "SystemServices")
             ],
             path: "WalletsService",
@@ -328,6 +330,25 @@ let package = Package(
             path: "WalletsService/TestKit"
         ),
         .target(
+            name: "WalletSessionService",
+            dependencies: [
+                "Primitives",
+                "Store",
+                "Preferences"
+            ],
+            path: "WalletSessionService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "WalletSessionServiceTestKit",
+            dependencies: [
+                "WalletSessionService",
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "StoreTestKit", package: "Store")
+            ],
+            path: "WalletSessionService/TestKit"
+        ),
+        .target(
             name: "WalletService",
             dependencies: [
                 "Primitives",
@@ -335,7 +356,7 @@ let package = Package(
                 "Store",
                 "Preferences",
                 "AvatarService",
-                .product(name: "WalletSessionService", package: "SystemServices")
+                "WalletSessionService"
             ],
             path: "WalletService",
             exclude: ["TestKit"]

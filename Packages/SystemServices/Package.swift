@@ -15,8 +15,6 @@ let package = Package(
         .library(name: "DeviceServiceTestKit", targets: ["DeviceServiceTestKit"]),
         .library(name: "ImageGalleryService", targets: ["ImageGalleryService"]),
         .library(name: "NativeProviderService", targets: ["NativeProviderService"]),
-        .library(name: "WalletSessionService", targets: ["WalletSessionService"]),
-        .library(name: "WalletSessionServiceTestKit", targets: ["WalletSessionServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -78,25 +76,6 @@ let package = Package(
             ],
             path: "NativeProviderService",
             exclude: ["Tests", "TestKit"]
-        ),
-        .target(
-            name: "WalletSessionService",
-            dependencies: [
-                "Primitives",
-                "Store",
-                "Preferences"
-            ],
-            path: "WalletSessionService",
-            exclude: ["TestKit"]
-        ),
-        .target(
-            name: "WalletSessionServiceTestKit",
-            dependencies: [
-                "WalletSessionService",
-                .product(name: "PreferencesTestKit", package: "Preferences"),
-                .product(name: "StoreTestKit", package: "Store"),
-            ],
-            path: "WalletSessionService/TestKit"
         ),
     ]
 )

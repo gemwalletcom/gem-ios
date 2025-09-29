@@ -22,7 +22,7 @@ let package = Package(
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "QRScanner", path: "../QRScanner"),
         .package(name: "Keystore", path: "../../Packages/Keystore"),
-        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
     ],
     targets: [
@@ -38,7 +38,7 @@ let package = Package(
                 "Preferences",
                 "PrimitivesComponents",
                 "QRScanner",
-                .product(name: "WalletSessionService", package: "SystemServices"),
+                .product(name: "WalletSessionService", package: "FeatureServices"),
                 "Keystore",
                 "Gemstone"
             ],
@@ -50,7 +50,7 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
-                .product(name: "WalletSessionServiceTestKit", package: "SystemServices"),
+                .product(name: "WalletSessionServiceTestKit", package: "FeatureServices"),
                 .product(name: "WalletConnectorServiceTestKit", package: "ChainServices"),
                 "WalletConnector",
                 "Gemstone"
