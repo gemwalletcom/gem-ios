@@ -17,9 +17,10 @@ public final class ConnectionsViewModel {
     
     var request: ConnectionsRequest
     var connections: [WalletConnection] = []
+
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
-    var loadingButton: LoadingButton?
+    var isPresentingConnectorBar: Bool = false
 
     public init(
         service: ConnectionsService,
@@ -35,6 +36,7 @@ public final class ConnectionsViewModel {
     var pasteButtonTitle: String { Localized.Common.paste }
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
     var docsUrl: URL { Docs.url(.walletConnect) }
+    
     
     var sections: [ListSection<WalletConnection>] {
         let grouped = Dictionary(grouping: connections, by: { $0.wallet })
@@ -73,8 +75,8 @@ public final class ConnectionsViewModel {
         service.updateSessions()
     }
     
-    func stopLoading() {
-        loadingButton = nil
+    func hideConnectionBar() {
+        isPresentingConnectorBar = false
     }
 }
 
@@ -90,14 +92,12 @@ extension ConnectionsViewModel {
             return
         }
 
-        loadingButton = .paste
         Task {
             await connectURI(uri: content)
         }
     }
     
     func onHandleScan(_ result: String) {
-        loadingButton = .scan
         Task {
             await connectURI(uri: result)
         }
@@ -115,19 +115,13 @@ extension ConnectionsViewModel {
     }
     
     private func connectURI(uri: String) async {
+        isPresentingConnectorBar = true
         do {
             try await pair(uri: uri)
         } catch {
-            loadingButton = nil
+            hideConnectionBar()
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             NSLog("connectURI error: \(error)")
         }
-    }
-}
-
-extension ConnectionsViewModel {
-    enum LoadingButton: Equatable {
-        case paste
-        case scan
     }
 }
