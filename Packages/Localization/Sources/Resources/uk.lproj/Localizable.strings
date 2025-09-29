@@ -54,7 +54,7 @@
 "common.paste" = "Вставити";
 "transfer.max" = "Max";
 "common.delete" = "Видалити";
-"common.delete_confirmation" = "Ви впевнені, що хочете видалити %s?";
+"common.delete_confirmation" = "Ви впевнені, що хочете видалити %@?";
 "settings.community" = "Спільнота";
 "common.hide" = "Сховати";
 "wallet.scan" = "Сканувати";

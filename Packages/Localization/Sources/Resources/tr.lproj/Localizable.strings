@@ -54,7 +54,7 @@
 "common.paste" = "Yapıştırmak";
 "transfer.max" = "Maksimum";
 "common.delete" = "Silmek";
-"common.delete_confirmation" = "%s silmek istediğinizden emin misiniz?";
+"common.delete_confirmation" = "%@ silmek istediğinizden emin misiniz?";
 "settings.community" = "Toplum";
 "common.hide" = "Saklamak";
 "wallet.scan" = "Tara";
