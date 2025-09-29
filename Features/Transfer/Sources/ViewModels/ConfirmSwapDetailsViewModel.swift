@@ -5,7 +5,7 @@ import PrimitivesComponents
 import Components
 import Swap
 
-struct ConfirmTransferSwapDetailsViewModel {
+struct ConfirmSwapDetailsViewModel {
     private let type: TransferDataType
     private let metadata: TransferDataMetadata?
 
@@ -28,7 +28,7 @@ struct ConfirmTransferSwapDetailsViewModel {
 
 // MARK: - ItemModelProvidable
 
-extension ConfirmTransferSwapDetailsViewModel: ItemModelProvidable {
+extension ConfirmSwapDetailsViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel {
         guard let swapDetailsModel = swapDetailsModel else {
             return .empty

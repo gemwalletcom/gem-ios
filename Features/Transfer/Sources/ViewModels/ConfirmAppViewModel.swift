@@ -7,7 +7,7 @@ import Primitives
 import PrimitivesComponents
 import Foundation
 
-public struct ConfirmTransferAppViewModel: ItemModelProvidable {
+public struct ConfirmAppViewModel: ItemModelProvidable {
     private let type: TransferDataType
 
     init(type: TransferDataType) {
@@ -35,7 +35,7 @@ public struct ConfirmTransferAppViewModel: ItemModelProvidable {
 
 // MARK: - ItemModelPrividable
 
-extension ConfirmTransferAppViewModel {
+extension ConfirmAppViewModel {
     public var itemModel: ConfirmTransferItemModel {
         guard let name = appValue else { return .empty }
 
@@ -56,7 +56,7 @@ extension ConfirmTransferAppViewModel {
 
 // MARK: - Private
 
-extension ConfirmTransferAppViewModel {
+extension ConfirmAppViewModel {
     private var appValue: String? {
         switch type {
         case .transfer,

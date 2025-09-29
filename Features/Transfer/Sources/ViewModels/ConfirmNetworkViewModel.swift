@@ -5,7 +5,7 @@ import PrimitivesComponents
 import Components
 import Localization
 
-struct ConfirmTransferNetworkViewModel: ItemModelProvidable {
+struct ConfirmNetworkViewModel: ItemModelProvidable {
     private let type: TransferDataType
 
     init(type: TransferDataType) {
@@ -15,7 +15,7 @@ struct ConfirmTransferNetworkViewModel: ItemModelProvidable {
 
 // MARK: - ItemModelProvidable
 
-extension ConfirmTransferNetworkViewModel {
+extension ConfirmNetworkViewModel {
     var itemModel: ConfirmTransferItemModel {
         .network(
             ListItemModel(
@@ -28,7 +28,7 @@ extension ConfirmTransferNetworkViewModel {
 
 // MARK: - Private
 
-extension ConfirmTransferNetworkViewModel {
+extension ConfirmNetworkViewModel {
     private var networkText: String {
         let model = AssetViewModel(asset: type.asset)
         switch type {

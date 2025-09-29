@@ -5,7 +5,7 @@ import Localization
 import Primitives
 import PrimitivesComponents
 
-struct ConfirmTransferRecipientViewModel {
+struct ConfirmRecipientViewModel {
     private let model: TransferDataViewModel
     private let addressName: AddressName?
     private let addressLink: BlockExplorerLink
@@ -19,7 +19,7 @@ struct ConfirmTransferRecipientViewModel {
 
 // MARK: - ItemModelProvidable
 
-extension ConfirmTransferRecipientViewModel: ItemModelProvidable {
+extension ConfirmRecipientViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel  {
         guard showRecipient else { return .empty }
         return .recipient(
@@ -40,7 +40,7 @@ extension ConfirmTransferRecipientViewModel: ItemModelProvidable {
 
 // MARK: - Private
 
-extension ConfirmTransferRecipientViewModel {
+extension ConfirmRecipientViewModel {
     private var recipientTitle: String {
         switch model.type {
         case .swap: Localized.Common.provider

@@ -3,7 +3,7 @@
 import Primitives
 import Components
 
-struct ConfirmTransferNetworkFeeViewModel: ItemModelProvidable {
+struct ConfirmNetworkFeeViewModel: ItemModelProvidable {
     private let state: StateViewType<TransactionInputViewModel>
     private let title: String
     private let value: String?
@@ -30,7 +30,7 @@ struct ConfirmTransferNetworkFeeViewModel: ItemModelProvidable {
 
 // MARK: - ItemModelProvidable
 
-extension ConfirmTransferNetworkFeeViewModel {
+extension ConfirmNetworkFeeViewModel {
     var itemModel: ConfirmTransferItemModel {
         .networkFee(
             .init(
@@ -47,7 +47,7 @@ extension ConfirmTransferNetworkFeeViewModel {
 
 // MARK: - Private
 
-extension ConfirmTransferNetworkFeeViewModel {
+extension ConfirmNetworkFeeViewModel {
     private var isCalculatorError: Bool {
         switch state.value?.transferAmount {
         case .success, .none: false

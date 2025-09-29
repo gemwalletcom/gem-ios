@@ -4,7 +4,7 @@ import Primitives
 import PrimitivesComponents
 import Components
 
-struct ConfirmTransferMemoViewModel {
+struct ConfirmMemoViewModel {
     private let type: TransferDataType
     private let recipientData: RecipientData
 
@@ -16,7 +16,7 @@ struct ConfirmTransferMemoViewModel {
 
 // MARK: - ItemModelProvidable
 
-extension ConfirmTransferMemoViewModel: ItemModelProvidable {
+extension ConfirmMemoViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel {
         guard showMemo else { return .empty }
         return .memo(MemoViewModel(memo: recipientData.recipient.memo).listItemModel)
@@ -25,7 +25,7 @@ extension ConfirmTransferMemoViewModel: ItemModelProvidable {
 
 // MARK: - Private
 
-extension ConfirmTransferMemoViewModel {
+extension ConfirmMemoViewModel {
     private var showMemo: Bool {
         switch type {
         case .transfer, .deposit, .withdrawal: type.chain.isMemoSupported

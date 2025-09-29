@@ -4,7 +4,7 @@ import Components
 import Primitives
 import Localization
 
-struct ConfirmTransferErrorViewModel {
+struct ConfirmErrorViewModel {
     private let state: StateViewType<TransactionInputViewModel>
     private let onSelectListError: (Error) -> Void
 
@@ -19,7 +19,7 @@ struct ConfirmTransferErrorViewModel {
 
 // MARK: - ItemModelProvidable
 
-extension ConfirmTransferErrorViewModel: ItemModelProvidable {
+extension ConfirmErrorViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel {
         guard let error = listError else { return .empty }
         return .error(
@@ -32,7 +32,7 @@ extension ConfirmTransferErrorViewModel: ItemModelProvidable {
 
 // MARK: - Private
 
-extension ConfirmTransferErrorViewModel {
+extension ConfirmErrorViewModel {
     private var listError: Error? {
         if case let .error(error) = state { return error }
         if case let .failure(error) = state.value?.transferAmount { return error }

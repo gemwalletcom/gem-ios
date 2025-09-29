@@ -4,7 +4,7 @@ import Components
 import PrimitivesComponents
 import Primitives
 
-struct ConfirmTransferHeaderViewModel {
+struct ConfirmHeaderViewModel {
     private let inputModel: TransactionInputViewModel?
     private let metadata: TransferDataMetadata?
     private let data: TransferData
@@ -18,7 +18,7 @@ struct ConfirmTransferHeaderViewModel {
 
 // MARK: - ItemModelProvidable
 
-extension ConfirmTransferHeaderViewModel: ItemModelProvidable {
+extension ConfirmHeaderViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel {
         .header(
             TransactionHeaderItemModel(
@@ -31,7 +31,7 @@ extension ConfirmTransferHeaderViewModel: ItemModelProvidable {
 
 // MARK: - Private
 
-extension ConfirmTransferHeaderViewModel {
+extension ConfirmHeaderViewModel {
     private var headerType: TransactionHeaderType {
         guard let inputModel else {
             return TransactionInputViewModel(data: data, transactionData: nil, metaData: metadata, transferAmount: nil).headerType

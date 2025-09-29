@@ -95,8 +95,8 @@ public final class ConfirmTransferSceneViewModel {
         )
     }
 
-    var swapDetailsViewModel: ConfirmTransferSwapDetailsViewModel {
-        ConfirmTransferSwapDetailsViewModel(type: data.type, metadata: metadata)
+    var swapDetailsViewModel: ConfirmSwapDetailsViewModel {
+        ConfirmSwapDetailsViewModel(type: data.type, metadata: metadata)
     }
 }
 
@@ -115,25 +115,25 @@ extension ConfirmTransferSceneViewModel: ListSectionProvideable {
     public func itemModel(for item: ConfirmTransferItem) -> any ItemModelProvidable<ConfirmTransferItemModel> {
         switch item {
         case .header:
-            ConfirmTransferHeaderViewModel(inputModel: state.value, metadata: metadata, data: data)
+            ConfirmHeaderViewModel(inputModel: state.value, metadata: metadata, data: data)
         case .app:
-            ConfirmTransferAppViewModel(type: data.type)
+            ConfirmAppViewModel(type: data.type)
         case .sender:
-            ConfirmTransferSenderViewModel(wallet: wallet)
+            ConfirmSenderViewModel(wallet: wallet)
         case .network:
-            ConfirmTransferNetworkViewModel(type: data.type)
+            ConfirmNetworkViewModel(type: data.type)
         case .recipient:
-            ConfirmTransferRecipientViewModel(
+            ConfirmRecipientViewModel(
                 model: dataModel,
                 addressName: try? confirmService.getAddressName(chain: dataModel.chain, address: dataModel.recipient.address),
                 addressLink: confirmService.getExplorerLink(chain: dataModel.chain, address: dataModel.recipient.address)
             )
         case .memo:
-            ConfirmTransferMemoViewModel(type: data.type, recipientData: data.recipientData)
+            ConfirmMemoViewModel(type: data.type, recipientData: data.recipientData)
         case .swapDetails:
             swapDetailsViewModel
         case .networkFee:
-            ConfirmTransferNetworkFeeViewModel(
+            ConfirmNetworkFeeViewModel(
                 state: state,
                 title: feeModel.title,
                 value: feeModel.value,
@@ -142,7 +142,7 @@ extension ConfirmTransferSceneViewModel: ListSectionProvideable {
                 infoAction: onSelectNetworkFeeInfo
             )
         case .error:
-            ConfirmTransferErrorViewModel(
+            ConfirmErrorViewModel(
                 state: state,
                 onSelectListError: onSelectListError
             )

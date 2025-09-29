@@ -5,7 +5,7 @@ import Localization
 import Primitives
 import PrimitivesComponents
 
-struct ConfirmTransferSenderViewModel {
+struct ConfirmSenderViewModel {
     private let wallet: Wallet
 
     init(wallet: Wallet) {
@@ -15,7 +15,7 @@ struct ConfirmTransferSenderViewModel {
 
 // MARK: - ItemModelProvidable
 
-extension ConfirmTransferSenderViewModel: ItemModelProvidable {
+extension ConfirmSenderViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel {
         let walletViewModel = WalletViewModel(wallet: wallet)
         return .sender(
