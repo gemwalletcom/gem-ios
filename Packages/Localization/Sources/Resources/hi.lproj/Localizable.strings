@@ -54,7 +54,7 @@
 "common.paste" = "Paste";
 "transfer.max" = "Max";
 "common.delete" = "Delete";
-"common.delete_confirmation" = "Are sure you want to delete %s?";
+"common.delete_confirmation" = "क्या आप वाकई %@ हटाना चाहते हैं?";
 "settings.community" = "Community";
 "common.hide" = "Hide";
 "wallet.scan" = "Scan";

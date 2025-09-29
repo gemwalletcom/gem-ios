@@ -54,7 +54,7 @@
 "common.paste" = "جای گذاری";
 "transfer.max" = "حداکثر";
 "common.delete" = "پاک کردن";
-"common.delete_confirmation" = "آیا از پاک کردن %s مطمن هستید؟";
+"common.delete_confirmation" = "آیا مطمئنید که می‌خواهید %@ را حذف کنید؟";
 "settings.community" = "همبودگاه";
 "common.hide" = "پنهان کن";
 "wallet.scan" = "اسکن کن";

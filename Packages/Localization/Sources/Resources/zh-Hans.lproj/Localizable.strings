@@ -54,7 +54,7 @@
 "common.paste" = "粘贴";
 "transfer.max" = "最大值";
 "common.delete" = "删除";
-"common.delete_confirmation" = "确认删除%s吗？";
+"common.delete_confirmation" = "确定要删除%@吗？";
 "settings.community" = "社区";
 "common.hide" = "隐藏";
 "wallet.scan" = "扫码";

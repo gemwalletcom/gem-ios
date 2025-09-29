@@ -54,7 +54,7 @@
 "common.paste" = "Pegar";
 "transfer.max" = "máx.";
 "common.delete" = "Borrar";
-"common.delete_confirmation" = "¿Estás seguro de que deseas eliminar %s ?";
+"common.delete_confirmation" = "¿Estás seguro de que deseas eliminar %@?";
 "settings.community" = "Comunidad";
 "common.hide" = "Esconder";
 "wallet.scan" = "Escanear";
