@@ -36,7 +36,7 @@ struct VerifyPhraseWalletScene: View {
                                     Button { } label: {
                                         Text(row.word)
                                     }
-                                    .buttonStyle(.lightGray(paddingHorizontal: .small, paddingVertical: .tiny))
+                                    .buttonStyle(.lightGray(paddingHorizontal: .small, paddingVertical: .tiny, glassEffect: .enabled))
                                     .disabled(true)
                                     .fixedSize()
                                 } else {
@@ -45,7 +45,7 @@ struct VerifyPhraseWalletScene: View {
                                     } label: {
                                         Text(row.word)
                                     }
-                                    .buttonStyle(.blueGrayPressed(paddingHorizontal: .small, paddingVertical: .tiny))
+                                    .buttonStyle(.blueGrayPressed(paddingHorizontal: .small, paddingVertical: .tiny, glassEffect: .enabled))
                                     .fixedSize()
                                 }
                             }

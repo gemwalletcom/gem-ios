@@ -23,8 +23,8 @@ struct BannerButtonViewModel: Identifiable {
     @MainActor
     var style: ColorButtonStyle {
         switch button {
-        case .buy: .blue(paddingVertical: .small, isGlassEffectEnabled: true)
-        case .receive: .lightGray(paddingVertical: .small, isGlassEffectEnabled: true)
+        case .buy: .blue(paddingVertical: .small)
+        case .receive: .lightGray(paddingVertical: .small)
         }
     }
     

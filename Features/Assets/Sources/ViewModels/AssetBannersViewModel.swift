@@ -42,7 +42,7 @@ public final class AssetBannersViewModel: Sendable {
         switch banner.event {
         case .enableNotifications, .accountBlockedMultiSignature: true
         case .accountActivation: assetData.balance.available == 0
-        case .stake: assetData.balance.staked.isZero
+        case .stake: assetData.balance.staked.isZero && assetData.balance.frozen.isZero
         case .activateAsset: !assetData.metadata.isActive
         case .suspiciousAsset: AssetScoreTypeViewModel(score: assetData.metadata.rankScore).shouldShowBanner
         case .onboarding: false
