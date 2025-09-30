@@ -10,9 +10,8 @@
 "wallets.title" = "Wallets";
 "wallet.import.title" = "Import Wallet";
 "wallet.new.title" = "New Wallet";
-"receive.title" = "Receive %s";
-"buy.title" = "Buy %s";
-"welcome.legal.concent" = "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)";
+"receive.title" = "Ricevi %@";
+"buy.title" = "Acquista %@";
 "wallet.import.secret_phrase" = "Secret Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Import";
@@ -39,9 +38,9 @@
 "settings.title" = "Settings";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Error: %s";
-"errors.validation" = "Validation Error: %s";
-"errors.create_wallet" = "Create Wallet Error: %s";
+"errors.transfer" = "Errore di trasferimento: %@";
+"errors.validation" = "Errore di convalida: %@";
+"errors.create_wallet" = "Errore di creazione del portafoglio: %@";
 "wallet.manage_token_list" = "Gestisci token";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Non trasferire fondi a questo portafoglio multi-firma %@ a meno che tu non sia certo di controllare le chiavi private. In caso contrario, potresti esporti a truffe e potresti perdere definitivamente i tuoi beni.";
 "swap.price_impact" = "Impatto sul prezzo";
 "wallet.sell" = "Vendere";
-"sell.title" = "Sell %s";
+"sell.title" = "Vendi %@";
 "common.learn_more" = "Saperne di più";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
