@@ -26,8 +26,7 @@ let package = Package(
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "QRScanner", path: "../QRScanner"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
-        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
-        .package(name: "SystemServices", path: "../../Packages/SystemServices")
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices")
     ],
     targets: [
         .target(
@@ -50,7 +49,7 @@ let package = Package(
                 .product(name: "TransactionsService", package: "FeatureServices"),
                 .product(name: "WalletsService", package: "FeatureServices"),
                 .product(name: "PriceService", package: "FeatureServices"),
-                .product(name: "BannerService", package: "SystemServices"),
+                .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "ChainService", package: "ChainServices")
             ]
         ),
@@ -63,7 +62,7 @@ let package = Package(
                 .product(name: "TransactionsServiceTestKit", package: "FeatureServices"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "PriceAlertServiceTestKit", package: "FeatureServices"),
-                .product(name: "BannerServiceTestKit", package: "SystemServices"),
+                .product(name: "BannerServiceTestKit", package: "FeatureServices"),
                 .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "TransactionServiceTestKit", package: "FeatureServices"),
                 "Assets"
