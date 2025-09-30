@@ -33,13 +33,13 @@ struct AmountSceneViewModelTests {
     
     @Test
     func stakingReservedFeesText() {
-        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 1_000_000_000_000_000_000))
+        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 2_000_000_000_000_000_000))
         let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
         
         model.onSelectMaxButton()
 
         #expect(model.infoText != nil)
-        #expect(model.amountInputModel.text == "0.99975")
+        #expect(model.amountInputModel.text == "1.99975")
     }
     
     @Test
