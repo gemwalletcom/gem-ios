@@ -10,9 +10,8 @@
 "wallets.title" = "Dompet";
 "wallet.import.title" = "Impor Dompet";
 "wallet.new.title" = "Dompet Baru";
-"receive.title" = "Terima %s";
-"buy.title" = "Beli %s";
-"welcome.legal.concent" = "Dengan menggunakan Gem, Anda setuju untuk menerima\n [Syarat dan Ketentuan](%s) dan [Kebijakan Privasi](%s) kami ";
+"receive.title" = "Terima %@";
+"buy.title" = "Beli %@";
 "wallet.import.secret_phrase" = "Frasa Pemulihan Rahasia";
 "wallet.name" = "Nama";
 "wallet.import.action" = "Impor";
@@ -39,9 +38,9 @@
 "settings.title" = "Pengaturan";
 "settings.developer" = "Developer";
 "settings.version" = "Versi";
-"errors.transfer" = "Kesalahan Pengiriman: %s";
-"errors.validation" = "Kesalahan Validasi: %s";
-"errors.create_wallet" = "Kesalahan Membuat Dompet: %s";
+"errors.transfer" = "Kesalahan Transfer: %@";
+"errors.validation" = "Kesalahan Validasi: %@";
+"errors.create_wallet" = "Kesalahan Pembuatan Dompet: %@";
 "wallet.manage_token_list" = "Kelola Token";
 "wallet.scan_qr_code" = "Pindai Kode QR";
 "buy.providers.title" = "Penyedia";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Jangan mentransfer dana ke dompet Multi-Signature %@ ini kecuali Anda yakin bahwa Anda memegang kunci pribadi. Kegagalan untuk melakukannya dapat membuat Anda rentan terhadap penipuan, dan Anda dapat kehilangan aset Anda secara permanen.";
 "swap.price_impact" = "Dampak Harga";
 "wallet.sell" = "Menjual";
-"sell.title" = "Sell %s";
+"sell.title" = "Jual %@";
 "common.learn_more" = "Pelajari lebih lanjut";
 "info.network_fee.title" = "Biaya Jaringan";
 "info.watch_wallet.title" = "Watch Wallet";
