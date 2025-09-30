@@ -54,7 +54,7 @@
 "common.paste" = "粘貼";
 "transfer.max" = "最大值";
 "common.delete" = "刪除";
-"common.delete_confirmation" = "確定要刪除%s嗎？";
+"common.delete_confirmation" = "確定要刪除%@嗎？";
 "settings.community" = "社區";
 "common.hide" = "隱藏";
 "wallet.scan" = "掃描";

@@ -3,26 +3,25 @@
 import SwiftUI
 
 public struct ColorButtonStyle: ButtonStyle {
-    @Environment(\.isEnabled) private var isEnabled
 
     let palette: ButtonStylePalette
     let paddingHorizontal: CGFloat
     let paddingVertical: CGFloat
     let cornerRadius: CGFloat
-    let isGlassEffectEnabled: Bool
+    let glassEffect: GlassEffectSettings
 
     public init(
         palette: ButtonStylePalette,
         paddingHorizontal: CGFloat,
         paddingVertical: CGFloat,
         cornerRadius: CGFloat,
-        isGlassEffectEnabled: Bool
+        glassEffect: GlassEffectSettings
     ) {
         self.paddingHorizontal = paddingHorizontal
         self.paddingVertical = paddingVertical
         self.palette = palette
         self.cornerRadius = cornerRadius
-        self.isGlassEffectEnabled = isGlassEffectEnabled
+        self.glassEffect = glassEffect
     }
 
     public func makeBody(configuration: Configuration) -> some View {
@@ -37,10 +36,10 @@ public struct ColorButtonStyle: ButtonStyle {
 
     @ViewBuilder
     private func background(configuration: Configuration) -> some View {
-        if #available(iOS 26, *), isGlassEffectEnabled {
+        if #available(iOS 26, *), glassEffect.isEnabled {
             DefaultGlassEffectShape()
-                .fill(palette.background)
-                .glassEffect(.regular.interactive(isEnabled))
+                .fill(configuration.isPressed ? palette.backgroundPressed : palette.background)
+                .glassEffect(.regular.interactive(glassEffect.isInteractive))
         } else {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(configuration.isPressed ? palette.backgroundPressed : palette.background)
@@ -59,14 +58,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .button.paddingHorizontal,
         paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .blue,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
 
@@ -74,14 +73,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .button.paddingHorizontal,
         paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .blueGrayPressed,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
     
@@ -90,14 +89,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .button.paddingHorizontal,
         paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .gray,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
 
@@ -105,14 +104,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .button.paddingHorizontal,
         paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .lightGray,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
 
@@ -120,14 +119,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .button.paddingHorizontal,
         paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .white,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
 
@@ -135,14 +134,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .small + .space4,
         paddingVertical: CGFloat = .small,
         cornerRadius: CGFloat = .small,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .empty,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
 
@@ -150,14 +149,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .small,
         paddingVertical: CGFloat = .small,
         cornerRadius: CGFloat = .small,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .amount,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
 
@@ -165,14 +164,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .button.paddingHorizontal,
         paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .listStyleColor,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
     
@@ -180,14 +179,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .button.paddingHorizontal,
         paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .red,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
     
@@ -195,14 +194,14 @@ extension ButtonStyle where Self == ColorButtonStyle {
         paddingHorizontal: CGFloat = .button.paddingHorizontal,
         paddingVertical: CGFloat = .button.paddingVertical,
         cornerRadius: CGFloat = Sizing.space12,
-        isGlassEffectEnabled: Bool = false
+        glassEffect: GlassEffectSettings = .isInteractive
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .green,
             paddingHorizontal: paddingHorizontal,
             paddingVertical: paddingVertical,
             cornerRadius: cornerRadius,
-            isGlassEffectEnabled: isGlassEffectEnabled
+            glassEffect: glassEffect
         )
     }
 }

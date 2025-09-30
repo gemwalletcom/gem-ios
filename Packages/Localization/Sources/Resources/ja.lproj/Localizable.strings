@@ -54,7 +54,7 @@
 "common.paste" = "ペースト";
 "transfer.max" = "マックス";
 "common.delete" = "消去";
-"common.delete_confirmation" = "本当に%s削除してもよろしいですか?";
+"common.delete_confirmation" = "%@を削除してもよろしいですか?";
 "settings.community" = "コミュニティ";
 "common.hide" = "隠れる";
 "wallet.scan" = "スキャン";

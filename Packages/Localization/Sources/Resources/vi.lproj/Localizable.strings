@@ -54,7 +54,7 @@
 "common.paste" = "Dán";
 "transfer.max" = "Tối đa";
 "common.delete" = "Xóa bỏ";
-"common.delete_confirmation" = "Bạn có chắc chắn muốn xóa %s không?";
+"common.delete_confirmation" = "Bạn có chắc chắn muốn xóa %@ không?";
 "settings.community" = "Cộng đồng";
 "common.hide" = "Trốn";
 "wallet.scan" = "Quét";
