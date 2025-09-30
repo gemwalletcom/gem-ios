@@ -34,7 +34,6 @@ let package = Package(
         .package(name: "FiatConnect", path: "../FiatConnect"),
         .package(name: "Swap", path: "../Swap"),
 
-        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "GemAPI", path: "../../Packages/GemAPI")
@@ -64,7 +63,7 @@ let package = Package(
                 "Swap",
 
                 .product(name: "ChainService", package: "ChainServices"),
-                .product(name: "WalletService", package: "SystemServices"),
+                .product(name: "WalletService", package: "FeatureServices"),
                 .product(name: "WalletsService", package: "FeatureServices"),
                 .product(name: "NodeService", package: "ChainServices"),
                 .product(name: "TransactionService", package: "FeatureServices"),
@@ -87,7 +86,7 @@ let package = Package(
                 .product(name: "ScanServiceTestKit", package: "ChainServices"),
                 .product(name: "SwapServiceTestKit", package: "FeatureServices"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
-                .product(name: "WalletServiceTestKit", package: "SystemServices"),
+                .product(name: "WalletServiceTestKit", package: "FeatureServices"),
                 .product(name: "NameServiceTestKit", package: "ChainServices"),
                 .product(name: "NodeServiceTestKit", package: "ChainServices"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),

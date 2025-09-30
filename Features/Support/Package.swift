@@ -20,7 +20,7 @@ let package = Package(
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
-        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
     ],
     targets: [
         .target(
@@ -34,8 +34,8 @@ let package = Package(
                 "GemstonePrimitives",
                 "PrimitivesComponents",
                 "Preferences",
-                .product(name: "NotificationService", package: "SystemServices"),
-                .product(name: "DeviceService", package: "SystemServices")
+                .product(name: "NotificationService", package: "FeatureServices"),
+                .product(name: "DeviceService", package: "FeatureServices")
             ],
             path: "Sources"
         ),
