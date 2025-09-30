@@ -114,6 +114,13 @@ public struct InfoSheetModelFactory {
                 image: .image(Images.Logo.logo),
                 button: .action(title: Localized.Asset.buyAsset(asset.feeAsset.symbol), action: action)
             )
+        case let .stakingReservedFees(image):
+            return InfoSheetModel(
+                title: "Reserved for Fees",
+                description: "A small amount stays in your wallet to cover fees for operations like unstaking or claiming rewards.",
+                image: .assetImage(image),
+                button: .url(Docs.url(.networkFees))
+            )
         case .fundingRate:
             return InfoSheetModel(
                 title: Localized.Info.FundingRate.title,
