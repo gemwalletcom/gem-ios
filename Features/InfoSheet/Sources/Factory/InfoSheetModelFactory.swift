@@ -57,7 +57,7 @@ public struct InfoSheetModelFactory {
             return InfoSheetModel(
                 title: Localized.Info.WatchWallet.title,
                 description: Localized.Info.WatchWallet.description,
-                image: nil,
+                image: .image(Images.Wallets.watch),
                 button: .url(Docs.url(.whatIsWatchWallet))
             )
         case let .stakeLockTime(placeholder):
