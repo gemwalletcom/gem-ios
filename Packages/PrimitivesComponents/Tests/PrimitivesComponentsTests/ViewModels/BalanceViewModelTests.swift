@@ -17,9 +17,16 @@ struct BalanceViewModelTests {
             available: BigInt(1),
             frozen: BigInt(1_000_000),
             locked: BigInt(0),
-            staked: BigInt(1_000_000),
+            staked: BigInt(0),
             pending: BigInt(0),
-            rewards: BigInt(5_496)
+            rewards: BigInt(5_496),
+            metadata: BalanceMetadata(
+                votes: 1,
+                energyAvailable: .zero,
+                energyTotal: .zero,
+                bandwidthAvailable: .zero,
+                bandwidthTotal: .zero
+            )
         )
         let tronModel = BalanceViewModel(asset: .mockTron(), balance: tronBalance, formatter: .auto)
 

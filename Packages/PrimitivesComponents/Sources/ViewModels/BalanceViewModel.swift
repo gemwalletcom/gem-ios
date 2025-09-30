@@ -103,9 +103,6 @@ public struct BalanceViewModel: Sendable {
     }
 
     var total: BigInt {
-        if asset.chain == .tron {
-            return balance.available + balance.frozen + balance.locked + balance.pending + balance.rewards
-        }
-        return balance.available + balance.frozen + balance.locked + balance.staked + balance.pending + balance.rewards
+        balance.available + balance.frozen + balance.locked + balance.staked + balance.pending + balance.rewards
     }
 }
