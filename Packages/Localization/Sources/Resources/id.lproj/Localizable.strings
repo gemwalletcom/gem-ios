@@ -54,7 +54,7 @@
 "common.paste" = "Tempel";
 "transfer.max" = "Maksimum";
 "common.delete" = "Hapus";
-"common.delete_confirmation" = "Apa Anda yakin ingin menghapus %s?";
+"common.delete_confirmation" = "Apakah Anda yakin ingin menghapus %@?";
 "settings.community" = "Komunitas";
 "common.hide" = "Sembunyikan";
 "wallet.scan" = "Pindai";
@@ -477,3 +477,5 @@
 "perpetual.modify" = "Memodifikasi";
 "perpetual.reduce_position" = "Kurangi Posisi";
 "perpetual.increase_position" = "Tingkatkan Posisi";
+"banner.onboarding.title" = "Selamat datang di keluarga Gem";
+"banner.onboarding.description" = "Beli atau Terima kripto ke dompet Anda untuk memulai";

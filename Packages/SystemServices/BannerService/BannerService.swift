@@ -20,18 +20,23 @@ public struct BannerService: Sendable {
     }
 
     public func handleAction(_ action: BannerAction) async throws {
-        let result = try await {
-            switch action.event {
-            case .enableNotifications:
-                return try await pushNotificationService.requestPermissionsOrOpenSettings()
-            case .accountActivation,
-                .accountBlockedMultiSignature:
-                return true
-            case .stake, .activateAsset, .suspiciousAsset:
-                return false
+        let canClose = try await {
+            switch action.type {
+            case let .event(event):
+                switch event {
+                case .enableNotifications:
+                    try await pushNotificationService.requestPermissionsOrOpenSettings()
+                case .accountActivation,
+                    .accountBlockedMultiSignature:
+                    true
+                case .stake, .activateAsset, .suspiciousAsset, .onboarding:
+                    false
+                }
+            case .closeBanner: true
+            case .button: false
             }
         }()
-        if action.closeOnAction && result {
+        if canClose {
             try closeBanner(id: action.id)
         }
     }

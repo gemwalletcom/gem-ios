@@ -54,7 +54,7 @@
 "common.paste" = "Yapıştırmak";
 "transfer.max" = "Maksimum";
 "common.delete" = "Silmek";
-"common.delete_confirmation" = "%s silmek istediğinizden emin misiniz?";
+"common.delete_confirmation" = "%@ silmek istediğinizden emin misiniz?";
 "settings.community" = "Toplum";
 "common.hide" = "Saklamak";
 "wallet.scan" = "Tara";
@@ -477,3 +477,5 @@
 "perpetual.modify" = "Değiştir";
 "perpetual.reduce_position" = "Pozisyonu Azalt";
 "perpetual.increase_position" = "Pozisyonu Artır";
+"banner.onboarding.title" = "Gem ailesine hoş geldiniz";
+"banner.onboarding.description" = "Başlamak için kripto paranızı cüzdanınıza satın alın veya alın";

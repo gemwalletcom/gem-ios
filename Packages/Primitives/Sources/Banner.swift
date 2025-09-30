@@ -11,6 +11,7 @@ public enum BannerEvent: String, Codable, CaseIterable, Equatable, Sendable {
 	case accountBlockedMultiSignature
 	case activateAsset
 	case suspiciousAsset
+	case onboarding
 }
 
 public enum BannerState: String, Codable, CaseIterable, Equatable, Sendable {

@@ -54,7 +54,7 @@
 "common.paste" = "Paste";
 "transfer.max" = "Max";
 "common.delete" = "Delete";
-"common.delete_confirmation" = "Are sure you want to delete %s?";
+"common.delete_confirmation" = "Weet u zeker dat u %@ wilt verwijderen?";
 "settings.community" = "Community";
 "common.hide" = "Hide";
 "wallet.scan" = "Scan";
@@ -477,3 +477,5 @@
 "perpetual.modify" = "Bewerken";
 "perpetual.reduce_position" = "Positie verkleinen";
 "perpetual.increase_position" = "Positie verhogen";
+"banner.onboarding.title" = "Welkom bij de Gem-familie";
+"banner.onboarding.description" = "Koop of ontvang crypto in uw portemonnee om te beginnen";

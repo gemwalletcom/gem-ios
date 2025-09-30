@@ -54,7 +54,7 @@
 "common.paste" = "Colar";
 "transfer.max" = "Máx.";
 "common.delete" = "Excluir";
-"common.delete_confirmation" = "Tem certeza de que deseja excluir %s ?";
+"common.delete_confirmation" = "Tem certeza de que deseja excluir %@?";
 "settings.community" = "Comunidade";
 "common.hide" = "Esconder";
 "wallet.scan" = "Varredura";
@@ -477,3 +477,5 @@
 "perpetual.modify" = "Modificar";
 "perpetual.reduce_position" = "Reduzir posição";
 "perpetual.increase_position" = "Aumentar a posição";
+"banner.onboarding.title" = "Bem-vindo à família Gem";
+"banner.onboarding.description" = "Compre ou receba criptomoedas em sua carteira para começar";

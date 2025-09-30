@@ -13,6 +13,7 @@ public struct AssetConfiguration: Sendable {
             .xrp,
             .stellar,
             .xrp,
+            .hyperCore,
         ],
         EVMChain.allCases.compactMap { Chain(rawValue: $0.rawValue) },
     ]

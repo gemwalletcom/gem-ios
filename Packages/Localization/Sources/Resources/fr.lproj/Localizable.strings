@@ -54,7 +54,7 @@
 "common.paste" = "Pâte";
 "transfer.max" = "Max.";
 "common.delete" = "Supprimer";
-"common.delete_confirmation" = "Etes-vous sûr de vouloir supprimer %s ?";
+"common.delete_confirmation" = "Êtes-vous sûr de vouloir supprimer %@?";
 "settings.community" = "Communauté";
 "common.hide" = "Cacher";
 "wallet.scan" = "Analyse";
@@ -477,3 +477,5 @@
 "perpetual.modify" = "Modifier";
 "perpetual.reduce_position" = "Réduire la position";
 "perpetual.increase_position" = "Augmenter la position";
+"banner.onboarding.title" = "Bienvenue dans la famille Gem";
+"banner.onboarding.description" = "Achetez ou recevez des crypto-monnaies sur votre portefeuille pour commencer";

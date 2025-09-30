@@ -54,7 +54,7 @@
 "common.paste" = "معجون";
 "transfer.max" = "الأعلى";
 "common.delete" = "يمسح";
-"common.delete_confirmation" = "هل أنت متأكد أنك تريد حذف %s ؟";
+"common.delete_confirmation" = "هل أنت متأكد أنك تريد حذف %@ ؟";
 "settings.community" = "مجتمع";
 "common.hide" = "يخفي";
 "wallet.scan" = "مسح";
@@ -477,3 +477,5 @@
 "perpetual.modify" = "يُعدِّل";
 "perpetual.reduce_position" = "تقليل الموضع";
 "perpetual.increase_position" = "زيادة الموقف";
+"banner.onboarding.title" = "مرحبًا بك في عائلة Gem";
+"banner.onboarding.description" = "قم بشراء أو استلام العملات المشفرة في محفظتك للبدء";

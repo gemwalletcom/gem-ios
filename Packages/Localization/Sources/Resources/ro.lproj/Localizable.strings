@@ -54,7 +54,7 @@
 "common.paste" = "Paste";
 "transfer.max" = "Max";
 "common.delete" = "Delete";
-"common.delete_confirmation" = "Are sure you want to delete %s?";
+"common.delete_confirmation" = "Sigur vrei să ștergi %@?";
 "settings.community" = "Community";
 "common.hide" = "Hide";
 "wallet.scan" = "Scan";
@@ -476,4 +476,6 @@
 "stake.resource.bandwidth" = "Lățime de bandă";
 "perpetual.modify" = "Modifica";
 "perpetual.reduce_position" = "Reduceți poziția";
-"perpetual.increase_position" = "Increase Position";
+"perpetual.increase_position" = "Creșteți poziția";
+"banner.onboarding.title" = "Bine ai venit în familia Gem";
+"banner.onboarding.description" = "Cumpără sau primește criptomonede în portofelul tău pentru a începe";

@@ -54,7 +54,7 @@
 "common.paste" = "반죽";
 "transfer.max" = "맥스";
 "common.delete" = "삭제";
-"common.delete_confirmation" = "%s 삭제하시겠습니까?";
+"common.delete_confirmation" = "%@ (를) 삭제하시겠습니까?";
 "settings.community" = "지역 사회";
 "common.hide" = "숨다";
 "wallet.scan" = "주사";
@@ -477,3 +477,5 @@
 "perpetual.modify" = "수정하다";
 "perpetual.reduce_position" = "위치 줄이기";
 "perpetual.increase_position" = "위치 증가";
+"banner.onboarding.title" = "Gem 패밀리에 오신 것을 환영합니다";
+"banner.onboarding.description" = "시작하려면 암호화폐를 구매하거나 지갑으로 받으세요";

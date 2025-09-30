@@ -54,7 +54,7 @@
 "common.paste" = "粘貼";
 "transfer.max" = "最大值";
 "common.delete" = "刪除";
-"common.delete_confirmation" = "確定要刪除%s嗎？";
+"common.delete_confirmation" = "確定要刪除%@嗎？";
 "settings.community" = "社區";
 "common.hide" = "隱藏";
 "wallet.scan" = "掃描";
@@ -477,3 +477,5 @@
 "perpetual.modify" = "調整";
 "perpetual.reduce_position" = "減倉";
 "perpetual.increase_position" = "增加職位";
+"banner.onboarding.title" = "歡迎加入 Gem 家庭";
+"banner.onboarding.description" = "購買或接收加密貨幣到您的錢包即可開始使用";

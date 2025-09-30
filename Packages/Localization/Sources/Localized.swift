@@ -161,6 +161,12 @@ public enum Localized {
       /// Enable Notifications
       public static let title = Localized.tr("Localizable", "banner.enable_notifications.title", fallback: "Enable Notifications")
     }
+    public enum Onboarding {
+      /// Buy or Receive crypto to your wallet to get started
+      public static let description = Localized.tr("Localizable", "banner.onboarding.description", fallback: "Buy or Receive crypto to your wallet to get started")
+      /// Welcome to the Gem Family
+      public static let title = Localized.tr("Localizable", "banner.onboarding.title", fallback: "Welcome to the Gem Family")
+    }
     public enum Stake {
       /// Earn %@ rewards on your stake while you sleep.
       public static func description(_ p1: Any) -> String {
@@ -221,9 +227,9 @@ public enum Localized {
     public static let copy = Localized.tr("Localizable", "common.copy", fallback: "Copy")
     /// Delete
     public static let delete = Localized.tr("Localizable", "common.delete", fallback: "Delete")
-    /// Are sure you want to delete %s?
-    public static func deleteConfirmation(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "common.delete_confirmation", p1, fallback: "Are sure you want to delete %s?")
+    /// Are sure you want to delete %@?
+    public static func deleteConfirmation(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "common.delete_confirmation", String(describing: p1), fallback: "Are sure you want to delete %@?")
     }
     /// Description
     public static let description = Localized.tr("Localizable", "common.description", fallback: "Description")

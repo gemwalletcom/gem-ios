@@ -54,7 +54,7 @@
 "common.paste" = "Dán";
 "transfer.max" = "Tối đa";
 "common.delete" = "Xóa bỏ";
-"common.delete_confirmation" = "Bạn có chắc chắn muốn xóa %s không?";
+"common.delete_confirmation" = "Bạn có chắc chắn muốn xóa %@ không?";
 "settings.community" = "Cộng đồng";
 "common.hide" = "Trốn";
 "wallet.scan" = "Quét";
@@ -476,4 +476,6 @@
 "stake.resource.bandwidth" = "Băng thông";
 "perpetual.modify" = "Biến đổi";
 "perpetual.reduce_position" = "Giảm vị trí";
-"perpetual.increase_position" = "Increase Position";
+"perpetual.increase_position" = "Tăng vị trí";
+"banner.onboarding.title" = "Chào mừng đến với gia đình Gem";
+"banner.onboarding.description" = "Mua hoặc nhận tiền điện tử vào ví của bạn để bắt đầu";
