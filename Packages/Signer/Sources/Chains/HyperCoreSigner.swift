@@ -31,7 +31,15 @@ public class HyperCoreSigner: Signable {
     }
 
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        throw AnyError.notImplemented
+        let amount = BigNumberFormatter.standard.string(from: input.value, decimals: Int(input.asset.decimals))
+        let parts = try input.asset.getTokenId().split(separator: "::").map { String($0) }
+        let token = try "\(parts.getElement(safe: 0)):\(parts.getElement(safe: 1))"
+        return try signSpotSend(
+            amount: amount,
+            destination: input.destinationAddress,
+            token: token,
+            privateKey: privateKey
+        )
     }
 
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
