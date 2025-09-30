@@ -10,9 +10,8 @@
 "wallets.title" = "Wallets";
 "wallet.import.title" = "Import Wallet";
 "wallet.new.title" = "New Wallet";
-"receive.title" = "Receive %s";
-"buy.title" = "Buy %s";
-"welcome.legal.concent" = "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)";
+"receive.title" = "รับ %@";
+"buy.title" = "ซื้อ %@";
 "wallet.import.secret_phrase" = "Secret Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Import";
@@ -39,9 +38,9 @@
 "settings.title" = "Settings";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Error: %s";
-"errors.validation" = "Validation Error: %s";
-"errors.create_wallet" = "Create Wallet Error: %s";
+"errors.transfer" = "ข้อผิดพลาดในการโอน: %@";
+"errors.validation" = "ข้อผิดพลาดในการตรวจสอบ: %@";
+"errors.create_wallet" = "สร้างกระเป๋าสตางค์ผิดพลาด: %@";
 "wallet.manage_token_list" = "จัดการโทเค็น";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "อย่าโอนเงินไปยังกระเป๋าเงินหลายลายเซ็น %@ นี้ เว้นแต่คุณจะแน่ใจว่าคุณควบคุมคีย์ส่วนตัวได้ การไม่ทำเช่นนั้นอาจทำให้คุณตกเป็นเหยื่อของการหลอกลวง และคุณอาจสูญเสียทรัพย์สินของคุณไปอย่างถาวร";
 "swap.price_impact" = "ผลกระทบต่อราคา";
 "wallet.sell" = "ขาย";
-"sell.title" = "Sell %s";
+"sell.title" = "ขาย %@";
 "common.learn_more" = "เรียนรู้เพิ่มเติม";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
