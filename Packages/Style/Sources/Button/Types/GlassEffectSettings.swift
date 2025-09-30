@@ -3,11 +3,8 @@
 import Foundation
 
 public struct GlassEffectSettings : Sendable{
-    /// Enabled and interactive (default behavior)
     public static let isInteractive: Self = .init(isEnabled: true, isInteractive: true)
-    /// Enabled but not interactive (display only)
     public static let enabled: Self = .init(isEnabled: true, isInteractive: false)
-    /// Disabled
     public static let disabled: Self = .init(isEnabled: false, isInteractive: false)
     
     public let isEnabled: Bool
