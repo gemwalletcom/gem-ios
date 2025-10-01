@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "Pozisyonu Artır";
 "banner.onboarding.title" = "Gem ailesine hoş geldiniz";
 "banner.onboarding.description" = "Başlamak için kripto paranızı cüzdanınıza satın alın veya alın";
+"info.stake.reserved.title" = "Ağ ücreti için ayrıldı";
+"info.stake.reserved.description" = "Cüzdanınızda, stake'lerinizi iptal etme veya ödül talep etme gibi işlemlerin ücretlerini karşılamak için küçük bir miktar kalır.";

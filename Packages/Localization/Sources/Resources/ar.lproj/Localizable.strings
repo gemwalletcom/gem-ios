@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "زيادة الموقف";
 "banner.onboarding.title" = "مرحبًا بك في عائلة Gem";
 "banner.onboarding.description" = "قم بشراء أو استلام العملات المشفرة في محفظتك للبدء";
+"info.stake.reserved.title" = "محجوز لرسوم الشبكة";
+"info.stake.reserved.description" = "يبقى مبلغ صغير في محفظتك لتغطية الرسوم الخاصة بالعمليات مثل إلغاء المراهنة أو المطالبة بالمكافآت.";

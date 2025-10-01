@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "Aumenta la posizione";
 "banner.onboarding.title" = "Benvenuto nella famiglia Gem";
 "banner.onboarding.description" = "Acquista o ricevi criptovalute sul tuo portafoglio per iniziare";
+"info.stake.reserved.title" = "Riservato per la commissione di rete";
+"info.stake.reserved.description" = "Una piccola somma rimane nel tuo portafoglio per coprire le commissioni per operazioni come l'annullamento dello staking o la richiesta di premi.";

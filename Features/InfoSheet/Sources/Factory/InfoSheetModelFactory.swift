@@ -116,8 +116,8 @@ public struct InfoSheetModelFactory {
             )
         case let .stakingReservedFees(image):
             return InfoSheetModel(
-                title: "Reserved for Fees",
-                description: "A small amount stays in your wallet to cover fees for operations like unstaking or claiming rewards.",
+                title: Localized.Info.Stake.Reserved.title,
+                description: Localized.Info.Stake.Reserved.description,
                 image: .assetImage(image),
                 button: .url(Docs.url(.networkFees))
             )
