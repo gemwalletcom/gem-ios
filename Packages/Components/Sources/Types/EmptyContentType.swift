@@ -7,6 +7,7 @@ public enum EmptyContentType {
         case assets
         case networks
         case activity
+        case perpMarkets
     }
 
     case nfts(action: (() -> Void)? = nil)
@@ -16,5 +17,6 @@ public enum EmptyContentType {
     case stake(symbol: String)
     case walletConnect
     case search(type: SearchType, action: (() -> Void)? = nil)
+    case perpMarkets
     case markets
 }

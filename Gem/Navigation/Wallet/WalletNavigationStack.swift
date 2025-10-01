@@ -111,8 +111,7 @@ struct WalletNavigationStack: View {
                     PerpetualsNavigationView(
                         wallet: model.wallet,
                         perpetualService: perpetualService,
-                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType,
-                        isPresentingTransferData: $model.isPresentingTransferData
+                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType
                     )
                 }
                 .navigationDestination(for: Scenes.Perpetual.self) {

@@ -31,11 +31,13 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         case .stake: Localized.Stake.State.Empty.title
         case .walletConnect: Localized.WalletConnect.State.Empty.title
         case .markets: Localized.Markets.State.Empty.title
+        case .perpMarkets: "No markets"
         case let .search(searchType, _):
             switch searchType {
             case .assets: Localized.Assets.State.Empty.searchTitle
             case .networks: Localized.Networks.State.Empty.searchTitle
             case .activity: Localized.Activity.State.Empty.searchTitle
+            case .perpMarkets: "No markets found"
             }
         }
     }
@@ -61,8 +63,10 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             case .assets: action != nil ? Localized.Assets.State.Empty.searchDescription : Localized.Search.State.Empty.description
             case .networks: Localized.Search.State.Empty.description
             case .activity: Localized.Activity.State.Empty.searchDescription
+            case .perpMarkets: Localized.Search.State.Empty.description
             }
         case .markets: .none
+        case .perpMarkets: .none
         }
     }
 
@@ -75,14 +79,15 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         case .walletConnect: Images.EmptyContent.walletConnect
         case .search: Images.EmptyContent.search
         case .markets: Images.EmptyContent.activity
+        case .perpMarkets: Images.EmptyContent.activity
         }
     }
 
     public var buttons: [EmptyAction] {
         let actions: [EmptyAction]
-        
+
         switch type {
-        case .priceAlerts, .stake, .walletConnect, .markets:
+        case .priceAlerts, .stake, .walletConnect, .markets, .perpMarkets:
             actions = []
         case let .asset(_, buy, isViewOnly):
             switch isViewOnly {
@@ -107,9 +112,11 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
                 actions = []
             case .activity:
                 actions = [EmptyAction(title: Localized.Filter.clear, action: action)]
+            case .perpMarkets:
+                actions = []
             }
         }
-        
+
         return actions.filter { $0.action != nil }
     }
 }
