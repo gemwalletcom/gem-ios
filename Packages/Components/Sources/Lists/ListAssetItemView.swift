@@ -58,10 +58,12 @@ extension ListAssetItemView {
                     Text(priceChangePercentage24h.text)
                         .textStyle(priceChangePercentage24h.style)
                 }
+                .numericTransition(for: [price.text, priceChangePercentage24h.text])
             }
         case .type(let textValue):
             Text(textValue.text)
                 .textStyle(textValue.style)
+                .numericTransition(for: textValue.text)
         case .none:
             EmptyView()
         }
@@ -96,9 +98,11 @@ extension ListAssetItemView {
         VStack(alignment: .trailing, spacing: .tiny) {
             PrivacyText(balance.text, isEnabled: model.showBalancePrivacy)
                 .textStyle(balance.style)
+                .numericTransition(for: balance.text)
             if !totalFiat.text.isEmpty {
                 PrivacyText(totalFiat.text, isEnabled: model.showBalancePrivacy)
                     .textStyle(totalFiat.style)
+                    .numericTransition(for: totalFiat.text)
             }
         }
         .lineLimit(1)
