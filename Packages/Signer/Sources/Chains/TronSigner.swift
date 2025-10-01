@@ -12,6 +12,7 @@ public struct TronSigner: Signable {
         input: SignerInput,
         contract: WalletCore.TronTransaction.OneOf_ContractOneof,
         feeLimit: Int?,
+        memo: String? = .none,
         privateKey: Data
     ) throws -> String {
         guard case .tron(
@@ -36,6 +37,9 @@ public struct TronSigner: Signable {
                     $0.feeLimit = Int64(feeLimit)
                 }
                 $0.expiration = Int64(blockTimestamp) + 10 * 60 * 60 * 1000
+                if let memo = memo {
+                    $0.memo = memo
+                }
             }
             $0.privateKey = privateKey
         }
@@ -67,8 +71,7 @@ public struct TronSigner: Signable {
             $0.toAddress = input.destinationAddress
             $0.amount = input.value.asInt64
         }
-        return try sign(
-            input: input, contract: .transfer(contract), feeLimit: .none, privateKey: privateKey)
+        return try sign(input: input, contract: .transfer(contract), feeLimit: .none, memo: input.memo, privateKey: privateKey)
     }
 
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
@@ -79,8 +82,12 @@ public struct TronSigner: Signable {
             $0.amount = input.value.magnitude.serialize()
         }
         return try sign(
-            input: input, contract: .transferTrc20Contract(contract), feeLimit: input.fee.gasPrice.asInt,
-            privateKey: privateKey)
+            input: input,
+            contract: .transferTrc20Contract(contract),
+            feeLimit: input.fee.gasPrice.asInt,
+            memo: input.memo,
+            privateKey: privateKey
+        )
     }
 
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
@@ -131,13 +138,22 @@ public struct TronSigner: Signable {
     }
 
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-//        guard
-//            case let .swap(_, _, _quoteData) = input.type,
-//            //let data = Data(fromHex: quoteData.data.data),
-//            //let callValue = Int64(quoteData.data.value)
-//        else {
-//            throw AnyError("Invalid input type for swapping")
-//        }
-        throw AnyError.notImplemented
+        guard case let .swap(_, _, data) = input.type else {
+            throw AnyError("Invalid input type for swapping")
+        }
+        let contract = TronTransferContract.with {
+            $0.ownerAddress = input.senderAddress
+            $0.toAddress = data.data.to
+            $0.amount = BigInt(stringLiteral: data.data.value).asInt64
+        }
+        return [
+            try sign(
+                input: input,
+                contract: .transfer(contract),
+                feeLimit: .none,
+                memo: data.data.data,
+                privateKey: privateKey
+            ),
+        ]
     }
 }
