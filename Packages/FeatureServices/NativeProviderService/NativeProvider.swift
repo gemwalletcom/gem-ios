@@ -7,7 +7,6 @@ import struct Gemstone.AlienTarget
 import enum Gemstone.AlienError
 import typealias Gemstone.Chain
 import Primitives
-import WalletCore
 
 public actor NativeProvider {
     let session: URLSession
@@ -109,7 +108,8 @@ extension NativeProvider: AlienProvider {
 
 extension AlienTarget {
     var cacheKey: String {
-        let string = [url, method.hashValue.asString, headers?.description, body?.hexString].compactMap { $0 }.joined()
+        let bodyHex = body?.map { String(format: "%02x", $0) }.joined() ?? ""
+        let string = [url, method.hashValue.asString, headers?.description, bodyHex].compactMap { $0 }.joined()
         return SHA256.hash(data: Data(string.utf8)).description
     }
 }

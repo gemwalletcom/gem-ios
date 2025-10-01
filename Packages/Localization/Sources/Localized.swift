@@ -183,9 +183,9 @@ public enum Localized {
     public static let noResults = Localized.tr("Localizable", "buy.no_results", fallback: "No quotes available")
     /// Rate
     public static let rate = Localized.tr("Localizable", "buy.rate", fallback: "Rate")
-    /// Buy %s
-    public static func title(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "buy.title", p1, fallback: "Buy %s")
+    /// Buy %@
+    public static func title(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "buy.title", String(describing: p1), fallback: "Buy %@")
     }
     public enum Providers {
       /// Providers
@@ -343,9 +343,9 @@ public enum Localized {
   public enum Errors {
     /// Camera permission not granted. Please enable camera access in settings to scan QR code.
     public static let cameraPermissionsNotGranted = Localized.tr("Localizable", "errors.camera_permissions_not_granted", fallback: "Camera permission not granted. Please enable camera access in settings to scan QR code.")
-    /// Create Wallet Error: %s
-    public static func createWallet(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "errors.create_wallet", p1, fallback: "Create Wallet Error: %s")
+    /// Create Wallet Error: %@
+    public static func createWallet(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.create_wallet", String(describing: p1), fallback: "Create Wallet Error: %@")
     }
     /// Decoding Error
     public static let decoding = Localized.tr("Localizable", "errors.decoding", fallback: "Decoding Error")
@@ -383,9 +383,9 @@ public enum Localized {
     public static func `required`(_ p1: Any) -> String {
       return Localized.tr("Localizable", "errors.required", String(describing: p1), fallback: "%@ is required")
     }
-    /// Transfer Error: %s
-    public static func transfer(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")
+    /// Transfer Error: %@
+    public static func transfer(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.transfer", String(describing: p1), fallback: "Transfer Error: %@")
     }
     /// Transfer Error
     public static let transferError = Localized.tr("Localizable", "errors.transfer_error", fallback: "Transfer Error")
@@ -395,9 +395,9 @@ public enum Localized {
     public static let unknown = Localized.tr("Localizable", "errors.unknown", fallback: "Unknown")
     /// An unknown error occurred. Please try again.
     public static let unknownTryAgain = Localized.tr("Localizable", "errors.unknown_try_again", fallback: "An unknown error occurred. Please try again.")
-    /// Validation Error: %s
-    public static func validation(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "errors.validation", p1, fallback: "Validation Error: %s")
+    /// Validation Error: %@
+    public static func validation(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.validation", String(describing: p1), fallback: "Validation Error: %@")
     }
     public enum Connections {
       /// Invalid parameters provided for sending a transaction.
@@ -843,9 +843,9 @@ public enum Localized {
     }
   }
   public enum Receive {
-    /// Receive %s
-    public static func title(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "receive.title", p1, fallback: "Receive %s")
+    /// Receive %@
+    public static func title(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "receive.title", String(describing: p1), fallback: "Receive %@")
     }
     /// Your Receiving Address
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
@@ -886,9 +886,9 @@ public enum Localized {
     }
   }
   public enum Sell {
-    /// Sell %s
-    public static func title(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "sell.title", p1, fallback: "Sell %s")
+    /// Sell %@
+    public static func title(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "sell.title", String(describing: p1), fallback: "Sell %@")
     }
   }
   public enum Settings {
@@ -1396,13 +1396,6 @@ public enum Localized {
   public enum Welcome {
     /// Welcome to Gem Family
     public static let title = Localized.tr("Localizable", "welcome.title", fallback: "Welcome to Gem Family")
-    public enum Legal {
-      /// By using Gem, you agree to accept our
-      ///  [Terms of Use](%s) and [Privacy Policy](%s)
-      public static func concent(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>) -> String {
-        return Localized.tr("Localizable", "welcome.legal.concent", p1, p2, fallback: "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)")
-      }
-    }
   }
   public enum Widget {
     public enum Medium {

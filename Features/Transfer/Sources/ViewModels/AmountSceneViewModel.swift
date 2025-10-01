@@ -592,7 +592,8 @@ extension AmountSceneViewModel {
             return assetData.balance.available
         case .stake:
             if asset.chain == .tron {
-                return (assetData.balance.frozen + assetData.balance.locked) - assetData.balance.staked
+                let staked = BigNumberFormatter.standard.number(from: Int(assetData.balance.metadata?.votes ?? 0), decimals: Int(assetData.asset.decimals))
+                return (assetData.balance.frozen + assetData.balance.locked) - staked
             }
             return availableBalanceForStaking
         case .freeze(let data):

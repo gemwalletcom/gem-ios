@@ -10,9 +10,8 @@
 "wallets.title" = "Cüzdanlar";
 "wallet.import.title" = "Cüzdanı İçe Aktar";
 "wallet.new.title" = "Yeni Cüzdan";
-"receive.title" = "Aldığın";
-"buy.title" = "%s Satın Al";
-"welcome.legal.concent" = "Gem kullanarak, \n [Kullanım Şartlarımızı]( %s ) ve [Gizlilik Politikamızı]( %s ) kabul etmiş olursunuz";
+"receive.title" = "%@ alın";
+"buy.title" = "%@ satın al";
 "wallet.import.secret_phrase" = "gizli yenileme";
 "wallet.name" = "İsim";
 "wallet.import.action" = "Cüzdanı İçe Aktar";
@@ -39,9 +38,9 @@
 "settings.title" = "Ayarları aç";
 "settings.developer" = "Developer";
 "settings.version" = "Sürüm";
-"errors.transfer" = "Aktar";
-"errors.validation" = "Ücret hesaplama hatası";
-"errors.create_wallet" = "Yeni Cüzdan Oluştur";
+"errors.transfer" = "Transfer Hatası: %@";
+"errors.validation" = "Doğrulama Hatası: %@";
+"errors.create_wallet" = "Cüzdan Oluşturma Hatası: %@";
 "wallet.manage_token_list" = "Jetonları Yönet";
 "wallet.scan_qr_code" = "QR Kodunu Tara";
 "buy.providers.title" = "Sağlayıcılar";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Özel anahtarları kontrol ettiğinizden emin olmadığınız sürece bu %@ Çoklu İmzalı cüzdana para transferi yapmayın. Bunu yapmamanız sizi dolandırıcılıklara maruz bırakabilir ve varlıklarınızı kalıcı olarak kaybedebilirsiniz.";
 "swap.price_impact" = "Fiyat Etkisi";
 "wallet.sell" = "Satmak";
-"sell.title" = "Sell %s";
+"sell.title" = "%@ sat";
 "common.learn_more" = "Daha fazla bilgi edin";
 "info.network_fee.title" = "Ağ";
 "info.watch_wallet.title" = "Watch Wallet";
