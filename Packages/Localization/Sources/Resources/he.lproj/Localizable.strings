@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "הגדלת מיקום";
 "banner.onboarding.title" = "ברוך הבא למשפחת Gem";
 "banner.onboarding.description" = "קנה או קבל קריפטו לארנק שלך כדי להתחיל";
+"info.stake.reserved.title" = "שמור עבור דמי רשת";
+"info.stake.reserved.description" = "סכום קטן נשאר בארנק שלך כדי לכסות עמלות עבור פעולות כמו ביטול הפקדה או תביעת תגמולים.";

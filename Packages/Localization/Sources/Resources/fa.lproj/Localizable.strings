@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "افزایش موقعیت";
 "banner.onboarding.title" = "به خانواده Gem خوش آمدید";
 "banner.onboarding.description" = "برای شروع، ارز دیجیتال را در کیف پول خود خریداری یا دریافت کنید";
+"info.stake.reserved.title" = "برای هزینه شبکه رزرو شده است";
+"info.stake.reserved.description" = "مقدار کمی در کیف پول شما باقی می‌ماند تا هزینه‌های عملیاتی مانند برداشت از حساب یا دریافت پاداش را پوشش دهد.";

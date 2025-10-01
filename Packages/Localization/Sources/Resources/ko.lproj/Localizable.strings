@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "위치 증가";
 "banner.onboarding.title" = "Gem 패밀리에 오신 것을 환영합니다";
 "banner.onboarding.description" = "시작하려면 암호화폐를 구매하거나 지갑으로 받으세요";
+"info.stake.reserved.title" = "네트워크 수수료로 예약됨";
+"info.stake.reserved.description" = "스테이킹 해제나 보상 청구 등의 수수료를 충당하기 위해 소액이 지갑에 남아 있습니다.";

@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "پوزیشن میں اضافہ کریں۔";
 "banner.onboarding.title" = "Gem خاندان میں خوش آمدید";
 "banner.onboarding.description" = "شروع کرنے کے لیے اپنے بٹوے میں کریپٹو خریدیں یا وصول کریں۔";
+"info.stake.reserved.title" = "نیٹ ورک فیس کے لیے محفوظ ہے";
+"info.stake.reserved.description" = "ایک چھوٹی سی رقم آپ کے بٹوے میں رہ جاتی ہے تاکہ ان کارروائیوں کے لیے فیس کو پورا کیا جا سکے جیسے کہ انعامات کا دعوی کرنا یا دعوی کرنا۔";

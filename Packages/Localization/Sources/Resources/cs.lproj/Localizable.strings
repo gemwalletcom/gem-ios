@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "Zvýšit pozici";
 "banner.onboarding.title" = "Vítejte v rodině Gem";
 "banner.onboarding.description" = "Kupte si kryptoměny nebo je přijměte do své peněženky a začněte";
+"info.stake.reserved.title" = "Rezervováno pro síťový poplatek";
+"info.stake.reserved.description" = "Malá částka vám zůstane v peněžence na pokrytí poplatků za operace, jako je odstraňování sázek nebo nárokování odměn.";
