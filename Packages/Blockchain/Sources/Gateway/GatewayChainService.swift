@@ -107,7 +107,7 @@ extension GatewayChainService: ChainTransactionDataLoadable {
 
 extension GatewayChainService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        try await gateway.validators(chain: chain)
+        try await gateway.validators(chain: chain, apy: apr)
     }
     
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
