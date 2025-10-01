@@ -57,7 +57,7 @@ public struct InfoSheetModelFactory {
             return InfoSheetModel(
                 title: Localized.Info.WatchWallet.title,
                 description: Localized.Info.WatchWallet.description,
-                image: nil,
+                image: .image(Images.Wallets.watch),
                 button: .url(Docs.url(.whatIsWatchWallet))
             )
         case let .stakeLockTime(placeholder):
@@ -113,6 +113,13 @@ public struct InfoSheetModelFactory {
                 description: Localized.Info.StakeMinimumAmount.description(asset.name, amount),
                 image: .image(Images.Logo.logo),
                 button: .action(title: Localized.Asset.buyAsset(asset.feeAsset.symbol), action: action)
+            )
+        case let .stakingReservedFees(image):
+            return InfoSheetModel(
+                title: Localized.Info.Stake.Reserved.title,
+                description: Localized.Info.Stake.Reserved.description,
+                image: .assetImage(image),
+                button: .url(Docs.url(.networkFees))
             )
         case .fundingRate:
             return InfoSheetModel(

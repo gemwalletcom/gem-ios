@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "Increase Position";
 "banner.onboarding.title" = "Welcome to the Gem Family";
 "banner.onboarding.description" = "Buy or Receive crypto to your wallet to get started";
+"info.stake.reserved.title" = "Reserved for Network Fee";
+"info.stake.reserved.description" = "A small amount stays in your wallet to cover fees for operations like unstaking or claiming rewards.";

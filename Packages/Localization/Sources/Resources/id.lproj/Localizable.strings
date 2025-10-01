@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "Tingkatkan Posisi";
 "banner.onboarding.title" = "Selamat datang di keluarga Gem";
 "banner.onboarding.description" = "Beli atau Terima kripto ke dompet Anda untuk memulai";
+"info.stake.reserved.title" = "Dicadangkan untuk Biaya Jaringan";
+"info.stake.reserved.description" = "Sejumlah kecil dana disimpan di dompet Anda untuk menutupi biaya operasi seperti unstaking atau klaim hadiah.";
