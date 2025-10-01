@@ -98,12 +98,10 @@ public final class AmountSceneViewModel {
 
     var infoText: String? {
         switch type {
-        case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual, .freeze:
+        case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual:
             return nil
-        case .stake:
-            guard amountInputModel.text == maxBalance,
-                  availableBalanceForStaking > .zero,
-                  amountInputModel.isValid else { return nil }
+        case .stake, .freeze:
+            guard amountInputModel.text == maxBalance else { return nil }
             return Localized.Transfer.reservedFees(formatter.string(stakingReservedForFees, asset: asset))
         }
     }
@@ -390,7 +388,7 @@ extension AmountSceneViewModel {
                     decimals: asset.decimals.asInt,
                     validators: [
                         PositiveValueValidator<BigInt>().silent,
-                        MinimumValueValidator<BigInt>(minimumValue: minimumValue, asset: asset),
+                        MinimumValueValidator<BigInt>(minimumValue: minimumValue + stakingReservedForFees, asset: asset),
                         BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
                     ]
                 )
@@ -595,10 +593,10 @@ extension AmountSceneViewModel {
                 let staked = BigNumberFormatter.standard.number(from: Int(assetData.balance.metadata?.votes ?? 0), decimals: Int(assetData.asset.decimals))
                 return (assetData.balance.frozen + assetData.balance.locked) - staked
             }
-            return availableBalanceForStaking
+            return assetData.balance.available
         case .freeze(let data):
             switch data.freezeType {
-            case .freeze: return availableBalanceForStaking
+            case .freeze: return assetData.balance.available
             case .unfreeze:
                 switch data.resource {
                 case .bandwidth: return assetData.balance.frozen
@@ -617,7 +615,18 @@ extension AmountSceneViewModel {
     }
 
     private var maxBalance: String {
-        formatter.string(availableValue, decimals: asset.decimals.asInt)
+        let maxValue: BigInt = switch input.type {
+        case .stake:
+            availableBalanceForStaking
+        case .freeze(let data):
+            switch data.freezeType {
+            case .freeze: availableBalanceForStaking
+            case .unfreeze: availableValue
+            }
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
+            availableValue
+        }
+        return formatter.string(maxValue, decimals: asset.decimals.asInt)
     }
 
     private var canChangeValue: Bool {
