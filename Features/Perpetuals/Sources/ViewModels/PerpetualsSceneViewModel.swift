@@ -128,26 +128,3 @@ extension PerpetualsSceneViewModel {
         isSearchPresented = true
     }
 }
-
-// MARK: - Private
-
-extension PerpetualsSceneViewModel {
-    private func updatePositions() async {
-        do {
-            try await perpetualService.updatePositions(wallet: wallet)
-        } catch {
-            NSLog("Failed to update positions: \(error)")
-        }
-    }
-
-    private func updateMarkets() async {
-        guard preferences.perpetualMarketsUpdatedAt.isOutdated(byHours: 12) else { return }
-
-        do {
-            try await perpetualService.updateMarkets()
-            preferences.perpetualMarketsUpdatedAt = .now
-        } catch {
-            NSLog("Failed to update markets: \(error)")
-        }
-    }
-}
