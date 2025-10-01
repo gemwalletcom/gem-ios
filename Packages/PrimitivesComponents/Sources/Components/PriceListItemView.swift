@@ -25,6 +25,7 @@ public struct PriceListItemView: View {
                     Text(model.priceChangeView.text)
                         .textStyle(model.priceChangeView.style)
                 }
+                .numericTransition(for: [model.priceAmount.text, model.priceChangeView.text])
             }
         }
     }
