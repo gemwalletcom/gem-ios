@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "Ongeza Nafasi";
 "banner.onboarding.title" = "Karibu kwenye familia ya Gem";
 "banner.onboarding.description" = "Nunua au Pokea crypto kwenye pochi yako ili uanze";
+"info.stake.reserved.title" = "Imehifadhiwa kwa Ada ya Mtandao";
+"info.stake.reserved.description" = "Kiasi kidogo husalia kwenye mkoba wako ili kulipia ada za shughuli kama vile kutoweka au kudai zawadi.";

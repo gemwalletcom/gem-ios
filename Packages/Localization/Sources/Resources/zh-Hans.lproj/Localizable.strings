@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "增加职位";
 "banner.onboarding.title" = "欢迎加入 Gem 家庭";
 "banner.onboarding.description" = "购买或接收加密货币到您的钱包即可开始使用";
+"info.stake.reserved.title" = "预留网络费";
+"info.stake.reserved.description" = "您的钱包中会留有少量资金，用于支付取消质押或领取奖励等操作的费用。";

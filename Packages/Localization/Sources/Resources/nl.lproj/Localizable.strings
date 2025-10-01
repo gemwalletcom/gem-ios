@@ -478,3 +478,5 @@
 "perpetual.increase_position" = "Positie verhogen";
 "banner.onboarding.title" = "Welkom bij de Gem-familie";
 "banner.onboarding.description" = "Koop of ontvang crypto in uw portemonnee om te beginnen";
+"info.stake.reserved.title" = "Gereserveerd voor netwerkkosten";
+"info.stake.reserved.description" = "Een klein bedrag blijft in uw portemonnee staan om de kosten voor handelingen zoals unstaking of het claimen van beloningen te dekken.";

@@ -50,12 +50,14 @@ struct AmountScene: View {
 
             if let infoText = model.infoText {
                 Section {
-                    HStack {
-                        Images.System.info
-                            .foregroundStyle(Colors.gray)
-                            .frame(width: .list.image, height: .list.image)
-                        Text(infoText)
-                            .textStyle(.calloutSecondary)
+                    Button(action: model.onSelectReservedFeesInfo) {
+                        HStack {
+                            Images.System.info
+                                .foregroundStyle(Colors.gray)
+                                .frame(width: .list.image, height: .list.image)
+                            Text(infoText)
+                                .textStyle(.calloutSecondary)
+                        }
                     }
                 }
             }
