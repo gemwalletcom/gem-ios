@@ -136,8 +136,8 @@ extension GatewayService {
 // MARK: - Staking
 
 extension GatewayService {
-    public func validators(chain: Primitives.Chain) async throws -> [DelegationValidator] {
-        try await gateway.getStakingValidators(chain: chain.rawValue, apy: nil)
+    public func validators(chain: Primitives.Chain, apy: Double) async throws -> [DelegationValidator] {
+        try await gateway.getStakingValidators(chain: chain.rawValue, apy: apy)
             .map { try $0.map() }
     }
 
