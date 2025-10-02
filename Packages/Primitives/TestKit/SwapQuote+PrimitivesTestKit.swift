@@ -5,16 +5,19 @@ import Primitives
 
 extension SwapQuote {
     public static func mock(
+        fromValue: String = "1000000000000000000",
+        toValue: String = "2000000000000000000",
         providerData: SwapProviderData = .mock(),
+        walletAddress: String = "0x0000000000000000000000000000000000000000",
         etaInSeconds: UInt32 = 123
     ) -> SwapQuote {
         SwapQuote(
-            fromValue: "",
-            toValue: "",
+            fromValue: fromValue,
+            toValue: toValue,
             providerData: providerData,
-            walletAddress: "",
+            walletAddress: walletAddress,
             slippageBps: 50,
-            etaInSeconds: 123
+            etaInSeconds: etaInSeconds
         )
     }
 }

@@ -12,6 +12,9 @@ let package = Package(
         .library(
             name: "Transfer",
             targets: ["Transfer"]),
+        .library(
+            name: "TransferTestKit",
+            targets: ["TransferTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -76,10 +79,20 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "TransferTestKit",
+            dependencies: [
+                "Transfer",
+                "Primitives",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "TransferTests",
             dependencies: [
                 "Transfer",
+                "TransferTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BlockchainTestKit", package: "Blockchain"),
