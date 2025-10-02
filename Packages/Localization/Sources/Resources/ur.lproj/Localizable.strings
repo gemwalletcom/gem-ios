@@ -10,9 +10,8 @@
 "wallets.title" = "Wallets";
 "wallet.import.title" = "Import Wallet";
 "wallet.new.title" = "New Wallet";
-"receive.title" = "Receive %s";
-"buy.title" = "Buy %s";
-"welcome.legal.concent" = "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)";
+"receive.title" = "وصول کریں %@";
+"buy.title" = "خریدیں %@";
 "wallet.import.secret_phrase" = "Secret Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Import";
@@ -39,9 +38,9 @@
 "settings.title" = "Settings";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Error: %s";
-"errors.validation" = "Validation Error: %s";
-"errors.create_wallet" = "Create Wallet Error: %s";
+"errors.transfer" = "منتقلی کی خرابی: %@";
+"errors.validation" = "توثیق کی خرابی: %@";
+"errors.create_wallet" = "والیٹ کی خرابی بنائیں: %@";
 "wallet.manage_token_list" = "ٹوکنز کا نظم کریں۔";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.";
 "swap.price_impact" = "Price Impact";
 "wallet.sell" = "Sell";
-"sell.title" = "Sell %s";
+"sell.title" = "فروخت کریں %@";
 "common.learn_more" = "Learn More";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "پوزیشن میں اضافہ کریں۔";
 "banner.onboarding.title" = "Gem خاندان میں خوش آمدید";
 "banner.onboarding.description" = "شروع کرنے کے لیے اپنے بٹوے میں کریپٹو خریدیں یا وصول کریں۔";
+"info.stake.reserved.title" = "نیٹ ورک فیس کے لیے محفوظ ہے";
+"info.stake.reserved.description" = "ایک چھوٹی سی رقم آپ کے بٹوے میں رہ جاتی ہے تاکہ ان کارروائیوں کے لیے فیس کو پورا کیا جا سکے جیسے کہ انعامات کا دعوی کرنا یا دعوی کرنا۔";

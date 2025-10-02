@@ -10,9 +10,8 @@
 "wallets.title" = "Wallets";
 "wallet.import.title" = "Import Wallet";
 "wallet.new.title" = "New Wallet";
-"receive.title" = "Receive %s";
-"buy.title" = "Buy %s";
-"welcome.legal.concent" = "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)";
+"receive.title" = "Terima %@";
+"buy.title" = "Beli %@";
 "wallet.import.secret_phrase" = "Secret Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Import";
@@ -39,9 +38,9 @@
 "settings.title" = "Settings";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Error: %s";
-"errors.validation" = "Validation Error: %s";
-"errors.create_wallet" = "Create Wallet Error: %s";
+"errors.transfer" = "Ralat Pemindahan: %@";
+"errors.validation" = "Ralat Pengesahan: %@";
+"errors.create_wallet" = "Ralat Cipta Wallet: %@";
 "wallet.manage_token_list" = "Uruskan Token";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.";
 "swap.price_impact" = "Price Impact";
 "wallet.sell" = "Sell";
-"sell.title" = "Sell %s";
+"sell.title" = "Jual %@";
 "common.learn_more" = "Learn More";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "Tingkatkan Kedudukan";
 "banner.onboarding.title" = "Selamat datang ke keluarga Gem";
 "banner.onboarding.description" = "Beli atau Terima kripto ke dompet anda untuk bermula";
+"info.stake.reserved.title" = "Dikhaskan untuk Yuran Rangkaian";
+"info.stake.reserved.description" = "Sejumlah kecil kekal dalam dompet anda untuk menampung yuran untuk operasi seperti menanggalkan atau menuntut ganjaran.";

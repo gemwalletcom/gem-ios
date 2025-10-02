@@ -10,9 +10,8 @@
 "wallets.title" = "Кошельки";
 "wallet.import.title" = "Импорт кошелька";
 "wallet.new.title" = "Новый кошелек";
-"receive.title" = "Получить %s";
-"buy.title" = "Купить %s";
-"welcome.legal.concent" = "Используя Gem, вы соглашаетесь принять наши \n [Условия использования](%s) и [Политику конфиденциальности](%s)";
+"receive.title" = "Получить %@";
+"buy.title" = "Купить %@";
 "wallet.import.secret_phrase" = "Секретная фраза";
 "wallet.name" = "Имя";
 "wallet.import.action" = "Импортировать";
@@ -39,9 +38,9 @@
 "settings.title" = "Настройки";
 "settings.developer" = "Разработчик";
 "settings.version" = "Версия";
-"errors.transfer" = "Ошибка перевода: %s";
-"errors.validation" = "Ошибка проверки: %s";
-"errors.create_wallet" = "Ошибка создания кошелька: %s";
+"errors.transfer" = "Ошибка передачи: %@";
+"errors.validation" = "Ошибка проверки: %@";
+"errors.create_wallet" = "Ошибка создания кошелька: %@";
 "wallet.manage_token_list" = "Управление токенами";
 "wallet.scan_qr_code" = "Сканировать QR-код";
 "buy.providers.title" = "Провайдеры";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Не переводите средства на этот %@ кошелек Multi-Signature, если вы не уверены, что контролируете закрытые ключи. Невыполнение этого требования может подвергнуть вас мошенничеству, и вы можете навсегда потерять свои активы.";
 "swap.price_impact" = "Влияние цены";
 "wallet.sell" = "Продавать";
-"sell.title" = "Sell %s";
+"sell.title" = "Продать %@";
 "common.learn_more" = "Узнать больше";
 "info.network_fee.title" = "Сетевая плата";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "Увеличить позицию";
 "banner.onboarding.title" = "Добро пожаловать в семью Gem";
 "banner.onboarding.description" = "Чтобы начать, купите или получите криптовалюту на свой кошелек.";
+"info.stake.reserved.title" = "Зарезервировано для комиссии сети";
+"info.stake.reserved.description" = "Небольшая сумма остается в вашем кошельке для покрытия комиссий за такие операции, как отмена стейкинга или получение вознаграждений.";

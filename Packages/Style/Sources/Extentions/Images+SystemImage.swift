@@ -28,6 +28,7 @@ public extension Images {
         public static let plus = Image(systemName: SystemImage.plus)
         public static let eye = Image(systemName: SystemImage.eye)
         public static let searchNoResults = Image(systemName: SystemImage.searchNoResults)
+        public static let search = Image(systemName: SystemImage.search)
         public static let exclamationmarkTriangleFill = Image(systemName: SystemImage.exclamationmarkTriangleFill)
         public static let exclamationmarkTriangle = Image(systemName: SystemImage.exclamationmarkTriangle)
         public static let gallery = Image(systemName: SystemImage.gallery)

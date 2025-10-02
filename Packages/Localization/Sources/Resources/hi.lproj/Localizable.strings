@@ -10,9 +10,8 @@
 "wallets.title" = "Wallets";
 "wallet.import.title" = "Import Wallet";
 "wallet.new.title" = "New Wallet";
-"receive.title" = "Receive %s";
-"buy.title" = "Buy %s";
-"welcome.legal.concent" = "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)";
+"receive.title" = "%@ प्राप्त करें";
+"buy.title" = "%@ खरीदें";
 "wallet.import.secret_phrase" = "Secret Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Import";
@@ -39,9 +38,9 @@
 "settings.title" = "Settings";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Error: %s";
-"errors.validation" = "Validation Error: %s";
-"errors.create_wallet" = "Create Wallet Error: %s";
+"errors.transfer" = "स्थानांतरण त्रुटि: %@";
+"errors.validation" = "सत्यापन त्रुटि: %@";
+"errors.create_wallet" = "वॉलेट बनाने में त्रुटि: %@";
 "wallet.manage_token_list" = "टोकन प्रबंधित करें";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "जब तक आप सुनिश्चित न हों कि आप निजी कुंजियों को नियंत्रित करते हैं, तब तक इस %@ मल्टी-सिग्नेचर वॉलेट में धनराशि स्थानांतरित न करें। ऐसा न करने पर आप धोखाधड़ी के शिकार हो सकते हैं, और आप अपनी संपत्ति हमेशा के लिए खो सकते हैं।";
 "swap.price_impact" = "मूल्य प्रभाव";
 "wallet.sell" = "बेचना";
-"sell.title" = "Sell %s";
+"sell.title" = "बेचें %@";
 "common.learn_more" = "और अधिक जानें";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "स्थिति बढ़ाएँ";
 "banner.onboarding.title" = "Gem परिवार में आपका स्वागत ";
 "banner.onboarding.description" = "आरंभ करने के लिए अपने वॉलेट में क्रिप्टो खरीदें या प्राप्त करें";
+"info.stake.reserved.title" = "नेटवर्क शुल्क के लिए आरक्षित";
+"info.stake.reserved.description" = "आपके वॉलेट में एक छोटी राशि रहती है, जो अनस्टेकिंग या पुरस्कार का दावा करने जैसे कार्यों के लिए शुल्क को कवर करती है।";

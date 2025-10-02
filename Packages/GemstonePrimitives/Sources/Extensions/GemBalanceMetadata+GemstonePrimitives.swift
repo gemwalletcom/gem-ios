@@ -7,6 +7,7 @@ import Primitives
 extension GemBalanceMetadata {
     public func map() -> BalanceMetadata {
         BalanceMetadata(
+            votes: votes,
             energyAvailable: energyAvailable,
             energyTotal: energyTotal,
             bandwidthAvailable: bandwidthAvailable,

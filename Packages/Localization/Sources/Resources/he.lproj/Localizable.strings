@@ -10,9 +10,8 @@
 "wallets.title" = "Wallets";
 "wallet.import.title" = "Import Wallet";
 "wallet.new.title" = "New Wallet";
-"receive.title" = "Receive %s";
-"buy.title" = "Buy %s";
-"welcome.legal.concent" = "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)";
+"receive.title" = "קבל %@";
+"buy.title" = "קנה %@";
 "wallet.import.secret_phrase" = "Secret Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Import";
@@ -39,9 +38,9 @@
 "settings.title" = "Settings";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Error: %s";
-"errors.validation" = "Validation Error: %s";
-"errors.create_wallet" = "Create Wallet Error: %s";
+"errors.transfer" = "שגיאת העברה: %@";
+"errors.validation" = "שגיאת אימות: %@";
+"errors.create_wallet" = "שגיאת יצירת ארנק: %@";
 "wallet.manage_token_list" = "ניהול אסימונים";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "אל תעביר כספים לארנק ריבוי חתימות %@ זה אלא אם אתה בטוח שאתה שולט במפתחות הפרטיים. אם לא תעשה זאת, תוכל לחשוף אותך להונאות, ואתה עלול לאבד לצמיתות את הנכסים שלך.";
 "swap.price_impact" = "השפעת המחיר";
 "wallet.sell" = "מְכִירָה";
-"sell.title" = "Sell %s";
+"sell.title" = "למכור %@";
 "common.learn_more" = "למידע נוסף";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "הגדלת מיקום";
 "banner.onboarding.title" = "ברוך הבא למשפחת Gem";
 "banner.onboarding.description" = "קנה או קבל קריפטו לארנק שלך כדי להתחיל";
+"info.stake.reserved.title" = "שמור עבור דמי רשת";
+"info.stake.reserved.description" = "סכום קטן נשאר בארנק שלך כדי לכסות עמלות עבור פעולות כמו ביטול הפקדה או תביעת תגמולים.";

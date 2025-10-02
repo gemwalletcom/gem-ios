@@ -93,14 +93,8 @@ extension ReceiveScene {
                 .frame(maxWidth: .infinity)
 
                 Button(model.copyTitle, action: onCopyAddress)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Colors.black)
-                    .padding(.all, .small)
-                    .background(
-                        RoundedRectangle(cornerRadius: .small)
-                            .fill(Colors.grayVeryLight)
-                    )
-                    .buttonStyle(.plain)
+                    .fixedSize()
+                    .buttonStyle(.lightGray(paddingHorizontal: .small, paddingVertical: .small))
             }
         }
         .padding(.medium)

@@ -23,7 +23,6 @@ let package = Package(
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
-        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
     ],
     targets: [
@@ -38,7 +37,7 @@ let package = Package(
                 "PrimitivesComponents",
                 .product(name: "ExplorerService", package: "ChainServices"),
                 .product(name: "TransactionsService", package: "FeatureServices"),
-                .product(name: "WalletService", package: "SystemServices"),
+                .product(name: "WalletService", package: "FeatureServices"),
                 "Preferences",
                 "InfoSheet"
             ],

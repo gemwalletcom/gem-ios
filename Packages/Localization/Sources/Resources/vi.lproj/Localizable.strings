@@ -10,9 +10,8 @@
 "wallets.title" = "Ví";
 "wallet.import.title" = "Nhập ví";
 "wallet.new.title" = "Ví mới";
-"receive.title" = "Receive %s";
-"buy.title" = "Buy %s";
-"welcome.legal.concent" = "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)";
+"receive.title" = "Nhận %@";
+"buy.title" = "Mua %@";
 "wallet.import.secret_phrase" = "Secret Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Import";
@@ -39,9 +38,9 @@
 "settings.title" = "Settings";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Error: %s";
-"errors.validation" = "Validation Error: %s";
-"errors.create_wallet" = "Create Wallet Error: %s";
+"errors.transfer" = "Lỗi chuyển giao: %@";
+"errors.validation" = "Lỗi xác thực: %@";
+"errors.create_wallet" = "Lỗi tạo ví: %@";
 "wallet.manage_token_list" = "Quản lý mã thông báo";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Không chuyển tiền vào ví Đa chữ ký %@ này trừ khi bạn chắc chắn mình kiểm soát được khóa riêng. Nếu không làm như vậy, bạn có thể bị lừa đảo và có thể mất vĩnh viễn tài sản của mình.";
 "swap.price_impact" = "Tác động giá";
 "wallet.sell" = "Bán";
-"sell.title" = "Sell %s";
+"sell.title" = "Bán %@";
 "common.learn_more" = "Tìm hiểu thêm";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "Tăng vị trí";
 "banner.onboarding.title" = "Chào mừng đến với gia đình Gem";
 "banner.onboarding.description" = "Mua hoặc nhận tiền điện tử vào ví của bạn để bắt đầu";
+"info.stake.reserved.title" = "Dành riêng cho Phí mạng";
+"info.stake.reserved.description" = "Một số tiền nhỏ sẽ được giữ lại trong ví của bạn để trang trải phí cho các hoạt động như hủy đặt cọc hoặc nhận phần thưởng.";

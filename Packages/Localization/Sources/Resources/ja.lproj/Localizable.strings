@@ -10,9 +10,8 @@
 "wallets.title" = "ウォレット";
 "wallet.import.title" = "ウォレットをインポート";
 "wallet.new.title" = "新しいウォレット";
-"receive.title" = "%sを受け取る";
-"buy.title" = "%s を購入";
-"welcome.legal.concent" = "Gemを使用すると、私たちの\n[利用規約](%s)と[プライバシーポリシー](%s)に同意します";
+"receive.title" = "%@を受信";
+"buy.title" = "%@を購入";
 "wallet.import.secret_phrase" = "シークレットリカバリーフレーズ";
 "wallet.name" = "名前";
 "wallet.import.action" = "インポート";
@@ -39,9 +38,9 @@
 "settings.title" = "設定";
 "settings.developer" = "開発者";
 "settings.version" = "バージョン";
-"errors.transfer" = "送金エラー：%s";
-"errors.validation" = "検証エラー: %s";
-"errors.create_wallet" = "ウォレット作成エラー：%s";
+"errors.transfer" = "転送エラー: %@";
+"errors.validation" = "検証エラー: %@";
+"errors.create_wallet" = "ウォレット作成エラー: %@";
 "wallet.manage_token_list" = "トークンの管理";
 "wallet.scan_qr_code" = "QRコードをスキャン";
 "buy.providers.title" = "プロバイダー";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "秘密鍵を確実に管理していない限り、この%@マルチ署名ウォレットに資金を送金しないでください。そうしないと、詐欺に遭う可能性があり、資産を永久に失う可能性があります。";
 "swap.price_impact" = "価格の影響";
 "wallet.sell" = "売却する";
-"sell.title" = "売却する%s";
+"sell.title" = "%@を売る";
 "common.learn_more" = "もっと詳しく知る";
 "info.network_fee.title" = "ネットワーク料金";
 "info.watch_wallet.title" = "ウォッチ";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "ポジションを上げる";
 "banner.onboarding.title" = "Gemファミリーへようこそ";
 "banner.onboarding.description" = "始めるにはウォレットで暗号通貨を購入または受け取りましょう";
+"info.stake.reserved.title" = "ネットワーク料金用に予約";
+"info.stake.reserved.description" = "ステーキング解除や報酬の請求などの操作にかかる手数料をカバーするために、少額がウォレットに残ります。";

@@ -10,9 +10,8 @@
 "wallets.title" = "지갑";
 "wallet.import.title" = "지갑 가져오기";
 "wallet.new.title" = "새로운 지갑";
-"receive.title" = "Receive %s";
-"buy.title" = "Buy %s";
-"welcome.legal.concent" = "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)";
+"receive.title" = "%@ 받습니다.";
+"buy.title" = "%@ 구매";
 "wallet.import.secret_phrase" = "Secret Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Import";
@@ -39,9 +38,9 @@
 "settings.title" = "Settings";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Error: %s";
-"errors.validation" = "Validation Error: %s";
-"errors.create_wallet" = "Create Wallet Error: %s";
+"errors.transfer" = "전송 오류: %@";
+"errors.validation" = "유효성 검사 오류: %@";
+"errors.create_wallet" = "지갑 생성 오류: %@";
 "wallet.manage_token_list" = "토큰 관리";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "개인 키를 제어하고 있다는 확신이 없다면 이 %@ 다중 서명 지갑으로 자금을 이체하지 마십시오. 그렇지 않으면 사기에 노출될 수 있으며 자산을 영구적으로 잃을 수 있습니다.";
 "swap.price_impact" = "가격 영향";
 "wallet.sell" = "팔다";
-"sell.title" = "Sell %s";
+"sell.title" = "%@ 판매";
 "common.learn_more" = "더 알아보기";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "위치 증가";
 "banner.onboarding.title" = "Gem 패밀리에 오신 것을 환영합니다";
 "banner.onboarding.description" = "시작하려면 암호화폐를 구매하거나 지갑으로 받으세요";
+"info.stake.reserved.title" = "네트워크 수수료로 예약됨";
+"info.stake.reserved.description" = "스테이킹 해제나 보상 청구 등의 수수료를 충당하기 위해 소액이 지갑에 남아 있습니다.";

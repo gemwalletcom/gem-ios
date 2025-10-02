@@ -69,7 +69,7 @@ public struct ListItemValueSectionList <Item: Identifiable, Content: View>: View
                     Text(section.section)
                 }
             } footer: {
-                if let footer = section.footer {
+                if let footer = section.footer, !section.values.isEmpty {
                     Text(footer)
                 }
             }

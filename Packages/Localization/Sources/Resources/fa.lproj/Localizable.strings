@@ -10,9 +10,8 @@
 "wallets.title" = "کیف پول ها";
 "wallet.import.title" = "وارد کردن کیف پول";
 "wallet.new.title" = "کیف پول جدید";
-"receive.title" = "دریافت %s";
-"buy.title" = "خرید %s";
-"welcome.legal.concent" = "با استفاده از Gem ، موافقت می کنید که \n [شرایط استفاده] ( %s ) و [خط مشی رازداری] ( %s ) ما را بپذیرید";
+"receive.title" = "دریافت %@";
+"buy.title" = "خرید %@";
 "wallet.import.secret_phrase" = "عبارات بازیابی خصوصی";
 "wallet.name" = "نام";
 "wallet.import.action" = "وارد کردن";
@@ -39,9 +38,9 @@
 "settings.title" = "تنظیمات";
 "settings.developer" = "Developer";
 "settings.version" = "نگارش";
-"errors.transfer" = "خطای انتقال: %s";
-"errors.validation" = "خطای اعتبارسنجی: %s";
-"errors.create_wallet" = "خطا هنگام ساخت کیف پول جدید: %s";
+"errors.transfer" = "خطای انتقال: %@";
+"errors.validation" = "خطای اعتبارسنجی: %@";
+"errors.create_wallet" = "خطای ایجاد کیف پول: %@";
 "wallet.manage_token_list" = "مدیریت توکن‌ها";
 "wallet.scan_qr_code" = "کد QR را اسکن کنید";
 "buy.providers.title" = "ارائه دهندگان";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "وجه را به این کیف پول چند امضایی %@ منتقل نکنید، مگر اینکه مطمئن باشید کلیدهای خصوصی را کنترل می کنید. عدم انجام این کار می تواند شما را در معرض کلاهبرداری قرار دهد و ممکن است برای همیشه دارایی های خود را از دست بدهید.";
 "swap.price_impact" = "تاثیر قیمت";
 "wallet.sell" = "فروش";
-"sell.title" = "Sell %s";
+"sell.title" = "فروش %@";
 "common.learn_more" = "بیشتر بدانید";
 "info.network_fee.title" = "کارمزد شبکه";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "افزایش موقعیت";
 "banner.onboarding.title" = "به خانواده Gem خوش آمدید";
 "banner.onboarding.description" = "برای شروع، ارز دیجیتال را در کیف پول خود خریداری یا دریافت کنید";
+"info.stake.reserved.title" = "برای هزینه شبکه رزرو شده است";
+"info.stake.reserved.description" = "مقدار کمی در کیف پول شما باقی می‌ماند تا هزینه‌های عملیاتی مانند برداشت از حساب یا دریافت پاداش را پوشش دهد.";

@@ -10,9 +10,8 @@
 "wallets.title" = "Гаманці";
 "wallet.import.title" = "Імпорт гаманця";
 "wallet.new.title" = "Новий Гаманець";
-"receive.title" = "Отримати %s";
-"buy.title" = "Купити %s";
-"welcome.legal.concent" = "Використовуючи Gem, ви приймаєте наші \n [Умови використання](%s) і [Політику конфіденційності](%s)";
+"receive.title" = "Отримати %@";
+"buy.title" = "Купити %@";
 "wallet.import.secret_phrase" = "Секретна Фраза Гаманця";
 "wallet.name" = "Ім'я";
 "wallet.import.action" = "Імпорт";
@@ -39,9 +38,9 @@
 "settings.title" = "Налаштування";
 "settings.developer" = "Розробник";
 "settings.version" = "Версія";
-"errors.transfer" = "Помилка Переказу: %s";
-"errors.validation" = "Помилка Перевірки: %s";
-"errors.create_wallet" = "Помилка Створення Гаманця: %s";
+"errors.transfer" = "Помилка перенесення: %@";
+"errors.validation" = "Помилка перевірки: %@";
+"errors.create_wallet" = "Помилка створення гаманця: %@";
 "wallet.manage_token_list" = "Керування токенами";
 "wallet.scan_qr_code" = "Сканувати QR-код";
 "buy.providers.title" = "Провайдери";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Не переказуйте кошти на цей %@ гаманець Multi-Signature, якщо ви не впевнені, що контролюєте закриті ключі. Якщо цього не зробити, ви можете стати жертвою шахрайства та назавжди втратити свої активи.";
 "swap.price_impact" = "Вплив ціни";
 "wallet.sell" = "Продати";
-"sell.title" = "Будь ласка, введіть суму для продажу";
+"sell.title" = "Продати %@";
 "common.learn_more" = "Дізнайтеся більше";
 "info.network_fee.title" = "Мережева плата";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "Збільшити позицію";
 "banner.onboarding.title" = "Ласкаво просимо до родини Gem";
 "banner.onboarding.description" = "Купуйте або отримуйте криптовалюту на свій гаманець, щоб розпочати";
+"info.stake.reserved.title" = "Зарезервовано для комісії мережі";
+"info.stake.reserved.description" = "Невелика сума залишається у вашому гаманці для покриття комісій за такі операції, як зняття коштів зі стейкінгу або отримання винагород.";

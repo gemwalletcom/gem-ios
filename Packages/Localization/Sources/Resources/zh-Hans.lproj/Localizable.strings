@@ -10,9 +10,8 @@
 "wallets.title" = "钱包";
 "wallet.import.title" = "导入钱包";
 "wallet.new.title" = "新建钱包";
-"receive.title" = "接收%s";
-"buy.title" = "购买%s";
-"welcome.legal.concent" = "开始使用 Gem，表示您接受我们的【使用条款】（%s）和【隐私政策】（%s）。";
+"receive.title" = "接收%@";
+"buy.title" = "购买%@";
 "wallet.import.secret_phrase" = "助记词";
 "wallet.name" = "名称";
 "wallet.import.action" = "导入";
@@ -39,9 +38,9 @@
 "settings.title" = "设置";
 "settings.developer" = "开发者";
 "settings.version" = "版本";
-"errors.transfer" = "转账错误：%s";
-"errors.validation" = "验证错误：%s";
-"errors.create_wallet" = "创建钱包错误: %s";
+"errors.transfer" = "传输错误： %@";
+"errors.validation" = "验证错误： %@";
+"errors.create_wallet" = "创建钱包错误： %@";
 "wallet.manage_token_list" = "管理代币";
 "wallet.scan_qr_code" = "扫描二维码";
 "buy.providers.title" = "服务商";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "除非确定自己掌握私钥，否则切勿将资金转入此 %@ 多重签名钱包。否则可能遭受诈骗并永久损失资产。";
 "swap.price_impact" = "价格影响";
 "wallet.sell" = "出售";
-"sell.title" = "出售%s";
+"sell.title" = "出售%@";
 "common.learn_more" = "了解更多";
 "info.network_fee.title" = "网络费用";
 "info.watch_wallet.title" = "观察钱包";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "增加职位";
 "banner.onboarding.title" = "欢迎加入 Gem 家庭";
 "banner.onboarding.description" = "购买或接收加密货币到您的钱包即可开始使用";
+"info.stake.reserved.title" = "预留网络费";
+"info.stake.reserved.description" = "您的钱包中会留有少量资金，用于支付取消质押或领取奖励等操作的费用。";

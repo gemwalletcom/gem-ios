@@ -10,9 +10,8 @@
 "wallets.title" = "Wallets";
 "wallet.import.title" = "Wallet importieren";
 "wallet.new.title" = "Neue Wallet";
-"receive.title" = "Empfangen %s";
-"buy.title" = "%s kaufen";
-"welcome.legal.concent" = "Durch die Nutzung von Gem erklären Sie sich mit unseren [Nutzungsbedingungen](%s) und [Datenschutzbestimmungen](%s) einverstanden.";
+"receive.title" = "Empfangen %@";
+"buy.title" = "Kaufen %@";
 "wallet.import.secret_phrase" = "Geheimen Sicherheitsschlüssel";
 "wallet.name" = "Name";
 "wallet.import.action" = "Importieren";
@@ -39,9 +38,9 @@
 "settings.title" = "Einstellungen";
 "settings.developer" = "Entwickler";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Fehler: %s";
-"errors.validation" = "Validierungsfehler: %s";
-"errors.create_wallet" = "Fehler beim Erstellen der Wallet: %s";
+"errors.transfer" = "Übertragungsfehler: %@";
+"errors.validation" = "Validierungsfehler: %@";
+"errors.create_wallet" = "Fehler beim Erstellen der Brieftasche: %@";
 "wallet.manage_token_list" = "Token verwalten";
 "wallet.scan_qr_code" = "QR-Code scannen";
 "buy.providers.title" = "Anbieter";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Überweisen Sie kein Geld auf dieses %@ Multi-Signature-Wallet, es sei denn, Sie sind sicher, dass Sie die privaten Schlüssel kontrollieren. Andernfalls könnten Sie Opfer von Betrug werden und Ihr Vermögen dauerhaft verlieren.";
 "swap.price_impact" = "Preisauswirkungen";
 "wallet.sell" = "Verkaufen";
-"sell.title" = "Sell %s";
+"sell.title" = "Verkaufen %@";
 "common.learn_more" = "Mehr erfahren";
 "info.network_fee.title" = "Netzwerk-Gebühr";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "Position erhöhen";
 "banner.onboarding.title" = "Willkommen in der Gem-Familie";
 "banner.onboarding.description" = "Kaufen oder erhalten Sie Kryptowährungen in Ihr Wallet, um loszulegen";
+"info.stake.reserved.title" = "Reserviert für Netzwerkgebühr";
+"info.stake.reserved.description" = "Ein kleiner Betrag verbleibt in Ihrem Wallet, um Gebühren für Vorgänge wie das Aufheben der Absteckung oder das Einfordern von Prämien zu decken.";

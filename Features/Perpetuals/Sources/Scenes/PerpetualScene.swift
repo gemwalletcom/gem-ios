@@ -45,6 +45,7 @@ public struct PerpetualScene: View {
                         subtitle: position.pnlWithPercentText,
                         subtitleStyle: position.pnlTextStyle
                     )
+                    .numericTransition(for: position.pnlWithPercentText)
                     
                     ListItemView(
                         title: position.sizeTitle,
@@ -88,21 +89,21 @@ public struct PerpetualScene: View {
                     HStack(spacing: Spacing.medium) {
                         Button(model.modifyPositionTitle, action: model.onModifyPosition)
                             .frame(maxWidth: .infinity)
-                            .buttonStyle(.blue(isGlassEffectEnabled: true))
+                            .buttonStyle(.blue())
 
                         Button(model.closePositionTitle, action: model.onClosePosition)
                             .frame(maxWidth: .infinity)
-                            .buttonStyle(.red(isGlassEffectEnabled: true))
+                            .buttonStyle(.red())
                     }
                 } else {
                     HStack(spacing: Spacing.medium) {
                         Button(model.longButtonTitle, action: model.onOpenLongPosition)
                             .frame(maxWidth: .infinity)
-                            .buttonStyle(.green(isGlassEffectEnabled: true))
+                            .buttonStyle(.green())
                         
                         Button(model.shortButtonTitle, action: model.onOpenShortPosition)
                             .frame(maxWidth: .infinity)
-                            .buttonStyle(.red(isGlassEffectEnabled: true))
+                            .buttonStyle(.red())
                     }
                 }
             }

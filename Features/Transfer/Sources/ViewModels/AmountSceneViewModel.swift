@@ -101,7 +101,9 @@ public final class AmountSceneViewModel {
         case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual, .freeze:
             return nil
         case .stake:
-            guard amountInputModel.text == maxBalance, availableBalanceForStaking > .zero else { return nil }
+            guard amountInputModel.text == maxBalance,
+                  availableBalanceForStaking > .zero,
+                  amountInputModel.isValid else { return nil }
             return Localized.Transfer.reservedFees(formatter.string(stakingReservedForFees, asset: asset))
         }
     }
@@ -279,6 +281,10 @@ extension AmountSceneViewModel {
         case .fiat: amountInputType = .asset
         }
         cleanInput()
+    }
+
+    func onSelectReservedFeesInfo() {
+        isPresentingSheet = .infoAction(.stakingReservedFees(image: assetImage))
     }
 
     func infoAction(for error: Error) -> (() -> Void)? {
@@ -586,7 +592,8 @@ extension AmountSceneViewModel {
             return assetData.balance.available
         case .stake:
             if asset.chain == .tron {
-                return (assetData.balance.frozen + assetData.balance.locked) - assetData.balance.staked
+                let staked = BigNumberFormatter.standard.number(from: Int(assetData.balance.metadata?.votes ?? 0), decimals: Int(assetData.asset.decimals))
+                return (assetData.balance.frozen + assetData.balance.locked) - staked
             }
             return availableBalanceForStaking
         case .freeze(let data):

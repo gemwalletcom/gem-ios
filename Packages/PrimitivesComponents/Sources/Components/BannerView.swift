@@ -53,7 +53,7 @@ private extension BannerView {
                 }
             }
         )
-        .buttonStyle(.listStyleColor())
+        .buttonStyle(.listStyleColor(glassEffect: .disabled))
     }
 
     private var bannerView: some View {

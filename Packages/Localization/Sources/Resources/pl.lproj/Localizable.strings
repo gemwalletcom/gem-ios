@@ -10,9 +10,8 @@
 "wallets.title" = "Portfele";
 "wallet.import.title" = "Importuj portfel";
 "wallet.new.title" = "Nowy portfel";
-"receive.title" = "Receive %s";
-"buy.title" = "Buy %s";
-"welcome.legal.concent" = "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)";
+"receive.title" = "Odbierz %@";
+"buy.title" = "Kup %@";
 "wallet.import.secret_phrase" = "Secret Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Import";
@@ -39,9 +38,9 @@
 "settings.title" = "Settings";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
-"errors.transfer" = "Transfer Error: %s";
-"errors.validation" = "Validation Error: %s";
-"errors.create_wallet" = "Create Wallet Error: %s";
+"errors.transfer" = "Błąd transferu: %@";
+"errors.validation" = "Błąd walidacji: %@";
+"errors.create_wallet" = "Błąd tworzenia portfela: %@";
 "wallet.manage_token_list" = "Zarządzaj tokenami";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
@@ -276,7 +275,7 @@
 "warnings.multi_signature_blocked" = "Nie przelewaj środków do tego portfela Multi-Signature %@ chyba że masz pewność, że kontrolujesz klucze prywatne. Niedopełnienie tego obowiązku może narazić Cię na oszustwa i możesz trwale utracić swoje aktywa.";
 "swap.price_impact" = "Wpływ na cenę";
 "wallet.sell" = "Sprzedać";
-"sell.title" = "Sell %s";
+"sell.title" = "Sprzedaj %@";
 "common.learn_more" = "Dowiedz się więcej";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -479,3 +478,5 @@
 "perpetual.increase_position" = "Zwiększ pozycję";
 "banner.onboarding.title" = "Witamy w rodzinie Gem";
 "banner.onboarding.description" = "Kup lub odbierz kryptowalutę do swojego portfela, aby zacząć";
+"info.stake.reserved.title" = "Zarezerwowane na opłatę sieciową";
+"info.stake.reserved.description" = "Niewielka kwota pozostaje w Twoim portfelu i służy pokryciu opłat za operacje, takie jak anulowanie transakcji lub odbieranie nagród.";
