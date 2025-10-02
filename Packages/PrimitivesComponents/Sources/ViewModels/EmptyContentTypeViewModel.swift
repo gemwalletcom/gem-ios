@@ -80,7 +80,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
 
     public var buttons: [EmptyAction] {
         let actions: [EmptyAction]
-        
+
         switch type {
         case .priceAlerts, .stake, .walletConnect, .markets:
             actions = []
@@ -109,7 +109,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
                 actions = [EmptyAction(title: Localized.Filter.clear, action: action)]
             }
         }
-        
+
         return actions.filter { $0.action != nil }
     }
 }

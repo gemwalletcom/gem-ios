@@ -45,6 +45,7 @@ public struct PerpetualScene: View {
                         subtitle: position.pnlWithPercentText,
                         subtitleStyle: position.pnlTextStyle
                     )
+                    .numericTransition(for: position.pnlWithPercentText)
                     
                     ListItemView(
                         title: position.sizeTitle,

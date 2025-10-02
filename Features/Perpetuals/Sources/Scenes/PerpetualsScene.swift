@@ -10,45 +10,78 @@ import PrimitivesComponents
 import Preferences
 
 public struct PerpetualsScene: View {
-    
-    let model: PerpetualsSceneViewModel
-    
+    @Bindable private var model: PerpetualsSceneViewModel
+
     public init(model: PerpetualsSceneViewModel) {
         self.model = model
     }
-    
+
     public var body: some View {
-        List {
-            Section { } header: {
-                WalletHeaderView(
-                    model: model.headerViewModel,
-                    isHideBalanceEnalbed: .constant(model.preferences.isHideBalanceEnabled),
-                    onHeaderAction: model.onHeaderAction,
-                    onInfoAction: { }
-                )
-                .padding(.top, Spacing.small)
+        SearchableWrapper(
+            content: { list },
+            isSearching: $model.isSearching,
+            dismissSearch: .constant(false)
+        )
+        .searchable(
+            text: $model.searchQuery,
+            isPresented: $model.isSearchPresented,
+            placement: .navigationBarDrawer(displayMode: .automatic)
+        )
+        .onChange(of: model.searchQuery, model.onSearchQueryChange)
+        .onChange(of: model.isSearchPresented, model.onSearchPresentedChange)
+        .navigationTitle(model.navigationTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: model.onSelectSearchButton) {
+                    model.searchImage
+                }
             }
-            .cleanListRow()
-            
-            if !model.positions.isEmpty {
+        }
+        .taskOnce {
+            Task {
+                await model.fetch()
+            }
+        }
+        .refreshable {
+            await model.fetch()
+        }
+    }
+
+    var list: some View {
+        List {
+            if !model.isSearching {
+                Section { } header: {
+                    WalletHeaderView(
+                        model: model.headerViewModel,
+                        isHideBalanceEnalbed: .constant(model.preferences.isHideBalanceEnabled),
+                        onHeaderAction: model.onSelectHeaderAction,
+                        onInfoAction: .none
+                    )
+                    .padding(.top, Spacing.small)
+                }
+                .cleanListRow()
+            }
+
+            if model.showPositions {
                 Section {
                     ForEach(model.positions) { position in
                         NavigationLink(
-                            value: Scenes
-                                .Perpetual(position.perpetualData)
-                        ) {
-                            ListAssetItemView(model: PerpetualPositionItemViewModel(
-                                model: PerpetualPositionViewModel(position)
-                            ))
-                        }
+                            value: Scenes.Perpetual(position.perpetualData),
+                            label: {
+                                ListAssetItemView(
+                                    model: PerpetualPositionItemViewModel(model: PerpetualPositionViewModel(position))
+                                )
+                            }
+                        )
                         .listRowInsets(.assetListRowInsets)
                     }
                 } header: {
                     Text(model.positionsSectionTitle)
                 }
             }
-            
-            if !model.sections.pinned.isEmpty {
+
+            if model.showPinned {
                 Section {
                     PerpetualSectionView(
                         perpetuals: model.sections.pinned,
@@ -61,7 +94,6 @@ public struct PerpetualsScene: View {
                     }
                 }
             }
-            
             Section {
                 PerpetualSectionView(
                     perpetuals: model.sections.markets,
@@ -71,16 +103,6 @@ public struct PerpetualsScene: View {
             } header: {
                 Text(model.marketsSectionTitle)
             }
-        }
-        .navigationTitle(model.navigationTitle)
-        .navigationBarTitleDisplayMode(.inline)
-        .taskOnce {
-            Task {
-                await model.fetch()
-            }
-        }
-        .refreshable {
-            await model.fetch()
         }
     }
 }

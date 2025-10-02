@@ -84,7 +84,7 @@ public struct TronSigner: Signable {
         return try sign(
             input: input,
             contract: .transferTrc20Contract(contract),
-            feeLimit: input.fee.gasPrice.asInt,
+            feeLimit: input.fee.gasLimit.asInt,
             memo: input.memo,
             privateKey: privateKey
         )
@@ -138,22 +138,45 @@ public struct TronSigner: Signable {
     }
 
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case let .swap(_, _, data) = input.type else {
+        guard case let .swap(fromAsset, _, data) = input.type else {
             throw AnyError("Invalid input type for swapping")
         }
-        let contract = TronTransferContract.with {
-            $0.ownerAddress = input.senderAddress
-            $0.toAddress = data.data.to
-            $0.amount = BigInt(stringLiteral: data.data.value).asInt64
+        let toAddress = data.data.to
+        let amount = BigInt(stringLiteral: data.data.value)
+        let memo = data.data.data
+    
+        switch fromAsset.id.type {
+        case .native:
+            let contract = TronTransferContract.with {
+                $0.ownerAddress = input.senderAddress
+                $0.toAddress = toAddress
+                $0.amount = amount.asInt64
+            }
+            return [
+                try sign(
+                    input: input,
+                    contract: .transfer(contract),
+                    feeLimit: .none,
+                    memo: memo,
+                    privateKey: privateKey
+                ),
+            ]
+        case .token:
+            let contract = try TronTransferTRC20Contract.with {
+                $0.contractAddress = try input.asset.getTokenId()
+                $0.ownerAddress = input.senderAddress
+                $0.toAddress = toAddress
+                $0.amount = amount.magnitude.serialize()
+            }
+            return [
+                try sign(
+                    input: input,
+                    contract: .transferTrc20Contract(contract),
+                    feeLimit: input.fee.gasLimit.asInt,
+                    memo: memo,
+                    privateKey: privateKey
+                )
+            ]
         }
-        return [
-            try sign(
-                input: input,
-                contract: .transfer(contract),
-                feeLimit: .none,
-                memo: data.data.data,
-                privateKey: privateKey
-            ),
-        ]
     }
 }

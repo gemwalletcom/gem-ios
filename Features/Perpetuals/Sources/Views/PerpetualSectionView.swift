@@ -7,7 +7,7 @@ struct PerpetualSectionView: View {
     let perpetuals: [PerpetualData]
     let onPin: (String, Bool) -> Void
     let emptyText: String?
-    
+
     init(
         perpetuals: [PerpetualData],
         onPin: @escaping (String, Bool) -> Void,
@@ -17,7 +17,7 @@ struct PerpetualSectionView: View {
         self.onPin = onPin
         self.emptyText = emptyText
     }
-    
+
     var body: some View {
         if perpetuals.isEmpty, let emptyText {
             Text(emptyText)

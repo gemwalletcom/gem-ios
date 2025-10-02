@@ -14,48 +14,52 @@ import Style
 @Observable
 @MainActor
 public final class PerpetualsSceneViewModel {
-    
     private let perpetualService: PerpetualServiceable
-    
-    public let wallet: Wallet
-    public let positions: [PerpetualPositionData]
-    public let perpetuals: [PerpetualData]
-    public let walletBalance: WalletBalance
-    
-    public var isLoading: Bool = false
-    public let preferences: Preferences = .standard
-    
-    private let onSelectAssetType: ((SelectAssetType) -> Void)?
-    
-    
+
+    let preferences: Preferences = .standard
+    let wallet: Wallet
+
+    var positionsRequest: PerpetualPositionsRequest
+    var perpetualsRequest: PerpetualsRequest
+    var walletBalanceRequest: PerpetualWalletBalanceRequest
+
+    var positions: [PerpetualPositionData] = []
+    var perpetuals: [PerpetualData] = []
+    var walletBalance: WalletBalance = .zero
+
+    var isSearchPresented: Bool = false
+    var searchQuery: String = .empty
+    var isSearching: Bool = false
+
+    let onSelectAssetType: ((SelectAssetType) -> Void)?
+
     public init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
-        positions: [PerpetualPositionData],
-        perpetuals: [PerpetualData],
-        walletBalance: WalletBalance,
         onSelectAssetType: ((SelectAssetType) -> Void)? = nil
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
-        self.positions = positions
-        self.perpetuals = perpetuals
-        self.walletBalance = walletBalance
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id)
+        self.perpetualsRequest = PerpetualsRequest(searchQuery: "")
+        self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: wallet.id)
         self.onSelectAssetType = onSelectAssetType
     }
-    
-    public var navigationTitle: String { "Perpetuals" }
-    public var positionsSectionTitle: String { Localized.Perpetual.positions }
-    public var marketsSectionTitle: String { "Markets" }
-    public var pinnedSectionTitle: String { Localized.Common.pinned }
-    public var noMarketsText: String { "No markets" }
-    public var pinImage: Image { Images.System.pin }
-    
-    public var sections: PerpetualsSections {
-        PerpetualsSections.from(perpetuals)
-    }
-    
-    public var headerViewModel: PerpetualsHeaderViewModel {
+
+    var navigationTitle: String { "Perpetuals" }
+    var positionsSectionTitle: String { Localized.Perpetual.positions }
+    var marketsSectionTitle: String { "Markets" }
+    var pinnedSectionTitle: String { Localized.Common.pinned }
+    var noMarketsText: String? { !isSearching ? "No markets" : "No markets found" }
+    var pinImage: Image { Images.System.pin }
+    var searchImage: Image { Images.System.search }
+
+    var showPositions: Bool { !isSearching && positions.isNotEmpty }
+    var showPinned: Bool { !isSearching && sections.pinned.isNotEmpty }
+
+    var sections: PerpetualsSections { PerpetualsSections.from(perpetuals) }
+
+    var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
             walletType: wallet.type,
             balance: walletBalance
@@ -63,10 +67,10 @@ public final class PerpetualsSceneViewModel {
     }
 }
 
-// MARK: - Actions
+// MARK: - Businesss Logic
 
 extension PerpetualsSceneViewModel {
-    public func fetch() async {
+    func fetch() async {
         await updateMarkets()
         await updatePositions()
     }
@@ -89,8 +93,8 @@ extension PerpetualsSceneViewModel {
             NSLog("Failed to update markets: \(error)")
         }
     }
-    
-    public func onHeaderAction(type: HeaderButtonType) {
+
+    func onSelectHeaderAction(type: HeaderButtonType) {
         switch type {
         case .deposit:
             onSelectAssetType?(.deposit)
@@ -100,12 +104,27 @@ extension PerpetualsSceneViewModel {
             break
         }
     }
-    
-    public func onPinPerpetual(_ perpetualId: String, value: Bool) {
+
+    func onPinPerpetual(_ perpetualId: String, value: Bool) {
         do {
             try perpetualService.setPinned(value, perpetualId: perpetualId)
         } catch {
             NSLog("PerpetualsSceneViewModel pin perpetual error: \(error)")
         }
+    }
+
+    func onSearchQueryChange(_ _: String, _ newValue: String) {
+        let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        perpetualsRequest = PerpetualsRequest(searchQuery: trimmed)
+    }
+
+    func onSearchPresentedChange(_ _: Bool, _ isPresented: Bool) {
+        if !isPresented {
+            searchQuery = .empty
+        }
+    }
+
+    func onSelectSearchButton() {
+        isSearchPresented = true
     }
 }
