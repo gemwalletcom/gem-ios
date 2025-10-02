@@ -18,7 +18,7 @@ public extension Asset {
     var feeAsset: Asset {
         switch id.chain {
         case .hyperCore:
-            return self
+            return Asset.hyperliquidUSDC()
         default:
             switch id.type {
             case .native: return self
