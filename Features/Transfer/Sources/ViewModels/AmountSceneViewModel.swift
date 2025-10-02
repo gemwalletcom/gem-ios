@@ -101,8 +101,10 @@ public final class AmountSceneViewModel {
         case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual:
             return nil
         case .stake, .freeze:
-            guard amountInputModel.text == maxBalance else { return nil }
-            return Localized.Transfer.reservedFees(formatter.string(stakingReservedForFees, asset: asset))
+            guard reservedForFee > .zero else { return nil }
+            guard let inputValue = try? formatter.inputNumber(from: amountInputModel.text, decimals: asset.decimals.asInt) else { return nil }
+            guard inputValue >= availableBalanceForStaking, inputValue <= availableValue else { return nil }
+            return Localized.Transfer.reservedFees(formatter.string(reservedForFee, asset: asset))
         }
     }
 
@@ -388,7 +390,7 @@ extension AmountSceneViewModel {
                     decimals: asset.decimals.asInt,
                     validators: [
                         PositiveValueValidator<BigInt>().silent,
-                        MinimumValueValidator<BigInt>(minimumValue: minimumValue + stakingReservedForFees, asset: asset),
+                        MinimumValueValidator<BigInt>(minimumValue: minimumValue + reservedForFee, asset: asset),
                         BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
                     ]
                 )
@@ -650,9 +652,23 @@ extension AmountSceneViewModel {
     }
 
     private var amountTransferValue: String {
-        switch amountInputType {
+        let amountInputValue: String = switch amountInputType {
         case .asset: amountInputModel.text
         case .fiat: amountValue
+        }
+
+        // For stake/freeze, cap input at max allowed (balance - reserved fees)
+        switch input.type {
+        case .stake, .freeze:
+            guard let inputValue = try? formatter.inputNumber(from: amountInputValue, decimals: asset.decimals.asInt) else {
+                return amountInputValue
+            }
+            if inputValue > availableBalanceForStaking {
+                return formatter.string(availableBalanceForStaking, decimals: asset.decimals.asInt)
+            }
+            return amountInputValue
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
+            return amountInputValue
         }
     }
 
@@ -660,13 +676,21 @@ extension AmountSceneViewModel {
         asset.type == .native ? asset.chain.minimumAccountBalance : .zero
     }
 
-    private var stakingReservedForFees: BigInt {
-        BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
+    private var reservedForFee: BigInt {
+        switch input.type {
+        case .stake: BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
+        case .freeze(let data):
+            switch data.freezeType {
+            case .freeze: BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
+            case .unfreeze: .zero
+            }
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw: .zero
+        }
     }
 
     private var availableBalanceForStaking: BigInt {
-        assetData.balance.available > stakingReservedForFees
-        ? assetData.balance.available - stakingReservedForFees
+        assetData.balance.available > reservedForFee
+        ? assetData.balance.available - reservedForFee
         : .zero
     }
 }
