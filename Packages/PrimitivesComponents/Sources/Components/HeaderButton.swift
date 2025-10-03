@@ -51,11 +51,11 @@ public struct HeaderButton: Identifiable {
     
     public var image: Image {
         switch type {
-        case .send: Images.Actions.send
-        case .receive: Images.Actions.receive
-        case .buy: Images.Actions.buy
+        case .send: Images.System.paperplane
+        case .receive: Images.System.qrCode
+        case .buy: Images.System.dollar
         case .sell: Images.System.dollar
-        case .swap: Images.Actions.swap
+        case .swap: Images.System.arrowSwap
         case .stake: Images.Actions.swap
         case .more: Images.Actions.more
         case .deposit: Images.Actions.buy

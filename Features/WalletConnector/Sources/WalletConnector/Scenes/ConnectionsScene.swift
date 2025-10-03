@@ -27,7 +27,7 @@ public struct ConnectionsScene: View {
                 )
                 ButtonListItem(
                     title: model.scanQRCodeButtonTitle,
-                    image: Images.System.qrCode,
+                    image: Images.System.qrCodeViewfinder,
                     action: model.onScan
                 )
             }

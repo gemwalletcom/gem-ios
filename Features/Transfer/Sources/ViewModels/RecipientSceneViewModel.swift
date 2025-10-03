@@ -85,7 +85,7 @@ public final class RecipientSceneViewModel {
     }
 
     var pasteImage: Image { Images.System.paste }
-    var qrImage: Image { Images.System.qrCode }
+    var qrImage: Image { Images.System.qrCodeViewfinder }
     var shouldShowInputActions: Bool { addressInputModel.text.isEmpty }
 
     var recipientSections: [ListItemValueSection<RecipientAddress>] {

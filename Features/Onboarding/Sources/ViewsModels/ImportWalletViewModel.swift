@@ -57,7 +57,7 @@ final class ImportWalletViewModel {
     var pasteButtonImage: Image { Images.System.paste }
 
     var qrButtonTitle: String { Localized.Wallet.scan }
-    var qrButtonImage: Image { Images.System.qrCode }
+    var qrButtonImage: Image { Images.System.qrCodeViewfinder }
 
     var alertTitle: String { Localized.Errors.validation("") }
 
