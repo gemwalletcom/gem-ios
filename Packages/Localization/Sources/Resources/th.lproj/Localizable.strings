@@ -423,7 +423,7 @@
 "asset.buy_asset" = "ซื้อ %@";
 "wallet.import_address_warning" = "คุณสามารถดูยอดคงเหลือและธุรกรรมสำหรับที่อยู่นี้ แต่ **ไม่สามารถส่งหรือขายเงินได้**";
 "info.stake_minimum_amount.title" = "จำนวนเงินขั้นต่ำ";
-"info.stake_minimum_amount.description" = "บนเครือข่าย %@ ข้อกำหนดการเดิมพันขั้นต่ำคือ ** %@ **";
+"info.stake_minimum_amount.description" = "บนเครือข่าย %@ ข้อกำหนดการเดิมพันขั้นต่ำคือ **%@**";
 "asset.add_to_wallet" = "เพิ่มลงในกระเป๋าสตางค์";
 "asset.hide_from_wallet" = "ซ่อนจากกระเป๋าสตางค์";
 "common.details" = "รายละเอียด";

@@ -423,7 +423,7 @@
 "asset.buy_asset" = "קנה %@";
 "wallet.import_address_warning" = "ניתן לצפות ביתרות ועסקאות עבור כתובת זו, אך **לא ניתן לשלוח או למכור כספים**.";
 "info.stake_minimum_amount.title" = "סכום מינימלי";
-"info.stake_minimum_amount.description" = "ברשת %@, דרישת ההימור המינימלית היא ** %@ **.";
+"info.stake_minimum_amount.description" = "ברשת %@, דרישת ההימור המינימלית היא **%@**.";
 "asset.add_to_wallet" = "הוסף לארנק";
 "asset.hide_from_wallet" = "הסתר מהארנק";
 "common.details" = "פרטים";

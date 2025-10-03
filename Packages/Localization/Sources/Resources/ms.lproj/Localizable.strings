@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Beli %@";
 "wallet.import_address_warning" = "Anda boleh melihat baki dan urus niaga untuk alamat ini, tetapi **tidak boleh menghantar atau menjual dana**.";
 "info.stake_minimum_amount.title" = "Jumlah minimum";
-"info.stake_minimum_amount.description" = "Pada rangkaian %@, keperluan pertaruhan minimum ialah ** %@ **.";
+"info.stake_minimum_amount.description" = "Pada rangkaian %@, keperluan pertaruhan minimum ialah **%@**.";
 "asset.add_to_wallet" = "Tambah pada dompet";
 "asset.hide_from_wallet" = "Sembunyi dari dompet";
 "common.details" = "Butiran";

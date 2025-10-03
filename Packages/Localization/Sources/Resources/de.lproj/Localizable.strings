@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Kaufen %@";
 "wallet.import_address_warning" = "Sie können Guthaben und Transaktionen für diese Adresse anzeigen, aber **kein Geld senden oder verkaufen**.";
 "info.stake_minimum_amount.title" = "Mindestbetrag";
-"info.stake_minimum_amount.description" = "Im %@ -Netzwerk beträgt die Mindesteinsatzanforderung ** %@ **.";
+"info.stake_minimum_amount.description" = "Im %@ -Netzwerk beträgt die Mindesteinsatzanforderung **%@**.";
 "asset.add_to_wallet" = "Zum Wallet hinzufügen";
 "asset.hide_from_wallet" = "Vor der Brieftasche verstecken";
 "common.details" = "Details";

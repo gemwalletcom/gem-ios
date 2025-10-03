@@ -423,7 +423,7 @@
 "asset.buy_asset" = "خرید %@";
 "wallet.import_address_warning" = "شما می‌توانید موجودی و تراکنش‌های این آدرس را مشاهده کنید، اما **نمی‌توانید وجه ارسال یا بفروشید**.";
 "info.stake_minimum_amount.title" = "حداقل مقدار";
-"info.stake_minimum_amount.description" = "در شبکه %@ ، حداقل میزان سپرده‌گذاری ** %@ ** است.";
+"info.stake_minimum_amount.description" = "در شبکه %@ ، حداقل میزان سپرده‌گذاری **%@** است.";
 "asset.add_to_wallet" = "اضافه کردن به کیف پول";
 "asset.hide_from_wallet" = "پنهان شدن از کیف پول";
 "common.details" = "جزئیات";

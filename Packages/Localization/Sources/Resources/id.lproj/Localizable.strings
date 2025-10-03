@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Beli %@";
 "wallet.import_address_warning" = "Anda dapat melihat saldo dan transaksi untuk alamat ini, tetapi **tidak dapat mengirim atau menjual dana**.";
 "info.stake_minimum_amount.title" = "Jumlah minimum";
-"info.stake_minimum_amount.description" = "Pada jaringan %@, persyaratan staking minimum adalah ** %@ **.";
+"info.stake_minimum_amount.description" = "Pada jaringan %@, persyaratan staking minimum adalah **%@**.";
 "asset.add_to_wallet" = "Tambahkan ke dompet";
 "asset.hide_from_wallet" = "Sembunyikan dari dompet";
 "common.details" = "Rincian";

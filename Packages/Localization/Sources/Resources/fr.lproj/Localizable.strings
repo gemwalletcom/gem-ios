@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Achetez %@";
 "wallet.import_address_warning" = "Vous pouvez consulter les soldes et les transactions pour cette adresse, mais **vous ne pouvez pas envoyer ou vendre des fonds**.";
 "info.stake_minimum_amount.title" = "Montant minimum";
-"info.stake_minimum_amount.description" = "Sur le réseau %@, l'exigence minimale de jalonnement est de ** %@ **.";
+"info.stake_minimum_amount.description" = "Sur le réseau %@, l'exigence minimale de jalonnement est de **%@**.";
 "asset.add_to_wallet" = "Ajouter au portefeuille";
 "asset.hide_from_wallet" = "Se cacher du portefeuille";
 "common.details" = "Détails";

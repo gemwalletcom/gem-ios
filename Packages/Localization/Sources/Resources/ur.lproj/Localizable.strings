@@ -423,7 +423,7 @@
 "asset.buy_asset" = "خریدیں %@";
 "wallet.import_address_warning" = "آپ اس پتے کے بیلنس اور لین دین دیکھ سکتے ہیں، لیکن **فنڈز بھیج یا فروخت نہیں کر سکتے**۔";
 "info.stake_minimum_amount.title" = "کم از کم رقم";
-"info.stake_minimum_amount.description" = "%@ نیٹ ورک پر، اسٹیکنگ کی کم از کم ضرورت ** %@ ** ہے۔";
+"info.stake_minimum_amount.description" = "%@ نیٹ ورک پر، اسٹیکنگ کی کم از کم ضرورت **%@** ہے۔";
 "asset.add_to_wallet" = "بٹوے میں شامل کریں۔";
 "asset.hide_from_wallet" = "بٹوے سے چھپائیں۔";
 "common.details" = "تفصیلات";
