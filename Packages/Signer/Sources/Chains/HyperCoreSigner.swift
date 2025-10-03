@@ -184,16 +184,6 @@ public class HyperCoreSigner: Signable {
         return try hyperCore.signCWithdraw(withdraw: request, privateKey: privateKey)
     }
 
-    private func signTokenDelegate(validator: String, wei: UInt64, nonce: UInt64, isUndelegate: Bool, privateKey: Data) throws -> String {
-        let delegateRequest = switch isUndelegate {
-        case true:
-            factory.makeUndelegate(validator: validator, wei: wei, nonce: nonce)
-        case false:
-            factory.makeDelegate(validator: validator, wei: wei, nonce: nonce)
-        }
-        return try hyperCore.signTokenDelegate(delegate: delegateRequest, privateKey: privateKey)
-    }
-
     private func signMarketMessage(type: PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
         let order = switch type {
         case let .close(data):
