@@ -15,12 +15,14 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt.git", exact: Version(5, 7, 0)),
+        .package(path: "../CAtomics"),
     ],
     targets: [
         .target(
             name: "Primitives",
             dependencies: [
                 .product(name: "BigInt", package: "BigInt"),
+                "CAtomics",
             ],
             path: "Sources"
         ),

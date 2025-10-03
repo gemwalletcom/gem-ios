@@ -32,12 +32,11 @@ public class HyperCoreSigner: Signable {
 
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let amount = BigNumberFormatter.standard.string(from: input.value, decimals: Int(input.asset.decimals))
-        let parts = try input.asset.getTokenId().split(separator: "::").map { String($0) }
-        let token = try "\(parts.getElement(safe: 0)):\(parts.getElement(safe: 1))"
+        let (symbol, tokenId) = try input.asset.id.twoSubTokenIds()
         return try signSpotSend(
             amount: amount,
             destination: input.destinationAddress,
-            token: token,
+            token: "\(symbol):\(tokenId)",
             privateKey: privateKey
         )
     }
@@ -55,33 +54,23 @@ public class HyperCoreSigner: Signable {
             throw AnyError("Invalid input type for stake signing")
         }
 
-        let timestamp = UInt64(Date.getTimestampInMs())
+        let nonceIncrementer = NumberIncrementer(Date.getTimestampInMs())
         let denominator = BigInt(10).power(10)
         switch stakeType {
         case let .stake(validator):
             let wei = input.value / denominator
-            let depositAction = try signStakingTransfer(wei: wei.asUInt, nonce: timestamp, privateKey: privateKey)
-            let delegateAction = try signTokenDelegate(
-                validator: validator.id,
-                wei: wei.asUInt,
-                nonce: timestamp + 1,
-                isUndelegate: false,
-                privateKey: privateKey
-            )
+            let depositAction = try signStakingTransfer(wei: wei.asUInt, nonce: nonceIncrementer.next(), privateKey: privateKey)
+            let request = factory.makeDelegate(validator: validator.id, wei: wei.asUInt, nonce: nonceIncrementer.next())
+            let delegateAction = try hyperCore.signTokenDelegate(delegate: request, privateKey: privateKey)
             return [
                 depositAction,
                 delegateAction
             ]
         case let .unstake(delegation):
             let wei = delegation.base.balanceValue / denominator
-            let undelegateAction = try signTokenDelegate(
-                validator: delegation.validator.id,
-                wei: wei.asUInt,
-                nonce: timestamp,
-                isUndelegate: true,
-                privateKey: privateKey
-            )
-            let withdrawAction = try signStakingWithdraw(wei: wei.asUInt, nonce: timestamp + 1, privateKey: privateKey)
+            let request = factory.makeUndelegate(validator: delegation.validator.id, wei: wei.asUInt, nonce: nonceIncrementer.current())
+            let undelegateAction = try hyperCore.signTokenDelegate(delegate: request, privateKey: privateKey)
+            let withdrawAction = try signStakingWithdraw(wei: wei.asUInt, nonce: nonceIncrementer.next(), privateKey: privateKey)
             return [
                 undelegateAction,
                 withdrawAction
