@@ -12,8 +12,11 @@ import Primitives
 import BigInt
 import PriceService
 import PerpetualService
+import Components
 
-public struct DeveloperViewModel: Sendable {
+@Observable
+@MainActor
+public final class DeveloperViewModel {
     private let walletId: WalletId
     private let transactionsService: TransactionsService
     private let assetService: AssetsService
@@ -21,6 +24,8 @@ public struct DeveloperViewModel: Sendable {
     private let bannerService: BannerService
     private let priceService: PriceService
     private let perpetualService: PerpetualService
+
+    public var isPresentingToastMessage: ToastMessage?
 
     public init(
         walletId: WalletId,
@@ -43,15 +48,15 @@ public struct DeveloperViewModel: Sendable {
     var title: String {
         Localized.Settings.developer
     }
-    
+
     var deviceId: String {
         (try? SecurePreferences().get(key: .deviceId)) ?? .empty
     }
-    
+
     var deviceToken: String {
         (try? SecurePreferences().get(key: .deviceToken)) ?? .empty
     }
-    
+
     func reset() {
         do {
             try clearDocuments()
@@ -62,78 +67,81 @@ public struct DeveloperViewModel: Sendable {
             NSLog("reset error \(error)")
         }
     }
-    
-    private func clearDocuments() throws {
-        let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-        for fileURL in fileURLs {
-            try FileManager.default.removeItem(at: fileURL)
-        }
-    }
 
     func clearCache() {
-        URLCache.shared.removeAllCachedResponses()
+        performAction {
+            URLCache.shared.removeAllCachedResponses()
+        }
     }
     
     // database
     
     func clearTransactions() {
-        do {
+        performAction {
             try transactionsService.transactionStore.clear()
-        } catch { }
+        }
     }
 
     func clearPendingTransactions() {
-        do {
+        performAction {
             let transactionIds = try transactionsService.transactionStore.getTransactions(state: .pending).map { $0.id }
             try transactionsService.transactionStore.deleteTransactionId(ids: transactionIds)
-        } catch { }
+        }
     }
-    
+
     func clearTransactionsTimestamp() {
-        let store = WalletPreferences(walletId: walletId.id)
-        store.transactionsTimestamp = 0
+        performAction {
+            WalletPreferences(walletId: walletId.id).transactionsTimestamp = 0
+        }
     }
-    
+
     func clearWalletPreferences() {
-        WalletPreferences(walletId: walletId.id).clear()
+        performAction {
+            WalletPreferences(walletId: walletId.id).clear()
+        }
     }
-    
+
     func clearAssets() {
-        do {
+        performAction {
             try assetService.assetStore.clearTokens()
-        } catch { }
+        }
     }
-    
+
     func clearDelegations() {
-        do {
+        performAction {
             try stakeService.clearDelegations()
-        } catch { }
+        }
     }
-    
+
     func clearValidators() {
-        do {
+        performAction {
             try stakeService.clearValidators()
-        } catch { }
+        }
     }
 
     func clearBanners() {
-        do {
+        performAction {
             try bannerService.clearBanners()
-        } catch { }
+        }
     }
-    
+
+    func activateAllCancelledBanners() {
+        performAction {
+            try bannerService.activateAllCancelledBanners()
+        }
+    }
+
     func clearPrices() {
-        do {
+        performAction {
             try priceService.clear()
-        } catch { }
+        }
     }
-    
+
     func clearPerpetuals() {
-        do {
+        performAction {
             try perpetualService.clear()
             Preferences.standard.perpetualMarketsUpdatedAt = .none
-        } catch { }
+        }
     }
     
     func addTransactions() {
@@ -281,14 +289,41 @@ public struct DeveloperViewModel: Sendable {
     }
 
     // preferences
-    
+
     func clearAssetsVersion() {
-        Preferences.standard.swapAssetsVersion = 0
+        performAction {
+            Preferences.standard.swapAssetsVersion = 0
+        }
     }
     
     func deeplink(deeplink: DeepLink) {
         Task { @MainActor in
             await UIApplication.shared.open(deeplink.localUrl, options: [:])
+        }
+    }
+}
+
+// MARK: - Private
+
+extension DeveloperViewModel {
+    private func showSuccess() {
+        isPresentingToastMessage = ToastMessage(title: "Success", image: "checkmark.circle")
+    }
+
+    private func performAction(_ action: () throws -> Void) {
+        do {
+            try action()
+            showSuccess()
+        } catch {
+            NSLog("Developer action error: \(error)")
+        }
+    }
+
+    private func clearDocuments() throws {
+        let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+        for fileURL in fileURLs {
+            try FileManager.default.removeItem(at: fileURL)
         }
     }
 }

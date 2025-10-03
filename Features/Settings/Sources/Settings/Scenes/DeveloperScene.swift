@@ -8,10 +8,10 @@ import Primitives
 import PrimitivesComponents
 
 public struct DeveloperScene: View {
-    private let model: DeveloperViewModel
+    @State private var model: DeveloperViewModel
 
     public init(model: DeveloperViewModel) {
-        self.model = model
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
@@ -63,6 +63,10 @@ public struct DeveloperScene: View {
                     action: model.clearBanners
                 )
                 NavigationCustomLink(
+                    with: ListItemView(title: "Activate All Cancelled Banners"),
+                    action: model.activateAllCancelledBanners
+                )
+                NavigationCustomLink(
                     with: ListItemView(title: "Clear Perpetuals"),
                     action: model.clearPerpetuals
                 )
@@ -100,5 +104,6 @@ public struct DeveloperScene: View {
         }
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
+        .toast(message: $model.isPresentingToastMessage)
     }
 }
