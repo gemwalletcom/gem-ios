@@ -618,6 +618,8 @@ extension AmountSceneViewModel {
 
     private var maxBalance: String {
         let maxValue: BigInt = switch input.type {
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
+            availableValue
         case .stake:
             availableBalanceForStaking
         case .freeze(let data):
@@ -625,8 +627,6 @@ extension AmountSceneViewModel {
             case .freeze: availableBalanceForStaking
             case .unfreeze: availableValue
             }
-        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
-            availableValue
         }
         return formatter.string(maxValue, decimals: asset.decimals.asInt)
     }
@@ -659,6 +659,8 @@ extension AmountSceneViewModel {
 
         // For stake/freeze, cap input at max allowed (balance - reserved fees)
         switch input.type {
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
+            return amountInputValue
         case .stake, .freeze:
             guard let inputValue = try? formatter.inputNumber(from: amountInputValue, decimals: asset.decimals.asInt) else {
                 return amountInputValue
@@ -666,8 +668,6 @@ extension AmountSceneViewModel {
             if inputValue > availableBalanceForStaking {
                 return formatter.string(availableBalanceForStaking, decimals: asset.decimals.asInt)
             }
-            return amountInputValue
-        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
             return amountInputValue
         }
     }
@@ -678,13 +678,13 @@ extension AmountSceneViewModel {
 
     private var reservedForFee: BigInt {
         switch input.type {
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw: .zero
         case .stake: BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
         case .freeze(let data):
             switch data.freezeType {
             case .freeze: BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
             case .unfreeze: .zero
             }
-        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw: .zero
         }
     }
 
