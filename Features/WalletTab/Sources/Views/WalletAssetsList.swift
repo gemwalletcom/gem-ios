@@ -13,6 +13,7 @@ struct WalletAssetsList: View {
     let currencyCode: String
     let onHideAsset: AssetIdAction
     let onPinAsset: AssetIdBoolAction
+    let onCopyAddress: StringAction
 
     @Binding var showBalancePrivacy: Bool
 
@@ -21,12 +22,14 @@ struct WalletAssetsList: View {
         currencyCode: String,
         onHideAsset: AssetIdAction,
         onPinAsset: AssetIdBoolAction,
+        onCopyAddress: StringAction = nil,
         showBalancePrivacy: Binding<Bool>
     ) {
         self.assets = assets
         self.currencyCode = currencyCode
         self.onHideAsset = onHideAsset
         self.onPinAsset = onPinAsset
+        self.onCopyAddress = onCopyAddress
         _showBalancePrivacy = showBalancePrivacy
     }
 
@@ -45,13 +48,12 @@ struct WalletAssetsList: View {
                     [
                         .copy(
                             title: Localized.Wallet.copyAddress,
-                            value: asset.account.address
+                            value: asset.account.address,
+                            onCopy: { onCopyAddress?($0) }
                         ),
                         .pin(
                             isPinned: asset.metadata.isPinned,
-                            onPin: {
-                                onPinAsset?(asset.asset.id, !asset.metadata.isPinned)
-                            }
+                            onPin: { onPinAsset?(asset.asset.id, !asset.metadata.isPinned) }
                         ),
                         .hide({ onHideAsset?(asset.asset.id) })
                     ]

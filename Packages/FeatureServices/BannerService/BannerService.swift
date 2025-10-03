@@ -45,7 +45,7 @@ public struct BannerService: Sendable {
 
     @discardableResult
     public func activateAllCancelledBanners() throws -> Int {
-        try store.activateAllCancelledBanners()
+        try store.updateStates(from: .cancelled, to: .active)
     }
 
     private func updateState(id: String, state: BannerState) throws {

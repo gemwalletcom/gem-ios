@@ -28,11 +28,11 @@ public struct BannerStore: Sendable {
         }
     }
 
-    public func activateAllCancelledBanners() throws -> Int {
+    public func updateStates(from: BannerState, to: BannerState) throws -> Int {
         try db.write {
             try BannerRecord
-                .filter(BannerRecord.Columns.state == BannerState.cancelled.rawValue)
-                .updateAll($0, [BannerRecord.Columns.state.set(to: BannerState.active.rawValue)])
+                .filter(BannerRecord.Columns.state == from.rawValue)
+                .updateAll($0, [BannerRecord.Columns.state.set(to: to.rawValue)])
         }
     }
 

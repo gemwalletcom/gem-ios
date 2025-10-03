@@ -13,6 +13,7 @@ import PrimitivesComponents
 import InfoSheet
 import Components
 import WalletService
+import Formatters
 
 @Observable
 @MainActor
@@ -190,9 +191,20 @@ extension WalletSceneViewModel {
     func onPinAsset(_ assetId: AssetId, value: Bool) {
         do {
             try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetId)
+            isPresentingToastMessage = ToastMessage(
+                title: value ? Localized.Common.pinned : Localized.Common.unpin,
+                image: value ? SystemImage.pin : SystemImage.unpin
+            )
         } catch {
             NSLog("WalletSceneViewModel pin asset error: \(error)")
         }
+    }
+
+    func onCopyAddress(_ address: String) {
+        isPresentingToastMessage = ToastMessage(
+            title: AddressFormatter(address: address, chain: nil).value(),
+            image: SystemImage.copy
+        )
     }
 
     public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
