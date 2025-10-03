@@ -36,6 +36,9 @@ struct StakeNavigationView: View {
             request: $model.assetRequest,
             value: $model.assetData
         )
+        .ifLet(model.stakeInfoUrl, content: { view, url in
+            view.toolbarInfoButton(url: url)
+        })
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(type: $0)
         }
