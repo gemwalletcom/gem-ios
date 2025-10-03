@@ -6,8 +6,10 @@ public extension Images {
     struct System {
         public static let settings = Image(systemName: SystemImage.settings)
         public static let qrCode = Image(systemName: SystemImage.qrCode)
+        public static let qrCodePlain = Image(systemName: SystemImage.qrCodePlain)
         public static let paste = Image(systemName: SystemImage.paste)
         public static let copy = Image(systemName: SystemImage.copy)
+        public static let arrowTrianglehead2Clockwise = Image(systemName: SystemImage.arrowTrianglehead2Clockwise)
         public static let chevronDown = Image(systemName: SystemImage.chevronDown)
         public static let checklist = Image(systemName: SystemImage.checklist)
         public static let clear = Image(systemName: SystemImage.clear)
