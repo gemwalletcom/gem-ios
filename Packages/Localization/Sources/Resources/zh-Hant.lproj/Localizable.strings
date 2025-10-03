@@ -423,7 +423,7 @@
 "asset.buy_asset" = "購買%@";
 "wallet.import_address_warning" = "您可以查看此地址的餘額和交易，但**不能發送或出售資金**。";
 "info.stake_minimum_amount.title" = "最低金額";
-"info.stake_minimum_amount.description" = "在%@網路上，最低質押要求為 ** %@ **。";
+"info.stake_minimum_amount.description" = "在%@網路上，最低質押要求為 **%@**。";
 "asset.add_to_wallet" = "加入錢包";
 "asset.hide_from_wallet" = "隱藏錢包";
 "common.details" = "詳情";

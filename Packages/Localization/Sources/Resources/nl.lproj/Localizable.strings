@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Koop %@";
 "wallet.import_address_warning" = "U kunt het saldo en de transacties voor dit adres bekijken, maar u kunt geen geld verzenden of verkopen.";
 "info.stake_minimum_amount.title" = "Minimumbedrag";
-"info.stake_minimum_amount.description" = "Op het %@ netwerk is de minimale inzetvereiste ** %@ **.";
+"info.stake_minimum_amount.description" = "Op het %@ netwerk is de minimale inzetvereiste **%@**.";
 "asset.add_to_wallet" = "Toevoegen aan portemonnee";
 "asset.hide_from_wallet" = "Verbergen voor portemonnee";
 "common.details" = "Details";

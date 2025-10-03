@@ -423,7 +423,7 @@
 "asset.buy_asset" = "%@ खरीदें";
 "wallet.import_address_warning" = "आप इस पते के लिए शेष राशि और लेनदेन देख सकते हैं, लेकिन **धन भेज या बेच नहीं सकते**।";
 "info.stake_minimum_amount.title" = "न्यूनतम राशि";
-"info.stake_minimum_amount.description" = "%@ नेटवर्क पर, न्यूनतम स्टेकिंग आवश्यकता ** %@ ** है.";
+"info.stake_minimum_amount.description" = "%@ नेटवर्क पर, न्यूनतम स्टेकिंग आवश्यकता **%@** है.";
 "asset.add_to_wallet" = "वॉलेट में जोड़ें";
 "asset.hide_from_wallet" = "बटुए से छिपाएँ";
 "common.details" = "विवरण";

@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Comprar %@";
 "wallet.import_address_warning" = "Você pode visualizar saldos e transações para este endereço, mas **não pode enviar ou vender fundos**.";
 "info.stake_minimum_amount.title" = "Quantidade mínima";
-"info.stake_minimum_amount.description" = "Na rede %@, o requisito mínimo de staking é ** %@ **.";
+"info.stake_minimum_amount.description" = "Na rede %@, o requisito mínimo de staking é **%@**.";
 "asset.add_to_wallet" = "Adicionar à carteira";
 "asset.hide_from_wallet" = "Esconder da carteira";
 "common.details" = "Detalhes";

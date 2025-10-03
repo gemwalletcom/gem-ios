@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Nunua %@";
 "wallet.import_address_warning" = "Unaweza kuangalia salio na miamala ya anwani hii, lakini **haiwezi kutuma au kuuza fedha**.";
 "info.stake_minimum_amount.title" = "Kiasi cha chini";
-"info.stake_minimum_amount.description" = "Kwenye mtandao %@, hitaji la chini kabisa la kuweka hisa ni ** %@ **.";
+"info.stake_minimum_amount.description" = "Kwenye mtandao %@, hitaji la chini kabisa la kuweka hisa ni **%@**.";
 "asset.add_to_wallet" = "Ongeza kwenye mkoba";
 "asset.hide_from_wallet" = "Ficha kutoka kwa mkoba";
 "common.details" = "Maelezo";

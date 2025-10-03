@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Køb %@";
 "wallet.import_address_warning" = "Du kan se saldi og transaktioner for denne adresse, men **kan ikke sende eller sælge penge**.";
 "info.stake_minimum_amount.title" = "Minimumsbeløb";
-"info.stake_minimum_amount.description" = "På netværket %@ er minimumskravet for staking ** %@ **.";
+"info.stake_minimum_amount.description" = "På netværket %@ er minimumskravet for staking **%@**.";
 "asset.add_to_wallet" = "Tilføj til tegnebog";
 "asset.hide_from_wallet" = "Skjul fra tegnebogen";
 "common.details" = "Detaljer";

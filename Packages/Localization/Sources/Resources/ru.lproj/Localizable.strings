@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Купить %@";
 "wallet.import_address_warning" = "Вы можете просматривать балансы и транзакции для этого адреса, но **не можете отправлять или продавать средства**.";
 "info.stake_minimum_amount.title" = "Минимальная сумма";
-"info.stake_minimum_amount.description" = "В сети %@ минимальное требование к стейкингу составляет ** %@ **.";
+"info.stake_minimum_amount.description" = "В сети %@ минимальное требование к стейкингу составляет **%@**.";
 "asset.add_to_wallet" = "Добавить в кошелек";
 "asset.hide_from_wallet" = "Скрыть из кошелька";
 "common.details" = "Детали";

@@ -423,7 +423,7 @@
 "asset.buy_asset" = "%@ 구매";
 "wallet.import_address_warning" = "이 주소에 대한 잔액과 거래 내역은 볼 수 있지만, **자금을 보내거나 판매할 수는 없습니다**.";
 "info.stake_minimum_amount.title" = "최소 금액";
-"info.stake_minimum_amount.description" = "%@ 네트워크에서 최소 스테이킹 요구 사항은 ** %@ **입니다.";
+"info.stake_minimum_amount.description" = "%@ 네트워크에서 최소 스테이킹 요구 사항은 **%@**입니다.";
 "asset.add_to_wallet" = "지갑에 추가";
 "asset.hide_from_wallet" = "지갑에서 숨기기";
 "common.details" = "세부";

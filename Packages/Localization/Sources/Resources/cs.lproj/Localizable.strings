@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Koupit %@";
 "wallet.import_address_warning" = "Pro tuto adresu si můžete prohlížet zůstatky a transakce, ale **nemůžete posílat ani prodávat finanční prostředky**.";
 "info.stake_minimum_amount.title" = "Minimální částka";
-"info.stake_minimum_amount.description" = "V síti %@ je minimální požadavek na staking ** %@ **.";
+"info.stake_minimum_amount.description" = "V síti %@ je minimální požadavek na staking **%@**.";
 "asset.add_to_wallet" = "Přidat do peněženky";
 "asset.hide_from_wallet" = "Skrýt z peněženky";
 "common.details" = "Podrobnosti";
