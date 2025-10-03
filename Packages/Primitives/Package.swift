@@ -8,21 +8,21 @@ let package = Package(
     products: [
         .library(
             name: "Primitives",
-            targets: ["Primitives"]),
+            targets: ["Primitives"]
+        ),
         .library(
             name: "PrimitivesTestKit",
-            targets: ["PrimitivesTestKit"]),
+            targets: ["PrimitivesTestKit"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt.git", exact: Version(5, 7, 0)),
-        .package(path: "../CAtomics"),
     ],
     targets: [
         .target(
             name: "Primitives",
             dependencies: [
                 .product(name: "BigInt", package: "BigInt"),
-                "CAtomics",
             ],
             path: "Sources"
         ),
@@ -37,7 +37,8 @@ let package = Package(
             name: "PrimitivesTests",
             dependencies: [
                 "Primitives",
-                "PrimitivesTestKit"
-            ]),
+                "PrimitivesTestKit",
+            ]
+        ),
     ]
 )

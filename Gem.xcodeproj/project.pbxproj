@@ -979,7 +979,6 @@
 			);
 			mainGroup = C30952A7299C39D70004C0F9;
 			packageReferences = (
-				F46D08B02E8F4906003E70E5 /* XCLocalSwiftPackageReference "Packages/CAtomics" */,
 			);
 			productRefGroup = C30952B1299C39D70004C0F9 /* Products */;
 			projectDirPath = "";
@@ -1742,13 +1741,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		F46D08B02E8F4906003E70E5 /* XCLocalSwiftPackageReference "Packages/CAtomics" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/CAtomics;
-		};
-/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		074168392D3AFDBB00AC26A4 /* NFT */ = {
