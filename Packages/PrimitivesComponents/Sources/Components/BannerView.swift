@@ -47,9 +47,7 @@ private extension BannerView {
                         imageStyle: model.imageStyle
                     )
 
-                    if model.canClose {
-                        Spacer()
-                    }
+                    Spacer(minLength: model.canClose ? .extraLarge : .zero)
                 }
             }
         )
@@ -96,9 +94,11 @@ private extension BannerView {
             action(model.closeAction)
         } label: {
             Images.System.xmark
+                .resizable()
+                .frame(size: .small)
                 .symbolRenderingMode(.hierarchical)
                 .foregroundColor(Colors.gray)
-                .padding(.tiny)
+                .padding(.small)
                 .liquidGlass { _ in
                     ListButton(
                         image: Images.System.xmarkCircle,
