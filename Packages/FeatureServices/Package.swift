@@ -102,7 +102,7 @@ let package = Package(
                 "Preferences"
             ],
             path: "BannerService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "BannerServiceTestKit",
@@ -466,6 +466,17 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives")
             ],
             path: "PriceAlertService/Tests"
+        ),
+        .testTarget(
+            name: "BannerServiceTests",
+            dependencies: [
+                "BannerService",
+                "BannerServiceTestKit",
+                .product(name: "StoreTestKit", package: "Store"),
+                "NotificationServiceTestKit",
+                "Primitives"
+            ],
+            path: "BannerService/Tests"
         ),
     ]
 )
