@@ -62,15 +62,8 @@ extension GemTransactionLoadMetadata {
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
-        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps, let agentAddress, let agentPrivateKey):
-            return .hyperliquid(
-                approveAgentRequired: approveAgentRequired,
-                approveReferralRequired: approveReferralRequired,
-                approveBuilderRequired: approveBuilderRequired,
-                builderFeeBps: UInt32(builderFeeBps),
-                agentAddress: agentAddress,
-                agentPrivateKey: agentPrivateKey
-            )
+        case .hyperliquid(let order):
+            return .hyperliquid(order: order?.map())
         }
     }
 }
@@ -133,15 +126,34 @@ extension TransactionLoadMetadata {
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
-        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps, let agentAddress, let agentPrivateKey):
-            return .hyperliquid(
-                approveAgentRequired: approveAgentRequired,
-                approveReferralRequired: approveReferralRequired,
-                approveBuilderRequired: approveBuilderRequired,
-                builderFeeBps: builderFeeBps,
-                agentAddress: agentAddress,
-                agentPrivateKey: agentPrivateKey
-            )
+        case .hyperliquid(let order):
+            return .hyperliquid(order: order?.map())
         }
+    }
+}
+
+extension GemHyperliquidOrder {
+    func map() -> HyperliquidOrder {
+        HyperliquidOrder(
+            approveAgentRequired: approveAgentRequired,
+            approveReferralRequired: approveReferralRequired,
+            approveBuilderRequired: approveBuilderRequired,
+            builderFeeBps: UInt32(builderFeeBps),
+            agentAddress: agentAddress,
+            agentPrivateKey: agentPrivateKey
+        )
+    }
+}
+
+extension HyperliquidOrder {
+    func map() -> GemHyperliquidOrder {
+        GemHyperliquidOrder(
+            approveAgentRequired: approveAgentRequired,
+            approveReferralRequired: approveReferralRequired,
+            approveBuilderRequired: approveBuilderRequired,
+            builderFeeBps: builderFeeBps,
+            agentAddress: agentAddress,
+            agentPrivateKey: agentPrivateKey
+        )
     }
 }

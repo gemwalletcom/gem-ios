@@ -32,6 +32,18 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct PerpetualBasic: Codable, Equatable, Hashable, Sendable {
+	public let assetId: AssetId
+	public let perpetualId: String
+	public let provider: PerpetualProvider
+
+	public init(assetId: AssetId, perpetualId: String, provider: PerpetualProvider) {
+		self.assetId = assetId
+		self.perpetualId = perpetualId
+		self.provider = provider
+	}
+}
+
 public struct PerpetualBalance: Codable, Equatable, Hashable, Sendable {
 	public let available: Double
 	public let reserved: Double
