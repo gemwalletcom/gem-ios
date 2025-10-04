@@ -45,7 +45,7 @@ extension TransactionSceneViewModel: ListSectionProvideable {
         [
             ListSection(type: .header, [.header]),
             ListSection(type: .swapAction, [.swapButton]),
-            ListSection(type: .details, [.date, .status, .participant, .memo, .network, .pnl, .price, .provider, .fee]),
+            ListSection(type: .details, [.date, .status, .participant, .memo, .network, .pnl, .price, .size, .provider, .fee]),
             ListSection(type: .explorer, [.explorerLink])
         ]
     }
@@ -61,6 +61,7 @@ extension TransactionSceneViewModel: ListSectionProvideable {
         case .network: TransactionNetworkViewModel(chain: model.transaction.asset.chain)
         case .pnl: TransactionPnlViewModel(metadata: model.transaction.transaction.metadata)
         case .price: TransactionPriceViewModel(metadata: model.transaction.transaction.metadata)
+        case .size: TransactionSizeViewModel(transaction: model.transaction)
         case .provider: TransactionProviderViewModel(transaction: model.transaction.transaction)
         case .fee: TransactionNetworkFeeViewModel(feeDisplay: model.infoModel.feeDisplay, onInfoAction: onSelectFee)
         case .explorerLink: TransactionExplorerViewModel(transactionViewModel: model, explorerService: explorerService)

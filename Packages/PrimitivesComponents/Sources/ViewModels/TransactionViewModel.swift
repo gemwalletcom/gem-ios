@@ -238,10 +238,7 @@ public struct TransactionViewModel: Sendable {
             guard case .perpetual(let metadata) = transaction.transaction.metadata, metadata.pnl != 0 else {
                 return .none
             }
-            return TextValue(
-                text: "\(metadata.pnl)",
-                style: .footnote
-            )
+            return AmountDisplay.currency(value: metadata.pnl, currencyCode: Currency.usd.rawValue)
         case .tokenApproval:
             return AmountDisplay.symbol(asset: transaction.asset).amount
         case .swap:

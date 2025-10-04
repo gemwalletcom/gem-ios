@@ -211,6 +211,7 @@ struct TransactionSceneViewModelTests {
             TransactionItem.network,
             TransactionItem.pnl,
             TransactionItem.price,
+            TransactionItem.size,
             TransactionItem.provider,
             TransactionItem.fee
         ])
