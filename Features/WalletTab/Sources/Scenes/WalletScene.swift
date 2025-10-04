@@ -35,14 +35,7 @@ public struct WalletScene: View {
                 Section {
                     PerpetualsPreviewView(wallet: model.wallet)
                 } header: {
-                    HStack {
-                        Text("PERPETUALS")
-                        Spacer()
-                        NavigationLink(value: Scenes.Perpetuals()) {
-                            SectionHeaderActionView(title: Localized.Common.manage)
-                        }
-                        .buttonStyle(.borderless)
-                    }
+                    HeaderNavigationLinkView(title: "PERPETUALS", destination: Scenes.Perpetuals())
                 }
             }
             

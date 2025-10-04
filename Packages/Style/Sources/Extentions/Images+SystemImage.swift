@@ -9,6 +9,7 @@ public extension Images {
         public static let paste = Image(systemName: SystemImage.paste)
         public static let copy = Image(systemName: SystemImage.copy)
         public static let chevronDown = Image(systemName: SystemImage.chevronDown)
+        public static let chevronRight = Image(systemName: SystemImage.chevronRight)
         public static let checklist = Image(systemName: SystemImage.checklist)
         public static let clear = Image(systemName: SystemImage.clear)
         public static let hide = Image(systemName: SystemImage.hide)
