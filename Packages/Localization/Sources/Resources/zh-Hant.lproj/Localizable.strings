@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "購買或接收加密貨幣到您的錢包即可開始使用";
 "info.stake.reserved.title" = "預留網路費用";
 "info.stake.reserved.description" = "您的錢包中會留有少量資金，用於支付取消質押或領取獎勵等操作的費用。";
+"perpetual.open_direction" = "打開%@";
+"perpetual.close_direction" = "關閉%@";

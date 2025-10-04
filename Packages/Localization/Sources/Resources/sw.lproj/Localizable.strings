@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Nunua au Pokea crypto kwenye pochi yako ili uanze";
 "info.stake.reserved.title" = "Imehifadhiwa kwa Ada ya Mtandao";
 "info.stake.reserved.description" = "Kiasi kidogo husalia kwenye mkoba wako ili kulipia ada za shughuli kama vile kutoweka au kudai zawadi.";
+"perpetual.open_direction" = "Fungua %@";
+"perpetual.close_direction" = "Funga %@";

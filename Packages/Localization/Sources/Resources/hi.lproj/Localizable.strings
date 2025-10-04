@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "आरंभ करने के लिए अपने वॉलेट में क्रिप्टो खरीदें या प्राप्त करें";
 "info.stake.reserved.title" = "नेटवर्क शुल्क के लिए आरक्षित";
 "info.stake.reserved.description" = "आपके वॉलेट में एक छोटी राशि रहती है, जो अनस्टेकिंग या पुरस्कार का दावा करने जैसे कार्यों के लिए शुल्क को कवर करती है।";
+"perpetual.open_direction" = "%@ खोलें";
+"perpetual.close_direction" = "बंद करें %@";

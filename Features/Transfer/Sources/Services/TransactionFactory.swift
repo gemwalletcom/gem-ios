@@ -27,7 +27,7 @@ struct TransactionFactory {
         default: (transferData.type.transactionType, metadata)
         }
         let state = TransactionState.pending
-
+        
         return Transaction(
             id: Transaction.id(chain: transferData.chain, hash: hash),
             hash: hash,

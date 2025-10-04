@@ -42,6 +42,17 @@ public struct TransactionScene: View {
                 subtitle: subtitle,
                 assetImage: image
             )
+        case let .pnl(title, value, color):
+            ListItemView(
+                title: title,
+                subtitle: value,
+                subtitleStyle: TextStyle(font: .callout, color: color)
+            )
+        case let .price(title, value):
+            ListItemView(
+                title: title,
+                subtitle: value
+            )
         case let .explorer(url, text):
             SafariNavigationLink(url: url) {
                 Text(text)

@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Compra o recibe criptomonedas en tu billetera para comenzar";
 "info.stake.reserved.title" = "Reservado para comisión de red";
 "info.stake.reserved.description" = "Una pequeña cantidad permanece en tu billetera para cubrir las tarifas de operaciones como dejar de apostar o reclamar recompensas.";
+"perpetual.open_direction" = "Abrir %@";
+"perpetual.close_direction" = "Cerrar %@";

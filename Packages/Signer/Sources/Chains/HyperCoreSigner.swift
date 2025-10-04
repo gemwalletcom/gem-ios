@@ -188,7 +188,7 @@ public class HyperCoreSigner: Signable {
         return try hyperCore.signCWithdraw(withdraw: request, privateKey: privateKey)
     }
 
-    private func signMarketMessage(type: PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
+    private func signMarketMessage(type: Primitives.PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
         let order = switch type {
         case let .close(data):
             factory.makeMarketOrder(

@@ -66,19 +66,19 @@ public final class AmountSceneViewModel {
         self.currentValidator = defaultValidator
         self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: inputValidators)
 
-        // Initialize selectedResource based on current resource
         if let currentResource = currentResource {
             self.selectedResource = currentResource
         }
 
-        // set amount if avaialbe in recipientData
         if let recipientAmount = recipientData.amount {
             amountInputModel.update(text: recipientAmount)
         }
     }
 
     var type: AmountType { input.type }
-    var asset: Asset { input.asset }
+    var asset: Asset {
+        input.asset
+    }
     var assetImage: AssetImage { AssetViewModel(asset: asset).assetImage }
     var assetName: String { asset.name }
 
@@ -457,7 +457,7 @@ extension AmountSceneViewModel {
             let price = perpetualPriceFormatter.formatPrice(
                 provider: perpetual.provider,
                 slippagePrice,
-                decimals: perpetual.perpetualAsset.decimals.asInt
+                decimals: perpetual.asset.decimals.asInt
             )
             // Convert USDC amount to USD value
             let usdAmount = Double(value) / pow(10.0, Double(asset.decimals))
@@ -466,14 +466,14 @@ extension AmountSceneViewModel {
             let size = perpetualPriceFormatter.formatSize(
                 provider: perpetual.provider,
                 sizeAsAsset,
-                decimals: Int(perpetual.perpetualAsset.decimals)
+                decimals: Int(perpetual.asset.decimals)
             )
             return TransferData(
                 type: .perpetual(
-                    asset, .open(
+                    perpetual.asset, .open(
                         PerpetualConfirmData(
                             direction: perpetual.direction,
-                            asset: perpetual.asset,
+                            baseAsset: perpetual.baseAsset,
                             assetIndex: Int32(perpetual.assetIndex),
                             price: price,
                             fiatValue: perpetual.price * sizeAsAsset,
