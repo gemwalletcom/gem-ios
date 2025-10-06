@@ -63,6 +63,7 @@ public struct WalletScene: View {
                         currencyCode: model.currencyCode,
                         onHideAsset: model.onHideAsset,
                         onPinAsset: model.onPinAsset,
+                        onCopyAddress: model.onCopyAddress,
                         showBalancePrivacy: $preferences.isHideBalanceEnabled
                     )
                     .listRowInsets(.assetListRowInsets)
@@ -80,6 +81,7 @@ public struct WalletScene: View {
                     currencyCode: model.currencyCode,
                     onHideAsset: model.onHideAsset,
                     onPinAsset: model.onPinAsset,
+                    onCopyAddress: model.onCopyAddress,
                     showBalancePrivacy: $preferences.isHideBalanceEnabled
                 )
                 .listRowInsets(.assetListRowInsets)
