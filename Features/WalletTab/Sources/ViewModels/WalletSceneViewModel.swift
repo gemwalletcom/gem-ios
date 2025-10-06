@@ -188,11 +188,11 @@ extension WalletSceneViewModel {
         }
     }
 
-    func onPinAsset(_ assetId: AssetId, value: Bool) {
+    func onPinAsset(_ asset: Asset, value: Bool) {
         do {
-            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetId)
+            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: asset.id)
             isPresentingToastMessage = ToastMessage(
-                title: value ? Localized.Common.pinned : Localized.Common.unpin,
+                title: value ? "\(Localized.Common.pinned) \(asset.name)" : "\(Localized.Common.unpin) \(asset.name)",
                 image: value ? SystemImage.pin : SystemImage.unpin
             )
         } catch {
@@ -200,9 +200,9 @@ extension WalletSceneViewModel {
         }
     }
 
-    func onCopyAddress(_ address: String) {
+    func onCopyAddress(_ symbol: String, _ address: String) {
         isPresentingToastMessage = ToastMessage(
-            title: AddressFormatter(address: address, chain: nil).value(),
+            title: "\(symbol): \(AddressFormatter(address: address, chain: nil).value())",
             image: SystemImage.copy
         )
     }
