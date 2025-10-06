@@ -44,7 +44,7 @@ public final class TransferMetadataProvider: TransferMetadataProvidable {
         extraIds: [AssetId] = []
     ) throws -> TransferDataMetadata {
         let assetId = asset.id
-        let feeAssetId = asset.feeAsset.id
+        let feeAssetId = asset.feeAssetId
 
         guard let balance = try balanceService.getBalance(walletId: walletId.id, assetId: assetId.identifier) else {
             throw AnyError("Missing balance for assetId: \(assetId.identifier)")
