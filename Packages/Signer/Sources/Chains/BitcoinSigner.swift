@@ -76,6 +76,48 @@ public struct BitcoinSigner: Signable {
             $0.useMaxAmount = input.useMaxAmount
         }
         signingOverride?(&signingInput)
+        
+        if coinType == .zcash {
+            signingInput.plan = .with {
+                $0.amount = input.value.asInt64
+                $0.utxos = utxos
+                $0.fee = 6000
+                //$0.change = input.value.asInt64 - 6000
+                $0.branchID = Data([0xbb, 0x09, 0xb8, 0x76])
+            }
+        }
+
+//        if coinType == .zcash {
+//            signingInput.byteFee = 0
+//
+//            let totalAvailable = utxos.reduce(into: Int64(0)) { result, utxo in
+//                result += utxo.amount
+//            }
+//
+//            guard totalAvailable >= ZcashSigner.staticFee else {
+//                throw AnyError("Insufficient balance to cover Zcash fee")
+//            }
+//
+//            let requestedAmount = signingInput.amount
+//            let targetAmount = signingInput.useMaxAmount
+//                ? max(totalAvailable - ZcashSigner.staticFee, 0)
+//                : requestedAmount
+//
+//
+//            let change = max(totalAvailable - targetAmount - ZcashSigner.staticFee, 0)
+//
+//            signingInput.amount = targetAmount
+//            signingInput.zip0317 = true
+//            signingInput.plan = BitcoinTransactionPlan.with {
+//                $0.amount = targetAmount
+//                $0.availableAmount = totalAvailable
+//                $0.fee = input.fee.fee.asInt64
+//                $0.change = change
+//                $0.utxos = utxos
+//                $0.branchID = ZcashSigner.branchId
+//            }
+//        }
+
         let output: BitcoinSigningOutput = AnySigner.sign(input: signingInput, coin: coinType)
 
         if output.error != .ok {

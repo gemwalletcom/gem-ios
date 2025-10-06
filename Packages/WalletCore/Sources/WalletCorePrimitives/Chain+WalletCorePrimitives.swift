@@ -43,6 +43,7 @@ public extension Chain {
         case .ton: .ton
         case .tron: .tron
         case .doge: .dogecoin
+        case .zcash: .zcash
         case .aptos: .aptos
         case .sui: .sui
         case .xrp: .xrp
