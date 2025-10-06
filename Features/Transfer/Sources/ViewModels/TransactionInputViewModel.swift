@@ -35,11 +35,18 @@ struct TransactionInputViewModel: Sendable {
         case .failure, .none: data.value
         }
     }
+    
+    var asset: Asset {
+        switch data.type {
+        case .perpetual(_, let type): type.baseAsset
+        default: data.type.asset
+        }
+    }
 
     var infoModel: TransactionInfoViewModel {
         TransactionInfoViewModel(
             currency: preferences.currency,
-            asset: data.type.asset,
+            asset: asset,
             assetPrice: metaData?.assetPrice,
             feeAsset: data.type.asset.feeAsset,
             feeAssetPrice: metaData?.feePrice,

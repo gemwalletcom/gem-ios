@@ -12,7 +12,8 @@ struct WalletAssetsList: View {
     let assets: [AssetData]
     let currencyCode: String
     let onHideAsset: AssetIdAction
-    let onPinAsset: AssetIdBoolAction
+    let onPinAsset: AssetBoolAction
+    let onCopyAddress: ((String, String) -> Void)?
 
     @Binding var showBalancePrivacy: Bool
 
@@ -20,13 +21,15 @@ struct WalletAssetsList: View {
         assets: [AssetData],
         currencyCode: String,
         onHideAsset: AssetIdAction,
-        onPinAsset: AssetIdBoolAction,
+        onPinAsset: AssetBoolAction,
+        onCopyAddress: ((String, String) -> Void)? = nil,
         showBalancePrivacy: Binding<Bool>
     ) {
         self.assets = assets
         self.currencyCode = currencyCode
         self.onHideAsset = onHideAsset
         self.onPinAsset = onPinAsset
+        self.onCopyAddress = onCopyAddress
         _showBalancePrivacy = showBalancePrivacy
     }
 
@@ -45,13 +48,12 @@ struct WalletAssetsList: View {
                     [
                         .copy(
                             title: Localized.Wallet.copyAddress,
-                            value: asset.account.address
+                            value: asset.account.address,
+                            onCopy: { onCopyAddress?(asset.asset.symbol, $0) }
                         ),
                         .pin(
                             isPinned: asset.metadata.isPinned,
-                            onPin: {
-                                onPinAsset?(asset.asset.id, !asset.metadata.isPinned)
-                            }
+                            onPin: { onPinAsset?(asset.asset, !asset.metadata.isPinned) }
                         ),
                         .hide({ onHideAsset?(asset.asset.id) })
                     ]
@@ -69,7 +71,7 @@ struct WalletAssetsList: View {
                 }
                 .swipeActions(edge: .leading) {
                     Button(role: .destructive) {
-                        onPinAsset?(asset.asset.id, !asset.metadata.isPinned)
+                        onPinAsset?(asset.asset, !asset.metadata.isPinned)
                     } label: {
                         Label(
                             asset.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin,

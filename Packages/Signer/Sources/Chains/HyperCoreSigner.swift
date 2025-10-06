@@ -85,16 +85,20 @@ public class HyperCoreSigner: Signable {
     }
 
     public func signPerpetual(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case let .perpetual(_, type) = input.type, case let .hyperliquid(approveAgentRequired, approveReferralRequired, approveBuilderRequired, builderFeeBps, agentAddress, agentPrivateKey) = input.metadata else {
+        guard case let .perpetual(_, type) = input.type, case let .hyperliquid(order) = input.metadata else {
             throw AnyError("Invalid input type for perpetual signing")
         }
 
-        let agentKey = try Data.from(hex: agentPrivateKey)
-        let builder = try? getBuilder(builder: builderAddress, fee: Int(builderFeeBps))
+        guard let order = order else {
+            throw AnyError("Hyperliquid order metadata is required for perpetual signing")
+        }
+
+        let agentKey = try Data.from(hex: order.agentPrivateKey)
+        let builder = try? getBuilder(builder: builderAddress, fee: Int(order.builderFeeBps))
         let timestampIncrementer = NumberIncrementer(Int(Date.getTimestampInMs()))
         var transactions: [String] = []
 
-        if approveReferralRequired {
+        if order.approveReferralRequired {
             try transactions.append(
                 signSetReferer(
                     agentKey: privateKey,
@@ -103,21 +107,21 @@ public class HyperCoreSigner: Signable {
                 )
             )
         }
-        if approveAgentRequired {
+        if order.approveAgentRequired {
             try transactions.append(
                 signApproveAgent(
-                    agentAddress: agentAddress,
+                    agentAddress: order.agentAddress,
                     privateKey: privateKey,
                     timestamp: timestampIncrementer.next().asUInt64
                 )
             )
         }
-        if approveBuilderRequired {
+        if order.approveBuilderRequired {
             try transactions.append(
                 signApproveBuilderAddress(
                     agentKey: privateKey,
                     builderAddress: builderAddress,
-                    rateBps: builderFeeBps,
+                    rateBps: order.builderFeeBps,
                     timestamp: timestampIncrementer.next().asUInt64
                 )
             )
@@ -184,7 +188,7 @@ public class HyperCoreSigner: Signable {
         return try hyperCore.signCWithdraw(withdraw: request, privateKey: privateKey)
     }
 
-    private func signMarketMessage(type: PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
+    private func signMarketMessage(type: Primitives.PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
         let order = switch type {
         case let .close(data):
             factory.makeMarketOrder(

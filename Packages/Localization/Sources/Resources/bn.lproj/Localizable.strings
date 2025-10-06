@@ -423,7 +423,7 @@
 "asset.buy_asset" = "%@ কিনুন";
 "wallet.import_address_warning" = "আপনি এই ঠিকানার ব্যালেন্স এবং লেনদেন দেখতে পারবেন, কিন্তু **তহবিল পাঠাতে বা বিক্রি করতে পারবেন না**।";
 "info.stake_minimum_amount.title" = "সর্বনিম্ন পরিমাণ";
-"info.stake_minimum_amount.description" = "%@ নেটওয়ার্কে, ন্যূনতম স্টেকিং প্রয়োজনীয়তা হল ** %@ **।";
+"info.stake_minimum_amount.description" = "%@ নেটওয়ার্কে, ন্যূনতম স্টেকিং প্রয়োজনীয়তা হল **%@**।";
 "asset.add_to_wallet" = "ওয়ালেটে যোগ করুন";
 "asset.hide_from_wallet" = "মানিব্যাগ থেকে লুকান";
 "common.details" = "বিস্তারিত";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "শুরু করতে আপনার ওয়ালেটে ক্রিপ্টো কিনুন বা গ্রহণ করুন";
 "info.stake.reserved.title" = "নেটওয়ার্ক ফি এর জন্য সংরক্ষিত";
 "info.stake.reserved.description" = "পুরষ্কার দাবি করা বা স্টক খোলার মতো ক্রিয়াকলাপের ফি মেটাতে আপনার ওয়ালেটে অল্প পরিমাণ টাকা থেকে যায়।";
+"perpetual.open_direction" = "%@ খুলুন";
+"perpetual.close_direction" = "%@ বন্ধ করুন";
