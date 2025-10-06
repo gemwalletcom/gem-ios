@@ -215,6 +215,8 @@ struct LocalKeystoreTests {
                     expected = "13nN6BGAoJwd7Nw1XxeBCx5YcBXuYnL94Mh7i3xBprqVSsFk"
                 case .cardano:
                     expected = "addr1qyr8jjfnypp95eq74aqzn7ss687ehxclgj7mu6gratmg3mul2040vt35dypp042awzsjk5xm3zr3zm5qh7454uwdv08s84ray2"
+                case .zcash:
+                    expected = "t1YYnByMzdGhQv3W3rnjHMrJs6HH4Y231gy"
                 }
 
                 #expect(derivedAddress == expected, "\(chain) failed to match address")

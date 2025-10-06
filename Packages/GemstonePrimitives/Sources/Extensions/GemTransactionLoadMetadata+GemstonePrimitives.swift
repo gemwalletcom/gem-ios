@@ -26,6 +26,8 @@ extension GemTransactionLoadMetadata {
             return .cosmos(accountNumber: UInt64(accountNumber), sequence: sequence, chainId: chainId)
         case .bitcoin(let utxos):
             return .bitcoin(utxos: try utxos.map { try $0.map() })
+        case .zcash(let utxos, let branchId):
+            return .zcash(utxos: try utxos.map { try $0.map() }, branchId: branchId)
         case .cardano(let utxos):
             return .cardano(utxos: try utxos.map { try $0.map() })
         case .evm(let nonce, let chainId, let stakeData):
@@ -86,6 +88,8 @@ extension TransactionLoadMetadata {
             return .cosmos(accountNumber: UInt64(accountNumber), sequence: sequence, chainId: chainId)
         case .bitcoin(let utxos):
             return .bitcoin(utxos: utxos.map { $0.map() })
+        case .zcash(let utxos, let branchId):
+            return .zcash(utxos: utxos.map { $0.map() }, branchId: branchId)
         case .cardano(let utxos):
             return .cardano(utxos: utxos.map { $0.map() })
         case .evm(let nonce, let chainId, let stakeData):
