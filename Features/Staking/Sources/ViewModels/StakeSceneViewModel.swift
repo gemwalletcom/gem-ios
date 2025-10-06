@@ -46,20 +46,8 @@ public final class StakeSceneViewModel {
     }
 
     public var stakeInfoUrl: URL? {
-        switch chain.stakeChain {
-        case .solana: Docs.url(.stakingSolana)
-        case .smartChain: Docs.url(.stakingSmartChain)
-        case .cosmos: Docs.url(.stakingCosmos)
-        case .osmosis: Docs.url(.stakingOsmosis)
-        case .tron: Docs.url(.stakingTron)
-        case .sui: Docs.url(.stakingSui)
-        case .celestia: Docs.url(.stakingCelestia)
-        case .injective: Docs.url(.stakingInjective)
-        case .sei: Docs.url(.stakingSei)
-        case .ethereum: Docs.url(.stakingEthereum)
-        case .hyperCore: Docs.url(.stakingHyperliquid)
-        case .none: nil
-        }
+        guard let stakeChain = chain.stakeChain?.rawValue else { return nil }
+        return Docs.url(.staking(stakeChain))
     }
 
     var title: String { Localized.Transfer.Stake.title }
