@@ -11,6 +11,7 @@ public struct SystemImage {
     public static let arrowSwap = "arrow.trianglehead.2.clockwise"
     public static let paperplane = "paperplane"
     public static let chevronDown = "chevron.down"
+    public static let chevronRight = "chevron.right"
     public static let checklist = "checklist.unchecked"
     public static let clear = "multiply.circle.fill"
     public static let hide = "eye.slash.fill"

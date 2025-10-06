@@ -12,6 +12,7 @@ public extension Images {
         public static let arrowSwap = Image(systemName: SystemImage.arrowSwap)
         public static let paperplane = Image(systemName: SystemImage.paperplane)
         public static let chevronDown = Image(systemName: SystemImage.chevronDown)
+        public static let chevronRight = Image(systemName: SystemImage.chevronRight)
         public static let checklist = Image(systemName: SystemImage.checklist)
         public static let clear = Image(systemName: SystemImage.clear)
         public static let hide = Image(systemName: SystemImage.hide)
