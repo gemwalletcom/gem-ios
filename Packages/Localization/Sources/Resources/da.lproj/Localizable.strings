@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Køb eller modtag krypto til din wallet for at komme i gang";
 "info.stake.reserved.title" = "Reserveret til netværksgebyr";
 "info.stake.reserved.description" = "Et lille beløb forbliver i din pung til at dække gebyrer for operationer som at fjerne indsatser eller gøre krav på belønninger.";
+"perpetual.open_direction" = "Åbn %@";
+"perpetual.close_direction" = "Luk %@";

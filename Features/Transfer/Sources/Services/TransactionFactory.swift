@@ -26,8 +26,10 @@ struct TransactionFactory {
             }
         default: (transferData.type.transactionType, metadata)
         }
+        let value = amount.value.description
+        
         let state = TransactionState.pending
-
+        
         return Transaction(
             id: Transaction.id(chain: transferData.chain, hash: hash),
             hash: hash,
@@ -41,7 +43,7 @@ struct TransactionFactory {
             sequence: (try? String(transactionData.metadata.getSequence())) ?? "0",
             fee: amount.networkFee.description,
             feeAssetId: transferData.type.asset.feeAsset.id,
-            value: amount.value.description,
+            value: value,
             memo: transferData.recipientData.recipient.memo ?? "",
             direction: direction,
             utxoInputs: [],

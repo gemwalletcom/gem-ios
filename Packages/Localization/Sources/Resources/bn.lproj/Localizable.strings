@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "শুরু করতে আপনার ওয়ালেটে ক্রিপ্টো কিনুন বা গ্রহণ করুন";
 "info.stake.reserved.title" = "নেটওয়ার্ক ফি এর জন্য সংরক্ষিত";
 "info.stake.reserved.description" = "পুরষ্কার দাবি করা বা স্টক খোলার মতো ক্রিয়াকলাপের ফি মেটাতে আপনার ওয়ালেটে অল্প পরিমাণ টাকা থেকে যায়।";
+"perpetual.open_direction" = "%@ খুলুন";
+"perpetual.close_direction" = "%@ বন্ধ করুন";

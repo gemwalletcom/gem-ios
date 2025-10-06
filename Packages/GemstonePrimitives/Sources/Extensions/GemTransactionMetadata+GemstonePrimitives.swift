@@ -4,13 +4,15 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemTransactionMetadata {
-    public func map() -> TransactionMetadata {
+extension Gemstone.TransactionMetadata {
+    public func map() -> Primitives.TransactionMetadata {
         switch self {
         case .perpetual(let perpetualMetadata):
-            return .perpetual(TransactionPerpetualMetadata(
+            return .perpetual(Primitives.TransactionPerpetualMetadata(
                 pnl: perpetualMetadata.pnl,
-                price: perpetualMetadata.price
+                price: perpetualMetadata.price,
+                direction: perpetualMetadata.direction.map(),
+                provider: perpetualMetadata.provider?.map()
             ))
         }
     }

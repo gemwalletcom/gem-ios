@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Mua hoặc nhận tiền điện tử vào ví của bạn để bắt đầu";
 "info.stake.reserved.title" = "Dành riêng cho Phí mạng";
 "info.stake.reserved.description" = "Một số tiền nhỏ sẽ được giữ lại trong ví của bạn để trang trải phí cho các hoạt động như hủy đặt cọc hoặc nhận phần thưởng.";
+"perpetual.open_direction" = "Mở %@";
+"perpetual.close_direction" = "Đóng %@";

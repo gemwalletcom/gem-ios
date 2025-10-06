@@ -67,12 +67,7 @@ public final class PerpetualSceneViewModel {
         self.transactionsRequest = TransactionsRequest(
             walletId: wallet.id,
             type: .asset(assetId: asset.id),
-            filters: [
-                .types([
-                    TransactionType.perpetualOpenPosition,
-                    TransactionType.perpetualClosePosition
-                ].map { $0.rawValue })
-            ]
+            filters: [.types([TransactionType.perpetualOpenPosition, TransactionType.perpetualClosePosition].map { $0.rawValue })]
         )
     }
 
@@ -162,7 +157,7 @@ public extension PerpetualSceneViewModel {
         let size = formatter.formatSize(provider: perpetualViewModel.perpetual.provider, abs(position.size), decimals: Int(asset.decimals))
         let data = PerpetualConfirmData(
             direction: position.direction,
-            asset: asset,
+            baseAsset: .hyperliquidUSDC(),
             assetIndex: Int32(assetIndex),
             price: price,
             fiatValue: abs(position.size) * positionPrice,
@@ -170,7 +165,7 @@ public extension PerpetualSceneViewModel {
         )
         
         let transferData = TransferData(
-            type: .perpetual(.hyperliquidUSDC(), .close(data)),
+            type: .perpetual(asset, .close(data)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false
@@ -188,8 +183,8 @@ public extension PerpetualSceneViewModel {
             data: PerpetualTransferData(
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .long,
-                asset: .hyperliquidUSDC(),
-                perpetualAsset: asset,
+                asset: asset,
+                baseAsset: .hyperliquidUSDC(),
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
                 leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
@@ -207,8 +202,8 @@ public extension PerpetualSceneViewModel {
             data: PerpetualTransferData(
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .short,
-                asset: .hyperliquidUSDC(),
-                perpetualAsset: asset,
+                asset: asset,
+                baseAsset: .hyperliquidUSDC(),
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
                 leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
