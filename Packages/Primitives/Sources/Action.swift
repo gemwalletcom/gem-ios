@@ -6,4 +6,4 @@ public typealias VoidAction = (() -> Void)?
 public typealias StringAction = ((String) -> Void)?
 public typealias AssetAction = ((Asset) -> Void)?
 public typealias AssetIdAction = ((AssetId) -> Void)?
-public typealias AssetIdBoolAction = ((AssetId, Bool) -> Void)?
+public typealias AssetBoolAction = ((Asset, Bool) -> Void)?

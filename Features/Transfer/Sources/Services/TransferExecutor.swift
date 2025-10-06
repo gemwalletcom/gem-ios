@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Blockchain
 import Foundation
 import Primitives
-import Blockchain
-import TransactionService
 import Signer
+import TransactionService
 import WalletsService
 
 public protocol TransferExecutable: Sendable {
@@ -29,13 +29,13 @@ public struct TransferExecutor: TransferExecutable {
         self.transactionService = transactionService
     }
 
-    public func execute(input: TransferConfirmationInput) async throws  {
+    public func execute(input: TransferConfirmationInput) async throws {
         let signedData = try sign(input: input)
         let options = broadcastOptions(data: input.data)
 
         for (index, transactionData) in signedData.enumerated() {
             NSLog("TransferExecutor data \(transactionData)")
-            
+
             switch input.data.type.outputAction {
             case .sign:
                 input.delegate?(.success(transactionData))
@@ -59,7 +59,7 @@ public struct TransferExecutor: TransferExecutable {
                 let excludeChains = [Chain.hyperCore]
                 let assetIds = transaction.assetIds.filter { !excludeChains.contains($0.chain) }
                 let transactions = [transaction]
-                
+
                 try transactionService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {
                     try walletsService.enableBalances(

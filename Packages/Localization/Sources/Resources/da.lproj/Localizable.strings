@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Køb %@";
 "wallet.import_address_warning" = "Du kan se saldi og transaktioner for denne adresse, men **kan ikke sende eller sælge penge**.";
 "info.stake_minimum_amount.title" = "Minimumsbeløb";
-"info.stake_minimum_amount.description" = "På netværket %@ er minimumskravet for staking ** %@ **.";
+"info.stake_minimum_amount.description" = "På netværket %@ er minimumskravet for staking **%@**.";
 "asset.add_to_wallet" = "Tilføj til tegnebog";
 "asset.hide_from_wallet" = "Skjul fra tegnebogen";
 "common.details" = "Detaljer";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Køb eller modtag krypto til din wallet for at komme i gang";
 "info.stake.reserved.title" = "Reserveret til netværksgebyr";
 "info.stake.reserved.description" = "Et lille beløb forbliver i din pung til at dække gebyrer for operationer som at fjerne indsatser eller gøre krav på belønninger.";
+"perpetual.open_direction" = "Åbn %@";
+"perpetual.close_direction" = "Luk %@";

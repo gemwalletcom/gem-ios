@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
 import BalanceService
+import Foundation
 import PriceService
+import Primitives
 
 public protocol TransferMetadataProvidable: Sendable {
     func metadata(
@@ -43,20 +43,15 @@ public final class TransferMetadataProvider: TransferMetadataProvidable {
         asset: Asset,
         extraIds: [AssetId] = []
     ) throws -> TransferDataMetadata {
-
         let assetId = asset.id
         let feeAssetId = asset.feeAsset.id
 
-        guard
-            let balance = try balanceService.getBalance(
-                walletId: walletId.id,
-                assetId: assetId.identifier
-            ),
-            let fee = try balanceService.getBalance(
-                walletId: walletId.id,
-                assetId: feeAssetId.identifier
-            )
-        else { throw AnyError("Missing balance") }
+        guard let balance = try balanceService.getBalance(walletId: walletId.id, assetId: assetId.identifier) else {
+            throw AnyError("Missing balance for assetId: \(assetId.identifier)")
+        }
+        guard let fee = try balanceService.getBalance(walletId: walletId.id, assetId: feeAssetId.identifier) else {
+            throw AnyError("Missing balance for feeAssetId: \(feeAssetId.identifier)")
+        }
 
         let ids = Array(Set([assetId, feeAssetId] + extraIds))
         let pricesList = try priceService.getPrices(for: ids)

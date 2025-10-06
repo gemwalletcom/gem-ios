@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Koupit %@";
 "wallet.import_address_warning" = "Pro tuto adresu si můžete prohlížet zůstatky a transakce, ale **nemůžete posílat ani prodávat finanční prostředky**.";
 "info.stake_minimum_amount.title" = "Minimální částka";
-"info.stake_minimum_amount.description" = "V síti %@ je minimální požadavek na staking ** %@ **.";
+"info.stake_minimum_amount.description" = "V síti %@ je minimální požadavek na staking **%@**.";
 "asset.add_to_wallet" = "Přidat do peněženky";
 "asset.hide_from_wallet" = "Skrýt z peněženky";
 "common.details" = "Podrobnosti";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Kupte si kryptoměny nebo je přijměte do své peněženky a začněte";
 "info.stake.reserved.title" = "Rezervováno pro síťový poplatek";
 "info.stake.reserved.description" = "Malá částka vám zůstane v peněžence na pokrytí poplatků za operace, jako je odstraňování sázek nebo nárokování odměn.";
+"perpetual.open_direction" = "Otevřít %@";
+"perpetual.close_direction" = "Zavřít %@";

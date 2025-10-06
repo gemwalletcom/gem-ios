@@ -62,7 +62,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
 
     public var metadata: TransactionMetadata {
         switch self {
-        case .swap(let fromAsset, let toAsset, let data): .swap(
+        case .swap(let fromAsset, let toAsset, let data):
+            return .swap(
                 TransactionSwapMetadata(
                     fromAsset: fromAsset.id,
                     fromValue: data.quote.fromValue,
@@ -71,17 +72,24 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
                     provider: data.quote.providerData.provider.rawValue
                 )
             )
-        case .transferNft(let asset): .nft(
+        case .transferNft(let asset):
+            return .nft(
                 TransactionNFTTransferMetadata(assetId: asset.id, name: asset.name)
             )
+        case .perpetual(_, let type):
+            let metadata = switch type {
+            case .open(let data): TransactionPerpetualMetadata(pnl: 0, price: 0, direction: data.direction, provider: nil)
+            case .close(let data): TransactionPerpetualMetadata(pnl: 0, price: 0, direction: data.direction, provider: nil)
+            }
+            return .perpetual(metadata)
         case .generic,
-             .transfer,
-             .deposit,
-             .withdrawal,
-             .tokenApprove,
-             .stake,
-             .account,
-             .perpetual: .null
+            .transfer,
+            .deposit,
+            .withdrawal,
+            .tokenApprove,
+            .stake,
+            .account:
+            return .null
         }
     }
 

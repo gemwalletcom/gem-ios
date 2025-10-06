@@ -90,29 +90,52 @@ public struct TransactionViewModel: Sendable {
     }
 
     public var titleTextValue: TextValue {
-        let title: String = switch transaction.transaction.type {
-        case .transfer, .transferNFT, .smartContractCall:
-            switch transaction.transaction.state {
-            case .confirmed: switch transaction.transaction.direction {
-                case .incoming: Localized.Transaction.Title.received
-                case .outgoing, .selfTransfer: Localized.Transaction.Title.sent
+        let title: String = {
+            switch transaction.transaction.type {
+            case .transfer, .transferNFT, .smartContractCall:
+                switch transaction.transaction.state {
+                case .confirmed:
+                    switch transaction.transaction.direction {
+                    case .incoming:
+                        return Localized.Transaction.Title.received
+                    case .outgoing, .selfTransfer:
+                        return Localized.Transaction.Title.sent
+                    }
+                case .failed, .pending, .reverted:
+                    return Localized.Transfer.title
                 }
-            case .failed, .pending, .reverted:
-                Localized.Transfer.title
+            case .swap:
+                return Localized.Wallet.swap
+            case .tokenApproval:
+                return Localized.Transfer.Approve.title
+            case .stakeDelegate:
+                return Localized.Transfer.Stake.title
+            case .stakeUndelegate:
+                return Localized.Transfer.Unstake.title
+            case .stakeRedelegate:
+                return Localized.Transfer.Redelegate.title
+            case .stakeRewards:
+                return Localized.Transfer.Rewards.title
+            case .stakeWithdraw:
+                return Localized.Transfer.Withdraw.title
+            case .assetActivation:
+                return Localized.Transfer.ActivateAsset.title
+            case .stakeFreeze:
+                return Localized.Transfer.Freeze.title
+            case .stakeUnfreeze:
+                return Localized.Transfer.Unfreeze.title
+            case .perpetualOpenPosition:
+                if case let .perpetual(metadata) = transaction.transaction.metadata {
+                    return Localized.Perpetual.openDirection(PerpetualDirectionViewModel(direction: metadata.direction).title)
+                }
+                return .empty
+            case .perpetualClosePosition:
+                if case let .perpetual(metadata) = transaction.transaction.metadata {
+                    return Localized.Perpetual.closeDirection(PerpetualDirectionViewModel(direction: metadata.direction).title)
+                }
+                return .empty
             }
-        case .swap: Localized.Wallet.swap
-        case .tokenApproval: Localized.Transfer.Approve.title
-        case .stakeDelegate: Localized.Transfer.Stake.title
-        case .stakeUndelegate: Localized.Transfer.Unstake.title
-        case .stakeRedelegate: Localized.Transfer.Redelegate.title
-        case .stakeRewards: Localized.Transfer.Rewards.title
-        case .stakeWithdraw: Localized.Transfer.Withdraw.title
-        case .assetActivation: Localized.Transfer.ActivateAsset.title
-        case .stakeFreeze: Localized.Transfer.Freeze.title
-        case .stakeUnfreeze: Localized.Transfer.Unfreeze.title
-        case .perpetualOpenPosition: "Open Position"
-        case .perpetualClosePosition: "Close Position"
-        }
+        }()
         return TextValue(
             text: title,
             style: TextStyle(font: Font.system(.body, weight: .medium), color: .primary)
@@ -199,38 +222,37 @@ public struct TransactionViewModel: Sendable {
 
     public var subtitleTextValue: TextValue? {
         switch transaction.transaction.type {
-        case .transfer, .smartContractCall,
-                .stakeRewards, .stakeWithdraw,
-                .stakeDelegate, .stakeUndelegate, .stakeRedelegate,
-                .perpetualOpenPosition, .perpetualClosePosition,
-                .assetActivation, .stakeFreeze, .stakeUnfreeze:
+        case .transfer,
+            .smartContractCall,
+            .stakeRewards,
+            .stakeWithdraw,
+            .stakeDelegate,
+            .stakeUndelegate,
+            .stakeRedelegate,
+            .assetActivation,
+            .stakeFreeze,
+            .stakeUnfreeze:
             return infoModel.amountDisplay(formatter: .short).amount
-
+        case .perpetualOpenPosition,
+            .perpetualClosePosition:
+            guard case .perpetual(let metadata) = transaction.transaction.metadata, metadata.pnl != 0 else {
+                return .none
+            }
+            return AmountDisplay.currency(value: metadata.pnl, currencyCode: Currency.usd.rawValue)
         case .tokenApproval:
             return AmountDisplay.symbol(asset: transaction.asset).amount
         case .swap:
-            switch transaction.transaction.metadata {
-            case .null, .nft, .none:
+            guard case .swap(let metadata) = transaction.transaction.metadata, let asset = transaction.assets.first(where: { $0.id == metadata.toAsset }) else {
                 return .none
-            case .swap(let meta):
-                if let asset = transaction.assets.first(where: { $0.id == meta.toAsset }) {
-                    return AmountDisplay.numeric(
-                        data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: meta.toValue), price: nil),
-                        style: AmountDisplayStyle(sign: .incoming, formatter: .auto, currencyCode: currency)
-                    ).amount
-                }
-                return nil
-            case .perpetual(let metadata):
-                return TextValue(
-                    text: "\(metadata.pnl)",
-                    style: .footnote
-                ) // TODO: Perpetual - improve formatting
             }
+            return AmountDisplay.numeric(
+                data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: metadata.toValue), price: nil),
+                style: AmountDisplayStyle(sign: .incoming, formatter: .auto, currencyCode: currency)
+            ).amount
         case .transferNFT:
             return nil
         }
     }
-
 
     public var subtitleExtraTextValue: TextValue? {
         switch transaction.transaction.type {
@@ -250,23 +272,18 @@ public struct TransactionViewModel: Sendable {
                 .stakeUnfreeze:
             return .none
         case .swap:
-            switch transaction.transaction.metadata {
-            case .null, .none, .nft, .perpetual:
-                return .none
-            case .swap(let metadata):
-                if let asset = transaction.assets.first(where: { $0.id == metadata.fromAsset }) {
-                    return AmountDisplay.numeric(
-                        data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: metadata.fromValue), price: nil),
-                        style: AmountDisplayStyle(
-                            sign: .outgoing,
-                            formatter: .auto,
-                            currencyCode: currency,
-                            textStyle: .footnote
-                        )
-                    ).amount
-                }
+            guard case .swap(let metadata) = transaction.transaction.metadata, let asset = transaction.assets.first(where: { $0.id == metadata.fromAsset }) else {
                 return .none
             }
+            return AmountDisplay.numeric(
+                data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: metadata.fromValue), price: nil),
+                style: AmountDisplayStyle(
+                    sign: .outgoing,
+                    formatter: .auto,
+                    currencyCode: currency,
+                    textStyle: .footnote
+                )
+            ).amount
         }
     }
 

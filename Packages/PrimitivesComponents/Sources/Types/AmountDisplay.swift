@@ -122,4 +122,34 @@ extension AmountDisplay {
             )
         )
     }
+
+    static func currency(
+        value: Double,
+        currencyCode: String,
+        textStyle: TextStyle? = nil
+    ) -> TextValue {
+        let prefix = if value > 0 {
+            "+"
+        } else if value < 0 {
+            ""
+        } else {
+            ""
+        }
+
+        let color = if value > 0 {
+            Colors.green
+        } else if value < 0 {
+            Colors.red
+        } else {
+            Colors.black
+        }
+
+        let formatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
+        let viewStyle = textStyle ?? TextStyle(font: .body, color: color, fontWeight: .medium)
+
+        return TextValue(
+            text: prefix + formatter.string(value),
+            style: viewStyle
+        )
+    }
 }

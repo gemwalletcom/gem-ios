@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Bumili ng %@";
 "wallet.import_address_warning" = "Maaari mong tingnan ang mga balanse at transaksyon para sa address na ito, ngunit **hindi maaaring magpadala o magbenta ng mga pondo**.";
 "info.stake_minimum_amount.title" = "Minimum na halaga";
-"info.stake_minimum_amount.description" = "Sa %@ network, ang minimum na kinakailangan sa staking ay ** %@ **.";
+"info.stake_minimum_amount.description" = "Sa %@ network, ang minimum na kinakailangan sa staking ay **%@**.";
 "asset.add_to_wallet" = "Idagdag sa wallet";
 "asset.hide_from_wallet" = "Itago sa wallet";
 "common.details" = "Mga Detalye";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Bumili o Tumanggap ng crypto sa iyong wallet para makapagsimula";
 "info.stake.reserved.title" = "Nakalaan para sa Bayad ng Network";
 "info.stake.reserved.description" = "May maliit na halaga ang nananatili sa iyong wallet para mabayaran ang mga bayarin para sa mga operasyon tulad ng pag-unstaking o pag-claim ng mga reward.";
+"perpetual.open_direction" = "Buksan ang %@";
+"perpetual.close_direction" = "Isara ang %@";

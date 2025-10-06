@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Cumpără %@";
 "wallet.import_address_warning" = "Puteți vizualiza soldurile și tranzacțiile pentru această adresă, dar **nu puteți trimite sau vinde fonduri**.";
 "info.stake_minimum_amount.title" = "Suma minimă";
-"info.stake_minimum_amount.description" = "În rețeaua %@, cerința minimă de staking este ** %@ **.";
+"info.stake_minimum_amount.description" = "În rețeaua %@, cerința minimă de staking este **%@**.";
 "asset.add_to_wallet" = "Adaugă în portofel";
 "asset.hide_from_wallet" = "Ascunde din portofel";
 "common.details" = "Detalii";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Cumpără sau primește criptomonede în portofelul tău pentru a începe";
 "info.stake.reserved.title" = "Rezervat pentru comision de rețea";
 "info.stake.reserved.description" = "O sumă mică rămâne în portofelul tău pentru a acoperi comisioanele aferente operațiunilor precum unstaking-ul sau revendicarea recompenselor.";
+"perpetual.open_direction" = "Deschis %@";
+"perpetual.close_direction" = "Închide %@";
