@@ -57,6 +57,9 @@ public struct PerpetualService: PerpetualServiceable {
         let formatter = ValueFormatter.full
         try balanceStore.addMissingBalances(walletId: walletId, assetIds: [usd.id], isEnabled: false)
         
+        let perpetuals = try store.getPerpetuals().map(\.assetId)
+        try balanceStore.addMissingBalances(walletId: walletId, assetIds: perpetuals, isEnabled: false)
+        
         try balanceStore.updateBalances(
             [
              UpdateBalance(

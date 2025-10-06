@@ -75,9 +75,9 @@ struct TransactionSceneViewModelTests {
         let confirmedModel = TransactionSceneViewModel.mock(state: TransactionState.confirmed)
         if case .listItem(let item) = confirmedModel.item(for: TransactionItem.status) {
             #expect(item.title == Localized.Transaction.status)
-            #expect(item.subtitleStyle.color == Colors.gray)
+            #expect(item.subtitleStyle.color == Colors.green)
         } else {
-            Issue.record("Expected listItem for status")
+            Issue.record("Expected listItem for confirmed status")
         }
 
         let pendingModel = TransactionSceneViewModel.mock(state: TransactionState.pending)
@@ -209,6 +209,9 @@ struct TransactionSceneViewModelTests {
             TransactionItem.participant,
             TransactionItem.memo,
             TransactionItem.network,
+            TransactionItem.pnl,
+            TransactionItem.price,
+            TransactionItem.size,
             TransactionItem.provider,
             TransactionItem.fee
         ])

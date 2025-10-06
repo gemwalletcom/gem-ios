@@ -128,14 +128,12 @@ public struct PerpetualScene: View {
             }
             
             if !model.transactions.isEmpty {
-                Section(header: Text(model.transactionsSectionTitle)) {
-                    TransactionsList(
-                        explorerService: model.explorerService,
-                        model.transactions,
-                        currency: model.currency
-                    )
-                    .listRowInsets(.assetListRowInsets)
-                }
+                TransactionsList(
+                    explorerService: model.explorerService,
+                    model.transactions,
+                    currency: model.currency
+                )
+                .listRowInsets(.assetListRowInsets)
             }
         }
         .navigationTitle(model.navigationTitle)

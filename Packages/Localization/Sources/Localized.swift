@@ -773,6 +773,10 @@ public enum Localized {
     }
   }
   public enum Perpetual {
+    /// Close %@
+    public static func closeDirection(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "perpetual.close_direction", String(describing: p1), fallback: "Close %@")
+    }
     /// Close position
     public static let closePosition = Localized.tr("Localizable", "perpetual.close_position", fallback: "Close position")
     /// Entry Price
@@ -785,6 +789,10 @@ public enum Localized {
     public static let margin = Localized.tr("Localizable", "perpetual.margin", fallback: "Margin")
     /// Modify
     public static let modify = Localized.tr("Localizable", "perpetual.modify", fallback: "Modify")
+    /// Open %@
+    public static func openDirection(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "perpetual.open_direction", String(describing: p1), fallback: "Open %@")
+    }
     /// PnL
     public static let pnl = Localized.tr("Localizable", "perpetual.pnl", fallback: "PnL")
     /// Position

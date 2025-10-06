@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Comprar %@";
 "wallet.import_address_warning" = "Puede ver los saldos y las transacciones de esta dirección, pero **no puede enviar ni vender fondos**.";
 "info.stake_minimum_amount.title" = "Cantidad mínima";
-"info.stake_minimum_amount.description" = "En la red %@, el requisito mínimo de staking es ** %@ **.";
+"info.stake_minimum_amount.description" = "En la red %@, el requisito mínimo de staking es **%@**.";
 "asset.add_to_wallet" = "Añadir a la billetera";
 "asset.hide_from_wallet" = "Ocultar de la billetera";
 "common.details" = "Detalles";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Compra o recibe criptomonedas en tu billetera para comenzar";
 "info.stake.reserved.title" = "Reservado para comisión de red";
 "info.stake.reserved.description" = "Una pequeña cantidad permanece en tu billetera para cubrir las tarifas de operaciones como dejar de apostar o reclamar recompensas.";
+"perpetual.open_direction" = "Abrir %@";
+"perpetual.close_direction" = "Cerrar %@";

@@ -34,11 +34,11 @@ struct PerpetualPositionNavigationStack: View {
                             recipient: perpetualRecipientData.recipient,
                             perpetual: perpetualRecipientData.data
                         ),
-                        asset: perpetualRecipientData.data.asset
+                        asset: .hyperliquidUSDC()
                     ),
                     wallet: wallet,
-                    onTransferAction: { transferData in
-                        navigationPath.append(transferData)
+                    onTransferAction: {
+                        navigationPath.append($0)
                     }
                 )
             )
