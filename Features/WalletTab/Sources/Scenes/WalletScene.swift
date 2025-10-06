@@ -35,7 +35,7 @@ public struct WalletScene: View {
                 Section {
                     PerpetualsPreviewView(wallet: model.wallet)
                 } header: {
-                    HeaderNavigationLinkView(title: "PERPETUALS", destination: Scenes.Perpetuals())
+                    HeaderNavigationLinkView(title: "Perpetuals", destination: Scenes.Perpetuals())
                 }
             }
             
