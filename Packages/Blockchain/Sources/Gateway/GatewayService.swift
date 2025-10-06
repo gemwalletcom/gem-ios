@@ -58,16 +58,16 @@ extension GatewayService {
     
     public func transactionStatus(chain: Primitives.Chain, request: TransactionStateRequest) async throws -> TransactionChanges {
         let update = try await gateway.getTransactionStatus(chain: chain.rawValue, request: request.map())
-        let changes: [TransactionChange] = try update.changes.compactMap {
+        let changes: [Primitives.TransactionChange] = try update.changes.compactMap {
             switch $0 {
             case .hashChange(old: let old, new: let new):
-                return TransactionChange.hashChange(old: old, new: new)
+                return .hashChange(old: old, new: new)
             case .metadata(let metadata):
-                return TransactionChange.metadata(metadata.map())
+                return .metadata(metadata.map())
             case .blockNumber(let number):
-                return TransactionChange.blockNumber(try Int.from(string: number))
+                return .blockNumber(try Int.from(string: number))
             case .networkFee(let fee):
-                return TransactionChange.networkFee(try BigInt.from(string: fee))
+                return .networkFee(try BigInt.from(string: fee))
             }
         }
         return TransactionChanges(

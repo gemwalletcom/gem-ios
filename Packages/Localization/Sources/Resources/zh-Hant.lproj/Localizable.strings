@@ -423,7 +423,7 @@
 "asset.buy_asset" = "購買%@";
 "wallet.import_address_warning" = "您可以查看此地址的餘額和交易，但**不能發送或出售資金**。";
 "info.stake_minimum_amount.title" = "最低金額";
-"info.stake_minimum_amount.description" = "在%@網路上，最低質押要求為 ** %@ **。";
+"info.stake_minimum_amount.description" = "在%@網路上，最低質押要求為 **%@**。";
 "asset.add_to_wallet" = "加入錢包";
 "asset.hide_from_wallet" = "隱藏錢包";
 "common.details" = "詳情";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "購買或接收加密貨幣到您的錢包即可開始使用";
 "info.stake.reserved.title" = "預留網路費用";
 "info.stake.reserved.description" = "您的錢包中會留有少量資金，用於支付取消質押或領取獎勵等操作的費用。";
+"perpetual.open_direction" = "打開%@";
+"perpetual.close_direction" = "關閉%@";

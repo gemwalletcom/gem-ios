@@ -423,7 +423,7 @@
 "asset.buy_asset" = "%@を購入";
 "wallet.import_address_warning" = "このアドレスの残高と取引は表示できますが、**資金を送信または売却することはできません**。";
 "info.stake_minimum_amount.title" = "最低金額";
-"info.stake_minimum_amount.description" = "%@ネットワークでは、最小ステーキング要件は ** %@ ** です。";
+"info.stake_minimum_amount.description" = "%@ネットワークでは、最小ステーキング要件は **%@** です。";
 "asset.add_to_wallet" = "ウォレットに追加";
 "asset.hide_from_wallet" = "ウォレットから隠す";
 "common.details" = "ディテール";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "始めるにはウォレットで暗号通貨を購入または受け取りましょう";
 "info.stake.reserved.title" = "ネットワーク料金用に予約";
 "info.stake.reserved.description" = "ステーキング解除や報酬の請求などの操作にかかる手数料をカバーするために、少額がウォレットに残ります。";
+"perpetual.open_direction" = "%@を開く";
+"perpetual.close_direction" = "%@を閉じる";

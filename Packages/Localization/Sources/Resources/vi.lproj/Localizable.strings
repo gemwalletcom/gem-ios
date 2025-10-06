@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Mua %@";
 "wallet.import_address_warning" = "Bạn có thể xem số dư và giao dịch của địa chỉ này, nhưng **không thể gửi hoặc bán tiền**.";
 "info.stake_minimum_amount.title" = "Số tiền tối thiểu";
-"info.stake_minimum_amount.description" = "Trên mạng %@, yêu cầu đặt cược tối thiểu là ** %@ **.";
+"info.stake_minimum_amount.description" = "Trên mạng %@, yêu cầu đặt cược tối thiểu là **%@**.";
 "asset.add_to_wallet" = "Thêm vào ví";
 "asset.hide_from_wallet" = "Ẩn khỏi ví";
 "common.details" = "Chi tiết";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "Mua hoặc nhận tiền điện tử vào ví của bạn để bắt đầu";
 "info.stake.reserved.title" = "Dành riêng cho Phí mạng";
 "info.stake.reserved.description" = "Một số tiền nhỏ sẽ được giữ lại trong ví của bạn để trang trải phí cho các hoạt động như hủy đặt cọc hoặc nhận phần thưởng.";
+"perpetual.open_direction" = "Mở %@";
+"perpetual.close_direction" = "Đóng %@";

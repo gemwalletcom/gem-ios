@@ -2,6 +2,31 @@
 
 import Foundation
 
+public struct HyperliquidOrder: Sendable {
+    public let approveAgentRequired: Bool
+    public let approveReferralRequired: Bool
+    public let approveBuilderRequired: Bool
+    public let builderFeeBps: UInt32
+    public let agentAddress: String
+    public let agentPrivateKey: String
+
+    public init(
+        approveAgentRequired: Bool,
+        approveReferralRequired: Bool,
+        approveBuilderRequired: Bool,
+        builderFeeBps: UInt32,
+        agentAddress: String,
+        agentPrivateKey: String
+    ) {
+        self.approveAgentRequired = approveAgentRequired
+        self.approveReferralRequired = approveReferralRequired
+        self.approveBuilderRequired = approveBuilderRequired
+        self.builderFeeBps = builderFeeBps
+        self.agentAddress = agentAddress
+        self.agentPrivateKey = agentPrivateKey
+    }
+}
+
 public enum TransactionLoadMetadata: Sendable {
     case none
     case solana(
@@ -54,14 +79,7 @@ public enum TransactionLoadMetadata: Sendable {
         votes: [String: UInt64]
     )
     case sui(messageBytes: String)
-    case hyperliquid(
-        approveAgentRequired: Bool,
-        approveReferralRequired: Bool,
-        approveBuilderRequired: Bool,
-        builderFeeBps: UInt32,
-        agentAddress: String,
-        agentPrivateKey: String
-    )
+    case hyperliquid(order: HyperliquidOrder?)
 }
 
 extension TransactionLoadMetadata {

@@ -46,17 +46,11 @@ public final class TransferMetadataProvider: TransferMetadataProvidable {
         let assetId = asset.id
         let feeAssetId = asset.feeAsset.id
 
-        guard
-            let balance = try balanceService.getBalance(
-                walletId: walletId.id,
-                assetId: assetId.identifier
-            ),
-            let fee = try balanceService.getBalance(
-                walletId: walletId.id,
-                assetId: feeAssetId.identifier
-            )
-        else {
-            throw AnyError("Missing balance")
+        guard let balance = try balanceService.getBalance(walletId: walletId.id, assetId: assetId.identifier) else {
+            throw AnyError("Missing balance for assetId: \(assetId.identifier)")
+        }
+        guard let fee = try balanceService.getBalance(walletId: walletId.id, assetId: feeAssetId.identifier) else {
+            throw AnyError("Missing balance for feeAssetId: \(feeAssetId.identifier)")
         }
 
         let ids = Array(Set([assetId, feeAssetId] + extraIds))

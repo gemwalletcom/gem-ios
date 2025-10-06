@@ -17,10 +17,14 @@ public struct TransactionNFTTransferMetadata: Codable, Sendable {
 public struct TransactionPerpetualMetadata: Codable, Sendable {
 	public let pnl: Double
 	public let price: Double
+	public let direction: PerpetualDirection
+	public let provider: PerpetualProvider?
 
-	public init(pnl: Double, price: Double) {
+	public init(pnl: Double, price: Double, direction: PerpetualDirection, provider: PerpetualProvider?) {
 		self.pnl = pnl
 		self.price = price
+		self.direction = direction
+		self.provider = provider
 	}
 }
 

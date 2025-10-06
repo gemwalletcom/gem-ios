@@ -423,7 +423,7 @@
 "asset.buy_asset" = "خرید %@";
 "wallet.import_address_warning" = "شما می‌توانید موجودی و تراکنش‌های این آدرس را مشاهده کنید، اما **نمی‌توانید وجه ارسال یا بفروشید**.";
 "info.stake_minimum_amount.title" = "حداقل مقدار";
-"info.stake_minimum_amount.description" = "در شبکه %@ ، حداقل میزان سپرده‌گذاری ** %@ ** است.";
+"info.stake_minimum_amount.description" = "در شبکه %@ ، حداقل میزان سپرده‌گذاری **%@** است.";
 "asset.add_to_wallet" = "اضافه کردن به کیف پول";
 "asset.hide_from_wallet" = "پنهان شدن از کیف پول";
 "common.details" = "جزئیات";
@@ -437,7 +437,7 @@
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
 "info.funding_rate.description" = "The funding rate determines the cost of holding a perpetual position. It is calculated hourly and helps maintain price equilibrium between the perpetual contract and the underlying asset's spot price.";
-"info.liquidation_price.title" = "Liquidation Price";
+"info.liquidation_price.title" = "قیمت انحلال";
 "info.liquidation_price.description" = "The liquidation price is the price level at which your position will be automatically closed to prevent further losses. When the market price reaches this level, your position is liquidated and you lose your margin.";
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
@@ -480,3 +480,5 @@
 "banner.onboarding.description" = "برای شروع، ارز دیجیتال را در کیف پول خود خریداری یا دریافت کنید";
 "info.stake.reserved.title" = "برای هزینه شبکه رزرو شده است";
 "info.stake.reserved.description" = "مقدار کمی در کیف پول شما باقی می‌ماند تا هزینه‌های عملیاتی مانند برداشت از حساب یا دریافت پاداش را پوشش دهد.";
+"perpetual.open_direction" = "باز کردن %@";
+"perpetual.close_direction" = "بستن %@";
