@@ -97,6 +97,9 @@ public struct BitcoinSigner: Signable {
         utxos: [BitcoinUnspentTransaction],
         signingOverride: ((inout BitcoinSigningInput) -> Void)?
     ) throws -> String {
+        guard case .zcash(_, let branchId) = input.metadata else {
+            throw AnyError("invalid zcash metadata")
+        }
         var signingInput = BitcoinSigningInput.with {
             $0.coinType = coinType.rawValue
             $0.hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
@@ -130,21 +133,16 @@ public struct BitcoinSigner: Signable {
         }
 
         let change = max(totalAvailable - targetAmount - fee, 0)
-
-        // FIXME: need to get from network
-        guard let branchId = Data(fromHex: "c8e71055") else {
-            throw AnyError("Invalid Zcash branch id")
-        }
-
+        
         signingInput.amount = targetAmount
         signingInput.zip0317 = false
-        signingInput.plan = BitcoinTransactionPlan.with {
+        signingInput.plan = try BitcoinTransactionPlan.with {
             $0.amount = targetAmount
             $0.availableAmount = totalAvailable
             $0.fee = fee
             $0.change = change
             $0.utxos = utxos
-            $0.branchID = Data(branchId.reversed())
+            $0.branchID = Data(try Data.from(hex: branchId).reversed())
         }
 
         return try performSigning(signingInput: signingInput, coinType: coinType)
