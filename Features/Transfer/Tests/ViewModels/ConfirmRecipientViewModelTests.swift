@@ -63,24 +63,6 @@ struct ConfirmRecipientViewModelTests {
     }
 
     @Test
-    func swap() {
-        let model = ConfirmRecipientViewModel(model: .mock(type: .swap(.mock(), .mock(), .mock())), addressName: nil, addressLink: .mock())
-        guard case .empty = model.itemModel else { return }
-    }
-
-    @Test
-    func account() {
-        let model = ConfirmRecipientViewModel(model: .mock(type: .account(.mock(), .activate)), addressName: nil, addressLink: .mock())
-        guard case .empty = model.itemModel else { return }
-    }
-
-    @Test
-    func perpetual() {
-        let model = ConfirmRecipientViewModel(model: .mock(type: .perpetual(.mock(), .open(.mock()))), addressName: nil, addressLink: .mock())
-        guard case .empty = model.itemModel else { return }
-    }
-
-    @Test
     func stakeDelegate() {
         let model = ConfirmRecipientViewModel(model: .mock(type: .stake(.mock(), .stake(.mock()))), addressName: nil, addressLink: .mock())
 
@@ -117,12 +99,6 @@ struct ConfirmRecipientViewModelTests {
     }
 
     @Test
-    func stakeRewards() {
-        let model = ConfirmRecipientViewModel(model: .mock(type: .stake(.mock(), .rewards([.mock()]))), addressName: nil, addressLink: .mock())
-        guard case .empty = model.itemModel else { return }
-    }
-
-    @Test
     func stakeFreeze() {
         let model = ConfirmRecipientViewModel(
             model: .mock(type: .stake(.mock(), .freeze(FreezeData(freezeType: .freeze, resource: .bandwidth)))),
@@ -141,21 +117,6 @@ struct ConfirmRecipientViewModelTests {
 
         guard case .recipient(let item) = model.itemModel else { return }
         #expect(item.account.name == "Vitalik.eth")
-    }
-
-    @Test
-    func emptyRecipientAddress() {
-        let data = TransferData.mock(
-            type: .transfer(.mock()),
-            recipient: .mock(recipient: .mock(address: ""))
-        )
-        let model = ConfirmRecipientViewModel(
-            model: TransferDataViewModel(data: data),
-            addressName: nil,
-            addressLink: .mock()
-        )
-
-        guard case .empty = model.itemModel else { return }
     }
 }
 

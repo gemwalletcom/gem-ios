@@ -21,6 +21,9 @@ struct ConfirmSwapDetailsViewModelTests {
     func transfer() {
         let model = ConfirmSwapDetailsViewModel(type: .transfer(.mock()), metadata: nil)
         #expect(model.swapDetailsModel == nil)
-        guard case .empty = model.itemModel else { return }
+        guard case .empty = model.itemModel else {
+            Issue.record("Expected .empty")
+            return
+        }
     }
 }

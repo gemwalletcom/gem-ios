@@ -30,12 +30,18 @@ struct ConfirmErrorViewModelTests {
         )
         let model = ConfirmErrorViewModel(state: .data(input), onSelectListError: { _ in })
 
-        guard case .error = model.itemModel else { return }
+        guard case .error = model.itemModel else {
+            Issue.record("Expected .error")
+            return
+        }
     }
 
     @Test
     func loaded() {
         let model = ConfirmErrorViewModel(state: .data(.mock()), onSelectListError: { _ in })
-        guard case .empty = model.itemModel else { return }
+        guard case .empty = model.itemModel else {
+            Issue.record("Expected .empty")
+            return
+        }
     }
 }
