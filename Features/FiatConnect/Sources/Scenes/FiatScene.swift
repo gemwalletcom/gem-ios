@@ -22,8 +22,7 @@ public struct FiatScene: View {
 
     public var body: some View {
         @Bindable var model = model
-        VStack {
-            List {
+        List {
                 CurrencyInputValidationView(
                     model: $model.inputValidationModel,
                     config: model.currencyInputConfig
@@ -34,17 +33,16 @@ public struct FiatScene: View {
                 amountSelectorSection
                 providerSection
             }
-            .contentMargins([.top], .zero, for: .scrollContent)
-            Spacer()
+        .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.state, showProgress: false),
                 action: model.onSelectContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)
+            .padding(.bottom, .scene.bottom)
         }
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
+        .contentMargins([.top], .zero, for: .scrollContent)
         .frame(maxWidth: .infinity)
         .onChange(of: model.focusField, onChangeFocus)
         .onChange(of: model.input.type, model.onChangeType)
@@ -56,7 +54,7 @@ public struct FiatScene: View {
             action: model.onChangeAmountValue
         )
         .onAppear {
-            focusedField = .amountBuy
+            focusedField = model.focusField
         }
     }
 }

@@ -35,8 +35,12 @@ extension PerpetualsHeaderViewModel: HeaderViewModel {
 
     public var buttons: [HeaderButton] {
         [
-            HeaderButton(type: .withdraw, isEnabled: false),
+            HeaderButton(type: .withdraw, isEnabled: isWithdrawEnabled),
             HeaderButton(type: .deposit, isEnabled: true)
         ]
+    }
+
+    private var isWithdrawEnabled: Bool {
+        balance.available > 0
     }
 }

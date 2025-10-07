@@ -32,9 +32,15 @@ public struct PerpetualNavigationView: View {
     public var body: some View {
         PerpetualScene(model: model)
             .observeQuery(request: $model.positionsRequest, value: $model.positions)
+            .observeQuery(request: $model.transactionsRequest, value: $model.transactions)
             .observeQuery(request: $model.perpetualTotalValueRequest, value: $model.perpetualTotalValue)
             // we should ideally observer is isCompleted, but don't have access from here
             .onChange(of: isPresentingTransferData) { _, newValue in
+                if newValue == .none {
+                    Task { await model.fetch() }
+                }
+            }
+            .onChange(of: isPresentingPerpetualRecipientData) { _, newValue in
                 if newValue == .none {
                     Task { await model.fetch() }
                 }

@@ -41,15 +41,15 @@ public struct DelegationValidator: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let name: String
 	public let isActive: Bool
-	public let commision: Double
+	public let commission: Double
 	public let apr: Double
 
-	public init(chain: Chain, id: String, name: String, isActive: Bool, commision: Double, apr: Double) {
+	public init(chain: Chain, id: String, name: String, isActive: Bool, commission: Double, apr: Double) {
 		self.chain = chain
 		self.id = id
 		self.name = name
 		self.isActive = isActive
-		self.commision = commision
+		self.commission = commission
 		self.apr = apr
 	}
 }

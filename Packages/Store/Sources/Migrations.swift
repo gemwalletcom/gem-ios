@@ -309,6 +309,16 @@ public struct Migrations {
             }
         }
         
+        migrator.registerMigration("Add metadata to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.metadata.name, .jsonText)
+            }
+        }
+
+        migrator.registerMigration("Clear metadata from \(BalanceRecord.databaseTableName)") { db in
+            try? db.execute(sql: "UPDATE \(BalanceRecord.databaseTableName) SET metadata = NULL WHERE metadata IS NOT NULL")
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

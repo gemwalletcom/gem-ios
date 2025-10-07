@@ -16,7 +16,7 @@ public struct ProviderFactory {
 
 extension Chain {
     public var defaultBaseUrl: URL {
-        return URL(string: "https://\(self.rawValue.lowercased()).gemnodes.com")!
+        return URL(string: "https://gemnodes.com/\(self.rawValue.lowercased())")!
     }
     
     public var defaultNode: Node {
@@ -25,5 +25,12 @@ extension Chain {
     
     public var defaultChainNode: ChainNode {
         return ChainNode(chain: self.rawValue, node: defaultNode)
+    }
+    
+    public var asiaChainNode: ChainNode {
+        return ChainNode(
+            chain: rawValue,
+            node: Node(url: URL(string: "https://asia.gemnodes.com/\(self.rawValue.lowercased())")!.absoluteString, status: .active, priority: 10)
+        )
     }
 }

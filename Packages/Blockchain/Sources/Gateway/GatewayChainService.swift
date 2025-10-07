@@ -107,7 +107,7 @@ extension GatewayChainService: ChainTransactionDataLoadable {
 
 extension GatewayChainService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        try await gateway.validators(chain: chain)
+        try await gateway.validators(chain: chain, apy: apr)
     }
     
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
@@ -123,6 +123,8 @@ extension GatewayChainService: ChainNodeStatusFetchable {
     }
 }
 
-// MARK: - Default Protocol Conformances
-
-extension GatewayChainService: ChainAddressStatusFetchable {}
+extension GatewayChainService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        try await gateway.getAddressStatus(chain: chain, address: address)
+    }
+}

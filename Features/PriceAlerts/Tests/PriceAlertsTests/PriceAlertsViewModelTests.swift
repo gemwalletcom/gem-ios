@@ -11,7 +11,7 @@ import PrimitivesTestKit
 struct PriceAlertsViewModelTests {
     @Test
     func testSections() {
-        let model = PriceAlertsViewModel(priceAlertService: .mock())
+        let model = PriceAlertsSceneViewModel(priceAlertService: .mock())
         
         let autoAlert = PriceAlertData.mock()
         let manualAlert = PriceAlertData.mock(priceAlert: .mock(price: 5, priceDirection: .down))

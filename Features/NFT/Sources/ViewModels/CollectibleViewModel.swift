@@ -153,7 +153,7 @@ extension CollectibleViewModel {
                 type: .send(.nft(assetData.asset)),
                 assetAddress: AssetAddress(asset: account.chain.asset, address: account.address)
             )
-        case .buy, .receive, .swap, .stake, .more, .deposit, .withdraw:
+        case .buy, .sell, .receive, .swap, .stake, .more, .deposit, .withdraw:
             fatalError()
         }
     }

@@ -79,4 +79,10 @@ public struct AptosSigner: Signable {
             try sign(payload: .anyData(data.data.data), input: input, privateKey: privateKey)
         ]
     }
+
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+        return [
+            try sign(payload: .anyData(try input.metadata.getData()), input: input, privateKey: privateKey)
+        ]
+    }
 }

@@ -21,27 +21,36 @@ public struct SwapScene: View {
     }
 
     public var body: some View {
-        ZStack(alignment: .bottom) {
-            swapList
-                .padding(.bottom, .scene.button.height)
-            bottomActionView
-        }
-        .confirmationDialog(
-            model.swapDetailsViewModel?.highImpactWarningTitle ?? "",
-            presenting: $model.isPresentingPriceImpactConfirmation,
-            sensoryFeedback: .warning,
-            actions: { _ in
-                Button(
-                    model.actionButtonTitle,
-                    role: .destructive,
-                    action: model.onSelectSwapConfirmation
-                )
-            },
-            message: {
-                Text(model.isPresentingPriceImpactConfirmation ?? "")
+        List {
+            swapFromSectionView
+            swapToSectionView
+            if model.shouldShowAdditionalInfo {
+                additionalInfoSectionView
             }
-        )
-        .background(Colors.grayBackground)
+
+            if let error = model.swapState.error {
+                ListItemErrorView(errorTitle: model.errorTitle, error: error, infoAction: model.errorInfoAction)
+            }
+        }
+        .listSectionSpacing(.compact)
+        .safeAreaView {
+            bottomActionView
+                .confirmationDialog(
+                    model.swapDetailsViewModel?.highImpactWarningTitle ?? "",
+                    presenting: $model.isPresentingPriceImpactConfirmation,
+                    sensoryFeedback: .warning,
+                    actions: { _ in
+                        Button(
+                            model.buttonViewModel.title,
+                            role: .destructive,
+                            action: model.onSelectSwapConfirmation
+                        )
+                    },
+                    message: {
+                        Text(model.isPresentingPriceImpactConfirmation ?? "")
+                    }
+                )
+        }
         .navigationTitle(model.title)
         .onChangeObserveQuery(
             request: $model.fromAssetRequest,
@@ -82,20 +91,6 @@ public struct SwapScene: View {
 // MARK: - UI Components
 
 extension SwapScene {
-    private var swapList: some View {
-        List {
-            swapFromSectionView
-            swapToSectionView
-            if model.shouldShowAdditionalInfo {
-                additionalInfoSectionView
-            }
-
-            if let error = model.swapState.error {
-                ListItemErrorView(errorTitle: model.errorTitle, error: error, infoAction: model.errorInfoAction)
-            }
-        }
-    }
-    
     private var swapFromSectionView: some View {
         Section {
             if let swapModel = model.swapTokenModel(type: .pay) {
@@ -108,9 +103,7 @@ extension SwapScene {
                 .buttonStyle(.borderless)
                 .focused($focusedField, equals: .from)
             } else {
-                SwapTokenEmptyView(
-                    onSelectAssetAction: model.onSelectAssetPay
-                )
+                SwapTokenEmptyView(onSelectAssetAction: model.onSelectAssetPay)
             }
         } header: {
             Text(model.swapFromTitle)
@@ -143,9 +136,7 @@ extension SwapScene {
                 .buttonStyle(.borderless)
                 .focused($focusedField, equals: .to)
             } else {
-                SwapTokenEmptyView(
-                    onSelectAssetAction: model.onSelectAssetReceive
-                )
+                SwapTokenEmptyView(onSelectAssetAction: model.onSelectAssetReceive)
             }
         } header: {
             Text(model.swapToTitle)
@@ -166,11 +157,7 @@ extension SwapScene {
     
     private var buttonView: some View {
         VStack {
-            StateButton(
-                text: model.actionButtonTitle,
-                type: .primary(model.actionButtonState, isDisabled: model.shouldDisableActionButton),
-                action: model.onSelectActionButton
-            )
+            StateButton(model.buttonViewModel)
         }
         .frame(maxWidth: Spacing.scene.button.maxWidth)
     }
@@ -184,7 +171,7 @@ extension SwapScene {
                 .isVisible(focusedField == .from)
 
             Group {
-                if model.isVisibleActionButton {
+                if model.buttonViewModel.isVisible {
                     buttonView
                 } else if focusedField == .from {
                     PercentageAccessoryView(

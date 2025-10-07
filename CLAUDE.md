@@ -104,6 +104,12 @@ just uml-app
 - **SwiftGen**: Code generation for assets and localization
 - **SwiftFormat**: Code formatting
 
+### Apple Documentation Resources
+- **Xcode AI Documentation**: `/Applications/Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/AdditionalDocumentation`
+  - Contains latest SwiftUI, AppKit, UIKit, and framework documentation
+  - Includes guides for new Apple features and APIs
+  - Reference these docs when implementing new iOS features or using latest Apple frameworks
+
 ## Code Architecture Patterns
 
 ### Feature Module Structure

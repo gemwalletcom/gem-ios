@@ -13,6 +13,7 @@ import PrimitivesComponents
 import InfoSheet
 import Components
 import WalletService
+import Formatters
 
 @Observable
 @MainActor
@@ -43,6 +44,8 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingUrl: URL? = nil
     public var isPresentingTransferData: TransferData?
     public var isPresentingPerpetualRecipientData: PerpetualRecipientData?
+    public var isPresentingSetPriceAlert: AssetId?
+    public var isPresentingToastMessage: ToastMessage?
     
     public var isLoadingAssets: Bool = false
 
@@ -72,6 +75,7 @@ public final class WalletSceneViewModel: Sendable {
             events: [
                 .enableNotifications,
                 .accountBlockedMultiSignature,
+                .onboarding
             ]
         )
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
@@ -109,7 +113,15 @@ public final class WalletSceneViewModel: Sendable {
         WalletHeaderViewModel(
             walletType: wallet.type,
             value: totalFiatValue,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: banners.map(\.event))
+        )
+    }
+
+    var walletBannersModel: WalletSceneBannersViewModel {
+        WalletSceneBannersViewModel(
+            banners: banners,
+            totalFiatValue: totalFiatValue
         )
     }
 }
@@ -141,7 +153,7 @@ extension WalletSceneViewModel {
         case .buy: .buy
         case .send: .send
         case .receive: .receive(.asset)
-        case .swap, .more, .stake, .deposit, .withdraw:
+        case .sell, .swap, .more, .stake, .deposit, .withdraw:
             fatalError()
         }
         isPresentingSelectAssetType = selectType
@@ -155,17 +167,14 @@ extension WalletSceneViewModel {
         isPresentingInfoSheet = .watchWallet
     }
 
-    func onBannerAction(banner: Banner) {
-        let action = BannerViewModel(banner: banner).action
-        switch banner.event {
-        case .stake,
-                .enableNotifications,
-                .accountActivation,
-                .accountBlockedMultiSignature,
-                .activateAsset,
-                .suspiciousAsset:
-            Task {
-                try await handleBanner(action: action)
+    func onBanner(action: BannerAction) {
+        switch action.type {
+        case .event, .closeBanner:
+            Task { try await handleBanner(action: action) }
+        case .button(let bannerButton):
+            switch bannerButton {
+            case .buy: isPresentingSelectAssetType = .buy
+            case .receive: isPresentingSelectAssetType = .receive(.asset)
             }
         }
         isPresentingUrl = action.url
@@ -179,12 +188,23 @@ extension WalletSceneViewModel {
         }
     }
 
-    func onPinAsset(_ assetId: AssetId, value: Bool) {
+    func onPinAsset(_ asset: Asset, value: Bool) {
         do {
-            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetId)
+            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: asset.id)
+            isPresentingToastMessage = ToastMessage(
+                title: value ? "\(Localized.Common.pinned) \(asset.name)" : "\(Localized.Common.unpin) \(asset.name)",
+                image: value ? SystemImage.pin : SystemImage.unpin
+            )
         } catch {
             NSLog("WalletSceneViewModel pin asset error: \(error)")
         }
+    }
+
+    func onCopyAddress(_ symbol: String, _ address: String) {
+        isPresentingToastMessage = ToastMessage(
+            title: "\(symbol): \(AddressFormatter(address: address, chain: nil).value())",
+            image: SystemImage.copy
+        )
     }
 
     public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
@@ -195,11 +215,16 @@ extension WalletSceneViewModel {
     
     func shouldStartLoadingAssets() {
         let preferences = WalletPreferences(walletId: wallet.id)
-        isLoadingAssets = !preferences.completeDiscoveryAssets && preferences.assetsTimestamp == .zero
+        isLoadingAssets = !preferences.completeInitialLoadAssets && preferences.assetsTimestamp == .zero
     }
     
     public func onTransferComplete() {
         isPresentingTransferData = nil
+    }
+    
+    public func onSetPriceAlertComplete(message: String) {
+        isPresentingSetPriceAlert = nil
+        isPresentingToastMessage = ToastMessage(title: message, image: SystemImage.bellFill)
     }
 }
 

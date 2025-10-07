@@ -26,7 +26,6 @@ public struct AboutUsScene: View {
                     ListItemView(title: model.websiteTitle)
                 }
             }
-            .listRowInsets(.assetListRowInsets)
 
             Section {
                 ListItemView(
@@ -47,7 +46,6 @@ public struct AboutUsScene: View {
                     )
                 }
             }
-            .listRowInsets(.assetListRowInsets)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .listStyle(.insetGrouped)

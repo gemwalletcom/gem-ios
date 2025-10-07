@@ -59,6 +59,8 @@ public enum Localized {
     public static let name = Localized.tr("Localizable", "asset.name", fallback: "Name")
     /// Price
     public static let price = Localized.tr("Localizable", "asset.price", fallback: "Price")
+    /// Resources
+    public static let resources = Localized.tr("Localizable", "asset.resources", fallback: "Resources")
     /// Symbol
     public static let symbol = Localized.tr("Localizable", "asset.symbol", fallback: "Symbol")
     /// Token ID
@@ -159,6 +161,12 @@ public enum Localized {
       /// Enable Notifications
       public static let title = Localized.tr("Localizable", "banner.enable_notifications.title", fallback: "Enable Notifications")
     }
+    public enum Onboarding {
+      /// Buy or Receive crypto to your wallet to get started
+      public static let description = Localized.tr("Localizable", "banner.onboarding.description", fallback: "Buy or Receive crypto to your wallet to get started")
+      /// Welcome to the Gem Family
+      public static let title = Localized.tr("Localizable", "banner.onboarding.title", fallback: "Welcome to the Gem Family")
+    }
     public enum Stake {
       /// Earn %@ rewards on your stake while you sleep.
       public static func description(_ p1: Any) -> String {
@@ -175,9 +183,9 @@ public enum Localized {
     public static let noResults = Localized.tr("Localizable", "buy.no_results", fallback: "No quotes available")
     /// Rate
     public static let rate = Localized.tr("Localizable", "buy.rate", fallback: "Rate")
-    /// Buy %s
-    public static func title(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "buy.title", p1, fallback: "Buy %s")
+    /// Buy %@
+    public static func title(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "buy.title", String(describing: p1), fallback: "Buy %@")
     }
     public enum Providers {
       /// Providers
@@ -219,9 +227,9 @@ public enum Localized {
     public static let copy = Localized.tr("Localizable", "common.copy", fallback: "Copy")
     /// Delete
     public static let delete = Localized.tr("Localizable", "common.delete", fallback: "Delete")
-    /// Are sure you want to delete %s?
-    public static func deleteConfirmation(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "common.delete_confirmation", p1, fallback: "Are sure you want to delete %s?")
+    /// Are sure you want to delete %@?
+    public static func deleteConfirmation(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "common.delete_confirmation", String(describing: p1), fallback: "Are sure you want to delete %@?")
     }
     /// Description
     public static let description = Localized.tr("Localizable", "common.description", fallback: "Description")
@@ -335,9 +343,9 @@ public enum Localized {
   public enum Errors {
     /// Camera permission not granted. Please enable camera access in settings to scan QR code.
     public static let cameraPermissionsNotGranted = Localized.tr("Localizable", "errors.camera_permissions_not_granted", fallback: "Camera permission not granted. Please enable camera access in settings to scan QR code.")
-    /// Create Wallet Error: %s
-    public static func createWallet(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "errors.create_wallet", p1, fallback: "Create Wallet Error: %s")
+    /// Create Wallet Error: %@
+    public static func createWallet(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.create_wallet", String(describing: p1), fallback: "Create Wallet Error: %@")
     }
     /// Decoding Error
     public static let decoding = Localized.tr("Localizable", "errors.decoding", fallback: "Decoding Error")
@@ -375,9 +383,9 @@ public enum Localized {
     public static func `required`(_ p1: Any) -> String {
       return Localized.tr("Localizable", "errors.required", String(describing: p1), fallback: "%@ is required")
     }
-    /// Transfer Error: %s
-    public static func transfer(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")
+    /// Transfer Error: %@
+    public static func transfer(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.transfer", String(describing: p1), fallback: "Transfer Error: %@")
     }
     /// Transfer Error
     public static let transferError = Localized.tr("Localizable", "errors.transfer_error", fallback: "Transfer Error")
@@ -387,9 +395,9 @@ public enum Localized {
     public static let unknown = Localized.tr("Localizable", "errors.unknown", fallback: "Unknown")
     /// An unknown error occurred. Please try again.
     public static let unknownTryAgain = Localized.tr("Localizable", "errors.unknown_try_again", fallback: "An unknown error occurred. Please try again.")
-    /// Validation Error: %s
-    public static func validation(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "errors.validation", p1, fallback: "Validation Error: %s")
+    /// Validation Error: %@
+    public static func validation(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.validation", String(describing: p1), fallback: "Validation Error: %@")
     }
     public enum Connections {
       /// Invalid parameters provided for sending a transaction.
@@ -572,6 +580,14 @@ public enum Localized {
     public enum Slippage {
       /// Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.
       public static let description = Localized.tr("Localizable", "info.slippage.description", fallback: "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.")
+    }
+    public enum Stake {
+      public enum Reserved {
+        /// A small amount stays in your wallet to cover fees for operations like unstaking or claiming rewards.
+        public static let description = Localized.tr("Localizable", "info.stake.reserved.description", fallback: "A small amount stays in your wallet to cover fees for operations like unstaking or claiming rewards.")
+        /// Reserved for Network Fee
+        public static let title = Localized.tr("Localizable", "info.stake.reserved.title", fallback: "Reserved for Network Fee")
+      }
     }
     public enum StakeMinimumAmount {
       /// On the %@ network, the minimum staking requirement is **%@**.
@@ -757,20 +773,34 @@ public enum Localized {
     }
   }
   public enum Perpetual {
+    /// Close %@
+    public static func closeDirection(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "perpetual.close_direction", String(describing: p1), fallback: "Close %@")
+    }
     /// Close position
     public static let closePosition = Localized.tr("Localizable", "perpetual.close_position", fallback: "Close position")
     /// Entry Price
     public static let entryPrice = Localized.tr("Localizable", "perpetual.entry_price", fallback: "Entry Price")
+    /// Increase Position
+    public static let increasePosition = Localized.tr("Localizable", "perpetual.increase_position", fallback: "Increase Position")
     /// Long
     public static let long = Localized.tr("Localizable", "perpetual.long", fallback: "Long")
     /// Margin
     public static let margin = Localized.tr("Localizable", "perpetual.margin", fallback: "Margin")
+    /// Modify
+    public static let modify = Localized.tr("Localizable", "perpetual.modify", fallback: "Modify")
+    /// Open %@
+    public static func openDirection(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "perpetual.open_direction", String(describing: p1), fallback: "Open %@")
+    }
     /// PnL
     public static let pnl = Localized.tr("Localizable", "perpetual.pnl", fallback: "PnL")
     /// Position
     public static let position = Localized.tr("Localizable", "perpetual.position", fallback: "Position")
     /// Positions
     public static let positions = Localized.tr("Localizable", "perpetual.positions", fallback: "Positions")
+    /// Reduce Position
+    public static let reducePosition = Localized.tr("Localizable", "perpetual.reduce_position", fallback: "Reduce Position")
     /// Short
     public static let short = Localized.tr("Localizable", "perpetual.short", fallback: "Short")
     /// Size
@@ -781,6 +811,8 @@ public enum Localized {
     public static func addedFor(_ p1: Any) -> String {
       return Localized.tr("Localizable", "price_alerts.added_for", String(describing: p1), fallback: "Set price alert %@")
     }
+    /// Alerts trigger on significant price moves.
+    public static let autoFooter = Localized.tr("Localizable", "price_alerts.auto_footer", fallback: "Alerts trigger on significant price moves.")
     /// Price alert disabled for %@
     public static func disabledFor(_ p1: Any) -> String {
       return Localized.tr("Localizable", "price_alerts.disabled_for", String(describing: p1), fallback: "Price alert disabled for %@")
@@ -814,6 +846,8 @@ public enum Localized {
       public static let priceUnder = Localized.tr("Localizable", "price_alerts.set_alert.price_under", fallback: "When price is under")
       /// Set target price
       public static let setTargetPrice = Localized.tr("Localizable", "price_alerts.set_alert.set_target_price", fallback: "Set target price")
+      /// Set Price Alert
+      public static let title = Localized.tr("Localizable", "price_alerts.set_alert.title", fallback: "Set Price Alert")
     }
     public enum State {
       public enum Empty {
@@ -825,9 +859,9 @@ public enum Localized {
     }
   }
   public enum Receive {
-    /// Receive %s
-    public static func title(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "receive.title", p1, fallback: "Receive %s")
+    /// Receive %@
+    public static func title(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "receive.title", String(describing: p1), fallback: "Receive %@")
     }
     /// Your Receiving Address
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
@@ -868,9 +902,9 @@ public enum Localized {
     }
   }
   public enum Sell {
-    /// Sell %s
-    public static func title(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "sell.title", p1, fallback: "Sell %s")
+    /// Sell %@
+    public static func title(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "sell.title", String(describing: p1), fallback: "Sell %@")
     }
   }
   public enum Settings {
@@ -1002,6 +1036,8 @@ public enum Localized {
     public static let noActiveStaking = Localized.tr("Localizable", "stake.no_active_staking", fallback: "No active staking yet.")
     /// Pending
     public static let pending = Localized.tr("Localizable", "stake.pending", fallback: "Pending")
+    /// Resource
+    public static let resource = Localized.tr("Localizable", "stake.resource", fallback: "Resource")
     /// Rewards
     public static let rewards = Localized.tr("Localizable", "stake.rewards", fallback: "Rewards")
     /// Stake
@@ -1012,6 +1048,12 @@ public enum Localized {
     public static let validators = Localized.tr("Localizable", "stake.validators", fallback: "Validators")
     /// Stake via Gem Wallet
     public static let viagem = Localized.tr("Localizable", "stake.viagem", fallback: "Stake via Gem Wallet")
+    public enum Resource {
+      /// Bandwidth
+      public static let bandwidth = Localized.tr("Localizable", "stake.resource.bandwidth", fallback: "Bandwidth")
+      /// Energy
+      public static let energy = Localized.tr("Localizable", "stake.resource.energy", fallback: "Energy")
+    }
     public enum State {
       public enum Empty {
         /// Stake your first %@
@@ -1032,6 +1074,8 @@ public enum Localized {
     public static func approveTokenPermission(_ p1: Any) -> String {
       return Localized.tr("Localizable", "swap.approve_token_permission", String(describing: p1), fallback: "Approve %@ token for swap access.")
     }
+    /// Minimum Receive
+    public static let minReceive = Localized.tr("Localizable", "swap.min_receive", fallback: "Minimum Receive")
     /// Price Impact
     public static let priceImpact = Localized.tr("Localizable", "swap.price_impact", fallback: "Price Impact")
     /// Quote includes a %@ Gem fee.
@@ -1162,6 +1206,10 @@ public enum Localized {
       /// Max total
       public static let maxtotal = Localized.tr("Localizable", "transfer.confirm.maxtotal", fallback: "Max total")
     }
+    public enum Freeze {
+      /// Freeze
+      public static let title = Localized.tr("Localizable", "transfer.freeze.title", fallback: "Freeze")
+    }
     public enum Other {
       /// Other
       public static let title = Localized.tr("Localizable", "transfer.other.title", fallback: "Other")
@@ -1195,6 +1243,10 @@ public enum Localized {
     public enum Stake {
       /// Stake
       public static let title = Localized.tr("Localizable", "transfer.stake.title", fallback: "Stake")
+    }
+    public enum Unfreeze {
+      /// Unfreeze
+      public static let title = Localized.tr("Localizable", "transfer.unfreeze.title", fallback: "Unfreeze")
     }
     public enum Unstake {
       /// Unstake
@@ -1360,13 +1412,6 @@ public enum Localized {
   public enum Welcome {
     /// Welcome to Gem Family
     public static let title = Localized.tr("Localizable", "welcome.title", fallback: "Welcome to Gem Family")
-    public enum Legal {
-      /// By using Gem, you agree to accept our
-      ///  [Terms of Use](%s) and [Privacy Policy](%s)
-      public static func concent(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>) -> String {
-        return Localized.tr("Localizable", "welcome.legal.concent", p1, p2, fallback: "By using Gem, you agree to accept our\n [Terms of Use](%s) and [Privacy Policy](%s)")
-      }
-    }
   }
   public enum Widget {
     public enum Medium {

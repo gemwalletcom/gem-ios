@@ -26,10 +26,12 @@ extension GemTransactionLoadMetadata {
             return .cosmos(accountNumber: UInt64(accountNumber), sequence: sequence, chainId: chainId)
         case .bitcoin(let utxos):
             return .bitcoin(utxos: try utxos.map { try $0.map() })
+        case .zcash(let utxos, let branchId):
+            return .zcash(utxos: try utxos.map { try $0.map() }, branchId: branchId)
         case .cardano(let utxos):
             return .cardano(utxos: try utxos.map { try $0.map() })
-        case .evm(let nonce, let chainId):
-            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
+        case .evm(let nonce, let chainId, let stakeData):
+            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId), stakeData: stakeData?.map())
         case .near(let sequence, let blockHash):
             return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):
@@ -38,8 +40,8 @@ extension GemTransactionLoadMetadata {
             return .xrp(sequence: sequence, blockNumber: blockNumber)
         case .algorand(let sequence, let blockHash, let chainId):
             return .algorand(sequence: sequence, blockHash: blockHash, chainId: chainId)
-        case .aptos(let sequence):
-            return .aptos(sequence: sequence)
+        case .aptos(let sequence, let data):
+            return .aptos(sequence: sequence, data: data)
         case .polkadot(let sequence, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
             return .polkadot(
                 sequence: sequence,
@@ -62,15 +64,8 @@ extension GemTransactionLoadMetadata {
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
-        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps, let agentAddress, let agentPrivateKey):
-            return .hyperliquid(
-                approveAgentRequired: approveAgentRequired,
-                approveReferralRequired: approveReferralRequired,
-                approveBuilderRequired: approveBuilderRequired,
-                builderFeeBps: UInt32(builderFeeBps),
-                agentAddress: agentAddress,
-                agentPrivateKey: agentPrivateKey
-            )
+        case .hyperliquid(let order):
+            return .hyperliquid(order: order?.map())
         }
     }
 }
@@ -93,10 +88,16 @@ extension TransactionLoadMetadata {
             return .cosmos(accountNumber: UInt64(accountNumber), sequence: sequence, chainId: chainId)
         case .bitcoin(let utxos):
             return .bitcoin(utxos: utxos.map { $0.map() })
+        case .zcash(let utxos, let branchId):
+            return .zcash(utxos: utxos.map { $0.map() }, branchId: branchId)
         case .cardano(let utxos):
             return .cardano(utxos: utxos.map { $0.map() })
-        case .evm(let nonce, let chainId):
-            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId))
+        case .evm(let nonce, let chainId, let stakeData):
+            return .evm(
+                nonce: UInt64(nonce),
+                chainId: UInt64(chainId),
+                stakeData: stakeData?.map()
+            )
         case .near(let sequence, let blockHash):
             return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):
@@ -105,8 +106,8 @@ extension TransactionLoadMetadata {
             return .xrp(sequence: sequence, blockNumber: blockNumber)
         case .algorand(let sequence, let blockHash, let chainId):
             return .algorand(sequence: sequence, blockHash: blockHash, chainId: chainId)
-        case .aptos(let sequence):
-            return .aptos(sequence: sequence)
+        case .aptos(let sequence, let data):
+            return .aptos(sequence: sequence, data: data)
         case .polkadot(let sequence, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
             return .polkadot(
                 sequence: sequence,
@@ -129,15 +130,34 @@ extension TransactionLoadMetadata {
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
-        case .hyperliquid(let approveAgentRequired, let approveReferralRequired, let approveBuilderRequired, let builderFeeBps, let agentAddress, let agentPrivateKey):
-            return .hyperliquid(
-                approveAgentRequired: approveAgentRequired,
-                approveReferralRequired: approveReferralRequired,
-                approveBuilderRequired: approveBuilderRequired,
-                builderFeeBps: builderFeeBps,
-                agentAddress: agentAddress,
-                agentPrivateKey: agentPrivateKey
-            )
+        case .hyperliquid(let order):
+            return .hyperliquid(order: order?.map())
         }
+    }
+}
+
+extension GemHyperliquidOrder {
+    func map() -> HyperliquidOrder {
+        HyperliquidOrder(
+            approveAgentRequired: approveAgentRequired,
+            approveReferralRequired: approveReferralRequired,
+            approveBuilderRequired: approveBuilderRequired,
+            builderFeeBps: UInt32(builderFeeBps),
+            agentAddress: agentAddress,
+            agentPrivateKey: agentPrivateKey
+        )
+    }
+}
+
+extension HyperliquidOrder {
+    func map() -> GemHyperliquidOrder {
+        GemHyperliquidOrder(
+            approveAgentRequired: approveAgentRequired,
+            approveReferralRequired: approveReferralRequired,
+            approveBuilderRequired: approveBuilderRequired,
+            builderFeeBps: builderFeeBps,
+            agentAddress: agentAddress,
+            agentPrivateKey: agentPrivateKey
+        )
     }
 }

@@ -104,7 +104,7 @@ public struct SolanaSigner: Signable {
         return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType)
     }
 
-    func signData(bytes: Data, privateKey: Data, outputType: TransferDataExtra.OutputType) throws -> String {
+    func signData(bytes: Data, privateKey: Data, outputType: TransferDataOutputType) throws -> String {
         let rawTxDecoder = SolanaRawTxDecoder(rawData: bytes)
         let numRequiredSignatures = rawTxDecoder.signatureCount()
         var signatures: [Data] = rawTxDecoder.signatures()
@@ -232,6 +232,8 @@ public struct SolanaSigner: Signable {
         case .redelegate,
              .rewards:
             fatalError()
+        case .freeze(_):
+            throw AnyError("Solana does not support freeze operations")
         }
         return try [
             sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey),

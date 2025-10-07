@@ -12,6 +12,7 @@ import Assets
 import Perpetuals
 import Transfer
 import StakeService
+import PriceAlerts
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
@@ -62,6 +63,7 @@ struct WalletNavigationStack: View {
                             model: model.walletBarModel,
                             action: model.onSelectWalletBar
                         )
+                        .liquidGlass()
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: model.onSelectManage) {
@@ -98,7 +100,10 @@ struct WalletNavigationStack: View {
                     ChartScene(
                         model: ChartsViewModel(
                             priceService: priceService,
-                            assetModel: AssetViewModel(asset: $0.asset)
+                            assetModel: AssetViewModel(asset: $0.asset),
+                            priceAlertService: priceAlertService,
+                            walletId: model.wallet.walletId,
+                            isPresentingSetPriceAlert: $model.isPresentingSetPriceAlert
                         )
                     )
                 }
@@ -106,8 +111,7 @@ struct WalletNavigationStack: View {
                     PerpetualsNavigationView(
                         wallet: model.wallet,
                         perpetualService: perpetualService,
-                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType,
-                        isPresentingTransferData: $model.isPresentingTransferData
+                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType
                     )
                 }
                 .navigationDestination(for: Scenes.Perpetual.self) {
@@ -117,6 +121,15 @@ struct WalletNavigationStack: View {
                         perpetualService: perpetualService,
                         isPresentingTransferData: $model.isPresentingTransferData,
                         isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
+                    )
+                }
+                .navigationDestination(for: Scenes.AssetPriceAlert.self) {
+                    AssetPriceAlertsScene(
+                        model: AssetPriceAlertsViewModel(
+                            priceAlertService: priceAlertService,
+                            walletId: model.wallet.walletId,
+                            asset: $0.asset
+                        )
                     )
                 }
                 .sheet(item: $model.isPresentingSelectAssetType) {
@@ -153,7 +166,17 @@ struct WalletNavigationStack: View {
                         }
                     )
                 }
+                .sheet(item: $model.isPresentingSetPriceAlert) { assetId in
+                    SetPriceAlertNavigationStack(
+                        model: SetPriceAlertViewModel(
+                            walletId: model.wallet.walletId,
+                            assetId: assetId,
+                            priceAlertService: priceAlertService
+                        ) { model.onSetPriceAlertComplete(message: $0) }
+                    )
+                }
                 .safariSheet(url: $model.isPresentingUrl)
+                .toast(message: $model.isPresentingToastMessage)
         }
     }
 }

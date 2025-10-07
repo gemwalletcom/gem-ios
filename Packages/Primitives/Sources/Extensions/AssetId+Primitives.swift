@@ -53,7 +53,7 @@ public extension AssetId {
     }
     
     func twoSubTokenIds() throws -> (String, String) {
-        guard let split = tokenId?.split(separator: Self.subTokenSeparator).map ({ String($0) }), split.count == 2 else {
+        guard let split = tokenId?.split(separator: Self.subTokenSeparator).map ({ String($0) }), split.count >= 2 else {
             throw AnyError("invalid token id: \(tokenId ?? "")")
         }
         return (

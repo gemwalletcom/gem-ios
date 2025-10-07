@@ -83,12 +83,30 @@ struct AmountDisplayTests {
     func fiatVisibilitySymbolUnchanged() {
         let display = AmountDisplay.symbol(asset: asset)
         let modified = display.fiatVisibility(false)
-        
+
         guard case .symbol = modified else {
             Issue.record("Symbol display should remain unchanged")
             return
         }
-        
+
         #expect(modified.amount.text == asset.symbol)
+    }
+
+    @Test
+    func currencyPositive() {
+        let textValue = AmountDisplay.currency(value: 100.50, currencyCode: "USD")
+        #expect(textValue.text == "+$100.50")
+    }
+
+    @Test
+    func currencyNegative() {
+        let textValue = AmountDisplay.currency(value: -50.25, currencyCode: "USD")
+        #expect(textValue.text == "-$50.25")
+    }
+
+    @Test
+    func currencyZero() {
+        let textValue = AmountDisplay.currency(value: 0, currencyCode: "USD")
+        #expect(textValue.text == "$0.00")
     }
 }

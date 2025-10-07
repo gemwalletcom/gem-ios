@@ -39,6 +39,8 @@ public enum GemAPI: TargetType {
     case scanTransaction(payload: ScanTransactionPayload)
     
     case markets
+
+    case addSupportDevice(device: SupportDevice)
     
     public var baseUrl: URL {
         return URL(string: "https://api.gemwallet.com")!
@@ -68,7 +70,8 @@ public enum GemAPI: TargetType {
             .getAssets,
             .addPriceAlerts,
             .scanTransaction,
-            .getPrices:
+            .getPrices,
+            .addSupportDevice:
             return .POST
         case .updateDevice:
             return .PUT
@@ -127,6 +130,8 @@ public enum GemAPI: TargetType {
             return "/v1/scan/transaction"
         case .markets:
             return "/v1/markets"
+        case .addSupportDevice:
+            return "/v1/support/add_device"
         }
     }
     
@@ -164,6 +169,8 @@ public enum GemAPI: TargetType {
             ])
         case .getPrices(let request):
             return .encodable(request)
+        case .addSupportDevice(let device):
+            return .encodable(device)
         case .addSubscriptions(_, let subscriptions),
             .deleteSubscriptions(_, let subscriptions):
             return .encodable(subscriptions)

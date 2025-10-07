@@ -32,7 +32,7 @@ extension ButtonStylePalette {
         foregroundPressed: Colors.whiteSolid,
         background: Colors.blue,
         backgroundPressed: Colors.blueDark,
-        backgroundDisabled: Colors.blueDark.opacity(0.6)
+        backgroundDisabled: Colors.blueDarkFaded
     )
 
     static let blue = ButtonStylePalette(
@@ -40,7 +40,7 @@ extension ButtonStylePalette {
         foregroundPressed: Colors.whiteSolid,
         background: Colors.blue,
         backgroundPressed: Colors.blueDark,
-        backgroundDisabled: .clear
+        backgroundDisabled: Colors.blueFaded
     )
 
     static let blueGrayPressed = ButtonStylePalette(
@@ -48,7 +48,7 @@ extension ButtonStylePalette {
         foregroundPressed: Colors.whiteSolid,
         background: Colors.blue,
         backgroundPressed: Colors.gray,
-        backgroundDisabled: .clear
+        backgroundDisabled: Colors.blueFaded
     )
 
     static let gray = ButtonStylePalette(
@@ -56,15 +56,15 @@ extension ButtonStylePalette {
         foregroundPressed: Colors.whiteSolid,
         background: Colors.grayLight,
         backgroundPressed: Colors.gray,
-        backgroundDisabled: .clear
+        backgroundDisabled: Colors.grayLightFaded
     )
 
     static let lightGray = ButtonStylePalette(
         foreground: Colors.gray,
         foregroundPressed: Colors.whiteSolid,
         background: Colors.grayVeryLight,
-        backgroundPressed: Colors.grayLight.opacity(0.3),
-        backgroundDisabled: .clear
+        backgroundPressed: Colors.grayLightFaded,
+        backgroundDisabled: Colors.grayVeryLightFaded
     )
 
     static let white = ButtonStylePalette(
@@ -72,23 +72,23 @@ extension ButtonStylePalette {
         foregroundPressed: Colors.whiteSolid,
         background: Colors.white,
         backgroundPressed: Colors.grayVeryLight,
-        backgroundDisabled: .clear
+        backgroundDisabled: Colors.whiteFaded
     )
 
     static let empty = ButtonStylePalette(
         foreground: Colors.black,
-        foregroundPressed: Colors.black.opacity(0.5),
+        foregroundPressed: Colors.blackFaded,
         background: Colors.Empty.buttonsBackground,
-        backgroundPressed: Colors.Empty.buttonsBackground.opacity(0.5),
-        backgroundDisabled: .clear
+        backgroundPressed: Colors.Empty.buttonsBackground,
+        backgroundDisabled: Colors.Empty.buttonsBackground
     )
 
     static let amount = ButtonStylePalette(
         foreground: Colors.black,
-        foregroundPressed: Colors.black.opacity(0.5),
+        foregroundPressed: Colors.blackFaded,
         background: Colors.grayVeryLight,
-        backgroundPressed: Colors.grayVeryLight.opacity(0.5),
-        backgroundDisabled: .clear
+        backgroundPressed: Colors.grayVeryLightFaded,
+        backgroundDisabled: Colors.grayVeryLightFaded
     )
 
     static let listStyleColor = ButtonStylePalette(
@@ -96,23 +96,23 @@ extension ButtonStylePalette {
         foregroundPressed: Colors.whiteSolid,
         background: Colors.listStyleColor,
         backgroundPressed: Colors.grayVeryLight,
-        backgroundDisabled: .clear
+        backgroundDisabled: Colors.grayFaded
     )
     
     static let red = ButtonStylePalette(
         foreground: Colors.whiteSolid,
         foregroundPressed: Colors.whiteSolid,
         background: Colors.red,
-        backgroundPressed: Colors.red.opacity(0.8),
-        backgroundDisabled: Colors.red.opacity(0.6)
+        backgroundPressed: Colors.redFaded,
+        backgroundDisabled: Colors.redFadedLight
     )
     
     static let green = ButtonStylePalette(
         foreground: Colors.whiteSolid,
         foregroundPressed: Colors.whiteSolid,
         background: Colors.green,
-        backgroundPressed: Colors.green.opacity(0.8),
-        backgroundDisabled: Colors.green.opacity(0.6)
+        backgroundPressed: Colors.greenFaded,
+        backgroundDisabled: Colors.greenFadedLight
     )
 
 }

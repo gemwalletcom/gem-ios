@@ -9,16 +9,13 @@ import QRScanner
 public struct RecipientNavigationView: View {
     @State private var model: RecipientSceneViewModel
     private let confirmService: ConfirmService
-    private let onComplete: VoidAction
 
     public init(
         confirmService: ConfirmService,
-        model: RecipientSceneViewModel,
-        onComplete: VoidAction
+        model: RecipientSceneViewModel
     ) {
         self.confirmService = confirmService
         _model = State(initialValue: model)
-        self.onComplete = onComplete
     }
 
     public var body: some View {
@@ -36,16 +33,6 @@ public struct RecipientNavigationView: View {
                     input: AmountInput(type: .transfer(recipient: data), asset: model.asset),
                     wallet: model.wallet,
                     onTransferAction: model.onTransferAction
-                )
-            )
-        }
-        .navigationDestination(for: TransferData.self) { data in
-            ConfirmTransferScene(
-                model: ConfirmTransferSceneViewModel(
-                    wallet: model.wallet,
-                    data: data,
-                    confirmService: confirmService,
-                    onComplete: onComplete
                 )
             )
         }

@@ -4,13 +4,12 @@ import Gemstone
 import Primitives
 import BigInt
 
-public extension Gemstone.GemNodeStatus {
-    func map() throws -> NodeStatus {
-        NodeStatus(
+extension Gemstone.NodeStatus {
+    public func map() -> Primitives.NodeStatus {
+        Primitives.NodeStatus(
             chainId: chainId,
-            latestBlockNumber: latestBlockNumber.asBigInt,
-            latency: Latency.from(duration: Double(latencyMs))
+            latestBlockNumber: BigInt(latestBlockNumber),
+            latency: Latency.from(milliseconds: Double(latencyMs))
         )
     }
 }
-

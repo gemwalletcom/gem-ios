@@ -1,6 +1,6 @@
 XCBEAUTIFY_ARGS := "--quieter"
 BUILD_THREADS := `sysctl -n hw.ncpu`
-SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 16"
+SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 17"
 
 xcbeautify:
     @xcbeautify {{XCBEAUTIFY_ARGS}}

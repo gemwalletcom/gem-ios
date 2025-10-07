@@ -7,7 +7,7 @@ import Primitives
 import PrimitivesComponents
 import Preferences
 
-struct TransactionInputViewModel: Sendable {
+public struct TransactionInputViewModel: Sendable {
     let data: TransferData
     let transactionData: TransactionData?
     let metaData: TransferDataMetadata?
@@ -15,7 +15,7 @@ struct TransactionInputViewModel: Sendable {
 
     private let preferences: Preferences
 
-    init(
+    public init(
         data: TransferData,
         transactionData: TransactionData?,
         metaData: TransferDataMetadata?,
@@ -35,13 +35,30 @@ struct TransactionInputViewModel: Sendable {
         case .failure, .none: data.value
         }
     }
+    
+    var asset: Asset {
+        switch data.type {
+        case .perpetual(_, let type): type.baseAsset
+        default: data.type.asset
+        }
+    }
 
     var infoModel: TransactionInfoViewModel {
-        TransactionInfoViewModel(
+        let feeAsset = data.chain.asset
+        let asset: Asset
+
+        switch data.type {
+        case .transferNft(let nftAsset):
+            asset = nftAsset.chain.asset
+        default:
+            asset = data.type.asset
+        }
+
+        return TransactionInfoViewModel(
             currency: preferences.currency,
-            asset: data.type.asset,
+            asset: asset,
             assetPrice: metaData?.assetPrice,
-            feeAsset: data.type.asset.feeAsset,
+            feeAsset: feeAsset,
             feeAssetPrice: metaData?.feePrice,
             value: value,
             feeValue: transactionData?.fee.fee,

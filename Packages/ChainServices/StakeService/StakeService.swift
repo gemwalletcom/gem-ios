@@ -79,7 +79,7 @@ extension StakeService {
                 id: $0.id,
                 name: name,
                 isActive: $0.isActive,
-                commision: $0.commision,
+                commission: $0.commission,
                 apr: $0.apr
             )
         }

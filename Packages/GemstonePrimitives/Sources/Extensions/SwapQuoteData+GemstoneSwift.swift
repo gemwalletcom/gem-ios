@@ -10,7 +10,7 @@ public extension Gemstone.SwapperQuoteData {
             to: to,
             value: value,
             data: data,
-            approval: approval?.asPrimitive,
+            approval: approval?.map(),
             gasLimit: gasLimit
         )
     }

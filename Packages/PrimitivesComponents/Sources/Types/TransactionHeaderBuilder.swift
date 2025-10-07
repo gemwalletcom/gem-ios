@@ -18,7 +18,9 @@ public struct TransactionHeaderTypeBuilder {
                     .stakeRedelegate,
                     .stakeRewards,
                     .stakeWithdraw,
-                    .smartContractCall:
+                    .smartContractCall,
+                    .stakeFreeze,
+                    .stakeUnfreeze:
                 return .amount(showFiat: true)
             case .swap:
                 guard let metadata, let input = SwapMetadataViewModel(metadata: metadata).headerInput else {
@@ -39,7 +41,7 @@ public struct TransactionHeaderTypeBuilder {
                 }
                 return .nft(name: metadata.name, id: metadata.assetId)
             case .perpetualOpenPosition, .perpetualClosePosition:
-                return .amount(showFiat: true)
+                return .symbol
             }
         }()
         return infoModel.headerType(input: inputType)
@@ -94,7 +96,7 @@ public struct TransactionHeaderTypeBuilder {
                 }
                 return .swap(input)
             case .perpetual:
-                return .amount(showFiat: true)
+                return .symbol
             }
         }()
         return infoModel.headerType(input: inputType)

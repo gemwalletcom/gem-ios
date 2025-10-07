@@ -44,6 +44,18 @@ public struct PerpetualBalance: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct PerpetualBasic: Codable, Equatable, Hashable, Sendable {
+	public let assetId: AssetId
+	public let perpetualId: String
+	public let provider: PerpetualProvider
+
+	public init(assetId: AssetId, perpetualId: String, provider: PerpetualProvider) {
+		self.assetId = assetId
+		self.perpetualId = perpetualId
+		self.provider = provider
+	}
+}
+
 public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
 	case short
 	case long
@@ -51,15 +63,15 @@ public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
 
 public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let direction: PerpetualDirection
-	public let asset: Asset
+	public let baseAsset: Asset
 	public let assetIndex: Int32
 	public let price: String
 	public let fiatValue: Double
 	public let size: String
 
-	public init(direction: PerpetualDirection, asset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String) {
+	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String) {
 		self.direction = direction
-		self.asset = asset
+		self.baseAsset = baseAsset
 		self.assetIndex = assetIndex
 		self.price = price
 		self.fiatValue = fiatValue
@@ -110,7 +122,7 @@ public struct PerpetualPositionsSummary: Codable, Equatable, Hashable, Sendable 
 }
 
 public enum AccountDataType: String, Codable, Equatable, Hashable, Sendable {
-	case activate = "Activate"
+	case activate
 }
 
 public enum PerpetualType: Codable, Equatable, Hashable, Sendable {

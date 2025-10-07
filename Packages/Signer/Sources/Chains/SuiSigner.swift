@@ -27,6 +27,8 @@ public struct SuiSigner: Signable {
             return [try sign(input: input, privateKey: privateKey)]
         case .redelegate, .rewards, .withdraw:
             throw AnyError.notImplemented
+        case .freeze:
+            throw AnyError("Sui does not support freeze operations")
         }
     }
     

@@ -67,4 +67,18 @@ struct AssetBannersViewModelTests {
         #expect(model.allBanners[1].state == .alwaysActive)
         #expect(model.allBanners[2].state == .active)
     }
+    
+    @Test
+    func priorityBannerReturnsHighestPriority() {
+        let model = AssetBannersViewModel(
+            assetData: .mock(),
+            banners: [
+                .mock(event: .stake, state: .active),
+                .mock(event: .enableNotifications, state: .cancelled),
+                .mock(event: .accountActivation, state: .alwaysActive)
+            ]
+        )
+        
+        #expect(model.priorityBanner?.state == .alwaysActive)
+    }
 }

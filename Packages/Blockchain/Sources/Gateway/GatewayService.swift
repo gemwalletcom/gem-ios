@@ -52,26 +52,26 @@ extension GatewayService {
 // MARK: - Transactions
 
 extension GatewayService {
-    public func transactionBroadcast(chain: Primitives.Chain, data: String, options: BroadcastOptions = BroadcastOptions(skipPreflight: false)) async throws -> String {
+    public func transactionBroadcast(chain: Primitives.Chain, data: String, options: Primitives.BroadcastOptions = Primitives.BroadcastOptions(skipPreflight: false)) async throws -> String {
         try await gateway.transactionBroadcast(chain: chain.rawValue, data: data, options: options.map())
     }
     
     public func transactionStatus(chain: Primitives.Chain, request: TransactionStateRequest) async throws -> TransactionChanges {
         let update = try await gateway.getTransactionStatus(chain: chain.rawValue, request: request.map())
-        let changes: [TransactionChange] = try update.changes.compactMap {
+        let changes: [Primitives.TransactionChange] = try update.changes.compactMap {
             switch $0 {
             case .hashChange(old: let old, new: let new):
-                return TransactionChange.hashChange(old: old, new: new)
+                return .hashChange(old: old, new: new)
             case .metadata(let metadata):
-                return TransactionChange.metadata(metadata.map())
+                return .metadata(metadata.map())
             case .blockNumber(let number):
-                return TransactionChange.blockNumber(try Int.from(string: number))
+                return .blockNumber(try Int.from(string: number))
             case .networkFee(let fee):
-                return TransactionChange.networkFee(try BigInt.from(string: fee))
+                return .networkFee(try BigInt.from(string: fee))
             }
         }
         return TransactionChanges(
-            state: try TransactionState(id: update.state),
+            state: update.state.map(),
             changes: changes
         )
     }
@@ -104,7 +104,7 @@ extension GatewayService {
         try await gateway.getFeeRates(chain: chain.rawValue, input: input.map()).map { try $0.map() }
     }
     
-    public func nodeStatus(chain: Primitives.Chain, url: String) async throws -> NodeStatus {
+    public func nodeStatus(chain: Primitives.Chain, url: String) async throws -> Primitives.NodeStatus {
         try await gateway.getNodeStatus(chain: chain.rawValue, url: url).map()
     }
 }
@@ -136,8 +136,8 @@ extension GatewayService {
 // MARK: - Staking
 
 extension GatewayService {
-    public func validators(chain: Primitives.Chain) async throws -> [DelegationValidator] {
-        try await gateway.getStakingValidators(chain: chain.rawValue, apy: nil)
+    public func validators(chain: Primitives.Chain, apy: Double) async throws -> [DelegationValidator] {
+        try await gateway.getStakingValidators(chain: chain.rawValue, apy: apy)
             .map { try $0.map() }
     }
 
@@ -167,5 +167,8 @@ extension GatewayService {
     }
 }
 
-// MARK: - Perpetual Mapping Extensions
-
+extension GatewayService {
+    public func getAddressStatus(chain: Primitives.Chain, address: String) async throws -> [Primitives.AddressStatus] {
+        try await gateway.getAddressStatus(chain: chain.rawValue, address: address).map { $0.map() }
+    }
+}

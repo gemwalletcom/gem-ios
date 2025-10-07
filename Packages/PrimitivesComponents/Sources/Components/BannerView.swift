@@ -7,29 +7,27 @@ import Components
 import Style
 
 public struct BannerView: View {
-    let banners: [BannerViewModel]
-    private let action: ((Banner) -> Void)
-    private let closeAction: ((Banner) -> Void)
-    
-    @State private var currentIndex: Int = 0
+    private let model: BannerViewModel
+    private let action: ((BannerAction) -> Void)
 
     public init(
-        banners: [Banner],
-        action: @escaping (Banner) -> Void,
-        closeAction: @escaping (Banner) -> Void
+        banner: Banner,
+        action: @escaping (BannerAction) -> Void
     ) {
-        self.banners = banners.map(BannerViewModel.init)
+        self.model = BannerViewModel(banner: banner)
         self.action = action
-        self.closeAction = closeAction
     }
 
     public var body: some View {
-        if banners.isNotEmpty {
-            VStack(spacing: .small) {
-                carouselTabView
-                if banners.count > 1 {
-                    carouselIndicators
-                }
+        ZStack(alignment: .topTrailing) {
+            switch model.viewType {
+            case .list: listView
+            case .banner: bannerView
+            }
+            
+            if model.canClose {
+                closeButton
+                    .padding([.top, .trailing], .medium)
             }
         }
     }
@@ -38,31 +36,9 @@ public struct BannerView: View {
 // MARK: - Private Views
 
 private extension BannerView {
-    var carouselTabView: some View {
-        TabView(selection: $currentIndex) {
-            ForEach(banners.indices, id: \.self) { index in
-                bannerView(for: banners[index])
-                    .tag(index)
-            }
-        }
-        .frame(height: .scene.bannerHeight)
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-    }
-    
-    @ViewBuilder
-    var carouselIndicators: some View {
-        HStack(spacing: .tiny) {
-            ForEach(0..<banners.count, id: \.self) { index in
-                Circle()
-                    .fill(index == currentIndex ? Colors.blue : Colors.gray.opacity(0.3))
-                    .frame(size: .space6)
-            }
-        }
-    }
-    
-    func bannerView(for model: BannerViewModel) -> some View {
+    private var listView: some View {
         Button(
-            action: { action(model.banner) },
+            action: { action(model.action) },
             label: {
                 HStack(spacing: 0) {
                     ListItemView(
@@ -71,20 +47,67 @@ private extension BannerView {
                         imageStyle: model.imageStyle
                     )
 
-                    if model.canClose {
-                        Spacer()
-
-                        ListButton(
-                            image: Images.System.xmarkCircle,
-                            action: { closeAction(model.banner) }
-                        )
-                        .padding(.vertical, .small)
-                        .foregroundColor(Colors.gray)
-                    }
+                    Spacer(minLength: model.canClose ? .extraLarge : .zero)
                 }
             }
         )
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.listStyleColor(glassEffect: .disabled))
+    }
+
+    private var bannerView: some View {
+        VStack(spacing: .medium) {
+            if let image = model.image {
+                AssetImageView(assetImage: image, size: model.imageSize)
+            }
+            
+            VStack(spacing: .small) {
+                if let title = model.title {
+                    Text(title)
+                        .textStyle(TextStyle(font: .body, color: .primary, fontWeight: .semibold))
+                }
+                
+                if let subtitle = model.description {
+                    Text(subtitle)
+                        .textStyle(.bodySecondary)
+                }
+            }
+            .multilineTextAlignment(.center)
+
+            HStack(spacing: .medium) {
+                ForEach(model.buttons) { button in
+                    Button {
+                        action(button.action)
+                    } label: {
+                        Text(button.title)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .buttonStyle(button.style)
+                }
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+    }
+    
+    private var closeButton: some View {
+        Button {
+            action(model.closeAction)
+        } label: {
+            Images.System.xmark
+                .resizable()
+                .frame(size: .small)
+                .symbolRenderingMode(.hierarchical)
+                .foregroundColor(Colors.gray)
+                .padding(.small)
+                .liquidGlass { _ in
+                    ListButton(
+                        image: Images.System.xmarkCircle,
+                        action: { action(model.closeAction) }
+                    )
+                    .foregroundColor(Colors.gray)
+                }
+        }
+        .buttonStyle(.borderless)
     }
 }
 

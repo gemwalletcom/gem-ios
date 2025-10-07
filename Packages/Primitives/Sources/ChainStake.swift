@@ -10,9 +10,11 @@ public enum StakeChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case injective
 	case sei
 	case celestia
+	case ethereum
 	case solana
 	case sui
 	case smartChain = "smartchain"
 	case tron
+	case aptos
 	case hyperCore = "hypercore"
 }

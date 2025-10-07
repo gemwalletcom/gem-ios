@@ -71,6 +71,10 @@ public extension Spacing {
 }
 
 public extension Sizing {
+    struct button {
+        public static let paddingHorizontal: CGFloat = .space12
+        public static let paddingVertical: CGFloat = .space12
+    }
     struct image {
         /// 10
         public static let tiny: CGFloat = 10

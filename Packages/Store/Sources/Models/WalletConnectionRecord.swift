@@ -19,8 +19,6 @@ public struct WalletConnectionRecord: Codable, FetchableRecord, PersistableRecor
         static let appDescription = Column("appDescription")
         static let appLink = Column("appLink")
         static let appIcon = Column("appIcon")
-        static let redirectNative = Column("redirectNative")
-        static let redirectUniversal = Column("redirectUniversal")
     }
 
     public var id: String
@@ -36,8 +34,6 @@ public struct WalletConnectionRecord: Codable, FetchableRecord, PersistableRecor
     public var appDescription: String
     public var appLink: String
     public var appIcon: String
-    public var redirectNative: String?
-    public var redirectUniversal: String?
 }
 
 extension WalletConnectionRecord: CreateTable {
@@ -68,8 +64,6 @@ extension WalletConnectionRecord: CreateTable {
                 .notNull()
             $0.column(Columns.appIcon.name, .text)
                 .notNull()
-            $0.column(Columns.redirectNative.name, .text)
-            $0.column(Columns.redirectUniversal.name, .text)
         }
     }
 }
@@ -86,9 +80,7 @@ extension WalletConnection {
             appName: session.metadata.name,
             appDescription: session.metadata.description,
             appLink: session.metadata.url,
-            appIcon: session.metadata.icon,
-            redirectNative: session.metadata.redirectNative,
-            redirectUniversal: session.metadata.redirectUniversal
+            appIcon: session.metadata.icon
         )
     }
 }
@@ -106,9 +98,7 @@ extension WalletConnectionRecord {
                 name: appName,
                 description: appDescription,
                 url: appLink,
-                icon: appIcon,
-                redirectNative: redirectNative,
-                redirectUniversal: redirectUniversal
+                icon: appIcon
             )
         )
     }
@@ -125,9 +115,7 @@ extension WalletConnectionRecord {
             appName: session.metadata.name,
             appDescription: session.metadata.description,
             appLink: session.metadata.url,
-            appIcon: session.metadata.icon,
-            redirectNative: session.metadata.redirectNative,
-            redirectUniversal: session.metadata.redirectUniversal
+            appIcon: session.metadata.icon
         )
     }
 }

@@ -15,43 +15,42 @@ struct AmountScene: View {
 
     public init(model: AmountSceneViewModel) {
         self.model = model
-        self.focusedField = focusedField
     }
 
     var body: some View {
         @Bindable var model = model
-        VStack {
-            List {
-                CurrencyInputValidationView(
-                    model: $model.amountInputModel,
-                    config: model.inputConfig,
-                    infoAction: model.infoAction(for:)
-                )
-                .padding(.top, .medium)
-                .listGroupRowStyle()
-                .disabled(model.isInputDisabled)
-                .focused($focusedField)
+        List {
+            CurrencyInputValidationView(
+                model: $model.amountInputModel,
+                config: model.inputConfig,
+                infoAction: model.infoAction(for:)
+            )
+            .padding(.top, .medium)
+            .listGroupRowStyle()
+            .disabled(model.isInputDisabled)
+            .focused($focusedField)
 
-                if model.isBalanceViewEnabled {
-                    Section {
-                        AssetBalanceView(
-                            image: model.assetImage,
-                            title: model.assetName,
-                            balance: model.balanceText,
-                            secondary: {
-                                Button(
-                                    model.maxTitle,
-                                    action: model.onSelectMaxButton
-                                )
-                                .buttonStyle(.lightGray(paddingHorizontal: .medium, paddingVertical: .small))
-                                .fixedSize()
-                            }
-                        )
-                    }
+            if model.isBalanceViewEnabled {
+                Section {
+                    AssetBalanceView(
+                        image: model.assetImage,
+                        title: model.assetName,
+                        balance: model.balanceText,
+                        secondary: {
+                            Button(
+                                model.maxTitle,
+                                action: model.onSelectMaxButton
+                            )
+                            .buttonStyle(.lightGray(paddingHorizontal: .medium, paddingVertical: .small))
+                            .fixedSize()
+                        }
+                    )
                 }
-                
-                if let infoText = model.infoText {
-                    Section {
+            }
+
+            if let infoText = model.infoText {
+                Section {
+                    Button(action: model.onSelectReservedFeesInfo) {
                         HStack {
                             Images.System.info
                                 .foregroundStyle(Colors.gray)
@@ -60,44 +59,54 @@ struct AmountScene: View {
                                 .textStyle(.calloutSecondary)
                         }
                     }
-                    .listRowInsets(.assetListRowInsets)
-                }
-
-                switch model.type {
-                case .transfer, .deposit, .withdraw:
-                    EmptyView()
-                case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
-                    if let viewModel = model.stakeValidatorViewModel  {
-                        Section(model.validatorTitle) {
-                            if model.isSelectValidatorEnabled {
-                                NavigationCustomLink(
-                                    with: ValidatorView(model: viewModel),
-                                    action: model.onSelectCurrentValidator
-                                )
-                            } else {
-                                ValidatorView(model: viewModel)
-                            }
-                        }
-                        .listRowInsets(.assetListRowInsets)
-                    }
-                case .perpetual:
-                    // PositionView()
-                    EmptyView()
                 }
             }
-            .contentMargins([.top], .zero, for: .scrollContent)
 
-            Spacer()
+            switch model.type {
+            case .transfer, .deposit, .withdraw:
+                EmptyView()
+            case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
+                if let viewModel = model.stakeValidatorViewModel {
+                    Section(model.validatorTitle) {
+                        if model.isSelectValidatorEnabled {
+                            NavigationCustomLink(
+                                with: ValidatorView(model: viewModel),
+                                action: model.onSelectCurrentValidator
+                            )
+                        } else {
+                            ValidatorView(model: viewModel)
+                        }
+                    }
+                }
+            case .freeze:
+                if model.isSelectResourceEnabled {
+                    Section {
+                        Picker("", selection: $model.selectedResource) {
+                            ForEach(model.availableResources) { resource in
+                                Text(resource.title).tag(resource)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 200)
+                    }
+                    .cleanListRow()
+                }
+            case .perpetual:
+                // PositionView()
+                EmptyView()
+            }
+        }
+        .safeAreaView {
             StateButton(
                 text: model.continueTitle,
                 type: .primary(model.actionButtonState),
                 action: model.onSelectNextButton
             )
             .frame(maxWidth: .scene.button.maxWidth)
+            .padding(.bottom, .scene.bottom)
         }
+        .contentMargins([.top], .zero, for: .scrollContent)
         .listSectionSpacing(.compact)
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
         .onAppear(perform: model.onAppear)

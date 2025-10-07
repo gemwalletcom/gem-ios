@@ -18,32 +18,11 @@ public struct ChainService {
         self.chain = chain
         self.url = url
     }
-}
-
-// MARK: - Factory
-
-extension ChainService {
+    
     public static func service(chain: Chain, with url: URL) -> ChainServiceable {
-        switch chain.type {
-        case .ethereum,
-            .sui,
-            .aptos,
-            .algorand,
-            .xrp,
-            .stellar,
-            .near,
-            .cosmos,
-            .ton,
-            .polkadot,
-            .bitcoin,
-            .cardano,
-            .tron,
-            .solana,
-            .hyperCore:
-            GatewayChainService(
-                chain: chain,
-                gateway: GatewayService(provider: NativeProvider(url: url))
-            )
-        }
+        GatewayChainService(
+            chain: chain,
+            gateway: GatewayService(provider: NativeProvider(url: url))
+        )
     }
 }

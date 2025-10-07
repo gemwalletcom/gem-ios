@@ -15,37 +15,32 @@ struct AcceptTermsScene: View {
     }
 
     var body: some View {
-        VStack(spacing: .medium) {
-            List {
-                CalloutView(style: .header(title: model.message))
-                    .cleanListRow()
-
-                ForEach($model.items) { $item in
-                    Section {
-                        Toggle(isOn: $item.isConfirmed) {
-                            Text(item.message)
-                                .textStyle(item.style)
-                        }
-                        .accessibilityIdentifier(item.id)
-                        .toggleStyle(CheckboxStyle(position: .left))
+        List {
+            CalloutView(style: .header(title: model.message))
+                .cleanListRow()
+            
+            ForEach($model.items) { $item in
+                Section {
+                    Toggle(isOn: $item.isConfirmed) {
+                        Text(item.message)
+                            .textStyle(item.style)
                     }
-                    .listRowInsets(.assetListRowInsets)
+                    .accessibilityIdentifier(item.id)
+                    .toggleStyle(CheckboxStyle(position: .left))
                 }
             }
-            .contentMargins([.top], .extraSmall, for: .scrollContent)
-            .listSectionSpacing(.custom(.medium))
-            
-            Spacer()
-            
+        }
+        .safeAreaView {
             StateButton(
                 text: Localized.Onboarding.AcceptTerms.continue,
                 type: .primary(model.state),
                 action: { model.onNext?() }
             )
             .frame(maxWidth: .scene.button.maxWidth)
+            .padding(.bottom, .scene.bottom)
         }
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
+        .contentMargins([.top], .extraSmall, for: .scrollContent)
+        .listSectionSpacing(.custom(.medium))
         .navigationTitle(model.title)
         .toolbarTitleDisplayMode(.inline)
         .toolbarInfoButton(url: model.termsAndServicesURL)

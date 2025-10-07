@@ -16,7 +16,7 @@ public struct SwapDetailsListView: View {
         HStack {
             ListItemView(title: Localized.Common.details)
             
-            Spacer()
+            Spacer(minLength: .extraSmall)
             
             if let rate = model.rateText {
                 HStack(spacing: .tiny) {

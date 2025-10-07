@@ -8,14 +8,24 @@ import Primitives
 
 public struct PriceAlertsRequest: ValueObservationQueryable {
     public static var defaultValue: [PriceAlertData] { [] }
+    
+    public let assetId: AssetId?
 
-    public init() {}
+    public init(assetId: AssetId? = nil) {
+        self.assetId = assetId
+    }
 
     public func fetch(_ db: Database) throws -> [PriceAlertData] {
-        try AssetRecord
+        var request = AssetRecord
             .including(required: AssetRecord.priceAlert)
             .including(optional: AssetRecord.price)
             .order(AssetRecord.Columns.rank.desc)
+            
+        if let assetId = assetId {
+            request = request.filter(AssetRecord.Columns.id == assetId.identifier)
+        }
+            
+        return try request
             .asRequest(of: PriceAlertInfo.self)
             .fetchAll(db)
             .map { $0.data }

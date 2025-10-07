@@ -73,8 +73,7 @@ struct SelectedAssetNavigationStack: View  {
                             onTransferAction: {
                                 navigationPath.append($0)
                             }
-                        ),
-                        onComplete: onComplete
+                        )
                     )
                 case .receive:
                     ReceiveScene(
@@ -89,7 +88,16 @@ struct SelectedAssetNavigationStack: View  {
                     FiatConnectNavigationView(
                         model: viewModelFactory.fiatScene(
                             assetAddress: input.assetAddress,
-                            walletId: wallet.walletId
+                            walletId: wallet.walletId,
+                            type: .buy
+                        )
+                    )
+                case .sell:
+                    FiatConnectNavigationView(
+                        model: viewModelFactory.fiatScene(
+                            assetAddress: input.assetAddress,
+                            walletId: wallet.walletId,
+                            type: .sell
                         )
                     )
                 case let .swap(fromAsset, toAsset):
@@ -105,20 +113,29 @@ struct SelectedAssetNavigationStack: View  {
                             onSwap: {
                                 navigationPath.append($0)
                             }
-                        ),
-                        onComplete: onComplete
+                        )
                     )
                 case .stake:
                     StakeNavigationView(
-                        wallet: wallet,
-                        assetId: input.asset.id,
-                        navigationPath: $navigationPath,
-                        onComplete: onComplete
+                        model: viewModelFactory.stakeScene(
+                            wallet: wallet,
+                            chain: input.asset.id.chain
+                        ),
+                        navigationPath: $navigationPath
                     )
                 }
             }
             .toolbarDismissItem(title: .done, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: TransferData.self) { data in
+                ConfirmTransferScene(
+                    model: viewModelFactory.confirmTransferScene(
+                        wallet: wallet,
+                        data: data,
+                        onComplete: onComplete
+                    )
+                )
+            }
         }
     }
 }

@@ -42,6 +42,7 @@ struct MainTabView: View {
     }
 
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
+    @State private var isPresentingSupport = false
 
     init(model: MainTabViewModel) {
         self.model = model
@@ -105,7 +106,8 @@ struct MainTabView: View {
 
             SettingsNavigationStack(
                 walletId: model.wallet.walletId,
-                priceService: priceService
+                priceService: priceService,
+                isPresentingSupport: $isPresentingSupport
             )
             .tabItem {
                 tabItem(Localized.Settings.title, Images.Tabs.settings)
@@ -214,6 +216,8 @@ extension MainTabView {
                     )
                 )
                 return
+            case .support:
+                isPresentingSupport = true
             case .test, .unknown:
                 break
             }
@@ -248,7 +252,7 @@ extension MainTabView {
 
     private func onComplete(type: SelectedAssetType) {
         switch type {
-        case .receive, .stake, .buy:
+        case .receive, .stake, .buy, .sell:
             isPresentingSelectedAssetInput = nil
         case let .send(type):
             switch type {
@@ -285,6 +289,7 @@ extension PushNotification {
     var selectTab: TabItem? {
         switch self {
         case .transaction, .asset, .priceAlert, .buyAsset, .swapAsset: .wallet
+        case .support: .settings
         case .test, .unknown: nil
         }
     }

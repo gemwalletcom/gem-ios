@@ -9,7 +9,7 @@ public extension TransferDataExtra {
         gasLimit: BigInt? = nil,
         gasPrice: GasPriceType? = nil,
         data: Data? = nil,
-        outputType: OutputType = .encodedTransaction
+        outputType: TransferDataOutputType = .encodedTransaction
     ) -> TransferDataExtra {
         TransferDataExtra(
             gasLimit: gasLimit,

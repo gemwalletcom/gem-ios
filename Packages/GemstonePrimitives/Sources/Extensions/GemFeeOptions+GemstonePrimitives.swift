@@ -11,7 +11,7 @@ public extension GemFeeOptions {
     }
     
     static func from(_ feeOptionMap: FeeOptionMap) -> GemFeeOptions {
-        var gemOptions: [GemFeeOption: String] = [:]
+        var gemOptions: [Gemstone.FeeOption: String] = [:]
         for (option, value) in feeOptionMap {
             switch option {
             case .tokenAccountCreation:
@@ -24,7 +24,7 @@ public extension GemFeeOptions {
     func map() throws -> FeeOptionMap {
         var feeOptions: FeeOptionMap = [:]
         for (option, value) in options {
-            let feeOption: FeeOption
+            let feeOption: Primitives.FeeOption
             switch option {
             case .tokenAccountCreation:
                 feeOption = .tokenAccountCreation

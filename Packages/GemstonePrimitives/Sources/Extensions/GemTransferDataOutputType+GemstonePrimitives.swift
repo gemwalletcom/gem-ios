@@ -4,8 +4,8 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemTransferDataOutputType {
-    public func map() -> TransferDataExtra.OutputType {
+extension Gemstone.TransferDataOutputType {
+    public func map() -> Primitives.TransferDataOutputType {
         switch self {
         case .encodedTransaction: .encodedTransaction
         case .signature: .signature
@@ -13,8 +13,8 @@ extension GemTransferDataOutputType {
     }
 }
 
-extension TransferDataExtra.OutputType {
-    public func map() -> GemTransferDataOutputType {
+extension Primitives.TransferDataOutputType {
+    public func map() -> Gemstone.TransferDataOutputType {
         switch self {
         case .encodedTransaction: .encodedTransaction
         case .signature: .signature

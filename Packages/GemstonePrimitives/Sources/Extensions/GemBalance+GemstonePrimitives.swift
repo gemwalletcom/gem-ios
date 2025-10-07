@@ -15,7 +15,8 @@ extension GemBalance {
             pending: try BigInt.from(string: pending),
             rewards: try BigInt.from(string: rewards),
             reserved: try BigInt.from(string: reserved),
-            withdrawable: try BigInt.from(string: withdrawable)
+            withdrawable: try BigInt.from(string: withdrawable),
+            metadata: metadata?.map()
         )
     }
 }

@@ -66,11 +66,21 @@ public struct BalanceStore: Sendable {
                         BalanceRecord.Columns.withdrawableAmount.set(to: balance.withdrawable.amount)
                     ]
                 }
-                
-                let defaultFields: [ColumnAssignment] = [
-                    BalanceRecord.Columns.updatedAt.set(to: balance.updatedAt),
-                    BalanceRecord.Columns.isActive.set(to: balance.isActive),
-                ]
+
+                let defaultFields: [ColumnAssignment] = try {
+                    var items: [ColumnAssignment] = [
+                        BalanceRecord.Columns.updatedAt.set(to: balance.updatedAt),
+                        BalanceRecord.Columns.isActive.set(to: balance.isActive),
+                    ]
+
+                    if let metadata = balance.type.metadataa {
+                        let metadataString = try JSONEncoder().encode(metadata).encodeString()
+                        items.append(BalanceRecord.Columns.metadata.set(to: metadataString))
+                    }
+                    return items
+                }()
+
+
                 let assignments = balanceFields + defaultFields
                 
                 try BalanceRecord

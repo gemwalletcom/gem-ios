@@ -4,11 +4,40 @@ import Foundation
 import Gemstone
 import Primitives
 
+extension GemDelegationState {
+    public func map() -> DelegationState {
+        switch self {
+        case .active: return .active
+        case .pending: return .pending
+        case .undelegating: return .undelegating
+        case .inactive: return .inactive
+        case .activating: return .activating
+        case .deactivating: return .deactivating
+        case .awaitingWithdrawal: return .awaitingWithdrawal
+        @unknown default: return .inactive
+        }
+    }
+}
+
+extension DelegationState {
+    public func map() -> GemDelegationState {
+        switch self {
+        case .active: return .active
+        case .pending: return .pending
+        case .undelegating: return .undelegating
+        case .inactive: return .inactive
+        case .activating: return .activating
+        case .deactivating: return .deactivating
+        case .awaitingWithdrawal: return .awaitingWithdrawal
+        }
+    }
+}
+
 extension GemDelegationBase {
     public func map() throws -> DelegationBase {
         DelegationBase(
             assetId: try AssetId(id: assetId),
-            state: try DelegationState(id: delegationState),
+            state: state.map(),
             balance: balance,
             shares: shares,
             rewards: rewards,
@@ -21,15 +50,15 @@ extension GemDelegationBase {
 
 extension DelegationBase {
     public func map() -> GemDelegationBase {
-        return GemDelegationBase(
+        GemDelegationBase(
             assetId: assetId.identifier,
-            delegationId: delegationId,
-            validatorId: validatorId,
+            state: state.map(),
             balance: balance,
             shares: shares,
-            completionDate: completionDate.map { UInt64($0.timeIntervalSince1970) },
-            delegationState: state.rawValue,
-            rewards: rewards
+            rewards: rewards,
+            completionDate: completionDate.map { Int64($0.timeIntervalSince1970) },
+            delegationId: delegationId,
+            validatorId: validatorId
         )
     }
 }

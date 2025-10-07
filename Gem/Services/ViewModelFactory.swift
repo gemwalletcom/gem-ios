@@ -132,11 +132,13 @@ public struct ViewModelFactory: Sendable {
     @MainActor
     public func fiatScene(
         assetAddress: AssetAddress,
-        walletId: WalletId
+        walletId: WalletId,
+        type: FiatQuoteType = .buy
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
             assetAddress: assetAddress,
-            walletId: walletId.id
+            walletId: walletId.id,
+            type: type
         )
     }
     
@@ -153,7 +155,19 @@ public struct ViewModelFactory: Sendable {
             onSwap: onSwap
         )
     }
-    
+
+    @MainActor
+    public func stakeScene(
+        wallet: Wallet,
+        chain: Chain
+    ) -> StakeSceneViewModel {
+        StakeSceneViewModel(
+            wallet: wallet,
+            chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
+            stakeService: stakeService
+        )
+    }
+
     @MainActor
     public func signMessageScene(
         payload: SignMessagePayload,

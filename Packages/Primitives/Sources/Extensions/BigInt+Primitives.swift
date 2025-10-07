@@ -27,6 +27,11 @@ public extension BigInt {
         return self * BigInt(multiplier) / 100
     }
     
+    func decrease(byPercent percent: Int) -> BigInt {
+        let multiplier = 100 - percent
+        return self * BigInt(multiplier) / 100
+    }
+    
     func multiply(byPercent percent: Int) -> BigInt {
         self * BigInt(percent) / 100
     }

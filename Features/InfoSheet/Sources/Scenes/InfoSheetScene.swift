@@ -16,34 +16,33 @@ public struct InfoSheetScene: View {
     }
 
     public var body: some View {
-        InfoSheetView(model: model)
-            .frame(
-                maxWidth: .infinity,
-                maxHeight: .infinity
-            )
-            .padding(.horizontal, .medium)
-            .safeAreaInset(edge: .top, alignment: .trailing) {
-                closeButton
-                    .padding([.trailing, .top], .medium)
-            }
-            .if(model.shouldShowButton) {
-                $0.safeAreaInset(edge: .bottom) {
-                    actionButton
-                        .padding([.bottom], .medium)
+        NavigationStack {
+            InfoSheetView(model: model)
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity
+                )
+                .padding(.horizontal, .medium)
+                .toolbar(content: {
+                    Button("", systemImage: SystemImage.xmark) {
+                        dismiss()
+                    }
+                    .liquidGlass { view in
+                        view
+                            .buttonStyle(.bordered)
+                            .buttonBorderShape(.circle)
+                            .padding(.top, .medium)
+                    }
+                })
+                .if(model.shouldShowButton) {
+                    $0.safeAreaInset(edge: .bottom) {
+                        actionButton
+                            .padding([.bottom], .medium)
+                    }
                 }
-            }
-            .presentationDetentsForCurrentDeviceSize()
-            .safariSheet(url: $isPresentedUrl)
-    }
-
-    private var closeButton: some View {
-        Button(action: onClose) {
-            Images.System.xmarkCircle
-                .symbolRenderingMode(.hierarchical)
-                .font(.system(size: .large, weight: .bold))
-                .foregroundStyle(.secondary)
+                .presentationDetentsForCurrentDeviceSize()
+                .safariSheet(url: $isPresentedUrl)
         }
-        .buttonStyle(.plain)
     }
     
     private var actionButton: some View {

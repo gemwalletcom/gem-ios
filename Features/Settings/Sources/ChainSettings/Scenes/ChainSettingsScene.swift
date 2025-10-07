@@ -44,7 +44,6 @@ public struct ChainSettingsScene: View {
                     }
                 }
             }
-            .listRowInsets(.assetListRowInsets)
             
             Section(model.explorerTitle) {
                 ForEach(model.explorers, id: \.self) { explorer in
@@ -61,12 +60,11 @@ public struct ChainSettingsScene: View {
                     )
                 }
             }
-            .listRowInsets(.assetListRowInsets)
         }
         .refreshable {
             await model.fetch()
         }
-        .confirmationDialog(
+        .alert(
             model.deleteConfirmationTitle(for: model.nodeDelete?.host ?? ""),
             presenting: $model.nodeDelete,
             sensoryFeedback: .warning,

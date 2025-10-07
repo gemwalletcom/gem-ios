@@ -56,15 +56,15 @@ struct WalletConnectorNavigationStack: View {
                 }
             }
             .interactiveDismissDisabled(true)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button(Localized.Common.cancel) {
                         presenter.cancelSheet(type: type)
                     }
                     .bold()
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

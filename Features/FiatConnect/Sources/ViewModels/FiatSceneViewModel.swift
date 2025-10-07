@@ -41,7 +41,8 @@ public final class FiatSceneViewModel {
         fiatService: any GemAPIFiatService = GemAPIService(),
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
-        walletId: String
+        walletId: String,
+        type: FiatQuoteType = .buy
     ) {
         self.fiatService = fiatService
         self.currencyFormatter = currencyFormatter
@@ -224,7 +225,7 @@ extension FiatSceneViewModel {
                 let request = FiatQuoteRequest(
                     assetId: asset.id.identifier,
                     type: input.type,
-                    fiatCurrency: currencyFormatter.currencyCode,
+                    fiatCurrency: try Currency(id: currencyFormatter.currencyCode),
                     fiatAmount: input.type == .buy ? input.amount : nil,
                     cryptoValue: amountFormatter.formatCryptoValue(fiatAmount: input.amount, type: input.type),
                     walletAddress: assetAddress.address

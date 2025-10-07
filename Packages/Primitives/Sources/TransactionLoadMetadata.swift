@@ -2,6 +2,31 @@
 
 import Foundation
 
+public struct HyperliquidOrder: Sendable {
+    public let approveAgentRequired: Bool
+    public let approveReferralRequired: Bool
+    public let approveBuilderRequired: Bool
+    public let builderFeeBps: UInt32
+    public let agentAddress: String
+    public let agentPrivateKey: String
+
+    public init(
+        approveAgentRequired: Bool,
+        approveReferralRequired: Bool,
+        approveBuilderRequired: Bool,
+        builderFeeBps: UInt32,
+        agentAddress: String,
+        agentPrivateKey: String
+    ) {
+        self.approveAgentRequired = approveAgentRequired
+        self.approveReferralRequired = approveReferralRequired
+        self.approveBuilderRequired = approveBuilderRequired
+        self.builderFeeBps = builderFeeBps
+        self.agentAddress = agentAddress
+        self.agentPrivateKey = agentPrivateKey
+    }
+}
+
 public enum TransactionLoadMetadata: Sendable {
     case none
     case solana(
@@ -21,8 +46,9 @@ public enum TransactionLoadMetadata: Sendable {
         chainId: String
     )
     case bitcoin(utxos: [UTXO])
+    case zcash(utxos: [UTXO], branchId: String)
     case cardano(utxos: [UTXO])
-    case evm(nonce: UInt64, chainId: UInt64)
+    case evm(nonce: UInt64, chainId: UInt64, stakeData: StakeData? = nil)
     case near(
         sequence: UInt64,
         blockHash: String
@@ -34,7 +60,7 @@ public enum TransactionLoadMetadata: Sendable {
         blockHash: String,
         chainId: String
     )
-    case aptos(sequence: UInt64)
+    case aptos(sequence: UInt64, data: String? = nil)
     case polkadot(
         sequence: UInt64,
         genesisHash: String,
@@ -54,14 +80,7 @@ public enum TransactionLoadMetadata: Sendable {
         votes: [String: UInt64]
     )
     case sui(messageBytes: String)
-    case hyperliquid(
-        approveAgentRequired: Bool,
-        approveReferralRequired: Bool,
-        approveBuilderRequired: Bool,
-        builderFeeBps: UInt32,
-        agentAddress: String,
-        agentPrivateKey: String
-    )
+    case hyperliquid(order: HyperliquidOrder?)
 }
 
 extension TransactionLoadMetadata {
@@ -73,11 +92,11 @@ extension TransactionLoadMetadata {
              .stellar(let sequence, _),
              .xrp(let sequence, _),
              .algorand(let sequence, _, _),
-             .aptos(let sequence),
+             .aptos(let sequence, _),
              .polkadot(let sequence, _, _, _, _, _, _),
-             .evm(let sequence, _):
+             .evm(let sequence, _, _):
             return sequence
-        case .none, .bitcoin, .cardano, .tron, .solana, .sui, .hyperliquid:
+        case .none, .bitcoin, .zcash, .cardano, .tron, .solana, .sui, .hyperliquid:
             throw AnyError("Sequence not available for this metadata type")
         }
     }
@@ -111,7 +130,7 @@ extension TransactionLoadMetadata {
             return chainId
         case .algorand(_, _, let chainId):
             return chainId
-        case .evm(_, let chainId):
+        case .evm(_, let chainId, _):
             return String(chainId)
         default:
             throw AnyError("Chain ID not available for this metadata type")
@@ -121,6 +140,7 @@ extension TransactionLoadMetadata {
     public func getUtxos() throws -> [UTXO] {
         switch self {
         case .bitcoin(let utxos),
+             .zcash(let utxos, _),
              .cardano(let utxos):
             return utxos
         default:
@@ -171,5 +191,16 @@ extension TransactionLoadMetadata {
         default:
             throw AnyError("Votes not available for this metadata type")
         }
+    }
+    
+    public func getData() throws -> String {
+        let data: String? = switch self {
+        case .aptos(_, let data): data
+        default: .none
+        }
+        guard let data = data else {
+            throw AnyError("Data not available for this metadata type")
+        }
+        return data
     }
 }

@@ -22,87 +22,85 @@ struct RecipientScene: View {
 
     var body: some View {
         @Bindable var model = model
-        VStack {
-            List {
-                Section {
-                    InputValidationField(
-                        model: $model.addressInputModel,
-                        placeholder: model.recipientField,
-                        allowClean: true,
-                        trailingView: {
-                            HStack(spacing: .large/2) {
-                                NameRecordView(
-                                    model: model.nameRecordViewModel,
-                                    state: $model.nameResolveState,
-                                    address: $model.addressInputModel.text
+        List {
+            Section {
+                InputValidationField(
+                    model: $model.addressInputModel,
+                    placeholder: model.recipientField,
+                    allowClean: true,
+                    trailingView: {
+                        HStack(spacing: .large/2) {
+                            NameRecordView(
+                                model: model.nameRecordViewModel,
+                                state: $model.nameResolveState,
+                                address: $model.addressInputModel.text
+                            )
+                            if model.shouldShowInputActions {
+                                ListButton(
+                                    image: model.pasteImage,
+                                    action: { model.onSelectPaste(field: .address) }
                                 )
-                                if model.shouldShowInputActions {
-                                    ListButton(
-                                        image: model.pasteImage,
-                                        action: { model.onSelectPaste(field: .address) }
-                                    )
-                                    ListButton(
-                                        image: model.qrImage,
-                                        action: { model.onSelectScan(field: .address) }
-                                    )
-                                }
+                                ListButton(
+                                    image: model.qrImage,
+                                    action: { model.onSelectScan(field: .address) }
+                                )
                             }
                         }
+                    }
+                )
+                .focused($focusedField, equals: .address)
+                .keyboardType(.alphabet)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+            }
+            
+            if model.showMemo {
+                Section {
+                    FloatTextField(
+                        model.memoField,
+                        text: $model.memo,
+                        allowClean: focusedField == .memo,
+                        trailingView: {
+                            ListButton(
+                                image: model.qrImage,
+                                action: { model.onSelectScan(field: .memo) }
+                            )
+                        }
                     )
-                    .focused($focusedField, equals: .address)
+                    .focused($focusedField, equals: .memo)
                     .keyboardType(.alphabet)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                 }
-
-                if model.showMemo {
-                    Section {
-                        FloatTextField(
-                            model.memoField,
-                            text: $model.memo,
-                            allowClean: focusedField == .memo,
-                            trailingView: {
-                                ListButton(
-                                    image: model.qrImage,
-                                    action: { model.onSelectScan(field: .memo) }
-                                )
-                            }
+            }
+            
+            ForEach(model.recipientSections) { section in
+                Section {
+                    ForEach(section.values) { item in
+                        NavigationCustomLink(
+                            with: ListItemView(title: item.value.name),
+                            action: { model.onSelectRecipient(item.value) }
                         )
-                        .focused($focusedField, equals: .memo)
-                        .keyboardType(.alphabet)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
                     }
-                }
-
-                ForEach(model.recipientSections) { section in
-                    Section {
-                        ForEach(section.values) { item in
-                            NavigationCustomLink(
-                                with: ListItemView(title: item.value.name),
-                                action: { model.onSelectRecipient(item.value) }
-                            )
-                        }
-                    } header: {
-                        Label {
-                            Text(section.section)
-                        } icon: {
-                            section.image
-                        }
+                } header: {
+                    HStack {
+                        section.image
+                            .frame(size: .image.small)
+                        Text(section.section)
                     }
                 }
             }
-            Spacer()
+        }
+        .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.actionButtonState),
                 action: model.onContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)
+            .padding(.bottom, .scene.bottom)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
-        .padding(.bottom, .scene.bottom)
-        .background(Colors.grayBackground)
         .navigationTitle(model.tittle)
         .onChange(of: model.addressInputModel.text, model.onChangeAddressText)
         .onChange(of: model.nameResolveState, model.onChangeNameResolverState)

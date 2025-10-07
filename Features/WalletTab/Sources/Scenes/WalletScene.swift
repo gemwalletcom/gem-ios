@@ -34,25 +34,19 @@ public struct WalletScene: View {
             if ($preferences.isDeveloperEnabled.wrappedValue || preferences.preferences.isPerpetualEnabled) && model.wallet.isMultiCoins {
                 Section {
                     PerpetualsPreviewView(wallet: model.wallet)
-                        .listRowInsets(.assetListRowInsets)
                 } header: {
-                    HStack {
-                        Text("PERPETUALS")
-                        Spacer()
-                        NavigationLink(value: Scenes.Perpetuals()) {
-                            SectionHeaderActionView(title: Localized.Common.manage)
-                        }
-                        .buttonStyle(.borderless)
-                    }
+                    HeaderNavigationLinkView(title: "Perpetuals", destination: Scenes.Perpetuals())
                 }
             }
             
-            Section {
-                BannerView(
-                    banners: model.banners,
-                    action: model.onBannerAction,
-                    closeAction: model.onCloseBanner
-                )
+            if let banner = model.walletBannersModel.priorityBanner {
+                Section {
+                    BannerView(
+                        banner: banner,
+                        action: model.onBanner
+                    )
+                }
+                .listRowInsets(.zero)
             }
 
             if model.showPinnedSection {
@@ -62,6 +56,7 @@ public struct WalletScene: View {
                         currencyCode: model.currencyCode,
                         onHideAsset: model.onHideAsset,
                         onPinAsset: model.onPinAsset,
+                        onCopyAddress: model.onCopyAddress,
                         showBalancePrivacy: $preferences.isHideBalanceEnabled
                     )
                     .listRowInsets(.assetListRowInsets)
@@ -79,6 +74,7 @@ public struct WalletScene: View {
                     currencyCode: model.currencyCode,
                     onHideAsset: model.onHideAsset,
                     onPinAsset: model.onPinAsset,
+                    onCopyAddress: model.onCopyAddress,
                     showBalancePrivacy: $preferences.isHideBalanceEnabled
                 )
                 .listRowInsets(.assetListRowInsets)

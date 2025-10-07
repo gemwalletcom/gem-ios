@@ -15,10 +15,14 @@ public struct OnboardingScene: View {
         VStack {
             Spacer()
             VStack(alignment: .center, spacing: 24) {
-                Button(model.createWalletTitle, action: model.onCreateWallet)
-                    .buttonStyle(.blue())
-                Button(model.importWalletTitle, action: model.onImportWallet)
-                    .buttonStyle(.blue())
+                StateButton(
+                    text: model.createWalletTitle,
+                    action: model.onCreateWallet
+                )
+                StateButton(
+                    text: model.importWalletTitle,
+                    action: model.onImportWallet
+                )
             }
             .frame(maxWidth: .scene.button.maxWidth)
             .padding(.scene.bottom * 2)
