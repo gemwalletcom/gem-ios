@@ -8,6 +8,7 @@ import Components
 import Localization
 import Style
 import Assets
+import AssetsService
 
 struct CollectionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -65,7 +66,7 @@ struct CollectionsNavigationStack: View {
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             selectType: $0,
-                            assetsService: assetsService,
+                            searchService: AssetSearchService(assetsService: assetsService),
                             walletsService: walletsService,
                             priceAlertService: priceAlertService
                         ),

@@ -1,24 +1,23 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import PrimitivesComponents
 import Primitives
 
-struct SelectAssetSearchViewModel {
-    enum Focus {
+public struct AssetSearchViewModel {
+    public enum Focus {
         case search
         case tags
     }
 
-    var tagsViewModel: AssetTagsViewModel
-    var searchableQuery: String = .empty
-    var focus: Focus = .search
-    
-    init(selectType: SelectAssetType) {
+    public var tagsViewModel: AssetTagsViewModel
+    public var searchableQuery: String = .empty
+    public var focus: Focus = .search
+
+    public init(selectType: SelectAssetType) {
         tagsViewModel = AssetTagsViewModel(selectType: selectType)
     }
 
-    var priorityAssetsQuery: String? {
+    public var priorityAssetsQuery: String? {
         switch focus {
         case .search: searchableQuery
         case .tags: tagsViewModel.query
