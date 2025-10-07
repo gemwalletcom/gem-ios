@@ -60,7 +60,7 @@ public enum TransactionLoadMetadata: Sendable {
         blockHash: String,
         chainId: String
     )
-    case aptos(sequence: UInt64)
+    case aptos(sequence: UInt64, data: String? = nil)
     case polkadot(
         sequence: UInt64,
         genesisHash: String,
@@ -92,7 +92,7 @@ extension TransactionLoadMetadata {
              .stellar(let sequence, _),
              .xrp(let sequence, _),
              .algorand(let sequence, _, _),
-             .aptos(let sequence),
+             .aptos(let sequence, _),
              .polkadot(let sequence, _, _, _, _, _, _),
              .evm(let sequence, _, _):
             return sequence
@@ -191,5 +191,16 @@ extension TransactionLoadMetadata {
         default:
             throw AnyError("Votes not available for this metadata type")
         }
+    }
+    
+    public func getData() throws -> String {
+        let data: String? = switch self {
+        case .aptos(_, let data): data
+        default: .none
+        }
+        guard let data = data else {
+            throw AnyError("Data not available for this metadata type")
+        }
+        return data
     }
 }

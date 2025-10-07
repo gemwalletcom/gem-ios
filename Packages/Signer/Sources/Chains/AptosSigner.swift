@@ -79,4 +79,13 @@ public struct AptosSigner: Signable {
             try sign(payload: .anyData(data.data.data), input: input, privateKey: privateKey)
         ]
     }
+
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard case .aptos(_, let data) = input.metadata, let stakeData = data else {
+            throw AnyError("Invalid metadata for Aptos staking")
+        }
+        return [
+            try sign(payload: .anyData(try input.metadata.getData()), input: input, privateKey: privateKey)
+        ]
+    }
 }

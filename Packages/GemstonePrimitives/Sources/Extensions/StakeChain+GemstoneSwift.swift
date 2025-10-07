@@ -2,9 +2,26 @@
 
 import Foundation
 import Primitives
-import class Gemstone.Config
+import Gemstone
 
 extension StakeChain {
+    public func map() -> GemStakeChain {
+        switch self {
+        case .cosmos: .cosmos
+        case .osmosis: .osmosis
+        case .injective: .injective
+        case .sei: .sei
+        case .celestia: .celestia
+        case .ethereum: .ethereum
+        case .solana: .solana
+        case .sui: .sui
+        case .smartChain: .smartChain
+        case .tron: .tron
+        case .aptos: .aptos
+        case .hyperCore: .hyperCore
+        }
+    }
+
     public var canChangeAmountOnUnstake: Bool {
         Config.shared.getStakeConfig(chain: rawValue).changeAmountOnUnstake
     }

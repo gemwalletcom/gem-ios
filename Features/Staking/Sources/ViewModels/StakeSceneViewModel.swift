@@ -45,7 +45,12 @@ public final class StakeSceneViewModel {
         self.assetRequest = AssetRequest(walletId: wallet.id, assetId: chain.assetId)
     }
 
-    public var stakeInfoUrl: URL { Docs.url(.staking) }
+    public var stakeInfoUrl: URL {
+        guard let stakeChain = assetModel.asset.chain.stakeChain else {
+            return Docs.url(.start)
+        }
+        return Docs.url(.staking(stakeChain.map()))
+    }
 
     var title: String { Localized.Transfer.Stake.title }
 
