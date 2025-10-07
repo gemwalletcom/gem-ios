@@ -1,11 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import enum Gemstone.GemStakeChain
 import Primitives
+import Gemstone
+import BigInt
 
-public extension StakeChain {
-    func map() -> GemStakeChain {
+extension StakeChain {
+    public func map() -> GemStakeChain {
         switch self {
         case .cosmos: .cosmos
         case .osmosis: .osmosis
@@ -17,7 +18,32 @@ public extension StakeChain {
         case .sui: .sui
         case .smartChain: .smartChain
         case .tron: .tron
+        case .aptos: .aptos
         case .hyperCore: .hyperCore
         }
+    }
+    
+    public var lockTime: TimeInterval {
+        Double(Config.shared.getStakeConfig(chain: rawValue).timeLock)
+    }
+
+    public var minAmount: BigInt {
+        BigInt(Config.shared.getStakeConfig(chain: rawValue).minAmount)
+    }
+
+    public var canChangeAmountOnUnstake: Bool {
+        Config.shared.getStakeConfig(chain: rawValue).changeAmountOnUnstake
+    }
+    
+    public var supportRedelegate: Bool {
+        Config.shared.getStakeConfig(chain: rawValue).canRedelegate
+    }
+    
+    public var supportWidthdraw: Bool {
+        Config.shared.getStakeConfig(chain: rawValue).canWithdraw
+    }
+    
+    public var supportClaimRewards: Bool {
+        Config.shared.getStakeConfig(chain: rawValue).canClaimRewards
     }
 }
