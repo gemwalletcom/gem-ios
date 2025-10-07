@@ -78,7 +78,7 @@ public struct WalletSearchScene: View {
                                 showBalancePrivacy: .constant(false),
                                 assetData: asset,
                                 formatter: .abbreviated,
-                                currencyCode: "USD"
+                                currencyCode: model.currencyCode
                             )
                         )
                     }

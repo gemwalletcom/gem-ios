@@ -61,6 +61,10 @@ public final class WalletSearchSceneViewModel: Sendable {
         sections.assets.isEmpty
     }
 
+    var currencyCode: String {
+        preferences.currency
+    }
+
     func onAppear() {
         dismissSearch = false
         isSearchPresented = true
