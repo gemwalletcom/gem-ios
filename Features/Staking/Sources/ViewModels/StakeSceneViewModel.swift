@@ -73,13 +73,13 @@ public final class StakeSceneViewModel {
     var freezeTitle: String { Localized.Transfer.Freeze.title }
     var unfreezeTitle: String { Localized.Transfer.Unfreeze.title }
 
-
     var lockTimeTitle: String { Localized.Stake.lockTime }
     var lockTimeValue: String {
         let now = Date.now
         let date = now.addingTimeInterval(lockTime)
         return Self.lockTimeFormatter.string(from: now, to: date) ?? .empty
     }
+
     var lockTimeInfoSheet: InfoSheetType {
         InfoSheetType.stakeLockTime(assetModel.assetImage.placeholder)
     }
@@ -97,7 +97,7 @@ public final class StakeSceneViewModel {
     var showManage: Bool {
         !wallet.isViewOnly
     }
-    
+
     var recommendedCurrentValidator: DelegationValidator? {
         guard let validatorId = recommendedValidators.randomValidatorId(chain: chain) else { return .none }
         return try? stakeService.getValidator(assetId: asset.id, validatorId: validatorId)
@@ -109,7 +109,7 @@ public final class StakeSceneViewModel {
 
     var delegationsState: StateViewType<[StakeDelegationViewModel]> {
         let delegationModels = delegations.map { StakeDelegationViewModel(delegation: $0) }
-        
+
         switch delegatitonsState {
         case .noData: return .noData
         case .loading: return delegationModels.isEmpty ? .loading : .data(delegationModels)
@@ -117,13 +117,13 @@ public final class StakeSceneViewModel {
         case .error(let error): return .error(error)
         }
     }
-    
+
     var claimRewardsText: String {
         formatter.string(rewardsValue, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
     var claimRewardsDestination: (any Hashable)? {
-        guard rewardsValue > 0 && ![Chain.solana, Chain.sui].contains(chain) else { return nil }
+        guard rewardsValue > 0, ![Chain.ethereum, Chain.solana, Chain.sui].contains(chain) else { return nil }
 
         let validators = delegations
             .filter { $0.base.rewardsValue > 0 }
@@ -198,7 +198,7 @@ extension StakeSceneViewModel {
             delegatitonsState = .error(error)
         }
     }
-    
+
     func onLockTimeInfo() {
         isPresentingInfoSheet = lockTimeInfoSheet
     }
