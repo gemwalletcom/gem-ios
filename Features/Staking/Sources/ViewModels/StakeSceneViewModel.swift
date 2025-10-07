@@ -46,7 +46,7 @@ public final class StakeSceneViewModel {
     }
 
     public var stakeInfoUrl: URL {
-        return Docs.url(.staking(chain.map()))
+        Docs.url(.staking(chain.map()))
     }
 
     var title: String { Localized.Transfer.Stake.title }
@@ -79,7 +79,7 @@ public final class StakeSceneViewModel {
     var lockTimeTitle: String { Localized.Stake.lockTime }
     var lockTimeValue: String {
         let now = Date.now
-        let date = now.addingTimeInterval(lockTime)
+        let date = now.addingTimeInterval(chain.lockTime)
         return Self.lockTimeFormatter.string(from: now, to: date) ?? .empty
     }
     var lockTimeInfoSheet: InfoSheetType {
@@ -88,8 +88,8 @@ public final class StakeSceneViewModel {
 
     var minAmountTitle: String { Localized.Stake.minimumAmount }
     var minAmountValue: String? {
-        guard minAmount != 0 else { return .none }
-        return formatter.string(minAmount, decimals: Int(asset.decimals), currency: asset.symbol)
+        guard chain.minAmount != 0 else { return .none }
+        return formatter.string(chain.minAmount, decimals: Int(asset.decimals), currency: asset.symbol)
     }
 
     var delegationsErrorTitle: String { Localized.Errors.errorOccured }
@@ -217,14 +217,6 @@ extension StakeSceneViewModel {
         formatter.unitsStyle = .full
         return formatter
     }()
-
-    private var lockTime: TimeInterval {
-        Double(StakeConfig.config(chain: chain).timeLock)
-    }
-
-    private var minAmount: BigInt {
-        BigInt(StakeConfig.config(chain: chain).minAmount)
-    }
 
     private var assetModel: AssetViewModel {
         AssetViewModel(asset: asset)
