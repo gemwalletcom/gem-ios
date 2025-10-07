@@ -46,6 +46,7 @@ public enum TransactionLoadMetadata: Sendable {
         chainId: String
     )
     case bitcoin(utxos: [UTXO])
+    case zcash(utxos: [UTXO], branchId: String)
     case cardano(utxos: [UTXO])
     case evm(nonce: UInt64, chainId: UInt64, stakeData: StakeData? = nil)
     case near(
@@ -59,7 +60,7 @@ public enum TransactionLoadMetadata: Sendable {
         blockHash: String,
         chainId: String
     )
-    case aptos(sequence: UInt64)
+    case aptos(sequence: UInt64, data: String? = nil)
     case polkadot(
         sequence: UInt64,
         genesisHash: String,
@@ -91,11 +92,11 @@ extension TransactionLoadMetadata {
              .stellar(let sequence, _),
              .xrp(let sequence, _),
              .algorand(let sequence, _, _),
-             .aptos(let sequence),
+             .aptos(let sequence, _),
              .polkadot(let sequence, _, _, _, _, _, _),
              .evm(let sequence, _, _):
             return sequence
-        case .none, .bitcoin, .cardano, .tron, .solana, .sui, .hyperliquid:
+        case .none, .bitcoin, .zcash, .cardano, .tron, .solana, .sui, .hyperliquid:
             throw AnyError("Sequence not available for this metadata type")
         }
     }
@@ -139,6 +140,7 @@ extension TransactionLoadMetadata {
     public func getUtxos() throws -> [UTXO] {
         switch self {
         case .bitcoin(let utxos),
+             .zcash(let utxos, _),
              .cardano(let utxos):
             return utxos
         default:
@@ -189,5 +191,16 @@ extension TransactionLoadMetadata {
         default:
             throw AnyError("Votes not available for this metadata type")
         }
+    }
+    
+    public func getData() throws -> String {
+        let data: String? = switch self {
+        case .aptos(_, let data): data
+        default: .none
+        }
+        guard let data = data else {
+            throw AnyError("Data not available for this metadata type")
+        }
+        return data
     }
 }

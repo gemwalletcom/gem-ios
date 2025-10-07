@@ -335,7 +335,7 @@ extension AmountSceneViewModel {
 
     private func recipientAddress(chain: StakeChain?, validatorId: String) -> String {
         switch chain {
-        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron, .smartChain, .ethereum: validatorId
+        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron, .smartChain, .ethereum, .aptos: validatorId
         case .none, .some(.hyperCore): ""
         }
     }

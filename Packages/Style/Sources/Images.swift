@@ -57,6 +57,7 @@ public enum Images {
         public static let hyperliquid = Image(.hyperliquid)
         public static let monad = Image(.monad)
         public static let plasma = Image(.plasma)
+        public static let zcash = Image(.zcash)
     }
 
     public enum SwapProviders {

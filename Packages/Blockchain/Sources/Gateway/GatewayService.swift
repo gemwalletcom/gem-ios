@@ -71,7 +71,7 @@ extension GatewayService {
             }
         }
         return TransactionChanges(
-            state: try TransactionState(id: update.state),
+            state: update.state.map(),
             changes: changes
         )
     }
