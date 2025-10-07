@@ -60,6 +60,8 @@ final class Chain_WalletCorePrimitiveTests {
             expected = .polkadot
         case .cardano:
             expected = .cardano
+        case .zcash:
+            expected = .zcash
         }
 
         #expect(chain.coinType == expected)
