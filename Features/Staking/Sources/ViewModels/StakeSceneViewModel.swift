@@ -46,8 +46,8 @@ public final class StakeSceneViewModel {
     }
 
     public var stakeInfoUrl: URL? {
-        guard let stakeChain = chain.stakeChain?.rawValue else { return nil }
-        return Docs.url(.staking(stakeChain))
+        guard let stakeChain = chain.stakeChain else { return nil }
+        return Docs.url(.staking(stakeChain.map()))
     }
 
     var title: String { Localized.Transfer.Stake.title }
