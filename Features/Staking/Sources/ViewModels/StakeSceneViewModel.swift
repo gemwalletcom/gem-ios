@@ -19,7 +19,7 @@ public final class StakeSceneViewModel {
     private let stakeService: any StakeServiceable
 
     private var delegatitonsState: StateViewType<Bool> = .loading
-    private let chain: Chain
+    private let chain: StakeChain
 
     private let formatter = ValueFormatter(style: .medium)
     private let recommendedValidators = StakeRecommendedValidators()
@@ -35,21 +35,18 @@ public final class StakeSceneViewModel {
 
     public init(
         wallet: Wallet,
-        chain: Chain,
+        chain: StakeChain,
         stakeService: any StakeServiceable
     ) {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
-        self.request = StakeDelegationsRequest(walletId: wallet.id, assetId: chain.id)
-        self.assetRequest = AssetRequest(walletId: wallet.id, assetId: chain.assetId)
+        self.request = StakeDelegationsRequest(walletId: wallet.id, assetId: chain.chain.id)
+        self.assetRequest = AssetRequest(walletId: wallet.id, assetId: chain.chain.assetId)
     }
 
     public var stakeInfoUrl: URL {
-        guard let stakeChain = assetModel.asset.chain.stakeChain else {
-            return Docs.url(.start)
-        }
-        return Docs.url(.staking(stakeChain.map()))
+        return Docs.url(.staking(chain.map()))
     }
 
     var title: String { Localized.Transfer.Stake.title }
@@ -60,7 +57,7 @@ public final class StakeSceneViewModel {
 
     var stakeAprTitle: String { Localized.Stake.apr("") }
     var stakeAprValue: String {
-        let apr = (try? stakeService.stakeApr(assetId: chain.assetId)) ?? 0
+        let apr = (try? stakeService.stakeApr(assetId: chain.chain.assetId)) ?? 0
         guard apr > 0 else {
             return .empty
         }
@@ -104,7 +101,7 @@ public final class StakeSceneViewModel {
     }
     
     var recommendedCurrentValidator: DelegationValidator? {
-        guard let validatorId = recommendedValidators.randomValidatorId(chain: chain) else { return .none }
+        guard let validatorId = recommendedValidators.randomValidatorId(chain: chain.chain) else { return .none }
         return try? stakeService.getValidator(assetId: asset.id, validatorId: validatorId)
     }
 
@@ -127,15 +124,17 @@ public final class StakeSceneViewModel {
         formatter.string(rewardsValue, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
-    var claimRewardsDestination: (any Hashable)? {
-        guard rewardsValue > 0 && ![Chain.solana, Chain.sui].contains(chain) else { return nil }
-
+    var canClaimRewards: Bool {
+        chain.supportClaimRewards && rewardsValue > 0
+    }
+    
+    var claimRewardsDestination: any Hashable {
         let validators = delegations
             .filter { $0.base.rewardsValue > 0 }
             .map { $0.validator }
 
         return TransferData(
-            type: .stake(chain.asset, .rewards(validators)),
+            type: .stake(chain.chain.asset, .rewards(validators)),
             recipientData: RecipientData(
                 recipient: Recipient(name: .none, address: "", memo: .none),
                 amount: .none
@@ -147,7 +146,7 @@ public final class StakeSceneViewModel {
     var stakeDestination: any Hashable {
         destination(
             type: .stake(
-                validators: (try? stakeService.getActiveValidators(assetId: chain.assetId)) ?? [],
+                validators: (try? stakeService.getActiveValidators(assetId: chain.chain.assetId)) ?? [],
                 recommendedValidator: recommendedCurrentValidator
             )
         )
@@ -195,8 +194,8 @@ extension StakeSceneViewModel {
     func fetch() async {
         delegatitonsState = .loading
         do {
-            let acccount = try wallet.account(for: chain)
-            try await stakeService.update(walletId: wallet.id, chain: chain, address: acccount.address)
+            let acccount = try wallet.account(for: chain.chain)
+            try await stakeService.update(walletId: wallet.id, chain: chain.chain, address: acccount.address)
             delegatitonsState = .data(true)
         } catch {
             print("Stake scene fetch error: \(error)")
@@ -220,19 +219,19 @@ extension StakeSceneViewModel {
     }()
 
     private var lockTime: TimeInterval {
-        Double(StakeConfig.config(chain: chain.stakeChain!).timeLock)
+        Double(StakeConfig.config(chain: chain).timeLock)
     }
 
     private var minAmount: BigInt {
-        BigInt(StakeConfig.config(chain: chain.stakeChain!).minAmount)
+        BigInt(StakeConfig.config(chain: chain).minAmount)
     }
 
     private var assetModel: AssetViewModel {
-        AssetViewModel(asset: chain.asset)
+        AssetViewModel(asset: asset)
     }
 
     private var asset: Asset {
-        chain.asset
+        chain.chain.asset
     }
 
     private var balanceModel: BalanceViewModel {
@@ -246,7 +245,7 @@ extension StakeSceneViewModel {
     private func destination(type: AmountType) -> any Hashable {
         AmountInput(
             type: type,
-            asset: chain.asset
+            asset: asset
         )
     }
 }

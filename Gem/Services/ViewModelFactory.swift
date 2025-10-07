@@ -163,7 +163,7 @@ public struct ViewModelFactory: Sendable {
     ) -> StakeSceneViewModel {
         StakeSceneViewModel(
             wallet: wallet,
-            chain: chain,
+            chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
             stakeService: stakeService
         )
     }

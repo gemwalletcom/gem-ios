@@ -81,9 +81,6 @@ public struct AptosSigner: Signable {
     }
 
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case .aptos(_, let data) = input.metadata else {
-            throw AnyError("Invalid metadata for Aptos staking")
-        }
         return [
             try sign(payload: .anyData(try input.metadata.getData()), input: input, privateKey: privateKey)
         ]
