@@ -41,7 +41,7 @@ struct StakeSceneViewModelTests {
 extension StakeSceneViewModel {
     static func mock(
         wallet: Wallet = .mock(),
-        chain: Chain = .tron,
+        chain: StakeChain = .tron,
         stakeService: any StakeServiceable = MockStakeService(stakeApr: 13.5)
     ) -> StakeSceneViewModel {
         StakeSceneViewModel(

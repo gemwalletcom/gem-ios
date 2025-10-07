@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import Gemstone
+import BigInt
 
 extension StakeChain {
     public func map() -> GemStakeChain {
@@ -20,6 +21,14 @@ extension StakeChain {
         case .aptos: .aptos
         case .hyperCore: .hyperCore
         }
+    }
+    
+    public var lockTime: TimeInterval {
+        Double(Config.shared.getStakeConfig(chain: rawValue).timeLock)
+    }
+
+    public var minAmount: BigInt {
+        BigInt(Config.shared.getStakeConfig(chain: rawValue).minAmount)
     }
 
     public var canChangeAmountOnUnstake: Bool {
