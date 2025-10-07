@@ -54,7 +54,7 @@ extension NativeProvider: AlienProvider {
     }
 
     public nonisolated func getEndpoint(chain: Chain) throws -> String {
-        self.nodeProvider.node(for: Primitives.Chain(rawValue: chain)!).absoluteString
+        self.nodeProvider.node(for: try Primitives.Chain(id: chain)).absoluteString
     }
 
     public func batchRequest(targets: [AlienTarget]) async throws -> [Data] {

@@ -52,6 +52,7 @@ public final class BitcoinService: Sendable {
             $0.utxo = utxo
             $0.scripts = scripts
             $0.useMaxAmount = isMaxAmount
+            $0.zip0317 = false
         }
         let plan: BitcoinTransactionPlan = AnySigner.plan(input: signingInput, coin: coinType)
 

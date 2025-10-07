@@ -46,6 +46,7 @@ public enum TransactionLoadMetadata: Sendable {
         chainId: String
     )
     case bitcoin(utxos: [UTXO])
+    case zcash(utxos: [UTXO], branchId: String)
     case cardano(utxos: [UTXO])
     case evm(nonce: UInt64, chainId: UInt64, stakeData: StakeData? = nil)
     case near(
@@ -95,7 +96,7 @@ extension TransactionLoadMetadata {
              .polkadot(let sequence, _, _, _, _, _, _),
              .evm(let sequence, _, _):
             return sequence
-        case .none, .bitcoin, .cardano, .tron, .solana, .sui, .hyperliquid:
+        case .none, .bitcoin, .zcash, .cardano, .tron, .solana, .sui, .hyperliquid:
             throw AnyError("Sequence not available for this metadata type")
         }
     }
@@ -139,6 +140,7 @@ extension TransactionLoadMetadata {
     public func getUtxos() throws -> [UTXO] {
         switch self {
         case .bitcoin(let utxos),
+             .zcash(let utxos, _),
              .cardano(let utxos):
             return utxos
         default:
