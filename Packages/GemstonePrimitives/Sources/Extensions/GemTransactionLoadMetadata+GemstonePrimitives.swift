@@ -40,8 +40,8 @@ extension GemTransactionLoadMetadata {
             return .xrp(sequence: sequence, blockNumber: blockNumber)
         case .algorand(let sequence, let blockHash, let chainId):
             return .algorand(sequence: sequence, blockHash: blockHash, chainId: chainId)
-        case .aptos(let sequence):
-            return .aptos(sequence: sequence)
+        case .aptos(let sequence, let data):
+            return .aptos(sequence: sequence, data: data)
         case .polkadot(let sequence, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
             return .polkadot(
                 sequence: sequence,
@@ -106,8 +106,8 @@ extension TransactionLoadMetadata {
             return .xrp(sequence: sequence, blockNumber: blockNumber)
         case .algorand(let sequence, let blockHash, let chainId):
             return .algorand(sequence: sequence, blockHash: blockHash, chainId: chainId)
-        case .aptos(let sequence):
-            return .aptos(sequence: sequence)
+        case .aptos(let sequence, let data):
+            return .aptos(sequence: sequence, data: data)
         case .polkadot(let sequence, let genesisHash, let blockHash, let blockNumber, let specVersion, let transactionVersion, let period):
             return .polkadot(
                 sequence: sequence,
