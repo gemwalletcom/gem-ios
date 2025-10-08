@@ -41,10 +41,6 @@ struct TransactionSwapHashViewModel: ItemModelProvidable {
         }
     }
 
-    private var titleExtra: String? {
-        stateViewModel?.title
-    }
-
     private var subtitle: String {
         if let hash, hash.isEmpty == false {
             return hash
@@ -70,7 +66,6 @@ struct TransactionSwapHashViewModel: ItemModelProvidable {
         .listItem(ListItemModel(
             title: title,
             titleTagType: titleTagType,
-            titleExtra: titleExtra,
             subtitle: subtitle,
             subtitleStyle: subtitleStyle,
             infoAction: infoAction
