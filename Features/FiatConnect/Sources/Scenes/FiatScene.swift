@@ -23,16 +23,16 @@ public struct FiatScene: View {
     public var body: some View {
         @Bindable var model = model
         List {
-                CurrencyInputValidationView(
-                    model: $model.inputValidationModel,
-                    config: model.currencyInputConfig
-                )
-                .focused($focusedField, equals: model.input.type == .buy ? .amountBuy : .amountSell)
-                .padding(.top, .medium)
-                .listGroupRowStyle()
-                amountSelectorSection
-                providerSection
-            }
+            CurrencyInputValidationView(
+                model: $model.inputValidationModel,
+                config: model.currencyInputConfig
+            )
+            .focused($focusedField, equals: model.input.type == .buy ? .amountBuy : .amountSell)
+            .padding(.top, .medium)
+            .listGroupRowStyle()
+            amountSelectorSection
+            providerSection
+        }
         .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,

@@ -11,11 +11,12 @@ import Store
 import PrimitivesComponents
 import Formatters
 import Validators
+import BigInt
 
 @MainActor
 @Observable
 public final class FiatSceneViewModel {
-    private static let minimumFiatAmount: Double = 10
+    private static let minimumFiatAmount: Double = 5
     private static let maximumFiatAmount: Double = 10000
 
     private let fiatService: any GemAPIFiatService
@@ -286,13 +287,16 @@ extension FiatSceneViewModel {
     private var inputValidation: [any TextValidator] {
         switch input.type {
         case .buy:
-            [.fiat(validators: [
-                FiatRangeValidator<Double>(
-                    range: Self.minimumFiatAmount...Self.maximumFiatAmount,
-                    minimumValueText: currencyFormatter.string(Self.minimumFiatAmount),
-                    maximumValueText: currencyFormatter.string(Self.maximumFiatAmount)
+            [
+                .assetAmount(
+                    decimals: 0,
+                    validators: [FiatRangeValidator(
+                        range: BigInt(Self.minimumFiatAmount)...BigInt(Self.maximumFiatAmount),
+                        minimumValueText: currencyFormatter.string(Self.minimumFiatAmount),
+                        maximumValueText: currencyFormatter.string(Self.maximumFiatAmount)
+                    )]
                 )
-            ])]
+            ]
         case .sell: []
         }
     }
