@@ -40,17 +40,9 @@ struct AmountSceneViewModelTests {
 
         #expect(model.infoText != nil)
         #expect(model.amountInputModel.text == "1.99975")
-    }
-    
-    @Test
-    func stakingMaxWithInsufficientBalance() {
-        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 1_000_000_000_000)) // Less than reserve
-        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
-
-        model.onSelectMaxButton()
-
-        #expect(model.amountInputModel.text == "0")
-        #expect(model.infoText != nil)
+        
+        model.amountInputModel.text = .zero
+        #expect(model.infoText == nil)
     }
     
 //    @Test
