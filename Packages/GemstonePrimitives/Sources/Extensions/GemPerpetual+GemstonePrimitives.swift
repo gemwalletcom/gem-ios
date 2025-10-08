@@ -9,7 +9,7 @@ extension GemPerpetual {
         Perpetual(
             id: id,
             name: name,
-            provider: try PerpetualProvider(id: provider),
+            provider: provider.map(),
             assetId: try AssetId(id: assetId),
             identifier: identifier,
             price: price,
@@ -17,7 +17,7 @@ extension GemPerpetual {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            leverage: [UInt8](leverage)
+            leverage: Array(leverage)
         )
     }
 }
