@@ -8,6 +8,7 @@ import Assets
 import Localization
 import Primitives
 import Components
+import AssetsService
 
 struct PriceAlertsNavigationView: View {
     @Environment(\.dismiss) private var dismiss
@@ -38,7 +39,7 @@ struct PriceAlertsNavigationView: View {
                 selectAssetModel: SelectAssetViewModel(
                     wallet: walletService.currentWallet!,
                     selectType: .priceAlert,
-                    assetsService: assetsService,
+                    searchService: AssetSearchService(assetsService: assetsService),
                     walletsService: walletsService,
                     priceAlertService: priceAlertService,
                     selectAssetAction: onSelectAsset

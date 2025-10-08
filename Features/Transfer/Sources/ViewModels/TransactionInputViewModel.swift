@@ -6,6 +6,7 @@ import BigInt
 import Primitives
 import PrimitivesComponents
 import Preferences
+import GemstonePrimitives
 
 public struct TransactionInputViewModel: Sendable {
     let data: TransferData
@@ -44,7 +45,6 @@ public struct TransactionInputViewModel: Sendable {
     }
 
     var infoModel: TransactionInfoViewModel {
-        let feeAsset = data.chain.asset
         let asset: Asset
 
         switch data.type {
@@ -58,7 +58,7 @@ public struct TransactionInputViewModel: Sendable {
             currency: preferences.currency,
             asset: asset,
             assetPrice: metaData?.assetPrice,
-            feeAsset: feeAsset,
+            feeAsset: asset.feeAsset,
             feeAssetPrice: metaData?.feePrice,
             value: value,
             feeValue: transactionData?.fee.fee,

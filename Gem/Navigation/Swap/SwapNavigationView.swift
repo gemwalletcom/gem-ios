@@ -6,6 +6,7 @@ import Components
 import InfoSheet
 import Swap
 import Assets
+import AssetsService
 
 struct SwapNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -29,7 +30,7 @@ struct SwapNavigationView: View {
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             selectType: .swap(type),
-                            assetsService: assetsService,
+                            searchService: AssetSearchService(assetsService: assetsService),
                             walletsService: model.walletsService,
                             priceAlertService: priceAlertService,
                             selectAssetAction: model.onFinishAssetSelection
