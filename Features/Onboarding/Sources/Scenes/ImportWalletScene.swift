@@ -53,7 +53,7 @@ struct ImportWalletScene: View {
                         .frame(minHeight: 80, alignment: .top)
                         .focused($focusedField, equals: .input)
                         .toolbar {
-                            if model.importType.showToolbar {
+                            if model.importType.showToolbar, focusedField == .input {
                                 ToolbarItem(placement: .keyboard) {
                                     WordSuggestionView(
                                         words: model.wordsSuggestion,
