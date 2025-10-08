@@ -1114,10 +1114,6 @@ public enum Localized {
     public static let swapAgain = Localized.tr("Localizable", "transaction.swap_again", fallback: "Swap Again")
     /// Swap Status
     public static let swapStatus = Localized.tr("Localizable", "transaction.swap_status", fallback: "Swap Status")
-    /// Source Transaction
-    public static let sourceTransaction = Localized.tr("Localizable", "transaction.source_transaction", fallback: "Source Transaction")
-    /// Destination Transaction
-    public static let destinationTransaction = Localized.tr("Localizable", "transaction.destination_transaction", fallback: "Destination Transaction")
     /// View on %@
     public static func viewOn(_ p1: Any) -> String {
       return Localized.tr("Localizable", "transaction.view_on", String(describing: p1), fallback: "View on %@")

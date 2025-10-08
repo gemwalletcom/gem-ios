@@ -20,8 +20,6 @@ public enum TransactionItem: Identifiable, Equatable, Sendable {
     case date
     case status
     case swapStatus
-    case sourceTransaction
-    case destinationTransaction
     case participant
     case memo
     case network

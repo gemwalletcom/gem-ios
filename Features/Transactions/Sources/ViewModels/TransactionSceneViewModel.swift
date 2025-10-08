@@ -66,16 +66,6 @@ extension TransactionSceneViewModel: ListSectionProvideable {
             TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onSelectStatusInfo)
         case .swapStatus:
             TransactionStatusViewModel(title: model.swapStatusTitle, state: model.transaction.transaction.state, swapResult: swapResult, onInfoAction: onSelectStatusInfo)
-        case .sourceTransaction:
-            TransactionSwapHashViewModel(
-                kind: .source(state: model.transaction.transaction.state, infoAction: onSelectStatusInfo),
-                hash: model.transaction.transaction.hash
-            )
-        case .destinationTransaction:
-            TransactionSwapHashViewModel(
-                kind: .destination,
-                hash: swapResult?.toTxHash
-            )
         case .participant: TransactionParticipantViewModel(transactionViewModel: model)
         case .memo: TransactionMemoViewModel(transaction: model.transaction.transaction)
         case .network: TransactionNetworkViewModel(chain: model.transaction.asset.chain)
@@ -152,8 +142,10 @@ extension TransactionSceneViewModel {
     private var detailItems: [TransactionItem] {
         var items: [TransactionItem] = [.date]
         if isCrossChainSwap {
-            items.append(contentsOf: [.swapStatus, .sourceTransaction, .destinationTransaction])
-        } else {
+            items.append(.swapStatus)
+        }
+
+        if !isCrossChainSwap {
             items.append(.status)
         }
 
@@ -169,14 +161,6 @@ extension TransactionSceneViewModel {
     private var isCrossChainSwap: Bool {
         guard let metadata = swapMetadata else { return false }
         return metadata.fromAsset.chain != metadata.toAsset.chain
-    }
-
-    private var sourceChainName: String? {
-        swapMetadata?.fromAsset.chain.rawValue.capitalized
-    }
-
-    private var destinationChainName: String? {
-        swapMetadata?.toAsset.chain.rawValue.capitalized
     }
 
     private var swapProviderIdentifier: String? {
