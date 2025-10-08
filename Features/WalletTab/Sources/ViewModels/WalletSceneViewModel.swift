@@ -86,6 +86,7 @@ public final class WalletSceneViewModel: Sendable {
 
     var pinnedTitle: String { Localized.Common.pinned }
     var manageTokenTitle: String { Localized.Wallet.manageTokenList }
+    var perpertualsTitle: String { Localized.Perpetuals.title }
 
     public var searchImage: Image { Images.System.search }
     public var manageImage: Image { Images.Actions.manage }

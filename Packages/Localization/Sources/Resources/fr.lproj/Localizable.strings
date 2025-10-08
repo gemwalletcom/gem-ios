@@ -482,3 +482,8 @@
 "info.stake.reserved.description" = "Une petite somme reste dans votre portefeuille pour couvrir les frais d'opérations telles que le déblocage ou la réclamation de récompenses.";
 "perpetual.open_direction" = "Ouvrir %@";
 "perpetual.close_direction" = "Fermer %@";
+"perpetuals.title" = "Perpétuelles";
+"settings.preferences.title" = "Préférences";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Aucun marché trouvé";

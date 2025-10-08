@@ -482,3 +482,8 @@
 "info.stake.reserved.description" = "스테이킹 해제나 보상 청구 등의 수수료를 충당하기 위해 소액이 지갑에 남아 있습니다.";
 "perpetual.open_direction" = "%@ 열기";
 "perpetual.close_direction" = "%@ 닫기";
+"perpetuals.title" = "영구";
+"settings.preferences.title" = "환경 설정";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "시장을 찾을 수 없습니다";

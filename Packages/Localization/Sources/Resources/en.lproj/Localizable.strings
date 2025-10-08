@@ -482,3 +482,8 @@
 "info.stake.reserved.description" = "A small amount stays in your wallet to cover fees for operations like unstaking or claiming rewards.";
 "perpetual.open_direction" = "Open %@";
 "perpetual.close_direction" = "Close %@";
+"perpetuals.title" = "Perpetuals";
+"settings.preferences.title" = "Preferences";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "No markets found";

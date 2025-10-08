@@ -46,11 +46,13 @@ public final class PerpetualsSceneViewModel {
         self.onSelectAssetType = onSelectAssetType
     }
 
-    var navigationTitle: String { "Perpetuals" }
+    var navigationTitle: String { Localized.Perpetuals.title }
     var positionsSectionTitle: String { Localized.Perpetual.positions }
-    var marketsSectionTitle: String { "Markets" }
+    var marketsSectionTitle: String { Localized.Perpetuals.markets }
     var pinnedSectionTitle: String { Localized.Common.pinned }
-    var noMarketsText: String? { !isSearching ? "No markets" : "No markets found" }
+    var noMarketsText: String? {
+        !isSearching ? Localized.Perpetuals.EmptyState.noMarkets : Localized.Perpetuals.EmptyState.noMarketsFound
+    }
     var pinImage: Image { Images.System.pin }
     var searchImage: Image { Images.System.search }
 

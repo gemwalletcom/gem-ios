@@ -31,11 +31,11 @@ public struct WalletScene: View {
             }
             .cleanListRow()
 
-            if ($preferences.isDeveloperEnabled.wrappedValue || preferences.preferences.isPerpetualEnabled) && model.wallet.isMultiCoins {
+            if preferences.isPerpetualEnabled && model.wallet.isMultiCoins {
                 Section {
                     PerpetualsPreviewView(wallet: model.wallet)
                 } header: {
-                    HeaderNavigationLinkView(title: "Perpetuals", destination: Scenes.Perpetuals())
+                    HeaderNavigationLinkView(title: model.perpertualsTitle, destination: Scenes.Perpetuals())
                 }
             }
             

@@ -482,3 +482,8 @@
 "info.stake.reserved.description" = "Sejumlah kecil dana disimpan di dompet Anda untuk menutupi biaya operasi seperti unstaking atau klaim hadiah.";
 "perpetual.open_direction" = "Buka %@";
 "perpetual.close_direction" = "Tutup %@";
+"perpetuals.title" = "Abadi";
+"settings.preferences.title" = "Preferensi";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Tidak ada pasar yang ditemukan";
