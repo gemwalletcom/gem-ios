@@ -32,7 +32,7 @@ public final class AddTokenViewModel {
     var addressTitleField: String { Localized.Wallet.Import.contractAddressField }
 
     var pasteImage: Image { Images.System.paste }
-    var qrImage: Image { Images.System.qrCode }
+    var qrImage: Image { Images.System.qrCodeViewfinder }
     var errorSystemImage: String { SystemImage.errorOccurred }
 
     var chains: [Chain] { input.chains }

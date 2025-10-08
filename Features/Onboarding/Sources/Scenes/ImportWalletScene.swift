@@ -53,7 +53,7 @@ struct ImportWalletScene: View {
                         .frame(minHeight: 80, alignment: .top)
                         .focused($focusedField, equals: .input)
                         .toolbar {
-                            if model.importType.showToolbar {
+                            if model.importType.showToolbar, focusedField == .input {
                                 ToolbarItem(placement: .keyboard) {
                                     WordSuggestionView(
                                         words: model.wordsSuggestion,
@@ -97,14 +97,18 @@ struct ImportWalletScene: View {
             }
             
             Section {} header: {
-                StateButton(
-                    text: Localized.Wallet.Import.action,
-                    type: .primary(model.buttonState),
-                    action: model.onSelectActionButton
-                )
-                .frame(height: .scene.button.height)
-                .frame(maxWidth: .scene.button.maxWidth)
+                VStack(alignment: .center) {
+                    StateButton(
+                        text: Localized.Wallet.Import.action,
+                        type: .primary(model.buttonState),
+                        action: model.onSelectActionButton
+                    )
+                    .frame(height: .scene.button.height)
+                    .frame(maxWidth: .scene.button.maxWidth)
+                }
+                .frame(maxWidth: .infinity)
             }
+            .textCase(nil)
         }
         .listSectionSpacing(.compact)
         .contentMargins(.top, .scene.top, for: .scrollContent)
