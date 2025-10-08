@@ -9,29 +9,36 @@ import Primitives
 import PrimitivesComponents
 import Store
 import SwiftUI
+import SwapService
 
 @Observable
 @MainActor
 public final class TransactionSceneViewModel {
     private let preferences: Preferences
     private let explorerService: ExplorerService
+    private let swapTransactionService: any SwapResultProviding
 
     var request: TransactionRequest
     var transactionExtended: TransactionExtended
+    var swapResult: SwapResult?
 
     var isPresentingShareSheet = false
     var isPresentingInfoSheet: InfoSheetType? = .none
+    private var swapStatusTask: Task<Void, Never>?
 
     public init(
         transaction: TransactionExtended,
         walletId: String,
         preferences: Preferences = Preferences.standard,
-        explorerService: ExplorerService = ExplorerService.standard
+        explorerService: ExplorerService = ExplorerService.standard,
+        swapTransactionService: any SwapResultProviding
     ) {
         self.preferences = preferences
         self.explorerService = explorerService
+        self.swapTransactionService = swapTransactionService
         self.transactionExtended = transaction
         self.request = TransactionRequest(walletId: walletId, transactionId: transaction.id)
+        startSwapStatusUpdates()
     }
 
     var title: String { model.titleTextValue.text }
@@ -45,7 +52,7 @@ extension TransactionSceneViewModel: ListSectionProvideable {
         [
             ListSection(type: .header, [.header]),
             ListSection(type: .swapAction, [.swapButton]),
-            ListSection(type: .details, [.date, .status, .participant, .memo, .network, .pnl, .price, .size, .provider, .fee]),
+            ListSection(type: .details, detailItems),
             ListSection(type: .explorer, [.explorerLink])
         ]
     }
@@ -55,7 +62,20 @@ extension TransactionSceneViewModel: ListSectionProvideable {
         case .header: headerViewModel
         case .swapButton: TransactionSwapButtonViewModel(transaction: transactionExtended)
         case .date: TransactionDateViewModel(date: model.transaction.transaction.createdAt)
-        case .status: TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onSelectStatusInfo)
+        case .status:
+            TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onSelectStatusInfo)
+        case .swapStatus:
+            TransactionStatusViewModel(title: model.swapStatusTitle, state: model.transaction.transaction.state, swapResult: swapResult, onInfoAction: onSelectStatusInfo)
+        case .sourceTransaction:
+            TransactionSwapHashViewModel(
+                kind: .source(state: model.transaction.transaction.state, infoAction: onSelectStatusInfo),
+                hash: model.transaction.transaction.hash
+            )
+        case .destinationTransaction:
+            TransactionSwapHashViewModel(
+                kind: .destination,
+                hash: swapResult?.toTxHash
+            )
         case .participant: TransactionParticipantViewModel(transactionViewModel: model)
         case .memo: TransactionMemoViewModel(transaction: model.transaction.transaction)
         case .network: TransactionNetworkViewModel(chain: model.transaction.asset.chain)
@@ -75,6 +95,7 @@ extension TransactionSceneViewModel {
     func onChangeTransaction(_ oldValue: TransactionExtended, _ newValue: TransactionExtended) {
         if oldValue != newValue {
             transactionExtended = newValue
+            restartSwapStatusUpdates()
         }
     }
 
@@ -113,7 +134,7 @@ extension TransactionSceneViewModel {
             currency: preferences.currency
         )
     }
-    
+
     private var headerViewModel: TransactionHeaderViewModel {
         TransactionHeaderViewModel(
             transaction: model.transaction,
@@ -126,5 +147,84 @@ extension TransactionSceneViewModel {
             transactionViewModel: model,
             explorerService: explorerService
         )
+    }
+
+    private var detailItems: [TransactionItem] {
+        var items: [TransactionItem] = [.date]
+        if isCrossChainSwap {
+            items.append(contentsOf: [.swapStatus, .sourceTransaction, .destinationTransaction])
+        } else {
+            items.append(.status)
+        }
+
+        items.append(contentsOf: [.participant, .memo, .network, .pnl, .price, .size, .provider, .fee])
+        return items
+    }
+
+    private var swapMetadata: TransactionSwapMetadata? {
+        guard case let .swap(metadata) = transactionExtended.transaction.metadata else { return nil }
+        return metadata
+    }
+
+    private var isCrossChainSwap: Bool {
+        guard let metadata = swapMetadata else { return false }
+        return metadata.fromAsset.chain != metadata.toAsset.chain
+    }
+
+    private var sourceChainName: String? {
+        swapMetadata?.fromAsset.chain.rawValue.capitalized
+    }
+
+    private var destinationChainName: String? {
+        swapMetadata?.toAsset.chain.rawValue.capitalized
+    }
+
+    private var swapProviderIdentifier: String? {
+        swapMetadata?.provider
+    }
+
+    private func restartSwapStatusUpdates() {
+        swapStatusTask?.cancel()
+        swapStatusTask = nil
+        swapResult = nil
+        startSwapStatusUpdates()
+    }
+
+    private func startSwapStatusUpdates() {
+        guard swapStatusTask == nil else { return }
+        guard isCrossChainSwap, let provider = swapProviderIdentifier else { return }
+
+        let chain = transactionExtended.transaction.assetId.chain
+        let hash = transactionExtended.transaction.hash
+
+        swapStatusTask = Task { [weak self] in
+            await self?.pollSwapStatus(chain: chain, provider: provider, hash: hash)
+        }
+    }
+
+    private func pollSwapStatus(chain: Chain, provider: String, hash: String) async {
+        defer { swapStatusTask = nil }
+
+        var backoff: Duration = .seconds(5)
+
+        while !Task.isCancelled {
+            do {
+                let result = try await swapTransactionService.getSwapResult(
+                    chain: chain,
+                    providerId: provider,
+                    transactionHash: hash
+                )
+                swapResult = result
+                if result.status != .pending { break }
+                backoff = .seconds(5)
+            } catch {
+                NSLog("TransactionSceneViewModel swap status error: \(error)")
+                try? await Task.sleep(for: backoff)
+                backoff = min(backoff * 2, .seconds(300))
+                continue
+            }
+
+            try? await Task.sleep(for: .seconds(30))
+        }
     }
 }

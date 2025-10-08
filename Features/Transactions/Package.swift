@@ -37,6 +37,7 @@ let package = Package(
                 "PrimitivesComponents",
                 .product(name: "ExplorerService", package: "ChainServices"),
                 .product(name: "TransactionsService", package: "FeatureServices"),
+                .product(name: "SwapService", package: "FeatureServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
                 "Preferences",
                 "InfoSheet"
@@ -49,7 +50,8 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 "Transactions",
-                "PrimitivesComponents"
+                "PrimitivesComponents",
+                .product(name: "SwapService", package: "FeatureServices")
             ]
         ),
     ]

@@ -14,6 +14,7 @@ import Transfer
 import StakeService
 import PriceAlerts
 import AssetsService
+import SwapService
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
@@ -27,6 +28,7 @@ struct WalletNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.balanceService) private var balanceService
+    @Environment(\.swapTransactionService) private var swapTransactionService
 
     @State private var model: WalletSceneViewModel
 
@@ -105,14 +107,15 @@ struct WalletNavigationStack: View {
                     )
                 )
             }
-            .navigationDestination(for: TransactionExtended.self) {
-                TransactionNavigationView(
-                    model: TransactionSceneViewModel(
-                        transaction: $0,
-                        walletId: model.wallet.id
+                .navigationDestination(for: TransactionExtended.self) {
+                    TransactionNavigationView(
+                        model: TransactionSceneViewModel(
+                            transaction: $0,
+                            walletId: model.wallet.id,
+                            swapTransactionService: swapTransactionService
+                        )
                     )
-                )
-            }
+                }
             .navigationDestination(for: Scenes.Price.self) {
                 ChartScene(
                     model: ChartsViewModel(

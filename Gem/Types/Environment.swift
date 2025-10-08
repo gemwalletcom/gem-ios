@@ -56,6 +56,7 @@ extension EnvironmentValues {
     @Entry var releaseService: AppReleaseService = AppResolver.main.services.appReleaseService
     @Entry var scanService: ScanService = AppResolver.main.services.scanService
     @Entry var swapService: SwapService = AppResolver.main.services.swapService
+    @Entry var swapTransactionService: SwapTransactionService = AppResolver.main.services.swapTransactionService
     @Entry var perpetualService: PerpetualService = AppResolver.main.services.perpetualService
     @Entry var perpetualObserverService: PerpetualObserverService = AppResolver.main.services.perpetualObserverService
     @Entry var transactionService: TransactionService = AppResolver.main.services.transactionService
