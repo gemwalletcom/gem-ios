@@ -72,7 +72,7 @@ extension AddNodeScene {
             FloatTextField(model.inputFieldTitle, text: $model.urlInput) {
                 HStack(spacing: .medium) {
                     ListButton(image: Images.System.paste, action: onSelectPaste)
-                    ListButton(image: Images.System.qrCode, action: onSelectScan)
+                    ListButton(image: Images.System.qrCodeViewfinder, action: onSelectScan)
                 }
             }
             .focused($focusedField, equals: .address)
