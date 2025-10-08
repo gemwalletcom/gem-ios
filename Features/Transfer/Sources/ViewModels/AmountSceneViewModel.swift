@@ -391,7 +391,7 @@ extension AmountSceneViewModel {
                     decimals: asset.decimals.asInt,
                     validators: [
                         PositiveValueValidator<BigInt>().silent,
-                        MinimumValueValidator<BigInt>(minimumValue: minimumValue + reservedForFee, asset: asset),
+                        MinimumValueValidator<BigInt>(minimumValue: minimumValue, asset: asset),
                         BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
                     ]
                 )
@@ -690,8 +690,6 @@ extension AmountSceneViewModel {
     }
 
     private var availableBalanceForStaking: BigInt {
-        assetData.balance.available > reservedForFee
-        ? assetData.balance.available - reservedForFee
-        : .zero
+        assetData.balance.available > reservedForFee ? assetData.balance.available - reservedForFee : .zero
     }
 }
