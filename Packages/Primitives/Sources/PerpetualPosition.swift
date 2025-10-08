@@ -9,13 +9,20 @@ public enum PerpetualMarginType: String, Codable, Equatable, Hashable, Sendable 
 	case isolated
 }
 
-public struct PriceTarget: Codable, Equatable, Hashable, Sendable {
-	public let price: Double?
-	public let percentage: Double?
+public enum PerpetualOrderType: String, Codable, Equatable, Hashable, Sendable {
+	case market
+	case limit
+}
 
-	public init(price: Double?, percentage: Double?) {
+public struct PerpetualTriggerOrder: Codable, Equatable, Hashable, Sendable {
+	public let price: Double
+	public let order_type: PerpetualOrderType
+	public let order_id: String
+
+	public init(price: Double, order_type: PerpetualOrderType, order_id: String) {
 		self.price = price
-		self.percentage = percentage
+		self.order_type = order_type
+		self.order_id = order_id
 	}
 }
 
@@ -31,12 +38,12 @@ public struct PerpetualPosition: Codable, Equatable, Hashable, Sendable {
 	public let marginType: PerpetualMarginType
 	public let direction: PerpetualDirection
 	public let marginAmount: Double
-	public let takeProfit: PriceTarget?
-	public let stopLoss: PriceTarget?
+	public let takeProfit: PerpetualTriggerOrder?
+	public let stopLoss: PerpetualTriggerOrder?
 	public let pnl: Double
 	public let funding: Float?
 
-	public init(id: String, perpetualId: String, assetId: AssetId, size: Double, sizeValue: Double, leverage: UInt8, entryPrice: Double?, liquidationPrice: Double?, marginType: PerpetualMarginType, direction: PerpetualDirection, marginAmount: Double, takeProfit: PriceTarget?, stopLoss: PriceTarget?, pnl: Double, funding: Float?) {
+	public init(id: String, perpetualId: String, assetId: AssetId, size: Double, sizeValue: Double, leverage: UInt8, entryPrice: Double?, liquidationPrice: Double?, marginType: PerpetualMarginType, direction: PerpetualDirection, marginAmount: Double, takeProfit: PerpetualTriggerOrder?, stopLoss: PerpetualTriggerOrder?, pnl: Double, funding: Float?) {
 		self.id = id
 		self.perpetualId = perpetualId
 		self.assetId = assetId
