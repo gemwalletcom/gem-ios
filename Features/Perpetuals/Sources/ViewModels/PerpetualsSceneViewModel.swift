@@ -40,7 +40,7 @@ public final class PerpetualsSceneViewModel {
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id)
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, searchQuery: "")
         self.perpetualsRequest = PerpetualsRequest(searchQuery: "")
         self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: wallet.id)
         self.onSelectAssetType = onSelectAssetType
@@ -56,10 +56,19 @@ public final class PerpetualsSceneViewModel {
     var pinImage: Image { Images.System.pin }
     var searchImage: Image { Images.System.search }
 
-    var showPositions: Bool { !isSearching && positions.isNotEmpty }
+    var showPositions: Bool { positions.isNotEmpty }
     var showPinned: Bool { !isSearching && sections.pinned.isNotEmpty }
+    var showMarkets: Bool { !isSearching || sections.markets.isNotEmpty || positions.isEmpty }
 
-    var sections: PerpetualsSections { PerpetualsSections.from(perpetuals) }
+    var sections: PerpetualsSections {
+        if isSearching {
+            // During search, filter out perpetuals that are already in positions
+            let positionPerpetualIds = Set(positions.map { $0.perpetual.id })
+            let filteredPerpetuals = perpetuals.filter { !positionPerpetualIds.contains($0.perpetual.id) }
+            return PerpetualsSections.from(filteredPerpetuals)
+        }
+        return PerpetualsSections.from(perpetuals)
+    }
 
     var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
@@ -118,6 +127,7 @@ extension PerpetualsSceneViewModel {
     func onSearchQueryChange(_ _: String, _ newValue: String) {
         let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
         perpetualsRequest = PerpetualsRequest(searchQuery: trimmed)
+        positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, searchQuery: trimmed)
     }
 
     func onSearchPresentedChange(_ _: Bool, _ isPresented: Bool) {

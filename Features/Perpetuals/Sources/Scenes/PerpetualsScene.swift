@@ -94,14 +94,16 @@ public struct PerpetualsScene: View {
                     }
                 }
             }
-            Section {
-                PerpetualSectionView(
-                    perpetuals: model.sections.markets,
-                    onPin: model.onPinPerpetual,
-                    emptyText: model.noMarketsText
-                )
-            } header: {
-                Text(model.marketsSectionTitle)
+            if model.showMarkets {
+                Section {
+                    PerpetualSectionView(
+                        perpetuals: model.sections.markets,
+                        onPin: model.onPinPerpetual,
+                        emptyText: model.noMarketsText
+                    )
+                } header: {
+                    Text(model.marketsSectionTitle)
+                }
             }
         }
     }
