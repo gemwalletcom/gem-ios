@@ -9,13 +9,18 @@ import Localization
 import PrimitivesComponents
 import PriceService
 import Preferences
+import PriceAlertService
+import SwiftUI
 
 @MainActor
 @Observable
 public final class ChartsViewModel {
     private let service: ChartService
     private let priceService: PriceService
-    private let assetModel: AssetViewModel
+
+    let walletId: WalletId
+    let assetModel: AssetViewModel
+    let priceAlertService: PriceAlertService
 
     private let preferences: Preferences = .standard
 
@@ -26,24 +31,42 @@ public final class ChartsViewModel {
         }
     }
 
-    var priceRequest: PriceRequest {
-        PriceRequest(assetId: assetModel.asset.id)
-    }
+    var priceData: PriceData?
+    var priceRequest: PriceRequest
+
+    public var isPresentingSetPriceAlert: Binding<AssetId?>
 
     var title: String { assetModel.name }
     var emptyTitle: String { Localized.Common.notAvailable }
     var errorTitle: String { Localized.Errors.errorOccured }
+    
+    var priceAlertsViewModel: PriceAlertsViewModel {
+        PriceAlertsViewModel(priceAlerts: priceData?.priceAlerts ?? [])
+    }
+    var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts }
 
     public init(
         service: ChartService = ChartService(),
         priceService: PriceService,
         assetModel: AssetViewModel,
-        currentPeriod: ChartPeriod = ChartValuesViewModel.defaultPeriod
+        priceAlertService: PriceAlertService,
+        walletId: WalletId,
+        currentPeriod: ChartPeriod = ChartValuesViewModel.defaultPeriod,
+        isPresentingSetPriceAlert: Binding<AssetId?>
     ) {
         self.service = service
         self.priceService = priceService
         self.assetModel = assetModel
+        self.priceAlertService = priceAlertService
+        self.walletId = walletId
         self.currentPeriod = currentPeriod
+        self.priceRequest = PriceRequest(assetId: assetModel.asset.id)
+        self.isPresentingSetPriceAlert = isPresentingSetPriceAlert
+    }
+    
+    var priceDataModel: AssetDetailsInfoViewModel? {
+        guard let priceData else { return nil }
+        return AssetDetailsInfoViewModel(priceData: priceData)
     }
 }
 
@@ -77,5 +100,9 @@ extension ChartsViewModel {
         } catch {
             state = .error(error)
         }
+    }
+
+    public func onSelectSetPriceAlerts() {
+        isPresentingSetPriceAlert.wrappedValue = assetModel.asset.id
     }
 }

@@ -21,7 +21,7 @@ struct PerpetualPositionViewModelTests {
     
     @Test
     func positionTypeText() {
-        #expect(createPositionViewModel(.mock(size: 100, leverage: 5)).positionTypeText == "Long 5x")
+        #expect(createPositionViewModel(.mock(size: 100, leverage: 5)).positionTypeText == "LONG 5x")
     }
     
     @Test
@@ -54,6 +54,12 @@ struct PerpetualPositionViewModelTests {
         #expect(createPositionViewModel(.mock(liquidationPrice: nil)).liquidationPriceText == nil)
     }
     
+    @Test
+    func positionTypeColor() {
+        #expect(createPositionViewModel(.mock(direction: .short)).positionTypeColor == Colors.red)
+        #expect(createPositionViewModel(.mock(direction: .long)).positionTypeColor == Colors.green)
+    }
+    
 //    @Test
 //    func liquidationPriceColor() {
 //        // Long position: entry $2.00, liquidation $1.50
@@ -81,5 +87,5 @@ private func createPositionViewModel(_ position: PerpetualPosition) -> Perpetual
         asset: asset,
         position: position
     )
-    return PerpetualPositionViewModel(data: positionData)
+    return PerpetualPositionViewModel(positionData)
 }

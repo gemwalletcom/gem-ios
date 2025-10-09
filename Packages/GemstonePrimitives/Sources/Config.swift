@@ -3,7 +3,6 @@
 import Foundation
 import class Gemstone.Config
 import struct Gemstone.EvmChainConfig
-import struct Gemstone.BitcoinChainConfig
 import struct Gemstone.SwapConfig
 import enum Gemstone.DocsUrl
 import enum Gemstone.PublicUrl
@@ -18,10 +17,6 @@ extension Config {
 
     public func config(for evmChain: EVMChain) -> EvmChainConfig {
         getEvmChainConfig(chain: evmChain.rawValue)
-    }
-
-    public func config(for bitcoinChain: BitcoinChain) -> BitcoinChainConfig {
-        getBitcoinChainConfig(chain: bitcoinChain.rawValue)
     }
     
     public func swapConfig() -> SwapConfig {

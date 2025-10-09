@@ -27,6 +27,7 @@ struct MainTabView: View {
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.walletService) private var walletService
     @Environment(\.assetsService) private var assetsService
+    @Environment(\.perpetualObserverService) private var perpetualObserverService
 
     private let model: MainTabViewModel
 
@@ -41,6 +42,7 @@ struct MainTabView: View {
     }
 
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
+    @State private var isPresentingSupport = false
 
     init(model: MainTabViewModel) {
         self.model = model
@@ -104,7 +106,8 @@ struct MainTabView: View {
 
             SettingsNavigationStack(
                 walletId: model.wallet.walletId,
-                priceService: priceService
+                priceService: priceService,
+                isPresentingSupport: $isPresentingSupport
             )
             .tabItem {
                 tabItem(Localized.Settings.title, Images.Tabs.settings)
@@ -126,19 +129,19 @@ struct MainTabView: View {
         )
         .taskOnce {
             Task {
-                await priceObserverService.connect()
+                await connectObservers()
             }
         }
         .onChange(of: scenePhase) { (oldScene, newPhase) in
             switch newPhase {
             case .active:
                 Task {
-                    await priceObserverService.connect()
+                    await connectObservers()
                 }
                 print("App moved to active — restart websocket, refresh UI…")
             case .inactive:
                 Task {
-                    await priceObserverService.disconnect()
+                    await disconnectObservers()
                 }
                 print("App is inactive — e.g. transitioning or showing interruption UI")
             case .background:
@@ -213,6 +216,8 @@ extension MainTabView {
                     )
                 )
                 return
+            case .support:
+                isPresentingSupport = true
             case .test, .unknown:
                 break
             }
@@ -231,12 +236,23 @@ extension MainTabView {
         
         Task {
             try await priceObserverService.setupAssets()
+            await perpetualObserverService.connect(for: model.wallet)
         }
+    }
+    
+    private func connectObservers() async {
+        await priceObserverService.connect()
+        await perpetualObserverService.connect(for: model.wallet)
+    }
+    
+    private func disconnectObservers() async {
+        await priceObserverService.disconnect()
+        await perpetualObserverService.disconnect()
     }
 
     private func onComplete(type: SelectedAssetType) {
         switch type {
-        case .receive, .stake, .buy:
+        case .receive, .stake, .buy, .sell:
             isPresentingSelectedAssetInput = nil
         case let .send(type):
             switch type {
@@ -273,6 +289,7 @@ extension PushNotification {
     var selectTab: TabItem? {
         switch self {
         case .transaction, .asset, .priceAlert, .buyAsset, .swapAsset: .wallet
+        case .support: .settings
         case .test, .unknown: nil
         }
     }

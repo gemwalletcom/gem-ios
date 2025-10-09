@@ -7,6 +7,7 @@ import Components
 import Transactions
 import Store
 import Assets
+import AssetsService
 
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -52,8 +53,8 @@ struct TransactionsNavigationStack: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle(model.title)
                 .navigationDestination(for: TransactionExtended.self) {
-                    TransactionScene(
-                        model: TransactionDetailViewModel(
+                    TransactionNavigationView(
+                        model: TransactionSceneViewModel(
                             transaction: $0,
                             walletId: model.wallet.id
                         )
@@ -88,7 +89,7 @@ struct TransactionsNavigationStack: View {
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             selectType: $0,
-                            assetsService: assetsService,
+                            searchService: AssetSearchService(assetsService: assetsService),
                             walletsService: walletsService,
                             priceAlertService: priceAlertService
                         ),

@@ -15,7 +15,18 @@ public struct PerpetualStore: Sendable {
     public func upsertPerpetuals(_ perpetuals: [Perpetual]) throws {
         try db.write { db in
             for perpetual in perpetuals {
-                try perpetual.record.upsert(db)
+                try perpetual.record.insert(db, onConflict: .ignore)
+                try PerpetualRecord
+                    .filter(PerpetualRecord.Columns.id == perpetual.id)
+                    .updateAll(
+                        db,
+                        PerpetualRecord.Columns.price.set(to: perpetual.price),
+                        PerpetualRecord.Columns.pricePercentChange24h.set(to: perpetual.pricePercentChange24h),
+                        PerpetualRecord.Columns.openInterest.set(to: perpetual.openInterest),
+                        PerpetualRecord.Columns.volume24h.set(to: perpetual.volume24h),
+                        PerpetualRecord.Columns.funding.set(to: perpetual.funding),
+                        PerpetualRecord.Columns.leverage.set(to: Data(perpetual.leverage))
+                    )
             }
         }
     }
@@ -28,9 +39,6 @@ public struct PerpetualStore: Sendable {
                 .map { $0.mapToPerpetual() }
         }
     }
-    
-    // MARK: - Position Operations
-    
     
     public func getPositions(walletId: String) throws -> [PerpetualPosition] {
         try db.read { db in
@@ -68,6 +76,26 @@ public struct PerpetualStore: Sendable {
             for position in positions {
                 try position.record(walletId: walletId).upsert(db)
             }
+        }
+    }
+    
+    @discardableResult
+    public func setPinned(for perpetualIds: [String], value: Bool) throws -> Int {
+        try setColumn(for: perpetualIds, column: PerpetualRecord.Columns.isPinned, value: value)
+    }
+    
+    private func setColumn(for perpetualIds: [String], column: Column, value: Bool) throws -> Int {
+        try db.write { db in
+            return try PerpetualRecord
+                .filter(perpetualIds.contains(PerpetualRecord.Columns.id))
+                .updateAll(db, column.set(to: value))
+        }
+    }
+    
+    public func clear() throws {
+        try db.write { db in
+            try PerpetualPositionRecord.deleteAll(db)
+            try PerpetualRecord.deleteAll(db)
         }
     }
 }

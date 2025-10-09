@@ -78,14 +78,16 @@ public struct QRScannerScene: View {
         .onChange(of: model.imageState, onChangeImageState)
     }
 
-    private func photosPicker<Content: View>(@ViewBuilder content: @Sendable () -> Content) -> some View {
+    @ViewBuilder
+    private func photosPicker<Label: View>(
+        @ViewBuilder label: @Sendable @escaping () -> Label
+    ) -> some View {
         PhotosPicker(
             selection: $model.selectedPhoto,
             matching: .images,
-            photoLibrary: .shared()
-        ) {
-            content()
-        }
+            photoLibrary: .shared(),
+            label: label
+        )
     }
 }
 

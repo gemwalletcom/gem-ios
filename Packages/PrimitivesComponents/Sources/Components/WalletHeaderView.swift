@@ -44,6 +44,7 @@ public struct WalletHeaderView: View {
                     Text(model.title)
                 }
             }
+            .numericTransition(for: model.title)
             .minimumScaleFactor(0.5)
             .font(.system(size: 42))
             .fontWeight(.semibold)
@@ -58,6 +59,7 @@ public struct WalletHeaderView: View {
                 .font(.system(size: 16))
                 .fontWeight(.medium)
                 .foregroundStyle(Colors.gray)
+                .numericTransition(for: model.subtitle)
             }
 
             switch model.isWatchWallet {
@@ -99,7 +101,8 @@ public struct WalletHeaderView: View {
     let model = WalletHeaderViewModel(
         walletType: .multicoin,
         value: 1_000,
-        currencyCode: Currency.usd.rawValue
+        currencyCode: Currency.usd.rawValue,
+        bannerEventsViewModel: HeaderBannerEventViewModel(events: [])
     )
 
     WalletHeaderView(

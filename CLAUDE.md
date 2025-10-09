@@ -104,6 +104,12 @@ just uml-app
 - **SwiftGen**: Code generation for assets and localization
 - **SwiftFormat**: Code formatting
 
+### Apple Documentation Resources
+- **Xcode AI Documentation**: `/Applications/Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/AdditionalDocumentation`
+  - Contains latest SwiftUI, AppKit, UIKit, and framework documentation
+  - Includes guides for new Apple features and APIs
+  - Reference these docs when implementing new iOS features or using latest Apple frameworks
+
 ## Code Architecture Patterns
 
 ### Feature Module Structure
@@ -277,6 +283,16 @@ public extension Banner {
 - Place extensions in the appropriate `Extensions/` directory following the naming pattern: `TypeName+Primitives.swift`
 
 ## Development Guidelines
+
+### Build Verification
+**CRITICAL REQUIREMENT**: Always verify the project builds successfully before claiming work is complete.
+
+- **ALWAYS run `just build`** before stating that tasks are finished
+- **Fix all build errors** before marking tasks as completed  
+- **Test core changes** with `just generate-stone` when modifying Rust core
+- **Verify iOS integration** after any core modifications
+- If build fails, identify and fix all errors before proceeding
+- Never claim "migration complete" or "tasks done" without a successful build
 
 ### Code Style
 - Follow existing SwiftUI and Swift concurrency patterns

@@ -12,7 +12,6 @@ import NameService
 import Keystore
 import WalletsService
 import NodeService
-import StakeService
 import SwiftUI
 import ScanService
 import Formatters
@@ -72,7 +71,7 @@ public final class RecipientSceneViewModel {
     var actionButtonTitle: String { Localized.Common.continue }
     var actionButtonState: ButtonState {
         switch nameResolveState {
-        case .none: addressInputModel.isValid || addressInputModel.text.isEmpty ? .normal : .disabled
+        case .none: addressInputModel.isValid && addressInputModel.text.isNotEmpty ? .normal : .disabled
         case .loading, .error: .disabled
         case .complete: .normal
         }
@@ -86,7 +85,7 @@ public final class RecipientSceneViewModel {
     }
 
     var pasteImage: Image { Images.System.paste }
-    var qrImage: Image { Images.System.qrCode }
+    var qrImage: Image { Images.System.qrCodeViewfinder }
     var shouldShowInputActions: Bool { addressInputModel.text.isEmpty }
 
     var recipientSections: [ListItemValueSection<RecipientAddress>] {
@@ -254,10 +253,11 @@ extension RecipientSceneViewModel {
         }
     }
 
-    private func sectionImage(for type: RecipientAddressType) -> Image? {
+    private func sectionImage(for type: RecipientAddressType) -> Image {
         switch type {
         case .pinned: Images.System.pin
-        case .wallets, .view: nil
+        case .wallets: Images.System.wallet
+        case .view: Images.System.eye
         }
     }
 

@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 import Components
 import Primitives
@@ -5,40 +7,22 @@ import GRDBQuery
 import Store
 import Style
 import Localization
+import PrimitivesComponents
 
 public struct WalletsScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @Binding private var isPresentingCreateWalletSheet: Bool
-    @Binding private var isPresentingImportWalletSheet: Bool
-
     @State private var model: WalletsSceneViewModel
 
-    @Query<WalletsRequest>
-    private var pinnedWallets: [Wallet]
-
-    @Query<WalletsRequest>
-    private var wallets: [Wallet]
-
-    public init(
-        model: WalletsSceneViewModel,
-        isPresentingCreateWalletSheet: Binding<Bool>,
-        isPresentingImportWalletSheet: Binding<Bool>
-    ) {
+    public init(model: WalletsSceneViewModel) {
         _model = State(initialValue: model)
-        
-        _pinnedWallets = Query(WalletsRequest(isPinned: true))
-        _wallets = Query(WalletsRequest(isPinned: false))
-        
-        _isPresentingCreateWalletSheet = isPresentingCreateWalletSheet
-        _isPresentingImportWalletSheet = isPresentingImportWalletSheet
     }
 
     public var body: some View {
         List {
             Section {
                 Button(
-                    action: onSelectCreateWallet,
+                    action: model.onSelectCreateWallet,
                     label: {
                         HStack {
                             Images.Wallets.create
@@ -47,7 +31,7 @@ public struct WalletsScene: View {
                     }
                 )
                 Button(
-                    action: onSelectImportWallet,
+                    action: model.onSelectImportWallet,
                     label: {
                         HStack {
                             Images.Wallets.import
@@ -56,48 +40,45 @@ public struct WalletsScene: View {
                     }
                 )
             }
-            .listRowInsets(.assetListRowInsets)
 
-            if !pinnedWallets.isEmpty {
+            if !model.pinnedWallets.isEmpty {
                 Section {
-                    ForEach(pinnedWallets) {
+                    ForEach(model.pinnedWallets) {
                         WalletListItemView(
                             wallet: $0,
                             currentWalletId: model.currentWalletId,
-                            onSelect: onSelect,
-                            onEdit: onEdit,
+                            onSelect: { model.onSelect(wallet: $0, dismiss: dismiss) },
+                            onEdit: model.onEdit,
                             onPin: model.onPin,
                             onDelete: model.onDelete
                         )
                     }
-                    .onMove(perform: onMovePinned)
+                    .onMove(perform: model.onMovePinned)
                 } header: {
                     HStack {
                         Images.System.pin
                         Text(Localized.Common.pinned)
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
 
             Section {
-                ForEach(wallets) {
+                ForEach(model.wallets) {
                     WalletListItemView(
                         wallet: $0,
                         currentWalletId: model.currentWalletId,
-                        onSelect: onSelect,
-                        onEdit: onEdit,
+                        onSelect: { model.onSelect(wallet: $0, dismiss: dismiss) },
+                        onEdit: model.onEdit,
                         onPin: model.onPin,
                         onDelete: model.onDelete
                     )
                 }
-                .onMove(perform: onMove)
+                .onMove(perform: model.onMove)
             }
-            .listRowInsets(.assetListRowInsets)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .alertSheet($model.isPresentingAlertMessage)
-        .confirmationDialog(
+        .alert(
             Localized.Common.deleteConfirmation(model.walletDelete?.name ?? ""),
             presenting: $model.walletDelete,
             sensoryFeedback: .warning,
@@ -110,93 +91,14 @@ public struct WalletsScene: View {
             }
         )
         .navigationBarTitle(model.title)
-    }
-}
-
-
-// MARK: - Actions
-
-extension WalletsScene {
-    private func onSelectCreateWallet() {
-        guard validate() else {
-            return
-        }
-        isPresentingCreateWalletSheet.toggle()
-    }
-
-    private func onSelectImportWallet() {
-        guard validate() else {
-            return
-        }
-        isPresentingImportWalletSheet.toggle()
-    }
-    
-    private func validate() -> Bool {
-        // fix: https://github.com/gemwalletcom/gem-ios/issues/1067
-        if wallets.count > WalletsSceneViewModel.walletsLimit {
-            model.isPresentingAlertMessage = AlertMessage(
-                title: Localized.Errors.Wallets.Limit.title,
-                message: Localized.Errors.Wallets.Limit.description(WalletsSceneViewModel.walletsLimit)
-            )
-            return false
-        }
-        return true
-    }
-
-    private func onEdit(wallet: Wallet) {
-        model.onEdit(wallet: wallet)
-    }
-
-    private func onSelect(wallet: Wallet) {
-        model.setCurrent(wallet.walletId)
-        dismiss()
-    }
-
-    private func onMovePinned(from source: IndexSet, to destination: Int) {
-        guard let source = source.first else { return }
-        do {
-            try swapOrder(wallets: pinnedWallets, source: source, destination: destination)
-        } catch {
-            model.isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-        }
-    }
-
-    private func onMove(from source: IndexSet, to destination: Int) {
-        guard let source = source.first else { return }
-        do {
-            try swapOrder(wallets: wallets, source: source, destination: destination)
-        } catch {
-            model.isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-        }
-    }
-
-    private func swapOrder(wallets: [Wallet], source: Int, destination: Int) throws {
-        NSLog("swapOrder source: \(source) destination: \(destination)")
-
-        let from = try wallets.getElement(safe: source)
-        if source - destination == 1 { // if next to each other, swap
-            let to = try wallets.getElement(safe: destination)
-            try model.swapOrder(
-                from: from.walletId,
-                to: to.walletId
-            )
-        } else if source == 0 || wallets.count == destination  { // moving to last position
-            for i in source..<destination-1 {
-                let to = try wallets.getElement(safe: i+1)
-                try model.swapOrder(
-                    from: from.walletId,
-                    to: to.walletId
-                )
-            }
-        } else if source == wallets.count-1 { // moving to the first position
-            for i in stride(from: wallets.count-1, through: destination+1, by: -1) {
-                let to = try wallets.getElement(safe: i-1)
-                try model.swapOrder(
-                    from: from.walletId,
-                    to: to.walletId
-                )
-            }
-        }
+        .observeQuery(
+            request: .constant(model.pinnedWalletsRequest),
+            value: $model.pinnedWallets
+        )
+        .observeQuery(
+            request: .constant(model.walletsRequest),
+            value: $model.wallets
+        )
     }
 }
 

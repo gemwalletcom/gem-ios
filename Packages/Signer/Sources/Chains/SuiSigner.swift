@@ -7,27 +7,33 @@ import Primitives
 
 public struct SuiSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
+        try sign(input: input, privateKey: privateKey)
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
+        try sign(input: input, privateKey: privateKey)
     }
     
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        [signTxDataDigest(data: input.messageBytes, privateKey: privateKey)]
+        [try sign(input: input, privateKey: privateKey)]
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let type) = input.type else {
-            fatalError()
+            throw AnyError.notImplemented
         }
         switch type {
         case .stake, .unstake:
-            return [signTxDataDigest(data: input.messageBytes, privateKey: privateKey)]
+            return [try sign(input: input, privateKey: privateKey)]
         case .redelegate, .rewards, .withdraw:
-            fatalError()
+            throw AnyError.notImplemented
+        case .freeze:
+            throw AnyError("Sui does not support freeze operations")
         }
+    }
+    
+    func sign(input: SignerInput, privateKey: Data) throws -> String {
+        return signTxDataDigest(data: try input.metadata.getMessageBytes(), privateKey: privateKey)
     }
     
     func signMessageBytes(coinType: CoinType, bytes: String, privateKey: Data) -> String {

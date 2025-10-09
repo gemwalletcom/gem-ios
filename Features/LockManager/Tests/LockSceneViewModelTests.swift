@@ -165,7 +165,6 @@ struct LockSceneViewModelTests {
         #expect(viewModel.lastUnlockTime == .distantFuture)
     }
 
-
     func testIsLockedPropertyWhenAuthEnabled() {
         let mockService = MockBiometryAuthenticationService(
             isAuthEnabled: true,
@@ -431,6 +430,24 @@ struct LockSceneViewModelTests {
         #expect(viewModel.state == .unlocked)
         #expect(!viewModel.shouldShowLockScreen)
         #expect(!viewModel.isLocked)
+    }
+
+    @Test
+    func inactiveToActiveTransitionWithoutBackgroundLocksWhenExpired() {
+        let mockService = MockBiometryAuthenticationService(
+            isAuthEnabled: true,
+            availableAuth: .biometrics,
+            lockPeriod: .oneMinute
+        )
+        let viewModel = LockSceneViewModel(service: mockService)
+        viewModel.state = .unlocked
+        viewModel.lastUnlockTime = Date(timeIntervalSince1970: 0)
+
+        viewModel.handleSceneChange(to: .inactive)
+        viewModel.handleSceneChange(to: .active)
+
+        #expect(viewModel.state == .locked)
+        #expect(viewModel.shouldShowLockScreen)
     }
 }
 

@@ -29,6 +29,7 @@ import SwapService
 import NameService
 import PerpetualService
 import TransactionService
+import AddressNameService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
@@ -48,6 +49,7 @@ extension EnvironmentValues {
     @Entry var notificationHandler: NotificationHandler =  AppResolver.main.services.notificationHandler
     @Entry var stakeService: StakeService = AppResolver.main.services.stakeService
     @Entry var connectionsService: ConnectionsService = AppResolver.main.services.connectionsService
+    @Entry var walletConnectorManager: WalletConnectorManager = AppResolver.main.services.walletConnectorManager
     @Entry var chainServiceFactory: ChainServiceFactory = AppResolver.main.services.chainServiceFactory
     @Entry var nftService: NFTService = AppResolver.main.services.nftService
     @Entry var avatarService: AvatarService = AppResolver.main.services.avatarService
@@ -55,7 +57,9 @@ extension EnvironmentValues {
     @Entry var scanService: ScanService = AppResolver.main.services.scanService
     @Entry var swapService: SwapService = AppResolver.main.services.swapService
     @Entry var perpetualService: PerpetualService = AppResolver.main.services.perpetualService
+    @Entry var perpetualObserverService: PerpetualObserverService = AppResolver.main.services.perpetualObserverService
     @Entry var transactionService: TransactionService = AppResolver.main.services.transactionService
     @Entry var nameService: NameService = AppResolver.main.services.nameService
+    @Entry var addressNameService: AddressNameService = AppResolver.main.services.addressNameService
     @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
 }

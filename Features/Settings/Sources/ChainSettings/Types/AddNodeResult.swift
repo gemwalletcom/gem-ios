@@ -2,6 +2,7 @@
 
 import Foundation
 import BigInt
+import Primitives
 
 public struct AddNodeResult: Sendable {
     let url: URL

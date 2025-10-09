@@ -8,7 +8,7 @@ struct TransferDataTypeTests {
     @Test
     func shouldIgnoreValueCheck() {
         #expect(TransferData.mock(type: .transferNft(.mock())).type.shouldIgnoreValueCheck == true)
-        #expect(TransferData.mock(type: .stake(.mock(), .stake(validator: .mock()))).type.shouldIgnoreValueCheck == true)
+        #expect(TransferData.mock(type: .stake(.mock(), .stake(.mock()))).type.shouldIgnoreValueCheck == true)
         #expect(TransferData.mock(type: .account(.mock(), .activate)).type.shouldIgnoreValueCheck == true)
         #expect(TransferData.mock(type: .transfer(.mock())).type.shouldIgnoreValueCheck == false)
 
@@ -30,12 +30,12 @@ struct TransferDataTypeTests {
 
         #expect(TransferData.mock(type: .swap(.mock(), .mock(), .mock())).canChangeValue == true)
 
-        #expect(TransferData.mock(type: .stake(.mock(), .stake(validator: .mock()))).canChangeValue == true)
-        #expect(TransferData.mock(type: .stake(.mock(), .redelegate(delegation: .mock(), toValidator: .mock()))).canChangeValue == true)
+        #expect(TransferData.mock(type: .stake(.mock(), .stake(.mock()))).canChangeValue == true)
+        #expect(TransferData.mock(type: .stake(.mock(), .redelegate(.mock()))).canChangeValue == true)
 
-        #expect(TransferData.mock(type: .stake(.mock(), .unstake(delegation: .mock(state: .inactive)))).canChangeValue == true)
-        #expect(TransferData.mock(type: .stake(.mock(), .withdraw(delegation: .mock(state: .inactive)))).canChangeValue == true)
-        #expect(TransferData.mock(type: .stake(.mock(), .rewards(validators: [.mock()]))).canChangeValue == true)
+        #expect(TransferData.mock(type: .stake(.mock(), .unstake(.mock(state: .inactive)))).canChangeValue == true)
+        #expect(TransferData.mock(type: .stake(.mock(), .withdraw(.mock(state: .inactive)))).canChangeValue == true)
+        #expect(TransferData.mock(type: .stake(.mock(), .rewards([.mock()]))).canChangeValue == true)
 
         #expect(TransferData.mock(type: .transferNft(.mock())).canChangeValue == true)
         #expect(TransferData.mock(type: .tokenApprove(.mock(), .mock())).canChangeValue == true)

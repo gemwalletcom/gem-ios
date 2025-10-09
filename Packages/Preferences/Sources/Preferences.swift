@@ -31,6 +31,9 @@ public final class Preferences: @unchecked Sendable {
         static let skippedReleaseVersion = "skipped_release_version"
         static let isWalletConnectActivated = "is_walletconnect_activated"
         static let perpetualsMarketsUpdatedAt = "perpetual_markets_updated_at"
+        static let isPerpetualEnabled = "is_perpetual_enabled"
+        static let supportDeviceId = "support_device_id"
+        static let supportDeviceRegistered = "support_device_registered"
     }
 
     @ConfigurableDefaults(key: Keys.currency, defaultValue: Currency.usd.rawValue)
@@ -98,6 +101,15 @@ public final class Preferences: @unchecked Sendable {
     
     @ConfigurableDefaults(key: Keys.perpetualsMarketsUpdatedAt, defaultValue: nil)
     public var perpetualMarketsUpdatedAt: Date?
+    
+    @ConfigurableDefaults(key: Keys.isPerpetualEnabled, defaultValue: false)
+    public var isPerpetualEnabled: Bool
+
+    @ConfigurableDefaults(key: Keys.supportDeviceId, defaultValue: nil)
+    public var supportDeviceId: String?
+
+    @ConfigurableDefaults(key: Keys.supportDeviceRegistered, defaultValue: false)
+    public var isSupportDeviceRegistered: Bool
 
     public static let standard = Preferences()
     private let defaults: UserDefaults
@@ -135,6 +147,9 @@ public final class Preferences: @unchecked Sendable {
         configure(\._skippedReleaseVersion, key: Keys.skippedReleaseVersion, defaultValue: nil)
         configure(\._isWalletConnectActivated, key: Keys.isWalletConnectActivated, defaultValue: nil)
         configure(\._perpetualMarketsUpdatedAt, key: Keys.perpetualsMarketsUpdatedAt, defaultValue: nil)
+        configure(\._isPerpetualEnabled, key: Keys.isPerpetualEnabled, defaultValue: false)
+        configure(\._supportDeviceId, key: Keys.supportDeviceId, defaultValue: nil)
+        configure(\._isSupportDeviceRegistered, key: Keys.supportDeviceRegistered, defaultValue: false)
     }
 
     public func incrementLaunchesCount() {

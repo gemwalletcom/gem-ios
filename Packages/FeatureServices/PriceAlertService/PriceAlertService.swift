@@ -62,7 +62,7 @@ public struct PriceAlertService: Sendable {
         
         try store.diffPriceAlerts(
             deleteIds: changes.toDelete.asArray(),
-            alerts: remote.filter { changes.toAdd.contains($0.id)}
+            alerts: remote
         )
     }
 

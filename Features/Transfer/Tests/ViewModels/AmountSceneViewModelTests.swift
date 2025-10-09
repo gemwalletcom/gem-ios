@@ -16,7 +16,6 @@ struct AmountSceneViewModelTests {
     @Test
     func testMaxButton() {
         let model = AmountSceneViewModel.mock()
-
         #expect(model.amountInputModel.isValid)
 
         model.onSelectMaxButton()
@@ -30,6 +29,20 @@ struct AmountSceneViewModelTests {
     @Test
     func depositTitle() {
         #expect(AmountSceneViewModel.mock(type: .deposit(recipient: .mock())).title == "Deposit")
+    }
+    
+    @Test
+    func stakingReservedFeesText() {
+        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 2_000_000_000_000_000_000))
+        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+        
+        model.onSelectMaxButton()
+
+        #expect(model.infoText != nil)
+        #expect(model.amountInputModel.text == "1.99975")
+        
+        model.amountInputModel.text = .zero
+        #expect(model.infoText == nil)
     }
     
 //    @Test
@@ -49,28 +62,69 @@ struct AmountSceneViewModelTests {
 //        let _ = model.amountInputModel.validate()
 //        #expect(model.amountInputModel.isValid)
 //    }
+
+    @Test
+    func transferWithSmallAmount() {
+        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 10_000_000_000_000_000))
+        let model = AmountSceneViewModel.mock(type: .transfer(recipient: .mock()), assetData: assetData)
+
+        model.amountInputModel.update(text: "0.001")
+        #expect(model.amountInputModel.isValid)
+    }
+
+    @Test
+    func stakeWithInsufficientAmount() {
+        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 2_000_000_000_000_000_000))
+        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+
+        model.amountInputModel.update(text: "0.099")
+        #expect(model.amountInputModel.isValid == false)
+    }
+
+    @Test
+    func stakeWithSufficientAmount() {
+        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 5_000_000_000_000_000_000))
+        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+
+        model.amountInputModel.update(text: "1.5")
+        #expect(model.amountInputModel.isValid == true)
+    }
+
+    @Test
+    func stakeManualInputNearMax() {
+        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 2_000_000_000_000_000_000))
+        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+
+        model.amountInputModel.update(text: "2.0")
+        #expect(model.infoText != nil)
+
+        model.amountInputModel.update(text: "1.9")
+        #expect(model.infoText == nil)
+    }
+
+    @Test
+    func stakeUserInputAboveMax() {
+        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 2_000_000_000_000_000_000))
+        let model = AmountSceneViewModel.mock(type: .stake(validators: [.mock()], recommendedValidator: .mock()), assetData: assetData)
+
+        model.amountInputModel.update(text: "2.0")
+        #expect(model.infoText != nil)
+        #expect(model.amountInputModel.isValid == true)
+    }
 }
 
 extension AmountSceneViewModel {
     static func mock(
         type: AmountType = .transfer(recipient: .mock()),
-        asset: Asset = .mockEthereum()
+        assetData: AssetData = .mock(balance: .mock())
     ) -> AmountSceneViewModel {
-        let balanceStore = BalanceStore.mock(db: .mockAssets())
-        return AmountSceneViewModel(
-            input: AmountInput(type: type, asset: asset),
+        let model = AmountSceneViewModel(
+            input: AmountInput(type: type, asset: assetData.asset),
             wallet: .mock(),
-            amountService: AmountService(
-                priceService: .mock(),
-                balanceService:.mock(
-                    balanceStore: balanceStore,
-                    assetsService: .mock(balanceStore: balanceStore),
-                    chainServiceFactory: .mock()
-                ),
-                stakeService: .mock()
-            ),
-            onTransferAction: { _ in
-            }
+            onTransferAction: { _ in }
         )
+        model.assetData = assetData
+        model.onChangeAssetBalance(assetData, assetData)
+        return model
     }
 }

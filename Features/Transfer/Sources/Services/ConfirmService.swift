@@ -12,6 +12,7 @@ import Primitives
 import BigInt
 import Blockchain
 import ChainService
+import AddressNameService
 
 public struct ConfirmService: Sendable {
     private let metadataProvider: any TransferMetadataProvidable
@@ -20,6 +21,7 @@ public struct ConfirmService: Sendable {
     private let keystore: any Keystore
     private let chainService: any ChainServiceable
     private let explorerService: any ExplorerLinkFetchable
+    private let addressNameService: AddressNameService
 
     public init(
         explorerService: any ExplorerLinkFetchable,
@@ -27,7 +29,8 @@ public struct ConfirmService: Sendable {
         transferTransactionProvider: any TransferTransactionProvidable,
         transferExecutor: any TransferExecutable,
         keystore: any Keystore,
-        chainService: any ChainServiceable
+        chainService: any ChainServiceable,
+        addressNameService: AddressNameService
     ) {
         self.explorerService = explorerService
         self.metadataProvider = metadataProvider
@@ -35,6 +38,7 @@ public struct ConfirmService: Sendable {
         self.transferExecutor = transferExecutor
         self.keystore = keystore
         self.chainService = chainService
+        self.addressNameService = addressNameService
     }
 
     public func getMetadata(wallet: Wallet, data: TransferData) throws -> TransferDataMetadata {
@@ -69,5 +73,9 @@ public struct ConfirmService: Sendable {
 
     public func defaultPriority(for type: TransferDataType) -> FeePriority {
         chainService.defaultPriority(for: type)
+    }
+    
+    public func getAddressName(chain: Chain, address: String) throws -> AddressName? {
+        try addressNameService.getAddressName(chain: chain, address: address)
     }
 }

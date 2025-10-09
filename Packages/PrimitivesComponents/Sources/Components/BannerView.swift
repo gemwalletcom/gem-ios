@@ -7,48 +7,107 @@ import Components
 import Style
 
 public struct BannerView: View {
-    private let banners: [Banner]
-
-    private let action: ((Banner) -> Void)
-    private let closeAction: ((Banner) -> Void)
+    private let model: BannerViewModel
+    private let action: ((BannerAction) -> Void)
 
     public init(
-        banners: [Banner],
-        action: @escaping (Banner) -> Void,
-        closeAction: @escaping (Banner) -> Void
+        banner: Banner,
+        action: @escaping (BannerAction) -> Void
     ) {
-        self.banners = banners
+        self.model = BannerViewModel(banner: banner)
         self.action = action
-        self.closeAction = closeAction
     }
 
     public var body: some View {
-        if let banner = banners.map({ BannerViewModel(banner: $0) }).first {
-            Button(
-                action: { action(banner.banner) },
-                label: {
-                    HStack(spacing: 0) {
-                        ListItemView(
-                            title: banner.title,
-                            titleExtra: banner.description,
-                            imageStyle: banner.imageStyle
-                        )
-
-                        if banner.canClose {
-                            Spacer()
-
-                            ListButton(
-                                image: Images.System.xmarkCircle,
-                                action: {
-                                    closeAction(banner.banner)
-                                }
-                            )
-                            .padding(.vertical, .small)
-                            .foregroundColor(Colors.gray)
-                        }
-                    }
-                })
+        ZStack(alignment: .topTrailing) {
+            switch model.viewType {
+            case .list: listView
+            case .banner: bannerView
+            }
+            
+            if model.canClose {
+                closeButton
+                    .padding([.top, .trailing], .medium)
+            }
         }
+    }
+}
+
+// MARK: - Private Views
+
+private extension BannerView {
+    private var listView: some View {
+        Button(
+            action: { action(model.action) },
+            label: {
+                HStack(spacing: 0) {
+                    ListItemView(
+                        title: model.title,
+                        titleExtra: model.description,
+                        imageStyle: model.imageStyle
+                    )
+
+                    Spacer(minLength: model.canClose ? .extraLarge : .zero)
+                }
+            }
+        )
+        .buttonStyle(.listStyleColor(glassEffect: .disabled))
+    }
+
+    private var bannerView: some View {
+        VStack(spacing: .medium) {
+            if let image = model.image {
+                AssetImageView(assetImage: image, size: model.imageSize)
+            }
+            
+            VStack(spacing: .small) {
+                if let title = model.title {
+                    Text(title)
+                        .textStyle(TextStyle(font: .body, color: .primary, fontWeight: .semibold))
+                }
+                
+                if let subtitle = model.description {
+                    Text(subtitle)
+                        .textStyle(.bodySecondary)
+                }
+            }
+            .multilineTextAlignment(.center)
+
+            HStack(spacing: .medium) {
+                ForEach(model.buttons) { button in
+                    Button {
+                        action(button.action)
+                    } label: {
+                        Text(button.title)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .buttonStyle(button.style)
+                }
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+    }
+    
+    private var closeButton: some View {
+        Button {
+            action(model.closeAction)
+        } label: {
+            Images.System.xmark
+                .resizable()
+                .frame(size: .small)
+                .symbolRenderingMode(.hierarchical)
+                .foregroundColor(Colors.gray)
+                .padding(.small)
+                .liquidGlass { _ in
+                    ListButton(
+                        image: Images.System.xmarkCircle,
+                        action: { action(model.closeAction) }
+                    )
+                    .foregroundColor(Colors.gray)
+                }
+        }
+        .buttonStyle(.borderless)
     }
 }
 

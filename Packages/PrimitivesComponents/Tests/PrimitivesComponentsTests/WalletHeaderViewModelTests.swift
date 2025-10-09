@@ -11,8 +11,21 @@ struct WalletHeaderViewModelTests {
             WalletHeaderViewModel(
                 walletType: .multicoin,
                 value: 1000,
-                currencyCode: Currency.usd.rawValue)
+                currencyCode: Currency.usd.rawValue,
+                bannerEventsViewModel: HeaderBannerEventViewModel(events: []))
             .totalValueText == "$1,000.00"
         )
+    }
+
+    @Test
+    func buttonsDisabledWithActivateAssetEvent() {
+        let model = WalletHeaderViewModel(
+            walletType: .multicoin,
+            value: 1000,
+            currencyCode: Currency.usd.rawValue,
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: [.activateAsset, .accountBlockedMultiSignature])
+        )
+        
+        #expect(model.buttons.allSatisfy { !$0.isEnabled })
     }
 }

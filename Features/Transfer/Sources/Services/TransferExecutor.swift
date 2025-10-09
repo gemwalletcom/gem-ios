@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Blockchain
 import Foundation
 import Primitives
-import Blockchain
-import TransactionService
 import Signer
+import TransactionService
 import WalletsService
 
 public protocol TransferExecutable: Sendable {
@@ -29,16 +29,17 @@ public struct TransferExecutor: TransferExecutable {
         self.transactionService = transactionService
     }
 
-    public func execute(input: TransferConfirmationInput) async throws  {
+    public func execute(input: TransferConfirmationInput) async throws {
         let signedData = try sign(input: input)
         let options = broadcastOptions(data: input.data)
 
         for (index, transactionData) in signedData.enumerated() {
             NSLog("TransferExecutor data \(transactionData)")
-            switch input.data.type.outputType {
-            case .signature:
+
+            switch input.data.type.outputAction {
+            case .sign:
                 input.delegate?(.success(transactionData))
-            case .encodedTransaction:
+            case .send:
                 let hash = try await chainService.broadcast(
                     data: transactionData,
                     options: options
@@ -57,8 +58,9 @@ public struct TransferExecutor: TransferExecutable {
                 )
                 let excludeChains = [Chain.hyperCore]
                 let assetIds = transaction.assetIds.filter { !excludeChains.contains($0.chain) }
+                let transactions = [transaction]
 
-                try transactionService.addTransactions(wallet: input.wallet, transactions: [transaction])
+                try transactionService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {
                     try walletsService.enableBalances(
                         for: input.wallet.walletId,
@@ -91,16 +93,18 @@ extension TransferExecutor {
         switch data.chain {
         case .solana:
             switch data.type {
-            case .transfer, .deposit, .transferNft, .stake, .account, .tokenApprove, .perpetual: .standard
+            case .transfer, .deposit, .withdrawal, .transferNft, .stake, .account, .tokenApprove, .perpetual: BroadcastOptions(
+                skipPreflight: false
+            )
             case .swap, .generic: BroadcastOptions(skipPreflight: true)
             }
-        default: .standard
+        default: BroadcastOptions(skipPreflight: false)
         }
     }
 
     private func transactionDelay(for type: ChainType) -> Duration {
         switch type {
-        case .ethereum: .milliseconds(0)
+        case .ethereum, .hyperCore: .milliseconds(0)
         case .tron: .milliseconds(500)
         default: .milliseconds(500)
         }

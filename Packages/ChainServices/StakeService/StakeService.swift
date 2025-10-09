@@ -9,15 +9,18 @@ import Blockchain
 
 public struct StakeService: StakeServiceable {
     private let store: StakeStore
+    private let addressStore: AddressStore
     private let chainServiceFactory: ChainServiceFactory
     private let assetsService: GemAPIStaticService
     
     public init(
         store: StakeStore,
+        addressStore: AddressStore,
         chainServiceFactory: ChainServiceFactory,
         assetsService: GemAPIStaticService = GemAPIStaticService()
     ) {
         self.store = store
+        self.addressStore = addressStore
         self.chainServiceFactory = chainServiceFactory
         self.assetsService = assetsService
     }
@@ -44,20 +47,6 @@ public struct StakeService: StakeServiceable {
 
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
         try store.getValidator(assetId: assetId, validatorId: validatorId)
-    }
-
-    public func getRecipientAddress(chain: StakeChain?, type: AmountType, validatorId: String?) -> String? {
-        guard let id = validatorId else {
-            return nil
-        }
-        switch chain {
-        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron:
-            return id
-        case .smartChain:
-            return StakeHub.address
-        default:
-            fatalError()
-        }
     }
     
     public func clearDelegations() throws {
@@ -90,12 +79,14 @@ extension StakeService {
                 id: $0.id,
                 name: name,
                 isActive: $0.isActive,
-                commision: $0.commision,
+                commission: $0.commission,
                 apr: $0.apr
             )
         }
-
         try store.updateValidators(updateValidators)
+        
+        let addressNames = updateValidators.map { AddressName(chain: $0.chain, address: $0.id, name: $0.name)}
+        try addressStore.addAddressNames(addressNames)
     }
 
     private func updateDelegations(walletId: String, chain: Chain, address: String) async throws {

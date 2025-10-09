@@ -5,13 +5,12 @@ import SwiftUI
 import Primitives
 import Components
 import Style
-import Localization
 import PrimitivesComponents
 
 public struct ChainSettingsScene: View {
-    @State private var model: ChainSettingsViewModel
+    @State private var model: ChainSettingsSceneViewModel
 
-    public init(model: ChainSettingsViewModel) {
+    public init(model: ChainSettingsSceneViewModel) {
         _model = State(initialValue: model)
     }
 
@@ -30,22 +29,21 @@ public struct ChainSettingsScene: View {
                         value: nodeModel.chainNode.host,
                         selection: model.selectedNode.host
                     ) { _ in
-                        onSelectNode(nodeModel.chainNode)
+                        model.onSelectNode(nodeModel.chainNode)
                     }
                     .contextMenu(
                         .copy(value: nodeModel.chainNode.node.url)
                     )
                     .if(model.canDelete(node: nodeModel.chainNode)) {
                         $0.swipeActions(edge: .trailing) {
-                            Button(Localized.Common.delete, role: .destructive) {
-                                onSelectDelete(nodeModel.chainNode)
+                            Button(model.deleteButtonTitle, role: .destructive) {
+                                model.onSelectNodeForDeletion(nodeModel.chainNode)
                             }
                             .tint(Colors.red)
                         }
                     }
                 }
             }
-            .listRowInsets(.assetListRowInsets)
             
             Section(model.explorerTitle) {
                 ForEach(model.explorers, id: \.self) { explorer in
@@ -58,30 +56,29 @@ public struct ChainSettingsScene: View {
                         subtitleExtra: .none,
                         value: explorer,
                         selection: model.selectedExplorer,
-                        action: onSelectExplorer(name:)
+                        action: model.onSelectExplorer(name:)
                     )
                 }
             }
-            .listRowInsets(.assetListRowInsets)
         }
         .refreshable {
-            await fetch()
+            await model.fetch()
         }
-        .confirmationDialog(
-            Localized.Common.deleteConfirmation(model.nodeDelete?.host ?? ""),
+        .alert(
+            model.deleteConfirmationTitle(for: model.nodeDelete?.host ?? ""),
             presenting: $model.nodeDelete,
             sensoryFeedback: .warning,
             actions: { chainNode in
                 Button(
-                    Localized.Common.delete,
+                    model.deleteButtonTitle,
                     role: .destructive,
-                    action: onDeleteNode
+                    action: model.onDeleteNode
                 )
             }
         )
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button(action: onSelectImportNode) {
+                Button(action: model.onPresentImportNode) {
                     Images.System.plus
                         .font(.body.weight(.semibold))
                 }
@@ -92,71 +89,16 @@ public struct ChainSettingsScene: View {
                 AddNodeScene(
                     model: AddNodeSceneViewModel(
                         chain: model.chain,
-                        nodeService: model.nodeService),
-                    onDismiss: onDismissAddCustomNode
+                        nodeService: model.nodeService
+                    ),
+                    onDismiss: model.onDismissImportNode
                 )
             }
         }
         .navigationTitle(model.title)
         .listSectionSpacing(.compact)
         .taskOnce {
-            Task { await fetch()}
-        }
-    }
-}
-
-// MARK: - Actions
-
-extension ChainSettingsScene {
-    private func onSelectNode(_ node: ChainNode) {
-        do {
-            try model.select(node: node)
-        } catch {
-            // TODO: - handle error
-            print("chain settings scene: on chain select error \(error)")
-        }
-    }
-
-    private func onSelectDelete(_ chainNode: ChainNode) {
-        model.nodeDelete = chainNode
-    }
-
-    private func onSelectExplorer(name: String) {
-        model.selectExplorer(name: name)
-    }
-
-    private func onSelectImportNode() {
-        model.isPresentingImportNode = true
-    }
-
-    private func onDismissAddCustomNode() {
-        model.isPresentingImportNode = false
-        Task {
-            await fetch()
-        }
-    }
-
-    private func onDeleteNode() {
-        do {
-            try model.delete()
-        } catch {
-            // TODO: - handle error
-            print("chain settings scene: on delete error \(error)")
-        }
-    }
-}
-
-// MARK: - Effects
-
-extension ChainSettingsScene {
-    private func fetch() async {
-        do {
-            model.clear()
-            try model.fetchNodes()
-            await model.fetchNodesStatusInfo()
-        } catch {
-            // TODO: - handle error
-            print("chain settings scene: fetch error \(error)")
+            Task { await model.fetch()}
         }
     }
 }

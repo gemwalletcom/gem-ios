@@ -3,16 +3,17 @@
 import Foundation
 import Primitives
 import GemAPI
-import GemstonePrimitives
 import WidgetKit
 import Preferences
 
 internal struct WidgetPriceService {
     private let pricesService: any GemAPIPricesService
+    private let assetsService: any GemAPIAssetsService
     private let preferences = SharedPreferences()
     
     init() {
         self.pricesService = GemAPIService()
+        self.assetsService = GemAPIService()
     }
     
     internal func coins(_ widgetFamily: WidgetFamily) -> [AssetId] {
@@ -35,23 +36,19 @@ internal struct WidgetPriceService {
         let currency = preferences.currency
         
         do {
-            let prices = try await pricesService.getPrices(currency: currency, assetIds: coins)
+            let (assets, prices) = try await (
+                assetsService.getAssets(assetIds: coins),
+                pricesService.getPrices(currency: currency, assetIds: coins)
+            )
             
-            let coinPrices = coins.enumerated().compactMap { index, assetId -> CoinPrice? in
-                guard index < prices.count else { return nil }
-                let price = prices[index]
-                let chain = assetId.chain
-                let name = chain.asset.name
-                let symbol = chain.asset.symbol
-                let imageURL = AssetImageFormatter().getURL(for: assetId)
-                
+            let coinPrices = assets.compactMap { asset -> CoinPrice? in
+                guard let price = prices.first(where: { $0.assetId == asset.asset.id }) else { return nil }
                 return CoinPrice(
-                    assetId: assetId,
-                    name: name,
-                    symbol: symbol,
+                    assetId: asset.asset.id,
+                    name: asset.asset.name,
+                    symbol: asset.asset.symbol,
                     price: price.price,
-                    priceChangePercentage24h: price.priceChangePercentage24h,
-                    imageURL: imageURL
+                    priceChangePercentage24h: price.priceChangePercentage24h
                 )
             }
             return PriceWidgetEntry(

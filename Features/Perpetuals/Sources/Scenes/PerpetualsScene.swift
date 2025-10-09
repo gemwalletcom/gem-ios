@@ -10,83 +10,99 @@ import PrimitivesComponents
 import Preferences
 
 public struct PerpetualsScene: View {
-    
-    let model: PerpetualsSceneViewModel
-    
+    @Bindable private var model: PerpetualsSceneViewModel
+
     public init(model: PerpetualsSceneViewModel) {
         self.model = model
     }
-    
+
     public var body: some View {
-        List {
-            Section { } header: {
-                WalletHeaderView(
-                    model: model.headerViewModel,
-                    isHideBalanceEnalbed: .constant(model.preferences.isHideBalanceEnabled),
-                    onHeaderAction: model.onHeaderAction,
-                    onInfoAction: { }
-                )
-                .padding(.top, Spacing.small)
-            }
-            .cleanListRow()
-            
-            if !model.positions.isEmpty {
-                Section {
-                    ForEach(model.positions) { positionData in
-                        NavigationLink(
-                            value: Scenes
-                                .Perpetual(perpetualData: PerpetualData(perpetual: positionData.perpetual, asset: positionData.asset))
-                        ) {
-                            ListAssetItemView(model: PerpetualPositionItemViewModel(
-                                model: PerpetualPositionViewModel(
-                                    data: positionData
-                                )
-                            ))
-                        }
-                        .listRowInsets(.assetListRowInsets)
-                    }
-                } header: {
-                    Text(model.positionsSectionTitle)
-                }
-            }
-            
-            Section {
-                if model.perpetuals.isEmpty {
-                    Text(model.noMarketsText)
-                        .foregroundColor(.secondary)
-                } else {
-                    ForEach(model.perpetuals) { perpetualData in
-                        NavigationLink(value: Scenes.Perpetual(perpetualData: perpetualData)) {
-                            ListAssetItemView(
-                                model: PerpetualItemViewModel(
-                                    model: PerpetualViewModel(
-                                        perpetual: perpetualData.perpetual,
-                                        currencyStyle: .abbreviated
-                                    )
-                                )
-                            )
-                        }
-                    }
-                    .listRowInsets(.assetListRowInsets)
-                }
-            } header: {
-                Text(model.marketsSectionTitle)
-            }
-        }
+        SearchableWrapper(
+            content: { list },
+            isSearching: $model.isSearching,
+            dismissSearch: .constant(false)
+        )
+        .searchable(
+            text: $model.searchQuery,
+            isPresented: $model.isSearchPresented,
+            placement: .navigationBarDrawer(displayMode: .automatic)
+        )
+        .onChange(of: model.searchQuery, model.onSearchQueryChange)
+        .onChange(of: model.isSearchPresented, model.onSearchPresentedChange)
         .navigationTitle(model.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .taskOnce {
-            Task {
-                await model.fetch()
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: model.onSelectSearchButton) {
+                    model.searchImage
+                }
             }
         }
-        .onReceive(Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()) { _ in
+        .taskOnce {
             Task {
                 await model.fetch()
             }
         }
         .refreshable {
             await model.fetch()
+        }
+    }
+
+    var list: some View {
+        List {
+            if !model.isSearching {
+                Section { } header: {
+                    WalletHeaderView(
+                        model: model.headerViewModel,
+                        isHideBalanceEnalbed: .constant(model.preferences.isHideBalanceEnabled),
+                        onHeaderAction: model.onSelectHeaderAction,
+                        onInfoAction: .none
+                    )
+                    .padding(.top, Spacing.small)
+                }
+                .cleanListRow()
+            }
+
+            if model.showPositions {
+                Section {
+                    ForEach(model.positions) { position in
+                        NavigationLink(
+                            value: Scenes.Perpetual(position.perpetualData),
+                            label: {
+                                ListAssetItemView(
+                                    model: PerpetualPositionItemViewModel(model: PerpetualPositionViewModel(position))
+                                )
+                            }
+                        )
+                        .listRowInsets(.assetListRowInsets)
+                    }
+                } header: {
+                    Text(model.positionsSectionTitle)
+                }
+            }
+
+            if model.showPinned {
+                Section {
+                    PerpetualSectionView(
+                        perpetuals: model.sections.pinned,
+                        onPin: model.onPinPerpetual
+                    )
+                } header: {
+                    HStack {
+                        model.pinImage
+                        Text(model.pinnedSectionTitle)
+                    }
+                }
+            }
+            Section {
+                PerpetualSectionView(
+                    perpetuals: model.sections.markets,
+                    onPin: model.onPinPerpetual,
+                    emptyText: model.noMarketsText
+                )
+            } header: {
+                Text(model.marketsSectionTitle)
+            }
         }
     }
 }

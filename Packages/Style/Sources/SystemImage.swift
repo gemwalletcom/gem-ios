@@ -4,10 +4,14 @@ import SwiftUI
 
 public struct SystemImage {
     public static let settings = "gearshape"
-    public static let qrCode = "qrcode.viewfinder"
+    public static let qrCodeViewfinder = "qrcode.viewfinder"
+    public static let qrCode = "qrcode"
     public static let paste = "doc.on.clipboard"
     public static let copy = "doc.on.doc"
+    public static let arrowSwap = "arrow.trianglehead.2.clockwise"
+    public static let paperplane = "paperplane"
     public static let chevronDown = "chevron.down"
+    public static let chevronRight = "chevron.right"
     public static let checklist = "checklist.unchecked"
     public static let clear = "multiply.circle.fill"
     public static let hide = "eye.slash.fill"
@@ -29,6 +33,7 @@ public struct SystemImage {
     public static let minusCircle = "minus.circle"
     public static let eye = "eye.fill"
     public static let searchNoResults = "exclamationmark.magnifyingglass"
+    public static let search = "magnifyingglass"
     public static let exclamationmarkTriangleFill = "exclamationmark.triangle.fill"
     public static let exclamationmarkTriangle = "exclamationmark.triangle"
     public static let gallery = "photo.on.rectangle.angled"
@@ -49,6 +54,10 @@ public struct SystemImage {
     public static let pencilLine = "pencil.line"
     public static let checkmarkCircle = "checkmark.circle"
     public static let circle = "circle"
+    public static let dollarsign = "dollarsign"
+    public static let wallet = "wallet.pass"
+    public static let eyeCircle = "eye.circle"
+    public static let bitcoin = "bitcoinsign.arrow.trianglehead.counterclockwise.rotate.90"
 
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill

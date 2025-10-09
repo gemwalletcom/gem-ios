@@ -25,10 +25,10 @@ let package = Package(
 
         .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
-        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
-        .package(name: "QRScanner", path: "../QRScanner")
+        .package(name: "QRScanner", path: "../QRScanner"),
+        .package(name: "Support", path: "../Support")
     ],
     targets: [
         .target(
@@ -43,20 +43,22 @@ let package = Package(
                 "GemstonePrimitives",
                 "Gemstone",
                 "Keystore",
-                .product(name: "WalletsService", package: "SystemServices"),
-                .product(name: "BannerService", package: "SystemServices"),
+                .product(name: "WalletsService", package: "FeatureServices"),
+                .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "StakeService", package: "ChainServices"),
                 .product(name: "AssetsService", package: "FeatureServices"),
                 .product(name: "TransactionsService", package: "FeatureServices"),
-                .product(name: "NotificationService", package: "SystemServices"),
-                .product(name: "DeviceService", package: "SystemServices"),
+                .product(name: "NotificationService", package: "FeatureServices"),
+                .product(name: "DeviceService", package: "FeatureServices"),
                 .product(name: "PriceService", package: "FeatureServices"),
-                .product(name: "AppService", package: "SystemServices"),
+                .product(name: "AppService", package: "FeatureServices"),
+                .product(name: "PerpetualService", package: "FeatureServices"),
                 "Formatters",
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "NodeService", package: "ChainServices"),
                 .product(name: "ExplorerService", package: "ChainServices"),
-                "QRScanner"
+                "QRScanner",
+                "Support"
             ],
             path: "Sources"
         ),

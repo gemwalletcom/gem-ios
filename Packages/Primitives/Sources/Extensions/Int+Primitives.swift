@@ -25,6 +25,13 @@ public enum RoundingMode {
 
 extension Int {
     
+    public static func from(string: String) throws -> Self {
+        guard let value = Self(string) else {
+            throw AnyError("invalid int")
+        }
+        return value
+    }
+    
     public func isBetween(_ lowerBound: Int, and upperBound: Int) -> Bool {
         return self >= lowerBound && self <= upperBound
     }

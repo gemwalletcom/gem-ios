@@ -12,6 +12,9 @@ let package = Package(
         .library(
             name: "Transfer",
             targets: ["Transfer"]),
+        .library(
+            name: "TransferTestKit",
+            targets: ["TransferTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -34,7 +37,6 @@ let package = Package(
         .package(name: "FiatConnect", path: "../FiatConnect"),
         .package(name: "Swap", path: "../Swap"),
 
-        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "GemAPI", path: "../../Packages/GemAPI")
@@ -64,37 +66,47 @@ let package = Package(
                 "Swap",
 
                 .product(name: "ChainService", package: "ChainServices"),
-                .product(name: "WalletService", package: "SystemServices"),
-                .product(name: "WalletsService", package: "SystemServices"),
-                .product(name: "StakeService", package: "ChainServices"),
+                .product(name: "WalletService", package: "FeatureServices"),
+                .product(name: "WalletsService", package: "FeatureServices"),
                 .product(name: "NodeService", package: "ChainServices"),
                 .product(name: "TransactionService", package: "FeatureServices"),
                 .product(name: "ScanService", package: "ChainServices"),
                 .product(name: "BalanceService", package: "FeatureServices"),
                 .product(name: "PriceService", package: "FeatureServices"),
                 .product(name: "ExplorerService", package: "ChainServices"),
-                .product(name: "NameService", package: "ChainServices")
+                .product(name: "NameService", package: "ChainServices"),
+                .product(name: "AddressNameService", package: "FeatureServices")
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "TransferTestKit",
+            dependencies: [
+                "Transfer",
+                "Primitives",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "TransferTests",
             dependencies: [
                 "Transfer",
+                "TransferTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "StakeServiceTestKit", package: "ChainServices"),
-                .product(name: "WalletsServiceTestKit", package: "SystemServices"),
+                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BlockchainTestKit", package: "Blockchain"),
                 .product(name: "ScanServiceTestKit", package: "ChainServices"),
                 .product(name: "SwapServiceTestKit", package: "FeatureServices"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
-                .product(name: "WalletServiceTestKit", package: "SystemServices"),
+                .product(name: "WalletServiceTestKit", package: "FeatureServices"),
                 .product(name: "NameServiceTestKit", package: "ChainServices"),
                 .product(name: "NodeServiceTestKit", package: "ChainServices"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "TransactionServiceTestKit", package: "FeatureServices"),
+                .product(name: "AddressNameServiceTestKit", package: "FeatureServices"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
             ],

@@ -40,7 +40,7 @@ struct RootScene: View {
                 presenter: model.walletConnectorPresenter
             )
         }
-        .confirmationDialog(
+        .alert(
             Localized.WalletConnect.brandName,
             presenting: $model.isPresentingConnectorError,
             actions: { _ in

@@ -14,10 +14,10 @@ public struct XrpSigner: Signable {
     }
     
     func sign(input: SignerInput, operation: Operation, privateKey: Data) throws -> String {
-        let signingInput = RippleSigningInput.with {
+        let signingInput = try RippleSigningInput.with {
             $0.fee = input.fee.fee.asInt64
-            $0.sequence = input.sequence.asUInt32
-            $0.lastLedgerSequence = (input.block.number + 12).asUInt32
+            $0.sequence = UInt32(try input.metadata.getSequence())
+            $0.lastLedgerSequence = UInt32(try input.metadata.getBlockNumber()) + 12
             $0.account = input.senderAddress
             $0.privateKey = privateKey
             switch operation {

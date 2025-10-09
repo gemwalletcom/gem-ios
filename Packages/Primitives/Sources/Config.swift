@@ -29,9 +29,9 @@ public struct ConfigVersions: Codable, Sendable {
 }
 
 public struct SwapConfig: Codable, Sendable {
-	public let enabledProviders: [SwapProvider]
+	public let enabledProviders: [String]
 
-	public init(enabledProviders: [SwapProvider]) {
+	public init(enabledProviders: [String]) {
 		self.enabledProviders = enabledProviders
 	}
 }

@@ -10,6 +10,8 @@ import PrimitivesComponents
 import Store
 import SwiftUI
 import Formatters
+import ExplorerService
+import Preferences
 
 @Observable
 @MainActor
@@ -20,12 +22,15 @@ public final class PerpetualSceneViewModel {
 
     public let wallet: Wallet
     public let asset: Asset
+    public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     public var positionsRequest: PerpetualPositionsRequest
     public var perpetualTotalValueRequest: TotalValueRequest
+    public var transactionsRequest: TransactionsRequest
     public var positions: [PerpetualPositionData] = []
     public var perpetualTotalValue: Double = .zero
+    public var transactions: [TransactionExtended] = []
     public var state: StateViewType<[ChartCandleStick]> = .loading
-    public var currentPeriod: ChartPeriod = .hour {
+    public var currentPeriod: ChartPeriod = .day {
         didSet {
             Task {
                 await fetchCandlesticks()
@@ -33,13 +38,14 @@ public final class PerpetualSceneViewModel {
         }
     }
     let formatter = PerpetualPriceFormatter()
-
+    let preference = Preferences.standard
     public var isPresentingInfoSheet: InfoSheetType?
+    public var isPresentingModifyAlert: Bool?
 
     public let perpetualViewModel: PerpetualViewModel
 
     public var positionViewModels: [PerpetualPositionViewModel] {
-        positions.map { PerpetualPositionViewModel(data: $0) }
+        positions.map { PerpetualPositionViewModel($0) }
     }
 
     public init(
@@ -57,27 +63,25 @@ public final class PerpetualSceneViewModel {
         self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
         self.perpetualTotalValueRequest = TotalValueRequest(walletId: wallet.id, balanceType: .perpetual)
-    }
-
-    public var navigationTitle: String {
-        perpetualViewModel.name
-    }
-
-    public var hasOpenPosition: Bool {
-        !positionViewModels.isEmpty
-    }
-
-    var perpetualHeaderModel: WalletHeaderViewModel {
-        WalletHeaderViewModel(
-            walletType: wallet.type,
-            value: perpetualTotalValue,
-            currencyCode: Currency.usd.rawValue
+        
+        self.transactionsRequest = TransactionsRequest(
+            walletId: wallet.id,
+            type: .asset(assetId: asset.id),
+            filters: [.types([TransactionType.perpetualOpenPosition, TransactionType.perpetualClosePosition].map { $0.rawValue })]
         )
     }
 
+    public var navigationTitle: String { perpetualViewModel.name }
+    public var currency: String { preference.currency }
+    public var hasOpenPosition: Bool { !positionViewModels.isEmpty }
+
     public var positionSectionTitle: String { Localized.Perpetual.position }
     public var infoSectionTitle: String { Localized.Common.info }
+    public var transactionsSectionTitle: String { Localized.Activity.title }
     public var closePositionTitle: String { Localized.Perpetual.closePosition }
+    public var modifyPositionTitle: String { Localized.Perpetual.modify }
+    public var increasePositionTitle: String { Localized.Perpetual.increasePosition }
+    public var reducePositionTitle: String { Localized.Perpetual.reducePosition }
     public var longButtonTitle: String { Localized.Perpetual.long }
     public var shortButtonTitle: String { Localized.Perpetual.short }
 
@@ -131,6 +135,10 @@ public extension PerpetualSceneViewModel {
         isPresentingInfoSheet = .openInterest
     }
 
+    func onModifyPosition() {
+        isPresentingModifyAlert = true
+    }
+
     func onClosePosition() {
         guard
             let position = positions.first?.position,
@@ -149,15 +157,15 @@ public extension PerpetualSceneViewModel {
         let size = formatter.formatSize(provider: perpetualViewModel.perpetual.provider, abs(position.size), decimals: Int(asset.decimals))
         let data = PerpetualConfirmData(
             direction: position.direction,
-            asset: asset,
-            assetIndex: Int(assetIndex),
+            baseAsset: .hyperliquidUSDC(),
+            assetIndex: Int32(assetIndex),
             price: price,
             fiatValue: abs(position.size) * positionPrice,
             size: size
         )
         
         let transferData = TransferData(
-            type: .perpetual(.hyperliquidUSDC(), .close(data)),
+            type: .perpetual(asset, .close(data)),
             recipientData: .hyperliquid(),
             value: .zero,
             canChangeValue: false
@@ -175,8 +183,8 @@ public extension PerpetualSceneViewModel {
             data: PerpetualTransferData(
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .long,
-                asset: .hyperliquidUSDC(),
-                perpetualAsset: asset,
+                asset: asset,
+                baseAsset: .hyperliquidUSDC(),
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
                 leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
@@ -194,14 +202,44 @@ public extension PerpetualSceneViewModel {
             data: PerpetualTransferData(
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .short,
-                asset: .hyperliquidUSDC(),
-                perpetualAsset: asset,
+                asset: asset,
+                baseAsset: .hyperliquidUSDC(),
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
                 leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
             )
         )
         onPerpetualRecipientData?(data)
+    }
+
+    func onIncreasePosition() {
+        isPresentingModifyAlert = false
+
+        guard let direction = positions.first?.position.direction else {
+            return
+        }
+
+        switch direction {
+        case .long:
+            onOpenLongPosition()
+        case .short:
+            onOpenShortPosition()
+        }
+    }
+
+    func onReducePosition() {
+        isPresentingModifyAlert = false
+
+        guard let direction = positions.first?.position.direction else {
+            return
+        }
+
+        switch direction {
+        case .long:
+            onOpenShortPosition()
+        case .short:
+            onOpenLongPosition()
+        }
     }
 }
 

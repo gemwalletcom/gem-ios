@@ -2,8 +2,8 @@
 
 import Foundation
 import Blockchain
-import ChainService
 import Primitives
+import NativeProviderService
 
 public struct PerpetualProviderFactory {
     
@@ -14,11 +14,11 @@ public struct PerpetualProviderFactory {
     }
     
     public func createProvider(chain: Chain = .hyperCore) -> PerpetualProvidable {
-        HyperCorePerpetualProvider(
-            hyperCoreService: HyperCoreService(
-                provider: ProviderFactory.create(with: nodeProvider.node(for: chain)),
-                cacheService: BlockchainCacheService(chain: chain)
-            )
+        GatewayPerpetualProvider(
+            gateway: GatewayService(
+                provider: NativeProvider(nodeProvider: nodeProvider)
+            ),
+            chain: chain
         )
     }
 }

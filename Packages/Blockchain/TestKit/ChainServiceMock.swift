@@ -22,9 +22,10 @@ public struct ChainServiceMock: ChainServiceable {
     public var inSync: Bool = true
     public var tokenData: [String: Asset] = [:]
     public var transactionData: TransactionData = TransactionData(fee: Fee(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero))
-    public var transactionPreload: TransactionPreload = TransactionPreload()
+    public var transactionPreload: TransactionLoadMetadata = .none
     public var transactionState: TransactionChanges = TransactionChanges(state: .pending, changes: [])
-    
+    public var nodeStatus: NodeStatus = NodeStatus(chainId: "1", latestBlockNumber: .zero, latency: .from(duration: 1000))
+
     public init() {}
 }
 
@@ -91,15 +92,19 @@ extension ChainServiceMock {
         tokenData[tokenId] != nil
     }
     
-    public func load(input: Blockchain.TransactionInput) async throws -> TransactionData {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         transactionData
     }
     
-    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
         transactionPreload
     }
     
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         transactionState
+    }
+    
+    public func getNodeStatus(url: String) async throws -> NodeStatus {
+        nodeStatus
     }
 }

@@ -23,6 +23,7 @@ import AvatarService
 import SwapService
 import NameService
 import PerpetualService
+import AddressNameService
 
 extension AppResolver {
     struct Services: Sendable {
@@ -55,7 +56,9 @@ extension AppResolver {
         let onstartAsyncService: OnstartAsyncService
         let walletConnectorManager: WalletConnectorManager
         let perpetualService: PerpetualService
+        let perpetualObserverService: PerpetualObserverService
         let nameService: NameService
+        let addressNameService: AddressNameService
         let viewModelFactory: ViewModelFactory
 
         init(
@@ -87,7 +90,9 @@ extension AppResolver {
             onstartAsyncService: OnstartAsyncService,
             walletConnectorManager: WalletConnectorManager,
             perpetualService: PerpetualService,
+            perpetualObserverService: PerpetualObserverService,
             nameService: NameService,
+            addressNameService: AddressNameService,
             viewModelFactory: ViewModelFactory
         ) {
             self.assetsService = assetsService
@@ -118,7 +123,9 @@ extension AppResolver {
             self.onstartAsyncService = onstartAsyncService
             self.walletConnectorManager = walletConnectorManager
             self.perpetualService = perpetualService
+            self.perpetualObserverService = perpetualObserverService
             self.nameService = nameService
+            self.addressNameService = addressNameService
             self.viewModelFactory = viewModelFactory
         }
     }

@@ -58,7 +58,7 @@ extension AddNodeSceneViewModel {
     
     public func fetch() async  {
         guard let url = try? URLDecoder().decode(urlInput) else {
-            await updateStateWithError(error: AnyError(AddNodeError.invalidURL.errorDescription ?? ""))
+            state = .error(AnyError(AddNodeError.invalidURL.errorDescription ?? ""))
             return
         }
 
@@ -67,45 +67,21 @@ extension AddNodeSceneViewModel {
         let service = provider.service(for: chain)
 
         do {
-            async let (requestLatency, networkId) = fetchChainID(service: service)
-            async let inSync = service.getInSync()
-            async let latestBlock = service.getLatestBlock()
-
-            let (latency, chainId, isNodeInSync, blockNumber) = try await (requestLatency, networkId, inSync, latestBlock)
-
-            let result = AddNodeResult(url: url, chainID: chainId, blockNumber: blockNumber, isInSync: isNodeInSync, latency: latency)
-            let resultVM = AddNodeResultViewModel(addNodeResult: result)
-            state = .data(resultVM)
+            let nodeStatus = try await service.getNodeStatus(url: urlInput)
+            guard NodeService.isValid(netoworkId: nodeStatus.chainId, for: chain) else {
+                throw AddNodeError.invalidNetworkId
+            }
+            
+            let result = AddNodeResult(
+                url: url, 
+                chainID: nodeStatus.chainId, 
+                blockNumber: nodeStatus.latestBlockNumber, 
+                isInSync: true, 
+                latency: nodeStatus.latency
+            )
+            state = .data(AddNodeResultViewModel(addNodeResult: result))
         } catch {
-            await updateStateWithError(error: error)
+            state = .error(error)
         }
-    }
-}
-
-// MARK: - Private
-
-extension AddNodeSceneViewModel {
-    private func fetchChainID(service: any ChainIDFetchable) async throws -> (latency: Latency, value: String) {
-        let result = try await LatencyMeasureService.measure(for: service.getChainID)
-        let networkId = result.value
-        guard NodeService.isValid(netoworkId: networkId, for: chain) else {
-            throw AddNodeError.invalidNetworkId
-        }
-        return (latency: .from(duration: result.duration), value: networkId)
-    }
-
-    private func updateStateWithError(error: any Error) async {
-        await MainActor.run { [self] in
-            self.state = .error(error)
-        }
-    }
-}
-
-// MARK: - NodeURLFetchable
-
-extension AddNodeSceneViewModel {
-    struct CustomNodeULRFetchable: NodeURLFetchable {
-        let url: URL
-        func node(for chain: Chain) -> URL { url }
     }
 }

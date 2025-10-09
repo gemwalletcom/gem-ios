@@ -117,10 +117,16 @@ public final class SwapDetailsViewModel {
     }
     
     // MARK: - Slippage
-    var slippageField: String { Localized.Swap.slippage }
+    var slippageTitle: String { Localized.Swap.slippage }
+    var slippageValue: UInt32 { selectedQuote.slippageBps / 100 }
     var slippageText: String {
-        let slippageValue = Double(selectedQuote.slippageBps) / 100
-        return String(format: "%@ %@", "\(slippageValue.rounded(toPlaces: 2))", "%")
+        String(format: "%@ %@", "\(Double(slippageValue).rounded(toPlaces: 2))", "%")
+    }
+    
+    // MARK: - Min receive
+    var minReceiveTitle: String { Localized.Swap.minReceive }
+    var minReceiveText: String {
+        valueFormatter.string(selectedQuote.toValueBigInt.decrease(byPercent: Int(slippageValue)), asset: toAssetPrice.asset)
     }
 
     // MARK: - Private methods

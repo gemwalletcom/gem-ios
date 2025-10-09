@@ -21,20 +21,20 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.keystore) private var keystore
-    @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
     @Environment(\.transactionService) private var transactionService
     @Environment(\.swapService) private var swapService
     @Environment(\.nameService) private var nameService
+    @Environment(\.addressNameService) private var addressNameService
 
     @State private var isPresentingFilteringView: Bool = false
 
     @State private var model: SelectAssetViewModel
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectAssetType: SelectAssetType?
-    
+
     init(
         model: SelectAssetViewModel,
         isPresentingSelectType: Binding<SelectAssetType?>
@@ -75,11 +75,6 @@ struct SelectAssetSceneNavigationStack: View {
                 switch input.type {
                 case .send:
                     RecipientNavigationView(
-                        amountService: AmountService(
-                            priceService: priceService,
-                            balanceService: balanceService,
-                            stakeService: stakeService
-                        ),
                         confirmService: ConfirmServiceFactory.create(
                             keystore: keystore,
                             nodeService: nodeService,
@@ -88,6 +83,7 @@ struct SelectAssetSceneNavigationStack: View {
                             balanceService: balanceService,
                             priceService: priceService,
                             transactionService: transactionService,
+                            addressNameService: addressNameService,
                             chain: input.asset.chain
                         ),
                         model: viewModelFactory.recipientScene(
@@ -100,10 +96,7 @@ struct SelectAssetSceneNavigationStack: View {
                             onTransferAction: {
                                 navigationPath.append($0)
                             }
-                        ),
-                        onComplete: {
-                            isPresentingSelectAssetType = nil
-                        }
+                        )
                     )
                 case .receive:
                     ReceiveScene(
@@ -128,6 +121,29 @@ struct SelectAssetSceneNavigationStack: View {
                                 type: .deposit(
                                     recipient: RecipientData(
                                         recipient: .hyperliquid,
+                                        amount: .none
+                                    )
+                                ),
+                                asset: input.asset
+                            ),
+                            wallet: model.wallet,
+                            onTransferAction: {
+                                navigationPath.append($0)
+                            }
+                        )
+                    )
+                case .withdraw:
+                    let withdrawRecipient = Recipient(
+                        name: model.wallet.name,
+                        address: input.assetAddress.address,
+                        memo: nil
+                    )
+                    AmountNavigationView(
+                        model: viewModelFactory.amountScene(
+                            input: AmountInput(
+                                type: .withdraw(
+                                    recipient: RecipientData(
+                                        recipient: withdrawRecipient,
                                         amount: .none
                                     )
                                 ),
@@ -179,4 +195,3 @@ extension SelectAssetSceneNavigationStack {
         isPresentingFilteringView.toggle()
     }
 }
-

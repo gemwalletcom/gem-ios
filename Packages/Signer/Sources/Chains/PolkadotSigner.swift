@@ -7,20 +7,20 @@ import Primitives
 public struct PolkadotSigner: Signable {
     
     func sign(input: SignerInput, message: PolkadotSigningInput.OneOf_MessageOneof, privateKey: Data) throws -> String {
-        guard case let .polkadot(data) = input.data else {
+        guard case let .polkadot(sequence, genesisHash, blockHash, blockNumber, specVersion, transactionVersion, period) = input.metadata else {
             throw SignerError.incompleteData
         }
-        let input = PolkadotSigningInput.with {
-            $0.genesisHash = data.genesisHash
-            $0.blockHash = data.blockHash
-            $0.nonce = input.sequence.asUInt64
-            $0.specVersion = data.specVersion
+        let input = try PolkadotSigningInput.with {
+            $0.genesisHash = try Data.from(hex: genesisHash)
+            $0.blockHash = try Data.from(hex: blockHash)
+            $0.nonce = sequence
+            $0.specVersion = UInt32(specVersion)
             $0.network = CoinType.polkadot.ss58Prefix
-            $0.transactionVersion = data.transactionVersion
+            $0.transactionVersion = UInt32(transactionVersion)
             $0.privateKey = privateKey
             $0.era = PolkadotEra.with {
-                $0.blockNumber = data.blockNumber
-                $0.period = data.period
+                $0.blockNumber = UInt64(blockNumber)
+                $0.period = UInt64(period)
             }
             $0.messageOneof = message
         }

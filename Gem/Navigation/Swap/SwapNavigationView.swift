@@ -2,14 +2,11 @@
 
 import SwiftUI
 import Primitives
-import ChainService
 import Components
 import InfoSheet
 import Swap
 import Assets
-import Transfer
-import ExplorerService
-import Signer
+import AssetsService
 
 struct SwapNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -18,29 +15,12 @@ struct SwapNavigationView: View {
 
     @State private var model: SwapSceneViewModel
 
-    private let onComplete: VoidAction
-
-    init(
-        model: SwapSceneViewModel,
-        onComplete: VoidAction
-    ) {
+    init(model: SwapSceneViewModel) {
         _model = State(initialValue: model)
-        self.onComplete = onComplete
     }
 
     var body: some View {
         SwapScene(model: model)
-            .navigationDestination(for: TransferData.self) { data in
-                ConfirmTransferScene(
-                    model: viewModelFactory.confirmTransferScene(
-                        wallet: model.wallet,
-                        data: data,
-                        onComplete: {
-                            onSwapComplete(type: data.type)
-                        }
-                    )
-                )
-            }
             .sheet(item: $model.isPresentingInfoSheet) {
                 switch $0 {
                 case let .info(type):
@@ -50,7 +30,7 @@ struct SwapNavigationView: View {
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             selectType: .swap(type),
-                            assetsService: assetsService,
+                            searchService: AssetSearchService(assetsService: assetsService),
                             walletsService: model.walletsService,
                             priceAlertService: priceAlertService,
                             selectAssetAction: model.onFinishAssetSelection
@@ -66,17 +46,5 @@ struct SwapNavigationView: View {
                     }
                 }
             }
-    }
-}
-
-// MARK: - Actions
-
-extension SwapNavigationView {
-    private func onSwapComplete(type: TransferDataType) {
-        switch type {
-        case .swap, .tokenApprove:
-            onComplete?()
-        default: break
-        }
     }
 }

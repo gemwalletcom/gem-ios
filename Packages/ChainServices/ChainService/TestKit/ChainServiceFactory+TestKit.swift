@@ -2,10 +2,12 @@
 
 import Foundation
 import ChainService
+import Primitives
+import PrimitivesTestKit
 
 public extension ChainServiceFactory {
     static func mock(
-        nodeProvider: any NodeURLFetchable = NodeURLFetchableMock(url: URL(string: "https://gemwallet.com/")!)
+        nodeProvider: any NodeURLFetchable = MockNodeURLFetchable()
     ) -> ChainServiceFactory {
         ChainServiceFactory(nodeProvider: nodeProvider)
     }

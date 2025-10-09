@@ -59,6 +59,8 @@ public struct ChainImage: Sendable {
         case .berachain: Images.Chains.berachain
         case .hyperliquid, .hyperCore: Images.Chains.hyperliquid
         case .monad: Images.Chains.monad
+        case .plasma: Images.Chains.plasma
+        case .zcash: Images.Chains.zcash
         }
     }
     

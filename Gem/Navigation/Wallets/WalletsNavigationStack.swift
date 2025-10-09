@@ -27,10 +27,10 @@ struct WalletsNavigationStack: View {
             WalletsScene(
                 model: WalletsSceneViewModel(
                     navigationPath: $navigationPath,
-                    walletService: walletService
-                ),
-                isPresentingCreateWalletSheet: $isPresentingCreateWalletSheet,
-                isPresentingImportWalletSheet: $isPresentingImportWalletSheet
+                    walletService: walletService,
+                    isPresentingCreateWalletSheet: $isPresentingCreateWalletSheet,
+                    isPresentingImportWalletSheet: $isPresentingImportWalletSheet
+                )
             )
             .navigationDestination(for: Scenes.WalletDetail.self) {
                 WalletDetailScene(

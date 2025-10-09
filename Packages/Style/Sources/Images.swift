@@ -56,6 +56,8 @@ public enum Images {
         public static let unichain = Image(.unichain)
         public static let hyperliquid = Image(.hyperliquid)
         public static let monad = Image(.monad)
+        public static let plasma = Image(.plasma)
+        public static let zcash = Image(.zcash)
     }
 
     public enum SwapProviders {
@@ -77,6 +79,7 @@ public enum Images {
         public static let chainflip = Image(.chainflip)
         public static let relay = Image(.relay)
         public static let aerodrome = Image(.aerodrome)
+        public static let hyperliquid = Image(.hypercore)
     }
 
     public enum Fiat {
@@ -85,6 +88,7 @@ public enum Images {
         public static let banxa = Image(.banxa)
         public static let mercuryo = Image(.mercuryo)
         public static let ramp = Image(.ramp)
+        public static let paybis = Image(.paybis)
     }
 
     public enum Actions {

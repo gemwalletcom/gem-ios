@@ -7,7 +7,6 @@ import Style
 import Components
 import Localization
 
-// TODO: - integrate localization texts
 public struct EmptyContentTypeViewModel: EmptyContentViewable {
     public let type: EmptyContentType
 
@@ -19,8 +18,16 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         switch type {
         case .nfts: Localized.Nft.State.Empty.title
         case .priceAlerts: Localized.PriceAlerts.State.Empty.title
-        case .asset: Localized.Asset.State.Empty.title
-        case .activity: Localized.Activity.State.Empty.title
+        case let .asset(_, _, isViewOnly):
+            switch isViewOnly {
+            case true: Localized.Wallet.Watch.Tooltip.title
+            case false: Localized.Asset.State.Empty.title
+            }
+        case let .activity(_, _, isViewOnly):
+            switch isViewOnly {
+            case true: Localized.Wallet.Watch.Tooltip.title
+            case false: Localized.Activity.State.Empty.title
+            }
         case .stake: Localized.Stake.State.Empty.title
         case .walletConnect: Localized.WalletConnect.State.Empty.title
         case .markets: Localized.Markets.State.Empty.title
@@ -37,9 +44,17 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         switch type {
         case let .nfts(action): action != nil ? Localized.Nft.State.Empty.description : nil
         case .priceAlerts: Localized.PriceAlerts.State.Empty.description
-        case .asset(let symbol, _): Localized.Asset.State.Empty.description(symbol)
-        case .activity: Localized.Activity.State.Empty.description
-        case .stake(let symbol): Localized.Stake.State.Empty.description(symbol)
+        case let .asset(symbol, _, isViewOnly):
+            switch isViewOnly {
+            case true: Localized.Info.WatchWallet.description
+            case false: Localized.Asset.State.Empty.description(symbol)
+            }
+        case let .activity(_, _, isViewOnly):
+            switch isViewOnly {
+            case true: Localized.Info.WatchWallet.description
+            case false: Localized.Activity.State.Empty.description
+            }
+        case let .stake(symbol): Localized.Stake.State.Empty.description(symbol)
         case .walletConnect: Localized.WalletConnect.State.Empty.description
         case let .search(searchType, action):
             switch searchType {
@@ -64,34 +79,37 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
     }
 
     public var buttons: [EmptyAction] {
+        let actions: [EmptyAction]
+
         switch type {
         case .priceAlerts, .stake, .walletConnect, .markets:
-            return []
-        case let .asset(_ , buy):
-            return [
-                EmptyAction(title: Localized.Wallet.buy, action: buy),
-            ]
+            actions = []
+        case let .asset(_, buy, isViewOnly):
+            switch isViewOnly {
+            case true: actions = []
+            case false: actions = [EmptyAction(title: Localized.Wallet.buy, action: buy)]
+            }
         case let .nfts(action):
-            let receive = EmptyAction(title: Localized.Wallet.receive, action: action)
-            return [receive]
-        case let .activity(receive, buy):
-            return [
-                EmptyAction(title: Localized.Wallet.buy, action: buy),
-                EmptyAction(title: Localized.Wallet.receive, action: receive),
-            ].filter { $0.action != nil }
+            actions = [EmptyAction(title: Localized.Wallet.receive, action: action)]
+        case let .activity(receive, buy, isViewOnly):
+            switch isViewOnly {
+            case true: actions = []
+            case false : actions = [
+                    EmptyAction(title: Localized.Wallet.buy, action: buy),
+                    EmptyAction(title: Localized.Wallet.receive, action: receive)
+                ]
+            }
         case let .search(searchType, action):
             switch searchType {
             case .assets:
-                return [
-                    EmptyAction(title: Localized.Assets.addCustomToken, action: action)
-                ].filter { $0.action != nil }
+                actions = [EmptyAction(title: Localized.Assets.addCustomToken, action: action)]
             case .networks:
-                return []
+                actions = []
             case .activity:
-                return [
-                    EmptyAction(title: Localized.Filter.clear, action: action)
-                ]
+                actions = [EmptyAction(title: Localized.Filter.clear, action: action)]
             }
         }
+
+        return actions.filter { $0.action != nil }
     }
 }

@@ -110,9 +110,17 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
         switch transaction {
         case .ethereum: throw AnyError("Not supported yet")
-        case .solana(let tx):
+        case .solana(let transaction, let outputType):
             let transferData = TransferData(
-                type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: tx.data(using: .utf8), outputType: .signature)),
+                type: .generic(
+                    asset: chain.asset,
+                    metadata: session.session.metadata,
+                    extra: TransferDataExtra(
+                        data: transaction.data(using: .utf8),
+                        outputType: outputType,
+                        outputAction: .sign
+                    )
+                ),
                 recipientData: RecipientData(
                     recipient: Recipient(name: .none, address: "", memo: .none),
                     amount: .none
@@ -172,9 +180,16 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
             )
 
             return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
-        case .solana(let tx):
+        case .solana(let transaction, _):
             let transferData = TransferData(
-                type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: tx.data(using: .utf8))),
+                type: .generic(
+                    asset: chain.asset,
+                    metadata: session.session.metadata,
+                    extra: TransferDataExtra(
+                        data: transaction.data(using: .utf8),
+                        outputAction: .send
+                    )
+                ),
                 recipientData: RecipientData(
                     recipient: Recipient(name: .none, address: "", memo: .none),
                     amount: .none

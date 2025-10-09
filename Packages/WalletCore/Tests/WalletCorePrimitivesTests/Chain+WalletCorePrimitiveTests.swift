@@ -18,7 +18,7 @@ final class Chain_WalletCorePrimitiveTests {
         case .ethereum, .smartChain, .polygon, .arbitrum, .optimism, .base,
              .avalancheC, .opBNB, .fantom, .gnosis, .manta, .blast, .zkSync,
              .linea, .mantle, .celo, .world, .sonic, .abstract, .berachain,
-             .ink, .unichain, .hyperliquid, .monad, .hyperCore:
+             .ink, .unichain, .hyperliquid, .monad, .hyperCore, .plasma:
             expected = .ethereum
         case .solana:
             expected = .solana
@@ -60,6 +60,8 @@ final class Chain_WalletCorePrimitiveTests {
             expected = .polkadot
         case .cardano:
             expected = .cardano
+        case .zcash:
+            expected = .zcash
         }
 
         #expect(chain.coinType == expected)

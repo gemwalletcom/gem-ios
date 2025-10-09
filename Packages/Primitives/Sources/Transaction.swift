@@ -20,12 +20,12 @@ public struct Transaction: Codable, Equatable, Sendable {
 	public let value: String
 	public let memo: String?
 	public let direction: TransactionDirection
-	public let utxoInputs: [TransactionInput]
-	public let utxoOutputs: [TransactionInput]
+	public let utxoInputs: [TransactionUtxoInput]?
+	public let utxoOutputs: [TransactionUtxoInput]?
 	public let metadata: TransactionMetadata?
 	public let createdAt: Date
 
-	public init(id: String, hash: String, assetId: AssetId, from: String, to: String, contract: String?, type: TransactionType, state: TransactionState, blockNumber: String, sequence: String, fee: String, feeAssetId: AssetId, value: String, memo: String?, direction: TransactionDirection, utxoInputs: [TransactionInput], utxoOutputs: [TransactionInput], metadata: TransactionMetadata?, createdAt: Date) {
+	public init(id: String, hash: String, assetId: AssetId, from: String, to: String, contract: String?, type: TransactionType, state: TransactionState, blockNumber: String, sequence: String, fee: String, feeAssetId: AssetId, value: String, memo: String?, direction: TransactionDirection, utxoInputs: [TransactionUtxoInput]?, utxoOutputs: [TransactionUtxoInput]?, metadata: TransactionMetadata?, createdAt: Date) {
 		self.id = id
 		self.hash = hash
 		self.assetId = assetId

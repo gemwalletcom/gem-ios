@@ -9,7 +9,6 @@ internal struct CoinPrice: Sendable, Identifiable {
     let symbol: String
     let price: Double
     let priceChangePercentage24h: Double
-    let imageURL: URL?
     
     var id: AssetId { assetId }
     
@@ -19,14 +18,15 @@ internal struct CoinPrice: Sendable, Identifiable {
         symbol: String,
         price: Double,
         priceChangePercentage24h: Double,
-        imageURL: URL?
     ) {
         self.assetId = assetId
         self.name = name
         self.symbol = symbol
         self.price = price
         self.priceChangePercentage24h = priceChangePercentage24h
-        self.imageURL = imageURL
     }
-    
+ 
+    var imageURL: URL {
+        AssetImageFormatter.shared.getURL(for: id)
+    }
 }

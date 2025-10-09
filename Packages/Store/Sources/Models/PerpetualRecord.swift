@@ -19,6 +19,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         static let volume24h = Column("volume24h")
         static let funding = Column("funding")
         static let leverage = Column("leverage")
+        static let isPinned = Column("isPinned")
     }
     
     public var id: String
@@ -32,6 +33,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
     public var volume24h: Double
     public var funding: Double
     public var leverage: Data
+    public var isPinned: Bool
     
     public init(
         id: String,
@@ -44,7 +46,8 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         openInterest: Double,
         volume24h: Double,
         funding: Double,
-        leverage: Data
+        leverage: Data,
+        isPinned: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -57,9 +60,8 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         self.volume24h = volume24h
         self.funding = funding
         self.leverage = leverage
+        self.isPinned = isPinned
     }
-    
-    // MARK: - Associations
     
     static let positions = hasMany(PerpetualPositionRecord.self).forKey("positions")
     static let asset = belongsTo(AssetRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
@@ -67,24 +69,23 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
 
 extension PerpetualRecord: CreateTable {
     static func create(db: Database) throws {
-        try db.create(table: Self.databaseTableName) { t in
-            t.column(Columns.id.name, .text).primaryKey().notNull()
-            t.column(Columns.name.name, .text).notNull()
-            t.column(Columns.provider.name, .text).notNull()
-            t.column(Columns.assetId.name, .text).notNull()
+        try db.create(table: Self.databaseTableName) {
+            $0.column(Columns.id.name, .text).primaryKey().notNull()
+            $0.column(Columns.name.name, .text).notNull()
+            $0.column(Columns.provider.name, .text).notNull()
+            $0.column(Columns.assetId.name, .text).notNull()
                 .references(AssetRecord.databaseTableName, column: AssetRecord.Columns.id.name, onDelete: .cascade)
-            t.column(Columns.identifier.name, .text).notNull()
-            t.column(Columns.price.name, .double).notNull()
-            t.column(Columns.pricePercentChange24h.name, .double).notNull()
-            t.column(Columns.openInterest.name, .double).notNull()
-            t.column(Columns.volume24h.name, .double).notNull()
-            t.column(Columns.funding.name, .double).notNull()
-            t.column(Columns.leverage.name, .blob).notNull()
+            $0.column(Columns.identifier.name, .text).notNull()
+            $0.column(Columns.price.name, .double).notNull()
+            $0.column(Columns.pricePercentChange24h.name, .double).notNull()
+            $0.column(Columns.openInterest.name, .double).notNull()
+            $0.column(Columns.volume24h.name, .double).notNull()
+            $0.column(Columns.funding.name, .double).notNull()
+            $0.column(Columns.leverage.name, .blob).notNull()
+            $0.column(Columns.isPinned.name, .boolean).notNull().defaults(to: false)
         }
     }
 }
-
-// MARK: - Mapping
 
 extension PerpetualRecord {
     func mapToPerpetual() -> Perpetual {

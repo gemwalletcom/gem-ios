@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AssetMarket: Codable, Sendable {
+public struct AssetMarket: Codable, Equatable, Sendable {
 	public let marketCap: Double?
 	public let marketCapFdv: Double?
 	public let marketCapRank: Int32?

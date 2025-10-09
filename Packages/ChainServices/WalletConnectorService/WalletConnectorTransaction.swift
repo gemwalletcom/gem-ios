@@ -5,5 +5,5 @@ import Primitives
 
 public enum WalletConnectorTransaction {
     case ethereum(WCEthereumTransaction)
-    case solana(String)
+    case solana(String, TransferDataOutputType)
 }

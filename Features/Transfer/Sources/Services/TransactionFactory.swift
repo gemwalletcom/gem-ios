@@ -4,7 +4,6 @@ import Foundation
 import Primitives
 
 struct TransactionFactory {
-
     public static func makePendingTransaction(
         wallet: Wallet,
         transferData: TransferData,
@@ -27,11 +26,10 @@ struct TransactionFactory {
             }
         default: (transferData.type.transactionType, metadata)
         }
-        let state: TransactionState = switch transferData.chain {
-        case .hyperCore: .confirmed
-        default: .pending
-        }
-
+        let value = amount.value.description
+        
+        let state = TransactionState.pending
+        
         return Transaction(
             id: Transaction.id(chain: transferData.chain, hash: hash),
             hash: hash,
@@ -41,11 +39,11 @@ struct TransactionFactory {
             contract: nil,
             type: data.type,
             state: state,
-            blockNumber: String(transactionData.block.number),
-            sequence: transactionData.sequence.asString,
+            blockNumber: (try? String(transactionData.metadata.getBlockNumber())) ?? "0",
+            sequence: (try? String(transactionData.metadata.getSequence())) ?? "0",
             fee: amount.networkFee.description,
             feeAssetId: transferData.type.asset.feeAsset.id,
-            value: amount.value.description,
+            value: value,
             memo: transferData.recipientData.recipient.memo ?? "",
             direction: direction,
             utxoInputs: [],

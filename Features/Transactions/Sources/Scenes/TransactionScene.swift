@@ -4,116 +4,77 @@ import Foundation
 import SwiftUI
 import Components
 import Style
-import Store
-import GRDBQuery
-import Primitives
-import InfoSheet
 import PrimitivesComponents
-import ExplorerService
 
 public struct TransactionScene: View {
-    @State private var model: TransactionDetailViewModel
+    private let model: TransactionSceneViewModel
 
-    public init(model: TransactionDetailViewModel) {
-        _model = State(initialValue: model)
+    public init(model: TransactionSceneViewModel) {
+        self.model = model
     }
 
     public var body: some View {
-        VStack {
-            List {
-                TransactionHeaderListItemView(
-                    headerType: model.headerType,
-                    showClearHeader: model.showClearHeader,
-                    action: model.onSelectTransactionHeader
-                )
+        ListSectionView(
+            provider: model,
+            content: content(for:)
+        )
+        .contentMargins([.top], .small, for: .scrollContent)
+        .listSectionSpacing(.compact)
+        .background(Colors.grayBackground)
+        .navigationTitle(model.title)
+    }
 
-                if model.showSwapAgain {
-                    Section {
-                        StateButton(
-                            text: model.swapAgain,
-                            type: .primary(.normal),
-                            action: model.onSelectTransactionHeader
-                        )
-                    }
-                    .cleanListRow(topOffset: .zero)
-                }
-
-                Section {
-                    ListItemView(title: model.dateField, subtitle: model.date)
-                    HStack(spacing: .small) {
-                        ListItemView(
-                            title: model.statusField,
-                            subtitle: model.statusText,
-                            subtitleStyle: model.statusTextStyle,
-                            infoAction: model.onStatusInfo
-                        )
-                        switch model.statusType {
-                        case .none:
-                            EmptyView()
-                        case .progressView:
-                            LoadingView(tint: Colors.orange)
-                        case .image(let image):
-                            image
-                        }
-                    }
-
-                    if let recipientAddressViewModel = model.recipientAddressViewModel {
-                        AddressListItemView(model: recipientAddressViewModel)
-                    }
-
-                    if model.showMemoField {
-                        MemoListItemView(memo: model.memo)
-                    }
-
-                    ListItemImageView(
-                        title: model.networkField,
-                        subtitle: model.network,
-                        assetImage: model.networkAssetImage
-                    )
-
-                    if let item = model.providerListItem {
-                        ListItemImageView(
-                            title: item.title,
-                            subtitle: item.subtitle,
-                            assetImage: item.assetImage
-                        )
-                    }
-
-                    ListItemView(
-                        title: model.networkFeeField,
-                        subtitle: model.networkFeeText,
-                        subtitleExtra: model.networkFeeFiatText,
-                        infoAction: model.onNetworkFeeInfo
-                    )
-                }
-                Section {
-                    SafariNavigationLink(url: model.transactionExplorerUrl) {
-                        Text(model.transactionExplorerText)
-                            .tint(Colors.black)
-                    }
-                }
+    @ViewBuilder
+    private func content(for itemModel: TransactionItemModel) -> some View {
+        switch itemModel {
+        case let .listItem(model):
+            ListItemView(model: model)
+        case let .header(model):
+            TransactionHeaderListItemView(
+                model: model,
+                action: self.model.onSelectTransactionHeader
+            )
+        case let .participant(model):
+            AddressListItemView(model: model.addressViewModel)
+        case let .network(title, subtitle, image):
+            ListItemImageView(
+                title: title,
+                subtitle: subtitle,
+                assetImage: image
+            )
+        case let .pnl(title, value, color):
+            ListItemView(
+                title: title,
+                subtitle: value,
+                subtitleStyle: TextStyle(font: .callout, color: color)
+            )
+        case let .price(title, value):
+            ListItemView(
+                title: title,
+                subtitle: value
+            )
+        case let .size(title, value):
+            ListItemView(
+                title: title,
+                subtitle: value
+            )
+        case let .explorer(url, text):
+            SafariNavigationLink(url: url) {
+                Text(text)
+                    .tint(Colors.black)
             }
-            .contentMargins([.top], .small, for: .scrollContent)
-            .listSectionSpacing(.compact)
-            .background(Colors.grayBackground)
-            .navigationTitle(model.title)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        model.onSelectShare()
-                    } label: {
-                        Images.System.share
-                    }
-                }
+        case let .swapAgain(text):
+            let button = StateButton(
+                text: text,
+                type: .primary(.normal),
+                action: model.onSelectTransactionHeader
+            )
+            .cleanListRow(topOffset: .zero)
+            if #available(iOS 26, *) {
+                button.cornerRadius(.scene.button.height / 2) // TODO: - Think about what to do with this button
             }
-            .sheet(isPresented: $model.isPresentingShareSheet) {
-                ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
-            }
-            .sheet(item: $model.isPresentingInfoSheet) {
-                InfoSheetScene(type: $0)
-            }
+        case .empty:
+            EmptyView()
         }
-        .observeQuery(request: $model.request, value: $model.transactionExtended)
-        .onChange(of: model.transactionExtended, model.onChangeTransaction)
     }
 }

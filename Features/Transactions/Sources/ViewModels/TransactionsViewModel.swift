@@ -9,12 +9,14 @@ import TransactionsService
 import ExplorerService
 import PrimitivesComponents
 import WalletService
+import Preferences
 
 @Observable
 @MainActor
 public final class TransactionsViewModel {
     public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     public let transactionsService: TransactionsService
+    public let preferences: Preferences
 
     private let walletService: WalletService
     private let type: TransactionsRequestType
@@ -32,7 +34,8 @@ public final class TransactionsViewModel {
         transactionsService: TransactionsService,
         walletService: WalletService,
         wallet: Wallet,
-        type: TransactionsRequestType
+        type: TransactionsRequestType,
+        preferences: Preferences = .standard
     ) {
         self.walletService = walletService
         self.transactionsService = transactionsService
@@ -40,15 +43,17 @@ public final class TransactionsViewModel {
         self.type = type
         self.wallet = wallet
         self.filterModel = TransactionsFilterViewModel(wallet: wallet, type: type)
+        self.preferences = preferences
     }
 
     public var title: String { Localized.Activity.title }
     public var currentWallet: Wallet? { walletService.currentWallet }
     public var walletId: WalletId { wallet.walletId }
+    public var currency: String { preferences.currency }
 
     public var emptyContentModel: EmptyContentTypeViewModel {
         if !filterModel.isAnyFilterSpecified {
-            EmptyContentTypeViewModel(type: .activity(receive: onSelectReceive, buy: onSelectBuy))
+            EmptyContentTypeViewModel(type: .activity(receive: onSelectReceive, buy: onSelectBuy, isViewOnly: wallet.isViewOnly))
         } else {
             EmptyContentTypeViewModel(type: .search(type: .activity, action: onSelectCleanFilters))
         }

@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import Components
+import Localization
 
 struct PriceAlertsSections {
     let autoAlerts: [PriceAlertData]
@@ -11,6 +12,7 @@ struct PriceAlertsSections {
     var list: [ListItemValueSection<PriceAlertData>] {
         let autoSection = ListItemValueSection(
             section: "",
+            footer: Localized.PriceAlerts.autoFooter,
             values: autoAlerts.map { ListItemValue(value: $0) }
         )
 

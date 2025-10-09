@@ -26,21 +26,7 @@ struct AssetSceneViewModelTests {
     func showStatus() {
         #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(rankScore: 42))).showStatus == false)
         #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(rankScore: 10))).showStatus == true)
-        #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(rankScore: 3))).showStatus == true)
-    }
-    
-    @Test
-    func allBanners() {
-        let banners = [Banner.mock()]
-        let modelActive = AssetSceneViewModel.mock(.mock(metadata: .mock(isActive: true)), banners: banners)
-        let modelInactive = AssetSceneViewModel.mock(.mock(metadata: .mock(isActive: false)), banners: banners)
-        
-        #expect(modelActive.allBanners.count == 1)
-        #expect(modelActive.allBanners == banners)
-        
-        #expect(modelInactive.allBanners.count == 2)
-        #expect(modelInactive.allBanners.first?.event == .activateAsset)
-        #expect(modelInactive.allBanners.last == banners.first)
+        #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(rankScore: 3))).showStatus == false)
     }
 }
 

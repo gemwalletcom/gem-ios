@@ -16,7 +16,7 @@ struct TransactionInfoModelTests {
     let feeValue = BigInt(10_000_000)
 
     @Test
-    func testAmountValueText() {
+    func amountDisplay() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -28,13 +28,14 @@ struct TransactionInfoModelTests {
             direction: .incoming
         )
 
-        #expect(model.amountValueText.contains(asset.symbol))
-        #expect(!model.amountValueText.isEmpty)
-        #expect(model.amountValueText == "1 BTC")
+        let display = model.amountDisplay()
+        #expect(display.amount.text.contains(asset.symbol))
+        #expect(!display.amount.text.isEmpty)
+        #expect(display.amount.text == "+1 BTC")
     }
     
     @Test
-    func testSentAmountValueText() {
+    func amountDisplayOutgoing() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -46,13 +47,14 @@ struct TransactionInfoModelTests {
             direction: .outgoing
         )
 
-        #expect(model.amountValueText.contains(asset.symbol))
-        #expect(!model.amountValueText.isEmpty)
-        #expect(model.amountValueText == "-1 BTC")
+        let display = model.amountDisplay()
+        #expect(display.amount.text.contains(asset.symbol))
+        #expect(!display.amount.text.isEmpty)
+        #expect(display.amount.text == "-1 BTC")
     }
 
     @Test
-    func testAmountFiatValueText() {
+    func amountDisplayFiat() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -64,15 +66,13 @@ struct TransactionInfoModelTests {
             direction: nil
         )
 
-        #expect(model.amountFiatValueText != nil)
-        if let fiatText = model.amountFiatValueText {
-            #expect(!fiatText.isEmpty)
-            #expect(fiatText == "$1.50")
-        }
+        let display = model.amountDisplay()
+        #expect(display.fiat != nil)
+        #expect(display.fiat?.text == "$1.50")
     }
 
     @Test
-    func testFeeValueText() {
+    func feeDisplay() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -84,13 +84,13 @@ struct TransactionInfoModelTests {
             direction: .incoming
         )
 
-        #expect(model.feeValueText != nil)
-        #expect(model.feeValueText!.contains(feeAsset.symbol))
-        #expect(model.feeValueText! == "0.10 BTC")
+        #expect(model.feeDisplay != nil)
+        #expect(model.feeDisplay!.amount.text.contains(feeAsset.symbol))
+        #expect(model.feeDisplay!.amount.text == "0.10 BTC")
     }
 
     @Test
-    func testFeeFiatValueText() {
+    func feeDisplayFiat() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -102,13 +102,13 @@ struct TransactionInfoModelTests {
             direction: nil
         )
 
-        #expect(model.feeFiatValueText != nil)
-        #expect(!model.feeFiatValueText!.isEmpty)
-        #expect(model.feeFiatValueText! == "$0.05")
+        #expect(model.feeDisplay != nil)
+        #expect(model.feeDisplay!.fiat != nil)
+        #expect(model.feeDisplay!.fiat!.text == "$0.05")
     }
 
     @Test
-    func testHeaderTypeAmount() {
+    func headerTypeAmount() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -119,20 +119,18 @@ struct TransactionInfoModelTests {
             feeValue: feeValue,
             direction: .incoming
         )
-        let header = model.headerType(input: .amount(showFiatSubtitle: true))
-        guard case .amount(let title, let subtitle) = header else {
+        let header = model.headerType(input: .amount(showFiat: true))
+        guard case .amount(let display) = header else {
             Issue.record("Expected header type .amount")
             return
         }
     
-        #expect(title == model.amountValueText)
-        #expect(subtitle == model.amountFiatValueText)
-        #expect(title == "1 BTC")
-        #expect(subtitle == "$1.50")
+        #expect(display.amount.text == "+1 BTC")
+        #expect(display.fiat?.text == "$1.50")
     }
 
     @Test
-    func testHeaderTypeNFT() {
+    func headerTypeNFT() {
         let nftAsset = NFTAsset.mock()
         let model = TransactionInfoViewModel(
             currency: "USD",
@@ -155,7 +153,7 @@ struct TransactionInfoModelTests {
     }
 
     @Test
-    func testHeaderTypeSwap() {
+    func headerTypeSwap() {
         let swapMetadata = SwapHeaderInput(
             from: AssetValuePrice(
                 asset: asset,
@@ -193,7 +191,7 @@ struct TransactionInfoModelTests {
     }
 
     @Test
-    func testAmountFiatValueTextNilWhenAssetPriceIsNil() {
+    func amountDisplayFiatNilWhenAssetPriceIsNil() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -205,11 +203,12 @@ struct TransactionInfoModelTests {
             direction: nil
         )
 
-        #expect(model.amountFiatValueText == nil)
+        let display = model.amountDisplay()
+        #expect(display.fiat == nil)
     }
 
     @Test
-    func testFeeValueTextNilWhenFeeValueIsNil() {
+    func feeDisplayNilWhenFeeValueIsNil() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -221,11 +220,11 @@ struct TransactionInfoModelTests {
             direction: nil
         )
 
-        #expect(model.feeValueText == nil)
+        #expect(model.feeDisplay == nil)
     }
 
     @Test
-    func testFeeFiatValueTextNilWhenFeeAssetPriceIsNil() {
+    func feeDisplayFiatNilWhenFeeAssetPriceIsNil() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -237,11 +236,11 @@ struct TransactionInfoModelTests {
             direction: nil
         )
 
-        #expect(model.feeFiatValueText == nil)
+        #expect(model.feeDisplay?.fiat == nil)
     }
 
     @Test
-    func testHeaderTypeAmountWithoutFiatSubtitle() {
+    func headerTypeAmountWithoutFiat() {
         let model = TransactionInfoViewModel(
             currency: "USD",
             asset: asset,
@@ -252,13 +251,13 @@ struct TransactionInfoModelTests {
             feeValue: feeValue,
             direction: .incoming
         )
-        let header = model.headerType(input: .amount(showFiatSubtitle: false))
-        guard case .amount(let title, let subtitle) = header else {
+        let header = model.headerType(input: .amount(showFiat: false))
+        guard case .amount(let display) = header else {
             Issue.record("Expected header type .amount")
             return
         }
 
-        #expect(title == model.amountValueText)
-        #expect(subtitle == nil || subtitle?.isEmpty == true)
+        #expect(display.amount.text == "+1 BTC")
+        #expect(display.fiat == nil)
     }
 }

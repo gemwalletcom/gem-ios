@@ -15,8 +15,8 @@ public struct PerpetualPositionViewModel {
     private let percentFormatter: CurrencyFormatter
     
     public init(
-        data: PerpetualPositionData,
-        currencyStyle: CurrencyFormatterType = .abbreviated
+        _ data: PerpetualPositionData,
+        currencyStyle: CurrencyFormatterType = .currency
     ) {
         self.data = data
         self.currencyFormatter = CurrencyFormatter(type: currencyStyle, currencyCode: Currency.usd.rawValue)
@@ -47,11 +47,14 @@ public struct PerpetualPositionViewModel {
     }
     
     public var positionTypeText: String {
-        "\(directionText) \(leverageText)"
+        "\(directionText.uppercased()) \(leverageText)"
     }
     
     public var positionTypeColor: Color {
-        PriceChangeColor.color(for: data.position.size)
+        switch data.position.direction {
+        case .short: Colors.red
+        case .long: Colors.green
+        }
     }
     
     public var pnlTitle: String { Localized.Perpetual.pnl }

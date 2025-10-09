@@ -68,7 +68,7 @@ public struct SelectAssetScene: View {
                     tags: model.searchModel.tagsViewModel.items,
                     onSelect: { model.setSelected(tag: $0.tag) }
                 )
-                .isVisible(model.shouldShowTagFilter)
+                .isVisible(model.showTags)
             }
             .textCase(nil)
             .listRowInsets(EdgeInsets())
@@ -108,7 +108,7 @@ public struct SelectAssetScene: View {
     func assetsList(assets: [AssetData]) -> some View {
         ForEach(assets) { assetData in
             switch model.selectType {
-            case .buy, .receive, .send, .deposit:
+            case .buy, .receive, .send, .deposit, .withdraw:
                 NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
                     ListAssetItemSelectionView(
                         assetData: assetData,

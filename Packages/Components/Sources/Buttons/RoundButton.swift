@@ -27,10 +27,13 @@ public struct RoundButton: View {
         } label: {
             VStack(alignment: .center) {
                 image
-                    .frame(width: 48, height: 48)
+                    .font(.system(size: 20).weight(.medium))
+                    .foregroundStyle(Colors.whiteSolid)
+                    .frame(size: 48)
                     .background(Colors.blue)
-                    .cornerRadius(24)
+                    .clipShape(Circle())
                     .opacity(isEnabled ? 1 : 0.5)
+                    .liquidGlass()
                 Text(title)
                     .allowsTightening(true)
                     .truncationMode(.tail)

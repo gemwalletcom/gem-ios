@@ -1,9 +1,5 @@
 {
-<<<<<<< Updated upstream
-  "originHash" : "6a30b308d2157b81f8f3e25e97dae7c779b004db473b8fe1555f7737efc9706a",
-=======
   "originHash" : "fc886b732fe8783cac01c3adbe7176a4f0f4b633b17cae7f1c4b8b8689d79857",
->>>>>>> Stashed changes
   "pins" : [
     {
       "identity" : "bigint",

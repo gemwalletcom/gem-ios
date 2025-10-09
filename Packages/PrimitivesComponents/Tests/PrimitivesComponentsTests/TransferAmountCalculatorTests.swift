@@ -443,7 +443,7 @@ struct TransferAmountCalculatorTests {
 
     @Test
     func testStakeFlexible() {
-        let stakeType = StakeType.stake(validator: .mock())
+        let stakeType = StakeType.stake(.mock())
         #expect(throws: Never.self) {
             let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
@@ -462,7 +462,7 @@ struct TransferAmountCalculatorTests {
     @Test
     func testUnstakeFixed() {
         let delegation = Delegation.mock(state: .active)
-        let stakeType = StakeType.unstake(delegation: delegation)
+        let stakeType = StakeType.unstake(delegation)
         #expect(throws: Never.self) {
             let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
@@ -550,6 +550,25 @@ struct TransferAmountCalculatorTests {
                 )
             ))
             #expect(result == TransferAmount(value: 999_999, networkFee: 4, useMaxAmount: false))
+        }
+    }
+    
+    @Test
+    func testHypercoreIgnoreValueCheck() {
+        let hypercoreAsset = Asset(.hyperCore)
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: hypercoreAsset,
+                assetBalance: Balance(available: BigInt(0)),
+                value: BigInt(1000),
+                availableValue: BigInt(0),
+                assetFee: hypercoreAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(0)),
+                fee: BigInt(0),
+                canChangeValue: true,
+                ignoreValueCheck: true
+            ))
+            #expect(result == TransferAmount(value: 1000, networkFee: 0, useMaxAmount: false))
         }
     }
 }

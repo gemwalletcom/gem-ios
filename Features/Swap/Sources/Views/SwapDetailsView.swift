@@ -77,7 +77,12 @@ public struct SwapDetailsView: View {
                 )
                 
                 ListItemView(
-                    title: model.slippageField,
+                    title: model.minReceiveTitle,
+                    subtitle: model.minReceiveText
+                )
+
+                ListItemView(
+                    title: model.slippageTitle,
                     subtitle: model.slippageText,
                     infoAction: model.onSelectSlippageInfoSheet
                 )

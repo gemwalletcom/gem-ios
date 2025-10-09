@@ -155,7 +155,7 @@ extension AssetRecordInfo {
             balance: balance?.mapToBalance() ?? .zero,
             account: account.mapToAccount(),
             price: price?.mapToPrice(),
-            price_alerts: priceAlerts.or([]).compactMap { $0.map() },
+            priceAlerts: priceAlerts.or([]).compactMap { $0.map() },
             metadata: metadata
         )
     }

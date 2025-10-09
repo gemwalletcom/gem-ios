@@ -11,15 +11,15 @@ public struct PerpetualsHeaderViewModel {
     let walletType: WalletType
     let balance: WalletBalance
     let currencyFormatter: CurrencyFormatter
+    let currency = Currency.usd.rawValue
     
     public init(
         walletType: WalletType,
-        balance: WalletBalance,
-        currencyCode: String
+        balance: WalletBalance
     ) {
         self.walletType = walletType
         self.balance = balance
-        self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
+        self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currency)
     }
 }
 
@@ -35,8 +35,12 @@ extension PerpetualsHeaderViewModel: HeaderViewModel {
 
     public var buttons: [HeaderButton] {
         [
-            HeaderButton(type: .withdraw, isEnabled: false),
+            HeaderButton(type: .withdraw, isEnabled: isWithdrawEnabled),
             HeaderButton(type: .deposit, isEnabled: true)
         ]
+    }
+
+    private var isWithdrawEnabled: Bool {
+        balance.available > 0
     }
 }

@@ -19,6 +19,7 @@ public enum Chain: String, Codable, CaseIterable, Equatable, Hashable, Sendable 
 	case ton
 	case tron
 	case doge
+	case zcash
 	case optimism
 	case aptos
 	case base
@@ -44,6 +45,7 @@ public enum Chain: String, Codable, CaseIterable, Equatable, Hashable, Sendable 
 	case sonic
 	case algorand
 	case polkadot
+	case plasma
 	case cardano
 	case abstract
 	case berachain

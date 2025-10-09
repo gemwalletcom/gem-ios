@@ -8,8 +8,8 @@ public enum TransactionFilterType: Int, CaseIterable, Sendable {
     case swaps
     case stake
     case smartContract
+    case perpetuals
     case others
-    
 }
 
 extension TransactionFilterType: Identifiable {
@@ -28,8 +28,9 @@ extension TransactionType {
         case .transfer, .transferNFT: .transfers
         case .smartContractCall: .smartContract
         case .swap, .tokenApproval: .swaps
-        case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw: .stake
-        case .assetActivation, .perpetualOpenPosition, .perpetualClosePosition: .others
+        case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw, .stakeFreeze, .stakeUnfreeze: .stake
+        case .assetActivation: .others
+        case .perpetualOpenPosition, .perpetualClosePosition: .perpetuals
         }
     }
 }

@@ -190,7 +190,7 @@ extension BalanceService {
                 amount: formatter.double(from: available, decimals: decimals)
             )
             return .token(UpdateTokenBalance(available: available))
-        case .stake(let staked, let pending, let rewards, _, let locked, let frozen):
+        case .stake(let staked, let pending, let rewards, _, let locked, let frozen, let metadata):
             let stakedValue = try UpdateBalanceValue(
                 value: staked.description,
                 amount: formatter.double(from: staked, decimals: decimals)
@@ -217,7 +217,8 @@ extension BalanceService {
                     pending: pendingValue,
                     frozen: frozenValue,
                     locked: lockedValue,
-                    rewards: rewardsValue
+                    rewards: rewardsValue,
+                    metadata: metadata
                 )
             )
         }

@@ -10,9 +10,7 @@ import PrimitivesComponents
 import WalletConnector
 import InfoSheet
 import Validators
-import Style
 import SwiftUI
-import Formatters
 import Swap
 
 @Observable
@@ -72,105 +70,15 @@ public final class ConfirmTransferSceneViewModel {
     }
 
     var title: String { dataModel.title }
-    var appTitle: String { Localized.WalletConnect.app }
-    var appAssetImage: AssetImage? { dataModel.appAssetImage }
-    var appText: String? {
-        if let value = dataModel.appValue {
-            return AppDisplayFormatter.format(name: value, host: websiteURL?.cleanHost())
-        }
-        return .none
-    }
-    var websiteURL: URL? { dataModel.websiteURL }
-    var websiteTitle: String {Localized.Settings.website }
 
-    var senderTitle: String { Localized.Wallet.title }
-    var senderValue: String { wallet.name }
+    var websiteURL: URL? { dataModel.websiteURL }
+    var websiteTitle: String { Localized.Settings.website }
+
     var senderAddress: String { (try? wallet.account(for: dataModel.chain).address) ?? "" }
-    var senderAssetImage: AssetImage? {
-        let viewModel = WalletViewModel(wallet: wallet)
-        return viewModel.hasAvatar ? viewModel.avatarImage : .none
-    }
     var senderAddressExplorerUrl: URL { senderLink.url }
     var senderExplorerText: String { Localized.Transaction.viewOn(senderLink.name) }
 
-    var shouldShowRecipient: Bool { dataModel.shouldShowRecipient }
-    var recipientAddressViewModel: AddressListItemViewModel {
-        AddressListItemViewModel(
-            title: dataModel.recipientTitle,
-            account: dataModel.recepientAccount,
-            mode: dataModel.recipientMode,
-            addressLink: confirmService.getExplorerLink(chain: dataModel.recepientAccount.chain, address: dataModel.recepientAccount.address)
-        )
-    }
-
-    var networkTitle: String { Localized.Transfer.network }
-    var networkText: String {
-        let model = AssetViewModel(asset: dataModel.asset)
-        switch data.type {
-        case .transfer, .deposit:
-            return model.networkFullName
-        case .transferNft, .swap, .tokenApprove, .stake, .account, .generic, .perpetual:
-            return model.networkName
-        }
-    }
-    var networkAssetImage: AssetImage { AssetIdViewModel(assetId: dataModel.chainAsset.id).networkAssetImage }
-
-    var networkFeeTitle: String { feeModel.title }
-    var networkFeeValue: String? { state.isError ? "-" : feeModel.value }
-    var networkFeeFiatValue: String? { state.isError ? nil : feeModel.fiatValue }
-
-    var shouldShowMemo: Bool { dataModel.shouldShowMemo }
-    var memo: String? { dataModel.recipientData.recipient.memo }
-
     var progressMessage: String { Localized.Common.loading }
-    var shouldShowFeeRatesSelector: Bool { feeModel.showFeeRatesSelector }
-
-    var networkFeeFooterText: String? {
-        return .none
-        //        TODO: Enable later
-        //        if let quoteFee = dataModel.quoteFee {
-        //            Localized.Swap.quoteFee("\(quoteFee)%")
-        //        } else {
-        //            .none
-        //        }
-    }
-
-    var listError: Error? {
-        if case let .error(error) = state {
-            return error
-        }
-        if case let .failure(error) = state.value?.transferAmount {
-            return error
-        }
-
-        return nil
-    }
-    var listErrorTitle: String { Localized.Errors.errorOccured }
-    var shouldShowListErrorInfo: Bool {
-        switch state.value?.transferAmount {
-        case .success, .none: false
-        case .failure: true
-        }
-    }
-
-    var showClearHeader: Bool {
-        switch headerType {
-        case .amount, .nft: true
-        case .swap: false
-        }
-    }
-
-    var headerType: TransactionHeaderType {
-        if let value = state.value {
-            return value.headerType
-        }
-        return TransactionInputViewModel(
-            data: dataModel.data,
-            transactionData: nil,
-            metaData: metadata,
-            transferAmount: nil
-        ).headerType
-    }
 
     var confirmButtonModel: ConfirmButtonViewModel {
         ConfirmButtonViewModel(
@@ -187,15 +95,58 @@ public final class ConfirmTransferSceneViewModel {
         )
     }
 
-    var swapDetailsViewModel: SwapDetailsViewModel? {
-        guard case let .swap(fromAsset, toAsset, swapData) = data.type else {
-            return nil
+    var swapDetailsViewModel: ConfirmSwapDetailsViewModel {
+        ConfirmSwapDetailsViewModel(type: data.type, metadata: metadata)
+    }
+}
+
+// MARK: - ListSectionProvideable
+
+extension ConfirmTransferSceneViewModel: ListSectionProvideable {
+    public var sections: [ListSection<ConfirmTransferItem>] {
+        [
+            ListSection(type: .header, [.header]),
+            ListSection(type: .details, [.app, .sender, .network, .recipient, .memo, .swapDetails]),
+            ListSection(type: .fee, [.networkFee]),
+            ListSection(type: .error, [.error])
+        ]
+    }
+
+    public func itemModel(for item: ConfirmTransferItem) -> any ItemModelProvidable<ConfirmTransferItemModel> {
+        switch item {
+        case .header:
+            ConfirmHeaderViewModel(inputModel: state.value, metadata: metadata, data: data)
+        case .app:
+            ConfirmAppViewModel(type: data.type)
+        case .sender:
+            ConfirmSenderViewModel(wallet: wallet)
+        case .network:
+            ConfirmNetworkViewModel(type: data.type)
+        case .recipient:
+            ConfirmRecipientViewModel(
+                model: dataModel,
+                addressName: try? confirmService.getAddressName(chain: dataModel.chain, address: dataModel.recipient.address),
+                addressLink: confirmService.getExplorerLink(chain: dataModel.chain, address: dataModel.recipient.address)
+            )
+        case .memo:
+            ConfirmMemoViewModel(type: data.type, recipientData: data.recipientData)
+        case .swapDetails:
+            swapDetailsViewModel
+        case .networkFee:
+            ConfirmNetworkFeeViewModel(
+                state: state,
+                title: feeModel.title,
+                value: feeModel.value,
+                fiatValue: feeModel.fiatValue,
+                showFeeRatesSelector: feeModel.showFeeRatesSelector,
+                infoAction: onSelectNetworkFeeInfo
+            )
+        case .error:
+            ConfirmErrorViewModel(
+                state: state,
+                onSelectListError: onSelectListError
+            )
         }
-        return SwapDetailsViewModel(
-            fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
-            toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
-            selectedQuote: swapData.quote
-        )
     }
 }
 
@@ -221,10 +172,6 @@ extension ConfirmTransferSceneViewModel {
 
     func onSelectNetworkFeeInfo() {
         isPresentingSheet = .info(.networkFee(dataModel.chain))
-    }
-
-    func onSelectSlippageInfo() {
-        isPresentingSheet = .info(.slippage)
     }
 
     func onSelectOpenWebsiteURL() {

@@ -9,7 +9,7 @@ public struct NearSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let signingInput = try NEARSigningInput.with {
             $0.signerID = input.senderAddress
-            $0.nonce = input.sequence.asUInt64
+            $0.nonce = try input.metadata.getSequence()
             $0.receiverID = input.destinationAddress
             $0.actions = [
                 NEARAction.with({
@@ -18,7 +18,7 @@ public struct NearSigner: Signable {
                     }
                 }),
             ]
-            $0.blockHash = try Base58.decodeNoCheck(string: input.block.hash)
+            $0.blockHash = try Base58.decodeNoCheck(string: input.metadata.getBlockHash())
             $0.privateKey = privateKey
         }
         let output: NEARSigningOutput = AnySigner.sign(input: signingInput, coin: input.asset.chain.coinType)

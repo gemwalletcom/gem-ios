@@ -12,7 +12,7 @@ import protocol Gemstone.GemSwapperProtocol
 import enum Gemstone.SwapperError
 import Keystore
 import KeystoreTestKit
-
+import Primitives
 @testable import Swap
 
 @MainActor
@@ -36,32 +36,22 @@ struct SwapSceneViewModelTests {
         #expect(model.shouldShowAdditionalInfo)
 	}
 
-	@Test
-    func insufficientBalance() {
-        let model = SwapSceneViewModel.mock()
-        model.onChangeFromAsset(old: nil, new: .mock(asset: .mockEthereum(), balance: .init(available: 1000000000000000000)))
-        model.amountInputModel.text = "1.1"
-
-        #expect(model.actionButtonState.isError)
-        #expect(model.actionButtonTitle == "Insufficient ETH balance.")
-        
-        model.amountInputModel.text = "0.9"
-        #expect(!model.actionButtonState.isError)
-        #expect(model.actionButtonTitle == "Swap")
-    }
-    
     @Test
-    func tryAgainButtonEnabledWhenError() {
+    func buttonViewModelFlow() {
         let model = SwapSceneViewModel.mock()
-        
-        model.swapState.quotes = .error(ErrorWrapper(Gemstone.SwapperError.NoQuoteAvailable))
-        #expect(model.shouldDisableActionButton == false)
         
         model.swapState.quotes = .data([])
-        model.amountInputModel.text = ""
-        #expect(model.shouldDisableActionButton == false)
+        #expect(model.buttonViewModel.buttonAction == SwapButtonAction.swap)
+        #expect(model.buttonViewModel.isVisible)
+        
+        model.swapState.quotes = .error(TestError())
+        #expect(model.buttonViewModel.buttonAction == SwapButtonAction.retryQuotes)
+        
+        model.swapState.quotes = .data([])
+        model.swapState.swapTransferData = .error(TestError())
+        #expect(model.buttonViewModel.buttonAction == SwapButtonAction.retrySwap)
     }
-    
+
     // MARK: - Private methods
     
     private func model(
@@ -102,4 +92,8 @@ extension SwapQuoteInput {
             amount: 1000000000000000000
         )
     }
+}
+
+private struct TestError: Error, RetryableError {
+    var isRetryAvailable: Bool = true
 }

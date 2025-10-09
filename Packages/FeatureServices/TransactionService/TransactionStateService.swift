@@ -25,7 +25,8 @@ struct TransactionStateService: Sendable {
                 id: transaction.hash,
                 senderAddress: transaction.from,
                 recipientAddress: transaction.to,
-                block: transaction.blockNumber
+                block: try Int.from(string: transaction.blockNumber),
+                createdAt: transaction.createdAt
             )
         )
     }
@@ -56,6 +57,8 @@ struct TransactionStateService: Sendable {
                 try transactionStore.updateBlockNumber(transactionId: transaction.id, block: block)
             case .createdAt(let date):
                 try transactionStore.updateCreatedAt(transactionId: transaction.id, date: date)
+            case .metadata(let metadata):
+                try transactionStore.updateMetadata(transactionId: transaction.id, metadata: metadata)
             }
         }
     }

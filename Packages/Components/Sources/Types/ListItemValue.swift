@@ -24,15 +24,18 @@ extension ListItemValue: Identifiable {
 public struct ListItemValueSection<T: Identifiable> {
     public let section: String
     public let image: Image?
+    public let footer: String?
     public let values: [ListItemValue<T>]
 
     public init(
         section: String,
         image: Image? = .none,
+        footer: String? = .none,
         values: [ListItemValue<T>]
     ) {
         self.section = section
         self.image = image
+        self.footer = footer
         self.values = values
     }
 }
@@ -64,6 +67,10 @@ public struct ListItemValueSectionList <Item: Identifiable, Content: View>: View
                     EmptyView()
                 } else {
                     Text(section.section)
+                }
+            } footer: {
+                if let footer = section.footer, !section.values.isEmpty {
+                    Text(footer)
                 }
             }
             .listRowInsets(.assetListRowInsets)

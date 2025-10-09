@@ -3,9 +3,9 @@
 import SwiftUI
 
 public struct ListSectionView<Item: Identifiable & Sendable, Content: View>: View {
-    let sections: [ListSection<Item>]
-    let content: (Item) -> Content
-    
+    private let sections: [ListSection<Item>]
+    private let content: (Item) -> Content
+
     public init(
         sections: [ListSection<Item>],
         @ViewBuilder content: @escaping  (Item) -> Content
@@ -39,8 +39,20 @@ public struct ListSectionView<Item: Identifiable & Sendable, Content: View>: Vie
                         }
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
+        }
+    }
+}
+
+// MARK: - SectionedItemProvider Support
+
+public extension ListSectionView {
+    init<Provider: ListSectionProvideable>(
+        provider: Provider,
+        @ViewBuilder content: @escaping (Provider.ItemModel) -> Content
+    ) where Item == Provider.Item {
+        self.init(sections: provider.sections) { type in
+            content(provider.item(for: type))
         }
     }
 }

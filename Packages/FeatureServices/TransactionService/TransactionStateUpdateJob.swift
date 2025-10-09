@@ -60,6 +60,7 @@ public struct TransactionStateUpdateJob: Job {
                 try? stateService.updateState(state: .failed, for: transaction)
                 return .complete
             }
+            NSLog("TransactionStateUpdateJob: error \(error)")
             return .retry
         }
     }

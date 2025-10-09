@@ -35,12 +35,10 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
         priority: FeePriority,
         available: BigInt
     ) async throws -> TransferTransactionData {
-        //TODO: Enable later?
-        //async let getTransactionValidation: () = validateTransaction(wallet: wallet, data: data)
         async let getFeeRates = getFeeRates(type: data.type, priority: priority)
-        async let getTransactionPreload = getTransactionPreload(wallet: wallet, data: data)
+        async let getTransactionMetadata = getTransactionMetadata(wallet: wallet, data: data)
 
-        let (rates, preload) = try await (getFeeRates, getTransactionPreload) //, getTransactionValidation)
+        let (rates, metadata) = try await (getFeeRates, getTransactionMetadata)
 
         return try await TransferTransactionData(
             allRates: rates.rates,
@@ -49,7 +47,7 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
                 data: data,
                 available: available,
                 rate: rates.selected,
-                preload: preload
+                metadata: metadata
             )
         )
     }
@@ -63,7 +61,7 @@ extension TransferTransactionProvider {
         data: TransferData,
         available: BigInt,
         rate: FeeRate,
-        preload: TransactionPreload
+        metadata: TransactionLoadMetadata
     ) async throws -> TransactionData {
         let input = TransactionInput(
             type: data.type,
@@ -74,15 +72,16 @@ extension TransferTransactionProvider {
             balance: available,
             gasPrice: rate.gasPriceType,
             memo: data.recipientData.recipient.memo,
-            preload: preload
+            metadata: metadata
         )
 
         return try await chainService.load(input: input)
     }
     
-    private func getTransactionPreload(wallet: Wallet, data: TransferData) async throws -> TransactionPreload {
+    private func getTransactionMetadata(wallet: Wallet, data: TransferData) async throws -> TransactionLoadMetadata {
         try await chainService.preload(
             input: TransactionPreloadInput(
+                inputType: data.type,
                 senderAddress: try wallet.account(for: data.chain).address,
                 destinationAddress: data.recipientData.recipient.address
             )

@@ -23,7 +23,7 @@ public struct StakeDelegationsRequest: ValueObservationQueryable {
             .including(optional: StakeDelegationRecord.price)
             .filter(StakeDelegationRecord.Columns.walletId == walletId)
             .filter(StakeDelegationRecord.Columns.assetId == assetId)
-            .order(StakeDelegationRecord.Columns.state.asc)
+            .order(StakeDelegationRecord.Columns.balance.desc)
             .asRequest(of: StakeDelegationInfo.self)
             .fetchAll(db)
             .map { $0.mapToDelegation() }

@@ -15,16 +15,12 @@ public struct WalletConnectionSessionAppMetadata: Codable, Equatable, Hashable, 
 	public let description: String
 	public let url: String
 	public let icon: String
-	public let redirectNative: String?
-	public let redirectUniversal: String?
 
-	public init(name: String, description: String, url: String, icon: String, redirectNative: String?, redirectUniversal: String?) {
+	public init(name: String, description: String, url: String, icon: String) {
 		self.name = name
 		self.description = description
 		self.url = url
 		self.icon = icon
-		self.redirectNative = redirectNative
-		self.redirectUniversal = redirectUniversal
 	}
 }
 

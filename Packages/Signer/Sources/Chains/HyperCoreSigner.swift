@@ -2,153 +2,206 @@
 
 import BigInt
 import Blockchain
+import Formatters
 import Foundation
 import Gemstone
 import GemstonePrimitives
-import Keychain
-import Keystore
 import Primitives
-import WalletCore
-import WalletCorePrimitives
 
 public class HyperCoreSigner: Signable {
-    let keychain: Keychain
-    let hyperCore = HyperCore()
-    let factory = HyperCoreModelFactory()
+    private let hyperCore: HyperCore
+    private let factory = HyperCoreModelFactory()
     private let agentNamePrefix = "gemwallet_"
-    
-    public init(keychain: Keychain = KeychainDefault()) {
-        self.keychain = keychain
+    private let referralCode = "GEMWALLET"
+    private let builderAddress = "0x0d9dab1a248f63b0a48965ba8435e4de7497a3dc"
+    private let nativeSpotToken = "HYPE:0x0d01dc56dcaaca66ad901c959b4011ec"
+
+    public init() {
+        hyperCore = HyperCore(signer: NativeSigner())
     }
 
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
+        let amount = BigNumberFormatter.standard.string(from: input.value, decimals: Int(input.asset.decimals))
+        return try signSpotSend(
+            amount: amount,
+            destination: input.destinationAddress,
+            token: nativeSpotToken,
+            privateKey: privateKey
+        )
     }
 
-    func getAgentKey(for walletAddress: String) throws -> (address: String, key: Data) {
-        let agentPrivateKeyName = "\(HyperCoreService.agentPrivateKey)_\(walletAddress)"
-        let agentAddressKeyName = "\(HyperCoreService.agentAddressKey)_\(walletAddress)"
-        
-        if let key = try keychain.get(agentPrivateKeyName), let address = try keychain.get(agentAddressKeyName) {
-            return try (address: address, Data.from(hex: key))
+    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        let amount = BigNumberFormatter.standard.string(from: input.value, decimals: Int(input.asset.decimals))
+        let (symbol, tokenId) = try input.asset.id.twoSubTokenIds()
+        return try signSpotSend(
+            amount: amount,
+            destination: input.destinationAddress,
+            token: "\(symbol):\(tokenId)",
+            privateKey: privateKey
+        )
+    }
+
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard case let .swap(_, _, swapData) = input.type else {
+            throw AnyError("Invalid Swap Data")
         }
-        let newKey = try SecureRandom.generateKey()
-        let newAddress = CoinType.ethereum.deriveAddress(privateKey: PrivateKey(data: newKey)!)
 
-        try keychain.set(newKey.hexString, key: agentPrivateKeyName)
-        try keychain.set(newAddress, key: agentAddressKeyName)
-
-        return (address: newAddress, key: newKey)
+        return try [hyperCore.signTypedAction(typedDataJson: swapData.data.data, privateKey: privateKey)]
     }
-    
+
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard case let .stake(_, stakeType) = input.type else {
+            throw AnyError("Invalid input type for stake signing")
+        }
+
+        let nonceIncrementer = NumberIncrementer(Date.getTimestampInMs())
+        let denominator = BigInt(10).power(10)
+        switch stakeType {
+        case let .stake(validator):
+            let wei = input.value / denominator
+            let depositAction = try signStakingTransfer(wei: wei.asUInt, nonce: nonceIncrementer.next(), privateKey: privateKey)
+            let request = factory.makeDelegate(validator: validator.id, wei: wei.asUInt, nonce: nonceIncrementer.next())
+            let delegateAction = try hyperCore.signTokenDelegate(delegate: request, privateKey: privateKey)
+            return [
+                depositAction,
+                delegateAction
+            ]
+        case let .unstake(delegation):
+            let wei = delegation.base.balanceValue / denominator
+            let request = factory.makeUndelegate(validator: delegation.validator.id, wei: wei.asUInt, nonce: nonceIncrementer.current())
+            let undelegateAction = try hyperCore.signTokenDelegate(delegate: request, privateKey: privateKey)
+            let withdrawAction = try signStakingWithdraw(wei: wei.asUInt, nonce: nonceIncrementer.next(), privateKey: privateKey)
+            return [
+                undelegateAction,
+                withdrawAction
+            ]
+        case .freeze, .redelegate, .rewards, .withdraw:
+            throw AnyError("Not supported stake type")
+        }
+    }
+
     private func getBuilder(builder: String, fee: Int) throws -> HyperBuilder {
         return HyperBuilder(builderAddress: builder, fee: fee.asUInt32)
     }
 
     public func signPerpetual(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case let .perpetual(_, type) = input.type, case let .hyperliquid(data) = input.data else {
+        guard case let .perpetual(_, type) = input.type, case let .hyperliquid(order) = input.metadata else {
             throw AnyError("Invalid input type for perpetual signing")
         }
 
-        let (agentAddress, agentKey) = try getAgentKey(for: input.senderAddress)
-        let builder = try? getBuilder(builder: HyperCoreService.builderAddress, fee: HyperCoreService.builderFeeBps)
-        // timestamp for each transaction should be increase to avoid duplicate nonce
-        let timestamp = Date.getTimestampInMs()
+        guard let order = order else {
+            throw AnyError("Hyperliquid order metadata is required for perpetual signing")
+        }
+
+        let agentKey = try Data.from(hex: order.agentPrivateKey)
+        let builder = try? getBuilder(builder: builderAddress, fee: Int(order.builderFeeBps))
+        let timestampIncrementer = NumberIncrementer(Int(Date.getTimestampInMs()))
         var transactions: [String] = []
-        
-        if data.approveReferralRequired {
-            transactions.append(
-                try signSetReferer(
+
+        if order.approveReferralRequired {
+            try transactions.append(
+                signSetReferer(
                     agentKey: privateKey,
-                    code: HyperCoreService.referralCode,
-                    timestamp: timestamp
+                    code: referralCode,
+                    timestamp: timestampIncrementer.next().asUInt64
                 )
             )
         }
-        if data.approveAgentRequired {
-            transactions.append(
-                try signApproveAgent(agentAddress: agentAddress, privateKey: privateKey, timestamp: timestamp + 1)
-            )
-        }
-        if data.approveBuilderRequired {
-            transactions.append(
-                try signApproveBuilderAddress(
-                    agentKey: privateKey,
-                    builderAddress: HyperCoreService.builderAddress,
-                    rateBps: HyperCoreService.builderFeeBps,
-                    timestamp: timestamp + 2
+        if order.approveAgentRequired {
+            try transactions.append(
+                signApproveAgent(
+                    agentAddress: order.agentAddress,
+                    privateKey: privateKey,
+                    timestamp: timestampIncrementer.next().asUInt64
                 )
             )
         }
-        transactions.append(
-            try signMarketMessage(type: type, agentKey: agentKey, builder: builder, timestamp: timestamp + 3)
+        if order.approveBuilderRequired {
+            try transactions.append(
+                signApproveBuilderAddress(
+                    agentKey: privateKey,
+                    builderAddress: builderAddress,
+                    rateBps: order.builderFeeBps,
+                    timestamp: timestampIncrementer.next().asUInt64
+                )
+            )
+        }
+        try transactions.append(
+            signMarketMessage(
+                type: type,
+                agentKey: agentKey,
+                builder: builder,
+                timestamp: timestampIncrementer.next().asUInt64
+            )
         )
-        
+
         return transactions
     }
-    
+
     public func signApproveAgent(agentAddress: String, privateKey: Data, timestamp: UInt64) throws -> String {
         let agentName = agentNamePrefix + agentAddress.suffix(6)
         let agent = factory.makeApproveAgent(name: agentName, address: agentAddress, nonce: timestamp)
-        let eip712Message = hyperCore.approveAgentTypedData(agent: agent)
-        return try actionMessage(
-            signature: try signEIP712(messageJson: eip712Message, privateKey: privateKey),
-            eip712Message: eip712Message,
-            timestamp: timestamp
-        )
+        return try hyperCore.signApproveAgent(agent: agent, privateKey: privateKey)
     }
 
-    public func signWithdraw(input: SignerInput, privateKey: Data, timestamp: UInt64) throws -> String {
-        // FIXME: make sure input.amount is correct  ("2" means 2 USD)
-        let request = factory.makeWithdraw(amount: input.value.description, address: input.senderAddress.lowercased(), nonce: timestamp)
-        let eip712Message = hyperCore.withdrawalRequestTypedData(request: request)
-        let signature = try signEIP712(messageJson: eip712Message, privateKey: privateKey)
-
-        return try actionMessage(signature: signature, eip712Message: eip712Message, timestamp: timestamp)
+    public func signWithdrawal(input: SignerInput, privateKey: Data) throws -> String {
+        let timestamp = UInt64(Date.getTimestampInMs())
+        let amount = BigNumberFormatter.standard.string(from: input.value, decimals: Int(input.asset.decimals))
+        let request = factory.makeWithdraw(amount: amount, address: input.senderAddress.lowercased(), nonce: timestamp)
+        return try hyperCore.signWithdrawalRequest(request: request, privateKey: privateKey)
     }
-    
+
+    public func feeRate(_ tenthsBps: UInt32) -> String {
+        String(format: "%g%%", Double(tenthsBps) * 0.001)
+    }
+
     // "0.05%" = 50bps. 1 means 0.001%
-    public func signApproveBuilderAddress(agentKey: Data, builderAddress: String, rateBps: Int, timestamp: UInt64) throws -> String {
-        let maxFeeRate = HyperCoreService.feeRate(rateBps)
+    public func signApproveBuilderAddress(agentKey: Data, builderAddress: String, rateBps: UInt32, timestamp: UInt64) throws -> String {
+        let maxFeeRate = feeRate(rateBps)
         let request = factory.makeApproveBuilder(maxFeeRate: maxFeeRate, builder: builderAddress, nonce: timestamp)
-        let eip712Message = hyperCore.approveBuilderFeeTypedData(fee: request)
-        let signature = try signEIP712(messageJson: eip712Message, privateKey: agentKey)
-        return try actionMessage(signature: signature, eip712Message: eip712Message, timestamp: timestamp)
-    }
-
-    private func signEIP712(messageJson: String, privateKey: Data) throws -> String {
-        let hash = EthereumAbi.encodeTyped(messageJson: messageJson)
-        guard let signature = PrivateKey(data: privateKey)!.sign(digest: hash, curve: .secp256k1) else {
-            throw AnyError("Failed to sign")
-        }
-        return signature.hexString.append0x
+        return try hyperCore.signApproveBuilderFee(fee: request, privateKey: agentKey)
     }
 
     private func signSetReferer(agentKey: Data, code: String, timestamp: UInt64) throws -> String {
         let referer = factory.makeSetReferrer(referrer: code)
-        let eip712Message = hyperCore.setReferrerTypedData(referrer: referer, nonce: timestamp)
-        let signature = try signEIP712(messageJson: eip712Message, privateKey: agentKey)
-        return factory.buildSignedRequest(
-            signature: signature,
-            action: factory.serializeSetReferrer(setReferrer: referer),
-            timestamp: timestamp
-        )
-     }
+        return try hyperCore.signSetReferrer(referrer: referer, nonce: timestamp, privateKey: agentKey)
+    }
 
-    private func signMarketMessage(type: PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
+    private func signSpotSend(amount: String, destination: String, token: String, privateKey: Data) throws -> String {
+        let timestamp = UInt64(Date.getTimestampInMs())
+        let spotSend = factory.sendSpotTokenToAddress(
+            amount: amount,
+            destination: destination.lowercased(),
+            time: timestamp,
+            token: token
+        )
+        return try hyperCore.signSpotSend(spotSend: spotSend, privateKey: privateKey)
+    }
+
+    private func signStakingTransfer(wei: UInt64, nonce: UInt64, privateKey: Data) throws -> String {
+        let depositRequest = factory.makeTransferToStaking(wei: wei, nonce: nonce)
+        return try hyperCore.signCDeposit(deposit: depositRequest, privateKey: privateKey)
+    }
+
+    private func signStakingWithdraw(wei: UInt64, nonce: UInt64, privateKey: Data) throws -> String {
+        let request = factory.makeWithdrawFromStaking(wei: wei, nonce: nonce)
+        return try hyperCore.signCWithdraw(withdraw: request, privateKey: privateKey)
+    }
+
+    private func signMarketMessage(type: Primitives.PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
         let order = switch type {
-        case .close(let data):
+        case let .close(data):
             factory.makeMarketOrder(
-                asset: data.assetIndex.asUInt32,
+                asset: UInt32(data.assetIndex),
                 isBuy: data.direction == .short,
                 price: data.price,
                 size: data.size,
                 reduceOnly: true,
                 builder: builder
             )
-        case .open(let data):
+        case let .open(data):
             factory.makeMarketOrder(
-                asset: data.assetIndex.asUInt32,
+                asset: UInt32(data.assetIndex),
                 isBuy: data.direction == .long,
                 price: data.price,
                 size: data.size,
@@ -156,17 +209,6 @@ public class HyperCoreSigner: Signable {
                 builder: builder
             )
         }
-        let eip712 = hyperCore.placeOrderTypedData(order: order, nonce: timestamp)
-        return try factory.buildSignedRequest(
-            signature: signEIP712(messageJson: eip712, privateKey: agentKey),
-            action: factory.serializeOrder(order: order),
-            timestamp: timestamp
-        )
-    }
-
-    private func actionMessage(signature: String, eip712Message: String, timestamp: UInt64) throws -> String {
-        let eip712Json = try JSONSerialization.jsonObject(with: eip712Message.data(using: .utf8)!) as! [String: Any]
-        let actionJson = try JSONSerialization.data(withJSONObject: eip712Json["message"]!).encodeString()
-        return factory.buildSignedRequest(signature: signature, action: actionJson, timestamp: timestamp)
+        return try hyperCore.signPlaceOrder(order: order, nonce: timestamp, privateKey: agentKey)
     }
 }

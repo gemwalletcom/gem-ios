@@ -16,7 +16,7 @@ import PriceAlertService
 public final class SelectAssetViewModel {
     let preferences: Preferences
     let selectType: SelectAssetType
-    let assetsService: AssetsService
+    let searchService: AssetSearchService
     let walletsService: WalletsService
     let priceAlertService: PriceAlertService
 
@@ -24,7 +24,7 @@ public final class SelectAssetViewModel {
 
     var assets: [AssetData] = []
     var state: StateViewType<[AssetBasic]> = .noData
-    var searchModel: SelectAssetSearchViewModel
+    var searchModel: AssetSearchViewModel
     var request: AssetsRequest
 
     var isSearching: Bool = false
@@ -41,7 +41,7 @@ public final class SelectAssetViewModel {
         preferences: Preferences = Preferences.standard,
         wallet: Wallet,
         selectType: SelectAssetType,
-        assetsService: AssetsService,
+        searchService: AssetSearchService,
         walletsService: WalletsService,
         priceAlertService: PriceAlertService,
         selectAssetAction: AssetAction = .none
@@ -49,7 +49,7 @@ public final class SelectAssetViewModel {
         self.preferences = preferences
         self.wallet = wallet
         self.selectType = selectType
-        self.assetsService = assetsService
+        self.searchService = searchService
         self.walletsService = walletsService
         self.priceAlertService = priceAlertService
         self.onSelectAssetAction = selectAssetAction
@@ -61,7 +61,7 @@ public final class SelectAssetViewModel {
             )
         )
         self.filterModel = filter
-        self.searchModel = SelectAssetSearchViewModel(selectType: selectType)
+        self.searchModel = AssetSearchViewModel(selectType: selectType)
 
         self.request = AssetsRequest(
             walletId: wallet.id,
@@ -85,7 +85,8 @@ public final class SelectAssetViewModel {
             }
         case .manage: Localized.Wallet.manageTokenList
         case .priceAlert: Localized.Assets.selectAsset
-        case .deposit: "Deposit"
+        case .deposit: Localized.Wallet.deposit
+        case .withdraw: Localized.Wallet.withdraw
         }
     }
 
@@ -109,7 +110,7 @@ public final class SelectAssetViewModel {
                 wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
             case .collection: false
             }
-        case .buy, .manage, .priceAlert, .send, .swap, .deposit:
+        case .buy, .manage, .priceAlert, .send, .swap, .deposit, .withdraw:
             wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
         }
     }
@@ -122,11 +123,11 @@ public final class SelectAssetViewModel {
             case .pay: return false
             case .receive: return true
             }
-        case .send, .deposit: return false
+        case .send, .deposit, .withdraw: return false
         }
     }
 
-    var shouldShowTagFilter: Bool {
+    var showTags: Bool {
         searchModel.searchableQuery.isEmpty
     }
 
@@ -144,7 +145,7 @@ extension SelectAssetViewModel {
             Task {
                 await setPriceAlert(assetId: asset.id, enabled: true)
             }
-            case .manage, .send, .receive, .buy, .swap, .deposit: break
+            case .manage, .send, .receive, .buy, .swap, .deposit, .withdraw: break
         }
         onSelectAssetAction?(asset)
     }
@@ -165,7 +166,7 @@ extension SelectAssetViewModel {
         switch selectType {
         case .manage:
             await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
-        case .send, .receive, .buy, .swap, .priceAlert, .deposit: break
+        case .send, .receive, .buy, .swap, .priceAlert, .deposit, .withdraw: break
         }
     }
 
@@ -232,35 +233,19 @@ extension SelectAssetViewModel {
 // MARK: - Private
 
 extension SelectAssetViewModel {
-    private func searchChains(for type: WalletType) -> [Chain] {
-        switch selectType {
-        case .send, .receive, .manage, .buy, .swap, .deposit:
-            switch wallet.type {
-            case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }
-            case .multicoin: []
-            }
-        case .priceAlert: []
-        }
-    }
-
     private func searchAssets(
         query: String,
         priorityAssetsQuery: String?,
         tag: AssetTag?
     ) async {
-        let chains: [Chain] = searchChains(for: wallet.type)
-
         do {
-            let assets = try await assetsService.searchAssets(query: query, chains: chains, tags: [tag].compactMap { $0 })
-            try assetsService.addAssets(assets: assets)
-            if let priorityAssetsQuery {
-                try assetsService.assetStore.addAssetsSearch(query: priorityAssetsQuery, assets: assets)
-            }
-            try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
-
-            await MainActor.run { [self] in
-                self.state = .data(assets)
-            }
+            let assets = try await searchService.searchAssets(
+                wallet: wallet,
+                query: query,
+                priorityAssetsQuery: priorityAssetsQuery,
+                tag: tag
+            )
+            state = .data(assets)
         } catch {
             await handle(error: error)
         }
@@ -297,7 +282,8 @@ extension SelectAssetType {
         case .send,
                 .buy,
                 .swap,
-                .deposit: .view
+                .deposit,
+                .withdraw: .view
         case .receive: .copy
         case .manage: .manage
         case .priceAlert: .price

@@ -21,7 +21,8 @@ public struct TransactionsScene: View {
             List {
                 TransactionsList(
                     explorerService: model.explorerService,
-                    model.transactions
+                    model.transactions,
+                    currency: model.currency
                 )
                 .listRowInsets(.assetListRowInsets)
             }
@@ -33,6 +34,7 @@ public struct TransactionsScene: View {
         .overlay {
             if model.transactions.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
+                    .padding(.horizontal, .medium)
             }
         }
         .task { await model.fetch() }

@@ -5,10 +5,14 @@ import SwiftUI
 public extension Images {
     struct System {
         public static let settings = Image(systemName: SystemImage.settings)
+        public static let qrCodeViewfinder = Image(systemName: SystemImage.qrCodeViewfinder)
         public static let qrCode = Image(systemName: SystemImage.qrCode)
         public static let paste = Image(systemName: SystemImage.paste)
         public static let copy = Image(systemName: SystemImage.copy)
+        public static let arrowSwap = Image(systemName: SystemImage.arrowSwap)
+        public static let paperplane = Image(systemName: SystemImage.paperplane)
         public static let chevronDown = Image(systemName: SystemImage.chevronDown)
+        public static let chevronRight = Image(systemName: SystemImage.chevronRight)
         public static let checklist = Image(systemName: SystemImage.checklist)
         public static let clear = Image(systemName: SystemImage.clear)
         public static let hide = Image(systemName: SystemImage.hide)
@@ -28,6 +32,7 @@ public extension Images {
         public static let plus = Image(systemName: SystemImage.plus)
         public static let eye = Image(systemName: SystemImage.eye)
         public static let searchNoResults = Image(systemName: SystemImage.searchNoResults)
+        public static let search = Image(systemName: SystemImage.search)
         public static let exclamationmarkTriangleFill = Image(systemName: SystemImage.exclamationmarkTriangleFill)
         public static let exclamationmarkTriangle = Image(systemName: SystemImage.exclamationmarkTriangle)
         public static let gallery = Image(systemName: SystemImage.gallery)
@@ -46,5 +51,9 @@ public extension Images {
         public static let pencilLine = Image(systemName: SystemImage.pencilLine)
         public static let checkmarkCircle = Image(systemName: SystemImage.checkmarkCircle)
         public static let circle = Image(systemName: SystemImage.circle)
+        public static let dollar = Image(systemName: SystemImage.dollarsign)
+        public static let wallet = Image(systemName: SystemImage.wallet)
+        public static let eyeCircle = Image(systemName: SystemImage.eyeCircle)
+        public static let bitcoin = Image(systemName: SystemImage.bitcoin)
     }
 }

@@ -20,7 +20,7 @@ struct TextMessageScene: View {
                 .padding()
         }
         .toolbarContent {
-            ToolbarDismissItem(title: .cancel, placement: .topBarLeading)
+            ToolbarDismissItem(title: .done, placement: .topBarLeading)
             ToolbarItemView(placement: .topBarTrailing) {
                 Button {
                     isPresentingShareSheet.toggle()

@@ -21,8 +21,11 @@ struct SwapChangeView: View {
         Button {
             swap(&fromId, &toId)
         } label: {
-            Images.Actions.swap
+            Images.System.arrowSwap
+                .resizable()
                 .renderingMode(.template)
+                .scaledToFit()
+                .frame(size: .large)
                 .foregroundStyle(Colors.gray)
         }
     }

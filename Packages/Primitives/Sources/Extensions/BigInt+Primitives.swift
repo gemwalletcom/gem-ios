@@ -27,6 +27,11 @@ public extension BigInt {
         return self * BigInt(multiplier) / 100
     }
     
+    func decrease(byPercent percent: Int) -> BigInt {
+        let multiplier = 100 - percent
+        return self * BigInt(multiplier) / 100
+    }
+    
     func multiply(byPercent percent: Int) -> BigInt {
         self * BigInt(percent) / 100
     }
@@ -58,8 +63,10 @@ public extension BigInt {
     static func from(string: String) throws -> BigInt {
         if string.isEmpty {
            return .zero
+        } else if let value = BigInt(string, radix: 10) {
+            return value
         } else {
-            return BigInt(stringLiteral: string)
+            return .zero
         }
     }
     

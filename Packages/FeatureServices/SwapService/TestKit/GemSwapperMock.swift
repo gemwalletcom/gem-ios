@@ -11,6 +11,7 @@ import struct Gemstone.SwapperQuoteRequest
 import enum Gemstone.SwapperProvider
 import enum Gemstone.FetchQuoteData
 import typealias Gemstone.AssetId
+import struct Gemstone.SwapperSwapResult
 
 public final class GemSwapperMock: GemSwapperProtocol {
     private let permit2ForQuote: Permit2ApprovalData
@@ -21,6 +22,7 @@ public final class GemSwapperMock: GemSwapperProtocol {
     private let transactionStatus: Bool
     private let chains: [Chain]
     private let swapAssetList: SwapperAssetList
+    private let swapResult: SwapperSwapResult
 
     public init(
         permit2ForQuote: Permit2ApprovalData = .mock(),
@@ -30,7 +32,8 @@ public final class GemSwapperMock: GemSwapperProtocol {
         providers: [SwapperProviderType] = [.mock()],
         transactionStatus: Bool = false,
         chains: [Chain] = ["ethereum"],
-        swapAssetList: SwapperAssetList = .mock()
+        swapAssetList: SwapperAssetList = .mock(),
+        swapResult: SwapperSwapResult = .mock()
     ) {
         self.permit2ForQuote = permit2ForQuote
         self.quotes = quotes
@@ -40,6 +43,7 @@ public final class GemSwapperMock: GemSwapperProtocol {
         self.transactionStatus = transactionStatus
         self.chains = chains
         self.swapAssetList = swapAssetList
+        self.swapResult = swapResult
     }
     
     public func fetchPermit2ForQuote(quote: SwapperQuote) async throws -> Permit2ApprovalData? {
@@ -72,5 +76,9 @@ public final class GemSwapperMock: GemSwapperProtocol {
     
     public func supportedChainsForFromAsset(assetId: AssetId) -> SwapperAssetList {
         swapAssetList
+    }
+    
+    public func getSwapResult(chain: Chain, swapProvider: SwapperProvider, transactionHash: String) async throws -> SwapperSwapResult {
+        swapResult
     }
 }

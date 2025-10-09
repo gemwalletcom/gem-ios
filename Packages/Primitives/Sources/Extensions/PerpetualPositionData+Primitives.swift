@@ -6,6 +6,6 @@ extension PerpetualPositionData: Identifiable {
     }
     
     public var perpetualData: PerpetualData {
-        PerpetualData(perpetual: perpetual, asset: asset)
+        PerpetualData(perpetual: perpetual, asset: asset, metadata: PerpetualMetadata(isPinned: false))
     }
 }
