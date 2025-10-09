@@ -220,6 +220,10 @@ extension WalletSceneViewModel {
             refresh(for: newWallet)
         }
     }
+
+    public func onWalletTabReselected(_: Bool, _: Bool) {
+         isPresentingSearch = false
+    }
     
     func shouldStartLoadingAssets() {
         let preferences = WalletPreferences(walletId: wallet.id)
