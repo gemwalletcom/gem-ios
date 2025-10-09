@@ -17,6 +17,7 @@ public struct ValidatorImageView: View {
     public var body: some View {
         AsyncImageView(
             url: formatter.getValidatorUrl(chain: validator.chain, id: validator.id),
+            size: .image.asset,
             placeholder: .letter(validator.name.first ?? " ")
         )
     }

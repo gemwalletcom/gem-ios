@@ -8,7 +8,7 @@ public struct TransactionHeaderTypeBuilder {
     public static func build(
         infoModel: TransactionInfoViewModel,
         transaction: Transaction,
-        swapMetadata: SwapMetadata?
+        metadata: TransactionExtendedMetadata?
     ) -> TransactionHeaderType {
         let inputType: TransactionHeaderInputType = {
             switch transaction.type {
@@ -18,10 +18,12 @@ public struct TransactionHeaderTypeBuilder {
                     .stakeRedelegate,
                     .stakeRewards,
                     .stakeWithdraw,
-                    .smartContractCall:
-                return .amount(showFiatSubtitle: true)
+                    .smartContractCall,
+                    .stakeFreeze,
+                    .stakeUnfreeze:
+                return .amount(showFiat: true)
             case .swap:
-                guard let swapMetadata, let input = SwapMetadataViewModel(metadata: swapMetadata).headerInput else {
+                guard let metadata, let input = SwapMetadataViewModel(metadata: metadata).headerInput else {
                     fatalError("swapMetadata is missed")
                 }
                 return .swap(input)
@@ -29,17 +31,17 @@ public struct TransactionHeaderTypeBuilder {
                 return .symbol
             case .tokenApproval:
                 if infoModel.isZero {
-                    return .amount(showFiatSubtitle: false)
+                    return .amount(showFiat: false)
                 } else {
                     return .symbol
                 }
             case .transferNFT:
-                guard let metadata = transaction.metadata, case .nft(let metadata) = metadata else {
-                    return .amount(showFiatSubtitle: false)
+                guard case let .nft(metadata) = transaction.metadata else {
+                    return .amount(showFiat: false)
                 }
                 return .nft(name: metadata.name, id: metadata.assetId)
             case .perpetualOpenPosition, .perpetualClosePosition:
-                return .amount(showFiatSubtitle: true)
+                return .symbol
             }
         }()
         return infoModel.headerType(input: inputType)
@@ -54,11 +56,12 @@ public struct TransactionHeaderTypeBuilder {
             switch dataType {
             case .transfer,
                     .deposit,
+                    .withdrawal,
                     .generic,
                     .stake,
                     .tokenApprove:
                 return .amount(
-                    showFiatSubtitle: true
+                    showFiat: true
                 )
             case .transferNft(let asset):
                 return .nft(name: asset.name, id: asset.id)
@@ -66,25 +69,25 @@ public struct TransactionHeaderTypeBuilder {
                 switch type {
                 case .activate:
                     return .amount(
-                        showFiatSubtitle: false
+                        showFiat: false
                     )
                 }
             case .swap(let fromAsset, let toAsset, let data):
                 let assetPrices = (metadata?.assetPrices ?? [:]).map { (assetId, price) in
                     price.mapToAssetPrice(assetId: assetId)
                 }
-                
+
                 let model = SwapMetadataViewModel(
-                    metadata: SwapMetadata(
+                    metadata: TransactionExtendedMetadata(
                         assets: [fromAsset, toAsset],
                         assetPrices: assetPrices,
-                        transactionMetadata: TransactionSwapMetadata(
+                        transactionMetadata: .swap(TransactionSwapMetadata(
                             fromAsset: fromAsset.id,
                             fromValue: data.quote.fromValue,
                             toAsset: toAsset.id,
                             toValue: data.quote.toValue,
                             provider: data.quote.providerData.provider.rawValue
-                        )
+                        ))
                     )
                 )
 
@@ -93,7 +96,7 @@ public struct TransactionHeaderTypeBuilder {
                 }
                 return .swap(input)
             case .perpetual:
-                return .amount(showFiatSubtitle: true)
+                return .symbol
             }
         }()
         return infoModel.headerType(input: inputType)

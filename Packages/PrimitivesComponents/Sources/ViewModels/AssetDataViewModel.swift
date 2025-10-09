@@ -13,7 +13,7 @@ public struct AssetDataViewModel: Sendable {
     private let balanceViewModel: BalanceViewModel
 
     public let priceViewModel: PriceViewModel
-    let currencyCode: String
+    public let currencyCode: String
 
     public init(
         assetData: AssetData,
@@ -112,6 +112,14 @@ public struct AssetDataViewModel: Sendable {
         balanceViewModel.balanceTextColor
     }
 
+    public var energyText: String {
+        balanceViewModel.energyText
+    }
+
+    public var bandwidthText: String {
+        balanceViewModel.bandwidthText
+    }
+
     public var fiatBalanceText: String {
         guard
             let price = priceViewModel.price,
@@ -154,10 +162,6 @@ public struct AssetDataViewModel: Sendable {
         assetData.account.address
     }
 
-    public var showBalances: Bool {
-        assetData.balances.contains(where: { $0.key != .available && $0.value > 0 })
-    }
-
     public var stakeApr: Double? {
         assetData.metadata.stakingApr
     }
@@ -168,5 +172,13 @@ public struct AssetDataViewModel: Sendable {
     
     public var assetAddress: AssetAddress {
         assetData.assetAddress
+    }
+
+    public var showBalances: Bool {
+        assetData.balances.contains(where: { $0.key != .available && $0.value > 0 })
+    }
+
+    public var showResources: Bool {
+        balanceViewModel.hasStakingResources
     }
 }

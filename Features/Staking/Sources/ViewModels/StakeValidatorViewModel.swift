@@ -8,7 +8,7 @@ import Formatters
 public struct StakeValidatorViewModel {
     
     public let validator: DelegationValidator
-    public let aprFormatter = CurrencyFormatter(type: .percentSignLess)
+    public let aprFormatter = CurrencyFormatter.percentSignLess
     
     public init(validator: DelegationValidator) {
         self.validator = validator

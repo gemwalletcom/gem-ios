@@ -30,7 +30,10 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let rewardsAmount = Column("rewardsAmount")
         static let reserved = Column("reserved")
         static let reservedAmount = Column("reservedAmount")
+        static let withdrawable = Column("withdrawable")
+        static let withdrawableAmount = Column("withdrawableAmount")
         static let totalAmount = Column("totalAmount")
+        static let metadata = Column("metadata")
         static let lastUsedAt = Column("lastUsedAt")
         static let updatedAt = Column("updatedAt")
     }
@@ -59,6 +62,9 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     public var reserved: String
     public var reservedAmount: Double
     
+    public var withdrawable: String
+    public var withdrawableAmount: Double
+    
     public var totalAmount: Double
     
     public var isEnabled: Bool
@@ -66,6 +72,8 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     public var isPinned: Bool
     public var isActive: Bool
     
+    public var metadata: BalanceMetadata?
+
     public var lastUsedAt: Date?
     public var updatedAt: Date?
 }
@@ -103,6 +111,9 @@ extension BalanceRecord: CreateTable {
             $0.column(Columns.reserved.name, .text).defaults(to: "0")
             $0.column(Columns.reservedAmount.name, .double).defaults(to: 0)
             
+            $0.column(Columns.withdrawable.name, .text).defaults(to: "0")
+            $0.column(Columns.withdrawableAmount.name, .double).defaults(to: 0)
+            
             $0.column(sql: totalAmountSQlCreation)
             
             $0.column(Columns.isEnabled.name, .boolean).defaults(to: true).indexed()
@@ -110,6 +121,7 @@ extension BalanceRecord: CreateTable {
             $0.column(Columns.isPinned.name, .boolean).defaults(to: false).indexed()
             $0.column(Columns.isActive.name, .boolean).defaults(to: true).indexed()
             
+            $0.column(Columns.metadata.name, .jsonText)
             $0.column(Columns.lastUsedAt.name, .date)
             $0.column(Columns.updatedAt.name, .date)
             $0.uniqueKey([
@@ -134,7 +146,10 @@ extension BalanceRecord {
             locked: BigInt(stringLiteral: locked),
             staked: BigInt(stringLiteral: staked),
             pending: BigInt(stringLiteral: pending),
-            reserved: BigInt(stringLiteral: reserved)
+            rewards: BigInt(stringLiteral: rewards),
+            reserved: BigInt(stringLiteral: reserved),
+            withdrawable: BigInt(stringLiteral: withdrawable),
+            metadata: metadata
         )
     }
     

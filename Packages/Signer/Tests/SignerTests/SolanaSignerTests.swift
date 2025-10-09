@@ -6,7 +6,7 @@ import PrimitivesTestKit
 import Testing
 import WalletCore
 
-final class SolanaSignerTests {
+struct SolanaSignerTests {
     let fee = Fee(fee: .zero, gasPriceType: .eip1559(gasPrice: 5_000, priorityFee: 10_000), gasLimit: 125_000)
 
     @Test
@@ -18,21 +18,19 @@ final class SolanaSignerTests {
             value: .zero,
             fee: fee,
             isMaxAmount: false,
-            chainId: "",
             memo: .none,
-            accountNumber: 0,
-            sequence: 0,
             senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
             destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
-            data: .none,
-            block: SignerInputBlock(hash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"),
-            token: SignerInputToken(),
-            utxos: [],
-            messageBytes: ""
+            metadata: .solana(
+                senderTokenAddress: nil,
+                recipientTokenAddress: nil,
+                tokenProgram: nil,
+                blockHash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"
+            )
         )
 
         let result = try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey)
-        #expect(result == "AQo2Eug/J7WNOj0pI72OU0RHM9Ss4OXK2HvuGhaKGhJN8KtcxIuEvAbuKuzjBfq+d6q8SfeVx8l6BOfYs0/lsQoBAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAMCAAkDECcAAAAAAAACAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
+        #expect(result == "ATMIgrvRXhyfgZ1CsTIZu8L76/TZZ2y0tP8VT7d7xf2+5I7SehvqstpEKQncjcMoB4+f6I8Re9HPg/V7gzc59A4BAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAICAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
     }
 
     @Test
@@ -44,21 +42,19 @@ final class SolanaSignerTests {
             value: .zero,
             fee: fee,
             isMaxAmount: false,
-            chainId: "",
             memo: .none,
-            accountNumber: 0,
-            sequence: 0,
             senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
             destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
-            data: .none,
-            block: SignerInputBlock(hash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"),
-            token: SignerInputToken(),
-            utxos: [],
-            messageBytes: ""
+            metadata: .solana(
+                senderTokenAddress: nil,
+                recipientTokenAddress: nil,
+                tokenProgram: nil,
+                blockHash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"
+            )
         )
 
         let result = try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey)
-        #expect(result == "AQo2Eug/J7WNOj0pI72OU0RHM9Ss4OXK2HvuGhaKGhJN8KtcxIuEvAbuKuzjBfq+d6q8SfeVx8l6BOfYs0/lsQoBAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAMCAAkDECcAAAAAAAACAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
+        #expect(result == "ATMIgrvRXhyfgZ1CsTIZu8L76/TZZ2y0tP8VT7d7xf2+5I7SehvqstpEKQncjcMoB4+f6I8Re9HPg/V7gzc59A4BAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAICAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
     }
 
     @Test
@@ -70,21 +66,19 @@ final class SolanaSignerTests {
             value: .zero,
             fee: fee,
             isMaxAmount: false,
-            chainId: "",
             memo: .none,
-            accountNumber: 0,
-            sequence: 0,
             senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
             destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
-            data: .none,
-            block: SignerInputBlock(hash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"),
-            token: SignerInputToken(senderTokenAddress: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", recipientTokenAddress: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK", tokenProgram: .token),
-            utxos: [],
-            messageBytes: ""
+            metadata: .solana(
+                senderTokenAddress: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+                recipientTokenAddress: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK",
+                tokenProgram: .token,
+                blockHash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"
+            )
         )
 
         let result = try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey)
-        #expect(result == "AQo2Eug/J7WNOj0pI72OU0RHM9Ss4OXK2HvuGhaKGhJN8KtcxIuEvAbuKuzjBfq+d6q8SfeVx8l6BOfYs0/lsQoBAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAMCAAkDECcAAAAAAAACAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
+        #expect(result == "ATMIgrvRXhyfgZ1CsTIZu8L76/TZZ2y0tP8VT7d7xf2+5I7SehvqstpEKQncjcMoB4+f6I8Re9HPg/V7gzc59A4BAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAICAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
     }
 
     @Test

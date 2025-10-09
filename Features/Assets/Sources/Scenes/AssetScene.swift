@@ -27,13 +27,17 @@ public struct AssetScene: View {
                 .padding(.bottom, .medium)
             }
             .cleanListRow()
-            Section {
-                BannerView(
-                    banners: model.allBanners,
-                    action: model.onSelectBanner,
-                    closeAction: model.onCloseBanner
-                )
+            
+            if let banner = model.assetBannerViewModel.priorityBanner {
+                Section {
+                    BannerView(
+                        banner: banner,
+                        action: model.onSelectBanner
+                    )
+                }
+                .listRowInsets(.zero)
             }
+
             if model.showStatus {
                 Section {
                     NavigationCustomLink(with:
@@ -77,6 +81,18 @@ public struct AssetScene: View {
                     label: { PriceListItemView(model: model.priceItemViewModel) }
                 )
                 .accessibilityIdentifier("price")
+                
+                if model.showPriceAlerts {
+                    NavigationLink(
+                        value: Scenes.AssetPriceAlert(asset: model.assetData.asset),
+                        label: {
+                            ListItemView(
+                                title: model.priceAlertsViewModel.priceAlertsTitle,
+                                subtitle: model.priceAlertsViewModel.priceAlertCount
+                            )
+                        }
+                    )
+                }
 
                 if model.canOpenNetwork {
                     NavigationLink(
@@ -107,21 +123,37 @@ public struct AssetScene: View {
                             )
                         }
                     }
+                    
                 }
             } else if model.assetDataModel.isStakeEnabled {
                 stakeViewEmpty
             }
 
+            if model.showResources {
+                Section(model.resourcesTitle) {
+                    ListItemView(
+                        title: model.energyTitle,
+                        subtitle: model.assetDataModel.energyText
+                    )
+
+                    ListItemView(
+                        title: model.bandwidthTitle,
+                        subtitle: model.assetDataModel.bandwidthText
+                    )
+                }
+            }
+
             if model.showTransactions {
                 TransactionsList(
                     explorerService: model.explorerService,
-                    model.transactions
+                    model.transactions,
+                    currency: model.assetDataModel.currencyCode
                 )
                 .listRowInsets(.assetListRowInsets)
             } else {
                 Section {
                     Spacer()
-                    EmptyContentView(model: model.emptyConentModel)
+                    EmptyContentView(model: model.emptyContentModel)
                 }
                 .cleanListRow()
             }

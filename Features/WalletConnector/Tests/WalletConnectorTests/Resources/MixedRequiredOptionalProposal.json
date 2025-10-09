@@ -1,0 +1,83 @@
+{
+  "id": "mixed-required-optional-test",
+  "pairingTopic": "mixed-required-optional-topic",
+  "proposer": {
+    "name": "MixedApp",
+    "description": "App with both required and optional chains",
+    "url": "https://mixed.app",
+    "icons": ["https://mixed.app/icon.png"],
+    "redirect": {
+      "native": "mixedapp://open",
+      "universal": "https://mixed.app/deeplink",
+      "linkMode": true
+    }
+  },
+  "requiredNamespaces": {
+    "eip155": {
+      "chains": [
+        "eip155:1",
+        "eip155:137",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "methods": ["eth_sendTransaction", "personal_sign"],
+      "events": ["chainChanged", "accountsChanged"]
+    }
+  },
+  "optionalNamespaces": {
+    "cosmos": {
+      "chains": [
+        "cosmos:cosmoshub-4"
+      ],
+      "methods": ["cosmos_sendTransaction"],
+      "events": ["cosmos_signMessage"]
+    }
+  },
+  "sessionProperties": {
+    "theme": "dark",
+    "version": "1.0.0"
+  },
+  "proposal": {
+    "relays": [
+      {
+        "protocol": "waku",
+        "data": "relayData"
+      }
+    ],
+    "proposer": {
+      "publicKey": "mixedPublicKey",
+      "metadata": {
+        "name": "MixedApp",
+        "description": "App with both required and optional chains",
+        "url": "https://mixed.app",
+        "icons": ["https://mixed.app/icon.png"],
+        "redirect": {
+          "native": "mixedapp://open",
+          "universal": "https://mixed.app/deeplink",
+          "linkMode": true
+        }
+      }
+    },
+    "requiredNamespaces": {
+      "eip155": {
+        "chains": [
+          "eip155:1"
+        ],
+        "methods": ["eth_sendTransaction"],
+        "events": ["chainChanged"]
+      }
+    },
+    "optionalNamespaces": {
+      "cosmos": {
+        "chains": [
+          "cosmos:cosmoshub-4"
+        ],
+        "methods": ["cosmos_sendTransaction"],
+        "events": ["cosmos_signMessage"]
+      }
+    },
+    "sessionProperties": {
+      "theme": "dark"
+    },
+    "expiryTimestamp": 1700000000
+  }
+}

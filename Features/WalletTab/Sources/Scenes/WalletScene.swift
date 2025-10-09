@@ -31,20 +31,22 @@ public struct WalletScene: View {
             }
             .cleanListRow()
 
-            if $preferences.isDeveloperEnabled.wrappedValue {
+            if ($preferences.isDeveloperEnabled.wrappedValue || preferences.preferences.isPerpetualEnabled) && model.wallet.isMultiCoins {
                 Section {
-                    NavigationLink(value: Scenes.Perpetuals()) {
-                        ListItemView(title: "Perpetuals")
-                    }
+                    PerpetualsPreviewView(wallet: model.wallet)
+                } header: {
+                    HeaderNavigationLinkView(title: "Perpetuals", destination: Scenes.Perpetuals())
                 }
             }
             
-            Section {
-                BannerView(
-                    banners: model.banners,
-                    action: model.onBannerAction,
-                    closeAction: model.onCloseBanner
-                )
+            if let banner = model.walletBannersModel.priorityBanner {
+                Section {
+                    BannerView(
+                        banner: banner,
+                        action: model.onBanner
+                    )
+                }
+                .listRowInsets(.zero)
             }
 
             if model.showPinnedSection {
@@ -54,6 +56,7 @@ public struct WalletScene: View {
                         currencyCode: model.currencyCode,
                         onHideAsset: model.onHideAsset,
                         onPinAsset: model.onPinAsset,
+                        onCopyAddress: model.onCopyAddress,
                         showBalancePrivacy: $preferences.isHideBalanceEnabled
                     )
                     .listRowInsets(.assetListRowInsets)
@@ -71,17 +74,15 @@ public struct WalletScene: View {
                     currencyCode: model.currencyCode,
                     onHideAsset: model.onHideAsset,
                     onPinAsset: model.onPinAsset,
+                    onCopyAddress: model.onCopyAddress,
                     showBalancePrivacy: $preferences.isHideBalanceEnabled
                 )
                 .listRowInsets(.assetListRowInsets)
             } header: {
                 if model.isLoadingAssets {
-                    HStack {
-                        Text(Localized.Common.loading + "...")
-                        ActivityIndicator(isAnimating: .constant(true), style: .medium)
-                    }
-                    .listRowInsets(.assetListRowInsets)
-                    .textCase(nil)
+                    LoadingTextView(isAnimating: .constant(true))
+                        .listRowInsets(.assetListRowInsets)
+                        .textCase(nil)
                 }
             } footer: {
                 ListButton(

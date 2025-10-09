@@ -3,9 +3,8 @@
 import Foundation
 import Primitives
 
-extension Asset {
-
-    public init(_ chain: Chain) {
+public extension Asset {
+    init(_ chain: Chain) {
         let asset = chain.asset
         self.init(
             id: chain.assetId,
@@ -15,11 +14,16 @@ extension Asset {
             type: asset.type
         )
     }
-    
-    public var feeAsset: Asset {
-        switch id.type {
-        case .native: self
-        case .token: id.chain.asset
+
+    var feeAsset: Asset {
+        switch id.chain {
+        case .hyperCore:
+            return Asset.hyperliquidUSDC()
+        default:
+            switch id.type {
+            case .native: return self
+            case .token: return id.chain.asset
+            }
         }
     }
 }

@@ -39,6 +39,5 @@ public struct AssetBalanceView<SecondaryView: View>: View {
             },
             secondary: secondary
         )
-        .listRowInsets(.assetListRowInsets)
     }
 }

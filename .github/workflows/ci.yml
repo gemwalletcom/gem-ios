@@ -17,9 +17,13 @@ env:
 jobs:
   unit_test:
     name: Build and Test iPhone simulator
-    runs-on: macos-15
+    runs-on: macos-26
 
     steps:
+      - name: Select Xcode
+        run: |
+          xcrun simctl list devices
+        
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -67,4 +71,4 @@ jobs:
         run: just generate-stone
 
       - name: Unit Tests
-        run: just test_all
+        run: just test-all

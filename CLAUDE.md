@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI assistants (Claude Code, Gemini, Codex, etc.) when working with code in this repository.
 
 ## Project Overview
 
@@ -44,13 +44,13 @@ just build
 just build-package $PACKAGE. Example: just build-package Primitives
 
 # Build and run tests
-just test_all
+just test-all
 
 # Build and run tests for a specific package
 just test $PACKAGE. Example: just test PrimitivesTests
 
 # Run UI tests
-just test_ui
+just test-ui
 
 # Generate code (models, SwiftGen assets)
 just generate
@@ -83,6 +83,13 @@ just core-upgrade
 just uml-app
 ```
 
+## Debugging and Troubleshooting
+
+- **Build Logs:** Build logs can be found in `build/DerivedData`. When a `just build` command fails, examine the output in the console for specific Xcode errors.
+- **Failing Tests:** When a test fails using `just test TARGET`, first try running the test directly in Xcode to use the interactive debugger.
+- **Environment Issues:** If you encounter issues after pulling new changes, run `just bootstrap` again to ensure all dependencies and generated files are up to date.
+- **Rust Core Issues:** If you suspect an issue in the `core/` submodule, consult the `core/README.md` for specific Rust-related debugging steps.
+
 ## Key Dependencies
 
 ### Core Technology Stack
@@ -96,6 +103,12 @@ just uml-app
 - **WalletCore**: TrustWallet's blockchain library
 - **SwiftGen**: Code generation for assets and localization
 - **SwiftFormat**: Code formatting
+
+### Apple Documentation Resources
+- **Xcode AI Documentation**: `/Applications/Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/AdditionalDocumentation`
+  - Contains latest SwiftUI, AppKit, UIKit, and framework documentation
+  - Includes guides for new Apple features and APIs
+  - Reference these docs when implementing new iOS features or using latest Apple frameworks
 
 ## Code Architecture Patterns
 
@@ -164,8 +177,9 @@ Services are injected via SwiftUI Environment:
 
 ### Running Tests
 - Unit tests: `just test`
-- UI tests: `just test_ui`
-- Specific test: `just test-specific TARGET` (e.g. `just test-specific AssetsTests`)
+- UI tests: `just test-ui`
+- Specific test: `just test TARGET` (e.g. `just test AssetsTests`)
+- Run all tests: `just test-all`
 - Tests use iPhone 16 simulator by default
 - To run tests, always use the `just` commands above, not direct `xcrun swift test` commands
 
@@ -270,6 +284,16 @@ public extension Banner {
 
 ## Development Guidelines
 
+### Build Verification
+**CRITICAL REQUIREMENT**: Always verify the project builds successfully before claiming work is complete.
+
+- **ALWAYS run `just build`** before stating that tasks are finished
+- **Fix all build errors** before marking tasks as completed  
+- **Test core changes** with `just generate-stone` when modifying Rust core
+- **Verify iOS integration** after any core modifications
+- If build fails, identify and fix all errors before proceeding
+- Never claim "migration complete" or "tasks done" without a successful build
+
 ### Code Style
 - Follow existing SwiftUI and Swift concurrency patterns
 - Use `@Observable` for ViewModels instead of `ObservableObject`
@@ -330,6 +354,23 @@ public extension Banner {
 - **Check for Patterns**: Don't blindly copy patterns from existing code without understanding their purpose
 - **Minimize API Surface**: Only make public what needs to be public
 - **Test-Driven Implementation**: Write tests that verify actual usage, not just coverage
+
+## Release Process
+
+### Branching Strategy
+This project follows a GitFlow-like branching strategy:
+- `main`: Represents the latest production release.
+- `develop`: The primary branch for ongoing development. All feature branches are merged into `develop`.
+- `feature/...`: Branches for new features, branched from `develop`.
+- `release/...`: Branches for preparing a new production release.
+- `hotfix/...`: Branches for critical production fixes.
+
+### Versioning
+The project uses semantic versioning (Major.Minor.Patch). The version can be updated using the `just bump-version` command, which leverages the `scripts/bump-version.sh` script.
+
+### Committing Changes
+- Before committing, ensure your changes are compliant with the project's style by running formatters and linters if available.
+- Write clear, concise commit messages that explain the "why" behind the change.
 
 ## Platform Requirements
 

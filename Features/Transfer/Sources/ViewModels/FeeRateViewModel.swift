@@ -9,7 +9,7 @@ import Components
 import Formatters
 
 public struct FeeRateViewModel: Identifiable {
-    static let formatter = CurrencyFormatter()
+    static let formatter = CurrencyFormatter(currencyCode: .empty)
 
     public let feeRate: FeeRate
     public let unitType: FeeUnitType

@@ -13,19 +13,22 @@ import GemstonePrimitives
 @MainActor
 public final class ConnectionsViewModel {
     let service: ConnectionsService
+    let walletConnectorPresenter: WalletConnectorPresenter?
     
     var request: ConnectionsRequest
     var connections: [WalletConnection] = []
+
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
+    var isPresentingConnectorBar: Bool = false
 
     public init(
-        service: ConnectionsService
+        service: ConnectionsService,
+        walletConnectorPresenter: WalletConnectorPresenter? = nil
     ) {
         self.service = service
+        self.walletConnectorPresenter = walletConnectorPresenter
         self.request = ConnectionsRequest()
-        self.isPresentingScanner = false
-        self.isPresentingAlertMessage = nil
     }
 
     var title: String { Localized.WalletConnect.title }
@@ -33,6 +36,7 @@ public final class ConnectionsViewModel {
     var pasteButtonTitle: String { Localized.Common.paste }
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
     var docsUrl: URL { Docs.url(.walletConnect) }
+    
     
     var sections: [ListSection<WalletConnection>] {
         let grouped = Dictionary(grouping: connections, by: { $0.wallet })
@@ -69,6 +73,10 @@ public final class ConnectionsViewModel {
     
     func updateSessions() {
         service.updateSessions()
+    }
+    
+    func hideConnectionBar() {
+        isPresentingConnectorBar = false
     }
 }
 
@@ -107,9 +115,11 @@ extension ConnectionsViewModel {
     }
     
     private func connectURI(uri: String) async {
+        isPresentingConnectorBar = true
         do {
             try await pair(uri: uri)
         } catch {
+            hideConnectionBar()
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
             NSLog("connectURI error: \(error)")
         }

@@ -14,16 +14,18 @@ public struct ValidatorDelegationView: View {
     }
     
     public var body: some View {
-        HStack {
-            ValidatorImageView(validator: delegation.delegation.validator)
-            ListItemView(
-                title: delegation.validatorText,
-                titleExtra: delegation.stateText,
-                titleStyleExtra: TextStyle(font: .footnote, color: delegation.stateTextColor),
-                subtitle: delegation.balanceText,
-                subtitleExtra: delegation.completionDateText,
-                subtitleStyleExtra: .footnote
-            )
-        }
+        ListItemView(
+            title: delegation.validatorText,
+            titleStyle: delegation.titleStyle,
+            titleTag: delegation.stateText,
+            titleTagStyle: delegation.stateTagStyle,
+            titleExtra: delegation.completionDateText,
+            titleStyleExtra: delegation.titleExtraStyle,
+            subtitle: delegation.balanceText,
+            subtitleStyle: delegation.subtitleStyle,
+            subtitleExtra: delegation.fiatValueText,
+            subtitleStyleExtra: delegation.subtitleExtraStyle,
+            imageStyle: .asset(assetImage: delegation.validatorImage)
+        )
     }
 }

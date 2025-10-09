@@ -2,7 +2,6 @@
 
 import Foundation
 import WalletCore
-import WalletCorePrimitives
 import Keystore
 import Primitives
 
@@ -14,7 +13,7 @@ enum AptosPayload {
 public struct AptosSigner: Signable {
     
     func sign(payload: AptosPayload, input: SignerInput , privateKey: Data) throws -> String {
-        let signingInput = AptosSigningInput.with {
+        let signingInput = try AptosSigningInput.with {
             $0.chainID = 1
             switch payload {
             case .payload(let payload):
@@ -22,11 +21,10 @@ public struct AptosSigner: Signable {
             case .anyData(let string):
                 $0.anyEncoded = string
             }
-            // TODO: - 3664390082 = 2086-22:08:02 +UTC, probably need to adjust
-            $0.expirationTimestampSecs = 3664390082
+            $0.expirationTimestampSecs = UInt64(Date.now.timeIntervalSince1970) + 3_600
             $0.gasUnitPrice = input.fee.gasPrice.asUInt
             $0.maxGasAmount = input.fee.gasLimit.asUInt
-            $0.sequenceNumber = Int64(input.sequence)
+            $0.sequenceNumber = Int64(try input.metadata.getSequence())
             $0.sender = input.senderAddress
             $0.privateKey = privateKey
         }
@@ -79,6 +77,12 @@ public struct AptosSigner: Signable {
         let data = try input.type.swap().data
         return [
             try sign(payload: .anyData(data.data.data), input: input, privateKey: privateKey)
+        ]
+    }
+
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+        return [
+            try sign(payload: .anyData(try input.metadata.getData()), input: input, privateKey: privateKey)
         ]
     }
 }

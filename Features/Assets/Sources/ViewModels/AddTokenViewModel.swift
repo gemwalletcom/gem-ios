@@ -32,7 +32,7 @@ public final class AddTokenViewModel {
     var addressTitleField: String { Localized.Wallet.Import.contractAddressField }
 
     var pasteImage: Image { Images.System.paste }
-    var qrImage: Image { Images.System.qrCode }
+    var qrImage: Image { Images.System.qrCodeViewfinder }
     var errorSystemImage: String { SystemImage.errorOccurred }
 
     var chains: [Chain] { input.chains }
@@ -89,18 +89,6 @@ extension AddTokenViewModel {
             await MainActor.run { [self] in
                 self.state = .error(error)
             }
-        }
-    }
-}
-
-// MARK: - Models extensions
-
-extension TokenValidationError: @retroactive LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .invalidTokenId: Localized.Errors.Token.invalidId
-        case .invalidMetadata: Localized.Errors.Token.invalidMetadata
-        case .other(let error): Localized.Errors.Token.unableFetchTokenInformation(error.localizedDescription)
         }
     }
 }

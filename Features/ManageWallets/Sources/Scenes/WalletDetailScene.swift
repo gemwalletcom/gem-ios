@@ -80,7 +80,7 @@ public struct WalletDetailScene: View {
                                 title: Localized.Common.address,
                                 account: account,
                                 mode: .auto(addressStyle: .short),
-                                explorerService: model.explorerService
+                                addressLink: model.addressLink(account: account)
                             )
                         )
                     case .none:
@@ -104,7 +104,7 @@ public struct WalletDetailScene: View {
         .frame(maxWidth: .infinity)
         .onChange(of: model.nameInput, model.onChangeWalletName)
         .navigationTitle(model.title)
-        .confirmationDialog(
+        .alert(
             Localized.Common.deleteConfirmation(model.name),
             presenting: $model.isPresentingDeleteConfirmation,
             sensoryFeedback: .warning,

@@ -15,6 +15,8 @@ import TransactionsService
 import WalletConnector
 import WalletService
 import WalletsService
+import NameService
+import BannerService
 
 @Observable
 @MainActor
@@ -27,6 +29,7 @@ final class RootSceneViewModel {
     private let walletsService: WalletsService
 
     let walletService: WalletService
+    let nameService: NameService
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
@@ -57,7 +60,8 @@ final class RootSceneViewModel {
         notificationHandler: NotificationHandler,
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
-        walletsService: WalletsService
+        walletsService: WalletsService,
+        nameService: NameService
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartAsyncService = onstartAsyncService
@@ -68,6 +72,7 @@ final class RootSceneViewModel {
         self.lockManager = lockWindowManager
         self.walletService = walletService
         self.walletsService = walletsService
+        self.nameService = nameService
     }
 }
 
@@ -163,9 +168,6 @@ extension RootSceneViewModel {
             try walletsService.setup(wallet: wallet)
         } catch {
             NSLog("RootSceneViewModel setupWallet error: \(error)")
-        }
-        Task {
-            await walletsService.runAddressStatusCheck(wallet)
         }
     }
 }

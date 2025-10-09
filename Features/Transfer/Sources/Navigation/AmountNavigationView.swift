@@ -8,6 +8,7 @@ import InfoSheet
 import Components
 import FiatConnect
 import PrimitivesComponents
+import Store
 
 public struct AmountNavigationView: View {
     @State private var model: AmountSceneViewModel
@@ -20,14 +21,15 @@ public struct AmountNavigationView: View {
         AmountScene(
             model: model
         )
+        .onChangeObserveQuery(
+            request: $model.assetRequest,
+            value: $model.assetData,
+            action: model.onChangeAssetBalance
+        )
         .sheet(item: $model.isPresentingSheet) {
             switch $0 {
-            case let .infoAction(type, button):
-                let infoModel = InfoSheetViewModel(
-                    type: type,
-                    button: button
-                )
-                InfoSheetScene(model: infoModel)
+            case let .infoAction(type):
+                InfoSheetScene(type: type)
             case .fiatConnect(let assetAddress, let walletId):
                 NavigationStack {
                     FiatConnectNavigationView(

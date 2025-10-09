@@ -8,6 +8,7 @@ import Components
 import Localization
 import Style
 import Assets
+import AssetsService
 
 struct CollectionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -16,6 +17,7 @@ struct CollectionsNavigationStack: View {
     @Environment(\.avatarService) private var avatarService
     @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
+    @Environment(\.assetsService) private var assetsService
 
     @State private var model: CollectionsViewModel
 
@@ -64,7 +66,7 @@ struct CollectionsNavigationStack: View {
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             selectType: $0,
-                            assetsService: walletsService.assetsService,
+                            searchService: AssetSearchService(assetsService: assetsService),
                             walletsService: walletsService,
                             priceAlertService: priceAlertService
                         ),

@@ -39,13 +39,13 @@
 		83B08BDD2D0B4B1E00CA1B33 /* AppResolver+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B08BDC2D0B4B1E00CA1B33 /* AppResolver+Services.swift */; };
 		83B57FAB2CFF92670009319F /* AppResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B57FAA2CFF92670009319F /* AppResolver.swift */; };
 		83B6C2102D5E3F2600F9DF8A /* WalletTab in Frameworks */ = {isa = PBXBuildFile; productRef = 83B6C20F2D5E3F2600F9DF8A /* WalletTab */; };
-		83CA4BA72D2F02440064A4AF /* NameResolver in Frameworks */ = {isa = PBXBuildFile; productRef = 83CA4BA62D2F02440064A4AF /* NameResolver */; };
 		83D6808B2CCA90D900B45089 /* InfoSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 83D6808A2CCA90D900B45089 /* InfoSheet */; };
 		83E041582D0AFCB10031D4BC /* RootScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E041572D0AFCB10031D4BC /* RootScene.swift */; };
 		83E0415A2D0AFCB80031D4BC /* RootSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */; };
 		83EB5E302D2ECF00006A7CFB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 83EB5E2F2D2ECF00006A7CFB /* Onboarding */; };
 		83EF67E52E005F48009C690F /* Formatters in Frameworks */ = {isa = PBXBuildFile; productRef = 83EF67E42E005F48009C690F /* Formatters */; };
 		83F645062D52C31D00C18881 /* DiscoverAssetsService in Frameworks */ = {isa = PBXBuildFile; productRef = 83F645052D52C31D00C18881 /* DiscoverAssetsService */; };
+		B60C6C352E68848900899BAC /* Support in Frameworks */ = {isa = PBXBuildFile; productRef = B60C6C342E68848900899BAC /* Support */; };
 		B617D60B2D5B75F0001697A6 /* AvatarService in Frameworks */ = {isa = PBXBuildFile; productRef = B617D60A2D5B75F0001697A6 /* AvatarService */; };
 		B62F6B9D2DE61ADF00AF56AB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = B62F6B9C2DE61ADF00AF56AB /* Onboarding */; };
 		B66AFC6C2DDB260A0082C026 /* AppService in Frameworks */ = {isa = PBXBuildFile; productRef = B66AFC6B2DDB260A0082C026 /* AppService */; };
@@ -86,12 +86,14 @@
 		D838194A2E256A5A0076CDB3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80A2E246E6700871ED9 /* WidgetKit.framework */; };
 		D838194B2E256A5A0076CDB3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832C80C2E246E6700871ED9 /* SwiftUI.framework */; };
 		D83819562E256A5B0076CDB3 /* GemPriceWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		D838195C2E256A630076CDB3 /* PriceWidget in Frameworks */ = {isa = PBXBuildFile; productRef = D838195B2E256A630076CDB3 /* PriceWidget */; settings = {ATTRIBUTES = (Required, ); }; };
+		D83BDCB72E3E878A00E41807 /* PerpetualPositionNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83BDCB52E3E878A00E41807 /* PerpetualPositionNavigationStack.swift */; };
+		D83BDCB92E3E8AA400E41807 /* ViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83BDCB82E3E8AA400E41807 /* ViewModelFactory.swift */; };
 		D83D3C252D6E62F4002959EA /* ScanService in Frameworks */ = {isa = PBXBuildFile; productRef = D83D3C242D6E62F4002959EA /* ScanService */; };
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
 		D85AD29D2CD337BE0010DEF8 /* SwapService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD29C2CD337BE0010DEF8 /* SwapService */; };
 		D85AD2A62CD7017E0010DEF8 /* NativeProviderService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD2A52CD7017E0010DEF8 /* NativeProviderService */; };
+		D87316B82E3AF30300C11634 /* ui_tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = D87316B72E3AF30300C11634 /* ui_tests.xctestplan */; };
 		D873DA512D7933AF0003F5CE /* MarketsNavigtionStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D873DA502D7933AF0003F5CE /* MarketsNavigtionStack.swift */; };
 		D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */; };
 		D891DD412D3F359F00241222 /* CollectionsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */; };
@@ -106,13 +108,21 @@
 		D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */; };
 		D8C4A3A52C9696FE006FABE8 /* AssetNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */; };
 		D8CF19E32CC747370025D6B4 /* Transfer in Frameworks */ = {isa = PBXBuildFile; productRef = D8CF19E22CC747370025D6B4 /* Transfer */; };
+		D8CFDE9E2E37FC2500D27283 /* Style in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDE9D2E37FC2500D27283 /* Style */; };
+		D8CFDEA02E37FC3B00D27283 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDE9F2E37FC3B00D27283 /* Primitives */; };
+		D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEA72E37FC8800D27283 /* Preferences */; };
+		D8CFDEAA2E37FC8C00D27283 /* GemAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEA92E37FC8C00D27283 /* GemAPI */; };
+		D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAD2E37FCA800D27283 /* Formatters */; };
+		D8CFDEB02E37FCB000D27283 /* Components in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDEAF2E37FCB000D27283 /* Components */; };
 		D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */; };
+		D8D5C1D12E6CAC16007628A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D5C1D02E6CAC16007628A1 /* Errors.swift */; };
 		D8D726BD2C7157A000A6B559 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = D8D726BC2C7157A000A6B559 /* Primitives */; };
 		D8D726C02C716DED00A6B559 /* ScreenshotsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F8772B17F21E00B15F54 /* ScreenshotsLaunchTests.swift */; };
 		D8D83C842CECFA610083AA53 /* Swap in Frameworks */ = {isa = PBXBuildFile; productRef = D8D83C832CECFA610083AA53 /* Swap */; };
 		D8F5B8602CCA008E0007E615 /* ChainService in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B85F2CCA008E0007E615 /* ChainService */; };
 		D8F5B86C2CCD52EB0007E615 /* Staking in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86B2CCD52EB0007E615 /* Staking */; };
 		D8F5B86F2CCD639A0007E615 /* StakeService in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86E2CCD639A0007E615 /* StakeService */; };
+		D8WIDGBF12345678901234 /* WidgetLocalization in Frameworks */ = {isa = PBXBuildFile; productRef = D8WIDGET12345678901234 /* WidgetLocalization */; };
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
 		DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = DF93C4ED2C969F4F00204ABD /* Gemstone */; };
@@ -165,49 +175,33 @@
 
 /* Begin PBXFileReference section */
 		074168342D3AF81E00AC26A4 /* NFT */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NFT; sourceTree = "<group>"; };
-		07A9FE332D355F2F00ACDB94 /* NFTService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NFTService; sourceTree = "<group>"; };
 		830FDA412C2236B6003DA605 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		830FDA442C224316003DA605 /* NavigationStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStateManager.swift; sourceTree = "<group>"; };
 		830FDA472C22EEC4003DA605 /* TabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
 		8311A89A2DF9D35D00598C43 /* Validators */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Validators; sourceTree = "<group>"; };
-		83245B5F2D529879003A6220 /* TransactionService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TransactionService; sourceTree = "<group>"; };
 		832F57E92D36A6D50066024D /* Preferences */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Preferences; sourceTree = "<group>"; };
 		833931A32D2D54060063BB6A /* PriceAlerts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceAlerts; sourceTree = "<group>"; };
-		833931A62D2D64BA0063BB6A /* PriceService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceService; sourceTree = "<group>"; };
 		833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesFactory.swift; sourceTree = "<group>"; };
 		8349F1452D5E4D04003A0A93 /* ManageWallets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ManageWallets; sourceTree = "<group>"; };
 		834B38182D1D858D009D58D4 /* LockManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = LockManager; sourceTree = "<group>"; };
 		83518CCC2D1C998300B339E5 /* PrimitivesComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PrimitivesComponents; sourceTree = "<group>"; };
-		8352C8D32D39391B000DEDD9 /* ExplorerService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ExplorerService; sourceTree = "<group>"; };
 		8361BB5C2D3FDBF1008D89CF /* Transactions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transactions; sourceTree = "<group>"; };
-		8361BB5D2D3FDD7C008D89CF /* BalanceService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BalanceService; sourceTree = "<group>"; };
-		8361BB682D400CA6008D89CF /* TransactionsService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TransactionsService; sourceTree = "<group>"; };
-		8361BB6B2D400DF1008D89CF /* AssetsService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AssetsService; sourceTree = "<group>"; };
 		836281AD2DEF32F600CA5C75 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Assets; sourceTree = "<group>"; };
 		837A1E6A2D0B029200733AC1 /* AppResolver+ViewInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+ViewInjection.swift"; sourceTree = "<group>"; };
 		837A1E6C2D0B096600733AC1 /* WalletConnectorNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorNavigationStack.swift; sourceTree = "<group>"; };
 		837D7DE62E005D2800BBBDDA /* Formatters */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Formatters; sourceTree = "<group>"; };
 		838383112D5E677A00D1CAF2 /* WalletTab */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletTab; sourceTree = "<group>"; };
-		83863EE52D19B8D8005048A7 /* NodeService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NodeService; sourceTree = "<group>"; };
-		8391FE572D7F4D9F0057A548 /* WalletSessionService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletSessionService; sourceTree = "<group>"; };
 		8393897A2CCA8F0000735088 /* InfoSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = InfoSheet; sourceTree = "<group>"; };
-		8399EC4F2DB67EC50020C0A6 /* WalletService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletService; sourceTree = "<group>"; };
-		83A4F8032D30433E000E09BB /* NameResolver */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NameResolver; sourceTree = "<group>"; };
 		83A4F8042D30434E000E09BB /* Onboarding */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Onboarding; sourceTree = "<group>"; };
 		83B08BDA2D0B4AE200CA1B33 /* AppResolver+Storages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+Storages.swift"; sourceTree = "<group>"; };
 		83B08BDC2D0B4B1E00CA1B33 /* AppResolver+Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+Services.swift"; sourceTree = "<group>"; };
 		83B57FAA2CFF92670009319F /* AppResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppResolver.swift; sourceTree = "<group>"; };
 		83E041572D0AFCB10031D4BC /* RootScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScene.swift; sourceTree = "<group>"; };
 		83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSceneViewModel.swift; sourceTree = "<group>"; };
-		83F645042D52C2AB00C18881 /* DiscoverAssetsService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DiscoverAssetsService; sourceTree = "<group>"; };
-		83F645072D52C5DF00C18881 /* WalletsService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletsService; sourceTree = "<group>"; };
-		83FE37B12D2715940048D54C /* WalletConnectorService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnectorService; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
-		B617D6092D5B73B7001697A6 /* AvatarService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AvatarService; sourceTree = "<group>"; };
-		B66AFC6A2DDB14D50082C026 /* AppService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AppService; sourceTree = "<group>"; };
-		B66DEDAE2D49F0C600309D53 /* ImageGalleryService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ImageGalleryService; sourceTree = "<group>"; };
 		B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapNavigationView.swift; sourceTree = "<group>"; };
+		B6EA21D42E27E21700F1C849 /* Support */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Support; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30952B3299C39D70004C0F9 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		C30952B7299C39D80004C0F9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -225,7 +219,6 @@
 		C3CF3BA529B5262100E96586 /* Keystore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Keystore; sourceTree = "<group>"; };
 		C3CF3BD929BBE40300E96586 /* Style */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Style; sourceTree = "<group>"; };
 		C3D1C4E32A2AB5B6006E8EEA /* Signer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Signer; sourceTree = "<group>"; };
-		C3E99BC62A733FD6005DF35F /* WalletCorePrimitives */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCorePrimitives; sourceTree = "<group>"; };
 		C3FA949529DD50E200BFC23D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8041FA12B193A2C002DC071 /* screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = screenshots.xctestplan; sourceTree = "<group>"; };
 		D80700492BBB1FB600ED770B /* SettingsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationStack.swift; sourceTree = "<group>"; };
@@ -234,24 +227,23 @@
 		D829BF2B2CBDB82600DEB2E8 /* Localization */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Localization; sourceTree = "<group>"; };
 		D829BF402CBDD64D00DEB2E8 /* MarketInsight */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarketInsight; sourceTree = "<group>"; };
 		D829BF432CBDD9D200DEB2E8 /* FiatConnect */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FiatConnect; sourceTree = "<group>"; };
-		D829BF4C2CBF025400DEB2E8 /* BannerService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BannerService; sourceTree = "<group>"; };
-		D829BF4F2CBF2BDA00DEB2E8 /* NotificationService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NotificationService; sourceTree = "<group>"; };
-		D829BF522CBF30A900DEB2E8 /* PriceAlertService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceAlertService; sourceTree = "<group>"; };
-		D829BF552CBF317300DEB2E8 /* DeviceService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DeviceService; sourceTree = "<group>"; };
 		D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GemUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D832C80A2E246E6700871ED9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D832C80C2E246E6700871ED9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		D832C8542E2471B100871ED9 /* PriceWidget */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceWidget; sourceTree = "<group>"; };
 		D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GemPriceWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D83BDCB52E3E878A00E41807 /* PerpetualPositionNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerpetualPositionNavigationStack.swift; sourceTree = "<group>"; };
+		D83BDCB82E3E8AA400E41807 /* ViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelFactory.swift; sourceTree = "<group>"; };
 		D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetPriceAlertNavigationStack.swift; sourceTree = "<group>"; };
 		D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertsNavigationView.swift; sourceTree = "<group>"; };
-		D85AD29B2CD3370D0010DEF8 /* SwapService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwapService; sourceTree = "<group>"; };
-		D85AD2A42CD7013D0010DEF8 /* NativeProviderService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NativeProviderService; sourceTree = "<group>"; };
+		D87316532E3AF1F000C11634 /* ChainServices */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ChainServices; sourceTree = "<group>"; };
+		D87316542E3AF1F000C11634 /* FeatureServices */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FeatureServices; sourceTree = "<group>"; };
+		D87316552E3AF1F000C11634 /* SystemServices */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SystemServices; sourceTree = "<group>"; };
+		D87316B62E3AF2FA00C11634 /* Gemstone */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gemstone; sourceTree = "<group>"; };
+		D87316B72E3AF30300C11634 /* ui_tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ui_tests.xctestplan; sourceTree = "<group>"; };
 		D873DA502D7933AF0003F5CE /* MarketsNavigtionStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketsNavigtionStack.swift; sourceTree = "<group>"; };
 		D88BB2682E2EE09F006310B9 /* Perpetuals */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Perpetuals; sourceTree = "<group>"; };
 		D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsNavigationStack.swift; sourceTree = "<group>"; };
 		D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsNavigationStack.swift; sourceTree = "<group>"; };
-		D896B57F2E2EE38F00ADE083 /* PerpetualService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PerpetualService; sourceTree = "<group>"; };
 		D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransferNavigationStack.swift; sourceTree = "<group>"; };
 		D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedAssetNavigationStack.swift; sourceTree = "<group>"; };
 		D8A1F8732B17F21E00B15F54 /* Screenshots.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Screenshots.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -262,14 +254,12 @@
 		D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenNavigationStack.swift; sourceTree = "<group>"; };
 		D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeNavigationView.swift; sourceTree = "<group>"; };
 		D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetNavigationView.swift; sourceTree = "<group>"; };
-		D8CEF3272D6E60AF00E48A78 /* ScanService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ScanService; sourceTree = "<group>"; };
 		D8CF19E12CC745ED0025D6B4 /* Transfer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transfer; sourceTree = "<group>"; };
 		D8D203D12AE0813E00261CA2 /* SwiftHTTPClient */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwiftHTTPClient; sourceTree = "<group>"; };
+		D8D5C1D02E6CAC16007628A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		D8D83C822CECF90A0083AA53 /* Swap */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Swap; sourceTree = "<group>"; };
 		D8EFE3EA2BAB580300608363 /* GemstonePrimitives */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GemstonePrimitives; sourceTree = "<group>"; };
-		D8F5B85E2CC9FFD60007E615 /* ChainService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ChainService; sourceTree = "<group>"; };
 		D8F5B8682CCD50650007E615 /* Staking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Staking; sourceTree = "<group>"; };
-		D8F5B8702CCD6C010007E615 /* StakeService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = StakeService; sourceTree = "<group>"; };
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DFBDD9AE2C77EC90002A1706 /* WalletCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -285,7 +275,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D83096AD2D5D4F1E00FFEE3E /* GemUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemUITests; sourceTree = "<group>"; };
 		D838194C2E256A5A0076CDB3 /* GemPriceWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (D8877F6C2E256D5F008440EB /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = GemPriceWidget; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -306,6 +295,7 @@
 				839C794B2D1C42A500E32072 /* PrimitivesComponents in Frameworks */,
 				C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */,
 				D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */,
+				B60C6C352E68848900899BAC /* Support in Frameworks */,
 				834EC80A2D7F1FCD00D8FA39 /* WalletSessionService in Frameworks */,
 				C3CF3B8829AC2C0800E96586 /* Components in Frameworks */,
 				D829BF2D2CBDBC5300DEB2E8 /* Localization in Frameworks */,
@@ -332,7 +322,6 @@
 				D896B57E2E2EE2D300ADE083 /* Perpetuals in Frameworks */,
 				C3CF3B7729A98C7B00E96586 /* Blockchain in Frameworks */,
 				8352C8D52D393E05000DEDD9 /* ExplorerService in Frameworks */,
-				83CA4BA72D2F02440064A4AF /* NameResolver in Frameworks */,
 				D85AD29D2CD337BE0010DEF8 /* SwapService in Frameworks */,
 				07A9FE3D2D3565CD00ACDB94 /* NFTService in Frameworks */,
 				C3CF3B7B29A98C7B00E96586 /* Primitives in Frameworks */,
@@ -384,9 +373,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8CFDE9E2E37FC2500D27283 /* Style in Frameworks */,
+				D8WIDGBF12345678901234 /* WidgetLocalization in Frameworks */,
+				D8CFDEAE2E37FCA800D27283 /* Formatters in Frameworks */,
+				D8CFDEB02E37FCB000D27283 /* Components in Frameworks */,
+				D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */,
 				D838194B2E256A5A0076CDB3 /* SwiftUI.framework in Frameworks */,
+				D8CFDEAA2E37FC8C00D27283 /* GemAPI in Frameworks */,
+				D8CFDEA02E37FC3B00D27283 /* Primitives in Frameworks */,
 				D838194A2E256A5A0076CDB3 /* WidgetKit.framework in Frameworks */,
-				D838195C2E256A630076CDB3 /* PriceWidget in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,6 +452,7 @@
 				D891DD3C2D3EDD7300241222 /* Staking */,
 				D8C4A3812C9388AC006FABE8 /* Price Alerts */,
 				830FDA442C224316003DA605 /* NavigationStateManager.swift */,
+				D83BDCB62E3E878A00E41807 /* Perpetuals */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -478,6 +474,7 @@
 				C36679092A0B7E5800F1D74D /* Environment.swift */,
 				830FDA472C22EEC4003DA605 /* TabItem.swift */,
 				B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */,
+				D8D5C1D02E6CAC16007628A1 /* Errors.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -506,6 +503,7 @@
 				83B08BDA2D0B4AE200CA1B33 /* AppResolver+Storages.swift */,
 				83B08BDC2D0B4B1E00CA1B33 /* AppResolver+Services.swift */,
 				833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */,
+				D83BDCB82E3E8AA400E41807 /* ViewModelFactory.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -522,12 +520,10 @@
 		C30952A7299C39D70004C0F9 = {
 			isa = PBXGroup;
 			children = (
-				D829BF4B2CBF022700DEB2E8 /* Services */,
 				D829BF2E2CBDC21600DEB2E8 /* Features */,
 				C3CF3B6E29A98BFD00E96586 /* Packages */,
 				C30952B2299C39D70004C0F9 /* Gem */,
 				C30952C4299C39D80004C0F9 /* GemTests */,
-				D83096AD2D5D4F1E00FFEE3E /* GemUITests */,
 				D838194C2E256A5A0076CDB3 /* GemPriceWidget */,
 				C30952B1299C39D70004C0F9 /* Products */,
 				C3CF3B6429A9628100E96586 /* Frameworks */,
@@ -567,6 +563,7 @@
 			children = (
 				D8D726BF2C716C5B00A6B559 /* Screenshots */,
 				C34C7CF729FDE942009EEC21 /* unit_frameworks.xctestplan */,
+				D87316B72E3AF30300C11634 /* ui_tests.xctestplan */,
 				D8041FA12B193A2C002DC071 /* screenshots.xctestplan */,
 			);
 			path = GemTests;
@@ -589,7 +586,6 @@
 				DFBDD9AE2C77EC90002A1706 /* WalletCore */,
 				D8EFE3EA2BAB580300608363 /* GemstonePrimitives */,
 				D8D203D12AE0813E00261CA2 /* SwiftHTTPClient */,
-				C3E99BC62A733FD6005DF35F /* WalletCorePrimitives */,
 				C36679142A0FF81000F1D74D /* GemAPI */,
 				C3549B4C29CA3A9000B4BE01 /* Store */,
 				C3CF3BA529B5262100E96586 /* Keystore */,
@@ -601,6 +597,10 @@
 				D829BF2B2CBDB82600DEB2E8 /* Localization */,
 				83518CCC2D1C998300B339E5 /* PrimitivesComponents */,
 				8311A89A2DF9D35D00598C43 /* Validators */,
+				D87316532E3AF1F000C11634 /* ChainServices */,
+				D87316542E3AF1F000C11634 /* FeatureServices */,
+				D87316552E3AF1F000C11634 /* SystemServices */,
+				D87316B62E3AF2FA00C11634 /* Gemstone */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -617,13 +617,13 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				B6EA21D42E27E21700F1C849 /* Support */,
 				836281AD2DEF32F600CA5C75 /* Assets */,
 				838383112D5E677A00D1CAF2 /* WalletTab */,
 				8349F1452D5E4D04003A0A93 /* ManageWallets */,
 				8361BB5C2D3FDBF1008D89CF /* Transactions */,
 				074168342D3AF81E00AC26A4 /* NFT */,
 				83A4F8042D30434E000E09BB /* Onboarding */,
-				83A4F8032D30433E000E09BB /* NameResolver */,
 				833931A32D2D54060063BB6A /* PriceAlerts */,
 				83FE37B22D2715BF0048D54C /* WalletConnector */,
 				D8D83C822CECF90A0083AA53 /* Swap */,
@@ -635,43 +635,17 @@
 				C366791B2A1860E500F1D74D /* QRScanner */,
 				834B38182D1D858D009D58D4 /* LockManager */,
 				C370289B2A9C3B0E009AE123 /* Settings */,
-				D832C8542E2471B100871ED9 /* PriceWidget */,
 				D88BB2682E2EE09F006310B9 /* Perpetuals */,
 			);
 			path = Features;
 			sourceTree = "<group>";
 		};
-		D829BF4B2CBF022700DEB2E8 /* Services */ = {
+		D83BDCB62E3E878A00E41807 /* Perpetuals */ = {
 			isa = PBXGroup;
 			children = (
-				B66AFC6A2DDB14D50082C026 /* AppService */,
-				8399EC4F2DB67EC50020C0A6 /* WalletService */,
-				8391FE572D7F4D9F0057A548 /* WalletSessionService */,
-				D8CEF3272D6E60AF00E48A78 /* ScanService */,
-				83F645072D52C5DF00C18881 /* WalletsService */,
-				83F645042D52C2AB00C18881 /* DiscoverAssetsService */,
-				83245B5F2D529879003A6220 /* TransactionService */,
-				B66DEDAE2D49F0C600309D53 /* ImageGalleryService */,
-				8361BB6B2D400DF1008D89CF /* AssetsService */,
-				8361BB682D400CA6008D89CF /* TransactionsService */,
-				8361BB5D2D3FDD7C008D89CF /* BalanceService */,
-				8352C8D32D39391B000DEDD9 /* ExplorerService */,
-				07A9FE332D355F2F00ACDB94 /* NFTService */,
-				833931A62D2D64BA0063BB6A /* PriceService */,
-				83FE37B12D2715940048D54C /* WalletConnectorService */,
-				83863EE52D19B8D8005048A7 /* NodeService */,
-				D85AD2A42CD7013D0010DEF8 /* NativeProviderService */,
-				D85AD29B2CD3370D0010DEF8 /* SwapService */,
-				D8F5B85E2CC9FFD60007E615 /* ChainService */,
-				D829BF552CBF317300DEB2E8 /* DeviceService */,
-				D829BF522CBF30A900DEB2E8 /* PriceAlertService */,
-				D829BF4F2CBF2BDA00DEB2E8 /* NotificationService */,
-				D829BF4C2CBF025400DEB2E8 /* BannerService */,
-				D8F5B8702CCD6C010007E615 /* StakeService */,
-				B617D6092D5B73B7001697A6 /* AvatarService */,
-				D896B57F2E2EE38F00ADE083 /* PerpetualService */,
+				D83BDCB52E3E878A00E41807 /* PerpetualPositionNavigationStack.swift */,
 			);
-			path = Services;
+			path = Perpetuals;
 			sourceTree = "<group>";
 		};
 		D86BA4CE2DF9FEC600A8EE9A /* Scenes */ = {
@@ -789,8 +763,6 @@
 				83385DDD2D27147900D76803 /* WalletConnectorService */,
 				83FE37B32D273CC80048D54C /* WalletConnector */,
 				83EB5E2F2D2ECF00006A7CFB /* Onboarding */,
-				83CA4BA62D2F02440064A4AF /* NameResolver */,
-				83759DF62D384AF5002FECBA /* PreferencesTestKit */,
 				8352C8D42D393E05000DEDD9 /* ExplorerService */,
 				07A9FE3C2D3565CD00ACDB94 /* NFTService */,
 				074168392D3AFDBB00AC26A4 /* NFT */,
@@ -809,18 +781,12 @@
 				834EC8092D7F1FCD00D8FA39 /* WalletSessionService */,
 				8342EA022DB67EE3001B3780 /* WalletService */,
 				B66AFC6B2DDB260A0082C026 /* AppService */,
-				B68BD2A92DDF5FF900687F09 /* WalletServiceTestKit */,
-				B68BD2CF2DE0558500687F09 /* KeystoreTestKit */,
-				B62F6C4E2DE6F0FD00AF56AB /* AssetsServiceTestKit */,
-				B69C517F2DE6F91800BBD95D /* WalletsServiceTestKit */,
-				B69C51812DE6F93700BBD95D /* PriceAlertServiceTestKit */,
-				B69C53B82DE8493300BBD95D /* TransactionsServiceTestKit */,
-				B69C53BA2DE8685D00BBD95D /* WalletTabTestKit */,
 				836281AF2DEF34DC00CA5C75 /* Assets */,
 				8327CBF02DF9E088000BF1E1 /* Validators */,
 				83EF67E42E005F48009C690F /* Formatters */,
 				D896B57D2E2EE2D300ADE083 /* Perpetuals */,
 				D80312AE2E2EE3E1005A5C77 /* PerpetualService */,
+				B60C6C342E68848900899BAC /* Support */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -885,9 +851,6 @@
 			dependencies = (
 				D83096B32D5D4F1E00FFEE3E /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				D83096AD2D5D4F1E00FFEE3E /* GemUITests */,
-			);
 			name = GemUITests;
 			packageProductDependencies = (
 				B68BD2C92DE04B5B00687F09 /* Components */,
@@ -920,7 +883,7 @@
 			);
 			name = GemPriceWidget;
 			packageProductDependencies = (
-				D838195B2E256A630076CDB3 /* PriceWidget */,
+				D8WIDGET12345678901234 /* WidgetLocalization */,
 			);
 			productName = GemPriceWidgetExtension;
 			productReference = D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */;
@@ -1052,6 +1015,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D87316B82E3AF30300C11634 /* ui_tests.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1090,9 +1054,11 @@
 				D807004E2BBB283400ED770B /* WalletNavigationStack.swift in Sources */,
 				D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */,
 				D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */,
+				D83BDCB72E3E878A00E41807 /* PerpetualPositionNavigationStack.swift in Sources */,
 				D807004A2BBB1FB600ED770B /* SettingsNavigationStack.swift in Sources */,
 				D8C4A3A52C9696FE006FABE8 /* AssetNavigationView.swift in Sources */,
 				D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */,
+				D83BDCB92E3E8AA400E41807 /* ViewModelFactory.swift in Sources */,
 				83B08BDD2D0B4B1E00CA1B33 /* AppResolver+Services.swift in Sources */,
 				83E0415A2D0AFCB80031D4BC /* RootSceneViewModel.swift in Sources */,
 				D8B738D42C59643D004EF083 /* MainTabViewModel.swift in Sources */,
@@ -1104,6 +1070,7 @@
 				C366790A2A0B7E5800F1D74D /* Environment.swift in Sources */,
 				D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */,
 				837A1E6D2D0B096600733AC1 /* WalletConnectorNavigationStack.swift in Sources */,
+				D8D5C1D12E6CAC16007628A1 /* Errors.swift in Sources */,
 				D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */,
 				D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */,
 				833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */,
@@ -1448,7 +1415,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.201;
+				MARKETING_VERSION = 1.3.271;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -1499,7 +1466,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.201;
+				MARKETING_VERSION = 1.3.271;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -1606,11 +1573,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = GemPriceWidget/GemPriceWidget.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = U2D6XV88CZ;
+				DEVELOPMENT_TEAM = U2D6XV88CZ;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GemPriceWidget/Info.plist;
@@ -1623,11 +1589,10 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.3.201;
+				MARKETING_VERSION = 1.3.271;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.widgetprice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.gemwallet.ios.widgetprice";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1644,11 +1609,9 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = GemPriceWidget/GemPriceWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = U2D6XV88CZ;
+				DEVELOPMENT_TEAM = U2D6XV88CZ;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GemPriceWidget/Info.plist;
@@ -1661,11 +1624,10 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.3.201;
+				MARKETING_VERSION = 1.3.271;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.widgetprice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.gemwallet.ios.widgetprice";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1857,10 +1819,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Assets;
 		};
-		83759DF62D384AF5002FECBA /* PreferencesTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PreferencesTestKit;
-		};
 		83863EE62D19B93E005048A7 /* NodeService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NodeService;
@@ -1872,10 +1830,6 @@
 		83B6C20F2D5E3F2600F9DF8A /* WalletTab */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletTab;
-		};
-		83CA4BA62D2F02440064A4AF /* NameResolver */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = NameResolver;
 		};
 		83D6808A2CCA90D900B45089 /* InfoSheet */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1897,6 +1851,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletConnector;
 		};
+		B60C6C342E68848900899BAC /* Support */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Support;
+		};
 		B617D60A2D5B75F0001697A6 /* AvatarService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AvatarService;
@@ -1904,10 +1862,6 @@
 		B62F6B9C2DE61ADF00AF56AB /* Onboarding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Onboarding;
-		};
-		B62F6C4E2DE6F0FD00AF56AB /* AssetsServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AssetsServiceTestKit;
 		};
 		B66AFC6B2DDB260A0082C026 /* AppService */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1917,17 +1871,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ImageGalleryService;
 		};
-		B68BD2A92DDF5FF900687F09 /* WalletServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletServiceTestKit;
-		};
 		B68BD2C92DE04B5B00687F09 /* Components */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Components;
-		};
-		B68BD2CF2DE0558500687F09 /* KeystoreTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = KeystoreTestKit;
 		};
 		B68BD2D72DE05F7500687F09 /* KeystoreTestKit */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1945,25 +1891,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Primitives;
 		};
-		B69C517F2DE6F91800BBD95D /* WalletsServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletsServiceTestKit;
-		};
-		B69C51812DE6F93700BBD95D /* PriceAlertServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PriceAlertServiceTestKit;
-		};
 		B69C52F22DE72B1000BBD95D /* ManageWallets */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ManageWallets;
-		};
-		B69C53B82DE8493300BBD95D /* TransactionsServiceTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = TransactionsServiceTestKit;
-		};
-		B69C53BA2DE8685D00BBD95D /* WalletTabTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletTabTestKit;
 		};
 		C35DA07B2A9C3B4B008CCEFA /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2040,10 +1970,6 @@
 		D829BF562CBF3E1900DEB2E8 /* DeviceService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DeviceService;
-		};
-		D838195B2E256A630076CDB3 /* PriceWidget */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PriceWidget;
 		};
 		D83D3C242D6E62F4002959EA /* ScanService */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2169,6 +2095,30 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Transfer;
 		};
+		D8CFDE9D2E37FC2500D27283 /* Style */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Style;
+		};
+		D8CFDE9F2E37FC3B00D27283 /* Primitives */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Primitives;
+		};
+		D8CFDEA72E37FC8800D27283 /* Preferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Preferences;
+		};
+		D8CFDEA92E37FC8C00D27283 /* GemAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GemAPI;
+		};
+		D8CFDEAD2E37FCA800D27283 /* Formatters */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Formatters;
+		};
+		D8CFDEAF2E37FCB000D27283 /* Components */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Components;
+		};
 		D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftHTTPClient;
@@ -2192,6 +2142,10 @@
 		D8F5B86E2CCD639A0007E615 /* StakeService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = StakeService;
+		};
+		D8WIDGET12345678901234 /* WidgetLocalization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WidgetLocalization;
 		};
 		DF8421ED2C1526ED003F558C /* GemstonePrimitives */ = {
 			isa = XCSwiftPackageProductDependency;

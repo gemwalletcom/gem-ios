@@ -17,9 +17,14 @@ struct AmountInputConfig: CurrencyInputConfigurable {
     let numberSanitizer: NumberSanitizer
     let secondaryText: String
     let onTapActionButton: (() -> Void)?
-    
+
     var placeholder: String { .zero }
-    var keyboardType: UIKeyboardType { .decimalPad }
+    var keyboardType: UIKeyboardType {
+        switch sceneType {
+        case .transfer, .deposit, .withdraw, .stakeWithdraw, .perpetual, .stakeRedelegate, .freeze: .decimalPad
+        case .stake, .stakeUnstake: asset.chain == .tron ? .numberPad : .decimalPad
+        }
+    }
 
     var currencyPosition: CurrencyTextField.CurrencyPosition {
         switch inputType {
@@ -37,11 +42,11 @@ struct AmountInputConfig: CurrencyInputConfigurable {
     
     var actionStyle: CurrencyInputActionStyle? {
         switch sceneType {
-        case .transfer, .deposit, .perpetual: CurrencyInputActionStyle(
+        case .transfer, .deposit, .withdraw, .perpetual: CurrencyInputActionStyle(
             position: .secondary,
             image: Images.Actions.swap.renderingMode(.template)
         )
-        case .stake, .unstake, .redelegate, .withdraw: nil
+        case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .freeze: nil
         }
     }
 

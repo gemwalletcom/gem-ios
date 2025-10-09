@@ -5,89 +5,59 @@ import Primitives
 import SwiftUI
 import Transfer
 import Staking
-import ChainService
-import NodeService
-import SwapService
+import InfoSheet
 
 struct StakeNavigationView: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.nodeService) private var nodeService
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.stakeService) private var stakeService
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
+    @Environment(\.balanceService) private var balanceService
+    @Environment(\.priceService) private var priceService
 
-    private let wallet: Wallet
-    private let assetId: AssetId
-
+    @State private var model: StakeSceneViewModel
     @Binding private var navigationPath: NavigationPath
 
-    private let onComplete: VoidAction
-
-    init(
-        wallet: Wallet,
-        assetId: AssetId,
-        navigationPath: Binding<NavigationPath>,
-        onComplete: VoidAction
+    public init(
+        model: StakeSceneViewModel,
+        navigationPath: Binding<NavigationPath>
     ) {
-        self.wallet = wallet
-        self.assetId = assetId
+        _model = State(initialValue: model)
         _navigationPath = navigationPath
-        self.onComplete = onComplete
     }
 
     var body: some View {
         StakeScene(
-            model: StakeViewModel(
-                wallet: wallet,
-                chain: assetId.chain,
-                stakeService: stakeService,
-                onTransferAction: {
-                    navigationPath.append($0)
-                },
-                onAmountInputAction: {
-                    navigationPath.append($0)
-                }
-            )
+            model: model
         )
-        .navigationDestination(for: TransferData.self) {
-            ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
-                    wallet: wallet,
-                    data: $0,
-                    keystore: keystore,
-                    chainService: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: $0.chain),
-                    scanService: scanService,
-                    swapService: swapService,
-                    walletsService: walletsService,
-                    swapDataProvider: SwapQuoteDataProvider(
-                        keystore: keystore,
-                        swapService: swapService
-                    ),
-                    onComplete: onComplete
-                )
-            )
+        .observeQuery(
+            request: $model.request,
+            value: $model.delegations
+        )
+        .observeQuery(
+            request: $model.assetRequest,
+            value: $model.assetData
+        )
+        .ifLet(model.stakeInfoUrl, content: { view, url in
+            view.toolbarInfoButton(url: url)
+        })
+        .sheet(item: $model.isPresentingInfoSheet) {
+            InfoSheetScene(type: $0)
         }
-        .navigationDestination(for: AmountInput.self) {
+        .navigationDestination(for: AmountInput.self) { input in
             AmountNavigationView(
-                model: AmountSceneViewModel(
-                    input: $0,
-                    wallet: wallet,
-                    walletsService: walletsService,
-                    stakeService: stakeService,
+                model: viewModelFactory.amountScene(
+                    input: input,
+                    wallet: model.wallet,
                     onTransferAction: {
                         navigationPath.append($0)
                     }
                 )
             )
         }
-        .navigationDestination(for: Delegation.self) { value in
+        .navigationDestination(for: Delegation.self) { delegation in
             StakeDetailScene(
-                model: StakeDetailViewModel(
-                    wallet: wallet,
-                    model: StakeDelegationViewModel(delegation: value),
-                    service: stakeService,
+                model: viewModelFactory.stakeDetailScene(
+                    wallet: model.wallet,
+                    delegation: delegation,
                     onAmountInputAction: {
                         navigationPath.append($0)
                     },

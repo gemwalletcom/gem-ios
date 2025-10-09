@@ -1,0 +1,67 @@
+{
+  "id": "required-chains-no-match-test",
+  "pairingTopic": "required-chains-no-match-topic",
+  "proposer": {
+    "name": "RequiredChainsNoMatchApp",
+    "description": "App requiring chains that won't match",
+    "url": "https://nomatch.app",
+    "icons": ["https://nomatch.app/icon.png"],
+    "redirect": {
+      "native": "nomatchapp://open",
+      "universal": "https://nomatch.app/deeplink",
+      "linkMode": true
+    }
+  },
+  "requiredNamespaces": {
+    "eip155": {
+      "chains": [
+        "eip155:42161",
+        "eip155:10"
+      ],
+      "methods": ["eth_sendTransaction", "personal_sign"],
+      "events": ["chainChanged", "accountsChanged"]
+    }
+  },
+  "optionalNamespaces": {},
+  "sessionProperties": {
+    "theme": "dark",
+    "version": "1.0.0"
+  },
+  "proposal": {
+    "relays": [
+      {
+        "protocol": "waku",
+        "data": "relayData"
+      }
+    ],
+    "proposer": {
+      "publicKey": "requiredChainsNoMatchPublicKey",
+      "metadata": {
+        "name": "RequiredChainsNoMatchApp",
+        "description": "App requiring chains that won't match",
+        "url": "https://nomatch.app",
+        "icons": ["https://nomatch.app/icon.png"],
+        "redirect": {
+          "native": "nomatchapp://open",
+          "universal": "https://nomatch.app/deeplink",
+          "linkMode": true
+        }
+      }
+    },
+    "requiredNamespaces": {
+      "eip155": {
+        "chains": [
+          "eip155:42161",
+          "eip155:10"
+        ],
+        "methods": ["eth_sendTransaction", "personal_sign"],
+        "events": ["chainChanged", "accountsChanged"]
+      }
+    },
+    "optionalNamespaces": {},
+    "sessionProperties": {
+      "theme": "dark"
+    },
+    "expiryTimestamp": 1700000000
+  }
+}

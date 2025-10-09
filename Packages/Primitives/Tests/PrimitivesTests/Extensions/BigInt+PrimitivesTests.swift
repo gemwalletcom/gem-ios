@@ -17,6 +17,15 @@ struct BigInt_PrimitivesTests {
     }
     
     @Test
+    func testDecreaseByPercent() {
+        #expect(BigInt(100).decrease(byPercent: 1) == BigInt(99))
+        #expect(BigInt(100).decrease(byPercent: 10) == BigInt(90))
+        #expect(BigInt(100).decrease(byPercent: 50) == BigInt(50))
+        #expect(BigInt(1000).decrease(byPercent: 25) == BigInt(750))
+        #expect(BigInt(100).decrease(byPercent: 0) == BigInt(100))
+    }
+    
+    @Test
     func testMultiplyByPercent() {
         #expect(BigInt(100).multiply(byPercent: 10) == BigInt(10))
         #expect(BigInt(100).multiply(byPercent: 5) == BigInt(5))
@@ -29,5 +38,11 @@ struct BigInt_PrimitivesTests {
         #expect(BigInt(100).isBetween(110, and: 99) == false)
         #expect(BigInt(100).isBetween(0, and: 10) == false)
         #expect(BigInt(0).isBetween(0, and: 1))
+    }
+    
+    @Test
+    func testFromString() throws {
+        #expect(try BigInt.from(string: "111").description == "111")
+        #expect(try BigInt.from(string: "0.1").description == "0")
     }
 }

@@ -22,11 +22,12 @@ let package = Package(
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Localization", path: "../../Packages/Localization"),
-        .package(name: "PerpetualService", path: "../../Services/PerpetualService"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
     ],
     targets: [
         .target(
@@ -37,11 +38,12 @@ let package = Package(
                 "Components",
                 "Style",
                 "Localization",
-                "PerpetualService",
+                .product(name: "PerpetualService", package: "FeatureServices"),
                 "Store",
                 "Formatters",
                 "Preferences",
                 "InfoSheet",
+                .product(name: "ExplorerService", package: "ChainServices"),
             ],
             path: "Sources"
         ),

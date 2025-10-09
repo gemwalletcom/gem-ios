@@ -3,17 +3,8 @@
 import Testing
 import Primitives
 import PrimitivesTestKit
-import Keystore
-import KeystoreTestKit
 import WalletServiceTestKit
-import WalletsServiceTestKit
-import StakeServiceTestKit
-import ScanServiceTestKit
-import SwapServiceTestKit
-import StoreTestKit
-import NodeService
-import SwapService
-import NameResolver
+import NameServiceTestKit
 import Components
 import Formatters
 @testable import Transfer
@@ -61,8 +52,19 @@ struct RecipientSceneViewModelTests {
     @Test
     func actionButtonState() {
         let model = RecipientSceneViewModel.mock()
+
+        #expect(model.actionButtonState == .disabled)
+        
+        model.addressInputModel.text = "0x1234567890123456789012345678901234567890"
+        _ = model.addressInputModel.update()
+
         #expect(model.actionButtonState == .normal)
         
+        model.addressInputModel.text = "invalid"
+        _ = model.addressInputModel.update()
+
+        #expect(model.actionButtonState == .disabled)
+
         model.nameResolveState = .loading
         #expect(model.actionButtonState == .disabled)
         
@@ -133,13 +135,8 @@ extension RecipientSceneViewModel {
         RecipientSceneViewModel(
             wallet: wallet,
             asset: asset,
-            keystore: LocalKeystore.mock(),
             walletService: .mock(),
-            walletsService: .mock(),
-            nodeService: NodeService(nodeStore: .mock()),
-            stakeService: .mock(),
-            scanService: .mock(),
-            swapService: .mock(),
+            nameService: .mock(),
             type: type,
             onRecipientDataAction: onRecipientDataAction,
             onTransferAction: onTransferAction

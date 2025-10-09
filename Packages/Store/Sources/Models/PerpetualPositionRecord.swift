@@ -39,8 +39,8 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
     public var marginType: PerpetualMarginType
     public var direction: PerpetualDirection
     public var marginAmount: Double
-    public var takeProfit: PriceTarget?
-    public var stopLoss: PriceTarget?
+    public var takeProfit: PerpetualTriggerOrder?
+    public var stopLoss: PerpetualTriggerOrder?
     public var pnl: Double
     public var funding: Float?
     public var updatedAt: Date
@@ -58,8 +58,8 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         marginType: PerpetualMarginType,
         direction: PerpetualDirection,
         marginAmount: Double,
-        takeProfit: PriceTarget?,
-        stopLoss: PriceTarget?,
+        takeProfit: PerpetualTriggerOrder?,
+        stopLoss: PerpetualTriggerOrder?,
         pnl: Double,
         funding: Float? = nil,
         updatedAt: Date = Date()
@@ -90,27 +90,31 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
 
 extension PerpetualPositionRecord: CreateTable {
     static func create(db: Database) throws {
-        try db.create(table: Self.databaseTableName) { t in
-            t.column(Columns.id.name, .text).primaryKey().notNull()
-            t.column(Columns.walletId.name, .text).notNull().indexed()
+        try db.create(table: Self.databaseTableName) {
+            $0.column(Columns.id.name, .text).notNull()
+            $0.column(Columns.walletId.name, .text).notNull().indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            t.column(Columns.perpetualId.name, .text).notNull()
+            $0.column(Columns.perpetualId.name, .text).notNull()
                 .references(PerpetualRecord.databaseTableName, onDelete: .cascade)
-            t.column(Columns.assetId.name, .jsonText).notNull()
+            $0.column(Columns.assetId.name, .jsonText).notNull()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            t.column(Columns.size.name, .double).notNull()
-            t.column(Columns.sizeValue.name, .double).notNull()
-            t.column(Columns.leverage.name, .integer).notNull()
-            t.column(Columns.entryPrice.name, .double)
-            t.column(Columns.liquidationPrice.name, .double)
-            t.column(Columns.marginType.name, .text).notNull()
-            t.column(Columns.direction.name, .text).notNull()
-            t.column(Columns.marginAmount.name, .double).notNull()
-            t.column(Columns.takeProfit.name, .jsonText)
-            t.column(Columns.stopLoss.name, .jsonText)
-            t.column(Columns.pnl.name, .double).notNull()
-            t.column(Columns.funding.name, .double)
-            t.column(Columns.updatedAt.name, .date).notNull()
+            $0.column(Columns.size.name, .double).notNull()
+            $0.column(Columns.sizeValue.name, .double).notNull()
+            $0.column(Columns.leverage.name, .integer).notNull()
+            $0.column(Columns.entryPrice.name, .double)
+            $0.column(Columns.liquidationPrice.name, .double)
+            $0.column(Columns.marginType.name, .text).notNull()
+            $0.column(Columns.direction.name, .text).notNull()
+            $0.column(Columns.marginAmount.name, .double).notNull()
+            $0.column(Columns.takeProfit.name, .jsonText)
+            $0.column(Columns.stopLoss.name, .jsonText)
+            $0.column(Columns.pnl.name, .double).notNull()
+            $0.column(Columns.funding.name, .double)
+            $0.column(Columns.updatedAt.name, .date).notNull()
+            $0.uniqueKey([
+                Columns.id.name,
+                Columns.walletId.name,
+            ])
         }
     }
 }

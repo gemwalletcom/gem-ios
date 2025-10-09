@@ -143,4 +143,12 @@ extension NewBanner {
             state: .alwaysActive
         )
     }
+    
+    public static func onboarding(walletId: WalletId) -> NewBanner {
+        NewBanner(
+            walletId: walletId.id,
+            event: .onboarding,
+            state: .active
+        )
+    }
 }

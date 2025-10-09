@@ -159,8 +159,16 @@ public struct Scenes {
     public struct Perpetual: Hashable {
         public let perpetualData: PerpetualData
         
-        public init(perpetualData: PerpetualData) {
+        public init(_ perpetualData: PerpetualData) {
             self.perpetualData = perpetualData
+        }
+    }
+    
+    public struct AssetPriceAlert: Hashable {
+        public let asset: Primitives.Asset
+
+        public init(asset: Primitives.Asset) {
+            self.asset = asset
         }
     }
 }

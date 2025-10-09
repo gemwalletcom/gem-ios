@@ -45,8 +45,8 @@ struct SwapTokenView: View {
                         }
                     }
                 }
-                .padding(.vertical, 8)
-            }.padding(.bottom, 2)
+                .padding(.vertical, .tiny)
+            }.padding(.bottom, .extraSmall)
             
             HStack {
                 Text(model.fiatBalance(amount: text))

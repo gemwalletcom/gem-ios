@@ -26,7 +26,8 @@ struct TransferDataViewModel {
     var title: String {
         switch type {
         case .transfer: Localized.Transfer.Send.title
-        case .deposit: "Deposit"
+        case .deposit: Localized.Wallet.deposit
+        case .withdrawal: Localized.Wallet.withdraw
         case .transferNft: Localized.Transfer.Send.title
         case .swap, .tokenApprove: Localized.Wallet.swap
         //case .approval: Localized.Transfer.Approve.title
@@ -38,6 +39,11 @@ struct TransferDataViewModel {
             case .redelegate: Localized.Transfer.Redelegate.title
             case .rewards: Localized.Transfer.ClaimRewards.title
             case .withdraw: Localized.Transfer.Withdraw.title
+            case .freeze(let data):
+                switch data.freezeType {
+                case .freeze: Localized.Transfer.Freeze.title
+                case .unfreeze: Localized.Transfer.Unfreeze.title
+                }
             }
         case .account(_, let type):
             switch type {
@@ -45,62 +51,22 @@ struct TransferDataViewModel {
             }
         case .perpetual(_, let type):
             switch type {
-            case .open: "Open Position"
-            case .close: "Close Position"
+            case .open(let data): switch data.direction {
+                case .short: Localized.Perpetual.short
+                case .long: Localized.Perpetual.long
+            }
+            case .close: Localized.Perpetual.closePosition
             }
         }
     }
 
-    var recipientTitle: String {
-        switch type {
-        case .swap: Localized.Common.provider
-        case .stake: Localized.Stake.validator
-        default: Localized.Transfer.to
-        }
-    }
-
-    var recepientAccount: SimpleAccount {
-        SimpleAccount(
-            name: recipientName,
-            chain: chain,
-            address: recipient.address,
-            assetImage: .none
-        )
-    }
-
-    var recipientMode: AddressListItemViewModel.Mode {
-        switch type {
-        case .transfer,
-                .deposit,
-                .transferNft,
-                .tokenApprove,
-                .stake,
-                .account,
-                .generic,
-                .perpetual: .auto(addressStyle: .short)
-        case .swap: .nameOrAddress
-        }
-    }
-
-    var appValue: String? {
-        switch type {
-        case .transfer,
-            .deposit,
-            .transferNft,
-            .swap,
-            .tokenApprove,
-            .stake,
-            .account,
-            .perpetual: .none
-        case .generic(_, let metadata, _):
-            metadata.shortName
-        }
-    }
+    
 
     var websiteURL: URL? {
         switch type {
         case .transfer,
             .deposit,
+            .withdrawal,
             .transferNft,
             .swap,
             .tokenApprove,
@@ -112,51 +78,11 @@ struct TransferDataViewModel {
         }
     }
 
-    var shouldShowMemo: Bool {
-        switch type {
-        case .transfer, .deposit: chain.isMemoSupported
-        case .transferNft, .swap, .tokenApprove, .generic, .account, .stake, .perpetual: false
-        }
-    }
-
-    var shouldShowRecipient: Bool {
-        switch type {
-        case .stake(_, let stakeType):
-            switch stakeType {
-            case .stake, .unstake, .redelegate, .withdraw: true
-            case .rewards: false
-            }
-        case .account,
-            .swap,
-            .perpetual: false
-        case .transfer,
-            .transferNft,
-            .deposit,
-            .generic,
-            .tokenApprove: true
-        }
-    }
-    
-    var appAssetImage: AssetImage? {
-        switch type {
-        case .transfer,
-                .deposit,
-                .transferNft,
-                .swap,
-                .tokenApprove,
-                .stake,
-                .account,
-                .perpetual:
-                .none
-        case let .generic(_, session, _):
-            AssetImage(imageURL: session.icon.asURL)
-        }
-    }
-
     func availableValue(metadata: TransferDataMetadata?) -> BigInt {
         switch type {
         case .transfer,
                 .deposit,
+                .withdrawal,
                 .swap,
                 .tokenApprove,
                 .generic,
@@ -168,40 +94,12 @@ struct TransferDataViewModel {
             }
         case .stake(_, let stakeType):
             switch stakeType {
-            case .unstake(let delegation), .redelegate(let delegation, _), .withdraw(let delegation): delegation.base.balanceValue
+            case .unstake(let delegation): delegation.base.balanceValue
+            case .redelegate(let data): data.delegation.base.balanceValue
+            case .withdraw(let delegation): delegation.base.balanceValue
             case .rewards: data.value
             case .stake: metadata?.available ?? .zero
-            }
-        }
-    }
-}
-
-// MARK: - Private
-
-extension TransferDataViewModel {
-    private var recipientName: String? {
-        switch type {
-        case .transfer,
-                .deposit,
-                .transferNft,
-                .swap,
-                .tokenApprove,
-                .generic,
-                .account,
-                .perpetual:
-            recipient.name ?? recipient.address
-        case .stake(_, let stakeType):
-            switch stakeType {
-            case .stake(let validator):
-                validator.name
-            case .unstake(let delegation):
-                delegation.validator.name
-            case .redelegate(_, let toValidator):
-                toValidator.name
-            case .withdraw(let delegation):
-                delegation.validator.name
-            case .rewards:
-                    .none
+            case .freeze: metadata?.available ?? .zero
             }
         }
     }

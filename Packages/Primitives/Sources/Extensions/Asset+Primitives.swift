@@ -60,3 +60,17 @@ public extension AssetFull {
         )
     }
 }
+
+// MARK: - Assets
+
+extension Asset {
+    public static func hyperliquidUSDC() -> Asset {
+        Asset(
+            id: AssetId(chain: .hyperCore, tokenId: "perpetual::USDC"),
+            name: "USDC",
+            symbol: "USDC",
+            decimals: 6,
+            type: .perpetual
+        )
+    }
+}

@@ -1,0 +1,134 @@
+{
+  "id": "9d52516ed609b9525170812258c22f233c416d0402f0cc57d017bb00e5b21021",
+  "pairingTopic": "b9bdf76de33ad2f8526e9a9a69cac3097a96217e95a7624bc07c4670e69bebbf",
+  "proposer": {
+    "name": "Polymarket | The World's Largest Prediction Market",
+    "description": "Polymarket is the world’s largest prediction market, allowing you to stay informed and profit from your knowledge by betting on future events across various topics.",
+    "url": "https://polymarket.com",
+    "icons": [
+      "https://polymarket.com/icons/apple-touch-icon.png",
+      "https://polymarket.com/icons/favicon-32x32.png",
+      "https://polymarket.com/icons/favicon-16x16.png",
+      "https://polymarket.com/icons/safari-pinned-tab.svg"
+    ],
+    "redirect": null
+  },
+  "requiredNamespaces": {},
+  "optionalNamespaces": {
+    "eip155": {
+      "chains": [
+        "eip155:137",
+        "eip155:1",
+        "eip155:10",
+        "eip155:56",
+        "eip155:999",
+        "eip155:8453",
+        "eip155:42161",
+        "eip155:747474"
+      ],
+      "methods": [
+        "eth_sign",
+        "eth_signTransaction",
+        "wallet_showCallsStatus",
+        "wallet_sendCalls",
+        "wallet_addEthereumChain",
+        "wallet_watchAsset",
+        "eth_accounts",
+        "eth_sendTransaction",
+        "wallet_getPermissions",
+        "wallet_switchEthereumChain",
+        "wallet_getCapabilities",
+        "wallet_scanQRCode",
+        "eth_signTypedData_v4",
+        "eth_signTypedData",
+        "wallet_registerOnboarding",
+        "personal_sign",
+        "wallet_requestPermissions",
+        "eth_requestAccounts",
+        "eth_signTypedData_v3",
+        "eth_sendRawTransaction",
+        "wallet_getCallsStatus"
+      ],
+      "events": [
+        "disconnect",
+        "connect",
+        "chainChanged",
+        "accountsChanged",
+        "message"
+      ]
+    }
+  },
+  "sessionProperties": null,
+  "scopedProperties": null,
+  "proposal": {
+    "relays": [
+      {
+        "protocol": "irn",
+        "data": null
+      }
+    ],
+    "proposer": {
+      "publicKey": "9d52516ed609b9525170812258c22f233c416d0402f0cc57d017bb00e5b21021",
+      "metadata": {
+        "name": "Polymarket | The World's Largest Prediction Market",
+        "description": "Polymarket is the world’s largest prediction market, allowing you to stay informed and profit from your knowledge by betting on future events across various topics.",
+        "url": "https://polymarket.com",
+        "icons": [
+          "https://polymarket.com/icons/apple-touch-icon.png",
+          "https://polymarket.com/icons/favicon-32x32.png",
+          "https://polymarket.com/icons/favicon-16x16.png",
+          "https://polymarket.com/icons/safari-pinned-tab.svg"
+        ],
+        "redirect": null
+      }
+    },
+    "requiredNamespaces": {},
+    "optionalNamespaces": {
+      "eip155": {
+        "chains": [
+          "eip155:137",
+          "eip155:1",
+          "eip155:10",
+          "eip155:56",
+          "eip155:999",
+          "eip155:8453",
+          "eip155:42161",
+          "eip155:747474"
+        ],
+        "methods": [
+          "eth_sign",
+          "eth_signTransaction",
+          "wallet_showCallsStatus",
+          "wallet_sendCalls",
+          "wallet_addEthereumChain",
+          "wallet_watchAsset",
+          "eth_accounts",
+          "eth_sendTransaction",
+          "wallet_getPermissions",
+          "wallet_switchEthereumChain",
+          "wallet_getCapabilities",
+          "wallet_scanQRCode",
+          "eth_signTypedData_v4",
+          "eth_signTypedData",
+          "wallet_registerOnboarding",
+          "personal_sign",
+          "wallet_requestPermissions",
+          "eth_requestAccounts",
+          "eth_signTypedData_v3",
+          "eth_sendRawTransaction",
+          "wallet_getCallsStatus"
+        ],
+        "events": [
+          "disconnect",
+          "connect",
+          "chainChanged",
+          "accountsChanged",
+          "message"
+        ]
+      }
+    },
+    "sessionProperties": null,
+    "scopedProperties": null,
+    "expiryTimestamp": 1753795293
+  }
+}

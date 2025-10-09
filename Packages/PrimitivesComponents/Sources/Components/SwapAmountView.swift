@@ -54,11 +54,9 @@ public struct SwapAmountSingleView: View {
             VStack(alignment: .leading) {
                 Text(field.amount)
                     .foregroundColor(Colors.black)
-                    .font(.system(size: 24))
-                    .scaledToFit()
+                    .font(.system(size: 22))
                     .fontWeight(.medium)
-                    .minimumScaleFactor(0.4)
-                    .truncationMode(.tail)
+                    .truncationMode(.middle)
                     .lineLimit(1)
                 if let fiatAmount = field.fiatAmount {
                     Text(fiatAmount)
@@ -67,7 +65,7 @@ public struct SwapAmountSingleView: View {
                         .foregroundColor(Colors.gray)
                 }
             }
-            Spacer(minLength: 60)
+            Spacer(minLength: .extraLarge)
             AssetImageView(assetImage: field.assetImage)
         }
     }

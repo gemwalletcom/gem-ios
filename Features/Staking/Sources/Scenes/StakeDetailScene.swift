@@ -2,16 +2,28 @@
 
 import SwiftUI
 import Components
+import PrimitivesComponents
 
 public struct StakeDetailScene: View {
-    private let model: StakeDetailViewModel
+    private let model: StakeDetailSceneViewModel
 
-    public init(model: StakeDetailViewModel) {
+    public init(model: StakeDetailSceneViewModel) {
         self.model = model
     }
 
     public var body: some View {
         List {
+            Section { } header: {
+                WalletHeaderView(
+                    model: model.validatorHeaderViewModel,
+                    isHideBalanceEnalbed: .constant(false),
+                    onHeaderAction: nil,
+                    onInfoAction: nil
+                )
+                .padding(.top, .small)
+            }
+            .cleanListRow()
+
             Section {
                 if let url = model.validatorUrl {
                     SafariNavigationLink(url: url) {
@@ -31,46 +43,48 @@ public struct StakeDetailScene: View {
                     ListItemView(title: title, subtitle: subtitle)
                 }
             }
-            Section(model.balancesTitle) {
-                ListItemView(title: model.title, subtitle: model.model.balanceText)
-                if let rewardsText = model.model.rewardsText {
-                    ListItemView(title: model.rewardsTitle, subtitle: rewardsText)
+
+            if let rewardsText = model.model.rewardsText {
+                Section {
+                    ListItemView(
+                        title: model.rewardsTitle,
+                        titleStyle: model.model.titleStyle,
+                        subtitle: rewardsText,
+                        subtitleStyle: model.model.subtitleStyle,
+                        subtitleExtra: model.model.rewardsFiatValueText,
+                        subtitleStyleExtra: model.model.subtitleExtraStyle,
+                        imageStyle: model.assetImageStyle
+                    )
                 }
             }
+
             //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()
             if model.showManage {
                 Section(model.manageTitle) {
                     if model.isStakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: model.title)) {
-                            if let value = try? model.stakeRecipientData() {
-                                model.onAmountInputAction?(value)
-                            }
+                            model.onStakeAmountAction()
                         }
                     }
                     if model.isUnstakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: model.unstakeTitle)) {
-                            if let value = try? model.unstakeRecipientData() {
-                                model.onAmountInputAction?(value)
-                            }
+                            model.onUnstakeAction()
                         }
                     }
                     if model.isRedelegateAvailable {
                         NavigationCustomLink(with: ListItemView(title: model.redelegateTitle)) {
-                            if let value = try? model.redelegateRecipientData() {
-                                model.onAmountInputAction?(value)
-                            }
+                            model.onRedelegateAction()
                         }
                     }
                     if model.isWithdrawStakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: model.withdrawTitle)) {
-                            if let value = try? model.withdrawStakeTransferData() {
-                                model.onTransferAction?(value)
-                            }
+                            model.onWithdrawAction()
                         }
                     }
                 }
             }
         }
         .navigationTitle(model.title)
+        .listSectionSpacing(.compact)
     }
 }

@@ -5,26 +5,47 @@ import Localization
 import Preferences
 import WalletService
 import Components
+import Store
 
 @Observable
 @MainActor
 public final class WalletsSceneViewModel {
-    private let navigationPath: Binding<NavigationPath>
-    let service: WalletService
-    let currentWalletId: WalletId?
+#if DEBUG
+    public static let walletsLimit = 1000
+#else
+    public static let walletsLimit = 100
+#endif
     
+    private let service: WalletService
+    private let isPresentingCreateWalletSheet: Binding<Bool>
+    private let isPresentingImportWalletSheet: Binding<Bool>
+    private let navigationPath: Binding<NavigationPath>
+
     var isPresentingAlertMessage: AlertMessage?
     var walletDelete: Wallet?
-    
+    var currentWalletId: WalletId?
+
+    // db observation requests
+    let pinnedWalletsRequest: WalletsRequest = WalletsRequest(isPinned: true)
+    let walletsRequest: WalletsRequest = WalletsRequest(isPinned: false)
+
+    // observed
+    var pinnedWallets: [Wallet] = []
+    var wallets: [Wallet] = []
+
     public init(
         navigationPath: Binding<NavigationPath>,
-        walletService: WalletService
+        walletService: WalletService,
+        isPresentingCreateWalletSheet: Binding<Bool>,
+        isPresentingImportWalletSheet: Binding<Bool>
     ) {
         self.navigationPath = navigationPath
         self.service = walletService
         self.currentWalletId = service.currentWalletId
         self.isPresentingAlertMessage = nil
         self.walletDelete = nil
+        self.isPresentingCreateWalletSheet = isPresentingCreateWalletSheet
+        self.isPresentingImportWalletSheet = isPresentingImportWalletSheet
     }
     
     var title: String {
@@ -37,17 +58,18 @@ public final class WalletsSceneViewModel {
 extension WalletsSceneViewModel {
     func setCurrent(_ walletId: WalletId) {
         service.setCurrent(for: walletId)
+        currentWalletId = walletId
     }
 
     func onEdit(wallet: Wallet) {
         navigationPath.wrappedValue.append(Scenes.WalletDetail(wallet: wallet))
     }
 
-    func delete(_ wallet: Wallet) throws {
+    private func delete(_ wallet: Wallet) throws {
         try service.delete(wallet)
     }
 
-    func pin(_ wallet: Wallet) throws {
+    private func pin(_ wallet: Wallet) throws {
         if wallet.isPinned {
             try service.unpin(wallet: wallet)
         } else {
@@ -55,7 +77,7 @@ extension WalletsSceneViewModel {
         }
     }
 
-    func swapOrder(from: WalletId, to: WalletId) throws {
+    private func swapOrder(from: WalletId, to: WalletId) throws {
         try service.swapOrder(from: from, to: to)
     }
 }
@@ -63,6 +85,43 @@ extension WalletsSceneViewModel {
 // MARK: - Actions
 
 extension WalletsSceneViewModel {
+    func onSelectCreateWallet() {
+        guard validate() else {
+            return
+        }
+        isPresentingCreateWalletSheet.wrappedValue.toggle()
+    }
+
+    func onSelectImportWallet() {
+        guard validate() else {
+            return
+        }
+        isPresentingImportWalletSheet.wrappedValue.toggle()
+    }
+
+    func onSelect(wallet: Wallet, dismiss: DismissAction) {
+        setCurrent(wallet.walletId)
+        dismiss()
+    }
+
+    func onMovePinned(from source: IndexSet, to destination: Int) {
+        guard let source = source.first else { return }
+        do {
+            try performSwapOrder(wallets: pinnedWallets, source: source, destination: destination)
+        } catch {
+            NSLog("WalletsSceneViewModel move pinned error: \(error)")
+        }
+    }
+
+    func onMove(from source: IndexSet, to destination: Int) {
+        guard let source = source.first else { return }
+        do {
+            try performSwapOrder(wallets: wallets, source: source, destination: destination)
+        } catch {
+            NSLog("WalletsSceneViewModel move error: \(error)")
+        }
+    }
+    
     func onDelete(wallet: Wallet) {
         walletDelete = wallet
     }
@@ -78,8 +137,55 @@ extension WalletsSceneViewModel {
     func onDeleteConfirmed(wallet: Wallet) {
         do {
             try delete(wallet)
+            currentWalletId = service.currentWalletId
         } catch {
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+        }
+    }
+}
+
+// MARK: - Private
+
+extension WalletsSceneViewModel {
+    private func validate() -> Bool {
+        // fix: https://github.com/gemwalletcom/gem-ios/issues/1067
+        if wallets.count > WalletsSceneViewModel.walletsLimit {
+            isPresentingAlertMessage = AlertMessage(
+                title: Localized.Errors.Wallets.Limit.title,
+                message: Localized.Errors.Wallets.Limit.description(WalletsSceneViewModel.walletsLimit)
+            )
+            return false
+        }
+        return true
+    }
+
+    private func performSwapOrder(wallets: [Wallet], source: Int, destination: Int) throws {
+        guard source != destination else { return }
+        NSLog("swapOrder source: \(source) destination: \(destination)")
+
+        let from = try wallets.getElement(safe: source)
+        if source - destination == 1 { // if next to each other, swap
+            let to = try wallets.getElement(safe: destination)
+            try swapOrder(
+                from: from.walletId,
+                to: to.walletId
+            )
+        } else if source == 0 || wallets.count == destination  { // moving to last position
+            for i in source..<destination-1 {
+                let to = try wallets.getElement(safe: i+1)
+                try swapOrder(
+                    from: from.walletId,
+                    to: to.walletId
+                )
+            }
+        } else if source == wallets.count-1 { // moving to the first position
+            for i in stride(from: wallets.count-1, through: destination+1, by: -1) {
+                let to = try wallets.getElement(safe: i-1)
+                try swapOrder(
+                    from: from.walletId,
+                    to: to.walletId
+                )
+            }
         }
     }
 }

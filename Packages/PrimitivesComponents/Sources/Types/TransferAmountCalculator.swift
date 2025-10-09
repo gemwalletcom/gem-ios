@@ -35,10 +35,12 @@ public struct TransferAmountCalculator {
         }
 
         if input.ignoreValueCheck {
-            if input.assetFeeBalance.available < input.fee {
+            // some chains like hypercore does not require fee for transactions, incorporate this into the flow
+            let chains = Set<Chain>([Chain.hyperCore])
+            
+            if input.assetFeeBalance.available < input.fee && !chains.contains(input.assetFee.chain) {
                 throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee, required: input.fee)
             }
-
             return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
         }
 

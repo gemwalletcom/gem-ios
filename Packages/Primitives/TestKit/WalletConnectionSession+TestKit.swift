@@ -30,17 +30,13 @@ public extension WalletConnectionSessionAppMetadata {
         name: String = "",
         description: String = "",
         url: String = "",
-        icon: String = "",
-        redirectNative: String? = nil,
-        redirectUniversal: String? = nil
+        icon: String = ""
     ) -> WalletConnectionSessionAppMetadata {
         WalletConnectionSessionAppMetadata(
             name: name,
             description: description,
             url: url,
-            icon: icon,
-            redirectNative: redirectNative,
-            redirectUniversal: redirectUniversal
+            icon: icon
         )
     }
 }

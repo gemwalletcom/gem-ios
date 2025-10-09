@@ -20,13 +20,14 @@ let package = Package(
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "Localization", path: "../../Packages/Localization"),
-        .package(name: "SwapService", path: "../../Services/SwapService"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
-        .package(name: "WalletsService", path: "../../Services/WalletsService"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "Keystore", path: "../../Packages/Keystore"),
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
+        .package(name: "GemAPI", path: "../../Packages/GemAPI"),
     ],
     targets: [
         .target(
@@ -38,10 +39,10 @@ let package = Package(
                 "GemstonePrimitives",
                 "Gemstone",
                 "Localization",
-                "SwapService",
+                .product(name: "SwapService", package: "FeatureServices"),
                 "Store",
                 "Preferences",
-                "WalletsService",
+                .product(name: "WalletsService", package: "FeatureServices"),
                 "PrimitivesComponents",
                 "InfoSheet",
                 "Keystore",
@@ -52,9 +53,16 @@ let package = Package(
             name: "SwapTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "WalletsServiceTestKit", package: "WalletsService"),
-                .product(name: "SwapServiceTestKit", package: "SwapService"),
+                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
+                .product(name: "SwapServiceTestKit", package: "FeatureServices"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "PriceServiceTestKit", package: "FeatureServices"),
+                .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
+                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
+                .product(name: "TransactionServiceTestKit", package: "FeatureServices"),
+                .product(name: "ChainServiceTestKit", package: "ChainServices"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "StoreTestKit", package: "Store"),
                 "Swap"
             ]
         )

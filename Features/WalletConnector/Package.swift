@@ -13,7 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
-        .package(name: "WalletConnectorService", path: "../../Services/WalletConnectorService"),
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "Style", path: "../../Packages/Style"),
@@ -22,7 +22,7 @@ let package = Package(
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "QRScanner", path: "../QRScanner"),
         .package(name: "Keystore", path: "../../Packages/Keystore"),
-        .package(name: "WalletSessionService", path: "../../Services/WalletSessionService"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
     ],
     targets: [
@@ -30,7 +30,7 @@ let package = Package(
             name: "WalletConnector",
             dependencies: [
                 "Primitives",
-                "WalletConnectorService",
+                .product(name: "WalletConnectorService", package: "ChainServices"),
                 "Components",
                 "Localization",
                 "Style",
@@ -38,7 +38,7 @@ let package = Package(
                 "Preferences",
                 "PrimitivesComponents",
                 "QRScanner",
-                "WalletSessionService",
+                .product(name: "WalletSessionService", package: "FeatureServices"),
                 "Keystore",
                 "Gemstone"
             ],
@@ -50,8 +50,8 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
-                .product(name: "WalletSessionServiceTeskKit", package: "WalletSessionService"),
-                .product(name: "WalletConnectorServiceTestKit", package: "WalletConnectorService"),
+                .product(name: "WalletSessionServiceTestKit", package: "FeatureServices"),
+                .product(name: "WalletConnectorServiceTestKit", package: "ChainServices"),
                 "WalletConnector",
                 "Gemstone"
             ],

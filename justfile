@@ -1,6 +1,6 @@
 XCBEAUTIFY_ARGS := "--quieter"
 BUILD_THREADS := `sysctl -n hw.ncpu`
-SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 16"
+SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 17"
 
 xcbeautify:
     @xcbeautify {{XCBEAUTIFY_ARGS}}
@@ -77,7 +77,11 @@ build-package PACKAGE:
     SWIFT_OPTIMIZATION_LEVEL=-Onone \
     build | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test_all:
+show-simulator:
+    @echo "Destination: {{SIMULATOR_DEST}}"
+    @xcrun simctl list devices | grep "iPhone" | head -5 || true
+
+test-all: show-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
@@ -89,7 +93,7 @@ test_all:
     -jobs {{BUILD_THREADS}} \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test_ui:
+test-ui:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
     -sdk iphonesimulator \
@@ -99,7 +103,7 @@ test_ui:
     -allowProvisioningDeviceRegistration \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test TARGET:
+test TARGET: show-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \

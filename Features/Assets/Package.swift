@@ -25,14 +25,8 @@ let package = Package(
         .package(name: "Blockchain", path: "../../Packages/Blockchain"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "QRScanner", path: "../QRScanner"),
-        .package(name: "PriceAlertService", path: "../../Services/PriceAlertService"),
-        .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
-        .package(name: "AssetsService", path: "../../Services/AssetsService"),
-        .package(name: "TransactionsService", path: "../../Services/TransactionsService"),
-        .package(name: "WalletsService", path: "../../Services/WalletsService"),
-        .package(name: "PriceService", path: "../../Services/PriceService"),
-        .package(name: "BannerService", path: "../../Services/BannerService"),
-        .package(name: "ChainService", path: "../../Services/ChainService")
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices")
     ],
     targets: [
         .target(
@@ -49,26 +43,28 @@ let package = Package(
                 "Blockchain",
                 "InfoSheet",
                 "QRScanner",
-                "PriceAlertService",
-                "ExplorerService",
-                "AssetsService",
-                "TransactionsService",
-                "WalletsService",
-                "PriceService",
-                "BannerService",
-                "ChainService"
+                .product(name: "PriceAlertService", package: "FeatureServices"),
+                .product(name: "ExplorerService", package: "ChainServices"),
+                .product(name: "AssetsService", package: "FeatureServices"),
+                .product(name: "TransactionsService", package: "FeatureServices"),
+                .product(name: "WalletsService", package: "FeatureServices"),
+                .product(name: "PriceService", package: "FeatureServices"),
+                .product(name: "BannerService", package: "FeatureServices"),
+                .product(name: "ChainService", package: "ChainServices")
             ]
         ),
         .testTarget(
             name: "AssetsTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "WalletsServiceTestKit", package: "WalletsService"),
-                .product(name: "AssetsServiceTestKit", package: "AssetsService"),
-                .product(name: "TransactionsServiceTestKit", package: "TransactionsService"),
-                .product(name: "PriceServiceTestKit", package: "PriceService"),
-                .product(name: "PriceAlertServiceTestKit", package: "PriceAlertService"),
-                .product(name: "BannerServiceTestKit", package: "BannerService"),
+                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
+                .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
+                .product(name: "TransactionsServiceTestKit", package: "FeatureServices"),
+                .product(name: "PriceServiceTestKit", package: "FeatureServices"),
+                .product(name: "PriceAlertServiceTestKit", package: "FeatureServices"),
+                .product(name: "BannerServiceTestKit", package: "FeatureServices"),
+                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
+                .product(name: "TransactionServiceTestKit", package: "FeatureServices"),
                 "Assets"
             ]
         )

@@ -17,7 +17,7 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
-        .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
+        .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "Localization", path: "../Localization"),
         .package(name: "Components", path: "../Components"),
         .package(name: "Style", path: "../Style"),
@@ -30,7 +30,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "GemstonePrimitives",
-                "WalletCorePrimitives",
+                .product(name: "WalletCorePrimitives", package: "WalletCore"),
                 "Localization",
                 "Components",
                 "Style",

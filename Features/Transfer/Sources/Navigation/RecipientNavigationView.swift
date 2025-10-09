@@ -5,19 +5,17 @@ import SwiftUI
 import Primitives
 import ChainService
 import QRScanner
-import SwapService
 
 public struct RecipientNavigationView: View {
     @State private var model: RecipientSceneViewModel
-
-    private let onComplete: VoidAction
+    private let confirmService: ConfirmService
 
     public init(
-        model: RecipientSceneViewModel,
-        onComplete: VoidAction
+        confirmService: ConfirmService,
+        model: RecipientSceneViewModel
     ) {
+        self.confirmService = confirmService
         _model = State(initialValue: model)
-        self.onComplete = onComplete
     }
 
     public var body: some View {
@@ -34,28 +32,7 @@ public struct RecipientNavigationView: View {
                 model: AmountSceneViewModel(
                     input: AmountInput(type: .transfer(recipient: data), asset: model.asset),
                     wallet: model.wallet,
-                    walletsService: model.walletsService,
-                    stakeService: model.stakeService,
                     onTransferAction: model.onTransferAction
-                )
-            )
-        }
-        .navigationDestination(for: TransferData.self) { data in
-            ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
-                    wallet: model.wallet,
-                    data: data,
-                    keystore: model.keystore,
-                    chainService: ChainServiceFactory(nodeProvider: model.nodeService)
-                        .service(for: data.chain),
-                    scanService: model.scanService,
-                    swapService: model.swapService,
-                    walletsService: model.walletsService,
-                    swapDataProvider: SwapQuoteDataProvider(
-                        keystore: model.keystore,
-                        swapService: model.swapService
-                    ),
-                    onComplete: onComplete
                 )
             )
         }

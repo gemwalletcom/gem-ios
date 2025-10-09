@@ -1,0 +1,67 @@
+{
+  "id": "required-chains-test",
+  "pairingTopic": "required-chains-topic",
+  "proposer": {
+    "name": "RequiredChainsApp",
+    "description": "App requiring specific chains",
+    "url": "https://required.app",
+    "icons": ["https://required.app/icon.png"],
+    "redirect": {
+      "native": "requiredapp://open",
+      "universal": "https://required.app/deeplink",
+      "linkMode": true
+    }
+  },
+  "requiredNamespaces": {
+    "eip155": {
+      "chains": [
+        "eip155:1",
+        "eip155:137"
+      ],
+      "methods": ["eth_sendTransaction", "personal_sign"],
+      "events": ["chainChanged", "accountsChanged"]
+    }
+  },
+  "optionalNamespaces": {},
+  "sessionProperties": {
+    "theme": "dark",
+    "version": "1.0.0"
+  },
+  "proposal": {
+    "relays": [
+      {
+        "protocol": "waku",
+        "data": "relayData"
+      }
+    ],
+    "proposer": {
+      "publicKey": "requiredChainsPublicKey",
+      "metadata": {
+        "name": "RequiredChainsApp",
+        "description": "App requiring specific chains",
+        "url": "https://required.app",
+        "icons": ["https://required.app/icon.png"],
+        "redirect": {
+          "native": "requiredapp://open",
+          "universal": "https://required.app/deeplink",
+          "linkMode": true
+        }
+      }
+    },
+    "requiredNamespaces": {
+      "eip155": {
+        "chains": [
+          "eip155:1",
+          "eip155:137"
+        ],
+        "methods": ["eth_sendTransaction", "personal_sign"],
+        "events": ["chainChanged", "accountsChanged"]
+      }
+    },
+    "optionalNamespaces": {},
+    "sessionProperties": {
+      "theme": "dark"
+    },
+    "expiryTimestamp": 1700000000
+  }
+}

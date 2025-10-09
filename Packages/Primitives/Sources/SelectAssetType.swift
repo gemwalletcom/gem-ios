@@ -10,6 +10,7 @@ public enum SelectAssetType: Identifiable, Hashable, Sendable {
     case manage
     case priceAlert
     case deposit
+    case withdraw
 
     public var id: String {
         switch self {
@@ -20,6 +21,7 @@ public enum SelectAssetType: Identifiable, Hashable, Sendable {
         case .manage: "manage"
         case .priceAlert:"priceAlert"
         case .deposit: "perps"
+        case .withdraw: "perps_withdrawal"
         }
     }
 }

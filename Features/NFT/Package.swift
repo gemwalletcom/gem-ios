@@ -19,14 +19,11 @@ let package = Package(
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Localization", path: "../../Packages/Localization"),
-        .package(name: "DeviceService", path: "../../Services/DeviceService"),
-        .package(name: "NFTService", path: "../../Services/NFTService"),
+        .package(name: "SystemServices", path: "../../Packages/SystemServices"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Store", path: "../../Packages/Store"),
-        .package(name: "ImageGalleryService", path: "../../Services/ImageGalleryService"),
-        .package(name: "WalletService", path: "../../Services/WalletService"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
-        .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
-        .package(name: "AvatarService", path: "../../Services/AvatarService"),
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
     ],
     targets: [
         .target(
@@ -37,14 +34,14 @@ let package = Package(
                 "PrimitivesComponents",
                 "Style",
                 "Localization",
-                "DeviceService",
-                "NFTService",
+                .product(name: "DeviceService", package: "FeatureServices"),
+                .product(name: "NFTService", package: "FeatureServices"),
                 "Store",
-                "ImageGalleryService",
-                "WalletService",
+                .product(name: "ImageGalleryService", package: "SystemServices"),
+                .product(name: "WalletService", package: "FeatureServices"),
                 "Formatters",
-                "ExplorerService",
-                "AvatarService"
+                .product(name: "ExplorerService", package: "ChainServices"),
+                .product(name: "AvatarService", package: "FeatureServices")
             ],
             path: "Sources"
         ),
@@ -53,10 +50,10 @@ let package = Package(
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StoreTestKit", package: "Store"),
-                .product(name: "WalletServiceTestKit", package: "WalletService"),
+                .product(name: "WalletServiceTestKit", package: "FeatureServices"),
                 "NFT",
                 "PrimitivesComponents",
-                "AvatarService",
+                .product(name: "AvatarService", package: "FeatureServices"),
                 "Store"
             ]
         )

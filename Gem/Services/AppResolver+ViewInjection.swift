@@ -32,6 +32,7 @@ extension View {
             .environment(\.nftService, services.nftService)
             .environment(\.avatarService, services.avatarService)
             .environment(\.releaseService, services.appReleaseService)
+            .environment(\.viewModelFactory, services.viewModelFactory)
     }
     
     private func inject(storages: AppResolver.Storages) -> some View {

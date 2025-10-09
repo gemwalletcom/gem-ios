@@ -25,7 +25,7 @@ struct RootScene: View {
                 .alertSheet($model.updateVersionAlertMessage)
             } else {
                 OnboardingNavigationView(
-                    model: .init(walletService: model.walletService)
+                    model: .init(walletService: model.walletService, nameService: model.nameService)
                 )
             }
         }
@@ -40,7 +40,7 @@ struct RootScene: View {
                 presenter: model.walletConnectorPresenter
             )
         }
-        .confirmationDialog(
+        .alert(
             Localized.WalletConnect.brandName,
             presenting: $model.isPresentingConnectorError,
             actions: { _ in

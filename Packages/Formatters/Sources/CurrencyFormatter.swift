@@ -54,15 +54,20 @@ public struct CurrencyFormatter: Sendable, Hashable {
         return formatter
     }
     
-    public static let percent = CurrencyFormatter(type: .percent)
+    private var abbreviatedFormatter: AbbreviatedFormatter {
+        AbbreviatedFormatter(locale: locale, threshold: abbreviationThreshold)
+    }
+    
+    public static let percent = CurrencyFormatter(type: .percent, currencyCode: .empty)
+    public static let percentSignLess = CurrencyFormatter(type: .percentSignLess, currencyCode: .empty)
 
     public var currencyCode: String
-    public var abbreviationThreshold: Double = 100_000
+    public var abbreviationThreshold: Decimal = 100_000
     
     public init(
         type: CurrencyFormatterType = .currency,
         locale: Locale = Locale.current,
-        currencyCode: String = Locale.current.currency?.identifier ?? .empty
+        currencyCode: String
     ) {
         self.type = type
         self.locale = locale
@@ -111,30 +116,17 @@ public struct CurrencyFormatter: Sendable, Hashable {
     // MARK: - Private methods
     
     private func abbreviatedString(_ double: Double) -> String {
-        guard abs(double) >= abbreviationThreshold, #available(iOS 18, *) else {
-            return currencyString(double)
+        if let result = abbreviatedFormatter.string(from: double, currency: currencyCode) {
+            return result
         }
-        return double
-            .formatted(
-                .currency(code: currencyCode)
-                .notation(.compactName)
-                .locale(locale)
-                .precision(.fractionLength(0...2))
-            )
+        return currencyString(double)
     }
     
     private func abbreviatedStringSymbol(_ double: Double, symbol: String?) -> String {
-        guard abs(double) >= abbreviationThreshold else {
-            return stringSymbol(double, symbol: symbol)
+        if let result = abbreviatedFormatter.string(from: double) {
+            return combined(value: result, symbol: symbol)
         }
-        let string = double
-            .formatted(
-                .number
-                .notation(.compactName)
-                .locale(locale)
-                .precision(.fractionLength(0...2))
-            )
-        return combined(value: string, symbol: symbol)
+        return stringSymbol(double, symbol: symbol)
     }
     
     private func stringSymbol(_ double: Double, symbol: String?) -> String {

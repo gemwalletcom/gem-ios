@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import GRDBQuery
 import Store
 import Primitives
 import Components
@@ -10,17 +9,10 @@ import InfoSheet
 import PrimitivesComponents
 
 public struct StakeScene: View {
-    @State private var model: StakeViewModel
+    private let model: StakeSceneViewModel
 
-    @Query<StakeDelegationsRequest>
-    private var delegations: [Delegation]
-    private var delegationsModel: [StakeDelegationViewModel] {
-        delegations.map { StakeDelegationViewModel(delegation: $0) }
-    }
-
-    public init(model: StakeViewModel) {
-        _model = State(initialValue: model)
-        _delegations = Query(model.request)
+    public init(model: StakeSceneViewModel) {
+        self.model = model
     }
 
     public var body: some View {
@@ -29,15 +21,18 @@ public struct StakeScene: View {
             if model.showManage {
                 stakeSection
             }
+
+            if model.showTronResources {
+                resourcesSection
+            }
+
             delegationsSection
         }
+        .listSectionSpacing(.compact)
         .refreshable {
             await model.fetch()
         }
         .navigationTitle(model.title)
-        .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
-        }
         .taskOnce {
             Task {
                 await model.fetch()
@@ -51,27 +46,38 @@ public struct StakeScene: View {
 extension StakeScene {
     private var stakeSection: some View {
         Section(Localized.Common.manage) {
-            NavigationCustomLink(
-                with: ListItemView(title: model.stakeTitle),
-                action: model.onSelectStake
-            )
+            if model.showStake {
+                NavigationLink(value: model.stakeDestination) {
+                    ListItemView(title: model.stakeTitle)
+                }
+            }
+            
+            if model.showFreeze {
+                NavigationLink(value: model.freezeDestination) {
+                    ListItemView(title: model.freezeTitle)
+                }
+            }
 
-            if model.showClaimRewards(delegations: delegations) {
-                NavigationCustomLink(
-                    with: ListItemView(
+            if model.showUnfreeze {
+                NavigationLink(value: model.unfreezeDestination) {
+                    ListItemView(title: model.unfreezeTitle)
+                }
+            }
+
+            if model.canClaimRewards {
+                NavigationLink(value: model.claimRewardsDestination) {
+                    ListItemView(
                         title: model.claimRewardsTitle,
-                        subtitle: model.claimRewardsText(delegations: delegations)
-                    ),
-                    action: { model.onSelectDelegations(delegations: delegations) }
-                )
+                        subtitle: model.claimRewardsText
+                    )
+                }
             }
         }
     }
 
     private var delegationsSection: some View {
-        let state = model.stakeDelegateionState(delegationModels: delegationsModel)
-        return Section {
-            switch state {
+        Section {
+            switch model.delegationsState {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)
                     .cleanListRow()
@@ -80,7 +86,7 @@ extension StakeScene {
                     .id(UUID())
             case .data(let delegations):
                 ForEach(delegations) { delegation in
-                    NavigationLink(value: delegation.delegation) {
+                    NavigationLink(value: delegation.navigationDestination) {
                         ValidatorDelegationView(delegation: delegation)
                     }
                 }
@@ -103,6 +109,19 @@ extension StakeScene {
             )
         }
     }
+
+    private var resourcesSection: some View {
+        Section(model.resourcesTitle) {
+            ListItemView(
+                title: model.energyTitle,
+                subtitle: model.energyText
+            )
+
+            ListItemView(
+                title: model.bandwidthTitle,
+                subtitle: model.bandwidthText
+            )
+        }
+        
+    }
 }
-
-

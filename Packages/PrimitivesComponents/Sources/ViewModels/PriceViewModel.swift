@@ -5,6 +5,7 @@ import SwiftUI
 import Primitives
 import Style
 import Formatters
+import Components
 
 public struct PriceViewModel: Sendable {
     public let price: Price?
@@ -54,12 +55,8 @@ public struct PriceViewModel: Sendable {
     }
 
     public static func priceChangeTextColor(value: Double?) -> Color {
-        if value == 0 {
-            return Colors.grayLight
-        } else if value ?? 0 >= 0 {
-            return Colors.green
-        }
-        return Colors.red
+        guard let value = value else { return Colors.gray }
+        return PriceChangeColor.color(for: value)
     }
 
     public var priceChangeTextBackgroundColor: Color {

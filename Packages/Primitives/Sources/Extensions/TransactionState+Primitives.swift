@@ -9,3 +9,13 @@ extension TransactionState: Identifiable {
         self == .pending
     }
 }
+
+extension TransactionState {
+    public init(id: String) throws {
+        if let state = TransactionState(rawValue: id) {
+            self = state
+        } else {
+            throw AnyError("invalid state: \(id)")
+        }
+    }
+}

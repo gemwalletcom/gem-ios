@@ -7,6 +7,14 @@ extension ChartPeriod: Identifiable {
 }
 
 extension ChartPeriod {
+    public init(id: String) throws {
+        if let period = ChartPeriod(rawValue: id) {
+            self = period
+        } else {
+            throw AnyError("invalid chart period: \(id)")
+        }
+    }
+    
     public var duration: Int {
         switch self {
         case .hour:

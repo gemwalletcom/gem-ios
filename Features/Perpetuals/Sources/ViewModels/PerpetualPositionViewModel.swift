@@ -12,13 +12,15 @@ import Localization
 public struct PerpetualPositionViewModel {
     public let data: PerpetualPositionData
     private let currencyFormatter: CurrencyFormatter
+    private let percentFormatter: CurrencyFormatter
     
     public init(
-        data: PerpetualPositionData,
-        currencyStyle: CurrencyFormatterType = .abbreviated
+        _ data: PerpetualPositionData,
+        currencyStyle: CurrencyFormatterType = .currency
     ) {
         self.data = data
-        self.currencyFormatter = CurrencyFormatter(type: currencyStyle)
+        self.currencyFormatter = CurrencyFormatter(type: currencyStyle, currencyCode: Currency.usd.rawValue)
+        self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
     }
     
     public var assetImage: AssetImage {
@@ -45,16 +47,19 @@ public struct PerpetualPositionViewModel {
     }
     
     public var positionTypeText: String {
-        "\(directionText) \(leverageText)"
+        "\(directionText.uppercased()) \(leverageText)"
     }
     
     public var positionTypeColor: Color {
-        data.position.size > 0 ? Colors.green : Colors.red
+        switch data.position.direction {
+        case .short: Colors.red
+        case .long: Colors.green
+        }
     }
     
     public var pnlTitle: String { Localized.Perpetual.pnl }
     public var pnlColor: Color {
-        data.position.pnl >= 0 ? Colors.green : Colors.red
+        PriceChangeColor.color(for: data.position.pnl)
     }
     
     public var pnlTextStyle: TextStyle {
@@ -82,12 +87,11 @@ public struct PerpetualPositionViewModel {
     }
     
     public var pnlPercentText: String {
-        CurrencyFormatter(type: .percent).string(pnlPercent)
+        percentFormatter.string(pnlPercent)
     }
     
     public var pnlWithPercentText: String {
         let pnlAmount = currencyFormatter.string(abs(data.position.pnl))
-        let percentFormatter = CurrencyFormatter(type: .percent)
         let percentText = percentFormatter.string(pnlPercent)
         
         if data.position.pnl >= 0 {
@@ -104,7 +108,7 @@ public struct PerpetualPositionViewModel {
     }
     public var fundingPaymentsColor: Color {
         guard let funding = data.position.funding else { return .secondary }
-        return funding >= 0 ? Colors.green : Colors.red
+        return PriceChangeColor.color(for: Double(funding))
     }
     
     public var fundingPaymentsTextStyle: TextStyle {

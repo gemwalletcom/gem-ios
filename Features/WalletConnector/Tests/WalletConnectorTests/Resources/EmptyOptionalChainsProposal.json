@@ -1,0 +1,49 @@
+{
+  "id": "empty-optional-chains-test",
+  "pairingTopic": "empty-optional-chains-topic",
+  "proposer": {
+    "name": "EmptyOptionalApp",
+    "description": "App with empty optional chains",
+    "url": "https://empty.app",
+    "icons": ["https://empty.app/icon.png"],
+    "redirect": {
+      "native": "emptyapp://open",
+      "universal": "https://empty.app/deeplink",
+      "linkMode": true
+    }
+  },
+  "requiredNamespaces": {},
+  "optionalNamespaces": {},
+  "sessionProperties": {
+    "theme": "dark",
+    "version": "1.0.0"
+  },
+  "proposal": {
+    "relays": [
+      {
+        "protocol": "waku",
+        "data": "relayData"
+      }
+    ],
+    "proposer": {
+      "publicKey": "emptyOptionalPublicKey",
+      "metadata": {
+        "name": "EmptyOptionalApp",
+        "description": "App with empty optional chains",
+        "url": "https://empty.app",
+        "icons": ["https://empty.app/icon.png"],
+        "redirect": {
+          "native": "emptyapp://open",
+          "universal": "https://empty.app/deeplink",
+          "linkMode": true
+        }
+      }
+    },
+    "requiredNamespaces": {},
+    "optionalNamespaces": {},
+    "sessionProperties": {
+      "theme": "dark"
+    },
+    "expiryTimestamp": 1700000000
+  }
+}

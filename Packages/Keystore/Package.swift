@@ -17,7 +17,6 @@ let package = Package(
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Formatters", path: "../Formatters"),
         .package(name: "WalletCore", path: "../WalletCore"),
-        .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(name: "Keychain", path: "../Keychain")
     ],
     targets: [
@@ -26,7 +25,7 @@ let package = Package(
             dependencies: [
                 .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
                 .product(name: "WalletCore", package: "WalletCore"),
-                "WalletCorePrimitives",
+                .product(name: "WalletCorePrimitives", package: "WalletCore"),
                 "Primitives",
                 "Formatters",
                 "Keychain"

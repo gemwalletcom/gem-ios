@@ -2,7 +2,6 @@
 
 import Foundation
 import WalletCore
-import WalletCorePrimitives
 import Keystore
 import Primitives
 import BigInt
@@ -15,7 +14,7 @@ public struct TonSigner: Signable {
             if let memo = input.memo {
                 $0.comment = memo
             }
-            $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
+            $0.mode = input.useMaxAmount ? TheOpenNetworkSendMode.transferAllTonMode() : TheOpenNetworkSendMode.defaultMode()
             $0.bounceable = false
         }
 
@@ -27,13 +26,17 @@ public struct TonSigner: Signable {
             throw AnyError("Invalid token creation fee")
         }
 
+        guard let jettonAddress = try input.metadata.senderTokenAddress() else {
+            throw AnyError("Invalid token address")
+        }
+        
         let transfer = TheOpenNetworkTransfer.with {
-            $0.dest = input.token.senderTokenAddress // My Jetton Wallet address
+            $0.dest = jettonAddress
             $0.amount = jettonCreationFee.serialize()
             if let memo = input.memo {
                 $0.comment = memo
             }
-            $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
+            $0.mode = TheOpenNetworkSendMode.defaultMode()
             $0.bounceable = true
             $0.jettonTransfer = .with {
                 $0.jettonAmount = input.value.serialize()
@@ -46,10 +49,31 @@ public struct TonSigner: Signable {
         return try sign(input: input, messages: [transfer], coinType: input.coinType, privateKey: privateKey)
     }
     
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        let data = try input.type.swap().data.data
+        let transfer = try TheOpenNetworkTransfer.with {
+            $0.dest = data.to
+            $0.amount = try BigInt.from(string: data.value).serialize()
+            if let memo = input.memo {
+                $0.comment = memo
+            }
+            $0.mode = TheOpenNetworkSendMode.defaultMode()
+            $0.bounceable = true
+            $0.customPayload = data.data
+        }
+        return [
+            try sign(input: input, messages: [transfer], coinType: input.coinType, privateKey: privateKey),
+        ]
+    }
+
+    private func expireAt() -> UInt32 {
+        UInt32(Date.now.timeIntervalSince1970 + TimeInterval(600))
+    }
+
     private func sign(input: SignerInput, messages: [TW_TheOpenNetwork_Proto_Transfer], coinType: CoinType, privateKey: Data) throws -> String {
-        let signingInput = TheOpenNetworkSigningInput.with {
+        let signingInput = try TheOpenNetworkSigningInput.with {
             $0.walletVersion = TheOpenNetworkWalletVersion.walletV4R2
-            $0.sequenceNumber = UInt32(input.sequence)
+            $0.sequenceNumber = UInt32(try input.metadata.getSequence())
             $0.expireAt = expireAt()
             $0.messages = messages
             $0.privateKey = privateKey
@@ -62,25 +86,14 @@ public struct TonSigner: Signable {
 
         return output.encoded
     }
-    
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let data = try input.type.swap().data.data
-        let transfer = try TheOpenNetworkTransfer.with {
-            $0.dest = data.to
-            $0.amount = try BigInt.from(string: data.value).serialize()
-            if let memo = input.memo {
-                $0.comment = memo
-            }
-            $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
-            $0.bounceable = true
-            $0.customPayload = data.data
-        }
-        return [
-            try sign(input: input, messages: [transfer], coinType: input.coinType, privateKey: privateKey),
-        ]
-    }
+}
 
-    private func expireAt() -> UInt32 {
-        UInt32(Date.now.timeIntervalSince1970 + TimeInterval(600))
+extension TheOpenNetworkSendMode {
+    static func transferAllTonMode() -> UInt32 {
+        UInt32(TheOpenNetworkSendMode.attachAllContractBalance.rawValue) | TheOpenNetworkSendMode.defaultMode()
+    }
+    
+    static func defaultMode() -> UInt32 {
+        UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
     }
 }

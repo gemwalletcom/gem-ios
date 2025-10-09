@@ -8,14 +8,15 @@ let package = Package(
     products: [
         .library(
             name: "Signer",
-            targets: ["Signer"]),
+            targets: ["Signer"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "Blockchain", path: "../Blockchain"),
         .package(name: "WalletCore", path: "../WalletCore"),
-        .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
+        .package(name: "Keychain", path: "../Keychain"),
     ],
     targets: [
         .target(
@@ -26,7 +27,8 @@ let package = Package(
                 "Blockchain",
                 .product(name: "WalletCore", package: "WalletCore"),
                 .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
-                "WalletCorePrimitives",
+                .product(name: "WalletCorePrimitives", package: "WalletCore"),
+                "Keychain",
             ],
             path: "Sources"
         ),
@@ -36,6 +38,7 @@ let package = Package(
                 "Signer",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "KeychainTestKit", package: "Keychain"),
             ]
         ),
     ]

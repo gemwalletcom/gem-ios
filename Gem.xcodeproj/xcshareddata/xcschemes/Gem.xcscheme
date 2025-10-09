@@ -224,16 +224,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NameResolverTests"
-               BuildableName = "NameResolverTests"
-               BlueprintName = "NameResolverTests"
-               ReferencedContainer = "container:Features/NameResolver">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "QRScannerTests"
                BuildableName = "QRScannerTests"
                BlueprintName = "QRScannerTests"

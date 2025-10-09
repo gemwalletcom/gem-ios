@@ -8,19 +8,23 @@ let package = Package(
     products: [
         .library(
             name: "Blockchain",
-            targets: ["Blockchain"]),
+            targets: ["Blockchain"]
+        ),
         .library(
             name: "BlockchainTestKit",
-            targets: ["BlockchainTestKit"]),
+            targets: ["BlockchainTestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "SwiftHTTPClient", path: "../SwiftHTTPClient"),
         .package(name: "WalletCore", path: "../WalletCore"),
-        .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
-        .package(name: "Formatters", path: "../Formatters")
+        .package(name: "Formatters", path: "../Formatters"),
+        .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "Keychain", path: "../Keychain"),
+        .package(name: "FeatureServices", path: "../FeatureServices"),
     ],
     targets: [
         .target(
@@ -29,10 +33,13 @@ let package = Package(
                 "SwiftHTTPClient",
                 "Primitives",
                 .product(name: "WalletCore", package: "WalletCore"),
-                "WalletCorePrimitives",
+                .product(name: "WalletCorePrimitives", package: "WalletCore"),
                 "Gemstone",
                 "GemstonePrimitives",
-                "Formatters"
+                "Formatters",
+                "Preferences",
+                "Keychain",
+                .product(name: "NativeProviderService", package: "FeatureServices"),
             ],
             path: "Sources"
         ),
@@ -41,7 +48,7 @@ let package = Package(
             dependencies: [
                 "Blockchain",
                 "Primitives",
-                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "PrimitivesTestKit", package: "Primitives")
             ],
             path: "TestKit"
         ),
@@ -51,8 +58,7 @@ let package = Package(
                 "Blockchain",
                 "BlockchainTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-            ],
-            resources: [.process("Resources")]
-        )
+            ]
+        ),
     ]
 )

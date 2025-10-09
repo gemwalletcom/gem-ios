@@ -2,20 +2,19 @@
 
 import Foundation
 import WalletCore
-import WalletCorePrimitives
 import Primitives
 
 public struct AlgorandSigner: Signable {
     
     func sign(input: SignerInput, message: AlgorandSigningInput.OneOf_MessageOneof, privateKey: Data) throws -> String {
         let input = try AlgorandSigningInput.with {
-            $0.genesisID = input.chainId
-            $0.genesisHash = try input.block.hash.base64Encoded()
+            $0.genesisID = try input.metadata.getChainId()
+            $0.genesisHash = try input.metadata.getBlockHash().base64Encoded()
             if let memo = input.memo, !memo.isEmpty {
                 $0.note = try memo.encodedData()
             }
-            $0.firstRound = input.sequence.asUInt64
-            $0.lastRound = input.sequence.asUInt64 + 1000
+            $0.firstRound = try input.metadata.getSequence()
+            $0.lastRound = try input.metadata.getSequence() + 1000
             $0.fee = input.fee.gasPrice.asUInt
             $0.messageOneof = message
             $0.privateKey = privateKey

@@ -3,17 +3,23 @@
 import Foundation
 import Localization
 import WalletService
+import PrimitivesComponents
 
 @Observable
 @MainActor
 public final class OnboardingViewModel {
     let walletService: WalletService
+    let nameService: any NameServiceable
     
     public var isPresentingCreateWalletSheet: Bool = false
     public var isPresentingImportWalletSheet: Bool = false
     
-    public init(walletService: WalletService) {
+    public init(
+        walletService: WalletService,
+        nameService: any NameServiceable
+    ) {
         self.walletService = walletService
+        self.nameService = nameService
     }
     
     var title: String { Localized.Welcome.title }

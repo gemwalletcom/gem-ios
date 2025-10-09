@@ -58,6 +58,14 @@ public struct WCSolanaTransaction: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct WCSolanaTransactions: Codable, Equatable, Hashable, Sendable {
+	public let transactions: [String]
+
+	public init(transactions: [String]) {
+		self.transactions = transactions
+	}
+}
+
 public enum WalletConnectCAIP2: String, Codable, Sendable {
 	case eip155
 	case solana

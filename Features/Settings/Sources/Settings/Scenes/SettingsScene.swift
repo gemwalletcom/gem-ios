@@ -5,20 +5,23 @@ import Components
 import Primitives
 import Localization
 import PrimitivesComponents
+import Support
 
 public struct SettingsScene: View {
     @Environment(\.openURL) private var openURL
 
     @State private var model: SettingsViewModel
-
     @Binding private var isPresentingWallets: Bool
+    @Binding private var isPresentingSupport: Bool
 
     public init(
         model: SettingsViewModel,
-        isPresentingWallets: Binding<Bool>
+        isPresentingWallets: Binding<Bool>,
+        isPresentingSupport: Binding<Bool>
     ) {
         _model = State(initialValue: model)
         _isPresentingWallets = isPresentingWallets
+        _isPresentingSupport = isPresentingSupport
     }
 
     public var body: some View {
@@ -36,6 +39,9 @@ public struct SettingsScene: View {
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .sheet(isPresented: $isPresentingSupport) {
+            SupportScene(model: SupportSceneViewModel(isPresentingSupport: $isPresentingSupport))
+        }
     }
 }
 
@@ -123,19 +129,13 @@ extension SettingsScene {
 
     private var aboutSection: some View {
         Section {
-            SafariNavigationLink(url: model.helpCenterURL) {
-                ListItemView(
-                    title: model.helpCenterTitle,
-                    imageStyle: .settings(assetImage: model.helpCenterImage)
-                )
-            }
-
-            SafariNavigationLink(url: model.supportURL) {
-                ListItemView(
+            NavigationCustomLink(
+                with: ListItemView(
                     title: model.supportTitle,
                     imageStyle: .settings(assetImage: model.supportImage)
-                )
-            }
+                ),
+                action: onOpenSupport
+            )
 
             NavigationLink(value: Scenes.AboutUs()) {
                 ListItemView(
@@ -165,6 +165,10 @@ extension SettingsScene {
     }
 
     private func onOpenWallets() {
-        isPresentingWallets.toggle()
+        isPresentingWallets = true
+    }
+    
+    private func onOpenSupport() {
+        isPresentingSupport = true
     }
 }

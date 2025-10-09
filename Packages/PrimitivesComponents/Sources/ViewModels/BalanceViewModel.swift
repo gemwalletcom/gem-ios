@@ -1,10 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
+import Formatters
 import Foundation
-import SwiftUI
 import Primitives
 import Style
-import Formatters
+import SwiftUI
 
 public struct BalanceViewModel: Sendable {
     private static let fullFormatter = ValueFormatter(style: .full)
@@ -25,7 +26,7 @@ public struct BalanceViewModel: Sendable {
 
     public var balanceAmount: Double {
         do {
-            return try Self.fullFormatter.double(from: balance.total, decimals: asset.decimals.asInt)
+            return try Self.fullFormatter.double(from: total, decimals: asset.decimals.asInt)
         } catch {
             return .zero
         }
@@ -40,10 +41,10 @@ public struct BalanceViewModel: Sendable {
     }
 
     public var balanceText: String {
-        guard !balance.total.isZero else {
+        guard !total.isZero else {
             return .zero
         }
-        return formatter.string(balance.total, decimals: asset.decimals.asInt)
+        return formatter.string(total, decimals: asset.decimals.asInt)
     }
 
     public var availableBalanceText: String {
@@ -54,7 +55,7 @@ public struct BalanceViewModel: Sendable {
     }
 
     public var totalBalanceTextWithSymbol: String {
-        formatter.string(balance.total, decimals: asset.decimals.asInt, currency: asset.symbol)
+        formatter.string(total, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
     public var availableBalanceTextWithSymbol: String {
@@ -62,7 +63,18 @@ public struct BalanceViewModel: Sendable {
     }
 
     public var stakingBalanceTextWithSymbol: String {
-        formatter.string(balance.staked + balance.pending, decimals: asset.decimals.asInt, currency: asset.symbol)
+        let amount = switch StakeChain(rawValue: asset.chain.rawValue) {
+        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .ethereum, .aptos, .none: balance.staked + balance.pending
+        case .tron: balance.frozen + balance.locked + balance.pending
+        }
+        return formatter.string(amount, decimals: asset.decimals.asInt, currency: asset.symbol)
+    }
+
+    public var hasStakingResources: Bool {
+        switch StakeChain(rawValue: asset.chain.rawValue) {
+        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .ethereum, .aptos, .none: false
+        case .tron: !balance.frozen.isZero || !balance.locked.isZero
+        }
     }
 
     public var hasReservedBalance: Bool {
@@ -74,9 +86,23 @@ public struct BalanceViewModel: Sendable {
     }
 
     public var balanceTextColor: Color {
-        guard !balance.total.isZero else {
+        guard !total.isZero else {
             return Colors.gray
         }
         return Colors.black
+    }
+
+    public var energyText: String {
+        guard let metadata = balance.metadata else { return "" }
+        return "\(metadata.energyAvailable) / \(metadata.energyTotal)"
+    }
+
+    public var bandwidthText: String {
+        guard let metadata = balance.metadata else { return "" }
+        return "\(metadata.bandwidthAvailable) / \(metadata.bandwidthTotal)"
+    }
+
+    var total: BigInt {
+        balance.available + balance.frozen + balance.locked + balance.staked + balance.pending + balance.rewards
     }
 }

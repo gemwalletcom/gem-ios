@@ -69,13 +69,22 @@ public final class AssetSceneViewModel: Sendable {
     var balancesTitle: String { Localized.Asset.balances }
     var networkTitle: String { Localized.Transfer.network }
     var stakeTitle: String { Localized.Wallet.stake }
+    
+    var resourcesTitle: String { Localized.Asset.resources }
+    var energyTitle: String { ResourceViewModel(resource: .energy).title }
+    var bandwidthTitle: String { ResourceViewModel(resource: .bandwidth).title }
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
+
     var showBalances: Bool { assetDataModel.showBalances }
-    var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
+    private var showStakedBalanceTypes: [BalanceType] = [.staked, .pending, .rewards]
+    var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
+    var showResources: Bool { assetDataModel.showResources }
+
     var showTransactions: Bool { transactions.isNotEmpty }
     var showManageToken: Bool { !assetData.metadata.isEnabled }
+
     var pinText: String {
         assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
     }
@@ -100,7 +109,7 @@ public final class AssetSceneViewModel: Sendable {
     var networkText: String { assetModel.networkFullName }
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
-        return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
+        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -114,12 +123,11 @@ public final class AssetSceneViewModel: Sendable {
         AssetIdViewModel(assetId: assetModel.asset.chain.assetId).networkAssetImage
     }
 
-    var emptyConentModel: EmptyContentTypeViewModel {
+    var emptyContentModel: EmptyContentTypeViewModel {
         let buy = assetData.metadata.isBuyEnabled ? onSelectBuy : nil
-        return EmptyContentTypeViewModel(type: .asset(
-            symbol: assetModel.symbol,
-            buy: buy
-        ))
+        return EmptyContentTypeViewModel(
+            type: .asset(symbol: assetModel.symbol, buy: buy, isViewOnly: wallet.isViewOnly)
+        )
     }
 
     var assetDataModel: AssetDataViewModel {
@@ -130,25 +138,15 @@ public final class AssetSceneViewModel: Sendable {
         )
     }
     
-    var allBanners: [Banner] {
-        let allBanners = (assetDataModel.isActive ? [] : [
-            Banner(
-                wallet: .none,
-                asset: assetDataModel.asset,
-                chain: .none,
-                event: .activateAsset,
-                state: .alwaysActive
-            )
-        ])
-        
-        return allBanners + banners
+    var assetBannerViewModel: AssetBannersViewModel {
+        AssetBannersViewModel(assetData: assetData, banners: banners)
     }
     
     var assetHeaderModel: AssetHeaderViewModel {
         AssetHeaderViewModel(
             assetDataModel: assetDataModel,
             walletModel: walletModel,
-            bannerEventsViewModel: HeaderBannerEventViewModel(events: allBanners.map(\.event))
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: assetBannerViewModel.allBanners.map(\.event))
         )
     }
 
@@ -156,12 +154,10 @@ public final class AssetSceneViewModel: Sendable {
     public var assetModel: AssetViewModel { AssetViewModel(asset: assetData.asset) }
     public var walletModel: WalletViewModel { WalletViewModel(wallet: input.wallet) }
 
-    public var addImage: Image { Images.System.plus }
     public var optionsImage: Image { Images.System.ellipsis }
     public var priceAlertsSystemImage: String { assetData.isPriceAlertsEnabled ? SystemImage.bellFill : SystemImage.bell }
     public var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
-
-    public var isDeveloperEnabled: Bool { preferences.isDeveloperEnabled }
+    public var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts }
 
     public var menuItems: [ActionMenuItemType] {
         [.button(title: viewAddressOnTitle, systemImage: SystemImage.globe, action: { self.onSelect(url: self.addressExplorerUrl) }),
@@ -169,12 +165,16 @@ public final class AssetSceneViewModel: Sendable {
          .button(title: Localized.Common.share, systemImage: SystemImage.share, action: onSelectShareAsset)].compactMap { $0 }
     }
 
-    var scoreViewModel: AssetScoreViewModel {
-        AssetScoreViewModel(score: assetData.metadata.rankScore)
+    var scoreViewModel: AssetScoreTypeViewModel {
+        AssetScoreTypeViewModel(score: assetData.metadata.rankScore)
     }
 
     var showStatus: Bool {
         scoreViewModel.hasWarning
+    }
+    
+    var priceAlertsViewModel: PriceAlertsViewModel {
+        PriceAlertsViewModel(priceAlerts: assetData.priceAlerts)
     }
 }
 
@@ -198,6 +198,7 @@ extension AssetSceneViewModel {
     func onSelectHeader(_ buttonType: HeaderButtonType) {
         let selectType: SelectedAssetType = switch buttonType {
         case .buy: .buy(assetData.asset)
+        case .sell: .sell(assetData.asset)
         case .send: .send(.asset(assetData.asset))
         case .swap: .swap(assetData.asset, nil)
         case .receive: .receive(.asset)
@@ -215,38 +216,47 @@ extension AssetSceneViewModel {
         isPresentingAssetSheet = .info(.watchWallet)
     }
 
-    func onSelectBanner(_ banner: Banner) {
-        let action = BannerViewModel(banner: banner).action
-        switch banner.event {
-        case .stake:
-            onSelectHeader(.stake)
-        case .activateAsset:
-            isPresentingAssetSheet = .transfer(
-                TransferData(
-                    type: .account(assetData.asset, .activate),
-                    recipientData: RecipientData(
-                        recipient: Recipient(
-                            name: .none,
-                            address: "",
-                            memo: .none
+    func onSelectBanner(_ action: BannerAction) {
+        switch action.type {
+        case .event(let event):
+            switch event {
+            case .stake:
+                onSelectHeader(.stake)
+            case .activateAsset:
+                isPresentingAssetSheet = .transfer(
+                    TransferData(
+                        type: .account(assetData.asset, .activate),
+                        recipientData: RecipientData(
+                            recipient: Recipient(
+                                name: .none,
+                                address: "",
+                                memo: .none
+                            ),
+                            amount: .none
                         ),
-                        amount: .none
-                    ),
-                    value: 0
+                        value: 0
+                    )
                 )
-            )
-        case .enableNotifications,
-                .accountActivation,
-                .accountBlockedMultiSignature:
+            case .enableNotifications,
+                    .accountActivation,
+                    .accountBlockedMultiSignature,
+                    .onboarding:
+                Task {
+                    try await bannerService.handleAction(action)
+                }
+            case .suspiciousAsset: break
+            }
+        case .button(let bannerButton):
+            switch bannerButton {
+            case .buy: onSelectHeader(.buy)
+            case .receive: onSelectHeader(.receive)
+            }
+        case .closeBanner:
             Task {
                 try await bannerService.handleAction(action)
             }
         }
         onSelect(url: action.url)
-    }
-
-    func onCloseBanner(_ banner: Banner) {
-        bannerService.onClose(banner)
     }
 
     func onSelectBuy() {
@@ -262,15 +272,6 @@ extension AssetSceneViewModel {
 
     public func onTransferComplete() {
         isPresentingAssetSheet = .none
-    }
-
-    public func onSetPriceAlertComplete(message: String) {
-        isPresentingAssetSheet = .none
-        isPresentingToastMessage = ToastMessage(title: message, image: priceAlertsSystemImage)
-    }
-
-    public func onSelectSetPriceAlerts() {
-        isPresentingAssetSheet = .setPriceAlert
     }
 
     public func onTogglePriceAlert() {

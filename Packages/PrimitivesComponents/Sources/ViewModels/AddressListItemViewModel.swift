@@ -5,6 +5,7 @@ import Primitives
 import Localization
 import Components
 import Formatters
+import Style
 
 public struct AddressListItemViewModel {
     
@@ -17,18 +18,18 @@ public struct AddressListItemViewModel {
     public let title: String
     public let account: SimpleAccount
     public let mode: Mode
-    private let explorerService: ExplorerLinkFetchable
+    private let addressLink: BlockExplorerLink
 
     public init(
         title: String,
         account: SimpleAccount,
         mode: Mode,
-        explorerService: some ExplorerLinkFetchable
+        addressLink: BlockExplorerLink
     ) {
         self.title = title
         self.account = account
         self.mode = mode
-        self.explorerService = explorerService
+        self.addressLink = addressLink
     }
 
     public var subtitle: String {
@@ -43,9 +44,6 @@ public struct AddressListItemViewModel {
         account.assetImage
     }
 
-    public var addressLink: BlockExplorerLink {
-        explorerService.addressUrl(chain: account.chain, address: account.address)
-    }
 
     public var addressExplorerText: String {
         Localized.Transaction.viewOn(addressLink.name)
@@ -73,6 +71,6 @@ public struct AddressListItemViewModel {
     }
 
     private func address(for style: AddressFormatter.Style) -> String {
-        return AddressFormatter(style: style, address: account.address, chain: account.chain).value()
+        AddressFormatter(style: style, address: account.address, chain: account.chain).value()
     }
 }

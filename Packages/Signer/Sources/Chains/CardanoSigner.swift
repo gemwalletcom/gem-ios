@@ -2,7 +2,6 @@
 
 import Foundation
 import WalletCore
-import WalletCorePrimitives
 import Primitives
 
 public struct CardanoSigner: Signable {
@@ -16,7 +15,7 @@ public struct CardanoSigner: Signable {
             $0.ttl = 190000000
         }
         signingInput.privateKey.append(privateKey)
-        signingInput.utxos = try input.utxos.map { utxo in
+        signingInput.utxos = try input.metadata.getUtxos().map { utxo in
             try CardanoTxInput.with {
                 $0.outPoint.txHash = try Data.from(hex: utxo.transaction_id)
                 $0.outPoint.outputIndex = UInt64(utxo.vout)
@@ -29,6 +28,10 @@ public struct CardanoSigner: Signable {
 
         if !output.errorMessage.isEmpty {
             throw AnyError(output.errorMessage)
+        }
+
+        if output.encoded.hexString.isEmpty {
+            throw AnyError("CardanoSigner: Transaction encoding failed - no data produced")
         }
 
         return output.encoded.hexString

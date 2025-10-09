@@ -19,12 +19,11 @@ let package = Package(
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "Store", path: "../../Packages/Store"),
-        .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
-        .package(name: "PriceService", path: "../../Services/PriceService"),
-        .package(name: "AssetsService", path: "../../Services/AssetsService"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
     ],
     targets: [
         .target(
@@ -35,12 +34,13 @@ let package = Package(
                 "Localization",
                 "Gemstone",
                 "Store",
-                "ExplorerService",
+                .product(name: "ExplorerService", package: "ChainServices"),
                 "PrimitivesComponents",
                 "Components",
                 "Preferences",
-                "PriceService",
-                "AssetsService"
+                .product(name: "PriceService", package: "FeatureServices"),
+                .product(name: "PriceAlertService", package: "FeatureServices"),
+                .product(name: "AssetsService", package: "FeatureServices")
             ],
             path: "Sources"
         ),

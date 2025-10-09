@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 import BannerService
 import ChainService
 import DeviceService
@@ -21,14 +22,16 @@ import AssetsService
 import TransactionsService
 import TransactionService
 import NFTService
-import WalletsService
 import WalletService
 import AvatarService
 import WalletSessionService
-import AppService
 import ScanService
 import SwapService
+import NameService
 import PerpetualService
+import WalletsService
+import AppService
+import AddressNameService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -72,6 +75,7 @@ struct ServicesFactory {
         )
         let stakeService = Self.makeStakeService(
             stakeStore: storeManager.stakeStore,
+            addressStore: storeManager.addressStore,
             chainFactory: chainServiceFactory
         )
         let nftService = Self.makeNftService(
@@ -139,9 +143,6 @@ struct ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserverService,
-            transactionService: transactionService,
-            chainServiceFactory: chainServiceFactory,
-            bannerSetupService: bannerSetupService,
             deviceService: deviceService
         )
 
@@ -164,14 +165,37 @@ struct ServicesFactory {
             deviceService: deviceService,
             bannerSetupService: bannerSetupService,
             configService: configService,
-            releaseService: AppReleaseService(configService: configService)
+            releaseService: AppReleaseService(configService: configService),
+            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
         )
 
         let perpetualService = Self.makePerpetualService(
             perpetualStore: storeManager.perpetualStore,
             assetStore: storeManager.assetStore,
+            priceAstore: storeManager.priceStore,
             balanceStore: storeManager.balanceStore,
             nodeProvider: nodeService
+        )
+        let perpetualObserverService = PerpetualObserverService(perpetualService: perpetualService)
+        
+        let nameService = NameService()
+        let scanService = ScanService(securePreferences: .standard)
+        let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
+        
+        let viewModelFactory = ViewModelFactory(
+            keystore: storages.keystore,
+            nodeService: nodeService,
+            scanService: scanService,
+            swapService: swapService,
+            walletsService: walletsService,
+            walletService: walletService,
+            stakeService: stakeService,
+            nameService: nameService,
+            balanceService: balanceService,
+            priceService: priceService,
+            transactionService: transactionService,
+            chainServiceFactory: chainServiceFactory,
+            addressNameService: addressNameService
         )
 
         return AppResolver.Services(
@@ -192,7 +216,7 @@ struct ServicesFactory {
             walletService: walletService,
             walletsService: walletsService,
             explorerService: explorerService,
-            scanService: ScanService(securePreferences: .standard),
+            scanService: scanService,
             nftService: nftService,
             avatarService: avatarService,
             swapService: swapService,
@@ -202,7 +226,11 @@ struct ServicesFactory {
             onstartService: onStartService,
             onstartAsyncService: onstartAsyncService,
             walletConnectorManager: walletConnectorManager,
-            perpetualService: perpetualService
+            perpetualService: perpetualService,
+            perpetualObserverService: perpetualObserverService,
+            nameService: nameService,
+            addressNameService: addressNameService,
+            viewModelFactory: viewModelFactory
         )
     }
 }
@@ -270,10 +298,12 @@ extension ServicesFactory {
 
     private static func makeStakeService(
         stakeStore: StakeStore,
+        addressStore: AddressStore,
         chainFactory: ChainServiceFactory
     ) -> StakeService {
         StakeService(
             store: stakeStore,
+            addressStore: addressStore,
             chainServiceFactory: chainFactory
         )
     }
@@ -368,9 +398,6 @@ extension ServicesFactory {
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        transactionService: TransactionService,
-        chainServiceFactory: ChainServiceFactory,
-        bannerSetupService: BannerSetupService,
         deviceService: DeviceService
     ) -> WalletsService {
         WalletsService(
@@ -379,9 +406,6 @@ extension ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            transactionService: transactionService,
-            bannerSetupService: bannerSetupService,
-            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
             deviceService: deviceService
         )
     }
@@ -415,7 +439,8 @@ extension ServicesFactory {
         deviceService: DeviceService,
         bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
-        releaseService: AppReleaseService
+        releaseService: AppReleaseService,
+        addressStatusService: AddressStatusService
     ) -> OnstartAsyncService {
         OnstartAsyncService(
             assetStore: assetStore,
@@ -425,7 +450,8 @@ extension ServicesFactory {
             deviceService: deviceService,
             bannerSetupService: bannerSetupService,
             configService: configService,
-            releaseService: releaseService
+            releaseService: releaseService,
+            addressStatusService: addressStatusService
         )
     }
     
@@ -444,6 +470,7 @@ extension ServicesFactory {
     private static func makePerpetualService(
         perpetualStore: PerpetualStore,
         assetStore: AssetStore,
+        priceAstore: PriceStore,
         balanceStore: BalanceStore,
         nodeProvider: any NodeURLFetchable
     ) -> PerpetualService {
@@ -452,8 +479,9 @@ extension ServicesFactory {
         return PerpetualService(
             store: perpetualStore,
             assetStore: assetStore,
+            priceStore: priceAstore,
             balanceStore: balanceStore,
-            providerFactory: providerFactory
+            provider: providerFactory.createProvider()
         )
     }
 }

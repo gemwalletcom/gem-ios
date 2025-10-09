@@ -15,12 +15,4 @@ struct SwapperErrorTests {
         #expect(SwapperError.NotSupportedChain.isRetryAvailable == false)
         #expect(SwapperError.InvalidAmount("").isRetryAvailable == false)
     }
-    
-    @Test
-    func underlyingError() {
-        let swapperError = SwapperError.TransactionError("Attempt to debit an account but found no record of a prior credit")
-        let errorWrapper = ErrorWrapper(swapperError)
-        
-        #expect(errorWrapper.errorDescription == "Attempt to debit an account but found no record of a prior credit")
-    }
 }

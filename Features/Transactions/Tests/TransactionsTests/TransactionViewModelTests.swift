@@ -10,7 +10,7 @@ import Primitives
 final class TransactionViewModelTests {
 
     @Test
-    func testTransactionTitle() {
+    func transactionTitle() {
         testTransactionTitle(expectedTitle: "Received", transaction: .mock(state: .confirmed))
         testTransactionTitle(expectedTitle: "Sent", transaction: .mock(state: .confirmed, direction: .outgoing))
         testTransactionTitle(expectedTitle: "Transfer", transaction: .mock(state: .failed))
@@ -18,13 +18,13 @@ final class TransactionViewModelTests {
     }
     
     @Test
-    func testAutoValueFormatter() {
-        #expect(TransactionViewModel.mock(toValue: "1000000").subtitle == "+1.00 USDT")
-        #expect(TransactionViewModel.mock(toValue: "10000").subtitle == "+0.01 USDT")
-        #expect(TransactionViewModel.mock(toValue: "1000").subtitle == "+0.001 USDT")
-        #expect(TransactionViewModel.mock(toValue: "100").subtitle == "+0.0001 USDT")
-        #expect(TransactionViewModel.mock(toValue: "10").subtitle == "+0.00001 USDT")
-        #expect(TransactionViewModel.mock(toValue: "1").subtitle == "+0.000001 USDT")
+    func autoValueFormatter() {
+        #expect(TransactionViewModel.mock(toValue: "1000000").subtitleTextValue?.text == "+1.00 USDT")
+        #expect(TransactionViewModel.mock(toValue: "10000").subtitleTextValue?.text == "+0.01 USDT")
+        #expect(TransactionViewModel.mock(toValue: "1000").subtitleTextValue?.text == "+0.001 USDT")
+        #expect(TransactionViewModel.mock(toValue: "100").subtitleTextValue?.text == "+0.0001 USDT")
+        #expect(TransactionViewModel.mock(toValue: "10").subtitleTextValue?.text == "+0.00001 USDT")
+        #expect(TransactionViewModel.mock(toValue: "1").subtitleTextValue?.text == "+0.000001 USDT")
     }
     
     @Test
@@ -39,7 +39,7 @@ final class TransactionViewModelTests {
     }
     
     @Test
-    func titleExtra_usesAddressNames() {
+    func titleExtraUsesAddressNames() {
         // Test with outgoing transaction - should use toAddress
         let toAddress = AddressName.mock(address: "0x742d35cc6327c516e07e17dddaef8b48ca1e8c4a", name: "Hyperliquid")
         let hyperliquidViewModel = TransactionViewModel.mock(
@@ -48,7 +48,7 @@ final class TransactionViewModelTests {
             participant: "0x742d35cc6327c516e07e17dddaef8b48ca1e8c4a",
             toAddress: toAddress
         )
-        #expect(hyperliquidViewModel.titleExtra?.contains("Hyperliquid") == true)
+        #expect(hyperliquidViewModel.titleExtraTextValue?.text.contains("Hyperliquid") == true)
         
         // Test with incoming transaction - should use fromAddress
         let fromAddress = AddressName.mock(address: "0x1111111111111111111111111111111111111111", name: "Sender")
@@ -58,7 +58,7 @@ final class TransactionViewModelTests {
             participant: "0x1111111111111111111111111111111111111111",
             fromAddress: fromAddress
         )
-        #expect(incomingViewModel.titleExtra?.contains("Sender") == true)
+        #expect(incomingViewModel.titleExtraTextValue?.text.contains("Sender") == true)
         
         // Test with unknown address - should use formatted address
         let unknownViewModel = TransactionViewModel.mock(
@@ -66,12 +66,12 @@ final class TransactionViewModelTests {
             direction: .outgoing,
             participant: "0x1234567890abcdef1234567890abcdef12345678"
         )
-        #expect(unknownViewModel.titleExtra?.contains("0x1234") == true)
-        #expect(unknownViewModel.titleExtra?.contains("5678") == true)
+        #expect(unknownViewModel.titleExtraTextValue?.text.contains("0x1234") == true)
+        #expect(unknownViewModel.titleExtraTextValue?.text.contains("5678") == true)
     }
 
     func testTransactionTitle(expectedTitle: String, transaction: Transaction) {
-        #expect(TransactionViewModel(explorerService: MockExplorerLink(), transaction: .mock(transaction: transaction), formatter: .full).title == expectedTitle)
+        #expect(TransactionViewModel(explorerService: MockExplorerLink(), transaction: .mock(transaction: transaction), currency: "USD").titleTextValue.text == expectedTitle)
     }
 }
 
@@ -120,7 +120,7 @@ extension TransactionViewModel {
         return TransactionViewModel(
             explorerService: MockExplorerLink(),
             transaction: extended,
-            formatter: .auto
+            currency: "USD"
         )
     }
 }

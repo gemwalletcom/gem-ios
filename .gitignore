@@ -7,6 +7,7 @@
 xcuserdata/
 DerivedData/
 build/
+.build/
 .xcframework/
 
 # Swift Package Manager
@@ -33,6 +34,9 @@ build/
 .vscode/
 .vscode/settings.json
 
+# Claude Code settings
+.claude/settings.local.json
+
 # Dependency Management
 Packages/Gemstone/
 
@@ -45,3 +49,6 @@ sources.png
 
 # Git-specific
 *.orig
+
+# rust
+target/

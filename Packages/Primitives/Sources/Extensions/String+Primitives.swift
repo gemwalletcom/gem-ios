@@ -96,6 +96,10 @@ public extension String {
         }
         return String(self[firstNonZeroIndex...])
     }
+    
+    func wrap(_ value: String) -> String {
+        "\(value)\(self)\(value)"
+    }
 }
 
 extension Optional where Wrapped == String {

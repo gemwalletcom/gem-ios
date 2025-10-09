@@ -50,6 +50,9 @@ public extension Spacing {
         public static let top: CGFloat = space16
         /// 8
         public static let bottom: CGFloat = space8
+        
+        /// 72
+        public static let bannerHeight: CGFloat = 72
 
         public struct button {
             /// 340
@@ -68,6 +71,10 @@ public extension Spacing {
 }
 
 public extension Sizing {
+    struct button {
+        public static let paddingHorizontal: CGFloat = .space12
+        public static let paddingVertical: CGFloat = .space12
+    }
     struct image {
         /// 10
         public static let tiny: CGFloat = 10
@@ -115,10 +122,5 @@ public extension Sizing {
         public struct transactions {
             public static let height: CGFloat = Sizing.image.asset
         }
-    }
-    
-    struct presentation {
-        /// 24
-        public static let cornerRadius: CGFloat = 24
     }
 }

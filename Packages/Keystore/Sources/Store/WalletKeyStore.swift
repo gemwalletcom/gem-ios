@@ -4,6 +4,7 @@ import struct Formatters.MnemonicFormatter
 import Foundation
 import Primitives
 @preconcurrency import WalletCore
+import WalletCorePrimitives
 
 public struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore
@@ -26,7 +27,7 @@ public struct WalletKeyStore: Sendable {
             encryptPassword: password,
             coins: []
         )
-        return try addCoins(wallet: wallet, chains: chains, password: password)
+        return try addCoins(wallet: wallet, existingChains: [], newChains: chains, password: password)
     }
 
     public static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
@@ -103,18 +104,25 @@ public struct WalletKeyStore: Sendable {
         )
     }
 
-    func addCoins(wallet: WalletCore.Wallet, chains: [Chain], password: String) throws -> Primitives.Wallet {
+    public func addCoins(wallet: WalletCore.Wallet, existingChains: [Chain], newChains: [Chain], password: String) throws -> Primitives.Wallet {
+        let allChains = existingChains + newChains
         let exclude = [Chain.solana]
-        let coins = chains.filter { !exclude.contains($0) }.map { $0.coinType }.asSet().asArray()
-
+        let coins = allChains.filter { !exclude.contains($0) }.map { $0.coinType }.asSet().asArray()
+        let existingCoinTypes = existingChains.map({ $0.coinType }).asSet()
+        let newCoinTypes = newChains.map({ $0.coinType }).asSet()
+        
         // Tricky wallet core implementation. By default is coins: [], it will create ethereum
-        let _ = try keyStore.removeAccounts(wallet: wallet, coins: [.ethereum] + exclude.map { $0.coinType }, password: password)
-        if chains.contains(.solana) {
+        // if single chain, remove all to simplify
+        if existingChains.isEmpty && newChains.count == 1 {
+            let _ = try keyStore.removeAccounts(wallet: wallet, coins: [.ethereum] + exclude.map { $0.coinType }, password: password)
+        }
+        if newChains.contains(.solana) && !existingChains.contains(.solana) {
             // By default solana derived a wrong derivation path, need to adjust use a new one
             let _ = try wallet.getAccount(password: password, coin: .solana, derivation: .solanaSolana)
         }
-
-        let _ = try keyStore.addAccounts(wallet: wallet, coins: coins, password: password)
+        if newChains.isNotEmpty && newCoinTypes.subtracting(existingCoinTypes).isNotEmpty {
+            let _ = try keyStore.addAccounts(wallet: wallet, coins: coins, password: password)
+        }
 
         let type: Primitives.WalletType = {
             if wallet.key.isMnemonic {
@@ -122,13 +130,11 @@ public struct WalletKeyStore: Sendable {
             }
             return .privateKey
         }()
-
-        let accounts = chains.compactMap { chain in
-            if let account = wallet.accounts.filter({ $0.coin == chain.coinType }).first {
-                return account.mapToAccount(chain: chain)
-            }
-            return .none
+        
+        let accounts = allChains.compactMap { chain in
+            wallet.accounts.filter({ $0.coin == chain.coinType }).first?.mapToAccount(chain: chain)
         }
+
         return Wallet(
             id: wallet.id,
             name: wallet.key.name,
@@ -141,9 +147,9 @@ public struct WalletKeyStore: Sendable {
         )
     }
 
-    func addChains(chains: [Chain], wallet: Primitives.Wallet, password: String) throws -> Primitives.Wallet {
+    public func addChains(wallet: Primitives.Wallet, existingChains: [Chain], newChains: [Chain], password: String) throws -> Primitives.Wallet {
         let wallet = try getWallet(id: wallet.id)
-        return try addCoins(wallet: wallet, chains: chains, password: password)
+        return try addCoins(wallet: wallet, existingChains: existingChains, newChains: newChains, password: password)
     }
 
     private func getWallet(id: String) throws -> WalletCore.Wallet {

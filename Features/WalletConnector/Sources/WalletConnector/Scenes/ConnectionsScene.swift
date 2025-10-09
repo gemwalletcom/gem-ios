@@ -8,6 +8,7 @@ import Components
 import QRScanner
 import Style
 import PrimitivesComponents
+import Localization
 
 public struct ConnectionsScene: View {
     @State private var model: ConnectionsViewModel
@@ -26,11 +27,10 @@ public struct ConnectionsScene: View {
                 )
                 ButtonListItem(
                     title: model.scanQRCodeButtonTitle,
-                    image: Images.System.qrCode,
+                    image: Images.System.qrCodeViewfinder,
                     action: model.onScan
                 )
             }
-            .listRowInsets(.assetListRowInsets)
             
             ForEach(model.sections) { section in
                 Section(section.title.or(.empty)) {
@@ -48,7 +48,6 @@ public struct ConnectionsScene: View {
                         }
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
         }
         .observeQuery(
@@ -69,8 +68,17 @@ public struct ConnectionsScene: View {
         }
         .toolbarInfoButton(url: model.docsUrl)
         .alertSheet($model.isPresentingAlertMessage)
+        .toast(
+            isPresenting: $model.isPresentingConnectorBar,
+            message: ToastMessage(
+                title: "\(Localized.WalletConnect.brandName)...",
+                image: SystemImage.network
+            ),
+            duration: .infinity,
+            tapToDismiss: false
+        )
         .navigationTitle(model.title)
         .taskOnce { model.updateSessions() }
+        .onChange(of: model.walletConnectorPresenter?.isPresentingSheet?.id, model.hideConnectionBar)
     }
-
 }

@@ -9,22 +9,28 @@ import Formatters
 
 public struct ChainNodeViewModel: Sendable {
     public let chainNode: ChainNode
-    private let nodeStatus: NodeStatus
+
+    private let statusState: NodeStatusState
     private let formatter: ValueFormatter
 
-    public init(
+    init(
         chainNode: ChainNode,
-        nodeStatus: NodeStatus,
+        statusState: NodeStatusState,
         formatter: ValueFormatter
     ) {
         self.chainNode = chainNode
-        self.nodeStatus = nodeStatus
+        self.statusState = statusState
         self.formatter = formatter
     }
 
     public var title: String {
         guard let host = chainNode.host else { return "" }
-        return chainNode.isGemNode ? Localized.Nodes.gemWalletNode : host
+        if host.contains("-asia.gemnodes.com") {
+            return Localized.Nodes.gemWalletNode + " Asia"
+        } else if host.contains("gemnodes.com") {
+            return Localized.Nodes.gemWalletNode
+        }
+        return host
     }
 
     public var titleExtra: String? {
@@ -40,7 +46,7 @@ public struct ChainNodeViewModel: Sendable {
     }
 
     public var titleTagType: TitleTagType {
-        switch nodeStatus {
+        switch statusState {
         case .result, .error: .none
         case .none: .progressView(scale: 1.24)
         }
@@ -54,8 +60,8 @@ public struct ChainNodeViewModel: Sendable {
         )
     }
 
-    private var nodeStatusModel: NodeStatusViewModel {
-        NodeStatusViewModel(nodeStatus: nodeStatus)
+    private var nodeStatusModel: NodeStatusStateViewModel {
+        NodeStatusStateViewModel(nodeStatus: statusState)
     }
 }
 

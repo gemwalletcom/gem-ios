@@ -1,0 +1,73 @@
+{
+  "id": "non-eip155-optional-test",
+  "pairingTopic": "non-eip155-optional-topic",
+  "proposer": {
+    "name": "CosmosApp",
+    "description": "App with non-EIP155 optional chains",
+    "url": "https://cosmos.app",
+    "icons": ["https://cosmos.app/icon.png"],
+    "redirect": {
+      "native": "cosmosapp://open",
+      "universal": "https://cosmos.app/deeplink",
+      "linkMode": true
+    }
+  },
+  "requiredNamespaces": {},
+  "optionalNamespaces": {
+    "cosmos": {
+      "chains": [
+        "cosmos:cosmoshub-4"
+      ],
+      "methods": ["cosmos_sendTransaction"],
+      "events": ["cosmos_signMessage"]
+    }
+  },
+  "sessionProperties": {
+    "theme": "dark",
+    "version": "1.0.0"
+  },
+  "proposal": {
+    "relays": [
+      {
+        "protocol": "waku",
+        "data": "relayData"
+      }
+    ],
+    "proposer": {
+      "publicKey": "cosmosPublicKey",
+      "metadata": {
+        "name": "CosmosApp",
+        "description": "App with non-EIP155 optional chains",
+        "url": "https://cosmos.app",
+        "icons": ["https://cosmos.app/icon.png"],
+        "redirect": {
+          "native": "cosmosapp://open",
+          "universal": "https://cosmos.app/deeplink",
+          "linkMode": true
+        }
+      }
+    },
+    "requiredNamespaces": {
+      "eip155": {
+        "chains": [
+          "eip155:1"
+        ],
+        "methods": ["eth_sendTransaction"],
+        "events": ["chainChanged"]
+      }
+    },
+    "optionalNamespaces": {
+      "cosmos": {
+        "chains": [
+          "cosmos:cosmoshub-4"
+        ],
+        "methods": ["cosmos_sendTransaction"],
+        "events": ["cosmos_signMessage"]
+      }
+    },
+    "sessionProperties": {
+      "theme": "dark"
+    },
+    "expiryTimestamp": 1700000000
+  }
+}

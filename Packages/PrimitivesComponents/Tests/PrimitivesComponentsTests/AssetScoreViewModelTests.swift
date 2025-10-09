@@ -7,24 +7,25 @@ struct AssetScoreViewModelTests {
 
     @Test
     func testWarning() {
-        #expect(AssetScoreViewModel(score: 0).hasWarning)
-        #expect(AssetScoreViewModel(score: 5).hasWarning)
-        #expect(AssetScoreViewModel(score: 6).hasWarning)
-        #expect(AssetScoreViewModel(score: 15).hasWarning)
-        #expect(!AssetScoreViewModel(score: 16).hasWarning)
+        #expect(!AssetScoreTypeViewModel(score: 0).hasWarning)
+        #expect(!AssetScoreTypeViewModel(score: 5).hasWarning)
+        #expect(AssetScoreTypeViewModel(score: 6).hasWarning)
+        #expect(AssetScoreTypeViewModel(score: 15).hasWarning)
+        #expect(!AssetScoreTypeViewModel(score: 16).hasWarning)
     }
 
     @Test
     func testStatus() {
-        #expect(AssetScoreViewModel(score: 3).status == "Suspicious")
-        #expect(AssetScoreViewModel(score: 10).status == "Unverified")
-        #expect(AssetScoreViewModel(score: 20).status.isEmpty)
+        #expect(AssetScoreTypeViewModel(score: 3).status == "Suspicious")
+        #expect(AssetScoreTypeViewModel(score: 10).status == "Unverified")
+        #expect(AssetScoreTypeViewModel(score: 20).status.isEmpty)
     }
-
+    
     @Test
-    func testAssetImage() {
-        #expect(AssetScoreViewModel(score: 2).assetImage != nil)
-        #expect(AssetScoreViewModel(score: 12).assetImage != nil)
-        #expect(AssetScoreViewModel(score: 30).assetImage == nil)
+    func testShouldShowBanner() {
+        #expect(AssetScoreTypeViewModel(score: 0).shouldShowBanner)
+        #expect(!AssetScoreTypeViewModel(score: 30).shouldShowBanner)
+        #expect(!AssetScoreTypeViewModel(score: 50).shouldShowBanner)
+        #expect(!AssetScoreTypeViewModel(score: 100).shouldShowBanner)
     }
 }

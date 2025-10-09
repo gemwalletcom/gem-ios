@@ -28,6 +28,8 @@ public struct SecurityScene: View {
                     Toggle(model.privacyLockTitle, isOn: $model.isPrivacyLockEnabled)
                         .toggleStyle(AppToggleStyle())
                 }
+            } footer: {
+                Text(model.authenticationFooter)
             }
 
             Section {

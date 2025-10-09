@@ -9,6 +9,7 @@ public enum PushNotification: Equatable, Sendable {
     case buyAsset(AssetId)
     case swapAsset(AssetId, AssetId?)
     case test
+    case support
     case unknown
 
     public init(from userInfo: [AnyHashable: Any]) throws {
@@ -41,6 +42,8 @@ public enum PushNotification: Equatable, Sendable {
             let fromAssetId = try AssetId(id: swapAsset.fromAssetId)
             let toAssetId = try AssetId(id: swapAsset.toAssetId)
             self = .swapAsset(fromAssetId, toAssetId)
+        case .support:
+            self = .support
         case .test:
             self = .test
         }

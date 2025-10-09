@@ -4,7 +4,6 @@ import Foundation
 import BigInt
 
 public struct Balance: Codable, Equatable, Hashable, Sendable {
-
     public var available: BigInt
     public var frozen: BigInt
     public var locked: BigInt
@@ -12,6 +11,8 @@ public struct Balance: Codable, Equatable, Hashable, Sendable {
     public var pending: BigInt
     public var rewards: BigInt
     public var reserved: BigInt
+    public var withdrawable: BigInt
+    public var metadata: BalanceMetadata?
 
     public init(
         available: BigInt = .zero,
@@ -20,7 +21,9 @@ public struct Balance: Codable, Equatable, Hashable, Sendable {
         staked: BigInt = .zero,
         pending: BigInt = .zero,
         rewards: BigInt = .zero,
-        reserved: BigInt = .zero
+        reserved: BigInt = .zero,
+        withdrawable: BigInt = .zero,
+        metadata: BalanceMetadata? = .none
     ) {
         self.available = available
         self.frozen = frozen
@@ -29,5 +32,7 @@ public struct Balance: Codable, Equatable, Hashable, Sendable {
         self.pending = pending
         self.rewards = rewards
         self.reserved = reserved
+        self.withdrawable = withdrawable
+        self.metadata = metadata
     }
 }

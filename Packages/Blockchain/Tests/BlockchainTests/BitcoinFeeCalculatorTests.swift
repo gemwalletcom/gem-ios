@@ -9,7 +9,7 @@ import PrimitivesTestKit
 
 @testable import Blockchain
 
-struct BitcoinFeeTests {
+struct BitcoinServiceTests {
     let utxos: [UTXO] = [
         UTXO(
             transaction_id: "21d603f2bcf5bf3c9b653ec70f53cf6caf9ad51d304e9fbbf609832d1f9a1fec",
@@ -42,8 +42,8 @@ struct BitcoinFeeTests {
 
     @Test
     func testCalculateFeeSuccess() throws {
-        let fee = try BitcoinService.BitcoinFeeCalculator.calculate(
-            chain: chain,
+        let service = BitcoinService(chain: chain)
+        let fee = try service.calculate(
             senderAddress: feeInput.senderAddress,
             destinationAddress: feeInput.destinationAddress,
             amount: BigInt(1000),
@@ -73,8 +73,8 @@ struct BitcoinFeeTests {
         )
 
         #expect(throws: ChainCoreError.incorrectAmount) {
-            _ = try BitcoinService.BitcoinFeeCalculator.calculate(
-                chain: chain,
+            let service = BitcoinService(chain: chain)
+            _ = try service.calculate(
                 senderAddress: incorrectAmountFeeInput.senderAddress,
                 destinationAddress: incorrectAmountFeeInput.destinationAddress,
                 amount: incorrectAmountFeeInput.value,
@@ -88,8 +88,8 @@ struct BitcoinFeeTests {
     @Test
     func testCalculateFeeCantEstimateFee() throws {
         #expect(throws: ChainCoreError.cantEstimateFee) {
-            _ = try BitcoinService.BitcoinFeeCalculator.calculate(
-                chain: chain,
+            let service = BitcoinService(chain: chain)
+            _ = try service.calculate(
                 senderAddress: feeInput.senderAddress,
                 destinationAddress: feeInput.destinationAddress,
                 amount: feeInput.value,

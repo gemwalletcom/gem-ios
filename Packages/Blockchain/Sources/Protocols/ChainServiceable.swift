@@ -9,8 +9,8 @@ public typealias ChainServiceable =
     ChainFeeRateFetchable &
     ChainIDFetchable &
     ChainLatestBlockFetchable &
+    ChainNodeStatusFetchable &
     ChainStakable &
-    ChainSyncable &
     ChainTokenable &
     ChainTransactionDataLoadable &
     ChainTransactionPreloadable &
@@ -30,7 +30,7 @@ public protocol ChainFeeRateFetchable: Sendable {
 }
 
 public protocol ChainTransactionPreloadable: Sendable {
-    func preload(input: TransactionPreloadInput) async throws -> TransactionPreload
+    func preload(input: TransactionPreloadInput) async throws -> TransactionLoadMetadata
 }
 
 public protocol ChainTransactionDataLoadable: Sendable {
@@ -41,31 +41,9 @@ public protocol ChainBroadcastable: Sendable {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String
 }
 
-public struct TransactionStateRequest: Sendable {
-    public let id: String
-    public let senderAddress: String
-    public let recipientAddress: String
-    public let block: String
-
-    public init(
-        id: String,
-        senderAddress: String,
-        recipientAddress: String,
-        block: String
-    ) {
-        self.id = id
-        self.senderAddress = senderAddress
-        self.recipientAddress = recipientAddress
-        self.block = block
-    }
-}
 
 public protocol ChainTransactionStateFetchable: Sendable {
     func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges
-}
-
-public protocol ChainSyncable: Sendable {
-    func getInSync() async throws -> Bool
 }
 
 public protocol ChainIDFetchable: Sendable {
@@ -79,7 +57,7 @@ public protocol ChainStakable: Sendable {
 
 public protocol ChainTokenable: Sendable {
     func getTokenData(tokenId: String) async throws -> Asset
-    func getIsTokenAddress(tokenId: String) -> Bool
+    func getIsTokenAddress(tokenId: String) async throws -> Bool
 }
 
 public protocol ChainLatestBlockFetchable: Sendable {
@@ -90,13 +68,44 @@ public protocol ChainAddressStatusFetchable: Sendable {
     func getAddressStatus(address: String) async throws -> [AddressStatus]
 }
 
+public protocol ChainNodeStatusFetchable: Sendable {
+    func getNodeStatus(url: String) async throws -> NodeStatus
+}
+
 public protocol ChainFeePriorityPreference: Sendable {}
 
 public extension ChainFeeRateFetchable {
     func defaultPriority(for type: TransferDataType) -> FeePriority {
         switch type {
         case .swap(let fromAsset, _, _): fromAsset.chain == .bitcoin ? .fast : .normal
-        case .tokenApprove, .stake, .transfer, .deposit, .transferNft, .generic, .account, .perpetual: .normal
+        case .tokenApprove, .stake, .transfer, .deposit, .transferNft, .generic, .account, .perpetual, .withdrawal: .normal
         }
     }
 }
+
+public extension ChainStakable {
+    func getValidators(apr: Double) async throws -> [DelegationValidator] {
+        return []
+    }
+
+    func getStakeDelegations(address: String) async throws -> [DelegationBase] {
+        return []
+    }
+}
+
+public extension ChainTokenable {
+    func getTokenData(tokenId: String) async throws -> Asset {
+        throw AnyError("Not Implemented")
+    }
+    
+    func getIsTokenAddress(tokenId: String) -> Bool {
+        return false
+    }
+}
+
+public extension ChainAddressStatusFetchable {
+    func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        return []
+    }
+}
+

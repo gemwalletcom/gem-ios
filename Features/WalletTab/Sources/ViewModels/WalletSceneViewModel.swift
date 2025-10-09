@@ -13,6 +13,7 @@ import PrimitivesComponents
 import InfoSheet
 import Components
 import WalletService
+import Formatters
 
 @Observable
 @MainActor
@@ -37,7 +38,10 @@ public final class WalletSceneViewModel: Sendable {
 
     public var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     public var isPresentingSheet: WalletSceneSheetType?
-    
+    public var isPresentingSetPriceAlert: AssetId?
+    public var isPresentingToastMessage: ToastMessage?
+    public var isPresentingSearch = false
+
     public var isLoadingAssets: Bool = false
 
     public init(
@@ -54,7 +58,7 @@ public final class WalletSceneViewModel: Sendable {
         self.walletService = walletService
         self.observablePreferences = observablePreferences
 
-        self.totalFiatRequest = TotalValueRequest(walletId: wallet.id)
+        self.totalFiatRequest = TotalValueRequest(walletId: wallet.id, balanceType: .wallet)
         self.assetsRequest = AssetsRequest(
             walletId: wallet.id,
             filters: [.enabled]
@@ -66,6 +70,7 @@ public final class WalletSceneViewModel: Sendable {
             events: [
                 .enableNotifications,
                 .accountBlockedMultiSignature,
+                .onboarding
             ]
         )
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
@@ -76,8 +81,10 @@ public final class WalletSceneViewModel: Sendable {
     var pinnedTitle: String { Localized.Common.pinned }
     var manageTokenTitle: String { Localized.Wallet.manageTokenList }
 
-    var pinImage: Image { Images.System.pin }
+    public var searchImage: Image { Images.System.search }
     public var manageImage: Image { Images.Actions.manage }
+
+    var pinImage: Image { Images.System.pin }
 
     var showPinnedSection: Bool {
         !sections.pinned.isEmpty
@@ -103,7 +110,15 @@ public final class WalletSceneViewModel: Sendable {
         WalletHeaderViewModel(
             walletType: wallet.type,
             value: totalFiatValue,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: banners.map(\.event))
+        )
+    }
+
+    var walletBannersModel: WalletSceneBannersViewModel {
+        WalletSceneBannersViewModel(
+            banners: banners,
+            totalFiatValue: totalFiatValue
         )
     }
 }
@@ -121,7 +136,7 @@ extension WalletSceneViewModel {
             isLoadingAssets = false
         }
     }
-    
+
     public func onSelectWalletBar() {
         isPresentingSheet = .wallets
     }
@@ -130,12 +145,16 @@ extension WalletSceneViewModel {
         isPresentingSheet = .selectAssetType(.manage)
     }
 
+    public func onToggleSearch() {
+        isPresentingSearch.toggle()
+    }
+
     func onHeaderAction(type: HeaderButtonType) {
         let selectType: SelectAssetType = switch type {
         case .buy: .buy
         case .send: .send
         case .receive: .receive(.asset)
-        case .swap, .more, .stake, .deposit, .withdraw:
+        case .sell, .swap, .more, .stake, .deposit, .withdraw:
             fatalError()
         }
         isPresentingSheet = .selectAssetType(selectType)
@@ -149,16 +168,14 @@ extension WalletSceneViewModel {
         isPresentingSheet = .info(.watchWallet)
     }
 
-    func onBannerAction(banner: Banner) {
-        let action = BannerViewModel(banner: banner).action
-        switch banner.event {
-        case .stake,
-                .enableNotifications,
-                .accountActivation,
-                .accountBlockedMultiSignature,
-                .activateAsset:
-            Task {
-                try await handleBanner(action: action)
+    func onBanner(action: BannerAction) {
+        switch action.type {
+        case .event, .closeBanner:
+            Task { try await handleBanner(action: action) }
+        case .button(let bannerButton):
+            switch bannerButton {
+            case .buy: isPresentingSheet = .selectAssetType(.buy)
+            case .receive: isPresentingSheet = .selectAssetType(.receive(.asset))
             }
         }
         if let url = action.url {
@@ -174,12 +191,23 @@ extension WalletSceneViewModel {
         }
     }
 
-    func onPinAsset(_ assetId: AssetId, value: Bool) {
+    func onPinAsset(_ asset: Asset, value: Bool) {
         do {
-            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetId)
+            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: asset.id)
+            isPresentingToastMessage = ToastMessage(
+                title: value ? "\(Localized.Common.pinned) \(asset.name)" : "\(Localized.Common.unpin) \(asset.name)",
+                image: value ? SystemImage.pin : SystemImage.unpin
+            )
         } catch {
             NSLog("WalletSceneViewModel pin asset error: \(error)")
         }
+    }
+
+    func onCopyAddress(_ symbol: String, _ address: String) {
+        isPresentingToastMessage = ToastMessage(
+            title: "\(symbol): \(AddressFormatter(address: address, chain: nil).value())",
+            image: SystemImage.copy
+        )
     }
 
     public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
@@ -187,14 +215,19 @@ extension WalletSceneViewModel {
             refresh(for: newWallet)
         }
     }
-    
+
     func shouldStartLoadingAssets() {
         let preferences = WalletPreferences(walletId: wallet.id)
-        isLoadingAssets = !preferences.completeDiscoveryAssets && preferences.assetsTimestamp == .zero
+        isLoadingAssets = !preferences.completeInitialLoadAssets && preferences.assetsTimestamp == .zero
     }
-    
+
     public func onTransferComplete() {
         isPresentingSheet = nil
+    }
+
+    public func onSetPriceAlertComplete(message: String) {
+        isPresentingSetPriceAlert = nil
+        isPresentingToastMessage = ToastMessage(title: message, image: SystemImage.bellFill)
     }
 }
 

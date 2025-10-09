@@ -9,6 +9,7 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	public let name: String
 	public let provider: PerpetualProvider
 	public let assetId: AssetId
+	public let identifier: String
 	public let price: Double
 	public let pricePercentChange24h: Double
 	public let openInterest: Double
@@ -16,11 +17,12 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	public let funding: Double
 	public let leverage: [UInt8]
 
-	public init(id: String, name: String, provider: PerpetualProvider, assetId: AssetId, price: Double, pricePercentChange24h: Double, openInterest: Double, volume24h: Double, funding: Double, leverage: [UInt8]) {
+	public init(id: String, name: String, provider: PerpetualProvider, assetId: AssetId, identifier: String, price: Double, pricePercentChange24h: Double, openInterest: Double, volume24h: Double, funding: Double, leverage: [UInt8]) {
 		self.id = id
 		self.name = name
 		self.provider = provider
 		self.assetId = assetId
+		self.identifier = identifier
 		self.price = price
 		self.pricePercentChange24h = pricePercentChange24h
 		self.openInterest = openInterest
@@ -30,13 +32,70 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct PerpetualBalance: Codable, Equatable, Hashable, Sendable {
+	public let available: Double
+	public let reserved: Double
+	public let withdrawable: Double
+
+	public init(available: Double, reserved: Double, withdrawable: Double) {
+		self.available = available
+		self.reserved = reserved
+		self.withdrawable = withdrawable
+	}
+}
+
+public struct PerpetualBasic: Codable, Equatable, Hashable, Sendable {
+	public let assetId: AssetId
+	public let perpetualId: String
+	public let provider: PerpetualProvider
+
+	public init(assetId: AssetId, perpetualId: String, provider: PerpetualProvider) {
+		self.assetId = assetId
+		self.perpetualId = perpetualId
+		self.provider = provider
+	}
+}
+
+public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
+	case short
+	case long
+}
+
+public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
+	public let direction: PerpetualDirection
+	public let baseAsset: Asset
+	public let assetIndex: Int32
+	public let price: String
+	public let fiatValue: Double
+	public let size: String
+
+	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String) {
+		self.direction = direction
+		self.baseAsset = baseAsset
+		self.assetIndex = assetIndex
+		self.price = price
+		self.fiatValue = fiatValue
+		self.size = size
+	}
+}
+
+public struct PerpetualMetadata: Codable, Equatable, Hashable, Sendable {
+	public let isPinned: Bool
+
+	public init(isPinned: Bool) {
+		self.isPinned = isPinned
+	}
+}
+
 public struct PerpetualData: Codable, Equatable, Hashable, Sendable {
 	public let perpetual: Perpetual
 	public let asset: Asset
+	public let metadata: PerpetualMetadata
 
-	public init(perpetual: Perpetual, asset: Asset) {
+	public init(perpetual: Perpetual, asset: Asset, metadata: PerpetualMetadata) {
 		self.perpetual = perpetual
 		self.asset = asset
+		self.metadata = metadata
 	}
 }
 
@@ -52,7 +111,61 @@ public struct PerpetualPositionData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
-	case short
-	case long
+public struct PerpetualPositionsSummary: Codable, Equatable, Hashable, Sendable {
+	public let positions: [PerpetualPosition]
+	public let balance: PerpetualBalance
+
+	public init(positions: [PerpetualPosition], balance: PerpetualBalance) {
+		self.positions = positions
+		self.balance = balance
+	}
+}
+
+public enum AccountDataType: String, Codable, Equatable, Hashable, Sendable {
+	case activate
+}
+
+public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
+	case open(PerpetualConfirmData)
+	case close(PerpetualConfirmData)
+
+	enum CodingKeys: String, CodingKey, Codable {
+		case open = "Open",
+			close = "Close"
+	}
+
+	private enum ContainerCodingKeys: String, CodingKey {
+		case type, content
+	}
+
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: ContainerCodingKeys.self)
+		if let type = try? container.decode(CodingKeys.self, forKey: .type) {
+			switch type {
+			case .open:
+				if let content = try? container.decode(PerpetualConfirmData.self, forKey: .content) {
+					self = .open(content)
+					return
+				}
+			case .close:
+				if let content = try? container.decode(PerpetualConfirmData.self, forKey: .content) {
+					self = .close(content)
+					return
+				}
+			}
+		}
+		throw DecodingError.typeMismatch(PerpetualType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for PerpetualType"))
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: ContainerCodingKeys.self)
+		switch self {
+		case .open(let content):
+			try container.encode(CodingKeys.open, forKey: .type)
+			try container.encode(content, forKey: .content)
+		case .close(let content):
+			try container.encode(CodingKeys.close, forKey: .type)
+			try container.encode(content, forKey: .content)
+		}
+	}
 }

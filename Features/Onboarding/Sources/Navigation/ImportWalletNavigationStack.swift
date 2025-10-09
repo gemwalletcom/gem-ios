@@ -3,17 +3,21 @@
 import SwiftUI
 import Primitives
 import Localization
+import PrimitivesComponents
 
 public struct ImportWalletNavigationStack: View {
     @State private var navigationPath: NavigationPath = NavigationPath()
     @Binding private var isPresentingWallets: Bool
     private let model: ImportWalletTypeViewModel
+    private let nameService: any NameServiceable
 
     public init(
         model: ImportWalletTypeViewModel,
+        nameService: any NameServiceable,
         isPresentingWallets: Binding<Bool>
     ) {
         self.model = model
+        self.nameService = nameService
         _isPresentingWallets = isPresentingWallets
     }
 
@@ -37,6 +41,7 @@ public struct ImportWalletNavigationStack: View {
                 ImportWalletScene(
                     model: ImportWalletViewModel(
                         walletService: model.walletService,
+                        nameService: nameService,
                         type: type,
                         onFinish: {
                             model.acceptTerms()

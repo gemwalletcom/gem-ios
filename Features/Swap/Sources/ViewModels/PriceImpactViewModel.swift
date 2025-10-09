@@ -17,7 +17,7 @@ struct PriceImpactViewModel {
 
     private let swapConfig = GemstoneConfig.shared.getSwapConfig()
     private let valueFormatter = ValueFormatter(style: .full)
-    private let percentFormatter = CurrencyFormatter(type: .percent)
+    private let percentFormatter = CurrencyFormatter.percent
 
     init(fromAssetPrice: AssetPriceValue, fromValue: String, toAssetPrice: AssetPriceValue, toValue: String) {
         self.fromAssetPrice = fromAssetPrice
@@ -39,7 +39,7 @@ struct PriceImpactViewModel {
     var value: PriceImpactValue? { rawImpactPercentage.flatMap(evaluatePriceImpactValue) }
 
     var priceImpactText: String? {
-        priceImpactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
+        priceImpactPercentage.flatMap { CurrencyFormatter.percentSignLess.string($0) }
     }
 
     var priceImpactStyle: TextStyle {

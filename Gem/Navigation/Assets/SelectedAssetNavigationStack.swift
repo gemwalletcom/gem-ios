@@ -11,8 +11,12 @@ import PriceAlerts
 import Swap
 import Assets
 import Transfer
+import ChainService
+import ExplorerService
+import Signer
 
 struct SelectedAssetNavigationStack: View  {
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
@@ -20,6 +24,11 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
     @Environment(\.swapService) private var swapService
+    @Environment(\.balanceService) private var balanceService
+    @Environment(\.priceService) private var priceService
+    @Environment(\.transactionService) private var transactionService
+    @Environment(\.nameService) private var nameService
+    @Environment(\.addressNameService) private var addressNameService
 
     @State private var navigationPath = NavigationPath()
 
@@ -43,16 +52,20 @@ struct SelectedAssetNavigationStack: View  {
                 switch input.type {
                 case .send(let type):
                     RecipientNavigationView(
-                        model: RecipientSceneViewModel(
+                        confirmService: ConfirmServiceFactory.create(
+                            keystore: keystore,
+                            nodeService: nodeService,
+                            walletsService: walletsService,
+                            scanService: scanService,
+                            balanceService: balanceService,
+                            priceService: priceService,
+                            transactionService: transactionService,
+                            addressNameService: addressNameService,
+                            chain: input.asset.chain
+                        ),
+                        model: viewModelFactory.recipientScene(
                             wallet: wallet,
                             asset: input.asset,
-                            keystore: keystore,
-                            walletService: walletService,
-                            walletsService: walletsService,
-                            nodeService: nodeService,
-                            stakeService: stakeService,
-                            scanService: scanService,
-                            swapService: swapService,
                             type: type,
                             onRecipientDataAction: {
                                 navigationPath.append($0)
@@ -60,8 +73,7 @@ struct SelectedAssetNavigationStack: View  {
                             onTransferAction: {
                                 navigationPath.append($0)
                             }
-                        ),
-                        onComplete: onComplete
+                        )
                     )
                 case .receive:
                     ReceiveScene(
@@ -74,14 +86,23 @@ struct SelectedAssetNavigationStack: View  {
                     )
                 case .buy:
                     FiatConnectNavigationView(
-                        model: FiatSceneViewModel(
+                        model: viewModelFactory.fiatScene(
                             assetAddress: input.assetAddress,
-                            walletId: wallet.id
+                            walletId: wallet.walletId,
+                            type: .buy
+                        )
+                    )
+                case .sell:
+                    FiatConnectNavigationView(
+                        model: viewModelFactory.fiatScene(
+                            assetAddress: input.assetAddress,
+                            walletId: wallet.walletId,
+                            type: .sell
                         )
                     )
                 case let .swap(fromAsset, toAsset):
                     SwapNavigationView(
-                        model: SwapSceneViewModel(
+                        model: viewModelFactory.swapScene(
                             input: SwapInput(
                                 wallet: wallet,
                                 pairSelector: SwapPairSelectorViewModel(
@@ -89,26 +110,32 @@ struct SelectedAssetNavigationStack: View  {
                                     toAssetId: toAsset?.id ?? SwapPairSelectorViewModel.defaultSwapPair(for: fromAsset).toAssetId
                                 )
                             ),
-                            walletsService: walletsService,
-                            swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
-                            swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
                             onSwap: {
                                 navigationPath.append($0)
                             }
-                        ),
-                        onComplete: onComplete
+                        )
                     )
                 case .stake:
                     StakeNavigationView(
-                        wallet: wallet,
-                        assetId: input.asset.id,
-                        navigationPath: $navigationPath,
-                        onComplete: onComplete
+                        model: viewModelFactory.stakeScene(
+                            wallet: wallet,
+                            chain: input.asset.id.chain
+                        ),
+                        navigationPath: $navigationPath
                     )
                 }
             }
             .toolbarDismissItem(title: .done, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: TransferData.self) { data in
+                ConfirmTransferScene(
+                    model: viewModelFactory.confirmTransferScene(
+                        wallet: wallet,
+                        data: data,
+                        onComplete: onComplete
+                    )
+                )
+            }
         }
     }
 }

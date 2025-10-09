@@ -10,10 +10,15 @@ import Localization
 import Store
 import PrimitivesComponents
 import Formatters
+import Validators
+import BigInt
 
 @MainActor
 @Observable
 public final class FiatSceneViewModel {
+    private static let minimumFiatAmount: Double = 5
+    private static let maximumFiatAmount: Double = 10000
+
     private let fiatService: any GemAPIFiatService
     private let assetAddress: AssetAddress
     private let walletId: String
@@ -28,7 +33,7 @@ public final class FiatSceneViewModel {
     var state: StateViewType<[FiatQuote]> = .loading
 
     var input: FiatInput
-    var amountText: String
+    var inputValidationModel: InputValidationViewModel = InputValidationViewModel()
 
     var focusField: FiatScene.Field?
     var isPresentingFiatProvider: Bool = false
@@ -37,7 +42,8 @@ public final class FiatSceneViewModel {
         fiatService: any GemAPIFiatService = GemAPIService(),
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
-        walletId: String
+        walletId: String,
+        type: FiatQuoteType = .buy
     ) {
         self.fiatService = fiatService
         self.currencyFormatter = currencyFormatter
@@ -46,7 +52,6 @@ public final class FiatSceneViewModel {
 
         let buyAmount = FiatQuoteTypeViewModel(type: .buy).defaultAmount
         self.input = FiatInput(type: .buy, buyAmount: buyAmount)
-        self.amountText = String(Int(buyAmount))
 
         self.amountFormatter = FiatAmountFormatter(
             valueFormatter: ValueFormatter(locale: .US, style: .medium),
@@ -55,6 +60,12 @@ public final class FiatSceneViewModel {
 
         // TODO: - move asset request and query observing on top, just inject AssetData
         self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id)
+
+        self.inputValidationModel = InputValidationViewModel(
+            mode: .onDemand,
+            validators: inputValidation
+        )
+        self.inputValidationModel.text = String(Int(buyAmount))
     }
 
     var title: String {
@@ -156,10 +167,10 @@ extension FiatSceneViewModel {
     func onSelect(amount: Double) {
         switch input.type {
         case .buy:
-            amountText = amountFormatter.format(amount: amount, for: .buy)
+            inputValidationModel.text = amountFormatter.format(amount: amount, for: .buy)
         case .sell:
             let percentAmount = maxAmount * (amount / 100)
-            amountText = amountFormatter.format(amount: percentAmount, for: .sell)
+            inputValidationModel.text = amountFormatter.format(amount: percentAmount, for: .sell)
         }
     }
 
@@ -167,9 +178,9 @@ extension FiatSceneViewModel {
         switch input.type {
         case .buy:
             let randomAmount = typeModel(type: input.type).randomAmount(maxAmount: maxAmount) ?? .zero
-            amountText = amountFormatter.format(amount: randomAmount, for: .buy)
+            inputValidationModel.text = amountFormatter.format(amount: randomAmount, for: .buy)
         case .sell:
-            amountText = amountFormatter.format(amount: maxAmount, for: .sell)
+            inputValidationModel.text = amountFormatter.format(amount: maxAmount, for: .sell)
         }
     }
 
@@ -184,7 +195,8 @@ extension FiatSceneViewModel {
     }
 
     func onChangeType(_: FiatQuoteType, type: FiatQuoteType) {
-        amountText = amountFormatter.format(amount: input.amount, for: type)
+        inputValidationModel.text = amountFormatter.format(amount: input.amount, for: type)
+        inputValidationModel.update(validators: inputValidation)
         focusField = type == .buy ? .amountBuy : .amountSell
     }
 
@@ -214,7 +226,7 @@ extension FiatSceneViewModel {
                 let request = FiatQuoteRequest(
                     assetId: asset.id.identifier,
                     type: input.type,
-                    fiatCurrency: currencyFormatter.currencyCode,
+                    fiatCurrency: try Currency(id: currencyFormatter.currencyCode),
                     fiatAmount: input.type == .buy ? input.amount : nil,
                     cryptoValue: amountFormatter.formatCryptoValue(fiatAmount: input.amount, type: input.type),
                     walletAddress: assetAddress.address
@@ -269,6 +281,23 @@ extension FiatSceneViewModel {
         case .data(let items): .data(.plain(items.map { FiatQuoteViewModel(asset: asset, quote: $0, selectedQuote: input.quote, formatter: currencyFormatter) }))
         case .loading: .loading
         case .noData: .noData
+        }
+    }
+    
+    private var inputValidation: [any TextValidator] {
+        switch input.type {
+        case .buy:
+            [
+                .assetAmount(
+                    decimals: 0,
+                    validators: [FiatRangeValidator(
+                        range: BigInt(Self.minimumFiatAmount)...BigInt(Self.maximumFiatAmount),
+                        minimumValueText: currencyFormatter.string(Self.minimumFiatAmount),
+                        maximumValueText: currencyFormatter.string(Self.maximumFiatAmount)
+                    )]
+                )
+            ]
+        case .sell: []
         }
     }
 

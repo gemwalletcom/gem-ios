@@ -9,14 +9,19 @@ import Localization
 import Components
 import Formatters
 
-public struct BannerViewModel {
-    public  let banner: Banner
+struct BannerViewModel {
+    enum BannerViewType {
+        case list
+        case banner
+    }
 
-    public init(banner: Banner) {
+    private let banner: Banner
+
+    init(banner: Banner) {
         self.banner = banner
     }
 
-    public var image: AssetImage? {
+    var image: AssetImage? {
         switch banner.event {
         case .stake, .accountActivation, .activateAsset:
             guard let asset = asset else {
@@ -27,17 +32,14 @@ public struct BannerViewModel {
             return AssetImage.image(Images.System.bell)
         case .accountBlockedMultiSignature:
             return AssetImage.image(Images.System.exclamationmarkTriangle)
+        case .suspiciousAsset:
+            return AssetImage.image(Images.TokenStatus.risk)
+        case .onboarding:
+            return AssetImage.image(Images.System.bitcoin)
         }
-    }
-    
-    private var asset: Asset? {
-        if let asset = banner.asset {
-            return asset
-        }
-        return banner.chain?.asset
     }
 
-    public var title: String? {
+    var title: String? {
         switch banner.event {
         case .stake:
             guard let asset = asset else {
@@ -52,10 +54,13 @@ public struct BannerViewModel {
             return Localized.Common.warning
         case .activateAsset:
             return Localized.Transfer.ActivateAsset.title
+        case .suspiciousAsset:
+            return Localized.Banner.AssetStatus.title
+        case .onboarding: return Localized.Banner.Onboarding.title
         }
     }
 
-    public var description: String? {
+    var description: String? {
         switch banner.event {
         case .stake:
             guard let asset = asset else {
@@ -78,50 +83,104 @@ public struct BannerViewModel {
                 return .none
             }
             return Localized.Banner.ActivateAsset.description(asset.symbol, asset.chain.asset.name)
+        case .suspiciousAsset:
+            return Localized.Banner.AssetStatus.description
+        case .onboarding: return Localized.Banner.Onboarding.description
         }
     }
 
-    public var canClose: Bool {
+    var canClose: Bool {
         banner.state != .alwaysActive
     }
 
-    public var imageSize: CGFloat {
-        28
+    var imageSize: CGFloat {
+        switch banner.event {
+        case .stake,
+                .accountActivation,
+                .enableNotifications,
+                .accountBlockedMultiSignature,
+                .activateAsset,
+                .suspiciousAsset: 28
+        case .onboarding: .image.medium
+        }
     }
 
-    public var cornerRadius: CGFloat {
+    var cornerRadius: CGFloat {
         switch banner.event {
         case .stake,
             .accountActivation,
-            .activateAsset: 14
+            .activateAsset,
+            .suspiciousAsset: 14
         case .enableNotifications,
-            .accountBlockedMultiSignature: 0
+            .accountBlockedMultiSignature,
+            .onboarding: 0
         }
     }
     
-    public var action: BannerAction {
-        BannerAction(id: banner.id, event: banner.event, url: url)
+    var action: BannerAction {
+        BannerAction(id: banner.id, type: .event(banner.event), url: url)
     }
     
-    public var url: URL? {
+    var closeAction: BannerAction {
+        BannerAction(id: banner.id, type: .closeBanner, url: nil)
+    }
+    
+    var url: URL? {
         switch banner.event {
         case .stake,
             .enableNotifications,
-            .activateAsset:
+            .activateAsset,
+            .onboarding:
             return.none
         case .accountActivation:
             return asset?.chain.accountActivationFeeUrl
         case .accountBlockedMultiSignature:
             return Docs.url(.tronMultiSignature)
+        case .suspiciousAsset:
+            return Docs.url(.tokenVerification)
         }
     }
     
-    public var imageStyle: ListItemImageStyle? {
+    var imageStyle: ListItemImageStyle? {
         ListItemImageStyle(
             assetImage: image,
             imageSize: imageSize,
             cornerRadiusType: .custom(cornerRadius)
         )
+    }
+    
+    var viewType: BannerViewType {
+        switch banner.event {
+        case .stake,
+                .accountActivation,
+                .enableNotifications,
+                .accountBlockedMultiSignature,
+                .activateAsset,
+                .suspiciousAsset: .list
+        case .onboarding: .banner
+        }
+    }
+    
+    var buttons: [BannerButtonViewModel] {
+        switch banner.event {
+        case .stake,
+                .accountActivation,
+                .enableNotifications,
+                .accountBlockedMultiSignature,
+                .activateAsset,
+                .suspiciousAsset: []
+        case .onboarding: [
+            BannerButtonViewModel(button: .buy, banner: banner),
+            BannerButtonViewModel(button: .receive, banner: banner)
+        ]
+        }
+    }
+    
+    private var asset: Asset? {
+        if let asset = banner.asset {
+            return asset
+        }
+        return banner.chain?.asset
     }
 }
 

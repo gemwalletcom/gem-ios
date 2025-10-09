@@ -3,7 +3,8 @@ import Primitives
 import Style
 import Localization
 import WalletService
-import NameResolver
+import NameService
+import PrimitivesComponents
 import SwiftUI
 import Components
 import enum Keystore.KeystoreImportType
@@ -14,6 +15,7 @@ import struct Keystore.Mnemonic
 final class ImportWalletViewModel {
     private let walletService: WalletService
     private let wordSuggester = WordSuggester()
+    private let nameService: any NameServiceable
 
     let type: ImportWalletType
 
@@ -31,10 +33,12 @@ final class ImportWalletViewModel {
 
     init(
         walletService: WalletService,
+        nameService: any NameServiceable,
         type: ImportWalletType,
         onFinish: (() -> Void)?
     ) {
         self.walletService = walletService
+        self.nameService = nameService
         self.type = type
         self.name = WalletNameGenerator(type: type, walletService: walletService).name
         self.onFinish = onFinish
@@ -53,7 +57,7 @@ final class ImportWalletViewModel {
     var pasteButtonImage: Image { Images.System.paste }
 
     var qrButtonTitle: String { Localized.Wallet.scan }
-    var qrButtonImage: Image { Images.System.qrCode }
+    var qrButtonImage: Image { Images.System.qrCodeViewfinder }
 
     var alertTitle: String { Localized.Errors.validation("") }
 
@@ -62,6 +66,11 @@ final class ImportWalletViewModel {
         case .multicoin: .none
         case .chain(let chain): chain
         }
+    }
+    
+    var nameRecordViewModel: NameRecordViewModel? {
+        guard let chain else { return nil }
+        return NameRecordViewModel(chain: chain, nameService: nameService)
     }
 
     var showImportTypes: Bool { importTypes.count > 1 }

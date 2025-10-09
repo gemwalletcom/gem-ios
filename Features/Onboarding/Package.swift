@@ -20,10 +20,10 @@ let package = Package(
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
-        .package(name: "NameResolver", path: "../NameResolver"),
         .package(name: "QRScanner", path: "../QRScanner"),
         .package(name: "Keystore", path: "../../Packages/Keystore"),
-        .package(name: "WalletService", path: "../../Services/WalletService")
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
+        .package(name: "ChainServices", path: "../../Packages/ChainServices")
     ],
     targets: [
         .target(
@@ -34,10 +34,11 @@ let package = Package(
                 "Style",
                 "Localization",
                 "PrimitivesComponents",
-                "NameResolver",
+                .product(name: "NameService", package: "ChainServices"),
                 "QRScanner",
                 "Keystore",
-                "WalletService",
+                .product(name: "WalletService", package: "FeatureServices"),
+                .product(name: "BannerService", package: "FeatureServices"),
                 "Formatters"
             ],
             path: "Sources"

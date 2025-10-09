@@ -40,20 +40,22 @@ public struct HeaderButton: Identifiable {
         case .send: Localized.Wallet.send
         case .receive: Localized.Wallet.receive
         case .buy: Localized.Wallet.buy
+        case .sell: Localized.Wallet.sell
         case .swap: Localized.Wallet.swap
         case .stake: Localized.Wallet.stake
         case .more: Localized.Wallet.more
-        case .deposit: "Deposit"
-        case .withdraw: "Withdraw"
+        case .deposit: Localized.Wallet.deposit
+        case .withdraw: Localized.Wallet.withdraw
         }
     }
     
     public var image: Image {
         switch type {
-        case .send: Images.Actions.send
-        case .receive: Images.Actions.receive
-        case .buy: Images.Actions.buy
-        case .swap: Images.Actions.swap
+        case .send: Images.System.paperplane
+        case .receive: Images.System.qrCode
+        case .buy: Images.System.dollar
+        case .sell: Images.System.dollar
+        case .swap: Images.System.arrowSwap
         case .stake: Images.Actions.swap
         case .more: Images.Actions.more
         case .deposit: Images.Actions.buy

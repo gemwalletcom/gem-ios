@@ -36,7 +36,7 @@ public struct AssetRateFormatter {
         let quoteAmount = try formatter.double(from: quoteValue, decimals: quoteAsset.decimals.asInt)
 
         let amount = quoteAmount / baseAmount
-        let amountString = CurrencyFormatter(type: .currency)
+        let amountString = CurrencyFormatter(type: .currency, currencyCode: .empty)
             .string(double: amount, symbol: quoteAsset.symbol)
 
         return "1 \(baseAsset.symbol) ≈ \(amountString)"

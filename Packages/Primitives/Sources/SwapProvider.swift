@@ -11,7 +11,6 @@ public enum SwapProvider: String, Codable, Equatable, Hashable, Sendable {
 	case aerodrome
 	case pancakeswapAptosV2 = "pancakeswap_aptos_v2"
 	case thorchain
-	case orca
 	case jupiter
 	case across
 	case oku
@@ -24,4 +23,5 @@ public enum SwapProvider: String, Codable, Equatable, Hashable, Sendable {
 	case chainflip
 	case cetusAggregator = "cetus_aggregator"
 	case relay
+	case hyperliquid
 }

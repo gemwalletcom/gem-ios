@@ -27,7 +27,16 @@ public struct PerpetualItemViewModel: ListAssetItemViewable {
     }
     
     public var subtitleView: ListAssetItemSubtitleView {
-        .none
+        .price(
+            price: TextValue(
+                text: model.priceText,
+                style: TextStyle(font: .footnote, color: Colors.gray)
+            ),
+            priceChangePercentage24h: TextValue(
+                text: model.priceChangeText,
+                style: TextStyle(font: .footnote, color: model.priceChangeTextColor)
+            )
+        )
     }
     
     public var rightView: ListAssetItemRightView {

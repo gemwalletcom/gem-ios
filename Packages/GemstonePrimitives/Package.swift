@@ -13,7 +13,6 @@ let package = Package(
     dependencies: [
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
     ],
     targets: [
         .target(
@@ -21,7 +20,6 @@ let package = Package(
             dependencies: [
                 "Gemstone",
                 "Primitives",
-                "WalletCorePrimitives",
             ],
             path: "Sources"
         ),

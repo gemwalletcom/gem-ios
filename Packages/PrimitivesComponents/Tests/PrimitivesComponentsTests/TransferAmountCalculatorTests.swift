@@ -443,7 +443,7 @@ struct TransferAmountCalculatorTests {
 
     @Test
     func testStakeFlexible() {
-        let stakeType = StakeType.stake(validator: .mock())
+        let stakeType = StakeType.stake(.mock())
         #expect(throws: Never.self) {
             let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
@@ -462,7 +462,7 @@ struct TransferAmountCalculatorTests {
     @Test
     func testUnstakeFixed() {
         let delegation = Delegation.mock(state: .active)
-        let stakeType = StakeType.unstake(delegation: delegation)
+        let stakeType = StakeType.unstake(delegation)
         #expect(throws: Never.self) {
             let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
@@ -525,7 +525,7 @@ struct TransferAmountCalculatorTests {
                 assetFeeBalance: Balance(available: BigInt(100)),
                 fee: BigInt(8),
                 transferData: TransferData.mock(
-                    type: .perpetual(coinAsset, .open(.long)),
+                    type: .perpetual(coinAsset, .open(.mock(direction: .long, assetIndex: 0, price: "100", size: "1"))),
                     value: BigInt(200)
                 )
             ))
@@ -545,11 +545,30 @@ struct TransferAmountCalculatorTests {
                 assetFeeBalance: Balance(available: BigInt(20)),
                 fee: BigInt(4),
                 transferData: TransferData.mock(
-                    type: .perpetual(coinAsset, .close),
+                    type: .perpetual(coinAsset, .close(.mock(direction: .long, assetIndex: 0, price: "100", size: "1"))),
                     value: BigInt(999_999)
                 )
             ))
             #expect(result == TransferAmount(value: 999_999, networkFee: 4, useMaxAmount: false))
+        }
+    }
+    
+    @Test
+    func testHypercoreIgnoreValueCheck() {
+        let hypercoreAsset = Asset(.hyperCore)
+        #expect(throws: Never.self) {
+            let result = try service.calculate(input: TransferAmountInput(
+                asset: hypercoreAsset,
+                assetBalance: Balance(available: BigInt(0)),
+                value: BigInt(1000),
+                availableValue: BigInt(0),
+                assetFee: hypercoreAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(0)),
+                fee: BigInt(0),
+                canChangeValue: true,
+                ignoreValueCheck: true
+            ))
+            #expect(result == TransferAmount(value: 1000, networkFee: 0, useMaxAmount: false))
         }
     }
 }

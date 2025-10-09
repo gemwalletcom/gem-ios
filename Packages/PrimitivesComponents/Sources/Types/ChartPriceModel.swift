@@ -5,6 +5,7 @@ import SwiftUI
 import Primitives
 import Style
 import Formatters
+import Components
 
 public struct ChartPriceModel {
     public let period: ChartPeriod
@@ -54,7 +55,7 @@ public struct ChartPriceModel {
     }
     
     public var priceChangeTextColor: Color {
-        priceChange >= 0 ? Colors.green : Colors.red
+        PriceChangeColor.color(for: priceChange)
     }
 }
 
