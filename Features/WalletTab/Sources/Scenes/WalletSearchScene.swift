@@ -74,9 +74,7 @@ public struct WalletSearchScene: View {
 
             if model.showPinnedSection {
                 Section(
-                    content: {
-                        list(for: model.sections.pinned)
-                    },
+                    content: { list(for: model.sections.pinned) },
                     header: {
                         HStack {
                             model.pinnedImage
@@ -86,16 +84,15 @@ public struct WalletSearchScene: View {
                 )
                 .listRowInsets(.assetListRowInsets)
             }
-
-            Section(
-                content: {
-                    list(for: model.sections.assets)
-                },
-                header: {
-                    Text(model.assetsTitle)
-                }
-            )
-            .listRowInsets(.assetListRowInsets)
+            if model.showAssetsSection {
+                Section(
+                    content: { list(for: model.sections.assets) },
+                    header: {
+                        Text(model.assetsTitle)
+                    }
+                )
+                .listRowInsets(.assetListRowInsets)
+            }
         }
         .contentMargins(.top, .zero, for: .scrollContent)
     }

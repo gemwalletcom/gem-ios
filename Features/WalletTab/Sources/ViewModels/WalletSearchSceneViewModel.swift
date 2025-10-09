@@ -69,7 +69,11 @@ public final class WalletSearchSceneViewModel: Sendable {
     }
 
     var showPinnedSection: Bool {
-        !sections.pinned.isEmpty
+        sections.pinned.isNotEmpty
+    }
+
+    var showAssetsSection: Bool {
+        sections.assets.isNotEmpty
     }
 
     var currencyCode: String {
