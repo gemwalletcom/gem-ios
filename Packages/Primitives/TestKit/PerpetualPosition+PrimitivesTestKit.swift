@@ -16,8 +16,8 @@ public extension PerpetualPosition {
         marginType: PerpetualMarginType = .isolated,
         direction: PerpetualDirection? = nil,
         marginAmount: Double = 100.0,
-        takeProfit: PriceTarget? = nil,
-        stopLoss: PriceTarget? = nil,
+        takeProfit: PerpetualTriggerOrder? = nil,
+        stopLoss: PerpetualTriggerOrder? = nil,
         pnl: Double = 0,
         funding: Float? = nil
     ) -> PerpetualPosition {
