@@ -41,10 +41,12 @@ extension NavigationStateManager {
     }
 
     func backToRoot(tab: TabItem) {
-        switch tab {
-        case .wallet:
-            resetPath(&wallet)
+        if wallet.isEmpty {
             walletTabReselected.toggle()
+        }
+        
+        switch tab {
+        case .wallet: resetPath(&wallet)
         case .collections: resetPath(&collections)
         case .activity: resetPath(&activity)
         case .settings: resetPath(&settings)
