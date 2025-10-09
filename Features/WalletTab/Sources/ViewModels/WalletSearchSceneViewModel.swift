@@ -61,11 +61,11 @@ public final class WalletSearchSceneViewModel: Sendable {
     }
 
     var showLoading: Bool {
-        state.isLoading && sections.assets.isEmpty
+        state.isLoading && showEmpty
     }
 
     var showEmpty: Bool {
-        sections.assets.isEmpty
+        !showAssetsSection && !showPinnedSection
     }
 
     var showPinnedSection: Bool {
