@@ -482,3 +482,8 @@
 "info.stake.reserved.description" = "Una piccola somma rimane nel tuo portafoglio per coprire le commissioni per operazioni come l'annullamento dello staking o la richiesta di premi.";
 "perpetual.open_direction" = "Apri %@";
 "perpetual.close_direction" = "Chiudi %@";
+"perpetuals.title" = "Perpetui";
+"settings.preferences.title" = "Preferenze";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Nessun mercato trovato";

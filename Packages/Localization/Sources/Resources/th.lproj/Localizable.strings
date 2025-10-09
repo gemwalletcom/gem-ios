@@ -482,3 +482,8 @@
 "info.stake.reserved.description" = "เงินจำนวนเล็กน้อยจะอยู่ในกระเป๋าเงินของคุณเพื่อชำระค่าธรรมเนียมการดำเนินการ เช่น การยกเลิกการเดิมพันหรือการรับรางวัล";
 "perpetual.open_direction" = "เปิด %@";
 "perpetual.close_direction" = "ปิด %@";
+"perpetuals.title" = "นิรันดร์";
+"settings.preferences.title" = "การตั้งค่า";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "ไม่พบตลาด";

@@ -482,3 +482,8 @@
 "info.stake.reserved.description" = "Небольшая сумма остается в вашем кошельке для покрытия комиссий за такие операции, как отмена стейкинга или получение вознаграждений.";
 "perpetual.open_direction" = "Открыть %@";
 "perpetual.close_direction" = "Закрыть %@";
+"perpetuals.title" = "Вечные";
+"settings.preferences.title" = "Настройки";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Рынки не найдены";

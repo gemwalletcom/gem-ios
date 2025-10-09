@@ -17,7 +17,7 @@ struct TransactionFilterTypeViewModel {
         case .smartContract: Localized.Transfer.SmartContract.title
         case .swaps: Localized.Wallet.swap
         case .stake: Localized.Transfer.Stake.title
-        case .perpetuals: "Perpetuals"
+        case .perpetuals: Localized.Perpetuals.title
         case .others: Localized.Transfer.Other.title
         }
     }

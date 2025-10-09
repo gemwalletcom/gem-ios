@@ -482,3 +482,8 @@
 "info.stake.reserved.description" = "Ein kleiner Betrag verbleibt in Ihrem Wallet, um Gebühren für Vorgänge wie das Aufheben der Absteckung oder das Einfordern von Prämien zu decken.";
 "perpetual.open_direction" = "Öffnen %@";
 "perpetual.close_direction" = "Schließen %@";
+"perpetuals.title" = "Dauerhafte";
+"settings.preferences.title" = "Einstellungen";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Keine Märkte gefunden";

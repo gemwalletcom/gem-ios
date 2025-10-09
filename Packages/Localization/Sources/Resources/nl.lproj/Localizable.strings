@@ -482,3 +482,8 @@
 "info.stake.reserved.description" = "Een klein bedrag blijft in uw portemonnee staan om de kosten voor handelingen zoals unstaking of het claimen van beloningen te dekken.";
 "perpetual.open_direction" = "Open %@";
 "perpetual.close_direction" = "Sluiten %@";
+"perpetuals.title" = "Perpetuals";
+"settings.preferences.title" = "Voorkeuren";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Geen markten gevonden";
