@@ -39,8 +39,8 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
     public var marginType: PerpetualMarginType
     public var direction: PerpetualDirection
     public var marginAmount: Double
-    public var takeProfit: PriceTarget?
-    public var stopLoss: PriceTarget?
+    public var takeProfit: PerpetualTriggerOrder?
+    public var stopLoss: PerpetualTriggerOrder?
     public var pnl: Double
     public var funding: Float?
     public var updatedAt: Date
@@ -58,8 +58,8 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         marginType: PerpetualMarginType,
         direction: PerpetualDirection,
         marginAmount: Double,
-        takeProfit: PriceTarget?,
-        stopLoss: PriceTarget?,
+        takeProfit: PerpetualTriggerOrder?,
+        stopLoss: PerpetualTriggerOrder?,
         pnl: Double,
         funding: Float? = nil,
         updatedAt: Date = Date()
