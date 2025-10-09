@@ -36,15 +36,8 @@ public final class WalletSceneViewModel: Sendable {
     public var assets: [AssetData] = []
     public var banners: [Banner] = []
 
-    // TODO: - separate presenting sheet state logic to separate type
     public var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
-    public var isPresentingWallets = false
-    public var isPresentingSelectAssetType: SelectAssetType?
-    public var isPresentingInfoSheet: InfoSheetType?
-    public var isPresentingUrl: URL? = nil
-    public var isPresentingTransferData: TransferData?
-    public var isPresentingPerpetualRecipientData: PerpetualRecipientData?
-    public var isPresentingSetPriceAlert: AssetId?
+    public var isPresentingSheet: WalletSceneSheetType?
     public var isPresentingToastMessage: ToastMessage?
     public var isPresentingSearch = false
 
@@ -143,13 +136,13 @@ extension WalletSceneViewModel {
             isLoadingAssets = false
         }
     }
-    
+
     public func onSelectWalletBar() {
-        isPresentingWallets.toggle()
+        isPresentingSheet = .wallets
     }
 
     public func onSelectManage() {
-        isPresentingSelectAssetType = .manage
+        isPresentingSheet = .selectAssetType(.manage)
     }
 
     public func onToggleSearch() {
@@ -164,7 +157,7 @@ extension WalletSceneViewModel {
         case .sell, .swap, .more, .stake, .deposit, .withdraw:
             fatalError()
         }
-        isPresentingSelectAssetType = selectType
+        isPresentingSheet = .selectAssetType(selectType)
     }
 
     func onCloseBanner(banner: Banner) {
@@ -172,7 +165,7 @@ extension WalletSceneViewModel {
     }
 
     func onSelectWatchWalletInfo() {
-        isPresentingInfoSheet = .watchWallet
+        isPresentingSheet = .info(.watchWallet)
     }
 
     func onBanner(action: BannerAction) {
@@ -181,11 +174,13 @@ extension WalletSceneViewModel {
             Task { try await handleBanner(action: action) }
         case .button(let bannerButton):
             switch bannerButton {
-            case .buy: isPresentingSelectAssetType = .buy
-            case .receive: isPresentingSelectAssetType = .receive(.asset)
+            case .buy: isPresentingSheet = .selectAssetType(.buy)
+            case .receive: isPresentingSheet = .selectAssetType(.receive(.asset))
             }
         }
-        isPresentingUrl = action.url
+        if let url = action.url {
+            isPresentingSheet = .url(url)
+        }
     }
 
     func onHideAsset(_ assetId: AssetId) {
@@ -220,22 +215,21 @@ extension WalletSceneViewModel {
             refresh(for: newWallet)
         }
     }
-    
+
     func shouldStartLoadingAssets() {
         let preferences = WalletPreferences(walletId: wallet.id)
         isLoadingAssets = !preferences.completeInitialLoadAssets && preferences.assetsTimestamp == .zero
     }
-    
+
     public func onTransferComplete() {
-        isPresentingTransferData = nil
+        isPresentingSheet = nil
     }
-    
+
     public func onSetPriceAlertComplete(message: String) {
-        isPresentingSetPriceAlert = nil
+        isPresentingSheet = nil
         isPresentingToastMessage = ToastMessage(title: message, image: SystemImage.bellFill)
     }
 }
-
 
 // MARK: - Private
 
