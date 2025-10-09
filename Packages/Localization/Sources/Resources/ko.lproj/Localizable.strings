@@ -487,3 +487,4 @@
 "perpetuals.markets" = "Markets";
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "시장을 찾을 수 없습니다";
+"assets.title" = "자산";

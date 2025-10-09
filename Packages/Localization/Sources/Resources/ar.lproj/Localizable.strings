@@ -487,3 +487,4 @@
 "perpetuals.markets" = "Markets";
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "لم يتم العثور على الأسواق";
+"assets.title" = "أصول";

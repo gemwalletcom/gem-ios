@@ -1,3 +1,4 @@
+
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
@@ -59,33 +60,59 @@ public struct WalletSearchScene: View {
     @ViewBuilder
     private var assetsList: some View {
         List {
-            Section {
-                TagsView(
-                    tags: model.searchModel.tagsViewModel.items,
-                    onSelect: { model.onSelectTag(tag: $0.tag) }
-                )
-            }
-            .cleanListRow(topOffset: 0)
-            .lineSpacing(.zero)
-            .listSectionSpacing(.zero)
-            .isVisible(model.showTags)
-
-            Section {
-                ForEach(model.sections.assets) { asset in
-                    NavigationLink(value: Scenes.Asset(asset: asset.asset)) {
-                        ListAssetItemView(
-                            model: ListAssetItemViewModel(
-                                showBalancePrivacy: .constant(false),
-                                assetData: asset,
-                                formatter: .abbreviated,
-                                currencyCode: model.currencyCode
-                            )
-                        )
-                    }
+            if model.showTags {
+                Section {
+                    TagsView(
+                        tags: model.searchModel.tagsViewModel.items,
+                        onSelect: { model.onSelectTag(tag: $0.tag) }
+                    )
                 }
+                .cleanListRow(topOffset: 0)
+                .lineSpacing(.zero)
+                .listSectionSpacing(.zero)
             }
+
+            if model.showPinnedSection {
+                Section(
+                    content: {
+                        list(for: model.sections.pinned)
+                    },
+                    header: {
+                        HStack {
+                            model.pinnedImage
+                            Text(model.pinnedTitle)
+                        }
+                    }
+                )
+                .listRowInsets(.assetListRowInsets)
+            }
+
+            Section(
+                content: {
+                    list(for: model.sections.assets)
+                },
+                header: {
+                    Text(model.assetsTitle)
+                }
+            )
             .listRowInsets(.assetListRowInsets)
         }
         .contentMargins(.top, .zero, for: .scrollContent)
+    }
+
+    @ViewBuilder
+    private func list(for items: [AssetData]) -> some View {
+        ForEach(items) { asset in
+            NavigationLink(value: Scenes.Asset(asset: asset.asset)) {
+                ListAssetItemView(
+                    model: ListAssetItemViewModel(
+                        showBalancePrivacy: .constant(false),
+                        assetData: asset,
+                        formatter: .abbreviated,
+                        currencyCode: model.currencyCode
+                    )
+                )
+            }
+        }
     }
 }
