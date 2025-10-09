@@ -102,8 +102,9 @@ public final class AmountSceneViewModel {
             return nil
         case .stake, .freeze:
             guard reservedForFee > .zero else { return nil }
-            guard let inputValue = try? formatter.inputNumber(from: amountInputModel.text, decimals: asset.decimals.asInt) else { return nil }
-            guard inputValue >= availableBalanceForStaking, inputValue <= availableValue else { return nil }
+            guard let inputValue = try? formatter.inputNumber(from: amountInputModel.text, decimals: asset.decimals.asInt),
+                  !inputValue.isZero, inputValue >= availableBalanceForStaking, inputValue <= availableValue
+            else { return nil }
             return Localized.Transfer.reservedFees(formatter.string(reservedForFee, asset: asset))
         }
     }
@@ -390,7 +391,7 @@ extension AmountSceneViewModel {
                     decimals: asset.decimals.asInt,
                     validators: [
                         PositiveValueValidator<BigInt>().silent,
-                        MinimumValueValidator<BigInt>(minimumValue: minimumValue + reservedForFee, asset: asset),
+                        MinimumValueValidator<BigInt>(minimumValue: minimumValue, asset: asset),
                         BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
                     ]
                 )
@@ -689,8 +690,6 @@ extension AmountSceneViewModel {
     }
 
     private var availableBalanceForStaking: BigInt {
-        assetData.balance.available > reservedForFee
-        ? assetData.balance.available - reservedForFee
-        : .zero
+        assetData.balance.available > reservedForFee ? assetData.balance.available - reservedForFee : .zero
     }
 }

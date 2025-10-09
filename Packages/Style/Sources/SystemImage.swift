@@ -4,9 +4,12 @@ import SwiftUI
 
 public struct SystemImage {
     public static let settings = "gearshape"
-    public static let qrCode = "qrcode.viewfinder"
+    public static let qrCodeViewfinder = "qrcode.viewfinder"
+    public static let qrCode = "qrcode"
     public static let paste = "doc.on.clipboard"
     public static let copy = "doc.on.doc"
+    public static let arrowSwap = "arrow.trianglehead.2.clockwise"
+    public static let paperplane = "paperplane"
     public static let chevronDown = "chevron.down"
     public static let chevronRight = "chevron.right"
     public static let checklist = "checklist.unchecked"
