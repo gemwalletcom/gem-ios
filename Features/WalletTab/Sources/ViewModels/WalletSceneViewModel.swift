@@ -38,7 +38,6 @@ public final class WalletSceneViewModel: Sendable {
 
     public var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     public var isPresentingSheet: WalletSceneSheetType?
-    public var isPresentingSetPriceAlert: AssetId?
     public var isPresentingToastMessage: ToastMessage?
     public var isPresentingSearch = false
 
@@ -226,11 +225,10 @@ extension WalletSceneViewModel {
     }
 
     public func onSetPriceAlertComplete(message: String) {
-        isPresentingSetPriceAlert = nil
+        isPresentingSheet = nil
         isPresentingToastMessage = ToastMessage(title: message, image: SystemImage.bellFill)
     }
 }
-
 
 // MARK: - Private
 

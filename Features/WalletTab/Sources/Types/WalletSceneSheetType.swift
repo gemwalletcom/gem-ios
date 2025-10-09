@@ -12,6 +12,7 @@ public enum WalletSceneSheetType: Identifiable, Sendable {
     case url(URL)
     case transferData(TransferData)
     case perpetualRecipientData(PerpetualRecipientData)
+    case setPriceAlert(AssetId)
 
     public var id: String {
         switch self {
@@ -21,6 +22,7 @@ public enum WalletSceneSheetType: Identifiable, Sendable {
         case let .url(url): "url-\(url)"
         case let .transferData(data): "transfer-data-\(data.id)"
         case let .perpetualRecipientData(data): "perpetual-recipient-data-\(data.id)"
+        case let .setPriceAlert(assetId): "set-price-alert-\(assetId.identifier)"
         }
     }
 }
@@ -78,6 +80,20 @@ extension Binding where Value == WalletSceneSheetType? {
             },
             set: { newValue in
                 wrappedValue = newValue ? .wallets : nil
+            }
+        )
+    }
+
+    public var setPriceAlert: Binding<AssetId?> {
+        Binding<AssetId?>(
+            get: {
+                if case .setPriceAlert(let assetId) = wrappedValue {
+                    return assetId
+                }
+                return nil
+            },
+            set: { newValue in
+                wrappedValue = newValue.map { .setPriceAlert($0) }
             }
         )
     }

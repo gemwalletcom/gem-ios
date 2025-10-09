@@ -120,7 +120,7 @@ struct WalletNavigationStack: View {
                         assetModel: AssetViewModel(asset: $0.asset),
                         priceAlertService: priceAlertService,
                         walletId: model.wallet.walletId,
-                        isPresentingSetPriceAlert: $model.isPresentingSetPriceAlert
+                        isPresentingSetPriceAlert: $model.isPresentingSheet.setPriceAlert
                     )
                 )
             }
@@ -182,16 +182,15 @@ struct WalletNavigationStack: View {
                     SFSafariView(url: url)
                 case .wallets:
                     WalletsNavigationStack(isPresentingWallets: $model.isPresentingSheet.wallets)
+                case let .setPriceAlert(assetId):
+                    SetPriceAlertNavigationStack(
+                        model: SetPriceAlertViewModel(
+                            walletId: model.wallet.walletId,
+                            assetId: assetId,
+                            priceAlertService: priceAlertService
+                        ) { model.onSetPriceAlertComplete(message: $0) }
+                    )
                 }
-            }
-            .sheet(item: $model.isPresentingSetPriceAlert) { assetId in
-                SetPriceAlertNavigationStack(
-                    model: SetPriceAlertViewModel(
-                        walletId: model.wallet.walletId,
-                        assetId: assetId,
-                        priceAlertService: priceAlertService
-                    ) { model.onSetPriceAlertComplete(message: $0) }
-                )
             }
             .toast(message: $model.isPresentingToastMessage)
         }
