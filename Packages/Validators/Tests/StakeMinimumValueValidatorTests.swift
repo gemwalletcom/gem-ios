@@ -56,6 +56,17 @@ struct StakeMinimumValueValidatorTests {
             try validator.validate(BigInt(10))
         }
     }
+
+    @Test
+    func passesAtMaximumStake() throws {
+        let validator = StakeMinimumValueValidator.mock(
+            available: available,
+            minimumValue: minimumValue,
+            reservedForFee: reservedForFee,
+            asset: asset
+        )
+        try validator.validate(BigInt(95))
+    }
 }
 
 extension StakeMinimumValueValidator {
