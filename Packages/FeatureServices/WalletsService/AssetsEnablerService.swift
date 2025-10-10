@@ -21,6 +21,7 @@ struct AssetsEnablerService: AssetsEnabler {
 
     func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async {
         do {
+            try await assetsService.prefetchAssets(assetIds: assetIds)
             for assetId in assetIds {
                 try assetsService.addBalanceIfMissing(walletId: walletId, assetId: assetId)
             }
