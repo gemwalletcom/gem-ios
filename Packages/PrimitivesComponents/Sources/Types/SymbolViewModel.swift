@@ -1,16 +1,17 @@
 import Style
 import Components
+import Primitives
 
 public struct SymbolViewModel: Sendable, AmountDisplayable {
-    public let symbol: String
-    
-    public init(symbol: String) {
-        self.symbol = symbol
+    public let asset: Asset
+
+    public init(asset: Asset) {
+        self.asset = asset
     }
-    
+
     public var amount: TextValue {
         TextValue(
-            text: symbol,
+            text: asset.symbol,
             style: TextStyle(
                 font: .body,
                 color: Colors.black,
@@ -19,6 +20,10 @@ public struct SymbolViewModel: Sendable, AmountDisplayable {
             lineLimit: 1
         )
     }
-    
+
     public var fiat: TextValue? { nil }
+
+    public var assetImage: AssetImage? {
+        AssetViewModel(asset: asset).assetImage
+    }
 }

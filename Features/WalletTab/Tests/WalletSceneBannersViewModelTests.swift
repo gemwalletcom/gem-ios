@@ -18,6 +18,6 @@ struct WalletSceneBannersViewModelTests {
             totalFiatValue: 42
         )
 
-        #expect(model.priorityBanner?.event == .enableNotifications)
+        #expect(model.allBanners.first?.event == .enableNotifications)
     }
 }
