@@ -15,8 +15,6 @@ import Components
 @Observable
 @MainActor
 public final class SettingsViewModel {
-    var currencyModel: CurrencySceneViewModel
-
     private let walletId: WalletId
     private let walletsService: WalletsService
     private let observablePrefereces: ObservablePreferences
@@ -24,12 +22,10 @@ public final class SettingsViewModel {
     public init(
         walletId: WalletId,
         walletsService: WalletsService,
-        currencyModel: CurrencySceneViewModel,
         observablePrefereces: ObservablePreferences
     ) {
         self.walletId = walletId
         self.walletsService = walletsService
-        self.currencyModel = currencyModel
         self.observablePrefereces = observablePrefereces
     }
 
@@ -55,22 +51,8 @@ public final class SettingsViewModel {
     var priceAlertsTitle: String { Localized.Settings.PriceAlerts.title }
     var priceAlertsImage: AssetImage { AssetImage.image(Images.Settings.priceAlerts) }
 
-    var currencyTitle: String { Localized.Settings.currency }
-    var currencyValue: String { currencyModel.selectedCurrencyValue }
-    var currencyImage: AssetImage { AssetImage.image(Images.Settings.currency) }
-
-    var lanugageTitle: String { Localized.Settings.language }
-    var lanugageValue: String {
-        guard let code = Locale.current.language.languageCode?.identifier else {
-            return ""
-        }
-        return Locale.current.localizedString(forLanguageCode: code)?.capitalized ?? ""
-    }
-
-    var lanugageImage: AssetImage { AssetImage.image(Images.Settings.language) }
-
-    var chainsTitle: String { Localized.Settings.Networks.title }
-    var chainsImage: AssetImage { AssetImage.image(Images.Settings.networks) }
+    var preferencesTitle: String { Localized.Settings.Preferences.title }
+    var preferencesImage: AssetImage { AssetImage.image(Images.Settings.preferences) }
 
     var walletConnectTitle: String { Localized.WalletConnect.title }
     var walletConnectImage: AssetImage { AssetImage.image(Images.Settings.walletConnect) }

@@ -697,6 +697,6 @@ extension AmountSceneViewModel {
     }
 
     private var availableBalanceForStaking: BigInt {
-        assetData.balance.available > reservedForFee ? assetData.balance.available - reservedForFee : .zero
+        assetData.balance.available > reservedForFee ? assetData.balance.available - reservedForFee : availableValue
     }
 }

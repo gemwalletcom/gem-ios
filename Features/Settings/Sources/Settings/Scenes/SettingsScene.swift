@@ -76,7 +76,7 @@ extension SettingsScene {
                     imageStyle: .settings(assetImage: model.notificationsImage)
                 )
             }
-            
+
             NavigationLink(value: Scenes.PriceAlerts()) {
                 ListItemView(
                     title: model.priceAlertsTitle,
@@ -84,27 +84,10 @@ extension SettingsScene {
                 )
             }
 
-            NavigationLink(value: Scenes.Currency()) {
+            NavigationLink(value: Scenes.Preferences()) {
                 ListItemView(
-                    title: Localized.Settings.currency,
-                    subtitle: model.currencyValue,
-                    imageStyle: .settings(assetImage: model.currencyImage)
-                )
-            }
-
-            NavigationCustomLink(
-                with: ListItemView(
-                    title: model.lanugageTitle,
-                    subtitle: model.lanugageValue,
-                    imageStyle: .settings(assetImage: model.lanugageImage)
-                ),
-                action: onSelectLanguages
-            )
-
-            NavigationLink(value: Scenes.Chains()) {
-                ListItemView(
-                    title: model.chainsTitle,
-                    imageStyle: .settings(assetImage: model.chainsImage)
+                    title: model.preferencesTitle,
+                    imageStyle: .settings(assetImage: model.preferencesImage)
                 )
             }
         }
@@ -159,15 +142,10 @@ extension SettingsScene {
 // MARK: - Actions
 
 extension SettingsScene {
-    private func onSelectLanguages() {
-        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-        openURL(settingsURL)
-    }
-
     private func onOpenWallets() {
         isPresentingWallets = true
     }
-    
+
     private func onOpenSupport() {
         isPresentingSupport = true
     }

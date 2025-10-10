@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "您的錢包中會留有少量資金，用於支付取消質押或領取獎勵等操作的費用。";
 "perpetual.open_direction" = "打開%@";
 "perpetual.close_direction" = "關閉%@";
+"perpetuals.title" = "永久";
+"settings.preferences.title" = "偏好設定";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "未找到任何市場";
+"assets.title" = "資產";
