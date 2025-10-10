@@ -27,7 +27,7 @@ public struct WalletScene: View {
                     onHeaderAction: model.onHeaderAction,
                     onInfoAction: model.onSelectWatchWalletInfo
                 )
-                .padding(.top, .small)
+                .padding(.top, .space6)
             }
             .cleanListRow()
 
@@ -39,7 +39,7 @@ public struct WalletScene: View {
                 }
             }
             
-            if let banner = model.walletBannersModel.priorityBanner {
+            if let banner = model.walletBannersModel.allBanners.first {
                 Section {
                     BannerView(
                         banner: banner,
