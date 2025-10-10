@@ -37,7 +37,12 @@ public struct Signer: Sendable {
                     fromAsset: fromAsset,
                     swapData: swapData
                 )
-                return try [signer.signTransfer(input: transferInput, privateKey: privateKey)]
+                switch fromAsset.id.type {
+                case .native:
+                    return try [signer.signTransfer(input: transferInput, privateKey: privateKey)]
+                case .token:
+                    return try [signer.signTokenTransfer(input: transferInput, privateKey: privateKey)]
+                }
             }
             return try signer.signSwap(input: input, privateKey: privateKey)
         case .generic:
