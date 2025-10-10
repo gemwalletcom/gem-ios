@@ -31,18 +31,8 @@ public struct Signer: Sendable {
         case .tokenApprove:
             return try [signer.signTokenTransfer(input: input, privateKey: privateKey)]
         case .swap(let fromAsset, _, let swapData):
-            if isTransferSwap(data: swapData) {
-                let transferInput = transferSwapInput(
-                    input: input,
-                    fromAsset: fromAsset,
-                    swapData: swapData
-                )
-                switch fromAsset.id.type {
-                case .native:
-                    return try [signer.signTransfer(input: transferInput, privateKey: privateKey)]
-                case .token:
-                    return try [signer.signTokenTransfer(input: transferInput, privateKey: privateKey)]
-                }
+            if SwapSigner.isTransferSwap(data: swapData) {
+                return try SwapSigner(signer: signer).signSwap(input: input, fromAsset: fromAsset, swapData: swapData, privateKey: privateKey)
             }
             return try signer.signSwap(input: input, privateKey: privateKey)
         case .generic:
@@ -92,28 +82,5 @@ public struct Signer: Sendable {
         case .cardano: CardanoSigner()
         case .hyperCore: HyperCoreSigner()
         }
-    }
-
-    func isTransferSwap(data: SwapData) -> Bool {
-        switch data.quote.providerData.provider {
-        case .nearIntents:
-            true
-        default:
-            false
-        }
-    }
-
-    func transferSwapInput(input: SignerInput, fromAsset: Asset, swapData: SwapData) -> SignerInput {
-        SignerInput(
-            type: .transfer(fromAsset),
-            asset: fromAsset,
-            value: swapData.quote.fromValueBigInt,
-            fee: input.fee,
-            isMaxAmount: input.useMaxAmount,
-            memo: swapData.data.data.isEmpty ? nil : swapData.data.data,
-            senderAddress: input.senderAddress,
-            destinationAddress: swapData.data.to,
-            metadata: input.metadata
-        )
     }
 }
