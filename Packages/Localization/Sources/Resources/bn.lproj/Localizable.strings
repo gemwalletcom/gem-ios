@@ -487,3 +487,4 @@
 "perpetuals.markets" = "Markets";
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "কোন বাজার খুঁজে পাওয়া যায়নি";
+"assets.title" = "সম্পদ";

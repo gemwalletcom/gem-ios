@@ -113,6 +113,8 @@ public enum Localized {
     public static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
     /// Select Asset
     public static let selectAsset = Localized.tr("Localizable", "assets.select_asset", fallback: "Select Asset")
+    /// Assets
+    public static let title = Localized.tr("Localizable", "assets.title", fallback: "Assets")
     public enum State {
       public enum Empty {
         /// You can try to add it manually

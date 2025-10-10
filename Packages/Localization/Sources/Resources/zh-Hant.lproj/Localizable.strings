@@ -487,3 +487,4 @@
 "perpetuals.markets" = "Markets";
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "未找到任何市場";
+"assets.title" = "資產";
