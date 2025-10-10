@@ -27,7 +27,7 @@ public struct WalletScene: View {
                     onHeaderAction: model.onHeaderAction,
                     onInfoAction: model.onSelectWatchWalletInfo
                 )
-                .padding(.top, .small)
+                .padding(.top, .space6)
             }
             .cleanListRow()
 
