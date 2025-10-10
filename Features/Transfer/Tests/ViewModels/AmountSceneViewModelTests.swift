@@ -111,6 +111,60 @@ struct AmountSceneViewModelTests {
         #expect(model.infoText != nil)
         #expect(model.amountInputModel.isValid == true)
     }
+
+    @Test
+    func stakeWithInsufficientBalanceForFees() {
+        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 1_000_200_000_000_000_000))
+        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+
+        model.amountInputModel.update(text: "1.0")
+        #expect(model.amountInputModel.isValid == false)
+    }
+
+    @Test
+    func freezeWithInsufficientBalanceForFees() {
+        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(available: 1_002_000))
+        let model = AmountSceneViewModel.mock(
+            type: .freeze(data: .init(freezeType: .freeze, resource: .bandwidth)),
+            assetData: assetData
+        )
+
+        model.amountInputModel.update(text: "1.0")
+        #expect(model.amountInputModel.isValid == false)
+    }
+
+    @Test
+    func unfreezeWithSufficientBalance() {
+        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(frozen: 1_000_000))
+        let model = AmountSceneViewModel.mock(
+            type: .freeze(data: .init(freezeType: .unfreeze, resource: .bandwidth)),
+            assetData: assetData
+        )
+
+        model.amountInputModel.update(text: "1.0")
+        #expect(model.amountInputModel.isValid == true)
+    }
+
+    @Test
+    func unfreezeEnergyWithSufficientBalance() {
+        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(locked: 2_000_000))
+        let model = AmountSceneViewModel.mock(
+            type: .freeze(data: .init(freezeType: .unfreeze, resource: .energy)),
+            assetData: assetData
+        )
+
+        model.amountInputModel.update(text: "2.0")
+        #expect(model.amountInputModel.isValid == true)
+    }
+
+    @Test
+    func tronStakeWithoutFeeReservation() {
+        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(frozen: 10_000_000, locked: 0))
+        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+
+        model.amountInputModel.update(text: "10")
+        #expect(model.amountInputModel.isValid == true)
+    }
 }
 
 extension AmountSceneViewModel {

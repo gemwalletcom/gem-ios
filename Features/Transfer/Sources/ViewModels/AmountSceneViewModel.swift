@@ -101,8 +101,8 @@ public final class AmountSceneViewModel {
         case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual:
             return nil
         case .stake, .freeze:
-            guard reservedForFee > .zero else { return nil }
-            guard let inputValue = try? formatter.inputNumber(from: amountInputModel.text, decimals: asset.decimals.asInt),
+            guard reservedForFee > .zero, amountInputModel.isValid,
+                  let inputValue = try? formatter.inputNumber(from: amountInputModel.text, decimals: asset.decimals.asInt),
                   !inputValue.isZero, inputValue >= availableBalanceForStaking, inputValue <= availableValue
             else { return nil }
             return Localized.Transfer.reservedFees(formatter.string(reservedForFee, asset: asset))
@@ -375,28 +375,35 @@ extension AmountSceneViewModel {
         case .asset: .asset
         case .fiat: .fiat(price: assetData.price?.mapToAssetPrice(assetId: asset.id), converter: valueConverter)
         }
-        switch input.type {
+
+        let minimumValidator: any ValueValidator<BigInt> = switch input.type {
+        case .stake where asset.chain != .tron:
+            StakeMinimumValueValidator(available: availableValue, minimumValue: minimumValue, reservedForFee: reservedForFee, asset: asset)
+        case .freeze(let data) where data.freezeType == .freeze:
+            StakeMinimumValueValidator(available: availableValue, minimumValue: minimumValue, reservedForFee: reservedForFee, asset: asset)
         case .transfer,
-            .deposit,
-            .withdraw,
-            .stake,
-            .stakeUnstake,
-            .stakeRedelegate,
-            .stakeWithdraw,
-            .perpetual,
-            .freeze:
-                return [
-                .amount(
-                    source: source,
-                    decimals: asset.decimals.asInt,
-                    validators: [
-                        PositiveValueValidator<BigInt>().silent,
-                        MinimumValueValidator<BigInt>(minimumValue: minimumValue, asset: asset),
-                        BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
-                    ]
-                )
-            ]
+             .deposit,
+             .withdraw,
+             .stake,
+             .stakeUnstake,
+             .stakeRedelegate,
+             .stakeWithdraw,
+             .perpetual,
+             .freeze:
+            MinimumValueValidator(minimumValue: minimumValue, asset: asset)
         }
+
+        return [
+            .amount(
+                source: source,
+                decimals: asset.decimals.asInt,
+                validators: [
+                    PositiveValueValidator<BigInt>().silent,
+                    BalanceValueValidator(available: availableValue, asset: asset),
+                    minimumValidator
+                ]
+            )
+        ]
     }
 
     private var fiatValueText: String {
@@ -622,7 +629,7 @@ extension AmountSceneViewModel {
         case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
             availableValue
         case .stake:
-            availableBalanceForStaking
+            asset.chain == .tron ? availableValue : availableBalanceForStaking
         case .freeze(let data):
             switch data.freezeType {
             case .freeze: availableBalanceForStaking
@@ -680,7 +687,7 @@ extension AmountSceneViewModel {
     private var reservedForFee: BigInt {
         switch input.type {
         case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw: .zero
-        case .stake: BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
+        case .stake: asset.chain == .tron ? .zero : BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
         case .freeze(let data):
             switch data.freezeType {
             case .freeze: BigInt(Config.shared.getStakeConfig(chain: asset.chain.rawValue).reservedForFees)
