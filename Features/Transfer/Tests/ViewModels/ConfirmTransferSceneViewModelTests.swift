@@ -287,7 +287,7 @@ struct ConfirmTransferSceneViewModelTests {
         #expect(sections[3].id == "error")
 
         #expect(sections[0].values == [.header])
-        #expect(sections[1].values == [.app, .sender, .network, .recipient, .memo, .swapDetails])
+        #expect(sections[1].values == [.app, .network, .sender, .recipient, .memo, .swapDetails])
         #expect(sections[2].values == [.networkFee])
         #expect(sections[3].values == [.error])
     }

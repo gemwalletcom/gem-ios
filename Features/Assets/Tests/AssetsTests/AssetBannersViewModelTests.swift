@@ -79,6 +79,6 @@ struct AssetBannersViewModelTests {
             ]
         )
         
-        #expect(model.priorityBanner?.state == .alwaysActive)
+        #expect(model.allBanners.first?.state == .alwaysActive)
     }
 }

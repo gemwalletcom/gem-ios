@@ -14,7 +14,7 @@ struct ConfirmRecipientViewModelTests {
         let model = ConfirmRecipientViewModel(model: .mock(type: .transfer(.mock())), addressName: nil, addressLink: .mock())
 
         guard case .recipient(let item) = model.itemModel else { return }
-        #expect(item.title == Localized.Transfer.to)
+        #expect(item.title == Localized.Transfer.Recipient.title)
         #expect(item.account.address != "")
     }
 
@@ -23,7 +23,7 @@ struct ConfirmRecipientViewModelTests {
         let model = ConfirmRecipientViewModel(model: .mock(type: .transferNft(.mock())), addressName: nil, addressLink: .mock())
 
         guard case .recipient(let item) = model.itemModel else { return }
-        #expect(item.title == Localized.Transfer.to)
+        #expect(item.title == Localized.Transfer.Recipient.title)
     }
 
     @Test
@@ -31,7 +31,7 @@ struct ConfirmRecipientViewModelTests {
         let model = ConfirmRecipientViewModel(model: .mock(type: .deposit(.mock())), addressName: nil, addressLink: .mock())
 
         guard case .recipient(let item) = model.itemModel else { return }
-        #expect(item.title == Localized.Transfer.to)
+        #expect(item.title == Localized.Transfer.Recipient.title)
     }
 
     @Test
@@ -39,7 +39,7 @@ struct ConfirmRecipientViewModelTests {
         let model = ConfirmRecipientViewModel(model: .mock(type: .withdrawal(.mock())), addressName: nil, addressLink: .mock())
 
         guard case .recipient(let item) = model.itemModel else { return }
-        #expect(item.title == Localized.Transfer.to)
+        #expect(item.title == Localized.Transfer.Recipient.title)
     }
 
     @Test
@@ -47,7 +47,7 @@ struct ConfirmRecipientViewModelTests {
         let model = ConfirmRecipientViewModel(model: .mock(type: .tokenApprove(.mock(), .mock())), addressName: nil, addressLink: .mock())
 
         guard case .recipient(let item) = model.itemModel else { return }
-        #expect(item.title == Localized.Transfer.to)
+        #expect(item.title == Localized.Transfer.Recipient.title)
     }
 
     @Test
@@ -59,7 +59,7 @@ struct ConfirmRecipientViewModelTests {
         )
 
         guard case .recipient(let item) = model.itemModel else { return }
-        #expect(item.title == Localized.Transfer.to)
+        #expect(item.title == Localized.Transfer.Recipient.title)
     }
 
     @Test
