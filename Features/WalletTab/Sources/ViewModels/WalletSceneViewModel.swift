@@ -86,6 +86,7 @@ public final class WalletSceneViewModel: Sendable {
 
     var pinnedTitle: String { Localized.Common.pinned }
     var manageTokenTitle: String { Localized.Wallet.manageTokenList }
+    var perpetualsTitle: String { Localized.Perpetuals.title }
 
     public var searchImage: Image { Images.System.search }
     public var manageImage: Image { Images.Actions.manage }
@@ -218,6 +219,10 @@ extension WalletSceneViewModel {
         if let newWallet, wallet != newWallet {
             refresh(for: newWallet)
         }
+    }
+
+    public func onWalletTabReselected(_: Bool, _: Bool) {
+         isPresentingSearch = false
     }
     
     func shouldStartLoadingAssets() {

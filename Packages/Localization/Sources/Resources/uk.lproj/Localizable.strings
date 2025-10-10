@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "Невелика сума залишається у вашому гаманці для покриття комісій за такі операції, як зняття коштів зі стейкінгу або отримання винагород.";
 "perpetual.open_direction" = "Відкрити %@";
 "perpetual.close_direction" = "Закрити %@";
+"perpetuals.title" = "Перпетуали";
+"settings.preferences.title" = "Налаштування";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Ринків не знайдено";
+"assets.title" = "Активи";

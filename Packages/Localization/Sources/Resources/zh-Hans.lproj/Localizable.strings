@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "您的钱包中会留有少量资金，用于支付取消质押或领取奖励等操作的费用。";
 "perpetual.open_direction" = "打开%@";
 "perpetual.close_direction" = "关闭%@";
+"perpetuals.title" = "永久";
+"settings.preferences.title" = "偏好设置";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "未找到任何市场";
+"assets.title" = "资产";

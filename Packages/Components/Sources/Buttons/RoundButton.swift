@@ -27,10 +27,11 @@ public struct RoundButton: View {
         } label: {
             VStack(alignment: .center) {
                 image
+                    .font(.system(size: 20).weight(.medium))
                     .foregroundStyle(Colors.whiteSolid)
-                    .frame(width: 48, height: 48)
+                    .frame(size: 48)
                     .background(Colors.blue)
-                    .cornerRadius(24)
+                    .clipShape(Circle())
                     .opacity(isEnabled ? 1 : 0.5)
                     .liquidGlass()
                 Text(title)

@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "مقدار کمی در کیف پول شما باقی می‌ماند تا هزینه‌های عملیاتی مانند برداشت از حساب یا دریافت پاداش را پوشش دهد.";
 "perpetual.open_direction" = "باز کردن %@";
 "perpetual.close_direction" = "بستن %@";
+"perpetuals.title" = "دائمی‌ها";
+"settings.preferences.title" = "تنظیمات برگزیده";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "هیچ بازاری یافت نشد";
+"assets.title" = "دارایی‌ها";
