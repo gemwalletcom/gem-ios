@@ -39,7 +39,7 @@ public struct WalletScene: View {
                 }
             }
             
-            if let banner = model.walletBannersModel.priorityBanner {
+            if let banner = model.walletBannersModel.allBanners.first {
                 Section {
                     BannerView(
                         banner: banner,

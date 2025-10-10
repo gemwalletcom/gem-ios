@@ -28,7 +28,7 @@ public struct AssetScene: View {
             }
             .cleanListRow()
             
-            if let banner = model.assetBannerViewModel.priorityBanner {
+            if let banner = model.assetBannerViewModel.allBanners.first {
                 Section {
                     BannerView(
                         banner: banner,

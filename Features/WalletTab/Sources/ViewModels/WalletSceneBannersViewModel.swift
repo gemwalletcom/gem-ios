@@ -6,20 +6,16 @@ import Primitives
 struct WalletSceneBannersViewModel: Sendable {
     let banners: [Banner]
     let totalFiatValue: Double
-    
-    var priorityBanner: Banner? {
-        visibleBanners.first
-    }
 
-    var visibleBanners: [Banner] {
+    var allBanners: [Banner] {
         banners
-            .filter(shouldDisplay)
+            .filter(shouldShowBanner)
             .sorted { $0 < $1 }
     }
     
     // MARK: - Private
 
-    private func shouldDisplay(_ banner: Banner) -> Bool {
+    private func shouldShowBanner(_ banner: Banner) -> Bool {
         switch banner.event {
         case .accountActivation, .accountBlockedMultiSignature, .enableNotifications: true
         case .stake, .activateAsset, .suspiciousAsset: false
