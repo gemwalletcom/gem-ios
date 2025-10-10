@@ -12,42 +12,42 @@ struct AssetBannersViewModelTests {
     
     @Test
     func stakingBannerFiltering() {
-        let withStake = AssetBannersViewModel(assetData: .mock(balance: Balance(staked: BigInt(100))), banners: [.mock(event: .stake)])
+        let withStake = AssetSceneBannersViewModel(assetData: .mock(balance: Balance(staked: BigInt(100))), banners: [.mock(event: .stake)])
         #expect(withStake.allBanners.isEmpty)
         
-        let noStake = AssetBannersViewModel(assetData: .mock(balance: Balance(staked: .zero)), banners: [.mock(event: .stake)])
+        let noStake = AssetSceneBannersViewModel(assetData: .mock(balance: Balance(staked: .zero)), banners: [.mock(event: .stake)])
         #expect(noStake.allBanners.count == 1)
     }
     
     @Test
     func activateAssetBanner() {
-        let inactive = AssetBannersViewModel(assetData: .mock(metadata: .mock(isActive: false)), banners: [])
+        let inactive = AssetSceneBannersViewModel(assetData: .mock(metadata: .mock(isActive: false)), banners: [])
         #expect(inactive.allBanners.count == 1)
         #expect(inactive.allBanners.first?.event == .activateAsset)
 
-        let active = AssetBannersViewModel(assetData: .mock(metadata: .mock(isActive: true)), banners: [])
+        let active = AssetSceneBannersViewModel(assetData: .mock(metadata: .mock(isActive: true)), banners: [])
         #expect(active.allBanners.isEmpty)
     }
     
     @Test
     func suspiciousAssetBanner() {
-        let suspicious = AssetBannersViewModel(assetData: .mock(metadata: .mock(rankScore: 5)), banners: [])
+        let suspicious = AssetSceneBannersViewModel(assetData: .mock(metadata: .mock(rankScore: 5)), banners: [])
         #expect(suspicious.allBanners.count == 1)
         #expect(suspicious.allBanners.first?.event == .suspiciousAsset)
 
-        #expect(AssetBannersViewModel(assetData: .mock(metadata: .mock(rankScore: 50)), banners: []).allBanners.isEmpty)
+        #expect(AssetSceneBannersViewModel(assetData: .mock(metadata: .mock(rankScore: 50)), banners: []).allBanners.isEmpty)
     }
     
     @Test
     func accountActivationBanner() {
-        #expect(AssetBannersViewModel(
+        #expect(AssetSceneBannersViewModel(
             assetData: .mock(asset: .mockXRP(), balance: .zero, metadata: .mock(rankScore: 16)),
             banners: [
                 .mock(event: .accountActivation)
             ]
         ).allBanners.first?.event == .accountActivation)
         
-        #expect(AssetBannersViewModel(
+        #expect(AssetSceneBannersViewModel(
             assetData: .mock(balance: Balance(available: BigInt(1)), metadata: .mock(rankScore: 16)),
             banners: [
                 .mock(event: .accountActivation)
@@ -57,7 +57,7 @@ struct AssetBannersViewModelTests {
 
 	@Test
     func nonClosableBannersShowFirst() {
-        let model = AssetBannersViewModel(
+        let model = AssetSceneBannersViewModel(
             assetData: .mock(metadata: .mock(rankScore: 5)),
             banners: [.mock(event: .stake, state: .active), .mock(event: .accountActivation, state: .alwaysActive)]
         )
@@ -70,7 +70,7 @@ struct AssetBannersViewModelTests {
     
     @Test
     func priorityBannerReturnsHighestPriority() {
-        let model = AssetBannersViewModel(
+        let model = AssetSceneBannersViewModel(
             assetData: .mock(),
             banners: [
                 .mock(event: .stake, state: .active),
@@ -79,6 +79,6 @@ struct AssetBannersViewModelTests {
             ]
         )
         
-        #expect(model.priorityBanner?.state == .alwaysActive)
+        #expect(model.allBanners.first?.state == .alwaysActive)
     }
 }
