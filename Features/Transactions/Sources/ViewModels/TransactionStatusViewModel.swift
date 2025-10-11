@@ -64,10 +64,7 @@ public struct TransactionStatusViewModel {
     }
 
     private var statusTag: TitleTagType {
-        if let swapResult, swapResult.status == .pending {
-            return .progressView()
-        }
-        if state == .pending && swapResult == nil {
+        if swapResult?.status == .pending || (swapResult == nil && state == .pending) {
             return .progressView()
         }
         let image = (swapStateViewModel ?? stateViewModel).stateImage
