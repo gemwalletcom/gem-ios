@@ -17,18 +17,10 @@ struct TransactionMemoViewModel: Sendable {
 
 extension TransactionMemoViewModel: ItemModelProvidable {
     var itemModel: TransactionItemModel {
-        guard showMemo else { return .empty}
+        guard transaction.assetId.chain.isMemoSupported, transaction.memo?.isEmpty == false else { return .empty } 
 
         return .listItem(
             MemoViewModel(memo: transaction.memo).listItemModel
         )
-    }
-}
-
-// MARK: - Private
-
-extension TransactionMemoViewModel {
-    private var showMemo: Bool {
-        transaction.memo?.isEmpty == false
     }
 }

@@ -53,13 +53,13 @@ struct ImportWalletScene: View {
                         .frame(minHeight: 80, alignment: .top)
                         .focused($focusedField, equals: .input)
                         .toolbar {
-                            if model.importType.showToolbar, focusedField == .input {
+                            if model.importType.showToolbar, model.wordsSuggestion.isNotEmpty, focusedField == .input {
                                 ToolbarItem(placement: .keyboard) {
                                     WordSuggestionView(
                                         words: model.wordsSuggestion,
                                         selectWord: model.onSelectWord
                                     )
-                                    .padding(.horizontal, .medium)
+                                    .padding(.horizontal, .small)
                                 }
                             }
                         }
