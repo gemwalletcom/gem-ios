@@ -4,6 +4,7 @@ import Style
 import Components
 import GRDBQuery
 import Store
+import PrimitivesComponents
 
 public struct FiatScene: View {
     @FocusState private var focusedField: Field?
@@ -22,8 +23,8 @@ public struct FiatScene: View {
     public var body: some View {
         @Bindable var model = model
         List {
-            CurrencyInputView(
-                text: $model.amountText,
+            CurrencyInputValidationView(
+                model: $model.inputValidationModel,
                 config: model.currencyInputConfig
             )
             .focused($focusedField, equals: model.input.type == .buy ? .amountBuy : .amountSell)
@@ -45,7 +46,7 @@ public struct FiatScene: View {
         .frame(maxWidth: .infinity)
         .onChange(of: model.focusField, onChangeFocus)
         .onChange(of: model.input.type, model.onChangeType)
-        .onChange(of: model.amountText, model.onChangeAmountText)
+        .onChange(of: model.inputValidationModel.text, model.onChangeAmountText)
         .debounce(
             value: model.input.amount,
             initial: true,

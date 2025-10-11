@@ -76,6 +76,19 @@ public final class ObservablePreferences: Sendable {
             }
         }
     }
+
+    @ObservationIgnored
+    public var isPerpetualEnabled: Bool {
+        get {
+            access(keyPath: \.isPerpetualEnabled)
+            return preferences.isPerpetualEnabled
+        }
+        set {
+            withMutation(keyPath: \.isPerpetualEnabled) {
+                preferences.isPerpetualEnabled = newValue
+            }
+        }
+    }
 }
 
 // MARK: - EnvironmentValues

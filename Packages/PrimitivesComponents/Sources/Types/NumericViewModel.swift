@@ -63,6 +63,10 @@ public struct NumericViewModel: Sendable, AmountDisplayable {
         )
     }
 
+    public var assetImage: AssetImage? {
+        AssetViewModel(asset: data.asset).assetImage
+    }
+
     private var color: Color {
         switch style.sign {
         case .incoming: Colors.green

@@ -20,6 +20,9 @@ final class NavigationStateManager: Sendable {
     @MainActor
     var previousSelectedTab: TabItem = .wallet
 
+    @MainActor
+    var walletTabReselected = false
+
     init() {}
 }
 
@@ -38,6 +41,10 @@ extension NavigationStateManager {
     }
 
     func backToRoot(tab: TabItem) {
+        if wallet.isEmpty {
+            walletTabReselected.toggle()
+        }
+        
         switch tab {
         case .wallet: resetPath(&wallet)
         case .collections: resetPath(&collections)

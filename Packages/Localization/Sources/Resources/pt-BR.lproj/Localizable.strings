@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "Uma pequena quantia fica na sua carteira para cobrir taxas de operações como retirada de stake ou reivindicação de recompensas.";
 "perpetual.open_direction" = "Abrir %@";
 "perpetual.close_direction" = "Fechar %@";
+"perpetuals.title" = "Perpétuos";
+"settings.preferences.title" = "Preferências";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Nenhum mercado encontrado";
+"assets.title" = "Ativos";

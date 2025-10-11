@@ -27,12 +27,13 @@ public struct WalletHeaderView: View {
     }
 
     public var body: some View {
-        VStack(spacing: .large/2) {
+        VStack(spacing: .zero) {
             if let assetImage = model.assetImage {
                 AssetImageView(
                     assetImage: assetImage,
                     size: 64
                 )
+                .padding(.bottom, .space12)
             }
             ZStack {
                 if model.allowHiddenBalance {
@@ -50,6 +51,7 @@ public struct WalletHeaderView: View {
             .fontWeight(.semibold)
             .foregroundStyle(Colors.black)
             .lineLimit(1)
+            .padding(.bottom, .space10)
 
             if let subtitle = model.subtitle {
                 PrivacyText(
@@ -60,6 +62,7 @@ public struct WalletHeaderView: View {
                 .fontWeight(.medium)
                 .foregroundStyle(Colors.gray)
                 .numericTransition(for: model.subtitle)
+                .padding(.bottom, .space10)
             }
 
             switch model.isWatchWallet {
@@ -80,12 +83,12 @@ public struct WalletHeaderView: View {
                     .padding()
                     .background(Colors.grayDarkBackground)
                     .cornerRadius(.medium)
-                    .padding(.top, .medium)
+                    .padding(.top, .space10)
                 }
 
             case false:
                 HeaderButtonsView(buttons: model.buttons, action: onHeaderAction)
-                    .padding(.top, .small)
+                    .padding(.top, .space8)
             }
         }
     }
