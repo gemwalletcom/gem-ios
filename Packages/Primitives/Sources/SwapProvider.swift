@@ -21,6 +21,7 @@ public enum SwapProvider: String, Codable, Equatable, Hashable, Sendable {
 	case reservoir
 	case symbiosis
 	case chainflip
+	case nearIntents = "near_intents"
 	case cetusAggregator = "cetus_aggregator"
 	case relay
 	case hyperliquid
