@@ -106,7 +106,7 @@ extension ConfirmTransferSceneViewModel: ListSectionProvideable {
     public var sections: [ListSection<ConfirmTransferItem>] {
         [
             ListSection(type: .header, [.header]),
-            ListSection(type: .details, [.app, .sender, .network, .recipient, .memo, .swapDetails]),
+            ListSection(type: .details, [.app, .network, .sender, .recipient, .memo, .swapDetails]),
             ListSection(type: .fee, [.networkFee]),
             ListSection(type: .error, [.error])
         ]

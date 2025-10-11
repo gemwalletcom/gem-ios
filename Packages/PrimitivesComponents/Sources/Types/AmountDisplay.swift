@@ -10,6 +10,7 @@ import Foundation
 public protocol AmountDisplayable: Sendable {
     var amount: TextValue { get }
     var fiat: TextValue? { get }
+    var assetImage: AssetImage? { get }
 }
 
 public enum AmountDisplaySign: Sendable {
@@ -63,6 +64,13 @@ extension AmountDisplay: AmountDisplayable {
         }
     }
 
+    public var assetImage: AssetImage? {
+        switch self {
+        case .numeric(let viewModel): viewModel.assetImage
+        case .symbol(let viewModel): viewModel.assetImage
+        }
+    }
+
     func fiatVisibility(_ visible: Bool) -> AmountDisplay {
         switch self {
         case .numeric(let model):
@@ -93,7 +101,7 @@ extension AmountDisplay {
     static func symbol(
         asset: Asset
     ) -> AmountDisplay {
-        .symbol(SymbolViewModel(symbol: asset.symbol))
+        .symbol(SymbolViewModel(asset: asset))
     }
 
     static func numeric(

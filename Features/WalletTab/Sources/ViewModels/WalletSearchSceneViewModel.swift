@@ -8,6 +8,8 @@ import PrimitivesComponents
 import AssetsService
 import Components
 import Preferences
+import Style
+import Localization
 
 @Observable
 @MainActor
@@ -49,16 +51,29 @@ public final class WalletSearchSceneViewModel: Sendable {
         AssetsSections.from(assets)
     }
 
+    var pinnedImage: Image { Images.System.pin }
+    var pinnedTitle: String { Localized.Common.pinned }
+
+    var assetsTitle: String { Localized.Assets.title }
+
     var showTags: Bool {
         searchModel.searchableQuery.isEmpty
     }
 
     var showLoading: Bool {
-        state.isLoading && sections.assets.isEmpty
+        state.isLoading && showEmpty
     }
 
     var showEmpty: Bool {
-        sections.assets.isEmpty
+        !showAssetsSection && !showPinnedSection
+    }
+
+    var showPinnedSection: Bool {
+        sections.pinned.isNotEmpty
+    }
+
+    var showAssetsSection: Bool {
+        sections.assets.isNotEmpty
     }
 
     var currencyCode: String {

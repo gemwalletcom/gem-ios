@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "ステーキング解除や報酬の請求などの操作にかかる手数料をカバーするために、少額がウォレットに残ります。";
 "perpetual.open_direction" = "%@を開く";
 "perpetual.close_direction" = "%@を閉じる";
+"perpetuals.title" = "パーペチュアル";
+"settings.preferences.title" = "設定";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "市場が見つかりません";
+"assets.title" = "資産";

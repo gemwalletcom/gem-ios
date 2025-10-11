@@ -59,6 +59,7 @@ struct WalletNavigationStack: View {
                 }
             }
             .onChange(of: model.currentWallet, model.onChangeWallet)
+            .onChange(of: navigationState.walletTabReselected, model.onWalletTabReselected)
             .observeQuery(
                 request: $model.assetsRequest,
                 value: $model.assets

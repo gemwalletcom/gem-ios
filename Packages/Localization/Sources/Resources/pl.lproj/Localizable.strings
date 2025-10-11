@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "Niewielka kwota pozostaje w Twoim portfelu i służy pokryciu opłat za operacje, takie jak anulowanie transakcji lub odbieranie nagród.";
 "perpetual.open_direction" = "Otwórz %@";
 "perpetual.close_direction" = "Zamknij %@";
+"perpetuals.title" = "Wieczyste";
+"settings.preferences.title" = "Preferencje";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Nie znaleziono rynków";
+"assets.title" = "Aktywa";

@@ -27,12 +27,12 @@ final class FiatSceneViewModelTests {
     @Test
     func testDefaultAmountText() {
         let model = FiatSceneViewModelTests.mock()
-        #expect(model.amountText == String(format: "%.0f", FiatQuoteTypeViewModel(type: .buy).defaultAmount))
+        #expect(model.inputValidationModel.text == String(format: "%.0f", FiatQuoteTypeViewModel(type: .buy).defaultAmount))
 
         model.input.type = .sell
         model.onChangeType(.buy, type: .sell)
 
-        #expect(model.amountText == "")
+        #expect(model.inputValidationModel.text == "")
     }
 
     @Test
@@ -62,12 +62,12 @@ final class FiatSceneViewModelTests {
         let model = FiatSceneViewModelTests.mock()
         model.onSelect(amount: 150)
 
-        #expect(model.amountText == "150")
+        #expect(model.inputValidationModel.text == "150")
 
         model.onSelect(amount: 1.1)
 
-        #expect(model.amountText != "1.1")
-        #expect(model.amountText == "1")
+        #expect(model.inputValidationModel.text != "1.1")
+        #expect(model.inputValidationModel.text == "1")
     }
 
     @Test
@@ -79,11 +79,11 @@ final class FiatSceneViewModelTests {
 
         model.onSelect(amount: 50)
 
-        #expect(model.amountText == "0.0005")
+        #expect(model.inputValidationModel.text == "0.0005")
 
         model.onSelect(amount: 100)
 
-        #expect(model.amountText == "0.001")
+        #expect(model.inputValidationModel.text == "0.001")
     }
 
     @Test
@@ -130,5 +130,22 @@ final class FiatSceneViewModelTests {
         model.input.quote = sellQuote
 
         #expect(model.cryptoAmountValue == "≈ $2,400.00")
+    }
+
+    @Test
+    func testFiatValidation() {
+        let model = FiatSceneViewModelTests.mock()
+        
+        model.inputValidationModel.text = "4"
+        #expect(model.inputValidationModel.update() == false)
+        
+        model.inputValidationModel.text = "5"
+        #expect(model.inputValidationModel.update() == true)
+        
+        model.inputValidationModel.text = "10000"
+        #expect(model.inputValidationModel.update() == true)
+        
+        model.inputValidationModel.text = "10001"
+        #expect(model.inputValidationModel.update() == false)
     }
 }
