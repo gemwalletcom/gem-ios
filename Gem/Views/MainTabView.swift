@@ -189,10 +189,10 @@ extension MainTabView {
                     walletService.setCurrent(for: walletIndex)
                 }
 
+                let asset = try await assetsService.getOrFetchAsset(for: assetId)
+                navigationState.wallet.append(Scenes.Asset(asset: asset))
                 if let walletId = walletService.currentWalletId {
                     let transaction = try await transactionsService.getTransaction(walletId: walletId, transactionId: transactionId)
-
-                    navigationState.wallet.append(Scenes.Asset(asset: transaction.asset))
                     navigationState.wallet.append(transaction)
                 }
             case .priceAlert(let assetId):
