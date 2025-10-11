@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "Tumeacha %@ kwenye salio lako ili kulipia ada za mtandao za siku zijazo.";
+"transfer.reserved_fees" = "Tumeacha %@ katika salio lako ili kulipia ada za mtandao za siku zijazo.";
 "price_alerts.auto_footer" = "Arifa huanzisha hatua muhimu za bei.";
 "price_alerts.set_alert.title" = "Weka Arifa ya Bei";
 "swap.min_receive" = "Kiasi cha chini cha kupokea";
