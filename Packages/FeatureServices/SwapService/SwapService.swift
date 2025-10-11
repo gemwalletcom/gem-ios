@@ -17,7 +17,6 @@ import func Gemstone.getDefaultSlippage
 import GemstonePrimitives
 import NativeProviderService
 import Primitives
-import enum Primitives.AnyError
 import enum Primitives.Chain
 import enum Primitives.EVMChain
 

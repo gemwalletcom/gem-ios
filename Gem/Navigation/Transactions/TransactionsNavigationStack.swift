@@ -8,6 +8,7 @@ import Transactions
 import Store
 import Assets
 import AssetsService
+import SwapService
 
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -17,6 +18,7 @@ struct TransactionsNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceObserverService) private var priceObserverService
     @Environment(\.bannerService) private var bannerService
+    @Environment(\.swapTransactionService) private var swapTransactionService
 
     @State private var model: TransactionsViewModel
 
@@ -56,7 +58,8 @@ struct TransactionsNavigationStack: View {
                     TransactionNavigationView(
                         model: TransactionSceneViewModel(
                             transaction: $0,
-                            walletId: model.wallet.id
+                            walletId: model.wallet.id,
+                            swapTransactionService: swapTransactionService
                         )
                     )
                 }

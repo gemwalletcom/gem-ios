@@ -121,6 +121,7 @@ struct ServicesFactory {
         )
         let explorerService = ExplorerService.standard
         let swapService = SwapService(nodeProvider: nodeService)
+        let swapTransactionService = SwapTransactionService(nodeProvider: nodeService)
 
         let presenter = WalletConnectorPresenter()
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)
@@ -220,6 +221,7 @@ struct ServicesFactory {
             nftService: nftService,
             avatarService: avatarService,
             swapService: swapService,
+            swapTransactionService: swapTransactionService,
             appReleaseService: releaseService,
             subscriptionsService: subscriptionService,
             deviceObserverService: deviceObserverService,

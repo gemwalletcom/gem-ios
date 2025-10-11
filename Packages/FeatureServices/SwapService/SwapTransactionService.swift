@@ -2,34 +2,60 @@
 
 import Foundation
 import class Gemstone.GemSwapper
+import enum Gemstone.SwapperProvider
+import struct Gemstone.SwapperSwapResult
+import class Gemstone.SwapProviderConfig
 import GemstonePrimitives
-import ChainService
 import NativeProviderService
 import Primitives
 
-public struct SwapTransactionService: Sendable {
-    private let nodeProvider: any NodeURLFetchable
+public protocol SwapStatusProviding: Sendable {
+    func getSwapResult(
+        providerId: String?,
+        chain: Primitives.Chain,
+        transactionId: String,
+        memo: String?
+    ) async throws -> SwapResult
+}
+
+public struct SwapTransactionService: SwapStatusProviding, Sendable {
     private let swapper: GemSwapper
-    private let swapConfig = GemstoneConfig.shared.getSwapConfig()
-    
-    public init(
-        nodeProvider: any NodeURLFetchable
-    ) {
-        self.nodeProvider = nodeProvider
-        self.swapper = GemSwapper(
-            rpcProvider: NativeProvider(nodeProvider: nodeProvider)
-        )
+
+    public init(nodeProvider: any NodeURLFetchable) {
+        swapper = GemSwapper(rpcProvider: NativeProvider(nodeProvider: nodeProvider))
     }
-    
-    public func getTransactionStatus(chain: Primitives.Chain, provider: String?, hash: String) async throws {
-        //let provider = SwapProviderConfig
-        
-        //let provider = SwapProvider.across
-        
-//        let status = try await swapper.getTransactionStatus(
-//            chain: chain.rawValue,
-//            swapProvider: .across,
-//            transactionHash: hash
-//        )
+
+    public func getSwapResult(
+        providerId: String?,
+        chain: Primitives.Chain,
+        transactionId: String,
+        memo: String?
+    ) async throws -> SwapResult {
+        guard let providerId, !providerId.isEmpty else {
+            throw AnyError("Swap provider is missing")
+        }
+
+        guard let swapProvider = providerId.toSwapperProvider() else {
+            throw AnyError("Invalid swap provider: \(providerId)")
+        }
+
+        let transactionHash = if swapProvider == .nearIntents, let memo, !memo.isEmpty {
+            memo
+        } else {
+            transactionId
+        }
+        let result = try await swapper.getSwapResult(
+            chain: chain.rawValue,
+            swapProvider: swapProvider,
+            transactionHash: transactionHash
+        )
+
+        return try result.asPrimitives()
+    }
+}
+
+private extension String {
+    func toSwapperProvider() -> SwapperProvider? {
+        SwapProviderConfig.fromString(id: self).inner().id
     }
 }

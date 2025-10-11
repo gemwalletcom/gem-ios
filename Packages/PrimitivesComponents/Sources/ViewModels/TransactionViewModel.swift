@@ -150,6 +150,10 @@ public struct TransactionViewModel: Sendable {
         }
     }
 
+    public var swapStatusTitle: String {
+        Localized.Transaction.swapStatus
+    }
+
     public var titleTagTextValue: TextValue? {
         let title: String? = switch transaction.transaction.state {
         case .confirmed: .none
