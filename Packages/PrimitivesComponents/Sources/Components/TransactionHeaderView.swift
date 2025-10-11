@@ -21,8 +21,13 @@ public struct TransactionHeaderView: View {
     public var body: some View {
         VStack(alignment: .center) {
             switch type {
-            case let .amount(display):
-                AmountView(viewModel: display)
+            case .amount(let display):
+                WalletHeaderView(
+                    model: TransactionAmountHeaderViewModel(display: display),
+                    isHideBalanceEnalbed: .constant(false),
+                    onHeaderAction: nil,
+                    onInfoAction: nil
+                )
             case .swap(let from, let to):
                 SwapAmountView(from: from, to: to)
             case .nft(let name, let image):

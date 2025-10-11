@@ -63,7 +63,6 @@ struct SettingsNavigationStack: View {
                 model: SettingsViewModel(
                     walletId: walletId,
                     walletsService: walletsService,
-                    currencyModel: currencyModel,
                     observablePrefereces: observablePreferences
                 ),
                 isPresentingWallets: $isPresentingWallets,
@@ -138,6 +137,9 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.Currency.self) { _ in
                 CurrencyScene(model: currencyModel)
+            }
+            .navigationDestination(for: Scenes.Preferences.self) { _ in
+                PreferencesScene(model: PreferencesViewModel(currencyModel: currencyModel))
             }
             .navigationDestination(for: Scenes.ChainSettings.self) {
                 ChainSettingsScene(

@@ -113,6 +113,8 @@ public enum Localized {
     public static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
     /// Select Asset
     public static let selectAsset = Localized.tr("Localizable", "assets.select_asset", fallback: "Select Asset")
+    /// Assets
+    public static let title = Localized.tr("Localizable", "assets.title", fallback: "Assets")
     public enum State {
       public enum Empty {
         /// You can try to add it manually
@@ -806,6 +808,18 @@ public enum Localized {
     /// Size
     public static let size = Localized.tr("Localizable", "perpetual.size", fallback: "Size")
   }
+  public enum Perpetuals {
+    /// Markets
+    public static let markets = Localized.tr("Localizable", "perpetuals.markets", fallback: "Markets")
+    /// Perpetuals
+    public static let title = Localized.tr("Localizable", "perpetuals.title", fallback: "Perpetuals")
+    public enum EmptyState {
+      /// No markets
+      public static let noMarkets = Localized.tr("Localizable", "perpetuals.empty_state.no_markets", fallback: "No markets")
+      /// No markets found
+      public static let noMarketsFound = Localized.tr("Localizable", "perpetuals.empty_state.no_markets_found", fallback: "No markets found")
+    }
+  }
   public enum PriceAlerts {
     /// Set price alert %@
     public static func addedFor(_ p1: Any) -> String {
@@ -959,6 +973,10 @@ public enum Localized {
     public enum Notifications {
       /// Notifications
       public static let title = Localized.tr("Localizable", "settings.notifications.title", fallback: "Notifications")
+    }
+    public enum Preferences {
+      /// Preferences
+      public static let title = Localized.tr("Localizable", "settings.preferences.title", fallback: "Preferences")
     }
     public enum PriceAlerts {
       /// Price Alerts

@@ -44,6 +44,7 @@ public struct WalletsService: Sendable {
         let processor = DiscoveryAssetsProcessor(
             deviceService: deviceService,
             discoverAssetService: DiscoverAssetsService(balanceService: balanceService),
+            assetService: assetsService,
             priceUpdater: priceUpdater,
             walletSessionService: walletSessionService,
             assetsEnabler: assetsEnabler

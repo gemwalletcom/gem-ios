@@ -27,19 +27,19 @@ public struct WalletScene: View {
                     onHeaderAction: model.onHeaderAction,
                     onInfoAction: model.onSelectWatchWalletInfo
                 )
-                .padding(.top, .small)
+                .padding(.top, .space6)
             }
             .cleanListRow()
 
-            if ($preferences.isDeveloperEnabled.wrappedValue || preferences.preferences.isPerpetualEnabled) && model.wallet.isMultiCoins {
+            if preferences.isPerpetualEnabled && model.wallet.isMultiCoins {
                 Section {
                     PerpetualsPreviewView(wallet: model.wallet)
                 } header: {
-                    HeaderNavigationLinkView(title: "Perpetuals", destination: Scenes.Perpetuals())
+                    HeaderNavigationLinkView(title: model.perpetualsTitle, destination: Scenes.Perpetuals())
                 }
             }
             
-            if let banner = model.walletBannersModel.priorityBanner {
+            if let banner = model.walletBannersModel.allBanners.first {
                 Section {
                     BannerView(
                         banner: banner,

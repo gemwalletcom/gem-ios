@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "يبقى مبلغ صغير في محفظتك لتغطية الرسوم الخاصة بالعمليات مثل إلغاء المراهنة أو المطالبة بالمكافآت.";
 "perpetual.open_direction" = "افتح %@";
 "perpetual.close_direction" = "إغلاق %@";
+"perpetuals.title" = "الأبدية";
+"settings.preferences.title" = "التفضيلات";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "لم يتم العثور على الأسواق";
+"assets.title" = "أصول";

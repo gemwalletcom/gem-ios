@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "Sejumlah kecil kekal dalam dompet anda untuk menampung yuran untuk operasi seperti menanggalkan atau menuntut ganjaran.";
 "perpetual.open_direction" = "Buka %@";
 "perpetual.close_direction" = "Tutup %@";
+"perpetuals.title" = "Kekal";
+"settings.preferences.title" = "Keutamaan";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Tiada pasaran ditemui";
+"assets.title" = "Aset";

@@ -12,6 +12,7 @@ import DeviceService
 struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
     private let deviceService: any DeviceServiceable
     private let discoverAssetService: DiscoverAssetsService
+    private let assetService: AssetsService
     private let priceUpdater: any PriceUpdater
     private let walletSessionService: any WalletSessionManageable
     private let assetsEnabler: any AssetsEnabler
@@ -19,12 +20,14 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
     init(
         deviceService: any DeviceServiceable,
         discoverAssetService: DiscoverAssetsService,
+        assetService: AssetsService,
         priceUpdater: any PriceUpdater,
         walletSessionService: any WalletSessionManageable,
         assetsEnabler: any AssetsEnabler
     ) {
         self.deviceService = deviceService
         self.discoverAssetService = discoverAssetService
+        self.assetService = assetService
         self.priceUpdater = priceUpdater
         self.walletSessionService = walletSessionService
         self.assetsEnabler = assetsEnabler
@@ -41,6 +44,7 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
             wallet: wallet,
             fromTimestamp: preferences.assetsTimestamp
         )
+        try await assetService.prefetchAssets(assetIds: assetIds)
         try await priceUpdater.addPrices(assetIds: assetIds)
         await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: assetIds, enabled: true)
         

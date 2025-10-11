@@ -31,8 +31,7 @@ public struct TransactionHeaderListItemView: View {
         if showClearHeader {
             Section {} header: {
                 TransactionHeaderView(type: headerType)
-                    .padding(.top, .small + .space2)
-                    .padding(.bottom, .small + .space4)
+                    .padding(.top, .small)
             }
             .cleanListRow()
         } else {
