@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "আমরা %@ বাদ দিয়েছি যাতে আপনি টাকা তোলার ফি পরিশোধ করতে পারেন।";
+"transfer.reserved_fees" = "ভবিষ্যতের নেটওয়ার্ক ফি মেটানোর জন্য আমরা আপনার ব্যালেন্সে %@ বাদ দিয়েছি।";
 "price_alerts.auto_footer" = "উল্লেখযোগ্য মূল্য পরিবর্তনের সময় সতর্কতাগুলি ট্রিগার করে।";
 "price_alerts.set_alert.title" = "মূল্য সতর্কতা সেট করুন";
 "swap.min_receive" = "প্রাপ্তির সর্বনিম্ন";

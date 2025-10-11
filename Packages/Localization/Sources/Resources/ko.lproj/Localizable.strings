@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "출금 수수료를 지불할 수 있도록 %@ 제외했습니다.";
+"transfer.reserved_fees" = "향후 네트워크 수수료를 충당하기 위해 잔액에서 %@ 제외했습니다.";
 "price_alerts.auto_footer" = "가격이 크게 변동하면 알림이 울립니다.";
 "price_alerts.set_alert.title" = "가격 설정 알림";
 "swap.min_receive" = " 최소 수령";

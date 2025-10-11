@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "השמטנו את %@ כדי שתוכל לשלם עבור עמלות משיכה.";
+"transfer.reserved_fees" = "השארנו %@ ביתרה שלך כדי לכסות את דמי הרשת העתידיים.";
 "price_alerts.auto_footer" = "התראות מופעלות על תנודות משמעותיות במחיר.";
 "price_alerts.set_alert.title" = "הגדר התראת מחיר";
 "swap.min_receive" = "סכום מינימום לקבל";

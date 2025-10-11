@@ -13,8 +13,8 @@ public struct Transaction: Codable, Equatable, Sendable {
 	public let contract: String?
 	public let type: TransactionType
 	public let state: TransactionState
-	public let blockNumber: String?
-	public let sequence: String?
+	public let blockNumber: String
+	public let sequence: String
 	public let fee: String
 	public let feeAssetId: AssetId
 	public let value: String
@@ -25,7 +25,7 @@ public struct Transaction: Codable, Equatable, Sendable {
 	public let metadata: TransactionMetadata?
 	public let createdAt: Date
 
-	public init(id: String, hash: String, assetId: AssetId, from: String, to: String, contract: String?, type: TransactionType, state: TransactionState, blockNumber: String?, sequence: String?, fee: String, feeAssetId: AssetId, value: String, memo: String?, direction: TransactionDirection, utxoInputs: [TransactionUtxoInput]?, utxoOutputs: [TransactionUtxoInput]?, metadata: TransactionMetadata?, createdAt: Date) {
+	public init(id: String, hash: String, assetId: AssetId, from: String, to: String, contract: String?, type: TransactionType, state: TransactionState, blockNumber: String, sequence: String, fee: String, feeAssetId: AssetId, value: String, memo: String?, direction: TransactionDirection, utxoInputs: [TransactionUtxoInput]?, utxoOutputs: [TransactionUtxoInput]?, metadata: TransactionMetadata?, createdAt: Date) {
 		self.id = id
 		self.hash = hash
 		self.assetId = assetId
