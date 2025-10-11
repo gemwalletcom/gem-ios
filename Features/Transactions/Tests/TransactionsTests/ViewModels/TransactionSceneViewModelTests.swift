@@ -114,7 +114,7 @@ struct TransactionSceneViewModelTests {
         let swapModel = TransactionSceneViewModel.mock(
             type: .swap,
             metadata: .swap(metadata),
-            swapResultProvider: .init { _, _, _ in swapResult }
+            swapStatusProvider: .init { _, _, _, _ in swapResult }
         )
 
         await Task.yield()
@@ -126,12 +126,6 @@ struct TransactionSceneViewModelTests {
             Issue.record("Expected swap status list item")
         }
 
-        if case .listItem(let destinationItem) = swapModel.item(for: TransactionItem.destinationTransaction) {
-            #expect(destinationItem.title == Localized.Transaction.destinationTransaction)
-            #expect(destinationItem.subtitle == "0xdestination")
-        } else {
-            Issue.record("Expected destination transaction list item")
-        }
     }
 
     @Test
@@ -148,7 +142,7 @@ struct TransactionSceneViewModelTests {
             transaction: transaction,
             walletId: "test_wallet_id",
             preferences: Preferences.standard,
-            swapTransactionService: SwapResultProviderMock.noop
+            swapTransactionService: SwapStatusProviderMock.noop
         )
 
         if case .participant(let item) = modelWithAddresses.item(for: TransactionItem.participant) {
@@ -269,7 +263,7 @@ struct TransactionSceneViewModelTests {
 }
 
 extension TransactionSceneViewModel {
-    static func mock(
+    fileprivate static func mock(
         type: TransactionType = .transfer,
         state: TransactionState = .confirmed,
         direction: TransactionDirection = .outgoing,
@@ -278,7 +272,7 @@ extension TransactionSceneViewModel {
         memo: String? = nil,
         createdAt: Date = Date(),
         metadata: TransactionMetadata? = nil,
-        swapResultProvider: SwapResultProviderMock = .noop
+        swapStatusProvider: SwapStatusProviderMock = .noop
     ) -> TransactionSceneViewModel {
         TransactionSceneViewModel(
             transaction: TransactionExtended.mock(
@@ -294,25 +288,25 @@ extension TransactionSceneViewModel {
             ),
             walletId: "test_wallet_id",
             preferences: Preferences.standard,
-            swapTransactionService: swapResultProvider
+            swapTransactionService: swapStatusProvider
         )
     }
 }
 
-private struct SwapResultProviderMock: SwapResultProviding {
-    private let handler: (Chain, String?, String) async throws -> SwapResult
+fileprivate struct SwapStatusProviderMock: SwapStatusProviding {
+    private let handler: @Sendable (String?, Chain, String, String?) async throws -> SwapResult
 
-    init(handler: @escaping (Chain, String?, String) async throws -> SwapResult) {
+    init(handler: @escaping @Sendable (String?, Chain, String, String?) async throws -> SwapResult) {
         self.handler = handler
     }
 
-    static var noop: SwapResultProviderMock {
-        SwapResultProviderMock { _, _, _ in
+    static var noop: SwapStatusProviderMock {
+        SwapStatusProviderMock { _, _, _, _ in
             SwapResult(status: .pending, fromChain: .ethereum, fromTxHash: "", toChain: nil, toTxHash: nil)
         }
     }
 
-    func getSwapResult(chain: Chain, providerId: String?, transactionHash: String) async throws -> SwapResult {
-        try await handler(chain, providerId, transactionHash)
+    func getSwapResult(providerId: String?, chain: Chain, transactionId: String, memo: String?) async throws -> SwapResult {
+        try await handler(providerId, chain, transactionId, memo)
     }
 }

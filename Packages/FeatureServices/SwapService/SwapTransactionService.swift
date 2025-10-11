@@ -9,25 +9,27 @@ import GemstonePrimitives
 import NativeProviderService
 import Primitives
 
-public protocol SwapResultProviding: Sendable {
+public protocol SwapStatusProviding: Sendable {
     func getSwapResult(
-        chain: Primitives.Chain,
         providerId: String?,
-        transactionHash: String
+        chain: Primitives.Chain,
+        transactionId: String,
+        memo: String?
     ) async throws -> SwapResult
 }
 
-public struct SwapTransactionService: SwapResultProviding, Sendable {
+public struct SwapTransactionService: SwapStatusProviding, Sendable {
     private let swapper: GemSwapper
 
     public init(nodeProvider: any NodeURLFetchable) {
-        self.swapper = GemSwapper(rpcProvider: NativeProvider(nodeProvider: nodeProvider))
+        swapper = GemSwapper(rpcProvider: NativeProvider(nodeProvider: nodeProvider))
     }
 
     public func getSwapResult(
-        chain: Primitives.Chain,
         providerId: String?,
-        transactionHash: String
+        chain: Primitives.Chain,
+        transactionId: String,
+        memo: String?
     ) async throws -> SwapResult {
         guard let providerId, !providerId.isEmpty else {
             throw AnyError("Swap provider is missing")
@@ -37,6 +39,11 @@ public struct SwapTransactionService: SwapResultProviding, Sendable {
             throw AnyError("Invalid swap provider: \(providerId)")
         }
 
+        let transactionHash = if swapProvider == .nearIntents, let memo, !memo.isEmpty {
+            memo
+        } else {
+            transactionId
+        }
         let result = try await swapper.getSwapResult(
             chain: chain.rawValue,
             swapProvider: swapProvider,

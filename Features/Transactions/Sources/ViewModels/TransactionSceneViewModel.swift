@@ -8,15 +8,15 @@ import Preferences
 import Primitives
 import PrimitivesComponents
 import Store
-import SwiftUI
 import SwapService
+import SwiftUI
 
 @Observable
 @MainActor
 public final class TransactionSceneViewModel {
     private let preferences: Preferences
     private let explorerService: ExplorerService
-    private let swapTransactionService: any SwapResultProviding
+    private let swapTransactionService: any SwapStatusProviding
 
     var request: TransactionRequest
     var transactionExtended: TransactionExtended
@@ -31,7 +31,7 @@ public final class TransactionSceneViewModel {
         walletId: String,
         preferences: Preferences = Preferences.standard,
         explorerService: ExplorerService = ExplorerService.standard,
-        swapTransactionService: any SwapResultProviding
+        swapTransactionService: any SwapStatusProviding
     ) {
         self.preferences = preferences
         self.explorerService = explorerService
@@ -179,14 +179,16 @@ extension TransactionSceneViewModel {
         guard isCrossChainSwap, let provider = swapProviderIdentifier else { return }
 
         let chain = transactionExtended.transaction.assetId.chain
-        let hash = transactionExtended.transaction.hash
+        let transactionId = transactionExtended.transaction.hash
+        // Stellar might be different here
+        let memo = transactionExtended.transaction.memo ?? transactionExtended.transaction.to
 
         swapStatusTask = Task { [weak self] in
-            await self?.pollSwapStatus(chain: chain, provider: provider, hash: hash)
+            await self?.pollSwapStatus(provider: provider, chain: chain, transactionId: transactionId, memo: memo)
         }
     }
 
-    private func pollSwapStatus(chain: Chain, provider: String, hash: String) async {
+    private func pollSwapStatus(provider: String, chain: Chain, transactionId: String, memo: String?) async {
         defer { swapStatusTask = nil }
 
         var backoff: Duration = .seconds(5)
@@ -194,9 +196,10 @@ extension TransactionSceneViewModel {
         while !Task.isCancelled {
             do {
                 let result = try await swapTransactionService.getSwapResult(
-                    chain: chain,
                     providerId: provider,
-                    transactionHash: hash
+                    chain: chain,
+                    transactionId: transactionId,
+                    memo: memo
                 )
                 swapResult = result
                 if result.status != .pending { break }
