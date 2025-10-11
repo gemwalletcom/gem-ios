@@ -91,24 +91,35 @@ struct AmountSceneViewModelTests {
     }
 
     @Test
-    func stakeManualInputNearMax() {
-        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 2_000_000_000_000_000_000))
-        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+    func unfreezeWithSufficientBalance() {
+        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(frozen: 1_000_000))
+        let model = AmountSceneViewModel.mock(
+            type: .freeze(data: .init(freezeType: .unfreeze, resource: .bandwidth)),
+            assetData: assetData
+        )
 
-        model.amountInputModel.update(text: "2.0")
-        #expect(model.infoText != nil)
-
-        model.amountInputModel.update(text: "1.9")
-        #expect(model.infoText == nil)
+        model.amountInputModel.update(text: "1.0")
+        #expect(model.amountInputModel.isValid == true)
     }
 
     @Test
-    func stakeUserInputAboveMax() {
-        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 2_000_000_000_000_000_000))
-        let model = AmountSceneViewModel.mock(type: .stake(validators: [.mock()], recommendedValidator: .mock()), assetData: assetData)
+    func unfreezeEnergyWithSufficientBalance() {
+        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(locked: 2_000_000))
+        let model = AmountSceneViewModel.mock(
+            type: .freeze(data: .init(freezeType: .unfreeze, resource: .energy)),
+            assetData: assetData
+        )
 
         model.amountInputModel.update(text: "2.0")
-        #expect(model.infoText != nil)
+        #expect(model.amountInputModel.isValid == true)
+    }
+
+    @Test
+    func tronStakeWithoutFeeReservation() {
+        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(frozen: 10_000_000, locked: 0))
+        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+
+        model.amountInputModel.update(text: "10")
         #expect(model.amountInputModel.isValid == true)
     }
 }

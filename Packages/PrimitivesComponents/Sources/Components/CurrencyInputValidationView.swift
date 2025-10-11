@@ -34,6 +34,7 @@ public struct CurrencyInputValidationView: View {
                         InfoButton(action: action)
                     }
                     Text(error.localizedDescription)
+                        .multilineTextAlignment(.center)
                         .textStyle(TextStyle(font: .footnote, color: Colors.red))
                         .transition(.opacity)
                 }
