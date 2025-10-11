@@ -622,11 +622,11 @@ extension AmountSceneViewModel {
         case .stake:
             switch asset.chain {
             case .tron: availableValue
-            default: shouldReserveFee ? availableBalanceForStaking : availableValue
+            default: shouldReserveFee ? availableBalanceForMaxStaking : availableValue
             }
         case .freeze(let data):
             switch data.freezeType {
-            case .freeze: shouldReserveFee ? availableBalanceForStaking : availableValue
+            case .freeze: shouldReserveFee ? availableBalanceForMaxStaking : availableValue
             case .unfreeze: availableValue
             }
         }
@@ -670,11 +670,11 @@ extension AmountSceneViewModel {
         case .stake:
             switch asset.chain {
             case .tron: false
-            default: availableBalanceForStaking > minimumValue
+            default: availableBalanceForMaxStaking > minimumValue
             }
         case .freeze(let data):
             switch data.freezeType {
-            case .freeze: availableBalanceForStaking > minimumValue
+            case .freeze: availableBalanceForMaxStaking > minimumValue
             case .unfreeze: false
             }
         }
@@ -696,7 +696,7 @@ extension AmountSceneViewModel {
         }
     }
 
-    private var availableBalanceForStaking: BigInt {
+    private var availableBalanceForMaxStaking: BigInt {
         max(.zero, availableValue - reserveForFee)
     }
 }
