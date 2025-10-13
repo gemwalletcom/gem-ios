@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Components
 import PrimitivesComponents
+import Primitives
 
 public enum TransactionSectionType: String, Identifiable, Equatable {
     case header
@@ -35,6 +36,7 @@ public enum TransactionItem: Identifiable, Equatable, Sendable {
 
 public enum TransactionItemModel {
     case listItem(ListItemModel)
+    case fee(ListItemModel)
     case header(TransactionHeaderItemModel)
     case participant(TransactionParticipantItemModel)
     case network(title: String, subtitle: String, image: AssetImage)

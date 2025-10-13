@@ -184,14 +184,19 @@ extension MainTabView {
     private func onReceiveNotification(notification: PushNotification) async {
         do {
             switch notification {
-            case .transaction(let walletIndex, let assetId):
-                //select wallet
+            case let .transaction(walletIndex, assetId, transaction):
                 if walletIndex != model.wallet.index.asInt {
                     walletService.setCurrent(for: walletIndex)
                 }
 
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)
-                navigationState.wallet.append(Scenes.Asset(asset: asset))
+                try transactionsService.addTransaction(walletId: model.walletId, transaction: transaction)
+                let transaction = try transactionsService.getTransaction(walletId: model.walletId, transactionId: transaction.id)
+                
+                var path = NavigationPath()
+                path.append(Scenes.Asset(asset: asset))
+                path.append(transaction)
+                navigationState.wallet = path
             case .priceAlert(let assetId):
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Price(asset: asset))

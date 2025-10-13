@@ -3,7 +3,8 @@
 import Testing
 import Primitives
 import BigInt
-@testable import Transfer
+
+@testable import PrimitivesComponents
 
 @MainActor
 struct NetworkFeeSceneViewModelTests {
