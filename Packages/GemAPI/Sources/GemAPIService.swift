@@ -53,7 +53,6 @@ public protocol GemAPISubscriptionService: Sendable {
 public protocol GemAPITransactionService: Sendable {
     func getTransactionsAll(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> TransactionsResponse
     func getTransactionsForAsset(deviceId: String, walletIndex: Int, asset: AssetId, fromTimestamp: Int) async throws -> TransactionsResponse
-    func getTransaction(transactionId: String) async throws -> Transaction
 }
 
 public protocol GemAPIPriceAlertService: Sendable {
@@ -183,14 +182,6 @@ extension GemAPIService: GemAPITransactionService {
         return try await provider
             .request(.getTransactions(deviceId: deviceId, options: options))
             .map(as: TransactionsResponse.self)
-    }
-
-    public func getTransaction(transactionId: String) async throws -> Transaction {
-        let transaction = try await provider
-            .request(.getTransaction(transactionId: transactionId))
-            .map(as: Transaction.self)
-
-        return transaction
     }
 }
 

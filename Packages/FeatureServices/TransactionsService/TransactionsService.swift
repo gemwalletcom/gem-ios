@@ -74,13 +74,9 @@ public final class TransactionsService: Sendable {
         store.setTransactionsForAssetTimestamp(assetId: assetId.identifier, value: newTimestamp)
     }
 
-    public func getTransaction(walletId: WalletId, transactionId: String) async throws -> TransactionExtended {
-        let transaction = try await provider.getTransaction(transactionId: transactionId)
-
-        try await prefetchAssets(walletId: walletId, transactions: [transaction])
+    public func addTransaction(walletId: WalletId, transaction: Transaction) throws -> TransactionExtended {
         try transactionStore.addTransactions(walletId: walletId.id, transactions: [transaction])
-
-        return try transactionStore.getTransaction(walletId: walletId.id, transactionId: transactionId)
+        return try transactionStore.getTransaction(walletId: walletId.id, transactionId: transaction.id)
     }
 
     private func prefetchAssets(walletId: WalletId, transactions: [Transaction]) async throws {

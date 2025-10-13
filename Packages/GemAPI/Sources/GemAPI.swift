@@ -28,7 +28,6 @@ public enum GemAPI: TargetType {
     case deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
 
     case getTransactions(deviceId: String, options: TransactionsFetchOption)
-    case getTransaction(transactionId: String)
 
     case getAsset(AssetId)
     case getAssets([AssetId])
@@ -59,7 +58,6 @@ public enum GemAPI: TargetType {
             .getSubscriptions,
             .getDevice,
             .getTransactions,
-            .getTransaction,
             .getAsset,
             .getSearchAssets,
             .getAssetsList,
@@ -114,8 +112,6 @@ public enum GemAPI: TargetType {
             return "/v1/devices/\(device.id)"
         case .getTransactions(let deviceId, _):
             return "/v2/transactions/device/\(deviceId)"
-        case .getTransaction(let transactionId):
-            return "/v1/transactions/\(transactionId)"
         case .getAsset(let id):
             return "/v1/assets/\(id.identifier.replacingOccurrences(of: "/", with: "%2F"))"
         case .getAssets:
@@ -151,7 +147,6 @@ public enum GemAPI: TargetType {
             .deleteDevice,
             .getAssetsList,
             .getAsset,
-            .getTransaction,
             .getPriceAlerts,
             .getNFTAssets,
             .markets:
