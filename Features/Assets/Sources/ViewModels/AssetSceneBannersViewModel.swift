@@ -7,7 +7,7 @@ import PrimitivesComponents
 
 @Observable
 @MainActor
-public final class AssetBannersViewModel: Sendable {
+public final class AssetSceneBannersViewModel: Sendable {
     private let assetData: AssetData
     private let banners: [Banner]
     
@@ -17,10 +17,6 @@ public final class AssetBannersViewModel: Sendable {
     ) {
         self.assetData = assetData
         self.banners = banners
-    }
-    
-    public var priorityBanner: Banner? {
-        allBanners.first
     }
     
     public var allBanners: [Banner] {

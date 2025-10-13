@@ -437,7 +437,7 @@
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
 "info.funding_rate.description" = "The funding rate determines the cost of holding a perpetual position. It is calculated hourly and helps maintain price equilibrium between the perpetual contract and the underlying asset's spot price.";
-"info.liquidation_price.title" = "Liquidation Price";
+"info.liquidation_price.title" = "Giá thanh lý";
 "info.liquidation_price.description" = "The liquidation price is the price level at which your position will be automatically closed to prevent further losses. When the market price reaches this level, your position is liquidated and you lose your margin.";
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "Chúng tôi đã bỏ %@ ra để bạn có thể trả phí rút tiền.";
+"transfer.reserved_fees" = "Chúng tôi đã để lại %@ trong số dư của bạn để trang trải phí mạng trong tương lai.";
 "price_alerts.auto_footer" = "Cảnh báo sẽ được kích hoạt khi giá biến động đáng kể.";
 "price_alerts.set_alert.title" = "Đặt cảnh báo giá";
 "swap.min_receive" = "Nhận tối thiểu";
@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "Một số tiền nhỏ sẽ được giữ lại trong ví của bạn để trang trải phí cho các hoạt động như hủy đặt cọc hoặc nhận phần thưởng.";
 "perpetual.open_direction" = "Mở %@";
 "perpetual.close_direction" = "Đóng %@";
+"perpetuals.title" = "Tiền vĩnh cửu";
+"settings.preferences.title" = "Sở thích";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Không tìm thấy thị trường";
+"assets.title" = "Tài sản";

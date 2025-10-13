@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "Çekim ücretlerini ödeyebilmeniz için %@ dışarıda bıraktık.";
+"transfer.reserved_fees" = "Gelecekteki ağ ücretlerini karşılamak için bakiyenizde %@ bıraktık.";
 "price_alerts.auto_footer" = "Önemli fiyat hareketlerinde uyarılar tetiklenir.";
 "price_alerts.set_alert.title" = "Fiyat Uyarısı Ayarla";
 "swap.min_receive" = "Alınacak minimum";
@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "Cüzdanınızda, stake'lerinizi iptal etme veya ödül talep etme gibi işlemlerin ücretlerini karşılamak için küçük bir miktar kalır.";
 "perpetual.open_direction" = "%@ yi aç";
 "perpetual.close_direction" = "%@ yi kapatın";
+"perpetuals.title" = "Sürekliler";
+"settings.preferences.title" = "Tercihler";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Hiçbir pazar bulunamadı";
+"assets.title" = "Varlıklar";

@@ -124,7 +124,7 @@ struct TransactionSceneViewModelTests {
 
     @Test
     func memoItemModel() {
-        let modelWithMemo = TransactionSceneViewModel.mock(memo: "Test memo")
+        let modelWithMemo = TransactionSceneViewModel.mock(assetId: .mock(.cosmos), memo: "Test memo")
         if case .listItem(let item) = modelWithMemo.item(for: TransactionItem.memo) {
             #expect(item.title == Localized.Transfer.memo)
             #expect(item.subtitle == "Test memo")
@@ -132,13 +132,13 @@ struct TransactionSceneViewModelTests {
             Issue.record("Expected listItem for memo")
         }
 
-        let modelNoMemo = TransactionSceneViewModel.mock(memo: nil)
+        let modelNoMemo = TransactionSceneViewModel.mock(assetId: .mock(.cosmos), memo: nil)
         if case .empty = modelNoMemo.item(for: TransactionItem.memo) {
         } else {
             Issue.record("Expected empty for nil memo")
         }
 
-        let modelEmptyMemo = TransactionSceneViewModel.mock(memo: "")
+        let modelEmptyMemo = TransactionSceneViewModel.mock(assetId: .mock(.cosmos), memo: "")
         if case .empty = modelEmptyMemo.item(for: TransactionItem.memo) {
         } else {
             Issue.record("Expected empty for empty memo")
@@ -230,6 +230,7 @@ extension TransactionSceneViewModel {
         type: TransactionType = .transfer,
         state: TransactionState = .confirmed,
         direction: TransactionDirection = .outgoing,
+        assetId: AssetId = .mock(),
         toAddress: String = "participant_address",
         memo: String? = nil,
         createdAt: Date = Date()
@@ -240,6 +241,7 @@ extension TransactionSceneViewModel {
                     type: type,
                     state: state,
                     direction: direction,
+                    assetId: assetId,
                     to: toAddress,
                     memo: memo
                 )

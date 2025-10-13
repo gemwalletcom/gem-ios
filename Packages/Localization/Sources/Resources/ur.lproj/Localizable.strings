@@ -437,7 +437,7 @@
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
 "info.funding_rate.description" = "The funding rate determines the cost of holding a perpetual position. It is calculated hourly and helps maintain price equilibrium between the perpetual contract and the underlying asset's spot price.";
-"info.liquidation_price.title" = "Liquidation Price";
+"info.liquidation_price.title" = "لیکویڈیشن کی قیمت";
 "info.liquidation_price.description" = "The liquidation price is the price level at which your position will be automatically closed to prevent further losses. When the market price reaches this level, your position is liquidated and you lose your margin.";
 "info.open_interest.title" = "Open Interest";
 "info.open_interest.description" = "Open interest represents the total value of all outstanding perpetual contracts that have not been settled. It provides insight into market activity and liquidity.";
@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "ہم نے %@ چھوڑ دیا ہے تاکہ آپ واپسی کی فیس ادا کر سکیں۔";
+"transfer.reserved_fees" = "ہم نے مستقبل کے نیٹ ورک فیس کو پورا کرنے کے لیے آپ کے بیلنس میں %@ چھوڑ دیا ہے۔";
 "price_alerts.auto_footer" = "انتباہات اہم قیمت کی چالوں پر متحرک ہوتے ہیں۔";
 "price_alerts.set_alert.title" = "قیمت کا الرٹ سیٹ کریں۔";
 "swap.min_receive" = "کم از کم وصولی";
@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "ایک چھوٹی سی رقم آپ کے بٹوے میں رہ جاتی ہے تاکہ ان کارروائیوں کے لیے فیس کو پورا کیا جا سکے جیسے کہ انعامات کا دعوی کرنا یا دعوی کرنا۔";
 "perpetual.open_direction" = "کھولیں %@";
 "perpetual.close_direction" = "بند کریں %@";
+"perpetuals.title" = "دائمی";
+"settings.preferences.title" = "ترجیحات";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "کوئی بازار نہیں ملا";
+"assets.title" = "اثاثے";

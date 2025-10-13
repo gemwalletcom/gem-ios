@@ -40,24 +40,35 @@ public final class PerpetualsSceneViewModel {
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id)
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, searchQuery: "")
         self.perpetualsRequest = PerpetualsRequest(searchQuery: "")
         self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: wallet.id)
         self.onSelectAssetType = onSelectAssetType
     }
 
-    var navigationTitle: String { "Perpetuals" }
+    var navigationTitle: String { Localized.Perpetuals.title }
     var positionsSectionTitle: String { Localized.Perpetual.positions }
-    var marketsSectionTitle: String { "Markets" }
+    var marketsSectionTitle: String { Localized.Perpetuals.markets }
     var pinnedSectionTitle: String { Localized.Common.pinned }
-    var noMarketsText: String? { !isSearching ? "No markets" : "No markets found" }
+    var noMarketsText: String? {
+        !isSearching ? Localized.Perpetuals.EmptyState.noMarkets : Localized.Perpetuals.EmptyState.noMarketsFound
+    }
     var pinImage: Image { Images.System.pin }
     var searchImage: Image { Images.System.search }
 
-    var showPositions: Bool { !isSearching && positions.isNotEmpty }
+    var showPositions: Bool { positions.isNotEmpty }
     var showPinned: Bool { !isSearching && sections.pinned.isNotEmpty }
+    var showMarkets: Bool { !isSearching || sections.markets.isNotEmpty || positions.isEmpty }
 
-    var sections: PerpetualsSections { PerpetualsSections.from(perpetuals) }
+    var sections: PerpetualsSections {
+        if isSearching {
+            // During search, filter out perpetuals that are already in positions
+            let positionPerpetualIds = Set(positions.map { $0.perpetual.id })
+            let filteredPerpetuals = perpetuals.filter { !positionPerpetualIds.contains($0.perpetual.id) }
+            return PerpetualsSections.from(filteredPerpetuals)
+        }
+        return PerpetualsSections.from(perpetuals)
+    }
 
     var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
@@ -116,6 +127,7 @@ extension PerpetualsSceneViewModel {
     func onSearchQueryChange(_ _: String, _ newValue: String) {
         let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
         perpetualsRequest = PerpetualsRequest(searchQuery: trimmed)
+        positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, searchQuery: trimmed)
     }
 
     func onSearchPresentedChange(_ _: Bool, _ isPresented: Bool) {

@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "可疑资产";
 "banner.asset_status.description" = "代币可能不安全或具有误导性。请仅在完全信任的情况下继续操作。";
 "transfer.maximum_amount" = "最高金额为%@";
-"transfer.reserved_fees" = "我们省略了%@以便您可以支付提款费用。";
+"transfer.reserved_fees" = "我们已在您的余额中留下%@以支付未来的网络费用。";
 "price_alerts.auto_footer" = "当价格发生重大变动时，警报就会触发。";
 "price_alerts.set_alert.title" = "设置价格提醒";
 "swap.min_receive" = "最少接收";
@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "您的钱包中会留有少量资金，用于支付取消质押或领取奖励等操作的费用。";
 "perpetual.open_direction" = "打开%@";
 "perpetual.close_direction" = "关闭%@";
+"perpetuals.title" = "永久";
+"settings.preferences.title" = "偏好设置";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "未找到任何市场";
+"assets.title" = "资产";

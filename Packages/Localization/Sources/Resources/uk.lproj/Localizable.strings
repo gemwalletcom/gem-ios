@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "Ми залишили %@, щоб ви могли сплатити комісію за зняття коштів.";
+"transfer.reserved_fees" = "Ми залишили на вашому балансі %@ для покриття майбутніх мережевих платежів.";
 "price_alerts.auto_footer" = "Сповіщення спрацьовують у разі значних змін цін.";
 "price_alerts.set_alert.title" = "Встановити сповіщення про ціну";
 "swap.min_receive" = "Мінімум до отримання";
@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "Невелика сума залишається у вашому гаманці для покриття комісій за такі операції, як зняття коштів зі стейкінгу або отримання винагород.";
 "perpetual.open_direction" = "Відкрити %@";
 "perpetual.close_direction" = "Закрити %@";
+"perpetuals.title" = "Перпетуали";
+"settings.preferences.title" = "Налаштування";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Ринків не знайдено";
+"assets.title" = "Активи";

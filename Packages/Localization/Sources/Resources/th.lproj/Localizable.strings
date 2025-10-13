@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "เราได้เว้น %@ ไว้เพื่อให้คุณสามารถชำระค่าธรรมเนียมการถอนเงินได้";
+"transfer.reserved_fees" = "เราได้เหลือ %@ ไว้ในยอดคงเหลือของคุณเพื่อครอบคลุมค่าธรรมเนียมเครือข่ายในอนาคต";
 "price_alerts.auto_footer" = "การแจ้งเตือนจะเกิดขึ้นเมื่อราคามีการเปลี่ยนแปลงอย่างมีนัยสำคัญ";
 "price_alerts.set_alert.title" = "ตั้งค่าการแจ้งเตือนราคา";
 "swap.min_receive" = "รับขั้นต่ำ";
@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "เงินจำนวนเล็กน้อยจะอยู่ในกระเป๋าเงินของคุณเพื่อชำระค่าธรรมเนียมการดำเนินการ เช่น การยกเลิกการเดิมพันหรือการรับรางวัล";
 "perpetual.open_direction" = "เปิด %@";
 "perpetual.close_direction" = "ปิด %@";
+"perpetuals.title" = "นิรันดร์";
+"settings.preferences.title" = "การตั้งค่า";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "ไม่พบตลาด";
+"assets.title" = "สินทรัพย์";

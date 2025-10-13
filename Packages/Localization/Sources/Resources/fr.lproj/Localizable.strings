@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "Nous avons laissé %@ de côté pour que vous puissiez payer les frais de retrait.";
+"transfer.reserved_fees" = "Nous avons laissé %@ sur votre solde pour couvrir les futurs frais de réseau.";
 "price_alerts.auto_footer" = "Les alertes se déclenchent en cas de mouvements de prix importants.";
 "price_alerts.set_alert.title" = "Définir une alerte de prix";
 "swap.min_receive" = "Minimum à recevoir";
@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "Une petite somme reste dans votre portefeuille pour couvrir les frais d'opérations telles que le déblocage ou la réclamation de récompenses.";
 "perpetual.open_direction" = "Ouvrir %@";
 "perpetual.close_direction" = "Fermer %@";
+"perpetuals.title" = "Perpétuelles";
+"settings.preferences.title" = "Préférences";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Aucun marché trouvé";
+"assets.title" = "Actifs";

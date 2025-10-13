@@ -463,7 +463,7 @@
 "banner.asset_status.title" = "Suspicious Asset";
 "banner.asset_status.description" = "Token may be unsafe or misleading. Proceed only if you fully trust it.";
 "transfer.maximum_amount" = "Maximum Amount is %@";
-"transfer.reserved_fees" = "We hebben %@ weggelaten zodat u de opnamekosten kunt betalen.";
+"transfer.reserved_fees" = "We hebben %@ op uw saldo laten staan om toekomstige netwerkkosten te dekken.";
 "price_alerts.auto_footer" = "Waarschuwingen worden geactiveerd bij aanzienlijke prijsbewegingen.";
 "price_alerts.set_alert.title" = "Prijswaarschuwing instellen";
 "swap.min_receive" = "Minimale ontvangst";
@@ -482,3 +482,9 @@
 "info.stake.reserved.description" = "Een klein bedrag blijft in uw portemonnee staan om de kosten voor handelingen zoals unstaking of het claimen van beloningen te dekken.";
 "perpetual.open_direction" = "Open %@";
 "perpetual.close_direction" = "Sluiten %@";
+"perpetuals.title" = "Perpetuals";
+"settings.preferences.title" = "Voorkeuren";
+"perpetuals.markets" = "Markets";
+"perpetuals.empty_state.no_markets" = "No markets";
+"perpetuals.empty_state.no_markets_found" = "Geen markten gevonden";
+"assets.title" = "Activa";
