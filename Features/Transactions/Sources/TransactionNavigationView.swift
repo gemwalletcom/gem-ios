@@ -9,6 +9,7 @@ import Components
 import InfoSheet
 import ExplorerService
 import Style
+import PrimitivesComponents
 
 public struct TransactionNavigationView: View {
     @State private var model: TransactionSceneViewModel
@@ -39,6 +40,12 @@ public struct TransactionNavigationView: View {
         }
         .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(type: $0)
+        }
+        .sheet(isPresented: $model.isPresentingFeeDetails) {
+            NavigationStack {
+                NetworkFeeScene(model: model.feeDetailsViewModel)
+                    .presentationDetents([.height(200)])
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ import Primitives
 import PrimitivesComponents
 import Store
 import SwiftUI
+import Transfer
 
 @Observable
 @MainActor
@@ -21,6 +22,7 @@ public final class TransactionSceneViewModel {
 
     var isPresentingShareSheet = false
     var isPresentingInfoSheet: InfoSheetType? = .none
+    var isPresentingFeeDetails = false
 
     public init(
         transaction: TransactionExtended,
@@ -101,6 +103,10 @@ extension TransactionSceneViewModel {
             state: model.transaction.transaction.state
         )
     }
+
+    func onSelectFeeDetails() {
+        isPresentingFeeDetails = true
+    }
 }
 
 // MARK: - Private
@@ -125,6 +131,15 @@ extension TransactionSceneViewModel {
         TransactionExplorerViewModel(
             transactionViewModel: model,
             explorerService: explorerService
+        )
+    }
+
+    var feeDetailsViewModel: NetworkFeeSceneViewModel {
+        NetworkFeeSceneViewModel(
+            chain: model.transaction.transaction.assetId.chain,
+            priority: .normal,
+            value: model.infoModel.feeDisplay?.amount.text,
+            fiatValue: model.infoModel.feeDisplay?.fiat?.text
         )
     }
 }
