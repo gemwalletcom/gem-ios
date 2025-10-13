@@ -185,8 +185,7 @@ public final class StakeSceneViewModel {
         }
         return true
     }
-    var isStakeAvailable: Bool { validators.isNotEmpty }
-    var stakePlaceholders: [ListItemViewPlaceholderType] { isStakeAvailable ? [] : [.subtitle] }
+    var isStakeEnabled: Bool { validators.isNotEmpty }
 
     var showTronResources: Bool {
         balanceModel.hasStakingResources

@@ -16,4 +16,9 @@ extension View {
             return self.presentationDetents([.medium])
         }
     }
+    
+    @ViewBuilder
+    public func enabled(_ value: Bool) -> some View {
+        self.disabled(!value)
+    }
 }
