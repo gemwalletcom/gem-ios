@@ -42,10 +42,7 @@
       "Bash(just generate-model:*)",
       "Bash(just:*)",
       "Bash(git stash push:*)",
-      "mcp__sosumi__fetchAppleDocumentation",
-      "mcp__sosumi__searchAppleDocumentation",
-      "Bash(xcbeautify:*)",
-      "Bash(pkill:*)"
+      "mcp__sosumi__fetchAppleDocumentation"
     ],
     "deny": []
   }
