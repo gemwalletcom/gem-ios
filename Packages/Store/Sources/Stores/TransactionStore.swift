@@ -62,6 +62,12 @@ public struct TransactionStore: Sendable {
                 .fetchAll(db)
         }
     }
+    
+    public func getTransaction(walletId: String, transactionId: String) throws -> TransactionExtended {
+        try db.read { db in
+            try TransactionRequest(walletId: walletId, transactionId: transactionId).fetch(db)
+        }
+    }
 
     public func addTransactions(walletId: String, transactions: [Transaction]) throws {
         if transactions.isEmpty {
