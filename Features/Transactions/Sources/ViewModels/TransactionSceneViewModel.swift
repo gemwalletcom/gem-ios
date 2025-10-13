@@ -2,14 +2,13 @@
 
 import Components
 import ExplorerService
-import Foundation
+import Foundationhttps://github.com/gemwalletcom/gem-ios/blob/1301-transaction-fee-detailed/Features/Transactions/Sources/ViewModels/TransactionSceneViewModel.swift
 import InfoSheet
 import Preferences
 import Primitives
 import PrimitivesComponents
 import Store
 import SwiftUI
-import Transfer
 
 @Observable
 @MainActor
