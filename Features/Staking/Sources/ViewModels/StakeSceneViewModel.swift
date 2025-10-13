@@ -27,6 +27,8 @@ public final class StakeSceneViewModel {
     public let wallet: Wallet
     public var request: StakeDelegationsRequest
     public var delegations: [Delegation] = []
+    public var validatorsRequest: StakeValidatorsRequest
+    public var validators: [DelegationValidator] = []
 
     public var assetRequest: AssetRequest
     public var assetData: AssetData = .empty
@@ -42,6 +44,7 @@ public final class StakeSceneViewModel {
         self.chain = chain
         self.stakeService = stakeService
         self.request = StakeDelegationsRequest(walletId: wallet.id, assetId: chain.chain.id)
+        self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId.identifier)
         self.assetRequest = AssetRequest(walletId: wallet.id, assetId: chain.chain.assetId)
     }
 
@@ -146,7 +149,7 @@ public final class StakeSceneViewModel {
     var stakeDestination: any Hashable {
         destination(
             type: .stake(
-                validators: (try? stakeService.getActiveValidators(assetId: chain.chain.assetId)) ?? [],
+                validators: validators,
                 recommendedValidator: recommendedCurrentValidator
             )
         )
@@ -182,6 +185,8 @@ public final class StakeSceneViewModel {
         }
         return true
     }
+    var isStakeAvailable: Bool { validators.isNotEmpty }
+    var stakePlaceholders: [ListItemViewPlaceholderType] { isStakeAvailable ? [] : [.subtitle] }
 
     var showTronResources: Bool {
         balanceModel.hasStakingResources

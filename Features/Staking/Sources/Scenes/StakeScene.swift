@@ -48,8 +48,9 @@ extension StakeScene {
         Section(Localized.Common.manage) {
             if model.showStake {
                 NavigationLink(value: model.stakeDestination) {
-                    ListItemView(title: model.stakeTitle)
+                    ListItemView(title: model.stakeTitle, placeholders: model.stakePlaceholders)
                 }
+                .disabled(!model.isStakeAvailable)
             }
             
             if model.showFreeze {
