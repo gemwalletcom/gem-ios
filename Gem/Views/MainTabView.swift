@@ -13,6 +13,7 @@ import WalletTab
 import Transactions
 import Swap
 import Assets
+import AssetsService
 
 struct MainTabView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -139,7 +140,11 @@ struct MainTabView: View {
                     role: .search,
                     content: {
                         SearchNavigationStack(
-                            wallet: model.wallet,
+                            model: WalletSearchSceneViewModel(
+                                wallet: model.wallet,
+                                walletService: walletService,
+                                searchService: AssetSearchService(assetsService: assetsService)
+                            ),
                             isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
                         )
                     }

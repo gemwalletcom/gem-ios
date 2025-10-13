@@ -29,21 +29,13 @@ public struct WalletSearchScene: View {
             } else if model.showEmpty {
                 EmptyContentView(
                     model: EmptyContentTypeViewModel(
-                        type: .search(
-                            type: .assets,
-                            action: nil
-                        )
+                        type: .search(type: .assets, action: nil)
                     )
                 )
             }
         }
-        .observeQuery(request: $model.request, value: $model.assets)
-        .searchable(
-            text: $model.searchModel.searchableQuery,
-            placement: .navigationBarDrawer(displayMode: .always)
-        )
+        .searchable(text: $model.searchModel.searchableQuery)
         .scrollDismissesKeyboard(.interactively)
-        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("Search")
         .autocorrectionDisabled(true)
         .debounce(
