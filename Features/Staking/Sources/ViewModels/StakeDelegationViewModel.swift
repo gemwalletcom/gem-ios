@@ -76,18 +76,10 @@ public struct StakeDelegationViewModel: Sendable {
         TextStyle(font: .body, color: .primary, fontWeight: .semibold)
     }
     
-    public var stateTagStyle: TextStyle {
-        TextStyle(
-            font: .footnote,
-            color: stateTextColor,
-            background: stateTextColor.opacity(0.15)
-        )
+    public var stateStyle: TextStyle {
+        TextStyle(font: .footnote, color: stateTextColor)
     }
-    
-    public var titleExtraStyle: TextStyle {
-        TextStyle(font: .footnote, color: Colors.gray)
-    }
-    
+
     public var subtitleStyle: TextStyle {
         TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold)
     }
