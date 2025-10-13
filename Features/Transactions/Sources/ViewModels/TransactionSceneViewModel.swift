@@ -19,10 +19,7 @@ public final class TransactionSceneViewModel {
 
     var request: TransactionRequest
     var transactionExtended: TransactionExtended
-
-    var isPresentingShareSheet = false
-    var isPresentingInfoSheet: InfoSheetType? = .none
-    var isPresentingFeeDetails = false
+    var isPresentingTransactionSheet: TransactionSheetType?
 
     public init(
         transaction: TransactionExtended,
@@ -87,25 +84,25 @@ extension TransactionSceneViewModel {
     }
 
     func onSelectShare() {
-        isPresentingShareSheet = true
+        isPresentingTransactionSheet = .share
+    }
+
+    func onSelectFeeDetails() {
+        isPresentingTransactionSheet = .feeDetails
     }
 
     private func onSelectFee() {
         let chain = model.transaction.transaction.assetId.chain
-        isPresentingInfoSheet = .networkFee(chain)
+        isPresentingTransactionSheet = .info(.networkFee(chain))
     }
 
     private func onSelectStatusInfo() {
         let assetImage = model.assetImage
-        isPresentingInfoSheet = .transactionState(
+        isPresentingTransactionSheet = .info(.transactionState(
             imageURL: assetImage.imageURL,
             placeholder: assetImage.placeholder,
             state: model.transaction.transaction.state
-        )
-    }
-
-    func onSelectFeeDetails() {
-        isPresentingFeeDetails = true
+        ))
     }
 }
 
