@@ -190,11 +190,12 @@ extension MainTabView {
                 }
 
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)
-                let transactionExtended = try transactionsService.addTransaction(walletId: model.walletId, transaction: transaction)
-
+                try transactionsService.addTransaction(walletId: model.walletId, transaction: transaction)
+                let transaction = try transactionsService.getTransaction(walletId: model.walletId, transactionId: transaction.id)
+                
                 var path = NavigationPath()
                 path.append(Scenes.Asset(asset: asset))
-                path.append(transactionExtended)
+                path.append(transaction)
                 navigationState.wallet = path
             case .priceAlert(let assetId):
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)
