@@ -29,6 +29,11 @@ public struct TransactionScene: View {
         switch itemModel {
         case let .listItem(model):
             ListItemView(model: model)
+        case let .fee(model):
+            NavigationCustomLink(
+                with: ListItemView(model: model),
+                action: self.model.onSelectFeeDetails
+            )
         case let .header(model):
             TransactionHeaderListItemView(
                 model: model,

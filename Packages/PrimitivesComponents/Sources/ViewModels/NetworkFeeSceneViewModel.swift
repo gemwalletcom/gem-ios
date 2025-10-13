@@ -1,6 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Blockchain
 import Localization
 import Primitives
 import SwiftUI
@@ -18,10 +17,16 @@ public final class NetworkFeeSceneViewModel {
 
     public init(
         chain: Chain,
-        priority: FeePriority
+        priority: FeePriority,
+        rates: [FeeRate] = [],
+        value: String? = nil,
+        fiatValue: String? = nil
     ) {
         self.chain = chain
         self.priority = priority
+        self.rates = rates
+        self.value = value
+        self.fiatValue = fiatValue
     }
 
     public var title: String { Localized.Transfer.networkFee }
@@ -43,6 +48,10 @@ public final class NetworkFeeSceneViewModel {
 
     public var selectedFeeRateViewModel: FeeRateViewModel? {
         feeRatesViewModels.first(where: { $0.feeRate.priority == priority })
+    }
+
+    public var showFeeRates: Bool {
+        feeRatesViewModels.isNotEmpty
     }
 }
 
