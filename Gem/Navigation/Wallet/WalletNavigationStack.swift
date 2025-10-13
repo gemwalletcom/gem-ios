@@ -43,38 +43,22 @@ struct WalletNavigationStack: View {
 
     var body: some View {
         NavigationStack(path: navigationPath) {
-            ZStack {
-                WalletScene(model: model)
-                    .opacity(model.isPresentingSearch ? 0 : 1)
-
-                if model.isPresentingSearch {
-                    WalletSearchScene(
-                        model: WalletSearchSceneViewModel(
-                            wallet: model.wallet,
-                            searchService: AssetSearchService(assetsService: assetsService),
-                            onDismissSearch: model.onToggleSearch
-                        )
-                    )
-                    .transition(.opacity)
-                }
-            }
-            .onChange(of: model.currentWallet, model.onChangeWallet)
-            .onChange(of: navigationState.walletTabReselected, model.onWalletTabReselected)
-            .observeQuery(
-                request: $model.assetsRequest,
-                value: $model.assets
-            )
-            .observeQuery(
-                request: $model.bannersRequest,
-                value: $model.banners
-            )
-            .observeQuery(
-                request: $model.totalFiatRequest,
-                value: $model.totalFiatValue
-            )
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                if !model.isPresentingSearch {
+            WalletScene(model: model)
+                .onChange(of: model.currentWallet, model.onChangeWallet)
+                .observeQuery(
+                    request: $model.assetsRequest,
+                    value: $model.assets
+                )
+                .observeQuery(
+                    request: $model.bannersRequest,
+                    value: $model.banners
+                )
+                .observeQuery(
+                    request: $model.totalFiatRequest,
+                    value: $model.totalFiatValue
+                )
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
                     ToolbarItem(placement: .principal) {
                         WalletBarView(
                             model: model.walletBarModel,
@@ -83,118 +67,117 @@ struct WalletNavigationStack: View {
                         .liquidGlass()
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: model.onToggleSearch) {
-                            model.searchImage
+                        Button(action: model.onSelectManage) {
+                            model.manageImage
                         }
                     }
                 }
-            }
-            .navigationDestination(for: Scenes.Asset.self) {
-                AssetNavigationView(
-                    model: AssetSceneViewModel(
-                        walletsService: walletsService,
-                        assetsService: assetsService,
-                        transactionsService: transactionsService,
-                        priceObserverService: priceObserverService,
-                        priceAlertService: priceAlertService,
-                        bannerService: bannerService,
-                        input: AssetSceneInput(
-                            wallet: model.wallet,
-                            asset: $0.asset
-                        ),
-                        isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput
+                .navigationDestination(for: Scenes.Asset.self) {
+                    AssetNavigationView(
+                        model: AssetSceneViewModel(
+                            walletsService: walletsService,
+                            assetsService: assetsService,
+                            transactionsService: transactionsService,
+                            priceObserverService: priceObserverService,
+                            priceAlertService: priceAlertService,
+                            bannerService: bannerService,
+                            input: AssetSceneInput(
+                                wallet: model.wallet,
+                                asset: $0.asset
+                            ),
+                            isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput
+                        )
                     )
-                )
-            }
-            .navigationDestination(for: TransactionExtended.self) {
-                TransactionNavigationView(
-                    model: TransactionSceneViewModel(
-                        transaction: $0,
-                        walletId: model.wallet.id
+                }
+                .navigationDestination(for: TransactionExtended.self) {
+                    TransactionNavigationView(
+                        model: TransactionSceneViewModel(
+                            transaction: $0,
+                            walletId: model.wallet.id
+                        )
                     )
-                )
-            }
-            .navigationDestination(for: Scenes.Price.self) {
-                ChartScene(
-                    model: ChartsViewModel(
-                        priceService: priceService,
-                        assetModel: AssetViewModel(asset: $0.asset),
-                        priceAlertService: priceAlertService,
-                        walletId: model.wallet.walletId,
-                        isPresentingSetPriceAlert: $model.isPresentingSetPriceAlert
+                }
+                .navigationDestination(for: Scenes.Price.self) {
+                    ChartScene(
+                        model: ChartsViewModel(
+                            priceService: priceService,
+                            assetModel: AssetViewModel(asset: $0.asset),
+                            priceAlertService: priceAlertService,
+                            walletId: model.wallet.walletId,
+                            isPresentingSetPriceAlert: $model.isPresentingSetPriceAlert
+                        )
                     )
-                )
-            }
-            .navigationDestination(for: Scenes.Perpetuals.self) { _ in
-                PerpetualsNavigationView(
-                    wallet: model.wallet,
-                    perpetualService: perpetualService,
-                    isPresentingSelectAssetType: $model.isPresentingSelectAssetType
-                )
-            }
-            .navigationDestination(for: Scenes.Perpetual.self) {
-                PerpetualNavigationView(
-                    perpetualData: $0.perpetualData,
-                    wallet: model.wallet,
-                    perpetualService: perpetualService,
-                    isPresentingTransferData: $model.isPresentingTransferData,
-                    isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
-                )
-            }
-            .navigationDestination(for: Scenes.AssetPriceAlert.self) {
-                AssetPriceAlertsScene(
-                    model: AssetPriceAlertsViewModel(
-                        priceAlertService: priceAlertService,
-                        walletId: model.wallet.walletId,
-                        asset: $0.asset
-                    )
-                )
-            }
-            .sheet(item: $model.isPresentingSelectAssetType) {
-                SelectAssetSceneNavigationStack(
-                    model: SelectAssetViewModel(
+                }
+                .navigationDestination(for: Scenes.Perpetuals.self) { _ in
+                    PerpetualsNavigationView(
                         wallet: model.wallet,
-                        selectType: $0,
-                        searchService: AssetSearchService(assetsService: assetsService),
-                        walletsService: walletsService,
-                        priceAlertService: priceAlertService
-                    ),
-                    isPresentingSelectType: $model.isPresentingSelectAssetType
-                )
-            }
-            .sheet(isPresented: $model.isPresentingWallets) {
-                WalletsNavigationStack(isPresentingWallets: $model.isPresentingWallets)
-            }
-            .sheet(item: $model.isPresentingInfoSheet) {
-                InfoSheetScene(type: $0)
-            }
-            .sheet(item: $model.isPresentingTransferData) {
-                ConfirmTransferNavigationStack(
-                    wallet: model.wallet,
-                    transferData: $0,
-                    onComplete: model.onTransferComplete
-                )
-            }
-            .sheet(item: $model.isPresentingPerpetualRecipientData) {
-                PerpetualPositionNavigationStack(
-                    perpetualRecipientData: $0,
-                    wallet: model.wallet,
-                    onComplete: {
-                        model.isPresentingPerpetualRecipientData = nil
-                    }
-                )
-            }
-            .sheet(item: $model.isPresentingSetPriceAlert) { assetId in
-                SetPriceAlertNavigationStack(
-                    model: SetPriceAlertViewModel(
-                        walletId: model.wallet.walletId,
-                        assetId: assetId,
-                        priceAlertService: priceAlertService
-                    ) { model.onSetPriceAlertComplete(message: $0) }
-                )
-            }
-            .safariSheet(url: $model.isPresentingUrl)
-            .toast(message: $model.isPresentingToastMessage)
+                        perpetualService: perpetualService,
+                        isPresentingSelectAssetType: $model.isPresentingSelectAssetType
+                    )
+                }
+                .navigationDestination(for: Scenes.Perpetual.self) {
+                    PerpetualNavigationView(
+                        perpetualData: $0.perpetualData,
+                        wallet: model.wallet,
+                        perpetualService: perpetualService,
+                        isPresentingTransferData: $model.isPresentingTransferData,
+                        isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
+                    )
+                }
+                .navigationDestination(for: Scenes.AssetPriceAlert.self) {
+                    AssetPriceAlertsScene(
+                        model: AssetPriceAlertsViewModel(
+                            priceAlertService: priceAlertService,
+                            walletId: model.wallet.walletId,
+                            asset: $0.asset
+                        )
+                    )
+                }
+                .sheet(item: $model.isPresentingSelectAssetType) {
+                    SelectAssetSceneNavigationStack(
+                        model: SelectAssetViewModel(
+                            wallet: model.wallet,
+                            selectType: $0,
+                            searchService: AssetSearchService(assetsService: assetsService),
+                            walletsService: walletsService,
+                            priceAlertService: priceAlertService
+                        ),
+                        isPresentingSelectType: $model.isPresentingSelectAssetType
+                    )
+                }
+                .sheet(isPresented: $model.isPresentingWallets) {
+                    WalletsNavigationStack(isPresentingWallets: $model.isPresentingWallets)
+                }
+                .sheet(item: $model.isPresentingInfoSheet) {
+                    InfoSheetScene(type: $0)
+                }
+                .sheet(item: $model.isPresentingTransferData) {
+                    ConfirmTransferNavigationStack(
+                        wallet: model.wallet,
+                        transferData: $0,
+                        onComplete: model.onTransferComplete
+                    )
+                }
+                .sheet(item: $model.isPresentingPerpetualRecipientData) {
+                    PerpetualPositionNavigationStack(
+                        perpetualRecipientData: $0,
+                        wallet: model.wallet,
+                        onComplete: {
+                            model.isPresentingPerpetualRecipientData = nil
+                        }
+                    )
+                }
+                .sheet(item: $model.isPresentingSetPriceAlert) { assetId in
+                    SetPriceAlertNavigationStack(
+                        model: SetPriceAlertViewModel(
+                            walletId: model.wallet.walletId,
+                            assetId: assetId,
+                            priceAlertService: priceAlertService
+                        ) { model.onSetPriceAlertComplete(message: $0) }
+                    )
+                }
+                .safariSheet(url: $model.isPresentingUrl)
+                .toast(message: $model.isPresentingToastMessage)
         }
     }
 }

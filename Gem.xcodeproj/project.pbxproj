@@ -24,6 +24,7 @@
 		8349F1472D5E4FF4003A0A93 /* ManageWallets in Frameworks */ = {isa = PBXBuildFile; productRef = 8349F1462D5E4FF4003A0A93 /* ManageWallets */; };
 		834B381A2D1D85E2009D58D4 /* LockManager in Frameworks */ = {isa = PBXBuildFile; productRef = 834B38192D1D85E2009D58D4 /* LockManager */; };
 		834EC80A2D7F1FCD00D8FA39 /* WalletSessionService in Frameworks */ = {isa = PBXBuildFile; productRef = 834EC8092D7F1FCD00D8FA39 /* WalletSessionService */; };
+		835081992E9D928E003FC2F0 /* SearchNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835081982E9D928E003FC2F0 /* SearchNavigationStack.swift */; };
 		8352B1042D52C73B0059EB27 /* WalletsService in Frameworks */ = {isa = PBXBuildFile; productRef = 8352B1032D52C73B0059EB27 /* WalletsService */; };
 		8352C8D52D393E05000DEDD9 /* ExplorerService in Frameworks */ = {isa = PBXBuildFile; productRef = 8352C8D42D393E05000DEDD9 /* ExplorerService */; };
 		8361BB5F2D3FDE73008D89CF /* BalanceService in Frameworks */ = {isa = PBXBuildFile; productRef = 8361BB5E2D3FDE73008D89CF /* BalanceService */; };
@@ -184,6 +185,7 @@
 		833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesFactory.swift; sourceTree = "<group>"; };
 		8349F1452D5E4D04003A0A93 /* ManageWallets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ManageWallets; sourceTree = "<group>"; };
 		834B38182D1D858D009D58D4 /* LockManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = LockManager; sourceTree = "<group>"; };
+		835081982E9D928E003FC2F0 /* SearchNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationStack.swift; sourceTree = "<group>"; };
 		83518CCC2D1C998300B339E5 /* PrimitivesComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PrimitivesComponents; sourceTree = "<group>"; };
 		8361BB5C2D3FDBF1008D89CF /* Transactions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transactions; sourceTree = "<group>"; };
 		836281AD2DEF32F600CA5C75 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Assets; sourceTree = "<group>"; };
@@ -404,6 +406,14 @@
 			path = Wallet;
 			sourceTree = "<group>";
 		};
+		835081972E9D9279003FC2F0 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				835081982E9D928E003FC2F0 /* SearchNavigationStack.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		8351CD282D5524FE002ACCAB /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -439,6 +449,7 @@
 		8361BB702D402C9D008D89CF /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				835081972E9D9279003FC2F0 /* Search */,
 				83A35C612DF2054B00360060 /* Transfer */,
 				836281B22DEF423400CA5C75 /* Assets */,
 				83ACA9792DEE01F00085B133 /* Swap */,
@@ -1073,6 +1084,7 @@
 				D8D5C1D12E6CAC16007628A1 /* Errors.swift in Sources */,
 				D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */,
 				D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */,
+				835081992E9D928E003FC2F0 /* SearchNavigationStack.swift in Sources */,
 				833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

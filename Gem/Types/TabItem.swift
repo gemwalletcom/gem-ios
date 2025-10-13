@@ -7,6 +7,7 @@ enum TabItem: Identifiable, CaseIterable, Sendable {
     case collections
     case activity
     case settings
+    case search
     case markets
 
     var id: Self { self }

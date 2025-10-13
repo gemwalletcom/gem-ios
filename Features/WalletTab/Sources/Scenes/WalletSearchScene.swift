@@ -40,9 +40,11 @@ public struct WalletSearchScene: View {
         .observeQuery(request: $model.request, value: $model.assets)
         .searchable(
             text: $model.searchModel.searchableQuery,
-            isPresented: $model.isSearchPresented,
             placement: .navigationBarDrawer(displayMode: .always)
         )
+        .scrollDismissesKeyboard(.interactively)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Search")
         .autocorrectionDisabled(true)
         .debounce(
             value: $model.searchModel.searchableQuery.wrappedValue,
@@ -51,10 +53,6 @@ public struct WalletSearchScene: View {
         )
         .onChange(of: model.searchModel.searchableQuery, model.onChangeSearchQuery)
         .onChange(of: model.isSearching, model.onChangeFocus)
-        .onChange(of: model.isSearchPresented, model.onChangeSearchPresented)
-        .onAppear {
-            model.onAppear()
-        }
     }
 
     @ViewBuilder

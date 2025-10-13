@@ -18,7 +18,6 @@ public final class WalletSearchSceneViewModel: Sendable {
     private let preferences: Preferences
 
     private let wallet: Wallet
-    private let onDismissSearch: VoidAction
 
     private var state: StateViewType<[AssetBasic]> = .noData
 
@@ -27,19 +26,16 @@ public final class WalletSearchSceneViewModel: Sendable {
     var request: AssetsRequest
 
     var isSearching: Bool = false
-    var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
 
     public init(
         wallet: Wallet,
         searchService: AssetSearchService,
-        preferences: Preferences = .standard,
-        onDismissSearch: VoidAction
+        preferences: Preferences = .standard
     ) {
         self.wallet = wallet
         self.searchService = searchService
         self.preferences = preferences
-        self.onDismissSearch = onDismissSearch
         self.searchModel = AssetSearchViewModel(selectType: .manage)
         self.request = AssetsRequest(
             walletId: wallet.id,
@@ -80,11 +76,6 @@ public final class WalletSearchSceneViewModel: Sendable {
         preferences.currency
     }
 
-    func onAppear() {
-        dismissSearch = false
-        isSearchPresented = true
-    }
-
     func onSearch(query: String) async {
         let query = query.trim()
         guard !query.isEmpty else { return }
@@ -123,7 +114,6 @@ public final class WalletSearchSceneViewModel: Sendable {
     func onChangeSearchPresented(_: Bool, isPresented: Bool) {
         guard !isPresented else { return }
         dismissSearch = true
-        onDismissSearch?()
     }
 }
 
