@@ -19,12 +19,12 @@ public extension SwapProvider {
         case .stonfiV2: Images.SwapProviders.stonfi
         case .mayan: Images.SwapProviders.mayan
         case .reservoir: Images.SwapProviders.reservoir
-        case .symbiosis: Images.SwapProviders.symbiosis
         case .chainflip: Images.SwapProviders.chainflip
         case .relay: Images.SwapProviders.relay
         case .aerodrome: Images.SwapProviders.aerodrome
         case .hyperliquid: Images.SwapProviders.hyperliquid
         case .nearIntents: Images.Chains.near
+        case .orca: Images.SwapProviders.orca
         }
     }
 }
