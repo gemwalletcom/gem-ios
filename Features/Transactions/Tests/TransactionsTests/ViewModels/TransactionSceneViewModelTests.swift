@@ -207,11 +207,11 @@ struct TransactionSceneViewModelTests {
     func feeItemModel() {
         let model = TransactionSceneViewModel.mock()
 
-        if case .listItem(let item) = model.item(for: TransactionItem.fee) {
+        if case .fee(let item) = model.item(for: TransactionItem.fee) {
             #expect(item.title == Localized.Transfer.networkFee)
             #expect(item.infoAction != nil)
         } else {
-            Issue.record("Expected listItem for fee")
+            Issue.record("Expected fee item for network fee")
         }
     }
 
