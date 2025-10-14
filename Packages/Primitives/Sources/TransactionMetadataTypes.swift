@@ -34,12 +34,14 @@ public struct TransactionSwapMetadata: Codable, Sendable {
 	public let toAsset: AssetId
 	public let toValue: String
 	public let provider: String?
+	public let swapResult: SwapResult?
 
-	public init(fromAsset: AssetId, fromValue: String, toAsset: AssetId, toValue: String, provider: String?) {
+	public init(fromAsset: AssetId, fromValue: String, toAsset: AssetId, toValue: String, provider: String?, swapResult: SwapResult?) {
 		self.fromAsset = fromAsset
 		self.fromValue = fromValue
 		self.toAsset = toAsset
 		self.toValue = toValue
 		self.provider = provider
+		self.swapResult = swapResult
 	}
 }

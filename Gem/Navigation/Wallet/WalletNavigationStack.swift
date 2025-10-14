@@ -112,8 +112,7 @@ struct WalletNavigationStack: View {
                     TransactionNavigationView(
                         model: TransactionSceneViewModel(
                             transaction: $0,
-                            walletId: model.wallet.id,
-                            swapTransactionService: swapTransactionService
+                            walletId: model.wallet.id
                         )
                     )
                 }

@@ -227,6 +227,7 @@ let package = Package(
                 "Preferences",
                 "AssetsService",
                 "DeviceService",
+                "SwapService"
             ],
             path: "TransactionsService",
             exclude: ["TestKit"]
@@ -238,6 +239,7 @@ let package = Package(
                 "AssetsServiceTestKit",
                 "TransactionsService",
                 "DeviceServiceTestKit",
+                "SwapService"
             ],
             path: "TransactionsService/TestKit"
         ),

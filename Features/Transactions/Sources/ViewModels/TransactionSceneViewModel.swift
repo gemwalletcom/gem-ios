@@ -8,7 +8,6 @@ import Preferences
 import Primitives
 import PrimitivesComponents
 import Store
-import SwapService
 import SwiftUI
 
 @Observable
@@ -16,30 +15,25 @@ import SwiftUI
 public final class TransactionSceneViewModel {
     private let preferences: Preferences
     private let explorerService: ExplorerService
-    private let swapTransactionService: any SwapStatusProviding
 
     var request: TransactionRequest
     var transactionExtended: TransactionExtended
-    var swapResult: SwapResult?
+    var swapResult: SwapResult? { swapMetadata?.swapResult }
 
     var isPresentingShareSheet = false
     var isPresentingInfoSheet: InfoSheetType? = .none
-    private var swapStatusTask: Task<Void, Never>?
     var isPresentingTransactionSheet: TransactionSheetType?
 
     public init(
         transaction: TransactionExtended,
         walletId: String,
         preferences: Preferences = Preferences.standard,
-        explorerService: ExplorerService = ExplorerService.standard,
-        swapTransactionService: any SwapStatusProviding
+        explorerService: ExplorerService = ExplorerService.standard
     ) {
         self.preferences = preferences
         self.explorerService = explorerService
-        self.swapTransactionService = swapTransactionService
         self.transactionExtended = transaction
         self.request = TransactionRequest(walletId: walletId, transactionId: transaction.id)
-        startSwapStatusUpdates()
     }
 
     var title: String { model.titleTextValue.text }
@@ -86,7 +80,6 @@ extension TransactionSceneViewModel {
     func onChangeTransaction(_ oldValue: TransactionExtended, _ newValue: TransactionExtended) {
         if oldValue != newValue {
             transactionExtended = newValue
-            restartSwapStatusUpdates()
         }
     }
 
@@ -166,58 +159,6 @@ extension TransactionSceneViewModel {
     private var isCrossChainSwap: Bool {
         guard let metadata = swapMetadata else { return false }
         return metadata.fromAsset.chain != metadata.toAsset.chain
-    }
-
-    private var swapProviderIdentifier: String? {
-        swapMetadata?.provider
-    }
-
-    private func restartSwapStatusUpdates() {
-        swapStatusTask?.cancel()
-        swapStatusTask = nil
-        swapResult = nil
-        startSwapStatusUpdates()
-    }
-
-    private func startSwapStatusUpdates() {
-        guard swapStatusTask == nil else { return }
-        guard isCrossChainSwap, let provider = swapProviderIdentifier else { return }
-
-        let chain = transactionExtended.transaction.assetId.chain
-        let transactionId = transactionExtended.transaction.hash
-        // Stellar might be different here
-        let memo = transactionExtended.transaction.memo ?? transactionExtended.transaction.to
-
-        swapStatusTask = Task { [weak self] in
-            await self?.pollSwapStatus(provider: provider, chain: chain, transactionId: transactionId, memo: memo)
-        }
-    }
-
-    private func pollSwapStatus(provider: String, chain: Chain, transactionId: String, memo: String?) async {
-        defer { swapStatusTask = nil }
-
-        var backoff: Duration = .seconds(5)
-
-        while !Task.isCancelled {
-            do {
-                let result = try await swapTransactionService.getSwapResult(
-                    providerId: provider,
-                    chain: chain,
-                    transactionId: transactionId,
-                    memo: memo
-                )
-                swapResult = result
-                if result.status != .pending { break }
-                backoff = .seconds(5)
-            } catch {
-                NSLog("TransactionSceneViewModel swap status error: \(error)")
-                try? await Task.sleep(for: backoff)
-                backoff = min(backoff * 2, .seconds(300))
-                continue
-            }
-
-            try? await Task.sleep(for: .seconds(30))
-        }
     }
 
     var feeDetailsViewModel: NetworkFeeSceneViewModel {

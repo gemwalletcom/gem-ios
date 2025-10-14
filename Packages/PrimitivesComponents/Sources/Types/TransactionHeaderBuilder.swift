@@ -86,7 +86,8 @@ public struct TransactionHeaderTypeBuilder {
                             fromValue: data.quote.fromValue,
                             toAsset: toAsset.id,
                             toValue: data.quote.toValue,
-                            provider: data.quote.providerData.provider.rawValue
+                            provider: data.quote.providerData.provider.rawValue,
+                            swapResult: nil
                         ))
                     )
                 )

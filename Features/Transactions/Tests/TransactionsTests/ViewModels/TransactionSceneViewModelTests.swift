@@ -7,7 +7,6 @@ import PreferencesTestKit
 import PrimitivesComponents
 import Style
 import Components
-import SwapService
 
 @testable import Transactions
 @testable import Store
@@ -129,6 +128,35 @@ struct TransactionSceneViewModelTests {
     }
 
     @Test
+    func swapStatusLoadsPersistedResult() {
+        let expected = SwapResult(
+            status: .completed,
+            fromChain: .ethereum,
+            fromTxHash: "0xsource",
+            toChain: .some(.arbitrum),
+            toTxHash: "0xdestination"
+        )
+
+        let metadata = TransactionMetadata.swap(
+            TransactionSwapMetadata(
+                fromAsset: .mock(.ethereum),
+                fromValue: "1",
+                toAsset: .mock(.arbitrum),
+                toValue: "1",
+                provider: "across",
+                swapResult: expected
+            )
+        )
+
+        let model = TransactionSceneViewModel.mock(
+            type: .swap,
+            metadata: metadata
+        )
+
+        #expect(model.swapResult == expected)
+    }
+
+    @Test
     func participantItemModel() {
         let transaction = TransactionExtended.mock(
             transaction: Transaction.mock(
@@ -142,7 +170,7 @@ struct TransactionSceneViewModelTests {
             transaction: transaction,
             walletId: "test_wallet_id",
             preferences: Preferences.standard,
-            swapTransactionService: SwapStatusProviderMock.noop
+            explorerService: ExplorerService.standard
         )
 
         if case .participant(let item) = modelWithAddresses.item(for: TransactionItem.participant) {
@@ -271,42 +299,24 @@ extension TransactionSceneViewModel {
         toAddress: String = "participant_address",
         memo: String? = nil,
         createdAt: Date = Date(),
-        metadata: TransactionMetadata? = nil,
-        swapStatusProvider: SwapStatusProviderMock = .noop
+        metadata: TransactionMetadata? = nil
     ) -> TransactionSceneViewModel {
-        TransactionSceneViewModel(
-            transaction: TransactionExtended.mock(
-                transaction: Transaction.mock(
-                    type: type,
-                    state: state,
-                    direction: direction,
-                    assetId: assetId,
-                    to: toAddress,
-                    memo: memo,
-                    metadata: metadata
-                )
-            ),
-            walletId: "test_wallet_id",
-            preferences: Preferences.standard,
-            swapTransactionService: swapStatusProvider
+        let transactionExtended = TransactionExtended.mock(
+            transaction: Transaction.mock(
+                type: type,
+                state: state,
+                direction: direction,
+                assetId: assetId,
+                to: toAddress,
+                memo: memo,
+                metadata: metadata
+            )
         )
-    }
-}
 
-fileprivate struct SwapStatusProviderMock: SwapStatusProviding {
-    private let handler: @Sendable (String?, Chain, String, String?) async throws -> SwapResult
-
-    init(handler: @escaping @Sendable (String?, Chain, String, String?) async throws -> SwapResult) {
-        self.handler = handler
-    }
-
-    static var noop: SwapStatusProviderMock {
-        SwapStatusProviderMock { _, _, _, _ in
-            SwapResult(status: .pending, fromChain: .ethereum, fromTxHash: "", toChain: nil, toTxHash: nil)
-        }
-    }
-
-    func getSwapResult(providerId: String?, chain: Chain, transactionId: String, memo: String?) async throws -> SwapResult {
-        try await handler(providerId, chain, transactionId, memo)
+        return TransactionSceneViewModel(
+            transaction: transactionExtended,
+            walletId: "test_wallet_id",
+            preferences: Preferences.standard
+        )
     }
 }

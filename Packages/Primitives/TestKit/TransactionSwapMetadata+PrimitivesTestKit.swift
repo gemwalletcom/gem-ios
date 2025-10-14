@@ -9,14 +9,16 @@ public extension TransactionSwapMetadata {
         fromValue: String = "",
         toAsset: AssetId = .mock(.smartChain),
         toValue: String = "",
-        provider: String? = nil
+        provider: String? = nil,
+        swapResult: SwapResult? = nil
     ) -> TransactionSwapMetadata {
         TransactionSwapMetadata(
             fromAsset: fromAsset,
             fromValue: fromValue,
             toAsset: toAsset,
             toValue: toValue,
-            provider: provider
+            provider: provider,
+            swapResult: swapResult
         )
     }
 }
