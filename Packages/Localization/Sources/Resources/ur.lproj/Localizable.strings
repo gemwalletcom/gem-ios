@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "کوئی بازار نہیں ملا";
 "assets.title" = "اثاثے";
+"stake.delegations" = "تفویضات";
+"info.stake.apr.description" = "APR (سالانہ فیصدی شرح) سے مراد وہ سود کی شرح یا انعامات ہیں جو صارف اپنے کرپٹو اثاثوں کو بلاک چین نیٹ ورک میں جمع کرکے حاصل کرتا ہے۔ یہ کمپاؤنڈ انعامات کو چھوڑ کر متوقع سالانہ واپسی کی نمائندگی کرتا ہے۔";

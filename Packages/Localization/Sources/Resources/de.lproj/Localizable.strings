@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Keine Märkte gefunden";
 "assets.title" = "Vermögenswerte";
+"stake.delegations" = "Delegationen";
+"info.stake.apr.description" = "Der effektive Jahreszins (APR) bezeichnet den Zinssatz oder die Prämien, die ein Benutzer durch das Einsetzen seiner Krypto-Assets in einem Blockchain-Netzwerk erhält. Er stellt die erwartete jährliche Rendite ohne Zinseszinsen dar.";

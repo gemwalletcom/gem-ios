@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Aucun marché trouvé";
 "assets.title" = "Actifs";
+"stake.delegations" = "Délégations";
+"info.stake.apr.description" = "Le TAEG (taux annuel effectif global) désigne le taux d'intérêt ou les récompenses qu'un utilisateur obtient en staking ses cryptoactifs sur un réseau blockchain. Il représente le rendement annuel attendu, hors rémunérations composées.";

@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Nie znaleziono rynków";
 "assets.title" = "Aktywa";
+"stake.delegations" = "Delegacje";
+"info.stake.apr.description" = "RRSO (Roczna Stopa Oprocentowania) odnosi się do stopy procentowej lub nagrody, jaką użytkownik otrzymuje za staking swoich kryptowalut w sieci blockchain. Reprezentuje ona oczekiwany roczny zwrot, z wyłączeniem nagród składanych.";

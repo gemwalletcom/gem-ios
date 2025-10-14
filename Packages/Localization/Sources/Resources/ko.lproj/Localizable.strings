@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "시장을 찾을 수 없습니다";
 "assets.title" = "자산";
+"stake.delegations" = "위임";
+"info.stake.apr.description" = "APR(연이율)은 사용자가 블록체인 네트워크에 암호화폐 자산을 스테이킹하여 얻는 이자율 또는 보상을 의미합니다. 복리 보상을 제외한 연간 예상 수익률을 나타냅니다.";

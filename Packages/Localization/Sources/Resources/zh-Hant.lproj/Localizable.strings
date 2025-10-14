@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "未找到任何市場";
 "assets.title" = "資產";
+"stake.delegations" = "委託";
+"info.stake.apr.description" = "APR（年利率）是指用戶在區塊鏈網路中質押加密資產所獲得的利率或獎勵。它代表預期年回報率，不包括複合收益。";

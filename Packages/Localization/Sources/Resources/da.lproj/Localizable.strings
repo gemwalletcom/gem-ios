@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Ingen markeder fundet";
 "assets.title" = "Aktiver";
+"stake.delegations" = "Delegationer";
+"info.stake.apr.description" = "ÅOP (årlig procentsats) refererer til den rente eller de belønninger, en bruger tjener ved at placere sine kryptoaktiver i et blockchain-netværk. Det repræsenterer det forventede årlige afkast eksklusive sammensatte belønninger.";

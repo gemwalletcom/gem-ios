@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Hakuna masoko yaliyopatikana";
 "assets.title" = "Mali";
+"stake.delegations" = "Uwakilishi";
+"info.stake.apr.description" = "APR (Kiwango cha Asilimia ya Kila Mwaka) inarejelea kiwango cha riba au zawadi anazopata mtumiaji kwa kuweka rasilimali zao za crypto kwenye mtandao wa blockchain. Inawakilisha mapato yanayotarajiwa ya kila mwaka, bila kujumuisha zawadi shirikishi.";

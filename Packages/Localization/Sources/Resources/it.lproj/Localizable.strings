@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Nessun mercato trovato";
 "assets.title" = "Attività";
+"stake.delegations" = "Delegazioni";
+"info.stake.apr.description" = "Il TAEG (tasso annuo effettivo globale) si riferisce al tasso di interesse o alle ricompense che un utente guadagna investendo i propri asset crittografici in una rete blockchain. Rappresenta il rendimento annuo atteso, escludendo le ricompense composte.";

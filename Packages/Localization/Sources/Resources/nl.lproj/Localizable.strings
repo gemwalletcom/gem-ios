@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Geen markten gevonden";
 "assets.title" = "Activa";
+"stake.delegations" = "Delegaties";
+"info.stake.apr.description" = "APR (jaarlijks percentage) verwijst naar de rente of beloning die een gebruiker verdient door zijn cryptovaluta in een blockchainnetwerk te staken. Het vertegenwoordigt het verwachte jaarlijkse rendement, exclusief samengestelde beloningen.";

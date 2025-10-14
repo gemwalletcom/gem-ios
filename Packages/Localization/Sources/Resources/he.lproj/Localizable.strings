@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "לא נמצאו שווקים";
 "assets.title" = "נכסים";
+"stake.delegations" = "האצלות";
+"info.stake.apr.description" = "שיעור הריבית השנתי (APR) מתייחס לשיעור הריבית או התגמולים שמשתמש מרוויח על ידי השקעת נכסי הקריפטו שלו ברשת בלוקצ'יין. הוא מייצג את התשואה השנתית הצפויה, לא כולל תגמולים מורכבים.";

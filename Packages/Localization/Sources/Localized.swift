@@ -584,6 +584,10 @@ public enum Localized {
       public static let description = Localized.tr("Localizable", "info.slippage.description", fallback: "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.")
     }
     public enum Stake {
+      public enum Apr {
+        /// APR (Annual Percentage Rate) refers to the interest rate or rewards a user earns by staking their crypto assets in a blockchain network. It represents the expected yearly return, excluding compound rewards.
+        public static let description = Localized.tr("Localizable", "info.stake.apr.description", fallback: "APR (Annual Percentage Rate) refers to the interest rate or rewards a user earns by staking their crypto assets in a blockchain network. It represents the expected yearly return, excluding compound rewards.")
+      }
       public enum Reserved {
         /// A small amount stays in your wallet to cover fees for operations like unstaking or claiming rewards.
         public static let description = Localized.tr("Localizable", "info.stake.reserved.description", fallback: "A small amount stays in your wallet to cover fees for operations like unstaking or claiming rewards.")
@@ -1044,6 +1048,8 @@ public enum Localized {
     public static let awaitingWithdrawal = Localized.tr("Localizable", "stake.awaiting_withdrawal", fallback: "Awaiting Withdrawal")
     /// Deactivating
     public static let deactivating = Localized.tr("Localizable", "stake.deactivating", fallback: "Deactivating")
+    /// Delegations
+    public static let delegations = Localized.tr("Localizable", "stake.delegations", fallback: "Delegations")
     /// Inactive
     public static let inactive = Localized.tr("Localizable", "stake.inactive", fallback: "Inactive")
     /// Lock Time

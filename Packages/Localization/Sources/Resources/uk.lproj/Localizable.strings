@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Ринків не знайдено";
 "assets.title" = "Активи";
+"stake.delegations" = "Делегації";
+"info.stake.apr.description" = "Річна процентна ставка (APR) – це процентна ставка або винагорода, яку користувач отримує, розміщуючи свої криптоактиви в мережі блокчейн. Вона відображає очікувану річну прибутковість, без урахування складних винагород.";

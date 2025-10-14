@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "ไม่พบตลาด";
 "assets.title" = "สินทรัพย์";
+"stake.delegations" = "การมอบหมาย";
+"info.stake.apr.description" = "APR (อัตราดอกเบี้ยรายปี) หมายถึงอัตราดอกเบี้ยหรือผลตอบแทนที่ผู้ใช้ได้รับจากการฝากสินทรัพย์คริปโตของตนในเครือข่ายบล็อกเชน อัตราดอกเบี้ยนี้แสดงถึงผลตอบแทนรายปีที่คาดหวัง ไม่รวมผลตอบแทนทบต้น";

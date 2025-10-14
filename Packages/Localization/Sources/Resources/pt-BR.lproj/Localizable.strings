@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Nenhum mercado encontrado";
 "assets.title" = "Ativos";
+"stake.delegations" = "Delegações";
+"info.stake.apr.description" = "APR (Taxa Percentual Anual) refere-se à taxa de juros ou recompensas que um usuário ganha ao investir seus criptoativos em uma rede blockchain. Ela representa o retorno anual esperado, excluindo recompensas compostas.";
