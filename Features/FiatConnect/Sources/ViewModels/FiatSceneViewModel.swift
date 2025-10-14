@@ -38,6 +38,8 @@ public final class FiatSceneViewModel {
     var focusField: FiatScene.Field?
     var isPresentingFiatProvider: Bool = false
 
+    private var fetchTask: Task<Void, Never>?
+
     public init(
         fiatService: any GemAPIFiatService = GemAPIService(),
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
@@ -88,6 +90,9 @@ public final class FiatSceneViewModel {
     }
 
     var actionButtonTitle: String { Localized.Common.continue }
+    var actionButtonState: StateViewType<[FiatQuote]> {
+        inputValidationModel.isValid ? state : .noData
+    }
     var providerTitle: String { Localized.Common.provider }
     var rateTitle: String { Localized.Buy.rate }
     var errorTitle: String { Localized.Errors.errorOccured }
@@ -195,6 +200,7 @@ extension FiatSceneViewModel {
     }
 
     func onChangeType(_: FiatQuoteType, type: FiatQuoteType) {
+        fetchTask?.cancel()
         inputValidationModel.text = amountFormatter.format(amount: input.amount, for: type)
         inputValidationModel.update(validators: inputValidation)
         focusField = type == .buy ? .amountBuy : .amountSell
@@ -213,16 +219,13 @@ extension FiatSceneViewModel {
 
 extension FiatSceneViewModel {
     private func fetch() async {
-        input.quote = nil
+        fetchTask?.cancel()
 
-        guard shouldProceedFetch else {
-            state = .noData
-            return
-        }
-        state = .loading
+        fetchTask = Task {
+            input.quote = nil
+            state = .loading
 
-        do {
-            let quotes: [FiatQuote] = try await {
+            do {
                 let request = FiatQuoteRequest(
                     assetId: asset.id.identifier,
                     type: input.type,
@@ -231,19 +234,24 @@ extension FiatSceneViewModel {
                     cryptoValue: amountFormatter.formatCryptoValue(fiatAmount: input.amount, type: input.type),
                     walletAddress: assetAddress.address
                 )
-                return try await fiatService.getQuotes(asset: asset, request: request)
-            }()
 
-            if !quotes.isEmpty {
-                input.quote = quotes.first
-                state = .data(quotes)
-            } else {
-                state = .noData
-            }
-        } catch {
-            if !error.isCancelled {
-                state = .error(error)
-                NSLog("FiatSceneViewModel get quotes error: \(error)")
+                let quotes = try await fiatService.getQuotes(asset: asset, request: request)
+
+                try Task.checkCancellation()
+
+                if !quotes.isEmpty {
+                    input.quote = quotes.first
+                    state = .data(quotes)
+                } else {
+                    state = .noData
+                }
+            } catch {
+                guard !Task.isCancelled else { return }
+
+                if !error.isCancelled {
+                    state = .error(error)
+                    NSLog("FiatSceneViewModel get quotes error: \(error)")
+                }
             }
         }
     }
@@ -264,14 +272,6 @@ extension FiatSceneViewModel {
         switch input.type {
         case .buy: FiatQuoteTypeViewModel.defaultBuyMaxAmount
         case .sell: balanceModel.availableBalanceAmount
-        }
-    }
-
-    private var shouldProceedFetch: Bool {
-        guard !input.amount.isZero else { return false }
-        switch input.type {
-        case .buy: return true
-        case .sell: return input.amount <= maxAmount
         }
     }
 
@@ -297,7 +297,11 @@ extension FiatSceneViewModel {
                     )]
                 )
             ]
-        case .sell: []
+        case .sell: [
+            .assetAmount(decimals: asset.decimals.asInt, validators: [
+                BalanceValueValidator(available: assetData.balance.available, asset: asset)
+            ])
+        ]
         }
     }
 
