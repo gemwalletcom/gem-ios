@@ -23,7 +23,7 @@ public struct TransactionNetworkFeeViewModel {
 
 extension TransactionNetworkFeeViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
-        .listItem(
+        .fee(
             ListItemModel(
                 title: Localized.Transfer.networkFee,
                 subtitle: feeDisplay?.fiat?.text ?? feeDisplay?.amount.text ?? "-",

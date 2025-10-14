@@ -28,7 +28,7 @@ public enum GemAPI: TargetType {
     case deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
 
     case getTransactions(deviceId: String, options: TransactionsFetchOption)
-    
+
     case getAsset(AssetId)
     case getAssets([AssetId])
     case getSearchAssets(query: String, chains: [Chain], tags: [AssetTag])

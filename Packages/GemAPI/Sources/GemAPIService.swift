@@ -176,7 +176,7 @@ extension GemAPIService: GemAPITransactionService {
             .request(.getTransactions(deviceId: deviceId, options: options))
             .map(as: TransactionsResponse.self)
     }
-    
+
     public func getTransactionsAll(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> TransactionsResponse {
         let options = TransactionsFetchOption(wallet_index: walletIndex.asInt32, asset_id: .none, from_timestamp: fromTimestamp.asUInt32)
         return try await provider

@@ -70,10 +70,18 @@ public final class TransactionsService: Sendable {
         try await prefetchAssets(walletId: wallet.walletId, transactions: response.transactions)
         try transactionStore.addTransactions(walletId: wallet.id, transactions: response.transactions)
         try addressStore.addAddressNames(response.addressNames)
-        
+
         store.setTransactionsForAssetTimestamp(assetId: assetId.identifier, value: newTimestamp)
     }
+
+    public func addTransaction(walletId: WalletId, transaction: Transaction) throws {
+        try transactionStore.addTransactions(walletId: walletId.id, transactions: [transaction])
+    }
     
+    public func getTransaction(walletId: WalletId, transactionId: String) throws -> TransactionExtended {
+        try transactionStore.getTransaction(walletId: walletId.id, transactionId: transactionId)
+    }
+
     private func prefetchAssets(walletId: WalletId, transactions: [Transaction]) async throws {
         let assetIds = transactions.map { $0.assetIds }.flatMap { $0 }
         if assetIds.isEmpty {
