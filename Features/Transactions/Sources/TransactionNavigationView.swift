@@ -9,6 +9,7 @@ import Components
 import InfoSheet
 import ExplorerService
 import Style
+import PrimitivesComponents
 
 public struct TransactionNavigationView: View {
     @State private var model: TransactionSceneViewModel
@@ -34,11 +35,18 @@ public struct TransactionNavigationView: View {
                 }
             }
         }
-        .sheet(isPresented: $model.isPresentingShareSheet) {
-            ShareSheet(activityItems: [model.explorerURL.absoluteString])
-        }
-        .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(type: $0)
+        .sheet(item: $model.isPresentingTransactionSheet) { sheetType in
+            switch sheetType {
+            case .share:
+                ShareSheet(activityItems: [model.explorerURL.absoluteString])
+            case .feeDetails:
+                NavigationStack {
+                    NetworkFeeScene(model: model.feeDetailsViewModel)
+                        .presentationDetents([.height(200)])
+                }
+            case .info(let infoType):
+                InfoSheetScene(type: infoType)
+            }
         }
     }
 }

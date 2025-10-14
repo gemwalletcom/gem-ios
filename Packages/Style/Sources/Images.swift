@@ -75,7 +75,6 @@ public enum Images {
         public static let oku = Image(.oku)
         public static let wagmi = Image(.wagmi)
         public static let reservoir = Image(.reservoir)
-        public static let symbiosis = Image(.symbiosis)
         public static let chainflip = Image(.chainflip)
         public static let relay = Image(.relay)
         public static let aerodrome = Image(.aerodrome)

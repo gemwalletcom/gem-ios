@@ -6,7 +6,7 @@ import Primitives
 import PrimitivesTestKit
 import Formatters
 
-@testable import Transfer
+@testable import PrimitivesComponents
 
 struct FeeUnitViewModelTests {
     let formatter = CurrencyFormatter(currencyCode: .empty)
