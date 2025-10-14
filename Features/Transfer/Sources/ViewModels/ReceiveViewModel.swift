@@ -36,7 +36,7 @@ public final class ReceiveViewModel: Sendable {
     }
 
     var title: String {
-        Localized.Receive.title(assetModel.symbol)
+        Localized.Receive.title("")
     }
     
     var addressShort: String {
