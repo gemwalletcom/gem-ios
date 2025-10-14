@@ -206,8 +206,8 @@ extension FiatSceneViewModel {
         focusField = type == .buy ? .amountBuy : .amountSell
     }
 
-    func onChangeAmountValue(_ amount: Double) async {
-        await fetch()
+    func onChangeAmountValue(_ amount: Double) {
+        fetch()
     }
 
     func onChangeAmountText(_: String, text: String) {
@@ -218,7 +218,7 @@ extension FiatSceneViewModel {
 // MARK: - Private
 
 extension FiatSceneViewModel {
-    private func fetch() async {
+    private func fetch() {
         fetchTask?.cancel()
 
         fetchTask = Task {
