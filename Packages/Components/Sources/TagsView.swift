@@ -65,6 +65,5 @@ public struct TagView<T: TagItemViewable>: View {
             }
 
         }
-        .liquidGlass(interactive: false)
     }
 }
