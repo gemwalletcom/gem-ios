@@ -51,141 +51,140 @@ struct MainTabView: View {
     }
 
     var body: some View {
+        // TODO: - Add common modifiers e.g. .sheet(), onChange()
         if #available(iOS 26, *) {
             ios26TabView
         } else {
             legacyTabView
         }
     }
-    
+
     @ViewBuilder
+    @available(iOS 26.0, *)
     private var ios26TabView: some View {
-        if #available(iOS 26, *) {
-            TabView(selection: tabViewSelection) {
+        TabView(selection: tabViewSelection) {
+            Tab(
+                value: TabItem.wallet,
+                content: {
+                    WalletNavigationStack(
+                        model: WalletSceneViewModel(
+                            walletsService: walletsService,
+                            bannerService: bannerService,
+                            walletService: walletService,
+                            observablePreferences: observablePreferences,
+                            wallet: model.wallet,
+                            isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
+                        )
+                    )
+                },
+                label: { tabItem(Localized.Wallet.title, Images.Tabs.wallet) }
+            )
+
+            if model.isMarketEnabled {
                 Tab(
-                    value: TabItem.wallet,
+                    value: TabItem.markets,
                     content: {
-                        WalletNavigationStack(
-                            model: WalletSceneViewModel(
-                                walletsService: walletsService,
-                                bannerService: bannerService,
+                        MarketsNavigationStack()
+                    },
+                    label: { tabItem("Markets", Images.Tabs.markets) }
+                )
+            }
+
+            if model.isCollectionsEnabled {
+                Tab(
+                    value: TabItem.collections,
+                    content: {
+                        CollectionsNavigationStack(
+                            model: CollectionsViewModel(
+                                nftService: nftService,
                                 walletService: walletService,
-                                observablePreferences: observablePreferences,
                                 wallet: model.wallet,
+                                sceneStep: .collections,
                                 isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
                             )
                         )
                     },
-                    label: { tabItem(Localized.Wallet.title, Images.Tabs.wallet) }
-                )
-
-                if model.isMarketEnabled {
-                    Tab(
-                        value: TabItem.markets,
-                        content: {
-                            MarketsNavigationStack()
-                        },
-                        label: { tabItem("Markets", Images.Tabs.markets) }
-                    )
-                }
-
-                if model.isCollectionsEnabled {
-                    Tab(
-                        value: TabItem.collections,
-                        content: {
-                            CollectionsNavigationStack(
-                                model: CollectionsViewModel(
-                                    nftService: nftService,
-                                    walletService: walletService,
-                                    wallet: model.wallet,
-                                    sceneStep: .collections,
-                                    isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
-                                )
-                            )
-                        },
-                        label: { tabItem(Localized.Nft.collections, Images.Tabs.collections) }
-                    )
-                }
-
-                Tab(
-                    value: TabItem.activity,
-                    content: {
-                        TransactionsNavigationStack(
-                            model: TransactionsViewModel(
-                                transactionsService: transactionsService,
-                                walletService: walletService,
-                                wallet: model.wallet,
-                                type: .all
-                            )
-                        )
-                    },
-                    label: { tabItem(Localized.Activity.title, Images.Tabs.activity) }
-                )
-                .badge(transactions)
-
-                Tab(
-                    value: TabItem.settings,
-                    content: {
-                        SettingsNavigationStack(
-                            walletId: model.wallet.walletId,
-                            priceService: priceService,
-                            isPresentingSupport: $isPresentingSupport
-                        )
-                    },
-                    label: { tabItem(Localized.Settings.title, Images.Tabs.settings) }
-                )
-
-                Tab(
-                    value: TabItem.search,
-                    role: .search,
-                    content: {
-                        SearchNavigationStack(
-                            model: WalletSearchSceneViewModel(
-                                wallet: model.wallet,
-                                walletService: walletService,
-                                searchService: AssetSearchService(assetsService: assetsService)
-                            ),
-                            isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
-                        )
-                    }
+                    label: { tabItem(Localized.Nft.collections, Images.Tabs.collections) }
                 )
             }
-            .tabViewStyle(.sidebarAdaptable)
-            .sheet(item: $isPresentingSelectedAssetInput) { input in
-                SelectedAssetNavigationStack(
-                    input: input,
-                    wallet: model.wallet,
-                    onComplete: { onComplete(type: input.type) }
-                )
-            }
-            .onChange(of: model.walletId, onWalletIdChange)
-            .onChange(
-                of: notificationHandler.notifications,
-                initial: true,
-                onReceiveNotifications
+
+            Tab(
+                value: TabItem.activity,
+                content: {
+                    TransactionsNavigationStack(
+                        model: TransactionsViewModel(
+                            transactionsService: transactionsService,
+                            walletService: walletService,
+                            wallet: model.wallet,
+                            type: .all
+                        )
+                    )
+                },
+                label: { tabItem(Localized.Activity.title, Images.Tabs.activity) }
             )
-            .taskOnce {
+            .badge(transactions)
+
+            Tab(
+                value: TabItem.settings,
+                content: {
+                    SettingsNavigationStack(
+                        walletId: model.wallet.walletId,
+                        priceService: priceService,
+                        isPresentingSupport: $isPresentingSupport
+                    )
+                },
+                label: { tabItem(Localized.Settings.title, Images.Tabs.settings) }
+            )
+
+            Tab(
+                value: TabItem.search,
+                role: .search,
+                content: {
+                    SearchNavigationStack(
+                        model: WalletSearchSceneViewModel(
+                            wallet: model.wallet,
+                            walletService: walletService,
+                            searchService: AssetSearchService(assetsService: assetsService)
+                        ),
+                        isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
+                    )
+                }
+            )
+        }
+        .sheet(item: $isPresentingSelectedAssetInput) { input in
+            SelectedAssetNavigationStack(
+                input: input,
+                wallet: model.wallet,
+                onComplete: { onComplete(type: input.type) }
+            )
+        }
+        .onChange(of: model.walletId, onWalletIdChange)
+        .onChange(
+            of: notificationHandler.notifications,
+            initial: true,
+            onReceiveNotifications
+        )
+        .taskOnce {
+            Task {
+                await connectObservers()
+            }
+        }
+        .onChange(of: scenePhase) { (oldScene, newPhase) in
+            switch newPhase {
+            case .active:
                 Task {
                     await connectObservers()
                 }
-            }
-            .onChange(of: scenePhase) { (oldScene, newPhase) in
-                switch newPhase {
-                case .active:
-                    Task {
-                        await connectObservers()
-                    }
-                    print("App moved to active — restart websocket, refresh UI…")
-                case .inactive:
-                    Task {
-                        await disconnectObservers()
-                    }
-                    print("App is inactive — e.g. transitioning or showing interruption UI")
-                case .background:
-                    print("App went to background — tear down connections, save state…")
-                @unknown default:
-                    break
+                print("App moved to active — restart websocket, refresh UI…")
+            case .inactive:
+                Task {
+                    await disconnectObservers()
                 }
+                print("App is inactive — e.g. transitioning or showing interruption UI")
+            case .background:
+                print("App went to background — tear down connections, save state…")
+            @unknown default:
+                break
             }
         }
     }
