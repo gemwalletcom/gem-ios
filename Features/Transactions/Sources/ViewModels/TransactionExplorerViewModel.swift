@@ -18,18 +18,14 @@ public struct TransactionExplorerViewModel: Sendable {
         self.explorerService = explorerService
     }
     
-    private var swapProvider: String? {
-        guard case let .swap(metadata) = transactionViewModel.transaction.transaction.metadata else {
-            return nil
-        }
-        return metadata.provider
-    }
-    
     private var transactionLink: BlockExplorerLink {
-        explorerService.transactionUrl(
-            chain: transactionViewModel.transaction.transaction.assetId.chain,
-            hash: transactionViewModel.transaction.transaction.hash,
-            swapProvider: swapProvider
+        let chain = transactionViewModel.transaction.transaction.assetId.chain
+        let hash = transactionViewModel.transaction.transaction.hash
+        return explorerService.transactionLink(
+            chain: chain,
+            provider: transactionViewModel.transaction.transaction.swapProvider,
+            hash: hash,
+            recipient: transactionViewModel.transaction.transaction.to
         )
     }
     

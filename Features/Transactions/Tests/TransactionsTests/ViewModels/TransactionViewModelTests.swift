@@ -70,6 +70,26 @@ final class TransactionViewModelTests {
         #expect(unknownViewModel.titleExtraTextValue?.text.contains("5678") == true)
     }
 
+    @Test
+    func swapTransactionsUseProviderSpecificExplorer() {
+        let model = TransactionViewModel.mock(
+            participant: "recipient.near",
+            swapProvider: SwapProvider.nearIntents.rawValue
+        )
+
+        #expect(model.transactionExplorerUrl.absoluteString.contains("recipient.near"))
+    }
+
+    @Test
+    func swapIdentifierUsesRecipientForNearIntents() {
+        let model = TransactionViewModel.mock(
+            participant: "recipient.near",
+            swapProvider: SwapProvider.nearIntents.rawValue
+        )
+
+        #expect(model.transactionExplorerUrl.absoluteString.contains("recipient.near"))
+    }
+
     func testTransactionTitle(expectedTitle: String, transaction: Transaction) {
         #expect(TransactionViewModel(explorerService: MockExplorerLink(), transaction: .mock(transaction: transaction), currency: "USD").titleTextValue.text == expectedTitle)
     }
@@ -85,7 +105,8 @@ extension TransactionViewModel {
         participant: String = "",
         memo: String? = nil,
         fromAddress: AddressName? = nil,
-        toAddress: AddressName? = nil
+        toAddress: AddressName? = nil,
+        swapProvider: String? = nil
     ) -> TransactionViewModel {
         let fromAsset = Asset.mockEthereum()
         let toAsset = Asset.mockEthereumUSDT()
@@ -96,7 +117,7 @@ extension TransactionViewModel {
                 fromValue: fromValue,
                 toAsset: toAsset.id,
                 toValue: toValue,
-                provider: ""
+                provider: swapProvider
             )
         )
         

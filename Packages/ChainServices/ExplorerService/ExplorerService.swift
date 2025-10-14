@@ -26,18 +26,42 @@ public struct ExplorerService {
         Gemstone.Config.shared.getBlockExplorers(chain: chain.id)
     }
     
-    public func transactionUrl(chain: Chain, hash: String, swapProvider: String?) -> BlockExplorerLink {
+    public func transactionUrl(chain: Chain, hash: String) -> BlockExplorerLink {
         let name = explorerNameOrDefault(chain: chain)
         let explorer = Gemstone.Explorer(chain: chain.id)
-        if let swapProvider, let url = explorer.getTransactionSwapUrl(
-            explorerName: name,
-            transactionId: hash,
-            providerId: swapProvider
-        ) {
-            return BlockExplorerLink(name: url.name, link: url.url)
-        }
         let url = URL(string: explorer.getTransactionUrl(explorerName: name, transactionId: hash))!
         return BlockExplorerLink(name: name, link: url.absoluteString)
+    }
+
+    public func swapIdentifier(
+        chain: Chain,
+        provider: String,
+        hash: String,
+        recipient: String? = nil
+    ) -> String {
+        switch provider.lowercased() {
+        case SwapProvider.nearIntents.rawValue.lowercased():
+            if let recipient = recipient?.trimmingCharacters(in: .whitespacesAndNewlines), !recipient.isEmpty {
+                return recipient
+            }
+            return hash
+        default:
+            return hash
+        }
+    }
+
+    public func swapTransactionUrl(chain: Chain, provider: String, identifier: String) -> BlockExplorerLink? {
+        let name = explorerNameOrDefault(chain: chain)
+        let explorer = Gemstone.Explorer(chain: chain.id)
+        guard let url = explorer.getTransactionSwapUrl(
+            explorerName: name,
+            transactionId: identifier,
+            providerId: provider
+        ) else {
+            return nil
+        }
+
+        return BlockExplorerLink(name: url.name, link: url.url)
     }
 
     public func addressUrl(chain: Chain, address: String) -> BlockExplorerLink {
