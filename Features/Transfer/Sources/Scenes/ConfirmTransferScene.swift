@@ -48,7 +48,15 @@ public struct ConfirmTransferScene: View {
             case .networkFeeSelector:
                 NavigationStack {
                     NetworkFeeScene(model: model.feeModel)
-                        .presentationDetentsForCurrentDeviceSize(expandable: true)
+                        .ifElse(
+                            model.feeModel.showFeeRates,
+                            ifContent: {
+                                $0.presentationDetentsForCurrentDeviceSize(expandable: true)
+                            },
+                            elseContent: {
+                                $0.presentationDetents([.height(200)])
+                            }
+                        )
                 }
             case .fiatConnect(let assetAddress, let walletId):
                 NavigationStack {
@@ -114,15 +122,11 @@ extension ConfirmTransferScene {
                 with: SwapDetailsListView(model: swapDetailsViewModel),
                 action: model.onSelectSwapDetails
             )
-        case let .networkFee(model, selectable):
-            if selectable {
-                NavigationCustomLink(
-                    with: ListItemView(model: model),
-                    action: self.model.onSelectFeePicker
-                )
-            } else {
-                ListItemView(model: model)
-            }
+        case let .networkFee(model):
+            NavigationCustomLink(
+                with: ListItemView(model: model),
+                action: self.model.onSelectFeePicker
+            )
         case let .error(title, error, onInfoAction):
             ListItemErrorView(
                 errorTitle: title,

@@ -14,12 +14,12 @@ struct NetworkFeeSceneViewModelTests {
             chain: .ethereum,
             priority: .normal
         )
-        
+
         model.update(rates: [.defaultRate()])
-        #expect(model.showFeeRatesSelector == false)
-        
+        #expect(model.showFeeRates == false)
+
         model.update(rates: [.defaultRate(), .defaultRate()])
-        #expect(model.showFeeRatesSelector)
+        #expect(model.showFeeRates)
     }
     
     @Test
