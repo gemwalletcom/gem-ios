@@ -36,6 +36,10 @@ struct StakeNavigationView: View {
             request: $model.assetRequest,
             value: $model.assetData
         )
+        .observeQuery(
+            request: $model.validatorsRequest,
+            value: $model.validators
+        )
         .ifLet(model.stakeInfoUrl, content: { view, url in
             view.toolbarInfoButton(url: url)
         })

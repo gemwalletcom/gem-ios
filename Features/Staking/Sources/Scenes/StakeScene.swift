@@ -51,6 +51,7 @@ extension StakeScene {
                 NavigationLink(value: model.stakeDestination) {
                     ListItemView(title: model.stakeTitle)
                 }
+                .enabled(model.isStakeEnabled)
             }
             
             if model.showFreeze {
@@ -77,7 +78,7 @@ extension StakeScene {
     }
 
     private var delegationsSection: some View {
-        Section(model.delegationsTitle) {
+        Section(model.delegationsSectionTitle) {
             switch model.delegationsState {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)

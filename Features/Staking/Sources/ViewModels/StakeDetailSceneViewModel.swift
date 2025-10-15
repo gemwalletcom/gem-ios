@@ -120,7 +120,7 @@ public struct StakeDetailSceneViewModel {
     public func stakeRecipientData() throws -> AmountInput {
         AmountInput(
             type: .stake(
-                validators: try service.getActiveValidators(assetId: asset.id),
+                validators: try service.getValidatorsActive(assetId: asset.id),
                 recommendedValidator: model.delegation.validator
             ),
             asset: asset
@@ -131,7 +131,7 @@ public struct StakeDetailSceneViewModel {
         AmountInput(
             type: .stakeRedelegate(
                 delegation: model.delegation,
-                validators: try service.getActiveValidators(assetId: asset.id),
+                validators: try service.getValidatorsActive(assetId: asset.id),
                 recommendedValidator: recommendedCurrentValidator
             ),
             asset: asset
