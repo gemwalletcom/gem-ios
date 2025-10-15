@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Nu s-au găsit piețe";
 "assets.title" = "Active";
+"stake.delegations" = "Delegații";
+"info.stake.apr.description" = "Rata anuală procentuală (DAE) este rata anuală de recompensă pentru plasarea criptomonedei tale.";

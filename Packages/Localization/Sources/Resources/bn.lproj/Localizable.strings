@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "কোন বাজার খুঁজে পাওয়া যায়নি";
 "assets.title" = "সম্পদ";
+"stake.delegations" = "ডেলিগেশনসমূহ";
+"info.stake.apr.description" = "বার্ষিক শতাংশ হার (এপিআর) হল আপনার ক্রিপ্টোকারেন্সি শেয়ার করার জন্য বার্ষিক পুরষ্কারের হার।";
