@@ -23,7 +23,7 @@ public enum GemAPI: TargetType {
     case addSubscriptions(deviceId: String, subscriptions: [Subscription])
     case deleteSubscriptions(deviceId: String, subscriptions: [Subscription])
     
-    case getPriceAlerts(deviceId: String)
+    case getPriceAlerts(deviceId: String, assetId: String?)
     case addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
     case deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
 
@@ -122,7 +122,9 @@ public enum GemAPI: TargetType {
             return "/v1/assets/device/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
         case .getPrices:
             return "/v1/prices"
-        case .getPriceAlerts(let deviceId), .addPriceAlerts(let deviceId, _), .deletePriceAlerts(let deviceId, _):
+        case .getPriceAlerts(let deviceId, _):
+            return "/v1/price_alerts/\(deviceId)"
+        case .addPriceAlerts(let deviceId, _), .deletePriceAlerts(let deviceId, _):
             return "/v1/price_alerts/\(deviceId)"
         case .getNFTAssets(deviceId: let deviceId, walletIndex: let walletIndex):
             return "/v1/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
@@ -147,12 +149,17 @@ public enum GemAPI: TargetType {
             .deleteDevice,
             .getAssetsList,
             .getAsset,
-            .getPriceAlerts,
             .getNFTAssets,
             .markets:
             return .plain
         case .getAssets(let value):
             return .encodable(value.map { $0.identifier })
+        case .getPriceAlerts(_, let assetId):
+            let params: [String: Any] = [
+                "asset_id": assetId,
+            ].compactMapValues { $0 }
+            
+            return .params(params)
         case let .getFiatQuotes(_, value):
             let params: [String: Any] = [
                 "type": value.type.rawValue,

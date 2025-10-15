@@ -122,6 +122,26 @@ struct AmountSceneViewModelTests {
         model.amountInputModel.update(text: "10")
         #expect(model.amountInputModel.isValid == true)
     }
+
+    @Test
+    func unfreezeResourceSwitchUpdatesValidators() {
+        let assetData = AssetData.mock(
+            asset: .mockTron(),
+            balance: .mock(frozen: 0, locked: 5_000_000)
+        )
+        let model = AmountSceneViewModel.mock(
+            type: .freeze(data: .init(freezeType: .unfreeze, resource: .bandwidth)),
+            assetData: assetData
+        )
+
+        model.onSelectResource(.energy)
+        model.amountInputModel.update(text: "2.0")
+        #expect(model.amountInputModel.isValid == true)
+
+        model.onSelectResource(.bandwidth)
+        model.amountInputModel.update(text: "2.0")
+        #expect(model.amountInputModel.isValid == false)
+    }
 }
 
 extension AmountSceneViewModel {
