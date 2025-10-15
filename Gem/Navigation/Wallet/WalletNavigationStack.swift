@@ -14,7 +14,6 @@ import Transfer
 import StakeService
 import PriceAlerts
 import AssetsService
-import SwapService
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
@@ -28,7 +27,6 @@ struct WalletNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.balanceService) private var balanceService
-    @Environment(\.swapTransactionService) private var swapTransactionService
 
     @State private var model: WalletSceneViewModel
 

@@ -49,7 +49,6 @@ extension AppResolver {
         let nftService: NFTService
         let avatarService: AvatarService
         let swapService: SwapService
-        let swapTransactionService: SwapTransactionService
         let subscriptionsService: SubscriptionService
         let appReleaseService: AppReleaseService
         let deviceObserverService: DeviceObserverService
@@ -118,7 +117,6 @@ extension AppResolver {
             self.nftService = nftService
             self.avatarService = avatarService
             self.swapService = swapService
-            self.swapTransactionService = swapTransactionService
             self.appReleaseService = appReleaseService
             self.deviceObserverService = deviceObserverService
             self.subscriptionsService = subscriptionsService

@@ -18,7 +18,6 @@ struct TransactionsNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceObserverService) private var priceObserverService
     @Environment(\.bannerService) private var bannerService
-    @Environment(\.swapTransactionService) private var swapTransactionService
 
     @State private var model: TransactionsViewModel
 
