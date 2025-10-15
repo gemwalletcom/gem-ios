@@ -37,10 +37,6 @@ public struct PriceAlertService: Sendable {
         preferences.isPushNotificationsEnabled
     }
 
-    public func getPriceAlerts() throws -> [PriceAlert] {
-        try store.getPriceAlerts()
-    }
-
     @discardableResult
     public func requestPermissions() async throws -> Bool {
         try await pushNotificationService.requestPermissions()
@@ -54,22 +50,36 @@ public struct PriceAlertService: Sendable {
         let remote = try await getPriceAlerts()
         let local = try store.getPriceAlerts()
         
+        try syncChanges(remote: remote, local: local)
+    }
+    
+    public func update(assetId: String) async throws {
+        let remote = try await getPriceAlerts(for: assetId)
+        let local = try store.getPriceAlerts(for: assetId)
+        
+        try syncChanges(remote: remote, local: local)
+    }
+    
+    private func syncChanges(remote: [PriceAlert], local: [PriceAlert]) throws {
         let changes = SyncDiff.calculate(
             primary: .remote,
             local: local.map { $0.id }.asSet(),
             remote: remote.map { $0.id }.asSet()
         )
-        
         try store.diffPriceAlerts(
             deleteIds: changes.toDelete.asArray(),
             alerts: remote
         )
     }
-
-    private func getPriceAlerts() async throws -> [PriceAlert] {
-        try await apiService.getPriceAlerts(deviceId: try deviceService.getDeviceId())
-    }
     
+    private func getPriceAlerts() async throws -> [PriceAlert] {
+        try await apiService.getPriceAlerts(deviceId: try deviceService.getDeviceId(), assetId: .none)
+    }
+
+    private func getPriceAlerts(for assetId: String) async throws -> [PriceAlert] {
+        try await apiService.getPriceAlerts(deviceId: try deviceService.getDeviceId(), assetId: assetId)
+    }
+
     public func add(priceAlert: PriceAlert) async throws {
         try store.addPriceAlerts([priceAlert])
         try await add(priceAlerts: [priceAlert])
