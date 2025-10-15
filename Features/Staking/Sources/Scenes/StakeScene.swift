@@ -99,9 +99,6 @@ extension StakeScene {
 
     private var stakeInfoSection: some View {
         Section(model.assetTitle) {
-            if let minAmountValue = model.minAmountValue {
-                ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
-            }
             ListItemView(
                 title: model.stakeAprTitle,
                 subtitle: model.stakeAprValue,
@@ -112,6 +109,9 @@ extension StakeScene {
                 subtitle: model.lockTimeValue,
                 infoAction: model.onLockTimeInfo
             )
+            if let minAmountValue = model.minAmountValue {
+                ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
+            }
         }
     }
 
