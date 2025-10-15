@@ -78,7 +78,7 @@ extension StakeScene {
     }
 
     private var delegationsSection: some View {
-        Section(model.delegationsTitle) {
+        Section(model.delegationsSectionTitle) {
             switch model.delegationsState {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)

@@ -117,6 +117,13 @@ public final class StakeSceneViewModel {
         EmptyContentTypeViewModel(type: .stake(symbol: assetModel.symbol))
     }
 
+    var delegationsSectionTitle: String {
+        guard case .data(let delegations) = delegationsState, !delegations.isEmpty else {
+            return .empty
+        }
+        return delegationsTitle
+    }
+    
     var delegationsState: StateViewType<[StakeDelegationViewModel]> {
         let delegationModels = delegations.map { StakeDelegationViewModel(delegation: $0) }
         
