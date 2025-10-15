@@ -30,10 +30,6 @@ public struct ReceiveScene: View {
                         .frame(maxWidth: model.qrWidth)
                 }
                 Spacer()
-                StateButton(
-                    text: model.shareTitle,
-                    action: model.onShareSheet
-                )
                 Button(action: model.onCopyAddress) {
                     HStack {
                         Images.System.copy
@@ -46,6 +42,7 @@ public struct ReceiveScene: View {
                     .padding()
                 }
                 .liquidGlass()
+                .frame(width: .scene.button.maxWidth)
             }
             .frame(maxWidth: .scene.button.maxWidth)
         }
@@ -98,7 +95,7 @@ extension ReceiveScene {
             .clipShape(RoundedRectangle(cornerRadius: .medium))
             .padding(.medium)
             .background(
-                RoundedRectangle(cornerRadius: .medium)
+                RoundedRectangle(cornerRadius: .extraLarge)
                     .fill(Colors.listStyleColor)
                     .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 5)
             )
