@@ -27,20 +27,27 @@ public struct NetworkFeeScene: View {
                             )
                             .frame(width: Sizing.image.asset, height: Sizing.image.asset)
 
-                            ListItemSelectionView(
-                                title: feeRate.title,
-                                titleExtra: feeRate.valueText,
-                                titleTag: .none,
-                                titleTagType: .none,
-                                subtitle: .none,
-                                subtitleExtra: .none,
-                                value: feeRate.feeRate.priority,
-                                selection: model.priority,
-                                action: {
-                                    model.priority = $0
-                                    dismiss()
-                                }
-                            )
+                            if model.showFeeRatesSelector {
+                                ListItemSelectionView(
+                                    title: feeRate.title,
+                                    titleExtra: feeRate.valueText,
+                                    titleTag: .none,
+                                    titleTagType: .none,
+                                    subtitle: .none,
+                                    subtitleExtra: .none,
+                                    value: feeRate.feeRate.priority,
+                                    selection: model.priority,
+                                    action: {
+                                        model.priority = $0
+                                        dismiss()
+                                    }
+                                )
+                            } else {
+                                ListItemView(
+                                    title: feeRate.title,
+                                    titleExtra: feeRate.valueText
+                                )
+                            }
                         }
                     }
                 } footer: {
