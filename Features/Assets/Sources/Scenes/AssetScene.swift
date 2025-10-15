@@ -154,6 +154,7 @@ public struct AssetScene: View {
                 Section {
                     Spacer()
                     EmptyContentView(model: model.emptyContentModel)
+                        .padding(.bottom, .extraLarge)
                 }
                 .cleanListRow()
             }
