@@ -585,8 +585,8 @@ public enum Localized {
     }
     public enum Stake {
       public enum Apr {
-        /// APR (Annual Percentage Rate) refers to the interest rate or rewards a user earns by staking their crypto assets in a blockchain network. It represents the expected yearly return, excluding compound rewards.
-        public static let description = Localized.tr("Localizable", "info.stake.apr.description", fallback: "APR (Annual Percentage Rate) refers to the interest rate or rewards a user earns by staking their crypto assets in a blockchain network. It represents the expected yearly return, excluding compound rewards.")
+        /// Annual Percentage Rate (APR) is the yearly reward rate for staking your cryptocurrency.
+        public static let description = Localized.tr("Localizable", "info.stake.apr.description", fallback: "Annual Percentage Rate (APR) is the yearly reward rate for staking your cryptocurrency.")
       }
       public enum Reserved {
         /// A small amount stays in your wallet to cover fees for operations like unstaking or claiming rewards.

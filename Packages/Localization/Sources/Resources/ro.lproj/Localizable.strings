@@ -489,4 +489,4 @@
 "perpetuals.empty_state.no_markets_found" = "Nu s-au găsit piețe";
 "assets.title" = "Active";
 "stake.delegations" = "Delegații";
-"info.stake.apr.description" = "DAE (Dobânda Anuală Eficientă) se referă la rata dobânzii sau la recompensele pe care un utilizator le câștigă prin plasarea activelor sale cripto într-o rețea blockchain. Reprezintă randamentul anual așteptat, excluzând recompensele compuse.";
+"info.stake.apr.description" = "Rata anuală procentuală (DAE) este rata anuală de recompensă pentru plasarea criptomonedei tale.";

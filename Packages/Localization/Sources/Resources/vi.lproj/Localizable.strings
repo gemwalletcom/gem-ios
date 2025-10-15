@@ -489,4 +489,4 @@
 "perpetuals.empty_state.no_markets_found" = "Không tìm thấy thị trường";
 "assets.title" = "Tài sản";
 "stake.delegations" = "Ủy quyền";
-"info.stake.apr.description" = "APR (Tỷ lệ phần trăm hàng năm) là lãi suất hoặc phần thưởng mà người dùng kiếm được khi đặt cược tài sản tiền điện tử của họ vào mạng lưới blockchain. Nó thể hiện lợi nhuận dự kiến hàng năm, không bao gồm phần thưởng kép.";
+"info.stake.apr.description" = "Tỷ lệ phần trăm hàng năm (APR) là tỷ lệ phần thưởng hàng năm cho việc đặt cược tiền điện tử của bạn.";

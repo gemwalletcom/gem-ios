@@ -489,4 +489,4 @@
 "perpetuals.empty_state.no_markets_found" = "Tiada pasaran ditemui";
 "assets.title" = "Aset";
 "stake.delegations" = "Delegasi";
-"info.stake.apr.description" = "APR (Kadar Peratusan Tahunan) merujuk kepada kadar faedah atau ganjaran yang diperoleh pengguna dengan mempertaruhkan aset kripto mereka dalam rangkaian blockchain. Ia mewakili pulangan tahunan yang dijangkakan, tidak termasuk ganjaran kompaun.";
+"info.stake.apr.description" = "Kadar Peratusan Tahunan (APR) ialah kadar ganjaran tahunan untuk mempertaruhkan mata wang kripto anda.";

@@ -489,4 +489,4 @@
 "perpetuals.empty_state.no_markets_found" = "No se encontraron mercados";
 "assets.title" = "Activos";
 "stake.delegations" = "Delegaciones";
-"info.stake.apr.description" = "La TAE (Tasa Anual Equivalente) se refiere a la tasa de interés o las recompensas que un usuario obtiene al invertir sus criptomonedas en una red blockchain. Representa la rentabilidad anual esperada, excluyendo las recompensas compuestas.";
+"info.stake.apr.description" = "La tasa de porcentaje anual (APR) es la tasa de recompensa anual por apostar su criptomoneda.";

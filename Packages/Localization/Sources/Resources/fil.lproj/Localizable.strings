@@ -489,4 +489,4 @@
 "perpetuals.empty_state.no_markets_found" = "Walang nakitang mga merkado";
 "assets.title" = "Mga asset";
 "stake.delegations" = "Mga delegasyon";
-"info.stake.apr.description" = "Ang APR (Taunang Percentage Rate) ay tumutukoy sa rate ng interes o mga reward na nakukuha ng isang user sa pamamagitan ng pag-staking ng kanilang mga crypto asset sa isang blockchain network. Kinakatawan nito ang inaasahang taunang pagbabalik, hindi kasama ang mga compound reward.";
+"info.stake.apr.description" = "Ang Annual Percentage Rate (APR) ay ang taunang reward rate para sa staking ng iyong cryptocurrency.";

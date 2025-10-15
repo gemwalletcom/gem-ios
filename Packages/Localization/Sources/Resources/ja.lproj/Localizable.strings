@@ -489,4 +489,4 @@
 "perpetuals.empty_state.no_markets_found" = "市場が見つかりません";
 "assets.title" = "資産";
 "stake.delegations" = "委任";
-"info.stake.apr.description" = "APR（年率）とは、ユーザーがブロックチェーンネットワークに暗号資産をステーキングすることで得られる金利または報酬を指します。これは、複利報酬を除いた年間の期待収益を表します。";
+"info.stake.apr.description" = "年率 (APR) は、暗号通貨をステーキングした場合の年間報酬率です。";

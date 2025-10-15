@@ -489,4 +489,4 @@
 "perpetuals.empty_state.no_markets_found" = "Tidak ada pasar yang ditemukan";
 "assets.title" = "Aktiva";
 "stake.delegations" = "Delegasi";
-"info.stake.apr.description" = "APR (Tingkat Persentase Tahunan) mengacu pada suku bunga atau imbalan yang diperoleh pengguna dengan staking aset kripto mereka di jaringan blockchain. Ini mewakili imbal hasil tahunan yang diharapkan, tidak termasuk imbalan majemuk.";
+"info.stake.apr.description" = "Tingkat Persentase Tahunan (APR) adalah tingkat imbalan tahunan untuk mempertaruhkan mata uang kripto Anda.";

@@ -489,4 +489,4 @@
 "perpetuals.empty_state.no_markets_found" = "Nenalezeny žádné trhy";
 "assets.title" = "Aktiva";
 "stake.delegations" = "Delegace";
-"info.stake.apr.description" = "RPSN (roční procentní sazba) označuje úrokovou sazbu nebo odměny, které uživatel získá vložením svých krypto aktiv do blockchainové sítě. Představuje očekávaný roční výnos bez započítání složených odměn.";
+"info.stake.apr.description" = "Roční procentní sazba (RPSN) je roční odměna za staking vaší kryptoměny.";

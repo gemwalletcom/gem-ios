@@ -489,4 +489,4 @@
 "perpetuals.empty_state.no_markets_found" = "No markets found";
 "assets.title" = "Assets";
 "stake.delegations" = "Delegations";
-"info.stake.apr.description" = "APR (Annual Percentage Rate) refers to the interest rate or rewards a user earns by staking their crypto assets in a blockchain network. It represents the expected yearly return, excluding compound rewards.";
+"info.stake.apr.description" = "Annual Percentage Rate (APR) is the yearly reward rate for staking your cryptocurrency.";
