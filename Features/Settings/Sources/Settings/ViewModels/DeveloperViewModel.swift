@@ -166,7 +166,8 @@ public final class DeveloperViewModel {
                             fromValue: BigInt(2767611111).description,
                             toAsset: AssetId.init(chain: .solana),
                             toValue: BigInt(812312312).description,
-                            provider: .none
+                            provider: .none,
+                            swapResult: .none
                         )
                     ),
                 createdAt: Date().addingTimeInterval(-122223)
@@ -235,7 +236,8 @@ public final class DeveloperViewModel {
                             fromValue: BigInt(276767623311111111).description,
                             toAsset: AssetId.init(chain: .bitcoin),
                             toValue: BigInt(32312312).description,
-                            provider: .none
+                            provider: .none,
+                            swapResult: .none
                         )
                     ),
                 createdAt: Date().addingTimeInterval(-1344411)

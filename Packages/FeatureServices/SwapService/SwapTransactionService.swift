@@ -2,34 +2,52 @@
 
 import Foundation
 import class Gemstone.GemSwapper
+import enum Gemstone.SwapperProvider
+import struct Gemstone.SwapperSwapResult
+import class Gemstone.SwapProviderConfig
 import GemstonePrimitives
-import ChainService
 import NativeProviderService
 import Primitives
 
-public struct SwapTransactionService: Sendable {
-    private let nodeProvider: any NodeURLFetchable
+public protocol SwapStatusProviding: Sendable {
+    func getSwapResult(
+        providerId: SwapProvider,
+        chain: Primitives.Chain,
+        transactionId: String,
+        recipient: String
+    ) async throws -> SwapResult
+}
+
+public struct SwapTransactionService: SwapStatusProviding, Sendable {
     private let swapper: GemSwapper
-    private let swapConfig = GemstoneConfig.shared.getSwapConfig()
-    
-    public init(
-        nodeProvider: any NodeURLFetchable
-    ) {
-        self.nodeProvider = nodeProvider
-        self.swapper = GemSwapper(
-            rpcProvider: NativeProvider(nodeProvider: nodeProvider)
-        )
+
+    public init(nodeProvider: any NodeURLFetchable) {
+        swapper = GemSwapper(rpcProvider: NativeProvider(nodeProvider: nodeProvider))
     }
-    
-    public func getTransactionStatus(chain: Primitives.Chain, provider: String?, hash: String) async throws {
-        //let provider = SwapProviderConfig
-        
-        //let provider = SwapProvider.across
-        
-//        let status = try await swapper.getTransactionStatus(
-//            chain: chain.rawValue,
-//            swapProvider: .across,
-//            transactionHash: hash
-//        )
+
+    func shouldUpdate(id: SwapProvider) -> Bool {
+        let providerConfig = SwapProviderConfig.fromString(id: id.rawValue)
+        return providerConfig.inner().mode != .onChain
+    }
+
+    public func getSwapResult(
+        providerId: SwapProvider,
+        chain: Primitives.Chain,
+        transactionId: String,
+        recipient: String
+    ) async throws -> SwapResult {
+        let swapProvider = SwapProviderConfig.fromString(id: providerId.rawValue).inner().id
+        let transactionHash = if swapProvider == .nearIntents {
+            recipient
+        } else {
+            transactionId
+        }
+        let result = try await swapper.getSwapResult(
+            chain: chain.rawValue,
+            swapProvider: swapProvider,
+            transactionHash: transactionHash
+        )
+
+        return try result.asPrimitives()
     }
 }

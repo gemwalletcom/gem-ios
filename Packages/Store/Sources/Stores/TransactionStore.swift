@@ -34,6 +34,18 @@ public struct TransactionStore: Sendable {
         }
     }
 
+    public func getSwapTransactionsNeedingStatusUpdate() throws -> [TransactionWallet] {
+        try db.read { db in
+            try TransactionRecord
+                .including(required: TransactionRecord.wallet)
+                .filter(TransactionRecord.Columns.type == TransactionType.swap.rawValue)
+                .asRequest(of: WalletTransactionInfo.self)
+                .fetchAll(db)
+                .map(\.transactionWallet)
+                .filter(\.needsSwapStatusUpdate)
+        }
+    }
+
     public func getTransactionRecord(transactionId: String) throws -> TransactionRecord {
         try db.read { db in
             guard let transaction = try TransactionRecord
@@ -159,5 +171,19 @@ public struct TransactionStore: Sendable {
             try TransactionRecord
                 .deleteAll(db)
         }
+    }
+}
+
+private extension TransactionWallet {
+    var needsSwapStatusUpdate: Bool {
+        guard case let .swap(metadata) = transaction.metadata else { return false }
+        guard let provider = metadata.provider, !provider.isEmpty else { return false }
+        if metadata.fromAsset.chain == metadata.toAsset.chain {
+            return false
+        }
+        if let swapResult = metadata.swapResult, swapResult.status != .pending {
+            return false
+        }
+        return true
     }
 }

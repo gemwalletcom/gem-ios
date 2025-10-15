@@ -10,7 +10,8 @@ public extension SwapperProviderType {
             id: .pancakeswapV3,
             name: "PancakeSwap",
             protocol: "v3",
-            protocolId: "pancakeswap_v3"
+            protocolId: "pancakeswap_v3",
+            mode: .onChain
         )
     }
 } 

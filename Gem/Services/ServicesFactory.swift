@@ -83,13 +83,16 @@ struct ServicesFactory {
             nftStore: storeManager.nftStore,
             deviceService: deviceService
         )
+        let swapTransactionService = SwapTransactionService(nodeProvider: nodeService)
         let transactionsService = Self.makeTransactionsService(
             transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
             walletStore: storeManager.walletStore,
             deviceService: deviceService,
-            addressStore: storeManager.addressStore
+            addressStore: storeManager.addressStore,
+            swapTransactionService: swapTransactionService
         )
+        transactionsService.monitorPendingSwapStatuses()
         let transactionService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
             stakeService: stakeService,
@@ -325,14 +328,16 @@ extension ServicesFactory {
         assetsService: AssetsService,
         walletStore: WalletStore,
         deviceService: any DeviceServiceable,
-        addressStore: AddressStore
+        addressStore: AddressStore,
+        swapTransactionService: SwapTransactionService
     ) -> TransactionsService {
         TransactionsService(
             transactionStore: transactionStore,
             assetsService: assetsService,
             walletStore: walletStore,
             deviceService: deviceService,
-            addressStore: addressStore
+            addressStore: addressStore,
+            swapTransactionService: swapTransactionService
         )
     }
 

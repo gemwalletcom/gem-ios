@@ -1130,6 +1130,8 @@ public enum Localized {
     public static let status = Localized.tr("Localizable", "transaction.status", fallback: "Status")
     /// Swap Again
     public static let swapAgain = Localized.tr("Localizable", "transaction.swap_again", fallback: "Swap Again")
+    /// Swap Status
+    public static let swapStatus = Localized.tr("Localizable", "transaction.swap_status", fallback: "Swap Status")
     /// View on %@
     public static func viewOn(_ p1: Any) -> String {
       return Localized.tr("Localizable", "transaction.view_on", String(describing: p1), fallback: "View on %@")
@@ -1143,6 +1145,8 @@ public enum Localized {
       public static let pending = Localized.tr("Localizable", "transaction.status.pending", fallback: "Pending")
       /// Reverted
       public static let reverted = Localized.tr("Localizable", "transaction.status.reverted", fallback: "Reverted")
+      /// Refunded
+      public static let refunded = Localized.tr("Localizable", "transaction.status.refunded", fallback: "Refunded")
     }
     public enum Title {
       /// Received

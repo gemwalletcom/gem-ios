@@ -18,6 +18,10 @@ public final class TransactionSceneViewModel {
 
     var request: TransactionRequest
     var transactionExtended: TransactionExtended
+    var swapResult: SwapResult? { swapMetadata?.swapResult }
+
+    var isPresentingShareSheet = false
+    var isPresentingInfoSheet: InfoSheetType? = .none
     var isPresentingTransactionSheet: TransactionSheetType?
 
     public init(
@@ -43,7 +47,7 @@ extension TransactionSceneViewModel: ListSectionProvideable {
         [
             ListSection(type: .header, [.header]),
             ListSection(type: .swapAction, [.swapButton]),
-            ListSection(type: .details, [.date, .status, .participant, .memo, .network, .pnl, .price, .size, .provider, .fee]),
+            ListSection(type: .details, detailItems),
             ListSection(type: .explorer, [.explorerLink])
         ]
     }
@@ -53,7 +57,10 @@ extension TransactionSceneViewModel: ListSectionProvideable {
         case .header: headerViewModel
         case .swapButton: TransactionSwapButtonViewModel(transaction: transactionExtended)
         case .date: TransactionDateViewModel(date: model.transaction.transaction.createdAt)
-        case .status: TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onSelectStatusInfo)
+        case .status:
+            TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onSelectStatusInfo)
+        case .swapStatus:
+            TransactionStatusViewModel(title: model.swapStatusTitle, state: model.transaction.transaction.state, swapResult: swapResult, onInfoAction: onSelectStatusInfo)
         case .participant: TransactionParticipantViewModel(transactionViewModel: model)
         case .memo: TransactionMemoViewModel(transaction: model.transaction.transaction)
         case .network: TransactionNetworkViewModel(chain: model.transaction.asset.chain)
@@ -115,7 +122,7 @@ extension TransactionSceneViewModel {
             currency: preferences.currency
         )
     }
-    
+
     private var headerViewModel: TransactionHeaderViewModel {
         TransactionHeaderViewModel(
             transaction: model.transaction,
@@ -128,6 +135,30 @@ extension TransactionSceneViewModel {
             transactionViewModel: model,
             explorerService: explorerService
         )
+    }
+
+    private var detailItems: [TransactionItem] {
+        var items: [TransactionItem] = [.date]
+        if isCrossChainSwap {
+            items.append(.swapStatus)
+        }
+
+        if !isCrossChainSwap {
+            items.append(.status)
+        }
+
+        items.append(contentsOf: [.participant, .memo, .network, .pnl, .price, .size, .provider, .fee])
+        return items
+    }
+
+    private var swapMetadata: TransactionSwapMetadata? {
+        guard case let .swap(metadata) = transactionExtended.transaction.metadata else { return nil }
+        return metadata
+    }
+
+    private var isCrossChainSwap: Bool {
+        guard let metadata = swapMetadata else { return false }
+        return metadata.fromAsset.chain != metadata.toAsset.chain
     }
 
     var feeDetailsViewModel: NetworkFeeSceneViewModel {

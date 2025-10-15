@@ -7,6 +7,7 @@ import PreferencesTestKit
 import PrimitivesComponents
 import Style
 import Components
+import ExplorerService
 
 @testable import Transactions
 @testable import Store
@@ -93,6 +94,70 @@ struct TransactionSceneViewModelTests {
     }
 
     @Test
+    func swapStatusReflectsSwapResult() {
+        let swapResult = SwapResult(
+            status: .completed,
+            fromChain: .ethereum,
+            fromTxHash: "0xsource",
+            toChain: .some(.arbitrum),
+            toTxHash: "0xdestination"
+        )
+
+        let metadata = TransactionMetadata.swap(
+            TransactionSwapMetadata(
+                fromAsset: AssetId(chain: .ethereum, tokenId: nil),
+                fromValue: "1",
+                toAsset: AssetId(chain: .arbitrum, tokenId: nil),
+                toValue: "1",
+                provider: "across",
+                swapResult: swapResult
+            )
+        )
+
+        let swapModel = TransactionSceneViewModel.mock(
+            type: .swap,
+            metadata: metadata
+        )
+
+        if case .listItem(let item) = swapModel.item(for: TransactionItem.swapStatus) {
+            #expect(item.title == Localized.Transaction.swapStatus)
+            #expect(item.subtitle == Localized.Transaction.Status.confirmed)
+        } else {
+            Issue.record("Expected swap status list item")
+        }
+
+    }
+
+    @Test
+    func swapStatusLoadsPersistedResult() {
+        let expected = SwapResult(
+            status: .completed,
+            fromChain: .ethereum,
+            fromTxHash: "0xsource",
+            toChain: .some(.arbitrum),
+            toTxHash: "0xdestination"
+        )
+
+        let metadata = TransactionMetadata.swap(
+            TransactionSwapMetadata(
+                fromAsset: .mock(.ethereum),
+                fromValue: "1",
+                toAsset: .mock(.arbitrum),
+                toValue: "1",
+                provider: "across",
+                swapResult: expected
+            )
+        )
+
+        let model = TransactionSceneViewModel.mock(
+            type: .swap,
+            metadata: metadata
+        )
+
+        #expect(model.swapResult == expected)
+    }
+
+    @Test
     func participantItemModel() {
         let transaction = TransactionExtended.mock(
             transaction: Transaction.mock(
@@ -105,7 +170,8 @@ struct TransactionSceneViewModelTests {
         let modelWithAddresses = TransactionSceneViewModel(
             transaction: transaction,
             walletId: "test_wallet_id",
-            preferences: Preferences.standard
+            preferences: Preferences.standard,
+            explorerService: ExplorerService.standard
         )
 
         if case .participant(let item) = modelWithAddresses.item(for: TransactionItem.participant) {
@@ -170,11 +236,11 @@ struct TransactionSceneViewModelTests {
     func feeItemModel() {
         let model = TransactionSceneViewModel.mock()
 
-        if case .listItem(let item) = model.item(for: TransactionItem.fee) {
+        if case .fee(let item) = model.item(for: TransactionItem.fee) {
             #expect(item.title == Localized.Transfer.networkFee)
             #expect(item.infoAction != nil)
         } else {
-            Issue.record("Expected listItem for fee")
+            Issue.record("Expected fee item for network fee")
         }
     }
 
@@ -226,26 +292,30 @@ struct TransactionSceneViewModelTests {
 }
 
 extension TransactionSceneViewModel {
-    static func mock(
+    fileprivate static func mock(
         type: TransactionType = .transfer,
         state: TransactionState = .confirmed,
         direction: TransactionDirection = .outgoing,
         assetId: AssetId = .mock(),
         toAddress: String = "participant_address",
         memo: String? = nil,
-        createdAt: Date = Date()
+        createdAt: Date = Date(),
+        metadata: TransactionMetadata? = nil
     ) -> TransactionSceneViewModel {
-        TransactionSceneViewModel(
-            transaction: TransactionExtended.mock(
-                transaction: Transaction.mock(
-                    type: type,
-                    state: state,
-                    direction: direction,
-                    assetId: assetId,
-                    to: toAddress,
-                    memo: memo
-                )
-            ),
+        let transactionExtended = TransactionExtended.mock(
+            transaction: Transaction.mock(
+                type: type,
+                state: state,
+                direction: direction,
+                assetId: assetId,
+                to: toAddress,
+                memo: memo,
+                metadata: metadata
+            )
+        )
+
+        return TransactionSceneViewModel(
+            transaction: transactionExtended,
             walletId: "test_wallet_id",
             preferences: Preferences.standard
         )
