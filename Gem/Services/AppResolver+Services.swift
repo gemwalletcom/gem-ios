@@ -83,7 +83,6 @@ extension AppResolver {
             nftService: NFTService,
             avatarService: AvatarService,
             swapService: SwapService,
-            swapTransactionService: SwapTransactionService,
             appReleaseService: AppReleaseService,
             subscriptionsService: SubscriptionService,
             deviceObserverService: DeviceObserverService,

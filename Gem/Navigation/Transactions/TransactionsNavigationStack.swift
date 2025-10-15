@@ -8,7 +8,6 @@ import Transactions
 import Store
 import Assets
 import AssetsService
-import SwapService
 
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState

@@ -223,7 +223,6 @@ struct ServicesFactory {
             nftService: nftService,
             avatarService: avatarService,
             swapService: swapService,
-            swapTransactionService: swapTransactionService,
             appReleaseService: releaseService,
             subscriptionsService: subscriptionService,
             deviceObserverService: deviceObserverService,
