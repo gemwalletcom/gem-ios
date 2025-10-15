@@ -16,6 +16,15 @@ public protocol SwapStatusProviding: Sendable {
         transactionId: String,
         memo: String?
     ) async throws -> SwapResult
+
+    func shouldUpdate(id: SwapProvider) -> Bool
+}
+
+public extension SwapStatusProviding {
+    func shouldUpdate(id: SwapProvider) -> Bool {
+        let providerConfig = SwapProviderConfig.fromString(id: id.rawValue)
+        return providerConfig.inner().mode != .onChain
+    }
 }
 
 public struct SwapTransactionService: SwapStatusProviding, Sendable {

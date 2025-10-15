@@ -7,6 +7,7 @@ import PreferencesTestKit
 import PrimitivesComponents
 import Style
 import Components
+import ExplorerService
 
 @testable import Transactions
 @testable import Store
@@ -93,7 +94,7 @@ struct TransactionSceneViewModelTests {
     }
 
     @Test
-    func swapStatusReflectsSwapResult() async {
+    func swapStatusReflectsSwapResult() {
         let swapResult = SwapResult(
             status: .completed,
             fromChain: .ethereum,
@@ -102,21 +103,21 @@ struct TransactionSceneViewModelTests {
             toTxHash: "0xdestination"
         )
 
-        let metadata = TransactionSwapMetadata(
-            fromAsset: AssetId(chain: .ethereum, tokenId: nil),
-            fromValue: "1",
-            toAsset: AssetId(chain: .arbitrum, tokenId: nil),
-            toValue: "1",
-            provider: "across"
+        let metadata = TransactionMetadata.swap(
+            TransactionSwapMetadata(
+                fromAsset: AssetId(chain: .ethereum, tokenId: nil),
+                fromValue: "1",
+                toAsset: AssetId(chain: .arbitrum, tokenId: nil),
+                toValue: "1",
+                provider: "across",
+                swapResult: swapResult
+            )
         )
 
         let swapModel = TransactionSceneViewModel.mock(
             type: .swap,
-            metadata: .swap(metadata),
-            swapStatusProvider: .init { _, _, _, _ in swapResult }
+            metadata: metadata
         )
-
-        await Task.yield()
 
         if case .listItem(let item) = swapModel.item(for: TransactionItem.swapStatus) {
             #expect(item.title == Localized.Transaction.swapStatus)

@@ -106,7 +106,8 @@ extension TransactionViewModel {
         memo: String? = nil,
         fromAddress: AddressName? = nil,
         toAddress: AddressName? = nil,
-        swapProvider: String? = nil
+        swapProvider: String? = nil,
+        swapResult: SwapResult? = nil
     ) -> TransactionViewModel {
         let fromAsset = Asset.mockEthereum()
         let toAsset = Asset.mockEthereumUSDT()
@@ -117,7 +118,8 @@ extension TransactionViewModel {
                 fromValue: fromValue,
                 toAsset: toAsset.id,
                 toValue: toValue,
-                provider: swapProvider
+                provider: swapProvider,
+                swapResult: swapResult
             )
         )
         

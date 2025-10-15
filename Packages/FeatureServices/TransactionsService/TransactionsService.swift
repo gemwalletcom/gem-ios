@@ -163,7 +163,7 @@ public final class TransactionsService: Sendable {
 
                 backoff = .seconds(5)
             } catch {
-                NSLog("TransactionsService swap status error: \(error)")
+                NSLog("TransactionsService swap status \(context) error: \(error)")
                 try? await Task.sleep(for: backoff)
                 backoff = min(backoff * 2, .seconds(300))
                 continue
@@ -175,7 +175,13 @@ public final class TransactionsService: Sendable {
 
     private func makeSwapStatusContext(for transaction: Transaction) -> SwapStatusContext? {
         guard case let .swap(metadata) = transaction.metadata else { return nil }
-        guard let provider = metadata.provider, !provider.isEmpty else { return nil }
+        guard
+            let provider = metadata.provider,
+            let providerType = SwapProvider(rawValue: provider),
+            swapTransactionService.shouldUpdate(id: providerType)
+        else {
+            return nil
+        }
 
         if metadata.fromAsset.chain == metadata.toAsset.chain {
             return nil
@@ -215,7 +221,7 @@ private actor SwapStatusTaskManager {
         guard tasks[id] == nil else { return }
         tasks[id] = Task {
             await operation()
-            await self.removeTask(id: id)
+            self.removeTask(id: id)
         }
     }
 

@@ -34,7 +34,7 @@ struct TransactionStoreTests {
                 type: .swap,
                 assetId: btc,
                 metadata: .swap(TransactionSwapMetadata(
-                    fromAsset: btc, fromValue: "100", toAsset: eth, toValue: "200", provider: nil
+                    fromAsset: btc, fromValue: "100", toAsset: eth, toValue: "200", provider: nil, swapResult: nil
                 ))
             )
         ])
@@ -45,7 +45,7 @@ struct TransactionStoreTests {
                 type: .swap,
                 assetId: btc,
                 metadata: .swap(TransactionSwapMetadata(
-                    fromAsset: btc, fromValue: "100", toAsset: sol, toValue: "300", provider: nil
+                    fromAsset: btc, fromValue: "100", toAsset: sol, toValue: "300", provider: nil, swapResult: nil
                 ))
             )
         ])
