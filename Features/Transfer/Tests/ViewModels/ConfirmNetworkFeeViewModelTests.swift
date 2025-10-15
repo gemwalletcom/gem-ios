@@ -18,13 +18,11 @@ struct ConfirmNetworkFeeViewModelTests {
             title: Localized.Transfer.networkFee,
             value: "0.001 ETH",
             fiatValue: fiatValue,
-            showFeeRatesSelector: false,
             infoAction: {}
         )
 
-        guard case .networkFee(let item, let selectable) = model.itemModel else { return }
+        guard case .networkFee(let item) = model.itemModel else { return }
         #expect(item.subtitle == fiatValue)
-        #expect(selectable == false)
     }
 
     @Test
@@ -35,11 +33,10 @@ struct ConfirmNetworkFeeViewModelTests {
             title: Localized.Transfer.networkFee,
             value: value,
             fiatValue: nil,
-            showFeeRatesSelector: false,
             infoAction: {}
         )
 
-        guard case .networkFee(let item, _) = model.itemModel else { return }
+        guard case .networkFee(let item) = model.itemModel else { return }
         #expect(item.subtitle == value)
     }
 
@@ -50,11 +47,10 @@ struct ConfirmNetworkFeeViewModelTests {
             title: Localized.Transfer.networkFee,
             value: nil,
             fiatValue: nil,
-            showFeeRatesSelector: false,
             infoAction: {}
         )
 
-        guard case .networkFee(let item, _) = model.itemModel else { return }
+        guard case .networkFee(let item) = model.itemModel else { return }
         #expect(item.subtitle == "-")
     }
 
@@ -73,28 +69,12 @@ struct ConfirmNetworkFeeViewModelTests {
             title: Localized.Transfer.networkFee,
             value: value,
             fiatValue: fiatValue,
-            showFeeRatesSelector: false,
             infoAction: {}
         )
 
-        guard case .networkFee(let item, _) = model.itemModel else { return }
+        guard case .networkFee(let item) = model.itemModel else { return }
         #expect(item.subtitle == value)
         #expect(item.subtitleExtra == fiatValue)
-    }
-
-    @Test
-    func selectable() {
-        let model = ConfirmNetworkFeeViewModel(
-            state: .data(.mock()),
-            title: "Fee",
-            value: "0.001",
-            fiatValue: nil,
-            showFeeRatesSelector: true,
-            infoAction: {}
-        )
-
-        guard case .networkFee(_, let selectable) = model.itemModel else { return }
-        #expect(selectable == true)
     }
 }
 

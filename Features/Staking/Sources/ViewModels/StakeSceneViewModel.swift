@@ -57,6 +57,7 @@ public final class StakeSceneViewModel {
     var stakeTitle: String { Localized.Transfer.Stake.title }
     var claimRewardsTitle: String { Localized.Transfer.ClaimRewards.title }
     var assetTitle: String { assetModel.title }
+    var delegationsTitle: String { Localized.Stake.delegations }
 
     var stakeAprTitle: String { Localized.Stake.apr("") }
     var stakeAprValue: String {
@@ -87,6 +88,10 @@ public final class StakeSceneViewModel {
     }
     var lockTimeInfoSheet: InfoSheetType {
         InfoSheetType.stakeLockTime(assetModel.assetImage.placeholder)
+    }
+
+    var aprInfoSheet: InfoSheetType {
+        InfoSheetType.stakeApr(assetModel.assetImage.placeholder)
     }
 
     var minAmountTitle: String { Localized.Stake.minimumAmount }
@@ -209,6 +214,10 @@ extension StakeSceneViewModel {
     
     func onLockTimeInfo() {
         isPresentingInfoSheet = lockTimeInfoSheet
+    }
+
+    func onAprInfo() {
+        isPresentingInfoSheet = aprInfoSheet
     }
 }
 

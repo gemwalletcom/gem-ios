@@ -19,6 +19,15 @@ public struct PriceAlertStore: Sendable {
                 .map { $0.map() }
         }
     }
+    
+    public func getPriceAlerts(for assetId: String) throws -> [PriceAlert] {
+        try db.read { db in
+            try PriceAlertRecord
+                .filter(PriceAlertRecord.Columns.assetId == assetId)
+                .fetchAll(db)
+                .map { $0.map() }
+        }
+    }
 
     public func addPriceAlerts(_ alerts: [PriceAlert]) throws {
         try db.write { (db: Database) in

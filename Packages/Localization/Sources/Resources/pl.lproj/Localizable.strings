@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Nie znaleziono rynków";
 "assets.title" = "Aktywa";
+"stake.delegations" = "Delegacje";
+"info.stake.apr.description" = "Roczna stopa procentowa (APR) to roczna stopa nagrody za stakowanie kryptowaluty.";

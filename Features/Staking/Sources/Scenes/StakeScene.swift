@@ -17,16 +17,17 @@ public struct StakeScene: View {
 
     public var body: some View {
         List {
-            stakeInfoSection
-            if model.showManage {
-                stakeSection
+            Group {
+                stakeInfoSection
+                if model.showManage {
+                    stakeSection
+                }
+                if model.showTronResources {
+                    resourcesSection
+                }
+                delegationsSection
             }
-
-            if model.showTronResources {
-                resourcesSection
-            }
-
-            delegationsSection
+            .listRowInsets(.assetListRowInsets)
         }
         .listSectionSpacing(.compact)
         .refreshable {
@@ -77,7 +78,7 @@ extension StakeScene {
     }
 
     private var delegationsSection: some View {
-        Section {
+        Section(model.delegationsTitle) {
             switch model.delegationsState {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)
@@ -99,15 +100,19 @@ extension StakeScene {
 
     private var stakeInfoSection: some View {
         Section(model.assetTitle) {
-            if let minAmountValue = model.minAmountValue {
-                ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
-            }
-            ListItemView(title: model.stakeAprTitle, subtitle: model.stakeAprValue)
+            ListItemView(
+                title: model.stakeAprTitle,
+                subtitle: model.stakeAprValue,
+                infoAction: model.onAprInfo
+            )
             ListItemView(
                 title: model.lockTimeTitle,
                 subtitle: model.lockTimeValue,
                 infoAction: model.onLockTimeInfo
             )
+            if let minAmountValue = model.minAmountValue {
+                ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
+            }
         }
     }
 

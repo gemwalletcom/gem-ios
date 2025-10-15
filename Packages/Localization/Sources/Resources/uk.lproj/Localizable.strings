@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Ринків не знайдено";
 "assets.title" = "Активи";
+"stake.delegations" = "Делегації";
+"info.stake.apr.description" = "Річна процентна ставка (APR) – це річна ставка винагороди за стейкінг вашої криптовалюти.";
