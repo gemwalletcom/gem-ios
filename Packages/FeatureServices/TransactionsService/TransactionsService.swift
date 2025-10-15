@@ -148,7 +148,7 @@ public final class TransactionsService: Sendable {
                     providerId: context.provider,
                     chain: context.chain,
                     transactionId: context.transactionId,
-                    memo: context.identifier
+                    recipient: context.recipient
                 )
 
                 do {
@@ -177,8 +177,7 @@ public final class TransactionsService: Sendable {
         guard case let .swap(metadata) = transaction.metadata else { return nil }
         guard
             let provider = metadata.provider,
-            let providerType = SwapProvider(rawValue: provider),
-            swapTransactionService.shouldUpdate(id: providerType)
+            let swapProvider = SwapProvider(rawValue: provider)
         else {
             return nil
         }
@@ -191,27 +190,20 @@ public final class TransactionsService: Sendable {
             return nil
         }
 
-        let identifier: String?
-        if provider.lowercased() == SwapProvider.nearIntents.rawValue.lowercased() {
-            identifier = transaction.to
-        } else {
-            identifier = transaction.memo
-        }
-
         return SwapStatusContext(
-            provider: provider,
+            provider: swapProvider,
             chain: transaction.assetId.chain,
             transactionId: transaction.hash,
-            identifier: identifier
+            recipient: transaction.to
         )
     }
 }
 
 private struct SwapStatusContext {
-    let provider: String
+    let provider: SwapProvider
     let chain: Chain
     let transactionId: String
-    let identifier: String?
+    let recipient: String
 }
 
 private actor SwapStatusTaskManager {

@@ -23,10 +23,10 @@ public extension TransactionsService {
 
 private struct SwapStatusProvidingMock: SwapStatusProviding {
     func getSwapResult(
-        providerId: String?,
+        providerId: SwapProvider,
         chain: Chain,
         transactionId: String,
-        memo: String?
+        recipient: String
     ) async throws -> SwapResult {
         SwapResult(status: .pending, fromChain: chain, fromTxHash: transactionId, toChain: nil, toTxHash: nil)
     }

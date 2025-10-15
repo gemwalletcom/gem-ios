@@ -11,20 +11,11 @@ import Primitives
 
 public protocol SwapStatusProviding: Sendable {
     func getSwapResult(
-        providerId: String?,
+        providerId: SwapProvider,
         chain: Primitives.Chain,
         transactionId: String,
-        memo: String?
+        recipient: String
     ) async throws -> SwapResult
-
-    func shouldUpdate(id: SwapProvider) -> Bool
-}
-
-public extension SwapStatusProviding {
-    func shouldUpdate(id: SwapProvider) -> Bool {
-        let providerConfig = SwapProviderConfig.fromString(id: id.rawValue)
-        return providerConfig.inner().mode != .onChain
-    }
 }
 
 public struct SwapTransactionService: SwapStatusProviding, Sendable {
@@ -34,22 +25,20 @@ public struct SwapTransactionService: SwapStatusProviding, Sendable {
         swapper = GemSwapper(rpcProvider: NativeProvider(nodeProvider: nodeProvider))
     }
 
+    func shouldUpdate(id: SwapProvider) -> Bool {
+        let providerConfig = SwapProviderConfig.fromString(id: id.rawValue)
+        return providerConfig.inner().mode != .onChain
+    }
+
     public func getSwapResult(
-        providerId: String?,
+        providerId: SwapProvider,
         chain: Primitives.Chain,
         transactionId: String,
-        memo: String?
+        recipient: String
     ) async throws -> SwapResult {
-        guard let providerId, !providerId.isEmpty else {
-            throw AnyError("Swap provider is missing")
-        }
-
-        guard let swapProvider = providerId.toSwapperProvider() else {
-            throw AnyError("Invalid swap provider: \(providerId)")
-        }
-
-        let transactionHash = if swapProvider == .nearIntents, let memo, !memo.isEmpty {
-            memo
+        let swapProvider = SwapProviderConfig.fromString(id: providerId.rawValue).inner().id
+        let transactionHash = if swapProvider == .nearIntents {
+            recipient
         } else {
             transactionId
         }
@@ -60,11 +49,5 @@ public struct SwapTransactionService: SwapStatusProviding, Sendable {
         )
 
         return try result.asPrimitives()
-    }
-}
-
-private extension String {
-    func toSwapperProvider() -> SwapperProvider? {
-        SwapProviderConfig.fromString(id: self).inner().id
     }
 }
