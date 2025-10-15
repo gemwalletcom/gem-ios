@@ -48,7 +48,15 @@ public struct ConfirmTransferScene: View {
             case .networkFeeSelector:
                 NavigationStack {
                     NetworkFeeScene(model: model.feeModel)
-                        .presentationDetentsForCurrentDeviceSize(expandable: true)
+                        .ifElse(
+                            model.feeModel.showFeeRates,
+                            ifContent: {
+                                $0.presentationDetentsForCurrentDeviceSize(expandable: true)
+                            },
+                            elseContent: {
+                                $0.presentationDetents([.height(200)])
+                            }
+                        )
                 }
             case .fiatConnect(let assetAddress, let walletId):
                 NavigationStack {

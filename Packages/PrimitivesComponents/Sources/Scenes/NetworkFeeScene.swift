@@ -27,27 +27,20 @@ public struct NetworkFeeScene: View {
                             )
                             .frame(width: Sizing.image.asset, height: Sizing.image.asset)
 
-                            if model.showFeeRatesSelector {
-                                ListItemSelectionView(
-                                    title: feeRate.title,
-                                    titleExtra: feeRate.valueText,
-                                    titleTag: .none,
-                                    titleTagType: .none,
-                                    subtitle: .none,
-                                    subtitleExtra: .none,
-                                    value: feeRate.feeRate.priority,
-                                    selection: model.priority,
-                                    action: {
-                                        model.priority = $0
-                                        dismiss()
-                                    }
-                                )
-                            } else {
-                                ListItemView(
-                                    title: feeRate.title,
-                                    titleExtra: feeRate.valueText
-                                )
-                            }
+                            ListItemSelectionView(
+                                title: feeRate.title,
+                                titleExtra: feeRate.valueText,
+                                titleTag: .none,
+                                titleTagType: .none,
+                                subtitle: .none,
+                                subtitleExtra: .none,
+                                value: feeRate.feeRate.priority,
+                                selection: model.priority,
+                                action: {
+                                    model.priority = $0
+                                    dismiss()
+                                }
+                            )
                         }
                     }
                 } footer: {
@@ -65,7 +58,7 @@ public struct NetworkFeeScene: View {
                 placeholders: [.subtitle]
             )
         }
-        
+
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
