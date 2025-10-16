@@ -12,44 +12,20 @@ import SwiftUI
 
 public struct PerpetualDetailsViewModel: Sendable, Identifiable {
     public var id: String { data.baseAsset.id.identifier }
-    private let asset: Asset
     private let data: PerpetualConfirmData
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
+    private let percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
 
-    public init(asset: Asset, data: PerpetualConfirmData) {
-        self.asset = asset
+    public init(data: PerpetualConfirmData) {
         self.data = data
     }
 
     public var listItemModel: ListItemModel {
         ListItemModel(
             title: Localized.Common.details,
-            subtitle: directionText,
-            subtitleStyle: TextStyle(font: .callout, color: positionColor)
+            subtitle: pnlText ?? directionText,
+            subtitleStyle: pnlText == nil ? TextStyle(font: .callout, color: data.direction.color) : pnlTextStyle
         )
-    }
-    var positionColor: Color {
-        switch data.direction {
-        case .short: Colors.red
-        case .long: Colors.green
-        }
-    }
-
-    var sizeTitle: String { Localized.Perpetual.size }
-    var sizeText: String {
-        guard let size = Double(data.size) else { return data.size }
-        return currencyFormatter.string(double: size, symbol: asset.symbol)
-    }
-
-    var executionPriceTitle: String {
-        switch data.direction {
-        case .long: "Max Execution Price"
-        case .short: "Min Execution Price"
-        }
-    }
-    var executionPriceText: String {
-        guard let price = Double(data.price) else { return data.price }
-        return currencyFormatter.string(price)
     }
 
     var directionTitle: String { "Direction" }
@@ -60,8 +36,33 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
         }
     }
 
-    var notionalValueTitle: String { "Position Value" }
-    var notionalValueText: String {
-        currencyFormatter.string(data.fiatValue)
+    var leverageTitle: String { "Leverage" }
+    var leverageText: String { "\(data.metadata.leverage)x" }
+
+    var slippageTitle: String { Localized.Swap.slippage }
+    var slippageText: String { percentFormatter.string(data.metadata.slippage) }
+    
+    var marketPriceTitle: String { Localized.PriceAlerts.SetAlert.currentPrice }
+    var marketPriceText: String { currencyFormatter.string(data.metadata.marketPrice) }
+
+    var entryPriceTitle: String { Localized.Perpetual.entryPrice }
+    var entryPriceText: String? {
+        guard let price = data.metadata.entryPrice else { return nil }
+        return currencyFormatter.string(price)
     }
+
+    var pnlViewModel: PnLViewModel {
+        PnLViewModel(
+            pnl: data.metadata.pnl,
+            marginAmount: data.metadata.marginAmount,
+            currencyFormatter: currencyFormatter,
+            percentFormatter: percentFormatter
+        )
+    }
+    var pnlTitle: String { pnlViewModel.title }
+    var pnlText: String? { pnlViewModel.text }
+    var pnlTextStyle: TextStyle { pnlViewModel.textStyle }
+
+    var marginTitle: String { Localized.Perpetual.margin }
+    var marginText: String { currencyFormatter.string(data.metadata.marginAmount) }
 }

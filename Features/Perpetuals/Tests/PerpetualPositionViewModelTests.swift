@@ -30,11 +30,11 @@ struct PerpetualPositionViewModelTests {
     }
     
     @Test
-    func pnlText() {
-        #expect(createPositionViewModel(.mock(pnl: 500)).pnlText == "+$500.00")
-        #expect(createPositionViewModel(.mock(pnl: -200)).pnlText == "-$200.00")
+    func pnlWithPercentText() {
+        #expect(createPositionViewModel(.mock(marginAmount: 1000, pnl: 500)).pnlWithPercentText == "+$500.00 (50%)")
+        #expect(createPositionViewModel(.mock(marginAmount: 1000, pnl: -200)).pnlWithPercentText == "-$200.00 (-20%)")
     }
-    
+
     @Test
     func pnlPercent() {
         #expect(createPositionViewModel(.mock(marginAmount: 1000, pnl: 100)).pnlPercent == 10.0)
