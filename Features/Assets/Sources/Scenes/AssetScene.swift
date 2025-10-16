@@ -165,6 +165,7 @@ public struct AssetScene: View {
         .taskOnce(model.fetchOnce)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .contentMargins([.top], .small, for: .scrollContent)
     }
 }
 
