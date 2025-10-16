@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "هیچ بازاری یافت نشد";
 "assets.title" = "دارایی‌ها";
+"stake.delegations" = "واگذاری‌ها";
+"info.stake.apr.description" = "نرخ درصد سالانه (APR) نرخ پاداش سالانه برای سپرده‌گذاری ارز دیجیتال شما است.";

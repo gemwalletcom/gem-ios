@@ -45,10 +45,6 @@ extension DelegationValidator {
             apr: .zero
         )
     }
-
-    public var isSystem: Bool {
-        id == Self.systemId || id == Self.legacySystemId
-    }
 }
 
 extension DelegationState {

@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Ingen markeder fundet";
 "assets.title" = "Aktiver";
+"stake.delegations" = "Delegationer";
+"info.stake.apr.description" = "Årlig procentsats (ÅOP) er den årlige belønningssats for at satse din kryptovaluta.";
