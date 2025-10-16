@@ -14,7 +14,14 @@ public struct NetworkFeeSheet: View {
     public var body: some View {
         NavigationStack {
             NetworkFeeScene(model: model)
-                .presentationDetentsForCurrentDeviceSize(expandable: true)
+                .presentationDetents(presentationDetent)
         }
+    }
+    
+    private var presentationDetent: Set<PresentationDetent> {
+        if model.showFeeRates {
+            return Set([.medium, .large])
+        }
+        return Set([.height(180)])
     }
 }
