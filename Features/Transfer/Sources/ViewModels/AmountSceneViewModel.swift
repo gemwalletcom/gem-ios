@@ -17,6 +17,7 @@ import Store
 import Style
 import Validators
 import WalletsService
+import PerpetualService
 
 @MainActor
 @Observable
@@ -28,7 +29,7 @@ public final class AmountSceneViewModel {
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
     private let numberSanitizer = NumberSanitizer()
     private let valueConverter = ValueConverter()
-    private let perpetualPriceFormatter = PerpetualPriceFormatter()
+    private let perpetualOrderFactory = PerpetualOrderFactory()
 
     private var currentValidator: DelegationValidator?
     private var amountInputType: AmountInputType = .asset {
@@ -446,40 +447,14 @@ extension AmountSceneViewModel {
                 canChangeValue: canChangeValue
             )
         case .perpetual(_, let perpetual):
-            // Add 2% slippage for market-like execution
-            // For long: buy 2% above market (more conservative)
-            // For short: sell 2% below market (more conservative)
-            let slippagePrice = switch perpetual.direction {
-            case .long: perpetual.price * 1.02
-            case .short: perpetual.price * 0.98
-            }
-            let price = perpetualPriceFormatter.formatPrice(
-                provider: perpetual.provider,
-                slippagePrice,
-                decimals: perpetual.asset.decimals.asInt
+            let data = perpetualOrderFactory.makeOpenOrder(
+                perpetual: perpetual,
+                usdcAmount: value,
+                usdcDecimals: asset.decimals.asInt
             )
-            // Convert USDC amount to USD value
-            let usdAmount = Double(value) / pow(10.0, Double(asset.decimals))
-            // Size = (USD amount * leverage) / price (use original price for size calculation)
-            let sizeAsAsset = (usdAmount * Double(perpetual.leverage)) / perpetual.price
-            let size = perpetualPriceFormatter.formatSize(
-                provider: perpetual.provider,
-                sizeAsAsset,
-                decimals: Int(perpetual.asset.decimals)
-            )
+
             return TransferData(
-                type: .perpetual(
-                    perpetual.asset, .open(
-                        PerpetualConfirmData(
-                            direction: perpetual.direction,
-                            baseAsset: perpetual.baseAsset,
-                            assetIndex: Int32(perpetual.assetIndex),
-                            price: price,
-                            fiatValue: perpetual.price * sizeAsAsset,
-                            size: size
-                        )
-                    )
-                ),
+                type: .perpetual(perpetual.asset, .open(data)),
                 recipientData: recipientData,
                 value: value,
                 canChangeValue: canChangeValue
