@@ -24,19 +24,39 @@ public struct PerpetualDetailsView: View {
                     subtitleStyle: model.listItemModel.subtitleStyle
                 )
 
+                if let pnlText = model.pnlText {
+                    ListItemView(
+                        title: model.pnlTitle,
+                        subtitle: pnlText,
+                        subtitleStyle: model.pnlTextStyle
+                    )
+                }
+                
                 ListItemView(
-                    title: model.executionPriceTitle,
-                    subtitle: model.executionPriceText
+                    title: model.marginTitle,
+                    subtitle: model.marginText
                 )
 
                 ListItemView(
-                    title: model.sizeTitle,
-                    subtitle: model.sizeText
+                    title: model.leverageTitle,
+                    subtitle: model.leverageText
                 )
 
                 ListItemView(
-                    title: model.notionalValueTitle,
-                    subtitle: model.notionalValueText
+                    title: model.marketPriceTitle,
+                    subtitle: model.marketPriceText
+                )
+
+                if let entryPriceText = model.entryPriceText {
+                    ListItemView(
+                        title: model.entryPriceTitle,
+                        subtitle: entryPriceText
+                    )
+                }
+
+                ListItemView(
+                    title: model.slippageTitle,
+                    subtitle: model.slippageText
                 )
             }
         }

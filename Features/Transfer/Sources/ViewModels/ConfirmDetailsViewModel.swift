@@ -30,7 +30,7 @@ extension ConfirmDetailsViewModel: ItemModelProvidable {
                     )
                 )
         case let .perpetual(asset, perpetualType):
-                .perpetualDetails(PerpetualDetailsViewModel(asset: asset, data: perpetualType.data))
+                .perpetualDetails(PerpetualDetailsViewModel(data: perpetualType.data))
         case .transfer,
                 .deposit,
                 .withdrawal,

@@ -30,16 +30,28 @@ public struct PerpetualOrderFactory {
 
         let usdAmount = Double(usdcAmount) / pow(10.0, Double(usdcDecimals))
         let sizeAsAsset = (usdAmount * Double(perpetual.leverage)) / perpetual.price
+        let fiatValue = perpetual.price * sizeAsAsset
+        let marginAmount = fiatValue / Double(perpetual.leverage)
+
+        let metadata = PerpetualConfirmMetadata(
+            slippage: slippage,
+            leverage: UInt8(perpetual.leverage),
+            pnl: nil,
+            entryPrice: nil,
+            marketPrice: perpetual.price,
+            marginAmount: marginAmount
+        )
 
         return makePerpetualConfirmData(
             direction: perpetual.direction,
             baseAsset: perpetual.baseAsset,
+            fiatValue: fiatValue,
             assetIndex: Int32(perpetual.assetIndex),
             provider: perpetual.provider,
             slippagePrice: slippagePrice,
             sizeAsDouble: sizeAsAsset,
-            fiatValue: perpetual.price * sizeAsAsset,
-            assetDecimals: Int(perpetual.asset.decimals)
+            assetDecimals: Int(perpetual.asset.decimals),
+            metadata: metadata
         )
     }
 
@@ -58,15 +70,25 @@ public struct PerpetualOrderFactory {
             slippage: slippage
         )
 
+        let metadata = PerpetualConfirmMetadata(
+            slippage: slippage,
+            leverage: position.leverage,
+            pnl: position.pnl,
+            entryPrice: position.entryPrice,
+            marketPrice: perpetual.price,
+            marginAmount: position.marginAmount
+        )
+
         return makePerpetualConfirmData(
             direction: position.direction,
             baseAsset: baseAsset,
+            fiatValue: abs(position.size) * positionPrice,
             assetIndex: assetIndex,
             provider: perpetual.provider,
             slippagePrice: positionPrice,
             sizeAsDouble: abs(position.size),
-            fiatValue: abs(position.size) * positionPrice,
-            assetDecimals: Int(asset.decimals)
+            assetDecimals: Int(asset.decimals),
+            metadata: metadata
         )
     }
     
@@ -91,12 +113,13 @@ public struct PerpetualOrderFactory {
     private func makePerpetualConfirmData(
         direction: PerpetualDirection,
         baseAsset: Asset,
+        fiatValue: Double,
         assetIndex: Int32,
         provider: PerpetualProvider,
         slippagePrice: Double,
         sizeAsDouble: Double,
-        fiatValue: Double,
-        assetDecimals: Int
+        assetDecimals: Int,
+        metadata: PerpetualConfirmMetadata
     ) -> PerpetualConfirmData {
         let price = formatter.formatPrice(
             provider: provider,
@@ -116,7 +139,8 @@ public struct PerpetualOrderFactory {
             assetIndex: assetIndex,
             price: price,
             fiatValue: fiatValue,
-            size: size
+            size: size,
+            metadata: metadata
         )
     }
 }
