@@ -18,31 +18,47 @@ public struct ReceiveScene: View {
                 .padding(.top, .medium)
 
             HStack(alignment: .bottom, spacing: .tiny) {
-                Text(model.assetModel.networkFullName)
+                Text(model.assetModel.name)
                     .textStyle(.headline)
-                    .lineLimit(1)
-                Text(model.assetModel.symbol)
-                    .textStyle(.subheadline)
+                if let symbol = model.symbol {
+                    Text(symbol)
+                        .textStyle(.subheadline)
+                }
             }
+            .lineLimit(1)
+
             VStack {
                 if let image = model.renderedImage {
                     qrCodeView(image: image)
                         .frame(maxWidth: model.qrWidth)
                 }
+                
+                if let warning = try? AttributedString(markdown: model.warningMessage) {
+                    Text(warning)
+                        .textStyle(.subheadline)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, .medium)
+                }
+                
                 Spacer()
-                Button(action: model.onCopyAddress) {
+                StateButton(
+                    text: model.address,
+                    image: Images.System.copy,
+                    infoTitle: model.youAddressTitle,
+                    truncationMode: .middle,
+                    action: model.onCopyAddress
+                )
+
+                Button(action: model.onShareSheet) {
                     HStack {
-                        Images.System.copy
+                        Images.System.share
                             .foregroundStyle(Colors.secondaryText)
-                        Text(model.address)
+                        Text(model.shareTitle)
                             .textStyle(.bodySecondary)
-                            .truncationMode(.middle)
-                            .lineLimit(1)
                     }
-                    .padding()
+                    .frame(width: .scene.button.maxWidth, height: .scene.button.height)
                 }
                 .liquidGlass()
-                .frame(width: .scene.button.maxWidth)
             }
             .frame(maxWidth: .scene.button.maxWidth)
         }
@@ -71,14 +87,6 @@ public struct ReceiveScene: View {
                 await model.enableAsset()
             }
         }
-    }
-}
-
-// MARK: - Actions
-
-extension ReceiveScene {
-    private func onCopyAddress() {
-        model.onCopyAddress()
     }
 }
 

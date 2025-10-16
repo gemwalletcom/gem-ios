@@ -54,6 +54,17 @@ public final class ReceiveViewModel: Sendable {
     var copyTitle: String {
         Localized.Common.copy
     }
+    
+    var symbol: String? {
+        if assetModel.name == assetModel.symbol {
+            return nil
+        }
+        return assetModel.symbol
+    }
+    
+    var warningMessage: String {
+        Localized.Receive.warning(assetModel.symbol, assetModel.networkFullName)
+    }
 
     var copyModel: CopyTypeViewModel {
         CopyTypeViewModel(
