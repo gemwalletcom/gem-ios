@@ -6,6 +6,7 @@ import Components
 import PrimitivesComponents
 import Swap
 import Primitives
+import Perpetuals
 
 enum ConfirmTransferSectionType: String, Identifiable, Equatable {
     case header
@@ -23,7 +24,7 @@ public enum ConfirmTransferItem: Identifiable, Equatable, Sendable {
     case network
     case recipient
     case memo
-    case swapDetails
+    case details
     case networkFee
     case error
 
@@ -39,6 +40,7 @@ public enum ConfirmTransferItemModel {
     case memo(ListItemModel)
     case swapDetails(SwapDetailsViewModel)
     case networkFee(ListItemModel)
+    case perpetualDetails(PerpetualDetailsViewModel)
     case error(title: String, error: Error, onInfoAction: VoidAction)
     case empty
 }

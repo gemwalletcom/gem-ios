@@ -4,9 +4,12 @@ import Foundation
 
 public extension PerpetualType {
     var baseAsset: Asset {
+        data.baseAsset
+    }
+
+    var data: PerpetualConfirmData {
         switch self {
-        case .open(let data): data.baseAsset
-        case .close(let data): data.baseAsset
+        case .open(let data), .close(let data): data
         }
     }
 }

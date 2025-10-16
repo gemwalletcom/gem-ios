@@ -4,6 +4,7 @@ import Foundation
 import InfoSheet
 import Primitives
 import Components
+import Perpetuals
 
 enum ConfirmTransferSheetType: Identifiable, Sendable {
     case info(InfoSheetType)
@@ -11,6 +12,7 @@ enum ConfirmTransferSheetType: Identifiable, Sendable {
     case url(URL)
     case fiatConnect(assetAddress: AssetAddress, walletId: WalletId)
     case swapDetails
+    case perpetualDetails(PerpetualDetailsViewModel)
 
     var id: String {
         switch self {
@@ -19,6 +21,7 @@ enum ConfirmTransferSheetType: Identifiable, Sendable {
         case .networkFeeSelector: "network-fee-selector"
         case .fiatConnect: "fiat-connect"
         case .swapDetails: "swap-details"
+        case let .perpetualDetails(model): "perpetual-details-\(model.id)"
         }
     }
 }
