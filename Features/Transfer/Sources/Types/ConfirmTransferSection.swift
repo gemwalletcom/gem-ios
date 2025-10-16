@@ -39,8 +39,8 @@ public enum ConfirmTransferItemModel {
     case network(ListItemModel)
     case memo(ListItemModel)
     case swapDetails(SwapDetailsViewModel)
+    case networkFee(ListItemModel)
     case perpetualDetails(PerpetualDetailsViewModel)
-    case networkFee(ListItemModel, selectable: Bool)
     case error(title: String, error: Error, onInfoAction: VoidAction)
     case empty
 }

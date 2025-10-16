@@ -139,7 +139,6 @@ extension ConfirmTransferSceneViewModel: ListSectionProvideable {
                 title: feeModel.title,
                 value: feeModel.value,
                 fiatValue: feeModel.fiatValue,
-                showFeeRatesSelector: feeModel.showFeeRatesSelector,
                 infoAction: onSelectNetworkFeeInfo
             )
         case .error:

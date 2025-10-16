@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Aucun marché trouvé";
 "assets.title" = "Actifs";
+"stake.delegations" = "Délégations";
+"info.stake.apr.description" = "Le taux annuel en pourcentage (APR) est le taux de récompense annuel pour le jalonnement de votre crypto-monnaie.";

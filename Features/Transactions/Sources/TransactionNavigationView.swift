@@ -40,10 +40,7 @@ public struct TransactionNavigationView: View {
             case .share:
                 ShareSheet(activityItems: [model.explorerURL.absoluteString])
             case .feeDetails:
-                NavigationStack {
-                    NetworkFeeScene(model: model.feeDetailsViewModel)
-                        .presentationDetents([.height(200)])
-                }
+                NetworkFeeSheet(model: model.feeDetailsViewModel)
             case .info(let infoType):
                 InfoSheetScene(type: infoType)
             }

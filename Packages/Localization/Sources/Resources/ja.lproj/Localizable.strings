@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "市場が見つかりません";
 "assets.title" = "資産";
+"stake.delegations" = "委任";
+"info.stake.apr.description" = "年率 (APR) は、暗号通貨をステーキングした場合の年間報酬率です。";

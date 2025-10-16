@@ -2,7 +2,6 @@
 
 import SwiftUI
 import Primitives
-import GemstonePrimitives
 import Components
 
 public struct AssetIdViewModel: Sendable {

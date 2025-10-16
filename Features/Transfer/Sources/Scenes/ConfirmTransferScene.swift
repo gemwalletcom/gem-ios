@@ -47,10 +47,7 @@ public struct ConfirmTransferScene: View {
             case .url(let url):
                 SFSafariView(url: url)
             case .networkFeeSelector:
-                NavigationStack {
-                    NetworkFeeScene(model: model.feeModel)
-                        .presentationDetentsForCurrentDeviceSize(expandable: true)
-                }
+                NetworkFeeSheet(model: model.feeModel)
             case .fiatConnect(let assetAddress, let walletId):
                 NavigationStack {
                     FiatConnectNavigationView(
@@ -125,15 +122,11 @@ extension ConfirmTransferScene {
                 with: ListItemView(model: model.listItemModel),
                 action: { self.model.onSelectPerpetualDetails(model) }
             )
-        case let .networkFee(model, selectable):
-            if selectable {
-                NavigationCustomLink(
-                    with: ListItemView(model: model),
-                    action: self.model.onSelectFeePicker
-                )
-            } else {
-                ListItemView(model: model)
-            }
+        case let .networkFee(model):
+            NavigationCustomLink(
+                with: ListItemView(model: model),
+                action: self.model.onSelectFeePicker
+            )
         case let .error(title, error, onInfoAction):
             ListItemErrorView(
                 errorTitle: title,

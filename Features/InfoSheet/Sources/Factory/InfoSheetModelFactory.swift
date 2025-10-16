@@ -67,6 +67,13 @@ public struct InfoSheetModelFactory {
                 image: placeholder.map { .image($0) },
                 button: .url(Docs.url(.stakingLockTime))
             )
+        case let .stakeApr(placeholder):
+            return InfoSheetModel(
+                title: Localized.Stake.apr(""),
+                description: Localized.Info.Stake.Apr.description,
+                image: placeholder.map { .image($0) },
+                button: .url(Docs.url(.stakingApr))
+            )
         case .priceImpact:
             return InfoSheetModel(
                 title: Localized.Swap.priceImpact,

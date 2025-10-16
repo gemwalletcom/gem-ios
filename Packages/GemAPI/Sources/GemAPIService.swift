@@ -56,7 +56,7 @@ public protocol GemAPITransactionService: Sendable {
 }
 
 public protocol GemAPIPriceAlertService: Sendable {
-    func getPriceAlerts(deviceId: String) async throws -> [PriceAlert]
+    func getPriceAlerts(deviceId: String, assetId: String?) async throws -> [PriceAlert]
     func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
     func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
 }
@@ -233,9 +233,9 @@ extension GemAPIService: GemAPIAssetsService {
 }
 
 extension GemAPIService: GemAPIPriceAlertService {
-    public func getPriceAlerts(deviceId: String) async throws -> [PriceAlert] {
+    public func getPriceAlerts(deviceId: String, assetId: String?) async throws -> [PriceAlert] {
         return try await provider
-            .request(.getPriceAlerts(deviceId: deviceId))
+            .request(.getPriceAlerts(deviceId: deviceId, assetId: assetId))
             .map(as: [PriceAlert].self)
     }
 

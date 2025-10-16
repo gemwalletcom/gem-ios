@@ -52,6 +52,13 @@ public struct StakeStore: Sendable {
         }
     }
     
+    
+    public func getValidatorsActive(assetId: String) throws -> [DelegationValidator] {
+        return try db.read { db in
+            try Self.getValidatorsActive(db: db, assetId: assetId)
+        }
+    }
+    
     public func getValidators(assetId: AssetId) throws -> [DelegationValidator] {
         try db.read { db in
             try StakeValidatorRecord
@@ -110,5 +117,21 @@ public struct StakeStore: Sendable {
     public func clear() throws {
         try clearDelegations()
         try clearValidators()
+    }
+}
+
+// MARK: - Static
+
+extension StakeStore {
+    public static func getValidatorsActive(db: Database, assetId: String) throws -> [DelegationValidator] {
+        let excludeValidatorIds = [DelegationValidator.systemId, DelegationValidator.legacySystemId]
+        return try StakeValidatorRecord
+            .filter(StakeValidatorRecord.Columns.assetId == assetId)
+            .filter(StakeValidatorRecord.Columns.isActive == true)
+            .filter(!excludeValidatorIds.contains(StakeValidatorRecord.Columns.validatorId))
+            .filter(StakeValidatorRecord.Columns.name != "")
+            .order(StakeValidatorRecord.Columns.apr.desc)
+            .fetchAll(db)
+            .map { $0.validator }
     }
 }
