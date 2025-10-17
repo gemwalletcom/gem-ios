@@ -18,8 +18,8 @@ private enum TestValues {
     static let suiReceiver = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
     static let tronSender = "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT"
     static let tronAggregator = "TJApZYJwPKuQR7tL6FmvD6jDjbYpHESZGH"
-    static let tronDestinationHex = "357a7401a0f0c2d4a44a1881a0c622f15d986291"
-    static let tronDestination = "TEqyWRKCzREYC2bK2fc3j7pp8XjAa6tJK1"
+    static let tronDestinationHex = "4199066fd9daa7a14e000f63b8803138607dc00aaa"
+    static let tronDestination = "TPvL6et9hcRMb3j9vzVQRtt4UC2HvQrmCK"
     static let tronTokenId = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
 }
 
