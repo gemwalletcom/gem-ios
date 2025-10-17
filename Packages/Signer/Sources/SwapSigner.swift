@@ -6,24 +6,19 @@ import Primitives
 import WalletCore
 
 public struct SwapSigner {
-    let signer: Signable
 
-    public init(signer: Signable) {
-        self.signer = signer
-    }
+    public init() {}
 
-    static func isTransferSwap(data: SwapData) -> Bool {
+    func isTransferSwap(data: SwapData) -> Bool {
         switch data.quote.providerData.provider {
-        case .nearIntents:
-            true
-        default:
-            false
+        case .nearIntents: true
+        default: false
         }
     }
 
-    static func transferSwapInput(input: SignerInput, fromAsset: Asset, swapData: SwapData) throws -> SignerInput {
-        let memo = Self.getMemo(fromAsset: fromAsset, swapData: swapData)
-        let destinationAddress = try Self.getDestinationAddress(fromAsset: fromAsset, swapData: swapData)
+    func transferSwapInput(input: SignerInput, fromAsset: Asset, swapData: SwapData) throws -> SignerInput {
+        let memo = getMemo(fromAsset: fromAsset, swapData: swapData)
+        let destinationAddress = try getDestinationAddress(fromAsset: fromAsset, swapData: swapData)
 
         return SignerInput(
             type: .transfer(fromAsset),
@@ -38,7 +33,7 @@ public struct SwapSigner {
         )
     }
 
-    static func getMemo(fromAsset: Asset, swapData: SwapData) -> String? {
+    func getMemo(fromAsset: Asset, swapData: SwapData) -> String? {
         switch fromAsset.chain.type {
         case .stellar:
             return swapData.data.data
@@ -47,15 +42,13 @@ public struct SwapSigner {
         }
     }
 
-    static func getDestinationAddress(fromAsset: Asset, swapData: SwapData) throws -> String {
+    func getDestinationAddress(fromAsset: Asset, swapData: SwapData) throws -> String {
         guard fromAsset.tokenId != nil else {
             return swapData.data.to
         }
         switch fromAsset.chain.type {
         case .ethereum, .tron:
-            guard
-                let callData = Data(fromHex: swapData.data.data), callData.count == 68
-            else {
+            guard let callData = Data(fromHex: swapData.data.data), callData.count == 68 else {
                 throw AnyError("Invalid Call data")
             }
             let addressData = Data(callData[4 ..< 36]).suffix(20)
@@ -65,8 +58,8 @@ public struct SwapSigner {
         }
     }
 
-    func signSwap(input: SignerInput, fromAsset: Asset, swapData: SwapData, privateKey: Data) throws -> [String] {
-        let transferInput = try Self.transferSwapInput(
+    func signSwap(signer: Signable, input: SignerInput, fromAsset: Asset, swapData: SwapData, privateKey: Data) throws -> [String] {
+        let transferInput = try transferSwapInput(
             input: input,
             fromAsset: fromAsset,
             swapData: swapData

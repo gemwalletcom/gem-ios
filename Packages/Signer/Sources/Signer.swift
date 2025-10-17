@@ -31,8 +31,16 @@ public struct Signer: Sendable {
         case .tokenApprove:
             return try [signer.signTokenTransfer(input: input, privateKey: privateKey)]
         case .swap(let fromAsset, _, let swapData):
-            if SwapSigner.isTransferSwap(data: swapData) {
-                return try SwapSigner(signer: signer).signSwap(input: input, fromAsset: fromAsset, swapData: swapData, privateKey: privateKey)
+            let swapSigner = SwapSigner()
+            if swapSigner.isTransferSwap(data: swapData) {
+                return try swapSigner
+                    .signSwap(
+                        signer: signer,
+                        input: input,
+                        fromAsset: fromAsset,
+                        swapData: swapData,
+                        privateKey: privateKey
+                    )
             }
             return try signer.signSwap(input: input, privateKey: privateKey)
         case .generic:

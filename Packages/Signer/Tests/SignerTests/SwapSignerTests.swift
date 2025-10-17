@@ -18,31 +18,6 @@ private enum TestValues {
     static let suiReceiver = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 }
 
-private final class SwapSignableMock: Signable {
-    var transferInputs: [SignerInput] = []
-    var tokenTransferInputs: [SignerInput] = []
-    let transferResult: String
-    let tokenTransferResult: String
-
-    init(
-        transferResult: String = "transfer-signature",
-        tokenTransferResult: String = "token-transfer-signature"
-    ) {
-        self.transferResult = transferResult
-        self.tokenTransferResult = tokenTransferResult
-    }
-
-    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        transferInputs.append(input)
-        return transferResult
-    }
-
-    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        tokenTransferInputs.append(input)
-        return tokenTransferResult
-    }
-}
-
 struct SwapSignerTests {
     private func makeSwapInput(
         from fromAsset: Asset,
@@ -124,9 +99,10 @@ struct SwapSignerTests {
             senderAddress: TestValues.ethereumSender
         )
         let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner(signer: mockSigner)
+        let swapSigner = SwapSigner()
 
         let result = try swapSigner.signSwap(
+            signer: mockSigner,
             input: input,
             fromAsset: fromAsset,
             swapData: swapData,
@@ -188,9 +164,10 @@ struct SwapSignerTests {
             senderAddress: TestValues.ethereumSender
         )
         let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner(signer: mockSigner)
+        let swapSigner = SwapSigner()
 
         let result = try swapSigner.signSwap(
+            signer: mockSigner,
             input: input,
             fromAsset: fromAsset,
             swapData: swapData,
@@ -259,9 +236,10 @@ struct SwapSignerTests {
             destinationAddress: TestValues.nearReceiver
         )
         let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner(signer: mockSigner)
+        let swapSigner = SwapSigner()
 
         let result = try swapSigner.signSwap(
+            signer: mockSigner,
             input: input,
             fromAsset: fromAsset,
             swapData: swapData,
@@ -320,9 +298,10 @@ struct SwapSignerTests {
             destinationAddress: TestValues.suiReceiver
         )
         let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner(signer: mockSigner)
+        let swapSigner = SwapSigner()
 
         let result = try swapSigner.signSwap(
+            signer: mockSigner,
             input: input,
             fromAsset: fromAsset,
             swapData: swapData,
@@ -346,5 +325,30 @@ struct SwapSignerTests {
         } else {
             #expect(Bool(false))
         }
+    }
+}
+
+private final class SwapSignableMock: Signable {
+    var transferInputs: [SignerInput] = []
+    var tokenTransferInputs: [SignerInput] = []
+    let transferResult: String
+    let tokenTransferResult: String
+
+    init(
+        transferResult: String = "transfer-signature",
+        tokenTransferResult: String = "token-transfer-signature"
+    ) {
+        self.transferResult = transferResult
+        self.tokenTransferResult = tokenTransferResult
+    }
+
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        transferInputs.append(input)
+        return transferResult
+    }
+
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        tokenTransferInputs.append(input)
+        return tokenTransferResult
     }
 }

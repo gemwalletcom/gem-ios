@@ -41,6 +41,13 @@ extension Transaction {
             return [metadata.fromAsset, metadata.toAsset]
         }
     }
+
+    public var swapProvider: String? {
+        guard case let .swap(metadata) = self.metadata else {
+            return nil
+        }
+        return metadata.provider
+    }
 }
 
 extension Transaction: Identifiable { }
