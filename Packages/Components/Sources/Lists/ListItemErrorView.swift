@@ -46,7 +46,7 @@ public struct ListItemErrorView: View {
                 }
                 if errorTitle != nil {
                     Text(error.localizedDescription)
-                        .textStyle(.subheadline)
+                        .textStyle(.subHeadline)
                 }
             }
             .layoutPriority(1)

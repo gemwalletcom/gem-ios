@@ -33,9 +33,10 @@ public struct StateButton: View {
         image: Image? = nil,
         infoTitle: String? = nil,
         infoTitleStyle: TextStyle = .calloutSecondary,
+        truncationMode: Text.TruncationMode = .tail,
         action: @escaping () -> Void
     ) {
-        self.textValue = TextValue(text: text, style: textStyle)
+        self.textValue = TextValue(text: text, style: textStyle, truncationMode: truncationMode)
         self.type = type
         self.infoTextValue = infoTitle.map({ TextValue(text: $0, style: infoTitleStyle) })
         self.action = action
@@ -43,7 +44,7 @@ public struct StateButton: View {
     }
 
     public var body: some View {
-        VStack {
+        VStack(spacing: .tiny) {
             if let infoTextValue {
                 Text(infoTextValue.text)
                     .textStyle(infoTextValue.style)
@@ -57,6 +58,7 @@ public struct StateButton: View {
                     }
                     Text(textValue.text)
                         .foregroundStyle(textValue.style.color)
+                        .truncationMode(textValue.truncationMode)
                 }
                 .font(textValue.style.font)
             }

@@ -490,3 +490,4 @@
 "assets.title" = "Aktywa";
 "stake.delegations" = "Delegacje";
 "info.stake.apr.description" = "Roczna stopa procentowa (APR) to roczna stopa nagrody za stakowanie kryptowaluty.";
+"receive.warning" = "Wyślij tylko ** %@ ** w sieci ** %@ ** na ten adres.";

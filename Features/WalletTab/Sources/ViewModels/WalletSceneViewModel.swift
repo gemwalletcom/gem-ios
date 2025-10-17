@@ -208,9 +208,9 @@ extension WalletSceneViewModel {
         }
     }
 
-    func onCopyAddress(_ symbol: String, _ address: String) {
+    func onCopyAddress(_ message: String) {
         isPresentingToastMessage = ToastMessage(
-            title: "\(symbol): \(AddressFormatter(address: address, chain: nil).value())",
+            title: message,
             image: SystemImage.copy
         )
     }

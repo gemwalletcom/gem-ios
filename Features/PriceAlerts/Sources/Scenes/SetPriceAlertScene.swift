@@ -28,7 +28,7 @@ public struct SetPriceAlertScene: View {
             Section {
                 VStack(spacing: .small) {
                     Text(model.alertDirectionTitle)
-                        .textStyle(.subheadline)
+                        .textStyle(.subHeadline)
                     
                     CurrencyInputView(
                         text: $model.state.amount,
