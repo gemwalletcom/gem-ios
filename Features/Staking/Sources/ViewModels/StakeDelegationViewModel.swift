@@ -20,13 +20,21 @@ public struct StakeDelegationViewModel: Sendable {
     private let exploreService: ExplorerService = .standard
     private let priceFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
 
-    private static func dateFormatter(allowedUnits: NSCalendar.Unit, unitsStyle: DateComponentsFormatter.UnitsStyle) -> DateComponentsFormatter {
+    private static let dateFormatterDefault: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = allowedUnits
+        formatter.allowedUnits = [.day, .hour]
         formatter.zeroFormattingBehavior = .dropLeading
-        formatter.unitsStyle = unitsStyle
+        formatter.unitsStyle = .full
         return formatter
-    }
+    }()
+    
+    private static let dateFormatterDay: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.unitsStyle = .full
+        return formatter
+    }()
     
     public init(delegation: Delegation, formatter: ValueFormatter = ValueFormatter(style: .short)) {
         self.delegation = delegation
@@ -158,20 +166,12 @@ public struct StakeDelegationViewModel: Sendable {
     }
     
     public var completionDateText: String? {
-        completionDate(for: .full)
-    }
-    
-    public var completionDateShortText: String? {
-        completionDate(for: .abbreviated)
-    }
-    
-    private func completionDate(for unitsStyle: DateComponentsFormatter.UnitsStyle) -> String? {
         let now = Date.now
         if let completionDate = delegation.base.completionDate, completionDate > now {
             if now.distance(to: completionDate) < 86400 { // 1 day
-                return Self.dateFormatter(allowedUnits: [.hour, .minute], unitsStyle: unitsStyle).string(from: .now, to: completionDate)
+                return Self.dateFormatterDay.string(from: .now, to: completionDate)
             }
-            return Self.dateFormatter(allowedUnits: [.day, .hour], unitsStyle: unitsStyle).string(from: .now, to: completionDate)
+            return Self.dateFormatterDefault.string(from: .now, to: completionDate)
         }
         return .none
     }
