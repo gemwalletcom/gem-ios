@@ -14,7 +14,7 @@ public struct ReceiveScene: View {
 
     public var body: some View {
         VStack(spacing: .large) {
-            AssetImageView(assetImage: model.assetModel.assetImage, size: Sizing.image.large)
+            AssetImageView(assetImage: model.assetModel.assetImage, size: 64)
                 .padding(.top, .medium)
 
             HStack(alignment: .bottom, spacing: .tiny) {
@@ -22,45 +22,45 @@ public struct ReceiveScene: View {
                     .textStyle(.headline)
                 if let symbol = model.symbol {
                     Text(symbol)
-                        .textStyle(.subheadline)
+                        .textStyle(.subHeadline)
                 }
             }
             .lineLimit(1)
 
             VStack {
+                Spacer()
                 if let image = model.renderedImage {
                     qrCodeView(image: image)
                         .frame(maxWidth: model.qrWidth)
+                    .padding(.medium)
+                    .background(
+                        RoundedRectangle(cornerRadius: .medium)
+                            .fill(Colors.listStyleColor)
+                            .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 5)
+                    )
                 }
-                
-                if let warning = try? AttributedString(markdown: model.warningMessage) {
-                    Text(warning)
-                        .textStyle(.subheadline)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, .medium)
-                }
-                
+                Text(model.warningMessage)
+                    .textStyle(.subHeadline)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, .medium)
+                    .padding(.top, .small)
+                    .frame(maxWidth: model.qrWidth)
                 Spacer()
-                StateButton(
-                    text: model.address,
-                    image: Images.System.copy,
-                    infoTitle: model.youAddressTitle,
-                    truncationMode: .middle,
-                    action: model.onCopyAddress
-                )
-
-                Button(action: model.onShareSheet) {
-                    HStack {
-                        Images.System.share
-                            .foregroundStyle(Colors.secondaryText)
-                        Text(model.shareTitle)
-                            .textStyle(.bodySecondary)
-                    }
-                    .frame(width: .scene.button.maxWidth, height: .scene.button.height)
-                }
-                .liquidGlass()
             }
             .frame(maxWidth: .scene.button.maxWidth)
+            
+            Button(action: model.onCopyAddress) {
+                HStack {
+                    Images.System.copy
+                        .foregroundStyle(Colors.secondaryText)
+                    Text(model.addressShort)
+                        .textStyle(.bodySecondary)
+                        .truncationMode(.middle)
+                }
+                .padding()
+                .frame(width: .scene.button.maxWidth, height: .scene.button.height)
+            }
+            .liquidGlass()
         }
         .padding(.bottom, .scene.bottom)
         .frame(maxWidth: .infinity)
@@ -100,12 +100,6 @@ extension ReceiveScene {
             .scaledToFit()
             .padding(.extraSmall)
             .background(Color.white)
-            .clipShape(RoundedRectangle(cornerRadius: .medium))
-            .padding(.medium)
-            .background(
-                RoundedRectangle(cornerRadius: .extraLarge)
-                    .fill(Colors.listStyleColor)
-                    .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 5)
-            )
+            .clipShape(RoundedRectangle(cornerRadius: .small))
     }
 }
