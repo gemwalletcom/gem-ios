@@ -9,7 +9,6 @@ extension GemDelegationState {
         switch self {
         case .active: return .active
         case .pending: return .pending
-        case .undelegating: return .undelegating
         case .inactive: return .inactive
         case .activating: return .activating
         case .deactivating: return .deactivating
@@ -24,7 +23,6 @@ extension DelegationState {
         switch self {
         case .active: return .active
         case .pending: return .pending
-        case .undelegating: return .undelegating
         case .inactive: return .inactive
         case .activating: return .activating
         case .deactivating: return .deactivating

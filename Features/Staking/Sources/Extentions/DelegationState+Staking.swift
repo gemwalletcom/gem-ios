@@ -8,7 +8,6 @@ extension DelegationState {
         switch self {
         case .active: Localized.Stake.active
         case .pending: Localized.Stake.pending
-        case .undelegating: Localized.Stake.pending
         case .inactive: Localized.Stake.inactive
         case .activating: Localized.Stake.activating
         case .deactivating: Localized.Stake.deactivating

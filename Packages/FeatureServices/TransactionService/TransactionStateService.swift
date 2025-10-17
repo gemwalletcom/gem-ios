@@ -22,7 +22,7 @@ struct TransactionStateService: Sendable {
         let chainService = chainServiceFactory.service(for: transaction.assetId.chain)
         return try await chainService.transactionState(
             for: TransactionStateRequest(
-                id: transaction.hash,
+                id: transaction.id.identifier,
                 senderAddress: transaction.from,
                 recipientAddress: transaction.to,
                 block: try Int.from(string: transaction.blockNumber ?? "0"),
@@ -40,32 +40,33 @@ struct TransactionStateService: Sendable {
         )
 
         for change in stateChanges.changes {
+            let transactionId = transaction.id.identifier
             switch change {
             case .networkFee(let networkFee):
                 try transactionStore.updateNetworkFee(
-                    transactionId: transaction.id,
+                    transactionId: transaction.id.identifier,
                     networkFee: networkFee.description
                 )
             case .hashChange(_, let newHash):
                 let newTransactionId = Primitives.Transaction.id(chain: transaction.assetId.chain, hash: newHash)
                 try transactionStore.updateTransactionId(
-                    oldTransactionId: transaction.id,
+                    oldTransactionId: transactionId,
                     transactionId: newTransactionId,
                     hash: newHash
                 )
             case .blockNumber(let block):
-                try transactionStore.updateBlockNumber(transactionId: transaction.id, block: block)
+                try transactionStore.updateBlockNumber(transactionId: transactionId, block: block)
             case .createdAt(let date):
-                try transactionStore.updateCreatedAt(transactionId: transaction.id, date: date)
+                try transactionStore.updateCreatedAt(transactionId: transactionId, date: date)
             case .metadata(let metadata):
-                try transactionStore.updateMetadata(transactionId: transaction.id, metadata: metadata)
+                try transactionStore.updateMetadata(transactionId: transactionId, metadata: metadata)
             }
         }
     }
 
     public func updateState(state: TransactionState, for transaction: Transaction) throws {
         try transactionStore.updateState(
-            id: transaction.id,
+            id: transaction.id.identifier,
             state: state
         )
     }

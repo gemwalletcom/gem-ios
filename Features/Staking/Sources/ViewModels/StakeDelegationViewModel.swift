@@ -51,7 +51,7 @@ public struct StakeDelegationViewModel: Sendable {
     
     public var navigationDestination: any Hashable {
         switch state {
-        case .active, .pending, .undelegating, .inactive, .activating, .deactivating:
+        case .active, .pending, .inactive, .activating, .deactivating:
             delegation
         case .awaitingWithdrawal:
             TransferData(
@@ -68,7 +68,7 @@ public struct StakeDelegationViewModel: Sendable {
     public var stateText: String? {
         switch state {
         case .active: nil
-        case .pending, .undelegating, .inactive, .activating, .deactivating, .awaitingWithdrawal: delegation.base.state.title
+        case .pending, .inactive, .activating, .deactivating, .awaitingWithdrawal: delegation.base.state.title
         }
     }
     
@@ -93,7 +93,6 @@ public struct StakeDelegationViewModel: Sendable {
         case .active:
             Colors.green
         case .pending,
-            .undelegating,
             .activating,
             .deactivating:
             Colors.orange
@@ -124,7 +123,6 @@ public struct StakeDelegationViewModel: Sendable {
             }
             return formatter.string(delegation.base.rewardsValue, decimals: asset.decimals.asInt, currency: asset.symbol)
         case .pending,
-            .undelegating,
             .inactive,
             .activating,
             .deactivating,
