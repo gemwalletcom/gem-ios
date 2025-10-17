@@ -90,8 +90,10 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             case false:
                 if let buy {
                     actions = [EmptyAction(title: Localized.Wallet.buy, action: buy)]
-                } else {
+                } else if let swap {
                     actions = [EmptyAction(title: Localized.Wallet.swap, action: swap)]
+                } else {
+                    actions = []
                 }
             }
         case let .nfts(action):

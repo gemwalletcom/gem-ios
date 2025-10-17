@@ -125,7 +125,7 @@ public final class AssetSceneViewModel: Sendable {
 
     var emptyContentModel: EmptyContentTypeViewModel {
         let buy = assetData.metadata.isBuyEnabled ? onSelectBuy : nil
-        let swap = !assetData.metadata.isBuyEnabled && assetData.metadata.isSwapEnabled ? onSelectSwap : nil
+        let swap = buy == nil && assetData.metadata.isSwapEnabled ? onSelectSwap : nil
         return EmptyContentTypeViewModel(
             type: .asset(symbol: assetModel.symbol, buy: buy, swap: swap, isViewOnly: wallet.isViewOnly)
         )
@@ -261,17 +261,11 @@ extension AssetSceneViewModel {
     }
 
     func onSelectBuy() {
-        isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
-            type: .buy(assetModel.asset),
-            assetAddress: assetDataModel.assetAddress
-        )
+        onSelectHeader(.buy)
     }
 
     func onSelectSwap() {
-        isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
-            type: .swap(assetModel.asset, nil),
-            assetAddress: assetDataModel.assetAddress
-        )
+        onSelectHeader(.swap)
     }
 
     public func onSelectShareAsset() {
