@@ -64,6 +64,7 @@ struct SwapSignerTests {
                 to: destination,
                 value: "0",
                 data: data,
+                memo: nil,
                 approval: nil,
                 gasLimit: nil
             )
