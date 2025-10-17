@@ -61,24 +61,6 @@ public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
 	case long
 }
 
-public struct PerpetualConfirmMetadata: Codable, Equatable, Hashable, Sendable {
-	public let slippage: Double
-	public let leverage: UInt8
-	public let pnl: Double?
-	public let entryPrice: Double?
-	public let marketPrice: Double
-	public let marginAmount: Double
-
-	public init(slippage: Double, leverage: UInt8, pnl: Double?, entryPrice: Double?, marketPrice: Double, marginAmount: Double) {
-		self.slippage = slippage
-		self.leverage = leverage
-		self.pnl = pnl
-		self.entryPrice = entryPrice
-		self.marketPrice = marketPrice
-		self.marginAmount = marginAmount
-	}
-}
-
 public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let direction: PerpetualDirection
 	public let baseAsset: Asset
@@ -86,16 +68,26 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let price: String
 	public let fiatValue: Double
 	public let size: String
-	public let metadata: PerpetualConfirmMetadata
+	public let slippage: Double
+	public let leverage: UInt8
+	public let pnl: Double?
+	public let entryPrice: Double?
+	public let marketPrice: Double
+	public let marginAmount: Double
 
-	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String, metadata: PerpetualConfirmMetadata) {
+	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String, slippage: Double, leverage: UInt8, pnl: Double?, entryPrice: Double?, marketPrice: Double, marginAmount: Double) {
 		self.direction = direction
 		self.baseAsset = baseAsset
 		self.assetIndex = assetIndex
 		self.price = price
 		self.fiatValue = fiatValue
 		self.size = size
-		self.metadata = metadata
+		self.slippage = slippage
+		self.leverage = leverage
+		self.pnl = pnl
+		self.entryPrice = entryPrice
+		self.marketPrice = marketPrice
+		self.marginAmount = marginAmount
 	}
 }
 

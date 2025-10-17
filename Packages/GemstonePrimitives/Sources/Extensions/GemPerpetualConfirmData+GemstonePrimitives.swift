@@ -4,32 +4,6 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension Gemstone.PerpetualConfirmMetadata {
-    public func map() -> Primitives.PerpetualConfirmMetadata {
-        Primitives.PerpetualConfirmMetadata(
-            slippage: slippage,
-            leverage: leverage,
-            pnl: pnl,
-            entryPrice: entryPrice,
-            marketPrice: marketPrice,
-            marginAmount: marginAmount
-        )
-    }
-}
-
-extension Primitives.PerpetualConfirmMetadata {
-    public func map() -> Gemstone.PerpetualConfirmMetadata {
-        Gemstone.PerpetualConfirmMetadata(
-            slippage: slippage,
-            leverage: leverage,
-            pnl: pnl,
-            entryPrice: entryPrice,
-            marketPrice: marketPrice,
-            marginAmount: marginAmount
-        )
-    }
-}
-
 extension Gemstone.PerpetualConfirmData {
     public func map() throws -> Primitives.PerpetualConfirmData {
         Primitives.PerpetualConfirmData(
@@ -39,7 +13,12 @@ extension Gemstone.PerpetualConfirmData {
             price: price,
             fiatValue: fiatValue,
             size: size,
-            metadata: metadata.map()
+            slippage: slippage,
+            leverage: leverage,
+            pnl: pnl,
+            entryPrice: entryPrice,
+            marketPrice: marketPrice,
+            marginAmount: marginAmount
         )
     }
 }
@@ -53,7 +32,12 @@ extension Primitives.PerpetualConfirmData {
             price: price,
             fiatValue: fiatValue,
             size: size,
-            metadata: metadata.map()
+            slippage: slippage,
+            leverage: leverage,
+            pnl: pnl,
+            entryPrice: entryPrice,
+            marketPrice: marketPrice,
+            marginAmount: marginAmount
         )
     }
 }

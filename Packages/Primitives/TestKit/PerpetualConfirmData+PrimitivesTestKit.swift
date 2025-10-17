@@ -3,26 +3,6 @@
 import Foundation
 import Primitives
 
-public extension PerpetualConfirmMetadata {
-    static func mock(
-        slippage: Double = 2.0,
-        leverage: UInt8 = 3,
-        pnl: Double? = nil,
-        entryPrice: Double? = nil,
-        marketPrice: Double = 100.0,
-        marginAmount: Double = 33.33
-    ) -> PerpetualConfirmMetadata {
-        PerpetualConfirmMetadata(
-            slippage: slippage,
-            leverage: leverage,
-            pnl: pnl,
-            entryPrice: entryPrice,
-            marketPrice: marketPrice,
-            marginAmount: marginAmount
-        )
-    }
-}
-
 public extension PerpetualConfirmData {
     static func mock(
         direction: PerpetualDirection = .long,
@@ -31,7 +11,12 @@ public extension PerpetualConfirmData {
         price: String = "100",
         fiatValue: Double = 100.0,
         size: String = "1",
-        metadata: PerpetualConfirmMetadata = .mock()
+        slippage: Double = 2.0,
+        leverage: UInt8 = 3,
+        pnl: Double? = nil,
+        entryPrice: Double? = nil,
+        marketPrice: Double = 100.0,
+        marginAmount: Double = 33.33
     ) -> PerpetualConfirmData {
         PerpetualConfirmData(
             direction: direction,
@@ -40,7 +25,12 @@ public extension PerpetualConfirmData {
             price: price,
             fiatValue: fiatValue,
             size: size,
-            metadata: metadata
+            slippage: slippage,
+            leverage: leverage,
+            pnl: pnl,
+            entryPrice: entryPrice,
+            marketPrice: marketPrice,
+            marginAmount: marginAmount
         )
     }
 }

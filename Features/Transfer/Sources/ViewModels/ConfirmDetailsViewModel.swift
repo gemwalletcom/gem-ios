@@ -29,7 +29,7 @@ extension ConfirmDetailsViewModel: ItemModelProvidable {
                         selectedQuote: swapData.quote
                     )
                 )
-        case let .perpetual(asset, perpetualType):
+        case let .perpetual(_, perpetualType):
                 .perpetualDetails(PerpetualDetailsViewModel(data: perpetualType.data))
         case .transfer,
                 .deposit,

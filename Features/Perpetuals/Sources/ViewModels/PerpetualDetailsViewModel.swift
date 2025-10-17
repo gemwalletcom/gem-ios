@@ -37,24 +37,24 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
     }
 
     var leverageTitle: String { "Leverage" }
-    var leverageText: String { "\(data.metadata.leverage)x" }
+    var leverageText: String { "\(data.leverage)x" }
 
     var slippageTitle: String { Localized.Swap.slippage }
-    var slippageText: String { percentFormatter.string(data.metadata.slippage) }
-    
+    var slippageText: String { percentFormatter.string(data.slippage) }
+
     var marketPriceTitle: String { Localized.PriceAlerts.SetAlert.currentPrice }
-    var marketPriceText: String { currencyFormatter.string(data.metadata.marketPrice) }
+    var marketPriceText: String { currencyFormatter.string(data.marketPrice) }
 
     var entryPriceTitle: String { Localized.Perpetual.entryPrice }
     var entryPriceText: String? {
-        guard let price = data.metadata.entryPrice else { return nil }
+        guard let price = data.entryPrice else { return nil }
         return currencyFormatter.string(price)
     }
 
     var pnlViewModel: PnLViewModel {
         PnLViewModel(
-            pnl: data.metadata.pnl,
-            marginAmount: data.metadata.marginAmount,
+            pnl: data.pnl,
+            marginAmount: data.marginAmount,
             currencyFormatter: currencyFormatter,
             percentFormatter: percentFormatter
         )
@@ -64,5 +64,5 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
     var pnlTextStyle: TextStyle { pnlViewModel.textStyle }
 
     var marginTitle: String { Localized.Perpetual.margin }
-    var marginText: String { currencyFormatter.string(data.metadata.marginAmount) }
+    var marginText: String { currencyFormatter.string(data.marginAmount) }
 }

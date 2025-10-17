@@ -29,7 +29,6 @@ public final class AmountSceneViewModel {
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
     private let numberSanitizer = NumberSanitizer()
     private let valueConverter = ValueConverter()
-    private let perpetualOrderFactory = PerpetualOrderFactory()
 
     private var currentValidator: DelegationValidator?
     private var amountInputType: AmountInputType = .asset {
@@ -447,7 +446,7 @@ extension AmountSceneViewModel {
                 canChangeValue: canChangeValue
             )
         case .perpetual(_, let perpetual):
-            let data = perpetualOrderFactory.makeOpenOrder(
+            let data = PerpetualOrderFactory().makeOpenOrder(
                 perpetual: perpetual,
                 usdcAmount: value,
                 usdcDecimals: asset.decimals.asInt
