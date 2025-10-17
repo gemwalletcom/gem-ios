@@ -22,7 +22,7 @@ struct TransactionStateService: Sendable {
         let chainService = chainServiceFactory.service(for: transaction.assetId.chain)
         return try await chainService.transactionState(
             for: TransactionStateRequest(
-                id: transaction.id.identifier,
+                id: transaction.id.hash,
                 senderAddress: transaction.from,
                 recipientAddress: transaction.to,
                 block: try Int.from(string: transaction.blockNumber ?? "0"),

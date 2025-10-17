@@ -8,20 +8,20 @@ import struct Gemstone.SwapperQuoteData
 
 public struct SwapTransferDataFactory: Sendable {
     public static func swap(
+        wallet: Wallet,
         fromAsset: Asset,
         toAsset: Asset,
         quote: Gemstone.SwapperQuote,
         quoteData: Gemstone.SwapperQuoteData
-    ) -> TransferData {
+    ) throws -> TransferData {
         let recipient = Recipient(
-            name: quote.data.provider.name,
-            address: quoteData.to,
+            name: .none,
+            address: try wallet.account(for: toAsset.chain).address,
             memo: .none
         )
-        
         let result = SwapData(
-            quote: quote.asPrimitive,
-            data: quoteData.asPrimitive(quote: quote.asPrimitive)
+            quote: quote.map(),
+            data: quoteData.map(quote: quote.map())
         )
 
         return TransferData(
