@@ -569,7 +569,7 @@ extension AmountSceneViewModel {
                 return BigInt(2_000_000)
             }
         case .perpetual:
-            return BigInt(12_000_000) // 15 USDC with 6 decimals
+            return BigInt(10_000_000) // 15 USDC with 6 decimals
         case .stakeUnstake, .transfer:
             break
         }
@@ -591,10 +591,8 @@ extension AmountSceneViewModel {
             return assetData.balance.available
         case let .perpetual(_, perpetualData):
             switch perpetualData.positionMode {
-            case .opening: return assetData.balance.available
-            case .reducing(let marginAmount):
-                let sizeValue = BigInt(marginAmount * pow(10.0, Double(asset.decimals)))
-                return min(sizeValue, assetData.balance.available)
+            case .open: return assetData.balance.available
+            case .reduce(let available): return available
             }
         case .stake:
             switch asset.chain {

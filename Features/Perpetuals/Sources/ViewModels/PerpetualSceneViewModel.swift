@@ -12,6 +12,7 @@ import SwiftUI
 import Formatters
 import ExplorerService
 import Preferences
+import BigInt
 
 @Observable
 @MainActor
@@ -174,7 +175,7 @@ public extension PerpetualSceneViewModel {
         onTransferData?(transferData)
     }
 
-    func onOpenLongPosition(_ positionMode: PerpetualPositionMode = .opening) {
+    func onOpenLongPosition(_ positionMode: PerpetualPositionMode = .open) {
         guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
             return
         }
@@ -184,7 +185,7 @@ public extension PerpetualSceneViewModel {
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .long,
                 asset: asset,
-                baseAsset: .hyperliquidUSDC(),
+                baseAsset: .hyperliquidUSDC(), //TODO: use position.baseAsset in the future
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
                 leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3),
@@ -194,7 +195,7 @@ public extension PerpetualSceneViewModel {
         onPerpetualRecipientData?(data)
     }
 
-    func onOpenShortPosition(_ positionMode: PerpetualPositionMode = .opening) {
+    func onOpenShortPosition(_ positionMode: PerpetualPositionMode = .open) {
         guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
             return
         }
@@ -204,7 +205,7 @@ public extension PerpetualSceneViewModel {
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .short,
                 asset: asset,
-                baseAsset: .hyperliquidUSDC(),
+                baseAsset: .hyperliquidUSDC(), //TODO: use position.baseAsset in the future
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
                 leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3),
@@ -235,12 +236,13 @@ public extension PerpetualSceneViewModel {
         guard let position = positions.first?.position else {
             return
         }
+        let available = BigInt(position.marginAmount * pow(10.0, Double(position.baseAsset.decimals)))
 
         switch position.direction {
         case .long:
-            onOpenShortPosition(.reducing(marginAmount: position.marginAmount))
+            onOpenShortPosition(.reduce(available: available))
         case .short:
-            onOpenLongPosition(.reducing(marginAmount: position.marginAmount))
+            onOpenLongPosition(.reduce(available: available))
         }
     }
 }
