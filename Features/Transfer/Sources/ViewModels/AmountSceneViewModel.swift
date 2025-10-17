@@ -587,8 +587,15 @@ extension AmountSceneViewModel {
 
     private var availableValue: BigInt {
         switch input.type {
-        case .transfer, .deposit, .perpetual:
+        case .transfer, .deposit:
             return assetData.balance.available
+        case let .perpetual(_, perpetualData):
+            switch perpetualData.positionMode {
+            case .opening: return assetData.balance.available
+            case .reducing(let marginAmount):
+                let sizeValue = BigInt(marginAmount * pow(10.0, Double(asset.decimals)))
+                return min(sizeValue, assetData.balance.available)
+            }
         case .stake:
             switch asset.chain {
             case .tron:

@@ -5,7 +5,7 @@ import Foundation
 public struct PerpetualRecipientData: Codable, Equatable, Hashable, Sendable {
     public let recipient: RecipientData
     public let data: PerpetualTransferData
-    
+
     public init(recipient: RecipientData, data: PerpetualTransferData) {
         self.recipient = recipient
         self.data = data
@@ -18,6 +18,11 @@ extension PerpetualRecipientData: Identifiable {
     }
 }
 
+public enum PerpetualPositionMode: Codable, Equatable, Hashable, Sendable {
+    case opening
+    case reducing(marginAmount: Double)
+}
+
 public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
     public let provider: PerpetualProvider
     public let direction: PerpetualDirection
@@ -26,7 +31,8 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
     public let assetIndex: Int
     public let price: Double
     public let leverage: Int
-    
+    public let positionMode: PerpetualPositionMode
+
     public init(
         provider: PerpetualProvider,
         direction: PerpetualDirection,
@@ -34,7 +40,8 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
         baseAsset: Asset,
         assetIndex: Int,
         price: Double,
-        leverage: Int
+        leverage: Int,
+        positionMode: PerpetualPositionMode = .opening
     ) {
         self.provider = provider
         self.direction = direction
@@ -43,6 +50,7 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
         self.assetIndex = assetIndex
         self.price = price
         self.leverage = leverage
+        self.positionMode = positionMode
     }
 }
 
