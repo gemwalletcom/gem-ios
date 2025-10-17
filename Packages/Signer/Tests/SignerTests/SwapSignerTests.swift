@@ -16,6 +16,11 @@ private enum TestValues {
     static let nearReceiver = "receiver.near"
     static let suiSender = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     static let suiReceiver = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    static let tronSender = "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT"
+    static let tronAggregator = "TJApZYJwPKuQR7tL6FmvD6jDjbYpHESZGH"
+    static let tronDestinationHex = "357a7401a0f0c2d4a44a1881a0c622f15d986291"
+    static let tronDestination = "TEqyWRKCzREYC2bK2fc3j7pp8XjAa6tJK1"
+    static let tronTokenId = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
 }
 
 struct SwapSignerTests {
@@ -199,6 +204,71 @@ struct SwapSignerTests {
         let expectedDestination = addressData.hexString.append0x
 
         #expect(captured.destinationAddress == expectedDestination)
+        #expect(captured.destinationAddress != swapData.data.to)
+    }
+
+    @Test
+    func trc20TransferSwapUsesTokenTransferAndParsesBase58Destination() throws {
+        let fromAsset = Asset(
+            id: AssetId(chain: .tron, tokenId: TestValues.tronTokenId),
+            name: "Tether USD",
+            symbol: "USDT",
+            decimals: 6,
+            type: .trc20
+        )
+        let toAsset = Asset(
+            id: AssetId(chain: .near, tokenId: nil),
+            name: "NEAR",
+            symbol: "NEAR",
+            decimals: 24,
+            type: .native
+        )
+        let functionSelector = "a9059cbb"
+        let paddedDestination = TestValues.tronDestinationHex.addPadding(number: 64, padding: "0")
+        let paddedAmount = String(repeating: "0", count: 63) + "1"
+        let callData = "0x" + functionSelector + paddedDestination + paddedAmount
+        let swapData = makeSwapData(
+            walletAddress: TestValues.tronSender,
+            to: TestValues.tronAggregator,
+            data: callData
+        )
+        let input = makeSwapInput(
+            from: fromAsset,
+            to: toAsset,
+            swapData: swapData,
+            useMaxAmount: false,
+            senderAddress: TestValues.tronSender
+        )
+        let mockSigner = SwapSignableMock()
+        let swapSigner = SwapSigner()
+
+        let result = try swapSigner.signSwap(
+            signer: mockSigner,
+            input: input,
+            fromAsset: fromAsset,
+            swapData: swapData,
+            privateKey: swapTestPrivateKey
+        )
+
+        #expect(result == [mockSigner.tokenTransferResult])
+        #expect(mockSigner.transferInputs.isEmpty)
+        #expect(mockSigner.tokenTransferInputs.count == 1)
+
+        guard let captured = mockSigner.tokenTransferInputs.first else {
+            #expect(Bool(false))
+            return
+        }
+
+        #expect(captured.asset == fromAsset)
+        if case .transfer(let asset) = captured.type {
+            #expect(asset == fromAsset)
+        } else {
+            #expect(Bool(false))
+        }
+        #expect(captured.memo == nil)
+        #expect(captured.useMaxAmount == false)
+        #expect(captured.value == swapData.quote.fromValueBigInt)
+        #expect(captured.destinationAddress == TestValues.tronDestination)
         #expect(captured.destinationAddress != swapData.data.to)
     }
 

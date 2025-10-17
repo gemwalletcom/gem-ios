@@ -47,12 +47,12 @@ public struct SwapSigner {
             return swapData.data.to
         }
         switch fromAsset.chain.type {
-        case .ethereum, .tron:
-            guard let callData = Data(fromHex: swapData.data.data), callData.count == 68 else {
-                throw AnyError("Invalid Call data")
-            }
-            let addressData = Data(callData[4 ..< 36]).suffix(20)
-            return Data(addressData).hexString.append0x
+        case .ethereum:
+            let addressData = try extractTokenDestination(from: swapData.data.data)
+            return addressData.hexString.append0x
+        case .tron:
+            let addressData = try extractTokenDestination(from: swapData.data.data)
+            return try tronAddress(from: addressData)
         default:
             return swapData.data.to
         }
@@ -70,5 +70,25 @@ public struct SwapSigner {
         case .token:
             return try [signer.signTokenTransfer(input: transferInput, privateKey: privateKey)]
         }
+    }
+
+    private func extractTokenDestination(from callDataHex: String) throws -> Data {
+        guard let callData = Data(fromHex: callDataHex), callData.count == 68 else {
+            throw AnyError("Invalid Call data")
+        }
+        let addressSlice = callData[4 ..< 36]
+        let destinationSlice = addressSlice.suffix(20)
+        return Data(destinationSlice)
+    }
+
+    private func tronAddress(from addressData: Data) throws -> String {
+        guard addressData.count == 20 else {
+            throw AnyError("Invalid Tron address length")
+        }
+
+        var payload = Data([0x41])
+        payload.append(addressData)
+
+        return Base58.encode(data: payload)
     }
 }
