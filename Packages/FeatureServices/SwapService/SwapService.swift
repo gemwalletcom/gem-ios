@@ -3,17 +3,17 @@
 import BigInt
 import ChainService
 import Foundation
+import enum Gemstone.FetchQuoteData
 import class Gemstone.GemSwapper
 import protocol Gemstone.GemSwapperProtocol
-import struct Gemstone.SwapperQuote
-import struct Gemstone.SwapperQuoteRequest
-import struct Gemstone.SwapperQuoteAsset
-import struct Gemstone.SwapperOptions
-import struct Gemstone.SwapperQuoteData
-import struct Gemstone.SwapReferralFees
-import enum Gemstone.FetchQuoteData
-import struct Gemstone.Permit2ApprovalData
+import struct Gemstone.GemSwapQuoteData
 import func Gemstone.getDefaultSlippage
+import struct Gemstone.Permit2ApprovalData
+import struct Gemstone.SwapperOptions
+import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperQuoteAsset
+import struct Gemstone.SwapperQuoteRequest
+import struct Gemstone.SwapReferralFees
 import GemstonePrimitives
 import NativeProviderService
 import Primitives
@@ -70,7 +70,7 @@ public final class SwapService: Sendable {
         return quotes
     }
 
-    public func getQuoteData(_ request: SwapperQuote, data: FetchQuoteData) async throws -> SwapperQuoteData {
+    public func getQuoteData(_ request: SwapperQuote, data: FetchQuoteData) async throws -> GemSwapQuoteData {
         let quoteData = try await swapper.fetchQuoteData(quote: request, data: data)
         try Task.checkCancellation()
         return quoteData

@@ -62,13 +62,15 @@ public struct SwapQuoteData: Codable, Equatable, Hashable, Sendable {
 	public let to: String
 	public let value: String
 	public let data: String
+	public let memo: String?
 	public let approval: ApprovalData?
 	public let gasLimit: String?
 
-	public init(to: String, value: String, data: String, approval: ApprovalData?, gasLimit: String?) {
+	public init(to: String, value: String, data: String, memo: String?, approval: ApprovalData?, gasLimit: String?) {
 		self.to = to
 		self.value = value
 		self.data = data
+		self.memo = memo
 		self.approval = approval
 		self.gasLimit = gasLimit
 	}

@@ -4,14 +4,14 @@ import Foundation
 import Primitives
 import BigInt
 import struct Gemstone.SwapperQuote
-import struct Gemstone.SwapperQuoteData
+import struct Gemstone.GemSwapQuoteData
 
 public struct SwapTransferDataFactory: Sendable {
     public static func swap(
         fromAsset: Asset,
         toAsset: Asset,
         quote: Gemstone.SwapperQuote,
-        quoteData: Gemstone.SwapperQuoteData
+        quoteData: Gemstone.GemSwapQuoteData
     ) -> TransferData {
         let recipient = Recipient(
             name: quote.data.provider.name,
