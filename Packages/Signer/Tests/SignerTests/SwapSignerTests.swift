@@ -113,17 +113,17 @@ struct SwapSignerTests {
         #expect(mockSigner.transferInputs.count == 1)
         #expect(mockSigner.tokenTransferInputs.isEmpty)
 
-        let transfer_input = mockSigner.transferInputs.first!
-        #expect(transfer_input.asset == fromAsset)
-        if case .transfer(let asset) = transfer_input.type {
+        let transferInput = mockSigner.transferInputs.first!
+        #expect(transferInput.asset == fromAsset)
+        if case .transfer(let asset) = transferInput.type {
             #expect(asset == fromAsset)
         } else {
             #expect(Bool(false))
         }
-        #expect(transfer_input.destinationAddress == swapData.data.to)
-        #expect(transfer_input.memo == nil)
-        #expect(transfer_input.useMaxAmount == true)
-        #expect(transfer_input.value == swapData.quote.fromValueBigInt)
+        #expect(transferInput.destinationAddress == swapData.data.to)
+        #expect(transferInput.memo == nil)
+        #expect(transferInput.useMaxAmount == true)
+        #expect(transferInput.value == swapData.quote.fromValueBigInt)
     }
 
     @Test
@@ -162,19 +162,19 @@ struct SwapSignerTests {
         #expect(mockSigner.transferInputs.isEmpty)
         #expect(mockSigner.tokenTransferInputs.count == 1)
 
-        let transfer_input = mockSigner.tokenTransferInputs.first!
+        let transferInput = mockSigner.tokenTransferInputs.first!
 
-        #expect(transfer_input.asset == fromAsset)
-        if case .transfer(let asset) = transfer_input.type {
+        #expect(transferInput.asset == fromAsset)
+        if case .transfer(let asset) = transferInput.type {
             #expect(asset == fromAsset)
         } else {
             #expect(Bool(false))
         }
-        #expect(transfer_input.memo == nil)
-        #expect(transfer_input.useMaxAmount == false)
-        #expect(transfer_input.value == swapData.quote.fromValueBigInt)
-        #expect(transfer_input.destinationAddress != swapData.data.to)
-        #expect(transfer_input.destinationAddress == swapData.quote.toAddress)
+        #expect(transferInput.memo == nil)
+        #expect(transferInput.useMaxAmount == false)
+        #expect(transferInput.value == swapData.quote.fromValueBigInt)
+        #expect(transferInput.destinationAddress != swapData.data.to)
+        #expect(transferInput.destinationAddress == swapData.quote.toAddress)
     }
 
     @Test
@@ -213,18 +213,18 @@ struct SwapSignerTests {
         #expect(mockSigner.transferInputs.isEmpty)
         #expect(mockSigner.tokenTransferInputs.count == 1)
 
-        let transfer_input = mockSigner.tokenTransferInputs.first!
-        #expect(transfer_input.asset == fromAsset)
-        if case .transfer(let asset) = transfer_input.type {
+        let transferInput = mockSigner.tokenTransferInputs.first!
+        #expect(transferInput.asset == fromAsset)
+        if case .transfer(let asset) = transferInput.type {
             #expect(asset == fromAsset)
         } else {
             #expect(Bool(false))
         }
-        #expect(transfer_input.memo == nil)
-        #expect(transfer_input.useMaxAmount == false)
-        #expect(transfer_input.value == swapData.quote.fromValueBigInt)
-        #expect(transfer_input.destinationAddress == TestValues.tronDestination)
-        #expect(transfer_input.destinationAddress != swapData.data.to)
+        #expect(transferInput.memo == nil)
+        #expect(transferInput.useMaxAmount == false)
+        #expect(transferInput.value == swapData.quote.fromValueBigInt)
+        #expect(transferInput.destinationAddress == TestValues.tronDestination)
+        #expect(transferInput.destinationAddress != swapData.data.to)
     }
 
     @Test

@@ -7,7 +7,7 @@ import BigInt
 public struct SwapQuoteInput: Hashable, Sendable {
     public let fromAsset: Asset
     public let toAsset: Asset
-    public let amount: BigInt
+    public let value: BigInt
     public let useMaxAmount: Bool
 }
 
@@ -15,7 +15,7 @@ public struct SwapQuoteInput: Hashable, Sendable {
 
 extension SwapQuoteInput: Identifiable {
     public var id: String {
-        [fromAsset.id.identifier, toAsset.id.identifier, amount.description]
+        [fromAsset.id.identifier, toAsset.id.identifier, value.description]
             .compactMap { $0 }
             .joined(separator: "_")
     }
@@ -35,16 +35,16 @@ extension SwapQuoteInput {
             throw SwapQuoteInputError.missingToAsset
         }
 
-        let amount = try formatter.format(
+        let value = try formatter.format(
             inputValue: fromValue,
             decimals: fromAsset.asset.decimals.asInt
         )
-        let useMaxAmount = amount == fromAsset.balance.available
+        let useMaxAmount = value == fromAsset.balance.available
 
         return SwapQuoteInput(
             fromAsset: fromAsset.asset,
             toAsset: toAsset,
-            amount: amount,
+            value: value,
             useMaxAmount: useMaxAmount
         )
     }
