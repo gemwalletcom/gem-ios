@@ -19,7 +19,7 @@ public extension Asset {
             type: type
         )
     }
-    
+
     static func mockEthereum() -> Asset {
         .mock(
             id: AssetId(chain: .ethereum, tokenId: .none),
@@ -29,7 +29,7 @@ public extension Asset {
             type: .native
         )
     }
-    
+
     static func mockBNB() -> Asset {
         .mock(
             id: AssetId(chain: .smartChain, tokenId: .none),
@@ -39,7 +39,7 @@ public extension Asset {
             type: .native
         )
     }
-    
+
     static func mockXRP() -> Asset {
         .mock(
             id: AssetId(chain: .xrp, tokenId: .none),
@@ -49,7 +49,7 @@ public extension Asset {
             type: .native
         )
     }
-    
+
     static func mockEthereumUSDT() -> Asset {
         .mock(
             id: AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7"),
@@ -59,13 +59,43 @@ public extension Asset {
             type: .erc20
         )
     }
-    
+
     static func mockTron() -> Asset {
         .mock(
             id: AssetId(chain: .tron, tokenId: .none),
             name: "TRON",
             symbol: "TRX",
             decimals: 6,
+            type: .native
+        )
+    }
+
+    static func mockTronUSDT() -> Asset {
+        Asset(
+            id: AssetId(chain: .tron, tokenId: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),
+            name: "Tether USD",
+            symbol: "USDT",
+            decimals: 6,
+            type: .trc20
+        )
+    }
+
+    static func mockNear() -> Asset {
+        Asset(
+            id: AssetId(chain: .near, tokenId: nil),
+            name: "NEAR",
+            symbol: "NEAR",
+            decimals: 24,
+            type: .native
+        )
+    }
+
+    static func mockSUI() -> Asset {
+        Asset(
+            id: AssetId(chain: .sui, tokenId: nil),
+            name: "Sui",
+            symbol: "SUI",
+            decimals: 9,
             type: .native
         )
     }

@@ -41,20 +41,24 @@ public struct SwapProviderData: Codable, Equatable, Hashable, Sendable {
 }
 
 public struct SwapQuote: Codable, Equatable, Hashable, Sendable {
+	public let fromAddress: String
 	public let fromValue: String
+	public let toAddress: String
 	public let toValue: String
 	public let providerData: SwapProviderData
-	public let walletAddress: String
 	public let slippageBps: UInt32
 	public let etaInSeconds: UInt32?
+	public let useMaxAmount: Bool?
 
-	public init(fromValue: String, toValue: String, providerData: SwapProviderData, walletAddress: String, slippageBps: UInt32, etaInSeconds: UInt32?) {
+	public init(fromAddress: String, fromValue: String, toAddress: String, toValue: String, providerData: SwapProviderData, slippageBps: UInt32, etaInSeconds: UInt32?, useMaxAmount: Bool?) {
+		self.fromAddress = fromAddress
 		self.fromValue = fromValue
+		self.toAddress = toAddress
 		self.toValue = toValue
 		self.providerData = providerData
-		self.walletAddress = walletAddress
 		self.slippageBps = slippageBps
 		self.etaInSeconds = etaInSeconds
+		self.useMaxAmount = useMaxAmount
 	}
 }
 
@@ -62,13 +66,17 @@ public struct SwapQuoteData: Codable, Equatable, Hashable, Sendable {
 	public let to: String
 	public let value: String
 	public let data: String
+	public let memo: String?
+	public let recipient: String?
 	public let approval: ApprovalData?
 	public let gasLimit: String?
 
-	public init(to: String, value: String, data: String, approval: ApprovalData?, gasLimit: String?) {
+	public init(to: String, value: String, data: String, memo: String?, recipient: String?, approval: ApprovalData?, gasLimit: String?) {
 		self.to = to
 		self.value = value
 		self.data = data
+		self.memo = memo
+		self.recipient = recipient
 		self.approval = approval
 		self.gasLimit = gasLimit
 	}

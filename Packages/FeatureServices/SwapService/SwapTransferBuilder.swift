@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
 import BigInt
+import Foundation
+import struct Gemstone.GemSwapQuoteData
 import struct Gemstone.SwapperQuote
-import struct Gemstone.SwapperQuoteData
+import Primitives
 
 public struct SwapTransferDataFactory: Sendable {
     public static func swap(
@@ -12,16 +12,16 @@ public struct SwapTransferDataFactory: Sendable {
         fromAsset: Asset,
         toAsset: Asset,
         quote: Gemstone.SwapperQuote,
-        quoteData: Gemstone.SwapperQuoteData
+        quoteData: Gemstone.GemSwapQuoteData
     ) throws -> TransferData {
-        let recipient = Recipient(
+        let recipient = try Recipient(
             name: .none,
-            address: try wallet.account(for: toAsset.chain).address,
+            address: wallet.account(for: toAsset.chain).address,
             memo: .none
         )
-        let result = SwapData(
+        let result = try SwapData(
             quote: quote.map(),
-            data: quoteData.map(quote: quote.map())
+            data: quoteData.map()
         )
 
         return TransferData(

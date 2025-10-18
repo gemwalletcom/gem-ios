@@ -2,14 +2,16 @@
 
 import Foundation
 import Primitives
-import struct Gemstone.SwapperQuoteData
+import struct Gemstone.GemSwapQuoteData
 
-public extension Gemstone.SwapperQuoteData {
-    func map(quote: Primitives.SwapQuote) -> Primitives.SwapQuoteData {
+public extension Gemstone.GemSwapQuoteData {
+    func asPrimitive(quote: Primitives.SwapQuote) -> Primitives.SwapQuoteData {
         Primitives.SwapQuoteData(
             to: to,
             value: value,
             data: data,
+            memo: memo,
+            recipient: recipient,
             approval: approval?.map(),
             gasLimit: gasLimit
         )

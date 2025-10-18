@@ -8,6 +8,7 @@ public struct SwapQuoteInput: Hashable, Sendable {
     public let fromAsset: Asset
     public let toAsset: Asset
     public let amount: BigInt
+    public let useMaxAmount: Bool
 }
 
 // MARK: - Identifiable
@@ -27,20 +28,24 @@ extension SwapQuoteInput {
         fromValue: String,
         formatter: SwapValueFormatter
     ) throws -> SwapQuoteInput {
-        guard let fromAsset = fromAsset?.asset else {
+        guard let fromAsset else {
             throw SwapQuoteInputError.missingFromAsset
         }
         guard let toAsset = toAsset?.asset else {
             throw SwapQuoteInputError.missingToAsset
         }
 
+        let amount = try formatter.format(
+            inputValue: fromValue,
+            decimals: fromAsset.asset.decimals.asInt
+        )
+        let useMaxAmount = amount == fromAsset.balance.available
+
         return SwapQuoteInput(
-            fromAsset: fromAsset,
+            fromAsset: fromAsset.asset,
             toAsset: toAsset,
-            amount: try formatter.format(
-                inputValue: fromValue,
-                decimals: fromAsset.decimals.asInt
-            )
+            amount: amount,
+            useMaxAmount: useMaxAmount
         )
     }
 }

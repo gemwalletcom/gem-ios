@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import struct Gemstone.SwapperProviderType
 import enum Gemstone.SwapperProvider
+import struct Gemstone.SwapperProviderType
 
 public extension SwapperProviderType {
     static func mock() -> SwapperProviderType {
@@ -14,4 +14,4 @@ public extension SwapperProviderType {
             mode: .onChain
         )
     }
-} 
+}

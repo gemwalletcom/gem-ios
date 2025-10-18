@@ -3,17 +3,17 @@
 import BigInt
 import ChainService
 import Foundation
+import enum Gemstone.FetchQuoteData
 import class Gemstone.GemSwapper
 import protocol Gemstone.GemSwapperProtocol
-import struct Gemstone.SwapperQuote
-import struct Gemstone.SwapperQuoteRequest
-import struct Gemstone.SwapperQuoteAsset
-import struct Gemstone.SwapperOptions
-import struct Gemstone.SwapperQuoteData
-import struct Gemstone.SwapReferralFees
-import enum Gemstone.FetchQuoteData
-import struct Gemstone.Permit2ApprovalData
+import struct Gemstone.GemSwapQuoteData
 import func Gemstone.getDefaultSlippage
+import struct Gemstone.Permit2ApprovalData
+import struct Gemstone.SwapperOptions
+import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperQuoteAsset
+import struct Gemstone.SwapperQuoteRequest
+import struct Gemstone.SwapReferralFees
 import GemstonePrimitives
 import NativeProviderService
 import Primitives
@@ -51,7 +51,7 @@ public final class SwapService: Sendable {
         )
     }
 
-    public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String) async throws -> [SwapperQuote] {
+    public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String, useMaxAmount: Bool) async throws -> [SwapperQuote] {
         let swapRequest = SwapperQuoteRequest(
             fromAsset: SwapperQuoteAsset(asset: fromAsset),
             toAsset: SwapperQuoteAsset(asset: toAsset),
@@ -62,7 +62,8 @@ public final class SwapService: Sendable {
             options: SwapperOptions(
                 slippage: getDefaultSlippage(chain: fromAsset.id.chain.rawValue),
                 fee: getReferralFees(),
-                preferredProviders: []
+                preferredProviders: [],
+                useMaxAmount: useMaxAmount
             )
         )
         let quotes = try await swapper.fetchQuote(request: swapRequest)
@@ -70,7 +71,7 @@ public final class SwapService: Sendable {
         return quotes
     }
 
-    public func getQuoteData(_ request: SwapperQuote, data: FetchQuoteData) async throws -> SwapperQuoteData {
+    public func getQuoteData(_ request: SwapperQuote, data: FetchQuoteData) async throws -> GemSwapQuoteData {
         let quoteData = try await swapper.fetchQuoteData(quote: request, data: data)
         try Task.checkCancellation()
         return quoteData
