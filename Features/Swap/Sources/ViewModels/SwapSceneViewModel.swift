@@ -91,7 +91,7 @@ public final class SwapSceneViewModel {
             state: swapState.quotes,
             fromAssetPrice: AssetPriceValue(asset: fromAsset.asset, price: fromAsset.price),
             toAssetPrice: AssetPriceValue(asset: toAsset.asset, price: toAsset.price),
-            selectedQuote: selectedSwapQuote.asPrimitive,
+            selectedQuote: selectedSwapQuote.map(),
             preferences: preferences,
             swapProviderSelectAction: { [weak self] quote in
                 self?.onFinishSwapProviderSelection(quote)
@@ -312,14 +312,14 @@ extension SwapSceneViewModel {
             do {
                 swapState.swapTransferData = .loading
                 let data = try await swapQuoteDataProvider.fetchQuoteData(wallet: wallet, quote: quote)
-                onSwap?(
-                    SwapTransferDataFactory.swap(
-                        fromAsset: fromAsset.asset,
-                        toAsset: toAsset.asset,
-                        quote: quote,
-                        quoteData: data
-                    )
+                let transferData = try SwapTransferDataFactory.swap(
+                    wallet: wallet,
+                    fromAsset: fromAsset.asset,
+                    toAsset: toAsset.asset,
+                    quote: quote,
+                    quoteData: data
                 )
+                onSwap?(transferData)
                 swapState.swapTransferData = .noData
             } catch {
                 if !error.isCancelled {

@@ -183,7 +183,7 @@ struct TransactionSceneViewModelTests {
         let model = TransactionSceneViewModel.mock()
 
         if case .explorer(let url, let text) = model.item(for: TransactionItem.explorerLink) {
-            #expect(url.absoluteString == "https://blockchair.com/bitcoin/transaction/2")
+            #expect(url.absoluteString == "https://blockchair.com/bitcoin/transaction/1")
             #expect(text == "View on Blockchair")
         } else {
             Issue.record("Expected explorer item for explorer link")

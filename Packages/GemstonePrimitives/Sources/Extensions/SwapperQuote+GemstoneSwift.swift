@@ -7,7 +7,7 @@ import struct Gemstone.SwapperQuote
 import struct Gemstone.SwapperProviderType
 
 public extension Gemstone.SwapperQuote {
-    var asPrimitive: Primitives.SwapQuote {
+    func map() -> Primitives.SwapQuote {
         Primitives.SwapQuote(
             fromAddress: request.walletAddress,
             fromValue: fromValue,

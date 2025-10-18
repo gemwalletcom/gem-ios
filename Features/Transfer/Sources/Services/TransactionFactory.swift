@@ -31,8 +31,7 @@ struct TransactionFactory {
         let state = TransactionState.pending
         
         return Transaction(
-            id: Transaction.id(chain: transferData.chain, hash: hash),
-            hash: hash,
+            id: TransactionId(chain: transferData.chain, hash: hash),
             assetId: transferData.type.asset.id,
             from: senderAddress,
             to: recipientAddress,
