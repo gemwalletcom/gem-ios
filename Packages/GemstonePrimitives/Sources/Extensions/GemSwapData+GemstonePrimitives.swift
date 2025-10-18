@@ -1,18 +1,18 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
+import struct Gemstone.GemApprovalData
 import struct Gemstone.GemSwapData
+import struct Gemstone.GemSwapProviderData
 import struct Gemstone.GemSwapQuote
 import struct Gemstone.GemSwapQuoteData
-import struct Gemstone.GemSwapProviderData
-import struct Gemstone.GemApprovalData
+import Primitives
 
 public extension Gemstone.GemSwapData {
     func map() throws -> Primitives.SwapData {
-        Primitives.SwapData(
-            quote: try quote.map(),
-            data: try data.map()
+        try Primitives.SwapData(
+            quote: quote.map(),
+            data: data.map()
         )
     }
 }
@@ -28,13 +28,15 @@ extension Primitives.SwapData {
 
 public extension Gemstone.GemSwapQuote {
     func map() throws -> Primitives.SwapQuote {
-        Primitives.SwapQuote(
+        try Primitives.SwapQuote(
+            fromAddress: fromAddress,
             fromValue: fromValue,
+            toAddress: toAddress,
             toValue: toValue,
-            providerData: try providerData.map(),
-            walletAddress: walletAddress,
+            providerData: providerData.map(),
             slippageBps: slippageBps,
-            etaInSeconds: etaInSeconds
+            etaInSeconds: etaInSeconds,
+            useMaxAmount: useMaxAmount
         )
     }
 }
@@ -42,12 +44,14 @@ public extension Gemstone.GemSwapQuote {
 extension Primitives.SwapQuote {
     func map() -> Gemstone.GemSwapQuote {
         Gemstone.GemSwapQuote(
+            fromAddress: fromAddress,
             fromValue: fromValue,
+            toAddress: toAddress,
             toValue: toValue,
             providerData: providerData.map(),
-            walletAddress: walletAddress,
             slippageBps: slippageBps,
-            etaInSeconds: etaInSeconds
+            etaInSeconds: etaInSeconds,
+            useMaxAmount: useMaxAmount
         )
     }
 }
@@ -80,11 +84,8 @@ extension Primitives.SwapQuoteData {
 
 public extension Gemstone.GemSwapProviderData {
     func map() throws -> Primitives.SwapProviderData {
-        guard let swapProvider = SwapProvider(rawValue: provider) else {
-            throw AnyError("Invalid swap provider: \(provider)")
-        }
         return Primitives.SwapProviderData(
-            provider: swapProvider,
+            provider: provider.asPrimitives(),
             name: name,
             protocolName: protocolName
         )
@@ -94,7 +95,7 @@ public extension Gemstone.GemSwapProviderData {
 extension Primitives.SwapProviderData {
     func map() -> Gemstone.GemSwapProviderData {
         Gemstone.GemSwapProviderData(
-            provider: provider.rawValue,
+            provider: provider.map(),
             name: name,
             protocolName: protocolName
         )

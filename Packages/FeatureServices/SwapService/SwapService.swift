@@ -51,7 +51,7 @@ public final class SwapService: Sendable {
         )
     }
 
-    public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String) async throws -> [SwapperQuote] {
+    public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String, useMaxAmount: Bool) async throws -> [SwapperQuote] {
         let swapRequest = SwapperQuoteRequest(
             fromAsset: SwapperQuoteAsset(asset: fromAsset),
             toAsset: SwapperQuoteAsset(asset: toAsset),
@@ -62,7 +62,8 @@ public final class SwapService: Sendable {
             options: SwapperOptions(
                 slippage: getDefaultSlippage(chain: fromAsset.id.chain.rawValue),
                 fee: getReferralFees(),
-                preferredProviders: []
+                preferredProviders: [],
+                useMaxAmount: useMaxAmount
             )
         )
         let quotes = try await swapper.fetchQuote(request: swapRequest)

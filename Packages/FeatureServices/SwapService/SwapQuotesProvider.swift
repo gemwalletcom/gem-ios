@@ -31,7 +31,8 @@ public struct SwapQuotesProvider: SwapQuotesProvidable {
             toAsset: toAsset,
             value: amount.description,
             walletAddress: walletAddress,
-            destinationAddress: destinationAddress
+            destinationAddress: destinationAddress,
+            useMaxAmount: false // FIXME check amount == wallet balance
         )
         return try quotes.sorted { try BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue) }
     }
