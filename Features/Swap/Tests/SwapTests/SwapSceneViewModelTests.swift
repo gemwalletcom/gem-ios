@@ -89,7 +89,8 @@ extension SwapQuoteInput {
         SwapQuoteInput(
             fromAsset: .mockEthereum(),
             toAsset: .mockEthereumUSDT(),
-            amount: 1000000000000000000
+            amount: 1000000000000000000,
+            useMaxAmount: false
         )
     }
 }

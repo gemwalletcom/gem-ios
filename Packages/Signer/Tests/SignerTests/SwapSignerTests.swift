@@ -5,7 +5,6 @@ import Primitives
 import PrimitivesTestKit
 @testable import Signer
 import Testing
-import WalletCore
 
 private let swapTestPrivateKey = Data(repeating: 0x11, count: 32)
 
