@@ -14,9 +14,9 @@ struct TransactionFactory {
     ) throws -> Primitives.Transaction {
 
         let senderAddress = try wallet.account(for: transferData.chain).address
+        
         let recipientAddress = switch transferData.type {
-        case .swap(_, _, let swapData):
-            swapData.data.recipient ?? swapData.data.to
+        case .swap(_, _, let swapData): swapData.data.to
         default: transferData.recipientData.recipient.address
         }
 

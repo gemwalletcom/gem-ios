@@ -62,21 +62,26 @@ public struct SwapQuote: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public enum SwapQuoteDataType: String, Codable, Equatable, Hashable, Sendable {
+	case contract
+	case transfer
+}
+
 public struct SwapQuoteData: Codable, Equatable, Hashable, Sendable {
 	public let to: String
+	public let dataType: SwapQuoteDataType
 	public let value: String
 	public let data: String
 	public let memo: String?
-	public let recipient: String?
 	public let approval: ApprovalData?
 	public let gasLimit: String?
 
-	public init(to: String, value: String, data: String, memo: String?, recipient: String?, approval: ApprovalData?, gasLimit: String?) {
+	public init(to: String, dataType: SwapQuoteDataType, value: String, data: String, memo: String?, approval: ApprovalData?, gasLimit: String?) {
 		self.to = to
+		self.dataType = dataType
 		self.value = value
 		self.data = data
 		self.memo = memo
-		self.recipient = recipient
 		self.approval = approval
 		self.gasLimit = gasLimit
 	}
