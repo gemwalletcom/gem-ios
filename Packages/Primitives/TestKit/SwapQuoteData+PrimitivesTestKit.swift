@@ -12,7 +12,8 @@ public extension SwapQuoteData {
             value: "",
             data: "",
             memo: nil,
-            approval: .none,
+            recipient: nil,
+            approval: nil,
             gasLimit: ""
         )
     }
