@@ -32,12 +32,12 @@ public struct SwapSigner {
 
 
     func getDestinationAddress(fromAsset: Asset, swapData: SwapData) throws -> String {
-        guard fromAsset.tokenId != nil else {
-            return swapData.data.to
-        }
         switch fromAsset.chain.type {
         case .ethereum, .tron:
-            return swapData.quote.toAddress
+            if let recipient = swapData.data.recipient, fromAsset.tokenId != nil {
+                return recipient
+            }
+            return swapData.data.to
         default:
             return swapData.data.to
         }
