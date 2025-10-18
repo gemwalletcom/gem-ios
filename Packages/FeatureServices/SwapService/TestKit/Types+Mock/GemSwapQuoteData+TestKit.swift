@@ -9,6 +9,7 @@ public extension GemSwapQuoteData {
             value: "0",
             data: "0x",
             memo: nil,
+            recipient: nil,
             approval: .mock(),
             gasLimit: "210000"
         )
