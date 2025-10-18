@@ -16,6 +16,7 @@ public struct SwapSigner {
     }
 
     func transferSwapInput(input: SignerInput, fromAsset: Asset, swapData: SwapData) throws -> SignerInput {
+        let destinationAddress = try getDestinationAddress(fromAsset: fromAsset, swapData: swapData)
         return SignerInput(
             type: .transfer(fromAsset),
             asset: fromAsset,
@@ -24,9 +25,22 @@ public struct SwapSigner {
             isMaxAmount: input.useMaxAmount,
             memo: swapData.data.memo,
             senderAddress: input.senderAddress,
-            destinationAddress: input.destinationAddress,
+            destinationAddress: destinationAddress,
             metadata: input.metadata
         )
+    }
+
+
+    func getDestinationAddress(fromAsset: Asset, swapData: SwapData) throws -> String {
+        guard fromAsset.tokenId != nil else {
+            return swapData.data.to
+        }
+        switch fromAsset.chain.type {
+        case .ethereum, .tron:
+            return swapData.quote.toAddress
+        default:
+            return swapData.data.to
+        }
     }
 
     func signSwap(signer: Signable, input: SignerInput, fromAsset: Asset, swapData: SwapData, privateKey: Data) throws -> [String] {
