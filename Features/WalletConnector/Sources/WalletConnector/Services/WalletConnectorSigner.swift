@@ -129,6 +129,25 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                 value: .zero
             )
             return try await walletConnectorInteractor.signTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
+        case .sui(let transaction, let outputType):
+            let transferData = TransferData(
+                type: .generic(
+                    asset: chain.asset,
+                    metadata: session.session.metadata,
+                    extra: TransferDataExtra(
+                        to: "",
+                        data: transaction.data(using: .utf8),
+                        outputType: outputType,
+                        outputAction: .sign
+                    )
+                ),
+                recipientData: RecipientData(
+                    recipient: Recipient(name: .none, address: "", memo: .none),
+                    amount: .none
+                ),
+                value: .zero
+            )
+            return try await walletConnectorInteractor.signTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         }
     }
 
@@ -183,6 +202,24 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
             return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         case .solana(let transaction, _):
+            let transferData = TransferData(
+                type: .generic(
+                    asset: chain.asset,
+                    metadata: session.session.metadata,
+                    extra: TransferDataExtra(
+                        to: "",
+                        data: transaction.data(using: .utf8),
+                        outputAction: .send
+                    )
+                ),
+                recipientData: RecipientData(
+                    recipient: Recipient(name: .none, address: "", memo: .none),
+                    amount: .none
+                ),
+                value: .zero
+            )
+            return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
+        case .sui(let transaction, _):
             let transferData = TransferData(
                 type: .generic(
                     asset: chain.asset,

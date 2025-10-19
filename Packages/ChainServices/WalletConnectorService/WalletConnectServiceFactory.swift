@@ -15,6 +15,7 @@ final class WalletConnectServiceFactory: Sendable {
         switch WalletConnectionMethods(rawValue: method)?.blockchainMethod {
         case .ethereum: EthereumWalletConnectService(signer: signer)
         case .solana: SolanaWalletConnectService(signer: signer)
+        case .sui: SuiWalletConnectService(signer: signer)
         case nil: throw WalletConnectorServiceError.unresolvedMethod(method)
         }
     }

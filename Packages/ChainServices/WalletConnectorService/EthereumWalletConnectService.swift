@@ -18,9 +18,9 @@ final class EthereumWalletConnectService: WalletConnectRequestHandleable {
             guard let chain = signer.allChains.first(where: { $0.blockchain == request.chainId }) else {
                 throw WalletConnectorServiceError.unresolvedChainId(request.chainId.absoluteString)
             }
-            
+
             return try await handle(method: method, chain: chain, request: request)
-        case .solana, nil:
+        case .solana, .sui, nil:
             throw WalletConnectorServiceError.unresolvedMethod(request.method)
         }
     }

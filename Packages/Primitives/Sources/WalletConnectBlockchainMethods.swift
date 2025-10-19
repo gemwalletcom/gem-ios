@@ -23,3 +23,9 @@ public enum WalletConnectSolanaMethods: String, Codable, CaseIterable, Sendable 
 	case signAndSendTransaction
 	case signAllTransactions
 }
+
+public enum WalletConnectSuiMethods: String, Codable, CaseIterable, Sendable {
+	case signPersonalMessage
+	case signTransaction
+	case signAndExecuteTransaction
+}
