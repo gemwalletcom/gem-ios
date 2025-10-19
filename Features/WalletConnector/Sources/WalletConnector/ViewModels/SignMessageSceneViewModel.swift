@@ -7,8 +7,9 @@ import Primitives
 import PrimitivesComponents
 import Localization
 import Components
-import WalletCore
+import Gemstone
 import class Gemstone.SignMessageDecoder
+import class Gemstone.GemstoneSigner
 
 @Observable
 @MainActor
@@ -76,13 +77,22 @@ public final class SignMessageSceneViewModel {
     }
 
     public func signMessage() throws {
-        let hash = switch payload.message.signType {
+        let hash: Data = switch payload.message.signType {
         case .eip712:
             // temporary fix for Hyperliquid 712 encoding issue, it contains not valid Solidity type names like HyperliquidTransaction:ApproveAgent
             EthereumAbi.encodeTyped(messageJson: String(data: payload.message.data, encoding: .utf8) ?? "")
         default:
             decoder.hash()
         }
+
+        if payload.chain == .sui, payload.message.signType == .suiPersonalMessage {
+            let privateKey = try keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
+            let signer = GemstoneSigner()
+            let signature = try signer.signSuiDigest(digest: hash, privateKey: privateKey)
+            confirmTransferDelegate(.success(signature))
+            return
+        }
+
         let signature = try keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
         let result = decoder.getResult(data: signature)
         confirmTransferDelegate(.success(result))

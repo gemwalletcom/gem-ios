@@ -66,6 +66,14 @@ public struct WCSolanaTransactions: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct WCSuiSignAndExecuteTransactionResult: Codable, Equatable, Hashable, Sendable {
+	public let digest: String
+
+	public init(digest: String) {
+		self.digest = digest
+	}
+}
+
 public struct WCSuiSignMessage: Codable, Equatable, Hashable, Sendable {
 	public let message: String
 	public let account: String
@@ -84,13 +92,23 @@ public struct WCSuiSignMessageResult: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct WCSuiSignTransactionResult: Codable, Equatable, Hashable, Sendable {
+	public let signature: String
+	public let transactionBytes: String
+
+	public init(signature: String, transactionBytes: String) {
+		self.signature = signature
+		self.transactionBytes = transactionBytes
+	}
+}
+
 public struct WCSuiTransaction: Codable, Equatable, Hashable, Sendable {
 	public let transaction: String
-	public let account: String
+	public let address: String
 
-	public init(transaction: String, account: String) {
+	public init(transaction: String, address: String) {
 		self.transaction = transaction
-		self.account = account
+		self.address = address
 	}
 }
 

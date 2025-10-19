@@ -36,8 +36,8 @@ extension SuiWalletConnectService {
 extension SuiWalletConnectService {
     private func suiSignMessage(request: WalletConnectSign.Request) async throws -> RPCResult {
         let params = try request.params.get(WCSuiSignMessage.self)
-        let data = Data(params.message.utf8)
-        let message = SignMessage(signType: .sign, data: data)
+        let data = Data(base64Encoded: params.message) ?? Data(params.message.utf8)
+        let message = SignMessage(signType: .suiPersonalMessage, data: data)
         let signature = try await signer.signMessage(sessionId: request.topic, chain: .sui, message: message)
         let result = WCSuiSignMessageResult(signature: signature)
         return .response(AnyCodable(result))
@@ -45,12 +45,19 @@ extension SuiWalletConnectService {
 
     private func suiSignTransaction(request: WalletConnectSign.Request) async throws -> RPCResult {
         let tx = try request.params.get(WCSuiTransaction.self)
-        let signature = try await signer.signTransaction(
+        let signedPayload = try await signer.signTransaction(
             sessionId: request.topic,
             chain: .sui,
             transaction: .sui(tx.transaction, .signature)
         )
-        let result = WCSuiSignMessageResult(signature: signature)
+        let parts = signedPayload.split(separator: "_", maxSplits: 1, omittingEmptySubsequences: false)
+        guard parts.count == 2 else {
+            throw WalletConnectorServiceError.wrongSignParameters
+        }
+        let result = WCSuiSignTransactionResult(
+            signature: String(parts[1]),
+            transactionBytes: String(parts[0])
+        )
         return .response(AnyCodable(result))
     }
 
@@ -61,6 +68,7 @@ extension SuiWalletConnectService {
             chain: .sui,
             transaction: .sui(tx.transaction, .encodedTransaction)
         )
-        return .response(AnyCodable(txId))
+        let result = WCSuiSignAndExecuteTransactionResult(digest: txId)
+        return .response(AnyCodable(result))
     }
 }
