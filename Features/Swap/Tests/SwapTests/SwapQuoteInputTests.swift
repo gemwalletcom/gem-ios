@@ -24,7 +24,7 @@ struct SwapQuoteInputTests {
             formatter: formatter
         )
 
-        #expect(input.amount == availableBalance)
+        #expect(input.value == availableBalance)
         #expect(input.useMaxAmount == true)
     }
 
@@ -45,7 +45,7 @@ struct SwapQuoteInputTests {
             formatter: formatter
         )
 
-        #expect(input.amount == BigInt("500000000000000000"))
+        #expect(input.value == BigInt("500000000000000000"))
         #expect(input.useMaxAmount == false)
     }
 
@@ -67,7 +67,7 @@ struct SwapQuoteInputTests {
             formatter: formatter
         )
 
-        #expect(input.amount == availableBalance)
+        #expect(input.value == availableBalance)
         #expect(input.useMaxAmount == true)
     }
 }

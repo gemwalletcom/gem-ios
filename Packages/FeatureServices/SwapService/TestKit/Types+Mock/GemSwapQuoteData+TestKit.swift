@@ -6,10 +6,10 @@ public extension GemSwapQuoteData {
     static func mock() -> GemSwapQuoteData {
         GemSwapQuoteData(
             to: "0x",
+            dataType: .contract,
             value: "0",
             data: "0x",
             memo: nil,
-            recipient: nil,
             approval: .mock(),
             gasLimit: "210000"
         )

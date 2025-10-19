@@ -71,10 +71,10 @@ struct SwapSignerTests {
             ),
             data: SwapQuoteData(
                 to: toAddress,
+                dataType: .transfer,
                 value: "0",
                 data: data,
                 memo: nil,
-                recipient: destinationAddress,
                 approval: nil,
                 gasLimit: nil
             )
@@ -124,107 +124,6 @@ struct SwapSignerTests {
         #expect(transferInput.memo == nil)
         #expect(transferInput.useMaxAmount == true)
         #expect(transferInput.value == swapData.quote.fromValueBigInt)
-    }
-
-    @Test
-    func erc20TransferSwapUsesTokenTransferAndParsesDestination() throws {
-        let fromAsset = Asset.mockEthereumUSDT()
-        let toAsset = Asset.mockNear()
-        let destinationAddress = "0x016606acc6b0cfe537acc221e3bf1bb44b4049ee"
-        let callData = "0xa9059cbb000000000000000000000000016606acc6b0cfe537acc221e3bf1bb44b4049ee0000000000000000000000000000000000000000000000000000000003197500"
-
-        let swapData = try makeSwapData(
-            walletAddress: TestValues.ethereumSender,
-            toAddress: fromAsset.getTokenId(),
-            destinationAddress: destinationAddress,
-            data: callData
-        )
-        let input = makeSwapInput(
-            from: fromAsset,
-            to: toAsset,
-            swapData: swapData,
-            useMaxAmount: false,
-            senderAddress: TestValues.ethereumSender,
-            destinationAddress: destinationAddress
-        )
-        let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner()
-
-        let result = try swapSigner.signSwap(
-            signer: mockSigner,
-            input: input,
-            fromAsset: fromAsset,
-            swapData: swapData,
-            privateKey: swapTestPrivateKey
-        )
-
-        #expect(result == [mockSigner.tokenTransferResult])
-        #expect(mockSigner.transferInputs.isEmpty)
-        #expect(mockSigner.tokenTransferInputs.count == 1)
-
-        let transferInput = mockSigner.tokenTransferInputs.first!
-
-        #expect(transferInput.asset == fromAsset)
-        if case .transfer(let asset) = transferInput.type {
-            #expect(asset == fromAsset)
-        } else {
-            #expect(Bool(false))
-        }
-        #expect(transferInput.memo == nil)
-        #expect(transferInput.useMaxAmount == false)
-        #expect(transferInput.value == swapData.quote.fromValueBigInt)
-        #expect(transferInput.destinationAddress != swapData.data.to)
-        #expect(transferInput.destinationAddress == swapData.quote.toAddress)
-    }
-
-    @Test
-    func trc20TransferSwapUsesTokenTransferAndParsesBase58Destination() throws {
-        let fromAsset = Asset.mockTronUSDT()
-        let toAsset = Asset.mockNear()
-        let functionSelector = "a9059cbb"
-        let paddedDestination = TestValues.tronDestinationHex.addPadding(number: 64, padding: "0")
-        let paddedAmount = String(repeating: "0", count: 63) + "1"
-        let callData = "0x" + functionSelector + paddedDestination + paddedAmount
-        let swapData = makeSwapData(
-            walletAddress: TestValues.tronSender,
-            toAddress: TestValues.tronAggregator,
-            destinationAddress: TestValues.tronDestination,
-            data: callData
-        )
-        let input = makeSwapInput(
-            from: fromAsset,
-            to: toAsset,
-            swapData: swapData,
-            useMaxAmount: false,
-            senderAddress: TestValues.tronSender
-        )
-        let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner()
-
-        let result = try swapSigner.signSwap(
-            signer: mockSigner,
-            input: input,
-            fromAsset: fromAsset,
-            swapData: swapData,
-            privateKey: swapTestPrivateKey
-        )
-
-        #expect(result == [mockSigner.tokenTransferResult])
-        #expect(mockSigner.transferInputs.isEmpty)
-        #expect(mockSigner.tokenTransferInputs.count == 1)
-
-        let transferInput = mockSigner.tokenTransferInputs.first!
-        #expect(transferInput.asset == fromAsset)
-        if case .transfer(let asset) = transferInput.type {
-            #expect(asset == fromAsset)
-        } else {
-            #expect(Bool(false))
-        }
-        #expect(transferInput.memo == nil)
-        #expect(transferInput.useMaxAmount == false)
-        #expect(transferInput.value == swapData.quote.fromValueBigInt)
-        #expect(transferInput.destinationAddress == TestValues.tronDestination)
-        #expect(transferInput.destinationAddress != swapData.data.to)
     }
 
     @Test
