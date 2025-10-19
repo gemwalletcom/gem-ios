@@ -6,7 +6,6 @@ import Primitives
 import WalletCore
 
 public struct SwapSigner {
-
     public init() {}
 
     func isTransferSwap(data: SwapData) -> Bool {
@@ -17,28 +16,17 @@ public struct SwapSigner {
     }
 
     func transferSwapInput(input: SignerInput, fromAsset: Asset, swapData: SwapData) throws -> SignerInput {
-        let memo = getMemo(fromAsset: fromAsset, swapData: swapData)
-
         return SignerInput(
             type: .transfer(fromAsset),
             asset: fromAsset,
             value: swapData.quote.fromValueBigInt,
             fee: input.fee,
             isMaxAmount: input.useMaxAmount,
-            memo: memo,
+            memo: swapData.data.memo,
             senderAddress: input.senderAddress,
-            destinationAddress: input.destinationAddress,
+            destinationAddress: swapData.data.to,
             metadata: input.metadata
         )
-    }
-
-    func getMemo(fromAsset: Asset, swapData: SwapData) -> String? {
-        switch fromAsset.chain.type {
-        case .stellar:
-            return swapData.data.data
-        default:
-            return nil
-        }
     }
 
     func signSwap(signer: Signable, input: SignerInput, fromAsset: Asset, swapData: SwapData, privateKey: Data) throws -> [String] {

@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Primitives
 import Localization
+import Primitives
 
-extension DelegationState {
-    public var title: String {
+public extension DelegationState {
+    var title: String {
         switch self {
         case .active: Localized.Stake.active
         case .pending: Localized.Stake.pending

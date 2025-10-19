@@ -339,7 +339,8 @@ extension SwapSceneViewModel {
                 wallet: wallet,
                 fromAsset: input.fromAsset,
                 toAsset: input.toAsset,
-                amount: input.amount
+                amount: input.value,
+                useMaxAmount: input.useMaxAmount
             )
 
             swapState.fetch = .data(quotes: swapQuotes)
