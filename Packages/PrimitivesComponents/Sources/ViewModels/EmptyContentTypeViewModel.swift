@@ -18,7 +18,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         switch type {
         case .nfts: Localized.Nft.State.Empty.title
         case .priceAlerts: Localized.PriceAlerts.State.Empty.title
-        case let .asset(_, _, isViewOnly):
+        case let .asset(_, _, _, isViewOnly):
             switch isViewOnly {
             case true: Localized.Wallet.Watch.Tooltip.title
             case false: Localized.Asset.State.Empty.title
@@ -44,7 +44,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         switch type {
         case let .nfts(action): action != nil ? Localized.Nft.State.Empty.description : nil
         case .priceAlerts: Localized.PriceAlerts.State.Empty.description
-        case let .asset(symbol, _, isViewOnly):
+        case let .asset(symbol, _, _, isViewOnly):
             switch isViewOnly {
             case true: Localized.Info.WatchWallet.description
             case false: Localized.Asset.State.Empty.description(symbol)
@@ -84,10 +84,17 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         switch type {
         case .priceAlerts, .stake, .walletConnect, .markets:
             actions = []
-        case let .asset(_, buy, isViewOnly):
+        case let .asset(_, buy, swap, isViewOnly):
             switch isViewOnly {
             case true: actions = []
-            case false: actions = [EmptyAction(title: Localized.Wallet.buy, action: buy)]
+            case false:
+                if let buy {
+                    actions = [EmptyAction(title: Localized.Wallet.buy, action: buy)]
+                } else if let swap {
+                    actions = [EmptyAction(title: Localized.Wallet.swap, action: swap)]
+                } else {
+                    actions = []
+                }
             }
         case let .nfts(action):
             actions = [EmptyAction(title: Localized.Wallet.receive, action: action)]

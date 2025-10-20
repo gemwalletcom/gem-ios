@@ -6,7 +6,6 @@ import Primitives
 import WalletCore
 
 public struct SwapSigner {
-
     public init() {}
 
     func isTransferSwap(data: SwapData) -> Bool {
@@ -17,45 +16,17 @@ public struct SwapSigner {
     }
 
     func transferSwapInput(input: SignerInput, fromAsset: Asset, swapData: SwapData) throws -> SignerInput {
-        let memo = getMemo(fromAsset: fromAsset, swapData: swapData)
-        let destinationAddress = try getDestinationAddress(fromAsset: fromAsset, swapData: swapData)
-
         return SignerInput(
             type: .transfer(fromAsset),
             asset: fromAsset,
             value: swapData.quote.fromValueBigInt,
             fee: input.fee,
             isMaxAmount: input.useMaxAmount,
-            memo: memo,
+            memo: swapData.data.memo,
             senderAddress: input.senderAddress,
-            destinationAddress: destinationAddress,
+            destinationAddress: swapData.data.to,
             metadata: input.metadata
         )
-    }
-
-    func getMemo(fromAsset: Asset, swapData: SwapData) -> String? {
-        switch fromAsset.chain.type {
-        case .stellar:
-            return swapData.data.data
-        default:
-            return nil
-        }
-    }
-
-    func getDestinationAddress(fromAsset: Asset, swapData: SwapData) throws -> String {
-        guard fromAsset.tokenId != nil else {
-            return swapData.data.to
-        }
-        switch fromAsset.chain.type {
-        case .ethereum, .tron:
-            guard let callData = Data(fromHex: swapData.data.data), callData.count == 68 else {
-                throw AnyError("Invalid Call data")
-            }
-            let addressData = Data(callData[4 ..< 36]).suffix(20)
-            return Data(addressData).hexString.append0x
-        default:
-            return swapData.data.to
-        }
     }
 
     func signSwap(signer: Signable, input: SignerInput, fromAsset: Asset, swapData: SwapData, privateKey: Data) throws -> [String] {

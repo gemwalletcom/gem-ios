@@ -22,7 +22,7 @@ public struct TransactionExplorerViewModel: Sendable {
         explorerService.transactionLink(
             chain: transactionViewModel.transaction.transaction.assetId.chain,
             provider: transactionViewModel.transaction.transaction.swapProvider,
-            hash: transactionViewModel.transaction.transaction.hash,
+            hash: transactionViewModel.transaction.transaction.id.hash,
             recipient: transactionViewModel.transaction.transaction.to
         )
     }
