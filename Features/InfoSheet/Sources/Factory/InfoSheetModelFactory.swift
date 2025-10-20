@@ -149,6 +149,14 @@ public struct InfoSheetModelFactory {
                 image: .image(Images.Logo.logo),
                 button: .url(Docs.url(.perpetualsOpenInterest))
             )
+        case .autoclose:
+        // TODO: - localize
+            return InfoSheetModel(
+                title: "Auto close",
+                description: "Automatically close your position at set price levels. Take Profit(TP) locks in gains, Stop Loss(SL) limits losses.",
+                image: .image(Images.Logo.logo),
+                button: .url(Docs.url(.perpetualsFundingRate)) // TODO: - update
+            )
         }
     }
 }

@@ -79,6 +79,29 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct AutocloseConfirmData: Codable, Equatable, Hashable, Sendable {
+    public let direction: PerpetualDirection
+    public let baseAsset: Asset
+    public let assetIndex: Int32
+    public let price: String
+    public let size: String
+
+    public init(
+        direction: PerpetualDirection,
+        baseAsset: Asset,
+        assetIndex: Int32,
+        price: String,
+        size: String,
+        existingTpOrderId: UInt64? = nil
+    ) {
+        self.direction = direction
+        self.baseAsset = baseAsset
+        self.assetIndex = assetIndex
+        self.price = price
+        self.size = size
+    }
+}
+
 public struct PerpetualMetadata: Codable, Equatable, Hashable, Sendable {
 	public let isPinned: Bool
 
@@ -128,10 +151,12 @@ public enum AccountDataType: String, Codable, Equatable, Hashable, Sendable {
 public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 	case open(PerpetualConfirmData)
 	case close(PerpetualConfirmData)
+    case autoclose(AutocloseConfirmData)
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case open = "Open",
-			close = "Close"
+			close = "Close",
+            autoclose = "Autoclose"
 	}
 
 	private enum ContainerCodingKeys: String, CodingKey {
@@ -152,7 +177,13 @@ public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 					self = .close(content)
 					return
 				}
+            case .autoclose:
+                if let content = try? container.decode(AutocloseConfirmData.self, forKey: .content) {
+                    self = .autoclose(content)
+                    return
+                }
 			}
+
 		}
 		throw DecodingError.typeMismatch(PerpetualType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for PerpetualType"))
 	}
@@ -166,6 +197,9 @@ public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 		case .close(let content):
 			try container.encode(CodingKeys.close, forKey: .type)
 			try container.encode(content, forKey: .content)
+        case .autoclose(let content):
+            try container.encode(CodingKeys.autoclose, forKey: .type)
+            try container.encode(content, forKey: .content)
 		}
 	}
 }

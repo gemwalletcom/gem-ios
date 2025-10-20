@@ -41,6 +41,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             switch type {
             case .open: .perpetualOpenPosition
             case .close: .perpetualClosePosition
+            case .autoclose: .perpetualModify
             }
         }
     }
@@ -80,6 +81,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             let metadata = switch type {
             case .open(let data): TransactionPerpetualMetadata(pnl: 0, price: 0, direction: data.direction, provider: nil)
             case .close(let data): TransactionPerpetualMetadata(pnl: 0, price: 0, direction: data.direction, provider: nil)
+            case .autoclose(let data): TransactionPerpetualMetadata(pnl: 0, price: 0, direction: data.direction, provider: nil)
             }
             return .perpetual(metadata)
         case .generic,

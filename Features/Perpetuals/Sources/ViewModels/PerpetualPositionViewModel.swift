@@ -68,9 +68,14 @@ public struct PerpetualPositionViewModel {
     
     public var marginTitle: String { Localized.Perpetual.margin }
     public var marginAmountText: String {
-        return currencyFormatter.string(data.position.marginAmount)
+        currencyFormatter.string(data.position.marginAmount)
     }
-    
+
+    var autocloseTitle: String { "Auto close" }
+    var autocloseText: String {
+        "TP: \(data.position.takeProfit.map { currencyFormatter.string($0.price) } ?? "-")"
+    }
+
     public var marginText: String {
         let marginAmount = currencyFormatter.string(data.position.marginAmount)
         return "\(marginAmount) (\(data.position.marginType.displayText))"

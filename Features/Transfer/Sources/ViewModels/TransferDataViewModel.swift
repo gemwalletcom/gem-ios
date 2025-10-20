@@ -56,6 +56,7 @@ struct TransferDataViewModel {
                 case .long: Localized.Perpetual.long
             }
             case .close: Localized.Perpetual.closePosition
+            case .autoclose(_): "Auto close" // TODO: - Add localization
             }
         }
     }

@@ -79,6 +79,15 @@ public struct PerpetualScene: View {
                         subtitleStyle: position.fundingPaymentsTextStyle,
                         infoAction: model.onSelectFundingPaymentsInfo
                     )
+
+                    NavigationCustomLink(
+                        with: ListItemView(
+                            title: position.autocloseTitle,
+                            subtitle: position.autocloseText,
+                            infoAction: model.onSelectAutocloseInfo
+                        ),
+                        action: model.onSelectAutoclose
+                    )
                 } header: {
                     Text(model.positionSectionTitle)
                 }

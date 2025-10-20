@@ -208,6 +208,15 @@ public class HyperCoreSigner: Signable {
                 reduceOnly: false,
                 builder: builder
             )
+        case let .autoclose(data):
+            factory.makePositionTpSl(
+                asset: UInt32(data.assetIndex),
+                isBuy: data.direction == .long,
+                size: data.size,
+                tpTrigger: data.price,
+                slTrigger: data.direction == .long ? "0.001" : "999999",
+                builder: builder
+            )
         }
         return try hyperCore.signPlaceOrder(order: order, nonce: timestamp, privateKey: agentKey)
     }

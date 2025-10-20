@@ -42,7 +42,19 @@ public struct PerpetualPriceFormatter {
         formatter.maximumFractionDigits = decimals
         formatter.roundingMode = .halfUp
         formatter.usesGroupingSeparator = false
-        
+
         return formatter.string(from: NSNumber(value: size)) ?? String(format: "%.*f", decimals, size)
+    }
+
+    public func formatPriceForInput(_ price: Double) -> String {
+        // Format price for input field with user's locale (e.g., "3,3" vs "3.3")
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 8
+        formatter.usesGroupingSeparator = false
+
+        return formatter.string(from: NSNumber(value: price)) ?? String(price)
     }
 }
