@@ -4,6 +4,6 @@ import Foundation
 
 extension TransactionExtended: Identifiable {
     public var id: String {
-        return transaction.id
+        return transaction.id.identifier
     }
 }

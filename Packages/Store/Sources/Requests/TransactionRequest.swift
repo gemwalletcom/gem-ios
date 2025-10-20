@@ -45,8 +45,7 @@ extension TransactionExtended {
 
         return TransactionExtended(
             transaction: Transaction(
-                id: "",
-                hash: "",
+                id: TransactionId(chain: .ethereum, hash: ""),
                 assetId: AssetId(chain: .bitcoin, tokenId: nil),
                 from: "",
                 to: "",

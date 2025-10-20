@@ -41,7 +41,7 @@ public struct SwapProviderItem: Sendable {
     ) {
         guard let swapperQuote else { return nil }
         self.asset = asset
-        self.swapQuote = swapperQuote.asPrimitive
+        self.swapQuote = swapperQuote.map()
         self.swapperQuote = swapperQuote
         self.selectedProvider = selectedProvider
         self.priceViewModel = priceViewModel

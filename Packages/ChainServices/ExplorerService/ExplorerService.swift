@@ -21,23 +21,29 @@ public struct ExplorerService {
         let explorers = Self.explorers(chain: chain)
         return explorers.first(where: { $0 == name }) ?? explorers.first!
     }
-    
+
     public static func explorers(chain: Chain) -> [String] {
         Gemstone.Config.shared.getBlockExplorers(chain: chain.id)
     }
-    
-    public func transactionUrl(chain: Chain, hash: String, swapProvider: String?) -> BlockExplorerLink {
+
+    public func transactionUrl(chain: Chain, hash: String) -> BlockExplorerLink {
         let name = explorerNameOrDefault(chain: chain)
         let explorer = Gemstone.Explorer(chain: chain.id)
-        if let swapProvider, let url = explorer.getTransactionSwapUrl(
-            explorerName: name,
-            transactionId: hash,
-            providerId: swapProvider
-        ) {
-            return BlockExplorerLink(name: url.name, link: url.url)
-        }
         let url = URL(string: explorer.getTransactionUrl(explorerName: name, transactionId: hash))!
         return BlockExplorerLink(name: name, link: url.absoluteString)
+    }
+
+    public func swapTransactionUrl(chain: Chain, provider: String, identifier: String) -> BlockExplorerLink? {
+        let name = explorerNameOrDefault(chain: chain)
+        let explorer = Gemstone.Explorer(chain: chain.id)
+        guard let url = explorer.getTransactionSwapUrl(
+            explorerName: name,
+            transactionId: identifier,
+            providerId: provider
+        ) else {
+            return nil
+        }
+        return BlockExplorerLink(name: url.name, link: url.url)
     }
 
     public func addressUrl(chain: Chain, address: String) -> BlockExplorerLink {
@@ -46,7 +52,7 @@ public struct ExplorerService {
         let url = URL(string: explorer.getAddressUrl(explorerName: name, address: address))!
         return BlockExplorerLink(name: name, link: url.absoluteString)
     }
-    
+
     public func tokenUrl(chain: Chain, address: String) -> BlockExplorerLink? {
         let name = explorerNameOrDefault(chain: chain)
         let explorer = Gemstone.Explorer(chain: chain.id)
@@ -55,7 +61,7 @@ public struct ExplorerService {
         }
         return .none
     }
-    
+
     public func validatorUrl(chain: Chain, address: String) -> BlockExplorerLink? {
         let name = explorerNameOrDefault(chain: chain)
         let explorer = Gemstone.Explorer(chain: chain.id)
@@ -74,7 +80,7 @@ extension ExplorerService: ExplorerPreferencesStorable {
     public func set(chain: Chain, name: String) {
         preferences.set(chain: chain, name: name)
     }
-    
+
     public func get(chain: Chain) -> String? {
         preferences.get(chain: chain)
     }

@@ -324,14 +324,11 @@ public struct TransactionViewModel: Sendable {
     }
 
     private var transactionLink: BlockExplorerLink {
-        let swapProvider: String? = switch transaction.transaction.metadata {
-        case .swap(let metadata): metadata.provider
-        default: .none
-        }
-        return explorerService.transactionUrl(
+        return explorerService.transactionLink(
             chain: assetId.chain,
-            hash: transaction.transaction.hash,
-            swapProvider: swapProvider
+            provider: transaction.transaction.swapProvider,
+            hash: transaction.transaction.id.hash,
+            recipient: transaction.transaction.to
         )
     }
 

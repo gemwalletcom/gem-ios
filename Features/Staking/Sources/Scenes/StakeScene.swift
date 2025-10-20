@@ -17,16 +17,14 @@ public struct StakeScene: View {
 
     public var body: some View {
         List {
-            Group {
-                stakeInfoSection
-                if model.showManage {
-                    stakeSection
-                }
-                if model.showTronResources {
-                    resourcesSection
-                }
-                delegationsSection
+            stakeInfoSection
+            if model.showManage {
+                stakeSection
             }
+            if model.showTronResources {
+                resourcesSection
+            }
+            delegationsSection
             .listRowInsets(.assetListRowInsets)
         }
         .listSectionSpacing(.compact)
@@ -89,7 +87,7 @@ extension StakeScene {
             case .data(let delegations):
                 ForEach(delegations) { delegation in
                     NavigationLink(value: delegation.navigationDestination) {
-                        ValidatorDelegationView(delegation: delegation)
+                        StakeDelegationView(delegation: delegation)
                     }
                 }
             case .error(let error):

@@ -140,8 +140,7 @@ extension TransactionRecord: CreateTable {
 extension TransactionRecord {
     func mapToTransaction() -> Transaction {
         return Transaction(
-            id: Transaction.id(chain: assetId.chain, hash: hash),
-            hash: hash,
+            id: TransactionId(chain: assetId.chain, hash: hash),
             assetId: assetId,
             from: from,
             to: to,
@@ -164,11 +163,11 @@ extension TransactionRecord {
 }
 
 extension Transaction {
-    func record(walletId: String) -> TransactionRecord {
+    func record(walletId: String) throws -> TransactionRecord {
         return TransactionRecord(
             walletId: walletId,
-            transactionId: Transaction.id(chain: assetId.chain, hash: hash),
-            hash: hash,
+            transactionId: id.identifier,
+            hash: id.hash,
             type: type,
             from: from,
             to: to,

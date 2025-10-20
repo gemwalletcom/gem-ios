@@ -12,8 +12,7 @@ public extension Transaction {
         metadata: TransactionMetadata? = nil
     ) -> Transaction {
         Transaction(
-            id: id,
-            hash: id,
+            id: TransactionId(chain: .ethereum, hash: "1"),
             assetId: assetId,
             from: "from",
             to: "to",
