@@ -27,6 +27,8 @@ public final class StakeSceneViewModel {
     public let wallet: Wallet
     public var request: StakeDelegationsRequest
     public var delegations: [Delegation] = []
+    public var validatorsRequest: StakeValidatorsRequest
+    public var validators: [DelegationValidator] = []
 
     public var assetRequest: AssetRequest
     public var assetData: AssetData = .empty
@@ -42,6 +44,7 @@ public final class StakeSceneViewModel {
         self.chain = chain
         self.stakeService = stakeService
         self.request = StakeDelegationsRequest(walletId: wallet.id, assetId: chain.chain.id)
+        self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId.identifier)
         self.assetRequest = AssetRequest(walletId: wallet.id, assetId: chain.chain.assetId)
     }
 
@@ -54,6 +57,7 @@ public final class StakeSceneViewModel {
     var stakeTitle: String { Localized.Transfer.Stake.title }
     var claimRewardsTitle: String { Localized.Transfer.ClaimRewards.title }
     var assetTitle: String { assetModel.title }
+    var delegationsTitle: String { Localized.Stake.delegations }
 
     var stakeAprTitle: String { Localized.Stake.apr("") }
     var stakeAprValue: String {
@@ -86,6 +90,10 @@ public final class StakeSceneViewModel {
         InfoSheetType.stakeLockTime(assetModel.assetImage.placeholder)
     }
 
+    var aprInfoSheet: InfoSheetType {
+        InfoSheetType.stakeApr(assetModel.assetImage.placeholder)
+    }
+
     var minAmountTitle: String { Localized.Stake.minimumAmount }
     var minAmountValue: String? {
         guard chain.minAmount != 0 else { return .none }
@@ -109,6 +117,13 @@ public final class StakeSceneViewModel {
         EmptyContentTypeViewModel(type: .stake(symbol: assetModel.symbol))
     }
 
+    var delegationsSectionTitle: String {
+        guard case .data(let delegations) = delegationsState, !delegations.isEmpty else {
+            return .empty
+        }
+        return delegationsTitle
+    }
+    
     var delegationsState: StateViewType<[StakeDelegationViewModel]> {
         let delegationModels = delegations.map { StakeDelegationViewModel(delegation: $0) }
         
@@ -146,7 +161,7 @@ public final class StakeSceneViewModel {
     var stakeDestination: any Hashable {
         destination(
             type: .stake(
-                validators: (try? stakeService.getActiveValidators(assetId: chain.chain.assetId)) ?? [],
+                validators: validators,
                 recommendedValidator: recommendedCurrentValidator
             )
         )
@@ -182,6 +197,7 @@ public final class StakeSceneViewModel {
         }
         return true
     }
+    var isStakeEnabled: Bool { validators.isNotEmpty }
 
     var showTronResources: Bool {
         balanceModel.hasStakingResources
@@ -205,6 +221,10 @@ extension StakeSceneViewModel {
     
     func onLockTimeInfo() {
         isPresentingInfoSheet = lockTimeInfoSheet
+    }
+
+    func onAprInfo() {
+        isPresentingInfoSheet = aprInfoSheet
     }
 }
 

@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "시장을 찾을 수 없습니다";
 "assets.title" = "자산";
+"stake.delegations" = "위임";
+"info.stake.apr.description" = "연이율(APR)은 암호화폐를 스테이킹할 때 매년 지급되는 보상률입니다.";

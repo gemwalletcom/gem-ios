@@ -191,7 +191,10 @@ extension MainTabView {
 
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)
                 try transactionsService.addTransaction(walletId: model.walletId, transaction: transaction)
-                let transaction = try transactionsService.getTransaction(walletId: model.walletId, transactionId: transaction.id)
+                let transaction = try transactionsService.getTransaction(
+                    walletId: model.walletId,
+                    transactionId: transaction.id.identifier
+                )
                 
                 var path = NavigationPath()
                 path.append(Scenes.Asset(asset: asset))

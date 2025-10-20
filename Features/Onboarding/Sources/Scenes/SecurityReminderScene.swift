@@ -35,6 +35,7 @@ struct SecurityReminderScene: View {
                 action: model.onNext
             )
             .frame(maxWidth: .scene.button.maxWidth)
+            .padding(.bottom, .scene.bottom)
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
         .listSectionSpacing(.custom(.medium))

@@ -21,12 +21,11 @@ public struct StakeScene: View {
             if model.showManage {
                 stakeSection
             }
-
             if model.showTronResources {
                 resourcesSection
             }
-
             delegationsSection
+            .listRowInsets(.assetListRowInsets)
         }
         .listSectionSpacing(.compact)
         .refreshable {
@@ -50,6 +49,7 @@ extension StakeScene {
                 NavigationLink(value: model.stakeDestination) {
                     ListItemView(title: model.stakeTitle)
                 }
+                .enabled(model.isStakeEnabled)
             }
             
             if model.showFreeze {
@@ -76,7 +76,7 @@ extension StakeScene {
     }
 
     private var delegationsSection: some View {
-        Section {
+        Section(model.delegationsSectionTitle) {
             switch model.delegationsState {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)
@@ -87,7 +87,7 @@ extension StakeScene {
             case .data(let delegations):
                 ForEach(delegations) { delegation in
                     NavigationLink(value: delegation.navigationDestination) {
-                        ValidatorDelegationView(delegation: delegation)
+                        StakeDelegationView(delegation: delegation)
                     }
                 }
             case .error(let error):
@@ -98,15 +98,19 @@ extension StakeScene {
 
     private var stakeInfoSection: some View {
         Section(model.assetTitle) {
-            if let minAmountValue = model.minAmountValue {
-                ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
-            }
-            ListItemView(title: model.stakeAprTitle, subtitle: model.stakeAprValue)
+            ListItemView(
+                title: model.stakeAprTitle,
+                subtitle: model.stakeAprValue,
+                infoAction: model.onAprInfo
+            )
             ListItemView(
                 title: model.lockTimeTitle,
                 subtitle: model.lockTimeValue,
                 infoAction: model.onLockTimeInfo
             )
+            if let minAmountValue = model.minAmountValue {
+                ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
+            }
         }
     }
 

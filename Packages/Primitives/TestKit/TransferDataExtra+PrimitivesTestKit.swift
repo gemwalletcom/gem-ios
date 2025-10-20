@@ -6,12 +6,14 @@ import BigInt
 
 public extension TransferDataExtra {
     static func mock(
+        to: String = "",
         gasLimit: BigInt? = nil,
         gasPrice: GasPriceType? = nil,
         data: Data? = nil,
         outputType: TransferDataOutputType = .encodedTransaction
     ) -> TransferDataExtra {
         TransferDataExtra(
+            to: to,
             gasLimit: gasLimit,
             gasPrice: gasPrice,
             data: data,

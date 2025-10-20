@@ -26,7 +26,13 @@ struct StakeDelegationViewModelTests {
     
     @Test
     func completionDate() {
-        #expect(StakeDelegationViewModel.mock(state: .undelegating, completionDate: Date.now.addingTimeInterval(86400)).completionDateText == "23 hours, 59 minutes")
+        #expect(
+            StakeDelegationViewModel
+                .mock(
+                    state: .deactivating,
+                    completionDate: Date.now.addingTimeInterval(86400)
+                ).completionDateText == "23 hours, 59 minutes"
+        )
     }
 }
 

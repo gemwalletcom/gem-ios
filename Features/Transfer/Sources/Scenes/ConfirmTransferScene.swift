@@ -46,18 +46,7 @@ public struct ConfirmTransferScene: View {
             case .url(let url):
                 SFSafariView(url: url)
             case .networkFeeSelector:
-                NavigationStack {
-                    NetworkFeeScene(model: model.feeModel)
-                        .ifElse(
-                            model.feeModel.showFeeRates,
-                            ifContent: {
-                                $0.presentationDetentsForCurrentDeviceSize(expandable: true)
-                            },
-                            elseContent: {
-                                $0.presentationDetents([.height(200)])
-                            }
-                        )
-                }
+                NetworkFeeSheet(model: model.feeModel)
             case .fiatConnect(let assetAddress, let walletId):
                 NavigationStack {
                     FiatConnectNavigationView(

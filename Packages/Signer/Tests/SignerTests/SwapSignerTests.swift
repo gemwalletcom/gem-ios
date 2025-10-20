@@ -16,31 +16,11 @@ private enum TestValues {
     static let nearReceiver = "receiver.near"
     static let suiSender = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     static let suiReceiver = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-}
-
-private final class SwapSignableMock: Signable {
-    var transferInputs: [SignerInput] = []
-    var tokenTransferInputs: [SignerInput] = []
-    let transferResult: String
-    let tokenTransferResult: String
-
-    init(
-        transferResult: String = "transfer-signature",
-        tokenTransferResult: String = "token-transfer-signature"
-    ) {
-        self.transferResult = transferResult
-        self.tokenTransferResult = tokenTransferResult
-    }
-
-    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        transferInputs.append(input)
-        return transferResult
-    }
-
-    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        tokenTransferInputs.append(input)
-        return tokenTransferResult
-    }
+    static let tronSender = "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT"
+    static let tronAggregator = "TJApZYJwPKuQR7tL6FmvD6jDjbYpHESZGH"
+    static let tronDestinationHex = "4199066fd9daa7a14e000f63b8803138607dc00aaa"
+    static let tronDestination = "TPvL6et9hcRMb3j9vzVQRtt4UC2HvQrmCK"
+    static let tronTokenId = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
 }
 
 struct SwapSignerTests {
@@ -60,35 +40,41 @@ struct SwapSignerTests {
             fee: .mock(),
             isMaxAmount: useMaxAmount,
             memo: nil,
-            senderAddress: senderAddress ?? swapData.quote.walletAddress,
-            destinationAddress: destinationAddress ?? swapData.data.to,
+            senderAddress: senderAddress ?? swapData.quote.fromAddress,
+            destinationAddress: destinationAddress ?? swapData.quote.toAddress,
             metadata: metadata
         )
     }
 
     private func makeSwapData(
         walletAddress: String,
-        to destination: String,
+        toAddress: String,
+        destinationAddress: String,
         data: String,
-        fromValue: String = "1000"
+        fromValue: String = "1000",
+        useMaxAmount: Bool = false
     ) -> SwapData {
         SwapData(
             quote: SwapQuote(
+                fromAddress: walletAddress,
                 fromValue: fromValue,
+                toAddress: destinationAddress,
                 toValue: "2000",
                 providerData: SwapProviderData(
                     provider: .nearIntents,
                     name: "Near Intents",
                     protocolName: "near_intents"
                 ),
-                walletAddress: walletAddress,
                 slippageBps: 50,
-                etaInSeconds: 60
+                etaInSeconds: 60,
+                useMaxAmount: useMaxAmount
             ),
             data: SwapQuoteData(
-                to: destination,
+                to: toAddress,
+                dataType: .transfer,
                 value: "0",
                 data: data,
+                memo: nil,
                 approval: nil,
                 gasLimit: nil
             )
@@ -97,23 +83,12 @@ struct SwapSignerTests {
 
     @Test
     func ethereumNativeTransferSwapUsesTransferFlow() throws {
-        let fromAsset = Asset(
-            id: AssetId(chain: .ethereum, tokenId: nil),
-            name: "Ether",
-            symbol: "ETH",
-            decimals: 18,
-            type: .native
-        )
-        let toAsset = Asset(
-            id: AssetId(chain: .near, tokenId: nil),
-            name: "NEAR",
-            symbol: "NEAR",
-            decimals: 24,
-            type: .native
-        )
+        let fromAsset = Asset.mockEthereum()
+        let toAsset = Asset.mockNear()
         let swapData = makeSwapData(
             walletAddress: TestValues.ethereumSender,
-            to: TestValues.ethereumReceiver,
+            toAddress: TestValues.ethereumReceiver,
+            destinationAddress: TestValues.ethereumReceiver,
             data: "0x"
         )
         let input = makeSwapInput(
@@ -124,9 +99,10 @@ struct SwapSignerTests {
             senderAddress: TestValues.ethereumSender
         )
         let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner(signer: mockSigner)
+        let swapSigner = SwapSigner()
 
         let result = try swapSigner.signSwap(
+            signer: mockSigner,
             input: input,
             fromAsset: fromAsset,
             swapData: swapData,
@@ -137,112 +113,27 @@ struct SwapSignerTests {
         #expect(mockSigner.transferInputs.count == 1)
         #expect(mockSigner.tokenTransferInputs.isEmpty)
 
-        guard let captured = mockSigner.transferInputs.first else {
-            #expect(Bool(false))
-            return
-        }
-
-        #expect(captured.asset == fromAsset)
-        if case .transfer(let asset) = captured.type {
+        let transferInput = mockSigner.transferInputs.first!
+        #expect(transferInput.asset == fromAsset)
+        if case .transfer(let asset) = transferInput.type {
             #expect(asset == fromAsset)
         } else {
             #expect(Bool(false))
         }
-        #expect(captured.destinationAddress == swapData.data.to)
-        #expect(captured.memo == nil)
-        #expect(captured.useMaxAmount == true)
-        #expect(captured.value == swapData.quote.fromValueBigInt)
-    }
-
-    @Test
-    func erc20TransferSwapUsesTokenTransferAndParsesDestination() throws {
-        let fromAsset = Asset(
-            id: AssetId(chain: .ethereum, tokenId: "0xToken"),
-            name: "Mock Token",
-            symbol: "MTK",
-            decimals: 18,
-            type: .erc20
-        )
-        let toAsset = Asset(
-            id: AssetId(chain: .near, tokenId: nil),
-            name: "NEAR",
-            symbol: "NEAR",
-            decimals: 24,
-            type: .native
-        )
-        let destination = "1234567890abcdef1234567890abcdef12345678"
-        let functionSelector = "a9059cbb"
-        let paddedDestination = String(repeating: "0", count: 24) + destination
-        let paddedAmount = String(repeating: "0", count: 63) + "1"
-        let callData = "0x" + functionSelector + paddedDestination + paddedAmount
-        let swapData = makeSwapData(
-            walletAddress: TestValues.ethereumSender,
-            to: TestValues.ethereumAggregator,
-            data: callData
-        )
-        let input = makeSwapInput(
-            from: fromAsset,
-            to: toAsset,
-            swapData: swapData,
-            useMaxAmount: false,
-            senderAddress: TestValues.ethereumSender
-        )
-        let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner(signer: mockSigner)
-
-        let result = try swapSigner.signSwap(
-            input: input,
-            fromAsset: fromAsset,
-            swapData: swapData,
-            privateKey: swapTestPrivateKey
-        )
-
-        #expect(result == [mockSigner.tokenTransferResult])
-        #expect(mockSigner.transferInputs.isEmpty)
-        #expect(mockSigner.tokenTransferInputs.count == 1)
-
-        guard let captured = mockSigner.tokenTransferInputs.first else {
-            #expect(Bool(false))
-            return
-        }
-
-        #expect(captured.asset == fromAsset)
-        if case .transfer(let asset) = captured.type {
-            #expect(asset == fromAsset)
-        } else {
-            #expect(Bool(false))
-        }
-        #expect(captured.memo == nil)
-        #expect(captured.useMaxAmount == false)
-        #expect(captured.value == swapData.quote.fromValueBigInt)
-
-        let callDataBytes = try #require(Data(fromHex: callData))
-        let addressData = callDataBytes.subdata(in: 4 ..< 36).suffix(20)
-        let expectedDestination = addressData.hexString.append0x
-
-        #expect(captured.destinationAddress == expectedDestination)
-        #expect(captured.destinationAddress != swapData.data.to)
+        #expect(transferInput.destinationAddress == swapData.data.to)
+        #expect(transferInput.memo == nil)
+        #expect(transferInput.useMaxAmount == true)
+        #expect(transferInput.value == swapData.quote.fromValueBigInt)
     }
 
     @Test
     func nearTransferSwapKeepsMetadataAndUsesTransfer() throws {
-        let fromAsset = Asset(
-            id: AssetId(chain: .near, tokenId: nil),
-            name: "NEAR",
-            symbol: "NEAR",
-            decimals: 24,
-            type: .native
-        )
-        let toAsset = Asset(
-            id: AssetId(chain: .ethereum, tokenId: nil),
-            name: "Ether",
-            symbol: "ETH",
-            decimals: 18,
-            type: .native
-        )
+        let fromAsset = Asset.mockNear()
+        let toAsset = Asset.mockEthereum()
         let swapData = makeSwapData(
             walletAddress: TestValues.nearSender,
-            to: TestValues.nearReceiver,
+            toAddress: TestValues.nearReceiver,
+            destinationAddress: TestValues.nearReceiver,
             data: "0x"
         )
         let metadata: TransactionLoadMetadata = .near(
@@ -259,9 +150,10 @@ struct SwapSignerTests {
             destinationAddress: TestValues.nearReceiver
         )
         let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner(signer: mockSigner)
+        let swapSigner = SwapSigner()
 
         let result = try swapSigner.signSwap(
+            signer: mockSigner,
             input: input,
             fromAsset: fromAsset,
             swapData: swapData,
@@ -290,23 +182,12 @@ struct SwapSignerTests {
 
     @Test
     func suiTransferSwapUsesTransferFlow() throws {
-        let fromAsset = Asset(
-            id: AssetId(chain: .sui, tokenId: nil),
-            name: "Sui",
-            symbol: "SUI",
-            decimals: 9,
-            type: .native
-        )
-        let toAsset = Asset(
-            id: AssetId(chain: .ethereum, tokenId: nil),
-            name: "Ether",
-            symbol: "ETH",
-            decimals: 18,
-            type: .native
-        )
+        let fromAsset = Asset.mockSUI()
+        let toAsset = Asset.mockEthereum()
         let swapData = makeSwapData(
             walletAddress: TestValues.suiSender,
-            to: TestValues.suiReceiver,
+            toAddress: TestValues.suiReceiver,
+            destinationAddress: TestValues.suiReceiver,
             data: "0x"
         )
         let metadata: TransactionLoadMetadata = .sui(messageBytes: "payload")
@@ -320,9 +201,10 @@ struct SwapSignerTests {
             destinationAddress: TestValues.suiReceiver
         )
         let mockSigner = SwapSignableMock()
-        let swapSigner = SwapSigner(signer: mockSigner)
+        let swapSigner = SwapSigner()
 
         let result = try swapSigner.signSwap(
+            signer: mockSigner,
             input: input,
             fromAsset: fromAsset,
             swapData: swapData,
@@ -346,5 +228,30 @@ struct SwapSignerTests {
         } else {
             #expect(Bool(false))
         }
+    }
+}
+
+private final class SwapSignableMock: Signable {
+    var transferInputs: [SignerInput] = []
+    var tokenTransferInputs: [SignerInput] = []
+    let transferResult: String
+    let tokenTransferResult: String
+
+    init(
+        transferResult: String = "transfer-signature",
+        tokenTransferResult: String = "token-transfer-signature"
+    ) {
+        self.transferResult = transferResult
+        self.tokenTransferResult = tokenTransferResult
+    }
+
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        transferInputs.append(input)
+        return transferResult
+    }
+
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        tokenTransferInputs.append(input)
+        return tokenTransferResult
     }
 }

@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "ไม่พบตลาด";
 "assets.title" = "สินทรัพย์";
+"stake.delegations" = "การมอบหมาย";
+"info.stake.apr.description" = "อัตราเปอร์เซ็นต์ต่อปี (APR) คืออัตราผลตอบแทนรายปีสำหรับการเดิมพันสกุลเงินดิจิทัลของคุณ";
