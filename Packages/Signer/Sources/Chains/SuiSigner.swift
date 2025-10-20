@@ -44,8 +44,7 @@ public struct SuiSigner: Signable {
         guard case .raw(let messageData) = message else {
             throw AnyError("Sui message signing expects raw message bytes")
         }
-        let signer = GemstoneSigner()
-        return try signer.signSuiPersonalMessage(message: messageData, privateKey: privateKey)
+        return try GemstoneSigner().signSuiPersonalMessage(message: messageData, privateKey: privateKey)
     }
     
     func signTxDataDigest(data: String, privateKey: Data) throws -> String {
@@ -56,8 +55,7 @@ public struct SuiSigner: Signable {
         guard let digest = Data(hexString: parts[1]) else {
             throw AnyError("Invalid digest hex for Sui transaction")
         }
-        let signer = GemstoneSigner()
-        let signature = try signer.signSuiDigest(digest: digest, privateKey: privateKey)
+        let signature = try GemstoneSigner().signSuiDigest(digest: digest, privateKey: privateKey)
         return parts[0] + "_" + signature
     }
 }

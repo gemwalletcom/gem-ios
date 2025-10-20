@@ -15,7 +15,7 @@ final class SolanaWalletConnectService: WalletConnectRequestHandleable {
     func handle(request: WalletConnectSign.Request) async throws -> RPCResult {
         switch WalletConnectionMethods(rawValue: request.method)?.blockchainMethod {
         case .solana(let method): try await handle(method: method, request: request)
-        case .ethereum, .sui, nil: throw WalletConnectorServiceError.unresolvedMethod(request.method)
+        default: throw WalletConnectorServiceError.unresolvedMethod(request.method)
         }
     }
 }
@@ -40,24 +40,24 @@ private extension SolanaWalletConnectService {
 
 extension SolanaWalletConnectService {
     private func solanaSignTransaction(request: WalletConnectSign.Request) async throws -> RPCResult {
-        let tx = try request.params.get(WCSolanaTransaction.self)
+        let transaction = try request.params.get(WCSolanaTransaction.self)
         let signature = try await signer.signTransaction(
             sessionId: request.topic,
             chain: .solana,
-            transaction: .solana(tx.transaction, .signature)
+            transaction: .solana(transaction.transaction, .signature)
         )
         let result = WCSolanaSignMessageResult(signature: signature)
         return .response(AnyCodable(result))
     }
 
     private func solanaSendTransaction(request: WalletConnectSign.Request) async throws -> RPCResult {
-        let tx = try request.params.get(WCSolanaTransaction.self)
-        let txId = try await signer.sendTransaction(
+        let transaction = try request.params.get(WCSolanaTransaction.self)
+        let transactionId = try await signer.sendTransaction(
             sessionId: request.topic,
             chain: .solana,
-            transaction: .solana(tx.transaction, .encodedTransaction)
+            transaction: .solana(transaction.transaction, .encodedTransaction)
         )
-        return .response(AnyCodable(txId))
+        return .response(AnyCodable(transactionId))
     }
 
     private func solanaSignMessage(request: WalletConnectSign.Request) async throws -> RPCResult {

@@ -15,7 +15,7 @@ final class SuiWalletConnectService: WalletConnectRequestHandleable {
     func handle(request: WalletConnectSign.Request) async throws -> RPCResult {
         switch WalletConnectionMethods(rawValue: request.method)?.blockchainMethod {
         case .sui(let method): try await handle(method: method, request: request)
-        case .ethereum, .solana, nil: throw WalletConnectorServiceError.unresolvedMethod(request.method)
+        default: throw WalletConnectorServiceError.unresolvedMethod(request.method)
         }
     }
 }
