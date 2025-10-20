@@ -116,6 +116,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                     asset: chain.asset,
                     metadata: session.session.metadata,
                     extra: TransferDataExtra(
+                        to: "",
                         data: transaction.data(using: .utf8),
                         outputType: outputType,
                         outputAction: .sign
@@ -168,6 +169,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
             let transferData = TransferData(
                 type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(
+                    to: address,
                     gasLimit: gasLimit,
                     gasPrice: gasPrice,
                     data: data
@@ -186,6 +188,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                     asset: chain.asset,
                     metadata: session.session.metadata,
                     extra: TransferDataExtra(
+                        to: "",
                         data: transaction.data(using: .utf8),
                         outputAction: .send
                     )

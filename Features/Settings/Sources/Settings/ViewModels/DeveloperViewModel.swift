@@ -84,7 +84,9 @@ public final class DeveloperViewModel {
 
     func clearPendingTransactions() {
         performAction {
-            let transactionIds = try transactionsService.transactionStore.getTransactions(state: .pending).map { $0.id }
+            let transactionIds = try transactionsService.transactionStore.getTransactions(state: .pending).map {
+                $0.id.identifier
+            }
             try transactionsService.transactionStore.deleteTransactionId(ids: transactionIds)
         }
     }
@@ -264,8 +266,7 @@ public final class DeveloperViewModel {
         
         let transactions = data.enumerated().map { (index, element) in
             Transaction(
-                id: "\(element.assetId.chain.rawValue)_\(index)" ,
-                hash: index.description,
+                id: TransactionId(chain: element.assetId.chain, hash: "\(index)"),
                 assetId: element.assetId,
                 from: element.from,
                 to: element.to,

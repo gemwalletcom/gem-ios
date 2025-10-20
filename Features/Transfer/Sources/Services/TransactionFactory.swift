@@ -14,7 +14,12 @@ struct TransactionFactory {
     ) throws -> Primitives.Transaction {
 
         let senderAddress = try wallet.account(for: transferData.chain).address
-        let recipientAddress = transferData.recipientData.recipient.address
+        
+        let recipientAddress = switch transferData.type {
+        case .swap(_, _, let swapData): swapData.data.to
+        default: transferData.recipientData.recipient.address
+        }
+
         let metadata = transferData.type.metadata
         let direction: TransactionDirection = senderAddress == recipientAddress ? .selfTransfer : .outgoing
 
@@ -31,8 +36,7 @@ struct TransactionFactory {
         let state = TransactionState.pending
         
         return Transaction(
-            id: Transaction.id(chain: transferData.chain, hash: hash),
-            hash: hash,
+            id: TransactionId(chain: transferData.chain, hash: hash),
             assetId: transferData.type.asset.id,
             from: senderAddress,
             to: recipientAddress,

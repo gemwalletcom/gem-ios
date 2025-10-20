@@ -3,15 +3,17 @@
 import Foundation
 import Primitives
 
-extension SwapQuoteData {
-    public static func mock(
+public extension SwapQuoteData {
+    static func mock(
         quote: SwapQuote = .mock()
     ) -> SwapQuoteData {
         SwapQuoteData(
             to: "",
+            dataType: .contract,
             value: "",
             data: "",
-            approval: .none,
+            memo: nil,
+            approval: nil,
             gasLimit: ""
         )
     }

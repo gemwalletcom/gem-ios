@@ -13,7 +13,7 @@ public struct TransactionStateUpdateJob: Job {
     private let postProcessingService: TransactionStateUpdatePostJob
     private let minInitialInterval: Duration = .seconds(5)
 
-    public var id: String { transaction.hash }
+    public var id: String { transaction.id.identifier }
 
     public var configuration: JobConfiguration {
         .adaptive(
