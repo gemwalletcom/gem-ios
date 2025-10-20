@@ -104,11 +104,11 @@ public struct WCSuiSignTransactionResult: Codable, Equatable, Hashable, Sendable
 
 public struct WCSuiTransaction: Codable, Equatable, Hashable, Sendable {
 	public let transaction: String
-	public let address: String
+	public let account: String
 
-	public init(transaction: String, address: String) {
+	public init(transaction: String, account: String) {
 		self.transaction = transaction
-		self.address = address
+		self.account = account
 	}
 }
 
