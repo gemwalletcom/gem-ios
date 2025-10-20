@@ -7,7 +7,7 @@ import Primitives
 import PrimitivesComponents
 import Localization
 import Components
-import Gemstone
+import WalletCore
 import class Gemstone.SignMessageDecoder
 import class Gemstone.GemstoneSigner
 
