@@ -1,5 +1,6 @@
 import Foundation
 import Gemstone
+import WalletCore
 
 final class NativeSigner: AlienSigner {
     func signEip712(typedDataJson: String, privateKey: Data) throws -> String {
