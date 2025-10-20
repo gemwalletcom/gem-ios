@@ -327,7 +327,7 @@ public struct TransactionViewModel: Sendable {
         return explorerService.transactionLink(
             chain: assetId.chain,
             provider: transaction.transaction.swapProvider,
-            hash: transaction.transaction.hash,
+            hash: transaction.transaction.id.hash,
             recipient: transaction.transaction.to
         )
     }

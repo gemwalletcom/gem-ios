@@ -1,27 +1,27 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
 import BigInt
+import Foundation
+import struct Gemstone.GemSwapQuoteData
 import struct Gemstone.SwapperQuote
-import struct Gemstone.SwapperQuoteData
+import Primitives
 
 public struct SwapTransferDataFactory: Sendable {
     public static func swap(
+        wallet: Wallet,
         fromAsset: Asset,
         toAsset: Asset,
         quote: Gemstone.SwapperQuote,
-        quoteData: Gemstone.SwapperQuoteData
-    ) -> TransferData {
-        let recipient = Recipient(
-            name: quote.data.provider.name,
-            address: quoteData.to,
+        quoteData: Gemstone.GemSwapQuoteData
+    ) throws -> TransferData {
+        let recipient = try Recipient(
+            name: .none,
+            address: wallet.account(for: toAsset.chain).address,
             memo: .none
         )
-        
-        let result = SwapData(
-            quote: quote.asPrimitive,
-            data: quoteData.asPrimitive(quote: quote.asPrimitive)
+        let result = try SwapData(
+            quote: quote.map(),
+            data: quoteData.map()
         )
 
         return TransferData(
