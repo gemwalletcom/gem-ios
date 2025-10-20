@@ -17,12 +17,17 @@ extension WalletConnectionMethods {
         case .ethSendRawTransaction: .ethereum(.sendRawTransaction)
         case .walletSwitchEthereumChain: .ethereum(.switchChain)
         case .walletAddEthereumChain: .ethereum(.addChain)
-            
+
         // Solana methods
         case .solanaSignMessage: .solana(.signMessage)
         case .solanaSignTransaction: .solana(.signTransaction)
         case .solanaSignAndSendTransaction: .solana(.signAndSendTransaction)
         case .solanaSignAllTransactions: .solana(.signAllTransactions)
+
+        // Sui methods
+        case .suiSignPersonalMessage: .sui(.signPersonalMessage)
+        case .suiSignTransaction: .sui(.signTransaction)
+        case .suiSignAndExecuteTransaction: .sui(.signAndExecuteTransaction)
         }
     }
 }
