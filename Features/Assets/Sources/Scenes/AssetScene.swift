@@ -154,6 +154,7 @@ public struct AssetScene: View {
                 Section {
                     Spacer()
                     EmptyContentView(model: model.emptyContentModel)
+                        .padding(.bottom, .extraLarge)
                 }
                 .cleanListRow()
             }
@@ -164,6 +165,7 @@ public struct AssetScene: View {
         .taskOnce(model.fetchOnce)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .contentMargins([.top], .small, for: .scrollContent)
     }
 }
 

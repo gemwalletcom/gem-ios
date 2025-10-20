@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Hakuna masoko yaliyopatikana";
 "assets.title" = "Mali";
+"stake.delegations" = "Uwakilishi";
+"info.stake.apr.description" = "Kiwango cha Asilimia cha Mwaka (APR) ni kiwango cha tuzo cha kila mwaka cha kuweka sarafu yako ya cryptocurrency.";

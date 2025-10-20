@@ -41,7 +41,30 @@ struct PriceAlertServiceTests {
 
         #expect(try await performUpdate(localAlerts: [keepAlert, deleteAlert], remoteAlerts: [keepAlert]).first?.assetId.chain == .bitcoin)
     }
-    
+
+    @Test
+    func updateSpecificAssetId() async throws {
+        let bitcoinAssetId = AssetId.mock(.bitcoin)
+        let ethereumAssetId = AssetId.mock(.ethereum)
+
+        let bitcoinAlert = PriceAlert.mock(assetId: bitcoinAssetId, lastNotifiedAt: nil)
+        let ethereumAlert = PriceAlert.mock(assetId: ethereumAssetId, lastNotifiedAt: nil)
+        let updatedBitcoinAlert = PriceAlert.mock(assetId: bitcoinAssetId, lastNotifiedAt: Date(timeIntervalSince1970: 1000))
+
+        let store = try createStore(with: [bitcoinAlert, ethereumAlert])
+        let apiService = GemAPIPriceAlertServiceMock(priceAlerts: [updatedBitcoinAlert])
+        let service = PriceAlertService.mock(store: store, apiService: apiService)
+
+        try await service.update(assetId: bitcoinAssetId.identifier)
+
+        let result = try store.getPriceAlerts()
+        let updatedBitcoin = result.first { $0.assetId.chain == .bitcoin }
+        let unchangedEthereum = result.first { $0.assetId.chain == .ethereum }
+
+        #expect(updatedBitcoin?.lastNotifiedAt == Date(timeIntervalSince1970: 1000))
+        #expect(unchangedEthereum?.lastNotifiedAt == nil)
+    }
+
     // MARK: - Private methods
     
     private func createStore(with alerts: [PriceAlert] = []) throws -> PriceAlertStore {

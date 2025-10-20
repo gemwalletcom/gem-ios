@@ -40,9 +40,8 @@ public struct StakeService: StakeServiceable {
         }
     }
     
-    public func getActiveValidators(assetId: AssetId) throws -> [DelegationValidator] {
-        try store.getValidators(assetId: assetId)
-            .filter { $0.isActive && !$0.name.isEmpty && !$0.isSystem }
+    public func getValidatorsActive(assetId: AssetId) throws -> [DelegationValidator] {
+        try store.getValidatorsActive(assetId: assetId.identifier)
     }
 
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {

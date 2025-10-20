@@ -17,6 +17,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case transactionState(imageURL: URL?, placeholder: Image?, state: TransactionState)
     case watchWallet
     case stakeLockTime(Image?)
+    case stakeApr(Image?)
     // swaps
     case priceImpact
     case slippage
@@ -42,6 +43,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case let .transactionState(_, _, state): state.id
         case .watchWallet: "watchWallet"
         case .stakeLockTime: "stakeLockTime"
+        case .stakeApr: "stakeApr"
         case .priceImpact: "priceImpact"
         case .slippage: "slippage"
         case let .assetStatus(status): "assetStatus_\(status.rawValue)"

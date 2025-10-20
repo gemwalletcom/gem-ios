@@ -271,6 +271,7 @@ extension AmountSceneViewModel {
             ),
             asset: input.asset
         )
+        amountInputModel.update(validators: inputValidators)
     }
 
     func onSelectInputButton() {

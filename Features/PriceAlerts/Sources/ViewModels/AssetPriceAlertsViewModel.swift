@@ -65,7 +65,7 @@ public final class AssetPriceAlertsViewModel: Sendable {
 extension AssetPriceAlertsViewModel {
     func fetch() async {
         do {
-            try await priceAlertService.update()
+            try await priceAlertService.update(assetId: asset.id.identifier)
         } catch {
             NSLog("fetch error: \(error)")
         }

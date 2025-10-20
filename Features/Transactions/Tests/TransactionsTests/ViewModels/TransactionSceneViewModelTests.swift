@@ -170,7 +170,7 @@ struct TransactionSceneViewModelTests {
     func feeItemModel() {
         let model = TransactionSceneViewModel.mock()
 
-        if case .listItem(let item) = model.item(for: TransactionItem.fee) {
+        if case .fee(let item) = model.item(for: TransactionItem.fee) {
             #expect(item.title == Localized.Transfer.networkFee)
             #expect(item.infoAction != nil)
         } else {
@@ -183,7 +183,7 @@ struct TransactionSceneViewModelTests {
         let model = TransactionSceneViewModel.mock()
 
         if case .explorer(let url, let text) = model.item(for: TransactionItem.explorerLink) {
-            #expect(url.absoluteString == "https://blockchair.com/bitcoin/transaction/2")
+            #expect(url.absoluteString == "https://blockchair.com/bitcoin/transaction/1")
             #expect(text == "View on Blockchair")
         } else {
             Issue.record("Expected explorer item for explorer link")

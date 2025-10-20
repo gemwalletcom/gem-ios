@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "Tidak ada pasar yang ditemukan";
 "assets.title" = "Aktiva";
+"stake.delegations" = "Delegasi";
+"info.stake.apr.description" = "Tingkat Persentase Tahunan (APR) adalah tingkat imbalan tahunan untuk mempertaruhkan mata uang kripto Anda.";

@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "لم يتم العثور على الأسواق";
 "assets.title" = "أصول";
+"stake.delegations" = "التفويضات";
+"info.stake.apr.description" = "معدل النسبة السنوية (APR) هو معدل المكافأة السنوي لمراهنة العملة المشفرة الخاصة بك.";

@@ -9,15 +9,18 @@ extension SwapQuote {
         toValue: String = "2000000000000000000",
         providerData: SwapProviderData = .mock(),
         walletAddress: String = "0x0000000000000000000000000000000000000000",
-        etaInSeconds: UInt32 = 123
+        etaInSeconds: UInt32 = 123,
+        useMaxAmount: Bool = false
     ) -> SwapQuote {
         SwapQuote(
+            fromAddress: walletAddress,
             fromValue: fromValue,
+            toAddress: walletAddress,
             toValue: toValue,
             providerData: providerData,
-            walletAddress: walletAddress,
             slippageBps: 50,
-            etaInSeconds: etaInSeconds
+            etaInSeconds: etaInSeconds,
+            useMaxAmount: useMaxAmount
         )
     }
 }

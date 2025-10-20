@@ -20,7 +20,7 @@ public struct MockStakeService: StakeServiceable {
         //
     }
 
-    public func getActiveValidators(assetId: AssetId) throws -> [DelegationValidator] {
+    public func getValidatorsActive(assetId: AssetId) throws -> [DelegationValidator] {
         []
     }
 

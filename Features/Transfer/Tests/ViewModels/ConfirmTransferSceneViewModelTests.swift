@@ -176,7 +176,7 @@ struct ConfirmTransferSceneViewModelTests {
         model.state = .error(AnyError("test"))
         let errorFeeItem = model.itemModel(for: .networkFee) as? ConfirmNetworkFeeViewModel
 
-        if case .networkFee(let listItem, _) = errorFeeItem?.itemModel {
+        if case .networkFee(let listItem) = errorFeeItem?.itemModel {
             #expect(listItem.subtitle == "-")
             #expect(listItem.subtitleExtra == nil)
         } else {
@@ -187,7 +187,7 @@ struct ConfirmTransferSceneViewModelTests {
         model.state = .data(TransactionInputViewModel.mock())
         let feeWithFiatItem = model.itemModel(for: .networkFee) as? ConfirmNetworkFeeViewModel
 
-        if case .networkFee(let listItem, _) = feeWithFiatItem?.itemModel {
+        if case .networkFee(let listItem) = feeWithFiatItem?.itemModel {
             #expect(listItem.subtitle == "$2.50")
             #expect(listItem.subtitleExtra == nil)
         } else {
@@ -197,7 +197,7 @@ struct ConfirmTransferSceneViewModelTests {
         model.feeModel.update(value: "0.001 ETH", fiatValue: nil)
         let feeNoFiatItem = model.itemModel(for: .networkFee) as? ConfirmNetworkFeeViewModel
 
-        if case .networkFee(let listItem, _) = feeNoFiatItem?.itemModel {
+        if case .networkFee(let listItem) = feeNoFiatItem?.itemModel {
             #expect(listItem.subtitle == "0.001 ETH")
             #expect(listItem.subtitleExtra == nil)
         } else {

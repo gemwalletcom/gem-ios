@@ -488,3 +488,5 @@
 "perpetuals.empty_state.no_markets" = "No markets";
 "perpetuals.empty_state.no_markets_found" = "No se encontraron mercados";
 "assets.title" = "Activos";
+"stake.delegations" = "Delegaciones";
+"info.stake.apr.description" = "La tasa de porcentaje anual (APR) es la tasa de recompensa anual por apostar su criptomoneda.";

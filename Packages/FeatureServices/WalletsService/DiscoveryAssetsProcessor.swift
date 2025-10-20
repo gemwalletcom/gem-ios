@@ -35,9 +35,6 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
 
     func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
         let wallet = try walletSessionService.getWallet(walletId: walletId)
-        // Only perform coin discovery if it hasn’t been done before.
-        guard !preferences.completeInitialLoadAssets else { return }
-        
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let assetIds = try await discoverAssetService.getAssets(
             deviceId: deviceId,
@@ -49,5 +46,6 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
         await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: assetIds, enabled: true)
         
         preferences.completeInitialLoadAssets = true
+        preferences.assetsTimestamp = Int(Date.now.timeIntervalSince1970)
     }
 }
