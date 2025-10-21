@@ -105,7 +105,10 @@ public final class AutocloseSceneViewModel {
     }
 
     var buttonType: ButtonType {
-        .primary()
+        if hasTakeProfit || takeProfitPrice == nil {
+            return .primary(.disabled)
+        }
+        return .primary()
     }
 
     var hasTakeProfit: Bool {
@@ -142,7 +145,19 @@ public final class AutocloseSceneViewModel {
 // MARK: - Actions
 
 extension AutocloseSceneViewModel {
-    func onSelectConfirmButton() {
+    func onSelectConfirm() {
+        setTakeProfit()
+    }
+
+    func onSelectCancel() {
+        cancelTakeProfit()
+    }
+}
+
+// MARK: - Private
+
+extension AutocloseSceneViewModel {
+    private func setTakeProfit() {
         guard let takeProfitPrice = takeProfitPrice,
               let assetIndex = Int32(position.perpetual.identifier),
               inputModel.update()
@@ -175,7 +190,7 @@ extension AutocloseSceneViewModel {
         onTransferAction?(transferData)
     }
 
-    func onCancelTakeProfit() {
+    private func cancelTakeProfit() {
         guard let orderId = takeProfitOrderId,
               let assetIndex = Int32(position.perpetual.identifier) else {
             return

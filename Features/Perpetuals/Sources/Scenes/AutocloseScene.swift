@@ -46,7 +46,7 @@ public struct AutocloseScene: View {
                     Text(model.takeProfitTitle)
                     Spacer()
                     if model.hasTakeProfit {
-                        Button(action: model.onCancelTakeProfit) {
+                        Button(action: model.onSelectCancel) {
                             Text(Localized.Common.cancel)
                                 .foregroundStyle(Colors.blue)
                         }
@@ -70,7 +70,7 @@ public struct AutocloseScene: View {
             StateButton(
                 text: Localized.Transfer.confirm,
                 type: model.buttonType,
-                action: model.onSelectConfirmButton
+                action: model.onSelectConfirm
             )
             .frame(maxWidth: .scene.button.maxWidth)
             .padding(.bottom, .scene.bottom)
