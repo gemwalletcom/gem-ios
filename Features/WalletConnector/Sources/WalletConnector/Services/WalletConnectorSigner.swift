@@ -102,31 +102,46 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
         await walletConnectorInteractor.sessionReject(error: error)
     }
 
+    private func buildTransferData(
+        chain: Chain,
+        metadata: WalletConnectionSessionAppMetadata,
+        transaction: String,
+        outputType: TransferDataOutputType,
+        outputAction: TransferDataOutputAction
+    ) -> TransferData {
+        TransferData(
+            type: .generic(
+                asset: chain.asset,
+                metadata: metadata,
+                extra: TransferDataExtra(
+                    to: "",
+                    data: transaction.data(using: .utf8),
+                    outputType: outputType,
+                    outputAction: outputAction
+                )
+            ),
+            recipientData: RecipientData(
+                recipient: Recipient(name: .none, address: "", memo: .none),
+                amount: .none
+            ),
+            value: .zero
+        )
+    }
+
     public func signTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
         let session = try connectionsStore.getConnection(id: sessionId)
-
-        // TODO: - review why not get wallet from session (session.wallet)
         let wallet = try getWallet(id: session.wallet.walletId)
 
         switch transaction {
-        case .ethereum: throw AnyError("Not supported yet")
-        case .solana(let transaction, let outputType):
-            let transferData = TransferData(
-                type: .generic(
-                    asset: chain.asset,
-                    metadata: session.session.metadata,
-                    extra: TransferDataExtra(
-                        to: "",
-                        data: transaction.data(using: .utf8),
-                        outputType: outputType,
-                        outputAction: .sign
-                    )
-                ),
-                recipientData: RecipientData(
-                    recipient: Recipient(name: .none, address: "", memo: .none),
-                    amount: .none
-                ),
-                value: .zero
+        case .ethereum:
+            throw AnyError("Not supported yet")
+        case .solana(let transaction, let outputType), .sui(let transaction, let outputType):
+            let transferData = buildTransferData(
+                chain: chain,
+                metadata: session.session.metadata,
+                transaction: transaction,
+                outputType: outputType,
+                outputAction: .sign
             )
             return try await walletConnectorInteractor.signTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         }
@@ -134,7 +149,6 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
     public func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
         let session = try connectionsStore.getConnection(id: sessionId)
-        // TODO: - review why not get wallet from session (session.wallet)
         let wallet = try getWallet(id: session.wallet.walletId)
 
         switch transaction {
@@ -182,22 +196,13 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
             )
 
             return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
-        case .solana(let transaction, _):
-            let transferData = TransferData(
-                type: .generic(
-                    asset: chain.asset,
-                    metadata: session.session.metadata,
-                    extra: TransferDataExtra(
-                        to: "",
-                        data: transaction.data(using: .utf8),
-                        outputAction: .send
-                    )
-                ),
-                recipientData: RecipientData(
-                    recipient: Recipient(name: .none, address: "", memo: .none),
-                    amount: .none
-                ),
-                value: .zero
+        case .solana(let transaction, let outputType), .sui(let transaction, let outputType):
+            let transferData = buildTransferData(
+                chain: chain,
+                metadata: session.session.metadata,
+                transaction: transaction,
+                outputType: outputType,
+                outputAction: .send
             )
             return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         }
