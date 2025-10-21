@@ -7,7 +7,7 @@ public extension PerpetualType {
         switch self {
         case .open(let data): data.baseAsset
         case .close(let data): data.baseAsset
-        case .autoclose(let data): data.baseAsset
+        case .modify(let data): data.baseAsset
         }
     }
 }

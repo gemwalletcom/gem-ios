@@ -20,5 +20,5 @@ public enum TransactionType: String, Codable, CaseIterable, Equatable, Sendable 
 	case smartContractCall
 	case perpetualOpenPosition
 	case perpetualClosePosition
-    case perpetualModify
+	case perpetualModify
 }

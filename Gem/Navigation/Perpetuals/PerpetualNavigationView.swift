@@ -36,9 +36,7 @@ public struct PerpetualNavigationView: View {
                     AutocloseNavigationStack(
                         position: position,
                         wallet: model.wallet,
-                        onComplete: {
-                            model.isPresentingAutoclose = false
-                        }
+                        onComplete: model.onAutocloseComplete
                     )
                 }
             }

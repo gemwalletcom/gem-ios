@@ -13,10 +13,8 @@ extension PerpetualError: LocalizedError {
         switch self {
         case .invalidTakeProfitPrice(let direction):
             switch direction {
-            case .long:
-                "Target price should be higher than mark price" // TODO: Localized
-            case .short:
-                "Target price should be lower than mark price" // TODO: Localized
+            case .long: "Target price should be higher than market price" // TODO: Localized
+            case .short: "Target price should be lower than market price" // TODO: Localized
             }
         }
     }

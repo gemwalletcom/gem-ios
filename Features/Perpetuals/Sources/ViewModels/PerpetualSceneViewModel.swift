@@ -250,6 +250,13 @@ public extension PerpetualSceneViewModel {
             onOpenLongPosition()
         }
     }
+
+    func onAutocloseComplete() {
+        isPresentingAutoclose = false
+        Task {
+            await fetch()
+        }
+    }
 }
 
 extension RecipientData {

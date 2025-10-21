@@ -19,7 +19,7 @@ public final class AutocloseSceneViewModel {
     private let position: PerpetualPositionData
     private let onTransferAction: TransferDataAction
 
-    var takeProfitInputModel: InputValidationViewModel
+    var inputModel: InputValidationViewModel
 
     public init(position: PerpetualPositionData, onTransferAction: TransferDataAction = nil) {
         self.position = position
@@ -32,15 +32,15 @@ public final class AutocloseSceneViewModel {
             marketPrice: position.perpetual.price,
             direction: position.position.direction
         )
-        self.takeProfitInputModel = InputValidationViewModel(mode: .manual, validators: [validator])
+        self.inputModel = InputValidationViewModel(mode: .manual, validators: [validator])
 
-        if let takeProfitPrice = position.position.takeProfit?.price {
-            takeProfitInputModel.text = formatPriceForInput(takeProfitPrice)
+        if let price = position.position.takeProfit?.price {
+            inputModel.text = priceFormatter.formatInputPrice(price)
         }
     }
 
     var takeProfit: String {
-        takeProfitInputModel.text
+        inputModel.text
     }
 
     var takeProfitPrice: Double? {
@@ -49,14 +49,13 @@ public final class AutocloseSceneViewModel {
 
     public var doneTitle: String { Localized.Common.done }
     var title: String { "Auto close" }
-    var targetPricePlaceholder: String { "Target price" } // TODO: Localized.Perpetual.targetPrice
-    var takeProfitTitle: String { "Take profit" } // TODO: Localized.Perpetual.takeProfit
-    var expectedProfitTitle: String { "Expected profit" } // TODO: Localized.Perpetual.expectedProfit
+    var targetPriceTitle: String { "Target price" }
+    var takeProfitTitle: String { "Take profit" }
+    var expectedProfitTitle: String { "Expected profit" }
 
     var expectedProfitPercent: Double {
-        guard let entryPrice = position.position.entryPrice, entryPrice > 0,
-              let takeProfitValue = takeProfitPrice, takeProfitValue > 0,
-              position.position.marginAmount > 0
+        guard let entryPrice = position.position.entryPrice,
+              let takeProfitValue = takeProfitPrice
         else {
             return 0
         }
@@ -66,8 +65,8 @@ public final class AutocloseSceneViewModel {
     }
 
     var expectedProfitText: String {
-        guard let entryPrice = position.position.entryPrice, entryPrice > 0,
-              let takeProfitValue = takeProfitPrice, takeProfitValue > 0
+        guard let entryPrice = position.position.entryPrice,
+              let takeProfitValue = takeProfitPrice
         else {
             return "-"
         }
@@ -84,8 +83,8 @@ public final class AutocloseSceneViewModel {
     }
 
     var expectedProfitColor: Color {
-        guard let entryPrice = position.position.entryPrice, entryPrice > 0,
-              let takeProfitValue = takeProfitPrice, takeProfitValue > 0
+        guard let entryPrice = position.position.entryPrice,
+              let takeProfitValue = takeProfitPrice
         else {
             return Colors.secondaryText
         }
@@ -95,12 +94,12 @@ public final class AutocloseSceneViewModel {
         return profit >= 0 ? Colors.green : Colors.red
     }
 
-    var entryPriceTitle: String { "Entry Price" } // TODO: Localized.Perpetual.entryPrice
+    var entryPriceTitle: String { "Entry Price" }
     var entryPriceText: String {
         position.position.entryPrice.map { currencyFormatter.string($0) } ?? "-"
     }
 
-    var markPriceTitle: String { "Mark Price" } // TODO: Localized.Perpetual.markPrice
+    var markPriceTitle: String { "Market Price" }
     var markPriceText: String {
         currencyFormatter.string(position.perpetual.price)
     }
@@ -108,26 +107,46 @@ public final class AutocloseSceneViewModel {
     var buttonType: ButtonType {
         .primary()
     }
-}
 
-// MARK: - Private
-
-extension AutocloseSceneViewModel {
-    private func formatPriceForInput(_ price: Double) -> String {
-        priceFormatter.formatPriceForInput(price)
+    var hasTakeProfit: Bool {
+        position.position.takeProfit != nil
     }
+
+    var takeProfitOrderId: UInt64? {
+        guard let orderId = position.position.takeProfit?.order_id else { return nil }
+        return UInt64(orderId)
+    }
+
+    var currentTakeProfitPrice: String {
+        guard let takeProfit = position.position.takeProfit else { return "-" }
+        return currencyFormatter.string(takeProfit.price)
+    }
+
+    /* TODO: - stop loss
+     var hasStopLoss: Bool {
+     position.position.stopLoss != nil
+     }
+
+     var stopLossOrderId: UInt64? {
+         guard let orderId = position.position.stopLoss?.order_id else { return nil }
+         return UInt64(orderId)
+     }
+
+     var currentStopLossPrice: String {
+     guard let stopLoss = position.position.stopLoss else { return "-" }
+     return currencyFormatter.string(stopLoss.price)
+     }
+     */
 }
 
 // MARK: - Actions
 
 extension AutocloseSceneViewModel {
     func onSelectConfirmButton() {
-        // TODO: - update
-        guard takeProfitInputModel.update() else {
-            return
-        }
-
-        guard let takeProfitPrice = takeProfitPrice else {
+        guard let takeProfitPrice = takeProfitPrice,
+              let assetIndex = Int32(position.perpetual.identifier),
+              inputModel.update()
+        else {
             return
         }
 
@@ -136,27 +155,41 @@ extension AutocloseSceneViewModel {
             takeProfitPrice,
             decimals: Int(position.asset.decimals)
         )
-
-        let size = priceFormatter.formatPrice(
-            provider: position.perpetual.provider,
-            position.position.size,
-            decimals: Int(position.asset.decimals)
-        )
-
-        guard let assetIndex = Int32(position.perpetual.identifier) else {
-            return
-        }
-
-        let data = AutocloseConfirmData(
-            direction: position.position.direction,
+        let data = PerpetualModifyConfirmData(
             baseAsset: Asset.hyperliquidUSDC(),
             assetIndex: assetIndex,
-            price: price,
-            size: size
+            modifyType: .tp(
+                direction: position.position.direction,
+                price: price,
+                size: .zero
+            )
         )
 
         let transferData = TransferData(
-            type: .perpetual(position.asset, .autoclose(data)),
+            type: .perpetual(position.asset, .modify(data)),
+            recipientData: RecipientData.hyperliquid(),
+            value: .zero,
+            canChangeValue: false
+        )
+
+        onTransferAction?(transferData)
+    }
+
+    func onCancelTakeProfit() {
+        guard let orderId = takeProfitOrderId,
+              let assetIndex = Int32(position.perpetual.identifier) else {
+            return
+        }
+
+        let cancelOrder = CancelOrderData(assetIndex: assetIndex, orderId: orderId)
+        let data = PerpetualModifyConfirmData(
+            baseAsset: Asset.hyperliquidUSDC(),
+            assetIndex: assetIndex,
+            modifyType: .cancel(orders: [cancelOrder])
+        )
+
+        let transferData = TransferData(
+            type: .perpetual(position.asset, .modify(data)),
             recipientData: RecipientData.hyperliquid(),
             value: .zero,
             canChangeValue: false

@@ -9,6 +9,7 @@ extension Gemstone.PerpetualType {
         switch self {
         case .open(let confirmData): .open(try confirmData.map())
         case .close(let confirmData): .close(try confirmData.map())
+        case .modify(let data): .modify(try data.map())
         }
     }
 }
@@ -18,18 +19,7 @@ extension Primitives.PerpetualType {
         switch self {
         case .open(let confirmData): .open(confirmData.map())
         case .close(let confirmData): .close(confirmData.map())
-        case .autoclose(let data): 
-        // TODO: - update this mock, since it's not a close but autoclose
-        .close(
-            .init(
-                direction: data.direction.map(),
-                baseAsset: data.baseAsset.map(),
-                assetIndex: data.assetIndex,
-                price: data.price,
-                fiatValue: 0,
-                size: data.size
-            )
-        )
+        case .modify(let data): .modify(data.map())
         }
     }
 }

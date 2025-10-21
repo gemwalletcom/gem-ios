@@ -41,7 +41,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             switch type {
             case .open: .perpetualOpenPosition
             case .close: .perpetualClosePosition
-            case .autoclose: .perpetualModify
+            case .modify: .perpetualModify
             }
         }
     }
@@ -78,12 +78,20 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
                 TransactionNFTTransferMetadata(assetId: asset.id, name: asset.name)
             )
         case .perpetual(_, let type):
-            let metadata = switch type {
-            case .open(let data): TransactionPerpetualMetadata(pnl: 0, price: 0, direction: data.direction, provider: nil)
-            case .close(let data): TransactionPerpetualMetadata(pnl: 0, price: 0, direction: data.direction, provider: nil)
-            case .autoclose(let data): TransactionPerpetualMetadata(pnl: 0, price: 0, direction: data.direction, provider: nil)
+            let direction: PerpetualDirection
+            switch type {
+            case .open(let data): direction = data.direction
+            case .close(let data): direction = data.direction
+            case .modify(let data):
+                switch data.modifyType {
+                case .tp(let dir, _, _), .sl(let dir, _, _), .tpsl(let dir, _, _, _):
+                    direction = dir
+                case .cancel:
+                    // for cancel operations direction not uses
+                    direction = .long
+                }
             }
-            return .perpetual(metadata)
+            return .perpetual(TransactionPerpetualMetadata(pnl: 0, price: 0, direction: direction, provider: nil))
         case .generic,
             .transfer,
             .deposit,

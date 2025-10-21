@@ -25,18 +25,35 @@ public struct AutocloseScene: View {
                     subtitle: model.markPriceText
                 )
             }
-
             Section {
-                InputValidationField(
-                    model: $model.takeProfitInputModel,
-                    placeholder: model.targetPricePlaceholder,
-                    allowClean: true
-                )
-                .keyboardType(.decimalPad)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
+                if model.hasTakeProfit {
+                    ListItemView(
+                        title: model.targetPriceTitle,
+                        subtitle: model.currentTakeProfitPrice
+                    )
+                } else {
+                    InputValidationField(
+                        model: $model.inputModel,
+                        placeholder: model.targetPriceTitle,
+                        allowClean: true
+                    )
+                    .keyboardType(.decimalPad)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                }
             } header: {
-                Text(model.takeProfitTitle)
+                HStack {
+                    Text(model.takeProfitTitle)
+                    Spacer()
+                    if model.hasTakeProfit {
+                        Button(action: model.onCancelTakeProfit) {
+                            Text(Localized.Common.cancel)
+                                .foregroundStyle(Colors.blue)
+                        }
+                    }
+                }
+                .font(.subheadline)
+                .fontWeight(.semibold)
             } footer: {
                 HStack {
                     Text(model.expectedProfitTitle)

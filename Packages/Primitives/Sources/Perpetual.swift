@@ -79,26 +79,36 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct AutocloseConfirmData: Codable, Equatable, Hashable, Sendable {
-    public let direction: PerpetualDirection
+public struct CancelOrderData: Codable, Equatable, Hashable, Sendable {
+    public let assetIndex: Int32
+    public let orderId: UInt64
+
+    public init(assetIndex: Int32, orderId: UInt64) {
+        self.assetIndex = assetIndex
+        self.orderId = orderId
+    }
+}
+
+public enum PerpetualModifyType: Codable, Equatable, Hashable, Sendable {
+    case tp(direction: PerpetualDirection, price: String, size: String)
+    case sl(direction: PerpetualDirection, price: String, size: String)
+    case tpsl(direction: PerpetualDirection, takeProfit: String, stopLoss: String, size: String)
+    case cancel(orders: [CancelOrderData])
+}
+
+public struct PerpetualModifyConfirmData: Codable, Equatable, Hashable, Sendable {
     public let baseAsset: Asset
     public let assetIndex: Int32
-    public let price: String
-    public let size: String
+    public let modifyType: PerpetualModifyType
 
     public init(
-        direction: PerpetualDirection,
         baseAsset: Asset,
         assetIndex: Int32,
-        price: String,
-        size: String,
-        existingTpOrderId: UInt64? = nil
+        modifyType: PerpetualModifyType
     ) {
-        self.direction = direction
         self.baseAsset = baseAsset
         self.assetIndex = assetIndex
-        self.price = price
-        self.size = size
+        self.modifyType = modifyType
     }
 }
 
@@ -151,12 +161,12 @@ public enum AccountDataType: String, Codable, Equatable, Hashable, Sendable {
 public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 	case open(PerpetualConfirmData)
 	case close(PerpetualConfirmData)
-    case autoclose(AutocloseConfirmData)
+    case modify(PerpetualModifyConfirmData)
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case open = "Open",
 			close = "Close",
-            autoclose = "Autoclose"
+            modify = "Modify"
 	}
 
 	private enum ContainerCodingKeys: String, CodingKey {
@@ -177,9 +187,9 @@ public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 					self = .close(content)
 					return
 				}
-            case .autoclose:
-                if let content = try? container.decode(AutocloseConfirmData.self, forKey: .content) {
-                    self = .autoclose(content)
+            case .modify:
+                if let content = try? container.decode(PerpetualModifyConfirmData.self, forKey: .content) {
+                    self = .modify(content)
                     return
                 }
 			}
@@ -197,8 +207,8 @@ public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 		case .close(let content):
 			try container.encode(CodingKeys.close, forKey: .type)
 			try container.encode(content, forKey: .content)
-        case .autoclose(let content):
-            try container.encode(CodingKeys.autoclose, forKey: .type)
+        case .modify(let content):
+            try container.encode(CodingKeys.modify, forKey: .type)
             try container.encode(content, forKey: .content)
 		}
 	}
