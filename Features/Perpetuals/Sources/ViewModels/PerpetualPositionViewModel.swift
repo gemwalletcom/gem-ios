@@ -73,7 +73,11 @@ public struct PerpetualPositionViewModel {
 
     var autocloseTitle: String { "Auto close" }
     var autocloseText: String {
-        "TP: \(data.position.takeProfit.map { currencyFormatter.string($0.price) } ?? "-")"
+        guard let price = data.position.takeProfit.map({ currencyFormatter.string($0.price) }) else {
+            return "-"
+        }
+        return "TP: \(price)"
+
     }
 
     public var marginText: String {

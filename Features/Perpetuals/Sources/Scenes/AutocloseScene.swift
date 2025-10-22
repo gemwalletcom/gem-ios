@@ -7,6 +7,10 @@ import Style
 import PrimitivesComponents
 
 public struct AutocloseScene: View {
+    enum Field: Int, Hashable {
+        case targetPrice
+    }
+    @FocusState private var focusedField: Field?
     @State private var model: AutocloseSceneViewModel
 
     public init(model: AutocloseSceneViewModel) {
@@ -40,6 +44,7 @@ public struct AutocloseScene: View {
                     .keyboardType(.decimalPad)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
+                    .focused($focusedField, equals: .targetPrice)
                 }
             } header: {
                 HStack {
@@ -67,14 +72,40 @@ public struct AutocloseScene: View {
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .safeAreaView {
-            StateButton(
-                text: Localized.Transfer.confirm,
-                type: model.buttonType,
-                action: model.onSelectConfirm
-            )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
+            VStack(spacing: 0) {
+                Divider()
+                    .frame(height: 1 / UIScreen.main.scale)
+                    .background(Colors.grayVeryLight)
+                    .isVisible(focusedField == .targetPrice)
+
+                Group {
+                    if model.showButton {
+                        StateButton(
+                            text: Localized.Transfer.confirm,
+                            type: model.buttonType,
+                            action: model.onSelectConfirm
+                        )
+                        .frame(maxWidth: .scene.button.maxWidth)
+                    } else if focusedField == .targetPrice {
+                        PercentageAccessoryView(
+                            onSelectPercent: model.onSelectPercent,
+                            onDone: { focusedField = nil }
+                        )
+                    }
+                }
+                .padding(.small)
+            }
+            .background(Colors.grayBackground)
         }
         .navigationTitle(model.title)
+        .onChange(of: model.focusField, onChangeFocus)
+    }
+}
+
+// MARK: - Actions
+
+extension AutocloseScene {
+    private func onChangeFocus(_ _: Field?, _ newField: Field?) {
+        focusedField = newField
     }
 }

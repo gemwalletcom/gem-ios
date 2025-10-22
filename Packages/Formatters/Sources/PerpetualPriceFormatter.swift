@@ -46,12 +46,12 @@ public struct PerpetualPriceFormatter {
         return formatter.string(from: NSNumber(value: size)) ?? String(format: "%.*f", decimals, size)
     }
 
-    public func formatInputPrice(_ price: Double, locale: Locale = Locale.current) -> String {
+    public func formatInputPrice(_ price: Double, locale: Locale = Locale.current, decimals: Int = 6) -> String {
         let formatter = NumberFormatter()
         formatter.locale = Locale.current
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 6
+        formatter.maximumFractionDigits = decimals
         formatter.usesGroupingSeparator = false
 
         return formatter.string(from: NSNumber(value: price)) ?? String(price)

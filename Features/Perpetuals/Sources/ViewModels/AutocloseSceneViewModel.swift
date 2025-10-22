@@ -20,6 +20,7 @@ public final class AutocloseSceneViewModel {
     private let onTransferAction: TransferDataAction
 
     var inputModel: InputValidationViewModel
+    var focusField: AutocloseScene.Field?
 
     public init(position: PerpetualPositionData, onTransferAction: TransferDataAction = nil) {
         self.position = position
@@ -59,9 +60,9 @@ public final class AutocloseSceneViewModel {
         else {
             return 0
         }
-        let size = position.position.size
-        let profit = (takeProfitValue - entryPrice) * abs(size)
-        return (profit / position.position.marginAmount) * 100
+        let profit = (takeProfitValue - entryPrice) * abs(position.position.size)
+        let initialMargin = abs(position.position.size) * entryPrice / Double(position.position.leverage)
+        return (profit / initialMargin) * 100
     }
 
     var expectedProfitText: String {
@@ -70,8 +71,7 @@ public final class AutocloseSceneViewModel {
         else {
             return "-"
         }
-        let size = position.position.size
-        let profit = (takeProfitValue - entryPrice) * abs(size)
+        let profit = (takeProfitValue - entryPrice) * abs(position.position.size)
         let profitAmount = currencyFormatter.string(abs(profit))
         let percentText = percentFormatter.string(expectedProfitPercent)
 
@@ -111,6 +111,10 @@ public final class AutocloseSceneViewModel {
         return .primary()
     }
 
+    var showButton: Bool {
+        !takeProfit.isEmpty
+    }
+
     var hasTakeProfit: Bool {
         position.position.takeProfit != nil
     }
@@ -124,40 +128,12 @@ public final class AutocloseSceneViewModel {
         guard let takeProfit = position.position.takeProfit else { return "-" }
         return currencyFormatter.string(takeProfit.price)
     }
-
-    /* TODO: - stop loss
-     var hasStopLoss: Bool {
-     position.position.stopLoss != nil
-     }
-
-     var stopLossOrderId: UInt64? {
-         guard let orderId = position.position.stopLoss?.order_id else { return nil }
-         return UInt64(orderId)
-     }
-
-     var currentStopLossPrice: String {
-     guard let stopLoss = position.position.stopLoss else { return "-" }
-     return currencyFormatter.string(stopLoss.price)
-     }
-     */
 }
 
 // MARK: - Actions
 
 extension AutocloseSceneViewModel {
     func onSelectConfirm() {
-        setTakeProfit()
-    }
-
-    func onSelectCancel() {
-        cancelTakeProfit()
-    }
-}
-
-// MARK: - Private
-
-extension AutocloseSceneViewModel {
-    private func setTakeProfit() {
         guard let takeProfitPrice = takeProfitPrice,
               let assetIndex = Int32(position.perpetual.identifier),
               inputModel.update()
@@ -190,7 +166,7 @@ extension AutocloseSceneViewModel {
         onTransferAction?(transferData)
     }
 
-    private func cancelTakeProfit() {
+    func onSelectCancel() {
         guard let orderId = takeProfitOrderId,
               let assetIndex = Int32(position.perpetual.identifier) else {
             return
@@ -211,5 +187,18 @@ extension AutocloseSceneViewModel {
         )
 
         onTransferAction?(transferData)
+    }
+
+    func onSelectPercent(_ percent: Int) {
+        guard let entryPrice = position.position.entryPrice else { return }
+
+        let percentMultiplier = Double(percent) / 100.0
+        let priceChange = entryPrice * percentMultiplier
+
+        let targetPrice = position.position.direction == .long
+            ? entryPrice + priceChange
+            : entryPrice - priceChange
+
+        inputModel.text = priceFormatter.formatInputPrice(targetPrice, decimals: 2)
     }
 }
