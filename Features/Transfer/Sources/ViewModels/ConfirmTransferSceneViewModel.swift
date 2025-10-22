@@ -236,13 +236,28 @@ extension ConfirmTransferSceneViewModel {
         transactionData: TransactionData,
         amount: TransferAmount
     ) {
-        Task {
-            await processConfirmation(
-                transactionData: transactionData,
-                amount: amount
-            )
-            if case .data(_) = confirmingState {
-                onComplete?()
+        let input = TransferConfirmationInput(
+            data: state.value!.data,
+            wallet: wallet,
+            transactionData: transactionData,
+            amount: amount,
+            delegate: confirmTransferDelegate
+        )
+
+        switch data.type {
+        case .perpetual:
+            confirmService.executeTransferAsync(input: input)
+            onComplete?()
+        default:
+            confirmingState = .loading
+            Task {
+                do {
+                    try await confirmService.executeTransfer(input: input)
+                    confirmingState = .noData
+                    onComplete?()
+                } catch {
+                    confirmingState = .error(error)
+                }
             }
         }
     }
@@ -281,24 +296,6 @@ extension ConfirmTransferSceneViewModel {
                 state = .error(error)
                 NSLog("preload transaction error: \(error)")
             }
-        }
-    }
-
-    private func processConfirmation(transactionData: TransactionData, amount: TransferAmount) async {
-        confirmingState = .loading
-        do {
-            let input = TransferConfirmationInput(
-                data: state.value!.data,
-                wallet: wallet,
-                transactionData: transactionData,
-                amount: amount,
-                delegate: confirmTransferDelegate
-            )
-            try await confirmService.executeTransfer(input: input)
-            confirmingState = .data(true)
-        } catch {
-            confirmingState = .error(error)
-            NSLog("confirm transaction error: \(error)")
         }
     }
 

@@ -9,6 +9,7 @@ import WalletsService
 
 public protocol TransferExecutable: Sendable {
     func execute(input: TransferConfirmationInput) async throws
+    func executeAsync(input: TransferConfirmationInput)
 }
 
 public struct TransferExecutor: TransferExecutable {
@@ -16,17 +17,33 @@ public struct TransferExecutor: TransferExecutable {
     private let chainService: any ChainServiceable
     private let walletsService: WalletsService
     private let transactionService: TransactionService
+    private let handler: any TransferHandleable
 
     public init(
         signer: any TransactionSigneable,
         chainService: any ChainServiceable,
         walletsService: WalletsService,
-        transactionService: TransactionService
+        transactionService: TransactionService,
+        handler: any TransferHandleable
     ) {
         self.signer = signer
         self.chainService = chainService
         self.walletsService = walletsService
         self.transactionService = transactionService
+        self.handler = handler
+    }
+
+    public func executeAsync(input: TransferConfirmationInput) {
+        Task {
+            await handler.handle(state: .executing(type: input.data.type))
+
+            do {
+                try await execute(input: input)
+                await handler.handle(state: .completed(type: input.data.type))
+            } catch {
+                await handler.handle(state: .failed)
+            }
+        }
     }
 
     public func execute(input: TransferConfirmationInput) async throws {

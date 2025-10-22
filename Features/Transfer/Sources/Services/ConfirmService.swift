@@ -67,6 +67,10 @@ public struct ConfirmService: Sendable {
         try await transferExecutor.execute(input: input)
     }
 
+    public func executeTransferAsync(input: TransferConfirmationInput) {
+        transferExecutor.executeAsync(input: input)
+    }
+
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {
         try keystore.getPasswordAuthentication()
     }

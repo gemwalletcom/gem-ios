@@ -13,6 +13,8 @@ import WalletTab
 import Transactions
 import Swap
 import Assets
+import Transfer
+import Components
 
 struct MainTabView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -28,6 +30,7 @@ struct MainTabView: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.perpetualObserverService) private var perpetualObserverService
+    @Environment(\.transferHandler) private var transferHandler
 
     private let model: MainTabViewModel
 
@@ -43,6 +46,7 @@ struct MainTabView: View {
 
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
     @State private var isPresentingSupport = false
+    @State private var isPresentingToastMessage: ToastMessage?
 
     init(model: MainTabViewModel) {
         self.model = model
@@ -127,6 +131,8 @@ struct MainTabView: View {
             initial: true,
             onReceiveNotifications
         )
+        .onChange(of: transferHandler.toastMessage, onReceiveToast)
+        .toast(message: $isPresentingToastMessage)
         .taskOnce {
             Task {
                 await connectObservers()
@@ -290,6 +296,10 @@ extension MainTabView {
                 isPresentingSelectedAssetInput = nil
             }
         }
+    }
+    
+    private func onReceiveToast(_ old: ToastMessage?, new: ToastMessage?) {
+        isPresentingToastMessage = new
     }
 }
 

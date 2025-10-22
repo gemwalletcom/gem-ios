@@ -72,10 +72,10 @@ public struct ConnectionsScene: View {
             isPresenting: $model.isPresentingConnectorBar,
             message: ToastMessage(
                 title: "\(Localized.WalletConnect.brandName)...",
-                image: SystemImage.network
-            ),
-            duration: .infinity,
-            tapToDismiss: false
+                image: SystemImage.network,
+                duration: .infinity,
+                tapToDismiss: false
+            )
         )
         .navigationTitle(model.title)
         .taskOnce { model.updateSessions() }

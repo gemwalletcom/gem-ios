@@ -38,7 +38,8 @@ public struct ViewModelFactory: Sendable {
     let transactionService: TransactionService
     let chainServiceFactory: ChainServiceFactory
     let addressNameService: AddressNameService
-    
+    let transferHandler: TransferHandler
+
     public init(
         keystore: any Keystore,
         nodeService: NodeService,
@@ -52,7 +53,8 @@ public struct ViewModelFactory: Sendable {
         priceService: PriceService,
         transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
-        addressNameService: AddressNameService
+        addressNameService: AddressNameService,
+        transferHandler: TransferHandler
     ) {
         self.keystore = keystore
         self.nodeService = nodeService
@@ -67,6 +69,7 @@ public struct ViewModelFactory: Sendable {
         self.transactionService = transactionService
         self.chainServiceFactory = chainServiceFactory
         self.addressNameService = addressNameService
+        self.transferHandler = transferHandler
     }
     
     @MainActor
@@ -85,9 +88,10 @@ public struct ViewModelFactory: Sendable {
             priceService: priceService,
             transactionService: transactionService,
             addressNameService: addressNameService,
+            transferHandler: transferHandler,
             chain: data.chain
         )
-        
+
         return ConfirmTransferSceneViewModel(
             wallet: wallet,
             data: data,

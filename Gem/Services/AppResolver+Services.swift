@@ -59,6 +59,7 @@ extension AppResolver {
         let perpetualObserverService: PerpetualObserverService
         let nameService: NameService
         let addressNameService: AddressNameService
+        let transferHandler: TransferHandler
         let viewModelFactory: ViewModelFactory
 
         init(
@@ -93,6 +94,7 @@ extension AppResolver {
             perpetualObserverService: PerpetualObserverService,
             nameService: NameService,
             addressNameService: AddressNameService,
+            transferHandler: TransferHandler,
             viewModelFactory: ViewModelFactory
         ) {
             self.assetsService = assetsService
@@ -126,6 +128,7 @@ extension AppResolver {
             self.perpetualObserverService = perpetualObserverService
             self.nameService = nameService
             self.addressNameService = addressNameService
+            self.transferHandler = transferHandler
             self.viewModelFactory = viewModelFactory
         }
     }

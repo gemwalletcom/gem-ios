@@ -61,5 +61,6 @@ extension EnvironmentValues {
     @Entry var transactionService: TransactionService = AppResolver.main.services.transactionService
     @Entry var nameService: NameService = AppResolver.main.services.nameService
     @Entry var addressNameService: AddressNameService = AppResolver.main.services.addressNameService
+    @Entry var transferHandler: TransferHandler = AppResolver.main.services.transferHandler
     @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
 }

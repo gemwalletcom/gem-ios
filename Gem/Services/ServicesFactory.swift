@@ -181,7 +181,9 @@ struct ServicesFactory {
         let nameService = NameService()
         let scanService = ScanService(securePreferences: .standard)
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
-        
+
+        let transferHandler = TransferHandler()
+
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
             nodeService: nodeService,
@@ -195,7 +197,8 @@ struct ServicesFactory {
             priceService: priceService,
             transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
-            addressNameService: addressNameService
+            addressNameService: addressNameService,
+            transferHandler: transferHandler
         )
 
         return AppResolver.Services(
@@ -230,6 +233,7 @@ struct ServicesFactory {
             perpetualObserverService: perpetualObserverService,
             nameService: nameService,
             addressNameService: addressNameService,
+            transferHandler: transferHandler,
             viewModelFactory: viewModelFactory
         )
     }
