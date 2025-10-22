@@ -48,49 +48,30 @@ public final class AutocloseSceneViewModel {
         currencyFormatter.double(from: takeProfit)
     }
 
-    public var doneTitle: String { Localized.Common.done }
     var title: String { "Auto close" }
     var targetPriceTitle: String { "Target price" }
     var takeProfitTitle: String { "Take profit" }
     var expectedProfitTitle: String { "Expected profit" }
 
     var expectedProfitPercent: Double {
-        guard let entryPrice = position.position.entryPrice,
-              let takeProfitValue = takeProfitPrice
+        guard let profit = calculatedProfit,
+              let entryPrice = position.position.entryPrice
         else {
             return 0
         }
-        let profit = (takeProfitValue - entryPrice) * abs(position.position.size)
         let initialMargin = abs(position.position.size) * entryPrice / Double(position.position.leverage)
         return (profit / initialMargin) * 100
     }
 
     var expectedProfitText: String {
-        guard let entryPrice = position.position.entryPrice,
-              let takeProfitValue = takeProfitPrice
-        else {
-            return "-"
-        }
-        let profit = (takeProfitValue - entryPrice) * abs(position.position.size)
+        guard let profit = calculatedProfit else { return "-" }
         let profitAmount = currencyFormatter.string(abs(profit))
         let percentText = percentFormatter.string(expectedProfitPercent)
-
-        if profit >= 0 {
-            return "+\(profitAmount) (\(percentText))"
-        } else {
-            return "-\(profitAmount) (\(percentText))"
-        }
+        return profit >= 0 ? "+\(profitAmount) (\(percentText))" : "-\(profitAmount) (\(percentText))"
     }
 
     var expectedProfitColor: Color {
-        guard let entryPrice = position.position.entryPrice,
-              let takeProfitValue = takeProfitPrice
-        else {
-            return Colors.secondaryText
-        }
-        let size = position.position.size
-        let profit = (takeProfitValue - entryPrice) * abs(size)
-
+        guard let profit = calculatedProfit else { return Colors.secondaryText }
         return profit >= 0 ? Colors.green : Colors.red
     }
 
@@ -133,6 +114,10 @@ public final class AutocloseSceneViewModel {
 // MARK: - Actions
 
 extension AutocloseSceneViewModel {
+    func onDone() {
+        focusField = nil
+    }
+
     func onSelectConfirm() {
         guard let takeProfitPrice = takeProfitPrice,
               let assetIndex = Int32(position.perpetual.identifier),
@@ -200,5 +185,18 @@ extension AutocloseSceneViewModel {
             : entryPrice - priceChange
 
         inputModel.text = priceFormatter.formatInputPrice(targetPrice, decimals: 2)
+    }
+}
+
+// MARK: - Private
+
+extension AutocloseSceneViewModel {
+    private var calculatedProfit: Double? {
+        guard let entryPrice = position.position.entryPrice,
+              let takeProfitValue = takeProfitPrice
+        else {
+            return nil
+        }
+        return (takeProfitValue - entryPrice) * abs(position.position.size)
     }
 }
