@@ -256,6 +256,8 @@ public class EthereumSigner: Signable {
         switch message {
         case .typed(let message):
             return EthereumMessageSigner.signTypedMessage(privateKey: privateKey, messageJson: message)
+        case .raw:
+            throw AnyError("Raw message signing is not supported for Ethereum")
         }
     }
 }

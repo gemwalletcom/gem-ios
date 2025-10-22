@@ -66,9 +66,56 @@ public struct WCSolanaTransactions: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct WCSuiSignAndExecuteTransactionResult: Codable, Equatable, Hashable, Sendable {
+	public let digest: String
+
+	public init(digest: String) {
+		self.digest = digest
+	}
+}
+
+public struct WCSuiSignMessage: Codable, Equatable, Hashable, Sendable {
+	public let message: String
+	public let account: String
+
+	public init(message: String, account: String) {
+		self.message = message
+		self.account = account
+	}
+}
+
+public struct WCSuiSignMessageResult: Codable, Equatable, Hashable, Sendable {
+	public let signature: String
+
+	public init(signature: String) {
+		self.signature = signature
+	}
+}
+
+public struct WCSuiSignTransactionResult: Codable, Equatable, Hashable, Sendable {
+	public let signature: String
+	public let transactionBytes: String
+
+	public init(signature: String, transactionBytes: String) {
+		self.signature = signature
+		self.transactionBytes = transactionBytes
+	}
+}
+
+public struct WCSuiTransaction: Codable, Equatable, Hashable, Sendable {
+	public let transaction: String
+	public let account: String
+
+	public init(transaction: String, account: String) {
+		self.transaction = transaction
+		self.account = account
+	}
+}
+
 public enum WalletConnectCAIP2: String, Codable, Sendable {
 	case eip155
 	case solana
 	case cosmos
 	case algorand
+	case sui
 }
