@@ -99,8 +99,8 @@ public final class AutocloseSceneViewModel {
         position.position.entryPrice.map { currencyFormatter.string($0) } ?? "-"
     }
 
-    var markPriceTitle: String { "Market Price" }
-    var markPriceText: String {
+    var marketPriceTitle: String { "Market Price" }
+    var marketPriceText: String {
         currencyFormatter.string(position.perpetual.price)
     }
 

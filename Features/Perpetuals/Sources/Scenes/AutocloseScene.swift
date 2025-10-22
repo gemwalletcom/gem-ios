@@ -21,8 +21,8 @@ public struct AutocloseScene: View {
                     subtitle: model.entryPriceText
                 )
                 ListItemView(
-                    title: model.markPriceTitle,
-                    subtitle: model.markPriceText
+                    title: model.marketPriceTitle,
+                    subtitle: model.marketPriceText
                 )
             }
             Section {

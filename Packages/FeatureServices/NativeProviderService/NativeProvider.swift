@@ -3,14 +3,15 @@
 import CryptoKit
 import Foundation
 import protocol Gemstone.AlienProvider
+import struct Gemstone.AlienResponse
 import struct Gemstone.AlienTarget
 import enum Gemstone.AlienError
 import typealias Gemstone.Chain
 import Primitives
 
 public actor NativeProvider {
-    let session: URLSession
-    let nodeProvider: any NodeURLFetchable
+    private let session: URLSession
+    private let nodeProvider: any NodeURLFetchable
     private let cache: any ProviderCache
 
     public init(
@@ -21,7 +22,7 @@ public actor NativeProvider {
         self.nodeProvider = nodeProvider
         self.cache = MemoryCache()
     }
-    
+
     public init(session: URLSession = .shared, url: URL) {
         self.session = session
         self.nodeProvider = StaticNode(url: url)
@@ -30,79 +31,34 @@ public actor NativeProvider {
 }
 
 public struct StaticNode: NodeURLFetchable {
-    
     let url: URL
-    
+
     public init(url: URL) {
         self.url = url
     }
-    
-    public func node(for chain: Primitives.Chain) -> URL {
-        url
+
+    public func node(for chain: Primitives.Chain) -> URL { url
     }
 }
 
 extension NativeProvider: AlienProvider {
-    public func request(target: AlienTarget) async throws -> Data {
-        let results = try await self.batchRequest(targets: [target])
-        guard
-            results.count == 1
-        else {
-            throw AlienError.ResponseError(msg: "invalid response: \(target)")
+    public func request(target: AlienTarget) async throws -> AlienResponse {
+        if let data = await cache.get(key: target.cacheKey) {
+            return AlienResponse(status: 200, data: data)
         }
-        return results[0]
+
+        let (data, response) = try await session.data(for: target.asRequest())
+        let statusCode = (response as? HTTPURLResponse)?.statusCode
+
+        if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {
+            await cache.set(key: target.cacheKey, value: data, ttl: Duration.seconds(duration))
+        }
+
+        return AlienResponse(status: statusCode.map(UInt16.init), data: data)
     }
 
     public nonisolated func getEndpoint(chain: Chain) throws -> String {
-        self.nodeProvider.node(for: try Primitives.Chain(id: chain)).absoluteString
-    }
-
-    public func batchRequest(targets: [AlienTarget]) async throws -> [Data] {
-        do {
-            return try await withThrowingTaskGroup(of: Data.self) { group in
-                var results = [Data]()
-
-                for target in targets {
-                    group.addTask {
-//                        print("==> handle request:\n\(target)")
-
-                        if let data = await self.cache.get(key: target.cacheKey) {
-                            return data
-                        }
-
-
-                        let (data, response) = try await self.session.data(for: target.asRequest())
-                        let statusCode = (response as? HTTPURLResponse)?.statusCode
-                        if statusCode != 200 && data.isEmpty {
-                            throw AlienError.ResponseError(msg: "Invalid HTTP status code: \(String(describing: statusCode))")
-                        }
-//                        print("<== response body size:\(data.count)")
-//#if DEBUG
-//                        if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-//                            let pretty = try JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted])
-//                            print("<== response json: \(pretty)")
-//                        }
-//#endif
-
-                        // save cache
-                        if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {
-                            await self.cache.set(key: target.cacheKey, value: data, ttl: Duration.seconds(duration))
-                        }
-
-                        return data
-                    }
-                }
-                for try await result in group {
-                    results.append(result)
-                }
-                return results
-            }
-        } catch let error {
-            if (error as NSError).domain == NSURLErrorDomain {
-                throw AlienError.ResponseError(msg: error.localizedDescription)
-            }
-            throw error
-        }
+        nodeProvider.node(for: try Primitives.Chain(id: chain)).absoluteString
     }
 }
 
