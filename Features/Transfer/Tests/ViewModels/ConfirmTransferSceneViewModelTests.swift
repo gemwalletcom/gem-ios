@@ -317,6 +317,7 @@ private extension ConfirmTransferSceneViewModel {
                 priceService: .mock(),
                 transactionService: .mock(),
                 addressNameService: addressNameService,
+                transferHandler: TransferHandlerMock(),
                 chain: data.chain
             ),
             onComplete: {}
