@@ -134,9 +134,10 @@ extension AutocloseSceneViewModel {
         let data = PerpetualModifyConfirmData(
             baseAsset: Asset.hyperliquidUSDC(),
             assetIndex: assetIndex,
-            modifyType: .tp(
+            modifyType: .tpsl(
                 direction: position.position.direction,
-                price: price,
+                takeProfit: price,
+                stopLoss: nil,
                 size: .zero
             )
         )

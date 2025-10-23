@@ -221,28 +221,6 @@ public class HyperCoreSigner: Signable {
 
         case let .modify(data):
             switch data.modifyType {
-            case let .tp(direction, price, size):
-                let order = factory.makePositionTpSl(
-                    asset: UInt32(data.assetIndex),
-                    isBuy: direction == .long,
-                    size: size,
-                    tpTrigger: price,
-                    slTrigger: nil,
-                    builder: builder
-                )
-                return try hyperCore.signPlaceOrder(order: order, nonce: timestamp, privateKey: agentKey)
-
-            case let .sl(direction, price, size):
-                let order = factory.makePositionTpSl(
-                    asset: UInt32(data.assetIndex),
-                    isBuy: direction == .long,
-                    size: size,
-                    tpTrigger: nil,
-                    slTrigger: price,
-                    builder: builder
-                )
-                return try hyperCore.signPlaceOrder(order: order, nonce: timestamp, privateKey: agentKey)
-
             case let .tpsl(direction, takeProfit, stopLoss, size):
                 let order = factory.makePositionTpSl(
                     asset: UInt32(data.assetIndex),

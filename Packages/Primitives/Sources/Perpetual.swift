@@ -90,9 +90,7 @@ public struct CancelOrderData: Codable, Equatable, Hashable, Sendable {
 }
 
 public enum PerpetualModifyType: Codable, Equatable, Hashable, Sendable {
-    case tp(direction: PerpetualDirection, price: String, size: String)
-    case sl(direction: PerpetualDirection, price: String, size: String)
-    case tpsl(direction: PerpetualDirection, takeProfit: String, stopLoss: String, size: String)
+    case tpsl(direction: PerpetualDirection, takeProfit: String?, stopLoss: String?, size: String)
     case cancel(orders: [CancelOrderData])
 }
 
