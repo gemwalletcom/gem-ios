@@ -131,15 +131,16 @@ extension AutocloseSceneViewModel {
             takeProfitPrice,
             decimals: Int(position.asset.decimals)
         )
+        let tpslData = TPSLOrderData(
+            direction: position.position.direction,
+            takeProfit: price,
+            stopLoss: nil,
+            size: .zero
+        )
         let data = PerpetualModifyConfirmData(
             baseAsset: Asset.hyperliquidUSDC(),
             assetIndex: assetIndex,
-            modifyType: .tpsl(
-                direction: position.position.direction,
-                takeProfit: price,
-                stopLoss: nil,
-                size: .zero
-            )
+            modifyType: .tpsl(tpslData)
         )
 
         let transferData = TransferData(

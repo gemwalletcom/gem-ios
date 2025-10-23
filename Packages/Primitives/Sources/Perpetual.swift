@@ -4,6 +4,16 @@
 
 import Foundation
 
+public struct CancelOrderData: Codable, Equatable, Hashable, Sendable {
+	public let assetIndex: Int32
+	public let orderId: UInt64
+
+	public init(assetIndex: Int32, orderId: UInt64) {
+		self.assetIndex = assetIndex
+		self.orderId = orderId
+	}
+}
+
 public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let name: String
@@ -79,37 +89,6 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct CancelOrderData: Codable, Equatable, Hashable, Sendable {
-    public let assetIndex: Int32
-    public let orderId: UInt64
-
-    public init(assetIndex: Int32, orderId: UInt64) {
-        self.assetIndex = assetIndex
-        self.orderId = orderId
-    }
-}
-
-public enum PerpetualModifyType: Codable, Equatable, Hashable, Sendable {
-    case tpsl(direction: PerpetualDirection, takeProfit: String?, stopLoss: String?, size: String)
-    case cancel(orders: [CancelOrderData])
-}
-
-public struct PerpetualModifyConfirmData: Codable, Equatable, Hashable, Sendable {
-    public let baseAsset: Asset
-    public let assetIndex: Int32
-    public let modifyType: PerpetualModifyType
-
-    public init(
-        baseAsset: Asset,
-        assetIndex: Int32,
-        modifyType: PerpetualModifyType
-    ) {
-        self.baseAsset = baseAsset
-        self.assetIndex = assetIndex
-        self.modifyType = modifyType
-    }
-}
-
 public struct PerpetualMetadata: Codable, Equatable, Hashable, Sendable {
 	public let isPinned: Bool
 
@@ -127,6 +106,63 @@ public struct PerpetualData: Codable, Equatable, Hashable, Sendable {
 		self.perpetual = perpetual
 		self.asset = asset
 		self.metadata = metadata
+	}
+}
+
+public enum PerpetualModifyType: Codable, Equatable, Hashable, Sendable {
+	case tpsl(TPSLOrderData)
+	case cancel([CancelOrderData])
+
+	enum CodingKeys: String, CodingKey, Codable {
+		case tpsl = "Tpsl",
+			cancel = "Cancel"
+	}
+
+	private enum ContainerCodingKeys: String, CodingKey {
+		case type, content
+	}
+
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: ContainerCodingKeys.self)
+		if let type = try? container.decode(CodingKeys.self, forKey: .type) {
+			switch type {
+			case .tpsl:
+				if let content = try? container.decode(TPSLOrderData.self, forKey: .content) {
+					self = .tpsl(content)
+					return
+				}
+			case .cancel:
+				if let content = try? container.decode([CancelOrderData].self, forKey: .content) {
+					self = .cancel(content)
+					return
+				}
+			}
+		}
+		throw DecodingError.typeMismatch(PerpetualModifyType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for PerpetualModifyType"))
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: ContainerCodingKeys.self)
+		switch self {
+		case .tpsl(let content):
+			try container.encode(CodingKeys.tpsl, forKey: .type)
+			try container.encode(content, forKey: .content)
+		case .cancel(let content):
+			try container.encode(CodingKeys.cancel, forKey: .type)
+			try container.encode(content, forKey: .content)
+		}
+	}
+}
+
+public struct PerpetualModifyConfirmData: Codable, Equatable, Hashable, Sendable {
+	public let baseAsset: Asset
+	public let assetIndex: Int32
+	public let modifyType: PerpetualModifyType
+
+	public init(baseAsset: Asset, assetIndex: Int32, modifyType: PerpetualModifyType) {
+		self.baseAsset = baseAsset
+		self.assetIndex = assetIndex
+		self.modifyType = modifyType
 	}
 }
 
@@ -152,6 +188,20 @@ public struct PerpetualPositionsSummary: Codable, Equatable, Hashable, Sendable 
 	}
 }
 
+public struct TPSLOrderData: Codable, Equatable, Hashable, Sendable {
+	public let direction: PerpetualDirection
+	public let takeProfit: String?
+	public let stopLoss: String?
+	public let size: String
+
+	public init(direction: PerpetualDirection, takeProfit: String?, stopLoss: String?, size: String) {
+		self.direction = direction
+		self.takeProfit = takeProfit
+		self.stopLoss = stopLoss
+		self.size = size
+	}
+}
+
 public enum AccountDataType: String, Codable, Equatable, Hashable, Sendable {
 	case activate
 }
@@ -159,12 +209,12 @@ public enum AccountDataType: String, Codable, Equatable, Hashable, Sendable {
 public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 	case open(PerpetualConfirmData)
 	case close(PerpetualConfirmData)
-    case modify(PerpetualModifyConfirmData)
+	case modify(PerpetualModifyConfirmData)
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case open = "Open",
 			close = "Close",
-            modify = "Modify"
+			modify = "Modify"
 	}
 
 	private enum ContainerCodingKeys: String, CodingKey {
@@ -185,13 +235,12 @@ public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 					self = .close(content)
 					return
 				}
-            case .modify:
-                if let content = try? container.decode(PerpetualModifyConfirmData.self, forKey: .content) {
-                    self = .modify(content)
-                    return
-                }
+			case .modify:
+				if let content = try? container.decode(PerpetualModifyConfirmData.self, forKey: .content) {
+					self = .modify(content)
+					return
+				}
 			}
-
 		}
 		throw DecodingError.typeMismatch(PerpetualType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for PerpetualType"))
 	}
@@ -205,9 +254,9 @@ public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 		case .close(let content):
 			try container.encode(CodingKeys.close, forKey: .type)
 			try container.encode(content, forKey: .content)
-        case .modify(let content):
-            try container.encode(CodingKeys.modify, forKey: .type)
-            try container.encode(content, forKey: .content)
+		case .modify(let content):
+			try container.encode(CodingKeys.modify, forKey: .type)
+			try container.encode(content, forKey: .content)
 		}
 	}
 }

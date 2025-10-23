@@ -84,7 +84,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .close(let data): direction = data.direction
             case .modify(let data):
                 switch data.modifyType {
-                case .tpsl(let dir, _, _, _): direction = dir
+                case .tpsl(let data): direction = data.direction
                 case .cancel: direction = .long // for cancel operations direction not uses
                 }
             }

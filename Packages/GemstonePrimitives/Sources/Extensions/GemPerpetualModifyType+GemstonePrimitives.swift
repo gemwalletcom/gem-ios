@@ -7,10 +7,16 @@ import Primitives
 extension Gemstone.PerpetualModifyType {
     public func map() throws -> Primitives.PerpetualModifyType {
         switch self {
-        case .tpsl(let direction, let takeProfit, let stopLoss, let size):
-            .tpsl(direction: try direction.map(), takeProfit: takeProfit, stopLoss: stopLoss, size: size)
+        case .tpsl(let tpslData):
+            let primitiveData = Primitives.TPSLOrderData(
+                direction: tpslData.direction.map(),
+                takeProfit: tpslData.takeProfit,
+                stopLoss: tpslData.stopLoss,
+                size: tpslData.size
+            )
+            return .tpsl(primitiveData)
         case .cancel(let orders):
-            .cancel(orders: try orders.map { try $0.map() })
+            return .cancel(try orders.map { try $0.map() })
         }
     }
 }
@@ -18,10 +24,16 @@ extension Gemstone.PerpetualModifyType {
 extension Primitives.PerpetualModifyType {
     public func map() -> Gemstone.PerpetualModifyType {
         switch self {
-        case .tpsl(let direction, let takeProfit, let stopLoss, let size):
-            .tpsl(direction: direction.map(), takeProfit: takeProfit, stopLoss: stopLoss, size: size)
+        case .tpsl(let data):
+            let gemstoneData = Gemstone.TpslOrderData(
+                direction: data.direction.map(),
+                takeProfit: data.takeProfit,
+                stopLoss: data.stopLoss,
+                size: data.size
+            )
+            return .tpsl(gemstoneData)
         case .cancel(let orders):
-            .cancel(orders: orders.map { $0.map() })
+            return .cancel(orders.map { $0.map() })
         }
     }
 }
