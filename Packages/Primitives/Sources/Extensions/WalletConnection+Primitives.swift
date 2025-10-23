@@ -8,12 +8,6 @@ extension WalletConnection: Identifiable {
 
 public extension WCSuiTransaction {
     var walletAddress: String {
-        if let wallet = account {
-            return wallet
-        } else if let wallet = address {
-            return wallet
-        } else {
-            return ""
-        }
+        return account ?? address ?? ""
     }
 }
