@@ -5,6 +5,7 @@ import Foundation
 import protocol Gemstone.AlienProvider
 import struct Gemstone.AlienResponse
 import struct Gemstone.AlienTarget
+import struct Gemstone.AlienResponse
 import enum Gemstone.AlienError
 import typealias Gemstone.Chain
 import Primitives
@@ -37,28 +38,29 @@ public struct StaticNode: NodeURLFetchable {
         self.url = url
     }
 
-    public func node(for chain: Primitives.Chain) -> URL { url
+    public func node(for chain: Primitives.Chain) -> URL {
+        url
     }
 }
 
 extension NativeProvider: AlienProvider {
     public func request(target: AlienTarget) async throws -> AlienResponse {
-        if let data = await cache.get(key: target.cacheKey) {
+        if let data = await self.cache.get(key: target.cacheKey) {
             return AlienResponse(status: 200, data: data)
         }
 
-        let (data, response) = try await session.data(for: target.asRequest())
+        let (data, response) = try await self.session.data(for: target.asRequest())
         let statusCode = (response as? HTTPURLResponse)?.statusCode
 
         if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {
-            await cache.set(key: target.cacheKey, value: data, ttl: Duration.seconds(duration))
+            await self.cache.set(key: target.cacheKey, value: data, ttl: Duration.seconds(duration))
         }
 
         return AlienResponse(status: statusCode.map(UInt16.init), data: data)
     }
 
     public nonisolated func getEndpoint(chain: Chain) throws -> String {
-        nodeProvider.node(for: try Primitives.Chain(id: chain)).absoluteString
+        self.nodeProvider.node(for: try Primitives.Chain(id: chain)).absoluteString
     }
 }
 
