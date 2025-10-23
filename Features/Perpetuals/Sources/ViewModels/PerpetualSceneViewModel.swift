@@ -42,6 +42,7 @@ public final class PerpetualSceneViewModel {
     let preference = Preferences.standard
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingModifyAlert: Bool?
+    public var isPresentingAutoclose: Bool = false
 
     public let perpetualViewModel: PerpetualViewModel
 
@@ -134,6 +135,14 @@ public extension PerpetualSceneViewModel {
 
     func onSelectOpenInterestInfo() {
         isPresentingInfoSheet = .openInterest
+    }
+
+    func onSelectAutoclose() {
+        isPresentingAutoclose = true
+    }
+
+    func onSelectAutocloseInfo() {
+        isPresentingInfoSheet = .autoclose
     }
 
     func onModifyPosition() {
@@ -243,6 +252,13 @@ public extension PerpetualSceneViewModel {
             onOpenShortPosition(.reduce(available: available))
         case .short:
             onOpenLongPosition(.reduce(available: available))
+        }
+    }
+
+    func onAutocloseComplete() {
+        isPresentingAutoclose = false
+        Task {
+            await fetch()
         }
     }
 }

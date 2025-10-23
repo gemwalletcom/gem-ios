@@ -26,6 +26,8 @@
 		834EC80A2D7F1FCD00D8FA39 /* WalletSessionService in Frameworks */ = {isa = PBXBuildFile; productRef = 834EC8092D7F1FCD00D8FA39 /* WalletSessionService */; };
 		8352B1042D52C73B0059EB27 /* WalletsService in Frameworks */ = {isa = PBXBuildFile; productRef = 8352B1032D52C73B0059EB27 /* WalletsService */; };
 		8352C8D52D393E05000DEDD9 /* ExplorerService in Frameworks */ = {isa = PBXBuildFile; productRef = 8352C8D42D393E05000DEDD9 /* ExplorerService */; };
+		8358DBBD2EA6AD31007A4DC7 /* AutocloseNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8358DBBC2EA6AD31007A4DC7 /* AutocloseNavigationStack.swift */; };
+		8358DBBF2EA6AE59007A4DC7 /* PerpetualNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8358DBBE2EA6AE59007A4DC7 /* PerpetualNavigationView.swift */; };
 		8361BB5F2D3FDE73008D89CF /* BalanceService in Frameworks */ = {isa = PBXBuildFile; productRef = 8361BB5E2D3FDE73008D89CF /* BalanceService */; };
 		8361BB612D3FE5F2008D89CF /* Transactions in Frameworks */ = {isa = PBXBuildFile; productRef = 8361BB602D3FE5F2008D89CF /* Transactions */; };
 		8361BB6A2D400DB6008D89CF /* TransactionsService in Frameworks */ = {isa = PBXBuildFile; productRef = 8361BB692D400DB6008D89CF /* TransactionsService */; };
@@ -185,6 +187,8 @@
 		8349F1452D5E4D04003A0A93 /* ManageWallets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ManageWallets; sourceTree = "<group>"; };
 		834B38182D1D858D009D58D4 /* LockManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = LockManager; sourceTree = "<group>"; };
 		83518CCC2D1C998300B339E5 /* PrimitivesComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PrimitivesComponents; sourceTree = "<group>"; };
+		8358DBBC2EA6AD31007A4DC7 /* AutocloseNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocloseNavigationStack.swift; sourceTree = "<group>"; };
+		8358DBBE2EA6AE59007A4DC7 /* PerpetualNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerpetualNavigationView.swift; sourceTree = "<group>"; };
 		8361BB5C2D3FDBF1008D89CF /* Transactions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transactions; sourceTree = "<group>"; };
 		836281AD2DEF32F600CA5C75 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Assets; sourceTree = "<group>"; };
 		837A1E6A2D0B029200733AC1 /* AppResolver+ViewInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+ViewInjection.swift"; sourceTree = "<group>"; };
@@ -643,6 +647,8 @@
 		D83BDCB62E3E878A00E41807 /* Perpetuals */ = {
 			isa = PBXGroup;
 			children = (
+				8358DBBE2EA6AE59007A4DC7 /* PerpetualNavigationView.swift */,
+				8358DBBC2EA6AD31007A4DC7 /* AutocloseNavigationStack.swift */,
 				D83BDCB52E3E878A00E41807 /* PerpetualPositionNavigationStack.swift */,
 			);
 			path = Perpetuals;
@@ -1053,8 +1059,10 @@
 				83B08BDB2D0B4AE200CA1B33 /* AppResolver+Storages.swift in Sources */,
 				D807004E2BBB283400ED770B /* WalletNavigationStack.swift in Sources */,
 				D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */,
+				8358DBBF2EA6AE59007A4DC7 /* PerpetualNavigationView.swift in Sources */,
 				D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */,
 				D83BDCB72E3E878A00E41807 /* PerpetualPositionNavigationStack.swift in Sources */,
+				8358DBBD2EA6AD31007A4DC7 /* AutocloseNavigationStack.swift in Sources */,
 				D807004A2BBB1FB600ED770B /* SettingsNavigationStack.swift in Sources */,
 				D8C4A3A52C9696FE006FABE8 /* AssetNavigationView.swift in Sources */,
 				D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */,

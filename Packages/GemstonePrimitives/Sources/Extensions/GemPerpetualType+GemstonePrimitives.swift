@@ -9,6 +9,7 @@ extension Gemstone.PerpetualType {
         switch self {
         case .open(let confirmData): .open(try confirmData.map())
         case .close(let confirmData): .close(try confirmData.map())
+        case .modify(let data): .modify(try data.map())
         }
     }
 }
@@ -18,6 +19,7 @@ extension Primitives.PerpetualType {
         switch self {
         case .open(let confirmData): .open(confirmData.map())
         case .close(let confirmData): .close(confirmData.map())
+        case .modify(let data): .modify(data.map())
         }
     }
 }

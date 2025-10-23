@@ -56,11 +56,10 @@ struct TransferDataViewModel {
                 case .long: Localized.Perpetual.long
             }
             case .close: Localized.Perpetual.closePosition
+            case .modify(_): "Modify position" // TODO: - Add localization
             }
         }
     }
-
-    
 
     var websiteURL: URL? {
         switch type {
