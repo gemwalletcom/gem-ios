@@ -147,7 +147,9 @@ public struct AssetScene: View {
                 TransactionsList(
                     explorerService: model.explorerService,
                     model.transactions,
-                    currency: model.assetDataModel.currencyCode
+                    currency: model.assetDataModel.currencyCode,
+                    filterButtonAction: model.onSelectFilterButton,
+                    isFilterActive: model.filterModel.isAnyFilterSpecified
                 )
                 .listRowInsets(.assetListRowInsets)
             } else {

@@ -24,7 +24,7 @@ struct AssetNavigationView: View {
         )
         .observeQuery(request: $model.input.assetRequest, value: $model.assetData)
         .observeQuery(request: $model.input.bannersRequest, value: $model.banners)
-        .observeQuery(request: $model.input.transactionsRequest, value: $model.transactions)
+        .observeQuery(request: $model.filterModel.request, value: $model.transactions)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: model.onTogglePriceAlert) {
@@ -54,6 +54,9 @@ struct AssetNavigationView: View {
             case let .url(url):
                 SFSafariView(url: url)
             }
+        }
+        .sheet(isPresented: $model.isPresentingFilterView) {
+            AssetTransactionsFilterScene(model: $model.filterModel)
         }
     }
 }

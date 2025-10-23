@@ -25,6 +25,7 @@ let package = Package(
         .package(name: "Blockchain", path: "../../Packages/Blockchain"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "QRScanner", path: "../QRScanner"),
+        .package(name: "Transactions", path: "../Transactions"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices")
     ],
@@ -43,6 +44,7 @@ let package = Package(
                 "Blockchain",
                 "InfoSheet",
                 "QRScanner",
+                "Transactions",
                 .product(name: "PriceAlertService", package: "FeatureServices"),
                 .product(name: "ExplorerService", package: "ChainServices"),
                 .product(name: "AssetsService", package: "FeatureServices"),

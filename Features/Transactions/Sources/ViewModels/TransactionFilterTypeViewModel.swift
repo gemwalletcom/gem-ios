@@ -4,14 +4,14 @@ import Foundation
 import Primitives
 import Localization
 
-struct TransactionFilterTypeViewModel {
+public struct TransactionFilterTypeViewModel {
     private let type: TransactionFilterType
 
-    init(type: TransactionFilterType) {
+    public init(type: TransactionFilterType) {
         self.type = type
     }
 
-    var title: String {
+    public var title: String {
         switch type {
         case .transfers: Localized.Transfer.title
         case .smartContract: Localized.Transfer.SmartContract.title

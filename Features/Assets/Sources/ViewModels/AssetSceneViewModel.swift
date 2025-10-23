@@ -15,6 +15,7 @@ import WalletsService
 import PriceService
 import BannerService
 import Formatters
+import Transactions
 
 @Observable
 @MainActor
@@ -34,6 +35,7 @@ public final class AssetSceneViewModel: Sendable {
 
     public var isPresentingToastMessage: ToastMessage?
     public var isPresentingAssetSheet: AssetSheetType?
+    public var isPresentingFilterView: Bool = false
 
     public var input: AssetSceneInput
     public var assetData: AssetData
@@ -41,6 +43,8 @@ public final class AssetSceneViewModel: Sendable {
     public var banners: [Banner] = []
     private var asset: Asset { assetData.asset }
     private var wallet: Wallet { walletModel.wallet }
+
+    public var filterModel: TransactionsFilterViewModel
 
     public init(
         walletsService: WalletsService,
@@ -62,6 +66,11 @@ public final class AssetSceneViewModel: Sendable {
         self.input = input
         self.assetData = AssetData.with(asset: input.asset)
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
+
+        self.filterModel = TransactionsFilterViewModel(
+            wallet: input.wallet,
+            type: .asset(assetId: input.asset.id)
+        )
     }
 
     public var title: String { assetModel.name }
@@ -124,11 +133,15 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     var emptyContentModel: EmptyContentTypeViewModel {
-        let buy = assetData.metadata.isBuyEnabled ? onSelectBuy : nil
-        let swap = buy == nil && assetData.metadata.isSwapEnabled ? onSelectSwap : nil
-        return EmptyContentTypeViewModel(
-            type: .asset(symbol: assetModel.symbol, buy: buy, swap: swap, isViewOnly: wallet.isViewOnly)
-        )
+        if filterModel.isAnyFilterSpecified {
+            return EmptyContentTypeViewModel(type: .search(type: .activity, action: onSelectCleanFilters))
+        } else {
+            let buy = assetData.metadata.isBuyEnabled ? onSelectBuy : nil
+            let swap = buy == nil && assetData.metadata.isSwapEnabled ? onSelectSwap : nil
+            return EmptyContentTypeViewModel(
+                type: .asset(symbol: assetModel.symbol, buy: buy, swap: swap, isViewOnly: wallet.isViewOnly)
+            )
+        }
     }
 
     var assetDataModel: AssetDataViewModel {
@@ -319,6 +332,14 @@ extension AssetSceneViewModel {
                 await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: isEnabled)
             }
         }
+    }
+
+    public func onSelectFilterButton() {
+        isPresentingFilterView = true
+    }
+
+    private func onSelectCleanFilters() {
+        filterModel.transactionTypesFilter.selectedTypes = []
     }
 }
 

@@ -2,6 +2,8 @@
 
 import SwiftUI
 import Primitives
+import Components
+import Style
 
 public struct TransactionsList: View {
 
@@ -9,6 +11,8 @@ public struct TransactionsList: View {
     let showSections: Bool
     let explorerService: any ExplorerLinkFetchable
     let currency: String
+    let filterButtonAction: (() -> Void)?
+    let isFilterActive: Bool
 
     var groupedByDate: [Date: [Primitives.TransactionExtended]] {
         Dictionary(grouping: transactions, by: {
@@ -24,19 +28,23 @@ public struct TransactionsList: View {
         explorerService: any ExplorerLinkFetchable,
         _ transactions: [Primitives.TransactionExtended],
         currency: String,
-        showSections: Bool = true
+        showSections: Bool = true,
+        filterButtonAction: (() -> Void)? = nil,
+        isFilterActive: Bool = false
     ) {
         self.explorerService = explorerService
         self.transactions = transactions
         self.currency =  currency
         self.showSections = showSections
+        self.filterButtonAction = filterButtonAction
+        self.isFilterActive = isFilterActive
     }
 
     public var body: some View {
         if showSections {
-            ForEach(headers, id: \.self) { header in
+            ForEach(headers.enumerated().map { $0 }, id: \.element) { index, header in
                 Section(
-                    header: Text(TransactionDateFormatter(date: header).section)
+                    header: sectionHeader(for: header, isFirst: index == 0)
                 ) {
                     TransactionsListView(
                         explorerService: explorerService,
@@ -51,6 +59,20 @@ public struct TransactionsList: View {
                 transactions: transactions,
                 currency: currency
             )
+        }
+    }
+
+    @ViewBuilder
+    private func sectionHeader(for date: Date, isFirst: Bool) -> some View {
+        if isFirst, let action = filterButtonAction {
+            HStack {
+                Text(TransactionDateFormatter(date: date).section)
+                Spacer()
+                FilterButton(isActive: isFilterActive, action: action)
+                    .foregroundStyle(Colors.gray)
+            }
+        } else {
+            Text(TransactionDateFormatter(date: date).section)
         }
     }
 }
