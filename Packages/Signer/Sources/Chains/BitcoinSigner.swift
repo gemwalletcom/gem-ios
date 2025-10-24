@@ -38,12 +38,8 @@ public struct BitcoinSigner: Signable {
         let opReturnData: Data = switch data.quote.providerData.provider {
         case .thorchain:
             try data.data.data.encodedData()
-        case .chainflip: try {
-                guard let data = Data(hexString: data.data.data) else {
-                    throw AnyError("Invalid Chainflip swap data")
-                }
-                return data
-            }()
+        case .chainflip:
+            try Data.from(hex: data.data.data)
         default: fatalError()
         }
 
@@ -52,6 +48,7 @@ public struct BitcoinSigner: Signable {
                 if let opReturnIndex = opReturnIndex {
                     signingInput.outputOpReturnIndex.index = opReturnIndex
                 }
+                signingInput.toAddress = data.data.to
                 signingInput.outputOpReturn = opReturnData
             }
         ]
