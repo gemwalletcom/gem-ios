@@ -45,14 +45,7 @@ public struct TransactionInputViewModel: Sendable {
     }
 
     var infoModel: TransactionInfoViewModel {
-        let asset: Asset
-
-        switch data.type {
-        case .transferNft(let nftAsset):
-            asset = nftAsset.chain.asset
-        default:
-            asset = data.type.asset
-        }
+        let asset = data.type.asset
 
         return TransactionInfoViewModel(
             currency: preferences.currency,
