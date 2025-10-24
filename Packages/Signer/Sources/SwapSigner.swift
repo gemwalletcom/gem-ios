@@ -16,7 +16,7 @@ public struct SwapSigner {
 //        }
         switch data.quote.providerData.provider {
         case .nearIntents: true
-        case .thorchain: [ChainType.bitcoin, ChainType.tron].contains(fromAsset.chain.type)
+        case .thorchain: [ChainType.bitcoin, ChainType.tron, ChainType.xrp].contains(fromAsset.chain.type)
         default: false
         }
     }
