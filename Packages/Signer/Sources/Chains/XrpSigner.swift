@@ -94,6 +94,10 @@ public struct XrpSigner: Signable {
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let (_, _, data) = try input.type.swap()
         
+        guard let memo = data.data.memo else {
+            throw AnyError("memo not provided")
+        }
+        
         switch data.quote.providerData.provider {
         case .thorchain:
             let json = """
@@ -104,7 +108,7 @@ public struct XrpSigner: Signable {
                         "Memos": [
                             {
                                 "Memo": {
-                                    "MemoData": "\(Data(data.data.data.remove0x.utf8).hexString.remove0x)"
+                                    "MemoData": "\(Data(memo.remove0x.utf8).hexString.remove0x)"
                                 }
                             }
                         ]
