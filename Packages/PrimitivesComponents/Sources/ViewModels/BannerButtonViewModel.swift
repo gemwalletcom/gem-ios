@@ -24,7 +24,7 @@ struct BannerButtonViewModel: Identifiable {
     var style: ColorButtonStyle {
         switch button {
         case .buy: .blue(paddingVertical: .small)
-        case .receive: .lightGray(paddingVertical: .small)
+        case .receive: .empty(paddingVertical: .small)
         }
     }
     
