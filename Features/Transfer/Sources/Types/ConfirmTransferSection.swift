@@ -6,7 +6,6 @@ import Components
 import PrimitivesComponents
 import Swap
 import Primitives
-import Perpetuals
 
 enum ConfirmTransferSectionType: String, Identifiable, Equatable {
     case header

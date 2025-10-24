@@ -491,3 +491,5 @@
 "stake.delegations" = "Delegationen";
 "info.stake.apr.description" = "Der effektive Jahreszins (APR) ist der jährliche Belohnungssatz für das Staking Ihrer Kryptowährung.";
 "receive.warning" = "Senden Sie nur ** %@ ** im ** %@ **-Netzwerk an diese Adresse.";
+"perpetual.leverage" = "Hebelwirkung";
+"perpetual.direction" = "Richtung";

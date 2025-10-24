@@ -12,7 +12,6 @@ import InfoSheet
 import Validators
 import SwiftUI
 import Swap
-import Perpetuals
 
 @Observable
 @MainActor

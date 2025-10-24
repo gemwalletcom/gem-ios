@@ -3,8 +3,6 @@
 import Foundation
 import SwiftUI
 import Components
-import PrimitivesComponents
-import InfoSheet
 import Localization
 import Primitives
 
@@ -20,7 +18,7 @@ public struct PerpetualDetailsView: View {
             Section {
                 ListItemView(
                     title: model.directionTitle,
-                    subtitle: model.directionText,
+                    subtitle: model.directionViewModel.title,
                     subtitleStyle: model.listItemModel.subtitleStyle
                 )
 

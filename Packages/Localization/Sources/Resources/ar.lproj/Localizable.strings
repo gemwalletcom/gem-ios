@@ -491,3 +491,5 @@
 "stake.delegations" = "التفويضات";
 "info.stake.apr.description" = "معدل النسبة السنوية (APR) هو معدل المكافأة السنوي لمراهنة العملة المشفرة الخاصة بك.";
 "receive.warning" = "أرسل فقط ** %@ ** على شبكة ** %@ ** إلى هذا العنوان.";
+"perpetual.leverage" = "الرافعة المالية";
+"perpetual.direction" = "اتجاه";

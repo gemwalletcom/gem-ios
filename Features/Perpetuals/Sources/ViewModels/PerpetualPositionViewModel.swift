@@ -40,10 +40,7 @@ public struct PerpetualPositionViewModel {
     }
     
     public var directionText: String {
-        switch data.position.direction {
-        case .short: Localized.Perpetual.short
-        case .long: Localized.Perpetual.long
-        }
+        PerpetualDirectionViewModel(direction: data.position.direction).title
     }
     
     public var positionTypeText: String {
@@ -51,7 +48,7 @@ public struct PerpetualPositionViewModel {
     }
     
     public var positionTypeColor: Color {
-        data.position.direction.color
+        PerpetualDirectionViewModel(direction: data.position.direction).color
     }
     
     public var pnlViewModel: PnLViewModel {

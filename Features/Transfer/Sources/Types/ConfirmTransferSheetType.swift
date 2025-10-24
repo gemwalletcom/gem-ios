@@ -4,7 +4,7 @@ import Foundation
 import InfoSheet
 import Primitives
 import Components
-import Perpetuals
+import PrimitivesComponents
 
 enum ConfirmTransferSheetType: Identifiable, Sendable {
     case info(InfoSheetType)

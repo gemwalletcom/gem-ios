@@ -4,9 +4,7 @@ import Foundation
 import Localization
 import Primitives
 import Formatters
-import PrimitivesComponents
 import Components
-import InfoSheet
 import Style
 import SwiftUI
 
@@ -23,20 +21,16 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
     public var listItemModel: ListItemModel {
         ListItemModel(
             title: Localized.Common.details,
-            subtitle: pnlText ?? directionText,
-            subtitleStyle: pnlText == nil ? TextStyle(font: .callout, color: data.direction.color) : pnlTextStyle
+            subtitle: pnlText ?? String(format: "%@ %@", directionViewModel.title, leverageText),
+            subtitleStyle: pnlText == nil ? directionTextStyle : pnlTextStyle
         )
     }
 
-    var directionTitle: String { "Direction" }
-    var directionText: String {
-        switch data.direction {
-        case .long: Localized.Perpetual.long
-        case .short: Localized.Perpetual.short
-        }
-    }
+    var directionTitle: String { Localized.Perpetual.direction }
+    var directionViewModel: PerpetualDirectionViewModel { PerpetualDirectionViewModel(direction: data.direction) }
+    var directionTextStyle: TextStyle { TextStyle(font: .callout, color: directionViewModel.color) }
 
-    var leverageTitle: String { "Leverage" }
+    var leverageTitle: String { Localized.Perpetual.leverage}
     var leverageText: String { "\(data.leverage)x" }
 
     var slippageTitle: String { Localized.Swap.slippage }

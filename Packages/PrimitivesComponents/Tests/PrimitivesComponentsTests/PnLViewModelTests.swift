@@ -4,22 +4,14 @@ import Testing
 import Formatters
 import Primitives
 import Style
-@testable import Perpetuals
+@testable import PrimitivesComponents
 
 struct PnLViewModelTests {
 
     @Test
-    func textPositivePnL() {
-        #expect(PnLViewModel.mock(pnl: 500, marginAmount: 1000).text == "+$500.00 (50.00%)")
-    }
-
-    @Test
-    func textNegativePnL() {
+    func textPnL() {
+        #expect(PnLViewModel.mock(pnl: 500, marginAmount: 1000).text == "+$500.00 (+50.00%)")
         #expect(PnLViewModel.mock(pnl: -200, marginAmount: 1000).text == "-$200.00 (-20.00%)")
-    }
-
-    @Test
-    func textNilPnL() {
         #expect(PnLViewModel.mock(pnl: nil, marginAmount: 1000).text == nil)
     }
 
@@ -28,15 +20,7 @@ struct PnLViewModelTests {
         #expect(PnLViewModel.mock(pnl: 100, marginAmount: 1000).percent == 10.0)
         #expect(PnLViewModel.mock(pnl: -50, marginAmount: 1000).percent == -5.0)
         #expect(PnLViewModel.mock(pnl: 0, marginAmount: 1000).percent == 0.0)
-    }
-
-    @Test
-    func percentZeroMargin() {
         #expect(PnLViewModel.mock(pnl: 100, marginAmount: 0).percent == 0.0)
-    }
-
-    @Test
-    func percentNilPnL() {
         #expect(PnLViewModel.mock(pnl: nil, marginAmount: 1000).percent == 0.0)
     }
 

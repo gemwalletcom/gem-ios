@@ -94,10 +94,8 @@ public struct PerpetualOrderFactory {
     ) -> Double {
         let slippageFraction = slippage / 100.0
         let multiplier: Double = switch (direction, action) {
-        case (.long, .open): 1.0 + slippageFraction
-        case (.long, .close): 1.0 - slippageFraction
-        case (.short, .open): 1.0 - slippageFraction
-        case (.short, .close): 1.0 + slippageFraction
+        case (.long, .open), (.short, .close): 1.0 + slippageFraction
+        case (.long, .close), (.short, .open): 1.0 - slippageFraction
         }
         return marketPrice * multiplier
     }

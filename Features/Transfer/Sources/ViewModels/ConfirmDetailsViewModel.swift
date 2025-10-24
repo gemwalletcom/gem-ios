@@ -4,7 +4,6 @@ import Primitives
 import PrimitivesComponents
 import Components
 import Swap
-import Perpetuals
 
 struct ConfirmDetailsViewModel {
     private let type: TransferDataType

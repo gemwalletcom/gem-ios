@@ -8,7 +8,6 @@ import InfoSheet
 import PrimitivesComponents
 import FiatConnect
 import Swap
-import Perpetuals
 
 public struct ConfirmTransferScene: View {
     @State private var model: ConfirmTransferSceneViewModel

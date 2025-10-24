@@ -491,3 +491,5 @@
 "stake.delegations" = "Delegazioni";
 "info.stake.apr.description" = "Il tasso percentuale annuo (APR) è il tasso di ricompensa annuale per lo staking della tua criptovaluta.";
 "receive.warning" = "Invia solo ** %@ ** sulla rete ** %@ ** a questo indirizzo.";
+"perpetual.leverage" = "Leva";
+"perpetual.direction" = "Direzione";
