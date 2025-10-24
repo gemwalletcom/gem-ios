@@ -1,11 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import BigInt
 
 public struct PerpetualRecipientData: Codable, Equatable, Hashable, Sendable {
     public let recipient: RecipientData
     public let data: PerpetualTransferData
-    
+
     public init(recipient: RecipientData, data: PerpetualTransferData) {
         self.recipient = recipient
         self.data = data
@@ -18,6 +19,11 @@ extension PerpetualRecipientData: Identifiable {
     }
 }
 
+public enum PerpetualPositionMode: Codable, Equatable, Hashable, Sendable {
+    case open
+    case reduce(available: BigInt)
+}
+
 public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
     public let provider: PerpetualProvider
     public let direction: PerpetualDirection
@@ -26,7 +32,8 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
     public let assetIndex: Int
     public let price: Double
     public let leverage: Int
-    
+    public let positionMode: PerpetualPositionMode // TODO: Better split perpetuals to different types open / close / reduce
+
     public init(
         provider: PerpetualProvider,
         direction: PerpetualDirection,
@@ -34,7 +41,8 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
         baseAsset: Asset,
         assetIndex: Int,
         price: Double,
-        leverage: Int
+        leverage: Int,
+        positionMode: PerpetualPositionMode
     ) {
         self.provider = provider
         self.direction = direction
@@ -43,6 +51,7 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
         self.assetIndex = assetIndex
         self.price = price
         self.leverage = leverage
+        self.positionMode = positionMode
     }
 }
 

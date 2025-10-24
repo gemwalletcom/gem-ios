@@ -16,7 +16,7 @@ public struct SwapSigner {
     }
 
     func transferSwapInput(input: SignerInput, fromAsset: Asset, swapData: SwapData) throws -> SignerInput {
-        return SignerInput(
+        SignerInput(
             type: .transfer(fromAsset),
             asset: fromAsset,
             value: swapData.quote.fromValueBigInt,

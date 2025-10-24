@@ -12,6 +12,7 @@ import SwiftUI
 import Formatters
 import ExplorerService
 import Preferences
+import BigInt
 
 @Observable
 @MainActor
@@ -163,7 +164,7 @@ public extension PerpetualSceneViewModel {
         onTransferData?(transferData)
     }
 
-    func onOpenLongPosition() {
+    func onOpenLongPosition(_ positionMode: PerpetualPositionMode = .open) {
         guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
             return
         }
@@ -173,16 +174,17 @@ public extension PerpetualSceneViewModel {
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .long,
                 asset: asset,
-                baseAsset: .hyperliquidUSDC(),
+                baseAsset: .hyperliquidUSDC(), //TODO: use position.baseAsset in the future
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
-                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
+                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3),
+                positionMode: positionMode
             )
         )
         onPerpetualRecipientData?(data)
     }
 
-    func onOpenShortPosition() {
+    func onOpenShortPosition(_ positionMode: PerpetualPositionMode = .open) {
         guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
             return
         }
@@ -192,10 +194,11 @@ public extension PerpetualSceneViewModel {
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .short,
                 asset: asset,
-                baseAsset: .hyperliquidUSDC(),
+                baseAsset: .hyperliquidUSDC(), //TODO: use position.baseAsset in the future
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
-                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
+                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3),
+                positionMode: positionMode
             )
         )
         onPerpetualRecipientData?(data)
@@ -219,15 +222,16 @@ public extension PerpetualSceneViewModel {
     func onReducePosition() {
         isPresentingModifyAlert = false
 
-        guard let direction = positions.first?.position.direction else {
+        guard let position = positions.first?.position else {
             return
         }
+        let available = BigInt(position.marginAmount * pow(10.0, Double(position.baseAsset.decimals)))
 
-        switch direction {
+        switch position.direction {
         case .long:
-            onOpenShortPosition()
+            onOpenShortPosition(.reduce(available: available))
         case .short:
-            onOpenLongPosition()
+            onOpenLongPosition(.reduce(available: available))
         }
     }
 }

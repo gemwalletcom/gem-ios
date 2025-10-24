@@ -18,7 +18,7 @@ public struct ConnectionProposalScene: View {
         List {
             Section { } header: {
                 VStack(alignment: .center) {
-                    AsyncImageView(url: model.imageUrl, size: 64)
+                    AsyncImageView(url: model.imageUrl, size: .image.semiLarge)
                 }
                 .padding(.top, 8)
             }

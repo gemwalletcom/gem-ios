@@ -3,6 +3,7 @@ import Primitives
 
 public enum SignMessage {
     case typed(String)
+    case raw(Data)
 }
 
 public protocol Signable {

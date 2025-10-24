@@ -3,8 +3,8 @@
 import Foundation
 import Primitives
 
-extension TransferDataType {
-    public var asset: Asset {
+public extension TransferDataType {
+    var asset: Asset {
         switch self {
         case .transfer(let asset),
              .deposit(let asset),
