@@ -73,7 +73,7 @@ public struct CosmosSigner: Signable {
         let messages = try [getSwapMessage(input: input, chain: chain, data: data.data, chainName: "THOR", symbol: input.asset.symbol)]
         
         return [
-            try sign(input: input, messages: messages, chain: chain, memo: data.data.data, privateKey: privateKey),
+            try sign(input: input, messages: messages, chain: chain, memo: data.data.memo, privateKey: privateKey),
         ]
     }
     
@@ -213,6 +213,9 @@ public struct CosmosSigner: Signable {
                 }
             }
         case .thorchain:
+            guard let memo = data.memo else {
+                throw AnyError("no memo provided")
+            }
             return CosmosMessage.with {
                 $0.thorchainDepositMessage = CosmosMessage.THORChainDeposit.with {
                     $0.coins = [
@@ -225,7 +228,7 @@ public struct CosmosSigner: Signable {
                             }
                         }
                     ]
-                    $0.memo = data.data
+                    $0.memo = memo
                     $0.signer = AnyAddress(string: input.senderAddress, coin: chain.chain.coinType)!.data
                 }
             }
