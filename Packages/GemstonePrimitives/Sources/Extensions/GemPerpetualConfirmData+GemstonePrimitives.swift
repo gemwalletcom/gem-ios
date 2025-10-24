@@ -12,7 +12,13 @@ extension Gemstone.PerpetualConfirmData {
             assetIndex: assetIndex,
             price: price,
             fiatValue: fiatValue,
-            size: size
+            size: size,
+            slippage: slippage,
+            leverage: leverage,
+            pnl: pnl,
+            entryPrice: entryPrice,
+            marketPrice: marketPrice,
+            marginAmount: marginAmount
         )
     }
 }
@@ -25,7 +31,13 @@ extension Primitives.PerpetualConfirmData {
             assetIndex: assetIndex,
             price: price,
             fiatValue: fiatValue,
-            size: size
+            size: size,
+            slippage: slippage,
+            leverage: leverage,
+            pnl: pnl,
+            entryPrice: entryPrice,
+            marketPrice: marketPrice,
+            marginAmount: marginAmount
         )
     }
 }

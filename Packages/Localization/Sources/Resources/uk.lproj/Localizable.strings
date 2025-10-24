@@ -491,3 +491,5 @@
 "stake.delegations" = "Делегації";
 "info.stake.apr.description" = "Річна процентна ставка (APR) – це річна ставка винагороди за стейкінг вашої криптовалюти.";
 "receive.warning" = "Надсилати лише ** %@ ** через мережу ** %@ ** на цю адресу.";
+"perpetual.leverage" = "Кредитне плече";
+"perpetual.direction" = "Напрямок";

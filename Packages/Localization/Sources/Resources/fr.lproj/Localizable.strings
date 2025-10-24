@@ -491,3 +491,5 @@
 "stake.delegations" = "Délégations";
 "info.stake.apr.description" = "Le taux annuel en pourcentage (APR) est le taux de récompense annuel pour le jalonnement de votre crypto-monnaie.";
 "receive.warning" = "Envoyez uniquement ** %@ ** sur le réseau ** %@ ** à cette adresse.";
+"perpetual.leverage" = "Effet de levier";
+"perpetual.direction" = "Direction";

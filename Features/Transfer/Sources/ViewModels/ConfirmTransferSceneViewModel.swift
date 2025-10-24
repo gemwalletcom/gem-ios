@@ -95,8 +95,8 @@ public final class ConfirmTransferSceneViewModel {
         )
     }
 
-    var swapDetailsViewModel: ConfirmSwapDetailsViewModel {
-        ConfirmSwapDetailsViewModel(type: data.type, metadata: metadata)
+    var detailsViewModel: ConfirmDetailsViewModel {
+        ConfirmDetailsViewModel(type: data.type, metadata: metadata)
     }
 }
 
@@ -106,7 +106,7 @@ extension ConfirmTransferSceneViewModel: ListSectionProvideable {
     public var sections: [ListSection<ConfirmTransferItem>] {
         [
             ListSection(type: .header, [.header]),
-            ListSection(type: .details, [.app, .network, .sender, .recipient, .memo, .swapDetails]),
+            ListSection(type: .details, [.app, .network, .sender, .recipient, .memo, .details]),
             ListSection(type: .fee, [.networkFee]),
             ListSection(type: .error, [.error])
         ]
@@ -130,8 +130,8 @@ extension ConfirmTransferSceneViewModel: ListSectionProvideable {
             )
         case .memo:
             ConfirmMemoViewModel(type: data.type, recipientData: data.recipientData)
-        case .swapDetails:
-            swapDetailsViewModel
+        case .details:
+            detailsViewModel
         case .networkFee:
             ConfirmNetworkFeeViewModel(
                 state: state,
@@ -189,6 +189,10 @@ extension ConfirmTransferSceneViewModel {
 
     func onSelectSwapDetails() {
         isPresentingSheet = .swapDetails
+    }
+
+    func onSelectPerpetualDetails(_ model: PerpetualDetailsViewModel) {
+        isPresentingSheet = .perpetualDetails(model)
     }
 
     func onChangeFeePriority(_ priority: FeePriority) async {

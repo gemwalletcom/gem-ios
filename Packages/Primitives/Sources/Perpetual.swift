@@ -68,14 +68,26 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let price: String
 	public let fiatValue: Double
 	public let size: String
+	public let slippage: Double
+	public let leverage: UInt8
+	public let pnl: Double?
+	public let entryPrice: Double?
+	public let marketPrice: Double
+	public let marginAmount: Double
 
-	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String) {
+	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String, slippage: Double, leverage: UInt8, pnl: Double?, entryPrice: Double?, marketPrice: Double, marginAmount: Double) {
 		self.direction = direction
 		self.baseAsset = baseAsset
 		self.assetIndex = assetIndex
 		self.price = price
 		self.fiatValue = fiatValue
 		self.size = size
+		self.slippage = slippage
+		self.leverage = leverage
+		self.pnl = pnl
+		self.entryPrice = entryPrice
+		self.marketPrice = marketPrice
+		self.marginAmount = marginAmount
 	}
 }
 

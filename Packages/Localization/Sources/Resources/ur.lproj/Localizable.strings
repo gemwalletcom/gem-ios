@@ -491,3 +491,5 @@
 "stake.delegations" = "تفویضات";
 "info.stake.apr.description" = "سالانہ فیصدی شرح (APR) آپ کی کریپٹو کرنسی کو داغدار کرنے کے لیے سالانہ انعام کی شرح ہے۔";
 "receive.warning" = "اس ایڈریس پر ** %@ ** نیٹ ورک پر صرف ** %@ ** بھیجیں۔";
+"perpetual.leverage" = "مالی فائدہ اٹھانا";
+"perpetual.direction" = "سمت";

@@ -64,11 +64,16 @@ public struct ConfirmTransferScene: View {
                     }
                 }
             case .swapDetails:
-                if let model = model.swapDetailsViewModel.swapDetailsModel {
+                if case let .swapDetails(model) = model.detailsViewModel.itemModel {
                     NavigationStack {
                         SwapDetailsView(model: Bindable(model))
                             .presentationDetentsForCurrentDeviceSize(expandable: true)
                     }
+                }
+            case .perpetualDetails(let model):
+                NavigationStack {
+                    PerpetualDetailsView(model: model)
+                        .presentationDetentsForCurrentDeviceSize(expandable: true)
                 }
             }
         }
@@ -106,10 +111,15 @@ extension ConfirmTransferScene {
         case let .memo(model):
             ListItemView(model: model)
                 .contextMenu( model.subtitle.map ({ [.copy(value: $0)] }) ?? [] )
-        case .swapDetails(let swapDetailsViewModel):
+        case .swapDetails(let model):
             NavigationCustomLink(
-                with: SwapDetailsListView(model: swapDetailsViewModel),
-                action: model.onSelectSwapDetails
+                with: SwapDetailsListView(model: model),
+                action: { self.model.onSelectSwapDetails() }
+            )
+        case .perpetualDetails(let model):
+            NavigationCustomLink(
+                with: ListItemView(model: model.listItemModel),
+                action: { self.model.onSelectPerpetualDetails(model) }
             )
         case let .networkFee(model):
             NavigationCustomLink(

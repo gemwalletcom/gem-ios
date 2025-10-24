@@ -491,3 +491,5 @@
 "stake.delegations" = "Delegații";
 "info.stake.apr.description" = "Rata anuală procentuală (DAE) este rata anuală de recompensă pentru plasarea criptomonedei tale.";
 "receive.warning" = "Trimiteți doar ** %@ ** prin rețeaua ** %@ ** către această adresă.";
+"perpetual.leverage" = "Efect de levier";
+"perpetual.direction" = "Direcţie";

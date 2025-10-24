@@ -491,3 +491,5 @@
 "stake.delegations" = "Uwakilishi";
 "info.stake.apr.description" = "Kiwango cha Asilimia cha Mwaka (APR) ni kiwango cha tuzo cha kila mwaka cha kuweka sarafu yako ya cryptocurrency.";
 "receive.warning" = "Tuma tu ** %@ ** kwenye mtandao wa ** %@ ** kwa anwani hii.";
+"perpetual.leverage" = "Uvunjaji wa kifedh";
+"perpetual.direction" = "Mwelekeo";

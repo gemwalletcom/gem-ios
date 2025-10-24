@@ -20,6 +20,7 @@ public final class PerpetualSceneViewModel {
     private let perpetualService: PerpetualServiceable
     private let onTransferData: TransferDataAction
     private let onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)?
+    private let perpetualOrderFactory = PerpetualOrderFactory()
 
     public let wallet: Wallet
     public let asset: Asset
@@ -38,7 +39,6 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
-    let formatter = PerpetualPriceFormatter()
     let preference = Preferences.standard
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingModifyAlert: Bool?
@@ -143,28 +143,17 @@ public extension PerpetualSceneViewModel {
     func onClosePosition() {
         guard
             let position = positions.first?.position,
-            let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
-            return
-        }
-        // Add 2% slippage for market-like execution
-        // For closing long: sell 2% below market
-        // For closing short: buy 2% above market
-        let positionPrice = switch position.direction {
-        case .long: perpetualViewModel.perpetual.price * 0.98
-        case .short: perpetualViewModel.perpetual.price * 1.02
-        }
-        
-        let price = formatter.formatPrice(provider: perpetualViewModel.perpetual.provider, positionPrice, decimals: Int(asset.decimals))
-        let size = formatter.formatSize(provider: perpetualViewModel.perpetual.provider, abs(position.size), decimals: Int(asset.decimals))
-        let data = PerpetualConfirmData(
-            direction: position.direction,
-            baseAsset: .hyperliquidUSDC(),
+            let assetIndex = UInt32(perpetualViewModel.perpetual.identifier)
+        else { return }
+
+        let data = perpetualOrderFactory.makeCloseOrder(
             assetIndex: Int32(assetIndex),
-            price: price,
-            fiatValue: abs(position.size) * positionPrice,
-            size: size
+            perpetual: perpetualViewModel.perpetual,
+            position: position,
+            asset: asset,
+            baseAsset: .hyperliquidUSDC()
         )
-        
+
         let transferData = TransferData(
             type: .perpetual(asset, .close(data)),
             recipientData: .hyperliquid(),
