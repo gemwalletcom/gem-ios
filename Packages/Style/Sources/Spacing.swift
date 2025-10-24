@@ -86,6 +86,8 @@ public extension Sizing {
         public static let semiMedium: CGFloat = 34
         /// 44
         public static let medium: CGFloat = 44
+        /// 64
+        public static let semiLarge: CGFloat = 64
         /// 88
         public static let large: CGFloat = 88
         /// 102
@@ -111,18 +113,24 @@ public extension Sizing {
         public static let image: CGFloat = 22
         /// 28
         public static let settings: CGFloat = 28
-        
+
         public struct selected {
             /// 20
             public static let image: CGFloat = 20
         }
-        
+
         public struct assets {
             public static let height: CGFloat = Sizing.image.asset
         }
-    
+
         public struct transactions {
             public static let height: CGFloat = Sizing.image.asset
         }
+    }
+
+    struct shadow {
+        public static let opacity: CGFloat = 0.25
+        public static let radius: CGFloat = 10
+        public static let yOffset: CGFloat = 5
     }
 }

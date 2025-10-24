@@ -14,7 +14,7 @@ public struct ReceiveScene: View {
 
     public var body: some View {
         VStack(spacing: .large) {
-            AssetImageView(assetImage: model.assetModel.assetImage, size: 64)
+            AssetImageView(assetImage: model.assetModel.assetImage, size: .image.semiLarge)
                 .padding(.top, .medium)
 
             HStack(alignment: .bottom, spacing: .tiny) {
@@ -22,7 +22,7 @@ public struct ReceiveScene: View {
                     .textStyle(.headline)
                 if let symbol = model.symbol {
                     Text(symbol)
-                        .textStyle(.subHeadline)
+                        .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
                 }
             }
             .lineLimit(1)
@@ -36,7 +36,7 @@ public struct ReceiveScene: View {
                     .background(
                         RoundedRectangle(cornerRadius: .medium)
                             .fill(Colors.listStyleColor)
-                            .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 5)
+                            .shadow(color: Color.black.opacity(Sizing.shadow.opacity), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
                     )
                 }
                 Text(model.warningMessage)

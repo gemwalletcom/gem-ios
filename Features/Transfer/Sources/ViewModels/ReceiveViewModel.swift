@@ -59,7 +59,10 @@ public final class ReceiveViewModel: Sendable {
     }
     
     var warningMessage: AttributedString {
-        (try? AttributedString(markdown: Localized.Receive.warning(assetModel.symbol, assetModel.networkFullName))) ?? AttributedString()
+        guard let message = try? AttributedString(markdown: Localized.Receive.warning(assetModel.symbol, assetModel.networkFullName)) else {
+            return AttributedString()
+        }
+        return message
     }
 
     var copyModel: CopyTypeViewModel {
