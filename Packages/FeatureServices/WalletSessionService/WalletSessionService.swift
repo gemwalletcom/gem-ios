@@ -28,11 +28,15 @@ public struct WalletSessionService: WalletSessionManageable {
     }
 
     public func setCurrent(index: Int) -> WalletId? {
-        if let wallet = wallets.first(where: { $0.index == index }) {
-            preferences.currentWalletId = wallet.id
-            return wallet.walletId
+        guard let wallet = wallets.first(where: { $0.index == index }) else {
+            return nil
         }
-        return nil
+        if let currentWallet, currentWallet == wallet {
+            return currentWallet.walletId
+        }
+        preferences.currentWalletId = wallet.id
+        
+        return wallet.walletId
     }
 
     public func setCurrent(walletId: WalletId?) {

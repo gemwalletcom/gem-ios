@@ -185,11 +185,8 @@ extension MainTabView {
         do {
             switch notification {
             case let .transaction(walletIndex, assetId, transaction):
-                let walletId: WalletId
-                if walletIndex != model.wallet.index.asInt, let currentWalletId = walletService.setCurrent(for: walletIndex) {
-                    walletId = currentWalletId
-                } else {
-                    walletId = model.walletId
+                guard let walletId = walletService.setCurrent(for: walletIndex) else {
+                    return
                 }
 
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)
