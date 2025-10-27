@@ -190,6 +190,12 @@ extension AssetSceneViewModel {
         Task {
             await updateAsset()
         }
+        
+        if assetData.priceAlerts.isNotEmpty {
+            Task {
+                try await priceAlertService.update(assetId: asset.id.identifier)
+            }
+        }
     }
 
     func fetch() async {
