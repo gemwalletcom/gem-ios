@@ -13,6 +13,7 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
     private let data: PerpetualConfirmData
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
     private let percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
+    private let percentSignLessFormatter = CurrencyFormatter.percentSignLess
 
     public init(data: PerpetualConfirmData) {
         self.data = data
@@ -34,7 +35,7 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
     var leverageText: String { "\(data.leverage)x" }
 
     var slippageTitle: String { Localized.Swap.slippage }
-    var slippageText: String { percentFormatter.string(data.slippage) }
+    var slippageText: String { percentSignLessFormatter.string(data.slippage) }
 
     var marketPriceTitle: String { Localized.PriceAlerts.SetAlert.currentPrice }
     var marketPriceText: String { currencyFormatter.string(data.marketPrice) }
