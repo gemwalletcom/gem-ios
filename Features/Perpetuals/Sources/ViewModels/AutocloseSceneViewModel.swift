@@ -140,7 +140,7 @@ extension AutocloseSceneViewModel {
         let data = PerpetualModifyConfirmData(
             baseAsset: Asset.hyperliquidUSDC(),
             assetIndex: assetIndex,
-            modifyType: .tpsl(tpslData)
+            modifyTypes: [.tpsl(tpslData)]
         )
 
         let transferData = TransferData(
@@ -163,7 +163,7 @@ extension AutocloseSceneViewModel {
         let data = PerpetualModifyConfirmData(
             baseAsset: Asset.hyperliquidUSDC(),
             assetIndex: assetIndex,
-            modifyType: .cancel([cancelOrder])
+            modifyTypes: [.cancel([cancelOrder])]
         )
 
         let transferData = TransferData(

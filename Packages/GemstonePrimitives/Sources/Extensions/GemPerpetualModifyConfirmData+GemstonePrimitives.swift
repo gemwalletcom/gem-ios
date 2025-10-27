@@ -9,7 +9,7 @@ extension Gemstone.PerpetualModifyConfirmData {
         Primitives.PerpetualModifyConfirmData(
             baseAsset: try baseAsset.map(),
             assetIndex: assetIndex,
-            modifyType: try modifyType.map()
+            modifyTypes: try modifyTypes.map { try $0.map() }
         )
     }
 }
@@ -19,7 +19,7 @@ extension Primitives.PerpetualModifyConfirmData {
         Gemstone.PerpetualModifyConfirmData(
             baseAsset: baseAsset.map(),
             assetIndex: assetIndex,
-            modifyType: modifyType.map()
+            modifyTypes: modifyTypes.map { $0.map() }
         )
     }
 }

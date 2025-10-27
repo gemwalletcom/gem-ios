@@ -83,9 +83,9 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .open(let data): direction = data.direction
             case .close(let data): direction = data.direction
             case .modify(let data):
-                switch data.modifyType {
-                case .tpsl(let data): direction = data.direction
-                case .cancel: direction = .long // for cancel operations direction not uses
+                switch data.modifyTypes.first {
+                case .tpsl(let tpslData): direction = tpslData.direction
+                case .cancel, .none: direction = .long // for cancel operations direction not uses
                 }
             }
             return .perpetual(TransactionPerpetualMetadata(pnl: 0, price: 0, direction: direction, provider: nil))

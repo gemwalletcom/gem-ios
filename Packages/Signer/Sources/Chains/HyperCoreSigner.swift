@@ -127,11 +127,11 @@ public class HyperCoreSigner: Signable {
             )
         }
         try transactions.append(
-            signMarketMessage(
+            contentsOf: signMarketMessage(
                 type: type,
                 agentKey: agentKey,
                 builder: builder,
-                timestamp: timestampIncrementer.next().asUInt64
+                timestampIncrementer: timestampIncrementer
             )
         )
 
@@ -195,47 +195,64 @@ public class HyperCoreSigner: Signable {
         return try hyperCore.signCWithdraw(withdraw: request, privateKey: privateKey)
     }
 
-    private func signMarketMessage(type: Primitives.PerpetualType, agentKey: Data, builder: HyperBuilder?, timestamp: UInt64) throws -> String {
+    private func signMarketMessage(
+        type: Primitives.PerpetualType,
+        agentKey: Data,
+        builder: HyperBuilder?,
+        timestampIncrementer: NumberIncrementer<Int>
+    ) throws -> [String] {
         switch type {
         case let .close(data):
-            let order = factory.makeMarketOrder(
-                asset: UInt32(data.assetIndex),
-                isBuy: data.direction == .short,
-                price: data.price,
-                size: data.size,
-                reduceOnly: true,
-                builder: builder
-            )
-            return try hyperCore.signPlaceOrder(order: order, nonce: timestamp, privateKey: agentKey)
-
-        case let .open(data):
-            let order = factory.makeMarketOrder(
-                asset: UInt32(data.assetIndex),
-                isBuy: data.direction == .long,
-                price: data.price,
-                size: data.size,
-                reduceOnly: false,
-                builder: builder
-            )
-            return try hyperCore.signPlaceOrder(order: order, nonce: timestamp, privateKey: agentKey)
-
-        case let .modify(data):
-            switch data.modifyType {
-            case let .tpsl(tpslData):
-                let order = factory.makePositionTpSl(
-                    asset: UInt32(data.assetIndex),
-                    isBuy: tpslData.direction == .long,
-                    size: tpslData.size,
-                    tpTrigger: tpslData.takeProfit,
-                    slTrigger: tpslData.stopLoss,
-                    builder: builder
+            [
+                try hyperCore.signPlaceOrder(
+                    order: factory.makeMarketOrder(
+                        asset: UInt32(data.assetIndex),
+                        isBuy: data.direction == .short,
+                        price: data.price,
+                        size: data.size,
+                        reduceOnly: true,
+                        builder: builder
+                    ),
+                    nonce: timestampIncrementer.next().asUInt64,
+                    privateKey: agentKey
                 )
-                return try hyperCore.signPlaceOrder(order: order, nonce: timestamp, privateKey: agentKey)
-
-            case let .cancel(orders):
-                let cancelOrders = orders.map { HyperCancelOrder(asset: UInt32($0.assetIndex), orderId: $0.orderId) }
-                let cancel = factory.makeCancelOrders(orders: cancelOrders)
-                return try hyperCore.signCancelOrder(cancel: cancel, nonce: timestamp, privateKey: agentKey)
+            ]
+        case let .open(data):
+            [
+                try hyperCore.signPlaceOrder(
+                    order: factory.makeMarketOrder(
+                        asset: UInt32(data.assetIndex),
+                        isBuy: data.direction == .long,
+                        price: data.price,
+                        size: data.size,
+                        reduceOnly: false,
+                        builder: builder
+                    ),
+                    nonce: timestampIncrementer.next().asUInt64,
+                    privateKey: agentKey
+                )
+            ]
+        case let .modify(data):
+            try data.modifyTypes.map {
+                switch $0 {
+                case let .tpsl(tpslData): try hyperCore.signPlaceOrder(
+                    order: factory.makePositionTpSl(
+                        asset: UInt32(data.assetIndex),
+                        isBuy: tpslData.direction == .long,
+                        size: tpslData.size,
+                        tpTrigger: tpslData.takeProfit,
+                        slTrigger: tpslData.stopLoss,
+                        builder: builder
+                    ),
+                    nonce: timestampIncrementer.next().asUInt64,
+                    privateKey: agentKey
+                )
+                case let .cancel(orders): try hyperCore.signCancelOrder(
+                    cancel: factory.makeCancelOrders(orders: orders.map { HyperCancelOrder(asset: UInt32($0.assetIndex), orderId: $0.orderId) }),
+                    nonce: timestampIncrementer.next().asUInt64,
+                    privateKey: agentKey
+                )
+                }
             }
         }
     }

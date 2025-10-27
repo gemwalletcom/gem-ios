@@ -169,12 +169,12 @@ public enum PerpetualModifyType: Codable, Equatable, Hashable, Sendable {
 public struct PerpetualModifyConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let baseAsset: Asset
 	public let assetIndex: Int32
-	public let modifyType: PerpetualModifyType
+	public let modifyTypes: [PerpetualModifyType]
 
-	public init(baseAsset: Asset, assetIndex: Int32, modifyType: PerpetualModifyType) {
+	public init(baseAsset: Asset, assetIndex: Int32, modifyTypes: [PerpetualModifyType]) {
 		self.baseAsset = baseAsset
 		self.assetIndex = assetIndex
-		self.modifyType = modifyType
+		self.modifyTypes = modifyTypes
 	}
 }
 
