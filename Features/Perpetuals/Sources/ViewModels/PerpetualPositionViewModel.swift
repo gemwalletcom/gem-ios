@@ -70,13 +70,21 @@ public struct PerpetualPositionViewModel {
         currencyFormatter.string(data.position.marginAmount)
     }
 
-    var autocloseTitle: String { "Auto close" }
+    var autocloseTitle: String { "Auto Close" }
     var autocloseText: String {
-        guard let price = data.position.takeProfit.map({ currencyFormatter.string($0.price) }) else {
+        let tp = data.position.takeProfit.map { "TP: \(currencyFormatter.string($0.price))" }
+        let sl = data.position.stopLoss.map { "SL: \(currencyFormatter.string($0.price))" }
+
+        switch (tp, sl) {
+        case (.some(let tpText), .some(let slText)):
+            return "\(tpText), \(slText)"
+        case (.some(let tpText), .none):
+            return tpText
+        case (.none, .some(let slText)):
+            return slText
+        case (.none, .none):
             return "-"
         }
-        return "TP: \(price)"
-
     }
 
     public var marginText: String {

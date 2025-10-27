@@ -159,8 +159,8 @@ public struct InfoSheetModelFactory {
         case .autoclose:
         // TODO: - localize
             return InfoSheetModel(
-                title: "Auto close",
-                description: "Automatically close your position at set price levels. Take Profit(TP) locks in gains, Stop Loss(SL) limits losses.",
+                title: "Auto Close",
+                description: "Automatically close your position at set price levels. Take Profit locks in gains, Stop Loss limits losses.",
                 image: .image(Images.Logo.logo),
                 button: .url(Docs.url(.perpetualsFundingRate)) // TODO: - update
             )
