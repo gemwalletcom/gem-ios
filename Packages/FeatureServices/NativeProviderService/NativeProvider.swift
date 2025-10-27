@@ -48,15 +48,21 @@ extension NativeProvider: AlienProvider {
         if let data = await self.cache.get(key: target.cacheKey) {
             return AlienResponse(status: 200, data: data)
         }
+        do {
+            let (data, response) = try await self.session.data(for: target.asRequest())
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            
+            if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {
+                await self.cache.set(key: target.cacheKey, value: data, ttl: Duration.seconds(duration))
+            }
 
-        let (data, response) = try await self.session.data(for: target.asRequest())
-        let statusCode = (response as? HTTPURLResponse)?.statusCode
-
-        if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {
-            await self.cache.set(key: target.cacheKey, value: data, ttl: Duration.seconds(duration))
+            return AlienResponse(status: statusCode.map(UInt16.init), data: data)
+        } catch {
+            if (error as NSError).domain == NSURLErrorDomain {
+                throw AlienError.ResponseError(msg: error.localizedDescription)
+            }
+            throw error
         }
-
-        return AlienResponse(status: statusCode.map(UInt16.init), data: data)
     }
 
     public nonisolated func getEndpoint(chain: Chain) throws -> String {
