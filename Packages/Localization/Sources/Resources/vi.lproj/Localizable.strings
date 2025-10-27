@@ -490,3 +490,6 @@
 "assets.title" = "Tài sản";
 "stake.delegations" = "Ủy quyền";
 "info.stake.apr.description" = "Tỷ lệ phần trăm hàng năm (APR) là tỷ lệ phần thưởng hàng năm cho việc đặt cược tiền điện tử của bạn.";
+"receive.warning" = "Chỉ gửi ** %@ ** trên mạng ** %@ ** đến địa chỉ này.";
+"perpetual.leverage" = "Đòn bẩy";
+"perpetual.direction" = "Phương hướng";

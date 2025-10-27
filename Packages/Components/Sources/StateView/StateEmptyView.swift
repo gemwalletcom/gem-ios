@@ -14,7 +14,7 @@ public struct StateEmptyView<Content: View>: View {
         title: String,
         titleTextStyle: TextStyle = .headline,
         description: String? = nil,
-        descriptionTextStyle: TextStyle = .subheadline,
+        descriptionTextStyle: TextStyle = .subHeadline,
         image: Image? = nil,
         @ViewBuilder buttons: (() -> Content) = { EmptyView() }
     ) {

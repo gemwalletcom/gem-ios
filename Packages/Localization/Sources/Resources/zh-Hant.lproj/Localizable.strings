@@ -490,3 +490,6 @@
 "assets.title" = "資產";
 "stake.delegations" = "委託";
 "info.stake.apr.description" = "年利率（APR）是質押加密貨幣的年度報酬率。";
+"receive.warning" = "僅透過 ** %@ ** 網路向此位址發送 ** %@ **。";
+"perpetual.leverage" = "槓桿作用";
+"perpetual.direction" = "方向";

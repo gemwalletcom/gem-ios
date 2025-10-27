@@ -490,3 +490,6 @@
 "assets.title" = "دارایی‌ها";
 "stake.delegations" = "واگذاری‌ها";
 "info.stake.apr.description" = "نرخ درصد سالانه (APR) نرخ پاداش سالانه برای سپرده‌گذاری ارز دیجیتال شما است.";
+"receive.warning" = "فقط ** %@ ** را در شبکه ** %@ ** به این آدرس ارسال کنید.";
+"perpetual.leverage" = "اهرم مالی";
+"perpetual.direction" = "جهت";

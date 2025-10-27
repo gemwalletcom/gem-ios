@@ -239,7 +239,7 @@ struct ConfirmTransferSceneViewModelTests {
         let swapModel = ConfirmTransferSceneViewModel.mock(
             data: .mock(type: .swap(.mockEthereum(), .mockEthereumUSDT(), .mock()))
         )
-        let swapItem = swapModel.itemModel(for: .swapDetails) as? ConfirmSwapDetailsViewModel
+        let swapItem = swapModel.itemModel(for: .details) as? ConfirmDetailsViewModel
 
         if case .swapDetails = swapItem?.itemModel {
             // Expected swap details
@@ -250,7 +250,7 @@ struct ConfirmTransferSceneViewModelTests {
         let transferModel = ConfirmTransferSceneViewModel.mock(
             data: .mock(type: .transfer(.mock()))
         )
-        let transferSwapItem = transferModel.itemModel(for: .swapDetails) as? ConfirmSwapDetailsViewModel
+        let transferSwapItem = transferModel.itemModel(for: .details) as? ConfirmDetailsViewModel
 
         if case .empty = transferSwapItem?.itemModel {
             // Expected empty for non-swap
@@ -287,7 +287,7 @@ struct ConfirmTransferSceneViewModelTests {
         #expect(sections[3].id == "error")
 
         #expect(sections[0].values == [.header])
-        #expect(sections[1].values == [.app, .network, .sender, .recipient, .memo, .swapDetails])
+        #expect(sections[1].values == [.app, .network, .sender, .recipient, .memo, .details])
         #expect(sections[2].values == [.networkFee])
         #expect(sections[3].values == [.error])
     }

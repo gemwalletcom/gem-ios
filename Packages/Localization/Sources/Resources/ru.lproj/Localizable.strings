@@ -490,3 +490,6 @@
 "assets.title" = "Ресурсы";
 "stake.delegations" = "Делегации";
 "info.stake.apr.description" = "Годовая процентная ставка (APR) — это годовая ставка вознаграждения за стейкинг вашей криптовалюты.";
+"receive.warning" = "Отправлять только ** %@ ** в сети ** %@ ** на этот адрес.";
+"perpetual.leverage" = "Кредитное плечо";
+"perpetual.direction" = "Направление";

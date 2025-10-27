@@ -490,3 +490,6 @@
 "assets.title" = "נכסים";
 "stake.delegations" = "האצלות";
 "info.stake.apr.description" = "שיעור אחוז שנתי (APR) הוא שיעור התגמול השנתי עבור הפקדת מטבע הקריפטו שלך.";
+"receive.warning" = "שלח רק ** %@ ** ברשת ** %@ ** לכתובת זו.";
+"perpetual.leverage" = "מינוף";
+"perpetual.direction" = "כיוון";

@@ -40,10 +40,7 @@ public struct PerpetualPositionViewModel {
     }
     
     public var directionText: String {
-        switch data.position.direction {
-        case .short: Localized.Perpetual.short
-        case .long: Localized.Perpetual.long
-        }
+        PerpetualDirectionViewModel(direction: data.position.direction).title
     }
     
     public var positionTypeText: String {
@@ -51,21 +48,23 @@ public struct PerpetualPositionViewModel {
     }
     
     public var positionTypeColor: Color {
-        switch data.position.direction {
-        case .short: Colors.red
-        case .long: Colors.green
-        }
+        PerpetualDirectionViewModel(direction: data.position.direction).color
     }
     
-    public var pnlTitle: String { Localized.Perpetual.pnl }
-    public var pnlColor: Color {
-        PriceChangeColor.color(for: data.position.pnl)
+    public var pnlViewModel: PnLViewModel {
+        PnLViewModel(
+            pnl: data.position.pnl,
+            marginAmount: data.position.marginAmount,
+            currencyFormatter: currencyFormatter,
+            percentFormatter: percentFormatter
+        )
     }
-    
-    public var pnlTextStyle: TextStyle {
-        TextStyle(font: .callout, color: pnlColor)
-    }
-    
+    public var pnlTitle: String { pnlViewModel.title }
+    public var pnlColor: Color { pnlViewModel.color }
+    public var pnlTextStyle: TextStyle { pnlViewModel.textStyle }
+    public var pnlPercent: Double { pnlViewModel.percent }
+    public var pnlWithPercentText: String { pnlViewModel.text ?? "" }
+
     public var marginTitle: String { Localized.Perpetual.margin }
     public var marginAmountText: String {
         currencyFormatter.string(data.position.marginAmount)
@@ -83,31 +82,6 @@ public struct PerpetualPositionViewModel {
     public var marginText: String {
         let marginAmount = currencyFormatter.string(data.position.marginAmount)
         return "\(marginAmount) (\(data.position.marginType.displayText))"
-    }
-    
-    public var pnlText: String {
-        let sign = data.position.pnl >= 0 ? "+" : ""
-        return "\(sign)\(currencyFormatter.string(data.position.pnl))"
-    }
-    
-    public var pnlPercent: Double {
-        guard data.position.marginAmount > 0 else { return 0 }
-        return (data.position.pnl / data.position.marginAmount) * 100
-    }
-    
-    public var pnlPercentText: String {
-        percentFormatter.string(pnlPercent)
-    }
-    
-    public var pnlWithPercentText: String {
-        let pnlAmount = currencyFormatter.string(abs(data.position.pnl))
-        let percentText = percentFormatter.string(pnlPercent)
-        
-        if data.position.pnl >= 0 {
-            return "+\(pnlAmount) (\(percentText))"
-        } else {
-            return "-\(pnlAmount) (\(percentText))"
-        }
     }
     
     public var fundingPaymentsTitle: String { Localized.Info.FundingPayments.title }

@@ -490,3 +490,6 @@
 "assets.title" = "Ativos";
 "stake.delegations" = "Delegações";
 "info.stake.apr.description" = "Taxa Percentual Anual (APR) é a taxa de recompensa anual para apostar sua criptomoeda.";
+"receive.warning" = "Enviar somente ** %@ ** na rede ** %@ ** para este endereço.";
+"perpetual.leverage" = "Alavancagem";
+"perpetual.direction" = "Direção";

@@ -490,3 +490,6 @@
 "assets.title" = "Aktiva";
 "stake.delegations" = "Delegace";
 "info.stake.apr.description" = "Roční procentní sazba (RPSN) je roční odměna za staking vaší kryptoměny.";
+"receive.warning" = "Na tuto adresu odesílejte pouze ** %@ ** v síti ** %@ **.";
+"perpetual.leverage" = "Finanční páka";
+"perpetual.direction" = "Směr";

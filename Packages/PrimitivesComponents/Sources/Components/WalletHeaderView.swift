@@ -31,7 +31,7 @@ public struct WalletHeaderView: View {
             if let assetImage = model.assetImage {
                 AssetImageView(
                     assetImage: assetImage,
-                    size: 64
+                    size: .image.semiLarge
                 )
                 .padding(.bottom, .space12)
             }

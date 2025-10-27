@@ -490,3 +490,6 @@
 "assets.title" = "資産";
 "stake.delegations" = "委任";
 "info.stake.apr.description" = "年率 (APR) は、暗号通貨をステーキングした場合の年間報酬率です。";
+"receive.warning" = "** %@ ** ネットワーク上の ** %@ ** のみをこのアドレスに送信します。";
+"perpetual.leverage" = "てこの作用";
+"perpetual.direction" = "方向";

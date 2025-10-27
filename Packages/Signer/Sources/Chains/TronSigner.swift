@@ -136,47 +136,4 @@ public struct TronSigner: Signable {
             sign(input: input, contract: contract, feeLimit: .none, privateKey: privateKey)
         ]
     }
-
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case let .swap(fromAsset, _, data) = input.type else {
-            throw AnyError("Invalid input type for swapping")
-        }
-        let toAddress = data.data.to
-        let amount = BigInt(stringLiteral: data.data.value)
-        let memo = data.data.data
-    
-        switch fromAsset.id.type {
-        case .native:
-            let contract = TronTransferContract.with {
-                $0.ownerAddress = input.senderAddress
-                $0.toAddress = toAddress
-                $0.amount = amount.asInt64
-            }
-            return [
-                try sign(
-                    input: input,
-                    contract: .transfer(contract),
-                    feeLimit: .none,
-                    memo: memo,
-                    privateKey: privateKey
-                ),
-            ]
-        case .token:
-            let contract = try TronTransferTRC20Contract.with {
-                $0.contractAddress = try input.asset.getTokenId()
-                $0.ownerAddress = input.senderAddress
-                $0.toAddress = toAddress
-                $0.amount = amount.magnitude.serialize()
-            }
-            return [
-                try sign(
-                    input: input,
-                    contract: .transferTrc20Contract(contract),
-                    feeLimit: input.fee.gasLimit.asInt,
-                    memo: memo,
-                    privateKey: privateKey
-                )
-            ]
-        }
-    }
 }

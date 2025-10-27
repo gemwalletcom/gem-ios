@@ -70,10 +70,10 @@ public struct CosmosSigner: Signable {
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let data = try input.type.swap().data
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
-        let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: input.asset.symbol, memo: data.data.data)]
+        let messages = try [getSwapMessage(input: input, chain: chain, data: data.data, chainName: "THOR", symbol: input.asset.symbol)]
         
         return [
-            try sign(input: input, messages: messages, chain: chain, memo: data.data.data, privateKey: privateKey),
+            try sign(input: input, messages: messages, chain: chain, memo: data.data.memo, privateKey: privateKey),
         ]
     }
     
@@ -195,7 +195,7 @@ public struct CosmosSigner: Signable {
         }
     }
     
-    func getSwapMessage(input: SignerInput, chain: CosmosChain, chainName: String, symbol: String, memo: String) -> CosmosMessage {
+    func getSwapMessage(input: SignerInput, chain: CosmosChain, data: SwapQuoteData, chainName: String, symbol: String) throws -> CosmosMessage {
         switch chain {
         case .cosmos,
             .osmosis,
@@ -206,13 +206,16 @@ public struct CosmosSigner: Signable {
             return CosmosMessage.with {
                 $0.sendCoinsMessage = CosmosMessage.Send.with {
                     $0.fromAddress = input.senderAddress
-                    $0.toAddress = input.destinationAddress
+                    $0.toAddress = data.to
                     $0.amounts = [
                         getAmount(input: input, denom: chain.denom.rawValue)
                     ]
                 }
             }
         case .thorchain:
+            guard let memo = data.memo else {
+                throw AnyError("no memo provided")
+            }
             return CosmosMessage.with {
                 $0.thorchainDepositMessage = CosmosMessage.THORChainDeposit.with {
                     $0.coins = [

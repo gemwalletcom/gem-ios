@@ -490,3 +490,6 @@
 "assets.title" = "Aktiver";
 "stake.delegations" = "Delegationer";
 "info.stake.apr.description" = "Årlig procentsats (ÅOP) er den årlige belønningssats for at satse din kryptovaluta.";
+"receive.warning" = "Send kun ** %@ ** på ** %@ **-netværket til denne adresse.";
+"perpetual.leverage" = "Gearing";
+"perpetual.direction" = "Retning";

@@ -490,3 +490,6 @@
 "assets.title" = "Activa";
 "stake.delegations" = "Delegaties";
 "info.stake.apr.description" = "Jaarlijks percentage (APR) is het jaarlijkse beloningspercentage voor het staken van uw cryptocurrency.";
+"receive.warning" = "Stuur alleen ** %@ ** op het ** %@ ** netwerk naar dit adres.";
+"perpetual.leverage" = "Hefboom";
+"perpetual.direction" = "Richting";

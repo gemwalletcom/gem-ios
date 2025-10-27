@@ -490,3 +490,6 @@
 "assets.title" = "Mga asset";
 "stake.delegations" = "Mga delegasyon";
 "info.stake.apr.description" = "Ang Annual Percentage Rate (APR) ay ang taunang reward rate para sa staking ng iyong cryptocurrency.";
+"receive.warning" = "Ipadala lamang ang ** %@ ** sa ** %@ ** network sa address na ito.";
+"perpetual.leverage" = "Leverage";
+"perpetual.direction" = "Direksyon";

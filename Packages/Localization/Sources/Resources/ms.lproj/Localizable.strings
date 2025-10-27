@@ -490,3 +490,6 @@
 "assets.title" = "Aset";
 "stake.delegations" = "Delegasi";
 "info.stake.apr.description" = "Kadar Peratusan Tahunan (APR) ialah kadar ganjaran tahunan untuk mempertaruhkan mata wang kripto anda.";
+"receive.warning" = "Hantar hanya ** %@ ** pada rangkaian ** %@ ** ke alamat ini.";
+"perpetual.leverage" = "Leverage";
+"perpetual.direction" = "Arah";
