@@ -36,10 +36,8 @@ public struct SwapSigner {
             swapData: swapData
         )
         switch fromAsset.id.type {
-        case .native:
-            return try [signer.signTransfer(input: transferInput, privateKey: privateKey)]
-        case .token:
-            return try [signer.signTokenTransfer(input: transferInput, privateKey: privateKey)]
+        case .native: return try [signer.signTransfer(input: transferInput, privateKey: privateKey)]
+        case .token: return try [signer.signTokenTransfer(input: transferInput, privateKey: privateKey)]
         }
     }
 }
