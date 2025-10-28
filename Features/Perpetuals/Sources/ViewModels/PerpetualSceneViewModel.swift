@@ -160,7 +160,7 @@ public extension PerpetualSceneViewModel {
             perpetual: perpetualViewModel.perpetual,
             position: position,
             asset: asset,
-            baseAsset: .hyperliquidUSDC()
+            baseAsset: .hypercoreUSDC()
         )
 
         let transferData = TransferData(
@@ -183,7 +183,7 @@ public extension PerpetualSceneViewModel {
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .long,
                 asset: asset,
-                baseAsset: .hyperliquidUSDC(), //TODO: use position.baseAsset in the future
+                baseAsset: .hypercoreUSDC(), //TODO: use position.baseAsset in the future
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
                 leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3),
@@ -203,7 +203,7 @@ public extension PerpetualSceneViewModel {
                 provider: perpetualViewModel.perpetual.provider,
                 direction: .short,
                 asset: asset,
-                baseAsset: .hyperliquidUSDC(), //TODO: use position.baseAsset in the future
+                baseAsset: .hypercoreUSDC(), //TODO: use position.baseAsset in the future
                 assetIndex: Int(assetIndex),
                 price: perpetualViewModel.perpetual.price,
                 leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3),

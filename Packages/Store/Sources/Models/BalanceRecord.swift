@@ -13,7 +13,6 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let assetId = Column("assetId")
         static let walletId = Column("walletId")
         static let isEnabled = Column("isEnabled")
-        static let isHidden = Column("isHidden")
         static let isPinned = Column("isPinned")
         static let isActive = Column("isActive")
         static let available = Column("available")
@@ -68,7 +67,6 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     public var totalAmount: Double
     
     public var isEnabled: Bool
-    public var isHidden: Bool
     public var isPinned: Bool
     public var isActive: Bool
     
@@ -117,7 +115,6 @@ extension BalanceRecord: CreateTable {
             $0.column(sql: totalAmountSQlCreation)
             
             $0.column(Columns.isEnabled.name, .boolean).defaults(to: true).indexed()
-            $0.column(Columns.isHidden.name, .boolean).defaults(to: false).indexed()
             $0.column(Columns.isPinned.name, .boolean).defaults(to: false).indexed()
             $0.column(Columns.isActive.name, .boolean).defaults(to: true).indexed()
             
