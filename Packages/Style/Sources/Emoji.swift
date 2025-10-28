@@ -148,6 +148,8 @@ public struct Emoji {
         case normal = "💎"
         case fast = "⚡️"
     }
+    
+    public static let bell: String = "🔔"
 }
 
 // MARK: - Previews

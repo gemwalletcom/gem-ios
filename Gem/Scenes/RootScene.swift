@@ -68,6 +68,16 @@ struct RootScene: View {
                 image: SystemImage.network
             )
         )
+        .sheet(isPresented: $model.isPresentingEnablePushNotifications) {
+            EnablePushNotificationsScene(
+                model: EnablePushNotificationsViewModel(
+                    deviceService: model.deviceService,
+                    bannerService: model.bannerService,
+                    isPresented: $model.isPresentingEnablePushNotifications
+                )
+            )
+            .presentationDetentsForCurrentDeviceSize()
+        }
     }
 }
 

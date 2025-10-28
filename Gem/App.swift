@@ -36,7 +36,9 @@ struct GemApp: App {
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
                     walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService,
-                    nameService: resolver.services.nameService
+                    nameService: resolver.services.nameService,
+                    deviceService: resolver.services.deviceService,
+                    bannerService: resolver.services.bannerService
                 )
             )
             .inject(resolver: resolver)
