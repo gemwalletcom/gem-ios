@@ -10,8 +10,12 @@ struct AutocloseModifyBuilder {
         self.position = position
     }
 
-    func hasChanges(takeProfit: AutocloseField, stopLoss: AutocloseField) -> Bool {
-        takeProfit.shouldUpdate || stopLoss.shouldUpdate
+    func canBuild(takeProfit: AutocloseField, stopLoss: AutocloseField) -> Bool {
+        let hasChanges = takeProfit.shouldUpdate || stopLoss.shouldUpdate
+        let takeProfitValid = takeProfit.price == nil || takeProfit.isValid
+        let stopLossValid = stopLoss.price == nil || stopLoss.isValid
+
+        return hasChanges && takeProfitValid && stopLossValid
     }
 
     func build(

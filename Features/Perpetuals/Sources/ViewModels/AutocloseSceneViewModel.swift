@@ -148,7 +148,7 @@ extension AutocloseSceneViewModel {
             orderId: stopLossOrderId
         )
 
-        guard builder.hasChanges(takeProfit: takeProfitField, stopLoss: stopLossField) else { return }
+        guard builder.canBuild(takeProfit: takeProfitField, stopLoss: stopLossField) else { return }
 
         let modifyTypes = builder.build(
             assetIndex: assetIndex,
