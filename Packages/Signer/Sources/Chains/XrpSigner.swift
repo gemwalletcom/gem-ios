@@ -38,15 +38,33 @@ public struct XrpSigner: Signable {
     }
     
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        try sign(
-            input: input,
-            operation: .operation(.opPayment(RippleOperationPayment.with {
+        let operation: Operation = {
+            if let memo = input.memo {
+                if let destinationTag = UInt64(memo) {
+                    return .operation(.opPayment(.with {
+                        $0.destination = input.destinationAddress
+                        $0.amount = input.value.asInt64
+                        $0.destinationTag = destinationTag
+                    }))
+                } else if memo.isNotEmpty {
+                    return .json(
+                        jsonTransferMemo(
+                            destination: input.destinationAddress,
+                            amount: input.value.description,
+                            memo: Data(memo.remove0x.utf8).hexString.remove0x
+                        )
+                    )
+                }
+            }
+            return .operation(.opPayment(.with {
                 $0.destination = input.destinationAddress
                 $0.amount = input.value.asInt64
-                if let memo = input.memo, let destinationTag = UInt64(memo) {
-                    $0.destinationTag = destinationTag
-                }
-            })),
+            }))
+        }()
+        
+        return try sign(
+            input: input,
+            operation: operation,
             privateKey: privateKey
         )
     }
@@ -91,43 +109,29 @@ public struct XrpSigner: Signable {
         fatalError()
     }
     
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let (_, _, data) = try input.type.swap()
-        
-        switch data.quote.providerData.provider {
-        case .thorchain:
-            let json = """
-                {
-                        "TransactionType": "Payment",
-                        "Destination": "\(data.data.to)",
-                        "Amount": "\(data.data.value)",
-                        "Memos": [
-                            {
-                                "Memo": {
-                                    "MemoData": "\(Data(data.data.data.remove0x.utf8).hexString.remove0x)"
-                                }
-                            }
-                        ]
-                    }
-                """
-
-            return [
-                try sign(
-                    input: input,
-                    operation: .json(json),
-                    privateKey: privateKey
-                )
-            ]
-        default: fatalError()
-        }
-    }
-    
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         fatalError()
     }
     
     public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
         fatalError()
+    }
+    
+    func jsonTransferMemo(destination: String, amount: String, memo: String) -> String {
+        """
+            {
+                    "TransactionType": "Payment",
+                    "Destination": "\(destination)",
+                    "Amount": "\(amount)",
+                    "Memos": [
+                        {
+                            "Memo": {
+                                "MemoData": "\(memo)"
+                            }
+                        }
+                    ]
+                }
+            """
     }
 }
     

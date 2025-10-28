@@ -32,7 +32,7 @@ public struct Signer: Sendable {
             return try [signer.signTokenTransfer(input: input, privateKey: privateKey)]
         case .swap(let fromAsset, _, let swapData):
             let swapSigner = SwapSigner()
-            if swapSigner.isTransferSwap(data: swapData) {
+            if swapSigner.isTransferSwap(fromAsset: fromAsset, data: swapData) {
                 return try swapSigner
                     .signSwap(
                         signer: signer,

@@ -8,10 +8,10 @@ import WalletCore
 public struct SwapSigner {
     public init() {}
 
-    func isTransferSwap(data: SwapData) -> Bool {
-        switch data.quote.providerData.provider {
-        case .nearIntents: true
-        default: false
+    func isTransferSwap(fromAsset: Asset, data: SwapData) -> Bool {
+        switch data.data.dataType {
+        case .transfer: true
+        case .contract: false
         }
     }
 
@@ -36,10 +36,8 @@ public struct SwapSigner {
             swapData: swapData
         )
         switch fromAsset.id.type {
-        case .native:
-            return try [signer.signTransfer(input: transferInput, privateKey: privateKey)]
-        case .token:
-            return try [signer.signTokenTransfer(input: transferInput, privateKey: privateKey)]
+        case .native: return try [signer.signTransfer(input: transferInput, privateKey: privateKey)]
+        case .token: return try [signer.signTokenTransfer(input: transferInput, privateKey: privateKey)]
         }
     }
 }

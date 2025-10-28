@@ -64,7 +64,8 @@ public struct TransferExecutor: TransferExecutable {
                 Task {
                     try walletsService.enableBalances(
                         for: input.wallet.walletId,
-                        assetIds: assetIds
+                        assetIds: assetIds,
+                        isEnabled: true
                     )
                     await walletsService.enableAssets(walletId: input.wallet.walletId, assetIds: assetIds, enabled: true)
                 }

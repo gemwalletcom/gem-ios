@@ -18,6 +18,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
         static let symbol = Column("symbol")
         static let decimals = Column("decimals")
         static let tokenId = Column("tokenId")
+        static let isEnabled = Column("isEnabled")
         static let isBuyable = Column("isBuyable")
         static let isSellable = Column("isSellable")
         static let isSwappable = Column("isSwappable")
@@ -33,6 +34,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     public var decimals: Int
     public var type: AssetType
     
+    public var isEnabled: Bool
     public var isBuyable: Bool
     public var isSellable: Bool
     public var isSwappable: Bool
@@ -74,6 +76,8 @@ extension AssetRecord: CreateTable {
                 .notNull()
             $0.column(Columns.type.name, .text)
                 .notNull()
+            $0.column(Columns.isEnabled.name, .boolean)
+                .defaults(to: true)
             $0.column(Columns.isBuyable.name, .boolean)
                 .defaults(to: false)
             $0.column(Columns.isSellable.name, .boolean)
@@ -99,6 +103,7 @@ extension Asset {
             symbol: symbol,
             decimals: Int(decimals),
             type: type,
+            isEnabled: false,
             isBuyable: false,
             isSellable: false,
             isSwappable: false,
@@ -124,7 +129,7 @@ extension AssetRecord {
         AssetBasic(
             asset: mapToAsset(),
             properties: AssetProperties(
-                isEnabled: true,
+                isEnabled: isEnabled,
                 isBuyable: isBuyable,
                 isSellable: isSellable,
                 isSwapable: isSwappable,
@@ -162,7 +167,8 @@ extension AssetRecordInfo {
 
     var metadata: AssetMetaData {
         AssetMetaData(
-            isEnabled: balance?.isEnabled ?? false,
+            isEnabled: asset.isEnabled,
+            isBalanceEnabled: balance?.isEnabled ?? false,
             isBuyEnabled: asset.isBuyable,
             isSellEnabled: asset.isSellable,
             isSwapEnabled: asset.isSwappable,
@@ -185,6 +191,7 @@ extension AssetBasic {
             symbol: asset.symbol,
             decimals: Int(asset.decimals),
             type: asset.type,
+            isEnabled: properties.isEnabled,
             isBuyable: properties.isBuyable,
             isSellable: properties.isSellable,
             isSwappable: properties.isSwapable,

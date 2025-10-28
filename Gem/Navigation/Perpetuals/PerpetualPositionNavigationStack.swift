@@ -34,7 +34,7 @@ struct PerpetualPositionNavigationStack: View {
                             recipient: perpetualRecipientData.recipient,
                             perpetual: perpetualRecipientData.data
                         ),
-                        asset: .hyperliquidUSDC()
+                        asset: .hypercoreUSDC()
                     ),
                     wallet: wallet,
                     onTransferAction: {

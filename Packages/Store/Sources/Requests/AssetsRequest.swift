@@ -65,7 +65,6 @@ extension AssetsRequest {
                 .search,
                 .enabled,
                 .hasBalance,
-                .hidden,
                 .priceAlerts:
                 request = Self.applyFilter(request: request, $0)
             }
@@ -119,11 +118,6 @@ extension AssetsRequest {
                 .filter(
                     TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isEnabled] == true
                 )
-        case .hidden:
-            return request
-                .filter(
-                    TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isHidden] == true
-                )
         case .chains(let chains):
             if chains.isEmpty {
                 return request
@@ -143,6 +137,7 @@ extension AssetsRequest {
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
         let totalValue = (TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[PriceRecord.Columns.price] ?? 0))
         let request = AssetRecord
+            .filter(AssetRecord.Columns.isEnabled == true)
             .including(optional: AssetRecord.account)
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.price)
@@ -175,6 +170,7 @@ extension AssetsRequest {
         filters: [AssetsRequestFilter]
     ) throws -> [PriceAlertAssetRecordInfo] {
         var request = AssetRecord
+            .filter(AssetRecord.Columns.isEnabled == true)
             .including(all: AssetRecord.priceAlerts)
             .including(optional: AssetRecord.price)
             .order(AssetRecord.Columns.rank.desc)

@@ -147,14 +147,6 @@ public struct Migrations {
             }
         }
         
-        migrator.registerMigration("Add isHidden to \(BalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: BalanceRecord.databaseTableName) {
-                $0.add(column: BalanceRecord.Columns.isHidden.name, .boolean)
-                    .defaults(to: false)
-                    .indexed()
-            }
-        }
-        
         migrator.registerMigration("Add lastUsedAt to \(BalanceRecord.databaseTableName)") { db in
             try? db.alter(table: BalanceRecord.databaseTableName) {
                 $0.add(column: BalanceRecord.Columns.lastUsedAt.name, .date)
@@ -317,6 +309,12 @@ public struct Migrations {
 
         migrator.registerMigration("Clear metadata from \(BalanceRecord.databaseTableName)") { db in
             try? db.execute(sql: "UPDATE \(BalanceRecord.databaseTableName) SET metadata = NULL WHERE metadata IS NOT NULL")
+        }
+        
+        migrator.registerMigration("Add isEnabled to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.isEnabled.name, .boolean).defaults(to: true)
+            }
         }
 
         try migrator.migrate(dbQueue)

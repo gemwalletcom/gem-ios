@@ -67,16 +67,6 @@ public struct CosmosSigner: Signable {
         fatalError()
     }
     
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let data = try input.type.swap().data
-        let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
-        let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: input.asset.symbol, memo: data.data.data)]
-        
-        return [
-            try sign(input: input, messages: messages, chain: chain, memo: data.data.data, privateKey: privateKey),
-        ]
-    }
-    
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let type) = input.type else {
             throw AnyError("invalid type")
@@ -170,64 +160,11 @@ public struct CosmosSigner: Signable {
     func getTransferMessage(input: SignerInput, chain: CosmosChain, denom: String) -> CosmosMessage {
         let amounts = [getAmount(input: input, denom: denom)]
         
-        switch chain {
-        case .cosmos,
-            .osmosis,
-            .celestia,
-            .injective,
-            .sei,
-            .noble:
-            return CosmosMessage.with {
-                $0.sendCoinsMessage = CosmosMessage.Send.with {
-                    $0.fromAddress = input.senderAddress
-                    $0.toAddress = input.destinationAddress
-                    $0.amounts = amounts
-                }
-            }
-        case .thorchain:
-            return CosmosMessage.with {
-                $0.thorchainSendMessage = CosmosMessage.THORChainSend.with {
-                    $0.fromAddress = AnyAddress(string: input.senderAddress, coin: chain.chain.coinType)!.data
-                    $0.toAddress = AnyAddress(string: input.destinationAddress, coin: chain.chain.coinType)!.data
-                    $0.amounts = amounts
-                }
-            }
-        }
-    }
-    
-    func getSwapMessage(input: SignerInput, chain: CosmosChain, chainName: String, symbol: String, memo: String) -> CosmosMessage {
-        switch chain {
-        case .cosmos,
-            .osmosis,
-            .celestia,
-            .injective,
-            .sei,
-            .noble:
-            return CosmosMessage.with {
-                $0.sendCoinsMessage = CosmosMessage.Send.with {
-                    $0.fromAddress = input.senderAddress
-                    $0.toAddress = input.destinationAddress
-                    $0.amounts = [
-                        getAmount(input: input, denom: chain.denom.rawValue)
-                    ]
-                }
-            }
-        case .thorchain:
-            return CosmosMessage.with {
-                $0.thorchainDepositMessage = CosmosMessage.THORChainDeposit.with {
-                    $0.coins = [
-                        CosmosTHORChainCoin.with {
-                            $0.amount = input.value.description
-                            $0.asset = CosmosTHORChainAsset.with {
-                                $0.chain = chainName
-                                $0.symbol = symbol
-                                $0.ticker = symbol
-                            }
-                        }
-                    ]
-                    $0.memo = memo
-                    $0.signer = AnyAddress(string: input.senderAddress, coin: chain.chain.coinType)!.data
-                }
+        return CosmosMessage.with {
+            $0.sendCoinsMessage = CosmosMessage.Send.with {
+                $0.fromAddress = input.senderAddress
+                $0.toAddress = input.destinationAddress
+                $0.amounts = amounts
             }
         }
     }

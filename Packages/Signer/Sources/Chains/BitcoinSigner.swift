@@ -17,47 +17,7 @@ public struct BitcoinSigner: Signable {
         fatalError()
     }
 
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let (_, _, data) = try input.type.swap()
-        let providers = Set([SwapProvider.thorchain, .chainflip])
-
-        if providers.contains(data.quote.providerData.provider) == false {
-            throw AnyError("Invalid signing input type or not supported provider id")
-        }
-
-        if input.useMaxAmount, data.quote.providerData.provider == .chainflip {
-            throw AnyError("Doesn't support swapping all amounts on Chainflip yet")
-        }
-
-        let opReturnIndex: UInt32? = switch data.quote.providerData.provider {
-        case .thorchain: .none
-        case .chainflip: 1
-        default: .none
-        }
-
-        let opReturnData: Data = switch data.quote.providerData.provider {
-        case .thorchain:
-            try data.data.data.encodedData()
-        case .chainflip: try {
-                guard let data = Data(hexString: data.data.data) else {
-                    throw AnyError("Invalid Chainflip swap data")
-                }
-                return data
-            }()
-        default: fatalError()
-        }
-
-        return try [
-            sign(input: input, privateKey: privateKey) { signingInput in
-                if let opReturnIndex = opReturnIndex {
-                    signingInput.outputOpReturnIndex.index = opReturnIndex
-                }
-                signingInput.outputOpReturn = opReturnData
-            }
-        ]
-    }
-
-    func sign(input: SignerInput, privateKey: Data, signingOverride: ((inout BitcoinSigningInput) -> Void)? = nil) throws -> String {
+    func sign(input: SignerInput, privateKey: Data) throws -> String {
         let coinType = input.coinType
         let utxos = try input.metadata.getUtxos().map {
             $0.mapToUnspendTransaction(address: input.senderAddress, coinType: coinType)
@@ -68,12 +28,11 @@ public struct BitcoinSigner: Signable {
                 input: input,
                 coinType: coinType,
                 privateKey: privateKey,
-                utxos: utxos,
-                signingOverride: signingOverride
+                utxos: utxos
             )
         }
 
-        var signingInput = BitcoinSigningInput.with {
+        let signingInput = try BitcoinSigningInput.with {
             $0.coinType = coinType.rawValue
             $0.hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
             $0.amount = input.value.asInt64
@@ -82,10 +41,12 @@ public struct BitcoinSigner: Signable {
             $0.changeAddress = input.senderAddress
             $0.utxo = utxos
             $0.privateKey = [privateKey]
+            if let memo = input.memo {
+                $0.outputOpReturn = try memo.encodedData()
+            }
             $0.scripts = utxos.mapToScripts(address: input.senderAddress, coinType: coinType)
             $0.useMaxAmount = input.useMaxAmount
         }
-        signingOverride?(&signingInput)
 
         return try performSigning(signingInput: signingInput, coinType: coinType)
     }
@@ -94,8 +55,7 @@ public struct BitcoinSigner: Signable {
         input: SignerInput,
         coinType: CoinType,
         privateKey: Data,
-        utxos: [BitcoinUnspentTransaction],
-        signingOverride: ((inout BitcoinSigningInput) -> Void)?
+        utxos: [BitcoinUnspentTransaction]
     ) throws -> String {
         guard case .zcash(_, let branchId) = input.metadata else {
             throw AnyError("invalid zcash metadata")
@@ -112,8 +72,6 @@ public struct BitcoinSigner: Signable {
             $0.scripts = utxos.mapToScripts(address: input.senderAddress, coinType: coinType)
             $0.useMaxAmount = input.useMaxAmount
         }
-
-        signingOverride?(&signingInput)
 
         let totalAvailable = utxos.reduce(into: Int64(0)) { result, utxo in
             result += utxo.amount
