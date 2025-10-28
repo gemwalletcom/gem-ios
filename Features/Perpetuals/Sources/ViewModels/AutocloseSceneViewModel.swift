@@ -158,7 +158,7 @@ extension AutocloseSceneViewModel {
         guard !modifyTypes.isEmpty else { return }
 
         let data = PerpetualModifyConfirmData(
-            baseAsset: Asset.hyperliquidUSDC(),
+            baseAsset: .hypercoreUSDC(),
             assetIndex: assetIndex,
             modifyTypes: modifyTypes
         )
