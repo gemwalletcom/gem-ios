@@ -8,7 +8,8 @@ import PrimitivesComponents
 
 public struct AutocloseScene: View {
     enum Field: Int, Hashable {
-        case targetPrice
+        case takeProfit
+        case stopLoss
     }
     @FocusState private var focusedField: Field?
     @State private var model: AutocloseSceneViewModel
@@ -29,45 +30,37 @@ public struct AutocloseScene: View {
                     subtitle: model.marketPriceText
                 )
             }
+
+            AutocloseInputSection(
+                inputModel: $model.takeProfitInput,
+                title: model.takeProfitTitle,
+                placeholder: model.triggerPriceTitle,
+                estimatedPNLTitle: model.estimatedPNL,
+                estimatedPNLText: model.expectedProfitText,
+                estimatedPNLColor: model.expectedProfitColor,
+                field: Field.takeProfit,
+                focusedField: $focusedField
+            )
+
+            AutocloseInputSection(
+                inputModel: $model.stopLossInput,
+                title: model.stopLossTitle,
+                placeholder: model.triggerPriceTitle,
+                estimatedPNLTitle: model.estimatedPNL,
+                estimatedPNLText: model.expectedStopLossText,
+                estimatedPNLColor: model.expectedStopLossColor,
+                field: Field.stopLoss,
+                focusedField: $focusedField
+            )
+
             Section {
-                if model.hasTakeProfit {
-                    ListItemView(
-                        title: model.targetPriceTitle,
-                        subtitle: model.currentTakeProfitPrice
-                    )
-                } else {
-                    InputValidationField(
-                        model: $model.inputModel,
-                        placeholder: model.targetPriceTitle,
-                        allowClean: true
-                    )
-                    .keyboardType(.decimalPad)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .focused($focusedField, equals: .targetPrice)
-                }
-            } header: {
-                HStack {
-                    Text(model.takeProfitTitle)
-                    Spacer()
-                    if model.hasTakeProfit {
-                        Button(action: model.onSelectCancel) {
-                            Text(Localized.Common.cancel)
-                                .foregroundStyle(Colors.blue)
-                        }
-                    }
-                }
-                .font(.subheadline)
-                .fontWeight(.semibold)
-            } footer: {
-                HStack {
-                    Text(model.expectedProfitTitle)
-                    Spacer()
-                    Text(model.expectedProfitText)
-                        .foregroundStyle(model.expectedProfitColor)
-                }
-                .font(.subheadline)
-                .fontWeight(.semibold)
+                StateButton(
+                    text: Localized.Transfer.confirm,
+                    type: .primary(),
+                    action: model.onSelectConfirm
+                )
+                .frame(maxWidth: .infinity)
+                .listRowInsets(EdgeInsets())
             }
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
@@ -76,28 +69,20 @@ public struct AutocloseScene: View {
                 Divider()
                     .frame(height: 1 / UIScreen.main.scale)
                     .background(Colors.grayVeryLight)
-                    .isVisible(focusedField == .targetPrice)
+                    .isVisible(focusedField != nil)
 
-                Group {
-                    if model.showButton {
-                        StateButton(
-                            text: Localized.Transfer.confirm,
-                            type: model.buttonType,
-                            action: model.onSelectConfirm
-                        )
-                        .frame(maxWidth: .scene.button.maxWidth)
-                    } else if focusedField == .targetPrice {
-                        PercentageAccessoryView(
-                            onSelectPercent: model.onSelectPercent,
-                            onDone: model.onDone
-                        )
-                    }
+                if focusedField != nil {
+                    PercentageAccessoryView(
+                        onSelectPercent: model.onSelectPercent,
+                        onDone: model.onDone
+                    )
+                    .padding(.small)
                 }
-                .padding(.small)
             }
             .background(Colors.grayBackground)
         }
         .navigationTitle(model.title)
+        .onChange(of: focusedField, model.onChangeFocusField)
         .onChange(of: model.focusField, onChangeFocus)
     }
 }

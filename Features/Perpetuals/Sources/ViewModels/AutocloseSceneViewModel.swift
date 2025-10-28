@@ -9,6 +9,7 @@ import PrimitivesComponents
 import Style
 import Validators
 import SwiftUI
+import Components
 
 @Observable
 @MainActor
@@ -18,62 +19,65 @@ public final class AutocloseSceneViewModel {
     private let priceFormatter: PerpetualPriceFormatter
     private let position: PerpetualPositionData
     private let onTransferAction: TransferDataAction
+    private let estimator: AutocloseEstimator
 
-    var inputModel: InputValidationViewModel
+    var takeProfitInput: InputValidationViewModel
+    var stopLossInput: InputValidationViewModel
+
     var focusField: AutocloseScene.Field?
 
     public init(position: PerpetualPositionData, onTransferAction: TransferDataAction = nil) {
-        self.position = position
-        self.onTransferAction = onTransferAction
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
         self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
         self.priceFormatter = PerpetualPriceFormatter()
 
-        let validator = TakeProfitValidator(
-            marketPrice: position.perpetual.price,
-            direction: position.position.direction
+        self.position = position
+        self.onTransferAction = onTransferAction
+
+        self.estimator = AutocloseEstimator(
+            entryPrice: position.position.entryPrice ?? .zero,
+            positionSize: position.position.size,
+            direction: position.position.direction,
+            leverage: position.position.leverage
         )
-        self.inputModel = InputValidationViewModel(mode: .manual, validators: [validator])
+
+        self.takeProfitInput = InputValidationViewModel(
+            mode: .manual,
+            validators: [
+                AutocloseValidator(
+                    type: .takeProfit,
+                    marketPrice: position.perpetual.price
+                )
+            ]
+        )
+
+        self.stopLossInput = InputValidationViewModel(
+            mode: .manual,
+            validators: [
+                AutocloseValidator(
+                    type: .stopLoss,
+                    marketPrice: position.perpetual.price
+                )
+            ]
+        )
 
         if let price = position.position.takeProfit?.price {
-            inputModel.text = priceFormatter.formatInputPrice(price)
+            takeProfitInput.text = priceFormatter.formatInputPrice(price)
+        }
+
+        if let price = position.position.stopLoss?.price {
+            stopLossInput.text = priceFormatter.formatInputPrice(price)
         }
     }
 
-    var takeProfit: String {
-        inputModel.text
-    }
+    var title: String { "Auto Close" }
 
-    var takeProfitPrice: Double? {
-        currencyFormatter.double(from: takeProfit)
-    }
+    var triggerPriceTitle: String { "Trigger price" }
 
-    var title: String { "Auto close" }
-    var targetPriceTitle: String { "Target price" }
     var takeProfitTitle: String { "Take profit" }
-    var expectedProfitTitle: String { "Expected profit" }
+    var stopLossTitle: String { "Stop Loss" }
 
-    var expectedProfitPercent: Double {
-        guard let profit = calculatedProfit,
-              let entryPrice = position.position.entryPrice
-        else {
-            return 0
-        }
-        let initialMargin = abs(position.position.size) * entryPrice / Double(position.position.leverage)
-        return (profit / initialMargin) * 100
-    }
-
-    var expectedProfitText: String {
-        guard let profit = calculatedProfit else { return "-" }
-        let profitAmount = currencyFormatter.string(abs(profit))
-        let percentText = percentFormatter.string(expectedProfitPercent)
-        return profit >= 0 ? "+\(profitAmount) (\(percentText))" : "-\(profitAmount) (\(percentText))"
-    }
-
-    var expectedProfitColor: Color {
-        guard let profit = calculatedProfit else { return Colors.secondaryText }
-        return profit >= 0 ? Colors.green : Colors.red
-    }
+    var estimatedPNL: String { "Estimated PNL" }
 
     var entryPriceTitle: String { "Entry Price" }
     var entryPriceText: String {
@@ -85,19 +89,20 @@ public final class AutocloseSceneViewModel {
         currencyFormatter.string(position.perpetual.price)
     }
 
-    var buttonType: ButtonType {
-        if hasTakeProfit || takeProfitPrice == nil {
-            return .primary(.disabled)
-        }
-        return .primary()
+    var expectedProfitText: String {
+        formatExpectedPnL(price: takeProfitPrice)
     }
 
-    var showButton: Bool {
-        !takeProfit.isEmpty
+    var expectedProfitColor: Color {
+        colorForPnL(price: takeProfitPrice)
     }
 
-    var hasTakeProfit: Bool {
-        position.position.takeProfit != nil
+    var expectedStopLossText: String {
+        formatExpectedPnL(price: stopLossPrice)
+    }
+
+    var expectedStopLossColor: Color {
+        colorForPnL(price: stopLossPrice)
     }
 
     var takeProfitOrderId: UInt64? {
@@ -105,9 +110,9 @@ public final class AutocloseSceneViewModel {
         return UInt64(orderId)
     }
 
-    var currentTakeProfitPrice: String {
-        guard let takeProfit = position.position.takeProfit else { return "-" }
-        return currencyFormatter.string(takeProfit.price)
+    var stopLossOrderId: UInt64? {
+        guard let orderId = position.position.stopLoss?.order_id else { return nil }
+        return UInt64(orderId)
     }
 }
 
@@ -118,29 +123,44 @@ extension AutocloseSceneViewModel {
         focusField = nil
     }
 
-    func onSelectConfirm() {
-        guard let takeProfitPrice = takeProfitPrice,
-              let assetIndex = Int32(position.perpetual.identifier),
-              inputModel.update()
-        else {
-            return
-        }
+    func onChangeFocusField(_ oldField: AutocloseScene.Field?, _ newField: AutocloseScene.Field?) {
+        focusField = newField
+    }
 
-        let price = priceFormatter.formatPrice(
-            provider: position.perpetual.provider,
-            takeProfitPrice,
-            decimals: Int(position.asset.decimals)
+    func onSelectConfirm() {
+        guard let assetIndex = Int32(position.perpetual.identifier) else { return }
+
+        let builder = AutocloseModifyBuilder(position: position)
+
+        let takeProfitField = AutocloseField(
+            price: takeProfitPrice,
+            originalPrice: position.position.takeProfit?.price,
+            formattedPrice: takeProfitPrice.map { formatPrice($0) },
+            isValid: !takeProfit.isEmpty && takeProfitInput.update(),
+            orderId: takeProfitOrderId
         )
-        let tpslData = TPSLOrderData(
-            direction: position.position.direction,
-            takeProfit: price,
-            stopLoss: nil,
-            size: .zero
+
+        let stopLossField = AutocloseField(
+            price: stopLossPrice,
+            originalPrice: position.position.stopLoss?.price,
+            formattedPrice: stopLossPrice.map { formatPrice($0) },
+            isValid: !stopLoss.isEmpty && stopLossInput.update(),
+            orderId: stopLossOrderId
         )
+
+        guard builder.hasChanges(takeProfit: takeProfitField, stopLoss: stopLossField) else { return }
+
+        let modifyTypes = builder.build(
+            assetIndex: assetIndex,
+            takeProfit: takeProfitField,
+            stopLoss: stopLossField
+        )
+        guard !modifyTypes.isEmpty else { return }
+
         let data = PerpetualModifyConfirmData(
             baseAsset: Asset.hyperliquidUSDC(),
             assetIndex: assetIndex,
-            modifyTypes: [.tpsl(tpslData)]
+            modifyTypes: modifyTypes
         )
 
         let transferData = TransferData(
@@ -153,39 +173,18 @@ extension AutocloseSceneViewModel {
         onTransferAction?(transferData)
     }
 
-    func onSelectCancel() {
-        guard let orderId = takeProfitOrderId,
-              let assetIndex = Int32(position.perpetual.identifier) else {
-            return
-        }
-
-        let cancelOrder = CancelOrderData(assetIndex: assetIndex, orderId: orderId)
-        let data = PerpetualModifyConfirmData(
-            baseAsset: Asset.hyperliquidUSDC(),
-            assetIndex: assetIndex,
-            modifyTypes: [.cancel([cancelOrder])]
+    private func formatPrice(_ price: Double) -> String {
+        priceFormatter.formatPrice(
+            provider: position.perpetual.provider,
+            price,
+            decimals: Int(position.asset.decimals)
         )
-
-        let transferData = TransferData(
-            type: .perpetual(position.asset, .modify(data)),
-            recipientData: RecipientData.hyperliquid(),
-            value: .zero,
-            canChangeValue: false
-        )
-
-        onTransferAction?(transferData)
     }
 
     func onSelectPercent(_ percent: Int) {
-        guard let entryPrice = position.position.entryPrice else { return }
-
-        let percentMultiplier = Double(percent) / 100.0
-        let priceChange = entryPrice * percentMultiplier
-
-        let targetPrice = position.position.direction == .long
-            ? entryPrice + priceChange
-            : entryPrice - priceChange
-
+        let type: AutocloseType = focusField == .takeProfit ? .takeProfit : .stopLoss
+        let targetPrice = estimator.calculateTargetPriceFromROE(roePercent: percent, type: type)
+        let inputModel = type == .takeProfit ? takeProfitInput : stopLossInput
         inputModel.text = priceFormatter.formatInputPrice(targetPrice, decimals: 2)
     }
 }
@@ -193,12 +192,28 @@ extension AutocloseSceneViewModel {
 // MARK: - Private
 
 extension AutocloseSceneViewModel {
-    private var calculatedProfit: Double? {
-        guard let entryPrice = position.position.entryPrice,
-              let takeProfitValue = takeProfitPrice
-        else {
-            return nil
-        }
-        return (takeProfitValue - entryPrice) * abs(position.position.size)
+    private var takeProfit: String { takeProfitInput.text }
+    private var takeProfitPrice: Double? { currencyFormatter.double(from: takeProfit) }
+
+    private var stopLoss: String { stopLossInput.text }
+    private var stopLossPrice: Double? { currencyFormatter.double(from: stopLoss) }
+
+    private func formatExpectedPnL(price: Double?) -> String {
+        guard let triggerPrice = price else { return "-" }
+        let pnl = estimator.calculatePnL(triggerPrice: triggerPrice)
+        let roe = estimator.calculateROE(triggerPrice: triggerPrice)
+
+        let amount = currencyFormatter.string(abs(pnl))
+        let percentText = percentFormatter.string(roe)
+        let sign = pnl >= 0 ? "+" : "-"
+
+        return "\(sign)\(amount) (\(percentText))"
     }
+
+    private func colorForPnL(price: Double?) -> Color {
+        guard let triggerPrice = price else { return Colors.secondaryText }
+        let pnl = estimator.calculatePnL(triggerPrice: triggerPrice)
+        return PriceChangeColor.color(for: pnl)
+    }
+
 }

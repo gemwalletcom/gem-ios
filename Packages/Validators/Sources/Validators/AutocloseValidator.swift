@@ -4,16 +4,16 @@ import Foundation
 import Primitives
 import Formatters
 
-public struct TakeProfitValidator: TextValidator {
+public struct AutocloseValidator: TextValidator {
+    private let type: AutocloseType
     private let marketPrice: Double
-    private let direction: PerpetualDirection
 
     public init(
-        marketPrice: Double,
-        direction: PerpetualDirection
+        type: AutocloseType,
+        marketPrice: Double
     ) {
         self.marketPrice = marketPrice
-        self.direction = direction
+        self.type = type
     }
 
     public func validate(_ text: String) throws {
@@ -27,14 +27,14 @@ public struct TakeProfitValidator: TextValidator {
             throw TransferError.invalidAmount
         }
 
-        switch direction {
-        case .long:
+        switch type {
+        case .takeProfit:
             guard price > marketPrice else {
-                throw PerpetualError.invalidTakeProfitPrice(direction: direction)
+                throw PerpetualError.invalidAutoclose(type: type)
             }
-        case .short:
+        case .stopLoss:
             guard price < marketPrice else {
-                throw PerpetualError.invalidTakeProfitPrice(direction: direction)
+                throw PerpetualError.invalidAutoclose(type: type)
             }
         }
     }
