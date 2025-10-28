@@ -81,9 +81,7 @@ final class VerifyPhraseViewModel {
     
     func importWallet() async throws  {
         let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
-        let wallet = try await Task.detached {
-            try self.walletService.importWallet(name: name, type: .phrase(words: self.words, chains: AssetConfiguration.allChains))
-        }.value
+        let wallet = try await walletService.importWallet(name: name, type: .phrase(words: self.words, chains: AssetConfiguration.allChains))
 
         WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
         walletService.acceptTerms()
