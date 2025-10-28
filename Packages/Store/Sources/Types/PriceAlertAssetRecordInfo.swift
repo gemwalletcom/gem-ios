@@ -25,6 +25,7 @@ extension PriceAlertAssetRecordInfo {
             priceAlerts: priceAlerts.or([]).compactMap { $0.map() },
             metadata: AssetMetaData(
                 isEnabled: true,
+                isBalanceEnabled: true,
                 isBuyEnabled: asset.isBuyable,
                 isSellEnabled: asset.isSellable,
                 isSwapEnabled: asset.isSwappable,

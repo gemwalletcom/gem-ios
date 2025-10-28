@@ -48,19 +48,13 @@ public struct ReceiveScene: View {
                 Spacer()
             }
             .frame(maxWidth: .scene.button.maxWidth)
-            
-            Button(action: model.onCopyAddress) {
-                HStack {
-                    Images.System.copy
-                        .foregroundStyle(Colors.secondaryText)
-                    Text(model.addressShort)
-                        .textStyle(.bodySecondary)
-                        .truncationMode(.middle)
-                }
-                .padding()
-                .frame(width: .scene.button.maxWidth, height: .scene.button.height)
-            }
-            .liquidGlass()
+
+            StateButton(
+                text: model.addressShort,
+                image: Images.System.copy,
+                action: model.onCopyAddress
+            )
+            .frame(maxWidth: .scene.button.maxWidth)
         }
         .padding(.bottom, .scene.bottom)
         .frame(maxWidth: .infinity)

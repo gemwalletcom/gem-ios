@@ -185,20 +185,21 @@ extension MainTabView {
         do {
             switch notification {
             case let .transaction(walletIndex, assetId, transaction):
-                if walletIndex != model.wallet.index.asInt {
-                    walletService.setCurrent(for: walletIndex)
+                guard let walletId = walletService.setCurrent(for: walletIndex) else {
+                    return
                 }
 
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)
-                try transactionsService.addTransaction(walletId: model.walletId, transaction: transaction)
-                let transaction = try transactionsService.getTransaction(
-                    walletId: model.walletId,
-                    transactionId: transaction.id.identifier
-                )
-                
                 var path = NavigationPath()
                 path.append(Scenes.Asset(asset: asset))
+
+                try transactionsService.addTransaction(walletId: walletId, transaction: transaction)
+                let transaction = try transactionsService.getTransaction(
+                    walletId: walletId,
+                    transactionId: transaction.id.identifier
+                )
                 path.append(transaction)
+
                 navigationState.wallet = path
             case .priceAlert(let assetId):
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)

@@ -38,7 +38,6 @@ struct MigrationsTests {
             
             let balanceColumns = try db.columns(in: BalanceRecord.databaseTableName)
             #expect(balanceColumns.contains(where: { $0.name == BalanceRecord.Columns.availableAmount.name }))
-            #expect(balanceColumns.contains(where: { $0.name == BalanceRecord.Columns.isHidden.name }))
             #expect(balanceColumns.contains(where: { $0.name == BalanceRecord.Columns.isActive.name }))
             
             let assetColumns = try db.columns(in: AssetRecord.databaseTableName)

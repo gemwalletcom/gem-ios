@@ -149,11 +149,9 @@ public struct BalanceStore: Sendable {
             let assigments = switch value {
             case true: [
                 BalanceRecord.Columns.isEnabled.set(to: true),
-                BalanceRecord.Columns.isHidden.set(to: false),
             ]
             case false: [
                 BalanceRecord.Columns.isEnabled.set(to: false),
-                BalanceRecord.Columns.isHidden.set(to: true),
                 BalanceRecord.Columns.isPinned.set(to: false)
             ]}
             

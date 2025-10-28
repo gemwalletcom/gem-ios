@@ -9,15 +9,9 @@ public struct SwapSigner {
     public init() {}
 
     func isTransferSwap(fromAsset: Asset, data: SwapData) -> Bool {
-// TODO: Enable this in the future.
-//        switch data.data.dataType {
-//        case .transfer: true
-//        case .contract: false
-//        }
-        switch data.quote.providerData.provider {
-        case .nearIntents: true
-        case .thorchain: [ChainType.bitcoin, ChainType.tron, ChainType.xrp].contains(fromAsset.chain.type)
-        default: false
+        switch data.data.dataType {
+        case .transfer: true
+        case .contract: false
         }
     }
 
@@ -42,10 +36,8 @@ public struct SwapSigner {
             swapData: swapData
         )
         switch fromAsset.id.type {
-        case .native:
-            return try [signer.signTransfer(input: transferInput, privateKey: privateKey)]
-        case .token:
-            return try [signer.signTokenTransfer(input: transferInput, privateKey: privateKey)]
+        case .native: return try [signer.signTransfer(input: transferInput, privateKey: privateKey)]
+        case .token: return try [signer.signTokenTransfer(input: transferInput, privateKey: privateKey)]
         }
     }
 }

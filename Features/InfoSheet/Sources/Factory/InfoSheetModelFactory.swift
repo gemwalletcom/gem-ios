@@ -18,7 +18,7 @@ public struct InfoSheetModelFactory {
         case let .networkFee(chain):
             return InfoSheetModel(
                 title: Localized.Info.NetworkFee.title,
-                description: Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol),
+                description: Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.feeAsset.symbol),
                 image: .image(Images.Info.networkFee),
                 button: .url(Docs.url(.networkFees))
             )
@@ -37,7 +37,7 @@ public struct InfoSheetModelFactory {
                     asset.chain.asset.symbol
                 )
             } else {
-                Localized.Info.InsufficientNetworkFeeBalance.description("", asset.chain.asset.name, asset.chain.asset.symbol)
+                Localized.Info.InsufficientNetworkFeeBalance.description(asset.chain.asset.symbol.wrap("**"), asset.chain.asset.name, asset.chain.asset.symbol)
             }
             return InfoSheetModel(
                 title: Localized.Info.InsufficientNetworkFeeBalance.title(asset.chain.asset.symbol),

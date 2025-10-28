@@ -38,7 +38,9 @@ public struct ImportAssetsService: Sendable {
         #endif
         
         let chains = AssetConfiguration.allChains
-        let assetIds = chains.map { $0.id }
+        let defaultAssets = chains.map { $0.defaultAssets }.flatMap { $0 }
+        let assetIds = chains.map { $0.id } + defaultAssets.ids
+        
         let localAssetsVersion = try assetStore.getAssets(for: assetIds).map { $0.id }
         
         if localAssetsVersion.count != assetIds.count {
@@ -48,16 +50,11 @@ public struct ImportAssetsService: Sendable {
                 let isStakable = GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).isStakeSupported
                 let isSwapable = GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).isSwapSupported
                 let isBuyable = score.rank >= 40
-                // Disable hypercore to show up in search
-                let isEnabled = switch chain {
-                case .hyperCore: false
-                default: true
-                }
-            
+                
                 return AssetBasic(
                     asset: $0.asset,
                     properties: AssetProperties(
-                        isEnabled: isEnabled,
+                        isEnabled: true,
                         isBuyable: isBuyable,
                         isSellable: false,
                         isSwapable: isSwapable,
@@ -68,6 +65,21 @@ public struct ImportAssetsService: Sendable {
                 )
             }
             try assetStore.add(assets: assets)
+            
+            try assetStore.insert(assets: defaultAssets.map {
+                AssetBasic(
+                    asset: $0,
+                    properties: AssetProperties(
+                        isEnabled: true,
+                        isBuyable: false,
+                        isSellable: false,
+                        isSwapable: false,
+                        isStakeable: false,
+                        stakingApr: .none
+                    ),
+                    score: AssetScore(rank: 16)
+                )
+            })
         }
         
         try assetStore.setAssetIsStakeable(for: chains.filter { $0.isStakeSupported }.map { $0.id }, value: true)

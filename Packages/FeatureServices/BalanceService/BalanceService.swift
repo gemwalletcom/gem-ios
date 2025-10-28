@@ -94,7 +94,7 @@ extension BalanceService {
         }
     }
 
-    public func addAssetsBalancesIfMissing(assetIds: [AssetId], wallet: Wallet) throws {
+    public func addAssetsBalancesIfMissing(assetIds: [AssetId], wallet: Wallet, isEnabled: Bool?) throws {
         let balancesAssetIds = try balanceStore
             .getBalances(walletId: wallet.id, assetIds: assetIds.ids)
             .map { $0.assetId }
@@ -105,7 +105,7 @@ extension BalanceService {
             balances: missingBalancesAssetIds.map {
                 AddBalance(
                     assetId: $0,
-                    isEnabled: AssetConfiguration.enabledByDefault.contains($0) || !wallet.isMultiCoins
+                    isEnabled: isEnabled ?? false
                 )
             }
         )

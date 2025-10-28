@@ -70,12 +70,6 @@ extension TransactionSceneViewModel: ListSectionProvideable {
 // MARK: - Actions
 
 extension TransactionSceneViewModel {
-    func onChangeTransaction(_ oldValue: TransactionExtended, _ newValue: TransactionExtended) {
-        if oldValue != newValue {
-            transactionExtended = newValue
-        }
-    }
-
     func onSelectTransactionHeader() {
         if let headerLink = headerViewModel.headerLink {
             UIApplication.shared.open(headerLink)

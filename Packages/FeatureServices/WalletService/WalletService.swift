@@ -48,7 +48,7 @@ public struct WalletService: Sendable {
         try walletStore.nextWalletIndex()
     }
 
-    public func setCurrent(for index: Int) {
+    public func setCurrent(for index: Int) -> WalletId? {
         walletSessionService.setCurrent(index: index)
     }
 

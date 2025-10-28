@@ -135,7 +135,7 @@ public struct AssetDataViewModel: Sendable {
     }
 
     public var isEnabled: Bool {
-        assetData.metadata.isEnabled
+        assetData.metadata.isBalanceEnabled
     }
 
     public var isBuyEnabled: Bool {

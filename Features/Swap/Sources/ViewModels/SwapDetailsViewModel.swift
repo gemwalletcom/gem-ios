@@ -21,6 +21,7 @@ public final class SwapDetailsViewModel {
     }()
     private let valueFormatter = ValueFormatter(style: .auto)
     private let rateFormatter = AssetRateFormatter()
+    private let percentSignLessFormatter = CurrencyFormatter.percentSignLess
     
     let state: StateViewType<[SwapperQuote]>
     private let fromAssetPrice: AssetPriceValue
@@ -119,9 +120,7 @@ public final class SwapDetailsViewModel {
     // MARK: - Slippage
     var slippageTitle: String { Localized.Swap.slippage }
     var slippageValue: UInt32 { selectedQuote.slippageBps / 100 }
-    var slippageText: String {
-        String(format: "%@ %@", "\(Double(slippageValue).rounded(toPlaces: 2))", "%")
-    }
+    var slippageText: String { percentSignLessFormatter.string(Double(slippageValue).rounded(toPlaces: 2)) }
     
     // MARK: - Min receive
     var minReceiveTitle: String { Localized.Swap.minReceive }

@@ -83,7 +83,7 @@ public final class AssetSceneViewModel: Sendable {
     var showResources: Bool { assetDataModel.showResources }
 
     var showTransactions: Bool { transactions.isNotEmpty }
-    var showManageToken: Bool { !assetData.metadata.isEnabled }
+    var showManageToken: Bool { !assetData.metadata.isBalanceEnabled }
 
     var pinText: String {
         assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
@@ -95,13 +95,13 @@ public final class AssetSceneViewModel: Sendable {
         Image(systemName: pinSystemImage)
     }
     var enableText: String {
-        assetData.metadata.isEnabled ? Localized.Asset.hideFromWallet : Localized.Asset.addToWallet
+        assetData.metadata.isBalanceEnabled ? Localized.Asset.hideFromWallet : Localized.Asset.addToWallet
     }
     var enableImage: Image {
         Image(systemName: enableSystemImage)
     }
     var enableSystemImage: String {
-        assetData.metadata.isEnabled ? SystemImage.minusCircle : SystemImage.plusCircle
+        assetData.metadata.isBalanceEnabled ? SystemImage.minusCircle : SystemImage.plusCircle
     }
     
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
@@ -189,6 +189,12 @@ extension AssetSceneViewModel {
         }
         Task {
             await updateAsset()
+        }
+        
+        if assetData.priceAlerts.isNotEmpty {
+            Task {
+                try await priceAlertService.update(assetId: asset.id.identifier)
+            }
         }
     }
 
@@ -303,7 +309,7 @@ extension AssetSceneViewModel {
             let isPinned = !assetData.metadata.isPinned
             isPresentingToastMessage = ToastMessage(title: pinText, image: pinSystemImage)
             try walletsService.setPinned(isPinned, walletId: wallet.walletId, assetId: asset.id)
-            if !assetData.metadata.isEnabled {
+            if !assetData.metadata.isBalanceEnabled {
                 onSelectEnable()
             }
         } catch {
@@ -313,7 +319,7 @@ extension AssetSceneViewModel {
     
     public func onSelectEnable() {
         Task {
-            let isEnabled = !assetData.metadata.isEnabled
+            let isEnabled = !assetData.metadata.isBalanceEnabled
             isPresentingToastMessage = ToastMessage(title: enableText, image: enableSystemImage)
             do {
                 await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: isEnabled)

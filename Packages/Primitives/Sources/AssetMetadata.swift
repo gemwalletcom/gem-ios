@@ -6,6 +6,7 @@ import Foundation
 
 public struct AssetMetaData: Codable, Equatable, Hashable, Sendable {
 	public let isEnabled: Bool
+	public let isBalanceEnabled: Bool
 	public let isBuyEnabled: Bool
 	public let isSellEnabled: Bool
 	public let isSwapEnabled: Bool
@@ -15,8 +16,9 @@ public struct AssetMetaData: Codable, Equatable, Hashable, Sendable {
 	public let stakingApr: Double?
 	public let rankScore: Int32
 
-	public init(isEnabled: Bool, isBuyEnabled: Bool, isSellEnabled: Bool, isSwapEnabled: Bool, isStakeEnabled: Bool, isPinned: Bool, isActive: Bool, stakingApr: Double?, rankScore: Int32) {
+	public init(isEnabled: Bool, isBalanceEnabled: Bool, isBuyEnabled: Bool, isSellEnabled: Bool, isSwapEnabled: Bool, isStakeEnabled: Bool, isPinned: Bool, isActive: Bool, stakingApr: Double?, rankScore: Int32) {
 		self.isEnabled = isEnabled
+		self.isBalanceEnabled = isBalanceEnabled
 		self.isBuyEnabled = isBuyEnabled
 		self.isSellEnabled = isSellEnabled
 		self.isSwapEnabled = isSwapEnabled

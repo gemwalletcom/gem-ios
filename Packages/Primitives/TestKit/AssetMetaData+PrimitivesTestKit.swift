@@ -6,6 +6,7 @@ import Primitives
 public extension AssetMetaData {
     static func mock(
         isEnabled: Bool = true,
+        isBalanceEnabled: Bool = true,
         isBuyEnabled: Bool = true,
         isSellEnabled: Bool = true,
         isSwapEnabled: Bool = true,
@@ -17,6 +18,7 @@ public extension AssetMetaData {
     ) -> AssetMetaData {
         AssetMetaData(
             isEnabled: isEnabled,
+            isBalanceEnabled: isBalanceEnabled,
             isBuyEnabled: isBuyEnabled,
             isSellEnabled: isSellEnabled,
             isSwapEnabled: isSwapEnabled,

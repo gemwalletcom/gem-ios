@@ -25,10 +25,11 @@ struct BalanceUpdateService: BalanceUpdater {
     }
 
     // add asset to asset store and create balance store record
-    func enableBalances(for walletId: WalletId, assetIds: [AssetId]) throws {
+    func enableBalances(for walletId: WalletId, assetIds: [AssetId], isEnabled: Bool?) throws {
         try balanceService.addAssetsBalancesIfMissing(
             assetIds: assetIds,
-            wallet: walletSessionService.getWallet(walletId: walletId)
+            wallet: walletSessionService.getWallet(walletId: walletId),
+            isEnabled: isEnabled
         )
     }
 }
