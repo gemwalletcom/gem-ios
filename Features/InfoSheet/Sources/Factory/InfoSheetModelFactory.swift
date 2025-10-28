@@ -157,12 +157,11 @@ public struct InfoSheetModelFactory {
                 button: .url(Docs.url(.perpetualsOpenInterest))
             )
         case .autoclose:
-        // TODO: - localize
             return InfoSheetModel(
-                title: "Auto Close",
-                description: "Automatically close your position at set price levels. Take Profit locks in gains, Stop Loss limits losses.",
+                title: Localized.Perpetual.autoClose,
+                description: Localized.Info.Perpetual.AutoClose.description,
                 image: .image(Images.Logo.logo),
-                button: .url(Docs.url(.perpetualsFundingRate)) // TODO: - update
+                button: .url(Docs.url(.perpetualsFundingRate)) // TODO: - update when available
             )
         }
     }

@@ -493,3 +493,10 @@
 "receive.warning" = "Отправлять только ** %@ ** в сети ** %@ ** на этот адрес.";
 "perpetual.leverage" = "Кредитное плечо";
 "perpetual.direction" = "Направление";
+"perpetual.auto_close" = "Автоматическое закрытие";
+"info.perpetual.auto_close.description" = "Автоматически закрывает позицию по достижении заданного уровня цены. Тейк-профит фиксирует прибыль, стоп-лосс ограничивает убытки.";
+"perpetual.auto_close.trigger_price" = "Цена триггера";
+"perpetual.auto_close.take_profit" = "Тейк-профит";
+"perpetual.auto_close.stop_loss" = "Стоп-лосс";
+"perpetual.market_price" = "Рыночная цена";
+"perpetual.auto_close.estimed_pnl" = "Расчетная PNL";

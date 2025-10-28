@@ -493,3 +493,10 @@
 "receive.warning" = "Trimiteți doar ** %@ ** prin rețeaua ** %@ ** către această adresă.";
 "perpetual.leverage" = "Efect de levier";
 "perpetual.direction" = "Direcţie";
+"perpetual.auto_close" = "Închidere automată";
+"info.perpetual.auto_close.description" = "Închide automat poziția la nivelurile de preț stabilite. Funcția Take Profit blochează câștigurile, iar funcția Stop Loss limitează pierderile.";
+"perpetual.auto_close.trigger_price" = "Preț de declanșare";
+"perpetual.auto_close.take_profit" = "Ia profit";
+"perpetual.auto_close.stop_loss" = "Stop Loss";
+"perpetual.market_price" = "Prețul de piață";
+"perpetual.auto_close.estimed_pnl" = "PNL estimat";

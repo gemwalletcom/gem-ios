@@ -493,3 +493,10 @@
 "receive.warning" = "इस पते पर केवल ** %@ ** नेटवर्क पर ** %@ ** भेजें।";
 "perpetual.leverage" = "उत्तोलन";
 "perpetual.direction" = "दिशा";
+"perpetual.auto_close" = "स्वतः बंद";
+"info.perpetual.auto_close.description" = "निर्धारित मूल्य स्तरों पर अपनी पोजीशन स्वचालित रूप से बंद करें। टेक प्रॉफिट लाभ को लॉक करता है, स्टॉप लॉस नुकसान को सीमित करता है।";
+"perpetual.auto_close.trigger_price" = "ट्रिगर मूल्य";
+"perpetual.auto_close.take_profit" = "लाभ लेने के";
+"perpetual.auto_close.stop_loss" = "झड़ने बंद";
+"perpetual.market_price" = "बाजार कीमत";
+"perpetual.auto_close.estimed_pnl" = "अनुमानित पीएनएल";

@@ -493,3 +493,10 @@
 "receive.warning" = "Stuur alleen ** %@ ** op het ** %@ ** netwerk naar dit adres.";
 "perpetual.leverage" = "Hefboom";
 "perpetual.direction" = "Richting";
+"perpetual.auto_close" = "Automatisch sluiten";
+"info.perpetual.auto_close.description" = "Sluit uw positie automatisch op ingestelde prijsniveaus. Take Profit vergrendelt winsten, Stop Loss beperkt verliezen.";
+"perpetual.auto_close.trigger_price" = "Triggerprijs";
+"perpetual.auto_close.take_profit" = "Winst nemen";
+"perpetual.auto_close.stop_loss" = "Stop-loss";
+"perpetual.market_price" = "Marktprijs";
+"perpetual.auto_close.estimed_pnl" = "Geschatte PNL";

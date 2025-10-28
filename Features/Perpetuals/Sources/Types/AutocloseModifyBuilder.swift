@@ -37,7 +37,11 @@ struct AutocloseModifyBuilder {
 
         return result
     }
+}
 
+// MARK: - Private
+
+extension AutocloseModifyBuilder {
     private func buildTPSL(takeProfit: AutocloseField, stopLoss: AutocloseField) -> PerpetualModifyType {
         .tpsl(TPSLOrderData(
             direction: position.position.direction,

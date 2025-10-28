@@ -70,21 +70,21 @@ public final class AutocloseSceneViewModel {
         }
     }
 
-    var title: String { "Auto Close" }
+    var title: String { Localized.Perpetual.autoClose }
 
-    var triggerPriceTitle: String { "Trigger price" }
+    var triggerPriceTitle: String { Localized.Perpetual.AutoClose.triggerPrice }
 
-    var takeProfitTitle: String { "Take profit" }
-    var stopLossTitle: String { "Stop Loss" }
+    var takeProfitTitle: String { Localized.Perpetual.AutoClose.takeProfit }
+    var stopLossTitle: String { Localized.Perpetual.AutoClose.stopLoss }
 
-    var estimatedPNL: String { "Estimated PNL" }
+    var estimatedPNL: String { Localized.Perpetual.AutoClose.estimedPnl }
 
-    var entryPriceTitle: String { "Entry Price" }
+    var entryPriceTitle: String { Localized.Perpetual.entryPrice }
     var entryPriceText: String {
         position.position.entryPrice.map { currencyFormatter.string($0) } ?? "-"
     }
 
-    var marketPriceTitle: String { "Market Price" }
+    var marketPriceTitle: String { Localized.Perpetual.marketPrice }
     var marketPriceText: String {
         currencyFormatter.string(position.perpetual.price)
     }
