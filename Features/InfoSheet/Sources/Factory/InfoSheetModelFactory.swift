@@ -18,7 +18,7 @@ public struct InfoSheetModelFactory {
         case let .networkFee(chain):
             return InfoSheetModel(
                 title: Localized.Info.NetworkFee.title,
-                description: Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.symbol),
+                description: Localized.Info.NetworkFee.description(chain.asset.name, chain.asset.feeAsset.symbol),
                 image: .image(Images.Info.networkFee),
                 button: .url(Docs.url(.networkFees))
             )

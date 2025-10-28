@@ -39,7 +39,7 @@ struct AssetsRequestTests {
 
             #expect(assets.first?.asset.id == assetId)
             #expect(assets.first?.metadata.isPinned == true)
-            #expect(assets.first?.metadata.isEnabled == true)
+            #expect(assets.first?.metadata.isBalanceEnabled == true)
         }
     }
     
@@ -52,14 +52,10 @@ struct AssetsRequestTests {
         
         try db.dbQueue.read { db in
             let enabledAssets = try AssetsRequest.mock(filters: [.enabled]).fetch(db)
-            let hiddenAssets = try AssetsRequest.mock(filters: [.hidden]).fetch(db)
             let enabledIds = enabledAssets.map { $0.asset.id }
 
             #expect(enabledAssets.count == 4)
             #expect(enabledIds.contains(disabledId) == false)
-            
-            #expect(hiddenAssets.count == 1)
-            #expect(hiddenAssets.first?.asset.id == disabledId)
         }
     }
     

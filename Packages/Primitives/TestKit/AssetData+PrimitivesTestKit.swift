@@ -12,6 +12,7 @@ public extension AssetData {
         priceAlerts: [PriceAlert] = [],
         metadata: AssetMetaData = AssetMetaData(
             isEnabled: true,
+            isBalanceEnabled: true,
             isBuyEnabled: true,
             isSellEnabled: true,
             isSwapEnabled: true,
