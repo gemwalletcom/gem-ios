@@ -182,7 +182,7 @@ extension AutocloseSceneViewModel {
     }
 
     func onSelectPercent(_ percent: Int) {
-        let type: AutocloseType = focusField == .takeProfit ? .takeProfit : .stopLoss
+        let type: TpslType = focusField == .takeProfit ? .takeProfit : .stopLoss
         let targetPrice = estimator.calculateTargetPriceFromROE(roePercent: percent, type: type)
         let inputModel = type == .takeProfit ? takeProfitInput : stopLossInput
         inputModel.text = priceFormatter.formatInputPrice(targetPrice, decimals: 2)

@@ -5,7 +5,7 @@ import Localization
 import Primitives
 
 public enum PerpetualError: Equatable {
-    case invalidAutoclose(type: AutocloseType)
+    case invalidAutoclose(type: TpslType)
 }
 
 extension PerpetualError: LocalizedError {

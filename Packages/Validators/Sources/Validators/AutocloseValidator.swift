@@ -5,11 +5,11 @@ import Primitives
 import Formatters
 
 public struct AutocloseValidator: TextValidator {
-    private let type: AutocloseType
+    private let type: TpslType
     private let marketPrice: Double
 
     public init(
-        type: AutocloseType,
+        type: TpslType,
         marketPrice: Double
     ) {
         self.marketPrice = marketPrice

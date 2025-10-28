@@ -9,7 +9,7 @@ struct AutocloseEstimator {
     let direction: PerpetualDirection
     let leverage: UInt8
 
-    func calculateTargetPriceFromROE(roePercent: Int, type: AutocloseType) -> Double {
+    func calculateTargetPriceFromROE(roePercent: Int, type: TpslType) -> Double {
         let priceChangePercent = Double(roePercent) / Double(leverage) / 100.0
 
         return switch (direction, type) {
