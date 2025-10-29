@@ -40,6 +40,7 @@ public enum ConfirmTransferItemModel {
     case swapDetails(SwapDetailsViewModel)
     case networkFee(ListItemModel)
     case perpetualDetails(PerpetualDetailsViewModel)
+    case perpetualModify(PerpetualModifyViewModel)
     case error(title: String, error: Error, onInfoAction: VoidAction)
     case empty
 }

@@ -13,7 +13,8 @@ public struct PerpetualPositionViewModel {
     public let data: PerpetualPositionData
     private let currencyFormatter: CurrencyFormatter
     private let percentFormatter: CurrencyFormatter
-    
+    private let autocloseFormatter: AutocloseFormatter
+
     public init(
         _ data: PerpetualPositionData,
         currencyStyle: CurrencyFormatterType = .currency
@@ -21,6 +22,7 @@ public struct PerpetualPositionViewModel {
         self.data = data
         self.currencyFormatter = CurrencyFormatter(type: currencyStyle, currencyCode: Currency.usd.rawValue)
         self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
+        self.autocloseFormatter = AutocloseFormatter(currencyFormatter: currencyFormatter)
     }
     
     public var assetImage: AssetImage {
@@ -72,19 +74,10 @@ public struct PerpetualPositionViewModel {
 
     var autocloseTitle: String { Localized.Perpetual.autoClose }
     var autocloseText: String {
-        let tp = data.position.takeProfit.map { "TP: \(currencyFormatter.string($0.price))" }
-        let sl = data.position.stopLoss.map { "SL: \(currencyFormatter.string($0.price))" }
-
-        switch (tp, sl) {
-        case (.some(let tpText), .some(let slText)):
-            return "\(tpText), \(slText)"
-        case (.some(let tpText), .none):
-            return tpText
-        case (.none, .some(let slText)):
-            return slText
-        case (.none, .none):
-            return "-"
-        }
+        autocloseFormatter.format(
+            takeProfit: data.position.takeProfit?.price,
+            stopLoss: data.position.stopLoss?.price
+        )
     }
 
     public var marginText: String {

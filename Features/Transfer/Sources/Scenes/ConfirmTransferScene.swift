@@ -121,6 +121,8 @@ extension ConfirmTransferScene {
                 with: ListItemView(model: model.listItemModel),
                 action: { self.model.onSelectPerpetualDetails(model) }
             )
+        case .perpetualModify(let model):
+            ListItemView(model: model.listItemModel)
         case let .networkFee(model):
             NavigationCustomLink(
                 with: ListItemView(model: model),

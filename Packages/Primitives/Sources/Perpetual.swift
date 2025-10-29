@@ -170,11 +170,15 @@ public struct PerpetualModifyConfirmData: Codable, Equatable, Hashable, Sendable
 	public let baseAsset: Asset
 	public let assetIndex: Int32
 	public let modifyTypes: [PerpetualModifyType]
+	public let takeProfitOrderId: UInt64?
+	public let stopLossOrderId: UInt64?
 
-	public init(baseAsset: Asset, assetIndex: Int32, modifyTypes: [PerpetualModifyType]) {
+	public init(baseAsset: Asset, assetIndex: Int32, modifyTypes: [PerpetualModifyType], takeProfitOrderId: UInt64?, stopLossOrderId: UInt64?) {
 		self.baseAsset = baseAsset
 		self.assetIndex = assetIndex
 		self.modifyTypes = modifyTypes
+		self.takeProfitOrderId = takeProfitOrderId
+		self.stopLossOrderId = stopLossOrderId
 	}
 }
 

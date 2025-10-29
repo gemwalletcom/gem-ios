@@ -160,7 +160,9 @@ extension AutocloseSceneViewModel {
         let data = PerpetualModifyConfirmData(
             baseAsset: .hypercoreUSDC(),
             assetIndex: assetIndex,
-            modifyTypes: modifyTypes
+            modifyTypes: modifyTypes,
+            takeProfitOrderId: takeProfitOrderId,
+            stopLossOrderId: stopLossOrderId
         )
 
         let transferData = TransferData(

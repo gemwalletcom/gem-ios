@@ -20,18 +20,17 @@ struct ConfirmDetailsViewModel {
 extension ConfirmDetailsViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel {
         switch type {
-        case let .swap(fromAsset, toAsset, swapData):
-                .swapDetails(
-                    SwapDetailsViewModel(
-                        fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
-                        toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
-                        selectedQuote: swapData.quote
-                    )
-                )
+        case let .swap(fromAsset, toAsset, swapData): .swapDetails(
+            SwapDetailsViewModel(
+                fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
+                toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
+                selectedQuote: swapData.quote
+            )
+        )
         case let .perpetual(_, perpetualType):
             switch perpetualType {
             case .close(let data), .open(let data): .perpetualDetails(PerpetualDetailsViewModel(data: data))
-            case .modify: .empty
+            case .modify(let data): .perpetualModify(PerpetualModifyViewModel(data: data))
             }
         case .transfer,
                 .deposit,
@@ -40,8 +39,7 @@ extension ConfirmDetailsViewModel: ItemModelProvidable {
                 .tokenApprove,
                 .stake,
                 .account,
-                .generic:
-                .empty
+                .generic: .empty
         }
     }
 }
