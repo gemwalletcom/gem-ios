@@ -9,11 +9,13 @@ import WalletCore
 
 public class EthereumSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        let data: Data = input.memo?.data(using: .utf8) ?? Data()
         let base = try buildBaseInput(
             input: input,
             transaction: .with {
                 $0.transfer = EthereumTransaction.Transfer.with {
                     $0.amount = input.value.magnitude.serialize()
+                    $0.data = data
                 }
             },
             toAddress: input.destinationAddress,
