@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "סטופ לוס";
 "perpetual.market_price" = "מחיר שוק";
 "perpetual.auto_close.estimed_pnl" = "PNL משוער";
+"perpetual.increase_direction" = "הגדלה %@";
+"perpetual.reduce_direction" = "צמצום %@";

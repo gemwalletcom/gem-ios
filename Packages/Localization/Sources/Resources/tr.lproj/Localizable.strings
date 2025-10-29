@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "Zarar Durdurma";
 "perpetual.market_price" = "Piyasa Fiyatı";
 "perpetual.auto_close.estimed_pnl" = "Tahmini Kâr/Zarar";
+"perpetual.increase_direction" = "%@ yi artırın";
+"perpetual.reduce_direction" = "%@ azalt";

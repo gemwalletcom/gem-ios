@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "نقصان کو روکیں۔";
 "perpetual.market_price" = "بازاری قیمت";
 "perpetual.auto_close.estimed_pnl" = "تخمینہ شدہ PNL";
+"perpetual.increase_direction" = "اضافہ کریں %@";
+"perpetual.reduce_direction" = "کم کریں %@";

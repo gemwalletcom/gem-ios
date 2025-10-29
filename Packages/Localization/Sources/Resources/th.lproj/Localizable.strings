@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "สต็อปลอส";
 "perpetual.market_price" = "ราคาตลาด";
 "perpetual.auto_close.estimed_pnl" = "PNL โดยประมาณ";
+"perpetual.increase_direction" = "เพิ่ม %@";
+"perpetual.reduce_direction" = "ลด %@";

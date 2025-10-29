@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "Hentikan Kerugian";
 "perpetual.market_price" = "Harga Pasar";
 "perpetual.auto_close.estimed_pnl" = "Perkiraan PNL";
+"perpetual.increase_direction" = "Peningkatan %@";
+"perpetual.reduce_direction" = "Kurangi %@";

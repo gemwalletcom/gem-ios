@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "ストップロス";
 "perpetual.market_price" = "市場価格";
 "perpetual.auto_close.estimed_pnl" = "推定損益";
+"perpetual.increase_direction" = "%@を増やす";
+"perpetual.reduce_direction" = "%@を減らす";

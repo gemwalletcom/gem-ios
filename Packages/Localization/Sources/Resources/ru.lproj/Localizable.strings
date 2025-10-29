@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "Стоп-лосс";
 "perpetual.market_price" = "Рыночная цена";
 "perpetual.auto_close.estimed_pnl" = "Расчетная PNL";
+"perpetual.increase_direction" = "Увеличение %@";
+"perpetual.reduce_direction" = "Уменьшить %@";

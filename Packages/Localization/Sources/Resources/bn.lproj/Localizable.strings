@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "স্টপ লস";
 "perpetual.market_price" = "বাজার মূল্য";
 "perpetual.auto_close.estimed_pnl" = "আনুমানিক পিএনএল";
+"perpetual.increase_direction" = "%@ বৃদ্ধি করুন";
+"perpetual.reduce_direction" = "%@ কমাও";

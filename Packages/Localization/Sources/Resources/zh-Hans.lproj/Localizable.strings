@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "止损";
 "perpetual.market_price" = "市价";
 "perpetual.auto_close.estimed_pnl" = "预计盈亏";
+"perpetual.increase_direction" = "增加%@";
+"perpetual.reduce_direction" = "减少%@";

@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "झड़ने बंद";
 "perpetual.market_price" = "बाजार कीमत";
 "perpetual.auto_close.estimed_pnl" = "अनुमानित पीएनएल";
+"perpetual.increase_direction" = "%@ बढ़ाएँ";
+"perpetual.reduce_direction" = "%@ कम करें";

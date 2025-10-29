@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "Stop Loss";
 "perpetual.market_price" = "Prețul de piață";
 "perpetual.auto_close.estimed_pnl" = "PNL estimat";
+"perpetual.increase_direction" = "Creștere %@";
+"perpetual.reduce_direction" = "Reduceți %@";

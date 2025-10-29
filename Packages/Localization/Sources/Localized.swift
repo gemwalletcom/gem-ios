@@ -797,6 +797,10 @@ public enum Localized {
     public static let direction = Localized.tr("Localizable", "perpetual.direction", fallback: "Direction")
     /// Entry Price
     public static let entryPrice = Localized.tr("Localizable", "perpetual.entry_price", fallback: "Entry Price")
+    /// Increase %@
+    public static func increaseDirection(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "perpetual.increase_direction", String(describing: p1), fallback: "Increase %@")
+    }
     /// Increase Position
     public static let increasePosition = Localized.tr("Localizable", "perpetual.increase_position", fallback: "Increase Position")
     /// Leverage
@@ -819,6 +823,10 @@ public enum Localized {
     public static let position = Localized.tr("Localizable", "perpetual.position", fallback: "Position")
     /// Positions
     public static let positions = Localized.tr("Localizable", "perpetual.positions", fallback: "Positions")
+    /// Reduce %@
+    public static func reduceDirection(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "perpetual.reduce_direction", String(describing: p1), fallback: "Reduce %@")
+    }
     /// Reduce Position
     public static let reducePosition = Localized.tr("Localizable", "perpetual.reduce_position", fallback: "Reduce Position")
     /// Short
@@ -826,8 +834,8 @@ public enum Localized {
     /// Size
     public static let size = Localized.tr("Localizable", "perpetual.size", fallback: "Size")
     public enum AutoClose {
-      /// Estimated PNL
-      public static let estimedPnl = Localized.tr("Localizable", "perpetual.auto_close.estimed_pnl", fallback: "Estimated PNL")
+      /// Estimated Pnl
+      public static let estimedPnl = Localized.tr("Localizable", "perpetual.auto_close.estimed_pnl", fallback: "Estimated Pnl")
       /// Stop Loss
       public static let stopLoss = Localized.tr("Localizable", "perpetual.auto_close.stop_loss", fallback: "Stop Loss")
       /// Take profit

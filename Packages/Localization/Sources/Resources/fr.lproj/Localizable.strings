@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "Stop Loss";
 "perpetual.market_price" = "Prix du marché";
 "perpetual.auto_close.estimed_pnl" = "PNL estimé";
+"perpetual.increase_direction" = "Augmentation %@";
+"perpetual.reduce_direction" = "Réduire %@";

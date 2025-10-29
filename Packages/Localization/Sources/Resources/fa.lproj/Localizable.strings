@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "حد ضرر";
 "perpetual.market_price" = "قیمت بازار";
 "perpetual.auto_close.estimed_pnl" = "سود هر سهم (PNL) تخمینی";
+"perpetual.increase_direction" = "افزایش %@";
+"perpetual.reduce_direction" = "کاهش %@";

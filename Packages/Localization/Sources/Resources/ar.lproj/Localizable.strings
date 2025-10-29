@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "وقف الخسارة";
 "perpetual.market_price" = "سعر السوق";
 "perpetual.auto_close.estimed_pnl" = "الربح والخسارة التقديرية";
+"perpetual.increase_direction" = "زيادة %@";
+"perpetual.reduce_direction" = "تقليل %@";

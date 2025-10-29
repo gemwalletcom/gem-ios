@@ -500,3 +500,5 @@
 "perpetual.auto_close.stop_loss" = "Zastavit ztrátu";
 "perpetual.market_price" = "Tržní cena";
 "perpetual.auto_close.estimed_pnl" = "Odhadovaný PNL";
+"perpetual.increase_direction" = "Zvýšení %@";
+"perpetual.reduce_direction" = "Snížit %@";
