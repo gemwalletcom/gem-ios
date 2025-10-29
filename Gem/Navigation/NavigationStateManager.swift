@@ -7,6 +7,8 @@ final class NavigationStateManager: Sendable {
     @MainActor
     var wallet = NavigationPath()
     @MainActor
+    var search = NavigationPath()
+    @MainActor
     var collections = NavigationPath()
     @MainActor
     var activity = NavigationPath()
@@ -19,9 +21,6 @@ final class NavigationStateManager: Sendable {
     var selectedTab: TabItem = .wallet
     @MainActor
     var previousSelectedTab: TabItem = .wallet
-
-    @MainActor
-    var walletTabReselected = false
 
     init() {}
 }
@@ -41,12 +40,12 @@ extension NavigationStateManager {
     }
 
     func backToRoot(tab: TabItem) {
-        if wallet.isEmpty {
-            walletTabReselected.toggle()
-        }
-        
         switch tab {
         case .wallet: resetPath(&wallet)
+        case .search:
+            if #available(iOS 26, *) {
+                resetPath(&search)
+            }
         case .collections: resetPath(&collections)
         case .activity: resetPath(&activity)
         case .settings: resetPath(&settings)

@@ -29,20 +29,14 @@ public struct WalletSearchScene: View {
             } else if model.showEmpty {
                 EmptyContentView(
                     model: EmptyContentTypeViewModel(
-                        type: .search(
-                            type: .assets,
-                            action: nil
-                        )
+                        type: .search(type: .assets, action: nil)
                     )
                 )
             }
         }
-        .observeQuery(request: $model.request, value: $model.assets)
-        .searchable(
-            text: $model.searchModel.searchableQuery,
-            isPresented: $model.isSearchPresented,
-            placement: .navigationBarDrawer(displayMode: .always)
-        )
+        .searchable(text: $model.searchModel.searchableQuery)
+        .scrollDismissesKeyboard(.interactively)
+        .navigationTitle("Search")
         .autocorrectionDisabled(true)
         .debounce(
             value: $model.searchModel.searchableQuery.wrappedValue,
@@ -51,10 +45,6 @@ public struct WalletSearchScene: View {
         )
         .onChange(of: model.searchModel.searchableQuery, model.onChangeSearchQuery)
         .onChange(of: model.isSearching, model.onChangeFocus)
-        .onChange(of: model.isSearchPresented, model.onChangeSearchPresented)
-        .onAppear {
-            model.onAppear()
-        }
     }
 
     @ViewBuilder
