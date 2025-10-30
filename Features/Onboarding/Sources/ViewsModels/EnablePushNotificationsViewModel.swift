@@ -9,6 +9,7 @@ import Components
 import Style
 import Localization
 import BannerService
+import InfoSheet
 
 @Observable
 @MainActor
@@ -34,8 +35,17 @@ public final class EnablePushNotificationsViewModel {
         self.isPresented = isPresented
     }
 
-    var title: String { Localized.Banner.EnableNotifications.title }
-    var message: String { "Turn on notifications to keep up with your wallet activity. You can change this anytime in Settings." }
+    var infoSheetModel: InfoSheetModel {
+        InfoSheetModel(
+            title: Localized.Banner.EnableNotifications.title,
+            description: "Turn on notifications to keep up with your wallet activity. You can change this anytime in Settings.",
+            image: .assetImage(AssetImage(type: Emoji.bell)),
+            button: .action(
+                title: Localized.Settings.enableValue(""),
+                action: onEnable
+            )
+        )
+    }
 }
 
 // MARK: - Actions
