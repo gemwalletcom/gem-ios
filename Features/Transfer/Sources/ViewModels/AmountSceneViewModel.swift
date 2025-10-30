@@ -123,10 +123,11 @@ public final class AmountSceneViewModel {
         case .transfer: Localized.Transfer.Send.title
         case .deposit: Localized.Wallet.deposit
         case .withdraw: Localized.Wallet.withdraw
-        case .perpetual(_, let data):
-            switch data.direction {
-            case .short: "Short"
-            case .long: "Long"
+        case .perpetual(let data):
+            switch data.positionAction {
+            case .open(let transferData): PerpetualDirectionViewModel(direction: transferData.direction).title
+            case .increase(let transferData): PerpetualDirectionViewModel(direction: transferData.direction).increaseTitle
+            case .reduce(_, _, let positionDirection): PerpetualDirectionViewModel(direction: positionDirection).reduceTitle
             }
         case .stake: Localized.Transfer.Stake.title
         case .stakeUnstake: Localized.Transfer.Unstake.title
@@ -344,7 +345,7 @@ extension AmountSceneViewModel {
         case .transfer(recipient: let recipient): recipient
         case .deposit(recipient: let recipient): recipient
         case .withdraw(recipient: let recipient): recipient
-        case .perpetual(let recipient, _): recipient
+        case .perpetual(let data): data.recipient
         case .stake,
              .stakeUnstake,
              .stakeRedelegate,
@@ -445,15 +446,15 @@ extension AmountSceneViewModel {
                 value: value,
                 canChangeValue: canChangeValue
             )
-        case .perpetual(_, let perpetual):
-            let data = PerpetualOrderFactory().makeOpenOrder(
-                perpetual: perpetual,
+        case .perpetual(let data):
+            let perpetualType = PerpetualOrderFactory().makeOpenOrder(
+                positionAction: data.positionAction,
                 usdcAmount: value,
                 usdcDecimals: asset.decimals.asInt
             )
 
             return TransferData(
-                type: .perpetual(perpetual.asset, .open(data)),
+                type: .perpetual(data.positionAction.transferData.asset, perpetualType),
                 recipientData: recipientData,
                 value: value,
                 canChangeValue: canChangeValue
@@ -563,10 +564,10 @@ extension AmountSceneViewModel {
         switch input.type {
         case .transfer, .deposit:
             return assetData.balance.available
-        case let .perpetual(_, perpetualData):
-            switch perpetualData.positionMode {
-            case .open: return assetData.balance.available
-            case .reduce(let available): return available
+        case let .perpetual(perpetualData):
+            switch perpetualData.positionAction {
+            case .open, .increase: return assetData.balance.available
+            case .reduce(_, let available, _): return available
             }
         case .stake:
             switch asset.chain {

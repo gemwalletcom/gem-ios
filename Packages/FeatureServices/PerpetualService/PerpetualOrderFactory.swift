@@ -16,11 +16,13 @@ public struct PerpetualOrderFactory {
     public init() {}
 
     public func makeOpenOrder(
-        perpetual: PerpetualTransferData,
+        positionAction: PerpetualPositionAction,
         usdcAmount: BigInt,
         usdcDecimals: Int,
         slippage: Double = 2.0
-    ) -> PerpetualConfirmData {
+    ) -> PerpetualType {
+        let perpetual = positionAction.transferData
+
         let slippagePrice = calculateSlippagePrice(
             marketPrice: perpetual.price,
             direction: perpetual.direction,
@@ -33,7 +35,7 @@ public struct PerpetualOrderFactory {
         let fiatValue = perpetual.price * sizeAsAsset
         let marginAmount = fiatValue / Double(perpetual.leverage)
 
-        return makePerpetualConfirmData(
+        let data = makePerpetualConfirmData(
             direction: perpetual.direction,
             baseAsset: perpetual.baseAsset,
             fiatValue: fiatValue,
@@ -49,6 +51,12 @@ public struct PerpetualOrderFactory {
             marketPrice: perpetual.price,
             marginAmount: marginAmount
         )
+
+        return switch positionAction {
+        case .open: .open(data)
+        case .increase: .increase(data)
+        case .reduce(_, _, let positionDirection): .reduce(PerpetualReduceData(data: data, positionDirection: positionDirection))
+        }
     }
 
     public func makeCloseOrder(
