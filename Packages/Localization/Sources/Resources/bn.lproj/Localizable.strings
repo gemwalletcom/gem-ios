@@ -493,3 +493,12 @@
 "receive.warning" = "** %@ ** নেটওয়ার্কে শুধুমাত্র ** %@ ** এই ঠিকানায় পাঠান।";
 "perpetual.leverage" = "লিভারেজ";
 "perpetual.direction" = "দিকনির্দেশনা";
+"perpetual.auto_close" = "স্বয়ংক্রিয়ভাবে বন্ধ করুন";
+"info.perpetual.auto_close.description" = "নির্ধারিত মূল্য স্তরে আপনার পজিশন স্বয়ংক্রিয়ভাবে বন্ধ করুন। টেক প্রফিট লাভকে আটকে রাখে, স্টপ লস লোকসানকে সীমাবদ্ধ করে।";
+"perpetual.auto_close.trigger_price" = "ট্রিগার মূল্য";
+"perpetual.auto_close.take_profit" = "লাভ নিন";
+"perpetual.auto_close.stop_loss" = "স্টপ লস";
+"perpetual.market_price" = "বাজার মূল্য";
+"perpetual.auto_close.estimed_pnl" = "আনুমানিক পিএনএল";
+"perpetual.increase_direction" = "%@ বৃদ্ধি করুন";
+"perpetual.reduce_direction" = "%@ কমাও";

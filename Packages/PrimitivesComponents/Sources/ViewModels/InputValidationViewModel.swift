@@ -86,7 +86,7 @@ extension InputValidationViewModel {
             update()
         case .manual:
             // clear error for every field change
-            if isInvalid {
+            if isInvalid && oldText != text {
                 update(error: nil)
             }
         }

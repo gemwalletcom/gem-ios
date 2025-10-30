@@ -53,11 +53,10 @@ struct TransferDataViewModel {
             switch type {
             case .open(let data): PerpetualDirectionViewModel(direction: data.direction).title
             case .close: Localized.Perpetual.closePosition
+            case .modify(_): "Modify position" // TODO: - Add localization
             }
         }
     }
-
-    
 
     var websiteURL: URL? {
         switch type {
