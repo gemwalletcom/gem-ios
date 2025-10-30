@@ -447,7 +447,7 @@ extension AmountSceneViewModel {
                 canChangeValue: canChangeValue
             )
         case .perpetual(let data):
-            let perpetualType = PerpetualOrderFactory().makeOpenOrder(
+            let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
                 positionAction: data.positionAction,
                 usdcAmount: value,
                 usdcDecimals: asset.decimals.asInt

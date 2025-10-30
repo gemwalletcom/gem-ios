@@ -18,9 +18,9 @@ extension Gemstone.GemPerpetualType {
 extension Primitives.PerpetualType {
     public func map() -> Gemstone.GemPerpetualType {
         switch self {
-        case .open, .increase: .open(data.map())
-        case .reduce(let reduceData): .open(reduceData.data.map())
-        case .close: .close(data.map())
+        case .open(let data), .increase(let data): .open(data.map())
+        case .reduce(let data): .open(data.data.map())
+        case .close(let data): .close(data.map())
         }
     }
 }

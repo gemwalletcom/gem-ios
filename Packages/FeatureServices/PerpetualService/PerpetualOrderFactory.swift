@@ -15,7 +15,7 @@ public struct PerpetualOrderFactory {
 
     public init() {}
 
-    public func makeOpenOrder(
+    public func makePerpetualOrder(
         positionAction: PerpetualPositionAction,
         usdcAmount: BigInt,
         usdcDecimals: Int,
