@@ -1,61 +1,43 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Keystore
+import class Gemstone.GemChainSigner
+import GemstonePrimitives
 import Primitives
 import Gemstone
 
-public struct SuiSigner: Signable {
+public final class SuiSigner: Signable {
+    private let signer: GemChainSigner
+    private let cryptoSigner = CryptoSigner()
+
+    public init() {
+        signer = Gemstone.GemChainSigner(chain: Chain.sui.rawValue)
+    }
+
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        try sign(input: input, privateKey: privateKey)
+        try signer.signTransfer(input: input.map(), privateKey: privateKey)
     }
-    
+
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        try sign(input: input, privateKey: privateKey)
+        try signer.signTokenTransfer(input: input.map(), privateKey: privateKey)
     }
-    
+
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        [try sign(input: input, privateKey: privateKey)]
+        try signer.signSwap(input: input.map(), privateKey: privateKey)
     }
-    
+
     public func signData(input: SignerInput, privateKey: Data) throws -> String {
-        try signTxDataDigest(data: try input.metadata.getMessageBytes(), privateKey: privateKey)
+        try signer.signData(input: input.map(), privateKey: privateKey)
     }
-    
+
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case .stake(_, let type) = input.type else {
-            throw AnyError.notImplemented
-        }
-        switch type {
-        case .stake, .unstake:
-            return [try sign(input: input, privateKey: privateKey)]
-        case .redelegate, .rewards, .withdraw:
-            throw AnyError.notImplemented
-        case .freeze:
-            throw AnyError("Sui does not support freeze operations")
-        }
+        try signer.signStake(input: input.map(), privateKey: privateKey)
     }
-    
-    func sign(input: SignerInput, privateKey: Data) throws -> String {
-        return try signTxDataDigest(data: try input.metadata.getMessageBytes(), privateKey: privateKey)
-    }
-    
+
     public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
         guard case .raw(let messageData) = message else {
             throw AnyError("Sui message signing expects raw message bytes")
         }
-        return try CryptoSigner().signSuiPersonalMessage(message: messageData, privateKey: privateKey)
-    }
-    
-    func signTxDataDigest(data: String, privateKey: Data) throws -> String {
-        let parts = data.split(separator: "_").map { String($0) }
-        guard parts.count == 2 else {
-            throw AnyError("Invalid Sui digest payload")
-        }
-        guard let digest = Data(hexString: parts[1]) else {
-            throw AnyError("Invalid digest hex for Sui transaction")
-        }
-        let signature = try CryptoSigner().signSuiDigest(digest: digest, privateKey: privateKey)
-        return parts[0] + "_" + signature
+        return try cryptoSigner.signSuiPersonalMessage(message: messageData, privateKey: privateKey)
     }
 }
