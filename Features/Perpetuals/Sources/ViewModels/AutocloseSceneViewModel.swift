@@ -46,7 +46,8 @@ public final class AutocloseSceneViewModel {
             validators: [
                 AutocloseValidator(
                     type: .takeProfit,
-                    marketPrice: position.perpetual.price
+                    marketPrice: position.perpetual.price,
+                    direction: position.position.direction
                 )
             ]
         )
@@ -56,7 +57,8 @@ public final class AutocloseSceneViewModel {
             validators: [
                 AutocloseValidator(
                     type: .stopLoss,
-                    marketPrice: position.perpetual.price
+                    marketPrice: position.perpetual.price,
+                    direction: position.position.direction
                 )
             ]
         )

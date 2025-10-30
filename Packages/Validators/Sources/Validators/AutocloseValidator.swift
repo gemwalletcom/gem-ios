@@ -7,13 +7,16 @@ import Formatters
 public struct AutocloseValidator: TextValidator {
     private let type: TpslType
     private let marketPrice: Double
+    private let direction: PerpetualDirection
 
     public init(
         type: TpslType,
-        marketPrice: Double
+        marketPrice: Double,
+        direction: PerpetualDirection
     ) {
         self.marketPrice = marketPrice
         self.type = type
+        self.direction = direction
     }
 
     public func validate(_ text: String) throws {
@@ -27,17 +30,15 @@ public struct AutocloseValidator: TextValidator {
             throw TransferError.invalidAmount
         }
 
-        switch type {
-        case .takeProfit:
-            guard price > marketPrice else {
-                throw PerpetualError.invalidAutoclose(type: type)
-            }
-        case .stopLoss:
-            guard price < marketPrice else {
-                throw PerpetualError.invalidAutoclose(type: type)
-            }
+        let isValid = switch (type, direction) {
+        case (.takeProfit, .long), (.stopLoss, .short): price > marketPrice
+        case (.takeProfit, .short), (.stopLoss, .long): price < marketPrice
+        }
+
+        guard isValid else {
+            throw PerpetualError.invalidAutoclose(type: type, direction: direction)
         }
     }
 
-    public var id: String { "TakeProfitValidator" }
+    public var id: String { "AutocloseValidator" }
 }

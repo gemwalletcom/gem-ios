@@ -24,7 +24,8 @@ struct AutocloseEstimator {
     }
 
     func calculatePriceChangePercent(triggerPrice: Double) -> Double {
-        ((triggerPrice - entryPrice) / entryPrice) * 100
+        let rawChange = ((triggerPrice - entryPrice) / entryPrice) * 100
+        return direction == .short ? -rawChange : rawChange
     }
 
     func calculateROE(triggerPrice: Double) -> Double {
