@@ -36,7 +36,8 @@ extension ConfirmNetworkFeeViewModel {
                 subtitleExtra: networkFeeFiatValue,
                 placeholders: [.subtitle],
                 infoAction: infoAction
-            )
+            ),
+            selectable: !state.isError
         )
     }
 }
