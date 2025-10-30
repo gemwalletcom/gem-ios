@@ -1,15 +1,15 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
+import class Gemstone.GemChainSigner
 import GemstonePrimitives
 import Primitives
 
 public class HyperCoreSigner: Signable {
-    private let signer: any ChainSigner
+    private let signer: GemChainSigner
 
     public init() {
-        signer = Gemstone.GemSigner(signer: NativeSigner())
+        signer = Gemstone.GemChainSigner(chain: Chain.hyperCore.rawValue)
     }
 
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
