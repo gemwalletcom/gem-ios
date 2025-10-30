@@ -17,7 +17,7 @@ public extension Gemstone.GemSwapData {
     }
 }
 
-extension Primitives.SwapData {
+public extension Primitives.SwapData {
     func map() -> Gemstone.GemSwapData {
         Gemstone.GemSwapData(
             quote: quote.map(),
