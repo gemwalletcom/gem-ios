@@ -247,7 +247,7 @@ public struct TransactionViewModel: Sendable {
             return AmountDisplay.numeric(
                 asset: .hypercoreUSDC(),
                 price: Price(price: 1, priceChangePercentage24h: .zero, updatedAt: .now),
-                value: BigInt(stringLiteral: transaction.transaction.value),
+                value: transaction.transaction.valueBigInt,
                 currency: Currency.usd.rawValue,
                 formatter: .auto,
                 textStyle: TextStyle(font: .body, color: Colors.black, fontWeight: .medium)
