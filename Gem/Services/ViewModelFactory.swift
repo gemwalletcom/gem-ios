@@ -23,6 +23,10 @@ import Assets
 import FiatConnect
 import WalletConnectorService
 import AddressNameService
+import DeviceService
+import BannerService
+import Onboarding
+import InfoSheet
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -38,6 +42,8 @@ public struct ViewModelFactory: Sendable {
     let transactionService: TransactionService
     let chainServiceFactory: ChainServiceFactory
     let addressNameService: AddressNameService
+    let deviceService: DeviceService
+    let bannerService: BannerService
     
     public init(
         keystore: any Keystore,
@@ -52,7 +58,9 @@ public struct ViewModelFactory: Sendable {
         priceService: PriceService,
         transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
-        addressNameService: AddressNameService
+        addressNameService: AddressNameService,
+        deviceService: DeviceService,
+        bannerService: BannerService
     ) {
         self.keystore = keystore
         self.nodeService = nodeService
@@ -67,6 +75,8 @@ public struct ViewModelFactory: Sendable {
         self.transactionService = transactionService
         self.chainServiceFactory = chainServiceFactory
         self.addressNameService = addressNameService
+        self.deviceService = deviceService
+        self.bannerService = bannerService
     }
     
     @MainActor
@@ -195,5 +205,20 @@ public struct ViewModelFactory: Sendable {
             onTransferAction: onTransferAction
         )
     }
-    
+
+    @MainActor
+    public func infoSheetActionViewModel(
+        type: InfoSheetActionType,
+        onComplete: VoidAction
+    ) -> some InfoSheetActionable {
+        switch type {
+        case .enablePushNotifications:
+            return EnablePushNotificationsViewModel(
+                deviceService: deviceService,
+                bannerService: bannerService,
+                onComplete: onComplete
+            )
+        }
+    }
+
 }

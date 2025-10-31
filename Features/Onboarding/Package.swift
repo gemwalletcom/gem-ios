@@ -23,7 +23,8 @@ let package = Package(
         .package(name: "QRScanner", path: "../QRScanner"),
         .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
-        .package(name: "ChainServices", path: "../../Packages/ChainServices")
+        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
+        .package(name: "InfoSheet", path: "../InfoSheet")
     ],
     targets: [
         .target(
@@ -39,13 +40,19 @@ let package = Package(
                 "Keystore",
                 .product(name: "WalletService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
-                "Formatters"
+                .product(name: "DeviceService", package: "FeatureServices"),
+                "Formatters",
+                "InfoSheet"
             ],
             path: "Sources"
         ),
         .testTarget(
             name: "OnboardingTest",
-            dependencies: ["Onboarding"],
+            dependencies: [
+                "Onboarding",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                "InfoSheet"
+            ],
             path: "Tests"
         )
     ]

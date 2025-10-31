@@ -36,7 +36,10 @@ struct GemApp: App {
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
                     walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService,
-                    nameService: resolver.services.nameService
+                    nameService: resolver.services.nameService,
+                    onboardingPresenter: resolver.services.onboardingPresenter,
+                    viewModelFactory: resolver.services.viewModelFactory,
+                    preferences: resolver.storages.observablePreferences.preferences
                 )
             )
             .inject(resolver: resolver)

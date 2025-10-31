@@ -17,6 +17,9 @@ import WalletService
 import WalletsService
 import NameService
 import BannerService
+import Preferences
+import Onboarding
+import InfoSheet
 
 @Observable
 @MainActor
@@ -27,14 +30,23 @@ final class RootSceneViewModel {
     private let deviceObserverService: DeviceObserverService
     private let notificationHandler: NotificationHandler
     private let walletsService: WalletsService
+    private let preferences: Preferences
 
     let walletService: WalletService
     let nameService: NameService
     let walletConnectorPresenter: WalletConnectorPresenter
+    let onboardingPresenter: OnboardingPresenter
     let lockManager: any LockWindowManageable
+    let viewModelFactory: ViewModelFactory
+
     var currentWallet: Wallet? { walletService.currentWallet }
 
     var updateVersionAlertMessage: AlertMessage?
+
+    var isPresentingInfoSheetAction: InfoSheetActionType? {
+        get { onboardingPresenter.isPresentingInfoSheetAction }
+        set { onboardingPresenter.isPresentingInfoSheetAction = newValue }
+    }
 
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -61,7 +73,10 @@ final class RootSceneViewModel {
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
         walletsService: WalletsService,
-        nameService: NameService
+        nameService: NameService,
+        onboardingPresenter: OnboardingPresenter,
+        viewModelFactory: ViewModelFactory,
+        preferences: Preferences = .standard
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartAsyncService = onstartAsyncService
@@ -73,6 +88,9 @@ final class RootSceneViewModel {
         self.walletService = walletService
         self.walletsService = walletsService
         self.nameService = nameService
+        self.onboardingPresenter = onboardingPresenter
+        self.viewModelFactory = viewModelFactory
+        self.preferences = preferences
     }
 }
 
@@ -101,6 +119,11 @@ extension RootSceneViewModel {
         if let newWallet {
             setup(wallet: newWallet)
         }
+        onboardingPresenter.showEnablePushNotificationsIfNeeded(
+            oldWallet: oldWallet,
+            newWallet: newWallet,
+            isPushNotificationsEnabled: preferences.isPushNotificationsEnabled
+        )
     }
 
     func handleOpenUrl(_ url: URL) async {
