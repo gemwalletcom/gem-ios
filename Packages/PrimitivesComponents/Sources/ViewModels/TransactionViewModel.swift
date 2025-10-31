@@ -213,7 +213,7 @@ public struct TransactionViewModel: Sendable {
                     return .none
                 }
                 let price = AmountDisplay.currency(value: metadata.price, currencyCode: Currency.usd.rawValue, showSign: false).text
-                return String(format: "%@ %@", Localized.Asset.price, price)
+                return String(format: "%@: %@", Localized.Asset.price, price)
             }
         }()
 
