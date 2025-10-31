@@ -48,7 +48,11 @@ let package = Package(
         ),
         .testTarget(
             name: "OnboardingTest",
-            dependencies: ["Onboarding"],
+            dependencies: [
+                "Onboarding",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                "InfoSheet"
+            ],
             path: "Tests"
         )
     ]

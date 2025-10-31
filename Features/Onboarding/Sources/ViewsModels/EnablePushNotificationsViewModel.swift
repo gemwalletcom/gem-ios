@@ -13,29 +13,29 @@ import InfoSheet
 
 @Observable
 @MainActor
-public final class EnablePushNotificationsViewModel {
+public final class EnablePushNotificationsViewModel: InfoSheetActionable {
 
     private let pushNotificationService: PushNotificationEnablerService
     private let deviceService: DeviceService
     private let bannerService: BannerService
-    private var isPresented: Binding<Bool>
+    private let onComplete: VoidAction
 
     var buttonState = ButtonState.normal
-    var isPresentingAlertMessage: AlertMessage?
+    public var isPresentingAlertMessage: AlertMessage?
 
     public init(
         pushNotificationService: PushNotificationEnablerService = PushNotificationEnablerService(),
         deviceService: DeviceService,
         bannerService: BannerService,
-        isPresented: Binding<Bool>
+        onComplete: VoidAction
     ) {
         self.pushNotificationService = pushNotificationService
         self.deviceService = deviceService
         self.bannerService = bannerService
-        self.isPresented = isPresented
+        self.onComplete = onComplete
     }
 
-    var infoSheetModel: InfoSheetModel {
+    public var infoSheetModel: InfoSheetModel {
         InfoSheetModel(
             title: Localized.Banner.EnableNotifications.title,
             description: "Turn on notifications to keep up with your wallet activity. You can change this anytime in Settings.",
@@ -61,7 +61,7 @@ extension EnablePushNotificationsViewModel {
                     try await deviceService.update()
                     try bannerService.closeBanner(id: BannerEvent.enableNotifications.rawValue)
                 }
-                isPresented.wrappedValue = false
+                onComplete?()
             } catch {
                 isPresentingAlertMessage = AlertMessage(
                     title: Localized.Errors.errorOccured,

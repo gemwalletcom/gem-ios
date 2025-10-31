@@ -2,14 +2,12 @@
 
 import Foundation
 import SwiftUI
-import InfoSheet
-import Localization
 import Components
 
-public struct EnablePushNotificationsScene: View {
-    @State private var model: EnablePushNotificationsViewModel
+public struct InfoSheetActionScene<ViewModel: InfoSheetActionable>: View {
+    @State private var model: ViewModel
 
-    public init(model: EnablePushNotificationsViewModel) {
+    public init(model: ViewModel) {
         _model = State(wrappedValue: model)
     }
 

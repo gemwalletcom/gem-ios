@@ -8,6 +8,7 @@ import Primitives
 import Onboarding
 import PriceService
 import Components
+import InfoSheet
 
 struct RootScene: View {
     @State private var model: RootSceneViewModel
@@ -68,15 +69,13 @@ struct RootScene: View {
                 image: SystemImage.network
             )
         )
-        .sheet(isPresented: $model.isPresentingEnablePushNotifications) {
-            EnablePushNotificationsScene(
-                model: EnablePushNotificationsViewModel(
-                    deviceService: model.deviceService,
-                    bannerService: model.bannerService,
-                    isPresented: $model.isPresentingEnablePushNotifications
+        .sheet(item: $model.isPresentingInfoSheetAction) { type in
+            InfoSheetActionScene(
+                model: model.viewModelFactory.infoSheetActionViewModel(
+                    type: type,
+                    onComplete: { model.isPresentingInfoSheetAction = nil }
                 )
             )
-            .presentationDetentsForCurrentDeviceSize()
         }
     }
 }

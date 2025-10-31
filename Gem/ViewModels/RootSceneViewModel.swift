@@ -18,6 +18,8 @@ import WalletsService
 import NameService
 import BannerService
 import Preferences
+import Onboarding
+import InfoSheet
 
 @Observable
 @MainActor
@@ -33,13 +35,18 @@ final class RootSceneViewModel {
     let walletService: WalletService
     let nameService: NameService
     let walletConnectorPresenter: WalletConnectorPresenter
+    let onboardingPresenter: OnboardingPresenter
     let lockManager: any LockWindowManageable
-    let deviceService: DeviceService
-    let bannerService: BannerService
+    let viewModelFactory: ViewModelFactory
+
     var currentWallet: Wallet? { walletService.currentWallet }
 
     var updateVersionAlertMessage: AlertMessage?
-    var isPresentingEnablePushNotifications: Bool = false
+
+    var isPresentingInfoSheetAction: InfoSheetActionType? {
+        get { onboardingPresenter.isPresentingInfoSheetAction }
+        set { onboardingPresenter.isPresentingInfoSheetAction = newValue }
+    }
 
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -67,8 +74,8 @@ final class RootSceneViewModel {
         walletService: WalletService,
         walletsService: WalletsService,
         nameService: NameService,
-        deviceService: DeviceService,
-        bannerService: BannerService,
+        onboardingPresenter: OnboardingPresenter,
+        viewModelFactory: ViewModelFactory,
         preferences: Preferences = .standard
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
@@ -81,8 +88,8 @@ final class RootSceneViewModel {
         self.walletService = walletService
         self.walletsService = walletsService
         self.nameService = nameService
-        self.deviceService = deviceService
-        self.bannerService = bannerService
+        self.onboardingPresenter = onboardingPresenter
+        self.viewModelFactory = viewModelFactory
         self.preferences = preferences
     }
 }
@@ -111,8 +118,12 @@ extension RootSceneViewModel {
     func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
         if let newWallet {
             setup(wallet: newWallet)
-            showEnablePushNotificationsIfNeeded(oldWallet: oldWallet)
         }
+        onboardingPresenter.showEnablePushNotificationsIfNeeded(
+            oldWallet: oldWallet,
+            newWallet: newWallet,
+            isPushNotificationsEnabled: preferences.isPushNotificationsEnabled
+        )
     }
 
     func handleOpenUrl(_ url: URL) async {
@@ -181,10 +192,5 @@ extension RootSceneViewModel {
         } catch {
             NSLog("RootSceneViewModel setupWallet error: \(error)")
         }
-    }
-
-    private func showEnablePushNotificationsIfNeeded(oldWallet: Wallet?) {
-        guard oldWallet == nil, preferences.isPushNotificationsEnabled == false else { return }
-        isPresentingEnablePushNotifications = true
     }
 }

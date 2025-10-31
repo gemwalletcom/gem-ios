@@ -24,6 +24,7 @@ import SwapService
 import NameService
 import PerpetualService
 import AddressNameService
+import Onboarding
 
 extension AppResolver {
     struct Services: Sendable {
@@ -59,6 +60,7 @@ extension AppResolver {
         let perpetualObserverService: PerpetualObserverService
         let nameService: NameService
         let addressNameService: AddressNameService
+        let onboardingPresenter: OnboardingPresenter
         let viewModelFactory: ViewModelFactory
 
         init(
@@ -93,6 +95,7 @@ extension AppResolver {
             perpetualObserverService: PerpetualObserverService,
             nameService: NameService,
             addressNameService: AddressNameService,
+            onboardingPresenter: OnboardingPresenter,
             viewModelFactory: ViewModelFactory
         ) {
             self.assetsService = assetsService
@@ -126,6 +129,7 @@ extension AppResolver {
             self.perpetualObserverService = perpetualObserverService
             self.nameService = nameService
             self.addressNameService = addressNameService
+            self.onboardingPresenter = onboardingPresenter
             self.viewModelFactory = viewModelFactory
         }
     }
