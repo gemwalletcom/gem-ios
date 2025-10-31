@@ -11,6 +11,7 @@ struct WalletsNavigationStack: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.avatarService) private var avatarService
     @Environment(\.nameService) private var nameService
+    @Environment(\.bannerSetupService) private var bannerSetupService
 
     @State private var navigationPath = NavigationPath()
 
@@ -50,6 +51,7 @@ struct WalletsNavigationStack: View {
             .sheet(isPresented: $isPresentingCreateWalletSheet) {
                 CreateWalletNavigationStack(
                     walletService: walletService,
+                    bannerSetupService: bannerSetupService,
                     isPresentingWallets: $isPresentingWallets
                 )
             }

@@ -44,6 +44,7 @@ extension EnvironmentValues {
     @Entry var deviceService: DeviceService = AppResolver.main.services.deviceService
     @Entry var balanceService: BalanceService = AppResolver.main.services.balanceService
     @Entry var bannerService: BannerService = AppResolver.main.services.bannerService
+    @Entry var bannerSetupService: BannerSetupService = AppResolver.main.services.bannerSetupService
     @Entry var transactionsService: TransactionsService =  AppResolver.main.services.transactionsService
     @Entry var assetsService: AssetsService = AppResolver.main.services.assetsService
     @Entry var notificationHandler: NotificationHandler =  AppResolver.main.services.notificationHandler
