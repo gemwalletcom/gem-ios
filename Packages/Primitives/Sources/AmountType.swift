@@ -11,5 +11,5 @@ public enum AmountType: Equatable, Hashable, Sendable {
     case stakeRedelegate(delegation: Delegation, validators: [DelegationValidator], recommendedValidator: DelegationValidator?)
     case stakeWithdraw(delegation: Delegation)
     case freeze(data: FreezeData)
-    case perpetual(recipient: RecipientData, perpetual: PerpetualTransferData)
+    case perpetual(PerpetualRecipientData)
 }

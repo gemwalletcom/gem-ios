@@ -97,11 +97,11 @@ public struct PerpetualScene: View {
                     }
                 } else {
                     HStack(spacing: Spacing.medium) {
-                        Button(model.longButtonTitle) { model.onOpenLongPosition() }
+                        Button(model.longButtonTitle, action: model.onOpenLongPosition)
                             .frame(maxWidth: .infinity)
                             .buttonStyle(.green())
 
-                        Button(model.shortButtonTitle) { model.onOpenShortPosition() }
+                        Button(model.shortButtonTitle, action: model.onOpenShortPosition)
                             .frame(maxWidth: .infinity)
                             .buttonStyle(.red())
                     }

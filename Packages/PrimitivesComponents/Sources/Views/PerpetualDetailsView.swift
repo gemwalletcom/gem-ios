@@ -19,7 +19,7 @@ public struct PerpetualDetailsView: View {
                 ListItemView(
                     title: model.directionTitle,
                     subtitle: model.directionViewModel.title,
-                    subtitleStyle: model.listItemModel.subtitleStyle
+                    subtitleStyle: model.directionTextStyle
                 )
 
                 if let pnlText = model.pnlText {

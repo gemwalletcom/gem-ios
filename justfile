@@ -59,7 +59,6 @@ build:
     ENABLE_TESTABILITY=NO \
     build | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-# Clean build cache
 clean:
     @rm -rf build/DerivedData
     @echo "Build cache cleaned"

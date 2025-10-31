@@ -9,7 +9,8 @@ public extension PerpetualType {
 
     var data: PerpetualConfirmData {
         switch self {
-        case .open(let data), .close(let data): data
+        case .open(let data), .close(let data), .increase(let data): data
+        case .reduce(let reduceData): reduceData.data
         }
     }
 }

@@ -493,3 +493,12 @@
 "receive.warning" = "Bu adrese yalnızca ** %@ ** ağında ** %@ ** gönderin.";
 "perpetual.leverage" = "Kaldıraç";
 "perpetual.direction" = "Yön";
+"perpetual.auto_close" = "Otomatik Kapatma";
+"info.perpetual.auto_close.description" = "Pozisyonunuzu belirlenen fiyat seviyelerinde otomatik olarak kapatın. Kâr Al özelliği kazançlarınızı sabitler, Zarar Durdur özelliği ise kayıplarınızı sınırlar.";
+"perpetual.auto_close.trigger_price" = "Tetikleyici fiyat";
+"perpetual.auto_close.take_profit" = "Kar al";
+"perpetual.auto_close.stop_loss" = "Zarar Durdurma";
+"perpetual.market_price" = "Piyasa Fiyatı";
+"perpetual.auto_close.estimed_pnl" = "Tahmini Kâr/Zarar";
+"perpetual.increase_direction" = "%@ yi artırın";
+"perpetual.reduce_direction" = "%@ azalt";

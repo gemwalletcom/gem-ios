@@ -9,7 +9,7 @@ import Localization
 import Components
 import WalletCore
 import class Gemstone.SignMessageDecoder
-import class Gemstone.GemstoneSigner
+import class Gemstone.CryptoSigner
 
 @Observable
 @MainActor
@@ -87,7 +87,7 @@ public final class SignMessageSceneViewModel {
 
         if payload.chain == .sui, payload.message.signType == .suiPersonalMessage {
             let privateKey = try keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
-            let signature = try GemstoneSigner().signSuiDigest(digest: hash, privateKey: privateKey)
+            let signature = try CryptoSigner().signSuiDigest(digest: hash, privateKey: privateKey)
             confirmTransferDelegate(.success(signature))
             return
         }

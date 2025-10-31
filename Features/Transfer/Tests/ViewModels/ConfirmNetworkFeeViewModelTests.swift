@@ -21,8 +21,9 @@ struct ConfirmNetworkFeeViewModelTests {
             infoAction: {}
         )
 
-        guard case .networkFee(let item) = model.itemModel else { return }
+        guard case .networkFee(let item, let selectable) = model.itemModel else { return }
         #expect(item.subtitle == fiatValue)
+        #expect(selectable == true)
     }
 
     @Test
@@ -36,8 +37,9 @@ struct ConfirmNetworkFeeViewModelTests {
             infoAction: {}
         )
 
-        guard case .networkFee(let item) = model.itemModel else { return }
+        guard case .networkFee(let item, let selectable) = model.itemModel else { return }
         #expect(item.subtitle == value)
+        #expect(selectable == true)
     }
 
     @Test
@@ -50,8 +52,9 @@ struct ConfirmNetworkFeeViewModelTests {
             infoAction: {}
         )
 
-        guard case .networkFee(let item) = model.itemModel else { return }
+        guard case .networkFee(let item, let selectable) = model.itemModel else { return }
         #expect(item.subtitle == "-")
+        #expect(selectable == false)
     }
 
     @Test
@@ -72,9 +75,10 @@ struct ConfirmNetworkFeeViewModelTests {
             infoAction: {}
         )
 
-        guard case .networkFee(let item) = model.itemModel else { return }
+        guard case .networkFee(let item, let selectable) = model.itemModel else { return }
         #expect(item.subtitle == value)
         #expect(item.subtitleExtra == fiatValue)
+        #expect(selectable == true)
     }
 }
 

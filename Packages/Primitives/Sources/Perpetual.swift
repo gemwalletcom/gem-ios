@@ -133,6 +133,16 @@ public struct PerpetualPositionsSummary: Codable, Equatable, Hashable, Sendable 
 	}
 }
 
+public struct PerpetualReduceData: Codable, Equatable, Hashable, Sendable {
+	public let data: PerpetualConfirmData
+	public let positionDirection: PerpetualDirection
+
+	public init(data: PerpetualConfirmData, positionDirection: PerpetualDirection) {
+		self.data = data
+		self.positionDirection = positionDirection
+	}
+}
+
 public enum AccountDataType: String, Codable, Equatable, Hashable, Sendable {
 	case activate
 }
@@ -140,10 +150,14 @@ public enum AccountDataType: String, Codable, Equatable, Hashable, Sendable {
 public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 	case open(PerpetualConfirmData)
 	case close(PerpetualConfirmData)
+	case increase(PerpetualConfirmData)
+	case reduce(PerpetualReduceData)
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case open = "Open",
-			close = "Close"
+			close = "Close",
+			increase = "Increase",
+			reduce = "Reduce"
 	}
 
 	private enum ContainerCodingKeys: String, CodingKey {
@@ -164,6 +178,16 @@ public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 					self = .close(content)
 					return
 				}
+			case .increase:
+				if let content = try? container.decode(PerpetualConfirmData.self, forKey: .content) {
+					self = .increase(content)
+					return
+				}
+			case .reduce:
+				if let content = try? container.decode(PerpetualReduceData.self, forKey: .content) {
+					self = .reduce(content)
+					return
+				}
 			}
 		}
 		throw DecodingError.typeMismatch(PerpetualType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for PerpetualType"))
@@ -177,6 +201,12 @@ public enum PerpetualType: Codable, Equatable, Hashable, Sendable {
 			try container.encode(content, forKey: .content)
 		case .close(let content):
 			try container.encode(CodingKeys.close, forKey: .type)
+			try container.encode(content, forKey: .content)
+		case .increase(let content):
+			try container.encode(CodingKeys.increase, forKey: .type)
+			try container.encode(content, forKey: .content)
+		case .reduce(let content):
+			try container.encode(CodingKeys.reduce, forKey: .type)
 			try container.encode(content, forKey: .content)
 		}
 	}

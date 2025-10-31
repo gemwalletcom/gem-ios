@@ -205,10 +205,14 @@ public struct TransactionViewModel: Sendable {
             case .swap,
                     .stakeRewards,
                     .stakeWithdraw,
-                    .assetActivation,
-                    .perpetualOpenPosition,
-                    .perpetualClosePosition:
+                    .assetActivation:
                 return .none
+            case .perpetualOpenPosition,
+                    .perpetualClosePosition:
+                guard case .perpetual(let metadata) = transaction.transaction.metadata else {
+                    return .none
+                }
+                return AmountDisplay.currency(value: metadata.price, currencyCode: Currency.usd.rawValue, showSign: false).text
             }
         }()
 

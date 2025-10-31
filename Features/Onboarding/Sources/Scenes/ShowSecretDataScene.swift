@@ -17,6 +17,7 @@ struct ShowSecretDataScene: View {
             if let calloutViewStyle = model.calloutViewStyle {
                 CalloutView(style: calloutViewStyle)
                     .cleanListRow()
+                    .padding(.horizontal, .medium)
             }
             
             Section {
@@ -44,6 +45,7 @@ struct ShowSecretDataScene: View {
                 .padding(.bottom, .scene.bottom)
             }
         }
+        .listStyle(.plain)
         .contentMargins([.top], .extraSmall, for: .scrollContent)
         .listSectionSpacing(.custom(.medium))
         .toolbarInfoButton(url: model.docsUrl)
