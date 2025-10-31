@@ -493,3 +493,12 @@
 "receive.warning" = "Надсилати лише ** %@ ** через мережу ** %@ ** на цю адресу.";
 "perpetual.leverage" = "Кредитне плече";
 "perpetual.direction" = "Напрямок";
+"perpetual.auto_close" = "Автоматичне закриття";
+"info.perpetual.auto_close.description" = "Автоматично закривайте свою позицію за встановленими ціновими рівнями. Тейк-профіт фіксує прибутки, а стоп-лос обмежує збитки.";
+"perpetual.auto_close.trigger_price" = "Тригерна ціна";
+"perpetual.auto_close.take_profit" = "Зафіксуйте прибуток";
+"perpetual.auto_close.stop_loss" = "Стоп-лосс";
+"perpetual.market_price" = "Ринкова ціна";
+"perpetual.auto_close.estimed_pnl" = "Очікуваний PNL";
+"perpetual.increase_direction" = "Збільшити %@";
+"perpetual.reduce_direction" = "Зменшити %@";
