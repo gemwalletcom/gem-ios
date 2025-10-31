@@ -9,6 +9,10 @@ extension Gemstone.PerpetualType {
         switch self {
         case .open(let confirmData): .open(try confirmData.map())
         case .close(let confirmData): .close(try confirmData.map())
+        case .increase(_):
+            fatalError()
+        case .reduce(_):
+            fatalError()
         }
     }
 }
