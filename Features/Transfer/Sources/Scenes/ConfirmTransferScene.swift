@@ -121,11 +121,15 @@ extension ConfirmTransferScene {
                 with: ListItemView(model: model.listItemModel),
                 action: { self.model.onSelectPerpetualDetails(model) }
             )
-        case let .networkFee(model):
-            NavigationCustomLink(
-                with: ListItemView(model: model),
-                action: self.model.onSelectFeePicker
-            )
+        case let .networkFee(model, selectable):
+            if selectable {
+                NavigationCustomLink(
+                    with: ListItemView(model: model),
+                    action: self.model.onSelectFeePicker
+                )
+            } else {
+                ListItemView(model: model)
+            }
         case let .error(title, error, onInfoAction):
             ListItemErrorView(
                 errorTitle: title,
