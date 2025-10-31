@@ -4,7 +4,7 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension Gemstone.GemPerpetualReduceData {
+extension Gemstone.PerpetualReduceData {
     public func map() throws -> Primitives.PerpetualReduceData {
         Primitives.PerpetualReduceData(
             data: try data.map(),

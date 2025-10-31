@@ -4,7 +4,7 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension Gemstone.GemPerpetualType {
+extension Gemstone.PerpetualType {
     public func map() throws -> Primitives.PerpetualType {
         switch self {
         case .open(let confirmData): .open(try confirmData.map())
@@ -16,7 +16,7 @@ extension Gemstone.GemPerpetualType {
 }
 
 extension Primitives.PerpetualType {
-    public func map() -> Gemstone.GemPerpetualType {
+    public func map() -> Gemstone.PerpetualType {
         switch self {
         case .open(let data), .increase(let data): .open(data.map())
         case .reduce(let data): .open(data.data.map())
