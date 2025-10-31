@@ -31,6 +31,7 @@ extension AppResolver {
         let assetsService: AssetsService
         let balanceService: BalanceService
         let bannerService: BannerService
+        let bannerSetupService: BannerSetupService
         let chainServiceFactory: ChainServiceFactory
         let connectionsService: ConnectionsService
         let deviceService: DeviceService
@@ -65,6 +66,7 @@ extension AppResolver {
             assetsService: AssetsService,
             balanceService: BalanceService,
             bannerService: BannerService,
+            bannerSetupService: BannerSetupService,
             chainServiceFactory: ChainServiceFactory,
             connectionsService: ConnectionsService,
             deviceService: DeviceService,
@@ -98,6 +100,7 @@ extension AppResolver {
             self.assetsService = assetsService
             self.balanceService = balanceService
             self.bannerService = bannerService
+            self.bannerSetupService = bannerSetupService
             self.chainServiceFactory = chainServiceFactory
             self.connectionsService = connectionsService
             self.deviceService = deviceService

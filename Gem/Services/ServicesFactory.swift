@@ -202,6 +202,7 @@ struct ServicesFactory {
             assetsService: assetsService,
             balanceService: balanceService,
             bannerService: bannerService,
+            bannerSetupService: bannerSetupService,
             chainServiceFactory: chainServiceFactory,
             connectionsService: connectionsService,
             deviceService: deviceService,

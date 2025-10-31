@@ -35,12 +35,17 @@ public struct BannerSetupService: Sendable {
 
     public func setupWallet(wallet: Wallet) throws  {
         try setupAccountActivation()
-        try setupOnboarding(wallet: wallet)
     }
     
     public func setupAccountMultiSignatureWallet(walletId: WalletId, chain: Chain) throws {
         try store.addBanners([
             NewBanner.accountBlockedMultiSignature(walletId: walletId, chain: chain)
+        ])
+    }
+    
+    public func setupOnboarding(wallet: Wallet) throws {
+        try store.addBanners([
+            NewBanner.onboarding(walletId: wallet.walletId)
         ])
     }
     
@@ -52,13 +57,5 @@ public struct BannerSetupService: Sendable {
             NewBanner.accountActivation(assetId: $0.assetId)
         }
         try store.addBanners(banners)
-    }
-    
-    private func setupOnboarding(wallet: Wallet) throws {
-        if WalletPreferences(walletId: wallet.id).isCompleteInitialSynchronization, !wallet.isViewOnly {
-            try store.addBanners([
-                NewBanner.onboarding(walletId: wallet.walletId)
-            ])
-        }
     }
 }

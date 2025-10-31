@@ -9,6 +9,7 @@ import Localization
 import PrimitivesComponents
 import Preferences
 import Components
+import BannerService
 
 @Observable
 @MainActor
@@ -17,6 +18,7 @@ final class VerifyPhraseViewModel {
     private let words: [String]
     private let shuffledWords: [String]
     private let walletService: WalletService
+    private let bannerSetupService: BannerSetupService
     private let onFinish: VoidAction
 
     var wordsVerified: [String]
@@ -28,12 +30,14 @@ final class VerifyPhraseViewModel {
     init(
         words: [String],
         walletService: WalletService,
+        bannerSetupService: BannerSetupService,
         onFinish: VoidAction
     ) {
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
         self.walletService = walletService
+        self.bannerSetupService = bannerSetupService
         self.onFinish = onFinish
         self.isPresentingAlertMessage = nil
     }
@@ -83,7 +87,7 @@ final class VerifyPhraseViewModel {
         let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
         let wallet = try await walletService.importWallet(name: name, type: .phrase(words: self.words, chains: AssetConfiguration.allChains))
 
-        WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
+        try? bannerSetupService.setupOnboarding(wallet: wallet)
         walletService.acceptTerms()
 
         onFinish?()

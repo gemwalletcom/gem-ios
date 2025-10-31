@@ -30,6 +30,7 @@ final class RootSceneViewModel {
 
     let walletService: WalletService
     let nameService: NameService
+    let bannerSetupService: BannerSetupService
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
@@ -61,7 +62,8 @@ final class RootSceneViewModel {
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
         walletsService: WalletsService,
-        nameService: NameService
+        nameService: NameService,
+        bannerSetupService: BannerSetupService
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartAsyncService = onstartAsyncService
@@ -73,6 +75,7 @@ final class RootSceneViewModel {
         self.walletService = walletService
         self.walletsService = walletsService
         self.nameService = nameService
+        self.bannerSetupService = bannerSetupService
     }
 }
 
