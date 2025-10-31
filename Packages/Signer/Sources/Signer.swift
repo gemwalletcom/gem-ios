@@ -81,14 +81,14 @@ public struct Signer: Sendable {
         case .tron: TronSigner()
         case .bitcoin: BitcoinSigner()
         case .aptos: AptosSigner()
-        case .sui: SuiSigner()
         case .xrp: XrpSigner()
         case .near: NearSigner()
         case .stellar: StellarSigner()
         case .algorand: AlgorandSigner()
         case .polkadot: PolkadotSigner()
         case .cardano: CardanoSigner()
-        case .hyperCore: HyperCoreSigner()
+        case .sui, .hyperCore: ChainSigner(chain: chain)
         }
     }
 }
+
