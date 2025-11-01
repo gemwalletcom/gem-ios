@@ -57,13 +57,14 @@ extension AssetsRequest {
         var request: QueryInterfaceRequest<AssetRecord> = request
         filters.forEach {
             switch $0 {
-            case .buyable,
+            case .enabled,
+                .buyable,
                 .swappable,
                 .stakeable,
                 .chains,
                 .chainsOrAssets,
                 .search,
-                .enabled,
+                .enabledBalance,
                 .hasBalance,
                 .priceAlerts:
                 request = Self.applyFilter(request: request, $0)
@@ -98,6 +99,11 @@ extension AssetsRequest {
                 .filter(
                     TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.totalAmount] > 0
                 )
+        case .enabled:
+            return request
+                .filter(
+                    TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.isEnabled] == true
+                )
         case .buyable:
             return request
                 .filter(
@@ -113,7 +119,7 @@ extension AssetsRequest {
                 .filter(
                     TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.isStakeable] == true
                 )
-        case .enabled:
+        case .enabledBalance:
             return request
                 .filter(
                     TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isEnabled] == true
@@ -126,6 +132,7 @@ extension AssetsRequest {
         case .chainsOrAssets(let chains, let assetIds):
             return request
                 .filter(chains.contains(AssetRecord.Columns.chain) || assetIds.contains(AssetRecord.Columns.id))
+                .filter(AssetRecord.Columns.isEnabled == true || AssetRecord.Columns.isEnabled == false)
         case .priceAlerts:
             return request
         }
@@ -137,7 +144,6 @@ extension AssetsRequest {
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
         let totalValue = (TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[PriceRecord.Columns.price] ?? 0))
         let request = AssetRecord
-            .filter(AssetRecord.Columns.isEnabled == true)
             .including(optional: AssetRecord.account)
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.price)
@@ -170,7 +176,6 @@ extension AssetsRequest {
         filters: [AssetsRequestFilter]
     ) throws -> [PriceAlertAssetRecordInfo] {
         var request = AssetRecord
-            .filter(AssetRecord.Columns.isEnabled == true)
             .including(all: AssetRecord.priceAlerts)
             .including(optional: AssetRecord.price)
             .order(AssetRecord.Columns.rank.desc)

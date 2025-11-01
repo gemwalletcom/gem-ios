@@ -67,7 +67,7 @@ public final class WalletSceneViewModel: Sendable {
         self.totalFiatRequest = TotalValueRequest(walletId: wallet.id, balanceType: .wallet)
         self.assetsRequest = AssetsRequest(
             walletId: wallet.id,
-            filters: [.enabled]
+            filters: [.enabledBalance]
         )
         self.bannersRequest = BannersRequest(
             walletId: wallet.id,
