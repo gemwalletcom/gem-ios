@@ -67,7 +67,7 @@ public struct TransactionViewModel: Sendable {
                 .perpetualClosePosition,
                 .stakeFreeze,
                 .stakeUnfreeze,
-                .perpetualModify: .none
+                .perpetualModifyPosition: .none
         }
     }
 
@@ -135,7 +135,7 @@ public struct TransactionViewModel: Sendable {
                     return Localized.Perpetual.closeDirection(PerpetualDirectionViewModel(direction: metadata.direction).title)
                 }
                 return .empty
-            case .perpetualModify:
+            case .perpetualModifyPosition:
                 return .empty
             }
         }()
@@ -211,7 +211,7 @@ public struct TransactionViewModel: Sendable {
                     .assetActivation,
                     .perpetualOpenPosition,
                     .perpetualClosePosition,
-                    .perpetualModify:
+                    .perpetualModifyPosition:
                 return .none
             }
         }()
@@ -255,7 +255,7 @@ public struct TransactionViewModel: Sendable {
             ).amount
         case .transferNFT:
             return nil
-        case .perpetualModify:
+        case .perpetualModifyPosition:
             return nil
         }
     }
@@ -274,7 +274,7 @@ public struct TransactionViewModel: Sendable {
                 .smartContractCall,
                 .perpetualOpenPosition,
                 .perpetualClosePosition,
-                .perpetualModify,
+                .perpetualModifyPosition,
                 .stakeFreeze,
                 .stakeUnfreeze:
             return .none

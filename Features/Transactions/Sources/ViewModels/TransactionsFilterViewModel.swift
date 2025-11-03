@@ -21,7 +21,7 @@ public final class TransactionsFilterViewModel {
     
     public var request: TransactionsRequest
     
-    private static let excludeTransactionTypes: [TransactionType] = [.perpetualOpenPosition, .perpetualClosePosition, .perpetualModify]
+    private static let excludeTransactionTypes: [TransactionType] = [.perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition]
     private let transactionTypes = TransactionType.allCases.filter( { !excludeTransactionTypes.contains($0) })
     
     private let defaultFilters: [TransactionsRequestFilter] = [
