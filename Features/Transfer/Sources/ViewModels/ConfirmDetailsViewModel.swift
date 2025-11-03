@@ -31,14 +31,14 @@ extension ConfirmDetailsViewModel: ItemModelProvidable {
         case let .perpetual(_, perpetualType):
                 .perpetualDetails(PerpetualDetailsViewModel(perpetualType: perpetualType))
         case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .tokenApprove,
-                .stake,
-                .account,
-                .generic:
-                .empty
+            .deposit,
+            .withdrawal,
+            .transferNft,
+            .tokenApprove,
+            .stake,
+            .account,
+            .generic:
+            .empty
         }
     }
 }
