@@ -1,20 +1,33 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import BigInt
 
 public struct PerpetualRecipientData: Codable, Equatable, Hashable, Sendable {
     public let recipient: RecipientData
-    public let data: PerpetualTransferData
-    
-    public init(recipient: RecipientData, data: PerpetualTransferData) {
+    public let positionAction: PerpetualPositionAction
+
+    public init(recipient: RecipientData, positionAction: PerpetualPositionAction) {
         self.recipient = recipient
-        self.data = data
+        self.positionAction = positionAction
     }
 }
 
 extension PerpetualRecipientData: Identifiable {
+    public var id: String { positionAction.id }
+}
+
+public enum PerpetualPositionAction: Codable, Equatable, Hashable, Sendable, Identifiable {
+    case open(PerpetualTransferData)
+    case reduce(PerpetualTransferData, available: BigInt, positionDirection: PerpetualDirection)
+    case increase(PerpetualTransferData)
+
     public var id: String {
-        data.id
+        switch self {
+        case .open(let data): return data.id
+        case .reduce(let data, _, _): return data.id
+        case .increase(let data): return data.id
+        }
     }
 }
 
@@ -26,7 +39,7 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
     public let assetIndex: Int
     public let price: Double
     public let leverage: Int
-    
+
     public init(
         provider: PerpetualProvider,
         direction: PerpetualDirection,

@@ -12,6 +12,7 @@ import SwiftUI
 import Formatters
 import ExplorerService
 import Preferences
+import BigInt
 
 @Observable
 @MainActor
@@ -19,6 +20,7 @@ public final class PerpetualSceneViewModel {
     private let perpetualService: PerpetualServiceable
     private let onTransferData: TransferDataAction
     private let onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)?
+    private let perpetualOrderFactory = PerpetualOrderFactory()
 
     public let wallet: Wallet
     public let asset: Asset
@@ -37,7 +39,6 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
-    let formatter = PerpetualPriceFormatter()
     let preference = Preferences.standard
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingModifyAlert: Bool?
@@ -142,28 +143,17 @@ public extension PerpetualSceneViewModel {
     func onClosePosition() {
         guard
             let position = positions.first?.position,
-            let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
-            return
-        }
-        // Add 2% slippage for market-like execution
-        // For closing long: sell 2% below market
-        // For closing short: buy 2% above market
-        let positionPrice = switch position.direction {
-        case .long: perpetualViewModel.perpetual.price * 0.98
-        case .short: perpetualViewModel.perpetual.price * 1.02
-        }
-        
-        let price = formatter.formatPrice(provider: perpetualViewModel.perpetual.provider, positionPrice, decimals: Int(asset.decimals))
-        let size = formatter.formatSize(provider: perpetualViewModel.perpetual.provider, abs(position.size), decimals: Int(asset.decimals))
-        let data = PerpetualConfirmData(
-            direction: position.direction,
-            baseAsset: .hyperliquidUSDC(),
+            let assetIndex = UInt32(perpetualViewModel.perpetual.identifier)
+        else { return }
+
+        let data = perpetualOrderFactory.makeCloseOrder(
             assetIndex: Int32(assetIndex),
-            price: price,
-            fiatValue: abs(position.size) * positionPrice,
-            size: size
+            perpetual: perpetualViewModel.perpetual,
+            position: position,
+            asset: asset,
+            baseAsset: .hypercoreUSDC()
         )
-        
+
         let transferData = TransferData(
             type: .perpetual(asset, .close(data)),
             recipientData: .hyperliquid(),
@@ -175,71 +165,78 @@ public extension PerpetualSceneViewModel {
     }
 
     func onOpenLongPosition() {
-        guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
+        guard let transferData = createTransferData(direction: .long) else {
             return
         }
-        let data = PerpetualRecipientData(
-            recipient: .hyperliquid(),
-            data: PerpetualTransferData(
-                provider: perpetualViewModel.perpetual.provider,
-                direction: .long,
-                asset: asset,
-                baseAsset: .hyperliquidUSDC(),
-                assetIndex: Int(assetIndex),
-                price: perpetualViewModel.perpetual.price,
-                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
-            )
-        )
-        onPerpetualRecipientData?(data)
+        onPositionAction(.open(transferData))
     }
 
     func onOpenShortPosition() {
-        guard let assetIndex = UInt32(perpetualViewModel.perpetual.identifier) else {
+        guard let transferData = createTransferData(direction: .short) else {
             return
         }
-        let data = PerpetualRecipientData(
-            recipient: .hyperliquid(),
-            data: PerpetualTransferData(
-                provider: perpetualViewModel.perpetual.provider,
-                direction: .short,
-                asset: asset,
-                baseAsset: .hyperliquidUSDC(),
-                assetIndex: Int(assetIndex),
-                price: perpetualViewModel.perpetual.price,
-                leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
-            )
-        )
-        onPerpetualRecipientData?(data)
+        onPositionAction(.open(transferData))
     }
 
     func onIncreasePosition() {
         isPresentingModifyAlert = false
 
-        guard let direction = positions.first?.position.direction else {
-            return
-        }
+        guard let direction = positions.first?.position.direction,
+              let transferData = createTransferData(direction: direction)
+        else { return }
 
-        switch direction {
-        case .long:
-            onOpenLongPosition()
-        case .short:
-            onOpenShortPosition()
-        }
+        onPositionAction(.increase(transferData))
     }
 
     func onReducePosition() {
         isPresentingModifyAlert = false
 
-        guard let direction = positions.first?.position.direction else {
+        guard let position = positions.first?.position else {
             return
         }
 
-        switch direction {
-        case .long:
-            onOpenShortPosition()
-        case .short:
-            onOpenLongPosition()
+        let direction: PerpetualDirection = {
+            switch position.direction {
+            case .long: .short
+            case .short: .long
+            }
+        }()
+
+        guard let transferData = createTransferData(direction: direction) else {
+            return
         }
+
+        onPositionAction(
+            .reduce(
+                transferData,
+                available: BigInt(position.marginAmount * pow(10.0, Double(position.baseAsset.decimals))),
+                positionDirection: position.direction
+            )
+        )
+    }
+
+    private func createTransferData(direction: PerpetualDirection) -> PerpetualTransferData? {
+        guard let assetIndex = Int(perpetualViewModel.perpetual.identifier) else {
+            return nil
+        }
+
+        return PerpetualTransferData(
+            provider: perpetualViewModel.perpetual.provider,
+            direction: direction,
+            asset: asset,
+            baseAsset: .hypercoreUSDC(), //TODO: use position.baseAsset in the future
+            assetIndex: assetIndex,
+            price: perpetualViewModel.perpetual.price,
+            leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
+        )
+    }
+
+    private func onPositionAction(_ positionAction: PerpetualPositionAction) {
+        let recipientData = PerpetualRecipientData(
+            recipient: .hyperliquid(),
+            positionAction: positionAction
+        )
+        onPerpetualRecipientData?(recipientData)
     }
 }
 

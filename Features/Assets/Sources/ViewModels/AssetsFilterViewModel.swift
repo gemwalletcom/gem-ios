@@ -38,18 +38,19 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
 
     private var defaultFilters: [AssetsRequestFilter] {
         switch type {
-        case .send: [.hasBalance]
+        case .send: [.enabled, .hasBalance]
         case .receive(let type):
             switch type {
-            case .asset: []
-            case .collection: [.chainsOrAssets([], Chain.allCases.filter { $0.isNFTSupported }.map { $0.rawValue})]
+            case .asset: [.enabled]
+            case .collection: [.enabled, .chainsOrAssets([], Chain.allCases.filter { $0.isNFTSupported }.map { $0.rawValue})]
             }
-        case .buy: [.buyable]
+        case .buy: [.enabled, .buyable]
         case .swap(let type):
             switch type {
-            case .pay: [.swappable, .hasBalance]
+            case .pay: [.enabled, .swappable, .hasBalance]
             case .receive(let chains, let assetIds):
                 [
+                    .enabled,
                     .chainsOrAssets(
                         chains.map { $0.rawValue },
                         assetIds.map { $0.identifier }
@@ -57,10 +58,10 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
                     .swappable,
                 ]
             }
-        case .manage: []
-        case .priceAlert: [.priceAlerts]
-        case .deposit: [ .chainsOrAssets([], ["arbitrum_0xaf88d065e77c8cC2239327C5EDb3A432268e5831"])] // USDC arbitrum
-        case .withdraw: [ .chainsOrAssets([], ["hypercore_perpetual::USDC"])]
+        case .manage: [.enabled]
+        case .priceAlert: [.enabled, .priceAlerts]
+        case .deposit: [ .chainsOrAssets([], [AssetId(chain: .arbitrum, tokenId: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831").identifier])]
+        case .withdraw: [ .chainsOrAssets([], [Asset.hypercoreUSDC().id.identifier])]
         }
     }
 

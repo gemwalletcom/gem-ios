@@ -32,7 +32,7 @@ public struct Signer: Sendable {
             return try [signer.signTokenTransfer(input: input, privateKey: privateKey)]
         case .swap(let fromAsset, _, let swapData):
             let swapSigner = SwapSigner()
-            if swapSigner.isTransferSwap(data: swapData) {
+            if swapSigner.isTransferSwap(fromAsset: fromAsset, data: swapData) {
                 return try swapSigner
                     .signSwap(
                         signer: signer,
@@ -81,14 +81,14 @@ public struct Signer: Sendable {
         case .tron: TronSigner()
         case .bitcoin: BitcoinSigner()
         case .aptos: AptosSigner()
-        case .sui: SuiSigner()
         case .xrp: XrpSigner()
         case .near: NearSigner()
         case .stellar: StellarSigner()
         case .algorand: AlgorandSigner()
         case .polkadot: PolkadotSigner()
         case .cardano: CardanoSigner()
-        case .hyperCore: HyperCoreSigner()
+        case .sui, .hyperCore: ChainSigner(chain: chain)
         }
     }
 }
+

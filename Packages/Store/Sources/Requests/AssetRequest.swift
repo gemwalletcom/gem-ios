@@ -54,6 +54,7 @@ extension AssetData {
             priceAlerts: [],
             metadata: AssetMetaData(
                 isEnabled: false,
+                isBalanceEnabled: false,
                 isBuyEnabled: false,
                 isSellEnabled: false,
                 isSwapEnabled: false,
@@ -80,6 +81,7 @@ extension AssetData {
             priceAlerts: [],
             metadata: AssetMetaData(
                 isEnabled: false,
+                isBalanceEnabled: false,
                 isBuyEnabled: false,
                 isSellEnabled: false,
                 isSwapEnabled: false,

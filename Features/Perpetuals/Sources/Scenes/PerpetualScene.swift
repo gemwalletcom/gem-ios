@@ -100,7 +100,7 @@ public struct PerpetualScene: View {
                         Button(model.longButtonTitle, action: model.onOpenLongPosition)
                             .frame(maxWidth: .infinity)
                             .buttonStyle(.green())
-                        
+
                         Button(model.shortButtonTitle, action: model.onOpenShortPosition)
                             .frame(maxWidth: .infinity)
                             .buttonStyle(.red())

@@ -17,6 +17,7 @@ import Store
 import Style
 import Validators
 import WalletsService
+import PerpetualService
 
 @MainActor
 @Observable
@@ -28,7 +29,6 @@ public final class AmountSceneViewModel {
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
     private let numberSanitizer = NumberSanitizer()
     private let valueConverter = ValueConverter()
-    private let perpetualPriceFormatter = PerpetualPriceFormatter()
 
     private var currentValidator: DelegationValidator?
     private var amountInputType: AmountInputType = .asset {
@@ -123,10 +123,11 @@ public final class AmountSceneViewModel {
         case .transfer: Localized.Transfer.Send.title
         case .deposit: Localized.Wallet.deposit
         case .withdraw: Localized.Wallet.withdraw
-        case .perpetual(_, let data):
-            switch data.direction {
-            case .short: "Short"
-            case .long: "Long"
+        case .perpetual(let data):
+            switch data.positionAction {
+            case .open(let transferData): PerpetualDirectionViewModel(direction: transferData.direction).title
+            case .increase(let transferData): PerpetualDirectionViewModel(direction: transferData.direction).increaseTitle
+            case .reduce(_, _, let positionDirection): PerpetualDirectionViewModel(direction: positionDirection).reduceTitle
             }
         case .stake: Localized.Transfer.Stake.title
         case .stakeUnstake: Localized.Transfer.Unstake.title
@@ -344,7 +345,7 @@ extension AmountSceneViewModel {
         case .transfer(recipient: let recipient): recipient
         case .deposit(recipient: let recipient): recipient
         case .withdraw(recipient: let recipient): recipient
-        case .perpetual(let recipient, _): recipient
+        case .perpetual(let data): data.recipient
         case .stake,
              .stakeUnstake,
              .stakeRedelegate,
@@ -445,41 +446,15 @@ extension AmountSceneViewModel {
                 value: value,
                 canChangeValue: canChangeValue
             )
-        case .perpetual(_, let perpetual):
-            // Add 2% slippage for market-like execution
-            // For long: buy 2% above market (more conservative)
-            // For short: sell 2% below market (more conservative)
-            let slippagePrice = switch perpetual.direction {
-            case .long: perpetual.price * 1.02
-            case .short: perpetual.price * 0.98
-            }
-            let price = perpetualPriceFormatter.formatPrice(
-                provider: perpetual.provider,
-                slippagePrice,
-                decimals: perpetual.asset.decimals.asInt
+        case .perpetual(let data):
+            let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
+                positionAction: data.positionAction,
+                usdcAmount: value,
+                usdcDecimals: asset.decimals.asInt
             )
-            // Convert USDC amount to USD value
-            let usdAmount = Double(value) / pow(10.0, Double(asset.decimals))
-            // Size = (USD amount * leverage) / price (use original price for size calculation)
-            let sizeAsAsset = (usdAmount * Double(perpetual.leverage)) / perpetual.price
-            let size = perpetualPriceFormatter.formatSize(
-                provider: perpetual.provider,
-                sizeAsAsset,
-                decimals: Int(perpetual.asset.decimals)
-            )
+
             return TransferData(
-                type: .perpetual(
-                    perpetual.asset, .open(
-                        PerpetualConfirmData(
-                            direction: perpetual.direction,
-                            baseAsset: perpetual.baseAsset,
-                            assetIndex: Int32(perpetual.assetIndex),
-                            price: price,
-                            fiatValue: perpetual.price * sizeAsAsset,
-                            size: size
-                        )
-                    )
-                ),
+                type: .perpetual(data.positionAction.transferData.asset, perpetualType),
                 recipientData: recipientData,
                 value: value,
                 canChangeValue: canChangeValue
@@ -569,7 +544,7 @@ extension AmountSceneViewModel {
                 return BigInt(2_000_000)
             }
         case .perpetual:
-            return BigInt(12_000_000) // 15 USDC with 6 decimals
+            return BigInt(10_000_000) // 15 USDC with 6 decimals
         case .stakeUnstake, .transfer:
             break
         }
@@ -587,8 +562,13 @@ extension AmountSceneViewModel {
 
     private var availableValue: BigInt {
         switch input.type {
-        case .transfer, .deposit, .perpetual:
+        case .transfer, .deposit:
             return assetData.balance.available
+        case let .perpetual(perpetualData):
+            switch perpetualData.positionAction {
+            case .open, .increase: return assetData.balance.available
+            case .reduce(_, let available, _): return available
+            }
         case .stake:
             switch asset.chain {
             case .tron:

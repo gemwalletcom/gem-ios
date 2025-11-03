@@ -13,24 +13,51 @@ public struct ReceiveScene: View {
     }
 
     public var body: some View {
-        VStack {
+        VStack(spacing: .large) {
+            AssetImageView(assetImage: model.assetModel.assetImage, size: .image.semiLarge)
+                .padding(.top, .medium)
+
+            HStack(alignment: .bottom, spacing: .tiny) {
+                Text(model.assetModel.name)
+                    .textStyle(.headline)
+                if let symbol = model.symbol {
+                    Text(symbol)
+                        .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
+                }
+            }
+            .lineLimit(1)
+
             VStack {
                 Spacer()
                 if let image = model.renderedImage {
                     qrCodeView(image: image)
                         .frame(maxWidth: model.qrWidth)
+                    .padding(.medium)
+                    .background(
+                        RoundedRectangle(cornerRadius: .medium)
+                            .fill(Colors.listStyleColor)
+                            .shadow(color: Color.black.opacity(Sizing.shadow.opacity), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
+                    )
                 }
+                Text(model.warningMessage)
+                    .textStyle(.subHeadline)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, .medium)
+                    .padding(.top, .small)
+                    .frame(maxWidth: model.qrWidth)
                 Spacer()
-                StateButton(
-                    text: model.shareTitle,
-                    action: model.onShareSheet
-                )
             }
+            .frame(maxWidth: .scene.button.maxWidth)
+
+            StateButton(
+                text: model.addressShort,
+                image: Images.System.copy,
+                action: model.onCopyAddress
+            )
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .padding(.bottom, .scene.bottom)
         .frame(maxWidth: .infinity)
-        .background(Colors.grayBackground)
         .navigationBarTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -57,51 +84,16 @@ public struct ReceiveScene: View {
     }
 }
 
-// MARK: - Actions
-
-extension ReceiveScene {
-    private func onCopyAddress() {
-        model.onCopyAddress()
-    }
-}
-
 // MARK: - UI Components
 
 extension ReceiveScene {
     @ViewBuilder
     private func qrCodeView(image: UIImage) -> some View {
-        VStack(spacing: .medium) {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
-                .padding(.extraSmall)
-                .background(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: .medium))
-
-            HStack(spacing: .small) {
-                AssetImageView(assetImage: model.assetModel.assetImage)
-                VStack(alignment: .leading, spacing: .extraSmall) {
-                    Text(model.youAddressTitle)
-                        .font(.subheadline.weight(.semibold))
-                        .minimumScaleFactor(0.8)
-                        .foregroundStyle(Colors.black)
-                    Text(model.address)
-                        .textStyle(.calloutSecondary)
-                }
-                .lineLimit(1)
-                .truncationMode(.middle)
-                .frame(maxWidth: .infinity)
-
-                Button(model.copyTitle, action: onCopyAddress)
-                    .fixedSize()
-                    .buttonStyle(.lightGray(paddingHorizontal: .small, paddingVertical: .small))
-            }
-        }
-        .padding(.medium)
-        .background(
-            RoundedRectangle(cornerRadius: .medium)
-                .fill(Colors.listStyleColor)
-                .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 5)
-        )
+        Image(uiImage: image)
+            .resizable()
+            .scaledToFit()
+            .padding(.extraSmall)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: .small))
     }
 }

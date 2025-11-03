@@ -23,7 +23,7 @@ public enum ConfirmTransferItem: Identifiable, Equatable, Sendable {
     case network
     case recipient
     case memo
-    case swapDetails
+    case details
     case networkFee
     case error
 
@@ -38,7 +38,8 @@ public enum ConfirmTransferItemModel {
     case network(ListItemModel)
     case memo(ListItemModel)
     case swapDetails(SwapDetailsViewModel)
-    case networkFee(ListItemModel)
+    case networkFee(ListItemModel, selectable: Bool)
+    case perpetualDetails(PerpetualDetailsViewModel)
     case error(title: String, error: Error, onInfoAction: VoidAction)
     case empty
 }

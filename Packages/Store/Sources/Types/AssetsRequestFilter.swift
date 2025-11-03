@@ -4,12 +4,12 @@ import Foundation
 
 public enum AssetsRequestFilter {
     case search(String, hasPriorityAssets: Bool)
-    case hasBalance
-    case buyable // available to buy
+    case enabled
+    case buyable
     case swappable
     case stakeable
-    case enabled
-    case hidden
+    case enabledBalance
+    case hasBalance
     // include all assets of these chains
     case chains([String])
     case chainsOrAssets([String], [String])

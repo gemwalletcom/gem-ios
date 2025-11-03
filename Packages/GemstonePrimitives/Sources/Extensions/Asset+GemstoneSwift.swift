@@ -18,7 +18,11 @@ public extension Asset {
     var feeAsset: Asset {
         switch id.chain {
         case .hyperCore:
-            return Asset.hyperliquidUSDC()
+            switch map().assetType {
+            case .native: return Asset.hypercoreSpotUSDC()
+            case .perpetual: return Asset.hypercoreUSDC()
+            default: return Asset.hypercoreSpotUSDC()
+            }
         default:
             switch id.type {
             case .native: return self

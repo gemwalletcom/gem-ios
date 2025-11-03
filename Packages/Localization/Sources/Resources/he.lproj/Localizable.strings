@@ -490,3 +490,15 @@
 "assets.title" = "נכסים";
 "stake.delegations" = "האצלות";
 "info.stake.apr.description" = "שיעור אחוז שנתי (APR) הוא שיעור התגמול השנתי עבור הפקדת מטבע הקריפטו שלך.";
+"receive.warning" = "שלח רק ** %@ ** ברשת ** %@ ** לכתובת זו.";
+"perpetual.leverage" = "מינוף";
+"perpetual.direction" = "כיוון";
+"perpetual.auto_close" = "סגירה אוטומטית";
+"info.perpetual.auto_close.description" = "סגור אוטומטית את הפוזיציה שלך ברמות מחיר קבועות. Take Profit נועל רווחים, Stop Loss מגביל הפסדים.";
+"perpetual.auto_close.trigger_price" = "מחיר טריגר";
+"perpetual.auto_close.take_profit" = "קח רווח";
+"perpetual.auto_close.stop_loss" = "סטופ לוס";
+"perpetual.market_price" = "מחיר שוק";
+"perpetual.auto_close.estimed_pnl" = "PNL משוער";
+"perpetual.increase_direction" = "הגדלה %@";
+"perpetual.reduce_direction" = "צמצום %@";

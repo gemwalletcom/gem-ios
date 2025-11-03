@@ -57,15 +57,15 @@ extension AssetsRequest {
         var request: QueryInterfaceRequest<AssetRecord> = request
         filters.forEach {
             switch $0 {
-            case .buyable,
+            case .enabled,
+                .buyable,
                 .swappable,
                 .stakeable,
                 .chains,
                 .chainsOrAssets,
                 .search,
-                .enabled,
+                .enabledBalance,
                 .hasBalance,
-                .hidden,
                 .priceAlerts:
                 request = Self.applyFilter(request: request, $0)
             }
@@ -99,6 +99,11 @@ extension AssetsRequest {
                 .filter(
                     TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.totalAmount] > 0
                 )
+        case .enabled:
+            return request
+                .filter(
+                    TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.isEnabled] == true
+                )
         case .buyable:
             return request
                 .filter(
@@ -114,15 +119,10 @@ extension AssetsRequest {
                 .filter(
                     TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.isStakeable] == true
                 )
-        case .enabled:
+        case .enabledBalance:
             return request
                 .filter(
                     TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isEnabled] == true
-                )
-        case .hidden:
-            return request
-                .filter(
-                    TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isHidden] == true
                 )
         case .chains(let chains):
             if chains.isEmpty {
@@ -132,6 +132,7 @@ extension AssetsRequest {
         case .chainsOrAssets(let chains, let assetIds):
             return request
                 .filter(chains.contains(AssetRecord.Columns.chain) || assetIds.contains(AssetRecord.Columns.id))
+                .filter(AssetRecord.Columns.isEnabled == true || AssetRecord.Columns.isEnabled == false)
         case .priceAlerts:
             return request
         }

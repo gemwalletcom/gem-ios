@@ -74,6 +74,18 @@ public extension Primitives.Chain {
     var transactionTimeoutSeconds: UInt32 {
         transactionTimeoutMilliSeconds / 1000
     }
+    
+    var defaultAssets: [Asset] {
+        switch self {
+        case .hyperCore:
+            [
+                .hypercoreUSDC(),
+                .hypercoreSpotUSDC(),
+            ]
+        default:
+            []
+        }
+    }
 }
 
 extension Array where Element == Primitives.Chain {

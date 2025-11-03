@@ -67,7 +67,7 @@ public final class WalletSceneViewModel: Sendable {
         self.totalFiatRequest = TotalValueRequest(walletId: wallet.id, balanceType: .wallet)
         self.assetsRequest = AssetsRequest(
             walletId: wallet.id,
-            filters: [.enabled]
+            filters: [.enabledBalance]
         )
         self.bannersRequest = BannersRequest(
             walletId: wallet.id,
@@ -208,9 +208,9 @@ extension WalletSceneViewModel {
         }
     }
 
-    func onCopyAddress(_ symbol: String, _ address: String) {
+    func onCopyAddress(_ message: String) {
         isPresentingToastMessage = ToastMessage(
-            title: "\(symbol): \(AddressFormatter(address: address, chain: nil).value())",
+            title: message,
             image: SystemImage.copy
         )
     }

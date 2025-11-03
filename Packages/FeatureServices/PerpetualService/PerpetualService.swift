@@ -53,7 +53,7 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     private func syncProviderBalances(walletId: String, balance: PerpetualBalance) throws {
-        let usd = Asset.hyperliquidUSDC()
+        let usd = Asset.hypercoreUSDC()
         let formatter = ValueFormatter.full
         try balanceStore.addMissingBalances(walletId: walletId, assetIds: [usd.id], isEnabled: false)
         
@@ -107,15 +107,11 @@ public struct PerpetualService: PerpetualServiceable {
     public func updateMarkets() async throws {
         let perpetualsData = try await provider.getPerpetualsData()
         let perpetuals = perpetualsData.map { $0.perpetual }
-        let assets = perpetualsData.map { createPerpetualAssetBasic(from: $0.asset) } + [
-            createPerpetualAssetBasic(from: .hyperliquidUSDC()),
-        ]
         
-        try assetStore.add(assets: assets)
         try store.upsertPerpetuals(perpetuals)
         // setup prices
         try priceStore.updatePrice(price: AssetPrice(
-            assetId: Asset.hyperliquidUSDC().id,
+            assetId: Asset.hypercoreUSDC().id,
             price: 1,
             priceChangePercentage24h: 0,
             updatedAt: .now

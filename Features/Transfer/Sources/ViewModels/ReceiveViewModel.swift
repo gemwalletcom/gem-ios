@@ -10,7 +10,7 @@ import Formatters
 @Observable
 @MainActor
 public final class ReceiveViewModel: Sendable {
-    let qrWidth: CGFloat = 300
+    let qrWidth: CGFloat = 280
     
     let assetModel: AssetViewModel
     let walletId: WalletId
@@ -36,15 +36,11 @@ public final class ReceiveViewModel: Sendable {
     }
 
     var title: String {
-        Localized.Receive.title(assetModel.symbol)
+        Localized.Receive.title("")
     }
     
     var addressShort: String {
         AddressFormatter(style: .short, address: address, chain: assetModel.asset.chain).value()
-    }
-
-    var youAddressTitle: String {
-        Localized.Receive.yourAddress
     }
 
     var shareTitle: String {
@@ -53,6 +49,20 @@ public final class ReceiveViewModel: Sendable {
 
     var copyTitle: String {
         Localized.Common.copy
+    }
+    
+    var symbol: String? {
+        if assetModel.name == assetModel.symbol {
+            return nil
+        }
+        return assetModel.symbol
+    }
+    
+    var warningMessage: AttributedString {
+        guard let message = try? AttributedString(markdown: Localized.Receive.warning(assetModel.symbol, assetModel.networkFullName)) else {
+            return AttributedString()
+        }
+        return message
     }
 
     var copyModel: CopyTypeViewModel {

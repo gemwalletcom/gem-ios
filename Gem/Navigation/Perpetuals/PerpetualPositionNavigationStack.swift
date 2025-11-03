@@ -30,11 +30,8 @@ struct PerpetualPositionNavigationStack: View {
             AmountNavigationView(
                 model: viewModelFactory.amountScene(
                     input: AmountInput(
-                        type: .perpetual(
-                            recipient: perpetualRecipientData.recipient,
-                            perpetual: perpetualRecipientData.data
-                        ),
-                        asset: .hyperliquidUSDC()
+                        type: .perpetual(perpetualRecipientData),
+                        asset: .hypercoreUSDC()
                     ),
                     wallet: wallet,
                     onTransferAction: {

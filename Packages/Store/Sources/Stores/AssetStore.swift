@@ -12,6 +12,14 @@ public struct AssetStore: Sendable {
         self.db = db.dbQueue
     }
     
+    public func insert(assets: [AssetBasic]) throws {
+        try db.write { db in
+            for asset in assets {
+                try asset.asset.record.insert(db, onConflict: .ignore)
+            }
+        }
+    }
+    
     public func add(assets: [AssetBasic]) throws {
         try db.write { db in
             for asset in assets {
@@ -25,6 +33,7 @@ public struct AssetStore: Sendable {
                         AssetRecord.Columns.symbol.set(to: asset.asset.symbol),
                         AssetRecord.Columns.decimals.set(to: asset.asset.decimals),
                         AssetRecord.Columns.type.set(to: asset.asset.type.rawValue),
+                        AssetRecord.Columns.isEnabled.set(to: asset.properties.isEnabled),
                         AssetRecord.Columns.isBuyable.set(to: asset.properties.isBuyable),
                         AssetRecord.Columns.isSellable.set(to: asset.properties.isSellable),
                         AssetRecord.Columns.isSwappable.set(to: asset.properties.isSwapable),

@@ -573,6 +573,12 @@ public enum Localized {
       /// Open Interest
       public static let title = Localized.tr("Localizable", "info.open_interest.title", fallback: "Open Interest")
     }
+    public enum Perpetual {
+      public enum AutoClose {
+        /// Automatically close your position at set price levels. Take Profit locks in gains, Stop Loss limits losses.
+        public static let description = Localized.tr("Localizable", "info.perpetual.auto_close.description", fallback: "Automatically close your position at set price levels. Take Profit locks in gains, Stop Loss limits losses.")
+      }
+    }
     public enum PriceImpact {
       /// Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size.
       public static let description = Localized.tr("Localizable", "info.price_impact.description", fallback: "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size.")
@@ -779,20 +785,32 @@ public enum Localized {
     }
   }
   public enum Perpetual {
+    /// Auto Close
+    public static let autoClose = Localized.tr("Localizable", "perpetual.auto_close", fallback: "Auto Close")
     /// Close %@
     public static func closeDirection(_ p1: Any) -> String {
       return Localized.tr("Localizable", "perpetual.close_direction", String(describing: p1), fallback: "Close %@")
     }
     /// Close position
     public static let closePosition = Localized.tr("Localizable", "perpetual.close_position", fallback: "Close position")
+    /// Direction
+    public static let direction = Localized.tr("Localizable", "perpetual.direction", fallback: "Direction")
     /// Entry Price
     public static let entryPrice = Localized.tr("Localizable", "perpetual.entry_price", fallback: "Entry Price")
+    /// Increase %@
+    public static func increaseDirection(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "perpetual.increase_direction", String(describing: p1), fallback: "Increase %@")
+    }
     /// Increase Position
     public static let increasePosition = Localized.tr("Localizable", "perpetual.increase_position", fallback: "Increase Position")
+    /// Leverage
+    public static let leverage = Localized.tr("Localizable", "perpetual.leverage", fallback: "Leverage")
     /// Long
     public static let long = Localized.tr("Localizable", "perpetual.long", fallback: "Long")
     /// Margin
     public static let margin = Localized.tr("Localizable", "perpetual.margin", fallback: "Margin")
+    /// Market Price
+    public static let marketPrice = Localized.tr("Localizable", "perpetual.market_price", fallback: "Market Price")
     /// Modify
     public static let modify = Localized.tr("Localizable", "perpetual.modify", fallback: "Modify")
     /// Open %@
@@ -805,12 +823,26 @@ public enum Localized {
     public static let position = Localized.tr("Localizable", "perpetual.position", fallback: "Position")
     /// Positions
     public static let positions = Localized.tr("Localizable", "perpetual.positions", fallback: "Positions")
+    /// Reduce %@
+    public static func reduceDirection(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "perpetual.reduce_direction", String(describing: p1), fallback: "Reduce %@")
+    }
     /// Reduce Position
     public static let reducePosition = Localized.tr("Localizable", "perpetual.reduce_position", fallback: "Reduce Position")
     /// Short
     public static let short = Localized.tr("Localizable", "perpetual.short", fallback: "Short")
     /// Size
     public static let size = Localized.tr("Localizable", "perpetual.size", fallback: "Size")
+    public enum AutoClose {
+      /// Estimated PNL
+      public static let estimedPnl = Localized.tr("Localizable", "perpetual.auto_close.estimed_pnl", fallback: "Estimated PNL")
+      /// Stop Loss
+      public static let stopLoss = Localized.tr("Localizable", "perpetual.auto_close.stop_loss", fallback: "Stop Loss")
+      /// Take profit
+      public static let takeProfit = Localized.tr("Localizable", "perpetual.auto_close.take_profit", fallback: "Take profit")
+      /// Trigger price
+      public static let triggerPrice = Localized.tr("Localizable", "perpetual.auto_close.trigger_price", fallback: "Trigger price")
+    }
   }
   public enum Perpetuals {
     /// Markets
@@ -880,6 +912,10 @@ public enum Localized {
     /// Receive %@
     public static func title(_ p1: Any) -> String {
       return Localized.tr("Localizable", "receive.title", String(describing: p1), fallback: "Receive %@")
+    }
+    /// Send only **%@** on the **%@** network to this address.
+    public static func warning(_ p1: Any, _ p2: Any) -> String {
+      return Localized.tr("Localizable", "receive.warning", String(describing: p1), String(describing: p2), fallback: "Send only **%@** on the **%@** network to this address.")
     }
     /// Your Receiving Address
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")

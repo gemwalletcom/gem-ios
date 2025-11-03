@@ -134,9 +134,10 @@ extension AmountDisplay {
     static func currency(
         value: Double,
         currencyCode: String,
-        textStyle: TextStyle? = nil
+        textStyle: TextStyle? = nil,
+        showSign: Bool = true
     ) -> TextValue {
-        let prefix = if value > 0 {
+        let prefix = if showSign && value > 0 {
             "+"
         } else if value < 0 {
             ""

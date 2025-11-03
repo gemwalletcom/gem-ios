@@ -490,3 +490,15 @@
 "assets.title" = "Assets";
 "stake.delegations" = "Delegations";
 "info.stake.apr.description" = "Annual Percentage Rate (APR) is the yearly reward rate for staking your cryptocurrency.";
+"receive.warning" = "Send only **%@** on the **%@** network to this address.";
+"perpetual.leverage" = "Leverage";
+"perpetual.direction" = "Direction";
+"perpetual.auto_close" = "Auto Close";
+"info.perpetual.auto_close.description" = "Automatically close your position at set price levels. Take Profit locks in gains, Stop Loss limits losses.";
+"perpetual.auto_close.trigger_price" = "Trigger price";
+"perpetual.auto_close.take_profit" = "Take profit";
+"perpetual.auto_close.stop_loss" = "Stop Loss";
+"perpetual.market_price" = "Market Price";
+"perpetual.auto_close.estimed_pnl" = "Estimated PNL";
+"perpetual.increase_direction" = "Increase %@";
+"perpetual.reduce_direction" = "Reduce %@";
