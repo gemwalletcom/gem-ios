@@ -10,41 +10,67 @@ import Components
 import Preferences
 import Style
 import Localization
+import WalletService
+import InfoSheet
 
 @Observable
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
     private let searchService: AssetSearchService
+    private let walletService: WalletService
     private let preferences: Preferences
 
-    private let wallet: Wallet
-    private let onDismissSearch: VoidAction
+    public var wallet: Wallet
 
     private var state: StateViewType<[AssetBasic]> = .noData
 
-    var assets: [AssetData] = []
-    var searchModel: AssetSearchViewModel
-    var request: AssetsRequest
+    public var assets: [AssetData] = []
+    public var searchModel: AssetSearchViewModel
+    public var request: AssetsRequest
 
     var isSearching: Bool = false
-    var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
+
+    public var isPresentingInfoSheet: InfoSheetType?
+    public var isPresentingSelectAssetType: SelectAssetType?
+    public var isPresentingTransferData: TransferData?
+    public var isPresentingPerpetualRecipientData: PerpetualRecipientData?
+    public var isPresentingSetPriceAlert: AssetId?
+    public var isPresentingUrl: URL?
+    public var isPresentingToastMessage: ToastMessage?
 
     public init(
         wallet: Wallet,
+        walletService: WalletService,
         searchService: AssetSearchService,
-        preferences: Preferences = .standard,
-        onDismissSearch: VoidAction
+        preferences: Preferences = .standard
     ) {
         self.wallet = wallet
+        self.walletService = walletService
         self.searchService = searchService
         self.preferences = preferences
-        self.onDismissSearch = onDismissSearch
         self.searchModel = AssetSearchViewModel(selectType: .manage)
         self.request = AssetsRequest(
             walletId: wallet.id,
             filters: []
         )
+    }
+
+    public var currentWallet: Wallet? { walletService.currentWallet }
+
+    public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
+        if let newWallet, wallet != newWallet {
+            refresh(for: newWallet)
+        }
+    }
+
+    public func onTransferComplete() {
+        isPresentingTransferData = nil
+    }
+
+    public func onSetPriceAlertComplete(message: String) {
+        isPresentingSetPriceAlert = nil
+        isPresentingToastMessage = ToastMessage(title: message, image: SystemImage.bellFill)
     }
 
     var sections: AssetsSections {
@@ -78,11 +104,6 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var currencyCode: String {
         preferences.currency
-    }
-
-    func onAppear() {
-        dismissSearch = false
-        isSearchPresented = true
     }
 
     func onSearch(query: String) async {
@@ -123,13 +144,17 @@ public final class WalletSearchSceneViewModel: Sendable {
     func onChangeSearchPresented(_: Bool, isPresented: Bool) {
         guard !isPresented else { return }
         dismissSearch = true
-        onDismissSearch?()
     }
 }
 
 // MARK: - Private
 
 extension WalletSearchSceneViewModel {
+    private func refresh(for newWallet: Wallet) {
+        wallet = newWallet
+        request.walletId = newWallet.id
+    }
+
     private func updateRequest() {
         if searchModel.searchableQuery.isNotEmpty && searchModel.focus == .tags {
             searchModel.focus = .search
