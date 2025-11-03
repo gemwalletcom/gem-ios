@@ -41,7 +41,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             switch type {
             case .open: .perpetualOpenPosition
             case .close: .perpetualClosePosition
-            case .modify: .perpetualModify
+            case .modify: .perpetualModifyPosition
             }
         }
     }

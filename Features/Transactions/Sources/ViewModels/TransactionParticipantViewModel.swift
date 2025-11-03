@@ -61,7 +61,7 @@ extension TransactionParticipantViewModel {
             Localized.Stake.resource
         case .swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards,
                 .stakeWithdraw, .assetActivation, .perpetualOpenPosition, .perpetualClosePosition: nil
-        case .perpetualModify:
+        case .perpetualModifyPosition:
             nil
         }
     }

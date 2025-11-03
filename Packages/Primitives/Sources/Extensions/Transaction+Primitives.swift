@@ -31,7 +31,7 @@ extension Transaction {
             .smartContractCall,
             .perpetualOpenPosition,
             .perpetualClosePosition,
-            .perpetualModify,
+            .perpetualModifyPosition,
             .stakeFreeze,
             .stakeUnfreeze:
             return [assetId]
