@@ -63,7 +63,15 @@ extension TransactionMetadata: Equatable {
             lhsSwap.toAsset == rhsSwap.toAsset &&
             lhsSwap.toValue == rhsSwap.toValue &&
             lhsSwap.fromValue == rhsSwap.fromValue
-        default:
+        case (.nft(let lhsNFT), .nft(let rhsNFT)):
+            return lhsNFT.assetId == rhsNFT.assetId &&
+            lhsNFT.name == rhsNFT.name
+        case (.perpetual(let lhsPerpetual), .perpetual(let rhsPerpetual)):
+            return lhsPerpetual.pnl == rhsPerpetual.pnl &&
+            lhsPerpetual.price == rhsPerpetual.price &&
+            lhsPerpetual.direction == rhsPerpetual.direction &&
+            lhsPerpetual.provider == rhsPerpetual.provider
+        case (.null, _), (.swap, _), (.nft, _), (.perpetual, _):
             return false
         }
     }

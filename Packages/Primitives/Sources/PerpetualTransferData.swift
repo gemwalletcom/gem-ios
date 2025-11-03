@@ -5,23 +5,30 @@ import BigInt
 
 public struct PerpetualRecipientData: Codable, Equatable, Hashable, Sendable {
     public let recipient: RecipientData
-    public let data: PerpetualTransferData
+    public let positionAction: PerpetualPositionAction
 
-    public init(recipient: RecipientData, data: PerpetualTransferData) {
+    public init(recipient: RecipientData, positionAction: PerpetualPositionAction) {
         self.recipient = recipient
-        self.data = data
+        self.positionAction = positionAction
     }
 }
 
 extension PerpetualRecipientData: Identifiable {
-    public var id: String {
-        data.id
-    }
+    public var id: String { positionAction.id }
 }
 
-public enum PerpetualPositionMode: Codable, Equatable, Hashable, Sendable {
-    case open
-    case reduce(available: BigInt)
+public enum PerpetualPositionAction: Codable, Equatable, Hashable, Sendable, Identifiable {
+    case open(PerpetualTransferData)
+    case reduce(PerpetualTransferData, available: BigInt, positionDirection: PerpetualDirection)
+    case increase(PerpetualTransferData)
+
+    public var id: String {
+        switch self {
+        case .open(let data): return data.id
+        case .reduce(let data, _, _): return data.id
+        case .increase(let data): return data.id
+        }
+    }
 }
 
 public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
@@ -32,7 +39,6 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
     public let assetIndex: Int
     public let price: Double
     public let leverage: Int
-    public let positionMode: PerpetualPositionMode // TODO: Better split perpetuals to different types open / close / reduce
 
     public init(
         provider: PerpetualProvider,
@@ -41,8 +47,7 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
         baseAsset: Asset,
         assetIndex: Int,
         price: Double,
-        leverage: Int,
-        positionMode: PerpetualPositionMode
+        leverage: Int
     ) {
         self.provider = provider
         self.direction = direction
@@ -51,7 +56,6 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
         self.assetIndex = assetIndex
         self.price = price
         self.leverage = leverage
-        self.positionMode = positionMode
     }
 }
 

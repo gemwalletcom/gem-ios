@@ -80,7 +80,7 @@ extension Asset {
             id: AssetId(chain: .hyperCore, tokenId: "USDC::0x6d1e7cde53ba9467b783cb7c530ce054::0"),
             name: "USDC",
             symbol: "USDC",
-            decimals: 6,
+            decimals: 8,
             type: .token
         )
     }

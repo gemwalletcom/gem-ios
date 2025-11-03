@@ -135,17 +135,63 @@ final class FiatSceneViewModelTests {
     @Test
     func testFiatValidation() {
         let model = FiatSceneViewModelTests.mock()
-        
+
         model.inputValidationModel.text = "4"
         #expect(model.inputValidationModel.update() == false)
-        
+
         model.inputValidationModel.text = "5"
         #expect(model.inputValidationModel.update() == true)
-        
+
         model.inputValidationModel.text = "10000"
         #expect(model.inputValidationModel.update() == true)
-        
+
         model.inputValidationModel.text = "10001"
         #expect(model.inputValidationModel.update() == false)
+    }
+
+    @Test
+    func actionButtonStateInvalidInput() {
+        let model = FiatSceneViewModelTests.mock()
+        model.state = .data([])
+
+        model.inputValidationModel.text = "4"
+        model.inputValidationModel.update()
+
+        #expect(model.actionButtonState.value == nil)
+    }
+
+    @Test
+    func actionButtonStateLoading() {
+        let model = FiatSceneViewModelTests.mock()
+        model.state = .loading
+
+        model.inputValidationModel.text = "100"
+        model.inputValidationModel.update()
+
+        #expect(model.actionButtonState.value == nil)
+    }
+
+    @Test
+    func actionButtonStateValidWithQuote() {
+        let model = FiatSceneViewModelTests.mock()
+        let quote = FiatQuote.mock(fiatAmount: 100, cryptoAmount: 1, type: .buy)
+
+        model.state = .data([quote])
+        model.input.quote = quote
+        model.inputValidationModel.text = "100"
+        model.inputValidationModel.update()
+
+        #expect(model.actionButtonState.value != nil)
+    }
+
+    @Test
+    func actionButtonStateValidNoQuote() {
+        let model = FiatSceneViewModelTests.mock()
+        model.state = .noData
+
+        model.inputValidationModel.text = "100"
+        model.inputValidationModel.update()
+
+        #expect(model.actionButtonState.value == nil)
     }
 }

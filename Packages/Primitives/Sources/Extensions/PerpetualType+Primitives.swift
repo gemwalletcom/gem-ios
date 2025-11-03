@@ -5,8 +5,9 @@ import Foundation
 public extension PerpetualType {
     var baseAsset: Asset {
         switch self {
-        case .open(let data), .close(let data): data.baseAsset
+        case .open(let data), .close(let data), .increase(let data): data.baseAsset
         case .modify(let data): data.baseAsset
+        case .reduce(let reduceData): reduceData.data.baseAsset
         }
     }
 }

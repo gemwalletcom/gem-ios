@@ -20,26 +20,30 @@ struct ConfirmDetailsViewModel {
 extension ConfirmDetailsViewModel: ItemModelProvidable {
     var itemModel: ConfirmTransferItemModel {
         switch type {
-        case let .swap(fromAsset, toAsset, swapData): .swapDetails(
-            SwapDetailsViewModel(
-                fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
-                toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
-                selectedQuote: swapData.quote
-            )
-        )
+        case let .swap(fromAsset, toAsset, swapData):
+                .swapDetails(
+                    SwapDetailsViewModel(
+                        fromAssetPrice: AssetPriceValue(asset: fromAsset, price: metadata?.assetPrice),
+                        toAssetPrice: AssetPriceValue(asset: toAsset, price: metadata?.assetPrices[toAsset.id]),
+                        selectedQuote: swapData.quote
+                    )
+                )
         case let .perpetual(_, perpetualType):
             switch perpetualType {
-            case .close(let data), .open(let data): .perpetualDetails(PerpetualDetailsViewModel(data: data))
-            case .modify(let data): .perpetualModifyPosition(PerpetualModifyViewModel(data: data))
+            case .open, .close, .increase, .reduce:
+                .perpetualDetails(PerpetualDetailsViewModel(perpetualType: perpetualType))
+            case .modify(let data):
+                .perpetualModifyPosition(PerpetualModifyViewModel(data: data))
             }
         case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .tokenApprove,
-                .stake,
-                .account,
-                .generic: .empty
+            .deposit,
+            .withdrawal,
+            .transferNft,
+            .tokenApprove,
+            .stake,
+            .account,
+            .generic:
+            .empty
         }
     }
 }
