@@ -38,7 +38,7 @@ public final class FiatSceneViewModel {
     var focusField: FiatScene.Field?
     var isPresentingFiatProvider: Bool = false
 
-    private var fetchTask: Task<Void, Never>?
+    private var fetchTasks: [FiatQuoteType: Task<Void, Never>] = [:]
 
     public init(
         fiatService: any GemAPIFiatService = GemAPIService(),
@@ -199,8 +199,8 @@ extension FiatSceneViewModel {
         isPresentingFiatProvider = false
     }
 
-    func onChangeType(_: FiatQuoteType, type: FiatQuoteType) {
-        fetchTask?.cancel()
+    func onChangeType(_ oldValue: FiatQuoteType, type: FiatQuoteType) {
+        fetchTasks[oldValue]?.cancel()
         inputValidationModel.text = amountFormatter.format(amount: input.amount, for: type)
         inputValidationModel.update(validators: inputValidation)
         focusField = type == .buy ? .amountBuy : .amountSell
@@ -219,9 +219,9 @@ extension FiatSceneViewModel {
 
 extension FiatSceneViewModel {
     private func fetch() {
-        fetchTask?.cancel()
+        fetchTasks[input.type]?.cancel()
 
-        fetchTask = Task {
+        fetchTasks[input.type] = Task {
             input.quote = nil
             state = .loading
 
