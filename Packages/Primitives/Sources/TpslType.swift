@@ -5,6 +5,6 @@
 import Foundation
 
 public enum TpslType: String, Codable, Equatable, Sendable {
-	case takeProfit = "tp"
-	case stopLoss = "sl"
+	case takeProfit = "TakeProfit"
+	case stopLoss = "StopLoss"
 }
