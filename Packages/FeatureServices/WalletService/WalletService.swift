@@ -73,9 +73,7 @@ public struct WalletService: Sendable {
             isCreated: isCreated
         )
         try walletStore.addWallet(newWallet)
-        await MainActor.run {
-            walletSessionService.setCurrent(walletId: newWallet.walletId)
-        }
+        walletSessionService.setCurrent(walletId: newWallet.walletId)
         return newWallet
     }
 

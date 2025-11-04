@@ -31,7 +31,7 @@ final class RootSceneViewModel {
     let nameService: NameService
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
-    var currentWallet: Wallet? { walletService.currentWallet }
+    var currentWallet: Wallet?
 
     var updateVersionAlertMessage: AlertMessage?
 
@@ -72,6 +72,7 @@ final class RootSceneViewModel {
         self.walletService = walletService
         self.walletsService = walletsService
         self.nameService = nameService
+        self.currentWallet = walletService.currentWallet
     }
 }
 
@@ -91,17 +92,18 @@ extension RootSceneViewModel {
             try await deviceObserverService.startSubscriptionsObserver()
         }
     }
+
+    func updateCurrentWallet(_ oldValue: String?, _ newValue: String?) {
+        currentWallet = walletService.currentWallet
+        if let currentWallet {
+            setup(wallet: currentWallet)
+        }
+    }
 }
 
 // MARK: - Effects
 
 extension RootSceneViewModel {
-    func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
-        if let newWallet {
-            setup(wallet: newWallet)
-        }
-    }
-
     func handleOpenUrl(_ url: URL) async {
         do {
             let parsedURL = try URLParser.from(url: url)
