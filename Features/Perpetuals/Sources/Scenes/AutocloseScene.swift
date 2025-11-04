@@ -21,6 +21,12 @@ public struct AutocloseScene: View {
     public var body: some View {
         List {
             Section {
+                ListAssetItemView(
+                    model: PerpetualPositionItemViewModel(model: model.positionViewModel)
+                )
+            }
+
+            Section {
                 ListItemView(
                     title: model.entryPriceTitle,
                     subtitle: model.entryPriceText
@@ -74,6 +80,7 @@ public struct AutocloseScene: View {
             .background(Colors.grayBackground)
         }
         .navigationTitle(model.title)
+        .onAppear(perform: model.onAppear)
         .onChange(of: focusedField, model.onChangeFocusField)
         .onChange(of: model.focusField, onChangeFocus)
     }

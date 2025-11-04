@@ -26,6 +26,10 @@ public final class AutocloseSceneViewModel {
 
     var focusField: AutocloseScene.Field?
 
+    var positionViewModel: PerpetualPositionViewModel {
+        PerpetualPositionViewModel(position)
+    }
+
     public init(position: PerpetualPositionData, onTransferAction: TransferDataAction = nil) {
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
         self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
@@ -62,14 +66,6 @@ public final class AutocloseSceneViewModel {
                 )
             ]
         )
-
-        if let price = position.position.takeProfit?.price {
-            takeProfitInput.text = priceFormatter.formatInputPrice(price)
-        }
-
-        if let price = position.position.stopLoss?.price {
-            stopLossInput.text = priceFormatter.formatInputPrice(price)
-        }
     }
 
     var title: String { Localized.Perpetual.autoClose }
@@ -118,6 +114,16 @@ public final class AutocloseSceneViewModel {
 // MARK: - Actions
 
 extension AutocloseSceneViewModel {
+    func onAppear() {
+        if let price = position.position.takeProfit?.price {
+            takeProfitInput.text = priceFormatter.formatInputPrice(price)
+        }
+
+        if let price = position.position.stopLoss?.price {
+            stopLossInput.text = priceFormatter.formatInputPrice(price)
+        }
+    }
+
     func onDone() {
         focusField = nil
     }
@@ -128,8 +134,6 @@ extension AutocloseSceneViewModel {
 
     func onSelectConfirm() {
         guard let assetIndex = Int32(position.perpetual.identifier) else { return }
-
-        let builder = AutocloseModifyBuilder(position: position)
 
         let takeProfitField = AutocloseField(
             price: takeProfitPrice,
@@ -147,6 +151,7 @@ extension AutocloseSceneViewModel {
             orderId: stopLossOrderId
         )
 
+        let builder = AutocloseModifyBuilder(position: position)
         guard builder.canBuild(takeProfit: takeProfitField, stopLoss: stopLossField) else { return }
 
         let modifyTypes = builder.build(
@@ -154,7 +159,6 @@ extension AutocloseSceneViewModel {
             takeProfit: takeProfitField,
             stopLoss: stopLossField
         )
-        guard !modifyTypes.isEmpty else { return }
 
         let data = PerpetualModifyConfirmData(
             baseAsset: .hypercoreUSDC(),
@@ -172,14 +176,6 @@ extension AutocloseSceneViewModel {
         )
 
         onTransferAction?(transferData)
-    }
-
-    private func formatPrice(_ price: Double) -> String {
-        priceFormatter.formatPrice(
-            provider: position.perpetual.provider,
-            price,
-            decimals: Int(position.asset.decimals)
-        )
     }
 
     func onSelectPercent(_ percent: Int) {
@@ -203,4 +199,12 @@ extension AutocloseSceneViewModel {
 
     private var stopLoss: String { stopLossInput.text }
     private var stopLossPrice: Double? { currencyFormatter.double(from: stopLoss) }
+
+    private func formatPrice(_ price: Double) -> String {
+        priceFormatter.formatPrice(
+            provider: position.perpetual.provider,
+            price,
+            decimals: Int(position.asset.decimals)
+        )
+    }
 }

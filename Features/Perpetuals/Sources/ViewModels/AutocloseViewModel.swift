@@ -29,9 +29,7 @@ struct AutocloseViewModel {
         self.percentFormatter = percentFormatter
     }
 
-    var priceTitle: String {
-        Localized.Asset.price
-    }
+    var priceTitle: String { Localized.Asset.price }
 
     var title: String {
         switch type {
@@ -41,10 +39,8 @@ struct AutocloseViewModel {
     }
 
     var profitTitle: String {
-        switch type {
-        case .takeProfit: Localized.Perpetual.AutoClose.expectedProfit
-        case .stopLoss: Localized.Perpetual.AutoClose.expectedLoss
-        }
+        let isProfit = price.map { estimator.calculatePnL(price: $0) >= 0 } ?? (type == .takeProfit)
+        return isProfit ? Localized.Perpetual.AutoClose.expectedProfit : Localized.Perpetual.AutoClose.expectedLoss
     }
 
     var expectedPnL: String {
