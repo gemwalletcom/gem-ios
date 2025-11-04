@@ -135,19 +135,6 @@ export BUILD_MODE := env_var_or_default("BUILD_MODE","")
 generate-stone:
     @./scripts/generate-stone.sh $BUILD_MODE
 
-install-uml-tools:
-    brew install swiftplantuml plantuml
-
-uml-app:
-    just uml .
-
-uml PATH:
-    #!/usr/bin/env bash
-    cd {{ PATH }}
-    swiftplantuml --output consoleOnly > sources.txt
-    PLANTUML_LIMIT_SIZE=16384 plantuml sources.txt && open sources.png
-    rm sources.cmapx
-
 bump-version:
     @sh ./scripts/bump-version-and-commit.sh patch
 
