@@ -31,7 +31,7 @@ extension ConfirmDetailsViewModel: ItemModelProvidable {
         case let .perpetual(_, perpetualType):
             switch perpetualType {
             case .open, .close, .increase, .reduce:
-                .perpetualDetails(PerpetualDetailsViewModel(perpetualType: perpetualType))
+                    .perpetualDetails(PerpetualDetailsViewModel(type: PerpetualDetailsType(perpetualType)))
             case .modify(let data):
                 .perpetualModifyPosition(PerpetualModifyViewModel(data: data))
             }
