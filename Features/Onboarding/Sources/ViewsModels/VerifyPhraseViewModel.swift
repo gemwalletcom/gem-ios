@@ -79,9 +79,9 @@ final class VerifyPhraseViewModel {
         selectedIndexes.contains(index)
     }
     
-    func importWallet() async throws  {
+    func importWallet() throws  {
         let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
-        let wallet = try await walletService.importWallet(name: name, type: .phrase(words: self.words, chains: AssetConfiguration.allChains))
+        let wallet = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
 
         WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
         walletService.acceptTerms()
@@ -95,15 +95,21 @@ final class VerifyPhraseViewModel {
 extension VerifyPhraseViewModel {
     func onImportWallet() {
         buttonState = .loading(showProgress: true)
+
         Task {
+            try await Task.sleep(for: .milliseconds(50))
             do {
-                try await importWallet()
+                try await MainActor.run {
+                    try importWallet()
+                }
             } catch {
-                isPresentingAlertMessage = AlertMessage(
-                    title: Localized.Errors.createWallet(""),
-                    message: error.localizedDescription
-                )
-                buttonState = .normal
+                await MainActor.run {
+                    isPresentingAlertMessage = AlertMessage(
+                        title: Localized.Errors.createWallet(""),
+                        message: error.localizedDescription
+                    )
+                    buttonState = .normal
+                }
             }
         }
     }
