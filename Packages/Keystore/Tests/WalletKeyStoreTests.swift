@@ -18,7 +18,8 @@ final class WalletKeyStoreTests {
             name: "test",
             key: testBase58Key,
             chain: .solana,
-            password: "test"
+            password: "test",
+            isCreated: false
         )
 
         #expect(wallet.type == .privateKey)
@@ -72,7 +73,8 @@ final class WalletKeyStoreTests {
             name: "",
             words: words.components(separatedBy: ", "),
             chains: [.bitcoin, .ethereum],
-            password: password
+            password: password,
+            isCreated: false
         )
         
         #expect(newWallet.accounts.map { $0.chain } == [.bitcoin, .ethereum])
@@ -80,7 +82,7 @@ final class WalletKeyStoreTests {
     
     @Test func addCoinsMany() async throws {
         let store = WalletKeyStore.mock()
-        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password)
+        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password, isCreated: false)
         
         let wallet = try store.addChains(
             wallet: newWallet,
@@ -94,7 +96,7 @@ final class WalletKeyStoreTests {
     
     @Test func addCoinsEmptyChain() async throws {
         let store = WalletKeyStore.mock()
-        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password)
+        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password, isCreated: false)
         
         let wallet = try store.addChains(wallet: newWallet, existingChains: [], newChains: [], password: password)
         
@@ -103,7 +105,7 @@ final class WalletKeyStoreTests {
     
     @Test func addCoinsSingleChain() async throws {
         let store = WalletKeyStore.mock()
-        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password)
+        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password, isCreated: false)
         
         let wallet = try store.addChains(
             wallet: newWallet,
@@ -117,7 +119,7 @@ final class WalletKeyStoreTests {
     
     @Test func addCoinsWhenSolana() async throws {
         let store = WalletKeyStore.mock()
-        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password)
+        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password, isCreated: false)
         
         let wallet = try store.addChains(wallet: newWallet, existingChains: [], newChains: [.solana], password: password)
         
@@ -127,7 +129,7 @@ final class WalletKeyStoreTests {
     
     @Test func addCoinsManyTries() async throws {
         let store = WalletKeyStore.mock()
-        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password)
+        let newWallet = try store.importWallet(name: "", words: words.components(separatedBy: ", "), chains: [], password: password, isCreated: false)
         
         let wallet = try store.addChains(
             wallet: newWallet,
