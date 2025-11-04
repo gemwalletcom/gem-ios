@@ -74,12 +74,12 @@ public final class AutocloseSceneViewModel {
 
     var title: String { Localized.Perpetual.autoClose }
 
-    var triggerPriceTitle: String { Localized.Perpetual.AutoClose.triggerPrice }
+    var priceTitle: String { Localized.Perpetual.AutoClose.triggerPrice }
 
     var takeProfitTitle: String { Localized.Perpetual.AutoClose.takeProfit }
     var stopLossTitle: String { Localized.Perpetual.AutoClose.stopLoss }
 
-    var estimatedPNL: String { Localized.Perpetual.AutoClose.estimedPnl }
+    var pnlTitle: String { Localized.Perpetual.AutoClose.estimedPnl }
 
     var entryPriceTitle: String { Localized.Perpetual.entryPrice }
     var entryPriceText: String {
@@ -186,9 +186,14 @@ extension AutocloseSceneViewModel {
     }
 
     func onSelectPercent(_ percent: Int) {
-        let type: TpslType = focusField == .takeProfit ? .takeProfit : .stopLoss
+        guard let focusField else { return }
+
+        let (type, inputModel): (TpslType, InputValidationViewModel) = switch focusField {
+        case .takeProfit: (.takeProfit, takeProfitInput)
+        case .stopLoss: (.stopLoss, stopLossInput)
+        }
+
         let targetPrice = estimator.calculateTargetPriceFromROE(roePercent: percent, type: type)
-        let inputModel = type == .takeProfit ? takeProfitInput : stopLossInput
         inputModel.text = priceFormatter.formatInputPrice(targetPrice, decimals: 2)
     }
 }
@@ -203,9 +208,9 @@ extension AutocloseSceneViewModel {
     private var stopLossPrice: Double? { currencyFormatter.double(from: stopLoss) }
 
     private func formatExpectedPnL(price: Double?) -> String {
-        guard let triggerPrice = price else { return "-" }
-        let pnl = estimator.calculatePnL(triggerPrice: triggerPrice)
-        let roe = estimator.calculateROE(triggerPrice: triggerPrice)
+        guard let price else { return "-" }
+        let pnl = estimator.calculatePnL(price: price)
+        let roe = estimator.calculateROE(price: price)
 
         let amount = currencyFormatter.string(abs(pnl))
         let percentText = percentFormatter.string(roe)
@@ -215,8 +220,8 @@ extension AutocloseSceneViewModel {
     }
 
     private func colorForPnL(price: Double?) -> Color {
-        guard let triggerPrice = price else { return Colors.secondaryText }
-        let pnl = estimator.calculatePnL(triggerPrice: triggerPrice)
+        guard let price else { return Colors.secondaryText }
+        let pnl = estimator.calculatePnL(price: price)
         return PriceChangeColor.color(for: pnl)
     }
 

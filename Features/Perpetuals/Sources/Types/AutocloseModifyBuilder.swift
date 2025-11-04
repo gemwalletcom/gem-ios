@@ -22,8 +22,8 @@ struct AutocloseModifyBuilder {
         assetIndex: Int32,
         takeProfit: AutocloseField,
         stopLoss: AutocloseField
-    ) -> [PerpetualModifyType] {
-        var result: [PerpetualModifyType] = []
+    ) -> [PerpetualModifyPositionType] {
+        var result: [PerpetualModifyPositionType] = []
 
         let cancelOrders = buildCancelOrders(
             assetIndex: assetIndex,
@@ -46,7 +46,7 @@ struct AutocloseModifyBuilder {
 // MARK: - Private
 
 extension AutocloseModifyBuilder {
-    private func buildTPSL(takeProfit: AutocloseField, stopLoss: AutocloseField) -> PerpetualModifyType {
+    private func buildTPSL(takeProfit: AutocloseField, stopLoss: AutocloseField) -> PerpetualModifyPositionType {
         .tpsl(TPSLOrderData(
             direction: position.position.direction,
             takeProfit: takeProfit.shouldSet ? takeProfit.formattedPrice : nil,
@@ -66,5 +66,3 @@ extension AutocloseModifyBuilder {
         }
     }
 }
-
-

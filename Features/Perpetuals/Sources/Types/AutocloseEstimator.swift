@@ -18,26 +18,18 @@ struct AutocloseEstimator {
         }
     }
 
-    func calculatePnL(triggerPrice: Double) -> Double {
+    func calculatePnL(price: Double) -> Double {
         let side: Double = direction == .long ? 1 : -1
-        return side * (triggerPrice - entryPrice) * abs(positionSize)
+        return side * (price - entryPrice) * abs(positionSize)
     }
 
-    func calculatePriceChangePercent(triggerPrice: Double) -> Double {
-        let rawChange = ((triggerPrice - entryPrice) / entryPrice) * 100
+    func calculatePriceChangePercent(price: Double) -> Double {
+        let rawChange = ((price - entryPrice) / entryPrice) * 100
         return direction == .short ? -rawChange : rawChange
     }
 
-    func calculateROE(triggerPrice: Double) -> Double {
-        let priceChangePercent = calculatePriceChangePercent(triggerPrice: triggerPrice)
+    func calculateROE(price: Double) -> Double {
+        let priceChangePercent = calculatePriceChangePercent(price: price)
         return priceChangePercent * Double(leverage)
-    }
-
-    func calculateAbsolutePnL(triggerPrice: Double) -> Double {
-        abs(calculatePnL(triggerPrice: triggerPrice))
-    }
-
-    func calculateAbsoluteROE(triggerPrice: Double) -> Double {
-        abs(calculateROE(triggerPrice: triggerPrice))
     }
 }

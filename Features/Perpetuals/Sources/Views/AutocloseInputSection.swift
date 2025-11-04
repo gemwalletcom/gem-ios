@@ -9,9 +9,9 @@ struct AutocloseInputSection<Field: Hashable>: View {
     @Binding var inputModel: InputValidationViewModel
     let title: String
     let placeholder: String
-    let estimatedPNLTitle: String
-    let estimatedPNLText: String
-    let estimatedPNLColor: Color
+    let pnlTitle: String
+    let pnlText: String
+    let pnlColor: Color
     let field: Field
     var focusedField: FocusState<Field?>.Binding
 
@@ -30,10 +30,10 @@ struct AutocloseInputSection<Field: Hashable>: View {
             Text(title)
         } footer: {
             HStack {
-                Text(estimatedPNLTitle)
+                Text(pnlTitle)
                 Spacer()
-                Text(estimatedPNLText)
-                    .foregroundStyle(estimatedPNLColor)
+                Text(pnlText)
+                    .foregroundStyle(pnlColor)
             }
             .font(.subheadline)
             .fontWeight(.semibold)

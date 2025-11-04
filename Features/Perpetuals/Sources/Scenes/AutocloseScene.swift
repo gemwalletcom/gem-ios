@@ -34,10 +34,10 @@ public struct AutocloseScene: View {
             AutocloseInputSection(
                 inputModel: $model.takeProfitInput,
                 title: model.takeProfitTitle,
-                placeholder: model.triggerPriceTitle,
-                estimatedPNLTitle: model.estimatedPNL,
-                estimatedPNLText: model.expectedProfitText,
-                estimatedPNLColor: model.expectedProfitColor,
+                placeholder: model.priceTitle,
+                pnlTitle: model.pnlTitle,
+                pnlText: model.expectedProfitText,
+                pnlColor: model.expectedProfitColor,
                 field: Field.takeProfit,
                 focusedField: $focusedField
             )
@@ -45,10 +45,10 @@ public struct AutocloseScene: View {
             AutocloseInputSection(
                 inputModel: $model.stopLossInput,
                 title: model.stopLossTitle,
-                placeholder: model.triggerPriceTitle,
-                estimatedPNLTitle: model.estimatedPNL,
-                estimatedPNLText: model.expectedStopLossText,
-                estimatedPNLColor: model.expectedStopLossColor,
+                placeholder: model.priceTitle,
+                pnlTitle: model.pnlTitle,
+                pnlText: model.expectedStopLossText,
+                pnlColor: model.expectedStopLossColor,
                 field: Field.stopLoss,
                 focusedField: $focusedField
             )
