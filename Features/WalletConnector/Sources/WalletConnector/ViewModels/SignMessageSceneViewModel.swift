@@ -76,23 +76,22 @@ public final class SignMessageSceneViewModel {
         TextMessageViewModel(message: decoder.plainPreview())
     }
 
-    public func signMessage() throws {
+    public func signMessage() async throws {
         let hash: Data = switch payload.message.signType {
         case .eip712:
-            // temporary fix for Hyperliquid 712 encoding issue, it contains not valid Solidity type names like HyperliquidTransaction:ApproveAgent
             EthereumAbi.encodeTyped(messageJson: String(data: payload.message.data, encoding: .utf8) ?? "")
         default:
             decoder.hash()
         }
 
         if payload.chain == .sui, payload.message.signType == .suiPersonalMessage {
-            let privateKey = try keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
+            let privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
             let signature = try CryptoSigner().signSuiDigest(digest: hash, privateKey: privateKey)
             confirmTransferDelegate(.success(signature))
             return
         }
 
-        let signature = try keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
+        let signature = try await keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
         let result = decoder.getResult(data: signature)
         confirmTransferDelegate(.success(result))
     }

@@ -56,14 +56,14 @@ public struct Signer: Sendable {
         }
     }
 
-    public func sign(input: SignerInput) throws -> [String] {
+    public func sign(input: SignerInput) async throws -> [String] {
         let chain = input.asset.chain
-        let privateKey = try keystore.getPrivateKey(wallet: wallet, chain: chain)
+        let privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
         return try sign(input: input, chain: chain, privateKey: privateKey)
     }
 
-    public func signMessage(chain: Chain, message: SignMessage) throws -> String {
-        let privateKey = try keystore.getPrivateKey(wallet: wallet, chain: chain)
+    public func signMessage(chain: Chain, message: SignMessage) async throws -> String {
+        let privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
         return try signMessage(chain: chain, message: message, privateKey: privateKey)
     }
 

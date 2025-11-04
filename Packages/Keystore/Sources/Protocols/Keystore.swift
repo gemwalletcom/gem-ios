@@ -7,13 +7,13 @@ import SwiftUI
 public protocol Keystore: Sendable {
     func createWallet() -> [String]
     @discardableResult
-    func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool) throws -> Wallet
+    func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool) async throws -> Wallet
     func setupChains(chains: [Chain], for wallets: [Wallet]) throws -> [Wallet]
-    func deleteKey(for wallet: Wallet) throws
-    func getPrivateKey(wallet: Wallet, chain: Chain) throws -> Data
-    func getPrivateKey(wallet: Wallet, chain: Chain, encoding: EncodingType) throws -> String
-    func getMnemonic(wallet: Wallet) throws -> [String]
+    func deleteKey(for wallet: Wallet) async throws
+    func getPrivateKey(wallet: Wallet, chain: Chain) async throws -> Data
+    func getPrivateKey(wallet: Wallet, chain: Chain, encoding: EncodingType) async throws -> String
+    func getMnemonic(wallet: Wallet) async throws -> [String]
     func getPasswordAuthentication() throws -> KeystoreAuthentication
-    func sign(hash: Data, wallet: Wallet, chain: Chain) throws -> Data
+    func sign(hash: Data, wallet: Wallet, chain: Chain) async throws -> Data
     func destroy() throws
 }

@@ -65,33 +65,29 @@ public struct WalletService: Sendable {
     }
 
     @discardableResult
-    public func importWallet(name: String, type: KeystoreImportType) throws -> Wallet {
-        let newWallet = try keystore.importWallet(
+    public func importWallet(name: String, type: KeystoreImportType) async throws -> Wallet {
+        let newWallet = try await keystore.importWallet(
             name: name,
             type: type,
             isWalletsEmpty: wallets.isEmpty
         )
         try walletStore.addWallet(newWallet)
-        walletSessionService.setCurrent(walletId: newWallet.walletId)
+        await MainActor.run {
+            walletSessionService.setCurrent(walletId: newWallet.walletId)
+        }
         return newWallet
     }
 
-    public func delete(_ wallet: Wallet) throws {
+    public func delete(_ wallet: Wallet) async throws {
         try avatarService.remove(for: wallet.id)
-        try keystore.deleteKey(for: wallet)
+        try await keystore.deleteKey(for: wallet)
         try walletStore.deleteWallet(for: wallet.id)
 
-
-        if currentWalletId == wallet.walletId {
-            walletSessionService.setCurrent(walletId: wallets.first?.walletId)
+        await MainActor.run {
+            if currentWalletId == wallet.walletId {
+                walletSessionService.setCurrent(walletId: wallets.first?.walletId)
+            }
         }
-
-        // TODO: - enable once will be enabled in CleanUpService
-        /*
-        if keystore.wallets.isEmpty {
-            try CleanUpService(keystore: keystore).onDeleteAllWallets()
-        }
-         */
     }
 
     public func setup(chains: [Chain]) throws {
@@ -120,11 +116,11 @@ public struct WalletService: Sendable {
         try walletStore.renameWallet(walletId.id, name: newName)
     }
     
-    public func getMnemonic(wallet: Wallet) throws -> [String] {
-        try keystore.getMnemonic(wallet: wallet)
+    public func getMnemonic(wallet: Wallet) async throws -> [String] {
+        try await keystore.getMnemonic(wallet: wallet)
     }
-    
-    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) throws -> String {
-        try keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
+
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> String {
+        try await keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
     }
 }
