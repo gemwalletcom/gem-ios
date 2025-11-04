@@ -74,13 +74,6 @@ public final class AutocloseSceneViewModel {
 
     var title: String { Localized.Perpetual.autoClose }
 
-    var priceTitle: String { Localized.Perpetual.AutoClose.triggerPrice }
-
-    var takeProfitTitle: String { Localized.Perpetual.AutoClose.takeProfit }
-    var stopLossTitle: String { Localized.Perpetual.AutoClose.stopLoss }
-
-    var pnlTitle: String { Localized.Perpetual.AutoClose.estimedPnl }
-
     var entryPriceTitle: String { Localized.Perpetual.entryPrice }
     var entryPriceText: String {
         position.position.entryPrice.map { currencyFormatter.string($0) } ?? "-"
@@ -91,20 +84,24 @@ public final class AutocloseSceneViewModel {
         currencyFormatter.string(position.perpetual.price)
     }
 
-    var expectedProfitText: String {
-        formatExpectedPnL(price: takeProfitPrice)
+    var takeProfitModel: AutocloseViewModel {
+        AutocloseViewModel(
+            type: .takeProfit,
+            price: takeProfitPrice,
+            estimator: estimator,
+            currencyFormatter: currencyFormatter,
+            percentFormatter: percentFormatter
+        )
     }
 
-    var expectedProfitColor: Color {
-        colorForPnL(price: takeProfitPrice)
-    }
-
-    var expectedStopLossText: String {
-        formatExpectedPnL(price: stopLossPrice)
-    }
-
-    var expectedStopLossColor: Color {
-        colorForPnL(price: stopLossPrice)
+    var stopLossModel: AutocloseViewModel {
+        AutocloseViewModel(
+            type: .stopLoss,
+            price: stopLossPrice,
+            estimator: estimator,
+            currencyFormatter: currencyFormatter,
+            percentFormatter: percentFormatter
+        )
     }
 
     var takeProfitOrderId: UInt64? {
@@ -206,23 +203,4 @@ extension AutocloseSceneViewModel {
 
     private var stopLoss: String { stopLossInput.text }
     private var stopLossPrice: Double? { currencyFormatter.double(from: stopLoss) }
-
-    private func formatExpectedPnL(price: Double?) -> String {
-        guard let price else { return "-" }
-        let pnl = estimator.calculatePnL(price: price)
-        let roe = estimator.calculateROE(price: price)
-
-        let amount = currencyFormatter.string(abs(pnl))
-        let percentText = percentFormatter.string(roe)
-        let sign = pnl >= 0 ? "+" : "-"
-
-        return "\(sign)\(amount) (\(percentText))"
-    }
-
-    private func colorForPnL(price: Double?) -> Color {
-        guard let price else { return Colors.secondaryText }
-        let pnl = estimator.calculatePnL(price: price)
-        return PriceChangeColor.color(for: pnl)
-    }
-
 }

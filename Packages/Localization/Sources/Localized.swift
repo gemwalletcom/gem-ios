@@ -834,14 +834,14 @@ public enum Localized {
     /// Size
     public static let size = Localized.tr("Localizable", "perpetual.size", fallback: "Size")
     public enum AutoClose {
-      /// Estimated Pnl
-      public static let estimedPnl = Localized.tr("Localizable", "perpetual.auto_close.estimed_pnl", fallback: "Estimated Pnl")
+      /// Expected loss
+      public static let expectedLoss = Localized.tr("Localizable", "perpetual.auto_close.expected_loss", fallback: "Expected loss")
+      /// Expected profit
+      public static let expectedProfit = Localized.tr("Localizable", "perpetual.auto_close.expected_profit", fallback: "Expected profit")
       /// Stop Loss
       public static let stopLoss = Localized.tr("Localizable", "perpetual.auto_close.stop_loss", fallback: "Stop Loss")
       /// Take profit
       public static let takeProfit = Localized.tr("Localizable", "perpetual.auto_close.take_profit", fallback: "Take profit")
-      /// Trigger price
-      public static let triggerPrice = Localized.tr("Localizable", "perpetual.auto_close.trigger_price", fallback: "Trigger price")
     }
   }
   public enum Perpetuals {

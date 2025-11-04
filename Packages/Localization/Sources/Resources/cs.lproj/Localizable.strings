@@ -495,10 +495,10 @@
 "perpetual.direction" = "Směr";
 "perpetual.auto_close" = "Automatické zavření";
 "info.perpetual.auto_close.description" = "Automaticky uzavřete svou pozici na stanovených cenových úrovních. Funkce Take Profit blokuje zisky, Stop Loss omezuje ztráty.";
-"perpetual.auto_close.trigger_price" = "Spouštěcí cena";
 "perpetual.auto_close.take_profit" = "Zisk z prodeje";
 "perpetual.auto_close.stop_loss" = "Zastavit ztrátu";
 "perpetual.market_price" = "Tržní cena";
-"perpetual.auto_close.estimed_pnl" = "Odhadovaný PNL";
 "perpetual.increase_direction" = "Zvýšení %@";
 "perpetual.reduce_direction" = "Snížit %@";
+"perpetual.auto_close.expected_profit" = "Očekávaný zisk";
+"perpetual.auto_close.expected_loss" = "Očekávaná ztráta";

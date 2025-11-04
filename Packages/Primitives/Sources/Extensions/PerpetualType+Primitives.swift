@@ -10,4 +10,12 @@ public extension PerpetualType {
         case .reduce(let reduceData): reduceData.data.baseAsset
         }
     }
+
+    var data: PerpetualConfirmData? {
+        switch self {
+        case .open(let data), .close(let data), .increase(let data): data
+        case .reduce(let reduceData): reduceData.data
+        case .modify: nil
+        }
+    }
 }

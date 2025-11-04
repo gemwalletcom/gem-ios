@@ -33,22 +33,14 @@ public struct AutocloseScene: View {
 
             AutocloseInputSection(
                 inputModel: $model.takeProfitInput,
-                title: model.takeProfitTitle,
-                placeholder: model.priceTitle,
-                pnlTitle: model.pnlTitle,
-                pnlText: model.expectedProfitText,
-                pnlColor: model.expectedProfitColor,
+                sectionModel: model.takeProfitModel,
                 field: Field.takeProfit,
                 focusedField: $focusedField
             )
 
             AutocloseInputSection(
                 inputModel: $model.stopLossInput,
-                title: model.stopLossTitle,
-                placeholder: model.priceTitle,
-                pnlTitle: model.pnlTitle,
-                pnlText: model.expectedStopLossText,
-                pnlColor: model.expectedStopLossColor,
+                sectionModel: model.stopLossModel,
                 field: Field.stopLoss,
                 focusedField: $focusedField
             )

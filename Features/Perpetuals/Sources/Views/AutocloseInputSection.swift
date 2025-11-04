@@ -7,11 +7,7 @@ import PrimitivesComponents
 
 struct AutocloseInputSection<Field: Hashable>: View {
     @Binding var inputModel: InputValidationViewModel
-    let title: String
-    let placeholder: String
-    let pnlTitle: String
-    let pnlText: String
-    let pnlColor: Color
+    let sectionModel: AutocloseViewModel
     let field: Field
     var focusedField: FocusState<Field?>.Binding
 
@@ -19,7 +15,7 @@ struct AutocloseInputSection<Field: Hashable>: View {
         Section {
             InputValidationField(
                 model: $inputModel,
-                placeholder: placeholder,
+                placeholder: sectionModel.priceTitle,
                 allowClean: true
             )
             .keyboardType(.decimalPad)
@@ -27,13 +23,13 @@ struct AutocloseInputSection<Field: Hashable>: View {
             .autocorrectionDisabled()
             .focused(focusedField, equals: field)
         } header: {
-            Text(title)
+            Text(sectionModel.title)
         } footer: {
             HStack {
-                Text(pnlTitle)
+                Text(sectionModel.profitTitle)
                 Spacer()
-                Text(pnlText)
-                    .foregroundStyle(pnlColor)
+                Text(sectionModel.expectedPnL)
+                    .foregroundStyle(sectionModel.pnlColor)
             }
             .font(.subheadline)
             .fontWeight(.semibold)

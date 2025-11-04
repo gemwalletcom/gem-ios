@@ -495,10 +495,10 @@
 "perpetual.direction" = "Arah";
 "perpetual.auto_close" = "Auto Tutup";
 "info.perpetual.auto_close.description" = "Tutup kedudukan anda secara automatik pada tahap harga yang ditetapkan. Ambil Untung mengunci keuntungan, Henti Kerugian menghadkan kerugian.";
-"perpetual.auto_close.trigger_price" = "Harga pencetus";
 "perpetual.auto_close.take_profit" = "Ambil untung";
 "perpetual.auto_close.stop_loss" = "Hentikan Kehilangan";
 "perpetual.market_price" = "Harga Pasaran";
-"perpetual.auto_close.estimed_pnl" = "Anggaran PNL";
 "perpetual.increase_direction" = "Tingkatkan %@";
 "perpetual.reduce_direction" = "Kurangkan %@";
+"perpetual.auto_close.expected_profit" = "Keuntungan yang dijangkakan";
+"perpetual.auto_close.expected_loss" = "Kerugian yang dijangkakan";
