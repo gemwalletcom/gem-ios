@@ -110,8 +110,9 @@ extension ImportWalletViewModel {
         buttonState = .loading(showProgress: true)
 
         Task {
+            try await Task.sleep(for: .milliseconds(50))
             do {
-                try await importWallet()
+                try importWallet()
             } catch {
                 isPresentingAlertMessage = AlertMessage(
                     title: alertTitle,
@@ -149,7 +150,7 @@ extension ImportWalletViewModel {
 // MARK: - Private
 
 extension ImportWalletViewModel {
-    private func importWallet() async throws {
+    private func importWallet() throws {
         let recipient: RecipientImport = {
             if let result = nameResolveState.result {
                 return RecipientImport(name: result.name, address: result.address)
@@ -164,12 +165,12 @@ extension ImportWalletViewModel {
             }
             switch type {
             case .multicoin:
-                try await importWallet(
+                try importWallet(
                     name: recipient.name,
                     keystoreType: .phrase(words: words, chains: AssetConfiguration.allChains)
                 )
             case .chain(let chain):
-                try await importWallet(
+                try importWallet(
                     name: recipient.name,
                     keystoreType: .single(words: words, chain: chain)
                 )
@@ -178,7 +179,7 @@ extension ImportWalletViewModel {
             guard try validateForm(type: importType, address: recipient.address, words: [input]) else {
                 return
             }
-            try await importWallet(name: recipient.name, keystoreType: .privateKey(text: input, chain: chain!))
+            try importWallet(name: recipient.name, keystoreType: .privateKey(text: input, chain: chain!))
         case .address:
             guard try validateForm(type: importType, address: recipient.address, words: []) else {
                 return
@@ -186,12 +187,12 @@ extension ImportWalletViewModel {
             let chain = chain!
             let address = chain.checksumAddress(recipient.address)
 
-            try await importWallet(name: recipient.name, keystoreType: .address(chain: chain, address: address))
+            try importWallet(name: recipient.name, keystoreType: .address(chain: chain, address: address))
         }
     }
 
-    private func importWallet(name: String, keystoreType: KeystoreImportType) async throws {
-        try await walletService.importWallet(name: name, type: keystoreType)
+    private func importWallet(name: String, keystoreType: KeystoreImportType) throws {
+        try walletService.importWallet(name: name, type: keystoreType)
         onFinish?()
     }
 
