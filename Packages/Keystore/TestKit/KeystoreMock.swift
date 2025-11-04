@@ -8,7 +8,7 @@ import PrimitivesTestKit
 public struct KeystoreMock: Keystore {
     public init() {}
     public func createWallet() -> [String] { LocalKeystore.words }
-    public func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool) throws -> Wallet { .mock() }
+    public func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool, isCreated: Bool) throws -> Wallet { .mock() }
     public func setupChains(chains: [Primitives.Chain], for wallets: [Primitives.Wallet]) throws -> [Wallet] { [.mock()] }
     public func deleteKey(for wallet: Primitives.Wallet) throws {}
     public func getPrivateKey(wallet: Primitives.Wallet, chain: Primitives.Chain) throws -> Data { Data() }

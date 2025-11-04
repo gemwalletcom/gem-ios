@@ -22,7 +22,8 @@ extension WalletRecordInfo {
             accounts: accounts.map { $0.mapToAccount() },
             order: wallet.order.asInt32,
             isPinned: wallet.isPinned,
-            imageUrl: wallet.imageUrl
+            imageUrl: wallet.imageUrl,
+            isCreated: wallet.isCreated
         )
     }
 }

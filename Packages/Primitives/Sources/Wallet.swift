@@ -20,8 +20,9 @@ public struct Wallet: Codable, Equatable, Hashable, Sendable {
 	public let order: Int32
 	public let isPinned: Bool
 	public let imageUrl: String?
+	public let isCreated: Bool
 
-	public init(id: String, name: String, index: Int32, type: WalletType, accounts: [Account], order: Int32, isPinned: Bool, imageUrl: String?) {
+	public init(id: String, name: String, index: Int32, type: WalletType, accounts: [Account], order: Int32, isPinned: Bool, imageUrl: String?, isCreated: Bool) {
 		self.id = id
 		self.name = name
 		self.index = index
@@ -30,6 +31,7 @@ public struct Wallet: Codable, Equatable, Hashable, Sendable {
 		self.order = order
 		self.isPinned = isPinned
 		self.imageUrl = imageUrl
+		self.isCreated = isCreated
 	}
 }
 

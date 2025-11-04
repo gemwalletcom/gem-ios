@@ -10,7 +10,8 @@ public extension Wallet {
         type: WalletType = .multicoin,
         accounts: [Account] = [],
         index: Int = 0,
-        order: Int = 0
+        order: Int = 0,
+        isCreated: Bool = false
     ) -> Wallet {
         Wallet(
             id: id,
@@ -20,7 +21,8 @@ public extension Wallet {
             accounts: accounts,
             order: order.asInt32,
             isPinned: false,
-            imageUrl: nil
+            imageUrl: nil,
+            isCreated: isCreated
         )
     }
 }

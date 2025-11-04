@@ -317,6 +317,12 @@ public struct Migrations {
             }
         }
 
+        migrator.registerMigration("Add isCreated to \(WalletRecord.databaseTableName)") { db in
+            try? db.alter(table: WalletRecord.databaseTableName) {
+                $0.add(column: WalletRecord.Columns.isCreated.name, .boolean).defaults(to: false)
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

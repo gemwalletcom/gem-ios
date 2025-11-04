@@ -16,6 +16,7 @@ public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRe
         static let isPinned = Column("isPinned")
         static let imageUrl = Column("imageUrl")
         static let updatedAt = Column("updatedAt")
+        static let isCreated = Column("isCreated")
     }
 
     public var id: String
@@ -26,6 +27,7 @@ public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRe
     public var isPinned: Bool
     public var imageUrl: String?
     public var updatedAt: Date?
+    public var isCreated: Bool
 
     static let accounts = hasMany(AccountRecord.self).forKey("accounts")
     static let connection = hasOne(WalletConnectionRecord.self).forKey("connection")
@@ -51,6 +53,8 @@ extension WalletRecord: CreateTable {
                 .defaults(to: false)
             $0.column(Columns.imageUrl.name, .text)
             $0.column(Columns.updatedAt.name, .date)
+            $0.column(Columns.isCreated.name, .boolean)
+                .defaults(to: false)
         }
     }
 }

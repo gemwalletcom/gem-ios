@@ -191,7 +191,7 @@ extension ImportWalletViewModel {
     }
 
     private func importWallet(name: String, keystoreType: KeystoreImportType) async throws {
-        try await walletService.importWallet(name: name, type: keystoreType)
+        try await walletService.importWallet(name: name, type: keystoreType, isCreated: false)
         onFinish?()
     }
 

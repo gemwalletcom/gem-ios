@@ -7,7 +7,7 @@ import SwiftUI
 public protocol Keystore: Sendable {
     func createWallet() -> [String]
     @discardableResult
-    func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool) throws -> Wallet
+    func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool, isCreated: Bool) throws -> Wallet
     func setupChains(chains: [Chain], for wallets: [Wallet]) throws -> [Wallet]
     func deleteKey(for wallet: Wallet) throws
     func getPrivateKey(wallet: Wallet, chain: Chain) throws -> Data

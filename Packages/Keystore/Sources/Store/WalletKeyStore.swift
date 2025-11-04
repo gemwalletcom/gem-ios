@@ -20,14 +20,14 @@ public struct WalletKeyStore: Sendable {
         keyStore = try! WalletCore.KeyStore(keyDirectory: directory)
     }
 
-    public func importWallet(name: String, words: [String], chains: [Chain], password: String) throws -> Primitives.Wallet {
+    public func importWallet(name: String, words: [String], chains: [Chain], password: String, isCreated: Bool) throws -> Primitives.Wallet {
         let wallet = try keyStore.import(
             mnemonic: MnemonicFormatter.fromArray(words: words),
             name: name,
             encryptPassword: password,
             coins: []
         )
-        return try addCoins(wallet: wallet, existingChains: [], newChains: chains, password: password)
+        return try addCoins(wallet: wallet, existingChains: [], newChains: chains, password: password, isCreated: isCreated)
     }
 
     public static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
@@ -81,7 +81,7 @@ public struct WalletKeyStore: Sendable {
         }
     }
 
-    public func importPrivateKey(name: String, key: String, chain: Chain, password: String) throws -> Primitives.Wallet {
+    public func importPrivateKey(name: String, key: String, chain: Chain, password: String, isCreated: Bool) throws -> Primitives.Wallet {
         let privateKey = try Self.decodeKey(key, chain: chain)
         let wallet = try keyStore.import(privateKey: privateKey, name: name, password: password, coin: chain.coinType)
 
@@ -100,17 +100,18 @@ public struct WalletKeyStore: Sendable {
             accounts: [account],
             order: 0,
             isPinned: false,
-            imageUrl: nil
+            imageUrl: nil,
+            isCreated: isCreated
         )
     }
 
-    public func addCoins(wallet: WalletCore.Wallet, existingChains: [Chain], newChains: [Chain], password: String) throws -> Primitives.Wallet {
+    public func addCoins(wallet: WalletCore.Wallet, existingChains: [Chain], newChains: [Chain], password: String, isCreated: Bool) throws -> Primitives.Wallet {
         let allChains = existingChains + newChains
         let exclude = [Chain.solana]
         let coins = allChains.filter { !exclude.contains($0) }.map { $0.coinType }.asSet().asArray()
         let existingCoinTypes = existingChains.map({ $0.coinType }).asSet()
         let newCoinTypes = newChains.map({ $0.coinType }).asSet()
-        
+
         // Tricky wallet core implementation. By default is coins: [], it will create ethereum
         // if single chain, remove all to simplify
         if existingChains.isEmpty && newChains.count == 1 {
@@ -130,7 +131,7 @@ public struct WalletKeyStore: Sendable {
             }
             return .privateKey
         }()
-        
+
         let accounts = allChains.compactMap { chain in
             wallet.accounts.filter({ $0.coin == chain.coinType }).first?.mapToAccount(chain: chain)
         }
@@ -143,13 +144,19 @@ public struct WalletKeyStore: Sendable {
             accounts: accounts,
             order: 0,
             isPinned: false,
-            imageUrl: nil
+            imageUrl: nil,
+            isCreated: isCreated
         )
     }
 
     public func addChains(wallet: Primitives.Wallet, existingChains: [Chain], newChains: [Chain], password: String) throws -> Primitives.Wallet {
-        let wallet = try getWallet(id: wallet.id)
-        return try addCoins(wallet: wallet, existingChains: existingChains, newChains: newChains, password: password)
+        try addCoins(
+            wallet: try getWallet(id: wallet.id),
+            existingChains: existingChains,
+            newChains: newChains,
+            password: password,
+            isCreated: wallet.isCreated
+        )
     }
 
     private func getWallet(id: String) throws -> WalletCore.Wallet {

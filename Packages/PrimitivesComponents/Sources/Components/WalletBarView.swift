@@ -54,7 +54,8 @@ public struct WalletBarView: View {
                     accounts: [.init(chain: .algorand, address: "", derivationPath: "", extendedPublicKey: "")],
                     order: 1,
                     isPinned: true,
-                    imageUrl: nil
+                    imageUrl: nil,
+                    isCreated: false
                 )
             ).name,
             image: AssetImage(imageURL: .none, placeholder: .none, chainPlaceholder: .none)
