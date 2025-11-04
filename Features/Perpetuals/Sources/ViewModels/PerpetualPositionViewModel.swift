@@ -13,7 +13,8 @@ public struct PerpetualPositionViewModel {
     public let data: PerpetualPositionData
     private let currencyFormatter: CurrencyFormatter
     private let percentFormatter: CurrencyFormatter
-    
+    private let autocloseFormatter: AutocloseFormatter
+
     public init(
         _ data: PerpetualPositionData,
         currencyStyle: CurrencyFormatterType = .currency
@@ -21,6 +22,7 @@ public struct PerpetualPositionViewModel {
         self.data = data
         self.currencyFormatter = CurrencyFormatter(type: currencyStyle, currencyCode: Currency.usd.rawValue)
         self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
+        self.autocloseFormatter = AutocloseFormatter(currencyFormatter: currencyFormatter)
     }
     
     public var assetImage: AssetImage {
@@ -68,6 +70,14 @@ public struct PerpetualPositionViewModel {
     public var marginTitle: String { Localized.Perpetual.margin }
     public var marginAmountText: String {
         currencyFormatter.string(data.position.marginAmount)
+    }
+
+    var autocloseTitle: String { Localized.Perpetual.autoClose }
+    var autocloseText: String {
+        autocloseFormatter.format(
+            takeProfit: data.position.takeProfit?.price,
+            stopLoss: data.position.stopLoss?.price
+        )
     }
 
     public var marginText: String {
