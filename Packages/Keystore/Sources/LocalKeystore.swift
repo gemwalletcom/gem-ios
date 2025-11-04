@@ -88,10 +88,8 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
                     try walletKeyStore.deleteWallet(id: wallet.id, password: password)
                 } catch let error as KeystoreError {
                     switch error {
-                    case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList:
+                    case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList, .invalidPrivateKey, .invalidPrivateKeyEncoding:
                         break
-                    case .invalidPrivateKey, .invalidPrivateKeyEncoding:
-                        throw error
                     @unknown default:
                         throw error
                     }
