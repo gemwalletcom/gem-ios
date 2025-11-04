@@ -27,8 +27,7 @@ struct RootScene: View {
                 OnboardingNavigationView(
                     model: .init(
                         walletService: model.walletService,
-                        nameService: model.nameService,
-                        bannerSetupService: model.bannerSetupService
+                        nameService: model.nameService
                     )
                 )
             }
