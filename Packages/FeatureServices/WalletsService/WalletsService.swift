@@ -76,7 +76,7 @@ public struct WalletsService: Sendable {
         let chains = wallet.chains
         
         let (chainsEnabledByDefault, chainsDisabledByDefault) = chains.reduce(into: ([Chain](), [Chain]())) { result, chain in
-            if AssetConfiguration.enabledByDefault.contains( chain.assetId ) || (wallet.accounts.count == 1) {
+            if AssetConfiguration.enabledByDefault.contains(chain.assetId) || (wallet.accounts.count == 1 && chains.count == 1) {
                 result.0.append(chain)
             } else {
                 result.1.append(chain)

@@ -254,6 +254,13 @@
     },
     {
       "target" : {
+        "containerPath" : "container:Packages\/FeatureServices",
+        "identifier" : "WalletsServiceTests",
+        "name" : "WalletsServiceTests"
+      }
+    },
+    {
+      "target" : {
         "containerPath" : "container:Features\/ManageWallets",
         "identifier" : "ManageWalletsTests",
         "name" : "ManageWalletsTests"
