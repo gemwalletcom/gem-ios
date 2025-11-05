@@ -10,6 +10,10 @@ let package = Package(
             name: "Signer",
             targets: ["Signer"]
         ),
+        .library(
+            name: "SignerTestKit",
+            targets: ["SignerTestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -33,6 +37,14 @@ let package = Package(
                 "Gemstone",
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "SignerTestKit",
+            dependencies: [
+                "Signer",
+                "Primitives",
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "SignerTests",

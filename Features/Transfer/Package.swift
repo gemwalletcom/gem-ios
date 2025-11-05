@@ -29,6 +29,7 @@ let package = Package(
         .package(name: "Signer", path: "../../Packages/Signer"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "Validators", path: "../../Packages/Validators"),
+        .package(name: "Store", path: "../../Packages/Store"),
 
         .package(name: "Staking", path: "../Staking"),
         .package(name: "QRScanner", path: "../QRScanner"),
@@ -110,6 +111,10 @@ let package = Package(
                 .product(name: "AddressNameServiceTestKit", package: "FeatureServices"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "StakeServiceTestKit", package: "ChainServices"),
+                .product(name: "NFTServiceTestKit", package: "FeatureServices"),
+                .product(name: "SignerTestKit", package: "Signer"),
             ],
             path: "Tests"
         ),
