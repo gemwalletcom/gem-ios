@@ -87,11 +87,14 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
                 do {
                     try walletKeyStore.deleteWallet(id: wallet.id, password: password)
                 } catch let error as KeystoreError {
+                    // in some cases wallet already deleted, just ignore
                     switch error {
-                    case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList:
+                    case .unknownWalletInWalletCore,
+                        .unknownWalletIdInWalletCore,
+                        .unknownWalletInWalletCoreList,
+                        .invalidPrivateKey,
+                        .invalidPrivateKeyEncoding:
                         break
-                    case .invalidPrivateKey, .invalidPrivateKeyEncoding:
-                        throw error
                     @unknown default:
                         throw error
                     }
