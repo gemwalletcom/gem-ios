@@ -62,7 +62,7 @@ public struct TransferExecutor: TransferExecutable {
 
                 try transactionService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {
-                    try walletsService.enableBalances(
+                    try walletsService.addBalancesIfMissing(
                         for: input.wallet.walletId,
                         assetIds: assetIds,
                         isEnabled: true
