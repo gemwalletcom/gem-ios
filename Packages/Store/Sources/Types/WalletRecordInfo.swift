@@ -23,7 +23,7 @@ extension WalletRecordInfo {
             order: wallet.order.asInt32,
             isPinned: wallet.isPinned,
             imageUrl: wallet.imageUrl,
-            isCreated: wallet.isCreated
+            source: wallet.source
         )
     }
 }

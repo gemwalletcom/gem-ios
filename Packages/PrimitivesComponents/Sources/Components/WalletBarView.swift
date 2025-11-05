@@ -55,7 +55,7 @@ public struct WalletBarView: View {
                     order: 1,
                     isPinned: true,
                     imageUrl: nil,
-                    isCreated: false
+                    source: .create
                 )
             ).name,
             image: AssetImage(imageURL: .none, placeholder: .none, chainPlaceholder: .none)

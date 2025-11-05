@@ -36,7 +36,7 @@ public struct LocalKeystore: Keystore {
         name: String,
         type: KeystoreImportType,
         isWalletsEmpty: Bool,
-        isCreated: Bool
+        source: WalletSource
     ) throws -> Primitives.Wallet {
         return switch type {
         case .phrase(let words, let chains):
@@ -45,7 +45,7 @@ public struct LocalKeystore: Keystore {
                 words: words,
                 chains: chains,
                 password: getOrCreatePassword(createPasswordIfNone: isWalletsEmpty),
-                isCreated: isCreated
+                source: source
             )
         case .single(let words, let chain):
             try walletKeyStore.importWallet(
@@ -53,7 +53,7 @@ public struct LocalKeystore: Keystore {
                 words: words,
                 chains: [chain],
                 password: getOrCreatePassword(createPasswordIfNone: isWalletsEmpty),
-                isCreated: isCreated
+                source: source
             )
         case .privateKey(let text, let chain):
             try walletKeyStore.importPrivateKey(
@@ -61,7 +61,7 @@ public struct LocalKeystore: Keystore {
                 key: text,
                 chain: chain,
                 password: getOrCreatePassword(createPasswordIfNone: isWalletsEmpty),
-                isCreated: isCreated
+                source: source
             )
         case .address(let chain, let address):
             Wallet.makeView(name: name, chain: chain, address: address)

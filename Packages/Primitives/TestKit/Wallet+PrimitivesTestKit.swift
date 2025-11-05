@@ -11,7 +11,7 @@ public extension Wallet {
         accounts: [Account] = [],
         index: Int = 0,
         order: Int = 0,
-        isCreated: Bool = false
+        source: WalletSource = .create
     ) -> Wallet {
         Wallet(
             id: id,
@@ -22,7 +22,7 @@ public extension Wallet {
             order: order.asInt32,
             isPinned: false,
             imageUrl: nil,
-            isCreated: isCreated
+            source: source
         )
     }
 }

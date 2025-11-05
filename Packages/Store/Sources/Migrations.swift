@@ -1,5 +1,6 @@
 import Foundation
 import GRDB
+import Primitives
 
 public struct Migrations {
     
@@ -317,9 +318,9 @@ public struct Migrations {
             }
         }
 
-        migrator.registerMigration("Add isCreated to \(WalletRecord.databaseTableName)") { db in
+        migrator.registerMigration("Add source to \(WalletRecord.databaseTableName)") { db in
             try? db.alter(table: WalletRecord.databaseTableName) {
-                $0.add(column: WalletRecord.Columns.isCreated.name, .boolean).defaults(to: false)
+                $0.add(column: WalletRecord.Columns.source.name, .text).defaults(to: WalletSource.create.rawValue)
             }
         }
 

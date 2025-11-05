@@ -137,7 +137,7 @@ extension WalletRecord {
             order: order.asInt32,
             isPinned: isPinned,
             imageUrl: imageUrl,
-            isCreated: isCreated
+            source: source
         )
     }
 }
@@ -153,7 +153,7 @@ extension Wallet {
             isPinned: false,
             imageUrl: imageUrl,
             updatedAt: nil,
-            isCreated: isCreated
+            source: source
         )
     }
 }

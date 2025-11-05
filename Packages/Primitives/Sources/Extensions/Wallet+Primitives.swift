@@ -48,7 +48,7 @@ public extension Wallet {
             order: 0,
             isPinned: false,
             imageUrl: nil,
-            isCreated: false
+            source: .import
         )
     }
 }
