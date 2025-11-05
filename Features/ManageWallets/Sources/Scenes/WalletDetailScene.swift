@@ -113,8 +113,10 @@ public struct WalletDetailScene: View {
                     Localized.Common.delete,
                     role: .destructive,
                     action: {
-                        if model.onDelete() {
-                            dismiss()
+                        Task {
+                            if await model.onDelete() {
+                                dismiss()
+                            }
                         }
                     }
                 )

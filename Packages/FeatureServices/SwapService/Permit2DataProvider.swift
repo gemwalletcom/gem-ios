@@ -17,7 +17,7 @@ protocol Permit2DataProvidable: Sendable {
         wallet: Wallet,
         chain: Chain,
         approval: Permit2ApprovalData
-    ) throws -> Permit2Data
+    ) async throws -> Permit2Data
 }
 
 struct Permit2DataProvider: Permit2DataProvidable {
@@ -31,7 +31,7 @@ struct Permit2DataProvider: Permit2DataProvidable {
         wallet: Wallet,
         chain: Chain,
         approval: Permit2ApprovalData
-    ) throws -> Permit2Data {
+    ) async throws -> Permit2Data {
 
         let permitSingle = permitSingle(approval: approval)
         let json = try Gemstone.permit2DataToEip712Json(
@@ -41,7 +41,7 @@ struct Permit2DataProvider: Permit2DataProvidable {
         )
 
         let signer = Signer(wallet: wallet, keystore: keystore)
-        let hexSignature = try signer.signMessage(chain: chain, message: .typed(json))
+        let hexSignature = try await signer.signMessage(chain: chain, message: .typed(json))
         let signature = try Data.from(hex: hexSignature)
 
         return Permit2Data(permitSingle: permitSingle, signature: signature)

@@ -13,7 +13,6 @@ extension GemDelegationState {
         case .activating: return .activating
         case .deactivating: return .deactivating
         case .awaitingWithdrawal: return .awaitingWithdrawal
-        @unknown default: return .inactive
         }
     }
 }

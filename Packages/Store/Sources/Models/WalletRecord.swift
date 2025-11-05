@@ -20,7 +20,7 @@ public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRe
 
     public var id: String
     public var name: String
-    public var type: String
+    public var type: WalletType
     public var index: Int
     public var order: Int
     public var isPinned: Bool

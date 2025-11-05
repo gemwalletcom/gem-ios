@@ -76,18 +76,18 @@ public struct WalletsService: Sendable {
         let chains = wallet.chains
         
         let (chainsEnabledByDefault, chainsDisabledByDefault) = chains.reduce(into: ([Chain](), [Chain]())) { result, chain in
-            if AssetConfiguration.enabledByDefault.contains( chain.assetId ) {
+            if AssetConfiguration.enabledByDefault.contains(chain.assetId) || (wallet.accounts.count == 1 && chains.count == 1) {
                 result.0.append(chain)
             } else {
                 result.1.append(chain)
             }
         }
         
-        try enableBalances(for: wallet.walletId, assetIds: chainsEnabledByDefault.ids, isEnabled: true)
-        try enableBalances(for: wallet.walletId, assetIds: chainsDisabledByDefault.ids, isEnabled: false)
+        try addBalancesIfMissing(for: wallet.walletId, assetIds: chainsEnabledByDefault.ids, isEnabled: true)
+        try addBalancesIfMissing(for: wallet.walletId, assetIds: chainsDisabledByDefault.ids, isEnabled: false)
         
         let defaultAssets = chains.map { $0.defaultAssets.assetIds }.flatMap { $0 }
-        try enableBalances(for: wallet.walletId, assetIds: defaultAssets, isEnabled: false)
+        try addBalancesIfMissing(for: wallet.walletId, assetIds: defaultAssets, isEnabled: false)
     }
 }
 
@@ -123,8 +123,8 @@ extension WalletsService: BalanceUpdater {
         try await balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
     }
 
-    public func enableBalances(for walletId: WalletId, assetIds: [AssetId], isEnabled: Bool?) throws {
-        try balanceUpdater.enableBalances(for: walletId, assetIds: assetIds, isEnabled: isEnabled)
+    public func addBalancesIfMissing(for walletId: WalletId, assetIds: [AssetId], isEnabled: Bool?) throws {
+        try balanceUpdater.addBalancesIfMissing(for: walletId, assetIds: assetIds, isEnabled: isEnabled)
     }
 }
 
