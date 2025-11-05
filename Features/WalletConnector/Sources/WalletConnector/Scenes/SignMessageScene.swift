@@ -74,11 +74,13 @@ public struct SignMessageScene: View {
     }
     
     func sign() {
-        do {
-            try model.signMessage()
-            dismiss()
-        } catch {
-            NSLog("sign message error \(error)")
+        Task {
+            do {
+                try await model.signMessage()
+                dismiss()
+            } catch {
+                NSLog("sign message error \(error)")
+            }
         }
     }
 }

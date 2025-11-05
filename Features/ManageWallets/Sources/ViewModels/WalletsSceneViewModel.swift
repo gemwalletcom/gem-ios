@@ -65,8 +65,8 @@ extension WalletsSceneViewModel {
         navigationPath.wrappedValue.append(Scenes.WalletDetail(wallet: wallet))
     }
 
-    private func delete(_ wallet: Wallet) throws {
-        try service.delete(wallet)
+    private func delete(_ wallet: Wallet) async throws {
+        try await service.delete(wallet)
     }
 
     private func pin(_ wallet: Wallet) throws {
@@ -134,9 +134,9 @@ extension WalletsSceneViewModel {
         }
     }
     
-    func onDeleteConfirmed(wallet: Wallet) {
+    func onDeleteConfirmed(wallet: Wallet) async {
         do {
-            try delete(wallet)
+            try await delete(wallet)
             currentWalletId = service.currentWalletId
         } catch {
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)

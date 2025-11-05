@@ -19,7 +19,6 @@ extension GemAssetType {
         case .synth: return .synth
         case .asa: return .asa
         case .perpetual: return .perpetual
-        @unknown default: return .native
         }
     }
 }

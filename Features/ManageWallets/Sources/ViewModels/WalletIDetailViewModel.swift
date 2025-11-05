@@ -90,21 +90,21 @@ extension WalletDetailViewModel {
         try walletService.rename(walletId: wallet.walletId, newName: name)
     }
     
-    func getMnemonicWords() throws -> [String] {
-        try walletService.getMnemonic(wallet: wallet)
+    func getMnemonicWords() async throws -> [String] {
+        try await walletService.getMnemonic(wallet: wallet)
     }
-    
-    func getPrivateKey() throws -> String {
+
+    func getPrivateKey() async throws -> String {
         let chain = wallet.accounts[0].chain
-        return try walletService.getPrivateKey(
+        return try await walletService.getPrivateKey(
             wallet: wallet,
             chain: chain,
             encoding: chain.defaultKeyEncodingType
         )
     }
 
-    func delete() throws {
-        try walletService.delete(wallet)
+    func delete() async throws {
+        try await walletService.delete(wallet)
     }
 
     func onSelectImage() {
@@ -124,18 +124,22 @@ extension WalletDetailViewModel {
     }
 
     func onShowSecretPhrase() {
-        do {
-            isPresentingExportWallet = .words(try getMnemonicWords())
-        } catch {
-            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+        Task {
+            do {
+                isPresentingExportWallet = .words(try await getMnemonicWords())
+            } catch {
+                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+            }
         }
     }
 
     func onShowPrivateKey() {
-        do {
-            isPresentingExportWallet = .privateKey(try getPrivateKey())
-        } catch {
-            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+        Task {
+            do {
+                isPresentingExportWallet = .privateKey(try await getPrivateKey())
+            } catch {
+                isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
+            }
         }
     }
 
@@ -143,9 +147,9 @@ extension WalletDetailViewModel {
         isPresentingDeleteConfirmation = true
     }
 
-    func onDelete() -> Bool {
+    func onDelete() async -> Bool {
         do {
-            try delete()
+            try await delete()
             return true
         } catch {
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)

@@ -3,6 +3,7 @@
 import CryptoKit
 import Foundation
 import protocol Gemstone.AlienProvider
+import struct Gemstone.AlienResponse
 import struct Gemstone.AlienTarget
 import struct Gemstone.AlienResponse
 import enum Gemstone.AlienError
@@ -10,8 +11,8 @@ import typealias Gemstone.Chain
 import Primitives
 
 public actor NativeProvider {
-    let session: URLSession
-    let nodeProvider: any NodeURLFetchable
+    private let session: URLSession
+    private let nodeProvider: any NodeURLFetchable
     private let cache: any ProviderCache
 
     public init(
@@ -31,7 +32,6 @@ public actor NativeProvider {
 }
 
 public struct StaticNode: NodeURLFetchable {
-
     let url: URL
 
     public init(url: URL) {

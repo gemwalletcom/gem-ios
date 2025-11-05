@@ -11,6 +11,7 @@ extension Gemstone.PerpetualType {
         case .close(let confirmData): .close(try confirmData.map())
         case .increase(let confirmData): .increase(try confirmData.map())
         case .reduce(let reduceData): .reduce(try reduceData.map())
+        case .modify(let data): .modify(try data.map())
         }
     }
 }
@@ -21,6 +22,7 @@ extension Primitives.PerpetualType {
         case .open(let data), .increase(let data): .open(data.map())
         case .reduce(let data): .open(data.data.map())
         case .close(let data): .close(data.map())
+        case .modify(let data): .modify(data.map())
         }
     }
 }

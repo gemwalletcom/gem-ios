@@ -16,7 +16,7 @@ public struct TransactionSigner: TransactionSigneable {
         transactionData: TransactionData,
         amount: TransferAmount,
         wallet: Wallet
-    ) throws -> [String] {
+    ) async throws -> [String] {
 
         let signer = Signer(wallet: wallet, keystore: keystore)
         let fee = Fee(
@@ -38,6 +38,6 @@ public struct TransactionSigner: TransactionSigneable {
             metadata: transactionData.metadata
         )
 
-        return try signer.sign(input: input)
+        return try await signer.sign(input: input)
     }
 }

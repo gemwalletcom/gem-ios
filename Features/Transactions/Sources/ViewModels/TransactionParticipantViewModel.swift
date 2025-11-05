@@ -59,8 +59,8 @@ extension TransactionParticipantViewModel {
             Localized.Stake.validator
         case .stakeFreeze, .stakeUnfreeze:
             Localized.Stake.resource
-        case .swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards,
-                .stakeWithdraw, .assetActivation, .perpetualOpenPosition, .perpetualClosePosition: nil
+        case .swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw,
+                .assetActivation, .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition: nil
         }
     }
 }

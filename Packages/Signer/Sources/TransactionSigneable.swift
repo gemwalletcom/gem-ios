@@ -9,5 +9,5 @@ public protocol TransactionSigneable: Sendable {
         transactionData: TransactionData,
         amount: TransferAmount,
         wallet: Wallet
-    ) throws -> [String]
+    ) async throws -> [String]
 }
