@@ -7,7 +7,6 @@ import Primitives
 import PrimitivesComponents
 import Localization
 import Components
-import WalletCore
 import class Gemstone.SignMessageDecoder
 import class Gemstone.CryptoSigner
 
@@ -77,13 +76,7 @@ public final class SignMessageSceneViewModel {
     }
 
     public func signMessage() async throws {
-        let hash: Data = switch payload.message.signType {
-        case .eip712:
-            EthereumAbi.encodeTyped(messageJson: String(data: payload.message.data, encoding: .utf8) ?? "")
-        default:
-            decoder.hash()
-        }
-
+        let hash: Data = decoder.hash()
         if payload.chain == .sui, payload.message.signType == .suiPersonalMessage {
             let privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
             let signature = try CryptoSigner().signSuiDigest(digest: hash, privateKey: privateKey)
