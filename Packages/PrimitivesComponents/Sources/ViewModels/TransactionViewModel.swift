@@ -66,7 +66,8 @@ public struct TransactionViewModel: Sendable {
                 .perpetualOpenPosition,
                 .perpetualClosePosition,
                 .stakeFreeze,
-                .stakeUnfreeze: .none
+                .stakeUnfreeze,
+                .perpetualModifyPosition: .none
         }
     }
 
@@ -133,6 +134,8 @@ public struct TransactionViewModel: Sendable {
                 if case let .perpetual(metadata) = transaction.transaction.metadata {
                     return Localized.Perpetual.closeDirection(PerpetualDirectionViewModel(direction: metadata.direction).title)
                 }
+                return .empty
+            case .perpetualModifyPosition:
                 return .empty
             }
         }()
@@ -205,9 +208,9 @@ public struct TransactionViewModel: Sendable {
             case .swap,
                     .stakeRewards,
                     .stakeWithdraw,
-                    .assetActivation:
-                return .none
-            case .perpetualOpenPosition,
+                    .assetActivation,
+                    .perpetualModifyPosition,
+                    .perpetualOpenPosition,
                     .perpetualClosePosition:
                 guard case .perpetual(let metadata) = transaction.transaction.metadata else {
                     return .none
@@ -264,6 +267,8 @@ public struct TransactionViewModel: Sendable {
             ).amount
         case .transferNFT:
             return nil
+        case .perpetualModifyPosition:
+            return nil
         }
     }
 
@@ -281,6 +286,7 @@ public struct TransactionViewModel: Sendable {
                 .smartContractCall,
                 .perpetualOpenPosition,
                 .perpetualClosePosition,
+                .perpetualModifyPosition,
                 .stakeFreeze,
                 .stakeUnfreeze:
             return .none

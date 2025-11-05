@@ -86,7 +86,7 @@ public struct WalletsScene: View {
                 Button(
                     Localized.Common.delete,
                     role: .destructive,
-                    action: { model.onDeleteConfirmed(wallet: wallet) }
+                    action: { Task { await model.onDeleteConfirmed(wallet: wallet) } }
                 )
             }
         )

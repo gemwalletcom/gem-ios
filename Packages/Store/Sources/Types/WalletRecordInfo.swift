@@ -11,14 +11,11 @@ struct WalletRecordInfo: FetchableRecord, Codable {
 
 extension WalletRecordInfo {
     func mapToWallet() -> Wallet? {
-        guard let type = WalletType(rawValue: wallet.type) else {
-            return .none
-        }
         return Wallet(
             id: wallet.id,
             name: wallet.name,
             index: wallet.index.asInt32,
-            type: type,
+            type: wallet.type,
             accounts: accounts.map { $0.mapToAccount() },
             order: wallet.order.asInt32,
             isPinned: wallet.isPinned,

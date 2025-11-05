@@ -125,9 +125,9 @@ public final class AmountSceneViewModel {
         case .withdraw: Localized.Wallet.withdraw
         case .perpetual(let data):
             switch data.positionAction {
-            case .open(let transferData): PerpetualDirectionViewModel(direction: transferData.direction).title
-            case .increase(let transferData): PerpetualDirectionViewModel(direction: transferData.direction).increaseTitle
-            case .reduce(_, _, let positionDirection): PerpetualDirectionViewModel(direction: positionDirection).reduceTitle
+            case .open(let data): PerpetualDirectionViewModel(direction: data.direction).title
+            case .increase(let data): PerpetualDirectionViewModel(direction: data.direction).increaseTitle
+            case .reduce(_, _, let direction): PerpetualDirectionViewModel(direction: direction).reduceTitle
             }
         case .stake: Localized.Transfer.Stake.title
         case .stakeUnstake: Localized.Transfer.Unstake.title

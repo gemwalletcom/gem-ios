@@ -156,6 +156,13 @@ public struct InfoSheetModelFactory {
                 image: .image(Images.Logo.logo),
                 button: .url(Docs.url(.perpetualsOpenInterest))
             )
+        case .autoclose:
+            return InfoSheetModel(
+                title: Localized.Perpetual.autoClose,
+                description: Localized.Info.Perpetual.AutoClose.description,
+                image: .image(Images.Logo.logo),
+                button: .url(Docs.url(.perpetualsFundingRate)) // TODO: - update when available
+            )
         }
     }
 }

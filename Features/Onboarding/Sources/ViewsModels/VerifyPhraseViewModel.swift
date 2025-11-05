@@ -94,6 +94,7 @@ final class VerifyPhraseViewModel {
 extension VerifyPhraseViewModel {
     func onImportWallet() {
         buttonState = .loading(showProgress: true)
+
         Task {
             do {
                 try await importWallet()

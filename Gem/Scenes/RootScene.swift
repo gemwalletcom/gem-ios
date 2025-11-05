@@ -8,11 +8,9 @@ import Primitives
 import Onboarding
 import PriceService
 import Components
-import Preferences
 
 struct RootScene: View {
     @State private var model: RootSceneViewModel
-    @Environment(\.observablePreferences) private var preferences
 
     init(model: RootSceneViewModel) {
         _model = State(initialValue: model)
@@ -61,7 +59,11 @@ struct RootScene: View {
         )
         .taskOnce(model.setup)
         .lockManaged(by: model.lockManager)
-        .onChange(of: preferences.currentWalletId, initial: true, model.updateCurrentWallet)
+        .onChange(
+            of: model.currentWallet,
+            initial: true,
+            model.onChangeWallet
+        )
         .toast(
             isPresenting: $model.isPresentingConnectorBar,
             message: ToastMessage(

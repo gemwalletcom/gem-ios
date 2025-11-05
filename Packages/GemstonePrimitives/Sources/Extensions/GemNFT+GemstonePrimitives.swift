@@ -7,11 +7,10 @@ import Primitives
 extension GemNftType {
     public func map() -> NFTType {
         switch self {
-        case .erc721: return .erc721
-        case .erc1155: return .erc1155
-        case .spl: return .spl
-        case .jetton: return .jetton
-        @unknown default: return .erc721
+        case .erc721: .erc721
+        case .erc1155: .erc1155
+        case .spl: .spl
+        case .jetton: .jetton
         }
     }
 }
@@ -19,10 +18,10 @@ extension GemNftType {
 extension NFTType {
     public func map() -> GemNftType {
         switch self {
-        case .erc721: return .erc721
-        case .erc1155: return .erc1155
-        case .spl: return .spl
-        case .jetton: return .jetton
+        case .erc721: .erc721
+        case .erc1155: .erc1155
+        case .spl: .spl
+        case .jetton: .jetton
         }
     }
 }
