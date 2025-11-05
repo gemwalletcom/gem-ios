@@ -84,7 +84,6 @@ public final class AutocloseSceneViewModel {
     var marketPriceText: String { currencyFormatter.string(position.perpetual.price) }
 
     var takeProfitModel: AutocloseViewModel { autocloseModel(type: .takeProfit, price: takeProfitPrice) }
-
     var stopLossModel: AutocloseViewModel { autocloseModel(type: .stopLoss, price: stopLossPrice) }
 
     var positionViewModel: PerpetualPositionViewModel { PerpetualPositionViewModel(position) }
