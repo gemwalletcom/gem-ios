@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "Inaasahang tubo";
 "perpetual.auto_close.expected_loss" = "Inaasahang pagkawala";
 "perpetual.modify_position" = "Baguhin ang Posisyon";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "Itigil ang pagkawala";

@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "Faida inayotarajiwa";
 "perpetual.auto_close.expected_loss" = "Hasara inayotarajiwa";
 "perpetual.modify_position" = "Rekebisha Nafasi";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "Acha hasara";

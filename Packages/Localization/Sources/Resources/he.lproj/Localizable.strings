@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "רווח צפוי";
 "perpetual.auto_close.expected_loss" = "הפסד צפוי";
 "perpetual.modify_position" = "שינוי מיקום";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "עצירת הפסד";

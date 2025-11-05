@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "Beklenen kar";
 "perpetual.auto_close.expected_loss" = "Beklenen kayıp";
 "perpetual.modify_position" = "Pozisyonu Değiştir";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "Zarar durdurma";

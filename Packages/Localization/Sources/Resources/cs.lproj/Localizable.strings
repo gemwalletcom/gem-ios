@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "Očekávaný zisk";
 "perpetual.auto_close.expected_loss" = "Očekávaná ztráta";
 "perpetual.modify_position" = "Upravit pozici";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "Zastavit ztrátu";

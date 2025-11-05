@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "अपेक्षित लाभ";
 "perpetual.auto_close.expected_loss" = "अपेक्षित हानि";
 "perpetual.modify_position" = "स्थिति संशोधित करें";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "झड़ने बंद";

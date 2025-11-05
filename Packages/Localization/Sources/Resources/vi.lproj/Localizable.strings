@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "Lợi nhuận dự kiến";
 "perpetual.auto_close.expected_loss" = "Dự kiến mất mát";
 "perpetual.modify_position" = "Sửa đổi vị trí";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "Dừng lỗ";

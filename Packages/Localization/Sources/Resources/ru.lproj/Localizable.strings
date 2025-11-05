@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "Ожидаемая прибыль";
 "perpetual.auto_close.expected_loss" = "Ожидаемые потери";
 "perpetual.modify_position" = "Изменить позицию";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "Стоп-лосс";

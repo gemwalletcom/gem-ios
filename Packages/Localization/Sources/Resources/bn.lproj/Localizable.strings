@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "প্রত্যাশিত লাভ";
 "perpetual.auto_close.expected_loss" = "প্রত্যাশিত ক্ষতি";
 "perpetual.modify_position" = "অবস্থান পরিবর্তন করুন";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "স্টপ লস";

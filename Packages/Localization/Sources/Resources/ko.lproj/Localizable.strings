@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "예상 이익";
 "perpetual.auto_close.expected_loss" = "예상 손실";
 "perpetual.modify_position" = "위치 수정";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "손절매";

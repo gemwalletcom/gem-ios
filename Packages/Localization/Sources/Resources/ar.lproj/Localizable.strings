@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "الربح المتوقع";
 "perpetual.auto_close.expected_loss" = "الخسارة المتوقعة";
 "perpetual.modify_position" = "تعديل الموضع";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "وقف الخسارة";

@@ -502,4 +502,4 @@
 "perpetual.auto_close.expected_profit" = "Forventet fortjeneste";
 "perpetual.auto_close.expected_loss" = "Forventet tab";
 "perpetual.modify_position" = "Rediger position";
-"perpetual.auto_close.stop_loss" = "Stop loss";
+"perpetual.auto_close.stop_loss" = "Stop-loss";
