@@ -496,9 +496,10 @@
 "perpetual.auto_close" = "自動閉じる";
 "info.perpetual.auto_close.description" = "設定した価格レベルでポジションを自動的に決済します。テイクプロフィットで利益を確定し、ストップロスで損失を制限します。";
 "perpetual.auto_close.take_profit" = "利益確定";
-"perpetual.auto_close.stop_loss" = "ストップロス";
 "perpetual.market_price" = "市場価格";
 "perpetual.increase_direction" = "%@を増やす";
 "perpetual.reduce_direction" = "%@を減らす";
 "perpetual.auto_close.expected_profit" = "予想利益";
 "perpetual.auto_close.expected_loss" = "予想損失";
+"perpetual.modify_position" = "位置の変更";
+"perpetual.auto_close.stop_loss" = "Stop loss";

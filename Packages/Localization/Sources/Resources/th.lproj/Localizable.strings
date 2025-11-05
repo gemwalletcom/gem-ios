@@ -496,9 +496,10 @@
 "perpetual.auto_close" = "ปิดอัตโนมัติ";
 "info.perpetual.auto_close.description" = "ปิดสถานะของคุณโดยอัตโนมัติเมื่อถึงระดับราคาที่กำหนด Take Profit ล็อกกำไร Stop Loss จำกัดการขาดทุน";
 "perpetual.auto_close.take_profit" = "รับผลกำไร";
-"perpetual.auto_close.stop_loss" = "สต็อปลอส";
 "perpetual.market_price" = "ราคาตลาด";
 "perpetual.increase_direction" = "เพิ่ม %@";
 "perpetual.reduce_direction" = "ลด %@";
 "perpetual.auto_close.expected_profit" = "กำไรที่คาดหวัง";
 "perpetual.auto_close.expected_loss" = "การสูญเสียที่คาดว่าจะเกิดขึ้น";
+"perpetual.modify_position" = "ปรับเปลี่ยนตำแหน่ง";
+"perpetual.auto_close.stop_loss" = "Stop loss";

@@ -496,9 +496,10 @@
 "perpetual.auto_close" = "Închidere automată";
 "info.perpetual.auto_close.description" = "Închide automat poziția la nivelurile de preț stabilite. Funcția Take Profit blochează câștigurile, iar funcția Stop Loss limitează pierderile.";
 "perpetual.auto_close.take_profit" = "Ia profit";
-"perpetual.auto_close.stop_loss" = "Stop Loss";
 "perpetual.market_price" = "Prețul de piață";
 "perpetual.increase_direction" = "Creștere %@";
 "perpetual.reduce_direction" = "Reduceți %@";
 "perpetual.auto_close.expected_profit" = "Profit așteptat";
 "perpetual.auto_close.expected_loss" = "Pierderea așteptată";
+"perpetual.modify_position" = "Modificare poziție";
+"perpetual.auto_close.stop_loss" = "Stop loss";

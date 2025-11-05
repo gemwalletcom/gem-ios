@@ -496,9 +496,10 @@
 "perpetual.auto_close" = "自动关闭";
 "info.perpetual.auto_close.description" = "以设定的价格自动平仓。止盈锁定收益，止损限制损失。";
 "perpetual.auto_close.take_profit" = "获利";
-"perpetual.auto_close.stop_loss" = "止损";
 "perpetual.market_price" = "市价";
 "perpetual.increase_direction" = "增加%@";
 "perpetual.reduce_direction" = "减少%@";
 "perpetual.auto_close.expected_profit" = "预期利润";
 "perpetual.auto_close.expected_loss" = "预期损失";
+"perpetual.modify_position" = "修改位置";
+"perpetual.auto_close.stop_loss" = "Stop loss";

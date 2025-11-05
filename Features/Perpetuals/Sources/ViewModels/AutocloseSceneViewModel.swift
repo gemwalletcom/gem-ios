@@ -21,14 +21,7 @@ public final class AutocloseSceneViewModel {
     private let onTransferAction: TransferDataAction
     private let estimator: AutocloseEstimator
 
-    var takeProfitInput: InputValidationViewModel
-    var stopLossInput: InputValidationViewModel
-
-    var focusField: AutocloseScene.Field?
-
-    var positionViewModel: PerpetualPositionViewModel {
-        PerpetualPositionViewModel(position)
-    }
+    var input: AutocloseInput
 
     public init(position: PerpetualPositionData, onTransferAction: TransferDataAction = nil) {
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
@@ -45,7 +38,7 @@ public final class AutocloseSceneViewModel {
             leverage: position.position.leverage
         )
 
-        self.takeProfitInput = InputValidationViewModel(
+        let takeProfitInput = InputValidationViewModel(
             mode: .manual,
             validators: [
                 AutocloseValidator(
@@ -56,7 +49,7 @@ public final class AutocloseSceneViewModel {
             ]
         )
 
-        self.stopLossInput = InputValidationViewModel(
+        let stopLossInput = InputValidationViewModel(
             mode: .manual,
             validators: [
                 AutocloseValidator(
@@ -66,55 +59,7 @@ public final class AutocloseSceneViewModel {
                 )
             ]
         )
-    }
 
-    var title: String { Localized.Perpetual.autoClose }
-
-    var entryPriceTitle: String { Localized.Perpetual.entryPrice }
-    var entryPriceText: String {
-        position.position.entryPrice.map { currencyFormatter.string($0) } ?? "-"
-    }
-
-    var marketPriceTitle: String { Localized.Perpetual.marketPrice }
-    var marketPriceText: String {
-        currencyFormatter.string(position.perpetual.price)
-    }
-
-    var takeProfitModel: AutocloseViewModel {
-        AutocloseViewModel(
-            type: .takeProfit,
-            price: takeProfitPrice,
-            estimator: estimator,
-            currencyFormatter: currencyFormatter,
-            percentFormatter: percentFormatter
-        )
-    }
-
-    var stopLossModel: AutocloseViewModel {
-        AutocloseViewModel(
-            type: .stopLoss,
-            price: stopLossPrice,
-            estimator: estimator,
-            currencyFormatter: currencyFormatter,
-            percentFormatter: percentFormatter
-        )
-    }
-
-    var takeProfitOrderId: UInt64? {
-        guard let orderId = position.position.takeProfit?.order_id else { return nil }
-        return UInt64(orderId)
-    }
-
-    var stopLossOrderId: UInt64? {
-        guard let orderId = position.position.stopLoss?.order_id else { return nil }
-        return UInt64(orderId)
-    }
-}
-
-// MARK: - Actions
-
-extension AutocloseSceneViewModel {
-    func onAppear() {
         if let price = position.position.takeProfit?.price {
             takeProfitInput.text = priceFormatter.formatInputPrice(price)
         }
@@ -122,34 +67,50 @@ extension AutocloseSceneViewModel {
         if let price = position.position.stopLoss?.price {
             stopLossInput.text = priceFormatter.formatInputPrice(price)
         }
+
+        self.input = AutocloseInput(
+            takeProfit: takeProfitInput,
+            stopLoss: stopLossInput,
+            focusField: nil
+        )
     }
 
+    var title: String { Localized.Perpetual.autoClose }
+
+    var entryPriceTitle: String { Localized.Perpetual.entryPrice }
+    var entryPriceText: String { position.position.entryPrice.map { currencyFormatter.string($0) } ?? "-" }
+
+    var marketPriceTitle: String { Localized.Perpetual.marketPrice }
+    var marketPriceText: String { currencyFormatter.string(position.perpetual.price) }
+
+    var takeProfitModel: AutocloseViewModel { autocloseModel(type: .takeProfit, price: takeProfitPrice) }
+
+    var stopLossModel: AutocloseViewModel { autocloseModel(type: .stopLoss, price: stopLossPrice) }
+
+    var positionViewModel: PerpetualPositionViewModel { PerpetualPositionViewModel(position) }
+
+    var confirmButtonType: ButtonType {
+        let builder = AutocloseModifyBuilder(position: position)
+        let isEnabled = builder.canBuild(takeProfit: takeProfitField, stopLoss: stopLossField)
+        return .primary(isEnabled ? .normal : .disabled)
+    }
+}
+
+// MARK: - Actions
+
+extension AutocloseSceneViewModel {
     func onDone() {
-        focusField = nil
+        input.focusField = nil
     }
 
     func onChangeFocusField(_ oldField: AutocloseScene.Field?, _ newField: AutocloseScene.Field?) {
-        focusField = newField
+        input.focusField = newField
     }
 
     func onSelectConfirm() {
+        input.update()
+
         guard let assetIndex = Int32(position.perpetual.identifier) else { return }
-
-        let takeProfitField = AutocloseField(
-            price: takeProfitPrice,
-            originalPrice: position.position.takeProfit?.price,
-            formattedPrice: takeProfitPrice.map { formatPrice($0) },
-            isValid: !takeProfit.isEmpty && takeProfitInput.update(),
-            orderId: takeProfitOrderId
-        )
-
-        let stopLossField = AutocloseField(
-            price: stopLossPrice,
-            originalPrice: position.position.stopLoss?.price,
-            formattedPrice: stopLossPrice.map { formatPrice($0) },
-            isValid: !stopLoss.isEmpty && stopLossInput.update(),
-            orderId: stopLossOrderId
-        )
 
         let builder = AutocloseModifyBuilder(position: position)
         guard builder.canBuild(takeProfit: takeProfitField, stopLoss: stopLossField) else { return }
@@ -179,26 +140,62 @@ extension AutocloseSceneViewModel {
     }
 
     func onSelectPercent(_ percent: Int) {
-        guard let focusField else { return }
-
-        let (type, inputModel): (TpslType, InputValidationViewModel) = switch focusField {
-        case .takeProfit: (.takeProfit, takeProfitInput)
-        case .stopLoss: (.stopLoss, stopLossInput)
-        }
+        guard let type = input.focusedType, let focused = input.focused else { return }
 
         let targetPrice = estimator.calculateTargetPriceFromROE(roePercent: percent, type: type)
-        inputModel.text = priceFormatter.formatInputPrice(targetPrice, decimals: 2)
+        focused.text = priceFormatter.formatInputPrice(targetPrice, decimals: 2)
     }
 }
 
 // MARK: - Private
 
 extension AutocloseSceneViewModel {
-    private var takeProfit: String { takeProfitInput.text }
-    private var takeProfitPrice: Double? { currencyFormatter.double(from: takeProfit) }
+    private var takeProfitPrice: Double? { currencyFormatter.double(from: input.takeProfit.text)}
+    private var stopLossPrice: Double? { currencyFormatter.double(from: input.stopLoss.text) }
 
-    private var stopLoss: String { stopLossInput.text }
-    private var stopLossPrice: Double? { currencyFormatter.double(from: stopLoss) }
+    private var takeProfitField: AutocloseField {
+        input.field(
+            type: .takeProfit,
+            price: takeProfitPrice,
+            originalPrice: position.position.takeProfit?.price,
+            formattedPrice: takeProfitPrice.map { formatPrice($0) },
+            orderId: takeProfitOrderId
+        )
+    }
+
+    private var stopLossField: AutocloseField {
+        input.field(
+            type: .stopLoss,
+            price: stopLossPrice,
+            originalPrice: position.position.stopLoss?.price,
+            formattedPrice: stopLossPrice.map { formatPrice($0) },
+            orderId: stopLossOrderId
+        )
+    }
+
+    private func autocloseModel(type: TpslType, price: Double?) -> AutocloseViewModel {
+        AutocloseViewModel(
+            type: type,
+            price: price,
+            estimator: estimator,
+            currencyFormatter: currencyFormatter,
+            percentFormatter: percentFormatter
+        )
+    }
+
+    private var takeProfitOrderId: UInt64? {
+        if let orderId = position.position.takeProfit?.order_id {
+            return UInt64(orderId)
+        }
+        return nil
+    }
+
+    private var stopLossOrderId: UInt64? {
+        if let orderId = position.position.stopLoss?.order_id {
+            return UInt64(orderId)
+        }
+        return nil
+    }
 
     private func formatPrice(_ price: Double) -> String {
         priceFormatter.formatPrice(

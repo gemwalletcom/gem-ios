@@ -496,9 +496,10 @@
 "perpetual.auto_close" = "স্বয়ংক্রিয়ভাবে বন্ধ করুন";
 "info.perpetual.auto_close.description" = "নির্ধারিত মূল্য স্তরে আপনার পজিশন স্বয়ংক্রিয়ভাবে বন্ধ করুন। টেক প্রফিট লাভকে আটকে রাখে, স্টপ লস লোকসানকে সীমাবদ্ধ করে।";
 "perpetual.auto_close.take_profit" = "লাভ নিন";
-"perpetual.auto_close.stop_loss" = "স্টপ লস";
 "perpetual.market_price" = "বাজার মূল্য";
 "perpetual.increase_direction" = "%@ বৃদ্ধি করুন";
 "perpetual.reduce_direction" = "%@ কমাও";
 "perpetual.auto_close.expected_profit" = "প্রত্যাশিত লাভ";
 "perpetual.auto_close.expected_loss" = "প্রত্যাশিত ক্ষতি";
+"perpetual.modify_position" = "অবস্থান পরিবর্তন করুন";
+"perpetual.auto_close.stop_loss" = "Stop loss";
