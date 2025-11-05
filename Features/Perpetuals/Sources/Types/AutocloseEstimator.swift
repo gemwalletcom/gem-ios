@@ -3,13 +3,20 @@
 import Foundation
 import Primitives
 
-struct AutocloseEstimator {
-    let entryPrice: Double
-    let positionSize: Double
-    let direction: PerpetualDirection
-    let leverage: UInt8
+public struct AutocloseEstimator {
+    public let entryPrice: Double
+    public let positionSize: Double
+    public let direction: PerpetualDirection
+    public let leverage: UInt8
 
-    func calculateTargetPriceFromROE(roePercent: Int, type: TpslType) -> Double {
+    public init(entryPrice: Double, positionSize: Double, direction: PerpetualDirection, leverage: UInt8) {
+        self.entryPrice = entryPrice
+        self.positionSize = positionSize
+        self.direction = direction
+        self.leverage = leverage
+    }
+
+    public func calculateTargetPriceFromROE(roePercent: Int, type: TpslType) -> Double {
         let priceChangePercent = Double(roePercent) / Double(leverage) / 100.0
 
         return switch (direction, type) {
@@ -18,17 +25,17 @@ struct AutocloseEstimator {
         }
     }
 
-    func calculatePnL(price: Double) -> Double {
+    public func calculatePnL(price: Double) -> Double {
         let side: Double = direction == .long ? 1 : -1
         return side * (price - entryPrice) * abs(positionSize)
     }
 
-    func calculatePriceChangePercent(price: Double) -> Double {
+    public func calculatePriceChangePercent(price: Double) -> Double {
         let rawChange = ((price - entryPrice) / entryPrice) * 100
         return direction == .short ? -rawChange : rawChange
     }
 
-    func calculateROE(price: Double) -> Double {
+    public func calculateROE(price: Double) -> Double {
         let priceChangePercent = calculatePriceChangePercent(price: price)
         return priceChangePercent * Double(leverage)
     }

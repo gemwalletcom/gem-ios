@@ -161,7 +161,7 @@ public struct InfoSheetModelFactory {
                 title: Localized.Perpetual.autoClose,
                 description: Localized.Info.Perpetual.AutoClose.description,
                 image: .image(Images.Logo.logo),
-                button: .url(Docs.url(.perpetualsFundingRate)) // TODO: - update when available
+                button: .url(Docs.url(.perpetualsAutoclose))
             )
         }
     }

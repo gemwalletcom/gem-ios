@@ -496,9 +496,10 @@
 "perpetual.auto_close" = "Automatisk lukning";
 "info.perpetual.auto_close.description" = "Luk automatisk din position ved fastsatte prisniveauer. Take Profit låser gevinster, Stop Loss begrænser tab.";
 "perpetual.auto_close.take_profit" = "Tag profit";
-"perpetual.auto_close.stop_loss" = "Stop-loss";
 "perpetual.market_price" = "Markedspris";
 "perpetual.increase_direction" = "Forøgelse %@";
 "perpetual.reduce_direction" = "Reducer %@";
 "perpetual.auto_close.expected_profit" = "Forventet fortjeneste";
 "perpetual.auto_close.expected_loss" = "Forventet tab";
+"perpetual.modify_position" = "Rediger position";
+"perpetual.auto_close.stop_loss" = "Stop-loss";

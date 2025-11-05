@@ -3,14 +3,14 @@
 import Foundation
 import Primitives
 
-struct AutocloseModifyBuilder {
+public struct AutocloseModifyBuilder {
     private let position: PerpetualPositionData
 
-    init(position: PerpetualPositionData) {
+    public init(position: PerpetualPositionData) {
         self.position = position
     }
 
-    func canBuild(takeProfit: AutocloseField, stopLoss: AutocloseField) -> Bool {
+    public func canBuild(takeProfit: AutocloseField, stopLoss: AutocloseField) -> Bool {
         let hasChanges = takeProfit.shouldUpdate || stopLoss.shouldUpdate
         let takeProfitValid = takeProfit.price == nil || takeProfit.isValid
         let stopLossValid = stopLoss.price == nil || stopLoss.isValid
@@ -18,7 +18,7 @@ struct AutocloseModifyBuilder {
         return hasChanges && takeProfitValid && stopLossValid
     }
 
-    func build(
+    public func build(
         assetIndex: Int32,
         takeProfit: AutocloseField,
         stopLoss: AutocloseField
