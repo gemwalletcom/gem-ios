@@ -30,7 +30,7 @@ public struct TransferExecutor: TransferExecutable {
     }
 
     public func execute(input: TransferConfirmationInput) async throws {
-        let signedData = try sign(input: input)
+        let signedData = try await sign(input: input)
         let options = broadcastOptions(data: input.data)
 
         for (index, transactionData) in signedData.enumerated() {
@@ -81,8 +81,8 @@ public struct TransferExecutor: TransferExecutable {
 // MARK: - Private
 
 extension TransferExecutor {
-    private func sign(input: TransferConfirmationInput) throws -> [String] {
-        try signer.sign(
+    private func sign(input: TransferConfirmationInput) async throws -> [String] {
+        try await signer.sign(
             transfer: input.data,
             transactionData: input.transactionData,
             amount: input.amount,
