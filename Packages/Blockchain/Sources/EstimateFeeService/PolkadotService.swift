@@ -39,6 +39,7 @@ public final class PolkadotService: Sendable {
                 $0.blockNumber = blockNumber
                 $0.period = period
             }
+            $0.chargeNativeAsAssetTxPayment = true
             $0.balanceCall.transfer = PolkadotBalance.Transfer.with {
                 $0.toAddress = input.destinationAddress
                 $0.value = input.value.magnitude.serialize()
