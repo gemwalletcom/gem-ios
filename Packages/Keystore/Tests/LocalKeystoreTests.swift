@@ -109,7 +109,7 @@ struct LocalKeystoreTests {
             name: "Test Solana",
             type: .phrase(words: LocalKeystore.words, chains: [.solana]),
             isWalletsEmpty: true,
-            isCreated: false
+            source: .import
         )
 
         let text = "5A2EYggC6hiAAuRArnkAANGySDyqQUGrbBHXfKQD9DQ5XcSkReDswnRqb7x3KRrnie9qSL"
