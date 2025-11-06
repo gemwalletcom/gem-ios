@@ -8,14 +8,14 @@ import Primitives
 import Formatters
 import Components
 
-struct AutocloseViewModel {
+public struct AutocloseViewModel {
     private let type: TpslType
     private let price: Double?
     private let estimator: AutocloseEstimator
     private let currencyFormatter: CurrencyFormatter
     private let percentFormatter: CurrencyFormatter
 
-    init(
+    public init(
         type: TpslType,
         price: Double?,
         estimator: AutocloseEstimator,
@@ -29,21 +29,21 @@ struct AutocloseViewModel {
         self.percentFormatter = percentFormatter
     }
 
-    var priceTitle: String { Localized.Asset.price }
+    public var priceTitle: String { Localized.Asset.price }
 
-    var title: String {
+    public var title: String {
         switch type {
         case .takeProfit: Localized.Perpetual.AutoClose.takeProfit
         case .stopLoss: Localized.Perpetual.AutoClose.stopLoss
         }
     }
 
-    var profitTitle: String {
+    public var profitTitle: String {
         let isProfit = price.map { estimator.calculatePnL(price: $0) >= 0 } ?? (type == .takeProfit)
         return isProfit ? Localized.Perpetual.AutoClose.expectedProfit : Localized.Perpetual.AutoClose.expectedLoss
     }
 
-    var expectedPnL: String {
+    public var expectedPnL: String {
         guard let price else { return "-" }
         let pnl = estimator.calculatePnL(price: price)
         let roe = estimator.calculateROE(price: price)
@@ -55,7 +55,7 @@ struct AutocloseViewModel {
         return "\(sign)\(amount) (\(percentText))"
     }
 
-    var pnlColor: Color {
+    public var pnlColor: Color {
         guard let price else { return Colors.secondaryText }
         let pnl = estimator.calculatePnL(price: price)
         return PriceChangeColor.color(for: pnl)

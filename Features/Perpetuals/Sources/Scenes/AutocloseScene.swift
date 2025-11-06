@@ -38,14 +38,14 @@ public struct AutocloseScene: View {
             }
 
             AutocloseInputSection(
-                inputModel: $model.takeProfitInput,
+                inputModel: $model.input.takeProfit,
                 sectionModel: model.takeProfitModel,
                 field: Field.takeProfit,
                 focusedField: $focusedField
             )
 
             AutocloseInputSection(
-                inputModel: $model.stopLossInput,
+                inputModel: $model.input.stopLoss,
                 sectionModel: model.stopLossModel,
                 field: Field.stopLoss,
                 focusedField: $focusedField
@@ -54,7 +54,7 @@ public struct AutocloseScene: View {
             Section {
                 StateButton(
                     text: Localized.Transfer.confirm,
-                    type: .primary(),
+                    type: model.confirmButtonType,
                     action: model.onSelectConfirm
                 )
                 .frame(maxWidth: .infinity)
@@ -80,9 +80,8 @@ public struct AutocloseScene: View {
             .background(Colors.grayBackground)
         }
         .navigationTitle(model.title)
-        .onAppear(perform: model.onAppear)
         .onChange(of: focusedField, model.onChangeFocusField)
-        .onChange(of: model.focusField, onChangeFocus)
+        .onChange(of: model.input.focusField, onChangeFocus)
     }
 }
 

@@ -496,9 +496,10 @@
 "perpetual.auto_close" = "Funga Kiotomatiki";
 "info.perpetual.auto_close.description" = "Funga msimamo wako kiotomatiki katika viwango vya bei vilivyowekwa. Chukua kufuli za Faida katika faida, Stop Loss mipaka hasara.";
 "perpetual.auto_close.take_profit" = "Chukua faida";
-"perpetual.auto_close.stop_loss" = "Acha Hasara";
 "perpetual.market_price" = "Bei ya Soko";
 "perpetual.increase_direction" = "Ongeza %@";
 "perpetual.reduce_direction" = "Punguza %@";
 "perpetual.auto_close.expected_profit" = "Faida inayotarajiwa";
 "perpetual.auto_close.expected_loss" = "Hasara inayotarajiwa";
+"perpetual.modify_position" = "Rekebisha Nafasi";
+"perpetual.auto_close.stop_loss" = "Acha hasara";

@@ -496,9 +496,10 @@
 "perpetual.auto_close" = "Cierre automático";
 "info.perpetual.auto_close.description" = "Cierra tu posición automáticamente a precios establecidos. El Take Profit fija las ganancias y el Stop Loss limita las pérdidas.";
 "perpetual.auto_close.take_profit" = "Tomar ganancias";
-"perpetual.auto_close.stop_loss" = "Stop Loss";
 "perpetual.market_price" = "Precio de mercado";
 "perpetual.increase_direction" = "Incremento %@";
 "perpetual.reduce_direction" = "Reducir %@";
 "perpetual.auto_close.expected_profit" = "Beneficio esperado";
 "perpetual.auto_close.expected_loss" = "Pérdida esperada";
+"perpetual.modify_position" = "Modificar posición";
+"perpetual.auto_close.stop_loss" = "Stop loss";

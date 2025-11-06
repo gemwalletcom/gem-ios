@@ -39,9 +39,16 @@ public final class PolkadotService: Sendable {
                 $0.blockNumber = blockNumber
                 $0.period = period
             }
+            $0.chargeNativeAsAssetTxPayment = true
             $0.balanceCall.transfer = PolkadotBalance.Transfer.with {
                 $0.toAddress = input.destinationAddress
                 $0.value = input.value.magnitude.serialize()
+                $0.callIndices = .with {
+                    $0.variant = .custom(.with {
+                        $0.moduleIndex = 0x0A
+                        $0.methodIndex = 0x00
+                    })
+                }
             }
         }
         let output: PolkadotSigningOutput = AnySigner.sign(input: input, coin: .polkadot)

@@ -496,9 +496,10 @@
 "perpetual.auto_close" = "Auto Close";
 "info.perpetual.auto_close.description" = "Automatically close your position at set price levels. Take Profit locks in gains, Stop Loss limits losses.";
 "perpetual.auto_close.take_profit" = "Take profit";
-"perpetual.auto_close.stop_loss" = "Stop Loss";
 "perpetual.market_price" = "Market Price";
 "perpetual.increase_direction" = "Increase %@";
 "perpetual.reduce_direction" = "Reduce %@";
 "perpetual.auto_close.expected_profit" = "Expected profit";
 "perpetual.auto_close.expected_loss" = "Expected loss";
+"perpetual.modify_position" = "Modify Position";
+"perpetual.auto_close.stop_loss" = "Stop loss";
