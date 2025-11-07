@@ -20,27 +20,14 @@ public struct DebugLogMacro: ExpressionMacro {
             throw DebugLogMacroError.missingMessage
         }
 
-        let categoryArgument = node.arguments.first { element in
-            element.label?.text == "category"
-        }
-
-        let categoryExpr: ExprSyntax
-        if let categoryArgument {
-            categoryExpr = ExprSyntax(categoryArgument.expression)
-        } else {
-            categoryExpr = "nil"
-        }
-
         let messageExpr = ExprSyntax(messageArgument.expression)
 
         return """
-        DebugLoggerRuntime.emit(
-            String(describing: \(messageExpr)),
-            category: \(categoryExpr),
-            fileID: #fileID,
-            function: #function,
-            line: #line
-        )
+        ({
+            #if DEBUG
+                NSLog("%@", String(describing: \(messageExpr)))
+            #endif
+        })()
         """
     }
 }
