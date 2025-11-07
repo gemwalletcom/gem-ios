@@ -59,11 +59,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
             
             try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: documentsDirectory))
             try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: supportDirectory))
-            
-            #if DEBUG
+
             #debugLog("documentsDirectory \(documentsDirectory)")
             #debugLog("supportDirectory \(supportDirectory)")
-            #endif
         } catch {
             #debugLog("addSkipBackupAttributeToItemAtURL error \(error)")
         }
@@ -104,18 +102,14 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         AppResolver.main.services.notificationHandler.handleUserInfo(userInfo)
     }
 
-    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         #debugLog("url \(url)")
         return true
     }
     
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        //#debugLog("URLContexts.first?.url \(URLContexts.first?.url)")
-    }
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {}
     
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        //#debugLog("URLContexts.first?.url \(connectionOptions.urlContexts.first?.url)")
-    }
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {}
 }
 
 extension AppDelegate: @preconcurrency UNUserNotificationCenterDelegate {
