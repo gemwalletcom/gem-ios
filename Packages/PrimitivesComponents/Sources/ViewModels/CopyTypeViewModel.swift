@@ -32,7 +32,16 @@ public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
 
     public var systemImage: String { SystemImage.copy }
 
+    public var expirationTimeInternal: TimeInterval {
+        switch type {
+        case .secretPhrase, .privateKey: 60
+        case .address(let asset, let address): 500
+        }
+    }
+    
     public func copy() {
-        UIPasteboard.general.string = copyValue
+        UIPasteboard.general.setItems([[UIPasteboard.typeAutomatic: copyValue]],
+            options: [.localOnly: true, .expirationDate: Date().addingTimeInterval(expirationTimeInternal)]
+        )
     }
 }
