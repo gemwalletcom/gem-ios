@@ -162,7 +162,7 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         guard password.isEmpty, createPasswordIfNone else {
             return password
         }
-        let newPassword = UUID().uuidString
+        let newPassword = try SecureRandom.generateKey(length: 32).hexString
         try keystorePassword.setPassword(newPassword, authentication: .none)
         return newPassword
     }
