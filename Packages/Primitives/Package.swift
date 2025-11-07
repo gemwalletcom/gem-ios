@@ -16,12 +16,14 @@ let package = Package(
         ),
     ],
     dependencies: [
+        .package(name: "Logger", path: "../Logger"),
         .package(url: "https://github.com/attaswift/BigInt.git", exact: Version(5, 7, 0)),
     ],
     targets: [
         .target(
             name: "Primitives",
             dependencies: [
+                "Logger",
                 .product(name: "BigInt", package: "BigInt"),
             ],
             path: "Sources"

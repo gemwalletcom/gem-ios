@@ -109,7 +109,7 @@ extension ConnectionsViewModel {
                 try await disconnect(connection: connection)
             } catch {
                 isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-                debugLog("disconnect error: \(error)")
+                #debugLog("disconnect error: \(error)")
             }
         }
     }
@@ -121,7 +121,7 @@ extension ConnectionsViewModel {
         } catch {
             hideConnectionBar()
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-            debugLog("connectURI error: \(error)")
+            #debugLog("connectURI error: \(error)")
         }
     }
 }

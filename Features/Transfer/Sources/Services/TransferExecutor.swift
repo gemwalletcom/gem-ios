@@ -34,7 +34,7 @@ public struct TransferExecutor: TransferExecutable {
         let options = broadcastOptions(data: input.data)
 
         for (index, transactionData) in signedData.enumerated() {
-            debugLog("TransferExecutor data \(transactionData)")
+            #debugLog("TransferExecutor data \(transactionData)")
 
             switch input.data.type.outputAction {
             case .sign:
@@ -44,7 +44,7 @@ public struct TransferExecutor: TransferExecutable {
                     data: transactionData,
                     options: options
                 )
-                debugLog("TransferExecutor broadcast response hash \(hash)")
+                #debugLog("TransferExecutor broadcast response hash \(hash)")
 
                 input.delegate?(.success(hash))
 

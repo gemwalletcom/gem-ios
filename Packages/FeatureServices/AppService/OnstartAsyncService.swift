@@ -77,7 +77,7 @@ public final class OnstartAsyncService: Sendable {
             updateAssetsIfNeeded(config)
             checkNewRelease(config)
         } catch {
-            debugLog("Fetching config error: \(error)")
+            #debugLog("Fetching config error: \(error)")
         }
 
         performRate()
@@ -101,9 +101,9 @@ public final class OnstartAsyncService: Sendable {
             Task {
                 do {
                     try await importAssetsService.updateFiatAssets()
-                    debugLog("Update fiat assets version: on ramp: \(versions.fiatOnRampAssets), off ramp: \(versions.fiatOffRampAssets)")
+                    #debugLog("Update fiat assets version: on ramp: \(versions.fiatOnRampAssets), off ramp: \(versions.fiatOffRampAssets)")
                 } catch {
-                    debugLog("Update fiat assets error: \(error)")
+                    #debugLog("Update fiat assets error: \(error)")
                 }
             }
         }
@@ -112,9 +112,9 @@ public final class OnstartAsyncService: Sendable {
             Task {
                 do {
                     try await importAssetsService.updateSwapAssets()
-                    debugLog("Update swap assets version: \(versions.swapAssets)")
+                    #debugLog("Update swap assets version: \(versions.swapAssets)")
                 } catch {
-                    debugLog("Update swap assets error: \(error)")
+                    #debugLog("Update swap assets error: \(error)")
                 }
             }
         }
@@ -127,11 +127,11 @@ public final class OnstartAsyncService: Sendable {
         
         if let skippedReleaseVersion = preferences.skippedReleaseVersion,
            skippedReleaseVersion == release.version {
-            debugLog("Skipping newer version: \(release.version)")
+            #debugLog("Skipping newer version: \(release.version)")
             return
         }
         
-        debugLog("Newer version available: \(release)")
+        #debugLog("Newer version available: \(release)")
         Task { @MainActor [weak self] in
             self?.releaseAction?(release)
         }
@@ -170,7 +170,7 @@ public final class OnstartAsyncService: Sendable {
             }
             walletPreferences.completeInitialAddressStatus = true
         } catch {
-            debugLog("runAddressStatusCheck: \(error)")
+            #debugLog("runAddressStatusCheck: \(error)")
         }
     }
 }

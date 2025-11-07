@@ -98,7 +98,7 @@ public final class PerpetualSceneViewModel {
             do {
                 try await perpetualService.updatePositions(wallet: wallet)
             } catch {
-                debugLog("Failed to load data: \(error)")
+                #debugLog("Failed to load data: \(error)")
             }
         }
     }

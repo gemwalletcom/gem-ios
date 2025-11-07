@@ -90,10 +90,10 @@ public actor PriceObserverService: Sendable {
         let data = try JSONEncoder().encode(action)
         task?.send(.data(data)) { error in
             if let error {
-                debugLog("Price Observer WebSocket send error: \(error)")
+                #debugLog("Price Observer WebSocket send error: \(error)")
                 Task { await self.scheduleReconnect() }
             } else {
-                debugLog("Price Observer action \(action.action.rawValue), assets: \(action.assets?.count ?? 0)")
+                #debugLog("Price Observer action \(action.action.rawValue), assets: \(action.assets?.count ?? 0)")
             }
         }
     }
@@ -108,7 +108,7 @@ public actor PriceObserverService: Sendable {
         do {
             try setupAssets()
         } catch {
-            debugLog("price observer: startWebSocket \(error)")
+            #debugLog("price observer: startWebSocket \(error)")
         }
 
         // Begin receiving
@@ -122,7 +122,7 @@ public actor PriceObserverService: Sendable {
                 do {
                     try await self.process(result)
                 } catch {
-                    debugLog("price observer: listen error: \(error)")
+                    #debugLog("price observer: listen error: \(error)")
                 }
             }
         }
@@ -139,7 +139,7 @@ public actor PriceObserverService: Sendable {
                 return
             }
 
-            debugLog("price observer:: process error: \(error)")
+            #debugLog("price observer:: process error: \(error)")
             await scheduleReconnect()
 
         case .success(let message):
@@ -165,7 +165,7 @@ public actor PriceObserverService: Sendable {
     private func handleMessageData(data: Data) throws {
         let payload = try JSONDateDecoder.standard.decode(WebSocketPricePayload.self, from: data)
 
-        debugLog("price observer: prices: \(payload.prices.count), rates: \(payload.rates.count)")
+        #debugLog("price observer: prices: \(payload.prices.count), rates: \(payload.rates.count)")
 
         try priceService.addRates(payload.rates)
         try priceService.updatePrices(payload.prices, currency: preferences.currency)
@@ -184,7 +184,7 @@ public actor PriceObserverService: Sendable {
 
         let delay = reconnectDelay
         reconnectDelay = min(maxReconnectDelay, reconnectDelay * 2)
-        debugLog("price observer: ⚡️ Reconnecting in \(delay)s…")
+        #debugLog("price observer: ⚡️ Reconnecting in \(delay)s…")
 
         // Wait, then restart
         reconnectTask = Task { [weak self] in

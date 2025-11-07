@@ -81,7 +81,7 @@ extension AboutUsViewModel {
         do {
             release = try await releaseService.getNewestRelease()
         } catch {
-            debugLog("Release fetch failed: \(error)")
+            #debugLog("Release fetch failed: \(error)")
         }
     }
     

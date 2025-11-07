@@ -90,7 +90,7 @@ extension PerpetualsSceneViewModel {
         do {
             try await perpetualService.updatePositions(wallet: wallet)
         } catch {
-            debugLog("Failed to update positions: \(error)")
+            #debugLog("Failed to update positions: \(error)")
         }
     }
     
@@ -101,7 +101,7 @@ extension PerpetualsSceneViewModel {
             try await perpetualService.updateMarkets()
             preferences.perpetualMarketsUpdatedAt = .now
         } catch {
-            debugLog("Failed to update markets: \(error)")
+            #debugLog("Failed to update markets: \(error)")
         }
     }
 
@@ -120,7 +120,7 @@ extension PerpetualsSceneViewModel {
         do {
             try perpetualService.setPinned(value, perpetualId: perpetualId)
         } catch {
-            debugLog("PerpetualsSceneViewModel pin perpetual error: \(error)")
+            #debugLog("PerpetualsSceneViewModel pin perpetual error: \(error)")
         }
     }
 

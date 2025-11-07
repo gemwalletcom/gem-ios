@@ -250,7 +250,7 @@ extension FiatSceneViewModel {
 
                 if !error.isCancelled {
                     state = .error(error)
-                    debugLog("FiatSceneViewModel get quotes error: \(error)")
+                    #debugLog("FiatSceneViewModel get quotes error: \(error)")
                 }
             }
         }

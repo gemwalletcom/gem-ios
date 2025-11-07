@@ -101,7 +101,7 @@ extension StakeService {
 
         //TODO: Might need to fetch in the future.
         if !missingValidatorIds.isEmpty {
-            debugLog("missingValidatorIds \(missingValidatorIds)")
+            #debugLog("missingValidatorIds \(missingValidatorIds)")
         }
         let updateDelegations = delegations.filter { validatorsIds.contains($0.validatorId) }
 

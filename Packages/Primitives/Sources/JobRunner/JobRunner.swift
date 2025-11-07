@@ -43,7 +43,7 @@ extension JobRunner {
         while !Task.isCancelled {
             if let limit = job.configuration.timeLimit,
                jobStart.duration(to: clock.now) >= limit {
-                debugLog("job \(job.id) completed by time limit")
+                #debugLog("job \(job.id) completed by time limit")
                 return
             }
 
@@ -55,7 +55,7 @@ extension JobRunner {
                     try await job.onComplete()
                 }
                 catch {
-                    debugLog("job \(job.id) completed with error: \(error)")
+                    #debugLog("job \(job.id) completed with error: \(error)")
                 }
                 return
             case .retry:

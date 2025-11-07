@@ -65,7 +65,7 @@ extension PriceAlertsSceneViewModel {
         do {
             try await priceAlertService.update()
         } catch {
-            debugLog("getPriceAlerts error: \(error)")
+            #debugLog("getPriceAlerts error: \(error)")
         }
     }
 
@@ -73,7 +73,7 @@ extension PriceAlertsSceneViewModel {
         do {
             try await priceAlertService.delete(priceAlerts: [priceAlert])
         } catch {
-            debugLog("deletePriceAlert error: \(error)")
+            #debugLog("deletePriceAlert error: \(error)")
         }
     }
 
@@ -89,7 +89,7 @@ extension PriceAlertsSceneViewModel {
             try await priceAlertService
                 .add(priceAlert: .default(for: assetId, currency: preferences.preferences.currency))
         } catch {
-            debugLog("addPriceAlert error: \(error)")
+            #debugLog("addPriceAlert error: \(error)")
         }
     }
 
@@ -97,7 +97,7 @@ extension PriceAlertsSceneViewModel {
         do {
             preferences.preferences.isPushNotificationsEnabled = try await requestPermissions()
         } catch {
-            debugLog("pushesUpdate error: \(error)")
+            #debugLog("pushesUpdate error: \(error)")
         }
     }
 
@@ -105,7 +105,7 @@ extension PriceAlertsSceneViewModel {
         do {
             try await priceAlertService.deviceUpdate()
         } catch {
-            debugLog("deviceUpdate error: \(error)")
+            #debugLog("deviceUpdate error: \(error)")
         }
     }
 

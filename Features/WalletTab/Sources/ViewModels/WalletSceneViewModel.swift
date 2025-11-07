@@ -192,7 +192,7 @@ extension WalletSceneViewModel {
         do {
             try walletsService.hideAsset(walletId: wallet.walletId, assetId: assetId)
         } catch {
-            debugLog("WalletSceneViewModel hide Asset error: \(error)")
+            #debugLog("WalletSceneViewModel hide Asset error: \(error)")
         }
     }
 
@@ -204,7 +204,7 @@ extension WalletSceneViewModel {
                 image: value ? SystemImage.pin : SystemImage.unpin
             )
         } catch {
-            debugLog("WalletSceneViewModel pin asset error: \(error)")
+            #debugLog("WalletSceneViewModel pin asset error: \(error)")
         }
     }
 
@@ -254,7 +254,7 @@ extension WalletSceneViewModel {
                 assetIds: assetIds
             )
         } catch {
-            debugLog("WalletSceneViewModel fetch error: \(error)")
+            #debugLog("WalletSceneViewModel fetch error: \(error)")
         }
     }
 

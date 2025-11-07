@@ -32,7 +32,7 @@ public actor PerpetualObserverService: Sendable {
                         try await perpetualService.updatePositions(wallet: wallet)
                     }
                 } catch {
-                    debugLog("PerpetualObserverService error getting positions: \(error)")
+                    #debugLog("PerpetualObserverService error getting positions: \(error)")
                 }
                 
                 try? await Task.sleep(for: .seconds(5))

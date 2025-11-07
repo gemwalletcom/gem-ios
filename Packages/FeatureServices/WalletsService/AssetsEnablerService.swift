@@ -32,7 +32,7 @@ struct AssetsEnablerService: AssetsEnabler {
                 _ = try await (balanceUpdate, priceUpdate)
             }
         } catch {
-            debugLog("enableAssets error: \(error)")
+            #debugLog("enableAssets error: \(error)")
         }
     }
 }

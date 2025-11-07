@@ -1,11 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
+@_exported import Logger
 
-/// Prints debug information only in DEBUG builds to avoid leaking data in production logs.
-/// Uses NSLog for consistency with system logging.
+@available(*, deprecated, message: "Use #debugLog macro instead")
 public func debugLog(_ message: @autoclosure () -> String) {
-#if DEBUG
-    NSLog("%@", message())
-#endif
+    DebugLoggerRuntime.emit(
+        message(),
+        fileID: #fileID,
+        function: #function,
+        line: #line
+    )
 }

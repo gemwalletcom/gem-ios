@@ -177,7 +177,7 @@ extension StakeDetailSceneViewModel {
         do {
             onAmountInputAction?(try stakeRecipientData())
         } catch {
-            debugLog("staking: unable to create recipient data: \(error)")
+            #debugLog("staking: unable to create recipient data: \(error)")
         }
     }
     
@@ -185,7 +185,7 @@ extension StakeDetailSceneViewModel {
         do {
             onAmountInputAction?(try redelegateRecipientData())
         } catch {
-            debugLog("staking: unable to create recipient data: \(error)")
+            #debugLog("staking: unable to create recipient data: \(error)")
         }
     }
     
@@ -193,7 +193,7 @@ extension StakeDetailSceneViewModel {
         do {
             onTransferAction?(try withdrawStakeTransferData())
         } catch {
-            debugLog("staking: unable to create transfer data: \(error)")
+            #debugLog("staking: unable to create transfer data: \(error)")
         }
     }
 }

@@ -36,7 +36,7 @@ public struct OnstartService: Sendable {
         do {
             try walletService.setup(chains: AssetConfiguration.allChains)
         } catch {
-            debugLog("Setup chains: \(error)")
+            #debugLog("Setup chains: \(error)")
         }
         do {
             try ImportAssetsService(
@@ -45,7 +45,7 @@ public struct OnstartService: Sendable {
                 preferences: preferences
             ).migrate()
         } catch {
-            debugLog("migrations error: \(error)")
+            #debugLog("migrations error: \(error)")
         }
         
         if !preferences.hasCurrency, let currency = Locale.current.currency {

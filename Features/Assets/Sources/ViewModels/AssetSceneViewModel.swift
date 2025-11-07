@@ -313,7 +313,7 @@ extension AssetSceneViewModel {
                 onSelectEnable()
             }
         } catch {
-            debugLog("onSelectPin error: \(error)")
+            #debugLog("onSelectPin error: \(error)")
         }
     }
     
@@ -362,7 +362,7 @@ extension AssetSceneViewModel {
             try await transactionsService.updateForAsset(wallet: walletModel.wallet, assetId: assetModel.asset.id)
         } catch {
             // TODO: - handle fetchTransactions error
-            debugLog("asset scene: fetchTransactions error \(error)")
+            #debugLog("asset scene: fetchTransactions error \(error)")
         }
     }
 
@@ -372,7 +372,7 @@ extension AssetSceneViewModel {
             try await priceAlertService.requestPermissions()
             try await priceAlertService.enablePriceAlerts()
         } catch {
-            debugLog("enablePriceAlert error \(error)")
+            #debugLog("enablePriceAlert error \(error)")
         }
     }
 
@@ -380,7 +380,7 @@ extension AssetSceneViewModel {
         do {
             try await priceAlertService.delete(priceAlerts: [.default(for: assetModel.asset.id, currency: Preferences.standard.currency)])
         } catch {
-            debugLog("disablePriceAlert error \(error)")
+            #debugLog("disablePriceAlert error \(error)")
         }
     }
 
@@ -389,7 +389,7 @@ extension AssetSceneViewModel {
             try await assetsService.updateAsset(assetId: assetModel.asset.id)
         } catch {
             // TODO: - handle updateAsset error
-            debugLog("asset scene: updateAsset error \(error)")
+            #debugLog("asset scene: updateAsset error \(error)")
         }
 
         Task {
@@ -397,7 +397,7 @@ extension AssetSceneViewModel {
                 try await priceObserverService.addAssets(assets: [assetModel.asset.id])
             } catch {
                 // TODO: - handle priceObserverService.addAssets error
-                debugLog("asset scene: priceObserverService.addAssets error \(error)")
+                #debugLog("asset scene: priceObserverService.addAssets error \(error)")
             }
         }
     }
@@ -412,7 +412,7 @@ extension AssetSceneViewModel {
             let _ = try await [updateAsset, updateTransactions]
         } catch {
             // TODO: - handle fetch error
-            debugLog("asset scene: updateWallet error \(error)")
+            #debugLog("asset scene: updateWallet error \(error)")
         }
     }
 }

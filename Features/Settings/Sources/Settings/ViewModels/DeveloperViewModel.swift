@@ -64,7 +64,7 @@ public final class DeveloperViewModel {
             try SecurePreferences.standard.clear()
             fatalError()
         } catch {
-            debugLog("reset error \(error)")
+            #debugLog("reset error \(error)")
         }
     }
 
@@ -316,7 +316,7 @@ extension DeveloperViewModel {
             try action()
             showSuccess()
         } catch {
-            debugLog("Developer action error: \(error)")
+            #debugLog("Developer action error: \(error)")
         }
     }
 

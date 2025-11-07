@@ -37,7 +37,7 @@ public final class MarketsSceneViewModel: Sendable  {
             self.state = .data(MarketsViewModel(markets: markets))
         } catch {
             self.state = .error(error)
-            debugLog("get markets error: \(error)")
+            #debugLog("get markets error: \(error)")
         }
     }
     

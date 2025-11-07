@@ -67,7 +67,7 @@ extension AssetPriceAlertsViewModel {
         do {
             try await priceAlertService.update(assetId: asset.id.identifier)
         } catch {
-            debugLog("fetch error: \(error)")
+            #debugLog("fetch error: \(error)")
         }
     }
     
@@ -75,7 +75,7 @@ extension AssetPriceAlertsViewModel {
         do {
             try await priceAlertService.delete(priceAlerts: [priceAlert])
         } catch {
-            debugLog("deletePriceAlert error: \(error)")
+            #debugLog("deletePriceAlert error: \(error)")
         }
     }
     

@@ -80,7 +80,7 @@ public struct SignMessageScene: View {
                 try await model.signMessage()
                 dismiss()
             } catch {
-                debugLog("sign message error \(error)")
+                #debugLog("sign message error \(error)")
             }
         }
     }

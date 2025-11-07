@@ -125,9 +125,9 @@ public final class CollectionsViewModel: Sendable {
         do {
             let count = try await nftService.updateAssets(wallet: wallet)
             
-            debugLog("update nfts: \(count)")
+            #debugLog("update nfts: \(count)")
         } catch {
-            debugLog("update nfts error: \(error)")
+            #debugLog("update nfts error: \(error)")
         }
     }
 

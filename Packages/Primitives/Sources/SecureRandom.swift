@@ -9,7 +9,6 @@ public enum SecureRandom {
         guard status == errSecSuccess else {
             throw AnyError("generateKey failed: \(status)")
         }
-
         return Data(bytes)
     }
 }

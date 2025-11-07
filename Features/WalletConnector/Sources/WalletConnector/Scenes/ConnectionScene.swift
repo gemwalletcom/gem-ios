@@ -35,7 +35,7 @@ struct ConnectionScene: View {
         do {
             try await model.disconnect()
         } catch {
-            debugLog("disconnect error: \(error)")
+            #debugLog("disconnect error: \(error)")
         }
     }
 }
