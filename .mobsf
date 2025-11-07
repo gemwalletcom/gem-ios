@@ -1,0 +1,24 @@
+---
+- ignore-paths:
+  - build
+  - .build
+  - blockchains
+  - core
+  - Gem.xcodeproj
+  - Gem/Generated
+  - GemTests/Fixtures
+  - GemTests
+  - github.com
+  - Packages/Keystore/Tests
+  - Packages/Keychain/Tests
+  - Packages/Keychain/Sources/Types/Accessibility.swift
+  - Packages/Keystore/TestKit
+  - Packages/Gemstone
+  - Packages/GemstonePrimitives
+  - Packages/Primitives/Sources/Extensions/Color+Primitives.swift
+  - Packages/Primitives/Sources/TransactionLoadMetadata.swift
+  - scripts
+  - swiftgen.yml
+  severity-filter:
+  - WARNING
+  - ERROR
