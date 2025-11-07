@@ -20,12 +20,12 @@ public extension View {
     @ViewBuilder
     private func build(_ item: ContextMenuItemType) -> some View {
         switch item {
-        case let .copy(title, value, onCopied):
+        case let .copy(title, value, expirationTime, onCopied):
             ContextMenuItem(
                 title: title ?? Localized.Common.copy,
                 systemImage: SystemImage.copy
             ) {
-                UIPasteboard.general.string = value
+                CopyTypeViewModel.copyToClipboard(value, expirationTime: expirationTime)
                 onCopied?(value)
             }
         case let .pin(isPinned, onPin):
