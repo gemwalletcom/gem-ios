@@ -15,7 +15,6 @@
   - Packages/GemstonePrimitives
   - Packages/Primitives/Sources/Extensions/Color+Primitives.swift
   - Packages/Primitives/Sources/TransactionLoadMetadata.swift
-  - scripts
   - swiftgen.yml
   severity-filter:
   - WARNING
