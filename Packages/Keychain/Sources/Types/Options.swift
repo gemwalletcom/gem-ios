@@ -62,7 +62,7 @@ extension Options {
                 }
                 attributes[AttributeAccessControl] = accessControl
             } else {
-                debugLog("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
+                print("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
             }
         } else {
             attributes[AttributeAccessible] = accessibility.rawValue

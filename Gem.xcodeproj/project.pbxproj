@@ -1404,6 +1404,7 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = U2D6XV88CZ;
 				ENABLE_PREVIEWS = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = core;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Gem;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -1455,6 +1456,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = U2D6XV88CZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = core;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Gem;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
