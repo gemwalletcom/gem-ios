@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 
 struct Options: @unchecked Sendable {
     var service: String = ""
@@ -57,7 +56,7 @@ extension Options {
                     if let error = error?.takeUnretainedValue() {
                         return (attributes, error.error)
                     }
-                    
+
                     return (attributes, Status.unexpectedError)
                 }
                 attributes[AttributeAccessControl] = accessControl
