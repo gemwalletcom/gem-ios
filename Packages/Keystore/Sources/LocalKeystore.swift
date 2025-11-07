@@ -111,7 +111,8 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
     }
 
     public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> String {
-        let data = try await getPrivateKey(wallet: wallet, chain: chain)
+        var data = try await getPrivateKey(wallet: wallet, chain: chain)
+        defer { data.zeroize() }
         switch encoding {
         case .base58:
             return Base58.encodeNoCheck(data: data)
@@ -162,7 +163,7 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         guard password.isEmpty, createPasswordIfNone else {
             return password
         }
-        let newPassword = try SecureRandom.generateKey(length: 32).hexString
+        let newPassword = try SecureRandom.generateKey(length: 32).hex
         try keystorePassword.setPassword(newPassword, authentication: .none)
         return newPassword
     }

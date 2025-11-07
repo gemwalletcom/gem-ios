@@ -35,7 +35,7 @@ public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
     public var expirationTimeInternal: TimeInterval {
         switch type {
         case .secretPhrase, .privateKey: 60
-        case .address(let asset, let address): 500
+        case .address: 500
         }
     }
     

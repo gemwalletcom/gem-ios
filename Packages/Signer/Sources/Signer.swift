@@ -58,12 +58,14 @@ public struct Signer: Sendable {
 
     public func sign(input: SignerInput) async throws -> [String] {
         let chain = input.asset.chain
-        let privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
+        var privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
+        defer { privateKey.zeroize() }
         return try sign(input: input, chain: chain, privateKey: privateKey)
     }
 
     public func signMessage(chain: Chain, message: SignMessage) async throws -> String {
-        let privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
+        var privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
+        defer { privateKey.zeroize() }
         return try signMessage(chain: chain, message: message, privateKey: privateKey)
     }
 
