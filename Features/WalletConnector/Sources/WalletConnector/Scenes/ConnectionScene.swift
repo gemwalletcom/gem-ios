@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Localization
+import Primitives
 
 struct ConnectionScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -34,7 +35,7 @@ struct ConnectionScene: View {
         do {
             try await model.disconnect()
         } catch {
-            NSLog("disconnect error: \(error)")
+            debugLog("disconnect error: \(error)")
         }
     }
 }

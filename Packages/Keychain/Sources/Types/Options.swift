@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 
 struct Options: @unchecked Sendable {
     var service: String = ""
@@ -61,7 +62,7 @@ extension Options {
                 }
                 attributes[AttributeAccessControl] = accessControl
             } else {
-                print("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
+                debugLog("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
             }
         } else {
             attributes[AttributeAccessible] = accessibility.rawValue

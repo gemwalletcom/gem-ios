@@ -31,13 +31,6 @@ struct URLRequestSequence<T: URLRequestConvertible>: AsyncSequence {
             guard let request = requests.next() else {
                 return nil
             }
-            let req = try request.asRequest()
-            #if DEBUG
-            print("==> request: \(req)")
-            if let body = req.httpBody {
-                print("==> body: \(String(decoding: body, as: UTF8.self))")
-            }
-            #endif
             return try await session.data(for: request.asRequest())
         }
     }

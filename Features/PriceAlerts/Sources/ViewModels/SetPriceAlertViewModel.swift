@@ -172,7 +172,7 @@ extension SetPriceAlertViewModel {
             onComplete?(completeMessage)
             try await priceAlertService.add(priceAlert: priceAlert())
         } catch {
-            NSLog("Set price alert error: \(error.localizedDescription)")
+            debugLog("Set price alert error: \(error.localizedDescription)")
         }
     }
     
@@ -182,7 +182,7 @@ extension SetPriceAlertViewModel {
         do {
             preferences.isPushNotificationsEnabled = try await requestPermissions()
         } catch {
-            NSLog("pushesUpdate error: \(error)")
+            debugLog("pushesUpdate error: \(error)")
         }
     }
     

@@ -177,7 +177,7 @@ extension StakeDetailSceneViewModel {
         do {
             onAmountInputAction?(try stakeRecipientData())
         } catch {
-            NSLog("staking: unable to create recipient data: \(error)")
+            debugLog("staking: unable to create recipient data: \(error)")
         }
     }
     
@@ -185,7 +185,7 @@ extension StakeDetailSceneViewModel {
         do {
             onAmountInputAction?(try redelegateRecipientData())
         } catch {
-            NSLog("staking: unable to create recipient data: \(error)")
+            debugLog("staking: unable to create recipient data: \(error)")
         }
     }
     
@@ -193,7 +193,7 @@ extension StakeDetailSceneViewModel {
         do {
             onTransferAction?(try withdrawStakeTransferData())
         } catch {
-            NSLog("staking: unable to create transfer data: \(error)")
+            debugLog("staking: unable to create transfer data: \(error)")
         }
     }
 }
