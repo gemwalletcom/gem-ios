@@ -91,7 +91,6 @@ public struct WalletKeyStore: Sendable {
             derivationPath: chain.coinType.derivationPath(), // not applicable
             extendedPublicKey: nil
         )
-
         return Primitives.Wallet(
             id: wallet.id,
             name: wallet.key.name,
@@ -198,9 +197,12 @@ public struct WalletKeyStore: Sendable {
     }
 
     public func sign(hash: Data, walletId: String, type: Primitives.WalletType, password: String, chain: Chain) throws -> Data {
-        let key = try getPrivateKey(id: walletId, type: type, chain: chain, password: password)
+        var privateKey = try getPrivateKey(id: walletId, type: type, chain: chain, password: password)
+        defer {
+            privateKey.zeroize()
+        }
         guard
-            let privateKey = PrivateKey(data: key),
+            let privateKey = PrivateKey(data: privateKey),
             let signature = privateKey.sign(digest: hash, curve: chain.coinType.curve)
         else {
             throw AnyError("no data signed")
