@@ -69,7 +69,7 @@ public struct Signer: Sendable {
         return try signer(for: chain).signMessage(message: message, privateKey: privateKey)
     }
 
-    func signer(for chain: Chain) -> Signable {
+    public func signer(for chain: Chain) -> Signable {
         switch chain.type {
         case .solana: SolanaSigner()
         case .ethereum: EthereumSigner()
