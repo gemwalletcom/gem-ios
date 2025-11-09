@@ -1,4 +1,4 @@
-XCBEAUTIFY_ARGS := "--quieter"
+XCBEAUTIFY_ARGS := "--quieter --is-ci"
 BUILD_THREADS := `sysctl -n hw.ncpu`
 SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 17"
 
