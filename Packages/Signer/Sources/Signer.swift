@@ -66,15 +66,10 @@ public struct Signer: Sendable {
     public func signMessage(chain: Chain, message: SignMessage) async throws -> String {
         var privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
         defer { privateKey.zeroize() }
-        return try signMessage(chain: chain, message: message, privateKey: privateKey)
+        return try signer(for: chain).signMessage(message: message, privateKey: privateKey)
     }
 
-    public func signMessage(chain: Chain, message: SignMessage, privateKey: Data) throws -> String {
-        return try signer(for: chain)
-            .signMessage(message: message, privateKey: privateKey)
-    }
-
-    func signer(for chain: Chain) -> Signable {
+    public func signer(for chain: Chain) -> Signable {
         switch chain.type {
         case .solana: SolanaSigner()
         case .ethereum: EthereumSigner()

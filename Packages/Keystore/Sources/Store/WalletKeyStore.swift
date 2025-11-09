@@ -20,14 +20,20 @@ public struct WalletKeyStore: Sendable {
         keyStore = try! WalletCore.KeyStore(keyDirectory: directory)
     }
 
-    public func importWallet(name: String, words: [String], chains: [Chain], password: String) throws -> Primitives.Wallet {
+    public func importWallet(
+        type: Primitives.WalletType,
+        name: String,
+        words: [String],
+        chains: [Chain],
+        password: String
+    ) throws -> Primitives.Wallet {
         let wallet = try keyStore.import(
             mnemonic: MnemonicFormatter.fromArray(words: words),
             name: name,
             encryptPassword: password,
             coins: []
         )
-        return try addCoins(wallet: wallet, existingChains: [], newChains: chains, password: password)
+        return try addCoins(type: type, wallet: wallet, existingChains: [], newChains: chains, password: password)
     }
 
     public static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
@@ -91,7 +97,6 @@ public struct WalletKeyStore: Sendable {
             derivationPath: chain.coinType.derivationPath(), // not applicable
             extendedPublicKey: nil
         )
-
         return Primitives.Wallet(
             id: wallet.id,
             name: wallet.key.name,
@@ -104,7 +109,13 @@ public struct WalletKeyStore: Sendable {
         )
     }
 
-    public func addCoins(wallet: WalletCore.Wallet, existingChains: [Chain], newChains: [Chain], password: String) throws -> Primitives.Wallet {
+    public func addCoins(
+        type: Primitives.WalletType,
+        wallet: WalletCore.Wallet,
+        existingChains: [Chain],
+        newChains: [Chain],
+        password: String
+    ) throws -> Primitives.Wallet {
         let allChains = existingChains + newChains
         let exclude = [Chain.solana]
         let coins = allChains.filter { !exclude.contains($0) }.map { $0.coinType }.asSet().asArray()
@@ -123,13 +134,6 @@ public struct WalletKeyStore: Sendable {
         if newChains.isNotEmpty && newCoinTypes.subtracting(existingCoinTypes).isNotEmpty {
             let _ = try keyStore.addAccounts(wallet: wallet, coins: coins, password: password)
         }
-
-        let type: Primitives.WalletType = {
-            if wallet.key.isMnemonic {
-                return wallet.accounts.count == 1 ? .single : .multicoin
-            }
-            return .privateKey
-        }()
         
         let accounts = allChains.compactMap { chain in
             wallet.accounts.filter({ $0.coin == chain.coinType }).first?.mapToAccount(chain: chain)
@@ -147,9 +151,19 @@ public struct WalletKeyStore: Sendable {
         )
     }
 
-    public func addChains(wallet: Primitives.Wallet, existingChains: [Chain], newChains: [Chain], password: String) throws -> Primitives.Wallet {
-        let wallet = try getWallet(id: wallet.id)
-        return try addCoins(wallet: wallet, existingChains: existingChains, newChains: newChains, password: password)
+    public func addChains(
+        wallet: Primitives.Wallet,
+        existingChains: [Chain],
+        newChains: [Chain],
+        password: String
+    ) throws -> Primitives.Wallet {
+        return try addCoins(
+            type: wallet.type,
+            wallet: try getWallet(id: wallet.id),
+            existingChains: existingChains,
+            newChains: newChains,
+            password: password
+        )
     }
 
     private func getWallet(id: String) throws -> WalletCore.Wallet {
@@ -198,9 +212,12 @@ public struct WalletKeyStore: Sendable {
     }
 
     public func sign(hash: Data, walletId: String, type: Primitives.WalletType, password: String, chain: Chain) throws -> Data {
-        let key = try getPrivateKey(id: walletId, type: type, chain: chain, password: password)
+        var privateKey = try getPrivateKey(id: walletId, type: type, chain: chain, password: password)
+        defer {
+            privateKey.zeroize()
+        }
         guard
-            let privateKey = PrivateKey(data: key),
+            let privateKey = PrivateKey(data: privateKey),
             let signature = privateKey.sign(digest: hash, curve: chain.coinType.curve)
         else {
             throw AnyError("no data signed")

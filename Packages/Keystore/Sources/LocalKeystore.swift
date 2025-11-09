@@ -43,12 +43,12 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         return try await queue.asyncTask { [walletKeyStore] in
             switch type {
             case .phrase(let words, let chains):
-                try walletKeyStore.importWallet(name: name, words: words, chains: chains, password: password)
+                try walletKeyStore.importWallet(type: .multicoin, name: name, words: words, chains: chains, password: password)
             case .single(let words, let chain):
-                try walletKeyStore.importWallet(name: name, words: words, chains: [chain], password: password)
+                try walletKeyStore.importWallet(type: .single, name: name, words: words, chains: [chain], password: password)
             case .privateKey(let text, let chain):
                 try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: password)
-            case .address(let chain, let address):
+            case .address(let address, let chain):
                 Wallet.makeView(name: name, chain: chain, address: address)
             }
         }

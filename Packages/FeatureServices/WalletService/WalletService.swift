@@ -66,16 +66,35 @@ public struct WalletService: Sendable {
 
     @discardableResult
     public func importWallet(name: String, type: KeystoreImportType) async throws -> Wallet {
-        let newWallet = try await keystore.importWallet(
+        let wallet = try await loadOrCreateWallet(name: name, type: type)
+        await MainActor.run {
+            walletSessionService.setCurrent(walletId: wallet.walletId)
+        }
+        return wallet
+    }
+    
+    private func loadOrCreateWallet(name: String, type: KeystoreImportType) async throws -> Wallet {
+        if let existing = try existingWallet(type: type) {
+            return existing
+        }
+        let wallet = try await keystore.importWallet(
             name: name,
             type: type,
             isWalletsEmpty: wallets.isEmpty
         )
-        try walletStore.addWallet(newWallet)
-        await MainActor.run {
-            walletSessionService.setCurrent(walletId: newWallet.walletId)
+        try walletStore.addWallet(wallet)
+        return wallet
+    }
+
+    private func existingWallet(type: KeystoreImportType) throws -> Wallet? {
+        let (chain, address) = try WalletIdentifier.from(type).deriveAddress()
+        let walletType = type.walletType
+
+        return wallets.first { wallet in
+            wallet.type == walletType && wallet.accounts.contains {
+                $0.chain == chain && $0.address == address
+            }
         }
-        return newWallet
     }
 
     public func delete(_ wallet: Wallet) async throws {
