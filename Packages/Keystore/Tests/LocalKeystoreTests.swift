@@ -9,9 +9,9 @@ struct LocalKeystoreTests {
     let chains: [Chain] = [.ethereum, .solana]
 
     @Test
-    func testCreateWallet() {
+    func testCreateWallet() throws {
         let keystore = LocalKeystore.mock()
-        let createdWords = keystore.createWallet()
+        let createdWords = try keystore.createWallet()
         #expect(createdWords.count == 12)
     }
 
@@ -19,7 +19,7 @@ struct LocalKeystoreTests {
     func testImportWallet() async {
         await #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
-            let words = keystore.createWallet()
+            let words = try keystore.createWallet()
             let wallet = try await keystore.importWallet(
                 name: "test",
                 type: .phrase(words: words, chains: [.ethereum]),
