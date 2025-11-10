@@ -73,7 +73,7 @@ public struct PerpetualPositionViewModel {
     }
 
     var autocloseTitle: String { Localized.Perpetual.autoClose }
-    var autocloseText: String {
+    var autocloseText: (subtitle: String, subtitleExtra: String?) {
         autocloseFormatter.format(
             takeProfit: data.position.takeProfit?.price,
             stopLoss: data.position.stopLoss?.price

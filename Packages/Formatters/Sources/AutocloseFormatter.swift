@@ -15,7 +15,7 @@ public struct AutocloseFormatter: Sendable {
         stopLoss: Double?,
         takeProfitCanceled: Bool = false,
         stopLossCanceled: Bool = false
-    ) -> String {
+    ) -> (subtitle: String, subtitleExtra: String?) {
         let tp: String? = {
             if takeProfitCanceled { return "TP: -" }
             return takeProfit.map { "TP: \(currencyFormatter.string($0))" }
@@ -28,13 +28,13 @@ public struct AutocloseFormatter: Sendable {
 
         switch (tp, sl) {
         case (.some(let tpText), .some(let slText)):
-            return "\(tpText), \(slText)"
+            return (subtitle: tpText, subtitleExtra: slText)
         case (.some(let tpText), .none):
-            return tpText
+            return (subtitle: tpText, subtitleExtra: nil)
         case (.none, .some(let slText)):
-            return slText
+            return (subtitle: slText, subtitleExtra: nil)
         case (.none, .none):
-            return "-"
+            return (subtitle: "-", subtitleExtra: nil)
         }
     }
 }
