@@ -54,7 +54,6 @@ extension WalletRecord: CreateTable {
             $0.column(Columns.imageUrl.name, .text)
             $0.column(Columns.updatedAt.name, .date)
             $0.column(Columns.source.name, .text)
-                .defaults(to: WalletSource.create.rawValue)
         }
     }
 }
