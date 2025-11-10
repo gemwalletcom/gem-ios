@@ -10,10 +10,10 @@ import PrimitivesComponents
 public final class OnboardingViewModel {
     let walletService: WalletService
     let nameService: any NameServiceable
-    
+
     public var isPresentingCreateWalletSheet: Bool = false
     public var isPresentingImportWalletSheet: Bool = false
-    
+
     public init(
         walletService: WalletService,
         nameService: any NameServiceable

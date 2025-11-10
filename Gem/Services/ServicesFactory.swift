@@ -133,10 +133,6 @@ struct ServicesFactory {
             interactor: walletConnectorManager
         )
 
-        let bannerSetupService = BannerSetupService(
-            store: storeManager.bannerStore,
-            preferences: preferences
-        )
         let walletsService = Self.makeWalletsService(
             walletStore: storeManager.walletStore,
             assetsService: assetsService,
@@ -160,10 +156,10 @@ struct ServicesFactory {
         let onstartAsyncService = Self.makeOnstartAsyncService(
             assetStore: storeManager.assetStore,
             nodeStore: storeManager.nodeStore,
+            bannerStore: storeManager.bannerStore,
             preferences: preferences,
             assetsService: assetsService,
             deviceService: deviceService,
-            bannerSetupService: bannerSetupService,
             configService: configService,
             releaseService: AppReleaseService(configService: configService),
             addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
@@ -434,15 +430,19 @@ extension ServicesFactory {
     private static func makeOnstartAsyncService(
         assetStore: AssetStore,
         nodeStore: NodeStore,
+        bannerStore: BannerStore,
         preferences: Preferences,
         assetsService: AssetsService,
         deviceService: DeviceService,
-        bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
         releaseService: AppReleaseService,
         addressStatusService: AddressStatusService
     ) -> OnstartAsyncService {
-        OnstartAsyncService(
+        let bannerSetupService = BannerSetupService(
+            store: bannerStore,
+            preferences: preferences
+        )
+        return OnstartAsyncService(
             assetStore: assetStore,
             nodeStore: nodeStore,
             preferences: preferences,

@@ -16,7 +16,6 @@ import WalletConnector
 import WalletService
 import WalletsService
 import NameService
-import BannerService
 
 @Observable
 @MainActor
