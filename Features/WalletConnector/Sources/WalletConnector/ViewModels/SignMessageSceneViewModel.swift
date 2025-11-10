@@ -78,7 +78,8 @@ public final class SignMessageSceneViewModel {
     public func signMessage() async throws {
         let hash: Data = decoder.hash()
         if payload.chain == .sui, payload.message.signType == .suiPersonalMessage {
-            let privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
+            var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
+            defer { privateKey.zeroize() }
             let signature = try CryptoSigner().signSuiDigest(digest: hash, privateKey: privateKey)
             confirmTransferDelegate(.success(signature))
             return

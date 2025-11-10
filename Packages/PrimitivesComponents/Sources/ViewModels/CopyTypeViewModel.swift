@@ -32,7 +32,30 @@ public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
 
     public var systemImage: String { SystemImage.copy }
 
+    public var expirationTimeInternal: TimeInterval? {
+        switch type {
+        case .secretPhrase, .privateKey: 60
+        case .address: .none
+        }
+    }
+    
     public func copy() {
-        UIPasteboard.general.string = copyValue
+        Self.copyToClipboard(copyValue, expirationTime: expirationTimeInternal)
+    }
+
+    public static func copyToClipboard(_ value: String, expirationTime: TimeInterval?) {
+        let options = pasteboardOptions(expirationTime: expirationTime)
+        UIPasteboard.general.setItems([[UIPasteboard.typeAutomatic: value]], options: options)
+    }
+
+    static func pasteboardOptions(expirationTime: TimeInterval?) -> [UIPasteboard.OptionsKey: Any] {
+        var options: [UIPasteboard.OptionsKey: Any] = [:]
+
+        if let expirationTime = expirationTime {
+            options[.localOnly] = true
+            options[.expirationDate] = Date().addingTimeInterval(expirationTime)
+        }
+
+        return options
     }
 }

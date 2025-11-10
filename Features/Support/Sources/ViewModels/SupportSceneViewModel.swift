@@ -44,7 +44,7 @@ public final class SupportSceneViewModel: Sendable {
         do {
             _ = try await pushNotificationService.requestPermissions()
         } catch {
-            print("Failed to request push notifications: \(error)")
+            debugLog("Failed to request push notifications: \(error)")
         }
     }
     
@@ -52,7 +52,7 @@ public final class SupportSceneViewModel: Sendable {
         do {
             try await supportService.registerSupportDeviceIfNeeded()
         } catch {
-            NSLog("registerSupport error \(error)")
+            debugLog("registerSupport error \(error)")
         }
     }
 }

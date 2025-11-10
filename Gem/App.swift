@@ -61,11 +61,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
             try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: supportDirectory))
             
             #if DEBUG
-            NSLog("documentsDirectory \(documentsDirectory)")
-            NSLog("supportDirectory \(supportDirectory)")
+            debugLog("documentsDirectory \(documentsDirectory)")
+            debugLog("supportDirectory \(supportDirectory)")
             #endif
         } catch {
-            NSLog("addSkipBackupAttributeToItemAtURL error \(error)")
+            debugLog("addSkipBackupAttributeToItemAtURL error \(error)")
         }
         AppResolver.main.services.onstartService.migrations()
         AppResolver.main.storages.observablePreferences.preferences.incrementLaunchesCount()
@@ -97,7 +97,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: any Error) {
-        NSLog("didFailToRegisterForRemoteNotificationsWithError error: \(error)")
+        debugLog("didFailToRegisterForRemoteNotificationsWithError error: \(error)")
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
@@ -105,16 +105,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        NSLog("url \(url)")
+        debugLog("url \(url)")
         return true
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        //NSLog("URLContexts.first?.url \(URLContexts.first?.url)")
+        //debugLog("URLContexts.first?.url \(URLContexts.first?.url)")
     }
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        //NSLog("URLContexts.first?.url \(connectionOptions.urlContexts.first?.url)")
+        //debugLog("URLContexts.first?.url \(connectionOptions.urlContexts.first?.url)")
     }
 }
 

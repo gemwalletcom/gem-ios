@@ -5,6 +5,7 @@ import Components
 import Style
 import Localization
 import PrimitivesComponents
+import Primitives
 
 public struct SignMessageScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -79,7 +80,7 @@ public struct SignMessageScene: View {
                 try await model.signMessage()
                 dismiss()
             } catch {
-                NSLog("sign message error \(error)")
+                debugLog("sign message error \(error)")
             }
         }
     }

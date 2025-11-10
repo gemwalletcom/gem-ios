@@ -363,7 +363,7 @@ let package = Package(
                 "WalletSessionService"
             ],
             path: "WalletService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "WalletServiceTestKit",
@@ -503,6 +503,18 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives")
             ],
             path: "WalletsService/Tests"
+        ),
+        .testTarget(
+            name: "WalletServiceTests",
+            dependencies: [
+                "WalletService",
+                "WalletServiceTestKit",
+                .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "PrimitivesTestKit", package: "Primitives")
+            ],
+            path: "WalletService/Tests"
         ),
     ]
 )

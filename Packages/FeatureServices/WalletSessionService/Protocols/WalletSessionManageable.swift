@@ -24,7 +24,7 @@ public extension WalletSessionManageable {
         do {
             return try getWallets()
         } catch {
-            NSLog("get wallets error: \(error)")
+            debugLog("get wallets error: \(error)")
             return []
         }
     }

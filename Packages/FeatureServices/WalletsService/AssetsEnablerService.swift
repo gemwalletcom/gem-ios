@@ -32,7 +32,7 @@ struct AssetsEnablerService: AssetsEnabler {
                 _ = try await (balanceUpdate, priceUpdate)
             }
         } catch {
-            NSLog("enableAssets error: \(error)")
+            debugLog("enableAssets error: \(error)")
         }
     }
 }

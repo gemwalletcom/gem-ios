@@ -283,7 +283,7 @@ extension ConfirmTransferSceneViewModel {
         } catch {
             if !error.isCancelled {
                 state = .error(error)
-                NSLog("preload transaction error: \(error)")
+                debugLog("preload transaction error: \(error)")
             }
         }
     }
@@ -302,7 +302,7 @@ extension ConfirmTransferSceneViewModel {
             confirmingState = .data(true)
         } catch {
             confirmingState = .error(error)
-            NSLog("confirm transaction error: \(error)")
+            debugLog("confirm transaction error: \(error)")
         }
     }
 

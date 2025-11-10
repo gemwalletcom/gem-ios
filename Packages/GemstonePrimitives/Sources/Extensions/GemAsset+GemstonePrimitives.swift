@@ -7,18 +7,19 @@ import Primitives
 extension GemAssetType {
     public func map() -> AssetType {
         switch self {
-        case .native: return .native
-        case .erc20: return .erc20
-        case .bep20: return .bep20
-        case .spl: return .spl
-        case .spl2022: return .spl2022
-        case .trc20: return .trc20
-        case .token: return .token
-        case .ibc: return .ibc
-        case .jetton: return .jetton
-        case .synth: return .synth
-        case .asa: return .asa
-        case .perpetual: return .perpetual
+        case .native: .native
+        case .erc20: .erc20
+        case .bep20: .bep20
+        case .spl: .spl
+        case .spl2022: .spl2022
+        case .trc20: .trc20
+        case .token: .token
+        case .ibc: .ibc
+        case .jetton: .jetton
+        case .synth: .synth
+        case .asa: .asa
+        case .perpetual: .perpetual
+        case .spot: .spot
         }
     }
 }
@@ -26,18 +27,19 @@ extension GemAssetType {
 extension AssetType {
     public func map() -> GemAssetType {
         switch self {
-        case .native: return .native
-        case .erc20: return .erc20
-        case .bep20: return .bep20
-        case .spl: return .spl
-        case .spl2022: return .spl2022
-        case .trc20: return .trc20
-        case .token: return .token
-        case .ibc: return .ibc
-        case .jetton: return .jetton
-        case .synth: return .synth
-        case .asa: return .asa
-        case .perpetual: return .perpetual
+        case .native: .native
+        case .erc20: .erc20
+        case .bep20: .bep20
+        case .spl: .spl
+        case .spl2022: .spl2022
+        case .trc20: .trc20
+        case .token: .token
+        case .ibc: .ibc
+        case .jetton: .jetton
+        case .synth: .synth
+        case .asa: .asa
+        case .perpetual: .perpetual
+        case .spot: .spot
         }
     }
 }

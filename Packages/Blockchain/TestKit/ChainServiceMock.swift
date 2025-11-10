@@ -5,14 +5,14 @@ import Blockchain
 import Primitives
 import BigInt
 
-public struct ChainServiceMock: ChainServiceable {
+public final class ChainServiceMock: ChainServiceable, @unchecked Sendable {
     
     // Injected data
     public var addressStatuses: [AddressStatus] = []
     public var coinBalances: [String: AssetBalance] = [:]
     public var tokenBalances: [String: [AssetBalance]] = [:]
     public var stakeBalance: AssetBalance?
-    public var broadcastResponse: String = ""
+    public var broadcastResponses: [String] = []
     public var fee: Fee = Fee(fee: .zero, gasPriceType: .regular(gasPrice: .zero), gasLimit: .zero)
     public var feeRates: [FeeRate] = []
     public var chainID: String?
@@ -47,7 +47,7 @@ extension ChainServiceMock {
     }
     
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        broadcastResponse
+        broadcastResponses.removeFirst()
     }
     
     public func getFee(asset: Asset, input: FeeInput) async throws -> Fee {

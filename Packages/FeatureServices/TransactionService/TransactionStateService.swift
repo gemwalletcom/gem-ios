@@ -32,7 +32,7 @@ struct TransactionStateService: Sendable {
     }
 
     public func updateStateChanges(_ stateChanges: TransactionChanges, for transaction: Transaction) async throws {
-        NSLog("updateStateChanges for \(transaction.id), \(stateChanges)")
+        debugLog("updateStateChanges for \(transaction.id), \(stateChanges)")
 
         try updateState(
             state: stateChanges.state,
