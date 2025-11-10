@@ -29,8 +29,8 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         self.keystorePassword = keystorePassword
     }
 
-    public func createWallet() -> [String] {
-        walletKeyStore.createWallet()
+    public func createWallet() throws -> [String] {
+        try walletKeyStore.createWallet()
     }
 
     public func importWallet(

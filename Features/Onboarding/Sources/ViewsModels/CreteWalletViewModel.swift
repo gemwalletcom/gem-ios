@@ -28,7 +28,11 @@ struct CreateWalletViewModel: SecretPhraseViewableModel {
     ) {
         self.walletService = walletService
         self.onCreateWallet = onCreateWallet
-        self.words = walletService.createWallet()
+        do {
+            self.words = try walletService.createWallet()
+        } catch {
+            fatalError("Unable to create wallet")
+        }
     }
 
     var title: String {

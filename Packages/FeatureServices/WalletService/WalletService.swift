@@ -60,8 +60,8 @@ public struct WalletService: Sendable {
         preferences.isAcceptTermsCompleted = true
     }
 
-    public func createWallet() -> [String] {
-        keystore.createWallet()
+    public func createWallet() throws -> [String] {
+        try keystore.createWallet()
     }
 
     @discardableResult
