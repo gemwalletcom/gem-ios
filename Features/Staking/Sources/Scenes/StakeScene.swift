@@ -25,7 +25,6 @@ public struct StakeScene: View {
                 resourcesSection
             }
             delegationsSection
-            .listRowInsets(.assetListRowInsets)
         }
         .listSectionSpacing(.compact)
         .refreshable {
@@ -90,6 +89,7 @@ extension StakeScene {
                         StakeDelegationView(delegation: delegation)
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             case .error(let error):
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
