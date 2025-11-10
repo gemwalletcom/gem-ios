@@ -10,8 +10,10 @@ public struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore
     private let directory: URL
 
-    func createWallet() -> [String] {
-        let wallet = HDWallet(strength: 128, passphrase: "")!
+    func createWallet() throws -> [String] {
+        guard let wallet = HDWallet(strength: 128, passphrase: "") else {
+            throw AnyError("Unable to create wallet")
+        }
         return wallet.mnemonic.split(separator: " ").map { String($0) }
     }
 
