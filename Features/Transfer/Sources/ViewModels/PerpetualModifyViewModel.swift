@@ -32,7 +32,7 @@ public struct PerpetualModifyViewModel: Sendable {
         let takeProfit = tpslOrderData?.takeProfit.flatMap(Double.init)
         let stopLoss = tpslOrderData?.stopLoss.flatMap(Double.init)
 
-        let autocloseText = autocloseFormatter.format(
+        let autoclose = autocloseFormatter.format(
             takeProfit: takeProfit,
             stopLoss: stopLoss,
             takeProfitCanceled: tpCanceled && takeProfit == nil,
@@ -41,7 +41,8 @@ public struct PerpetualModifyViewModel: Sendable {
 
         return ListItemModel(
             title: Localized.Perpetual.autoClose,
-            subtitle: autocloseText
+            subtitle: autoclose.subtitle,
+            subtitleExtra: autoclose.subtitleExtra
         )
     }
 }

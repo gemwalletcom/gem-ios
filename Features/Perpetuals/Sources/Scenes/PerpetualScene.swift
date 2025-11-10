@@ -83,7 +83,8 @@ public struct PerpetualScene: View {
                     NavigationCustomLink(
                         with: ListItemView(
                             title: position.autocloseTitle,
-                            subtitle: position.autocloseText,
+                            subtitle: position.autocloseText.subtitle,
+                            subtitleExtra: position.autocloseText.subtitleExtra,
                             infoAction: model.onSelectAutocloseInfo
                         ),
                         action: model.onSelectAutoclose
