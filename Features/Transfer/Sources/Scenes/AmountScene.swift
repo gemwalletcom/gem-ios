@@ -92,8 +92,15 @@ struct AmountScene: View {
                     .cleanListRow()
                 }
             case .perpetual:
-                // PositionView()
-                EmptyView()
+                if model.isPerpetualLeverageEnabled {
+                    Section {
+                        LeverageSliderView(
+                            maxLeverage: model.maxLeverage,
+                            selectedLeverage: $model.selectedLeverage
+                        )
+                    }
+                    .cleanListRow()
+                }
             }
         }
         .safeAreaView {

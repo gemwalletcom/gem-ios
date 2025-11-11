@@ -19,6 +19,7 @@ public struct PerpetualOrderFactory {
         positionAction: PerpetualPositionAction,
         usdcAmount: BigInt,
         usdcDecimals: Int,
+        leverage: UInt8,
         slippage: Double = 2.0
     ) -> PerpetualType {
         let perpetual = positionAction.transferData
@@ -31,9 +32,9 @@ public struct PerpetualOrderFactory {
         )
 
         let usdAmount = Double(usdcAmount) / pow(10.0, Double(usdcDecimals))
-        let sizeAsAsset = (usdAmount * Double(perpetual.leverage)) / perpetual.price
+        let sizeAsAsset = (usdAmount * Double(leverage)) / perpetual.price
         let fiatValue = perpetual.price * sizeAsAsset
-        let marginAmount = fiatValue / Double(perpetual.leverage)
+        let marginAmount = fiatValue / Double(leverage)
 
         let data = makePerpetualConfirmData(
             direction: perpetual.direction,
@@ -45,7 +46,7 @@ public struct PerpetualOrderFactory {
             sizeAsDouble: sizeAsAsset,
             assetDecimals: Int(perpetual.asset.decimals),
             slippage: slippage,
-            leverage: UInt8(perpetual.leverage),
+            leverage: leverage,
             pnl: nil,
             entryPrice: nil,
             marketPrice: perpetual.price,

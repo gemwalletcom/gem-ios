@@ -22,6 +22,8 @@ import PerpetualService
 @MainActor
 @Observable
 public final class AmountSceneViewModel {
+    private static let defaultLeverage: UInt8 = 3
+
     private let wallet: Wallet
     private let onTransferAction: TransferDataAction
 
@@ -46,6 +48,7 @@ public final class AmountSceneViewModel {
             onSelectResource(selectedResource)
         }
     }
+    var selectedLeverage: UInt8 = .zero
 
     var isPresentingSheet: AmountSheetType?
     var focusField: Bool = false
@@ -68,6 +71,12 @@ public final class AmountSceneViewModel {
 
         if let currentResource = currentResource {
             self.selectedResource = currentResource
+        }
+
+        if case .perpetual(let data) = type {
+            let maxLeverage = data.positionAction.transferData.leverage
+            let leverage = Self.defaultLeverage > maxLeverage ? maxLeverage : Self.defaultLeverage
+            self.selectedLeverage = leverage
         }
 
         if let recipientAmount = recipientData.amount {
@@ -224,6 +233,26 @@ public final class AmountSceneViewModel {
         case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw: false
         }
     }
+
+    var isPerpetualLeverageEnabled: Bool {
+        switch type {
+        case .perpetual(let data):
+            switch data.positionAction {
+            case .open: true
+            case .increase, .reduce: false
+            }
+        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: false
+        }
+    }
+
+    var maxLeverage: UInt8 {
+        switch type {
+        case .perpetual(let data): data.positionAction.transferData.leverage
+        default: .zero
+        }
+    }
+
+    var leverageTitle: String { Localized.Perpetual.leverage }
 }
 
 // MARK: - Business Logic
@@ -450,9 +479,9 @@ extension AmountSceneViewModel {
             let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
                 positionAction: data.positionAction,
                 usdcAmount: value,
-                usdcDecimals: asset.decimals.asInt
+                usdcDecimals: asset.decimals.asInt,
+                leverage: selectedLeverage
             )
-
             return TransferData(
                 type: .perpetual(data.positionAction.transferData.asset, perpetualType),
                 recipientData: recipientData,
