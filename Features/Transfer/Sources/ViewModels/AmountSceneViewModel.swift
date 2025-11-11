@@ -48,7 +48,11 @@ public final class AmountSceneViewModel {
             onSelectResource(selectedResource)
         }
     }
-    var selectedLeverage: UInt8 = .zero
+    var selectedLeverage: UInt8 = .zero {
+        didSet {
+            amountInputModel.update(validators: inputValidators)
+        }
+    }
 
     var isPresentingSheet: AmountSheetType?
     var focusField: Bool = false
@@ -66,18 +70,23 @@ public final class AmountSceneViewModel {
             assetId: input.asset.id
         )
 
-        self.currentValidator = defaultValidator
-        self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: inputValidators)
+        if case .perpetual(let data) = type {
+            switch data.positionAction {
+            case .open:
+                let maxLeverage = data.positionAction.transferData.leverage
+                let leverage = Self.defaultLeverage > maxLeverage ? maxLeverage : Self.defaultLeverage
+                self.selectedLeverage = leverage
+            case .increase, .reduce:
+                self.selectedLeverage = data.positionAction.transferData.leverage
+            }
+        }
 
         if let currentResource = currentResource {
             self.selectedResource = currentResource
         }
 
-        if case .perpetual(let data) = type {
-            let maxLeverage = data.positionAction.transferData.leverage
-            let leverage = Self.defaultLeverage > maxLeverage ? maxLeverage : Self.defaultLeverage
-            self.selectedLeverage = leverage
-        }
+        self.currentValidator = defaultValidator
+        self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: inputValidators)
 
         if let recipientAmount = recipientData.amount {
             amountInputModel.update(text: recipientAmount)
@@ -252,7 +261,27 @@ public final class AmountSceneViewModel {
         }
     }
 
-    var leverageTitle: String { Localized.Perpetual.leverage }
+    var sizeTitle: String { Localized.Perpetual.size }
+
+    var perpetualPositionSize: String? {
+        guard case .perpetual(let data) = type,
+              amountInputModel.isValid,
+              let amount = try? value(for: amountTransferValue),
+              amount > .zero,
+              let usdAmount = try? formatter.double(from: amount, decimals: asset.decimals.asInt) else {
+            return nil
+        }
+
+        let size = (usdAmount * Double(selectedLeverage)) / data.positionAction.transferData.price
+        let sizeString = ValueFormatter(style: .medium).string(
+            BigInt(size * pow(10.0, Double(data.positionAction.transferData.asset.decimals.asInt))),
+            decimals: data.positionAction.transferData.asset.decimals.asInt,
+            currency: data.positionAction.transferData.asset.symbol
+        )
+        let sizeValue = size * data.positionAction.transferData.price
+        let priceString = currencyFormatter.string(sizeValue)
+        return "\(sizeString) / \(priceString)"
+    }
 }
 
 // MARK: - Business Logic
@@ -572,8 +601,12 @@ extension AmountSceneViewModel {
                 // withdrawals require a minimum of 2 USDC
                 return BigInt(2_000_000)
             }
-        case .perpetual:
-            return BigInt(10_000_000) // 15 USDC with 6 decimals
+        case .perpetual(let data):
+            return PerpetualMinimumCalculator.calculateMinimumUSDC(
+                price: data.positionAction.transferData.price,
+                szDecimals: data.positionAction.transferData.asset.decimals.asInt,
+                leverage: selectedLeverage
+            )
         case .stakeUnstake, .transfer:
             break
         }

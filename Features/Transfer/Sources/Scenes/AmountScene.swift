@@ -101,6 +101,12 @@ struct AmountScene: View {
                     }
                     .cleanListRow()
                 }
+
+                if let positionSize = model.perpetualPositionSize {
+                    Section {
+                        ListItemView(title: model.sizeTitle, subtitle: positionSize)
+                    }
+                }
             }
         }
         .safeAreaView {
