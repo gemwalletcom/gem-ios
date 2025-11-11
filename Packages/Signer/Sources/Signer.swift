@@ -58,21 +58,18 @@ public struct Signer: Sendable {
 
     public func sign(input: SignerInput) async throws -> [String] {
         let chain = input.asset.chain
-        let privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
+        var privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
+        defer { privateKey.zeroize() }
         return try sign(input: input, chain: chain, privateKey: privateKey)
     }
 
     public func signMessage(chain: Chain, message: SignMessage) async throws -> String {
-        let privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
-        return try signMessage(chain: chain, message: message, privateKey: privateKey)
+        var privateKey = try await keystore.getPrivateKey(wallet: wallet, chain: chain)
+        defer { privateKey.zeroize() }
+        return try signer(for: chain).signMessage(message: message, privateKey: privateKey)
     }
 
-    public func signMessage(chain: Chain, message: SignMessage, privateKey: Data) throws -> String {
-        return try signer(for: chain)
-            .signMessage(message: message, privateKey: privateKey)
-    }
-
-    func signer(for chain: Chain) -> Signable {
+    public func signer(for chain: Chain) -> Signable {
         switch chain.type {
         case .solana: SolanaSigner()
         case .ethereum: EthereumSigner()

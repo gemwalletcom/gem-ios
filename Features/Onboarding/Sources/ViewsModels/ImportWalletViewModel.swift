@@ -186,12 +186,12 @@ extension ImportWalletViewModel {
             let chain = chain!
             let address = chain.checksumAddress(recipient.address)
 
-            try await importWallet(name: recipient.name, keystoreType: .address(chain: chain, address: address))
+            try await importWallet(name: recipient.name, keystoreType: .address(address: address, chain: chain))
         }
     }
 
     private func importWallet(name: String, keystoreType: KeystoreImportType) async throws {
-        try await walletService.importWallet(name: name, type: keystoreType)
+        try await walletService.importWallet(name: name, type: keystoreType, source: .import)
         onFinish?()
     }
 

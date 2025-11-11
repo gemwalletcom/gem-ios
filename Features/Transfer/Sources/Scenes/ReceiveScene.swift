@@ -14,30 +14,31 @@ public struct ReceiveScene: View {
 
     public var body: some View {
         VStack(spacing: .large) {
-            AssetImageView(assetImage: model.assetModel.assetImage, size: .image.semiLarge)
-                .padding(.top, .medium)
-
-            HStack(alignment: .bottom, spacing: .tiny) {
-                Text(model.assetModel.name)
-                    .textStyle(.headline)
-                if let symbol = model.symbol {
-                    Text(symbol)
-                        .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
-                }
-            }
-            .lineLimit(1)
-
             VStack {
                 Spacer()
-                if let image = model.renderedImage {
-                    qrCodeView(image: image)
-                        .frame(maxWidth: model.qrWidth)
-                    .padding(.medium)
-                    .background(
-                        RoundedRectangle(cornerRadius: .medium)
-                            .fill(Colors.listStyleColor)
-                            .shadow(color: Color.black.opacity(Sizing.shadow.opacity), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
-                    )
+                VStack(spacing: .medium) {
+                    AssetImageView(assetImage: model.assetModel.assetImage, size: .image.semiLarge)
+
+                    HStack(alignment: .bottom, spacing: .tiny) {
+                        Text(model.assetModel.name)
+                            .textStyle(.headline)
+                        if let symbol = model.symbol {
+                            Text(symbol)
+                                .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
+                        }
+                    }
+                    .lineLimit(1)
+
+                    if let image = model.renderedImage {
+                        qrCodeView(image: image)
+                            .frame(maxWidth: model.qrWidth)
+                            .padding(.medium)
+                            .background(
+                                RoundedRectangle(cornerRadius: .medium)
+                                    .fill(Colors.listStyleColor)
+                                    .shadow(color: Color.black.opacity(Sizing.shadow.opacity), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
+                            )
+                    }
                 }
                 Text(model.warningMessage)
                     .textStyle(.subHeadline)

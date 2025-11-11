@@ -5,9 +5,9 @@ import Primitives
 import SwiftUI
 
 public protocol Keystore: Sendable {
-    func createWallet() -> [String]
+    func createWallet() throws -> [String]
     @discardableResult
-    func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool) async throws -> Wallet
+    func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool, source: WalletSource) async throws -> Wallet
     func setupChains(chains: [Chain], for wallets: [Wallet]) throws -> [Wallet]
     func deleteKey(for wallet: Wallet) async throws
     func getPrivateKey(wallet: Wallet, chain: Chain) async throws -> Data

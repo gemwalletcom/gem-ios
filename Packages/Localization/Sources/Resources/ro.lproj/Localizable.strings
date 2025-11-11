@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Tokenurile suspecte sau spam sunt identificate ca potențiale escrocherii sau active dăunătoare. Acestea pot apărea în portofelul dvs. din cauza lansărilor prin airdrop, transferuri sau importuri manuale.";
 "errors.insufficient_funds" = "Fonduri insuficiente";
 "info.insufficient_network_fee_balance.title" = "%@ necesar";
-"info.insufficient_network_fee_balance.description" = "Această tranzacție necesită %@ pentru a acoperi taxa de rețea plătită minerilor %@, nu Gem Wallet. Asigurați-vă că aveți suficienți %@.";
+"info.insufficient_network_fee_balance.description" = "Această tranzacție necesită ** %@ ** pentru a acoperi taxa de rețea plătită minerilor ** %@ **, nu Gem Wallet. Asigurați-vă că aveți suficienți %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Sold insuficient";
 "info.insufficient_balance.description" = "Nu aveți suficienți %@ pentru a finaliza această tranzacție. Vă rugăm să încărcați, să primiți sau să schimbați contul în portofelul dvs. și să încercați din nou.";

@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "توکن‌های مشکوک یا اسپم به عنوان کلاهبرداری‌های بالقوه یا دارایی‌های مضر شناسایی می‌شوند. آنها ممکن است به دلیل ایردراپ‌ها، انتقال‌ها یا واردات دستی در کیف پول شما ظاهر شوند.";
 "errors.insufficient_funds" = "بودجه ناکافی";
 "info.insufficient_network_fee_balance.title" = "%@ مورد نیاز";
-"info.insufficient_network_fee_balance.description" = "این تراکنش مستلزم %@ است تا کارمزد شبکه پرداخت شده به %@ ماینرها را پوشش دهد، نه Gem Wallet. مطمئن شوید که %@ کافی دارید.";
+"info.insufficient_network_fee_balance.description" = "این تراکنش به ** %@ ** برای پوشش کارمزد شبکه پرداخت شده به ** %@ ** ماینرها نیاز دارد، نه Gem Wallet. مطمئن شوید که %@ کافی دارید.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "موجودی ناکافی";
 "info.insufficient_balance.description" = "شما %@ کافی برای تکمیل این تراکنش ندارید. لطفاً کیف پول خود را شارژ، دریافت یا مبادله کنید و دوباره امتحان کنید.";

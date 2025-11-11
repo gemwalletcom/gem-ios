@@ -1,4 +1,4 @@
-XCBEAUTIFY_ARGS := "--quieter"
+XCBEAUTIFY_ARGS := "--quieter --is-ci"
 BUILD_THREADS := `sysctl -n hw.ncpu`
 SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 17"
 
@@ -46,7 +46,6 @@ spm-resolve-all:
 build:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
-    -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -derivedDataPath build/DerivedData \
@@ -66,7 +65,6 @@ clean:
 build-package PACKAGE:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme {{PACKAGE}} \
-    -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -derivedDataPath build/DerivedData \
@@ -83,7 +81,6 @@ show-simulator:
 test-all: show-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
-    -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -derivedDataPath build/DerivedData \
@@ -95,7 +92,6 @@ test-all: show-simulator
 test-ui:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
-    -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -allowProvisioningUpdates \
@@ -105,7 +101,6 @@ test-ui:
 test TARGET: show-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
-    -sdk iphonesimulator \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -derivedDataPath build/DerivedData \
@@ -114,6 +109,12 @@ test TARGET: show-simulator
     -parallelizeTargets \
     -jobs {{BUILD_THREADS}} \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
+
+mobsfscan:
+    @command -v uv >/dev/null || { \
+        echo "uv is not installed. Install it via 'curl -LsSf https://astral.sh/uv/install.sh | sh'."; \
+        exit 1; }
+    uv tool run mobsfscan -- --type ios --config .mobsf --exit-warning
 
 localize:
     @sh core/scripts/localize.sh ios Packages/Localization/Sources/Resources

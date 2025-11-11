@@ -29,26 +29,27 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         self.keystorePassword = keystorePassword
     }
 
-    public func createWallet() -> [String] {
-        walletKeyStore.createWallet()
+    public func createWallet() throws -> [String] {
+        try walletKeyStore.createWallet()
     }
 
     public func importWallet(
         name: String,
         type: KeystoreImportType,
-        isWalletsEmpty: Bool
+        isWalletsEmpty: Bool,
+        source: WalletSource
     ) async throws -> Primitives.Wallet {
         let password = try await getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
 
         return try await queue.asyncTask { [walletKeyStore] in
             switch type {
             case .phrase(let words, let chains):
-                try walletKeyStore.importWallet(name: name, words: words, chains: chains, password: password)
+                try walletKeyStore.importWallet(type: .multicoin, name: name, words: words, chains: chains, password: password, source: source)
             case .single(let words, let chain):
-                try walletKeyStore.importWallet(name: name, words: words, chains: [chain], password: password)
+                try walletKeyStore.importWallet(type: .single, name: name, words: words, chains: [chain], password: password, source: source)
             case .privateKey(let text, let chain):
-                try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: password)
-            case .address(let chain, let address):
+                try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: password, source: source)
+            case .address(let address, let chain):
                 Wallet.makeView(name: name, chain: chain, address: address)
             }
         }
@@ -111,7 +112,8 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
     }
 
     public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> String {
-        let data = try await getPrivateKey(wallet: wallet, chain: chain)
+        var data = try await getPrivateKey(wallet: wallet, chain: chain)
+        defer { data.zeroize() }
         switch encoding {
         case .base58:
             return Base58.encodeNoCheck(data: data)
@@ -162,7 +164,7 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         guard password.isEmpty, createPasswordIfNone else {
             return password
         }
-        let newPassword = UUID().uuidString
+        let newPassword = try SecureRandom.generateKey(length: 32).hex
         try keystorePassword.setPassword(newPassword, authentication: .none)
         return newPassword
     }

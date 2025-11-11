@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "אסימונים חשודים או ספאם מזוהים כתרמיות פוטנציאליות או נכסים מזיקים. הם עשויים להופיע בארנק שלך עקב הטלות אוויר, העברות או ייבוא ידני.";
 "errors.insufficient_funds" = "חוסר כספים";
 "info.insufficient_network_fee_balance.title" = "נדרש %@";
-"info.insufficient_network_fee_balance.description" = "עסקה זו דורשת מ %@ לכסות את דמי הרשת ששולמו לכורי %@, לא ל Gem Wallet. ודא שיש לך מספיק %@.";
+"info.insufficient_network_fee_balance.description" = "עסקה זו דורשת ** %@ ** כדי לכסות את דמי הרשת ששולמו לכורי ** %@ **, ולא ל- Gem Wallet. ודא שיש לך מספיק %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "יתרה לא מספקת";
 "info.insufficient_balance.description" = "אין לך מספיק %@ כדי להשלים עסקה זו. אנא טען, קבל או החלף בארנק שלך ונסה שוב.";

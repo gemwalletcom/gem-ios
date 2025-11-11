@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "โทเค็นที่น่าสงสัยหรือเป็นสแปมจะถูกระบุว่าเป็นการหลอกลวงหรือทรัพย์สินที่เป็นอันตราย โทเค็นเหล่านี้อาจปรากฏในกระเป๋าเงินของคุณเนื่องจากการส่งทางอากาศ การโอน หรือการนำเข้าด้วยตนเอง";
 "errors.insufficient_funds" = "เงินไม่เพียงพอ";
 "info.insufficient_network_fee_balance.title" = "%@ จำเป็น";
-"info.insufficient_network_fee_balance.description" = "ธุรกรรมนี้ต้องการให้ %@ ครอบคลุมค่าธรรมเนียมเครือข่ายที่จ่ายให้กับนักขุด %@ คน ไม่ใช่ Gem Wallet โปรดตรวจสอบให้แน่ใจว่าคุณมี %@ เพียงพอ";
+"info.insufficient_network_fee_balance.description" = "ธุรกรรมนี้ต้องการ ** %@ ** เพื่อครอบคลุมค่าธรรมเนียมเครือข่ายที่จ่ายให้กับ ** %@ ** นักขุด ไม่ใช่ Gem Wallet โปรดตรวจสอบให้แน่ใจว่าคุณมี %@ เพียงพอ";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "ยอดเงินคงเหลือไม่เพียงพอ";
 "info.insufficient_balance.description" = "คุณมี %@ ไม่เพียงพอสำหรับการทำธุรกรรมนี้ โปรดเติมเงิน รับ หรือแลกเปลี่ยนในกระเป๋าสตางค์ของคุณแล้วลองอีกครั้ง";

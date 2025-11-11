@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "可疑或垃圾代幣會被識別為潛在的詐騙或有害資產。它們可能因空投、轉帳或手動匯入而出現在您的錢包中。";
 "errors.insufficient_funds" = "資金不足";
 "info.insufficient_network_fee_balance.title" = "需要%@";
-"info.insufficient_network_fee_balance.description" = "此交易需要%@來支付給%@礦工的網路費用，而非Gem Wallet 。請確保您有足夠的%@ 。";
+"info.insufficient_network_fee_balance.description" = "此交易需要 ** %@ ** 來支付給 ** %@ ** 礦工的網路費用，而不是Gem Wallet 。請確保您有足夠的%@ 。";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "餘額不足";
 "info.insufficient_balance.description" = "您的餘額不足%@ ，無法完成此交易。請充值、接收或兌換您的錢包，然後重試。";

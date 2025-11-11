@@ -168,14 +168,14 @@ struct MainTabView: View {
                 Task {
                     await connectObservers()
                 }
-                print("App moved to active — restart websocket, refresh UI…")
+                debugLog("App moved to active — restart websocket, refresh UI…")
             case .inactive:
                 Task {
                     await disconnectObservers()
                 }
-                print("App is inactive — e.g. transitioning or showing interruption UI")
+                debugLog("App is inactive — e.g. transitioning or showing interruption UI")
             case .background:
-                print("App went to background — tear down connections, save state…")
+                debugLog("App went to background — tear down connections, save state…")
             @unknown default:
                 break
             }
@@ -265,7 +265,7 @@ extension MainTabView {
                 navigationState.selectedTab = selectTab
             }
         } catch {
-            NSLog("onReceiveNotification error \(error)")
+            debugLog("onReceiveNotification error \(error)")
         }
     }
 

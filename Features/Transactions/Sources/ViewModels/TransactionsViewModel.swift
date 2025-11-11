@@ -77,7 +77,7 @@ extension TransactionsViewModel {
         do {
             try await transactionsService.updateAll(walletId: walletId)
         } catch {
-            NSLog("fetch getTransactions error \(error)")
+            debugLog("fetch getTransactions error \(error)")
         }
     }
 }

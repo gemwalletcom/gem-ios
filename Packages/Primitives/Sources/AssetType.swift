@@ -22,4 +22,5 @@ public enum AssetType: String, Codable, CaseIterable, Equatable, Sendable {
 	case synth = "SYNTH"
 	case asa = "ASA"
 	case perpetual = "PERPETUAL"
+	case spot = "SPOT"
 }

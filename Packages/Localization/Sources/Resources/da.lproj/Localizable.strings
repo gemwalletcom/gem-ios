@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Mistænkelige eller spam-tokens identificeres som potentielle svindelnumre eller skadelige aktiver. De kan dukke op i din wallet på grund af airdrops, overførsler eller manuelle importer.";
 "errors.insufficient_funds" = "Utilstrækkelige midler";
 "info.insufficient_network_fee_balance.title" = "%@ påkrævet";
-"info.insufficient_network_fee_balance.description" = "Denne transaktion kræver, at %@ dækker netværksgebyret, der betales til %@ minere, ikke Gem Wallet. Sørg for, at du har nok %@.";
+"info.insufficient_network_fee_balance.description" = "Denne transaktion kræver ** %@ ** for at dække netværksgebyret betalt til ** %@ ** minere, ikke Gem Wallet. Sørg for, at du har nok %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Utilstrækkelig saldo";
 "info.insufficient_balance.description" = "Du har ikke nok %@ til at gennemføre denne transaktion. Tank op, modtag eller veksle i din wallet, og prøv igen.";

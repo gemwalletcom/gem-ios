@@ -76,7 +76,7 @@ extension ChainSettingsSceneViewModel {
             await fetchNodesStates()
         } catch {
             // TODO: - handle error
-            print("chain settings scene: fetch error \(error)")
+            debugLog("chain settings scene: fetch error \(error)")
         }
     }
 
@@ -91,7 +91,7 @@ extension ChainSettingsSceneViewModel {
             try nodeService.setNodeSelected(chain: chain, node: selectedNode.node)
         } catch {
             // TODO: - handle error
-            print("chain settings scene: on chain select error \(error)")
+            debugLog("chain settings scene: on chain select error \(error)")
         }
     }
 
@@ -115,7 +115,7 @@ extension ChainSettingsSceneViewModel {
             try delete()
         } catch {
             // TODO: - handle error
-            print("chain settings scene: on delete error \(error)")
+            debugLog("chain settings scene: on delete error \(error)")
         }
     }
 }

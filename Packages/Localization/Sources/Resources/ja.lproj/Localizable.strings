@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "疑わしいトークンやスパムトークンは、詐欺や有害な資産の可能性があると判断されます。エアドロップ、送金、または手動インポートによってウォレットに表示される場合があります。";
 "errors.insufficient_funds" = "資金不足";
 "info.insufficient_network_fee_balance.title" = "%@が必要です";
-"info.insufficient_network_fee_balance.description" = "このトランザクションでは%@ %@に支払うネットワーク手数料を賄うためにGem Walletではなく %@ が必要です。十分な%@があることを確認してください。";
+"info.insufficient_network_fee_balance.description" = "このトランザクションでは、マイナーへのネットワーク手数料として%@ Gem Walletではなく [ %@ s] が必要です。十分な%@があることを確認してください。";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "残高不足";
 "info.insufficient_balance.description" = "この取引を完了するには%@が足りません。ウォレットにチャージ、受け取り、または交換して、もう一度お試しください。";

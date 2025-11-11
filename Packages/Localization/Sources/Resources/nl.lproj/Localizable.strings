@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Verdachte of spamtokens worden herkend als potentiële oplichting of schadelijke activa. Ze kunnen in uw wallet verschijnen via airdrops, overschrijvingen of handmatige imports.";
 "errors.insufficient_funds" = "Onvoldoende fondsen";
 "info.insufficient_network_fee_balance.title" = "%@ vereist";
-"info.insufficient_network_fee_balance.description" = "Voor deze transactie is %@ nodig om de netwerkkosten te dekken die aan %@ miners worden betaald, niet Gem Wallet. Zorg ervoor dat u voldoende %@ heeft.";
+"info.insufficient_network_fee_balance.description" = "Voor deze transactie is ** %@ ** nodig om de netwerkkosten te dekken die aan ** %@ ** miners worden betaald, niet aan Gem Wallet. Zorg ervoor dat u voldoende %@ hebt.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Onvoldoende saldo";
 "info.insufficient_balance.description" = "Je hebt niet genoeg %@ om deze transactie te voltooien. Vul je wallet aan, ontvang of wissel in en probeer het opnieuw.";

@@ -56,7 +56,7 @@ extension Options {
                     if let error = error?.takeUnretainedValue() {
                         return (attributes, error.error)
                     }
-                    
+
                     return (attributes, Status.unexpectedError)
                 }
                 attributes[AttributeAccessControl] = accessControl

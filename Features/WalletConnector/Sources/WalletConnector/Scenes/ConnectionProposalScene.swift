@@ -57,7 +57,7 @@ extension ConnectionProposalScene {
             try model.accept()
             dismiss()
         } catch {
-            NSLog("accept proposal error \(error)")
+            debugLog("accept proposal error \(error)")
         }
     }
 }
