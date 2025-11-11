@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Tokens suspeitos ou de spam são identificados como potenciais golpes ou ativos nocivos. Eles podem aparecer na sua carteira devido a airdrops, transferências ou importações manuais.";
 "errors.insufficient_funds" = "Fundos insuficientes";
 "info.insufficient_network_fee_balance.title" = "%@ necessário";
-"info.insufficient_network_fee_balance.description" = "Esta transação requer %@ para cobrir a taxa de rede paga a %@ mineradores, não Gem Wallet. Certifique-se de ter %@ suficientes.";
+"info.insufficient_network_fee_balance.description" = "Esta transação requer ** %@ ** para cobrir a taxa de rede paga aos ** %@ ** mineradores, não Gem Wallet. Certifique-se de ter %@ suficiente .";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Saldo insuficiente";
 "info.insufficient_balance.description" = "Você não tem %@ suficientes para concluir esta transação. Recarregue, receba ou troque na sua carteira e tente novamente.";

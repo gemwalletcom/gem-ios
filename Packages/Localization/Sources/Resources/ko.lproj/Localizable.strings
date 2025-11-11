@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "의심스럽거나 스팸 토큰은 잠재적 사기 또는 유해 자산으로 식별됩니다. 이러한 토큰은 에어드랍, 이체 또는 수동 가져오기를 통해 지갑에 나타날 수 있습니다.";
 "errors.insufficient_funds" = "자금이 부족합니다";
 "info.insufficient_network_fee_balance.title" = "%@ 이 필요합니다";
-"info.insufficient_network_fee_balance.description" = "이 거래에는 %@ (가) %@ 채굴자에게 지불한 네트워크 수수료를 충당해야 하며, Gem Wallet 필요하지 않습니다. 충분한 %@ 이(가) 있는지 확인하세요.";
+"info.insufficient_network_fee_balance.description" = "이 거래에는 ** %@ ** 채굴자에게 지불된 네트워크 수수료를 충당하기 위해 ** %@ **가 필요하며, Gem Wallet 가 필요하지 않습니다. 충분한 %@ 가 있는지 확인하세요.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "잔액이 부족합니다";
 "info.insufficient_balance.description" = "이 거래를 완료하기에 %@ 잔액이 부족합니다. 지갑에 충전, 수령 또는 스왑한 후 다시 시도해 주세요.";

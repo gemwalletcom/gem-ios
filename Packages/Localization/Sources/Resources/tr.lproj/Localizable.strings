@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Şüpheli veya spam token'lar potansiyel dolandırıcılık veya zararlı varlıklar olarak tanımlanır. Airdrop'lar, transferler veya manuel ithalatlar nedeniyle cüzdanınızda görünebilirler.";
 "errors.insufficient_funds" = "Yetersiz fon";
 "info.insufficient_network_fee_balance.title" = "%@ gerekli";
-"info.insufficient_network_fee_balance.description" = "Bu işlem %@ madenciye ödenen ağ ücretini karşılamak için %@ gerektirir, Gem Wallet değil. Yeterli %@ olduğundan emin olun.";
+"info.insufficient_network_fee_balance.description" = "Bu işlem, ** %@ ** madencilere ödenen ağ ücretini karşılamak için ** %@ ** gerektirir, Gem Wallet değil. Yeterli %@ kaynağınız olduğundan emin olun.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Yetersiz Bakiye";
 "info.insufficient_balance.description" = "Bu işlemi tamamlamak için yeterli %@ iniz yok. Lütfen cüzdanınıza para yükleyin, alın veya takas edin ve tekrar deneyin.";

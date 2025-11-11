@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "সন্দেহজনক বা স্প্যাম টোকেনগুলিকে সম্ভাব্য স্ক্যাম বা ক্ষতিকারক সম্পদ হিসেবে চিহ্নিত করা হয়। এয়ারড্রপ, ট্রান্সফার বা ম্যানুয়াল আমদানির কারণে এগুলি আপনার ওয়ালেটে দেখা দিতে পারে।";
 "errors.insufficient_funds" = "অপর্যাপ্ত তহবিল";
 "info.insufficient_network_fee_balance.title" = "%@ প্রয়োজন";
-"info.insufficient_network_fee_balance.description" = "এই লেনদেনের জন্য %@ মাইনারদের প্রদত্ত নেটওয়ার্ক ফি %@ কে বহন করতে হবে, Gem Wallet কে নয়। নিশ্চিত করুন যে আপনার কাছে পর্যাপ্ত %@ আছে।";
+"info.insufficient_network_fee_balance.description" = "এই লেনদেনের জন্য ** %@ ** মাইনারদের প্রদত্ত নেটওয়ার্ক ফি প্রদানের জন্য ** %@ ** প্রয়োজন, Gem Wallet নয়। নিশ্চিত করুন যে আপনার কাছে পর্যাপ্ত %@ আছে।";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "অপর্যাপ্ত ব্যালেন্স";
 "info.insufficient_balance.description" = "এই লেনদেনটি সম্পন্ন করার জন্য আপনার কাছে পর্যাপ্ত %@ নেই। অনুগ্রহ করে আপনার ওয়ালেটে টাকা টপ আপ করুন, গ্রহণ করুন বা সোয়াপ করুন এবং আবার চেষ্টা করুন।";

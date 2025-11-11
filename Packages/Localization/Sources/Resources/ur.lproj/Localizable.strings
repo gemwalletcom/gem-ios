@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "مشکوک یا سپیم ٹوکنز کی شناخت ممکنہ گھوٹالوں یا نقصان دہ اثاثوں کے طور پر کی جاتی ہے۔ وہ ایئر ڈراپس، ٹرانسفرز، یا دستی درآمدات کی وجہ سے آپ کے بٹوے میں ظاہر ہو سکتے ہیں۔";
 "errors.insufficient_funds" = "ناکافی فنڈز";
 "info.insufficient_network_fee_balance.title" = "%@ درکار ہے۔";
-"info.insufficient_network_fee_balance.description" = "اس لین دین کے لیے %@ %@ کان کنوں کو ادا کی جانے والی نیٹ ورک فیس کو پورا کرنے کی ضرورت ہے، نہ کہ Gem Wallet ۔ یقینی بنائیں کہ آپ کے پاس کافی ہے %@ ۔";
+"info.insufficient_network_fee_balance.description" = "اس لین دین کے لیے ** %@ ** نیٹ ورک فیس کو پورا کرنے کے لیے ** %@ ** کان کنوں کو ادا کرنے کی ضرورت ہے، نہ کہ Gem Wallet ۔ یقینی بنائیں کہ آپ کے پاس کافی ہے %@ ۔";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "ناکافی بیلنس";
 "info.insufficient_balance.description" = "آپ کے پاس اس لین دین کو مکمل کرنے کے لیے کافی %@ نہیں ہے۔ براہ کرم اپنے بٹوے میں ٹاپ اپ کریں، وصول کریں یا تبدیل کریں اور دوبارہ کوشش کریں۔";
