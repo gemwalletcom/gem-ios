@@ -16,7 +16,8 @@ public extension WalletSceneViewModel {
             walletService: .mock(),
             observablePreferences: .mock(),
             wallet: .mock(),
-            isPresentingSelectedAssetInput: .constant(.none)
+            isPresentingSelectedAssetInput: .constant(.none),
+            isPresentingConfirmTransfer: .constant(.none)
         )
     }
 }

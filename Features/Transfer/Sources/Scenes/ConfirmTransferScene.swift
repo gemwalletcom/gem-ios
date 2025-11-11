@@ -34,7 +34,7 @@ public struct ConfirmTransferScene: View {
             interval: nil,
             action: model.onChangeFeePriority
         )
-        .taskOnce { model.fetch() }
+        .taskOnce(model.onAppear)
         .navigationTitle(model.title)
         // TODO: - move to navigation view
         .navigationBarTitleDisplayMode(.inline)

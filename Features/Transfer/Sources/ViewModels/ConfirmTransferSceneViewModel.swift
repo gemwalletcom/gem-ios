@@ -50,23 +50,28 @@ public final class ConfirmTransferSceneViewModel {
 
     public init(
         wallet: Wallet,
-        data: TransferData,
+        presentation: ConfirmTransferPresentation,
         confirmService: ConfirmService,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
         onComplete: VoidAction
     ) {
         self.wallet = wallet
-        self.data = data
+        self.data = presentation.transferData
         self.confirmService = confirmService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.onComplete = onComplete
 
         self.feeModel = NetworkFeeSceneViewModel(
-            chain: data.chain,
-            priority: confirmService.defaultPriority(for: data.type)
+            chain: presentation.transferData.chain,
+            priority: confirmService.defaultPriority(for: presentation.transferData.type)
         )
 
-        self.metadata = try? confirmService.getMetadata(wallet: wallet, data: data)
+        self.metadata = try? confirmService.getMetadata(wallet: wallet, data: presentation.transferData)
+
+        switch presentation {
+        case .confirm: break
+        case .retry(_, let error): self.state = .error(error)
+        }
     }
 
     var title: String { dataModel.title }
@@ -199,6 +204,13 @@ extension ConfirmTransferSceneViewModel {
         await fetch()
     }
 
+    func onAppear() {
+        switch state {
+        case .error: break
+        case .loading, .noData, .data: fetch()
+        }
+    }
+
     func fetch() {
         Task {
             await fetch()
@@ -240,14 +252,24 @@ extension ConfirmTransferSceneViewModel {
         transactionData: TransactionData,
         amount: TransferAmount
     ) {
-        Task {
-            await processConfirmation(
-                transactionData: transactionData,
-                amount: amount
-            )
-            if case .data(_) = confirmingState {
+        let input = TransferConfirmationInput(
+            data: state.value!.data,
+            wallet: wallet,
+            transactionData: transactionData,
+            amount: amount,
+            delegate: confirmTransferDelegate
+        )
+
+        switch data.type {
+        case .perpetual, .swap:
+            if #available(iOS 26.0, *) {
+                confirmService.executeTransferAsync(input: input)
                 onComplete?()
+            } else {
+                processConfirmation(transactionData: transactionData, amount: amount)
             }
+        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .stake, .account, .generic:
+            processConfirmation(transactionData: transactionData, amount: amount)
         }
     }
 
@@ -288,21 +310,26 @@ extension ConfirmTransferSceneViewModel {
         }
     }
 
-    private func processConfirmation(transactionData: TransactionData, amount: TransferAmount) async {
-        confirmingState = .loading
-        do {
-            let input = TransferConfirmationInput(
-                data: state.value!.data,
-                wallet: wallet,
-                transactionData: transactionData,
-                amount: amount,
-                delegate: confirmTransferDelegate
-            )
-            try await confirmService.executeTransfer(input: input)
-            confirmingState = .data(true)
-        } catch {
-            confirmingState = .error(error)
-            NSLog("confirm transaction error: \(error)")
+    private func processConfirmation(transactionData: TransactionData, amount: TransferAmount) {
+        Task {
+            confirmingState = .loading
+            do {
+                let input = TransferConfirmationInput(
+                    data: state.value!.data,
+                    wallet: wallet,
+                    transactionData: transactionData,
+                    amount: amount,
+                    delegate: confirmTransferDelegate
+                )
+                try await confirmService.executeTransfer(input: input)
+                confirmingState = .data(true)
+                if case .data(_) = confirmingState {
+                    onComplete?()
+                }
+            } catch {
+                confirmingState = .error(error)
+                NSLog("confirm transaction error: \(error)")
+            }
         }
     }
 

@@ -24,6 +24,7 @@ public struct ConfirmServiceFactory {
         priceService: PriceService,
         transactionService: TransactionService,
         addressNameService: AddressNameService,
+        transferStateService: TransferStateService,
         chain: Chain
     ) -> ConfirmService {
         let chainService = ChainServiceFactory(nodeProvider: nodeService).service(for: chain)
@@ -42,7 +43,8 @@ public struct ConfirmServiceFactory {
                 signer: TransactionSigner(keystore: keystore),
                 chainService: chainService,
                 walletsService: walletsService,
-                transactionService: transactionService
+                transactionService: transactionService,
+                transferStateService: transferStateService
             ),
             keystore: keystore,
             chainService: chainService,

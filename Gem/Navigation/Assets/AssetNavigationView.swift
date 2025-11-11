@@ -43,10 +43,10 @@ struct AssetNavigationView: View {
             switch $0 {
             case let .info(type):
                 InfoSheetScene(type: type)
-            case let .transfer(data):
+            case let .transfer(presentation):
                 ConfirmTransferNavigationStack(
                     wallet: model.walletModel.wallet,
-                    transferData: data,
+                    presentation: presentation,
                     onComplete: model.onTransferComplete
                 )
             case .share:

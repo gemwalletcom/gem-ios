@@ -38,11 +38,11 @@ public final class WalletSceneViewModel: Sendable {
 
     // TODO: - separate presenting sheet state logic to separate type
     public var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
+    public var isPresentingConfirmTransfer: Binding<ConfirmTransferPresentation?>
     public var isPresentingWallets = false
     public var isPresentingSelectAssetType: SelectAssetType?
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingUrl: URL? = nil
-    public var isPresentingTransferData: TransferData?
     public var isPresentingPerpetualRecipientData: PerpetualRecipientData?
     public var isPresentingSetPriceAlert: AssetId?
     public var isPresentingToastMessage: ToastMessage?
@@ -56,7 +56,8 @@ public final class WalletSceneViewModel: Sendable {
         walletService: WalletService,
         observablePreferences: ObservablePreferences,
         wallet: Wallet,
-        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
+        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>,
+        isPresentingConfirmTransfer: Binding<ConfirmTransferPresentation?>
     ) {
         self.wallet = wallet
         self.walletsService = walletsService
@@ -80,6 +81,7 @@ public final class WalletSceneViewModel: Sendable {
             ]
         )
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
+        self.isPresentingConfirmTransfer = isPresentingConfirmTransfer
     }
 
     public var currentWallet: Wallet? { walletService.currentWallet }
@@ -231,7 +233,7 @@ extension WalletSceneViewModel {
     }
     
     public func onTransferComplete() {
-        isPresentingTransferData = nil
+        isPresentingConfirmTransfer.wrappedValue = nil
     }
     
     public func onSetPriceAlertComplete(message: String) {

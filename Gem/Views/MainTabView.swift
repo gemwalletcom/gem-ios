@@ -13,6 +13,7 @@ import WalletTab
 import Transactions
 import Swap
 import Assets
+import Transfer
 
 struct MainTabView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -28,6 +29,8 @@ struct MainTabView: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.perpetualObserverService) private var perpetualObserverService
+    @Environment(\.transferStatePresenter) private var transferStatePresenter
+    @Environment(\.transferStateService) private var transferStateService
 
     private let model: MainTabViewModel
 
@@ -43,6 +46,7 @@ struct MainTabView: View {
 
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
     @State private var isPresentingSupport = false
+    @State private var isPresentingConfirmTransfer: ConfirmTransferPresentation?
 
     init(model: MainTabViewModel) {
         self.model = model
@@ -58,7 +62,8 @@ struct MainTabView: View {
                     walletService: walletService,
                     observablePreferences: observablePreferences,
                     wallet: model.wallet,
-                    isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
+                    isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput,
+                    isPresentingConfirmTransfer: $isPresentingConfirmTransfer
                 )
             )
             .tabItem {
@@ -114,11 +119,36 @@ struct MainTabView: View {
             }
             .tag(TabItem.settings)
         }
+        .tabViewBottomAccessoryIfAvailable {
+            if let execution = transferStatePresenter.executions.displayExecution {
+                TransferExecutionView(
+                    model: TransferExecutionViewModel(
+                        transferStateService: transferStateService,
+                        execution: execution,
+                        isPresentingConfirmTransfer: $isPresentingConfirmTransfer
+                    )
+                )
+            }
+        }
+        .onAppear {
+            Task {
+                await transferStateService.setCurrentWallet(id: model.walletId)
+            }
+        }
         .sheet(item: $isPresentingSelectedAssetInput) { input in
             SelectedAssetNavigationStack(
                 input: input,
                 wallet: model.wallet,
                 onComplete: { onComplete(type: input.type) }
+            )
+        }
+        .sheet(item: $isPresentingConfirmTransfer) { presentation in
+            ConfirmTransferNavigationStack(
+                wallet: model.wallet,
+                presentation: presentation,
+                onComplete: {
+                    isPresentingConfirmTransfer = nil
+                }
             )
         }
         .onChange(of: model.walletId, onWalletIdChange)
@@ -242,8 +272,9 @@ extension MainTabView {
     private func onWalletIdChange() {
         navigationState.clearAll()
         navigationState.selectedTab = .wallet
-        
+
         Task {
+            await transferStateService.setCurrentWallet(id: model.walletId)
             try await priceObserverService.setupAssets()
             await perpetualObserverService.connect(for: model.wallet)
         }

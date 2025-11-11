@@ -38,7 +38,8 @@ public struct ViewModelFactory: Sendable {
     let transactionService: TransactionService
     let chainServiceFactory: ChainServiceFactory
     let addressNameService: AddressNameService
-    
+    let transferStateService: TransferStateService
+
     public init(
         keystore: any Keystore,
         nodeService: NodeService,
@@ -52,7 +53,8 @@ public struct ViewModelFactory: Sendable {
         priceService: PriceService,
         transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
-        addressNameService: AddressNameService
+        addressNameService: AddressNameService,
+        transferStateService: TransferStateService
     ) {
         self.keystore = keystore
         self.nodeService = nodeService
@@ -67,12 +69,13 @@ public struct ViewModelFactory: Sendable {
         self.transactionService = transactionService
         self.chainServiceFactory = chainServiceFactory
         self.addressNameService = addressNameService
+        self.transferStateService = transferStateService
     }
     
     @MainActor
     public func confirmTransferScene(
         wallet: Wallet,
-        data: TransferData,
+        presentation: ConfirmTransferPresentation,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = nil,
         onComplete: VoidAction
     ) -> ConfirmTransferSceneViewModel {
@@ -85,12 +88,13 @@ public struct ViewModelFactory: Sendable {
             priceService: priceService,
             transactionService: transactionService,
             addressNameService: addressNameService,
-            chain: data.chain
+            transferStateService: transferStateService,
+            chain: presentation.transferData.chain
         )
-        
+
         return ConfirmTransferSceneViewModel(
             wallet: wallet,
-            data: data,
+            presentation: presentation,
             confirmService: confirmService,
             confirmTransferDelegate: confirmTransferDelegate,
             onComplete: onComplete

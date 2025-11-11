@@ -8,23 +8,23 @@ import Perpetuals
 
 public struct PerpetualNavigationView: View {
     @State private var model: PerpetualSceneViewModel
-    @Binding var isPresentingTransferData: TransferData?
+    @Binding var isPresentingConfirmTransfer: ConfirmTransferPresentation?
     @Binding var isPresentingPerpetualRecipientData: PerpetualRecipientData?
-    
+
     public init(
         perpetualData: PerpetualData,
         wallet: Wallet,
         perpetualService: any PerpetualServiceable,
-        isPresentingTransferData: Binding<TransferData?>,
+        isPresentingConfirmTransfer: Binding<ConfirmTransferPresentation?>,
         isPresentingPerpetualRecipientData: Binding<PerpetualRecipientData?>
     ) {
-        _isPresentingTransferData = isPresentingTransferData
+        _isPresentingConfirmTransfer = isPresentingConfirmTransfer
         _isPresentingPerpetualRecipientData = isPresentingPerpetualRecipientData
         _model = State(initialValue: PerpetualSceneViewModel(
             wallet: wallet,
             perpetualData: perpetualData,
             perpetualService: perpetualService,
-            onTransferData: { isPresentingTransferData.wrappedValue = $0 },
+            onTransferData: { isPresentingConfirmTransfer.wrappedValue = .confirm($0) },
             onPerpetualRecipientData: { isPresentingPerpetualRecipientData.wrappedValue = $0 }
         ))
     }
@@ -44,7 +44,7 @@ public struct PerpetualNavigationView: View {
             .observeQuery(request: $model.transactionsRequest, value: $model.transactions)
             .observeQuery(request: $model.perpetualTotalValueRequest, value: $model.perpetualTotalValue)
             // we should ideally observer is isCompleted, but don't have access from here
-            .onChange(of: isPresentingTransferData) { _, newValue in
+            .onChange(of: isPresentingConfirmTransfer) { _, newValue in
                 if newValue == .none {
                     Task { await model.fetch() }
                 }
