@@ -21,7 +21,7 @@ public struct TransferExecutionItemViewModel {
         case .executing:
             "Sending..."
         case .success:
-            "\(TransferDataViewModel(data: execution.transferData).title) \(Localized.Transaction.Status.confirmed)"
+            "\(TransferDataViewModel(data: execution.transferData).title) \(Localized.Transaction.Title.sent)"
         case .error:
             "\(TransferDataViewModel(data: execution.transferData).title) \(Localized.Transaction.Status.failed)"
         }

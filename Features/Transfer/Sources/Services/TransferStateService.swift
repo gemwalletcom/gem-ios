@@ -8,11 +8,10 @@ import Style
 public actor TransferStateService {
     static let dismissDelay: Duration = .seconds(2)
 
-    private var executions: [TransferExecution] = [] {
-        didSet { updatePresenter() }
-    }
-    private var currentWalletId: WalletId?
     private let presenter: TransferStatePresenter
+
+    private var executions: [TransferExecution] = []
+    private var currentWalletId: WalletId?
 
     public init(presenter: TransferStatePresenter) {
         self.presenter = presenter
@@ -24,13 +23,13 @@ public actor TransferStateService {
         transferData: TransferData,
         wallet: Wallet,
         execute: @escaping @Sendable () async throws -> Void
-    ) {
+    ) async {
         let execution = TransferExecution(
             wallet: wallet,
             state: .executing,
             transferData: transferData
         )
-        update(execution: execution)
+        await update(execution: execution)
 
         Task {
             let state: ExecutionState = await {
@@ -41,38 +40,41 @@ public actor TransferStateService {
                     return .error(error)
                 }
             }()
-            update(execution: execution.update(state: state))
+            await update(execution: execution.update(state: state))
         }
     }
 
-    public func remove(execution: TransferExecution) {
+    public func remove(execution: TransferExecution) async {
         executions.removeAll { $0.id == execution.id }
+        await updatePresenter()
     }
 
-    public func setCurrentWallet(id: WalletId) {
+    public func setCurrentWallet(id: WalletId) async {
         currentWalletId = id
-        updatePresenter()
+        await updatePresenter()
     }
 
     // MARK: - Private methods
 
-    private func updatePresenter() {
+    private func updatePresenter() async {
         let currentExecutions = currentWalletId.map { walletId in
             executions.filter { $0.wallet.walletId == walletId }
         } ?? []
 
-        Task { @MainActor in
+        await MainActor.run {
             presenter.executions = currentExecutions
         }
     }
 
-    private func update(execution: TransferExecution) {
+    private func update(execution: TransferExecution) async {
         guard let index = executions.firstIndex(where: { $0.id == execution.id }) else {
             executions.append(execution)
+            await updatePresenter()
             return
         }
 
         executions[index] = execution
+        await updatePresenter()
 
         switch execution.state {
         case .success: scheduleRemoval(execution: execution)
