@@ -9,12 +9,14 @@ struct LeverageSliderView: View {
 
     @Binding var selectedLeverage: UInt8
 
+    private let impactGenerator = UIImpactFeedbackGenerator(style: .light)
+
     private var sliderValue: Binding<Double> {
         Binding(
             get: { Double(selectedLeverage) },
             set: { newValue in
                 if UInt8(newValue) != selectedLeverage {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    impactGenerator.impactOccurred()
                     selectedLeverage = UInt8(newValue)
                 }
             }
