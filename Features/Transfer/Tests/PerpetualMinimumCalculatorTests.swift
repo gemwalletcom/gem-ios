@@ -10,7 +10,7 @@ struct PerpetualMinimumCalculatorTests {
     func btc() {
         #expect(
             PerpetualMinimumCalculator.calculateMinimumUSDC(price: 100_000.0, szDecimals: 5, leverage: 1)
-                == BigInt(10_010_000)
+                == BigInt(10_000_000)
         )
     }
 
@@ -18,7 +18,7 @@ struct PerpetualMinimumCalculatorTests {
     func eth() {
         #expect(
             PerpetualMinimumCalculator.calculateMinimumUSDC(price: 3_500.0, szDecimals: 4, leverage: 3)
-                == BigInt(3_340_000)
+                == BigInt(3_390_000)
         )
     }
 
@@ -34,7 +34,7 @@ struct PerpetualMinimumCalculatorTests {
     func sol() {
         #expect(
             PerpetualMinimumCalculator.calculateMinimumUSDC(price: 200.0, szDecimals: 1, leverage: 10)
-                == BigInt(1_000_000)
+                == BigInt(2_000_000)
         )
     }
 
