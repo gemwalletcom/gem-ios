@@ -73,9 +73,7 @@ public final class AmountSceneViewModel {
         if case .perpetual(let data) = type {
             switch data.positionAction {
             case .open:
-                let maxLeverage = data.positionAction.transferData.leverage
-                let leverage = Self.defaultLeverage > maxLeverage ? maxLeverage : Self.defaultLeverage
-                self.selectedLeverage = leverage
+                self.selectedLeverage = min(Self.defaultLeverage, data.positionAction.transferData.leverage)
             case .increase, .reduce:
                 self.selectedLeverage = data.positionAction.transferData.leverage
             }
@@ -264,24 +262,15 @@ public final class AmountSceneViewModel {
     var sizeTitle: String { Localized.Perpetual.size }
 
     var perpetualPositionSize: String {
-        guard case .perpetual(let data) = type,
+        guard case .perpetual = type,
               amountInputModel.isValid,
               let amount = try? value(for: amountTransferValue),
               amount > .zero else {
             return "-"
         }
 
-        let assetDecimals = data.positionAction.transferData.asset.decimals.asInt
-        let price = BigInt(data.positionAction.transferData.price) * BigInt(10).power(asset.decimals.asInt)
-        let size = (amount * BigInt(selectedLeverage) * BigInt(10).power(assetDecimals)) / price
-
-        let sizeString = ValueFormatter(style: .medium).string(
-            size,
-            decimals: assetDecimals,
-            currency: data.positionAction.transferData.asset.symbol
-        )
         let sizeValue = (try? formatter.double(from: amount * BigInt(selectedLeverage), decimals: asset.decimals.asInt)) ?? .zero
-        return "\(sizeString) / \(currencyFormatter.string(sizeValue))"
+        return currencyFormatter.string(sizeValue)
     }
 
     var showPerpetualDetails: Bool {
