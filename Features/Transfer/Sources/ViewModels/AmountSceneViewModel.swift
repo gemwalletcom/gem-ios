@@ -267,20 +267,21 @@ public final class AmountSceneViewModel {
         guard case .perpetual(let data) = type,
               amountInputModel.isValid,
               let amount = try? value(for: amountTransferValue),
-              amount > .zero,
-              let usdAmount = try? formatter.double(from: amount, decimals: asset.decimals.asInt) else {
+              amount > .zero else {
             return "-"
         }
 
-        let size = (usdAmount * Double(selectedLeverage)) / data.positionAction.transferData.price
+        let assetDecimals = data.positionAction.transferData.asset.decimals.asInt
+        let price = BigInt(data.positionAction.transferData.price) * BigInt(10).power(asset.decimals.asInt)
+        let size = (amount * BigInt(selectedLeverage) * BigInt(10).power(assetDecimals)) / price
+
         let sizeString = ValueFormatter(style: .medium).string(
-            BigInt(size * pow(10.0, Double(data.positionAction.transferData.asset.decimals.asInt))),
-            decimals: data.positionAction.transferData.asset.decimals.asInt,
+            size,
+            decimals: assetDecimals,
             currency: data.positionAction.transferData.asset.symbol
         )
-        let sizeValue = size * data.positionAction.transferData.price
-        let priceString = currencyFormatter.string(sizeValue)
-        return "\(sizeString) / \(priceString)"
+        let sizeValue = (try? formatter.double(from: amount * BigInt(selectedLeverage), decimals: asset.decimals.asInt)) ?? .zero
+        return "\(sizeString) / \(currencyFormatter.string(sizeValue))"
     }
 
     var showPerpetualDetails: Bool {
