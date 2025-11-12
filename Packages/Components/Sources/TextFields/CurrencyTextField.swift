@@ -53,6 +53,7 @@ public struct CurrencyTextField: View {
                 currencySymbolView
             }
         }
+        .frame(height: 54)
     }
 
     private var currencySymbolView: some View {
