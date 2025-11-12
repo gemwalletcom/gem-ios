@@ -15,6 +15,6 @@ public enum PerpetualMinimumCalculator {
         let roundedSize = ceil((10.0 / price) * sizeMultiplier) / sizeMultiplier
         let minUSDC = ceil((roundedSize * price / Double(leverage)) * 100) / 100
 
-        return BigInt(Int(minUSDC * 1_000_000))
+        return BigInt(minUSDC * 1_000_000)
     }
 }
