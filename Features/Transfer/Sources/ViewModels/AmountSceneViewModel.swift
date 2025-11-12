@@ -263,13 +263,13 @@ public final class AmountSceneViewModel {
 
     var sizeTitle: String { Localized.Perpetual.size }
 
-    var perpetualPositionSize: String? {
+    var perpetualPositionSize: String {
         guard case .perpetual(let data) = type,
               amountInputModel.isValid,
               let amount = try? value(for: amountTransferValue),
               amount > .zero,
               let usdAmount = try? formatter.double(from: amount, decimals: asset.decimals.asInt) else {
-            return nil
+            return "-"
         }
 
         let size = (usdAmount * Double(selectedLeverage)) / data.positionAction.transferData.price
@@ -281,6 +281,13 @@ public final class AmountSceneViewModel {
         let sizeValue = size * data.positionAction.transferData.price
         let priceString = currencyFormatter.string(sizeValue)
         return "\(sizeString) / \(priceString)"
+    }
+
+    var showPerpetualDetails: Bool {
+        if case .perpetual = type {
+            return true
+        }
+        return false
     }
 }
 

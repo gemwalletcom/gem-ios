@@ -102,9 +102,9 @@ struct AmountScene: View {
                     .cleanListRow()
                 }
 
-                if let positionSize = model.perpetualPositionSize {
+                if model.showPerpetualDetails {
                     Section {
-                        ListItemView(title: model.sizeTitle, subtitle: positionSize)
+                        ListItemView(title: model.sizeTitle, subtitle: model.perpetualPositionSize)
                     }
                 }
             }
