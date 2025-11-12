@@ -9,8 +9,8 @@ public enum ExecutionState: Sendable {
 
     public var priority: Int {
         switch self {
-        case .error: 3
-        case .executing: 2
+        case .executing: 3
+        case .error: 2
         case .success: 1
         }
     }

@@ -119,7 +119,7 @@ struct MainTabView: View {
             }
             .tag(TabItem.settings)
         }
-        .tabViewBottomAccessoryIfAvailable {
+        .tabViewBottomAccessoryIfAvailable(isVisible: transferStatePresenter.executions.isNotEmpty) {
             if let execution = transferStatePresenter.executions.displayExecution {
                 TransferExecutionView(
                     model: TransferExecutionViewModel(
