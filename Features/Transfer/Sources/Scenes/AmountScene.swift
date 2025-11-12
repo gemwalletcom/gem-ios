@@ -92,18 +92,14 @@ struct AmountScene: View {
                     .cleanListRow()
                 }
             case .perpetual:
-                if model.isPerpetualLeverageEnabled {
-                    Section {
-                        LeverageSliderView(
-                            maxLeverage: model.maxLeverage,
-                            selectedLeverage: $model.selectedLeverage
+                Section {
+                    if model.isPerpetualLeverageEnabled {
+                        NavigationCustomLink(
+                            with: ListItemView(title: model.leverageTitle, subtitle: model.leverageText),
+                            action: model.onSelectLeverage
                         )
                     }
-                    .cleanListRow()
-                }
-
-                if model.showPerpetualDetails {
-                    Section {
+                    if model.showPerpetualDetails {
                         ListItemView(title: model.sizeTitle, subtitle: model.perpetualPositionSize)
                     }
                 }

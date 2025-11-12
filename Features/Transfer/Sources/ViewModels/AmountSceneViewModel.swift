@@ -73,7 +73,7 @@ public final class AmountSceneViewModel {
         if case .perpetual(let data) = type {
             switch data.positionAction {
             case .open:
-                self.selectedLeverage = min(Self.defaultLeverage, data.positionAction.transferData.leverage)
+                self.selectedLeverage = Self.defaultLeverage
             case .increase, .reduce:
                 self.selectedLeverage = data.positionAction.transferData.leverage
             }
@@ -259,13 +259,16 @@ public final class AmountSceneViewModel {
         }
     }
 
+    var leverageOptions: [UInt8] { [1, 2, 3, 5, 10, 20, 25, 30, 40, 50].filter { $0 <= maxLeverage } }
+    var leverageTitle: String { Localized.Perpetual.leverage }
+    var leverageText: String { "\(selectedLeverage)x" }
+
     var sizeTitle: String { Localized.Perpetual.size }
 
     var perpetualPositionSize: String {
-        guard case .perpetual = type,
-              amountInputModel.isValid,
-              let amount = try? value(for: amountTransferValue),
-              amount > .zero else {
+        guard case .perpetual = type, amountInputModel.isValid,
+              let amount = try? value(for: amountTransferValue), amount > .zero
+        else {
             return "-"
         }
 
@@ -311,6 +314,10 @@ extension AmountSceneViewModel {
 
     func onSelectCurrentValidator() {
         delegation = currentValidator
+    }
+
+    func onSelectLeverage() {
+        isPresentingSheet = .leveragePicker
     }
 
     func onSelectValidator(_ validator: DelegationValidator) {

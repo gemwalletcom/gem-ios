@@ -46,6 +46,23 @@ public struct AmountNavigationView: View {
                         )
                     }
                 }
+            case .leveragePicker:
+                NavigationStack {
+                    LeveragePickerView(
+                        leverageOptions: model.leverageOptions,
+                        selectedLeverage: $model.selectedLeverage
+                    )
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationTitle(model.leverageTitle)
+                    .toolbar {
+                        ToolbarDismissItem(
+                            title: .done,
+                            placement: .topBarLeading
+                        )
+                    }
+                }
+                .presentationDetents([.height(300)])
+                .presentationDragIndicator(.visible)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
