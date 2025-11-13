@@ -92,8 +92,17 @@ struct AmountScene: View {
                     .cleanListRow()
                 }
             case .perpetual:
-                // PositionView()
-                EmptyView()
+                Section {
+                    if model.isPerpetualLeverageEnabled {
+                        NavigationCustomLink(
+                            with: ListItemView(title: model.leverageTitle, subtitle: model.leverageText),
+                            action: model.onSelectLeverage
+                        )
+                    }
+                    if model.showPerpetualDetails {
+                        ListItemView(title: model.sizeTitle, subtitle: model.perpetualPositionSize)
+                    }
+                }
             }
         }
         .safeAreaView {

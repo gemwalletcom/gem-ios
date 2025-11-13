@@ -17,7 +17,7 @@ extension GemPerpetual {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            leverage: Array(leverage)
+            maxLeverage: Array(maxLeverage)
         )
     }
 }

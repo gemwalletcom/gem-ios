@@ -324,6 +324,12 @@ public struct Migrations {
             }
         }
 
+        migrator.registerMigration("Rename leverage to maxLeverage in \(PerpetualRecord.databaseTableName)") { db in
+            try? db.alter(table: PerpetualRecord.databaseTableName) {
+                $0.rename(column: "leverage", to: "maxLeverage")
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

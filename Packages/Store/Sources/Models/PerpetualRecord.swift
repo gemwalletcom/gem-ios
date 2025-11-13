@@ -18,7 +18,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         static let openInterest = Column("openInterest")
         static let volume24h = Column("volume24h")
         static let funding = Column("funding")
-        static let leverage = Column("leverage")
+        static let maxLeverage = Column("maxLeverage")
         static let isPinned = Column("isPinned")
     }
     
@@ -32,7 +32,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
     public var openInterest: Double
     public var volume24h: Double
     public var funding: Double
-    public var leverage: Data
+    public var maxLeverage: Data
     public var isPinned: Bool
     
     public init(
@@ -46,7 +46,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         openInterest: Double,
         volume24h: Double,
         funding: Double,
-        leverage: Data,
+        maxLeverage: Data,
         isPinned: Bool = false
     ) {
         self.id = id
@@ -59,7 +59,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         self.openInterest = openInterest
         self.volume24h = volume24h
         self.funding = funding
-        self.leverage = leverage
+        self.maxLeverage = maxLeverage
         self.isPinned = isPinned
     }
     
@@ -81,7 +81,7 @@ extension PerpetualRecord: CreateTable {
             $0.column(Columns.openInterest.name, .double).notNull()
             $0.column(Columns.volume24h.name, .double).notNull()
             $0.column(Columns.funding.name, .double).notNull()
-            $0.column(Columns.leverage.name, .blob).notNull()
+            $0.column(Columns.maxLeverage.name, .blob).notNull()
             $0.column(Columns.isPinned.name, .boolean).notNull().defaults(to: false)
         }
     }
@@ -100,7 +100,7 @@ extension PerpetualRecord {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            leverage: [UInt8](leverage)
+            maxLeverage: [UInt8](maxLeverage)
         )
     }
 }
@@ -118,7 +118,7 @@ extension Perpetual {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            leverage: Data(leverage)
+            maxLeverage: Data(maxLeverage)
         )
     }
 }
