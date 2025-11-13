@@ -4,13 +4,18 @@ import Foundation
 
 public extension PerpetualType {
     var baseAsset: Asset {
-        data.baseAsset
+        switch self {
+        case .open(let data), .close(let data), .increase(let data): data.baseAsset
+        case .modify(let data): data.baseAsset
+        case .reduce(let reduceData): reduceData.data.baseAsset
+        }
     }
 
-    var data: PerpetualConfirmData {
+    var data: PerpetualConfirmData? {
         switch self {
         case .open(let data), .close(let data), .increase(let data): data
         case .reduce(let reduceData): reduceData.data
+        case .modify: nil
         }
     }
 }

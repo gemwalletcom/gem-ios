@@ -245,10 +245,6 @@ public struct SolanaSigner: Signable {
             .base64EncodedString()
             .paddded
     }
-
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
-    }
 }
 
 extension String {

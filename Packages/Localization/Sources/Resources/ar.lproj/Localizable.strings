@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "يتم تحديد الرموز المشبوهة أو غير المرغوب فيها على أنها عمليات احتيال محتملة أو أصول ضارة. قد تظهر في محفظتك نتيجةً لعمليات الإنزال الجوي أو التحويلات أو الاستيراد اليدوي.";
 "errors.insufficient_funds" = "عدم كفاية الأموال";
 "info.insufficient_network_fee_balance.title" = "%@ مطلوب";
-"info.insufficient_network_fee_balance.description" = "تتطلب هذه المعاملة %@ لتغطية رسوم الشبكة المدفوعة لـ %@ من عمال المناجم، وليس Gem Wallet. تأكد من وجود %@ كافٍ لديك.";
+"info.insufficient_network_fee_balance.description" = "تتطلب هذه المعاملة ** %@ ** لتغطية رسوم الشبكة المدفوعة لعمال المناجم ** %@ **، وليس Gem Wallet. تأكد من وجود مبلغ كافٍ %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "رصيد غير كاف";
 "info.insufficient_balance.description" = "ليس لديك رصيد كافٍ %@ لإتمام هذه المعاملة. يُرجى شحن رصيدك أو استلامه أو استبداله في محفظتك والمحاولة مرة أخرى.";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "اتجاه";
 "perpetual.auto_close" = "إغلاق تلقائي";
 "info.perpetual.auto_close.description" = "أغلق مركزك تلقائيًا عند مستويات الأسعار المحددة. جني الأرباح يُثبّت الأرباح، ووقف الخسارة يحدّ من الخسائر.";
-"perpetual.auto_close.trigger_price" = "سعر الزناد";
 "perpetual.auto_close.take_profit" = "جني الأرباح";
-"perpetual.auto_close.stop_loss" = "وقف الخسارة";
 "perpetual.market_price" = "سعر السوق";
-"perpetual.auto_close.estimed_pnl" = "الربح والخسارة التقديرية";
 "perpetual.increase_direction" = "زيادة %@";
 "perpetual.reduce_direction" = "تقليل %@";
+"perpetual.auto_close.expected_profit" = "الربح المتوقع";
+"perpetual.auto_close.expected_loss" = "الخسارة المتوقعة";
+"perpetual.modify_position" = "تعديل الموضع";
+"perpetual.auto_close.stop_loss" = "وقف الخسارة";

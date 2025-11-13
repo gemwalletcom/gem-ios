@@ -195,7 +195,7 @@ extension CollectibleViewModel {
                 try await setWalletAvatar()
                 isPresentingToast = ToastMessage(title: Localized.Nft.setAsAvatar, image: SystemImage.checkmark)
             } catch {
-                NSLog("Set nft avatar error: \(error)")
+                debugLog("Set nft avatar error: \(error)")
             }
         }
     }

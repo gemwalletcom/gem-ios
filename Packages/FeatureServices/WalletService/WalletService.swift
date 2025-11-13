@@ -60,38 +60,52 @@ public struct WalletService: Sendable {
         preferences.isAcceptTermsCompleted = true
     }
 
-    public func createWallet() -> [String] {
-        keystore.createWallet()
+    public func createWallet() throws -> [String] {
+        try keystore.createWallet()
     }
 
     @discardableResult
-    public func importWallet(name: String, type: KeystoreImportType) async throws -> Wallet {
-        let newWallet = try keystore.importWallet(
+    public func importWallet(name: String, type: KeystoreImportType, source: WalletSource) async throws -> Wallet {
+        let wallet = try await loadOrCreateWallet(name: name, type: type, source: source)
+        await MainActor.run {
+            walletSessionService.setCurrent(walletId: wallet.walletId)
+        }
+        return wallet
+    }
+    
+    private func loadOrCreateWallet(name: String, type: KeystoreImportType, source: WalletSource) async throws -> Wallet {
+        if let existing = try existingWallet(type: type) {
+            return existing
+        }
+        let wallet = try await keystore.importWallet(
             name: name,
             type: type,
-            isWalletsEmpty: wallets.isEmpty
+            isWalletsEmpty: wallets.isEmpty,
+            source: source
         )
-        try walletStore.addWallet(newWallet)
-        walletSessionService.setCurrent(walletId: newWallet.walletId)
-        return newWallet
+        try walletStore.addWallet(wallet)
+        return wallet
     }
 
-    public func delete(_ wallet: Wallet) throws {
+    private func existingWallet(type: KeystoreImportType) throws -> Wallet? {
+        let (chain, address) = try WalletIdentifier.from(type).deriveAddress()
+        return wallets.first { wallet in
+            wallet.type == type.walletType && wallet.accounts.contains {
+                $0.chain == chain && $0.address == address
+            }
+        }
+    }
+
+    public func delete(_ wallet: Wallet) async throws {
         try avatarService.remove(for: wallet.id)
-        try keystore.deleteKey(for: wallet)
+        try await keystore.deleteKey(for: wallet)
         try walletStore.deleteWallet(for: wallet.id)
 
-
-        if currentWalletId == wallet.walletId {
-            walletSessionService.setCurrent(walletId: wallets.first?.walletId)
+        await MainActor.run {
+            if currentWalletId == wallet.walletId {
+                walletSessionService.setCurrent(walletId: wallets.first?.walletId)
+            }
         }
-
-        // TODO: - enable once will be enabled in CleanUpService
-        /*
-        if keystore.wallets.isEmpty {
-            try CleanUpService(keystore: keystore).onDeleteAllWallets()
-        }
-         */
     }
 
     public func setup(chains: [Chain]) throws {
@@ -120,11 +134,11 @@ public struct WalletService: Sendable {
         try walletStore.renameWallet(walletId.id, name: newName)
     }
     
-    public func getMnemonic(wallet: Wallet) throws -> [String] {
-        try keystore.getMnemonic(wallet: wallet)
+    public func getMnemonic(wallet: Wallet) async throws -> [String] {
+        try await keystore.getMnemonic(wallet: wallet)
     }
-    
-    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) throws -> String {
-        try keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
+
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> String {
+        try await keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
     }
 }

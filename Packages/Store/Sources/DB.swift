@@ -59,12 +59,12 @@ public struct DB: Sendable {
                 switch $0 {
                 case .profile(let statement, let duration):
                     break
-                    //NSLog("profile SQL> \(statement)")
+                    //debugLog("profile SQL> \(statement)")
                 case .statement(let statement):
                     let sql = statement.sql
 
                     if ignoreMethods.filter({ sql.description.contains($0) }).isEmpty {
-                        // NSLog("SQL> \(sql)")
+                        // debugLog("SQL> \(sql)")
                     }
                 }
             }

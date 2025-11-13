@@ -51,7 +51,7 @@ struct AssetsRequestTests {
         try balanceStore.setIsEnabled(walletId: .empty, assetIds: [disabledId.identifier], value: false)
         
         try db.dbQueue.read { db in
-            let enabledAssets = try AssetsRequest.mock(filters: [.enabled]).fetch(db)
+            let enabledAssets = try AssetsRequest.mock(filters: [.enabledBalance]).fetch(db)
             let enabledIds = enabledAssets.map { $0.asset.id }
 
             #expect(enabledAssets.count == 4)

@@ -4,12 +4,11 @@ import SwiftUI
 import Localization
 import Primitives
 import WalletService
-import BannerService
 
 public struct CreateWalletNavigationStack: View {
     @State private var navigationPath: NavigationPath = NavigationPath()
     @Binding private var isPresentingWallets: Bool
-    
+
     private let walletService: WalletService
 
     public init(

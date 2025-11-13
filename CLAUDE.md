@@ -90,6 +90,15 @@ just uml-app
 - **Environment Issues:** If you encounter issues after pulling new changes, run `just bootstrap` again to ensure all dependencies and generated files are up to date.
 - **Rust Core Issues:** If you suspect an issue in the `core/` submodule, consult the `core/README.md` for specific Rust-related debugging steps.
 
+### Build Command Guidelines
+
+- **Primary Build Method**: Use `just build` or `just build-package PACKAGE` (already uses xcodebuild internally)
+- **If swift build fails**: Use xcodebuild directly instead:
+  ```bash
+  # For full project build
+  xcodebuild -project Gem.xcodeproj -scheme Gem -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 17" build
+  ```
+
 ## Key Dependencies
 
 ### Core Technology Stack
@@ -268,6 +277,7 @@ public extension Banner {
 - Located in `core/` directory
 - Shared between iOS and Android applications
 - Provides blockchain-specific operations and cryptographic functions
+- **IMPORTANT**: When working with the Rust core, read `core/AGENTS.md` for detailed guidance on core architecture, development workflow, and coding standards
 
 ### Swift Bindings
 - Generated via `just generate-stone`
@@ -288,7 +298,8 @@ public extension Banner {
 **CRITICAL REQUIREMENT**: Always verify the project builds successfully before claiming work is complete.
 
 - **ALWAYS run `just build`** before stating that tasks are finished
-- **Fix all build errors** before marking tasks as completed  
+- **Use xcodebuild if needed**: If `just build` fails or you need to build directly, use xcodebuild (see "Build Command Guidelines" in Debugging section)
+- **Fix all build errors** before marking tasks as completed
 - **Test core changes** with `just generate-stone` when modifying Rust core
 - **Verify iOS integration** after any core modifications
 - If build fails, identify and fix all errors before proceeding

@@ -80,7 +80,7 @@ public final class WalletImageViewModel: Sendable {
         do {
             try await avatarService.save(url: url, for: wallet.id)
         } catch {
-            print("Set nft image error:", error)
+            debugLog("Set nft image error: \(error)")
         }
     }
     
@@ -88,7 +88,7 @@ public final class WalletImageViewModel: Sendable {
         do {
             try avatarService.remove(for: wallet.id)
         } catch {
-            print("Setting default avatar error:", error)
+            debugLog("Setting default avatar error: \(error)")
         }
     }
     
@@ -156,7 +156,7 @@ public final class WalletImageViewModel: Sendable {
             }
             try avatarService.save(data: data, for: wallet.id)
         } catch {
-            print("Set image error:", error)
+            debugLog("Set image error: \(error)")
         }
     }
 }

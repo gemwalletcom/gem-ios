@@ -144,7 +144,7 @@ extension RootSceneViewModel {
                 notificationHandler.notify(notification: PushNotification.swapAsset(fromAssetId, toAssetId))
             }
         } catch {
-            NSLog("RootSceneViewModel handleUrl error: \(error)")
+            debugLog("RootSceneViewModel handleUrl error: \(error)")
             isPresentingConnectorError = error.localizedDescription
         }
     }
@@ -190,7 +190,7 @@ extension RootSceneViewModel {
         do {
             try walletsService.setup(wallet: wallet)
         } catch {
-            NSLog("RootSceneViewModel setupWallet error: \(error)")
+            debugLog("RootSceneViewModel setupWallet error: \(error)")
         }
     }
 }

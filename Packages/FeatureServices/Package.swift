@@ -318,7 +318,7 @@ let package = Package(
                 "DeviceService"
             ],
             path: "WalletsService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "WalletsServiceTestKit",
@@ -363,7 +363,7 @@ let package = Package(
                 "WalletSessionService"
             ],
             path: "WalletService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "WalletServiceTestKit",
@@ -488,6 +488,33 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives")
             ],
             path: "WalletSessionService/Tests"
+        ),
+        .testTarget(
+            name: "WalletsServiceTests",
+            dependencies: [
+                "WalletsService",
+                "WalletsServiceTestKit",
+                .product(name: "StoreTestKit", package: "Store"),
+                "BalanceServiceTestKit",
+                "PriceServiceTestKit",
+                "AssetsServiceTestKit",
+                "DeviceServiceTestKit",
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "PrimitivesTestKit", package: "Primitives")
+            ],
+            path: "WalletsService/Tests"
+        ),
+        .testTarget(
+            name: "WalletServiceTests",
+            dependencies: [
+                "WalletService",
+                "WalletServiceTestKit",
+                .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "PrimitivesTestKit", package: "Primitives")
+            ],
+            path: "WalletService/Tests"
         ),
     ]
 )

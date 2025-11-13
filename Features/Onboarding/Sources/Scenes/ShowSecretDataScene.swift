@@ -45,7 +45,6 @@ struct ShowSecretDataScene: View {
                 .padding(.bottom, .scene.bottom)
             }
         }
-        .listStyle(.plain)
         .contentMargins([.top], .extraSmall, for: .scrollContent)
         .listSectionSpacing(.custom(.medium))
         .toolbarInfoButton(url: model.docsUrl)

@@ -25,7 +25,7 @@ extension NotificationHandler {
         do {
             notify(notification: try PushNotification(from: userInfo))
         } catch {
-            NSLog("handleUserInfo error \(error)")
+            debugLog("handleUserInfo error \(error)")
         }
     }
 }

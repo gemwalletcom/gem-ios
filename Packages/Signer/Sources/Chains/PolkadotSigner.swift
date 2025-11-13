@@ -18,6 +18,7 @@ public struct PolkadotSigner: Signable {
             $0.network = CoinType.polkadot.ss58Prefix
             $0.transactionVersion = UInt32(transactionVersion)
             $0.privateKey = privateKey
+            $0.chargeNativeAsAssetTxPayment = true
             $0.era = PolkadotEra.with {
                 $0.blockNumber = UInt64(blockNumber)
                 $0.period = UInt64(period)
@@ -40,6 +41,12 @@ public struct PolkadotSigner: Signable {
                 $0.transfer = .with {
                     $0.toAddress = input.destinationAddress
                     $0.value = input.value.magnitude.serialize()
+                    $0.callIndices = .with {
+                        $0.variant = .custom(.with {
+                            $0.moduleIndex = 0x0A
+                            $0.methodIndex = 0x00
+                        })
+                    }
                 }
             }),
             privateKey: privateKey

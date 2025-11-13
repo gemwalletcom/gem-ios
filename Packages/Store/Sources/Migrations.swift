@@ -1,5 +1,6 @@
 import Foundation
 import GRDB
+import Primitives
 
 public struct Migrations {
     
@@ -314,6 +315,12 @@ public struct Migrations {
         migrator.registerMigration("Add isEnabled to \(AssetRecord.databaseTableName)") { db in
             try? db.alter(table: AssetRecord.databaseTableName) {
                 $0.add(column: AssetRecord.Columns.isEnabled.name, .boolean).defaults(to: true)
+            }
+        }
+
+        migrator.registerMigration("Add source to \(WalletRecord.databaseTableName)") { db in
+            try? db.alter(table: WalletRecord.databaseTableName) {
+                $0.add(column: WalletRecord.Columns.source.name, .text).defaults(to: WalletSource.create.rawValue)
             }
         }
 

@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "I token sospetti o spam vengono identificati come potenziali truffe o asset dannosi. Potrebbero comparire nel tuo portafoglio a seguito di airdrop, trasferimenti o importazioni manuali.";
 "errors.insufficient_funds" = "Fondi insufficienti";
 "info.insufficient_network_fee_balance.title" = "%@ richiesto";
-"info.insufficient_network_fee_balance.description" = "Questa transazione richiede %@ per coprire la commissione di rete pagata a %@ minatori, non Gem Wallet. Assicurati di avere abbastanza %@.";
+"info.insufficient_network_fee_balance.description" = "Questa transazione richiede ** %@ ** per coprire la commissione di rete pagata ai ** %@ ** minatori, non Gem Wallet. Assicurati di avere abbastanza %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Saldo insufficiente";
 "info.insufficient_balance.description" = "Non hai abbastanza %@ per completare questa transazione. Ricarica, ricevi o scambia nel tuo portafoglio e riprova.";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "Direzione";
 "perpetual.auto_close" = "Chiusura automatica";
 "info.perpetual.auto_close.description" = "Chiudi automaticamente la tua posizione a livelli di prezzo prestabiliti. Il Take Profit blocca i guadagni, mentre lo Stop Loss limita le perdite.";
-"perpetual.auto_close.trigger_price" = "Prezzo di attivazione";
 "perpetual.auto_close.take_profit" = "Prendi profitto";
-"perpetual.auto_close.stop_loss" = "Stop Loss";
 "perpetual.market_price" = "Prezzo di mercato";
-"perpetual.auto_close.estimed_pnl" = "PNL stimato";
 "perpetual.increase_direction" = "Aumenta %@";
 "perpetual.reduce_direction" = "Riduci %@";
+"perpetual.auto_close.expected_profit" = "Profitto previsto";
+"perpetual.auto_close.expected_loss" = "Perdita prevista";
+"perpetual.modify_position" = "Modifica posizione";
+"perpetual.auto_close.stop_loss" = "Stop loss";

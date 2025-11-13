@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Verdächtige oder Spam-Token werden als potenzieller Betrug oder schädliche Vermögenswerte identifiziert. Sie können aufgrund von Airdrops, Transfers oder manuellen Importen in Ihrer Wallet erscheinen.";
 "errors.insufficient_funds" = "Unzureichende Mittel";
 "info.insufficient_network_fee_balance.title" = "%@ erforderlich";
-"info.insufficient_network_fee_balance.description" = "Für diese Transaktion sind %@ erforderlich, um die an %@ Miner gezahlte Netzwerkgebühr zu decken, nicht Gem Wallet. Stellen Sie sicher, dass Sie über genügend %@ verfügen.";
+"info.insufficient_network_fee_balance.description" = "Für diese Transaktion werden ** %@ ** benötigt, um die an ** %@ ** Miner gezahlte Netzwerkgebühr zu decken, nicht Gem Wallet. Stellen Sie sicher, dass Sie über genügend %@ verfügen.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Unzureichendes Guthaben";
 "info.insufficient_balance.description" = "Sie haben nicht genügend %@, um diese Transaktion abzuschließen. Bitte laden Sie Ihr Wallet auf, empfangen Sie es oder tauschen Sie es um und versuchen Sie es erneut.";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "Richtung";
 "perpetual.auto_close" = "Automatisches Schließen";
 "info.perpetual.auto_close.description" = "Schließen Sie Ihre Position automatisch bei festgelegten Preisniveaus. Take Profit sichert Gewinne, Stop Loss begrenzt Verluste.";
-"perpetual.auto_close.trigger_price" = "Auslösepreis";
 "perpetual.auto_close.take_profit" = "Gewinn mitnehmen";
-"perpetual.auto_close.stop_loss" = "Stop-Loss";
 "perpetual.market_price" = "Marktpreis";
-"perpetual.auto_close.estimed_pnl" = "Geschätzter Gewinn/Verlust";
 "perpetual.increase_direction" = "Erhöhung %@";
 "perpetual.reduce_direction" = "Reduzieren %@";
+"perpetual.auto_close.expected_profit" = "Erwarteter Gewinn";
+"perpetual.auto_close.expected_loss" = "Erwarteter Verlust";
+"perpetual.modify_position" = "Position ändern";
+"perpetual.auto_close.stop_loss" = "Stop-Loss";

@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Подозрительные или спам‑токены помечаются как потенциальные мошеннические или вредоносные активы. Они могут появиться в вашем кошельке в результате airdrop‑раздач, переводов или ручного добавления.";
 "errors.insufficient_funds" = "Недостаточно средств";
 "info.insufficient_network_fee_balance.title" = "Требуется %@";
-"info.insufficient_network_fee_balance.description" = "Для этой транзакции требуется %@ для покрытия сетевой комиссии, выплачиваемой майнерам %@, а не Кошелек Gem. Убедитесь, что у вас достаточно %@.";
+"info.insufficient_network_fee_balance.description" = "Для этой транзакции требуется ** %@ ** для покрытия сетевой комиссии, выплачиваемой майнерам ** %@ **, а не Кошелек Gem. Убедитесь, что у вас достаточно %@.";
 "brand_name" = "Кошелек Gem";
 "info.insufficient_balance.title" = "Недостаточный баланс";
 "info.insufficient_balance.description" = "У вас недостаточно %@ для завершения этой транзакции. Пожалуйста, пополните, получите или обменяйте ваш кошелек и попробуйте еще раз.";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "Направление";
 "perpetual.auto_close" = "Автоматическое закрытие";
 "info.perpetual.auto_close.description" = "Автоматически закрывает позицию по достижении заданного уровня цены. Тейк-профит фиксирует прибыль, стоп-лосс ограничивает убытки.";
-"perpetual.auto_close.trigger_price" = "Цена триггера";
 "perpetual.auto_close.take_profit" = "Тейк-профит";
-"perpetual.auto_close.stop_loss" = "Стоп-лосс";
 "perpetual.market_price" = "Рыночная цена";
-"perpetual.auto_close.estimed_pnl" = "Расчетная PNL";
 "perpetual.increase_direction" = "Увеличение %@";
 "perpetual.reduce_direction" = "Уменьшить %@";
+"perpetual.auto_close.expected_profit" = "Ожидаемая прибыль";
+"perpetual.auto_close.expected_loss" = "Ожидаемые потери";
+"perpetual.modify_position" = "Изменить позицию";
+"perpetual.auto_close.stop_loss" = "Стоп-лосс";

@@ -25,7 +25,7 @@ public struct SwapQuoteDataProvider: SwapQuoteDataProvidable {
         case .none:
             return try await swapService.getQuoteData(quote, data: .none)
         case .some(let approval):
-            let permit2Data = try permit2DataProvider.getPermit2Data(
+            let permit2Data = try await permit2DataProvider.getPermit2Data(
                 wallet: wallet,
                 chain: AssetId(id: quote.request.fromAsset.id).chain,
                 approval: approval

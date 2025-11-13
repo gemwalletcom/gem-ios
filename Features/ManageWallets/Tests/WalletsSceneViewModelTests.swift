@@ -15,20 +15,23 @@ import WalletServiceTestKit
 struct WalletsSceneViewModelTests {
     
     @Test
-    func onDeleteConfirmed() throws {
+    func onDeleteConfirmed() async throws {
         let service: WalletService = try .mockWallets()
         let model = WalletsSceneViewModel.mock(walletService: service)
         model.wallets = service.wallets
 
         #expect(model.currentWalletId == .mock(id: "1"))
 
-        model.onDeleteConfirmed(wallet: .mock(id: "1"))
+        await model.onDeleteConfirmed(wallet: .mock(id: "1"))
+        
         #expect(model.currentWalletId == .mock(id: "2"))
 
-        model.onDeleteConfirmed(wallet: .mock(id: "2"))
+        await model.onDeleteConfirmed(wallet: .mock(id: "2"))
+        
         #expect(model.currentWalletId == .mock(id: "3"))
 
-        model.onDeleteConfirmed(wallet: .mock(id: "3"))
+        await model.onDeleteConfirmed(wallet: .mock(id: "3"))
+        
         #expect(model.currentWalletId == .none)
     }
 

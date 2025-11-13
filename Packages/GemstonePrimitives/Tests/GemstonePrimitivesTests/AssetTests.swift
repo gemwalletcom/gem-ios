@@ -15,4 +15,22 @@ final class AssetTests {
         #expect(tokenAsset.feeAsset != tokenAsset)
         #expect(tokenAsset.feeAsset == nativeAsset)
     }
+
+    @Test
+    func feeAssetHypercorePerpetual() {
+        let perpetual = Asset.hypercoreUSDC()
+        #expect(perpetual.feeAsset == Asset.hypercoreUSDC())
+    }
+
+    @Test
+    func feeAssetHypercoreToken() {
+        let token = Asset.hypercoreSpotUSDC()
+        #expect(token.feeAsset == Asset.hypercoreSpotUSDC())
+    }
+
+    @Test
+    func feeAssetHypercoreNative() {
+        let native = Asset(.hyperCore)
+        #expect(native.feeAsset == Asset.hypercoreSpotUSDC())
+    }
 }

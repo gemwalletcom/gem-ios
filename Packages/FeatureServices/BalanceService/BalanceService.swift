@@ -166,7 +166,7 @@ extension BalanceService {
             try storeBalances(balances: balances, walletId: walletId)
             return balances
         } catch {
-            NSLog("update balance error: chain: \(chain.id): \(error.localizedDescription)")
+            debugLog("update balance error: chain: \(chain.id): \(error.localizedDescription)")
             return []
         }
     }
@@ -226,7 +226,7 @@ extension BalanceService {
 
     private func storeBalances(balances: [AssetBalanceChange], walletId: String) throws {
         for balance in balances {
-            NSLog("update balance: \(balance.assetId.identifier): \(balance.type)")
+            debugLog("update balance: \(balance.assetId.identifier): \(balance.type)")
         }
         let assets = try assetsService.getAssets(for: balances.map { $0.assetId })
         let updates = createBalanceUpdate(assets: assets, balances: balances)

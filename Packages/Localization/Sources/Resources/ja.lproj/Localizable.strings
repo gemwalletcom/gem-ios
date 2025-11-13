@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "疑わしいトークンやスパムトークンは、詐欺や有害な資産の可能性があると判断されます。エアドロップ、送金、または手動インポートによってウォレットに表示される場合があります。";
 "errors.insufficient_funds" = "資金不足";
 "info.insufficient_network_fee_balance.title" = "%@が必要です";
-"info.insufficient_network_fee_balance.description" = "このトランザクションでは%@ %@に支払うネットワーク手数料を賄うためにGem Walletではなく %@ が必要です。十分な%@があることを確認してください。";
+"info.insufficient_network_fee_balance.description" = "このトランザクションでは、マイナーへのネットワーク手数料として%@ Gem Walletではなく [ %@ s] が必要です。十分な%@があることを確認してください。";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "残高不足";
 "info.insufficient_balance.description" = "この取引を完了するには%@が足りません。ウォレットにチャージ、受け取り、または交換して、もう一度お試しください。";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自動閉じる";
 "info.perpetual.auto_close.description" = "設定した価格レベルでポジションを自動的に決済します。テイクプロフィットで利益を確定し、ストップロスで損失を制限します。";
-"perpetual.auto_close.trigger_price" = "トリガー価格";
 "perpetual.auto_close.take_profit" = "利益確定";
-"perpetual.auto_close.stop_loss" = "ストップロス";
 "perpetual.market_price" = "市場価格";
-"perpetual.auto_close.estimed_pnl" = "推定損益";
 "perpetual.increase_direction" = "%@を増やす";
 "perpetual.reduce_direction" = "%@を減らす";
+"perpetual.auto_close.expected_profit" = "予想利益";
+"perpetual.auto_close.expected_loss" = "予想損失";
+"perpetual.modify_position" = "位置の変更";
+"perpetual.auto_close.stop_loss" = "ストップロス";

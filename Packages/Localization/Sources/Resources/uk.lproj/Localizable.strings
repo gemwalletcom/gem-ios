@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Підозрілі або спам-токени ідентифікуються як потенційні шахрайські або шкідливі активи. Вони можуть з'явитися у вашому гаманці через аїрдропи, перекази або ручний імпорт.";
 "errors.insufficient_funds" = "Недостатньо коштів";
 "info.insufficient_network_fee_balance.title" = "Потрібно %@";
-"info.insufficient_network_fee_balance.description" = "Для цієї транзакції потрібно %@ для покриття мережевої плати, сплаченої %@ майнерам, а не Гаманець Gem. Переконайтеся, що у вас достатньо %@.";
+"info.insufficient_network_fee_balance.description" = "Для цієї транзакції потрібно ** %@ ** для покриття мережевої плати, сплаченої ** %@ ** майнерам, а не Гаманець Gem. Переконайтеся, що у вас достатньо %@.";
 "brand_name" = "Гаманець Gem";
 "info.insufficient_balance.title" = "Недостатній баланс";
 "info.insufficient_balance.description" = "У вас недостатньо %@ для завершення цієї транзакції. Будь ласка, поповніть, отримайте або обміняйте свій гаманець і спробуйте ще раз.";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "Напрямок";
 "perpetual.auto_close" = "Автоматичне закриття";
 "info.perpetual.auto_close.description" = "Автоматично закривайте свою позицію за встановленими ціновими рівнями. Тейк-профіт фіксує прибутки, а стоп-лос обмежує збитки.";
-"perpetual.auto_close.trigger_price" = "Тригерна ціна";
 "perpetual.auto_close.take_profit" = "Зафіксуйте прибуток";
-"perpetual.auto_close.stop_loss" = "Стоп-лосс";
 "perpetual.market_price" = "Ринкова ціна";
-"perpetual.auto_close.estimed_pnl" = "Очікуваний PNL";
 "perpetual.increase_direction" = "Збільшити %@";
 "perpetual.reduce_direction" = "Зменшити %@";
+"perpetual.auto_close.expected_profit" = "Очікуваний прибуток";
+"perpetual.auto_close.expected_loss" = "Очікувані втрати";
+"perpetual.modify_position" = "Змінити позицію";
+"perpetual.auto_close.stop_loss" = "Стоп-лосс";

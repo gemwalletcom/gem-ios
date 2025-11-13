@@ -33,6 +33,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case fundingPayments
     case liquidationPrice
     case openInterest
+    case autoclose
 
 
     public var id: String {
@@ -55,6 +56,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case .fundingPayments: "fundingPayments"
         case .liquidationPrice: "liquidationPrice"
         case .openInterest: "openInterest"
+        case .autoclose: "autoClose"
         }
     }
     

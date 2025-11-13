@@ -74,7 +74,7 @@ extension WalletConnectorService: WalletConnectorServiceable {
 
     public func disconnectAll() async throws {
         let sessions = WalletKit.instance.getSessions()
-        NSLog("sessions \(sessions)")
+        debugLog("sessions \(sessions)")
 
         for session in sessions {
             try? await WalletKit.instance.disconnect(topic: session.topic)
@@ -83,7 +83,7 @@ extension WalletConnectorService: WalletConnectorServiceable {
 
         let pairings = Pair.instance.getPairings()
 
-        NSLog("pairings \(pairings)")
+        debugLog("pairings \(pairings)")
         for pairing in pairings {
             try? await Pair.instance.disconnect(topic: pairing.topic)
         }
@@ -107,12 +107,12 @@ extension WalletConnectorService {
 
     private func handleSessionProposals() async {
         for await proposal in interactor.sessionProposalStream {
-            NSLog("Session proposal received: \(proposal)")
+            debugLog("Session proposal received: \(proposal)")
 
             do {
                 try await processSession(proposal: proposal.proposal)
             } catch {
-                NSLog("Error accepting proposal: \(error)")
+                debugLog("Error accepting proposal: \(error)")
                 try? await signer.sessionReject(
                     id: proposal.proposal.pairingTopic,
                     error: error
@@ -126,17 +126,17 @@ extension WalletConnectorService {
             do {
                 try await handleRequest(request: request.request)
             } catch {
-                NSLog("Error handling request: \(error)")
+                debugLog("Error handling request: \(error)")
             }
         }
     }
 
     private func updateSessions(_ sessions: [Session]) {
-        NSLog("Received sessions: \(sessions)")
+        debugLog("Received sessions: \(sessions)")
         do {
             try signer.updateSessions(sessions: sessions.map { $0.asSession })
         } catch {
-            NSLog("Error updating sessions: \(error)")
+            debugLog("Error updating sessions: \(error)")
         }
     }
 
@@ -144,22 +144,22 @@ extension WalletConnectorService {
         let messageId = request.messageId
         
         guard await messageTracker.shouldProcess(messageId) else {
-            NSLog("Ignoring duplicate request with ID: \(messageId)")
+            debugLog("Ignoring duplicate request with ID: \(messageId)")
             try await rejectRequest(request)
             return
         }
 
-        NSLog("handleMethod received: \(request.method) ")
-        NSLog("handleMethod received params: \(request.params) ")
+        debugLog("handleMethod received: \(request.method) ")
+        debugLog("handleMethod received params: \(request.params) ")
 
         do {
             let service = try serviceFactory.service(for: request.method)
             let response = try await service.handle(request: request)
 
-            NSLog("handleMethod result: \(request.method) \(response)")
+            debugLog("handleMethod result: \(request.method) \(response)")
             try await WalletKit.instance.respond(topic: request.topic, requestId: request.id, response: response)
         } catch {
-            NSLog("handleMethod error: \(error)")
+            debugLog("handleMethod error: \(error)")
             try await rejectRequest(request)
         }
     }
@@ -173,7 +173,7 @@ extension WalletConnectorService {
         let messageId = proposal.messageId
         
         guard await messageTracker.shouldProcess(messageId) else {
-            NSLog("Ignoring duplicate proposal with ID: \(messageId)")
+            debugLog("Ignoring duplicate proposal with ID: \(messageId)")
             return
         }
         

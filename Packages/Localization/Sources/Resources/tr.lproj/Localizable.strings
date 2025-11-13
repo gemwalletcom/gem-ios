@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Şüpheli veya spam token'lar potansiyel dolandırıcılık veya zararlı varlıklar olarak tanımlanır. Airdrop'lar, transferler veya manuel ithalatlar nedeniyle cüzdanınızda görünebilirler.";
 "errors.insufficient_funds" = "Yetersiz fon";
 "info.insufficient_network_fee_balance.title" = "%@ gerekli";
-"info.insufficient_network_fee_balance.description" = "Bu işlem %@ madenciye ödenen ağ ücretini karşılamak için %@ gerektirir, Gem Wallet değil. Yeterli %@ olduğundan emin olun.";
+"info.insufficient_network_fee_balance.description" = "Bu işlem, ** %@ ** madencilere ödenen ağ ücretini karşılamak için ** %@ ** gerektirir, Gem Wallet değil. Yeterli %@ kaynağınız olduğundan emin olun.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Yetersiz Bakiye";
 "info.insufficient_balance.description" = "Bu işlemi tamamlamak için yeterli %@ iniz yok. Lütfen cüzdanınıza para yükleyin, alın veya takas edin ve tekrar deneyin.";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "Yön";
 "perpetual.auto_close" = "Otomatik Kapatma";
 "info.perpetual.auto_close.description" = "Pozisyonunuzu belirlenen fiyat seviyelerinde otomatik olarak kapatın. Kâr Al özelliği kazançlarınızı sabitler, Zarar Durdur özelliği ise kayıplarınızı sınırlar.";
-"perpetual.auto_close.trigger_price" = "Tetikleyici fiyat";
 "perpetual.auto_close.take_profit" = "Kar al";
-"perpetual.auto_close.stop_loss" = "Zarar Durdurma";
 "perpetual.market_price" = "Piyasa Fiyatı";
-"perpetual.auto_close.estimed_pnl" = "Tahmini Kâr/Zarar";
 "perpetual.increase_direction" = "%@ yi artırın";
 "perpetual.reduce_direction" = "%@ azalt";
+"perpetual.auto_close.expected_profit" = "Beklenen kar";
+"perpetual.auto_close.expected_loss" = "Beklenen kayıp";
+"perpetual.modify_position" = "Pozisyonu Değiştir";
+"perpetual.auto_close.stop_loss" = "Zarar durdurma";

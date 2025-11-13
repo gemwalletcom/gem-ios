@@ -49,7 +49,6 @@ public final class KeychainDefault: Keychain {
             return nil
         }
         guard let string = String(data: data, encoding: .utf8) else {
-            print("failed to convert data to string")
             throw Status.conversionError
         }
         return string
@@ -83,7 +82,6 @@ public final class KeychainDefault: Keychain {
 
     public func set(_ value: String, key: String, ignoringAttributeSynchronizable: Bool = true) throws {
         guard let data = value.data(using: .utf8, allowLossyConversion: false) else {
-            print("failed to convert string to data")
             throw Status.conversionError
         }
         try set(data, key: key, ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
@@ -101,7 +99,6 @@ public final class KeychainDefault: Keychain {
             
             var (attributes, error) = options.attributes(key: nil, value: value)
             if let error = error {
-                print(error.localizedDescription)
                 throw error
             }
             
@@ -114,7 +111,6 @@ public final class KeychainDefault: Keychain {
         case errSecItemNotFound:
             var (attributes, error) = options.attributes(key: key, value: value)
             if let error = error {
-                print(error.localizedDescription)
                 throw error
             }
             

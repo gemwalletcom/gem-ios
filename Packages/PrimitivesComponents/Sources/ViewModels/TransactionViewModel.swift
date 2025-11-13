@@ -66,7 +66,8 @@ public struct TransactionViewModel: Sendable {
                 .perpetualOpenPosition,
                 .perpetualClosePosition,
                 .stakeFreeze,
-                .stakeUnfreeze: .none
+                .stakeUnfreeze,
+                .perpetualModifyPosition: .none
         }
     }
 
@@ -133,6 +134,8 @@ public struct TransactionViewModel: Sendable {
                 if case let .perpetual(metadata) = transaction.transaction.metadata {
                     return Localized.Perpetual.closeDirection(PerpetualDirectionViewModel(direction: metadata.direction).title)
                 }
+                return .empty
+            case .perpetualModifyPosition:
                 return .empty
             }
         }()
@@ -205,14 +208,15 @@ public struct TransactionViewModel: Sendable {
             case .swap,
                     .stakeRewards,
                     .stakeWithdraw,
-                    .assetActivation:
-                return .none
-            case .perpetualOpenPosition,
+                    .assetActivation,
+                    .perpetualModifyPosition,
+                    .perpetualOpenPosition,
                     .perpetualClosePosition:
                 guard case .perpetual(let metadata) = transaction.transaction.metadata else {
                     return .none
                 }
-                return AmountDisplay.currency(value: metadata.price, currencyCode: Currency.usd.rawValue, showSign: false).text
+                let price = AmountDisplay.currency(value: metadata.price, currencyCode: Currency.usd.rawValue, showSign: false).text
+                return String(format: "%@: %@", Localized.Asset.price, price)
             }
         }()
 
@@ -237,12 +241,20 @@ public struct TransactionViewModel: Sendable {
             .stakeFreeze,
             .stakeUnfreeze:
             return infoModel.amountDisplay(formatter: .short).amount
-        case .perpetualOpenPosition,
-            .perpetualClosePosition:
+        case .perpetualClosePosition:
             guard case .perpetual(let metadata) = transaction.transaction.metadata, metadata.pnl != 0 else {
                 return .none
             }
             return AmountDisplay.currency(value: metadata.pnl, currencyCode: Currency.usd.rawValue)
+        case .perpetualOpenPosition:
+            return AmountDisplay.numeric(
+                asset: .hypercoreUSDC(),
+                price: Price(price: 1, priceChangePercentage24h: .zero, updatedAt: .now),
+                value: transaction.transaction.valueBigInt,
+                currency: Currency.usd.rawValue,
+                formatter: .auto,
+                textStyle: TextStyle(font: .body, color: Colors.black, fontWeight: .medium)
+            ).fiat
         case .tokenApproval:
             return AmountDisplay.symbol(asset: transaction.asset).amount
         case .swap:
@@ -254,6 +266,8 @@ public struct TransactionViewModel: Sendable {
                 style: AmountDisplayStyle(sign: .incoming, formatter: .auto, currencyCode: currency)
             ).amount
         case .transferNFT:
+            return nil
+        case .perpetualModifyPosition:
             return nil
         }
     }
@@ -272,6 +286,7 @@ public struct TransactionViewModel: Sendable {
                 .smartContractCall,
                 .perpetualOpenPosition,
                 .perpetualClosePosition,
+                .perpetualModifyPosition,
                 .stakeFreeze,
                 .stakeUnfreeze:
             return .none

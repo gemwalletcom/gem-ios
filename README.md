@@ -68,6 +68,15 @@ If you want to contribute, you can use our [developers telegram](https://t.me/ge
 
 If you're using a legacy Intel Mac, you need to pull latest `core` submodule and run `just generate-stone` to build `x86_64` arch Gemstone, the core library used by Gem iOS.
 
+## 🔐 Security Scanning
+
+We run [MobSF mobsfscan](https://github.com/MobSF/mobsfscan) to catch insecure patterns in Swift and Objective-C code.
+
+- **Local usage**: Install [`uv`](https://docs.astral.sh/uv/getting-started/installation/) and run `uv tool install mobsfscan` once. After that, `just mobsfscan` (internally `uv tool run mobsfscan -- --type ios --config .mobsf --exit-warning`) scans the iOS source tree with the repo-wide `.mobsf` configuration and fails when it encounters `WARNING` or `ERROR` level findings.
+- **CI enforcement**: `.github/workflows/mobsfscan.yml` installs mobsfscan on every push/PR to `main`, uploads a SARIF report to GitHub code scanning, and fails the workflow when findings remain.
+
+Suppress individual findings only when you fully understand the risk—either update the code or add a `// mobsf-ignore: rule_id` inline comment with context.
+
 ## 👨‍👧‍👦 Contributors
 
 We love contributors! Feel free to contribute to this project but please read the [Contributing Guidelines](CONTRIBUTING.md) first!

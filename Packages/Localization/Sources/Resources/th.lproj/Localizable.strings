@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "โทเค็นที่น่าสงสัยหรือเป็นสแปมจะถูกระบุว่าเป็นการหลอกลวงหรือทรัพย์สินที่เป็นอันตราย โทเค็นเหล่านี้อาจปรากฏในกระเป๋าเงินของคุณเนื่องจากการส่งทางอากาศ การโอน หรือการนำเข้าด้วยตนเอง";
 "errors.insufficient_funds" = "เงินไม่เพียงพอ";
 "info.insufficient_network_fee_balance.title" = "%@ จำเป็น";
-"info.insufficient_network_fee_balance.description" = "ธุรกรรมนี้ต้องการให้ %@ ครอบคลุมค่าธรรมเนียมเครือข่ายที่จ่ายให้กับนักขุด %@ คน ไม่ใช่ Gem Wallet โปรดตรวจสอบให้แน่ใจว่าคุณมี %@ เพียงพอ";
+"info.insufficient_network_fee_balance.description" = "ธุรกรรมนี้ต้องการ ** %@ ** เพื่อครอบคลุมค่าธรรมเนียมเครือข่ายที่จ่ายให้กับ ** %@ ** นักขุด ไม่ใช่ Gem Wallet โปรดตรวจสอบให้แน่ใจว่าคุณมี %@ เพียงพอ";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "ยอดเงินคงเหลือไม่เพียงพอ";
 "info.insufficient_balance.description" = "คุณมี %@ ไม่เพียงพอสำหรับการทำธุรกรรมนี้ โปรดเติมเงิน รับ หรือแลกเปลี่ยนในกระเป๋าสตางค์ของคุณแล้วลองอีกครั้ง";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "ทิศทาง";
 "perpetual.auto_close" = "ปิดอัตโนมัติ";
 "info.perpetual.auto_close.description" = "ปิดสถานะของคุณโดยอัตโนมัติเมื่อถึงระดับราคาที่กำหนด Take Profit ล็อกกำไร Stop Loss จำกัดการขาดทุน";
-"perpetual.auto_close.trigger_price" = "ราคาทริกเกอร์";
 "perpetual.auto_close.take_profit" = "รับผลกำไร";
-"perpetual.auto_close.stop_loss" = "สต็อปลอส";
 "perpetual.market_price" = "ราคาตลาด";
-"perpetual.auto_close.estimed_pnl" = "PNL โดยประมาณ";
 "perpetual.increase_direction" = "เพิ่ม %@";
 "perpetual.reduce_direction" = "ลด %@";
+"perpetual.auto_close.expected_profit" = "กำไรที่คาดหวัง";
+"perpetual.auto_close.expected_loss" = "การสูญเสียที่คาดว่าจะเกิดขึ้น";
+"perpetual.modify_position" = "ปรับเปลี่ยนตำแหน่ง";
+"perpetual.auto_close.stop_loss" = "สต็อปลอส";

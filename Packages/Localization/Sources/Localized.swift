@@ -536,9 +536,9 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "info.insufficient_balance.title", fallback: "Insufficient Balance")
     }
     public enum InsufficientNetworkFeeBalance {
-      /// This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.
+      /// This transaction requires **%@** to cover the network fee paid to **%@** miners, not Gem Wallet. Ensure you have enough %@.
       public static func description(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
-        return Localized.tr("Localizable", "info.insufficient_network_fee_balance.description", String(describing: p1), String(describing: p2), String(describing: p3), fallback: "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.")
+        return Localized.tr("Localizable", "info.insufficient_network_fee_balance.description", String(describing: p1), String(describing: p2), String(describing: p3), fallback: "This transaction requires **%@** to cover the network fee paid to **%@** miners, not Gem Wallet. Ensure you have enough %@.")
       }
       /// %@ required
       public static func title(_ p1: Any) -> String {
@@ -813,6 +813,8 @@ public enum Localized {
     public static let marketPrice = Localized.tr("Localizable", "perpetual.market_price", fallback: "Market Price")
     /// Modify
     public static let modify = Localized.tr("Localizable", "perpetual.modify", fallback: "Modify")
+    /// Modify Position
+    public static let modifyPosition = Localized.tr("Localizable", "perpetual.modify_position", fallback: "Modify Position")
     /// Open %@
     public static func openDirection(_ p1: Any) -> String {
       return Localized.tr("Localizable", "perpetual.open_direction", String(describing: p1), fallback: "Open %@")
@@ -834,14 +836,14 @@ public enum Localized {
     /// Size
     public static let size = Localized.tr("Localizable", "perpetual.size", fallback: "Size")
     public enum AutoClose {
-      /// Estimated PNL
-      public static let estimedPnl = Localized.tr("Localizable", "perpetual.auto_close.estimed_pnl", fallback: "Estimated PNL")
-      /// Stop Loss
-      public static let stopLoss = Localized.tr("Localizable", "perpetual.auto_close.stop_loss", fallback: "Stop Loss")
+      /// Expected loss
+      public static let expectedLoss = Localized.tr("Localizable", "perpetual.auto_close.expected_loss", fallback: "Expected loss")
+      /// Expected profit
+      public static let expectedProfit = Localized.tr("Localizable", "perpetual.auto_close.expected_profit", fallback: "Expected profit")
+      /// Stop loss
+      public static let stopLoss = Localized.tr("Localizable", "perpetual.auto_close.stop_loss", fallback: "Stop loss")
       /// Take profit
       public static let takeProfit = Localized.tr("Localizable", "perpetual.auto_close.take_profit", fallback: "Take profit")
-      /// Trigger price
-      public static let triggerPrice = Localized.tr("Localizable", "perpetual.auto_close.trigger_price", fallback: "Trigger price")
     }
   }
   public enum Perpetuals {

@@ -7,9 +7,9 @@ import Localization
 enum WalletImportType: String, Hashable, CaseIterable, Identifiable {
     var id: String { rawValue }
     
-    case phrase = "Phrase"
-    case address = "Address"
-    case privateKey = "Private Key"
+    case phrase
+    case address
+    case privateKey
 }
 
 extension WalletImportType {

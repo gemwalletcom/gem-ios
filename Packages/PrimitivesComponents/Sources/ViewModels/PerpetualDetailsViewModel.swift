@@ -8,18 +8,44 @@ import Components
 import Style
 import SwiftUI
 
+public enum PerpetualDetailsType: Sendable {
+    case open(PerpetualConfirmData)
+    case close(PerpetualConfirmData)
+    case increase(PerpetualConfirmData)
+    case reduce(PerpetualReduceData)
+
+    public init(_ perpetualType: PerpetualType) {
+        switch perpetualType {
+        case .open(let data): self = .open(data)
+        case .close(let data): self = .close(data)
+        case .increase(let data): self = .increase(data)
+        case .reduce(let data): self = .reduce(data)
+        case .modify: fatalError("not suppoerted")
+        }
+    }
+
+    var data: PerpetualConfirmData {
+        switch self {
+        case .open(let data), .close(let data), .increase(let data): data
+        case .reduce(let data): data.data
+        }
+    }
+}
+
 public struct PerpetualDetailsViewModel: Sendable, Identifiable {
-    public var id: String { data.baseAsset.id.identifier }
-    private let perpetualType: PerpetualType
+    public var id: String { type.data.baseAsset.id.identifier }
+    private let type: PerpetualDetailsType
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
     private let percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
     private let percentSignLessFormatter = CurrencyFormatter.percentSignLess
 
-    public init(perpetualType: PerpetualType) {
-        self.perpetualType = perpetualType
+    public init(type: PerpetualDetailsType) {
+        self.type = type
     }
-    
-    var data: PerpetualConfirmData { perpetualType.data }
+
+    var data: PerpetualConfirmData {
+        type.data
+    }
 
     public var listItemModel: ListItemModel {
         ListItemModel(
@@ -30,15 +56,17 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
     }
 
     var directionTitle: String {
-        switch perpetualType {
+        switch type {
         case .open: Localized.Perpetual.direction
         case .close, .increase, .reduce: Localized.Perpetual.position
         }
     }
     var directionViewModel: PerpetualDirectionViewModel {
-        switch perpetualType {
-        case .open, .close, .increase: PerpetualDirectionViewModel(direction: perpetualType.data.direction)
-        case .reduce(let reduceData): PerpetualDirectionViewModel(direction: reduceData.positionDirection)
+        switch type {
+        case .open(let data), .close(let data), .increase(let data):
+            PerpetualDirectionViewModel(direction: data.direction)
+        case .reduce(let data):
+            PerpetualDirectionViewModel(direction: data.positionDirection)
         }
     }
     var directionTextStyle: TextStyle { TextStyle(font: .callout, color: directionViewModel.color) }
@@ -78,16 +106,16 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
 
 extension PerpetualDetailsViewModel {
     private var listItemSubtitle: String? {
-        switch perpetualType {
+        switch type {
         case .open: String(format: "%@ %@", directionViewModel.title, leverageText)
-        case .close(_): pnlText
-        case .increase(_): directionViewModel.increaseTitle
+        case .close: pnlText
+        case .increase: directionViewModel.increaseTitle
         case .reduce: directionViewModel.reduceTitle
         }
     }
-    
+
     private var listItemSubtitleStyle: TextStyle {
-        switch perpetualType {
+        switch type {
         case .open: TextStyle(font: .callout, color: directionViewModel.color)
         case .close: pnlTextStyle
         case .increase, .reduce: .calloutSecondary

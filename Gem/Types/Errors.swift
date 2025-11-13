@@ -13,6 +13,14 @@ extension Gemstone.GatewayError: @retroactive LocalizedError {
     }
 }
 
+extension Gemstone.GemstoneError: @retroactive LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .AnyError(let string): string
+        }
+    }
+}
+
 extension Gemstone.SwapperError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {

@@ -89,7 +89,7 @@ public struct Emoji {
         case ninja = "🥷"
         case hacker = "👨‍💻"
         case vault = "🛢"
-        case key = "🔑"
+        case keyEmoji = "🔑"
         case shield = "🛡"
         case upChart = "📈"
         case downChart = "📉"

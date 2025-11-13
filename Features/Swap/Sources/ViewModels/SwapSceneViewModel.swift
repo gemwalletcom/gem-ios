@@ -292,7 +292,7 @@ extension SwapSceneViewModel {
                 decimals: asset.decimals.asInt
             )
         } catch {
-            NSLog("SwapScene apply quote error: \(error)")
+            debugLog("SwapScene apply quote error: \(error)")
         }
     }
 
@@ -325,7 +325,7 @@ extension SwapSceneViewModel {
                 if !error.isCancelled {
                     swapState.swapTransferData = .error(error)
 
-                    NSLog("SwapScene get swap data error: \(error)")
+                    debugLog("SwapScene get swap data error: \(error)")
                 }
             }
         }
@@ -355,7 +355,7 @@ extension SwapSceneViewModel {
                 swapState.fetch = .data(quotes: [])
                 selectedSwapQuote = nil
                 amountInputModel.update(error: nil)
-                NSLog("SwapScene get quotes error: \(error)")
+                debugLog("SwapScene get quotes error: \(error)")
             }
         }
     }
@@ -368,7 +368,7 @@ extension SwapSceneViewModel {
             )
         } catch {
             // TODO: - handle error
-            NSLog("SwapScene perform assets update error: \(error)")
+            debugLog("SwapScene perform assets update error: \(error)")
         }
     }
 

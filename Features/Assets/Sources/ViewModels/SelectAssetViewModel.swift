@@ -268,7 +268,7 @@ extension SelectAssetViewModel {
         await MainActor.run { [self] in
             if !error.isCancelled {
                 self.state = .error(error)
-                NSLog("SelectAssetScene scene error: \(error)")
+                debugLog("SelectAssetScene scene error: \(error)")
             }
         }
     }

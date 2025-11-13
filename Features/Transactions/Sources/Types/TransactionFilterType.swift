@@ -30,7 +30,7 @@ extension TransactionType {
         case .swap, .tokenApproval: .swaps
         case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw, .stakeFreeze, .stakeUnfreeze: .stake
         case .assetActivation: .others
-        case .perpetualOpenPosition, .perpetualClosePosition: .perpetuals
+        case .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition: .perpetuals
         }
     }
 }

@@ -31,7 +31,7 @@ public extension FiatQuoteTypeViewModel {
 
     func randomAmount(maxAmount: Double) -> Double? {
         switch type {
-        case .buy: Double(Int.random(in: Int(defaultAmount)..<Int(maxAmount)))
+        case .buy: Double(Int.random(in: Int(defaultAmount)..<Int(maxAmount))) // mobsf-ignore: ios_insecure_random_no_generator (UI suggestion only)
         case .sell: .none
         }
     }

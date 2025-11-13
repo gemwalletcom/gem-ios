@@ -40,7 +40,7 @@ public struct TransactionHeaderTypeBuilder {
                     return .amount(showFiat: false)
                 }
                 return .nft(name: metadata.name, id: metadata.assetId)
-            case .perpetualOpenPosition, .perpetualClosePosition:
+            case .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition:
                 return .symbol
             }
         }()

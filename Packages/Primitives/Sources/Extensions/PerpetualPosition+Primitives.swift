@@ -4,6 +4,6 @@ import Foundation
 
 extension PerpetualPosition {
     public var baseAsset: Asset {
-        Asset.hypercoreSpotUSDC()
+        Asset.hypercoreUSDC()
     }
 }

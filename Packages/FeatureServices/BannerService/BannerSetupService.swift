@@ -55,10 +55,9 @@ public struct BannerSetupService: Sendable {
     }
     
     private func setupOnboarding(wallet: Wallet) throws {
-        if WalletPreferences(walletId: wallet.id).isCompleteInitialSynchronization, !wallet.isViewOnly {
-            try store.addBanners([
-                NewBanner.onboarding(walletId: wallet.walletId)
-            ])
+        switch wallet.source {
+        case .create: try store.addBanners([NewBanner.onboarding(walletId: wallet.walletId)])
+        case .import: break
         }
     }
 }

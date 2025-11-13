@@ -67,7 +67,7 @@ public final class WalletSceneViewModel: Sendable {
         self.totalFiatRequest = TotalValueRequest(walletId: wallet.id, balanceType: .wallet)
         self.assetsRequest = AssetsRequest(
             walletId: wallet.id,
-            filters: [.enabled]
+            filters: [.enabledBalance]
         )
         self.bannersRequest = BannersRequest(
             walletId: wallet.id,
@@ -192,7 +192,7 @@ extension WalletSceneViewModel {
         do {
             try walletsService.hideAsset(walletId: wallet.walletId, assetId: assetId)
         } catch {
-            NSLog("WalletSceneViewModel hide Asset error: \(error)")
+            debugLog("WalletSceneViewModel hide Asset error: \(error)")
         }
     }
 
@@ -204,7 +204,7 @@ extension WalletSceneViewModel {
                 image: value ? SystemImage.pin : SystemImage.unpin
             )
         } catch {
-            NSLog("WalletSceneViewModel pin asset error: \(error)")
+            debugLog("WalletSceneViewModel pin asset error: \(error)")
         }
     }
 
@@ -254,7 +254,7 @@ extension WalletSceneViewModel {
                 assetIds: assetIds
             )
         } catch {
-            NSLog("WalletSceneViewModel fetch error: \(error)")
+            debugLog("WalletSceneViewModel fetch error: \(error)")
         }
     }
 

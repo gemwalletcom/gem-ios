@@ -65,8 +65,8 @@ extension WalletsSceneViewModel {
         navigationPath.wrappedValue.append(Scenes.WalletDetail(wallet: wallet))
     }
 
-    private func delete(_ wallet: Wallet) throws {
-        try service.delete(wallet)
+    private func delete(_ wallet: Wallet) async throws {
+        try await service.delete(wallet)
     }
 
     private func pin(_ wallet: Wallet) throws {
@@ -109,7 +109,7 @@ extension WalletsSceneViewModel {
         do {
             try performSwapOrder(wallets: pinnedWallets, source: source, destination: destination)
         } catch {
-            NSLog("WalletsSceneViewModel move pinned error: \(error)")
+            debugLog("WalletsSceneViewModel move pinned error: \(error)")
         }
     }
 
@@ -118,7 +118,7 @@ extension WalletsSceneViewModel {
         do {
             try performSwapOrder(wallets: wallets, source: source, destination: destination)
         } catch {
-            NSLog("WalletsSceneViewModel move error: \(error)")
+            debugLog("WalletsSceneViewModel move error: \(error)")
         }
     }
     
@@ -134,9 +134,9 @@ extension WalletsSceneViewModel {
         }
     }
     
-    func onDeleteConfirmed(wallet: Wallet) {
+    func onDeleteConfirmed(wallet: Wallet) async {
         do {
-            try delete(wallet)
+            try await delete(wallet)
             currentWalletId = service.currentWalletId
         } catch {
             isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)

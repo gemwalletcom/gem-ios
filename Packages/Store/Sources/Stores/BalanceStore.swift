@@ -102,6 +102,16 @@ public struct BalanceStore: Sendable {
     }
 
     @discardableResult
+    public func getBalanceRecord(walletId: String, assetId: String) throws -> BalanceRecord? {
+        try db.read { db in
+            return try BalanceRecord
+                .filter(BalanceRecord.Columns.walletId == walletId)
+                .filter(BalanceRecord.Columns.assetId == assetId)
+                .fetchOne(db)
+        }
+    }
+
+    @discardableResult
     public func getBalances(assetIds: [String]) throws -> [WalletAssetBalance] {
         try db.read { db in
             return try BalanceRecord

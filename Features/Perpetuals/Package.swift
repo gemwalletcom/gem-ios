@@ -50,7 +50,9 @@ let package = Package(
         .target(
             name: "PerpetualsTestKit",
             dependencies: [
+                "Perpetuals",
                 "Primitives",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             path: "TestKit"
         ),

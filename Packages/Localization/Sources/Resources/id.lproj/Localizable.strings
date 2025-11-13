@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Token yang mencurigakan atau spam diidentifikasi sebagai potensi penipuan atau aset berbahaya. Token tersebut mungkin muncul di dompet Anda karena airdrop, transfer, atau impor manual.";
 "errors.insufficient_funds" = "Dana tidak mencukupi";
 "info.insufficient_network_fee_balance.title" = "%@ diperlukan";
-"info.insufficient_network_fee_balance.description" = "Transaksi ini membutuhkan %@ untuk menutupi biaya jaringan yang dibayarkan kepada %@ penambang, bukan Gem Wallet. Pastikan Anda memiliki %@ yang cukup.";
+"info.insufficient_network_fee_balance.description" = "Transaksi ini membutuhkan ** %@ ** untuk menutupi biaya jaringan yang dibayarkan kepada ** %@ ** penambang, bukan Gem Wallet. Pastikan Anda memiliki %@ yang cukup.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Saldo Tidak Cukup";
 "info.insufficient_balance.description" = "Anda tidak memiliki cukup %@ untuk menyelesaikan transaksi ini. Harap isi ulang, terima, atau tukarkan di dompet Anda dan coba lagi.";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "Arah";
 "perpetual.auto_close" = "Tutup Otomatis";
 "info.perpetual.auto_close.description" = "Tutup posisi Anda secara otomatis pada level harga yang ditentukan. Take Profit mengunci keuntungan, Stop Loss membatasi kerugian.";
-"perpetual.auto_close.trigger_price" = "Harga pemicu";
 "perpetual.auto_close.take_profit" = "Ambil untung";
-"perpetual.auto_close.stop_loss" = "Hentikan Kerugian";
 "perpetual.market_price" = "Harga Pasar";
-"perpetual.auto_close.estimed_pnl" = "Perkiraan PNL";
 "perpetual.increase_direction" = "Peningkatan %@";
 "perpetual.reduce_direction" = "Kurangi %@";
+"perpetual.auto_close.expected_profit" = "Keuntungan yang diharapkan";
+"perpetual.auto_close.expected_loss" = "Kerugian yang diharapkan";
+"perpetual.modify_position" = "Ubah Posisi";
+"perpetual.auto_close.stop_loss" = "Hentikan kerugian";

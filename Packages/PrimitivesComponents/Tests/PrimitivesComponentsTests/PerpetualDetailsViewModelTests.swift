@@ -36,22 +36,32 @@ struct PerpetualDetailsViewModelTests {
         #expect(closeModel.listItemModel.subtitle == "+$500.00 (+50.00%)")
 
         #expect(PerpetualDetailsViewModel.mock(.open(.mock())).listItemModel.subtitle == "Long 3x")
-        
-        #expect(PerpetualDetailsViewModel.mock(.increase(.mock())).listItemModel.subtitle == "Increase Long")
-        #expect(PerpetualDetailsViewModel.mock(.increase(.mock(direction: .short))).listItemModel.subtitle == "Increase Short")
-        #expect(PerpetualDetailsViewModel.mock(.reduce(.mock())).listItemModel.subtitle == "Reduce Long")
-        #expect(PerpetualDetailsViewModel.mock(.reduce(.mock(), positionDirection: .short)).listItemModel.subtitle == "Reduce Short")
+
+        let increaseModel = PerpetualDetailsViewModel.mock(.increase(.mock()))
+        #expect(increaseModel.listItemModel.subtitle == "Increase Long")
+
+        let increaseShortModel = PerpetualDetailsViewModel.mock(.increase(.mock(direction: .short)))
+        #expect(increaseShortModel.listItemModel.subtitle == "Increase Short")
+
+        let reduceLongModel = PerpetualDetailsViewModel.mock(.reduce())
+        #expect(reduceLongModel.listItemModel.subtitle == "Reduce Long")
+
+        let reduceShortModel = PerpetualDetailsViewModel.mock(.reduce(positionDirection: .short))
+        #expect(reduceShortModel.listItemModel.subtitle == "Reduce Short")
     }
 }
 
 extension PerpetualDetailsViewModel {
-    static func mock(_ perpetualType: PerpetualType) -> PerpetualDetailsViewModel {
-        PerpetualDetailsViewModel(perpetualType: perpetualType)
+    static func mock(_ type: PerpetualDetailsType) -> PerpetualDetailsViewModel {
+        PerpetualDetailsViewModel(type: type)
     }
 }
 
-extension PerpetualType {
-    static func reduce(_ data: PerpetualConfirmData, positionDirection: PerpetualDirection = .long) -> PerpetualType {
+extension PerpetualDetailsType {
+    static func reduce(
+        _ data: PerpetualConfirmData = .mock(),
+        positionDirection: PerpetualDirection = .long
+    ) -> PerpetualDetailsType {
         .reduce(PerpetualReduceData(data: data, positionDirection: positionDirection))
     }
 }

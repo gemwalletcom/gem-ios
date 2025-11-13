@@ -132,11 +132,12 @@ extension WalletRecord {
             id: id,
             name: name,
             index: index.asInt32,
-            type: WalletType(rawValue: type)!,
+            type: type,
             accounts: [],
             order: order.asInt32,
             isPinned: isPinned,
-            imageUrl: imageUrl
+            imageUrl: imageUrl,
+            source: source
         )
     }
 }
@@ -146,11 +147,13 @@ extension Wallet {
         return WalletRecord(
             id: id,
             name: name,
-            type: type.rawValue, 
+            type: type, 
             index: index.asInt,
             order: 0,
             isPinned: false,
-            imageUrl: imageUrl
+            imageUrl: imageUrl,
+            updatedAt: nil,
+            source: source
         )
     }
 }

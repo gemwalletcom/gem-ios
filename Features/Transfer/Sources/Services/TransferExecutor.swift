@@ -30,11 +30,11 @@ public struct TransferExecutor: TransferExecutable {
     }
 
     public func execute(input: TransferConfirmationInput) async throws {
-        let signedData = try sign(input: input)
+        let signedData = try await sign(input: input)
         let options = broadcastOptions(data: input.data)
 
         for (index, transactionData) in signedData.enumerated() {
-            NSLog("TransferExecutor data \(transactionData)")
+            debugLog("TransferExecutor data \(transactionData)")
 
             switch input.data.type.outputAction {
             case .sign:
@@ -44,7 +44,7 @@ public struct TransferExecutor: TransferExecutable {
                     data: transactionData,
                     options: options
                 )
-                NSLog("TransferExecutor broadcast response hash \(hash)")
+                debugLog("TransferExecutor broadcast response hash \(hash)")
 
                 input.delegate?(.success(hash))
 
@@ -58,11 +58,16 @@ public struct TransferExecutor: TransferExecutable {
                 )
                 let excludeChains = [Chain.hyperCore]
                 let assetIds = transaction.assetIds.filter { !excludeChains.contains($0.chain) }
-                let transactions = [transaction]
+                let transactions = [transaction].filter { tx in
+                    switch input.data.type {
+                    case .perpetual: !excludeChains.contains(tx.assetId.chain) || index == signedData.count - 1
+                    default: true
+                    }
+                }
 
                 try transactionService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {
-                    try walletsService.enableBalances(
+                    try walletsService.addBalancesIfMissing(
                         for: input.wallet.walletId,
                         assetIds: assetIds,
                         isEnabled: true
@@ -81,8 +86,8 @@ public struct TransferExecutor: TransferExecutable {
 // MARK: - Private
 
 extension TransferExecutor {
-    private func sign(input: TransferConfirmationInput) throws -> [String] {
-        try signer.sign(
+    private func sign(input: TransferConfirmationInput) async throws -> [String] {
+        try await signer.sign(
             transfer: input.data,
             transactionData: input.transactionData,
             amount: input.amount,

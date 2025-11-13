@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "مشکوک یا سپیم ٹوکنز کی شناخت ممکنہ گھوٹالوں یا نقصان دہ اثاثوں کے طور پر کی جاتی ہے۔ وہ ایئر ڈراپس، ٹرانسفرز، یا دستی درآمدات کی وجہ سے آپ کے بٹوے میں ظاہر ہو سکتے ہیں۔";
 "errors.insufficient_funds" = "ناکافی فنڈز";
 "info.insufficient_network_fee_balance.title" = "%@ درکار ہے۔";
-"info.insufficient_network_fee_balance.description" = "اس لین دین کے لیے %@ %@ کان کنوں کو ادا کی جانے والی نیٹ ورک فیس کو پورا کرنے کی ضرورت ہے، نہ کہ Gem Wallet ۔ یقینی بنائیں کہ آپ کے پاس کافی ہے %@ ۔";
+"info.insufficient_network_fee_balance.description" = "اس لین دین کے لیے ** %@ ** نیٹ ورک فیس کو پورا کرنے کے لیے ** %@ ** کان کنوں کو ادا کرنے کی ضرورت ہے، نہ کہ Gem Wallet ۔ یقینی بنائیں کہ آپ کے پاس کافی ہے %@ ۔";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "ناکافی بیلنس";
 "info.insufficient_balance.description" = "آپ کے پاس اس لین دین کو مکمل کرنے کے لیے کافی %@ نہیں ہے۔ براہ کرم اپنے بٹوے میں ٹاپ اپ کریں، وصول کریں یا تبدیل کریں اور دوبارہ کوشش کریں۔";
@@ -495,10 +495,11 @@
 "perpetual.direction" = "سمت";
 "perpetual.auto_close" = "آٹو بند";
 "info.perpetual.auto_close.description" = "اپنی پوزیشن کو سیٹ قیمت کی سطحوں پر خودکار طور پر بند کریں۔ منافع میں منافع کے تالے لیں، نقصان کو روکیں نقصانات کو محدود کریں۔";
-"perpetual.auto_close.trigger_price" = "ٹرگر قیمت";
 "perpetual.auto_close.take_profit" = "منافع لے لو";
-"perpetual.auto_close.stop_loss" = "نقصان کو روکیں۔";
 "perpetual.market_price" = "بازاری قیمت";
-"perpetual.auto_close.estimed_pnl" = "تخمینہ شدہ PNL";
 "perpetual.increase_direction" = "اضافہ کریں %@";
 "perpetual.reduce_direction" = "کم کریں %@";
+"perpetual.auto_close.expected_profit" = "متوقع منافع";
+"perpetual.auto_close.expected_loss" = "متوقع نقصان";
+"perpetual.modify_position" = "پوزیشن میں ترمیم کریں۔";
+"perpetual.auto_close.stop_loss" = "نقصان کو روکیں۔";

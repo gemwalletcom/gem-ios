@@ -46,12 +46,22 @@ public struct PerpetualScene: View {
                         subtitleStyle: position.pnlTextStyle
                     )
                     .numericTransition(for: position.pnlWithPercentText)
+
+                    NavigationCustomLink(
+                        with: ListItemView(
+                            title: position.autocloseTitle,
+                            subtitle: position.autocloseText.subtitle,
+                            subtitleExtra: position.autocloseText.subtitleExtra,
+                            infoAction: model.onSelectAutocloseInfo
+                        ),
+                        action: model.onSelectAutoclose
+                    )
                     
                     ListItemView(
                         title: position.sizeTitle,
                         subtitle: position.sizeValueText
                     )
-                    
+
                     if let text = position.entryPriceText {
                         ListItemView(
                             title: position.entryPriceTitle,
