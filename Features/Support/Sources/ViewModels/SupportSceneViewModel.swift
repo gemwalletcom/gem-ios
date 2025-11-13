@@ -33,8 +33,8 @@ public final class SupportSceneViewModel: Sendable {
     
     var chatwootModel: ChatwootWebViewModel {
         return ChatwootWebViewModel(
-            websiteToken: "21yu9Az48rJHe1rg4poHqLSr",
-            baseUrl: URL(string: "https://support.gemwallet.com")!,
+            websiteToken: Constants.chatwootPublicToken,
+            baseUrl: Constants.chatwootURL,
             supportDeviceId: supportService.getOrCreateSupportDeviceId(),
             isPresentingSupport: isPresentingSupport
         )
