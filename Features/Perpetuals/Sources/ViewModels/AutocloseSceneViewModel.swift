@@ -61,11 +61,11 @@ public final class AutocloseSceneViewModel {
         )
 
         if let price = position.position.takeProfit?.price {
-            takeProfitInput.text = priceFormatter.formatInputPrice(price)
+            takeProfitInput.text = priceFormatter.formatInputPrice(price, szDecimals: position.asset.decimals.asInt)
         }
 
         if let price = position.position.stopLoss?.price {
-            stopLossInput.text = priceFormatter.formatInputPrice(price)
+            stopLossInput.text = priceFormatter.formatInputPrice(price, szDecimals: position.asset.decimals.asInt)
         }
 
         self.input = AutocloseInput(
@@ -142,7 +142,7 @@ extension AutocloseSceneViewModel {
         guard let type = input.focusedType, let focused = input.focused else { return }
 
         let targetPrice = estimator.calculateTargetPriceFromROE(roePercent: percent, type: type)
-        focused.text = priceFormatter.formatInputPrice(targetPrice, decimals: 2)
+        focused.text = priceFormatter.formatInputPrice(targetPrice, szDecimals: position.asset.decimals.asInt)
     }
 }
 
