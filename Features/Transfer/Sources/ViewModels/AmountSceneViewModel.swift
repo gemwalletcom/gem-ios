@@ -255,7 +255,7 @@ public final class AmountSceneViewModel {
     var maxLeverage: UInt8 {
         switch type {
         case .perpetual(let data): data.positionAction.transferData.leverage
-        default: .zero
+        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: .zero
         }
     }
 
