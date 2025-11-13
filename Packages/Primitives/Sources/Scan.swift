@@ -51,16 +51,12 @@ public struct ScanTransaction: Codable, Equatable, Sendable {
 }
 
 public struct ScanTransactionPayload: Codable, Equatable, Sendable {
-	public let deviceId: String
-	public let walletIndex: UInt32
 	public let origin: ScanAddressTarget
 	public let target: ScanAddressTarget
 	public let website: String?
 	public let type: TransactionType
 
-	public init(deviceId: String, walletIndex: UInt32, origin: ScanAddressTarget, target: ScanAddressTarget, website: String?, type: TransactionType) {
-		self.deviceId = deviceId
-		self.walletIndex = walletIndex
+	public init(origin: ScanAddressTarget, target: ScanAddressTarget, website: String?, type: TransactionType) {
 		self.origin = origin
 		self.target = target
 		self.website = website
