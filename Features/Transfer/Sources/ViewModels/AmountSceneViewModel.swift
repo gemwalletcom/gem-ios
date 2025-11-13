@@ -317,7 +317,7 @@ extension AmountSceneViewModel {
     }
 
     func onSelectLeverage() {
-        isPresentingSheet = .leveragePicker
+        isPresentingSheet = .leverageSelector
     }
 
     func onSelectValidator(_ validator: DelegationValidator) {
@@ -606,10 +606,12 @@ extension AmountSceneViewModel {
                 return BigInt(2_000_000)
             }
         case .perpetual(let data):
-            return PerpetualMinimumCalculator.calculateMinimumUSDC(
-                price: data.positionAction.transferData.price,
-                szDecimals: data.positionAction.transferData.asset.decimals.asInt,
-                leverage: selectedLeverage
+            return BigInt(
+                PerpetualCalculator().calculateMinimumUsdc(
+                    price: data.positionAction.transferData.price,
+                    szDecimals: data.positionAction.transferData.asset.decimals,
+                    leverage: selectedLeverage
+                )
             )
         case .stakeUnstake, .transfer:
             break

@@ -46,7 +46,7 @@ public struct AmountNavigationView: View {
                         )
                     }
                 }
-            case .leveragePicker:
+            case .leverageSelector:
                 NavigationStack {
                     LeveragePickerView(
                         leverageOptions: model.leverageOptions,
@@ -62,7 +62,6 @@ public struct AmountNavigationView: View {
                     }
                 }
                 .presentationDetents([.height(300)])
-                .presentationDragIndicator(.visible)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
