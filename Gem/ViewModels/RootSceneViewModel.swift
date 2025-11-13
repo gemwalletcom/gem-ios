@@ -17,6 +17,11 @@ import WalletService
 import WalletsService
 import NameService
 
+enum AppState: Equatable {
+    case onboarding
+    case authenticated(Wallet)
+}
+
 @Observable
 @MainActor
 final class RootSceneViewModel {
@@ -27,11 +32,13 @@ final class RootSceneViewModel {
     private let notificationHandler: NotificationHandler
     private let walletsService: WalletsService
 
+    private(set) var appState: AppState
+
     let walletService: WalletService
     let nameService: NameService
     let walletConnectorPresenter: WalletConnectorPresenter
+    let onboardingPresenter: OnboardingPresenter
     let lockManager: any LockWindowManageable
-    var currentWallet: Wallet? { walletService.currentWallet }
 
     var updateVersionAlertMessage: AlertMessage?
 
@@ -60,7 +67,8 @@ final class RootSceneViewModel {
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
         walletsService: WalletsService,
-        nameService: NameService
+        nameService: NameService,
+        onboardingPresenter: OnboardingPresenter
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartAsyncService = onstartAsyncService
@@ -72,6 +80,24 @@ final class RootSceneViewModel {
         self.walletService = walletService
         self.walletsService = walletsService
         self.nameService = nameService
+        self.onboardingPresenter = onboardingPresenter
+
+        if let wallet = walletService.currentWallet {
+            appState = .authenticated(wallet)
+        } else {
+            appState = .onboarding
+        }
+    }
+    
+    var onboardingViewModel: OnboardingViewModel {
+        OnboardingViewModel(
+            walletService: walletService,
+            nameService: nameService,
+            onboardingPresenter: onboardingPresenter,
+            onComplete: { [weak self] in
+                self?.authenticateWallet()
+            }
+        )
     }
 }
 
@@ -98,7 +124,10 @@ extension RootSceneViewModel {
 extension RootSceneViewModel {
     func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
         if let newWallet {
+            appState = .authenticated(newWallet)
             setup(wallet: newWallet)
+        } else {
+            appState = .onboarding
         }
     }
 
@@ -161,6 +190,11 @@ extension RootSceneViewModel {
 // MARK: - Private
 
 extension RootSceneViewModel {
+    private func authenticateWallet() {
+        guard let wallet = walletService.currentWallet else { return }
+        appState = .authenticated(wallet)
+    }
+
     private func setup(wallet: Wallet) {
         onstartAsyncService.setup(wallet: wallet)
         do {

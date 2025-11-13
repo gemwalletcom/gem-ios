@@ -39,7 +39,7 @@ public struct CreateWalletNavigationStack: View {
                     model: VerifyPhraseViewModel(
                         words: $0.words,
                         walletService: walletService,
-                        onFinish: { isPresentingWallets.toggle() }
+                        onFinish: { isPresentingWallets = false }
                     )
                 )
             }

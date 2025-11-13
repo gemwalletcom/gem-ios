@@ -18,15 +18,12 @@ struct RootScene: View {
 
     var body: some View {
         VStack {
-            if let currentWallet = model.currentWallet {
-                MainTabView(
-                    model: .init(wallet: currentWallet)
-                )
-                .alertSheet($model.updateVersionAlertMessage)
-            } else {
-                OnboardingNavigationView(
-                    model: .init(walletService: model.walletService, nameService: model.nameService)
-                )
+            switch model.appState {
+            case .onboarding:
+                OnboardingNavigationView(model: model.onboardingViewModel)
+            case .authenticated(let wallet):
+                MainTabView(model: MainTabViewModel(wallet: wallet))
+                    .alertSheet($model.updateVersionAlertMessage)
             }
         }
         .onOpenURL { url in
@@ -57,7 +54,7 @@ struct RootScene: View {
         .taskOnce(model.setup)
         .lockManaged(by: model.lockManager)
         .onChange(
-            of: model.currentWallet,
+            of: model.walletService.currentWallet,
             initial: true,
             model.onChangeWallet
         )
