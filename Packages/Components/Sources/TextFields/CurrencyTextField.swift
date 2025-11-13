@@ -11,6 +11,16 @@ public struct CurrencyTextField: View {
         case trailing
     }
 
+    private enum Constants {
+        static let fontSize: CGFloat = 44
+        static let fontWeight: Font.Weight = .semibold
+        static let minWidth: CGFloat = 40
+        static let maxWidth: CGFloat = 210
+        static var height: CGFloat {
+            UIFont.systemFont(ofSize: fontSize, weight: .semibold).lineHeight
+        }
+    }
+
     @Binding var text: String
 
     private let currencySymbol: String
@@ -40,12 +50,12 @@ public struct CurrencyTextField: View {
             TextField(placeholder, text: $text)
                 .keyboardType(keyboardType)
                 .foregroundStyle(Colors.black)
-                .font(.system(size: 44).weight(.semibold))
+                .font(.system(size: Constants.fontSize, weight: Constants.fontWeight))
                 .multilineTextAlignment(.center)
                 .textFieldStyle(.plain)
                 .lineLimit(1)
                 .padding(currencyPosition == .leading ? .leading : .trailing, .tiny)
-                .frame(minWidth: 40, maxWidth: 210)
+                .frame(minWidth: Constants.minWidth, maxWidth: Constants.maxWidth)
                 .fixedSize(horizontal: true, vertical: false)
                 .disabled(!isEnabled)
 
@@ -53,12 +63,12 @@ public struct CurrencyTextField: View {
                 currencySymbolView
             }
         }
-        .frame(height: 54)
+        .frame(height: Constants.height) // TODO: Remove after fix bug: https://developer.apple.com/forums/thread/806828
     }
 
     private var currencySymbolView: some View {
         Text(currencySymbol)
-            .font(.system(size: 44).weight(.semibold))
+            .font(.system(size: Constants.fontSize, weight: Constants.fontWeight))
             .foregroundStyle(Colors.black)
             .lineLimit(1)
             .fixedSize()
