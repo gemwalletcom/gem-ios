@@ -47,7 +47,7 @@ public struct PerpetualPriceFormatter {
     }
 
     public func formatInputPrice(_ price: Double, locale: Locale = Locale.current, szDecimals: Int) -> String {
-        let maxDecimals = 6 - szDecimals
+        let maxDecimals = max(0, 6 - szDecimals)
 
         let formatter = NumberFormatter()
         formatter.locale = locale
@@ -61,8 +61,8 @@ public struct PerpetualPriceFormatter {
         }
 
         let decimalSeparator = formatter.decimalSeparator ?? "."
-        if let dotIndex = result.firstIndex(of: Character(decimalSeparator)) {
-            let decimalCount = result.distance(from: result.index(after: dotIndex), to: result.endIndex)
+        if !decimalSeparator.isEmpty, let separatorRange = result.range(of: decimalSeparator) {
+            let decimalCount = result.distance(from: separatorRange.upperBound, to: result.endIndex)
             if decimalCount > maxDecimals {
                 formatter.usesSignificantDigits = false
                 formatter.minimumFractionDigits = 0
