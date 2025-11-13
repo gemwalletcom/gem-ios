@@ -25,5 +25,7 @@ public struct OnboardingNavigationView: View {
                     isPresentingWallets: $model.isPresentingImportWalletSheet
                 )
             }
+            .onChange(of: model.isPresentingCreateWalletSheet, model.onWalletSetupComplete)
+            .onChange(of: model.isPresentingImportWalletSheet, model.onWalletSetupComplete)
     }
 }

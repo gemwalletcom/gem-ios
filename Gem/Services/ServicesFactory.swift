@@ -194,8 +194,7 @@ struct ServicesFactory {
             transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
             addressNameService: addressNameService,
-            deviceService: deviceService,
-            bannerService: bannerService
+            deviceService: deviceService
         )
 
         return AppResolver.Services(

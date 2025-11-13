@@ -3,6 +3,7 @@
 import SwiftUI
 import Primitives
 import InfoSheet
+import Preferences
 
 @Observable
 public final class OnboardingPresenter: Sendable {
@@ -12,8 +13,8 @@ public final class OnboardingPresenter: Sendable {
     public init() { }
 
     @MainActor
-    public func showEnablePushNotificationsIfNeeded(oldWallet: Wallet?, newWallet: Wallet?, isPushNotificationsEnabled: Bool) {
-        guard oldWallet == nil, newWallet != nil, !isPushNotificationsEnabled else { return }
+    public func showEnablePushNotifications() {
+        guard Preferences.standard.isPushNotificationsEnabled == false else { return }
         isPresentingInfoSheetAction = .enablePushNotifications
     }
 }

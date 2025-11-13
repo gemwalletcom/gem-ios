@@ -24,7 +24,8 @@ let package = Package(
         .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
-        .package(name: "InfoSheet", path: "../InfoSheet")
+        .package(name: "InfoSheet", path: "../InfoSheet"),
+        .package(name: "Preferences", path: "../../Packages/Preferences")
     ],
     targets: [
         .target(
@@ -42,7 +43,8 @@ let package = Package(
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "DeviceService", package: "FeatureServices"),
                 "Formatters",
-                "InfoSheet"
+                "InfoSheet",
+                "Preferences"
             ],
             path: "Sources"
         ),

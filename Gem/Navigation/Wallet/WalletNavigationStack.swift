@@ -27,6 +27,8 @@ struct WalletNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.balanceService) private var balanceService
+    @Environment(\.onboardingPresenter) private var onboardingPresenter
+    @Environment(\.viewModelFactory) private var viewModelFactory
 
     @State private var model: WalletSceneViewModel
 
@@ -195,6 +197,17 @@ struct WalletNavigationStack: View {
             }
             .safariSheet(url: $model.isPresentingUrl)
             .toast(message: $model.isPresentingToastMessage)
+            .sheet(item: Binding(
+                get: { onboardingPresenter.isPresentingInfoSheetAction },
+                set: { onboardingPresenter.isPresentingInfoSheetAction = $0 }
+            )) {
+                InfoSheetActionScene(
+                    model: viewModelFactory.infoSheetActionViewModel(
+                        type: $0,
+                        onComplete: { onboardingPresenter.isPresentingInfoSheetAction = nil }
+                    )
+                )
+            }
         }
     }
 }

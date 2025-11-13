@@ -17,7 +17,6 @@ public final class EnablePushNotificationsViewModel: InfoSheetActionable {
 
     private let pushNotificationService: PushNotificationEnablerService
     private let deviceService: DeviceService
-    private let bannerService: BannerService
     private let onComplete: VoidAction
 
     var buttonState = ButtonState.normal
@@ -26,12 +25,10 @@ public final class EnablePushNotificationsViewModel: InfoSheetActionable {
     public init(
         pushNotificationService: PushNotificationEnablerService = PushNotificationEnablerService(),
         deviceService: DeviceService,
-        bannerService: BannerService,
         onComplete: VoidAction
     ) {
         self.pushNotificationService = pushNotificationService
         self.deviceService = deviceService
-        self.bannerService = bannerService
         self.onComplete = onComplete
     }
 
@@ -59,7 +56,6 @@ extension EnablePushNotificationsViewModel {
                 let isEnabled = try await pushNotificationService.requestPermissions()
                 if isEnabled {
                     try await deviceService.update()
-                    try bannerService.closeBanner(id: BannerEvent.enableNotifications.rawValue)
                 }
                 onComplete?()
             } catch {

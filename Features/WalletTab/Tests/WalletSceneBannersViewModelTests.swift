@@ -3,7 +3,6 @@
 import Testing
 import Primitives
 import PrimitivesTestKit
-import Preferences
 
 @testable import WalletTab
 

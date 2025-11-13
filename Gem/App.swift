@@ -37,9 +37,7 @@ struct GemApp: App {
                     walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService,
                     nameService: resolver.services.nameService,
-                    onboardingPresenter: resolver.services.onboardingPresenter,
-                    viewModelFactory: resolver.services.viewModelFactory,
-                    preferences: resolver.storages.observablePreferences.preferences
+                    onboardingPresenter: resolver.services.onboardingPresenter
                 )
             )
             .inject(resolver: resolver)

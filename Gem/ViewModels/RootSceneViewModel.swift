@@ -16,10 +16,11 @@ import WalletConnector
 import WalletService
 import WalletsService
 import NameService
-import BannerService
-import Preferences
-import Onboarding
-import InfoSheet
+
+enum AppState: Equatable {
+    case onboarding
+    case authenticated(Wallet)
+}
 
 @Observable
 @MainActor
@@ -30,23 +31,16 @@ final class RootSceneViewModel {
     private let deviceObserverService: DeviceObserverService
     private let notificationHandler: NotificationHandler
     private let walletsService: WalletsService
-    private let preferences: Preferences
+
+    private(set) var appState: AppState
 
     let walletService: WalletService
     let nameService: NameService
     let walletConnectorPresenter: WalletConnectorPresenter
     let onboardingPresenter: OnboardingPresenter
     let lockManager: any LockWindowManageable
-    let viewModelFactory: ViewModelFactory
-
-    var currentWallet: Wallet? { walletService.currentWallet }
 
     var updateVersionAlertMessage: AlertMessage?
-
-    var isPresentingInfoSheetAction: InfoSheetActionType? {
-        get { onboardingPresenter.isPresentingInfoSheetAction }
-        set { onboardingPresenter.isPresentingInfoSheetAction = newValue }
-    }
 
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -74,9 +68,7 @@ final class RootSceneViewModel {
         walletService: WalletService,
         walletsService: WalletsService,
         nameService: NameService,
-        onboardingPresenter: OnboardingPresenter,
-        viewModelFactory: ViewModelFactory,
-        preferences: Preferences = .standard
+        onboardingPresenter: OnboardingPresenter
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartAsyncService = onstartAsyncService
@@ -89,8 +81,23 @@ final class RootSceneViewModel {
         self.walletsService = walletsService
         self.nameService = nameService
         self.onboardingPresenter = onboardingPresenter
-        self.viewModelFactory = viewModelFactory
-        self.preferences = preferences
+
+        if let wallet = walletService.currentWallet {
+            appState = .authenticated(wallet)
+        } else {
+            appState = .onboarding
+        }
+    }
+    
+    var onboardingViewModel: OnboardingViewModel {
+        OnboardingViewModel(
+            walletService: walletService,
+            nameService: nameService,
+            onboardingPresenter: onboardingPresenter,
+            onComplete: { [weak self] in
+                self?.authenticateWallet()
+            }
+        )
     }
 }
 
@@ -117,13 +124,11 @@ extension RootSceneViewModel {
 extension RootSceneViewModel {
     func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
         if let newWallet {
+            appState = .authenticated(newWallet)
             setup(wallet: newWallet)
+        } else {
+            appState = .onboarding
         }
-        onboardingPresenter.showEnablePushNotificationsIfNeeded(
-            oldWallet: oldWallet,
-            newWallet: newWallet,
-            isPushNotificationsEnabled: preferences.isPushNotificationsEnabled
-        )
     }
 
     func handleOpenUrl(_ url: URL) async {
@@ -185,6 +190,11 @@ extension RootSceneViewModel {
 // MARK: - Private
 
 extension RootSceneViewModel {
+    private func authenticateWallet() {
+        guard let wallet = walletService.currentWallet else { return }
+        appState = .authenticated(wallet)
+    }
+
     private func setup(wallet: Wallet) {
         onstartAsyncService.setup(wallet: wallet)
         do {
