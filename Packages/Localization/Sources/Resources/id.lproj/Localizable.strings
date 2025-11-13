@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Sembunyikan dari dompet";
 "common.details" = "Rincian";
 "transaction.swap_again" = "Tukar Lagi";
-"errors.scan_transaction.malicious" = "Transaksi diidentifikasi sebagai mencurigakan";
-"errors.scan_transaction.memo_required" = "Alamat %@ memerlukan tag / memo tujuan";
+"errors.scan_transaction.malicious.description" = "Transaksi ini tidak dapat diselesaikan — alamat dompet tujuan terkait dengan aktivitas yang mencurigakan atau berbahaya.";
+"errors.scan_transaction.memo_required" = "%@ alamat dompet tujuan memerlukan tag / memo tujuan";
 "common.info" = "Informasi";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "Kerugian yang diharapkan";
 "perpetual.modify_position" = "Ubah Posisi";
 "perpetual.auto_close.stop_loss" = "Hentikan kerugian";
+"errors.scan_transaction.malicious.title" = "Aktivitas Mencurigakan";

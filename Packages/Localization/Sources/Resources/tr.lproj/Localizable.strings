@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Cüzdandan gizle";
 "common.details" = "Detaylar";
 "transaction.swap_again" = "Tekrar Değiştir";
-"errors.scan_transaction.malicious" = "İşlem şüpheli olarak belirlendi";
-"errors.scan_transaction.memo_required" = "%@ adresi bir hedef etiketi / notu gerektiriyor";
+"errors.scan_transaction.malicious.description" = "Bu işlem tamamlanamıyor; hedef cüzdan adresi şüpheli veya zararlı bir etkinlikle bağlantılı.";
+"errors.scan_transaction.memo_required" = "%@ hedef cüzdan adresi bir hedef etiketi / notu gerektiriyor";
 "common.info" = "Bilgi";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "Beklenen kayıp";
 "perpetual.modify_position" = "Pozisyonu Değiştir";
 "perpetual.auto_close.stop_loss" = "Zarar durdurma";
+"errors.scan_transaction.malicious.title" = "Şüpheli Etkinlik";

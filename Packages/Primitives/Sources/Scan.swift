@@ -31,11 +31,11 @@ public struct ScanAddress: Codable, Equatable, Sendable {
 }
 
 public struct ScanAddressTarget: Codable, Equatable, Sendable {
-	public let chain: Chain
+	public let assetId: AssetId
 	public let address: String
 
-	public init(chain: Chain, address: String) {
-		self.chain = chain
+	public init(assetId: AssetId, address: String) {
+		self.assetId = assetId
 		self.address = address
 	}
 }

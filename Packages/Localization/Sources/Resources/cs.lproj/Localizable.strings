@@ -271,7 +271,7 @@
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "Confirm";
 "common.skip" = "Skip";
-"common.warning" = "Warning";
+"common.warning" = "Varování";
 "warnings.multi_signature_blocked" = "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.";
 "swap.price_impact" = "Price Impact";
 "wallet.sell" = "Sell";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Skrýt z peněženky";
 "common.details" = "Podrobnosti";
 "transaction.swap_again" = "Znovu vyměnit";
-"errors.scan_transaction.malicious" = "Transakce označena jako podezřelá";
-"errors.scan_transaction.memo_required" = "Adresa %@ vyžaduje tag / poznámku cíle";
+"errors.scan_transaction.malicious.description" = "Tuto transakci nelze dokončit – cílová adresa peněženky je spojena s podezřelou nebo škodlivou aktivitou.";
+"errors.scan_transaction.memo_required" = "Cílová adresa peněženky %@ vyžaduje cílovou značku / poznámku";
 "common.info" = "Informace";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "Očekávaná ztráta";
 "perpetual.modify_position" = "Upravit pozici";
 "perpetual.auto_close.stop_loss" = "Zastavit ztrátu";
+"errors.scan_transaction.malicious.title" = "Podezřelá aktivita";

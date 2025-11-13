@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Nascondi dal portafoglio";
 "common.details" = "Dettagli";
 "transaction.swap_again" = "Scambia di nuovo";
-"errors.scan_transaction.malicious" = "Transazione identificata come sospetta";
-"errors.scan_transaction.memo_required" = "L'indirizzo %@ richiede un tag di destinazione / promemoria";
+"errors.scan_transaction.malicious.description" = "Questa transazione non può essere completata: l'indirizzo del portafoglio di destinazione è collegato ad attività sospette o dannose.";
+"errors.scan_transaction.memo_required" = "%@ l'indirizzo del portafoglio di destinazione richiede un tag/memo di destinazione";
 "common.info" = "Informazioni";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "Perdita prevista";
 "perpetual.modify_position" = "Modifica posizione";
 "perpetual.auto_close.stop_loss" = "Stop loss";
+"errors.scan_transaction.malicious.title" = "Attività sospetta";

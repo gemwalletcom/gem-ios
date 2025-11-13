@@ -41,6 +41,14 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
 
         let (rates, metadata, scanResult) = try await (getFeeRates, getTransactionMetadata, getTransactionScan)
 
+        if let scanResult = scanResult {
+            try ScanTransactionValidator.validate(
+                transaction: scanResult,
+                asset: data.type.asset,
+                memo: data.recipientData.recipient.memo
+            )
+        }
+
         return try await TransferTransactionData(
             allRates: rates.rates,
             transactionData: getTransactionLoad(

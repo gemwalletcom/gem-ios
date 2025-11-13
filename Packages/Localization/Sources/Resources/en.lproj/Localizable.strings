@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Hide from wallet";
 "common.details" = "Details";
 "transaction.swap_again" = "Swap Again";
-"errors.scan_transaction.malicious" = "Transaction identified as suspicion";
-"errors.scan_transaction.memo_required" = "%@ address requires a destination tag / memo";
+"errors.scan_transaction.malicious.description" = "This transaction cannot be completed — the destination wallet address is linked to suspicious or harmful activity.";
+"errors.scan_transaction.memo_required" = "%@ destination wallet address requires a destination tag / memo";
 "common.info" = "Info";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "Expected loss";
 "perpetual.modify_position" = "Modify Position";
 "perpetual.auto_close.stop_loss" = "Stop loss";
+"errors.scan_transaction.malicious.title" = "Suspicious Activity";
