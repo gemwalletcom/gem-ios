@@ -42,6 +42,13 @@ struct WalletNavigationStack: View {
             set: { navigationState.wallet = $0 }
         )
     }
+    
+    private var isPresentingInfoSheetAction: Binding<InfoSheetActionType?> {
+        Binding(
+            get: { onboardingPresenter.isPresentingInfoSheetAction },
+            set: { onboardingPresenter.isPresentingInfoSheetAction = $0 }
+        )
+    }
 
     var body: some View {
         NavigationStack(path: navigationPath) {
@@ -197,10 +204,7 @@ struct WalletNavigationStack: View {
             }
             .safariSheet(url: $model.isPresentingUrl)
             .toast(message: $model.isPresentingToastMessage)
-            .sheet(item: Binding(
-                get: { onboardingPresenter.isPresentingInfoSheetAction },
-                set: { onboardingPresenter.isPresentingInfoSheetAction = $0 }
-            )) {
+            .sheet(item: isPresentingInfoSheetAction) {
                 InfoSheetActionScene(
                     model: viewModelFactory.infoSheetActionViewModel(
                         type: $0,
