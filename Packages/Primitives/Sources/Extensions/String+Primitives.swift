@@ -69,6 +69,18 @@ public extension String {
         return data
     }
     
+    func grouped(by length: Int, separator: String = " ") -> String {
+        var result = [String]()
+
+        for i in stride(from: 0, to: self.count, by: length) {
+            let endIndex = self.index(self.endIndex, offsetBy: -i)
+            let startIndex = self.index(endIndex, offsetBy: -length, limitedBy: self.startIndex) ?? self.startIndex
+            result.append(String(self[startIndex..<endIndex]))
+        }
+
+        return result.reversed().joined(separator: separator)
+    }
+    
     func base64Encoded() throws -> Data {
         guard let data = Data(base64Encoded: self) else {
             throw AnyError("Unable to base64 encode string to data")

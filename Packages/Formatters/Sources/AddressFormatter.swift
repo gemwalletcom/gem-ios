@@ -8,6 +8,7 @@ public struct AddressFormatter {
         case short
         case full
         case extra(Int)
+        case grouped(length: Int)
     }
     
     private let style: Self.Style
@@ -43,6 +44,7 @@ public struct AddressFormatter {
         case .short: address.truncate(first: first, last: shownNumberOfCharacters)
         case .full: address
         case .extra(let extra): address.truncate(first: first + extra, last: shownNumberOfCharacters + extra)
+        case .grouped(let length): address.grouped(by: length)
         }
     }
 }

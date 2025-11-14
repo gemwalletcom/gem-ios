@@ -4,6 +4,7 @@ import SwiftUI
 import Components
 import Style
 import PrimitivesComponents
+import Localization
 
 public struct ReceiveScene: View {
     @State private var model: ReceiveViewModel
@@ -30,14 +31,27 @@ public struct ReceiveScene: View {
                     .lineLimit(1)
 
                     if let image = model.renderedImage {
-                        qrCodeView(image: image)
-                            .frame(maxWidth: model.qrWidth)
-                            .padding(.medium)
-                            .background(
-                                RoundedRectangle(cornerRadius: .medium)
-                                    .fill(Colors.listStyleColor)
-                                    .shadow(color: Color.black.opacity(Sizing.shadow.opacity), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
-                            )
+                        VStack(spacing: .small) {
+                            Text(Localized.Receive.yourAddress)
+                                .textStyle(.body)
+
+                            qrCodeView(image: image)
+
+                            Button(action: model.onCopyAddress) {
+                                Text(model.addressGrouped)
+                                    .multilineTextAlignment(.center)
+                                    .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        .padding(.horizontal, .medium)
+                        .padding(.vertical, .small)
+                        .frame(maxWidth: model.qrWidth)
+                        .background(
+                            RoundedRectangle(cornerRadius: .medium)
+                                .fill(Colors.listStyleColor)
+                                .shadow(color: Color.black.opacity(Sizing.shadow.opacity), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
+                        )
                     }
                 }
                 Text(model.warningMessage)
@@ -51,7 +65,7 @@ public struct ReceiveScene: View {
             .frame(maxWidth: .scene.button.maxWidth)
 
             StateButton(
-                text: model.addressShort,
+                text: model.copyTitle,
                 image: Images.System.copy,
                 action: model.onCopyAddress
             )
