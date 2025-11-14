@@ -53,7 +53,7 @@ struct AutocloseNavigationStack: View {
                 ConfirmTransferScene(
                     model: viewModelFactory.confirmTransferScene(
                         wallet: wallet,
-                        data: $0,
+                        presentation: .confirm($0),
                         onComplete: {
                             onComplete?()
                         }

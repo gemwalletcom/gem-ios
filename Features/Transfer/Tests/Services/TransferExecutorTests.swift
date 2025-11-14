@@ -24,7 +24,8 @@ struct TransferExecutorTests {
             signer: TransactionSignerMock(signedData: ["setup1", "setup2", "setup3", "actual_order"]),
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash0", "hash1", "hash2", "hash3"]),
             walletsService: .mock(),
-            transactionService: .mock(transactionStore: transactionStore)
+            transactionService: .mock(transactionStore: transactionStore),
+            transferStateService: .mock()
         )
 
         let input = TransferConfirmationInput(
@@ -49,7 +50,8 @@ struct TransferExecutorTests {
             signer: TransactionSignerMock(signedData: ["approval_tx", "swap_tx"]),
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash0", "hash1"]),
             walletsService: .mock(),
-            transactionService: .mock(transactionStore: transactionStore)
+            transactionService: .mock(transactionStore: transactionStore),
+            transferStateService: .mock()
         )
 
         let input = TransferConfirmationInput(
@@ -74,7 +76,8 @@ struct TransferExecutorTests {
             signer: TransactionSignerMock(signedData: ["tx"]),
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash"]),
             walletsService: .mock(),
-            transactionService: .mock(transactionStore: transactionStore)
+            transactionService: .mock(transactionStore: transactionStore),
+            transferStateService: .mock()
         )
 
         let input = TransferConfirmationInput(

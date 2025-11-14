@@ -231,7 +231,7 @@ extension AssetSceneViewModel {
                 onSelectHeader(.stake)
             case .activateAsset:
                 isPresentingAssetSheet = .transfer(
-                    TransferData(
+                    .confirm(TransferData(
                         type: .account(assetData.asset, .activate),
                         recipientData: RecipientData(
                             recipient: Recipient(
@@ -242,7 +242,7 @@ extension AssetSceneViewModel {
                             amount: .none
                         ),
                         value: 0
-                    )
+                    ))
                 )
             case .enableNotifications,
                     .accountActivation,

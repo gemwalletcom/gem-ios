@@ -67,6 +67,11 @@ public struct ConfirmService: Sendable {
         try await transferExecutor.execute(input: input)
     }
 
+    @available(iOS 26.0, *)
+    public func executeTransferAsync(input: TransferConfirmationInput) {
+        transferExecutor.executeAsync(input: input)
+    }
+
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {
         try keystore.getPasswordAuthentication()
     }
