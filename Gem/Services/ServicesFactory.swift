@@ -32,6 +32,8 @@ import PerpetualService
 import WalletsService
 import AppService
 import AddressNameService
+import Blockchain
+import NativeProviderService
 import Transfer
 
 struct ServicesFactory {
@@ -54,6 +56,8 @@ struct ServicesFactory {
         )
 
         let nodeService = NodeService(nodeStore: storeManager.nodeStore)
+        let nativeProvider = NativeProvider(nodeProvider: nodeService)
+        let gatewayService = GatewayService(provider: nativeProvider)
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
 
         let avatarService = AvatarService(store: storeManager.walletStore)
@@ -174,9 +178,9 @@ struct ServicesFactory {
             nodeProvider: nodeService
         )
         let perpetualObserverService = PerpetualObserverService(perpetualService: perpetualService)
-        
+
         let nameService = NameService()
-        let scanService = ScanService(securePreferences: .standard)
+        let scanService = ScanService(gatewayService: gatewayService)
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
 
         let transferStatePresenter = TransferStatePresenter()
@@ -314,7 +318,7 @@ extension ServicesFactory {
     private static func makeAssetsService(
         assetStore: AssetStore,
         balanceStore: BalanceStore,
-        chainFactory: ChainService.ChainServiceFactory
+        chainFactory: ChainServiceFactory
     ) -> AssetsService {
         AssetsService(
             assetStore: assetStore,
@@ -343,7 +347,7 @@ extension ServicesFactory {
         transactionStore: TransactionStore,
         stakeService: StakeService,
         nftService: NFTService,
-        chainFactory: ChainService.ChainServiceFactory,
+        chainFactory: ChainServiceFactory,
         balanceService: BalanceService
     ) -> TransactionService {
         TransactionService(

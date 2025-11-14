@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "إخفاء من المحفظة";
 "common.details" = "تفاصيل";
 "transaction.swap_again" = "التبديل مرة أخرى";
-"errors.scan_transaction.malicious" = "تم تحديد المعاملة على أنها اشتباه";
-"errors.scan_transaction.memo_required" = "يتطلب عنوان %@ علامة وجهة/مذكرة";
+"errors.scan_transaction.malicious.description" = "لا يمكن إكمال هذه المعاملة - عنوان المحفظة الوجهة مرتبط بنشاط مشبوه أو ضار.";
+"errors.scan_transaction.memo_required" = "يتطلب عنوان محفظة الوجهة %@ علامة وجهة/مذكرة";
 "common.info" = "معلومات";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "الخسارة المتوقعة";
 "perpetual.modify_position" = "تعديل الموضع";
 "perpetual.auto_close.stop_loss" = "وقف الخسارة";
+"errors.scan_transaction.malicious.title" = "نشاط مشبوه";

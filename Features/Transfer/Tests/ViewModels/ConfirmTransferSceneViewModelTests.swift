@@ -292,6 +292,29 @@ struct ConfirmTransferSceneViewModelTests {
         #expect(sections[3].values == [.error])
     }
 
+    @Test
+    func scanTransactionMaliciousError() {
+        let model = ConfirmTransferSceneViewModel.mock()
+        model.onSelectListError(error: ScanTransactionError.malicious)
+
+        guard case .info(.maliciousTransaction) = model.isPresentingSheet else {
+            Issue.record("Expected maliciousTransaction sheet")
+            return
+        }
+    }
+
+    @Test
+    func scanTransactionMemoRequiredError() {
+        let model = ConfirmTransferSceneViewModel.mock()
+        model.onSelectListError(error: ScanTransactionError.memoRequired(symbol: "BTC"))
+
+        guard case .info(.memoRequired(let symbol)) = model.isPresentingSheet else {
+            Issue.record("Expected memoRequired sheet")
+            return
+        }
+        #expect(symbol == "BTC")
+    }
+
     private func verifyNonEmpty(_ model: any ItemModelProvidable<ConfirmTransferItemModel>) {
         if case .empty = model.itemModel {
             Issue.record("Expected non-empty model")

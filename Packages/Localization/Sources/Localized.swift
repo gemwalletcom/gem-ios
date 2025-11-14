@@ -424,11 +424,15 @@ public enum Localized {
       }
     }
     public enum ScanTransaction {
-      /// Transaction identified as suspicion
-      public static let malicious = Localized.tr("Localizable", "errors.scan_transaction.malicious", fallback: "Transaction identified as suspicion")
-      /// %@ address requires a destination tag / memo
+      /// %@ destination wallet address requires a destination tag / memo
       public static func memoRequired(_ p1: Any) -> String {
-        return Localized.tr("Localizable", "errors.scan_transaction.memo_required", String(describing: p1), fallback: "%@ address requires a destination tag / memo")
+        return Localized.tr("Localizable", "errors.scan_transaction.memo_required", String(describing: p1), fallback: "%@ destination wallet address requires a destination tag / memo")
+      }
+      public enum Malicious {
+        /// This transaction cannot be completed — the destination wallet address is linked to suspicious or harmful activity.
+        public static let description = Localized.tr("Localizable", "errors.scan_transaction.malicious.description", fallback: "This transaction cannot be completed — the destination wallet address is linked to suspicious or harmful activity.")
+        /// Suspicious Activity
+        public static let title = Localized.tr("Localizable", "errors.scan_transaction.malicious.title", fallback: "Suspicious Activity")
       }
     }
     public enum Swap {

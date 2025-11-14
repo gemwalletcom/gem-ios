@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Se cacher du portefeuille";
 "common.details" = "Détails";
 "transaction.swap_again" = "Échanger à nouveau";
-"errors.scan_transaction.malicious" = "Transaction identifiée comme suspecte";
-"errors.scan_transaction.memo_required" = "L'adresse %@ nécessite une balise de destination / un mémo";
+"errors.scan_transaction.malicious.description" = "Cette transaction ne peut être effectuée — l'adresse du portefeuille de destination est liée à une activité suspecte ou malveillante.";
+"errors.scan_transaction.memo_required" = "%@ L'adresse du portefeuille de destination nécessite une étiquette/un mémo de destination";
 "common.info" = "Informations";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "Perte attendue";
 "perpetual.modify_position" = "Modifier la position";
 "perpetual.auto_close.stop_loss" = "Stop loss";
+"errors.scan_transaction.malicious.title" = "Activité suspecte";

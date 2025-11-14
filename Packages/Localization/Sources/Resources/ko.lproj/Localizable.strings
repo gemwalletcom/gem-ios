@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "지갑에서 숨기기";
 "common.details" = "세부";
 "transaction.swap_again" = "다시 바꾸기";
-"errors.scan_transaction.malicious" = "의심 거래로 확인됨";
-"errors.scan_transaction.memo_required" = "%@ 주소에는 목적지 태그/메모가 필요합니다.";
+"errors.scan_transaction.malicious.description" = "이 거래를 완료할 수 없습니다. 대상 지갑 주소가 의심스럽거나 유해한 활동과 연결되어 있습니다.";
+"errors.scan_transaction.memo_required" = "%@ 대상 지갑 주소에는 대상 태그/메모가 필요합니다.";
 "common.info" = "정보";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "예상 손실";
 "perpetual.modify_position" = "위치 수정";
 "perpetual.auto_close.stop_loss" = "손절매";
+"errors.scan_transaction.malicious.title" = "의심스러운 활동";

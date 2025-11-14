@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Ukryj w portfelu";
 "common.details" = "Bliższe dane";
 "transaction.swap_again" = "Zamień ponownie";
-"errors.scan_transaction.malicious" = "Transakcja zidentyfikowana jako podejrzana";
-"errors.scan_transaction.memo_required" = "Adres %@ wymaga znacznika/notatki docelowej";
+"errors.scan_transaction.malicious.description" = "Nie można ukończyć tej transakcji — adres portfela docelowego jest powiązany z podejrzaną lub szkodliwą aktywnością.";
+"errors.scan_transaction.memo_required" = "%@ adres portfela docelowego wymaga znacznika/notatki docelowej";
 "common.info" = "Informacje";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "Oczekiwana strata";
 "perpetual.modify_position" = "Modyfikuj pozycję";
 "perpetual.auto_close.stop_loss" = "Stop-loss";
+"errors.scan_transaction.malicious.title" = "Podejrzana aktywność";

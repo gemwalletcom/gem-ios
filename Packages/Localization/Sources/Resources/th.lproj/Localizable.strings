@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "ซ่อนจากกระเป๋าสตางค์";
 "common.details" = "รายละเอียด";
 "transaction.swap_again" = "สลับอีกครั้ง";
-"errors.scan_transaction.malicious" = "ธุรกรรมถูกระบุว่าน่าสงสัย";
-"errors.scan_transaction.memo_required" = "ที่อยู่ %@ ต้องมีแท็กปลายทาง / บันทึกช่วยจำ";
+"errors.scan_transaction.malicious.description" = "ไม่สามารถทำธุรกรรมนี้ให้เสร็จสมบูรณ์ได้ — ที่อยู่กระเป๋าเงินปลายทางเชื่อมโยงกับกิจกรรมที่น่าสงสัยหรือเป็นอันตราย";
+"errors.scan_transaction.memo_required" = "ที่อยู่กระเป๋าเงินปลายทาง %@ ต้องมีแท็กปลายทาง / บันทึกช่วยจำ";
 "common.info" = "ข้อมูล";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "การสูญเสียที่คาดว่าจะเกิดขึ้น";
 "perpetual.modify_position" = "ปรับเปลี่ยนตำแหน่ง";
 "perpetual.auto_close.stop_loss" = "สต็อปลอส";
+"errors.scan_transaction.malicious.title" = "กิจกรรมที่น่าสงสัย";

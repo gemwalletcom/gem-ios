@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "הסתר מהארנק";
 "common.details" = "פרטים";
 "transaction.swap_again" = "החלפה נוספת";
-"errors.scan_transaction.malicious" = "עסקה זוהתה כחשודה";
-"errors.scan_transaction.memo_required" = "כתובת %@ דורשת תגית יעד / תזכיר";
+"errors.scan_transaction.malicious.description" = "לא ניתן להשלים עסקה זו - כתובת ארנק היעד מקושרת לפעילות חשודה או מזיקה.";
+"errors.scan_transaction.memo_required" = "כתובת ארנק היעד %@ דורשת תגית יעד / תזכיר";
 "common.info" = "מידע";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "הפסד צפוי";
 "perpetual.modify_position" = "שינוי מיקום";
 "perpetual.auto_close.stop_loss" = "עצירת הפסד";
+"errors.scan_transaction.malicious.title" = "פעילות חשודה";

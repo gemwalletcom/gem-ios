@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "پنهان شدن از کیف پول";
 "common.details" = "جزئیات";
 "transaction.swap_again" = "دوباره مبادله کنید";
-"errors.scan_transaction.malicious" = "تراکنش مشکوک شناسایی شد";
-"errors.scan_transaction.memo_required" = "آدرس %@ به یک برچسب / یادداشت مقصد نیاز دارد.";
+"errors.scan_transaction.malicious.description" = "این تراکنش قابل انجام نیست — آدرس کیف پول مقصد به فعالیت مشکوک یا مضر مرتبط است.";
+"errors.scan_transaction.memo_required" = "%@ آدرس کیف پول مقصد به یک برچسب / یادداشت مقصد نیاز دارد.";
 "common.info" = "اطلاعات";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "ضرر مورد انتظار";
 "perpetual.modify_position" = "تغییر موقعیت";
 "perpetual.auto_close.stop_loss" = "حد ضرر";
+"errors.scan_transaction.malicious.title" = "فعالیت مشکوک";

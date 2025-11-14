@@ -271,7 +271,7 @@
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "Confirm";
 "common.skip" = "Skip";
-"common.warning" = "Warning";
+"common.warning" = "সতর্কতা";
 "warnings.multi_signature_blocked" = "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.";
 "swap.price_impact" = "Price Impact";
 "wallet.sell" = "Sell";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "মানিব্যাগ থেকে লুকান";
 "common.details" = "বিস্তারিত";
 "transaction.swap_again" = "আবার অদলবদল করুন";
-"errors.scan_transaction.malicious" = "লেনদেন সন্দেহজনক হিসেবে চিহ্নিত";
-"errors.scan_transaction.memo_required" = "%@ ঠিকানার জন্য একটি গন্তব্য ট্যাগ / মেমো প্রয়োজন।";
+"errors.scan_transaction.malicious.description" = "এই লেনদেনটি সম্পন্ন করা যাবে না — গন্তব্যস্থলের ওয়ালেট ঠিকানাটি সন্দেহজনক বা ক্ষতিকারক কার্যকলাপের সাথে যুক্ত।";
+"errors.scan_transaction.memo_required" = "%@ গন্তব্য ওয়ালেট ঠিকানার জন্য একটি গন্তব্য ট্যাগ / মেমো প্রয়োজন।";
 "common.info" = "তথ্য";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "প্রত্যাশিত ক্ষতি";
 "perpetual.modify_position" = "অবস্থান পরিবর্তন করুন";
 "perpetual.auto_close.stop_loss" = "স্টপ লস";
+"errors.scan_transaction.malicious.title" = "সন্দেহজনক কার্যকলাপ";

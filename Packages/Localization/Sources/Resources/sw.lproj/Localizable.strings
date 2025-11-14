@@ -271,7 +271,7 @@
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "Confirm";
 "common.skip" = "Skip";
-"common.warning" = "Warning";
+"common.warning" = "Onyo";
 "warnings.multi_signature_blocked" = "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.";
 "swap.price_impact" = "Price Impact";
 "wallet.sell" = "Sell";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Ficha kutoka kwa mkoba";
 "common.details" = "Maelezo";
 "transaction.swap_again" = "Badilika Tena";
-"errors.scan_transaction.malicious" = "Muamala umetambuliwa kama tuhuma";
-"errors.scan_transaction.memo_required" = "%@ anwani inahitaji lebo/memo lengwa";
+"errors.scan_transaction.malicious.description" = "Muamala huu hauwezi kukamilika - anwani ya pochi lengwa imeunganishwa na shughuli za kutiliwa shaka au hatari.";
+"errors.scan_transaction.memo_required" = "%@ anwani ya mkoba lengwa inahitaji lebo/memo lengwa";
 "common.info" = "Habari";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "Hasara inayotarajiwa";
 "perpetual.modify_position" = "Rekebisha Nafasi";
 "perpetual.auto_close.stop_loss" = "Acha hasara";
+"errors.scan_transaction.malicious.title" = "Shughuli ya kutiliwa shaka";

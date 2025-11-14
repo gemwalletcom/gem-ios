@@ -12,7 +12,7 @@ public enum ScanTransactionError: Error, Equatable, Sendable {
 extension ScanTransactionError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .malicious: Localized.Errors.ScanTransaction.malicious
+        case .malicious: Localized.Errors.ScanTransaction.Malicious.description
         case .memoRequired(let symbol): Localized.Errors.ScanTransaction.memoRequired(symbol)
         }
     }

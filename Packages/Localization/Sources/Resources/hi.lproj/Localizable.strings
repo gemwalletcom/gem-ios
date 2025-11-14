@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "बटुए से छिपाएँ";
 "common.details" = "विवरण";
 "transaction.swap_again" = "फिर से स्वैप करें";
-"errors.scan_transaction.malicious" = "लेनदेन को संदिग्ध माना गया";
-"errors.scan_transaction.memo_required" = "%@ पते के लिए गंतव्य टैग / मेमो आवश्यक है";
+"errors.scan_transaction.malicious.description" = "यह लेनदेन पूरा नहीं किया जा सकता - गंतव्य वॉलेट पता संदिग्ध या हानिकारक गतिविधि से जुड़ा हुआ है।";
+"errors.scan_transaction.memo_required" = "%@ गंतव्य वॉलेट पते के लिए गंतव्य टैग / मेमो की आवश्यकता है";
 "common.info" = "जानकारी";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -503,3 +503,4 @@
 "perpetual.auto_close.expected_loss" = "अपेक्षित हानि";
 "perpetual.modify_position" = "स्थिति संशोधित करें";
 "perpetual.auto_close.stop_loss" = "झड़ने बंद";
+"errors.scan_transaction.malicious.title" = "संदिग्ध गतिविधि";
