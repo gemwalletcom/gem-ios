@@ -490,7 +490,7 @@
 "assets.title" = "Assets";
 "stake.delegations" = "Delegations";
 "info.stake.apr.description" = "Annual Percentage Rate (APR) is the yearly reward rate for staking your cryptocurrency.";
-"receive.warning" = "Send only **%@** on the **%@** network to this address.";
+"receive.warning" = "This is your address — send only **%@** on the **%@** network.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Direction";
 "perpetual.auto_close" = "Auto Close";

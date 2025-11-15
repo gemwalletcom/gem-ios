@@ -919,9 +919,9 @@ public enum Localized {
     public static func title(_ p1: Any) -> String {
       return Localized.tr("Localizable", "receive.title", String(describing: p1), fallback: "Receive %@")
     }
-    /// Send only **%@** on the **%@** network to this address.
+    /// This is your address — send only **%@** on the **%@** network.
     public static func warning(_ p1: Any, _ p2: Any) -> String {
-      return Localized.tr("Localizable", "receive.warning", String(describing: p1), String(describing: p2), fallback: "Send only **%@** on the **%@** network to this address.")
+      return Localized.tr("Localizable", "receive.warning", String(describing: p1), String(describing: p2), fallback: "This is your address — send only **%@** on the **%@** network.")
     }
     /// Your Receiving Address
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")

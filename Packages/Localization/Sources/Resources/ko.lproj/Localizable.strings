@@ -490,7 +490,7 @@
 "assets.title" = "자산";
 "stake.delegations" = "위임";
 "info.stake.apr.description" = "연이율(APR)은 암호화폐를 스테이킹할 때 매년 지급되는 보상률입니다.";
-"receive.warning" = "** %@ ** 네트워크의 ** %@ **만 이 주소로 보내세요.";
+"receive.warning" = "이것은 귀하의 주소입니다. ** %@ **를 ** %@ ** 네트워크로만 보내세요.";
 "perpetual.leverage" = "레버리지";
 "perpetual.direction" = "방향";
 "perpetual.auto_close" = "자동 닫기";

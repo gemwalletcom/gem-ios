@@ -490,7 +490,7 @@
 "assets.title" = "संपत्ति";
 "stake.delegations" = "प्रतिनियोजन";
 "info.stake.apr.description" = "वार्षिक प्रतिशत दर (एपीआर) आपकी क्रिप्टोकरेंसी को दांव पर लगाने के लिए वार्षिक पुरस्कार दर है।";
-"receive.warning" = "इस पते पर केवल ** %@ ** नेटवर्क पर ** %@ ** भेजें।";
+"receive.warning" = "यह आपका पता है - केवल ** %@ %@ ** नेटवर्क पर भेजें।";
 "perpetual.leverage" = "उत्तोलन";
 "perpetual.direction" = "दिशा";
 "perpetual.auto_close" = "स्वतः बंद";
