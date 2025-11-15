@@ -17,3 +17,9 @@ extension Session {
         )
     }
 }
+
+extension Session.Proposal {
+    var messageId: String {
+        "proposal-\(id)"
+    }
+}
