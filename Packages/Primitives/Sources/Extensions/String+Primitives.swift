@@ -30,6 +30,10 @@ public extension String {
         !isEmpty
     }
     
+    var withZeroWidthSpaces: String {
+        map({ String($0) }).joined(separator: "\u{200B}")
+    }
+    
     func index(from: Int) -> Index {
         return self.index(startIndex, offsetBy: from)
     }
@@ -67,18 +71,6 @@ public extension String {
             throw AnyError("Unable to encode string to data")
         }
         return data
-    }
-    
-    func grouped(by length: Int, separator: String = " ") -> String {
-        var result = [String]()
-
-        for i in stride(from: 0, to: self.count, by: length) {
-            let endIndex = self.index(self.endIndex, offsetBy: -i)
-            let startIndex = self.index(endIndex, offsetBy: -length, limitedBy: self.startIndex) ?? self.startIndex
-            result.append(String(self[startIndex..<endIndex]))
-        }
-
-        return result.reversed().joined(separator: separator)
     }
     
     func base64Encoded() throws -> Data {

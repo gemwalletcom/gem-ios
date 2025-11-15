@@ -4,7 +4,6 @@ import SwiftUI
 import Components
 import Style
 import PrimitivesComponents
-import Localization
 
 public struct ReceiveScene: View {
     @State private var model: ReceiveViewModel
@@ -32,13 +31,10 @@ public struct ReceiveScene: View {
 
                     if let image = model.renderedImage {
                         VStack(spacing: .small) {
-                            Text(Localized.Receive.yourAddress)
-                                .textStyle(.body)
-
                             qrCodeView(image: image)
 
                             Button(action: model.onCopyAddress) {
-                                Text(model.addressGrouped)
+                                Text(model.address.withZeroWidthSpaces)
                                     .multilineTextAlignment(.center)
                                     .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
                             }

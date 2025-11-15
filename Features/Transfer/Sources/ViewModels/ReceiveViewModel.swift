@@ -42,10 +42,6 @@ public final class ReceiveViewModel: Sendable {
     var addressShort: String {
         AddressFormatter(style: .short, address: address, chain: assetModel.asset.chain).value()
     }
-    
-    var addressGrouped: String {
-        AddressFormatter(style: .grouped(length: 4), address: address, chain: assetModel.asset.chain).value()
-    }
 
     var shareTitle: String {
         Localized.Common.share
