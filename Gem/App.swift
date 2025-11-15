@@ -116,6 +116,13 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         //debugLog("URLContexts.first?.url \(connectionOptions.urlContexts.first?.url)")
     }
+
+    func application(_ application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplication.ExtensionPointIdentifier) -> Bool {
+        switch extensionPointIdentifier {
+        case .keyboard: false
+        default: true
+        }
+    }
 }
 
 extension AppDelegate: @preconcurrency UNUserNotificationCenterDelegate {
