@@ -490,7 +490,7 @@
 "assets.title" = "أصول";
 "stake.delegations" = "التفويضات";
 "info.stake.apr.description" = "معدل النسبة السنوية (APR) هو معدل المكافأة السنوي لمراهنة العملة المشفرة الخاصة بك.";
-"receive.warning" = "أرسل فقط ** %@ ** على شبكة ** %@ ** إلى هذا العنوان.";
+"receive.warning" = "هذا هو عنوانك - أرسل فقط ** %@ ** على شبكة ** %@ **.";
 "perpetual.leverage" = "الرافعة المالية";
 "perpetual.direction" = "اتجاه";
 "perpetual.auto_close" = "إغلاق تلقائي";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "تعديل الموضع";
 "perpetual.auto_close.stop_loss" = "وقف الخسارة";
 "errors.scan_transaction.malicious.title" = "نشاط مشبوه";
+"secret_phrase.screenshot_detected.title" = "تم اكتشاف لقطة شاشة";
+"secret_phrase.screenshot_detected.description" = "قد تكون لقطات الشاشة متاحة لتطبيقات أخرى، ولكنها قد تعرض عبارة المرور الخاصة بك للخطر إذا تم حفظها بهذه الطريقة.";
+"secret_phrase.content_hidden.description" = "المحتوى المخفي أثناء تسجيل الشاشة";

@@ -490,7 +490,7 @@
 "assets.title" = "Mga asset";
 "stake.delegations" = "Mga delegasyon";
 "info.stake.apr.description" = "Ang Annual Percentage Rate (APR) ay ang taunang reward rate para sa staking ng iyong cryptocurrency.";
-"receive.warning" = "Ipadala lamang ang ** %@ ** sa ** %@ ** network sa address na ito.";
+"receive.warning" = "Ito ang iyong address — magpadala lamang ng ** %@ ** sa ** %@ ** network.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Direksyon";
 "perpetual.auto_close" = "Auto Close";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "Baguhin ang Posisyon";
 "perpetual.auto_close.stop_loss" = "Itigil ang pagkawala";
 "errors.scan_transaction.malicious.title" = "Kahina-hinalang Aktibidad";
+"secret_phrase.screenshot_detected.title" = "Natukoy ang screenshot";
+"secret_phrase.screenshot_detected.description" = "Maaaring ma-access ang mga screenshot sa iba pang apps, maaari nilang ilagay sa panganib ang iyong sikretong parirala kung ise-save sa ganitong paraan.";
+"secret_phrase.content_hidden.description" = "Nakatago ang content habang nagre-record ng screen";

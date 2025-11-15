@@ -490,7 +490,7 @@
 "assets.title" = "Aktiva";
 "stake.delegations" = "Delegasi";
 "info.stake.apr.description" = "Tingkat Persentase Tahunan (APR) adalah tingkat imbalan tahunan untuk mempertaruhkan mata uang kripto Anda.";
-"receive.warning" = "Kirim hanya ** %@ ** di jaringan ** %@ ** ke alamat ini.";
+"receive.warning" = "Ini adalah alamat Anda — kirim hanya ** %@ ** di jaringan ** %@ **.";
 "perpetual.leverage" = "Daya ungkit keuangan";
 "perpetual.direction" = "Arah";
 "perpetual.auto_close" = "Tutup Otomatis";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "Ubah Posisi";
 "perpetual.auto_close.stop_loss" = "Hentikan kerugian";
 "errors.scan_transaction.malicious.title" = "Aktivitas Mencurigakan";
+"secret_phrase.screenshot_detected.title" = "Tangkapan Layar Terdeteksi";
+"secret_phrase.screenshot_detected.description" = "Tangkapan layar mungkin dapat diakses oleh aplikasi lain, namun hal itu dapat membahayakan frasa rahasia Anda jika disimpan dengan cara ini.";
+"secret_phrase.content_hidden.description" = "Konten tersembunyi selama perekaman layar";

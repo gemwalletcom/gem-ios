@@ -490,7 +490,7 @@
 "assets.title" = "Varlıklar";
 "stake.delegations" = "Yetkilendirmeler";
 "info.stake.apr.description" = "Yıllık Yüzde Oranı (APR), kripto paranızı stake etmeniz durumunda ödeyeceğiniz yıllık ödül oranıdır.";
-"receive.warning" = "Bu adrese yalnızca ** %@ ** ağında ** %@ ** gönderin.";
+"receive.warning" = "Bu sizin adresinizdir — yalnızca ** %@ ** ** %@ ** ağında gönderim yapın.";
 "perpetual.leverage" = "Kaldıraç";
 "perpetual.direction" = "Yön";
 "perpetual.auto_close" = "Otomatik Kapatma";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "Pozisyonu Değiştir";
 "perpetual.auto_close.stop_loss" = "Zarar durdurma";
 "errors.scan_transaction.malicious.title" = "Şüpheli Etkinlik";
+"secret_phrase.screenshot_detected.title" = "Ekran Görüntüsü Algılandı";
+"secret_phrase.screenshot_detected.description" = "Ekran görüntüleri diğer uygulamalar tarafından erişilebilir olabilir, bu şekilde kaydedilirse gizli ifadeniz riske girebilir.";
+"secret_phrase.content_hidden.description" = "Ekran kaydı sırasında içerik gizlendi";

@@ -490,7 +490,7 @@
 "assets.title" = "اثاثے";
 "stake.delegations" = "تفویضات";
 "info.stake.apr.description" = "سالانہ فیصدی شرح (APR) آپ کی کریپٹو کرنسی کو داغدار کرنے کے لیے سالانہ انعام کی شرح ہے۔";
-"receive.warning" = "اس ایڈریس پر ** %@ ** نیٹ ورک پر صرف ** %@ ** بھیجیں۔";
+"receive.warning" = "یہ آپ کا پتہ ہے — ** %@ ** نیٹ ورک پر صرف ** %@ ** بھیجیں۔";
 "perpetual.leverage" = "مالی فائدہ اٹھانا";
 "perpetual.direction" = "سمت";
 "perpetual.auto_close" = "آٹو بند";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "پوزیشن میں ترمیم کریں۔";
 "perpetual.auto_close.stop_loss" = "نقصان کو روکیں۔";
 "errors.scan_transaction.malicious.title" = "مشکوک سرگرمی";
+"secret_phrase.screenshot_detected.title" = "اسکرین شاٹ کا پتہ چلا";
+"secret_phrase.screenshot_detected.description" = "اسکرین شاٹس دیگر ایپس کے لیے قابل رسائی ہو سکتے ہیں، اگر اس طرح محفوظ کیا جائے تو وہ آپ کے خفیہ جملے کو خطرے میں ڈال سکتے ہیں۔";
+"secret_phrase.content_hidden.description" = "اسکرین ریکارڈنگ کے دوران چھپا ہوا مواد";

@@ -490,7 +490,7 @@
 "assets.title" = "資産";
 "stake.delegations" = "委任";
 "info.stake.apr.description" = "年率 (APR) は、暗号通貨をステーキングした場合の年間報酬率です。";
-"receive.warning" = "** %@ ** ネットワーク上の ** %@ ** のみをこのアドレスに送信します。";
+"receive.warning" = "これはあなたのアドレスです。** %@ ** ネットワーク上の ** %@ ** のみを送信します。";
 "perpetual.leverage" = "てこの作用";
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自動閉じる";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "位置の変更";
 "perpetual.auto_close.stop_loss" = "ストップロス";
 "errors.scan_transaction.malicious.title" = "不審な活動";
+"secret_phrase.screenshot_detected.title" = "スクリーンショットが検出されました";
+"secret_phrase.screenshot_detected.description" = "スクリーンショットは他のアプリからアクセスできる場合があり、この方法で保存すると秘密のフレーズが危険にさらされる可能性があります。";
+"secret_phrase.content_hidden.description" = "画面録画中にコンテンツが非表示になる";

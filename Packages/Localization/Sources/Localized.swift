@@ -919,9 +919,9 @@ public enum Localized {
     public static func title(_ p1: Any) -> String {
       return Localized.tr("Localizable", "receive.title", String(describing: p1), fallback: "Receive %@")
     }
-    /// Send only **%@** on the **%@** network to this address.
+    /// This is your address — send only **%@** on the **%@** network.
     public static func warning(_ p1: Any, _ p2: Any) -> String {
-      return Localized.tr("Localizable", "receive.warning", String(describing: p1), String(describing: p2), fallback: "Send only **%@** on the **%@** network to this address.")
+      return Localized.tr("Localizable", "receive.warning", String(describing: p1), String(describing: p2), fallback: "This is your address — send only **%@** on the **%@** network.")
     }
     /// Your Receiving Address
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
@@ -954,11 +954,21 @@ public enum Localized {
         public static let title = Localized.tr("Localizable", "secret_phrase.confirm.quick_test.title", fallback: "Complete this quick test to confirm you've saved everything correctly.")
       }
     }
+    public enum ContentHidden {
+      /// Content hidden during screen recording
+      public static let description = Localized.tr("Localizable", "secret_phrase.content_hidden.description", fallback: "Content hidden during screen recording")
+    }
     public enum DoNotShare {
       /// If someone has your secret phrase they will have full control of your wallet!
       public static let description = Localized.tr("Localizable", "secret_phrase.do_not_share.description", fallback: "If someone has your secret phrase they will have full control of your wallet!")
       /// Do not share your Secret Phrase!
       public static let title = Localized.tr("Localizable", "secret_phrase.do_not_share.title", fallback: "Do not share your Secret Phrase!")
+    }
+    public enum ScreenshotDetected {
+      /// Screenshots may be accessible to other apps, they can put your secret phrase at risk if saved this way.
+      public static let description = Localized.tr("Localizable", "secret_phrase.screenshot_detected.description", fallback: "Screenshots may be accessible to other apps, they can put your secret phrase at risk if saved this way.")
+      /// Screenshot Detected
+      public static let title = Localized.tr("Localizable", "secret_phrase.screenshot_detected.title", fallback: "Screenshot Detected")
     }
   }
   public enum Sell {

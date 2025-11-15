@@ -490,7 +490,7 @@
 "assets.title" = "נכסים";
 "stake.delegations" = "האצלות";
 "info.stake.apr.description" = "שיעור אחוז שנתי (APR) הוא שיעור התגמול השנתי עבור הפקדת מטבע הקריפטו שלך.";
-"receive.warning" = "שלח רק ** %@ ** ברשת ** %@ ** לכתובת זו.";
+"receive.warning" = "זוהי הכתובת שלך — שלח רק ** %@ ** ברשת ** %@ **.";
 "perpetual.leverage" = "מינוף";
 "perpetual.direction" = "כיוון";
 "perpetual.auto_close" = "סגירה אוטומטית";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "שינוי מיקום";
 "perpetual.auto_close.stop_loss" = "עצירת הפסד";
 "errors.scan_transaction.malicious.title" = "פעילות חשודה";
+"secret_phrase.screenshot_detected.title" = "זוהה צילום מסך";
+"secret_phrase.screenshot_detected.description" = "צילומי מסך עשויים להיות נגישים לאפליקציות אחרות, והם עלולים לסכן את משפט הסוד שלך אם יישמרו בדרך זו.";
+"secret_phrase.content_hidden.description" = "תוכן מוסתר במהלך הקלטת מסך";

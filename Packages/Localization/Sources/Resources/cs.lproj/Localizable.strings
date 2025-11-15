@@ -490,7 +490,7 @@
 "assets.title" = "Aktiva";
 "stake.delegations" = "Delegace";
 "info.stake.apr.description" = "Roční procentní sazba (RPSN) je roční odměna za staking vaší kryptoměny.";
-"receive.warning" = "Na tuto adresu odesílejte pouze ** %@ ** v síti ** %@ **.";
+"receive.warning" = "Toto je vaše adresa – odesílejte pouze ** %@ ** v síti ** %@ **.";
 "perpetual.leverage" = "Finanční páka";
 "perpetual.direction" = "Směr";
 "perpetual.auto_close" = "Automatické zavření";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "Upravit pozici";
 "perpetual.auto_close.stop_loss" = "Zastavit ztrátu";
 "errors.scan_transaction.malicious.title" = "Podezřelá aktivita";
+"secret_phrase.screenshot_detected.title" = "Detekován snímek obrazovky";
+"secret_phrase.screenshot_detected.description" = "Snímky obrazovky mohou být přístupné jiným aplikacím, pokud se uloží tímto způsobem, mohou ohrozit vaši tajnou frázi.";
+"secret_phrase.content_hidden.description" = "Obsah skrytý během nahrávání obrazovky";

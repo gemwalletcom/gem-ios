@@ -490,7 +490,7 @@
 "assets.title" = "Tài sản";
 "stake.delegations" = "Ủy quyền";
 "info.stake.apr.description" = "Tỷ lệ phần trăm hàng năm (APR) là tỷ lệ phần thưởng hàng năm cho việc đặt cược tiền điện tử của bạn.";
-"receive.warning" = "Chỉ gửi ** %@ ** trên mạng ** %@ ** đến địa chỉ này.";
+"receive.warning" = "Đây là địa chỉ của bạn — chỉ gửi ** %@ ** trên mạng ** %@ **.";
 "perpetual.leverage" = "Đòn bẩy";
 "perpetual.direction" = "Phương hướng";
 "perpetual.auto_close" = "Tự động đóng";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "Sửa đổi vị trí";
 "perpetual.auto_close.stop_loss" = "Dừng lỗ";
 "errors.scan_transaction.malicious.title" = "Hoạt động đáng ngờ";
+"secret_phrase.screenshot_detected.title" = "Đã phát hiện ảnh chụp màn hình";
+"secret_phrase.screenshot_detected.description" = "Ảnh chụp màn hình có thể được các ứng dụng khác truy cập, nhưng chúng có thể khiến cụm từ bí mật của bạn gặp rủi ro nếu được lưu theo cách này.";
+"secret_phrase.content_hidden.description" = "Nội dung bị ẩn trong quá trình ghi màn hình";

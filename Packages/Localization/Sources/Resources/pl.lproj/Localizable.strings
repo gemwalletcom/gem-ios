@@ -490,7 +490,7 @@
 "assets.title" = "Aktywa";
 "stake.delegations" = "Delegacje";
 "info.stake.apr.description" = "Roczna stopa procentowa (APR) to roczna stopa nagrody za stakowanie kryptowaluty.";
-"receive.warning" = "Wyślij tylko ** %@ ** w sieci ** %@ ** na ten adres.";
+"receive.warning" = "To jest Twój adres — wysyłaj tylko ** %@ ** w sieci ** %@ **.";
 "perpetual.leverage" = "Dźwignia finansowa";
 "perpetual.direction" = "Kierunek";
 "perpetual.auto_close" = "Automatyczne zamykanie";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "Modyfikuj pozycję";
 "perpetual.auto_close.stop_loss" = "Stop-loss";
 "errors.scan_transaction.malicious.title" = "Podejrzana aktywność";
+"secret_phrase.screenshot_detected.title" = "Wykryto zrzut ekranu";
+"secret_phrase.screenshot_detected.description" = "Zrzuty ekranu mogą być dostępne dla innych aplikacji, a zapisanie ich w ten sposób może narazić Twoją tajną frazę na ryzyko.";
+"secret_phrase.content_hidden.description" = "Zawartość ukryta podczas nagrywania ekranu";

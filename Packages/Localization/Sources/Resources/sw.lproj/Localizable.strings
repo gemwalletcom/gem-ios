@@ -490,7 +490,7 @@
 "assets.title" = "Mali";
 "stake.delegations" = "Uwakilishi";
 "info.stake.apr.description" = "Kiwango cha Asilimia cha Mwaka (APR) ni kiwango cha tuzo cha kila mwaka cha kuweka sarafu yako ya cryptocurrency.";
-"receive.warning" = "Tuma tu ** %@ ** kwenye mtandao wa ** %@ ** kwa anwani hii.";
+"receive.warning" = "Hii ndiyo anwani yako — tuma tu ** %@ ** kwenye mtandao wa ** %@ **.";
 "perpetual.leverage" = "Uvunjaji wa kifedh";
 "perpetual.direction" = "Mwelekeo";
 "perpetual.auto_close" = "Funga Kiotomatiki";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "Rekebisha Nafasi";
 "perpetual.auto_close.stop_loss" = "Acha hasara";
 "errors.scan_transaction.malicious.title" = "Shughuli ya kutiliwa shaka";
+"secret_phrase.screenshot_detected.title" = "Picha ya skrini imegunduliwa";
+"secret_phrase.screenshot_detected.description" = "Picha za skrini zinaweza kupatikana kwa programu zingine, zinaweza kuweka maneno yako ya siri hatarini ikiwa yamehifadhiwa kwa njia hii.";
+"secret_phrase.content_hidden.description" = "Maudhui yaliyofichwa wakati wa kurekodi skrini";

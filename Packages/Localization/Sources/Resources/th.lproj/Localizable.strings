@@ -490,7 +490,7 @@
 "assets.title" = "สินทรัพย์";
 "stake.delegations" = "การมอบหมาย";
 "info.stake.apr.description" = "อัตราเปอร์เซ็นต์ต่อปี (APR) คืออัตราผลตอบแทนรายปีสำหรับการเดิมพันสกุลเงินดิจิทัลของคุณ";
-"receive.warning" = "ส่งเฉพาะ ** %@ ** บนเครือข่าย ** %@ ** ไปยังที่อยู่นี้";
+"receive.warning" = "นี่คือที่อยู่ของคุณ — ส่งเฉพาะ ** %@ ** บนเครือข่าย ** %@ ** เท่านั้น";
 "perpetual.leverage" = "อัตราทดทางการเงิน";
 "perpetual.direction" = "ทิศทาง";
 "perpetual.auto_close" = "ปิดอัตโนมัติ";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "ปรับเปลี่ยนตำแหน่ง";
 "perpetual.auto_close.stop_loss" = "สต็อปลอส";
 "errors.scan_transaction.malicious.title" = "กิจกรรมที่น่าสงสัย";
+"secret_phrase.screenshot_detected.title" = "ตรวจพบภาพหน้าจอ";
+"secret_phrase.screenshot_detected.description" = "ภาพหน้าจออาจเข้าถึงได้จากแอปอื่น แต่หากบันทึกในลักษณะนี้ อาจทำให้รหัสผ่านของคุณตกอยู่ในความเสี่ยง";
+"secret_phrase.content_hidden.description" = "เนื้อหาที่ซ่อนอยู่ระหว่างการบันทึกหน้าจอ";

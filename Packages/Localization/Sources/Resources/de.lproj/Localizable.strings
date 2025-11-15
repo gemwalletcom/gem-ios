@@ -490,7 +490,7 @@
 "assets.title" = "Vermögenswerte";
 "stake.delegations" = "Delegationen";
 "info.stake.apr.description" = "Der effektive Jahreszins (APR) ist der jährliche Belohnungssatz für das Staking Ihrer Kryptowährung.";
-"receive.warning" = "Senden Sie nur ** %@ ** im ** %@ **-Netzwerk an diese Adresse.";
+"receive.warning" = "Dies ist Ihre Adresse – senden Sie nur ** %@ ** im ** %@ ** Netzwerk.";
 "perpetual.leverage" = "Hebelwirkung";
 "perpetual.direction" = "Richtung";
 "perpetual.auto_close" = "Automatisches Schließen";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "Position ändern";
 "perpetual.auto_close.stop_loss" = "Stop-Loss";
 "errors.scan_transaction.malicious.title" = "Verdächtige Aktivitäten";
+"secret_phrase.screenshot_detected.title" = "Screenshot erkannt";
+"secret_phrase.screenshot_detected.description" = "Screenshots können von anderen Apps eingesehen werden und gefährden so Ihre geheime Phrase.";
+"secret_phrase.content_hidden.description" = "Inhalte, die während der Bildschirmaufnahme ausgeblendet wurden.";

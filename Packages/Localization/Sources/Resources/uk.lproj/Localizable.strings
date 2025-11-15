@@ -490,7 +490,7 @@
 "assets.title" = "Активи";
 "stake.delegations" = "Делегації";
 "info.stake.apr.description" = "Річна процентна ставка (APR) – це річна ставка винагороди за стейкінг вашої криптовалюти.";
-"receive.warning" = "Надсилати лише ** %@ ** через мережу ** %@ ** на цю адресу.";
+"receive.warning" = "Це ваша адреса — надсилайте лише ** %@ ** у мережі ** %@ **.";
 "perpetual.leverage" = "Кредитне плече";
 "perpetual.direction" = "Напрямок";
 "perpetual.auto_close" = "Автоматичне закриття";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "Змінити позицію";
 "perpetual.auto_close.stop_loss" = "Стоп-лосс";
 "errors.scan_transaction.malicious.title" = "Підозріла активність";
+"secret_phrase.screenshot_detected.title" = "Виявлено знімок екрана";
+"secret_phrase.screenshot_detected.description" = "Знімки екрана можуть бути доступні іншим програмам, і якщо їх зберегти таким чином, ваша секретна фраза може бути під загрозою.";
+"secret_phrase.content_hidden.description" = "Вміст прихований під час запису екрана";

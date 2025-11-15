@@ -490,7 +490,7 @@
 "assets.title" = "資產";
 "stake.delegations" = "委託";
 "info.stake.apr.description" = "年利率（APR）是質押加密貨幣的年度報酬率。";
-"receive.warning" = "僅透過 ** %@ ** 網路向此位址發送 ** %@ **。";
+"receive.warning" = "這是您的地址——僅在 ** %@ ** 網路上發送 ** %@ **。";
 "perpetual.leverage" = "槓桿作用";
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自動關閉";
@@ -504,3 +504,6 @@
 "perpetual.modify_position" = "修改位置";
 "perpetual.auto_close.stop_loss" = "停損";
 "errors.scan_transaction.malicious.title" = "可疑活動";
+"secret_phrase.screenshot_detected.title" = "偵測到螢幕截圖";
+"secret_phrase.screenshot_detected.description" = "其他應用程式可能可以存取螢幕截圖，如果以這種方式儲存，可能會洩露您的密碼短語。";
+"secret_phrase.content_hidden.description" = "螢幕錄製過程中隱藏的內容";
