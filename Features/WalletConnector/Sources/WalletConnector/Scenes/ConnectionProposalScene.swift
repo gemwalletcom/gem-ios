@@ -4,6 +4,7 @@ import SwiftUI
 import Components
 import Style
 import Primitives
+import Localization
 
 public struct ConnectionProposalScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -23,7 +24,7 @@ public struct ConnectionProposalScene: View {
                 .padding(.top, 8)
             }
             .cleanListRow()
-            
+
             Section {
                 NavigationLink(value: Scenes.SelectWallet()) {
                     ListItemView(
@@ -32,6 +33,12 @@ public struct ConnectionProposalScene: View {
                     )
                 }
                 ListItemView(title: model.appTitle, subtitle: model.appText)
+                ListItemImageView(
+                    title: Localized.WalletConnect.Connection.title,
+                    subtitle: model.statusText,
+                    subtitleStyle: model.statusTextStyle,
+                    assetImage: model.statusAssetImage
+                )
             }
         }
         .safeAreaView {

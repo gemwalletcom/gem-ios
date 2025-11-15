@@ -507,3 +507,5 @@
 "secret_phrase.screenshot_detected.title" = "偵測到螢幕截圖";
 "secret_phrase.screenshot_detected.description" = "其他應用程式可能可以存取螢幕截圖，如果以這種方式儲存，可能會洩露您的密碼短語。";
 "secret_phrase.content_hidden.description" = "螢幕錄製過程中隱藏的內容";
+"asset.verification.verified" = "已驗證";
+"errors.connections.malicious_origin" = "此連線來自不可信來源。";

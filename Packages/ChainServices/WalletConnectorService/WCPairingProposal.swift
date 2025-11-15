@@ -5,6 +5,7 @@ import Primitives
 public struct WCPairingProposal: Sendable {
     public let pairingId: String
     public let proposal: WalletConnectionSessionProposal
+    public let verificationStatus: WalletConnectionVerificationStatus
 }
 
 extension WCPairingProposal: Identifiable {

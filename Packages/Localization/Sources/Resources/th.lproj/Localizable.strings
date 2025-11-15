@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ เป็นสิ่งจำเป็น";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "ไม่ได้รับการยืนยัน";
 "asset.verification.suspicious" = "สงสัย";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -507,3 +507,5 @@
 "secret_phrase.screenshot_detected.title" = "ตรวจพบภาพหน้าจอ";
 "secret_phrase.screenshot_detected.description" = "ภาพหน้าจออาจเข้าถึงได้จากแอปอื่น แต่หากบันทึกในลักษณะนี้ อาจทำให้รหัสผ่านของคุณตกอยู่ในความเสี่ยง";
 "secret_phrase.content_hidden.description" = "เนื้อหาที่ซ่อนอยู่ระหว่างการบันทึกหน้าจอ";
+"asset.verification.verified" = "ได้รับการยืนยันแล้ว";
+"errors.connections.malicious_origin" = "การเชื่อมต่อนี้มาจากแหล่งที่ไม่น่าเชื่อถือ";

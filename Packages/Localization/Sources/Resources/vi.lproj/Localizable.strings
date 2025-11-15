@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ là bắt buộc";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Chưa được xác minh";
 "asset.verification.suspicious" = "Khả nghi";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -507,3 +507,5 @@
 "secret_phrase.screenshot_detected.title" = "Đã phát hiện ảnh chụp màn hình";
 "secret_phrase.screenshot_detected.description" = "Ảnh chụp màn hình có thể được các ứng dụng khác truy cập, nhưng chúng có thể khiến cụm từ bí mật của bạn gặp rủi ro nếu được lưu theo cách này.";
 "secret_phrase.content_hidden.description" = "Nội dung bị ẩn trong quá trình ghi màn hình";
+"asset.verification.verified" = "Đã xác minh";
+"errors.connections.malicious_origin" = "Kết nối này đến từ một nguồn không đáng tin cậy.";

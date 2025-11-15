@@ -98,6 +98,8 @@ public enum Localized {
       public static let suspicious = Localized.tr("Localizable", "asset.verification.suspicious", fallback: "Suspicious")
       /// Unverified
       public static let unverified = Localized.tr("Localizable", "asset.verification.unverified", fallback: "Unverified")
+      /// Verified
+      public static let verified = Localized.tr("Localizable", "asset.verification.verified", fallback: "Verified")
       /// Anyone can create one - including fake or malicious tokens.
       public static let warningMessage = Localized.tr("Localizable", "asset.verification.warning_message", fallback: "Anyone can create one - including fake or malicious tokens.")
       /// Know What You’re Adding
@@ -406,6 +408,8 @@ public enum Localized {
       public static let invalidSendParameters = Localized.tr("Localizable", "errors.connections.invalid_send_parameters", fallback: "Invalid parameters provided for sending a transaction.")
       /// Invalid parameters provided for signing.
       public static let invalidSignParameters = Localized.tr("Localizable", "errors.connections.invalid_sign_parameters", fallback: "Invalid parameters provided for signing.")
+      /// This connection comes from an untrusted source.
+      public static let maliciousOrigin = Localized.tr("Localizable", "errors.connections.malicious_origin", fallback: "This connection comes from an untrusted source.")
       /// No supported wallets are available.
       public static let noSupportedWallets = Localized.tr("Localizable", "errors.connections.no_supported_wallets", fallback: "No supported wallets are available.")
       /// The provided chain is not supported.

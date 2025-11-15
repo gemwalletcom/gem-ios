@@ -1,10 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import SwiftUI
 import Primitives
 import WalletConnectorService
 import Localization
 import PrimitivesComponents
+import Components
+import Style
 
 public struct ConnectionProposalViewModel {
     private let connectionsService: ConnectionsService
@@ -53,6 +56,34 @@ public struct ConnectionProposalViewModel {
     
     var imageUrl: URL? {
         URL(string: payload.metadata.icon)
+    }
+
+    var verificationImage: Image {
+        switch pairingProposal.verificationStatus {
+        case .verified: Images.Transaction.State.success
+        case .unknown: Images.TokenStatus.warning
+        case .invalid, .malicious: Images.TokenStatus.risk
+        }
+    }
+
+    var statusText: String {
+        switch pairingProposal.verificationStatus {
+        case .verified: Localized.Asset.Verification.verified
+        case .unknown: Localized.Asset.Verification.unverified
+        case .invalid, .malicious: Localized.Asset.Verification.suspicious
+        }
+    }
+
+    var statusTextStyle: TextStyle {
+        switch pairingProposal.verificationStatus {
+        case .verified: TextStyle(font: .callout, color: Colors.green)
+        case .unknown: TextStyle(font: .callout, color: Colors.orange)
+        case .invalid, .malicious: TextStyle(font: .callout, color: Colors.red)
+        }
+    }
+
+    var statusAssetImage: AssetImage {
+        .image(verificationImage)
     }
 
     private var payload: WalletConnectionSessionProposal {

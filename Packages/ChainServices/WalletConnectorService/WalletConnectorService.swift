@@ -11,10 +11,15 @@ public final class WalletConnectorService {
     private let signer: WalletConnectorSignable
     private let messageTracker = MessageTracker()
     private let serviceFactory: WalletConnectServiceFactory
+    private let verifyService: WalletConnectorVerifyServiceable
 
-    public init(signer: WalletConnectorSignable) {
+    public init(
+        signer: WalletConnectorSignable,
+        verifyService: WalletConnectorVerifyServiceable = WalletConnectorVerifyService()
+    ) {
         self.signer = signer
         self.serviceFactory = WalletConnectServiceFactory(signer: signer)
+        self.verifyService = verifyService
     }
 }
 
@@ -106,15 +111,16 @@ extension WalletConnectorService {
     }
 
     private func handleSessionProposals() async {
-        for await proposal in interactor.sessionProposalStream {
+        for await (proposal, verifyContext) in interactor.sessionProposalStream {
             debugLog("Session proposal received: \(proposal)")
+            debugLog("Verify context: \(String(describing: verifyContext))")
 
             do {
-                try await processSession(proposal: proposal.proposal)
+                try await processSession(proposal: proposal, verifyContext: verifyContext)
             } catch {
                 debugLog("Error accepting proposal: \(error)")
                 try? await signer.sessionReject(
-                    id: proposal.proposal.pairingTopic,
+                    id: proposal.pairingTopic,
                     error: error
                 )
             }
@@ -122,9 +128,17 @@ extension WalletConnectorService {
     }
 
     private func handleSessionRequests() async {
-        for await request in interactor.sessionRequestStream {
+        for await (request, verifyContext) in interactor.sessionRequestStream {
+            debugLog("Session request received: \(request.method)")
+            debugLog("Verify context: \(String(describing: verifyContext))")
+
+            if let verifyContext, verifyContext.validation == .invalid {
+                debugLog("Warning: Request from invalid/unverified origin")
+                debugLog("Origin: \(verifyContext.origin ?? "unknown"), Validation: \(verifyContext.validation)")
+            }
+
             do {
-                try await handleRequest(request: request.request)
+                try await handleRequest(request: request)
             } catch {
                 debugLog("Error handling request: \(error)")
             }
@@ -169,27 +183,48 @@ extension WalletConnectorService {
     }
 
 
-    private func processSession(proposal: Session.Proposal) async throws {
+    private func processSession(proposal: Session.Proposal, verifyContext: VerifyContext?) async throws {
         let messageId = proposal.messageId
-        
+
         guard await messageTracker.shouldProcess(messageId) else {
             debugLog("Ignoring duplicate proposal with ID: \(messageId)")
             return
         }
-        
+
         let wallets = try signer.getWallets(for: proposal)
         let currentWalletId = try signer.getCurrentWallet().walletId
 
         guard let preselectedWallet = wallets.first(where: { $0.walletId ==  currentWalletId }) ?? wallets.first else {
             throw WalletConnectorServiceError.walletsUnsupported
         }
+
+        let metadata = proposal.proposer.metadata
+        let verificationStatus = verifyService.validateOrigin(
+            metadata: metadata,
+            verifyContext: verifyContext
+        )
+
+        debugLog("Verification status: \(verificationStatus)")
+
+        switch verificationStatus {
+        case .verified, .unknown: break
+        case .invalid:
+            throw WalletConnectorServiceError.invalidOrigin
+        case .malicious:
+            throw WalletConnectorServiceError.maliciousOrigin
+        }
+
         let payload = WalletConnectionSessionProposal(
             defaultWallet: preselectedWallet,
             wallets: wallets,
-            metadata: proposal.proposer.metadata
+            metadata: metadata
         )
 
-        let payloadTopic = WCPairingProposal(pairingId: proposal.pairingTopic, proposal: payload)
+        let payloadTopic = WCPairingProposal(
+            pairingId: proposal.pairingTopic,
+            proposal: payload,
+            verificationStatus: verificationStatus
+        )
         let approvedWalletId = try await signer.sessionApproval(payload: payloadTopic)
         let selectedWallet = try signer.getWallet(id: approvedWalletId)
 

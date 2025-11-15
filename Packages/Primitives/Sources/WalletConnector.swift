@@ -91,3 +91,10 @@ public enum WalletConnectionMethods: String, Codable, CaseIterable, Sendable {
 	case suiSignTransaction = "sui_signTransaction"
 	case suiSignAndExecuteTransaction = "sui_signAndExecuteTransaction"
 }
+
+public enum WalletConnectionVerificationStatus: String, Codable, Hashable, Sendable {
+	case verified
+	case unknown
+	case invalid
+	case malicious
+}

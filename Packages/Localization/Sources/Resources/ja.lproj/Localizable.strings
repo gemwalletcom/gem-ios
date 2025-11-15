@@ -507,3 +507,5 @@
 "secret_phrase.screenshot_detected.title" = "スクリーンショットが検出されました";
 "secret_phrase.screenshot_detected.description" = "スクリーンショットは他のアプリからアクセスできる場合があり、この方法で保存すると秘密のフレーズが危険にさらされる可能性があります。";
 "secret_phrase.content_hidden.description" = "画面録画中にコンテンツが非表示になる";
+"asset.verification.verified" = "検証済み";
+"errors.connections.malicious_origin" = "この接続は信頼できないソースからのものです。";

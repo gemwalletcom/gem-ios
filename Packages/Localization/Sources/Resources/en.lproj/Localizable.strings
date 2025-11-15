@@ -507,3 +507,5 @@
 "secret_phrase.screenshot_detected.title" = "Screenshot Detected";
 "secret_phrase.screenshot_detected.description" = "Screenshots may be accessible to other apps, they can put your secret phrase at risk if saved this way.";
 "secret_phrase.content_hidden.description" = "Content hidden during screen recording";
+"asset.verification.verified" = "Verified";
+"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";

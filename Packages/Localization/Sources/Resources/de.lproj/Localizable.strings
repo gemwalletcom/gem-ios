@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ ist erforderlich";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Unbestätigt";
 "asset.verification.suspicious" = "Verdächtig";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -507,3 +507,5 @@
 "secret_phrase.screenshot_detected.title" = "Screenshot erkannt";
 "secret_phrase.screenshot_detected.description" = "Screenshots können von anderen Apps eingesehen werden und gefährden so Ihre geheime Phrase.";
 "secret_phrase.content_hidden.description" = "Inhalte, die während der Bildschirmaufnahme ausgeblendet wurden.";
+"asset.verification.verified" = "Bestätigt";
+"errors.connections.malicious_origin" = "Diese Verbindung stammt aus einer nicht vertrauenswürdigen Quelle.";

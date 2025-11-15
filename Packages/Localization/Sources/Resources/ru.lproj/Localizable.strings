@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "Я понимаю, что если я потеряю доступ к своим кошелькам, Gem не несет ответственности и не сможет оказать никакой помощи.";
 "onboarding.accept_terms.continue" = "Согласиться и продолжить";
 "errors.required" = "%@ требуется";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Непроверено";
 "asset.verification.suspicious" = "Подозрительный";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -507,3 +507,5 @@
 "secret_phrase.screenshot_detected.title" = "Скриншот обнаружен";
 "secret_phrase.screenshot_detected.description" = "Скриншоты могут быть доступны другим приложениям, и если сохранить их таким образом, они могут поставить под угрозу вашу секретную фразу.";
 "secret_phrase.content_hidden.description" = "Контент, скрытый во время записи экрана";
+"asset.verification.verified" = "Проверено";
+"errors.connections.malicious_origin" = "Это соединение получено из ненадежного источника.";
