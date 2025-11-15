@@ -8,7 +8,6 @@ extension WalletConnectionMethods {
         switch self {
         // Ethereum methods
         case .ethChainId: .ethereum(.chainId)
-        case .ethSign: .ethereum(.sign)
         case .personalSign: .ethereum(.personalSign)
         case .ethSignTypedData: .ethereum(.signTypedData)
         case .ethSignTypedDataV4: .ethereum(.signTypedDataV4)

@@ -75,7 +75,6 @@ public enum WalletConnectionEvents: String, Codable, CaseIterable, Sendable {
 
 public enum WalletConnectionMethods: String, Codable, CaseIterable, Sendable {
 	case ethChainId = "eth_chainId"
-	case ethSign = "eth_sign"
 	case personalSign = "personal_sign"
 	case ethSignTypedData = "eth_signTypedData"
 	case ethSignTypedDataV4 = "eth_signTypedData_v4"

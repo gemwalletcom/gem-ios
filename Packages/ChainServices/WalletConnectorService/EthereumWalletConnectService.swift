@@ -34,7 +34,6 @@ private extension EthereumWalletConnectService {
         request: WalletConnectSign.Request
     ) async throws -> RPCResult {
         switch method {
-        case .sign: try await ethSign(chain: chain, request: request)
         case .personalSign: try await personalSign(chain: chain, request: request)
         case .signTypedData, .signTypedDataV4: try await ethSignTypedData(chain: chain, request: request)
         case .signTransaction: try await signTransaction(chain: chain, request: request)
@@ -50,14 +49,6 @@ private extension EthereumWalletConnectService {
 // MARK: - Private Methods
 
 extension EthereumWalletConnectService {
-    private func ethSign(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
-        let params = try request.params.get([String].self)
-        let data = Data(hex: params[1])
-        let message = SignMessage(signType: .eip191, data: data)
-        let digest = try await signer.signMessage(sessionId: request.topic, chain: chain, message: message)
-        return .response(AnyCodable(digest))
-    }
-
     private func personalSign(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
         let params = try request.params.get([String].self)
         let param = params[0]

@@ -6,7 +6,6 @@ import Foundation
 
 public enum WalletConnectEthereumMethods: String, Codable, CaseIterable, Sendable {
 	case chainId
-	case sign
 	case personalSign
 	case signTypedData
 	case signTypedDataV4
