@@ -182,19 +182,18 @@ extension WalletConnectorService {
             return
         }
 
-        debugLog("handleMethod received: \(request.method) ")
-        debugLog("handleMethod received params: \(request.params) ")
+        debugLog("handleMethod received: \(request.method), params: \(request.params)")
 
         do {
-            let paramsString = try JSONEncoder().encode(request.params).encodeString()
+            let params = try JSONEncoder().encode(request.params).encodeString()
             let action = try walletConnect.parseRequest(
                 topic: request.topic,
                 method: request.method,
-                params: paramsString,
+                params: params,
                 chainId: request.chainId.absoluteString
             )
 
-            debugLog("handle action: \(action)")
+            debugLog("parse request result: \(action)")
 
             let response = try await handleAction(action: action, sessionId: request.topic)
 
@@ -213,13 +212,11 @@ extension WalletConnectorService {
             let signature = try await signer.signMessage(sessionId: sessionId, chain: chain.map(), message: message)
             let response = walletConnect.encodeSignMessage(chain: chain, signature: signature)
             return .response(response.map())
-
         case .signTransaction(let chain, let type, let data):
             let transaction = try walletConnect.decodeSendTransaction(transactionType: type, data: data)
             let transactionId = try await signer.signTransaction(sessionId: sessionId, chain: chain.map(), transaction: transaction.map())
             let response = walletConnect.encodeSignTransaction(chain: chain, transactionId: transactionId)
             return .response(response.map())
-
         case .sendTransaction(let chain, let type, let data):
             let transaction = try walletConnect.decodeSendTransaction(transactionType: type, data: data)
             let transactionId = try await signer.sendTransaction(
@@ -229,10 +226,8 @@ extension WalletConnectorService {
             )
             let response = walletConnect.encodeSendTransaction(chain: chain, transactionId: transactionId)
             return .response(response.map())
-
         case .chainOperation(let operation):
             return handleChainOperation(operation: operation)
-
         case .unsupported(let method):
             throw WalletConnectorServiceError.unresolvedMethod(method)
         }
