@@ -31,29 +31,55 @@ public struct SignMessageScene: View {
                 ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
             }
             
-            switch model.messageDisplayType {
-            case .sections(let sections):
-                ForEach(sections) { section in
-                    Section {
-                        ForEach(section.values) { item in
-                            ListItemView(
-                                title: item.title,
-                                subtitle: item.value
-                            )
-                            
-                        }
-                    } header: {
-                        if let title = section.title {
-                            Text(title)
+            if let siweViewModel = model.siweMessageViewModel {
+                Section(Localized.Common.details) {
+                    ListItemView(title: Localized.WalletConnect.domain, subtitle: siweViewModel.domainText)
+                    ListItemView(title: Localized.WalletConnect.website, subtitle: siweViewModel.websiteText)
+                    ListItemView(title: Localized.Common.address, subtitle: siweViewModel.addressText)
+                }
+
+                if let statement = siweViewModel.statementText {
+                    Section(Localized.SignMessage.message) {
+                        Text(statement)
+                    }
+                }
+
+                if siweViewModel.hasResources {
+                    Section(Localized.Asset.resources) {
+                        ForEach(Array(siweViewModel.resources.enumerated()), id: \.offset) { item in
+                            ListItemView(title: "#\(item.offset + 1)", subtitle: item.element)
                         }
                     }
                 }
+
                 NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
                     model.onViewFullMessage()
                 }
-            case .text(let string):
-                Section(Localized.SignMessage.message) {
-                    Text(string)
+            } else {
+                switch model.messageDisplayType {
+                case .sections(let sections):
+                    ForEach(sections) { section in
+                        Section {
+                            ForEach(section.values) { item in
+                                ListItemView(
+                                    title: item.title,
+                                    subtitle: item.value
+                                )
+                                
+                            }
+                        } header: {
+                            if let title = section.title {
+                                Text(title)
+                            }
+                        }
+                    }
+                    NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
+                        model.onViewFullMessage()
+                    }
+                case .text(let string):
+                    Section(Localized.SignMessage.message) {
+                        Text(string)
+                    }
                 }
             }
         }
