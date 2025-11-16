@@ -2,8 +2,15 @@
 
 import Foundation
 import Primitives
+import Gemstone
 import func Gemstone.assetWrapper
 import BigInt
+
+extension Gemstone.Chain {
+    public func map() throws -> Primitives.Chain {
+        try Primitives.Chain(id: self)
+    }
+}
 
 public extension Primitives.Chain {
     var asset: Asset {

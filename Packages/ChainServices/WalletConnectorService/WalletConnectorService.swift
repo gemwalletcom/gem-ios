@@ -4,22 +4,24 @@ import Foundation
 @preconcurrency import WalletConnectPairing
 @preconcurrency import ReownWalletKit
 import Primitives
+import GemstonePrimitives
 import struct Gemstone.SignMessage
+import enum Gemstone.SignDigestType
+import class Gemstone.WalletConnect
+import enum Gemstone.WalletConnectAction
+import enum Gemstone.WalletConnectTransaction
+import enum Gemstone.WalletConnectTransactionType
+import enum Gemstone.WalletConnectChainOperation
+import enum Gemstone.WalletConnectResponseType
 
 public final class WalletConnectorService {
     private let interactor = WCConnectionsInteractor()
     private let signer: WalletConnectorSignable
     private let messageTracker = MessageTracker()
-    private let serviceFactory: WalletConnectServiceFactory
-    private let verifyService: WalletConnectorVerifyServiceable
+    private let walletConnect = WalletConnect()
 
-    public init(
-        signer: WalletConnectorSignable,
-        verifyService: WalletConnectorVerifyServiceable = WalletConnectorVerifyService()
-    ) {
+    public init(signer: WalletConnectorSignable) {
         self.signer = signer
-        self.serviceFactory = WalletConnectServiceFactory(signer: signer)
-        self.verifyService = verifyService
     }
 }
 
@@ -28,16 +30,16 @@ public final class WalletConnectorService {
 extension WalletConnectorService: WalletConnectorServiceable {
     public func configure() throws {
         Networking.configure(
-            groupIdentifier: "group.com.gemwallet.ios",
-            projectId: "3bc07cd7179d11ea65335fb9377702b6",
+            groupIdentifier: Constants.WalletConnect.groupIdentifier,
+            projectId: Constants.WalletConnect.projectId,
             socketFactory: DefaultSocketFactory()
         )
 
         WalletKit.configure(
             metadata: AppMetadata(
-                name: "Gem Wallet",
+                name: Constants.App.name,
                 description: "Gem Web3 Wallet",
-                url: "https://gemwallet.com",
+                url: Constants.App.website,
                 icons: ["https://gemwallet.com/images/gem-logo-256x256.png"],
                 redirect: try AppMetadata.Redirect(
                     native: "gem://",
@@ -132,12 +134,29 @@ extension WalletConnectorService {
             debugLog("Session request received: \(request.method)")
             debugLog("Verify context: \(String(describing: verifyContext))")
 
-            if let verifyContext, verifyContext.validation == .invalid {
-                debugLog("Warning: Request from invalid/unverified origin")
-                debugLog("Origin: \(verifyContext.origin ?? "unknown"), Validation: \(verifyContext.validation)")
+            let session = WalletKit.instance.getSessions().first { $0.topic == request.topic }
+            
+            guard let verifyContext, let session else {
+                continue
             }
-
+            
             do {
+                let status = walletConnect.validateOrigin(metadataUrl: session.peer.metadata.url, origin: verifyContext.origin, validation: verifyContext.validation.map()).map()
+
+                debugLog("Verification status for request: \(status)")
+
+                switch status {
+                case .verified, .unknown: break
+                case .invalid:
+                    debugLog("Warning: Request from invalid origin")
+                    try await rejectRequest(request)
+                    continue
+                case .malicious:
+                    debugLog("Warning: Request from malicious origin")
+                    try await rejectRequest(request)
+                    continue
+                }
+
                 try await handleRequest(request: request)
             } catch {
                 debugLog("Error handling request: \(error)")
@@ -156,7 +175,7 @@ extension WalletConnectorService {
 
     private func handleRequest(request: WalletConnectSign.Request) async throws  {
         let messageId = request.messageId
-        
+
         guard await messageTracker.shouldProcess(messageId) else {
             debugLog("Ignoring duplicate request with ID: \(messageId)")
             try await rejectRequest(request)
@@ -167,21 +186,68 @@ extension WalletConnectorService {
         debugLog("handleMethod received params: \(request.params) ")
 
         do {
-            let service = try serviceFactory.service(for: request.method)
-            let response = try await service.handle(request: request)
+            let paramsString = try JSONEncoder().encode(request.params).encodeString()
+            let action = try walletConnect.parseRequest(
+                topic: request.topic,
+                method: request.method,
+                params: paramsString,
+                chainId: request.chainId.absoluteString
+            )
 
-            debugLog("handleMethod result: \(request.method) \(response)")
+            debugLog("handle action: \(action)")
+
+            let response = try await handleAction(action: action, sessionId: request.topic)
+
+            debugLog("handle method result: \(request.method) \(response)")
             try await WalletKit.instance.respond(topic: request.topic, requestId: request.id, response: response)
         } catch {
-            debugLog("handleMethod error: \(error)")
+            debugLog("handle method error: \(error)")
             try await rejectRequest(request)
+        }
+    }
+
+    private func handleAction(action: WalletConnectAction, sessionId: String) async throws -> RPCResult {
+        switch action {
+        case .signMessage(let chain, let signType, let data):
+            let message = walletConnect.decodeSignMessage(signType: signType, data: data)
+            let signature = try await signer.signMessage(sessionId: sessionId, chain: chain.map(), message: message)
+            let response = walletConnect.encodeSignMessage(chain: chain, signature: signature)
+            return .response(response.map())
+
+        case .signTransaction(let chain, let type, let data):
+            let transaction = try walletConnect.decodeSendTransaction(transactionType: type, data: data)
+            let transactionId = try await signer.signTransaction(sessionId: sessionId, chain: chain.map(), transaction: transaction.map())
+            let response = walletConnect.encodeSignTransaction(chain: chain, transactionId: transactionId)
+            return .response(response.map())
+
+        case .sendTransaction(let chain, let type, let data):
+            let transaction = try walletConnect.decodeSendTransaction(transactionType: type, data: data)
+            let transactionId = try await signer.sendTransaction(
+                sessionId: sessionId,
+                chain: chain.map(),
+                transaction: transaction.map()
+            )
+            let response = walletConnect.encodeSendTransaction(chain: chain, transactionId: transactionId)
+            return .response(response.map())
+
+        case .chainOperation(let operation):
+            return handleChainOperation(operation: operation)
+
+        case .unsupported(let method):
+            throw WalletConnectorServiceError.unresolvedMethod(method)
+        }
+    }
+
+    private func handleChainOperation(operation: WalletConnectChainOperation) -> RPCResult {
+        switch operation {
+        case .addChain, .switchChain: .response(AnyCodable.null())
+        case .getChainId: .error(.methodNotFound)
         }
     }
     
     private func rejectRequest(_ request: WalletConnectSign.Request) async throws {
         try await WalletKit.instance.respond(topic: request.topic, requestId: request.id, response: .error(JSONRPCError(code: 4001, message: "User rejected the request")))
     }
-
 
     private func processSession(proposal: Session.Proposal, verifyContext: VerifyContext?) async throws {
         let messageId = proposal.messageId
@@ -199,10 +265,16 @@ extension WalletConnectorService {
         }
 
         let metadata = proposal.proposer.metadata
-        let verificationStatus = verifyService.validateOrigin(
-            metadata: metadata,
-            verifyContext: verifyContext
-        )
+        let verificationStatus: WalletConnectionVerificationStatus
+        if let verifyContext {
+            verificationStatus = walletConnect.validateOrigin(
+                metadataUrl: metadata.url,
+                origin: verifyContext.origin,
+                validation: verifyContext.validation.map()
+            ).map()
+        } else {
+            verificationStatus = .unknown
+        }
 
         debugLog("Verification status: \(verificationStatus)")
 

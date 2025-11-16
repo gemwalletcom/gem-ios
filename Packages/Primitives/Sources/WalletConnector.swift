@@ -4,12 +4,6 @@
 
 import Foundation
 
-public enum WalletConnectionState: String, Codable, Hashable, Sendable {
-	case started
-	case active
-	case expired
-}
-
 public struct WalletConnectionSessionAppMetadata: Codable, Equatable, Hashable, Sendable {
 	public let name: String
 	public let description: String
@@ -22,6 +16,43 @@ public struct WalletConnectionSessionAppMetadata: Codable, Equatable, Hashable, 
 		self.url = url
 		self.icon = icon
 	}
+}
+
+public struct WalletConnectionSessionProposal: Codable, Equatable, Hashable, Sendable {
+	public let defaultWallet: Wallet
+	public let wallets: [Wallet]
+	public let metadata: WalletConnectionSessionAppMetadata
+
+	public init(defaultWallet: Wallet, wallets: [Wallet], metadata: WalletConnectionSessionAppMetadata) {
+		self.defaultWallet = defaultWallet
+		self.wallets = wallets
+		self.metadata = metadata
+	}
+}
+
+public enum WalletConnectionVerificationStatus: String, Codable, Hashable, Sendable {
+	case verified
+	case unknown
+	case invalid
+	case malicious
+}
+
+public struct WCPairingProposal: Codable, Sendable {
+	public let pairingId: String
+	public let proposal: WalletConnectionSessionProposal
+	public let verificationStatus: WalletConnectionVerificationStatus
+
+	public init(pairingId: String, proposal: WalletConnectionSessionProposal, verificationStatus: WalletConnectionVerificationStatus) {
+		self.pairingId = pairingId
+		self.proposal = proposal
+		self.verificationStatus = verificationStatus
+	}
+}
+
+public enum WalletConnectionState: String, Codable, Hashable, Sendable {
+	case started
+	case active
+	case expired
 }
 
 public struct WalletConnectionSession: Codable, Equatable, Hashable, Sendable {
@@ -54,18 +85,6 @@ public struct WalletConnection: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct WalletConnectionSessionProposal: Codable, Equatable, Hashable, Sendable {
-	public let defaultWallet: Wallet
-	public let wallets: [Wallet]
-	public let metadata: WalletConnectionSessionAppMetadata
-
-	public init(defaultWallet: Wallet, wallets: [Wallet], metadata: WalletConnectionSessionAppMetadata) {
-		self.defaultWallet = defaultWallet
-		self.wallets = wallets
-		self.metadata = metadata
-	}
-}
-
 public enum WalletConnectionEvents: String, Codable, CaseIterable, Sendable {
 	case connect
 	case disconnect
@@ -90,11 +109,4 @@ public enum WalletConnectionMethods: String, Codable, CaseIterable, Sendable {
 	case suiSignPersonalMessage = "sui_signPersonalMessage"
 	case suiSignTransaction = "sui_signTransaction"
 	case suiSignAndExecuteTransaction = "sui_signAndExecuteTransaction"
-}
-
-public enum WalletConnectionVerificationStatus: String, Codable, Hashable, Sendable {
-	case verified
-	case unknown
-	case invalid
-	case malicious
 }

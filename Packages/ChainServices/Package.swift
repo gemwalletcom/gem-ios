@@ -112,17 +112,7 @@ let package = Package(
         .target(
             name: "WalletConnectorServiceTestKit",
             dependencies: ["WalletConnectorService"],
-            path: "WalletConnectorService/TestKit",
-            exclude: ["WalletConnectorVerifyServiceTests.swift"]
-        ),
-        .testTarget(
-            name: "WalletConnectorServiceTests",
-            dependencies: [
-                "WalletConnectorService",
-                .product(name: "ReownWalletKit", package: "reown-swift"),
-            ],
-            path: "WalletConnectorService/TestKit",
-            sources: ["WalletConnectorVerifyServiceTests.swift"]
+            path: "WalletConnectorService/TestKit"
         ),
         .target(
             name: "ScanService",
