@@ -240,7 +240,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
         }
 
         guard case let .eip712(data) = preview else {
-            throw WalletConnectorServiceError.unresolvedChainId(chain.rawValue)
+            throw WalletConnectorServiceError.wrongSignParameters
         }
 
         let domainChainId = data.domain.chainId
