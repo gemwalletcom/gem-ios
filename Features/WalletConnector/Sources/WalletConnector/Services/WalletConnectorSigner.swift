@@ -224,10 +224,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
 
     private func validate(chain: Chain, session: WalletConnectionSession, message: SignMessage? = nil) throws {
-        guard session.chains.contains(chain) else {
-            throw WalletConnectorServiceError.unresolvedChainId(chain.rawValue)
-        }
-
+        try self.validate(chain: chain, session: session)
         if let message, message.signType == .eip712 {
             try validateEip712Chain(chain: chain, message: message)
         }
@@ -258,6 +255,9 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
 
     private func validate(chain: Chain, session: WalletConnectionSession) throws {
+        if session.chains.isEmpty {
+            return
+        }
         guard session.chains.contains(chain) else {
             throw WalletConnectorServiceError.unresolvedChainId(chain.rawValue)
         }
