@@ -14,16 +14,46 @@ public struct SiweMessageViewModel {
         message.domain
     }
 
-    var websiteText: String {
-        message.uri
-    }
-
     var addressText: String {
         message.address
     }
 
     var statementText: String? {
         message.statement?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+    }
+
+    var detailItems: [(title: String, value: String)] {
+        var items: [(String, String)] = [
+            ("Domain", domainText),
+            ("Address", addressText),
+            ("URI", message.uri),
+            ("Version", message.version),
+            ("Chain ID", "\(message.chainId)"),
+            ("Nonce", message.nonce),
+            ("Issued At", message.issuedAt),
+        ]
+
+        if let scheme = message.scheme?.nilIfEmpty {
+            items.insert(("Scheme", scheme), at: 1)
+        }
+
+        if let expiration = message.expirationTime?.nilIfEmpty {
+            items.append(("Expiration Time", expiration))
+        }
+
+        if let notBefore = message.notBefore?.nilIfEmpty {
+            items.append(("Not Before", notBefore))
+        }
+
+        if let requestId = message.requestId?.nilIfEmpty {
+            items.append(("Request ID", requestId))
+        }
+
+        if let statement = statementText {
+            items.append(("Statement", statement))
+        }
+
+        return items
     }
 
     var hasResources: Bool {

@@ -33,14 +33,8 @@ public struct SignMessageScene: View {
             
             if let siweViewModel = model.siweMessageViewModel {
                 Section(Localized.Common.details) {
-                    ListItemView(title: Localized.WalletConnect.domain, subtitle: siweViewModel.domainText)
-                    ListItemView(title: Localized.WalletConnect.website, subtitle: siweViewModel.websiteText)
-                    ListItemView(title: Localized.Common.address, subtitle: siweViewModel.addressText)
-                }
-
-                if let statement = siweViewModel.statementText {
-                    Section(Localized.SignMessage.message) {
-                        Text(statement)
+                    ForEach(Array(siweViewModel.detailItems.enumerated()), id: \.offset) { item in
+                        ListItemView(title: item.element.title, subtitle: item.element.value)
                     }
                 }
 
@@ -50,10 +44,6 @@ public struct SignMessageScene: View {
                             ListItemView(title: "#\(item.offset + 1)", subtitle: item.element)
                         }
                     }
-                }
-
-                NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
-                    model.onViewFullMessage()
                 }
             } else {
                 switch model.messageDisplayType {
