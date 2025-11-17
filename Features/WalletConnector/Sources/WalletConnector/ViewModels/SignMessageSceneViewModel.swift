@@ -55,13 +55,6 @@ public final class SignMessageSceneViewModel {
         WalletConnectionViewModel(connection: WalletConnection(session: payload.session, wallet: payload.wallet))
     }
 
-    public var siweMessageViewModel: SiweMessageViewModel? {
-        if case let .siwe(message) = payload.message.signType {
-            return SiweMessageViewModel(message: message)
-        }
-        return nil
-    }
-
     public var appName: String {
         payload.session.metadata.shortName
     }
