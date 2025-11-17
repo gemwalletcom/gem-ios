@@ -34,6 +34,9 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case liquidationPrice
     case openInterest
     case autoclose
+    // scan transaction
+    case maliciousTransaction
+    case memoRequired(symbol: String)
 
 
     public var id: String {
@@ -57,6 +60,8 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case .liquidationPrice: "liquidationPrice"
         case .openInterest: "openInterest"
         case .autoclose: "autoClose"
+        case .maliciousTransaction: "maliciousTransaction"
+        case let .memoRequired(symbol): "memoRequired_\(symbol)"
         }
     }
     

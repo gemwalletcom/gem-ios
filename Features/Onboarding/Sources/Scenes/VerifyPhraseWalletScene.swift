@@ -68,6 +68,8 @@ struct VerifyPhraseWalletScene: View {
         .listSectionSpacing(.custom(.medium))
         .navigationTitle(model.title)
         .alertSheet($model.isPresentingAlertMessage)
+        .detectScreenshots(docsUrl: model.docsUrl)
+        .protectFromScreenRecording()
     }
 
 }

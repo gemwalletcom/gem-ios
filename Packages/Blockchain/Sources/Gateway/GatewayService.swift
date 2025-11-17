@@ -9,14 +9,15 @@ import GemstonePrimitives
 
 public actor GatewayService: Sendable {
     let gateway: GemGateway
-    
+
     public init(
         provider: NativeProvider
     ) {
         self.gateway = GemGateway(
             provider: provider,
             preferences: GemstonePreferences(namespace: "gateway"),
-            securePreferences: GemstoneSecurePreferences(namespace: "gateway")
+            securePreferences: GemstoneSecurePreferences(namespace: "gateway"),
+            apiUrl: Constants.apiURL.absoluteString
         )
     }
 }
@@ -127,7 +128,11 @@ extension GatewayService {
     public func transactionPreload(chain: Primitives.Chain, input: TransactionPreloadInput) async throws -> TransactionLoadMetadata {
         try await gateway.getTransactionPreload(chain: chain.rawValue, input: input.map()).map()
     }
-    
+
+    public func transactionScan(chain: Primitives.Chain, input: TransactionPreloadInput) async throws -> Primitives.ScanTransaction? {
+        try await gateway.getTransactionScan(chain: chain.rawValue, input: input.map())?.map()
+    }
+
     public func transactionLoad(chain: Primitives.Chain, input: GemTransactionLoadInput) async throws -> TransactionData {
         try await gateway.getTransactionLoad(chain: chain.rawValue, input: input, provider: self).map()
     }

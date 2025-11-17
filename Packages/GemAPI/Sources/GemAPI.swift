@@ -43,7 +43,7 @@ public enum GemAPI: TargetType {
     case addSupportDevice(device: SupportDevice)
     
     public var baseUrl: URL {
-        return URL(string: "https://api.gemwallet.com")!
+        Constants.apiURL
     }
     
     public var method: HTTPMethod {

@@ -3,21 +3,13 @@
 import Foundation
 import ScanService
 import Primitives
-import Preferences
-import PreferencesTestKit
-import GemAPI
+import Blockchain
+import NativeProviderService
 
 public extension ScanService {
     static func mock() -> ScanService {
-        ScanService(
-            apiService: GemAPIScanServiceMock(),
-            securePreferences: SecurePreferences.mock()
-        )
-    }
-}
-
-private struct GemAPIScanServiceMock: GemAPIScanService {
-    func getScanTransaction(payload: ScanTransactionPayload) async throws -> ScanTransaction {
-        ScanTransaction(isMalicious: false, isMemoRequired: false)
+        let mockProvider = NativeProvider(url: Constants.apiURL)
+        let gatewayService = GatewayService(provider: mockProvider)
+        return ScanService(gatewayService: gatewayService)
     }
 }

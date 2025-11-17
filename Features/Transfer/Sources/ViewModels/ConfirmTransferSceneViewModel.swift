@@ -163,9 +163,15 @@ extension ConfirmTransferSceneViewModel {
             case let .minimumAccountBalanceTooLow(asset, required):
                 isPresentingSheet = .info(.accountMinimalBalance(asset, required: required))
             }
+        case let error as ScanTransactionError:
+            switch error {
+            case .malicious:
+                isPresentingSheet = .info(.maliciousTransaction)
+            case let .memoRequired(symbol):
+                isPresentingSheet = .info(.memoRequired(symbol: symbol))
+            }
         default:
             break
-            //TODO Generic error
         }
     }
 
@@ -216,6 +222,8 @@ extension ConfirmTransferSceneViewModel {
                 onSelectListError(error: error)
             }
         case .error(let error as TransferAmountCalculatorError):
+            onSelectListError(error: error)
+        case .error(let error as ScanTransactionError):
             onSelectListError(error: error)
         case .error, .loading, .noData:
             break

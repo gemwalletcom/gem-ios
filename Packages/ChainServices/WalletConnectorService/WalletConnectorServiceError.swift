@@ -8,4 +8,6 @@ public enum WalletConnectorServiceError: Error {
     case walletsUnsupported
     case wrongSignParameters
     case wrongSendParameters
+    case invalidOrigin
+    case maliciousOrigin
 }

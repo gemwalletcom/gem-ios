@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "隱藏錢包";
 "common.details" = "詳情";
 "transaction.swap_again" = "再次交換";
-"errors.scan_transaction.malicious" = "交易被認定為可疑";
-"errors.scan_transaction.memo_required" = "%@地址需要目的地標籤/備忘錄";
+"errors.scan_transaction.malicious.description" = "此交易無法完成——目標錢包地址與可疑或有害活動有關。";
+"errors.scan_transaction.memo_required" = "%@目標錢包位址需要目標標籤/備註";
 "common.info" = "資訊";
 "wallet.deposit" = "轉入";
 "wallet.withdraw" = "提領";
@@ -490,7 +490,7 @@
 "assets.title" = "資產";
 "stake.delegations" = "委託";
 "info.stake.apr.description" = "年利率（APR）是質押加密貨幣的年度報酬率。";
-"receive.warning" = "僅透過 ** %@ ** 網路向此位址發送 ** %@ **。";
+"receive.warning" = "這是您的地址——僅在 ** %@ ** 網路上發送 ** %@ **。";
 "perpetual.leverage" = "槓桿作用";
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自動關閉";
@@ -503,3 +503,9 @@
 "perpetual.auto_close.expected_loss" = "預期損失";
 "perpetual.modify_position" = "修改位置";
 "perpetual.auto_close.stop_loss" = "停損";
+"errors.scan_transaction.malicious.title" = "可疑活動";
+"secret_phrase.screenshot_detected.title" = "偵測到螢幕截圖";
+"secret_phrase.screenshot_detected.description" = "其他應用程式可能可以存取螢幕截圖，如果以這種方式儲存，可能會洩露您的密碼短語。";
+"secret_phrase.content_hidden.description" = "螢幕錄製過程中隱藏的內容";
+"asset.verification.verified" = "已驗證";
+"errors.connections.malicious_origin" = "此連線來自不可信來源。";

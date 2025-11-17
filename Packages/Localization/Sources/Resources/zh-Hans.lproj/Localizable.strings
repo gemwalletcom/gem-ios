@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "隐藏钱包";
 "common.details" = "详情";
 "transaction.swap_again" = "再次兑换";
-"errors.scan_transaction.malicious" = "交易被认定为可疑";
-"errors.scan_transaction.memo_required" = "%@地址需要目的地标签/备忘录";
+"errors.scan_transaction.malicious.description" = "此交易无法完成——目标钱包地址与可疑或有害活动有关。";
+"errors.scan_transaction.memo_required" = "%@目标钱包地址需要目标标签/备注";
 "common.info" = "信息";
 "wallet.deposit" = "充值";
 "wallet.withdraw" = "提现";
@@ -490,7 +490,7 @@
 "assets.title" = "资产";
 "stake.delegations" = "委托";
 "info.stake.apr.description" = "年利率（APR）是质押加密货币的年度回报率。";
-"receive.warning" = "仅通过 ** %@ ** 网络向此地址发送 ** %@ **。";
+"receive.warning" = "这是您的地址——仅在 ** %@ ** 网络上发送 ** %@ **。";
 "perpetual.leverage" = "杠杆作用";
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自动关闭";
@@ -503,3 +503,9 @@
 "perpetual.auto_close.expected_loss" = "预期损失";
 "perpetual.modify_position" = "修改位置";
 "perpetual.auto_close.stop_loss" = "止损";
+"errors.scan_transaction.malicious.title" = "可疑活动";
+"secret_phrase.screenshot_detected.title" = "检测到屏幕截图";
+"secret_phrase.screenshot_detected.description" = "其他应用程序可能可以访问屏幕截图，如果以这种方式保存，可能会泄露您的密码短语。";
+"secret_phrase.content_hidden.description" = "屏幕录制过程中隐藏的内容";
+"asset.verification.verified" = "已验证";
+"errors.connections.malicious_origin" = "此连接来自不可信来源。";

@@ -4,12 +4,10 @@ import Foundation
 import Primitives
 
 public extension ScanTransactionPayload {
-    static func mock(type: TransactionType = .transfer, chain: Chain = .sui) -> Self {
+    static func mock(type: TransactionType = .transfer, assetId: AssetId = AssetId(chain: .sui)) -> Self {
         .init(
-            deviceId: "dev",
-            walletIndex: 0,
-            origin: .mock(chain: chain, address: "orig"),
-            target: .mock(chain: chain, address: "tgt"),
+            origin: .mock(assetId: assetId, address: "orig"),
+            target: .mock(assetId: assetId, address: "tgt"),
             website: nil,
             type: type
         )

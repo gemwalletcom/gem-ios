@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ es obligatorio";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Inconfirmado";
 "asset.verification.suspicious" = "Sospechoso";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Ocultar de la billetera";
 "common.details" = "Detalles";
 "transaction.swap_again" = "Intercambiar de nuevo";
-"errors.scan_transaction.malicious" = "Transacción identificada como sospechosa";
-"errors.scan_transaction.memo_required" = "La dirección %@ requiere una etiqueta/memo de destino";
+"errors.scan_transaction.malicious.description" = "Esta transacción no se puede completar: la dirección de la billetera de destino está vinculada a actividades sospechosas o dañinas.";
+"errors.scan_transaction.memo_required" = "%@ La dirección de la cartera de destino requiere una etiqueta/nota de destino.";
 "common.info" = "Información";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -490,7 +490,7 @@
 "assets.title" = "Activos";
 "stake.delegations" = "Delegaciones";
 "info.stake.apr.description" = "La tasa de porcentaje anual (APR) es la tasa de recompensa anual por apostar su criptomoneda.";
-"receive.warning" = "Envíe solo ** %@ ** en la red ** %@ ** a esta dirección.";
+"receive.warning" = "Esta es su dirección — envíe solo ** %@ ** en la red ** %@ **.";
 "perpetual.leverage" = "Apalancamiento";
 "perpetual.direction" = "Dirección";
 "perpetual.auto_close" = "Cierre automático";
@@ -503,3 +503,9 @@
 "perpetual.auto_close.expected_loss" = "Pérdida esperada";
 "perpetual.modify_position" = "Modificar posición";
 "perpetual.auto_close.stop_loss" = "Stop loss";
+"errors.scan_transaction.malicious.title" = "Actividad sospechosa";
+"secret_phrase.screenshot_detected.title" = "Captura de pantalla detectada";
+"secret_phrase.screenshot_detected.description" = "Las capturas de pantalla pueden ser accesibles a otras aplicaciones y, si se guardan de esta manera, pueden poner en riesgo tu frase secreta.";
+"secret_phrase.content_hidden.description" = "Contenido oculto durante la grabación de pantalla";
+"asset.verification.verified" = "Verificado";
+"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";

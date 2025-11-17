@@ -271,7 +271,7 @@
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "Confirm";
 "common.skip" = "Skip";
-"common.warning" = "Warning";
+"common.warning" = "Amaran";
 "warnings.multi_signature_blocked" = "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.";
 "swap.price_impact" = "Price Impact";
 "wallet.sell" = "Sell";
@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Setuju dan Teruskan";
 "errors.required" = "%@ diperlukan";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Tidak disahkan";
 "asset.verification.suspicious" = "mencurigakan";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Sembunyi dari dompet";
 "common.details" = "Butiran";
 "transaction.swap_again" = "Tukar Lagi";
-"errors.scan_transaction.malicious" = "Transaksi dikenal pasti sebagai syak wasangka";
-"errors.scan_transaction.memo_required" = "Alamat %@ memerlukan teg / memo destinasi";
+"errors.scan_transaction.malicious.description" = "Urus niaga ini tidak dapat diselesaikan — alamat dompet destinasi dipautkan kepada aktiviti yang mencurigakan atau berbahaya.";
+"errors.scan_transaction.memo_required" = "%@ alamat dompet destinasi memerlukan teg / memo destinasi";
 "common.info" = "info";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -490,7 +490,7 @@
 "assets.title" = "Aset";
 "stake.delegations" = "Delegasi";
 "info.stake.apr.description" = "Kadar Peratusan Tahunan (APR) ialah kadar ganjaran tahunan untuk mempertaruhkan mata wang kripto anda.";
-"receive.warning" = "Hantar hanya ** %@ ** pada rangkaian ** %@ ** ke alamat ini.";
+"receive.warning" = "Ini alamat anda — hantar hanya ** %@ ** pada rangkaian ** %@ **.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Arah";
 "perpetual.auto_close" = "Auto Tutup";
@@ -503,3 +503,9 @@
 "perpetual.auto_close.expected_loss" = "Kerugian yang dijangkakan";
 "perpetual.modify_position" = "Ubahsuai Kedudukan";
 "perpetual.auto_close.stop_loss" = "Hentikan kerugian";
+"errors.scan_transaction.malicious.title" = "Aktiviti Meragukan";
+"secret_phrase.screenshot_detected.title" = "Tangkapan Skrin Dikesan";
+"secret_phrase.screenshot_detected.description" = "Tangkapan skrin mungkin boleh diakses oleh apl lain, ia boleh meletakkan frasa rahsia anda pada risiko jika disimpan dengan cara ini.";
+"secret_phrase.content_hidden.description" = "Kandungan tersembunyi semasa rakaman skrin";
+"asset.verification.verified" = "Disahkan";
+"errors.connections.malicious_origin" = "Sambungan ini datang dari sumber yang tidak dipercayai.";

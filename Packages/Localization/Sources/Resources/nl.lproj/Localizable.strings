@@ -271,7 +271,7 @@
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "Confirm";
 "common.skip" = "Skip";
-"common.warning" = "Warning";
+"common.warning" = "Waarschuwing";
 "warnings.multi_signature_blocked" = "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.";
 "swap.price_impact" = "Price Impact";
 "wallet.sell" = "Sell";
@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ is vereist";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Ongeverifieerd";
 "asset.verification.suspicious" = "Verdacht";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Verbergen voor portemonnee";
 "common.details" = "Details";
 "transaction.swap_again" = "Opnieuw ruilen";
-"errors.scan_transaction.malicious" = "Transactie geïdentificeerd als verdacht";
-"errors.scan_transaction.memo_required" = "%@ adres vereist een bestemmingslabel / memo";
+"errors.scan_transaction.malicious.description" = "Deze transactie kan niet worden voltooid: het adres van de bestemmingswallet is gekoppeld aan verdachte of schadelijke activiteiten.";
+"errors.scan_transaction.memo_required" = "%@ bestemmingswalletadres vereist een bestemmingstag / memo";
 "common.info" = "Informatie";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -490,7 +490,7 @@
 "assets.title" = "Activa";
 "stake.delegations" = "Delegaties";
 "info.stake.apr.description" = "Jaarlijks percentage (APR) is het jaarlijkse beloningspercentage voor het staken van uw cryptocurrency.";
-"receive.warning" = "Stuur alleen ** %@ ** op het ** %@ ** netwerk naar dit adres.";
+"receive.warning" = "Dit is uw adres: verstuur alleen ** %@ ** op het ** %@ ** netwerk.";
 "perpetual.leverage" = "Hefboom";
 "perpetual.direction" = "Richting";
 "perpetual.auto_close" = "Automatisch sluiten";
@@ -503,3 +503,9 @@
 "perpetual.auto_close.expected_loss" = "Verwacht verlies";
 "perpetual.modify_position" = "Positie wijzigen";
 "perpetual.auto_close.stop_loss" = "Stop-loss";
+"errors.scan_transaction.malicious.title" = "Verdachte activiteit";
+"secret_phrase.screenshot_detected.title" = "Schermafbeelding gedetecteerd";
+"secret_phrase.screenshot_detected.description" = "Schermafbeeldingen zijn mogelijk toegankelijk voor andere apps, maar ze kunnen uw geheime zin in gevaar brengen als u ze op deze manier opslaat.";
+"secret_phrase.content_hidden.description" = "Inhoud verborgen tijdens schermopname";
+"asset.verification.verified" = "Geverifieerd";
+"errors.connections.malicious_origin" = "Deze verbinding komt van een onbetrouwbare bron.";

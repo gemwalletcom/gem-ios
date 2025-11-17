@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 
 public extension ScanAddressTarget {
-    static func mock(chain: Chain = .sui, address: String = "addr") -> Self {
-        .init(chain: chain, address: address)
+    static func mock(assetId: AssetId = AssetId(chain: .sui), address: String = "addr") -> Self {
+        .init(assetId: assetId, address: address)
     }
 }

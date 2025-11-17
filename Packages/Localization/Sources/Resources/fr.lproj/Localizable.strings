@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ est requis";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Non vérifié";
 "asset.verification.suspicious" = "Suspect";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Se cacher du portefeuille";
 "common.details" = "Détails";
 "transaction.swap_again" = "Échanger à nouveau";
-"errors.scan_transaction.malicious" = "Transaction identifiée comme suspecte";
-"errors.scan_transaction.memo_required" = "L'adresse %@ nécessite une balise de destination / un mémo";
+"errors.scan_transaction.malicious.description" = "Cette transaction ne peut être effectuée — l'adresse du portefeuille de destination est liée à une activité suspecte ou malveillante.";
+"errors.scan_transaction.memo_required" = "%@ L'adresse du portefeuille de destination nécessite une étiquette/un mémo de destination";
 "common.info" = "Informations";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -490,7 +490,7 @@
 "assets.title" = "Actifs";
 "stake.delegations" = "Délégations";
 "info.stake.apr.description" = "Le taux annuel en pourcentage (APR) est le taux de récompense annuel pour le jalonnement de votre crypto-monnaie.";
-"receive.warning" = "Envoyez uniquement ** %@ ** sur le réseau ** %@ ** à cette adresse.";
+"receive.warning" = "Voici votre adresse — envoyez uniquement ** %@ ** sur le réseau ** %@ **.";
 "perpetual.leverage" = "Effet de levier";
 "perpetual.direction" = "Direction";
 "perpetual.auto_close" = "Fermeture automatique";
@@ -503,3 +503,9 @@
 "perpetual.auto_close.expected_loss" = "Perte attendue";
 "perpetual.modify_position" = "Modifier la position";
 "perpetual.auto_close.stop_loss" = "Stop loss";
+"errors.scan_transaction.malicious.title" = "Activité suspecte";
+"secret_phrase.screenshot_detected.title" = "Capture d'écran détectée";
+"secret_phrase.screenshot_detected.description" = "Les captures d'écran peuvent être accessibles à d'autres applications ; si elles sont enregistrées de cette manière, votre phrase secrète peut être compromise.";
+"secret_phrase.content_hidden.description" = "Contenu masqué pendant l'enregistrement d'écran";
+"asset.verification.verified" = "Vérifié";
+"errors.connections.malicious_origin" = "Cette connexion provient d'une source non fiable.";

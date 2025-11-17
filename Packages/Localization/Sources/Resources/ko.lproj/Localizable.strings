@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ 가 필요합니다";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "검증되지 않음";
 "asset.verification.suspicious" = "의심스러운";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "지갑에서 숨기기";
 "common.details" = "세부";
 "transaction.swap_again" = "다시 바꾸기";
-"errors.scan_transaction.malicious" = "의심 거래로 확인됨";
-"errors.scan_transaction.memo_required" = "%@ 주소에는 목적지 태그/메모가 필요합니다.";
+"errors.scan_transaction.malicious.description" = "이 거래를 완료할 수 없습니다. 대상 지갑 주소가 의심스럽거나 유해한 활동과 연결되어 있습니다.";
+"errors.scan_transaction.memo_required" = "%@ 대상 지갑 주소에는 대상 태그/메모가 필요합니다.";
 "common.info" = "정보";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -490,7 +490,7 @@
 "assets.title" = "자산";
 "stake.delegations" = "위임";
 "info.stake.apr.description" = "연이율(APR)은 암호화폐를 스테이킹할 때 매년 지급되는 보상률입니다.";
-"receive.warning" = "** %@ ** 네트워크의 ** %@ **만 이 주소로 보내세요.";
+"receive.warning" = "이것은 귀하의 주소입니다. ** %@ **를 ** %@ ** 네트워크로만 보내세요.";
 "perpetual.leverage" = "레버리지";
 "perpetual.direction" = "방향";
 "perpetual.auto_close" = "자동 닫기";
@@ -503,3 +503,9 @@
 "perpetual.auto_close.expected_loss" = "예상 손실";
 "perpetual.modify_position" = "위치 수정";
 "perpetual.auto_close.stop_loss" = "손절매";
+"errors.scan_transaction.malicious.title" = "의심스러운 활동";
+"secret_phrase.screenshot_detected.title" = "스크린샷이 감지되었습니다";
+"secret_phrase.screenshot_detected.description" = "스크린샷은 다른 앱에서 접근할 수 있으며, 이런 방식으로 저장할 경우 비밀번호가 위험에 노출될 수 있습니다.";
+"secret_phrase.content_hidden.description" = "화면 녹화 중 숨겨진 콘텐츠";
+"asset.verification.verified" = "검증됨";
+"errors.connections.malicious_origin" = "이 연결은 신뢰할 수 없는 출처에서 나왔습니다.";
