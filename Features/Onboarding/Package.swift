@@ -41,6 +41,7 @@ let package = Package(
                 "Keystore",
                 .product(name: "WalletService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
+                .product(name: "DeviceService", package: "FeatureServices"),
                 "Formatters"
             ],
             path: "Sources"
