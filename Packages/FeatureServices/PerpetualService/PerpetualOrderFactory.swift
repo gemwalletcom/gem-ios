@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 import Primitives
-import Formatters
+import GemstonePrimitives
 
 public struct PerpetualOrderFactory {
     private enum OrderAction {
@@ -11,7 +11,7 @@ public struct PerpetualOrderFactory {
         case close
     }
 
-    private let formatter = PerpetualPriceFormatter()
+    private let formatter = PerpetualFormatter()
 
     public init() {}
 

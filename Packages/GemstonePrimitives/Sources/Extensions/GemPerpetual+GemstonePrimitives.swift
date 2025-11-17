@@ -5,7 +5,7 @@ import Gemstone
 import Primitives
 
 extension GemPerpetual {
-    public func map() throws -> Perpetual {
+    public func map() throws -> Primitives.Perpetual {
         Perpetual(
             id: id,
             name: name,
