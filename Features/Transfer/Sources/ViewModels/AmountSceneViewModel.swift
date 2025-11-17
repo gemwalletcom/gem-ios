@@ -275,13 +275,6 @@ public final class AmountSceneViewModel {
         let sizeValue = (try? formatter.double(from: amount * BigInt(selectedLeverage), decimals: asset.decimals.asInt)) ?? .zero
         return currencyFormatter.string(sizeValue)
     }
-
-    var showPerpetualDetails: Bool {
-        if case .perpetual = type {
-            return true
-        }
-        return false
-    }
 }
 
 // MARK: - Business Logic

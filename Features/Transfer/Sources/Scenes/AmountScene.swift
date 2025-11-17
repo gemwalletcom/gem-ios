@@ -99,9 +99,8 @@ struct AmountScene: View {
                             action: model.onSelectLeverage
                         )
                     }
-                    if model.showPerpetualDetails {
-                        ListItemView(title: model.sizeTitle, subtitle: model.perpetualPositionSize)
-                    }
+
+                    ListItemView(title: model.sizeTitle, subtitle: model.perpetualPositionSize)
                 }
             }
         }
@@ -115,7 +114,7 @@ struct AmountScene: View {
             .padding(.bottom, .scene.bottom)
         }
         .contentMargins([.top], .zero, for: .scrollContent)
-        .listSectionSpacing(.compact)
+        .listSectionSpacing(.custom(.medium))
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
         .onAppear(perform: model.onAppear)
