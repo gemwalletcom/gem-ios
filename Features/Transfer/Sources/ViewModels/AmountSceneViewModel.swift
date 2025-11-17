@@ -607,9 +607,9 @@ extension AmountSceneViewModel {
             }
         case .perpetual(let data):
             return BigInt(
-                PerpetualCalculator().calculateMinimumUsdc(
+                PerpetualFormatter(provider: .hypercore).minimumOrderUsdAmount(
                     price: data.positionAction.transferData.price,
-                    szDecimals: data.positionAction.transferData.asset.decimals,
+                    decimals: data.positionAction.transferData.asset.decimals.asInt,
                     leverage: selectedLeverage
                 )
             )

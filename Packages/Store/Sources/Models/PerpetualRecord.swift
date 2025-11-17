@@ -32,7 +32,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
     public var openInterest: Double
     public var volume24h: Double
     public var funding: Double
-    public var maxLeverage: Data
+    public var maxLeverage: UInt8
     public var isPinned: Bool
     
     public init(
@@ -46,7 +46,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         openInterest: Double,
         volume24h: Double,
         funding: Double,
-        maxLeverage: Data,
+        maxLeverage: UInt8,
         isPinned: Bool = false
     ) {
         self.id = id
@@ -81,7 +81,7 @@ extension PerpetualRecord: CreateTable {
             $0.column(Columns.openInterest.name, .double).notNull()
             $0.column(Columns.volume24h.name, .double).notNull()
             $0.column(Columns.funding.name, .double).notNull()
-            $0.column(Columns.maxLeverage.name, .blob).notNull()
+            $0.column(Columns.maxLeverage.name, .integer).notNull()
             $0.column(Columns.isPinned.name, .boolean).notNull().defaults(to: false)
         }
     }
@@ -100,7 +100,7 @@ extension PerpetualRecord {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            maxLeverage: [UInt8](maxLeverage)
+            maxLeverage: maxLeverage
         )
     }
 }
@@ -118,7 +118,7 @@ extension Perpetual {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            maxLeverage: Data(maxLeverage)
+            maxLeverage: maxLeverage
         )
     }
 }

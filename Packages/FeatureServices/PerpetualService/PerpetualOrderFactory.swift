@@ -11,7 +11,7 @@ public struct PerpetualOrderFactory {
         case close
     }
 
-    private let formatter = PerpetualFormatter()
+    private let formatter = PerpetualFormatter(provider: .hypercore)
 
     public init() {}
 
@@ -126,13 +126,11 @@ public struct PerpetualOrderFactory {
         marginAmount: Double
     ) -> PerpetualConfirmData {
         let price = formatter.formatPrice(
-            provider: provider,
             slippagePrice,
             decimals: assetDecimals
         )
 
         let size = formatter.formatSize(
-            provider: provider,
             sizeAsDouble,
             decimals: assetDecimals
         )

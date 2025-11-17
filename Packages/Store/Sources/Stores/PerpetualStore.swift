@@ -25,7 +25,7 @@ public struct PerpetualStore: Sendable {
                         PerpetualRecord.Columns.openInterest.set(to: perpetual.openInterest),
                         PerpetualRecord.Columns.volume24h.set(to: perpetual.volume24h),
                         PerpetualRecord.Columns.funding.set(to: perpetual.funding),
-                        PerpetualRecord.Columns.leverage.set(to: Data(perpetual.maxLeverage))
+                        PerpetualRecord.Columns.maxLeverage.set(to: perpetual.maxLeverage)
                     )
             }
         }

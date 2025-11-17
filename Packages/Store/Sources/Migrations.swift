@@ -324,11 +324,30 @@ public struct Migrations {
             }
         }
 
+        /*
         migrator.registerMigration("Rename leverage to maxLeverage in \(PerpetualRecord.databaseTableName)") { db in
             try? db.alter(table: PerpetualRecord.databaseTableName) {
                 $0.rename(column: "leverage", to: "maxLeverage")
             }
         }
+
+        migrator.registerMigration("Convert maxLeverage from blob to integer in \(PerpetualRecord.databaseTableName)") { db in
+            try? db.alter(table: PerpetualRecord.databaseTableName) {
+                $0.add(column: "maxLeverageInt", .integer).defaults(to: 1)
+            }
+            try? db.execute(sql: """
+                UPDATE \(PerpetualRecord.databaseTableName)
+                SET maxLeverageInt = CAST(substr(hex(maxLeverage), 1, 2) AS INTEGER)
+                WHERE maxLeverage IS NOT NULL
+            """)
+            try? db.alter(table: PerpetualRecord.databaseTableName) {
+                $0.drop(column: "maxLeverage")
+            }
+            try? db.alter(table: PerpetualRecord.databaseTableName) {
+                $0.rename(column: "maxLeverageInt", to: "maxLeverage")
+            }
+        }
+         */
 
         try migrator.migrate(dbQueue)
     }

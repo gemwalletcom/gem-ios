@@ -27,7 +27,7 @@ public final class AutocloseSceneViewModel {
     public init(position: PerpetualPositionData, onTransferAction: TransferDataAction = nil) {
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
         self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
-        self.perpetualFormatter = PerpetualFormatter()
+        self.perpetualFormatter = PerpetualFormatter(provider: .hypercore)
 
         self.position = position
         self.onTransferAction = onTransferAction
@@ -62,11 +62,11 @@ public final class AutocloseSceneViewModel {
         )
 
         if let price = position.position.takeProfit?.price {
-            takeProfitInput.text = perpetualFormatter.formatInputPrice(provider: position.perpetual.provider, price, decimals: position.asset.decimals.asInt)
+            takeProfitInput.text = perpetualFormatter.formatInputPrice(price, decimals: position.asset.decimals.asInt)
         }
 
         if let price = position.position.stopLoss?.price {
-            stopLossInput.text = perpetualFormatter.formatInputPrice(provider: position.perpetual.provider, price, decimals: position.asset.decimals.asInt)
+            stopLossInput.text = perpetualFormatter.formatInputPrice(price, decimals: position.asset.decimals.asInt)
         }
 
         self.input = AutocloseInput(
@@ -143,7 +143,7 @@ extension AutocloseSceneViewModel {
         guard let type = input.focusedType, let focused = input.focused else { return }
 
         let targetPrice = estimator.calculateTargetPriceFromROE(roePercent: percent, type: type)
-        focused.text = perpetualFormatter.formatInputPrice(provider: position.perpetual.provider, targetPrice, decimals: position.asset.decimals.asInt)
+        focused.text = perpetualFormatter.formatInputPrice(targetPrice, decimals: position.asset.decimals.asInt)
     }
 }
 
@@ -198,10 +198,6 @@ extension AutocloseSceneViewModel {
     }
 
     private func formatPrice(_ price: Double) -> String {
-        perpetualFormatter.formatPrice(
-            provider: position.perpetual.provider,
-            price,
-            decimals: Int(position.asset.decimals)
-        )
+        perpetualFormatter.formatPrice(price, decimals: position.asset.decimals.asInt)
     }
 }
