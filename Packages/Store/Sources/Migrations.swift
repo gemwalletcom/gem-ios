@@ -323,31 +323,13 @@ public struct Migrations {
                 $0.add(column: WalletRecord.Columns.source.name, .text).defaults(to: WalletSource.create.rawValue)
             }
         }
-
-        /*
-        migrator.registerMigration("Rename leverage to maxLeverage in \(PerpetualRecord.databaseTableName)") { db in
+        migrator.registerMigration("Add maxLeverage to \(PerpetualRecord.databaseTableName)") { db in
             try? db.alter(table: PerpetualRecord.databaseTableName) {
-                $0.rename(column: "leverage", to: "maxLeverage")
+                $0.add(column: PerpetualRecord.Columns.maxLeverage.name, .integer)
+                    .notNull()
+                    .defaults(to: 1)
             }
         }
-
-        migrator.registerMigration("Convert maxLeverage from blob to integer in \(PerpetualRecord.databaseTableName)") { db in
-            try? db.alter(table: PerpetualRecord.databaseTableName) {
-                $0.add(column: "maxLeverageInt", .integer).defaults(to: 1)
-            }
-            try? db.execute(sql: """
-                UPDATE \(PerpetualRecord.databaseTableName)
-                SET maxLeverageInt = CAST(substr(hex(maxLeverage), 1, 2) AS INTEGER)
-                WHERE maxLeverage IS NOT NULL
-            """)
-            try? db.alter(table: PerpetualRecord.databaseTableName) {
-                $0.drop(column: "maxLeverage")
-            }
-            try? db.alter(table: PerpetualRecord.databaseTableName) {
-                $0.rename(column: "maxLeverageInt", to: "maxLeverage")
-            }
-        }
-         */
 
         try migrator.migrate(dbQueue)
     }
