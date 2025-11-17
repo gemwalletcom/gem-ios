@@ -1,13 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import Formatters
+import GemstonePrimitives
 import Primitives
 import Foundation
 
 struct PerpetualPriceFormatterTests {
-    
-    let formatter = PerpetualPriceFormatter()
+
+    let formatter = PerpetualFormatter()
     let provider = PerpetualProvider.hypercore
     
     @Test
@@ -70,29 +70,29 @@ struct PerpetualPriceFormatterTests {
     func formatInputPrice() {
         let usLocale = Locale(identifier: "en_US")
 
-        #expect(formatter.formatInputPrice(3397.10, locale: usLocale, szDecimals: 0) == "3397.1")
-        #expect(formatter.formatInputPrice(3532.984, locale: usLocale, szDecimals: 0) == "3533")
-        #expect(formatter.formatInputPrice(3261.216, locale: usLocale, szDecimals: 0) == "3261.2")
+        #expect(formatter.formatInputPrice(provider: provider, 3397.10, locale: usLocale, decimals: 0) == "3397.1")
+        #expect(formatter.formatInputPrice(provider: provider, 3532.984, locale: usLocale, decimals: 0) == "3533")
+        #expect(formatter.formatInputPrice(provider: provider, 3261.216, locale: usLocale, decimals: 0) == "3261.2")
 
-        #expect(formatter.formatInputPrice(123.456, locale: usLocale, szDecimals: 0) == "123.46")
-        #expect(formatter.formatInputPrice(99.999, locale: usLocale, szDecimals: 0) == "99.999")
+        #expect(formatter.formatInputPrice(provider: provider, 123.456, locale: usLocale, decimals: 0) == "123.46")
+        #expect(formatter.formatInputPrice(provider: provider, 99.999, locale: usLocale, decimals: 0) == "99.999")
 
-        #expect(formatter.formatInputPrice(0.005849, locale: usLocale, szDecimals: 0) == "0.005849")
-        #expect(formatter.formatInputPrice(0.0061415, locale: usLocale, szDecimals: 0) == "0.006142")
-        #expect(formatter.formatInputPrice(0.0052641, locale: usLocale, szDecimals: 0) == "0.005264")
+        #expect(formatter.formatInputPrice(provider: provider, 0.005849, locale: usLocale, decimals: 0) == "0.005849")
+        #expect(formatter.formatInputPrice(provider: provider, 0.0061415, locale: usLocale, decimals: 0) == "0.006142")
+        #expect(formatter.formatInputPrice(provider: provider, 0.0052641, locale: usLocale, decimals: 0) == "0.005264")
 
-        #expect(formatter.formatInputPrice(3397.10, locale: usLocale, szDecimals: 4) == "3397.1")
-        #expect(formatter.formatInputPrice(3532.984, locale: usLocale, szDecimals: 4) == "3533")
-        #expect(formatter.formatInputPrice(0.005849, locale: usLocale, szDecimals: 4) == "0.01")
+        #expect(formatter.formatInputPrice(provider: provider, 3397.10, locale: usLocale, decimals: 4) == "3397.1")
+        #expect(formatter.formatInputPrice(provider: provider, 3532.984, locale: usLocale, decimals: 4) == "3533")
+        #expect(formatter.formatInputPrice(provider: provider, 0.005849, locale: usLocale, decimals: 4) == "0.01")
 
-        #expect(formatter.formatInputPrice(0.0, locale: usLocale, szDecimals: 6) == "0")
-        #expect(formatter.formatInputPrice(1.0, locale: usLocale, szDecimals: 6) == "1")
-        #expect(formatter.formatInputPrice(0.000001, locale: usLocale, szDecimals: 6) == "0")
-        #expect(formatter.formatInputPrice(123.456, locale: usLocale, szDecimals: 6) == "123")
+        #expect(formatter.formatInputPrice(provider: provider, 0.0, locale: usLocale, decimals: 6) == "0")
+        #expect(formatter.formatInputPrice(provider: provider, 1.0, locale: usLocale, decimals: 6) == "1")
+        #expect(formatter.formatInputPrice(provider: provider, 0.000001, locale: usLocale, decimals: 6) == "0")
+        #expect(formatter.formatInputPrice(provider: provider, 123.456, locale: usLocale, decimals: 6) == "123")
 
         let euLocale = Locale(identifier: "de_DE")
-        #expect(formatter.formatInputPrice(3397.10, locale: euLocale, szDecimals: 0) == "3397,1")
-        #expect(formatter.formatInputPrice(0.005849, locale: euLocale, szDecimals: 0) == "0,005849")
-        #expect(formatter.formatInputPrice(3532.984, locale: euLocale, szDecimals: 4) == "3533")
+        #expect(formatter.formatInputPrice(provider: provider, 3397.10, locale: euLocale, decimals: 0) == "3397,1")
+        #expect(formatter.formatInputPrice(provider: provider, 0.005849, locale: euLocale, decimals: 0) == "0,005849")
+        #expect(formatter.formatInputPrice(provider: provider, 3532.984, locale: euLocale, decimals: 4) == "3533")
     }
 }

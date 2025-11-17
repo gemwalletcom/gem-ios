@@ -100,7 +100,7 @@ extension PerpetualRecord {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            leverage: [UInt8](leverage)
+            maxLeverage: [UInt8](leverage)
         )
     }
 }
@@ -118,7 +118,7 @@ extension Perpetual {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            leverage: Data(leverage)
+            leverage: Data(maxLeverage)
         )
     }
 }

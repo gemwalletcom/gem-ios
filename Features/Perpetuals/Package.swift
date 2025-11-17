@@ -28,6 +28,7 @@ let package = Package(
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
+        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
     ],
     targets: [
         .target(
@@ -35,6 +36,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "PrimitivesComponents",
+                "GemstonePrimitives",
                 "Components",
                 "Style",
                 "Localization",
