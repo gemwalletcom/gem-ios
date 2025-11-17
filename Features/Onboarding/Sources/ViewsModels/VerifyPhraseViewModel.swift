@@ -9,6 +9,7 @@ import Localization
 import PrimitivesComponents
 import Preferences
 import Components
+import GemstonePrimitives
 @Observable
 @MainActor
 final class VerifyPhraseViewModel {
@@ -40,7 +41,11 @@ final class VerifyPhraseViewModel {
     var title: String {
         Localized.VerifyPhrase.title
     }
-    
+
+    var docsUrl: URL {
+        Docs.url(.howToSecureSecretPhrase)
+    }
+
     var rows: [[WordIndex]] {
         return wordsVerified
             .enumerated()

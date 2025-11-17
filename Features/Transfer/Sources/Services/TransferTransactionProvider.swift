@@ -37,8 +37,17 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
     ) async throws -> TransferTransactionData {
         async let getFeeRates = getFeeRates(type: data.type, priority: priority)
         async let getTransactionMetadata = getTransactionMetadata(wallet: wallet, data: data)
+        async let getTransactionScan = getTransactionScan(wallet: wallet, data: data)
 
-        let (rates, metadata) = try await (getFeeRates, getTransactionMetadata)
+        let (rates, metadata, scanResult) = try await (getFeeRates, getTransactionMetadata, getTransactionScan)
+
+        if let scanResult = scanResult {
+            try ScanTransactionValidator.validate(
+                transaction: scanResult,
+                asset: data.type.asset,
+                memo: data.recipientData.recipient.memo
+            )
+        }
 
         return try await TransferTransactionData(
             allRates: rates.rates,
@@ -48,7 +57,8 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
                 available: available,
                 rate: rates.selected,
                 metadata: metadata
-            )
+            ),
+            scanResult: scanResult
         )
     }
 }
@@ -88,6 +98,17 @@ extension TransferTransactionProvider {
         )
     }
 
+    private func getTransactionScan(wallet: Wallet, data: TransferData) async throws -> ScanTransaction? {
+        await scanService.getScanTransaction(
+            chain: data.chain,
+            input: TransactionPreloadInput(
+                inputType: data.type,
+                senderAddress: try wallet.account(for: data.chain).address,
+                destinationAddress: data.recipientData.recipient.address
+            )
+        )
+    }
+
     private func getFeeRates(type: TransferDataType, priority: FeePriority) async throws -> (rates: [FeeRate], selected: FeeRate) {
         let rates = try await feeRatesProvider.rates(for: type)
         guard let selected = rates.first(where: { $0.priority == priority }) else {
@@ -95,28 +116,5 @@ extension TransferTransactionProvider {
         }
 
         return (rates, selected)
-    }
-
-    private func validateTransaction(wallet: Wallet, data: TransferData) async throws {
-        let payload = try scanService.getTransactionPayload(
-            wallet: wallet,
-            transferType: data.type,
-            recipient: data.recipientData
-        )
-        do {
-            let transaction = try await scanService.getScanTransaction(payload)
-            try ScanTransactionValidator.validate(
-                transaction: transaction,
-                with: payload
-            )
-        } catch let error as ScanTransactionError {
-            throw error
-        } catch {
-            // For swap transactions, re-throw the error. For all other types, an error
-            // from scanTransaction is ignored, and the transaction is considered valid.
-            if payload.type == .swap {
-                throw error
-            }
-        }
     }
 }

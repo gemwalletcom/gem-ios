@@ -7,14 +7,15 @@ import GemstonePrimitives
 public struct ScanTransactionValidator {
     public static func validate(
         transaction: ScanTransaction,
-        with payload: ScanTransactionPayload
+        asset: Asset,
+        memo: String?
     ) throws {
         if transaction.isMalicious {
             throw ScanTransactionError.malicious
         }
 
-        if payload.type == .transfer, transaction.isMemoRequired {
-            throw ScanTransactionError.memoRequired(symbol: payload.target.chain.asset.symbol)
+        if transaction.isMemoRequired, memo?.isEmpty ?? true {
+            throw ScanTransactionError.memoRequired(symbol: asset.symbol)
         }
     }
 }

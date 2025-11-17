@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "נדרש %@";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "לא מאומת";
 "asset.verification.suspicious" = "חָשׁוּד";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "הסתר מהארנק";
 "common.details" = "פרטים";
 "transaction.swap_again" = "החלפה נוספת";
-"errors.scan_transaction.malicious" = "עסקה זוהתה כחשודה";
-"errors.scan_transaction.memo_required" = "כתובת %@ דורשת תגית יעד / תזכיר";
+"errors.scan_transaction.malicious.description" = "לא ניתן להשלים עסקה זו - כתובת ארנק היעד מקושרת לפעילות חשודה או מזיקה.";
+"errors.scan_transaction.memo_required" = "כתובת ארנק היעד %@ דורשת תגית יעד / תזכיר";
 "common.info" = "מידע";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -490,7 +490,7 @@
 "assets.title" = "נכסים";
 "stake.delegations" = "האצלות";
 "info.stake.apr.description" = "שיעור אחוז שנתי (APR) הוא שיעור התגמול השנתי עבור הפקדת מטבע הקריפטו שלך.";
-"receive.warning" = "שלח רק ** %@ ** ברשת ** %@ ** לכתובת זו.";
+"receive.warning" = "זוהי הכתובת שלך — שלח רק ** %@ ** ברשת ** %@ **.";
 "perpetual.leverage" = "מינוף";
 "perpetual.direction" = "כיוון";
 "perpetual.auto_close" = "סגירה אוטומטית";
@@ -503,3 +503,9 @@
 "perpetual.auto_close.expected_loss" = "הפסד צפוי";
 "perpetual.modify_position" = "שינוי מיקום";
 "perpetual.auto_close.stop_loss" = "עצירת הפסד";
+"errors.scan_transaction.malicious.title" = "פעילות חשודה";
+"secret_phrase.screenshot_detected.title" = "זוהה צילום מסך";
+"secret_phrase.screenshot_detected.description" = "צילומי מסך עשויים להיות נגישים לאפליקציות אחרות, והם עלולים לסכן את משפט הסוד שלך אם יישמרו בדרך זו.";
+"secret_phrase.content_hidden.description" = "תוכן מוסתר במהלך הקלטת מסך";
+"asset.verification.verified" = "מְאוּמָת";
+"errors.connections.malicious_origin" = "קשר זה מגיע ממקור לא אמין.";

@@ -271,7 +271,7 @@
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "Confirm";
 "common.skip" = "Skip";
-"common.warning" = "Warning";
+"common.warning" = "Babala";
 "warnings.multi_signature_blocked" = "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.";
 "swap.price_impact" = "Price Impact";
 "wallet.sell" = "Sell";
@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ ay kinakailangan";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Hindi na-verify";
 "asset.verification.suspicious" = "kahina-hinala";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -428,8 +428,8 @@
 "asset.hide_from_wallet" = "Itago sa wallet";
 "common.details" = "Mga Detalye";
 "transaction.swap_again" = "Magpalit muli";
-"errors.scan_transaction.malicious" = "Natukoy ang transaksyon bilang hinala";
-"errors.scan_transaction.memo_required" = "Nangangailangan ang %@ address ng patutunguhang tag / memo";
+"errors.scan_transaction.malicious.description" = "Ang transaksyong ito ay hindi makukumpleto — ang patutunguhang wallet address ay naka-link sa kahina-hinala o nakakapinsalang aktibidad.";
+"errors.scan_transaction.memo_required" = "Nangangailangan ang %@ destination wallet address ng destination tag / memo";
 "common.info" = "Impormasyon";
 "wallet.deposit" = "Deposit";
 "wallet.withdraw" = "Withdraw";
@@ -490,7 +490,7 @@
 "assets.title" = "Mga asset";
 "stake.delegations" = "Mga delegasyon";
 "info.stake.apr.description" = "Ang Annual Percentage Rate (APR) ay ang taunang reward rate para sa staking ng iyong cryptocurrency.";
-"receive.warning" = "Ipadala lamang ang ** %@ ** sa ** %@ ** network sa address na ito.";
+"receive.warning" = "Ito ang iyong address — magpadala lamang ng ** %@ ** sa ** %@ ** network.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Direksyon";
 "perpetual.auto_close" = "Auto Close";
@@ -503,3 +503,9 @@
 "perpetual.auto_close.expected_loss" = "Inaasahang pagkawala";
 "perpetual.modify_position" = "Baguhin ang Posisyon";
 "perpetual.auto_close.stop_loss" = "Itigil ang pagkawala";
+"errors.scan_transaction.malicious.title" = "Kahina-hinalang Aktibidad";
+"secret_phrase.screenshot_detected.title" = "Natukoy ang screenshot";
+"secret_phrase.screenshot_detected.description" = "Maaaring ma-access ang mga screenshot sa iba pang apps, maaari nilang ilagay sa panganib ang iyong sikretong parirala kung ise-save sa ganitong paraan.";
+"secret_phrase.content_hidden.description" = "Nakatago ang content habang nagre-record ng screen";
+"asset.verification.verified" = "Na-verify";
+"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";

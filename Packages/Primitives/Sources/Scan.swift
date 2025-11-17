@@ -31,11 +31,11 @@ public struct ScanAddress: Codable, Equatable, Sendable {
 }
 
 public struct ScanAddressTarget: Codable, Equatable, Sendable {
-	public let chain: Chain
+	public let assetId: AssetId
 	public let address: String
 
-	public init(chain: Chain, address: String) {
-		self.chain = chain
+	public init(assetId: AssetId, address: String) {
+		self.assetId = assetId
 		self.address = address
 	}
 }
@@ -51,16 +51,12 @@ public struct ScanTransaction: Codable, Equatable, Sendable {
 }
 
 public struct ScanTransactionPayload: Codable, Equatable, Sendable {
-	public let deviceId: String
-	public let walletIndex: UInt32
 	public let origin: ScanAddressTarget
 	public let target: ScanAddressTarget
 	public let website: String?
 	public let type: TransactionType
 
-	public init(deviceId: String, walletIndex: UInt32, origin: ScanAddressTarget, target: ScanAddressTarget, website: String?, type: TransactionType) {
-		self.deviceId = deviceId
-		self.walletIndex = walletIndex
+	public init(origin: ScanAddressTarget, target: ScanAddressTarget, website: String?, type: TransactionType) {
 		self.origin = origin
 		self.target = target
 		self.website = website

@@ -53,6 +53,8 @@ struct ShowSecretDataScene: View {
             model: model.copyModel,
             isPresenting: $isPresentingCopyToast
         )
+        .detectScreenshots(docsUrl: model.docsUrl)
+        .protectFromScreenRecording()
     }
     
     private func copy() {

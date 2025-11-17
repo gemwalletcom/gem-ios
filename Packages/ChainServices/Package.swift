@@ -32,6 +32,7 @@ let package = Package(
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "FeatureServices", path: "../FeatureServices"),
         .package(url: "https://github.com/gemwalletcom/reown-swift.git", revision: "f061a10"),
         .package(url: "https://github.com/daltoniam/Starscream.git", exact: Version(stringLiteral: "3.1.2")),
     ],
@@ -117,8 +118,7 @@ let package = Package(
             name: "ScanService",
             dependencies: [
                 "Primitives",
-                "GemAPI",
-                "Preferences",
+                "Blockchain",
             ],
             path: "ScanService",
             exclude: ["TestKit"]
@@ -126,11 +126,10 @@ let package = Package(
         .target(
             name: "ScanServiceTestKit",
             dependencies: [
-                .product(name: "PrimitivesTestKit", package: "Primitives"),
                 "ScanService",
                 "Primitives",
-                "GemAPI",
-                .product(name: "PreferencesTestKit", package: "Preferences"),
+                "Blockchain",
+                .product(name: "NativeProviderService", package: "FeatureServices"),
             ],
             path: "ScanService/TestKit"
         ),

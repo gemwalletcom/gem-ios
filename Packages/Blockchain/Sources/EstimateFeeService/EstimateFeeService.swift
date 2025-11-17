@@ -18,11 +18,11 @@ public struct EstimateFeeService: Sendable {
     }
     
     public func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
-        try await provider(chain: try Chain(id: chain)).getFee(chain: chain, input: input)
+        try await provider(chain: try chain.map()).getFee(chain: chain, input: input)
     }
-    
+
     public func getFeeData(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> String? {
-        try await provider(chain: try Chain(id: chain)).getFeeData(chain: chain, input: input)
+        try await provider(chain: try chain.map()).getFeeData(chain: chain, input: input)
     }
 }
 

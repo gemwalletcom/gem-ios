@@ -167,6 +167,18 @@ public struct InfoSheetModelFactory {
                 image: .image(Images.Logo.logo),
                 button: .url(Docs.url(.perpetualsAutoclose))
             )
+        case .maliciousTransaction:
+            return InfoSheetModel(
+                title: Localized.Errors.ScanTransaction.Malicious.title,
+                description: Localized.Errors.ScanTransaction.Malicious.description,
+                image: .image(Images.Logo.logo)
+            )
+        case let .memoRequired(symbol):
+            return InfoSheetModel(
+                title: Localized.Common.warning,
+                description: Localized.Errors.ScanTransaction.memoRequired(symbol),
+                image: .image(Images.Logo.logo)
+            )
         }
     }
 }

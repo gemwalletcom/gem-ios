@@ -17,7 +17,12 @@ final class AssetImageFormatterTests {
     func getNFTUrl() {
         let formatter = AssetImageFormatter()
         
-        #expect(formatter.getNFTUrl(for: "test-asset-id").absoluteString == "\(Constants.apiURL)/v1/nft/assets/test-asset-id/image_preview")
+        #expect(
+            formatter
+                .getNFTUrl(
+                    for: "test-asset-id"
+                ).absoluteString == "\(Constants.apiURL.absoluteString)/v1/nft/assets/test-asset-id/image_preview"
+        )
     }
     
     @Test

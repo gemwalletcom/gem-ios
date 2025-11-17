@@ -46,7 +46,7 @@ public final class SwapService: Sendable {
         let swapAssetList = swapper.supportedChainsForFromAsset(assetId: assetId.identifier)
 
         return (
-            swapAssetList.chains.compactMap { try? Primitives.Chain(id: $0) },
+            swapAssetList.chains.compactMap { try? $0.map() },
             swapAssetList.assetIds.compactMap { try? Primitives.AssetId(id: $0) }
         )
     }
