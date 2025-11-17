@@ -86,7 +86,7 @@ extension ButtonStylePalette {
     static let amount = ButtonStylePalette(
         foreground: Colors.black,
         foregroundPressed: Colors.blackFaded,
-        background: Colors.grayVeryLight,
+        background: Colors.Empty.listEmpty,
         backgroundPressed: Colors.grayVeryLightFaded,
         backgroundDisabled: Colors.grayVeryLightFaded
     )
@@ -115,6 +115,13 @@ extension ButtonStylePalette {
         backgroundDisabled: Colors.greenFadedLight
     )
 
+    static let listEmpty = ButtonStylePalette(
+        foreground: Colors.gray,
+        foregroundPressed: Colors.black,
+        background: Colors.Empty.listEmpty,
+        backgroundPressed: Colors.Empty.listEmpty,
+        backgroundDisabled: Colors.Empty.listEmpty
+    )
 }
 // MARK: – Preview
 private struct PaletteSwatch: View {
