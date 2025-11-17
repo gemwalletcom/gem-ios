@@ -184,6 +184,7 @@ struct SelectAssetSceneNavigationStack: View {
             }
             .presentationDetentsForCurrentDeviceSize(expandable: true)
             .presentationDragIndicator(.visible)
+            .presentationBackground(Colors.grayBackground)
         }
     }
 }
