@@ -23,7 +23,8 @@ public struct PriceViewModel: Sendable {
     }
 
     public var isPriceAvailable: Bool {
-        price?.price != 0
+        guard let price else { return false }
+        return price.price != 0
     }
 
     public var priceAmountText: String {

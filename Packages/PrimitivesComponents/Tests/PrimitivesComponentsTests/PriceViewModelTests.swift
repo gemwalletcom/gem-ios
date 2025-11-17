@@ -10,7 +10,7 @@ struct PriceViewModelTests {
 
     @Test
     func testIsPriceAvailable() {
-        #expect(PriceViewModel(price: nil, currencyCode: currencyCode).isPriceAvailable)
+        #expect(PriceViewModel(price: nil, currencyCode: currencyCode).isPriceAvailable == false)
         #expect(PriceViewModel(price: .mock(price: 0, priceChangePercentage24h: 0), currencyCode: currencyCode).isPriceAvailable == false)
         #expect(PriceViewModel(price: .mock(price: 10), currencyCode: currencyCode).isPriceAvailable)
     }
