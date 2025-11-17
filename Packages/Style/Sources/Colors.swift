@@ -28,6 +28,7 @@ extension Colors {
         public static let imageBackground = Color(.quaternaryLabel)
         public static let image = Color.dynamicColor("#767A81")
         public static let buttonsBackground = Color(.quaternaryLabel)
+        public static let listEmpty = Color(.secondarySystemFill)
     }
 }
 
