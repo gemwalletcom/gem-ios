@@ -56,10 +56,10 @@ public final class SignMessageSceneViewModel {
     }
 
     public var siweMessageViewModel: SiweMessageViewModel? {
-        guard let message = payload.message.siwe else {
-            return nil
+        if case let .siwe(message) = payload.message.signType {
+            return SiweMessageViewModel(message: message)
         }
-        return SiweMessageViewModel(message: message)
+        return nil
     }
 
     public var appName: String {
@@ -84,7 +84,8 @@ public final class SignMessageSceneViewModel {
 
     public func signMessage() async throws {
         let hash: Data = decoder.hash()
-        if payload.chain == .sui, payload.message.signType == .suiPersonalMessage {
+        let messageChain = Chain(rawValue: payload.message.chain) ?? payload.chain
+        if messageChain == .sui {
             var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
             defer { privateKey.zeroize() }
             let signature = try CryptoSigner().signSuiDigest(digest: hash, privateKey: privateKey)
