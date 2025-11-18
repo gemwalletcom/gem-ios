@@ -134,16 +134,19 @@ public final class SwapSceneViewModel {
         }
     }
 
-    func swapTokenModel(type: SelectAssetSwapType) -> SwapTokenViewModel? {
-        guard let assetData: AssetData = type == .pay ? fromAsset : toAsset else { return nil }
+    func swapTokenModel(type: SelectAssetSwapType) -> SwapTokenViewModel {
+        guard let assetData: AssetData = type == .pay ? fromAsset : toAsset else {
+            return SwapTokenViewModel(type: .placeholder(currencyCode: preferences.currency))
+        }
         return SwapTokenViewModel(
-            model: AssetDataViewModel(
-                assetData: assetData,
-                formatter: .medium,
-                currencyCode: preferences.currency,
-                currencyFormatterType: .currency
-            ),
-            type: type
+            type: .selected(
+                AssetDataViewModel(
+                    assetData: assetData,
+                    formatter: .medium,
+                    currencyCode: preferences.currency,
+                    currencyFormatterType: .currency
+                )
+            )
         )
     }
 

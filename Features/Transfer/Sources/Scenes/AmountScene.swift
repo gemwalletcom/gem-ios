@@ -41,7 +41,7 @@ struct AmountScene: View {
                                 model.maxTitle,
                                 action: model.onSelectMaxButton
                             )
-                            .buttonStyle(.lightGray(paddingHorizontal: .medium, paddingVertical: .small))
+                            .buttonStyle(.listEmpty(paddingHorizontal: .medium, paddingVertical: .small))
                             .fixedSize()
                         }
                     )

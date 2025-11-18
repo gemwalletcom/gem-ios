@@ -7,6 +7,7 @@ import InfoSheet
 import Swap
 import Assets
 import AssetsService
+import Style
 
 struct SwapNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -42,6 +43,7 @@ struct SwapNavigationView: View {
                         NavigationStack {
                             SwapDetailsView(model: Bindable(model))
                                 .presentationDetentsForCurrentDeviceSize(expandable: true)
+                                .presentationBackground(Colors.grayBackground)
                         }
                     }
                 }
