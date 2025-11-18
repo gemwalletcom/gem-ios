@@ -83,6 +83,7 @@ struct TransactionsNavigationStack: View {
                     }
                     .presentationDetentsForCurrentDeviceSize(expandable: true)
                     .presentationDragIndicator(.visible)
+                    .presentationBackground(Colors.grayBackground)
                 }
                 .sheet(item: $model.isPresentingSelectAssetType) {
                     SelectAssetSceneNavigationStack(

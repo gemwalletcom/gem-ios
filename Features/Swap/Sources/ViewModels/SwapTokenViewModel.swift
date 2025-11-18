@@ -7,43 +7,53 @@ import Localization
 import PrimitivesComponents
 import Formatters
 
+enum SwapTokenViewType {
+    case selected(AssetDataViewModel)
+    case placeholder(currencyCode: String)
+}
+
 struct SwapTokenViewModel {
-    private let model: AssetDataViewModel
-    private let type: SelectAssetSwapType
+    private let type: SwapTokenViewType
     private let formatter = ValueFormatter(style: .medium)
-    
-    public init(
-        model: AssetDataViewModel,
-        type: SelectAssetSwapType
-    ) {
-        self.model = model
+
+    init(type: SwapTokenViewType) {
         self.type = type
     }
-    
-    var assetId: AssetId {
-        model.asset.id
+
+    var availableBalanceText: String? {
+        switch type {
+        case .selected(let model): Localized.Transfer.balance(model.availableBalanceText)
+        case .placeholder: nil
+        }
     }
 
-    var availableBalanceText: String {
-        Localized.Transfer.balance(model.availableBalanceText)
-    }
-    
-    var assetImage: AssetImage {
-        model.assetImage
-    }
-    
-    var symbol: String {
-        model.asset.symbol
-    }
-    
-    func fiatBalance(amount: String) -> String {
-        guard
-            let value = try? formatter.inputNumber(from: amount, decimals: model.asset.decimals.asInt),
-            let amount = try? formatter.double(from: value, decimals: model.asset.decimals.asInt),
-            let price = model.priceViewModel.price
-        else {
-            return .empty
+    var assetImage: AssetImage? {
+        switch type {
+        case .selected(let model): model.assetImage
+        case .placeholder: nil
         }
-        return model.priceViewModel.fiatAmountText(amount: price.price * amount)
+    }
+
+    var actionTitle: String {
+        switch type {
+        case .selected(let model): model.asset.symbol
+        case .placeholder: Localized.Assets.selectAsset
+        }
+    }
+
+    func fiatBalance(amount: String) -> String {
+        switch type {
+        case .selected(let model):
+            guard
+                let value = try? formatter.inputNumber(from: amount, decimals: model.asset.decimals.asInt),
+                let amount = try? formatter.double(from: value, decimals: model.asset.decimals.asInt),
+                let price = model.priceViewModel.price
+            else {
+                return .empty
+            }
+            return model.priceViewModel.fiatAmountText(amount: price.price * amount)
+        case .placeholder(let currencyCode):
+            return CurrencyFormatter(currencyCode: currencyCode).string(.zero)
+        }
     }
 }

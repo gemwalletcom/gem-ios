@@ -93,18 +93,14 @@ public struct SwapScene: View {
 extension SwapScene {
     private var swapFromSectionView: some View {
         Section {
-            if let swapModel = model.swapTokenModel(type: .pay) {
-                SwapTokenView(
-                    model: swapModel,
-                    text: $model.amountInputModel.text,
-                    onBalanceAction: model.onSelectFromMaxBalance,
-                    onSelectAssetAction: model.onSelectAssetPay
-                )
-                .buttonStyle(.borderless)
-                .focused($focusedField, equals: .from)
-            } else {
-                SwapTokenEmptyView(onSelectAssetAction: model.onSelectAssetPay)
-            }
+            SwapTokenView(
+                model: model.swapTokenModel(type: .pay),
+                text: $model.amountInputModel.text,
+                onBalanceAction: model.onSelectFromMaxBalance,
+                onSelectAssetAction: model.onSelectAssetPay
+            )
+            .buttonStyle(.borderless)
+            .focused($focusedField, equals: .from)
         } header: {
             Text(model.swapFromTitle)
                 .listRowInsets(.horizontalMediumInsets)
@@ -124,20 +120,16 @@ extension SwapScene {
     
     private var swapToSectionView: some View {
         Section {
-            if let swapModel = model.swapTokenModel(type: .receive(chains: [], assetIds: [])) {
-                SwapTokenView(
-                    model: swapModel,
-                    text: $model.toValue,
-                    showLoading: model.isLoading,
-                    disabledTextField: true,
-                    onBalanceAction: {},
-                    onSelectAssetAction: model.onSelectAssetReceive
-                )
-                .buttonStyle(.borderless)
-                .focused($focusedField, equals: .to)
-            } else {
-                SwapTokenEmptyView(onSelectAssetAction: model.onSelectAssetReceive)
-            }
+            SwapTokenView(
+                model: model.swapTokenModel(type: .receive(chains: [], assetIds: [])),
+                text: $model.toValue,
+                showLoading: model.isLoading,
+                disabledTextField: true,
+                onBalanceAction: {},
+                onSelectAssetAction: model.onSelectAssetReceive
+            )
+            .buttonStyle(.borderless)
+            .focused($focusedField, equals: .to)
         } header: {
             Text(model.swapToTitle)
                 .listRowInsets(.horizontalMediumInsets)
