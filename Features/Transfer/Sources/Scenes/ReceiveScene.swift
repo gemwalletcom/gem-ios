@@ -34,14 +34,13 @@ public struct ReceiveScene: View {
                             qrCodeView(image: image)
 
                             Button(action: model.onCopyAddress) {
-                                Text(model.address.withZeroWidthSpaces)
+                                Text(model.address.preventingHyphenation)
                                     .multilineTextAlignment(.center)
                                     .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
                             }
                             .buttonStyle(.plain)
                         }
-                        .padding(.horizontal, .medium)
-                        .padding(.vertical, .small)
+                        .padding(.medium)
                         .frame(maxWidth: model.qrWidth)
                         .background(
                             RoundedRectangle(cornerRadius: .medium)

@@ -30,8 +30,8 @@ public extension String {
         !isEmpty
     }
     
-    var withZeroWidthSpaces: String {
-        map({ String($0) }).joined(separator: "\u{200B}")
+    var preventingHyphenation: String {
+        map { String($0) }.joined(separator: "\u{200B}")
     }
     
     func index(from: Int) -> Index {
