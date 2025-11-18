@@ -10,7 +10,6 @@ import InfoSheet
 import Components
 import Assets
 import Perpetuals
-import Transfer
 import StakeService
 import PriceAlerts
 import AssetsService
@@ -137,7 +136,7 @@ struct WalletNavigationStack: View {
                     perpetualData: $0.perpetualData,
                     wallet: model.wallet,
                     perpetualService: perpetualService,
-                    isPresentingTransferData: $model.isPresentingTransferData,
+                    isPresentingConfirmTransfer: model.isPresentingConfirmTransfer,
                     isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
                 )
             }
@@ -167,13 +166,6 @@ struct WalletNavigationStack: View {
             }
             .sheet(item: $model.isPresentingInfoSheet) {
                 InfoSheetScene(type: $0)
-            }
-            .sheet(item: $model.isPresentingTransferData) {
-                ConfirmTransferNavigationStack(
-                    wallet: model.wallet,
-                    transferData: $0,
-                    onComplete: model.onTransferComplete
-                )
             }
             .sheet(item: $model.isPresentingPerpetualRecipientData) {
                 PerpetualPositionNavigationStack(

@@ -13,25 +13,25 @@ struct ConfirmTransferNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
 
     private let wallet: Wallet
-    private let transferData: TransferData
+    private let presentation: ConfirmTransferPresentation
     private let onComplete: VoidAction
 
     public init(
         wallet: Wallet,
-        transferData: TransferData,
+        presentation: ConfirmTransferPresentation,
         onComplete: VoidAction
     ) {
         self.wallet = wallet
-        self.transferData = transferData
+        self.presentation = presentation
         self.onComplete = onComplete
     }
-    
+
     var body: some View {
         NavigationStack {
             ConfirmTransferScene(
                 model: viewModelFactory.confirmTransferScene(
                     wallet: wallet,
-                    data: transferData,
+                    presentation: presentation,
                     onComplete: onComplete
                 )
             )

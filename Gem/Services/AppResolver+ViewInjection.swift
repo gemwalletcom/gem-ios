@@ -32,6 +32,8 @@ extension View {
             .environment(\.nftService, services.nftService)
             .environment(\.avatarService, services.avatarService)
             .environment(\.releaseService, services.appReleaseService)
+            .environment(\.transferStatePresenter, services.transferStatePresenter)
+            .environment(\.transferStateService, services.transferStateService)
             .environment(\.viewModelFactory, services.viewModelFactory)
     }
     

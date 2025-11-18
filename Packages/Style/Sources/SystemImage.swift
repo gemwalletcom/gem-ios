@@ -9,6 +9,7 @@ public struct SystemImage {
     public static let paste = "doc.on.clipboard"
     public static let copy = "doc.on.doc"
     public static let arrowSwap = "arrow.trianglehead.2.clockwise"
+    public static let retry = "arrow.trianglehead.clockwise"
     public static let paperplane = "paperplane"
     public static let chevronDown = "chevron.down"
     public static let chevronRight = "chevron.right"

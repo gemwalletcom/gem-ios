@@ -29,6 +29,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.transactionService) private var transactionService
     @Environment(\.nameService) private var nameService
     @Environment(\.addressNameService) private var addressNameService
+    @Environment(\.transferStateService) private var transferStateService
 
     @State private var navigationPath = NavigationPath()
 
@@ -61,6 +62,7 @@ struct SelectedAssetNavigationStack: View  {
                             priceService: priceService,
                             transactionService: transactionService,
                             addressNameService: addressNameService,
+                            transferStateService: transferStateService,
                             chain: input.asset.chain
                         ),
                         model: viewModelFactory.recipientScene(
@@ -131,7 +133,7 @@ struct SelectedAssetNavigationStack: View  {
                 ConfirmTransferScene(
                     model: viewModelFactory.confirmTransferScene(
                         wallet: wallet,
-                        data: data,
+                        presentation: .confirm(data),
                         onComplete: onComplete
                     )
                 )

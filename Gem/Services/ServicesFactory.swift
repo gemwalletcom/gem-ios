@@ -34,6 +34,7 @@ import AppService
 import AddressNameService
 import Blockchain
 import NativeProviderService
+import Transfer
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -181,7 +182,10 @@ struct ServicesFactory {
         let nameService = NameService()
         let scanService = ScanService(gatewayService: gatewayService)
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
-        
+
+        let transferStatePresenter = TransferStatePresenter()
+        let transferStateService = TransferStateService(presenter: transferStatePresenter)
+
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
             nodeService: nodeService,
@@ -195,7 +199,8 @@ struct ServicesFactory {
             priceService: priceService,
             transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
-            addressNameService: addressNameService
+            addressNameService: addressNameService,
+            transferStateService: transferStateService
         )
 
         return AppResolver.Services(
@@ -230,6 +235,8 @@ struct ServicesFactory {
             perpetualObserverService: perpetualObserverService,
             nameService: nameService,
             addressNameService: addressNameService,
+            transferStatePresenter: transferStatePresenter,
+            transferStateService: transferStateService,
             viewModelFactory: viewModelFactory
         )
     }
