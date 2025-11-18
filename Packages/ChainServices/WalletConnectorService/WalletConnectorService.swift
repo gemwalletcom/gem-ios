@@ -208,6 +208,7 @@ extension WalletConnectorService {
     private func handleAction(action: WalletConnectAction, sessionId: String) async throws -> RPCResult {
         switch action {
         case .signMessage(let chain, let signType, let data):
+            try walletConnect.validateSignMessage(chain: chain, signType: signType, data: data)
             let message = walletConnect.decodeSignMessage(chain: chain, signType: signType, data: data)
             let signature = try await signer.signMessage(
                 sessionId: sessionId,

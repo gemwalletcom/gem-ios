@@ -80,7 +80,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
     public func signMessage(sessionId: String, chain: Chain, message: SignMessage) async throws -> String {
         let session = try connectionsStore.getConnection(id: sessionId)
-        try validate(chain: chain, session: session.session, message: message)
+        try validate(chain: chain, session: session.session)
         let payload = SignMessagePayload(
             chain: chain,
             session: session.session,
@@ -221,43 +221,6 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
     public func sendRawTransaction(sessionId: String, chain: Chain, transaction: String) async throws -> String {
         throw AnyError("Not supported yet")
-    }
-
-    private func validate(chain: Chain, session: WalletConnectionSession, message: SignMessage? = nil) throws {
-        try self.validate(chain: chain, session: session)
-        if let message {
-            guard let messageChain = Chain(rawValue: message.chain), messageChain == chain else {
-                throw WalletConnectorServiceError.unresolvedChainId(chain.rawValue)
-            }
-
-            if message.signType == .eip712 {
-                try validateEip712Chain(chain: chain, message: message)
-            }
-        }
-    }
-
-    private func validateEip712Chain(chain: Chain, message: SignMessage) throws {
-        let decoder = SignMessageDecoder(message: message)
-        let preview: MessagePreview
-        do {
-            preview = try decoder.preview()
-        } catch {
-            throw WalletConnectorServiceError.wrongSignParameters
-        }
-
-        guard case let .eip712(data) = preview else {
-            throw WalletConnectorServiceError.wrongSignParameters
-        }
-
-        let domainChainId = data.domain.chainId
-
-        guard let expectedChainId = UInt64(ChainConfig.config(chain: chain).networkId) else {
-            throw WalletConnectorServiceError.unresolvedChainId(chain.rawValue)
-        }
-
-        guard domainChainId == expectedChainId else {
-            throw WalletConnectorServiceError.unresolvedChainId(chain.rawValue)
-        }
     }
 
     private func validate(chain: Chain, session: WalletConnectionSession) throws {
