@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 import Primitives
-import Formatters
+import GemstonePrimitives
 
 public struct PerpetualOrderFactory {
     private enum OrderAction {
@@ -11,7 +11,7 @@ public struct PerpetualOrderFactory {
         case close
     }
 
-    private let formatter = PerpetualPriceFormatter()
+    private let formatter = PerpetualFormatter(provider: .hypercore)
 
     public init() {}
 
@@ -19,6 +19,7 @@ public struct PerpetualOrderFactory {
         positionAction: PerpetualPositionAction,
         usdcAmount: BigInt,
         usdcDecimals: Int,
+        leverage: UInt8,
         slippage: Double = 2.0
     ) -> PerpetualType {
         let perpetual = positionAction.transferData
@@ -31,9 +32,9 @@ public struct PerpetualOrderFactory {
         )
 
         let usdAmount = Double(usdcAmount) / pow(10.0, Double(usdcDecimals))
-        let sizeAsAsset = (usdAmount * Double(perpetual.leverage)) / perpetual.price
+        let sizeAsAsset = (usdAmount * Double(leverage)) / perpetual.price
         let fiatValue = perpetual.price * sizeAsAsset
-        let marginAmount = fiatValue / Double(perpetual.leverage)
+        let marginAmount = fiatValue / Double(leverage)
 
         let data = makePerpetualConfirmData(
             direction: perpetual.direction,
@@ -43,9 +44,9 @@ public struct PerpetualOrderFactory {
             provider: perpetual.provider,
             slippagePrice: slippagePrice,
             sizeAsDouble: sizeAsAsset,
-            assetDecimals: Int(perpetual.asset.decimals),
+            assetDecimals: perpetual.asset.decimals,
             slippage: slippage,
-            leverage: UInt8(perpetual.leverage),
+            leverage: leverage,
             pnl: nil,
             entryPrice: nil,
             marketPrice: perpetual.price,
@@ -82,7 +83,7 @@ public struct PerpetualOrderFactory {
             provider: perpetual.provider,
             slippagePrice: positionPrice,
             sizeAsDouble: abs(position.size),
-            assetDecimals: Int(asset.decimals),
+            assetDecimals: asset.decimals,
             slippage: slippage,
             leverage: position.leverage,
             pnl: position.pnl,
@@ -116,7 +117,7 @@ public struct PerpetualOrderFactory {
         provider: PerpetualProvider,
         slippagePrice: Double,
         sizeAsDouble: Double,
-        assetDecimals: Int,
+        assetDecimals: Int32,
         slippage: Double,
         leverage: UInt8,
         pnl: Double?,
@@ -125,13 +126,11 @@ public struct PerpetualOrderFactory {
         marginAmount: Double
     ) -> PerpetualConfirmData {
         let price = formatter.formatPrice(
-            provider: provider,
             slippagePrice,
             decimals: assetDecimals
         )
 
         let size = formatter.formatSize(
-            provider: provider,
             sizeAsDouble,
             decimals: assetDecimals
         )

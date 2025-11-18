@@ -92,8 +92,16 @@ struct AmountScene: View {
                     .cleanListRow()
                 }
             case .perpetual:
-                // PositionView()
-                EmptyView()
+                Section {
+                    if model.isPerpetualLeverageEnabled {
+                        NavigationCustomLink(
+                            with: ListItemView(title: model.leverageTitle, subtitle: model.leverageText),
+                            action: model.onSelectLeverage
+                        )
+                    }
+
+                    ListItemView(title: model.sizeTitle, subtitle: model.perpetualPositionSize)
+                }
             }
         }
         .safeAreaView {
@@ -106,7 +114,7 @@ struct AmountScene: View {
             .padding(.bottom, .scene.bottom)
         }
         .contentMargins([.top], .zero, for: .scrollContent)
-        .listSectionSpacing(.compact)
+        .listSectionSpacing(.custom(.medium))
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
         .onAppear(perform: model.onAppear)

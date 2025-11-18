@@ -38,7 +38,7 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
     public let baseAsset: Asset // USD
     public let assetIndex: Int
     public let price: Double
-    public let leverage: Int
+    public let leverage: UInt8
 
     public init(
         provider: PerpetualProvider,
@@ -47,7 +47,7 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
         baseAsset: Asset,
         assetIndex: Int,
         price: Double,
-        leverage: Int
+        leverage: UInt8
     ) {
         self.provider = provider
         self.direction = direction
