@@ -16,6 +16,10 @@ public struct Constants {
     
     public static let apiURL = URL(string: "https://api.gemwallet.com")!
     public static let assetsURL = URL(string: "https://assets.gemwallet.com")!
+    
+    public static let nodesURL = URL(string: "https://gemnodes.com")!
+    public static let nodesEuropeURL = URL(string: "https://eu.gemnodes.com")!
+    public static let nodesAsiaURL = URL(string: "https://asia.gemnodes.com")!
 
     public static let chatwootURL = URL(string: "https://support.gemwallet.com")!
     public static let chatwootPublicToken = "21yu9Az48rJHe1rg4poHqLSr"
