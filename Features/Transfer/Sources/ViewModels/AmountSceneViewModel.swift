@@ -602,7 +602,7 @@ extension AmountSceneViewModel {
             return BigInt(
                 PerpetualFormatter(provider: .hypercore).minimumOrderUsdAmount(
                     price: data.positionAction.transferData.price,
-                    decimals: data.positionAction.transferData.asset.decimals.asInt,
+                    decimals: data.positionAction.transferData.asset.decimals,
                     leverage: selectedLeverage
                 )
             )

@@ -14,7 +14,7 @@ public extension Perpetual {
         openInterest: Double = 1_000_000,
         volume24h: Double = 10_000_000,
         funding: Double = 0.0001,
-        maxLeverage: [UInt8] = [10, 20, 50]
+        maxLeverage: UInt8 = 50
     ) -> Perpetual {
         Perpetual(
             id: id,

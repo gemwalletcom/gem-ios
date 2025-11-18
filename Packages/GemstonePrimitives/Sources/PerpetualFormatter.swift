@@ -12,25 +12,24 @@ public struct PerpetualFormatter {
         self.provider = provider
     }
 
-    public func minimumOrderUsdAmount(price: Double, decimals: Int, leverage: UInt8) -> UInt64 {
-        perpetual.minimumOrderUsdAmount(provider: provider.map(), price: price, decimals: decimals.asInt32, leverage: leverage)
+    public func minimumOrderUsdAmount(price: Double, decimals: Int32, leverage: UInt8) -> UInt64 {
+        perpetual.minimumOrderUsdAmount(provider: provider.map(), price: price, decimals: decimals, leverage: leverage)
     }
 
-    public func formatPrice(_ price: Double, decimals: Int) -> String {
-        perpetual.formatPrice(provider: provider.map(), price: price, decimals: decimals.asInt32)
+    public func formatPrice(_ price: Double, decimals: Int32) -> String {
+        perpetual.formatPrice(provider: provider.map(), price: price, decimals: decimals)
     }
 
-    public func formatSize(_ size: Double, decimals: Int) -> String {
-        perpetual.formatSize(provider: provider.map(), size: size, decimals: decimals.asInt32)
+    public func formatSize(_ size: Double, decimals: Int32) -> String {
+        perpetual.formatSize(provider: provider.map(), size: size, decimals: decimals)
     }
 
-    public func formatInputPrice(_ price: Double, locale: Locale = Locale.current, decimals: Int) -> String {
-        let formattedPrice = perpetual.formatPrice(provider: provider.map(), price: price, decimals: decimals.asInt32)
-
-        guard locale.decimalSeparator == "," else {
-            return formattedPrice
+    public func formatInputPrice(_ price: Double, decimals: Int32, locale: Locale = .current) -> String {
+        let formatted = perpetual.formatPrice(provider: provider.map(), price: price, decimals: decimals)
+        let decimalSeparator = locale.decimalSeparator ?? "."
+        guard decimalSeparator != "." else {
+            return formatted
         }
-
-        return formattedPrice.replacingOccurrences(of: ".", with: ",")
+        return formatted.replacingOccurrences(of: ".", with: decimalSeparator)
     }
 }
