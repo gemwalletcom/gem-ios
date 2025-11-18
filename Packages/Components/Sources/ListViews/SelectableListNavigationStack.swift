@@ -41,7 +41,7 @@ public struct SelectableListNavigationStack<ViewModel: SelectableListAdoptable &
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .presentationDetentsForCurrentDeviceSize(expandable: true)
-            .background(Colors.grayBackground)
+            .presentationBackground(Colors.grayBackground)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(model.doneTitle) {

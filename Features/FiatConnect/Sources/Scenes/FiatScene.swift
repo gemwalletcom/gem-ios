@@ -82,7 +82,7 @@ extension FiatScene {
                             model.onSelectTypeAmount()
                         }
                         .font(.subheadline.weight(.semibold))
-                        .buttonStyle(model.typeAmountButtonStyle)
+                        .buttonStyle(.listEmpty())
                         .if(model.input.type == .buy) {
                             $0.overlay {
                                 RandomOverlayView()
