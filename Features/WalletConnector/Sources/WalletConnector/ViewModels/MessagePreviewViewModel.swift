@@ -38,6 +38,8 @@ public struct MessagePreviewViewModel {
                 )
             }
             return .sections(sections)
+        case .siwe(let message):
+            return .siwe(message)
         }
     }
 }
