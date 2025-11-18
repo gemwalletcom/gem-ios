@@ -76,16 +76,16 @@ public final class SignMessageSceneViewModel {
     }
 
     public func signMessage() async throws {
-        let hash: Data = decoder.hash()
         let messageChain = Chain(rawValue: payload.message.chain) ?? payload.chain
         if messageChain == .sui {
             var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
             defer { privateKey.zeroize() }
-            let signature = try CryptoSigner().signSuiDigest(digest: hash, privateKey: privateKey)
+            let signature = try CryptoSigner().signSuiPersonalMessage(message: payload.message.data, privateKey: privateKey)
             confirmTransferDelegate(.success(signature))
             return
         }
 
+        let hash: Data = decoder.hash()
         let signature = try await keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
         let result = decoder.getResult(data: signature)
         confirmTransferDelegate(.success(result))
