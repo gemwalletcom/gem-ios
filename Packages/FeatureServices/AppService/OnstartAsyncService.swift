@@ -66,12 +66,12 @@ public final class OnstartAsyncService: Sendable {
         }
     }
 
-    public func setup(oldWallet: Wallet?, newWallet: Wallet) {
+    public func setup(wallet: Wallet) {
         Task {
-            try bannerSetupService.setupWallet(wallet: newWallet)
-            async let addressStatusTask: Void = runAddressStatusCheck(newWallet)
-            async let pushNotificationTask: Void = requestPushPermissionsIfNeeded(oldWallet: oldWallet, newWallet: newWallet)
-            _ = await (addressStatusTask, pushNotificationTask)
+            try bannerSetupService.setupWallet(wallet: wallet)
+            async let addressStatusTask: Void = runAddressStatusCheck(wallet)
+            async let pushPermissionsTask: Void = requestPushPermissions()
+            _ = await (addressStatusTask, pushPermissionsTask)
         }
     }
 
@@ -180,16 +180,19 @@ public final class OnstartAsyncService: Sendable {
         }
     }
 
-    private func requestPushPermissionsIfNeeded(oldWallet: Wallet?, newWallet: Wallet) async {
-        guard oldWallet == nil  else { return }
+    private func requestPushPermissions() async {
+        guard preferences.isPushPermissionsRequested == false,
+              preferences.isPushNotificationsEnabled == false
+        else { return }
 
         do {
             let isEnabled = try await pushNotificationEnablerService.requestPermissions()
             if isEnabled {
                 updateDeviceService()
             }
+            preferences.isPushPermissionsRequested = true
         } catch {
-            debugLog("requestPushPermissionsIfNeeded error: \(error)")
+            debugLog("requestPushPermissions error: \(error)")
         }
     }
 }
