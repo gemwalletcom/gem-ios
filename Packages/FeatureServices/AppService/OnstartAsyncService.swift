@@ -11,6 +11,7 @@ import NodeService
 import Preferences
 import AssetsService
 import ChainService
+import NotificationService
 
 public final class OnstartAsyncService: Sendable {
 
@@ -23,6 +24,7 @@ public final class OnstartAsyncService: Sendable {
     private let bannerSetupService: BannerSetupService
     private let releaseService: AppReleaseService
     private let addressStatusService: AddressStatusService
+    private let pushNotificationEnablerService: PushNotificationEnablerService
 
     @MainActor
     public var releaseAction: ((Release) -> Void)?
@@ -36,7 +38,8 @@ public final class OnstartAsyncService: Sendable {
         bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
         releaseService: AppReleaseService,
-        addressStatusService: AddressStatusService
+        addressStatusService: AddressStatusService,
+        pushNotificationEnablerService: PushNotificationEnablerService
     ) {
         self.assetStore = assetStore
         self.nodeStore = nodeStore
@@ -51,6 +54,7 @@ public final class OnstartAsyncService: Sendable {
         self.configService = configService
         self.releaseService = releaseService
         self.addressStatusService = addressStatusService
+        self.pushNotificationEnablerService = pushNotificationEnablerService
     }
 
     public func setup() {
@@ -62,10 +66,12 @@ public final class OnstartAsyncService: Sendable {
         }
     }
 
-    public func setup(wallet: Wallet) {
+    public func setup(oldWallet: Wallet?, newWallet: Wallet) {
         Task {
-            try bannerSetupService.setupWallet(wallet: wallet)
-            await runAddressStatusCheck(wallet)
+            try bannerSetupService.setupWallet(wallet: newWallet)
+            async let addressStatusTask: Void = runAddressStatusCheck(newWallet)
+            async let pushNotificationTask: Void = requestPushPermissionsIfNeeded(oldWallet: oldWallet, newWallet: newWallet)
+            _ = await (addressStatusTask, pushNotificationTask)
         }
     }
 
@@ -170,7 +176,20 @@ public final class OnstartAsyncService: Sendable {
             }
             walletPreferences.completeInitialAddressStatus = true
         } catch {
-            debugLog("runAddressStatusCheck: \(error)")
+            debugLog("runAddressStatusCheck error: \(error)")
+        }
+    }
+
+    private func requestPushPermissionsIfNeeded(oldWallet: Wallet?, newWallet: Wallet) async {
+        guard oldWallet == nil  else { return }
+
+        do {
+            let isEnabled = try await pushNotificationEnablerService.requestPermissions()
+            if isEnabled {
+                updateDeviceService()
+            }
+        } catch {
+            debugLog("requestPushPermissionsIfNeeded error: \(error)")
         }
     }
 }

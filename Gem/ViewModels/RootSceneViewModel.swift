@@ -98,7 +98,7 @@ extension RootSceneViewModel {
 extension RootSceneViewModel {
     func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
         if let newWallet {
-            setup(wallet: newWallet)
+            setup(oldWallet: oldWallet, wallet: newWallet)
         }
     }
 
@@ -161,8 +161,8 @@ extension RootSceneViewModel {
 // MARK: - Private
 
 extension RootSceneViewModel {
-    private func setup(wallet: Wallet) {
-        onstartAsyncService.setup(wallet: wallet)
+    private func setup(oldWallet: Wallet?, wallet: Wallet) {
+        onstartAsyncService.setup(oldWallet: oldWallet, newWallet: wallet)
         do {
             try walletsService.setup(wallet: wallet)
         } catch {
