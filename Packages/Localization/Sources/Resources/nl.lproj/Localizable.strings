@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ is vereist";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Ongeverifieerd";
 "asset.verification.suspicious" = "Verdacht";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -490,7 +490,7 @@
 "assets.title" = "Activa";
 "stake.delegations" = "Delegaties";
 "info.stake.apr.description" = "Jaarlijks percentage (APR) is het jaarlijkse beloningspercentage voor het staken van uw cryptocurrency.";
-"receive.warning" = "Stuur alleen ** %@ ** op het ** %@ ** netwerk naar dit adres.";
+"receive.warning" = "Dit is uw adres: verstuur alleen ** %@ ** op het ** %@ ** netwerk.";
 "perpetual.leverage" = "Hefboom";
 "perpetual.direction" = "Richting";
 "perpetual.auto_close" = "Automatisch sluiten";
@@ -504,3 +504,8 @@
 "perpetual.modify_position" = "Positie wijzigen";
 "perpetual.auto_close.stop_loss" = "Stop-loss";
 "errors.scan_transaction.malicious.title" = "Verdachte activiteit";
+"secret_phrase.screenshot_detected.title" = "Schermafbeelding gedetecteerd";
+"secret_phrase.screenshot_detected.description" = "Schermafbeeldingen zijn mogelijk toegankelijk voor andere apps, maar ze kunnen uw geheime zin in gevaar brengen als u ze op deze manier opslaat.";
+"secret_phrase.content_hidden.description" = "Inhoud verborgen tijdens schermopname";
+"asset.verification.verified" = "Geverifieerd";
+"errors.connections.malicious_origin" = "Deze verbinding komt van een onbetrouwbare bron.";

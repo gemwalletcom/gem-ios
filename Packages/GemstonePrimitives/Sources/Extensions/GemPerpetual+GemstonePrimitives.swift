@@ -5,7 +5,7 @@ import Gemstone
 import Primitives
 
 extension GemPerpetual {
-    public func map() throws -> Perpetual {
+    public func map() throws -> Primitives.Perpetual {
         Perpetual(
             id: id,
             name: name,
@@ -17,7 +17,7 @@ extension GemPerpetual {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            leverage: Array(leverage)
+            maxLeverage: maxLeverage
         )
     }
 }

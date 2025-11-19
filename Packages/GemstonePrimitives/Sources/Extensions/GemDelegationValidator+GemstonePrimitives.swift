@@ -7,7 +7,7 @@ import Primitives
 extension GemDelegationValidator {
     public func map() throws -> DelegationValidator {
         DelegationValidator(
-            chain: try Chain(id: chain),
+            chain: try chain.map(),
             id: id,
             name: name,
             isActive: isActive,

@@ -490,7 +490,7 @@
 "assets.title" = "Assets";
 "stake.delegations" = "Delegations";
 "info.stake.apr.description" = "Annual Percentage Rate (APR) is the yearly reward rate for staking your cryptocurrency.";
-"receive.warning" = "Send only **%@** on the **%@** network to this address.";
+"receive.warning" = "This is your address — send only **%@** on the **%@** network.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Direction";
 "perpetual.auto_close" = "Auto Close";
@@ -504,3 +504,8 @@
 "perpetual.modify_position" = "Modify Position";
 "perpetual.auto_close.stop_loss" = "Stop loss";
 "errors.scan_transaction.malicious.title" = "Suspicious Activity";
+"secret_phrase.screenshot_detected.title" = "Screenshot Detected";
+"secret_phrase.screenshot_detected.description" = "Screenshots may be accessible to other apps, they can put your secret phrase at risk if saved this way.";
+"secret_phrase.content_hidden.description" = "Content hidden during screen recording";
+"asset.verification.verified" = "Verified";
+"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";

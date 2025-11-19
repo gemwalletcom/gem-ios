@@ -10,13 +10,14 @@ import Style
 import Validators
 import SwiftUI
 import Components
+import GemstonePrimitives
 
 @Observable
 @MainActor
 public final class AutocloseSceneViewModel {
     private let currencyFormatter: CurrencyFormatter
     private let percentFormatter: CurrencyFormatter
-    private let priceFormatter: PerpetualPriceFormatter
+    private let perpetualFormatter: PerpetualFormatter
     private let position: PerpetualPositionData
     private let onTransferAction: TransferDataAction
     private let estimator: AutocloseEstimator
@@ -26,7 +27,7 @@ public final class AutocloseSceneViewModel {
     public init(position: PerpetualPositionData, onTransferAction: TransferDataAction = nil) {
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
         self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
-        self.priceFormatter = PerpetualPriceFormatter()
+        self.perpetualFormatter = PerpetualFormatter(provider: .hypercore)
 
         self.position = position
         self.onTransferAction = onTransferAction
@@ -61,11 +62,11 @@ public final class AutocloseSceneViewModel {
         )
 
         if let price = position.position.takeProfit?.price {
-            takeProfitInput.text = priceFormatter.formatInputPrice(price)
+            takeProfitInput.text = perpetualFormatter.formatInputPrice(price, decimals: position.asset.decimals)
         }
 
         if let price = position.position.stopLoss?.price {
-            stopLossInput.text = priceFormatter.formatInputPrice(price)
+            stopLossInput.text = perpetualFormatter.formatInputPrice(price, decimals: position.asset.decimals)
         }
 
         self.input = AutocloseInput(
@@ -142,7 +143,7 @@ extension AutocloseSceneViewModel {
         guard let type = input.focusedType, let focused = input.focused else { return }
 
         let targetPrice = estimator.calculateTargetPriceFromROE(roePercent: percent, type: type)
-        focused.text = priceFormatter.formatInputPrice(targetPrice, decimals: 2)
+        focused.text = perpetualFormatter.formatInputPrice(targetPrice, decimals: position.asset.decimals)
     }
 }
 
@@ -197,10 +198,6 @@ extension AutocloseSceneViewModel {
     }
 
     private func formatPrice(_ price: Double) -> String {
-        priceFormatter.formatPrice(
-            provider: position.perpetual.provider,
-            price,
-            decimals: Int(position.asset.decimals)
-        )
+        perpetualFormatter.formatPrice(price, decimals: position.asset.decimals)
     }
 }

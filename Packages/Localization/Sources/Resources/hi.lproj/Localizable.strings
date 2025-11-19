@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ आवश्यक है";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "असत्यापित";
 "asset.verification.suspicious" = "संदिग्ध";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -490,7 +490,7 @@
 "assets.title" = "संपत्ति";
 "stake.delegations" = "प्रतिनियोजन";
 "info.stake.apr.description" = "वार्षिक प्रतिशत दर (एपीआर) आपकी क्रिप्टोकरेंसी को दांव पर लगाने के लिए वार्षिक पुरस्कार दर है।";
-"receive.warning" = "इस पते पर केवल ** %@ ** नेटवर्क पर ** %@ ** भेजें।";
+"receive.warning" = "यह आपका पता है - केवल ** %@ %@ ** नेटवर्क पर भेजें।";
 "perpetual.leverage" = "उत्तोलन";
 "perpetual.direction" = "दिशा";
 "perpetual.auto_close" = "स्वतः बंद";
@@ -504,3 +504,8 @@
 "perpetual.modify_position" = "स्थिति संशोधित करें";
 "perpetual.auto_close.stop_loss" = "झड़ने बंद";
 "errors.scan_transaction.malicious.title" = "संदिग्ध गतिविधि";
+"secret_phrase.screenshot_detected.title" = "स्क्रीनशॉट का पता चला";
+"secret_phrase.screenshot_detected.description" = "स्क्रीनशॉट अन्य ऐप्स के लिए सुलभ हो सकते हैं, यदि वे इस तरह से सहेजे गए तो वे आपके गुप्त वाक्यांश को खतरे में डाल सकते हैं।";
+"secret_phrase.content_hidden.description" = "स्क्रीन रिकॉर्डिंग के दौरान सामग्री छिपाई गई";
+"asset.verification.verified" = "सत्यापित";
+"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";

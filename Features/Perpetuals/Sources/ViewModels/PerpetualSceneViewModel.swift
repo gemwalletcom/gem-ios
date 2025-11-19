@@ -233,10 +233,10 @@ public extension PerpetualSceneViewModel {
             provider: perpetualViewModel.perpetual.provider,
             direction: direction,
             asset: asset,
-            baseAsset: .hypercoreUSDC(), //TODO: use position.baseAsset in the future
+            baseAsset: .hypercoreUSDC(),
             assetIndex: assetIndex,
             price: perpetualViewModel.perpetual.price,
-            leverage: Int(perpetualViewModel.perpetual.leverage.last ?? 3)
+            leverage: perpetualViewModel.perpetual.maxLeverage
         )
     }
 

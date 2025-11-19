@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ jest wymagane";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Niesprawdzony";
 "asset.verification.suspicious" = "Podejrzany";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -490,7 +490,7 @@
 "assets.title" = "Aktywa";
 "stake.delegations" = "Delegacje";
 "info.stake.apr.description" = "Roczna stopa procentowa (APR) to roczna stopa nagrody za stakowanie kryptowaluty.";
-"receive.warning" = "Wyślij tylko ** %@ ** w sieci ** %@ ** na ten adres.";
+"receive.warning" = "To jest Twój adres — wysyłaj tylko ** %@ ** w sieci ** %@ **.";
 "perpetual.leverage" = "Dźwignia finansowa";
 "perpetual.direction" = "Kierunek";
 "perpetual.auto_close" = "Automatyczne zamykanie";
@@ -504,3 +504,8 @@
 "perpetual.modify_position" = "Modyfikuj pozycję";
 "perpetual.auto_close.stop_loss" = "Stop-loss";
 "errors.scan_transaction.malicious.title" = "Podejrzana aktywność";
+"secret_phrase.screenshot_detected.title" = "Wykryto zrzut ekranu";
+"secret_phrase.screenshot_detected.description" = "Zrzuty ekranu mogą być dostępne dla innych aplikacji, a zapisanie ich w ten sposób może narazić Twoją tajną frazę na ryzyko.";
+"secret_phrase.content_hidden.description" = "Zawartość ukryta podczas nagrywania ekranu";
+"asset.verification.verified" = "Zweryfikowano";
+"errors.connections.malicious_origin" = "To połączenie pochodzi z niezaufanego źródła.";

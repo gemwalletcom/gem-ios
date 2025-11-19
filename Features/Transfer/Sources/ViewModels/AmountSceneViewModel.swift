@@ -22,6 +22,8 @@ import PerpetualService
 @MainActor
 @Observable
 public final class AmountSceneViewModel {
+    private static let defaultLeverage: UInt8 = 3
+
     private let wallet: Wallet
     private let onTransferAction: TransferDataAction
 
@@ -46,6 +48,11 @@ public final class AmountSceneViewModel {
             onSelectResource(selectedResource)
         }
     }
+    var selectedLeverage: UInt8 = .zero {
+        didSet {
+            amountInputModel.update(validators: inputValidators)
+        }
+    }
 
     var isPresentingSheet: AmountSheetType?
     var focusField: Bool = false
@@ -63,12 +70,21 @@ public final class AmountSceneViewModel {
             assetId: input.asset.id
         )
 
-        self.currentValidator = defaultValidator
-        self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: inputValidators)
+        if case .perpetual(let data) = type {
+            switch data.positionAction {
+            case .open:
+                self.selectedLeverage = Self.defaultLeverage
+            case .increase, .reduce:
+                self.selectedLeverage = data.positionAction.transferData.leverage
+            }
+        }
 
         if let currentResource = currentResource {
             self.selectedResource = currentResource
         }
+
+        self.currentValidator = defaultValidator
+        self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: inputValidators)
 
         if let recipientAmount = recipientData.amount {
             amountInputModel.update(text: recipientAmount)
@@ -224,6 +240,41 @@ public final class AmountSceneViewModel {
         case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw: false
         }
     }
+
+    var isPerpetualLeverageEnabled: Bool {
+        switch type {
+        case .perpetual(let data):
+            switch data.positionAction {
+            case .open: true
+            case .increase, .reduce: false
+            }
+        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: false
+        }
+    }
+
+    var maxLeverage: UInt8 {
+        switch type {
+        case .perpetual(let data): data.positionAction.transferData.leverage
+        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: .zero
+        }
+    }
+
+    var leverageOptions: [UInt8] { [1, 2, 3, 5, 10, 20, 25, 30, 40, 50].filter { $0 <= maxLeverage } }
+    var leverageTitle: String { Localized.Perpetual.leverage }
+    var leverageText: String { "\(selectedLeverage)x" }
+
+    var sizeTitle: String { Localized.Perpetual.size }
+
+    var perpetualPositionSize: String {
+        guard case .perpetual = type, amountInputModel.isValid,
+              let amount = try? value(for: amountTransferValue), amount > .zero
+        else {
+            return "-"
+        }
+
+        let sizeValue = (try? formatter.double(from: amount * BigInt(selectedLeverage), decimals: asset.decimals.asInt)) ?? .zero
+        return currencyFormatter.string(sizeValue)
+    }
 }
 
 // MARK: - Business Logic
@@ -256,6 +307,10 @@ extension AmountSceneViewModel {
 
     func onSelectCurrentValidator() {
         delegation = currentValidator
+    }
+
+    func onSelectLeverage() {
+        isPresentingSheet = .leverageSelector
     }
 
     func onSelectValidator(_ validator: DelegationValidator) {
@@ -450,9 +505,9 @@ extension AmountSceneViewModel {
             let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
                 positionAction: data.positionAction,
                 usdcAmount: value,
-                usdcDecimals: asset.decimals.asInt
+                usdcDecimals: asset.decimals.asInt,
+                leverage: selectedLeverage
             )
-
             return TransferData(
                 type: .perpetual(data.positionAction.transferData.asset, perpetualType),
                 recipientData: recipientData,
@@ -543,8 +598,14 @@ extension AmountSceneViewModel {
                 // withdrawals require a minimum of 2 USDC
                 return BigInt(2_000_000)
             }
-        case .perpetual:
-            return BigInt(10_000_000) // 15 USDC with 6 decimals
+        case .perpetual(let data):
+            return BigInt(
+                PerpetualFormatter(provider: .hypercore).minimumOrderUsdAmount(
+                    price: data.positionAction.transferData.price,
+                    decimals: data.positionAction.transferData.asset.decimals,
+                    leverage: selectedLeverage
+                )
+            )
         case .stakeUnstake, .transfer:
             break
         }

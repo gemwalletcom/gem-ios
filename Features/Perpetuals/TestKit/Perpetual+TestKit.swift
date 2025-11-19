@@ -12,7 +12,7 @@ public extension Perpetual {
         identifier: String = "0",
         price: Double = 50000,
         pricePercentChange24h: Double = 5.0,
-        leverage: [UInt8] = [1, 5, 10, 25, 50],
+        maxLeverage: UInt8 = 25,
         openInterest: Double = 1000000,
         volume24h: Double = 5000000,
         funding: Double = 0.01
@@ -28,7 +28,7 @@ public extension Perpetual {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            leverage: leverage
+            maxLeverage: maxLeverage
         )
     }
 }

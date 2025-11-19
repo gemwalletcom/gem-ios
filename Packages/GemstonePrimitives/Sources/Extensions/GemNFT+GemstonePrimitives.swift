@@ -72,7 +72,7 @@ extension GemNftAsset {
             tokenType: tokenType.map(),
             name: name,
             description: description,
-            chain: try Chain(id: chain),
+            chain: try chain.map(),
             resource: resource.map(),
             images: images.map(),
             attributes: attributes.map { $0.map() }

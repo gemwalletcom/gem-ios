@@ -402,7 +402,7 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ é necessário";
-"asset.verification.unverified" = "Unverified";
+"asset.verification.unverified" = "Não verificado";
 "asset.verification.suspicious" = "Suspeito";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
@@ -490,7 +490,7 @@
 "assets.title" = "Ativos";
 "stake.delegations" = "Delegações";
 "info.stake.apr.description" = "Taxa Percentual Anual (APR) é a taxa de recompensa anual para apostar sua criptomoeda.";
-"receive.warning" = "Enviar somente ** %@ ** na rede ** %@ ** para este endereço.";
+"receive.warning" = "Este é o seu endereço — envie apenas ** %@ ** na rede ** %@ **.";
 "perpetual.leverage" = "Alavancagem";
 "perpetual.direction" = "Direção";
 "perpetual.auto_close" = "Fechamento automático";
@@ -504,3 +504,8 @@
 "perpetual.modify_position" = "Modificar posição";
 "perpetual.auto_close.stop_loss" = "Stop loss";
 "errors.scan_transaction.malicious.title" = "Atividade suspeita";
+"secret_phrase.screenshot_detected.title" = "Captura de tela detectada";
+"secret_phrase.screenshot_detected.description" = "Capturas de tela podem ser acessíveis a outros aplicativos e, se salvas dessa forma, podem colocar sua frase secreta em risco.";
+"secret_phrase.content_hidden.description" = "Conteúdo oculto durante a gravação de tela";
+"asset.verification.verified" = "Verificado";
+"errors.connections.malicious_origin" = "Esta conexão provém de uma fonte não confiável.";
