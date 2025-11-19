@@ -49,7 +49,7 @@ extension AssetSceneViewModel {
                 asset: assetData.asset
             ),
             isPresentingSelectedAssetInput: .constant(.none),
-            navigationPath: .constant(NavigationPath())
+            navigate: nil
         )
         viewModel.assetData = assetData
         viewModel.banners = banners

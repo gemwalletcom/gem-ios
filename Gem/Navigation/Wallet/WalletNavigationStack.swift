@@ -103,7 +103,7 @@ struct WalletNavigationStack: View {
                             asset: $0.asset
                         ),
                         isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput,
-                        navigationPath: navigationPath
+                        navigate: { navigationPath.wrappedValue.append($0) }
                     )
                 )
             }

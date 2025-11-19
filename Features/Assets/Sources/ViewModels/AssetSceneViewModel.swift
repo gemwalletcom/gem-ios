@@ -31,7 +31,7 @@ public final class AssetSceneViewModel: Sendable {
     public let priceAlertService: PriceAlertService
 
     private var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
-    private let navigationPath: Binding<NavigationPath>
+    private let navigate: NavigationAction
 
     public var isPresentingToastMessage: ToastMessage?
     public var isPresentingAssetSheet: AssetSheetType?
@@ -52,7 +52,7 @@ public final class AssetSceneViewModel: Sendable {
         bannerService: BannerService,
         input: AssetSceneInput,
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>,
-        navigationPath: Binding<NavigationPath>
+        navigate: NavigationAction
     ) {
         self.walletsService = walletsService
         self.assetsService = assetsService
@@ -64,7 +64,7 @@ public final class AssetSceneViewModel: Sendable {
         self.input = input
         self.assetData = AssetData.with(asset: input.asset)
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
-        self.navigationPath = navigationPath
+        self.navigate = navigate
     }
 
     public var title: String { assetModel.name }
@@ -256,10 +256,8 @@ extension AssetSceneViewModel {
                 }
             case .suspiciousAsset: break
             case .tradePerpetuals:
-                navigationPath.wrappedValue.append(Scenes.Perpetuals())
-                if preferences.isPerpetualEnabled == false {
-                    preferences.isPerpetualEnabled = true
-                }
+                navigate?(Scenes.Perpetuals())
+                preferences.isPerpetualEnabled = true
             }
         case .button(let bannerButton):
             switch bannerButton {
