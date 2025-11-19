@@ -156,8 +156,7 @@ public struct Scenes {
     }
     
     public struct Perpetuals: Hashable {
-        public init() {
-        }
+        public init() {}
     }
     
     public struct Perpetual: Hashable {
