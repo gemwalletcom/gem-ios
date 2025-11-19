@@ -476,8 +476,8 @@
 "perpetual.modify" = "পরিবর্তন করুন";
 "perpetual.reduce_position" = "অবস্থান হ্রাস করুন";
 "perpetual.increase_position" = "অবস্থান বৃদ্ধি করুন";
-"banner.onboarding.title" = "Gem পরিবারে স্বাগতম";
-"banner.onboarding.description" = "শুরু করতে আপনার ওয়ালেটে ক্রিপ্টো কিনুন বা গ্রহণ করুন";
+"banner.onboarding.title" = "তোমার মানিব্যাগ প্রস্তুত।";
+"banner.onboarding.description" = "শুরু করতে ক্রিপ্টো কিনুন বা গ্রহণ করুন";
 "info.stake.reserved.title" = "নেটওয়ার্ক ফি এর জন্য সংরক্ষিত";
 "info.stake.reserved.description" = "পুরষ্কার দাবি করা বা স্টক খোলার মতো ক্রিয়াকলাপের ফি মেটাতে আপনার ওয়ালেটে অল্প পরিমাণ টাকা থেকে যায়।";
 "perpetual.open_direction" = "%@ খুলুন";
@@ -508,4 +508,4 @@
 "secret_phrase.screenshot_detected.description" = "স্ক্রিনশটগুলি অন্যান্য অ্যাপের কাছে অ্যাক্সেসযোগ্য হতে পারে, যদি এইভাবে সংরক্ষণ করা হয় তবে এগুলি আপনার গোপন বাক্যাংশকে ঝুঁকির মধ্যে ফেলতে পারে।";
 "secret_phrase.content_hidden.description" = "স্ক্রিন রেকর্ডিংয়ের সময় লুকানো কন্টেন্ট";
 "asset.verification.verified" = "যাচাইকৃত";
-"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";
+"errors.connections.malicious_origin" = "এই সংযোগটি একটি অবিশ্বস্ত উৎস থেকে আসে।";

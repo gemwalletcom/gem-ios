@@ -476,8 +476,8 @@
 "perpetual.modify" = "Изменить";
 "perpetual.reduce_position" = "Уменьшить позицию";
 "perpetual.increase_position" = "Увеличить позицию";
-"banner.onboarding.title" = "Добро пожаловать в семью Gem";
-"banner.onboarding.description" = "Чтобы начать, купите или получите криптовалюту на свой кошелек.";
+"banner.onboarding.title" = "Ваш кошелек готов";
+"banner.onboarding.description" = "Купите или получите криптовалюту, чтобы начать";
 "info.stake.reserved.title" = "Зарезервировано для комиссии сети";
 "info.stake.reserved.description" = "Небольшая сумма остается в вашем кошельке для покрытия комиссий за такие операции, как отмена стейкинга или получение вознаграждений.";
 "perpetual.open_direction" = "Открыть %@";

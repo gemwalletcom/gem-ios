@@ -476,8 +476,8 @@
 "perpetual.modify" = "Upravit";
 "perpetual.reduce_position" = "Snížit pozici";
 "perpetual.increase_position" = "Zvýšit pozici";
-"banner.onboarding.title" = "Vítejte v rodině Gem";
-"banner.onboarding.description" = "Kupte si kryptoměny nebo je přijměte do své peněženky a začněte";
+"banner.onboarding.title" = "Vaše peněženka je připravena";
+"banner.onboarding.description" = "Kupte si nebo přijměte kryptoměny a začněte";
 "info.stake.reserved.title" = "Rezervováno pro síťový poplatek";
 "info.stake.reserved.description" = "Malá částka vám zůstane v peněžence na pokrytí poplatků za operace, jako je odstraňování sázek nebo nárokování odměn.";
 "perpetual.open_direction" = "Otevřít %@";
@@ -508,4 +508,4 @@
 "secret_phrase.screenshot_detected.description" = "Snímky obrazovky mohou být přístupné jiným aplikacím, pokud se uloží tímto způsobem, mohou ohrozit vaši tajnou frázi.";
 "secret_phrase.content_hidden.description" = "Obsah skrytý během nahrávání obrazovky";
 "asset.verification.verified" = "Ověřeno";
-"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";
+"errors.connections.malicious_origin" = "Toto spojení pochází z nedůvěryhodného zdroje.";

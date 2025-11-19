@@ -476,8 +476,8 @@
 "perpetual.modify" = "調整";
 "perpetual.reduce_position" = "減倉";
 "perpetual.increase_position" = "增加職位";
-"banner.onboarding.title" = "歡迎加入 Gem 家庭";
-"banner.onboarding.description" = "購買或接收加密貨幣到您的錢包即可開始使用";
+"banner.onboarding.title" = "您的錢包已準備就緒";
+"banner.onboarding.description" = "購買或接收加密貨幣即可開始";
 "info.stake.reserved.title" = "預留網路費用";
 "info.stake.reserved.description" = "您的錢包中會留有少量資金，用於支付取消質押或領取獎勵等操作的費用。";
 "perpetual.open_direction" = "打開%@";
