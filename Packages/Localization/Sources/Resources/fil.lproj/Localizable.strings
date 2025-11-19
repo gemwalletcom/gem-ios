@@ -476,8 +476,8 @@
 "perpetual.modify" = "Baguhin";
 "perpetual.reduce_position" = "Bawasan ang Posisyon";
 "perpetual.increase_position" = "Taasan ang Posisyon";
-"banner.onboarding.title" = "Maligayang pagdating sa Gem Family";
-"banner.onboarding.description" = "Bumili o Tumanggap ng crypto sa iyong wallet para makapagsimula";
+"banner.onboarding.title" = "Handa na ang iyong wallet";
+"banner.onboarding.description" = "Bumili o Tumanggap ng crypto para makapagsimula";
 "info.stake.reserved.title" = "Nakalaan para sa Bayad ng Network";
 "info.stake.reserved.description" = "May maliit na halaga ang nananatili sa iyong wallet para mabayaran ang mga bayarin para sa mga operasyon tulad ng pag-unstaking o pag-claim ng mga reward.";
 "perpetual.open_direction" = "Buksan ang %@";
@@ -508,4 +508,4 @@
 "secret_phrase.screenshot_detected.description" = "Maaaring ma-access ang mga screenshot sa iba pang apps, maaari nilang ilagay sa panganib ang iyong sikretong parirala kung ise-save sa ganitong paraan.";
 "secret_phrase.content_hidden.description" = "Nakatago ang content habang nagre-record ng screen";
 "asset.verification.verified" = "Na-verify";
-"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";
+"errors.connections.malicious_origin" = "Ang koneksyon na ito ay nagmula sa isang hindi pinagkakatiwalaang pinagmulan.";

@@ -8,12 +8,10 @@ public func isNetworkError(_ error: Error) -> Bool {
     
     switch nsError.code {
     case NSURLErrorNotConnectedToInternet,
-        NSURLErrorTimedOut,
         NSURLErrorCannotFindHost,
         NSURLErrorCannotConnectToHost,
         NSURLErrorNetworkConnectionLost,
         NSURLErrorDNSLookupFailed,
-        NSURLErrorHTTPTooManyRedirects,
         NSURLErrorBadURL:
         return true
     default:

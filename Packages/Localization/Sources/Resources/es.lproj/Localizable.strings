@@ -476,8 +476,8 @@
 "perpetual.modify" = "Modificar";
 "perpetual.reduce_position" = "Reducir posición";
 "perpetual.increase_position" = "Aumentar posición";
-"banner.onboarding.title" = "Bienvenido a la familia Gem";
-"banner.onboarding.description" = "Compra o recibe criptomonedas en tu billetera para comenzar";
+"banner.onboarding.title" = "Tu billetera está lista";
+"banner.onboarding.description" = "Compra o recibe criptomonedas para empezar";
 "info.stake.reserved.title" = "Reservado para comisión de red";
 "info.stake.reserved.description" = "Una pequeña cantidad permanece en tu billetera para cubrir las tarifas de operaciones como dejar de apostar o reclamar recompensas.";
 "perpetual.open_direction" = "Abrir %@";
@@ -508,4 +508,4 @@
 "secret_phrase.screenshot_detected.description" = "Las capturas de pantalla pueden ser accesibles a otras aplicaciones y, si se guardan de esta manera, pueden poner en riesgo tu frase secreta.";
 "secret_phrase.content_hidden.description" = "Contenido oculto durante la grabación de pantalla";
 "asset.verification.verified" = "Verificado";
-"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";
+"errors.connections.malicious_origin" = "Esta conexión proviene de una fuente no confiable.";

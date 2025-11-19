@@ -476,8 +476,8 @@
 "perpetual.modify" = "Rekebisha";
 "perpetual.reduce_position" = "Punguza Nafasi";
 "perpetual.increase_position" = "Ongeza Nafasi";
-"banner.onboarding.title" = "Karibu kwenye familia ya Gem";
-"banner.onboarding.description" = "Nunua au Pokea crypto kwenye pochi yako ili uanze";
+"banner.onboarding.title" = "Pochi yako iko tayari";
+"banner.onboarding.description" = "Nunua au Upokee crypto ili kuanza";
 "info.stake.reserved.title" = "Imehifadhiwa kwa Ada ya Mtandao";
 "info.stake.reserved.description" = "Kiasi kidogo husalia kwenye mkoba wako ili kulipia ada za shughuli kama vile kutoweka au kudai zawadi.";
 "perpetual.open_direction" = "Fungua %@";
@@ -508,4 +508,4 @@
 "secret_phrase.screenshot_detected.description" = "Picha za skrini zinaweza kupatikana kwa programu zingine, zinaweza kuweka maneno yako ya siri hatarini ikiwa yamehifadhiwa kwa njia hii.";
 "secret_phrase.content_hidden.description" = "Maudhui yaliyofichwa wakati wa kurekodi skrini";
 "asset.verification.verified" = "Imethibitishwa";
-"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";
+"errors.connections.malicious_origin" = "Muunganisho huu unatoka kwa chanzo kisichoaminika.";

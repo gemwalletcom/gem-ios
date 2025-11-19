@@ -476,8 +476,8 @@
 "perpetual.modify" = "Modyfikować";
 "perpetual.reduce_position" = "Zmniejsz pozycję";
 "perpetual.increase_position" = "Zwiększ pozycję";
-"banner.onboarding.title" = "Witamy w rodzinie Gem";
-"banner.onboarding.description" = "Kup lub odbierz kryptowalutę do swojego portfela, aby zacząć";
+"banner.onboarding.title" = "Twój portfel jest gotowy";
+"banner.onboarding.description" = "Kup lub odbierz kryptowalutę, aby zacząć";
 "info.stake.reserved.title" = "Zarezerwowane na opłatę sieciową";
 "info.stake.reserved.description" = "Niewielka kwota pozostaje w Twoim portfelu i służy pokryciu opłat za operacje, takie jak anulowanie transakcji lub odbieranie nagród.";
 "perpetual.open_direction" = "Otwórz %@";
