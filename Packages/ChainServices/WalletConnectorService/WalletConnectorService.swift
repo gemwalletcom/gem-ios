@@ -147,12 +147,9 @@ extension WalletConnectorService {
 
                 switch status {
                 case .verified, .unknown: break
-                case .invalid:
-                    debugLog("Warning: Request from invalid origin")
-                    try await rejectRequest(request)
-                    continue
-                case .malicious:
-                    debugLog("Warning: Request from malicious origin")
+                case .invalid, .malicious:
+                    // show toast with an error
+                    debugLog("Warning: Request status error (\(status)")
                     try await rejectRequest(request)
                     continue
                 }

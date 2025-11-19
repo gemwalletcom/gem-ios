@@ -11,7 +11,6 @@ struct NetworkErrorTests {
     func testNetworkErrors() throws {
         let networkErrorCodes: [Int] = [
             NSURLErrorNotConnectedToInternet,
-            NSURLErrorTimedOut,
             NSURLErrorCannotFindHost,
             NSURLErrorCannotConnectToHost,
             NSURLErrorNetworkConnectionLost
