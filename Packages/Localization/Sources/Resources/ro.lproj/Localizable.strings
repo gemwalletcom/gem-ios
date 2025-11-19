@@ -476,8 +476,8 @@
 "perpetual.modify" = "Modifica";
 "perpetual.reduce_position" = "Reduceți poziția";
 "perpetual.increase_position" = "Creșteți poziția";
-"banner.onboarding.title" = "Bine ai venit în familia Gem";
-"banner.onboarding.description" = "Cumpără sau primește criptomonede în portofelul tău pentru a începe";
+"banner.onboarding.title" = "Portofelul tău este gata";
+"banner.onboarding.description" = "Cumpără sau primește criptomonede pentru a începe";
 "info.stake.reserved.title" = "Rezervat pentru comision de rețea";
 "info.stake.reserved.description" = "O sumă mică rămâne în portofelul tău pentru a acoperi comisioanele aferente operațiunilor precum unstaking-ul sau revendicarea recompenselor.";
 "perpetual.open_direction" = "Deschis %@";
