@@ -476,8 +476,8 @@
 "perpetual.modify" = "Modificere";
 "perpetual.reduce_position" = "Reducer position";
 "perpetual.increase_position" = "Øg position";
-"banner.onboarding.title" = "Velkommen til Gem-familien";
-"banner.onboarding.description" = "Køb eller modtag krypto til din wallet for at komme i gang";
+"banner.onboarding.title" = "Din tegnebog er klar";
+"banner.onboarding.description" = "Køb eller modtag krypto for at komme i gang";
 "info.stake.reserved.title" = "Reserveret til netværksgebyr";
 "info.stake.reserved.description" = "Et lille beløb forbliver i din pung til at dække gebyrer for operationer som at fjerne indsatser eller gøre krav på belønninger.";
 "perpetual.open_direction" = "Åbn %@";
@@ -508,4 +508,4 @@
 "secret_phrase.screenshot_detected.description" = "Skærmbilleder kan være tilgængelige for andre apps, og de kan bringe din hemmelige frase i fare, hvis de gemmes på denne måde.";
 "secret_phrase.content_hidden.description" = "Indhold skjult under skærmoptagelse";
 "asset.verification.verified" = "Bekræftet";
-"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";
+"errors.connections.malicious_origin" = "Denne forbindelse kommer fra en upålidelig kilde.";

@@ -476,8 +476,8 @@
 "perpetual.modify" = "Ändern";
 "perpetual.reduce_position" = "Position reduzieren";
 "perpetual.increase_position" = "Position erhöhen";
-"banner.onboarding.title" = "Willkommen in der Gem-Familie";
-"banner.onboarding.description" = "Kaufen oder erhalten Sie Kryptowährungen in Ihr Wallet, um loszulegen";
+"banner.onboarding.title" = "Ihre Brieftasche ist bereit";
+"banner.onboarding.description" = "Kaufen oder empfangen Sie Kryptowährung, um loszulegen";
 "info.stake.reserved.title" = "Reserviert für Netzwerkgebühr";
 "info.stake.reserved.description" = "Ein kleiner Betrag verbleibt in Ihrem Wallet, um Gebühren für Vorgänge wie das Aufheben der Absteckung oder das Einfordern von Prämien zu decken.";
 "perpetual.open_direction" = "Öffnen %@";
