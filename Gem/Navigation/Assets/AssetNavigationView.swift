@@ -27,10 +27,8 @@ struct AssetNavigationView: View {
         .observeQuery(request: $model.input.transactionsRequest, value: $model.transactions)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-                if model.isPriceAvailable {
-                    Button(action: model.onTogglePriceAlert) {
-                        model.priceAlertsImage
-                    }                
+                Button(action: model.onTogglePriceAlert) {
+                    model.priceAlertsImage
                 }
 
                 AdaptiveActionMenu(

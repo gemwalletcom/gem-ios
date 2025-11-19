@@ -77,7 +77,7 @@ extension AssetData {
                 derivationPath: .empty,
                 extendedPublicKey: .none
             ),
-            price: Price.init(price: 1, priceChangePercentage24h: 1, updatedAt: .now),
+            price: .none,
             priceAlerts: [],
             metadata: AssetMetaData(
                 isEnabled: false,

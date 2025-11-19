@@ -158,8 +158,7 @@ public final class AssetSceneViewModel: Sendable {
     public var optionsImage: Image { Images.System.ellipsis }
     public var priceAlertsSystemImage: String { assetData.isPriceAlertsEnabled ? SystemImage.bellFill : SystemImage.bell }
     public var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
-    public var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts }
-    public var isPriceAvailable: Bool { assetDataModel.isPriceAvailable }
+    public var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts && assetDataModel.isPriceAvailable }
 
     public var menuItems: [ActionMenuItemType] {
         [.button(title: viewAddressOnTitle, systemImage: SystemImage.globe, action: { self.onSelect(url: self.addressExplorerUrl) }),

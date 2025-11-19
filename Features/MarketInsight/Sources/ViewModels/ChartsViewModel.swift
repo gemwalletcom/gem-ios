@@ -41,7 +41,7 @@ public final class ChartsViewModel {
     var errorTitle: String { Localized.Errors.errorOccured }
     
     var priceAlertsViewModel: PriceAlertsViewModel { PriceAlertsViewModel(priceAlerts: priceData?.priceAlerts ?? []) }
-    var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts }
+    var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts && isPriceAvailable }
     var isPriceAvailable: Bool { PriceViewModel(price: priceData?.price, currencyCode: preferences.currency).isPriceAvailable }
 
     public init(
