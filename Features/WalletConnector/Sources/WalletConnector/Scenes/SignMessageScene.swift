@@ -40,7 +40,6 @@ public struct SignMessageScene: View {
                                 title: item.title,
                                 subtitle: item.value
                             )
-                            
                         }
                     } header: {
                         if let title = section.title {
@@ -54,6 +53,16 @@ public struct SignMessageScene: View {
             case .text(let string):
                 Section(Localized.SignMessage.message) {
                     Text(string)
+                }
+            case .siwe(let message):
+                let siweViewModel = SiweMessageViewModel(message: message)
+                Section(Localized.Common.details) {
+                    ForEach(Array(siweViewModel.detailItems.enumerated()), id: \.offset) { item in
+                        ListItemView(title: item.element.title, subtitle: item.element.value)
+                    }
+                }
+                NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
+                    model.onViewFullMessage()
                 }
             }
         }

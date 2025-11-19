@@ -4,6 +4,7 @@ import Testing
 import Components
 import struct Gemstone.GemEip712MessageDomain
 import struct Gemstone.GemEip712Message
+import struct Gemstone.SiweMessage
 @testable import WalletConnector
 
 struct MessagePreviewViewModelTests {
@@ -57,5 +58,28 @@ struct MessagePreviewViewModelTests {
         }
         
         #expect(sections[0].values.count == 1)
+    }
+
+    @Test
+    func siwePreview() {
+        let message = SiweMessage(
+            domain: "login.xyz",
+            address: "0x123",
+            uri: "https://login.xyz",
+            chainId: 1,
+            nonce: "abcdefgh",
+            version: "1",
+            issuedAt: "2024-04-01T12:00:00Z"
+        )
+        let viewModel = MessagePreviewViewModel(message: .siwe(message))
+
+        guard case .siwe(let preview) = viewModel.messageDisplayType else {
+            Issue.record()
+            return
+        }
+
+        #expect(preview.domain == "login.xyz")
+        #expect(preview.address == "0x123")
+        #expect(preview.nonce == "abcdefgh")
     }
 }

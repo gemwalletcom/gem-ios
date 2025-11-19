@@ -323,6 +323,13 @@ public struct Migrations {
                 $0.add(column: WalletRecord.Columns.source.name, .text).defaults(to: WalletSource.create.rawValue)
             }
         }
+        migrator.registerMigration("Add maxLeverage to \(PerpetualRecord.databaseTableName)") { db in
+            try? db.alter(table: PerpetualRecord.databaseTableName) {
+                $0.add(column: PerpetualRecord.Columns.maxLeverage.name, .integer)
+                    .notNull()
+                    .defaults(to: 1)
+            }
+        }
 
         try migrator.migrate(dbQueue)
     }

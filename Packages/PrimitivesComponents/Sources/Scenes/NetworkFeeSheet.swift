@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Primitives
+import Style
 
 public struct NetworkFeeSheet: View {
     private let model: NetworkFeeSceneViewModel
@@ -15,6 +16,7 @@ public struct NetworkFeeSheet: View {
         NavigationStack {
             NetworkFeeScene(model: model)
                 .presentationDetents(presentationDetent)
+                .presentationBackground(Colors.grayBackground)
         }
     }
     

@@ -30,6 +30,10 @@ public extension String {
         !isEmpty
     }
     
+    var preventingHyphenation: String {
+        map { String($0) }.joined(separator: "\u{200B}")
+    }
+    
     func index(from: Int) -> Index {
         return self.index(startIndex, offsetBy: from)
     }

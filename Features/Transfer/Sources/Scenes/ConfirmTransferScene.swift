@@ -68,12 +68,14 @@ public struct ConfirmTransferScene: View {
                     NavigationStack {
                         SwapDetailsView(model: Bindable(model))
                             .presentationDetentsForCurrentDeviceSize(expandable: true)
+                            .presentationBackground(Colors.grayBackground)
                     }
                 }
             case .perpetualDetails(let model):
                 NavigationStack {
                     PerpetualDetailsView(model: model)
                         .presentationDetentsForCurrentDeviceSize(expandable: true)
+                        .presentationBackground(Colors.grayBackground)
                 }
             }
         }

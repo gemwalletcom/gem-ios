@@ -10,6 +10,9 @@ import class Gemstone.Config
 import WalletConnectSign
 import WalletSessionService
 import struct Gemstone.SignMessage
+import class Gemstone.SignMessageDecoder
+import enum Gemstone.MessagePreview
+import GemstonePrimitives
 
 public final class WalletConnectorSigner: WalletConnectorSignable {
     private let connectionsStore: ConnectionsStore
@@ -77,7 +80,13 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
     public func signMessage(sessionId: String, chain: Chain, message: SignMessage) async throws -> String {
         let session = try connectionsStore.getConnection(id: sessionId)
-        let payload = SignMessagePayload(chain: chain, session: session.session, wallet: session.wallet, message: message)
+        try validate(chain: chain, session: session.session)
+        let payload = SignMessagePayload(
+            chain: chain,
+            session: session.session,
+            wallet: session.wallet,
+            message: message
+        )
         return try await walletConnectorInteractor.signMessage(payload: payload)
     }
 
@@ -130,6 +139,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
     public func signTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
         let session = try connectionsStore.getConnection(id: sessionId)
+        try validate(chain: chain, session: session.session)
         let wallet = try getWallet(id: session.wallet.walletId)
 
         switch transaction {
@@ -149,6 +159,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
     public func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
         let session = try connectionsStore.getConnection(id: sessionId)
+        try validate(chain: chain, session: session.session)
         let wallet = try getWallet(id: session.wallet.walletId)
 
         switch transaction {
@@ -210,6 +221,15 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
     public func sendRawTransaction(sessionId: String, chain: Chain, transaction: String) async throws -> String {
         throw AnyError("Not supported yet")
+    }
+
+    private func validate(chain: Chain, session: WalletConnectionSession) throws {
+        if session.chains.isEmpty {
+            return
+        }
+        guard session.chains.contains(chain) else {
+            throw WalletConnectorServiceError.unresolvedChainId(chain.rawValue)
+        }
     }
 
     public func addConnection(connection: WalletConnection) throws {

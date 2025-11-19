@@ -25,8 +25,10 @@ public struct ChainNodeViewModel: Sendable {
 
     public var title: String {
         guard let host = chainNode.host else { return "" }
-        if host.contains("-asia.gemnodes.com") {
+        if host.contains("asia.gemnodes.com") {
             return Localized.Nodes.gemWalletNode + " Asia"
+        } else if host.contains("eu.gemnodes.com") {
+            return Localized.Nodes.gemWalletNode + " Europe"
         } else if host.contains("gemnodes.com") {
             return Localized.Nodes.gemWalletNode
         }
