@@ -89,6 +89,19 @@ public final class ObservablePreferences: Sendable {
             }
         }
     }
+
+    @ObservationIgnored
+    public var perpetualLeverage: UInt8 {
+        get {
+            access(keyPath: \.perpetualLeverage)
+            return preferences.perpetualLeverage
+        }
+        set {
+            withMutation(keyPath: \.perpetualLeverage) {
+                preferences.perpetualLeverage = newValue
+            }
+        }
+    }
 }
 
 // MARK: - EnvironmentValues

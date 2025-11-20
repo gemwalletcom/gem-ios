@@ -4,6 +4,7 @@ import SwiftUI
 import Components
 import Primitives
 import PrimitivesComponents
+import Style
 
 public struct PreferencesScene: View {
     @Environment(\.openURL) private var openURL
@@ -48,6 +49,17 @@ public struct PreferencesScene: View {
                         title: model.perpetualsTitle,
                         imageStyle: .settings(assetImage: model.perpetualsImage)
                     )
+
+                    if model.isPerpetualEnabled {
+                        NavigationCustomLink(
+                            with: ListItemView(
+                                title: model.defaultLeverageTitle,
+                                subtitle: model.defaultLeverageValue
+                            ),
+                            action: model.onSelectLeverage
+                        )
+                        .padding(.leading, Sizing.image.asset - .tiny)
+                    }
                 }
             }
             .listRowInsets(.assetListRowInsets)
@@ -55,6 +67,13 @@ public struct PreferencesScene: View {
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .sheet(isPresented: $model.isPresentingLeveragePicker) {
+            LeveragePickerSheet(
+                title: model.defaultLeverageTitle,
+                leverageOptions: model.leverageOptions,
+                selectedLeverage: $model.perpetualLeverage
+            )
+        }
     }
 }
 
@@ -62,7 +81,8 @@ public struct PreferencesScene: View {
 
 extension PreferencesScene {
     private func onSelectLanguage() {
-        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-        openURL(settingsURL)
+        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            openURL(settingsURL)
+        }
     }
 }

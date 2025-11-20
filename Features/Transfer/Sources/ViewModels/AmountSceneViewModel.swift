@@ -22,8 +22,6 @@ import PerpetualService
 @MainActor
 @Observable
 public final class AmountSceneViewModel {
-    private static let defaultLeverage: UInt8 = 3
-
     private let wallet: Wallet
     private let onTransferAction: TransferDataAction
 
@@ -48,7 +46,7 @@ public final class AmountSceneViewModel {
             onSelectResource(selectedResource)
         }
     }
-    var selectedLeverage: UInt8 = .zero {
+    var selectedLeverage: LeverageOption = LeverageOption(value: 1) {
         didSet {
             amountInputModel.update(validators: inputValidators)
         }
@@ -60,6 +58,7 @@ public final class AmountSceneViewModel {
     public init(
         input: AmountInput,
         wallet: Wallet,
+        preferences: Preferences = .standard,
         onTransferAction: TransferDataAction
     ) {
         self.input = input
@@ -73,9 +72,11 @@ public final class AmountSceneViewModel {
         if case .perpetual(let data) = type {
             switch data.positionAction {
             case .open:
-                self.selectedLeverage = Self.defaultLeverage
+                let defaultLeverage = Preferences.standard.perpetualLeverage
+                let maxLeverage = data.positionAction.transferData.leverage
+                self.selectedLeverage = LeverageOption(value: min(defaultLeverage, maxLeverage))
             case .increase, .reduce:
-                self.selectedLeverage = data.positionAction.transferData.leverage
+                self.selectedLeverage = LeverageOption(value: data.positionAction.transferData.leverage)
             }
         }
 
@@ -259,9 +260,11 @@ public final class AmountSceneViewModel {
         }
     }
 
-    var leverageOptions: [UInt8] { [1, 2, 3, 5, 10, 20, 25, 30, 40, 50].filter { $0 <= maxLeverage } }
+    var leverageOptions: [LeverageOption] {
+        LeverageOption.allOptions.filter { $0.value <= maxLeverage }
+    }
     var leverageTitle: String { Localized.Perpetual.leverage }
-    var leverageText: String { "\(selectedLeverage)x" }
+    var leverageText: String { selectedLeverage.displayText }
 
     var sizeTitle: String { Localized.Perpetual.size }
 
@@ -272,7 +275,7 @@ public final class AmountSceneViewModel {
             return "-"
         }
 
-        let sizeValue = (try? formatter.double(from: amount * BigInt(selectedLeverage), decimals: asset.decimals.asInt)) ?? .zero
+        let sizeValue = (try? formatter.double(from: amount * BigInt(selectedLeverage.value), decimals: asset.decimals.asInt)) ?? .zero
         return currencyFormatter.string(sizeValue)
     }
 }
@@ -506,7 +509,7 @@ extension AmountSceneViewModel {
                 positionAction: data.positionAction,
                 usdcAmount: value,
                 usdcDecimals: asset.decimals.asInt,
-                leverage: selectedLeverage
+                leverage: selectedLeverage.value
             )
             return TransferData(
                 type: .perpetual(data.positionAction.transferData.asset, perpetualType),
@@ -603,7 +606,7 @@ extension AmountSceneViewModel {
                 PerpetualFormatter(provider: .hypercore).minimumOrderUsdAmount(
                     price: data.positionAction.transferData.price,
                     decimals: data.positionAction.transferData.asset.decimals,
-                    leverage: selectedLeverage
+                    leverage: selectedLeverage.value
                 )
             )
         case .stakeUnstake, .transfer:

@@ -7,12 +7,15 @@ import Primitives
 import Style
 import Components
 import Preferences
+import PrimitivesComponents
 
 @Observable
 @MainActor
 public final class PreferencesViewModel {
     private let preferences: ObservablePreferences
     private let currencyModel: CurrencySceneViewModel
+
+    var isPresentingLeveragePicker = false
 
     public init(
         currencyModel: CurrencySceneViewModel,
@@ -46,4 +49,20 @@ public final class PreferencesViewModel {
     }
     var perpetualsTitle: String { Localized.Perpetuals.title }
     var perpetualsImage: AssetImage { AssetImage.image(Images.Settings.perpetuals) }
+
+    var perpetualLeverage: LeverageOption {
+        get { LeverageOption(value: preferences.perpetualLeverage) }
+        set { preferences.perpetualLeverage = newValue.value }
+    }
+    var defaultLeverageTitle: String { "Default Leverage" }
+    var defaultLeverageValue: String { "\(preferences.perpetualLeverage)x" }
+    var leverageOptions: [LeverageOption] { LeverageOption.allOptions }
+}
+
+// MARK: - Actions
+
+extension PreferencesViewModel {
+    func onSelectLeverage() {
+        isPresentingLeveragePicker = true
+    }
 }
