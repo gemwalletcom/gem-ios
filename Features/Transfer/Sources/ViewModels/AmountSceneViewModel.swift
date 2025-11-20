@@ -265,18 +265,16 @@ public final class AmountSceneViewModel {
     }
     var leverageTitle: String { Localized.Perpetual.leverage }
     var leverageText: String { selectedLeverage.displayText }
-
-    var sizeTitle: String { Localized.Perpetual.size }
-
-    var perpetualPositionSize: String {
-        guard case .perpetual = type, amountInputModel.isValid,
-              let amount = try? value(for: amountTransferValue), amount > .zero
+    var leverageTextStyle: TextStyle {
+        guard case .perpetual(let data) = type,
+              case .open(let transferData) = data.positionAction
         else {
-            return "-"
+            return .callout
         }
-
-        let sizeValue = (try? formatter.double(from: amount * BigInt(selectedLeverage.value), decimals: asset.decimals.asInt)) ?? .zero
-        return currencyFormatter.string(sizeValue)
+        return TextStyle(
+            font: .callout,
+            color: PerpetualDirectionViewModel(direction: transferData.direction).color
+        )
     }
 }
 
