@@ -2,25 +2,21 @@
 
 import SwiftUI
 import Primitives
+import Localization
 
 struct FiatTypeToolbar: ToolbarContent {
     @Binding private var selectedType: FiatQuoteType
-    private let pickerTitleProvider: (FiatQuoteType) -> String
 
-    init(
-        selectedType: Binding<FiatQuoteType>,
-        pickerTitleProvider: @escaping (FiatQuoteType) -> String
-    ) {
+    init(selectedType: Binding<FiatQuoteType>) {
         _selectedType = selectedType
-        self.pickerTitleProvider = pickerTitleProvider
     }
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .principal) {
             Picker("", selection: $selectedType) {
-                Text(pickerTitleProvider(.buy))
+                Text(Localized.Wallet.buy)
                     .tag(FiatQuoteType.buy)
-                Text(pickerTitleProvider(.sell))
+                Text(Localized.Wallet.sell)
                     .tag(FiatQuoteType.sell)
             }
             .pickerStyle(.segmented)

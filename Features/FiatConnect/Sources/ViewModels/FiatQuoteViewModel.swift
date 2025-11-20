@@ -30,10 +30,7 @@ public struct FiatQuoteViewModel: Sendable {
     }
 
     public var amountText: String {
-        switch quote.type {
-        case .buy: formatter.string(double: quote.cryptoAmount, symbol: asset.symbol)
-        case .sell: formatter.string(quote.fiatAmount)
-        }
+        formatter.string(double: quote.cryptoAmount, symbol: asset.symbol)
     }
 
     public var rateText: String {

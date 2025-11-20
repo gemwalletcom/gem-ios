@@ -7,13 +7,6 @@ import Store
 import PrimitivesComponents
 
 public struct FiatScene: View {
-    @FocusState private var focusedField: Field?
-    enum Field: Int, Hashable, Identifiable {
-        case amountBuy
-        case amountSell
-        var id: String { String(rawValue) }
-    }
-
     private var model: FiatSceneViewModel
 
     public init(model: FiatSceneViewModel) {
@@ -27,7 +20,6 @@ public struct FiatScene: View {
                 model: $model.inputValidationModel,
                 config: model.currencyInputConfig
             )
-            .focused($focusedField, equals: model.input.type == .buy ? .amountBuy : .amountSell)
             .padding(.top, .medium)
             .listGroupRowStyle()
             amountSelectorSection
@@ -36,7 +28,7 @@ public struct FiatScene: View {
         .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,
-                type: .primary(model.actionButtonState, showProgress: false),
+                type: .primary(model.actionButtonState, showProgress: true),
                 action: model.onSelectContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)
@@ -44,18 +36,14 @@ public struct FiatScene: View {
         }
         .contentMargins([.top], .zero, for: .scrollContent)
         .frame(maxWidth: .infinity)
-        .onChange(of: model.focusField, onChangeFocus)
-        .onChange(of: model.input.type, model.onChangeType)
+        .onChange(of: model.type, model.onChangeType)
         .onChange(of: model.inputValidationModel.text, model.onChangeAmountText)
         .debounce(
-            value: model.input.amount,
+            value: model.amount,
             initial: true,
-            interval: .none,
+            interval: Duration.milliseconds(250),
             action: model.onChangeAmountValue
         )
-        .onAppear {
-            focusedField = model.focusField
-        }
     }
 }
 
@@ -79,14 +67,12 @@ extension FiatScene {
                         }
 
                         Button(model.typeAmountButtonTitle) {
-                            model.onSelectTypeAmount()
+                            model.onSelectRandomAmount()
                         }
                         .font(.subheadline.weight(.semibold))
                         .buttonStyle(.listEmpty())
-                        .if(model.input.type == .buy) {
-                            $0.overlay {
-                                RandomOverlayView()
-                            }
+                        .overlay {
+                            RandomOverlayView()
                         }
                     }
                     .fixedSize()
@@ -98,14 +84,13 @@ extension FiatScene {
     @ViewBuilder
     private var providerSection: some View {
         Section {
-            switch model.state {
+            switch model.quotesState {
             case .noData:
                 StateEmptyView(title: model.emptyTitle)
             case .loading:
-                ListItemLoadingView()
-                    .id(UUID())
+                EmptyView()
             case .data:
-                if let quote = model.input.quote {
+                if let quote = model.selectedQuote {
                     let view = ListItemImageView(
                         title: model.providerTitle,
                         subtitle: quote.provider.name,
@@ -119,7 +104,7 @@ extension FiatScene {
                     } else {
                         view
                     }
-                    ListItemView(title: model.rateTitle, subtitle: model.rateValue(for: quote))
+                    ListItemView(title: model.rateTitle, subtitle: model.rateValue)
                 } else {
                     EmptyView()
                 }
@@ -127,13 +112,5 @@ extension FiatScene {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
         }
-    }
-}
-
-// MARK: - Actions
-
-extension FiatScene {
-    private func onChangeFocus(_ _: Field?, _ newField: Field?) {
-        focusedField = newField
     }
 }

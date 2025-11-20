@@ -5,19 +5,11 @@
 import Foundation
 
 public struct FiatQuoteRequest: Codable, Sendable {
-	public let assetId: String
-	public let type: FiatQuoteType
-	public let fiatCurrency: Currency
-	public let fiatAmount: Double?
-	public let cryptoValue: String?
-	public let walletAddress: String
+	public let amount: Double
+	public let currency: String
 
-	public init(assetId: String, type: FiatQuoteType, fiatCurrency: Currency, fiatAmount: Double?, cryptoValue: String?, walletAddress: String) {
-		self.assetId = assetId
-		self.type = type
-		self.fiatCurrency = fiatCurrency
-		self.fiatAmount = fiatAmount
-		self.cryptoValue = cryptoValue
-		self.walletAddress = walletAddress
+	public init(amount: Double, currency: String) {
+		self.amount = amount
+		self.currency = currency
 	}
 }
