@@ -174,14 +174,20 @@ public extension PerpetualSceneViewModel {
     }
 
     func onOpenLongPosition() {
-        guard let transferData = createTransferData(direction: .long) else {
+        guard let transferData = createTransferData(
+            direction: .long,
+            leverage: perpetualViewModel.perpetual.maxLeverage
+        ) else {
             return
         }
         onPositionAction(.open(transferData))
     }
 
     func onOpenShortPosition() {
-        guard let transferData = createTransferData(direction: .short) else {
+        guard let transferData = createTransferData(
+            direction: .short,
+            leverage: perpetualViewModel.perpetual.maxLeverage
+        ) else {
             return
         }
         onPositionAction(.open(transferData))
@@ -224,7 +230,7 @@ public extension PerpetualSceneViewModel {
         )
     }
 
-    private func createTransferData(direction: PerpetualDirection, leverage: UInt8? = nil) -> PerpetualTransferData? {
+    private func createTransferData(direction: PerpetualDirection, leverage: UInt8) -> PerpetualTransferData? {
         guard let assetIndex = Int(perpetualViewModel.perpetual.identifier) else {
             return nil
         }
@@ -236,7 +242,7 @@ public extension PerpetualSceneViewModel {
             baseAsset: .hypercoreUSDC(),
             assetIndex: assetIndex,
             price: perpetualViewModel.perpetual.price,
-            leverage: leverage ?? perpetualViewModel.perpetual.maxLeverage
+            leverage: leverage
         )
     }
 
