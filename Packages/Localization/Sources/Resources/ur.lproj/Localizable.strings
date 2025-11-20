@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "اسکرین ریکارڈنگ کے دوران چھپا ہوا مواد";
 "asset.verification.verified" = "تصدیق شدہ";
 "errors.connections.malicious_origin" = "یہ کنکشن ایک ناقابل اعتماد ذریعہ سے آتا ہے۔";
+"settings.preferences.default_leverage" = "ڈیفالٹ لیوریج";

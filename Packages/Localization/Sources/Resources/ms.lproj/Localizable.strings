@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Kandungan tersembunyi semasa rakaman skrin";
 "asset.verification.verified" = "Disahkan";
 "errors.connections.malicious_origin" = "Sambungan ini datang dari sumber yang tidak dipercayai.";
+"settings.preferences.default_leverage" = "Leveraj Lalai";

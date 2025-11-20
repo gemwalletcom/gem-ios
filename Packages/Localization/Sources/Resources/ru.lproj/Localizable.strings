@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Контент, скрытый во время записи экрана";
 "asset.verification.verified" = "Проверено";
 "errors.connections.malicious_origin" = "Это соединение получено из ненадежного источника.";
+"settings.preferences.default_leverage" = "Кредитное плечо по умолчанию";

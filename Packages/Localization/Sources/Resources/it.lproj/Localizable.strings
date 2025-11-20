@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Contenuto nascosto durante la registrazione dello schermo";
 "asset.verification.verified" = "Verificato";
 "errors.connections.malicious_origin" = "Questa connessione proviene da una fonte non attendibile.";
+"settings.preferences.default_leverage" = "Leva finanziaria predefinita";

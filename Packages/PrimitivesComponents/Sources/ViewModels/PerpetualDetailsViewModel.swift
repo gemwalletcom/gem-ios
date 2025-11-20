@@ -56,9 +56,7 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
     }
 
     var positionTitle: String { Localized.Perpetual.position }
-    var positionText: String {
-        String(format: "%@ %@", directionViewModel.title, leverageText)
-    }
+    var positionText: String { "\(directionViewModel.title) \(leverageText)" }
     var positionTextStyle: TextStyle {
         TextStyle(font: .callout, color: directionViewModel.color)
     }

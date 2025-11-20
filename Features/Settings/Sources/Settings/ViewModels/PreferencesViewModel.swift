@@ -54,7 +54,7 @@ public final class PreferencesViewModel {
         get { LeverageOption(value: preferences.perpetualLeverage) }
         set { preferences.perpetualLeverage = newValue.value }
     }
-    var defaultLeverageTitle: String { "Default Leverage" }
+    var defaultLeverageTitle: String { Localized.Settings.Preferences.defaultLeverage }
     var defaultLeverageValue: String { "\(preferences.perpetualLeverage)x" }
     var leverageOptions: [LeverageOption] { LeverageOption.allOptions }
 }

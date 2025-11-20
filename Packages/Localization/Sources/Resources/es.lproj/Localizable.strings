@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Contenido oculto durante la grabación de pantalla";
 "asset.verification.verified" = "Verificado";
 "errors.connections.malicious_origin" = "Esta conexión proviene de una fuente no confiable.";
+"settings.preferences.default_leverage" = "Apalancamiento por defecto";

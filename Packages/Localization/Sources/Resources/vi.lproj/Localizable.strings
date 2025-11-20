@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Nội dung bị ẩn trong quá trình ghi màn hình";
 "asset.verification.verified" = "Đã xác minh";
 "errors.connections.malicious_origin" = "Kết nối này đến từ một nguồn không đáng tin cậy.";
+"settings.preferences.default_leverage" = "Đòn bẩy mặc định";

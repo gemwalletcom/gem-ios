@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "화면 녹화 중 숨겨진 콘텐츠";
 "asset.verification.verified" = "검증됨";
 "errors.connections.malicious_origin" = "이 연결은 신뢰할 수 없는 출처에서 나왔습니다.";
+"settings.preferences.default_leverage" = "기본 레버리지";
