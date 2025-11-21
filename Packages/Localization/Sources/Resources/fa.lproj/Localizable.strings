@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "محتوای پنهان شده هنگام ضبط صفحه نمایش";
 "asset.verification.verified" = "تأیید شده";
 "errors.connections.malicious_origin" = "این اتصال از یک منبع غیرقابل اعتماد می‌آید.";
+"settings.preferences.default_leverage" = "اهرم پیش‌فرض";

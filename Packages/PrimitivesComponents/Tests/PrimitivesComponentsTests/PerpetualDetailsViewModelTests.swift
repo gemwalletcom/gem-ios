@@ -30,6 +30,21 @@ struct PerpetualDetailsViewModelTests {
     }
 
     @Test
+    func sizeText() {
+        #expect(PerpetualDetailsViewModel.mock(.open(.mock(fiatValue: 5000.0))).sizeText == "$5,000.00")
+    }
+
+    @Test
+    func positionText() {
+        #expect(PerpetualDetailsViewModel.mock(.open(.mock(direction: .long, leverage: 40))).positionText == "Long 40x")
+        #expect(PerpetualDetailsViewModel.mock(.open(.mock(direction: .short, leverage: 10))).positionText == "Short 10x")
+        #expect(PerpetualDetailsViewModel.mock(.increase(.mock(direction: .long, leverage: 5))).positionText == "Long 5x")
+
+        let reduceModel = PerpetualDetailsViewModel.mock(.reduce(positionDirection: .short))
+        #expect(reduceModel.positionText == "Short 3x")
+    }
+
+    @Test
     func listItemModelSubtitle() {
         let closeModel = PerpetualDetailsViewModel.mock(.close(.mock(pnl: 500, marginAmount: 1000)))
         #expect(closeModel.listItemModel.title == "Details")

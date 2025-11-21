@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "画面録画中にコンテンツが非表示になる";
 "asset.verification.verified" = "検証済み";
 "errors.connections.malicious_origin" = "この接続は信頼できないソースからのものです。";
+"settings.preferences.default_leverage" = "デフォルトレバレッジ";

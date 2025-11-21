@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Konten tersembunyi selama perekaman layar";
 "asset.verification.verified" = "Terverifikasi";
 "errors.connections.malicious_origin" = "Koneksi ini berasal dari sumber yang tidak tepercaya.";
+"settings.preferences.default_leverage" = "Leverage Default";

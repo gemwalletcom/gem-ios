@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "স্ক্রিন রেকর্ডিংয়ের সময় লুকানো কন্টেন্ট";
 "asset.verification.verified" = "যাচাইকৃত";
 "errors.connections.malicious_origin" = "এই সংযোগটি একটি অবিশ্বস্ত উৎস থেকে আসে।";
+"settings.preferences.default_leverage" = "ডিফল্ট লিভারেজ";

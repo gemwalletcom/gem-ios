@@ -55,21 +55,19 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
         )
     }
 
-    var directionTitle: String {
-        switch type {
-        case .open: Localized.Perpetual.direction
-        case .close, .increase, .reduce: Localized.Perpetual.position
-        }
+    var positionTitle: String { Localized.Perpetual.position }
+    var positionText: String { "\(directionViewModel.title) \(leverageText)" }
+    var positionTextStyle: TextStyle {
+        TextStyle(font: .callout, color: directionViewModel.color)
     }
+
     var directionViewModel: PerpetualDirectionViewModel {
-        switch type {
-        case .open(let data), .close(let data), .increase(let data):
-            PerpetualDirectionViewModel(direction: data.direction)
-        case .reduce(let data):
-            PerpetualDirectionViewModel(direction: data.positionDirection)
+        let direction = switch type {
+        case .open(let data), .close(let data), .increase(let data): data.direction
+        case .reduce(let data): data.positionDirection
         }
+        return PerpetualDirectionViewModel(direction: direction)
     }
-    var directionTextStyle: TextStyle { TextStyle(font: .callout, color: directionViewModel.color) }
 
     var leverageTitle: String { Localized.Perpetual.leverage}
     var leverageText: String { "\(data.leverage)x" }
@@ -100,6 +98,9 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
 
     var marginTitle: String { Localized.Perpetual.margin }
     var marginText: String { currencyFormatter.string(data.marginAmount) }
+
+    var sizeTitle: String { Localized.Perpetual.size }
+    var sizeText: String { currencyFormatter.string(data.fiatValue) }
 }
 
 // MARK: - Private

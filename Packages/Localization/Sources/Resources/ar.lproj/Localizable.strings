@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "المحتوى المخفي أثناء تسجيل الشاشة";
 "asset.verification.verified" = "تم التحقق";
 "errors.connections.malicious_origin" = "يأتي هذا الاتصال من مصدر غير موثوق.";
+"settings.preferences.default_leverage" = "الرافعة المالية الافتراضية";

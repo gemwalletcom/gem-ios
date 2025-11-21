@@ -174,14 +174,20 @@ public extension PerpetualSceneViewModel {
     }
 
     func onOpenLongPosition() {
-        guard let transferData = createTransferData(direction: .long) else {
+        guard let transferData = createTransferData(
+            direction: .long,
+            leverage: perpetualViewModel.perpetual.maxLeverage
+        ) else {
             return
         }
         onPositionAction(.open(transferData))
     }
 
     func onOpenShortPosition() {
-        guard let transferData = createTransferData(direction: .short) else {
+        guard let transferData = createTransferData(
+            direction: .short,
+            leverage: perpetualViewModel.perpetual.maxLeverage
+        ) else {
             return
         }
         onPositionAction(.open(transferData))
@@ -190,8 +196,8 @@ public extension PerpetualSceneViewModel {
     func onIncreasePosition() {
         isPresentingModifyAlert = false
 
-        guard let direction = positions.first?.position.direction,
-              let transferData = createTransferData(direction: direction)
+        guard let position = positions.first?.position,
+              let transferData = createTransferData(direction: position.direction, leverage: position.leverage)
         else { return }
 
         onPositionAction(.increase(transferData))
@@ -211,7 +217,7 @@ public extension PerpetualSceneViewModel {
             }
         }()
 
-        guard let transferData = createTransferData(direction: direction) else {
+        guard let transferData = createTransferData(direction: direction, leverage: position.leverage) else {
             return
         }
 
@@ -225,7 +231,7 @@ public extension PerpetualSceneViewModel {
         )
     }
 
-    private func createTransferData(direction: PerpetualDirection) -> PerpetualTransferData? {
+    private func createTransferData(direction: PerpetualDirection, leverage: UInt8) -> PerpetualTransferData? {
         guard let assetIndex = Int(perpetualViewModel.perpetual.identifier) else {
             return nil
         }
@@ -237,7 +243,7 @@ public extension PerpetualSceneViewModel {
             baseAsset: .hypercoreUSDC(),
             assetIndex: assetIndex,
             price: perpetualViewModel.perpetual.price,
-            leverage: perpetualViewModel.perpetual.maxLeverage
+            leverage: leverage
         )
     }
 
