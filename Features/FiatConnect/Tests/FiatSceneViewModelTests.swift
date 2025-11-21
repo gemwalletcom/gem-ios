@@ -37,28 +37,6 @@ final class FiatSceneViewModelTests {
     }
 
     @Test
-    func testStatesChanges() {
-        let model = FiatSceneViewModelTests.mock()
-        model.onChangeAmountText("", text: "100")
-
-        #expect(model.type == .buy)
-        #expect(model.amount == 100)
-
-        model.type = .sell
-        model.onChangeType(.buy, type: .sell)
-
-        #expect(model.type == .sell)
-        #expect(model.amount == 100)
-
-        model.onChangeAmountText("", text: "200")
-
-        model.type = .buy
-        model.onChangeType(.sell, type: .buy)
-
-        #expect(model.amount == 200)
-    }
-
-    @Test
     func testSelectBuyAmount() {
         let model = FiatSceneViewModelTests.mock()
         model.onSelect(amount: 150)
@@ -136,10 +114,28 @@ final class FiatSceneViewModelTests {
     func testFiatValidation() {
         let model = FiatSceneViewModelTests.mock()
 
-        model.inputValidationModel.text = "4"
+        model.inputValidationModel.text = "24"
         #expect(model.inputValidationModel.update() == false)
 
-        model.inputValidationModel.text = "5"
+        model.inputValidationModel.text = "25"
+        #expect(model.inputValidationModel.update() == true)
+
+        model.inputValidationModel.text = "10000"
+        #expect(model.inputValidationModel.update() == true)
+
+        model.inputValidationModel.text = "10001"
+        #expect(model.inputValidationModel.update() == false)
+    }
+
+    @Test
+    func testSellFiatValidation() {
+        let model = FiatSceneViewModelTests.mock()
+        model.type = .sell
+
+        model.inputValidationModel.text = "24"
+        #expect(model.inputValidationModel.update() == false)
+
+        model.inputValidationModel.text = "25"
         #expect(model.inputValidationModel.update() == true)
 
         model.inputValidationModel.text = "10000"

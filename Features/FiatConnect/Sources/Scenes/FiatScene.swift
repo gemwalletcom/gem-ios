@@ -7,14 +7,13 @@ import Store
 import PrimitivesComponents
 
 public struct FiatScene: View {
-    private var model: FiatSceneViewModel
+    @State private var model: FiatSceneViewModel
 
     public init(model: FiatSceneViewModel) {
-        self.model = model
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
-        @Bindable var model = model
         List {
             CurrencyInputValidationView(
                 model: $model.inputValidationModel,
@@ -39,10 +38,10 @@ public struct FiatScene: View {
         .onChange(of: model.type, model.onChangeType)
         .onChange(of: model.inputValidationModel.text, model.onChangeAmountText)
         .debounce(
-            value: model.amount,
+            value: model.inputValidationModel.text,
             initial: true,
             interval: Duration.milliseconds(250),
-            action: model.onChangeAmountValue
+            action: { _ in await model.fetch() }
         )
     }
 }

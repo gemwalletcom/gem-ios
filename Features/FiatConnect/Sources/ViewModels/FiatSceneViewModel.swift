@@ -18,7 +18,7 @@ import Preferences
 @Observable
 public final class FiatSceneViewModel {
     private struct Constants {
-        static let minimumFiatAmount: Int = 5
+        static let minimumFiatAmount: Int = 25
         static let maximumFiatAmount: Int = 10000
         static let randomMaxAmount: Int = 1000
         static let defaultAmount: Int = 50
@@ -38,7 +38,6 @@ public final class FiatSceneViewModel {
     var quotesState: StateViewType<[FiatQuote]> = .loading
     var urlState: StateViewType<Void> = .noData
     var type: FiatQuoteType
-    var amount: Int = 0
     var selectedQuote: FiatQuote?
     var inputValidationModel: InputValidationViewModel = InputValidationViewModel()
 
@@ -59,12 +58,11 @@ public final class FiatSceneViewModel {
         self.currencyFormatter = currencyFormatter
         self.assetAddress = assetAddress
         self.type = type
-        self.amount = Constants.defaultAmount
         self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id)
 
         self.inputValidationModel = InputValidationViewModel(
             mode: .onDemand,
-            validators: inputValidation
+            validators: inputValidators
         )
         self.inputValidationModel.text = String(Constants.defaultAmount)
     }
@@ -87,13 +85,13 @@ public final class FiatSceneViewModel {
     var actionButtonTitle: String { Localized.Common.continue }
     var actionButtonState: StateViewType<[FiatQuote]> {
         if urlState.isLoading { return .loading }
-        if !inputValidationModel.isValid { return .noData }
+        if inputValidationModel.isInvalid || inputValidationModel.text.isEmptyOrZero { return .noData }
         return quotesState
     }
     var providerTitle: String { Localized.Common.provider }
     var rateTitle: String { Localized.Buy.rate }
     var errorTitle: String { Localized.Errors.errorOccured }
-    var emptyTitle: String { amount == 0 ? emptyAmountTitle : Localized.Buy.noResults}
+    var emptyTitle: String { inputValidationModel.text.isEmptyOrZero ? emptyAmountTitle : Localized.Buy.noResults}
     var assetTitle: String { asset.name }
     var typeAmountButtonTitle: String { Emoji.random }
     var asset: Asset { assetAddress.asset }
@@ -137,6 +135,42 @@ public final class FiatSceneViewModel {
 // MARK: - Business Logic
 
 extension FiatSceneViewModel {
+    func fetch() {
+        fetchTask?.cancel()
+
+        fetchTask = Task {
+            guard inputValidationModel.isValid, let amount = Double(inputValidationModel.text) else { return }
+            quotesState = .loading
+            selectedQuote = nil
+
+            do {
+                let request = FiatQuoteRequest(
+                    amount: amount,
+                    currency: currencyFormatter.currencyCode
+                )
+
+                let quotes = try await fiatService.getQuotes(type: type, assetId: asset.id, request: request)
+
+                try Task.checkCancellation()
+
+                if quotes.isNotEmpty {
+                    selectedQuote = quotes.first
+                    quotesState = .data(quotes)
+                    updateInputValidators()
+                } else {
+                    quotesState = .noData
+                }
+            } catch {
+                guard !Task.isCancelled else { return }
+
+                if !error.isCancelled {
+                    quotesState = .error(error)
+                    debugLog("FiatSceneViewModel get quotes error: \(error)")
+                }
+            }
+        }
+    }
+
     func onSelectContinue() {
         guard let selectedQuote else { return }
 
@@ -167,12 +201,15 @@ extension FiatSceneViewModel {
     }
 
     func onSelect(amount: Int) {
-        inputValidationModel.text = String(amount)
+        guard inputValidationModel.text != String(amount) else { return }
+        reset()
+        inputValidationModel.update(text: String(amount))
     }
 
     func onSelectRandomAmount() {
-        let randomAmount = Int.random(in: Constants.defaultAmount..<Constants.randomMaxAmount) // mobsf-ignore: ios_insecure_random_no_generator (UI suggestion only)
-        inputValidationModel.text = String(randomAmount)
+        reset()
+        let amount = Int.random(in: Constants.defaultAmount..<Constants.randomMaxAmount) // mobsf-ignore: ios_insecure_random_no_generator (UI suggestion only)
+        inputValidationModel.update(text: String(amount))
     }
 
     func onSelectFiatProviders() {
@@ -186,15 +223,17 @@ extension FiatSceneViewModel {
     }
 
     func onChangeType(_: FiatQuoteType, type: FiatQuoteType) {
-        fetch()
-    }
-
-    func onChangeAmountValue(_ amount: Int) {
+        reset()
+        inputValidationModel.update()
         fetch()
     }
 
     func onChangeAmountText(_: String, text: String) {
-        amount = Int(text) ?? .zero
+        selectedQuote = nil
+        switch type {
+        case .buy: break
+        case .sell: inputValidationModel.update(validators: inputValidators)
+        }
     }
 }
 
@@ -217,62 +256,36 @@ extension FiatSceneViewModel {
         BalanceViewModel(asset: asset, balance: assetData.balance, formatter: valueFormatter)
     }
 
-    private var inputValidation: [any TextValidator] {
+    private var inputValidators: [any TextValidator] {
+        let rangeValidator = FiatRangeValidator(
+            range: BigInt(Constants.minimumFiatAmount)...BigInt(Constants.maximumFiatAmount),
+            minimumValueText: currencyFormatter.string(Double(Constants.minimumFiatAmount)),
+            maximumValueText: currencyFormatter.string(Double(Constants.maximumFiatAmount))
+        )
+
         let validators: [any ValueValidator<BigInt>] = switch type {
         case .buy:
-            [FiatRangeValidator(
-                range: BigInt(Constants.minimumFiatAmount)...BigInt(Constants.maximumFiatAmount),
-                minimumValueText: currencyFormatter.string(Double(Constants.minimumFiatAmount)),
-                maximumValueText: currencyFormatter.string(Double(Constants.maximumFiatAmount))
-            )]
+            [rangeValidator]
         case .sell:
-            [FiatSellValidator(
-                quote: selectedQuote,
-                availableBalance: assetData.balance.available,
-                asset: asset
-            )]
+            [
+                rangeValidator,
+                FiatSellValidator(
+                    quote: selectedQuote,
+                    availableBalance: assetData.balance.available,
+                    asset: asset
+                )
+            ]
         }
 
         return [.assetAmount(decimals: 0, validators: validators)]
     }
 
-    private func fetch() {
-        fetchTask?.cancel()
-
-        fetchTask = Task {
-            selectedQuote = nil
-            quotesState = .loading
-            updateInputValidators()
-
-            do {
-                let request = FiatQuoteRequest(
-                    amount: Double(amount),
-                    currency: currencyFormatter.currencyCode
-                )
-
-                let quotes = try await fiatService.getQuotes(type: type, assetId: asset.id, request: request)
-
-                try Task.checkCancellation()
-
-                if !quotes.isEmpty {
-                    selectedQuote = quotes.first
-                    quotesState = .data(quotes)
-                    updateInputValidators()
-                } else {
-                    quotesState = .noData
-                }
-            } catch {
-                guard !Task.isCancelled else { return }
-
-                if !error.isCancelled {
-                    quotesState = .error(error)
-                    debugLog("FiatSceneViewModel get quotes error: \(error)")
-                }
-            }
-        }
-    }
-
     private func updateInputValidators() {
-        inputValidationModel.update(validators: inputValidation)
+        inputValidationModel.update(validators: inputValidators)
+    }
+    
+    private func reset() {
+        selectedQuote = nil
+        updateInputValidators()
     }
 }
