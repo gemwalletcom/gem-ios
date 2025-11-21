@@ -18,7 +18,7 @@ struct WalletSceneBannersViewModel: Sendable {
     private func shouldShowBanner(_ banner: Banner) -> Bool {
         switch banner.event {
         case .accountActivation, .accountBlockedMultiSignature, .enableNotifications: true
-        case .stake, .activateAsset, .suspiciousAsset: false
+        case .stake, .activateAsset, .suspiciousAsset, .tradePerpetuals: false
         case .onboarding: totalFiatValue.isZero
         }
     }

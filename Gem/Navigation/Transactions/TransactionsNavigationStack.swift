@@ -13,10 +13,7 @@ struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
     @Environment(\.walletsService) private var walletsService
     @Environment(\.priceAlertService) private var priceAlertService
-
     @Environment(\.assetsService) private var assetsService
-    @Environment(\.priceObserverService) private var priceObserverService
-    @Environment(\.bannerService) private var bannerService
 
     @State private var model: TransactionsViewModel
 
@@ -57,23 +54,6 @@ struct TransactionsNavigationStack: View {
                         model: TransactionSceneViewModel(
                             transaction: $0,
                             walletId: model.wallet.id
-                        )
-                    )
-                }
-                .navigationDestination(for: Scenes.Asset.self) {
-                    AssetNavigationView(
-                        model: AssetSceneViewModel(
-                            walletsService: walletsService,
-                            assetsService: assetsService,
-                            transactionsService: model.transactionsService,
-                            priceObserverService: priceObserverService,
-                            priceAlertService: priceAlertService,
-                            bannerService: bannerService,
-                            input: AssetSceneInput(
-                                wallet: model.wallet,
-                                asset: $0.asset
-                            ),
-                            isPresentingSelectedAssetInput: .constant(.none)
                         )
                     )
                 }

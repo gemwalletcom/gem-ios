@@ -26,7 +26,7 @@ public struct BannerService: Sendable {
                 switch event {
                 case .enableNotifications:
                     try await pushNotificationService.requestPermissionsOrOpenSettings()
-                case .stake, .activateAsset, .suspiciousAsset, .onboarding, .accountActivation, .accountBlockedMultiSignature:
+                case .stake, .activateAsset, .suspiciousAsset, .onboarding, .accountActivation, .accountBlockedMultiSignature, .tradePerpetuals:
                     false
                 }
             case .closeBanner: true

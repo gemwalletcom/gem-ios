@@ -16,6 +16,7 @@ extension BannerEvent: Comparable {
         case .onboarding: 4
         case .enableNotifications: 5
         case .stake: 6
+        case .tradePerpetuals: 7
         }
     }
 }
