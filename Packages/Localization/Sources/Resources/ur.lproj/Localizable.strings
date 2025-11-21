@@ -476,8 +476,8 @@
 "perpetual.modify" = "ترمیم کریں۔";
 "perpetual.reduce_position" = "پوزیشن کو کم کریں۔";
 "perpetual.increase_position" = "پوزیشن میں اضافہ کریں۔";
-"banner.onboarding.title" = "Gem خاندان میں خوش آمدید";
-"banner.onboarding.description" = "شروع کرنے کے لیے اپنے بٹوے میں کریپٹو خریدیں یا وصول کریں۔";
+"banner.onboarding.title" = "آپ کا پرس تیار ہے۔";
+"banner.onboarding.description" = "شروع کرنے کے لیے کریپٹو خریدیں یا وصول کریں۔";
 "info.stake.reserved.title" = "نیٹ ورک فیس کے لیے محفوظ ہے";
 "info.stake.reserved.description" = "ایک چھوٹی سی رقم آپ کے بٹوے میں رہ جاتی ہے تاکہ ان کارروائیوں کے لیے فیس کو پورا کیا جا سکے جیسے کہ انعامات کا دعوی کرنا یا دعوی کرنا۔";
 "perpetual.open_direction" = "کھولیں %@";
@@ -508,4 +508,4 @@
 "secret_phrase.screenshot_detected.description" = "اسکرین شاٹس دیگر ایپس کے لیے قابل رسائی ہو سکتے ہیں، اگر اس طرح محفوظ کیا جائے تو وہ آپ کے خفیہ جملے کو خطرے میں ڈال سکتے ہیں۔";
 "secret_phrase.content_hidden.description" = "اسکرین ریکارڈنگ کے دوران چھپا ہوا مواد";
 "asset.verification.verified" = "تصدیق شدہ";
-"errors.connections.malicious_origin" = "This connection comes from an untrusted source.";
+"errors.connections.malicious_origin" = "یہ کنکشن ایک ناقابل اعتماد ذریعہ سے آتا ہے۔";

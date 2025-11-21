@@ -14,6 +14,10 @@ public struct InfoSheetScene: View {
     public init(type: InfoSheetType) {
         self.model = InfoSheetModelFactory.create(from: type)
     }
+    
+    public init(model: InfoSheetModel) {
+        self.model = model
+    }
 
     public var body: some View {
         NavigationStack {

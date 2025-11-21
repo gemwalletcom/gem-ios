@@ -476,8 +476,8 @@
 "perpetual.modify" = "Ubah suai";
 "perpetual.reduce_position" = "Kurangkan Kedudukan";
 "perpetual.increase_position" = "Tingkatkan Kedudukan";
-"banner.onboarding.title" = "Selamat datang ke keluarga Gem";
-"banner.onboarding.description" = "Beli atau Terima kripto ke dompet anda untuk bermula";
+"banner.onboarding.title" = "Dompet anda sudah sedia";
+"banner.onboarding.description" = "Beli atau Terima crypto untuk bermula";
 "info.stake.reserved.title" = "Dikhaskan untuk Yuran Rangkaian";
 "info.stake.reserved.description" = "Sejumlah kecil kekal dalam dompet anda untuk menampung yuran untuk operasi seperti menanggalkan atau menuntut ganjaran.";
 "perpetual.open_direction" = "Buka %@";

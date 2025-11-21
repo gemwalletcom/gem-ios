@@ -476,8 +476,8 @@
 "perpetual.modify" = "修正する";
 "perpetual.reduce_position" = "位置を減らす";
 "perpetual.increase_position" = "ポジションを上げる";
-"banner.onboarding.title" = "Gemファミリーへようこそ";
-"banner.onboarding.description" = "始めるにはウォレットで暗号通貨を購入または受け取りましょう";
+"banner.onboarding.title" = "ウォレットの準備ができました";
+"banner.onboarding.description" = "始めるには暗号通貨を購入または受け取りましょう";
 "info.stake.reserved.title" = "ネットワーク料金用に予約";
 "info.stake.reserved.description" = "ステーキング解除や報酬の請求などの操作にかかる手数料をカバーするために、少額がウォレットに残ります。";
 "perpetual.open_direction" = "%@を開く";

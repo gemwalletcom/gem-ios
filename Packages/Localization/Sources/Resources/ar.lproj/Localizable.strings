@@ -476,8 +476,8 @@
 "perpetual.modify" = "يُعدِّل";
 "perpetual.reduce_position" = "تقليل الموضع";
 "perpetual.increase_position" = "زيادة الموقف";
-"banner.onboarding.title" = "مرحبًا بك في عائلة Gem";
-"banner.onboarding.description" = "قم بشراء أو استلام العملات المشفرة في محفظتك للبدء";
+"banner.onboarding.title" = "محفظتك جاهزة";
+"banner.onboarding.description" = "قم بشراء أو استلام العملات المشفرة للبدء";
 "info.stake.reserved.title" = "محجوز لرسوم الشبكة";
 "info.stake.reserved.description" = "يبقى مبلغ صغير في محفظتك لتغطية الرسوم الخاصة بالعمليات مثل إلغاء المراهنة أو المطالبة بالمكافآت.";
 "perpetual.open_direction" = "افتح %@";
