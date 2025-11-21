@@ -24,13 +24,6 @@ public struct BannerSetupService: Sendable {
         try store.addBanners(stakeChains.map {
             NewBanner.stake(assetId: $0.chain.assetId)
         })
-
-        // Enable push notifications
-        if !preferences.isPushNotificationsEnabled && preferences.launchesCount > 2 {
-            try store.addBanners([
-                NewBanner(event: .enableNotifications, state: .active)
-            ])
-        }
     }
 
     public func setupWallet(wallet: Wallet) throws  {
