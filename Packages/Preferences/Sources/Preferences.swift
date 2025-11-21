@@ -21,7 +21,6 @@ public final class Preferences: @unchecked Sendable {
         static let subscriptionsVersionHasChange = "subscriptions_version_has_change"
         static let currentWalletId = "currentWallet"
         static let isPushNotificationsEnabled = "is_push_notifications_enabled"
-        static let isPushPermissionsRequested = "is_push_permissions_requested"
         static let isPriceAlertsEnabled = "is_price_alerts_enabled"
         static let isSubscriptionsEnabled = "is_subscriptions_enabled"
         static let rateApplicationShown = "rate_application_shown"
@@ -72,9 +71,6 @@ public final class Preferences: @unchecked Sendable {
     
     @ConfigurableDefaults(key: Keys.isPushNotificationsEnabled, defaultValue: false)
     public var isPushNotificationsEnabled: Bool
-
-    @ConfigurableDefaults(key: Keys.isPushPermissionsRequested, defaultValue: false)
-    public var isPushPermissionsRequested: Bool
 
     @ConfigurableDefaults(key: Keys.isPriceAlertsEnabled, defaultValue: false)
     public var isPriceAlertsEnabled: Bool
@@ -141,7 +137,6 @@ public final class Preferences: @unchecked Sendable {
         configure(\._subscriptionsVersionHasChange, key: Keys.subscriptionsVersionHasChange, defaultValue: true)
         configure(\._currentWalletId, key: Keys.currentWalletId, defaultValue: nil)
         configure(\._isPushNotificationsEnabled, key: Keys.isPushNotificationsEnabled, defaultValue: false)
-        configure(\._isPushPermissionsRequested, key: Keys.isPushPermissionsRequested, defaultValue: false)
         configure(\._isPriceAlertsEnabled, key: Keys.isPriceAlertsEnabled, defaultValue: false)
         configure(\._isSubscriptionsEnabled, key: Keys.isSubscriptionsEnabled, defaultValue: true)
         configure(\._rateApplicationShown, key: Keys.rateApplicationShown, defaultValue: false)

@@ -162,12 +162,23 @@ struct ServicesFactory {
         let onstartAsyncService = Self.makeOnstartAsyncService(
             assetStore: storeManager.assetStore,
             nodeStore: storeManager.nodeStore,
-            bannerStore: storeManager.bannerStore,
             preferences: preferences,
             assetsService: assetsService,
             deviceService: deviceService,
+            bannerSetupService: BannerSetupService(
+                store: storeManager.bannerStore,
+                preferences: preferences
+            ),
             configService: configService,
-            releaseService: AppReleaseService(configService: configService),
+            releaseService: AppReleaseService(configService: configService)
+        )
+        let onstartWalletService = Self.makeOnstartWalletService(
+            preferences: preferences,
+            deviceService: deviceService,
+            bannerSetupService: BannerSetupService(
+                store: storeManager.bannerStore,
+                preferences: preferences
+            ),
             addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
             pushNotificationEnablerService: pushNotificationEnablerService
         )
@@ -228,6 +239,7 @@ struct ServicesFactory {
             deviceObserverService: deviceObserverService,
             onstartService: onStartService,
             onstartAsyncService: onstartAsyncService,
+            onstartWalletService: onstartWalletService,
             walletConnectorManager: walletConnectorManager,
             perpetualService: perpetualService,
             perpetualObserverService: perpetualObserverService,
@@ -437,14 +449,12 @@ extension ServicesFactory {
     private static func makeOnstartAsyncService(
         assetStore: AssetStore,
         nodeStore: NodeStore,
-        bannerStore: BannerStore,
         preferences: Preferences,
         assetsService: AssetsService,
         deviceService: DeviceService,
+        bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
-        releaseService: AppReleaseService,
-        addressStatusService: AddressStatusService,
-        pushNotificationEnablerService: PushNotificationEnablerService
+        releaseService: AppReleaseService
     ) -> OnstartAsyncService {
         OnstartAsyncService(
             assetStore: assetStore,
@@ -452,12 +462,23 @@ extension ServicesFactory {
             preferences: preferences,
             assetsService: assetsService,
             deviceService: deviceService,
-            bannerSetupService: BannerSetupService(
-                store: bannerStore,
-                preferences: preferences
-            ),
+            bannerSetupService: bannerSetupService,
             configService: configService,
-            releaseService: releaseService,
+            releaseService: releaseService
+        )
+    }
+
+    private static func makeOnstartWalletService(
+        preferences: Preferences,
+        deviceService: DeviceService,
+        bannerSetupService: BannerSetupService,
+        addressStatusService: AddressStatusService,
+        pushNotificationEnablerService: PushNotificationEnablerService
+    ) -> OnstartWalletService {
+        OnstartWalletService(
+            preferences: preferences,
+            deviceService: deviceService,
+            bannerSetupService: bannerSetupService,
             addressStatusService: addressStatusService,
             pushNotificationEnablerService: pushNotificationEnablerService
         )

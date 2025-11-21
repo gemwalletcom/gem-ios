@@ -29,6 +29,7 @@ struct GemApp: App {
                 model: RootSceneViewModel(
                     walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
                     onstartAsyncService: resolver.services.onstartAsyncService,
+                    onstartWalletService: resolver.services.onstartWalletService,
                     transactionService: resolver.services.transactionService,
                     connectionsService: resolver.services.connectionsService,
                     deviceObserverService: resolver.services.deviceObserverService,
