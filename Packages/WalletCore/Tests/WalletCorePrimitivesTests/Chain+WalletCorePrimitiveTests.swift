@@ -18,7 +18,7 @@ final class Chain_WalletCorePrimitiveTests {
         case .ethereum, .smartChain, .polygon, .arbitrum, .optimism, .base,
              .avalancheC, .opBNB, .fantom, .gnosis, .manta, .blast, .zkSync,
              .linea, .mantle, .celo, .world, .sonic, .abstract, .berachain,
-             .ink, .unichain, .hyperliquid, .monad, .hyperCore, .plasma:
+             .ink, .unichain, .hyperliquid, .monad, .hyperCore, .plasma, .xLayer:
             expected = .ethereum
         case .solana:
             expected = .solana

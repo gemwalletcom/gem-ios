@@ -103,9 +103,11 @@ struct ServicesFactory {
         )
 
         let preferences = storages.observablePreferences.preferences
+        let pushNotificationEnablerService = PushNotificationEnablerService(preferences: preferences)
         let bannerService = Self.makeBannerService(
             bannerStore: storeManager.bannerStore,
-            preferences: preferences
+            preferences: preferences,
+            pushNotificationEnablerService: pushNotificationEnablerService
         )
         let notificationHandler = NotificationHandler()
 
@@ -160,13 +162,25 @@ struct ServicesFactory {
         let onstartAsyncService = Self.makeOnstartAsyncService(
             assetStore: storeManager.assetStore,
             nodeStore: storeManager.nodeStore,
-            bannerStore: storeManager.bannerStore,
             preferences: preferences,
             assetsService: assetsService,
             deviceService: deviceService,
+            bannerSetupService: BannerSetupService(
+                store: storeManager.bannerStore,
+                preferences: preferences
+            ),
             configService: configService,
-            releaseService: AppReleaseService(configService: configService),
-            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
+            releaseService: AppReleaseService(configService: configService)
+        )
+        let onstartWalletService = Self.makeOnstartWalletService(
+            preferences: preferences,
+            deviceService: deviceService,
+            bannerSetupService: BannerSetupService(
+                store: storeManager.bannerStore,
+                preferences: preferences
+            ),
+            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
+            pushNotificationEnablerService: pushNotificationEnablerService
         )
 
         let perpetualService = Self.makePerpetualService(
@@ -225,6 +239,7 @@ struct ServicesFactory {
             deviceObserverService: deviceObserverService,
             onstartService: onStartService,
             onstartAsyncService: onstartAsyncService,
+            onstartWalletService: onstartWalletService,
             walletConnectorManager: walletConnectorManager,
             perpetualService: perpetualService,
             perpetualObserverService: perpetualObserverService,
@@ -354,11 +369,12 @@ extension ServicesFactory {
 
     private static func makeBannerService(
         bannerStore: BannerStore,
-        preferences: Preferences
+        preferences: Preferences,
+        pushNotificationEnablerService: PushNotificationEnablerService
     ) -> BannerService {
         BannerService(
             store: bannerStore,
-            pushNotificationService: PushNotificationEnablerService(preferences: preferences)
+            pushNotificationService: pushNotificationEnablerService
         )
     }
 
@@ -381,14 +397,13 @@ extension ServicesFactory {
         walletSessionService: WalletSessionService,
         interactor: any WalletConnectorInteractable
     ) -> ConnectionsService {
-        let signer = WalletConnectorSigner(
-            connectionsStore: connectionsStore,
-            walletSessionService: walletSessionService,
-            walletConnectorInteractor: interactor
-        )
-        return ConnectionsService(
+        ConnectionsService(
             store: connectionsStore,
-            signer: signer
+            signer: WalletConnectorSigner(
+                connectionsStore: connectionsStore,
+                walletSessionService: walletSessionService,
+                walletConnectorInteractor: interactor
+            )
         )
     }
 
@@ -434,19 +449,14 @@ extension ServicesFactory {
     private static func makeOnstartAsyncService(
         assetStore: AssetStore,
         nodeStore: NodeStore,
-        bannerStore: BannerStore,
         preferences: Preferences,
         assetsService: AssetsService,
         deviceService: DeviceService,
+        bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
-        releaseService: AppReleaseService,
-        addressStatusService: AddressStatusService
+        releaseService: AppReleaseService
     ) -> OnstartAsyncService {
-        let bannerSetupService = BannerSetupService(
-            store: bannerStore,
-            preferences: preferences
-        )
-        return OnstartAsyncService(
+        OnstartAsyncService(
             assetStore: assetStore,
             nodeStore: nodeStore,
             preferences: preferences,
@@ -454,8 +464,23 @@ extension ServicesFactory {
             deviceService: deviceService,
             bannerSetupService: bannerSetupService,
             configService: configService,
-            releaseService: releaseService,
-            addressStatusService: addressStatusService
+            releaseService: releaseService
+        )
+    }
+
+    private static func makeOnstartWalletService(
+        preferences: Preferences,
+        deviceService: DeviceService,
+        bannerSetupService: BannerSetupService,
+        addressStatusService: AddressStatusService,
+        pushNotificationEnablerService: PushNotificationEnablerService
+    ) -> OnstartWalletService {
+        OnstartWalletService(
+            preferences: preferences,
+            deviceService: deviceService,
+            bannerSetupService: bannerSetupService,
+            addressStatusService: addressStatusService,
+            pushNotificationEnablerService: pushNotificationEnablerService
         )
     }
     
@@ -478,14 +503,12 @@ extension ServicesFactory {
         balanceStore: BalanceStore,
         nodeProvider: any NodeURLFetchable
     ) -> PerpetualService {
-        let providerFactory = PerpetualProviderFactory(nodeProvider: nodeProvider)
-        
-        return PerpetualService(
+        PerpetualService(
             store: perpetualStore,
             assetStore: assetStore,
             priceStore: priceAstore,
             balanceStore: balanceStore,
-            provider: providerFactory.createProvider()
+            provider: PerpetualProviderFactory(nodeProvider: nodeProvider).createProvider()
         )
     }
 }

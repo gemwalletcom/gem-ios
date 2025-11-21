@@ -30,4 +30,5 @@ public enum EVMChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case unichain
 	case hyperliquid
 	case monad
+	case xLayer = "xlayer"
 }
