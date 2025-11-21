@@ -54,4 +54,5 @@ public enum Chain: String, Codable, CaseIterable, Equatable, Hashable, Sendable 
 	case hyperliquid
 	case hyperCore = "hypercore"
 	case monad
+	case xLayer = "xlayer"
 }

@@ -35,7 +35,8 @@ public extension Chain {
             .hyperliquid,
             .monad,
             .hyperCore,
-            .plasma: .ethereum
+            .plasma,
+            .xLayer: .ethereum
         case .solana: .solana
         case .thorchain: .thorchain
         case .cosmos: .cosmos
