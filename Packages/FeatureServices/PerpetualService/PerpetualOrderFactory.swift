@@ -36,6 +36,11 @@ public struct PerpetualOrderFactory {
         let fiatValue = perpetual.price * sizeAsAsset
         let marginAmount = fiatValue / Double(leverage)
 
+        let (pnl, entryPrice) = calculatePnlForAction(
+            positionAction: positionAction,
+            partialSize: sizeAsAsset
+        )
+
         let data = makePerpetualConfirmData(
             direction: perpetual.direction,
             baseAsset: perpetual.baseAsset,
@@ -47,8 +52,8 @@ public struct PerpetualOrderFactory {
             assetDecimals: perpetual.asset.decimals,
             slippage: slippage,
             leverage: leverage,
-            pnl: nil,
-            entryPrice: nil,
+            pnl: pnl,
+            entryPrice: entryPrice,
             marketPrice: perpetual.price,
             marginAmount: marginAmount
         )
@@ -56,7 +61,7 @@ public struct PerpetualOrderFactory {
         return switch positionAction {
         case .open: .open(data)
         case .increase: .increase(data)
-        case .reduce(_, _, let positionDirection): .reduce(PerpetualReduceData(data: data, positionDirection: positionDirection))
+        case .reduce(_, _, let positionDirection, _): .reduce(PerpetualReduceData(data: data, positionDirection: positionDirection))
         }
     }
 
@@ -94,6 +99,20 @@ public struct PerpetualOrderFactory {
     }
     
     // MARK: - Private methods
+
+    private func calculatePnlForAction(
+        positionAction: PerpetualPositionAction,
+        partialSize: Double
+    ) -> (pnl: Double?, entryPrice: Double?) {
+        switch positionAction {
+        case .reduce(_, _, _, let position):
+            let ratio = abs(partialSize) / abs(position.size)
+            let partialPnl = position.pnl * ratio
+            return (partialPnl, position.entryPrice)
+        case .open, .increase:
+            return (nil, nil)
+        }
+    }
 
     private func calculateSlippagePrice(
         marketPrice: Double,

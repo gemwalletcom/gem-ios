@@ -219,7 +219,8 @@ public extension PerpetualSceneViewModel {
             .reduce(
                 transferData,
                 available: BigInt(position.marginAmount * pow(10.0, Double(position.baseAsset.decimals))),
-                positionDirection: position.direction
+                positionDirection: position.direction,
+                position: position
             )
         )
     }

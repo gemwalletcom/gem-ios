@@ -39,8 +39,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         case .account: .assetActivation
         case .perpetual(_, let type):
             switch type {
-            case .open, .increase, .reduce: .perpetualOpenPosition
-            case .close: .perpetualClosePosition
+            case .open, .increase: .perpetualOpenPosition
+            case .close, .reduce: .perpetualClosePosition
             case .modify: .perpetualModifyPosition
             }
         }
