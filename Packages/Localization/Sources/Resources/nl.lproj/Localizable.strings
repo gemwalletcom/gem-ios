@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Inhoud verborgen tijdens schermopname";
 "asset.verification.verified" = "Geverifieerd";
 "errors.connections.malicious_origin" = "Deze verbinding komt van een onbetrouwbare bron.";
+"settings.preferences.default_leverage" = "Standaard hefboomwerking";

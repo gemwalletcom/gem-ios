@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Вміст прихований під час запису екрана";
 "asset.verification.verified" = "Перевірено";
 "errors.connections.malicious_origin" = "Цей зв'язок походить з ненадійного джерела.";
+"settings.preferences.default_leverage" = "Кредитне плече за замовчуванням";

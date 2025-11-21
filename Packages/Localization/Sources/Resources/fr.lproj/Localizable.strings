@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Contenu masqué pendant l'enregistrement d'écran";
 "asset.verification.verified" = "Vérifié";
 "errors.connections.malicious_origin" = "Cette connexion provient d'une source non fiable.";
+"settings.preferences.default_leverage" = "effet de levier par défaut";

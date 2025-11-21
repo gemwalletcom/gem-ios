@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Zawartość ukryta podczas nagrywania ekranu";
 "asset.verification.verified" = "Zweryfikowano";
 "errors.connections.malicious_origin" = "To połączenie pochodzi z niezaufanego źródła.";
+"settings.preferences.default_leverage" = "Domyślna dźwignia";

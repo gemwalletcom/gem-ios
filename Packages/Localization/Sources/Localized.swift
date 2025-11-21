@@ -1035,6 +1035,8 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "settings.notifications.title", fallback: "Notifications")
     }
     public enum Preferences {
+      /// Default Leverage
+      public static let defaultLeverage = Localized.tr("Localizable", "settings.preferences.default_leverage", fallback: "Default Leverage")
       /// Preferences
       public static let title = Localized.tr("Localizable", "settings.preferences.title", fallback: "Preferences")
     }
