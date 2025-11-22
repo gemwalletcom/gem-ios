@@ -19,13 +19,13 @@ extension PerpetualRecipientData: Identifiable {
 
 public enum PerpetualPositionAction: Codable, Equatable, Hashable, Sendable, Identifiable {
     case open(PerpetualTransferData)
-    case reduce(PerpetualTransferData, available: BigInt, positionDirection: PerpetualDirection, position: PerpetualPosition)
+    case reduce(PerpetualTransferData, available: BigInt, positionDirection: PerpetualDirection)
     case increase(PerpetualTransferData)
 
     public var id: String {
         switch self {
         case .open(let data): return data.id
-        case .reduce(let data, _, _, _): return data.id
+        case .reduce(let data, _, _): return data.id
         case .increase(let data): return data.id
         }
     }

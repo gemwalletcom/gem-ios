@@ -144,7 +144,7 @@ public final class AmountSceneViewModel {
             switch data.positionAction {
             case .open(let data): PerpetualDirectionViewModel(direction: data.direction).title
             case .increase(let data): PerpetualDirectionViewModel(direction: data.direction).increaseTitle
-            case .reduce(_, _, let direction, _): PerpetualDirectionViewModel(direction: direction).reduceTitle
+            case .reduce(_, _, let direction): PerpetualDirectionViewModel(direction: direction).reduceTitle
             }
         case .stake: Localized.Transfer.Stake.title
         case .stakeUnstake: Localized.Transfer.Unstake.title
@@ -629,7 +629,7 @@ extension AmountSceneViewModel {
         case let .perpetual(perpetualData):
             switch perpetualData.positionAction {
             case .open, .increase: return assetData.balance.available
-            case .reduce(_, let available, _, _): return available
+            case .reduce(_, let available, _): return available
             }
         case .stake:
             switch asset.chain {
