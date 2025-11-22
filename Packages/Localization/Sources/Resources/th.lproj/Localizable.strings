@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "เนื้อหาที่ซ่อนอยู่ระหว่างการบันทึกหน้าจอ";
 "asset.verification.verified" = "ได้รับการยืนยันแล้ว";
 "errors.connections.malicious_origin" = "การเชื่อมต่อนี้มาจากแหล่งที่ไม่น่าเชื่อถือ";
+"settings.preferences.default_leverage" = "เลเวอเรจเริ่มต้น";

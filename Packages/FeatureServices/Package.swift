@@ -382,12 +382,14 @@ let package = Package(
                 "Store",
                 "GemAPI",
                 .product(name: "NodeService", package: "ChainServices"),
+                .product(name: "ChainService", package: "ChainServices"),
                 "Preferences",
                 "BannerService",
                 "DeviceService",
                 "SwapService",
                 "AssetsService",
-                "WalletService"
+                "WalletService",
+                "NotificationService"
             ],
             path: "AppService",
             exclude: ["Tests"]

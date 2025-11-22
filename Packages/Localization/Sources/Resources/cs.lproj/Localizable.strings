@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Obsah skrytý během nahrávání obrazovky";
 "asset.verification.verified" = "Ověřeno";
 "errors.connections.malicious_origin" = "Toto spojení pochází z nedůvěryhodného zdroje.";
+"settings.preferences.default_leverage" = "Výchozí pákový efekt";

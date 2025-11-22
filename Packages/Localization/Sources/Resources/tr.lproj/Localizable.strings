@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Ekran kaydı sırasında içerik gizlendi";
 "asset.verification.verified" = "Doğrulandı";
 "errors.connections.malicious_origin" = "Bu bağlantı güvenilir olmayan bir kaynaktan geliyor.";
+"settings.preferences.default_leverage" = "Varsayılan Kaldıraç";

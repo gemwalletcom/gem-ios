@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "螢幕錄製過程中隱藏的內容";
 "asset.verification.verified" = "已驗證";
 "errors.connections.malicious_origin" = "此連線來自不可信來源。";
+"settings.preferences.default_leverage" = "預設槓桿";

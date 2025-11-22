@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Content hidden during screen recording";
 "asset.verification.verified" = "Verified";
 "errors.connections.malicious_origin" = "This connection comes from an untrusted source.";
+"settings.preferences.default_leverage" = "Default Leverage";

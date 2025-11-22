@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Nakatago ang content habang nagre-record ng screen";
 "asset.verification.verified" = "Na-verify";
 "errors.connections.malicious_origin" = "Ang koneksyon na ito ay nagmula sa isang hindi pinagkakatiwalaang pinagmulan.";
+"settings.preferences.default_leverage" = "Default na Leverage";

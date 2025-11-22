@@ -17,9 +17,9 @@ public struct PerpetualDetailsView: View {
         List {
             Section {
                 ListItemView(
-                    title: model.directionTitle,
-                    subtitle: model.directionViewModel.title,
-                    subtitleStyle: model.directionTextStyle
+                    title: model.positionTitle,
+                    subtitle: model.positionText,
+                    subtitleStyle: model.positionTextStyle
                 )
 
                 if let pnlText = model.pnlText {
@@ -29,17 +29,21 @@ public struct PerpetualDetailsView: View {
                         subtitleStyle: model.pnlTextStyle
                     )
                 }
-                
+            }
+
+            Section {
                 ListItemView(
                     title: model.marginTitle,
                     subtitle: model.marginText
                 )
 
                 ListItemView(
-                    title: model.leverageTitle,
-                    subtitle: model.leverageText
+                    title: model.sizeTitle,
+                    subtitle: model.sizeText
                 )
+            }
 
+            Section {
                 ListItemView(
                     title: model.marketPriceTitle,
                     subtitle: model.marketPriceText

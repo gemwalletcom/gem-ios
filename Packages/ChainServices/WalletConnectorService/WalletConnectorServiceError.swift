@@ -9,5 +9,4 @@ public enum WalletConnectorServiceError: Error {
     case wrongSignParameters
     case wrongSendParameters
     case invalidOrigin
-    case maliciousOrigin
 }

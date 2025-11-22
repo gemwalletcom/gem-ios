@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Maudhui yaliyofichwa wakati wa kurekodi skrini";
 "asset.verification.verified" = "Imethibitishwa";
 "errors.connections.malicious_origin" = "Muunganisho huu unatoka kwa chanzo kisichoaminika.";
+"settings.preferences.default_leverage" = "Njia Chaguomsingi";
