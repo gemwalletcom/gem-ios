@@ -7,7 +7,8 @@ import Primitives
 public enum GemAPI: TargetType {
     case getFiatOnRampAssets
     case getFiatOffRampAssets
-    case getFiatQuotes(Asset, FiatQuoteRequest)
+    case getFiatQuotes(FiatQuoteType, AssetId, FiatQuoteRequest)
+    case getFiatQuoteUrl(FiatQuoteUrlRequest)
     case getSwapAssets
     case getConfig
     case getNameRecord(name: String, chain: String)
@@ -71,7 +72,8 @@ public enum GemAPI: TargetType {
             .addPriceAlerts,
             .scanTransaction,
             .getPrices,
-            .addSupportDevice:
+            .addSupportDevice,
+            .getFiatQuoteUrl:
             return .POST
         case .updateDevice:
             return .PUT
@@ -88,8 +90,10 @@ public enum GemAPI: TargetType {
             return "/v1/fiat/on_ramp/assets"
         case .getFiatOffRampAssets:
             return "/v1/fiat/off_ramp/assets"
-        case .getFiatQuotes(let asset, _):
-            return "/v1/fiat/quotes/\(asset.id.identifier)"
+        case .getFiatQuotes(let type, let assetId, _):
+            return "/v1/fiat/quotes/\(type.rawValue)/\(assetId.identifier)"
+        case .getFiatQuoteUrl:
+            return "/v1/fiat/quotes/url"
         case .getSwapAssets:
             return "/v1/swap/assets"
         case .getConfig:
@@ -152,6 +156,8 @@ public enum GemAPI: TargetType {
             .getNFTAssets,
             .markets:
             return .plain
+        case .getFiatQuoteUrl(let request):
+            return .encodable(request)
         case .getAssets(let value):
             return .encodable(value.map { $0.identifier })
         case .getPriceAlerts(_, let assetId):
@@ -160,15 +166,12 @@ public enum GemAPI: TargetType {
             ].compactMapValues { $0 }
             
             return .params(params)
-        case let .getFiatQuotes(_, value):
+        case let .getFiatQuotes(_, _, request):
             let params: [String: Any] = [
-                "type": value.type.rawValue,
-                "fiat_amount": value.fiatAmount,
-                "crypto_value": value.cryptoValue as Any?,
-                "currency": value.fiatCurrency,
-                "wallet_address": value.walletAddress
-            ].compactMapValues { $0 }
-            
+                "amount": request.amount,
+                "currency": request.currency
+            ]
+
             return .params(params)
         case .getCharts(_, let period):
             return .params([
