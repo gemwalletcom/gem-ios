@@ -87,7 +87,8 @@ extension FiatScene {
             case .noData:
                 StateEmptyView(title: model.emptyTitle)
             case .loading:
-                EmptyView()
+                ListItemLoadingView()
+                    .id(UUID())
             case .data:
                 if let quote = model.selectedQuote {
                     let view = ListItemImageView(

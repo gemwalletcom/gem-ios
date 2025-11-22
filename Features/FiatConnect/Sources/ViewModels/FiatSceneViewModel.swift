@@ -18,8 +18,6 @@ import Preferences
 @Observable
 public final class FiatSceneViewModel {
     private struct Constants {
-        static let minimumFiatAmount: Int = 25
-        static let maximumFiatAmount: Int = 10000
         static let randomMaxAmount: Int = 1000
         static let defaultAmount: Int = 50
         static let suggestedAmounts: [Int] = [100, 250]
@@ -35,15 +33,17 @@ public final class FiatSceneViewModel {
     var assetData: AssetData = .empty
     var assetRequest: AssetRequest
 
-    var quotesState: StateViewType<[FiatQuote]> = .loading
+    private let buyContext = FiatOperationContext()
+    private let sellContext = FiatOperationContext()
+
+    private let buyStrategy: FiatOperationStrategy
+    private let sellStrategy: FiatOperationStrategy
+
     var urlState: StateViewType<Void> = .noData
     var type: FiatQuoteType
-    var selectedQuote: FiatQuote?
     var inputValidationModel: InputValidationViewModel = InputValidationViewModel()
 
     var isPresentingFiatProvider: Bool = false
-
-    private var fetchTask: Task<Void, Never>?
 
     public init(
         fiatService: any GemAPIFiatService = GemAPIService(),
@@ -60,11 +60,47 @@ public final class FiatSceneViewModel {
         self.type = type
         self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id)
 
+        self.buyStrategy = BuyFiatStrategy(
+            service: fiatService,
+            asset: assetAddress.asset,
+            currencyFormatter: currencyFormatter
+        )
+        self.sellStrategy = SellFiatStrategy(
+            service: fiatService,
+            asset: assetAddress.asset,
+            currencyFormatter: currencyFormatter
+        )
+
         self.inputValidationModel = InputValidationViewModel(
             mode: .onDemand,
-            validators: inputValidators
+            validators: []
         )
-        self.inputValidationModel.text = String(Constants.defaultAmount)
+        self.inputValidationModel.text = context.amount
+        updateValidators()
+    }
+
+    private var context: FiatOperationContext {
+        switch type {
+        case .buy: buyContext
+        case .sell: sellContext
+        }
+    }
+
+    private var strategy: FiatOperationStrategy {
+        switch type {
+        case .buy: buyStrategy
+        case .sell: sellStrategy
+        }
+    }
+
+    var quotesState: StateViewType<[FiatQuote]> {
+        get { context.quotesState }
+        set { context.quotesState = newValue }
+    }
+
+    var selectedQuote: FiatQuote? {
+        get { context.selectedQuote }
+        set { context.selectedQuote = newValue }
     }
 
     var title: String {
@@ -84,6 +120,7 @@ public final class FiatSceneViewModel {
 
     var actionButtonTitle: String { Localized.Common.continue }
     var actionButtonState: StateViewType<[FiatQuote]> {
+        if selectedQuote == nil { return .noData }
         if urlState.isLoading { return .loading }
         if inputValidationModel.isInvalid || inputValidationModel.text.isEmptyOrZero { return .noData }
         return quotesState
@@ -136,27 +173,23 @@ public final class FiatSceneViewModel {
 
 extension FiatSceneViewModel {
     func fetch() {
-        fetchTask?.cancel()
+        quotesState = .data([])
+        context.fetchTask?.cancel()
 
-        fetchTask = Task {
+        context.fetchTask = Task {
             guard inputValidationModel.isValid, let amount = Double(inputValidationModel.text) else { return }
             quotesState = .loading
             selectedQuote = nil
 
             do {
-                let request = FiatQuoteRequest(
-                    amount: amount,
-                    currency: currencyFormatter.currencyCode
-                )
-
-                let quotes = try await fiatService.getQuotes(type: type, assetId: asset.id, request: request)
+                let quotes = try await strategy.fetch(amount: amount)
 
                 try Task.checkCancellation()
 
                 if quotes.isNotEmpty {
                     selectedQuote = quotes.first
                     quotesState = .data(quotes)
-                    updateInputValidators()
+                    updateValidators()
                 } else {
                     quotesState = .noData
                 }
@@ -223,16 +256,17 @@ extension FiatSceneViewModel {
     }
 
     func onChangeType(_: FiatQuoteType, type: FiatQuoteType) {
-        reset()
-        inputValidationModel.update()
+        inputValidationModel.text = context.amount
+        updateValidators()
         fetch()
     }
 
     func onChangeAmountText(_: String, text: String) {
+        context.amount = text
         selectedQuote = nil
         switch type {
         case .buy: break
-        case .sell: inputValidationModel.update(validators: inputValidators)
+        case .sell: updateValidators()
         }
     }
 }
@@ -256,36 +290,17 @@ extension FiatSceneViewModel {
         BalanceViewModel(asset: asset, balance: assetData.balance, formatter: valueFormatter)
     }
 
-    private var inputValidators: [any TextValidator] {
-        let rangeValidator = FiatRangeValidator(
-            range: BigInt(Constants.minimumFiatAmount)...BigInt(Constants.maximumFiatAmount),
-            minimumValueText: currencyFormatter.string(Double(Constants.minimumFiatAmount)),
-            maximumValueText: currencyFormatter.string(Double(Constants.maximumFiatAmount))
-        )
-
-        let validators: [any ValueValidator<BigInt>] = switch type {
-        case .buy:
-            [rangeValidator]
-        case .sell:
-            [
-                rangeValidator,
-                FiatSellValidator(
-                    quote: selectedQuote,
-                    availableBalance: assetData.balance.available,
-                    asset: asset
-                )
-            ]
-        }
-
-        return [.assetAmount(decimals: 0, validators: validators)]
-    }
-
-    private func updateInputValidators() {
-        inputValidationModel.update(validators: inputValidators)
-    }
-    
     private func reset() {
         selectedQuote = nil
-        updateInputValidators()
+        updateValidators()
+    }
+
+    private func updateValidators() {
+        inputValidationModel.update(
+            validators: strategy.validators(
+                availableBalance: assetData.balance.available,
+                selectedQuote: selectedQuote
+            )
+        )
     }
 }
