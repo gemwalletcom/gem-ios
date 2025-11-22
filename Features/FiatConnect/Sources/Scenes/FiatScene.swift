@@ -43,6 +43,7 @@ public struct FiatScene: View {
             interval: Duration.milliseconds(250),
             action: { _ in await model.fetch() }
         )
+        .alertSheet($model.isPresentingAlertMessage)
     }
 }
 

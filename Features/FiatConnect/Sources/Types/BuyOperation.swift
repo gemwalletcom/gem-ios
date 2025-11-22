@@ -8,16 +8,22 @@ import BigInt
 import Formatters
 import Localization
 
-struct SellFiatStrategy: FiatOperationStrategy {
-    private struct Constants {
-        static let minimumFiatAmount: Int = 25
-        static let maximumFiatAmount: Int = 10000
-    }
-
-    let type: FiatQuoteType = .sell
+struct BuyOperation: FiatOperation {
     private let service: any GemAPIFiatService
     private let asset: Asset
     private let currencyFormatter: CurrencyFormatter
+
+    private let config = FiatOperationConfig(
+        defaultAmount: 50,
+        minimumAmount: 25,
+        maximumAmount: 10000
+    )
+
+    var defaultAmount: Int { config.defaultAmount }
+
+    var emptyAmountTitle: String {
+        Localized.Input.enterAmountTo(Localized.Wallet.buy)
+    }
 
     init(
         service: any GemAPIFiatService,
@@ -31,7 +37,7 @@ struct SellFiatStrategy: FiatOperationStrategy {
 
     func fetch(amount: Double) async throws -> [FiatQuote] {
         let request = FiatQuoteRequest(amount: amount, currency: currencyFormatter.currencyCode)
-        return try await service.getQuotes(type: .sell, assetId: asset.id, request: request)
+        return try await service.getQuotes(type: .buy, assetId: asset.id, request: request)
     }
 
     func validators(
@@ -39,15 +45,10 @@ struct SellFiatStrategy: FiatOperationStrategy {
         selectedQuote: FiatQuote?
     ) -> [any TextValidator] {
         let rangeValidator = FiatRangeValidator(
-            range: BigInt(Constants.minimumFiatAmount)...BigInt(Constants.maximumFiatAmount),
-            minimumValueText: currencyFormatter.string(Double(Constants.minimumFiatAmount)),
-            maximumValueText: currencyFormatter.string(Double(Constants.maximumFiatAmount))
+            range: BigInt(config.minimumAmount)...BigInt(config.maximumAmount),
+            minimumValueText: currencyFormatter.string(Double(config.minimumAmount)),
+            maximumValueText: currencyFormatter.string(Double(config.maximumAmount))
         )
-        let sellValidator = FiatSellValidator(
-            quote: selectedQuote,
-            availableBalance: availableBalance,
-            asset: asset
-        )
-        return [.assetAmount(decimals: 0, validators: [rangeValidator, sellValidator])]
+        return [.assetAmount(decimals: 0, validators: [rangeValidator])]
     }
 }

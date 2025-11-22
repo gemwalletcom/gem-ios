@@ -5,8 +5,7 @@ import SwiftHTTPClient
 import Primitives
 
 public enum GemAPI: TargetType {
-    case getFiatOnRampAssets
-    case getFiatOffRampAssets
+    case getFiatAssets(FiatQuoteType)
     case getFiatQuotes(FiatQuoteType, AssetId, FiatQuoteRequest)
     case getFiatQuoteUrl(FiatQuoteUrlRequest)
     case getSwapAssets
@@ -50,8 +49,7 @@ public enum GemAPI: TargetType {
     public var method: HTTPMethod {
         switch self {
         case .getFiatQuotes,
-            .getFiatOnRampAssets,
-            .getFiatOffRampAssets,
+            .getFiatAssets,
             .getSwapAssets,
             .getConfig,
             .getNameRecord,
@@ -86,10 +84,8 @@ public enum GemAPI: TargetType {
 
     public var path: String {
         switch self {
-        case .getFiatOnRampAssets:
-            return "/v1/fiat/on_ramp/assets"
-        case .getFiatOffRampAssets:
-            return "/v1/fiat/off_ramp/assets"
+        case .getFiatAssets(let type):
+            return "/v1/fiat/assets/\(type.rawValue)"
         case .getFiatQuotes(let type, let assetId, _):
             return "/v1/fiat/quotes/\(type.rawValue)/\(assetId.identifier)"
         case .getFiatQuoteUrl:
@@ -143,8 +139,7 @@ public enum GemAPI: TargetType {
     
     public var data: RequestData {
         switch self {
-        case .getFiatOnRampAssets,
-            .getFiatOffRampAssets,
+        case .getFiatAssets,
             .getSwapAssets,
             .getConfig,
             .getNameRecord,

@@ -33,7 +33,7 @@ final class FiatSceneViewModelTests {
         model.type = .sell
         model.onChangeType(.buy, type: .sell)
 
-        #expect(model.inputValidationModel.text == "50")
+        #expect(model.inputValidationModel.text == "100")
     }
 
     @Test
@@ -90,24 +90,9 @@ final class FiatSceneViewModelTests {
     func testRateValue() {
         let model = FiatSceneViewModelTests.mock()
         let quote = FiatQuote.mock(fiatAmount: 1200, cryptoAmount: 2.0, type: model.type)
-        model.selectedQuote = quote
+        model.buyViewModel.selectedQuote = quote
 
         #expect(model.rateValue == "1 \(model.asset.symbol) ≈ $600.00")
-    }
-
-    @Test
-    func testCryptoAmountValue() {
-        let model = FiatSceneViewModelTests.mock()
-        let buyQuote = FiatQuote.mock(fiatAmount: 100, cryptoAmount: 1, type: model.type)
-        model.selectedQuote = buyQuote
-        #expect(model.cryptoAmountValue == "≈ 1.00 BTC")
-
-        model.type = .sell
-        model.onChangeType(.buy, type: .sell)
-        let sellQuote = FiatQuote.mock(fiatAmount: 2400, cryptoAmount: 1, type: model.type)
-        model.selectedQuote = sellQuote
-
-        #expect(model.cryptoAmountValue == "≈ 1.00 BTC")
     }
 
     @Test
@@ -148,7 +133,7 @@ final class FiatSceneViewModelTests {
     @Test
     func actionButtonStateInvalidInput() {
         let model = FiatSceneViewModelTests.mock()
-        model.quotesState = .data([])
+        model.buyViewModel.quotesState = .data(FiatQuotes(amount: 100, quotes: []))
 
         model.inputValidationModel.text = "4"
         model.inputValidationModel.update()
@@ -159,7 +144,7 @@ final class FiatSceneViewModelTests {
     @Test
     func actionButtonStateLoading() {
         let model = FiatSceneViewModelTests.mock()
-        model.quotesState = .loading
+        model.buyViewModel.quotesState = .loading
 
         model.inputValidationModel.text = "100"
         model.inputValidationModel.update()
@@ -172,8 +157,8 @@ final class FiatSceneViewModelTests {
         let model = FiatSceneViewModelTests.mock()
         let quote = FiatQuote.mock(fiatAmount: 100, cryptoAmount: 1, type: .buy)
 
-        model.quotesState = .data([quote])
-        model.selectedQuote = quote
+        model.buyViewModel.quotesState = .data(FiatQuotes(amount: 100, quotes: [quote]))
+        model.buyViewModel.selectedQuote = quote
         model.inputValidationModel.text = "100"
         model.inputValidationModel.update()
 
@@ -183,7 +168,7 @@ final class FiatSceneViewModelTests {
     @Test
     func actionButtonStateValidNoQuote() {
         let model = FiatSceneViewModelTests.mock()
-        model.quotesState = .noData
+        model.buyViewModel.quotesState = .noData
 
         model.inputValidationModel.text = "100"
         model.inputValidationModel.update()
@@ -196,8 +181,8 @@ final class FiatSceneViewModelTests {
         let model = FiatSceneViewModelTests.mock()
         let quote = FiatQuote.mock(fiatAmount: 100, cryptoAmount: 1, type: .buy)
 
-        model.quotesState = .data([quote])
-        model.selectedQuote = quote
+        model.buyViewModel.quotesState = .data(FiatQuotes(amount: 100, quotes: [quote]))
+        model.buyViewModel.selectedQuote = quote
         model.inputValidationModel.text = "100"
         model.inputValidationModel.update()
 

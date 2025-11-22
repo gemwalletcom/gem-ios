@@ -202,13 +202,13 @@ extension GemAPIService: GemAPIAssetsListService {
 
     public func getBuyableFiatAssets() async throws -> FiatAssets {
         try await provider
-            .request(.getFiatOnRampAssets)
+            .request(.getFiatAssets(.buy))
             .map(as: FiatAssets.self)
     }
 
     public func getSellableFiatAssets() async throws -> FiatAssets {
         try await provider
-            .request(.getFiatOffRampAssets)
+            .request(.getFiatAssets(.sell))
             .map(as: FiatAssets.self)
     }
     

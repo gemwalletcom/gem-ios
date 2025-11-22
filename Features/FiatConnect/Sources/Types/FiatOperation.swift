@@ -7,8 +7,9 @@ import Validators
 import BigInt
 import Formatters
 
-protocol FiatOperationStrategy: Sendable {
-    var type: FiatQuoteType { get }
+protocol FiatOperation: Sendable {
+    var defaultAmount: Int { get }
+    var emptyAmountTitle: String { get }
 
     func fetch(amount: Double) async throws -> [FiatQuote]
 
