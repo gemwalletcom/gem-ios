@@ -18,6 +18,7 @@ let package = Package(
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "GemAPI", path: "../../Packages/GemAPI"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Localization", path: "../../Packages/Localization"),
@@ -31,11 +32,12 @@ let package = Package(
                 "Primitives",
                 "Formatters",
                 "GemAPI",
+                "Preferences",
                 "Style",
                 "Components",
                 "Localization",
                 "Store",
-                "PrimitivesComponents"
+                "PrimitivesComponents",
             ],
             path: "Sources"
         ),

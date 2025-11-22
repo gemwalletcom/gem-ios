@@ -9,7 +9,8 @@ public protocol GemAPIConfigService: Sendable {
 }
 
 public protocol GemAPIFiatService: Sendable {
-    func getQuotes(asset: Asset, request: FiatQuoteRequest) async throws -> [FiatQuote]
+    func getQuotes(type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote]
+    func getQuoteUrl(request: FiatQuoteUrlRequest) async throws -> FiatQuoteUrl
 }
 
 public protocol GemAPIPricesService: Sendable {
@@ -92,11 +93,17 @@ public struct GemAPIService {
 }
 
 extension GemAPIService: GemAPIFiatService {
-    public func getQuotes(asset: Asset, request: FiatQuoteRequest) async throws -> [FiatQuote] {
-        return try await provider
-            .request(.getFiatQuotes(asset, request))
+    public func getQuotes(type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote] {
+        try await provider
+            .request(.getFiatQuotes(type, assetId, request))
             .map(as: FiatQuotes.self)
             .quotes
+    }
+
+    public func getQuoteUrl(request: FiatQuoteUrlRequest) async throws -> FiatQuoteUrl {
+        try await provider
+            .request(.getFiatQuoteUrl(request))
+            .map(as: FiatQuoteUrl.self)
     }
 }
 
@@ -195,13 +202,13 @@ extension GemAPIService: GemAPIAssetsListService {
 
     public func getBuyableFiatAssets() async throws -> FiatAssets {
         try await provider
-            .request(.getFiatOnRampAssets)
+            .request(.getFiatAssets(.buy))
             .map(as: FiatAssets.self)
     }
 
     public func getSellableFiatAssets() async throws -> FiatAssets {
         try await provider
-            .request(.getFiatOffRampAssets)
+            .request(.getFiatAssets(.sell))
             .map(as: FiatAssets.self)
     }
     
