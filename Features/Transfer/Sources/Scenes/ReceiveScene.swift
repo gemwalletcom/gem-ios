@@ -68,6 +68,7 @@ public struct ReceiveScene: View {
         }
         .padding(.bottom, .scene.bottom)
         .frame(maxWidth: .infinity)
+        .background(Colors.grayBackground)
         .navigationBarTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
