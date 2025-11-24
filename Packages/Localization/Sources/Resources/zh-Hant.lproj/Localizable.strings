@@ -510,3 +510,6 @@
 "asset.verification.verified" = "已驗證";
 "errors.connections.malicious_origin" = "此連線來自不可信來源。";
 "settings.preferences.default_leverage" = "預設槓桿";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

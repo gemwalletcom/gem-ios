@@ -510,3 +510,6 @@
 "asset.verification.verified" = "Проверено";
 "errors.connections.malicious_origin" = "Это соединение получено из ненадежного источника.";
 "settings.preferences.default_leverage" = "Кредитное плечо по умолчанию";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

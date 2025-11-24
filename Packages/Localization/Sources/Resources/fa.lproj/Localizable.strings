@@ -510,3 +510,6 @@
 "asset.verification.verified" = "تأیید شده";
 "errors.connections.malicious_origin" = "این اتصال از یک منبع غیرقابل اعتماد می‌آید.";
 "settings.preferences.default_leverage" = "اهرم پیش‌فرض";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

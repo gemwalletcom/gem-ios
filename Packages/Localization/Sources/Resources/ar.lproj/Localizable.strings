@@ -510,3 +510,6 @@
 "asset.verification.verified" = "تم التحقق";
 "errors.connections.malicious_origin" = "يأتي هذا الاتصال من مصدر غير موثوق.";
 "settings.preferences.default_leverage" = "الرافعة المالية الافتراضية";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

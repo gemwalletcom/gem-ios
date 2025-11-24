@@ -510,3 +510,6 @@
 "asset.verification.verified" = "Imethibitishwa";
 "errors.connections.malicious_origin" = "Muunganisho huu unatoka kwa chanzo kisichoaminika.";
 "settings.preferences.default_leverage" = "Njia Chaguomsingi";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

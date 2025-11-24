@@ -510,3 +510,6 @@
 "asset.verification.verified" = "Doğrulandı";
 "errors.connections.malicious_origin" = "Bu bağlantı güvenilir olmayan bir kaynaktan geliyor.";
 "settings.preferences.default_leverage" = "Varsayılan Kaldıraç";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

@@ -510,3 +510,6 @@
 "asset.verification.verified" = "Terverifikasi";
 "errors.connections.malicious_origin" = "Koneksi ini berasal dari sumber yang tidak tepercaya.";
 "settings.preferences.default_leverage" = "Leverage Default";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

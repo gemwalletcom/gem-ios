@@ -510,3 +510,6 @@
 "asset.verification.verified" = "מְאוּמָת";
 "errors.connections.malicious_origin" = "קשר זה מגיע ממקור לא אמין.";
 "settings.preferences.default_leverage" = "מינוף ברירת מחדל";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

@@ -510,3 +510,6 @@
 "asset.verification.verified" = "Verificat";
 "errors.connections.malicious_origin" = "Această conexiune provine dintr-o sursă nesigură.";
 "settings.preferences.default_leverage" = "Levier implicit";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

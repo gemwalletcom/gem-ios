@@ -510,3 +510,6 @@
 "asset.verification.verified" = "Geverifieerd";
 "errors.connections.malicious_origin" = "Deze verbinding komt van een onbetrouwbare bron.";
 "settings.preferences.default_leverage" = "Standaard hefboomwerking";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

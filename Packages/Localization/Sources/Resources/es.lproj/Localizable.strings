@@ -510,3 +510,6 @@
 "asset.verification.verified" = "Verificado";
 "errors.connections.malicious_origin" = "Esta conexión proviene de una fuente no confiable.";
 "settings.preferences.default_leverage" = "Apalancamiento por defecto";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

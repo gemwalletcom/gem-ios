@@ -510,3 +510,6 @@
 "asset.verification.verified" = "যাচাইকৃত";
 "errors.connections.malicious_origin" = "এই সংযোগটি একটি অবিশ্বস্ত উৎস থেকে আসে।";
 "settings.preferences.default_leverage" = "ডিফল্ট লিভারেজ";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";
