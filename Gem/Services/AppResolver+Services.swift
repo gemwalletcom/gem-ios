@@ -54,6 +54,7 @@ extension AppResolver {
         let deviceObserverService: DeviceObserverService
         let onstartService: OnstartService
         let onstartAsyncService: OnstartAsyncService
+        let onstartWalletService: OnstartWalletService
         let walletConnectorManager: WalletConnectorManager
         let perpetualService: PerpetualService
         let perpetualObserverService: PerpetualObserverService
@@ -88,6 +89,7 @@ extension AppResolver {
             deviceObserverService: DeviceObserverService,
             onstartService: OnstartService,
             onstartAsyncService: OnstartAsyncService,
+            onstartWalletService: OnstartWalletService,
             walletConnectorManager: WalletConnectorManager,
             perpetualService: PerpetualService,
             perpetualObserverService: PerpetualObserverService,
@@ -121,6 +123,7 @@ extension AppResolver {
             self.subscriptionsService = subscriptionsService
             self.onstartService = onstartService
             self.onstartAsyncService = onstartAsyncService
+            self.onstartWalletService = onstartWalletService
             self.walletConnectorManager = walletConnectorManager
             self.perpetualService = perpetualService
             self.perpetualObserverService = perpetualObserverService

@@ -5,22 +5,20 @@
 import Foundation
 
 public struct FiatQuote: Codable, Equatable, Hashable, Sendable {
+	public let id: String
 	public let provider: FiatProvider
 	public let type: FiatQuoteType
 	public let fiatAmount: Double
 	public let fiatCurrency: String
 	public let cryptoAmount: Double
-	public let cryptoValue: String
-	public let redirectUrl: String
 
-	public init(provider: FiatProvider, type: FiatQuoteType, fiatAmount: Double, fiatCurrency: String, cryptoAmount: Double, cryptoValue: String, redirectUrl: String) {
+	public init(id: String, provider: FiatProvider, type: FiatQuoteType, fiatAmount: Double, fiatCurrency: String, cryptoAmount: Double) {
+		self.id = id
 		self.provider = provider
 		self.type = type
 		self.fiatAmount = fiatAmount
 		self.fiatCurrency = fiatCurrency
 		self.cryptoAmount = cryptoAmount
-		self.cryptoValue = cryptoValue
-		self.redirectUrl = redirectUrl
 	}
 }
 
@@ -31,6 +29,26 @@ public struct FiatQuoteError: Codable, Sendable {
 	public init(provider: String?, error: String) {
 		self.provider = provider
 		self.error = error
+	}
+}
+
+public struct FiatQuoteUrl: Codable, Sendable {
+	public let redirectUrl: String
+
+	public init(redirectUrl: String) {
+		self.redirectUrl = redirectUrl
+	}
+}
+
+public struct FiatQuoteUrlRequest: Codable, Sendable {
+	public let quoteId: String
+	public let walletAddress: String
+	public let deviceId: String
+
+	public init(quoteId: String, walletAddress: String, deviceId: String) {
+		self.quoteId = quoteId
+		self.walletAddress = walletAddress
+		self.deviceId = deviceId
 	}
 }
 

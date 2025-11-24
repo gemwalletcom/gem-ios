@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Indhold skjult under skærmoptagelse";
 "asset.verification.verified" = "Bekræftet";
 "errors.connections.malicious_origin" = "Denne forbindelse kommer fra en upålidelig kilde.";
+"settings.preferences.default_leverage" = "Standardgearing";

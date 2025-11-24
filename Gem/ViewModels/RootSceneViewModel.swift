@@ -21,6 +21,7 @@ import NameService
 @MainActor
 final class RootSceneViewModel {
     private let onstartAsyncService: OnstartAsyncService
+    private let onstartWalletService: OnstartWalletService
     private let transactionService: TransactionService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
@@ -53,6 +54,7 @@ final class RootSceneViewModel {
     init(
         walletConnectorPresenter: WalletConnectorPresenter,
         onstartAsyncService: OnstartAsyncService,
+        onstartWalletService: OnstartWalletService,
         transactionService: TransactionService,
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
@@ -64,6 +66,7 @@ final class RootSceneViewModel {
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartAsyncService = onstartAsyncService
+        self.onstartWalletService = onstartWalletService
         self.transactionService = transactionService
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
@@ -162,7 +165,7 @@ extension RootSceneViewModel {
 
 extension RootSceneViewModel {
     private func setup(wallet: Wallet) {
-        onstartAsyncService.setup(wallet: wallet)
+        onstartWalletService.setup(wallet: wallet)
         do {
             try walletsService.setup(wallet: wallet)
         } catch {

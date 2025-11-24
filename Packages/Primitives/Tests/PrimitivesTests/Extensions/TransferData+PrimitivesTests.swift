@@ -53,4 +53,34 @@ struct TransferDataTypeTests {
                 ).canChangeValue == false
         )
     }
+
+    @Test
+    func perpetualOpenTransactionType() {
+        let asset = Asset.mock()
+
+        let openType = TransferDataType.perpetual(asset, .mockOpen())
+        let increaseType = TransferDataType.perpetual(asset, .mockIncrease())
+
+        #expect(openType.transactionType == .perpetualOpenPosition)
+        #expect(increaseType.transactionType == .perpetualOpenPosition)
+    }
+
+    @Test
+    func perpetualCloseTransactionType() {
+        let asset = Asset.mock()
+
+        let closeType = TransferDataType.perpetual(asset, .mockClose())
+        let reduceType = TransferDataType.perpetual(asset, .mockReduce())
+
+        #expect(closeType.transactionType == .perpetualClosePosition)
+        #expect(reduceType.transactionType == .perpetualClosePosition)
+    }
+
+    @Test
+    func perpetualModifyTransactionType() {
+        let asset = Asset.mock()
+        let modifyType = TransferDataType.perpetual(asset, .mockModify())
+
+        #expect(modifyType.transactionType == .perpetualModifyPosition)
+    }
 }

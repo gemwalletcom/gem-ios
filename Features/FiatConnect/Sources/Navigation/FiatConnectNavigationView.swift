@@ -25,10 +25,7 @@ public struct FiatConnectNavigationView: View {
             model.showFiatTypePicker,
             ifContent: {
                 $0.toolbar {
-                    FiatTypeToolbar(
-                        selectedType: $model.input.type,
-                        pickerTitleProvider: model.pickerTitle
-                    )
+                    FiatTypeToolbar(selectedType: $model.type)
                 }
             },
             elseContent: {

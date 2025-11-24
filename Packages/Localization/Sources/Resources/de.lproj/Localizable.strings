@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Inhalte, die während der Bildschirmaufnahme ausgeblendet wurden.";
 "asset.verification.verified" = "Bestätigt";
 "errors.connections.malicious_origin" = "Diese Verbindung stammt aus einer nicht vertrauenswürdigen Quelle.";
+"settings.preferences.default_leverage" = "Standardhebel";

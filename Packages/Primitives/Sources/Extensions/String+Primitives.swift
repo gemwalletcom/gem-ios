@@ -30,6 +30,10 @@ public extension String {
         !isEmpty
     }
     
+    var isEmptyOrZero: Bool {
+        isEmpty || self == .zero
+    }
+    
     var preventingHyphenation: String {
         map { String($0) }.joined(separator: "\u{200B}")
     }

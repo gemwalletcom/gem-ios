@@ -56,7 +56,7 @@ public struct ChartScene: View {
                         )
                     }
                 )
-            } else {
+            } else if model.isPriceAvailable {
                 NavigationCustomLink(
                     with: ListItemView(
                         title: model.priceAlertsViewModel.setPriceAlertTitle

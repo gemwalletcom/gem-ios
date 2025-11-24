@@ -21,9 +21,9 @@ struct FiatQuoteViewModelTests {
 
     @Test
     func testSellAmount() async throws {
-        #expect(FiatQuoteViewModel(asset: .mock(), quote: .mock(type: .sell), formatter: usFormatter).amountText == "$0.00")
-        #expect(FiatQuoteViewModel(asset: .mock(), quote: .mock(fiatAmount: 10.123, cryptoAmount: 15.12, type: .sell), formatter: usFormatter).amountText == "$10.12")
-        #expect(FiatQuoteViewModel(asset: .mock(), quote: .mock(fiatAmount: 10, cryptoAmount: 15, type: .sell), formatter: usFormatter).amountText == "$10.00")
+        #expect(FiatQuoteViewModel(asset: .mock(), quote: .mock(type: .sell), formatter: usFormatter).amountText == "0.00 BTC")
+        #expect(FiatQuoteViewModel(asset: .mock(), quote: .mock(fiatAmount: 10.123, cryptoAmount: 15.12, type: .sell), formatter: usFormatter).amountText == "15.12 BTC")
+        #expect(FiatQuoteViewModel(asset: .mock(), quote: .mock(fiatAmount: 10, cryptoAmount: 15, type: .sell), formatter: usFormatter).amountText == "15.00 BTC")
     }
 
     @Test

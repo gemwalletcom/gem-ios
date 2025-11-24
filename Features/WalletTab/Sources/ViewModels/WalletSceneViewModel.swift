@@ -74,7 +74,6 @@ public final class WalletSceneViewModel: Sendable {
             assetId: .none,
             chain: .none,
             events: [
-                .enableNotifications,
                 .accountBlockedMultiSignature,
                 .onboarding
             ]

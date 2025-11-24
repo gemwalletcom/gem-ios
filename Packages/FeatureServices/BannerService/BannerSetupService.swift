@@ -21,13 +21,6 @@ public struct BannerSetupService: Sendable {
     public func setup() throws {
         try setupStake()
         try setupHypercorePerpetuals()
-
-        // Enable push notifications
-        if !preferences.isPushNotificationsEnabled && preferences.launchesCount > 2 {
-            try store.addBanners([
-                NewBanner(event: .enableNotifications, state: .active)
-            ])
-        }
     }
 
     public func setupWallet(wallet: Wallet) throws  {

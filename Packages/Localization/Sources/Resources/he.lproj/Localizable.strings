@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "תוכן מוסתר במהלך הקלטת מסך";
 "asset.verification.verified" = "מְאוּמָת";
 "errors.connections.malicious_origin" = "קשר זה מגיע ממקור לא אמין.";
+"settings.preferences.default_leverage" = "מינוף ברירת מחדל";

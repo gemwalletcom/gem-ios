@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "屏幕录制过程中隐藏的内容";
 "asset.verification.verified" = "已验证";
 "errors.connections.malicious_origin" = "此连接来自不可信来源。";
+"settings.preferences.default_leverage" = "默认杠杆";

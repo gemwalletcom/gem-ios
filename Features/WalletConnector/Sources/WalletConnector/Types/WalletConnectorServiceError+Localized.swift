@@ -17,8 +17,7 @@ extension WalletConnectorServiceError: @retroactive LocalizedError {
             Localized.Errors.Connections.invalidSignParameters
         case .wrongSendParameters:
             Localized.Errors.Connections.invalidSendParameters
-        case .invalidOrigin,
-            .maliciousOrigin:
+        case .invalidOrigin:
             Localized.Errors.Connections.maliciousOrigin
         }
     }

@@ -509,3 +509,4 @@
 "secret_phrase.content_hidden.description" = "Conținut ascuns în timpul înregistrării ecranului";
 "asset.verification.verified" = "Verificat";
 "errors.connections.malicious_origin" = "Această conexiune provine dintr-o sursă nesigură.";
+"settings.preferences.default_leverage" = "Levier implicit";

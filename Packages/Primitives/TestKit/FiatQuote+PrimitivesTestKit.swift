@@ -5,19 +5,19 @@ import Primitives
 
 extension FiatQuote {
     public static func mock(
+        id: String = UUID().uuidString,
         fiatAmount: Double = 0,
         cryptoAmount: Double = 0,
         type: FiatQuoteType = .buy,
         fiatCurrency: String = Currency.usd.rawValue
     ) -> FiatQuote {
         FiatQuote(
+            id: id,
             provider: FiatProvider(id: UUID().uuidString, name: "", imageUrl: ""),
             type: type,
             fiatAmount: fiatAmount,
             fiatCurrency: fiatCurrency,
-            cryptoAmount: cryptoAmount,
-            cryptoValue: .zero,
-            redirectUrl: ""
+            cryptoAmount: cryptoAmount
         )
     }
 }
