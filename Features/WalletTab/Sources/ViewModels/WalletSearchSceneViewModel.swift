@@ -19,6 +19,7 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     private let wallet: Wallet
     private let onDismissSearch: VoidAction
+    private let onAddToken: VoidAction
 
     private var state: StateViewType<[AssetBasic]> = .noData
 
@@ -34,12 +35,14 @@ public final class WalletSearchSceneViewModel: Sendable {
         wallet: Wallet,
         searchService: AssetSearchService,
         preferences: Preferences = .standard,
-        onDismissSearch: VoidAction
+        onDismissSearch: VoidAction,
+        onAddToken: VoidAction
     ) {
         self.wallet = wallet
         self.searchService = searchService
         self.preferences = preferences
         self.onDismissSearch = onDismissSearch
+        self.onAddToken = onAddToken
         self.searchModel = AssetSearchViewModel(selectType: .manage)
         self.request = AssetsRequest(
             walletId: wallet.id,
@@ -80,6 +83,14 @@ public final class WalletSearchSceneViewModel: Sendable {
         preferences.currency
     }
 
+    var showAddToken: Bool {
+        wallet.hasTokenSupport
+    }
+}
+
+// MARK: - Actions
+
+extension WalletSearchSceneViewModel {
     func onAppear() {
         dismissSearch = false
         isSearchPresented = true
@@ -124,6 +135,10 @@ public final class WalletSearchSceneViewModel: Sendable {
         guard !isPresented else { return }
         dismissSearch = true
         onDismissSearch?()
+    }
+
+    func onSelectAddCustomToken() {
+        onAddToken?()
     }
 }
 

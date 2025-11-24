@@ -52,7 +52,8 @@ struct WalletNavigationStack: View {
                         model: WalletSearchSceneViewModel(
                             wallet: model.wallet,
                             searchService: AssetSearchService(assetsService: assetsService),
-                            onDismissSearch: model.onToggleSearch
+                            onDismissSearch: model.onToggleSearch,
+                            onAddToken: model.onSelectAddCustomToken
                         )
                     )
                     .transition(.opacity)
@@ -191,6 +192,12 @@ struct WalletNavigationStack: View {
                         assetId: assetId,
                         priceAlertService: priceAlertService
                     ) { model.onSetPriceAlertComplete(message: $0) }
+                )
+            }
+            .sheet(isPresented: $model.isPresentingAddToken) {
+                AddTokenNavigationStack(
+                    wallet: model.wallet,
+                    isPresenting: $model.isPresentingAddToken
                 )
             }
             .safariSheet(url: $model.isPresentingUrl)
