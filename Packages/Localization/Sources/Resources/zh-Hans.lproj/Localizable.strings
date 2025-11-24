@@ -510,3 +510,5 @@
 "asset.verification.verified" = "已验证";
 "errors.connections.malicious_origin" = "此连接来自不可信来源。";
 "settings.preferences.default_leverage" = "默认杠杆";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";

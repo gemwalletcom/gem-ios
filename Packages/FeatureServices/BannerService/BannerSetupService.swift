@@ -59,7 +59,8 @@ public struct BannerSetupService: Sendable {
 
     private func setupHypercorePerpetuals() throws {
         try store.addBanners([
-            NewBanner.tradePerpetuals(assetId: Chain.hyperCore.assetId)
+            NewBanner.tradePerpetuals(assetId: Chain.hyperCore.assetId),
+            NewBanner.tradePerpetuals(assetId: Chain.hyperliquid.assetId)
         ])
     }
 }

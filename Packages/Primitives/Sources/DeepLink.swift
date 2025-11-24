@@ -3,11 +3,12 @@
 import Foundation
 
 public enum DeepLink: Sendable {
-    
+
     static let host = "gemwallet.com"
-    
+
     case asset(AssetId)
     case swap(AssetId, AssetId?)
+    case perpetuals
 
     public var path: String {
         switch self {
@@ -21,14 +22,15 @@ public enum DeepLink: Sendable {
             case .some(let id): "/swap/\(fromAssetId.identifier)/\(id.identifier)"
             case .none: "/swap/\(fromAssetId.identifier)"
             }
+        case .perpetuals: "/perpetuals"
         }
     }
     
     public var url: URL {
-        return URL(string: "https://\(Self.host)\(path)")!
+        URL(string: "https://\(Self.host)\(path)")!
     }
     
     public var localUrl: URL {
-        return URL(string: "gem://\(path)")!
+        URL(string: "gem://\(path)")!
     }
 }

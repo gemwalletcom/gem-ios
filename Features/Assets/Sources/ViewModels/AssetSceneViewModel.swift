@@ -2,6 +2,7 @@
 
 import Primitives
 import SwiftUI
+import UIKit
 import Components
 import Style
 import Localization
@@ -31,7 +32,6 @@ public final class AssetSceneViewModel: Sendable {
     public let priceAlertService: PriceAlertService
 
     private var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
-    private let navigate: NavigationAction
 
     public var isPresentingToastMessage: ToastMessage?
     public var isPresentingAssetSheet: AssetSheetType?
@@ -51,8 +51,7 @@ public final class AssetSceneViewModel: Sendable {
         priceAlertService: PriceAlertService,
         bannerService: BannerService,
         input: AssetSceneInput,
-        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>,
-        navigate: NavigationAction
+        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.walletsService = walletsService
         self.assetsService = assetsService
@@ -64,7 +63,6 @@ public final class AssetSceneViewModel: Sendable {
         self.input = input
         self.assetData = AssetData.with(asset: input.asset)
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
-        self.navigate = navigate
     }
 
     public var title: String { assetModel.name }
@@ -256,7 +254,7 @@ extension AssetSceneViewModel {
                 }
             case .suspiciousAsset: break
             case .tradePerpetuals:
-                navigate?(Scenes.Perpetuals())
+                UIApplication.shared.open(DeepLink.perpetuals.localUrl)
                 preferences.isPerpetualEnabled = true
             }
         case .button(let bannerButton):

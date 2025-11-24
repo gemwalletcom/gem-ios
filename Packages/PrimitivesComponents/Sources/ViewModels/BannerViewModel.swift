@@ -59,8 +59,7 @@ struct BannerViewModel {
         case .suspiciousAsset:
             return Localized.Banner.AssetStatus.title
         case .onboarding: return Localized.Banner.Onboarding.title
-        case .tradePerpetuals:
-            return "Trade Perpetuals on Hyperliquid"
+        case .tradePerpetuals: return Localized.Banner.Perpetuals.title
         }
     }
 
@@ -90,7 +89,7 @@ struct BannerViewModel {
         case .suspiciousAsset:
             return Localized.Banner.AssetStatus.description
         case .onboarding: return Localized.Banner.Onboarding.description
-        case .tradePerpetuals: return "Deposit, trade, and earn with Hyperliquid perpetuals"
+        case .tradePerpetuals: return Localized.Banner.Perpetuals.description
         }
     }
 

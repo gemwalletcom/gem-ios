@@ -7,4 +7,3 @@ public typealias StringAction = ((String) -> Void)?
 public typealias AssetAction = ((Asset) -> Void)?
 public typealias AssetIdAction = ((AssetId) -> Void)?
 public typealias AssetBoolAction = ((Asset, Bool) -> Void)?
-public typealias NavigationAction = ((any Hashable) -> Void)?

@@ -42,6 +42,8 @@ public enum URLParser {
                 let fromId = try AssetId(id: urlComponents[1])
                 let toId: AssetId? = (urlComponents.count >= 3) ? try AssetId(id: urlComponents[2]) : nil
                 return .swap(fromId, toId)
+            case "perpetuals":
+                return .perpetuals
             default:
                 throw URLParserError.invalidURL(url)
             }

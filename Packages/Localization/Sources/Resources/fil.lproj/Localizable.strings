@@ -510,3 +510,5 @@
 "asset.verification.verified" = "Na-verify";
 "errors.connections.malicious_origin" = "Ang koneksyon na ito ay nagmula sa isang hindi pinagkakatiwalaang pinagmulan.";
 "settings.preferences.default_leverage" = "Default na Leverage";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";

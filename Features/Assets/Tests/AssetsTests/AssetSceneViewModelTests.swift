@@ -48,8 +48,7 @@ extension AssetSceneViewModel {
                 wallet: .mock(),
                 asset: assetData.asset
             ),
-            isPresentingSelectedAssetInput: .constant(.none),
-            navigate: nil
+            isPresentingSelectedAssetInput: .constant(.none)
         )
         viewModel.assetData = assetData
         viewModel.banners = banners
