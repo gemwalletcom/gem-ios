@@ -1,4 +1,3 @@
-
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
@@ -38,6 +37,7 @@ public struct WalletSearchScene: View {
             }
         }
         .observeQuery(request: $model.request, value: $model.assets)
+        .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
         .searchable(
             text: $model.searchModel.searchableQuery,
             isPresented: $model.isSearchPresented,
@@ -60,6 +60,19 @@ public struct WalletSearchScene: View {
     @ViewBuilder
     private var assetsList: some View {
         List {
+            if model.showRecentSearches {
+                Section(
+                    content: { collection(for: model.recentActivities) },
+                    header: {
+                        HStack {
+                            Text(model.recentSearchesTitle)
+                            Spacer()
+                        }
+                    }
+                )
+                .cleanListRow(topOffset: 0)
+            }
+
             if model.showTags {
                 Section {
                     TagsView(
@@ -98,18 +111,42 @@ public struct WalletSearchScene: View {
     }
 
     @ViewBuilder
+    private func collection(for items: [AssetData]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: Spacing.small) {
+                ForEach(items) { asset in
+                    let assetModel = AssetViewModel(asset: asset.asset)
+                    NavigationLink(value: Scenes.Asset(asset: asset.asset)) {
+                        ListItemView(
+                            title: assetModel.symbol,
+                            titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
+                            imageStyle: .list(assetImage: assetModel.assetImage)
+                        )
+                        .padding(Spacing.small)
+                        .background(
+                            Colors.listStyleColor,
+                            in: RoundedRectangle(cornerRadius: .large)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
     private func list(for items: [AssetData]) -> some View {
-        ForEach(items) { asset in
-            NavigationLink(value: Scenes.Asset(asset: asset.asset)) {
-                ListAssetItemView(
+        ForEach(items) { assetData in
+            NavigationCustomLink(
+                with: ListAssetItemView(
                     model: ListAssetItemViewModel(
                         showBalancePrivacy: .constant(false),
-                        assetData: asset,
+                        assetData: assetData,
                         formatter: .abbreviated,
                         currencyCode: model.currencyCode
                     )
-                )
-            }
+                ),
+                action: { model.onSelectAsset(assetData.asset) }
+            )
         }
     }
 }

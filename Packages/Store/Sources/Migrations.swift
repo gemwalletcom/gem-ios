@@ -331,6 +331,10 @@ public struct Migrations {
             }
         }
 
+        migrator.registerMigration("Create \(RecentActivityRecord.databaseTableName)") { db in
+            try? RecentActivityRecord.create(db: db)
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

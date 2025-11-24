@@ -30,6 +30,7 @@ import NameService
 import PerpetualService
 import TransactionService
 import AddressNameService
+import RecentActivityService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
@@ -61,5 +62,6 @@ extension EnvironmentValues {
     @Entry var transactionService: TransactionService = AppResolver.main.services.transactionService
     @Entry var nameService: NameService = AppResolver.main.services.nameService
     @Entry var addressNameService: AddressNameService = AppResolver.main.services.addressNameService
+    @Entry var recentActivityService: RecentActivityService = AppResolver.main.services.recentActivityService
     @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
 }

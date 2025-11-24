@@ -44,6 +44,7 @@ let package = Package(
         .library(name: "AddressNameService", targets: ["AddressNameService"]),
         .library(name: "AddressNameServiceTestKit", targets: ["AddressNameServiceTestKit"]),
         .library(name: "NativeProviderService", targets: ["NativeProviderService"]),
+        .library(name: "RecentActivityService", targets: ["RecentActivityService"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -455,6 +456,14 @@ let package = Package(
             ],
             path: "NativeProviderService",
             exclude: ["Tests", "TestKit"]
+        ),
+        .target(
+            name: "RecentActivityService",
+            dependencies: [
+                "Primitives",
+                "Store"
+            ],
+            path: "RecentActivityService"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",

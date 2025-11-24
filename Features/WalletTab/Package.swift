@@ -48,6 +48,7 @@ let package = Package(
                 .product(name: "WalletsService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
+                .product(name: "RecentActivityService", package: "FeatureServices"),
                 "Perpetuals"
             ],
             path: "Sources"

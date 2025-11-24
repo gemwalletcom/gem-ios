@@ -27,6 +27,7 @@ struct WalletNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.balanceService) private var balanceService
+    @Environment(\.recentActivityService) private var recentActivityService
 
     @State private var model: WalletSceneViewModel
 
@@ -52,7 +53,9 @@ struct WalletNavigationStack: View {
                         model: WalletSearchSceneViewModel(
                             wallet: model.wallet,
                             searchService: AssetSearchService(assetsService: assetsService),
-                            onDismissSearch: model.onToggleSearch
+                            recentActivityService: recentActivityService,
+                            onDismissSearch: model.onToggleSearch,
+                            onSelectAssetAction: { navigationState.wallet.append(Scenes.Asset(asset: $0)) }
                         )
                     )
                     .transition(.opacity)

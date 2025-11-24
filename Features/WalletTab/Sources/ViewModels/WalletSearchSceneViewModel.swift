@@ -10,11 +10,13 @@ import Components
 import Preferences
 import Style
 import Localization
+import RecentActivityService
 
 @Observable
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
     private let searchService: AssetSearchService
+    private let recentActivityService: RecentActivityService
     private let preferences: Preferences
 
     private let wallet: Wallet
@@ -23,27 +25,40 @@ public final class WalletSearchSceneViewModel: Sendable {
     private var state: StateViewType<[AssetBasic]> = .noData
 
     var assets: [AssetData] = []
+    var recentActivities: [AssetData] = []
     var searchModel: AssetSearchViewModel
     var request: AssetsRequest
+    var recentActivityRequest: RecentActivityRequest
 
     var isSearching: Bool = false
     var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
 
+    public let onSelectAssetAction: AssetAction
+
     public init(
         wallet: Wallet,
         searchService: AssetSearchService,
+        recentActivityService: RecentActivityService,
         preferences: Preferences = .standard,
-        onDismissSearch: VoidAction
+        onDismissSearch: VoidAction,
+        onSelectAssetAction: AssetAction
     ) {
         self.wallet = wallet
         self.searchService = searchService
+        self.recentActivityService = recentActivityService
         self.preferences = preferences
         self.onDismissSearch = onDismissSearch
+        self.onSelectAssetAction = onSelectAssetAction
         self.searchModel = AssetSearchViewModel(selectType: .manage)
         self.request = AssetsRequest(
             walletId: wallet.id,
             filters: []
+        )
+        self.recentActivityRequest = RecentActivityRequest(
+            walletId: wallet.id,
+            types: [.search],
+            limit: 10
         )
     }
 
@@ -58,6 +73,14 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var showTags: Bool {
         searchModel.searchableQuery.isEmpty
+    }
+
+    var showRecentSearches: Bool {
+        searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
+    }
+
+    var recentSearchesTitle: String {
+        "Recent"
     }
 
     var showLoading: Bool {
@@ -124,6 +147,15 @@ public final class WalletSearchSceneViewModel: Sendable {
         guard !isPresented else { return }
         dismissSearch = true
         onDismissSearch?()
+    }
+
+    func onSelectAsset(_ asset: Asset) {
+        try? recentActivityService.track(
+            type: .search,
+            assetId: asset.id,
+            walletId: wallet.walletId
+        )
+        onSelectAssetAction?(asset)
     }
 }
 
