@@ -46,7 +46,7 @@ extension RecentActivityRecord: CreateTable {
                 .notNull()
             $0.column(Columns.timestamp.name, .datetime)
                 .notNull()
-            $0.primaryKey([Columns.assetId.name, Columns.walletId.name, Columns.type.name])
+                .indexed()
         }
     }
 }

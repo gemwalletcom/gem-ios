@@ -60,18 +60,6 @@ public struct WalletSearchScene: View {
     @ViewBuilder
     private var assetsList: some View {
         List {
-            if model.showRecentSearches {
-                Section(
-                    content: { collection(for: model.recentActivities) },
-                    header: {
-                        HStack {
-                            Text(model.recentSearchesTitle)
-                            Spacer()
-                        }
-                    }
-                )
-                .cleanListRow(topOffset: 0)
-            }
 
             if model.showTags {
                 Section {
@@ -83,6 +71,20 @@ public struct WalletSearchScene: View {
                 .cleanListRow(topOffset: 0)
                 .lineSpacing(.zero)
                 .listSectionSpacing(.zero)
+            }
+
+            if model.showRecentSearches {
+                Section(
+                    content: { collection(for: model.recentActivities) },
+                    header: {
+                        HStack {
+                            Text(model.recentSearchesTitle)
+                                .padding(.leading, .space12)
+                            Spacer()
+                        }
+                    }
+                )
+                .cleanListRow(topOffset: 0)
             }
 
             if model.showPinnedSection {
@@ -97,6 +99,7 @@ public struct WalletSearchScene: View {
                 )
                 .listRowInsets(.assetListRowInsets)
             }
+
             if model.showAssetsSection {
                 Section(
                     content: { list(for: model.sections.assets) },
@@ -120,7 +123,7 @@ public struct WalletSearchScene: View {
                         ListItemView(
                             title: assetModel.symbol,
                             titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
-                            imageStyle: .list(assetImage: assetModel.assetImage)
+                            imageStyle: .list(assetImage: assetModel.assetImage, cornerRadiusType: .rounded)
                         )
                         .padding(Spacing.small)
                         .background(

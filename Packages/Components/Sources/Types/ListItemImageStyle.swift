@@ -47,11 +47,11 @@ public extension ListItemImageStyle {
         )
     }
     
-    static func list(assetImage: AssetImage?) -> Self? {
+    static func list(assetImage: AssetImage?, cornerRadiusType: CornerRadiusType = .none) -> Self? {
         ListItemImageStyle(
             assetImage: assetImage,
             imageSize: .list.image,
-            cornerRadiusType: .none
+            cornerRadiusType: cornerRadiusType
         )
     }
     

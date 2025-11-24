@@ -25,26 +25,29 @@ public struct RecentActivityRequest: ValueObservationQueryable {
 
     public func fetch(_ db: Database) throws -> [AssetData] {
         let activities = try RecentActivityRecord
+            .select([RecentActivityRecord.Columns.assetId, max(RecentActivityRecord.Columns.timestamp)])
             .filter(RecentActivityRecord.Columns.walletId == walletId)
             .filter(types.map { $0.rawValue }.contains(RecentActivityRecord.Columns.type))
-            .order(RecentActivityRecord.Columns.timestamp.desc)
+            .group(RecentActivityRecord.Columns.assetId)
+            .order(max(RecentActivityRecord.Columns.timestamp).desc)
             .limit(limit)
+            .asRequest(of: Row.self)
             .fetchAll(db)
 
-        let assetIds = activities.map { $0.assetId.identifier }
+        let assetIds = activities.compactMap { $0[RecentActivityRecord.Columns.assetId.name] as String? }
         guard !assetIds.isEmpty else { return [] }
 
         let assetRecords = try AssetRecord
+            .filter(assetIds.contains(AssetRecord.Columns.id))
             .including(optional: AssetRecord.account)
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.price)
             .joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId))
-            .filter(assetIds.contains(AssetRecord.Columns.id))
             .filter(TableAlias(name: AccountRecord.databaseTableName)[AccountRecord.Columns.walletId] == walletId)
             .asRequest(of: AssetRecordInfo.self)
             .fetchAll(db)
 
         let assetMap = Dictionary(uniqueKeysWithValues: assetRecords.map { ($0.asset.id, $0.assetData) })
-        return activities.compactMap { assetMap[$0.assetId.identifier] }
+        return assetIds.compactMap { assetMap[$0] }
     }
 }

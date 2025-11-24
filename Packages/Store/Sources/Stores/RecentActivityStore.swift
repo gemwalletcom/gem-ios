@@ -22,7 +22,7 @@ public struct RecentActivityStore: Sendable {
                 walletId: walletId.id,
                 type: type,
                 timestamp: Date()
-            ).upsert(db)
+            ).insert(db)
         }
     }
 }
