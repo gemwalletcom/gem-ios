@@ -57,10 +57,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         do {
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
             let supportDirectory = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
-            
+            let libraryDirectory = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
+
             try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: documentsDirectory))
             try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: supportDirectory))
-            
+            try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: libraryDirectory).appending(path: "Preferences"))
+
             #if DEBUG
             debugLog("documentsDirectory \(documentsDirectory)")
             debugLog("supportDirectory \(supportDirectory)")
