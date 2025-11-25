@@ -17,6 +17,7 @@ import NodeServiceTestKit
 import Localization
 import AddressNameService
 import AddressNameServiceTestKit
+import RecentActivityServiceTestKit
 import Store
 import BigInt
 import Components
@@ -340,6 +341,7 @@ private extension ConfirmTransferSceneViewModel {
                 priceService: .mock(),
                 transactionService: .mock(),
                 addressNameService: addressNameService,
+                recentActivityService: .mock(),
                 chain: data.chain
             ),
             onComplete: {}
