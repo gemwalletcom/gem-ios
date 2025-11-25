@@ -121,6 +121,8 @@ extension RootSceneViewModel {
                 notificationHandler.notify(notification: PushNotification.asset(assetId))
             case let .swap(fromAssetId, toAssetId):
                 notificationHandler.notify(notification: PushNotification.swapAsset(fromAssetId, toAssetId))
+            case .perpetuals:
+                notificationHandler.notify(notification: PushNotification.perpetuals)
             }
         } catch {
             debugLog("RootSceneViewModel handleUrl error: \(error)")

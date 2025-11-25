@@ -121,6 +121,10 @@ public enum Images {
         public static let perpetuals = Image(.settingsPerps)
     }
 
+    public enum Perpetuals {
+        public static let perpetuals = Image(.roundedPerps)
+    }
+
     public enum Social {
         public static let github = Image(.github)
         public static let telegram = Image(.telegram)

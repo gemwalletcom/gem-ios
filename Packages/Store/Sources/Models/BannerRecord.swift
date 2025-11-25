@@ -120,34 +120,42 @@ public struct NewBanner {
 
 extension NewBanner {
     public static func stake(assetId: AssetId) -> NewBanner {
-        return NewBanner(
+        NewBanner(
             assetId: assetId,
             event: .stake,
             state: .active
         )
     }
-    
+
     public static func accountActivation(assetId: AssetId) -> NewBanner {
-        return NewBanner(
+        NewBanner(
             assetId: assetId,
             event: .accountActivation,
             state: .active
         )
     }
-    
+
     public static func accountBlockedMultiSignature(walletId: WalletId, chain: Chain) -> NewBanner {
-        return NewBanner(
+        NewBanner(
             walletId: walletId.id,
             chain: chain,
             event: .accountBlockedMultiSignature,
             state: .alwaysActive
         )
     }
-    
+
     public static func onboarding(walletId: WalletId) -> NewBanner {
         NewBanner(
             walletId: walletId.id,
             event: .onboarding,
+            state: .active
+        )
+    }
+
+    public static func tradePerpetuals(assetId: AssetId) -> NewBanner {
+        NewBanner(
+            assetId: assetId,
+            event: .tradePerpetuals,
             state: .active
         )
     }

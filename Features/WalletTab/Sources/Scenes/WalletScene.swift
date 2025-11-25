@@ -31,7 +31,7 @@ public struct WalletScene: View {
             }
             .cleanListRow()
 
-            if preferences.isPerpetualEnabled && model.wallet.isMultiCoins {
+            if model.showPerpetuals {
                 Section {
                     PerpetualsPreviewView(wallet: model.wallet)
                 } header: {
