@@ -510,3 +510,5 @@
 "asset.verification.verified" = "Bekræftet";
 "errors.connections.malicious_origin" = "Denne forbindelse kommer fra en upålidelig kilde.";
 "settings.preferences.default_leverage" = "Standardgearing";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";

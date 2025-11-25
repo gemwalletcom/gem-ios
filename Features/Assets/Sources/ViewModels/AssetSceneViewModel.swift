@@ -2,6 +2,7 @@
 
 import Primitives
 import SwiftUI
+import UIKit
 import Components
 import Style
 import Localization
@@ -252,6 +253,9 @@ extension AssetSceneViewModel {
                     try await bannerService.handleAction(action)
                 }
             case .suspiciousAsset: break
+            case .tradePerpetuals:
+                UIApplication.shared.open(DeepLink.perpetuals.localUrl)
+                preferences.isPerpetualEnabled = true
             }
         case .button(let bannerButton):
             switch bannerButton {

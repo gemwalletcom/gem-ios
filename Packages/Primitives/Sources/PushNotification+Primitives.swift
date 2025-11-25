@@ -8,6 +8,7 @@ public enum PushNotification: Equatable, Sendable {
     case priceAlert(AssetId)
     case buyAsset(AssetId)
     case swapAsset(AssetId, AssetId?)
+    case perpetuals
     case test
     case support
     case unknown

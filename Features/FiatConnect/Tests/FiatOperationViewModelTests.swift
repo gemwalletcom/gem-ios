@@ -144,4 +144,33 @@ final class FiatOperationViewModelTests {
 
         #expect(model.quotesState.isNoData == true)
     }
+
+    @Test
+    func fetchSetsNoDataWhenValidationFails() {
+        let model = FiatOperationViewModelTests.mock(operation: MockFiatOperationWithValidator())
+        model.inputValidationModel.text = "20000"
+        model.quotesState = .loading
+
+        model.fetch()
+
+        #expect(model.quotesState.isNoData == true)
+    }
+
+    private struct MockFiatOperationWithValidator: FiatOperation {
+        var defaultAmount: Int = 50
+        var emptyAmountTitle: String = "Mock Title"
+
+        func fetch(amount: Double) async throws -> [FiatQuote] {
+            []
+        }
+
+        func validators(availableBalance: BigInt, selectedQuote: FiatQuote?) -> [any TextValidator] {
+            let rangeValidator = FiatRangeValidator(
+                range: BigInt(25)...BigInt(10000),
+                minimumValueText: "$25",
+                maximumValueText: "$10,000"
+            )
+            return [.assetAmount(decimals: 0, validators: [rangeValidator])]
+        }
+    }
 }

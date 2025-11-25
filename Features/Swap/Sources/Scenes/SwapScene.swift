@@ -167,6 +167,7 @@ extension SwapScene {
                     buttonView
                 } else if focusedField == .from {
                     PercentageAccessoryView(
+                        percents: SwapSceneViewModel.inputPercents,
                         onSelectPercent: model.onSelectPercent,
                         onDone: { focusedField = nil }
                     )

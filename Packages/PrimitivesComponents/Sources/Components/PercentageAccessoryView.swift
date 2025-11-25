@@ -6,19 +6,20 @@ import Style
 import Localization
 
 public struct PercentageAccessoryView: View {
-    
-    let percents = [25, 50, 100]
-    
+
+    public let percents: [Int]
     public let onSelectPercent: (Int) -> Void
-        public let onDone: () -> Void
-        
-        public init(
-            onSelectPercent: @escaping (Int) -> Void,
-            onDone: @escaping () -> Void
-        ) {
-            self.onSelectPercent = onSelectPercent
-            self.onDone = onDone
-        }
+    public let onDone: () -> Void
+
+    public init(
+        percents: [Int],
+        onSelectPercent: @escaping (Int) -> Void,
+        onDone: @escaping () -> Void
+    ) {
+        self.percents = percents
+        self.onSelectPercent = onSelectPercent
+        self.onDone = onDone
+    }
     
     public var body: some View {
         HStack {

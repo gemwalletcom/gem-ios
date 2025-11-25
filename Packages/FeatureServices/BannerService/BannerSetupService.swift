@@ -17,13 +17,10 @@ public struct BannerSetupService: Sendable {
         self.store = store
         self.preferences = preferences
     }
-
+    
     public func setup() throws {
-        let stakeChains = StakeChain.allCases
-
-        try store.addBanners(stakeChains.map {
-            NewBanner.stake(assetId: $0.chain.assetId)
-        })
+        try setupStake()
+        try setupHypercorePerpetuals()
     }
 
     public func setupWallet(wallet: Wallet) throws  {
@@ -39,6 +36,12 @@ public struct BannerSetupService: Sendable {
     
     // MARK: - Private methods
     
+    private func setupStake() throws {
+        try store.addBanners(StakeChain.allCases.map {
+            NewBanner.stake(assetId: $0.chain.assetId)
+        })
+    }
+
     private func setupAccountActivation() throws {
         let chains: [Chain] = [.xrp, .stellar, .algorand]
         let banners = chains.map {
@@ -46,11 +49,18 @@ public struct BannerSetupService: Sendable {
         }
         try store.addBanners(banners)
     }
-    
+
     private func setupOnboarding(wallet: Wallet) throws {
         switch wallet.source {
         case .create: try store.addBanners([NewBanner.onboarding(walletId: wallet.walletId)])
         case .import: break
         }
+    }
+
+    private func setupHypercorePerpetuals() throws {
+        try store.addBanners([
+            NewBanner.tradePerpetuals(assetId: Chain.hyperCore.assetId),
+            NewBanner.tradePerpetuals(assetId: Chain.hyperliquid.assetId)
+        ])
     }
 }
