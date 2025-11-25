@@ -71,6 +71,7 @@ public struct AutocloseScene: View {
 
                 if focusedField != nil {
                     PercentageAccessoryView(
+                        percents: model.takeProfitModel.percents,
                         onSelectPercent: model.onSelectPercent,
                         onDone: model.onDone
                     )
