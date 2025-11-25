@@ -24,7 +24,7 @@ generate() {
     rm -rf ${PACKAGES_DIR}
     cp -Rf target/spm ${PACKAGES_DIR}
 
-    popd /dev/null
+    popd > /dev/null
 }
 
 generate
