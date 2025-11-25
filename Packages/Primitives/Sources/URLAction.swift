@@ -8,4 +8,5 @@ public enum URLAction: Equatable {
     case walletConnectSession(String)
     case asset(AssetId)
     case swap(AssetId, AssetId?)
+    case perpetuals
 }

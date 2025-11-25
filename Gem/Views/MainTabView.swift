@@ -225,6 +225,8 @@ extension MainTabView {
                     )
                 )
                 return
+            case .perpetuals:
+                navigationState.wallet.append(Scenes.Perpetuals())
             case .support:
                 isPresentingSupport = true
             case .test, .unknown:
@@ -297,7 +299,7 @@ extension MainTabView {
 extension PushNotification {
     var selectTab: TabItem? {
         switch self {
-        case .transaction, .asset, .priceAlert, .buyAsset, .swapAsset: .wallet
+        case .transaction, .asset, .priceAlert, .buyAsset, .swapAsset, .perpetuals: .wallet
         case .support: .settings
         case .test, .unknown: nil
         }

@@ -510,3 +510,5 @@
 "asset.verification.verified" = "検証済み";
 "errors.connections.malicious_origin" = "この接続は信頼できないソースからのものです。";
 "settings.preferences.default_leverage" = "デフォルトレバレッジ";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";

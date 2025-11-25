@@ -510,3 +510,5 @@
 "asset.verification.verified" = "Ověřeno";
 "errors.connections.malicious_origin" = "Toto spojení pochází z nedůvěryhodného zdroje.";
 "settings.preferences.default_leverage" = "Výchozí pákový efekt";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";

@@ -36,6 +36,8 @@ struct BannerViewModel {
             return AssetImage.image(Images.TokenStatus.risk)
         case .onboarding:
             return AssetImage.image(Images.System.bitcoin)
+        case .tradePerpetuals:
+            return AssetImage.image(Images.Perpetuals.perpetuals)
         }
     }
 
@@ -48,7 +50,7 @@ struct BannerViewModel {
             return Localized.Banner.Stake.title(asset.name)
         case .accountActivation:
             return Localized.Banner.AccountActivation.title
-        case .enableNotifications: 
+        case .enableNotifications:
             return Localized.Banner.EnableNotifications.title
         case .accountBlockedMultiSignature:
             return Localized.Common.warning
@@ -57,6 +59,7 @@ struct BannerViewModel {
         case .suspiciousAsset:
             return Localized.Banner.AssetStatus.title
         case .onboarding: return Localized.Banner.Onboarding.title
+        case .tradePerpetuals: return Localized.Banner.Perpetuals.title
         }
     }
 
@@ -74,7 +77,7 @@ struct BannerViewModel {
             let amount = ValueFormatter(style: .full)
                 .string(fee.asInt.asBigInt, decimals: asset.decimals.asInt, currency: asset.symbol)
             return Localized.Banner.AccountActivation.description(asset.name, amount)
-        case .enableNotifications: 
+        case .enableNotifications:
             return Localized.Banner.EnableNotifications.description
         case .accountBlockedMultiSignature:
             return Localized.Warnings.multiSignatureBlocked(asset?.name ?? "")
@@ -86,6 +89,7 @@ struct BannerViewModel {
         case .suspiciousAsset:
             return Localized.Banner.AssetStatus.description
         case .onboarding: return Localized.Banner.Onboarding.description
+        case .tradePerpetuals: return Localized.Banner.Perpetuals.description
         }
     }
 
@@ -100,7 +104,8 @@ struct BannerViewModel {
                 .enableNotifications,
                 .accountBlockedMultiSignature,
                 .activateAsset,
-                .suspiciousAsset: 28
+                .suspiciousAsset,
+                .tradePerpetuals: 28
         case .onboarding: .image.medium
         }
     }
@@ -110,7 +115,8 @@ struct BannerViewModel {
         case .stake,
             .accountActivation,
             .activateAsset,
-            .suspiciousAsset: 14
+            .suspiciousAsset,
+            .tradePerpetuals: 14
         case .enableNotifications,
             .accountBlockedMultiSignature,
             .onboarding: 0
@@ -130,7 +136,8 @@ struct BannerViewModel {
         case .stake,
             .enableNotifications,
             .activateAsset,
-            .onboarding:
+            .onboarding,
+            .tradePerpetuals:
             return.none
         case .accountActivation:
             return asset?.chain.accountActivationFeeUrl
@@ -156,7 +163,8 @@ struct BannerViewModel {
                 .enableNotifications,
                 .accountBlockedMultiSignature,
                 .activateAsset,
-                .suspiciousAsset: .list
+                .suspiciousAsset,
+                .tradePerpetuals: .list
         case .onboarding: .banner
         }
     }
@@ -168,7 +176,8 @@ struct BannerViewModel {
                 .enableNotifications,
                 .accountBlockedMultiSignature,
                 .activateAsset,
-                .suspiciousAsset: []
+                .suspiciousAsset,
+                .tradePerpetuals: []
         case .onboarding: [
             BannerButtonViewModel(button: .buy, banner: banner),
             BannerButtonViewModel(button: .receive, banner: banner)

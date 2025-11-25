@@ -37,4 +37,11 @@ struct URLParserTests {
 
         #expect(action == .walletConnectSession("64a4f0817e3dd003cbe23202fb6ffaa16d38074de84762a5797e6092b2250a27"))
     }
+
+    @Test
+    func perpetualsUrl() async throws {
+        let perpetualsAction = try URLParser.from(url: URL(string: "https://gemwallet.com/perpetuals")!)
+
+        #expect(perpetualsAction == .perpetuals)
+    }
 }

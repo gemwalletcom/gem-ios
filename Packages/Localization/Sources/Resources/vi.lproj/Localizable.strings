@@ -510,3 +510,5 @@
 "asset.verification.verified" = "Đã xác minh";
 "errors.connections.malicious_origin" = "Kết nối này đến từ một nguồn không đáng tin cậy.";
 "settings.preferences.default_leverage" = "Đòn bẩy mặc định";
+"banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
+"banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";

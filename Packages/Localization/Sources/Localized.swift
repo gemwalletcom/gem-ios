@@ -171,6 +171,12 @@ public enum Localized {
       /// Your wallet is ready
       public static let title = Localized.tr("Localizable", "banner.onboarding.title", fallback: "Your wallet is ready")
     }
+    public enum Perpetuals {
+      /// Deposit, trade, and earn with Hyperliquid perpetuals
+      public static let description = Localized.tr("Localizable", "banner.perpetuals.description", fallback: "Deposit, trade, and earn with Hyperliquid perpetuals")
+      /// Trade Perpetuals on Hyperliquid
+      public static let title = Localized.tr("Localizable", "banner.perpetuals.title", fallback: "Trade Perpetuals on Hyperliquid")
+    }
     public enum Stake {
       /// Earn %@ rewards on your stake while you sleep.
       public static func description(_ p1: Any) -> String {
