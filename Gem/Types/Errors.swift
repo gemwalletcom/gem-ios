@@ -46,7 +46,7 @@ extension Gemstone.AlienError: @retroactive LocalizedError {
         switch self {
         case .RequestError(msg: let msg): msg
         case .ResponseError(msg: let msg):  msg
-        case .Http(status: let status, len: let len): "Response Status: \(status)"
+        case .Http(let status, _): "Response Status: \(status)"
         }
     }
 }

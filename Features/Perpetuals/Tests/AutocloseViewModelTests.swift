@@ -44,4 +44,14 @@ struct AutocloseViewModelTests {
         let model = AutocloseViewModel.mock(price: 90.0)
         #expect(model.expectedPnL == "-$100.00 (-50.00%)")
     }
+
+    @Test
+    func percentages() {
+        #expect(AutocloseViewModel.mock(leverage: 1).percents == [5, 10, 15])
+        #expect(AutocloseViewModel.mock(leverage: 3).percents == [5, 10, 15])
+        #expect(AutocloseViewModel.mock(leverage: 4).percents == [10, 15, 25])
+        #expect(AutocloseViewModel.mock(leverage: 10).percents == [10, 15, 25])
+        #expect(AutocloseViewModel.mock(leverage: 11).percents == [25, 50, 100])
+        #expect(AutocloseViewModel.mock(leverage: 50).percents == [25, 50, 100])
+    }
 }
