@@ -29,23 +29,27 @@ public enum URLParser {
         let urlComponents = Array(url.pathComponents.dropFirst())
 
         if url.host() == DeepLink.host || url.scheme == "gem" {
-            guard let path = urlComponents.first else {
+            guard let path = urlComponents.first,
+                  let pathComponent = DeepLink.PathComponent(rawValue: path) else {
                 throw URLParserError.invalidURL(url)
             }
 
-            let componentsCount = urlComponents.count
-            switch path {
-            case "tokens" where componentsCount >= 2:
-                let chain = try Chain(id: urlComponents.getElement(safe: 1))
+            switch pathComponent {
+            case .tokens:
+                guard let chainId = urlComponents.element(at: 1) else {
+                    throw URLParserError.invalidURL(url)
+                }
+                let chain = try Chain(id: chainId)
                 return .asset(AssetId(chain: chain, tokenId: urlComponents.element(at: 2)))
-            case "swap" where componentsCount >= 2:
-                let fromId = try AssetId(id: urlComponents[1])
-                let toId: AssetId? = (urlComponents.count >= 3) ? try AssetId(id: urlComponents[2]) : nil
+            case .swap:
+                guard let fromIdString = urlComponents.element(at: 1) else {
+                    throw URLParserError.invalidURL(url)
+                }
+                let fromId = try AssetId(id: fromIdString)
+                let toId: AssetId? = urlComponents.element(at: 2).flatMap { try? AssetId(id: $0) }
                 return .swap(fromId, toId)
-            case "perpetuals":
+            case .perpetuals:
                 return .perpetuals
-            default:
-                throw URLParserError.invalidURL(url)
             }
         }
 
