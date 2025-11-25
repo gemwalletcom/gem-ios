@@ -60,4 +60,12 @@ public struct AutocloseViewModel {
         let pnl = estimator.calculatePnL(price: price)
         return PriceChangeColor.color(for: pnl)
     }
+
+    public var percents: [Int] {
+        switch estimator.leverage {
+        case 0...3: [5, 10, 15]
+        case 4...10: [10, 15, 25]
+        case _: [25, 50, 100]
+        }
+    }
 }
