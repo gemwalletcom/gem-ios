@@ -63,6 +63,11 @@ final class FiatOperationViewModel {
             return
         }
 
+        if inputValidationModel.isInvalid {
+            quotesState = .noData
+            return
+        }
+
         if shouldSkipFetch(for: amount) {
             return
         }
