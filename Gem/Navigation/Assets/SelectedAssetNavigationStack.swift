@@ -29,6 +29,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.transactionService) private var transactionService
     @Environment(\.nameService) private var nameService
     @Environment(\.addressNameService) private var addressNameService
+    @Environment(\.recentActivityService) private var recentActivityService
 
     @State private var navigationPath = NavigationPath()
 
@@ -61,6 +62,7 @@ struct SelectedAssetNavigationStack: View  {
                             priceService: priceService,
                             transactionService: transactionService,
                             addressNameService: addressNameService,
+                            recentActivityService: recentActivityService,
                             chain: input.asset.chain
                         ),
                         model: viewModelFactory.recipientScene(
@@ -81,7 +83,8 @@ struct SelectedAssetNavigationStack: View  {
                             assetModel: AssetViewModel(asset: input.asset),
                             walletId: wallet.walletId,
                             address: input.address,
-                            walletsService: walletsService
+                            walletsService: walletsService,
+                            recentActivityService: recentActivityService
                         )
                     )
                 case .buy:

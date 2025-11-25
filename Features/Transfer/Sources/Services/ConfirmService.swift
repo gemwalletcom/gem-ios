@@ -13,6 +13,7 @@ import BigInt
 import Blockchain
 import ChainService
 import AddressNameService
+import RecentActivityService
 
 public struct ConfirmService: Sendable {
     private let metadataProvider: any TransferMetadataProvidable
@@ -22,6 +23,7 @@ public struct ConfirmService: Sendable {
     private let chainService: any ChainServiceable
     private let explorerService: any ExplorerLinkFetchable
     private let addressNameService: AddressNameService
+    private let recentActivityService: RecentActivityService
 
     public init(
         explorerService: any ExplorerLinkFetchable,
@@ -30,7 +32,8 @@ public struct ConfirmService: Sendable {
         transferExecutor: any TransferExecutable,
         keystore: any Keystore,
         chainService: any ChainServiceable,
-        addressNameService: AddressNameService
+        addressNameService: AddressNameService,
+        recentActivityService: RecentActivityService
     ) {
         self.explorerService = explorerService
         self.metadataProvider = metadataProvider
@@ -39,6 +42,7 @@ public struct ConfirmService: Sendable {
         self.keystore = keystore
         self.chainService = chainService
         self.addressNameService = addressNameService
+        self.recentActivityService = recentActivityService
     }
 
     public func getMetadata(wallet: Wallet, data: TransferData) throws -> TransferDataMetadata {
@@ -65,6 +69,25 @@ public struct ConfirmService: Sendable {
 
     public func executeTransfer(input: TransferConfirmationInput) async throws {
         try await transferExecutor.execute(input: input)
+    }
+
+    public func track(input: TransferConfirmationInput) {
+        switch input.data.type.transactionType {
+        case .transfer:
+            do {
+                try recentActivityService.track(
+                    type: .transfer,
+                    assetId: input.data.type.asset.id,
+                    walletId: input.wallet.walletId
+                )
+            } catch {
+                debugLog("track error: \(error)")
+            }
+        case .transferNFT, .swap, .tokenApproval, .stakeDelegate, .stakeUndelegate, .stakeRewards,
+                .stakeRedelegate, .stakeWithdraw, .stakeFreeze, .stakeUnfreeze,
+                .assetActivation, .smartContractCall,
+                .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition: break
+        }
     }
 
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {

@@ -28,6 +28,7 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.swapService) private var swapService
     @Environment(\.nameService) private var nameService
     @Environment(\.addressNameService) private var addressNameService
+    @Environment(\.recentActivityService) private var recentActivityService
 
     @State private var isPresentingFilteringView: Bool = false
 
@@ -84,6 +85,7 @@ struct SelectAssetSceneNavigationStack: View {
                             priceService: priceService,
                             transactionService: transactionService,
                             addressNameService: addressNameService,
+                            recentActivityService: recentActivityService,
                             chain: input.asset.chain
                         ),
                         model: viewModelFactory.recipientScene(
@@ -104,7 +106,8 @@ struct SelectAssetSceneNavigationStack: View {
                             assetModel: AssetViewModel(asset: input.asset),
                             walletId: model.wallet.walletId,
                             address: input.assetAddress.address,
-                            walletsService: walletsService
+                            walletsService: walletsService,
+                            recentActivityService: recentActivityService
                         )
                     )
                 case .buy:

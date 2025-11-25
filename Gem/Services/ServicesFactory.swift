@@ -211,7 +211,8 @@ struct ServicesFactory {
             priceService: priceService,
             transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
-            addressNameService: addressNameService
+            addressNameService: addressNameService,
+            recentActivityService: recentActivityService
         )
 
         return AppResolver.Services(

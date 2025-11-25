@@ -77,7 +77,8 @@ let package = Package(
                 .product(name: "PerpetualService", package: "FeatureServices"),
                 .product(name: "ExplorerService", package: "ChainServices"),
                 .product(name: "NameService", package: "ChainServices"),
-                .product(name: "AddressNameService", package: "FeatureServices")
+                .product(name: "AddressNameService", package: "FeatureServices"),
+                .product(name: "RecentActivityService", package: "FeatureServices")
             ],
             path: "Sources"
         ),

@@ -57,7 +57,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         )
         self.recentActivityRequest = RecentActivityRequest(
             walletId: wallet.id,
-            types: [.search],
+            types: RecentActivityType.allCases,
             limit: 10
         )
     }
@@ -148,11 +148,16 @@ public final class WalletSearchSceneViewModel: Sendable {
     }
 
     func onSelectAsset(_ asset: Asset) {
-        try? recentActivityService.track(
-            type: .search,
-            assetId: asset.id,
-            walletId: wallet.walletId
-        )
+        do {
+            try recentActivityService.track(
+                type: .search,
+                assetId: asset.id,
+                walletId: wallet.walletId
+            )
+        } catch {
+            debugLog("track error: \(error)")
+        }
+
         onSelectAssetAction?(asset)
     }
 }
