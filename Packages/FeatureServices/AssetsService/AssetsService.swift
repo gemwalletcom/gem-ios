@@ -158,9 +158,7 @@ public final class AssetsService: Sendable {
                     guard let self else { return nil }
                     let service = self.chainServiceFactory.service(for: chain)
                     guard try await service.getIsTokenAddress(tokenId: tokenId),
-                          let asset = try? await service.getTokenData(tokenId: tokenId),
-                          !asset.symbol.isEmpty, // validate token metadata, move to core ?
-                          !asset.name.isEmpty
+                          let asset = try? await service.getTokenData(tokenId: tokenId)
                     else { return nil }
 
                     return AssetBasic(
