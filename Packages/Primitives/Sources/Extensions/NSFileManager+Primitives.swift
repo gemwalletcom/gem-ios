@@ -3,26 +3,34 @@
 import Foundation
 
 public extension FileManager {
-    enum Directory: String {
+    enum Directory: Sendable {
         case documents
         case applicationSupport
-        case preferences
+        case library(LibraryFolder)
+        
+        public enum LibraryFolder: String, Sendable {
+            case preferences = "Preferences"
+        }
 
         public var directory: String {
             switch self {
             case .documents: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
             case .applicationSupport: NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
-            case .preferences: NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0].appending("/Preferences")
+            case .library(let folder): NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0].appending(folder.rawValue)
             }
         }
 
         public var url: URL {
             URL(fileURLWithPath: directory)
         }
-    }
-    
-    var excludedBackupDirectories: [Directory] {
-        [.documents, .applicationSupport, .preferences]
+        
+        public var name: String {
+            switch self {
+            case .documents: "Documents"
+            case .applicationSupport: "Application Support"
+            case .library(let folder): folder.rawValue
+            }
+        }
     }
 
     func addSkipBackupAttributeToItemAtURL(_ url: URL) throws {
