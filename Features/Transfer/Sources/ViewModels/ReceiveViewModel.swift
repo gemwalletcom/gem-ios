@@ -10,7 +10,7 @@ import Formatters
 @Observable
 @MainActor
 public final class ReceiveViewModel: Sendable {
-    let qrWidth: CGFloat = 280
+    let qrSize: CGFloat = 248
     
     let assetModel: AssetViewModel
     let walletId: WalletId
@@ -87,8 +87,8 @@ public final class ReceiveViewModel: Sendable {
         await generator.generate(
             from: address,
             size: CGSize(
-                width: qrWidth,
-                height: qrWidth
+                width: qrSize,
+                height: qrSize
             ),
             logo: UIImage.name("logo-dark")
         )
