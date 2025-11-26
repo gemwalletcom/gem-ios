@@ -3,6 +3,7 @@ import Store
 import Primitives
 import GemAPI
 import ChainService
+import Blockchain
 
 public final class AssetsService: Sendable {
     public let assetStore: AssetStore
@@ -151,33 +152,23 @@ public final class AssetsService: Sendable {
     }
 
     func searchNetworkAsset(tokenId: String, chains: [Chain]) async throws -> [AssetBasic] {
-        let services = chains.compactMap { [weak self] chain in
-            self?.chainServiceFactory.service(for: chain)
-        }.filter {
-            $0.getIsTokenAddress(tokenId: tokenId)
-        }
+        try await withThrowingTaskGroup(of: AssetBasic?.self) { group in
+            chains.forEach { chain in
+                group.addTask { [weak self] in
+                    guard let self else { return nil }
+                    let service = self.chainServiceFactory.service(for: chain)
+                    guard try await service.getIsTokenAddress(tokenId: tokenId),
+                          let asset = try? await service.getTokenData(tokenId: tokenId)
+                    else { return nil }
 
-        let assets = try await withThrowingTaskGroup(of: Asset?.self) { group in
-            var assets = [Asset]()
-            services.forEach { service in
-                group.addTask {
-                    try? await service.getTokenData(tokenId: tokenId)
+                    return AssetBasic(
+                        asset: asset,
+                        properties: .defaultValue(assetId: asset.id),
+                        score: .defaultValue(assetId: asset.id)
+                    )
                 }
             }
-            for try await asset in group {
-                if let asset = asset {
-                    assets.append(asset)
-                }
-            }
-            return assets
-        }
-
-        return assets.map {
-            AssetBasic(
-                asset: $0,
-                properties: AssetProperties.defaultValue(assetId: $0.id),
-                score: AssetScore.defaultValue(assetId: $0.id)
-            )
+            return try await group.reduce(into: [AssetBasic]()) { if let asset = $1 { $0.append(asset) } }
         }
     }
 }
