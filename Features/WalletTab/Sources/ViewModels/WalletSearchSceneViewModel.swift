@@ -10,13 +10,13 @@ import Components
 import Preferences
 import Style
 import Localization
-import RecentActivityService
+import ActivityService
 
 @Observable
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
     private let searchService: AssetSearchService
-    private let recentActivityService: RecentActivityService
+    private let activityService: ActivityService
     private let preferences: Preferences
 
     private let wallet: Wallet
@@ -39,14 +39,14 @@ public final class WalletSearchSceneViewModel: Sendable {
     public init(
         wallet: Wallet,
         searchService: AssetSearchService,
-        recentActivityService: RecentActivityService,
+        activityService: ActivityService,
         preferences: Preferences = .standard,
         onDismissSearch: VoidAction,
         onSelectAssetAction: AssetAction
     ) {
         self.wallet = wallet
         self.searchService = searchService
-        self.recentActivityService = recentActivityService
+        self.activityService = activityService
         self.preferences = preferences
         self.onDismissSearch = onDismissSearch
         self.onSelectAssetAction = onSelectAssetAction
@@ -148,23 +148,22 @@ public final class WalletSearchSceneViewModel: Sendable {
     }
 
     func onSelectAsset(_ asset: Asset) {
-        do {
-            try recentActivityService.track(
-                type: .search,
-                assetId: asset.id,
-                walletId: wallet.walletId
-            )
-        } catch {
-            debugLog("track error: \(error)")
-        }
-
         onSelectAssetAction?(asset)
+        updateRecent(asset)
     }
 }
 
 // MARK: - Private
 
 extension WalletSearchSceneViewModel {
+    private func updateRecent(_ asset: Asset) {
+        do {
+            try activityService.updateRecent(type: .search, assetId: asset.id, walletId: wallet.walletId)
+        } catch {
+            debugLog("UpdateRecent error: \(error)")
+        }
+    }
+
     private func updateRequest() {
         if searchModel.searchableQuery.isNotEmpty && searchModel.focus == .tags {
             searchModel.focus = .search

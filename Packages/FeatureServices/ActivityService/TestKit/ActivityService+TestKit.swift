@@ -1,13 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import RecentActivityService
+import ActivityService
 import Store
 import StoreTestKit
 
-public extension RecentActivityService {
+public extension ActivityService {
     static func mock(
         store: RecentActivityStore = .mock()
     ) -> Self {
-        RecentActivityService(store: store)
+        ActivityService(store: store)
     }
 }

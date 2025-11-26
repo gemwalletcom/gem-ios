@@ -4,14 +4,14 @@ import Foundation
 import Primitives
 import Store
 
-public struct RecentActivityService: Sendable {
+public struct ActivityService: Sendable {
     private let store: RecentActivityStore
 
     public init(store: RecentActivityStore) {
         self.store = store
     }
 
-    public func track(type: RecentActivityType, assetId: AssetId, walletId: WalletId) throws {
+    public func updateRecent(type: RecentActivityType, assetId: AssetId, walletId: WalletId) throws {
         try store.add(assetId: assetId, walletId: walletId, type: type)
     }
 }

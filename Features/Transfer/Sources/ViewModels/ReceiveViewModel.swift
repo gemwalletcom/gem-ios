@@ -6,7 +6,7 @@ import PrimitivesComponents
 import WalletsService
 import Components
 import Formatters
-import RecentActivityService
+import ActivityService
 
 @Observable
 @MainActor
@@ -17,7 +17,7 @@ public final class ReceiveViewModel: Sendable {
     let walletId: WalletId
     let address: String
     let walletsService: WalletsService
-    let recentActivityService: RecentActivityService
+    let activityService: ActivityService
     let generator = QRCodeGenerator()
     
     public var isPresentingShareSheet: Bool = false
@@ -29,14 +29,15 @@ public final class ReceiveViewModel: Sendable {
         walletId: WalletId,
         address: String,
         walletsService: WalletsService,
-        recentActivityService: RecentActivityService
+        activityService: ActivityService
     ) {
         self.assetModel = assetModel
         self.walletId = walletId
         self.address = address
         self.walletsService = walletsService
-        self.recentActivityService = recentActivityService
-        track()
+        self.activityService = activityService
+        
+        updateRecent()
     }
 
 
@@ -119,15 +120,11 @@ extension ReceiveViewModel {
 // MARK: - Private
 
 extension ReceiveViewModel {
-    private func track() {
+    private func updateRecent() {
         do {
-            try recentActivityService.track(
-                type: .receive,
-                assetId: assetModel.asset.id,
-                walletId: walletId
-            )
+            try activityService.updateRecent(type: .receive, assetId: assetModel.asset.id, walletId: walletId)
         } catch {
-            debugLog("track error: \(error)")
+            debugLog("UpdateRecent error: \(error)")
         }
     }
 }

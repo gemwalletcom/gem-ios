@@ -23,7 +23,7 @@ import Assets
 import FiatConnect
 import WalletConnectorService
 import AddressNameService
-import RecentActivityService
+import ActivityService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -39,7 +39,7 @@ public struct ViewModelFactory: Sendable {
     let transactionService: TransactionService
     let chainServiceFactory: ChainServiceFactory
     let addressNameService: AddressNameService
-    let recentActivityService: RecentActivityService
+    let activityService: ActivityService
 
     public init(
         keystore: any Keystore,
@@ -55,7 +55,7 @@ public struct ViewModelFactory: Sendable {
         transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
         addressNameService: AddressNameService,
-        recentActivityService: RecentActivityService
+        activityService: ActivityService
     ) {
         self.keystore = keystore
         self.nodeService = nodeService
@@ -70,7 +70,7 @@ public struct ViewModelFactory: Sendable {
         self.transactionService = transactionService
         self.chainServiceFactory = chainServiceFactory
         self.addressNameService = addressNameService
-        self.recentActivityService = recentActivityService
+        self.activityService = activityService
     }
     
     @MainActor
@@ -89,7 +89,7 @@ public struct ViewModelFactory: Sendable {
             priceService: priceService,
             transactionService: transactionService,
             addressNameService: addressNameService,
-            recentActivityService: recentActivityService,
+            activityService: activityService,
             chain: data.chain
         )
         

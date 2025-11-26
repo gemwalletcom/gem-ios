@@ -13,7 +13,7 @@ import BigInt
 import Blockchain
 import ChainService
 import AddressNameService
-import RecentActivityService
+import ActivityService
 
 public struct ConfirmService: Sendable {
     private let metadataProvider: any TransferMetadataProvidable
@@ -23,7 +23,7 @@ public struct ConfirmService: Sendable {
     private let chainService: any ChainServiceable
     private let explorerService: any ExplorerLinkFetchable
     private let addressNameService: AddressNameService
-    private let recentActivityService: RecentActivityService
+    private let activityService: ActivityService
 
     public init(
         explorerService: any ExplorerLinkFetchable,
@@ -33,7 +33,7 @@ public struct ConfirmService: Sendable {
         keystore: any Keystore,
         chainService: any ChainServiceable,
         addressNameService: AddressNameService,
-        recentActivityService: RecentActivityService
+        activityService: ActivityService
     ) {
         self.explorerService = explorerService
         self.metadataProvider = metadataProvider
@@ -42,7 +42,7 @@ public struct ConfirmService: Sendable {
         self.keystore = keystore
         self.chainService = chainService
         self.addressNameService = addressNameService
-        self.recentActivityService = recentActivityService
+        self.activityService = activityService
     }
 
     public func getMetadata(wallet: Wallet, data: TransferData) throws -> TransferDataMetadata {
@@ -71,17 +71,13 @@ public struct ConfirmService: Sendable {
         try await transferExecutor.execute(input: input)
     }
 
-    public func track(input: TransferConfirmationInput) {
+    public func updateRecent(input: TransferConfirmationInput) {
         switch input.data.type.transactionType {
         case .transfer:
             do {
-                try recentActivityService.track(
-                    type: .transfer,
-                    assetId: input.data.type.asset.id,
-                    walletId: input.wallet.walletId
-                )
+                try activityService.updateRecent(type: .transfer, assetId: input.data.type.asset.id, walletId: input.wallet.walletId)
             } catch {
-                debugLog("track error: \(error)")
+                debugLog("UpdateRecent error: \(error)")
             }
         case .transferNFT, .swap, .tokenApproval, .stakeDelegate, .stakeUndelegate, .stakeRewards,
                 .stakeRedelegate, .stakeWithdraw, .stakeFreeze, .stakeUnfreeze,
