@@ -31,7 +31,7 @@ public struct WalletSearchScene: View {
                     model: EmptyContentTypeViewModel(
                         type: .search(
                             type: .assets,
-                            action: nil
+                            action: model.showAddToken ? { model.onSelectAddCustomToken() } : nil
                         )
                     )
                 )

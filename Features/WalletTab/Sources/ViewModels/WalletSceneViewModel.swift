@@ -47,6 +47,7 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingSetPriceAlert: AssetId?
     public var isPresentingToastMessage: ToastMessage?
     public var isPresentingSearch = false
+    public var isPresentingAddToken: Bool = false
 
     public var isLoadingAssets: Bool = false
 
@@ -157,6 +158,10 @@ extension WalletSceneViewModel {
 
     public func onToggleSearch() {
         isPresentingSearch.toggle()
+    }
+
+    public func onSelectAddCustomToken() {
+        isPresentingAddToken = true
     }
 
     func onHeaderAction(type: HeaderButtonType) {
