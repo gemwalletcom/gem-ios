@@ -43,7 +43,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         activityService: ActivityService,
         preferences: Preferences = .standard,
         onDismissSearch: VoidAction,
-        onSelectAssetAction: AssetAction
+        onSelectAssetAction: AssetAction,
         onAddToken: VoidAction
     ) {
         self.wallet = wallet
@@ -161,6 +161,8 @@ extension WalletSearchSceneViewModel {
     func onSelectAsset(_ asset: Asset) {
         onSelectAssetAction?(asset)
         updateRecent(asset)
+    }
+
     func onSelectAddCustomToken() {
         onAddToken?()
     }
