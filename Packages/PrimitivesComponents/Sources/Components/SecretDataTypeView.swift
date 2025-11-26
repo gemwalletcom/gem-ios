@@ -16,6 +16,9 @@ public struct SecretDataTypeView: View {
             SecretPhraseGridView(rows: rows)
         case .privateKey(let key):
             Text(key)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, .medium)
+                .frame(maxWidth: .scene.content.maxWidth)
         }
     }
 }
