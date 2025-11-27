@@ -60,7 +60,6 @@ public final class WalletSearchSceneViewModel: Sendable {
         )
         self.recentActivityRequest = RecentActivityRequest(
             walletId: wallet.id,
-            types: RecentActivityType.allCases,
             limit: 10
         )
     }

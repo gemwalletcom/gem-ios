@@ -73,7 +73,9 @@ public struct SelectAssetScene: View {
             }
             .textCase(nil)
             .listRowInsets(EdgeInsets())
-            .listSectionSpacing(model.showRecentActivities ? .small : .zero)
+            .if(model.showRecentActivities) {
+                $0.listSectionSpacing(.small)
+            }
 
             if model.showRecentActivities {
                 Section(

@@ -42,6 +42,7 @@ extension RecentActivityRecord: CreateTable {
             $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
+                .references(WalletRecord.databaseTableName, onDelete: .cascade)
             $0.column(Columns.type.name, .text)
                 .notNull()
             $0.column(Columns.createdAt.name, .datetime)
