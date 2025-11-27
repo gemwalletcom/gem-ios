@@ -74,7 +74,7 @@ public struct WalletSearchScene: View {
 
             if model.showRecentSearches {
                 Section(
-                    content: { collection(for: model.recentActivities) },
+                    content: { recentActivitiesCollection },
                     header: {
                         HStack {
                             Text(model.recentActivityTitle)
@@ -115,24 +115,10 @@ public struct WalletSearchScene: View {
     }
 
     @ViewBuilder
-    private func collection(for items: [Asset]) -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Spacing.small) {
-                ForEach(items) { asset in
-                    let assetModel = AssetViewModel(asset: asset)
-                    NavigationLink(value: Scenes.Asset(asset: asset)) {
-                        ListItemView(
-                            title: assetModel.symbol,
-                            titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
-                            imageStyle: .list(assetImage: assetModel.assetImage, cornerRadiusType: .rounded)
-                        )
-                        .padding(Spacing.small)
-                        .background(
-                            Colors.listStyleColor,
-                            in: RoundedRectangle(cornerRadius: .large)
-                        )
-                    }
-                }
+    private var recentActivitiesCollection: some View {
+        AssetsCollectionView(models: model.activityModels) { assetModel in
+            NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
+                AssetChipView(model: assetModel)
             }
         }
     }

@@ -125,23 +125,9 @@ public struct SelectAssetScene: View {
 
     @ViewBuilder
     private var recentActivitiesCollection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Spacing.small) {
-                ForEach(model.recentActivities) { asset in
-                    let assetModel = AssetViewModel(asset: asset)
-                    NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: asset))) {
-                        ListItemView(
-                            title: assetModel.symbol,
-                            titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
-                            imageStyle: .list(assetImage: assetModel.assetImage, cornerRadiusType: .rounded)
-                        )
-                        .padding(Spacing.small)
-                        .background(
-                            Colors.listStyleColor,
-                            in: RoundedRectangle(cornerRadius: .large)
-                        )
-                    }
-                }
+        AssetsCollectionView(models: model.activityModels) { assetModel in
+            NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: assetModel.asset))) {
+                AssetChipView(model: assetModel)
             }
         }
     }

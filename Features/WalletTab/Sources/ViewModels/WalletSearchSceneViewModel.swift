@@ -83,6 +83,10 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var recentActivityTitle: String { Localized.RecentActivity.title }
 
+    var activityModels: [AssetViewModel] {
+        recentActivities.map { AssetViewModel(asset: $0) }
+    }
+
     var showLoading: Bool {
         state.isLoading && showEmpty
     }

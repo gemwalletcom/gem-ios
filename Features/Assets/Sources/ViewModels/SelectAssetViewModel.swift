@@ -152,6 +152,10 @@ public final class SelectAssetViewModel {
         Localized.RecentActivity.title
     }
 
+    var activityModels: [AssetViewModel] {
+        recentActivities.map { AssetViewModel(asset: $0) }
+    }
+
     var currencyCode: String {
         preferences.currency
     }
