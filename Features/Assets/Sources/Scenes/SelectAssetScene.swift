@@ -127,9 +127,9 @@ public struct SelectAssetScene: View {
     private var recentActivitiesCollection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: Spacing.small) {
-                ForEach(model.recentActivities) { assetData in
-                    let assetModel = AssetViewModel(asset: assetData.asset)
-                    NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
+                ForEach(model.recentActivities) { asset in
+                    let assetModel = AssetViewModel(asset: asset)
+                    NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: asset))) {
                         ListItemView(
                             title: assetModel.symbol,
                             titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),

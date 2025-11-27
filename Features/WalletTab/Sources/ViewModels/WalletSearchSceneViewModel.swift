@@ -26,7 +26,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     private var state: StateViewType<[AssetBasic]> = .noData
 
     var assets: [AssetData] = []
-    var recentActivities: [AssetData] = []
+    var recentActivities: [Asset] = []
     var searchModel: AssetSearchViewModel
     var request: AssetsRequest
     var recentActivityRequest: RecentActivityRequest

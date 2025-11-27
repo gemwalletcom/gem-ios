@@ -7,7 +7,7 @@ import Combine
 import Primitives
 
 public struct RecentActivityRequest: ValueObservationQueryable {
-    public static var defaultValue: [AssetData] { [] }
+    public static var defaultValue: [Asset] { [] }
 
     public var walletId: String
     public var limit: Int
@@ -20,23 +20,17 @@ public struct RecentActivityRequest: ValueObservationQueryable {
         self.limit = limit
     }
 
-    public func fetch(_ db: Database) throws -> [AssetData] {
+    public func fetch(_ db: Database) throws -> [Asset] {
         let recentActivitiesForWallet = AssetRecord.recentActivities
             .filter(RecentActivityRecord.Columns.walletId == walletId)
         let maxCreatedAt = recentActivitiesForWallet.max(RecentActivityRecord.Columns.createdAt)
 
         return try AssetRecord
             .joining(required: recentActivitiesForWallet)
-            .including(optional: AssetRecord.account)
-            .including(optional: AssetRecord.balance)
-            .including(optional: AssetRecord.price)
-            .joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId))
-            .filter(TableAlias(name: AccountRecord.databaseTableName)[AccountRecord.Columns.walletId] == walletId)
             .annotated(with: maxCreatedAt.forKey("maxCreatedAt"))
             .order(literal: "maxCreatedAt DESC")
             .limit(limit)
-            .asRequest(of: AssetRecordInfo.self)
             .fetchAll(db)
-            .map { $0.assetData }
+            .map { $0.mapToAsset() }
     }
 }

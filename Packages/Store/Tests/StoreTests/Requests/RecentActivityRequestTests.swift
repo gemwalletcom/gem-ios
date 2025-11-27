@@ -25,8 +25,8 @@ struct RecentActivityRequestTests {
             let result = try RecentActivityRequest(walletId: "", limit: 10).fetch(db)
 
             #expect(result.count == 2)
-            #expect(result.first?.asset.id == btc)
-            #expect(result.last?.asset.id == bnb)
+            #expect(result.first?.id == btc)
+            #expect(result.last?.id == bnb)
         }
     }
 }

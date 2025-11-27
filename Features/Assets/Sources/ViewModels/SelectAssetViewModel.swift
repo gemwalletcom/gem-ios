@@ -25,7 +25,7 @@ public final class SelectAssetViewModel {
     public let wallet: Wallet
 
     var assets: [AssetData] = []
-    var recentActivities: [AssetData] = []
+    var recentActivities: [Asset] = []
     var state: StateViewType<[AssetBasic]> = .noData
     var searchModel: AssetSearchViewModel
     var request: AssetsRequest
@@ -154,6 +154,11 @@ public final class SelectAssetViewModel {
 
     var currencyCode: String {
         preferences.currency
+    }
+
+    func assetAddress(for asset: Asset) -> AssetAddress {
+        let address = (try? wallet.account(for: asset.chain).address) ?? ""
+        return AssetAddress(asset: asset, address: address)
     }
 }
 

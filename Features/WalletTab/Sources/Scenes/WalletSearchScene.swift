@@ -115,12 +115,12 @@ public struct WalletSearchScene: View {
     }
 
     @ViewBuilder
-    private func collection(for items: [AssetData]) -> some View {
+    private func collection(for items: [Asset]) -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: Spacing.small) {
                 ForEach(items) { asset in
-                    let assetModel = AssetViewModel(asset: asset.asset)
-                    NavigationLink(value: Scenes.Asset(asset: asset.asset)) {
+                    let assetModel = AssetViewModel(asset: asset)
+                    NavigationLink(value: Scenes.Asset(asset: asset)) {
                         ListItemView(
                             title: assetModel.symbol,
                             titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
