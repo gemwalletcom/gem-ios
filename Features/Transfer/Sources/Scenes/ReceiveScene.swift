@@ -93,11 +93,7 @@ public struct ReceiveScene: View {
         .task {
             await model.onLoadImage()
         }
-        .taskOnce {
-            Task {
-                await model.enableAsset()
-            }
-        }
+        .taskOnce(model.onTaskOnce)
     }
 }
 

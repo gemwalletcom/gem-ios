@@ -307,6 +307,7 @@ extension ConfirmTransferSceneViewModel {
                 delegate: confirmTransferDelegate
             )
             try await confirmService.executeTransfer(input: input)
+            confirmService.updateRecent(input: input)
             confirmingState = .data(true)
         } catch {
             confirmingState = .error(error)

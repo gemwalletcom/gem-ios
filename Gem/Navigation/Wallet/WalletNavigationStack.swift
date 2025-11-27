@@ -27,6 +27,7 @@ struct WalletNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.balanceService) private var balanceService
+    @Environment(\.activityService) private var activityService
 
     @State private var model: WalletSceneViewModel
 
@@ -52,7 +53,9 @@ struct WalletNavigationStack: View {
                         model: WalletSearchSceneViewModel(
                             wallet: model.wallet,
                             searchService: AssetSearchService(assetsService: assetsService),
+                            activityService: activityService,
                             onDismissSearch: model.onToggleSearch,
+                            onSelectAssetAction: { navigationState.wallet.append(Scenes.Asset(asset: $0)) },
                             onAddToken: model.onSelectAddCustomToken
                         )
                     )
@@ -158,7 +161,8 @@ struct WalletNavigationStack: View {
                         selectType: $0,
                         searchService: AssetSearchService(assetsService: assetsService),
                         walletsService: walletsService,
-                        priceAlertService: priceAlertService
+                        priceAlertService: priceAlertService,
+                        activityService: activityService
                     ),
                     isPresentingSelectType: $model.isPresentingSelectAssetType
                 )

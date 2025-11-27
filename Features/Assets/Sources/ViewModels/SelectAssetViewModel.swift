@@ -10,6 +10,7 @@ import AssetsService
 import WalletsService
 import Preferences
 import PriceAlertService
+import ActivityService
 
 @Observable
 @MainActor
@@ -19,13 +20,16 @@ public final class SelectAssetViewModel {
     let searchService: AssetSearchService
     let walletsService: WalletsService
     let priceAlertService: PriceAlertService
+    let activityService: ActivityService
 
     public let wallet: Wallet
 
     var assets: [AssetData] = []
+    var recentActivities: [Asset] = []
     var state: StateViewType<[AssetBasic]> = .noData
     var searchModel: AssetSearchViewModel
     var request: AssetsRequest
+    var recentActivityRequest: RecentActivityRequest
 
     var isSearching: Bool = false
     var isDismissSearch: Bool = false
@@ -44,6 +48,7 @@ public final class SelectAssetViewModel {
         searchService: AssetSearchService,
         walletsService: WalletsService,
         priceAlertService: PriceAlertService,
+        activityService: ActivityService,
         selectAssetAction: AssetAction = .none
     ) {
         self.preferences = preferences
@@ -52,6 +57,7 @@ public final class SelectAssetViewModel {
         self.searchService = searchService
         self.walletsService = walletsService
         self.priceAlertService = priceAlertService
+        self.activityService = activityService
         self.onSelectAssetAction = selectAssetAction
 
         let filter = AssetsFilterViewModel(
@@ -66,6 +72,10 @@ public final class SelectAssetViewModel {
         self.request = AssetsRequest(
             walletId: wallet.id,
             filters: filter.filters
+        )
+        self.recentActivityRequest = RecentActivityRequest(
+            walletId: wallet.id,
+            limit: 10
         )
     }
 
@@ -131,8 +141,28 @@ public final class SelectAssetViewModel {
         searchModel.searchableQuery.isEmpty
     }
 
+    var showRecentActivities: Bool {
+        switch selectType {
+        case .send, .receive, .buy: searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
+        case .swap, .manage, .priceAlert, .deposit, .withdraw: false
+        }
+    }
+
+    var recentActivityTitle: String {
+        Localized.RecentActivity.title
+    }
+
+    var activityModels: [AssetViewModel] {
+        recentActivities.map { AssetViewModel(asset: $0) }
+    }
+
     var currencyCode: String {
         preferences.currency
+    }
+
+    func assetAddress(for asset: Asset) -> AssetAddress {
+        let address = (try? wallet.account(for: asset.chain).address) ?? ""
+        return AssetAddress(asset: asset, address: address)
     }
 }
 

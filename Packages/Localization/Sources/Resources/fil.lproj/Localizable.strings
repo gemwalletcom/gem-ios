@@ -512,3 +512,4 @@
 "settings.preferences.default_leverage" = "Default na Leverage";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";

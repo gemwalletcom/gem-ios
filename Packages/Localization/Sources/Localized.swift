@@ -936,6 +936,10 @@ public enum Localized {
     /// Your Receiving Address
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
   }
+  public enum RecentActivity {
+    /// Recent
+    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recent")
+  }
   public enum Rootcheck {
     /// Your device appears to have root access, which can significantly increase security risks. Using this app on a rooted device may expose your assets to unauthorized access and potential loss. For the safety of your funds, we strongly recommend using a non-rooted device.
     public static let body = Localized.tr("Localizable", "rootcheck.body", fallback: "Your device appears to have root access, which can significantly increase security risks. Using this app on a rooted device may expose your assets to unauthorized access and potential loss. For the safety of your funds, we strongly recommend using a non-rooted device.")

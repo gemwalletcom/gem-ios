@@ -13,7 +13,7 @@ public extension Spacing {
     static let space6: Spacing = 6
     /// 8
     static let space8: Spacing = 8
-    /// 12
+    /// 10
     static let space10: Spacing = 10
     /// 12
     static let space12: Spacing = 12

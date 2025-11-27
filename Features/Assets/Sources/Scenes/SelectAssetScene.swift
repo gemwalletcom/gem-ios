@@ -48,6 +48,7 @@ public struct SelectAssetScene: View {
             }
         }
         .observeQuery(request: $model.request, value: $model.assets)
+        .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
         .onChange(of: model.filterModel, model.onChangeFilterModel)
         .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
         .onChange(of: model.isSearching, model.onChangeFocus)
@@ -72,6 +73,23 @@ public struct SelectAssetScene: View {
             }
             .textCase(nil)
             .listRowInsets(EdgeInsets())
+            .if(model.showRecentActivities) {
+                $0.listSectionSpacing(.small)
+            }
+
+            if model.showRecentActivities {
+                Section(
+                    content: { recentActivitiesCollection },
+                    header: {
+                        HStack {
+                            Text(model.recentActivityTitle)
+                                .padding(.leading, Spacing.space12)
+                            Spacer()
+                        }
+                    }
+                )
+                .cleanListRow(topOffset: .zero)
+            }
 
             if model.enablePopularSection && model.sections.popular.isNotEmpty {
                 Section {
@@ -103,6 +121,15 @@ public struct SelectAssetScene: View {
             .listRowInsets(.assetListRowInsets)
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
+    }
+
+    @ViewBuilder
+    private var recentActivitiesCollection: some View {
+        AssetsCollectionView(models: model.activityModels) { assetModel in
+            NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: assetModel.asset))) {
+                AssetChipView(model: assetModel)
+            }
+        }
     }
 
     func assetsList(assets: [AssetData]) -> some View {
