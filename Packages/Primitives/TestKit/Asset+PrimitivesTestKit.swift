@@ -100,7 +100,7 @@ public extension Asset {
         )
     }
 
-    static func mockHyperliquid() -> Asset {
+    static func mockHypercore() -> Asset {
         Asset(
             id: AssetId(chain: .hyperCore, tokenId: nil),
             name: "Hyperliquid",
