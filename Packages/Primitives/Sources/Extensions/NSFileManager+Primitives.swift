@@ -23,14 +23,6 @@ public extension FileManager {
         public var url: URL {
             URL(fileURLWithPath: directory)
         }
-        
-        public var name: String {
-            switch self {
-            case .documents: "Documents"
-            case .applicationSupport: "Application Support"
-            case .library(let folder): folder.rawValue
-            }
-        }
     }
 
     func addSkipBackupAttributeToItemAtURL(_ url: URL) throws {

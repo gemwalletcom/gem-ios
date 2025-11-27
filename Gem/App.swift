@@ -50,12 +50,49 @@ struct GemApp: App {
 class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        setup()
+        
+        URLCache.shared.memoryCapacity = 256_000_000 // ~256 MB memory space
+        URLCache.shared.diskCapacity = 1_000_000_000 // ~1GB disk cache space
+        
+        do {
+            let excludedBackupDirectories: [FileManager.Directory] = [.documents, .applicationSupport, .library(.preferences)]
+            try excludedBackupDirectories.forEach {
+                try FileManager.default.addSkipBackupAttributeToItemAtURL($0.url)
+                
+                #if DEBUG
+                debugLog("Excluded backup directory: \($0.directory)")
+                #endif
+            }
+        } catch {
+            debugLog("addSkipBackupAttributeToItemAtURL error \(error)")
+        }
+        AppResolver.main.services.onstartService.migrations()
+        AppResolver.main.storages.observablePreferences.preferences.incrementLaunchesCount()
+
+        #if DEBUG
+        // when running screenshots, set local currency
+        if ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] != nil {
+            if let currency = Locale.current.currency {
+                Preferences.standard.currency = currency.identifier
+            }
+        }
+        #endif
+        
+        let device = UIDevice.current
+        if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
+            fatalError()
+        }
+
         return true
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        setDeviceToken(deviceToken)
+        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        
+        Task {
+            let _ = try SecurePreferences.standard.set(value: token, key: .deviceToken)
+            try await AppResolver.main.services.deviceService.update()
+        }
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: any Error) {
@@ -87,8 +124,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 }
 
-// MARK: - UNUserNotificationCenterDelegate
-
 extension AppDelegate: @preconcurrency UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .banner, .list, .sound])
@@ -101,79 +136,5 @@ extension AppDelegate: @preconcurrency UNUserNotificationCenterDelegate {
     ) {
         AppResolver.main.services.notificationHandler.handleUserInfo(response.notification.request.content.userInfo)
         completionHandler()
-    }
-}
-
-// MARK: - Private
-
-extension AppDelegate {
-
-    private enum AppConfiguration {
-        static let urlCacheMemoryCapacity = 256_000_000 // ~256 MB memory space
-        static let urlCacheDiskCapacity = 1_000_000_000 // ~1GB disk cache space
-        static let excludedBackupDirectories: [FileManager.Directory] = [.documents, .applicationSupport, .library(.preferences)]
-    }
-
-    private func setup() {
-        setupURLCache()
-        setupBackupExclusions()
-        runMigrations()
-        incrementLaunchCount()
-        setupScreenshotsIfNeeded()
-        performSecurityChecks()
-    }
-
-    private func setupURLCache() {
-        URLCache.shared.memoryCapacity = AppConfiguration.urlCacheMemoryCapacity
-        URLCache.shared.diskCapacity = AppConfiguration.urlCacheDiskCapacity
-    }
-
-    private func setupBackupExclusions() {
-        do {
-            try AppConfiguration.excludedBackupDirectories.forEach {
-                try FileManager.default.addSkipBackupAttributeToItemAtURL($0.url)
-
-                #if DEBUG
-                debugLog("\($0.name) \($0.directory)")
-                #endif
-            }
-        } catch {
-            debugLog("addSkipBackupAttributeToItemAtURL error \(error)")
-        }
-    }
-
-    private func runMigrations() {
-        AppResolver.main.services.onstartService.migrations()
-    }
-
-    private func incrementLaunchCount() {
-        AppResolver.main.storages.observablePreferences.preferences.incrementLaunchesCount()
-    }
-
-    private func setupScreenshotsIfNeeded() {
-        #if DEBUG
-        // when running screenshots, set local currency
-        if ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] != nil {
-            if let currency = Locale.current.currency {
-                Preferences.standard.currency = currency.identifier
-            }
-        }
-        #endif
-    }
-
-    private func performSecurityChecks() {
-        let device = UIDevice.current
-        if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
-            fatalError()
-        }
-    }
-
-    private func setDeviceToken(_ deviceToken: Data) {
-        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
-
-        Task {
-            let _ = try SecurePreferences.standard.set(value: token, key: .deviceToken)
-            try await AppResolver.main.services.deviceService.update()
-        }
     }
 }
