@@ -14,14 +14,15 @@ public struct RecentActivityStore: Sendable {
     public func add(
         assetId: AssetId,
         walletId: WalletId,
-        type: RecentActivityType
+        type: RecentActivityType,
+        timestamp: Date = .now
     ) throws {
         try db.write { db in
             try RecentActivityRecord(
                 assetId: assetId,
                 walletId: walletId.id,
                 type: type,
-                timestamp: Date()
+                timestamp: timestamp
             ).insert(db)
         }
     }
