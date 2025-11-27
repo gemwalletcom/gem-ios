@@ -127,7 +127,7 @@ extension GemAPIService: GemAPIChartService {
     public func getCharts(assetId: AssetId, period: String) async throws -> Charts {
         return try await provider
             .request(.getCharts(assetId, period: period))
-            .map(as: Charts.self)
+            .mapOrError(as: Charts.self, asError: ResponseError.self)
     }
 }
 
