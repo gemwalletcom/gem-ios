@@ -8,6 +8,6 @@ public enum RecentActivityType: String, Codable, CaseIterable, Equatable, Sendab
 	case search
 	case transfer
 	case receive
-	case fiatBuy = "fiatbuy"
-	case fiatSell = "fiatsell"
+	case fiatBuy
+	case fiatSell
 }
