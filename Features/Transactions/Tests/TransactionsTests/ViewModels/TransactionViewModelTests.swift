@@ -25,8 +25,8 @@ final class TransactionViewModelTests {
         #expect(TransactionViewModel.mock(metadata: .swap(.mock(fromAsset: fromAsset.id, toAsset: toAsset.id, toValue: "10000"))).subtitleTextValue?.text == "+0.01 USDT")
         #expect(TransactionViewModel.mock(metadata: .swap(.mock(fromAsset: fromAsset.id, toAsset: toAsset.id, toValue: "1000"))).subtitleTextValue?.text == "+0.001 USDT")
         #expect(TransactionViewModel.mock(metadata: .swap(.mock(fromAsset: fromAsset.id, toAsset: toAsset.id, toValue: "100"))).subtitleTextValue?.text == "+0.0001 USDT")
-        #expect(TransactionViewModel.mock(metadata: .swap(.mock(fromAsset: fromAsset.id, toAsset: toAsset.id, toValue: "10"))).subtitleTextValue?.text == "+0.00001 USDT")
-        #expect(TransactionViewModel.mock(metadata: .swap(.mock(fromAsset: fromAsset.id, toAsset: toAsset.id, toValue: "1"))).subtitleTextValue?.text == "+0.000001 USDT")
+        #expect(TransactionViewModel.mock(metadata: .swap(.mock(fromAsset: fromAsset.id, toAsset: toAsset.id, toValue: "10"))).subtitleTextValue?.text == "+0.00 USDT")
+        #expect(TransactionViewModel.mock(metadata: .swap(.mock(fromAsset: fromAsset.id, toAsset: toAsset.id, toValue: "1"))).subtitleTextValue?.text == "+0.00 USDT")
     }
     
     @Test
