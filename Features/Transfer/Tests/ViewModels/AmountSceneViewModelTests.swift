@@ -142,6 +142,16 @@ struct AmountSceneViewModelTests {
         model.amountInputModel.update(text: "2.0")
         #expect(model.amountInputModel.isValid == false)
     }
+
+    @Test
+    func stakeWithZeroReservedFees() {
+        let assetData = AssetData.mock(asset: .mockHyperliquid(), balance: .mock(available: 5_000_000))
+        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+
+        model.onSelectMaxButton()
+
+        #expect(model.infoText == nil)
+    }
 }
 
 extension AmountSceneViewModel {

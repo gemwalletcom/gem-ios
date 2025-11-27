@@ -99,4 +99,14 @@ public extension Asset {
             type: .native
         )
     }
+
+    static func mockHyperliquid() -> Asset {
+        Asset(
+            id: AssetId(chain: .hyperCore, tokenId: nil),
+            name: "Hyperliquid",
+            symbol: "HYPE",
+            decimals: 8,
+            type: .native
+        )
+    }
 }
