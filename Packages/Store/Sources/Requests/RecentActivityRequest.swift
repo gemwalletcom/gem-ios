@@ -25,11 +25,11 @@ public struct RecentActivityRequest: ValueObservationQueryable {
 
     public func fetch(_ db: Database) throws -> [AssetData] {
         let activities = try RecentActivityRecord
-            .select([RecentActivityRecord.Columns.assetId, max(RecentActivityRecord.Columns.timestamp)])
+            .select([RecentActivityRecord.Columns.assetId, max(RecentActivityRecord.Columns.createdAt)])
             .filter(RecentActivityRecord.Columns.walletId == walletId)
             .filter(types.map { $0.rawValue }.contains(RecentActivityRecord.Columns.type))
             .group(RecentActivityRecord.Columns.assetId)
-            .order(max(RecentActivityRecord.Columns.timestamp).desc)
+            .order(max(RecentActivityRecord.Columns.createdAt).desc)
             .limit(limit)
             .asRequest(of: Row.self)
             .fetchAll(db)

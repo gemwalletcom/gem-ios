@@ -11,24 +11,24 @@ public struct RecentActivityRecord: Codable, PersistableRecord, FetchableRecord,
         static let assetId = Column("assetId")
         static let walletId = Column("walletId")
         static let type = Column("type")
-        static let timestamp = Column("timestamp")
+        static let createdAt = Column("createdAt")
     }
 
     public var assetId: AssetId
     public var walletId: String
     public var type: RecentActivityType
-    public var timestamp: Date
+    public var createdAt: Date
 
     public init(
         assetId: AssetId,
         walletId: String,
         type: RecentActivityType,
-        timestamp: Date = Date()
+        createdAt: Date = Date()
     ) {
         self.assetId = assetId
         self.walletId = walletId
         self.type = type
-        self.timestamp = timestamp
+        self.createdAt = createdAt
     }
 }
 
@@ -44,7 +44,7 @@ extension RecentActivityRecord: CreateTable {
                 .indexed()
             $0.column(Columns.type.name, .text)
                 .notNull()
-            $0.column(Columns.timestamp.name, .datetime)
+            $0.column(Columns.createdAt.name, .datetime)
                 .notNull()
                 .indexed()
         }

@@ -21,7 +21,7 @@ public struct RecentActivityStore: Sendable {
                 assetId: assetId,
                 walletId: walletId.id,
                 type: type,
-                timestamp: Date()
+                createdAt: Date()
             ).insert(db)
         }
     }

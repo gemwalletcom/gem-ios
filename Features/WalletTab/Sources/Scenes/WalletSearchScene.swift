@@ -60,7 +60,6 @@ public struct WalletSearchScene: View {
     @ViewBuilder
     private var assetsList: some View {
         List {
-
             if model.showTags {
                 Section {
                     TagsView(
@@ -68,7 +67,7 @@ public struct WalletSearchScene: View {
                         onSelect: { model.onSelectTag(tag: $0.tag) }
                     )
                 }
-                .cleanListRow(topOffset: 0)
+                .cleanListRow(topOffset: .zero)
                 .lineSpacing(.zero)
                 .listSectionSpacing(.zero)
             }
@@ -78,13 +77,15 @@ public struct WalletSearchScene: View {
                     content: { collection(for: model.recentActivities) },
                     header: {
                         HStack {
-                            Text(model.recentSearchesTitle)
+                            Text(model.recentActivityTitle)
                                 .padding(.leading, .space12)
                             Spacer()
                         }
                     }
                 )
-                .cleanListRow(topOffset: 0)
+                .cleanListRow(topOffset: .zero)
+                .lineSpacing(.zero)
+                .listSectionSpacing(.zero)
             }
 
             if model.showPinnedSection {

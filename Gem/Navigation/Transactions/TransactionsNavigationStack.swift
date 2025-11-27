@@ -14,6 +14,7 @@ struct TransactionsNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.assetsService) private var assetsService
+    @Environment(\.activityService) private var activityService
 
     @State private var model: TransactionsViewModel
 
@@ -72,7 +73,8 @@ struct TransactionsNavigationStack: View {
                             selectType: $0,
                             searchService: AssetSearchService(assetsService: assetsService),
                             walletsService: walletsService,
-                            priceAlertService: priceAlertService
+                            priceAlertService: priceAlertService,
+                            activityService: activityService
                         ),
                         isPresentingSelectType: $model.isPresentingSelectAssetType
                     )

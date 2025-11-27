@@ -161,7 +161,8 @@ struct WalletNavigationStack: View {
                         selectType: $0,
                         searchService: AssetSearchService(assetsService: assetsService),
                         walletsService: walletsService,
-                        priceAlertService: priceAlertService
+                        priceAlertService: priceAlertService,
+                        activityService: activityService
                     ),
                     isPresentingSelectType: $model.isPresentingSelectAssetType
                 )

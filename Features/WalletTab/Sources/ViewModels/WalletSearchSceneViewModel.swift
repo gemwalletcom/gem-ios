@@ -82,7 +82,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
     }
 
-    var recentSearchesTitle: String { Localized.RecentActivity.title }
+    var recentActivityTitle: String { Localized.RecentActivity.title }
 
     var showLoading: Bool {
         state.isLoading && showEmpty

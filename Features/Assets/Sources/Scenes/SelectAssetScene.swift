@@ -48,6 +48,7 @@ public struct SelectAssetScene: View {
             }
         }
         .observeQuery(request: $model.request, value: $model.assets)
+        .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
         .onChange(of: model.filterModel, model.onChangeFilterModel)
         .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
         .onChange(of: model.isSearching, model.onChangeFocus)
@@ -72,6 +73,21 @@ public struct SelectAssetScene: View {
             }
             .textCase(nil)
             .listRowInsets(EdgeInsets())
+            .listSectionSpacing(model.showRecentActivities ? .small : .zero)
+
+            if model.showRecentActivities {
+                Section(
+                    content: { recentActivitiesCollection },
+                    header: {
+                        HStack {
+                            Text(model.recentActivityTitle)
+                                .padding(.leading, Spacing.space12)
+                            Spacer()
+                        }
+                    }
+                )
+                .cleanListRow(topOffset: .zero)
+            }
 
             if model.enablePopularSection && model.sections.popular.isNotEmpty {
                 Section {
@@ -103,6 +119,29 @@ public struct SelectAssetScene: View {
             .listRowInsets(.assetListRowInsets)
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
+    }
+
+    @ViewBuilder
+    private var recentActivitiesCollection: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: Spacing.small) {
+                ForEach(model.recentActivities) { assetData in
+                    let assetModel = AssetViewModel(asset: assetData.asset)
+                    NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
+                        ListItemView(
+                            title: assetModel.symbol,
+                            titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
+                            imageStyle: .list(assetImage: assetModel.assetImage, cornerRadiusType: .rounded)
+                        )
+                        .padding(Spacing.small)
+                        .background(
+                            Colors.listStyleColor,
+                            in: RoundedRectangle(cornerRadius: .large)
+                        )
+                    }
+                }
+            }
+        }
     }
 
     func assetsList(assets: [AssetData]) -> some View {

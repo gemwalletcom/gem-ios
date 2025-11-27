@@ -104,6 +104,13 @@ public final class ReceiveViewModel: Sendable {
 // MARK: - Actions
 
 extension ReceiveViewModel {
+    func onTaskOnce() {
+        Task {
+            await enableAsset()
+        }
+        updateRecent()
+    }
+    
     func onShareSheet() {
         isPresentingShareSheet = true
     }
