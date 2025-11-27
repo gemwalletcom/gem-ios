@@ -37,7 +37,7 @@ public struct AssetChipView: View {
 
     public var body: some View {
         if let imageStyle = ListItemImageStyle.list(assetImage: model.assetImage, cornerRadiusType: .rounded) {
-            HStack(spacing: Spacing.extraSmall) {
+            HStack(spacing: Spacing.small) {
                 AssetImageView(
                     assetImage: imageStyle.assetImage,
                     size: imageStyle.imageSize,
