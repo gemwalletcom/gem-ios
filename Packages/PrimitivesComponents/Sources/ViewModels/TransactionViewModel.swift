@@ -16,6 +16,7 @@ public struct TransactionViewModel: Sendable {
     private let explorerService: any ExplorerLinkFetchable
     private let assetImageFormatter = AssetImageFormatter()
     private let currency: String
+    private let formatter: ValueFormatter = .short
 
     public init(
         explorerService: any ExplorerLinkFetchable,
@@ -240,7 +241,7 @@ public struct TransactionViewModel: Sendable {
             .assetActivation,
             .stakeFreeze,
             .stakeUnfreeze:
-            return infoModel.amountDisplay(formatter: .short).amount
+            return infoModel.amountDisplay(formatter: formatter).amount
         case .perpetualClosePosition:
             guard case .perpetual(let metadata) = transaction.transaction.metadata, metadata.pnl != 0 else {
                 return .none
@@ -252,7 +253,7 @@ public struct TransactionViewModel: Sendable {
                 price: Price(price: 1, priceChangePercentage24h: .zero, updatedAt: .now),
                 value: transaction.transaction.valueBigInt,
                 currency: Currency.usd.rawValue,
-                formatter: .auto,
+                formatter: formatter,
                 textStyle: TextStyle(font: .body, color: Colors.black, fontWeight: .medium)
             ).fiat
         case .tokenApproval:
@@ -263,7 +264,7 @@ public struct TransactionViewModel: Sendable {
             }
             return AmountDisplay.numeric(
                 data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: metadata.toValue), price: nil),
-                style: AmountDisplayStyle(sign: .incoming, formatter: .auto, currencyCode: currency)
+                style: AmountDisplayStyle(sign: .incoming, formatter: formatter, currencyCode: currency)
             ).amount
         case .transferNFT:
             return nil
@@ -298,7 +299,7 @@ public struct TransactionViewModel: Sendable {
                 data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: metadata.fromValue), price: nil),
                 style: AmountDisplayStyle(
                     sign: .outgoing,
-                    formatter: .auto,
+                    formatter: formatter,
                     currencyCode: currency,
                     textStyle: .footnote
                 )
