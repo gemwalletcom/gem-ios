@@ -37,6 +37,7 @@ public struct ReceiveScene: View {
                                 Text(model.address.preventingHyphenation)
                                     .multilineTextAlignment(.center)
                                     .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
+                                    .accessibilityIdentifier(model.address)
                             }
                             .buttonStyle(.plain)
                         }

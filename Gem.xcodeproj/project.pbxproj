@@ -59,6 +59,7 @@
 		B68BD2DC2DE05FB600687F09 /* Keystore in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2DB2DE05FB600687F09 /* Keystore */; };
 		B68BD2E62DE0760E00687F09 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2E52DE0760E00687F09 /* Primitives */; };
 		B69C52F32DE72B1000BBD95D /* ManageWallets in Frameworks */ = {isa = PBXBuildFile; productRef = B69C52F22DE72B1000BBD95D /* ManageWallets */; };
+		B69D9C872ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */; };
 		B6B86A102D702E7C00D31D65 /* SwapNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
 		C34C7CF829FDE942009EEC21 /* unit_frameworks.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = C34C7CF729FDE942009EEC21 /* unit_frameworks.xctestplan */; };
@@ -204,6 +205,7 @@
 		83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSceneViewModel.swift; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
 		B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+		B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletReceiveBitcoinUITests.swift; sourceTree = "<group>"; };
 		B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapNavigationView.swift; sourceTree = "<group>"; };
 		B6EA21D42E27E21700F1C849 /* Support */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Support; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -521,6 +523,14 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		B69D9C862ED85EA000A04F7F /* GemUITestsAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */,
+			);
+			path = GemUITestsAppTests;
+			sourceTree = "<group>";
+		};
 		C30952A7299C39D70004C0F9 = {
 			isa = PBXGroup;
 			children = (
@@ -528,6 +538,7 @@
 				C3CF3B6E29A98BFD00E96586 /* Packages */,
 				C30952B2299C39D70004C0F9 /* Gem */,
 				C30952C4299C39D80004C0F9 /* GemTests */,
+				B69D9C862ED85EA000A04F7F /* GemUITestsAppTests */,
 				D838194C2E256A5A0076CDB3 /* GemPriceWidget */,
 				C30952B1299C39D70004C0F9 /* Products */,
 				C3CF3B6429A9628100E96586 /* Frameworks */,
@@ -1096,6 +1107,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B69D9C872ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
