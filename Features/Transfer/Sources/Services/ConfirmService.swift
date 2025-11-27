@@ -72,18 +72,8 @@ public struct ConfirmService: Sendable {
     }
 
     public func updateRecent(input: TransferConfirmationInput) {
-        switch input.data.type.transactionType {
-        case .transfer:
-            do {
-                try activityService.updateRecent(type: .transfer, assetId: input.data.type.asset.id, walletId: input.wallet.walletId)
-            } catch {
-                debugLog("UpdateRecent error: \(error)")
-            }
-        case .transferNFT, .swap, .tokenApproval, .stakeDelegate, .stakeUndelegate, .stakeRewards,
-                .stakeRedelegate, .stakeWithdraw, .stakeFreeze, .stakeUnfreeze,
-                .assetActivation, .smartContractCall,
-                .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition: break
-        }
+        guard input.data.type.transactionType == .transfer else { return }
+        try? activityService.updateRecent(type: .transfer, assetId: input.data.type.asset.id, walletId: input.wallet.walletId)
     }
 
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {

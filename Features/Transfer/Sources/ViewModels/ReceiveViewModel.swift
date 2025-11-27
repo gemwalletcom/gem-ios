@@ -36,8 +36,6 @@ public final class ReceiveViewModel: Sendable {
         self.address = address
         self.walletsService = walletsService
         self.activityService = activityService
-        
-        updateRecent()
     }
 
 
