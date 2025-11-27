@@ -145,7 +145,7 @@ struct AmountSceneViewModelTests {
 
     @Test
     func stakeWithZeroReservedFees() {
-        let assetData = AssetData.mock(asset: .mockHyperliquid(), balance: .mock(available: 5_000_000))
+        let assetData = AssetData.mock(asset: .mockHypercore(), balance: .mock(available: 5_000_000))
         let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
 
         model.onSelectMaxButton()
