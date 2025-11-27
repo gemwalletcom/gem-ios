@@ -46,9 +46,7 @@ public struct AssetChipView: View {
                 Text(model.symbol)
                     .textStyle(TextStyle(font: .body, color: .primary, fontWeight: .semibold))
             }
-            .padding(.vertical, Spacing.small)
-            .padding(.leading, Spacing.small)
-            .padding(.trailing, Spacing.space12)
+            .padding(Spacing.small)
             .background(Colors.listStyleColor, in: RoundedRectangle(cornerRadius: .large))
         }
     }
