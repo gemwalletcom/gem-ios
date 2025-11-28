@@ -31,6 +31,7 @@ public struct SecretPhraseGridView: View {
                                 .foregroundColor(Colors.black)
                                 .allowsTightening(false)
                                 .multilineTextAlignment(.leading)
+                                .accessibilityIdentifier("word_\(word.index)")
                             Spacer()
                         }
                         .padding(.small)
