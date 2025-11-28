@@ -56,7 +56,7 @@ public final class BitcoinService: Sendable {
         }
         let plan: BitcoinTransactionPlan = AnySigner.plan(input: signingInput, coin: coinType)
 
-        try ChainCoreError.fromWalletCore(for: primitiveChain, plan.error)
+        try ChainCoreError.fromWalletCore(plan.error)
         
         return Fee(
             fee: BigInt(plan.fee),
@@ -81,7 +81,7 @@ extension BitcoinService: GemGatewayEstimateFee {
     public func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
         return try calculateFee(input: try input.map()).map()
     }
-    
+
     public func getFeeData(chain: Gemstone.Chain, input: GemTransactionLoadInput) async throws -> String? {
         .none
     }

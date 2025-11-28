@@ -3,6 +3,7 @@
 import Components
 import Primitives
 import Localization
+import Blockchain
 
 struct ConfirmErrorViewModel {
     private let state: StateViewType<TransactionInputViewModel>
@@ -24,7 +25,7 @@ extension ConfirmErrorViewModel: ItemModelProvidable {
         guard let error = listError else { return .empty }
         return .error(
             title: Localized.Errors.errorOccured,
-            error: error,
+            error: ChainCoreError.fromError(error) ?? error,
             onInfoAction: { onSelectListError(error) }
         )
     }
