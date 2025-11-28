@@ -11,6 +11,7 @@ final class CreateWalletUITests: XCTestCase {
 
     func testImportWalletAndReceiveBitcoin() throws {
         let app = XCUIApplication()
+        setupPermissionHandler()
         app.activate()
 
         // OnboardingScene
@@ -29,9 +30,6 @@ final class CreateWalletUITests: XCTestCase {
         // VerifyPhraseWalletScene
         words.forEach { app.buttons[$0].firstMatch.tap() }
         app.tapContinue()
-
-        // System push permission
-        app.allowNotifications()
 
         // WalletScene
         app.buttons["Wallet #1"].firstMatch.tap()

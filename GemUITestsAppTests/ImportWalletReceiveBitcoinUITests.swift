@@ -17,6 +17,7 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
 
     func testImportMultiCoinWalletAndVerifyBitcoinAddress() throws {
         let app = XCUIApplication()
+        setupPermissionHandler()
         app.activate()
 
         // OnboardingScene
@@ -31,9 +32,6 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
         // ImportWalletScene
         app.textFields["importInputField"].typeText(Constants.words)
         app.buttons["Import"].firstMatch.tap()
-
-        // System push permission
-        app.allowNotifications()
 
         // WalletScene
         app.buttons["receive_button"].firstMatch.tap()

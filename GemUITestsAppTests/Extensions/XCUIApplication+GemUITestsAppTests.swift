@@ -9,11 +9,6 @@ extension XCUIApplication {
         buttons["Agree and Continue"].firstMatch.tap()
     }
 
-    func allowNotifications() {
-        let springboardApp = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        springboardApp.buttons["Allow"].firstMatch.tap()
-    }
-
     func tapContinue() {
         buttons["Continue"].firstMatch.tap()
     }
