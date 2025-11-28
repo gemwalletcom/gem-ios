@@ -289,7 +289,7 @@
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "Phổ biến";
-"errors.dust_threshold" = "Giao dịch không thành công vì số tiền quá nhỏ để đáp ứng yêu cầu tối thiểu của mạng %@ (ngưỡng bụi). Giới hạn này đảm bảo giá trị giao dịch bao gồm phí và chi phí xử lý. Tăng số tiền hoặc giảm phí để tiếp tục.";
+"errors.dust_threshold" = "Giao dịch không thành công vì số tiền quá nhỏ để đáp ứng yêu cầu tối thiểu của mạng %@ (ngưỡng bụi). Giới hạn này đảm bảo giá trị giao dịch bao gồm phí và chi phí xử lý.";
 "rootcheck.security_alert" = "Cảnh báo an ninh";
 "rootcheck.body" = "Thiết bị của bạn có vẻ như có quyền truy cập gốc, điều này có thể làm tăng đáng kể rủi ro bảo mật. Sử dụng ứng dụng này trên thiết bị đã root có thể khiến tài sản của bạn bị truy cập trái phép và có khả năng mất mát. Để đảm bảo an toàn cho tiền của bạn, chúng tôi đặc biệt khuyên bạn nên sử dụng thiết bị không root.";
 "rootcheck.ignore" = "Ignore";
@@ -513,3 +513,4 @@
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
+"errors.no_data_available" = "Không có dữ liệu có sẵn";
