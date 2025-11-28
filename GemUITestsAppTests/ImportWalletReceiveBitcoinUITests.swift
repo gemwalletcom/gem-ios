@@ -29,15 +29,14 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
         app.buttons["Multi-Coin"].firstMatch.tap()
 
         // ImportWalletScene
-        let activeField = app.textFields.matching(NSPredicate(format: "hasKeyboardFocus == true")).firstMatch
-        activeField.typeText(Constants.words)
+        app.textFields["importInputField"].typeText(Constants.words)
         app.buttons["Import"].firstMatch.tap()
 
         // System push permission
         app.allowNotifications()
 
         // WalletScene
-        app.images["qrcode"].firstMatch.tap()
+        app.buttons["receive_button"].firstMatch.tap()
 
         // SelectAssetScene
         app.buttons["Bitcoin, BTC"].firstMatch.tap()
