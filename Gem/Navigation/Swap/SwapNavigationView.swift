@@ -13,6 +13,7 @@ struct SwapNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
+    @Environment(\.activityService) private var activityService
 
     @State private var model: SwapSceneViewModel
 
@@ -34,6 +35,7 @@ struct SwapNavigationView: View {
                             searchService: AssetSearchService(assetsService: assetsService),
                             walletsService: model.walletsService,
                             priceAlertService: priceAlertService,
+                            activityService: activityService,
                             selectAssetAction: model.onFinishAssetSelection
                         ),
                         isPresentingSelectType: .constant(.swap(type))

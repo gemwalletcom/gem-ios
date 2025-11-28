@@ -10,11 +10,13 @@ import Components
 import Preferences
 import Style
 import Localization
+import ActivityService
 
 @Observable
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
     private let searchService: AssetSearchService
+    private let activityService: ActivityService
     private let preferences: Preferences
 
     private let wallet: Wallet
@@ -24,29 +26,41 @@ public final class WalletSearchSceneViewModel: Sendable {
     private var state: StateViewType<[AssetBasic]> = .noData
 
     var assets: [AssetData] = []
+    var recentActivities: [Asset] = []
     var searchModel: AssetSearchViewModel
     var request: AssetsRequest
+    var recentActivityRequest: RecentActivityRequest
 
     var isSearching: Bool = false
     var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
 
+    public let onSelectAssetAction: AssetAction
+
     public init(
         wallet: Wallet,
         searchService: AssetSearchService,
+        activityService: ActivityService,
         preferences: Preferences = .standard,
         onDismissSearch: VoidAction,
+        onSelectAssetAction: AssetAction,
         onAddToken: VoidAction
     ) {
         self.wallet = wallet
         self.searchService = searchService
+        self.activityService = activityService
         self.preferences = preferences
         self.onDismissSearch = onDismissSearch
+        self.onSelectAssetAction = onSelectAssetAction
         self.onAddToken = onAddToken
         self.searchModel = AssetSearchViewModel(selectType: .manage)
         self.request = AssetsRequest(
             walletId: wallet.id,
             filters: []
+        )
+        self.recentActivityRequest = RecentActivityRequest(
+            walletId: wallet.id,
+            limit: 10
         )
     }
 
@@ -61,6 +75,16 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var showTags: Bool {
         searchModel.searchableQuery.isEmpty
+    }
+
+    var showRecentSearches: Bool {
+        searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
+    }
+
+    var recentActivityTitle: String { Localized.RecentActivity.title }
+
+    var activityModels: [AssetViewModel] {
+        recentActivities.map { AssetViewModel(asset: $0) }
     }
 
     var showLoading: Bool {
@@ -137,6 +161,11 @@ extension WalletSearchSceneViewModel {
         onDismissSearch?()
     }
 
+    func onSelectAsset(_ asset: Asset) {
+        onSelectAssetAction?(asset)
+        updateRecent(asset)
+    }
+
     func onSelectAddCustomToken() {
         onAddToken?()
     }
@@ -145,6 +174,14 @@ extension WalletSearchSceneViewModel {
 // MARK: - Private
 
 extension WalletSearchSceneViewModel {
+    private func updateRecent(_ asset: Asset) {
+        do {
+            try activityService.updateRecent(type: .search, assetId: asset.id, walletId: wallet.walletId)
+        } catch {
+            debugLog("UpdateRecent error: \(error)")
+        }
+    }
+
     private func updateRequest() {
         if searchModel.searchableQuery.isNotEmpty && searchModel.focus == .tags {
             searchModel.focus = .search
