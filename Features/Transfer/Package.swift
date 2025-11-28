@@ -77,7 +77,8 @@ let package = Package(
                 .product(name: "PerpetualService", package: "FeatureServices"),
                 .product(name: "ExplorerService", package: "ChainServices"),
                 .product(name: "NameService", package: "ChainServices"),
-                .product(name: "AddressNameService", package: "FeatureServices")
+                .product(name: "AddressNameService", package: "FeatureServices"),
+                .product(name: "ActivityService", package: "FeatureServices")
             ],
             path: "Sources"
         ),
@@ -109,6 +110,7 @@ let package = Package(
                 .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "TransactionServiceTestKit", package: "FeatureServices"),
                 .product(name: "AddressNameServiceTestKit", package: "FeatureServices"),
+                .product(name: "ActivityServiceTestKit", package: "FeatureServices"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 .product(name: "StoreTestKit", package: "Store"),

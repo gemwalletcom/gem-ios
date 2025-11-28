@@ -96,7 +96,7 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.Price.self) { scene in
                 ChartScene(
-                    model: ChartsViewModel(
+                    model: ChartSceneViewModel(
                         priceService: priceService,
                         assetModel: AssetViewModel(asset: scene.asset),
                         priceAlertService: priceAlertService,

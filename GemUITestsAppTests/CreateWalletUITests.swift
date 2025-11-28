@@ -3,7 +3,7 @@
 import XCTest
 
 @MainActor
-final class CreateWalletReceiveEthereumUITests: XCTestCase {
+final class CreateWalletUITests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         continueAfterFailure = false

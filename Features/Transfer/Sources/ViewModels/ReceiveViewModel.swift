@@ -6,16 +6,18 @@ import PrimitivesComponents
 import WalletsService
 import Components
 import Formatters
+import ActivityService
 
 @Observable
 @MainActor
 public final class ReceiveViewModel: Sendable {
-    let qrWidth: CGFloat = 280
+    let qrSize: CGFloat = 248
     
     let assetModel: AssetViewModel
     let walletId: WalletId
     let address: String
     let walletsService: WalletsService
+    let activityService: ActivityService
     let generator = QRCodeGenerator()
     
     public var isPresentingShareSheet: Bool = false
@@ -26,14 +28,16 @@ public final class ReceiveViewModel: Sendable {
         assetModel: AssetViewModel,
         walletId: WalletId,
         address: String,
-        generator: QRCodeGenerator = QRCodeGenerator(),
-        walletsService: WalletsService
+        walletsService: WalletsService,
+        activityService: ActivityService
     ) {
         self.assetModel = assetModel
         self.walletId = walletId
         self.address = address
         self.walletsService = walletsService
+        self.activityService = activityService
     }
+
 
     var title: String {
         Localized.Receive.title("")
@@ -87,8 +91,8 @@ public final class ReceiveViewModel: Sendable {
         await generator.generate(
             from: address,
             size: CGSize(
-                width: qrWidth,
-                height: qrWidth
+                width: qrSize,
+                height: qrSize
             ),
             logo: UIImage.name("logo-dark")
         )
@@ -98,6 +102,13 @@ public final class ReceiveViewModel: Sendable {
 // MARK: - Actions
 
 extension ReceiveViewModel {
+    func onTaskOnce() {
+        Task {
+            await enableAsset()
+        }
+        updateRecent()
+    }
+    
     func onShareSheet() {
         isPresentingShareSheet = true
     }
@@ -108,5 +119,17 @@ extension ReceiveViewModel {
     
     func onLoadImage() async {
         renderedImage = await generateQRCode()
+    }
+}
+
+// MARK: - Private
+
+extension ReceiveViewModel {
+    private func updateRecent() {
+        do {
+            try activityService.updateRecent(type: .receive, assetId: assetModel.asset.id, walletId: walletId)
+        } catch {
+            debugLog("UpdateRecent error: \(error)")
+        }
     }
 }

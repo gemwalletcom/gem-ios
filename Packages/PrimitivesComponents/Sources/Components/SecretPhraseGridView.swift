@@ -35,7 +35,6 @@ public struct SecretPhraseGridView: View {
                             Spacer()
                         }
                         .padding(.small)
-                        .frame(maxWidth: (.scene.content.maxWidth / 2) - (.small * 2))
                         .background(Colors.listStyleColor)
                         .cornerRadius(10)
                         .overlay {
@@ -48,5 +47,7 @@ public struct SecretPhraseGridView: View {
                 }.padding(2)
             }
         }
+        .padding(.horizontal, .medium)
+        .frame(maxWidth: .scene.content.maxWidth)
     }
 }

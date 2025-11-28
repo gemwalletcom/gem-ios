@@ -44,5 +44,7 @@ public struct CalloutView: View {
         .padding()
         .background(style.backgroundColor)
         .cornerRadius(.small)
+        .padding(.horizontal, .medium)
+        .frame(maxWidth: .scene.content.maxWidth)
     }
 }

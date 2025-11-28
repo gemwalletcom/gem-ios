@@ -713,7 +713,7 @@ extension AmountSceneViewModel {
         case .stake:
             switch asset.chain {
             case .tron: false
-            default: availableBalanceForMaxStaking > minimumValue
+            default: availableBalanceForMaxStaking > minimumValue && reserveForFee.isZero == false
             }
         case .freeze(let data):
             switch data.freezeType {

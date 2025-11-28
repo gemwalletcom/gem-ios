@@ -50,7 +50,8 @@ let package = Package(
                 .product(name: "WalletsService", package: "FeatureServices"),
                 .product(name: "PriceService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
-                .product(name: "ChainService", package: "ChainServices")
+                .product(name: "ChainService", package: "ChainServices"),
+                .product(name: "ActivityService", package: "FeatureServices")
             ]
         ),
         .testTarget(

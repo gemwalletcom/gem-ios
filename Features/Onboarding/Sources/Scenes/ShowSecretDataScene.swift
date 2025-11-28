@@ -15,15 +15,14 @@ struct ShowSecretDataScene: View {
     var body: some View {
         List {
             if let calloutViewStyle = model.calloutViewStyle {
-                CalloutView(style: calloutViewStyle)
-                    .cleanListRow()
-                    .padding(.horizontal, .medium)
+                Section {
+                    CalloutView(style: calloutViewStyle)
+                }
+                .cleanListRow()
             }
-            
+
             Section {
-                SecretDataTypeView(
-                    type: model.type
-                )
+                SecretDataTypeView(type: model.type)
             }
             .cleanListRow()
             

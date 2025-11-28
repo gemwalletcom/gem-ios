@@ -17,6 +17,7 @@ struct PriceAlertsNavigationView: View {
     @Environment(\.priceService) private var priceService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.walletService) private var walletService
+    @Environment(\.activityService) private var activityService
 
     @State private var isPresentingAddAsset: Bool = false
     @State private var isPresentingToastMessage: ToastMessage?
@@ -42,6 +43,7 @@ struct PriceAlertsNavigationView: View {
                     searchService: AssetSearchService(assetsService: assetsService),
                     walletsService: walletsService,
                     priceAlertService: priceAlertService,
+                    activityService: activityService,
                     selectAssetAction: onSelectAsset
                 )
             )

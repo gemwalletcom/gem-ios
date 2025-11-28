@@ -29,33 +29,39 @@ public struct ReceiveScene: View {
                     }
                     .lineLimit(1)
 
-                    if let image = model.renderedImage {
-                        VStack(spacing: .small) {
-                            qrCodeView(image: image)
-
-                            Button(action: model.onCopyAddress) {
-                                Text(model.address.preventingHyphenation)
-                                    .multilineTextAlignment(.center)
-                                    .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
-                                    .accessibilityIdentifier(model.address)
+                    Button(action: model.onCopyAddress) {
+                        VStack {
+                            VStack {
+                                if let image = model.renderedImage {
+                                    qrCodeView(image: image)
+                                } else {
+                                    LoadingView()
+                                }
                             }
-                            .buttonStyle(.plain)
+                            .frame(size: model.qrSize)
+                            
+                            Text(model.address.preventingHyphenation)
+                                .multilineTextAlignment(.center)
+                                .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: model.qrSize)
+                                .accessibilityIdentifier(model.address)
                         }
-                        .padding(.medium)
-                        .frame(maxWidth: model.qrWidth)
-                        .background(
-                            RoundedRectangle(cornerRadius: .medium)
-                                .fill(Colors.listStyleColor)
-                                .shadow(color: Color.black.opacity(Sizing.shadow.opacity), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
-                        )
                     }
+                    .buttonStyle(.scale)
+                    .padding(.medium)
+                    .background(
+                        RoundedRectangle(cornerRadius: .medium)
+                            .fill(Colors.listStyleColor)
+                            .shadow(color: Color.black.opacity(Sizing.shadow.opacity), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
+                    )
                 }
                 Text(model.warningMessage)
                     .textStyle(.subHeadline)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, .medium)
                     .padding(.top, .small)
-                    .frame(maxWidth: model.qrWidth)
+                    .frame(maxWidth: model.qrSize + .extraLarge)
                 Spacer()
             }
             .frame(maxWidth: .scene.button.maxWidth)
@@ -88,11 +94,7 @@ public struct ReceiveScene: View {
         .task {
             await model.onLoadImage()
         }
-        .taskOnce {
-            Task {
-                await model.enableAsset()
-            }
-        }
+        .taskOnce(model.onTaskOnce)
     }
 }
 

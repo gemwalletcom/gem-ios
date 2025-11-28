@@ -1,4 +1,3 @@
-
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
@@ -38,6 +37,7 @@ public struct WalletSearchScene: View {
             }
         }
         .observeQuery(request: $model.request, value: $model.assets)
+        .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
         .searchable(
             text: $model.searchModel.searchableQuery,
             isPresented: $model.isSearchPresented,
@@ -67,7 +67,23 @@ public struct WalletSearchScene: View {
                         onSelect: { model.onSelectTag(tag: $0.tag) }
                     )
                 }
-                .cleanListRow(topOffset: 0)
+                .cleanListRow(topOffset: .zero)
+                .lineSpacing(.zero)
+                .listSectionSpacing(.zero)
+            }
+
+            if model.showRecentSearches {
+                Section(
+                    content: { recentActivitiesCollection },
+                    header: {
+                        HStack {
+                            Text(model.recentActivityTitle)
+                                .padding(.leading, .space12)
+                            Spacer()
+                        }
+                    }
+                )
+                .cleanListRow(topOffset: .zero)
                 .lineSpacing(.zero)
                 .listSectionSpacing(.zero)
             }
@@ -84,6 +100,7 @@ public struct WalletSearchScene: View {
                 )
                 .listRowInsets(.assetListRowInsets)
             }
+
             if model.showAssetsSection {
                 Section(
                     content: { list(for: model.sections.assets) },
@@ -98,18 +115,28 @@ public struct WalletSearchScene: View {
     }
 
     @ViewBuilder
+    private var recentActivitiesCollection: some View {
+        AssetsCollectionView(models: model.activityModels) { assetModel in
+            NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
+                AssetChipView(model: assetModel)
+            }
+        }
+    }
+
+    @ViewBuilder
     private func list(for items: [AssetData]) -> some View {
-        ForEach(items) { asset in
-            NavigationLink(value: Scenes.Asset(asset: asset.asset)) {
-                ListAssetItemView(
+        ForEach(items) { assetData in
+            NavigationCustomLink(
+                with: ListAssetItemView(
                     model: ListAssetItemViewModel(
                         showBalancePrivacy: .constant(false),
-                        assetData: asset,
+                        assetData: assetData,
                         formatter: .abbreviated,
                         currencyCode: model.currencyCode
                     )
-                )
-            }
+                ),
+                action: { model.onSelectAsset(assetData.asset) }
+            )
         }
     }
 }

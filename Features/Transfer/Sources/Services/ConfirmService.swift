@@ -13,6 +13,7 @@ import BigInt
 import Blockchain
 import ChainService
 import AddressNameService
+import ActivityService
 
 public struct ConfirmService: Sendable {
     private let metadataProvider: any TransferMetadataProvidable
@@ -22,6 +23,7 @@ public struct ConfirmService: Sendable {
     private let chainService: any ChainServiceable
     private let explorerService: any ExplorerLinkFetchable
     private let addressNameService: AddressNameService
+    private let activityService: ActivityService
 
     public init(
         explorerService: any ExplorerLinkFetchable,
@@ -30,7 +32,8 @@ public struct ConfirmService: Sendable {
         transferExecutor: any TransferExecutable,
         keystore: any Keystore,
         chainService: any ChainServiceable,
-        addressNameService: AddressNameService
+        addressNameService: AddressNameService,
+        activityService: ActivityService
     ) {
         self.explorerService = explorerService
         self.metadataProvider = metadataProvider
@@ -39,6 +42,7 @@ public struct ConfirmService: Sendable {
         self.keystore = keystore
         self.chainService = chainService
         self.addressNameService = addressNameService
+        self.activityService = activityService
     }
 
     public func getMetadata(wallet: Wallet, data: TransferData) throws -> TransferDataMetadata {
@@ -65,6 +69,11 @@ public struct ConfirmService: Sendable {
 
     public func executeTransfer(input: TransferConfirmationInput) async throws {
         try await transferExecutor.execute(input: input)
+    }
+
+    public func updateRecent(input: TransferConfirmationInput) {
+        guard input.data.type.transactionType == .transfer else { return }
+        try? activityService.updateRecent(type: .transfer, assetId: input.data.type.asset.id, walletId: input.wallet.walletId)
     }
 
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {

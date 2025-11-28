@@ -383,6 +383,8 @@ public enum Localized {
     public static let invalidNetworkId = Localized.tr("Localizable", "errors.invalid_network_id", fallback: "Invalid Network ID")
     /// Invalid URL
     public static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
+    /// No data available
+    public static let noDataAvailable = Localized.tr("Localizable", "errors.no_data_available", fallback: "No data available")
     /// Not Supported
     public static let notSupported = Localized.tr("Localizable", "errors.not_supported", fallback: "Not Supported")
     /// This device does not support QR code scanning. You can only select QR code image from library.
@@ -935,6 +937,10 @@ public enum Localized {
     }
     /// Your Receiving Address
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
+  }
+  public enum RecentActivity {
+    /// Recent
+    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recent")
   }
   public enum Rootcheck {
     /// Your device appears to have root access, which can significantly increase security risks. Using this app on a rooted device may expose your assets to unauthorized access and potential loss. For the safety of your funds, we strongly recommend using a non-rooted device.
