@@ -512,3 +512,5 @@
 "settings.preferences.default_leverage" = "डिफ़ॉल्ट उत्तोलन";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";
+"errors.no_data_available" = "कोई डेटा मौजूद नहीं";

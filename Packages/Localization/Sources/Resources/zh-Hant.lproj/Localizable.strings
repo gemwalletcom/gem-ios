@@ -512,3 +512,5 @@
 "settings.preferences.default_leverage" = "預設槓桿";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
+"recent_activity.title" = "Recent";
+"errors.no_data_available" = "暫無數據";

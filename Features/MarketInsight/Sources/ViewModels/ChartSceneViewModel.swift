@@ -14,7 +14,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-public final class ChartsViewModel {
+public final class ChartSceneViewModel {
     private let service: ChartService
     private let priceService: PriceService
 
@@ -67,11 +67,19 @@ public final class ChartsViewModel {
         guard let priceData else { return nil }
         return AssetDetailsInfoViewModel(priceData: priceData)
     }
+    
+    func description(for error: Error) -> String {
+        if isNetworkError(error) {
+            error.localizedDescription
+        } else {
+            Localized.Errors.noDataAvailable
+        }
+    }
 }
 
 // MARK: - Business Logic
 
-extension ChartsViewModel {
+extension ChartSceneViewModel {
     public func fetch() async {
         state = .loading
         do {
