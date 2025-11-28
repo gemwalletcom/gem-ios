@@ -230,6 +230,12 @@ public class EthereumSigner: Signable {
                 case .redelegate, .unstake, .rewards, .withdraw: Data()
                 case .freeze: throw AnyError("SmartChain does not support freeze operations")
                 }
+            case .monad:
+                return switch stakeType {
+                case .stake: input.value.magnitude.serialize()
+                case .unstake, .withdraw, .rewards: Data()
+                case .redelegate, .freeze: throw AnyError("Monad doesn't support this stake type")
+                }
             default:
                 fatalError("\(input.asset.name) native staking not supported")
             }
