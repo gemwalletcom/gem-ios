@@ -8,8 +8,8 @@ struct ChartBounds {
     let visibleLines: [ChartLineViewModel]
 
     init(candles: [ChartCandleStick], lines: [ChartLineViewModel]) {
-        let candleMin = candles.map { min($0.low, $0.open, $0.close) }.min() ?? 0
-        let candleMax = candles.map { max($0.high, $0.open, $0.close) }.max() ?? 1
+        let candleMin = candles.map(\.low).min() ?? 0
+        let candleMax = candles.map(\.high).max() ?? 1
         let candleRange = candleMax - candleMin
 
         let visibleLines = lines.filter {

@@ -65,7 +65,7 @@ struct CandlestickChartView: View {
 
         return Chart {
             candlestickMarks
-            linesMarks(bounds.visibleLines)
+            linesMarks(bounds)
             selectionMarks
         }
         .chartOverlay { proxy in
@@ -129,14 +129,14 @@ struct CandlestickChartView: View {
     }
 
     @ChartContentBuilder
-    private func linesMarks(_ lines: [ChartLineViewModel]) -> some ChartContent {
-        ForEach(lines) { line in
+    private func linesMarks(_ bounds: ChartBounds) -> some ChartContent {
+        ForEach(bounds.visibleLines) { line in
             RuleMark(y: .value(ChartKey.price, line.price))
                 .foregroundStyle(line.color.opacity(0.8))
                 .lineStyle(line.lineStyle)
         }
 
-        ForEach(Array(lines.enumerated()), id: \.element.id) { index, line in
+        ForEach(Array(bounds.visibleLines.enumerated()), id: \.element.id) { index, line in
             RuleMark(y: .value(ChartKey.price, line.price))
                 .foregroundStyle(.clear)
                 .annotation(position: .overlay, alignment: .leading, spacing: 0) {
@@ -147,17 +147,17 @@ struct CandlestickChartView: View {
                         .padding(.vertical, 1)
                         .background(line.color)
                         .clipShape(RoundedRectangle(cornerRadius: Spacing.extraSmall))
-                        .offset(x: labelXOffset(for: index, in: lines))
+                        .offset(x: labelXOffset(for: index, in: bounds))
                 }
         }
     }
 
-    private func labelXOffset(for index: Int, in lines: [ChartLineViewModel]) -> CGFloat {
+    private func labelXOffset(for index: Int, in bounds: ChartBounds) -> CGFloat {
         guard index > 0 else { return 0 }
-        let bounds = ChartBounds(candles: data, lines: lineModels)
         let priceRange = bounds.maxPrice - bounds.minPrice
         let threshold = priceRange * 0.06
         let space: CGFloat = 75
+        let lines = bounds.visibleLines
         return (1...index).reduce(0.0) { offset, idx in
             abs(lines[idx].price - lines[idx - 1].price) < threshold ? offset + space : offset
         }

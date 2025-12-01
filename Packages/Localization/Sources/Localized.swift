@@ -212,7 +212,7 @@ public enum Localized {
     /// 1H
     public static let hour = Localized.tr("Localizable", "charts.hour", fallback: "1H")
     /// Liquidation
-    public static let liquidation = Localized.tr("Localizable", "charts.Liquidation", fallback: "Liquidation")
+    public static let liquidation = Localized.tr("Localizable", "charts.liquidation", fallback: "Liquidation")
     /// 1M
     public static let month = Localized.tr("Localizable", "charts.month", fallback: "1M")
     /// SL

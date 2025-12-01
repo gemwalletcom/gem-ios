@@ -518,4 +518,4 @@
 "charts.take_profit" = "TP";
 "charts.stop_loss" = "SL";
 "charts.entry" = "Entry";
-"charts.Liquidation" = "Liquidation";
+"charts.liquidation" = "Liquidation";
