@@ -515,7 +515,3 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Tiada data tersedia";
 "errors.dust_threshold_short" = "Rangkaian menganggap jumlah habuk ini — bayarannya lebih tinggi daripada jumlah itu sendiri.";
-"charts.take_profit" = "TP";
-"charts.stop_loss" = "SL";
-"charts.entry" = "Entry";
-"charts.liquidation" = "Liquidation";

@@ -515,7 +515,3 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Ingen data tilgængelige";
 "errors.dust_threshold_short" = "Netværket anser denne mængde for støv – gebyret er højere end selve mængden.";
-"charts.take_profit" = "TP";
-"charts.stop_loss" = "SL";
-"charts.entry" = "Entry";
-"charts.liquidation" = "Liquidation";

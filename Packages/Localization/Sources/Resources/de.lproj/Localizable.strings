@@ -515,7 +515,3 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Keine Daten verfügbar";
 "errors.dust_threshold_short" = "Das Netzwerk betrachtet diesen Betrag als Staub – die Gebühr ist höher als der Betrag selbst.";
-"charts.take_profit" = "TP";
-"charts.stop_loss" = "SL";
-"charts.entry" = "Entry";
-"charts.liquidation" = "Liquidation";

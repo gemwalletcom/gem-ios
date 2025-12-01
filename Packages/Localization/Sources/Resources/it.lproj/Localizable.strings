@@ -515,7 +515,3 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Nessun dato disponibile";
 "errors.dust_threshold_short" = "La rete considera questa cifra come polvere: la commissione è più alta dell'importo stesso.";
-"charts.take_profit" = "TP";
-"charts.stop_loss" = "SL";
-"charts.entry" = "Entry";
-"charts.liquidation" = "Liquidation";

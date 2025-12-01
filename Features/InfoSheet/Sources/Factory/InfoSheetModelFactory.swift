@@ -179,6 +179,13 @@ public struct InfoSheetModelFactory {
                 description: Localized.Errors.ScanTransaction.memoRequired(symbol),
                 image: .image(Images.Logo.logo)
             )
+        case let .dustThreshold(chain, image):
+            return InfoSheetModel(
+                title: Localized.Errors.transferError,
+                description: Localized.Errors.dustThreshold(chain.asset.name),
+                image: .assetImage(image),
+                button: .url(Docs.url(.dust))
+            )
         }
     }
 }

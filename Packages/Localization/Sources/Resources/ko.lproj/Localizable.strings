@@ -515,7 +515,3 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "사용 가능한 데이터가 없습니다";
 "errors.dust_threshold_short" = "네트워크는 이 금액을 먼지로 간주합니다. 수수료가 금액 자체보다 높기 때문입니다.";
-"charts.take_profit" = "TP";
-"charts.stop_loss" = "SL";
-"charts.entry" = "Entry";
-"charts.liquidation" = "Liquidation";

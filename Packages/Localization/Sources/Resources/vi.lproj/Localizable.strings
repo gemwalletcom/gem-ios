@@ -515,7 +515,3 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Không có dữ liệu có sẵn";
 "errors.dust_threshold_short" = "Mạng lưới coi số tiền này là bụi — mức phí còn cao hơn cả số tiền thực tế.";
-"charts.take_profit" = "TP";
-"charts.stop_loss" = "SL";
-"charts.entry" = "Entry";
-"charts.liquidation" = "Liquidation";

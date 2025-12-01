@@ -515,7 +515,3 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "No hay datos disponibles";
 "errors.dust_threshold_short" = "La red considera esta cantidad como polvo: la tarifa es más alta que el monto en sí.";
-"charts.take_profit" = "TP";
-"charts.stop_loss" = "SL";
-"charts.entry" = "Entry";
-"charts.liquidation" = "Liquidation";
