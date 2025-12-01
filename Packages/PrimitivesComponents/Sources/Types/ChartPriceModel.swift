@@ -13,7 +13,7 @@ public struct ChartPriceModel {
     public let price: Double
     public let priceChange: Double
     public let priceChangePercentage: Double
-    public let currency: String
+    public let currency: Currency
     
     public init(
         period: ChartPeriod,
@@ -21,7 +21,7 @@ public struct ChartPriceModel {
         price: Double,
         priceChange: Double,
         priceChangePercentage: Double,
-        currency: String = "USD"
+        currency: Currency = Currency.default
     ) {
         self.period = period
         self.date = date
@@ -47,7 +47,7 @@ public struct ChartPriceModel {
     }
     
     public var priceText: String {
-        CurrencyFormatter(currencyCode: currency).string(price)
+        CurrencyFormatter(currencyCode: currency.rawValue).string(price)
     }
     
     public var priceChangeText: String? {

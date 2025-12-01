@@ -515,3 +515,7 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "কোন তথ্য নেই";
 "errors.dust_threshold_short" = "নেটওয়ার্ক এই পরিমাণ ধুলো বিবেচনা করে — ফি পরিমাণের চেয়ে বেশি।";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";

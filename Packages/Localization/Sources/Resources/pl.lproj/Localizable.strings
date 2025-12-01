@@ -515,3 +515,7 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Brak dostępnych danych";
 "errors.dust_threshold_short" = "Sieć traktuje tę kwotę jako kurz — opłata jest wyższa od samej kwoty.";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";

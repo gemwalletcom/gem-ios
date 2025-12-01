@@ -207,10 +207,18 @@ public enum Localized {
     public static let all = Localized.tr("Localizable", "charts.all", fallback: "All")
     /// 1D
     public static let day = Localized.tr("Localizable", "charts.day", fallback: "1D")
+    /// Entry
+    public static let entry = Localized.tr("Localizable", "charts.entry", fallback: "Entry")
     /// 1H
     public static let hour = Localized.tr("Localizable", "charts.hour", fallback: "1H")
+    /// Liquidation
+    public static let liquidation = Localized.tr("Localizable", "charts.liquidation", fallback: "Liquidation")
     /// 1M
     public static let month = Localized.tr("Localizable", "charts.month", fallback: "1M")
+    /// SL
+    public static let stopLoss = Localized.tr("Localizable", "charts.stop_loss", fallback: "SL")
+    /// TP
+    public static let takeProfit = Localized.tr("Localizable", "charts.take_profit", fallback: "TP")
     /// 1W
     public static let week = Localized.tr("Localizable", "charts.week", fallback: "1W")
     /// 1Y
