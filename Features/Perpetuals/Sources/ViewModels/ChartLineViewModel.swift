@@ -3,11 +3,12 @@
 import SwiftUI
 import Style
 import Localization
+import Primitives
 
 struct ChartLineViewModel: Identifiable {
     let line: ChartLine
 
-    var id: String { line.id }
+    var id: String { "\(line.type)_\(line.price)" }
     var price: Double { line.price }
 
     var label: String {
