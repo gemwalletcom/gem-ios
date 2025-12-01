@@ -87,6 +87,19 @@ public final class PerpetualSceneViewModel {
     public var longButtonTitle: String { Localized.Perpetual.long }
     public var shortButtonTitle: String { Localized.Perpetual.short }
 
+    var chartLineModels: [ChartLineViewModel] {
+        guard let position = positions.first?.position else { return [] }
+        let prices: [(ChartLineType, Double?)] = [
+            (.entry, position.entryPrice),
+            (.takeProfit, position.takeProfit?.price),
+            (.stopLoss, position.stopLoss?.price),
+            (.liquidation, position.liquidationPrice)
+        ]
+        return prices.compactMap { type, price in
+            price.map { ChartLineViewModel(line: ChartLine(type: type, price: $0)) }
+        }
+    }
+
     public func fetch() async {
         Task {
             await fetchCandlesticks()

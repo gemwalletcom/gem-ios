@@ -7,10 +7,11 @@ import Primitives
 import PrimitivesComponents
 
 struct CandlestickChartView: View {
-    let data: [ChartCandleStick]
-    let period: ChartPeriod
-    let basePrice: Double?
-    
+    private let data: [ChartCandleStick]
+    private let period: ChartPeriod
+    private let basePrice: Double?
+    private let lineModels: [ChartLineViewModel]
+
     @State private var selectedCandle: ChartPriceModel? {
         didSet {
             if let selectedCandle, selectedCandle.date != oldValue?.date {
@@ -18,22 +19,23 @@ struct CandlestickChartView: View {
             }
         }
     }
-    
-    init(data: [ChartCandleStick], period: ChartPeriod = .day, basePrice: Double? = nil) {
+
+    init(
+        data: [ChartCandleStick],
+        period: ChartPeriod = .day,
+        basePrice: Double? = nil,
+        lineModels: [ChartLineViewModel] = []
+    ) {
         self.data = data
         self.period = period
         self.basePrice = basePrice ?? data.first?.close
+        self.lineModels = lineModels
     }
     
     var body: some View {
-        let minPrice = data.map { min($0.low, $0.open, $0.close) }.min() ?? 0
-        let maxPrice = data.map { max($0.high, $0.open, $0.close) }.max() ?? 1
-        let priceRange = maxPrice - minPrice
-        let padding = priceRange * 0.02 // Add 2% padding
-        
         VStack {
             priceHeader
-            chartView(minPrice: minPrice - padding, maxPrice: maxPrice + padding)
+            chartView(bounds: ChartBounds(candles: data, lines: lineModels))
         }
     }
     
@@ -49,99 +51,111 @@ struct CandlestickChartView: View {
         .padding(.bottom, Spacing.tiny)
     }
     
-    private func chartView(minPrice: Double, maxPrice: Double) -> some View {
+    private func chartView(bounds: ChartBounds) -> some View {
         let dateRange = (data.first?.date ?? Date())...(data.last?.date ?? Date())
-        
-        return Chart(data, id: \.date) { candle in
-                // High-Low line (wick)
-                RuleMark(
-                    x: .value("Date", candle.date),
-                    yStart: .value("Low", candle.low),
-                    yEnd: .value("High", candle.high)
-                )
-                .lineStyle(StrokeStyle(lineWidth: 1))
-                .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
-                
-                // Open-Close body
-                RectangleMark(
-                    x: .value("Date", candle.date),
-                    yStart: .value("Open", candle.open),
-                    yEnd: .value("Close", candle.close),
-                    width: .fixed(4)
-                )
-                .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
-                
-                // Selection indicator
-                if let selectedCandle,
-                   let selectedDate = selectedCandle.date,
-                   let selectedCandleData = data.first(where: { abs($0.date.timeIntervalSince(selectedDate)) < 1 }) {
-                    PointMark(
-                        x: .value("Date", selectedDate),
-                        y: .value("Price", selectedCandleData.close)
-                    )
-                    .symbol {
-                        Circle()
-                            .strokeBorder(Colors.blue, lineWidth: 2)
-                            .background(Circle().foregroundColor(Colors.white))
-                            .frame(width: 12)
-                    }
-                    
-                    RuleMark(
-                        x: .value("Date", selectedDate)
-                    )
-                    .foregroundStyle(Colors.blue)
-                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
-                }
-            }
-            .chartOverlay { proxy in
-                GeometryReader { geometry in
-                    Rectangle()
-                        .fill(.clear)
-                        .contentShape(Rectangle())
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { value in
-                                    if let candle = findCandle(location: value.location, proxy: proxy, geometry: geometry) {
-                                        selectedCandle = createPriceModel(for: candle)
-                                    }
+
+        return Chart {
+            candlestickMarks
+            linesMarks(bounds.visibleLines)
+            selectionMarks
+        }
+        .chartOverlay { proxy in
+            GeometryReader { geometry in
+                Rectangle()
+                    .fill(.clear)
+                    .contentShape(Rectangle())
+                    .gesture(
+                        DragGesture(minimumDistance: 0)
+                            .onChanged { value in
+                                if let candle = findCandle(location: value.location, proxy: proxy, geometry: geometry) {
+                                    selectedCandle = createPriceModel(for: candle)
                                 }
-                                .onEnded { _ in
-                                    selectedCandle = nil
-                                }
-                        )
-                }
+                            }
+                            .onEnded { _ in
+                                selectedCandle = nil
+                            }
+                    )
             }
-            .chartXAxis {
-                AxisMarks(position: .bottom, values: .automatic(desiredCount: 6)) { value in
-                    AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                        .foregroundStyle(Colors.gray.opacity(0.5))
-                }
+        }
+        .chartXAxis {
+            AxisMarks(position: .bottom, values: .automatic(desiredCount: 6)) { _ in
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                    .foregroundStyle(Colors.gray.opacity(0.5))
             }
-            .chartYAxis {
-                AxisMarks(position: .trailing, values: .automatic(desiredCount: 5)) { _ in
-                    AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                        .foregroundStyle(Colors.gray.opacity(0.5))
-                    AxisTick(stroke: StrokeStyle(lineWidth: 1))
-                        .foregroundStyle(Colors.gray.opacity(0.5))
-                    AxisValueLabel()
-                        .foregroundStyle(Colors.gray)
-                        .font(.caption2)
-                }
+        }
+        .chartYAxis {
+            AxisMarks(position: .trailing, values: .automatic(desiredCount: 5)) { _ in
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                    .foregroundStyle(Colors.gray.opacity(0.5))
+                AxisTick(stroke: StrokeStyle(lineWidth: 1))
+                    .foregroundStyle(Colors.gray.opacity(0.5))
+                AxisValueLabel()
+                    .foregroundStyle(Colors.gray)
+                    .font(.caption2)
             }
-            .chartXScale(domain: dateRange)
-            .chartYScale(domain: minPrice...maxPrice)
+        }
+        .chartXScale(domain: dateRange)
+        .chartYScale(domain: bounds.minPrice...bounds.maxPrice)
     }
-    
-    private func formatAxisDate(_ date: Date) -> String {
-        switch period {
-        case .hour:
-            return date.formatted(.dateTime.hour().minute())
-        case .day:
-            return date.formatted(.dateTime.hour(.defaultDigits(amPM: .abbreviated)))
-        case .week, .month:
-            return date.formatted(.dateTime.month(.abbreviated).day())
-        case .year, .all:
-            return date.formatted(.dateTime.month(.abbreviated).year(.twoDigits))
+
+    @ChartContentBuilder
+    private var candlestickMarks: some ChartContent {
+        ForEach(data, id: \.date) { candle in
+            RuleMark(
+                x: .value("Date", candle.date),
+                yStart: .value("Low", candle.low),
+                yEnd: .value("High", candle.high)
+            )
+            .lineStyle(StrokeStyle(lineWidth: 1))
+            .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
+
+            RectangleMark(
+                x: .value("Date", candle.date),
+                yStart: .value("Open", candle.open),
+                yEnd: .value("Close", candle.close),
+                width: .fixed(4)
+            )
+            .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
+        }
+    }
+
+    @ChartContentBuilder
+    private func linesMarks(_ lines: [ChartLineViewModel]) -> some ChartContent {
+        ForEach(lines) { line in
+            RuleMark(y: .value("Price", line.price))
+                .foregroundStyle(line.color.opacity(0.8))
+                .lineStyle(line.lineStyle)
+                .annotation(position: .overlay, alignment: .leading) {
+                    Text(line.label)
+                        .font(.system(size: 8, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 3)
+                        .padding(.vertical, 1)
+                        .background(line.color.opacity(0.85))
+                        .clipShape(RoundedRectangle(cornerRadius: 2))
+                }
+        }
+    }
+
+    @ChartContentBuilder
+    private var selectionMarks: some ChartContent {
+        if let selectedCandle,
+           let selectedDate = selectedCandle.date,
+           let selectedCandleData = data.first(where: { abs($0.date.timeIntervalSince(selectedDate)) < 1 }) {
+            PointMark(
+                x: .value("Date", selectedDate),
+                y: .value("Price", selectedCandleData.close)
+            )
+            .symbol {
+                Circle()
+                    .strokeBorder(Colors.blue, lineWidth: 2)
+                    .background(Circle().foregroundColor(Colors.white))
+                    .frame(width: 12)
+            }
+
+            RuleMark(x: .value("Date", selectedDate))
+                .foregroundStyle(Colors.blue)
+                .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
         }
     }
     
