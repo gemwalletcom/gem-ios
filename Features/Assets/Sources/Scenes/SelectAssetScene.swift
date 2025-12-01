@@ -78,17 +78,15 @@ public struct SelectAssetScene: View {
             }
 
             if model.showRecentActivities {
-                Section(
-                    content: { recentActivitiesCollection },
-                    header: {
-                        HStack {
-                            Text(model.recentActivityTitle)
-                                .padding(.leading, Spacing.space12)
-                            Spacer()
-                        }
+                Section {} header: {
+                    VStack(alignment: .leading, spacing: Spacing.small) {
+                        Text(model.recentActivityTitle)
+                            .padding(.leading, Spacing.space12)
+                        recentActivitiesCollection
                     }
-                )
-                .cleanListRow(topOffset: .zero)
+                }
+                .textCase(nil)
+                .listRowInsets(EdgeInsets())
             }
 
             if model.enablePopularSection && model.sections.popular.isNotEmpty {
