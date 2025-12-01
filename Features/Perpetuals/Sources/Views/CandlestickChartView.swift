@@ -6,6 +6,15 @@ import Style
 import Primitives
 import PrimitivesComponents
 
+private struct ChartKey {
+    static let date = "Date"
+    static let low = "Low"
+    static let high = "High"
+    static let open = "Open"
+    static let close = "Close"
+    static let price = "Price"
+}
+
 struct CandlestickChartView: View {
     private let data: [ChartCandleStick]
     private let period: ChartPeriod
@@ -102,17 +111,17 @@ struct CandlestickChartView: View {
     private var candlestickMarks: some ChartContent {
         ForEach(data, id: \.date) { candle in
             RuleMark(
-                x: .value("Date", candle.date),
-                yStart: .value("Low", candle.low),
-                yEnd: .value("High", candle.high)
+                x: .value(ChartKey.date, candle.date),
+                yStart: .value(ChartKey.low, candle.low),
+                yEnd: .value(ChartKey.high, candle.high)
             )
             .lineStyle(StrokeStyle(lineWidth: 1))
             .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
 
             RectangleMark(
-                x: .value("Date", candle.date),
-                yStart: .value("Open", candle.open),
-                yEnd: .value("Close", candle.close),
+                x: .value(ChartKey.date, candle.date),
+                yStart: .value(ChartKey.open, candle.open),
+                yEnd: .value(ChartKey.close, candle.close),
                 width: .fixed(4)
             )
             .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
@@ -122,7 +131,7 @@ struct CandlestickChartView: View {
     @ChartContentBuilder
     private func linesMarks(_ lines: [ChartLineViewModel]) -> some ChartContent {
         ForEach(Array(lines.enumerated()), id: \.element.id) { index, line in
-            RuleMark(y: .value("Price", line.price))
+            RuleMark(y: .value(ChartKey.price, line.price))
                 .foregroundStyle(line.color.opacity(0.8))
                 .lineStyle(line.lineStyle)
                 .annotation(position: .overlay, alignment: .leading) {
@@ -155,8 +164,8 @@ struct CandlestickChartView: View {
            let selectedDate = selectedCandle.date,
            let selectedCandleData = data.first(where: { abs($0.date.timeIntervalSince(selectedDate)) < 1 }) {
             PointMark(
-                x: .value("Date", selectedDate),
-                y: .value("Price", selectedCandleData.close)
+                x: .value(ChartKey.date, selectedDate),
+                y: .value(ChartKey.price, selectedCandleData.close)
             )
             .symbol {
                 Circle()
@@ -165,7 +174,7 @@ struct CandlestickChartView: View {
                     .frame(width: 12)
             }
 
-            RuleMark(x: .value("Date", selectedDate))
+            RuleMark(x: .value(ChartKey.date, selectedDate))
                 .foregroundStyle(Colors.blue)
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
         }

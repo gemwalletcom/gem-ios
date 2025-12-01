@@ -289,7 +289,7 @@
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "פּוֹפּוּלָרִי";
-"errors.dust_threshold" = "העסקה נכשלה מכיוון שהסכום קטן מדי מכדי לעמוד בדרישת המינימום של הרשת %@ (סף אבק). מגבלה זו מבטיחה שערך העסקה יכסה את העמלות ועלויות העיבוד. הגדל את הסכום או הפחת את העמלות כדי להמשיך.";
+"errors.dust_threshold" = "העסקה נכשלה מכיוון שהסכום קטן מדי לעמוד בדרישת המינימום של רשת %@ (ערך אבק). מגבלה זו מבטיחה שערך העסקה יכסה את העמלות ואת עלויות העיבוד.";
 "rootcheck.security_alert" = "אזהרת אבטחה";
 "rootcheck.body" = "נראה שלמכשיר שלך יש גישת שורש, מה שיכול להגביר משמעותית את סיכוני האבטחה. שימוש באפליקציה זו במכשיר שורשי עלול לחשוף את הנכסים שלך לגישה לא מורשית ואובדן פוטנציאלי. למען בטיחות הכספים שלך, אנו ממליצים בחום להשתמש במכשיר ללא שורש.";
 "rootcheck.ignore" = "Ignore";
@@ -514,3 +514,8 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "אין נתונים זמינים";
+"errors.dust_threshold_short" = "הרשת מחשיבה את הכמות הזו כאבק - העמלה גבוהה יותר מהכמות עצמה.";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.Liquidation" = "Liquidation";

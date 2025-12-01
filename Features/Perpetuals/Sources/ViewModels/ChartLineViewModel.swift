@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Style
+import Localization
 
 struct ChartLineViewModel: Identifiable {
     let line: ChartLine
@@ -11,10 +12,10 @@ struct ChartLineViewModel: Identifiable {
 
     var label: String {
         switch line.type {
-        case .takeProfit: "TP"
-        case .stopLoss: "SL"
-        case .entry: "Entry"
-        case .liquidation: "Liq"
+        case .takeProfit: Localized.Charts.takeProfit
+        case .stopLoss: Localized.Charts.stopLoss
+        case .entry: Localized.Charts.entry
+        case .liquidation: Localized.Charts.liquidation
         }
     }
 
