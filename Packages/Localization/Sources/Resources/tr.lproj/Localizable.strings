@@ -289,7 +289,7 @@
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "Popüler";
-"errors.dust_threshold" = "İşlem, tutarın %@ ağının minimum gereksinimini (toz eşiği) karşılamak için çok küçük olması nedeniyle başarısız oldu. Bu sınır, işlem değerinin ücretleri ve işlem maliyetlerini karşılamasını sağlar. Devam etmek için tutarı artırın veya ücretleri azaltın.";
+"errors.dust_threshold" = "İşlem, tutarın %@ ağının minimum gereksinimini (toz eşiği) karşılamak için çok küçük olması nedeniyle başarısız oldu. Bu sınır, işlem değerinin ücretleri ve işlem maliyetlerini karşılamasını sağlar.";
 "rootcheck.security_alert" = "Güvenlik Uyarısı";
 "rootcheck.body" = "Cihazınızın kök erişimi var gibi görünüyor, bu da güvenlik risklerini önemli ölçüde artırabilir. Bu uygulamayı köklü bir cihazda kullanmak varlıklarınızı yetkisiz erişime ve olası kayba maruz bırakabilir. Fonlarınızın güvenliği için köklü olmayan bir cihaz kullanmanızı şiddetle öneririz.";
 "rootcheck.ignore" = "Ignore";
@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Veri mevcut değil";
+"errors.dust_threshold_short" = "Ağ bu miktarı toz olarak değerlendiriyor; ücret miktarın kendisinden daha yüksek.";

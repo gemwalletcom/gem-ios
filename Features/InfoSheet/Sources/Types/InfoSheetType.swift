@@ -18,6 +18,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case watchWallet
     case stakeLockTime(Image?)
     case stakeApr(Image?)
+    case dustThreshold(Chain, image: AssetImage)
     // swaps
     case priceImpact
     case slippage
@@ -37,7 +38,6 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     // scan transaction
     case maliciousTransaction
     case memoRequired(symbol: String)
-
 
     public var id: String {
         switch self {
@@ -62,6 +62,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case .autoclose: "autoClose"
         case .maliciousTransaction: "maliciousTransaction"
         case let .memoRequired(symbol): "memoRequired_\(symbol)"
+        case let .dustThreshold(chain, _): "dustThreshold_\(chain.rawValue)"
         }
     }
     
