@@ -515,3 +515,7 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "داده‌ای موجود نیست";
 "errors.dust_threshold_short" = "شبکه این مبلغ را داست (dust) در نظر می‌گیرد - کارمزد آن از خود مبلغ بیشتر است.";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";

@@ -515,3 +515,7 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "ไม่มีข้อมูล";
 "errors.dust_threshold_short" = "เครือข่ายถือว่าจำนวนนี้เป็นแค่ฝุ่น เพราะค่าธรรมเนียมนั้นสูงกว่าจำนวนที่แท้จริง";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";

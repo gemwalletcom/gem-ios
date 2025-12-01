@@ -515,3 +515,7 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Tidak ada data tersedia";
 "errors.dust_threshold_short" = "Jaringan menganggap jumlah ini sebagai debu — biayanya lebih tinggi daripada jumlahnya sendiri.";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";

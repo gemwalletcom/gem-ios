@@ -515,3 +515,7 @@
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "کوئی ڈیٹا دستیاب نہیں ہے۔";
 "errors.dust_threshold_short" = "نیٹ ورک اس رقم کو دھول سمجھتا ہے — فیس خود رقم سے زیادہ ہے۔";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";
