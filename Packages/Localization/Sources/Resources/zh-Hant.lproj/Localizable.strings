@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "暫無數據";
+"errors.dust_threshold_short" = "網路將這筆金額視為微不足道的垃圾——手續費甚至高於金額本身。";

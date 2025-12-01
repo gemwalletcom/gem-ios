@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Hakuna data inayopatikana";
+"errors.dust_threshold_short" = "Mtandao unazingatia kiasi hiki cha vumbi - ada ni kubwa kuliko kiasi yenyewe.";

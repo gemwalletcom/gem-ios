@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Дані недоступні";
+"errors.dust_threshold_short" = "Мережа вважає цю кількість пилом — плата вища за саму суму.";

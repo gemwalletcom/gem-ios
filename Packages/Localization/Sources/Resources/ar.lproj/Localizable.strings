@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "لا توجد بيانات متاحة";
+"errors.dust_threshold_short" = "تعتبر الشبكة هذه الكمية مجرد غبار، حيث أن الرسوم أعلى من الكمية نفسها.";

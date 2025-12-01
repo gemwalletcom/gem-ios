@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Veri mevcut değil";
+"errors.dust_threshold_short" = "Ağ bu miktarı toz olarak değerlendiriyor; ücret miktarın kendisinden daha yüksek.";

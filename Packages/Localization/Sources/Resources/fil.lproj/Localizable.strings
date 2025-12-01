@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Walang available na data";
+"errors.dust_threshold_short" = "Isinasaalang-alang ng network ang halagang ito ng alikabok — ang bayad ay mas mataas kaysa sa halaga mismo.";

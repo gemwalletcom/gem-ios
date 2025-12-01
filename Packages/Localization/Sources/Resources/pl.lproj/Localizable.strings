@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Brak dostępnych danych";
+"errors.dust_threshold_short" = "Sieć traktuje tę kwotę jako kurz — opłata jest wyższa od samej kwoty.";

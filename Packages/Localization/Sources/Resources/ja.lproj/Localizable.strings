@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "データなし";
+"errors.dust_threshold_short" = "ネットワークはこの金額をダストとみなします。つまり、手数料は金額自体よりも高くなります。";

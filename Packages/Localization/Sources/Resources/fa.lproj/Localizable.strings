@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "داده‌ای موجود نیست";
+"errors.dust_threshold_short" = "شبکه این مبلغ را داست (dust) در نظر می‌گیرد - کارمزد آن از خود مبلغ بیشتر است.";
