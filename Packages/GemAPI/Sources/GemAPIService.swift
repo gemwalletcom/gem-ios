@@ -96,36 +96,36 @@ extension GemAPIService: GemAPIFiatService {
     public func getQuotes(type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote] {
         try await provider
             .request(.getFiatQuotes(type, assetId, request))
-            .map(as: FiatQuotes.self)
+            .mapOrError(as: FiatQuotes.self, asError: ResponseError.self)
             .quotes
     }
 
     public func getQuoteUrl(request: FiatQuoteUrlRequest) async throws -> FiatQuoteUrl {
         try await provider
             .request(.getFiatQuoteUrl(request))
-            .map(as: FiatQuoteUrl.self)
+            .mapOrError(as: FiatQuoteUrl.self, asError: ResponseError.self)
     }
 }
 
 extension GemAPIService: GemAPIConfigService {
     public func getConfig() async throws -> ConfigResponse {
-        return try await provider
+        try await provider
             .request(.getConfig)
-            .map(as: ConfigResponse.self)
+            .mapOrError(as: ConfigResponse.self, asError: ResponseError.self)
     }
 }
 
 extension GemAPIService: GemAPINameService {
     public func getName(name: String, chain: String) async throws -> NameRecord {
-        return try await provider
+        try await provider
             .request(.getNameRecord(name: name, chain: chain))
-            .map(as: NameRecord.self)
+            .mapOrError(as: NameRecord.self, asError: ResponseError.self)
     }
 }
 
 extension GemAPIService: GemAPIChartService {
     public func getCharts(assetId: AssetId, period: String) async throws -> Charts {
-        return try await provider
+        try await provider
             .request(.getCharts(assetId, period: period))
             .mapOrError(as: Charts.self, asError: ResponseError.self)
     }
@@ -133,21 +133,21 @@ extension GemAPIService: GemAPIChartService {
 
 extension GemAPIService: GemAPIDeviceService {
     public func getDevice(deviceId: String) async throws -> Device {
-        return try await provider
+        try await provider
             .request(.getDevice(deviceId: deviceId))
-            .map(as: Device.self)
+            .mapOrError(as: Device.self, asError: ResponseError.self)
     }
     
     public func addDevice(device: Primitives.Device) async throws -> Device {
-        return try await provider
+        try await provider
             .request(.addDevice(device: device))
-            .map(as: Device.self)
+            .mapOrError(as: Device.self, asError: ResponseError.self)
     }
-    
+
     public func updateDevice(device: Primitives.Device) async throws -> Device {
-        return try await provider
+        try await provider
             .request(.updateDevice(device: device))
-            .map(as: Device.self)
+            .mapOrError(as: Device.self, asError: ResponseError.self)
     }
     
     public func deleteDevice(deviceId: String) async throws {
@@ -158,21 +158,21 @@ extension GemAPIService: GemAPIDeviceService {
 
 extension GemAPIService: GemAPISubscriptionService {
     public func getSubscriptions(deviceId: String) async throws -> [Subscription] {
-        return try await provider
+        try await provider
             .request(.getSubscriptions(deviceId: deviceId))
-            .map(as: [Subscription].self)
+            .mapOrError(as: [Subscription].self, asError: ResponseError.self)
     }
     
     public func addSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws {
         let _ = try await provider
             .request(.addSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
-            .map(as: Int.self)
+            .mapOrError(as: Int.self, asError: ResponseError.self)
     }
-    
+
     public func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws {
         let _ = try await provider
             .request(.deleteSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
-            .map(as: Int.self)
+            .mapOrError(as: Int.self, asError: ResponseError.self)
     }
 }
 
@@ -181,14 +181,14 @@ extension GemAPIService: GemAPITransactionService {
         let options = TransactionsFetchOption(wallet_index: walletIndex.asInt32, asset_id: asset.identifier, from_timestamp: fromTimestamp.asUInt32)
         return try await provider
             .request(.getTransactions(deviceId: deviceId, options: options))
-            .map(as: TransactionsResponse.self)
+            .mapOrError(as: TransactionsResponse.self, asError: ResponseError.self)
     }
 
     public func getTransactionsAll(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> TransactionsResponse {
         let options = TransactionsFetchOption(wallet_index: walletIndex.asInt32, asset_id: .none, from_timestamp: fromTimestamp.asUInt32)
         return try await provider
             .request(.getTransactions(deviceId: deviceId, options: options))
-            .map(as: TransactionsResponse.self)
+            .mapOrError(as: TransactionsResponse.self, asError: ResponseError.self)
     }
 }
 
@@ -196,66 +196,66 @@ extension GemAPIService: GemAPIAssetsListService {
     public func getAssetsByDeviceId(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [Primitives.AssetId] {
         try await provider
             .request(.getAssetsList(deviceId: deviceId, walletIndex: walletIndex, fromTimestamp: fromTimestamp))
-            .map(as: [String].self)
+            .mapOrError(as: [String].self, asError: ResponseError.self)
             .compactMap { try? AssetId(id: $0) }
     }
 
     public func getBuyableFiatAssets() async throws -> FiatAssets {
         try await provider
             .request(.getFiatAssets(.buy))
-            .map(as: FiatAssets.self)
+            .mapOrError(as: FiatAssets.self, asError: ResponseError.self)
     }
 
     public func getSellableFiatAssets() async throws -> FiatAssets {
         try await provider
             .request(.getFiatAssets(.sell))
-            .map(as: FiatAssets.self)
+            .mapOrError(as: FiatAssets.self, asError: ResponseError.self)
     }
-    
+
     public func getSwapAssets() async throws -> FiatAssets {
         try await provider
             .request(.getSwapAssets)
-            .map(as: FiatAssets.self)
+            .mapOrError(as: FiatAssets.self, asError: ResponseError.self)
     }
 }
 
 extension GemAPIService: GemAPIAssetsService {
     public func getAsset(assetId: AssetId) async throws -> AssetFull {
-        return try await provider
+        try await provider
             .request(.getAsset(assetId))
-            .map(as: AssetFull.self)
+            .mapOrError(as: AssetFull.self, asError: ResponseError.self)
     }
-    
+
     public func getAssets(assetIds: [AssetId]) async throws -> [AssetBasic] {
-        return try await provider
+        try await provider
             .request(.getAssets(assetIds))
-            .map(as: [AssetBasic].self)
+            .mapOrError(as: [AssetBasic].self, asError: ResponseError.self)
     }
-    
+
     public func getSearchAssets(query: String, chains: [Chain], tags: [AssetTag]) async throws -> [AssetBasic] {
         try await provider
             .request(.getSearchAssets(query: query, chains: chains, tags: tags))
-            .map(as: [AssetBasic].self)
+            .mapOrError(as: [AssetBasic].self, asError: ResponseError.self)
     }
 }
 
 extension GemAPIService: GemAPIPriceAlertService {
     public func getPriceAlerts(deviceId: String, assetId: String?) async throws -> [PriceAlert] {
-        return try await provider
+        try await provider
             .request(.getPriceAlerts(deviceId: deviceId, assetId: assetId))
-            .map(as: [PriceAlert].self)
+            .mapOrError(as: [PriceAlert].self, asError: ResponseError.self)
     }
 
     public func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws {
         let _ = try await provider
             .request(.addPriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
-            .map(as: Int.self)
+            .mapOrError(as: Int.self, asError: ResponseError.self)
     }
 
     public func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws {
         let _ = try await provider
             .request(.deletePriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
-            .map(as: Int.self)
+            .mapOrError(as: Int.self, asError: ResponseError.self)
     }
 }
 
@@ -287,7 +287,7 @@ extension GemAPIService: GemAPIPricesService {
     public func getPrices(currency: String?, assetIds: [AssetId]) async throws -> [AssetPrice] {
         try await provider
             .request(.getPrices(AssetPricesRequest(currency: currency, assetIds: assetIds)))
-            .map(as: AssetPrices.self).prices
+            .mapOrError(as: AssetPrices.self, asError: ResponseError.self).prices
     }
 }
 
