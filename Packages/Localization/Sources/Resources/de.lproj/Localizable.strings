@@ -289,7 +289,7 @@
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "Beliebt";
-"errors.dust_threshold" = "Die Transaktion ist fehlgeschlagen, da der Betrag zu gering ist, um die Mindestanforderung des %@ -Netzwerks (Dust-Schwellenwert) zu erfüllen. Dieses Limit stellt sicher, dass der Transaktionswert die Gebühren und Bearbeitungskosten deckt. Erhöhen Sie den Betrag oder reduzieren Sie die Gebühren, um fortzufahren.";
+"errors.dust_threshold" = "Die Transaktion ist fehlgeschlagen, da der Betrag zu gering ist, um die Mindestanforderung des %@ -Netzwerks (Dust-Schwellenwert) zu erfüllen. Dieses Limit stellt sicher, dass der Transaktionswert die Gebühren und Bearbeitungskosten deckt.";
 "rootcheck.security_alert" = "Sicherheitswarnung";
 "rootcheck.body" = "Ihr Gerät scheint Root-Zugriff zu haben, was die Sicherheitsrisiken erheblich erhöhen kann. Die Verwendung dieser App auf einem gerooteten Gerät kann Ihre Vermögenswerte einem unbefugten Zugriff und einem möglichen Verlust aussetzen. Zur Sicherheit Ihrer Gelder empfehlen wir dringend die Verwendung eines nicht gerooteten Geräts.";
 "rootcheck.ignore" = "Ignore";
@@ -514,3 +514,4 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Keine Daten verfügbar";
+"errors.dust_threshold_short" = "Das Netzwerk betrachtet diesen Betrag als Staub – die Gebühr ist höher als der Betrag selbst.";

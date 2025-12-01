@@ -3,23 +3,35 @@
 import Foundation
 import WalletCore
 import Primitives
+import Gemstone
 
-public enum ChainCoreError: Error, Equatable {
+public enum ChainCoreError: String, Error, Equatable {
     case feeRateMissed
     case cantEstimateFee
-    case incorrectAmount    
-    case dustThreshold(chain: Chain)
-    
-    public static func fromWalletCore(for chain: Chain, _ error: CommonSigningError) throws {
+    case incorrectAmount
+    case dustThreshold
+
+    public static func fromWalletCore(_ error: CommonSigningError) throws {
         let chainError: ChainCoreError? = switch error {
         case .errorDustAmountRequested,
-            .errorNotEnoughUtxos: ChainCoreError.dustThreshold(chain: chain)
+            .errorNotEnoughUtxos: ChainCoreError.dustThreshold
         case .ok: .none
         default: ChainCoreError.cantEstimateFee
         }
-        
+
         if let error = chainError {
             throw error
         }
+    }
+    
+    
+    public static func fromError(_ error: Error) -> ChainCoreError? {
+        for errorCase in [ChainCoreError.dustThreshold, .feeRateMissed, .cantEstimateFee, .incorrectAmount] {
+            if error.localizedDescription.contains(errorCase.rawValue) {
+                return errorCase
+            }
+        }
+
+        return nil
     }
 }
