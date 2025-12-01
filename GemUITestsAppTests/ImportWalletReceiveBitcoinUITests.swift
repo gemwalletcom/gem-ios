@@ -5,11 +5,6 @@ import XCTest
 @MainActor
 final class ImportWalletReceiveBitcoinUITests: XCTestCase {
 
-    enum Constants {
-        static let words = "insect select insane waste rate grit ranch uniform loan venture jump silent"
-        static let address = "bc1qvxn5cxtp63cylys56mdwzrdmeryj608vlsexkw"
-    }
-
     override func setUpWithError() throws {
         try super.setUpWithError()
         continueAfterFailure = false
@@ -30,7 +25,7 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
         app.buttons["Multi-Coin"].firstMatch.tap()
 
         // ImportWalletScene
-        app.textFields["importInputField"].typeText(Constants.words)
+        app.textFields["importInputField"].typeText(UITestKitConstants.words)
         app.buttons["Import"].firstMatch.tap()
 
         // WalletScene
@@ -41,6 +36,6 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
 
         // ReceiveScene
         app.buttons["Copy"].firstMatch.tap()
-        XCTAssertTrue(app.buttons[Constants.address].exists)
+        XCTAssertTrue(app.buttons[UITestKitConstants.bitcoinAddress].exists)
     }
 }
