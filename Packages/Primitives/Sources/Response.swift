@@ -1,10 +1,18 @@
 import Foundation
 
-public struct ResponseError: Codable, Sendable {
+public struct ResponseError: Codable, Sendable, LocalizedError {
     public let error: ResponseMessage
+    
+    public var errorDescription: String? {
+        error.errorDescription
+    }
 
-    public struct ResponseMessage: Codable, Sendable, Error {
+    public struct ResponseMessage: Codable, Sendable, LocalizedError {
         public let message: String
+        
+        public var errorDescription: String? {
+            message
+        }
     }
 }
 

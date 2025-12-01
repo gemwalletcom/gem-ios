@@ -90,20 +90,24 @@ public final class CollectibleViewModel {
             chainPlaceholder: .none
         )
     }
+    
+    let enabledChainTypes: Set<ChainType> = [ChainType.ethereum]
 
     var headerButtons: [HeaderButton] {
-        let enabledTransferChains = [Chain.ethereum]
         return [
             HeaderButton(
                 type: .send,
-                isEnabled: assetData.asset.chain.isNFTSupported && enabledTransferChains.contains(assetData.asset.chain)
+                isEnabled: assetData.asset.chain.isNFTSupported && enabledChainTypes
+                    .contains(assetData.asset.chain.type)
             ),
             HeaderButton(
                 type: .more,
                 viewType: .menuButton(
                     title: title,
-                    items: [.button(title: Localized.Nft.saveToPhotos, systemImage: SystemImage.gallery, action: onSelectSaveToGallery),
-                            .button(title: Localized.Nft.setAsAvatar, systemImage: SystemImage.emoji, action: onSelectSetAsAvatar)]
+                    items: [
+                        .button(title: Localized.Nft.saveToPhotos, systemImage: SystemImage.gallery, action: onSelectSaveToGallery),
+                        .button(title: Localized.Nft.setAsAvatar, systemImage: SystemImage.emoji, action: onSelectSetAsAvatar),
+                    ]
                 ),
                 isEnabled: true
             ),
