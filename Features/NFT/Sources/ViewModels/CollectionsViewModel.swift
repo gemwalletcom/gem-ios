@@ -9,143 +9,58 @@ import Localization
 import Style
 import SwiftUI
 import PrimitivesComponents
-import AvatarService
 import WalletService
 
 @Observable
 @MainActor
-public final class CollectionsViewModel: Sendable {
+public final class CollectionsViewModel: CollectionsViewable, Sendable {
     private let walletService: WalletService
     private let nftService: NFTService
 
-    let columns: [GridItem] = Array(repeating: GridItem(spacing: .medium), count: 2)
-    let sceneStep: Scenes.CollectionsScene.SceneStep
-    var request: NFTRequest
+    public var request: NFTRequest
+    public var nftDataList: [NFTData] = []
 
     public var isPresentingReceiveSelectAssetType: SelectAssetType?
-    public var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
 
-    public private(set) var wallet: Wallet
+    public var wallet: Wallet
 
     public init(
         nftService: NFTService,
         walletService: WalletService,
-        wallet: Wallet,
-        sceneStep: Scenes.CollectionsScene.SceneStep,
-        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
+        wallet: Wallet
     ) {
         self.nftService = nftService
         self.walletService = walletService
-
         self.wallet = wallet
-        self.sceneStep = sceneStep
-        self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
-        self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
+        self.request = NFTRequest(walletId: wallet.id, filter: .all)
     }
 
-    var title: String {
-        switch sceneStep {
-        case .collections: Localized.Nft.collections
-        case .collection(let data): data.collection.name
-        }
-    }
+    public var title: String { Localized.Nft.collections }
 
-    var emptyContentModel: EmptyContentTypeViewModel {
-        EmptyContentTypeViewModel(type: .nfts(action: onSelectReceive))
-    }
-    
     public var currentWallet: Wallet? {
         walletService.currentWallet
     }
 
-    // MARK: - Public methods
-    
-    public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
-        if let newWallet, wallet != newWallet {
-            wallet = newWallet
-            request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
-        }
+    public var content: GridContent {
+        let items = nftDataList
+            .filter { $0.collection.isVerified }
+            .map { buildGridItem(from: $0) }
+
+        let unverifiedCount = nftDataList
+            .filter { $0.collection.isVerified == false }
+            .count
+
+        return GridContent(items: items, unverifiedCount: unverifiedCount > 0 ? String(unverifiedCount) : nil)
     }
 
-    public func onSelectReceive() {
-        isPresentingReceiveSelectAssetType = .receive(.collection)
-    }
+    // MARK: - Actions
 
-    // MARK: - Internal methods
-    
-    func fetch() async {
-        switch sceneStep {
-        case .collections:
-            await updateCollection()
-        case .collection:
-            break
-        }
-    }
-    
-    func createGridItems(from list: [NFTData]) -> [GridPosterViewItem] {
-        switch sceneStep {
-        case .collections:
-            list.map { buildCollectionsGridItem(from: $0) }
-        case .collection(let data):
-            data.assets.map { asset in
-                buildAssetDetailsGridItem(collection: data.collection, asset: asset)
-            }
-        }
-    }
-    
-    // MARK: - Private methods
-    
-    private func buildCollectionsGridItem(from data: NFTData) -> GridPosterViewItem {
-        if data.assets.count == 1, let asset = data.assets.first {
-            buildAssetDetailsGridItem(collection: data.collection, asset: asset)
-        } else {
-            buildCollectionGridItem(from: data)
-        }
-    }
-    
-    private func buildCollectionGridItem(from data: NFTData) -> GridPosterViewItem {
-        GridPosterViewItem(
-            id: data.id,
-            destination: Scenes.CollectionsScene(sceneStep: .collection(data)),
-            assetImage: AssetImage(type: data.collection.name, imageURL: data.collection.images.preview.url.asURL),
-            title: data.collection.name
-        )
-    }
-    
-    private func buildAssetDetailsGridItem(collection: NFTCollection, asset: NFTAsset) -> GridPosterViewItem {
-        GridPosterViewItem(
-            id: asset.id,
-            destination: Scenes.Collectible(assetData: NFTAssetData(collection: collection, asset: asset)),
-            assetImage: AssetImage(type: collection.name, imageURL: asset.images.preview.url.asURL),
-            title: asset.name
-        )
-    }
-    
-    private func updateCollection() async {
+    public func fetch() async {
         do {
             let count = try await nftService.updateAssets(wallet: wallet)
-            
             debugLog("update nfts: \(count)")
         } catch {
             debugLog("update nfts error: \(error)")
-        }
-    }
-
-    private static func createNftRequest(
-        for wallet: Wallet,
-        sceneStep: Scenes.CollectionsScene.SceneStep
-    ) -> NFTRequest {
-        switch sceneStep {
-        case .collections:
-            NFTRequest(
-                walletId: wallet.id,
-                collectionId: nil
-            )
-        case .collection(let data):
-            NFTRequest(
-                walletId: wallet.id,
-                collectionId: data.collection.id
-            )
         }
     }
 }

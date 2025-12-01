@@ -5,45 +5,42 @@ import SwiftUI
 import GRDBQuery
 import Primitives
 import Store
-import NFTService
 import Components
-import DeviceService
 import Style
 import Localization
 import PrimitivesComponents
 
-public struct CollectionsScene: View {
-    private let model: CollectionsViewModel
+public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
+    @State private var model: ViewModel
 
-    @Query<NFTRequest>
-    private var nftDataList: [NFTData]
-    
-    public init(model: CollectionsViewModel) {
-        self.model = model
-        let request = Binding {
-            model.request
-        } set: { new in
-            model.request = new
-        }
-        _nftDataList = Query(request)
+    public init(model: ViewModel) {
+        _model = State(initialValue: model)
     }
-    
+
     public var body: some View {
         ScrollView {
-            LazyVGrid(columns: model.columns) {
-                collectionsView
+            VStack(spacing: Spacing.medium) {
+                LazyVGrid(columns: model.columns) {
+                    gridItemsView
+                }
+
+                if let unverifiedCount = model.content.unverifiedCount {
+                    unverifiedSection(unverifiedCount)
+                }
+                Spacer()
             }
+            .padding(.horizontal, .medium)
         }
+        .observeQuery(request: $model.request, value: $model.nftDataList)
         .overlay {
-            if nftDataList.isEmpty {
+            if model.content.items.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
-        .padding(.horizontal, .medium)
         .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
-        .refreshable(action: model.fetch)
+        .refreshable { await model.fetch() }
         .task { await model.fetch() }
     }
 }
@@ -51,13 +48,28 @@ public struct CollectionsScene: View {
 // MARK: - UI
 
 extension CollectionsScene {
-    private var collectionsView: some View {
-        ForEach(model.createGridItems(from: nftDataList)) { gridItem in
+    private var gridItemsView: some View {
+        ForEach(model.content.items) { gridItem in
             NavigationLink(value: gridItem.destination) {
                 GridPosterView(
                     assetImage: gridItem.assetImage,
                     title: gridItem.title
                 )
+            }
+        }
+    }
+
+    private func unverifiedSection(_ count: String) -> some View {
+        NavigationLink(value: Scenes.UnverifiedCollections()) {
+            HStack {
+                ListItemView(
+                    title: Localized.Asset.Verification.unverified,
+                    subtitle: count,
+                    imageStyle: .list(assetImage: .image(Images.TokenStatus.warning))
+                )
+                Spacer()
+                Images.System.chevronRight
+                    .foregroundColor(Colors.gray)
             }
         }
     }

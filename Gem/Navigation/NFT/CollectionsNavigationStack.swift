@@ -12,15 +12,15 @@ import AssetsService
 
 struct CollectionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
-    @Environment(\.nftService) private var nftService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.avatarService) private var avatarService
-    @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.activityService) private var activityService
 
     @State private var model: CollectionsViewModel
+
+    @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
 
     private var navigationPath: Binding<NavigationPath> {
         Binding(
@@ -29,11 +29,15 @@ struct CollectionsNavigationStack: View {
         )
     }
 
-    init(model: CollectionsViewModel) {
+    init(
+        model: CollectionsViewModel,
+        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
+    ) {
         _model = State(initialValue: model)
+        _isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
-    public var body: some View   {
+    public var body: some View {
         NavigationStack(path: navigationPath) {
             CollectionsScene(model: model)
                 .onChange(
@@ -41,15 +45,18 @@ struct CollectionsNavigationStack: View {
                     initial: true,
                     model.onChangeWallet
                 )
-                .navigationDestination(for: Scenes.CollectionsScene.self) {
+                .navigationDestination(for: Scenes.Collection.self) { scene in
                     CollectionsScene(
-                        model: CollectionsViewModel(
-                            nftService: nftService,
-                            walletService: walletService,
+                        model: CollectionViewModel(
                             wallet: model.wallet,
-                            sceneStep: $0.sceneStep,
-                            isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput
+                            collectionId: scene.id,
+                            collectionName: scene.name
                         )
+                    )
+                }
+                .navigationDestination(for: Scenes.UnverifiedCollections.self) { _ in
+                    CollectionsScene(
+                        model: UnverifiedCollectionsViewModel(wallet: model.wallet)
                     )
                 }
                 .navigationDestination(for: Scenes.Collectible.self) {
@@ -58,7 +65,7 @@ struct CollectionsNavigationStack: View {
                             wallet: model.wallet,
                             assetData: $0.assetData,
                             avatarService: avatarService,
-                            isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput
+                            isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
                         )
                     )
                 }

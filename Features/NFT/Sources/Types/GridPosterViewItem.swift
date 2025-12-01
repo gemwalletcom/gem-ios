@@ -3,9 +3,16 @@
 import Foundation
 import Components
 
-struct GridPosterViewItem: Identifiable {
-    let id: String
-    let destination: any Hashable
-    let assetImage: AssetImage
-    let title: String
+public struct GridPosterViewItem: Identifiable, Sendable {
+    public let id: String
+    public let destination: any Hashable & Sendable
+    public let assetImage: AssetImage
+    public let title: String
+
+    public init(id: String, destination: any Hashable & Sendable, assetImage: AssetImage, title: String) {
+        self.id = id
+        self.destination = destination
+        self.assetImage = assetImage
+        self.title = title
+    }
 }
