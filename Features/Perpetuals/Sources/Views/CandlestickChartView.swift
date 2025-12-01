@@ -130,31 +130,36 @@ struct CandlestickChartView: View {
 
     @ChartContentBuilder
     private func linesMarks(_ lines: [ChartLineViewModel]) -> some ChartContent {
-        ForEach(Array(lines.enumerated()), id: \.element.id) { index, line in
+        ForEach(lines) { line in
             RuleMark(y: .value(ChartKey.price, line.price))
                 .foregroundStyle(line.color.opacity(0.8))
                 .lineStyle(line.lineStyle)
-                .annotation(position: .overlay, alignment: .leading) {
+        }
+
+        ForEach(Array(lines.enumerated()), id: \.element.id) { index, line in
+            RuleMark(y: .value(ChartKey.price, line.price))
+                .foregroundStyle(.clear)
+                .annotation(position: .overlay, alignment: .leading, spacing: 0) {
                     Text(line.label)
-                        .font(.system(size: Spacing.small, weight: .semibold))
+                        .font(.system(size: Spacing.space10, weight: .bold))
                         .foregroundStyle(Colors.whiteSolid)
                         .padding(.horizontal, Spacing.extraSmall)
                         .padding(.vertical, 1)
-                        .background(line.color.opacity(0.85))
+                        .background(line.color)
                         .clipShape(RoundedRectangle(cornerRadius: Spacing.extraSmall))
-                        .offset(x: labelOffset(for: index, in: lines)) // offset of labels when near each others ( overlapping )
+                        .offset(x: labelXOffset(for: index, in: lines))
                 }
         }
     }
 
-    private func labelOffset(for index: Int, in lines: [ChartLineViewModel]) -> CGFloat {
+    private func labelXOffset(for index: Int, in lines: [ChartLineViewModel]) -> CGFloat {
         guard index > 0 else { return 0 }
-        let priceRange = (data.map { max($0.high, $0.close) }.max() ?? 1) -
-            (data.map { min($0.low, $0.close) }.min() ?? 0)
-        let threshold = priceRange * 0.05
-        let labelSpace = 40.0
-        return (1...index).reduce(0) { offset, idx in
-            abs(lines[idx].price - lines[idx - 1].price) < threshold ? offset + labelSpace : offset
+        let bounds = ChartBounds(candles: data, lines: lineModels)
+        let priceRange = bounds.maxPrice - bounds.minPrice
+        let threshold = priceRange * 0.06
+        let space: CGFloat = 75
+        return (1...index).reduce(0.0) { offset, idx in
+            abs(lines[idx].price - lines[idx - 1].price) < threshold ? offset + space : offset
         }
     }
 
