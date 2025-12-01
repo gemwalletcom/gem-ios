@@ -23,6 +23,6 @@ struct ChartBounds {
 
         self.minPrice = min(candleMin, overlayMin) - padding
         self.maxPrice = max(candleMax, overlayMax) + padding
-        self.visibleLines = visibleLines
+        self.visibleLines = visibleLines.sorted { $0.price < $1.price }
     }
 }
