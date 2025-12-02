@@ -45,6 +45,7 @@ public struct ReceiveScene: View {
                                 .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
                                 .fixedSize(horizontal: false, vertical: true)
                                 .frame(maxWidth: model.qrSize)
+                                .accessibilityIdentifier(model.address)
                         }
                     }
                     .buttonStyle(.scale)

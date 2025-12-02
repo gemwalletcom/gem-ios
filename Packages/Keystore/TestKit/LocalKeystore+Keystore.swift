@@ -3,6 +3,7 @@
 import Foundation
 import Keystore
 
+// For public use
 public extension LocalKeystore {
     static let words = ["shoot", "island", "position", "soft", "burden", "budget", "tooth", "cruel", "issue", "economy", "destroy", "above"]
     static let privateKey = "0x9f110a73d04dc7becb316fb9adfe04689a947bb49be11060577c3c0a4b4d4cd5"

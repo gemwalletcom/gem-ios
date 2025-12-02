@@ -46,6 +46,7 @@ struct ImportWalletScene: View {
                             text: $model.input,
                             axis: .vertical
                         )
+                        .accessibilityIdentifier("importInputField")
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
                         .lineLimit(8)

@@ -53,13 +53,18 @@
 		B66AFC6C2DDB260A0082C026 /* AppService in Frameworks */ = {isa = PBXBuildFile; productRef = B66AFC6B2DDB260A0082C026 /* AppService */; };
 		B66DEDB02D49F0EA00309D53 /* ImageGalleryService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */; };
 		B67ED5472DDB5DCC009F74E6 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */; };
+		B68058312ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */; };
+		B68058322ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */; };
 		B68BD2CA2DE04B5B00687F09 /* Components in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2C92DE04B5B00687F09 /* Components */; };
 		B68BD2D82DE05F7500687F09 /* KeystoreTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2D72DE05F7500687F09 /* KeystoreTestKit */; };
 		B68BD2DA2DE05F9100687F09 /* PrimitivesTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2D92DE05F9100687F09 /* PrimitivesTestKit */; };
 		B68BD2DC2DE05FB600687F09 /* Keystore in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2DB2DE05FB600687F09 /* Keystore */; };
 		B68BD2E62DE0760E00687F09 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2E52DE0760E00687F09 /* Primitives */; };
 		B69C52F32DE72B1000BBD95D /* ManageWallets in Frameworks */ = {isa = PBXBuildFile; productRef = B69C52F22DE72B1000BBD95D /* ManageWallets */; };
+		B69D9C872ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */; };
 		B6B86A102D702E7C00D31D65 /* SwapNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */; };
+		B6C8F2AF2EDE2691005915E4 /* UITestKitConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C8F2AD2EDE2691005915E4 /* UITestKitConstants.swift */; };
+		B6CBBC552ED9A80B0043443B /* CreateWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CBBC542ED9A80B0043443B /* CreateWalletUITests.swift */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
 		C34C7CF829FDE942009EEC21 /* unit_frameworks.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = C34C7CF729FDE942009EEC21 /* unit_frameworks.xctestplan */; };
 		C35DA07C2A9C3B4B008CCEFA /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = C35DA07B2A9C3B4B008CCEFA /* Settings */; };
@@ -204,7 +209,12 @@
 		83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSceneViewModel.swift; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
 		B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+		B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
+		B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
+		B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletReceiveBitcoinUITests.swift; sourceTree = "<group>"; };
 		B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapNavigationView.swift; sourceTree = "<group>"; };
+		B6C8F2AD2EDE2691005915E4 /* UITestKitConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestKitConstants.swift; sourceTree = "<group>"; };
+		B6CBBC542ED9A80B0043443B /* CreateWalletUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWalletUITests.swift; sourceTree = "<group>"; };
 		B6EA21D42E27E21700F1C849 /* Support */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Support; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30952B3299C39D70004C0F9 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -521,6 +531,34 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		B68058302ED9C6F7001273D6 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */,
+				B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B69D9C862ED85EA000A04F7F /* GemUITestsAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				B6C8F2AE2EDE2691005915E4 /* Types */,
+				B68058302ED9C6F7001273D6 /* Extensions */,
+				B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */,
+				B6CBBC542ED9A80B0043443B /* CreateWalletUITests.swift */,
+			);
+			path = GemUITestsAppTests;
+			sourceTree = "<group>";
+		};
+		B6C8F2AE2EDE2691005915E4 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				B6C8F2AD2EDE2691005915E4 /* UITestKitConstants.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
 		C30952A7299C39D70004C0F9 = {
 			isa = PBXGroup;
 			children = (
@@ -528,6 +566,7 @@
 				C3CF3B6E29A98BFD00E96586 /* Packages */,
 				C30952B2299C39D70004C0F9 /* Gem */,
 				C30952C4299C39D80004C0F9 /* GemTests */,
+				B69D9C862ED85EA000A04F7F /* GemUITestsAppTests */,
 				D838194C2E256A5A0076CDB3 /* GemPriceWidget */,
 				C30952B1299C39D70004C0F9 /* Products */,
 				C3CF3B6429A9628100E96586 /* Frameworks */,
@@ -1096,6 +1135,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B69D9C872ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift in Sources */,
+				B6CBBC552ED9A80B0043443B /* CreateWalletUITests.swift in Sources */,
+				B68058312ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift in Sources */,
+				B6C8F2AF2EDE2691005915E4 /* UITestKitConstants.swift in Sources */,
+				B68058322ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
