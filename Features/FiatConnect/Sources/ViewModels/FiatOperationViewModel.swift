@@ -64,6 +64,9 @@ final class FiatOperationViewModel {
         }
 
         if inputValidationModel.isInvalid {
+            if case .data(let fiatQuotes) = quotesState, fiatQuotes.amount == amount {
+                return
+            }
             quotesState = .noData
             return
         }

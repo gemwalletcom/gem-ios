@@ -23,7 +23,7 @@ public struct PerpetualScene: View {
                         switch model.state {
                         case .noData: StateEmptyView.noData()
                         case .loading: LoadingView()
-                        case .data(let data): CandlestickChartView(data: data, period: model.currentPeriod)
+                        case .data(let data): CandlestickChartView(data: data, period: model.currentPeriod, lineModels: model.chartLineModels)
                         case .error(let error): StateEmptyView.error(error)
                         }
                     }

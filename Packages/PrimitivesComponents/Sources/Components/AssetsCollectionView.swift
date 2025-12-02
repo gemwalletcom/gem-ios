@@ -36,18 +36,16 @@ public struct AssetChipView: View {
     }
 
     public var body: some View {
-        if let imageStyle = ListItemImageStyle.list(assetImage: model.assetImage, cornerRadiusType: .rounded) {
-            HStack(spacing: Spacing.extraSmall) {
-                AssetImageView(
-                    assetImage: imageStyle.assetImage,
-                    size: imageStyle.imageSize,
-                    cornerRadius: imageStyle.cornerRadius
-                )
-                Text(model.symbol)
-                    .textStyle(TextStyle(font: .body, color: .primary, fontWeight: .semibold))
-            }
-            .padding(Spacing.small)
-            .background(Colors.listStyleColor, in: RoundedRectangle(cornerRadius: .large))
+        HStack(spacing: .small) {
+            AssetImageView(
+                assetImage: model.assetImage,
+                size: .list.image,
+                cornerRadius: .medium
+            )
+            Text(model.symbol)
+                .textStyle(TextStyle(font: .body, color: .primary, fontWeight: .semibold))
         }
+        .padding(.small)
+        .background(Colors.listStyleColor, in: RoundedRectangle(cornerRadius: .large))
     }
 }
