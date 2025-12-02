@@ -146,14 +146,29 @@ final class FiatOperationViewModelTests {
     }
 
     @Test
-    func fetchSetsNoDataWhenValidationFails() {
+    func fetchSkipsWhenValidationFails() {
         let model = FiatOperationViewModelTests.mock(operation: MockFiatOperationWithValidator())
         model.inputValidationModel.text = "20000"
         model.quotesState = .loading
 
         model.fetch()
 
-        #expect(model.quotesState.isNoData == true)
+        #expect(model.quotesState.isLoading == true)
+    }
+
+    @Test
+    func fetchPreservesQuotesWhenValidationInvalid() {
+        let model = FiatOperationViewModelTests.mock(operation: MockFiatOperationWithValidator())
+        let quote = FiatQuote.mock()
+        let quotes = FiatQuotes(amount: 100.0, quotes: [quote])
+        model.quotesState = .data(quotes)
+        model.selectedQuote = quote
+        model.inputValidationModel.text = "20000"
+
+        model.fetch()
+
+        #expect(model.quotesState.value?.quotes.count == 1)
+        #expect(model.selectedQuote == quote)
     }
 
     private struct MockFiatOperationWithValidator: FiatOperation {

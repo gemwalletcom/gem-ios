@@ -64,7 +64,6 @@ final class FiatOperationViewModel {
         }
 
         if inputValidationModel.isInvalid {
-            quotesState = .noData
             return
         }
 
