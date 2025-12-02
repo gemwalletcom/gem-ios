@@ -70,10 +70,31 @@ struct CollectibleViewModelTests {
     @Test
     func onSelectViewTokenInExplorer() {
         let model = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "1234", chain: .ethereum)))
-        
+
         #expect(model.isPresentingTokenExplorerUrl == nil)
         model.onSelectViewTokenInExplorer()
         #expect(model.isPresentingTokenExplorerUrl != nil)
+    }
+
+    @Test
+    func isSendEnabled() {
+        let enabledModel = CollectibleViewModel.mock(
+            wallet: .mock(type: .multicoin),
+            assetData: .mock(asset: .mock(chain: .ethereum))
+        )
+        #expect(enabledModel.isSendEnabled == true)
+
+        let viewOnlyModel = CollectibleViewModel.mock(
+            wallet: .mock(type: .view),
+            assetData: .mock(asset: .mock(chain: .ethereum))
+        )
+        #expect(viewOnlyModel.isSendEnabled == false)
+
+        let bitcoinModel = CollectibleViewModel.mock(
+            wallet: .mock(type: .multicoin),
+            assetData: .mock(asset: .mock(chain: .bitcoin))
+        )
+        #expect(bitcoinModel.isSendEnabled == false)
     }
 }
 
