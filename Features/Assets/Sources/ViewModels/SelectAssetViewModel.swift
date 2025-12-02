@@ -141,6 +141,14 @@ public final class SelectAssetViewModel {
         searchModel.searchableQuery.isEmpty
     }
 
+    var showLoading: Bool {
+        state.isLoading && showEmpty
+    }
+
+    var showEmpty: Bool {
+        sections.pinned.isEmpty && sections.assets.isEmpty
+    }
+
     var showRecentActivities: Bool {
         switch selectType {
         case .send, .receive, .buy: searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
