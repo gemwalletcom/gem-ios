@@ -289,7 +289,7 @@
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "Populer";
-"errors.dust_threshold" = "Transaksi gagal karena jumlahnya terlalu kecil untuk memenuhi persyaratan minimum jaringan %@ (ambang batas debu). Batas ini memastikan nilai transaksi mencakup biaya dan ongkos pemrosesan. Tingkatkan jumlah atau kurangi biaya untuk melanjutkan.";
+"errors.dust_threshold" = "Transaksi gagal karena jumlahnya terlalu kecil untuk memenuhi persyaratan minimum jaringan %@ (ambang batas debu). Batas ini memastikan nilai transaksi mencakup biaya dan ongkos pemrosesan.";
 "rootcheck.security_alert" = "Peringatan Keamanan";
 "rootcheck.body" = "Perangkat Anda tampaknya memiliki akses root, yang dapat meningkatkan risiko keamanan secara signifikan. Penggunaan aplikasi ini pada perangkat yang di-root dapat menyebabkan aset Anda rentan terhadap akses tidak sah dan potensi kerugian. Demi keamanan dana Anda, kami sangat menyarankan untuk menggunakan perangkat yang tidak di-root.";
 "rootcheck.ignore" = "Ignore";
@@ -513,3 +513,9 @@
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
+"errors.no_data_available" = "Tidak ada data tersedia";
+"errors.dust_threshold_short" = "Jaringan menganggap jumlah ini sebagai debu — biayanya lebih tinggi daripada jumlahnya sendiri.";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";

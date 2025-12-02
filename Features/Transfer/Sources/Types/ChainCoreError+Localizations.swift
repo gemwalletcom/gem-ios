@@ -9,7 +9,7 @@ extension ChainCoreError: @retroactive LocalizedError {
         switch self {
         case .cantEstimateFee, .feeRateMissed: Localized.Errors.unableEstimateNetworkFee
         case .incorrectAmount: Localized.Errors.invalidAmount
-        case .dustThreshold(let chain): Localized.Errors.dustThreshold(chain.asset.name)
+        case .dustThreshold: Localized.Errors.dustThresholdShort
         }
     }
 }

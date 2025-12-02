@@ -13,9 +13,9 @@ import Localization
 
 public struct ChartScene: View {
     private let fetchTimer = Timer.publish(every: 60, tolerance: 1, on: .main, in: .common).autoconnect()
-    @State private var model: ChartsViewModel
+    @State private var model: ChartSceneViewModel
 
-    public init(model: ChartsViewModel) {
+    public init(model: ChartSceneViewModel) {
         _model = State(initialValue: model)
     }
     
@@ -34,7 +34,7 @@ public struct ChartScene: View {
                         case .error(let error):
                             StateEmptyView(
                                 title: model.errorTitle,
-                                description: error.localizedDescription,
+                                description: model.description(for: error),
                                 image: Images.ErrorConent.error
                             )
                         }

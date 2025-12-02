@@ -40,7 +40,7 @@ public enum GemAPI: TargetType {
     
     case markets
 
-    case addSupportDevice(device: SupportDevice)
+    case addSupportDevice(NewSupportDevice)
     
     public var baseUrl: URL {
         Constants.apiURL
@@ -127,9 +127,9 @@ public enum GemAPI: TargetType {
         case .addPriceAlerts(let deviceId, _), .deletePriceAlerts(let deviceId, _):
             return "/v1/price_alerts/\(deviceId)"
         case .getNFTAssets(deviceId: let deviceId, walletIndex: let walletIndex):
-            return "/v1/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
+            return "/v2/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
         case .scanTransaction:
-            return "/v1/scan/transaction"
+            return "/v2/scan/transaction"
         case .markets:
             return "/v1/markets"
         case .addSupportDevice:

@@ -289,7 +289,7 @@
 "input.transfer" = "轉帳";
 "settings.hide_balance" = "隱藏餘額";
 "common.popular" = "熱門";
-"errors.dust_threshold" = "交易失敗，因為金額太小，無法滿足%@網路的最低要求（灰塵閾值）。此限制確保交易價值涵蓋費用和處理成本。增加金額或減少費用以繼續。";
+"errors.dust_threshold" = "交易失敗，因為金額太小，無法滿足%@網路的最低要求（灰塵閾值）。此限制確保交易價值涵蓋費用和處理成本。";
 "rootcheck.security_alert" = "安全警告";
 "rootcheck.body" = "您的裝置似乎具有 root 存取權限，這會顯著增加安全風險。在已取得 root 權限的裝置上使用此應用程式可能會使您的資產遭受未經授權的存取並可能造成損失。為了您的資金安全，我們強烈建議使用免root設備。";
 "rootcheck.ignore" = "忽略";
@@ -513,3 +513,9 @@
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
+"errors.no_data_available" = "暫無數據";
+"errors.dust_threshold_short" = "網路將這筆金額視為微不足道的垃圾——手續費甚至高於金額本身。";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";

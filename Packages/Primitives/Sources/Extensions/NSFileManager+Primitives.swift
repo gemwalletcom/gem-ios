@@ -7,7 +7,7 @@ public extension FileManager {
         case documents
         case applicationSupport
         case library(LibraryFolder)
-        
+
         public enum LibraryFolder: String, Sendable {
             case preferences = "Preferences"
         }
@@ -16,7 +16,7 @@ public extension FileManager {
             switch self {
             case .documents: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
             case .applicationSupport: NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
-            case .library(let folder): NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0].appending(folder.rawValue)
+            case .library(let folder): NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0].appending("/\(folder.rawValue)")
             }
         }
 

@@ -289,7 +289,7 @@
 "input.transfer" = "转账";
 "settings.hide_balance" = "隐藏余额";
 "common.popular" = "热门";
-"errors.dust_threshold" = "交易失败，因为金额太小，无法满足%@网络的最低要求（粉尘阈值）。此限制可确保交易金额足以覆盖手续费和处理成本。请增加金额或降低手续费以继续操作。";
+"errors.dust_threshold" = "交易失败，因为金额太小，无法满足%@网络的最低要求（粉尘阈值）。此限制可确保交易金额足以覆盖手续费和处理成本。";
 "rootcheck.security_alert" = "安全警告";
 "rootcheck.body" = "检测到设备已获取 root 权限，可能显著增加安全风险。在已 root 的设备上使用此应用可能导致资产遭到未经授权的访问并造成损失。为保障资金安全，强烈建议使用非 root 设备。";
 "rootcheck.ignore" = "忽略";
@@ -513,3 +513,9 @@
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
+"errors.no_data_available" = "暂无数据";
+"errors.dust_threshold_short" = "网络将这笔金额视为微不足道的垃圾——手续费甚至高于金额本身。";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";

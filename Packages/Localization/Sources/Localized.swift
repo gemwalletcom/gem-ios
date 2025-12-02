@@ -207,10 +207,18 @@ public enum Localized {
     public static let all = Localized.tr("Localizable", "charts.all", fallback: "All")
     /// 1D
     public static let day = Localized.tr("Localizable", "charts.day", fallback: "1D")
+    /// Entry
+    public static let entry = Localized.tr("Localizable", "charts.entry", fallback: "Entry")
     /// 1H
     public static let hour = Localized.tr("Localizable", "charts.hour", fallback: "1H")
+    /// Liquidation
+    public static let liquidation = Localized.tr("Localizable", "charts.liquidation", fallback: "Liquidation")
     /// 1M
     public static let month = Localized.tr("Localizable", "charts.month", fallback: "1M")
+    /// SL
+    public static let stopLoss = Localized.tr("Localizable", "charts.stop_loss", fallback: "SL")
+    /// TP
+    public static let takeProfit = Localized.tr("Localizable", "charts.take_profit", fallback: "TP")
     /// 1W
     public static let week = Localized.tr("Localizable", "charts.week", fallback: "1W")
     /// 1Y
@@ -361,10 +369,12 @@ public enum Localized {
     public static let decoding = Localized.tr("Localizable", "errors.decoding", fallback: "Decoding Error")
     /// Failed to decode the QR code. Please try again with a different QR code.
     public static let decodingQr = Localized.tr("Localizable", "errors.decoding_qr", fallback: "Failed to decode the QR code. Please try again with a different QR code.")
-    /// The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.
+    /// The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs.
     public static func dustThreshold(_ p1: Any) -> String {
-      return Localized.tr("Localizable", "errors.dust_threshold", String(describing: p1), fallback: "The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.")
+      return Localized.tr("Localizable", "errors.dust_threshold", String(describing: p1), fallback: "The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs.")
     }
+    /// The network considers this amount dust — the fee is higher than the amount itself.
+    public static let dustThresholdShort = Localized.tr("Localizable", "errors.dust_threshold_short", fallback: "The network considers this amount dust — the fee is higher than the amount itself.")
     /// Error
     public static let error = Localized.tr("Localizable", "errors.error", fallback: "Error")
     /// An error occurred!
@@ -383,6 +393,8 @@ public enum Localized {
     public static let invalidNetworkId = Localized.tr("Localizable", "errors.invalid_network_id", fallback: "Invalid Network ID")
     /// Invalid URL
     public static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
+    /// No data available
+    public static let noDataAvailable = Localized.tr("Localizable", "errors.no_data_available", fallback: "No data available")
     /// Not Supported
     public static let notSupported = Localized.tr("Localizable", "errors.not_supported", fallback: "Not Supported")
     /// This device does not support QR code scanning. You can only select QR code image from library.
