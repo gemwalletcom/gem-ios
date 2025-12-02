@@ -41,19 +41,8 @@ public struct AssetsRequest: ValueObservationQueryable {
             .fetchAll(db)
             .map { $0.assetData }
     }
-}
 
-// MARK: - Private
-
-extension AssetsRequest {
-    
-    private func hasPriorityAssets(_ db: Database, query: String) throws -> Bool {
-        try AssetSearchRecord
-            .filter(AssetSearchRecord.Columns.query == query)
-            .fetchCount(db) > 0
-    }
-    
-    static private func applyFilters(request: QueryInterfaceRequest<AssetRecord>, _ filters: [AssetsRequestFilter]) -> QueryInterfaceRequest<AssetRecord> {
+    static func applyFilters(request: QueryInterfaceRequest<AssetRecord>, _ filters: [AssetsRequestFilter]) -> QueryInterfaceRequest<AssetRecord> {
         var request: QueryInterfaceRequest<AssetRecord> = request
         filters.forEach {
             switch $0 {
@@ -71,6 +60,17 @@ extension AssetsRequest {
             }
         }
         return request
+    }
+}
+
+// MARK: - Private
+
+extension AssetsRequest {
+    
+    private func hasPriorityAssets(_ db: Database, query: String) throws -> Bool {
+        try AssetSearchRecord
+            .filter(AssetSearchRecord.Columns.query == query)
+            .fetchCount(db) > 0
     }
 
     static private func applyFilter(request: QueryInterfaceRequest<AssetRecord>, _ filter: AssetsRequestFilter) -> QueryInterfaceRequest<AssetRecord>  {

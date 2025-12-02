@@ -124,8 +124,19 @@ public struct SelectAssetScene: View {
     @ViewBuilder
     private var recentActivitiesCollection: some View {
         AssetsCollectionView(models: model.activityModels) { assetModel in
-            NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: assetModel.asset))) {
-                AssetChipView(model: assetModel)
+            switch model.selectType {
+            case .send, .receive, .buy:
+                NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: assetModel.asset))) {
+                    AssetChipView(model: assetModel)
+                }
+            case .swap:
+                Button {
+                    model.selectAsset(asset: assetModel.asset)
+                } label: {
+                    AssetChipView(model: assetModel)
+                }
+            case .manage, .priceAlert, .deposit, .withdraw:
+                EmptyView()
             }
         }
     }
