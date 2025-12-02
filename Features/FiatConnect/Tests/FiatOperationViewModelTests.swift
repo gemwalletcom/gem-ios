@@ -146,18 +146,33 @@ final class FiatOperationViewModelTests {
     }
 
     @Test
-    func fetchSkipsWhenValidationFails() {
+    func fetchSetsNoDataWhenValidationFailsWithNoMatchingQuotes() {
         let model = FiatOperationViewModelTests.mock(operation: MockFiatOperationWithValidator())
         model.inputValidationModel.text = "20000"
         model.quotesState = .loading
 
         model.fetch()
 
-        #expect(model.quotesState.isLoading == true)
+        #expect(model.quotesState.isNoData == true)
     }
 
     @Test
-    func fetchPreservesQuotesWhenValidationInvalid() {
+    func fetchPreservesQuotesWhenValidationInvalidForSameAmount() {
+        let model = FiatOperationViewModelTests.mock(operation: MockFiatOperationWithValidator())
+        let quote = FiatQuote.mock()
+        let quotes = FiatQuotes(amount: 20000.0, quotes: [quote])
+        model.quotesState = .data(quotes)
+        model.selectedQuote = quote
+        model.inputValidationModel.text = "20000"
+
+        model.fetch()
+
+        #expect(model.quotesState.value?.quotes.count == 1)
+        #expect(model.selectedQuote == quote)
+    }
+
+    @Test
+    func fetchSetsNoDataWhenValidationFailsForDifferentAmount() {
         let model = FiatOperationViewModelTests.mock(operation: MockFiatOperationWithValidator())
         let quote = FiatQuote.mock()
         let quotes = FiatQuotes(amount: 100.0, quotes: [quote])
@@ -167,8 +182,7 @@ final class FiatOperationViewModelTests {
 
         model.fetch()
 
-        #expect(model.quotesState.value?.quotes.count == 1)
-        #expect(model.selectedQuote == quote)
+        #expect(model.quotesState.isNoData == true)
     }
 
     private struct MockFiatOperationWithValidator: FiatOperation {
