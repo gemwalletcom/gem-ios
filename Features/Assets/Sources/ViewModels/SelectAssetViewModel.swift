@@ -75,7 +75,8 @@ public final class SelectAssetViewModel {
         )
         self.recentActivityRequest = RecentActivityRequest(
             walletId: wallet.id,
-            limit: 10
+            limit: 10,
+            filters: filter.defaultFilters
         )
     }
 
@@ -151,8 +152,8 @@ public final class SelectAssetViewModel {
 
     var showRecentActivities: Bool {
         switch selectType {
-        case .send, .receive, .buy: searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
-        case .swap, .manage, .priceAlert, .deposit, .withdraw: false
+        case .send, .receive, .buy, .swap: searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
+        case .manage, .priceAlert, .deposit, .withdraw: false
         }
     }
 

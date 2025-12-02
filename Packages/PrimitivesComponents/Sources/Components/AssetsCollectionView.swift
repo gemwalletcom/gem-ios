@@ -36,16 +36,15 @@ public struct AssetChipView: View {
     }
 
     public var body: some View {
-        HStack(spacing: .small) {
+        HStack(spacing: .tiny) {
             AssetImageView(
                 assetImage: model.assetImage,
-                size: .list.image,
-                cornerRadius: .medium
+                size: .list.image
             )
             Text(model.symbol)
                 .textStyle(TextStyle(font: .body, color: .primary, fontWeight: .semibold))
         }
         .padding(.small)
-        .background(Colors.listStyleColor, in: RoundedRectangle(cornerRadius: .large))
+        .background(Colors.listStyleColor, in: RoundedRectangle(cornerRadius: .list.image / 2 + .small))
     }
 }

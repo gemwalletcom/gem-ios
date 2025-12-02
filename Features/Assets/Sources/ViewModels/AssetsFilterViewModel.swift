@@ -36,7 +36,7 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
         return result.unique()
     }
 
-    private var defaultFilters: [AssetsRequestFilter] {
+    public var defaultFilters: [AssetsRequestFilter] {
         switch type {
         case .send: [.enabled, .hasBalance]
         case .receive(let type):
