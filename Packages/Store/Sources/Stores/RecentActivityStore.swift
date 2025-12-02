@@ -13,6 +13,7 @@ public struct RecentActivityStore: Sendable {
 
     public func add(
         assetId: AssetId,
+        toAssetId: AssetId?,
         walletId: WalletId,
         type: RecentActivityType,
         createdAt: Date = .now
@@ -20,6 +21,7 @@ public struct RecentActivityStore: Sendable {
         try db.write { db in
             try RecentActivityRecord(
                 assetId: assetId,
+                toAssetId: toAssetId,
                 walletId: walletId.id,
                 type: type,
                 createdAt: createdAt
