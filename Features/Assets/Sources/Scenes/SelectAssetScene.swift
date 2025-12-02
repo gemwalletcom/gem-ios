@@ -34,10 +34,10 @@ public struct SelectAssetScene: View {
             )
         }
         .overlay {
-            if model.state.isLoading, model.sections.assets.isEmpty {
+            if model.showLoading {
                 LoadingView()
-            } else if model.sections.assets.isEmpty {
-                EmptyContentView (
+            } else if model.showEmpty {
+                EmptyContentView(
                     model: EmptyContentTypeViewModel(
                         type: .search(
                             type: .assets,

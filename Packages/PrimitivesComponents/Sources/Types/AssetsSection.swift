@@ -7,7 +7,7 @@ public struct AssetsSections: Hashable, Sendable {
     public let pinned: [AssetData]
     public let assets: [AssetData]
     public let popular: [AssetData]
-    
+
     private static let popularChains = Set<AssetId>(arrayLiteral: Chain.bitcoin.assetId, Chain.ethereum.assetId, Chain.solana.assetId)
 }
 
