@@ -171,7 +171,15 @@ extension ConfirmTransferSceneViewModel {
                 isPresentingSheet = .info(.memoRequired(symbol: symbol))
             }
         default:
-            break
+            if let chainError = ChainCoreError.fromError(error) {
+                switch chainError {
+                case .dustThreshold:
+                    let asset = dataModel.asset
+                    isPresentingSheet = .info(.dustThreshold(asset.chain, image: AssetViewModel(asset: asset).assetImage))
+                case .feeRateMissed, .cantEstimateFee, .incorrectAmount:
+                    break
+                }
+            }
         }
     }
 

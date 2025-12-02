@@ -30,12 +30,11 @@ public struct SupportService: Sendable {
 
     public func registerSupportDeviceIfNeeded() async throws  {
         guard preferences.isSupportDeviceRegistered == false else { return }
-        let device = SupportDevice(
-            supportId: getOrCreateSupportDeviceId(),
-            deviceId: try securePreferences.getDeviceId(),
-            unread: 0
+        let supportDevice = NewSupportDevice(
+            supportDeviceId: getOrCreateSupportDeviceId(),
+            deviceId: try securePreferences.getDeviceId()
         )
-        let _ = try await api.addSupportDevice(device: device)
+        let _ = try await api.addSupportDevice(supportDevice)
         preferences.isSupportDeviceRegistered = true
     }
 }

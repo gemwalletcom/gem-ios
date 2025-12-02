@@ -12,6 +12,6 @@ public struct ActivityService: Sendable {
     }
 
     public func updateRecent(type: RecentActivityType, assetId: AssetId, walletId: WalletId) throws {
-        try store.add(assetId: assetId, walletId: walletId, type: type)
+        try store.add(assetId: assetId, toAssetId: .none, walletId: walletId, type: type)
     }
 }

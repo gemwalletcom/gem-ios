@@ -289,7 +289,7 @@
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "लोकप्रिय";
-"errors.dust_threshold" = "लेन-देन विफल हो गया क्योंकि राशि %@ नेटवर्क की न्यूनतम आवश्यकता (डस्ट थ्रेशहोल्ड) को पूरा करने के लिए बहुत छोटी है। यह सीमा सुनिश्चित करती है कि लेन-देन मूल्य शुल्क और प्रसंस्करण लागत को कवर करता है। आगे बढ़ने के लिए राशि बढ़ाएँ या शुल्क घटाएँ।";
+"errors.dust_threshold" = "लेन-देन विफल रहा क्योंकि राशि %@ नेटवर्क की न्यूनतम आवश्यकता (डस्ट थ्रेशोल्ड) को पूरा करने के लिए बहुत कम है। यह सीमा सुनिश्चित करती है कि लेन-देन का मूल्य शुल्क और प्रसंस्करण लागत को कवर करता है।";
 "rootcheck.security_alert" = "सुरक्षा चेतावनी";
 "rootcheck.body" = "ऐसा लगता है कि आपके डिवाइस में रूट एक्सेस है, जो सुरक्षा जोखिमों को काफी हद तक बढ़ा सकता है। रूट किए गए डिवाइस पर इस ऐप का उपयोग करने से आपकी संपत्ति अनधिकृत पहुंच और संभावित नुकसान के संपर्क में आ सकती है। आपके फंड की सुरक्षा के लिए, हम दृढ़ता से गैर-रूट किए गए डिवाइस का उपयोग करने की सलाह देते हैं।";
 "rootcheck.ignore" = "Ignore";
@@ -514,3 +514,8 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "कोई डेटा मौजूद नहीं";
+"errors.dust_threshold_short" = "नेटवर्क इस राशि को धूल मानता है - शुल्क स्वयं राशि से अधिक है।";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";

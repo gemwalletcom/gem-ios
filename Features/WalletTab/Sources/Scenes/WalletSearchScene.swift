@@ -73,18 +73,15 @@ public struct WalletSearchScene: View {
             }
 
             if model.showRecentSearches {
-                Section(
-                    content: { recentActivitiesCollection },
-                    header: {
-                        HStack {
-                            Text(model.recentActivityTitle)
-                                .padding(.leading, .space12)
-                            Spacer()
-                        }
+                Section {} header: {
+                    VStack(alignment: .leading, spacing: Spacing.small) {
+                        Text(model.recentActivityTitle)
+                            .padding(.leading, Spacing.space12)
+                        recentActivitiesCollection
                     }
-                )
-                .cleanListRow(topOffset: .zero)
-                .lineSpacing(.zero)
+                }
+                .textCase(nil)
+                .listRowInsets(EdgeInsets())
                 .listSectionSpacing(.zero)
             }
 

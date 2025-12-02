@@ -3,6 +3,8 @@
 import Foundation
 
 extension Currency {
+    public static let `default`: Currency = .usd
+
     public init(id: String) throws {
         if let currency = Currency(rawValue: id) {
             self = currency

@@ -289,7 +289,7 @@
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "Popolare";
-"errors.dust_threshold" = "La transazione non è riuscita perché l'importo è troppo basso per soddisfare il requisito minimo della rete %@ (soglia di dust). Questo limite garantisce che il valore della transazione copra le commissioni e i costi di elaborazione. Aumentare l'importo o ridurre le commissioni per procedere.";
+"errors.dust_threshold" = "La transazione non è riuscita perché l’importo è troppo basso per soddisfare il requisito minimo della rete %@ (soglia di dust). Questo limite garantisce che il valore della transazione copra le commissioni e i costi di elaborazione.";
 "rootcheck.security_alert" = "Avviso di sicurezza";
 "rootcheck.body" = "Il tuo dispositivo sembra avere accesso root, il che può aumentare significativamente i rischi per la sicurezza. L'utilizzo di questa app su un dispositivo rooted potrebbe esporre i tuoi asset ad accessi non autorizzati e potenziali perdite. Per la sicurezza dei tuoi fondi, ti consigliamo vivamente di utilizzare un dispositivo non rooted.";
 "rootcheck.ignore" = "Ignore";
@@ -514,3 +514,8 @@
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
 "recent_activity.title" = "Recent";
 "errors.no_data_available" = "Nessun dato disponibile";
+"errors.dust_threshold_short" = "La rete considera questa cifra come polvere: la commissione è più alta dell'importo stesso.";
+"charts.take_profit" = "TP";
+"charts.stop_loss" = "SL";
+"charts.entry" = "Entry";
+"charts.liquidation" = "Liquidation";
