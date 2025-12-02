@@ -33,10 +33,8 @@ private struct ActivityIndicatorOverlay: ViewModifier {
                             Text(message)
                             ActivityIndicator(isAnimating: .constant(true), style: .large)
                         }
-                        .frame(
-                            width: geo.size.width / 2,
-                            height: geo.size.height / 5
-                        )
+                        .padding(.horizontal, .extraLarge)
+                        .padding(.vertical, .medium)
                         .background(Color.secondary.colorInvert())
                         .foregroundColor(.primary)
                         .cornerRadius(20)

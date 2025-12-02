@@ -33,6 +33,15 @@ public struct CollectibleScene: View {
         .alertSheet($model.isPresentingAlertMessage)
         .toast(message: $model.isPresentingToast)
         .safariSheet(url: $model.isPresentingTokenExplorerUrl)
+        .sheet(isPresented: $model.isPresentingReportSheet) {
+            ReportNavigationStack(
+                model: ReportNftViewModel(
+                    nftService: model.nftService,
+                    assetData: model.assetData,
+                    onComplete: model.onReportComplete
+                )
+            )
+        }
     }
 }
 
