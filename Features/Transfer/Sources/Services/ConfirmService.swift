@@ -72,8 +72,14 @@ public struct ConfirmService: Sendable {
     }
 
     public func updateRecent(input: TransferConfirmationInput) {
-        guard input.data.type.transactionType == .transfer else { return }
-        try? activityService.updateRecent(type: .transfer, assetId: input.data.type.asset.id, walletId: input.wallet.walletId)
+        switch input.data.type {
+        case .transfer(let asset):
+            try? activityService.updateRecent(type: .transfer, assetId: asset.id, walletId: input.wallet.walletId)
+        case .swap(let fromAsset, let toAsset, _):
+            try? activityService.updateRecent(type: .swap, assetId: fromAsset.id, toAssetId: toAsset.id, walletId: input.wallet.walletId)
+        default:
+            break
+        }
     }
 
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {
