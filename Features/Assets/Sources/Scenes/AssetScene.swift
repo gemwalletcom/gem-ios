@@ -40,17 +40,7 @@ public struct AssetScene: View {
 
             if model.showStatus {
                 Section {
-                    NavigationCustomLink(with:
-                        ListItemImageView(
-                            title: Localized.Transaction.status,
-                            subtitle: model.scoreViewModel.status,
-                            subtitleStyle: model.scoreViewModel.statusStyle,
-                            assetImage: model.scoreViewModel.assetImage,
-                            infoAction: { model.onSelectTokenStatus() }
-                        )
-                    ) {
-                        model.onSelectTokenStatus()
-                    }
+                    AssetStatusView(model: model.scoreViewModel, action: model.onSelectTokenStatus)
                 }
             }
             

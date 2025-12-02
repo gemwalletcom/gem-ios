@@ -5,25 +5,33 @@ import SwiftUI
 import Style
 
 public struct GridPosterView: View {
-    
+
     private let assetImage: AssetImage
     private let title: String?
-    
+    private let count: Int?
+
     public init(
         assetImage: AssetImage,
-        title: String?
+        title: String?,
+        count: Int? = nil
     ) {
         self.assetImage = assetImage
         self.title = title
+        self.count = count
     }
-    
+
     public var body: some View {
         VStack(alignment: .leading) {
             NftImageView(assetImage: assetImage)
                 .cornerRadius(.medium)
                 .aspectRatio(1, contentMode: .fit)
-            
-            if let title {            
+                .overlay(alignment: .topTrailing) {
+                    if let count {
+                        countBadge(count)
+                    }
+                }
+
+            if let title {
                 Text(title)
                     .font(.body)
                     .lineLimit(1)
@@ -31,6 +39,17 @@ public struct GridPosterView: View {
             }
             Spacer()
         }
+    }
+
+    private func countBadge(_ count: Int) -> some View {
+        Text(String(count))
+            .font(.caption.weight(.medium))
+            .foregroundStyle(Colors.whiteSolid)
+            .padding(.horizontal, .tiny)
+            .padding(.vertical, .extraSmall)
+            .background(Colors.gray)
+            .cornerRadius(.tiny)
+            .padding(.space12)
     }
 }
 

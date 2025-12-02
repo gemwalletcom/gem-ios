@@ -19,7 +19,11 @@ public struct NftImageView: View {
                 ZStack {
                     Rectangle()
                         .foregroundStyle(Colors.grayLight)
-                    LoadingView()
+                    if assetImage.placeholder != nil {
+                        AssetImageView(assetImage: assetImage, size: .image.large)
+                    } else {
+                        LoadingView()
+                    }
                 }
             case .success(let image):
                 image.resizable()
@@ -37,9 +41,10 @@ public struct NftImageView: View {
                 .foregroundStyle(Colors.grayLight)
             if let type = assetImage.type {
                 Text(type)
-                    .font(.title)
+                    .font(.body)
                     .lineLimit(1)
                     .foregroundStyle(Colors.black.opacity(0.8))
+                    .padding(.small)
             }
         }
         .frame(maxWidth: .infinity)

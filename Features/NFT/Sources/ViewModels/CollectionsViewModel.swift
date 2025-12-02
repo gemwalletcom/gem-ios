@@ -6,10 +6,10 @@ import NFTService
 import Primitives
 import Store
 import Localization
-import Style
 import SwiftUI
 import PrimitivesComponents
 import WalletService
+import Style
 
 @Observable
 @MainActor
@@ -41,16 +41,25 @@ public final class CollectionsViewModel: CollectionsViewable, Sendable {
         walletService.currentWallet
     }
 
-    public var content: GridContent {
-        let items = nftDataList
+    public var items: [GridPosterViewItem] {
+        verifiedItems + unverifiedItem
+    }
+    
+    // MARK: - Private
+
+    private var verifiedItems: [GridPosterViewItem] {
+        nftDataList
             .filter { $0.collection.isVerified }
             .map { buildGridItem(from: $0) }
+    }
 
-        let unverifiedCount = nftDataList
+    private var unverifiedItem: [GridPosterViewItem] {
+        let ids = nftDataList
             .filter { $0.collection.isVerified == false }
-            .count
+            .map(\.collection.id)
 
-        return GridContent(items: items, unverifiedCount: unverifiedCount > 0 ? String(unverifiedCount) : nil)
+        guard ids.isNotEmpty else { return [] }
+        return [.unverified(collectionIds: ids)]
     }
 
     // MARK: - Actions
@@ -62,5 +71,17 @@ public final class CollectionsViewModel: CollectionsViewable, Sendable {
         } catch {
             debugLog("update nfts error: \(error)")
         }
+    }
+}
+
+extension GridPosterViewItem {
+    static func unverified(collectionIds: [String]) -> GridPosterViewItem {
+        GridPosterViewItem(
+            id: collectionIds.joined(separator: "-").hash.asString,
+            destination: Scenes.UnverifiedCollections(),
+            assetImage: .image(Images.TokenStatus.warning),
+            title: Localized.Asset.Verification.unverified,
+            count: collectionIds.count
+        )
     }
 }

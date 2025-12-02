@@ -12,6 +12,7 @@ import Photos
 import AvatarService
 import Formatters
 import ExplorerService
+import InfoSheet
 
 @Observable
 @MainActor
@@ -25,6 +26,7 @@ public final class CollectibleViewModel {
     var isPresentingToast: ToastMessage?
     var isPresentingTokenExplorerUrl: URL?
     var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
+    var isPresentingInfoSheet: InfoSheetType?
 
     public init(
         wallet: Wallet,
@@ -50,9 +52,7 @@ public final class CollectibleViewModel {
     var networkText: String { assetData.asset.chain.asset.name }
 
     var contractTitle: String { Localized.Asset.contract }
-    var contractValue: String {
-        assetData.collection.contractAddress
-    }
+    var contractValue: String { assetData.collection.contractAddress }
 
     var contractText: String? {
         if contractValue.isEmpty || contractValue == assetData.asset.tokenId {
@@ -94,7 +94,7 @@ public final class CollectibleViewModel {
     let enabledChainTypes: Set<ChainType> = [ChainType.ethereum]
 
     var headerButtons: [HeaderButton] {
-        return [
+        [
             HeaderButton(
                 type: .send,
                 isEnabled: assetData.asset.chain.isNFTSupported && enabledChainTypes
@@ -115,11 +115,19 @@ public final class CollectibleViewModel {
     }
 
     var showAttributes: Bool {
-        !attributes.isEmpty
+        attributes.isNotEmpty
     }
 
     var showLinks: Bool {
-        !assetData.collection.links.isEmpty
+        assetData.collection.links.isNotEmpty
+    }
+
+    var scoreViewModel: AssetScoreTypeViewModel {
+        AssetScoreTypeViewModel(scoreType: .unverified)
+    }
+
+    var showStatus: Bool {
+        assetData.collection.isVerified == false
     }
 
     var socialLinksViewModel: SocialLinksViewModel {
@@ -208,6 +216,10 @@ extension CollectibleViewModel {
         guard let explorerLink = tokenExplorerUrl else { return }
         guard let url = URL(string: explorerLink.link) else { return }
         isPresentingTokenExplorerUrl = url
+    }
+
+    func onSelectStatus() {
+        isPresentingInfoSheet = .assetStatus(scoreViewModel.scoreType)
     }
 }
 

@@ -7,7 +7,6 @@ import Primitives
 import Store
 import Components
 import Style
-import Localization
 import PrimitivesComponents
 
 public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
@@ -19,21 +18,14 @@ public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
 
     public var body: some View {
         ScrollView {
-            VStack(spacing: Spacing.medium) {
-                LazyVGrid(columns: model.columns) {
-                    gridItemsView
-                }
-
-                if let unverifiedCount = model.content.unverifiedCount {
-                    unverifiedSection(unverifiedCount)
-                }
-                Spacer()
+            LazyVGrid(columns: model.columns) {
+                collectionsView
             }
-            .padding(.horizontal, .medium)
+            .padding(.horizontal, Spacing.medium)
         }
         .observeQuery(request: $model.request, value: $model.nftDataList)
         .overlay {
-            if model.content.items.isEmpty {
+            if model.items.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
@@ -48,28 +40,14 @@ public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
 // MARK: - UI
 
 extension CollectionsScene {
-    private var gridItemsView: some View {
-        ForEach(model.content.items) { gridItem in
-            NavigationLink(value: gridItem.destination) {
+    private var collectionsView: some View {
+        ForEach(model.items) { item in
+            NavigationLink(value: item.destination) {
                 GridPosterView(
-                    assetImage: gridItem.assetImage,
-                    title: gridItem.title
+                    assetImage: item.assetImage,
+                    title: item.title,
+                    count: item.count
                 )
-            }
-        }
-    }
-
-    private func unverifiedSection(_ count: String) -> some View {
-        NavigationLink(value: Scenes.UnverifiedCollections()) {
-            HStack {
-                ListItemView(
-                    title: Localized.Asset.Verification.unverified,
-                    subtitle: count,
-                    imageStyle: .list(assetImage: .image(Images.TokenStatus.warning))
-                )
-                Spacer()
-                Images.System.chevronRight
-                    .foregroundColor(Colors.gray)
             }
         }
     }

@@ -14,7 +14,7 @@ public protocol CollectionsViewable: AnyObject, Observable {
 
     var title: String { get }
     var columns: [GridItem] { get }
-    var content: GridContent { get }
+    var items: [GridPosterViewItem] { get }
     var emptyContentModel: EmptyContentTypeViewModel { get }
 
     var wallet: Wallet { get set }
@@ -56,7 +56,8 @@ extension CollectionsViewable {
             id: data.id,
             destination: Scenes.Collection(id: data.collection.id, name: data.collection.name),
             assetImage: AssetImage(type: data.collection.name, imageURL: data.collection.images.preview.url.asURL),
-            title: data.collection.name
+            title: data.collection.name,
+            count: data.assets.count
         )
     }
 
