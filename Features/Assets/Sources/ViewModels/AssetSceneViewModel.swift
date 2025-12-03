@@ -208,7 +208,9 @@ extension AssetSceneViewModel {
         case .buy: .buy(assetData.asset)
         case .sell: .sell(assetData.asset)
         case .send: .send(.asset(assetData.asset))
-        case .swap: .swap(assetData.asset, nil)
+        case .swap: assetData.balance.available == .zero && assetData.asset.type != .native
+            ? .swap(assetData.asset.chain.asset, assetData.asset)
+            : .swap(assetData.asset, nil)
         case .receive: .receive(.asset)
         case .stake: .stake(assetData.asset)
         case .more, .deposit, .withdraw:
