@@ -77,7 +77,14 @@ public struct ConfirmService: Sendable {
             try? activityService.updateRecent(type: .transfer, assetId: asset.id, walletId: input.wallet.walletId)
         case .swap(let fromAsset, let toAsset, _):
             try? activityService.updateRecent(type: .swap, assetId: fromAsset.id, toAssetId: toAsset.id, walletId: input.wallet.walletId)
-        default:
+        case .deposit,
+                .withdrawal,
+                .transferNft,
+                .tokenApprove,
+                .stake,
+                .account,
+                .perpetual,
+                .generic:
             break
         }
     }
