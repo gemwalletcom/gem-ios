@@ -44,4 +44,10 @@ struct URLParserTests {
 
         #expect(perpetualsAction == .perpetuals)
     }
+
+    @Test
+    func gemUrlWithoutAction() async throws {
+        #expect(try URLParser.from(url: URL(string: "gem://")!) == .none)
+        #expect(try URLParser.from(url: URL(string: "gem://invalidpath")!) == .none)
+    }
 }

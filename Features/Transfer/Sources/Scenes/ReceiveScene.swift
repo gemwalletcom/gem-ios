@@ -30,7 +30,7 @@ public struct ReceiveScene: View {
                     .lineLimit(1)
 
                     Button(action: model.onCopyAddress) {
-                        VStack {
+                        VStack(spacing: .medium) {
                             VStack {
                                 if let image = model.renderedImage {
                                     qrCodeView(image: image)

@@ -12,6 +12,9 @@ let package = Package(
         .library(
             name: "Assets",
             targets: ["Assets"]),
+        .library(
+            name: "AssetsTestKit",
+            targets: ["AssetsTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -52,7 +55,21 @@ let package = Package(
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "ActivityService", package: "FeatureServices")
-            ]
+            ],
+            path: "Sources"
+        ),
+        .target(
+            name: "AssetsTestKit",
+            dependencies: [
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
+                .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
+                .product(name: "PriceAlertServiceTestKit", package: "FeatureServices"),
+                .product(name: "ActivityServiceTestKit", package: "FeatureServices"),
+                "Components",
+                "Assets"
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "AssetsTests",
@@ -64,9 +81,7 @@ let package = Package(
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "PriceAlertServiceTestKit", package: "FeatureServices"),
                 .product(name: "BannerServiceTestKit", package: "FeatureServices"),
-                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
-                .product(name: "TransactionServiceTestKit", package: "FeatureServices"),
-                "Assets"
+                "AssetsTestKit"
             ]
         )
     ]
