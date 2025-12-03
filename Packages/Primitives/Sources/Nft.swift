@@ -139,7 +139,7 @@ public struct ReportNft: Codable, Sendable {
 
 public enum ReportReason: String, Codable, CaseIterable, Sendable {
 	case spam
-	case scam
+	case malicious
 	case inappropriate
 	case copyright
 	case other

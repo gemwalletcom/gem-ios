@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "अवांछित ईमेल";
-"nft.report.reason.scam" = "घोटाला";
+"nft.report.reason.malicious" = "दुर्भावनापूर्ण";
 "nft.report.reason.inappropriate" = "अनुपयुक्त सामग्री";
 "nft.report.reason.copyright" = "कॉपीराइट";
 "nft.report.report_button_title" = "रिपोर्ट करें";

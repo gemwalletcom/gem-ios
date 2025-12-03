@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "Thư rác";
-"nft.report.reason.scam" = "Lừa đảo";
+"nft.report.reason.malicious" = "Độc hại";
 "nft.report.reason.inappropriate" = "Nội dung không phù hợp";
 "nft.report.reason.copyright" = "Bản quyền";
 "nft.report.report_button_title" = "Báo cáo";

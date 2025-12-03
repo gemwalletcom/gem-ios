@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "Спам";
-"nft.report.reason.scam" = "Мошенничество";
+"nft.report.reason.malicious" = "Вредоносный";
 "nft.report.reason.inappropriate" = "Неприемлемый контент";
 "nft.report.reason.copyright" = "Авторские права";
 "nft.report.report_button_title" = "Пожаловаться";

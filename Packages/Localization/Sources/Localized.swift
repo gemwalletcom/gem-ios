@@ -729,8 +729,8 @@ public enum Localized {
         public static let copyright = Localized.tr("Localizable", "nft.report.reason.copyright", fallback: "Copyright")
         /// Inappropriate Content
         public static let inappropriate = Localized.tr("Localizable", "nft.report.reason.inappropriate", fallback: "Inappropriate Content")
-        /// Scam
-        public static let scam = Localized.tr("Localizable", "nft.report.reason.scam", fallback: "Scam")
+        /// Malicious
+        public static let malicious = Localized.tr("Localizable", "nft.report.reason.malicious", fallback: "Malicious")
         /// Spam
         public static let spam = Localized.tr("Localizable", "nft.report.reason.spam", fallback: "Spam")
       }

@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "Spam";
-"nft.report.reason.scam" = "Podvod";
+"nft.report.reason.malicious" = "Zlomyslný";
 "nft.report.reason.inappropriate" = "Nevhodný obsah";
 "nft.report.reason.copyright" = "Copyright";
 "nft.report.report_button_title" = "Nahlásit";

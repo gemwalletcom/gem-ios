@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "Spam";
-"nft.report.reason.scam" = "Zamba";
+"nft.report.reason.malicious" = "Mai mugunta";
 "nft.report.reason.inappropriate" = "Abun ciki mara dacewa";
 "nft.report.reason.copyright" = "Haƙƙin mallaka";
 "nft.report.report_button_title" = "Yi korafi";

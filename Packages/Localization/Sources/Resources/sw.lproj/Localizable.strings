@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "Barua taka";
-"nft.report.reason.scam" = "Ulaghai";
+"nft.report.reason.malicious" = "Uovu";
 "nft.report.reason.inappropriate" = "Maudhui Yasiyofaa";
 "nft.report.reason.copyright" = "Hakimiliki";
 "nft.report.report_button_title" = "Ripoti";

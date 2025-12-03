@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "สแปม";
-"nft.report.reason.scam" = "หลอกลวง";
+"nft.report.reason.malicious" = "อันตราย";
 "nft.report.reason.inappropriate" = "เนื้อหาที่ไม่เหมาะสม";
 "nft.report.reason.copyright" = "ลิขสิทธิ์";
 "nft.report.report_button_title" = "รายงานปัญหา";

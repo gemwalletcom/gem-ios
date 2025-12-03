@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "স্প্যাম";
-"nft.report.reason.scam" = "কেলেঙ্কারী";
+"nft.report.reason.malicious" = "দূষিত";
 "nft.report.reason.inappropriate" = "অনুপযুক্ত কন্টেন্ট";
 "nft.report.reason.copyright" = "কপিরাইট";
 "nft.report.report_button_title" = "রিপোর্ট করুন";

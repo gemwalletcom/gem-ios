@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "سپیم";
-"nft.report.reason.scam" = "اسکام";
+"nft.report.reason.malicious" = "بدنیتی پر مبنی";
 "nft.report.reason.inappropriate" = "نامناسب مواد";
 "nft.report.reason.copyright" = "کاپی رائٹ";
 "nft.report.report_button_title" = "رپورٹ";

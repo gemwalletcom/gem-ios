@@ -520,7 +520,7 @@
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
 "nft.report.reason.spam" = "Spam";
-"nft.report.reason.scam" = "Înșelătorie";
+"nft.report.reason.malicious" = "Malignorant";
 "nft.report.reason.inappropriate" = "Conținut neadecvat";
 "nft.report.reason.copyright" = "Drepturi de autor";
 "nft.report.report_button_title" = "Raportează";
