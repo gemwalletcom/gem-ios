@@ -71,22 +71,8 @@ public struct ConfirmService: Sendable {
         try await transferExecutor.execute(input: input)
     }
 
-    public func updateRecent(input: TransferConfirmationInput) {
-        switch input.data.type {
-        case .transfer(let asset):
-            try? activityService.updateRecent(type: .transfer, assetId: asset.id, walletId: input.wallet.walletId)
-        case .swap(let fromAsset, let toAsset, _):
-            try? activityService.updateRecent(type: .swap, assetId: fromAsset.id, toAssetId: toAsset.id, walletId: input.wallet.walletId)
-        case .deposit,
-                .withdrawal,
-                .transferNft,
-                .tokenApprove,
-                .stake,
-                .account,
-                .perpetual,
-                .generic:
-            break
-        }
+    public func updateRecent(data: RecentActivityData, walletId: WalletId) {
+        try? activityService.updateRecent(type: data.type, assetId: data.assetId, toAssetId: data.toAssetId, walletId: walletId)
     }
 
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {
