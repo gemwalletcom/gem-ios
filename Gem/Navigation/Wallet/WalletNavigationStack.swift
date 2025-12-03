@@ -54,6 +54,7 @@ struct WalletNavigationStack: View {
                             wallet: model.wallet,
                             searchService: AssetSearchService(assetsService: assetsService),
                             activityService: activityService,
+                            walletsService: walletsService,
                             onDismissSearch: model.onToggleSearch,
                             onSelectAssetAction: { navigationState.wallet.append(Scenes.Asset(asset: $0)) },
                             onAddToken: model.onSelectAddCustomToken

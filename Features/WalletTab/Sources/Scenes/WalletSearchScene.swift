@@ -55,6 +55,7 @@ public struct WalletSearchScene: View {
         .onAppear {
             model.onAppear()
         }
+        .toast(message: $model.isPresentingToastMessage)
     }
 
     @ViewBuilder
@@ -131,7 +132,8 @@ public struct WalletSearchScene: View {
                         formatter: .abbreviated,
                         currencyCode: model.currencyCode
                     )
-                ),
+                )
+                .contextMenu(model.contextMenuItems(for: assetData)),
                 action: { model.onSelectAsset(assetData.asset) }
             )
         }
