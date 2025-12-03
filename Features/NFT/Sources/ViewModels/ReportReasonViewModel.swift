@@ -5,11 +5,6 @@ import Primitives
 import Localization
 
 struct ReportReasonViewModel: Identifiable, Hashable {
-    enum ReasonType {
-        case preselected
-        case manual
-    }
-
     let reason: ReportReason
 
     var id: String { reason.id }
@@ -21,13 +16,6 @@ struct ReportReasonViewModel: Identifiable, Hashable {
         case .inappropriate: Localized.Nft.Report.Reason.inappropriate
         case .copyright: Localized.Nft.Report.Reason.copyright
         case .other: Localized.Transfer.Other.title
-        }
-    }
-
-    var type: ReasonType {
-        switch reason {
-        case .spam, .scam, .inappropriate, .copyright: .preselected
-        case .other: .manual
         }
     }
 

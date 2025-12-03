@@ -17,9 +17,6 @@ public struct ReportNavigationStack: View {
             ReportSelectReasonScene(model: model)
                 .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
                 .activityIndicator(isLoading: model.state.isLoading, message: model.progressMessage)
-                .navigationDestination(for: ReportReasonViewModel.self) { _ in
-                    ReportUserReasonScene(model: model)
-                }
         }
         .presentationDetentsForCurrentDeviceSize()
         .presentationBackground(Colors.grayBackground)

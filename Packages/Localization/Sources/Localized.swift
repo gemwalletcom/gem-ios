@@ -722,14 +722,8 @@ public enum Localized {
     /// Set as Avatar
     public static let setAsAvatar = Localized.tr("Localizable", "nft.set_as_avatar", fallback: "Set as Avatar")
     public enum Report {
-      /// Please describe the issue
-      public static let placeholder = Localized.tr("Localizable", "nft.report.placeholder", fallback: "Please describe the issue")
       /// Report
       public static let reportButtonTitle = Localized.tr("Localizable", "nft.report.report_button_title", fallback: "Report")
-      /// What is wrong with this NFT?
-      public static let selectReportHeader = Localized.tr("Localizable", "nft.report.select_report_header", fallback: "What is wrong with this NFT?")
-      /// Report Message
-      public static let title = Localized.tr("Localizable", "nft.report.title", fallback: "Report Message")
       public enum Reason {
         /// Copyright
         public static let copyright = Localized.tr("Localizable", "nft.report.reason.copyright", fallback: "Copyright")

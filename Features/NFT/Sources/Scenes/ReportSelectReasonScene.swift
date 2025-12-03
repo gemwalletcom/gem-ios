@@ -16,20 +16,11 @@ struct ReportSelectReasonScene: View {
         List {
             Section {
                 ForEach(model.reasons) { reasonViewModel in
-                    switch reasonViewModel.type {
-                    case .preselected:
-                        NavigationCustomLink(
-                            with: ListItemView(title: reasonViewModel.title),
-                            action: { model.submitReport(reason: reasonViewModel.reason.rawValue) }
-                        )
-                    case .manual:
-                        NavigationLink(value: reasonViewModel) {
-                            ListItemView(title: reasonViewModel.title)
-                        }
-                    }
+                    NavigationCustomLink(
+                        with: ListItemView(title: reasonViewModel.title),
+                        action: { model.submitReport(reason: reasonViewModel.reason.rawValue) }
+                    )
                 }
-            } header: {
-                Text(Localized.Nft.Report.selectReportHeader)
             }
         }
         .navigationTitle(model.title)

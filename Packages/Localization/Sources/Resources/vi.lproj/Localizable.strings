@@ -1,4 +1,4 @@
-"common.cancel" = "Cancel";
+"common.cancel" = "Hủy bỏ";
 "welcome.title" = "Welcome to Gem Family";
 "common.done" = "Done";
 "wallet.create_new_wallet" = "Tạo một ví mới";
@@ -519,11 +519,8 @@
 "charts.stop_loss" = "SL";
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
-"nft.report.select_report_header" = "What is wrong with this NFT?";
-"nft.report.title" = "Report Message";
-"nft.report.placeholder" = "Please describe the issue";
-"nft.report.reason.spam" = "Spam";
-"nft.report.reason.scam" = "Scam";
-"nft.report.reason.inappropriate" = "Inappropriate Content";
-"nft.report.reason.copyright" = "Copyright";
-"nft.report.report_button_title" = "Report";
+"nft.report.reason.spam" = "Thư rác";
+"nft.report.reason.scam" = "Lừa đảo";
+"nft.report.reason.inappropriate" = "Nội dung không phù hợp";
+"nft.report.reason.copyright" = "Bản quyền";
+"nft.report.report_button_title" = "Báo cáo";

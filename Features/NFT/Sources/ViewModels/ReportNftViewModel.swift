@@ -3,7 +3,6 @@
 import Foundation
 import Primitives
 import NFTService
-import Style
 import Localization
 import Components
 
@@ -15,7 +14,6 @@ public final class ReportNftViewModel {
     private let onComplete: VoidAction
 
     var state: StateViewType<Bool> = .noData
-    var reason: String = ""
 
     let reasons = ReportReasonViewModel.allCases
 
@@ -29,19 +27,8 @@ public final class ReportNftViewModel {
         self.onComplete = onComplete
     }
 
-    var title: String { Localized.Nft.Report.title }
+    var title: String { Localized.Nft.Report.reportButtonTitle }
     var progressMessage: String { Localized.Common.loading }
-
-    var submitButtonState: ButtonState {
-        if state.isLoading {
-            return .loading()
-        }
-        return reason.isEmpty ? .disabled : .normal
-    }
-
-    func submitUserReport() {
-        submitReport(reason: reason)
-    }
 
     func submitReport(reason: String) {
         state = .loading
