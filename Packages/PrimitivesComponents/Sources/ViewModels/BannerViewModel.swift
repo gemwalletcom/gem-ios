@@ -105,7 +105,7 @@ struct BannerViewModel {
                 .accountBlockedMultiSignature,
                 .activateAsset,
                 .suspiciousAsset,
-                .tradePerpetuals: .image.app
+                .tradePerpetuals: .image.asset
         case .onboarding: .image.medium
         }
     }
