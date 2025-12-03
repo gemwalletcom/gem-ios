@@ -23,7 +23,7 @@ public struct GridPosterView: View {
     public var body: some View {
         VStack(alignment: .leading) {
             NftImageView(assetImage: assetImage)
-                .cornerRadius(.medium)
+                .clipShape(RoundedRectangle(cornerRadius: .medium))
                 .aspectRatio(1, contentMode: .fit)
                 .overlay(alignment: .topTrailing) {
                     if let count {
@@ -43,13 +43,13 @@ public struct GridPosterView: View {
 
     private func countBadge(_ count: Int) -> some View {
         Text(String(count))
-            .font(.caption.weight(.medium))
+            .font(.footnote.weight(.semibold))
             .foregroundStyle(Colors.whiteSolid)
-            .padding(.horizontal, .tiny)
-            .padding(.vertical, .extraSmall)
+            .padding(.horizontal, .space6)
+            .frame(minWidth: .space24, minHeight: .space24)
             .background(Colors.gray)
-            .cornerRadius(.tiny)
-            .padding(.space12)
+            .clipShape(RoundedRectangle(cornerRadius: .small))
+            .padding(.space8)
     }
 }
 

@@ -42,7 +42,6 @@ public struct NftImageView: View {
             if let type = assetImage.type {
                 Text(type)
                     .font(.body)
-                    .lineLimit(1)
                     .foregroundStyle(Colors.black.opacity(0.8))
                     .padding(.small)
             }
