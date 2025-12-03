@@ -96,12 +96,17 @@ public final class CollectibleViewModel {
     
     let enabledChainTypes: Set<ChainType> = [ChainType.ethereum]
 
+    var isSendEnabled: Bool {
+        wallet.canSign &&
+        assetData.asset.chain.isNFTSupported &&
+        enabledChainTypes .contains(assetData.asset.chain.type)
+    }
+    
     var headerButtons: [HeaderButton] {
         return [
             HeaderButton(
                 type: .send,
-                isEnabled: assetData.asset.chain.isNFTSupported && enabledChainTypes
-                    .contains(assetData.asset.chain.type)
+                isEnabled: isSendEnabled
             ),
             HeaderButton(
                 type: .more,

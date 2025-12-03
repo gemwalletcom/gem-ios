@@ -123,6 +123,8 @@ extension RootSceneViewModel {
                 notificationHandler.notify(notification: PushNotification.swapAsset(fromAssetId, toAssetId))
             case .perpetuals:
                 notificationHandler.notify(notification: PushNotification.perpetuals)
+            case .none:
+                break
             }
         } catch {
             debugLog("RootSceneViewModel handleUrl error: \(error)")
