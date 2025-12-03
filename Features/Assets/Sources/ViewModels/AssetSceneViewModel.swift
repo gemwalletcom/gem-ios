@@ -178,6 +178,18 @@ public final class AssetSceneViewModel: Sendable {
     var priceAlertsViewModel: PriceAlertsViewModel {
         PriceAlertsViewModel(priceAlerts: assetData.priceAlerts)
     }
+    
+    var swapAssetType: SelectedAssetType {
+        switch assetData.asset.type {
+        case .native: .swap(assetData.asset, nil)
+        case .erc20, .bep20, .spl, .spl2022, .trc20, .token, .ibc, .jetton, .synth, .asa, .perpetual, .spot:
+            if assetData.balance.available == .zero {
+                .swap(assetData.asset.chain.asset, assetData.asset)
+            } else {
+                .swap(assetData.asset, nil)
+            }
+        }
+    }
 }
 
 
@@ -208,9 +220,7 @@ extension AssetSceneViewModel {
         case .buy: .buy(assetData.asset)
         case .sell: .sell(assetData.asset)
         case .send: .send(.asset(assetData.asset))
-        case .swap: assetData.balance.available == .zero && assetData.asset.type != .native
-            ? .swap(assetData.asset.chain.asset, assetData.asset)
-            : .swap(assetData.asset, nil)
+        case .swap: swapAssetType
         case .receive: .receive(.asset)
         case .stake: .stake(assetData.asset)
         case .more, .deposit, .withdraw:
