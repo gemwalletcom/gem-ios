@@ -133,23 +133,23 @@ public struct Scenes {
         }
     }
     
-    public struct CollectionsScene: Hashable {
+    public struct Collection: Hashable, Sendable {
+        public let id: String
+        public let name: String
 
-        public enum SceneStep: Hashable, Sendable {
-            case collections
-            case collection(NFTData)
-        }
-        
-        public let sceneStep: SceneStep
-
-        public init(sceneStep: SceneStep) {
-            self.sceneStep = sceneStep
+        public init(id: String, name: String) {
+            self.id = id
+            self.name = name
         }
     }
-    
+
+    public struct UnverifiedCollections: Hashable, Sendable {
+        public init() {}
+    }
+
     public struct Collectible: Hashable, Sendable {
         public let assetData: NFTAssetData
-        
+
         public init(assetData: NFTAssetData) {
             self.assetData = assetData
         }
