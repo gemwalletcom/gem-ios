@@ -46,6 +46,7 @@ public struct PerpetualsScene: View {
         .refreshable {
             await model.fetch()
         }
+        .listSectionSpacing(.compact)
     }
 
     var list: some View {
@@ -63,16 +64,24 @@ public struct PerpetualsScene: View {
                 .cleanListRow()
             }
 
+            if model.showRecent {
+                RecentActivitySectionView(models: model.activityModels) { assetModel in
+                    Button {
+                        model.onSelectRecentPerpetual(asset: assetModel.asset)
+                    } label: {
+                        AssetChipView(model: assetModel)
+                    }
+                }
+            }
+
             if model.showPositions {
                 Section {
                     ForEach(model.positions) { position in
-                        NavigationLink(
-                            value: Scenes.Perpetual(position.perpetualData),
-                            label: {
-                                ListAssetItemView(
-                                    model: PerpetualPositionItemViewModel(model: PerpetualPositionViewModel(position))
-                                )
-                            }
+                        NavigationCustomLink(
+                            with: ListAssetItemView(
+                                model: PerpetualPositionItemViewModel(model: PerpetualPositionViewModel(position))
+                            ),
+                            action: { model.onSelectPerpetual(asset: position.perpetualData.asset) }
                         )
                         .listRowInsets(.assetListRowInsets)
                     }
@@ -85,7 +94,8 @@ public struct PerpetualsScene: View {
                 Section {
                     PerpetualSectionView(
                         perpetuals: model.sections.pinned,
-                        onPin: model.onPinPerpetual
+                        onPin: model.onPinPerpetual,
+                        onSelect: model.onSelectPerpetual
                     )
                 } header: {
                     HStack {
@@ -94,11 +104,13 @@ public struct PerpetualsScene: View {
                     }
                 }
             }
+
             if model.showMarkets {
                 Section {
                     PerpetualSectionView(
                         perpetuals: model.sections.markets,
                         onPin: model.onPinPerpetual,
+                        onSelect: model.onSelectPerpetual,
                         emptyText: model.noMarketsText
                     )
                 } header: {
@@ -107,4 +119,5 @@ public struct PerpetualsScene: View {
             }
         }
     }
+
 }

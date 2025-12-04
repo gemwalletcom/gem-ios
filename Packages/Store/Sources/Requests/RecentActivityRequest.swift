@@ -11,21 +11,30 @@ public struct RecentActivityRequest: ValueObservationQueryable {
 
     public var walletId: String
     public var limit: Int
+    public var types: [RecentActivityType]
     public var filters: [AssetsRequestFilter]
 
     public init(
         walletId: String,
         limit: Int = 20,
+        types: [RecentActivityType] = [],
         filters: [AssetsRequestFilter] = []
     ) {
         self.walletId = walletId
         self.limit = limit
+        self.types = types
         self.filters = filters
     }
 
     public func fetch(_ db: Database) throws -> [Asset] {
-        let recentActivitiesForWallet = AssetRecord.recentActivities
+        var recentActivitiesForWallet = AssetRecord.recentActivities
             .filter(RecentActivityRecord.Columns.walletId == walletId)
+
+        if types.isNotEmpty {
+            recentActivitiesForWallet = recentActivitiesForWallet
+                .filter(types.map(\.rawValue).contains(RecentActivityRecord.Columns.type))
+        }
+
         let maxCreatedAt = recentActivitiesForWallet.max(RecentActivityRecord.Columns.createdAt)
 
         var request = AssetRecord

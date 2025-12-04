@@ -10,11 +10,13 @@ import PrimitivesComponents
 import Components
 import Localization
 import Style
+import ActivityService
 
 @Observable
 @MainActor
 public final class PerpetualsSceneViewModel {
     private let perpetualService: PerpetualServiceable
+    private let activityService: ActivityService
 
     let preferences: Preferences = .standard
     let wallet: Wallet
@@ -22,7 +24,9 @@ public final class PerpetualsSceneViewModel {
     var positionsRequest: PerpetualPositionsRequest
     var perpetualsRequest: PerpetualsRequest
     var walletBalanceRequest: PerpetualWalletBalanceRequest
+    var recentActivityRequest: RecentActivityRequest
 
+    var recentActivities: [Asset] = []
     var positions: [PerpetualPositionData] = []
     var perpetuals: [PerpetualData] = []
     var walletBalance: WalletBalance = .zero
@@ -32,18 +36,28 @@ public final class PerpetualsSceneViewModel {
     var isSearching: Bool = false
 
     let onSelectAssetType: ((SelectAssetType) -> Void)?
+    let onSelectAsset: ((Asset) -> Void)?
 
     public init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
-        onSelectAssetType: ((SelectAssetType) -> Void)? = nil
+        activityService: ActivityService,
+        onSelectAssetType: ((SelectAssetType) -> Void)? = nil,
+        onSelectAsset: ((Asset) -> Void)? = nil
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
+        self.activityService = activityService
+        self.onSelectAssetType = onSelectAssetType
+        self.onSelectAsset = onSelectAsset
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, searchQuery: "")
         self.perpetualsRequest = PerpetualsRequest(searchQuery: "")
         self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: wallet.id)
-        self.onSelectAssetType = onSelectAssetType
+        self.recentActivityRequest = RecentActivityRequest(
+            walletId: wallet.id,
+            limit: 10,
+            types: [.perpetual]
+        )
     }
 
     var navigationTitle: String { Localized.Perpetuals.title }
@@ -60,6 +74,8 @@ public final class PerpetualsSceneViewModel {
     var showPinned: Bool { !isSearching && sections.pinned.isNotEmpty }
     var showMarkets: Bool { !isSearching || sections.markets.isNotEmpty || positions.isEmpty }
 
+    var showRecent: Bool {  recentActivities.isNotEmpty }
+
     var sections: PerpetualsSections {
         if isSearching {
             // During search, filter out perpetuals that are already in positions
@@ -68,6 +84,10 @@ public final class PerpetualsSceneViewModel {
             return PerpetualsSections.from(filteredPerpetuals)
         }
         return PerpetualsSections.from(perpetuals)
+    }
+
+    var activityModels: [AssetViewModel] {
+        recentActivities.map { AssetViewModel(asset: $0) }
     }
 
     var headerViewModel: PerpetualsHeaderViewModel {
@@ -85,7 +105,7 @@ extension PerpetualsSceneViewModel {
         await updateMarkets()
         await updatePositions()
     }
-    
+
     private func updatePositions() async {
         do {
             try await perpetualService.updatePositions(wallet: wallet)
@@ -93,10 +113,10 @@ extension PerpetualsSceneViewModel {
             debugLog("Failed to update positions: \(error)")
         }
     }
-    
+
     func updateMarkets() async {
         guard preferences.perpetualMarketsUpdatedAt.isOutdated(byMinutes: 1) else { return }
-        
+
         do {
             try await perpetualService.updateMarkets()
             preferences.perpetualMarketsUpdatedAt = .now
@@ -138,5 +158,14 @@ extension PerpetualsSceneViewModel {
 
     func onSelectSearchButton() {
         isSearchPresented = true
+    }
+
+    func onSelectPerpetual(asset: Asset) {
+        onSelectAsset?(asset)
+        try? activityService.updateRecent(type: .perpetual, assetId: asset.id, walletId: wallet.walletId)
+    }
+
+    func onSelectRecentPerpetual(asset: Asset) {
+        onSelectAsset?(asset)
     }
 }
