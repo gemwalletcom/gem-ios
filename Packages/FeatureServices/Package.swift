@@ -10,6 +10,7 @@ let package = Package(
     ],
     products: [
         .library(name: "PerpetualService", targets: ["PerpetualService"]),
+        .library(name: "PerpetualServiceTestKit", targets: ["PerpetualServiceTestKit"]),
         .library(name: "BalanceService", targets: ["BalanceService"]),
         .library(name: "BalanceServiceTestKit", targets: ["BalanceServiceTestKit"]),
         .library(name: "BannerService", targets: ["BannerService"]),
@@ -72,6 +73,15 @@ let package = Package(
             ],
             path: "PerpetualService",
             exclude: ["Tests", "TestKit"]
+        ),
+        .target(
+            name: "PerpetualServiceTestKit",
+            dependencies: [
+                "PerpetualService",
+                "Primitives",
+                .product(name: "StoreTestKit", package: "Store")
+            ],
+            path: "PerpetualService/TestKit"
         ),
         .target(
             name: "BalanceService",
