@@ -60,7 +60,8 @@ public final class WalletSearchSceneViewModel: Sendable {
         )
         self.recentActivityRequest = RecentActivityRequest(
             walletId: wallet.id,
-            limit: 10
+            limit: 10,
+            types: RecentActivityType.allCases.filter { $0 != .perpetual }
         )
     }
 
@@ -77,11 +78,9 @@ public final class WalletSearchSceneViewModel: Sendable {
         searchModel.searchableQuery.isEmpty
     }
 
-    var showRecentSearches: Bool {
+    var showRecent: Bool {
         searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
     }
-
-    var recentActivityTitle: String { Localized.RecentActivity.title }
 
     var activityModels: [AssetViewModel] {
         recentActivities.map { AssetViewModel(asset: $0) }

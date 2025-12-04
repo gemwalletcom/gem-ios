@@ -7,31 +7,35 @@ import Combine
 import Primitives
 
 public struct PerpetualPositionsRequest: ValueObservationQueryable {
-
     public static var defaultValue: [PerpetualPositionData] { [] }
 
     public var walletId: String
-    public var perpetualId: String?
+    public var filter: PositionsRequestFilter?
     public var searchQuery: String
 
     public init(
         walletId: String,
-        perpetualId: String? = .none,
+        filter: PositionsRequestFilter? = nil,
         searchQuery: String = ""
     ) {
         self.walletId = walletId
-        self.perpetualId = perpetualId
+        self.filter = filter
         self.searchQuery = searchQuery
     }
-    
+
     public func fetch(_ db: Database) throws -> [PerpetualPositionData] {
         var query = PerpetualRecord
             .including(required: PerpetualRecord.asset)
             .including(all: PerpetualRecord.positions
                 .filter(PerpetualPositionRecord.Columns.walletId == walletId))
 
-        if let perpetualId = perpetualId {
+        switch filter {
+        case .perpetualId(let perpetualId):
             query = query.filter(PerpetualRecord.Columns.id == perpetualId)
+        case .assetId(let assetId):
+            query = query.filter(PerpetualRecord.Columns.assetId == assetId.identifier)
+        case .none:
+            break
         }
 
         if !searchQuery.isEmpty {
