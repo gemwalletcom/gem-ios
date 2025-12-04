@@ -65,7 +65,7 @@ public struct PerpetualsScene: View {
             }
 
             if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels) { assetModel in
+                RecentActivitySectionView(models: model.activityModels, headerPadding: .medium + .tiny) { assetModel in
                     Button {
                         model.onSelectRecentPerpetual(asset: assetModel.asset)
                     } label: {
@@ -118,6 +118,6 @@ public struct PerpetualsScene: View {
                 }
             }
         }
+        .contentMargins([.top], .space12, for: .scrollContent)
     }
-
 }

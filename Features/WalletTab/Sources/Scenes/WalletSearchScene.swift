@@ -73,7 +73,7 @@ public struct WalletSearchScene: View {
             }
 
             if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels) { assetModel in
+                RecentActivitySectionView(models: model.activityModels, ) { assetModel in
                     NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
                         AssetChipView(model: assetModel)
                     }
