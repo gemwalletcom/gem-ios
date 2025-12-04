@@ -136,3 +136,11 @@ public struct ReportNft: Codable, Sendable {
 		self.reason = reason
 	}
 }
+
+public enum ReportReason: String, Codable, CaseIterable, Sendable {
+	case spam
+	case malicious
+	case inappropriate
+	case copyright
+	case other
+}

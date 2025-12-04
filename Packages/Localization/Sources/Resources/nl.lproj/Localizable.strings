@@ -1,4 +1,4 @@
-"common.cancel" = "Cancel";
+"common.cancel" = "Annuleren";
 "welcome.title" = "Welcome to Gem Family";
 "common.done" = "Done";
 "wallet.create_new_wallet" = "Create a New Wallet";
@@ -519,11 +519,8 @@
 "charts.stop_loss" = "SL";
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
-"nft.report.select_report_header" = "What is wrong with this NFT?";
-"nft.report.title" = "Report Message";
-"nft.report.placeholder" = "Please describe the issue";
 "nft.report.reason.spam" = "Spam";
-"nft.report.reason.scam" = "Scam";
-"nft.report.reason.inappropriate" = "Inappropriate Content";
+"nft.report.reason.malicious" = "Kwaadwillend";
+"nft.report.reason.inappropriate" = "Ongepaste inhoud";
 "nft.report.reason.copyright" = "Copyright";
-"nft.report.report_button_title" = "Report";
+"nft.report.report_button_title" = "Melden";

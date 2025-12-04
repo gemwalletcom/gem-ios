@@ -58,6 +58,7 @@ struct CollectionsNavigationStack: View {
                             wallet: model.wallet,
                             assetData: $0.assetData,
                             avatarService: avatarService,
+                            nftService: nftService,
                             isPresentingSelectedAssetInput: model.isPresentingSelectedAssetInput
                         )
                     )
