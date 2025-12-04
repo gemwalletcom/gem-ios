@@ -207,7 +207,7 @@ extension WalletSceneViewModel {
     func onPinAsset(_ asset: Asset, value: Bool) {
         do {
             try walletsService.setPinned(value, walletId: wallet.walletId, assetId: asset.id)
-            isPresentingToastMessage = .pinned(asset.name, isPinned: value)
+            isPresentingToastMessage = .pin(asset.name, pinned: value)
         } catch {
             debugLog("WalletSceneViewModel pin asset error: \(error)")
         }

@@ -300,9 +300,9 @@ extension AssetSceneViewModel {
 
     public func onTogglePriceAlert() {
         Task {
-            let enable = !assetData.isPriceAlertsEnabled
-            isPresentingToastMessage = .priceAlert(for: assetData.asset.name, enabled: enable)
-            if enable {
+            let enabled = !assetData.isPriceAlertsEnabled
+            isPresentingToastMessage = .priceAlert(for: assetData.asset.name, enabled: enabled)
+            if enabled {
                 await enablePriceAlert()
             } else {
                 await disablePriceAlert()
@@ -316,9 +316,9 @@ extension AssetSceneViewModel {
     
     public func onSelectPin() {
         do {
-            let isPinned = !assetData.metadata.isPinned
-            isPresentingToastMessage = ToastMessage(title: pinText, image: pinSystemImage)
-            try walletsService.setPinned(isPinned, walletId: wallet.walletId, assetId: asset.id)
+            let pinned = !assetData.metadata.isPinned
+            isPresentingToastMessage = .pin(asset.name, pinned: pinned)
+            try walletsService.setPinned(pinned, walletId: wallet.walletId, assetId: asset.id)
             if !assetData.metadata.isBalanceEnabled {
                 onSelectEnable()
             }
@@ -326,14 +326,12 @@ extension AssetSceneViewModel {
             debugLog("onSelectPin error: \(error)")
         }
     }
-    
+
     public func onSelectEnable() {
         Task {
-            let isEnabled = !assetData.metadata.isBalanceEnabled
-            isPresentingToastMessage = ToastMessage(title: enableText, image: enableSystemImage)
-            do {
-                await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: isEnabled)
-            }
+            let enabled = !assetData.metadata.isBalanceEnabled
+            isPresentingToastMessage = .showAsset(visible: enabled)
+            await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: enabled)
         }
     }
 }

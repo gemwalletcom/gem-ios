@@ -9,6 +9,8 @@ import ActivityService
 import ActivityServiceTestKit
 import Preferences
 import PreferencesTestKit
+import WalletsService
+import WalletsServiceTestKit
 
 public extension WalletSearchSceneViewModel {
     @MainActor
@@ -16,12 +18,14 @@ public extension WalletSearchSceneViewModel {
         wallet: Wallet = .mock(),
         searchService: AssetSearchService = .mock(),
         activityService: ActivityService = .mock(),
+        walletsService: WalletsService = .mock(),
         preferences: Preferences = .mock()
     ) -> WalletSearchSceneViewModel {
         WalletSearchSceneViewModel(
             wallet: wallet,
             searchService: searchService,
             activityService: activityService,
+            walletsService: walletsService,
             preferences: preferences,
             onDismissSearch: {},
             onSelectAssetAction: { _ in },

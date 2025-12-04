@@ -184,7 +184,7 @@ extension WalletSearchSceneViewModel {
     func onSelectPinAsset(_ assetData: AssetData, value: Bool) {
         do {
             try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetData.asset.id)
-            isPresentingToastMessage = .pinned(assetData.asset.name, isPinned: value)
+            isPresentingToastMessage = .pin(assetData.asset.name, pinned: value)
         } catch {
             debugLog("WalletSearchSceneViewModel pin asset error: \(error)")
         }

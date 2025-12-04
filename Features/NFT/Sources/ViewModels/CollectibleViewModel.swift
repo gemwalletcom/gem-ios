@@ -225,7 +225,7 @@ extension CollectibleViewModel {
 
     func onReportComplete() {
         isPresentingReportSheet = false
-        isPresentingToast = ToastMessage(title: Localized.Transaction.Status.confirmed, image: SystemImage.checkmark)
+        isPresentingToast = .success(Localized.Transaction.Status.confirmed)
     }
 }
 

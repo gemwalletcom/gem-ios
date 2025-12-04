@@ -13,15 +13,22 @@ public extension ToastMessage {
         ToastMessage(title: message, image: SystemImage.copy)
     }
 
-    static func pinned(_ name: String, isPinned: Bool) -> ToastMessage {
+    static func pin(_ name: String, pinned: Bool) -> ToastMessage {
         ToastMessage(
-            title: isPinned ? "\(Localized.Common.pinned) \(name)" : "\(Localized.Common.unpin) \(name)",
-            image: isPinned ? SystemImage.pin : SystemImage.unpin
+            title: pinned ? "\(Localized.Common.pinned) \(name)" : "\(Localized.Common.unpin) \(name)",
+            image: pinned ? SystemImage.pin : SystemImage.unpin
         )
     }
 
     static func addedToWallet() -> ToastMessage {
         ToastMessage(title: Localized.Asset.addToWallet, image: SystemImage.plusCircle)
+    }
+
+    static func showAsset(visible: Bool) -> ToastMessage {
+        ToastMessage(
+            title: visible ? Localized.Asset.addToWallet : Localized.Asset.hideFromWallet,
+            image: visible ? SystemImage.plusCircle : SystemImage.minusCircle
+        )
     }
 
     static func priceAlert(for assetName: String, enabled: Bool) -> ToastMessage {

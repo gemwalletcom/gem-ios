@@ -13,14 +13,20 @@ struct ToastMessageTests {
     }
 
     @Test
-    func pinned() {
-        #expect(ToastMessage.pinned("BTC", isPinned: true).image == SystemImage.pin)
-        #expect(ToastMessage.pinned("BTC", isPinned: false).image == SystemImage.unpin)
+    func pin() {
+        #expect(ToastMessage.pin("BTC", pinned: true).image == SystemImage.pin)
+        #expect(ToastMessage.pin("BTC", pinned: false).image == SystemImage.unpin)
     }
 
     @Test
     func addedToWallet() {
         #expect(ToastMessage.addedToWallet().image == SystemImage.plusCircle)
+    }
+
+    @Test
+    func showAsset() {
+        #expect(ToastMessage.showAsset(visible: true).image == SystemImage.plusCircle)
+        #expect(ToastMessage.showAsset(visible: false).image == SystemImage.minusCircle)
     }
 
     @Test
