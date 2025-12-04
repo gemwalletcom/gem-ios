@@ -21,7 +21,8 @@ public struct RecentActivitySectionView<Content: View>: View {
         Section {} header: {
             VStack(alignment: .leading, spacing: Spacing.small) {
                 Text(Localized.RecentActivity.title)
-                    .padding(.leading, Spacing.space12)
+                    .padding(.top, .small)
+                    .padding(.leading, .medium + .tiny)
                 AssetsCollectionView(models: models, content: content)
             }
         }
