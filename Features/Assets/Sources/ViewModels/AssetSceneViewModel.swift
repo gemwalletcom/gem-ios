@@ -300,18 +300,12 @@ extension AssetSceneViewModel {
 
     public func onTogglePriceAlert() {
         Task {
-            if assetData.isPriceAlertsEnabled {
-                isPresentingToastMessage = ToastMessage(
-                    title: Localized.PriceAlerts.disabledFor(assetData.asset.name),
-                    image: priceAlertsSystemImage
-                )
-                await disablePriceAlert()
-            } else {
-                isPresentingToastMessage = ToastMessage(
-                    title: Localized.PriceAlerts.enabledFor(assetData.asset.name),
-                    image: priceAlertsSystemImage
-                )
+            let enable = !assetData.isPriceAlertsEnabled
+            isPresentingToastMessage = .priceAlert(for: assetData.asset.name, enabled: enable)
+            if enable {
                 await enablePriceAlert()
+            } else {
+                await disablePriceAlert()
             }
         }
     }

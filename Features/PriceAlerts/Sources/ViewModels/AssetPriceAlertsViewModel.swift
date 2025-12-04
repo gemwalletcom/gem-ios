@@ -85,6 +85,6 @@ extension AssetPriceAlertsViewModel {
     
     func onSetPriceAlertComplete(message: String) {
         isPresentingSetPriceAlert = false
-        isPresentingToastMessage = ToastMessage(title: message, image: SystemImage.bellFill)
+        isPresentingToastMessage = .priceAlert(message: message)
     }
 }

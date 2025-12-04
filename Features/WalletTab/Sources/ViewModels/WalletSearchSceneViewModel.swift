@@ -11,12 +11,14 @@ import Preferences
 import Style
 import Localization
 import ActivityService
+import WalletsService
 
 @Observable
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
     private let searchService: AssetSearchService
     private let activityService: ActivityService
+    private let walletsService: WalletsService
     private let preferences: Preferences
 
     private let wallet: Wallet
@@ -31,6 +33,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     var request: AssetsRequest
     var recentActivityRequest: RecentActivityRequest
 
+    var isPresentingToastMessage: ToastMessage? = nil
     var isSearching: Bool = false
     var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
@@ -41,6 +44,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         wallet: Wallet,
         searchService: AssetSearchService,
         activityService: ActivityService,
+        walletsService: WalletsService,
         preferences: Preferences = .standard,
         onDismissSearch: VoidAction,
         onSelectAssetAction: AssetAction,
@@ -49,6 +53,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.wallet = wallet
         self.searchService = searchService
         self.activityService = activityService
+        self.walletsService = walletsService
         self.preferences = preferences
         self.onDismissSearch = onDismissSearch
         self.onSelectAssetAction = onSelectAssetAction
@@ -167,6 +172,51 @@ extension WalletSearchSceneViewModel {
 
     func onSelectAddCustomToken() {
         onAddToken?()
+    }
+
+    func onSelectAddToWallet(_ asset: Asset) {
+        Task {
+            await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
+            isPresentingToastMessage = .addedToWallet()
+        }
+    }
+
+    func onSelectPinAsset(_ assetData: AssetData, value: Bool) {
+        do {
+            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetData.asset.id)
+            isPresentingToastMessage = .pinned(assetData.asset.name, isPinned: value)
+        } catch {
+            debugLog("WalletSearchSceneViewModel pin asset error: \(error)")
+        }
+    }
+
+    func onSelectCopyAddress(_ message: String) {
+        isPresentingToastMessage = .copy(message)
+    }
+
+    func contextMenuItems(for assetData: AssetData) -> [ContextMenuItemType] {
+        [
+            .copy(
+                title: Localized.Wallet.copyAddress,
+                value: assetData.account.address,
+                onCopy: { [weak self] in
+                    self?.onSelectCopyAddress(CopyTypeViewModel(type: .address(assetData.asset, address: $0), copyValue: $0).message)
+                }
+            ),
+            .pin(
+                isPinned: assetData.metadata.isPinned,
+                onPin: { [weak self] in
+                    self?.onSelectPinAsset(assetData, value: !assetData.metadata.isPinned)
+                }
+            ),
+            !assetData.metadata.isBalanceEnabled ? .custom(
+                title: Localized.Asset.addToWallet,
+                systemImage: SystemImage.plusCircle,
+                action: { [weak self] in
+                    self?.onSelectAddToWallet(assetData.asset)
+                }
+            ) : nil
+        ].compactMap { $0 }
     }
 }
 
