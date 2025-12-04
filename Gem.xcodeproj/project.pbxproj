@@ -208,6 +208,7 @@
 		83E041572D0AFCB10031D4BC /* RootScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScene.swift; sourceTree = "<group>"; };
 		83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSceneViewModel.swift; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
+		B62A3AE02EE18A8F00CE0D41 /* WebSocketClient */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WebSocketClient; sourceTree = "<group>"; };
 		B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
 		B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
@@ -624,6 +625,7 @@
 		C3CF3B6E29A98BFD00E96586 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				B62A3AE02EE18A8F00CE0D41 /* WebSocketClient */,
 				837D7DE62E005D2800BBBDDA /* Formatters */,
 				832F57E92D36A6D50066024D /* Preferences */,
 				DFBDD9AE2C77EC90002A1706 /* WalletCore */,
