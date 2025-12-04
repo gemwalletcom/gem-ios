@@ -105,7 +105,7 @@ public final class StakeSceneViewModel {
     var emptyDelegationsTitle: String { Localized.Stake.noActiveStaking }
 
     var showManage: Bool {
-        !wallet.isViewOnly
+        wallet.canSign
     }
     
     var recommendedCurrentValidator: DelegationValidator? {

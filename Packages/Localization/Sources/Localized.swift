@@ -721,6 +721,20 @@ public enum Localized {
     public static let saveToPhotos = Localized.tr("Localizable", "nft.save_to_photos", fallback: "Save to Photos")
     /// Set as Avatar
     public static let setAsAvatar = Localized.tr("Localizable", "nft.set_as_avatar", fallback: "Set as Avatar")
+    public enum Report {
+      /// Report
+      public static let reportButtonTitle = Localized.tr("Localizable", "nft.report.report_button_title", fallback: "Report")
+      public enum Reason {
+        /// Copyright
+        public static let copyright = Localized.tr("Localizable", "nft.report.reason.copyright", fallback: "Copyright")
+        /// Inappropriate Content
+        public static let inappropriate = Localized.tr("Localizable", "nft.report.reason.inappropriate", fallback: "Inappropriate Content")
+        /// Malicious
+        public static let malicious = Localized.tr("Localizable", "nft.report.reason.malicious", fallback: "Malicious")
+        /// Spam
+        public static let spam = Localized.tr("Localizable", "nft.report.reason.spam", fallback: "Spam")
+      }
+    }
     public enum State {
       public enum Empty {
         /// Receive your first NFT

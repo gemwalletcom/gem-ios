@@ -71,9 +71,8 @@ public struct ConfirmService: Sendable {
         try await transferExecutor.execute(input: input)
     }
 
-    public func updateRecent(input: TransferConfirmationInput) {
-        guard input.data.type.transactionType == .transfer else { return }
-        try? activityService.updateRecent(type: .transfer, assetId: input.data.type.asset.id, walletId: input.wallet.walletId)
+    public func updateRecent(data: RecentActivityData, walletId: WalletId) {
+        try? activityService.updateRecent(type: data.type, assetId: data.assetId, toAssetId: data.toAssetId, walletId: walletId)
     }
 
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {

@@ -519,3 +519,8 @@
 "charts.stop_loss" = "SL";
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
+"nft.report.reason.spam" = "İstenmeyen e-posta";
+"nft.report.reason.malicious" = "Kötü niyetli";
+"nft.report.reason.inappropriate" = "Uygunsuz İçerik";
+"nft.report.reason.copyright" = "Telif hakkı";
+"nft.report.report_button_title" = "Bildir";

@@ -31,7 +31,7 @@ public enum URLParser {
         if url.host() == DeepLink.host || url.scheme == "gem" {
             guard let path = urlComponents.first,
                   let pathComponent = DeepLink.PathComponent(rawValue: path) else {
-                throw URLParserError.invalidURL(url)
+                return .none
             }
 
             switch pathComponent {

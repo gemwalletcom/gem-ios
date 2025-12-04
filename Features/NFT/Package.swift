@@ -51,6 +51,7 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "WalletServiceTestKit", package: "FeatureServices"),
+                .product(name: "NFTServiceTestKit", package: "FeatureServices"),
                 "NFT",
                 "PrimitivesComponents",
                 .product(name: "AvatarService", package: "FeatureServices"),
