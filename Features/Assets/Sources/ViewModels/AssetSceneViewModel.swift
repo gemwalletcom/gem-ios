@@ -180,9 +180,9 @@ public final class AssetSceneViewModel: Sendable {
     }
     
     var swapAssetType: SelectedAssetType {
-        switch assetData.asset.type {
+        switch assetData.asset.id.type {
         case .native: .swap(assetData.asset, nil)
-        case .erc20, .bep20, .spl, .spl2022, .trc20, .token, .ibc, .jetton, .synth, .asa, .perpetual, .spot:
+        case .token:
             if assetData.balance.available == .zero {
                 .swap(assetData.asset.chain.asset, assetData.asset)
             } else {
