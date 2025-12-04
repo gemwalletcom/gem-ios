@@ -171,7 +171,7 @@ extension CollectibleViewModel {
         Task {
             do {
                 try await saveImageToGallery()
-                isPresentingToast = ToastMessage(title: Localized.Nft.saveToPhotos, image: SystemImage.checkmark)
+                isPresentingToast = .success(Localized.Nft.saveToPhotos)
             } catch let error as ImageGalleryServiceError {
                 switch error {
                 case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
@@ -202,7 +202,7 @@ extension CollectibleViewModel {
         Task {
             do {
                 try await setWalletAvatar()
-                isPresentingToast = ToastMessage(title: Localized.Nft.setAsAvatar, image: SystemImage.checkmark)
+                isPresentingToast = .success(Localized.Nft.setAsAvatar)
             } catch {
                 debugLog("Set nft avatar error: \(error)")
             }

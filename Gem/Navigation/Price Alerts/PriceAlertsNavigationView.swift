@@ -53,6 +53,6 @@ struct PriceAlertsNavigationView: View {
     
     private func onSelectAsset(asset: Asset) {
         isPresentingAddAsset = false
-        isPresentingToastMessage = ToastMessage(title: Localized.PriceAlerts.enabledFor(asset.name), image: SystemImage.bellFill)
+        isPresentingToastMessage = .priceAlert(for: asset.name, enabled: true)
     }
 }

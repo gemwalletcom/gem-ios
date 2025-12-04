@@ -178,30 +178,21 @@ extension WalletSearchSceneViewModel {
     func onSelectAddToWallet(_ asset: Asset) {
         Task {
             await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
-            isPresentingToastMessage = ToastMessage(
-                title: Localized.Asset.addToWallet,
-                image: SystemImage.plusCircle
-            )
+            isPresentingToastMessage = .addedToWallet()
         }
     }
 
     func onSelectPinAsset(_ assetData: AssetData, value: Bool) {
         do {
             try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetData.asset.id)
-            isPresentingToastMessage = ToastMessage(
-                title: value ? "\(Localized.Common.pinned) \(assetData.asset.name)" : "\(Localized.Common.unpin) \(assetData.asset.name)",
-                image: value ? SystemImage.pin : SystemImage.unpin
-            )
+            isPresentingToastMessage = .pinned(assetData.asset.name, isPinned: value)
         } catch {
             debugLog("WalletSearchSceneViewModel pin asset error: \(error)")
         }
     }
 
     func onSelectCopyAddress(_ message: String) {
-        isPresentingToastMessage = ToastMessage(
-            title: message,
-            image: SystemImage.copy
-        )
+        isPresentingToastMessage = .copy(message)
     }
 
     func contextMenuItems(for assetData: AssetData) -> [ContextMenuItemType] {
