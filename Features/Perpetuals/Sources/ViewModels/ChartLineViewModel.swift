@@ -23,17 +23,13 @@ struct ChartLineViewModel: Identifiable {
     var color: Color {
         switch line.type {
         case .takeProfit: Colors.green
-        case .stopLoss: Colors.red
-        case .entry: Colors.blue
-        case .liquidation: Colors.orange
+        case .stopLoss: Colors.orange
+        case .entry: Colors.gray
+        case .liquidation: Colors.red
         }
     }
 
     var lineStyle: StrokeStyle {
-        switch line.type {
-        case .takeProfit, .stopLoss: StrokeStyle(lineWidth: 1, dash: [6, 4])
-        case .entry: StrokeStyle(lineWidth: 1.5)
-        case .liquidation: StrokeStyle(lineWidth: 1, dash: [2, 2])
-        }
+        StrokeStyle(lineWidth: 1, dash: [4, 3])
     }
 }

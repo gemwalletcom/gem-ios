@@ -132,7 +132,7 @@ struct CandlestickChartView: View {
     private func linesMarks(_ bounds: ChartBounds) -> some ChartContent {
         ForEach(bounds.visibleLines) { line in
             RuleMark(y: .value(ChartKey.price, line.price))
-                .foregroundStyle(line.color.opacity(0.8))
+                .foregroundStyle(line.color.opacity(0.6))
                 .lineStyle(line.lineStyle)
         }
 
@@ -143,10 +143,9 @@ struct CandlestickChartView: View {
                     Text(line.label)
                         .font(.system(size: Spacing.space10, weight: .bold))
                         .foregroundStyle(Colors.whiteSolid)
-                        .padding(.horizontal, Spacing.extraSmall)
-                        .padding(.vertical, 1)
+                        .padding(Spacing.tiny)
                         .background(line.color)
-                        .clipShape(RoundedRectangle(cornerRadius: Spacing.extraSmall))
+                        .clipShape(RoundedRectangle(cornerRadius: Spacing.tiny))
                         .offset(x: labelXOffset(for: index, in: bounds))
                 }
         }
