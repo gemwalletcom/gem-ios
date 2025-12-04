@@ -56,6 +56,10 @@ let package = Package(
                 "Perpetuals",
                 "Primitives",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "PerpetualService", package: "FeatureServices"),
+                .product(name: "PerpetualServiceTestKit", package: "FeatureServices"),
+                .product(name: "ActivityService", package: "FeatureServices"),
+                .product(name: "ActivityServiceTestKit", package: "FeatureServices"),
             ],
             path: "TestKit"
         ),

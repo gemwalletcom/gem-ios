@@ -77,13 +77,14 @@ public final class PerpetualsSceneViewModel {
     var showRecent: Bool { isSearching && recentActivities.isNotEmpty }
 
     var sections: PerpetualsSections {
+        let source: [PerpetualData]
         if isSearching {
-            // During search, filter out perpetuals that are already in positions
-            let positionPerpetualIds = Set(positions.map { $0.perpetual.id })
-            let filteredPerpetuals = perpetuals.filter { !positionPerpetualIds.contains($0.perpetual.id) }
-            return PerpetualsSections.from(filteredPerpetuals)
+            let positionIds = Set(positions.map { $0.perpetual.id })
+            source = perpetuals.filter { !positionIds.contains($0.perpetual.id) }
+        } else {
+            source = perpetuals
         }
-        return PerpetualsSections.from(perpetuals)
+        return PerpetualsSections.from(source)
     }
 
     var activityModels: [AssetViewModel] {

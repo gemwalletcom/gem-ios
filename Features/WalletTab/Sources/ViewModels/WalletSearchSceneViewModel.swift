@@ -61,7 +61,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.recentActivityRequest = RecentActivityRequest(
             walletId: wallet.id,
             limit: 10,
-            types: [.search, .transfer, .receive, .fiatBuy, .fiatSell, .swap]
+            types: RecentActivityType.allCases.filter { $0 != .perpetual }
         )
     }
 

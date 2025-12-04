@@ -17,7 +17,7 @@ public struct RecentActivityRequest: ValueObservationQueryable {
     public init(
         walletId: String,
         limit: Int = 20,
-        types: [RecentActivityType] = [],
+        types: [RecentActivityType] = RecentActivityType.allCases,
         filters: [AssetsRequestFilter] = []
     ) {
         self.walletId = walletId
@@ -27,13 +27,9 @@ public struct RecentActivityRequest: ValueObservationQueryable {
     }
 
     public func fetch(_ db: Database) throws -> [Asset] {
-        var recentActivitiesForWallet = AssetRecord.recentActivities
+        let recentActivitiesForWallet = AssetRecord.recentActivities
             .filter(RecentActivityRecord.Columns.walletId == walletId)
-
-        if types.isNotEmpty {
-            recentActivitiesForWallet = recentActivitiesForWallet
-                .filter(types.map(\.rawValue).contains(RecentActivityRecord.Columns.type))
-        }
+            .filter(types.map(\.rawValue).contains(RecentActivityRecord.Columns.type))
 
         let maxCreatedAt = recentActivitiesForWallet.max(RecentActivityRecord.Columns.createdAt)
 
