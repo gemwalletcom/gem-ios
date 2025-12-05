@@ -17,6 +17,7 @@ case "$type" in
     new_build=$(bump_build)
     git add "$file"
     git commit -m "Bump to $version ($new_build)" > /dev/null
+    git tag "$version" 2>/dev/null || echo "⚠️  Tag $version already exists"
     echo "✅ Bumped to $version ($new_build)"
     ;;
   build)
