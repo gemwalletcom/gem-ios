@@ -1,10 +1,10 @@
-name: "Bump: iOS"
+name: "Release"
 
 on:
   workflow_dispatch:
 
 jobs:
-  bump-version:
+  release:
     runs-on: macos-latest
     outputs:
       version: ${{ steps.get_version.outputs.version }}
