@@ -3,8 +3,8 @@
 import Foundation
 
 public enum WebSocketState: Sendable {
-    case disconnected
     case connecting
     case connected
     case reconnecting
+    case disconnected
 }

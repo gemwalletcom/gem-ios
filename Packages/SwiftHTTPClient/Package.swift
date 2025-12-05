@@ -8,17 +8,28 @@ let package = Package(
     products: [
         .library(
             name: "SwiftHTTPClient",
-            targets: ["SwiftHTTPClient"]),
+            targets: ["SwiftHTTPClient"]
+        ),
+        .library(
+            name: "SwiftHTTPClientTestKit",
+            targets: ["SwiftHTTPClientTestKit"]
+        ),
     ],
-    dependencies: [
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "SwiftHTTPClient",
-            dependencies: [], path: "Sources"
+            dependencies: [],
+            path: "Sources"
+        ),
+        .target(
+            name: "SwiftHTTPClientTestKit",
+            dependencies: ["SwiftHTTPClient"],
+            path: "TestKit"
         ),
         .testTarget(
             name: "SwiftHTTPClientTests",
-            dependencies: ["SwiftHTTPClient"]),
+            dependencies: ["SwiftHTTPClient"]
+        ),
     ]
 )

@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 import Preferences
-import WebSocketClient
+import SwiftHTTPClient
 
 public actor PriceObserverService: Sendable {
 

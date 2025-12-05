@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WebSocketClient
+import SwiftHTTPClient
 
 public actor WebSocketConnectionMock: WebSocketConnectable {
 

@@ -48,11 +48,8 @@ public actor WebSocketConnection: WebSocketConnectable {
     public func disconnect() async {
         state = .disconnected
 
-        reconnectTask?.cancel()
-        reconnectTask = nil
-
-        task?.cancel(with: .goingAway, reason: nil)
-        task = nil
+        cancelReconnect()
+        cancelTask()
 
         continuation?.yield(.disconnected(nil))
         continuation?.finish()
@@ -67,6 +64,16 @@ public actor WebSocketConnection: WebSocketConnectable {
     }
 
     // MARK: - Private
+
+    private func cancelTask() {
+        task?.cancel(with: .goingAway, reason: nil)
+        task = nil
+    }
+
+    private func cancelReconnect() {
+        reconnectTask?.cancel()
+        reconnectTask = nil
+    }
 
     private func setupStream(_ continuation: AsyncStream<WebSocketEvent>.Continuation) {
         self.continuation = continuation
@@ -83,11 +90,8 @@ public actor WebSocketConnection: WebSocketConnectable {
     private func handleStreamTermination() {
         guard state != .disconnected else { return }
 
-        task?.cancel(with: .goingAway, reason: nil)
-        task = nil
-
-        reconnectTask?.cancel()
-        reconnectTask = nil
+        cancelTask()
+        cancelReconnect()
 
         state = .disconnected
     }
@@ -143,8 +147,7 @@ public actor WebSocketConnection: WebSocketConnectable {
     private func scheduleReconnect(with error: Error?) {
         guard reconnectTask == nil else { return }
 
-        task?.cancel(with: .goingAway, reason: nil)
-        task = nil
+        cancelTask()
 
         guard state != .disconnected else { return }
 

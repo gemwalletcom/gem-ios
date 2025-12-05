@@ -59,7 +59,7 @@ let package = Package(
         .package(name: "Signer", path: "../Signer"),
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "Formatters", path: "../Formatters"),
-        .package(name: "WebSocketClient", path: "../WebSocketClient"),
+        .package(name: "SwiftHTTPClient", path: "../SwiftHTTPClient"),
     ],
     targets: [
         .target(
@@ -153,7 +153,7 @@ let package = Package(
                 "Store",
                 "GemAPI",
                 "Preferences",
-                "WebSocketClient"
+                "SwiftHTTPClient"
             ],
             path: "PriceService",
             exclude: ["TestKit"]
