@@ -20,6 +20,7 @@ extension StakeChain {
         case .tron: .tron
         case .aptos: .aptos
         case .hyperCore: .hyperCore
+        case .monad: .monad
         }
     }
     
