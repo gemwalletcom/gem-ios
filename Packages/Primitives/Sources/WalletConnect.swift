@@ -31,3 +31,17 @@ public struct WCEthereumTransaction: Codable, Equatable, Hashable, Sendable {
 		self.data = data
 	}
 }
+
+public struct WCTonMessage: Codable, Equatable, Hashable, Sendable {
+	public let address: String
+	public let amount: String
+	public let payload: String?
+	public let stateInit: String?
+
+	public init(address: String, amount: String, payload: String?, stateInit: String?) {
+		self.address = address
+		self.amount = amount
+		self.payload = payload
+		self.stateInit = stateInit
+	}
+}
