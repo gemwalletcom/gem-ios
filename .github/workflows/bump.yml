@@ -16,10 +16,13 @@ jobs:
   bump:
     name: Bump
     runs-on: macos-latest
+    environment: Release
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: Configure Git
         run: |
