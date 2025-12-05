@@ -1,0 +1,32 @@
+#!/bin/bash
+set -euo pipefail
+
+type=${1:-}
+file="Gem.xcodeproj/project.pbxproj"
+
+bump_build() {
+  build=$(grep -oE "CURRENT_PROJECT_VERSION = [0-9]+;" "$file" | head -n1 | grep -oE "[0-9]+")
+  new_build=$((build + 1))
+  sed -i '' "s/CURRENT_PROJECT_VERSION = $build;/CURRENT_PROJECT_VERSION = $new_build;/g" "$file"
+  echo "$new_build"
+}
+
+case "$type" in
+  ""|version)
+    version=$(sh ./scripts/bump-version.sh patch)
+    new_build=$(bump_build)
+    git add "$file"
+    git commit -m "Bump to $version ($new_build)" > /dev/null
+    echo "✅ Bumped to $version ($new_build)"
+    ;;
+  build)
+    new_build=$(bump_build)
+    git add "$file"
+    git commit -m "Bump build to $new_build" > /dev/null
+    echo "✅ Bumped build to $new_build"
+    ;;
+  *)
+    echo "❌ Invalid type: $type. Use 'version' or 'build'." >&2
+    exit 1
+    ;;
+esac
