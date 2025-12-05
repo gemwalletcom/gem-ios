@@ -20,6 +20,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: 🔧 Install just
+        run: brew install just
+
       - name: 🔧 Install toolchains
         run: just install-toolchains
 
