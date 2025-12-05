@@ -20,21 +20,21 @@ case "$type" in
     version=$(bump_version)
     new_build=$(bump_build)
     git add "$file"
-    git commit -m "Bump to $version ($new_build)" > /dev/null
-    git tag "$version" 2>/dev/null || echo "⚠️  Tag $version already exists"
+    git commit -S -m "Bump to $version ($new_build)" > /dev/null
+    git tag -s "$version" -m "$version" 2>/dev/null || echo "⚠️  Tag $version already exists"
     echo "✅ Bumped to $version ($new_build)"
     ;;
   version)
     version=$(bump_version)
     git add "$file"
-    git commit -m "Bump to $version" > /dev/null
-    git tag "$version" 2>/dev/null || echo "⚠️  Tag $version already exists"
+    git commit -S -m "Bump to $version" > /dev/null
+    git tag -s "$version" -m "$version" 2>/dev/null || echo "⚠️  Tag $version already exists"
     echo "✅ Bumped to $version"
     ;;
   build)
     new_build=$(bump_build)
     git add "$file"
-    git commit -m "Bump build to $new_build" > /dev/null
+    git commit -S -m "Bump build to $new_build" > /dev/null
     echo "✅ Bumped build to $new_build"
     ;;
   *)
