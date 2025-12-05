@@ -64,16 +64,20 @@ public struct BalanceViewModel: Sendable {
 
     public var stakingBalanceTextWithSymbol: String {
         let amount = switch StakeChain(rawValue: asset.chain.rawValue) {
-        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .ethereum, .aptos, .none: balance.staked + balance.pending
-        case .tron: balance.frozen + balance.locked + balance.pending
+        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .ethereum, .aptos, .monad, .none:
+            balance.staked + balance.pending
+        case .tron:
+            balance.frozen + balance.locked + balance.pending
         }
         return formatter.string(amount, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
     public var hasStakingResources: Bool {
         switch StakeChain(rawValue: asset.chain.rawValue) {
-        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .ethereum, .aptos, .none: false
-        case .tron: !balance.frozen.isZero || !balance.locked.isZero
+        case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .ethereum, .aptos, .monad, .none:
+            false
+        case .tron:
+            !balance.frozen.isZero || !balance.locked.isZero
         }
     }
 

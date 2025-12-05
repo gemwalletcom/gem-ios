@@ -13,6 +13,7 @@ import BigInt
 import PriceService
 import PerpetualService
 import Components
+import PrimitivesComponents
 
 @Observable
 @MainActor
@@ -308,7 +309,7 @@ public final class DeveloperViewModel {
 
 extension DeveloperViewModel {
     private func showSuccess() {
-        isPresentingToastMessage = ToastMessage(title: "Success", image: "checkmark.circle")
+        isPresentingToastMessage = .success(Localized.Transaction.Status.confirmed)
     }
 
     private func performAction(_ action: () throws -> Void) {

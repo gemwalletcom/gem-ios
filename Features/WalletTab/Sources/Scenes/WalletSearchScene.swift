@@ -55,6 +55,7 @@ public struct WalletSearchScene: View {
         .onAppear {
             model.onAppear()
         }
+        .toast(message: $model.isPresentingToastMessage)
     }
 
     @ViewBuilder
@@ -72,16 +73,12 @@ public struct WalletSearchScene: View {
                 .listSectionSpacing(.zero)
             }
 
-            if model.showRecentSearches {
-                Section {} header: {
-                    VStack(alignment: .leading, spacing: Spacing.small) {
-                        Text(model.recentActivityTitle)
-                            .padding(.leading, Spacing.space12)
-                        recentActivitiesCollection
+            if model.showRecent {
+                RecentActivitySectionView(models: model.activityModels, ) { assetModel in
+                    NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
+                        AssetChipView(model: assetModel)
                     }
                 }
-                .textCase(nil)
-                .listRowInsets(EdgeInsets())
                 .listSectionSpacing(.zero)
             }
 
@@ -112,15 +109,6 @@ public struct WalletSearchScene: View {
     }
 
     @ViewBuilder
-    private var recentActivitiesCollection: some View {
-        AssetsCollectionView(models: model.activityModels) { assetModel in
-            NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
-                AssetChipView(model: assetModel)
-            }
-        }
-    }
-
-    @ViewBuilder
     private func list(for items: [AssetData]) -> some View {
         ForEach(items) { assetData in
             NavigationCustomLink(
@@ -131,7 +119,8 @@ public struct WalletSearchScene: View {
                         formatter: .abbreviated,
                         currencyCode: model.currencyCode
                     )
-                ),
+                )
+                .contextMenu(model.contextMenuItems(for: assetData)),
                 action: { model.onSelectAsset(assetData.asset) }
             )
         }

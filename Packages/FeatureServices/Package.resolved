@@ -1,51 +1,50 @@
 {
-  "originHash" : "3f1a3c335297b0ad8a7bfed1f0eb0f3125d816706d38a023cbf32007aac24e78",
-  "pins" : [
+  "originHash": "3f1a3c335297b0ad8a7bfed1f0eb0f3125d816706d38a023cbf32007aac24e78",
+  "pins": [
     {
-      "identity" : "bigint",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/attaswift/BigInt.git",
-      "state" : {
-        "revision" : "e07e00fa1fd435143a2dcf8b7eec9a7710b2fdfe",
-        "version" : "5.7.0"
+      "identity": "bigint",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/attaswift/BigInt.git",
+      "state": {
+        "revision": "e07e00fa1fd435143a2dcf8b7eec9a7710b2fdfe",
+        "version": "5.7.0"
       }
     },
     {
-      "identity" : "grdb.swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/groue/GRDB.swift.git",
-      "state" : {
-        "revision" : "8ba1bc9a96afc731a000fd4136dd13a5a46297bd",
-        "version" : "7.6.1"
+      "identity": "grdb.swift",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/groue/GRDB.swift.git",
+      "state": {
+        "revision": "8ba1bc9a96afc731a000fd4136dd13a5a46297bd",
+        "version": "7.6.1"
       }
     },
     {
-      "identity" : "grdbquery",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/groue/GRDBQuery.git",
-      "state" : {
-        "revision" : "540dc48e86af2972b4f1815616aa1ed8ac97845a",
-        "version" : "0.11.0"
+      "identity": "grdbquery",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/groue/GRDBQuery.git",
+      "state": {
+        "revision": "540dc48e86af2972b4f1815616aa1ed8ac97845a",
+        "version": "0.11.0"
       }
     },
     {
-      "identity" : "reown-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gemwalletcom/reown-swift.git",
-      "state" : {
-        "branch" : "f061a10",
-        "revision" : "f061a10b12e3d4d76c5017250aa9f369a8e47404"
+      "identity": "reown-swift",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/gemwalletcom/reown-swift.git",
+      "state": {
+        "revision": "e902bbb0de2208777c8e9c09591f4bdd39fc13ae"
       }
     },
     {
-      "identity" : "starscream",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/daltoniam/Starscream.git",
-      "state" : {
-        "revision" : "a063fda2b8145a231953c20e7a646be254365396",
-        "version" : "3.1.2"
+      "identity": "starscream",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/daltoniam/Starscream.git",
+      "state": {
+        "revision": "a063fda2b8145a231953c20e7a646be254365396",
+        "version": "3.1.2"
       }
     }
   ],
-  "version" : 3
+  "version": 3
 }
