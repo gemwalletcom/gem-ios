@@ -85,6 +85,11 @@ public final class SignMessageSceneViewModel {
             return
         }
 
+        if messageChain == .ton {
+            // TODO: implement ton_signData signing
+            throw AnyError("ton_signData is not supported yet")
+        }
+
         let hash: Data = decoder.hash()
         let signature = try await keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
         let result = decoder.getResult(data: signature)
