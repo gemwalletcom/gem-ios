@@ -23,9 +23,6 @@ jobs:
       - name: 🔧 Install just
         run: brew install just
 
-      - name: 🔧 Install toolchains
-        run: just install-toolchains
-
       - name: 🔼 Bump version
         run: just bump
 
