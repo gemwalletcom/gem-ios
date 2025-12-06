@@ -163,7 +163,7 @@ let package = Package(
                 "Store",
                 "GemAPI",
                 "Preferences",
-                "SwiftHTTPClient"
+                .product(name: "WebSocketClient", package: "SwiftHTTPClient")
             ],
             path: "PriceService",
             exclude: ["TestKit"]

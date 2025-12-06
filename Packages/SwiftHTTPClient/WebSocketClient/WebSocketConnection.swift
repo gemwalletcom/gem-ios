@@ -171,15 +171,3 @@ public actor WebSocketConnection: WebSocketConnectable {
         startConnection()
     }
 }
-
-// MARK: - URLSessionWebSocketTask.Message
-
-extension URLSessionWebSocketTask.Message {
-    var data: Data? {
-        switch self {
-        case .string(let text): text.data(using: .utf8)
-        case .data(let data): data
-        @unknown default: nil
-        }
-    }
-}
