@@ -23,4 +23,6 @@ public struct Constants {
 
     public static let chatwootURL = URL(string: "https://support.gemwallet.com")!
     public static let chatwootPublicToken = "21yu9Az48rJHe1rg4poHqLSr"
+
+    public static let pricesWebSocketURL = URL(string: "wss://api.gemwallet.com/v1/ws/prices")!
 }
