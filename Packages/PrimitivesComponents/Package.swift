@@ -13,6 +13,9 @@ let package = Package(
         .library(
             name: "PrimitivesComponents",
             targets: ["PrimitivesComponents"]),
+        .library(
+            name: "PrimitivesComponentsTestKit",
+            targets: ["PrimitivesComponentsTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -39,11 +42,21 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "PrimitivesComponentsTestKit",
+            dependencies: [
+                "PrimitivesComponents",
+                "Formatters",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "PrimitivesComponentsTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 "PrimitivesComponents",
+                "PrimitivesComponentsTestKit",
                 "GemstonePrimitives",
             ]
         ),

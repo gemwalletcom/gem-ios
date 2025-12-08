@@ -1,5 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Formatters
 import Primitives
 @testable import PrimitivesComponents
 
