@@ -77,7 +77,10 @@ public final class PerpetualSceneViewModel {
         )
     }
 
-    public var navigationTitle: String { perpetualViewModel.name }
+    public var navigationTitle: String {
+        let name = perpetualViewModel.name
+        return name.isEmpty ? asset.symbol : name
+    }
     public var currency: String { preference.currency }
     public var hasOpenPosition: Bool { !positionViewModels.isEmpty }
 
