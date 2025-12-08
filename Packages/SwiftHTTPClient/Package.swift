@@ -8,17 +8,49 @@ let package = Package(
     products: [
         .library(
             name: "SwiftHTTPClient",
-            targets: ["SwiftHTTPClient"]),
+            targets: ["SwiftHTTPClient"]
+        ),
+        .library(
+            name: "SwiftHTTPClientTestKit",
+            targets: ["SwiftHTTPClientTestKit"]
+        ),
+        .library(
+            name: "WebSocketClient",
+            targets: ["WebSocketClient"]
+        ),
+        .library(
+            name: "WebSocketClientTestKit",
+            targets: ["WebSocketClientTestKit"]
+        ),
     ],
-    dependencies: [
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "SwiftHTTPClient",
-            dependencies: [], path: "Sources"
+            dependencies: [],
+            path: "SwiftHTTPClient",
+            exclude: ["TestKit", "Tests"]
+        ),
+        .target(
+            name: "SwiftHTTPClientTestKit",
+            dependencies: ["SwiftHTTPClient"],
+            path: "SwiftHTTPClient/TestKit"
         ),
         .testTarget(
             name: "SwiftHTTPClientTests",
-            dependencies: ["SwiftHTTPClient"]),
+            dependencies: ["SwiftHTTPClient"],
+            path: "SwiftHTTPClient/Tests"
+        ),
+        .target(
+            name: "WebSocketClient",
+            dependencies: [],
+            path: "WebSocketClient",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "WebSocketClientTestKit",
+            dependencies: ["WebSocketClient"],
+            path: "WebSocketClient/TestKit"
+        ),
     ]
 )

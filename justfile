@@ -136,7 +136,7 @@ export BUILD_MODE := env_var_or_default("BUILD_MODE","")
 generate-stone:
     @./scripts/generate-stone.sh $BUILD_MODE
 
-bump-version:
-    @sh ./scripts/bump-version-and-commit.sh patch
+bump TYPE="":
+    @sh ./scripts/bump.sh {{TYPE}}
 
 mod core

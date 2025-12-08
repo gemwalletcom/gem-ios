@@ -77,7 +77,10 @@ public struct BalanceViewModel: Sendable {
         case .celestia, .cosmos, .hyperCore, .injective, .osmosis, .sei, .smartChain, .solana, .sui, .ethereum, .aptos, .monad, .none:
             false
         case .tron:
-            !balance.frozen.isZero || !balance.locked.isZero
+            switch asset.id.type {
+            case .native: true
+            case .token: false
+            }
         }
     }
 
