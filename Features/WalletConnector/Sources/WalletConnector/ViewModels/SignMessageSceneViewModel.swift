@@ -76,24 +76,35 @@ public final class SignMessageSceneViewModel {
     }
 
     public func signMessage() async throws {
-        let messageChain = Chain(rawValue: payload.message.chain) ?? payload.chain
-        if messageChain == .sui {
-            var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
-            defer { privateKey.zeroize() }
-            let signature = try CryptoSigner().signSuiPersonalMessage(message: payload.message.data, privateKey: privateKey)
-            confirmTransferDelegate(.success(signature))
-            return
+        let result = switch Chain(rawValue: payload.message.chain) ?? payload.chain {
+        case .sui: try await signSuiMessage()
+        case .ton: try await signTonMessage()
+        default: try await signDefaultMessage()
         }
+        confirmTransferDelegate(.success(result))
+    }
+}
 
-        if messageChain == .ton {
-            // TODO: implement ton_signData signing
-            throw AnyError("ton_signData is not supported yet")
-        }
+// MARK: - Signing
 
+extension SignMessageSceneViewModel {
+    private func signSuiMessage() async throws -> String {
+        var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
+        defer { privateKey.zeroize() }
+        return try CryptoSigner().signSuiPersonalMessage(message: payload.message.data, privateKey: privateKey)
+    }
+
+    private func signTonMessage() async throws -> String {
+        var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
+        defer { privateKey.zeroize() }
+        let domain = payload.session.metadata.url.asURL?.host ?? payload.session.metadata.url
+        return try CryptoSigner().signTonPersonalMessage(domain: domain, payload: payload.message.data, privateKey: privateKey)
+    }
+
+    private func signDefaultMessage() async throws -> String {
         let hash: Data = decoder.hash()
         let signature = try await keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
-        let result = decoder.getResult(data: signature)
-        confirmTransferDelegate(.success(result))
+        return decoder.getResult(data: signature)
     }
 }
 

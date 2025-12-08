@@ -5,7 +5,6 @@ import enum Gemstone.WalletConnectTransaction
 import struct Gemstone.WcEthereumTransactionData
 import struct Gemstone.WcSolanaTransactionData
 import struct Gemstone.WcSuiTransactionData
-import struct Gemstone.WcTonTransactionData
 import Primitives
 
 extension WalletConnectTransaction {
@@ -14,7 +13,7 @@ extension WalletConnectTransaction {
         case .ethereum(let data): .ethereum(data.map())
         case .solana(let data, let outputType): .solana(data.transaction, outputType.map())
         case .sui(let data, let outputType): .sui(data.transaction, outputType.map())
-        case .ton(let data, let outputType): .ton(data.messages, outputType.map())
+        case .ton(let messages, let outputType): .ton(messages, outputType.map())
         }
     }
 }
