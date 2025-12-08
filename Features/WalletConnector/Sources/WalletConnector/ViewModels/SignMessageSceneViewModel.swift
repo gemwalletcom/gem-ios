@@ -95,10 +95,11 @@ extension SignMessageSceneViewModel {
     }
 
     private func signTonMessage() async throws -> String {
-        var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
-        defer { privateKey.zeroize() }
+        let hash: Data = decoder.hash()
+        async let signature = keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
+        async let publicKey = keystore.getPublicKey(wallet: payload.wallet, chain: payload.chain)
         let domain = payload.session.metadata.url.asURL?.host ?? payload.session.metadata.url
-        return try CryptoSigner().signTonPersonalMessage(domain: domain, payload: payload.message.data, privateKey: privateKey)
+        return try await decoder.getTonResult(signature: signature, publicKey: publicKey, timestamp: Date.timestamp(), domain: domain)
     }
 
     private func signDefaultMessage() async throws -> String {
