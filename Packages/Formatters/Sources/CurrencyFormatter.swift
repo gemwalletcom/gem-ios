@@ -133,7 +133,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
         let formatter = formatter(for: double)
         formatter.currencySymbol = ""
 
-        let value = formatter.string(from: NSNumber(value: double)) ?? ""
+        let value = (formatter.string(from: NSNumber(value: double)) ?? "").trimmingCharacters(in: .whitespaces)
         return combined(value: value, symbol: symbol)
     }
     
