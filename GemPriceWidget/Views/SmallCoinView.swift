@@ -2,56 +2,69 @@
 
 import SwiftUI
 import Style
-import Components
 
 struct SmallCoinView: View {
     private let model: CoinPriceRowViewModel
-    
+
     init(model: CoinPriceRowViewModel) {
         self.model = model
     }
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: .zero) {
             HStack {
-                AsyncImageView(url: model.imageURL)
+                model.chainImage
+                    .resizable()
+                    .frame(size: .list.assets.widget)
                 Spacer()
                 Images.Logo.logo
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 32, height: 32)
+                    .frame(width: Constants.logoSize, height: Constants.logoSize)
             }
-            
+
             Spacer()
                 .frame(height: Spacing.small)
-            
+
             Text(model.name)
-                .font(.system(size: 16, weight: .regular))
+                .font(.system(size: Constants.nameFontSize, weight: .regular))
                 .foregroundColor(Colors.black)
-            
+
             Spacer()
                 .frame(height: Spacing.tiny)
-            
+
             Text(model.priceText)
-                .font(.system(size: 32, weight: .bold))
+                .font(.system(size: Constants.priceFontSize, weight: .bold))
                 .foregroundColor(Colors.black)
-                .minimumScaleFactor(0.5)
+                .minimumScaleFactor(Constants.priceMinScaleFactor)
                 .lineLimit(1)
-            
+
             Spacer()
                 .frame(height: Spacing.tiny)
-            
+
             HStack {
                 Text(model.percentageText)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: Constants.percentageFontSize, weight: .semibold))
                     .foregroundColor(Colors.black)
                     .padding(.vertical, Spacing.tiny + Spacing.extraSmall)
                     .padding(.horizontal, Spacing.tiny + Spacing.extraSmall)
                     .background(model.percentageColor)
-                    .cornerRadius(10)
+                    .cornerRadius(Constants.percentageCornerRadius)
             }
         }
-        .padding(0)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+// MARK: - Constants
+
+extension SmallCoinView {
+    enum Constants {
+        static let logoSize: CGFloat = 32
+        static let nameFontSize: CGFloat = 16
+        static let priceFontSize: CGFloat = 32
+        static let priceMinScaleFactor: CGFloat = 0.5
+        static let percentageFontSize: CGFloat = 16
+        static let percentageCornerRadius: CGFloat = 10
     }
 }

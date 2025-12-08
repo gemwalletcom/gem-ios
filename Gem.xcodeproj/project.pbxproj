@@ -62,6 +62,7 @@
 		B68BD2E62DE0760E00687F09 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2E52DE0760E00687F09 /* Primitives */; };
 		B69C52F32DE72B1000BBD95D /* ManageWallets in Frameworks */ = {isa = PBXBuildFile; productRef = B69C52F22DE72B1000BBD95D /* ManageWallets */; };
 		B69D9C872ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */; };
+		B6A5DE7C2EE6EE6E00E70673 /* PrimitivesComponents in Frameworks */ = {isa = PBXBuildFile; productRef = B6A5DE7B2EE6EE6E00E70673 /* PrimitivesComponents */; };
 		B6B86A102D702E7C00D31D65 /* SwapNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */; };
 		B6C8F2AF2EDE2691005915E4 /* UITestKitConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C8F2AD2EDE2691005915E4 /* UITestKitConstants.swift */; };
 		B6CBBC552ED9A80B0043443B /* CreateWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CBBC542ED9A80B0043443B /* CreateWalletUITests.swift */; };
@@ -393,6 +394,7 @@
 				D8CFDEB02E37FCB000D27283 /* Components in Frameworks */,
 				D8CFDEA82E37FC8800D27283 /* Preferences in Frameworks */,
 				D838194B2E256A5A0076CDB3 /* SwiftUI.framework in Frameworks */,
+				B6A5DE7C2EE6EE6E00E70673 /* PrimitivesComponents in Frameworks */,
 				D8CFDEAA2E37FC8C00D27283 /* GemAPI in Frameworks */,
 				D8CFDEA02E37FC3B00D27283 /* Primitives in Frameworks */,
 				D838194A2E256A5A0076CDB3 /* WidgetKit.framework in Frameworks */,
@@ -929,6 +931,7 @@
 			name = GemPriceWidget;
 			packageProductDependencies = (
 				D8WIDGET12345678901234 /* WidgetLocalization */,
+				B6A5DE7B2EE6EE6E00E70673 /* PrimitivesComponents */,
 			);
 			productName = GemPriceWidgetExtension;
 			productReference = D83819492E256A5A0076CDB3 /* GemPriceWidget.appex */;
@@ -1949,6 +1952,10 @@
 		B69C52F22DE72B1000BBD95D /* ManageWallets */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ManageWallets;
+		};
+		B6A5DE7B2EE6EE6E00E70673 /* PrimitivesComponents */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PrimitivesComponents;
 		};
 		C35DA07B2A9C3B4B008CCEFA /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;
