@@ -42,11 +42,9 @@ public enum ChartLineType: String, Codable, Equatable, Sendable {
 public struct ChartLine: Codable, Equatable, Sendable {
 	public let type: ChartLineType
 	public let price: Double
-	public let decimals: Int32
 
-	public init(type: ChartLineType, price: Double, decimals: Int32) {
+	public init(type: ChartLineType, price: Double) {
 		self.type = type
 		self.price = price
-		self.decimals = decimals
 	}
 }

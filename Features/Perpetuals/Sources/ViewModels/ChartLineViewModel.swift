@@ -4,11 +4,11 @@ import SwiftUI
 import Style
 import Localization
 import Primitives
-import GemstonePrimitives
+import Formatters
 
 struct ChartLineViewModel: Identifiable {
     let line: ChartLine
-    let formatter: PerpetualFormatter
+    let formatter: CurrencyFormatter
 
     var id: String { "\(line.type)_\(line.price)" }
     var price: Double { line.price }
@@ -20,7 +20,7 @@ struct ChartLineViewModel: Identifiable {
         case .entry: Localized.Charts.entry
         case .liquidation: Localized.Charts.liquidation
         }
-        let priceText = formatter.formatInputPrice(line.price, decimals: line.decimals)
+        let priceText = formatter.string(double: line.price)
         return "\(typeLabel) | \(priceText)"
     }
 

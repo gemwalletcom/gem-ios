@@ -102,8 +102,6 @@ public final class PerpetualSceneViewModel {
     var chartLineModels: [ChartLineViewModel] {
         guard let positionData = positions.first else { return [] }
         let position = positionData.position
-        let formatter = PerpetualFormatter(provider: perpetual.provider)
-        let decimals = positionData.asset.decimals
         let prices: [(ChartLineType, Double?)] = [
             (.entry, position.entryPrice),
             (.takeProfit, position.takeProfit?.price),
@@ -113,8 +111,8 @@ public final class PerpetualSceneViewModel {
         return prices.compactMap { type, price in
             price.map {
                 ChartLineViewModel(
-                    line: ChartLine(type: type, price: $0, decimals: decimals),
-                    formatter: formatter
+                    line: ChartLine(type: type, price: $0),
+                    formatter: CurrencyFormatter(type: .currency, currencyCode: .empty)
                 )
             }
         }
