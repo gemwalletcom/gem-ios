@@ -88,16 +88,16 @@ struct CandlestickChartView: View {
         }
         .chartXAxis {
             AxisMarks(position: .bottom, values: .automatic(desiredCount: 6)) { _ in
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                    .foregroundStyle(Colors.gray.opacity(0.5))
+                AxisGridLine(stroke: ChartGridStyle.strokeStyle)
+                    .foregroundStyle(ChartGridStyle.color)
             }
         }
         .chartYAxis {
             AxisMarks(position: .trailing, values: .automatic(desiredCount: 5)) { _ in
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                    .foregroundStyle(Colors.gray.opacity(0.5))
-                AxisTick(stroke: StrokeStyle(lineWidth: 1))
-                    .foregroundStyle(Colors.gray.opacity(0.5))
+                AxisGridLine(stroke: ChartGridStyle.strokeStyle)
+                    .foregroundStyle(ChartGridStyle.color)
+                AxisTick(stroke: StrokeStyle(lineWidth: ChartGridStyle.lineWidth))
+                    .foregroundStyle(ChartGridStyle.color)
                 AxisValueLabel()
                     .foregroundStyle(Colors.gray)
                     .font(.caption2)
