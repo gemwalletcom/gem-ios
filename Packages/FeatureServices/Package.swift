@@ -10,6 +10,7 @@ let package = Package(
     ],
     products: [
         .library(name: "PerpetualService", targets: ["PerpetualService"]),
+        .library(name: "PerpetualServiceTestKit", targets: ["PerpetualServiceTestKit"]),
         .library(name: "BalanceService", targets: ["BalanceService"]),
         .library(name: "BalanceServiceTestKit", targets: ["BalanceServiceTestKit"]),
         .library(name: "BannerService", targets: ["BannerService"]),
@@ -59,6 +60,7 @@ let package = Package(
         .package(name: "Signer", path: "../Signer"),
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "Formatters", path: "../Formatters"),
+        .package(name: "SwiftHTTPClient", path: "../SwiftHTTPClient"),
     ],
     targets: [
         .target(
@@ -72,6 +74,15 @@ let package = Package(
             ],
             path: "PerpetualService",
             exclude: ["Tests", "TestKit"]
+        ),
+        .target(
+            name: "PerpetualServiceTestKit",
+            dependencies: [
+                "PerpetualService",
+                "Primitives",
+                .product(name: "StoreTestKit", package: "Store")
+            ],
+            path: "PerpetualService/TestKit"
         ),
         .target(
             name: "BalanceService",
@@ -151,7 +162,8 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "GemAPI",
-                "Preferences"
+                "Preferences",
+                .product(name: "WebSocketClient", package: "SwiftHTTPClient")
             ],
             path: "PriceService",
             exclude: ["TestKit"]

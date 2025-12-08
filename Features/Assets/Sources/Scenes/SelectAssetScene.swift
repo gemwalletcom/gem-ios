@@ -34,10 +34,10 @@ public struct SelectAssetScene: View {
             )
         }
         .overlay {
-            if model.state.isLoading, model.sections.assets.isEmpty {
+            if model.showLoading {
                 LoadingView()
-            } else if model.sections.assets.isEmpty {
-                EmptyContentView (
+            } else if model.showEmpty {
+                EmptyContentView(
                     model: EmptyContentTypeViewModel(
                         type: .search(
                             type: .assets,
@@ -73,20 +73,27 @@ public struct SelectAssetScene: View {
             }
             .textCase(nil)
             .listRowInsets(EdgeInsets())
-            .if(model.showRecentActivities) {
+            .if(model.showRecent) {
                 $0.listSectionSpacing(.small)
             }
 
-            if model.showRecentActivities {
-                Section {} header: {
-                    VStack(alignment: .leading, spacing: Spacing.small) {
-                        Text(model.recentActivityTitle)
-                            .padding(.leading, Spacing.space12)
-                        recentActivitiesCollection
+            if model.showRecent {
+                RecentActivitySectionView(models: model.activityModels) { assetModel in
+                    switch model.selectType {
+                    case .send, .receive, .buy:
+                        NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: assetModel.asset))) {
+                            AssetChipView(model: assetModel)
+                        }
+                    case .swap:
+                        Button {
+                            model.selectAsset(asset: assetModel.asset)
+                        } label: {
+                            AssetChipView(model: assetModel)
+                        }
+                    case .manage, .priceAlert, .deposit, .withdraw:
+                        EmptyView()
                     }
                 }
-                .textCase(nil)
-                .listRowInsets(EdgeInsets())
             }
 
             if model.enablePopularSection && model.sections.popular.isNotEmpty {
@@ -119,15 +126,6 @@ public struct SelectAssetScene: View {
             .listRowInsets(.assetListRowInsets)
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
-    }
-
-    @ViewBuilder
-    private var recentActivitiesCollection: some View {
-        AssetsCollectionView(models: model.activityModels) { assetModel in
-            NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: assetModel.asset))) {
-                AssetChipView(model: assetModel)
-            }
-        }
     }
 
     func assetsList(assets: [AssetData]) -> some View {

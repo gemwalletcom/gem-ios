@@ -63,6 +63,7 @@ public protocol GemAPIPriceAlertService: Sendable {
 
 public protocol GemAPINFTService: Sendable {
     func getNFTAssets(deviceId: String, walletIndex: Int) async throws -> [NFTData]
+    func reportNft(_ report: ReportNft) async throws
 }
 
 public protocol GemAPIScanService: Sendable {
@@ -258,6 +259,11 @@ extension GemAPIService: GemAPINFTService {
         try await provider
             .request(.getNFTAssets(deviceId: deviceId, walletIndex: walletIndex))
             .mapResponse(as: [NFTData].self)
+    }
+
+    public func reportNft(_ report: ReportNft) async throws {
+        _ = try await provider
+            .request(.reportNft(report))
     }
 }
 

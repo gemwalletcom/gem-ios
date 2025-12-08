@@ -5,6 +5,11 @@ import Foundation
 extension Wallet: Identifiable { }
 
 public extension Wallet {
+    
+    var canSign: Bool {
+        !isViewOnly
+    }
+    
     var isViewOnly: Bool {
         return type == .view
     }

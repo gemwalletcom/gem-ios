@@ -519,3 +519,8 @@
 "charts.stop_loss" = "SL";
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
+"nft.report.reason.spam" = "هرزنامه";
+"nft.report.reason.malicious" = "مخرب";
+"nft.report.reason.inappropriate" = "محتوای نامناسب";
+"nft.report.reason.copyright" = "حق نشر";
+"nft.report.report_button_title" = "گزارش";

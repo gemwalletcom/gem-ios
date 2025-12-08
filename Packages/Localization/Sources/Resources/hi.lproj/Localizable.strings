@@ -1,4 +1,4 @@
-"common.cancel" = "Cancel";
+"common.cancel" = "रद्द करना";
 "welcome.title" = "Welcome to Gem Family";
 "common.done" = "Done";
 "wallet.create_new_wallet" = "Create a New Wallet";
@@ -519,3 +519,8 @@
 "charts.stop_loss" = "SL";
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
+"nft.report.reason.spam" = "अवांछित ईमेल";
+"nft.report.reason.malicious" = "दुर्भावनापूर्ण";
+"nft.report.reason.inappropriate" = "अनुपयुक्त सामग्री";
+"nft.report.reason.copyright" = "कॉपीराइट";
+"nft.report.report_button_title" = "रिपोर्ट करें";

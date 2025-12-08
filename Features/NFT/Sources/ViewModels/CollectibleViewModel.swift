@@ -12,30 +12,36 @@ import Photos
 import AvatarService
 import Formatters
 import ExplorerService
+import NFTService
 
 @Observable
 @MainActor
 public final class CollectibleViewModel {
     private let wallet: Wallet
-    private let assetData: NFTAssetData
     private let avatarService: AvatarService
     private let explorerService: ExplorerService
+
+    let assetData: NFTAssetData
+    let nftService: NFTService
 
     var isPresentingAlertMessage: AlertMessage?
     var isPresentingToast: ToastMessage?
     var isPresentingTokenExplorerUrl: URL?
     var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
+    var isPresentingReportSheet = false
 
     public init(
         wallet: Wallet,
         assetData: NFTAssetData,
         avatarService: AvatarService,
+        nftService: NFTService,
         explorerService: ExplorerService = ExplorerService.standard,
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.wallet = wallet
         self.assetData = assetData
         self.avatarService = avatarService
+        self.nftService = nftService
         self.explorerService = explorerService
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
@@ -50,10 +56,7 @@ public final class CollectibleViewModel {
     var networkText: String { assetData.asset.chain.asset.name }
 
     var contractTitle: String { Localized.Asset.contract }
-    var contractValue: String {
-        assetData.collection.contractAddress
-    }
-
+    var contractValue: String { assetData.collection.contractAddress }
     var contractText: String? {
         if contractValue.isEmpty || contractValue == assetData.asset.tokenId {
             return .none
@@ -93,12 +96,17 @@ public final class CollectibleViewModel {
     
     let enabledChainTypes: Set<ChainType> = [ChainType.ethereum]
 
+    var isSendEnabled: Bool {
+        wallet.canSign &&
+        assetData.asset.chain.isNFTSupported &&
+        enabledChainTypes .contains(assetData.asset.chain.type)
+    }
+    
     var headerButtons: [HeaderButton] {
         return [
             HeaderButton(
                 type: .send,
-                isEnabled: assetData.asset.chain.isNFTSupported && enabledChainTypes
-                    .contains(assetData.asset.chain.type)
+                isEnabled: isSendEnabled
             ),
             HeaderButton(
                 type: .more,
@@ -107,6 +115,7 @@ public final class CollectibleViewModel {
                     items: [
                         .button(title: Localized.Nft.saveToPhotos, systemImage: SystemImage.gallery, action: onSelectSaveToGallery),
                         .button(title: Localized.Nft.setAsAvatar, systemImage: SystemImage.emoji, action: onSelectSetAsAvatar),
+                        .button(title: Localized.Nft.Report.reportButtonTitle, role: .destructive, action: onSelectReport),
                     ]
                 ),
                 isEnabled: true
@@ -166,7 +175,7 @@ extension CollectibleViewModel {
         Task {
             do {
                 try await saveImageToGallery()
-                isPresentingToast = ToastMessage(title: Localized.Nft.saveToPhotos, image: SystemImage.checkmark)
+                isPresentingToast = .success(Localized.Nft.saveToPhotos)
             } catch let error as ImageGalleryServiceError {
                 switch error {
                 case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
@@ -197,7 +206,7 @@ extension CollectibleViewModel {
         Task {
             do {
                 try await setWalletAvatar()
-                isPresentingToast = ToastMessage(title: Localized.Nft.setAsAvatar, image: SystemImage.checkmark)
+                isPresentingToast = .success(Localized.Nft.setAsAvatar)
             } catch {
                 debugLog("Set nft avatar error: \(error)")
             }
@@ -208,6 +217,15 @@ extension CollectibleViewModel {
         guard let explorerLink = tokenExplorerUrl else { return }
         guard let url = URL(string: explorerLink.link) else { return }
         isPresentingTokenExplorerUrl = url
+    }
+
+    func onSelectReport() {
+        isPresentingReportSheet = true
+    }
+
+    func onReportComplete() {
+        isPresentingReportSheet = false
+        isPresentingToast = .success(Localized.Transaction.Status.confirmed)
     }
 }
 

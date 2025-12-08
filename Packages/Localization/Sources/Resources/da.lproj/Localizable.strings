@@ -1,4 +1,4 @@
-"common.cancel" = "Cancel";
+"common.cancel" = "Ophæve";
 "welcome.title" = "Welcome to Gem Family";
 "common.done" = "Done";
 "wallet.create_new_wallet" = "Create a New Wallet";
@@ -519,3 +519,8 @@
 "charts.stop_loss" = "SL";
 "charts.entry" = "Entry";
 "charts.liquidation" = "Liquidation";
+"nft.report.reason.spam" = "Spam";
+"nft.report.reason.malicious" = "Ondsindet";
+"nft.report.reason.inappropriate" = "Upassende indhold";
+"nft.report.reason.copyright" = "Ophavsret";
+"nft.report.report_button_title" = "Rapport";

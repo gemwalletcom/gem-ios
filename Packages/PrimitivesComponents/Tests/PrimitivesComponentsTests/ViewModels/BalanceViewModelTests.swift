@@ -7,6 +7,7 @@ import Primitives
 import PrimitivesTestKit
 import Formatters
 
+import PrimitivesComponentsTestKit
 @testable import PrimitivesComponents
 
 struct BalanceViewModelTests {
@@ -42,5 +43,13 @@ struct BalanceViewModelTests {
 
         #expect(tronModel.total == BigInt(1_005_497))
         #expect(bnbModel.total == BigInt(6_100_000))
+    }
+
+    @Test
+    func hasStakingResources() {
+        #expect(BalanceViewModel.mock(asset: .mockTron()).hasStakingResources == true)
+        #expect(BalanceViewModel.mock(asset: .mockTronUSDT()).hasStakingResources == false)
+        #expect(BalanceViewModel.mock(asset: .mockEthereum()).hasStakingResources == false)
+        #expect(BalanceViewModel.mock(asset: .mockBNB()).hasStakingResources == false)
     }
 }
