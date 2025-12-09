@@ -207,20 +207,14 @@ extension WalletSceneViewModel {
     func onPinAsset(_ asset: Asset, value: Bool) {
         do {
             try walletsService.setPinned(value, walletId: wallet.walletId, assetId: asset.id)
-            isPresentingToastMessage = ToastMessage(
-                title: value ? "\(Localized.Common.pinned) \(asset.name)" : "\(Localized.Common.unpin) \(asset.name)",
-                image: value ? SystemImage.pin : SystemImage.unpin
-            )
+            isPresentingToastMessage = .pin(asset.name, pinned: value)
         } catch {
             debugLog("WalletSceneViewModel pin asset error: \(error)")
         }
     }
 
     func onCopyAddress(_ message: String) {
-        isPresentingToastMessage = ToastMessage(
-            title: message,
-            image: SystemImage.copy
-        )
+        isPresentingToastMessage = .copy(message)
     }
 
     public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
@@ -244,7 +238,7 @@ extension WalletSceneViewModel {
     
     public func onSetPriceAlertComplete(message: String) {
         isPresentingSetPriceAlert = nil
-        isPresentingToastMessage = ToastMessage(title: message, image: SystemImage.bellFill)
+        isPresentingToastMessage = .priceAlert(message: message)
     }
 }
 

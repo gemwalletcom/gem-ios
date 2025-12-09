@@ -76,6 +76,7 @@ public final class SelectAssetViewModel {
         self.recentActivityRequest = RecentActivityRequest(
             walletId: wallet.id,
             limit: 10,
+            types: RecentActivityType.allCases.filter { $0 != .perpetual },
             filters: filter.defaultFilters
         )
     }
@@ -150,15 +151,11 @@ public final class SelectAssetViewModel {
         sections.pinned.isEmpty && sections.assets.isEmpty
     }
 
-    var showRecentActivities: Bool {
+    var showRecent: Bool {
         switch selectType {
         case .send, .receive, .buy, .swap: searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
         case .manage, .priceAlert, .deposit, .withdraw: false
         }
-    }
-
-    var recentActivityTitle: String {
-        Localized.RecentActivity.title
     }
 
     var activityModels: [AssetViewModel] {

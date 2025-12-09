@@ -4,6 +4,7 @@ import Primitives
 import PrimitivesTestKit
 import WalletServiceTestKit
 import StoreTestKit
+import NFTServiceTestKit
 import ExplorerService
 import PrimitivesComponents
 import AvatarService
@@ -110,6 +111,7 @@ extension CollectibleViewModel {
             wallet: wallet,
             assetData: assetData,
             avatarService: AvatarService(store: WalletStore.mock()),
+            nftService: .mock(),
             explorerService: explorerService,
             isPresentingSelectedAssetInput: .constant(.none)
         )

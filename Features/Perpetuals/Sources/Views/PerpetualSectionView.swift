@@ -6,15 +6,18 @@ import Primitives
 struct PerpetualSectionView: View {
     let perpetuals: [PerpetualData]
     let onPin: (String, Bool) -> Void
+    let onSelect: (Asset) -> Void
     let emptyText: String?
 
     init(
         perpetuals: [PerpetualData],
         onPin: @escaping (String, Bool) -> Void,
+        onSelect: @escaping (Asset) -> Void,
         emptyText: String? = nil
     ) {
         self.perpetuals = perpetuals
         self.onPin = onPin
+        self.onSelect = onSelect
         self.emptyText = emptyText
     }
 
@@ -26,7 +29,8 @@ struct PerpetualSectionView: View {
             ForEach(perpetuals) { perpetualData in
                 PerpetualListItem(
                     perpetualData: perpetualData,
-                    onPin: onPin
+                    onPin: onPin,
+                    onSelect: onSelect
                 )
             }
         }

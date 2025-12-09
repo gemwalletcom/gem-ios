@@ -28,6 +28,30 @@ struct AssetSceneViewModelTests {
         #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(rankScore: 10))).showStatus == true)
         #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(rankScore: 3))).showStatus == false)
     }
+
+    @Test
+    func swapAssetTypeNative() {
+        let asset = Asset.mock(type: .native)
+        let model = AssetSceneViewModel.mock(.mock(asset: asset, balance: .zero))
+
+        #expect(model.swapAssetType == .swap(asset, nil))
+    }
+
+    @Test
+    func swapAssetTypeTokenWithZeroBalance() {
+        let asset = Asset.mockEthereumUSDT()
+        let model = AssetSceneViewModel.mock(.mock(asset: asset, balance: .zero))
+
+        #expect(model.swapAssetType == .swap(asset.chain.asset, asset))
+    }
+
+    @Test
+    func swapAssetTypeTokenWithBalance() {
+        let asset = Asset.mockEthereumUSDT()
+        let model = AssetSceneViewModel.mock(.mock(asset: asset, balance: .mock()))
+
+        #expect(model.swapAssetType == .swap(asset, nil))
+    }
 }
 
 // MARK: - Mock Extensions

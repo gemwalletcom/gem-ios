@@ -13,6 +13,7 @@ import Formatters
 import ExplorerService
 import Preferences
 import BigInt
+import GemstonePrimitives
 
 @Observable
 @MainActor
@@ -24,13 +25,19 @@ public final class PerpetualSceneViewModel {
 
     public let wallet: Wallet
     public let asset: Asset
+
     public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
+
     public var positionsRequest: PerpetualPositionsRequest
+    public var perpetualRequest: PerpetualRequest
     public var perpetualTotalValueRequest: TotalValueRequest
     public var transactionsRequest: TransactionsRequest
+
     public var positions: [PerpetualPositionData] = []
+    public var perpetualData: PerpetualData = .empty
     public var perpetualTotalValue: Double = .zero
     public var transactions: [TransactionExtended] = []
+
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .day {
         didSet {
@@ -39,41 +46,42 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
-    let preference = Preferences.standard
+
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingModifyAlert: Bool?
     public var isPresentingAutoclose: Bool = false
 
-    public let perpetualViewModel: PerpetualViewModel
-
-    public var positionViewModels: [PerpetualPositionViewModel] {
-        positions.map { PerpetualPositionViewModel($0) }
-    }
+    let preference = Preferences.standard
 
     public init(
         wallet: Wallet,
-        perpetualData: PerpetualData,
+        asset: Asset,
         perpetualService: PerpetualServiceable,
         onTransferData: TransferDataAction = nil,
         onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)? = nil
     ) {
         self.wallet = wallet
-        self.asset = perpetualData.asset
+        self.asset = asset
         self.perpetualService = perpetualService
         self.onTransferData = onTransferData
         self.onPerpetualRecipientData = onPerpetualRecipientData
-        self.perpetualViewModel = PerpetualViewModel(perpetual: perpetualData.perpetual)
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, perpetualId: perpetualData.perpetual.id)
+
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, filter: .assetId(asset.id))
+        self.perpetualRequest = PerpetualRequest(assetId: asset.id)
         self.perpetualTotalValueRequest = TotalValueRequest(walletId: wallet.id, balanceType: .perpetual)
-        
+
+        let transactionTypes: [TransactionType] = [.perpetualOpenPosition, .perpetualClosePosition]
         self.transactionsRequest = TransactionsRequest(
             walletId: wallet.id,
             type: .asset(assetId: asset.id),
-            filters: [.types([TransactionType.perpetualOpenPosition, TransactionType.perpetualClosePosition].map { $0.rawValue })]
+            filters: [.types(transactionTypes.map { $0.rawValue })]
         )
     }
 
-    public var navigationTitle: String { perpetualViewModel.name }
+    public var navigationTitle: String {
+        let name = perpetualViewModel.name
+        return name.isEmpty ? asset.symbol : name
+    }
     public var currency: String { preference.currency }
     public var hasOpenPosition: Bool { !positionViewModels.isEmpty }
 
@@ -87,8 +95,13 @@ public final class PerpetualSceneViewModel {
     public var longButtonTitle: String { Localized.Perpetual.long }
     public var shortButtonTitle: String { Localized.Perpetual.short }
 
+    public var perpetual: Perpetual { perpetualData.perpetual }
+    public var perpetualViewModel: PerpetualViewModel { PerpetualViewModel(perpetual: perpetual) }
+    public var positionViewModels: [PerpetualPositionViewModel] { positions.map { PerpetualPositionViewModel($0) } }
+
     var chartLineModels: [ChartLineViewModel] {
-        guard let position = positions.first?.position else { return [] }
+        guard let positionData = positions.first else { return [] }
+        let position = positionData.position
         let prices: [(ChartLineType, Double?)] = [
             (.entry, position.entryPrice),
             (.takeProfit, position.takeProfit?.price),
@@ -96,7 +109,12 @@ public final class PerpetualSceneViewModel {
             (.liquidation, position.liquidationPrice)
         ]
         return prices.compactMap { type, price in
-            price.map { ChartLineViewModel(line: ChartLine(type: type, price: $0)) }
+            price.map {
+                ChartLineViewModel(
+                    line: ChartLine(type: type, price: $0),
+                    formatter: CurrencyFormatter(type: .currency, currencyCode: .empty)
+                )
+            }
         }
     }
 
@@ -105,7 +123,7 @@ public final class PerpetualSceneViewModel {
             await fetchCandlesticks()
         }
         Task {
-            try await perpetualService.updateMarket(symbol: perpetualViewModel.perpetual.name)
+            try await perpetualService.updateMarket(symbol: perpetual.name)
         }
         Task {
             do {
@@ -121,7 +139,7 @@ public final class PerpetualSceneViewModel {
 
         do {
             let candlesticks = try await perpetualService.candlesticks(
-                symbol: perpetualViewModel.perpetual.name,
+                symbol: perpetual.name,
                 period: currentPeriod
             )
             state = .data(candlesticks)
@@ -165,12 +183,12 @@ public extension PerpetualSceneViewModel {
     func onClosePosition() {
         guard
             let position = positions.first?.position,
-            let assetIndex = UInt32(perpetualViewModel.perpetual.identifier)
+            let assetIndex = UInt32(perpetual.identifier)
         else { return }
 
         let data = perpetualOrderFactory.makeCloseOrder(
             assetIndex: Int32(assetIndex),
-            perpetual: perpetualViewModel.perpetual,
+            perpetual: perpetual,
             position: position,
             asset: asset,
             baseAsset: .hypercoreUSDC()
@@ -189,7 +207,7 @@ public extension PerpetualSceneViewModel {
     func onOpenLongPosition() {
         guard let transferData = createTransferData(
             direction: .long,
-            leverage: perpetualViewModel.perpetual.maxLeverage
+            leverage: perpetual.maxLeverage
         ) else {
             return
         }
@@ -199,7 +217,7 @@ public extension PerpetualSceneViewModel {
     func onOpenShortPosition() {
         guard let transferData = createTransferData(
             direction: .short,
-            leverage: perpetualViewModel.perpetual.maxLeverage
+            leverage: perpetual.maxLeverage
         ) else {
             return
         }
@@ -244,17 +262,17 @@ public extension PerpetualSceneViewModel {
     }
 
     private func createTransferData(direction: PerpetualDirection, leverage: UInt8) -> PerpetualTransferData? {
-        guard let assetIndex = Int(perpetualViewModel.perpetual.identifier) else {
+        guard let assetIndex = Int(perpetual.identifier) else {
             return nil
         }
 
         return PerpetualTransferData(
-            provider: perpetualViewModel.perpetual.provider,
+            provider: perpetual.provider,
             direction: direction,
             asset: asset,
             baseAsset: .hypercoreUSDC(),
             assetIndex: assetIndex,
-            price: perpetualViewModel.perpetual.price,
+            price: perpetual.price,
             leverage: leverage
         )
     }

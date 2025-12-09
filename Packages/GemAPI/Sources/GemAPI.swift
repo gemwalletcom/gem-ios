@@ -35,7 +35,8 @@ public enum GemAPI: TargetType {
     case getAssetsList(deviceId: String, walletIndex: Int, fromTimestamp: Int)
     
     case getNFTAssets(deviceId: String, walletIndex: Int)
-    
+    case reportNft(ReportNft)
+
     case scanTransaction(payload: ScanTransactionPayload)
     
     case markets
@@ -71,7 +72,8 @@ public enum GemAPI: TargetType {
             .scanTransaction,
             .getPrices,
             .addSupportDevice,
-            .getFiatQuoteUrl:
+            .getFiatQuoteUrl,
+            .reportNft:
             return .POST
         case .updateDevice:
             return .PUT
@@ -128,6 +130,8 @@ public enum GemAPI: TargetType {
             return "/v1/price_alerts/\(deviceId)"
         case .getNFTAssets(deviceId: let deviceId, walletIndex: let walletIndex):
             return "/v2/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
+        case .reportNft:
+            return "/v1/nft/report"
         case .scanTransaction:
             return "/v2/scan/transaction"
         case .markets:
@@ -201,6 +205,8 @@ public enum GemAPI: TargetType {
             ])
         case .scanTransaction(let payload):
             return .encodable(payload)
+        case .reportNft(let report):
+            return .encodable(report)
         }
     }
 }

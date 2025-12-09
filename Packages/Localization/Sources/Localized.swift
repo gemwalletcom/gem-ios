@@ -211,8 +211,8 @@ public enum Localized {
     public static let entry = Localized.tr("Localizable", "charts.entry", fallback: "Entry")
     /// 1H
     public static let hour = Localized.tr("Localizable", "charts.hour", fallback: "1H")
-    /// Liquidation
-    public static let liquidation = Localized.tr("Localizable", "charts.liquidation", fallback: "Liquidation")
+    /// Liq
+    public static let liquidation = Localized.tr("Localizable", "charts.liquidation", fallback: "Liq")
     /// 1M
     public static let month = Localized.tr("Localizable", "charts.month", fallback: "1M")
     /// SL
@@ -722,21 +722,15 @@ public enum Localized {
     /// Set as Avatar
     public static let setAsAvatar = Localized.tr("Localizable", "nft.set_as_avatar", fallback: "Set as Avatar")
     public enum Report {
-      /// Please describe the issue
-      public static let placeholder = Localized.tr("Localizable", "nft.report.placeholder", fallback: "Please describe the issue")
       /// Report
       public static let reportButtonTitle = Localized.tr("Localizable", "nft.report.report_button_title", fallback: "Report")
-      /// What is wrong with this NFT?
-      public static let selectReportHeader = Localized.tr("Localizable", "nft.report.select_report_header", fallback: "What is wrong with this NFT?")
-      /// Report Message
-      public static let title = Localized.tr("Localizable", "nft.report.title", fallback: "Report Message")
       public enum Reason {
         /// Copyright
         public static let copyright = Localized.tr("Localizable", "nft.report.reason.copyright", fallback: "Copyright")
         /// Inappropriate Content
         public static let inappropriate = Localized.tr("Localizable", "nft.report.reason.inappropriate", fallback: "Inappropriate Content")
-        /// Scam
-        public static let scam = Localized.tr("Localizable", "nft.report.reason.scam", fallback: "Scam")
+        /// Malicious
+        public static let malicious = Localized.tr("Localizable", "nft.report.reason.malicious", fallback: "Malicious")
         /// Spam
         public static let spam = Localized.tr("Localizable", "nft.report.reason.spam", fallback: "Spam")
       }

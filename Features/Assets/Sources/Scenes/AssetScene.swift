@@ -117,6 +117,7 @@ public struct AssetScene: View {
                 }
             } else if model.assetDataModel.isStakeEnabled {
                 stakeViewEmpty
+                    .listRowInsets(.assetListRowInsets)
             }
 
             if model.showResources {
@@ -181,9 +182,9 @@ extension AssetScene {
     
     private var stakeViewEmpty: some View {
         NavigationCustomLink(
-            with: HStack {
+            with: HStack(spacing: .space12) {
                 EmojiView(color: Colors.grayVeryLight, emoji: "💰")
-                    .frame(width: Sizing.image.asset, height: Sizing.image.asset)
+                    .frame(size: .image.asset)
                 ListItemView(
                     title: model.stakeTitle,
                     subtitle: model.stakeAprText,

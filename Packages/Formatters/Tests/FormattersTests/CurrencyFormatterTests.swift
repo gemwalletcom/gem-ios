@@ -14,7 +14,8 @@ final class CurrencyFormatterTests {
     let percentFormatterUK = CurrencyFormatter(type: .percent, locale: .UK, currencyCode: Currency.gbp.rawValue)
     let percentSignLess = CurrencyFormatter(type: .percentSignLess, locale: .US, currencyCode: Currency.usd.rawValue)
 
-    let cryptoFormatter = CurrencyFormatter(type: .currency, locale: .US, currencyCode: "")
+    let cryptoFormatter = CurrencyFormatter(type: .currency, locale: .US, currencyCode: .empty)
+    let cryptoFormatterUA = CurrencyFormatter(type: .currency, locale: .RU_UA, currencyCode: .empty)
 
     let abbreviatedFormatterUS = CurrencyFormatter(type: .abbreviated, locale: .US, currencyCode: Currency.usd.rawValue)
     let abbreviatedFormatterUK = CurrencyFormatter(type: .abbreviated, locale: .UK, currencyCode: Currency.gbp.rawValue)
@@ -90,6 +91,10 @@ final class CurrencyFormatterTests {
         #expect(cryptoFormatter.string(double: 11.12) == "11.12")
         #expect(cryptoFormatter.string(double: 11) == "11.00")
         #expect(cryptoFormatter.string(double: 12000123) == "12,000,123.00")
+
+        #expect(cryptoFormatterUA.string(double: 0.003011) == cryptoFormatterUA.string(double: 0.003011).trimmingCharacters(in: .whitespaces))
+        #expect(cryptoFormatterUA.string(double: 92500) == "92 500,00")
+        #expect(cryptoFormatterUA.string(double: 29.73) == "29,73")
     }
 
     @Test

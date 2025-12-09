@@ -17,6 +17,7 @@ struct CollectionsNavigationStack: View {
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.activityService) private var activityService
+    @Environment(\.nftService) private var nftService
 
     @State private var model: CollectionsViewModel
 
@@ -65,6 +66,7 @@ struct CollectionsNavigationStack: View {
                             wallet: model.wallet,
                             assetData: $0.assetData,
                             avatarService: avatarService,
+                            nftService: nftService,
                             isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
                         )
                     )
