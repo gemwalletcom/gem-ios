@@ -2,12 +2,10 @@
 
 import Foundation
 import Primitives
-import Perpetuals
+@testable import Perpetuals
 
-public extension AutocloseModifyBuilder {
-    static func mock(
-        position: PerpetualPositionData = .mock()
-    ) -> AutocloseModifyBuilder {
-        AutocloseModifyBuilder(position: position)
+extension AutocloseModifyBuilder {
+    static func mock(direction: PerpetualDirection = .long) -> AutocloseModifyBuilder {
+        AutocloseModifyBuilder(direction: direction)
     }
 }

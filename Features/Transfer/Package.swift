@@ -37,6 +37,7 @@ let package = Package(
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "FiatConnect", path: "../FiatConnect"),
         .package(name: "Swap", path: "../Swap"),
+        .package(name: "Perpetuals", path: "../Perpetuals"),
 
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
@@ -65,6 +66,7 @@ let package = Package(
                 "InfoSheet",
                 "FiatConnect",
                 "Swap",
+                "Perpetuals",
 
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
