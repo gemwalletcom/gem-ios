@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Style
+import Components
 
 struct CoinPriceRow: View {
     private let model: CoinPriceRowViewModel
@@ -12,9 +13,7 @@ struct CoinPriceRow: View {
 
     var body: some View {
         HStack(spacing: Spacing.small) {
-            model.chainImage
-                .resizable()
-                .frame(size: .list.assets.widget)
+            AssetImageView(assetImage: model.assetImage, size: .list.assets.widget)
 
             VStack(alignment: .leading, spacing: Spacing.extraSmall) {
                 Text(model.name)

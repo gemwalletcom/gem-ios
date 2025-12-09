@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Style
+import Components
 
 struct SmallCoinView: View {
     private let model: CoinPriceRowViewModel
@@ -13,9 +14,7 @@ struct SmallCoinView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: .zero) {
             HStack {
-                model.chainImage
-                    .resizable()
-                    .frame(size: .list.assets.widget)
+                AssetImageView(assetImage: model.assetImage, size: .list.assets.widget)
                 Spacer()
                 Images.Logo.logo
                     .resizable()

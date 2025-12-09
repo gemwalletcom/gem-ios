@@ -4,7 +4,6 @@ import SwiftUI
 import Formatters
 import Style
 import Components
-import PrimitivesComponents
 
 @Observable
 @MainActor
@@ -31,8 +30,19 @@ internal final class CoinPriceRowViewModel {
         coin.symbol
     }
 
-    var chainImage: Image {
-        ChainImage(chain: coin.assetId.chain).image
+    var assetImage: AssetImage {
+        AssetImage(
+            type: coin.symbol,
+            placeholder: coin.image,
+            chainPlaceholder: chainPlaceholder
+        )
+    }
+    
+    var chainPlaceholder: Image? {
+        switch coin.assetId.type {
+        case .native: nil
+        case .token: Images.name(coin.assetId.chain.rawValue)
+        }
     }
 
     var priceText: String {
