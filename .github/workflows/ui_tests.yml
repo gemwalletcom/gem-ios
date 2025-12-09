@@ -8,7 +8,7 @@ on:
     branches: ["main"]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ui-tests-${{ github.ref }}
   cancel-in-progress: false
 
 env:
