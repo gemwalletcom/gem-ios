@@ -29,7 +29,7 @@ public struct TransactionViewModel: Sendable {
 
     public var assetImage: AssetImage {
         switch transaction.transaction.metadata {
-        case .null, .swap, .perpetual, .none:
+        case .null, .swap, .perpetual, .generic, .none:
             let asset = AssetIdViewModel(assetId: assetId).assetImage
             return AssetImage(
                 type: asset.type,
@@ -191,19 +191,35 @@ public struct TransactionViewModel: Sendable {
                     )
                 }
             case .stakeDelegate,
-                    .stakeRedelegate,
-                    .stakeFreeze:
+                    .stakeRedelegate:
                 return String(
                     format: "%@ %@",
                     Localized.Transfer.to,
                     getDisplayName(address: transaction.transaction.to, chain: chain)
                 )
-            case .stakeUndelegate,
-                    .stakeUnfreeze:
+            case .stakeUndelegate:
                 return String(
                     format: "%@ %@",
                     Localized.Transfer.from,
                     getDisplayName(address: transaction.transaction.to, chain: chain)
+                )
+            case .stakeFreeze:
+                guard let metadata = transaction.transaction.metadata?.resourceTypeMetadata else {
+                    return .none
+                }
+                return String(
+                    format: "%@ %@",
+                    Localized.Transfer.to,
+                    ResourceViewModel(resource: metadata.resourceType).title
+                )
+            case .stakeUnfreeze:
+                guard let metadata = transaction.transaction.metadata?.resourceTypeMetadata else {
+                    return .none
+                }
+                return String(
+                    format: "%@ %@",
+                    Localized.Transfer.from,
+                    ResourceViewModel(resource: metadata.resourceType).title
                 )
             case .swap,
                     .stakeRewards,

@@ -7,6 +7,7 @@ public enum TransactionMetadata: Codable, Sendable {
     case swap(TransactionSwapMetadata)
     case nft(TransactionNFTTransferMetadata)
     case perpetual(TransactionPerpetualMetadata)
+    case generic([String: String])
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
@@ -18,6 +19,8 @@ public enum TransactionMetadata: Codable, Sendable {
         case .nft(let value):
             try container.encode(value)
         case .perpetual(let value):
+            try container.encode(value)
+        case .generic(let value):
             try container.encode(value)
         }
     }
@@ -35,6 +38,9 @@ public enum TransactionMetadata: Codable, Sendable {
         } else if let value = try? container.decode(TransactionPerpetualMetadata.self) {
             self = .perpetual(value)
             return
+        } else if let value = try? container.decode([String: String].self) {
+            self = .generic(value)
+            return
         } else if let string = try? container.decode(String.self), let data = string.data(using: .utf8) {
             if let value = try? JSONDecoder().decode(TransactionSwapMetadata.self, from: data) {
                 self = .swap(value)
@@ -45,9 +51,23 @@ public enum TransactionMetadata: Codable, Sendable {
             } else if let value = try? JSONDecoder().decode(TransactionPerpetualMetadata.self, from: data) {
                 self = .perpetual(value)
                 return
+            } else if let value = try? JSONDecoder().decode([String: String].self, from: data) {
+                self = .generic(value)
+                return
             }
         }
 
         self = .null
+    }
+}
+
+// MARK: - Generic Metadata
+
+extension TransactionMetadata {
+    public var resourceTypeMetadata: TransactionResourceTypeMetadata? {
+        switch self {
+        case .generic(let dict): try? dict.mapTo(TransactionResourceTypeMetadata.self)
+        case .null, .swap, .nft, .perpetual: nil
+        }
     }
 }

@@ -71,7 +71,9 @@ extension TransactionMetadata: Equatable {
             lhsPerpetual.price == rhsPerpetual.price &&
             lhsPerpetual.direction == rhsPerpetual.direction &&
             lhsPerpetual.provider == rhsPerpetual.provider
-        case (.null, _), (.swap, _), (.nft, _), (.perpetual, _):
+        case (.generic(let lhsGeneric), .generic(let rhsGeneric)):
+            return lhsGeneric == rhsGeneric
+        case (.null, _), (.swap, _), (.nft, _), (.perpetual, _), (.generic, _):
             return false
         }
     }

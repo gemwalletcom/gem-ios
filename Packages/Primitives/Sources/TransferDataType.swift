@@ -82,12 +82,22 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
                 return .perpetual(TransactionPerpetualMetadata(pnl: 0, price: 0, direction: direction, provider: nil))
             }
             return .null
+        case .stake(_, let type):
+            switch type {
+            case .freeze(let data):
+                let metadata = TransactionResourceTypeMetadata(resourceType: data.resource)
+                guard let dict = try? metadata.toDictionary() else {
+                    return .null
+                }
+                return .generic(dict)
+            case .stake, .unstake, .redelegate, .rewards, .withdraw:
+                return .null
+            }
         case .generic,
             .transfer,
             .deposit,
             .withdrawal,
             .tokenApprove,
-            .stake,
             .account:
             return .null
         }
