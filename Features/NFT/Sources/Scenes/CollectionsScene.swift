@@ -8,6 +8,7 @@ import Store
 import Components
 import Style
 import PrimitivesComponents
+import Localization
 
 public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
     @State private var model: ViewModel
@@ -17,15 +18,35 @@ public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
     }
 
     public var body: some View {
-        ScrollView {
-            LazyVGrid(columns: model.columns) {
-                collectionsView
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(spacing: .zero) {
+                    LazyVGrid(columns: model.columns) {
+                        collectionsView
+                    }
+                    .padding(.horizontal, .medium)
+
+                    Spacer(minLength: .medium)
+
+                    if let unverifiedCount = model.content.unverifiedCount {
+                        List {
+                            NavigationLink(value: Scenes.UnverifiedCollections()) {
+                                ListItemView(
+                                    title: Localized.Asset.Verification.unverified,
+                                    subtitle: unverifiedCount
+                                )
+                            }
+                        }
+                        .scrollDisabled(true)
+                        .frame(height: .list.minHeight)
+                    }
+                }
+                .frame(minHeight: geometry.size.height)
             }
-            .padding(.horizontal, Spacing.medium)
         }
         .observeQuery(request: $model.request, value: $model.nftDataList)
         .overlay {
-            if model.items.isEmpty {
+            if model.content.items.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
@@ -41,7 +62,7 @@ public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
 
 extension CollectionsScene {
     private var collectionsView: some View {
-        ForEach(model.items) { item in
+        ForEach(model.content.items) { item in
             NavigationLink(value: item.destination) {
                 GridPosterView(
                     assetImage: item.assetImage,

@@ -31,10 +31,12 @@ public final class CollectionViewModel: CollectionsViewable, Sendable {
 
     public var title: String { collectionName }
 
-    public var items: [GridPosterViewItem] {
-        nftDataList.flatMap { data in
-            data.assets.map { buildGridItem(collection: data.collection, asset: $0) }
-        }
+    public var content: CollectionsContent {
+        CollectionsContent(
+            items: nftDataList.flatMap { data in
+                data.assets.map { buildGridItem(collection: data.collection, asset: $0) }
+            }
+        )
     }
 
 }

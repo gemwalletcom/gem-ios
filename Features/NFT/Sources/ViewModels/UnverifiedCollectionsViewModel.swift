@@ -25,7 +25,7 @@ public final class UnverifiedCollectionsViewModel: CollectionsViewable, Sendable
 
     public var title: String { Localized.Asset.Verification.unverified }
 
-    public var items: [GridPosterViewItem] {
-        nftDataList.map { buildGridItem(from: $0) }
+    public var content: CollectionsContent {
+        CollectionsContent(items: nftDataList.map { buildGridItem(from: $0) })
     }
 }

@@ -14,7 +14,7 @@ public protocol CollectionsViewable: AnyObject, Observable {
 
     var title: String { get }
     var columns: [GridItem] { get }
-    var items: [GridPosterViewItem] { get }
+    var content: CollectionsContent { get }
     var emptyContentModel: EmptyContentTypeViewModel { get }
 
     var wallet: Wallet { get set }

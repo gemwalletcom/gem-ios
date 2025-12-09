@@ -41,10 +41,13 @@ public final class CollectionsViewModel: CollectionsViewable, Sendable {
         walletService.currentWallet
     }
 
-    public var items: [GridPosterViewItem] {
-        verifiedItems + unverifiedItem
+    public var content: CollectionsContent {
+        CollectionsContent(
+            items: verifiedItems,
+            unverifiedCount: unverifiedCount
+        )
     }
-    
+
     // MARK: - Private
 
     private var verifiedItems: [GridPosterViewItem] {
@@ -53,13 +56,10 @@ public final class CollectionsViewModel: CollectionsViewable, Sendable {
             .map { buildGridItem(from: $0) }
     }
 
-    private var unverifiedItem: [GridPosterViewItem] {
-        let ids = nftDataList
-            .filter { $0.collection.isVerified == false }
-            .map(\.collection.id)
-
-        guard ids.isNotEmpty else { return [] }
-        return [.unverified(collectionIds: ids)]
+    private var unverifiedCount: String? {
+        let unverified = nftDataList.filter { !$0.collection.isVerified }
+        guard unverified.isNotEmpty else { return nil }
+        return unverified.count.asString
     }
 
     // MARK: - Actions
@@ -74,14 +74,3 @@ public final class CollectionsViewModel: CollectionsViewable, Sendable {
     }
 }
 
-extension GridPosterViewItem {
-    static func unverified(collectionIds: [String]) -> GridPosterViewItem {
-        GridPosterViewItem(
-            id: collectionIds.joined(separator: "-").hash.asString,
-            destination: Scenes.UnverifiedCollections(),
-            assetImage: .image(Images.TokenStatus.warning),
-            title: Localized.Asset.Verification.unverified,
-            count: collectionIds.count
-        )
-    }
-}

@@ -63,7 +63,8 @@ extension CollectibleScene {
             Spacer()
         } footer: {
             HeaderButtonsView(buttons: model.headerButtons, action: model.onSelectHeaderButton(type:))
-                .padding(.top, .small)
+                .padding(.top, .medium)
+                .padding(.bottom, .small)
         }
         .frame(maxWidth: .infinity)
         .textCase(nil)
