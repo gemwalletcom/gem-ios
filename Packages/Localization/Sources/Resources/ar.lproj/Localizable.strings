@@ -518,7 +518,7 @@
 "charts.take_profit" = "TP";
 "charts.stop_loss" = "SL";
 "charts.entry" = "Entry";
-"charts.liquidation" = "Liquidation";
+"charts.liquidation" = "Liq";
 "nft.report.reason.spam" = "رسائل إلكترونية مزعجة";
 "nft.report.reason.malicious" = "خبيث";
 "nft.report.reason.inappropriate" = "محتوى غير لائق";

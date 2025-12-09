@@ -88,16 +88,16 @@ struct CandlestickChartView: View {
         }
         .chartXAxis {
             AxisMarks(position: .bottom, values: .automatic(desiredCount: 6)) { _ in
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                    .foregroundStyle(Colors.gray.opacity(0.5))
+                AxisGridLine(stroke: ChartGridStyle.strokeStyle)
+                    .foregroundStyle(ChartGridStyle.color)
             }
         }
         .chartYAxis {
             AxisMarks(position: .trailing, values: .automatic(desiredCount: 5)) { _ in
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                    .foregroundStyle(Colors.gray.opacity(0.5))
-                AxisTick(stroke: StrokeStyle(lineWidth: 1))
-                    .foregroundStyle(Colors.gray.opacity(0.5))
+                AxisGridLine(stroke: ChartGridStyle.strokeStyle)
+                    .foregroundStyle(ChartGridStyle.color)
+                AxisTick(stroke: StrokeStyle(lineWidth: ChartGridStyle.lineWidth))
+                    .foregroundStyle(ChartGridStyle.color)
                 AxisValueLabel()
                     .foregroundStyle(Colors.gray)
                     .font(.caption2)
@@ -132,7 +132,7 @@ struct CandlestickChartView: View {
     private func linesMarks(_ bounds: ChartBounds) -> some ChartContent {
         ForEach(bounds.visibleLines) { line in
             RuleMark(y: .value(ChartKey.price, line.price))
-                .foregroundStyle(line.color.opacity(0.8))
+                .foregroundStyle(line.color.opacity(0.6))
                 .lineStyle(line.lineStyle)
         }
 
@@ -141,12 +141,11 @@ struct CandlestickChartView: View {
                 .foregroundStyle(.clear)
                 .annotation(position: .overlay, alignment: .leading, spacing: 0) {
                     Text(line.label)
-                        .font(.system(size: Spacing.space10, weight: .bold))
+                        .font(.system(size: .space10, weight: .semibold))
                         .foregroundStyle(Colors.whiteSolid)
-                        .padding(.horizontal, Spacing.extraSmall)
-                        .padding(.vertical, 1)
+                        .padding(.tiny)
                         .background(line.color)
-                        .clipShape(RoundedRectangle(cornerRadius: Spacing.extraSmall))
+                        .clipShape(RoundedRectangle(cornerRadius: .tiny))
                         .offset(x: labelXOffset(for: index, in: bounds))
                 }
         }
@@ -154,10 +153,9 @@ struct CandlestickChartView: View {
 
     private func labelXOffset(for index: Int, in bounds: ChartBounds) -> CGFloat {
         guard index > 0 else { return 0 }
-        let priceRange = bounds.maxPrice - bounds.minPrice
-        let threshold = priceRange * 0.06
-        let space: CGFloat = 75
+        let threshold = (bounds.maxPrice - bounds.minPrice) * 0.06
         let lines = bounds.visibleLines
+        let space = 115.0
         return (1...index).reduce(0.0) { offset, idx in
             abs(lines[idx].price - lines[idx - 1].price) < threshold ? offset + space : offset
         }
