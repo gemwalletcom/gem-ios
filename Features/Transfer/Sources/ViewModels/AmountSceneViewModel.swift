@@ -315,7 +315,6 @@ extension AmountSceneViewModel {
     }
 
     func onSelectValidator(_ validator: DelegationValidator) {
-        cleanInput()
         setSelectedValidator(validator)
     }
 

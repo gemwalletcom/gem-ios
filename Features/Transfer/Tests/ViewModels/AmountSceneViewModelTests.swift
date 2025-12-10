@@ -152,6 +152,22 @@ struct AmountSceneViewModelTests {
 
         #expect(model.infoText == nil)
     }
+
+    @Test
+    func selectValidatorPreservesAmount() {
+        let validator1 = DelegationValidator.mock(id: "1", name: "Validator 1")
+        let validator2 = DelegationValidator.mock(id: "2", name: "Validator 2")
+        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 5_000_000_000_000_000_000))
+        let model = AmountSceneViewModel.mock(
+            type: .stake(validators: [validator1, validator2], recommendedValidator: validator1),
+            assetData: assetData
+        )
+
+        model.amountInputModel.update(text: "1.5")
+        model.onSelectValidator(validator2)
+
+        #expect(model.amountInputModel.text == "1.5")
+    }
 }
 
 extension AmountSceneViewModel {
