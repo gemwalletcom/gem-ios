@@ -9,75 +9,75 @@ import Primitives
 struct AutocloseModifyBuilderTests {
 
     @Test
-    func canBuildModifyWithValidChanges() {
+    func canBuildWithValidChanges() {
         let builder = AutocloseModifyBuilder.mock()
         let takeProfit = AutocloseField.mock(price: 110.0, originalPrice: 100.0, isValid: true)
         let stopLoss = AutocloseField.mock(price: nil, originalPrice: nil, isValid: false)
 
-        #expect(builder.canBuild(type: .mockModify(), takeProfit: takeProfit, stopLoss: stopLoss) == true)
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == true)
     }
 
     @Test
-    func cannotBuildModifyWithoutChanges() {
+    func cannotBuildWithoutChanges() {
         let builder = AutocloseModifyBuilder.mock()
         let takeProfit = AutocloseField.mock(price: 100.0, originalPrice: 100.0, isValid: true)
         let stopLoss = AutocloseField.mock(price: 90.0, originalPrice: 90.0, isValid: true)
 
-        #expect(builder.canBuild(type: .mockModify(), takeProfit: takeProfit, stopLoss: stopLoss) == false)
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == false)
     }
 
     @Test
-    func cannotBuildModifyWithInvalidPrice() {
+    func cannotBuildWithInvalidPrice() {
         let builder = AutocloseModifyBuilder.mock()
         let takeProfit = AutocloseField.mock(price: 110.0, originalPrice: 100.0, isValid: false)
         let stopLoss = AutocloseField.mock(price: nil, originalPrice: nil, isValid: false)
 
-        #expect(builder.canBuild(type: .mockModify(), takeProfit: takeProfit, stopLoss: stopLoss) == false)
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == false)
     }
 
     @Test
-    func canBuildModifyWithClearedField() {
+    func canBuildWithClearedField() {
         let builder = AutocloseModifyBuilder.mock()
         let takeProfit = AutocloseField.mock(price: nil, originalPrice: 100.0, isValid: false)
         let stopLoss = AutocloseField.mock(price: nil, originalPrice: nil, isValid: false)
 
-        #expect(builder.canBuild(type: .mockModify(), takeProfit: takeProfit, stopLoss: stopLoss) == true)
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == true)
     }
 
     @Test
-    func canBuildOpenWithValidTakeProfit() {
+    func canBuildWithValidTakeProfit() {
         let builder = AutocloseModifyBuilder.mock()
-        let takeProfit = AutocloseField.mock(price: 110.0, isValid: true)
+        let takeProfit = AutocloseField.mock(price: 110.0, originalPrice: nil, isValid: true)
         let stopLoss = AutocloseField.mock(price: nil, isValid: false)
 
-        #expect(builder.canBuild(type: .mockOpen(), takeProfit: takeProfit, stopLoss: stopLoss) == true)
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == true)
     }
 
     @Test
-    func canBuildOpenWithValidStopLoss() {
+    func canBuildWithValidStopLoss() {
         let builder = AutocloseModifyBuilder.mock()
         let takeProfit = AutocloseField.mock(price: nil, isValid: false)
-        let stopLoss = AutocloseField.mock(price: 90.0, isValid: true)
+        let stopLoss = AutocloseField.mock(price: 90.0, originalPrice: nil, isValid: true)
 
-        #expect(builder.canBuild(type: .mockOpen(), takeProfit: takeProfit, stopLoss: stopLoss) == true)
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == true)
     }
 
     @Test
-    func cannotBuildOpenWithoutValidFields() {
+    func cannotBuildWithoutChangesOrValidFields() {
         let builder = AutocloseModifyBuilder.mock()
-        let takeProfit = AutocloseField.mock(price: nil, isValid: false)
-        let stopLoss = AutocloseField.mock(price: nil, isValid: false)
+        let takeProfit = AutocloseField.mock(price: nil, originalPrice: nil, isValid: false)
+        let stopLoss = AutocloseField.mock(price: nil, originalPrice: nil, isValid: false)
 
-        #expect(builder.canBuild(type: .mockOpen(), takeProfit: takeProfit, stopLoss: stopLoss) == false)
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == false)
     }
 
     @Test
-    func cannotBuildOpenWithInvalidPrices() {
+    func cannotBuildWithInvalidPrices() {
         let builder = AutocloseModifyBuilder.mock()
         let takeProfit = AutocloseField.mock(price: 110.0, isValid: false)
         let stopLoss = AutocloseField.mock(price: 90.0, isValid: false)
 
-        #expect(builder.canBuild(type: .mockOpen(), takeProfit: takeProfit, stopLoss: stopLoss) == false)
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == false)
     }
 
     @Test

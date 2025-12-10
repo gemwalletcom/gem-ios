@@ -10,17 +10,12 @@ struct AutocloseModifyBuilder {
         self.direction = direction
     }
 
-    func canBuild(type: AutocloseType, takeProfit: AutocloseField, stopLoss: AutocloseField) -> Bool {
+    func canBuild(takeProfit: AutocloseField, stopLoss: AutocloseField) -> Bool {
         let takeProfitValid = takeProfit.price == nil || takeProfit.isValid
         let stopLossValid = stopLoss.price == nil || stopLoss.isValid
         guard takeProfitValid && stopLossValid else { return false }
 
-        switch type {
-        case .modify:
-            return takeProfit.shouldUpdate || stopLoss.shouldUpdate
-        case .open:
-            return takeProfit.isValid || stopLoss.isValid
-        }
+        return takeProfit.shouldUpdate || stopLoss.shouldUpdate
     }
 
     func build(

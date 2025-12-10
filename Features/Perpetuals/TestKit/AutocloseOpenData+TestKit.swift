@@ -3,8 +3,6 @@
 import Foundation
 import Primitives
 
-@testable import Perpetuals
-
 extension AutocloseOpenData {
     static func mock(
         direction: PerpetualDirection = .long,

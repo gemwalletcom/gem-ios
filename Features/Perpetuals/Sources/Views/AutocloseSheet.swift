@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Components
+import Primitives
 import PrimitivesComponents
 
 public struct AutocloseSheet: View {

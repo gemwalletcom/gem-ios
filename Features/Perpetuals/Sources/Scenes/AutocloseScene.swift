@@ -29,10 +29,10 @@ public struct AutocloseScene: View {
             }
 
             Section {
-                if model.showEntryPrice {
+                if let positionViewModel = model.positionViewModel {
                     ListItemView(
-                        title: model.entryPriceTitle,
-                        subtitle: model.entryPriceText
+                        title: positionViewModel.entryPriceTitle,
+                        subtitle: positionViewModel.entryPriceText
                     )
                 }
                 ListItemView(

@@ -33,34 +33,23 @@ public final class AutocloseSceneViewModel {
     }
 
     public var title: String { Localized.Perpetual.autoClose }
-    public var entryPriceTitle: String { Localized.Perpetual.entryPrice }
     public var marketPriceTitle: String { Localized.Perpetual.marketPrice }
     public var marketPriceText: String { currencyFormatter.string(marketPrice) }
 
     public var takeProfitModel: AutocloseViewModel { autocloseModel(type: .takeProfit, price: takeProfitPrice) }
     public var stopLossModel: AutocloseViewModel { autocloseModel(type: .stopLoss, price: stopLossPrice) }
 
-    public var entryPriceText: String {
-        guard case .modify(let position, _) = type else { return "-" }
-        return position.position.entryPrice.map { currencyFormatter.string($0) } ?? "-"
-    }
-
     public var positionViewModel: PerpetualPositionViewModel? {
-        guard case .modify(let position, _) = type else { return nil }
-        return PerpetualPositionViewModel(position)
-    }
-
-    public var showEntryPrice: Bool {
         switch type {
-        case .modify: true
-        case .open: false
+        case let .modify(position, _): PerpetualPositionViewModel(position)
+        case .open: .none
         }
     }
 
     public var confirmButtonType: ButtonType {
         let builder = AutocloseModifyBuilder(direction: type.direction)
-        let canConfirm = builder.canBuild(type: type, takeProfit: takeProfitField, stopLoss: stopLossField)
-        return .primary(canConfirm ? .normal : .disabled)
+        let isEnabled = builder.canBuild(takeProfit: takeProfitField, stopLoss: stopLossField)
+        return .primary(isEnabled ? .normal : .disabled)
     }
 }
 
@@ -79,7 +68,7 @@ extension AutocloseSceneViewModel {
         input.update()
 
         let builder = AutocloseModifyBuilder(direction: type.direction)
-        guard builder.canBuild(type: type, takeProfit: takeProfitField, stopLoss: stopLossField) else { return }
+        guard builder.canBuild(takeProfit: takeProfitField, stopLoss: stopLossField) else { return }
 
         switch type {
         case .modify(let position, let onTransferAction):
@@ -109,10 +98,7 @@ extension AutocloseSceneViewModel {
             )
 
         case .open(_, let onComplete):
-            onComplete(
-                input.takeProfit.text.isEmpty ? nil : input.takeProfit.text,
-                input.stopLoss.text.isEmpty ? nil : input.stopLoss.text
-            )
+            onComplete(input.takeProfit, input.stopLoss)
         }
     }
 
@@ -151,20 +137,28 @@ extension AutocloseSceneViewModel {
     }
 
     private var takeProfitField: AutocloseField {
-        input.field(
+        let price: Double? = switch type {
+        case .modify(let position, _): position.position.takeProfit?.price
+        case .open(let data, _): data.takeProfit.flatMap { currencyFormatter.double(from: $0) }
+        }
+        return input.field(
             type: .takeProfit,
             price: takeProfitPrice,
-            originalPrice: position?.position.takeProfit?.price,
+            originalPrice: price,
             formattedPrice: takeProfitPrice.map { formatPrice($0) },
             orderId: takeProfitOrderId
         )
     }
 
     private var stopLossField: AutocloseField {
-        input.field(
+        let price: Double? = switch type {
+        case .modify(let position, _): position.position.stopLoss?.price
+        case .open(let data, _): data.stopLoss.flatMap { currencyFormatter.double(from: $0) }
+        }
+        return input.field(
             type: .stopLoss,
             price: stopLossPrice,
-            originalPrice: position?.position.stopLoss?.price,
+            originalPrice: price,
             formattedPrice: stopLossPrice.map { formatPrice($0) },
             orderId: stopLossOrderId
         )

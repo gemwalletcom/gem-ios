@@ -352,9 +352,9 @@ extension AmountSceneViewModel {
         ))
     }
 
-    func onAutocloseComplete(takeProfit: String?, stopLoss: String?) {
-        self.takeProfit = takeProfit
-        self.stopLoss = stopLoss
+    func onAutocloseComplete(takeProfit: InputValidationViewModel, stopLoss: InputValidationViewModel) {
+        self.takeProfit = takeProfit.text.isEmpty ? nil : takeProfit.text
+        self.stopLoss = stopLoss.text.isEmpty ? nil : stopLoss.text
         isPresentingSheet = nil
     }
 
