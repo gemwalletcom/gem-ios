@@ -52,7 +52,6 @@ public extension Spacing {
         public static let top: CGFloat = space16
         /// 8
         public static let bottom: CGFloat = space8
-        
         /// 72
         public static let bannerHeight: CGFloat = 72
 
@@ -107,6 +106,8 @@ public extension Sizing {
     }
 
     struct list {
+        /// 100
+        public static let minHeight: CGFloat = 100
         /// 16
         public static let accessory: CGFloat = 16
         /// 22
@@ -121,6 +122,8 @@ public extension Sizing {
 
         public struct assets {
             public static let height: CGFloat = Sizing.image.asset
+            /// 40
+            public static let widget: CGFloat = 40
         }
 
         public struct transactions {

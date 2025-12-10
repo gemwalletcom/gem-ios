@@ -24,6 +24,7 @@ let package = Package(
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
+        .package(name: "InfoSheet", path: "../InfoSheet"),
     ],
     targets: [
         .target(
@@ -41,7 +42,8 @@ let package = Package(
                 .product(name: "WalletService", package: "FeatureServices"),
                 "Formatters",
                 .product(name: "ExplorerService", package: "ChainServices"),
-                .product(name: "AvatarService", package: "FeatureServices")
+                .product(name: "AvatarService", package: "FeatureServices"),
+                "InfoSheet",
             ],
             path: "Sources"
         ),
