@@ -31,6 +31,7 @@ public final class AmountSceneViewModel {
     private let autocloseFormatter = AutocloseFormatter()
     private let numberSanitizer = NumberSanitizer()
     private let valueConverter = ValueConverter()
+    private let perpetualFormatter = PerpetualFormatter(provider: .hypercore)
 
     private var currentValidator: DelegationValidator?
     private var amountInputType: AmountInputType = .asset {
@@ -546,13 +547,14 @@ extension AmountSceneViewModel {
                 canChangeValue: canChangeValue
             )
         case .perpetual(let data):
+            let decimals = data.positionAction.transferData.asset.decimals
             let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
                 positionAction: data.positionAction,
                 usdcAmount: value,
                 usdcDecimals: asset.decimals.asInt,
                 leverage: selectedLeverage.value,
-                takeProfit: takeProfit,
-                stopLoss: stopLoss
+                takeProfit: takeProfit.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) },
+                stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) }
             )
             return TransferData(
                 type: .perpetual(data.positionAction.transferData.asset, perpetualType),
@@ -646,7 +648,7 @@ extension AmountSceneViewModel {
             }
         case .perpetual(let data):
             return BigInt(
-                PerpetualFormatter(provider: .hypercore).minimumOrderUsdAmount(
+                perpetualFormatter.minimumOrderUsdAmount(
                     price: data.positionAction.transferData.price,
                     decimals: data.positionAction.transferData.asset.decimals,
                     leverage: selectedLeverage.value
