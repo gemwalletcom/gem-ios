@@ -47,7 +47,7 @@ public struct GridPosterView: View {
             .foregroundStyle(Colors.whiteSolid)
             .padding(.horizontal, .space6)
             .frame(minWidth: .space24, minHeight: .space24)
-            .background(Colors.gray)
+            .background(Colors.Empty.image)
             .clipShape(RoundedRectangle(cornerRadius: .small))
             .padding(.space8)
     }
