@@ -12,7 +12,7 @@ final class CreateWalletUITests: XCTestCase {
     func testImportWalletAndReceiveBitcoin() throws {
         let app = XCUIApplication()
         setupPermissionHandler()
-        app.activate()
+        app.launch()
 
         // OnboardingScene
         app.buttons["Create a New Wallet"].firstMatch.tap()

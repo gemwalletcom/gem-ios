@@ -4,36 +4,36 @@ import SwiftUI
 import Style
 import Localization
 import Primitives
+import Formatters
 
 struct ChartLineViewModel: Identifiable {
     let line: ChartLine
+    let formatter: CurrencyFormatter
 
     var id: String { "\(line.type)_\(line.price)" }
     var price: Double { line.price }
 
     var label: String {
-        switch line.type {
+        let typeLabel: String = switch line.type {
         case .takeProfit: Localized.Charts.takeProfit
         case .stopLoss: Localized.Charts.stopLoss
         case .entry: Localized.Charts.entry
         case .liquidation: Localized.Charts.liquidation
         }
+        let priceText = formatter.string(double: line.price)
+        return "\(typeLabel) | \(priceText)"
     }
 
     var color: Color {
         switch line.type {
         case .takeProfit: Colors.green
-        case .stopLoss: Colors.red
-        case .entry: Colors.blue
-        case .liquidation: Colors.orange
+        case .stopLoss: Colors.orange
+        case .entry: Colors.gray
+        case .liquidation: Colors.red
         }
     }
 
     var lineStyle: StrokeStyle {
-        switch line.type {
-        case .takeProfit, .stopLoss: StrokeStyle(lineWidth: 1, dash: [6, 4])
-        case .entry: StrokeStyle(lineWidth: 1.5)
-        case .liquidation: StrokeStyle(lineWidth: 1, dash: [2, 2])
-        }
+        StrokeStyle(lineWidth: 1, dash: [4, 3])
     }
 }

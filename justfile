@@ -1,6 +1,7 @@
 XCBEAUTIFY_ARGS := "--quieter --is-ci"
 BUILD_THREADS := `sysctl -n hw.ncpu`
-SIMULATOR_DEST := "platform=iOS Simulator,name=iPhone 17"
+SIMULATOR_NAME := "iPhone 17"
+SIMULATOR_DEST := "platform=iOS Simulator,name=" + SIMULATOR_NAME
 
 xcbeautify:
     @xcbeautify {{XCBEAUTIFY_ARGS}}
@@ -89,14 +90,21 @@ test-all: show-simulator
     -jobs {{BUILD_THREADS}} \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test-ui:
+test-ui: reset-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
+    -testPlan ui_tests \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
+
+reset-simulator NAME=SIMULATOR_NAME:
+    @echo "==> Resetting {{NAME}} simulator to clean state"
+    @xcrun simctl shutdown "{{NAME}}" 2>/dev/null || true
+    @xcrun simctl erase "{{NAME}}" 2>/dev/null || true
+    @xcrun simctl boot "{{NAME}}" 2>/dev/null || true
 
 test TARGET: show-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \

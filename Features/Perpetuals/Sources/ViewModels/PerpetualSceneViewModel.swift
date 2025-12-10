@@ -13,6 +13,7 @@ import Formatters
 import ExplorerService
 import Preferences
 import BigInt
+import GemstonePrimitives
 
 @Observable
 @MainActor
@@ -77,7 +78,10 @@ public final class PerpetualSceneViewModel {
         )
     }
 
-    public var navigationTitle: String { perpetualViewModel.name }
+    public var navigationTitle: String {
+        let name = perpetualViewModel.name
+        return name.isEmpty ? asset.symbol : name
+    }
     public var currency: String { preference.currency }
     public var hasOpenPosition: Bool { !positionViewModels.isEmpty }
 
@@ -96,7 +100,8 @@ public final class PerpetualSceneViewModel {
     public var positionViewModels: [PerpetualPositionViewModel] { positions.map { PerpetualPositionViewModel($0) } }
 
     var chartLineModels: [ChartLineViewModel] {
-        guard let position = positions.first?.position else { return [] }
+        guard let positionData = positions.first else { return [] }
+        let position = positionData.position
         let prices: [(ChartLineType, Double?)] = [
             (.entry, position.entryPrice),
             (.takeProfit, position.takeProfit?.price),
@@ -104,7 +109,12 @@ public final class PerpetualSceneViewModel {
             (.liquidation, position.liquidationPrice)
         ]
         return prices.compactMap { type, price in
-            price.map { ChartLineViewModel(line: ChartLine(type: type, price: $0)) }
+            price.map {
+                ChartLineViewModel(
+                    line: ChartLine(type: type, price: $0),
+                    formatter: CurrencyFormatter(type: .currency, currencyCode: .empty)
+                )
+            }
         }
     }
 
