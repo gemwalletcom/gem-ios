@@ -13,7 +13,7 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
     func testImportMultiCoinWalletAndVerifyBitcoinAddress() throws {
         let app = XCUIApplication()
         setupPermissionHandler()
-        app.activate()
+        app.launch()
 
         // OnboardingScene
         app.buttons["Import an Existing Wallet"].firstMatch.tap()
