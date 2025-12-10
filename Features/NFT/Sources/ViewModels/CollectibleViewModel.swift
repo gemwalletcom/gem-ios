@@ -13,6 +13,7 @@ import AvatarService
 import Formatters
 import ExplorerService
 import NFTService
+import InfoSheet
 
 @Observable
 @MainActor
@@ -29,6 +30,7 @@ public final class CollectibleViewModel {
     var isPresentingTokenExplorerUrl: URL?
     var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     var isPresentingReportSheet = false
+    var isPresentingInfoSheet: InfoSheetType?
 
     public init(
         wallet: Wallet,
@@ -103,7 +105,7 @@ public final class CollectibleViewModel {
     }
     
     var headerButtons: [HeaderButton] {
-        return [
+        [
             HeaderButton(
                 type: .send,
                 isEnabled: isSendEnabled
@@ -124,11 +126,19 @@ public final class CollectibleViewModel {
     }
 
     var showAttributes: Bool {
-        !attributes.isEmpty
+        attributes.isNotEmpty
     }
 
     var showLinks: Bool {
-        !assetData.collection.links.isEmpty
+        assetData.collection.links.isNotEmpty
+    }
+
+    var scoreViewModel: AssetScoreTypeViewModel {
+        AssetScoreTypeViewModel(scoreType: .unverified)
+    }
+
+    var showStatus: Bool {
+        assetData.collection.isVerified == false
     }
 
     var socialLinksViewModel: SocialLinksViewModel {
@@ -226,6 +236,10 @@ extension CollectibleViewModel {
     func onReportComplete() {
         isPresentingReportSheet = false
         isPresentingToast = .success(Localized.Transaction.Status.confirmed)
+	}
+
+    func onSelectStatus() {
+        isPresentingInfoSheet = .assetStatus(scoreViewModel.scoreType)
     }
 }
 
