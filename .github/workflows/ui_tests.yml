@@ -2,13 +2,13 @@ name: UI Tests
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: ["main"]
-  # pull_request:
-  #   branches: ["main"]
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ui-tests-${{ github.ref }}
   cancel-in-progress: false
 
 env:
@@ -16,15 +16,19 @@ env:
   RUSTC_WRAPPER: "sccache"
 
 jobs:
-  unit_test:
+  ui_test:
     name: Build and UI Test iPhone simulator
     runs-on: macos-26
 
     steps:
+      - name: Select Xcode
+        run: |
+          xcrun simctl list devices
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: true
 
       - name: Cache Cargo Dependencies
         uses: actions/cache@v4
@@ -71,6 +75,4 @@ jobs:
         run: just generate-stone
 
       - name: UI Tests
-        run: |
-          defaults write com.apple.dt.XCTest IDESuppressCrashOnExceptions -bool YES
-          just test_ui
+        run: just test-ui

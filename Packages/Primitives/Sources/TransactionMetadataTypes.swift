@@ -28,6 +28,14 @@ public struct TransactionPerpetualMetadata: Codable, Sendable {
 	}
 }
 
+public struct TransactionResourceTypeMetadata: Codable, Sendable {
+	public let resourceType: Resource
+
+	public init(resourceType: Resource) {
+		self.resourceType = resourceType
+	}
+}
+
 public struct TransactionSwapMetadata: Codable, Sendable {
 	public let fromAsset: AssetId
 	public let fromValue: String

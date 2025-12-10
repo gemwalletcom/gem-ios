@@ -122,6 +122,8 @@ public extension Sizing {
 
         public struct assets {
             public static let height: CGFloat = Sizing.image.asset
+            /// 40
+            public static let widget: CGFloat = 40
         }
 
         public struct transactions {
