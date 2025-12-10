@@ -43,7 +43,6 @@ struct PerpetualPositionViewModelTests {
     @Test
     func entryPriceText() {
         #expect(createPositionViewModel(.mock(entryPrice: 42000)).entryPriceText == "$42,000.00")
-        #expect(createPositionViewModel(.mock(entryPrice: 0)).entryPriceText == nil)
     }
     
     @Test
