@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import SwiftUI
 import Primitives
 
 internal struct CoinPrice: Sendable, Identifiable {
@@ -9,24 +10,7 @@ internal struct CoinPrice: Sendable, Identifiable {
     let symbol: String
     let price: Double
     let priceChangePercentage24h: Double
-    
+    let image: Image?
+
     var id: AssetId { assetId }
-    
-    init(
-        assetId: AssetId,
-        name: String,
-        symbol: String,
-        price: Double,
-        priceChangePercentage24h: Double,
-    ) {
-        self.assetId = assetId
-        self.name = name
-        self.symbol = symbol
-        self.price = price
-        self.priceChangePercentage24h = priceChangePercentage24h
-    }
- 
-    var imageURL: URL {
-        AssetImageFormatter.shared.getURL(for: id)
-    }
 }

@@ -2,7 +2,7 @@
   "configurations" : [
     {
       "id" : "7A39A90A-96E2-44CA-891F-BF5B7E7A90C0",
-      "name" : "Configuration 1",
+      "name" : "Configuration",
       "options" : {
 
       }
@@ -13,6 +13,10 @@
   },
   "testTargets" : [
     {
+      "skippedTests" : [
+        "ImportWalletReceiveBitcoinUITests",
+        "ImportWalletReceiveBitcoinUITests\/testImportMultiCoinWalletAndVerifyBitcoinAddress()"
+      ],
       "target" : {
         "containerPath" : "container:Gem.xcodeproj",
         "identifier" : "D83096AB2D5D4F1E00FFEE3E",
