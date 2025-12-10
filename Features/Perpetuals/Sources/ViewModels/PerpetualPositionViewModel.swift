@@ -105,11 +105,8 @@ public struct PerpetualPositionViewModel {
     }
     
     public var entryPriceTitle: String { Localized.Perpetual.entryPrice }
-    public var entryPriceText: String? {
-        guard let price = data.position.entryPrice, price > 0 else { return .none }
-        return currencyFormatter.string(price)
-    }
-    
+    public var entryPriceText: String { currencyFormatter.string(data.position.entryPrice) }
+
     public var liquidationPriceTitle: String { Localized.Info.LiquidationPrice.title }
     public var liquidationPriceText: String? {
         guard let price = data.position.liquidationPrice, price > 0 else { return .none }
