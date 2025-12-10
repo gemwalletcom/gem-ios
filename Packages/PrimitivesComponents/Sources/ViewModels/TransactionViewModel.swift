@@ -204,22 +204,22 @@ public struct TransactionViewModel: Sendable {
                     getDisplayName(address: transaction.transaction.to, chain: chain)
                 )
             case .stakeFreeze:
-                guard let metadata = transaction.transaction.metadata?.resourceTypeMetadata else {
+                guard let resourceType = transaction.transaction.metadata?.resourceType else {
                     return .none
                 }
                 return String(
                     format: "%@ %@",
                     Localized.Transfer.to,
-                    ResourceViewModel(resource: metadata.resourceType).title
+                    ResourceViewModel(resource: resourceType).title
                 )
             case .stakeUnfreeze:
-                guard let metadata = transaction.transaction.metadata?.resourceTypeMetadata else {
+                guard let resourceType = transaction.transaction.metadata?.resourceType else {
                     return .none
                 }
                 return String(
                     format: "%@ %@",
                     Localized.Transfer.from,
-                    ResourceViewModel(resource: metadata.resourceType).title
+                    ResourceViewModel(resource: resourceType).title
                 )
             case .swap,
                     .stakeRewards,

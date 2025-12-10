@@ -55,10 +55,10 @@ extension TransactionParticipantViewModel {
     }
 
     private var resourceItemModel: TransactionItemModel {
-        guard let metadata = transactionViewModel.transaction.transaction.metadata?.resourceTypeMetadata else {
+        guard let resourceType = transactionViewModel.transaction.transaction.metadata?.resourceType else {
             return .empty
         }
-        let resourceTitle = ResourceViewModel(resource: metadata.resourceType).title
+        let resourceTitle = ResourceViewModel(resource: resourceType).title
         return .listItem(ListItemModel(title: Localized.Stake.resource, subtitle: resourceTitle))
     }
 

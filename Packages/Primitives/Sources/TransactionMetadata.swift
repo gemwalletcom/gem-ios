@@ -64,9 +64,9 @@ public enum TransactionMetadata: Codable, Sendable {
 // MARK: - Generic Metadata
 
 extension TransactionMetadata {
-    public var resourceTypeMetadata: TransactionResourceTypeMetadata? {
+    public var resourceType: Resource? {
         switch self {
-        case .generic(let dict): try? dict.mapTo(TransactionResourceTypeMetadata.self)
+        case .generic(let dict): try? dict.mapTo(TransactionResourceTypeMetadata.self).resourceType
         case .null, .swap, .nft, .perpetual: nil
         }
     }
