@@ -4,6 +4,31 @@
 
 import Foundation
 
+public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
+	case short
+	case long
+}
+
+public struct AutocloseOpenData: Codable, Equatable, Hashable, Sendable {
+	public let direction: PerpetualDirection
+	public let marketPrice: Double
+	public let leverage: UInt8
+	public let size: Double
+	public let assetDecimals: Int32
+	public let takeProfit: String?
+	public let stopLoss: String?
+
+	public init(direction: PerpetualDirection, marketPrice: Double, leverage: UInt8, size: Double, assetDecimals: Int32, takeProfit: String?, stopLoss: String?) {
+		self.direction = direction
+		self.marketPrice = marketPrice
+		self.leverage = leverage
+		self.size = size
+		self.assetDecimals = assetDecimals
+		self.takeProfit = takeProfit
+		self.stopLoss = stopLoss
+	}
+}
+
 public struct CancelOrderData: Codable, Equatable, Hashable, Sendable {
 	public let assetIndex: Int32
 	public let orderId: UInt64
@@ -66,11 +91,6 @@ public struct PerpetualBasic: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
-	case short
-	case long
-}
-
 public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let direction: PerpetualDirection
 	public let baseAsset: Asset
@@ -84,8 +104,10 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let entryPrice: Double?
 	public let marketPrice: Double
 	public let marginAmount: Double
+	public let takeProfit: String?
+	public let stopLoss: String?
 
-	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String, slippage: Double, leverage: UInt8, pnl: Double?, entryPrice: Double?, marketPrice: Double, marginAmount: Double) {
+	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String, slippage: Double, leverage: UInt8, pnl: Double?, entryPrice: Double?, marketPrice: Double, marginAmount: Double, takeProfit: String?, stopLoss: String?) {
 		self.direction = direction
 		self.baseAsset = baseAsset
 		self.assetIndex = assetIndex
@@ -98,6 +120,8 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 		self.entryPrice = entryPrice
 		self.marketPrice = marketPrice
 		self.marginAmount = marginAmount
+		self.takeProfit = takeProfit
+		self.stopLoss = stopLoss
 	}
 }
 

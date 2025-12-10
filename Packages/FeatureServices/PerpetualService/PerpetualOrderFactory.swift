@@ -20,7 +20,9 @@ public struct PerpetualOrderFactory {
         usdcAmount: BigInt,
         usdcDecimals: Int,
         leverage: UInt8,
-        slippage: Double = 2.0
+        slippage: Double = 2.0,
+        takeProfit: String? = nil,
+        stopLoss: String? = nil
     ) -> PerpetualType {
         let perpetual = positionAction.transferData
 
@@ -50,7 +52,9 @@ public struct PerpetualOrderFactory {
             pnl: nil,
             entryPrice: nil,
             marketPrice: perpetual.price,
-            marginAmount: marginAmount
+            marginAmount: marginAmount,
+            takeProfit: takeProfit,
+            stopLoss: stopLoss
         )
 
         return switch positionAction {
@@ -123,7 +127,9 @@ public struct PerpetualOrderFactory {
         pnl: Double?,
         entryPrice: Double?,
         marketPrice: Double,
-        marginAmount: Double
+        marginAmount: Double,
+        takeProfit: String? = nil,
+        stopLoss: String? = nil
     ) -> PerpetualConfirmData {
         let price = formatter.formatPrice(
             slippagePrice,
@@ -147,7 +153,9 @@ public struct PerpetualOrderFactory {
             pnl: pnl,
             entryPrice: entryPrice,
             marketPrice: marketPrice,
-            marginAmount: marginAmount
+            marginAmount: marginAmount,
+            takeProfit: takeProfit,
+            stopLoss: stopLoss
         )
     }
 }

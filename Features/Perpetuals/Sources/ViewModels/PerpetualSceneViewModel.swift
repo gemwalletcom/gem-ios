@@ -293,7 +293,7 @@ public extension PerpetualSceneViewModel {
     }
 }
 
-extension RecipientData {
+public extension RecipientData {
     static func hyperliquid() -> RecipientData {
         RecipientData(
             recipient: Recipient(name: "Hyperliquid", address: "", memo: .none),

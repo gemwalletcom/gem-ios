@@ -18,6 +18,7 @@ import Style
 import Validators
 import WalletsService
 import PerpetualService
+import Perpetuals
 
 @MainActor
 @Observable
@@ -27,8 +28,10 @@ public final class AmountSceneViewModel {
 
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
+    private let autocloseFormatter = AutocloseFormatter()
     private let numberSanitizer = NumberSanitizer()
     private let valueConverter = ValueConverter()
+    private let perpetualFormatter = PerpetualFormatter(provider: .hypercore)
 
     private var currentValidator: DelegationValidator?
     private var amountInputType: AmountInputType = .asset {
@@ -51,6 +54,8 @@ public final class AmountSceneViewModel {
             amountInputModel.update(validators: inputValidators)
         }
     }
+    var takeProfit: String?
+    var stopLoss: String?
 
     var isPresentingSheet: AmountSheetType?
     var focusField: Bool = false
@@ -276,6 +281,25 @@ public final class AmountSceneViewModel {
             color: PerpetualDirectionViewModel(direction: transferData.direction).color
         )
     }
+
+    var isAutocloseEnabled: Bool {
+        switch type {
+        case .perpetual(let data):
+            switch data.positionAction {
+            case .open: true
+            case .increase, .reduce: false
+            }
+        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: false
+        }
+    }
+
+    var autocloseTitle: String { Localized.Perpetual.autoClose }
+    var autocloseText: (subtitle: String, subtitleExtra: String?) {
+        autocloseFormatter.format(
+            takeProfit: takeProfit.flatMap { currencyFormatter.double(from: $0) },
+            stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }
+        )
+    }
 }
 
 // MARK: - Business Logic
@@ -312,6 +336,26 @@ extension AmountSceneViewModel {
 
     func onSelectLeverage() {
         isPresentingSheet = .leverageSelector
+    }
+
+    func onSelectAutoclose() {
+        guard case .perpetual(let data) = type else { return }
+        let transferData = data.positionAction.transferData
+        isPresentingSheet = .autoclose(AutocloseOpenData(
+            direction: transferData.direction,
+            marketPrice: transferData.price,
+            leverage: selectedLeverage.value,
+            size: currencyFormatter.double(from: amountInputModel.text) ?? 1,
+            assetDecimals: transferData.asset.decimals,
+            takeProfit: takeProfit,
+            stopLoss: stopLoss
+        ))
+    }
+
+    func onAutocloseComplete(takeProfit: InputValidationViewModel, stopLoss: InputValidationViewModel) {
+        self.takeProfit = takeProfit.text.isEmpty ? nil : takeProfit.text
+        self.stopLoss = stopLoss.text.isEmpty ? nil : stopLoss.text
+        isPresentingSheet = nil
     }
 
     func onSelectValidator(_ validator: DelegationValidator) {
@@ -503,11 +547,14 @@ extension AmountSceneViewModel {
                 canChangeValue: canChangeValue
             )
         case .perpetual(let data):
+            let decimals = data.positionAction.transferData.asset.decimals
             let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
                 positionAction: data.positionAction,
                 usdcAmount: value,
                 usdcDecimals: asset.decimals.asInt,
-                leverage: selectedLeverage.value
+                leverage: selectedLeverage.value,
+                takeProfit: takeProfit.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) },
+                stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) }
             )
             return TransferData(
                 type: .perpetual(data.positionAction.transferData.asset, perpetualType),
@@ -601,7 +648,7 @@ extension AmountSceneViewModel {
             }
         case .perpetual(let data):
             return BigInt(
-                PerpetualFormatter(provider: .hypercore).minimumOrderUsdAmount(
+                perpetualFormatter.minimumOrderUsdAmount(
                     price: data.positionAction.transferData.price,
                     decimals: data.positionAction.transferData.asset.decimals,
                     leverage: selectedLeverage.value
