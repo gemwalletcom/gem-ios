@@ -78,7 +78,7 @@ extension AddNodeScene {
             .focused($focusedField, equals: .address)
             .autocorrectionDisabled()
             .textInputAutocapitalization(.never)
-            .submitLabel(.search)
+            .submitLabel(.done)
             .onSubmit(onSubmitUrl)
         }
         if case let .error(error) = model.state {
