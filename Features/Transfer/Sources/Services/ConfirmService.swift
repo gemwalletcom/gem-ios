@@ -72,7 +72,7 @@ public struct ConfirmService: Sendable {
     }
 
     public func updateRecent(data: RecentActivityData, walletId: WalletId) {
-        try? activityService.updateRecent(type: data.type, assetId: data.assetId, toAssetId: data.toAssetId, walletId: walletId)
+        try? activityService.updateRecent(data: data, walletId: walletId)
     }
 
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {

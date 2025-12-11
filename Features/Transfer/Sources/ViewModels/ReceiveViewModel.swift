@@ -6,7 +6,6 @@ import PrimitivesComponents
 import WalletsService
 import Components
 import Formatters
-import ActivityService
 
 @Observable
 @MainActor
@@ -17,7 +16,6 @@ public final class ReceiveViewModel: Sendable {
     let walletId: WalletId
     let address: String
     let walletsService: WalletsService
-    let activityService: ActivityService
     let generator = QRCodeGenerator()
     
     public var isPresentingShareSheet: Bool = false
@@ -28,16 +26,13 @@ public final class ReceiveViewModel: Sendable {
         assetModel: AssetViewModel,
         walletId: WalletId,
         address: String,
-        walletsService: WalletsService,
-        activityService: ActivityService
+        walletsService: WalletsService
     ) {
         self.assetModel = assetModel
         self.walletId = walletId
         self.address = address
         self.walletsService = walletsService
-        self.activityService = activityService
     }
-
 
     var title: String {
         Localized.Receive.title("")
@@ -106,30 +101,17 @@ extension ReceiveViewModel {
         Task {
             await enableAsset()
         }
-        updateRecent()
     }
-    
+
     func onShareSheet() {
         isPresentingShareSheet = true
     }
-    
+
     func onCopyAddress() {
         isPresentingCopyToast = true
     }
-    
+
     func onLoadImage() async {
         renderedImage = await generateQRCode()
-    }
-}
-
-// MARK: - Private
-
-extension ReceiveViewModel {
-    private func updateRecent() {
-        do {
-            try activityService.updateRecent(type: .receive, assetId: assetModel.asset.id, walletId: walletId)
-        } catch {
-            debugLog("UpdateRecent error: \(error)")
-        }
     }
 }

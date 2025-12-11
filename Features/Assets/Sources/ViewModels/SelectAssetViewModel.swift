@@ -175,13 +175,19 @@ public final class SelectAssetViewModel {
 // MARK: - Business Logic
 
 extension SelectAssetViewModel {
+    public func updateRecent(assetId: AssetId) {
+        if let data = selectType.recentActivityData(assetId: assetId) {
+            try? activityService.updateRecent(data: data, walletId: wallet.walletId)
+        }
+    }
+
     func selectAsset(asset: Asset) {
         switch selectType {
         case .priceAlert:
             Task {
                 await setPriceAlert(assetId: asset.id, enabled: true)
             }
-            case .manage, .send, .receive, .buy, .swap, .deposit, .withdraw: break
+        case .manage, .send, .receive, .buy, .swap, .deposit, .withdraw: break
         }
         onSelectAssetAction?(asset)
     }
