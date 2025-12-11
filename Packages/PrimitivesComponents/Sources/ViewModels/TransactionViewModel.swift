@@ -204,23 +204,11 @@ public struct TransactionViewModel: Sendable {
                     getDisplayName(address: transaction.transaction.to, chain: chain)
                 )
             case .stakeFreeze:
-                guard let resourceType = transaction.transaction.metadata?.resourceType else {
-                    return .none
-                }
-                return String(
-                    format: "%@ %@",
-                    Localized.Transfer.to,
-                    ResourceViewModel(resource: resourceType).title
-                )
+                guard let title = getResourceTitle() else { return .none }
+                return String(format: "%@ %@", Localized.Transfer.to, title)
             case .stakeUnfreeze:
-                guard let resourceType = transaction.transaction.metadata?.resourceType else {
-                    return .none
-                }
-                return String(
-                    format: "%@ %@",
-                    Localized.Transfer.from,
-                    ResourceViewModel(resource: resourceType).title
-                )
+                guard let title = getResourceTitle() else { return .none }
+                return String(format: "%@ %@", Localized.Transfer.from, title)
             case .swap,
                     .stakeRewards,
                     .stakeWithdraw,
@@ -322,10 +310,6 @@ public struct TransactionViewModel: Sendable {
         }
     }
 
-    public func addressLink(account: SimpleAccount) -> BlockExplorerLink {
-        explorerService.addressUrl(chain: account.chain, address: account.address)
-    }
-
     public var participant: String {
         switch transaction.transaction.direction {
         case .incoming: transaction.transaction.from
@@ -339,13 +323,18 @@ public struct TransactionViewModel: Sendable {
     public var addressExplorerUrl: URL { addressLink.url }
     public var transactionExplorerUrl: URL { transactionLink.url }
 
-    public func getDisplayName(address: String, chain: Chain) -> String {
-        if let name = getAddressName(address: address) {
-            return name
-        }
-        return AddressFormatter(address: address, chain: chain).value()
+    private var transactionLink: BlockExplorerLink {
+        explorerService.transactionLink(
+            chain: assetId.chain,
+            provider: transaction.transaction.swapProvider,
+            hash: transaction.transaction.id.hash,
+            recipient: transaction.transaction.to
+        )
     }
 
+    private var addressLink: BlockExplorerLink { explorerService.addressUrl(chain: assetId.chain, address: participant) }
+    private var assetId: AssetId { transaction.transaction.assetId }
+    
     public func getAddressName(address: String) -> String? {
         if address == transaction.transaction.from {
             return transaction.fromAddress?.name
@@ -357,16 +346,26 @@ public struct TransactionViewModel: Sendable {
 
         return .none
     }
-
-    private var transactionLink: BlockExplorerLink {
-        return explorerService.transactionLink(
-            chain: assetId.chain,
-            provider: transaction.transaction.swapProvider,
-            hash: transaction.transaction.id.hash,
-            recipient: transaction.transaction.to
-        )
+    
+    public func addressLink(account: SimpleAccount) -> BlockExplorerLink {
+        explorerService.addressUrl(chain: account.chain, address: account.address)
+    }
+    
+    // MARK: - Private methods
+    
+    private func getDisplayName(address: String, chain: Chain) -> String {
+        if let name = getAddressName(address: address) {
+            return name
+        }
+        return AddressFormatter(address: address, chain: chain).value()
     }
 
-    private var addressLink: BlockExplorerLink { explorerService.addressUrl(chain: assetId.chain, address: participant) }
-    private var assetId: AssetId { transaction.transaction.assetId }
+    private func getResourceTitle() -> String? {
+        guard case .generic(let dict) = transaction.transaction.metadata,
+              let resourceType = try? dict.mapTo(TransactionResourceTypeMetadata.self).resourceType
+        else {
+            return nil
+        }
+        return ResourceViewModel(resource: resourceType).title
+    }
 }

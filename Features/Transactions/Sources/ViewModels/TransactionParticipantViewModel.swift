@@ -55,7 +55,9 @@ extension TransactionParticipantViewModel {
     }
 
     private var resourceItemModel: TransactionItemModel {
-        guard let resourceType = transactionViewModel.transaction.transaction.metadata?.resourceType else {
+        guard case .generic(let dict) = transactionViewModel.transaction.transaction.metadata,
+              let resourceType = try? dict.mapTo(TransactionResourceTypeMetadata.self).resourceType
+        else {
             return .empty
         }
         let resourceTitle = ResourceViewModel(resource: resourceType).title

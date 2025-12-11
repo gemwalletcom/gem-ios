@@ -85,10 +85,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         case .stake(_, let type):
             switch type {
             case .freeze(let data):
-                if let generic = TransactionResourceTypeMetadata(resourceType: data.resource).toGeneric() {
-                    return .generic(generic)
-                }
-                return .null
+                return .generic(from: TransactionResourceTypeMetadata(resourceType: data.resource))
             case .stake, .unstake, .redelegate, .rewards, .withdraw:
                 return .null
             }

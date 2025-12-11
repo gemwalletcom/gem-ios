@@ -59,15 +59,13 @@ public enum TransactionMetadata: Codable, Sendable {
 
         self = .null
     }
-}
 
-// MARK: - Generic Metadata
-
-extension TransactionMetadata {
-    public var resourceType: Resource? {
-        switch self {
-        case .generic(let dict): try? dict.mapTo(TransactionResourceTypeMetadata.self).resourceType
-        case .null, .swap, .nft, .perpetual: nil
+    public static func generic<T: Encodable>(from value: T) -> TransactionMetadata {
+        guard let data = try? JSONEncoder().encode(value),
+              let dict = try? JSONDecoder().decode([String: String].self, from: data)
+        else {
+            return .null
         }
+        return .generic(dict)
     }
 }

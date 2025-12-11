@@ -57,24 +57,24 @@ extension TransactionMetadata: Equatable {
     public static func == (lhs: TransactionMetadata, rhs: TransactionMetadata) -> Bool {
         switch (lhs, rhs) {
         case (.null, .null):
-            return true
-        case (.swap(let lhsSwap), .swap(let rhsSwap)):
-            return lhsSwap.fromAsset == rhsSwap.fromAsset &&
-            lhsSwap.toAsset == rhsSwap.toAsset &&
-            lhsSwap.toValue == rhsSwap.toValue &&
-            lhsSwap.fromValue == rhsSwap.fromValue
-        case (.nft(let lhsNFT), .nft(let rhsNFT)):
-            return lhsNFT.assetId == rhsNFT.assetId &&
-            lhsNFT.name == rhsNFT.name
-        case (.perpetual(let lhsPerpetual), .perpetual(let rhsPerpetual)):
-            return lhsPerpetual.pnl == rhsPerpetual.pnl &&
-            lhsPerpetual.price == rhsPerpetual.price &&
-            lhsPerpetual.direction == rhsPerpetual.direction &&
-            lhsPerpetual.provider == rhsPerpetual.provider
-        case (.generic(let lhsGeneric), .generic(let rhsGeneric)):
-            return lhsGeneric == rhsGeneric
+            true
+        case (.swap(let lhs), .swap(let rhs)):
+            lhs.fromAsset == rhs.fromAsset &&
+            lhs.toAsset == rhs.toAsset &&
+            lhs.toValue == rhs.toValue &&
+            lhs.fromValue == rhs.fromValue
+        case (.nft(let lhs), .nft(let rhs)):
+            lhs.assetId == rhs.assetId &&
+            lhs.name == rhs.name
+        case (.perpetual(let lhs), .perpetual(let rhs)):
+            lhs.pnl == rhs.pnl &&
+            lhs.price == rhs.price &&
+            lhs.direction == rhs.direction &&
+            lhs.provider == rhs.provider
+        case (.generic(let lhs), .generic(let rhs)):
+            lhs == rhs
         case (.null, _), (.swap, _), (.nft, _), (.perpetual, _), (.generic, _):
-            return false
+            false
         }
     }
 }
