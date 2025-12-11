@@ -163,10 +163,14 @@ extension PerpetualsSceneViewModel {
 
     func onSelectPerpetual(asset: Asset) {
         onSelectAsset?(asset)
-        try? activityService.updateRecent(
-            data: RecentActivityData(type: .perpetual, assetId: asset.id, toAssetId: nil),
-            walletId: wallet.walletId
-        )
+        do {
+            try activityService.updateRecent(
+                data: RecentActivityData(type: .perpetual, assetId: asset.id, toAssetId: nil),
+                walletId: wallet.walletId
+            )
+        } catch {
+            debugLog("Failed to update recent activity: \(error)")
+        }
     }
 
     func onSelectRecentPerpetual(asset: Asset) {
