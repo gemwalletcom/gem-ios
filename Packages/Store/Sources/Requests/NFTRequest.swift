@@ -6,20 +6,23 @@ import GRDBQuery
 import Primitives
 import Combine
 
+public enum NFTFilter: Sendable, Hashable {
+    case all
+    case unverified
+    case collection(id: String)
+}
+
 public struct NFTRequest: ValueObservationQueryable {
     public static var defaultValue: [NFTData] { [] }
-    
+
     private let walletId: String
-    private let collectionId: String?
-    
-    public init(
-        walletId: String,
-        collectionId: String?
-    ) {
+    private let filter: NFTFilter
+
+    public init(walletId: String, filter: NFTFilter) {
         self.walletId = walletId
-        self.collectionId = collectionId
+        self.filter = filter
     }
-    
+
     public func fetch(_ db: Database) throws -> [NFTData] {
         var request = NFTCollectionRecord
             .including(
@@ -32,8 +35,10 @@ public struct NFTRequest: ValueObservationQueryable {
             .distinct()
             .asRequest(of: NFTCollectionRecordInfo.self)
 
-        if let collectionId {
-            request = request.filter(NFTCollectionRecord.Columns.id == collectionId)
+        switch filter {
+        case .all: break
+        case .unverified: request = request.filter(NFTCollectionRecord.Columns.isVerified == false)
+        case .collection(let id): request = request.filter(NFTCollectionRecord.Columns.id == id)
         }
 
         return try request

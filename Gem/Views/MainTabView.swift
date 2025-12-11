@@ -79,10 +79,9 @@ struct MainTabView: View {
                     model: CollectionsViewModel(
                         nftService: nftService,
                         walletService: walletService,
-                        wallet: model.wallet,
-                        sceneStep: .collections,
-                        isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
-                    )
+                        wallet: model.wallet
+                    ),
+                    isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
                 )
                 .tabItem {
                     tabItem(Localized.Nft.collections, Images.Tabs.collections)

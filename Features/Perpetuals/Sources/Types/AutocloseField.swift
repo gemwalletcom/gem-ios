@@ -2,7 +2,7 @@
 
 import Primitives
 
-public struct AutocloseField {
+struct AutocloseField {
     let price: Double?
     let originalPrice: Double?
     let formattedPrice: String?
@@ -16,12 +16,4 @@ public struct AutocloseField {
     var shouldSet: Bool { isValid && hasChanged }
     var shouldUpdate: Bool { shouldSet || isCleared }
     var shouldCancel: Bool { isCleared || (shouldSet && hasExisting) }
-
-    public init(price: Double?, originalPrice: Double?, formattedPrice: String?, isValid: Bool, orderId: UInt64?) {
-        self.price = price
-        self.originalPrice = originalPrice
-        self.formattedPrice = formattedPrice
-        self.isValid = isValid
-        self.orderId = orderId
-    }
 }

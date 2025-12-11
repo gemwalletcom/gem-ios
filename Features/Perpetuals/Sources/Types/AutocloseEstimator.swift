@@ -16,6 +16,21 @@ public struct AutocloseEstimator {
         self.leverage = leverage
     }
 
+    public init(type: AutocloseType) {
+        switch type {
+        case .modify(let position, _):
+            self.entryPrice = position.position.entryPrice
+            self.positionSize = position.position.size
+            self.direction = position.position.direction
+            self.leverage = position.position.leverage
+        case .open(let data, _):
+            self.entryPrice = data.marketPrice
+            self.positionSize = data.size
+            self.direction = data.direction
+            self.leverage = data.leverage
+        }
+    }
+
     public func calculateTargetPriceFromROE(roePercent: Int, type: TpslType) -> Double {
         let priceChangePercent = Double(roePercent) / Double(leverage) / 100.0
 

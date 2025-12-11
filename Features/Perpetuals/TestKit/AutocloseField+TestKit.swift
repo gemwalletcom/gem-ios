@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Perpetuals
+@testable import Perpetuals
 
-public extension AutocloseField {
+extension AutocloseField {
     static func mock(
         price: Double? = nil,
         originalPrice: Double? = nil,
