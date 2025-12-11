@@ -20,14 +20,10 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.walletService) private var walletService
-    @Environment(\.stakeService) private var stakeService
     @Environment(\.scanService) private var scanService
-    @Environment(\.swapService) private var swapService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
     @Environment(\.transactionService) private var transactionService
-    @Environment(\.nameService) private var nameService
     @Environment(\.addressNameService) private var addressNameService
     @Environment(\.activityService) private var activityService
 
@@ -84,7 +80,6 @@ struct SelectedAssetNavigationStack: View  {
                             walletId: wallet.walletId,
                             address: input.address,
                             walletsService: walletsService,
-                            activityService: activityService
                         )
                     )
                 case .buy:
@@ -139,6 +134,19 @@ struct SelectedAssetNavigationStack: View  {
                     )
                 )
             }
+            .taskOnce {
+                updateRecent()
+            }
+        }
+    }
+}
+
+// MARK: - Private
+
+extension SelectedAssetNavigationStack {
+    private func updateRecent() {
+        if let data = input.type.recentActivityData(assetId: input.asset.id) {
+            try? activityService.updateRecent(data: data, walletId: wallet.walletId)
         }
     }
 }

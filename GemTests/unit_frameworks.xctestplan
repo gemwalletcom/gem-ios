@@ -184,13 +184,6 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Features\/ManageWallets",
-        "identifier" : "ManageWalletsTest",
-        "name" : "ManageWalletsTest"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:Features\/Onboarding",
         "identifier" : "OnboardingTest",
         "name" : "OnboardingTest"
@@ -264,6 +257,48 @@
         "containerPath" : "container:Features\/ManageWallets",
         "identifier" : "ManageWalletsTests",
         "name" : "ManageWalletsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/FeatureServices",
+        "identifier" : "BannerServiceTests",
+        "name" : "BannerServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Keychain",
+        "identifier" : "KeychainTests",
+        "name" : "KeychainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Features\/Support",
+        "identifier" : "SupportTests",
+        "name" : "SupportTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/FeatureServices",
+        "identifier" : "WalletServiceTests",
+        "name" : "WalletServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/FeatureServices",
+        "identifier" : "WalletSessionServiceTests",
+        "name" : "WalletSessionServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/FeatureServices",
+        "identifier" : "AppServiceTests",
+        "name" : "AppServiceTests"
       }
     }
   ],
