@@ -7,17 +7,18 @@ import NodeService
 import AssetsService
 import Preferences
 import WalletService
+import UIKit
 
 // OnstartService runs services before the app starts.
 // See OnstartAsyncService for any background tasks to run after start
 public struct OnstartService: Sendable {
-    
+
     private let assetsService: AssetsService
     private let assetStore: AssetStore
     private let nodeStore: NodeStore
     private let preferences: Preferences
     private let walletService: WalletService
-    
+
     public init(
         assetsService: AssetsService,
         assetStore: AssetStore,
@@ -32,24 +33,70 @@ public struct OnstartService: Sendable {
         self.walletService = walletService
     }
 
-    public func migrations() {
+    @MainActor
+    public func configure() {
+        validateDeviceSecurity()
+        configureURLCache()
         do {
-            try walletService.setup(chains: AssetConfiguration.allChains)
+            try excludeDirectoriesFromBackup()
+            try migrations()
         } catch {
-            debugLog("Setup chains: \(error)")
+            debugLog("configure error: \(error)")
         }
-        do {
-            try ImportAssetsService(
-                assetsService: assetsService,
-                assetStore: assetStore,
-                preferences: preferences
-            ).migrate()
-        } catch {
-            debugLog("migrations error: \(error)")
-        }
-        
+        preferences.incrementLaunchesCount()
+
+        #if DEBUG
+        configureScreenshots()
+        #endif
+    }
+}
+
+// MARK: - Private
+
+extension OnstartService {
+
+    private func migrations() throws {
+        try walletService.setup(chains: AssetConfiguration.allChains)
+        try ImportAssetsService(
+            assetsService: assetsService,
+            assetStore: assetStore,
+            preferences: preferences
+        ).migrate()
+
         if !preferences.hasCurrency, let currency = Locale.current.currency {
             preferences.currency = (Currency(rawValue: currency.identifier) ?? .usd).rawValue
+        }
+    }
+
+    private func configureURLCache() {
+        URLCache.shared.memoryCapacity = 256_000_000 // ~256 MB memory space
+        URLCache.shared.diskCapacity = 1_000_000_000 // ~1GB disk cache space
+    }
+
+    private func excludeDirectoriesFromBackup() throws {
+        let excludedBackupDirectories: [FileManager.Directory] = [.documents, .applicationSupport, .library(.preferences)]
+        for directory in excludedBackupDirectories {
+            try FileManager.default.addSkipBackupAttributeToItemAtURL(directory.url)
+
+            #if DEBUG
+            debugLog("Excluded backup directory: \(directory.directory)")
+            #endif
+        }
+    }
+
+    @MainActor
+    private func validateDeviceSecurity() {
+        let device = UIDevice.current
+        if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
+            fatalError()
+        }
+    }
+
+    private func configureScreenshots() {
+        if ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] != nil {
+            if let currency = Locale.current.currency {
+                Preferences.standard.currency = currency.identifier
+            }
         }
     }
 }

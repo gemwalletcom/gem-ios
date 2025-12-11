@@ -50,39 +50,7 @@ struct GemApp: App {
 class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        
-        URLCache.shared.memoryCapacity = 256_000_000 // ~256 MB memory space
-        URLCache.shared.diskCapacity = 1_000_000_000 // ~1GB disk cache space
-        
-        do {
-            let excludedBackupDirectories: [FileManager.Directory] = [.documents, .applicationSupport, .library(.preferences)]
-            try excludedBackupDirectories.forEach {
-                try FileManager.default.addSkipBackupAttributeToItemAtURL($0.url)
-                
-                #if DEBUG
-                debugLog("Excluded backup directory: \($0.directory)")
-                #endif
-            }
-        } catch {
-            debugLog("addSkipBackupAttributeToItemAtURL error \(error)")
-        }
-        AppResolver.main.services.onstartService.migrations()
-        AppResolver.main.storages.observablePreferences.preferences.incrementLaunchesCount()
-
-        #if DEBUG
-        // when running screenshots, set local currency
-        if ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] != nil {
-            if let currency = Locale.current.currency {
-                Preferences.standard.currency = currency.identifier
-            }
-        }
-        #endif
-        
-        let device = UIDevice.current
-        if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
-            fatalError()
-        }
-
+        AppResolver.main.services.onstartService.configure()
         return true
     }
     

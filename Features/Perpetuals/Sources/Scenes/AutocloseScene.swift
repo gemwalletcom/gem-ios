@@ -7,7 +7,7 @@ import Style
 import PrimitivesComponents
 
 public struct AutocloseScene: View {
-    enum Field: Int, Hashable {
+    public enum Field: Int, Hashable {
         case takeProfit
         case stopLoss
     }
@@ -20,17 +20,21 @@ public struct AutocloseScene: View {
 
     public var body: some View {
         List {
-            Section {
-                ListAssetItemView(
-                    model: PerpetualPositionItemViewModel(model: model.positionViewModel)
-                )
+            if let positionViewModel = model.positionViewModel {
+                Section {
+                    ListAssetItemView(
+                        model: PerpetualPositionItemViewModel(model: positionViewModel)
+                    )
+                }
             }
 
             Section {
-                ListItemView(
-                    title: model.entryPriceTitle,
-                    subtitle: model.entryPriceText
-                )
+                if let positionViewModel = model.positionViewModel {
+                    ListItemView(
+                        title: positionViewModel.entryPriceTitle,
+                        subtitle: positionViewModel.entryPriceText
+                    )
+                }
                 ListItemView(
                     title: model.marketPriceTitle,
                     subtitle: model.marketPriceText

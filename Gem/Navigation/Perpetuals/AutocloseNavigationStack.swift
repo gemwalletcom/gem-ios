@@ -6,10 +6,9 @@ import Store
 import Perpetuals
 import Transfer
 import Components
-import Localization
+import PrimitivesComponents
 
 struct AutocloseNavigationStack: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.viewModelFactory) private var viewModelFactory
 
     @State private var navigationPath = NavigationPath()
@@ -18,45 +17,21 @@ struct AutocloseNavigationStack: View {
     let wallet: Wallet
     let onComplete: VoidAction
 
-    init(
-        position: PerpetualPositionData,
-        wallet: Wallet,
-        onComplete: VoidAction
-    ) {
-        self.position = position
-        self.wallet = wallet
-        self.onComplete = onComplete
-    }
-
     var body: some View {
         NavigationStack(path: $navigationPath) {
             AutocloseScene(
                 model: AutocloseSceneViewModel(
-                    position: position,
-                    onTransferAction: {
-                        navigationPath.append($0)
-                    }
+                    type: .modify(position, onTransferAction: { navigationPath.append($0) })
                 )
             )
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text(Localized.Common.done)
-                            .bold()
-                    }
-                }
-            }
+            .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }
             .navigationDestination(for: TransferData.self) {
                 ConfirmTransferScene(
                     model: viewModelFactory.confirmTransferScene(
                         wallet: wallet,
                         data: $0,
-                        onComplete: {
-                            onComplete?()
-                        }
+                        onComplete: onComplete
                     )
                 )
             }

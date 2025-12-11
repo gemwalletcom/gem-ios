@@ -34,7 +34,7 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
     public var size: Double
     public var sizeValue: Double
     public var leverage: Int
-    public var entryPrice: Double?
+    public var entryPrice: Double
     public var liquidationPrice: Double?
     public var marginType: PerpetualMarginType
     public var direction: PerpetualDirection
@@ -53,7 +53,7 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         size: Double,
         sizeValue: Double,
         leverage: Int,
-        entryPrice: Double?,
+        entryPrice: Double,
         liquidationPrice: Double?,
         marginType: PerpetualMarginType,
         direction: PerpetualDirection,
@@ -101,7 +101,7 @@ extension PerpetualPositionRecord: CreateTable {
             $0.column(Columns.size.name, .double).notNull()
             $0.column(Columns.sizeValue.name, .double).notNull()
             $0.column(Columns.leverage.name, .integer).notNull()
-            $0.column(Columns.entryPrice.name, .double)
+            $0.column(Columns.entryPrice.name, .double).notNull()
             $0.column(Columns.liquidationPrice.name, .double)
             $0.column(Columns.marginType.name, .text).notNull()
             $0.column(Columns.direction.name, .text).notNull()

@@ -3,12 +3,27 @@
 import Foundation
 import Primitives
 import PrimitivesComponents
+import Validators
 
 @MainActor
 struct AutocloseInput {
     var takeProfit: InputValidationViewModel
     var stopLoss: InputValidationViewModel
     var focusField: AutocloseScene.Field?
+
+    init(type: AutocloseType, takeProfitText: String?, stopLossText: String?) {
+        self.takeProfit = InputValidationViewModel(
+            mode: .manual,
+            validators: [AutocloseValidator(type: .takeProfit, marketPrice: type.marketPrice, direction: type.direction)]
+        )
+        self.stopLoss = InputValidationViewModel(
+            mode: .manual,
+            validators: [AutocloseValidator(type: .stopLoss, marketPrice: type.marketPrice, direction: type.direction)]
+        )
+
+        takeProfitText.map { self.takeProfit.text = $0 }
+        stopLossText.map { self.stopLoss.text = $0 }
+    }
 
     var focused: InputValidationViewModel? {
         switch focusField {
