@@ -9,6 +9,7 @@ import Localization
 import Components
 import class Gemstone.SignMessageDecoder
 import class Gemstone.CryptoSigner
+import GemstonePrimitives
 
 @Observable
 @MainActor
@@ -77,18 +78,19 @@ public final class SignMessageSceneViewModel {
 
     public func signMessage() async throws {
         let messageChain = Chain(rawValue: payload.message.chain) ?? payload.chain
-        if messageChain == .sui {
-            var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
-            defer { privateKey.zeroize() }
-            let signature = try CryptoSigner().signSuiPersonalMessage(message: payload.message.data, privateKey: privateKey)
-            confirmTransferDelegate(.success(signature))
-            return
-        }
-
         let hash: Data = decoder.hash()
-        let signature = try await keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
-        let result = decoder.getResult(data: signature)
-        confirmTransferDelegate(.success(result))
+        var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: messageChain)
+        defer { privateKey.zeroize() }
+
+        let signature: String
+        if messageChain == .sui {
+            signature = try CryptoSigner().signSuiDigest(digest: hash, privateKey: privateKey)
+        } else {
+            let scheme = try messageChain.messageSignatureScheme()
+            let signedData = try CryptoSigner().signDigest(scheme: scheme, digest: hash, privateKey: privateKey)
+            signature = decoder.getResult(data: signedData)
+        }
+        confirmTransferDelegate(.success(signature))
     }
 }
 
