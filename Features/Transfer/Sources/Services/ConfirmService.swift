@@ -72,7 +72,11 @@ public struct ConfirmService: Sendable {
     }
 
     public func updateRecent(data: RecentActivityData, walletId: WalletId) {
-        try? activityService.updateRecent(data: data, walletId: walletId)
+        do {
+            try activityService.updateRecent(data: data, walletId: walletId)
+        } catch {
+            print("Failed to update recent activity: \(error)")
+        }
     }
 
     public func getPasswordAuthentication() throws -> KeystoreAuthentication {
