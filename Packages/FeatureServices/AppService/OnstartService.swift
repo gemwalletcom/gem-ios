@@ -37,8 +37,12 @@ public struct OnstartService: Sendable {
     public func configure() {
         validateDeviceSecurity()
         configureURLCache()
-        excludeDirectoriesFromBackup()
-        migrations()
+        do {
+            try excludeDirectoriesFromBackup()
+            try migrations()
+        } catch {
+            debugLog("configure error: \(error)")
+        }
         preferences.incrementLaunchesCount()
 
         #if DEBUG
@@ -51,21 +55,13 @@ public struct OnstartService: Sendable {
 
 extension OnstartService {
 
-    private func migrations() {
-        do {
-            try walletService.setup(chains: AssetConfiguration.allChains)
-        } catch {
-            debugLog("Setup chains: \(error)")
-        }
-        do {
-            try ImportAssetsService(
-                assetsService: assetsService,
-                assetStore: assetStore,
-                preferences: preferences
-            ).migrate()
-        } catch {
-            debugLog("migrations error: \(error)")
-        }
+    private func migrations() throws {
+        try walletService.setup(chains: AssetConfiguration.allChains)
+        try ImportAssetsService(
+            assetsService: assetsService,
+            assetStore: assetStore,
+            preferences: preferences
+        ).migrate()
 
         if !preferences.hasCurrency, let currency = Locale.current.currency {
             preferences.currency = (Currency(rawValue: currency.identifier) ?? .usd).rawValue
@@ -77,18 +73,14 @@ extension OnstartService {
         URLCache.shared.diskCapacity = 1_000_000_000 // ~1GB disk cache space
     }
 
-    private func excludeDirectoriesFromBackup() {
-        do {
-            let excludedBackupDirectories: [FileManager.Directory] = [.documents, .applicationSupport, .library(.preferences)]
-            try excludedBackupDirectories.forEach {
-                try FileManager.default.addSkipBackupAttributeToItemAtURL($0.url)
+    private func excludeDirectoriesFromBackup() throws {
+        let excludedBackupDirectories: [FileManager.Directory] = [.documents, .applicationSupport, .library(.preferences)]
+        for directory in excludedBackupDirectories {
+            try FileManager.default.addSkipBackupAttributeToItemAtURL(directory.url)
 
-                #if DEBUG
-                debugLog("Excluded backup directory: \($0.directory)")
-                #endif
-            }
-        } catch {
-            debugLog("addSkipBackupAttributeToItemAtURL error \(error)")
+            #if DEBUG
+            debugLog("Excluded backup directory: \(directory.directory)")
+            #endif
         }
     }
 
