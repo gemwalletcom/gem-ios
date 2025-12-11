@@ -21,7 +21,7 @@ extension UIDevice {
             return JailBrokenHelper.canEditSystemFiles()
         }
     }
-    
+
     public var isFridaDetected: Bool {
         get {
             if JailBrokenHelper.checkDYLD() { return true }
@@ -35,7 +35,7 @@ private struct JailBrokenHelper {
     @MainActor static func hasCydiaInstalled() -> Bool {
         return UIApplication.shared.canOpenURL(URL(string: "cydia://")!)
     }
-    
+
     static func isContainsSuspiciousApps() -> Bool {
         for path in suspiciousAppsPathToCheck {
             if FileManager.default.fileExists(atPath: path) {
@@ -44,7 +44,7 @@ private struct JailBrokenHelper {
         }
         return false
     }
-    
+
     static func isSuspiciousSystemPathsExists() -> Bool {
         for path in suspiciousSystemPathsToCheck {
             if FileManager.default.fileExists(atPath: path) {
@@ -53,7 +53,7 @@ private struct JailBrokenHelper {
         }
         return false
     }
-    
+
     static func canEditSystemFiles() -> Bool {
         let jailBreakText = "Developer Insider"
         do {
@@ -63,7 +63,7 @@ private struct JailBrokenHelper {
             return false
         }
     }
-    
+
     static var suspiciousAppsPathToCheck: [String] {
         return ["/Applications/Cydia.app",
                 "/Applications/blackra1n.app",
@@ -76,7 +76,7 @@ private struct JailBrokenHelper {
                 "/Applications/WinterBoard.app"
         ]
     }
-    
+
     static var suspiciousSystemPathsToCheck: [String] {
         return ["/Library/MobileSubstrate/DynamicLibraries/LiveClock.plist",
                 "/Library/MobileSubstrate/DynamicLibraries/Veency.plist",
@@ -120,13 +120,13 @@ private struct JailBrokenHelper {
            let littleEndian = Int(OSHostByteOrder()) == OSLittleEndian
            return littleEndian ? _OSSwapInt16(port) : port
        }
-     
+
        var serverAddress = sockaddr_in()
        serverAddress.sin_family = sa_family_t(AF_INET)
        serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1")
        serverAddress.sin_port = swapBytesIfNeeded(port: in_port_t(27042))
        let sock = socket(AF_INET, SOCK_STREAM, 0)
-     
+
        let result = withUnsafePointer(to: &serverAddress) {
            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
                connect(sock, $0, socklen_t(MemoryLayout<sockaddr_in>.stride))
