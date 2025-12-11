@@ -2,16 +2,14 @@
 
 import Foundation
 
-public enum SelectedAssetType: Sendable, Hashable {
+public enum SelectedAssetType: Sendable, Hashable, Identifiable {
     case send(RecipientAssetType)
     case receive(ReceiveAssetType)
     case stake(Asset)
     case buy(Asset)
     case sell(Asset)
     case swap(Asset, Asset?)
-}
 
-extension SelectedAssetType: Identifiable {
     public var id: String {
         switch self {
         case .send(let type): "send_\(type.id)"
@@ -20,6 +18,17 @@ extension SelectedAssetType: Identifiable {
         case .buy(let asset): "buy_\(asset.id)"
         case .sell(let asset): "sell_\(asset.id)"
         case .swap(let fromAsset, let toAsset): "swap_\(fromAsset.id)_\(toAsset?.id.identifier ?? "")"
+        }
+    }
+}
+
+public extension SelectedAssetType {
+    func recentActivityData(assetId: AssetId) -> RecentActivityData? {
+        switch self {
+        case .receive: RecentActivityData(type: .receive, assetId: assetId, toAssetId: nil)
+        case .buy: RecentActivityData(type: .fiatBuy, assetId: assetId, toAssetId: nil)
+        case .sell: RecentActivityData(type: .fiatSell, assetId: assetId, toAssetId: nil)
+        case .send, .stake, .swap: .none
         }
     }
 }
