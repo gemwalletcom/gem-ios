@@ -5,45 +5,55 @@ import SwiftUI
 import GRDBQuery
 import Primitives
 import Store
-import NFTService
 import Components
-import DeviceService
 import Style
-import Localization
 import PrimitivesComponents
+import Localization
 
-public struct CollectionsScene: View {
-    private let model: CollectionsViewModel
+public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
+    @State private var model: ViewModel
 
-    @Query<NFTRequest>
-    private var nftDataList: [NFTData]
-    
-    public init(model: CollectionsViewModel) {
-        self.model = model
-        let request = Binding {
-            model.request
-        } set: { new in
-            model.request = new
-        }
-        _nftDataList = Query(request)
+    public init(model: ViewModel) {
+        _model = State(initialValue: model)
     }
-    
+
     public var body: some View {
-        ScrollView {
-            LazyVGrid(columns: model.columns) {
-                collectionsView
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(spacing: .zero) {
+                    LazyVGrid(columns: model.columns) {
+                        collectionsView
+                    }
+                    .padding(.horizontal, .medium)
+
+                    Spacer(minLength: .medium)
+
+                    if let unverifiedCount = model.content.unverifiedCount {
+                        List {
+                            NavigationLink(value: Scenes.UnverifiedCollections()) {
+                                ListItemView(
+                                    title: Localized.Asset.Verification.unverified,
+                                    subtitle: unverifiedCount
+                                )
+                            }
+                        }
+                        .scrollDisabled(true)
+                        .frame(height: .list.minHeight)
+                    }
+                }
+                .frame(minHeight: geometry.size.height)
             }
         }
+        .observeQuery(request: $model.request, value: $model.nftDataList)
         .overlay {
-            if nftDataList.isEmpty {
+            if model.content.items.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
-        .padding(.horizontal, .medium)
         .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
-        .refreshable(action: model.fetch)
+        .refreshable { await model.fetch() }
         .task { await model.fetch() }
     }
 }
@@ -52,11 +62,12 @@ public struct CollectionsScene: View {
 
 extension CollectionsScene {
     private var collectionsView: some View {
-        ForEach(model.createGridItems(from: nftDataList)) { gridItem in
-            NavigationLink(value: gridItem.destination) {
+        ForEach(model.content.items) { item in
+            NavigationLink(value: item.destination) {
                 GridPosterView(
-                    assetImage: gridItem.assetImage,
-                    title: gridItem.title
+                    assetImage: item.assetImage,
+                    title: item.title,
+                    count: item.count
                 )
             }
         }

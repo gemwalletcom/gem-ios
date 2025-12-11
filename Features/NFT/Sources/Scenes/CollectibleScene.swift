@@ -8,6 +8,7 @@ import Components
 import PrimitivesComponents
 import Localization
 import ImageGalleryService
+import InfoSheet
 
 public struct CollectibleScene: View {
     @State private var model: CollectibleViewModel
@@ -19,6 +20,9 @@ public struct CollectibleScene: View {
     public var body: some View {
         List {
             headerSectionView
+            if model.showStatus {
+                statusSectionView
+            }
             assetInfoSectionView
             if model.showAttributes {
                 attributesSectionView
@@ -41,6 +45,9 @@ public struct CollectibleScene: View {
                     onComplete: model.onReportComplete
                 )
             )
+		}
+        .sheet(item: $model.isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetModelFactory.create(from: $0))
         }
     }
 }
@@ -57,6 +64,7 @@ extension CollectibleScene {
         } footer: {
             HeaderButtonsView(buttons: model.headerButtons, action: model.onSelectHeaderButton(type:))
                 .padding(.top, .medium)
+                .padding(.bottom, .small)
         }
         .frame(maxWidth: .infinity)
         .textCase(nil)
@@ -74,6 +82,12 @@ extension CollectibleScene {
                 action: model.onSelectSetAsAvatar
             )
         ])
+    }
+
+    private var statusSectionView: some View {
+        Section {
+            AssetStatusView(model: model.scoreViewModel, action: model.onSelectStatus)
+        }
     }
 
     private var assetInfoSectionView: some View {

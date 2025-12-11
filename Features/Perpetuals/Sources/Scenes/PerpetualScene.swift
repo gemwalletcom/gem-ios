@@ -61,13 +61,11 @@ public struct PerpetualScene: View {
                         title: position.sizeTitle,
                         subtitle: position.sizeValueText
                     )
-
-                    if let text = position.entryPriceText {
-                        ListItemView(
-                            title: position.entryPriceTitle,
-                            subtitle: text
-                        )
-                    }
+                    
+                    ListItemView(
+                        title: position.entryPriceTitle,
+                        subtitle: position.entryPriceText
+                    )
                     
                     if let text = position.liquidationPriceText {
                         ListItemView(

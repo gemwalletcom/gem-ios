@@ -41,7 +41,7 @@ public final class WalletImageViewModel: Sendable {
     }
     
     var nftAssetsRequest: NFTRequest {
-        NFTRequest(walletId: wallet.id, collectionId: nil)
+        NFTRequest(walletId: wallet.id, filter: .all)
     }
 
     var emptyContentModel: EmptyContentTypeViewModel {

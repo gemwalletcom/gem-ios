@@ -38,6 +38,7 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
     private let percentFormatter = CurrencyFormatter(type: .percent, currencyCode: Currency.usd.rawValue)
     private let percentSignLessFormatter = CurrencyFormatter.percentSignLess
+    private let autocloseFormatter = AutocloseFormatter()
 
     public init(type: PerpetualDetailsType) {
         self.type = type
@@ -101,6 +102,15 @@ public struct PerpetualDetailsViewModel: Sendable, Identifiable {
 
     var sizeTitle: String { Localized.Perpetual.size }
     var sizeText: String { currencyFormatter.string(data.fiatValue) }
+
+    var autocloseTitle: String { Localized.Perpetual.autoClose }
+    var autocloseText: (subtitle: String, subtitleExtra: String?) {
+        autocloseFormatter.format(
+            takeProfit: data.takeProfit.flatMap { currencyFormatter.double(from: $0) },
+            stopLoss: data.stopLoss.flatMap { currencyFormatter.double(from: $0) }
+        )
+    }
+    var showAutoclose: Bool { data.takeProfit != nil || data.stopLoss != nil }
 }
 
 // MARK: - Private

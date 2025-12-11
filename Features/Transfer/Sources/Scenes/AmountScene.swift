@@ -104,6 +104,18 @@ struct AmountScene: View {
                         )
                     }
                 }
+                if model.isAutocloseEnabled {
+                    Section {
+                        NavigationCustomLink(
+                            with: ListItemView(
+                                title: model.autocloseTitle,
+                                subtitle: model.autocloseText.subtitle,
+                                subtitleExtra: model.autocloseText.subtitleExtra
+                            ),
+                            action: model.onSelectAutoclose
+                        )
+                    }
+                }
             }
         }
         .safeAreaView {
