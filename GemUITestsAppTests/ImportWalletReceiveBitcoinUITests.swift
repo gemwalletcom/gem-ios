@@ -16,27 +16,28 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
         app.launch()
         app.logout()
 
-        // OnboardingScene
-        app.buttons["Import an Existing Wallet"].firstMatch.tap()
+        OnboardingScene(app: app)
+            .tapImportWallet()
 
-        // AcceptTermsScene
-        app.acceptTerms()
+        AcceptTermsScene(app: app)
+            .acceptIfNeeded()
 
-        // ImportWalletTypeScene
-        app.buttons["Multi-Coin"].firstMatch.tap()
+        ImportWalletTypeScene(app: app)
+            .tapMultiCoin()
 
-        // ImportWalletScene
-        app.textFields["importInputField"].typeText(UITestKitConstants.words)
-        app.buttons["Import"].firstMatch.tap()
+        ImportWalletScene(app: app)
+            .enterPhrase(UITestKitConstants.words)
+            .tapImport()
 
-        // WalletScene
-        app.buttons["receive_button"].firstMatch.tap()
+        WalletScene(app: app)
+            .tapReceive()
 
-        // SelectAssetScene
-        app.buttons["Bitcoin, BTC"].firstMatch.tap()
+        SelectAssetScene(app: app)
+            .tapAsset("Bitcoin, BTC")
 
-        // ReceiveScene
-        app.buttons["Copy"].firstMatch.tap()
-        XCTAssertTrue(app.buttons[UITestKitConstants.bitcoinAddress].exists)
+        let receiveScene = ReceiveScene(app: app)
+            .tapCopy()
+
+        XCTAssertTrue(receiveScene.addressExists(UITestKitConstants.bitcoinAddress))
     }
 }
