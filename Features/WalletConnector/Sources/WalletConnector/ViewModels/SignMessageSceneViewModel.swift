@@ -7,8 +7,7 @@ import Primitives
 import PrimitivesComponents
 import Localization
 import Components
-import class Gemstone.SignMessageDecoder
-import class Gemstone.CryptoSigner
+import class Gemstone.MessageSigner
 import GemstonePrimitives
 
 @Observable
@@ -17,11 +16,11 @@ public final class SignMessageSceneViewModel {
     private let keystore: any Keystore
     private let payload: SignMessagePayload
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate
-    private let decoder: SignMessageDecoder
-    
+    private let signer: MessageSigner
+
     public var isPresentingUrl: URL? = nil
     public var isPresentingMessage: Bool = false
-    
+
     public init(
         keystore: any Keystore,
         payload: SignMessagePayload,
@@ -29,7 +28,7 @@ public final class SignMessageSceneViewModel {
     ) {
         self.keystore = keystore
         self.payload = payload
-        self.decoder = SignMessageDecoder(message: payload.message)
+        self.signer = MessageSigner(message: payload.message)
         self.confirmTransferDelegate = confirmTransferDelegate
     }
     
@@ -42,8 +41,8 @@ public final class SignMessageSceneViewModel {
     }
     
     public var messageDisplayType: SignMessageDisplayType {
-        guard let message = try? decoder.preview() else {
-            return .text(decoder.plainPreview())
+        guard let message = try? signer.preview() else {
+            return .text(signer.plainPreview())
         }
         return MessagePreviewViewModel(message: message).messageDisplayType
     }
@@ -73,23 +72,15 @@ public final class SignMessageSceneViewModel {
     }
     
     var textMessageViewModel: TextMessageViewModel {
-        TextMessageViewModel(message: decoder.plainPreview())
+        TextMessageViewModel(message: signer.plainPreview())
     }
 
     public func signMessage() async throws {
         let messageChain = Chain(rawValue: payload.message.chain) ?? payload.chain
-        let hash: Data = decoder.hash()
         var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: messageChain)
         defer { privateKey.zeroize() }
 
-        let signature: String
-        if messageChain == .sui {
-            signature = try CryptoSigner().signSuiDigest(digest: hash, privateKey: privateKey)
-        } else {
-            let scheme = try messageChain.messageSignatureScheme()
-            let signedData = try CryptoSigner().signDigest(scheme: scheme, digest: hash, privateKey: privateKey)
-            signature = decoder.getResult(data: signedData)
-        }
+        let signature = try signer.sign(privateKey: privateKey)
         confirmTransferDelegate(.success(signature))
     }
 }
