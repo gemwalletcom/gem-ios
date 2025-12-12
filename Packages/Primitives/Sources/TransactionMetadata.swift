@@ -68,4 +68,9 @@ public enum TransactionMetadata: Codable, Sendable {
         }
         return .generic(dict)
     }
+
+    public var resourceType: Resource? {
+        guard case .generic(let dict) = self else { return nil }
+        return try? dict.mapTo(TransactionResourceTypeMetadata.self).resourceType
+    }
 }

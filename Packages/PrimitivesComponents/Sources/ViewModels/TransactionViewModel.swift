@@ -361,11 +361,7 @@ public struct TransactionViewModel: Sendable {
     }
 
     private func getResourceTitle() -> String? {
-        guard case .generic(let dict) = transaction.transaction.metadata,
-              let resourceType = try? dict.mapTo(TransactionResourceTypeMetadata.self).resourceType
-        else {
-            return nil
-        }
+        guard let resourceType = transaction.transaction.metadata?.resourceType else { return nil }
         return ResourceViewModel(resource: resourceType).title
     }
 }
