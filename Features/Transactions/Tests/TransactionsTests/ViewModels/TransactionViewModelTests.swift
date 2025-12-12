@@ -135,6 +135,45 @@ final class TransactionViewModelTests {
         #expect(model.subtitleTextValue == nil)
     }
 
+    @Test
+    func titleExtraFreeze() {
+        let bandwidthModel = TransactionViewModel.mock(
+            type: .stakeFreeze,
+            metadata: .generic(["resourceType": "bandwidth"])
+        )
+        #expect(bandwidthModel.titleExtraTextValue?.text == "To Bandwidth")
+
+        let energyModel = TransactionViewModel.mock(
+            type: .stakeFreeze,
+            metadata: .generic(["resourceType": "energy"])
+        )
+        #expect(energyModel.titleExtraTextValue?.text == "To Energy")
+    }
+
+    @Test
+    func titleExtraUnfreeze() {
+        let bandwidthModel = TransactionViewModel.mock(
+            type: .stakeUnfreeze,
+            metadata: .generic(["resourceType": "bandwidth"])
+        )
+        #expect(bandwidthModel.titleExtraTextValue?.text == "From Bandwidth")
+
+        let energyModel = TransactionViewModel.mock(
+            type: .stakeUnfreeze,
+            metadata: .generic(["resourceType": "energy"])
+        )
+        #expect(energyModel.titleExtraTextValue?.text == "From Energy")
+    }
+
+    @Test
+    func titleExtraFreezeNoMetadata() {
+        let model = TransactionViewModel.mock(
+            type: .stakeFreeze,
+            metadata: .null
+        )
+        #expect(model.titleExtraTextValue == nil)
+    }
+
     func testTransactionTitle(expectedTitle: String, transaction: Transaction) {
         #expect(TransactionViewModel(explorerService: MockExplorerLink(), transaction: .mock(transaction: transaction), currency: "USD").titleTextValue.text == expectedTitle)
     }

@@ -18,6 +18,18 @@ public struct TransactionParticipantViewModel {
 
 extension TransactionParticipantViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
+        switch transactionViewModel.transaction.transaction.type {
+        case .stakeFreeze, .stakeUnfreeze: resourceItemModel
+        case .transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate: participantItemModel
+        case .swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation, .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition: .empty
+        }
+    }
+}
+
+// MARK: - Private
+
+extension TransactionParticipantViewModel {
+    private var participantItemModel: TransactionItemModel {
         guard transactionViewModel.participant.isNotEmpty,
               let participantTitle
         else {
@@ -41,13 +53,17 @@ extension TransactionParticipantViewModel: ItemModelProvidable {
             )
         )
     }
-}
 
-// MARK: - Private
+    private var resourceItemModel: TransactionItemModel {
+        guard let resourceType = transactionViewModel.transaction.transaction.metadata?.resourceType else {
+            return .empty
+        }
+        let resourceTitle = ResourceViewModel(resource: resourceType).title
+        return .listItem(ListItemModel(title: Localized.Stake.resource, subtitle: resourceTitle))
+    }
 
-extension TransactionParticipantViewModel {
     private var participantTitle: String? {
-        switch  transactionViewModel.transaction.transaction.type {
+        switch transactionViewModel.transaction.transaction.type {
         case .transfer, .transferNFT:
             switch transactionViewModel.transaction.transaction.direction {
             case .incoming: Localized.Transaction.sender

@@ -83,4 +83,20 @@ struct TransferDataTypeTests {
 
         #expect(modifyType.transactionType == .perpetualModifyPosition)
     }
+
+    @Test
+    func freezeMetadataBandwidth() {
+        let freezeData = FreezeData(freezeType: .freeze, resource: .bandwidth)
+        let type = TransferDataType.stake(.mock(), .freeze(freezeData))
+
+        #expect(type.metadata == .generic(["resourceType": "bandwidth"]))
+    }
+
+    @Test
+    func freezeMetadataEnergy() {
+        let freezeData = FreezeData(freezeType: .freeze, resource: .energy)
+        let type = TransferDataType.stake(.mock(), .freeze(freezeData))
+
+        #expect(type.metadata == .generic(["resourceType": "energy"]))
+    }
 }
