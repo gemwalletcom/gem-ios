@@ -228,6 +228,8 @@ extension MainTabView {
                 navigationState.wallet.append(Scenes.Perpetuals())
             case .referral(let code):
                 navigationState.settings.append(Scenes.Referral(code: code))
+            case .rewards:
+                navigationState.settings.append(Scenes.Referral(code: nil))
             case .support:
                 isPresentingSupport = true
             case .test, .unknown:
@@ -301,7 +303,7 @@ extension PushNotification {
     var selectTab: TabItem? {
         switch self {
         case .transaction, .asset, .priceAlert, .buyAsset, .swapAsset, .perpetuals: .wallet
-        case .support, .referral: .settings
+        case .support, .referral, .rewards: .settings
         case .test, .unknown: nil
         }
     }
