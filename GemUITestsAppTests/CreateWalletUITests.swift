@@ -13,6 +13,7 @@ final class CreateWalletUITests: XCTestCase {
         let app = XCUIApplication()
         setupPermissionHandler()
         app.launch()
+        app.logout()
 
         // OnboardingScene
         app.buttons["Create a New Wallet"].firstMatch.tap()
@@ -32,10 +33,7 @@ final class CreateWalletUITests: XCTestCase {
         app.tapContinue()
 
         // WalletScene
-        app.buttons["Wallet #1"].firstMatch.tap()
-
-        // WalletsScene
-        app.buttons["gearshape"].firstMatch.tap()
+        app.openWalletDetails()
 
         // WalletDetailScene
         app.buttons["Show Secret Phrase"].firstMatch.tap()
