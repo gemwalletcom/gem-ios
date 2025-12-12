@@ -38,6 +38,7 @@ let package = Package(
         .library(name: "WalletService", targets: ["WalletService"]),
         .library(name: "WalletServiceTestKit", targets: ["WalletServiceTestKit"]),
         .library(name: "AppService", targets: ["AppService"]),
+        .library(name: "AppServiceTestKit", targets: ["AppServiceTestKit"]),
         .library(name: "DeviceService", targets: ["DeviceService"]),
         .library(name: "DeviceServiceTestKit", targets: ["DeviceServiceTestKit"]),
         .library(name: "NotificationService", targets: ["NotificationService"]),
@@ -400,13 +401,19 @@ let package = Package(
                 "Preferences",
                 "BannerService",
                 "DeviceService",
-                "SwapService",
                 "AssetsService",
                 "WalletService",
                 "NotificationService"
             ],
             path: "AppService",
-            exclude: ["Tests"]
+            exclude: ["Tests", "TestKit"]
+        ),
+        .target(
+            name: "AppServiceTestKit",
+            dependencies: [
+                "Primitives"
+            ],
+            path: "AppService/TestKit"
         ),
         .target(
             name: "DeviceService",
@@ -548,6 +555,20 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives")
             ],
             path: "WalletService/Tests"
+        ),
+        .testTarget(
+            name: "AppServiceTests",
+            dependencies: [
+                "AppService",
+                "AppServiceTestKit",
+                "AssetsServiceTestKit",
+                "DeviceServiceTestKit",
+                "BannerServiceTestKit",
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+            ],
+            path: "AppService/Tests"
         ),
     ]
 )

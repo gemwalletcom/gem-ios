@@ -171,7 +171,8 @@ struct ServicesFactory {
                 preferences: preferences
             ),
             configService: configService,
-            releaseService: AppReleaseService(configService: configService)
+            releaseService: AppReleaseService(configService: configService),
+            swappableChainsProvider: swapService
         )
         let onstartWalletService = Self.makeOnstartWalletService(
             preferences: preferences,
@@ -458,7 +459,8 @@ extension ServicesFactory {
         deviceService: DeviceService,
         bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
-        releaseService: AppReleaseService
+        releaseService: AppReleaseService,
+        swappableChainsProvider: any SwappableChainsProvider
     ) -> OnstartAsyncService {
         OnstartAsyncService(
             assetStore: assetStore,
@@ -468,7 +470,8 @@ extension ServicesFactory {
             deviceService: deviceService,
             bannerSetupService: bannerSetupService,
             configService: configService,
-            releaseService: releaseService
+            releaseService: releaseService,
+            swappableChainsProvider: swappableChainsProvider
         )
     }
 
