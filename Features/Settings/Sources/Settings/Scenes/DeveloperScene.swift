@@ -92,7 +92,7 @@ public struct DeveloperScene: View {
                 NavigationCustomLink(
                     with: ListItemView(title: "Open Referral (gemcoder)"),
                     action: {
-                        model.deeplink(deeplink: .referral(code: "gemcoder"))
+                        model.deeplink(deeplink: .rewards(code: "gemcoder"))
                     }
                 )
             }

@@ -50,8 +50,8 @@ public enum URLParser {
                 return .swap(fromId, toId)
             case .perpetuals:
                 return .perpetuals
-            case .referral:
-                return .referral(code: url.queryValue(for: "code") ?? "")
+            case .rewards, .join:
+                return .rewards(code: url.queryValue(for: "code") ?? "")
             }
         }
 

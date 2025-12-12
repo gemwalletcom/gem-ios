@@ -9,6 +9,6 @@ public enum URLAction: Equatable {
     case asset(AssetId)
     case swap(AssetId, AssetId?)
     case perpetuals
-    case referral(code: String)
+    case rewards(code: String)
     case none
 }
