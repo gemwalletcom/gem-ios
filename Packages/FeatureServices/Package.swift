@@ -48,6 +48,8 @@ let package = Package(
         .library(name: "NativeProviderService", targets: ["NativeProviderService"]),
         .library(name: "ActivityService", targets: ["ActivityService"]),
         .library(name: "ActivityServiceTestKit", targets: ["ActivityServiceTestKit"]),
+        .library(name: "RewardsService", targets: ["RewardsService"]),
+        .library(name: "RewardsServiceTestKit", targets: ["RewardsServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -493,6 +495,26 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store")
             ],
             path: "ActivityService/TestKit"
+        ),
+        .target(
+            name: "RewardsService",
+            dependencies: [
+                "Primitives",
+                "GemAPI",
+                "Keystore",
+                "Gemstone",
+            ],
+            path: "RewardsService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "RewardsServiceTestKit",
+            dependencies: [
+                "RewardsService",
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "KeystoreTestKit", package: "Keystore"),
+            ],
+            path: "RewardsService/TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",

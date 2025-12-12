@@ -78,6 +78,12 @@ public protocol GemAPISupportService: Sendable {
     func addSupportDevice(_ supportDevice: NewSupportDevice) async throws -> SupportDevice
 }
 
+public protocol GemAPIRewardsService: Sendable {
+    func getRewards(address: String) async throws -> Rewards
+    func createReferral(request: RewardsReferralRequest) async throws -> Rewards
+    func useReferralCode(request: RewardsReferralRequest) async throws
+}
+
 public struct GemAPIService {
     
     let provider: Provider<GemAPI>
@@ -297,6 +303,26 @@ extension GemAPIService: GemAPISupportService {
         try await provider
             .request(.addSupportDevice(supportDevice))
             .mapResponse(as: SupportDevice.self)
+    }
+}
+
+extension GemAPIService: GemAPIRewardsService {
+    public func getRewards(address: String) async throws -> Rewards {
+        try await provider
+            .request(.getRewards(address: address))
+            .mapResponse(as: Rewards.self)
+    }
+
+    public func createReferral(request: RewardsReferralRequest) async throws -> Rewards {
+        try await provider
+            .request(.createReferral(request))
+            .mapResponse(as: Rewards.self)
+    }
+
+    public func useReferralCode(request: RewardsReferralRequest) async throws {
+        _ = try await provider
+            .request(.useReferralCode(request))
+            .mapResponse(as: Bool.self)
     }
 }
 

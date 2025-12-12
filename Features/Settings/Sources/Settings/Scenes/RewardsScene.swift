@@ -1,0 +1,246 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
+import SwiftUI
+import Components
+import Primitives
+import Localization
+import Style
+import PrimitivesComponents
+
+public struct RewardsScene: View {
+    enum CodeInputType: Identifiable {
+        case create
+        case activate(code: String)
+
+        var id: String {
+            switch self {
+            case .create: "create"
+            case .activate: "activate"
+            }
+        }
+    }
+
+    @State private var model: RewardsViewModel
+    @State private var isPresentingWalletSelector = false
+    @State private var isPresentingShare = false
+    @State private var isPresentingCodeInput: CodeInputType?
+
+    public init(model: RewardsViewModel) {
+        _model = State(initialValue: model)
+    }
+
+    public var body: some View {
+        List {
+            switch model.state {
+            case .loading:
+                LoadingView()
+            case .error(let error):
+                stateErrorView(error: error)
+            case .data(let rewards):
+                if let code = rewards.code {
+                    referralCodeSection(code: code)
+                } else {
+                    createCodeSection
+                }
+                if model.isInfoEnabled {
+                    infoSection(rewards: rewards)
+                }
+            case .noData:
+                createCodeSection
+            }
+        }
+        .refreshable { await model.fetch() }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
+        .listStyle(.insetGrouped)
+        .navigationTitle(model.title)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if model.showsWalletSelector {
+                    WalletBarView(model: model.walletBarViewModel) {
+                        isPresentingWalletSelector = true
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $isPresentingWalletSelector) {
+            SelectableListNavigationStack(
+                model: model.walletSelectorModel,
+                onFinishSelection: { wallets in
+                    if let wallet = wallets.first {
+                        model.selectWallet(wallet)
+                    }
+                    isPresentingWalletSelector = false
+                },
+                listContent: { wallet in
+                    SimpleListItemView(model: wallet)
+                }
+            )
+        }
+        .sheet(isPresented: $isPresentingShare) {
+            if let shareText = model.shareText {
+                ShareSheet(activityItems: [shareText])
+            }
+        }
+        .sheet(item: $isPresentingCodeInput) { type in
+            switch type {
+            case .create:
+                TextInputScene(model: model.createCodeViewModel) {
+                    isPresentingCodeInput = nil
+                }
+                .presentationDetents([.medium])
+            case .activate(let code):
+                TextInputScene(model: model.redeemCodeViewModel(code: code)) {
+                    isPresentingCodeInput = nil
+                }
+                .presentationDetents([.medium])
+            }
+        }
+        .alert(
+            model.errorTitle,
+            isPresented: Binding(
+                get: { model.isPresentingError != nil },
+                set: { if !$0 { model.isPresentingError = nil } }
+            )
+        ) {
+            Button(Localized.Common.done, role: .cancel) {}
+        } message: {
+            if let error = model.isPresentingError {
+                Text(error)
+            }
+        }
+        .taskOnce {
+            Task {
+                await model.fetch()
+                if let code = model.activateCodeFromLink {
+                    isPresentingCodeInput = .activate(code: code)
+                }
+            }
+        }
+        .toast(message: $model.toastMessage)
+    }
+
+    @ViewBuilder
+    private func stateErrorView(error: Error) -> some View {
+        Section {
+            StateEmptyView(
+                title: model.errorTitle,
+                description: error.localizedDescription,
+                image: nil
+            ) {
+                Button(Localized.Common.tryAgain) {
+                    Task { await model.fetch() }
+                }
+                .buttonStyle(.blue())
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var createCodeSection: some View {
+        Section {
+            VStack(spacing: Spacing.large) {
+                Text("🎁")
+                    .font(.system(size: 72))
+                    .padding(.top, Spacing.medium)
+
+                VStack(spacing: Spacing.small) {
+                    Text(model.createCodeTitle)
+                        .font(.title2.bold())
+                        .multilineTextAlignment(.center)
+
+                    Text(model.createCodeDescription)
+                        .textStyle(.calloutSecondary)
+                        .multilineTextAlignment(.center)
+                }
+
+                HStack(spacing: Spacing.medium) {
+                    featureItem(emoji: "👥", text: Localized.Rewards.InviteFriends.title)
+                    featureItem(emoji: "💎", text: Localized.Rewards.EarnPoints.title)
+                    featureItem(emoji: "🎉", text: Localized.Rewards.GetRewards.title)
+                }
+
+                Button {
+                    isPresentingCodeInput = .create
+                } label: {
+                    Text(model.createCodeButtonTitle)
+                }
+                .buttonStyle(.blue())
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, Spacing.small)
+        }
+
+        if model.canUseReferralCode {
+            Section {
+                Button {
+                    isPresentingCodeInput = .activate(code: "")
+                } label: {
+                    Text(model.activateCodeFooterTitle)
+                        .frame(maxWidth: .infinity)
+                }
+            } footer: {
+                Text(model.activateCodeFooterDescription)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func featureItem(emoji: String, text: String) -> some View {
+        VStack(spacing: Spacing.extraSmall) {
+            Text(emoji)
+                .font(.title2)
+            Text(text)
+                .font(.caption)
+                .foregroundStyle(Colors.secondaryText)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    @ViewBuilder
+    private func referralCodeSection(code: String) -> some View {
+        Section {
+            VStack(spacing: Spacing.medium) {
+                Text(model.myReferralCodeTitle)
+                    .textStyle(.calloutSecondary)
+
+                Text(code)
+                    .font(.system(size: 32, weight: .bold, design: .monospaced))
+                    .foregroundStyle(Colors.black)
+
+                Button {
+                    isPresentingShare = true
+                } label: {
+                    HStack(spacing: Spacing.small) {
+                        Images.System.share
+                        Text(Localized.Common.share)
+                    }
+                }
+                .buttonStyle(.blue())
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, Spacing.small)
+        }
+    }
+
+    @ViewBuilder
+    private func infoSection(rewards: Rewards) -> some View {
+        Section {
+            ListItemView(
+                title: model.referralCountTitle,
+                subtitle: "\(rewards.referralCount)"
+            )
+            ListItemView(
+                title: model.pointsTitle,
+                subtitle: "💎 \(rewards.points)"
+            )
+            if let invitedBy = rewards.usedReferralCode {
+                ListItemView(
+                    title: model.invitedByTitle,
+                    subtitle: invitedBy
+                )
+            }
+        } header: {
+            Text(model.statsSectionTitle)
+        }
+    }
+}

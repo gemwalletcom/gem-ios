@@ -42,7 +42,11 @@ public enum GemAPI: TargetType {
     case markets
 
     case addSupportDevice(NewSupportDevice)
-    
+
+    case getRewards(address: String)
+    case createReferral(RewardsReferralRequest)
+    case useReferralCode(RewardsReferralRequest)
+
     public var baseUrl: URL {
         Constants.apiURL
     }
@@ -73,8 +77,12 @@ public enum GemAPI: TargetType {
             .getPrices,
             .addSupportDevice,
             .getFiatQuoteUrl,
-            .reportNft:
+            .reportNft,
+            .createReferral,
+            .useReferralCode:
             return .POST
+        case .getRewards:
+            return .GET
         case .updateDevice:
             return .PUT
         case .deleteSubscriptions,
@@ -138,6 +146,12 @@ public enum GemAPI: TargetType {
             return "/v1/markets"
         case .addSupportDevice:
             return "/v1/support/add_device"
+        case .getRewards(let address):
+            return "/v1/rewards/\(address)"
+        case .createReferral:
+            return "/v1/rewards/referrals/create"
+        case .useReferralCode:
+            return "/v1/rewards/referrals/use"
         }
     }
     
@@ -207,6 +221,12 @@ public enum GemAPI: TargetType {
             return .encodable(payload)
         case .reportNft(let report):
             return .encodable(report)
+        case .getRewards:
+            return .plain
+        case .createReferral(let request):
+            return .encodable(request)
+        case .useReferralCode(let request):
+            return .encodable(request)
         }
     }
 }

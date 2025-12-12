@@ -89,6 +89,12 @@ public struct DeveloperScene: View {
                         model.deeplink(deeplink: .asset(AssetId(chain: .bitcoin, tokenId: .none)))
                     }
                 )
+                NavigationCustomLink(
+                    with: ListItemView(title: "Open Referral (gemcoder)"),
+                    action: {
+                        model.deeplink(deeplink: .referral(code: "gemcoder"))
+                    }
+                )
             }
             
             Section("Preferences") {

@@ -259,6 +259,8 @@ public enum Localized {
     public static let edit = Localized.tr("Localizable", "common.edit", fallback: "Edit")
     /// Emoji
     public static let emoji = Localized.tr("Localizable", "common.emoji", fallback: "Emoji")
+    /// Get Started
+    public static let getStarted = Localized.tr("Localizable", "common.get_started", fallback: "Get Started")
     /// Hide
     public static let hide = Localized.tr("Localizable", "common.hide", fallback: "Hide")
     /// Info
@@ -965,6 +967,54 @@ public enum Localized {
   public enum RecentActivity {
     /// Recent
     public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recent")
+  }
+  public enum Rewards {
+    /// Invited By
+    public static let invitedBy = Localized.tr("Localizable", "rewards.invited_by", fallback: "Invited By")
+    /// My Referral Code
+    public static let myReferralCode = Localized.tr("Localizable", "rewards.my_referral_code", fallback: "My Referral Code")
+    /// Points
+    public static let points = Localized.tr("Localizable", "rewards.points", fallback: "Points")
+    /// Referral Code
+    public static let referralCode = Localized.tr("Localizable", "rewards.referral_code", fallback: "Referral Code")
+    /// Referrals
+    public static let referrals = Localized.tr("Localizable", "rewards.referrals", fallback: "Referrals")
+    /// Join Gem Wallet with my referral link and earn rewards: %@
+    public static func shareText(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "rewards.share_text", String(describing: p1), fallback: "Join Gem Wallet with my referral link and earn rewards: %@")
+    }
+    /// Rewards
+    public static let title = Localized.tr("Localizable", "rewards.title", fallback: "Rewards")
+    /// Username
+    public static let username = Localized.tr("Localizable", "rewards.username", fallback: "Username")
+    public enum ActivateReferralCode {
+      /// Have a referral code from a friend?
+      public static let description = Localized.tr("Localizable", "rewards.activate_referral_code.description", fallback: "Have a referral code from a friend?")
+      /// Redeem code
+      public static let title = Localized.tr("Localizable", "rewards.activate_referral_code.title", fallback: "Redeem code")
+    }
+    public enum CreateReferralCode {
+      /// This will be your personal username.
+      public static let info = Localized.tr("Localizable", "rewards.create_referral_code.info", fallback: "This will be your personal username.")
+      /// Create Username
+      public static let title = Localized.tr("Localizable", "rewards.create_referral_code.title", fallback: "Create Username")
+    }
+    public enum EarnPoints {
+      /// Earn Points
+      public static let title = Localized.tr("Localizable", "rewards.earn_points.title", fallback: "Earn Points")
+    }
+    public enum GetRewards {
+      /// Get Rewards
+      public static let title = Localized.tr("Localizable", "rewards.get_rewards.title", fallback: "Get Rewards")
+    }
+    public enum InviteFriends {
+      /// Get **%d points**  for every friend your invite.
+      public static func description(_ p1: Int) -> String {
+        return Localized.tr("Localizable", "rewards.invite_friends.description", p1, fallback: "Get **%d points**  for every friend your invite.")
+      }
+      /// Invite friend
+      public static let title = Localized.tr("Localizable", "rewards.invite_friends.title", fallback: "Invite friend")
+    }
   }
   public enum Rootcheck {
     /// Your device appears to have root access, which can significantly increase security risks. Using this app on a rooted device may expose your assets to unauthorized access and potential loss. For the safety of your funds, we strongly recommend using a non-rooted device.

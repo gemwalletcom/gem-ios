@@ -9,6 +9,7 @@ public enum PushNotification: Equatable, Sendable {
     case buyAsset(AssetId)
     case swapAsset(AssetId, AssetId?)
     case perpetuals
+    case referral(code: String)
     case test
     case support
     case unknown

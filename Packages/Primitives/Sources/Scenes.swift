@@ -158,6 +158,14 @@ public struct Scenes {
     public struct Perpetuals: Hashable {
         public init() {}
     }
+
+    public struct Referral: Hashable {
+        public let code: String?
+
+        public init(code: String? = nil) {
+            self.code = code
+        }
+    }
     
     public struct Perpetual: Hashable {
         public let asset: Primitives.Asset
