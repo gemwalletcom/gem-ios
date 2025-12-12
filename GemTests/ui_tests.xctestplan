@@ -13,10 +13,6 @@
   },
   "testTargets" : [
     {
-      "skippedTests" : [
-        "ImportWalletReceiveBitcoinUITests",
-        "ImportWalletReceiveBitcoinUITests\/testImportMultiCoinWalletAndVerifyBitcoinAddress()"
-      ],
       "target" : {
         "containerPath" : "container:Gem.xcodeproj",
         "identifier" : "D83096AB2D5D4F1E00FFEE3E",

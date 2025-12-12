@@ -4,16 +4,13 @@ import XCTest
 
 extension XCUIApplication {
 
-    func acceptTerms() {
-        switches.allElementsBoundByIndex.forEach { $0.tap() }
-        buttons["Agree and Continue"].firstMatch.tap()
-    }
-
-    func tapContinue() {
-        buttons["Continue"].firstMatch.tap()
-    }
-
-    func getWords() -> [String] {
-        (0..<12).map { staticTexts["word_\($0)"].label }
+    func logout(walletName: String = UITestKitConstants.defaultWalletName) {
+        if OnboardingScene(app: self).isVisible == false {
+            WalletScene(app: self)
+                .tapWallet(walletName)
+                .tapSettings()
+                .tapDelete()
+                .confirmDelete()
+        }
     }
 }

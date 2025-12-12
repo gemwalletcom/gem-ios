@@ -62,6 +62,19 @@
 		B68BD2E62DE0760E00687F09 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2E52DE0760E00687F09 /* Primitives */; };
 		B69C52F32DE72B1000BBD95D /* ManageWallets in Frameworks */ = {isa = PBXBuildFile; productRef = B69C52F22DE72B1000BBD95D /* ManageWallets */; };
 		B69D9C872ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */; };
+		B6B724B02EEC307A002A4A60 /* ImportWalletScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724A42EEC307A002A4A60 /* ImportWalletScene.swift */; };
+		B6B724B12EEC307A002A4A60 /* ImportWalletTypeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724A52EEC307A002A4A60 /* ImportWalletTypeScene.swift */; };
+		B6B724B22EEC307A002A4A60 /* ShowSecretDataScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724AA2EEC307A002A4A60 /* ShowSecretDataScene.swift */; };
+		B6B724B32EEC307A002A4A60 /* ReceiveScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724A72EEC307A002A4A60 /* ReceiveScene.swift */; };
+		B6B724B42EEC307A002A4A60 /* WalletDetailScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724AC2EEC307A002A4A60 /* WalletDetailScene.swift */; };
+		B6B724B52EEC307A002A4A60 /* AcceptTermsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724A32EEC307A002A4A60 /* AcceptTermsScene.swift */; };
+		B6B724B62EEC307A002A4A60 /* SecurityReminderScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724A82EEC307A002A4A60 /* SecurityReminderScene.swift */; };
+		B6B724B72EEC307A002A4A60 /* SelectAssetScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724A92EEC307A002A4A60 /* SelectAssetScene.swift */; };
+		B6B724B82EEC307A002A4A60 /* WalletsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724AE2EEC307A002A4A60 /* WalletsScene.swift */; };
+		B6B724B92EEC307A002A4A60 /* WalletScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724AD2EEC307A002A4A60 /* WalletScene.swift */; };
+		B6B724BA2EEC307A002A4A60 /* OnboardingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724A62EEC307A002A4A60 /* OnboardingScene.swift */; };
+		B6B724BB2EEC307A002A4A60 /* VerifyPhraseScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724AB2EEC307A002A4A60 /* VerifyPhraseScene.swift */; };
+		B6B724BD2EEC37AB002A4A60 /* XCUIApplication+CommonElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B724BC2EEC37AB002A4A60 /* XCUIApplication+CommonElements.swift */; };
 		B6B86A102D702E7C00D31D65 /* SwapNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */; };
 		B6C8F2AF2EDE2691005915E4 /* UITestKitConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C8F2AD2EDE2691005915E4 /* UITestKitConstants.swift */; };
 		B6CBBC552ED9A80B0043443B /* CreateWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CBBC542ED9A80B0043443B /* CreateWalletUITests.swift */; };
@@ -212,6 +225,19 @@
 		B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
 		B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
 		B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletReceiveBitcoinUITests.swift; sourceTree = "<group>"; };
+		B6B724A32EEC307A002A4A60 /* AcceptTermsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptTermsScene.swift; sourceTree = "<group>"; };
+		B6B724A42EEC307A002A4A60 /* ImportWalletScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletScene.swift; sourceTree = "<group>"; };
+		B6B724A52EEC307A002A4A60 /* ImportWalletTypeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletTypeScene.swift; sourceTree = "<group>"; };
+		B6B724A62EEC307A002A4A60 /* OnboardingScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingScene.swift; sourceTree = "<group>"; };
+		B6B724A72EEC307A002A4A60 /* ReceiveScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveScene.swift; sourceTree = "<group>"; };
+		B6B724A82EEC307A002A4A60 /* SecurityReminderScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityReminderScene.swift; sourceTree = "<group>"; };
+		B6B724A92EEC307A002A4A60 /* SelectAssetScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAssetScene.swift; sourceTree = "<group>"; };
+		B6B724AA2EEC307A002A4A60 /* ShowSecretDataScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSecretDataScene.swift; sourceTree = "<group>"; };
+		B6B724AB2EEC307A002A4A60 /* VerifyPhraseScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyPhraseScene.swift; sourceTree = "<group>"; };
+		B6B724AC2EEC307A002A4A60 /* WalletDetailScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetailScene.swift; sourceTree = "<group>"; };
+		B6B724AD2EEC307A002A4A60 /* WalletScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletScene.swift; sourceTree = "<group>"; };
+		B6B724AE2EEC307A002A4A60 /* WalletsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsScene.swift; sourceTree = "<group>"; };
+		B6B724BC2EEC37AB002A4A60 /* XCUIApplication+CommonElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+CommonElements.swift"; sourceTree = "<group>"; };
 		B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapNavigationView.swift; sourceTree = "<group>"; };
 		B6C8F2AD2EDE2691005915E4 /* UITestKitConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestKitConstants.swift; sourceTree = "<group>"; };
 		B6CBBC542ED9A80B0043443B /* CreateWalletUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWalletUITests.swift; sourceTree = "<group>"; };
@@ -534,6 +560,7 @@
 		B68058302ED9C6F7001273D6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				B6B724BC2EEC37AB002A4A60 /* XCUIApplication+CommonElements.swift */,
 				B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */,
 				B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */,
 			);
@@ -543,12 +570,32 @@
 		B69D9C862ED85EA000A04F7F /* GemUITestsAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				B6B724AF2EEC307A002A4A60 /* Scenes */,
 				B6C8F2AE2EDE2691005915E4 /* Types */,
 				B68058302ED9C6F7001273D6 /* Extensions */,
 				B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */,
 				B6CBBC542ED9A80B0043443B /* CreateWalletUITests.swift */,
 			);
 			path = GemUITestsAppTests;
+			sourceTree = "<group>";
+		};
+		B6B724AF2EEC307A002A4A60 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				B6B724A32EEC307A002A4A60 /* AcceptTermsScene.swift */,
+				B6B724A42EEC307A002A4A60 /* ImportWalletScene.swift */,
+				B6B724A52EEC307A002A4A60 /* ImportWalletTypeScene.swift */,
+				B6B724A62EEC307A002A4A60 /* OnboardingScene.swift */,
+				B6B724A72EEC307A002A4A60 /* ReceiveScene.swift */,
+				B6B724A82EEC307A002A4A60 /* SecurityReminderScene.swift */,
+				B6B724A92EEC307A002A4A60 /* SelectAssetScene.swift */,
+				B6B724AA2EEC307A002A4A60 /* ShowSecretDataScene.swift */,
+				B6B724AB2EEC307A002A4A60 /* VerifyPhraseScene.swift */,
+				B6B724AC2EEC307A002A4A60 /* WalletDetailScene.swift */,
+				B6B724AD2EEC307A002A4A60 /* WalletScene.swift */,
+				B6B724AE2EEC307A002A4A60 /* WalletsScene.swift */,
+			);
+			path = Scenes;
 			sourceTree = "<group>";
 		};
 		B6C8F2AE2EDE2691005915E4 /* Types */ = {
@@ -1137,8 +1184,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				B69D9C872ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift in Sources */,
+				B6B724B02EEC307A002A4A60 /* ImportWalletScene.swift in Sources */,
+				B6B724B12EEC307A002A4A60 /* ImportWalletTypeScene.swift in Sources */,
+				B6B724B22EEC307A002A4A60 /* ShowSecretDataScene.swift in Sources */,
+				B6B724B32EEC307A002A4A60 /* ReceiveScene.swift in Sources */,
+				B6B724B42EEC307A002A4A60 /* WalletDetailScene.swift in Sources */,
+				B6B724B52EEC307A002A4A60 /* AcceptTermsScene.swift in Sources */,
+				B6B724B62EEC307A002A4A60 /* SecurityReminderScene.swift in Sources */,
+				B6B724B72EEC307A002A4A60 /* SelectAssetScene.swift in Sources */,
+				B6B724B82EEC307A002A4A60 /* WalletsScene.swift in Sources */,
+				B6B724B92EEC307A002A4A60 /* WalletScene.swift in Sources */,
+				B6B724BA2EEC307A002A4A60 /* OnboardingScene.swift in Sources */,
+				B6B724BB2EEC307A002A4A60 /* VerifyPhraseScene.swift in Sources */,
 				B6CBBC552ED9A80B0043443B /* CreateWalletUITests.swift in Sources */,
 				B68058312ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift in Sources */,
+				B6B724BD2EEC37AB002A4A60 /* XCUIApplication+CommonElements.swift in Sources */,
 				B6C8F2AF2EDE2691005915E4 /* UITestKitConstants.swift in Sources */,
 				B68058322ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift in Sources */,
 			);
