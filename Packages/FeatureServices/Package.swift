@@ -50,6 +50,8 @@ let package = Package(
         .library(name: "ActivityServiceTestKit", targets: ["ActivityServiceTestKit"]),
         .library(name: "RewardsService", targets: ["RewardsService"]),
         .library(name: "RewardsServiceTestKit", targets: ["RewardsServiceTestKit"]),
+        .library(name: "AuthService", targets: ["AuthService"]),
+        .library(name: "AuthServiceTestKit", targets: ["AuthServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -501,9 +503,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "GemAPI",
-                "Keystore",
-                "Gemstone",
-                "Preferences",
+                "AuthService",
             ],
             path: "RewardsService",
             exclude: ["TestKit"]
@@ -513,9 +513,28 @@ let package = Package(
             dependencies: [
                 "RewardsService",
                 .product(name: "GemAPITestKit", package: "GemAPI"),
-                .product(name: "KeystoreTestKit", package: "Keystore"),
             ],
             path: "RewardsService/TestKit"
+        ),
+        .target(
+            name: "AuthService",
+            dependencies: [
+                "Primitives",
+                "GemAPI",
+                "Keystore",
+                "Gemstone",
+                "GemstonePrimitives",
+                "Preferences",
+            ],
+            path: "AuthService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "AuthServiceTestKit",
+            dependencies: [
+                "AuthService",
+            ],
+            path: "AuthService/TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",

@@ -4,6 +4,14 @@
 
 import Foundation
 
+public struct ReferralCode: Codable, Sendable {
+	public let code: String
+
+	public init(code: String) {
+		self.code = code
+	}
+}
+
 public struct Rewards: Codable, Equatable, Hashable, Sendable {
 	public let code: String?
 	public let referralCount: Int32
@@ -33,21 +41,5 @@ public struct RewardsEventItem: Codable, Equatable, Hashable, Sendable {
 		self.event = event
 		self.points = points
 		self.createdAt = createdAt
-	}
-}
-
-public struct RewardsReferralRequest: Codable, Sendable {
-	public let deviceId: String
-	public let address: String
-	public let message: String
-	public let signature: String
-	public let code: String
-
-	public init(deviceId: String, address: String, message: String, signature: String, code: String) {
-		self.deviceId = deviceId
-		self.address = address
-		self.message = message
-		self.signature = signature
-		self.code = code
 	}
 }
