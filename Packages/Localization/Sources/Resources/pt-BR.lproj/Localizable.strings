@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Conteúdo impróprio";
 "nft.report.reason.copyright" = "Direitos autorais";
 "nft.report.report_button_title" = "Denunciar";
-"rewards.title" = "Rewards";
+"rewards.title" = "Recompensas";
 "rewards.share_text" = "Juntar Gem Wallet Use meu link de indicação e ganhe recompensas: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Convide um amigo";
-"rewards.invite_friends.description" = "Pegar **%d pontos** para cada amigo que você convidar.";
+"rewards.my_referral_code" = "Meu código de indicação";
+"rewards.invite_friends.title" = "Convide amigos";
+"rewards.invite_friends.description" = "Ganhar **%d pontos** para cada amigo que se inscrever.";
 "common.get_started" = "Comece agora";
 "rewards.referral_code" = "Código de indicação";
 "rewards.invited_by" = "Invited By";

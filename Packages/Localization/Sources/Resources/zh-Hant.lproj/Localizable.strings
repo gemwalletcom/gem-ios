@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "不當內容";
 "nft.report.reason.copyright" = "版權";
 "nft.report.report_button_title" = "檢舉";
-"rewards.title" = "Rewards";
+"rewards.title" = "獎勵";
 "rewards.share_text" = "加入 Gem Wallet 使用我的推薦鏈接，即可獲得獎勵： %@";
-"rewards.my_referral_code" = "My Referral Code";
+"rewards.my_referral_code" = "我的推薦碼";
 "rewards.invite_friends.title" = "邀請好友";
-"rewards.invite_friends.description" = "得到 **%d 每邀請一位朋友，即可獲得積分**。";
+"rewards.invite_friends.description" = "賺 **%d 每邀請一位好友加入，即可獲得積分**。";
 "common.get_started" = "開始使用";
 "rewards.referral_code" = "推薦碼";
 "rewards.invited_by" = "Invited By";

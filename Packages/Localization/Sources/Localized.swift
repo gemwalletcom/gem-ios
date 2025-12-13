@@ -971,8 +971,8 @@ public enum Localized {
   public enum Rewards {
     /// Invited By
     public static let invitedBy = Localized.tr("Localizable", "rewards.invited_by", fallback: "Invited By")
-    /// My Referral Code
-    public static let myReferralCode = Localized.tr("Localizable", "rewards.my_referral_code", fallback: "My Referral Code")
+    /// My referral code
+    public static let myReferralCode = Localized.tr("Localizable", "rewards.my_referral_code", fallback: "My referral code")
     /// Points
     public static let points = Localized.tr("Localizable", "rewards.points", fallback: "Points")
     /// Referral Code
@@ -1008,12 +1008,12 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "rewards.get_rewards.title", fallback: "Get Rewards")
     }
     public enum InviteFriends {
-      /// Get **%d points**  for every friend your invite.
+      /// Earn **%d points** for each friend who joins.
       public static func description(_ p1: Int) -> String {
-        return Localized.tr("Localizable", "rewards.invite_friends.description", p1, fallback: "Get **%d points**  for every friend your invite.")
+        return Localized.tr("Localizable", "rewards.invite_friends.description", p1, fallback: "Earn **%d points** for each friend who joins.")
       }
-      /// Invite friend
-      public static let title = Localized.tr("Localizable", "rewards.invite_friends.title", fallback: "Invite friend")
+      /// Invite Friends
+      public static let title = Localized.tr("Localizable", "rewards.invite_friends.title", fallback: "Invite Friends")
     }
   }
   public enum Rootcheck {

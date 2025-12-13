@@ -6,6 +6,7 @@ import GemAPI
 import Keystore
 import Gemstone
 import WalletCore
+import Preferences
 
 public protocol RewardsServiceable: Sendable {
     func getRewards(wallet: Primitives.Wallet) async throws -> Rewards
@@ -17,13 +18,16 @@ public protocol RewardsServiceable: Sendable {
 public struct RewardsService: RewardsServiceable, Sendable {
     private let apiService: GemAPIRewardsService
     private let keystore: any Keystore
+    private let securePreferences: SecurePreferences
 
     public init(
         apiService: GemAPIRewardsService = GemAPIService.shared,
-        keystore: any Keystore
+        keystore: any Keystore,
+        securePreferences: SecurePreferences = SecurePreferences()
     ) {
         self.apiService = apiService
         self.keystore = keystore
+        self.securePreferences = securePreferences
     }
 
     public func getRewards(wallet: Primitives.Wallet) async throws -> Rewards {
@@ -32,8 +36,10 @@ public struct RewardsService: RewardsServiceable, Sendable {
     }
 
     public func useReferralCode(wallet: Primitives.Wallet, referralCode: String) async throws {
+        let deviceId = try securePreferences.getDeviceId()
         let signedMessage = try await signAuthMessage(wallet: wallet)
         let request = RewardsReferralRequest(
+            deviceId: deviceId,
             address: signedMessage.address,
             message: signedMessage.message,
             signature: signedMessage.signature,
@@ -43,8 +49,10 @@ public struct RewardsService: RewardsServiceable, Sendable {
     }
 
     public func createReferral(wallet: Primitives.Wallet, code: String) async throws -> Rewards {
+        let deviceId = try securePreferences.getDeviceId()
         let signedMessage = try await signAuthMessage(wallet: wallet)
         let request = RewardsReferralRequest(
+            deviceId: deviceId,
             address: signedMessage.address,
             message: signedMessage.message,
             signature: signedMessage.signature,

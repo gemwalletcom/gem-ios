@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Неприйнятний контент";
 "nft.report.reason.copyright" = "Авторське право";
 "nft.report.report_button_title" = "Поскаржитися";
-"rewards.title" = "Rewards";
+"rewards.title" = "Нагороди";
 "rewards.share_text" = "Приєднатися Гаманець Gem за моїм реферальним посиланням та отримуйте винагороди: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Запросити друга";
-"rewards.invite_friends.description" = "Отримати **%d бали** за кожного друга, якого ви запросите.";
+"rewards.my_referral_code" = "Мій реферальний код";
+"rewards.invite_friends.title" = "Запросити друзів";
+"rewards.invite_friends.description" = "Заробіть **%d бали** за кожного друга, який приєднається.";
 "common.get_started" = "Почати";
 "rewards.referral_code" = "Реферальний код";
 "rewards.invited_by" = "Invited By";

@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "نامناسب مواد";
 "nft.report.reason.copyright" = "کاپی رائٹ";
 "nft.report.report_button_title" = "رپورٹ";
-"rewards.title" = "Rewards";
+"rewards.title" = "انعامات";
 "rewards.share_text" = "شمولیت Gem Wallet میرے ریفرل لنک کے ساتھ اور انعامات حاصل کریں: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Invite friend";
-"rewards.invite_friends.description" = "حاصل کریں **%d پوائنٹس** ہر دوست کے لیے آپ کی دعوت۔";
+"rewards.my_referral_code" = "میرا ریفرل کوڈ";
+"rewards.invite_friends.title" = "دوستوں کو مدعو کریں۔";
+"rewards.invite_friends.description" = "کمائیں **%d شامل ہونے والے ہر دوست کے لیے پوائنٹس**۔";
 "common.get_started" = "شروع کریں";
 "rewards.referral_code" = "ریفرل کوڈ";
 "rewards.invited_by" = "Invited By";

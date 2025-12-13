@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "अनुपयुक्त सामग्री";
 "nft.report.reason.copyright" = "कॉपीराइट";
 "nft.report.report_button_title" = "रिपोर्ट करें";
-"rewards.title" = "Rewards";
+"rewards.title" = "पुरस्कार";
 "rewards.share_text" = "जोड़ना Gem Wallet मेरे रेफरल लिंक का उपयोग करें और पुरस्कार अर्जित करें: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Invite friend";
-"rewards.invite_friends.description" = "पाना **%d आपके द्वारा आमंत्रित प्रत्येक मित्र के लिए अंक** मिलेंगे।";
+"rewards.my_referral_code" = "My referral code";
+"rewards.invite_friends.title" = "मित्रों को आमंत्रित करें";
+"rewards.invite_friends.description" = "कमाना **%d शामिल होने वाले प्रत्येक मित्र के लिए अंक**।";
 "common.get_started" = "शुरू हो जाओ";
 "rewards.referral_code" = "रेफरल कोड";
 "rewards.invited_by" = "Invited By";

@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "不適切なコンテンツ";
 "nft.report.reason.copyright" = "著作権";
 "nft.report.report_button_title" = "報告";
-"rewards.title" = "Rewards";
+"rewards.title" = "報酬";
 "rewards.share_text" = "参加する Gem Wallet 私の紹介リンクを使用して報酬を獲得しましょう: %@";
-"rewards.my_referral_code" = "My Referral Code";
+"rewards.my_referral_code" = "私の紹介コード";
 "rewards.invite_friends.title" = "友達を招待";
-"rewards.invite_friends.description" = "得る **%d 招待した友達ごとに**ポイントを獲得できます。";
+"rewards.invite_friends.description" = "得る **%d 参加した友達ごとに**ポイントが付与されます。";
 "common.get_started" = "始める";
 "rewards.referral_code" = "紹介コード";
 "rewards.invited_by" = "Invited By";

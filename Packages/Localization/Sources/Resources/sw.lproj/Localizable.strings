@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Maudhui Yasiyofaa";
 "nft.report.reason.copyright" = "Hakimiliki";
 "nft.report.report_button_title" = "Ripoti";
-"rewards.title" = "Rewards";
+"rewards.title" = "Zawadi";
 "rewards.share_text" = "Jiunge Gem Wallet kwa kutumia kiungo changu cha rufaa na upate zawadi: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Mwalike rafiki";
-"rewards.invite_friends.description" = "Pata **%d pointi** kwa kila rafiki mwaliko wako.";
+"rewards.my_referral_code" = "Nambari yangu ya rufaa";
+"rewards.invite_friends.title" = "Alika Marafiki";
+"rewards.invite_friends.description" = "Pata **%d pointi** kwa kila rafiki anayejiunga.";
 "common.get_started" = "Anza";
 "rewards.referral_code" = "Nambari ya Rufaa";
 "rewards.invited_by" = "Invited By";

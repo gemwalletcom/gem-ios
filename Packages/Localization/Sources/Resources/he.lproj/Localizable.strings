@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "תוכן לא הולם";
 "nft.report.reason.copyright" = "זְכוּת יְוֹצרִים";
 "nft.report.report_button_title" = "דווח";
-"rewards.title" = "Rewards";
+"rewards.title" = "תגמולים";
 "rewards.share_text" = "לְהִצְטַרֵף Gem Wallet בעזרת קישור ההפניה שלי וצברו פרסים: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "הזמן חבר";
-"rewards.invite_friends.description" = "קבל **%d נקודות** עבור כל חבר שהזמנת.";
+"rewards.my_referral_code" = "קוד ההפניה שלי";
+"rewards.invite_friends.title" = "הזמן חברים";
+"rewards.invite_friends.description" = "להרוויח **%d נקודות** לכל חבר שמצטרף.";
 "common.get_started" = "התחל";
 "rewards.referral_code" = "קוד הפניה";
 "rewards.invited_by" = "Invited By";

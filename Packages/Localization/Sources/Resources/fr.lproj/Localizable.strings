@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Contenu inapproprié";
 "nft.report.reason.copyright" = "Droits d'auteur";
 "nft.report.report_button_title" = "Signaler";
-"rewards.title" = "Rewards";
+"rewards.title" = "Récompenses";
 "rewards.share_text" = "Rejoindre Gem Wallet Utilisez mon lien de parrainage et gagnez des récompenses : %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Inviter un ami";
-"rewards.invite_friends.description" = "Obtenir **%d des points** pour chaque ami que vous invitez.";
+"rewards.my_referral_code" = "Mon code de parrainage";
+"rewards.invite_friends.title" = "Inviter des amis";
+"rewards.invite_friends.description" = "Gagner **%d points** pour chaque ami qui s'inscrit.";
 "common.get_started" = "Commencer";
 "rewards.referral_code" = "Code de parrainage";
 "rewards.invited_by" = "Invited By";

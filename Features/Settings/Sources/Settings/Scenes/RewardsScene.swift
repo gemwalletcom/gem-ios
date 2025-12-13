@@ -37,16 +37,12 @@ public struct RewardsScene: View {
             case .error(let error):
                 stateErrorView(error: error)
             case .data(let rewards):
-                if let code = rewards.code {
-                    referralCodeSection(code: code)
-                } else {
-                    createCodeSection
-                }
+                inviteFriendsSection(code: rewards.code)
                 if model.isInfoEnabled {
                     infoSection(rewards: rewards)
                 }
             case .noData:
-                createCodeSection
+                inviteFriendsSection(code: nil)
             }
         }
         .refreshable { await model.fetch() }
@@ -136,7 +132,7 @@ public struct RewardsScene: View {
     }
 
     @ViewBuilder
-    private var createCodeSection: some View {
+    private func inviteFriendsSection(code: String?) -> some View {
         Section {
             VStack(spacing: Spacing.large) {
                 Text("🎁")
@@ -160,9 +156,18 @@ public struct RewardsScene: View {
                 }
 
                 Button {
-                    isPresentingCodeInput = .create
+                    if code != nil {
+                        isPresentingShare = true
+                    } else {
+                        isPresentingCodeInput = .create
+                    }
                 } label: {
-                    Text(model.createCodeButtonTitle)
+                    HStack(spacing: Spacing.small) {
+                        if code != nil {
+                            Images.System.share
+                        }
+                        Text(code != nil ? Localized.Rewards.InviteFriends.title : model.createCodeButtonTitle)
+                    }
                 }
                 .buttonStyle(.blue())
             }
@@ -197,34 +202,15 @@ public struct RewardsScene: View {
     }
 
     @ViewBuilder
-    private func referralCodeSection(code: String) -> some View {
-        Section {
-            VStack(spacing: Spacing.medium) {
-                Text(model.myReferralCodeTitle)
-                    .textStyle(.calloutSecondary)
-
-                Text(code)
-                    .font(.system(size: 32, weight: .bold, design: .monospaced))
-                    .foregroundStyle(Colors.black)
-
-                Button {
-                    isPresentingShare = true
-                } label: {
-                    HStack(spacing: Spacing.small) {
-                        Images.System.share
-                        Text(Localized.Common.share)
-                    }
-                }
-                .buttonStyle(.blue())
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, Spacing.small)
-        }
-    }
-
-    @ViewBuilder
     private func infoSection(rewards: Rewards) -> some View {
         Section {
+            if let code = rewards.code {
+                ListItemView(
+                    title: model.myReferralCodeTitle,
+                    subtitle: code
+                )
+                .contextMenu(model.referralLink.map { [.copy(value: $0)] } ?? [])
+            }
             ListItemView(
                 title: model.referralCountTitle,
                 subtitle: "\(rewards.referralCount)"

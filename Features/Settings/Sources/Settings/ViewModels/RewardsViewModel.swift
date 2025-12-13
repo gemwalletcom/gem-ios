@@ -71,6 +71,11 @@ public final class RewardsViewModel: Sendable {
         return Localized.Rewards.shareText(link)
     }
 
+    var referralLink: String? {
+        guard let code = rewards?.code else { return nil }
+        return rewardsService.generateReferralLink(code: code).absoluteString
+    }
+
     var hasReferralCode: Bool {
         guard let code = rewards?.code else { return false }
         return !code.isEmpty
@@ -129,7 +134,6 @@ public final class RewardsViewModel: Sendable {
     }
 
     var activateCodeFromLink: String? {
-        guard let activateCode, canUseReferralCode else { return nil }
         return activateCode
     }
 

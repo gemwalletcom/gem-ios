@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Uygunsuz İçerik";
 "nft.report.reason.copyright" = "Telif hakkı";
 "nft.report.report_button_title" = "Bildir";
-"rewards.title" = "Rewards";
+"rewards.title" = "Ödüller";
 "rewards.share_text" = "Katılmak Gem Wallet Benim referans linkimi kullanarak kayıt olun ve ödüller kazanın: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Arkadaşını davet et";
-"rewards.invite_friends.description" = "Elde etmek **%d Davet ettiğiniz her arkadaşınız için puan** kazanın.";
+"rewards.my_referral_code" = "Benim referans kodum";
+"rewards.invite_friends.title" = "Arkadaşlarınızı Davet Edin";
+"rewards.invite_friends.description" = "Para kazanmak **%d Katılan her arkadaşınız için puan**.";
 "common.get_started" = "Başlayın";
 "rewards.referral_code" = "Yönlendirme Kodu";
 "rewards.invited_by" = "Invited By";

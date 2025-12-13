@@ -503,6 +503,7 @@ let package = Package(
                 "GemAPI",
                 "Keystore",
                 "Gemstone",
+                "Preferences",
             ],
             path: "RewardsService",
             exclude: ["TestKit"]

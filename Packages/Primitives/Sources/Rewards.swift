@@ -37,12 +37,14 @@ public struct RewardsEventItem: Codable, Equatable, Hashable, Sendable {
 }
 
 public struct RewardsReferralRequest: Codable, Sendable {
+	public let deviceId: String
 	public let address: String
 	public let message: String
 	public let signature: String
 	public let code: String
 
-	public init(address: String, message: String, signature: String, code: String) {
+	public init(deviceId: String, address: String, message: String, signature: String, code: String) {
+		self.deviceId = deviceId
 		self.address = address
 		self.message = message
 		self.signature = signature

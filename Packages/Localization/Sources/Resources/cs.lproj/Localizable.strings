@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Nevhodný obsah";
 "nft.report.reason.copyright" = "Copyright";
 "nft.report.report_button_title" = "Nahlásit";
-"rewards.title" = "Rewards";
+"rewards.title" = "Odměny";
 "rewards.share_text" = "Připojit se Gem Wallet s mým doporučovacím odkazem a získejte odměny: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Pozvat přítele";
-"rewards.invite_friends.description" = "Získat **%d body** za každého přítele, kterého pozvete.";
+"rewards.my_referral_code" = "Můj doporučovací kód";
+"rewards.invite_friends.title" = "Pozvat přátele";
+"rewards.invite_friends.description" = "Vydělejte **%d body** za každého přítele, který se připojí.";
 "common.get_started" = "Začít";
 "rewards.referral_code" = "Doporučovací kód";
 "rewards.invited_by" = "Invited By";

@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "অনুপযুক্ত কন্টেন্ট";
 "nft.report.reason.copyright" = "কপিরাইট";
 "nft.report.report_button_title" = "রিপোর্ট করুন";
-"rewards.title" = "Rewards";
+"rewards.title" = "পুরষ্কার";
 "rewards.share_text" = "যোগদান করুন Gem Wallet আমার রেফারেল লিঙ্ক দিয়ে পুরষ্কার জিতুন: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "বন্ধুকে আমন্ত্রণ জানান";
-"rewards.invite_friends.description" = "আপনি যেকোনো বন্ধুকে আমন্ত্রণ করলে **%d পয়েন্ট** পাবেন।";
+"rewards.my_referral_code" = "My referral code";
+"rewards.invite_friends.title" = "বন্ধুদের আমন্ত্রণ জানান";
+"rewards.invite_friends.description" = "** উপার্জন করুন%d যোগদানকারী প্রতিটি বন্ধুর জন্য পয়েন্ট**।";
 "common.get_started" = "শুরু করুন";
 "rewards.referral_code" = "রেফারেল কোড";
 "rewards.invited_by" = "Invited By";

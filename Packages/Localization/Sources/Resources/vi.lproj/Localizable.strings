@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Nội dung không phù hợp";
 "nft.report.reason.copyright" = "Bản quyền";
 "nft.report.report_button_title" = "Báo cáo";
-"rewards.title" = "Rewards";
+"rewards.title" = "Phần thưởng";
 "rewards.share_text" = "Tham gia Gem Wallet Sử dụng liên kết giới thiệu của tôi và nhận phần thưởng: %@";
-"rewards.my_referral_code" = "My Referral Code";
+"rewards.my_referral_code" = "Mã giới thiệu của tôi";
 "rewards.invite_friends.title" = "Mời bạn bè";
-"rewards.invite_friends.description" = "Lấy **%d điểm** cho mỗi người bạn bạn mời.";
+"rewards.invite_friends.description" = "Kiếm **%d điểm** cho mỗi người bạn tham gia.";
 "common.get_started" = "Bắt đầu";
 "rewards.referral_code" = "Mã giới thiệu";
 "rewards.invited_by" = "Invited By";

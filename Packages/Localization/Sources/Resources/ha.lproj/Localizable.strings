@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Abun ciki mara dacewa";
 "nft.report.reason.copyright" = "Haƙƙin mallaka";
 "nft.report.report_button_title" = "Yi korafi";
-"rewards.title" = "Rewards";
+"rewards.title" = "Ladabi";
 "rewards.share_text" = "Shiga Gem Wallet tare da hanyar haɗin yanar gizo na kuma sami lada: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Gayyaci aboki";
-"rewards.invite_friends.description" = "Samu **%d maki** ga kowane aboki da ka gayyata.";
+"rewards.my_referral_code" = "My referral code";
+"rewards.invite_friends.title" = "Gayyaci Abokai";
+"rewards.invite_friends.description" = "Sami **%d maki** ga kowane aboki da ya shiga.";
 "common.get_started" = "Fara";
 "rewards.referral_code" = "Lambar Shawara";
 "rewards.invited_by" = "Invited By";

@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Contenuto inappropriato";
 "nft.report.reason.copyright" = "Copyright";
 "nft.report.report_button_title" = "Segnala";
-"rewards.title" = "Rewards";
+"rewards.title" = "Ricompense";
 "rewards.share_text" = "Giuntura Gem Wallet con il mio link di riferimento e guadagna premi: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Invita un amico";
-"rewards.invite_friends.description" = "Ottenere **%d punti** per ogni amico che inviti.";
+"rewards.my_referral_code" = "Il mio codice di riferimento";
+"rewards.invite_friends.title" = "Invita amici";
+"rewards.invite_friends.description" = "Guadagnare **%d punti** per ogni amico che si iscrive.";
 "common.get_started" = "Per iniziare";
 "rewards.referral_code" = "Codice di riferimento";
 "rewards.invited_by" = "Invited By";

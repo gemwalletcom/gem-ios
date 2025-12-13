@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "محتوى غير لائق";
 "nft.report.reason.copyright" = "حقوق الطبع والنشر";
 "nft.report.report_button_title" = "تقرير";
-"rewards.title" = "Rewards";
+"rewards.title" = "مكافآت";
 "rewards.share_text" = "ينضم Gem Wallet استخدم رابط الإحالة الخاص بي واحصل على مكافآت: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "ادعُ صديقًا";
-"rewards.invite_friends.description" = "يحصل **%d نقاط** لكل صديق تدعوه.";
+"rewards.my_referral_code" = "رمز الإحالة الخاص بي";
+"rewards.invite_friends.title" = "ادعُ الأصدقاء";
+"rewards.invite_friends.description" = "يكسب **%d نقاط** لكل صديق ينضم.";
 "common.get_started" = "ابدأ الآن";
 "rewards.referral_code" = "رمز الإحالة";
 "rewards.invited_by" = "Invited By";

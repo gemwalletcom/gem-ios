@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Kandungan Tidak Sesuai";
 "nft.report.reason.copyright" = "Hak Cipta";
 "nft.report.report_button_title" = "Laporan";
-"rewards.title" = "Rewards";
+"rewards.title" = "Ganjaran";
 "rewards.share_text" = "Sertai Gem Wallet dengan pautan rujukan saya dan dapatkan ganjaran: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Jemput rakan";
-"rewards.invite_friends.description" = "Dapatkan **%d mata** untuk setiap rakan yang anda jemput.";
+"rewards.my_referral_code" = "Kod rujukan saya";
+"rewards.invite_friends.title" = "Jemput Rakan-rakan";
+"rewards.invite_friends.description" = "Dapatkan **%d mata** untuk setiap rakan yang menyertai.";
 "common.get_started" = "Mulakan";
 "rewards.referral_code" = "Kod Rujukan";
 "rewards.invited_by" = "Invited By";

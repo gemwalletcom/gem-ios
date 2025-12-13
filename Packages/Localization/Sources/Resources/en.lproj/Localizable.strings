@@ -526,9 +526,9 @@
 "nft.report.report_button_title" = "Report";
 "rewards.title" = "Rewards";
 "rewards.share_text" = "Join Gem Wallet with my referral link and earn rewards: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Invite friend";
-"rewards.invite_friends.description" = "Get **%d points**  for every friend your invite.";
+"rewards.my_referral_code" = "My referral code";
+"rewards.invite_friends.title" = "Invite Friends";
+"rewards.invite_friends.description" = "Earn **%d points** for each friend who joins.";
 "common.get_started" = "Get Started";
 "rewards.referral_code" = "Referral Code";
 "rewards.invited_by" = "Invited By";

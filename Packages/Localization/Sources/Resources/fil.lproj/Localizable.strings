@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Hindi Naaangkop na Nilalaman";
 "nft.report.reason.copyright" = "Copyright";
 "nft.report.report_button_title" = "I-report";
-"rewards.title" = "Rewards";
+"rewards.title" = "Mga Gantimpala";
 "rewards.share_text" = "Sumali Gem Wallet gamit ang aking referral link at kumita ng mga gantimpala: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Imbitahan ang kaibigan";
-"rewards.invite_friends.description" = "Kunin **%d puntos** para sa bawat kaibigang inimbitahan mo.";
+"rewards.my_referral_code" = "Ang aking referral code";
+"rewards.invite_friends.title" = "Mag-imbita ng mga Kaibigan";
+"rewards.invite_friends.description" = "Kumita **%d puntos** para sa bawat kaibigang sasali.";
 "common.get_started" = "Magsimula";
 "rewards.referral_code" = "Kodigo ng Referral";
 "rewards.invited_by" = "Invited By";

@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "Ongepaste inhoud";
 "nft.report.reason.copyright" = "Copyright";
 "nft.report.report_button_title" = "Melden";
-"rewards.title" = "Rewards";
+"rewards.title" = "Beloningen";
 "rewards.share_text" = "Meedoen Gem Wallet Gebruik mijn verwijzingslink en verdien beloningen: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "Nodig een vriend uit";
-"rewards.invite_friends.description" = "Krijgen **%d punten** voor elke vriend die je uitnodigt.";
+"rewards.my_referral_code" = "Mijn verwijzingscode";
+"rewards.invite_friends.title" = "Nodig vrienden uit";
+"rewards.invite_friends.description" = "Verdienen **%d punten** voor elke vriend die meedoet.";
 "common.get_started" = "Aan de slag";
 "rewards.referral_code" = "Verwijzingscode";
 "rewards.invited_by" = "Invited By";

@@ -524,11 +524,11 @@
 "nft.report.reason.inappropriate" = "부적절한 콘텐츠";
 "nft.report.reason.copyright" = "저작권";
 "nft.report.report_button_title" = "신고";
-"rewards.title" = "Rewards";
+"rewards.title" = "보상";
 "rewards.share_text" = "가입하다 Gem Wallet 제 추천 링크를 통해 가입하시고 보상을 받으세요: %@";
-"rewards.my_referral_code" = "My Referral Code";
-"rewards.invite_friends.title" = "친구를 초대하세요";
-"rewards.invite_friends.description" = "얻다 **%d 친구를 초대할 때마다 포인트가 적립됩니다.";
+"rewards.my_referral_code" = "내 추천 코드";
+"rewards.invite_friends.title" = "친구 초대하기";
+"rewards.invite_friends.description" = "벌다 **%d 친구가 가입할 때마다 포인트가 적립됩니다.";
 "common.get_started" = "시작하기";
 "rewards.referral_code" = "추천 코드";
 "rewards.invited_by" = "Invited By";
