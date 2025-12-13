@@ -217,7 +217,7 @@ public struct RewardsScene: View {
             )
             ListItemView(
                 title: model.pointsTitle,
-                subtitle: "💎 \(rewards.points)"
+                subtitle: "\(rewards.points) 💎"
             )
             if let invitedBy = rewards.usedReferralCode {
                 ListItemView(
