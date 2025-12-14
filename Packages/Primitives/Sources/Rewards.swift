@@ -12,6 +12,25 @@ public struct ReferralCode: Codable, Sendable {
 	}
 }
 
+public enum RewardEventType: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
+	case createUsername
+	case inviteNew
+	case inviteExisting
+	case joined
+}
+
+public struct RewardEvent: Codable, Equatable, Hashable, Sendable {
+	public let event: RewardEventType
+	public let points: Int32
+	public let createdAt: Date
+
+	public init(event: RewardEventType, points: Int32, createdAt: Date) {
+		self.event = event
+		self.points = points
+		self.createdAt = createdAt
+	}
+}
+
 public struct Rewards: Codable, Equatable, Hashable, Sendable {
 	public let code: String?
 	public let referralCount: Int32
@@ -23,23 +42,5 @@ public struct Rewards: Codable, Equatable, Hashable, Sendable {
 		self.referralCount = referralCount
 		self.points = points
 		self.usedReferralCode = usedReferralCode
-	}
-}
-
-public enum RewardsEvent: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
-	case createUsername
-	case invite
-	case joined
-}
-
-public struct RewardsEventItem: Codable, Equatable, Hashable, Sendable {
-	public let event: RewardsEvent
-	public let points: Int32
-	public let createdAt: Date
-
-	public init(event: RewardsEvent, points: Int32, createdAt: Date) {
-		self.event = event
-		self.points = points
-		self.createdAt = createdAt
 	}
 }

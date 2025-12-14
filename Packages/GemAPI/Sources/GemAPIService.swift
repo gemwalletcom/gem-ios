@@ -334,7 +334,7 @@ extension GemAPIService: GemAPIRewardsService {
     public func useReferralCode(request: AuthenticatedRequest<ReferralCode>) async throws {
         _ = try await provider
             .request(.useReferralCode(request))
-            .mapResponse(as: Bool.self)
+            .mapResponse(as: [RewardEvent].self)
     }
 }
 
