@@ -10,7 +10,9 @@ import Formatters
 @Observable
 @MainActor
 public final class ReceiveViewModel: Sendable {
-    let qrSize: CGFloat = 248
+    var qrSize: CGFloat {
+        UIDevice.current.userInterfaceIdiom == .pad ? 180 : 248
+    }
     
     let assetModel: AssetViewModel
     let walletId: WalletId
