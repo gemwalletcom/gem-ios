@@ -18,13 +18,3 @@ public extension Rewards {
         )
     }
 }
-
-public extension RewardsEventItem {
-    static func mock(
-        event: RewardsEvent = .invite,
-        points: Int32 = 100,
-        createdAt: Date = Date()
-    ) -> RewardsEventItem {
-        RewardsEventItem(event: event, points: points, createdAt: createdAt)
-    }
-}

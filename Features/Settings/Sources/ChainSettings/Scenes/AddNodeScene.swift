@@ -29,6 +29,11 @@ public struct AddNodeScene: View {
             inputView
             nodeInfoView
         }
+        .debounce(
+            value: model.urlInputModel.text,
+            interval: .milliseconds(250),
+            action: model.onChangeInput(_:)
+        )
         .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,
@@ -69,7 +74,7 @@ extension AddNodeScene {
     @ViewBuilder
     private var inputView: some View {
         Section {
-            FloatTextField(model.inputFieldTitle, text: $model.urlInput) {
+            InputValidationField(model: $model.urlInputModel, placeholder: model.inputFieldTitle) {
                 HStack(spacing: .medium) {
                     ListButton(image: Images.System.paste, action: onSelectPaste)
                     ListButton(image: Images.System.qrCodeViewfinder, action: onSelectScan)
@@ -110,15 +115,16 @@ extension AddNodeScene {
     }
 
     private func onSubmitUrl() {
-        fetch()
+        Task {
+            await model.fetch()
+        }
     }
 
     private func onSelectPaste() {
         guard let content = UIPasteboard.general.string else {
             return
         }
-        model.urlInput = content.trim()
-        fetch()
+        model.urlInputModel.text = content.trim()
     }
 
     private func onSelectImport() {
@@ -131,21 +137,10 @@ extension AddNodeScene {
     }
 
     private func onHandleScan(_ result: String) {
-        model.urlInput = result
-        fetch()
+        model.urlInputModel.text = result
     }
 
     private func onSelectScan() {
         model.isPresentingScanner = true
-    }
-}
-
-// MARK: - Effects
-
-extension AddNodeScene {
-    private func fetch() {
-        Task {
-            await model.fetch()
-        }
     }
 }
