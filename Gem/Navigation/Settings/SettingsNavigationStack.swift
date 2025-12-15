@@ -10,6 +10,7 @@ import Preferences
 import MarketInsight
 import Settings
 import PriceService
+import RewardsService
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -20,6 +21,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
@@ -27,6 +29,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.releaseService) private var releaseService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.walletConnectorManager) private var walletConnectorManager
+    @Environment(\.rewardsService) private var rewardsService
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -140,6 +143,19 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.Preferences.self) { _ in
                 PreferencesScene(model: PreferencesViewModel(currencyModel: currencyModel))
+            }
+            .navigationDestination(for: Scenes.Referral.self) { scene in
+                let wallets = walletService.wallets.filter { $0.type == .multicoin }
+                if let wallet = wallets.first(where: { $0.id == walletService.currentWallet?.id }) ?? wallets.first {
+                    RewardsScene(
+                        model: RewardsViewModel(
+                            rewardsService: rewardsService,
+                            wallet: wallet,
+                            wallets: wallets,
+                            activateCode: scene.code
+                        )
+                    )
+                }
             }
             .navigationDestination(for: Scenes.ChainSettings.self) {
                 ChainSettingsScene(

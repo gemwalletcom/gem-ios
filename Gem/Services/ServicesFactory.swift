@@ -35,6 +35,8 @@ import AddressNameService
 import Blockchain
 import NativeProviderService
 import ActivityService
+import AuthService
+import RewardsService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -198,6 +200,8 @@ struct ServicesFactory {
         let scanService = ScanService(gatewayService: gatewayService)
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
         let activityService = ActivityService(store: storeManager.recentActivityStore)
+        let authService = AuthService(keystore: storages.keystore)
+        let rewardsService = RewardsService(authService: authService)
 
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
@@ -250,7 +254,8 @@ struct ServicesFactory {
             nameService: nameService,
             addressNameService: addressNameService,
             activityService: activityService,
-            viewModelFactory: viewModelFactory
+            viewModelFactory: viewModelFactory,
+            rewardsService: rewardsService
         )
     }
 }

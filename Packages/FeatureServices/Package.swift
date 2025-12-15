@@ -48,6 +48,10 @@ let package = Package(
         .library(name: "NativeProviderService", targets: ["NativeProviderService"]),
         .library(name: "ActivityService", targets: ["ActivityService"]),
         .library(name: "ActivityServiceTestKit", targets: ["ActivityServiceTestKit"]),
+        .library(name: "RewardsService", targets: ["RewardsService"]),
+        .library(name: "RewardsServiceTestKit", targets: ["RewardsServiceTestKit"]),
+        .library(name: "AuthService", targets: ["AuthService"]),
+        .library(name: "AuthServiceTestKit", targets: ["AuthServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -493,6 +497,44 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store")
             ],
             path: "ActivityService/TestKit"
+        ),
+        .target(
+            name: "RewardsService",
+            dependencies: [
+                "Primitives",
+                "GemAPI",
+                "AuthService",
+            ],
+            path: "RewardsService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "RewardsServiceTestKit",
+            dependencies: [
+                "RewardsService",
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+            ],
+            path: "RewardsService/TestKit"
+        ),
+        .target(
+            name: "AuthService",
+            dependencies: [
+                "Primitives",
+                "GemAPI",
+                "Keystore",
+                "Gemstone",
+                "GemstonePrimitives",
+                "Preferences",
+            ],
+            path: "AuthService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "AuthServiceTestKit",
+            dependencies: [
+                "AuthService",
+            ],
+            path: "AuthService/TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",
