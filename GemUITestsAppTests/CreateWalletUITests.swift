@@ -15,32 +15,34 @@ final class CreateWalletUITests: XCTestCase {
         app.launch()
         app.logout()
 
-        OnboardingScene(app: app)
-            .tapCreateWallet()
+        // OnboardingScene
+        app.buttons["Create a New Wallet"].firstMatch.tap()
 
-        AcceptTermsScene(app: app)
-            .acceptIfNeeded()
+        // AcceptTermsScene
+        app.acceptTerms()
 
-        SecurityReminderScene(app: app)
-            .tapContinue()
+        // SecurityReminderScene
+        app.tapContinue()
 
-        let showSecretData = ShowSecretDataScene(app: app)
-        let words = showSecretData.getWords()
-        showSecretData.tapContinue()
+        // ShowSecretDataScene
+        let words = app.getWords()
+        app.tapContinue()
 
-        VerifyPhraseScene(app: app)
-            .tapWords(words)
-            .tapContinue()
+        // VerifyPhraseWalletScene
+        words.forEach { app.buttons[$0].firstMatch.tap() }
+        app.tapContinue()
 
-        WalletScene(app: app)
-            .tapWallet(UITestKitConstants.defaultWalletName)
-            .tapSettings()
-            .tapShowSecretPhrase()
+        // WalletScene
+        app.openWalletDetails()
 
-        SecurityReminderScene(app: app)
-            .tapContinue()
+        // WalletDetailScene
+        app.buttons["Show Secret Phrase"].firstMatch.tap()
 
-        let displayedWords = ShowSecretDataScene(app: app).getWords()
+        // SecurityReminderScene
+        app.tapContinue()
+
+        // ShowSecretDataScene
+        let displayedWords = app.getWords()
         XCTAssertEqual(words, displayedWords)
     }
 }
