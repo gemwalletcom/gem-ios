@@ -19,12 +19,12 @@ public extension Rewards {
     }
 }
 
-public extension RewardsEventItem {
+public extension RewardEvent {
     static func mock(
-        event: RewardsEvent = .invite,
+        event: RewardEventType = .inviteNew,
         points: Int32 = 100,
         createdAt: Date = Date()
-    ) -> RewardsEventItem {
-        RewardsEventItem(event: event, points: points, createdAt: createdAt)
+    ) -> RewardEvent {
+        RewardEvent(event: event, points: points, createdAt: createdAt)
     }
 }
