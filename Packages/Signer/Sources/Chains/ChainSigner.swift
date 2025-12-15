@@ -2,15 +2,11 @@
 
 import Foundation
 import class Gemstone.GemChainSigner
-import class Gemstone.CryptoSigner
 import GemstonePrimitives
 import Primitives
 
-import class Gemstone.GemChainSigner
-
 final class ChainSigner: Signable {
     private let signer: GemChainSigner
-    private let cryptoSigner = CryptoSigner()
     private let chain: Chain
 
     init(chain: Chain) {
@@ -59,16 +55,17 @@ final class ChainSigner: Signable {
     }
 
     func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        guard case .raw(let messageData) = message else {
-            throw AnyError("Sui message signing expects raw message bytes")
+        let messageData: Data
+        switch message {
+        case .typed(let typed):
+            guard let data = typed.data(using: .utf8) else {
+                throw AnyError("Typed message is not valid UTF-8")
+            }
+            messageData = data
+        case .raw(let data):
+            messageData = data
         }
 
-        switch chain.type {
-        case .sui:
-            return try cryptoSigner.signSuiPersonalMessage(message: messageData, privateKey: privateKey)
-        default:
-            throw AnyError("unimplemented: signMessage for chain \(chain.rawValue)")
-        }
+        return try signer.signMessage(message: messageData, privateKey: privateKey)
     }
 }
-

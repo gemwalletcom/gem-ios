@@ -42,7 +42,13 @@ public enum GemAPI: TargetType {
     case markets
 
     case addSupportDevice(NewSupportDevice)
-    
+
+    case getAuthNonce(deviceId: String)
+
+    case getRewards(address: String)
+    case createReferral(AuthenticatedRequest<ReferralCode>)
+    case useReferralCode(AuthenticatedRequest<ReferralCode>)
+
     public var baseUrl: URL {
         Constants.apiURL
     }
@@ -63,7 +69,8 @@ public enum GemAPI: TargetType {
             .getAssetsList,
             .getPriceAlerts,
             .getNFTAssets,
-            .markets:
+            .markets,
+            .getAuthNonce:
             return .GET
         case .addSubscriptions,
             .addDevice,
@@ -73,8 +80,12 @@ public enum GemAPI: TargetType {
             .getPrices,
             .addSupportDevice,
             .getFiatQuoteUrl,
-            .reportNft:
+            .reportNft,
+            .createReferral,
+            .useReferralCode:
             return .POST
+        case .getRewards:
+            return .GET
         case .updateDevice:
             return .PUT
         case .deleteSubscriptions,
@@ -138,6 +149,14 @@ public enum GemAPI: TargetType {
             return "/v1/markets"
         case .addSupportDevice:
             return "/v1/support/add_device"
+        case .getAuthNonce(let deviceId):
+            return "/v1/devices/\(deviceId)/auth/nonce"
+        case .getRewards(let address):
+            return "/v1/rewards/\(address)"
+        case .createReferral:
+            return "/v1/rewards/referrals/create"
+        case .useReferralCode:
+            return "/v1/rewards/referrals/use"
         }
     }
     
@@ -153,7 +172,8 @@ public enum GemAPI: TargetType {
             .getAssetsList,
             .getAsset,
             .getNFTAssets,
-            .markets:
+            .markets,
+            .getAuthNonce:
             return .plain
         case .getFiatQuoteUrl(let request):
             return .encodable(request)
@@ -207,6 +227,12 @@ public enum GemAPI: TargetType {
             return .encodable(payload)
         case .reportNft(let report):
             return .encodable(report)
+        case .getRewards:
+            return .plain
+        case .createReferral(let request):
+            return .encodable(request)
+        case .useReferralCode(let request):
+            return .encodable(request)
         }
     }
 }

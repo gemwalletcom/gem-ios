@@ -35,6 +35,8 @@ import AddressNameService
 import Blockchain
 import NativeProviderService
 import ActivityService
+import AuthService
+import RewardsService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -171,7 +173,8 @@ struct ServicesFactory {
                 preferences: preferences
             ),
             configService: configService,
-            releaseService: AppReleaseService(configService: configService)
+            releaseService: AppReleaseService(configService: configService),
+            swappableChainsProvider: swapService
         )
         let onstartWalletService = Self.makeOnstartWalletService(
             preferences: preferences,
@@ -197,6 +200,8 @@ struct ServicesFactory {
         let scanService = ScanService(gatewayService: gatewayService)
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
         let activityService = ActivityService(store: storeManager.recentActivityStore)
+        let authService = AuthService(keystore: storages.keystore)
+        let rewardsService = RewardsService(authService: authService)
 
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
@@ -249,7 +254,8 @@ struct ServicesFactory {
             nameService: nameService,
             addressNameService: addressNameService,
             activityService: activityService,
-            viewModelFactory: viewModelFactory
+            viewModelFactory: viewModelFactory,
+            rewardsService: rewardsService
         )
     }
 }
@@ -458,7 +464,8 @@ extension ServicesFactory {
         deviceService: DeviceService,
         bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
-        releaseService: AppReleaseService
+        releaseService: AppReleaseService,
+        swappableChainsProvider: any SwappableChainsProvider
     ) -> OnstartAsyncService {
         OnstartAsyncService(
             assetStore: assetStore,
@@ -468,7 +475,8 @@ extension ServicesFactory {
             deviceService: deviceService,
             bannerSetupService: bannerSetupService,
             configService: configService,
-            releaseService: releaseService
+            releaseService: releaseService,
+            swappableChainsProvider: swappableChainsProvider
         )
     }
 

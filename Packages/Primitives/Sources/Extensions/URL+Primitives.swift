@@ -25,4 +25,11 @@ extension URL {
     public func withUTM(source: String) -> URL {
         return appending(queryItems: [URLQueryItem(name: "utm_source", value: source)])
     }
+
+    public func queryValue(for name: String) -> String? {
+        URLComponents(url: self, resolvingAgainstBaseURL: false)?
+            .queryItems?
+            .first { $0.name == name }?
+            .value
+    }
 }

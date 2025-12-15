@@ -78,6 +78,16 @@ public protocol GemAPISupportService: Sendable {
     func addSupportDevice(_ supportDevice: NewSupportDevice) async throws -> SupportDevice
 }
 
+public protocol GemAPIAuthService: Sendable {
+    func getAuthNonce(deviceId: String) async throws -> AuthNonce
+}
+
+public protocol GemAPIRewardsService: Sendable {
+    func getRewards(address: String) async throws -> Rewards
+    func createReferral(request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards
+    func useReferralCode(request: AuthenticatedRequest<ReferralCode>) async throws
+}
+
 public struct GemAPIService {
     
     let provider: Provider<GemAPI>
@@ -297,6 +307,34 @@ extension GemAPIService: GemAPISupportService {
         try await provider
             .request(.addSupportDevice(supportDevice))
             .mapResponse(as: SupportDevice.self)
+    }
+}
+
+extension GemAPIService: GemAPIAuthService {
+    public func getAuthNonce(deviceId: String) async throws -> AuthNonce {
+        try await provider
+            .request(.getAuthNonce(deviceId: deviceId))
+            .mapResponse(as: AuthNonce.self)
+    }
+}
+
+extension GemAPIService: GemAPIRewardsService {
+    public func getRewards(address: String) async throws -> Rewards {
+        try await provider
+            .request(.getRewards(address: address))
+            .mapResponse(as: Rewards.self)
+    }
+
+    public func createReferral(request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards {
+        try await provider
+            .request(.createReferral(request))
+            .mapResponse(as: Rewards.self)
+    }
+
+    public func useReferralCode(request: AuthenticatedRequest<ReferralCode>) async throws {
+        _ = try await provider
+            .request(.useReferralCode(request))
+            .mapResponse(as: [RewardEvent].self)
     }
 }
 

@@ -50,4 +50,10 @@ struct URLParserTests {
         #expect(try URLParser.from(url: URL(string: "gem://")!) == .none)
         #expect(try URLParser.from(url: URL(string: "gem://invalidpath")!) == .none)
     }
+
+    @Test
+    func rewardsUrl() async throws {
+        #expect(try URLParser.from(url: URL(string: "https://gemwallet.com/join?code=gemcoder")!) == .rewards(code: "gemcoder"))
+        #expect(try URLParser.from(url: URL(string: "https://gemwallet.com/rewards?code=gemcoder")!) == .rewards(code: "gemcoder"))
+    }
 }

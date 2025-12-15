@@ -47,9 +47,9 @@ public struct TransactionHeaderViewModel: Sendable {
 
     public var headerLink: URL? {
         switch transaction.transaction.metadata {
-        case .null, .nft, .none, .perpetual: 
+        case .null, .nft, .none, .perpetual, .generic:
             nil
-        case let .swap(metadata): 
+        case let .swap(metadata):
             DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
         }
     }

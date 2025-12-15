@@ -9,6 +9,8 @@ public enum PushNotification: Equatable, Sendable {
     case buyAsset(AssetId)
     case swapAsset(AssetId, AssetId?)
     case perpetuals
+    case referral(code: String)
+    case rewards
     case test
     case support
     case unknown
@@ -45,6 +47,8 @@ public enum PushNotification: Equatable, Sendable {
             self = .swapAsset(fromAssetId, toAssetId)
         case .support:
             self = .support
+        case .rewards:
+            self = .rewards
         case .test:
             self = .test
         }

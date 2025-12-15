@@ -9,11 +9,14 @@ public enum DeepLink: Sendable {
     case asset(AssetId)
     case swap(AssetId, AssetId?)
     case perpetuals
+    case rewards(code: String?)
 
     public enum PathComponent: String {
         case tokens
         case swap
         case perpetuals
+        case rewards
+        case join
     }
 
     public var pathComponent: PathComponent {
@@ -21,6 +24,7 @@ public enum DeepLink: Sendable {
         case .asset: .tokens
         case .swap: .swap
         case .perpetuals: .perpetuals
+        case .rewards: .rewards
         }
     }
 
@@ -37,6 +41,11 @@ public enum DeepLink: Sendable {
             case .none: "/\(pathComponent.rawValue)/\(fromAssetId.identifier)"
             }
         case .perpetuals: "/\(pathComponent.rawValue)"
+        case .rewards(let code): 
+            switch code {
+            case .some(let code): "/\(pathComponent.rawValue)?code=\(code)"
+            case .none: "/\(pathComponent.rawValue)"
+            }
         }
     }
     

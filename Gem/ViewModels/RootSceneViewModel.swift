@@ -123,6 +123,8 @@ extension RootSceneViewModel {
                 notificationHandler.notify(notification: PushNotification.swapAsset(fromAssetId, toAssetId))
             case .perpetuals:
                 notificationHandler.notify(notification: PushNotification.perpetuals)
+            case .rewards(let code):
+                notificationHandler.notify(notification: PushNotification.referral(code: code))
             case .none:
                 break
             }
