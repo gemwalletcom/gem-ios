@@ -14,6 +14,7 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
         let app = XCUIApplication()
         setupPermissionHandler()
         app.launch()
+        app.logout()
 
         // OnboardingScene
         app.buttons["Import an Existing Wallet"].firstMatch.tap()
