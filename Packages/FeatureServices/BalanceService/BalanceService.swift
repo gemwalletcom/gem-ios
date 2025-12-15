@@ -184,12 +184,12 @@ extension BalanceService {
                 amount: formatter.double(from: reserved, decimals: decimals)
             )
             return .coin(UpdateCoinBalance(available: available, reserved: reservedValue))
-        case .token(let available):
+        case .token(let available, let metadata):
             let available = try UpdateBalanceValue(
                 value: available.description,
                 amount: formatter.double(from: available, decimals: decimals)
             )
-            return .token(UpdateTokenBalance(available: available))
+            return .token(UpdateTokenBalance(available: available, metadata: metadata))
         case .stake(let staked, let pending, let rewards, _, let locked, let frozen, let metadata):
             let stakedValue = try UpdateBalanceValue(
                 value: staked.description,
