@@ -36,11 +36,13 @@ public struct Rewards: Codable, Equatable, Hashable, Sendable {
 	public let referralCount: Int32
 	public let points: Int32
 	public let usedReferralCode: String?
+	public let isEnabled: Bool
 
-	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?) {
+	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?, isEnabled: Bool) {
 		self.code = code
 		self.referralCount = referralCount
 		self.points = points
 		self.usedReferralCode = usedReferralCode
+		self.isEnabled = isEnabled
 	}
 }

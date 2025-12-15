@@ -107,7 +107,9 @@ public struct RewardsScene: View {
         .taskOnce {
             Task {
                 await model.fetch()
-                if let code = model.activateCodeFromLink {
+                if model.shouldAutoActivate {
+                    await model.useReferralCode()
+                } else if let code = model.activateCodeFromLink {
                     isPresentingCodeInput = .activate(code: code)
                 }
             }
