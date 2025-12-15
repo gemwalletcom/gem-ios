@@ -124,13 +124,6 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         }
     }
 
-    public func getPublicKey(wallet: Primitives.Wallet, chain: Chain) async throws -> Data {
-        let password = try await getPassword()
-        return try await queue.asyncTask { [walletKeyStore] in
-            try walletKeyStore.getPublicKey(id: wallet.id, type: wallet.type, chain: chain, password: password)
-        }
-    }
-
     public func getMnemonic(wallet: Primitives.Wallet) async throws -> [String] {
         let password = try await getPassword()
         return try await queue.asyncTask { [walletKeyStore] in

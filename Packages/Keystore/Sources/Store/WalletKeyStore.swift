@@ -207,15 +207,6 @@ public struct WalletKeyStore: Sendable {
         }
     }
 
-    func getPublicKey(id: String, type: Primitives.WalletType, chain: Chain, password: String) throws -> Data {
-        var privateKeyData = try getPrivateKey(id: id, type: type, chain: chain, password: password)
-        defer { privateKeyData.zeroize() }
-        guard let privateKey = PrivateKey(data: privateKeyData) else {
-            throw KeystoreError.invalidPrivateKey
-        }
-        return privateKey.getPublicKey(coinType: chain.coinType).data
-    }
-
     func getMnemonic(wallet: Primitives.Wallet, password: String) throws -> [String] {
         let wallet = try getWallet(id: wallet.id)
         guard
