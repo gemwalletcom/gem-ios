@@ -21,7 +21,7 @@ import enum Primitives.AnyError
 import enum Primitives.Chain
 import enum Primitives.EVMChain
 
-public final class SwapService: Sendable {
+public final class SwapService: Sendable, SwappableChainsProvider {
     private let swapper: GemSwapperProtocol
     private let swapConfig = GemstoneConfig.shared.getSwapConfig()
 

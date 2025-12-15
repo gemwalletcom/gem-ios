@@ -2,9 +2,9 @@
 
 import Testing
 import Primitives
-import PerpetualsTestKit
 
 @testable import Perpetuals
+@testable import PerpetualsTestKit
 
 struct AutocloseModifyBuilderTests {
 
@@ -42,6 +42,42 @@ struct AutocloseModifyBuilderTests {
         let stopLoss = AutocloseField.mock(price: nil, originalPrice: nil, isValid: false)
 
         #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == true)
+    }
+
+    @Test
+    func canBuildWithValidTakeProfit() {
+        let builder = AutocloseModifyBuilder.mock()
+        let takeProfit = AutocloseField.mock(price: 110.0, originalPrice: nil, isValid: true)
+        let stopLoss = AutocloseField.mock(price: nil, isValid: false)
+
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == true)
+    }
+
+    @Test
+    func canBuildWithValidStopLoss() {
+        let builder = AutocloseModifyBuilder.mock()
+        let takeProfit = AutocloseField.mock(price: nil, isValid: false)
+        let stopLoss = AutocloseField.mock(price: 90.0, originalPrice: nil, isValid: true)
+
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == true)
+    }
+
+    @Test
+    func cannotBuildWithoutChangesOrValidFields() {
+        let builder = AutocloseModifyBuilder.mock()
+        let takeProfit = AutocloseField.mock(price: nil, originalPrice: nil, isValid: false)
+        let stopLoss = AutocloseField.mock(price: nil, originalPrice: nil, isValid: false)
+
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == false)
+    }
+
+    @Test
+    func cannotBuildWithInvalidPrices() {
+        let builder = AutocloseModifyBuilder.mock()
+        let takeProfit = AutocloseField.mock(price: 110.0, isValid: false)
+        let stopLoss = AutocloseField.mock(price: 90.0, isValid: false)
+
+        #expect(builder.canBuild(takeProfit: takeProfit, stopLoss: stopLoss) == false)
     }
 
     @Test

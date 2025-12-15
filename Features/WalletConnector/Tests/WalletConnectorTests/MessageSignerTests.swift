@@ -6,23 +6,23 @@ import struct Gemstone.GemEip712MessageDomain
 import struct Gemstone.GemEip712Section
 import struct Gemstone.GemEip712Value
 import struct Gemstone.SignMessage
-import class Gemstone.SignMessageDecoder
+import class Gemstone.MessageSigner
 import enum Gemstone.MessagePreview
 import Testing
 import Primitives
 
 @testable import WalletConnector
 
-struct SignMessageDecoderTests {
+struct MessageSignerTests {
     @Test
     func testBase58() throws {
         let data = "X3CUgCGzyn43DTAbUKnTMDzcGWMooJT2hPSZinjfN1QUgVNYYfeoJ5zg6i4Nd5coKGUrNpEYVoD".data(using: .utf8)!
         let message = SignMessage(chain: "solana", signType: .base58, data: data)
-        let decoder = SignMessageDecoder(message: message)
-        
-        #expect(try decoder.hash().encodeString() == "This is an example message to be signed - 1747125759060")
-        #expect(decoder.plainPreview() == "This is an example message to be signed - 1747125759060")
-        #expect(try decoder.preview() == .text("This is an example message to be signed - 1747125759060"))
+        let signer = MessageSigner(message: message)
+
+        #expect(try signer.hash().encodeString() == "This is an example message to be signed - 1747125759060")
+        #expect(signer.plainPreview() == "This is an example message to be signed - 1747125759060")
+        #expect(try signer.preview() == .text("This is an example message to be signed - 1747125759060"))
     }
 // TODO: Enable later
 //    @Test

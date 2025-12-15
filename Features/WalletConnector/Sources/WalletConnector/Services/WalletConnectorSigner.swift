@@ -10,7 +10,7 @@ import class Gemstone.Config
 import WalletConnectSign
 import WalletSessionService
 import struct Gemstone.SignMessage
-import class Gemstone.SignMessageDecoder
+import class Gemstone.MessageSigner
 import enum Gemstone.MessagePreview
 import GemstonePrimitives
 

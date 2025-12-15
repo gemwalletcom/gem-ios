@@ -79,10 +79,9 @@ struct MainTabView: View {
                     model: CollectionsViewModel(
                         nftService: nftService,
                         walletService: walletService,
-                        wallet: model.wallet,
-                        sceneStep: .collections,
-                        isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
-                    )
+                        wallet: model.wallet
+                    ),
+                    isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
                 )
                 .tabItem {
                     tabItem(Localized.Nft.collections, Images.Tabs.collections)
@@ -227,6 +226,10 @@ extension MainTabView {
                 return
             case .perpetuals:
                 navigationState.wallet.append(Scenes.Perpetuals())
+            case .referral(let code):
+                navigationState.settings.append(Scenes.Referral(code: code))
+            case .rewards:
+                navigationState.settings.append(Scenes.Referral(code: nil))
             case .support:
                 isPresentingSupport = true
             case .test, .unknown:
@@ -300,7 +303,7 @@ extension PushNotification {
     var selectTab: TabItem? {
         switch self {
         case .transaction, .asset, .priceAlert, .buyAsset, .swapAsset, .perpetuals: .wallet
-        case .support: .settings
+        case .support, .referral, .rewards: .settings
         case .test, .unknown: nil
         }
     }

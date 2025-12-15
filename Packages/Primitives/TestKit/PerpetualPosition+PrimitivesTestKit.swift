@@ -11,7 +11,7 @@ public extension PerpetualPosition {
         size: Double = 1.0,
         sizeValue: Double = 1000.0,
         leverage: UInt8 = 10,
-        entryPrice: Double? = nil,
+        entryPrice: Double = 1000.0,
         liquidationPrice: Double? = nil,
         marginType: PerpetualMarginType = .isolated,
         direction: PerpetualDirection? = nil,
@@ -22,7 +22,7 @@ public extension PerpetualPosition {
         funding: Float? = nil
     ) -> PerpetualPosition {
         let direction = direction ?? (size >= 0 ? .long : .short)
-        
+
         return PerpetualPosition(
             id: id,
             perpetualId: perpetualId,

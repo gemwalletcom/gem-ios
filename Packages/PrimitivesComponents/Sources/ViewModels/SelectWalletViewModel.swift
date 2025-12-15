@@ -44,11 +44,15 @@ public struct SelectWalletViewModel: SelectableListAdoptable {
     }
 }
 
+extension SelectWalletViewModel: SelectableListNavigationAdoptable {
+    public var doneTitle: String { Localized.Common.done }
+}
+
 extension Wallet: @retroactive SimpleListItemViewable {
     public var title: String {
         name
     }
-    
+
     public var assetImage: Components.AssetImage {
         WalletViewModel(wallet: self).avatarImage
     }

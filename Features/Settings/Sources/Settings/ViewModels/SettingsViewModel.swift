@@ -57,6 +57,10 @@ public final class SettingsViewModel {
     var walletConnectTitle: String { Localized.WalletConnect.title }
     var walletConnectImage: AssetImage { AssetImage.image(Images.Settings.walletConnect) }
 
+    var rewardsTitle: String { Localized.Rewards.title }
+    var rewardsImage: AssetImage { AssetImage.image(Images.Settings.gem) }
+    var showsRewards: Bool { walletsService.hasMulticoinWallet() }
+
     private let links: [SocialUrl] = [.x, .discord, .telegram, .gitHub, .youTube]
     var linksViewModel: SocialLinksViewModel {
         let assetLinks = links.compactMap {

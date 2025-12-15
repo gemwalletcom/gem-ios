@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import PerpetualsTestKit
 
 @testable import Perpetuals
+@testable import PerpetualsTestKit
 
 struct AutocloseFieldTests {
 

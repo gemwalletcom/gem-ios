@@ -6,11 +6,10 @@ import GemAPI
 import Primitives
 import BannerService
 import DeviceService
-import SwapService
-import NodeService
 import Preferences
 import AssetsService
 import ChainService
+import NodeService
 
 public final class OnstartAsyncService: Sendable {
 
@@ -22,6 +21,7 @@ public final class OnstartAsyncService: Sendable {
     private let deviceService: DeviceService
     private let bannerSetupService: BannerSetupService
     private let releaseService: AppReleaseService
+    private let swappableChainsProvider: any SwappableChainsProvider
 
     @MainActor
     public var releaseAction: ((Release) -> Void)?
@@ -34,7 +34,8 @@ public final class OnstartAsyncService: Sendable {
         deviceService: DeviceService,
         bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
-        releaseService: AppReleaseService
+        releaseService: AppReleaseService,
+        swappableChainsProvider: any SwappableChainsProvider
     ) {
         self.assetStore = assetStore
         self.nodeStore = nodeStore
@@ -48,6 +49,7 @@ public final class OnstartAsyncService: Sendable {
         self.bannerSetupService = bannerSetupService
         self.configService = configService
         self.releaseService = releaseService
+        self.swappableChainsProvider = swappableChainsProvider
     }
 
     public func setup() {
@@ -133,9 +135,7 @@ public final class OnstartAsyncService: Sendable {
     
     private func updateSwappableAssets() {
         Task {
-            let swappper = SwapService(nodeProvider: NodeService(nodeStore: nodeStore))
-            let chains = swappper.supportedChains()
-            
+            let chains = swappableChainsProvider.supportedChains()
             try assetStore.setAssetIsSwappable(for: chains.map { $0.id }, value: true)
         }
     }

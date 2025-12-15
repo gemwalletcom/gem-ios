@@ -3,22 +3,22 @@
 import Foundation
 import Primitives
 
-public struct AutocloseModifyBuilder {
-    private let position: PerpetualPositionData
+struct AutocloseModifyBuilder {
+    private let direction: PerpetualDirection
 
-    public init(position: PerpetualPositionData) {
-        self.position = position
+    init(direction: PerpetualDirection) {
+        self.direction = direction
     }
 
-    public func canBuild(takeProfit: AutocloseField, stopLoss: AutocloseField) -> Bool {
-        let hasChanges = takeProfit.shouldUpdate || stopLoss.shouldUpdate
+    func canBuild(takeProfit: AutocloseField, stopLoss: AutocloseField) -> Bool {
         let takeProfitValid = takeProfit.price == nil || takeProfit.isValid
         let stopLossValid = stopLoss.price == nil || stopLoss.isValid
+        guard takeProfitValid && stopLossValid else { return false }
 
-        return hasChanges && takeProfitValid && stopLossValid
+        return takeProfit.shouldUpdate || stopLoss.shouldUpdate
     }
 
-    public func build(
+    func build(
         assetIndex: Int32,
         takeProfit: AutocloseField,
         stopLoss: AutocloseField
@@ -48,7 +48,7 @@ public struct AutocloseModifyBuilder {
 extension AutocloseModifyBuilder {
     private func buildTPSL(takeProfit: AutocloseField, stopLoss: AutocloseField) -> PerpetualModifyPositionType {
         .tpsl(TPSLOrderData(
-            direction: position.position.direction,
+            direction: direction,
             takeProfit: takeProfit.shouldSet ? takeProfit.formattedPrice : nil,
             stopLoss: stopLoss.shouldSet ? stopLoss.formattedPrice : nil,
             size: .zero

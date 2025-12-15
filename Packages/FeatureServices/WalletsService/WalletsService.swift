@@ -61,6 +61,10 @@ public struct WalletsService: Sendable {
         try walletSessionService.getWallets().count
     }
 
+    public func hasMulticoinWallet() -> Bool {
+        (try? walletSessionService.getWallets().contains { $0.type == .multicoin }) ?? false
+    }
+
     public func updateAssets(walletId: WalletId, assetIds: [AssetId]) async throws {
         try await balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
     }

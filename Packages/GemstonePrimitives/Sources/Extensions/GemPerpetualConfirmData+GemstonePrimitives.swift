@@ -18,7 +18,9 @@ extension Gemstone.PerpetualConfirmData {
             pnl: pnl,
             entryPrice: entryPrice,
             marketPrice: marketPrice,
-            marginAmount: marginAmount
+            marginAmount: marginAmount,
+            takeProfit: takeProfit,
+            stopLoss: stopLoss
         )
     }
 }
@@ -37,7 +39,9 @@ extension Primitives.PerpetualConfirmData {
             pnl: pnl,
             entryPrice: entryPrice,
             marketPrice: marketPrice,
-            marginAmount: marginAmount
+            marginAmount: marginAmount,
+            takeProfit: takeProfit,
+            stopLoss: stopLoss
         )
     }
 }

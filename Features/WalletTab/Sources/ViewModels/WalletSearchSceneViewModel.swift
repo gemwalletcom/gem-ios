@@ -225,7 +225,10 @@ extension WalletSearchSceneViewModel {
 extension WalletSearchSceneViewModel {
     private func updateRecent(_ asset: Asset) {
         do {
-            try activityService.updateRecent(type: .search, assetId: asset.id, walletId: wallet.walletId)
+            try activityService.updateRecent(
+                data: RecentActivityData(type: .search, assetId: asset.id, toAssetId: nil),
+                walletId: wallet.walletId
+            )
         } catch {
             debugLog("UpdateRecent error: \(error)")
         }
