@@ -27,26 +27,20 @@ extension XCUIApplication {
         (0..<12).map { staticTexts["word_\($0)"].label }
     }
     
+    func tapWalletBar() {
+        buttons.element(matching: .button, identifier: "walletBar").tap()
+    }
+    
     func logout() {
         if isOnboarding == false {
-            openWalletDetails()
-            walletDetailsSceneDelete()
+            buttons["Wallet"].firstMatch.tap()
+            tapWalletBar()
+            // WalletsScene
+            buttons["gearshape"].firstMatch.tap()
+            // WalletDetailScene
+            buttons["Delete"].firstMatch.tap()
+            // Delete confirmation alert
+            alerts.buttons["Delete"].tap()
         }
-    }
-    
-    func openWalletDetails() {
-        // WalletScene
-        buttons["Wallet #1"].firstMatch.tap()
-
-        // WalletsScene
-        buttons["gearshape"].firstMatch.tap()
-    }
-    
-    func walletDetailsSceneDelete() {
-        // WalletDetailScene
-        buttons["Delete"].firstMatch.tap()
-
-        // Delete confirmation alert
-        alerts.buttons["Delete"].tap()
     }
 }

@@ -33,7 +33,10 @@ final class CreateWalletUITests: XCTestCase {
         app.tapContinue()
 
         // WalletScene
-        app.openWalletDetails()
+        app.tapWalletBar()
+
+        // WalletsScene
+        app.buttons["gearshape"].firstMatch.tap()
 
         // WalletDetailScene
         app.buttons["Show Secret Phrase"].firstMatch.tap()
