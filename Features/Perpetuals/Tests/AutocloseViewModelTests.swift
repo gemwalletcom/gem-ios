@@ -35,14 +35,14 @@ struct AutocloseViewModelTests {
 
     @Test
     func expectedPnLProfit() {
-        let model = AutocloseViewModel.mock(price: 110.0)
-        #expect(model.expectedPnL == "+$100.00 (+50.00%)")
+        #expect(AutocloseViewModel.mock(price: 110.0).expectedPnL == "+$100.00 (+50.00%)")
+        #expect(AutocloseViewModel.mock(price: 110.0, positionSize: 0).expectedPnL == "+50.00%")
     }
 
     @Test
     func expectedPnLLoss() {
-        let model = AutocloseViewModel.mock(price: 90.0)
-        #expect(model.expectedPnL == "-$100.00 (-50.00%)")
+        #expect(AutocloseViewModel.mock(price: 90.0).expectedPnL == "-$100.00 (-50.00%)")
+        #expect(AutocloseViewModel.mock(price: 90.0, positionSize: 0).expectedPnL == "-50.00%")
     }
 
     @Test

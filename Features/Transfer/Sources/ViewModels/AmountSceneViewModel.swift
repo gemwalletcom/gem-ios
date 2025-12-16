@@ -347,7 +347,7 @@ extension AmountSceneViewModel {
             direction: transferData.direction,
             marketPrice: transferData.price,
             leverage: selectedLeverage.value,
-            size: currencyFormatter.double(from: amountInputModel.text) ?? 1,
+            size: currencyFormatter.double(from: amountInputModel.text) ?? .zero,
             assetDecimals: transferData.asset.decimals,
             takeProfit: takeProfit,
             stopLoss: stopLoss

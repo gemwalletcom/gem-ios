@@ -9,6 +9,7 @@ public extension AutocloseViewModel {
     static func mock(
         type: TpslType = .takeProfit,
         price: Double? = nil,
+        positionSize: Double = 10.0,
         leverage: UInt8 = 5,
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: "USD"),
         percentFormatter: CurrencyFormatter = .percent
@@ -16,7 +17,7 @@ public extension AutocloseViewModel {
         AutocloseViewModel(
             type: type,
             price: price,
-            estimator: .mock(leverage: leverage),
+            estimator: .mock(positionSize: positionSize, leverage: leverage),
             currencyFormatter: currencyFormatter,
             percentFormatter: percentFormatter
         )
