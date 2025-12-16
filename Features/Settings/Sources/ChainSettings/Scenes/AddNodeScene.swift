@@ -31,7 +31,7 @@ public struct AddNodeScene: View {
         }
         .debounce(
             value: model.urlInputModel.text,
-            interval: .milliseconds(250),
+            interval: model.debounceInterval,
             action: model.onChangeInput(_:)
         )
         .safeAreaView {
@@ -121,10 +121,8 @@ extension AddNodeScene {
     }
 
     private func onSelectPaste() {
-        guard let content = UIPasteboard.general.string else {
-            return
-        }
-        model.urlInputModel.text = content.trim()
+        guard let content = UIPasteboard.general.string else { return }
+        model.setInput(content.trim())
     }
 
     private func onSelectImport() {
@@ -137,7 +135,7 @@ extension AddNodeScene {
     }
 
     private func onHandleScan(_ result: String) {
-        model.urlInputModel.text = result
+        model.setInput(result)
     }
 
     private func onSelectScan() {

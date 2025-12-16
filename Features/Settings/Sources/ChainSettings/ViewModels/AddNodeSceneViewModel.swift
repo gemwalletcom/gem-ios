@@ -22,6 +22,7 @@ public final class AddNodeSceneViewModel {
     public var state: StateViewType<AddNodeResultViewModel> = .noData
     public var isPresentingScanner: Bool = false
     public var isPresentingAlertMessage: AlertMessage?
+    public var debounceInterval: Duration? = .milliseconds(250)
 
     public init(chain: Chain, nodeService: NodeService) {
         self.chain = chain
@@ -43,6 +44,8 @@ public final class AddNodeSceneViewModel {
 
 extension AddNodeSceneViewModel {
     func onChangeInput(_ text: String) async {
+        debounceInterval = .milliseconds(250)
+
         guard text.isNotEmpty, urlInputModel.isValid else {
             state = .noData
             return
@@ -50,7 +53,12 @@ extension AddNodeSceneViewModel {
         await fetch()
     }
 
-    public func importFoundNode() throws {
+    func setInput(_ text: String) {
+        debounceInterval = nil
+        urlInputModel.text = text
+    }
+
+    func importFoundNode() throws {
         guard case .data(let model) = state else {
             throw AnyError("Unknown result")
         }
@@ -65,8 +73,9 @@ extension AddNodeSceneViewModel {
          */
     }
     
-    public func fetch() async {
+    func fetch() async {
         guard let url = try? URLDecoder().decode(urlInputModel.text) else {
+            // safety check for onSubmitUrl
             state = .error(AnyError(AddNodeError.invalidURL.errorDescription ?? ""))
             return
         }
