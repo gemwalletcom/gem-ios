@@ -8,14 +8,16 @@ public extension Rewards {
         code: String? = "test123",
         referralCount: Int32 = 5,
         points: Int32 = 0,
-        usedReferralCode: String? = nil
+        usedReferralCode: String? = nil,
+        redemptionOptions: [RewardRedemptionOption] = []
     ) -> Rewards {
         Rewards(
             code: code,
             referralCount: referralCount,
             points: points,
             usedReferralCode: usedReferralCode,
-            isEnabled: true
+            isEnabled: true,
+            redemptionOptions: redemptionOptions
         )
     }
 }

@@ -41,6 +41,9 @@ public struct RewardsScene: View {
                 if model.isInfoEnabled {
                     infoSection(rewards: rewards)
                 }
+                if !rewards.redemptionOptions.isEmpty {
+                    redemptionOptionsSection(options: rewards.redemptionOptions)
+                }
             case .noData:
                 inviteFriendsSection(code: nil)
             }
@@ -201,6 +204,39 @@ public struct RewardsScene: View {
                 .foregroundStyle(Colors.secondaryText)
         }
         .frame(maxWidth: .infinity)
+    }
+
+    @ViewBuilder
+    private func redemptionOptionsSection(options: [RewardRedemptionOption]) -> some View {
+        Section {
+            ForEach(options, id: \.id) { option in
+                Button {
+                    Task { await model.redeem(option: option) }
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: Spacing.extraSmall) {
+                            Text(option.redemptionType.rawValue.capitalized)
+                                .font(.headline)
+                            if let assetId = option.assetId {
+                                Text(assetId)
+                                    .font(.caption)
+                                    .foregroundStyle(Colors.secondaryText)
+                            }
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: Spacing.extraSmall) {
+                            Text("\(option.points) 💎")
+                                .font(.headline)
+                            Text(option.value)
+                                .font(.caption)
+                                .foregroundStyle(Colors.secondaryText)
+                        }
+                    }
+                }
+            }
+        } header: {
+            Text("Redeem")
+        }
     }
 
     @ViewBuilder
