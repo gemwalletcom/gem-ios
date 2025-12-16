@@ -25,6 +25,7 @@ import Perpetuals
 public final class AmountSceneViewModel {
     private let wallet: Wallet
     private let onTransferAction: TransferDataAction
+    private let preferences: Preferences
 
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
@@ -68,6 +69,7 @@ public final class AmountSceneViewModel {
     ) {
         self.input = input
         self.wallet = wallet
+        self.preferences = preferences
         self.onTransferAction = onTransferAction
         self.assetRequest = AssetRequest(
             walletId: wallet.walletId.id,
@@ -547,13 +549,15 @@ extension AmountSceneViewModel {
             )
         case .perpetual(let data):
             let decimals = data.positionAction.transferData.asset.decimals
+            let autocloseOrderType = PerpetualOrderType(rawValue: preferences.perpetualAutocloseType) ?? .market
             let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
                 positionAction: data.positionAction,
                 usdcAmount: value,
                 usdcDecimals: asset.decimals.asInt,
                 leverage: selectedLeverage.value,
                 takeProfit: takeProfit.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) },
-                stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) }
+                stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) },
+                autocloseOrderType: autocloseOrderType
             )
             return TransferData(
                 type: .perpetual(data.positionAction.transferData.asset, perpetualType),

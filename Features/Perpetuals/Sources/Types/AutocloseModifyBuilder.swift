@@ -5,9 +5,11 @@ import Primitives
 
 struct AutocloseModifyBuilder {
     private let direction: PerpetualDirection
+    private let autocloseOrderType: PerpetualOrderType
 
-    init(direction: PerpetualDirection) {
+    init(direction: PerpetualDirection, autocloseOrderType: PerpetualOrderType) {
         self.direction = direction
+        self.autocloseOrderType = autocloseOrderType
     }
 
     func canBuild(takeProfit: AutocloseField, stopLoss: AutocloseField) -> Bool {
@@ -51,7 +53,8 @@ extension AutocloseModifyBuilder {
             direction: direction,
             takeProfit: takeProfit.shouldSet ? takeProfit.formattedPrice : nil,
             stopLoss: stopLoss.shouldSet ? stopLoss.formattedPrice : nil,
-            size: .zero
+            size: .zero,
+            autocloseOrderType: autocloseOrderType
         ))
     }
 

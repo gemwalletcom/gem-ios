@@ -5,7 +5,10 @@ import Primitives
 @testable import Perpetuals
 
 extension AutocloseModifyBuilder {
-    static func mock(direction: PerpetualDirection = .long) -> AutocloseModifyBuilder {
-        AutocloseModifyBuilder(direction: direction)
+    static func mock(
+        direction: PerpetualDirection = .long,
+        autocloseOrderType: PerpetualOrderType = .market
+    ) -> AutocloseModifyBuilder {
+        AutocloseModifyBuilder(direction: direction, autocloseOrderType: autocloseOrderType)
     }
 }

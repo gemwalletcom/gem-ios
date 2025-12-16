@@ -33,6 +33,7 @@ public final class Preferences: @unchecked Sendable {
         static let perpetualsMarketsUpdatedAt = "perpetual_markets_updated_at"
         static let isPerpetualEnabled = "is_perpetual_enabled"
         static let perpetualLeverage = "perpetual_leverage"
+        static let perpetualAutocloseType = "perpetual_autoclose_type"
         static let supportDeviceId = "support_device_id"
         static let supportDeviceRegistered = "support_device_registered"
     }
@@ -109,6 +110,9 @@ public final class Preferences: @unchecked Sendable {
     @ConfigurableDefaults(key: Keys.perpetualLeverage, defaultValue: 10)
     public var perpetualLeverage: UInt8
 
+    @ConfigurableDefaults(key: Keys.perpetualAutocloseType, defaultValue: PerpetualOrderType.market.rawValue)
+    public var perpetualAutocloseType: String
+
     @ConfigurableDefaults(key: Keys.supportDeviceId, defaultValue: nil)
     public var supportDeviceId: String?
 
@@ -153,6 +157,7 @@ public final class Preferences: @unchecked Sendable {
         configure(\._perpetualMarketsUpdatedAt, key: Keys.perpetualsMarketsUpdatedAt, defaultValue: nil)
         configure(\._isPerpetualEnabled, key: Keys.isPerpetualEnabled, defaultValue: false)
         configure(\._perpetualLeverage, key: Keys.perpetualLeverage, defaultValue: 10)
+        configure(\._perpetualAutocloseType, key: Keys.perpetualAutocloseType, defaultValue: PerpetualOrderType.market.rawValue)
         configure(\._supportDeviceId, key: Keys.supportDeviceId, defaultValue: nil)
         configure(\._isSupportDeviceRegistered, key: Keys.supportDeviceRegistered, defaultValue: false)
     }

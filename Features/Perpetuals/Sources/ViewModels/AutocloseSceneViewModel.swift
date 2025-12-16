@@ -9,6 +9,7 @@ import Style
 import SwiftUI
 import Components
 import GemstonePrimitives
+import Preferences
 
 @Observable
 @MainActor
@@ -18,12 +19,14 @@ public final class AutocloseSceneViewModel {
     private let perpetualFormatter = PerpetualFormatter(provider: .hypercore)
     private let type: AutocloseType
     private let estimator: AutocloseEstimator
+    private let autocloseOrderType: PerpetualOrderType
 
     var input: AutocloseInput
 
-    public init(type: AutocloseType) {
+    public init(type: AutocloseType, preferences: Preferences = .standard) {
         self.type = type
         self.estimator = AutocloseEstimator(type: type)
+        self.autocloseOrderType = PerpetualOrderType(rawValue: preferences.perpetualAutocloseType) ?? .market
 
         self.input = AutocloseInput(
             type: type,
@@ -47,7 +50,7 @@ public final class AutocloseSceneViewModel {
     }
 
     public var confirmButtonType: ButtonType {
-        let builder = AutocloseModifyBuilder(direction: type.direction)
+        let builder = AutocloseModifyBuilder(direction: type.direction, autocloseOrderType: autocloseOrderType)
         let isEnabled = builder.canBuild(takeProfit: takeProfitField, stopLoss: stopLossField)
         return .primary(isEnabled ? .normal : .disabled)
     }
@@ -67,7 +70,7 @@ extension AutocloseSceneViewModel {
     public func onSelectConfirm() {
         input.update()
 
-        let builder = AutocloseModifyBuilder(direction: type.direction)
+        let builder = AutocloseModifyBuilder(direction: type.direction, autocloseOrderType: autocloseOrderType)
         guard builder.canBuild(takeProfit: takeProfitField, stopLoss: stopLossField) else { return }
 
         switch type {

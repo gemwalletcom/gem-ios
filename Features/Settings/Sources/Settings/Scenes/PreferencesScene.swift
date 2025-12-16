@@ -59,6 +59,15 @@ public struct PreferencesScene: View {
                             action: model.onSelectLeverage
                         )
                         .padding(.leading, Sizing.image.asset - .tiny)
+
+                        NavigationCustomLink(
+                            with: ListItemView(
+                                title: model.defaultAutocloseTitle,
+                                subtitle: model.defaultAutocloseValue
+                            ),
+                            action: model.onSelectAutoclose
+                        )
+                        .padding(.leading, Sizing.image.asset - .tiny)
                     }
                 }
             }
@@ -72,6 +81,13 @@ public struct PreferencesScene: View {
                 title: model.defaultLeverageTitle,
                 leverageOptions: model.leverageOptions,
                 selectedLeverage: $model.perpetualLeverage
+            )
+        }
+        .sheet(isPresented: $model.isPresentingAutoclosePicker) {
+            AutocloseOrderTypeSheet(
+                title: model.defaultAutocloseTitle,
+                options: model.autocloseOptions,
+                selection: $model.perpetualAutocloseType
             )
         }
     }
