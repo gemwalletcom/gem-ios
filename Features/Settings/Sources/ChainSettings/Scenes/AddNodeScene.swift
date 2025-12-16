@@ -74,7 +74,11 @@ extension AddNodeScene {
     @ViewBuilder
     private var inputView: some View {
         Section {
-            InputValidationField(model: $model.urlInputModel, placeholder: model.inputFieldTitle) {
+            InputValidationField(
+                model: $model.urlInputModel,
+                placeholder: model.inputFieldTitle,
+                onWillClean: { model.debounceInterval = nil }
+            ) {
                 HStack(spacing: .medium) {
                     ListButton(image: Images.System.paste, action: onSelectPaste)
                     ListButton(image: Images.System.qrCodeViewfinder, action: onSelectScan)
