@@ -77,9 +77,10 @@ public final class AmountSceneViewModel {
         if case .perpetual(let data) = type {
             switch data.positionAction {
             case .open:
-                let defaultLeverage = Preferences.standard.perpetualLeverage
-                let maxLeverage = data.positionAction.transferData.leverage
-                self.selectedLeverage = LeverageOption(value: min(defaultLeverage, maxLeverage))
+                self.selectedLeverage = LeverageOption.option(
+                    desiredValue: Preferences.standard.perpetualLeverage,
+                    from: leverageOptions
+                )
             case .increase, .reduce:
                 self.selectedLeverage = LeverageOption(value: data.positionAction.transferData.leverage)
             }

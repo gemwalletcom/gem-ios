@@ -14,4 +14,13 @@ public struct LeverageOption: WheelPickerDisplayable, Sendable {
 
     public var id: UInt8 { value }
     public var displayText: String { "\(value)x" }
+
+    public static func option(desiredValue: UInt8, from available: [LeverageOption]) -> LeverageOption {
+        guard !available.isEmpty else { return allOptions[0] }
+        return available.min { lhs, rhs in
+            let lhsDist = max(lhs.value, desiredValue) - min(lhs.value, desiredValue)
+            let rhsDist = max(rhs.value, desiredValue) - min(rhs.value, desiredValue)
+            return lhsDist != rhsDist ? lhsDist < rhsDist : lhs.value > rhs.value
+        }!
+    }
 }
