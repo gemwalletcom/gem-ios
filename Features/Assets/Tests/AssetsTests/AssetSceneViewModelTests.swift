@@ -74,7 +74,10 @@ extension AssetSceneViewModel {
             ),
             isPresentingSelectedAssetInput: .constant(.none)
         )
-        viewModel.assetData = assetData
+        viewModel.chainAssetData = ChainAssetData(
+            assetData: assetData,
+            nativeAssetData: AssetData.with(asset: assetData.asset.chain.asset)
+        )
         viewModel.banners = banners
         return viewModel
     }

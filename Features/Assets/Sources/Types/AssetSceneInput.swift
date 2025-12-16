@@ -10,7 +10,7 @@ public struct AssetSceneInput: Sendable {
     public let wallet: Wallet
     public let asset: Asset
 
-    public var assetRequest: AssetRequest
+    public var chainAssetRequest: ChainAssetRequest
     public var transactionsRequest: TransactionsRequest
     public var bannersRequest: BannersRequest
 
@@ -18,7 +18,7 @@ public struct AssetSceneInput: Sendable {
         self.wallet = wallet
         self.asset = asset
 
-        self.assetRequest = AssetRequest(
+        self.chainAssetRequest = ChainAssetRequest(
             walletId: wallet.id,
             assetId: asset.id
         )
