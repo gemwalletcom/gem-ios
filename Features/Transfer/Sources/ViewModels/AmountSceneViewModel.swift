@@ -343,11 +343,13 @@ extension AmountSceneViewModel {
     func onSelectAutoclose() {
         guard case .perpetual(let data) = type else { return }
         let transferData = data.positionAction.transferData
+        let collateral = currencyFormatter.double(from: amountInputModel.text) ?? .zero
+        let positionSize = transferData.price > 0 ? (collateral * Double(selectedLeverage.value)) / transferData.price : 0
         isPresentingSheet = .autoclose(AutocloseOpenData(
             direction: transferData.direction,
             marketPrice: transferData.price,
             leverage: selectedLeverage.value,
-            size: currencyFormatter.double(from: amountInputModel.text) ?? .zero,
+            size: positionSize,
             assetDecimals: transferData.asset.decimals,
             takeProfit: takeProfit,
             stopLoss: stopLoss
