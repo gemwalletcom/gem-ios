@@ -95,6 +95,7 @@ public struct ReceiveScene: View {
             await model.onLoadImage()
         }
         .taskOnce(model.onTaskOnce)
+        .maxBrightness()
     }
 }
 
