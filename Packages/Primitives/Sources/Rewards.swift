@@ -4,6 +4,64 @@
 
 import Foundation
 
+public struct RedemptionRequest: Codable, Sendable {
+	public let id: String
+
+	public init(id: String) {
+		self.id = id
+	}
+}
+
+public enum RewardRedemptionType: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
+	case asset
+}
+
+public struct RewardRedemptionOption: Codable, Equatable, Hashable, Sendable {
+	public let id: String
+	public let redemptionType: RewardRedemptionType
+	public let points: Int32
+	public let assetId: String?
+	public let value: String
+
+	public init(id: String, redemptionType: RewardRedemptionType, points: Int32, assetId: String?, value: String) {
+		self.id = id
+		self.redemptionType = redemptionType
+		self.points = points
+		self.assetId = assetId
+		self.value = value
+	}
+}
+
+public enum RedemptionStatus: String, Codable, Equatable, Hashable, Sendable {
+	case pending
+	case completed
+	case failed
+}
+
+public struct RewardRedemption: Codable, Equatable, Hashable, Sendable {
+	public let id: Int32
+	public let option: RewardRedemptionOption
+	public let status: RedemptionStatus
+	public let transactionId: String?
+	public let createdAt: Date
+
+	public init(id: Int32, option: RewardRedemptionOption, status: RedemptionStatus, transactionId: String?, createdAt: Date) {
+		self.id = id
+		self.option = option
+		self.status = status
+		self.transactionId = transactionId
+		self.createdAt = createdAt
+	}
+}
+
+public struct RedemptionResult: Codable, Sendable {
+	public let redemption: RewardRedemption
+
+	public init(redemption: RewardRedemption) {
+		self.redemption = redemption
+	}
+}
+
 public struct ReferralCode: Codable, Sendable {
 	public let code: String
 
@@ -36,11 +94,15 @@ public struct Rewards: Codable, Equatable, Hashable, Sendable {
 	public let referralCount: Int32
 	public let points: Int32
 	public let usedReferralCode: String?
+	public let isEnabled: Bool
+	public let redemptionOptions: [RewardRedemptionOption]
 
-	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?) {
+	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?, isEnabled: Bool, redemptionOptions: [RewardRedemptionOption]) {
 		self.code = code
 		self.referralCount = referralCount
 		self.points = points
 		self.usedReferralCode = usedReferralCode
+		self.isEnabled = isEnabled
+		self.redemptionOptions = redemptionOptions
 	}
 }

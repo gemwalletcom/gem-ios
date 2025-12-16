@@ -48,6 +48,7 @@ public enum GemAPI: TargetType {
     case getRewards(address: String)
     case createReferral(AuthenticatedRequest<ReferralCode>)
     case useReferralCode(AuthenticatedRequest<ReferralCode>)
+    case redeem(address: String, request: AuthenticatedRequest<RedemptionRequest>)
 
     public var baseUrl: URL {
         Constants.apiURL
@@ -70,7 +71,8 @@ public enum GemAPI: TargetType {
             .getPriceAlerts,
             .getNFTAssets,
             .markets,
-            .getAuthNonce:
+            .getAuthNonce,
+            .getRewards:
             return .GET
         case .addSubscriptions,
             .addDevice,
@@ -82,10 +84,9 @@ public enum GemAPI: TargetType {
             .getFiatQuoteUrl,
             .reportNft,
             .createReferral,
-            .useReferralCode:
+            .useReferralCode,
+            .redeem:
             return .POST
-        case .getRewards:
-            return .GET
         case .updateDevice:
             return .PUT
         case .deleteSubscriptions,
@@ -157,6 +158,8 @@ public enum GemAPI: TargetType {
             return "/v1/rewards/referrals/create"
         case .useReferralCode:
             return "/v1/rewards/referrals/use"
+        case .redeem(let address, _):
+            return "/v1/rewards/\(address)/redeem"
         }
     }
     
@@ -232,6 +235,8 @@ public enum GemAPI: TargetType {
         case .createReferral(let request):
             return .encodable(request)
         case .useReferralCode(let request):
+            return .encodable(request)
+        case .redeem(_, let request):
             return .encodable(request)
         }
     }
