@@ -14,7 +14,8 @@ public extension Rewards {
             code: code,
             referralCount: referralCount,
             points: points,
-            usedReferralCode: usedReferralCode
+            usedReferralCode: usedReferralCode,
+            isEnabled: true
         )
     }
 }
