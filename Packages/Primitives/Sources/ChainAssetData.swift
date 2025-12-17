@@ -4,10 +4,10 @@ import Foundation
 
 public struct ChainAssetData: Codable, Equatable, Hashable, Sendable {
     public let assetData: AssetData
-    public let nativeAssetData: AssetData
+    public let feeAssetData: AssetData
 
-    public init(assetData: AssetData, nativeAssetData: AssetData) {
+    public init(assetData: AssetData, feeAssetData: AssetData) {
         self.assetData = assetData
-        self.nativeAssetData = nativeAssetData
+        self.feeAssetData = feeAssetData
     }
 }

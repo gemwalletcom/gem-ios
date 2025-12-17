@@ -6,11 +6,11 @@ import Primitives
 public extension ChainAssetData {
     static func mock(
         assetData: AssetData = .mock(),
-        nativeAssetData: AssetData = .mock()
+        feeAssetData: AssetData = .mock()
     ) -> ChainAssetData {
         ChainAssetData(
             assetData: assetData,
-            nativeAssetData: nativeAssetData
+            feeAssetData: feeAssetData
         )
     }
 }

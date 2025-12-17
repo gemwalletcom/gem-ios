@@ -17,7 +17,7 @@ struct ChainAssetRequestTests {
             let result = try ChainAssetRequest(walletId: .empty, assetId: assetId).fetch(db)
 
             #expect(result.assetData.asset.id == assetId)
-            #expect(result.nativeAssetData.asset.id == assetId)
+            #expect(result.feeAssetData.asset.id == assetId)
         }
     }
 
@@ -30,7 +30,7 @@ struct ChainAssetRequestTests {
             let result = try ChainAssetRequest(walletId: .empty, assetId: token.id).fetch(db)
 
             #expect(result.assetData.asset.id == token.id)
-            #expect(result.nativeAssetData.asset.id == token.chain.assetId)
+            #expect(result.feeAssetData.asset.id == token.chain.assetId)
         }
     }
 }

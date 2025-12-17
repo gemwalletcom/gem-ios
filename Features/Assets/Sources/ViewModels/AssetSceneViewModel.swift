@@ -64,7 +64,7 @@ public final class AssetSceneViewModel: Sendable {
         self.input = input
         self.chainAssetData = ChainAssetData(
             assetData: AssetData.with(asset: input.asset),
-            nativeAssetData: AssetData.with(asset: input.asset.chain.asset)
+            feeAssetData: AssetData.with(asset: input.asset.chain.asset)
         )
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
@@ -78,8 +78,8 @@ public final class AssetSceneViewModel: Sendable {
     var resourcesTitle: String { Localized.Asset.resources }
     var energyTitle: String { ResourceViewModel(resource: .energy).title }
     var bandwidthTitle: String { ResourceViewModel(resource: .bandwidth).title }
-    var energyText: String { nativeAssetDataModel.energyText }
-    var bandwidthText: String { nativeAssetDataModel.bandwidthText }
+    var energyText: String { feeAssetDataModel.energyText }
+    var bandwidthText: String { feeAssetDataModel.bandwidthText }
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
@@ -366,9 +366,9 @@ extension AssetSceneViewModel {
         explorerService.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
     }
 
-    private var nativeAssetDataModel: AssetDataViewModel {
+    private var feeAssetDataModel: AssetDataViewModel {
         AssetDataViewModel(
-            assetData: chainAssetData.nativeAssetData,
+            assetData: chainAssetData.feeAssetData,
             formatter: .medium,
             currencyCode: preferences.preferences.currency
         )

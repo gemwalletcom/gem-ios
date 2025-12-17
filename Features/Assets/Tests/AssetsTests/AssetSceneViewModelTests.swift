@@ -76,7 +76,7 @@ extension AssetSceneViewModel {
         )
         viewModel.chainAssetData = ChainAssetData(
             assetData: assetData,
-            nativeAssetData: AssetData.with(asset: assetData.asset.chain.asset)
+            feeAssetData: AssetData.with(asset: assetData.asset.chain.asset)
         )
         viewModel.banners = banners
         return viewModel
