@@ -10,6 +10,9 @@ public enum DeepLink: Sendable {
     case swap(AssetId, AssetId?)
     case perpetuals
     case rewards(code: String?)
+    case buy(AssetId, amount: Int?)
+    case sell(AssetId, amount: Int?)
+    case setPriceAlert(AssetId, price: Double)
 
     public enum PathComponent: String {
         case tokens
@@ -17,6 +20,9 @@ public enum DeepLink: Sendable {
         case perpetuals
         case rewards
         case join
+        case buy
+        case sell
+        case setPriceAlert
     }
 
     public var pathComponent: PathComponent {
@@ -25,6 +31,9 @@ public enum DeepLink: Sendable {
         case .swap: .swap
         case .perpetuals: .perpetuals
         case .rewards: .rewards
+        case .buy: .buy
+        case .sell: .sell
+        case .setPriceAlert: .setPriceAlert
         }
     }
 
@@ -41,11 +50,18 @@ public enum DeepLink: Sendable {
             case .none: "/\(pathComponent.rawValue)/\(fromAssetId.identifier)"
             }
         case .perpetuals: "/\(pathComponent.rawValue)"
-        case .rewards(let code): 
+        case .rewards(let code):
             switch code {
             case .some(let code): "/\(pathComponent.rawValue)?code=\(code)"
             case .none: "/\(pathComponent.rawValue)"
             }
+        case let .buy(assetId, amount), let .sell(assetId, amount):
+            switch amount {
+            case .some(let amount): "/\(pathComponent.rawValue)/\(assetId.identifier)?amount=\(amount)"
+            case .none: "/\(pathComponent.rawValue)/\(assetId.identifier)"
+            }
+        case let .setPriceAlert(assetId, price):
+            "/\(pathComponent.rawValue)/\(assetId.identifier)?price=\(price)"
         }
     }
     

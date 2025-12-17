@@ -6,7 +6,9 @@ public enum PushNotification: Equatable, Sendable {
     case transaction(walletIndex: Int, AssetId, transaction: Transaction)
     case asset(AssetId)
     case priceAlert(AssetId)
-    case buyAsset(AssetId)
+    case setPriceAlert(AssetId, price: Double)
+    case buyAsset(AssetId, amount: Int?)
+    case sellAsset(AssetId, amount: Int?)
     case swapAsset(AssetId, AssetId?)
     case perpetuals
     case referral(code: String)
@@ -38,8 +40,9 @@ public enum PushNotification: Equatable, Sendable {
             let asset = try decoder.decode(PushNotificationAsset.self, from: data)
             self = .priceAlert(try AssetId(id: asset.assetId))
         case .buyAsset:
+            // TODO: parse amount from push notification data
             let asset = try decoder.decode(PushNotificationAsset.self, from: data)
-            self = .buyAsset(try AssetId(id: asset.assetId))
+            self = .buyAsset(try AssetId(id: asset.assetId), amount: nil)
         case .swapAsset:
             let swapAsset = try decoder.decode(PushNotificationSwapAsset.self, from: data)
             let fromAssetId = try AssetId(id: swapAsset.fromAssetId)

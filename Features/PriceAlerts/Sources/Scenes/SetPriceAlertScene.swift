@@ -60,7 +60,10 @@ public struct SetPriceAlertScene: View {
         }
         .onChange(of: model.state.type, model.onChangeAlertType)
         .onChange(of: model.state.amount, onChangeAmount)
-        .onAppear { focusedField = true }
+        .onAppear {
+            focusedField = true
+            model.setAlertDirection(for: assetData.price)
+        }
     }
 }
 

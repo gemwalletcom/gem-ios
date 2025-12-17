@@ -52,9 +52,33 @@ public enum URLParser {
                 return .perpetuals
             case .rewards, .join:
                 return .rewards(code: url.queryValue(for: "code") ?? "")
+            case .buy, .sell:
+                return try parseFiat(url: url, urlComponents: urlComponents, type: pathComponent)
+            case .setPriceAlert:
+                guard
+                    let assetIdString = urlComponents.element(at: 1),
+                    let price = url.queryValue(for: "price").flatMap({ Double($0) })
+                else {
+                    throw URLParserError.invalidURL(url)
+                }
+                let assetId = try AssetId(id: assetIdString)
+                return .setPriceAlert(assetId, price: price)
             }
         }
 
         throw URLParserError.invalidURL(url)
+    }
+
+    private static func parseFiat(url: URL, urlComponents: [String], type: DeepLink.PathComponent) throws -> URLAction {
+        guard let assetIdString = urlComponents.element(at: 1) else {
+            throw URLParserError.invalidURL(url)
+        }
+        let assetId = try AssetId(id: assetIdString)
+        let amount = url.queryValue(for: "amount").flatMap { Int($0) }
+        return switch type {
+        case .buy: .buy(assetId, amount: amount)
+        case .sell: .sell(assetId, amount: amount)
+        default: .none
+        }
     }
 }

@@ -27,13 +27,14 @@ public final class SetPriceAlertViewModel {
         walletId: WalletId,
         assetId: AssetId,
         priceAlertService: PriceAlertService,
+        price: Double? = nil,
         onComplete: StringAction
     ) {
         self.walletId = walletId
         self.assetId = assetId
         self.priceAlertService = priceAlertService
         self.onComplete = onComplete
-        self.state = .init()
+        self.state = SetPriceAlertViewModelState(price: price)
     }
 
     var assetRequest: AssetRequest {

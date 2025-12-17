@@ -82,20 +82,22 @@ struct SelectedAssetNavigationStack: View  {
                             walletsService: walletsService,
                         )
                     )
-                case .buy:
+                case let .buy(_, amount):
                     FiatConnectNavigationView(
                         model: viewModelFactory.fiatScene(
                             assetAddress: input.assetAddress,
                             walletId: wallet.walletId,
-                            type: .buy
+                            type: .buy,
+                            amount: amount
                         )
                     )
-                case .sell:
+                case let .sell(_, amount):
                     FiatConnectNavigationView(
                         model: viewModelFactory.fiatScene(
                             assetAddress: input.assetAddress,
                             walletId: wallet.walletId,
-                            type: .sell
+                            type: .sell,
+                            amount: amount
                         )
                     )
                 case let .swap(fromAsset, toAsset):
