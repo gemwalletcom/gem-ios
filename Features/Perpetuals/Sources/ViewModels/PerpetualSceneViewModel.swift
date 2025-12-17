@@ -263,23 +263,18 @@ public extension PerpetualSceneViewModel {
     }
     
     func onAutocloseComplete() {
-        toastMessage = .success(Localized.Perpetual.autoClose)
+        toastMessage = ToastMessageViewModel(type: .perpetualAutoclose).toastMessage
         isPresentingAutoclose = false
         fetch()
     }
-    
+
     func onPerpetualCloseComplete() {
-        toastMessage = .success(Localized.Perpetual.closePosition)
+        toastMessage = ToastMessageViewModel(type: .perpetualClose).toastMessage
         fetch()
     }
 
     func onPerpetualOrderComplete(recipientData: PerpetualRecipientData) {
-        let message: String = switch recipientData.positionAction {
-        case .open(let data): Localized.Perpetual.openDirection(PerpetualDirectionViewModel(direction: data.direction).title)
-        case .increase: Localized.Perpetual.increasePosition
-        case .reduce: Localized.Perpetual.reducePosition
-        }
-        toastMessage = .success(message)
+        toastMessage = ToastMessageViewModel(type: .perpetualOrder(recipientData.positionAction)).toastMessage
         fetch()
     }
 
