@@ -33,7 +33,7 @@ public struct RewardsScene: View {
         List {
             switch model.state {
             case .loading:
-                LoadingView()
+                CenterLoadingView()
             case .error(let error):
                 stateErrorView(error: error)
             case .data(let rewards):
