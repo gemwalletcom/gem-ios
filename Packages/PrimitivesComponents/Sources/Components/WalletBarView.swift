@@ -37,6 +37,7 @@ public struct WalletBarView: View {
             .padding(.small)
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("walletBar")
     }
 }
 

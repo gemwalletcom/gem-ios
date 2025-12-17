@@ -75,7 +75,7 @@ public struct TonSigner: Signable {
         }
 
         let messages = try JSONDecoder().decode([WCTonMessage].self, from: data)
-        let transfers = try messages.map { message -> TW_TheOpenNetwork_Proto_Transfer in
+        let transfers = try messages.map { message in
             try TheOpenNetworkTransfer.with {
                 $0.dest = message.address
                 $0.amount = try BigInt.from(string: message.amount).serialize()
