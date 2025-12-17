@@ -541,3 +541,6 @@
 "rewards.create_referral_code.title" = "Create Username";
 "rewards.create_referral_code.info" = "This will be your personal username.";
 "rewards.username" = "Username";
+"rewards.ways_spend.title" = "Cara-cara untuk Berbelanja";
+"rewards.ways_spend.asset.title" = "Dapatkan %@";
+"rewards.insufficient_points" = "Mata tidak mencukupi";

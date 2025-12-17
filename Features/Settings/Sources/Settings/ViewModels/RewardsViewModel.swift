@@ -152,6 +152,11 @@ public final class RewardsViewModel: Sendable {
         }
     }
 
+    func canRedeem(option: RewardRedemptionOption) -> Bool {
+        guard let rewards else { return false }
+        return rewards.points >= option.points
+    }
+
     func redeem(option: RewardRedemptionOption) async {
         do {
             _ = try await rewardsService.redeem(wallet: selectedWallet, redemptionId: option.id)

@@ -526,7 +526,7 @@
 "nft.report.report_button_title" = "রিপোর্ট করুন";
 "rewards.title" = "পুরষ্কার";
 "rewards.share_text" = "যোগদান করুন Gem Wallet আমার রেফারেল লিঙ্ক দিয়ে পুরষ্কার জিতুন: %@";
-"rewards.my_referral_code" = "My referral code";
+"rewards.my_referral_code" = "আমার রেফারেল কোড";
 "rewards.invite_friends.title" = "বন্ধুদের আমন্ত্রণ জানান";
 "rewards.invite_friends.description" = "** উপার্জন করুন%d যোগদানকারী প্রতিটি বন্ধুর জন্য পয়েন্ট**।";
 "common.get_started" = "শুরু করুন";
@@ -541,3 +541,6 @@
 "rewards.create_referral_code.title" = "Create Username";
 "rewards.create_referral_code.info" = "This will be your personal username.";
 "rewards.username" = "Username";
+"rewards.ways_spend.title" = "খরচ করার উপায়";
+"rewards.ways_spend.asset.title" = "পান %@";
+"rewards.insufficient_points" = "অপর্যাপ্ত পয়েন্ট";
