@@ -11,7 +11,7 @@ import Formatters
 @MainActor
 public final class ReceiveViewModel: Sendable {
     var qrSize: CGFloat {
-        UIDevice.current.userInterfaceIdiom == .pad ? 180 : 248
+        UIDevice.current.userInterfaceIdiom == .pad ? 180 : 260
     }
     
     let assetModel: AssetViewModel
