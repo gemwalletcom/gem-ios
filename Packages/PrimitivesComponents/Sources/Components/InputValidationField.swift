@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Style
+import Primitives
 
 public struct InputValidationField<TrailingView: View>: View {
     @Binding private var model: InputValidationViewModel
@@ -10,6 +11,7 @@ public struct InputValidationField<TrailingView: View>: View {
     let style: FloatFieldStyle
     let placeholder: String
     let allowClean: Bool
+    let onWillClean: VoidAction
 
     private let trailingView: TrailingView
 
@@ -18,6 +20,7 @@ public struct InputValidationField<TrailingView: View>: View {
         style: FloatFieldStyle = .standard,
         placeholder: String,
         allowClean: Bool = true,
+        onWillClean: VoidAction = nil,
         @ViewBuilder trailingView: () -> TrailingView = { EmptyView() }
     ) {
         self.trailingView = trailingView()
@@ -25,6 +28,7 @@ public struct InputValidationField<TrailingView: View>: View {
         self.style = style
         self.placeholder = placeholder
         self.allowClean = allowClean
+        self.onWillClean = onWillClean
     }
 
     public var body: some View {
@@ -34,6 +38,7 @@ public struct InputValidationField<TrailingView: View>: View {
                 text: $model.text,
                 style: style,
                 allowClean: allowClean,
+                onWillClean: onWillClean,
                 trailingView: {
                     trailingView
                 }

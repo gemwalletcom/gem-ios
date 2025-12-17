@@ -29,6 +29,11 @@ public struct AddNodeScene: View {
             inputView
             nodeInfoView
         }
+        .debounce(
+            value: model.urlInputModel.text,
+            interval: model.debounceInterval,
+            action: model.onChangeInput(_:)
+        )
         .safeAreaView {
             StateButton(
                 text: model.actionButtonTitle,
@@ -69,7 +74,11 @@ extension AddNodeScene {
     @ViewBuilder
     private var inputView: some View {
         Section {
-            FloatTextField(model.inputFieldTitle, text: $model.urlInput) {
+            InputValidationField(
+                model: $model.urlInputModel,
+                placeholder: model.inputFieldTitle,
+                onWillClean: { model.debounceInterval = nil }
+            ) {
                 HStack(spacing: .medium) {
                     ListButton(image: Images.System.paste, action: onSelectPaste)
                     ListButton(image: Images.System.qrCodeViewfinder, action: onSelectScan)
@@ -78,7 +87,7 @@ extension AddNodeScene {
             .focused($focusedField, equals: .address)
             .autocorrectionDisabled()
             .textInputAutocapitalization(.never)
-            .submitLabel(.search)
+            .submitLabel(.done)
             .onSubmit(onSubmitUrl)
         }
         if case let .error(error) = model.state {
@@ -110,15 +119,14 @@ extension AddNodeScene {
     }
 
     private func onSubmitUrl() {
-        fetch()
+        Task {
+            await model.fetch()
+        }
     }
 
     private func onSelectPaste() {
-        guard let content = UIPasteboard.general.string else {
-            return
-        }
-        model.urlInput = content.trim()
-        fetch()
+        guard let content = UIPasteboard.general.string else { return }
+        model.setInput(content.trim())
     }
 
     private func onSelectImport() {
@@ -131,21 +139,10 @@ extension AddNodeScene {
     }
 
     private func onHandleScan(_ result: String) {
-        model.urlInput = result
-        fetch()
+        model.setInput(result)
     }
 
     private func onSelectScan() {
         model.isPresentingScanner = true
-    }
-}
-
-// MARK: - Effects
-
-extension AddNodeScene {
-    private func fetch() {
-        Task {
-            await model.fetch()
-        }
     }
 }
