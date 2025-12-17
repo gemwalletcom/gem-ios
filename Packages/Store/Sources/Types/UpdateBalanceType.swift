@@ -9,7 +9,7 @@ public enum UpdateBalanceType {
     case stake(UpdateStakeBalance)
     case perpetual(UpdatePerpetualBalance)
 
-    var metadataa: BalanceMetadata? {
+    var metadata: BalanceMetadata? {
         switch self {
         case .stake(let balance): balance.metadata
         case .coin, .perpetual, .token: .none
@@ -32,7 +32,7 @@ public struct UpdateCoinBalance {
 
 public struct UpdateTokenBalance {
     public let available: UpdateBalanceValue
-    
+
     public init(available: UpdateBalanceValue) {
         self.available = available
     }

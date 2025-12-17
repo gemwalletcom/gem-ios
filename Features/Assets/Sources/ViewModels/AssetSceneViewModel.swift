@@ -37,9 +37,10 @@ public final class AssetSceneViewModel: Sendable {
     public var isPresentingAssetSheet: AssetSheetType?
 
     public var input: AssetSceneInput
-    public var assetData: AssetData
+    public var chainAssetData: ChainAssetData
     public var transactions: [TransactionExtended] = []
     public var banners: [Banner] = []
+    public var assetData: AssetData { chainAssetData.assetData }
     private var asset: Asset { assetData.asset }
     private var wallet: Wallet { walletModel.wallet }
 
@@ -61,7 +62,10 @@ public final class AssetSceneViewModel: Sendable {
         self.bannerService = bannerService
 
         self.input = input
-        self.assetData = AssetData.with(asset: input.asset)
+        self.chainAssetData = ChainAssetData(
+            assetData: AssetData.with(asset: input.asset),
+            feeAssetData: AssetData.with(asset: input.asset.chain.asset)
+        )
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
@@ -74,6 +78,8 @@ public final class AssetSceneViewModel: Sendable {
     var resourcesTitle: String { Localized.Asset.resources }
     var energyTitle: String { ResourceViewModel(resource: .energy).title }
     var bandwidthTitle: String { ResourceViewModel(resource: .bandwidth).title }
+    var energyText: String { feeAssetDataModel.energyText }
+    var bandwidthText: String { feeAssetDataModel.bandwidthText }
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
@@ -358,6 +364,14 @@ extension AssetSceneViewModel {
 
     private var addressLink: BlockExplorerLink {
         explorerService.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
+    }
+
+    private var feeAssetDataModel: AssetDataViewModel {
+        AssetDataViewModel(
+            assetData: chainAssetData.feeAssetData,
+            formatter: .medium,
+            currencyCode: preferences.preferences.currency
+        )
     }
 
     private func onSelect(url: URL?) {
