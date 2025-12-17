@@ -526,7 +526,7 @@
 "nft.report.report_button_title" = "Reportar";
 "rewards.title" = "Recompensas";
 "rewards.share_text" = "Unirse Gem Wallet con mi enlace de referencia y gana recompensas: %@";
-"rewards.my_referral_code" = "My referral code";
+"rewards.my_referral_code" = "Mi código de referencia";
 "rewards.invite_friends.title" = "Invitar amigos";
 "rewards.invite_friends.description" = "Ganar **%d puntos** por cada amigo que se una.";
 "common.get_started" = "Empezar";
@@ -541,3 +541,6 @@
 "rewards.create_referral_code.title" = "Create Username";
 "rewards.create_referral_code.info" = "This will be your personal username.";
 "rewards.username" = "Username";
+"rewards.ways_spend.title" = "Formas de gastar";
+"rewards.ways_spend.asset.title" = "Conseguir %@";
+"rewards.insufficient_points" = "Puntos insuficientes";

@@ -8,5 +8,6 @@ public extension ValueFormatter {
     static let full = ValueFormatter(style: .full)
     static let auto = ValueFormatter(style: .auto)
     static let abbreviated = ValueFormatter(style: .abbreviated)
+    static let compact = ValueFormatter(style: .compact)
     static let full_US = ValueFormatter(locale: Locale.US, style: .full)
 }

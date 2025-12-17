@@ -969,6 +969,8 @@ public enum Localized {
     public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recent")
   }
   public enum Rewards {
+    /// Insufficient points
+    public static let insufficientPoints = Localized.tr("Localizable", "rewards.insufficient_points", fallback: "Insufficient points")
     /// Invited By
     public static let invitedBy = Localized.tr("Localizable", "rewards.invited_by", fallback: "Invited By")
     /// My referral code
@@ -1014,6 +1016,16 @@ public enum Localized {
       }
       /// Invite Friends
       public static let title = Localized.tr("Localizable", "rewards.invite_friends.title", fallback: "Invite Friends")
+    }
+    public enum WaysSpend {
+      /// Ways to Spend
+      public static let title = Localized.tr("Localizable", "rewards.ways_spend.title", fallback: "Ways to Spend")
+      public enum Asset {
+        /// Get %@
+        public static func title(_ p1: Any) -> String {
+          return Localized.tr("Localizable", "rewards.ways_spend.asset.title", String(describing: p1), fallback: "Get %@")
+        }
+      }
     }
   }
   public enum Rootcheck {
