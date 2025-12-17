@@ -102,19 +102,6 @@ public final class ObservablePreferences: Sendable {
             }
         }
     }
-
-    @ObservationIgnored
-    public var perpetualAutocloseType: String {
-        get {
-            access(keyPath: \.perpetualAutocloseType)
-            return preferences.perpetualAutocloseType
-        }
-        set {
-            withMutation(keyPath: \.perpetualAutocloseType) {
-                preferences.perpetualAutocloseType = newValue
-            }
-        }
-    }
 }
 
 // MARK: - EnvironmentValues

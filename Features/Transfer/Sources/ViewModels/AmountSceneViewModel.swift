@@ -551,7 +551,6 @@ extension AmountSceneViewModel {
             )
         case .perpetual(let data):
             let decimals = data.positionAction.transferData.asset.decimals
-            let autocloseOrderType = PerpetualOrderType(rawValue: preferences.perpetualAutocloseType) ?? .market
             let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
                 positionAction: data.positionAction,
                 usdcAmount: value,
@@ -559,7 +558,7 @@ extension AmountSceneViewModel {
                 leverage: selectedLeverage.value,
                 takeProfit: takeProfit.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) },
                 stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) },
-                autocloseOrderType: autocloseOrderType
+                autocloseOrderType: .market
             )
             return TransferData(
                 type: .perpetual(data.positionAction.transferData.asset, perpetualType),

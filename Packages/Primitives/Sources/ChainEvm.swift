@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum EVMChain: String, Codable, CaseIterable, Equatable, Sendable {
+public enum EVMChain: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case ethereum
 	case smartChain = "smartchain"
 	case polygon

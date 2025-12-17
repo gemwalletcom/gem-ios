@@ -58,7 +58,7 @@ public struct AutocloseViewModel {
         return "\(sign)\(amount) (\(percentText))"
     }
 
-    public var pnlColor: Color {
+    public var roeColor: Color {
         guard let price else { return Colors.secondaryText }
         let roe = estimator.calculateROE(price: price)
         return PriceChangeColor.color(for: roe)

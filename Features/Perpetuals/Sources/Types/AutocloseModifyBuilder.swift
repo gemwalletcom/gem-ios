@@ -7,7 +7,7 @@ struct AutocloseModifyBuilder {
     private let direction: PerpetualDirection
     private let autocloseOrderType: PerpetualOrderType
 
-    init(direction: PerpetualDirection, autocloseOrderType: PerpetualOrderType) {
+    init(direction: PerpetualDirection, autocloseOrderType: PerpetualOrderType = .market) {
         self.direction = direction
         self.autocloseOrderType = autocloseOrderType
     }
