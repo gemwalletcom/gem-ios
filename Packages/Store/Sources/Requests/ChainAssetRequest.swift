@@ -18,7 +18,14 @@ public struct ChainAssetRequest: ValueObservationQueryable {
     }
 
     public func fetch(_ db: Database) throws -> ChainAssetData {
-        ChainAssetData(
+        if assetRequest.assetId == feeAssetRequest.assetId {
+            let assetData = try assetRequest.fetch(db)
+            return ChainAssetData(
+                assetData: assetData,
+                feeAssetData: assetData
+            )
+        }
+        return ChainAssetData(
             assetData: try assetRequest.fetch(db),
             feeAssetData: try feeAssetRequest.fetch(db)
         )

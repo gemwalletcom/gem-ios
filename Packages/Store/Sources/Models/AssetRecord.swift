@@ -50,7 +50,6 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     static let priceAlerts = hasMany(PriceAlertRecord.self).forKey("priceAlerts")
     static let priorityAssets = hasOne(AssetSearchRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
     static let recentActivities = hasMany(RecentActivityRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
-    static let nativeAsset = belongsTo(AssetRecord.self, key: "nativeAsset", using: ForeignKey(["chain"], to: ["id"]))
     
     var priorityAsset: QueryInterfaceRequest<AssetSearchRecord> {
         request(for: AssetRecord.priorityAssets)
