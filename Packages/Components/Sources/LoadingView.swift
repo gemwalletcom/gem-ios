@@ -7,11 +7,7 @@ public struct LoadingView: View {
     public let size: ControlSize
     public let tint: Color
 
-    public init(tint: Color = Colors.gray) {
-        self.init(size: .regular, tint: tint)
-    }
-
-    public init(size: ControlSize, tint: Color) {
+    public init(size: ControlSize = .regular, tint: Color = Colors.gray) {
         self.size = size
         self.tint = tint
     }
@@ -21,5 +17,18 @@ public struct LoadingView: View {
             .controlSize(size)
             .progressViewStyle(.circular)
             .tint(tint)
+    }
+}
+
+public struct CenterLoadingView: View {
+    
+    public init() {}
+    
+    public var body: some View {
+        HStack {
+            Spacer()
+            LoadingView()
+            Spacer()
+        }
     }
 }
