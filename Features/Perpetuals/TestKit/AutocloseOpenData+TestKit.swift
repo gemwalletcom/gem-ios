@@ -2,9 +2,12 @@
 
 import Foundation
 import Primitives
+import PrimitivesTestKit
 
 extension AutocloseOpenData {
     static func mock(
+        assetId: AssetId = .mock(.bitcoin),
+        symbol: String = "BTC",
         direction: PerpetualDirection = .long,
         marketPrice: Double = 100.0,
         leverage: UInt8 = 10,
@@ -14,6 +17,8 @@ extension AutocloseOpenData {
         stopLoss: String? = nil
     ) -> AutocloseOpenData {
         AutocloseOpenData(
+            assetId: assetId,
+            symbol: symbol,
             direction: direction,
             marketPrice: marketPrice,
             leverage: leverage,

@@ -10,6 +10,8 @@ public enum PerpetualDirection: String, Codable, Equatable, Hashable, Sendable {
 }
 
 public struct AutocloseOpenData: Codable, Equatable, Hashable, Sendable {
+	public let assetId: AssetId
+	public let symbol: String
 	public let direction: PerpetualDirection
 	public let marketPrice: Double
 	public let leverage: UInt8
@@ -18,7 +20,9 @@ public struct AutocloseOpenData: Codable, Equatable, Hashable, Sendable {
 	public let takeProfit: String?
 	public let stopLoss: String?
 
-	public init(direction: PerpetualDirection, marketPrice: Double, leverage: UInt8, size: Double, assetDecimals: Int32, takeProfit: String?, stopLoss: String?) {
+	public init(assetId: AssetId, symbol: String, direction: PerpetualDirection, marketPrice: Double, leverage: UInt8, size: Double, assetDecimals: Int32, takeProfit: String?, stopLoss: String?) {
+		self.assetId = assetId
+		self.symbol = symbol
 		self.direction = direction
 		self.marketPrice = marketPrice
 		self.leverage = leverage
