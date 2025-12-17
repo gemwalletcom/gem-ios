@@ -22,7 +22,11 @@ public extension Date? {
 }
 
 public extension Date {
-    static func getTimestampInMs() -> UInt64 {
+    static func timestamp() -> UInt64 {
+        UInt64(Date().timeIntervalSince1970)
+    }
+
+    static func timestampInMs() -> UInt64 {
         UInt64(Date().timeIntervalSince1970 * 1000)
     }
 }

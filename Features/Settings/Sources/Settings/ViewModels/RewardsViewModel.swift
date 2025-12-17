@@ -137,6 +137,31 @@ public final class RewardsViewModel: Sendable {
         return activateCode
     }
 
+    var shouldAutoActivate: Bool {
+        wallets.count == 1 && activateCode != nil
+    }
+
+    func useReferralCode() async {
+        guard let code = activateCode else { return }
+        do {
+            try await rewardsService.useReferralCode(wallet: selectedWallet, referralCode: code)
+            showActivatedToast()
+            await fetch()
+        } catch {
+            isPresentingError = error.localizedDescription
+        }
+    }
+
+    func redeem(option: RewardRedemptionOption) async {
+        do {
+            _ = try await rewardsService.redeem(wallet: selectedWallet, redemptionId: option.id)
+            toastMessage = ToastMessage.success(Localized.Common.done)
+            await fetch()
+        } catch {
+            isPresentingError = error.localizedDescription
+        }
+    }
+
     private func showActivatedToast() {
         toastMessage = ToastMessage.success(Localized.Common.done)
     }

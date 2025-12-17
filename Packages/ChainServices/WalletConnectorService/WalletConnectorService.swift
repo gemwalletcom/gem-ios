@@ -161,7 +161,7 @@ extension WalletConnectorService {
                     continue
                 }
 
-                try await handleRequest(request: request)
+                try await handleRequest(request: request, session: session)
             } catch {
                 debugLog("Error handling request: \(error)")
             }
@@ -177,7 +177,7 @@ extension WalletConnectorService {
         }
     }
 
-    private func handleRequest(request: WalletConnectSign.Request) async throws  {
+    private func handleRequest(request: WalletConnectSign.Request, session: Session) async throws  {
         let messageId = request.messageId
 
         guard await messageTracker.shouldProcess(messageId) else {
@@ -194,7 +194,8 @@ extension WalletConnectorService {
                 topic: request.topic,
                 method: request.method,
                 params: params,
-                chainId: request.chainId.absoluteString
+                chainId: request.chainId.absoluteString,
+                domain: session.peer.metadata.url
             )
 
             debugLog("parse request result: \(action)")
@@ -222,11 +223,13 @@ extension WalletConnectorService {
             let response = walletConnect.encodeSignMessage(chain: chain, signature: signature)
             return .response(response.map())
         case .signTransaction(let chain, let type, let data):
+            try walletConnect.validateSendTransaction(transactionType: type, data: data)
             let transaction = try walletConnect.decodeSendTransaction(transactionType: type, data: data)
             let transactionId = try await signer.signTransaction(sessionId: sessionId, chain: chain.map(), transaction: transaction.map())
             let response = walletConnect.encodeSignTransaction(chain: chain, transactionId: transactionId)
             return .response(response.map())
         case .sendTransaction(let chain, let type, let data):
+            try walletConnect.validateSendTransaction(transactionType: type, data: data)
             let transaction = try walletConnect.decodeSendTransaction(transactionType: type, data: data)
             let transactionId = try await signer.sendTransaction(
                 sessionId: sessionId,

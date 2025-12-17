@@ -8,6 +8,7 @@ import Blockchain
 import ChainService
 import NodeService
 import PrimitivesComponents
+import Validators
 
 @MainActor
 @Observable
@@ -17,10 +18,11 @@ public final class AddNodeSceneViewModel {
 
     public let chain: Chain
 
-    public var urlInput: String = ""
+    public var urlInputModel = InputValidationViewModel(mode: .onDemand, validators: [.url])
     public var state: StateViewType<AddNodeResultViewModel> = .noData
     public var isPresentingScanner: Bool = false
     public var isPresentingAlertMessage: AlertMessage?
+    public var debounceInterval: Duration? = .milliseconds(250)
 
     public init(chain: Chain, nodeService: NodeService) {
         self.chain = chain
@@ -41,7 +43,22 @@ public final class AddNodeSceneViewModel {
 // MARK: - Business Logic
 
 extension AddNodeSceneViewModel {
-    public func importFoundNode() throws {
+    func onChangeInput(_ text: String) async {
+        debounceInterval = .milliseconds(250)
+
+        guard text.isNotEmpty, urlInputModel.isValid else {
+            state = .noData
+            return
+        }
+        await fetch()
+    }
+
+    func setInput(_ text: String) {
+        debounceInterval = nil
+        urlInputModel.text = text
+    }
+
+    func importFoundNode() throws {
         guard case .data(let model) = state else {
             throw AnyError("Unknown result")
         }
@@ -56,8 +73,9 @@ extension AddNodeSceneViewModel {
          */
     }
     
-    public func fetch() async  {
-        guard let url = try? URLDecoder().decode(urlInput) else {
+    func fetch() async {
+        guard let url = try? URLDecoder().decode(urlInputModel.text) else {
+            // safety check for onSubmitUrl
             state = .error(AnyError(AddNodeError.invalidURL.errorDescription ?? ""))
             return
         }
@@ -67,7 +85,7 @@ extension AddNodeSceneViewModel {
         let service = provider.service(for: chain)
 
         do {
-            let nodeStatus = try await service.getNodeStatus(url: urlInput)
+            let nodeStatus = try await service.getNodeStatus(url: urlInputModel.text)
             guard NodeService.isValid(netoworkId: nodeStatus.chainId, for: chain) else {
                 throw AddNodeError.invalidNetworkId
             }

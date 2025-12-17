@@ -8,23 +8,16 @@ public extension Rewards {
         code: String? = "test123",
         referralCount: Int32 = 5,
         points: Int32 = 0,
-        usedReferralCode: String? = nil
+        usedReferralCode: String? = nil,
+        redemptionOptions: [RewardRedemptionOption] = []
     ) -> Rewards {
         Rewards(
             code: code,
             referralCount: referralCount,
             points: points,
-            usedReferralCode: usedReferralCode
+            usedReferralCode: usedReferralCode,
+            isEnabled: true,
+            redemptionOptions: redemptionOptions
         )
-    }
-}
-
-public extension RewardEvent {
-    static func mock(
-        event: RewardEventType = .inviteNew,
-        points: Int32 = 100,
-        createdAt: Date = Date()
-    ) -> RewardEvent {
-        RewardEvent(event: event, points: points, createdAt: createdAt)
     }
 }
