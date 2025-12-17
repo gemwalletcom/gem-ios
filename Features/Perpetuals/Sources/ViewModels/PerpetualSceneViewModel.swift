@@ -50,6 +50,7 @@ public final class PerpetualSceneViewModel {
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingModifyAlert: Bool?
     public var isPresentingAutoclose: Bool = false
+    public var toastMessage: ToastMessage?
 
     let preference = Preferences.standard
 
@@ -118,7 +119,7 @@ public final class PerpetualSceneViewModel {
         }
     }
 
-    public func fetch() async {
+    public func fetch() {
         Task {
             await fetchCandlesticks()
         }
@@ -260,6 +261,29 @@ public extension PerpetualSceneViewModel {
             )
         )
     }
+    
+    func onAutocloseComplete() {
+        toastMessage = .success(Localized.Perpetual.autoClose)
+        isPresentingAutoclose = false
+        fetch()
+    }
+    
+    func onPerpetualCloseComplete() {
+        toastMessage = .success(Localized.Perpetual.closePosition)
+        fetch()
+    }
+
+    func onPerpetualOrderComplete(recipientData: PerpetualRecipientData) {
+        let message: String = switch recipientData.positionAction {
+        case .open(let data): Localized.Perpetual.openDirection(PerpetualDirectionViewModel(direction: data.direction).title)
+        case .increase: Localized.Perpetual.increasePosition
+        case .reduce: Localized.Perpetual.reducePosition
+        }
+        toastMessage = .success(message)
+        fetch()
+    }
+
+    // MARK: - Private
 
     private func createTransferData(direction: PerpetualDirection, leverage: UInt8) -> PerpetualTransferData? {
         guard let assetIndex = Int(perpetual.identifier) else {
@@ -283,13 +307,6 @@ public extension PerpetualSceneViewModel {
             positionAction: positionAction
         )
         onPerpetualRecipientData?(recipientData)
-    }
-
-    func onAutocloseComplete() {
-        isPresentingAutoclose = false
-        Task {
-            await fetch()
-        }
     }
 }
 
