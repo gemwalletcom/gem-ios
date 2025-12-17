@@ -59,7 +59,6 @@ public struct ReceiveScene: View {
                 Text(model.warningMessage)
                     .textStyle(.subHeadline)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, .medium)
                     .padding(.top, .small)
                     .frame(maxWidth: model.qrSize + .extraLarge)
                 Spacer()
