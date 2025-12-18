@@ -20,15 +20,17 @@ public struct RewardRedemptionOption: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let redemptionType: RewardRedemptionType
 	public let points: Int32
-	public let assetId: String?
+	public let asset: Asset?
 	public let value: String
+	public let remaining: Int32?
 
-	public init(id: String, redemptionType: RewardRedemptionType, points: Int32, assetId: String?, value: String) {
+	public init(id: String, redemptionType: RewardRedemptionType, points: Int32, asset: Asset?, value: String, remaining: Int32?) {
 		self.id = id
 		self.redemptionType = redemptionType
 		self.points = points
-		self.assetId = assetId
+		self.asset = asset
 		self.value = value
+		self.remaining = remaining
 	}
 }
 

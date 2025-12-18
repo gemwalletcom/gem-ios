@@ -66,35 +66,6 @@ public struct TonSigner: Signable {
         ]
     }
 
-    public func signData(input: SignerInput, privateKey: Data) throws -> String {
-        guard
-            case .generic(_, _, let extra) = input.type,
-            let data = extra.data
-        else {
-            throw AnyError("Invalid input data")
-        }
-
-        let messages = try JSONDecoder().decode([WCTonMessage].self, from: data)
-        let transfers = try messages.map { message in
-            try TheOpenNetworkTransfer.with {
-                $0.dest = message.address
-                $0.amount = try BigInt.from(string: message.amount).serialize()
-                $0.mode = TheOpenNetworkSendMode.defaultMode()
-                $0.bounceable = true
-                if let payload = message.payload {
-                    $0.customPayload = payload
-                }
-            }
-        }
-
-        return try sign(
-            input: input,
-            messages: transfers,
-            coinType: input.coinType,
-            privateKey: privateKey
-        )
-    }
-
     private func expireAt() -> UInt32 {
         UInt32(Date.now.timeIntervalSince1970 + TimeInterval(600))
     }

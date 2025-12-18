@@ -24,6 +24,7 @@ public struct RewardsScene: View {
     @State private var isPresentingWalletSelector = false
     @State private var isPresentingShare = false
     @State private var isPresentingCodeInput: CodeInputType?
+    @State private var isPresentingRedemptionAlert: AlertMessage?
 
     public init(model: RewardsViewModel) {
         _model = State(initialValue: model)
@@ -33,7 +34,7 @@ public struct RewardsScene: View {
         List {
             switch model.state {
             case .loading:
-                LoadingView()
+                CenterLoadingView()
             case .error(let error):
                 stateErrorView(error: error)
             case .data(let rewards):
@@ -118,6 +119,7 @@ public struct RewardsScene: View {
             }
         }
         .toast(message: $model.toastMessage)
+        .alertSheet($isPresentingRedemptionAlert)
     }
 
     @ViewBuilder
@@ -209,33 +211,32 @@ public struct RewardsScene: View {
     @ViewBuilder
     private func redemptionOptionsSection(options: [RewardRedemptionOption]) -> some View {
         Section {
-            ForEach(options, id: \.id) { option in
-                Button {
-                    Task { await model.redeem(option: option) }
-                } label: {
-                    HStack {
-                        VStack(alignment: .leading, spacing: Spacing.extraSmall) {
-                            Text(option.redemptionType.rawValue.capitalized)
-                                .font(.headline)
-                            if let assetId = option.assetId {
-                                Text(assetId)
-                                    .font(.caption)
-                                    .foregroundStyle(Colors.secondaryText)
-                            }
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: Spacing.extraSmall) {
-                            Text("\(option.points) 💎")
-                                .font(.headline)
-                            Text(option.value)
-                                .font(.caption)
-                                .foregroundStyle(Colors.secondaryText)
-                        }
+            ForEach(options.map { RewardRedemptionOptionViewModel(option: $0) }) { viewModel in
+                NavigationCustomLink(
+                    with: ListItemView(
+                        title: viewModel.title,
+                        subtitle: viewModel.subtitle,
+                        imageStyle: .asset(assetImage: viewModel.assetImage)
+                    )
+                ) {
+                    if model.canRedeem(option: viewModel.option) {
+                        isPresentingRedemptionAlert = AlertMessage(
+                            title: viewModel.confirmationMessage,
+                            message: "",
+                            actions: [
+                                AlertAction(title: Localized.Transfer.confirm, isDefaultAction: true) {
+                                    Task { await model.redeem(option: viewModel.option) }
+                                },
+                                .cancel(title: Localized.Common.cancel)
+                            ]
+                        )
+                    } else {
+                        model.isPresentingError = Localized.Rewards.insufficientPoints
                     }
                 }
             }
         } header: {
-            Text("Redeem")
+            Text(Localized.Rewards.WaysSpend.title)
         }
     }
 

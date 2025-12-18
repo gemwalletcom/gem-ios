@@ -50,7 +50,8 @@ public final class FiatSceneViewModel {
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
         walletId: String,
-        type: FiatQuoteType = .buy
+        type: FiatQuoteType = .buy,
+        amount: Int? = nil
     ) {
         self.fiatService = fiatService
         self.securePreferences = securePreferences
@@ -80,6 +81,10 @@ public final class FiatSceneViewModel {
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter
         )
+
+        if let amount {
+            currentViewModel.inputValidationModel.text = String(amount)
+        }
     }
 
     var currentViewModel: FiatOperationViewModel {

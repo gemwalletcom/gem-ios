@@ -541,3 +541,6 @@
 "rewards.create_referral_code.title" = "Create Username";
 "rewards.create_referral_code.info" = "This will be your personal username.";
 "rewards.username" = "Username";
+"rewards.ways_spend.title" = "消费方式";
+"rewards.ways_spend.asset.title" = "得到 %@";
+"rewards.insufficient_points" = "分数不足";

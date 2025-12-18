@@ -13,6 +13,8 @@ import WalletTab
 import Transactions
 import Swap
 import Assets
+import PriceAlerts
+import Components
 
 struct MainTabView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -28,6 +30,7 @@ struct MainTabView: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.perpetualObserverService) private var perpetualObserverService
+    @Environment(\.priceAlertService) private var priceAlertService
 
     private let model: MainTabViewModel
 
@@ -42,6 +45,8 @@ struct MainTabView: View {
     }
 
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
+    @State private var isPresentingSetPriceAlert: SetPriceAlertInput?
+    @State private var isPresentingToastMessage: ToastMessage?
     @State private var isPresentingSupport = false
 
     init(model: MainTabViewModel) {
@@ -120,6 +125,18 @@ struct MainTabView: View {
                 onComplete: { onComplete(type: input.type) }
             )
         }
+        .sheet(item: $isPresentingSetPriceAlert) { input in
+            SetPriceAlertNavigationStack(
+                model: SetPriceAlertViewModel(
+                    walletId: model.wallet.walletId,
+                    assetId: input.assetId,
+                    priceAlertService: priceAlertService,
+                    price: input.price,
+                    onComplete: onSetPriceAlertComplete
+                )
+            )
+        }
+        .toast(message: $isPresentingToastMessage)
         .onChange(of: model.walletId, onWalletIdChange)
         .onChange(
             of: notificationHandler.notifications,
@@ -200,12 +217,21 @@ extension MainTabView {
                 path.append(transaction)
 
                 navigationState.wallet = path
-            case .priceAlert(let assetId):
+            case let .priceAlert(assetId):
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)
-                navigationState.wallet.append(Scenes.Price(asset: asset))
-            case .asset(let assetId), .buyAsset(let assetId):
+                navigationState.wallet.append(Scenes.AssetPriceAlert(asset: asset, price: nil))
+            case let .setPriceAlert(assetId, price):
+                isPresentingSetPriceAlert = SetPriceAlertInput(assetId: assetId, price: price)
+                return
+            case .asset(let assetId):
                 let asset = try await assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Asset(asset: asset))
+            case let .buyAsset(assetId, amount):
+                try await presentFiatInput(assetId: assetId, fiatType: .buy, amount: amount)
+                return
+            case let .sellAsset(assetId, amount):
+                try await presentFiatInput(assetId: assetId, fiatType: .sell, amount: amount)
+                return
             case let .swapAsset(fromAsetId, toAssetId):
                 async let getFromAsset = try await assetsService.getOrFetchAsset(for: fromAsetId)
                 async let getToAsset: Asset? = {
@@ -264,6 +290,24 @@ extension MainTabView {
         await perpetualObserverService.disconnect()
     }
 
+    private func onSetPriceAlertComplete(message: String) {
+        isPresentingSetPriceAlert = nil
+        isPresentingToastMessage = .priceAlert(message: message)
+    }
+
+    private func presentFiatInput(assetId: AssetId, fiatType: FiatQuoteType, amount: Int?) async throws {
+        let asset = try await assetsService.getOrFetchAsset(for: assetId)
+        let account = try model.wallet.account(for: asset.chain)
+        let type: SelectedAssetType = switch fiatType {
+        case .buy: .buy(asset, amount: amount)
+        case .sell: .sell(asset, amount: amount)
+        }
+        isPresentingSelectedAssetInput = SelectedAssetInput(
+            type: type,
+            assetAddress: AssetAddress(asset: account.chain.asset, address: account.address)
+        )
+    }
+
     private func onComplete(type: SelectedAssetType) {
         switch type {
         case .receive, .stake, .buy, .sell:
@@ -302,7 +346,7 @@ extension MainTabView {
 extension PushNotification {
     var selectTab: TabItem? {
         switch self {
-        case .transaction, .asset, .priceAlert, .buyAsset, .swapAsset, .perpetuals: .wallet
+        case .transaction, .asset, .priceAlert, .setPriceAlert, .buyAsset, .sellAsset, .swapAsset, .perpetuals: .wallet
         case .support, .referral, .rewards: .settings
         case .test, .unknown: nil
         }

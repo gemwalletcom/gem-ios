@@ -10,5 +10,8 @@ public enum URLAction: Equatable {
     case swap(AssetId, AssetId?)
     case perpetuals
     case rewards(code: String)
+    case buy(AssetId, amount: Int?)
+    case sell(AssetId, amount: Int?)
+    case setPriceAlert(AssetId, price: Double?)
     case none
 }
