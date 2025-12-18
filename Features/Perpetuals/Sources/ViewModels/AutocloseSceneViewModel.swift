@@ -46,12 +46,7 @@ public final class AutocloseSceneViewModel {
         }
     }
 
-    public var entryPriceTitle: String? {
-        switch type {
-        case .modify: Localized.Perpetual.entryPrice
-        case .open: nil
-        }
-    }
+    public var entryPriceTitle: String { Localized.Perpetual.entryPrice }
 
     public var entryPriceText: String? {
         switch type {
