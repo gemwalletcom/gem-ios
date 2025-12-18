@@ -12,6 +12,6 @@ public enum URLAction: Equatable {
     case rewards(code: String)
     case buy(AssetId, amount: Int?)
     case sell(AssetId, amount: Int?)
-    case setPriceAlert(AssetId, price: Double)
+    case setPriceAlert(AssetId, price: Double?)
     case none
 }

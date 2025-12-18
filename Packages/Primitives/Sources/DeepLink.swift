@@ -12,7 +12,7 @@ public enum DeepLink: Sendable {
     case rewards(code: String?)
     case buy(AssetId, amount: Int?)
     case sell(AssetId, amount: Int?)
-    case setPriceAlert(AssetId, price: Double)
+    case setPriceAlert(AssetId, price: Double?)
 
     public enum PathComponent: String {
         case tokens
@@ -61,14 +61,17 @@ public enum DeepLink: Sendable {
             case .none: "/\(pathComponent.rawValue)/\(assetId.identifier)"
             }
         case let .setPriceAlert(assetId, price):
-            "/\(pathComponent.rawValue)/\(assetId.identifier)?price=\(price)"
+            switch price {
+            case .some(let price): "/\(pathComponent.rawValue)/\(assetId.identifier)?price=\(price)"
+            case .none: "/\(pathComponent.rawValue)/\(assetId.identifier)"
+            }
         }
     }
-    
+
     public var url: URL {
         URL(string: "https://\(Self.host)\(path)")!
     }
-    
+
     public var localUrl: URL {
         URL(string: "gem://\(path)")!
     }

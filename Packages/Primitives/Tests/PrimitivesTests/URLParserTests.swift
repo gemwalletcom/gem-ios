@@ -92,8 +92,7 @@ struct URLParserTests {
 
     @Test
     func setPriceAlertUrlWithoutPrice() async throws {
-        #expect(throws: URLParserError.self) {
-            try URLParser.from(url: URL(string: "https://gemwallet.com/setPriceAlert/bitcoin")!)
-        }
+        let alertWithoutPrice = try URLParser.from(url: URL(string: "https://gemwallet.com/setPriceAlert/bitcoin")!)
+        #expect(alertWithoutPrice == .setPriceAlert(AssetId(chain: .bitcoin, tokenId: nil), price: nil))
     }
 }

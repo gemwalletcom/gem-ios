@@ -6,7 +6,7 @@ public enum PushNotification: Equatable, Sendable {
     case transaction(walletIndex: Int, AssetId, transaction: Transaction)
     case asset(AssetId)
     case priceAlert(AssetId)
-    case setPriceAlert(AssetId, price: Double)
+    case setPriceAlert(AssetId, price: Double?)
     case buyAsset(AssetId, amount: Int?)
     case sellAsset(AssetId, amount: Int?)
     case swapAsset(AssetId, AssetId?)

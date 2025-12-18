@@ -36,17 +36,11 @@ public enum URLParser {
 
             switch pathComponent {
             case .tokens:
-                guard let chainId = urlComponents.element(at: 1) else {
-                    throw URLParserError.invalidURL(url)
-                }
-                let chain = try Chain(id: chainId)
+                let chain = try Chain(id: urlComponents.required(at: 1, url: url))
                 return .asset(AssetId(chain: chain, tokenId: urlComponents.element(at: 2)))
             case .swap:
-                guard let fromIdString = urlComponents.element(at: 1) else {
-                    throw URLParserError.invalidURL(url)
-                }
-                let fromId = try AssetId(id: fromIdString)
-                let toId: AssetId? = urlComponents.element(at: 2).flatMap { try? AssetId(id: $0) }
+                let fromId = try AssetId(id: urlComponents.required(at: 1, url: url))
+                let toId = urlComponents.element(at: 2).flatMap { try? AssetId(id: $0) }
                 return .swap(fromId, toId)
             case .perpetuals:
                 return .perpetuals
@@ -55,13 +49,8 @@ public enum URLParser {
             case .buy, .sell:
                 return try parseFiat(url: url, urlComponents: urlComponents, type: pathComponent)
             case .setPriceAlert:
-                guard
-                    let assetIdString = urlComponents.element(at: 1),
-                    let price = url.queryValue(for: "price").flatMap({ Double($0) })
-                else {
-                    throw URLParserError.invalidURL(url)
-                }
-                let assetId = try AssetId(id: assetIdString)
+                let price: Double? = url.queryValue(for: "price")
+                let assetId = try AssetId(id: urlComponents.required(at: 1, url: url))
                 return .setPriceAlert(assetId, price: price)
             }
         }
@@ -70,15 +59,21 @@ public enum URLParser {
     }
 
     private static func parseFiat(url: URL, urlComponents: [String], type: DeepLink.PathComponent) throws -> URLAction {
-        guard let assetIdString = urlComponents.element(at: 1) else {
-            throw URLParserError.invalidURL(url)
-        }
-        let assetId = try AssetId(id: assetIdString)
-        let amount = url.queryValue(for: "amount").flatMap { Int($0) }
+        let assetId = try AssetId(id: urlComponents.required(at: 1, url: url))
+        let amount: Int? = url.queryValue(for: "amount")
         return switch type {
         case .buy: .buy(assetId, amount: amount)
         case .sell: .sell(assetId, amount: amount)
         default: .none
         }
+    }
+}
+
+private extension Array where Element == String {
+    func required(at index: Int, url: URL) throws -> String {
+        guard let value = element(at: index) else {
+            throw URLParserError.invalidURL(url)
+        }
+        return value
     }
 }
