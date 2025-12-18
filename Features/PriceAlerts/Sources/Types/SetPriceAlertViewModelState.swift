@@ -5,7 +5,7 @@ import Primitives
 
 struct SetPriceAlertViewModelState {
     var type: SetPriceAlertType = .price
-    
+
     var amount: String {
         get {
             switch type {
@@ -20,7 +20,7 @@ struct SetPriceAlertViewModelState {
             }
         }
     }
-    
+
     var alertDirection: PriceAlertDirection? {
         get {
             switch type {
@@ -35,10 +35,17 @@ struct SetPriceAlertViewModelState {
             }
         }
     }
-    
+
     private var priceAmount: String = .empty
     private var percentageAmount: String = "5"
-    
+
     private var priceDirection: PriceAlertDirection?
     private var percentageDirection: PriceAlertDirection = .up
+
+    init(price: Double? = nil) {
+        if let price {
+            self.type = .price
+            self.priceAmount = String(price)
+        }
+    }
 }

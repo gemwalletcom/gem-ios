@@ -223,8 +223,8 @@ extension AssetSceneViewModel {
 
     func onSelectHeader(_ buttonType: HeaderButtonType) {
         let selectType: SelectedAssetType = switch buttonType {
-        case .buy: .buy(assetData.asset)
-        case .sell: .sell(assetData.asset)
+        case .buy: .buy(assetData.asset, amount: nil)
+        case .sell: .sell(assetData.asset, amount: nil)
         case .send: .send(.asset(assetData.asset))
         case .swap: swapAssetType
         case .receive: .receive(.asset)

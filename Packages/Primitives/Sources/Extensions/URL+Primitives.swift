@@ -32,4 +32,8 @@ extension URL {
             .first { $0.name == name }?
             .value
     }
+
+    public func queryValue<T: LosslessStringConvertible>(for name: String) -> T? {
+        queryValue(for: name).flatMap { T($0) }
+    }
 }

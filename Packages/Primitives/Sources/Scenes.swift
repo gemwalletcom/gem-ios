@@ -181,9 +181,11 @@ public struct Scenes {
     
     public struct AssetPriceAlert: Hashable {
         public let asset: Primitives.Asset
+        public let price: Double?
 
-        public init(asset: Primitives.Asset) {
+        public init(asset: Primitives.Asset, price: Double? = nil) {
             self.asset = asset
+            self.price = price
         }
     }
 }
