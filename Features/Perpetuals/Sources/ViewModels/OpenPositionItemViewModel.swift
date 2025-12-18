@@ -38,7 +38,7 @@ public struct OpenPositionItemViewModel: ListAssetItemViewable {
     public var rightView: ListAssetItemRightView {
         .balance(
             balance: TextValue(
-                text: currencyFormatter.string(data.size),
+                text: data.size.isZero ? "" : currencyFormatter.string(data.size),
                 style: TextStyle(font: .body, color: .primary, fontWeight: .medium)
             ),
             totalFiat: TextValue(

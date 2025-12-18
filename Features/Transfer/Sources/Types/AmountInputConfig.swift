@@ -42,11 +42,11 @@ struct AmountInputConfig: CurrencyInputConfigurable {
     
     var actionStyle: CurrencyInputActionStyle? {
         switch sceneType {
-        case .transfer, .deposit, .withdraw, .perpetual: CurrencyInputActionStyle(
+        case .transfer, .deposit, .withdraw: CurrencyInputActionStyle(
             position: .secondary,
             image: Images.Actions.swap.renderingMode(.template)
         )
-        case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .freeze: nil
+        case .perpetual, .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .freeze: nil
         }
     }
 
