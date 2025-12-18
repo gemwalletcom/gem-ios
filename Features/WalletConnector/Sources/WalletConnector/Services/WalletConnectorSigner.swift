@@ -137,14 +137,27 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
         )
     }
 
+    private func buildBitcoinTransferData(chain: Chain, transaction: String) throws -> TransferData {
+        let transfer = try JSONDecoder().decode(WCBitcoinTransfer.self, from: try transaction.encodedData())
+        return TransferData(
+            type: .transfer(chain.asset),
+            recipientData: RecipientData(
+                recipient: Recipient(name: .none, address: transfer.recipientAddress, memo: transfer.memo),
+                amount: .none
+            ),
+            value: BigInt(stringLiteral: transfer.amount),
+            canChangeValue: false
+        )
+    }
+
     public func signTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
         let session = try connectionsStore.getConnection(id: sessionId)
         try validate(chain: chain, session: session.session)
         let wallet = try getWallet(id: session.wallet.walletId)
 
         switch transaction {
-        case .ethereum:
-            throw AnyError("Not supported yet")
+        case .ethereum, .bitcoin:
+            throw AnyError("Not supported")
         case .solana(let transaction, let outputType), .sui(let transaction, let outputType), .ton(let transaction, let outputType):
             let transferData = buildTransferData(
                 chain: chain,
@@ -215,6 +228,9 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                 outputType: outputType,
                 outputAction: .send
             )
+            return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
+        case .bitcoin(let transaction, _):
+            let transferData = try buildBitcoinTransferData(chain: chain, transaction: transaction)
             return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         }
     }
