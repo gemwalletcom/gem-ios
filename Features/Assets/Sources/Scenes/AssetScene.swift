@@ -124,12 +124,12 @@ public struct AssetScene: View {
                 Section(model.resourcesTitle) {
                     ListItemView(
                         title: model.energyTitle,
-                        subtitle: model.assetDataModel.energyText
+                        subtitle: model.energyText
                     )
 
                     ListItemView(
                         title: model.bandwidthTitle,
-                        subtitle: model.assetDataModel.bandwidthText
+                        subtitle: model.bandwidthText
                     )
                 }
             }

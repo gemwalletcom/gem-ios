@@ -526,7 +526,7 @@
 "nft.report.report_button_title" = "Yi korafi";
 "rewards.title" = "Ladabi";
 "rewards.share_text" = "Shiga Gem Wallet tare da hanyar haɗin yanar gizo na kuma sami lada: %@";
-"rewards.my_referral_code" = "My referral code";
+"rewards.my_referral_code" = "Lambar da na bayar ta hanyar sadarwa";
 "rewards.invite_friends.title" = "Gayyaci Abokai";
 "rewards.invite_friends.description" = "Sami **%d maki** ga kowane aboki da ya shiga.";
 "common.get_started" = "Fara";
@@ -541,3 +541,6 @@
 "rewards.create_referral_code.title" = "Create Username";
 "rewards.create_referral_code.info" = "This will be your personal username.";
 "rewards.username" = "Username";
+"rewards.ways_spend.title" = "Hanyoyin Kashe Kuɗi";
+"rewards.ways_spend.asset.title" = "Samu %@";
+"rewards.insufficient_points" = "Rashin isassun maki";

@@ -541,3 +541,6 @@
 "rewards.create_referral_code.title" = "Create Username";
 "rewards.create_referral_code.info" = "This will be your personal username.";
 "rewards.username" = "Username";
+"rewards.ways_spend.title" = "Möglichkeiten zum Ausgeben";
+"rewards.ways_spend.asset.title" = "Erhalten %@";
+"rewards.insufficient_points" = "Unzureichende Punkte";

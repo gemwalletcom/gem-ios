@@ -11,6 +11,7 @@ public struct ValueFormatter: Sendable {
         case full
         case auto
         case abbreviated
+        case compact
     }
     
     private let locale: Locale
@@ -32,6 +33,17 @@ public struct ValueFormatter: Sendable {
         formatter.locale = locale
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.roundingIncrement = 0
+        formatter.roundingMode = .down
+        return formatter
+    }
+
+    private var formatterCompact: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 2
         formatter.roundingIncrement = 0
         formatter.roundingMode = .down
@@ -147,6 +159,7 @@ public struct ValueFormatter: Sendable {
         case .full: formatterFull
         case .auto: autoFormatter(for: number)
         case .abbreviated: formatterShort
+        case .compact: formatterCompact
         }
     }
     

@@ -160,12 +160,11 @@ public struct PerpetualScene: View {
             }
         )
         .refreshable {
-            await model.fetch()
+            model.fetch()
         }
         .taskOnce {
-            Task {
-                await model.fetch()
-            }
+            model.fetch()
         }
+        .toast(message: $model.toastMessage)
     }
 }
