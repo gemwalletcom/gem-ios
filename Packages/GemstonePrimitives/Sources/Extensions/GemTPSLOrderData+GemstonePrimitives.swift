@@ -10,8 +10,7 @@ extension Gemstone.TpslOrderData {
             direction: direction.map(),
             takeProfit: takeProfit,
             stopLoss: stopLoss,
-            size: size,
-            autocloseOrderType: autocloseOrderType.map()
+            size: size
         )
     }
 }
@@ -22,8 +21,7 @@ extension Primitives.TPSLOrderData {
             direction: direction.map(),
             takeProfit: takeProfit,
             stopLoss: stopLoss,
-            size: size,
-            autocloseOrderType: autocloseOrderType.map()
+            size: size
         )
     }
 }

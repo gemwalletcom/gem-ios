@@ -110,9 +110,8 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let marginAmount: Double
 	public let takeProfit: String?
 	public let stopLoss: String?
-	public let autocloseOrderType: PerpetualOrderType
 
-	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String, slippage: Double, leverage: UInt8, pnl: Double?, entryPrice: Double?, marketPrice: Double, marginAmount: Double, takeProfit: String?, stopLoss: String?, autocloseOrderType: PerpetualOrderType) {
+	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String, slippage: Double, leverage: UInt8, pnl: Double?, entryPrice: Double?, marketPrice: Double, marginAmount: Double, takeProfit: String?, stopLoss: String?) {
 		self.direction = direction
 		self.baseAsset = baseAsset
 		self.assetIndex = assetIndex
@@ -127,7 +126,6 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 		self.marginAmount = marginAmount
 		self.takeProfit = takeProfit
 		self.stopLoss = stopLoss
-		self.autocloseOrderType = autocloseOrderType
 	}
 }
 
@@ -249,14 +247,12 @@ public struct TPSLOrderData: Codable, Equatable, Hashable, Sendable {
 	public let takeProfit: String?
 	public let stopLoss: String?
 	public let size: String
-	public let autocloseOrderType: PerpetualOrderType
 
-	public init(direction: PerpetualDirection, takeProfit: String?, stopLoss: String?, size: String, autocloseOrderType: PerpetualOrderType) {
+	public init(direction: PerpetualDirection, takeProfit: String?, stopLoss: String?, size: String) {
 		self.direction = direction
 		self.takeProfit = takeProfit
 		self.stopLoss = stopLoss
 		self.size = size
-		self.autocloseOrderType = autocloseOrderType
 	}
 }
 

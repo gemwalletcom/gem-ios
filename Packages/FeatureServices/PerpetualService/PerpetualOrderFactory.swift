@@ -22,8 +22,7 @@ public struct PerpetualOrderFactory {
         leverage: UInt8,
         slippage: Double = 2.0,
         takeProfit: String? = nil,
-        stopLoss: String? = nil,
-        autocloseOrderType: PerpetualOrderType = .market
+        stopLoss: String? = nil
     ) -> PerpetualType {
         let perpetual = positionAction.transferData
 
@@ -55,8 +54,7 @@ public struct PerpetualOrderFactory {
             marketPrice: perpetual.price,
             marginAmount: marginAmount,
             takeProfit: takeProfit,
-            stopLoss: stopLoss,
-            autocloseOrderType: autocloseOrderType
+            stopLoss: stopLoss
         )
 
         return switch positionAction {
@@ -72,8 +70,7 @@ public struct PerpetualOrderFactory {
         position: PerpetualPosition,
         asset: Asset,
         baseAsset: Asset,
-        slippage: Double = 2.0,
-        autocloseOrderType: PerpetualOrderType = .market
+        slippage: Double = 2.0
     ) -> PerpetualConfirmData {
         let positionPrice = calculateSlippagePrice(
             marketPrice: perpetual.price,
@@ -96,8 +93,7 @@ public struct PerpetualOrderFactory {
             pnl: position.pnl,
             entryPrice: position.entryPrice,
             marketPrice: perpetual.price,
-            marginAmount: position.marginAmount,
-            autocloseOrderType: autocloseOrderType
+            marginAmount: position.marginAmount
         )
     }
     
@@ -133,8 +129,7 @@ public struct PerpetualOrderFactory {
         marketPrice: Double,
         marginAmount: Double,
         takeProfit: String? = nil,
-        stopLoss: String? = nil,
-        autocloseOrderType: PerpetualOrderType = .market
+        stopLoss: String? = nil
     ) -> PerpetualConfirmData {
         let price = formatter.formatPrice(
             slippagePrice,
@@ -160,8 +155,7 @@ public struct PerpetualOrderFactory {
             marketPrice: marketPrice,
             marginAmount: marginAmount,
             takeProfit: takeProfit,
-            stopLoss: stopLoss,
-            autocloseOrderType: autocloseOrderType
+            stopLoss: stopLoss
         )
     }
 }

@@ -20,8 +20,7 @@ extension Gemstone.PerpetualConfirmData {
             marketPrice: marketPrice,
             marginAmount: marginAmount,
             takeProfit: takeProfit,
-            stopLoss: stopLoss,
-            autocloseOrderType: autocloseOrderType.map()
+            stopLoss: stopLoss
         )
     }
 }
@@ -42,8 +41,7 @@ extension Primitives.PerpetualConfirmData {
             marketPrice: marketPrice,
             marginAmount: marginAmount,
             takeProfit: takeProfit,
-            stopLoss: stopLoss,
-            autocloseOrderType: autocloseOrderType.map()
+            stopLoss: stopLoss
         )
     }
 }

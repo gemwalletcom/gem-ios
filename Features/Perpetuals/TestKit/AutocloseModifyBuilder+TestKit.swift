@@ -6,9 +6,8 @@ import Primitives
 
 extension AutocloseModifyBuilder {
     static func mock(
-        direction: PerpetualDirection = .long,
-        autocloseOrderType: PerpetualOrderType = .market
+        direction: PerpetualDirection = .long
     ) -> AutocloseModifyBuilder {
-        AutocloseModifyBuilder(direction: direction, autocloseOrderType: autocloseOrderType)
+        AutocloseModifyBuilder(direction: direction)
     }
 }

@@ -558,8 +558,7 @@ extension AmountSceneViewModel {
                 usdcDecimals: asset.decimals.asInt,
                 leverage: selectedLeverage.value,
                 takeProfit: takeProfit.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) },
-                stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) },
-                autocloseOrderType: .market
+                stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) }
             )
             return TransferData(
                 type: .perpetual(data.positionAction.transferData.asset, perpetualType),
