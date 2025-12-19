@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Ways to Spend";
 "rewards.ways_spend.asset.title" = "Get %@";
 "rewards.insufficient_points" = "Insufficient points";
+"rewards.confirm_redeem" = "Get %@ for %@!";

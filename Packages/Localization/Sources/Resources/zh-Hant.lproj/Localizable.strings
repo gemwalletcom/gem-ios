@@ -490,7 +490,7 @@
 "assets.title" = "資產";
 "stake.delegations" = "委託";
 "info.stake.apr.description" = "年利率（APR）是質押加密貨幣的年度報酬率。";
-"receive.warning" = "這是您的地址——僅在 ** %@ ** 網路上發送 ** %@ **。";
+"receive.warning" = "這是您的地址—僅發送**%@**在**%@** 網路。";
 "perpetual.leverage" = "槓桿作用";
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自動關閉";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "消費方式";
 "rewards.ways_spend.asset.title" = "得到 %@";
 "rewards.insufficient_points" = "分數不足";
+"rewards.confirm_redeem" = "得到 %@ 為了 %@！";

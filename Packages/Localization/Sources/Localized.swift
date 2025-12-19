@@ -969,6 +969,10 @@ public enum Localized {
     public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recent")
   }
   public enum Rewards {
+    /// Get %@ for %@!
+    public static func confirmRedeem(_ p1: Any, _ p2: Any) -> String {
+      return Localized.tr("Localizable", "rewards.confirm_redeem", String(describing: p1), String(describing: p2), fallback: "Get %@ for %@!")
+    }
     /// Insufficient points
     public static let insufficientPoints = Localized.tr("Localizable", "rewards.insufficient_points", fallback: "Insufficient points")
     /// Invited By

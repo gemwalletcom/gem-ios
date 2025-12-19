@@ -490,7 +490,7 @@
 "assets.title" = "Mga asset";
 "stake.delegations" = "Mga delegasyon";
 "info.stake.apr.description" = "Ang Annual Percentage Rate (APR) ay ang taunang reward rate para sa staking ng iyong cryptocurrency.";
-"receive.warning" = "Ito ang iyong address — magpadala lamang ng ** %@ ** sa ** %@ ** network.";
+"receive.warning" = "Ito ang iyong address — ipadala lamang **%@** sa **%@** network.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Direksyon";
 "perpetual.auto_close" = "Auto Close";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Mga Paraan ng Paggastos";
 "rewards.ways_spend.asset.title" = "Kunin %@";
 "rewards.insufficient_points" = "Hindi sapat na puntos";
+"rewards.confirm_redeem" = "Kunin %@ para sa %@!";

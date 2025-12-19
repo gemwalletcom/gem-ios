@@ -490,7 +490,7 @@
 "assets.title" = "Активи";
 "stake.delegations" = "Делегації";
 "info.stake.apr.description" = "Річна процентна ставка (APR) – це річна ставка винагороди за стейкінг вашої криптовалюти.";
-"receive.warning" = "Це ваша адреса — надсилайте лише ** %@ ** у мережі ** %@ **.";
+"receive.warning" = "Це ваша адреса — лише для надсилання **%@** на **%@**мережа.**";
 "perpetual.leverage" = "Кредитне плече";
 "perpetual.direction" = "Напрямок";
 "perpetual.auto_close" = "Автоматичне закриття";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Способи витрат";
 "rewards.ways_spend.asset.title" = "Отримати %@";
 "rewards.insufficient_points" = "Недостатньо балів";
+"rewards.confirm_redeem" = "Отримати %@ для %@!";

@@ -490,7 +490,7 @@
 "assets.title" = "Ativos";
 "stake.delegations" = "Delegações";
 "info.stake.apr.description" = "Taxa Percentual Anual (APR) é a taxa de recompensa anual para apostar sua criptomoeda.";
-"receive.warning" = "Este é o seu endereço — envie apenas ** %@ ** na rede ** %@ **.";
+"receive.warning" = "Este é o seu endereço — envie apenas **%@** no **%@** rede.";
 "perpetual.leverage" = "Alavancagem";
 "perpetual.direction" = "Direção";
 "perpetual.auto_close" = "Fechamento automático";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Formas de gastar";
 "rewards.ways_spend.asset.title" = "Pegar %@";
 "rewards.insufficient_points" = "Pontos insuficientes";
+"rewards.confirm_redeem" = "Pegar %@ para %@!";

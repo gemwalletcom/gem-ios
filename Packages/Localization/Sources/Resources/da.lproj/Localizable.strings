@@ -490,7 +490,7 @@
 "assets.title" = "Aktiver";
 "stake.delegations" = "Delegationer";
 "info.stake.apr.description" = "Årlig procentsats (ÅOP) er den årlige belønningssats for at satse din kryptovaluta.";
-"receive.warning" = "Dette er din adresse — send kun ** %@ ** på ** %@ **-netværket.";
+"receive.warning" = "Dette er din adresse — kun send **%@** på **%@** netværk.";
 "perpetual.leverage" = "Gearing";
 "perpetual.direction" = "Retning";
 "perpetual.auto_close" = "Automatisk lukning";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Måder at bruge penge på";
 "rewards.ways_spend.asset.title" = "Få %@";
 "rewards.insufficient_points" = "Utilstrækkelige point";
+"rewards.confirm_redeem" = "Få %@ for %@!";

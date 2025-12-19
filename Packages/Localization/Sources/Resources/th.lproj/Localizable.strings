@@ -490,7 +490,7 @@
 "assets.title" = "สินทรัพย์";
 "stake.delegations" = "การมอบหมาย";
 "info.stake.apr.description" = "อัตราเปอร์เซ็นต์ต่อปี (APR) คืออัตราผลตอบแทนรายปีสำหรับการเดิมพันสกุลเงินดิจิทัลของคุณ";
-"receive.warning" = "นี่คือที่อยู่ของคุณ — ส่งเฉพาะ ** %@ ** บนเครือข่าย ** %@ ** เท่านั้น";
+"receive.warning" = "นี่คือที่อยู่ของคุณ — ส่งเฉพาะ ** เท่านั้น%@** บน **%@**เครือข่าย**";
 "perpetual.leverage" = "อัตราทดทางการเงิน";
 "perpetual.direction" = "ทิศทาง";
 "perpetual.auto_close" = "ปิดอัตโนมัติ";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "วิธีใช้จ่าย";
 "rewards.ways_spend.asset.title" = "รับ %@";
 "rewards.insufficient_points" = "คะแนนไม่เพียงพอ";
+"rewards.confirm_redeem" = "รับ %@ สำหรับ %@-";

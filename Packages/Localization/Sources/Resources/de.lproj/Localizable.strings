@@ -490,7 +490,7 @@
 "assets.title" = "Vermögenswerte";
 "stake.delegations" = "Delegationen";
 "info.stake.apr.description" = "Der effektive Jahreszins (APR) ist der jährliche Belohnungssatz für das Staking Ihrer Kryptowährung.";
-"receive.warning" = "Dies ist Ihre Adresse – senden Sie nur ** %@ ** im ** %@ ** Netzwerk.";
+"receive.warning" = "Dies ist Ihre Adresse – senden Sie bitte nur **%@** auf dem **%@** Netzwerk.";
 "perpetual.leverage" = "Hebelwirkung";
 "perpetual.direction" = "Richtung";
 "perpetual.auto_close" = "Automatisches Schließen";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Möglichkeiten zum Ausgeben";
 "rewards.ways_spend.asset.title" = "Erhalten %@";
 "rewards.insufficient_points" = "Unzureichende Punkte";
+"rewards.confirm_redeem" = "Erhalten %@ für %@!";
