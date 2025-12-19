@@ -9,6 +9,8 @@ public struct AutocloseEstimator {
     public let direction: PerpetualDirection
     public let leverage: UInt8
 
+    public var hasSize: Bool { positionSize > 0 }
+
     public init(entryPrice: Double, positionSize: Double, direction: PerpetualDirection, leverage: UInt8) {
         self.entryPrice = entryPrice
         self.positionSize = positionSize
@@ -25,7 +27,7 @@ public struct AutocloseEstimator {
             self.leverage = position.position.leverage
         case .open(let data, _):
             self.entryPrice = data.marketPrice
-            self.positionSize = data.size
+            self.positionSize = data.marketPrice > 0 ? (data.size * Double(data.leverage)) / data.marketPrice : 0
             self.direction = data.direction
             self.leverage = data.leverage
         }

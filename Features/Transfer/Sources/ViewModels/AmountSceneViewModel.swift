@@ -25,6 +25,7 @@ import Perpetuals
 public final class AmountSceneViewModel {
     private let wallet: Wallet
     private let onTransferAction: TransferDataAction
+    private let preferences: Preferences
 
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
@@ -68,6 +69,7 @@ public final class AmountSceneViewModel {
     ) {
         self.input = input
         self.wallet = wallet
+        self.preferences = preferences
         self.onTransferAction = onTransferAction
         self.assetRequest = AssetRequest(
             walletId: wallet.walletId.id,
@@ -343,10 +345,12 @@ extension AmountSceneViewModel {
         guard case .perpetual(let data) = type else { return }
         let transferData = data.positionAction.transferData
         isPresentingSheet = .autoclose(AutocloseOpenData(
+            assetId: transferData.asset.id,
+            symbol: transferData.asset.symbol,
             direction: transferData.direction,
             marketPrice: transferData.price,
             leverage: selectedLeverage.value,
-            size: currencyFormatter.double(from: amountInputModel.text) ?? 1,
+            size: currencyFormatter.double(from: amountInputModel.text) ?? .zero,
             assetDecimals: transferData.asset.decimals,
             takeProfit: takeProfit,
             stopLoss: stopLoss

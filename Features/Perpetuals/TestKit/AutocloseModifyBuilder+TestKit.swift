@@ -5,7 +5,9 @@ import Primitives
 @testable import Perpetuals
 
 extension AutocloseModifyBuilder {
-    static func mock(direction: PerpetualDirection = .long) -> AutocloseModifyBuilder {
+    static func mock(
+        direction: PerpetualDirection = .long
+    ) -> AutocloseModifyBuilder {
         AutocloseModifyBuilder(direction: direction)
     }
 }
