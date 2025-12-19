@@ -77,6 +77,7 @@ public struct SwapScene: View {
         .onChange(of: model.pairSelectorModel, model.onChangePair)
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
         .onChange(of: model.focusField, onChangeFocus)
+        .onChange(of: focusedField, { _, newValue in model.focusField = newValue })
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
             model.fetch()
         }

@@ -401,6 +401,7 @@ extension SwapSceneViewModel {
                 isPresentingPriceImpactConfirmation = warningText
                 return
             }
+            focusField = .none
             swap()
         }
     }
