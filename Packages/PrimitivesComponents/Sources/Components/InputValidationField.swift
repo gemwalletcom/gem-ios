@@ -21,7 +21,7 @@ public struct InputValidationField<TrailingView: View>: View {
         placeholder: String,
         allowClean: Bool = true,
         onWillClean: VoidAction = nil,
-        @ViewBuilder trailingView: () -> TrailingView = { EmptyView() }
+        @ViewBuilder trailingView: (() -> TrailingView) = { EmptyView() }
     ) {
         self.trailingView = trailingView()
         _model = model

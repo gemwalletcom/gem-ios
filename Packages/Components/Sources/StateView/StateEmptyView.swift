@@ -35,7 +35,7 @@ public struct StateEmptyView<Content: View>: View {
         titleValue: TextValue,
         descriptionValue: TextValue? = nil,
         image: Image? = nil,
-        @ViewBuilder buttons: () -> Content = { EmptyView() }
+        @ViewBuilder buttons: (() -> Content) = { EmptyView() }
     ) {
         self.title = titleValue
         self.description = descriptionValue

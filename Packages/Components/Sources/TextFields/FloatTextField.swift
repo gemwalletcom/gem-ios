@@ -43,7 +43,7 @@ public struct FloatTextField<TrailingView: View>: View {
         style: FloatFieldStyle = .standard,
         allowClean: Bool = true,
         onWillClean: (() -> Void)? = nil,
-        @ViewBuilder trailingView: () -> TrailingView = { EmptyView() }
+        @ViewBuilder trailingView: (() -> TrailingView) = { EmptyView() }
     ) {
         _text = text
         self.placeholder = placeholder
