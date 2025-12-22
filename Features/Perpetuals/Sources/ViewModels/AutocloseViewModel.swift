@@ -47,18 +47,21 @@ public struct AutocloseViewModel {
         guard let price else { return "-" }
         let pnl = estimator.calculatePnL(price: price)
         let roe = estimator.calculateROE(price: price)
+        let percentText = percentFormatter.string(roe)
+
+        guard estimator.hasSize else {
+            return percentText
+        }
 
         let amount = currencyFormatter.string(abs(pnl))
-        let percentText = percentFormatter.string(roe)
         let sign = pnl >= 0 ? "+" : "-"
-
         return "\(sign)\(amount) (\(percentText))"
     }
 
-    public var pnlColor: Color {
+    public var roeColor: Color {
         guard let price else { return Colors.secondaryText }
-        let pnl = estimator.calculatePnL(price: price)
-        return PriceChangeColor.color(for: pnl)
+        let roe = estimator.calculateROE(price: price)
+        return PriceChangeColor.color(for: roe)
     }
 
     public var percents: [Int] {

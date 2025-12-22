@@ -9,7 +9,7 @@ public extension View {
         presenting data: Binding<T?>,
         sensoryFeedback: SensoryFeedback? = nil,
         @ViewBuilder actions: (T) -> A,
-        @ViewBuilder message: (() -> M) = { EmptyView() }
+        @ViewBuilder message: () -> M = { EmptyView() }
     )
     -> some View where S: StringProtocol, A: View, M: View {
         let isPresented: Binding<Bool> = Binding(

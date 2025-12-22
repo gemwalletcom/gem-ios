@@ -490,7 +490,7 @@
 "assets.title" = "Actifs";
 "stake.delegations" = "Délégations";
 "info.stake.apr.description" = "Le taux annuel en pourcentage (APR) est le taux de récompense annuel pour le jalonnement de votre crypto-monnaie.";
-"receive.warning" = "Voici votre adresse — envoyez uniquement ** %@ ** sur le réseau ** %@ **.";
+"receive.warning" = "Voici votre adresse — envoyez uniquement **%@** sur le **%@** réseau.";
 "perpetual.leverage" = "Effet de levier";
 "perpetual.direction" = "Direction";
 "perpetual.auto_close" = "Fermeture automatique";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Façons de dépenser";
 "rewards.ways_spend.asset.title" = "Obtenir %@";
 "rewards.insufficient_points" = "Points insuffisants";
+"rewards.confirm_redeem" = "Obtenir %@ pour %@!";

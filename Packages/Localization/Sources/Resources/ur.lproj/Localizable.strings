@@ -490,7 +490,7 @@
 "assets.title" = "اثاثے";
 "stake.delegations" = "تفویضات";
 "info.stake.apr.description" = "سالانہ فیصدی شرح (APR) آپ کی کریپٹو کرنسی کو داغدار کرنے کے لیے سالانہ انعام کی شرح ہے۔";
-"receive.warning" = "یہ آپ کا پتہ ہے — ** %@ ** نیٹ ورک پر صرف ** %@ ** بھیجیں۔";
+"receive.warning" = "یہ آپ کا پتہ ہے - صرف بھیجیں **%@** پر **%@** نیٹ ورک۔";
 "perpetual.leverage" = "مالی فائدہ اٹھانا";
 "perpetual.direction" = "سمت";
 "perpetual.auto_close" = "آٹو بند";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "خرچ کرنے کے طریقے";
 "rewards.ways_spend.asset.title" = "حاصل کریں۔ %@";
 "rewards.insufficient_points" = "ناکافی پوائنٹس";
+"rewards.confirm_redeem" = "حاصل کریں۔ %@ کے لیے %@!";

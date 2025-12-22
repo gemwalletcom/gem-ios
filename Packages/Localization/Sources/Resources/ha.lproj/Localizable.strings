@@ -490,7 +490,7 @@
 "assets.title" = "Assets";
 "stake.delegations" = "Delegations";
 "info.stake.apr.description" = "Annual Percentage Rate (APR) is the yearly reward rate for staking your cryptocurrency.";
-"receive.warning" = "This is your address — send only **%@** on the **%@** network.";
+"receive.warning" = "Wannan shine adireshinka — aika kawai **%@** a cikin **%@** hanyar sadarwa.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Direction";
 "perpetual.auto_close" = "Auto Close";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Hanyoyin Kashe Kuɗi";
 "rewards.ways_spend.asset.title" = "Samu %@";
 "rewards.insufficient_points" = "Rashin isassun maki";
+"rewards.confirm_redeem" = "Samu %@ don %@!";

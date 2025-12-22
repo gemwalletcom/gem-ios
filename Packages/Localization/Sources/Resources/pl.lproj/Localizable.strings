@@ -490,7 +490,7 @@
 "assets.title" = "Aktywa";
 "stake.delegations" = "Delegacje";
 "info.stake.apr.description" = "Roczna stopa procentowa (APR) to roczna stopa nagrody za stakowanie kryptowaluty.";
-"receive.warning" = "To jest Twój adres — wysyłaj tylko ** %@ ** w sieci ** %@ **.";
+"receive.warning" = "To jest Twój adres — wysyłaj tylko **%@** na **%@** sieć.";
 "perpetual.leverage" = "Dźwignia finansowa";
 "perpetual.direction" = "Kierunek";
 "perpetual.auto_close" = "Automatyczne zamykanie";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Sposoby wydawania pieniędzy";
 "rewards.ways_spend.asset.title" = "Dostawać %@";
 "rewards.insufficient_points" = "Za mało punktów";
+"rewards.confirm_redeem" = "Dostawać %@ Do %@!";

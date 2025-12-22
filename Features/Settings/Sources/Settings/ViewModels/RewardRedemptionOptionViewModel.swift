@@ -45,6 +45,6 @@ struct RewardRedemptionOptionViewModel: Identifiable {
     }
 
     var confirmationMessage: String {
-        "\(title) for \(pointsText)?"
+        Localized.Rewards.confirmRedeem(title, pointsText)
     }
 }

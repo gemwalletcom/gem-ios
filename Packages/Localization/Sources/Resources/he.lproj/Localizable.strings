@@ -490,7 +490,7 @@
 "assets.title" = "נכסים";
 "stake.delegations" = "האצלות";
 "info.stake.apr.description" = "שיעור אחוז שנתי (APR) הוא שיעור התגמול השנתי עבור הפקדת מטבע הקריפטו שלך.";
-"receive.warning" = "זוהי הכתובת שלך — שלח רק ** %@ ** ברשת ** %@ **.";
+"receive.warning" = "זוהי הכתובת שלך - לשלוח בלבד **%@** על ה **%@**רשת.";
 "perpetual.leverage" = "מינוף";
 "perpetual.direction" = "כיוון";
 "perpetual.auto_close" = "סגירה אוטומטית";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "דרכים להוציא כסף";
 "rewards.ways_spend.asset.title" = "לְקַבֵּל %@";
 "rewards.insufficient_points" = "נקודות לא מספיקות";
+"rewards.confirm_redeem" = "לְקַבֵּל %@ עֲבוּר %@!";

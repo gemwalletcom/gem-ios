@@ -490,7 +490,7 @@
 "assets.title" = "সম্পদ";
 "stake.delegations" = "ডেলিগেশনসমূহ";
 "info.stake.apr.description" = "বার্ষিক শতাংশ হার (এপিআর) হল আপনার ক্রিপ্টোকারেন্সি শেয়ার করার জন্য বার্ষিক পুরষ্কারের হার।";
-"receive.warning" = "এটি আপনার ঠিকানা — ** %@ ** নেটওয়ার্কে শুধুমাত্র ** %@ ** পাঠান।";
+"receive.warning" = "এটি আপনার ঠিকানা — শুধুমাত্র ** পাঠান।%@** ** এর উপরে%@** নেটওয়ার্ক।";
 "perpetual.leverage" = "লিভারেজ";
 "perpetual.direction" = "দিকনির্দেশনা";
 "perpetual.auto_close" = "স্বয়ংক্রিয়ভাবে বন্ধ করুন";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "খরচ করার উপায়";
 "rewards.ways_spend.asset.title" = "পান %@";
 "rewards.insufficient_points" = "অপর্যাপ্ত পয়েন্ট";
+"rewards.confirm_redeem" = "পান %@ জন্য %@!";

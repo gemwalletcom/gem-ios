@@ -490,7 +490,7 @@
 "assets.title" = "资产";
 "stake.delegations" = "委托";
 "info.stake.apr.description" = "年利率（APR）是质押加密货币的年度回报率。";
-"receive.warning" = "这是您的地址——仅在 ** %@ ** 网络上发送 ** %@ **。";
+"receive.warning" = "这是您的地址——仅发送**%@**在**%@** 网络。";
 "perpetual.leverage" = "杠杆作用";
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自动关闭";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "消费方式";
 "rewards.ways_spend.asset.title" = "得到 %@";
 "rewards.insufficient_points" = "分数不足";
+"rewards.confirm_redeem" = "得到 %@ 为了 %@！";
