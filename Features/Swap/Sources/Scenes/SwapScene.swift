@@ -6,10 +6,7 @@ import Style
 import PrimitivesComponents
 
 public struct SwapScene: View {
-    enum Field: Int, Hashable {
-        case from, to
-    }
-    @FocusState private var focusedField: Field?
+    @FocusState private var focusedField: Bool
 
     @State private var model: SwapSceneViewModel
 
@@ -77,14 +74,11 @@ public struct SwapScene: View {
         .onChange(of: model.pairSelectorModel, model.onChangePair)
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
         .onChange(of: model.focusField, onChangeFocus)
-        .onChange(of: focusedField, { _, newValue in model.focusField = newValue })
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
             model.fetch()
         }
         .onAppear {
-            if model.toValue.isEmpty {
-                model.focusField = .from
-            }
+            model.focusField = true
         }
     }
 }
@@ -101,7 +95,7 @@ extension SwapScene {
                 onSelectAssetAction: model.onSelectAssetPay
             )
             .buttonStyle(.borderless)
-            .focused($focusedField, equals: .from)
+            .focused($focusedField)
         } header: {
             Text(model.swapFromTitle)
                 .listRowInsets(.horizontalMediumInsets)
@@ -130,7 +124,6 @@ extension SwapScene {
                 onSelectAssetAction: model.onSelectAssetReceive
             )
             .buttonStyle(.borderless)
-            .focused($focusedField, equals: .to)
         } header: {
             Text(model.swapToTitle)
                 .listRowInsets(.horizontalMediumInsets)
@@ -161,16 +154,16 @@ extension SwapScene {
             Divider()
                 .frame(height: 1 / UIScreen.main.scale)
                 .background(Colors.grayVeryLight)
-                .isVisible(focusedField == .from)
+                .isVisible(focusedField)
 
             Group {
                 if model.buttonViewModel.isVisible {
                     buttonView
-                } else if focusedField == .from {
+                } else if focusedField {
                     PercentageAccessoryView(
                         percents: SwapSceneViewModel.inputPercents,
                         onSelectPercent: model.onSelectPercent,
-                        onDone: { focusedField = nil }
+                        onDone: { focusedField = false }
                     )
                 }
             }
@@ -183,7 +176,7 @@ extension SwapScene {
 // MARK: - Actions
 
 extension SwapScene {
-    private func onChangeFocus(_ _: Field?, _ newField: Field?) {
+    private func onChangeFocus(_ _: Bool, _ newField: Bool) {
         focusedField = newField
     }
 }

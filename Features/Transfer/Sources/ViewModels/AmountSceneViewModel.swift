@@ -323,6 +323,7 @@ extension AmountSceneViewModel {
     func onSelectNextButton() {
         do {
             try onNext()
+            focusField = false
         } catch {
             amountInputModel.update(error: error)
         }
