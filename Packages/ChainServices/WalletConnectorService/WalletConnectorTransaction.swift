@@ -8,4 +8,5 @@ public enum WalletConnectorTransaction {
     case solana(String, TransferDataOutputType)
     case sui(String, TransferDataOutputType)
     case ton(String, TransferDataOutputType)
+    case bitcoin(String, TransferDataOutputType)
 }
