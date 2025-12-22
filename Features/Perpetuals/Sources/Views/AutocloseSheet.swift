@@ -6,17 +6,15 @@ import Primitives
 import PrimitivesComponents
 
 public struct AutocloseSheet: View {
-    private let openData: AutocloseOpenData
-    private let onComplete: AutocloseCompletion
+    @State private var model: AutocloseSceneViewModel
 
     public init(openData: AutocloseOpenData, onComplete: @escaping AutocloseCompletion) {
-        self.openData = openData
-        self.onComplete = onComplete
+        _model = State(initialValue: AutocloseSceneViewModel(type: .open(openData, onComplete: onComplete)))
     }
 
     public var body: some View {
         NavigationStack {
-            AutocloseScene(model: AutocloseSceneViewModel(type: .open(openData, onComplete: onComplete)))
+            AutocloseScene(model: model)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar { ToolbarDismissItem(title: .cancel, placement: .topBarLeading) }
         }
