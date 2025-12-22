@@ -43,7 +43,7 @@ public struct FloatTextField<TrailingView: View>: View {
         style: FloatFieldStyle = .standard,
         allowClean: Bool = true,
         onWillClean: (() -> Void)? = nil,
-        @ViewBuilder trailingView: (() -> TrailingView) = { EmptyView() }
+        @ViewBuilder trailingView: () -> TrailingView
     ) {
         _text = text
         self.placeholder = placeholder
@@ -52,7 +52,26 @@ public struct FloatTextField<TrailingView: View>: View {
         self.onWillClean = onWillClean
         self.trailingView = trailingView()
     }
+    
+    public init(
+        _ placeholder: String,
+        text: Binding<String>,
+        style: FloatFieldStyle = .standard,
+        allowClean: Bool = true,
+        onWillClean: (() -> Void)? = nil
+    ) where TrailingView == EmptyView {
+        self.init(
+            placeholder,
+            text: text,
+            style: style,
+            allowClean: allowClean,
+            onWillClean: onWillClean,
+            trailingView: { EmptyView() }
+        )
+    }
+}
 
+extension FloatTextField {
     public var body: some View {
         HStack {
             ZStack(alignment: .leading) {
@@ -132,12 +151,12 @@ extension FloatTextField {
             FloatTextField(
                 "Enter your text",
                 text: .constant("")
-            ) {}
+            )
 
             FloatTextField(
                 "Enter your text",
                 text: .constant("Some text")
-            ) {}
+            )
 
             FloatTextField(
                 "Enter your email",
@@ -147,7 +166,7 @@ extension FloatTextField {
                     placeholderColor: .orange,
                     activePlaceholderColor: .red
                 )
-            ) {}
+            )
 
             FloatTextField(
                 "Enter your password",
