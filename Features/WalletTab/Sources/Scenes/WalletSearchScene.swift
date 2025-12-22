@@ -62,24 +62,22 @@ public struct WalletSearchScene: View {
     private var assetsList: some View {
         List {
             if model.showTags {
-                Section {
+                Section {} header: {
                     TagsView(
                         tags: model.searchModel.tagsViewModel.items,
                         onSelect: { model.onSelectTag(tag: $0.tag) }
                     )
                 }
-                .cleanListRow(topOffset: .zero)
-                .lineSpacing(.zero)
-                .listSectionSpacing(.zero)
+                .textCase(nil)
+                .listRowInsets(EdgeInsets())
             }
 
             if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels, ) { assetModel in
+                RecentActivitySectionView(models: model.activityModels) { assetModel in
                     NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
                         AssetChipView(model: assetModel)
                     }
                 }
-                .listSectionSpacing(.zero)
             }
 
             if model.showPinnedSection {
@@ -105,7 +103,8 @@ public struct WalletSearchScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
         }
-        .contentMargins(.top, .zero, for: .scrollContent)
+        .contentMargins([.top], .extraSmall, for: .scrollContent)
+        .listSectionSpacing(.compact)
     }
 
     @ViewBuilder

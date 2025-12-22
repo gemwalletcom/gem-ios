@@ -41,7 +41,7 @@ public struct AutocloseInputSection<Field: Hashable>: View {
                 Text(sectionModel.profitTitle)
                 Spacer()
                 Text(sectionModel.expectedPnL)
-                    .foregroundStyle(sectionModel.pnlColor)
+                    .foregroundStyle(sectionModel.roeColor)
             }
             .font(.subheadline)
             .fontWeight(.semibold)

@@ -490,7 +490,7 @@
 "assets.title" = "Mali";
 "stake.delegations" = "Uwakilishi";
 "info.stake.apr.description" = "Kiwango cha Asilimia cha Mwaka (APR) ni kiwango cha tuzo cha kila mwaka cha kuweka sarafu yako ya cryptocurrency.";
-"receive.warning" = "Hii ndiyo anwani yako — tuma tu ** %@ ** kwenye mtandao wa ** %@ **.";
+"receive.warning" = "Hii ni anwani yako — tuma tu **%@**kwenye **%@** mtandao.";
 "perpetual.leverage" = "Uvunjaji wa kifedh";
 "perpetual.direction" = "Mwelekeo";
 "perpetual.auto_close" = "Funga Kiotomatiki";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Njia za Kutumia";
 "rewards.ways_spend.asset.title" = "Pata %@";
 "rewards.insufficient_points" = "Pointi zisizotosha";
+"rewards.confirm_redeem" = "Pata %@ kwa %@!";

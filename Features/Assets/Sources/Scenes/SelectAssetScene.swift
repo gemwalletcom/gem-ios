@@ -21,7 +21,6 @@ public struct SelectAssetScene: View {
             isSearching: $model.isSearching,
             dismissSearch: $model.isDismissSearch
         )
-        .listSectionSpacing(.compact)
         .searchable(
             text: $model.searchModel.searchableQuery,
             placement: .navigationBarDrawer(displayMode: .always)
@@ -58,23 +57,20 @@ public struct SelectAssetScene: View {
                 isPresenting: $model.isPresentingCopyToast
             )
         }
-        .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
     }
 
     var list: some View {
         List {
-            Section {} header: {
-                TagsView(
-                    tags: model.searchModel.tagsViewModel.items,
-                    onSelect: { model.setSelected(tag: $0.tag) }
-                )
-                .isVisible(model.showTags)
-            }
-            .textCase(nil)
-            .listRowInsets(EdgeInsets())
-            .if(model.showRecent) {
-                $0.listSectionSpacing(.small)
+            if model.showTags {
+                Section {} header: {
+                    TagsView(
+                        tags: model.searchModel.tagsViewModel.items,
+                        onSelect: { model.setSelected(tag: $0.tag) }
+                    )
+                }
+                .textCase(nil)
+                .listRowInsets(EdgeInsets())
             }
 
             if model.showRecent {
@@ -96,36 +92,41 @@ public struct SelectAssetScene: View {
                 }
             }
 
-            if model.enablePopularSection && model.sections.popular.isNotEmpty {
+            if model.showPopularSection {
                 Section {
                     assetsList(assets: model.sections.popular)
                 } header: {
                     HStack {
-                        Images.System.starFill
-                        Text(Localized.Common.popular)
+                        model.popularImage
+                        Text(model.popularTitle)
                     }
                 }
                 .listRowInsets(.assetListRowInsets)
             }
 
-            if model.sections.pinned.isNotEmpty {
+            if model.showPinnedSection {
                 Section {
                     assetsList(assets: model.sections.pinned)
                 } header: {
                     HStack {
-                        Images.System.pin
-                        Text(Localized.Common.pinned)
+                        model.pinnedImage
+                        Text(model.pinnedTitle)
                     }
                 }
                 .listRowInsets(.assetListRowInsets)
             }
 
-            Section {
-                assetsList(assets: model.sections.assets)
+            if model.showAssetsSection {
+                Section {
+                    assetsList(assets: model.sections.assets)
+                } header: {
+                    Text(model.assetsTitle)
+                }
+                .listRowInsets(.assetListRowInsets)
             }
-            .listRowInsets(.assetListRowInsets)
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
+        .listSectionSpacing(.compact)
     }
 
     func assetsList(assets: [AssetData]) -> some View {

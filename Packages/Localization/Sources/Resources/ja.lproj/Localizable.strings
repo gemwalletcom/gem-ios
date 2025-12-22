@@ -490,7 +490,7 @@
 "assets.title" = "資産";
 "stake.delegations" = "委任";
 "info.stake.apr.description" = "年率 (APR) は、暗号通貨をステーキングした場合の年間報酬率です。";
-"receive.warning" = "これはあなたのアドレスです。** %@ ** ネットワーク上の ** %@ ** のみを送信します。";
+"receive.warning" = "これはあなたの住所です - 送信のみ**%@** オン ザ **%@** ネットワーク。";
 "perpetual.leverage" = "てこの作用";
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自動閉じる";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "使い方";
 "rewards.ways_spend.asset.title" = "得る %@";
 "rewards.insufficient_points" = "ポイントが足りない";
+"rewards.confirm_redeem" = "得る %@ のために %@!";

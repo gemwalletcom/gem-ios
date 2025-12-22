@@ -20,25 +20,15 @@ public struct AutocloseScene: View {
 
     public var body: some View {
         List {
-            if let positionViewModel = model.positionViewModel {
-                Section {
-                    ListAssetItemView(
-                        model: PerpetualPositionItemViewModel(model: positionViewModel)
-                    )
-                }
+            Section {
+                ListAssetItemView(model: model.positionItemViewModel)
             }
 
             Section {
-                if let positionViewModel = model.positionViewModel {
-                    ListItemView(
-                        title: positionViewModel.entryPriceTitle,
-                        subtitle: positionViewModel.entryPriceText
-                    )
+                if let entryPriceText = model.entryPriceText {
+                    ListItemView(title: model.entryPriceTitle, subtitle: entryPriceText)
                 }
-                ListItemView(
-                    title: model.marketPriceTitle,
-                    subtitle: model.marketPriceText
-                )
+                ListItemView(title: model.marketPriceTitle, subtitle: model.marketPriceText)
             }
 
             AutocloseInputSection(

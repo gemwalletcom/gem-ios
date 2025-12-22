@@ -490,7 +490,7 @@
 "assets.title" = "Active";
 "stake.delegations" = "Delegații";
 "info.stake.apr.description" = "Rata anuală procentuală (DAE) este rata anuală de recompensă pentru plasarea criptomonedei tale.";
-"receive.warning" = "Aceasta este adresa dumneavoastră — trimiteți doar ** %@ ** prin rețeaua ** %@ **.";
+"receive.warning" = "Aceasta este adresa dumneavoastră — doar trimitere **%@** pe **%@** rețea.";
 "perpetual.leverage" = "Efect de levier";
 "perpetual.direction" = "Direcţie";
 "perpetual.auto_close" = "Închidere automată";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Modalități de a cheltui";
 "rewards.ways_spend.asset.title" = "Obţine %@";
 "rewards.insufficient_points" = "Puncte insuficiente";
+"rewards.confirm_redeem" = "Obţine %@ pentru %@!";

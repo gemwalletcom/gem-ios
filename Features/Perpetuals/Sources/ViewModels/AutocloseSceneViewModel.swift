@@ -39,10 +39,19 @@ public final class AutocloseSceneViewModel {
     public var takeProfitModel: AutocloseViewModel { autocloseModel(type: .takeProfit, price: takeProfitPrice) }
     public var stopLossModel: AutocloseViewModel { autocloseModel(type: .stopLoss, price: stopLossPrice) }
 
-    public var positionViewModel: PerpetualPositionViewModel? {
+    public var positionItemViewModel: (any ListAssetItemViewable) {
         switch type {
-        case let .modify(position, _): PerpetualPositionViewModel(position)
-        case .open: .none
+        case let .modify(position, _): PerpetualPositionItemViewModel(model: PerpetualPositionViewModel(position))
+        case let .open(data, _): OpenPositionItemViewModel(data: data)
+        }
+    }
+
+    public var entryPriceTitle: String { Localized.Perpetual.entryPrice }
+
+    public var entryPriceText: String? {
+        switch type {
+        case let .modify(position, _): currencyFormatter.string(position.position.entryPrice)
+        case .open: nil
         }
     }
 

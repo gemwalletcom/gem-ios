@@ -490,7 +490,7 @@
 "assets.title" = "Varlıklar";
 "stake.delegations" = "Yetkilendirmeler";
 "info.stake.apr.description" = "Yıllık Yüzde Oranı (APR), kripto paranızı stake etmeniz durumunda ödeyeceğiniz yıllık ödül oranıdır.";
-"receive.warning" = "Bu sizin adresinizdir — yalnızca ** %@ ** ** %@ ** ağında gönderim yapın.";
+"receive.warning" = "Bu sizin adresiniz — sadece ** gönderin%@** üzerinde **%@** ağ.";
 "perpetual.leverage" = "Kaldıraç";
 "perpetual.direction" = "Yön";
 "perpetual.auto_close" = "Otomatik Kapatma";
@@ -544,3 +544,4 @@
 "rewards.ways_spend.title" = "Harcama Yolları";
 "rewards.ways_spend.asset.title" = "Elde etmek %@";
 "rewards.insufficient_points" = "Yetersiz puan";
+"rewards.confirm_redeem" = "Elde etmek %@ için %@!";
