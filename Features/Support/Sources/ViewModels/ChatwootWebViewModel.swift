@@ -95,7 +95,7 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
         return """
         window.addEventListener('chatwoot:ready', function () {
           window.$chatwoot.setCustomAttributes({
-            supportDeviceId: '\(supportDeviceId)',
+            support_device_id: '\(supportDeviceId)',
             platform: 'ios',
             os: '\(os)',
             device: '\(device)',
