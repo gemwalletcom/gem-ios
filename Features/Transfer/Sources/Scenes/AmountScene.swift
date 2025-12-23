@@ -18,106 +18,10 @@ struct AmountScene: View {
     }
 
     var body: some View {
-        @Bindable var model = model
-        List {
-            CurrencyInputValidationView(
-                model: $model.amountInputModel,
-                config: model.inputConfig,
-                infoAction: model.infoAction(for:)
-            )
-            .padding(.top, .medium)
-            .listGroupRowStyle()
-            .disabled(model.isInputDisabled)
-            .focused($focusedField)
-
-            if model.isBalanceViewEnabled {
-                Section {
-                    AssetBalanceView(
-                        image: model.assetImage,
-                        title: model.assetName,
-                        balance: model.balanceText,
-                        secondary: {
-                            Button(
-                                model.maxTitle,
-                                action: model.onSelectMaxButton
-                            )
-                            .buttonStyle(.listEmpty(paddingHorizontal: .medium, paddingVertical: .small))
-                            .fixedSize()
-                        }
-                    )
-                }
-            }
-
-            if let infoText = model.infoText {
-                Section {
-                    Button(action: model.onSelectReservedFeesInfo) {
-                        HStack {
-                            Images.System.info
-                                .foregroundStyle(Colors.gray)
-                                .frame(width: .list.image, height: .list.image)
-                            Text(infoText)
-                                .textStyle(.calloutSecondary)
-                        }
-                    }
-                }
-            }
-
-            switch model.type {
-            case .transfer, .deposit, .withdraw:
-                EmptyView()
-            case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
-                if let viewModel = model.stakeValidatorViewModel {
-                    Section(model.validatorTitle) {
-                        if model.isSelectValidatorEnabled {
-                            NavigationCustomLink(
-                                with: ValidatorView(model: viewModel),
-                                action: model.onSelectCurrentValidator
-                            )
-                        } else {
-                            ValidatorView(model: viewModel)
-                        }
-                    }
-                }
-            case .freeze:
-                if model.isSelectResourceEnabled {
-                    Section {
-                        Picker("", selection: $model.selectedResource) {
-                            ForEach(model.availableResources) { resource in
-                                Text(resource.title).tag(resource)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .frame(width: 200)
-                    }
-                    .cleanListRow()
-                }
-            case .perpetual:
-                if model.isPerpetualLeverageEnabled {
-                    Section {
-                        NavigationCustomLink(
-                            with: ListItemView(
-                                title: model.leverageTitle,
-                                subtitle: model.leverageText,
-                                subtitleStyle: model.leverageTextStyle
-                            ),
-                            action: model.onSelectLeverage
-                        )
-                    }
-                }
-                if model.isAutocloseEnabled {
-                    Section {
-                        NavigationCustomLink(
-                            with: ListItemView(
-                                title: model.autocloseTitle,
-                                subtitle: model.autocloseText.subtitle,
-                                subtitleExtra: model.autocloseText.subtitleExtra
-                            ),
-                            action: model.onSelectAutoclose
-                        )
-                    }
-                }
-            }
-        }
+        ListSectionView(
+            provider: model,
+            content: content(for:)
+        )
         .safeAreaView {
             StateButton(
                 text: model.continueTitle,
@@ -133,6 +37,80 @@ struct AmountScene: View {
         .navigationTitle(model.title)
         .onAppear(perform: model.onAppear)
         .onChange(of: model.focusField, onChangeFocus)
+    }
+}
+
+// MARK: - UI Components
+
+extension AmountScene {
+    @ViewBuilder
+    private func content(for itemModel: AmountItemModel) -> some View {
+        @Bindable var bindableModel = model
+        switch itemModel {
+        case .input:
+            CurrencyInputValidationView(
+                model: $bindableModel.amountInputModel,
+                config: model.inputConfig,
+                infoAction: model.infoAction(for:)
+            )
+            .padding(.top, .medium)
+            .listGroupRowStyle()
+            .disabled(model.isInputDisabled)
+            .focused($focusedField)
+        case .balance(let balanceModel):
+            AssetBalanceView(
+                image: balanceModel.assetImage,
+                title: balanceModel.assetName,
+                balance: balanceModel.balanceText,
+                secondary: {
+                    Button(
+                        balanceModel.maxTitle,
+                        action: model.onSelectMaxButton
+                    )
+                    .buttonStyle(.listEmpty(paddingHorizontal: .medium, paddingVertical: .small))
+                    .fixedSize()
+                }
+            )
+        case .info(let infoModel):
+            Button(action: model.onSelectReservedFeesInfo) {
+                HStack {
+                    Images.System.info
+                        .foregroundStyle(Colors.gray)
+                        .frame(width: .list.image, height: .list.image)
+                    Text(infoModel.text)
+                        .textStyle(.calloutSecondary)
+                }
+            }
+        case .validator(let validatorModel):
+            if validatorModel.isSelectable {
+                NavigationCustomLink(
+                    with: ValidatorView(model: validatorModel.validator),
+                    action: model.onSelectCurrentValidator
+                )
+            } else {
+                ValidatorView(model: validatorModel.validator)
+            }
+        case .resource(let resourceModel):
+            Picker("", selection: $bindableModel.selectedResource) {
+                ForEach(resourceModel.resources) { resource in
+                    Text(resource.title).tag(resource)
+                }
+            }
+            .pickerStyle(.segmented)
+            .frame(width: 200)
+        case .leverage(let leverageModel):
+            NavigationCustomLink(
+                with: ListItemView(model: leverageModel),
+                action: model.onSelectLeverage
+            )
+        case .autoclose(let autocloseModel):
+            NavigationCustomLink(
+                with: ListItemView(model: autocloseModel),
+                action: model.onSelectAutoclose
+            )
+        case .empty:
+            EmptyView()
+        }
     }
 }
 

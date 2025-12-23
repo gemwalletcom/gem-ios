@@ -39,8 +39,8 @@ public struct AmountNavigationView: View {
                     }
                 case .leverageSelector:
                     LeveragePickerSheet(
-                        title: model.leverageTitle,
-                        leverageOptions: model.leverageOptions,
+                        title: model.perpetualViewModel.leverageTitle,
+                        leverageOptions: model.perpetualViewModel.leverageViewModel.leverageOptions,
                         selectedLeverage: $model.selectedLeverage
                     )
                 case .autoclose(let openData):
@@ -61,10 +61,10 @@ public struct AmountNavigationView: View {
             .navigationDestination(for: $model.delegation) { value in
                 StakeValidatorsScene(
                     model: StakeValidatorsViewModel(
-                        type: model.stakeValidatorsType,
+                        type: model.validatorViewModel.stakeValidatorsType,
                         chain: model.asset.chain,
                         currentValidator: value,
-                        validators: model.validators,
+                        validators: model.validatorViewModel.validators,
                         selectValidator: model.onSelectValidator
                     )
                 )
