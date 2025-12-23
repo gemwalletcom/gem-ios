@@ -1,7 +1,7 @@
+import KeystoreTestKit
+import Primitives
 import Testing
 import WalletCore
-import Primitives
-import KeystoreTestKit
 
 @testable import Keystore
 
@@ -33,7 +33,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testImportSolanaWallet() async {
+    func importSolanaWallet() async {
         await #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let wallet = try await keystore.importWallet(
@@ -50,7 +50,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testImportEthereumWallet() async {
+    func importEthereumWallet() async {
         await #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let chains: [Chain] = [.ethereum, .smartChain, .blast]
@@ -72,7 +72,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testExportSolanaPrivateKey() async {
+    func exportSolanaPrivateKey() async {
         await #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let hex = "0xb9095df5360714a69bc86ca92f6191e60355f206909982a8409f7b8358cf41b0"
@@ -103,7 +103,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testSignSolanaMessage() async throws {
+    func signSolanaMessage() async throws {
         let keystore = LocalKeystore.mock()
         let wallet = try await keystore.importWallet(
             name: "Test Solana",
@@ -121,19 +121,19 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testImportWIF() {
+    func importWIF() {
         #expect(throws: Never.self) {
             let wif = "L1NGZutRxaVotZSfRzGnFYUj42LjEL66ZdAeSDA8CbyASZWizHLA"
             let decoded = Base58.decode(string: wif)!
             #expect(decoded.count == 34)
 
-            let key = decoded[1...32]
+            let key = decoded[1 ... 32]
             #expect(PrivateKey.isValid(data: key, curve: .secp256k1))
         }
     }
 
     @Test
-    func testDeriveAddress() async {
+    func deriveAddress() async {
         await #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let chains = Chain.allCases
@@ -181,7 +181,8 @@ struct LocalKeystoreTests {
                      .monad,
                      .hyperCore,
                      .plasma,
-                     .xLayer:
+                     .xLayer,
+                     .stable:
                     expected = "0x8f348F300873Fd5DA36950B2aC75a26584584feE"
                 case .solana:
                     expected = "57mwmnV2rFuVDmhiJEjonD7cfuFtcaP9QvYNGfDEWK71"
@@ -233,7 +234,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testSetupChainsAddsMissingChains() async {
+    func setupChainsAddsMissingChains() async {
         await #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let ethWallet = try await keystore.importWallet(
@@ -262,7 +263,7 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testSetupChainsAddNoMissingChains() async {
+    func setupChainsAddNoMissingChains() async {
         await #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let wallet = try await keystore.importWallet(
@@ -282,11 +283,11 @@ struct LocalKeystoreTests {
     }
 
     @Test
-    func testConcurrentImportAndDelete() async throws {
+    func concurrentImportAndDelete() async throws {
         let keystore = LocalKeystore.mock()
 
         let wallets = try await withThrowingTaskGroup(of: Primitives.Wallet.self) { group in
-            for index in 0..<5 {
+            for index in 0 ..< 5 {
                 group.addTask {
                     try await keystore.importWallet(
                         name: "Wallet \(index)",

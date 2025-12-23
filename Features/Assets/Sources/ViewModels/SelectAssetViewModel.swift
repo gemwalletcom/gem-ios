@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import SwiftUI
 import Primitives
 import Store
 import Components
@@ -11,6 +12,7 @@ import WalletsService
 import Preferences
 import PriceAlertService
 import ActivityService
+import Style
 
 @Observable
 @MainActor
@@ -109,6 +111,26 @@ public final class SelectAssetViewModel {
     var enablePopularSection: Bool {
         [.buy, .priceAlert].contains(selectType)
     }
+
+    var showPopularSection: Bool {
+        enablePopularSection && sections.popular.isNotEmpty
+    }
+
+    var showPinnedSection: Bool {
+        sections.pinned.isNotEmpty
+    }
+
+    var showAssetsSection: Bool {
+        sections.assets.isNotEmpty
+    }
+
+    var popularImage: Image { Images.System.starFill }
+    var popularTitle: String { Localized.Common.popular }
+
+    var pinnedImage: Image { Images.System.pin }
+    var pinnedTitle: String { Localized.Common.pinned }
+
+    var assetsTitle: String { Localized.Assets.title }
 
     public var showAddToken: Bool {
         selectType == .manage && wallet.hasTokenSupport && !filterModel.chainsFilter.isEmpty

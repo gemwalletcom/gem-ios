@@ -10,14 +10,14 @@ public struct CosmosSigner: Signable {
 
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
-        let message = getTransferMessage(input: input, chain: chain, denom: chain.denom.rawValue)
+        let message = getTransferMessage(input: input, denom: chain.denom.rawValue)
         return try sign(input: input, messages: [message], chain: chain, memo: input.memo, privateKey: privateKey)
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
         let denom = try input.asset.getTokenId()
-        let message = getTransferMessage(input: input, chain: chain, denom: denom)
+        let message = getTransferMessage(input: input, denom: denom)
         return try sign(input: input, messages: [message], chain: chain, memo: input.memo, privateKey: privateKey)
     }
     
@@ -157,7 +157,7 @@ public struct CosmosSigner: Signable {
         }
     }
     
-    func getTransferMessage(input: SignerInput, chain: CosmosChain, denom: String) -> CosmosMessage {
+    func getTransferMessage(input: SignerInput, denom: String) -> CosmosMessage {
         let amounts = [getAmount(input: input, denom: denom)]
         
         return CosmosMessage.with {

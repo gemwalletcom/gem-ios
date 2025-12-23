@@ -111,4 +111,6 @@ public enum WalletConnectionMethods: String, Codable, CaseIterable, Sendable {
 	case suiSignAndExecuteTransaction = "sui_signAndExecuteTransaction"
 	case tonSendMessage = "ton_sendMessage"
 	case tonSignData = "ton_signData"
+	case btcSendTransfer = "sendTransfer"
+	case btcSignMessage = "signMessage"
 }
