@@ -38,11 +38,20 @@ public struct AmountNavigationView: View {
                         .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }
                     }
                 case .leverageSelector:
-                    LeveragePickerSheet(
-                        title: model.leverageTitle,
-                        leverageOptions: model.leverageOptions,
-                        selectedLeverage: $model.selectedLeverage
-                    )
+                    if case .perpetual(let perpetual) = model.strategy,
+                       let leverageSelection = perpetual.leverageSelection {
+                        LeveragePickerSheet(
+                            title: perpetual.leverageTitle,
+                            leverageOptions: leverageSelection.options,
+                            selectedLeverage: Binding(
+                                get: { leverageSelection.selected },
+                                set: { newValue in
+                                    leverageSelection.selected = newValue
+                                    model.onLeverageChanged()
+                                }
+                            )
+                        )
+                    }
                 case .autoclose(let openData):
                     AutocloseSheet(
                         openData: openData,
@@ -58,16 +67,18 @@ public struct AmountNavigationView: View {
                         .disabled(!model.isNextEnabled)
                 }
             }
-            .navigationDestination(for: $model.delegation) { value in
-                StakeValidatorsScene(
-                    model: StakeValidatorsViewModel(
-                        type: model.stakeValidatorsType,
-                        chain: model.asset.chain,
-                        currentValidator: value,
-                        validators: model.validators,
-                        selectValidator: model.onSelectValidator
+            .navigationDestination(for: DelegationValidator.self) { validator in
+                if case .stake(let stake) = model.strategy {
+                    StakeValidatorsScene(
+                        model: StakeValidatorsViewModel(
+                            type: stake.validatorSelection.type,
+                            chain: model.asset.chain,
+                            currentValidator: validator,
+                            validators: stake.validatorSelection.options,
+                            selectValidator: model.onValidatorSelected
+                        )
                     )
-                )
+                }
             }
     }
 }

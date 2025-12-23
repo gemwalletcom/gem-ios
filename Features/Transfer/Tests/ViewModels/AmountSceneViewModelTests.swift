@@ -134,11 +134,18 @@ struct AmountSceneViewModelTests {
             assetData: assetData
         )
 
-        model.onSelectResource(.energy)
+        guard case .stake(let stake) = model.strategy,
+              let resourceSelection = stake.resourceSelection else {
+            return
+        }
+
+        resourceSelection.selected = .energy
+        model.onResourceChanged()
         model.amountInputModel.update(text: "2.0")
         #expect(model.amountInputModel.isValid == true)
 
-        model.onSelectResource(.bandwidth)
+        resourceSelection.selected = .bandwidth
+        model.onResourceChanged()
         model.amountInputModel.update(text: "2.0")
         #expect(model.amountInputModel.isValid == false)
     }
@@ -164,7 +171,7 @@ struct AmountSceneViewModelTests {
         )
 
         model.amountInputModel.update(text: "1.5")
-        model.onSelectValidator(validator2)
+        model.onValidatorSelected(validator2)
 
         #expect(model.amountInputModel.text == "1.5")
     }
