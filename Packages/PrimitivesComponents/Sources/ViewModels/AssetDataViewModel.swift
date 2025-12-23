@@ -37,6 +37,7 @@ public struct AssetDataViewModel: Sendable {
 
     public var availableBalanceTitle: String { Localized.Asset.Balances.available }
     public var reservedBalanceTitle: String { Localized.Asset.Balances.reserved }
+    public var pendingUnconfirmedBalanceTitle: String { Localized.Stake.pending }
 
     // asset
 
@@ -100,12 +101,20 @@ public struct AssetDataViewModel: Sendable {
         balanceViewModel.hasReservedBalance
     }
 
+    public var hasPendingUnconfirmedBalance: Bool {
+        balanceViewModel.hasPendingUnconfirmedBalance
+    }
+
     public var hasAvailableBalance: Bool {
         balanceViewModel.availableBalanceAmount > 0
     }
 
     public var reservedBalanceTextWithSymbol: String {
         balanceViewModel.reservedBalanceTextWithSymbol
+    }
+
+    public var pendingUnconfirmedBalanceTextWithSymbol: String {
+        balanceViewModel.pendingUnconfirmedBalanceTextWithSymbol
     }
 
     public var balanceTextColor: Color {

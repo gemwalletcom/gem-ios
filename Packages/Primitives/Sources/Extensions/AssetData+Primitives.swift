@@ -16,6 +16,7 @@ public extension AssetData {
             BalanceType.frozen: balance.frozen,
             BalanceType.locked: balance.locked,
             BalanceType.pending: balance.pending,
+            BalanceType.pendingUnconfirmed: balance.pendingUnconfirmed,
             BalanceType.staked: balance.staked,
             BalanceType.rewards: balance.rewards,
             BalanceType.reserved: balance.reserved,

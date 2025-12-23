@@ -36,7 +36,9 @@ public struct BalanceStore: Sendable {
                         BalanceRecord.Columns.available.set(to: balance.available.value),
                         BalanceRecord.Columns.availableAmount.set(to: balance.available.amount),
                         BalanceRecord.Columns.reserved.set(to: balance.reserved.value),
-                        BalanceRecord.Columns.reservedAmount.set(to: balance.reserved.amount)
+                        BalanceRecord.Columns.reservedAmount.set(to: balance.reserved.amount),
+                        BalanceRecord.Columns.pendingUnconfirmed.set(to: balance.pendingUnconfirmed.value),
+                        BalanceRecord.Columns.pendingUnconfirmedAmount.set(to: balance.pendingUnconfirmed.amount)
                     ]
                 case .token(let balance):
                     [

@@ -174,8 +174,8 @@ extension BalanceService {
     private func createUpdateBalanceType(asset: Asset, change: AssetBalanceChange) throws -> UpdateBalanceType {
         let decimals = asset.decimals.asInt
         switch change.type {
-        case .coin(let available, let reserved):
-            let available = try UpdateBalanceValue(
+        case .coin(let available, let reserved, let pendingUnconfirmed):
+            let availableValue = try UpdateBalanceValue(
                 value: available.description,
                 amount: formatter.double(from: available, decimals: decimals)
             )
@@ -183,7 +183,11 @@ extension BalanceService {
                 value: reserved.description,
                 amount: formatter.double(from: reserved, decimals: decimals)
             )
-            return .coin(UpdateCoinBalance(available: available, reserved: reservedValue))
+            let pendingUnconfirmedValue = try UpdateBalanceValue(
+                value: pendingUnconfirmed.description,
+                amount: formatter.double(from: pendingUnconfirmed, decimals: decimals)
+            )
+            return .coin(UpdateCoinBalance(available: availableValue, reserved: reservedValue, pendingUnconfirmed: pendingUnconfirmedValue))
         case .token(let available):
             let available = try UpdateBalanceValue(
                 value: available.description,

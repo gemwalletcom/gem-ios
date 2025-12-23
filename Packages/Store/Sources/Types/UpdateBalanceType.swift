@@ -20,13 +20,16 @@ public enum UpdateBalanceType {
 public struct UpdateCoinBalance {
     public let available: UpdateBalanceValue
     public let reserved: UpdateBalanceValue
-    
+    public let pendingUnconfirmed: UpdateBalanceValue
+
     public init(
         available: UpdateBalanceValue,
-        reserved: UpdateBalanceValue
+        reserved: UpdateBalanceValue,
+        pendingUnconfirmed: UpdateBalanceValue = .zero
     ) {
         self.available = available
         self.reserved = reserved
+        self.pendingUnconfirmed = pendingUnconfirmed
     }
 }
 

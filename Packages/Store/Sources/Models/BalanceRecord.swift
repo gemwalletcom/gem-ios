@@ -25,6 +25,8 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let stakedAmount = Column("stakedAmount")
         static let pending = Column("pending")
         static let pendingAmount = Column("pendingAmount")
+        static let pendingUnconfirmed = Column("pendingUnconfirmed")
+        static let pendingUnconfirmedAmount = Column("pendingUnconfirmedAmount")
         static let rewards = Column("rewards")
         static let rewardsAmount = Column("rewardsAmount")
         static let reserved = Column("reserved")
@@ -54,7 +56,10 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public var pending: String
     public var pendingAmount: Double
-    
+
+    public var pendingUnconfirmed: String
+    public var pendingUnconfirmedAmount: Double
+
     public var rewards: String
     public var rewardsAmount: Double
     
@@ -102,7 +107,10 @@ extension BalanceRecord: CreateTable {
             
             $0.column(Columns.pending.name, .text).defaults(to: "0")
             $0.column(Columns.pendingAmount.name, .double).defaults(to: 0)
-            
+
+            $0.column(Columns.pendingUnconfirmed.name, .text).defaults(to: "0")
+            $0.column(Columns.pendingUnconfirmedAmount.name, .double).defaults(to: 0)
+
             $0.column(Columns.rewards.name, .text).defaults(to: "0")
             $0.column(Columns.rewardsAmount.name, .double).defaults(to: 0)
             
@@ -143,6 +151,7 @@ extension BalanceRecord {
             locked: BigInt(stringLiteral: locked),
             staked: BigInt(stringLiteral: staked),
             pending: BigInt(stringLiteral: pending),
+            pendingUnconfirmed: BigInt(stringLiteral: pendingUnconfirmed),
             rewards: BigInt(stringLiteral: rewards),
             reserved: BigInt(stringLiteral: reserved),
             withdrawable: BigInt(stringLiteral: withdrawable),
