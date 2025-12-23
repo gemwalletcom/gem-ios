@@ -11,18 +11,6 @@ public extension CosmosChain {
         return chain
     }
     
-    var chain: Chain {
-        switch self {
-        case .cosmos: .cosmos
-        case .osmosis: .osmosis
-        case .celestia: .celestia
-        case .thorchain: .thorchain
-        case .injective: .injective
-        case .sei: .sei
-        case .noble: .noble
-        }
-    }
-    
     var denom: CosmosDenom {
         switch self {
         case .thorchain: CosmosDenom.rune
@@ -32,17 +20,6 @@ public extension CosmosChain {
         case .injective: CosmosDenom.inj
         case .sei: CosmosDenom.usei
         case .noble: CosmosDenom.uusdc
-        }
-    }
-    
-    var stakeLockTime: TimeInterval {
-        switch self {
-        case .thorchain, .noble: 0
-        case .cosmos,
-            .celestia,
-            .injective,
-            .sei: 1_814_400
-        case .osmosis: 1_036_800
         }
     }
 }
