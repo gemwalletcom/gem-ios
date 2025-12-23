@@ -464,14 +464,5 @@
    <ArchiveAction
       buildConfiguration = "Release"
       revealArchiveInOrganizer = "YES">
-      <PostActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Remove GemstoneFFI framework"
-               scriptText = "rm -rf &quot;${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/GemstoneFFI.framework&quot;&#10;">
-            </ActionContent>
-         </ExecutionAction>
-      </PostActions>
    </ArchiveAction>
 </Scheme>
