@@ -44,7 +44,6 @@ public final class SwapSceneViewModel {
     var selectedSwapQuote: SwapperQuote?
     var amountInputModel: InputValidationViewModel = InputValidationViewModel(mode: .onDemand)
     var toValue: String = ""
-    var focusField: Bool = false
 
     private let onSwap: TransferDataAction
     private let swapQuotesProvider: any SwapQuotesProvidable
@@ -206,7 +205,6 @@ extension SwapSceneViewModel {
 
         resetValues()
         selectedSwapQuote = nil
-        focusField = true
         fetch()
         updateValidators(for: new)
     }
@@ -226,7 +224,6 @@ extension SwapSceneViewModel {
     func onSelectPercent(_ percent: Int) {
         guard let fromAsset else { return }
         applyPercentToFromValue(percent: percent, assetData: fromAsset)
-        focusField = false
     }
 
     func onSelectSwapConfirmation() {
@@ -401,7 +398,6 @@ extension SwapSceneViewModel {
                 isPresentingPriceImpactConfirmation = warningText
                 return
             }
-            focusField = false
             swap()
         }
     }

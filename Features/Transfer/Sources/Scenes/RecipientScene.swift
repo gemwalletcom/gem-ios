@@ -3,6 +3,7 @@
 import SwiftUI
 import Style
 import Components
+import Primitives
 import PrimitivesComponents
 
 struct RecipientScene: View {
@@ -79,7 +80,7 @@ struct RecipientScene: View {
                     ForEach(section.values) { item in
                         NavigationCustomLink(
                             with: ListItemView(title: item.value.name),
-                            action: { model.onSelectRecipient(item.value) }
+                            action: { onSelectRecipient(item.value) }
                         )
                     }
                 } header: {
@@ -95,7 +96,7 @@ struct RecipientScene: View {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.actionButtonState),
-                action: model.onContinue
+                action: onSelectContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)
             .padding(.bottom, .scene.bottom)
@@ -104,5 +105,19 @@ struct RecipientScene: View {
         .navigationTitle(model.tittle)
         .onChange(of: model.addressInputModel.text, model.onChangeAddressText)
         .onChange(of: model.nameResolveState, model.onChangeNameResolverState)
+    }
+}
+
+// MARK: - Actions
+
+extension RecipientScene {
+    private func onSelectRecipient(_ recipient: RecipientAddress) {
+        focusedField = nil
+        model.onSelectRecipient(recipient)
+    }
+
+    private func onSelectContinue() {
+        focusedField = nil
+        model.onContinue()
     }
 }

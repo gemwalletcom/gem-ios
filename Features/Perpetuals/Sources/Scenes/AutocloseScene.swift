@@ -67,7 +67,7 @@ public struct AutocloseScene: View {
                     PercentageAccessoryView(
                         percents: model.takeProfitModel.percents,
                         onSelectPercent: model.onSelectPercent,
-                        onDone: model.onDone
+                        onDone: { focusedField = nil }
                     )
                     .padding(.small)
                 }
@@ -76,14 +76,5 @@ public struct AutocloseScene: View {
         }
         .navigationTitle(model.title)
         .onChange(of: focusedField, model.onChangeFocusField)
-        .onChange(of: model.input.focusField, onChangeFocus)
-    }
-}
-
-// MARK: - Actions
-
-extension AutocloseScene {
-    private func onChangeFocus(_ _: Field?, _ newField: Field?) {
-        focusedField = newField
     }
 }
