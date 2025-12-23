@@ -337,6 +337,15 @@ public struct Migrations {
             try? RecentActivityRecord.create(db: db)
         }
 
+        migrator.registerMigration("Add pendingUnconfirmed to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.pendingUnconfirmed.name, .text)
+                    .defaults(to: "0")
+                $0.add(column: BalanceRecord.Columns.pendingUnconfirmedAmount.name, .double)
+                    .defaults(to: 0)
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

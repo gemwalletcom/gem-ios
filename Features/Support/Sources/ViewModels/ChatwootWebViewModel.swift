@@ -49,19 +49,27 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
             \(sdkInitializationScript)
             \(toggleChatScript)
             \(setDeviceIdScript)
-            \(chatCloseEventHandler)
             \(chatOpenEventHandler)
           "></script>
         </body>
         </html>
         """
     }
-    
+
     func configureWebView() -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
-        configuration.userContentController.add(self, name: ChatwootHandler.chatClosed.rawValue)
         configuration.userContentController.add(self, name: ChatwootHandler.chatOpened.rawValue)
+        configuration.userContentController.addUserScript(hideCloseButtonUserScript)
         return configuration
+    }
+
+    private var hideCloseButtonUserScript: WKUserScript {
+        let source = """
+        var style = document.createElement('style');
+        style.textContent = '.close-button, .rn-close-button { display: none !important; visibility: hidden !important; }';
+        document.head.appendChild(style);
+        """
+        return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
     }
     
     // MARK: - Private properties
@@ -113,11 +121,7 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
     private var sdkSourceURL: String {
         "\(baseUrl.absoluteString)/packs/js/sdk.js"
     }
-    
-    private var chatCloseEventHandler: String {
-        eventHandler(event: .closed, handler: .chatClosed, message: .closed)
-    }
-    
+
     private var chatOpenEventHandler: String {
         eventHandler(event: .ready, handler: .chatOpened, message: .ready)
     }
@@ -141,7 +145,6 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
 extension ChatwootWebViewModel: WKNavigationDelegate, WKScriptMessageHandler {
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch ChatwootHandler(rawValue: message.name) {
-        case .chatClosed: isPresentingSupport.wrappedValue = false
         case .chatOpened: isLoading = false
         default: break
         }
