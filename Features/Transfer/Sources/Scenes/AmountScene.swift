@@ -37,12 +37,9 @@ struct AmountScene: View {
                         title: model.assetName,
                         balance: model.balanceText,
                         secondary: {
-                            Button(
-                                model.maxTitle,
-                                action: model.onSelectMaxButton
-                            )
-                            .buttonStyle(.listEmpty(paddingHorizontal: .medium, paddingVertical: .small))
-                            .fixedSize()
+                            Button(model.maxTitle, action: onSelectMaxButton)
+                                .buttonStyle(.listEmpty(paddingHorizontal: .medium, paddingVertical: .small))
+                                .fixedSize()
                         }
                     )
                 }
@@ -122,7 +119,7 @@ struct AmountScene: View {
             StateButton(
                 text: model.continueTitle,
                 type: .primary(model.actionButtonState),
-                action: model.onSelectNextButton
+                action: onSelectNextButton
             )
             .frame(maxWidth: .scene.button.maxWidth)
             .padding(.bottom, .scene.bottom)
@@ -131,15 +128,25 @@ struct AmountScene: View {
         .listSectionSpacing(.custom(.medium))
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
-        .onAppear(perform: model.onAppear)
-        .onChange(of: model.focusField, onChangeFocus)
+        .onAppear {
+            model.onAppear()
+            if model.shouldFocusOnAppear {
+                focusedField = true
+            }
+        }
     }
 }
 
 // MARK: - Actions
 
 extension AmountScene {
-    private func onChangeFocus(_ _: Bool, _ newField: Bool) {
-        focusedField = newField
+    private func onSelectMaxButton() {
+        focusedField = false
+        model.onSelectMaxButton()
+    }
+
+    private func onSelectNextButton() {
+        focusedField = false
+        model.onSelectNextButton()
     }
 }
