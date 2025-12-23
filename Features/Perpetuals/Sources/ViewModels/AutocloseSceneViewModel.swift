@@ -65,10 +65,6 @@ public final class AutocloseSceneViewModel {
 // MARK: - Actions
 
 extension AutocloseSceneViewModel {
-    public func onDone() {
-        input.focusField = nil
-    }
-
     public func onChangeFocusField(_ _: AutocloseScene.Field?, _ newField: AutocloseScene.Field?) {
         input.focusField = newField
     }

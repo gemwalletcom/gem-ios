@@ -26,7 +26,7 @@ struct AmountScene: View {
             StateButton(
                 text: model.continueTitle,
                 type: .primary(model.actionButtonState),
-                action: model.onSelectNextButton
+                action: onSelectNextButton
             )
             .frame(maxWidth: .scene.button.maxWidth)
             .padding(.bottom, .scene.bottom)
@@ -35,8 +35,12 @@ struct AmountScene: View {
         .listSectionSpacing(.custom(.medium))
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
-        .onAppear(perform: model.onAppear)
-        .onChange(of: model.focusField, onChangeFocus)
+        .onAppear {
+            model.onAppear()
+            if model.shouldFocusOnAppear {
+                focusedField = true
+            }
+        }
     }
 }
 
@@ -117,7 +121,13 @@ extension AmountScene {
 // MARK: - Actions
 
 extension AmountScene {
-    private func onChangeFocus(_ _: Bool, _ newField: Bool) {
-        focusedField = newField
+    private func onSelectMaxButton() {
+        focusedField = false
+        model.onSelectMaxButton()
+    }
+
+    private func onSelectNextButton() {
+        focusedField = false
+        model.onSelectNextButton()
     }
 }

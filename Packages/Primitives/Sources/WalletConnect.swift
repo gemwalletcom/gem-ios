@@ -4,6 +4,20 @@
 
 import Foundation
 
+public struct WCBitcoinTransfer: Codable, Equatable, Hashable, Sendable {
+	public let account: String
+	public let recipientAddress: String
+	public let amount: String
+	public let memo: String?
+
+	public init(account: String, recipientAddress: String, amount: String, memo: String?) {
+		self.account = account
+		self.recipientAddress = recipientAddress
+		self.amount = amount
+		self.memo = memo
+	}
+}
+
 public struct WCEthereumTransaction: Codable, Equatable, Hashable, Sendable {
 	public let chainId: String?
 	public let from: String

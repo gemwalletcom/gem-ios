@@ -14,6 +14,7 @@ extension WalletConnectTransaction {
         case .solana(let data, let outputType): .solana(data.transaction, outputType.map())
         case .sui(let data, let outputType): .sui(data.transaction, outputType.map())
         case .ton(let messages, let outputType): .ton(messages, outputType.map())
+        case .bitcoin(let data, let outputType): .bitcoin(data, outputType.map())
         }
     }
 }

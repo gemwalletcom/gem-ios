@@ -6,10 +6,7 @@ import Style
 import PrimitivesComponents
 
 public struct SwapScene: View {
-    enum Field: Int, Hashable {
-        case from, to
-    }
-    @FocusState private var focusedField: Field?
+    @FocusState private var focusedField: Bool
 
     @State private var model: SwapSceneViewModel
 
@@ -76,14 +73,11 @@ public struct SwapScene: View {
         .onChange(of: model.amountInputModel.text, model.onChangeFromValue)
         .onChange(of: model.pairSelectorModel, model.onChangePair)
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
-        .onChange(of: model.focusField, onChangeFocus)
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
             model.fetch()
         }
         .onAppear {
-            if model.toValue.isEmpty {
-                model.focusField = .from
-            }
+            focusedField = true
         }
     }
 }
@@ -100,7 +94,7 @@ extension SwapScene {
                 onSelectAssetAction: model.onSelectAssetPay
             )
             .buttonStyle(.borderless)
-            .focused($focusedField, equals: .from)
+            .focused($focusedField)
         } header: {
             Text(model.swapFromTitle)
                 .listRowInsets(.horizontalMediumInsets)
@@ -117,7 +111,7 @@ extension SwapScene {
                 .listRowInsets(.horizontalMediumInsets)
         }
     }
-    
+
     private var swapToSectionView: some View {
         Section {
             SwapTokenView(
@@ -129,13 +123,12 @@ extension SwapScene {
                 onSelectAssetAction: model.onSelectAssetReceive
             )
             .buttonStyle(.borderless)
-            .focused($focusedField, equals: .to)
         } header: {
             Text(model.swapToTitle)
                 .listRowInsets(.horizontalMediumInsets)
         }
     }
-    
+
     private var additionalInfoSectionView: some View {
         Section {
             if let swapDetailsViewModel = model.swapDetailsViewModel {
@@ -146,30 +139,39 @@ extension SwapScene {
             }
         }
     }
-    
+
     private var buttonView: some View {
-        VStack {
-            StateButton(model.buttonViewModel)
-        }
+        StateButton(
+            text: model.buttonViewModel.title,
+            type: model.buttonViewModel.type,
+            image: model.buttonViewModel.icon,
+            infoTitle: model.buttonViewModel.infoText,
+            action: onSelectActionButton
+        )
         .frame(maxWidth: Spacing.scene.button.maxWidth)
     }
-    
+
     @ViewBuilder
     private var bottomActionView: some View {
         VStack(spacing: 0) {
             Divider()
                 .frame(height: 1 / UIScreen.main.scale)
                 .background(Colors.grayVeryLight)
-                .isVisible(focusedField == .from)
+                .isVisible(focusedField)
 
             Group {
                 if model.buttonViewModel.isVisible {
                     buttonView
-                } else if focusedField == .from {
+                } else if focusedField {
                     PercentageAccessoryView(
                         percents: SwapSceneViewModel.inputPercents,
-                        onSelectPercent: model.onSelectPercent,
-                        onDone: { focusedField = nil }
+                        onSelectPercent: {
+                            focusedField = false
+                            model.onSelectPercent($0)
+                        },
+                        onDone: {
+                            focusedField = false
+                        }
                     )
                 }
             }
@@ -182,7 +184,8 @@ extension SwapScene {
 // MARK: - Actions
 
 extension SwapScene {
-    private func onChangeFocus(_ _: Field?, _ newField: Field?) {
-        focusedField = newField
+    private func onSelectActionButton() {
+        focusedField = false
+        model.buttonViewModel.action()
     }
 }

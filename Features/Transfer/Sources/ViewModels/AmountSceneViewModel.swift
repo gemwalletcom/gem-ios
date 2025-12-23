@@ -57,7 +57,6 @@ public final class AmountSceneViewModel {
     var stopLoss: String?
 
     var isPresentingSheet: AmountSheetType?
-    var focusField: Bool = false
 
     public init(
         input: AmountInput,
@@ -180,10 +179,10 @@ public final class AmountSceneViewModel {
 // MARK: - Business Logic
 
 extension AmountSceneViewModel {
+    var shouldFocusOnAppear: Bool { balanceViewModel.canChangeValue }
+
     func onAppear() {
-        if balanceViewModel.canChangeValue {
-            focusField = true
-        } else {
+        if !balanceViewModel.canChangeValue {
             setMax()
         }
     }
@@ -202,7 +201,6 @@ extension AmountSceneViewModel {
 
     func onSelectMaxButton() {
         setMax()
-        focusField = false
     }
 
     func onSelectCurrentValidator() {
