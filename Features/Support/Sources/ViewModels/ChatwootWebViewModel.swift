@@ -64,29 +64,12 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
     }
 
     private var hideCloseButtonUserScript: WKUserScript {
-        let css = """
-        .rn-close-button,
-        button.rn-close-button,
-        .close-button,
-        button.close-button {
-            display: none !important;
-            visibility: hidden !important;
-        }
-        """
-
         let source = """
-        (function() {
-            var style = document.createElement('style');
-            style.innerHTML = \(css.debugDescription);
-            document.head.appendChild(style);
-        })();
+        var style = document.createElement('style');
+        style.textContent = '.close-button, .rn-close-button { display: none !important; visibility: hidden !important; }';
+        document.head.appendChild(style);
         """
-
-        return WKUserScript(
-            source: source,
-            injectionTime: .atDocumentEnd,
-            forMainFrameOnly: false
-        )
+        return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
     }
     
     // MARK: - Private properties
