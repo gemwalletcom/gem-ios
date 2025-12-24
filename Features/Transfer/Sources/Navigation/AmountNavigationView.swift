@@ -38,12 +38,13 @@ public struct AmountNavigationView: View {
                         .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }
                     }
                 case .leverageSelector:
-                    if let perpetualModel = model.amountTypeModel.perpetual {
+                    if let perpetualModel = model.amountTypeModel.perpetual,
+                       let firstItem = perpetualModel.items.first {
                         LeveragePickerSheet(
                             title: perpetualModel.selectionTitle,
                             leverageOptions: perpetualModel.items,
                             selectedLeverage: Binding(
-                                get: { perpetualModel.selectedItem ?? LeverageOption(value: 1) },
+                                get: { perpetualModel.selectedItem ?? firstItem },
                                 set: { perpetualModel.selectedItem = $0 }
                             )
                         )

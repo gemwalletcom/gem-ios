@@ -37,17 +37,16 @@ public final class PerpetualAmountTypeViewModel: AmountTypeConfigurable {
     }
 
     public var defaultItem: LeverageOption? {
-        switch positionAction {
+        let candidate: LeverageOption? = switch positionAction {
         case .open:
-            LeverageOption.option(
-                desiredValue: Preferences.standard.perpetualLeverage,
-                from: items
-            )
-        case .increase(let data):
-            LeverageOption(value: data.leverage)
-        case .reduce(let data, _, _):
+            LeverageOption.option(desiredValue: Preferences.standard.perpetualLeverage, from: items)
+        case .increase(let data), .reduce(let data, _, _):
             LeverageOption(value: data.leverage)
         }
+        guard let candidate, items.contains(candidate) else {
+            return items.first
+        }
+        return candidate
     }
 
     public var selectedItemViewModel: LeverageOption? { selectedItem }
