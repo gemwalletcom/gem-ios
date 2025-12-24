@@ -8,10 +8,10 @@ import StakeService
 import BalanceService
 import NFTService
 
-public struct TransactionService: Sendable {
+public struct TransactionStateService: Sendable {
     private let transactionStore: TransactionStore
-    private let stateService: TransactionStateService
-    private let postProcessingService: TransactionStateUpdatePostJob
+    private let stateService: TransactionStateProvider
+    private let postProcessingService: TransactionPostProcessingService
     private let runner: JobRunner = JobRunner()
 
     public init(
@@ -22,11 +22,11 @@ public struct TransactionService: Sendable {
         balanceUpdater: any BalancerUpdater
     ) {
         self.transactionStore = transactionStore
-        self.stateService = TransactionStateService(
+        self.stateService = TransactionStateProvider(
             transactionStore: transactionStore,
             chainServiceFactory: chainServiceFactory
         )
-        self.postProcessingService = TransactionStateUpdatePostJob(
+        self.postProcessingService = TransactionPostProcessingService(
             transactionStore: transactionStore,
             balanceUpdater: balanceUpdater,
             stakeService: stakeService,
@@ -51,7 +51,7 @@ public struct TransactionService: Sendable {
 
 // MARK: - Private
 
-extension TransactionService {
+extension TransactionStateService {
     private func runUpdate(for transactionWallets: [TransactionWallet]) {
         let jobs = transactionWallets.map {
             TransactionStateUpdateJob(

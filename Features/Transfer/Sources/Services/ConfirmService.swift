@@ -3,7 +3,7 @@
 import Foundation
 import BalanceService
 import PriceService
-import TransactionService
+import TransactionStateService
 import ExplorerService
 import Keystore
 import WalletsService

@@ -1,17 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 import Localization
 
-struct ConnectionDateFormatter {
-    private static let dateAndTime: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .long
-        return formatter
-    }()
-
+public struct RelativeDateFormatter: Sendable {
     private static let time: DateFormatter = {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
@@ -19,19 +11,28 @@ struct ConnectionDateFormatter {
         return formatter
     }()
 
-    private let date: Date
+    private static let dateAndTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .long
+        return formatter
+    }()
 
-    public init(date: Date) {
-        self.date = date
-    }
+    private static let dateOnly: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .none
+        formatter.dateStyle = .long
+        return formatter
+    }()
 
-    var dateString: String {
+    public init() {}
+
+    public func string(from date: Date, includeTime: Bool = true) -> String {
         if Calendar.current.isDateInToday(date) {
             return String(format: "%@, %@", Localized.Date.today, Self.time.string(from: date))
         } else if Calendar.current.isDateInYesterday(date) {
             return String(format: "%@, %@", Localized.Date.yesterday, Self.time.string(from: date))
         }
-        return Self.dateAndTime.string(from: date)
+        return includeTime ? Self.dateAndTime.string(from: date) : Self.dateOnly.string(from: date)
     }
 }
-

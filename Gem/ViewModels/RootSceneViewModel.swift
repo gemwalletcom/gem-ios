@@ -10,7 +10,7 @@ import Localization
 import Onboarding
 import Primitives
 import SwiftUI
-import TransactionService
+import TransactionStateService
 import TransactionsService
 import WalletConnector
 import WalletService
@@ -22,7 +22,7 @@ import NameService
 final class RootSceneViewModel {
     private let onstartAsyncService: OnstartAsyncService
     private let onstartWalletService: OnstartWalletService
-    private let transactionService: TransactionService
+    private let transactionStateService: TransactionStateService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
     private let notificationHandler: NotificationHandler
@@ -55,7 +55,7 @@ final class RootSceneViewModel {
         walletConnectorPresenter: WalletConnectorPresenter,
         onstartAsyncService: OnstartAsyncService,
         onstartWalletService: OnstartWalletService,
-        transactionService: TransactionService,
+        transactionStateService: TransactionStateService,
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
         notificationHandler: NotificationHandler,
@@ -67,7 +67,7 @@ final class RootSceneViewModel {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartAsyncService = onstartAsyncService
         self.onstartWalletService = onstartWalletService
-        self.transactionService = transactionService
+        self.transactionStateService = transactionStateService
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
         self.notificationHandler = notificationHandler
@@ -86,7 +86,7 @@ extension RootSceneViewModel {
             self?.setupUpdateReleaseAlert($0)
         }
         onstartAsyncService.setup()
-        transactionService.setup()
+        transactionStateService.setup()
         Task {
             try await connectionsService.setup()
         }

@@ -4,7 +4,7 @@ import Blockchain
 import Foundation
 import Primitives
 import Signer
-import TransactionService
+import TransactionStateService
 import WalletsService
 
 public protocol TransferExecutable: Sendable {
@@ -15,18 +15,18 @@ public struct TransferExecutor: TransferExecutable {
     private let signer: any TransactionSigneable
     private let chainService: any ChainServiceable
     private let walletsService: WalletsService
-    private let transactionService: TransactionService
+    private let transactionStateService: TransactionStateService
 
     public init(
         signer: any TransactionSigneable,
         chainService: any ChainServiceable,
         walletsService: WalletsService,
-        transactionService: TransactionService
+        transactionStateService: TransactionStateService
     ) {
         self.signer = signer
         self.chainService = chainService
         self.walletsService = walletsService
-        self.transactionService = transactionService
+        self.transactionStateService = transactionStateService
     }
 
     public func execute(input: TransferConfirmationInput) async throws {
@@ -65,7 +65,7 @@ public struct TransferExecutor: TransferExecutable {
                     }
                 }
 
-                try transactionService.addTransactions(wallet: input.wallet, transactions: transactions)
+                try transactionStateService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {
                     try walletsService.addBalancesIfMissing(
                         for: input.wallet.walletId,

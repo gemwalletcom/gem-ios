@@ -3,7 +3,7 @@
 import Foundation
 import BalanceService
 import PriceService
-import TransactionService
+import TransactionStateService
 import ExplorerService
 import Keystore
 import WalletsService
@@ -23,7 +23,7 @@ public struct ConfirmServiceFactory {
         scanService: ScanService,
         balanceService: BalanceService,
         priceService: PriceService,
-        transactionService: TransactionService,
+        transactionStateService: TransactionStateService,
         addressNameService: AddressNameService,
         activityService: ActivityService,
         chain: Chain
@@ -44,7 +44,7 @@ public struct ConfirmServiceFactory {
                 signer: TransactionSigner(keystore: keystore),
                 chainService: chainService,
                 walletsService: walletsService,
-                transactionService: transactionService
+                transactionStateService: transactionStateService
             ),
             keystore: keystore,
             chainService: chainService,
