@@ -13,12 +13,19 @@ import Localization
 @MainActor
 @Observable
 public final class WalletImageViewModel: Sendable {
+
+    public enum Source {
+        case onboarding
+        case wallet
+    }
+
     struct NFTAssetImageItem: Identifiable, Sendable {
         let id: String
         let assetImage: AssetImage
     }
 
     public let wallet: Wallet
+    public let source: Source
     private let avatarService: AvatarService
 
     let emojiViewSize: Sizing = .image.extraLarge
@@ -28,18 +35,25 @@ public final class WalletImageViewModel: Sendable {
 
     public init(
         wallet: Wallet,
+        source: Source = .wallet,
         avatarService: AvatarService
     ) {
         self.wallet = wallet
+        self.source = source
         self.avatarService = avatarService
     }
-    
-    var title: String { Localized.Common.avatar }
-    
+
+    var title: String {
+        switch source {
+        case .onboarding: Localized.Wallet.New.title
+        case .wallet: Localized.Common.avatar
+        }
+    }
+
     var walletRequest: WalletRequest {
         WalletRequest(walletId: wallet.id)
     }
-    
+
     var nftAssetsRequest: NFTRequest {
         NFTRequest(walletId: wallet.id, filter: .all)
     }
@@ -95,12 +109,6 @@ public final class WalletImageViewModel: Sendable {
     public func setAvatarEmoji(value: EmojiValue) {
         if let image = drawImage(color: value.color.uiColor, text: value.emoji) {
             setImage(image)
-        }
-    }
-    
-    public func emojiStyleViewModel() -> EmojiStyleViewModel {
-        EmojiStyleViewModel { [weak self] value in
-            self?.setAvatarEmoji(value: value)
         }
     }
     

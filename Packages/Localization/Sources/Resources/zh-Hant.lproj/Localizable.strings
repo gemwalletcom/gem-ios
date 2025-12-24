@@ -512,7 +512,7 @@
 "settings.preferences.default_leverage" = "預設槓桿";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
+"recent_activity.title" = "最近的";
 "errors.no_data_available" = "暫無數據";
 "errors.dust_threshold_short" = "網路將這筆金額視為微不足道的垃圾——手續費甚至高於金額本身。";
 "charts.take_profit" = "TP";
@@ -538,10 +538,11 @@
 "rewards.get_rewards.title" = "獲得獎勵";
 "rewards.activate_referral_code.description" = "Have a referral code from a friend?";
 "rewards.activate_referral_code.title" = "兌換碼";
-"rewards.create_referral_code.title" = "Create Username";
-"rewards.create_referral_code.info" = "This will be your personal username.";
-"rewards.username" = "Username";
+"rewards.create_referral_code.title" = "建立使用者名稱";
+"rewards.create_referral_code.info" = "這將是您的個人用戶名。";
+"rewards.username" = "使用者名稱";
 "rewards.ways_spend.title" = "消費方式";
 "rewards.ways_spend.asset.title" = "得到 %@";
 "rewards.insufficient_points" = "分數不足";
 "rewards.confirm_redeem" = "得到 %@ 為了 %@！";
+"wallet.wallet_name" = "錢包名稱";

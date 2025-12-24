@@ -6,64 +6,75 @@ import Primitives
 import WalletService
 
 public struct CreateWalletNavigationStack: View {
-    @State private var navigationPath: NavigationPath = NavigationPath()
-    @Binding private var isPresentingWallets: Bool
 
-    private let walletService: WalletService
+    @State private var model: CreateWalletModel
 
-    public init(
-        walletService: WalletService,
-        isPresentingWallets: Binding<Bool>
-    ) {
-        self.walletService = walletService
-        _isPresentingWallets = isPresentingWallets
+    public init(model: CreateWalletModel) {
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
-        NavigationStack(path: $navigationPath) {
-            Group {
-                if walletService.isAcceptTermsCompleted {
-                    securityReminderScene
-                } else {
-                    AcceptTermsScene(
-                        model: AcceptTermsViewModel(
-                            onNext: { navigationPath.append(Scenes.SecurityReminder())
-                        })
+        NavigationStack(path: $model.navigationPath) {
+            rootScene
+                .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationDestination(for: Scenes.VerifyPhrase.self) { scene in
+                    VerifyPhraseWalletScene(
+                        model: VerifyPhraseViewModel(
+                            words: scene.words,
+                            onComplete: model.onVerifyPhraseComplete
+                        )
                     )
                 }
-            }
-            .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: Scenes.VerifyPhrase.self) {
-                VerifyPhraseWalletScene(
-                    model: VerifyPhraseViewModel(
-                        words: $0.words,
-                        walletService: walletService,
-                        onFinish: { isPresentingWallets.toggle() }
+                .navigationDestination(for: Scenes.WalletProfile.self) { scene in
+                    SetupWalletScene(
+                        model: SetupWalletViewModel(
+                            wallet: scene.wallet,
+                            walletService: model.walletService,
+                            onSelectImage: { model.onNavigate(to: .selectImage(wallet: $0)) },
+                            onComplete: model.onSetupWalletComplete
+                        )
                     )
-                )
-            }
-            .navigationDestination(for: Scenes.CreateWallet.self) { _ in
-                ShowSecretDataScene(
-                    model: CreateWalletViewModel(
-                        walletService: walletService,
-                        onCreateWallet: {
-                            navigationPath.append(Scenes.VerifyPhrase(words: $0))
-                        }
+                    .navigationBarBackButtonHidden()
+                    .interactiveDismissDisabled()
+                }
+                .navigationDestination(for: Scenes.WalletSelectImage.self) {
+                    WalletImageScene(
+                        model: WalletImageViewModel(
+                            wallet: $0.wallet,
+                            source: .onboarding,
+                            avatarService: model.avatarService
+                        )
                     )
-                )
-            }
-            .navigationDestination(for: Scenes.SecurityReminder.self) { _ in
-                securityReminderScene
-            }
+                }
+                .navigationDestination(for: Scenes.CreateWallet.self) { _ in
+                    ShowSecretDataScene(
+                        model: NewSecretPhraseViewModel(
+                            walletService: model.walletService,
+                            onCreateWallet: { model.onNavigate(to: .verifyPhrase(words: $0)) }
+                        )
+                    )
+                }
+                .navigationDestination(for: Scenes.SecurityReminder.self) { _ in
+                    securityReminderScene
+                }
         }
     }
     
+    @ViewBuilder
+    private var rootScene: some View {
+        if model.isAcceptTermsCompleted {
+            securityReminderScene
+        } else {
+            AcceptTermsScene(model: AcceptTermsViewModel(onNext: { model.onNavigate(to: .securityReminder) }))
+        }
+    }
+
     private var securityReminderScene: some View {
         SecurityReminderScene(
             model: SecurityReminderViewModelDefault(
                 title: Localized.Wallet.New.title,
-                onNext: { navigationPath.append(Scenes.CreateWallet()) }
+                onNext: { model.onNavigate(to: .createWallet) }
             )
         )
     }

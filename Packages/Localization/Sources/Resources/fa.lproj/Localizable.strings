@@ -431,8 +431,8 @@
 "errors.scan_transaction.malicious.description" = "این تراکنش قابل انجام نیست — آدرس کیف پول مقصد به فعالیت مشکوک یا مضر مرتبط است.";
 "errors.scan_transaction.memo_required" = "%@ آدرس کیف پول مقصد به یک برچسب / یادداشت مقصد نیاز دارد.";
 "common.info" = "اطلاعات";
-"wallet.deposit" = "Deposit";
-"wallet.withdraw" = "Withdraw";
+"wallet.deposit" = "واریز";
+"wallet.withdraw" = "برداشت";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -512,7 +512,7 @@
 "settings.preferences.default_leverage" = "اهرم پیش‌فرض";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
+"recent_activity.title" = "اخیر";
 "errors.no_data_available" = "داده‌ای موجود نیست";
 "errors.dust_threshold_short" = "شبکه این مبلغ را داست (dust) در نظر می‌گیرد - کارمزد آن از خود مبلغ بیشتر است.";
 "charts.take_profit" = "TP";
@@ -538,10 +538,11 @@
 "rewards.get_rewards.title" = "دریافت پاداش";
 "rewards.activate_referral_code.description" = "Have a referral code from a friend?";
 "rewards.activate_referral_code.title" = "کد فعال‌سازی";
-"rewards.create_referral_code.title" = "Create Username";
-"rewards.create_referral_code.info" = "This will be your personal username.";
-"rewards.username" = "Username";
+"rewards.create_referral_code.title" = "ایجاد نام کاربری";
+"rewards.create_referral_code.info" = "این نام کاربری شخصی شما خواهد بود.";
+"rewards.username" = "نام کاربری";
 "rewards.ways_spend.title" = "راه‌های خرج کردن";
 "rewards.ways_spend.asset.title" = "دریافت %@";
 "rewards.insufficient_points" = "امتیاز ناکافی";
 "rewards.confirm_redeem" = "دریافت %@ برای %@!";
+"wallet.wallet_name" = "نام کیف پول";

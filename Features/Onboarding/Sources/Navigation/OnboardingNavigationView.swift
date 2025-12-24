@@ -14,15 +14,21 @@ public struct OnboardingNavigationView: View {
         OnboardingScene(model: model)
             .sheet(isPresented: $model.isPresentingCreateWalletSheet) {
                 CreateWalletNavigationStack(
-                    walletService: model.walletService,
-                    isPresentingWallets: $model.isPresentingCreateWalletSheet
+                    model: CreateWalletModel(
+                        walletService: model.walletService,
+                        avatarService: model.avatarService,
+                        isPresentingWallets: $model.isPresentingCreateWalletSheet
+                    )
                 )
             }
             .sheet(isPresented: $model.isPresentingImportWalletSheet) {
                 ImportWalletNavigationStack(
-                    model: ImportWalletTypeViewModel(walletService: model.walletService),
-                    nameService: model.nameService,
-                    isPresentingWallets: $model.isPresentingImportWalletSheet
+                    model: ImportWalletViewModel(
+                        walletService: model.walletService,
+                        avatarService: model.avatarService,
+                        nameService: model.nameService,
+                        isPresentingWallets: $model.isPresentingImportWalletSheet
+                    )
                 )
             }
     }

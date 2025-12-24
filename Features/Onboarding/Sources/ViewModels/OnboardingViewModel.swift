@@ -3,12 +3,14 @@
 import Foundation
 import Localization
 import WalletService
+import AvatarService
 import PrimitivesComponents
 
 @Observable
 @MainActor
 public final class OnboardingViewModel {
     let walletService: WalletService
+    let avatarService: AvatarService
     let nameService: any NameServiceable
 
     public var isPresentingCreateWalletSheet: Bool = false
@@ -16,9 +18,11 @@ public final class OnboardingViewModel {
 
     public init(
         walletService: WalletService,
+        avatarService: AvatarService,
         nameService: any NameServiceable
     ) {
         self.walletService = walletService
+        self.avatarService = avatarService
         self.nameService = nameService
     }
     

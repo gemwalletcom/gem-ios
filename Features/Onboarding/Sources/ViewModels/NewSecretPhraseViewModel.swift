@@ -8,12 +8,11 @@ import Formatters
 import Components
 import Style
 
-struct CreateWalletViewModel: SecretPhraseViewableModel {
-    
-    private let walletService: WalletService
+struct NewSecretPhraseViewModel: SecretPhraseViewableModel {
+
     private let onCreateWallet: (([String]) -> Void)
     let words: [String]
-    
+
     var calloutViewStyle: CalloutViewStyle? {
         .header(title: Localized.SecretPhrase.savePhraseSafely)
     }
@@ -26,7 +25,6 @@ struct CreateWalletViewModel: SecretPhraseViewableModel {
         walletService: WalletService,
         onCreateWallet: @escaping (([String]) -> Void)
     ) {
-        self.walletService = walletService
         self.onCreateWallet = onCreateWallet
         do {
             self.words = try walletService.createWallet()
@@ -35,13 +33,8 @@ struct CreateWalletViewModel: SecretPhraseViewableModel {
         }
     }
 
-    var title: String {
-        Localized.Wallet.New.title
-    }
-
-    var type: SecretPhraseDataType {
-        .words(words: WordIndex.rows(for: words))
-    }
+    var title: String { Localized.Wallet.New.title }
+    var type: SecretPhraseDataType { .words(words: WordIndex.rows(for: words)) }
 
     var copyModel: CopyTypeViewModel {
         CopyTypeViewModel(

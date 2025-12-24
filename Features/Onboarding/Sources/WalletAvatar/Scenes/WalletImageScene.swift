@@ -42,11 +42,15 @@ public struct WalletImageScene: View {
                 .padding(.top, .medium)
                 .padding(.bottom, .extraLarge)
             }
-            pickerView
-                .padding(.bottom, .medium)
-                .padding(.horizontal, .medium)
-            
-            listView
+            switch model.source {
+            case .onboarding:
+                listView
+            case .wallet:
+                pickerView
+                    .padding(.bottom, .medium)
+                    .padding(.horizontal, .medium)
+                listView
+            }
         }
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
