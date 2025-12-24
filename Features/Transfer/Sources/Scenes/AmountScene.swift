@@ -59,28 +59,31 @@ struct AmountScene: View {
                 }
             }
 
-            switch model.type {
-            case .transfer, .deposit, .withdraw:
+            switch model.amountTypeModel {
+            case .none:
                 EmptyView()
-            case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
-                if let viewModel = model.stakeValidatorViewModel {
-                    Section(model.validatorTitle) {
-                        if model.isSelectValidatorEnabled {
-                            NavigationCustomLink(
-                                with: ValidatorView(model: viewModel),
-                                action: model.onSelectCurrentValidator
-                            )
+            case .staking(let stakingModel):
+                if let validatorModel = stakingModel.selectedItemViewModel,
+                   let selectedItem = stakingModel.selectedItem {
+                    Section(stakingModel.selectionTitle) {
+                        if stakingModel.isSelectionEnabled {
+                            NavigationLink(value: selectedItem) {
+                                ValidatorView(model: validatorModel)
+                            }
                         } else {
-                            ValidatorView(model: viewModel)
+                            ValidatorView(model: validatorModel)
                         }
                     }
                 }
-            case .freeze:
-                if model.isSelectResourceEnabled {
+            case .freeze(let freezeModel):
+                if freezeModel.isSelectionEnabled {
                     Section {
-                        Picker("", selection: $model.selectedResource) {
-                            ForEach(model.availableResources) { resource in
-                                Text(resource.title).tag(resource)
+                        Picker("", selection: Binding(
+                            get: { freezeModel.selectedItem ?? .bandwidth },
+                            set: { model.onSelectResource($0) }
+                        )) {
+                            ForEach(freezeModel.pickerItems()) { resource in
+                                Text(resource.title).tag(resource.resource)
                             }
                         }
                         .pickerStyle(.segmented)
@@ -88,26 +91,26 @@ struct AmountScene: View {
                     }
                     .cleanListRow()
                 }
-            case .perpetual:
-                if model.isPerpetualLeverageEnabled {
+            case .perpetual(let perpetualModel):
+                if perpetualModel.isSelectionEnabled {
                     Section {
                         NavigationCustomLink(
                             with: ListItemView(
-                                title: model.leverageTitle,
-                                subtitle: model.leverageText,
-                                subtitleStyle: model.leverageTextStyle
+                                title: perpetualModel.selectionTitle,
+                                subtitle: perpetualModel.leverageText,
+                                subtitleStyle: perpetualModel.leverageTextStyle
                             ),
                             action: model.onSelectLeverage
                         )
                     }
                 }
-                if model.isAutocloseEnabled {
+                if perpetualModel.isAutocloseEnabled {
                     Section {
                         NavigationCustomLink(
                             with: ListItemView(
-                                title: model.autocloseTitle,
-                                subtitle: model.autocloseText.subtitle,
-                                subtitleExtra: model.autocloseText.subtitleExtra
+                                title: perpetualModel.autocloseTitle,
+                                subtitle: perpetualModel.autocloseText.subtitle,
+                                subtitleExtra: perpetualModel.autocloseText.subtitleExtra
                             ),
                             action: model.onSelectAutoclose
                         )
