@@ -58,6 +58,12 @@ struct URLParserTests {
     }
 
     @Test
+    func gemSchemeRewardsUrl() async throws {
+        #expect(try URLParser.from(url: URL(string: "gem://join?code=gemcoder")!) == .rewards(code: "gemcoder"))
+        #expect(try URLParser.from(url: URL(string: "gem://rewards?code=gemcoder")!) == .rewards(code: "gemcoder"))
+    }
+
+    @Test
     func buyUrl() async throws {
         let buyChain = try URLParser.from(url: URL(string: "https://gemwallet.com/buy/bitcoin")!)
         #expect(buyChain == .buy(AssetId(chain: .bitcoin, tokenId: nil), amount: nil))
