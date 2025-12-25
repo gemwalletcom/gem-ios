@@ -92,7 +92,7 @@ public final class WalletImageViewModel: Sendable {
     
     public func setImage(from url: URL) async {
         do {
-            try await avatarService.save(url: url, for: wallet.id)
+            try await avatarService.save(url: url, for: wallet)
         } catch {
             debugLog("Set nft image error: \(error)")
         }
@@ -100,7 +100,7 @@ public final class WalletImageViewModel: Sendable {
     
     public func setDefaultAvatar() {
         do {
-            try avatarService.remove(for: wallet.id)
+            try avatarService.remove(for: wallet)
         } catch {
             debugLog("Setting default avatar error: \(error)")
         }
@@ -162,7 +162,7 @@ public final class WalletImageViewModel: Sendable {
             guard let data = image.compress() else {
                 throw AnyError("Compression image failed")
             }
-            try avatarService.save(data: data, for: wallet.id)
+            try avatarService.save(data: data, for: wallet)
         } catch {
             debugLog("Set image error: \(error)")
         }

@@ -31,7 +31,7 @@ public struct SetupWalletScene: View {
                     AvatarView(
                         avatarImage: model.avatarAssetImage,
                         size: .image.extraLarge,
-                        action: model.onSelectImage
+                        action: onSelectImage
                     )
                     .padding(.bottom, .extraLarge)
                     Spacer()
@@ -57,5 +57,14 @@ public struct SetupWalletScene: View {
         .observeQuery(request: $model.walletRequest, value: $model.wallet)
         .onChange(of: model.nameInput, model.onChangeWalletName)
         .navigationTitle(model.title)
+    }
+}
+
+// MARK: - Actions
+
+extension SetupWalletScene {
+    private func onSelectImage() {
+        focusedField = nil
+        model.onSelectImage()
     }
 }
