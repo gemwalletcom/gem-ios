@@ -26,7 +26,12 @@ public enum URLParser {
         }
 
         // universal links
-        let urlComponents = Array(url.pathComponents.dropFirst())
+        var urlComponents = Array(url.pathComponents.dropFirst())
+
+        // For gem:// URLs like gem://join?code=gemcoder, the path component is in the host
+        if url.scheme == "gem", urlComponents.isEmpty, let host = url.host() {
+            urlComponents = [host]
+        }
 
         if url.host() == DeepLink.host || url.scheme == "gem" {
             guard let path = urlComponents.first,

@@ -8,7 +8,6 @@ enum ChatwootJSEvent: String {
 }
 
 enum ChatwootHandler: String {
-    case chatClosed
     case chatOpened
 }
 

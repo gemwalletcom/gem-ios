@@ -105,6 +105,14 @@ public struct AssetScene: View {
                         stakeView
                     }
 
+                    if model.showPendingUnconfirmedBalance {
+                        ListItemView(
+                            title: model.assetDataModel.pendingUnconfirmedBalanceTitle,
+                            subtitle: model.assetDataModel.pendingUnconfirmedBalanceTextWithSymbol,
+                            infoAction: model.onSelectPendingUnconfirmedInfo
+                        )
+                    }
+
                     if model.showReservedBalance, let url = model.reservedBalanceUrl {
                         SafariNavigationLink(url: url) {
                             ListItemView(
@@ -113,7 +121,6 @@ public struct AssetScene: View {
                             )
                         }
                     }
-                    
                 }
             } else if model.assetDataModel.isStakeEnabled {
                 stakeViewEmpty
