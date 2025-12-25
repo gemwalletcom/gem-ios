@@ -4,35 +4,34 @@ import Foundation
 import StoreKit
 import Preferences
 
-struct RateService {
+public struct RateService: Sendable {
     private let preferences: Preferences
 
-    init(preferences: Preferences) {
+    public init(preferences: Preferences) {
         self.preferences = preferences
     }
 
-    func perform() {
+    public func perform() {
 #if targetEnvironment(simulator)
 #else
         if preferences.launchesCount >= 5 && !preferences.rateApplicationShown {
             Task { @MainActor in
-                rate()
-                preferences.rateApplicationShown = true
+                if rate() {
+                    preferences.rateApplicationShown = true
+                }
             }
         }
 #endif
     }
-}
 
-// MARK: - Private
-
-extension RateService {
     @MainActor
-    private func rate() {
+    @discardableResult
+    private func rate() -> Bool {
         guard let scene = UIApplication.shared
             .connectedScenes
             .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
-        else { return }
+        else { return false }
         AppStore.requestReview(in: scene)
+        return true
     }
 }

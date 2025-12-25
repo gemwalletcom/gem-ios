@@ -58,6 +58,10 @@ public final class NodeService: Sendable {
         requestedChains.insert(chain)
          */
     }
+
+    public func importDefaultNodes() throws {
+        try AddNodeService(nodeStore: nodeStore).addNodes()
+    }
 }
 
 // MARK: - NodeURLFetchable
