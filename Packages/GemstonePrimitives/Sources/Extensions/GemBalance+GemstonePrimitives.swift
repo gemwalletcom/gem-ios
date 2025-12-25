@@ -13,6 +13,7 @@ extension GemBalance {
             locked: try BigInt.from(string: locked),
             staked: try BigInt.from(string: staked),
             pending: try BigInt.from(string: pending),
+            pendingUnconfirmed: try BigInt.from(string: pendingUnconfirmed),
             rewards: try BigInt.from(string: rewards),
             reserved: try BigInt.from(string: reserved),
             withdrawable: try BigInt.from(string: withdrawable),

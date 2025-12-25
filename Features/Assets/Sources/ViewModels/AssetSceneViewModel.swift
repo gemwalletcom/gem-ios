@@ -87,6 +87,7 @@ public final class AssetSceneViewModel: Sendable {
     private var showStakedBalanceTypes: [BalanceType] = [.staked, .pending, .rewards]
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
+    var showPendingUnconfirmedBalance: Bool { assetDataModel.hasPendingUnconfirmedBalance }
     var showResources: Bool { assetDataModel.showResources }
 
     var showTransactions: Bool { transactions.isNotEmpty }
@@ -318,6 +319,10 @@ extension AssetSceneViewModel {
     
     public func onSelectTokenStatus() {
         isPresentingAssetSheet = .info(.assetStatus(scoreViewModel.scoreType))
+    }
+
+    public func onSelectPendingUnconfirmedInfo() {
+        isPresentingAssetSheet = .info(.pendingUnconfirmedBalance)
     }
     
     public func onSelectPin() {

@@ -89,6 +89,14 @@ public struct BalanceViewModel: Sendable {
         formatter.string(balance.reserved, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
+    public var hasPendingUnconfirmedBalance: Bool {
+        !balance.pendingUnconfirmed.isZero
+    }
+
+    public var pendingUnconfirmedBalanceTextWithSymbol: String {
+        formatter.string(balance.pendingUnconfirmed, decimals: asset.decimals.asInt, currency: asset.symbol)
+    }
+
     public var balanceTextColor: Color {
         guard !total.isZero else {
             return Colors.gray

@@ -10,6 +10,7 @@ public enum BalanceType: String, Codable, CaseIterable, Equatable, Sendable {
 	case frozen
 	case staked
 	case pending
+	case pendingUnconfirmed
 	case rewards
 	case reserved
 }

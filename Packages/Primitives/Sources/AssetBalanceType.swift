@@ -4,13 +4,13 @@ import Foundation
 import BigInt
 
 public enum AssetBalanceType: Sendable {
-    case coin(available: BigInt, reserved: BigInt)
+    case coin(available: BigInt, reserved: BigInt, pendingUnconfirmed: BigInt)
     case token(available: BigInt)
     case stake(staked: BigInt, pending: BigInt, rewards: BigInt, reserved: BigInt, locked: BigInt, frozen: BigInt, metadata: BalanceMetadata?)
-    
+
     public var available: BigInt? {
         switch self {
-        case .coin(let available, _): available
+        case .coin(let available, _, _): available
         case .token(let available): available
         case .stake: nil
         }
@@ -60,7 +60,12 @@ extension AssetBalance {
     public var coinChange: AssetBalanceChange {
         AssetBalanceChange(
             assetId: assetId,
-            type: AssetBalanceType.coin(available: balance.available, reserved: balance.reserved),
+            type: AssetBalanceType
+                .coin(
+                    available: balance.available,
+                    reserved: balance.reserved,
+                    pendingUnconfirmed: balance.pendingUnconfirmed
+                ),
             isActive: isActive
         )
     }

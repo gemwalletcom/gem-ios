@@ -132,6 +132,12 @@ public struct InfoSheetModelFactory {
                 image: .assetImage(image),
                 button: .url(Docs.url(.networkFees))
             )
+        case .pendingUnconfirmedBalance:
+            return InfoSheetModel(
+                title: Localized.Stake.pending,
+                description: Localized.Info.Transaction.Pending.description,
+                image: .image(Images.Logo.logo)
+            )
         case .fundingRate:
             return InfoSheetModel(
                 title: Localized.Info.FundingRate.title,

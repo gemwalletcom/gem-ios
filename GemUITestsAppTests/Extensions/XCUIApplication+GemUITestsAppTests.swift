@@ -28,7 +28,9 @@ extension XCUIApplication {
     }
     
     func tapWalletBar() {
-        buttons.element(matching: .button, identifier: "walletBar").tap()
+        let walletBar = buttons["walletBar"].firstMatch
+        XCTAssertTrue(walletBar.waitForExistence(timeout: 2), "walletBar not found")
+        walletBar.tap()
     }
     
     func logout() {
