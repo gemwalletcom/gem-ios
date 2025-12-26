@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Podejrzane lub spamowe tokeny są identyfikowane jako potencjalne oszustwa lub szkodliwe aktywa. Mogą pojawić się w Twoim portfelu z powodu airdropów, transferów lub ręcznych importów.";
 "errors.insufficient_funds" = "Niewystarczające fundusze";
 "info.insufficient_network_fee_balance.title" = "%@ wymagane";
-"info.insufficient_network_fee_balance.description" = "Ta transakcja wymaga ** %@ ** na pokrycie opłaty sieciowej płaconej górnikom ** %@ **, a nie Gem Wallet. Upewnij się, że masz wystarczającą ilość %@.";
+"info.insufficient_network_fee_balance.description" = "Ta transakcja wymaga %@ aby pokryć opłatę sieciową uiszczaną %@ górnicy, nie Gem Wallet. Upewnij się, że masz wystarczająco dużo %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Niewystarczające saldo";
 "info.insufficient_balance.description" = "Nie masz wystarczająco %@ aby ukończyć tę transakcję. Doładuj, odbierz lub wymień w swoim portfelu i spróbuj ponownie.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Kup %@";
 "wallet.import_address_warning" = "Możesz przeglądać salda i transakcje dla tego adresu, ale **nie możesz wysyłać ani sprzedawać środków**.";
 "info.stake_minimum_amount.title" = "Minimalna kwota";
-"info.stake_minimum_amount.description" = "W sieci %@ minimalne wymagania dotyczące stakingu to **%@**.";
+"info.stake_minimum_amount.description" = "Na %@ sieć, minimalne wymagania dotyczące stakowania to %@.";
 "asset.add_to_wallet" = "Dodaj do portfela";
 "asset.hide_from_wallet" = "Ukryj w portfelu";
 "common.details" = "Bliższe dane";
@@ -490,7 +490,7 @@
 "assets.title" = "Aktywa";
 "stake.delegations" = "Delegacje";
 "info.stake.apr.description" = "Roczna stopa procentowa (APR) to roczna stopa nagrody za stakowanie kryptowaluty.";
-"receive.warning" = "To jest Twój adres — wysyłaj tylko **%@** na **%@** sieć.";
+"receive.warning" = "To jest Twój adres — wysyłaj tylko %@ na %@ sieć.";
 "perpetual.leverage" = "Dźwignia finansowa";
 "perpetual.direction" = "Kierunek";
 "perpetual.auto_close" = "Automatyczne zamykanie";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Dołączyć Gem Wallet z moim linkiem polecającym i zyskaj nagrody: %@";
 "rewards.my_referral_code" = "Mój kod polecający";
 "rewards.invite_friends.title" = "Zaproś znajomych";
-"rewards.invite_friends.description" = "Zarabiać **%d punktów** za każdego znajomego, który dołączy.";
+"rewards.invite_friends.description" = "Zarabiać %@ punktów za każdego dołączonego znajomego.";
 "common.get_started" = "Rozpocznij";
 "rewards.referral_code" = "Kod polecający";
 "rewards.invited_by" = "Invited By";

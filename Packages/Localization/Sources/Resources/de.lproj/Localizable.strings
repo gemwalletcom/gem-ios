@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Verdächtige oder Spam-Token werden als potenzieller Betrug oder schädliche Vermögenswerte identifiziert. Sie können aufgrund von Airdrops, Transfers oder manuellen Importen in Ihrer Wallet erscheinen.";
 "errors.insufficient_funds" = "Unzureichende Mittel";
 "info.insufficient_network_fee_balance.title" = "%@ erforderlich";
-"info.insufficient_network_fee_balance.description" = "Für diese Transaktion werden ** %@ ** benötigt, um die an ** %@ ** Miner gezahlte Netzwerkgebühr zu decken, nicht Gem Wallet. Stellen Sie sicher, dass Sie über genügend %@ verfügen.";
+"info.insufficient_network_fee_balance.description" = "Für diese Transaktion ist Folgendes erforderlich %@ um die Netzwerkgebühr zu decken, die an %@ Bergleute, nicht Gem WalletStellen Sie sicher, dass Sie genügend haben. %@Die";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Unzureichendes Guthaben";
 "info.insufficient_balance.description" = "Sie haben nicht genügend %@, um diese Transaktion abzuschließen. Bitte laden Sie Ihr Wallet auf, empfangen Sie es oder tauschen Sie es um und versuchen Sie es erneut.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Kaufen %@";
 "wallet.import_address_warning" = "Sie können Guthaben und Transaktionen für diese Adresse anzeigen, aber **kein Geld senden oder verkaufen**.";
 "info.stake_minimum_amount.title" = "Mindestbetrag";
-"info.stake_minimum_amount.description" = "Im %@ -Netzwerk beträgt die Mindesteinsatzanforderung **%@**.";
+"info.stake_minimum_amount.description" = "Auf dem %@ Im Netzwerk beträgt die Mindesteinsatzanforderung %@Die";
 "asset.add_to_wallet" = "Zum Wallet hinzufügen";
 "asset.hide_from_wallet" = "Vor der Brieftasche verstecken";
 "common.details" = "Details";
@@ -490,7 +490,7 @@
 "assets.title" = "Vermögenswerte";
 "stake.delegations" = "Delegationen";
 "info.stake.apr.description" = "Der effektive Jahreszins (APR) ist der jährliche Belohnungssatz für das Staking Ihrer Kryptowährung.";
-"receive.warning" = "Dies ist Ihre Adresse – senden Sie bitte nur **%@** auf dem **%@** Netzwerk.";
+"receive.warning" = "Dies ist Ihre Adresse – bitte senden Sie nur %@ auf %@ Netzwerk.";
 "perpetual.leverage" = "Hebelwirkung";
 "perpetual.direction" = "Richtung";
 "perpetual.auto_close" = "Automatisches Schließen";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Verbinden Gem Wallet Nutze meinen Empfehlungslink und erhalte Prämien: %@";
 "rewards.my_referral_code" = "Mein Empfehlungscode";
 "rewards.invite_friends.title" = "Freunde einladen";
-"rewards.invite_friends.description" = "Verdienen **%d Punkte** für jeden Freund, der beitritt.";
+"rewards.invite_friends.description" = "Verdienen %@ Punkte für jeden geworbenen Freund.";
 "common.get_started" = "Los geht's";
 "rewards.referral_code" = "Empfehlungscode";
 "rewards.invited_by" = "Invited By";

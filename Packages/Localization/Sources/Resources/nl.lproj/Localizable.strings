@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Verdachte of spamtokens worden herkend als potentiële oplichting of schadelijke activa. Ze kunnen in uw wallet verschijnen via airdrops, overschrijvingen of handmatige imports.";
 "errors.insufficient_funds" = "Onvoldoende fondsen";
 "info.insufficient_network_fee_balance.title" = "%@ vereist";
-"info.insufficient_network_fee_balance.description" = "Voor deze transactie is ** %@ ** nodig om de netwerkkosten te dekken die aan ** %@ ** miners worden betaald, niet aan Gem Wallet. Zorg ervoor dat u voldoende %@ hebt.";
+"info.insufficient_network_fee_balance.description" = "Deze transactie vereist %@ om de netwerkkosten te dekken die betaald worden aan %@ mijnwerkers, niet Gem WalletZorg ervoor dat je voldoende hebt. %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Onvoldoende saldo";
 "info.insufficient_balance.description" = "Je hebt niet genoeg %@ om deze transactie te voltooien. Vul je wallet aan, ontvang of wissel in en probeer het opnieuw.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Koop %@";
 "wallet.import_address_warning" = "U kunt het saldo en de transacties voor dit adres bekijken, maar u kunt geen geld verzenden of verkopen.";
 "info.stake_minimum_amount.title" = "Minimumbedrag";
-"info.stake_minimum_amount.description" = "Op het %@ netwerk is de minimale inzetvereiste **%@**.";
+"info.stake_minimum_amount.description" = "Op de %@ netwerk, de minimale inzetvereiste is %@.";
 "asset.add_to_wallet" = "Toevoegen aan portemonnee";
 "asset.hide_from_wallet" = "Verbergen voor portemonnee";
 "common.details" = "Details";
@@ -490,7 +490,7 @@
 "assets.title" = "Activa";
 "stake.delegations" = "Delegaties";
 "info.stake.apr.description" = "Jaarlijks percentage (APR) is het jaarlijkse beloningspercentage voor het staken van uw cryptocurrency.";
-"receive.warning" = "Dit is uw adres — alleen verzenden **%@** op de **%@** netwerk.";
+"receive.warning" = "Dit is uw adres — alleen verzenden %@ op de %@ netwerk.";
 "perpetual.leverage" = "Hefboom";
 "perpetual.direction" = "Richting";
 "perpetual.auto_close" = "Automatisch sluiten";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Meedoen Gem Wallet Gebruik mijn verwijzingslink en verdien beloningen: %@";
 "rewards.my_referral_code" = "Mijn verwijzingscode";
 "rewards.invite_friends.title" = "Nodig vrienden uit";
-"rewards.invite_friends.description" = "Verdienen **%d punten** voor elke vriend die meedoet.";
+"rewards.invite_friends.description" = "Verdienen %@ punten voor elke vriend die meedoet.";
 "common.get_started" = "Aan de slag";
 "rewards.referral_code" = "Verwijzingscode";
 "rewards.invited_by" = "Invited By";

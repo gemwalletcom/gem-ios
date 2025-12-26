@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Şüpheli veya spam token'lar potansiyel dolandırıcılık veya zararlı varlıklar olarak tanımlanır. Airdrop'lar, transferler veya manuel ithalatlar nedeniyle cüzdanınızda görünebilirler.";
 "errors.insufficient_funds" = "Yetersiz fon";
 "info.insufficient_network_fee_balance.title" = "%@ gerekli";
-"info.insufficient_network_fee_balance.description" = "Bu işlem, ** %@ ** madencilere ödenen ağ ücretini karşılamak için ** %@ ** gerektirir, Gem Wallet değil. Yeterli %@ kaynağınız olduğundan emin olun.";
+"info.insufficient_network_fee_balance.description" = "Bu işlem gerektirir %@ ödenen ağ ücretini karşılamak için %@ madenciler, değil Gem WalletYeterli miktarda olduğundan emin olun. %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Yetersiz Bakiye";
 "info.insufficient_balance.description" = "Bu işlemi tamamlamak için yeterli %@ iniz yok. Lütfen cüzdanınıza para yükleyin, alın veya takas edin ve tekrar deneyin.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "%@ satın al";
 "wallet.import_address_warning" = "Bu adrese ait bakiyeleri ve işlemleri görüntüleyebilirsiniz, ancak **para gönderemez veya satamazsınız**.";
 "info.stake_minimum_amount.title" = "Asgari tutar";
-"info.stake_minimum_amount.description" = "%@ ağında, minimum stake gereksinimi **%@**'dir.";
+"info.stake_minimum_amount.description" = "Üzerinde %@ Ağda, minimum staking gereksinimi şöyledir: %@.";
 "asset.add_to_wallet" = "Cüzdana ekle";
 "asset.hide_from_wallet" = "Cüzdandan gizle";
 "common.details" = "Detaylar";
@@ -490,7 +490,7 @@
 "assets.title" = "Varlıklar";
 "stake.delegations" = "Yetkilendirmeler";
 "info.stake.apr.description" = "Yıllık Yüzde Oranı (APR), kripto paranızı stake etmeniz durumunda ödeyeceğiniz yıllık ödül oranıdır.";
-"receive.warning" = "Bu sizin adresiniz — sadece ** gönderin%@** üzerinde **%@** ağ.";
+"receive.warning" = "Bu sizin adresiniz — sadece bu adrese gönderin. %@ üzerinde %@ ağ.";
 "perpetual.leverage" = "Kaldıraç";
 "perpetual.direction" = "Yön";
 "perpetual.auto_close" = "Otomatik Kapatma";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Katılmak Gem Wallet Benim referans linkimi kullanarak kayıt olun ve ödüller kazanın: %@";
 "rewards.my_referral_code" = "Benim referans kodum";
 "rewards.invite_friends.title" = "Arkadaşlarınızı Davet Edin";
-"rewards.invite_friends.description" = "Para kazanmak **%d Katılan her arkadaşınız için puan**.";
+"rewards.invite_friends.description" = "Para kazanmak %@ Katılan her arkadaş için puan kazanacaksınız.";
 "common.get_started" = "Başlayın";
 "rewards.referral_code" = "Yönlendirme Kodu";
 "rewards.invited_by" = "Invited By";

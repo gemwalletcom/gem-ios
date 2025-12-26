@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "โทเค็นที่น่าสงสัยหรือเป็นสแปมจะถูกระบุว่าเป็นการหลอกลวงหรือทรัพย์สินที่เป็นอันตราย โทเค็นเหล่านี้อาจปรากฏในกระเป๋าเงินของคุณเนื่องจากการส่งทางอากาศ การโอน หรือการนำเข้าด้วยตนเอง";
 "errors.insufficient_funds" = "เงินไม่เพียงพอ";
 "info.insufficient_network_fee_balance.title" = "%@ จำเป็น";
-"info.insufficient_network_fee_balance.description" = "ธุรกรรมนี้ต้องการ ** %@ ** เพื่อครอบคลุมค่าธรรมเนียมเครือข่ายที่จ่ายให้กับ ** %@ ** นักขุด ไม่ใช่ Gem Wallet โปรดตรวจสอบให้แน่ใจว่าคุณมี %@ เพียงพอ";
+"info.insufficient_network_fee_balance.description" = "ธุรกรรมนี้ต้องการ %@ เพื่อชดเชยค่าธรรมเนียมเครือข่ายที่จ่ายไป %@ ไม่ใช่คนงานเหมือง Gem Walletตรวจสอบให้แน่ใจว่าคุณมีเพียงพอ %@-";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "ยอดเงินคงเหลือไม่เพียงพอ";
 "info.insufficient_balance.description" = "คุณมี %@ ไม่เพียงพอสำหรับการทำธุรกรรมนี้ โปรดเติมเงิน รับ หรือแลกเปลี่ยนในกระเป๋าสตางค์ของคุณแล้วลองอีกครั้ง";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "ซื้อ %@";
 "wallet.import_address_warning" = "คุณสามารถดูยอดคงเหลือและธุรกรรมสำหรับที่อยู่นี้ แต่ **ไม่สามารถส่งหรือขายเงินได้**";
 "info.stake_minimum_amount.title" = "จำนวนเงินขั้นต่ำ";
-"info.stake_minimum_amount.description" = "บนเครือข่าย %@ ข้อกำหนดการเดิมพันขั้นต่ำคือ **%@**";
+"info.stake_minimum_amount.description" = "บน %@ เครือข่ายนี้ ข้อกำหนดการวางเดิมพันขั้นต่ำคือ %@-";
 "asset.add_to_wallet" = "เพิ่มลงในกระเป๋าสตางค์";
 "asset.hide_from_wallet" = "ซ่อนจากกระเป๋าสตางค์";
 "common.details" = "รายละเอียด";
@@ -490,7 +490,7 @@
 "assets.title" = "สินทรัพย์";
 "stake.delegations" = "การมอบหมาย";
 "info.stake.apr.description" = "อัตราเปอร์เซ็นต์ต่อปี (APR) คืออัตราผลตอบแทนรายปีสำหรับการเดิมพันสกุลเงินดิจิทัลของคุณ";
-"receive.warning" = "นี่คือที่อยู่ของคุณ — ส่งเฉพาะ ** เท่านั้น%@** บน **%@**เครือข่าย**";
+"receive.warning" = "นี่คือที่อยู่ของคุณ — ส่งเฉพาะที่อยู่นี้เท่านั้น %@ บน %@ เครือข่าย";
 "perpetual.leverage" = "อัตราทดทางการเงิน";
 "perpetual.direction" = "ทิศทาง";
 "perpetual.auto_close" = "ปิดอัตโนมัติ";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "เข้าร่วม Gem Wallet ใช้ลิงก์แนะนำของฉันเพื่อรับรางวัล: %@";
 "rewards.my_referral_code" = "รหัสแนะนำของฉัน";
 "rewards.invite_friends.title" = "เชิญเพื่อนๆ";
-"rewards.invite_friends.description" = "ได้รับ **%d รับคะแนน** สำหรับเพื่อนแต่ละคนที่เข้าร่วม";
+"rewards.invite_friends.description" = "ได้รับ %@ รับคะแนนสะสมสำหรับเพื่อนแต่ละคนที่เข้าร่วม";
 "common.get_started" = "เริ่มต้นใช้งาน";
 "rewards.referral_code" = "รหัสอ้างอิง";
 "rewards.invited_by" = "Invited By";

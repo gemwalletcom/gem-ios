@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Mã thông báo đáng ngờ hoặc thư rác được xác định là lừa đảo tiềm ẩn hoặc tài sản có hại. Chúng có thể xuất hiện trong ví của bạn do airdrop, chuyển khoản hoặc nhập thủ công.";
 "errors.insufficient_funds" = "Không đủ tiền";
 "info.insufficient_network_fee_balance.title" = "%@ bắt buộc";
-"info.insufficient_network_fee_balance.description" = "Giao dịch này yêu cầu ** %@ ** để trang trải phí mạng lưới trả cho ** %@ ** thợ đào, không phải Gem Wallet. Hãy đảm bảo bạn có đủ %@.";
+"info.insufficient_network_fee_balance.description" = "Giao dịch này yêu cầu %@ để trang trải phí mạng đã trả cho %@ thợ mỏ, không phải Gem WalletHãy đảm bảo bạn có đủ %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Số dư không đủ";
 "info.insufficient_balance.description" = "Bạn không có đủ %@ để hoàn tất giao dịch này. Vui lòng nạp tiền, nhận hoặc đổi trong ví của bạn và thử lại.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Mua %@";
 "wallet.import_address_warning" = "Bạn có thể xem số dư và giao dịch của địa chỉ này, nhưng **không thể gửi hoặc bán tiền**.";
 "info.stake_minimum_amount.title" = "Số tiền tối thiểu";
-"info.stake_minimum_amount.description" = "Trên mạng %@, yêu cầu đặt cược tối thiểu là **%@**.";
+"info.stake_minimum_amount.description" = "Trên %@ mạng lưới, yêu cầu đặt cọc tối thiểu là %@.";
 "asset.add_to_wallet" = "Thêm vào ví";
 "asset.hide_from_wallet" = "Ẩn khỏi ví";
 "common.details" = "Chi tiết";
@@ -490,7 +490,7 @@
 "assets.title" = "Tài sản";
 "stake.delegations" = "Ủy quyền";
 "info.stake.apr.description" = "Tỷ lệ phần trăm hàng năm (APR) là tỷ lệ phần thưởng hàng năm cho việc đặt cược tiền điện tử của bạn.";
-"receive.warning" = "Đây là địa chỉ của bạn — chỉ gửi **%@** trên **%@** mạng.";
+"receive.warning" = "Đây là địa chỉ của bạn — chỉ gửi thư %@ trên %@ mạng.";
 "perpetual.leverage" = "Đòn bẩy";
 "perpetual.direction" = "Phương hướng";
 "perpetual.auto_close" = "Tự động đóng";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Tham gia Gem Wallet Sử dụng liên kết giới thiệu của tôi và nhận phần thưởng: %@";
 "rewards.my_referral_code" = "Mã giới thiệu của tôi";
 "rewards.invite_friends.title" = "Mời bạn bè";
-"rewards.invite_friends.description" = "Kiếm **%d điểm** cho mỗi người bạn tham gia.";
+"rewards.invite_friends.description" = "Kiếm %@ Điểm thưởng cho mỗi người bạn tham gia.";
 "common.get_started" = "Bắt đầu";
 "rewards.referral_code" = "Mã giới thiệu";
 "rewards.invited_by" = "Invited By";

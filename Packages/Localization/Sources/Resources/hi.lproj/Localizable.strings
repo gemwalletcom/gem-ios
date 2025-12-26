@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "संदिग्ध या स्पैम टोकन को संभावित घोटाले या हानिकारक संपत्ति के रूप में पहचाना जाता है। वे एयरड्रॉप, ट्रांसफ़र या मैन्युअल आयात के कारण आपके वॉलेट में दिखाई दे सकते हैं।";
 "errors.insufficient_funds" = "अपर्याप्त कोष";
 "info.insufficient_network_fee_balance.title" = "%@ आवश्यक";
-"info.insufficient_network_fee_balance.description" = "इस लेन-देन के लिए ** [ %@ %@ ** माइनर्स को दिए गए नेटवर्क शुल्क को कवर करना आवश्यक है, न कि Gem Wallet । सुनिश्चित करें कि आपके पास पर्याप्त %@ हैं।";
+"info.insufficient_network_fee_balance.description" = "इस लेनदेन के लिए आवश्यकता है %@ नेटवर्क शुल्क का भुगतान करने के लिए %@ खनिक, नहीं Gem Walletसुनिश्चित करें कि आपके पास पर्याप्त मात्रा में हो। %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "अपर्याप्त शेषराशि";
 "info.insufficient_balance.description" = "इस लेनदेन को पूरा करने के लिए आपके पास पर्याप्त %@ नहीं है। कृपया अपने वॉलेट में टॉप अप करें, प्राप्त करें या स्वैप करें और फिर से प्रयास करें।";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "%@ खरीदें";
 "wallet.import_address_warning" = "आप इस पते के लिए शेष राशि और लेनदेन देख सकते हैं, लेकिन **धन भेज या बेच नहीं सकते**।";
 "info.stake_minimum_amount.title" = "न्यूनतम राशि";
-"info.stake_minimum_amount.description" = "%@ नेटवर्क पर, न्यूनतम स्टेकिंग आवश्यकता **%@** है.";
+"info.stake_minimum_amount.description" = "पर %@ नेटवर्क के लिए, न्यूनतम स्टेकिंग आवश्यकता है %@.";
 "asset.add_to_wallet" = "वॉलेट में जोड़ें";
 "asset.hide_from_wallet" = "बटुए से छिपाएँ";
 "common.details" = "विवरण";
@@ -490,7 +490,7 @@
 "assets.title" = "संपत्ति";
 "stake.delegations" = "प्रतिनियोजन";
 "info.stake.apr.description" = "वार्षिक प्रतिशत दर (एपीआर) आपकी क्रिप्टोकरेंसी को दांव पर लगाने के लिए वार्षिक पुरस्कार दर है।";
-"receive.warning" = "यह आपका पता है — केवल ** भेजें%@** पर **%@** नेटवर्क।";
+"receive.warning" = "यह आपका पता है — केवल संदेश भेजें %@ पर %@ नेटवर्क।";
 "perpetual.leverage" = "उत्तोलन";
 "perpetual.direction" = "दिशा";
 "perpetual.auto_close" = "स्वतः बंद";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "जोड़ना Gem Wallet मेरे रेफरल लिंक का उपयोग करें और पुरस्कार अर्जित करें: %@";
 "rewards.my_referral_code" = "मेरा रेफरल कोड";
 "rewards.invite_friends.title" = "मित्रों को आमंत्रित करें";
-"rewards.invite_friends.description" = "कमाना **%d शामिल होने वाले प्रत्येक मित्र के लिए अंक**।";
+"rewards.invite_friends.description" = "कमाना %@ जितने दोस्त जुड़ेंगे, उतने ही पॉइंट्स मिलेंगे।";
 "common.get_started" = "शुरू हो जाओ";
 "rewards.referral_code" = "रेफरल कोड";
 "rewards.invited_by" = "Invited By";

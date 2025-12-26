@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Les jetons suspects ou indésirables sont identifiés comme des arnaques potentielles ou des actifs dangereux. Ils peuvent apparaître dans votre portefeuille suite à des airdrops, des transferts ou des importations manuelles.";
 "errors.insufficient_funds" = "Fonds insuffisants";
 "info.insufficient_network_fee_balance.title" = "%@ requis";
-"info.insufficient_network_fee_balance.description" = "Cette transaction nécessite ** %@ ** pour couvrir les frais de réseau payés aux ** %@ ** mineurs, et non à Gem Wallet. Assurez-vous d'avoir suffisamment de %@.";
+"info.insufficient_network_fee_balance.description" = "Cette transaction nécessite %@ pour couvrir les frais de réseau payés à %@ mineurs, pas Gem WalletAssurez-vous d'en avoir suffisamment %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Solde insuffisant";
 "info.insufficient_balance.description" = "Vous n'avez pas assez de %@ pour finaliser cette transaction. Veuillez recharger, recevoir ou échanger votre portefeuille et réessayer.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Achetez %@";
 "wallet.import_address_warning" = "Vous pouvez consulter les soldes et les transactions pour cette adresse, mais **vous ne pouvez pas envoyer ou vendre des fonds**.";
 "info.stake_minimum_amount.title" = "Montant minimum";
-"info.stake_minimum_amount.description" = "Sur le réseau %@, l'exigence minimale de jalonnement est de **%@**.";
+"info.stake_minimum_amount.description" = "Sur le %@ sur le réseau, l'exigence de mise minimale est %@.";
 "asset.add_to_wallet" = "Ajouter au portefeuille";
 "asset.hide_from_wallet" = "Se cacher du portefeuille";
 "common.details" = "Détails";
@@ -490,7 +490,7 @@
 "assets.title" = "Actifs";
 "stake.delegations" = "Délégations";
 "info.stake.apr.description" = "Le taux annuel en pourcentage (APR) est le taux de récompense annuel pour le jalonnement de votre crypto-monnaie.";
-"receive.warning" = "Voici votre adresse — envoyez uniquement **%@** sur le **%@** réseau.";
+"receive.warning" = "Voici votre adresse — envoyez uniquement %@ sur le %@ réseau.";
 "perpetual.leverage" = "Effet de levier";
 "perpetual.direction" = "Direction";
 "perpetual.auto_close" = "Fermeture automatique";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Rejoindre Gem Wallet Utilisez mon lien de parrainage et gagnez des récompenses : %@";
 "rewards.my_referral_code" = "Mon code de parrainage";
 "rewards.invite_friends.title" = "Inviter des amis";
-"rewards.invite_friends.description" = "Gagner **%d points** pour chaque ami qui s'inscrit.";
+"rewards.invite_friends.description" = "Gagner %@ Des points pour chaque ami qui s'inscrit.";
 "common.get_started" = "Commencer";
 "rewards.referral_code" = "Code de parrainage";
 "rewards.invited_by" = "Invited By";

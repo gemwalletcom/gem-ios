@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Підозрілі або спам-токени ідентифікуються як потенційні шахрайські або шкідливі активи. Вони можуть з'явитися у вашому гаманці через аїрдропи, перекази або ручний імпорт.";
 "errors.insufficient_funds" = "Недостатньо коштів";
 "info.insufficient_network_fee_balance.title" = "Потрібно %@";
-"info.insufficient_network_fee_balance.description" = "Для цієї транзакції потрібно ** %@ ** для покриття мережевої плати, сплаченої ** %@ ** майнерам, а не Gem Wallet. Переконайтеся, що у вас достатньо %@.";
+"info.insufficient_network_fee_balance.description" = "Ця транзакція вимагає %@ для покриття сплаченої мережевої плати %@ шахтарі, а не Gem WalletПереконайтеся, що у вас достатньо %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Недостатній баланс";
 "info.insufficient_balance.description" = "У вас недостатньо %@ для завершення цієї транзакції. Будь ласка, поповніть, отримайте або обміняйте свій гаманець і спробуйте ще раз.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Купити %@";
 "wallet.import_address_warning" = "Ви можете переглядати баланси та транзакції для цієї адреси, але **не можете надсилати або продавати кошти**.";
 "info.stake_minimum_amount.title" = "Мінімальна сума";
-"info.stake_minimum_amount.description" = "У мережі %@ мінімальний розмір стейкінгу становить **%@**.";
+"info.stake_minimum_amount.description" = "На %@ мережі, мінімальна вимога до стейкінгу становить %@.";
 "asset.add_to_wallet" = "Додати до гаманця";
 "asset.hide_from_wallet" = "Приховати від гаманця";
 "common.details" = "Деталі";
@@ -490,7 +490,7 @@
 "assets.title" = "Активи";
 "stake.delegations" = "Делегації";
 "info.stake.apr.description" = "Річна процентна ставка (APR) – це річна ставка винагороди за стейкінг вашої криптовалюти.";
-"receive.warning" = "Надсилайте на цю адресу тільки **%@** у мережі **%@**.";
+"receive.warning" = "Це ваша адреса - надсилайте тільки %@ в мережі %@.";
 "perpetual.leverage" = "Кредитне плече";
 "perpetual.direction" = "Напрямок";
 "perpetual.auto_close" = "Автоматичне закриття";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Приєднатися Gem Wallet за моїм реферальним посиланням та отримуйте винагороди: %@";
 "rewards.my_referral_code" = "Мій реферальний код";
 "rewards.invite_friends.title" = "Запросити друзів";
-"rewards.invite_friends.description" = "Заробіть **%d бали** за кожного друга, який приєднається.";
+"rewards.invite_friends.description" = "Заробляти %@ бали за кожного друга, який приєднається.";
 "common.get_started" = "Почати";
 "rewards.referral_code" = "Реферальний код";
 "rewards.invited_by" = "Invited By";

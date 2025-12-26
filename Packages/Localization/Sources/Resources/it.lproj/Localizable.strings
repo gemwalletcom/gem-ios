@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "I token sospetti o spam vengono identificati come potenziali truffe o asset dannosi. Potrebbero comparire nel tuo portafoglio a seguito di airdrop, trasferimenti o importazioni manuali.";
 "errors.insufficient_funds" = "Fondi insufficienti";
 "info.insufficient_network_fee_balance.title" = "%@ richiesto";
-"info.insufficient_network_fee_balance.description" = "Questa transazione richiede ** %@ ** per coprire la commissione di rete pagata ai ** %@ ** minatori, non Gem Wallet. Assicurati di avere abbastanza %@.";
+"info.insufficient_network_fee_balance.description" = "Questa transazione richiede %@ per coprire la quota di rete pagata a %@ minatori, non Gem WalletAssicurati di averne abbastanza %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Saldo insufficiente";
 "info.insufficient_balance.description" = "Non hai abbastanza %@ per completare questa transazione. Ricarica, ricevi o scambia nel tuo portafoglio e riprova.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Acquista %@";
 "wallet.import_address_warning" = "Puoi visualizzare i saldi e le transazioni per questo indirizzo, ma **non puoi inviare o vendere fondi**.";
 "info.stake_minimum_amount.title" = "Importo minimo";
-"info.stake_minimum_amount.description" = "Sulla rete %@, il requisito minimo di staking è **%@**.";
+"info.stake_minimum_amount.description" = "Sul %@ rete, il requisito minimo di staking è %@.";
 "asset.add_to_wallet" = "Aggiungi al portafoglio";
 "asset.hide_from_wallet" = "Nascondi dal portafoglio";
 "common.details" = "Dettagli";
@@ -490,7 +490,7 @@
 "assets.title" = "Attività";
 "stake.delegations" = "Delegazioni";
 "info.stake.apr.description" = "Il tasso percentuale annuo (APR) è il tasso di ricompensa annuale per lo staking della tua criptovaluta.";
-"receive.warning" = "Questo è il tuo indirizzo: invia solo **%@** sul **%@** rete.";
+"receive.warning" = "Questo è il tuo indirizzo: invia solo %@ sul %@ rete.";
 "perpetual.leverage" = "Leva";
 "perpetual.direction" = "Direzione";
 "perpetual.auto_close" = "Chiusura automatica";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Giuntura Gem Wallet con il mio link di riferimento e guadagna premi: %@";
 "rewards.my_referral_code" = "Il mio codice di riferimento";
 "rewards.invite_friends.title" = "Invita amici";
-"rewards.invite_friends.description" = "Guadagnare **%d punti** per ogni amico che si iscrive.";
+"rewards.invite_friends.description" = "Guadagnare %@ punti per ogni amico che si iscrive.";
 "common.get_started" = "Per iniziare";
 "rewards.referral_code" = "Codice di riferimento";
 "rewards.invited_by" = "Invited By";

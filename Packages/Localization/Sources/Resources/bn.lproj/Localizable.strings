@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "সন্দেহজনক বা স্প্যাম টোকেনগুলিকে সম্ভাব্য স্ক্যাম বা ক্ষতিকারক সম্পদ হিসেবে চিহ্নিত করা হয়। এয়ারড্রপ, ট্রান্সফার বা ম্যানুয়াল আমদানির কারণে এগুলি আপনার ওয়ালেটে দেখা দিতে পারে।";
 "errors.insufficient_funds" = "অপর্যাপ্ত তহবিল";
 "info.insufficient_network_fee_balance.title" = "%@ প্রয়োজন";
-"info.insufficient_network_fee_balance.description" = "এই লেনদেনের জন্য ** %@ ** মাইনারদের প্রদত্ত নেটওয়ার্ক ফি প্রদানের জন্য ** %@ ** প্রয়োজন, Gem Wallet নয়। নিশ্চিত করুন যে আপনার কাছে পর্যাপ্ত %@ আছে।";
+"info.insufficient_network_fee_balance.description" = "এই লেনদেনের জন্য প্রয়োজন %@ প্রদত্ত নেটওয়ার্ক ফি মেটাতে %@ খনি শ্রমিকরা, না Gem Wallet. নিশ্চিত করুন যে আপনার যথেষ্ট আছে %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "অপর্যাপ্ত ব্যালেন্স";
 "info.insufficient_balance.description" = "এই লেনদেনটি সম্পন্ন করার জন্য আপনার কাছে পর্যাপ্ত %@ নেই। অনুগ্রহ করে আপনার ওয়ালেটে টাকা টপ আপ করুন, গ্রহণ করুন বা সোয়াপ করুন এবং আবার চেষ্টা করুন।";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "%@ কিনুন";
 "wallet.import_address_warning" = "আপনি এই ঠিকানার ব্যালেন্স এবং লেনদেন দেখতে পারবেন, কিন্তু **তহবিল পাঠাতে বা বিক্রি করতে পারবেন না**।";
 "info.stake_minimum_amount.title" = "সর্বনিম্ন পরিমাণ";
-"info.stake_minimum_amount.description" = "%@ নেটওয়ার্কে, ন্যূনতম স্টেকিং প্রয়োজনীয়তা হল **%@**।";
+"info.stake_minimum_amount.description" = "উপরে %@ নেটওয়ার্ক, ন্যূনতম স্টেকিং প্রয়োজনীয়তা হল %@.";
 "asset.add_to_wallet" = "ওয়ালেটে যোগ করুন";
 "asset.hide_from_wallet" = "মানিব্যাগ থেকে লুকান";
 "common.details" = "বিস্তারিত";
@@ -490,7 +490,7 @@
 "assets.title" = "সম্পদ";
 "stake.delegations" = "ডেলিগেশনসমূহ";
 "info.stake.apr.description" = "বার্ষিক শতাংশ হার (এপিআর) হল আপনার ক্রিপ্টোকারেন্সি শেয়ার করার জন্য বার্ষিক পুরষ্কারের হার।";
-"receive.warning" = "এটি আপনার ঠিকানা — শুধুমাত্র ** পাঠান।%@** ** এর উপরে%@** নেটওয়ার্ক।";
+"receive.warning" = "এটি আপনার ঠিকানা — শুধুমাত্র পাঠান %@ উপরে %@ নেটওয়ার্ক।";
 "perpetual.leverage" = "লিভারেজ";
 "perpetual.direction" = "দিকনির্দেশনা";
 "perpetual.auto_close" = "স্বয়ংক্রিয়ভাবে বন্ধ করুন";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "যোগদান করুন Gem Wallet আমার রেফারেল লিঙ্ক দিয়ে পুরষ্কার জিতুন: %@";
 "rewards.my_referral_code" = "আমার রেফারেল কোড";
 "rewards.invite_friends.title" = "বন্ধুদের আমন্ত্রণ জানান";
-"rewards.invite_friends.description" = "** উপার্জন করুন%d যোগদানকারী প্রতিটি বন্ধুর জন্য পয়েন্ট**।";
+"rewards.invite_friends.description" = "আয় করুন %@ যোগদানকারী প্রতিটি বন্ধুর জন্য পয়েন্ট।";
 "common.get_started" = "শুরু করুন";
 "rewards.referral_code" = "রেফারেল কোড";
 "rewards.invited_by" = "Invited By";

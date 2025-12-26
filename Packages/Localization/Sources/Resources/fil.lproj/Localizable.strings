@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Ang mga kahina-hinalang token o spam ay tinutukoy bilang mga potensyal na scam o mapaminsalang asset. Maaaring lumabas ang mga ito sa iyong wallet dahil sa mga airdrop, paglilipat, o manual na pag-import.";
 "errors.insufficient_funds" = "Hindi sapat na pondo";
 "info.insufficient_network_fee_balance.title" = "%@ kinakailangan";
-"info.insufficient_network_fee_balance.description" = "Ang transaksyong ito ay nangangailangan ng ** %@ ** upang mabayaran ang bayad sa network na binayaran sa ** %@ ** mga minero, hindi Gem Wallet. Tiyaking mayroon kang sapat na %@.";
+"info.insufficient_network_fee_balance.description" = "Ang transaksyong ito ay nangangailangan ng %@ para mabayaran ang bayad sa network na ibinayad sa %@ mga minero, hindi Gem WalletTiyaking mayroon kang sapat %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Hindi Sapat na Balanse";
 "info.insufficient_balance.description" = "Wala kang sapat na %@ upang makumpleto ang transaksyong ito. Mangyaring mag-top up, tumanggap, o magpalit sa iyong wallet at subukang muli.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Bumili ng %@";
 "wallet.import_address_warning" = "Maaari mong tingnan ang mga balanse at transaksyon para sa address na ito, ngunit **hindi maaaring magpadala o magbenta ng mga pondo**.";
 "info.stake_minimum_amount.title" = "Minimum na halaga";
-"info.stake_minimum_amount.description" = "Sa %@ network, ang minimum na kinakailangan sa staking ay **%@**.";
+"info.stake_minimum_amount.description" = "Sa %@ network, ang minimum na kinakailangan sa staking ay %@.";
 "asset.add_to_wallet" = "Idagdag sa wallet";
 "asset.hide_from_wallet" = "Itago sa wallet";
 "common.details" = "Mga Detalye";
@@ -490,7 +490,7 @@
 "assets.title" = "Mga asset";
 "stake.delegations" = "Mga delegasyon";
 "info.stake.apr.description" = "Ang Annual Percentage Rate (APR) ay ang taunang reward rate para sa staking ng iyong cryptocurrency.";
-"receive.warning" = "Ito ang iyong address — ipadala lamang **%@** sa **%@** network.";
+"receive.warning" = "Ito ang iyong address — ipadala lamang %@ sa %@ network.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Direksyon";
 "perpetual.auto_close" = "Auto Close";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Sumali Gem Wallet gamit ang aking referral link at kumita ng mga gantimpala: %@";
 "rewards.my_referral_code" = "Ang aking referral code";
 "rewards.invite_friends.title" = "Mag-imbita ng mga Kaibigan";
-"rewards.invite_friends.description" = "Kumita **%d puntos** para sa bawat kaibigang sasali.";
+"rewards.invite_friends.description" = "Kumita %@ puntos para sa bawat kaibigang sasali.";
 "common.get_started" = "Magsimula";
 "rewards.referral_code" = "Kodigo ng Referral";
 "rewards.invited_by" = "Invited By";

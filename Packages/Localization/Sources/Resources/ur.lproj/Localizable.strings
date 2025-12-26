@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "مشکوک یا سپیم ٹوکنز کی شناخت ممکنہ گھوٹالوں یا نقصان دہ اثاثوں کے طور پر کی جاتی ہے۔ وہ ایئر ڈراپس، ٹرانسفرز، یا دستی درآمدات کی وجہ سے آپ کے بٹوے میں ظاہر ہو سکتے ہیں۔";
 "errors.insufficient_funds" = "ناکافی فنڈز";
 "info.insufficient_network_fee_balance.title" = "%@ درکار ہے۔";
-"info.insufficient_network_fee_balance.description" = "اس لین دین کے لیے ** %@ ** نیٹ ورک فیس کو پورا کرنے کے لیے ** %@ ** کان کنوں کو ادا کرنے کی ضرورت ہے، نہ کہ Gem Wallet ۔ یقینی بنائیں کہ آپ کے پاس کافی ہے %@ ۔";
+"info.insufficient_network_fee_balance.description" = "اس لین دین کی ضرورت ہے۔ %@ نیٹ ورک کی فیس کو پورا کرنے کے لیے %@ کان کنوں، نہیں Gem Wallet. یقینی بنائیں کہ آپ کے پاس کافی ہے۔ %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "ناکافی بیلنس";
 "info.insufficient_balance.description" = "آپ کے پاس اس لین دین کو مکمل کرنے کے لیے کافی %@ نہیں ہے۔ براہ کرم اپنے بٹوے میں ٹاپ اپ کریں، وصول کریں یا تبدیل کریں اور دوبارہ کوشش کریں۔";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "خریدیں %@";
 "wallet.import_address_warning" = "آپ اس پتے کے بیلنس اور لین دین دیکھ سکتے ہیں، لیکن **فنڈز بھیج یا فروخت نہیں کر سکتے**۔";
 "info.stake_minimum_amount.title" = "کم از کم رقم";
-"info.stake_minimum_amount.description" = "%@ نیٹ ورک پر، اسٹیکنگ کی کم از کم ضرورت **%@** ہے۔";
+"info.stake_minimum_amount.description" = "پر %@ نیٹ ورک، اسٹیکنگ کی کم از کم ضرورت ہے۔ %@.";
 "asset.add_to_wallet" = "بٹوے میں شامل کریں۔";
 "asset.hide_from_wallet" = "بٹوے سے چھپائیں۔";
 "common.details" = "تفصیلات";
@@ -490,7 +490,7 @@
 "assets.title" = "اثاثے";
 "stake.delegations" = "تفویضات";
 "info.stake.apr.description" = "سالانہ فیصدی شرح (APR) آپ کی کریپٹو کرنسی کو داغدار کرنے کے لیے سالانہ انعام کی شرح ہے۔";
-"receive.warning" = "یہ آپ کا پتہ ہے - صرف بھیجیں **%@** پر **%@** نیٹ ورک۔";
+"receive.warning" = "یہ آپ کا پتہ ہے - صرف بھیجیں۔ %@ پر %@ نیٹ ورک";
 "perpetual.leverage" = "مالی فائدہ اٹھانا";
 "perpetual.direction" = "سمت";
 "perpetual.auto_close" = "آٹو بند";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "شمولیت Gem Wallet میرے ریفرل لنک کے ساتھ اور انعامات حاصل کریں: %@";
 "rewards.my_referral_code" = "میرا ریفرل کوڈ";
 "rewards.invite_friends.title" = "دوستوں کو مدعو کریں۔";
-"rewards.invite_friends.description" = "کمائیں **%d شامل ہونے والے ہر دوست کے لیے پوائنٹس**۔";
+"rewards.invite_friends.description" = "کمائیں %@ شامل ہونے والے ہر دوست کے لیے پوائنٹس۔";
 "common.get_started" = "شروع کریں";
 "rewards.referral_code" = "ریفرل کوڈ";
 "rewards.invited_by" = "Invited By";

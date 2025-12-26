@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Tokeni zinazotiliwa shaka au taka zinatambuliwa kuwa ulaghai au mali hatari. Huenda zikaonekana kwenye mkoba wako kwa sababu ya matone ya hewa, uhamisho, au uagizaji wa mikono.";
 "errors.insufficient_funds" = "Upungufu wa fedha";
 "info.insufficient_network_fee_balance.title" = "%@ inahitajika";
-"info.insufficient_network_fee_balance.description" = "Muamala huu unahitaji ** %@ ** kulipia ada ya mtandao inayolipwa kwa ** %@ ** wachimbaji, si Gem Wallet. Hakikisha una %@ ya kutosha .";
+"info.insufficient_network_fee_balance.description" = "Muamala huu unahitaji %@ ili kufidia ada ya mtandao iliyolipwa kwa %@ wachimbaji, si Gem WalletHakikisha una vya kutosha %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Mizani isiyotosha";
 "info.insufficient_balance.description" = "Huna %@ ya kutosha kukamilisha muamala huu. Tafadhali jaza, pokea, au ubadilishe pochi yako na ujaribu tena.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Nunua %@";
 "wallet.import_address_warning" = "Unaweza kuangalia salio na miamala ya anwani hii, lakini **haiwezi kutuma au kuuza fedha**.";
 "info.stake_minimum_amount.title" = "Kiasi cha chini";
-"info.stake_minimum_amount.description" = "Kwenye mtandao %@, hitaji la chini kabisa la kuweka hisa ni **%@**.";
+"info.stake_minimum_amount.description" = "Juu ya %@ mtandao, sharti la chini kabisa la kuweka dau ni %@.";
 "asset.add_to_wallet" = "Ongeza kwenye mkoba";
 "asset.hide_from_wallet" = "Ficha kutoka kwa mkoba";
 "common.details" = "Maelezo";
@@ -490,7 +490,7 @@
 "assets.title" = "Mali";
 "stake.delegations" = "Uwakilishi";
 "info.stake.apr.description" = "Kiwango cha Asilimia cha Mwaka (APR) ni kiwango cha tuzo cha kila mwaka cha kuweka sarafu yako ya cryptocurrency.";
-"receive.warning" = "Hii ni anwani yako — tuma tu **%@**kwenye **%@** mtandao.";
+"receive.warning" = "Hii ni anwani yako — tuma pekee %@ kwenye %@ mtandao.";
 "perpetual.leverage" = "Uvunjaji wa kifedh";
 "perpetual.direction" = "Mwelekeo";
 "perpetual.auto_close" = "Funga Kiotomatiki";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Jiunge Gem Wallet kwa kutumia kiungo changu cha rufaa na upate zawadi: %@";
 "rewards.my_referral_code" = "Nambari yangu ya rufaa";
 "rewards.invite_friends.title" = "Alika Marafiki";
-"rewards.invite_friends.description" = "Pata **%d pointi** kwa kila rafiki anayejiunga.";
+"rewards.invite_friends.description" = "Pata %@ pointi kwa kila rafiki anayejiunga.";
 "common.get_started" = "Anza";
 "rewards.referral_code" = "Nambari ya Rufaa";
 "rewards.invited_by" = "Invited By";

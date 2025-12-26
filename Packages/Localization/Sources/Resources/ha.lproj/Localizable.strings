@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
 "errors.insufficient_funds" = "Insufficient funds";
 "info.insufficient_network_fee_balance.title" = "%@ required";
-"info.insufficient_network_fee_balance.description" = "This transaction requires **%@** to cover the network fee paid to **%@** miners, not Gem Wallet. Ensure you have enough %@.";
+"info.insufficient_network_fee_balance.description" = "Wannan ciniki yana buƙatar %@ don biyan kuɗin hanyar sadarwa da aka biya %@ masu hakar ma'adinai, ba Gem WalletTabbatar kana da isassun kayan aiki %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Insufficient Balance";
 "info.insufficient_balance.description" = "You don’t have enough %@ to complete this transaction. Please top up, receive, or swap in your wallet and try again.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Buy %@";
 "wallet.import_address_warning" = "You can view balances and transactions for this address, but **cannot send or sell funds**.";
 "info.stake_minimum_amount.title" = "Minimum Amount";
-"info.stake_minimum_amount.description" = "On the %@ network, the minimum staking requirement is **%@**.";
+"info.stake_minimum_amount.description" = "A kan %@ hanyar sadarwa, mafi ƙarancin buƙatar saka hannun jari shine %@.";
 "asset.add_to_wallet" = "Add to wallet";
 "asset.hide_from_wallet" = "Hide from wallet";
 "common.details" = "Details";
@@ -490,7 +490,7 @@
 "assets.title" = "Assets";
 "stake.delegations" = "Delegations";
 "info.stake.apr.description" = "Annual Percentage Rate (APR) is the yearly reward rate for staking your cryptocurrency.";
-"receive.warning" = "Wannan shine adireshinka — aika kawai **%@** a cikin **%@** hanyar sadarwa.";
+"receive.warning" = "Wannan shine adireshinka — aika kawai %@ a kan %@ hanyar sadarwa.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Direction";
 "perpetual.auto_close" = "Auto Close";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Shiga Gem Wallet tare da hanyar haɗin yanar gizo na kuma sami lada: %@";
 "rewards.my_referral_code" = "Lambar da na bayar ta hanyar sadarwa";
 "rewards.invite_friends.title" = "Gayyaci Abokai";
-"rewards.invite_friends.description" = "Sami **%d maki** ga kowane aboki da ya shiga.";
+"rewards.invite_friends.description" = "Sami %@ maki ga kowane aboki da ya shiga.";
 "common.get_started" = "Fara";
 "rewards.referral_code" = "Lambar Shawara";
 "rewards.invited_by" = "Invited By";

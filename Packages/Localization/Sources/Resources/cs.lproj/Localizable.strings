@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Podezřelé nebo spamové tokeny jsou identifikovány jako potenciální podvody nebo škodlivá aktiva. Mohou se objevit ve vaší peněžence v důsledku airdropů, převodů nebo ručního importu.";
 "errors.insufficient_funds" = "Nedostatek finančních prostředků";
 "info.insufficient_network_fee_balance.title" = "%@ je vyžadováno";
-"info.insufficient_network_fee_balance.description" = "Tato transakce vyžaduje ** %@ ** k pokrytí síťového poplatku zaplaceného ** %@ ** těžařům, nikoli Gem Wallet. Ujistěte se, že máte dostatek %@.";
+"info.insufficient_network_fee_balance.description" = "Tato transakce vyžaduje %@ na pokrytí síťového poplatku placeného %@ horníci, ne Gem WalletUjistěte se, že máte dostatek %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Nedostatečný zůstatek";
 "info.insufficient_balance.description" = "Nemáte dostatek %@ k dokončení této transakce. Dobijte si prosím peněženku, přijměte ji nebo ji vyměňte a zkuste to znovu.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Koupit %@";
 "wallet.import_address_warning" = "Pro tuto adresu si můžete prohlížet zůstatky a transakce, ale **nemůžete posílat ani prodávat finanční prostředky**.";
 "info.stake_minimum_amount.title" = "Minimální částka";
-"info.stake_minimum_amount.description" = "V síti %@ je minimální požadavek na staking **%@**.";
+"info.stake_minimum_amount.description" = "Na %@ síť, minimální požadavek na staking je %@.";
 "asset.add_to_wallet" = "Přidat do peněženky";
 "asset.hide_from_wallet" = "Skrýt z peněženky";
 "common.details" = "Podrobnosti";
@@ -490,7 +490,7 @@
 "assets.title" = "Aktiva";
 "stake.delegations" = "Delegace";
 "info.stake.apr.description" = "Roční procentní sazba (RPSN) je roční odměna za staking vaší kryptoměny.";
-"receive.warning" = "Toto je vaše adresa – pouze pro odeslání **%@** na **%@síť.";
+"receive.warning" = "Toto je vaše adresa – pouze pro odeslání %@ na %@ síť.";
 "perpetual.leverage" = "Finanční páka";
 "perpetual.direction" = "Směr";
 "perpetual.auto_close" = "Automatické zavření";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Připojit se Gem Wallet s mým doporučovacím odkazem a získejte odměny: %@";
 "rewards.my_referral_code" = "Můj doporučovací kód";
 "rewards.invite_friends.title" = "Pozvat přátele";
-"rewards.invite_friends.description" = "Vydělejte **%d body** za každého přítele, který se připojí.";
+"rewards.invite_friends.description" = "Vydělat %@ body za každého přítele, který se připojí.";
 "common.get_started" = "Začít";
 "rewards.referral_code" = "Doporučovací kód";
 "rewards.invited_by" = "Invited By";

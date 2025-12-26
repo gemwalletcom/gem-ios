@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "يتم تحديد الرموز المشبوهة أو غير المرغوب فيها على أنها عمليات احتيال محتملة أو أصول ضارة. قد تظهر في محفظتك نتيجةً لعمليات الإنزال الجوي أو التحويلات أو الاستيراد اليدوي.";
 "errors.insufficient_funds" = "عدم كفاية الأموال";
 "info.insufficient_network_fee_balance.title" = "%@ مطلوب";
-"info.insufficient_network_fee_balance.description" = "تتطلب هذه المعاملة ** %@ ** لتغطية رسوم الشبكة المدفوعة لعمال المناجم ** %@ **، وليس Gem Wallet. تأكد من وجود مبلغ كافٍ %@.";
+"info.insufficient_network_fee_balance.description" = "تتطلب هذه المعاملة %@ لتغطية رسوم الشبكة المدفوعة إلى %@ عمال المناجم، وليس Gem Walletتأكد من أن لديك ما يكفي %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "رصيد غير كاف";
 "info.insufficient_balance.description" = "ليس لديك رصيد كافٍ %@ لإتمام هذه المعاملة. يُرجى شحن رصيدك أو استلامه أو استبداله في محفظتك والمحاولة مرة أخرى.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "شراء %@";
 "wallet.import_address_warning" = "يمكنك عرض الأرصدة والمعاملات لهذا العنوان، ولكن **لا يمكنك إرسال أو بيع الأموال**.";
 "info.stake_minimum_amount.title" = "الحد الأدنى للمبلغ";
-"info.stake_minimum_amount.description" = "على شبكة %@ ، الحد الأدنى لمتطلبات المشاركة هو ** %@ **.";
+"info.stake_minimum_amount.description" = "في %@ في الشبكة، الحد الأدنى لمتطلبات التخزين هو %@.";
 "asset.add_to_wallet" = "أضف إلى المحفظة";
 "asset.hide_from_wallet" = "إخفاء من المحفظة";
 "common.details" = "تفاصيل";
@@ -490,7 +490,7 @@
 "assets.title" = "أصول";
 "stake.delegations" = "التفويضات";
 "info.stake.apr.description" = "معدل النسبة السنوية (APR) هو معدل المكافأة السنوي لمراهنة العملة المشفرة الخاصة بك.";
-"receive.warning" = "هذا عنوانك — أرسل فقط **%@** على **%@** شبكة.";
+"receive.warning" = "هذا عنوانك — أرسل فقط %@ على %@ شبكة.";
 "perpetual.leverage" = "الرافعة المالية";
 "perpetual.direction" = "اتجاه";
 "perpetual.auto_close" = "إغلاق تلقائي";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "ينضم Gem Wallet استخدم رابط الإحالة الخاص بي واحصل على مكافآت: %@";
 "rewards.my_referral_code" = "رمز الإحالة الخاص بي";
 "rewards.invite_friends.title" = "ادعُ الأصدقاء";
-"rewards.invite_friends.description" = "يكسب **%d نقاط** لكل صديق ينضم.";
+"rewards.invite_friends.description" = "يكسب %@ نقاط لكل صديق ينضم.";
 "common.get_started" = "ابدأ الآن";
 "rewards.referral_code" = "رمز الإحالة";
 "rewards.invited_by" = "Invited By";

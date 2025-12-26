@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Token yang mencurigakan atau spam dikenal pasti sebagai potensi penipuan atau aset berbahaya. Ia mungkin muncul dalam dompet anda disebabkan oleh airdrop, pemindahan atau import manual.";
 "errors.insufficient_funds" = "Dana tidak mencukupi";
 "info.insufficient_network_fee_balance.title" = "%@ diperlukan";
-"info.insufficient_network_fee_balance.description" = "Urus niaga ini memerlukan ** %@ ** untuk menampung yuran rangkaian yang dibayar kepada ** %@ ** pelombong, bukan Gem Wallet. Pastikan anda mempunyai cukup %@.";
+"info.insufficient_network_fee_balance.description" = "Transaksi ini memerlukan %@ untuk menampung yuran rangkaian yang dibayar kepada %@ pelombong, bukan Gem WalletPastikan anda mempunyai cukup %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Baki Tidak Mencukupi";
 "info.insufficient_balance.description" = "Anda tidak mempunyai cukup %@ untuk menyelesaikan transaksi ini. Sila tambah nilai, terima atau tukar dalam dompet anda dan cuba lagi.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Beli %@";
 "wallet.import_address_warning" = "Anda boleh melihat baki dan urus niaga untuk alamat ini, tetapi **tidak boleh menghantar atau menjual dana**.";
 "info.stake_minimum_amount.title" = "Jumlah minimum";
-"info.stake_minimum_amount.description" = "Pada rangkaian %@, keperluan pertaruhan minimum ialah **%@**.";
+"info.stake_minimum_amount.description" = "Pada %@ rangkaian, keperluan pertaruhan minimum ialah %@.";
 "asset.add_to_wallet" = "Tambah pada dompet";
 "asset.hide_from_wallet" = "Sembunyi dari dompet";
 "common.details" = "Butiran";
@@ -490,7 +490,7 @@
 "assets.title" = "Aset";
 "stake.delegations" = "Delegasi";
 "info.stake.apr.description" = "Kadar Peratusan Tahunan (APR) ialah kadar ganjaran tahunan untuk mempertaruhkan mata wang kripto anda.";
-"receive.warning" = "Ini alamat anda — hantar sahaja **%@** pada **%@** rangkaian.";
+"receive.warning" = "Ini alamat anda — hantar sahaja %@ pada %@ rangkaian.";
 "perpetual.leverage" = "Leverage";
 "perpetual.direction" = "Arah";
 "perpetual.auto_close" = "Auto Tutup";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Sertai Gem Wallet dengan pautan rujukan saya dan dapatkan ganjaran: %@";
 "rewards.my_referral_code" = "Kod rujukan saya";
 "rewards.invite_friends.title" = "Jemput Rakan-rakan";
-"rewards.invite_friends.description" = "Dapatkan **%d mata** untuk setiap rakan yang menyertai.";
+"rewards.invite_friends.description" = "Dapatkan %@ mata untuk setiap rakan yang menyertai.";
 "common.get_started" = "Mulakan";
 "rewards.referral_code" = "Kod Rujukan";
 "rewards.invited_by" = "Invited By";

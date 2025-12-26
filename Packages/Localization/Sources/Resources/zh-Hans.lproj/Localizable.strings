@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "可疑或垃圾代币会被识别为潜在的诈骗或有害资产。它们可能因空投、转账或手动导入而出现在您的钱包中。";
 "errors.insufficient_funds" = "资金不足";
 "info.insufficient_network_fee_balance.title" = "需要%@";
-"info.insufficient_network_fee_balance.description" = "此交易需要 ** %@ ** 来支付给 ** %@ ** 矿工的网络费用，而不是Gem Wallet 。请确保您有足够的%@ 。";
+"info.insufficient_network_fee_balance.description" = "此交易需要 %@ 用于支付网络费用 %@ 矿工，而不是 Gem Wallet确保你有足够的 %@。";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "余额不足";
 "info.insufficient_balance.description" = "您的余额不足%@ ，无法完成此交易。请充值、接收或兑换您的钱包，然后重试。";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "购买%@";
 "wallet.import_address_warning" = "您可以查看此地址的余额和交易，但**不能发送或出售资金**。";
 "info.stake_minimum_amount.title" = "最低金额";
-"info.stake_minimum_amount.description" = "在%@网络上，最低质押要求为 **%@**。";
+"info.stake_minimum_amount.description" = "在 %@ 在网络中，最低质押要求是 %@。";
 "asset.add_to_wallet" = "添加到钱包";
 "asset.hide_from_wallet" = "隐藏钱包";
 "common.details" = "详情";
@@ -490,7 +490,7 @@
 "assets.title" = "资产";
 "stake.delegations" = "委托";
 "info.stake.apr.description" = "年利率（APR）是质押加密货币的年度回报率。";
-"receive.warning" = "这是您的地址——仅发送**%@**在**%@** 网络。";
+"receive.warning" = "这是您的地址——请仅发送邮件 %@ 在 %@ 网络。";
 "perpetual.leverage" = "杠杆作用";
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自动关闭";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "加入 Gem Wallet 使用我的推荐链接，即可获得奖励： %@";
 "rewards.my_referral_code" = "我的推荐码";
 "rewards.invite_friends.title" = "邀请好友";
-"rewards.invite_friends.description" = "赚 **%d 每邀请一位好友加入，即可获得积分**。";
+"rewards.invite_friends.description" = "赚 %@ 每邀请一位好友加入，即可获得积分。";
 "common.get_started" = "开始使用";
 "rewards.referral_code" = "推荐码";
 "rewards.invited_by" = "Invited By";

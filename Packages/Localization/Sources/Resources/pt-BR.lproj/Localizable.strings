@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Tokens suspeitos ou de spam são identificados como potenciais golpes ou ativos nocivos. Eles podem aparecer na sua carteira devido a airdrops, transferências ou importações manuais.";
 "errors.insufficient_funds" = "Fundos insuficientes";
 "info.insufficient_network_fee_balance.title" = "%@ necessário";
-"info.insufficient_network_fee_balance.description" = "Esta transação requer ** %@ ** para cobrir a taxa de rede paga aos ** %@ ** mineradores, não Gem Wallet. Certifique-se de ter %@ suficiente .";
+"info.insufficient_network_fee_balance.description" = "Esta transação requer %@ para cobrir a taxa de rede paga a %@ mineiros, não Gem WalletCertifique-se de ter o suficiente. %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Saldo insuficiente";
 "info.insufficient_balance.description" = "Você não tem %@ suficientes para concluir esta transação. Recarregue, receba ou troque na sua carteira e tente novamente.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Comprar %@";
 "wallet.import_address_warning" = "Você pode visualizar saldos e transações para este endereço, mas **não pode enviar ou vender fundos**.";
 "info.stake_minimum_amount.title" = "Quantidade mínima";
-"info.stake_minimum_amount.description" = "Na rede %@, o requisito mínimo de staking é **%@**.";
+"info.stake_minimum_amount.description" = "No %@ Na rede, o requisito mínimo de staking é %@.";
 "asset.add_to_wallet" = "Adicionar à carteira";
 "asset.hide_from_wallet" = "Esconder da carteira";
 "common.details" = "Detalhes";
@@ -490,7 +490,7 @@
 "assets.title" = "Ativos";
 "stake.delegations" = "Delegações";
 "info.stake.apr.description" = "Taxa Percentual Anual (APR) é a taxa de recompensa anual para apostar sua criptomoeda.";
-"receive.warning" = "Este é o seu endereço — envie apenas **%@** no **%@** rede.";
+"receive.warning" = "Este é o seu endereço — envie apenas %@ no %@ rede.";
 "perpetual.leverage" = "Alavancagem";
 "perpetual.direction" = "Direção";
 "perpetual.auto_close" = "Fechamento automático";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Juntar Gem Wallet Use meu link de indicação e ganhe recompensas: %@";
 "rewards.my_referral_code" = "Meu código de indicação";
 "rewards.invite_friends.title" = "Convide amigos";
-"rewards.invite_friends.description" = "Ganhar **%d pontos** para cada amigo que se inscrever.";
+"rewards.invite_friends.description" = "Ganhar %@ Pontos para cada amigo que se inscrever.";
 "common.get_started" = "Comece agora";
 "rewards.referral_code" = "Código de indicação";
 "rewards.invited_by" = "Invited By";

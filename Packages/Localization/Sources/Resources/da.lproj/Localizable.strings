@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Mistænkelige eller spam-tokens identificeres som potentielle svindelnumre eller skadelige aktiver. De kan dukke op i din wallet på grund af airdrops, overførsler eller manuelle importer.";
 "errors.insufficient_funds" = "Utilstrækkelige midler";
 "info.insufficient_network_fee_balance.title" = "%@ påkrævet";
-"info.insufficient_network_fee_balance.description" = "Denne transaktion kræver ** %@ ** for at dække netværksgebyret betalt til ** %@ ** minere, ikke Gem Wallet. Sørg for, at du har nok %@.";
+"info.insufficient_network_fee_balance.description" = "Denne transaktion kræver %@ til dækning af det betalte netværksgebyr %@ minearbejdere, ikke Gem WalletSørg for at du har nok %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Utilstrækkelig saldo";
 "info.insufficient_balance.description" = "Du har ikke nok %@ til at gennemføre denne transaktion. Tank op, modtag eller veksle i din wallet, og prøv igen.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Køb %@";
 "wallet.import_address_warning" = "Du kan se saldi og transaktioner for denne adresse, men **kan ikke sende eller sælge penge**.";
 "info.stake_minimum_amount.title" = "Minimumsbeløb";
-"info.stake_minimum_amount.description" = "På netværket %@ er minimumskravet for staking **%@**.";
+"info.stake_minimum_amount.description" = "På den %@ netværk, minimumskravet til staking er %@.";
 "asset.add_to_wallet" = "Tilføj til tegnebog";
 "asset.hide_from_wallet" = "Skjul fra tegnebogen";
 "common.details" = "Detaljer";
@@ -490,7 +490,7 @@
 "assets.title" = "Aktiver";
 "stake.delegations" = "Delegationer";
 "info.stake.apr.description" = "Årlig procentsats (ÅOP) er den årlige belønningssats for at satse din kryptovaluta.";
-"receive.warning" = "Dette er din adresse — kun send **%@** på **%@** netværk.";
+"receive.warning" = "Dette er din adresse — kun forsendelse %@ på %@ netværk.";
 "perpetual.leverage" = "Gearing";
 "perpetual.direction" = "Retning";
 "perpetual.auto_close" = "Automatisk lukning";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Deltag Gem Wallet med mit henvisningslink og optjen belønninger: %@";
 "rewards.my_referral_code" = "Min henvisningskode";
 "rewards.invite_friends.title" = "Inviter venner";
-"rewards.invite_friends.description" = "Optjen **%d point** for hver ven, der tilmelder sig.";
+"rewards.invite_friends.description" = "Optjen %@ point for hver ven, der tilmelder sig.";
 "common.get_started" = "Kom i gang";
 "rewards.referral_code" = "Henvisningskode";
 "rewards.invited_by" = "Invited By";
