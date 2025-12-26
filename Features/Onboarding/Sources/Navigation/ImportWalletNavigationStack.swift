@@ -7,13 +7,14 @@ import PrimitivesComponents
 
 public struct ImportWalletNavigationStack: View {
     @State private var model: ImportWalletViewModel
+    @State private var navigationPath = NavigationPath()
 
     public init(model: ImportWalletViewModel) {
         _model = State(initialValue: model)
     }
 
     public var body: some View {
-        NavigationStack(path: $model.navigationPath) {
+        NavigationStack(path: $navigationPath) {
             rootScene
                 .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
                 .navigationBarTitleDisplayMode(.inline)
@@ -23,7 +24,7 @@ public struct ImportWalletNavigationStack: View {
                             walletService: model.walletService,
                             nameService: model.nameService,
                             type: type,
-                            onComplete: model.onImportComplete
+                            onComplete: onImportComplete
                         )
                     )
                 }
@@ -32,24 +33,27 @@ public struct ImportWalletNavigationStack: View {
                         model: SetupWalletViewModel(
                             wallet: scene.wallet,
                             walletService: model.walletService,
-                            onSelectImage: { model.onNavigate(to: .selectImage(wallet: $0)) },
-                            onComplete: model.onSetupWalletComplete
+                            onSelectImage: { model.presentSelectImage(wallet: $0) },
+                            onComplete: onSetupWalletComplete
                         )
                     )
                     .navigationBarBackButtonHidden()
                     .interactiveDismissDisabled()
                 }
-                .navigationDestination(for: Scenes.WalletSelectImage.self) {
-                    WalletImageScene(
-                        model: WalletImageViewModel(
-                            wallet: $0.wallet,
-                            source: .onboarding,
-                            avatarService: model.avatarService
-                        )
-                    )
-                }
                 .navigationDestination(for: Scenes.ImportWalletType.self) { _ in
                     importWalletTypeScene
+                }
+                .sheet(item: $model.isPresentingSelectImageWallet) { wallet in
+                    NavigationStack {
+                        WalletImageScene(
+                            model: WalletImageViewModel(
+                                wallet: wallet,
+                                source: .onboarding,
+                                avatarService: model.avatarService
+                            )
+                        )
+                        .toolbarDismissItem(title: .done, placement: .topBarLeading)
+                    }
                 }
         }
     }
@@ -59,11 +63,48 @@ public struct ImportWalletNavigationStack: View {
         if model.isAcceptTermsCompleted {
             importWalletTypeScene
         } else {
-            AcceptTermsScene(model: AcceptTermsViewModel(onNext: { model.onNavigate(to: .importWalletType) }))
+            AcceptTermsScene(model: AcceptTermsViewModel(onNext: { navigate(to: .importWalletType) }))
         }
     }
-    
+
     private var importWalletTypeScene: some View {
         ImportWalletTypeScene(model: ImportWalletTypeViewModel(walletService: model.walletService))
+    }
+}
+
+// MARK: - Actions
+
+extension ImportWalletNavigationStack {
+    func navigate(to route: ImportWalletRoute) {
+        switch route {
+        case .importWalletType: navigationPath.append(Scenes.ImportWalletType())
+        case .walletProfile(let wallet): navigationPath.append(Scenes.WalletProfile(wallet: wallet))
+        }
+    }
+
+    func onImportComplete(data: WalletImportData) {
+        Task {
+            do {
+                let wallet = try await model.importWallet(data: data)
+
+                if model.hasExistingWallets {
+                    navigate(to: .walletProfile(wallet: wallet))
+                } else {
+                    try await model.setupWalletComplete(wallet: wallet)
+                }
+            } catch {
+                debugLog("Failed to import wallet: \(error)")
+            }
+        }
+    }
+
+    func onSetupWalletComplete(wallet: Wallet) {
+        Task {
+            do {
+                try await model.setupWalletComplete(wallet: wallet)
+            } catch {
+                debugLog("Failed to setup wallet: \(error)")
+            }
+        }
     }
 }

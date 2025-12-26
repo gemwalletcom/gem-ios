@@ -15,8 +15,8 @@ public struct WalletImageScene: View {
         case emoji, collections
     }
     
+    @Environment(\.dismiss) private var dismiss
     @State private var selectedTab: Tab = .emoji
-
     @State private var model: WalletImageViewModel
     
     @Query<WalletRequest>
@@ -53,6 +53,7 @@ public struct WalletImageScene: View {
             }
         }
         .navigationTitle(model.title)
+        .navigationBarTitleDisplayMode(.inline)
         .background(Colors.grayBackground)
     }
     
@@ -94,6 +95,7 @@ public struct WalletImageScene: View {
                 with: EmojiView(color: value.color, emoji: value.emoji)
             ) {
                 model.setAvatarEmoji(value: value)
+                onDismiss()
             }
             .frame(maxWidth: .infinity)
             .transition(.opacity)
@@ -124,5 +126,13 @@ private extension WalletImageScene {
     
     func setDefaultAvatar() {
         model.setDefaultAvatar()
+        onDismiss()
+    }
+    
+    func onDismiss() {
+        switch model.source {
+        case .onboarding: dismiss()
+        case .wallet: break
+        }
     }
 }

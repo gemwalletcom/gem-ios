@@ -14,9 +14,10 @@ public final class CreateWalletModel {
 
     let walletService: WalletService
     let avatarService: AvatarService
+    let hasExistingWallets: Bool
 
     var isPresentingWallets: Binding<Bool>
-    var navigationPath: NavigationPath = NavigationPath()
+    var isPresentingSelectImageWallet: Wallet?
 
     public init(
         walletService: WalletService,
@@ -26,73 +27,37 @@ public final class CreateWalletModel {
         self.walletService = walletService
         self.avatarService = avatarService
         self.isPresentingWallets = isPresentingWallets
-    }
-
-    public var hasExistingWallets: Bool {
-        walletService.wallets.isNotEmpty
+        self.hasExistingWallets = walletService.wallets.isNotEmpty
     }
 
     public var isAcceptTermsCompleted: Bool {
         walletService.isAcceptTermsCompleted
     }
-    
-    // MARK: - Private
 
-    private func dismiss() {
+    func dismiss() {
         isPresentingWallets.wrappedValue = false
-    }
-    
-    private func createWallet(words: [String]) async throws -> Wallet {
-        try await walletService.loadOrCreateWallet(
-            name: WalletNameGenerator(type: .multicoin, walletService: walletService).name,
-            type: .phrase(words: words, chains: AssetConfiguration.allChains),
-            source: .create
-        )
     }
 }
 
 // MARK: - Actions
 
 extension CreateWalletModel {
-    func onNavigate(to route: CreateWalletRoute) {
-        switch route {
-        case .securityReminder:
-            navigationPath.append(Scenes.SecurityReminder())
-        case .createWallet:
-            navigationPath.append(Scenes.CreateWallet())
-        case .verifyPhrase(let words):
-            navigationPath.append(Scenes.VerifyPhrase(words: words))
-        case .selectImage(let wallet):
-            navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
-        }
+    func presentSelectImage(wallet: Wallet) {
+        isPresentingSelectImageWallet = wallet
     }
 
-    func onVerifyPhraseComplete(words: [String]) {
-        Task {
-            do {
-                if hasExistingWallets {
-                    let wallet = try await createWallet(words: words)
-                    navigationPath.append(Scenes.WalletProfile(wallet: wallet))
-                } else {
-                    let wallet = try await createWallet(words: words)
-                    try await walletService.setCurrent(wallet: wallet)
-                    walletService.acceptTerms()
-                    dismiss()
-                }
-            } catch {
-                debugLog("Failed to create wallet: \(error)")
-            }
-        }
+    func createWallet(words: [String]) async throws -> Wallet {
+        let wallet = try await walletService.loadOrCreateWallet(
+            name: WalletNameGenerator(type: .multicoin, walletService: walletService).name,
+            type: .phrase(words: words, chains: AssetConfiguration.allChains),
+            source: .create
+        )
+        walletService.acceptTerms()
+        return wallet
     }
 
-    func onSetupWalletComplete(wallet: Wallet) {
-        Task {
-            do {
-                try await walletService.setCurrent(wallet: wallet)
-                dismiss()
-            } catch {
-                debugLog("Failed to import wallet: \(error)")
-            }
-        }
+    func setupWalletComplete(wallet: Wallet) async throws {
+        try await walletService.setCurrent(wallet: wallet)
+        dismiss()
     }
 }

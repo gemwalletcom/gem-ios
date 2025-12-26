@@ -18,6 +18,7 @@ final class ImportWalletSceneViewModel {
     private let nameService: any NameServiceable
 
     let type: ImportWalletType
+    let showNameField: Bool
 
     var name: String
     var input: String = ""
@@ -41,6 +42,7 @@ final class ImportWalletSceneViewModel {
         self.nameService = nameService
         self.type = type
         self.name = WalletNameGenerator(type: type, walletService: walletService).name
+        self.showNameField = walletService.wallets.isEmpty
         self.onComplete = onComplete
     }
 
@@ -59,7 +61,6 @@ final class ImportWalletSceneViewModel {
 
     var alertTitle: String { Localized.Errors.validation("") }
     var walletFieldTitle: String { Localized.Wallet.name }
-    var showNameField: Bool { walletService.wallets.isEmpty }
 
     var chain: Chain? {
         switch type {

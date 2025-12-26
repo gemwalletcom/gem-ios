@@ -18,7 +18,7 @@ public final class ImportWalletViewModel {
     let nameService: any NameServiceable
 
     var isPresentingWallets: Binding<Bool>
-    var navigationPath: NavigationPath = NavigationPath()
+    var isPresentingSelectImageWallet: Wallet?
 
     public init(
         walletService: WalletService,
@@ -40,9 +40,7 @@ public final class ImportWalletViewModel {
         walletService.isAcceptTermsCompleted
     }
 
-    // MARK: - Private
-
-    private func dismiss() {
+    func dismiss() {
         isPresentingWallets.wrappedValue = false
     }
 }
@@ -50,49 +48,19 @@ public final class ImportWalletViewModel {
 // MARK: - Actions
 
 extension ImportWalletViewModel {
-    func onNavigate(to route: ImportWalletRoute) {
-        switch route {
-        case .importWalletType:
-            navigationPath.append(Scenes.ImportWalletType())
-        case .selectImage(let wallet):
-            navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
-        case .walletProfile(let wallet):
-            navigationPath.append(Scenes.WalletProfile(wallet: wallet))
-        }
+    func presentSelectImage(wallet: Wallet) {
+        isPresentingSelectImageWallet = wallet
     }
 
-    func onImportComplete(data: WalletImportData) {
-        walletService.acceptTerms()
-        Task {
-            do {
-                if hasExistingWallets {
-                    let wallet = try await createWallet(data: data)
-                    onNavigate(to: .walletProfile(wallet: wallet))
-                } else {
-                    let wallet = try await createWallet(data: data)
-                    try await walletService.setCurrent(wallet: wallet)
-                    dismiss()
-                }
-            } catch {
-                debugLog("Failed to import wallet: \(error)")
-            }
-        }
-    }
-
-    private func createWallet(data: WalletImportData) async throws -> Wallet {
+    func importWallet(data: WalletImportData) async throws -> Wallet {
         let wallet = try await walletService.loadOrCreateWallet(name: data.name, type: data.keystoreType, source: .import)
+        walletService.acceptTerms()
         WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
         return wallet
     }
 
-    func onSetupWalletComplete(wallet: Wallet) {
-        Task {
-            do {
-                try await walletService.setCurrent(wallet: wallet)
-                dismiss()
-            } catch {
-                debugLog("Failed to import wallet: \(error)")
-            }
-        }
+    func setupWalletComplete(wallet: Wallet) async throws {
+        try await walletService.setCurrent(wallet: wallet)
+        dismiss()
     }
 }

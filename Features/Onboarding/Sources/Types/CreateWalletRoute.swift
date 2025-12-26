@@ -7,5 +7,5 @@ enum CreateWalletRoute {
     case securityReminder
     case createWallet
     case verifyPhrase(words: [String])
-    case selectImage(wallet: Wallet)
+    case walletProfile(wallet: Wallet)
 }
