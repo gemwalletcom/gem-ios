@@ -402,6 +402,7 @@ let package = Package(
                 "GemAPI",
                 .product(name: "NodeService", package: "ChainServices"),
                 .product(name: "ChainService", package: "ChainServices"),
+                "GemstonePrimitives",
                 "Preferences",
                 "BannerService",
                 "DeviceService",
@@ -415,7 +416,14 @@ let package = Package(
         .target(
             name: "AppServiceTestKit",
             dependencies: [
-                "Primitives"
+                "AppService",
+                "Primitives",
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                "BannerServiceTestKit",
+                .product(name: "NodeServiceTestKit", package: "ChainServices"),
+                "DeviceServiceTestKit",
+                "AssetsServiceTestKit",
+                .product(name: "PreferencesTestKit", package: "Preferences"),
             ],
             path: "AppService/TestKit"
         ),
@@ -603,12 +611,8 @@ let package = Package(
             dependencies: [
                 "AppService",
                 "AppServiceTestKit",
-                "AssetsServiceTestKit",
-                "DeviceServiceTestKit",
-                "BannerServiceTestKit",
-                .product(name: "StoreTestKit", package: "Store"),
-                .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             path: "AppService/Tests"
         ),

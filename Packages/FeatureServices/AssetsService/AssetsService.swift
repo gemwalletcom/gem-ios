@@ -171,4 +171,8 @@ public final class AssetsService: Sendable {
             return try await group.reduce(into: [AssetBasic]()) { if let asset = $1 { $0.append(asset) } }
         }
     }
+
+    public func setSwappableAssets(for chains: [Chain]) throws {
+        try assetStore.setAssetIsSwappable(for: chains.map { $0.id }, value: true)
+    }
 }

@@ -1,55 +1,94 @@
+import Foundation
 import Testing
-import StoreTestKit
-import PreferencesTestKit
-import DeviceServiceTestKit
-import BannerServiceTestKit
 import GemAPITestKit
 import AppServiceTestKit
-import AssetsServiceTestKit
+import Primitives
+import PrimitivesTestKit
 
 @testable import AppService
 
 struct OnstartAsyncServiceTests {
 
     @Test
-    func testNewRelease() async throws {
+    func run() async throws {
         let service = OnstartAsyncService.mock()
-
-        await confirmation(expectedCount: 1) { @MainActor confirmation in
-            service.releaseAction = { @MainActor release in
-                #expect(release.version == "16.1")
-                confirmation()
-            }
-            await service.migrations()
-        }
+        await service.run()
     }
 
     @Test
-    func testSkipRelease() async throws {
-        let service = OnstartAsyncService.mock()
+    func runWithRunners() async throws {
+        let service = OnstartAsyncService.mock(
+            runners: [
+                BannerSetupRunner.mock(),
+                NodeImportRunner.mock()
+            ]
+        )
+        await service.run()
+    }
 
-        await confirmation(expectedCount: 0) { @MainActor confirmation in
-            service.releaseAction = { @MainActor _ in
-                confirmation()
-            }
-            service.skipRelease("16.1")
-            await service.migrations()
-        }
+    @Test
+    func failingRunnerDoesNotStopOthers() async throws {
+        let tracker = RunnerTracker()
+        let service = OnstartAsyncService.mock(
+            runners: [
+                TrackingRunner(tracker: tracker, id: "first"),
+                FailingRunner(),
+                TrackingRunner(tracker: tracker, id: "last")
+            ]
+        )
+
+        await service.run()
+
+        #expect(await tracker.executedRunners == ["first", "last"])
+    }
+
+    @Test
+    func configIsPassedToRunners() async throws {
+        let tracker = RunnerTracker()
+        let config = ConfigResponse.mock(versions: .mock(fiatOnRampAssets: 99))
+        let service = OnstartAsyncService.mock(
+            configService: GemAPIConfigServiceMock(config: config),
+            runners: [ConfigCapturingRunner(tracker: tracker)]
+        )
+
+        await service.run()
+
+        #expect(await tracker.capturedConfig?.versions.fiatOnRampAssets == 99)
     }
 }
 
-extension OnstartAsyncService {
-    static func mock() -> OnstartAsyncService {
-        OnstartAsyncService(
-            assetStore: .mock(),
-            nodeStore: .mock(),
-            preferences: .mock(),
-            assetsService: .mock(),
-            deviceService: .mock(),
-            bannerSetupService: .mock(),
-            configService: GemAPIConfigServiceMock(config: .mock()),
-            releaseService: AppReleaseService(configService: GemAPIConfigServiceMock(config: .mock())),
-            swappableChainsProvider: SwappableChainsProviderMock()
-        )
+private actor RunnerTracker {
+    var executedRunners: [String] = []
+    var capturedConfig: ConfigResponse?
+
+    func track(id: String) {
+        executedRunners.append(id)
+    }
+
+    func capture(config: ConfigResponse?) {
+        capturedConfig = config
+    }
+}
+
+private struct TrackingRunner: OnstartAsyncRunnable {
+    let tracker: RunnerTracker
+    let id: String
+
+    func run(config: ConfigResponse?) async throws {
+        await tracker.track(id: id)
+    }
+}
+
+private struct FailingRunner: OnstartAsyncRunnable {
+    func run(config: ConfigResponse?) async throws {
+        throw NSError(domain: "test", code: 1)
+    }
+}
+
+private struct ConfigCapturingRunner: OnstartAsyncRunnable {
+    let tracker: RunnerTracker
+
+    func run(config: ConfigResponse?) async throws {
+        await tracker.capture(config: config)
     }
 }
