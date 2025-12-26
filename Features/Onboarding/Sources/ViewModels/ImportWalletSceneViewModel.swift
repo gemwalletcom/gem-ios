@@ -12,12 +12,13 @@ import struct Keystore.Mnemonic
 
 @Observable
 @MainActor
-final class ImportWalletViewModel {
+final class ImportWalletSceneViewModel {
     private let walletService: WalletService
     private let wordSuggester = WordSuggester()
     private let nameService: any NameServiceable
 
     let type: ImportWalletType
+    let showNameField: Bool
 
     var name: String
     var input: String = ""
@@ -29,19 +30,20 @@ final class ImportWalletViewModel {
     var isPresentingScanner = false
     var isPresentingAlertMessage: AlertMessage?
 
-    private let onFinish: (() -> Void)?
+    private let onComplete: ((WalletImportData) -> Void)?
 
     init(
         walletService: WalletService,
         nameService: any NameServiceable,
         type: ImportWalletType,
-        onFinish: (() -> Void)?
+        onComplete: ((WalletImportData) -> Void)?
     ) {
         self.walletService = walletService
         self.nameService = nameService
         self.type = type
         self.name = WalletNameGenerator(type: type, walletService: walletService).name
-        self.onFinish = onFinish
+        self.showNameField = walletService.wallets.isEmpty
+        self.onComplete = onComplete
     }
 
     var title: String {
@@ -51,8 +53,6 @@ final class ImportWalletViewModel {
         }
     }
 
-    var walletFieldTitle: String { Localized.Wallet.name }
-
     var pasteButtonTitle: String { Localized.Common.paste }
     var pasteButtonImage: Image { Images.System.paste }
 
@@ -60,6 +60,7 @@ final class ImportWalletViewModel {
     var qrButtonImage: Image { Images.System.qrCodeViewfinder }
 
     var alertTitle: String { Localized.Errors.validation("") }
+    var walletFieldTitle: String { Localized.Wallet.name }
 
     var chain: Chain? {
         switch type {
@@ -96,7 +97,7 @@ final class ImportWalletViewModel {
 
 // MARK: - Business Logic
 
-extension ImportWalletViewModel {
+extension ImportWalletSceneViewModel {
 
     func onChangeImportType(_: WalletImportType, _: WalletImportType) {
         input = ""
@@ -148,13 +149,14 @@ extension ImportWalletViewModel {
 
 // MARK: - Private
 
-extension ImportWalletViewModel {
+extension ImportWalletSceneViewModel {
     private func importWallet() async throws {
         let recipient: RecipientImport = {
             if let result = nameResolveState.result {
                 return RecipientImport(name: result.name, address: result.address)
             }
-            return RecipientImport(name: name, address: input)
+            let walletName = name.isEmpty ? WalletNameGenerator(type: type, walletService: walletService).name : name
+            return RecipientImport(name: walletName, address: input)
         }()
         switch importType {
         case .phrase:
@@ -164,12 +166,12 @@ extension ImportWalletViewModel {
             }
             switch type {
             case .multicoin:
-                try await importWallet(
+                importWallet(
                     name: recipient.name,
                     keystoreType: .phrase(words: words, chains: AssetConfiguration.allChains)
                 )
             case .chain(let chain):
-                try await importWallet(
+                importWallet(
                     name: recipient.name,
                     keystoreType: .single(words: words, chain: chain)
                 )
@@ -178,7 +180,7 @@ extension ImportWalletViewModel {
             guard try validateForm(type: importType, address: recipient.address, words: [input]) else {
                 return
             }
-            try await importWallet(name: recipient.name, keystoreType: .privateKey(text: input, chain: chain!))
+            importWallet(name: recipient.name, keystoreType: .privateKey(text: input, chain: chain!))
         case .address:
             guard try validateForm(type: importType, address: recipient.address, words: []) else {
                 return
@@ -186,18 +188,17 @@ extension ImportWalletViewModel {
             let chain = chain!
             let address = chain.checksumAddress(recipient.address)
 
-            try await importWallet(name: recipient.name, keystoreType: .address(address: address, chain: chain))
+            importWallet(name: recipient.name, keystoreType: .address(address: address, chain: chain))
         }
     }
 
-    private func importWallet(name: String, keystoreType: KeystoreImportType) async throws {
-        try await walletService.importWallet(name: name, type: keystoreType, source: .import)
-        onFinish?()
+    private func importWallet(name: String, keystoreType: KeystoreImportType) {
+        onComplete?(WalletImportData(name: name, keystoreType: keystoreType))
     }
 
     private func validateForm(type: WalletImportType, address: String, words: [String]) throws  -> Bool {
         guard !name.isEmpty else {
-            throw WalletImportError.emptyName
+             throw WalletImportError.emptyName
         }
         switch type {
         case .phrase:

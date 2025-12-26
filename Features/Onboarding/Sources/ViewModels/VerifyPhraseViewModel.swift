@@ -7,17 +7,16 @@ import SwiftUI
 import Style
 import Localization
 import PrimitivesComponents
-import Preferences
 import Components
 import GemstonePrimitives
+
 @Observable
 @MainActor
 final class VerifyPhraseViewModel {
-    
+
     private let words: [String]
     private let shuffledWords: [String]
-    private let walletService: WalletService
-    private let onFinish: VoidAction
+    private let onComplete: ([String]) -> Void
 
     var wordsVerified: [String]
     var wordsIndex: Int = 0
@@ -27,15 +26,12 @@ final class VerifyPhraseViewModel {
 
     init(
         words: [String],
-        walletService: WalletService,
-        onFinish: VoidAction
+        onComplete: @escaping ([String]) -> Void
     ) {
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
-        self.walletService = walletService
-        self.onFinish = onFinish
-        self.isPresentingAlertMessage = nil
+        self.onComplete = onComplete
     }
     
     var title: String {
@@ -47,7 +43,7 @@ final class VerifyPhraseViewModel {
     }
 
     var rows: [[WordIndex]] {
-        return wordsVerified
+        wordsVerified
             .enumerated()
             .map {
                 WordIndex(index: $0.offset, word: $0.element)
@@ -56,11 +52,11 @@ final class VerifyPhraseViewModel {
     }
     
     var rowsSections: [[WordIndex]] {
-        return selectRows.chunks(4)
+        selectRows.chunks(4)
     }
     
     var selectRows: [WordIndex] {
-        return shuffledWords
+        shuffledWords
             .enumerated()
             .map {
                 WordIndex(index: $0.offset, word: $0.element)
@@ -82,34 +78,13 @@ final class VerifyPhraseViewModel {
     func isVerified(index: WordIndex) -> Bool {
         selectedIndexes.contains(index)
     }
-    
-    func importWallet() async throws  {
-        let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
-        let wallet = try await walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains), source: .create)
-
-        WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
-        walletService.acceptTerms()
-
-        onFinish?()
-    }
 }
 
 // MARK: - Actions
 
 extension VerifyPhraseViewModel {
-    func onImportWallet() {
+    func onContinue() {
         buttonState = .loading(showProgress: true)
-
-        Task {
-            do {
-                try await importWallet()
-            } catch {
-                isPresentingAlertMessage = AlertMessage(
-                    title: Localized.Errors.createWallet(""),
-                    message: error.localizedDescription
-                )
-                buttonState = .normal
-            }
-        }
+        onComplete(words)
     }
 }

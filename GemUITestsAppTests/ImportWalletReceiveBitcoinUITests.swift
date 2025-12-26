@@ -17,17 +17,14 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
         app.logout()
 
         // OnboardingScene
-        app.buttons["Import an Existing Wallet"].firstMatch.tap()
+        if app.isOnboarding {        
+            app.tapImportWallet()
+        }
 
         // AcceptTermsScene
         app.acceptTerms()
 
-        // ImportWalletTypeScene
-        app.buttons["Multi-Coin"].firstMatch.tap()
-
-        // ImportWalletScene
-        app.textFields["importInputField"].typeText(UITestKitConstants.words)
-        app.buttons["Import"].firstMatch.tap()
+        importFlow(app: app, words: UITestKitConstants.words)
 
         // WalletScene
         app.buttons["receive_button"].firstMatch.tap()
@@ -38,5 +35,26 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
         // ReceiveScene
         app.buttons["Copy"].firstMatch.tap()
         XCTAssertTrue(app.buttons[UITestKitConstants.bitcoinAddress].exists)
+        
+        app.tapBack()
+        app.tapBack()
+        app.tapWalletBar()
+
+        // WalletsScene - import second wallet
+        app.tapImportWallet()
+
+        importFlow(app: app, words: UITestKitConstants.words2)
+
+        // SetupWalletScene
+        app.buttons["Done"].firstMatch.tap()
+    }
+    
+    func importFlow(app: XCUIApplication, words: String) {
+        // ImportWalletTypeScene
+        app.buttons["Multi-Coin"].firstMatch.tap()
+
+        // ImportWalletScene
+        app.textFields["importInputField"].typeText(words)
+        app.buttons["Import"].firstMatch.tap()
     }
 }

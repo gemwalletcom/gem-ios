@@ -253,7 +253,7 @@ extension CollectibleViewModel {
     
     private func setWalletAvatar() async throws {
         guard let url = assetData.asset.images.preview.url.asURL else { return }
-        try await avatarService.save(url: url, for: wallet.id)
+        try await avatarService.save(url: url, for: wallet)
     }
 
     private func saveImageToGallery() async throws(ImageGalleryServiceError) {

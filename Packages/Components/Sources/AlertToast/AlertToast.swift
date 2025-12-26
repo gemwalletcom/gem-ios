@@ -27,30 +27,28 @@ public struct AlertToast: View {
     }
 
     public var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                Spacer()
-
-                HStack(spacing: .medium) {
-                    Image(systemName: systemImage)
-                        .foregroundColor(imageColor)
-
-                    Text(LocalizedStringKey(title))
-                        .font(titleFont ?? Font.headline.bold())
-                        .foregroundColor(titleColor)
-                }
-                .multilineTextAlignment(.leading)
-                .padding(.horizontal, .medium)
-                .padding(.vertical, .medium)
-                .frame(maxWidth: .scene.content.maxWidth, alignment: .leading)
-                .liquidGlass(fallback: { view in
-                    view
-                        .background(BlurView())
-                        .cornerRadius(.space10)
-                })
-                .padding(.horizontal, .medium)
-                .padding(.bottom, .large + geometry.safeAreaInsets.bottom)
+        VStack {
+            Spacer()
+            
+            HStack(spacing: .medium) {
+                Image(systemName: systemImage)
+                    .foregroundColor(imageColor)
+                
+                Text(LocalizedStringKey(title))
+                    .font(titleFont ?? Font.headline.bold())
+                    .foregroundColor(titleColor)
             }
+            .multilineTextAlignment(.leading)
+            .padding(.horizontal, .medium)
+            .padding(.vertical, .medium)
+            .frame(maxWidth: .scene.content.maxWidth, alignment: .leading)
+            .liquidGlass(fallback: { view in
+                view
+                    .background(BlurView())
+                    .cornerRadius(.space10)
+            })
+            .padding(.horizontal, .medium)
+            .padding(.bottom, .medium)
         }
     }
 }

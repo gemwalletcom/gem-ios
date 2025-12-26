@@ -17,6 +17,7 @@ import WalletConnector
 import WalletService
 import WalletsService
 import NameService
+import AvatarService
 
 @Observable
 @MainActor
@@ -32,6 +33,7 @@ final class RootSceneViewModel {
 
     let walletService: WalletService
     let nameService: NameService
+    let avatarService: AvatarService
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
@@ -70,7 +72,8 @@ final class RootSceneViewModel {
         walletService: WalletService,
         walletsService: WalletsService,
         nameService: NameService,
-        eventPresenterService: EventPresenterService
+        eventPresenterService: EventPresenterService,
+        avatarService: AvatarService
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartAsyncService = onstartAsyncService
@@ -84,6 +87,7 @@ final class RootSceneViewModel {
         self.walletsService = walletsService
         self.nameService = nameService
         self.eventPresenterService = eventPresenterService
+        self.avatarService = avatarService
     }
 }
 
