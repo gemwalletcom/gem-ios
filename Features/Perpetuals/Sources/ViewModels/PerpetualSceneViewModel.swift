@@ -50,7 +50,6 @@ public final class PerpetualSceneViewModel {
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingModifyAlert: Bool?
     public var isPresentingAutoclose: Bool = false
-    public var toastMessage: ToastMessage?
 
     let preference = Preferences.standard
 
@@ -263,18 +262,7 @@ public extension PerpetualSceneViewModel {
     }
     
     func onAutocloseComplete() {
-        toastMessage = ToastMessageViewModel(type: .perpetualAutoclose).toastMessage
         isPresentingAutoclose = false
-        fetch()
-    }
-
-    func onPerpetualCloseComplete() {
-        toastMessage = ToastMessageViewModel(type: .perpetualClose).toastMessage
-        fetch()
-    }
-
-    func onPerpetualOrderComplete(recipientData: PerpetualRecipientData) {
-        toastMessage = ToastMessageViewModel(type: .perpetualOrder(recipientData.positionAction)).toastMessage
         fetch()
     }
 

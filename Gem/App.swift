@@ -30,14 +30,16 @@ struct GemApp: App {
                     walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
                     onstartAsyncService: resolver.services.onstartAsyncService,
                     onstartWalletService: resolver.services.onstartWalletService,
-                    transactionService: resolver.services.transactionService,
+                    transactionStateService: resolver.services.transactionStateService,
                     connectionsService: resolver.services.connectionsService,
                     deviceObserverService: resolver.services.deviceObserverService,
                     notificationHandler: resolver.services.notificationHandler,
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
                     walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService,
-                    nameService: resolver.services.nameService
+                    nameService: resolver.services.nameService,
+                    eventPresenterService: resolver.services.eventPresenterService,
+                    avatarService: resolver.services.avatarService
                 )
             )
             .inject(resolver: resolver)

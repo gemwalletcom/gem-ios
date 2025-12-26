@@ -108,6 +108,10 @@ public extension String {
     func wrap(_ value: String) -> String {
         "\(value)\(self)\(value)"
     }
+    
+    func boldMarkdown() -> String {
+        self.wrap("**")
+    }
 }
 
 extension Optional where Wrapped == String {

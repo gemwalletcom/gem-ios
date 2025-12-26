@@ -165,6 +165,5 @@ public struct PerpetualScene: View {
         .taskOnce {
             model.fetch()
         }
-        .toast(message: $model.toastMessage)
     }
 }

@@ -59,7 +59,7 @@ let package = Package(
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
-                .product(name: "TransactionServiceTestKit", package: "FeatureServices"),
+                .product(name: "TransactionStateServiceTestKit", package: "FeatureServices"),
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "StoreTestKit", package: "Store"),
