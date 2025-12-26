@@ -27,8 +27,8 @@ struct ToastModifier: ViewModifier {
         content
             .toast(isPresenting: isPresenting, duration: duration, tapToDismiss: tapToDismiss) {
                 AlertToast(
-                    displayMode: .banner(.pop),
-                    type: .systemImage(message.image, Colors.black),
+                    systemImage: message.image,
+                    imageColor: Colors.black,
                     title: message.title
                 )
             }
@@ -39,7 +39,7 @@ private struct OptionalMessageToastModifier: ViewModifier {
     @Binding var message: ToastMessage?
     private let duration: Double
     private let tapToDismiss: Bool
-    
+
     init(message: Binding<ToastMessage?>, duration: Double, tapToDismiss: Bool) {
         _message = message
         self.duration = duration

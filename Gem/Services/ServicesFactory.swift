@@ -37,6 +37,7 @@ import NativeProviderService
 import ActivityService
 import AuthService
 import RewardsService
+import EventPresenterService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -202,6 +203,7 @@ struct ServicesFactory {
         let activityService = ActivityService(store: storeManager.recentActivityStore)
         let authService = AuthService(keystore: storages.keystore)
         let rewardsService = RewardsService(authService: authService)
+        let eventPresenterService = EventPresenterService()
 
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
@@ -217,7 +219,8 @@ struct ServicesFactory {
             transactionStateService: transactionStateService,
             chainServiceFactory: chainServiceFactory,
             addressNameService: addressNameService,
-            activityService: activityService
+            activityService: activityService,
+            eventPresenterService: eventPresenterService
         )
 
         return AppResolver.Services(
@@ -254,6 +257,7 @@ struct ServicesFactory {
             nameService: nameService,
             addressNameService: addressNameService,
             activityService: activityService,
+            eventPresenterService: eventPresenterService,
             viewModelFactory: viewModelFactory,
             rewardsService: rewardsService
         )

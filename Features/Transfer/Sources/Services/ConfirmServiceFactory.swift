@@ -14,6 +14,7 @@ import ChainService
 import Signer
 import AddressNameService
 import ActivityService
+import EventPresenterService
 
 public struct ConfirmServiceFactory {
     public static func create(
@@ -26,6 +27,7 @@ public struct ConfirmServiceFactory {
         transactionStateService: TransactionStateService,
         addressNameService: AddressNameService,
         activityService: ActivityService,
+        eventPresenterService: EventPresenterService,
         chain: Chain
     ) -> ConfirmService {
         let chainService = ChainServiceFactory(nodeProvider: nodeService).service(for: chain)
@@ -49,7 +51,8 @@ public struct ConfirmServiceFactory {
             keystore: keystore,
             chainService: chainService,
             addressNameService: addressNameService,
-            activityService: activityService
+            activityService: activityService,
+            eventPresenterService: eventPresenterService
         )
     }
 }

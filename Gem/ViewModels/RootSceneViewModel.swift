@@ -3,6 +3,7 @@
 import AppService
 import Components
 import DeviceService
+import EventPresenterService
 import Foundation
 import GemstonePrimitives
 import LockManager
@@ -27,6 +28,7 @@ final class RootSceneViewModel {
     private let deviceObserverService: DeviceObserverService
     private let notificationHandler: NotificationHandler
     private let walletsService: WalletsService
+    private let eventPresenterService: EventPresenterService
 
     let walletService: WalletService
     let nameService: NameService
@@ -35,6 +37,11 @@ final class RootSceneViewModel {
     var currentWallet: Wallet? { walletService.currentWallet }
 
     var updateVersionAlertMessage: AlertMessage?
+
+    var isPresentingToastMessage: ToastMessage? {
+        get { eventPresenterService.toastPresenter.toastMessage }
+        set { eventPresenterService.toastPresenter.toastMessage = newValue }
+    }
 
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -62,7 +69,8 @@ final class RootSceneViewModel {
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
         walletsService: WalletsService,
-        nameService: NameService
+        nameService: NameService,
+        eventPresenterService: EventPresenterService
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartAsyncService = onstartAsyncService
@@ -75,6 +83,7 @@ final class RootSceneViewModel {
         self.walletService = walletService
         self.walletsService = walletsService
         self.nameService = nameService
+        self.eventPresenterService = eventPresenterService
     }
 }
 

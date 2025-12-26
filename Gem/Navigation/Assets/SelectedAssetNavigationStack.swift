@@ -14,6 +14,7 @@ import Transfer
 import ChainService
 import ExplorerService
 import Signer
+import EventPresenterService
 
 struct SelectedAssetNavigationStack: View  {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -26,6 +27,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.transactionStateService) private var transactionStateService
     @Environment(\.addressNameService) private var addressNameService
     @Environment(\.activityService) private var activityService
+    @Environment(\.eventPresenterService) private var eventPresenterService
 
     @State private var navigationPath = NavigationPath()
 
@@ -59,6 +61,7 @@ struct SelectedAssetNavigationStack: View  {
                             transactionStateService: transactionStateService,
                             addressNameService: addressNameService,
                             activityService: activityService,
+                            eventPresenterService: eventPresenterService,
                             chain: input.asset.chain
                         ),
                         model: viewModelFactory.recipientScene(

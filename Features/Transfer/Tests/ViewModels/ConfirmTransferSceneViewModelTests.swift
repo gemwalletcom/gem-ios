@@ -18,6 +18,8 @@ import Localization
 import AddressNameService
 import AddressNameServiceTestKit
 import ActivityServiceTestKit
+import EventPresenterService
+import EventPresenterServiceTestKit
 import Store
 import BigInt
 import Components
@@ -342,6 +344,7 @@ private extension ConfirmTransferSceneViewModel {
                 transactionStateService: .mock(),
                 addressNameService: addressNameService,
                 activityService: .mock(),
+                eventPresenterService: .mock(),
                 chain: data.chain
             ),
             onComplete: {}
