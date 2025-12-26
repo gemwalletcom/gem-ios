@@ -6,7 +6,7 @@ import Store
 import ChainService
 import Blockchain
 
-struct TransactionStateService: Sendable {
+struct TransactionStateProvider: Sendable {
     private let transactionStore: TransactionStore
     private let chainServiceFactory: ChainServiceFactory
 

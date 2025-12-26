@@ -72,6 +72,7 @@ struct RootScene: View {
                 image: SystemImage.network
             )
         )
+        .toast(message: $model.isPresentingToastMessage)
     }
 }
 

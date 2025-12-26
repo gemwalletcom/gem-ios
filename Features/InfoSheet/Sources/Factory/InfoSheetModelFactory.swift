@@ -30,19 +30,16 @@ public struct InfoSheetModelFactory {
             )
         case let .insufficientNetworkFee(asset, image, required, action):
             let formatter = ValueFormatter(style: .full)
-            let description = if let required = required {
-                Localized.Info.InsufficientNetworkFeeBalance.description(
-                    formatter.string(required, decimals: asset.chain.asset.decimals.asInt, currency: asset.chain.asset.symbol),
-                    asset.chain.asset.name,
-                    asset.chain.asset.symbol
-                )
+            let value = if let required = required {
+                formatter.string(required, decimals: asset.chain.asset.decimals.asInt, currency: asset.chain.asset.symbol)
             } else {
-                Localized.Info.InsufficientNetworkFeeBalance.description(
-                    asset.chain.asset.symbol,
-                    asset.chain.asset.name,
-                    asset.chain.asset.symbol
-                )
+                asset.chain.asset.symbol
             }
+            let description = Localized.Info.InsufficientNetworkFeeBalance.description(
+                value.boldMarkdown(),
+                asset.chain.asset.name.boldMarkdown(),
+                asset.chain.asset.symbol.boldMarkdown()
+            )
             return InfoSheetModel(
                 title: Localized.Info.InsufficientNetworkFeeBalance.title(asset.chain.asset.symbol),
                 description: description,
@@ -121,7 +118,7 @@ public struct InfoSheetModelFactory {
             let amount = formatter.string(required, asset: asset)
             return InfoSheetModel(
                 title: Localized.Info.StakeMinimumAmount.title,
-                description: Localized.Info.StakeMinimumAmount.description(asset.name, amount),
+                description: Localized.Info.StakeMinimumAmount.description(asset.name.boldMarkdown(), amount.boldMarkdown()),
                 image: .image(Images.Logo.logo),
                 button: .action(title: Localized.Asset.buyAsset(asset.feeAsset.symbol), action: action)
             )

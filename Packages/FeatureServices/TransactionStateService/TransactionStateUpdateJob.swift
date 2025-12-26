@@ -9,8 +9,8 @@ import Blockchain
 
 public struct TransactionStateUpdateJob: Job {
     private let transactionWallet: TransactionWallet
-    private let stateService: TransactionStateService
-    private let postProcessingService: TransactionStateUpdatePostJob
+    private let stateService: TransactionStateProvider
+    private let postProcessingService: TransactionPostProcessingService
     private let minInitialInterval: Duration = .seconds(5)
 
     public var id: String { transaction.id.identifier }
@@ -33,8 +33,8 @@ public struct TransactionStateUpdateJob: Job {
 
     init(
         transactionWallet: TransactionWallet,
-        stateService: TransactionStateService,
-        postProcessingService: TransactionStateUpdatePostJob
+        stateService: TransactionStateProvider,
+        postProcessingService: TransactionPostProcessingService
     ) {
         self.transactionWallet = transactionWallet
         self.stateService = stateService

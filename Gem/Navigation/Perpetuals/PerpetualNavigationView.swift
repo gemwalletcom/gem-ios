@@ -47,12 +47,12 @@ public struct PerpetualNavigationView: View {
             // we should ideally observer is isCompleted, but don't have access from here
             .onChange(of: isPresentingTransferData) { _, newValue in
                 if newValue == .none {
-                    model.onPerpetualCloseComplete()
+                    model.fetch()
                 }
             }
             .onChange(of: isPresentingPerpetualRecipientData) { oldValue, newValue in
-                if newValue == .none, let oldValue {
-                    model.onPerpetualOrderComplete(recipientData: oldValue)
+                if newValue == .none {
+                    model.fetch()
                 }
             }
     }
