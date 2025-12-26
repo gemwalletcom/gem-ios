@@ -1,14 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Primitives
-import WalletCore
-import Testing
 import PrimitivesTestKit
+import Testing
+import WalletCore
 import WalletCorePrimitives
 
 final class Chain_WalletCorePrimitiveTests {
     @Test(arguments: Chain.allCases)
-    func testChainToCoinType(chain: Chain) {
+    func chainToCoinType(chain: Chain) {
         let expected: CoinType
         switch chain {
         case .bitcoin:
@@ -18,7 +18,7 @@ final class Chain_WalletCorePrimitiveTests {
         case .ethereum, .smartChain, .polygon, .arbitrum, .optimism, .base,
              .avalancheC, .opBNB, .fantom, .gnosis, .manta, .blast, .zkSync,
              .linea, .mantle, .celo, .world, .sonic, .abstract, .berachain,
-             .ink, .unichain, .hyperliquid, .monad, .hyperCore, .plasma, .xLayer:
+             .ink, .unichain, .hyperliquid, .monad, .hyperCore, .plasma, .xLayer, .stable:
             expected = .ethereum
         case .solana:
             expected = .solana
@@ -66,7 +66,7 @@ final class Chain_WalletCorePrimitiveTests {
 
         #expect(chain.coinType == expected)
     }
-    
+
     @Test
     func testIsValidAddress() {
         // Expect addresses to be valid
@@ -83,7 +83,7 @@ final class Chain_WalletCorePrimitiveTests {
         let bitocoinAddress = "bc1qr6f065nr70x4gl6ja9lm5wfj7xkhdv2sq04q23"
         let evmAddress = "0xd41fdb03ba84762dd66a0af1a6c8540ff1ba5dfb"
         let evmChecksumAddress = "0xD41FDb03Ba84762dD66a0af1a6C8540FF1ba5dfb"
-        
+
         #expect(Chain.mock(.ethereum).checksumAddress(evmAddress) == evmChecksumAddress)
         #expect(Chain.mock(.smartChain).checksumAddress(evmAddress) == evmChecksumAddress)
         #expect(Chain.mock(.ethereum).checksumAddress(evmChecksumAddress) == evmChecksumAddress)

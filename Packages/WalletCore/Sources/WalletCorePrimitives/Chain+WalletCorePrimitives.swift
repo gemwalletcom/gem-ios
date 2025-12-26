@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WalletCore
 import Primitives
+import WalletCore
 
 public extension Chain {
     var coinType: WalletCore.CoinType {
@@ -11,32 +11,33 @@ public extension Chain {
         case .bitcoinCash: .bitcoinCash
         case .litecoin: .litecoin
         case .ethereum,
-            .arbitrum,
-            .polygon,
-            .optimism,
-            .base,
-            .avalancheC,
-            .opBNB,
-            .fantom,
-            .gnosis,
-            .manta,
-            .smartChain,
-            .blast,
-            .zkSync,
-            .linea,
-            .mantle,
-            .celo,
-            .world,
-            .sonic,
-            .abstract,
-            .berachain,
-            .ink,
-            .unichain,
-            .hyperliquid,
-            .monad,
-            .hyperCore,
-            .plasma,
-            .xLayer: .ethereum
+             .arbitrum,
+             .polygon,
+             .optimism,
+             .base,
+             .avalancheC,
+             .opBNB,
+             .fantom,
+             .gnosis,
+             .manta,
+             .smartChain,
+             .blast,
+             .zkSync,
+             .linea,
+             .mantle,
+             .celo,
+             .world,
+             .sonic,
+             .abstract,
+             .berachain,
+             .ink,
+             .unichain,
+             .hyperliquid,
+             .monad,
+             .hyperCore,
+             .plasma,
+             .xLayer,
+             .stable: .ethereum
         case .solana: .solana
         case .thorchain: .thorchain
         case .cosmos: .cosmos
@@ -59,13 +60,13 @@ public extension Chain {
         case .cardano: .cardano
         }
     }
-    
+
     func isValidAddress(_ address: String) -> Bool {
         AnyAddress.isValid(string: address, coin: coinType)
     }
-    
+
     func checksumAddress(_ address: String) -> String {
-        if let chain = EVMChain(rawValue: self.rawValue), let address = AnyAddress(string: address, coin: chain.chain.coinType) {
+        if let chain = EVMChain(rawValue: rawValue), let address = AnyAddress(string: address, coin: chain.chain.coinType) {
             return address.description
         }
         return address
