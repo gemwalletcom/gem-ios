@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import TransactionService
+import TransactionStateService
 import Store
 import StakeService
 import NFTService
@@ -13,14 +13,14 @@ import NFTServiceTestKit
 import ChainServiceTestKit
 import BalanceServiceTestKit
 
-public extension TransactionService {
+public extension TransactionStateService {
     static func mock(
         transactionStore: TransactionStore = .mock(),
         stakeService: StakeService = .mock(),
         nftService: NFTService = .mock(),
         chainServiceFactory: ChainServiceFactory = .mock()
-    ) -> TransactionService {
-        TransactionService(
+    ) -> TransactionStateService {
+        TransactionStateService(
             transactionStore: transactionStore,
             stakeService: stakeService,
             nftService: nftService,

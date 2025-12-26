@@ -13,7 +13,7 @@ import ExplorerService
 import BalanceService
 import AssetsService
 import TransactionsService
-import TransactionService
+import TransactionStateService
 import WalletsService
 import WalletService
 import AppService
@@ -43,7 +43,7 @@ extension AppResolver {
         let priceObserverService: PriceObserverService
         let stakeService: StakeService
         let transactionsService: TransactionsService
-        let transactionService: TransactionService
+        let transactionStateService: TransactionStateService
         let walletService: WalletService
         let walletsService: WalletsService
         let explorerService: ExplorerService
@@ -80,7 +80,7 @@ extension AppResolver {
             priceService: PriceService,
             stakeService: StakeService,
             transactionsService: TransactionsService,
-            transactionService: TransactionService,
+            transactionStateService: TransactionStateService,
             walletService: WalletService,
             walletsService: WalletsService,
             explorerService: ExplorerService,
@@ -116,7 +116,7 @@ extension AppResolver {
             self.priceObserverService = priceObserverService
             self.stakeService = stakeService
             self.transactionsService = transactionsService
-            self.transactionService = transactionService
+            self.transactionStateService = transactionStateService
             self.walletService = walletService
             self.walletsService = walletsService
             self.explorerService = explorerService

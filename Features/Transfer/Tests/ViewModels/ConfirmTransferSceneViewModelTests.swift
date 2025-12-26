@@ -12,7 +12,7 @@ import ScanServiceTestKit
 import KeystoreTestKit
 import BalanceServiceTestKit
 import PriceServiceTestKit
-import TransactionServiceTestKit
+import TransactionStateServiceTestKit
 import NodeServiceTestKit
 import Localization
 import AddressNameService
@@ -339,7 +339,7 @@ private extension ConfirmTransferSceneViewModel {
                 scanService: .mock(),
                 balanceService: .mock(),
                 priceService: .mock(),
-                transactionService: .mock(),
+                transactionStateService: .mock(),
                 addressNameService: addressNameService,
                 activityService: .mock(),
                 chain: data.chain

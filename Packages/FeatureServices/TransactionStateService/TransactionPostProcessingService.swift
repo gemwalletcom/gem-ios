@@ -7,7 +7,7 @@ import StakeService
 import NFTService
 import Primitives
 
-struct TransactionStateUpdatePostJob: Sendable {
+struct TransactionPostProcessingService: Sendable {
     private let transactionStore: TransactionStore
     private let balanceUpdater: any BalancerUpdater
     private let stakeService: StakeService

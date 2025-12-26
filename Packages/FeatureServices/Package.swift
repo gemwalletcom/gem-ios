@@ -22,8 +22,8 @@ let package = Package(
         .library(name: "PriceServiceTestKit", targets: ["PriceServiceTestKit"]),
         .library(name: "PriceAlertService", targets: ["PriceAlertService"]),
         .library(name: "PriceAlertServiceTestKit", targets: ["PriceAlertServiceTestKit"]),
-        .library(name: "TransactionService", targets: ["TransactionService"]),
-        .library(name: "TransactionServiceTestKit", targets: ["TransactionServiceTestKit"]),
+        .library(name: "TransactionStateService", targets: ["TransactionStateService"]),
+        .library(name: "TransactionStateServiceTestKit", targets: ["TransactionStateServiceTestKit"]),
         .library(name: "TransactionsService", targets: ["TransactionsService"]),
         .library(name: "TransactionsServiceTestKit", targets: ["TransactionsServiceTestKit"]),
         .library(name: "DiscoverAssetsService", targets: ["DiscoverAssetsService"]),
@@ -211,7 +211,7 @@ let package = Package(
             path: "PriceAlertService/TestKit"
         ),
         .target(
-            name: "TransactionService",
+            name: "TransactionStateService",
             dependencies: [
                 "Primitives",
                 "Store",
@@ -222,20 +222,20 @@ let package = Package(
                 "NFTService",
                 "GemstonePrimitives"
             ],
-            path: "TransactionService",
+            path: "TransactionStateService",
             exclude: ["TestKit"]
         ),
         .target(
-            name: "TransactionServiceTestKit",
+            name: "TransactionStateServiceTestKit",
             dependencies: [
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
                 "NFTServiceTestKit",
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 "BalanceServiceTestKit",
-                "TransactionService"
+                "TransactionStateService"
             ],
-            path: "TransactionService/TestKit"
+            path: "TransactionStateService/TestKit"
         ),
         .target(
             name: "TransactionsService",
@@ -330,7 +330,7 @@ let package = Package(
                 "Preferences",
                 "BalanceService",
                 "AssetsService",
-                "TransactionService",
+                "TransactionStateService",
                 "DiscoverAssetsService",
                 .product(name: "ChainService", package: "ChainServices"),
                 "WalletSessionService",
@@ -347,7 +347,7 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store"),
                 "PriceServiceTestKit",
                 "BalanceServiceTestKit",
-                "TransactionServiceTestKit",
+                "TransactionStateServiceTestKit",
                 "WalletsService"
             ],
             path: "WalletsService/TestKit"

@@ -2,34 +2,14 @@
 
 import Foundation
 import Primitives
-import Localization
+import Formatters
 
 public struct ChartDateFormatter {
-    
-    private static let time: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .none
-        return formatter
-    }()
-    
-    private static let dateWithTime: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .long
-        return formatter
-    }()
+    private static let relativeDateFormatter = RelativeDateFormatter()
 
-    private static let dateNoTime: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .none
-        formatter.dateStyle = .long
-        return formatter
-    }()
-    
     private let period: ChartPeriod
     private let date: Date
-    
+
     public init(
         period: ChartPeriod,
         date: Date
@@ -37,26 +17,17 @@ public struct ChartDateFormatter {
         self.period = period
         self.date = date
     }
-    
-    private var formatter: DateFormatter {
+
+    private var includeTime: Bool {
         switch period {
-        case .hour,
-            .day,
-            .week,
-            .month:
-            return ChartDateFormatter.dateWithTime
-        case .year,
-            .all:
-            return ChartDateFormatter.dateNoTime
+        case .hour, .day, .week, .month:
+            return true
+        case .year, .all:
+            return false
         }
     }
-    
+
     public var dateText: String {
-        if Calendar.current.isDateInToday(date) {
-            return String(format: "%@, %@", Localized.Date.today, Self.time.string(from: date))
-        } else if Calendar.current.isDateInYesterday(date) {
-            return String(format: "%@, %@", Localized.Date.yesterday, Self.time.string(from: date))
-        }
-        return formatter.string(from: date)
+        Self.relativeDateFormatter.string(from: date, includeTime: includeTime)
     }
 }

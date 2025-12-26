@@ -35,21 +35,21 @@ public struct FloatTextField<TrailingView: View>: View {
 
     private var allowClean: Bool
     private var trailingView: TrailingView
-    private var onWillClean: (() -> Void)?
+    private var onClean: (() -> Void)?
 
     public init(
         _ placeholder: String,
         text: Binding<String>,
         style: FloatFieldStyle = .standard,
         allowClean: Bool = true,
-        onWillClean: (() -> Void)? = nil,
+        onClean: (() -> Void)? = nil,
         @ViewBuilder trailingView: () -> TrailingView
     ) {
         _text = text
         self.placeholder = placeholder
         self.style = style
         self.allowClean = allowClean
-        self.onWillClean = onWillClean
+        self.onClean = onClean
         self.trailingView = trailingView()
     }
     
@@ -58,14 +58,14 @@ public struct FloatTextField<TrailingView: View>: View {
         text: Binding<String>,
         style: FloatFieldStyle = .standard,
         allowClean: Bool = true,
-        onWillClean: (() -> Void)? = nil
+        onClean: (() -> Void)? = nil
     ) where TrailingView == EmptyView {
         self.init(
             placeholder,
             text: text,
             style: style,
             allowClean: allowClean,
-            onWillClean: onWillClean,
+            onClean: onClean,
             trailingView: { EmptyView() }
         )
     }
@@ -101,7 +101,7 @@ extension FloatTextField {
     }
 
     private func onSelectClean() {
-        onWillClean?()
+        onClean?()
         text = ""
     }
 }

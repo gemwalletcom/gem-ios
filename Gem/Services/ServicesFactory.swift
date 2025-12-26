@@ -20,7 +20,7 @@ import ExplorerService
 import BalanceService
 import AssetsService
 import TransactionsService
-import TransactionService
+import TransactionStateService
 import NFTService
 import WalletService
 import AvatarService
@@ -97,7 +97,7 @@ struct ServicesFactory {
             deviceService: deviceService,
             addressStore: storeManager.addressStore
         )
-        let transactionService = Self.makeTransactionService(
+        let transactionStateService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
             stakeService: stakeService,
             nftService: nftService,
@@ -214,7 +214,7 @@ struct ServicesFactory {
             nameService: nameService,
             balanceService: balanceService,
             priceService: priceService,
-            transactionService: transactionService,
+            transactionStateService: transactionStateService,
             chainServiceFactory: chainServiceFactory,
             addressNameService: addressNameService,
             activityService: activityService
@@ -234,7 +234,7 @@ struct ServicesFactory {
             priceService: priceService,
             stakeService: stakeService,
             transactionsService: transactionsService,
-            transactionService: transactionService,
+            transactionStateService: transactionStateService,
             walletService: walletService,
             walletsService: walletsService,
             explorerService: explorerService,
@@ -367,8 +367,8 @@ extension ServicesFactory {
         nftService: NFTService,
         chainFactory: ChainServiceFactory,
         balanceService: BalanceService
-    ) -> TransactionService {
-        TransactionService(
+    ) -> TransactionStateService {
+        TransactionStateService(
             transactionStore: transactionStore,
             stakeService: stakeService,
             nftService: nftService,

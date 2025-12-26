@@ -77,7 +77,7 @@ extension AddNodeScene {
             InputValidationField(
                 model: $model.urlInputModel,
                 placeholder: model.inputFieldTitle,
-                onWillClean: { model.debounceInterval = nil }
+                onClean: { model.debounceInterval = nil }
             ) {
                 HStack(spacing: .medium) {
                     ListButton(image: Images.System.paste, action: onSelectPaste)
