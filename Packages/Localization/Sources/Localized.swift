@@ -1506,8 +1506,6 @@ public enum Localized {
     public static let swap = Localized.tr("Localizable", "wallet.swap", fallback: "Swap")
     /// Wallet
     public static let title = Localized.tr("Localizable", "wallet.title", fallback: "Wallet")
-    /// Wallet name
-    public static let walletName = Localized.tr("Localizable", "wallet.wallet_name", fallback: "Wallet name")
     /// Withdraw
     public static let withdraw = Localized.tr("Localizable", "wallet.withdraw", fallback: "Withdraw")
     public enum AddToken {

@@ -38,7 +38,7 @@ public final class SetupWalletViewModel: Sendable {
     var title: String {
         switch wallet?.source {
         case .create: Localized.Wallet.New.title
-        case .import, .none: Localized.Common.wallet
+        case .import, .none: Localized.Wallet.Import.title
         }
     }
 

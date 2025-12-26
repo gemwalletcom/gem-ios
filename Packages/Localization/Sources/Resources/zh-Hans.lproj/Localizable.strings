@@ -545,4 +545,3 @@
 "rewards.ways_spend.asset.title" = "得到 %@";
 "rewards.insufficient_points" = "分数不足";
 "rewards.confirm_redeem" = "得到 %@ 为了 %@！";
-"wallet.wallet_name" = "钱包名称";

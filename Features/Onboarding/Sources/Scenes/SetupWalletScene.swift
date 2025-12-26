@@ -23,7 +23,7 @@ public struct SetupWalletScene: View {
     public var body: some View {
         List {
             Section {
-                FloatTextField(Localized.Wallet.walletName, text: $model.nameInput, allowClean: focusedField == .name)
+                FloatTextField(Localized.Wallet.name, text: $model.nameInput, allowClean: focusedField == .name)
                     .focused($focusedField, equals: .name)
             } header: {
                 HStack {
