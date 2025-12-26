@@ -16,12 +16,12 @@ public struct StakeDetailSceneViewModel {
     public let onTransferAction: TransferDataAction
 
     private let wallet: Wallet
-    private let service: StakeService
+    private let service: any StakeServiceable
 
     public init(
         wallet: Wallet,
         model: StakeDelegationViewModel,
-        service: StakeService,
+        service: any StakeServiceable,
         onAmountInputAction: AmountInputAction,
         onTransferAction: TransferDataAction
     ) {
@@ -67,7 +67,8 @@ public struct StakeDetailSceneViewModel {
     }
     
     public var showManage: Bool {
-        [
+        guard wallet.canSign else { return false }
+        return [
             isStakeAvailable,
             isUnstakeAvailable,
             isRedelegateAvailable,
