@@ -16,6 +16,7 @@ public final class ImportWalletViewModel {
     let walletService: WalletService
     let avatarService: AvatarService
     let nameService: any NameServiceable
+    let hasExistingWallets: Bool
 
     var isPresentingWallets: Binding<Bool>
     var isPresentingSelectImageWallet: Wallet?
@@ -30,10 +31,7 @@ public final class ImportWalletViewModel {
         self.avatarService = avatarService
         self.nameService = nameService
         self.isPresentingWallets = isPresentingWallets
-    }
-
-    public var hasExistingWallets: Bool {
-        walletService.wallets.isNotEmpty
+        self.hasExistingWallets = walletService.wallets.isNotEmpty
     }
 
     public var isAcceptTermsCompleted: Bool {

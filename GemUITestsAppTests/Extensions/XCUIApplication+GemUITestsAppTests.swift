@@ -37,12 +37,22 @@ extension XCUIApplication {
         if isOnboarding == false {
             buttons["Wallet"].firstMatch.tap()
             tapWalletBar()
-            // WalletsScene
-            buttons["gearshape"].firstMatch.tap()
-            // WalletDetailScene
-            buttons["Delete"].firstMatch.tap()
-            // Delete confirmation alert
-            alerts.buttons["Delete"].tap()
+            while buttons["gearshape"].waitForExistence(timeout: 2) {
+                // WalletsScene
+                buttons["gearshape"].firstMatch.tap()
+                // WalletDetailScene
+                buttons["Delete"].firstMatch.tap()
+                // Delete confirmation alert
+                alerts.buttons["Delete"].tap()
+            }
         }
+    }
+    
+    func tapCreateWallet() {
+        buttons["Create a New Wallet"].firstMatch.tap()
+    }
+    
+    func tapImportWallet() {
+        buttons["Import an Existing Wallet"].firstMatch.tap()
     }
 }

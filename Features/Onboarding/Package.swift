@@ -50,7 +50,10 @@ let package = Package(
         ),
         .testTarget(
             name: "OnboardingTest",
-            dependencies: ["Onboarding"],
+            dependencies: [
+                "Onboarding",
+                .product(name: "WalletServiceTestKit", package: "FeatureServices"),
+            ],
             path: "Tests"
         )
     ]
