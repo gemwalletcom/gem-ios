@@ -14,7 +14,7 @@ import Blockchain
 import ChainService
 import AddressNameService
 import ActivityService
-import EventManager
+import EventPresenterService
 
 public struct ConfirmService: Sendable {
     private let metadataProvider: any TransferMetadataProvidable
@@ -25,7 +25,7 @@ public struct ConfirmService: Sendable {
     private let explorerService: any ExplorerLinkFetchable
     private let addressNameService: AddressNameService
     private let activityService: ActivityService
-    private let eventManager: EventManager
+    private let eventPresenterService: EventPresenterService
 
     public init(
         explorerService: any ExplorerLinkFetchable,
@@ -36,7 +36,7 @@ public struct ConfirmService: Sendable {
         chainService: any ChainServiceable,
         addressNameService: AddressNameService,
         activityService: ActivityService,
-        eventManager: EventManager
+        eventPresenterService: EventPresenterService
     ) {
         self.explorerService = explorerService
         self.metadataProvider = metadataProvider
@@ -46,7 +46,7 @@ public struct ConfirmService: Sendable {
         self.chainService = chainService
         self.addressNameService = addressNameService
         self.activityService = activityService
-        self.eventManager = eventManager
+        self.eventPresenterService = eventPresenterService
     }
 
     public func getMetadata(wallet: Wallet, data: TransferData) throws -> TransferDataMetadata {
@@ -73,7 +73,7 @@ public struct ConfirmService: Sendable {
 
     public func executeTransfer(input: TransferConfirmationInput) async throws {
         try await transferExecutor.execute(input: input)
-        await eventManager.send(.transfer(input.data, .toast))
+        await eventPresenterService.present(.transfer(input.data))
     }
 
     public func updateRecent(data: RecentActivityData, walletId: WalletId) {

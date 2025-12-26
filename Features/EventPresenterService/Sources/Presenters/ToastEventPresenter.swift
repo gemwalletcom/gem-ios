@@ -12,7 +12,7 @@ public final class ToastEventPresenter: Sendable {
     public init() {}
 
     @MainActor
-    public func present(_ event: AppEvent) {
+    public func present(_ event: ToastEvent) {
         toastMessage = ToastEventMessageFactory.makeToastMessage(for: event)
     }
 }

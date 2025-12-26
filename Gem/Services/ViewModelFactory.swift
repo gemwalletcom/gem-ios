@@ -24,7 +24,7 @@ import FiatConnect
 import WalletConnectorService
 import AddressNameService
 import ActivityService
-import EventManager
+import EventPresenterService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -41,7 +41,7 @@ public struct ViewModelFactory: Sendable {
     let chainServiceFactory: ChainServiceFactory
     let addressNameService: AddressNameService
     let activityService: ActivityService
-    let eventManager: EventManager
+    let eventPresenterService: EventPresenterService
 
     public init(
         keystore: any Keystore,
@@ -58,7 +58,7 @@ public struct ViewModelFactory: Sendable {
         chainServiceFactory: ChainServiceFactory,
         addressNameService: AddressNameService,
         activityService: ActivityService,
-        eventManager: EventManager
+        eventPresenterService: EventPresenterService
     ) {
         self.keystore = keystore
         self.nodeService = nodeService
@@ -74,7 +74,7 @@ public struct ViewModelFactory: Sendable {
         self.chainServiceFactory = chainServiceFactory
         self.addressNameService = addressNameService
         self.activityService = activityService
-        self.eventManager = eventManager
+        self.eventPresenterService = eventPresenterService
     }
     
     @MainActor
@@ -94,7 +94,7 @@ public struct ViewModelFactory: Sendable {
             transactionService: transactionService,
             addressNameService: addressNameService,
             activityService: activityService,
-            eventManager: eventManager,
+            eventPresenterService: eventPresenterService,
             chain: data.chain
         )
         

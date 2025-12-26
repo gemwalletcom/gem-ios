@@ -2,7 +2,7 @@
 
 import Foundation
 
-public final class EventManager: Sendable {
+public final class EventPresenterService: Sendable {
 
     @MainActor
     public var toastPresenter = ToastEventPresenter()
@@ -10,9 +10,7 @@ public final class EventManager: Sendable {
     public init() {}
 
     @MainActor
-    public func send(_ event: AppEvent) {
-        switch event.presentationType {
-        case .toast: toastPresenter.present(event)
-        }
+    public func present(_ event: ToastEvent) {
+        toastPresenter.present(event)
     }
 }

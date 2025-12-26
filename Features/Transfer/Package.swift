@@ -38,7 +38,7 @@ let package = Package(
         .package(name: "FiatConnect", path: "../FiatConnect"),
         .package(name: "Swap", path: "../Swap"),
         .package(name: "Perpetuals", path: "../Perpetuals"),
-        .package(name: "EventManager", path: "../EventManager"),
+        .package(name: "EventPresenterService", path: "../EventPresenterService"),
 
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
@@ -68,7 +68,7 @@ let package = Package(
                 "FiatConnect",
                 "Swap",
                 "Perpetuals",
-                "EventManager",
+                "EventPresenterService",
 
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
@@ -121,7 +121,7 @@ let package = Package(
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
                 .product(name: "NFTServiceTestKit", package: "FeatureServices"),
                 .product(name: "SignerTestKit", package: "Signer"),
-                .product(name: "EventManagerTestKit", package: "EventManager"),
+                .product(name: "EventPresenterServiceTestKit", package: "EventPresenterService"),
             ],
             path: "Tests"
         ),

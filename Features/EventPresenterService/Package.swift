@@ -3,18 +3,18 @@
 import PackageDescription
 
 let package = Package(
-    name: "EventManager",
+    name: "EventPresenterService",
     platforms: [
         .iOS(.v17),
         .macOS(.v15),
     ],
     products: [
         .library(
-            name: "EventManager",
-            targets: ["EventManager"]),
+            name: "EventPresenterService",
+            targets: ["EventPresenterService"]),
         .library(
-            name: "EventManagerTestKit",
-            targets: ["EventManagerTestKit"]),
+            name: "EventPresenterServiceTestKit",
+            targets: ["EventPresenterServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -25,7 +25,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "EventManager",
+            name: "EventPresenterService",
             dependencies: [
                 "Primitives",
                 "PrimitivesComponents",
@@ -36,9 +36,9 @@ let package = Package(
             path: "Sources"
         ),
         .target(
-            name: "EventManagerTestKit",
+            name: "EventPresenterServiceTestKit",
             dependencies: [
-                "EventManager",
+                "EventPresenterService",
             ],
             path: "TestKit"
         ),

@@ -27,28 +27,30 @@ public struct AlertToast: View {
     }
 
     public var body: some View {
-        VStack {
-            HStack(spacing: .medium) {
-                Image(systemName: systemImage)
-                    .foregroundColor(imageColor)
+        GeometryReader { geometry in
+            VStack {
+                Spacer()
 
-                Text(LocalizedStringKey(title))
-                    .font(titleFont ?? Font.headline.bold())
-                    .foregroundColor(titleColor)
+                HStack(spacing: .medium) {
+                    Image(systemName: systemImage)
+                        .foregroundColor(imageColor)
+
+                    Text(LocalizedStringKey(title))
+                        .font(titleFont ?? Font.headline.bold())
+                        .foregroundColor(titleColor)
+                }
+                .multilineTextAlignment(.leading)
+                .padding(.horizontal, .medium)
+                .padding(.vertical, .medium)
+                .frame(maxWidth: .scene.content.maxWidth, alignment: .leading)
+                .liquidGlass(fallback: { view in
+                    view
+                        .background(BlurView())
+                        .cornerRadius(.space10)
+                })
+                .padding(.horizontal, .medium)
+                .padding(.bottom, .large + geometry.safeAreaInsets.bottom)
             }
-            .multilineTextAlignment(.leading)
-            .padding(.horizontal, .medium)
-            .padding(.vertical, .medium)
-            .frame(maxWidth: .scene.content.maxWidth, alignment: .leading)
-            .liquidGlass(fallback: { view in
-                view
-                    .background(BlurView())
-                    .cornerRadius(.space10)
-            })
-            .padding(.horizontal, .medium)
-            .padding(.top, .small)
-
-            Spacer()
         }
     }
 }
@@ -84,7 +86,7 @@ public struct AlertToastModifier: ViewModifier {
                 .onDisappear {
                     completion?()
                 }
-                .transition(.move(edge: .top).combined(with: .opacity))
+                .transition(.move(edge: .bottom).combined(with: .opacity))
         }
     }
 

@@ -7,9 +7,9 @@ import Components
 import Localization
 
 public enum ToastEventMessageFactory {
-    public static func makeToastMessage(for event: AppEvent) -> ToastMessage? {
+    public static func makeToastMessage(for event: ToastEvent) -> ToastMessage? {
         switch event {
-        case .transfer(let data, _): transferMessage(for: data.type)
+        case .transfer(let data): transferMessage(for: data.type)
         }
     }
 }

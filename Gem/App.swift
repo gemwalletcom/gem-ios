@@ -38,7 +38,7 @@ struct GemApp: App {
                     walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService,
                     nameService: resolver.services.nameService,
-                    eventManager: resolver.services.eventManager
+                    eventPresenterService: resolver.services.eventPresenterService
                 )
             )
             .inject(resolver: resolver)

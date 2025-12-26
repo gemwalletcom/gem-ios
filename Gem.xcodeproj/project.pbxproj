@@ -208,7 +208,7 @@
 		83E041572D0AFCB10031D4BC /* RootScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScene.swift; sourceTree = "<group>"; };
 		83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSceneViewModel.swift; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
-		B67B3EEE2EFD25A6007AFA9C /* EventManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EventManager; sourceTree = "<group>"; };
+		B67B3EEE2EFD25A6007AFA9C /* EventPresenterService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EventPresenterService; sourceTree = "<group>"; };
 		B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
 		B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
@@ -661,7 +661,7 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				B67B3EEE2EFD25A6007AFA9C /* EventManager */,
+				B67B3EEE2EFD25A6007AFA9C /* EventPresenterService */,
 				B6EA21D42E27E21700F1C849 /* Support */,
 				836281AD2DEF32F600CA5C75 /* Assets */,
 				838383112D5E677A00D1CAF2 /* WalletTab */,
