@@ -60,7 +60,7 @@ public final class ReceiveViewModel: Sendable {
     }
     
     var warningMessage: AttributedString {
-        guard let message = try? AttributedString(markdown: Localized.Receive.warning(assetModel.symbol, assetModel.networkFullName)) else {
+        guard let message = try? AttributedString(markdown: Localized.Receive.warning(assetModel.symbol.boldMarkdown(), assetModel.networkFullName.boldMarkdown())) else {
             return AttributedString()
         }
         return message

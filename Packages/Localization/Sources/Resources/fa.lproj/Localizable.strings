@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "توکن‌های مشکوک یا اسپم به عنوان کلاهبرداری‌های بالقوه یا دارایی‌های مضر شناسایی می‌شوند. آنها ممکن است به دلیل ایردراپ‌ها، انتقال‌ها یا واردات دستی در کیف پول شما ظاهر شوند.";
 "errors.insufficient_funds" = "بودجه ناکافی";
 "info.insufficient_network_fee_balance.title" = "%@ مورد نیاز";
-"info.insufficient_network_fee_balance.description" = "این تراکنش به ** %@ ** برای پوشش کارمزد شبکه پرداخت شده به ** %@ ** ماینرها نیاز دارد، نه Gem Wallet. مطمئن شوید که %@ کافی دارید.";
+"info.insufficient_network_fee_balance.description" = "این تراکنش مستلزم %@ برای پوشش هزینه شبکه پرداخت شده به %@ معدنچیان، نه Gem Walletمطمئن شوید که به اندازه کافی دارید. %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "موجودی ناکافی";
 "info.insufficient_balance.description" = "شما %@ کافی برای تکمیل این تراکنش ندارید. لطفاً کیف پول خود را شارژ، دریافت یا مبادله کنید و دوباره امتحان کنید.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "خرید %@";
 "wallet.import_address_warning" = "شما می‌توانید موجودی و تراکنش‌های این آدرس را مشاهده کنید، اما **نمی‌توانید وجه ارسال یا بفروشید**.";
 "info.stake_minimum_amount.title" = "حداقل مقدار";
-"info.stake_minimum_amount.description" = "در شبکه %@ ، حداقل میزان سپرده‌گذاری **%@** است.";
+"info.stake_minimum_amount.description" = "روی %@ شبکه، حداقل الزام استیکینگ %@.";
 "asset.add_to_wallet" = "اضافه کردن به کیف پول";
 "asset.hide_from_wallet" = "پنهان شدن از کیف پول";
 "common.details" = "جزئیات";
@@ -431,8 +431,8 @@
 "errors.scan_transaction.malicious.description" = "این تراکنش قابل انجام نیست — آدرس کیف پول مقصد به فعالیت مشکوک یا مضر مرتبط است.";
 "errors.scan_transaction.memo_required" = "%@ آدرس کیف پول مقصد به یک برچسب / یادداشت مقصد نیاز دارد.";
 "common.info" = "اطلاعات";
-"wallet.deposit" = "Deposit";
-"wallet.withdraw" = "Withdraw";
+"wallet.deposit" = "واریز";
+"wallet.withdraw" = "برداشت";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -490,7 +490,7 @@
 "assets.title" = "دارایی‌ها";
 "stake.delegations" = "واگذاری‌ها";
 "info.stake.apr.description" = "نرخ درصد سالانه (APR) نرخ پاداش سالانه برای سپرده‌گذاری ارز دیجیتال شما است.";
-"receive.warning" = "این آدرس شماست — فقط ارسال کنید **%@**روی**%@**شبکه.";
+"receive.warning" = "این آدرس شماست — فقط ارسال %@ روی %@ شبکه.";
 "perpetual.leverage" = "اهرم مالی";
 "perpetual.direction" = "جهت";
 "perpetual.auto_close" = "بستن خودکار";
@@ -512,7 +512,7 @@
 "settings.preferences.default_leverage" = "اهرم پیش‌فرض";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
+"recent_activity.title" = "اخیر";
 "errors.no_data_available" = "داده‌ای موجود نیست";
 "errors.dust_threshold_short" = "شبکه این مبلغ را داست (dust) در نظر می‌گیرد - کارمزد آن از خود مبلغ بیشتر است.";
 "charts.take_profit" = "TP";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "عضویت Gem Wallet با لینک معرفی من و کسب جوایز: %@";
 "rewards.my_referral_code" = "کد معرف من";
 "rewards.invite_friends.title" = "دعوت از دوستان";
-"rewards.invite_friends.description" = "کسب درآمد **%d امتیاز** برای هر دوستی که ملحق می‌شود.";
+"rewards.invite_friends.description" = "کسب درآمد %@ امتیاز برای هر دوستی که عضو می‌شود.";
 "common.get_started" = "شروع کنید";
 "rewards.referral_code" = "کد ارجاع";
 "rewards.invited_by" = "Invited By";
@@ -538,9 +538,9 @@
 "rewards.get_rewards.title" = "دریافت پاداش";
 "rewards.activate_referral_code.description" = "Have a referral code from a friend?";
 "rewards.activate_referral_code.title" = "کد فعال‌سازی";
-"rewards.create_referral_code.title" = "Create Username";
-"rewards.create_referral_code.info" = "This will be your personal username.";
-"rewards.username" = "Username";
+"rewards.create_referral_code.title" = "ایجاد نام کاربری";
+"rewards.create_referral_code.info" = "این نام کاربری شخصی شما خواهد بود.";
+"rewards.username" = "نام کاربری";
 "rewards.ways_spend.title" = "راه‌های خرج کردن";
 "rewards.ways_spend.asset.title" = "دریافت %@";
 "rewards.insufficient_points" = "امتیاز ناکافی";

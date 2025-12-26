@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Token yang mencurigakan atau spam diidentifikasi sebagai potensi penipuan atau aset berbahaya. Token tersebut mungkin muncul di dompet Anda karena airdrop, transfer, atau impor manual.";
 "errors.insufficient_funds" = "Dana tidak mencukupi";
 "info.insufficient_network_fee_balance.title" = "%@ diperlukan";
-"info.insufficient_network_fee_balance.description" = "Transaksi ini membutuhkan ** %@ ** untuk menutupi biaya jaringan yang dibayarkan kepada ** %@ ** penambang, bukan Gem Wallet. Pastikan Anda memiliki %@ yang cukup.";
+"info.insufficient_network_fee_balance.description" = "Transaksi ini memerlukan %@ untuk menutupi biaya jaringan yang dibayarkan kepada %@ penambang, bukan Gem WalletPastikan Anda memiliki cukup %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Saldo Tidak Cukup";
 "info.insufficient_balance.description" = "Anda tidak memiliki cukup %@ untuk menyelesaikan transaksi ini. Harap isi ulang, terima, atau tukarkan di dompet Anda dan coba lagi.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Beli %@";
 "wallet.import_address_warning" = "Anda dapat melihat saldo dan transaksi untuk alamat ini, tetapi **tidak dapat mengirim atau menjual dana**.";
 "info.stake_minimum_amount.title" = "Jumlah minimum";
-"info.stake_minimum_amount.description" = "Pada jaringan %@, persyaratan staking minimum adalah **%@**.";
+"info.stake_minimum_amount.description" = "Pada %@ jaringan, persyaratan staking minimum adalah %@.";
 "asset.add_to_wallet" = "Tambahkan ke dompet";
 "asset.hide_from_wallet" = "Sembunyikan dari dompet";
 "common.details" = "Rincian";
@@ -431,8 +431,8 @@
 "errors.scan_transaction.malicious.description" = "Transaksi ini tidak dapat diselesaikan — alamat dompet tujuan terkait dengan aktivitas yang mencurigakan atau berbahaya.";
 "errors.scan_transaction.memo_required" = "%@ alamat dompet tujuan memerlukan tag / memo tujuan";
 "common.info" = "Informasi";
-"wallet.deposit" = "Deposit";
-"wallet.withdraw" = "Withdraw";
+"wallet.deposit" = "Deposito";
+"wallet.withdraw" = "Menarik";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -490,7 +490,7 @@
 "assets.title" = "Aktiva";
 "stake.delegations" = "Delegasi";
 "info.stake.apr.description" = "Tingkat Persentase Tahunan (APR) adalah tingkat imbalan tahunan untuk mempertaruhkan mata uang kripto Anda.";
-"receive.warning" = "Ini alamat Anda — kirim hanya **%@** pada **%@** jaringan.";
+"receive.warning" = "Ini alamat Anda — kirim saja %@ pada %@ jaringan.";
 "perpetual.leverage" = "Daya ungkit keuangan";
 "perpetual.direction" = "Arah";
 "perpetual.auto_close" = "Tutup Otomatis";
@@ -512,7 +512,7 @@
 "settings.preferences.default_leverage" = "Leverage Default";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
+"recent_activity.title" = "Terkini";
 "errors.no_data_available" = "Tidak ada data tersedia";
 "errors.dust_threshold_short" = "Jaringan menganggap jumlah ini sebagai debu — biayanya lebih tinggi daripada jumlahnya sendiri.";
 "charts.take_profit" = "TP";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Bergabung Gem Wallet Gunakan tautan referensi saya dan dapatkan hadiah: %@";
 "rewards.my_referral_code" = "Kode referensi saya";
 "rewards.invite_friends.title" = "Undang Teman";
-"rewards.invite_friends.description" = "Menghasilkan **%d poin** untuk setiap teman yang bergabung.";
+"rewards.invite_friends.description" = "Menghasilkan %@ poin untuk setiap teman yang bergabung.";
 "common.get_started" = "Mulai";
 "rewards.referral_code" = "Kode Referensi";
 "rewards.invited_by" = "Invited By";
@@ -538,9 +538,9 @@
 "rewards.get_rewards.title" = "Dapatkan Hadiah";
 "rewards.activate_referral_code.description" = "Have a referral code from a friend?";
 "rewards.activate_referral_code.title" = "Tukarkan kode";
-"rewards.create_referral_code.title" = "Create Username";
-"rewards.create_referral_code.info" = "This will be your personal username.";
-"rewards.username" = "Username";
+"rewards.create_referral_code.title" = "Buat Nama Pengguna";
+"rewards.create_referral_code.info" = "Ini akan menjadi nama pengguna pribadi Anda.";
+"rewards.username" = "Nama belakang";
 "rewards.ways_spend.title" = "Cara untuk Berbelanja";
 "rewards.ways_spend.asset.title" = "Mendapatkan %@";
 "rewards.insufficient_points" = "Poin tidak mencukupi";
