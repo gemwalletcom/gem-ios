@@ -1,41 +1,15 @@
-// from https://github.com/elai950/AlertToast
+// Adopted from https://github.com/elai950/AlertToast
 
-import Foundation
 import SwiftUI
 
-#if os(macOS)
+struct BlurView: UIViewRepresentable {
+    typealias UIViewType = UIVisualEffectView
 
-@available(macOS 11, *)
-public struct BlurView: NSViewRepresentable {
-    public typealias NSViewType = NSVisualEffectView
-    
-    public func makeNSView(context: Context) -> NSVisualEffectView {
-        let effectView = NSVisualEffectView()
-        effectView.material = .hudWindow
-        effectView.blendingMode = .withinWindow
-        effectView.state = NSVisualEffectView.State.active
-        return effectView
+    func makeUIView(context: Context) -> UIVisualEffectView {
+        UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
     }
     
-    public func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
-        nsView.material = .hudWindow
-        nsView.blendingMode = .withinWindow
-    }
-}
-
-#else
-
-@available(iOS 13, *)
-public struct BlurView: UIViewRepresentable {
-    public typealias UIViewType = UIVisualEffectView
-    
-    public func makeUIView(context: Context) -> UIVisualEffectView {
-        return UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
-    }
-    
-    public func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
         uiView.effect = UIBlurEffect(style: .systemMaterial)
     }
 }
-
-#endif
