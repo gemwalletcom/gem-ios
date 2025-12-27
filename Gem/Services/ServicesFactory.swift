@@ -172,7 +172,6 @@ struct ServicesFactory {
             nodeService: nodeService,
             preferences: preferences,
             assetsService: assetsService,
-            deviceService: deviceService,
             bannerSetupService: BannerSetupService(
                 store: storeManager.bannerStore,
                 preferences: preferences
@@ -469,7 +468,6 @@ extension ServicesFactory {
         nodeService: NodeService,
         preferences: Preferences,
         assetsService: AssetsService,
-        deviceService: DeviceService,
         bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
         swappableChainsProvider: any SwappableChainsProvider
@@ -488,7 +486,6 @@ extension ServicesFactory {
                 FiatAssetsUpdateRunner(importAssetsService: importAssetsService, preferences: preferences),
                 SwapAssetsUpdateRunner(importAssetsService: importAssetsService, preferences: preferences),
                 SwappableAssetsRunner(assetsService: assetsService, swappableChainsProvider: swappableChainsProvider),
-                DeviceUpdateRunner(deviceService: deviceService)
             ]
         )
     }

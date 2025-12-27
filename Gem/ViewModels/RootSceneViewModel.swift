@@ -30,6 +30,7 @@ final class RootSceneViewModel {
     private let releaseAlertService: ReleaseAlertService
     private let rateService: RateService
     private let eventPresenterService: EventPresenterService
+    private let deviceService: DeviceService
 
     let walletService: WalletService
     let nameService: NameService
@@ -74,7 +75,8 @@ final class RootSceneViewModel {
         releaseAlertService: ReleaseAlertService,
         rateService: RateService,
         eventPresenterService: EventPresenterService,
-        avatarService: AvatarService
+        avatarService: AvatarService,
+        deviceService: DeviceService
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartWalletService = onstartWalletService
@@ -90,6 +92,7 @@ final class RootSceneViewModel {
         self.rateService = rateService
         self.eventPresenterService = eventPresenterService
         self.avatarService = avatarService
+        self.deviceService = deviceService
     }
 }
 
@@ -99,6 +102,7 @@ extension RootSceneViewModel {
     func setup() {
         rateService.perform()
         Task { await checkForUpdate() }
+        Task { try await deviceService.update() }
         transactionStateService.setup()
         Task { try await connectionsService.setup() }
         Task { try await deviceObserverService.startSubscriptionsObserver() }

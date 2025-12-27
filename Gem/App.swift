@@ -40,7 +40,8 @@ struct GemApp: App {
                     releaseAlertService: resolver.services.releaseAlertService,
                     rateService: resolver.services.rateService,
                     eventPresenterService: resolver.services.eventPresenterService,
-                    avatarService: resolver.services.avatarService
+                    avatarService: resolver.services.avatarService,
+                    deviceService: resolver.services.deviceService
                 )
             )
             .inject(resolver: resolver)
