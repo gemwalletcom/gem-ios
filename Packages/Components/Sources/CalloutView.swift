@@ -41,7 +41,8 @@ public struct CalloutView: View {
                     .multilineTextAlignment(.center)
             }
         }
-        .padding()
+        .frame(maxWidth: .infinity)
+        .padding(.small)
         .background(style.backgroundColor)
         .cornerRadius(.small)
         .padding(.horizontal, .medium)

@@ -53,6 +53,8 @@ extension XCUIApplication {
     }
     
     func tapImportWallet() {
-        buttons["Import an Existing Wallet"].firstMatch.tap()
+        let button = buttons["Import an Existing Wallet"].firstMatch
+        XCTAssertTrue(button.waitForExistence(timeout: 2), "button not found")
+        button.tap()
     }
 }
