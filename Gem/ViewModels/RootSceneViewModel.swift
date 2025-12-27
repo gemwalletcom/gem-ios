@@ -3,6 +3,7 @@
 import AppService
 import Components
 import DeviceService
+import EventPresenterService
 import Foundation
 import LockManager
 import Localization
@@ -10,31 +11,39 @@ import NameService
 import Onboarding
 import Primitives
 import SwiftUI
-import TransactionService
+import TransactionStateService
 import TransactionsService
 import WalletConnector
 import WalletService
 import WalletsService
+import AvatarService
 
 @Observable
 @MainActor
 final class RootSceneViewModel {
     private let onstartWalletService: OnstartWalletService
-    private let transactionService: TransactionService
+    private let transactionStateService: TransactionStateService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
     private let notificationHandler: NotificationHandler
     private let walletsService: WalletsService
     private let releaseAlertService: ReleaseAlertService
     private let rateService: RateService
+    private let eventPresenterService: EventPresenterService
 
     let walletService: WalletService
     let nameService: NameService
+    let avatarService: AvatarService
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
 
     var updateVersionAlertMessage: AlertMessage?
+
+    var isPresentingToastMessage: ToastMessage? {
+        get { eventPresenterService.toastPresenter.toastMessage }
+        set { eventPresenterService.toastPresenter.toastMessage = newValue }
+    }
 
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -54,7 +63,7 @@ final class RootSceneViewModel {
     init(
         walletConnectorPresenter: WalletConnectorPresenter,
         onstartWalletService: OnstartWalletService,
-        transactionService: TransactionService,
+        transactionStateService: TransactionStateService,
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
         notificationHandler: NotificationHandler,
@@ -63,11 +72,13 @@ final class RootSceneViewModel {
         walletsService: WalletsService,
         nameService: NameService,
         releaseAlertService: ReleaseAlertService,
-        rateService: RateService
+        rateService: RateService,
+        eventPresenterService: EventPresenterService,
+        avatarService: AvatarService
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartWalletService = onstartWalletService
-        self.transactionService = transactionService
+        self.transactionStateService = transactionStateService
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
         self.notificationHandler = notificationHandler
@@ -77,6 +88,8 @@ final class RootSceneViewModel {
         self.nameService = nameService
         self.releaseAlertService = releaseAlertService
         self.rateService = rateService
+        self.eventPresenterService = eventPresenterService
+        self.avatarService = avatarService
     }
 }
 
@@ -86,7 +99,7 @@ extension RootSceneViewModel {
     func setup() {
         rateService.perform()
         Task { await checkForUpdate() }
-        transactionService.setup()
+        transactionStateService.setup()
         Task { try await connectionsService.setup() }
         Task { try await deviceObserverService.startSubscriptionsObserver() }
     }

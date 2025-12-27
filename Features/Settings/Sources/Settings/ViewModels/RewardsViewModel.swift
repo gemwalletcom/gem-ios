@@ -44,7 +44,7 @@ public final class RewardsViewModel: Sendable {
     var myReferralCodeTitle: String { Localized.Rewards.myReferralCode }
     var createCodeTitle: String { Localized.Rewards.InviteFriends.title }
     var createCodeDescription: AttributedString {
-        try! AttributedString(markdown: Localized.Rewards.InviteFriends.description(100))
+        try! AttributedString(markdown: Localized.Rewards.InviteFriends.description(100.description.boldMarkdown()))
     }
     var activateCodeFooterTitle: String { Localized.Rewards.ActivateReferralCode.title }
     var activateCodeFooterDescription: String { Localized.Rewards.ActivateReferralCode.description }

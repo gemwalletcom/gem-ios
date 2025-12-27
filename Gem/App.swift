@@ -29,7 +29,7 @@ struct GemApp: App {
                 model: RootSceneViewModel(
                     walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
                     onstartWalletService: resolver.services.onstartWalletService,
-                    transactionService: resolver.services.transactionService,
+                    transactionStateService: resolver.services.transactionStateService,
                     connectionsService: resolver.services.connectionsService,
                     deviceObserverService: resolver.services.deviceObserverService,
                     notificationHandler: resolver.services.notificationHandler,
@@ -38,7 +38,9 @@ struct GemApp: App {
                     walletsService: resolver.services.walletsService,
                     nameService: resolver.services.nameService,
                     releaseAlertService: resolver.services.releaseAlertService,
-                    rateService: resolver.services.rateService
+                    rateService: resolver.services.rateService,
+                    eventPresenterService: resolver.services.eventPresenterService,
+                    avatarService: resolver.services.avatarService
                 )
             )
             .inject(resolver: resolver)

@@ -39,15 +39,11 @@ public final class NodeService: Sendable {
 
     public func nodes(for chain: Chain) throws -> [ChainNode] {
         let nodes = try nodeStore.nodes(chain: chain)
-        #if DEBUG
-            return ([
-                chain.defaultChainNode,
-                chain.asiaChainNode,
-                chain.europeChainNode,
-            ] + nodes).unique()
-        #else
-            return ([chain.defaultChainNode] + nodes).unique()
-        #endif
+        return ([
+            chain.defaultChainNode,
+            chain.asiaChainNode,
+            chain.europeChainNode,
+        ] + nodes).unique()
     }
     
     public func update(chain: Chain, force: Bool = false) throws {

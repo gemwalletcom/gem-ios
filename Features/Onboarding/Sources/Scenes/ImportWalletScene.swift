@@ -9,26 +9,28 @@ import Localization
 import PrimitivesComponents
 
 struct ImportWalletScene: View {
-    enum Field: Int, Hashable {
+    enum Field {
         case name, input
     }
+
     @FocusState private var focusedField: Field?
+    @State private var model: ImportWalletSceneViewModel
 
-    @State private var model: ImportWalletViewModel
-
-    init(model: ImportWalletViewModel) {
+    init(model: ImportWalletSceneViewModel) {
         _model = State(initialValue: model)
     }
 
     var body: some View {
         Form {
-            Section {
-                FloatTextField(
-                    model.walletFieldTitle,
-                    text: $model.name,
-                    allowClean: focusedField == .name
-                )
-                .focused($focusedField, equals: .name)
+            if model.showNameField {
+                Section {
+                    FloatTextField(
+                        model.walletFieldTitle,
+                        text: $model.name,
+                        allowClean: focusedField == .name
+                    )
+                    .focused($focusedField, equals: .name)
+                }
             }
             Section {
                 VStack {

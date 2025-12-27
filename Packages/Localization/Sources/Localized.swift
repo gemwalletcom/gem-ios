@@ -564,9 +564,9 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "info.insufficient_balance.title", fallback: "Insufficient Balance")
     }
     public enum InsufficientNetworkFeeBalance {
-      /// This transaction requires **%@** to cover the network fee paid to **%@** miners, not Gem Wallet. Ensure you have enough %@.
+      /// This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.
       public static func description(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
-        return Localized.tr("Localizable", "info.insufficient_network_fee_balance.description", String(describing: p1), String(describing: p2), String(describing: p3), fallback: "This transaction requires **%@** to cover the network fee paid to **%@** miners, not Gem Wallet. Ensure you have enough %@.")
+        return Localized.tr("Localizable", "info.insufficient_network_fee_balance.description", String(describing: p1), String(describing: p2), String(describing: p3), fallback: "This transaction requires %@ to cover the network fee paid to %@ miners, not Gem Wallet. Ensure you have enough %@.")
       }
       /// %@ required
       public static func title(_ p1: Any) -> String {
@@ -630,9 +630,9 @@ public enum Localized {
       }
     }
     public enum StakeMinimumAmount {
-      /// On the %@ network, the minimum staking requirement is **%@**.
+      /// On the %@ network, the minimum staking requirement is %@.
       public static func description(_ p1: Any, _ p2: Any) -> String {
-        return Localized.tr("Localizable", "info.stake_minimum_amount.description", String(describing: p1), String(describing: p2), fallback: "On the %@ network, the minimum staking requirement is **%@**.")
+        return Localized.tr("Localizable", "info.stake_minimum_amount.description", String(describing: p1), String(describing: p2), fallback: "On the %@ network, the minimum staking requirement is %@.")
       }
       /// Minimum Amount
       public static let title = Localized.tr("Localizable", "info.stake_minimum_amount.title", fallback: "Minimum Amount")
@@ -957,9 +957,9 @@ public enum Localized {
     public static func title(_ p1: Any) -> String {
       return Localized.tr("Localizable", "receive.title", String(describing: p1), fallback: "Receive %@")
     }
-    /// This is your address — send only **%@** on the **%@** network.
+    /// This is your address — send only %@ on the %@ network.
     public static func warning(_ p1: Any, _ p2: Any) -> String {
-      return Localized.tr("Localizable", "receive.warning", String(describing: p1), String(describing: p2), fallback: "This is your address — send only **%@** on the **%@** network.")
+      return Localized.tr("Localizable", "receive.warning", String(describing: p1), String(describing: p2), fallback: "This is your address — send only %@ on the %@ network.")
     }
     /// Your Receiving Address
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
@@ -1014,9 +1014,9 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "rewards.get_rewards.title", fallback: "Get Rewards")
     }
     public enum InviteFriends {
-      /// Earn **%d points** for each friend who joins.
-      public static func description(_ p1: Int) -> String {
-        return Localized.tr("Localizable", "rewards.invite_friends.description", p1, fallback: "Earn **%d points** for each friend who joins.")
+      /// Earn %@ points for each friend who joins.
+      public static func description(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "rewards.invite_friends.description", String(describing: p1), fallback: "Earn %@ points for each friend who joins.")
       }
       /// Invite Friends
       public static let title = Localized.tr("Localizable", "rewards.invite_friends.title", fallback: "Invite Friends")

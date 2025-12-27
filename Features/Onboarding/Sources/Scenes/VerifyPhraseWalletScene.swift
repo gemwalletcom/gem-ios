@@ -59,7 +59,7 @@ struct VerifyPhraseWalletScene: View {
             StateButton(
                 text: Localized.Common.continue,
                 type: .primary(model.buttonState),
-                action: model.onImportWallet
+                action: model.onContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)
             .padding(.bottom, .scene.bottom)

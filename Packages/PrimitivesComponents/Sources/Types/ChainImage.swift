@@ -62,6 +62,7 @@ public struct ChainImage: Sendable {
         case .plasma: Images.Chains.plasma
         case .zcash: Images.Chains.zcash
         case .xLayer: Images.Chains.xlayer
+        case .stable: Images.Chains.stable
         }
     }
     

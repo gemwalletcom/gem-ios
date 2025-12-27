@@ -59,6 +59,7 @@ public enum Images {
         public static let plasma = Image(.plasma)
         public static let zcash = Image(.zcash)
         public static let xlayer = Image(.xlayer)
+        public static let stable = Image(.stable)
     }
 
     public enum SwapProviders {

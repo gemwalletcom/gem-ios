@@ -11,7 +11,7 @@ public struct InputValidationField<TrailingView: View>: View {
     let style: FloatFieldStyle
     let placeholder: String
     let allowClean: Bool
-    let onWillClean: VoidAction
+    let onClean: VoidAction
 
     private let trailingView: TrailingView
 
@@ -20,7 +20,7 @@ public struct InputValidationField<TrailingView: View>: View {
         style: FloatFieldStyle = .standard,
         placeholder: String,
         allowClean: Bool = true,
-        onWillClean: VoidAction = nil,
+        onClean: VoidAction = nil,
         @ViewBuilder trailingView: () -> TrailingView = { EmptyView() }
     ) {
         self.trailingView = trailingView()
@@ -28,7 +28,7 @@ public struct InputValidationField<TrailingView: View>: View {
         self.style = style
         self.placeholder = placeholder
         self.allowClean = allowClean
-        self.onWillClean = onWillClean
+        self.onClean = onClean
     }
 
     public var body: some View {
@@ -38,7 +38,7 @@ public struct InputValidationField<TrailingView: View>: View {
                 text: $model.text,
                 style: style,
                 allowClean: allowClean,
-                onWillClean: onWillClean,
+                onClean: onClean,
                 trailingView: {
                     trailingView
                 }

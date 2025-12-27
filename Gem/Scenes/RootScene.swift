@@ -11,7 +11,7 @@ import Components
 
 struct RootScene: View {
     @State private var model: RootSceneViewModel
-    
+
     init(model: RootSceneViewModel) {
         _model = State(initialValue: model)
     }
@@ -25,7 +25,11 @@ struct RootScene: View {
                 .alertSheet($model.updateVersionAlertMessage)
             } else {
                 OnboardingNavigationView(
-                    model: .init(walletService: model.walletService, nameService: model.nameService)
+                    model: .init(
+                        walletService: model.walletService,
+                        avatarService: model.avatarService,
+                        nameService: model.nameService
+                    )
                 )
             }
         }
@@ -68,6 +72,7 @@ struct RootScene: View {
                 image: SystemImage.network
             )
         )
+        .toast(message: $model.isPresentingToastMessage)
     }
 }
 

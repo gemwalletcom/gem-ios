@@ -17,13 +17,14 @@ import StakeService
 import NameService
 import BalanceService
 import PriceService
-import TransactionService
+import TransactionStateService
 import Staking
 import Assets
 import FiatConnect
 import WalletConnectorService
 import AddressNameService
 import ActivityService
+import EventPresenterService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -36,10 +37,11 @@ public struct ViewModelFactory: Sendable {
     let nameService: NameService
     let balanceService: BalanceService
     let priceService: PriceService
-    let transactionService: TransactionService
+    let transactionStateService: TransactionStateService
     let chainServiceFactory: ChainServiceFactory
     let addressNameService: AddressNameService
     let activityService: ActivityService
+    let eventPresenterService: EventPresenterService
 
     public init(
         keystore: any Keystore,
@@ -52,10 +54,11 @@ public struct ViewModelFactory: Sendable {
         nameService: NameService,
         balanceService: BalanceService,
         priceService: PriceService,
-        transactionService: TransactionService,
+        transactionStateService: TransactionStateService,
         chainServiceFactory: ChainServiceFactory,
         addressNameService: AddressNameService,
-        activityService: ActivityService
+        activityService: ActivityService,
+        eventPresenterService: EventPresenterService
     ) {
         self.keystore = keystore
         self.nodeService = nodeService
@@ -67,10 +70,11 @@ public struct ViewModelFactory: Sendable {
         self.nameService = nameService
         self.balanceService = balanceService
         self.priceService = priceService
-        self.transactionService = transactionService
+        self.transactionStateService = transactionStateService
         self.chainServiceFactory = chainServiceFactory
         self.addressNameService = addressNameService
         self.activityService = activityService
+        self.eventPresenterService = eventPresenterService
     }
     
     @MainActor
@@ -87,9 +91,10 @@ public struct ViewModelFactory: Sendable {
             scanService: scanService,
             balanceService: balanceService,
             priceService: priceService,
-            transactionService: transactionService,
+            transactionStateService: transactionStateService,
             addressNameService: addressNameService,
             activityService: activityService,
+            eventPresenterService: eventPresenterService,
             chain: data.chain
         )
         

@@ -35,7 +35,7 @@
 "transfer.memo" = "Memo";
 "settings.terms_of_services" = "Terms of Services";
 "settings.privacy_policy" = "Privacy Policy";
-"settings.title" = "Settings";
+"settings.title" = "Configurações";
 "settings.developer" = "Developer";
 "settings.version" = "Version";
 "errors.transfer" = "Erro de transferência: %@";
@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Tokens suspeitos ou de spam são identificados como potenciais golpes ou ativos nocivos. Eles podem aparecer na sua carteira devido a airdrops, transferências ou importações manuais.";
 "errors.insufficient_funds" = "Fundos insuficientes";
 "info.insufficient_network_fee_balance.title" = "%@ necessário";
-"info.insufficient_network_fee_balance.description" = "Esta transação requer ** %@ ** para cobrir a taxa de rede paga aos ** %@ ** mineradores, não Gem Wallet. Certifique-se de ter %@ suficiente .";
+"info.insufficient_network_fee_balance.description" = "Esta transação requer %@ para cobrir a taxa de rede paga a %@ mineiros, não Gem WalletCertifique-se de ter o suficiente. %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Saldo insuficiente";
 "info.insufficient_balance.description" = "Você não tem %@ suficientes para concluir esta transação. Recarregue, receba ou troque na sua carteira e tente novamente.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "Comprar %@";
 "wallet.import_address_warning" = "Você pode visualizar saldos e transações para este endereço, mas **não pode enviar ou vender fundos**.";
 "info.stake_minimum_amount.title" = "Quantidade mínima";
-"info.stake_minimum_amount.description" = "Na rede %@, o requisito mínimo de staking é **%@**.";
+"info.stake_minimum_amount.description" = "No %@ Na rede, o requisito mínimo de staking é %@.";
 "asset.add_to_wallet" = "Adicionar à carteira";
 "asset.hide_from_wallet" = "Esconder da carteira";
 "common.details" = "Detalhes";
@@ -431,8 +431,8 @@
 "errors.scan_transaction.malicious.description" = "Esta transação não pode ser concluída — o endereço da carteira de destino está vinculado a atividades suspeitas ou prejudiciais.";
 "errors.scan_transaction.memo_required" = "%@ O endereço da carteira de destino requer uma etiqueta/memorando de destino";
 "common.info" = "Informações";
-"wallet.deposit" = "Deposit";
-"wallet.withdraw" = "Withdraw";
+"wallet.deposit" = "Depósito";
+"wallet.withdraw" = "Retirar";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -490,7 +490,7 @@
 "assets.title" = "Ativos";
 "stake.delegations" = "Delegações";
 "info.stake.apr.description" = "Taxa Percentual Anual (APR) é a taxa de recompensa anual para apostar sua criptomoeda.";
-"receive.warning" = "Este é o seu endereço — envie apenas **%@** no **%@** rede.";
+"receive.warning" = "Este é o seu endereço — envie apenas %@ no %@ rede.";
 "perpetual.leverage" = "Alavancagem";
 "perpetual.direction" = "Direção";
 "perpetual.auto_close" = "Fechamento automático";
@@ -512,7 +512,7 @@
 "settings.preferences.default_leverage" = "Alavancagem padrão";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
+"recent_activity.title" = "Recente";
 "errors.no_data_available" = "Não há dados disponíveis.";
 "errors.dust_threshold_short" = "A rede considera essa quantia insignificante — a taxa cobrada é superior à própria quantia.";
 "charts.take_profit" = "TP";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Juntar Gem Wallet Use meu link de indicação e ganhe recompensas: %@";
 "rewards.my_referral_code" = "Meu código de indicação";
 "rewards.invite_friends.title" = "Convide amigos";
-"rewards.invite_friends.description" = "Ganhar **%d pontos** para cada amigo que se inscrever.";
+"rewards.invite_friends.description" = "Ganhar %@ Pontos para cada amigo que se inscrever.";
 "common.get_started" = "Comece agora";
 "rewards.referral_code" = "Código de indicação";
 "rewards.invited_by" = "Invited By";
@@ -538,9 +538,9 @@
 "rewards.get_rewards.title" = "Receba recompensas";
 "rewards.activate_referral_code.description" = "Have a referral code from a friend?";
 "rewards.activate_referral_code.title" = "Resgatar código";
-"rewards.create_referral_code.title" = "Create Username";
-"rewards.create_referral_code.info" = "This will be your personal username.";
-"rewards.username" = "Username";
+"rewards.create_referral_code.title" = "Criar nome de usuário";
+"rewards.create_referral_code.info" = "Este será o seu nome de usuário pessoal.";
+"rewards.username" = "Nome de usuário";
 "rewards.ways_spend.title" = "Formas de gastar";
 "rewards.ways_spend.asset.title" = "Pegar %@";
 "rewards.insufficient_points" = "Pontos insuficientes";

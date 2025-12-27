@@ -17,17 +17,19 @@ struct WalletServiceTests {
     func importSecretPhraseDuplicateSameChain() async throws {
         let service = WalletService.mock()
 
-        let wallet1 = try await service.importWallet(
+        let wallet1 = try await service.loadOrCreateWallet(
             name: "First Wallet",
             type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet1)
 
-        let wallet2 = try await service.importWallet(
+        let wallet2 = try await service.loadOrCreateWallet(
             name: "Second Wallet",
             type: .phrase(words: LocalKeystore.words, chains: [.ethereum, .aptos]),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet2)
 
         #expect(wallet1.id == wallet2.id)
         #expect(wallet1.type == WalletType.multicoin)
@@ -38,18 +40,20 @@ struct WalletServiceTests {
     func importSecretPhraseNoDuplicateDifferentWords() async throws {
         let service = WalletService.mock()
 
-        let wallet1 = try await service.importWallet(
+        let wallet1 = try await service.loadOrCreateWallet(
             name: "First Wallet",
             type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet1)
 
         let differentWords = try service.createWallet()
-        let wallet2 = try await service.importWallet(
+        let wallet2 = try await service.loadOrCreateWallet(
             name: "Second Wallet",
             type: .phrase(words: differentWords, chains: [.ethereum]),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet2)
 
         #expect(wallet1.id != wallet2.id)
     }
@@ -58,17 +62,19 @@ struct WalletServiceTests {
     func importSingleDuplicateSameChain() async throws {
         let service = WalletService.mock()
 
-        let wallet1 = try await service.importWallet(
+        let wallet1 = try await service.loadOrCreateWallet(
             name: "First Single",
             type: .single(words: LocalKeystore.words, chain: .bitcoin),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet1)
 
-        let wallet2 = try await service.importWallet(
+        let wallet2 = try await service.loadOrCreateWallet(
             name: "Second Single",
             type: .single(words: LocalKeystore.words, chain: .bitcoin),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet2)
 
         #expect(wallet1.id == wallet2.id)
         #expect(wallet1.type == WalletType.single)
@@ -79,17 +85,19 @@ struct WalletServiceTests {
     func importSingleNoDuplicateDifferentChain() async throws {
         let service = WalletService.mock()
 
-        let wallet1 = try await service.importWallet(
+        let wallet1 = try await service.loadOrCreateWallet(
             name: "BTC Single",
             type: .single(words: LocalKeystore.words, chain: .bitcoin),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet1)
 
-        let wallet2 = try await service.importWallet(
+        let wallet2 = try await service.loadOrCreateWallet(
             name: "LTC Single",
             type: .single(words: LocalKeystore.words, chain: .litecoin),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet2)
 
         #expect(wallet1.id != wallet2.id)
     }
@@ -98,17 +106,19 @@ struct WalletServiceTests {
     func importPrivateKeyDuplicateSameChain() async throws {
         let service = WalletService.mock()
 
-        let wallet1 = try await service.importWallet(
+        let wallet1 = try await service.loadOrCreateWallet(
             name: "First Wallet",
             type: .privateKey(text: LocalKeystore.privateKey, chain: .ethereum),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet1)
 
-        let wallet2 = try await service.importWallet(
+        let wallet2 = try await service.loadOrCreateWallet(
             name: "Second Wallet",
             type: .privateKey(text: LocalKeystore.privateKey, chain: .ethereum),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet2)
 
         #expect(wallet1.id == wallet2.id)
         #expect(wallet1.type == WalletType.privateKey)
@@ -119,17 +129,19 @@ struct WalletServiceTests {
     func importPrivateKeyNoDuplicateDifferentChain() async throws {
         let service = WalletService.mock()
 
-        let wallet1 = try await service.importWallet(
+        let wallet1 = try await service.loadOrCreateWallet(
             name: "ETH Wallet",
             type: .privateKey(text: LocalKeystore.privateKey, chain: .ethereum),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet1)
 
-        let wallet2 = try await service.importWallet(
+        let wallet2 = try await service.loadOrCreateWallet(
             name: "BSC Wallet",
             type: .privateKey(text: LocalKeystore.privateKey, chain: .smartChain),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet2)
 
         #expect(wallet1.id != wallet2.id)
     }
@@ -138,17 +150,19 @@ struct WalletServiceTests {
     func importViewOnlyDuplicateSameChain() async throws {
         let service = WalletService.mock()
 
-        let wallet1 = try await service.importWallet(
+        let wallet1 = try await service.loadOrCreateWallet(
             name: "First View",
             type: .address(address: LocalKeystore.address, chain: .ethereum),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet1)
 
-        let wallet2 = try await service.importWallet(
+        let wallet2 = try await service.loadOrCreateWallet(
             name: "Second View",
             type: .address(address: LocalKeystore.address, chain: .ethereum),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet2)
 
         #expect(wallet1.id == wallet2.id)
         #expect(wallet1.type == WalletType.view)
@@ -159,17 +173,19 @@ struct WalletServiceTests {
     func importViewOnlyNoDuplicateDifferentChain() async throws {
         let service = WalletService.mock()
 
-        let wallet1 = try await service.importWallet(
+        let wallet1 = try await service.loadOrCreateWallet(
             name: "ETH View",
             type: .address(address: LocalKeystore.address, chain: .ethereum),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet1)
 
-        let wallet2 = try await service.importWallet(
+        let wallet2 = try await service.loadOrCreateWallet(
             name: "Polygon View",
             type: .address(address: LocalKeystore.address, chain: .polygon),
             source: .import
         )
+        try await service.setCurrent(wallet: wallet2)
 
         #expect(wallet1.id != wallet2.id)
     }
@@ -178,17 +194,19 @@ struct WalletServiceTests {
     func importTypeMatchingExact() async throws {
         let service = WalletService.mock()
 
-        let mnemonicWallet = try await service.importWallet(
+        let mnemonicWallet = try await service.loadOrCreateWallet(
             name: "Mnemonic",
             type: .phrase(words: LocalKeystore.words, chains: [.ethereum, .aptos]),
             source: .import
         )
+        try await service.setCurrent(wallet: mnemonicWallet)
 
-        let privateKeyWallet = try await service.importWallet(
+        let privateKeyWallet = try await service.loadOrCreateWallet(
             name: "Private Key",
             type: .privateKey(text: LocalKeystore.privateKey, chain: .ethereum),
             source: .import
         )
+        try await service.setCurrent(wallet: privateKeyWallet)
 
         #expect(mnemonicWallet.id != privateKeyWallet.id)
         #expect(mnemonicWallet.type == WalletType.multicoin)
