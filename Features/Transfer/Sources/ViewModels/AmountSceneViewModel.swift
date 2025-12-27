@@ -29,12 +29,10 @@ public final class AmountSceneViewModel {
 
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
-    private let autocloseFormatter = AutocloseFormatter()
     private let numberSanitizer = NumberSanitizer()
     private let valueConverter = ValueConverter()
     private let perpetualFormatter = PerpetualFormatter(provider: .hypercore)
 
-    private var currentValidator: DelegationValidator?
     private var amountInputType: AmountInputType = .asset {
         didSet { amountInputModel.update(validators: inputValidators) }
     }
@@ -44,20 +42,7 @@ public final class AmountSceneViewModel {
     var assetData: AssetData = .empty
 
     var amountInputModel: InputValidationViewModel = .init()
-    var delegation: DelegationValidator?
-    var selectedResource: Primitives.Resource = .bandwidth {
-        didSet {
-            onSelectResource(selectedResource)
-        }
-    }
-    var selectedLeverage: LeverageOption = LeverageOption(value: 1) {
-        didSet {
-            amountInputModel.update(validators: inputValidators)
-        }
-    }
-    var takeProfit: String?
-    var stopLoss: String?
-
+    var amountTypeModel: AmountTypeModel
     var isPresentingSheet: AmountSheetType?
 
     public init(
@@ -74,24 +59,7 @@ public final class AmountSceneViewModel {
             walletId: wallet.walletId.id,
             assetId: input.asset.id
         )
-
-        if case .perpetual(let data) = type {
-            switch data.positionAction {
-            case .open:
-                self.selectedLeverage = LeverageOption.option(
-                    desiredValue: Preferences.standard.perpetualLeverage,
-                    from: leverageOptions
-                )
-            case .increase, .reduce:
-                self.selectedLeverage = LeverageOption(value: data.positionAction.transferData.leverage)
-            }
-        }
-
-        if let currentResource = currentResource {
-            self.selectedResource = currentResource
-        }
-
-        self.currentValidator = defaultValidator
+        self.amountTypeModel = AmountTypeModel.from(type: input.type, currencyFormatter: currencyFormatter)
         self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: inputValidators)
 
         if let recipientAmount = recipientData.amount {
@@ -113,8 +81,6 @@ public final class AmountSceneViewModel {
         amountInputModel.text.isNotEmpty && amountInputModel.isValid ? .normal : .disabled
     }
 
-    var validatorTitle: String { Localized.Stake.validator }
-    var resourceTitle: String { Localized.Stake.resource }
     var maxTitle: String { Localized.Transfer.max }
     var nextTitle: String { Localized.Common.next }
     var continueTitle: String { Localized.Common.continue }
@@ -179,129 +145,6 @@ public final class AmountSceneViewModel {
             currency: asset.symbol
         )
     }
-
-    var validators: [DelegationValidator] {
-        switch type {
-        case .transfer, .deposit, .withdraw, .perpetual, .freeze: []
-        case .stake(let validators, _): validators
-        case .stakeUnstake(let delegation): [delegation.validator]
-        case .stakeRedelegate(_, let validators, _): validators
-        case .stakeWithdraw(let delegation): [delegation.validator]
-        }
-    }
-
-    var stakeValidatorsType: StakeValidatorsType {
-        switch type {
-        case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate: .stake
-        case .stakeUnstake, .stakeWithdraw: .unstake
-        case .freeze: fatalError("unsupported")
-        }
-    }
-
-    var stakeValidatorViewModel: StakeValidatorViewModel? {
-        guard let currentValidator else { return nil }
-        return StakeValidatorViewModel(validator: currentValidator)
-    }
-
-    var tronResourceViewModel: ResourceViewModel? {
-        guard let currentResource else { return nil }
-        return ResourceViewModel(resource: currentResource)
-    }
-
-    var availableResources: [ResourceViewModel] {
-        [.bandwidth, .energy].map { ResourceViewModel(resource: $0) }
-    }
-
-    var currentResource: Primitives.Resource? {
-        switch type {
-        case .freeze(let data): data.resource
-        default: nil
-        }
-    }
-
-    var freezeType: Primitives.FreezeType? {
-        switch type {
-        case .freeze(let data): data.freezeType
-        default: nil
-        }
-    }
-
-    var delegations: [Delegation] {
-        switch type {
-        case .transfer, .deposit, .withdraw, .perpetual, .stake, .freeze: []
-        case .stakeUnstake(let delegation): [delegation]
-        case .stakeRedelegate(let delegation, _, _): [delegation]
-        case .stakeWithdraw(let delegation): [delegation]
-        }
-    }
-
-    var isSelectValidatorEnabled: Bool {
-        switch type {
-        case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate: true
-        case .stakeUnstake, .stakeWithdraw, .freeze: false
-        }
-    }
-
-    var isSelectResourceEnabled: Bool {
-        switch type {
-        case .freeze: true
-        case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw: false
-        }
-    }
-
-    var isPerpetualLeverageEnabled: Bool {
-        switch type {
-        case .perpetual(let data):
-            switch data.positionAction {
-            case .open: true
-            case .increase, .reduce: false
-            }
-        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: false
-        }
-    }
-
-    var maxLeverage: UInt8 {
-        switch type {
-        case .perpetual(let data): data.positionAction.transferData.leverage
-        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: .zero
-        }
-    }
-
-    var leverageOptions: [LeverageOption] {
-        LeverageOption.allOptions.filter { $0.value <= maxLeverage }
-    }
-    var leverageTitle: String { Localized.Perpetual.leverage }
-    var leverageText: String { selectedLeverage.displayText }
-    var leverageTextStyle: TextStyle {
-        guard case .perpetual(let data) = type,
-              case .open(let transferData) = data.positionAction
-        else {
-            return .callout
-        }
-        return TextStyle(
-            font: .callout,
-            color: PerpetualDirectionViewModel(direction: transferData.direction).color
-        )
-    }
-
-    var isAutocloseEnabled: Bool {
-        switch type {
-        case .perpetual(let data):
-            switch data.positionAction {
-            case .open: true
-            case .increase, .reduce: false
-            }
-        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: false
-        }
-    }
-
-    var autocloseTitle: String { Localized.Perpetual.autoClose }
-    var autocloseText: (subtitle: String, subtitleExtra: String?) {
-        autocloseFormatter.format(
-            takeProfit: takeProfit.flatMap { currencyFormatter.double(from: $0) },
-            stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }
-        )
-    }
 }
 
 // MARK: - Business Logic
@@ -331,49 +174,42 @@ extension AmountSceneViewModel {
         setMax()
     }
 
-    func onSelectCurrentValidator() {
-        delegation = currentValidator
-    }
-
     func onSelectLeverage() {
         isPresentingSheet = .leverageSelector
     }
 
     func onSelectAutoclose() {
-        guard case .perpetual(let data) = type else { return }
-        let transferData = data.positionAction.transferData
+        guard let model = amountTypeModel.perpetual else { return }
+        let transferData = model.transferData
         isPresentingSheet = .autoclose(AutocloseOpenData(
             assetId: transferData.asset.id,
             symbol: transferData.asset.symbol,
             direction: transferData.direction,
             marketPrice: transferData.price,
-            leverage: selectedLeverage.value,
+            leverage: model.selectedItem?.value ?? 1,
             size: currencyFormatter.double(from: amountInputModel.text) ?? .zero,
             assetDecimals: transferData.asset.decimals,
-            takeProfit: takeProfit,
-            stopLoss: stopLoss
+            takeProfit: model.takeProfit,
+            stopLoss: model.stopLoss
         ))
     }
 
     func onAutocloseComplete(takeProfit: InputValidationViewModel, stopLoss: InputValidationViewModel) {
-        self.takeProfit = takeProfit.text.isEmpty ? nil : takeProfit.text
-        self.stopLoss = stopLoss.text.isEmpty ? nil : stopLoss.text
+        amountTypeModel.perpetual?.takeProfit = takeProfit.text.isEmpty ? nil : takeProfit.text
+        amountTypeModel.perpetual?.stopLoss = stopLoss.text.isEmpty ? nil : stopLoss.text
         isPresentingSheet = nil
     }
 
     func onSelectValidator(_ validator: DelegationValidator) {
-        setSelectedValidator(validator)
+        amountTypeModel.staking?.selectedItem = validator
     }
 
     func onSelectResource(_ resource: Primitives.Resource) {
-        guard case .freeze(let data) = type else { return }
         cleanInput()
-        input = AmountInput(
-            type: .freeze(
-                data: data.with(resource: resource)
-            ),
-            asset: input.asset
-        )
+        if let freezeModel = amountTypeModel.freeze {
+            freezeModel.selectedItem = resource
+            input = AmountInput(type: .freeze(data: freezeModel.currentFreezeData), asset: input.asset)
+        }
         amountInputModel.update(validators: inputValidators)
     }
 
@@ -415,10 +251,6 @@ extension AmountSceneViewModel {
         amountInputModel.update(validators: inputValidators)
     }
 
-    private func setSelectedValidator(_ validator: DelegationValidator) {
-        currentValidator = validator
-    }
-
     private func onNext() throws {
         let value = try value(for: amountTransferValue)
         let transfer = try getTransferData(value: value)
@@ -444,26 +276,30 @@ extension AmountSceneViewModel {
 
     private var recipientData: RecipientData {
         switch type {
-        case .transfer(recipient: let recipient): recipient
-        case .deposit(recipient: let recipient): recipient
-        case .withdraw(recipient: let recipient): recipient
-        case .perpetual(let data): data.recipient
+        case .transfer(recipient: let recipient): return recipient
+        case .deposit(recipient: let recipient): return recipient
+        case .withdraw(recipient: let recipient): return recipient
+        case .perpetual(let data): return data.recipient
         case .stake,
              .stakeUnstake,
              .stakeRedelegate,
-             .stakeWithdraw: RecipientData(
+             .stakeWithdraw:
+            let validator = amountTypeModel.staking?.selectedItem
+            let validatorAddress = validator.flatMap { recipientAddress(chain: asset.chain.stakeChain, validatorId: $0.id) } ?? ""
+            return RecipientData(
                 recipient: Recipient(
-                    name: currentValidator?.name,
-                    address: (currentValidator?.id).flatMap { recipientAddress(chain: asset.chain.stakeChain, validatorId: $0) } ?? "",
+                    name: validator?.name,
+                    address: validatorAddress,
                     memo: Localized.Stake.viagem
                 ),
                 amount: .none
             )
-        case .freeze(let data):
-             RecipientData(
+        case .freeze:
+            let resource = amountTypeModel.freeze?.selectedItemViewModel
+            return RecipientData(
                 recipient: Recipient(
-                    name: ResourceViewModel(resource: data.resource).title,
-                    address: ResourceViewModel(resource: data.resource).title,
+                    name: resource?.title ?? "",
+                    address: resource?.title ?? "",
                     memo: nil
                 ),
                 amount: .none
@@ -550,11 +386,14 @@ extension AmountSceneViewModel {
             )
         case .perpetual(let data):
             let decimals = data.positionAction.transferData.asset.decimals
+            let leverage = amountTypeModel.perpetual?.selectedItem?.value ?? 1
+            let takeProfit = amountTypeModel.perpetual?.takeProfit
+            let stopLoss = amountTypeModel.perpetual?.stopLoss
             let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
                 positionAction: data.positionAction,
                 usdcAmount: value,
                 usdcDecimals: asset.decimals.asInt,
-                leverage: selectedLeverage.value,
+                leverage: leverage,
                 takeProfit: takeProfit.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) },
                 stopLoss: stopLoss.flatMap { currencyFormatter.double(from: $0) }.map { perpetualFormatter.formatPrice($0, decimals: decimals) }
             )
@@ -565,7 +404,7 @@ extension AmountSceneViewModel {
                 canChangeValue: canChangeValue
             )
         case .stake:
-            guard let validator = currentValidator else {
+            guard let validator = amountTypeModel.staking?.selectedItem else {
                 throw TransferError.invalidAmount
             }
             return TransferData(
@@ -582,7 +421,7 @@ extension AmountSceneViewModel {
                 canChangeValue: canChangeValue
             )
         case .stakeRedelegate(let delegation, _, _):
-            guard let validator = currentValidator else {
+            guard let validator = amountTypeModel.staking?.selectedItem else {
                 throw TransferError.invalidAmount
             }
             return TransferData(
@@ -599,12 +438,11 @@ extension AmountSceneViewModel {
                 canChangeValue: canChangeValue
             )
         case .freeze:
-            // Use input.type to get the current resource selection
-            guard case .freeze(let data) = input.type else {
+            guard let freezeModel = amountTypeModel.freeze else {
                 throw TransferError.invalidAmount
             }
             return TransferData(
-                type: .stake(asset, .freeze(data)),
+                type: .stake(asset, .freeze(freezeModel.currentFreezeData)),
                 recipientData: recipientData,
                 value: value,
                 canChangeValue: canChangeValue
@@ -649,26 +487,18 @@ extension AmountSceneViewModel {
                 return BigInt(2_000_000)
             }
         case .perpetual(let data):
+            let leverage = amountTypeModel.perpetual?.selectedItem?.value ?? 1
             return BigInt(
                 perpetualFormatter.minimumOrderUsdAmount(
                     price: data.positionAction.transferData.price,
                     decimals: data.positionAction.transferData.asset.decimals,
-                    leverage: selectedLeverage.value
+                    leverage: leverage
                 )
             )
         case .stakeUnstake, .transfer:
             break
         }
         return BigInt(0)
-    }
-
-    private var defaultValidator: DelegationValidator? {
-        let recommended: DelegationValidator? = switch type {
-        case .stake(_, let recommendedValidator): recommendedValidator
-        case .stakeRedelegate(_, _, let recommendedValidator): recommendedValidator
-        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeWithdraw, .freeze: .none
-        }
-        return recommended ?? validators.first
     }
 
     private var availableValue: BigInt {

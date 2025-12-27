@@ -38,11 +38,17 @@ public struct AmountNavigationView: View {
                         .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }
                     }
                 case .leverageSelector:
-                    LeveragePickerSheet(
-                        title: model.leverageTitle,
-                        leverageOptions: model.leverageOptions,
-                        selectedLeverage: $model.selectedLeverage
-                    )
+                    if let perpetualModel = model.amountTypeModel.perpetual,
+                       let firstItem = perpetualModel.items.first {
+                        LeveragePickerSheet(
+                            title: perpetualModel.selectionTitle,
+                            leverageOptions: perpetualModel.items,
+                            selectedLeverage: Binding(
+                                get: { perpetualModel.selectedItem ?? firstItem },
+                                set: { perpetualModel.selectedItem = $0 }
+                            )
+                        )
+                    }
                 case .autoclose(let openData):
                     AutocloseSheet(
                         openData: openData,
@@ -58,16 +64,18 @@ public struct AmountNavigationView: View {
                         .disabled(!model.isNextEnabled)
                 }
             }
-            .navigationDestination(for: $model.delegation) { value in
-                StakeValidatorsScene(
-                    model: StakeValidatorsViewModel(
-                        type: model.stakeValidatorsType,
-                        chain: model.asset.chain,
-                        currentValidator: value,
-                        validators: model.validators,
-                        selectValidator: model.onSelectValidator
+            .navigationDestination(for: DelegationValidator.self) { value in
+                if let stakingModel = model.amountTypeModel.staking {
+                    StakeValidatorsScene(
+                        model: StakeValidatorsViewModel(
+                            type: stakingModel.stakeValidatorsType,
+                            chain: model.asset.chain,
+                            currentValidator: value,
+                            validators: stakingModel.items,
+                            selectValidator: model.onSelectValidator
+                        )
                     )
-                )
+                }
             }
     }
 }
