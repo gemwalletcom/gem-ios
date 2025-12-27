@@ -5,25 +5,34 @@ import Primitives
 import Preferences
 import AssetsService
 
-public struct SwapAssetsUpdateRunner: OnstartAsyncRunnable {
+public struct SwapAssetsRunner: OnstartAsyncRunnable {
     private let importAssetsService: ImportAssetsService
+    private let assetsService: AssetsService
+    private let swappableChainsProvider: any SwappableChainsProvider
     private let preferences: Preferences
 
     public init(
         importAssetsService: ImportAssetsService,
+        assetsService: AssetsService,
+        swappableChainsProvider: any SwappableChainsProvider,
         preferences: Preferences
     ) {
         self.importAssetsService = importAssetsService
+        self.assetsService = assetsService
+        self.swappableChainsProvider = swappableChainsProvider
         self.preferences = preferences
     }
 
     public func run(config: ConfigResponse?) async throws {
-        guard let versions = config?.versions, shouldRun(versions: versions) else { return }
+        let chains = swappableChainsProvider.supportedChains()
+        try assetsService.setSwappableAssets(for: chains)
+
+        guard let versions = config?.versions, shouldUpdateFromAPI(versions: versions) else { return }
         try await importAssetsService.updateSwapAssets()
         debugLog("Updated swap assets: \(versions.swapAssets)")
     }
 
-    private func shouldRun(versions: ConfigVersions) -> Bool {
+    private func shouldUpdateFromAPI(versions: ConfigVersions) -> Bool {
         versions.swapAssets > preferences.swapAssetsVersion
     }
 }

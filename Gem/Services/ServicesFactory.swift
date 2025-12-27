@@ -484,8 +484,12 @@ extension ServicesFactory {
                 BannerSetupRunner(bannerSetupService: bannerSetupService),
                 NodeImportRunner(nodeService: nodeService),
                 FiatAssetsUpdateRunner(importAssetsService: importAssetsService, preferences: preferences),
-                SwapAssetsUpdateRunner(importAssetsService: importAssetsService, preferences: preferences),
-                SwappableAssetsRunner(assetsService: assetsService, swappableChainsProvider: swappableChainsProvider),
+                SwapAssetsRunner(
+                    importAssetsService: importAssetsService,
+                    assetsService: assetsService,
+                    swappableChainsProvider: swappableChainsProvider,
+                    preferences: preferences
+                ),
             ]
         )
     }
