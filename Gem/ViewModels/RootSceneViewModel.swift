@@ -138,6 +138,8 @@ extension RootSceneViewModel {
                 notificationHandler.notify(notification: PushNotification.perpetuals)
             case .rewards(let code):
                 notificationHandler.notify(notification: PushNotification.referral(code: code))
+            case .gift(let code):
+                notificationHandler.notify(notification: PushNotification.gift(code: code))
             case let .buy(assetId, amount):
                 notificationHandler.notify(notification: PushNotification.buyAsset(assetId, amount: amount))
             case let .sell(assetId, amount):

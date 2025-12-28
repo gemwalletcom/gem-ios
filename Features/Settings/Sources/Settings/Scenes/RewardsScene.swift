@@ -111,8 +111,16 @@ public struct RewardsScene: View {
         .taskOnce {
             Task {
                 await model.fetch()
+                
                 if model.shouldAutoActivate {
                     await model.useReferralCode()
+                } else if model.giftCodeFromLink != nil {
+                    do {
+                        let option = try await model.getRewardRedemptionOption()
+                        showRedemptionAlert(for: option)
+                    } catch {
+                        model.isPresentingError = error.localizedDescription
+                    }
                 } else if let code = model.activateCodeFromLink {
                     isPresentingCodeInput = .activate(code: code)
                 }
@@ -220,16 +228,7 @@ public struct RewardsScene: View {
                     )
                 ) {
                     if model.canRedeem(option: viewModel.option) {
-                        isPresentingRedemptionAlert = AlertMessage(
-                            title: viewModel.confirmationMessage,
-                            message: "",
-                            actions: [
-                                AlertAction(title: Localized.Transfer.confirm, isDefaultAction: true) {
-                                    Task { await model.redeem(option: viewModel.option) }
-                                },
-                                .cancel(title: Localized.Common.cancel)
-                            ]
-                        )
+                        showRedemptionAlert(for: viewModel.option)
                     } else {
                         model.isPresentingError = Localized.Rewards.insufficientPoints
                     }
@@ -238,6 +237,20 @@ public struct RewardsScene: View {
         } header: {
             Text(Localized.Rewards.WaysSpend.title)
         }
+    }
+
+    private func showRedemptionAlert(for option: RewardRedemptionOption) {
+        let viewModel = RewardRedemptionOptionViewModel(option: option)
+        isPresentingRedemptionAlert = AlertMessage(
+            title: viewModel.confirmationMessage,
+            message: "",
+            actions: [
+                AlertAction(title: Localized.Transfer.confirm, isDefaultAction: true) {
+                    Task { await model.redeem(option: option) }
+                },
+                .cancel(title: Localized.Common.cancel)
+            ]
+        )
     }
 
     @ViewBuilder

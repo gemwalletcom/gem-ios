@@ -10,6 +10,7 @@ public enum DeepLink: Sendable {
     case swap(AssetId, AssetId?)
     case perpetuals
     case rewards(code: String?)
+    case gift(code: String?)
     case buy(AssetId, amount: Int?)
     case sell(AssetId, amount: Int?)
     case setPriceAlert(AssetId, price: Double?)
@@ -20,6 +21,7 @@ public enum DeepLink: Sendable {
         case perpetuals
         case rewards
         case join
+        case gift
         case buy
         case sell
         case setPriceAlert
@@ -31,6 +33,7 @@ public enum DeepLink: Sendable {
         case .swap: .swap
         case .perpetuals: .perpetuals
         case .rewards: .rewards
+        case .gift: .gift
         case .buy: .buy
         case .sell: .sell
         case .setPriceAlert: .setPriceAlert
@@ -51,6 +54,11 @@ public enum DeepLink: Sendable {
             }
         case .perpetuals: "/\(pathComponent.rawValue)"
         case .rewards(let code):
+            switch code {
+            case .some(let code): "/\(pathComponent.rawValue)?code=\(code)"
+            case .none: "/\(pathComponent.rawValue)"
+            }
+        case .gift(let code):
             switch code {
             case .some(let code): "/\(pathComponent.rawValue)?code=\(code)"
             case .none: "/\(pathComponent.rawValue)"
