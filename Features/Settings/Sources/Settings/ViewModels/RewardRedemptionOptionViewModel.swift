@@ -15,7 +15,7 @@ struct RewardRedemptionOptionViewModel: Identifiable {
 
     var title: String {
         switch option.redemptionType {
-        case .asset:
+        case .asset, .giftAsset:
             return Localized.Rewards.WaysSpend.Asset.title(valueText)
         }
     }
@@ -37,7 +37,7 @@ struct RewardRedemptionOptionViewModel: Identifiable {
 
     var valueText: String {
         switch option.redemptionType {
-        case .asset:
+        case .asset, .giftAsset:
             guard let asset = option.asset else { return option.value }
             let value = BigInt(stringLiteral: option.value)
             return ValueFormatter.compact.string(value, asset: asset)
