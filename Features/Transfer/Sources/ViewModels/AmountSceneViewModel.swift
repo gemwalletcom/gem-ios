@@ -133,19 +133,19 @@ extension AmountSceneViewModel {
     }
 
     func onSelectLeverage() {
-        guard case .perpetual(let perpetual) = provider,
+        guard case let .perpetual(perpetual) = provider,
               let selection = perpetual.leverageSelection else { return }
         isPresentingSheet = .leverageSelector(title: perpetual.leverageTitle, selection: selection)
     }
 
     func onSelectAutoclose() {
-        guard case .perpetual(let perpetual) = provider else { return }
+        guard case let .perpetual(perpetual) = provider else { return }
         let amount = currencyFormatter.double(from: amountInputModel.text) ?? .zero
         isPresentingSheet = .autoclose(perpetual.makeAutocloseData(size: amount))
     }
 
     func onAutocloseComplete(takeProfit: InputValidationViewModel, stopLoss: InputValidationViewModel) {
-        if case .perpetual(let perpetual) = provider {
+        if case let .perpetual(perpetual) = provider {
             perpetual.takeProfit = takeProfit.text.isEmpty ? nil : takeProfit.text
             perpetual.stopLoss = stopLoss.text.isEmpty ? nil : stopLoss.text
         }
@@ -161,7 +161,7 @@ extension AmountSceneViewModel {
     }
 
     func onValidatorSelected(_ validator: DelegationValidator) {
-        if case .stake(let stake) = provider {
+        if case let .stake(stake) = provider {
             stake.validatorSelection.selected = validator
         }
     }

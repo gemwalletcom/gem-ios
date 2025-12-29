@@ -124,7 +124,7 @@ struct AmountSceneViewModelTests {
     }
 
     @Test
-    func unfreezeResourceSwitchUpdatesValidators() {
+    func unfreezeResourceSwitchUpdatesValidators() throws {
         let assetData = AssetData.mock(
             asset: .mockTron(),
             balance: .mock(frozen: 0, locked: 5_000_000)
@@ -134,17 +134,17 @@ struct AmountSceneViewModelTests {
             assetData: assetData
         )
 
-        guard case .freeze(let freeze) = model.provider else {
+        guard case let .freeze(freeze) = model.provider else {
             return
         }
 
         freeze.resourceSelection.selected = .energy
-        model.onResourceChanged()
+        model.onChangeResource(.bandwidth, .energy)
         model.amountInputModel.update(text: "2.0")
         #expect(model.amountInputModel.isValid == true)
 
         freeze.resourceSelection.selected = .bandwidth
-        model.onResourceChanged()
+        model.onChangeResource(.energy, .bandwidth)
         model.amountInputModel.update(text: "2.0")
         #expect(model.amountInputModel.isValid == false)
     }

@@ -60,7 +60,7 @@ struct AmountScene: View {
             }
 
             switch model.provider {
-            case .stake(let stake):
+            case let .stake(stake):
                 if let validator = stake.validatorSelection.selected {
                     Section(stake.validatorSectionTitle) {
                         if stake.validatorSelection.isPickerEnabled {
@@ -73,7 +73,7 @@ struct AmountScene: View {
                     }
                 }
 
-            case .freeze(let freeze):
+            case let .freeze(freeze):
                 @Bindable var resourceSelection = freeze.resourceSelection
                 Section {
                     Picker("", selection: $resourceSelection.selected) {
@@ -88,7 +88,7 @@ struct AmountScene: View {
                 }
                 .cleanListRow()
 
-            case .perpetual(let perpetual):
+            case let .perpetual(perpetual):
                 if let leverageSelection = perpetual.leverageSelection {
                     Section {
                         NavigationCustomLink(

@@ -27,6 +27,9 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
     var takeProfit: String?
     var stopLoss: String?
 
+    private var transferData: PerpetualTransferData { data.positionAction.transferData }
+    private var leverage: UInt8 { leverageSelection?.selected.value ?? transferData.leverage }
+
     init(asset: Asset, data: PerpetualRecipientData, preferences: Preferences = .standard) {
         self.asset = asset
         self.data = data
@@ -52,8 +55,7 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
     }
 
     var title: String {
-        let transferData = data.positionAction.transferData
-        return switch data.positionAction {
+        switch data.positionAction {
         case .open:
             PerpetualDirectionViewModel(direction: transferData.direction).title
         case .increase:
@@ -68,9 +70,7 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
     }
 
     var minimumValue: BigInt {
-        let transferData = data.positionAction.transferData
-        let leverage = leverageSelection?.selected.value ?? transferData.leverage
-        return BigInt(
+        BigInt(
             PerpetualFormatter(provider: .hypercore).minimumOrderUsdAmount(
                 price: transferData.price,
                 decimals: transferData.asset.decimals,
@@ -96,8 +96,6 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
     }
 
     func makeTransferData(value: BigInt) throws -> TransferData {
-        let transferData = data.positionAction.transferData
-        let leverage = leverageSelection?.selected.value ?? transferData.leverage
         let formatter = PerpetualFormatter(provider: .hypercore)
 
         let perpetualType = PerpetualOrderFactory().makePerpetualOrder(
@@ -122,8 +120,7 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
     }
 
     func makeAutocloseData(size: Double) -> AutocloseOpenData {
-        let transferData = data.positionAction.transferData
-        return AutocloseOpenData(
+        AutocloseOpenData(
             assetId: transferData.asset.id,
             symbol: transferData.asset.symbol,
             direction: transferData.direction,
@@ -137,7 +134,7 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
     }
 
     private static func makeLeverageSelection(data: PerpetualRecipientData, preferences: Preferences) -> LeverageSelection? {
-        guard case .open(let openData) = data.positionAction else { return nil }
+        guard case let .open(openData) = data.positionAction else { return nil }
 
         let transferData = data.positionAction.transferData
         let textStyle = TextStyle(

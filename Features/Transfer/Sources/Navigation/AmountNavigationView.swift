@@ -45,7 +45,7 @@ public struct AmountNavigationView: View {
                         selectedLeverage: $leverageSelection.selected
                     )
                     .onChange(of: leverageSelection.selected, model.onChangeLeverage)
-                case .autoclose(let openData):
+                case let .autoclose(openData):
                     AutocloseSheet(
                         openData: openData,
                         onComplete: model.onAutocloseComplete
@@ -61,7 +61,7 @@ public struct AmountNavigationView: View {
                 }
             }
             .navigationDestination(for: DelegationValidator.self) { validator in
-                if case .stake(let stake) = model.provider {
+                if case let .stake(stake) = model.provider {
                     StakeValidatorsScene(
                         model: StakeValidatorsViewModel(
                             type: stake.validatorSelection.type,
