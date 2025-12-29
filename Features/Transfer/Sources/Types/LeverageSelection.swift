@@ -11,12 +11,12 @@ public final class LeverageSelection {
     public let textStyle: TextStyle
 
     public init(
-        maxLeverage: UInt8,
-        initial: LeverageOption,
+        options: [LeverageOption],
+        selected: LeverageOption,
         textStyle: TextStyle = .callout
     ) {
-        self.options = LeverageOption.allOptions.filter { $0.value <= maxLeverage }
-        self.selected = initial
+        self.options = options
+        self.selected = selected
         self.textStyle = textStyle
     }
 }

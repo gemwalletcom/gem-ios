@@ -13,12 +13,12 @@ public final class ValidatorSelection {
 
     public init(
         options: [DelegationValidator],
-        recommended: DelegationValidator? = nil,
+        selected: DelegationValidator? = nil,
         isPickerEnabled: Bool = true,
         type: StakeValidatorsType = .stake
     ) {
         self.options = options
-        self.selected = recommended ?? options.first
+        self.selected = selected ?? options.first
         self.isPickerEnabled = isPickerEnabled
         self.type = type
     }

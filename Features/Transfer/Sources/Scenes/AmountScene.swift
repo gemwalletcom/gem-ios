@@ -77,7 +77,7 @@ struct AmountScene: View {
                 @Bindable var resourceSelection = freeze.resourceSelection
                 Section {
                     Picker("", selection: $resourceSelection.selected) {
-                        ForEach(ResourceSelection.options, id: \.self) { resource in
+                        ForEach(resourceSelection.options) { resource in
                             Text(ResourceViewModel(resource: resource).title)
                                 .tag(resource)
                         }

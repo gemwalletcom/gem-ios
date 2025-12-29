@@ -32,13 +32,13 @@ final class AmountStakeViewModel: AmountDataProvidable {
     private static func makeValidatorSelection(action: StakeAction) -> ValidatorSelection {
         switch action {
         case .stake(let validators, let recommended):
-            ValidatorSelection(options: validators, recommended: recommended, isPickerEnabled: true, type: .stake)
+            ValidatorSelection(options: validators, selected: recommended, isPickerEnabled: true, type: .stake)
         case .unstake(let delegation):
-            ValidatorSelection(options: [delegation.validator], recommended: delegation.validator, isPickerEnabled: false, type: .unstake)
+            ValidatorSelection(options: [delegation.validator], selected: delegation.validator, isPickerEnabled: false, type: .unstake)
         case .redelegate(_, let validators, let recommended):
-            ValidatorSelection(options: validators, recommended: recommended, isPickerEnabled: true, type: .stake)
+            ValidatorSelection(options: validators, selected: recommended, isPickerEnabled: true, type: .stake)
         case .withdraw(let delegation):
-            ValidatorSelection(options: [delegation.validator], recommended: delegation.validator, isPickerEnabled: false, type: .unstake)
+            ValidatorSelection(options: [delegation.validator], selected: delegation.validator, isPickerEnabled: false, type: .unstake)
         }
     }
 

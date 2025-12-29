@@ -5,10 +5,14 @@ import Primitives
 
 @Observable
 public final class ResourceSelection {
-    public static let options: [Resource] = [.bandwidth, .energy]
+    public let options: [Resource]
     public var selected: Resource
 
-    public init(selected: Resource = .bandwidth) {
+    public init(
+        options: [Resource] = [.bandwidth, .energy],
+        selected: Resource = .bandwidth
+    ) {
+        self.options = options
         self.selected = selected
     }
 }

@@ -137,19 +137,16 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
         guard case let .open(openData) = data.positionAction else { return nil }
 
         let transferData = data.positionAction.transferData
+        let options = LeverageOption.allOptions.filter { $0.value <= transferData.leverage }
+        let selected = LeverageOption.option(desiredValue: preferences.perpetualLeverage, from: options)
         let textStyle = TextStyle(
             font: .callout,
             color: PerpetualDirectionViewModel(direction: openData.direction).color
         )
 
-        let initialLeverage = LeverageOption.option(
-            desiredValue: preferences.perpetualLeverage,
-            from: LeverageOption.allOptions.filter { $0.value <= transferData.leverage }
-        )
-
         return LeverageSelection(
-            maxLeverage: transferData.leverage,
-            initial: initialLeverage,
+            options: options,
+            selected: selected,
             textStyle: textStyle
         )
     }
