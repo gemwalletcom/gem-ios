@@ -169,9 +169,11 @@ public struct Scenes {
 
     public struct Referral: Hashable {
         public let code: String?
+        public let giftCode: String?
 
-        public init(code: String? = nil) {
+        public init(code: String? = nil, giftCode: String? = nil) {
             self.code = code
+            self.giftCode = giftCode
         }
     }
     

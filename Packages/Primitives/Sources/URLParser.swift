@@ -51,6 +51,8 @@ public enum URLParser {
                 return .perpetuals
             case .rewards, .join:
                 return .rewards(code: url.queryValue(for: "code") ?? "")
+            case .gift:
+                return .gift(code: url.queryValue(for: "code") ?? "")
             case .buy, .sell:
                 return try parseFiat(url: url, urlComponents: urlComponents, type: pathComponent)
             case .setPriceAlert:

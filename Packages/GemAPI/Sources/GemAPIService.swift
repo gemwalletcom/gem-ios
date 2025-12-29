@@ -86,6 +86,7 @@ public protocol GemAPIRewardsService: Sendable {
     func getRewards(address: String) async throws -> Rewards
     func createReferral(request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards
     func useReferralCode(request: AuthenticatedRequest<ReferralCode>) async throws
+    func getRedemptionOption(code: String) async throws -> RewardRedemptionOption
     func redeem(address: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
 }
 
@@ -336,6 +337,12 @@ extension GemAPIService: GemAPIRewardsService {
         _ = try await provider
             .request(.useReferralCode(request))
             .mapResponse(as: [RewardEvent].self)
+    }
+
+    public func getRedemptionOption(code: String) async throws -> RewardRedemptionOption {
+        try await provider
+            .request(.getRedemptionOption(code: code))
+            .mapResponse(as: RewardRedemptionOption.self)
     }
 
     public func redeem(address: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult {

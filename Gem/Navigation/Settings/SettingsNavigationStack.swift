@@ -152,7 +152,8 @@ struct SettingsNavigationStack: View {
                             rewardsService: rewardsService,
                             wallet: wallet,
                             wallets: wallets,
-                            activateCode: scene.code
+                            activateCode: scene.code,
+                            giftCode: scene.giftCode
                         )
                     )
                 }

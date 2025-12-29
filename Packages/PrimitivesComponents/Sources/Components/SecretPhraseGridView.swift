@@ -44,7 +44,7 @@ public struct SecretPhraseGridView: View {
                             }
                         }
                     }
-                }.padding(2)
+                }.padding(.vertical, .space2)
             }
         }
         .padding(.horizontal, .medium)
