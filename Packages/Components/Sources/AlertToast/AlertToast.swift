@@ -59,6 +59,7 @@ public struct AlertToastModifier: ViewModifier {
 
     var duration: Double = 2
     var tapToDismiss: Bool = true
+    var offsetY: CGFloat = 0
 
     var alert: () -> AlertToast
 
@@ -71,6 +72,7 @@ public struct AlertToastModifier: ViewModifier {
     private func main() -> some View {
         if isPresenting {
             alert()
+                .offset(y: offsetY)
                 .onTapGesture {
                     onTap?()
                     if tapToDismiss {
@@ -126,6 +128,7 @@ public extension View {
         isPresenting: Binding<Bool>,
         duration: Double = 2,
         tapToDismiss: Bool = true,
+        offsetY: CGFloat = 0,
         alert: @escaping () -> AlertToast,
         onTap: (() -> Void)? = nil,
         completion: (() -> Void)? = nil
@@ -134,6 +137,7 @@ public extension View {
             isPresenting: isPresenting,
             duration: duration,
             tapToDismiss: tapToDismiss,
+            offsetY: offsetY,
             alert: alert,
             onTap: onTap,
             completion: completion
