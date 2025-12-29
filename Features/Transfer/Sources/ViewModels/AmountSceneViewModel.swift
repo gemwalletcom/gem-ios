@@ -24,7 +24,7 @@ public final class AmountSceneViewModel {
     let currencyFormatter: CurrencyFormatter
     private let valueConverter = ValueConverter()
 
-    let strategy: AmountStrategyType
+    let provider: AmountDataProvider
 
     var assetData: AssetData = .empty
     var assetRequest: AssetRequest
@@ -44,19 +44,19 @@ public final class AmountSceneViewModel {
         self.wallet = wallet
         self.onTransferAction = onTransferAction
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: preferences.currency)
-        self.strategy = AmountStrategyFactory.make(from: input)
+        self.provider = .make(from: input)
         self.assetRequest = AssetRequest(walletId: wallet.walletId.id, assetId: input.asset.id)
         self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: [])
         amountInputModel.update(validators: inputValidators)
 
-        if let amount = strategy.recipientData().amount {
+        if let amount = provider.recipientData().amount {
             amountInputModel.update(text: amount)
         }
     }
 
-    var asset: Asset { strategy.asset }
-    var title: String { strategy.title }
-    var canChangeValue: Bool { strategy.canChangeValue }
+    var asset: Asset { provider.asset }
+    var title: String { provider.title }
+    var canChangeValue: Bool { provider.canChangeValue }
     var isInputDisabled: Bool { !canChangeValue }
     var isBalanceViewEnabled: Bool { !isInputDisabled }
 
@@ -65,7 +65,7 @@ public final class AmountSceneViewModel {
 
     var balanceText: String {
         ValueFormatter(style: .medium).string(
-            strategy.availableValue(from: assetData),
+            provider.availableValue(from: assetData),
             decimals: asset.decimals.asInt,
             currency: asset.symbol
         )
@@ -76,8 +76,8 @@ public final class AmountSceneViewModel {
     }
 
     var infoText: String? {
-        guard strategy.shouldReserveFee(from: assetData), amountInputModel.text == maxBalance else { return nil }
-        return Localized.Transfer.reservedFees(formatter.string(strategy.reserveForFee, asset: asset))
+        guard provider.shouldReserveFee(from: assetData), amountInputModel.text == maxBalance else { return nil }
+        return Localized.Transfer.reservedFees(formatter.string(provider.reserveForFee, asset: asset))
     }
 
     var maxTitle: String { Localized.Transfer.max }
@@ -87,7 +87,7 @@ public final class AmountSceneViewModel {
 
     var inputConfig: any CurrencyInputConfigurable {
         AmountInputConfig(
-            sceneType: strategy.amountType,
+            sceneType: provider.amountType,
             inputType: amountInputType,
             asset: asset,
             currencyFormatter: currencyFormatter,
@@ -137,13 +137,13 @@ extension AmountSceneViewModel {
     }
 
     func onSelectAutoclose() {
-        guard case .perpetual(let perpetual) = strategy else { return }
+        guard case .perpetual(let perpetual) = provider else { return }
         let amount = currencyFormatter.double(from: amountInputModel.text) ?? .zero
         isPresentingSheet = .autoclose(perpetual.makeAutocloseData(size: amount))
     }
 
     func onAutocloseComplete(takeProfit: InputValidationViewModel, stopLoss: InputValidationViewModel) {
-        if case .perpetual(let perpetual) = strategy {
+        if case .perpetual(let perpetual) = provider {
             perpetual.takeProfit = takeProfit.text.isEmpty ? nil : takeProfit.text
             perpetual.stopLoss = stopLoss.text.isEmpty ? nil : stopLoss.text
         }
@@ -159,7 +159,7 @@ extension AmountSceneViewModel {
     }
 
     func onValidatorSelected(_ validator: DelegationValidator) {
-        if case .stake(let stake) = strategy {
+        if case .stake(let stake) = provider {
             stake.validatorSelection.selected = validator
         }
     }
@@ -184,7 +184,7 @@ private extension AmountSceneViewModel {
     }
 
     var maxBalance: String {
-        formatter.string(strategy.maxValue(from: assetData), decimals: asset.decimals.asInt)
+        formatter.string(provider.maxValue(from: assetData), decimals: asset.decimals.asInt)
     }
 
     func cleanInput() {
@@ -194,7 +194,7 @@ private extension AmountSceneViewModel {
 
     func onNext() throws {
         let value = try formatter.inputNumber(from: amountTransferValue, decimals: asset.decimals.asInt)
-        let transfer = try strategy.makeTransferData(value: value)
+        let transfer = try provider.makeTransferData(value: value)
         onTransferAction?(transfer)
     }
 
@@ -215,8 +215,8 @@ private extension AmountSceneViewModel {
                 decimals: asset.decimals.asInt,
                 validators: [
                     PositiveValueValidator<BigInt>().silent,
-                    MinimumValueValidator<BigInt>(minimumValue: strategy.minimumValue, asset: asset),
-                    BalanceValueValidator<BigInt>(available: strategy.availableValue(from: assetData), asset: asset)
+                    MinimumValueValidator<BigInt>(minimumValue: provider.minimumValue, asset: asset),
+                    BalanceValueValidator<BigInt>(available: provider.availableValue(from: assetData), asset: asset)
                 ]
             )
         ]

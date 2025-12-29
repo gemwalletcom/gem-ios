@@ -59,7 +59,7 @@ struct AmountScene: View {
                 }
             }
 
-            switch model.strategy {
+            switch model.provider {
             case .stake(let stake):
                 if let validator = stake.validatorSelection.selected {
                     Section(stake.validatorSectionTitle) {

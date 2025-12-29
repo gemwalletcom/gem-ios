@@ -13,7 +13,7 @@ import PrimitivesComponents
 import Style
 
 @Observable
-final class AmountPerpetualStrategy: AmountStrategy {
+final class AmountPerpetualViewModel: AmountViewModeling {
     let asset: Asset
     let data: PerpetualRecipientData
     let leverageSelection: LeverageSelection?

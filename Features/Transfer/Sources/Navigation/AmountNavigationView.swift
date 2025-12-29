@@ -38,7 +38,7 @@ public struct AmountNavigationView: View {
                         .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }
                     }
                 case .leverageSelector:
-                    if case .perpetual(let perpetual) = model.strategy,
+                    if case .perpetual(let perpetual) = model.provider,
                        let leverageSelection = perpetual.leverageSelection {
                         LeveragePickerSheet(
                             title: perpetual.leverageTitle,
@@ -68,7 +68,7 @@ public struct AmountNavigationView: View {
                 }
             }
             .navigationDestination(for: DelegationValidator.self) { validator in
-                if case .stake(let stake) = model.strategy {
+                if case .stake(let stake) = model.provider {
                     StakeValidatorsScene(
                         model: StakeValidatorsViewModel(
                             type: stake.validatorSelection.type,

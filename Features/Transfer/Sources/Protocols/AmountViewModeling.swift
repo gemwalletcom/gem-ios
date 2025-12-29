@@ -4,7 +4,7 @@ import BigInt
 import Foundation
 import Primitives
 
-protocol AmountStrategy {
+protocol AmountViewModeling {
     var asset: Asset { get }
     var title: String { get }
     var amountType: AmountType { get }
@@ -19,7 +19,7 @@ protocol AmountStrategy {
     func makeTransferData(value: BigInt) throws -> TransferData
 }
 
-extension AmountStrategy {
+extension AmountViewModeling {
     func maxValue(from assetData: AssetData) -> BigInt {
         shouldReserveFee(from: assetData) ? max(.zero, availableValue(from: assetData) - reserveForFee) : availableValue(from: assetData)
     }

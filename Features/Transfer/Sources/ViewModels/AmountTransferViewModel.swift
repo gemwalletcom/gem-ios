@@ -18,7 +18,7 @@ enum TransferAction {
     }
 }
 
-final class AmountTransferStrategy: AmountStrategy {
+final class AmountTransferViewModel: AmountViewModeling {
     let asset: Asset
     let action: TransferAction
 

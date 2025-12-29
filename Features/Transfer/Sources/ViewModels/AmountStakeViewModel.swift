@@ -27,7 +27,7 @@ enum StakeAction {
     }
 }
 
-final class AmountStakeStrategy: AmountStrategy {
+final class AmountStakeViewModel: AmountViewModeling {
     let asset: Asset
     let action: StakeAction
     let validatorSelection: ValidatorSelection
