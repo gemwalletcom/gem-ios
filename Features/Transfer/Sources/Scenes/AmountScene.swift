@@ -74,14 +74,9 @@ struct AmountScene: View {
                 }
 
             case .freeze(let freeze):
+                @Bindable var resourceSelection = freeze.resourceSelection
                 Section {
-                    Picker("", selection: Binding(
-                        get: { freeze.resourceSelection.selected },
-                        set: { newValue in
-                            freeze.resourceSelection.selected = newValue
-                            model.onResourceChanged()
-                        }
-                    )) {
+                    Picker("", selection: $resourceSelection.selected) {
                         ForEach(ResourceSelection.options, id: \.self) { resource in
                             Text(ResourceViewModel(resource: resource).title)
                                 .tag(resource)
@@ -89,6 +84,7 @@ struct AmountScene: View {
                     }
                     .pickerStyle(.segmented)
                     .frame(width: 200)
+                    .onChange(of: resourceSelection.selected, model.onChangeResource)
                 }
                 .cleanListRow()
 

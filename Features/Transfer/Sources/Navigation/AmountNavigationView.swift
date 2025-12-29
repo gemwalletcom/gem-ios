@@ -29,7 +29,7 @@ public struct AmountNavigationView: View {
                 switch $0 {
                 case let .infoAction(type):
                     InfoSheetScene(type: type)
-                case .fiatConnect(let assetAddress, let walletId):
+                case let .fiatConnect(assetAddress, walletId):
                     NavigationStack {
                         FiatConnectNavigationView(
                             model: FiatSceneViewModel(assetAddress: assetAddress, walletId: walletId.id)
@@ -37,21 +37,14 @@ public struct AmountNavigationView: View {
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }
                     }
-                case .leverageSelector:
-                    if case .perpetual(let perpetual) = model.provider,
-                       let leverageSelection = perpetual.leverageSelection {
-                        LeveragePickerSheet(
-                            title: perpetual.leverageTitle,
-                            leverageOptions: leverageSelection.options,
-                            selectedLeverage: Binding(
-                                get: { leverageSelection.selected },
-                                set: { newValue in
-                                    leverageSelection.selected = newValue
-                                    model.onLeverageChanged()
-                                }
-                            )
-                        )
-                    }
+                case let .leverageSelector(title, selection):
+                    @Bindable var leverageSelection = selection
+                    LeveragePickerSheet(
+                        title: title,
+                        leverageOptions: leverageSelection.options,
+                        selectedLeverage: $leverageSelection.selected
+                    )
+                    .onChange(of: leverageSelection.selected, model.onChangeLeverage)
                 case .autoclose(let openData):
                     AutocloseSheet(
                         openData: openData,
