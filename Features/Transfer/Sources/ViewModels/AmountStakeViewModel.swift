@@ -18,7 +18,7 @@ enum StakeAction {
     case withdraw(Delegation)
 }
 
-final class AmountStakeViewModel: AmountViewModeling {
+final class AmountStakeViewModel: AmountDataProvidable {
     let asset: Asset
     let action: StakeAction
     let validatorSelection: ValidatorSelection
@@ -76,7 +76,7 @@ final class AmountStakeViewModel: AmountViewModeling {
         case .unstake:
             .zero
         case .withdraw:
-            asset.symbol == "USDC" ? BigInt(5_000_000) : .zero
+            asset.symbol == "USDC" ? AmountPerpetualLimits.minDeposit : .zero
         }
     }
 

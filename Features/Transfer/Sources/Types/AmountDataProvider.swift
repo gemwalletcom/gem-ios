@@ -4,7 +4,7 @@ import BigInt
 import Foundation
 import Primitives
 
-enum AmountDataProvider: AmountViewModeling {
+enum AmountDataProvider: AmountDataProvidable {
     case transfer(AmountTransferViewModel)
     case stake(AmountStakeViewModel)
     case freeze(AmountFreezeViewModel)
@@ -64,7 +64,7 @@ enum AmountDataProvider: AmountViewModeling {
 // MARK: - Private
 
 extension AmountDataProvider {
-    private var provider: any AmountViewModeling {
+    private var provider: any AmountDataProvidable {
         switch self {
         case .transfer(let provider): provider
         case .stake(let provider): provider

@@ -19,6 +19,7 @@ enum TransferAction {
 }
 
 final class AmountTransferViewModel: AmountViewModeling {
+final class AmountTransferViewModel: AmountDataProvidable {
     let asset: Asset
     let action: TransferAction
 
@@ -46,8 +47,8 @@ final class AmountTransferViewModel: AmountViewModeling {
     var minimumValue: BigInt {
         switch action {
         case .send: .zero
-        case .deposit: asset.symbol == "USDC" ? BigInt(5_000_000) : .zero
-        case .withdraw: asset.symbol == "USDC" ? BigInt(2_000_000) : .zero
+        case .deposit: asset.symbol == "USDC" ? AmountPerpetualLimits.minDeposit : .zero
+        case .withdraw: asset.symbol == "USDC" ? AmountPerpetualLimits.minWithdraw : .zero
         }
     }
 

@@ -9,7 +9,7 @@ import Primitives
 import PrimitivesComponents
 import Staking
 
-final class AmountFreezeViewModel: AmountViewModeling {
+final class AmountFreezeViewModel: AmountDataProvidable {
     let asset: Asset
     let data: FreezeData
     let resourceSelection: ResourceSelection
@@ -47,11 +47,8 @@ final class AmountFreezeViewModel: AmountViewModeling {
 
     func availableValue(from assetData: AssetData) -> BigInt {
         switch data.freezeType {
-        case .freeze:
-            return assetData.balance.available
-        case .unfreeze:
-            let resource = resourceSelection.selected
-            return resource == .bandwidth ? assetData.balance.frozen : assetData.balance.locked
+        case .freeze: assetData.balance.available
+        case .unfreeze: resourceSelection.selected == .bandwidth ? assetData.balance.frozen : assetData.balance.locked
         }
     }
 

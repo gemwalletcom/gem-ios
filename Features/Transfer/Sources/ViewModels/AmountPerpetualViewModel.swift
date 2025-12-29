@@ -12,8 +12,13 @@ import Primitives
 import PrimitivesComponents
 import Style
 
+struct AmountPerpetualLimits {
+    static let minDeposit = BigInt(5_000_000)
+    static let minWithdraw = BigInt(2_000_000)
+}
+
 @Observable
-final class AmountPerpetualViewModel: AmountViewModeling {
+final class AmountPerpetualViewModel: AmountDataProvidable {
     let asset: Asset
     let data: PerpetualRecipientData
     let leverageSelection: LeverageSelection?
@@ -33,7 +38,10 @@ final class AmountPerpetualViewModel: AmountViewModeling {
     var autocloseTitle: String { Localized.Perpetual.autoClose }
 
     var isAutocloseEnabled: Bool {
-        if case .open = data.positionAction { true } else { false }
+        switch data.positionAction {
+        case .open: true
+        case .increase, .reduce: false
+        }
     }
 
     var autocloseText: (subtitle: String, subtitleExtra: String?) {
