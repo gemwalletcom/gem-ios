@@ -4,14 +4,16 @@ import Foundation
 import NodeService
 import Primitives
 
-public struct NodeImportRunner: OnstartAsyncRunnable {
+public struct NodeImportRunner: AsyncRunnable {
+    public let id = "node_import"
+
     private let nodeService: NodeService
 
     public init(nodeService: NodeService) {
         self.nodeService = nodeService
     }
 
-    public func run(config: ConfigResponse?) async throws {
+    public func run() async throws {
         try nodeService.importDefaultNodes()
     }
 }

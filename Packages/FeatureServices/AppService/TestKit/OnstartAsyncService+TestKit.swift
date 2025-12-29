@@ -2,18 +2,10 @@
 
 import Foundation
 import AppService
-import GemAPI
-import GemAPITestKit
-import PrimitivesTestKit
+import Primitives
 
 public extension OnstartAsyncService {
-    static func mock(
-        configService: any GemAPIConfigService = GemAPIConfigServiceMock(config: .mock()),
-        runners: [any OnstartAsyncRunnable] = []
-    ) -> OnstartAsyncService {
-        OnstartAsyncService(
-            configService: configService,
-            runners: runners
-        )
+    static func mock(runners: [any AsyncRunnable] = []) -> OnstartAsyncService {
+        OnstartAsyncService(runners: runners)
     }
 }

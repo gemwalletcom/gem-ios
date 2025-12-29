@@ -4,14 +4,16 @@ import Foundation
 import BannerService
 import Primitives
 
-public struct BannerSetupRunner: OnstartAsyncRunnable {
+public struct BannerSetupRunner: AsyncRunnable {
+    public let id = "banner_setup"
+
     private let bannerSetupService: BannerSetupService
 
     public init(bannerSetupService: BannerSetupService) {
         self.bannerSetupService = bannerSetupService
     }
 
-    public func run(config: ConfigResponse?) async throws {
+    public func run() async throws {
         try bannerSetupService.setup()
     }
 }

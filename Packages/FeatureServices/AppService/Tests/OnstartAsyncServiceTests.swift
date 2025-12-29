@@ -1,94 +1,106 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Testing
-import GemAPITestKit
 import AppServiceTestKit
 import Primitives
-import PrimitivesTestKit
 
 @testable import AppService
 
 struct OnstartAsyncServiceTests {
 
     @Test
-    func run() async throws {
+    func runEmpty() async {
         let service = OnstartAsyncService.mock()
         await service.run()
     }
 
     @Test
-    func runWithRunners() async throws {
-        let service = OnstartAsyncService.mock(
-            runners: [
-                BannerSetupRunner.mock(),
-                NodeImportRunner.mock()
-            ]
-        )
+    func runExecutesAllRunners() async {
+        let runner1 = TrackingRunner(id: "runner1")
+        let runner2 = TrackingRunner(id: "runner2")
+        let runner3 = TrackingRunner(id: "runner3")
+        let service = OnstartAsyncService.mock(runners: [runner1, runner2, runner3])
+
         await service.run()
+
+        #expect(runner1.didRun)
+        #expect(runner2.didRun)
+        #expect(runner3.didRun)
     }
 
     @Test
-    func failingRunnerDoesNotStopOthers() async throws {
-        let tracker = RunnerTracker()
-        let service = OnstartAsyncService.mock(
-            runners: [
-                TrackingRunner(tracker: tracker, id: "first"),
-                FailingRunner(),
-                TrackingRunner(tracker: tracker, id: "last")
-            ]
-        )
+    func failingRunnerDoesNotStopOthers() async {
+        let runner1 = TrackingRunner(id: "runner1")
+        let failingRunner = FailingRunner(id: "failing")
+        let runner2 = TrackingRunner(id: "runner2")
+        let service = OnstartAsyncService.mock(runners: [runner1, failingRunner, runner2])
 
         await service.run()
 
-        #expect(await tracker.executedRunners == ["first", "last"])
+        #expect(runner1.didRun)
+        #expect(runner2.didRun)
     }
 
     @Test
-    func configIsPassedToRunners() async throws {
-        let tracker = RunnerTracker()
-        let config = ConfigResponse.mock(versions: .mock(fiatOnRampAssets: 99))
-        let service = OnstartAsyncService.mock(
-            configService: GemAPIConfigServiceMock(config: config),
-            runners: [ConfigCapturingRunner(tracker: tracker)]
-        )
+    func runnersExecuteInOrder() async {
+        let executionOrder = ExecutionOrderTracker()
+        let runner1 = OrderTrackingRunner(id: "first", tracker: executionOrder)
+        let runner2 = OrderTrackingRunner(id: "second", tracker: executionOrder)
+        let runner3 = OrderTrackingRunner(id: "third", tracker: executionOrder)
+        let service = OnstartAsyncService.mock(runners: [runner1, runner2, runner3])
 
         await service.run()
 
-        #expect(await tracker.capturedConfig?.versions.fiatOnRampAssets == 99)
+        #expect(executionOrder.order == ["first", "second", "third"])
     }
 }
 
-private actor RunnerTracker {
-    var executedRunners: [String] = []
-    var capturedConfig: ConfigResponse?
+// MARK: - Test Helpers
 
-    func track(id: String) {
-        executedRunners.append(id)
+private final class TrackingRunner: AsyncRunnable, @unchecked Sendable {
+    let id: String
+    private(set) var didRun = false
+
+    init(id: String) {
+        self.id = id
     }
 
-    func capture(config: ConfigResponse?) {
-        capturedConfig = config
+    func run() async throws {
+        didRun = true
     }
 }
 
-private struct TrackingRunner: OnstartAsyncRunnable {
-    let tracker: RunnerTracker
+private struct FailingRunner: AsyncRunnable {
     let id: String
 
-    func run(config: ConfigResponse?) async throws {
-        await tracker.track(id: id)
+    func run() async throws {
+        throw TestError.intentional
     }
 }
 
-private struct FailingRunner: OnstartAsyncRunnable {
-    func run(config: ConfigResponse?) async throws {
-        throw NSError(domain: "test", code: 1)
+private final class ExecutionOrderTracker: @unchecked Sendable {
+    private(set) var order: [String] = []
+
+    func record(_ id: String) {
+        order.append(id)
     }
 }
 
-private struct ConfigCapturingRunner: OnstartAsyncRunnable {
-    let tracker: RunnerTracker
+private final class OrderTrackingRunner: AsyncRunnable, @unchecked Sendable {
+    let id: String
+    private let tracker: ExecutionOrderTracker
 
-    func run(config: ConfigResponse?) async throws {
-        await tracker.capture(config: config)
+    init(id: String, tracker: ExecutionOrderTracker) {
+        self.id = id
+        self.tracker = tracker
     }
+
+    func run() async throws {
+        tracker.record(id)
+    }
+}
+
+private enum TestError: Error {
+    case intentional
 }

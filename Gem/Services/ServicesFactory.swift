@@ -479,12 +479,11 @@ extension ServicesFactory {
         )
 
         return OnstartAsyncService(
-            configService: configService,
             runners: [
                 BannerSetupRunner(bannerSetupService: bannerSetupService),
                 NodeImportRunner(nodeService: nodeService),
-                FiatAssetsUpdateRunner(importAssetsService: importAssetsService, preferences: preferences),
-                SwapAssetsRunner(
+                AssetsUpdateRunner(
+                    configService: configService,
                     importAssetsService: importAssetsService,
                     assetsService: assetsService,
                     swappableChainsProvider: swappableChainsProvider,
