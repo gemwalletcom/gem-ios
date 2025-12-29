@@ -5,7 +5,7 @@ import Primitives
 import Localization
 import WalletConnector
 import Transfer
-import TransactionService
+import TransactionStateService
 import ExplorerService
 import Signer
 

@@ -14,31 +14,31 @@ public struct AvatarService: Sendable {
     
     // MARK: - Store
 
-    public func save(data: Data, for walletId: String) throws {
-        try write(data: data, for: walletId)
+    public func save(data: Data, for wallet: Wallet) throws {
+        try write(data: data, for: wallet)
     }
-    
-    public func save(url: URL, for walletId: String) async throws {
+
+    public func save(url: URL, for wallet: Wallet) async throws {
         let (data, _) = try await URLSession.shared.data(from: url)
-        try write(data: data, for: walletId)
+        try write(data: data, for: wallet)
     }
-    
-    public func remove(for walletId: String) throws {
-        try deleteExistingAvatar(for: walletId)
-        try store.setWalletAvatar(walletId, path: nil)
+
+    public func remove(for wallet: Wallet) throws {
+        try deleteExistingAvatar(for: wallet)
+        try store.setWalletAvatar(wallet.id, path: nil)
     }
-    
+
     // MARK: - Private methods
-    
-    private func write(data: Data, for walletId: String) throws {
-        try deleteExistingAvatar(for: walletId)
-        
+
+    private func write(data: Data, for wallet: Wallet) throws {
+        try deleteExistingAvatar(for: wallet)
+
         let imageUrl = try localStore.store(data, id: UUID().uuidString, documentType: "png")
-        try store.setWalletAvatar(walletId, path: imageUrl)
+        try store.setWalletAvatar(wallet.id, path: imageUrl)
     }
-    
-    private func deleteExistingAvatar(for walletId: String) throws {
-        guard let avatar = try store.getWallet(id: walletId)?.imageUrl else {
+
+    private func deleteExistingAvatar(for wallet: Wallet) throws {
+        guard let avatar = wallet.imageUrl else {
             return
         }
         try localStore.remove(avatar)

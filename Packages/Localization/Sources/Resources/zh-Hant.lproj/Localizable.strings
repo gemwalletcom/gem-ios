@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "可疑或垃圾代幣會被識別為潛在的詐騙或有害資產。它們可能因空投、轉帳或手動匯入而出現在您的錢包中。";
 "errors.insufficient_funds" = "資金不足";
 "info.insufficient_network_fee_balance.title" = "需要%@";
-"info.insufficient_network_fee_balance.description" = "此交易需要 ** %@ ** 來支付給 ** %@ ** 礦工的網路費用，而不是Gem Wallet 。請確保您有足夠的%@ 。";
+"info.insufficient_network_fee_balance.description" = "此交易需要 %@ 用於支付網路費用 %@ 礦工，而不是 Gem Wallet確保你有足夠的 %@。";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "餘額不足";
 "info.insufficient_balance.description" = "您的餘額不足%@ ，無法完成此交易。請充值、接收或兌換您的錢包，然後重試。";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "購買%@";
 "wallet.import_address_warning" = "您可以查看此地址的餘額和交易，但**不能發送或出售資金**。";
 "info.stake_minimum_amount.title" = "最低金額";
-"info.stake_minimum_amount.description" = "在%@網路上，最低質押要求為 **%@**。";
+"info.stake_minimum_amount.description" = "在 %@ 在網路中，最低質押要求是 %@。";
 "asset.add_to_wallet" = "加入錢包";
 "asset.hide_from_wallet" = "隱藏錢包";
 "common.details" = "詳情";
@@ -490,7 +490,7 @@
 "assets.title" = "資產";
 "stake.delegations" = "委託";
 "info.stake.apr.description" = "年利率（APR）是質押加密貨幣的年度報酬率。";
-"receive.warning" = "這是您的地址—僅發送**%@**在**%@** 網路。";
+"receive.warning" = "這是您的地址—請僅發送郵件 %@ 在 %@ 網路。";
 "perpetual.leverage" = "槓桿作用";
 "perpetual.direction" = "方向";
 "perpetual.auto_close" = "自動關閉";
@@ -512,7 +512,7 @@
 "settings.preferences.default_leverage" = "預設槓桿";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
+"recent_activity.title" = "最近的";
 "errors.no_data_available" = "暫無數據";
 "errors.dust_threshold_short" = "網路將這筆金額視為微不足道的垃圾——手續費甚至高於金額本身。";
 "charts.take_profit" = "TP";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "加入 Gem Wallet 使用我的推薦鏈接，即可獲得獎勵： %@";
 "rewards.my_referral_code" = "我的推薦碼";
 "rewards.invite_friends.title" = "邀請好友";
-"rewards.invite_friends.description" = "賺 **%d 每邀請一位好友加入，即可獲得積分**。";
+"rewards.invite_friends.description" = "賺 %@ 每邀請一位好友加入，即可獲得分數。";
 "common.get_started" = "開始使用";
 "rewards.referral_code" = "推薦碼";
 "rewards.invited_by" = "Invited By";
@@ -538,9 +538,9 @@
 "rewards.get_rewards.title" = "獲得獎勵";
 "rewards.activate_referral_code.description" = "Have a referral code from a friend?";
 "rewards.activate_referral_code.title" = "兌換碼";
-"rewards.create_referral_code.title" = "Create Username";
-"rewards.create_referral_code.info" = "This will be your personal username.";
-"rewards.username" = "Username";
+"rewards.create_referral_code.title" = "建立使用者名稱";
+"rewards.create_referral_code.info" = "這將是您的個人用戶名。";
+"rewards.username" = "使用者名稱";
 "rewards.ways_spend.title" = "消費方式";
 "rewards.ways_spend.asset.title" = "得到 %@";
 "rewards.insufficient_points" = "分數不足";

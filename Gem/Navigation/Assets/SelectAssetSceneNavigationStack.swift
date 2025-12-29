@@ -13,6 +13,7 @@ import Transfer
 import ChainService
 import ExplorerService
 import Signer
+import EventPresenterService
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -22,9 +23,10 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.scanService) private var scanService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
-    @Environment(\.transactionService) private var transactionService
+    @Environment(\.transactionStateService) private var transactionStateService
     @Environment(\.addressNameService) private var addressNameService
     @Environment(\.activityService) private var activityService
+    @Environment(\.eventPresenterService) private var eventPresenterService
 
     @State private var isPresentingFilteringView: Bool = false
 
@@ -80,9 +82,10 @@ struct SelectAssetSceneNavigationStack: View {
                                 scanService: scanService,
                                 balanceService: balanceService,
                                 priceService: priceService,
-                                transactionService: transactionService,
+                                transactionStateService: transactionStateService,
                                 addressNameService: addressNameService,
                                 activityService: activityService,
+                                eventPresenterService: eventPresenterService,
                                 chain: input.asset.chain
                             ),
                             model: viewModelFactory.recipientScene(

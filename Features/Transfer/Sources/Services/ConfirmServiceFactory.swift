@@ -3,7 +3,7 @@
 import Foundation
 import BalanceService
 import PriceService
-import TransactionService
+import TransactionStateService
 import ExplorerService
 import Keystore
 import WalletsService
@@ -14,6 +14,7 @@ import ChainService
 import Signer
 import AddressNameService
 import ActivityService
+import EventPresenterService
 
 public struct ConfirmServiceFactory {
     public static func create(
@@ -23,9 +24,10 @@ public struct ConfirmServiceFactory {
         scanService: ScanService,
         balanceService: BalanceService,
         priceService: PriceService,
-        transactionService: TransactionService,
+        transactionStateService: TransactionStateService,
         addressNameService: AddressNameService,
         activityService: ActivityService,
+        eventPresenterService: EventPresenterService,
         chain: Chain
     ) -> ConfirmService {
         let chainService = ChainServiceFactory(nodeProvider: nodeService).service(for: chain)
@@ -44,12 +46,13 @@ public struct ConfirmServiceFactory {
                 signer: TransactionSigner(keystore: keystore),
                 chainService: chainService,
                 walletsService: walletsService,
-                transactionService: transactionService
+                transactionStateService: transactionStateService
             ),
             keystore: keystore,
             chainService: chainService,
             addressNameService: addressNameService,
-            activityService: activityService
+            activityService: activityService,
+            eventPresenterService: eventPresenterService
         )
     }
 }

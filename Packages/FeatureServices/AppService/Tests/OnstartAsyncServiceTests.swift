@@ -1,55 +1,71 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
+import Foundation
 import Testing
-import StoreTestKit
-import PreferencesTestKit
-import DeviceServiceTestKit
-import BannerServiceTestKit
-import GemAPITestKit
 import AppServiceTestKit
-import AssetsServiceTestKit
+import Primitives
 
 @testable import AppService
 
 struct OnstartAsyncServiceTests {
 
     @Test
-    func testNewRelease() async throws {
+    func runEmpty() async {
         let service = OnstartAsyncService.mock()
-
-        await confirmation(expectedCount: 1) { @MainActor confirmation in
-            service.releaseAction = { @MainActor release in
-                #expect(release.version == "16.1")
-                confirmation()
-            }
-            await service.migrations()
-        }
+        await service.run()
     }
 
     @Test
-    func testSkipRelease() async throws {
-        let service = OnstartAsyncService.mock()
+    func runExecutesAllRunners() async {
+        let runner1 = TrackingRunner(id: "runner1")
+        let runner2 = TrackingRunner(id: "runner2")
+        let runner3 = TrackingRunner(id: "runner3")
+        let service = OnstartAsyncService.mock(runners: [runner1, runner2, runner3])
 
-        await confirmation(expectedCount: 0) { @MainActor confirmation in
-            service.releaseAction = { @MainActor _ in
-                confirmation()
-            }
-            service.skipRelease("16.1")
-            await service.migrations()
-        }
+        await service.run()
+
+        #expect(runner1.didRun)
+        #expect(runner2.didRun)
+        #expect(runner3.didRun)
+    }
+
+    @Test
+    func failingRunnerDoesNotStopOthers() async {
+        let runner1 = TrackingRunner(id: "runner1")
+        let failingRunner = FailingRunner(id: "failing")
+        let runner2 = TrackingRunner(id: "runner2")
+        let service = OnstartAsyncService.mock(runners: [runner1, failingRunner, runner2])
+
+        await service.run()
+
+        #expect(runner1.didRun)
+        #expect(runner2.didRun)
     }
 }
 
-extension OnstartAsyncService {
-    static func mock() -> OnstartAsyncService {
-        OnstartAsyncService(
-            assetStore: .mock(),
-            nodeStore: .mock(),
-            preferences: .mock(),
-            assetsService: .mock(),
-            deviceService: .mock(),
-            bannerSetupService: .mock(),
-            configService: GemAPIConfigServiceMock(config: .mock()),
-            releaseService: AppReleaseService(configService: GemAPIConfigServiceMock(config: .mock())),
-            swappableChainsProvider: SwappableChainsProviderMock()
-        )
+// MARK: - Test Helpers
+
+private final class TrackingRunner: AsyncRunnable, @unchecked Sendable {
+    let id: String
+    private(set) var didRun = false
+
+    init(id: String) {
+        self.id = id
     }
+
+    func run() async throws {
+        didRun = true
+    }
+}
+
+private struct FailingRunner: AsyncRunnable {
+    let id: String
+
+    func run() async throws {
+        throw TestError.intentional
+    }
+}
+
+private enum TestError: Error {
+    case intentional
 }

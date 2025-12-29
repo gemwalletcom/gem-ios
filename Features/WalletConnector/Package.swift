@@ -24,6 +24,7 @@ let package = Package(
         .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
     ],
     targets: [
         .target(
@@ -40,7 +41,8 @@ let package = Package(
                 "QRScanner",
                 .product(name: "WalletSessionService", package: "FeatureServices"),
                 "Keystore",
-                "Gemstone"
+                "Gemstone",
+                "Formatters"
             ],
             path: "Sources"
         ),
@@ -52,6 +54,7 @@ let package = Package(
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "WalletSessionServiceTestKit", package: "FeatureServices"),
                 .product(name: "WalletConnectorServiceTestKit", package: "ChainServices"),
+                .product(name: "KeystoreTestKit", package: "Keystore"),
                 "WalletConnector",
                 "Gemstone"
             ],

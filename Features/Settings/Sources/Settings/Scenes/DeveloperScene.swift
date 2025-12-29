@@ -95,6 +95,13 @@ public struct DeveloperScene: View {
                         model.deeplink(deeplink: .rewards(code: "gemcoder"))
                     }
                 )
+                
+                NavigationCustomLink(
+                    with: ListItemView(title: "Open Gift (code)"),
+                    action: {
+                        model.deeplink(deeplink: .gift(code: "GIFT-1234-1234-1234"))
+                    }
+                )
             }
             
             Section("Preferences") {

@@ -8,8 +8,8 @@ import Blockchain
 import BlockchainTestKit
 import SignerTestKit
 import WalletsServiceTestKit
-import TransactionService
-import TransactionServiceTestKit
+import TransactionStateService
+import TransactionStateServiceTestKit
 import Store
 import StoreTestKit
 import ChainServiceTestKit
@@ -24,7 +24,7 @@ struct TransferExecutorTests {
             signer: TransactionSignerMock(signedData: ["setup1", "setup2", "setup3", "actual_order"]),
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash0", "hash1", "hash2", "hash3"]),
             walletsService: .mock(),
-            transactionService: .mock(transactionStore: transactionStore)
+            transactionStateService: .mock(transactionStore: transactionStore)
         )
 
         let input = TransferConfirmationInput(
@@ -49,7 +49,7 @@ struct TransferExecutorTests {
             signer: TransactionSignerMock(signedData: ["approval_tx", "swap_tx"]),
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash0", "hash1"]),
             walletsService: .mock(),
-            transactionService: .mock(transactionStore: transactionStore)
+            transactionStateService: .mock(transactionStore: transactionStore)
         )
 
         let input = TransferConfirmationInput(
@@ -74,7 +74,7 @@ struct TransferExecutorTests {
             signer: TransactionSignerMock(signedData: ["tx"]),
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash"]),
             walletsService: .mock(),
-            transactionService: .mock(transactionStore: transactionStore)
+            transactionStateService: .mock(transactionStore: transactionStore)
         )
 
         let input = TransferConfirmationInput(

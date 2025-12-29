@@ -28,10 +28,11 @@ import ScanService
 import SwapService
 import NameService
 import PerpetualService
-import TransactionService
+import TransactionStateService
 import AddressNameService
 import ActivityService
 import RewardsService
+import EventPresenterService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
@@ -60,10 +61,11 @@ extension EnvironmentValues {
     @Entry var swapService: SwapService = AppResolver.main.services.swapService
     @Entry var perpetualService: PerpetualService = AppResolver.main.services.perpetualService
     @Entry var perpetualObserverService: PerpetualObserverService = AppResolver.main.services.perpetualObserverService
-    @Entry var transactionService: TransactionService = AppResolver.main.services.transactionService
+    @Entry var transactionStateService: TransactionStateService = AppResolver.main.services.transactionStateService
     @Entry var nameService: NameService = AppResolver.main.services.nameService
     @Entry var addressNameService: AddressNameService = AppResolver.main.services.addressNameService
     @Entry var activityService: ActivityService = AppResolver.main.services.activityService
+    @Entry var eventPresenterService: EventPresenterService = AppResolver.main.services.eventPresenterService
     @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
     @Entry var rewardsService: RewardsService = AppResolver.main.services.rewardsService
 }

@@ -6,65 +6,119 @@ import Primitives
 import WalletService
 
 public struct CreateWalletNavigationStack: View {
-    @State private var navigationPath: NavigationPath = NavigationPath()
-    @Binding private var isPresentingWallets: Bool
 
-    private let walletService: WalletService
+    @State private var model: CreateWalletModel
+    @State private var navigationPath = NavigationPath()
 
-    public init(
-        walletService: WalletService,
-        isPresentingWallets: Binding<Bool>
-    ) {
-        self.walletService = walletService
-        _isPresentingWallets = isPresentingWallets
+    public init(model: CreateWalletModel) {
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
         NavigationStack(path: $navigationPath) {
-            Group {
-                if walletService.isAcceptTermsCompleted {
-                    securityReminderScene
-                } else {
-                    AcceptTermsScene(
-                        model: AcceptTermsViewModel(
-                            onNext: { navigationPath.append(Scenes.SecurityReminder())
-                        })
+            rootScene
+                .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationDestination(for: Scenes.VerifyPhrase.self) { scene in
+                    VerifyPhraseWalletScene(
+                        model: VerifyPhraseViewModel(
+                            words: scene.words,
+                            onComplete: onVerifyPhraseComplete
+                        )
                     )
                 }
-            }
-            .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: Scenes.VerifyPhrase.self) {
-                VerifyPhraseWalletScene(
-                    model: VerifyPhraseViewModel(
-                        words: $0.words,
-                        walletService: walletService,
-                        onFinish: { isPresentingWallets.toggle() }
+                .navigationDestination(for: Scenes.WalletProfile.self) { scene in
+                    SetupWalletScene(
+                        model: SetupWalletViewModel(
+                            wallet: scene.wallet,
+                            walletService: model.walletService,
+                            onSelectImage: { model.presentSelectImage(wallet: $0) },
+                            onComplete: onSetupWalletComplete
+                        )
                     )
-                )
-            }
-            .navigationDestination(for: Scenes.CreateWallet.self) { _ in
-                ShowSecretDataScene(
-                    model: CreateWalletViewModel(
-                        walletService: walletService,
-                        onCreateWallet: {
-                            navigationPath.append(Scenes.VerifyPhrase(words: $0))
-                        }
+                    .navigationBarBackButtonHidden()
+                    .interactiveDismissDisabled()
+                }
+                .navigationDestination(for: Scenes.CreateWallet.self) { _ in
+                    ShowSecretDataScene(
+                        model: NewSecretPhraseViewModel(
+                            walletService: model.walletService,
+                            onCreateWallet: { navigate(to: .verifyPhrase(words: $0)) }
+                        )
                     )
-                )
-            }
-            .navigationDestination(for: Scenes.SecurityReminder.self) { _ in
-                securityReminderScene
-            }
+                }
+                .navigationDestination(for: Scenes.SecurityReminder.self) { _ in
+                    securityReminderScene
+                }
+                .sheet(item: $model.isPresentingSelectImageWallet) { wallet in
+                    NavigationStack {
+                        WalletImageScene(
+                            model: WalletImageViewModel(
+                                wallet: wallet,
+                                source: .onboarding,
+                                avatarService: model.avatarService
+                            )
+                        )
+                        .toolbarDismissItem(title: .done, placement: .topBarLeading)
+                    }
+                }
         }
     }
-    
+
+    @ViewBuilder
+    private var rootScene: some View {
+        if model.isAcceptTermsCompleted {
+            securityReminderScene
+        } else {
+            AcceptTermsScene(model: AcceptTermsViewModel(onNext: { navigate(to: .securityReminder) }))
+        }
+    }
+
     private var securityReminderScene: some View {
         SecurityReminderScene(
             model: SecurityReminderViewModelDefault(
                 title: Localized.Wallet.New.title,
-                onNext: { navigationPath.append(Scenes.CreateWallet()) }
+                onNext: { navigate(to: .createWallet) }
             )
         )
+    }
+}
+
+// MARK: - Actions
+
+extension CreateWalletNavigationStack {
+    func navigate(to route: CreateWalletRoute) {
+        switch route {
+        case .securityReminder: navigationPath.append(Scenes.SecurityReminder())
+        case .createWallet: navigationPath.append(Scenes.CreateWallet())
+        case .verifyPhrase(let words): navigationPath.append(Scenes.VerifyPhrase(words: words))
+        case .walletProfile(let wallet): navigationPath.append(Scenes.WalletProfile(wallet: wallet))
+        }
+    }
+
+    func onVerifyPhraseComplete(words: [String]) {
+        Task {
+            do {
+                let wallet = try await model.createWallet(words: words)
+
+                if model.hasExistingWallets {
+                    navigate(to: .walletProfile(wallet: wallet))
+                } else {
+                    onSetupWalletComplete(wallet: wallet)
+                }
+            } catch {
+                debugLog("Failed to create wallet: \(error)")
+            }
+        }
+    }
+
+    func onSetupWalletComplete(wallet: Wallet) {
+        Task {
+            do {
+                try await model.setupWalletComplete(wallet: wallet)
+            } catch {
+                debugLog("Failed to setup wallet: \(error)")
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@ public struct RedemptionRequest: Codable, Sendable {
 
 public enum RewardRedemptionType: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case asset
+	case giftAsset
 }
 
 public struct RewardRedemptionOption: Codable, Equatable, Hashable, Sendable {
@@ -69,6 +70,30 @@ public struct ReferralCode: Codable, Sendable {
 
 	public init(code: String) {
 		self.code = code
+	}
+}
+
+public struct ReferralLeader: Codable, Equatable, Hashable, Sendable {
+	public let username: String
+	public let referrals: Int32
+	public let points: Int32
+
+	public init(username: String, referrals: Int32, points: Int32) {
+		self.username = username
+		self.referrals = referrals
+		self.points = points
+	}
+}
+
+public struct ReferralLeaderboard: Codable, Equatable, Hashable, Sendable {
+	public let daily: [ReferralLeader]
+	public let weekly: [ReferralLeader]
+	public let monthly: [ReferralLeader]
+
+	public init(daily: [ReferralLeader], weekly: [ReferralLeader], monthly: [ReferralLeader]) {
+		self.daily = daily
+		self.weekly = weekly
+		self.monthly = monthly
 	}
 }
 

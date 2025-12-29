@@ -3,10 +3,13 @@
 import Primitives
 
 public extension WalletConnection {
-    static func mock() -> WalletConnection {
+    static func mock(
+        session: WalletConnectionSession = .mock(),
+        wallet: Wallet = .mock()
+    ) -> WalletConnection {
         WalletConnection(
-            session: .mock(),
-            wallet: .mock()
+            session: session,
+            wallet: wallet
         )
     }
 }

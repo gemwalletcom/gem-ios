@@ -3,38 +3,48 @@
 import AppService
 import Components
 import DeviceService
+import EventPresenterService
 import Foundation
-import GemstonePrimitives
 import LockManager
 import Localization
+import NameService
 import Onboarding
 import Primitives
 import SwiftUI
-import TransactionService
+import TransactionStateService
 import TransactionsService
 import WalletConnector
 import WalletService
 import WalletsService
-import NameService
+import AvatarService
 
 @Observable
 @MainActor
 final class RootSceneViewModel {
-    private let onstartAsyncService: OnstartAsyncService
     private let onstartWalletService: OnstartWalletService
-    private let transactionService: TransactionService
+    private let transactionStateService: TransactionStateService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
     private let notificationHandler: NotificationHandler
     private let walletsService: WalletsService
+    private let releaseAlertService: ReleaseAlertService
+    private let rateService: RateService
+    private let eventPresenterService: EventPresenterService
+    private let deviceService: DeviceService
 
     let walletService: WalletService
     let nameService: NameService
+    let avatarService: AvatarService
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
 
     var updateVersionAlertMessage: AlertMessage?
+
+    var isPresentingToastMessage: ToastMessage? {
+        get { eventPresenterService.toastPresenter.toastMessage }
+        set { eventPresenterService.toastPresenter.toastMessage = newValue }
+    }
 
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -51,23 +61,30 @@ final class RootSceneViewModel {
         set { walletConnectorPresenter.isPresentingConnectionBar = newValue }
     }
 
+    var toastOffset: CGFloat {
+        UIDevice.current.userInterfaceIdiom == .phone ? .space32 + .space16 : .zero
+    }
+
     init(
         walletConnectorPresenter: WalletConnectorPresenter,
-        onstartAsyncService: OnstartAsyncService,
         onstartWalletService: OnstartWalletService,
-        transactionService: TransactionService,
+        transactionStateService: TransactionStateService,
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
         notificationHandler: NotificationHandler,
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
         walletsService: WalletsService,
-        nameService: NameService
+        nameService: NameService,
+        releaseAlertService: ReleaseAlertService,
+        rateService: RateService,
+        eventPresenterService: EventPresenterService,
+        avatarService: AvatarService,
+        deviceService: DeviceService
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
-        self.onstartAsyncService = onstartAsyncService
         self.onstartWalletService = onstartWalletService
-        self.transactionService = transactionService
+        self.transactionStateService = transactionStateService
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
         self.notificationHandler = notificationHandler
@@ -75,6 +92,11 @@ final class RootSceneViewModel {
         self.walletService = walletService
         self.walletsService = walletsService
         self.nameService = nameService
+        self.releaseAlertService = releaseAlertService
+        self.rateService = rateService
+        self.eventPresenterService = eventPresenterService
+        self.avatarService = avatarService
+        self.deviceService = deviceService
     }
 }
 
@@ -82,17 +104,12 @@ final class RootSceneViewModel {
 
 extension RootSceneViewModel {
     func setup() {
-        onstartAsyncService.releaseAction = { [weak self] in
-            self?.setupUpdateReleaseAlert($0)
-        }
-        onstartAsyncService.setup()
-        transactionService.setup()
-        Task {
-            try await connectionsService.setup()
-        }
-        Task {
-            try await deviceObserverService.startSubscriptionsObserver()
-        }
+        rateService.perform()
+        Task { await checkForUpdate() }
+        Task { try await deviceService.update() }
+        transactionStateService.setup()
+        Task { try await connectionsService.setup() }
+        Task { try await deviceObserverService.startSubscriptionsObserver() }
     }
 }
 
@@ -125,6 +142,8 @@ extension RootSceneViewModel {
                 notificationHandler.notify(notification: PushNotification.perpetuals)
             case .rewards(let code):
                 notificationHandler.notify(notification: PushNotification.referral(code: code))
+            case .gift(let code):
+                notificationHandler.notify(notification: PushNotification.gift(code: code))
             case let .buy(assetId, amount):
                 notificationHandler.notify(notification: PushNotification.buyAsset(assetId, amount: amount))
             case let .sell(assetId, amount):
@@ -139,38 +158,6 @@ extension RootSceneViewModel {
             isPresentingConnectorError = error.localizedDescription
         }
     }
-    
-    private func setupUpdateReleaseAlert(_ release: Release) {
-        let skipAction = AlertAction(
-            title: Localized.Common.skip,
-            role: .cancel,
-            action: { [weak self] in
-                Task { @MainActor in
-                    self?.onstartAsyncService.skipRelease(release.version)
-                }
-            }
-        )
-        let updateAction = AlertAction(
-            title: Localized.UpdateApp.action,
-            isDefaultAction: true,
-            action: {
-                Task { @MainActor in
-                    UIApplication.shared.open(PublicConstants.url(.appStore))
-                }
-            }
-        )
-        let actions = if release.upgradeRequired {
-            [updateAction]
-        } else {
-            [skipAction, updateAction]
-        }
-        
-        updateVersionAlertMessage = AlertMessage(
-            title: Localized.UpdateApp.title,
-            message: Localized.UpdateApp.description(release.version),
-            actions: actions
-        )
-    }
 }
 
 // MARK: - Private
@@ -183,5 +170,36 @@ extension RootSceneViewModel {
         } catch {
             debugLog("RootSceneViewModel setupWallet error: \(error)")
         }
+    }
+
+    private func checkForUpdate() async {
+        guard let release = await releaseAlertService.checkForUpdate() else { return }
+        updateVersionAlertMessage = makeUpdateAlert(for: release)
+    }
+
+    private func makeUpdateAlert(for release: Release) -> AlertMessage {
+        let skipAction = AlertAction(
+            title: Localized.Common.skip,
+            role: .cancel,
+            action: { [releaseAlertService] in
+                releaseAlertService.skipRelease(release)
+            }
+        )
+        let updateAction = AlertAction(
+            title: Localized.UpdateApp.action,
+            isDefaultAction: true,
+            action: { [releaseAlertService] in
+                Task { @MainActor in
+                    releaseAlertService.openAppStore()
+                }
+            }
+        )
+        let actions = release.upgradeRequired ? [updateAction] : [skipAction, updateAction]
+
+        return AlertMessage(
+            title: Localized.UpdateApp.title,
+            message: Localized.UpdateApp.description(release.version),
+            actions: actions
+        )
     }
 }

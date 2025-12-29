@@ -415,7 +415,7 @@
 "info.asset_status.suspicious.description" = "Şüpheli veya spam token'lar potansiyel dolandırıcılık veya zararlı varlıklar olarak tanımlanır. Airdrop'lar, transferler veya manuel ithalatlar nedeniyle cüzdanınızda görünebilirler.";
 "errors.insufficient_funds" = "Yetersiz fon";
 "info.insufficient_network_fee_balance.title" = "%@ gerekli";
-"info.insufficient_network_fee_balance.description" = "Bu işlem, ** %@ ** madencilere ödenen ağ ücretini karşılamak için ** %@ ** gerektirir, Gem Wallet değil. Yeterli %@ kaynağınız olduğundan emin olun.";
+"info.insufficient_network_fee_balance.description" = "Bu işlem gerektirir %@ ödenen ağ ücretini karşılamak için %@ madenciler, değil Gem WalletYeterli miktarda olduğundan emin olun. %@.";
 "brand_name" = "Gem Wallet";
 "info.insufficient_balance.title" = "Yetersiz Bakiye";
 "info.insufficient_balance.description" = "Bu işlemi tamamlamak için yeterli %@ iniz yok. Lütfen cüzdanınıza para yükleyin, alın veya takas edin ve tekrar deneyin.";
@@ -423,7 +423,7 @@
 "asset.buy_asset" = "%@ satın al";
 "wallet.import_address_warning" = "Bu adrese ait bakiyeleri ve işlemleri görüntüleyebilirsiniz, ancak **para gönderemez veya satamazsınız**.";
 "info.stake_minimum_amount.title" = "Asgari tutar";
-"info.stake_minimum_amount.description" = "%@ ağında, minimum stake gereksinimi **%@**'dir.";
+"info.stake_minimum_amount.description" = "Üzerinde %@ Ağda, minimum staking gereksinimi şöyledir: %@.";
 "asset.add_to_wallet" = "Cüzdana ekle";
 "asset.hide_from_wallet" = "Cüzdandan gizle";
 "common.details" = "Detaylar";
@@ -431,8 +431,8 @@
 "errors.scan_transaction.malicious.description" = "Bu işlem tamamlanamıyor; hedef cüzdan adresi şüpheli veya zararlı bir etkinlikle bağlantılı.";
 "errors.scan_transaction.memo_required" = "%@ hedef cüzdan adresi bir hedef etiketi / notu gerektiriyor";
 "common.info" = "Bilgi";
-"wallet.deposit" = "Deposit";
-"wallet.withdraw" = "Withdraw";
+"wallet.deposit" = "Mevduat";
+"wallet.withdraw" = "Geri çekilmek";
 "info.funding_payments.title" = "Funding Payments";
 "info.funding_payments.description" = "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.";
 "info.funding_rate.title" = "Funding";
@@ -490,7 +490,7 @@
 "assets.title" = "Varlıklar";
 "stake.delegations" = "Yetkilendirmeler";
 "info.stake.apr.description" = "Yıllık Yüzde Oranı (APR), kripto paranızı stake etmeniz durumunda ödeyeceğiniz yıllık ödül oranıdır.";
-"receive.warning" = "Bu sizin adresiniz — sadece ** gönderin%@** üzerinde **%@** ağ.";
+"receive.warning" = "Bu sizin adresiniz — sadece bu adrese gönderin. %@ üzerinde %@ ağ.";
 "perpetual.leverage" = "Kaldıraç";
 "perpetual.direction" = "Yön";
 "perpetual.auto_close" = "Otomatik Kapatma";
@@ -512,7 +512,7 @@
 "settings.preferences.default_leverage" = "Varsayılan Kaldıraç";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
+"recent_activity.title" = "Son";
 "errors.no_data_available" = "Veri mevcut değil";
 "errors.dust_threshold_short" = "Ağ bu miktarı toz olarak değerlendiriyor; ücret miktarın kendisinden daha yüksek.";
 "charts.take_profit" = "TP";
@@ -528,7 +528,7 @@
 "rewards.share_text" = "Katılmak Gem Wallet Benim referans linkimi kullanarak kayıt olun ve ödüller kazanın: %@";
 "rewards.my_referral_code" = "Benim referans kodum";
 "rewards.invite_friends.title" = "Arkadaşlarınızı Davet Edin";
-"rewards.invite_friends.description" = "Para kazanmak **%d Katılan her arkadaşınız için puan**.";
+"rewards.invite_friends.description" = "Para kazanmak %@ Katılan her arkadaş için puan kazanacaksınız.";
 "common.get_started" = "Başlayın";
 "rewards.referral_code" = "Yönlendirme Kodu";
 "rewards.invited_by" = "Invited By";
@@ -538,9 +538,9 @@
 "rewards.get_rewards.title" = "Ödüller Kazanın";
 "rewards.activate_referral_code.description" = "Have a referral code from a friend?";
 "rewards.activate_referral_code.title" = "Kodu kullan";
-"rewards.create_referral_code.title" = "Create Username";
-"rewards.create_referral_code.info" = "This will be your personal username.";
-"rewards.username" = "Username";
+"rewards.create_referral_code.title" = "Kullanıcı Adı Oluştur";
+"rewards.create_referral_code.info" = "Bu sizin kişisel kullanıcı adınız olacak.";
+"rewards.username" = "Kullanıcı adı";
 "rewards.ways_spend.title" = "Harcama Yolları";
 "rewards.ways_spend.asset.title" = "Elde etmek %@";
 "rewards.insufficient_points" = "Yetersiz puan";

@@ -78,13 +78,49 @@ struct WalletConnectorSignerTests {
         let ethWallet = Wallet.mock(id: "1", accounts: [.mock(chain: .ethereum)])
         let bitcoinWallet = Wallet.mock(id: "2", accounts: [.mock(chain: .bitcoin)])
         let cosmosWallet = Wallet.mock(id: "3", accounts: [.mock(chain: .cosmos)])
-        
+
         let signer = try WalletConnectorSigner.mock(wallets: [ethWallet, bitcoinWallet, cosmosWallet])
 
         let wallets = try signer.getWallets(for: .nonEIP155Optional())
-        
+
         #expect(wallets.count == 1)
         #expect(wallets.first?.walletId == cosmosWallet.walletId)
+    }
+
+    @Test
+    func sessionBindsToConnectedWallet() throws {
+        let db = DB.mock()
+        let walletStore = WalletStore(db: db)
+        let connectionsStore = ConnectionsStore(db: db)
+
+        let walletA = Wallet.mock(id: "wallet-a", name: "Wallet A", accounts: [.mock(chain: .ethereum)])
+        let walletB = Wallet.mock(id: "wallet-b", name: "Wallet B", accounts: [.mock(chain: .ethereum)])
+
+        try walletStore.addWallet(walletA)
+        try walletStore.addWallet(walletB)
+
+        let signer = WalletConnectorSigner.mock(
+            connectionsStore: connectionsStore,
+            walletSessionService: WalletSessionService.mock(store: walletStore)
+        )
+
+        let sessionAId = "session-for-wallet-a"
+        let sessionBId = "session-for-wallet-b"
+
+        try signer.addConnection(connection: WalletConnection(
+            session: .mock(id: sessionAId, sessionId: sessionAId, chains: [.ethereum]),
+            wallet: walletA
+        ))
+        try signer.addConnection(connection: WalletConnection(
+            session: .mock(id: sessionBId, sessionId: sessionBId, chains: [.ethereum]),
+            wallet: walletB
+        ))
+
+        let connectionA = try connectionsStore.getConnection(id: sessionAId)
+        let connectionB = try connectionsStore.getConnection(id: sessionBId)
+
+        #expect(connectionA.wallet.id == walletA.id)
+        #expect(connectionB.wallet.id == walletB.id)
     }
 }
 

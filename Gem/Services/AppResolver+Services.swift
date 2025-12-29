@@ -13,7 +13,7 @@ import ExplorerService
 import BalanceService
 import AssetsService
 import TransactionsService
-import TransactionService
+import TransactionStateService
 import WalletsService
 import WalletService
 import AppService
@@ -26,6 +26,7 @@ import PerpetualService
 import AddressNameService
 import ActivityService
 import RewardsService
+import EventPresenterService
 
 extension AppResolver {
     struct Services: Sendable {
@@ -43,7 +44,7 @@ extension AppResolver {
         let priceObserverService: PriceObserverService
         let stakeService: StakeService
         let transactionsService: TransactionsService
-        let transactionService: TransactionService
+        let transactionStateService: TransactionStateService
         let walletService: WalletService
         let walletsService: WalletsService
         let explorerService: ExplorerService
@@ -53,6 +54,8 @@ extension AppResolver {
         let swapService: SwapService
         let subscriptionsService: SubscriptionService
         let appReleaseService: AppReleaseService
+        let releaseAlertService: ReleaseAlertService
+        let rateService: RateService
         let deviceObserverService: DeviceObserverService
         let onstartService: OnstartService
         let onstartAsyncService: OnstartAsyncService
@@ -63,6 +66,7 @@ extension AppResolver {
         let nameService: NameService
         let addressNameService: AddressNameService
         let activityService: ActivityService
+        let eventPresenterService: EventPresenterService
         let viewModelFactory: ViewModelFactory
         let rewardsService: RewardsService
 
@@ -80,7 +84,7 @@ extension AppResolver {
             priceService: PriceService,
             stakeService: StakeService,
             transactionsService: TransactionsService,
-            transactionService: TransactionService,
+            transactionStateService: TransactionStateService,
             walletService: WalletService,
             walletsService: WalletsService,
             explorerService: ExplorerService,
@@ -89,6 +93,8 @@ extension AppResolver {
             avatarService: AvatarService,
             swapService: SwapService,
             appReleaseService: AppReleaseService,
+            releaseAlertService: ReleaseAlertService,
+            rateService: RateService,
             subscriptionsService: SubscriptionService,
             deviceObserverService: DeviceObserverService,
             onstartService: OnstartService,
@@ -100,6 +106,7 @@ extension AppResolver {
             nameService: NameService,
             addressNameService: AddressNameService,
             activityService: ActivityService,
+            eventPresenterService: EventPresenterService,
             viewModelFactory: ViewModelFactory,
             rewardsService: RewardsService
         ) {
@@ -116,7 +123,7 @@ extension AppResolver {
             self.priceObserverService = priceObserverService
             self.stakeService = stakeService
             self.transactionsService = transactionsService
-            self.transactionService = transactionService
+            self.transactionStateService = transactionStateService
             self.walletService = walletService
             self.walletsService = walletsService
             self.explorerService = explorerService
@@ -125,6 +132,8 @@ extension AppResolver {
             self.avatarService = avatarService
             self.swapService = swapService
             self.appReleaseService = appReleaseService
+            self.releaseAlertService = releaseAlertService
+            self.rateService = rateService
             self.deviceObserverService = deviceObserverService
             self.subscriptionsService = subscriptionsService
             self.onstartService = onstartService
@@ -136,6 +145,7 @@ extension AppResolver {
             self.nameService = nameService
             self.addressNameService = addressNameService
             self.activityService = activityService
+            self.eventPresenterService = eventPresenterService
             self.viewModelFactory = viewModelFactory
             self.rewardsService = rewardsService
         }
