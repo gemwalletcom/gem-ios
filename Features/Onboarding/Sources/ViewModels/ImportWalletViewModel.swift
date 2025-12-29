@@ -58,7 +58,7 @@ extension ImportWalletViewModel {
     }
 
     func setupWalletComplete(wallet: Wallet) async throws {
-        try await walletService.setCurrent(wallet: wallet)
         dismiss()
+        try await walletService.setCurrent(wallet: wallet)
     }
 }
