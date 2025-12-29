@@ -18,6 +18,7 @@ final class AmountPerpetualViewModel: AmountViewModeling {
     let data: PerpetualRecipientData
     let leverageSelection: LeverageSelection?
     let currencyFormatter: CurrencyFormatter
+    
     var takeProfit: String?
     var stopLoss: String?
 

@@ -134,17 +134,16 @@ struct AmountSceneViewModelTests {
             assetData: assetData
         )
 
-        guard case .stake(let stake) = model.provider,
-              let resourceSelection = stake.resourceSelection else {
+        guard case .freeze(let freeze) = model.provider else {
             return
         }
 
-        resourceSelection.selected = .energy
+        freeze.resourceSelection.selected = .energy
         model.onResourceChanged()
         model.amountInputModel.update(text: "2.0")
         #expect(model.amountInputModel.isValid == true)
 
-        resourceSelection.selected = .bandwidth
+        freeze.resourceSelection.selected = .bandwidth
         model.onResourceChanged()
         model.amountInputModel.update(text: "2.0")
         #expect(model.amountInputModel.isValid == false)

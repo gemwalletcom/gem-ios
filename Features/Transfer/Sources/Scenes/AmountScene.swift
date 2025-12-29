@@ -73,25 +73,24 @@ struct AmountScene: View {
                     }
                 }
 
-                if let resourceSelection = stake.resourceSelection {
-                    Section {
-                        Picker("", selection: Binding(
-                            get: { resourceSelection.selected },
-                            set: { newValue in
-                                resourceSelection.selected = newValue
-                                model.onResourceChanged()
-                            }
-                        )) {
-                            ForEach(ResourceSelection.options, id: \.self) { resource in
-                                Text(ResourceViewModel(resource: resource).title)
-                                    .tag(resource)
-                            }
+            case .freeze(let freeze):
+                Section {
+                    Picker("", selection: Binding(
+                        get: { freeze.resourceSelection.selected },
+                        set: { newValue in
+                            freeze.resourceSelection.selected = newValue
+                            model.onResourceChanged()
                         }
-                        .pickerStyle(.segmented)
-                        .frame(width: 200)
+                    )) {
+                        ForEach(ResourceSelection.options, id: \.self) { resource in
+                            Text(ResourceViewModel(resource: resource).title)
+                                .tag(resource)
+                        }
                     }
-                    .cleanListRow()
+                    .pickerStyle(.segmented)
+                    .frame(width: 200)
                 }
+                .cleanListRow()
 
             case .perpetual(let perpetual):
                 if let leverageSelection = perpetual.leverageSelection {

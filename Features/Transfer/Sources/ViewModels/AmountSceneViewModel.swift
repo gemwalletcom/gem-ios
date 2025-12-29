@@ -21,8 +21,8 @@ public final class AmountSceneViewModel {
     private let onTransferAction: TransferDataAction
 
     private let formatter = ValueFormatter(style: .full)
-    let currencyFormatter: CurrencyFormatter
     private let valueConverter = ValueConverter()
+    let currencyFormatter: CurrencyFormatter
 
     let provider: AmountDataProvider
 

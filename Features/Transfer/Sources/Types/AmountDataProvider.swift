@@ -7,6 +7,7 @@ import Primitives
 enum AmountDataProvider: AmountViewModeling {
     case transfer(AmountTransferViewModel)
     case stake(AmountStakeViewModel)
+    case freeze(AmountFreezeViewModel)
     case perpetual(AmountPerpetualViewModel)
 
     static func make(from input: AmountInput) -> AmountDataProvider {
@@ -26,7 +27,7 @@ enum AmountDataProvider: AmountViewModeling {
         case .stakeWithdraw(let delegation):
             .stake(AmountStakeViewModel(asset: input.asset, action: .withdraw(delegation)))
         case .freeze(let data):
-            .stake(AmountStakeViewModel(asset: input.asset, action: .freeze(data)))
+            .freeze(AmountFreezeViewModel(asset: input.asset, data: data))
         case .perpetual(let data):
             .perpetual(AmountPerpetualViewModel(asset: input.asset, data: data))
         }
@@ -67,6 +68,7 @@ extension AmountDataProvider {
         switch self {
         case .transfer(let provider): provider
         case .stake(let provider): provider
+        case .freeze(let provider): provider
         case .perpetual(let provider): provider
         }
     }
