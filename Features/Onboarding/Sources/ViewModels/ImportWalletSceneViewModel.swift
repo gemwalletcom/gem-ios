@@ -18,9 +18,7 @@ final class ImportWalletSceneViewModel {
     private let nameService: any NameServiceable
 
     let type: ImportWalletType
-    let showNameField: Bool
 
-    var name: String
     var input: String = ""
     var wordsSuggestion: [String] = []
     var importType: WalletImportType = .phrase
@@ -41,8 +39,6 @@ final class ImportWalletSceneViewModel {
         self.walletService = walletService
         self.nameService = nameService
         self.type = type
-        self.name = WalletNameGenerator(type: type, walletService: walletService).name
-        self.showNameField = walletService.wallets.isEmpty
         self.onComplete = onComplete
     }
 
@@ -55,12 +51,9 @@ final class ImportWalletSceneViewModel {
 
     var pasteButtonTitle: String { Localized.Common.paste }
     var pasteButtonImage: Image { Images.System.paste }
-
     var qrButtonTitle: String { Localized.Wallet.scan }
     var qrButtonImage: Image { Images.System.qrCodeViewfinder }
-
     var alertTitle: String { Localized.Errors.validation("") }
-    var walletFieldTitle: String { Localized.Wallet.name }
 
     var chain: Chain? {
         switch type {
@@ -155,8 +148,7 @@ extension ImportWalletSceneViewModel {
             if let result = nameResolveState.result {
                 return RecipientImport(name: result.name, address: result.address)
             }
-            let walletName = name.isEmpty ? WalletNameGenerator(type: type, walletService: walletService).name : name
-            return RecipientImport(name: walletName, address: input)
+            return RecipientImport(name: WalletNameGenerator(type: type, walletService: walletService).name, address: input)
         }()
         switch importType {
         case .phrase:
@@ -197,9 +189,6 @@ extension ImportWalletSceneViewModel {
     }
 
     private func validateForm(type: WalletImportType, address: String, words: [String]) throws  -> Bool {
-        guard !name.isEmpty else {
-             throw WalletImportError.emptyName
-        }
         switch type {
         case .phrase:
             for word in words {
