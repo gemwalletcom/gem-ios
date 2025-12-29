@@ -28,7 +28,6 @@ struct GemApp: App {
             RootScene(
                 model: RootSceneViewModel(
                     walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
-                    onstartAsyncService: resolver.services.onstartAsyncService,
                     onstartWalletService: resolver.services.onstartWalletService,
                     transactionStateService: resolver.services.transactionStateService,
                     connectionsService: resolver.services.connectionsService,
@@ -38,8 +37,11 @@ struct GemApp: App {
                     walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService,
                     nameService: resolver.services.nameService,
+                    releaseAlertService: resolver.services.releaseAlertService,
+                    rateService: resolver.services.rateService,
                     eventPresenterService: resolver.services.eventPresenterService,
-                    avatarService: resolver.services.avatarService
+                    avatarService: resolver.services.avatarService,
+                    deviceService: resolver.services.deviceService
                 )
             )
             .inject(resolver: resolver)
@@ -53,6 +55,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         AppResolver.main.services.onstartService.configure()
+        Task {
+            await AppResolver.main.services.onstartAsyncService.run()
+        }
         return true
     }
     

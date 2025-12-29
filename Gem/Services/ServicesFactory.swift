@@ -154,6 +154,11 @@ struct ServicesFactory {
 
         let configService = GemAPIService()
         let releaseService = AppReleaseService(configService: configService)
+        let releaseAlertService = ReleaseAlertService(
+            appReleaseService: releaseService,
+            preferences: preferences
+        )
+        let rateService = RateService(preferences: preferences)
 
         let onStartService = Self.makeOnstartService(
             assetStore: storeManager.assetStore,
@@ -164,17 +169,14 @@ struct ServicesFactory {
             walletService: walletService
         )
         let onstartAsyncService = Self.makeOnstartAsyncService(
-            assetStore: storeManager.assetStore,
-            nodeStore: storeManager.nodeStore,
+            nodeService: nodeService,
             preferences: preferences,
             assetsService: assetsService,
-            deviceService: deviceService,
             bannerSetupService: BannerSetupService(
                 store: storeManager.bannerStore,
                 preferences: preferences
             ),
             configService: configService,
-            releaseService: AppReleaseService(configService: configService),
             swappableChainsProvider: swapService
         )
         let onstartWalletService = Self.makeOnstartWalletService(
@@ -246,6 +248,8 @@ struct ServicesFactory {
             avatarService: avatarService,
             swapService: swapService,
             appReleaseService: releaseService,
+            releaseAlertService: releaseAlertService,
+            rateService: rateService,
             subscriptionsService: subscriptionService,
             deviceObserverService: deviceObserverService,
             onstartService: onStartService,
@@ -461,26 +465,31 @@ extension ServicesFactory {
     }
 
     private static func makeOnstartAsyncService(
-        assetStore: AssetStore,
-        nodeStore: NodeStore,
+        nodeService: NodeService,
         preferences: Preferences,
         assetsService: AssetsService,
-        deviceService: DeviceService,
         bannerSetupService: BannerSetupService,
         configService: any GemAPIConfigService,
-        releaseService: AppReleaseService,
         swappableChainsProvider: any SwappableChainsProvider
     ) -> OnstartAsyncService {
-        OnstartAsyncService(
-            assetStore: assetStore,
-            nodeStore: nodeStore,
-            preferences: preferences,
+        let importAssetsService = ImportAssetsService(
             assetsService: assetsService,
-            deviceService: deviceService,
-            bannerSetupService: bannerSetupService,
-            configService: configService,
-            releaseService: releaseService,
-            swappableChainsProvider: swappableChainsProvider
+            assetStore: assetsService.assetStore,
+            preferences: preferences
+        )
+
+        return OnstartAsyncService(
+            runners: [
+                BannerSetupRunner(bannerSetupService: bannerSetupService),
+                NodeImportRunner(nodeService: nodeService),
+                AssetsUpdateRunner(
+                    configService: configService,
+                    importAssetsService: importAssetsService,
+                    assetsService: assetsService,
+                    swappableChainsProvider: swappableChainsProvider,
+                    preferences: preferences
+                ),
+            ]
         )
     }
 

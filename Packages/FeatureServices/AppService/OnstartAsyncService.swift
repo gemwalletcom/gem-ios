@@ -1,148 +1,23 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Store
-import GemAPI
 import Primitives
-import BannerService
-import DeviceService
-import Preferences
-import AssetsService
-import ChainService
-import NodeService
 
-public final class OnstartAsyncService: Sendable {
+public struct OnstartAsyncService: Sendable {
 
-    private let assetStore: AssetStore
-    private let nodeStore: NodeStore
-    private let preferences: Preferences
-    private let configService: any GemAPIConfigService
-    private let importAssetsService: ImportAssetsService
-    private let deviceService: DeviceService
-    private let bannerSetupService: BannerSetupService
-    private let releaseService: AppReleaseService
-    private let swappableChainsProvider: any SwappableChainsProvider
+    private let runners: [any AsyncRunnable]
 
-    @MainActor
-    public var releaseAction: ((Release) -> Void)?
-
-    public init(
-        assetStore: AssetStore,
-        nodeStore: NodeStore,
-        preferences: Preferences,
-        assetsService: AssetsService,
-        deviceService: DeviceService,
-        bannerSetupService: BannerSetupService,
-        configService: any GemAPIConfigService,
-        releaseService: AppReleaseService,
-        swappableChainsProvider: any SwappableChainsProvider
-    ) {
-        self.assetStore = assetStore
-        self.nodeStore = nodeStore
-        self.preferences = preferences
-        self.importAssetsService = ImportAssetsService(
-            assetsService: assetsService,
-            assetStore: assetStore,
-            preferences: preferences
-        )
-        self.deviceService = deviceService
-        self.bannerSetupService = bannerSetupService
-        self.configService = configService
-        self.releaseService = releaseService
-        self.swappableChainsProvider = swappableChainsProvider
+    public init(runners: [any AsyncRunnable]) {
+        self.runners = runners
     }
 
-    public func setup() {
-        Task {
-            await migrations()
-        }
-        Task {
-            try bannerSetupService.setup()
-        }
-    }
-
-    public func migrations() async {
-        do {
-            try importNodes()
-
-            let config = try await configService.getConfig()
-            updateAssetsIfNeeded(config)
-            checkNewRelease(config)
-        } catch {
-            debugLog("Fetching config error: \(error)")
-        }
-
-        performRate()
-        updateSwappableAssets()
-        updateDeviceService()
-    }
-    
-    public func skipRelease(_ version: String) {
-        preferences.skippedReleaseVersion = version
-    }
-    
-    // MARK: - Private methods
-    
-    private func importNodes() throws {
-        try AddNodeService(nodeStore: nodeStore).addNodes()
-    }
-    
-    private func updateAssetsIfNeeded(_ config: ConfigResponse) {
-        let versions = config.versions
-        if versions.fiatOnRampAssets > preferences.fiatOnRampAssetsVersion || versions.fiatOffRampAssets > preferences.fiatOffRampAssetsVersion {
-            Task {
-                do {
-                    try await importAssetsService.updateFiatAssets()
-                    debugLog("Update fiat assets version: on ramp: \(versions.fiatOnRampAssets), off ramp: \(versions.fiatOffRampAssets)")
-                } catch {
-                    debugLog("Update fiat assets error: \(error)")
-                }
+    public func run() async {
+        for runner in runners {
+            do {
+                try await runner.run()
+            } catch {
+                debugLog("\(runner.id) failed: \(error)")
             }
-        }
-
-        if versions.swapAssets > preferences.swapAssetsVersion {
-            Task {
-                do {
-                    try await importAssetsService.updateSwapAssets()
-                    debugLog("Update swap assets version: \(versions.swapAssets)")
-                } catch {
-                    debugLog("Update swap assets error: \(error)")
-                }
-            }
-        }
-    }
-    
-    private func checkNewRelease(_ config: ConfigResponse) {
-        guard let release = releaseService.release(config) else {
-            return
-        }
-        
-        if let skippedReleaseVersion = preferences.skippedReleaseVersion,
-           skippedReleaseVersion == release.version {
-            debugLog("Skipping newer version: \(release.version)")
-            return
-        }
-        
-        debugLog("Newer version available: \(release)")
-        Task { @MainActor [weak self] in
-            self?.releaseAction?(release)
-        }
-    }
-    
-    private func performRate() {
-        RateService(preferences: preferences).perform()
-    }
-    
-    private func updateSwappableAssets() {
-        Task {
-            let chains = swappableChainsProvider.supportedChains()
-            try assetStore.setAssetIsSwappable(for: chains.map { $0.id }, value: true)
-        }
-    }
-    
-    private func updateDeviceService() {
-        Task {
-            try await deviceService.update()
         }
     }
 }
