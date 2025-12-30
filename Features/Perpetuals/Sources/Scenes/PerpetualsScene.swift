@@ -47,6 +47,17 @@ public struct PerpetualsScene: View {
             await model.fetch()
         }
         .listSectionSpacing(.compact)
+        .sheet(isPresented: $model.isPresentingRecents) {
+            RecentsScene(
+                model: RecentsSceneViewModel(
+                    models: model.activityModels,
+                    onSelect: { asset in
+                        model.onSelectRecentPerpetual(asset: asset)
+                        model.isPresentingRecents = false
+                    }
+                )
+            )
+        }
     }
 
     var list: some View {
@@ -65,7 +76,11 @@ public struct PerpetualsScene: View {
             }
 
             if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels, headerPadding: .medium + .tiny) { assetModel in
+                RecentActivitySectionView(
+                    models: model.activityModels,
+                    headerPadding: .medium + .tiny,
+                    onSelectRecents: { model.isPresentingRecents = true }
+                ) { assetModel in
                     Button {
                         model.onSelectRecentPerpetual(asset: assetModel.asset)
                     } label: {
@@ -118,6 +133,8 @@ public struct PerpetualsScene: View {
                 }
             }
         }
-        .contentMargins([.top], .space12, for: .scrollContent)
+        .if(!model.isSearching) {
+            $0.contentMargins([.top], .space12, for: .scrollContent)
+        }
     }
 }

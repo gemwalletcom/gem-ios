@@ -58,6 +58,27 @@ public struct SelectAssetScene: View {
             )
         }
         .navigationBarTitle(model.title)
+        .sheet(isPresented: $model.isPresentingRecents) {
+            RecentsScene(
+                model: RecentsSceneViewModel(
+                    models: model.activityModels,
+                    onSelect: { asset in
+                        switch model.selectType {
+                        case .send, .receive, .buy, .deposit, .withdraw:
+                            model.selectedRecentInput = SelectAssetInput(
+                                type: model.selectType,
+                                assetAddress: model.assetAddress(for: asset)
+                            )
+                        case .swap, .priceAlert:
+                            model.selectAsset(asset: asset)
+                        case .manage:
+                            break
+                        }
+                        model.isPresentingRecents = false
+                    }
+                )
+            )
+        }
     }
 
     var list: some View {
@@ -74,7 +95,10 @@ public struct SelectAssetScene: View {
             }
 
             if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels) { assetModel in
+                RecentActivitySectionView(
+                    models: model.activityModels,
+                    onSelectRecents: { model.isPresentingRecents = true }
+                ) { assetModel in
                     switch model.selectType {
                     case .send, .receive, .buy:
                         NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: assetModel.asset))) {

@@ -192,6 +192,12 @@ struct SelectAssetSceneNavigationStack: View {
             .presentationDragIndicator(.visible)
             .presentationBackground(Colors.grayBackground)
         }
+        .onChange(of: model.selectedRecentInput) { _, input in
+            if let input {
+                model.selectedRecentInput = nil
+                navigationPath.append(input)
+            }
+        }
     }
 }
 

@@ -37,6 +37,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     var isSearching: Bool = false
     var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
+    var isPresentingRecents: Bool = false
 
     public let onSelectAssetAction: AssetAction
 
