@@ -34,6 +34,7 @@ public final class PerpetualsSceneViewModel {
     var isSearchPresented: Bool = false
     var searchQuery: String = .empty
     var isSearching: Bool = false
+    var isPresentingRecents: Bool = false
 
     let onSelectAssetType: ((SelectAssetType) -> Void)?
     let onSelectAsset: ((Asset) -> Void)?
@@ -74,7 +75,7 @@ public final class PerpetualsSceneViewModel {
     var showPinned: Bool { !isSearching && sections.pinned.isNotEmpty }
     var showMarkets: Bool { !isSearching || sections.markets.isNotEmpty || positions.isEmpty }
 
-    var showRecent: Bool { isSearching && recentActivities.isNotEmpty }
+    var showRecent: Bool { searchQuery.isEmpty && recentActivities.isNotEmpty }
 
     var sections: PerpetualsSections {
         let source: [PerpetualData]

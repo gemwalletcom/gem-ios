@@ -2,11 +2,15 @@ import Foundation
 import Primitives
 import Components
 
-public struct AssetViewModel: Sendable {
+public struct AssetViewModel: Sendable, Identifiable {
     public let asset: Asset
 
     public init(asset: Asset) {
         self.asset = asset
+    }
+
+    public var id: String {
+        asset.id.identifier
     }
 
     public var title: String {

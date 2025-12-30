@@ -39,6 +39,8 @@ public final class SelectAssetViewModel {
     var isPresentingCopyToast: Bool = false
     var copyTypeViewModel: CopyTypeViewModel?
     public var isPresentingAddToken: Bool = false
+    public var isPresentingRecents: Bool = false
+    public var selectedRecentInput: SelectAssetInput?
 
     public var filterModel: AssetsFilterViewModel
     public var onSelectAssetAction: AssetAction

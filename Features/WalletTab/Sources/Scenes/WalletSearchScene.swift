@@ -56,6 +56,17 @@ public struct WalletSearchScene: View {
             model.onAppear()
         }
         .toast(message: $model.isPresentingToastMessage)
+        .sheet(isPresented: $model.isPresentingRecents) {
+            RecentsScene(
+                model: RecentsSceneViewModel(
+                    models: model.activityModels,
+                    onSelect: { asset in
+                        model.onSelectAsset(asset)
+                        model.isPresentingRecents = false
+                    }
+                )
+            )
+        }
     }
 
     @ViewBuilder
@@ -73,7 +84,10 @@ public struct WalletSearchScene: View {
             }
 
             if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels) { assetModel in
+                RecentActivitySectionView(
+                    models: model.activityModels,
+                    onSelectRecents: { model.isPresentingRecents = true }
+                ) { assetModel in
                     NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
                         AssetChipView(model: assetModel)
                     }
