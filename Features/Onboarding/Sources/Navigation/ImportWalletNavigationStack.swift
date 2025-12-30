@@ -86,12 +86,7 @@ extension ImportWalletNavigationStack {
         Task {
             do {
                 let wallet = try await model.importWallet(data: data)
-
-                if model.hasExistingWallets {
-                    navigate(to: .walletProfile(wallet: wallet))
-                } else {
-                    try await model.setupWalletComplete(wallet: wallet)
-                }
+                navigate(to: .walletProfile(wallet: wallet))
             } catch {
                 debugLog("Failed to import wallet: \(error)")
             }
