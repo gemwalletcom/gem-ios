@@ -346,6 +346,21 @@ public struct Migrations {
             }
         }
 
+        migrator.registerMigration("Migrate \(NodeSelectedRecord.databaseTableName) to use URL") { db in
+            try? db.create(table: "nodes_selected_v2") {
+                $0.column(NodeSelectedRecord.Columns.chain.name, .text).primaryKey()
+                $0.column(NodeSelectedRecord.Columns.nodeUrl.name, .text).notNull()
+            }
+            try? db.execute(sql: """
+                INSERT INTO nodes_selected_v2 (chain, nodeUrl)
+                SELECT ns.chain, n.url
+                FROM nodes_selected_v1 ns
+                INNER JOIN nodes n ON ns.nodeId = n.id
+            """)
+            try? db.drop(table: NodeSelectedRecord.databaseTableName)
+            try? db.rename(table: "nodes_selected_v2", to: NodeSelectedRecord.databaseTableName)
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

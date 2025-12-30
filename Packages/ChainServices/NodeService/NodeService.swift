@@ -17,24 +17,22 @@ public final class NodeService: Sendable {
     }
 
     public func getNodeSelected(chain: Chain) -> ChainNode {
-        guard let node = try? nodeStore.selectedNode(chain: chain.rawValue) else {
+        guard
+            let url = try? nodeStore.selectedNodeUrl(chain: chain),
+            let node = try? nodes(for: chain).first(where: { $0.node.url == url })
+        else {
             return chain.defaultChainNode
         }
         return node
     }
-    
+
     public func setNodeSelected(chain: Chain, node: Primitives.Node) throws {
-        if node.url.contains("gemnodes.com") {
-            return try nodeStore.deleteNodeSelected(chain: chain.rawValue)
-        }
-        guard let recordNode = try nodeStore.nodeRecord(chain: chain, url: node.url) else {
-            throw AnyError("Node node record")
-        }
-        try nodeStore.setNodeSelected(node: recordNode)
+        try nodeStore.setNodeSelected(chain: chain, url: node.url)
     }
 
     public func delete(chain: Chain, node: Primitives.Node) throws {
-        try nodeStore.deleteNode(chain: chain.rawValue, url: node.url)
+        try nodeStore.deleteNode(chain: chain, url: node.url)
+        try nodeStore.deleteNodeSelected(chain: chain)
     }
 
     public func nodes(for chain: Chain) throws -> [ChainNode] {
@@ -45,7 +43,7 @@ public final class NodeService: Sendable {
             chain.europeChainNode,
         ] + nodes).unique()
     }
-    
+
     public func update(chain: Chain, force: Bool = false) throws {
         // TODO: - implement later
         /*
@@ -62,12 +60,10 @@ public final class NodeService: Sendable {
 
 // MARK: - NodeURLFetchable
 
-extension NodeService: NodeURLFetchable  {
+extension NodeService: NodeURLFetchable {
     public func node(for chain: Chain) -> URL {
-        guard
-            let node = try? nodeStore.selectedNode(chain: chain.rawValue),
-            let url = URL(string: node.node.url) else {
-                return chain.defaultBaseUrl
+        guard let url = try? nodeStore.selectedNodeUrl(chain: chain)?.asURL else {
+            return chain.defaultBaseUrl
         }
         return url
     }
