@@ -101,5 +101,8 @@ struct AmountStakeViewModelTests {
         #expect(redelegate.type.transactionType == .stakeRedelegate)
         #expect(withdraw.type.transactionType == .stakeWithdraw)
         #expect(stake.value == 100)
+        #expect(unstake.value == 100)
+        #expect(redelegate.value == 100)
+        #expect(withdraw.value == 100)
     }
 }
