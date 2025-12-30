@@ -12,12 +12,17 @@ import Staking
 final class AmountFreezeViewModel: AmountDataProvidable {
     let asset: Asset
     let data: FreezeData
-    let resourceSelection: ResourceSelection
+    let resourceSelection: SelectionState<Resource>
 
     init(asset: Asset, data: FreezeData) {
         self.asset = asset
         self.data = data
-        self.resourceSelection = ResourceSelection(selected: data.resource)
+        self.resourceSelection = SelectionState(
+            options: [.bandwidth, .energy],
+            selected: data.resource,
+            isEnabled: true,
+            title: Localized.Stake.resource
+        )
     }
 
     var title: String {

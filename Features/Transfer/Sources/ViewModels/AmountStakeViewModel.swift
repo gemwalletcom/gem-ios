@@ -21,7 +21,7 @@ enum StakeAction {
 final class AmountStakeViewModel: AmountDataProvidable {
     let asset: Asset
     let action: StakeAction
-    let validatorSelection: ValidatorSelection
+    let validatorSelection: SelectionState<DelegationValidator>
 
     init(asset: Asset, action: StakeAction) {
         self.asset = asset
@@ -29,20 +29,25 @@ final class AmountStakeViewModel: AmountDataProvidable {
         self.validatorSelection = Self.makeValidatorSelection(action: action)
     }
 
-    private static func makeValidatorSelection(action: StakeAction) -> ValidatorSelection {
+    private static func makeValidatorSelection(action: StakeAction) -> SelectionState<DelegationValidator> {
         switch action {
-        case .stake(let validators, let recommended):
-            ValidatorSelection(options: validators, selected: recommended, isPickerEnabled: true, type: .stake)
-        case .unstake(let delegation):
-            ValidatorSelection(options: [delegation.validator], selected: delegation.validator, isPickerEnabled: false, type: .unstake)
-        case .redelegate(_, let validators, let recommended):
-            ValidatorSelection(options: validators, selected: recommended, isPickerEnabled: true, type: .stake)
-        case .withdraw(let delegation):
-            ValidatorSelection(options: [delegation.validator], selected: delegation.validator, isPickerEnabled: false, type: .unstake)
+        case let .stake(validators, recommended):
+            SelectionState(options: validators, selected: recommended ?? validators[0], isEnabled: true, title: Localized.Stake.validator)
+        case let .unstake(delegation):
+            SelectionState(options: [delegation.validator], selected: delegation.validator, isEnabled: false, title: Localized.Stake.validator)
+        case let .redelegate(_, validators, recommended):
+            SelectionState(options: validators, selected: recommended ?? validators[0], isEnabled: true, title: Localized.Stake.validator)
+        case let .withdraw(delegation):
+            SelectionState(options: [delegation.validator], selected: delegation.validator, isEnabled: false, title: Localized.Stake.validator)
         }
     }
 
-    var validatorSectionTitle: String { Localized.Stake.validator }
+    var stakeValidatorsType: StakeValidatorsType {
+        switch action {
+        case .stake, .redelegate: .stake
+        case .unstake, .withdraw: .unstake
+        }
+    }
 
     var title: String {
         switch action {
@@ -129,8 +134,8 @@ final class AmountStakeViewModel: AmountDataProvidable {
     func recipientData() -> RecipientData {
         RecipientData(
             recipient: Recipient(
-                name: validatorSelection.selected?.name,
-                address: validatorSelection.selected.map { recipientAddress(validatorId: $0.id) } ?? "",
+                name: validatorSelection.selected.name,
+                address: recipientAddress(validatorId: validatorSelection.selected.id),
                 memo: Localized.Stake.viagem
             ),
             amount: nil
@@ -138,18 +143,15 @@ final class AmountStakeViewModel: AmountDataProvidable {
     }
 
     func makeTransferData(value: BigInt) throws -> TransferData {
-        let stakeType: StakeType
-        switch action {
+        let stakeType: StakeType = switch action {
         case .stake:
-            guard let validator = validatorSelection.selected else { throw TransferError.invalidAmount }
-            stakeType = .stake(validator)
+            .stake(validatorSelection.selected)
         case .unstake(let delegation):
-            stakeType = .unstake(delegation)
+            .unstake(delegation)
         case .redelegate(let delegation, _, _):
-            guard let validator = validatorSelection.selected else { throw TransferError.invalidAmount }
-            stakeType = .redelegate(RedelegateData(delegation: delegation, toValidator: validator))
+            .redelegate(RedelegateData(delegation: delegation, toValidator: validatorSelection.selected))
         case .withdraw(let delegation):
-            stakeType = .withdraw(delegation)
+            .withdraw(delegation)
         }
         return TransferData(
             type: .stake(asset, stakeType),

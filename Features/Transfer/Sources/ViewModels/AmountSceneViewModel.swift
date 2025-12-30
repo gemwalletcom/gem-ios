@@ -135,7 +135,7 @@ extension AmountSceneViewModel {
     func onSelectLeverage() {
         guard case let .perpetual(perpetual) = provider,
               let selection = perpetual.leverageSelection else { return }
-        isPresentingSheet = .leverageSelector(title: perpetual.leverageTitle, selection: selection)
+        isPresentingSheet = .leverageSelector(selection: selection)
     }
 
     func onSelectAutoclose() {

@@ -61,15 +61,13 @@ struct AmountScene: View {
 
             switch model.provider {
             case let .stake(stake):
-                if let validator = stake.validatorSelection.selected {
-                    Section(stake.validatorSectionTitle) {
-                        if stake.validatorSelection.isPickerEnabled {
-                            NavigationLink(value: validator) {
-                                ValidatorView(model: StakeValidatorViewModel(validator: validator))
-                            }
-                        } else {
-                            ValidatorView(model: StakeValidatorViewModel(validator: validator))
+                Section(stake.validatorSelection.title) {
+                    if stake.validatorSelection.isEnabled {
+                        NavigationLink(value: stake.validatorSelection.selected) {
+                            ValidatorView(model: StakeValidatorViewModel(validator: stake.validatorSelection.selected))
                         }
+                    } else {
+                        ValidatorView(model: StakeValidatorViewModel(validator: stake.validatorSelection.selected))
                     }
                 }
 
@@ -93,9 +91,9 @@ struct AmountScene: View {
                     Section {
                         NavigationCustomLink(
                             with: ListItemView(
-                                title: perpetual.leverageTitle,
+                                title: leverageSelection.title,
                                 subtitle: leverageSelection.selected.displayText,
-                                subtitleStyle: leverageSelection.textStyle
+                                subtitleStyle: perpetual.leverageTextStyle
                             ),
                             action: model.onSelectLeverage
                         )

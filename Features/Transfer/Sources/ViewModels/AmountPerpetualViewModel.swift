@@ -21,9 +21,10 @@ struct AmountPerpetualLimits {
 final class AmountPerpetualViewModel: AmountDataProvidable {
     let asset: Asset
     let data: PerpetualRecipientData
-    let leverageSelection: LeverageSelection?
+    let leverageSelection: SelectionState<LeverageOption>?
+    let leverageTextStyle: TextStyle
     let currencyFormatter: CurrencyFormatter
-    
+
     var takeProfit: String?
     var stopLoss: String?
 
@@ -34,7 +35,7 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
         self.asset = asset
         self.data = data
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: preferences.currency)
-        self.leverageSelection = Self.makeLeverageSelection(data: data, preferences: preferences)
+        (self.leverageSelection, self.leverageTextStyle) = Self.makeLeverageSelection(data: data, preferences: preferences)
     }
 
     var leverageTitle: String { Localized.Perpetual.leverage }
@@ -133,8 +134,13 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
         )
     }
 
-    private static func makeLeverageSelection(data: PerpetualRecipientData, preferences: Preferences) -> LeverageSelection? {
-        guard case let .open(openData) = data.positionAction else { return nil }
+    private static func makeLeverageSelection(
+        data: PerpetualRecipientData,
+        preferences: Preferences
+    ) -> (SelectionState<LeverageOption>?, TextStyle) {
+        guard case let .open(openData) = data.positionAction else {
+            return (nil, .callout)
+        }
 
         let transferData = data.positionAction.transferData
         let options = LeverageOption.allOptions.filter { $0.value <= transferData.leverage }
@@ -144,10 +150,13 @@ final class AmountPerpetualViewModel: AmountDataProvidable {
             color: PerpetualDirectionViewModel(direction: openData.direction).color
         )
 
-        return LeverageSelection(
+        let selection = SelectionState(
             options: options,
             selected: selected,
-            textStyle: textStyle
+            isEnabled: true,
+            title: Localized.Perpetual.leverage
         )
+
+        return (selection, textStyle)
     }
 }

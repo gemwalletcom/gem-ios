@@ -37,10 +37,10 @@ public struct AmountNavigationView: View {
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }
                     }
-                case let .leverageSelector(title, selection):
+                case let .leverageSelector(selection):
                     @Bindable var leverageSelection = selection
                     LeveragePickerSheet(
-                        title: title,
+                        title: leverageSelection.title,
                         leverageOptions: leverageSelection.options,
                         selectedLeverage: $leverageSelection.selected
                     )
@@ -64,7 +64,7 @@ public struct AmountNavigationView: View {
                 if case let .stake(stake) = model.provider {
                     StakeValidatorsScene(
                         model: StakeValidatorsViewModel(
-                            type: stake.validatorSelection.type,
+                            type: stake.stakeValidatorsType,
                             chain: model.asset.chain,
                             currentValidator: validator,
                             validators: stake.validatorSelection.options,
