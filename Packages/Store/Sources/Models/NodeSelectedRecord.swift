@@ -5,7 +5,7 @@ import Primitives
 import GRDB
 
 public struct NodeSelectedRecord: Codable, FetchableRecord, PersistableRecord, TableRecord {
-    public static let databaseTableName: String = "nodes_selected_v1"
+    public static let databaseTableName: String = "nodes_selected"
 
     public enum Columns {
         static let chain = Column("chain")

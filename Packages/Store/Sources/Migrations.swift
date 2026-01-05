@@ -346,19 +346,15 @@ public struct Migrations {
             }
         }
 
-        migrator.registerMigration("Migrate \(NodeSelectedRecord.databaseTableName) to use URL") { db in
-            try? db.create(table: "nodes_selected_v2") {
-                $0.column(NodeSelectedRecord.Columns.chain.name, .text).primaryKey()
-                $0.column(NodeSelectedRecord.Columns.nodeUrl.name, .text).notNull()
-            }
+        migrator.registerMigration("Migrate nodes_selected_v1 to \(NodeSelectedRecord.databaseTableName)") { db in
+            try? NodeSelectedRecord.create(db: db)
             try? db.execute(sql: """
-                INSERT INTO nodes_selected_v2 (chain, nodeUrl)
+                INSERT INTO \(NodeSelectedRecord.databaseTableName) (chain, nodeUrl)
                 SELECT ns.chain, n.url
                 FROM nodes_selected_v1 ns
-                INNER JOIN nodes n ON ns.nodeId = n.id
+                INNER JOIN \(NodeRecord.databaseTableName) n ON ns.nodeId = n.id
             """)
-            try? db.drop(table: NodeSelectedRecord.databaseTableName)
-            try? db.rename(table: "nodes_selected_v2", to: NodeSelectedRecord.databaseTableName)
+            try? db.drop(table: "nodes_selected_v1")
         }
 
         try migrator.migrate(dbQueue)

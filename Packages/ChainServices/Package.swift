@@ -86,7 +86,7 @@ let package = Package(
                 "ChainService",
             ],
             path: "NodeService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "NodeServiceTestKit",
@@ -95,6 +95,16 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store"),
             ],
             path: "NodeService/TestKit"
+        ),
+        .testTarget(
+            name: "NodeServiceTests",
+            dependencies: [
+                "NodeService",
+                "NodeServiceTestKit",
+                "Primitives",
+                .product(name: "StoreTestKit", package: "Store"),
+            ],
+            path: "NodeService/Tests"
         ),
         .target(
             name: "WalletConnectorService",

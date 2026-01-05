@@ -75,12 +75,5 @@ let package = Package(
                 "Primitives",
                 .product(name: "PriceServiceTestKit", package: "FeatureServices")
             ]),
-        .testTarget(
-            name: "ChainSettingsTests",
-            dependencies: [
-                "Settings",
-                "Primitives",
-                .product(name: "NodeServiceTestKit", package: "ChainServices"),
-            ]),
     ]
 )
