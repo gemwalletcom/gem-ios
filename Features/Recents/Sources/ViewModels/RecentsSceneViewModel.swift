@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import PrimitivesComponents
 import Store
+import Components
 
 @Observable
 @MainActor
@@ -12,6 +13,7 @@ public final class RecentsSceneViewModel {
     public let onSelect: (Asset) -> Void
 
     var recentAssets: [RecentAsset] = []
+    var searchQuery: String = ""
 
     public init(
         walletId: String,
@@ -29,6 +31,22 @@ public final class RecentsSceneViewModel {
     }
 
     var sections: [RecentAssetsSection] {
-        RecentAssetsSection.from(recentAssets)
+        RecentAssetsSection.from(filteredAssets)
+    }
+
+    var showEmpty: Bool {
+        !searchQuery.isEmpty && filteredAssets.isEmpty
+    }
+
+    var emptyModel: any EmptyContentViewable {
+        EmptyContentTypeViewModel(type: .search(type: .assets))
+    }
+
+    private var filteredAssets: [RecentAsset] {
+        guard !searchQuery.isEmpty else { return recentAssets }
+        return recentAssets.filter {
+            $0.asset.name.localizedCaseInsensitiveContains(searchQuery) ||
+            $0.asset.symbol.localizedCaseInsensitiveContains(searchQuery)
+        }
     }
 }

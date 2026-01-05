@@ -41,6 +41,16 @@ public struct RecentsScene: View {
             }
             .listStyle(.insetGrouped)
             .contentMargins(.top, .scene.top, for: .scrollContent)
+            .overlay {
+                if model.showEmpty {
+                    EmptyContentView(model: model.emptyModel)
+                }
+            }
+            .searchable(
+                text: $model.searchQuery,
+                placement: .navigationBarDrawer(displayMode: .always)
+            )
+            .autocorrectionDisabled()
             .navigationTitle(Localized.RecentActivity.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
