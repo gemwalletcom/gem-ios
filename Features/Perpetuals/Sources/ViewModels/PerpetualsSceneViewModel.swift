@@ -176,5 +176,6 @@ extension PerpetualsSceneViewModel {
 
     func onSelectRecentPerpetual(asset: Asset) {
         onSelectAsset?(asset)
+        isPresentingRecents = false
     }
 }

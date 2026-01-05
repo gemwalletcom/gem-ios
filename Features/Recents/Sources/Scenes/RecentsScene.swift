@@ -2,16 +2,19 @@
 
 import SwiftUI
 import Primitives
+import PrimitivesComponents
 import Components
 import Localization
 import Style
+import Store
 
 public struct RecentsScene: View {
     @Environment(\.dismiss) private var dismiss
-    private let model: RecentsSceneViewModel
+
+    @State private var model: RecentsSceneViewModel
 
     public init(model: RecentsSceneViewModel) {
-        self.model = model
+        _model = State(wrappedValue: model)
     }
 
     public var body: some View {
@@ -41,5 +44,6 @@ public struct RecentsScene: View {
                 }
             }
         }
+        .observeQuery(request: $model.request, value: $model.assets)
     }
 }

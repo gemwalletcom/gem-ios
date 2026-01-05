@@ -14,6 +14,7 @@ import ChainService
 import ExplorerService
 import Signer
 import EventPresenterService
+import Recents
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -191,6 +192,16 @@ struct SelectAssetSceneNavigationStack: View {
             .presentationDetentsForCurrentDeviceSize(expandable: true)
             .presentationDragIndicator(.visible)
             .presentationBackground(Colors.grayBackground)
+        }
+        .sheet(isPresented: $model.isPresentingRecents) {
+            RecentsScene(
+                model: RecentsSceneViewModel(
+                    walletId: model.recentActivityRequest.walletId,
+                    types: model.recentActivityRequest.types,
+                    filters: model.recentActivityRequest.filters,
+                    onSelect: model.onSelectRecentAsset
+                )
+            )
         }
         .onChange(of: model.selectedRecentInput) { _, input in
             if let input {

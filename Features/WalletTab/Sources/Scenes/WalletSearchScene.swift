@@ -8,6 +8,7 @@ import Style
 import Localization
 import PrimitivesComponents
 import AssetsService
+import Recents
 
 public struct WalletSearchScene: View {
     @State private var model: WalletSearchSceneViewModel
@@ -59,11 +60,10 @@ public struct WalletSearchScene: View {
         .sheet(isPresented: $model.isPresentingRecents) {
             RecentsScene(
                 model: RecentsSceneViewModel(
-                    models: model.activityModels,
-                    onSelect: { asset in
-                        model.onSelectAsset(asset)
-                        model.isPresentingRecents = false
-                    }
+                    walletId: model.recentActivityRequest.walletId,
+                    types: model.recentActivityRequest.types,
+                    filters: model.recentActivityRequest.filters,
+                    onSelect: model.onSelectRecentAsset
                 )
             )
         }

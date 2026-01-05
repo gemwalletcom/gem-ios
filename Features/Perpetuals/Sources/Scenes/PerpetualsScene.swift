@@ -8,6 +8,7 @@ import Store
 import PerpetualService
 import PrimitivesComponents
 import Preferences
+import Recents
 
 public struct PerpetualsScene: View {
     @Bindable private var model: PerpetualsSceneViewModel
@@ -50,11 +51,10 @@ public struct PerpetualsScene: View {
         .sheet(isPresented: $model.isPresentingRecents) {
             RecentsScene(
                 model: RecentsSceneViewModel(
-                    models: model.activityModels,
-                    onSelect: { asset in
-                        model.onSelectRecentPerpetual(asset: asset)
-                        model.isPresentingRecents = false
-                    }
+                    walletId: model.recentActivityRequest.walletId,
+                    types: model.recentActivityRequest.types,
+                    filters: model.recentActivityRequest.filters,
+                    onSelect: model.onSelectRecentPerpetual
                 )
             )
         }

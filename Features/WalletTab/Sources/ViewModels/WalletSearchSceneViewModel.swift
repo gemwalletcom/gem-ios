@@ -171,6 +171,11 @@ extension WalletSearchSceneViewModel {
         updateRecent(asset)
     }
 
+    func onSelectRecentAsset(asset: Asset) {
+        onSelectAssetAction?(asset)
+        isPresentingRecents = false
+    }
+
     func onSelectAddCustomToken() {
         onAddToken?()
     }

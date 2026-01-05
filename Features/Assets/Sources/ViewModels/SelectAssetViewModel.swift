@@ -31,7 +31,7 @@ public final class SelectAssetViewModel {
     var state: StateViewType<[AssetBasic]> = .noData
     var searchModel: AssetSearchViewModel
     var request: AssetsRequest
-    var recentActivityRequest: RecentActivityRequest
+    public var recentActivityRequest: RecentActivityRequest
 
     var isSearching: Bool = false
     var isDismissSearch: Bool = false
@@ -293,7 +293,24 @@ extension SelectAssetViewModel {
             }
         }
     }
-    
+
+    func onSelectRecents() {
+        isPresentingRecents = true
+    }
+
+    public func onSelectRecentAsset(asset: Asset) {
+        switch selectType {
+        case .send, .receive, .buy, .swap:
+            selectedRecentInput = SelectAssetInput(
+                type: selectType,
+                assetAddress: assetAddress(for: asset)
+            )
+        case .deposit, .withdraw, .manage, .priceAlert:
+            break
+        }
+        isPresentingRecents = false
+    }
+
     func onSelectAddCustomToken() {
         isPresentingAddToken.toggle()
     }
