@@ -16,7 +16,6 @@ public final class ImportWalletViewModel {
     let walletService: WalletService
     let avatarService: AvatarService
     let nameService: any NameServiceable
-    let hasExistingWallets: Bool
 
     var isPresentingWallets: Binding<Bool>
     var isPresentingSelectImageWallet: Wallet?
@@ -31,7 +30,6 @@ public final class ImportWalletViewModel {
         self.avatarService = avatarService
         self.nameService = nameService
         self.isPresentingWallets = isPresentingWallets
-        self.hasExistingWallets = walletService.wallets.isNotEmpty
     }
 
     public var isAcceptTermsCompleted: Bool {
@@ -58,7 +56,7 @@ extension ImportWalletViewModel {
     }
 
     func setupWalletComplete(wallet: Wallet) async throws {
-        try await walletService.setCurrent(wallet: wallet)
         dismiss()
+        try await walletService.setCurrent(wallet: wallet)
     }
 }

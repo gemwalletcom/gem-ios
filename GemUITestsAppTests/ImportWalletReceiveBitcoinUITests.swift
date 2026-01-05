@@ -44,9 +44,6 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
         app.tapImportWallet()
 
         importFlow(app: app, words: UITestKitConstants.words2)
-
-        // SetupWalletScene
-        app.buttons["Done"].firstMatch.tap()
     }
     
     func importFlow(app: XCUIApplication, words: String) {
@@ -56,5 +53,8 @@ final class ImportWalletReceiveBitcoinUITests: XCTestCase {
         // ImportWalletScene
         app.textFields["importInputField"].typeText(words)
         app.buttons["Import"].firstMatch.tap()
+        
+        // SetupWalletScene
+        app.buttons["Done"].firstMatch.tap()
     }
 }

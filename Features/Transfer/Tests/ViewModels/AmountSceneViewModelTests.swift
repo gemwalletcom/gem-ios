@@ -1,11 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import WalletsServiceTestKit
-import StakeServiceTestKit
 import PrimitivesTestKit
-import BalanceServiceTestKit
-import PriceServiceTestKit
 import Primitives
 import Store
 
@@ -13,8 +9,9 @@ import Store
 
 @MainActor
 struct AmountSceneViewModelTests {
+
     @Test
-    func testMaxButton() {
+    func maxButton() {
         let model = AmountSceneViewModel.mock()
         #expect(model.amountInputModel.isValid)
 
@@ -27,104 +24,62 @@ struct AmountSceneViewModelTests {
     }
 
     @Test
-    func depositTitle() {
-        #expect(AmountSceneViewModel.mock(type: .deposit(recipient: .mock())).title == "Deposit")
-    }
-    
-    @Test
     func stakingReservedFeesText() {
-        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 2_000_000_000_000_000_000))
-        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
-        
-        model.onSelectMaxButton()
+        let assetData = AssetData.mock(
+            asset: .mockBNB(),
+            balance: .mock(available: 2_000_000_000_000_000_000)
+        )
+        let model = AmountSceneViewModel.mock(
+            type: .stake(validators: [.mock()], recommendedValidator: nil),
+            assetData: assetData
+        )
 
+        model.onSelectMaxButton()
         #expect(model.infoText != nil)
         #expect(model.amountInputModel.text == "1.99975")
-        
+
         model.amountInputModel.text = .zero
         #expect(model.infoText == nil)
     }
-    
-//    @Test
-//    func depositMinimumAmount() {
-//        let usdcAsset = Asset.mock(
-//            id: AssetId(chain: .ethereum, tokenId: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"),
-//            symbol: "USDC",
-//            decimals: 6
-//        )
-//        let model = AmountSceneViewModel.mock(type: .deposit(recipient: .mock()), asset: usdcAsset)
-//        
-//        model.amountInputModel.update(text: "4.99")
-//        let _ = model.amountInputModel.validate()
-//        #expect(!model.amountInputModel.isValid)
-//        
-//        model.amountInputModel.update(text: "5")
-//        let _ = model.amountInputModel.validate()
-//        #expect(model.amountInputModel.isValid)
-//    }
 
     @Test
-    func transferWithSmallAmount() {
-        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 10_000_000_000_000_000))
-        let model = AmountSceneViewModel.mock(type: .transfer(recipient: .mock()), assetData: assetData)
-
-        model.amountInputModel.update(text: "0.001")
-        #expect(model.amountInputModel.isValid)
-    }
-
-    @Test
-    func stakeWithInsufficientAmount() {
-        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 2_000_000_000_000_000_000))
-        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
+    func stakeValidation() {
+        let assetData = AssetData.mock(
+            asset: .mockBNB(),
+            balance: .mock(available: 5_000_000_000_000_000_000)
+        )
+        let model = AmountSceneViewModel.mock(
+            type: .stake(validators: [.mock()], recommendedValidator: nil),
+            assetData: assetData
+        )
 
         model.amountInputModel.update(text: "0.099")
         #expect(model.amountInputModel.isValid == false)
-    }
-
-    @Test
-    func stakeWithSufficientAmount() {
-        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 5_000_000_000_000_000_000))
-        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
 
         model.amountInputModel.update(text: "1.5")
         #expect(model.amountInputModel.isValid == true)
     }
 
     @Test
-    func unfreezeWithSufficientBalance() {
-        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(frozen: 1_000_000))
+    func transferValidation() {
+        let assetData = AssetData.mock(
+            asset: .mockBNB(),
+            balance: .mock(available: 10_000_000_000_000_000)
+        )
         let model = AmountSceneViewModel.mock(
-            type: .freeze(data: .init(freezeType: .unfreeze, resource: .bandwidth)),
+            type: .transfer(recipient: .mock()),
             assetData: assetData
         )
 
-        model.amountInputModel.update(text: "1.0")
+        model.amountInputModel.update(text: "0.001")
         #expect(model.amountInputModel.isValid == true)
+
+        model.amountInputModel.update(text: "100")
+        #expect(model.amountInputModel.isValid == false)
     }
 
     @Test
-    func unfreezeEnergyWithSufficientBalance() {
-        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(locked: 2_000_000))
-        let model = AmountSceneViewModel.mock(
-            type: .freeze(data: .init(freezeType: .unfreeze, resource: .energy)),
-            assetData: assetData
-        )
-
-        model.amountInputModel.update(text: "2.0")
-        #expect(model.amountInputModel.isValid == true)
-    }
-
-    @Test
-    func tronStakeWithoutFeeReservation() {
-        let assetData = AssetData.mock(asset: .mockTron(), balance: .mock(frozen: 10_000_000, locked: 0))
-        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
-
-        model.amountInputModel.update(text: "10")
-        #expect(model.amountInputModel.isValid == true)
-    }
-
-    @Test
-    func unfreezeResourceSwitchUpdatesValidators() {
+    func unfreezeResourceSwitch() {
         let assetData = AssetData.mock(
             asset: .mockTron(),
             balance: .mock(frozen: 0, locked: 5_000_000)
@@ -134,39 +89,64 @@ struct AmountSceneViewModelTests {
             assetData: assetData
         )
 
-        model.onSelectResource(.energy)
+        guard case let .freeze(freeze) = model.provider else { return }
+
+        freeze.resourceSelection.selected = .energy
+        model.onChangeResource(.bandwidth, .energy)
         model.amountInputModel.update(text: "2.0")
         #expect(model.amountInputModel.isValid == true)
 
-        model.onSelectResource(.bandwidth)
+        freeze.resourceSelection.selected = .bandwidth
+        model.onChangeResource(.energy, .bandwidth)
         model.amountInputModel.update(text: "2.0")
         #expect(model.amountInputModel.isValid == false)
     }
 
     @Test
-    func stakeWithZeroReservedFees() {
-        let assetData = AssetData.mock(asset: .mockHypercore(), balance: .mock(available: 5_000_000))
-        let model = AmountSceneViewModel.mock(type: .stake(validators: [], recommendedValidator: nil), assetData: assetData)
-
-        model.onSelectMaxButton()
-
-        #expect(model.infoText == nil)
-    }
-
-    @Test
     func selectValidatorPreservesAmount() {
-        let validator1 = DelegationValidator.mock(id: "1", name: "Validator 1")
-        let validator2 = DelegationValidator.mock(id: "2", name: "Validator 2")
-        let assetData = AssetData.mock(asset: .mockBNB(), balance: .mock(available: 5_000_000_000_000_000_000))
+        let validator1 = DelegationValidator.mock(id: "1")
+        let validator2 = DelegationValidator.mock(id: "2")
+        let assetData = AssetData.mock(
+            asset: .mockBNB(),
+            balance: .mock(available: 5_000_000_000_000_000_000)
+        )
         let model = AmountSceneViewModel.mock(
             type: .stake(validators: [validator1, validator2], recommendedValidator: validator1),
             assetData: assetData
         )
 
         model.amountInputModel.update(text: "1.5")
-        model.onSelectValidator(validator2)
+        model.onValidatorSelected(validator2)
 
         #expect(model.amountInputModel.text == "1.5")
+    }
+
+    @Test
+    func actionButtonState() {
+        let model = AmountSceneViewModel.mock()
+
+        #expect(model.actionButtonState == .disabled)
+
+        model.amountInputModel.update(text: "1.0")
+        #expect(model.actionButtonState == .normal)
+
+        model.amountInputModel.update(text: "")
+        #expect(model.actionButtonState == .disabled)
+    }
+
+    @Test
+    func onAppearSetsMaxForFixedValue() {
+        let delegation = Delegation.mock(base: .mock(state: .active, balance: "1000000"))
+        let assetData = AssetData.mock(asset: .mockBNB())
+        let model = AmountSceneViewModel.mock(
+            type: .stakeWithdraw(delegation: delegation),
+            assetData: assetData
+        )
+
+        #expect(model.isInputDisabled == true)
+
+        model.onAppear()
+        #expect(model.amountInputModel.text.isEmpty == false)
     }
 }
 

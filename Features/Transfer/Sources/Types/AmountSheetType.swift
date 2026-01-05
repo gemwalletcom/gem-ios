@@ -5,11 +5,12 @@ import InfoSheet
 import Primitives
 import Components
 import Perpetuals
+import PrimitivesComponents
 
-enum AmountSheetType: Identifiable, Sendable {
+enum AmountSheetType: Identifiable {
     case infoAction(InfoSheetType)
     case fiatConnect(assetAddress: AssetAddress, walletId: WalletId)
-    case leverageSelector
+    case leverageSelector(selection: SelectionState<LeverageOption>)
     case autoclose(AutocloseOpenData)
 
     var id: String {
