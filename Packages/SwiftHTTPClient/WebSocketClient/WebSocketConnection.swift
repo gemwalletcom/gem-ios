@@ -7,17 +7,15 @@ public actor WebSocketConnection: WebSocketConnectable {
     public private(set) var state: WebSocketState = .disconnected
 
     private let configuration: WebSocketConfiguration
-    private let session: URLSession
 
+    private var session: URLSession?
     private var task: URLSessionWebSocketTask?
     private var reconnectTask: Task<Void, Never>?
     private var continuation: AsyncStream<WebSocketEvent>.Continuation?
-    private var reconnectDelay: TimeInterval
+    private var reconnectAttempt: Int = 0
 
     public init(configuration: WebSocketConfiguration) {
         self.configuration = configuration
-        self.session = URLSession(configuration: configuration.sessionConfiguration)
-        self.reconnectDelay = configuration.reconnectDelay
     }
 
     public init(url: URL) {
@@ -99,14 +97,38 @@ public actor WebSocketConnection: WebSocketConnectable {
     private func startConnection() {
         state = .connecting
 
-        task = session.webSocketTask(with: configuration.url)
+        let delegate = WebSocketSessionDelegate(
+            didOpen: { [weak self] in
+                Task { await self?.didOpen() }
+            },
+            didClose: { [weak self] closeCode, reason in
+                Task { await self?.didClose(closeCode: closeCode, reason: reason) }
+            }
+        )
+
+        session = URLSession(
+            configuration: configuration.sessionConfiguration,
+            delegate: delegate,
+            delegateQueue: nil
+        )
+
+        task = session?.webSocketTask(with: configuration.url)
         task?.resume()
 
-        state = .connected
-        reconnectDelay = configuration.reconnectDelay
-        continuation?.yield(.connected)
-
         listen()
+    }
+
+    private func didOpen() {
+        guard state == .connecting else { return }
+
+        state = .connected
+        reconnectAttempt = 0
+        continuation?.yield(.connected)
+    }
+
+    private func didClose(closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+        guard state != .disconnected else { return }
+        scheduleReconnect(with: nil)
     }
 
     private func listen() {
@@ -120,7 +142,6 @@ public actor WebSocketConnection: WebSocketConnectable {
     private func handleReceive(_ result: Result<URLSessionWebSocketTask.Message, Error>) {
         switch result {
         case .success(let message):
-            reconnectDelay = configuration.reconnectDelay
             handleMessage(message)
             listen()
 
@@ -154,8 +175,8 @@ public actor WebSocketConnection: WebSocketConnectable {
         state = .reconnecting
         continuation?.yield(.disconnected(error))
 
-        let delay = reconnectDelay
-        reconnectDelay = min(configuration.maxReconnectDelay, reconnectDelay * 2)
+        let delay = configuration.reconnection.reconnectAfter(attempt: reconnectAttempt)
+        reconnectAttempt += 1
 
         reconnectTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(delay))
@@ -167,7 +188,6 @@ public actor WebSocketConnection: WebSocketConnectable {
         reconnectTask = nil
 
         guard state == .reconnecting, task == nil else { return }
-
         startConnection()
     }
 }
