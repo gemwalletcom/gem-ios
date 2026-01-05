@@ -54,6 +54,8 @@ extension AppResolver {
         let swapService: SwapService
         let subscriptionsService: SubscriptionService
         let appReleaseService: AppReleaseService
+        let releaseAlertService: ReleaseAlertService
+        let rateService: RateService
         let deviceObserverService: DeviceObserverService
         let onstartService: OnstartService
         let onstartAsyncService: OnstartAsyncService
@@ -91,6 +93,8 @@ extension AppResolver {
             avatarService: AvatarService,
             swapService: SwapService,
             appReleaseService: AppReleaseService,
+            releaseAlertService: ReleaseAlertService,
+            rateService: RateService,
             subscriptionsService: SubscriptionService,
             deviceObserverService: DeviceObserverService,
             onstartService: OnstartService,
@@ -128,6 +132,8 @@ extension AppResolver {
             self.avatarService = avatarService
             self.swapService = swapService
             self.appReleaseService = appReleaseService
+            self.releaseAlertService = releaseAlertService
+            self.rateService = rateService
             self.deviceObserverService = deviceObserverService
             self.subscriptionsService = subscriptionsService
             self.onstartService = onstartService

@@ -10,7 +10,7 @@ import PrimitivesComponents
 
 struct ImportWalletScene: View {
     enum Field {
-        case name, input
+        case input
     }
 
     @FocusState private var focusedField: Field?
@@ -22,16 +22,6 @@ struct ImportWalletScene: View {
 
     var body: some View {
         Form {
-            if model.showNameField {
-                Section {
-                    FloatTextField(
-                        model.walletFieldTitle,
-                        text: $model.name,
-                        allowClean: focusedField == .name
-                    )
-                    .focused($focusedField, equals: .name)
-                }
-            }
             Section {
                 VStack {
                     if model.showImportTypes {
