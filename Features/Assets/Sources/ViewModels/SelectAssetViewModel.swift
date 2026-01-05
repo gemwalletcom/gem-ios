@@ -40,7 +40,7 @@ public final class SelectAssetViewModel {
     var copyTypeViewModel: CopyTypeViewModel?
     public var isPresentingAddToken: Bool = false
     public var isPresentingRecents: Bool = false
-    public var selectedRecentInput: SelectAssetInput?
+    public var assetSelection: AssetSelectionType?
 
     public var filterModel: AssetsFilterViewModel
     public var onSelectAssetAction: AssetAction
@@ -189,11 +189,6 @@ public final class SelectAssetViewModel {
     var currencyCode: String {
         preferences.currency
     }
-
-    func assetAddress(for asset: Asset) -> AssetAddress {
-        let address = (try? wallet.account(for: asset.chain).address) ?? ""
-        return AssetAddress(asset: asset, address: address)
-    }
 }
 
 // MARK: - Business Logic
@@ -298,14 +293,17 @@ extension SelectAssetViewModel {
         isPresentingRecents = true
     }
 
-    public func onSelectRecentAsset(asset: Asset) {
+    func onSelectAsset(_ assetData: AssetData) {
+        assetSelection = .regular(SelectAssetInput(type: selectType, assetAddress: assetData.assetAddress))
+    }
+
+    public func onSelectRecentAsset(_ asset: Asset) {
         switch selectType {
-        case .send, .receive, .buy, .swap:
-            selectedRecentInput = SelectAssetInput(
-                type: selectType,
-                assetAddress: assetAddress(for: asset)
-            )
-        case .deposit, .withdraw, .manage, .priceAlert:
+        case .send, .receive, .buy:
+            assetSelection = .recent(SelectAssetInput(type: selectType, assetAddress: assetAddress(for: asset)))
+        case .swap:
+            selectAsset(asset: asset)
+        case .manage, .priceAlert, .deposit, .withdraw:
             break
         }
         isPresentingRecents = false
@@ -319,6 +317,12 @@ extension SelectAssetViewModel {
 // MARK: - Private
 
 extension SelectAssetViewModel {
+
+    private func assetAddress(for asset: Asset) -> AssetAddress {
+        let address = (try? wallet.account(for: asset.chain).address) ?? ""
+        return AssetAddress(asset: asset, address: address)
+    }
+    
     private func searchAssets(
         query: String,
         priorityAssetsQuery: String?,

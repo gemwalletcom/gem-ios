@@ -81,7 +81,9 @@ public struct SelectAssetScene: View {
                 ) { assetModel in
                     switch model.selectType {
                     case .send, .receive, .buy:
-                        NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: assetModel.asset))) {
+                        Button {
+                            model.onSelectRecentAsset(assetModel.asset)
+                        } label: {
                             AssetChipView(model: assetModel)
                         }
                     case .swap:
@@ -137,13 +139,15 @@ public struct SelectAssetScene: View {
         ForEach(assets) { assetData in
             switch model.selectType {
             case .buy, .receive, .send, .deposit, .withdraw:
-                NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
-                    ListAssetItemSelectionView(
+                NavigationCustomLink(
+                    with: ListAssetItemSelectionView(
                         assetData: assetData,
                         currencyCode: model.currencyCode,
                         type: model.selectType.listType,
                         action: model.onAssetAction
                     )
+                ) {
+                    model.onSelectAsset(assetData)
                 }
             case .manage:
                 ListAssetItemSelectionView(

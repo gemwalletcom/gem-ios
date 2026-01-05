@@ -48,6 +48,7 @@ struct SelectAssetSceneNavigationStack: View {
             SelectAssetScene(
                 model: model
             )
+            .onChange(of: model.assetSelection, onChangeAssetSelection)
             .toolbar {
                 ToolbarDismissItem(
                     title: .done,
@@ -162,9 +163,6 @@ struct SelectAssetSceneNavigationStack: View {
                         EmptyView()
                     }
                 }
-                .taskOnce {
-                    model.updateRecent(assetId: input.asset.id)
-                }
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: TransferData.self) { data in
@@ -203,12 +201,6 @@ struct SelectAssetSceneNavigationStack: View {
                 )
             )
         }
-        .onChange(of: model.selectedRecentInput) { _, input in
-            if let input {
-                model.selectedRecentInput = nil
-                navigationPath.append(input)
-            }
-        }
     }
 }
 
@@ -217,5 +209,18 @@ struct SelectAssetSceneNavigationStack: View {
 extension SelectAssetSceneNavigationStack {
     private func onSelectFilter() {
         isPresentingFilteringView.toggle()
+    }
+
+    private func onChangeAssetSelection(_: AssetSelectionType?, new: AssetSelectionType?) {
+        if let new {
+            model.assetSelection = nil
+            switch new {
+            case .regular(let input):
+                model.updateRecent(assetId: input.asset.id)
+                navigationPath.append(input)
+            case .recent(let input):
+                navigationPath.append(input)
+            }
+        }
     }
 }
