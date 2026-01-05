@@ -82,6 +82,7 @@ public actor WebSocketConnection: WebSocketConnectable {
             }
         }
 
+        resetReconnectionAttempt()
         startConnection()
     }
 
@@ -122,7 +123,7 @@ public actor WebSocketConnection: WebSocketConnectable {
         guard state == .connecting else { return }
 
         state = .connected
-        reconnectAttempt = 0
+        resetReconnectionAttempt()
         continuation?.yield(.connected)
     }
 
@@ -189,5 +190,9 @@ public actor WebSocketConnection: WebSocketConnectable {
 
         guard state == .reconnecting, task == nil else { return }
         startConnection()
+    }
+    
+    private func resetReconnectionAttempt() {
+        reconnectAttempt = 0
     }
 }
