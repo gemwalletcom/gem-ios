@@ -43,8 +43,7 @@
       "Bash(just:*)",
       "Bash(git stash push:*)",
       "mcp__sosumi__fetchAppleDocumentation",
-      "mcp__sosumi__searchAppleDocumentation",
-      "Bash(xcrun simctl:*)"
+      "mcp__sosumi__searchAppleDocumentation"
     ],
     "deny": []
   }
