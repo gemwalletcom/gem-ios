@@ -76,7 +76,7 @@ extension AddTokenScene {
             }
             Section {
                 FloatTextField(model.addressTitleField, text: model.addressBinding) {
-                    HStack(spacing: .medium) {
+                    HStack(spacing: .small) {
                         ListButton(image: model.pasteImage, action: onSelectPaste)
                         ListButton(image: model.qrImage, action: onSelectScan)
                     }
