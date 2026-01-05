@@ -26,7 +26,7 @@ public final class PerpetualsSceneViewModel {
     var walletBalanceRequest: PerpetualWalletBalanceRequest
     var recentActivityRequest: RecentActivityRequest
 
-    var recentActivities: [Asset] = []
+    var recentActivities: [RecentAsset] = []
     var positions: [PerpetualPositionData] = []
     var perpetuals: [PerpetualData] = []
     var walletBalance: WalletBalance = .zero
@@ -89,7 +89,7 @@ public final class PerpetualsSceneViewModel {
     }
 
     var activityModels: [AssetViewModel] {
-        recentActivities.map { AssetViewModel(asset: $0) }
+        recentActivities.map { AssetViewModel(asset: $0.asset) }
     }
 
     var headerViewModel: PerpetualsHeaderViewModel {

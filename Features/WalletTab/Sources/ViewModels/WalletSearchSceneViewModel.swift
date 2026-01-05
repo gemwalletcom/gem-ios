@@ -28,7 +28,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     private var state: StateViewType<[AssetBasic]> = .noData
 
     var assets: [AssetData] = []
-    var recentActivities: [Asset] = []
+    var recentActivities: [RecentAsset] = []
     var searchModel: AssetSearchViewModel
     var request: AssetsRequest
     var recentActivityRequest: RecentActivityRequest
@@ -89,7 +89,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     }
 
     var activityModels: [AssetViewModel] {
-        recentActivities.map { AssetViewModel(asset: $0) }
+        recentActivities.map { AssetViewModel(asset: $0.asset) }
     }
 
     var showLoading: Bool {

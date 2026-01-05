@@ -20,17 +20,24 @@ public struct RecentsScene: View {
     public var body: some View {
         NavigationStack {
             List {
-                ForEach(model.models) { assetModel in
-                    NavigationCustomLink(
-                        with: ListItemView(
-                            title: assetModel.name,
-                            imageStyle: .asset(assetImage: assetModel.assetImage)
-                        )
-                    ) {
-                        model.onSelect(assetModel.asset)
+                ForEach(model.sections) { section in
+                    Section {
+                        ForEach(section.assets) { recentAsset in
+                            let assetModel = AssetViewModel(asset: recentAsset.asset)
+                            NavigationCustomLink(
+                                with: ListItemView(
+                                    title: assetModel.name,
+                                    imageStyle: .asset(assetImage: assetModel.assetImage)
+                                )
+                            ) {
+                                model.onSelect(recentAsset.asset)
+                            }
+                        }
+                        .listRowInsets(.assetListRowInsets)
+                    } header: {
+                        Text(section.title)
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
             .listStyle(.insetGrouped)
             .contentMargins(.top, .scene.top, for: .scrollContent)
@@ -44,6 +51,6 @@ public struct RecentsScene: View {
                 }
             }
         }
-        .observeQuery(request: $model.request, value: $model.assets)
+        .observeQuery(request: $model.request, value: $model.recentAssets)
     }
 }

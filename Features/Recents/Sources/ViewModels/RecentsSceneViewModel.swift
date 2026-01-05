@@ -11,11 +11,7 @@ public final class RecentsSceneViewModel {
     var request: RecentActivityRequest
     public let onSelect: (Asset) -> Void
 
-    var assets: [Asset] = []
-
-    public var models: [AssetViewModel] {
-        assets.map { AssetViewModel(asset: $0) }
-    }
+    var recentAssets: [RecentAsset] = []
 
     public init(
         walletId: String,
@@ -30,5 +26,9 @@ public final class RecentsSceneViewModel {
             filters: filters
         )
         self.onSelect = onSelect
+    }
+
+    var sections: [RecentAssetsSection] {
+        RecentAssetsSection.from(recentAssets)
     }
 }

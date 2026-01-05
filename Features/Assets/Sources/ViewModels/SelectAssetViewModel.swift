@@ -27,7 +27,7 @@ public final class SelectAssetViewModel {
     public let wallet: Wallet
 
     var assets: [AssetData] = []
-    var recentActivities: [Asset] = []
+    var recentActivities: [RecentAsset] = []
     var state: StateViewType<[AssetBasic]> = .noData
     var searchModel: AssetSearchViewModel
     var request: AssetsRequest
@@ -183,7 +183,7 @@ public final class SelectAssetViewModel {
     }
 
     var activityModels: [AssetViewModel] {
-        recentActivities.map { AssetViewModel(asset: $0) }
+        recentActivities.map { AssetViewModel(asset: $0.asset) }
     }
 
     var currencyCode: String {

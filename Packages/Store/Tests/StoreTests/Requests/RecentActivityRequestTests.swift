@@ -25,8 +25,8 @@ struct RecentActivityRequestTests {
             let result = try RecentActivityRequest(walletId: "", limit: 10).fetch(db)
 
             #expect(result.count == 2)
-            #expect(result.first?.id == btc)
-            #expect(result.last?.id == bnb)
+            #expect(result.first?.asset.id == btc)
+            #expect(result.last?.asset.id == bnb)
         }
     }
 
@@ -53,11 +53,11 @@ struct RecentActivityRequestTests {
 
             #expect(noFilter.count == 3)
             #expect(hasBalance.count == 2)
-            #expect(hasBalance.map(\.id).contains(btc) == false)
+            #expect(hasBalance.map(\.asset.id).contains(btc) == false)
             #expect(buyable.count == 2)
-            #expect(buyable.map(\.id).contains(btc) == false)
+            #expect(buyable.map(\.asset.id).contains(btc) == false)
             #expect(chains.count == 1)
-            #expect(chains.first?.id == eth)
+            #expect(chains.first?.asset.id == eth)
         }
     }
 }
