@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "Obţine %@ pentru %@!";
 "transfer.sign_transaction.title" = "Semnează tranzacția";
 "recent_activity.title" = "Recente";
+"date.earlier" = "Mai devreme";

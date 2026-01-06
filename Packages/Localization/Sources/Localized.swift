@@ -355,6 +355,8 @@ public enum Localized {
     public static let title = Localized.tr("Localizable", "contacts.title", fallback: "Contacts")
   }
   public enum Date {
+    /// Earlier
+    public static let earlier = Localized.tr("Localizable", "date.earlier", fallback: "Earlier")
     /// Today
     public static let today = Localized.tr("Localizable", "date.today", fallback: "Today")
     /// Yesterday

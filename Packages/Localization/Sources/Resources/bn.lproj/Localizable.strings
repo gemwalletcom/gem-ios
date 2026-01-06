@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "পান %@ জন্য %@!";
 "transfer.sign_transaction.title" = "লেনদেন স্বাক্ষর করুন";
 "recent_activity.title" = "সাম্প্রতিক";
+"date.earlier" = "আগে";

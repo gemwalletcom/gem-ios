@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "Dapatkan %@ untuk %@!";
 "transfer.sign_transaction.title" = "Tandatangan Transaksi";
 "recent_activity.title" = "Terkini";
+"date.earlier" = "Terdahulu";

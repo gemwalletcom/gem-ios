@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "Lấy %@ vì %@!";
 "transfer.sign_transaction.title" = "Ký giao dịch";
 "recent_activity.title" = "Gần đây";
+"date.earlier" = "Trước đó";

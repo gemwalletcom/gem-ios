@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "Ottenere %@ per %@!";
 "transfer.sign_transaction.title" = "Firma la transazione";
 "recent_activity.title" = "Recenti";
+"date.earlier" = "Prima";

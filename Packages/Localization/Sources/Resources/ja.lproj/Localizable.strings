@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "得る %@ のために %@!";
 "transfer.sign_transaction.title" = "トランザクションに署名";
 "recent_activity.title" = "最近";
+"date.earlier" = "以前";

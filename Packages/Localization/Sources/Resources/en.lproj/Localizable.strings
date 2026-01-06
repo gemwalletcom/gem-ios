@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "Get %@ for %@!";
 "transfer.sign_transaction.title" = "Sign Transaction";
 "recent_activity.title" = "Recents";
+"date.earlier" = "Earlier";

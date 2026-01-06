@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "לְקַבֵּל %@ עֲבוּר %@!";
 "transfer.sign_transaction.title" = "חתימה על עסקה";
 "recent_activity.title" = "אחרונים";
+"date.earlier" = "מוקדם יותר";

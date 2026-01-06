@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "得到 %@ 為了 %@！";
 "transfer.sign_transaction.title" = "簽署交易";
 "recent_activity.title" = "近期";
+"date.earlier" = "早些時候";

@@ -11,7 +11,7 @@ enum RecentGroup: Comparable, Hashable {
     var title: String {
         switch self {
         case .today: Localized.Date.today
-        case .earlier: "Earlier"
+        case .earlier: Localized.Date.earlier
         }
     }
 

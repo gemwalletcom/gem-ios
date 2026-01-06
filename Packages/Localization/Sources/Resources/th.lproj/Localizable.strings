@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "รับ %@ สำหรับ %@-";
 "transfer.sign_transaction.title" = "ลงนามในธุรกรรม";
 "recent_activity.title" = "ล่าสุด";
+"date.earlier" = "ก่อนหน้านี้";

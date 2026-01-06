@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "Pata %@ kwa %@!";
 "transfer.sign_transaction.title" = "Saini Muamala";
 "recent_activity.title" = "Hivi karibuni";
+"date.earlier" = "Mapema";

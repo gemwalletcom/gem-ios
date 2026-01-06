@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "دریافت %@ برای %@!";
 "transfer.sign_transaction.title" = "ثبت تراکنش";
 "recent_activity.title" = "تازه‌ها";
+"date.earlier" = "زودتر";

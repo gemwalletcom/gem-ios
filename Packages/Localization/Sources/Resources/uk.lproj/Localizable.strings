@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "Отримати %@ для %@!";
 "transfer.sign_transaction.title" = "Підписати транзакцію";
 "recent_activity.title" = "Нещодавні";
+"date.earlier" = "Раніше";

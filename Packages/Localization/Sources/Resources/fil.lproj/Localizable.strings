@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "Kunin %@ para sa %@!";
 "transfer.sign_transaction.title" = "Pirmahan ang Transaksyon";
 "recent_activity.title" = "Mga Kamakailan";
+"date.earlier" = "Mas maaga";

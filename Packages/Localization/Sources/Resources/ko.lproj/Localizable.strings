@@ -546,3 +546,4 @@
 "rewards.confirm_redeem" = "얻다 %@ ~을 위한 %@!";
 "transfer.sign_transaction.title" = "거래 서명";
 "recent_activity.title" = "최근";
+"date.earlier" = "더 일찍";
