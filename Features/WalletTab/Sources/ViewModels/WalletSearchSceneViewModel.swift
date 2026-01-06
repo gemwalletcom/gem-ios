@@ -21,7 +21,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     private let walletsService: WalletsService
     private let preferences: Preferences
 
-    public let wallet: Wallet
+    private let wallet: Wallet
     private let onDismissSearch: VoidAction
     private let onAddToken: VoidAction
 
