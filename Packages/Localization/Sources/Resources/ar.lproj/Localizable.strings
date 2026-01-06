@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "الرافعة المالية الافتراضية";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "مؤخرًا";
 "errors.no_data_available" = "لا توجد بيانات متاحة";
 "errors.dust_threshold_short" = "تعتبر الشبكة هذه الكمية مجرد غبار، حيث أن الرسوم أعلى من الكمية نفسها.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "يحصل %@";
 "rewards.insufficient_points" = "نقاط غير كافية";
 "rewards.confirm_redeem" = "يحصل %@ ل %@!";
+"transfer.sign_transaction.title" = "توقيع المعاملة";
+"recent_activity.title" = "آخر الأخبار";

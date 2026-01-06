@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Leveraj Lalai";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Terkini";
 "errors.no_data_available" = "Tiada data tersedia";
 "errors.dust_threshold_short" = "Rangkaian menganggap jumlah habuk ini — bayarannya lebih tinggi daripada jumlah itu sendiri.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "Dapatkan %@";
 "rewards.insufficient_points" = "Mata tidak mencukupi";
 "rewards.confirm_redeem" = "Dapatkan %@ untuk %@!";
+"transfer.sign_transaction.title" = "Tandatangan Transaksi";
+"recent_activity.title" = "Terkini";

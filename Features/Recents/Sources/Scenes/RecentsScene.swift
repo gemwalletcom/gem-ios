@@ -33,33 +33,27 @@ public struct RecentsScene: View {
                                 model.onSelect(recentAsset.asset)
                             }
                         }
-                        .listRowInsets(.assetListRowInsets)
                     } header: {
                         Text(section.title)
                     }
+                    .listRowInsets(.assetListRowInsets)
                 }
             }
-            .listStyle(.insetGrouped)
-            .contentMargins(.top, .scene.top, for: .scrollContent)
-            .overlay {
-                if model.showEmpty {
-                    EmptyContentView(model: model.emptyModel)
-                }
-            }
+            .contentMargins([.top], .extraSmall, for: .scrollContent)
+            .listSectionSpacing(.compact)
             .searchable(
                 text: $model.searchQuery,
                 placement: .navigationBarDrawer(displayMode: .always)
             )
             .autocorrectionDisabled()
-            .navigationTitle(Localized.RecentActivity.title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(Localized.Common.cancel) {
-                        dismiss()
-                    }
+            .overlay {
+                if model.showEmpty {
+                    EmptyContentView(model: model.emptyModel)
                 }
             }
+            .navigationTitle(Localized.RecentActivity.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { ToolbarDismissItem(title: .cancel, placement: .topBarLeading) }
         }
         .observeQuery(request: $model.request, value: $model.recentAssets)
     }

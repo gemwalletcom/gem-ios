@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "effet de levier par défaut";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Récent";
 "errors.no_data_available" = "Aucune donnée disponible";
 "errors.dust_threshold_short" = "Le réseau considère ce montant comme négligeable — les frais sont supérieurs au montant lui-même.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "Obtenir %@";
 "rewards.insufficient_points" = "Points insuffisants";
 "rewards.confirm_redeem" = "Obtenir %@ pour %@!";
+"transfer.sign_transaction.title" = "Signer la transaction";
+"recent_activity.title" = "Récents";

@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Default na Leverage";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Kamakailan";
 "errors.no_data_available" = "Walang available na data";
 "errors.dust_threshold_short" = "Isinasaalang-alang ng network ang halagang ito ng alikabok — ang bayad ay mas mataas kaysa sa halaga mismo.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "Kunin %@";
 "rewards.insufficient_points" = "Hindi sapat na puntos";
 "rewards.confirm_redeem" = "Kunin %@ para sa %@!";
+"transfer.sign_transaction.title" = "Pirmahan ang Transaksyon";
+"recent_activity.title" = "Mga Kamakailan";

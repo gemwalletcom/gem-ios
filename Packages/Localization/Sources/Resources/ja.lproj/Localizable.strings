@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "デフォルトレバレッジ";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "最近の";
 "errors.no_data_available" = "データなし";
 "errors.dust_threshold_short" = "ネットワークはこの金額をダストとみなします。つまり、手数料は金額自体よりも高くなります。";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "得る %@";
 "rewards.insufficient_points" = "ポイントが足りない";
 "rewards.confirm_redeem" = "得る %@ のために %@!";
+"transfer.sign_transaction.title" = "トランザクションに署名";
+"recent_activity.title" = "最近";

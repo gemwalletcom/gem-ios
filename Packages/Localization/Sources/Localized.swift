@@ -965,8 +965,8 @@ public enum Localized {
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
   }
   public enum RecentActivity {
-    /// Recent
-    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recent")
+    /// Recents
+    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recents")
   }
   public enum Rewards {
     /// Get %@ for %@!
@@ -1419,6 +1419,10 @@ public enum Localized {
     public enum Send {
       /// Send
       public static let title = Localized.tr("Localizable", "transfer.send.title", fallback: "Send")
+    }
+    public enum SignTransaction {
+      /// Sign Transaction
+      public static let title = Localized.tr("Localizable", "transfer.sign_transaction.title", fallback: "Sign Transaction")
     }
     public enum SmartContract {
       /// Smart Contract

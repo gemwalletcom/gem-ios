@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Domyślna dźwignia";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Ostatni";
 "errors.no_data_available" = "Brak dostępnych danych";
 "errors.dust_threshold_short" = "Sieć traktuje tę kwotę jako kurz — opłata jest wyższa od samej kwoty.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "Dostawać %@";
 "rewards.insufficient_points" = "Za mało punktów";
 "rewards.confirm_redeem" = "Dostawać %@ Do %@!";
+"transfer.sign_transaction.title" = "Podpisz transakcję";
+"recent_activity.title" = "Ostatnie";

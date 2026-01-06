@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "預設槓桿";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "最近的";
 "errors.no_data_available" = "暫無數據";
 "errors.dust_threshold_short" = "網路將這筆金額視為微不足道的垃圾——手續費甚至高於金額本身。";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "得到 %@";
 "rewards.insufficient_points" = "分數不足";
 "rewards.confirm_redeem" = "得到 %@ 為了 %@！";
+"transfer.sign_transaction.title" = "簽署交易";
+"recent_activity.title" = "近期";

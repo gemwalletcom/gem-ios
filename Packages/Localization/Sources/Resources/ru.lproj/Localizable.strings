@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Кредитное плечо по умолчанию";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Недавний";
 "errors.no_data_available" = "Данные отсутствуют.";
 "errors.dust_threshold_short" = "Эту сумму сеть считает пылью — комиссия выше самой суммы.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "Получать %@";
 "rewards.insufficient_points" = "Недостаточно баллов";
 "rewards.confirm_redeem" = "Получать %@ для %@!";
+"transfer.sign_transaction.title" = "Подписать транзакцию";
+"recent_activity.title" = "Последние";

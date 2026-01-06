@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "ডিফল্ট লিভারেজ";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "সাম্প্রতিক";
 "errors.no_data_available" = "কোন তথ্য নেই";
 "errors.dust_threshold_short" = "নেটওয়ার্ক এই পরিমাণ ধুলো বিবেচনা করে — ফি পরিমাণের চেয়ে বেশি।";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "পান %@";
 "rewards.insufficient_points" = "অপর্যাপ্ত পয়েন্ট";
 "rewards.confirm_redeem" = "পান %@ জন্য %@!";
+"transfer.sign_transaction.title" = "লেনদেন স্বাক্ষর করুন";
+"recent_activity.title" = "সাম্প্রতিক";

@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Standaard hefboomwerking";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
 "errors.no_data_available" = "Geen gegevens beschikbaar";
 "errors.dust_threshold_short" = "Het netwerk beschouwt deze hoeveelheid als stof; de vergoeding is hoger dan de hoeveelheid zelf.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "Krijgen %@";
 "rewards.insufficient_points" = "Onvoldoende punten";
 "rewards.confirm_redeem" = "Krijgen %@ voor %@!";
+"transfer.sign_transaction.title" = "Transactie ondertekenen";
+"recent_activity.title" = "Recente";

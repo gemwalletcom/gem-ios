@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Levier implicit";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
 "errors.no_data_available" = "Nu sunt disponibile date";
 "errors.dust_threshold_short" = "Rețeaua consideră această cantitate drept praf — taxa este mai mare decât suma în sine.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,5 @@
 "rewards.ways_spend.asset.title" = "Obţine %@";
 "rewards.insufficient_points" = "Puncte insuficiente";
 "rewards.confirm_redeem" = "Obţine %@ pentru %@!";
+"transfer.sign_transaction.title" = "Semnează tranzacția";
+"recent_activity.title" = "Recente";
