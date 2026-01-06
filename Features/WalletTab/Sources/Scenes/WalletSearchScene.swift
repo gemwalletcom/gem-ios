@@ -39,6 +39,7 @@ public struct WalletSearchScene: View {
         }
         .observeQuery(request: $model.request, value: $model.assets)
         .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
+        .observeQuery(request: $model.positionsRequest, value: $model.positions)
         .searchable(
             text: $model.searchModel.searchableQuery,
             isPresented: $model.isSearchPresented,
@@ -83,10 +84,10 @@ public struct WalletSearchScene: View {
 
             if model.showPerpetuals {
                 Section {
-                    PerpetualsPreviewView(wallet: model.wallet)
+                    PerpetualPositionsList(positions: model.positions)
                 } header: {
                     HeaderNavigationLinkView(
-                        title: model.perpetualsTitle,
+                        title: Localized.Perpetuals.title,
                         destination: Scenes.Perpetuals()
                     )
                 }

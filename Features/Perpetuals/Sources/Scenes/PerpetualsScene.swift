@@ -76,18 +76,14 @@ public struct PerpetualsScene: View {
 
             if model.showPositions {
                 Section {
-                    ForEach(model.positions) { position in
-                        NavigationCustomLink(
-                            with: ListAssetItemView(
-                                model: PerpetualPositionItemViewModel(model: PerpetualPositionViewModel(position))
-                            ),
-                            action: { model.onSelectPerpetual(asset: position.perpetualData.asset) }
-                        )
-                        .listRowInsets(.assetListRowInsets)
-                    }
+                    PerpetualPositionsList(
+                        positions: model.positions,
+                        onSelect: model.onSelectPerpetual
+                    )
                 } header: {
                     Text(model.positionsSectionTitle)
                 }
+                .listRowInsets(.assetListRowInsets)
             }
 
             if model.showPinned {

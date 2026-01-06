@@ -29,8 +29,11 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var assets: [AssetData] = []
     var recentActivities: [Asset] = []
+    var positions: [PerpetualPositionData] = []
     var searchModel: AssetSearchViewModel
+
     var request: AssetsRequest
+    var positionsRequest: PerpetualPositionsRequest
     var recentActivityRequest: RecentActivityRequest
 
     var isPresentingToastMessage: ToastMessage? = nil
@@ -68,6 +71,7 @@ public final class WalletSearchSceneViewModel: Sendable {
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual }
         )
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId.id)
     }
 
     var pinnedImage: Image { Images.System.pin }
@@ -81,7 +85,7 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var showTags: Bool { searchModel.searchableQuery.isEmpty }
     var showRecent: Bool { searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty }
-    var showPerpetuals: Bool { searchModel.searchableQuery.isEmpty && preferences.isPerpetualEnabled && wallet.isMultiCoins }
+    var showPerpetuals: Bool { positions.isNotEmpty && preferences.isPerpetualEnabled && wallet.isMultiCoins }
     var showLoading: Bool { state.isLoading && showEmpty }
     var showEmpty: Bool { !showAssets && !showPinned }
     var showPinned: Bool { sections.pinned.isNotEmpty }
@@ -214,6 +218,7 @@ extension WalletSearchSceneViewModel {
             searchModel.tagsViewModel.selectedTag = AssetTagSelection.all
         }
         request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
+        positionsRequest.searchQuery = searchModel.searchableQuery
         state = .loading
     }
 
