@@ -28,7 +28,7 @@ public struct AssetScene: View {
             }
             .cleanListRow()
             
-            if let banner = model.assetBannerViewModel.allBanners.first {
+            if model.canSign, let banner = model.assetBannerViewModel.allBanners.first {
                 Section {
                     BannerView(
                         banner: banner,
