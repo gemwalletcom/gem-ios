@@ -8,6 +8,7 @@ import Style
 import Localization
 import PrimitivesComponents
 import AssetsService
+import Perpetuals
 
 public struct WalletSearchScene: View {
     @State private var model: WalletSearchSceneViewModel
@@ -80,7 +81,19 @@ public struct WalletSearchScene: View {
                 }
             }
 
-            if model.showPinnedSection {
+            if model.showPerpetuals {
+                Section {
+                    PerpetualsPreviewView(wallet: model.wallet)
+                } header: {
+                    HeaderNavigationLinkView(
+                        title: model.perpetualsTitle,
+                        destination: Scenes.Perpetuals()
+                    )
+                }
+                .listRowInsets(.assetListRowInsets)
+            }
+
+            if model.showPinned {
                 Section(
                     content: { list(for: model.sections.pinned) },
                     header: {
@@ -93,7 +106,7 @@ public struct WalletSearchScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
 
-            if model.showAssetsSection {
+            if model.showAssets {
                 Section(
                     content: { list(for: model.sections.assets) },
                     header: {

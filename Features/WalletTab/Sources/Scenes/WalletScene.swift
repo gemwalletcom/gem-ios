@@ -37,6 +37,7 @@ public struct WalletScene: View {
                 } header: {
                     HeaderNavigationLinkView(title: model.perpetualsTitle, destination: Scenes.Perpetuals())
                 }
+                .listRowInsets(.assetListRowInsets)
             }
             
             if let banner = model.walletBannersModel.allBanners.first {
@@ -59,13 +60,13 @@ public struct WalletScene: View {
                         onCopyAddress: model.onCopyAddress,
                         showBalancePrivacy: $preferences.isHideBalanceEnabled
                     )
-                    .listRowInsets(.assetListRowInsets)
                 } header: {
                     HStack {
                         model.pinImage
                         Text(model.pinnedTitle)
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
 
             Section {
@@ -77,7 +78,6 @@ public struct WalletScene: View {
                     onCopyAddress: model.onCopyAddress,
                     showBalancePrivacy: $preferences.isHideBalanceEnabled
                 )
-                .listRowInsets(.assetListRowInsets)
             } header: {
                 if model.isLoadingAssets {
                     LoadingTextView(isAnimating: .constant(true))
@@ -94,7 +94,9 @@ public struct WalletScene: View {
                 .padding(.medium)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
+            .listRowInsets(.assetListRowInsets)
         }
+//        .listSectionSpacing(.compact)
         .refreshable {
             model.fetch()
         }
