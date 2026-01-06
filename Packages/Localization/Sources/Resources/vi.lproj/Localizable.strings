@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Lấy %@";
 "rewards.insufficient_points" = "Không đủ điểm";
 "rewards.confirm_redeem" = "Lấy %@ vì %@!";
+"transfer.sign_transaction.title" = "Ký giao dịch";

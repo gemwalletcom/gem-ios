@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Získat %@";
 "rewards.insufficient_points" = "Nedostatek bodů";
 "rewards.confirm_redeem" = "Získat %@ pro %@!";
+"transfer.sign_transaction.title" = "Podepsat transakci";
