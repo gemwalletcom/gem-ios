@@ -65,7 +65,7 @@ public struct PerpetualsScene: View {
             }
 
             if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels, headerPadding: .medium + .tiny) { assetModel in
+                RecentActivitySectionView(models: model.activityModels) { assetModel in
                     Button {
                         model.onSelectRecentPerpetual(asset: assetModel.asset)
                     } label: {
@@ -99,6 +99,7 @@ public struct PerpetualsScene: View {
                         Text(model.pinnedSectionTitle)
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
 
             if model.showMarkets {
@@ -112,6 +113,7 @@ public struct PerpetualsScene: View {
                 } header: {
                     Text(model.marketsSectionTitle)
                 }
+                .listRowInsets(.assetListRowInsets)
             }
         }
         .contentMargins([.top], .space12, for: .scrollContent)
