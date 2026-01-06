@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 import WalletService
+import WalletsService
 import AvatarService
 import PrimitivesComponents
 import Preferences
@@ -14,6 +15,7 @@ import enum Keystore.KeystoreImportType
 public final class ImportWalletViewModel {
 
     let walletService: WalletService
+    let walletsService: WalletsService
     let avatarService: AvatarService
     let nameService: any NameServiceable
 
@@ -22,11 +24,13 @@ public final class ImportWalletViewModel {
 
     public init(
         walletService: WalletService,
+        walletsService: WalletsService,
         avatarService: AvatarService,
         nameService: any NameServiceable,
         isPresentingWallets: Binding<Bool>
     ) {
         self.walletService = walletService
+        self.walletsService = walletsService
         self.avatarService = avatarService
         self.nameService = nameService
         self.isPresentingWallets = isPresentingWallets
@@ -38,6 +42,19 @@ public final class ImportWalletViewModel {
 
     func dismiss() {
         isPresentingWallets.wrappedValue = false
+    }
+    
+    private func discoverAssets(wallet: Wallet) {
+        Task {
+            do {
+                try await walletsService.discoverAssets(
+                    for: wallet.walletId,
+                    preferences: WalletPreferences(walletId: wallet.walletId.id)
+                )
+            } catch {
+                debugLog("Discover assets failed: \(error)")
+            }
+        }
     }
 }
 
@@ -52,6 +69,7 @@ extension ImportWalletViewModel {
         let wallet = try await walletService.loadOrCreateWallet(name: data.name, type: data.keystoreType, source: .import)
         walletService.acceptTerms()
         WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
+        discoverAssets(wallet: wallet)
         return wallet
     }
 

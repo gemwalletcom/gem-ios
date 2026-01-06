@@ -3,6 +3,7 @@
 import Foundation
 import Localization
 import WalletService
+import WalletsService
 import AvatarService
 import PrimitivesComponents
 
@@ -10,6 +11,7 @@ import PrimitivesComponents
 @MainActor
 public final class OnboardingViewModel {
     let walletService: WalletService
+    let walletsService: WalletsService
     let avatarService: AvatarService
     let nameService: any NameServiceable
 
@@ -18,10 +20,12 @@ public final class OnboardingViewModel {
 
     public init(
         walletService: WalletService,
+        walletsService: WalletsService,
         avatarService: AvatarService,
         nameService: any NameServiceable
     ) {
         self.walletService = walletService
+        self.walletsService = walletsService
         self.avatarService = avatarService
         self.nameService = nameService
     }

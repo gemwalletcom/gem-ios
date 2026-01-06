@@ -25,6 +25,7 @@ public struct OnboardingNavigationView: View {
                 ImportWalletNavigationStack(
                     model: ImportWalletViewModel(
                         walletService: model.walletService,
+                        walletsService: model.walletsService,
                         avatarService: model.avatarService,
                         nameService: model.nameService,
                         isPresentingWallets: $model.isPresentingImportWalletSheet

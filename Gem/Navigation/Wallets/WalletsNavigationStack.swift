@@ -9,6 +9,7 @@ import ManageWallets
 
 struct WalletsNavigationStack: View {
     @Environment(\.walletService) private var walletService
+    @Environment(\.walletsService) private var walletsService
     @Environment(\.avatarService) private var avatarService
     @Environment(\.nameService) private var nameService
 
@@ -60,6 +61,7 @@ struct WalletsNavigationStack: View {
                 ImportWalletNavigationStack(
                     model: ImportWalletViewModel(
                         walletService: walletService,
+                        walletsService: walletsService,
                         avatarService: avatarService,
                         nameService: nameService,
                         isPresentingWallets: $isPresentingWallets

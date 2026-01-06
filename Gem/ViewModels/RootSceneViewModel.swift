@@ -26,7 +26,7 @@ final class RootSceneViewModel {
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
     private let notificationHandler: NotificationHandler
-    private let walletsService: WalletsService
+    let walletsService: WalletsService
     private let releaseAlertService: ReleaseAlertService
     private let rateService: RateService
     private let eventPresenterService: EventPresenterService

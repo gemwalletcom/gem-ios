@@ -15,6 +15,7 @@ struct PriceUpdateService: PriceUpdater {
     }
 
     public func addPrices(assetIds: [AssetId]) async throws {
+        await priceObserver.connect()
         try await priceObserver.addAssets(assets: assetIds)
     }
 }
