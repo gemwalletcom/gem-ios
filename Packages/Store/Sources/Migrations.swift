@@ -347,6 +347,7 @@ public struct Migrations {
         }
 
         migrator.registerMigration("Migrate nodes_selected_v1 to \(NodeSelectedRecord.databaseTableName)") { db in
+            try? db.drop(table: NodeSelectedRecord.databaseTableName)
             try? NodeSelectedRecord.create(db: db)
             try? db.execute(sql: """
                 INSERT INTO \(NodeSelectedRecord.databaseTableName) (chain, nodeUrl)
