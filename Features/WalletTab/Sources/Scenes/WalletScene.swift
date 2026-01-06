@@ -96,7 +96,6 @@ public struct WalletScene: View {
             }
             .listRowInsets(.assetListRowInsets)
         }
-//        .listSectionSpacing(.compact)
         .refreshable {
             model.fetch()
         }
