@@ -10,13 +10,16 @@ import PrimitivesComponents
 public final class AssetSceneBannersViewModel: Sendable {
     private let assetData: AssetData
     private let banners: [Banner]
-    
+    private let wallet: Wallet
+
     public init(
         assetData: AssetData,
-        banners: [Banner]
+        banners: [Banner],
+        wallet: Wallet
     ) {
         self.assetData = assetData
         self.banners = banners
+        self.wallet = wallet
     }
     
     public var allBanners: [Banner] {
@@ -38,7 +41,7 @@ public final class AssetSceneBannersViewModel: Sendable {
         switch banner.event {
         case .enableNotifications, .accountBlockedMultiSignature, .tradePerpetuals: true
         case .accountActivation: assetData.balance.available == 0
-        case .stake: assetData.balance.staked.isZero && assetData.balance.frozen.isZero
+        case .stake: wallet.canSign && assetData.balance.staked.isZero && assetData.balance.frozen.isZero
         case .activateAsset: !assetData.metadata.isActive
         case .suspiciousAsset: AssetScoreTypeViewModel(score: assetData.metadata.rankScore).shouldShowBanner
         case .onboarding: false
