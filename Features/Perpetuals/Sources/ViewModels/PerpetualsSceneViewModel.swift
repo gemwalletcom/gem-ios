@@ -75,7 +75,7 @@ public final class PerpetualsSceneViewModel {
     var showPinned: Bool { !isSearching && sections.pinned.isNotEmpty }
     var showMarkets: Bool { !isSearching || sections.markets.isNotEmpty || positions.isEmpty }
 
-    var showRecent: Bool { searchQuery.isEmpty && recentActivities.isNotEmpty }
+    var showRecent: Bool { isSearching && recentActivities.isNotEmpty }
 
     var sections: PerpetualsSections {
         let source: [PerpetualData]
