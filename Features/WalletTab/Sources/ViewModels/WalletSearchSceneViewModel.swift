@@ -87,7 +87,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     var showRecent: Bool { searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty }
     var showPerpetuals: Bool { positions.isNotEmpty && preferences.isPerpetualEnabled && wallet.isMultiCoins }
     var showLoading: Bool { state.isLoading && showEmpty }
-    var showEmpty: Bool { !showAssets && !showPinned }
+    var showEmpty: Bool { !showRecent && !showPerpetuals && !showPinned && !showAssets }
     var showPinned: Bool { sections.pinned.isNotEmpty }
     var showAssets: Bool { sections.assets.isNotEmpty }
     var showAddToken: Bool { wallet.hasTokenSupport }
