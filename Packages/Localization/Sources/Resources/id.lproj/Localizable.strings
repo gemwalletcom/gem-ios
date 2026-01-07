@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Leverage Default";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Terkini";
 "errors.no_data_available" = "Tidak ada data tersedia";
 "errors.dust_threshold_short" = "Jaringan menganggap jumlah ini sebagai debu — biayanya lebih tinggi daripada jumlahnya sendiri.";
 "charts.take_profit" = "TP";
@@ -546,3 +545,6 @@
 "rewards.insufficient_points" = "Poin tidak mencukupi";
 "rewards.confirm_redeem" = "Mendapatkan %@ untuk %@!";
 "transfer.sign_transaction.title" = "Menandatangani Transaksi";
+"recent_activity.title" = "Terbaru";
+"date.earlier" = "Lebih awal";
+"settings.preferences.app_icon" = "Ikon Aplikasi";

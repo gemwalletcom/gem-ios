@@ -355,6 +355,8 @@ public enum Localized {
     public static let title = Localized.tr("Localizable", "contacts.title", fallback: "Contacts")
   }
   public enum Date {
+    /// Earlier
+    public static let earlier = Localized.tr("Localizable", "date.earlier", fallback: "Earlier")
     /// Today
     public static let today = Localized.tr("Localizable", "date.today", fallback: "Today")
     /// Yesterday
@@ -965,8 +967,8 @@ public enum Localized {
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
   }
   public enum RecentActivity {
-    /// Recent
-    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recent")
+    /// Recents
+    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recents")
   }
   public enum Rewards {
     /// Get %@ for %@!
@@ -1137,6 +1139,8 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "settings.notifications.title", fallback: "Notifications")
     }
     public enum Preferences {
+      /// App Icon
+      public static let appIcon = Localized.tr("Localizable", "settings.preferences.app_icon", fallback: "App Icon")
       /// Default Leverage
       public static let defaultLeverage = Localized.tr("Localizable", "settings.preferences.default_leverage", fallback: "Default Leverage")
       /// Preferences

@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Default Leverage";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recent";
 "errors.no_data_available" = "No data available";
 "errors.dust_threshold_short" = "The network considers this amount dust — the fee is higher than the amount itself.";
 "charts.take_profit" = "TP";
@@ -546,3 +545,6 @@
 "rewards.insufficient_points" = "Insufficient points";
 "rewards.confirm_redeem" = "Get %@ for %@!";
 "transfer.sign_transaction.title" = "Sign Transaction";
+"recent_activity.title" = "Recents";
+"date.earlier" = "Earlier";
+"settings.preferences.app_icon" = "App Icon";

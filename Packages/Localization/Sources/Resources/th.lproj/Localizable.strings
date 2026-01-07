@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "เลเวอเรจเริ่มต้น";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "ล่าสุด";
 "errors.no_data_available" = "ไม่มีข้อมูล";
 "errors.dust_threshold_short" = "เครือข่ายถือว่าจำนวนนี้เป็นแค่ฝุ่น เพราะค่าธรรมเนียมนั้นสูงกว่าจำนวนที่แท้จริง";
 "charts.take_profit" = "TP";
@@ -546,3 +545,6 @@
 "rewards.insufficient_points" = "คะแนนไม่เพียงพอ";
 "rewards.confirm_redeem" = "รับ %@ สำหรับ %@-";
 "transfer.sign_transaction.title" = "ลงนามในธุรกรรม";
+"recent_activity.title" = "ล่าสุด";
+"date.earlier" = "ก่อนหน้านี้";
+"settings.preferences.app_icon" = "ไอคอนแอป";

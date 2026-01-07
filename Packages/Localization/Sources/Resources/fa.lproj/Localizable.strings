@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "اهرم پیش‌فرض";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "اخیر";
 "errors.no_data_available" = "داده‌ای موجود نیست";
 "errors.dust_threshold_short" = "شبکه این مبلغ را داست (dust) در نظر می‌گیرد - کارمزد آن از خود مبلغ بیشتر است.";
 "charts.take_profit" = "TP";
@@ -546,3 +545,6 @@
 "rewards.insufficient_points" = "امتیاز ناکافی";
 "rewards.confirm_redeem" = "دریافت %@ برای %@!";
 "transfer.sign_transaction.title" = "ثبت تراکنش";
+"recent_activity.title" = "تازه‌ها";
+"date.earlier" = "زودتر";
+"settings.preferences.app_icon" = "آیکون برنامه";

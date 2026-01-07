@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Default Leverage";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Kwanan nan";
 "errors.no_data_available" = "No data available";
 "errors.dust_threshold_short" = "The network considers this amount dust — the fee is higher than the amount itself.";
 "charts.take_profit" = "TP";
@@ -546,3 +545,6 @@
 "rewards.insufficient_points" = "Rashin isassun maki";
 "rewards.confirm_redeem" = "Samu %@ don %@!";
 "transfer.sign_transaction.title" = "Sa hannu kan Ma'amala";
+"recent_activity.title" = "Kwanan nan";
+"date.earlier" = "Tun da farko";
+"settings.preferences.app_icon" = "Alamar Manhaja";
