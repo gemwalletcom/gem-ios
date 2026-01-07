@@ -29,11 +29,9 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var assets: [AssetData] = []
     var recents: [RecentAsset] = []
-    var positions: [PerpetualPositionData] = []
     var searchModel: AssetSearchViewModel
 
     var request: AssetsRequest
-    var positionsRequest: PerpetualPositionsRequest
     var recentsRequest: RecentActivityRequest
 
     var isPresentingToastMessage: ToastMessage? = nil
@@ -72,12 +70,10 @@ public final class WalletSearchSceneViewModel: Sendable {
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual }
         )
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId.id)
     }
 
     var pinnedImage: Image { Images.System.pin }
     var pinnedTitle: String { Localized.Common.pinned }
-    var perpetualsTitle: String { Localized.Perpetuals.title }
     var assetsTitle: String { Localized.Assets.title }
 
     var sections: AssetsSections { AssetsSections.from(assets) }
@@ -86,9 +82,8 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var showTags: Bool { searchModel.searchableQuery.isEmpty }
     var showRecents: Bool { searchModel.searchableQuery.isEmpty && recents.isNotEmpty }
-    var showPerpetuals: Bool { positions.isNotEmpty && preferences.isPerpetualEnabled && wallet.isMultiCoins }
     var showLoading: Bool { state.isLoading && showEmpty }
-    var showEmpty: Bool { !showRecents && !showPerpetuals && !showPinned && !showAssets }
+    var showEmpty: Bool { !showRecents && !showPinned && !showAssets }
     var showPinned: Bool { sections.pinned.isNotEmpty }
     var showAssets: Bool { sections.assets.isNotEmpty }
     var showAddToken: Bool { wallet.hasTokenSupport }
@@ -228,7 +223,6 @@ extension WalletSearchSceneViewModel {
             searchModel.tagsViewModel.selectedTag = AssetTagSelection.all
         }
         request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
-        positionsRequest.searchQuery = searchModel.searchableQuery
         state = .loading
     }
 

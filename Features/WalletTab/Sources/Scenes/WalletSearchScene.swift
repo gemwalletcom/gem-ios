@@ -9,7 +9,6 @@ import Localization
 import PrimitivesComponents
 import AssetsService
 import Recents
-import Perpetuals
 
 public struct WalletSearchScene: View {
     @State private var model: WalletSearchSceneViewModel
@@ -40,7 +39,6 @@ public struct WalletSearchScene: View {
         }
         .observeQuery(request: $model.request, value: $model.assets)
         .observeQuery(request: $model.recentsRequest, value: $model.recents)
-        .observeQuery(request: $model.positionsRequest, value: $model.positions)
         .searchable(
             text: $model.searchModel.searchableQuery,
             isPresented: $model.isSearchPresented,
@@ -106,18 +104,6 @@ public struct WalletSearchScene: View {
                         }
                     }
                 )
-                .listRowInsets(.assetListRowInsets)
-            }
-
-            if model.showPerpetuals {
-                Section {
-                    PerpetualPositionsList(positions: model.positions)
-                } header: {
-                    HeaderNavigationLinkView(
-                        title: Localized.Perpetuals.title,
-                        destination: Scenes.Perpetuals()
-                    )
-                }
                 .listRowInsets(.assetListRowInsets)
             }
 
