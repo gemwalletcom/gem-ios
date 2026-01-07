@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Krijgen %@";
 "rewards.insufficient_points" = "Onvoldoende punten";
 "rewards.confirm_redeem" = "Krijgen %@ voor %@!";
+"transfer.sign_transaction.title" = "Transactie ondertekenen";

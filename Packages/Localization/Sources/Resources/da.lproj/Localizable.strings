@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Få %@";
 "rewards.insufficient_points" = "Utilstrækkelige point";
 "rewards.confirm_redeem" = "Få %@ for %@!";
+"transfer.sign_transaction.title" = "Underskriv transaktion";

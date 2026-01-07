@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Obtenir %@";
 "rewards.insufficient_points" = "Points insuffisants";
 "rewards.confirm_redeem" = "Obtenir %@ pour %@!";
+"transfer.sign_transaction.title" = "Signer la transaction";

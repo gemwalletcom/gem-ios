@@ -1420,6 +1420,10 @@ public enum Localized {
       /// Send
       public static let title = Localized.tr("Localizable", "transfer.send.title", fallback: "Send")
     }
+    public enum SignTransaction {
+      /// Sign Transaction
+      public static let title = Localized.tr("Localizable", "transfer.sign_transaction.title", fallback: "Sign Transaction")
+    }
     public enum SmartContract {
       /// Smart Contract
       public static let title = Localized.tr("Localizable", "transfer.smart_contract.title", fallback: "Smart Contract")

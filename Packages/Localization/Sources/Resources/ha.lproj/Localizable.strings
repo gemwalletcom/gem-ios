@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Samu %@";
 "rewards.insufficient_points" = "Rashin isassun maki";
 "rewards.confirm_redeem" = "Samu %@ don %@!";
+"transfer.sign_transaction.title" = "Sa hannu kan Ma'amala";

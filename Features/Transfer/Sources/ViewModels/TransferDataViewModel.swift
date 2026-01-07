@@ -30,8 +30,11 @@ struct TransferDataViewModel {
         case .withdrawal: Localized.Wallet.withdraw
         case .transferNft: Localized.Transfer.Send.title
         case .swap, .tokenApprove: Localized.Wallet.swap
-        //case .approval: Localized.Transfer.Approve.title
-        case .generic: Localized.Transfer.Approve.title
+        case .generic:
+            switch type.outputAction {
+            case .sign: Localized.Transfer.SignTransaction.title
+            case .send: Localized.Transfer.Send.title
+            }
         case .stake(_, let type):
             switch type {
             case .stake: Localized.Transfer.Stake.title

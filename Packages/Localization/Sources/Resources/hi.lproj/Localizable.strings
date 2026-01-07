@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "पाना %@";
 "rewards.insufficient_points" = "अपर्याप्त अंक";
 "rewards.confirm_redeem" = "पाना %@ के लिए %@!";
+"transfer.sign_transaction.title" = "लेनदेन पर हस्ताक्षर करें";

@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "รับ %@";
 "rewards.insufficient_points" = "คะแนนไม่เพียงพอ";
 "rewards.confirm_redeem" = "รับ %@ สำหรับ %@-";
+"transfer.sign_transaction.title" = "ลงนามในธุรกรรม";

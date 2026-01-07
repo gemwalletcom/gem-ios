@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Pata %@";
 "rewards.insufficient_points" = "Pointi zisizotosha";
 "rewards.confirm_redeem" = "Pata %@ kwa %@!";
+"transfer.sign_transaction.title" = "Saini Muamala";

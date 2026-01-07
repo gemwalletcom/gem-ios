@@ -69,8 +69,13 @@ extension TransactionParticipantViewModel {
             case .incoming: Localized.Transaction.sender
             case .outgoing, .selfTransfer: Localized.Transaction.recipient
             }
-        case .tokenApproval, .smartContractCall:
+        case .tokenApproval:
             Localized.Asset.contract
+        case .smartContractCall:
+            switch transactionViewModel.transaction.transaction.metadata?.walletConnectOutputAction {
+            case .send: Localized.Transaction.recipient
+            case .sign, .none: Localized.Asset.contract
+            }
         case .stakeDelegate:
             Localized.Stake.validator
         case .stakeFreeze, .stakeUnfreeze:

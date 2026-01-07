@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Отримати %@";
 "rewards.insufficient_points" = "Недостатньо балів";
 "rewards.confirm_redeem" = "Отримати %@ для %@!";
+"transfer.sign_transaction.title" = "Підписати транзакцію";

@@ -10,14 +10,16 @@ public extension TransferDataExtra {
         gasLimit: BigInt? = nil,
         gasPrice: GasPriceType? = nil,
         data: Data? = nil,
-        outputType: TransferDataOutputType = .encodedTransaction
+        outputType: TransferDataOutputType = .encodedTransaction,
+        outputAction: TransferDataOutputAction = .send
     ) -> TransferDataExtra {
         TransferDataExtra(
             to: to,
             gasLimit: gasLimit,
             gasPrice: gasPrice,
             data: data,
-            outputType: outputType
+            outputType: outputType,
+            outputAction: outputAction
         )
     }
 }
