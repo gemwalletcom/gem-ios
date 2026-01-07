@@ -26,88 +26,43 @@ public struct NodeStore: Sendable {
         }
     }
     
-    public func nodes() throws -> [ChainNode] {
-        try db.read { db in
-            try NodeRecord
-                .fetchAll(db)
-        }
-        .map { $0.mapToChainNode() }
-    }
-    
     public func nodes(chain: Chain) throws -> [ChainNode] {
-        return try nodeRecords(chain: chain)
-            .map { $0.mapToChainNode() }
-    }
-
-    public func nodeRecord(chain: Chain, url: String) throws -> NodeRecord? {
-        try db.read { db in
-            try NodeRecord
-                .filter(NodeRecord.Columns.chain == chain.rawValue)
-                .filter(NodeRecord.Columns.url == url)
-                .fetchOne(db)
-        }
-    }
-    
-    public func nodeRecords(chain: Chain) throws -> [NodeRecord] {
         try db.read { db in
             try NodeRecord
                 .filter(NodeRecord.Columns.chain == chain.rawValue)
                 .fetchAll(db)
+                .map { $0.mapToChainNode() }
         }
     }
     
-    public func setNodeSelected(node: NodeRecord) throws {
+    public func setNodeSelected(chain: Chain, url: String) throws {
         try db.write { (db: Database) in
-            guard let nodeId = node.id else {
-                throw AnyError("no node id")
-            }
-            try NodeSelectedRecord(nodeId: nodeId, chain: node.chain, auto: true)
-                .upsert(db)
+            try NodeSelectedRecord(chain: chain, nodeUrl: url).upsert(db)
         }
     }
-    
-    public func deleteNodeSelected(chain: String) throws {
-        return try db.write { (db: Database) in
-            try NodeSelectedRecord
-                .filter(NodeRecord.Columns.chain == chain)
+
+    public func deleteNode(chain: Chain, url: String) throws {
+        _ = try db.write { db in
+            try NodeRecord
+                .filter(NodeRecord.Columns.chain == chain.rawValue && NodeRecord.Columns.url == url)
                 .deleteAll(db)
         }
     }
 
-    public func deleteNode(chain: String, url: String) throws {
-        return try db.write { (db: Database) in
-            try NodeRecord
-                .filter(NodeRecord.Columns.chain == chain && NodeRecord.Columns.url == url)
+    public func selectedNodeUrl(chain: Chain) throws -> String? {
+        try db.read { db in
+            try NodeSelectedRecord
+                .filter(NodeSelectedRecord.Columns.chain == chain.rawValue)
+                .fetchOne(db)?
+                .nodeUrl
+        }
+    }
+    
+    public func deleteNodeSelected(chain: Chain) throws {
+        _ = try db.write { (db: Database) in
+            try NodeSelectedRecord
+                .filter(NodeRecord.Columns.chain == chain.rawValue)
                 .deleteAll(db)
-        }
-    }
-
-    public func selectedNodes() throws -> [ChainNode] {
-        try db.read { db in
-            try NodeSelectedRecord
-                .including(required: NodeSelectedRecord.node)
-                .asRequest(of: NodeSelectedRecordInfo.self)
-                .fetchAll(db)
-                .map { $0.mapToChainNode() }
-        }
-    }
-    
-    public func selectedNode(chain: String) throws -> ChainNode? {
-        try db.read { db in
-            try NodeSelectedRecord
-                .including(required: NodeSelectedRecord.node)
-                .filter(NodeRecord.Columns.chain == chain)
-                .asRequest(of: NodeSelectedRecordInfo.self)
-                .fetchOne(db)
-                .map { $0.mapToChainNode() }
-        }
-    }
-    
-    public func allNodes() throws -> [Node] {
-        try db.read { db in
-            try NodeRecord
-                .fetchAll(db)
-                .map { $0.mapToNode() }
         }
     }
 }
