@@ -82,18 +82,6 @@ public struct WalletSearchScene: View {
                 }
             }
 
-            if model.showPerpetuals {
-                Section {
-                    PerpetualPositionsList(positions: model.positions)
-                } header: {
-                    HeaderNavigationLinkView(
-                        title: Localized.Perpetuals.title,
-                        destination: Scenes.Perpetuals()
-                    )
-                }
-                .listRowInsets(.assetListRowInsets)
-            }
-
             if model.showPinned {
                 Section(
                     content: { list(for: model.sections.pinned) },
@@ -104,6 +92,18 @@ public struct WalletSearchScene: View {
                         }
                     }
                 )
+                .listRowInsets(.assetListRowInsets)
+            }
+
+            if model.showPerpetuals {
+                Section {
+                    PerpetualPositionsList(positions: model.positions)
+                } header: {
+                    HeaderNavigationLinkView(
+                        title: Localized.Perpetuals.title,
+                        destination: Scenes.Perpetuals()
+                    )
+                }
                 .listRowInsets(.assetListRowInsets)
             }
 
