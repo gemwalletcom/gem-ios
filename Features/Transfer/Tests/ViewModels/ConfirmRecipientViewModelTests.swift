@@ -51,15 +51,27 @@ struct ConfirmRecipientViewModelTests {
     }
 
     @Test
-    func generic() {
+    func genericSend() {
         let model = ConfirmRecipientViewModel(
-            model: .mock(type: .generic(asset: .mock(), metadata: .mock(), extra: .mock())),
+            model: .mock(type: .generic(asset: .mock(), metadata: .mock(), extra: .mock(outputAction: .send))),
             addressName: nil,
             addressLink: .mock()
         )
 
         guard case .recipient(let item) = model.itemModel else { return }
         #expect(item.title == Localized.Transfer.Recipient.title)
+    }
+
+    @Test
+    func genericSign() {
+        let model = ConfirmRecipientViewModel(
+            model: .mock(type: .generic(asset: .mock(), metadata: .mock(), extra: .mock(outputAction: .sign))),
+            addressName: nil,
+            addressLink: .mock()
+        )
+
+        guard case .recipient(let item) = model.itemModel else { return }
+        #expect(item.title == Localized.Asset.contract)
     }
 
     @Test

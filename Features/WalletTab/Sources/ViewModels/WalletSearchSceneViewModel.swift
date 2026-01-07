@@ -29,8 +29,11 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var assets: [AssetData] = []
     var recentActivities: [RecentAsset] = []
+    var positions: [PerpetualPositionData] = []
     var searchModel: AssetSearchViewModel
+
     var request: AssetsRequest
+    var positionsRequest: PerpetualPositionsRequest
     var recentActivityRequest: RecentActivityRequest
 
     var isPresentingToastMessage: ToastMessage? = nil
@@ -69,52 +72,26 @@ public final class WalletSearchSceneViewModel: Sendable {
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual }
         )
-    }
-
-    var sections: AssetsSections {
-        AssetsSections.from(assets)
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId.id)
     }
 
     var pinnedImage: Image { Images.System.pin }
     var pinnedTitle: String { Localized.Common.pinned }
-
+    var perpetualsTitle: String { Localized.Perpetuals.title }
     var assetsTitle: String { Localized.Assets.title }
 
-    var showTags: Bool {
-        searchModel.searchableQuery.isEmpty
-    }
+    var sections: AssetsSections { AssetsSections.from(assets) }
+    var activityModels: [AssetViewModel] { recentActivities.map { AssetViewModel(asset: $0.asset) } }
+    var currencyCode: String { preferences.currency }
 
-    var showRecent: Bool {
-        searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
-    }
-
-    var activityModels: [AssetViewModel] {
-        recentActivities.map { AssetViewModel(asset: $0.asset) }
-    }
-
-    var showLoading: Bool {
-        state.isLoading && showEmpty
-    }
-
-    var showEmpty: Bool {
-        !showAssetsSection && !showPinnedSection
-    }
-
-    var showPinnedSection: Bool {
-        sections.pinned.isNotEmpty
-    }
-
-    var showAssetsSection: Bool {
-        sections.assets.isNotEmpty
-    }
-
-    var currencyCode: String {
-        preferences.currency
-    }
-
-    var showAddToken: Bool {
-        wallet.hasTokenSupport
-    }
+    var showTags: Bool { searchModel.searchableQuery.isEmpty }
+    var showRecent: Bool { searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty }
+    var showPerpetuals: Bool { positions.isNotEmpty && preferences.isPerpetualEnabled && wallet.isMultiCoins }
+    var showLoading: Bool { state.isLoading && showEmpty }
+    var showEmpty: Bool { !showRecent && !showPerpetuals && !showPinned && !showAssets }
+    var showPinned: Bool { sections.pinned.isNotEmpty }
+    var showAssets: Bool { sections.assets.isNotEmpty }
+    var showAddToken: Bool { wallet.hasTokenSupport }
 }
 
 // MARK: - Actions
@@ -128,6 +105,7 @@ extension WalletSearchSceneViewModel {
     func onSearch(query: String) async {
         let query = query.trim()
         guard !query.isEmpty else { return }
+
         await searchAssets(
             query: query,
             priorityAssetsQuery: searchModel.priorityAssetsQuery,
@@ -246,6 +224,7 @@ extension WalletSearchSceneViewModel {
             searchModel.tagsViewModel.selectedTag = AssetTagSelection.all
         }
         request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
+        positionsRequest.searchQuery = searchModel.searchableQuery
         state = .loading
     }
 

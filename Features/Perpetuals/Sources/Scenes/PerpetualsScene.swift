@@ -76,11 +76,7 @@ public struct PerpetualsScene: View {
             }
 
             if model.showRecent {
-                RecentActivitySectionView(
-                    models: model.activityModels,
-                    headerPadding: .medium + .tiny,
-                    onSelectRecents: { model.isPresentingRecents = true }
-                ) { assetModel in
+                RecentActivitySectionView(models: model.activityModels) { assetModel in
                     Button {
                         model.onSelectRecentPerpetual(asset: assetModel.asset)
                     } label: {
@@ -91,18 +87,14 @@ public struct PerpetualsScene: View {
 
             if model.showPositions {
                 Section {
-                    ForEach(model.positions) { position in
-                        NavigationCustomLink(
-                            with: ListAssetItemView(
-                                model: PerpetualPositionItemViewModel(model: PerpetualPositionViewModel(position))
-                            ),
-                            action: { model.onSelectPerpetual(asset: position.perpetualData.asset) }
-                        )
-                        .listRowInsets(.assetListRowInsets)
-                    }
+                    PerpetualPositionsList(
+                        positions: model.positions,
+                        onSelect: model.onSelectPerpetual
+                    )
                 } header: {
                     Text(model.positionsSectionTitle)
                 }
+                .listRowInsets(.assetListRowInsets)
             }
 
             if model.showPinned {
@@ -118,6 +110,7 @@ public struct PerpetualsScene: View {
                         Text(model.pinnedSectionTitle)
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
 
             if model.showMarkets {
@@ -131,6 +124,7 @@ public struct PerpetualsScene: View {
                 } header: {
                     Text(model.marketsSectionTitle)
                 }
+                .listRowInsets(.assetListRowInsets)
             }
         }
         .if(!model.isSearching) {
