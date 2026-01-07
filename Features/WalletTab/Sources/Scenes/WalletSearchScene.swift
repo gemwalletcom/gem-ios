@@ -39,7 +39,7 @@ public struct WalletSearchScene: View {
             }
         }
         .observeQuery(request: $model.request, value: $model.assets)
-        .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
+        .observeQuery(request: $model.recentsRequest, value: $model.recents)
         .observeQuery(request: $model.positionsRequest, value: $model.positions)
         .searchable(
             text: $model.searchModel.searchableQuery,
@@ -62,10 +62,10 @@ public struct WalletSearchScene: View {
         .sheet(isPresented: $model.isPresentingRecents) {
             RecentsScene(
                 model: RecentsSceneViewModel(
-                    walletId: model.recentActivityRequest.walletId,
-                    types: model.recentActivityRequest.types,
-                    filters: model.recentActivityRequest.filters,
-                    onSelect: model.onSelectRecentAsset
+                    walletId: model.recentsRequest.walletId,
+                    types: model.recentsRequest.types,
+                    filters: model.recentsRequest.filters,
+                    onSelect: model.onSelectRecent
                 )
             )
         }
@@ -85,10 +85,10 @@ public struct WalletSearchScene: View {
                 .listRowInsets(EdgeInsets())
             }
 
-            if model.showRecent {
+            if model.showRecents {
                 RecentActivitySectionView(
-                    models: model.activityModels,
-                    onSelectRecents: { model.isPresentingRecents = true }
+                    models: model.recentModels,
+                    onSelectRecents: model.onSelectRecents
                 ) { assetModel in
                     NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
                         AssetChipView(model: assetModel)

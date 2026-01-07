@@ -48,7 +48,7 @@ public struct SelectAssetScene: View {
             }
         }
         .observeQuery(request: $model.request, value: $model.assets)
-        .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
+        .observeQuery(request: $model.recentsRequest, value: $model.recents)
         .onChange(of: model.filterModel, model.onChangeFilterModel)
         .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
         .onChange(of: model.isSearching, model.onChangeFocus)
@@ -74,15 +74,15 @@ public struct SelectAssetScene: View {
                 .listRowInsets(EdgeInsets())
             }
 
-            if model.showRecent {
+            if model.showRecents {
                 RecentActivitySectionView(
-                    models: model.activityModels,
+                    models: model.recentModels,
                     onSelectRecents: model.onSelectRecents
                 ) { assetModel in
                     switch model.selectType {
                     case .send, .receive, .buy:
                         Button {
-                            model.onSelectRecentAsset(assetModel.asset)
+                            model.onSelectRecent(assetModel.asset)
                         } label: {
                             AssetChipView(model: assetModel)
                         }

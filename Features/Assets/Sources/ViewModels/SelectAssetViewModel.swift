@@ -27,17 +27,18 @@ public final class SelectAssetViewModel {
     public let wallet: Wallet
 
     var assets: [AssetData] = []
-    var recentActivities: [RecentAsset] = []
+    var recents: [RecentAsset] = []
     var state: StateViewType<[AssetBasic]> = .noData
     var searchModel: AssetSearchViewModel
+
     var request: AssetsRequest
-    public var recentActivityRequest: RecentActivityRequest
+    public var recentsRequest: RecentActivityRequest
 
     var isSearching: Bool = false
     var isDismissSearch: Bool = false
-
     var isPresentingCopyToast: Bool = false
     var copyTypeViewModel: CopyTypeViewModel?
+
     public var isPresentingAddToken: Bool = false
     public var isPresentingRecents: Bool = false
     public var assetSelection: AssetSelectionType?
@@ -77,7 +78,7 @@ public final class SelectAssetViewModel {
             walletId: wallet.id,
             filters: filter.filters
         )
-        self.recentActivityRequest = RecentActivityRequest(
+        self.recentsRequest = RecentActivityRequest(
             walletId: wallet.id,
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual },
@@ -175,15 +176,15 @@ public final class SelectAssetViewModel {
         sections.pinned.isEmpty && sections.assets.isEmpty
     }
 
-    var showRecent: Bool {
+    var showRecents: Bool {
         switch selectType {
-        case .send, .receive, .buy, .swap: searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
+        case .send, .receive, .buy, .swap: searchModel.searchableQuery.isEmpty && recents.isNotEmpty
         case .manage, .priceAlert, .deposit, .withdraw: false
         }
     }
 
-    var activityModels: [AssetViewModel] {
-        recentActivities.map { AssetViewModel(asset: $0.asset) }
+    var recentModels: [AssetViewModel] {
+        recents.map { AssetViewModel(asset: $0.asset) }
     }
 
     var currencyCode: String {
@@ -297,7 +298,7 @@ extension SelectAssetViewModel {
         assetSelection = .regular(SelectAssetInput(type: selectType, assetAddress: assetData.assetAddress))
     }
 
-    public func onSelectRecentAsset(_ asset: Asset) {
+    public func onSelectRecent(_ asset: Asset) {
         switch selectType {
         case .send, .receive, .buy:
             assetSelection = .recent(SelectAssetInput(type: selectType, assetAddress: assetAddress(for: asset)))

@@ -28,13 +28,13 @@ public final class WalletSearchSceneViewModel: Sendable {
     private var state: StateViewType<[AssetBasic]> = .noData
 
     var assets: [AssetData] = []
-    var recentActivities: [RecentAsset] = []
+    var recents: [RecentAsset] = []
     var positions: [PerpetualPositionData] = []
     var searchModel: AssetSearchViewModel
 
     var request: AssetsRequest
     var positionsRequest: PerpetualPositionsRequest
-    var recentActivityRequest: RecentActivityRequest
+    var recentsRequest: RecentActivityRequest
 
     var isPresentingToastMessage: ToastMessage? = nil
     var isSearching: Bool = false
@@ -67,7 +67,7 @@ public final class WalletSearchSceneViewModel: Sendable {
             walletId: wallet.id,
             filters: []
         )
-        self.recentActivityRequest = RecentActivityRequest(
+        self.recentsRequest = RecentActivityRequest(
             walletId: wallet.id,
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual }
@@ -81,14 +81,14 @@ public final class WalletSearchSceneViewModel: Sendable {
     var assetsTitle: String { Localized.Assets.title }
 
     var sections: AssetsSections { AssetsSections.from(assets) }
-    var activityModels: [AssetViewModel] { recentActivities.map { AssetViewModel(asset: $0.asset) } }
+    var recentModels: [AssetViewModel] { recents.map { AssetViewModel(asset: $0.asset) } }
     var currencyCode: String { preferences.currency }
 
     var showTags: Bool { searchModel.searchableQuery.isEmpty }
-    var showRecent: Bool { searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty }
+    var showRecents: Bool { searchModel.searchableQuery.isEmpty && recents.isNotEmpty }
     var showPerpetuals: Bool { positions.isNotEmpty && preferences.isPerpetualEnabled && wallet.isMultiCoins }
     var showLoading: Bool { state.isLoading && showEmpty }
-    var showEmpty: Bool { !showRecent && !showPerpetuals && !showPinned && !showAssets }
+    var showEmpty: Bool { !showRecents && !showPerpetuals && !showPinned && !showAssets }
     var showPinned: Bool { sections.pinned.isNotEmpty }
     var showAssets: Bool { sections.assets.isNotEmpty }
     var showAddToken: Bool { wallet.hasTokenSupport }
@@ -149,7 +149,11 @@ extension WalletSearchSceneViewModel {
         updateRecent(asset)
     }
 
-    func onSelectRecentAsset(asset: Asset) {
+    func onSelectRecents() {
+        isPresentingRecents = true
+    }
+
+    func onSelectRecent(asset: Asset) {
         onSelectAssetAction?(asset)
         isPresentingRecents = false
     }

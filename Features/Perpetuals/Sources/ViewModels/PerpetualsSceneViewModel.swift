@@ -24,9 +24,9 @@ public final class PerpetualsSceneViewModel {
     var positionsRequest: PerpetualPositionsRequest
     var perpetualsRequest: PerpetualsRequest
     var walletBalanceRequest: PerpetualWalletBalanceRequest
-    var recentActivityRequest: RecentActivityRequest
+    var recentsRequest: RecentActivityRequest
 
-    var recentActivities: [RecentAsset] = []
+    var recents: [RecentAsset] = []
     var positions: [PerpetualPositionData] = []
     var perpetuals: [PerpetualData] = []
     var walletBalance: WalletBalance = .zero
@@ -54,7 +54,7 @@ public final class PerpetualsSceneViewModel {
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, searchQuery: "")
         self.perpetualsRequest = PerpetualsRequest(searchQuery: "")
         self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: wallet.id)
-        self.recentActivityRequest = RecentActivityRequest(
+        self.recentsRequest = RecentActivityRequest(
             walletId: wallet.id,
             limit: 10,
             types: [.perpetual]
@@ -74,13 +74,10 @@ public final class PerpetualsSceneViewModel {
     var showPositions: Bool { positions.isNotEmpty }
     var showPinned: Bool { sections.pinned.isNotEmpty }
     var showMarkets: Bool { !isSearching || sections.markets.isNotEmpty || positions.isEmpty }
-    var showRecent: Bool { isSearching && recentActivities.isNotEmpty }
+    var showRecents: Bool { isSearching && recents.isNotEmpty }
 
     var sections: PerpetualsSections { .from(perpetuals) }
-
-    var activityModels: [AssetViewModel] {
-        recentActivities.map { AssetViewModel(asset: $0.asset) }
-    }
+    var recentModels: [AssetViewModel] { recents.map { AssetViewModel(asset: $0.asset) } }
 
     var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
@@ -164,7 +161,11 @@ extension PerpetualsSceneViewModel {
         }
     }
 
-    func onSelectRecentPerpetual(asset: Asset) {
+    func onSelectRecents() {
+        isPresentingRecents = true
+    }
+
+    func onSelectRecent(asset: Asset) {
         onSelectAsset?(asset)
         isPresentingRecents = false
     }

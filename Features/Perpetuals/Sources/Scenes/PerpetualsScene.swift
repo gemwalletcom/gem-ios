@@ -51,10 +51,10 @@ public struct PerpetualsScene: View {
         .sheet(isPresented: $model.isPresentingRecents) {
             RecentsScene(
                 model: RecentsSceneViewModel(
-                    walletId: model.recentActivityRequest.walletId,
-                    types: model.recentActivityRequest.types,
-                    filters: model.recentActivityRequest.filters,
-                    onSelect: model.onSelectRecentPerpetual
+                    walletId: model.recentsRequest.walletId,
+                    types: model.recentsRequest.types,
+                    filters: model.recentsRequest.filters,
+                    onSelect: model.onSelectRecent
                 )
             )
         }
@@ -75,10 +75,13 @@ public struct PerpetualsScene: View {
                 .cleanListRow()
             }
 
-            if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels) { assetModel in
+            if model.showRecents {
+                RecentActivitySectionView(
+                    models: model.recentModels,
+                    onSelectRecents: model.onSelectRecents
+                ) { assetModel in
                     Button {
-                        model.onSelectRecentPerpetual(asset: assetModel.asset)
+                        model.onSelectRecent(asset: assetModel.asset)
                     } label: {
                         AssetChipView(model: assetModel)
                     }
