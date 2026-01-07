@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "รับ %@ สำหรับ %@-";
 "transfer.sign_transaction.title" = "ลงนามในธุรกรรม";
 "recent_activity.title" = "ล่าสุด";
-"date.earlier" = "ก่อนหน้านี้";
+"settings.preferences.app_icon" = "ไอคอนแอป";
+"recent_activity.clear_confirmation" = "คุณแน่ใจหรือไม่ว่าต้องการล้างรายการล่าสุดทั้งหมด?";

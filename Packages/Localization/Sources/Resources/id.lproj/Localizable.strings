@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "Mendapatkan %@ untuk %@!";
 "transfer.sign_transaction.title" = "Menandatangani Transaksi";
 "recent_activity.title" = "Terbaru";
-"date.earlier" = "Lebih awal";
+"settings.preferences.app_icon" = "Ikon Aplikasi";
+"recent_activity.clear_confirmation" = "Apakah Anda yakin ingin menghapus semua postingan terbaru?";

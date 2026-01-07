@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "Získat %@ pro %@!";
 "transfer.sign_transaction.title" = "Podepsat transakci";
 "recent_activity.title" = "Nedávné";
-"date.earlier" = "Dříve";
+"settings.preferences.app_icon" = "Ikona aplikace";
+"recent_activity.clear_confirmation" = "Opravdu chcete vymazat všechny nedávné položky?";

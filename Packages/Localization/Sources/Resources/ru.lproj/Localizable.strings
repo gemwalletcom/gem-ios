@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "Получать %@ для %@!";
 "transfer.sign_transaction.title" = "Подписать транзакцию";
 "recent_activity.title" = "Последние";
-"date.earlier" = "Ранее";
+"settings.preferences.app_icon" = "Значок приложения";
+"recent_activity.clear_confirmation" = "Вы уверены, что хотите удалить все последние записи?";

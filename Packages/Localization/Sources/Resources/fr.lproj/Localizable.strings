@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "Obtenir %@ pour %@!";
 "transfer.sign_transaction.title" = "Signer la transaction";
 "recent_activity.title" = "Récents";
-"date.earlier" = "Plus tôt";
+"settings.preferences.app_icon" = "Icône de l'application";
+"recent_activity.clear_confirmation" = "Êtes-vous sûr de vouloir effacer tous les éléments récents ?";

@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "Få %@ for %@!";
 "transfer.sign_transaction.title" = "Underskriv transaktion";
 "recent_activity.title" = "Seneste";
-"date.earlier" = "Tidligere";
+"settings.preferences.app_icon" = "App-ikon";
+"recent_activity.clear_confirmation" = "Er du sikker på, at du vil slette alle seneste?";

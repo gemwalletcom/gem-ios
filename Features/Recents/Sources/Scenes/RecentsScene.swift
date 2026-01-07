@@ -4,7 +4,6 @@ import SwiftUI
 import Primitives
 import PrimitivesComponents
 import Components
-import Localization
 import Style
 import Store
 
@@ -14,7 +13,7 @@ public struct RecentsScene: View {
     @State private var model: RecentsSceneViewModel
 
     public init(model: RecentsSceneViewModel) {
-        _model = State(wrappedValue: model)
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
@@ -51,10 +50,33 @@ public struct RecentsScene: View {
                     EmptyContentView(model: model.emptyModel)
                 }
             }
-            .navigationTitle(Localized.RecentActivity.title)
+            .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar { ToolbarDismissItem(title: .cancel, placement: .topBarLeading) }
+            .toolbar {
+                ToolbarDismissItem(title: .cancel, placement: .topBarLeading)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(model.clearTitle) {
+                        model.onSelectClear()
+                    }
+                }
+            }
+            .alert(
+                model.clearConfirmationTitle,
+                presenting: $model.isPresentingClearConfirmation,
+                sensoryFeedback: .warning
+            ) { _ in
+                Button(model.clearTitle, role: .destructive, action: onSelectConfirm)
+            }
         }
         .observeQuery(request: $model.request, value: $model.recentAssets)
+    }
+}
+
+// MARK: - Private
+
+extension RecentsScene {
+    private func onSelectConfirm() {
+        model.onSelectConfirmClear()
+        dismiss()
     }
 }

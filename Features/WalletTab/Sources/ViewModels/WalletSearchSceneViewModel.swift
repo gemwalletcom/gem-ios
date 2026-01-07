@@ -17,11 +17,11 @@ import WalletsService
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
     private let searchService: AssetSearchService
-    private let activityService: ActivityService
+    let activityService: ActivityService
     private let walletsService: WalletsService
     private let preferences: Preferences
 
-    private let wallet: Wallet
+    let wallet: Wallet
     private let onDismissSearch: VoidAction
     private let onAddToken: VoidAction
 

@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "Pata %@ kwa %@!";
 "transfer.sign_transaction.title" = "Saini Muamala";
 "recent_activity.title" = "Hivi karibuni";
-"date.earlier" = "Mapema";
+"settings.preferences.app_icon" = "Aikoni ya Programu";
+"recent_activity.clear_confirmation" = "Una uhakika unataka kufuta taarifa zote za hivi karibuni?";

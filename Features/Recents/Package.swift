@@ -23,6 +23,7 @@ let package = Package(
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
     ],
     targets: [
         .target(
@@ -34,6 +35,7 @@ let package = Package(
                 "Localization",
                 "Style",
                 "Store",
+                .product(name: "ActivityService", package: "FeatureServices"),
             ],
             path: "Sources"
         ),
@@ -41,6 +43,8 @@ let package = Package(
             name: "RecentsTestKit",
             dependencies: [
                 "Recents",
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "ActivityServiceTestKit", package: "FeatureServices"),
             ],
             path: "TestKit"
         ),

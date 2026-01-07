@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "Obţine %@ pentru %@!";
 "transfer.sign_transaction.title" = "Semnează tranzacția";
 "recent_activity.title" = "Recente";
-"date.earlier" = "Mai devreme";
+"settings.preferences.app_icon" = "Pictogramă aplicație";
+"recent_activity.clear_confirmation" = "Sigur vrei să ștergi toate cele recente?";

@@ -2,35 +2,18 @@
 
 import Foundation
 import Primitives
-import Localization
-
-enum RecentGroup: Comparable, Hashable {
-    case today
-    case earlier
-
-    var title: String {
-        switch self {
-        case .today: Localized.Date.today
-        case .earlier: Localized.Date.earlier
-        }
-    }
-
-    static func from(_ date: Date) -> RecentGroup {
-        Calendar.current.isDateInToday(date) ? .today : .earlier
-    }
-}
+import PrimitivesComponents
 
 struct RecentAssetsSection: Identifiable {
-    let group: RecentGroup
+    let date: Date
     let assets: [RecentAsset]
 
-    var id: RecentGroup { group }
-
-    var title: String { group.title }
+    var id: String { title }
+    var title: String { TransactionDateFormatter(date: date).section }
 
     static func from(_ recentAssets: [RecentAsset]) -> [RecentAssetsSection] {
-        Dictionary(grouping: recentAssets) { RecentGroup.from($0.createdAt) }
-            .map { RecentAssetsSection(group: $0.key, assets: $0.value) }
-            .sorted { $0.group < $1.group }
+        Dictionary(grouping: recentAssets) { Calendar.current.startOfDay(for: $0.createdAt) }
+            .map { RecentAssetsSection(date: $0.key, assets: $0.value) }
+            .sorted { $0.date > $1.date }
     }
 }

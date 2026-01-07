@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "Kunin %@ para sa %@!";
 "transfer.sign_transaction.title" = "Pirmahan ang Transaksyon";
 "recent_activity.title" = "Mga Kamakailan";
-"date.earlier" = "Mas maaga";
+"settings.preferences.app_icon" = "Icon ng App";
+"recent_activity.clear_confirmation" = "Sigurado ka bang gusto mong i-clear lahat ng mga kamakailang impormasyon?";

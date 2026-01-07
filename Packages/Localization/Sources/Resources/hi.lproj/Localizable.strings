@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "पाना %@ के लिए %@!";
 "transfer.sign_transaction.title" = "लेनदेन पर हस्ताक्षर करें";
 "recent_activity.title" = "हाल ही";
-"date.earlier" = "पहले";
+"settings.preferences.app_icon" = "ऐप आइकन";
+"recent_activity.clear_confirmation" = "क्या आप वाकई सभी हालिया पोस्ट मिटाना चाहते हैं?";

@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "得到 %@ 为了 %@！";
 "transfer.sign_transaction.title" = "签署交易";
 "recent_activity.title" = "近期";
-"date.earlier" = "早些时候";
+"settings.preferences.app_icon" = "应用图标";
+"recent_activity.clear_confirmation" = "您确定要清除所有最近使用记录吗？";

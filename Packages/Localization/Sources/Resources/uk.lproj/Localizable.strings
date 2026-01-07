@@ -546,4 +546,5 @@
 "rewards.confirm_redeem" = "Отримати %@ для %@!";
 "transfer.sign_transaction.title" = "Підписати транзакцію";
 "recent_activity.title" = "Нещодавні";
-"date.earlier" = "Раніше";
+"settings.preferences.app_icon" = "Значок програми";
+"recent_activity.clear_confirmation" = "Ви впевнені, що хочете очистити всі нещодавні записи?";
