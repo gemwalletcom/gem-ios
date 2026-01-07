@@ -73,4 +73,9 @@ public enum TransactionMetadata: Codable, Sendable {
         guard case .generic(let dict) = self else { return nil }
         return try? dict.mapTo(TransactionResourceTypeMetadata.self).resourceType
     }
+
+    public var walletConnectOutputAction: TransferDataOutputAction? {
+        guard case .generic(let dict) = self else { return nil }
+        return try? dict.mapTo(TransactionWalletConnectMetadata.self).outputAction
+    }
 }

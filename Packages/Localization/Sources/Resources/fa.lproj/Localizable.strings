@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "دریافت %@";
 "rewards.insufficient_points" = "امتیاز ناکافی";
 "rewards.confirm_redeem" = "دریافت %@ برای %@!";
+"transfer.sign_transaction.title" = "ثبت تراکنش";

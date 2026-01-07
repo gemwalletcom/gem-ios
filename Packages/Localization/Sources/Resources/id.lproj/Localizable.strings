@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Mendapatkan %@";
 "rewards.insufficient_points" = "Poin tidak mencukupi";
 "rewards.confirm_redeem" = "Mendapatkan %@ untuk %@!";
+"transfer.sign_transaction.title" = "Menandatangani Transaksi";

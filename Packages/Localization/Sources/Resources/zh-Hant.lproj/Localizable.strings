@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "得到 %@";
 "rewards.insufficient_points" = "分數不足";
 "rewards.confirm_redeem" = "得到 %@ 為了 %@！";
+"transfer.sign_transaction.title" = "簽署交易";

@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "얻다 %@";
 "rewards.insufficient_points" = "점수가 부족합니다";
 "rewards.confirm_redeem" = "얻다 %@ ~을 위한 %@!";
+"transfer.sign_transaction.title" = "거래 서명";

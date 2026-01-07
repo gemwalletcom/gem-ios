@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "حاصل کریں۔ %@";
 "rewards.insufficient_points" = "ناکافی پوائنٹس";
 "rewards.confirm_redeem" = "حاصل کریں۔ %@ کے لیے %@!";
+"transfer.sign_transaction.title" = "لین دین پر دستخط کریں۔";

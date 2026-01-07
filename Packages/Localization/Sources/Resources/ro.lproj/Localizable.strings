@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "Obţine %@";
 "rewards.insufficient_points" = "Puncte insuficiente";
 "rewards.confirm_redeem" = "Obţine %@ pentru %@!";
+"transfer.sign_transaction.title" = "Semnează tranzacția";

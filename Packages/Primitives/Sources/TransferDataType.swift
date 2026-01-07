@@ -89,8 +89,9 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .stake, .unstake, .redelegate, .rewards, .withdraw:
                 return .null
             }
-        case .generic,
-            .transfer,
+        case .generic(_, _, let extra):
+            return .generic(from: TransactionWalletConnectMetadata(outputAction: extra.outputAction))
+        case .transfer,
             .deposit,
             .withdrawal,
             .tokenApprove,

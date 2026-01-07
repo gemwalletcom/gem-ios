@@ -545,3 +545,4 @@
 "rewards.ways_spend.asset.title" = "得る %@";
 "rewards.insufficient_points" = "ポイントが足りない";
 "rewards.confirm_redeem" = "得る %@ のために %@!";
+"transfer.sign_transaction.title" = "トランザクションに署名";
