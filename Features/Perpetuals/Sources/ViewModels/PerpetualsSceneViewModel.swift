@@ -72,21 +72,11 @@ public final class PerpetualsSceneViewModel {
     var searchImage: Image { Images.System.search }
 
     var showPositions: Bool { positions.isNotEmpty }
-    var showPinned: Bool { !isSearching && sections.pinned.isNotEmpty }
+    var showPinned: Bool { sections.pinned.isNotEmpty }
     var showMarkets: Bool { !isSearching || sections.markets.isNotEmpty || positions.isEmpty }
-
     var showRecent: Bool { isSearching && recentActivities.isNotEmpty }
 
-    var sections: PerpetualsSections {
-        let source: [PerpetualData]
-        if isSearching {
-            let positionIds = Set(positions.map { $0.perpetual.id })
-            source = perpetuals.filter { !positionIds.contains($0.perpetual.id) }
-        } else {
-            source = perpetuals
-        }
-        return PerpetualsSections.from(source)
-    }
+    var sections: PerpetualsSections { .from(perpetuals) }
 
     var activityModels: [AssetViewModel] {
         recentActivities.map { AssetViewModel(asset: $0.asset) }
