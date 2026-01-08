@@ -10,9 +10,9 @@ public struct PerpetualsSections: Hashable, Sendable {
 
 public extension PerpetualsSections {
     static func from(_ perpetuals: [PerpetualData]) -> PerpetualsSections {
-        PerpetualsSections(
-            pinned: perpetuals.filter { $0.metadata.isPinned },
-            markets: perpetuals.filter { !$0.metadata.isPinned }
-        )
+        let (pinned, markets) = perpetuals.reduce(into: ([PerpetualData](), [PerpetualData]())) {
+            $1.metadata.isPinned ? $0.0.append($1) : $0.1.append($1)
+        }
+        return PerpetualsSections(pinned: pinned, markets: markets)
     }
 }
