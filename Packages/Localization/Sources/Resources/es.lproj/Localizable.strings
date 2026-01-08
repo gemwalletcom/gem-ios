@@ -550,4 +550,4 @@
 "recent_activity.clear_confirmation" = "¿Estás seguro que deseas borrar todos los recientes?";
 "rewards.pending.title" = "Bono pendiente";
 "rewards.pending.description" = "Disponible en %@";
-"rewards.pending.description_ready" = "Your bonus is ready!";
+"rewards.pending.description_ready" = "¡Tu bono está listo!";

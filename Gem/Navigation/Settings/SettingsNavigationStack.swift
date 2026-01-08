@@ -144,6 +144,9 @@ struct SettingsNavigationStack: View {
             .navigationDestination(for: Scenes.Preferences.self) { _ in
                 PreferencesScene(model: PreferencesViewModel(currencyModel: currencyModel))
             }
+            .navigationDestination(for: Scenes.AppIcon.self) { _ in
+                AppIconScene(model: AppIconSceneViewModel())
+            }
             .navigationDestination(for: Scenes.Referral.self) { scene in
                 let wallets = walletService.wallets.filter { $0.type == .multicoin }
                 if let wallet = wallets.first(where: { $0.id == walletService.currentWallet?.id }) ?? wallets.first {
