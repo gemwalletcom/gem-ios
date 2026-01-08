@@ -546,5 +546,8 @@
 "rewards.confirm_redeem" = "يحصل %@ ل %@!";
 "transfer.sign_transaction.title" = "توقيع المعاملة";
 "recent_activity.title" = "آخر الأخبار";
-"date.earlier" = "سابقًا";
 "settings.preferences.app_icon" = "أيقونة التطبيق";
+"recent_activity.clear_confirmation" = "هل أنت متأكد من رغبتك في مسح جميع الملفات الأخيرة؟";
+"rewards.pending.title" = "المكافأة معلقة";
+"rewards.pending.description" = "متوفر في %@";
+"rewards.pending.description_ready" = "مكافأتك جاهزة!";

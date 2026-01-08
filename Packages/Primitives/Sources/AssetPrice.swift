@@ -12,8 +12,12 @@ public struct AssetMarket: Codable, Equatable, Sendable {
 	public let circulatingSupply: Double?
 	public let totalSupply: Double?
 	public let maxSupply: Double?
+	public let allTimeHigh: Double?
+	public let allTimeHighDate: Date?
+	public let allTimeLow: Double?
+	public let allTimeLowDate: Date?
 
-	public init(marketCap: Double?, marketCapFdv: Double?, marketCapRank: Int32?, totalVolume: Double?, circulatingSupply: Double?, totalSupply: Double?, maxSupply: Double?) {
+	public init(marketCap: Double?, marketCapFdv: Double?, marketCapRank: Int32?, totalVolume: Double?, circulatingSupply: Double?, totalSupply: Double?, maxSupply: Double?, allTimeHigh: Double?, allTimeHighDate: Date?, allTimeLow: Double?, allTimeLowDate: Date?) {
 		self.marketCap = marketCap
 		self.marketCapFdv = marketCapFdv
 		self.marketCapRank = marketCapRank
@@ -21,6 +25,10 @@ public struct AssetMarket: Codable, Equatable, Sendable {
 		self.circulatingSupply = circulatingSupply
 		self.totalSupply = totalSupply
 		self.maxSupply = maxSupply
+		self.allTimeHigh = allTimeHigh
+		self.allTimeHighDate = allTimeHighDate
+		self.allTimeLow = allTimeLow
+		self.allTimeLowDate = allTimeLowDate
 	}
 }
 

@@ -107,7 +107,11 @@ extension PriceRecord {
             totalVolume: totalVolume,
             circulatingSupply: circulatingSupply,
             totalSupply: totalSupply,
-            maxSupply: maxSupply
+            maxSupply: maxSupply,
+            allTimeHigh: .none,
+            allTimeHighDate: .now,
+            allTimeLow: .none,
+            allTimeLowDate: .none
         )
     }
 }

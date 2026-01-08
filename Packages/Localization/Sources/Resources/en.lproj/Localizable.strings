@@ -546,5 +546,8 @@
 "rewards.confirm_redeem" = "Get %@ for %@!";
 "transfer.sign_transaction.title" = "Sign Transaction";
 "recent_activity.title" = "Recents";
-"date.earlier" = "Earlier";
 "settings.preferences.app_icon" = "App Icon";
+"recent_activity.clear_confirmation" = "Are you sure you want to clear all recents?";
+"rewards.pending.title" = "Bonus Pending";
+"rewards.pending.description" = "Available in %@";
+"rewards.pending.description_ready" = "Your bonus is ready!";

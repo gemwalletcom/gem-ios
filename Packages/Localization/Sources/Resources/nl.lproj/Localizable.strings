@@ -546,5 +546,8 @@
 "rewards.confirm_redeem" = "Krijgen %@ voor %@!";
 "transfer.sign_transaction.title" = "Transactie ondertekenen";
 "recent_activity.title" = "Recente";
-"date.earlier" = "Eerder";
 "settings.preferences.app_icon" = "App-pictogram";
+"recent_activity.clear_confirmation" = "Weet je zeker dat je alle recente items wilt verwijderen?";
+"rewards.pending.title" = "Bonus in afwachting";
+"rewards.pending.description" = "Beschikbaar in %@";
+"rewards.pending.description_ready" = "Je bonus staat klaar!";

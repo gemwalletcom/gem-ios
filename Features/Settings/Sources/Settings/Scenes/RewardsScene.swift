@@ -39,6 +39,12 @@ public struct RewardsScene: View {
                 stateErrorView(error: error)
             case .data(let rewards):
                 inviteFriendsSection(code: rewards.code)
+                if let disableReason = model.disableReason {
+                    disableReasonSection(reason: disableReason)
+                }
+                if model.hasPendingReferral {
+                    pendingReferralSection
+                }
                 if model.isInfoEnabled {
                     infoSection(rewards: rewards)
                 }
@@ -279,6 +285,39 @@ public struct RewardsScene: View {
             }
         } header: {
             Text(model.statsSectionTitle)
+        }
+    }
+
+    @ViewBuilder
+    private func disableReasonSection(reason: String) -> some View {
+        Section {
+            ListItemErrorView(
+                errorTitle: model.errorTitle,
+                error: AnyError(reason)
+            )
+        }
+    }
+
+    @ViewBuilder
+    private var pendingReferralSection: some View {
+        Section {
+            ListItemInfoView(
+                title: model.pendingReferralTitle,
+                description: model.pendingReferralDescription
+            )
+
+            HStack {
+                Spacer()
+                StateButton(
+                    text: model.pendingReferralButtonTitle,
+                    type: model.activatePendingButtonType
+                ) {
+                    Task { await model.activatePendingReferral() }
+                }
+                .frame(height: .scene.button.height)
+                .frame(maxWidth: .scene.button.maxWidth)
+                Spacer()
+            }
         }
     }
 }

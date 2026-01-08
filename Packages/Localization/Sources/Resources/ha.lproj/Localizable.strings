@@ -546,5 +546,8 @@
 "rewards.confirm_redeem" = "Samu %@ don %@!";
 "transfer.sign_transaction.title" = "Sa hannu kan Ma'amala";
 "recent_activity.title" = "Kwanan nan";
-"date.earlier" = "Tun da farko";
 "settings.preferences.app_icon" = "Alamar Manhaja";
+"recent_activity.clear_confirmation" = "Shin kana da tabbacin kana son share duk sabbin bayanai?";
+"rewards.pending.title" = "Karin Kudi Ana Jira";
+"rewards.pending.description" = "Akwai a cikin %@";
+"rewards.pending.description_ready" = "Karin kyautar ku a shirye take!";
