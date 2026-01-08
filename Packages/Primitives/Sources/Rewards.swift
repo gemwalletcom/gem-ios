@@ -14,7 +14,7 @@ public struct RedemptionRequest: Codable, Sendable {
 
 public enum RewardRedemptionType: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case asset
-    case giftAsset
+	case giftAsset
 }
 
 public struct RewardRedemptionOption: Codable, Equatable, Hashable, Sendable {
