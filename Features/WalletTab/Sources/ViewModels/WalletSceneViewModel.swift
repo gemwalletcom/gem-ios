@@ -65,13 +65,13 @@ public final class WalletSceneViewModel: Sendable {
         self.walletService = walletService
         self.observablePreferences = observablePreferences
 
-        self.totalFiatRequest = TotalValueRequest(walletId: wallet.id, balanceType: .wallet)
+        self.totalFiatRequest = TotalValueRequest(walletId: wallet.walletId, balanceType: .wallet)
         self.assetsRequest = AssetsRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             filters: [.enabledBalance]
         )
         self.bannersRequest = BannersRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             assetId: .none,
             chain: .none,
             events: [
@@ -228,7 +228,7 @@ extension WalletSceneViewModel {
     }
     
     func shouldStartLoadingAssets() {
-        let preferences = WalletPreferences(walletId: wallet.id)
+        let preferences = WalletPreferences(walletId: wallet.walletId)
         isLoadingAssets = !preferences.completeInitialLoadAssets && preferences.assetsTimestamp == .zero
     }
     
@@ -262,9 +262,9 @@ extension WalletSceneViewModel {
 
     private func refresh(for newWallet: Wallet) {
         wallet = newWallet
-        totalFiatRequest.walletId = newWallet.id
-        assetsRequest.walletId = newWallet.id
-        bannersRequest.walletId = newWallet.id
+        totalFiatRequest.walletId = newWallet.walletId
+        assetsRequest.walletId = newWallet.walletId
+        bannersRequest.walletId = newWallet.walletId
 
         fetch()
     }

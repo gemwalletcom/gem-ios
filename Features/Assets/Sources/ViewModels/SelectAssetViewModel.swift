@@ -75,11 +75,11 @@ public final class SelectAssetViewModel {
         self.searchModel = AssetSearchViewModel(selectType: selectType)
 
         self.request = AssetsRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             filters: filter.filters
         )
         self.recentsRequest = RecentActivityRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual },
             filters: filter.defaultFilters

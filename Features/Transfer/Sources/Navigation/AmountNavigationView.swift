@@ -32,7 +32,7 @@ public struct AmountNavigationView: View {
                 case let .fiatConnect(assetAddress, walletId):
                     NavigationStack {
                         FiatConnectNavigationView(
-                            model: FiatSceneViewModel(assetAddress: assetAddress, walletId: walletId.id)
+                            model: FiatSceneViewModel(assetAddress: assetAddress, walletId: walletId)
                         )
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }

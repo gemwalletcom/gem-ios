@@ -66,13 +66,13 @@ public final class PerpetualSceneViewModel {
         self.onTransferData = onTransferData
         self.onPerpetualRecipientData = onPerpetualRecipientData
 
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, filter: .assetId(asset.id))
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId, filter: .assetId(asset.id))
         self.perpetualRequest = PerpetualRequest(assetId: asset.id)
-        self.perpetualTotalValueRequest = TotalValueRequest(walletId: wallet.id, balanceType: .perpetual)
+        self.perpetualTotalValueRequest = TotalValueRequest(walletId: wallet.walletId, balanceType: .perpetual)
 
         let transactionTypes: [TransactionType] = [.perpetualOpenPosition, .perpetualClosePosition]
         self.transactionsRequest = TransactionsRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             type: .asset(assetId: asset.id),
             filters: [.types(transactionTypes.map { $0.rawValue })]
         )

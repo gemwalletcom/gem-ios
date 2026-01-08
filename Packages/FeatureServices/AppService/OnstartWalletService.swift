@@ -40,7 +40,7 @@ public final class OnstartWalletService: Sendable {
     }
 
     private func runAddressStatusCheck(_ wallet: Wallet) async {
-        let walletPreferences = WalletPreferences(walletId: wallet.id)
+        let walletPreferences = WalletPreferences(walletId: wallet.walletId)
         guard !walletPreferences.completeInitialAddressStatus else { return }
 
         do {

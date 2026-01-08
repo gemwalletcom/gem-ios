@@ -33,28 +33,28 @@ public final class TransactionsService: Sendable {
     }
 
     public func updateAll(walletId: WalletId) async throws {
-        guard let wallet = try walletStore.getWallet(id: walletId.id) else {
+        guard let wallet = try walletStore.getWallet(id: walletId) else {
             throw AnyError("Can't get a wallet, walletId: \(walletId.id)")
         }
-        let store = WalletPreferences(walletId: wallet.id)
+        let store = WalletPreferences(walletId: walletId)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
-        
+
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let response = try await provider.getTransactionsAll(
             deviceId: deviceId,
             walletIndex: wallet.index.asInt,
             fromTimestamp: store.transactionsTimestamp
         )
-        
-        try await prefetchAssets(walletId: wallet.walletId, transactions: response.transactions)
-        try transactionStore.addTransactions(walletId: wallet.id, transactions: response.transactions)
+
+        try await prefetchAssets(walletId: walletId, transactions: response.transactions)
+        try transactionStore.addTransactions(walletId: walletId, transactions: response.transactions)
         try addressStore.addAddressNames(response.addressNames)
-        
+
         store.transactionsTimestamp = newTimestamp
     }
-    
+
     public func updateForAsset(wallet: Wallet, assetId: AssetId) async throws {
-        let store = WalletPreferences(walletId: wallet.id)
+        let store = WalletPreferences(walletId: wallet.walletId)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let response = try await provider.getTransactionsForAsset(
@@ -68,18 +68,18 @@ public final class TransactionsService: Sendable {
         }
 
         try await prefetchAssets(walletId: wallet.walletId, transactions: response.transactions)
-        try transactionStore.addTransactions(walletId: wallet.id, transactions: response.transactions)
+        try transactionStore.addTransactions(walletId: wallet.walletId, transactions: response.transactions)
         try addressStore.addAddressNames(response.addressNames)
 
         store.setTransactionsForAssetTimestamp(assetId: assetId.identifier, value: newTimestamp)
     }
 
     public func addTransaction(walletId: WalletId, transaction: Transaction) throws {
-        try transactionStore.addTransactions(walletId: walletId.id, transactions: [transaction])
+        try transactionStore.addTransactions(walletId: walletId, transactions: [transaction])
     }
-    
+
     public func getTransaction(walletId: WalletId, transactionId: String) throws -> TransactionExtended {
-        try transactionStore.getTransaction(walletId: walletId.id, transactionId: transactionId)
+        try transactionStore.getTransaction(walletId: walletId, transactionId: transactionId)
     }
 
     private func prefetchAssets(walletId: WalletId, transactions: [Transaction]) async throws {

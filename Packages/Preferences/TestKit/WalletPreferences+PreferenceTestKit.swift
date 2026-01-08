@@ -2,9 +2,10 @@
 
 import Foundation
 import Preferences
+import Primitives
 
 public extension WalletPreferences {
-    static func mock(walletId: String = UUID().uuidString) -> WalletPreferences {
+    static func mock(walletId: WalletId = WalletId(id: UUID().uuidString)) -> WalletPreferences {
         WalletPreferences(walletId: walletId)
     }
 }

@@ -30,9 +30,9 @@ struct AssetsRequestTests {
     @Test func testPinned() throws {
         let db = DB.mockAssets()
         let balanceStore = BalanceStore(db: db)
-        
+
         let assetId = AssetId(chain: .bitcoin, tokenId: nil)
-        try balanceStore.pinAsset(walletId: .empty, assetId: assetId.identifier, value: true)
+        try balanceStore.pinAsset(walletId: .mock(), assetId: assetId, value: true)
         
         try db.dbQueue.read { db in
             let assets = try AssetsRequest.mock().fetch(db)
@@ -48,7 +48,7 @@ struct AssetsRequestTests {
         let balanceStore = BalanceStore(db: db)
         
         let disabledId = AssetId(chain: .bitcoin)
-        try balanceStore.setIsEnabled(walletId: .empty, assetIds: [disabledId.identifier], value: false)
+        try balanceStore.setIsEnabled(walletId: .mock(), assetIds: [disabledId], value: false)
         
         try db.dbQueue.read { db in
             let enabledAssets = try AssetsRequest.mock(filters: [.enabledBalance]).fetch(db)
@@ -168,7 +168,7 @@ struct AssetsRequestTests {
             #expect(assets.last?.asset.id == AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7"))
         }
         
-        try balanceStore.pinAsset(walletId: .empty, assetId: AssetId(chain: .bitcoin).identifier, value: true)
+        try balanceStore.pinAsset(walletId: .mock(), assetId: AssetId(chain: .bitcoin), value: true)
         try db.dbQueue.read { db in
             let assets = try AssetsRequest.mock().fetch(db)
             
@@ -179,7 +179,7 @@ struct AssetsRequestTests {
 
 extension AssetsRequest {
     static func mock(
-        walletId: String = "",
+        walletId: WalletId = .mock(),
         searchBy: String = "",
         filters: [AssetsRequestFilter] = []
     ) -> AssetsRequest {

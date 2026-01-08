@@ -62,11 +62,11 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.onAddToken = onAddToken
         self.searchModel = AssetSearchViewModel(selectType: .manage)
         self.request = AssetsRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             filters: []
         )
         self.recentsRequest = RecentActivityRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual }
         )

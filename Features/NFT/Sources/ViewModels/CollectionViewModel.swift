@@ -26,7 +26,7 @@ public final class CollectionViewModel: CollectionsViewable, Sendable {
     ) {
         self.wallet = wallet
         self.collectionName = collectionName
-        self.request = NFTRequest(walletId: wallet.id, filter: .collection(id: collectionId))
+        self.request = NFTRequest(walletId: wallet.walletId, filter: .collection(id: collectionId))
     }
 
     public var title: String { collectionName }

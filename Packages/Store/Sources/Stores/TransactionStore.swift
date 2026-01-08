@@ -63,19 +63,19 @@ public struct TransactionStore: Sendable {
         }
     }
     
-    public func getTransaction(walletId: String, transactionId: String) throws -> TransactionExtended {
+    public func getTransaction(walletId: WalletId, transactionId: String) throws -> TransactionExtended {
         try db.read { db in
             try TransactionRequest(walletId: walletId, transactionId: transactionId).fetch(db)
         }
     }
 
-    public func addTransactions(walletId: String, transactions: [Transaction]) throws {
+    public func addTransactions(walletId: WalletId, transactions: [Transaction]) throws {
         if transactions.isEmpty {
             return
         }
         try db.write { db in
             for transaction in transactions {
-                let record = try transaction.record(walletId: walletId).upsertAndFetch(db, as: TransactionRecord.self)
+                let record = try transaction.record(walletId: walletId.id).upsertAndFetch(db, as: TransactionRecord.self)
                 if let id = record.id {
                     try TransactionAssetAssociationRecord
                         .filter(TransactionAssetAssociationRecord.Columns.transactionId == id)

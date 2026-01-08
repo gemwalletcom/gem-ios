@@ -94,13 +94,13 @@ public final class DeveloperViewModel {
 
     func clearTransactionsTimestamp() {
         performAction {
-            WalletPreferences(walletId: walletId.id).transactionsTimestamp = 0
+            WalletPreferences(walletId: walletId).transactionsTimestamp = 0
         }
     }
 
     func clearWalletPreferences() {
         performAction {
-            WalletPreferences(walletId: walletId.id).clear()
+            WalletPreferences(walletId: walletId).clear()
         }
     }
 
@@ -287,7 +287,7 @@ public final class DeveloperViewModel {
                 createdAt: element.createdAt
             )
         }
-        try? transactionsService.transactionStore.addTransactions(walletId: walletId.id, transactions: transactions)
+        try? transactionsService.transactionStore.addTransactions(walletId: walletId, transactions: transactions)
     }
 
     // preferences

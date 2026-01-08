@@ -8,9 +8,9 @@ import Primitives
 
 public struct WalletRequest: ValueObservationQueryable {
     public static var defaultValue: Wallet? { .none }
-    public var walletId: String
+    public var walletId: WalletId
 
-    public init(walletId: String) {
+    public init(walletId: WalletId) {
         self.walletId = walletId
     }
 
@@ -18,7 +18,7 @@ public struct WalletRequest: ValueObservationQueryable {
         try WalletRecord
             .including(all: WalletRecord.accounts)
             .asRequest(of: WalletRecordInfo.self)
-            .filter(WalletRecord.Columns.id == walletId)
+            .filter(WalletRecord.Columns.id == walletId.id)
             .fetchOne(db)?
             .mapToWallet()
     }

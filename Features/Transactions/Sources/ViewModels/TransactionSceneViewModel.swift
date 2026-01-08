@@ -22,7 +22,7 @@ public final class TransactionSceneViewModel {
 
     public init(
         transaction: TransactionExtended,
-        walletId: String,
+        walletId: WalletId,
         preferences: Preferences = Preferences.standard,
         explorerService: ExplorerService = ExplorerService.standard
     ) {

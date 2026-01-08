@@ -31,7 +31,7 @@ public final class RecentsSceneViewModel {
         self.walletId = walletId
         self.activityService = activityService
         self.request = RecentActivityRequest(
-            walletId: walletId.id,
+            walletId: walletId,
             limit: .max,
             types: types,
             filters: filters

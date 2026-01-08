@@ -9,14 +9,14 @@ import Primitives
 public struct TransactionsRequest: ValueObservationQueryable {
     public static var defaultValue: [TransactionExtended] { [] }
 
-    private let walletId: String
+    private let walletId: WalletId
     private let type: TransactionsRequestType
     private let limit: Int
 
     public var filters: [TransactionsRequestFilter] = []
 
     public init(
-        walletId: String,
+        walletId: WalletId,
         type: TransactionsRequestType,
         filters: [TransactionsRequestFilter] = [],
         limit: Int = 50
@@ -35,13 +35,13 @@ public struct TransactionsRequest: ValueObservationQueryable {
         _ db: Database,
         type: TransactionsRequestType,
         filters: [TransactionsRequestFilter],
-        walletId: String,
+        walletId: WalletId,
         limit: Int
     ) throws -> [TransactionExtended] {
         let states = states(type: type)
         let types = types(type: type)
         var request = TransactionRecord
-            .filter(TransactionRecord.Columns.walletId == walletId)
+            .filter(TransactionRecord.Columns.walletId == walletId.id)
             .filter(states.contains(TransactionRecord.Columns.state))
             .filter(types.contains(TransactionRecord.Columns.type))
             .including(required: TransactionRecord.asset)

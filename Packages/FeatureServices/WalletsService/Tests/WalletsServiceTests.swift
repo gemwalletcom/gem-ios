@@ -22,7 +22,7 @@ struct WalletsServiceTests {
         try walletStore.addWallet(wallet)
         try service.setup(wallet: wallet)
 
-        let isEnabled = try balanceStore.getBalanceRecord(walletId: wallet.walletId.id, assetId: AssetId(chain: .cosmos).identifier)?.isEnabled
+        let isEnabled = try balanceStore.getBalanceRecord(walletId: wallet.walletId, assetId: AssetId(chain: .cosmos))?.isEnabled
 
         #expect(isEnabled == false)
     }
@@ -36,7 +36,7 @@ struct WalletsServiceTests {
         try walletStore.addWallet(wallet)
         try service.setup(wallet: wallet)
 
-        let isEnabled = try balanceStore.getBalanceRecord(walletId: wallet.walletId.id, assetId: AssetId(chain: .cosmos).identifier)?.isEnabled
+        let isEnabled = try balanceStore.getBalanceRecord(walletId: wallet.walletId, assetId: AssetId(chain: .cosmos))?.isEnabled
 
         #expect(isEnabled == true)
     }

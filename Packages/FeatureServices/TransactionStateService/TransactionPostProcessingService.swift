@@ -38,7 +38,7 @@ struct TransactionPostProcessingService: Sendable {
             for assetIdentifier in transaction.assetIds {
                 Task {
                     try await stakeService.update(
-                        walletId: wallet.id,
+                        walletId: wallet.walletId,
                         chain: assetIdentifier.chain,
                         address: transaction.from
                     )
