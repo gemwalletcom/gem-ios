@@ -44,6 +44,6 @@ public struct NFTRequest: ValueObservationQueryable {
         return try request
             .fetchAll(db)
             .map { $0.mapToNFTData() }
-            .filter { $0.assets.count > 0 }
+            .filter { $0.assets.isNotEmpty }
     }
 }

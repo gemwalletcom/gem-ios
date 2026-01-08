@@ -80,7 +80,7 @@ public struct ConfirmService: Sendable {
         do {
             try activityService.updateRecent(data: data, walletId: walletId)
         } catch {
-            print("Failed to update recent activity: \(error)")
+            debugLog("Failed to update recent activity: \(error)")
         }
     }
 

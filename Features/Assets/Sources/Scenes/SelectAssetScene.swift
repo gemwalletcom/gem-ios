@@ -4,6 +4,7 @@ import Components
 import Style
 import Localization
 import PrimitivesComponents
+import Recents
 
 public struct SelectAssetScene: View {
 
@@ -47,7 +48,7 @@ public struct SelectAssetScene: View {
             }
         }
         .observeQuery(request: $model.request, value: $model.assets)
-        .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
+        .observeQuery(request: $model.recentsRequest, value: $model.recents)
         .onChange(of: model.filterModel, model.onChangeFilterModel)
         .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
         .onChange(of: model.isSearching, model.onChangeFocus)
@@ -73,11 +74,16 @@ public struct SelectAssetScene: View {
                 .listRowInsets(EdgeInsets())
             }
 
-            if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels) { assetModel in
+            if model.showRecents {
+                RecentActivitySectionView(
+                    models: model.recentModels,
+                    onSelectRecents: model.onSelectRecents
+                ) { assetModel in
                     switch model.selectType {
                     case .send, .receive, .buy:
-                        NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: model.assetAddress(for: assetModel.asset))) {
+                        Button {
+                            model.onSelectRecent(assetModel.asset)
+                        } label: {
                             AssetChipView(model: assetModel)
                         }
                     case .swap:
@@ -133,13 +139,15 @@ public struct SelectAssetScene: View {
         ForEach(assets) { assetData in
             switch model.selectType {
             case .buy, .receive, .send, .deposit, .withdraw:
-                NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
-                    ListAssetItemSelectionView(
+                NavigationCustomLink(
+                    with: ListAssetItemSelectionView(
                         assetData: assetData,
                         currencyCode: model.currencyCode,
                         type: model.selectType.listType,
                         action: model.onAssetAction
                     )
+                ) {
+                    model.onSelectAsset(assetData)
                 }
             case .manage:
                 ListAssetItemSelectionView(

@@ -28,4 +28,13 @@ public struct RecentActivityStore: Sendable {
             ).insert(db)
         }
     }
+
+    public func clear(walletId: WalletId, types: [RecentActivityType]) throws {
+        _ = try db.write { db in
+            try RecentActivityRecord
+                .filter(RecentActivityRecord.Columns.walletId == walletId.id)
+                .filter(types.map { $0.rawValue }.contains(RecentActivityRecord.Columns.type))
+                .deleteAll(db)
+        }
+    }
 }

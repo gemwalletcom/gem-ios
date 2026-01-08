@@ -17,29 +17,28 @@ import WalletsService
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
     private let searchService: AssetSearchService
-    private let activityService: ActivityService
+    let activityService: ActivityService
     private let walletsService: WalletsService
     private let preferences: Preferences
 
-    private let wallet: Wallet
+    let wallet: Wallet
     private let onDismissSearch: VoidAction
     private let onAddToken: VoidAction
 
     private var state: StateViewType<[AssetBasic]> = .noData
 
     var assets: [AssetData] = []
-    var recentActivities: [Asset] = []
-    var positions: [PerpetualPositionData] = []
+    var recents: [RecentAsset] = []
     var searchModel: AssetSearchViewModel
 
     var request: AssetsRequest
-    var positionsRequest: PerpetualPositionsRequest
-    var recentActivityRequest: RecentActivityRequest
+    var recentsRequest: RecentActivityRequest
 
     var isPresentingToastMessage: ToastMessage? = nil
     var isSearching: Bool = false
     var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
+    var isPresentingRecents: Bool = false
 
     public let onSelectAssetAction: AssetAction
 
@@ -66,28 +65,25 @@ public final class WalletSearchSceneViewModel: Sendable {
             walletId: wallet.walletId,
             filters: []
         )
-        self.recentActivityRequest = RecentActivityRequest(
+        self.recentsRequest = RecentActivityRequest(
             walletId: wallet.walletId,
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual }
         )
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId)
     }
 
     var pinnedImage: Image { Images.System.pin }
     var pinnedTitle: String { Localized.Common.pinned }
-    var perpetualsTitle: String { Localized.Perpetuals.title }
     var assetsTitle: String { Localized.Assets.title }
 
     var sections: AssetsSections { AssetsSections.from(assets) }
-    var activityModels: [AssetViewModel] { recentActivities.map { AssetViewModel(asset: $0) } }
+    var recentModels: [AssetViewModel] { recents.map { AssetViewModel(asset: $0.asset) } }
     var currencyCode: String { preferences.currency }
 
     var showTags: Bool { searchModel.searchableQuery.isEmpty }
-    var showRecent: Bool { searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty }
-    var showPerpetuals: Bool { positions.isNotEmpty && preferences.isPerpetualEnabled && wallet.isMultiCoins }
+    var showRecents: Bool { searchModel.searchableQuery.isEmpty && recents.isNotEmpty }
     var showLoading: Bool { state.isLoading && showEmpty }
-    var showEmpty: Bool { !showRecent && !showPerpetuals && !showPinned && !showAssets }
+    var showEmpty: Bool { !showRecents && !showPinned && !showAssets }
     var showPinned: Bool { sections.pinned.isNotEmpty }
     var showAssets: Bool { sections.assets.isNotEmpty }
     var showAddToken: Bool { wallet.hasTokenSupport }
@@ -146,6 +142,15 @@ extension WalletSearchSceneViewModel {
     func onSelectAsset(_ asset: Asset) {
         onSelectAssetAction?(asset)
         updateRecent(asset)
+    }
+
+    func onSelectRecents() {
+        isPresentingRecents = true
+    }
+
+    func onSelectRecent(asset: Asset) {
+        onSelectAssetAction?(asset)
+        isPresentingRecents = false
     }
 
     func onSelectAddCustomToken() {
@@ -218,7 +223,6 @@ extension WalletSearchSceneViewModel {
             searchModel.tagsViewModel.selectedTag = AssetTagSelection.all
         }
         request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
-        positionsRequest.searchQuery = searchModel.searchableQuery
         state = .loading
     }
 

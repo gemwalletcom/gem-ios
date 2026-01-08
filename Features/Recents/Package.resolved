@@ -1,5 +1,5 @@
 {
-  "originHash" : "00c1c6d304380587522e3db87e31443c482e0ed0f776e0d31235ee16e7345b60",
+  "originHash" : "e106c2f8cca8fae25f85fec1652ef07e87e6e58bde366f8149d65fdca96d1350",
   "pins" : [
     {
       "identity" : "bigint",
@@ -26,23 +26,6 @@
       "state" : {
         "revision" : "540dc48e86af2972b4f1815616aa1ed8ac97845a",
         "version" : "0.11.0"
-      }
-    },
-    {
-      "identity" : "reown-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gemwalletcom/reown-swift.git",
-      "state" : {
-        "revision" : "e902bbb0de2208777c8e9c09591f4bdd39fc13ae"
-      }
-    },
-    {
-      "identity" : "starscream",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/daltoniam/Starscream.git",
-      "state" : {
-        "revision" : "a063fda2b8145a231953c20e7a646be254365396",
-        "version" : "3.1.2"
       }
     }
   ],
