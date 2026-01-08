@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Výchozí pákový efekt";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Nedávné";
 "errors.no_data_available" = "Nejsou k dispozici žádná data";
 "errors.dust_threshold_short" = "Síť toto množství považuje za prach – poplatek je vyšší než samotné množství.";
 "charts.take_profit" = "TP";
@@ -546,3 +545,9 @@
 "rewards.insufficient_points" = "Nedostatek bodů";
 "rewards.confirm_redeem" = "Získat %@ pro %@!";
 "transfer.sign_transaction.title" = "Podepsat transakci";
+"recent_activity.title" = "Nedávné";
+"settings.preferences.app_icon" = "Ikona aplikace";
+"recent_activity.clear_confirmation" = "Opravdu chcete vymazat všechny nedávné položky?";
+"rewards.pending.title" = "Bonus čeká na vyřízení";
+"rewards.pending.description" = "K dispozici v %@";
+"rewards.pending.description_ready" = "Váš bonus je připraven!";

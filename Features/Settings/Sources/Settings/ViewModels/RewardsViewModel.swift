@@ -7,10 +7,19 @@ import PrimitivesComponents
 import Components
 import Preferences
 import Localization
+import Style
 
 @Observable
 @MainActor
 public final class RewardsViewModel: Sendable {
+    private static let dateFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute]
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.unitsStyle = .full
+        return formatter
+    }()
+
     private let rewardsService: RewardsServiceable
     private let activateCode: String?
     private let giftCode: String?
@@ -99,6 +108,44 @@ public final class RewardsViewModel: Sendable {
         hasReferralCode || hasUsedReferralCode
     }
 
+    var disableReason: String? {
+        rewards?.disableReason
+    }
+
+    var pendingVerificationAfter: Date? {
+        rewards?.pendingVerificationAfter
+    }
+
+    var hasPendingReferral: Bool {
+        pendingVerificationAfter != nil
+    }
+
+    var canActivatePendingReferral: Bool {
+        guard let pendingDate = pendingVerificationAfter else { return false }
+        return Date() >= pendingDate
+    }
+
+    var pendingReferralTitle: String {
+        Localized.Rewards.Pending.title
+    }
+
+    var pendingReferralDescription: String? {
+        guard let pendingDate = pendingVerificationAfter else { return nil }
+        if canActivatePendingReferral {
+            return Localized.Rewards.Pending.descriptionReady
+        }
+        guard let timeString = Self.dateFormatter.string(from: .now, to: pendingDate) else { return nil }
+        return Localized.Rewards.Pending.description(timeString)
+    }
+
+    var pendingReferralButtonTitle: String {
+        Localized.Transfer.confirm
+    }
+
+    var activatePendingButtonType: ButtonType {
+        canActivatePendingReferral ? .primary() : .primary(.disabled)
+    }
+
     var walletBarViewModel: WalletBarViewViewModel {
         let walletVM = WalletViewModel(wallet: selectedWallet)
         return WalletBarViewViewModel(name: walletVM.name, image: walletVM.avatarImage)
@@ -150,6 +197,17 @@ public final class RewardsViewModel: Sendable {
 
     func useReferralCode() async {
         guard let code = activateCode else { return }
+        do {
+            try await rewardsService.useReferralCode(wallet: selectedWallet, referralCode: code)
+            showActivatedToast()
+            await fetch()
+        } catch {
+            isPresentingError = error.localizedDescription
+        }
+    }
+
+    func activatePendingReferral() async {
+        guard let code = rewards?.usedReferralCode else { return }
         do {
             try await rewardsService.useReferralCode(wallet: selectedWallet, referralCode: code)
             showActivatedToast()

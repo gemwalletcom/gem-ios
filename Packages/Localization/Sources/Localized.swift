@@ -965,8 +965,10 @@ public enum Localized {
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
   }
   public enum RecentActivity {
-    /// Recent
-    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recent")
+    /// Are you sure you want to clear all recents?
+    public static let clearConfirmation = Localized.tr("Localizable", "recent_activity.clear_confirmation", fallback: "Are you sure you want to clear all recents?")
+    /// Recents
+    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recents")
   }
   public enum Rewards {
     /// Get %@ for %@!
@@ -1020,6 +1022,16 @@ public enum Localized {
       }
       /// Invite Friends
       public static let title = Localized.tr("Localizable", "rewards.invite_friends.title", fallback: "Invite Friends")
+    }
+    public enum Pending {
+      /// Available in %@
+      public static func description(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "rewards.pending.description", String(describing: p1), fallback: "Available in %@")
+      }
+      /// Your bonus is ready!
+      public static let descriptionReady = Localized.tr("Localizable", "rewards.pending.description_ready", fallback: "Your bonus is ready!")
+      /// Bonus Pending
+      public static let title = Localized.tr("Localizable", "rewards.pending.title", fallback: "Bonus Pending")
     }
     public enum WaysSpend {
       /// Ways to Spend
@@ -1137,6 +1149,8 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "settings.notifications.title", fallback: "Notifications")
     }
     public enum Preferences {
+      /// App Icon
+      public static let appIcon = Localized.tr("Localizable", "settings.preferences.app_icon", fallback: "App Icon")
       /// Default Leverage
       public static let defaultLeverage = Localized.tr("Localizable", "settings.preferences.default_leverage", fallback: "Default Leverage")
       /// Preferences

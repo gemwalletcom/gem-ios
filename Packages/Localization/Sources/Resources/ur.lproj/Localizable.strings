@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "ڈیفالٹ لیوریج";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "حالیہ";
 "errors.no_data_available" = "کوئی ڈیٹا دستیاب نہیں ہے۔";
 "errors.dust_threshold_short" = "نیٹ ورک اس رقم کو دھول سمجھتا ہے — فیس خود رقم سے زیادہ ہے۔";
 "charts.take_profit" = "TP";
@@ -546,3 +545,9 @@
 "rewards.insufficient_points" = "ناکافی پوائنٹس";
 "rewards.confirm_redeem" = "حاصل کریں۔ %@ کے لیے %@!";
 "transfer.sign_transaction.title" = "لین دین پر دستخط کریں۔";
+"recent_activity.title" = "حالیہ";
+"settings.preferences.app_icon" = "ایپ آئیکن";
+"recent_activity.clear_confirmation" = "کیا آپ واقعی تمام حالیہ کو صاف کرنا چاہتے ہیں؟";
+"rewards.pending.title" = "بونس زیر التواء";
+"rewards.pending.description" = "میں دستیاب ہے۔ %@";
+"rewards.pending.description_ready" = "Your bonus is ready!";

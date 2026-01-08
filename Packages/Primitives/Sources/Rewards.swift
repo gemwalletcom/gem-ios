@@ -119,6 +119,7 @@ public struct ReferralLeaderboard: Codable, Equatable, Hashable, Sendable {
 
 public enum RewardEventType: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case createUsername
+	case invitePending
 	case inviteNew
 	case inviteExisting
 	case joined
