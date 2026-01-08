@@ -1023,6 +1023,16 @@ public enum Localized {
       /// Invite Friends
       public static let title = Localized.tr("Localizable", "rewards.invite_friends.title", fallback: "Invite Friends")
     }
+    public enum Pending {
+      /// Available in %@
+      public static func description(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "rewards.pending.description", String(describing: p1), fallback: "Available in %@")
+      }
+      /// Your bonus is ready!
+      public static let descriptionReady = Localized.tr("Localizable", "rewards.pending.description_ready", fallback: "Your bonus is ready!")
+      /// Bonus Pending
+      public static let title = Localized.tr("Localizable", "rewards.pending.title", fallback: "Bonus Pending")
+    }
     public enum WaysSpend {
       /// Ways to Spend
       public static let title = Localized.tr("Localizable", "rewards.ways_spend.title", fallback: "Ways to Spend")

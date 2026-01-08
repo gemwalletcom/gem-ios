@@ -548,3 +548,6 @@
 "recent_activity.title" = "Son Haberler";
 "settings.preferences.app_icon" = "Uygulama Simgesi";
 "recent_activity.clear_confirmation" = "Son kullanılanları silmek istediğinizden emin misiniz?";
+"rewards.pending.title" = "Bonus Beklemede";
+"rewards.pending.description" = "Mevcuttur %@";
+"rewards.pending.description_ready" = "Bonusunuz hazır!";

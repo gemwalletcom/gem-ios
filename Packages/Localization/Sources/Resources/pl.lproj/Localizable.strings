@@ -548,3 +548,6 @@
 "recent_activity.title" = "Ostatnie";
 "settings.preferences.app_icon" = "Ikona aplikacji";
 "recent_activity.clear_confirmation" = "Czy na pewno chcesz wyczyścić wszystkie ostatnie?";
+"rewards.pending.title" = "Bonus w toku";
+"rewards.pending.description" = "Dostępne w %@";
+"rewards.pending.description_ready" = "Twój bonus jest gotowy!";

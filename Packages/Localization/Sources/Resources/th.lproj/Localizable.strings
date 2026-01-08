@@ -548,3 +548,6 @@
 "recent_activity.title" = "ล่าสุด";
 "settings.preferences.app_icon" = "ไอคอนแอป";
 "recent_activity.clear_confirmation" = "คุณแน่ใจหรือไม่ว่าต้องการล้างรายการล่าสุดทั้งหมด?";
+"rewards.pending.title" = "โบนัสรออนุมัติ";
+"rewards.pending.description" = "มีจำหน่ายใน %@";
+"rewards.pending.description_ready" = "โบนัสของคุณพร้อมแล้ว!";

@@ -548,3 +548,6 @@
 "recent_activity.title" = "最近";
 "settings.preferences.app_icon" = "アプリアイコン";
 "recent_activity.clear_confirmation" = "最近使ったものをすべて消去してもよろしいですか?";
+"rewards.pending.title" = "ボーナス保留中";
+"rewards.pending.description" = "入手可能な %@";
+"rewards.pending.description_ready" = "ボーナスの準備ができました!";

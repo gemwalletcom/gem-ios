@@ -206,6 +206,12 @@ public enum Images {
         public static let warning = Image(.verificationOrange)
         public static let risk = Image(.verificationRed)
     }
+
+    public enum AppIcons {
+        public static let primary = Image(.appIcon)
+        public static let mono = Image(.appIconMono)
+        public static let lava = Image(.appIconLava)
+    }
 }
 
 // MARK: - Preview

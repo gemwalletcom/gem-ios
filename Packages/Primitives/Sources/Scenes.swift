@@ -55,6 +55,10 @@ public struct Scenes {
         public init() {}
     }
 
+    public struct AppIcon: Hashable {
+        public init() {}
+    }
+
     public struct WalletConnectorScene: Hashable {
         public init() {}
     }

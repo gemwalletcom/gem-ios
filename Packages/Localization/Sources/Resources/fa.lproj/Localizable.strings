@@ -548,3 +548,6 @@
 "recent_activity.title" = "تازه‌ها";
 "settings.preferences.app_icon" = "آیکون برنامه";
 "recent_activity.clear_confirmation" = "آیا مطمئن هستید که می‌خواهید تمام موارد اخیر را پاک کنید؟";
+"rewards.pending.title" = "پاداش در انتظار";
+"rewards.pending.description" = "موجود در %@";
+"rewards.pending.description_ready" = "جایزه شما آماده است!";

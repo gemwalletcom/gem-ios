@@ -548,3 +548,6 @@
 "recent_activity.title" = "최근";
 "settings.preferences.app_icon" = "앱 아이콘";
 "recent_activity.clear_confirmation" = "최근 항목을 모두 삭제하시겠습니까?";
+"rewards.pending.title" = "보너스 지급 예정";
+"rewards.pending.description" = "다음에서 이용 가능합니다: %@";
+"rewards.pending.description_ready" = "보너스가 지급되었습니다!";

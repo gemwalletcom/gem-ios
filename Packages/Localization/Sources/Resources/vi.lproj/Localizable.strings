@@ -548,3 +548,6 @@
 "recent_activity.title" = "Gần đây";
 "settings.preferences.app_icon" = "Biểu tượng ứng dụng";
 "recent_activity.clear_confirmation" = "Bạn có chắc chắn muốn xóa tất cả mục gần đây không?";
+"rewards.pending.title" = "Tiền thưởng đang chờ xử lý";
+"rewards.pending.description" = "Có sẵn trong %@";
+"rewards.pending.description_ready" = "Phần thưởng của bạn đã sẵn sàng!";

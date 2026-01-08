@@ -548,3 +548,6 @@
 "recent_activity.title" = "Recenti";
 "settings.preferences.app_icon" = "Icona dell'app";
 "recent_activity.clear_confirmation" = "Vuoi davvero cancellare tutti i recenti?";
+"rewards.pending.title" = "Bonus in sospeso";
+"rewards.pending.description" = "Disponibile in %@";
+"rewards.pending.description_ready" = "Il tuo bonus è pronto!";

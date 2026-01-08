@@ -36,6 +36,15 @@ public struct PreferencesScene: View {
                         action: onSelectLanguage
                     )
 
+                    if model.supportsAlternateIcons {
+                        NavigationLink(value: Scenes.AppIcon()) {
+                            ListItemView(
+                                title: model.appIconTitle,
+                                imageStyle: .settings(assetImage: model.appIconImage)
+                            )
+                        }
+                    }
+
                     NavigationLink(value: Scenes.Chains()) {
                         ListItemView(
                             title: model.networksTitle,

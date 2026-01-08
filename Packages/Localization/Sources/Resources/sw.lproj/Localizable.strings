@@ -548,3 +548,6 @@
 "recent_activity.title" = "Hivi karibuni";
 "settings.preferences.app_icon" = "Aikoni ya Programu";
 "recent_activity.clear_confirmation" = "Una uhakika unataka kufuta taarifa zote za hivi karibuni?";
+"rewards.pending.title" = "Bonasi Inasubiri";
+"rewards.pending.description" = "Inapatikana katika %@";
+"rewards.pending.description_ready" = "Bonasi yako iko tayari!";

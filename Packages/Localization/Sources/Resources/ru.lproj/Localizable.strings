@@ -548,3 +548,6 @@
 "recent_activity.title" = "Последние";
 "settings.preferences.app_icon" = "Значок приложения";
 "recent_activity.clear_confirmation" = "Вы уверены, что хотите удалить все последние записи?";
+"rewards.pending.title" = "Ожидается выплата бонуса";
+"rewards.pending.description" = "Доступно в %@";
+"rewards.pending.description_ready" = "Ваш бонус готов!";
