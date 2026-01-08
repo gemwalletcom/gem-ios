@@ -65,6 +65,26 @@ public struct RedemptionResult: Codable, Sendable {
 	}
 }
 
+public struct ReferralQuota: Codable, Equatable, Hashable, Sendable {
+	public let limit: Int32
+	public let available: Int32
+
+	public init(limit: Int32, available: Int32) {
+		self.limit = limit
+		self.available = available
+	}
+}
+
+public struct ReferralAllowance: Codable, Equatable, Hashable, Sendable {
+	public let daily: ReferralQuota
+	public let weekly: ReferralQuota
+
+	public init(daily: ReferralQuota, weekly: ReferralQuota) {
+		self.daily = daily
+		self.weekly = weekly
+	}
+}
+
 public struct ReferralCode: Codable, Sendable {
 	public let code: String
 
@@ -102,6 +122,7 @@ public enum RewardEventType: String, Codable, CaseIterable, Equatable, Hashable,
 	case inviteNew
 	case inviteExisting
 	case joined
+	case disabled
 }
 
 public struct RewardEvent: Codable, Equatable, Hashable, Sendable {
@@ -122,14 +143,22 @@ public struct Rewards: Codable, Equatable, Hashable, Sendable {
 	public let points: Int32
 	public let usedReferralCode: String?
 	public let isEnabled: Bool
+	public let verified: Bool
 	public let redemptionOptions: [RewardRedemptionOption]
+	public let disableReason: String?
+	public let referralAllowance: ReferralAllowance
+	public let pendingVerificationAfter: Date?
 
-	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?, isEnabled: Bool, redemptionOptions: [RewardRedemptionOption]) {
+	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?, isEnabled: Bool, verified: Bool, redemptionOptions: [RewardRedemptionOption], disableReason: String?, referralAllowance: ReferralAllowance, pendingVerificationAfter: Date?) {
 		self.code = code
 		self.referralCount = referralCount
 		self.points = points
 		self.usedReferralCode = usedReferralCode
 		self.isEnabled = isEnabled
+		self.verified = verified
 		self.redemptionOptions = redemptionOptions
+		self.disableReason = disableReason
+		self.referralAllowance = referralAllowance
+		self.pendingVerificationAfter = pendingVerificationAfter
 	}
 }
