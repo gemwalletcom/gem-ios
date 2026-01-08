@@ -97,7 +97,7 @@ public struct WalletService: Sendable {
 
     public func delete(_ wallet: Wallet) async throws {
         try await keystore.deleteKey(for: wallet)
-        try walletStore.deleteWallet(for: wallet.id)
+        try walletStore.deleteWallet(for: wallet.walletId)
         try avatarService.remove(for: wallet)
 
         await MainActor.run {
@@ -118,11 +118,11 @@ public struct WalletService: Sendable {
     }
 
     public func pin(wallet: Wallet) throws {
-        try walletStore.pinWallet(wallet.id, value: true)
+        try walletStore.pinWallet(wallet.walletId, value: true)
     }
 
     public func unpin(wallet: Wallet) throws {
-        try walletStore.pinWallet(wallet.id, value: false)
+        try walletStore.pinWallet(wallet.walletId, value: false)
     }
 
     public func swapOrder(from: WalletId, to: WalletId) throws {
@@ -130,7 +130,7 @@ public struct WalletService: Sendable {
     }
     
     public func rename(walletId: WalletId, newName: String) throws {
-        try walletStore.renameWallet(walletId.id, name: newName)
+        try walletStore.renameWallet(walletId, name: newName)
     }
     
     public func getMnemonic(wallet: Wallet) async throws -> [String] {

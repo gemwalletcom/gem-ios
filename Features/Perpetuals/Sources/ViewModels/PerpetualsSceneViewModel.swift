@@ -50,11 +50,11 @@ public final class PerpetualsSceneViewModel {
         self.activityService = activityService
         self.onSelectAssetType = onSelectAssetType
         self.onSelectAsset = onSelectAsset
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, searchQuery: "")
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId, searchQuery: "")
         self.perpetualsRequest = PerpetualsRequest(searchQuery: "")
-        self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: wallet.id)
+        self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: wallet.walletId)
         self.recentActivityRequest = RecentActivityRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             limit: 10,
             types: [.perpetual]
         )
@@ -148,7 +148,7 @@ extension PerpetualsSceneViewModel {
     func onSearchQueryChange(_ _: String, _ newValue: String) {
         let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
         perpetualsRequest = PerpetualsRequest(searchQuery: trimmed)
-        positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, searchQuery: trimmed)
+        positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId, searchQuery: trimmed)
     }
 
     func onSearchPresentedChange(_ _: Bool, _ isPresented: Bool) {

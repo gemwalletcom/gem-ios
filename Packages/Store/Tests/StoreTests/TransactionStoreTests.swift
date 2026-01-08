@@ -28,7 +28,8 @@ struct TransactionStoreTests {
         let store = TransactionStore(db: db)
         let transactionId = "1"
 
-        try store.addTransactions(walletId: "1", transactions: [
+        let walletId = WalletId(id: "1")
+        try store.addTransactions(walletId: walletId, transactions: [
             .mock(
                 id: transactionId,
                 type: .swap,
@@ -38,8 +39,8 @@ struct TransactionStoreTests {
                 ))
             )
         ])
-        
-        try store.addTransactions(walletId: "1", transactions: [
+
+        try store.addTransactions(walletId: walletId, transactions: [
             .mock(
                 id: transactionId,
                 type: .swap,

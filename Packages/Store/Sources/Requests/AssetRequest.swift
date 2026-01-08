@@ -8,12 +8,12 @@ import Primitives
 
 public struct AssetRequest: ValueObservationQueryable {
     public static var defaultValue: AssetData { AssetData.empty }
-    
+
     public var assetId: AssetId
-    private let walletId: String
+    private let walletId: WalletId
 
     public init(
-        walletId: String,
+        walletId: WalletId,
         assetId: AssetId
     ) {
         self.walletId = walletId
@@ -26,8 +26,8 @@ public struct AssetRequest: ValueObservationQueryable {
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.account)
             .including(all: AssetRecord.priceAlerts)
-            .joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId))
-            .joining(optional: AssetRecord.account.filter(AccountRecord.Columns.walletId == walletId))
+            .joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId.id))
+            .joining(optional: AssetRecord.account.filter(AccountRecord.Columns.walletId == walletId.id))
             .filter(AssetRecord.Columns.id == assetId.identifier)
             .asRequest(of: AssetRecordInfo.self)
             .fetchOne(db)

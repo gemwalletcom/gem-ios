@@ -63,15 +63,15 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.onAddToken = onAddToken
         self.searchModel = AssetSearchViewModel(selectType: .manage)
         self.request = AssetsRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             filters: []
         )
         self.recentActivityRequest = RecentActivityRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual }
         )
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId.id)
+        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId)
     }
 
     var pinnedImage: Image { Images.System.pin }

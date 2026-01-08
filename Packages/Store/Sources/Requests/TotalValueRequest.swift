@@ -14,10 +14,10 @@ public enum BalanceType: Sendable {
 public struct TotalValueRequest: ValueObservationQueryable {
     public static var defaultValue: Double { 0 }
 
-    public var walletId: String
+    public var walletId: WalletId
     public var type: BalanceType
-    
-    public init(walletId: String, balanceType: BalanceType) {
+
+    public init(walletId: WalletId, balanceType: BalanceType) {
         self.walletId = walletId
         self.type = balanceType
     }
@@ -28,13 +28,13 @@ public struct TotalValueRequest: ValueObservationQueryable {
         case .perpetual: try fetchPerpetualBalance(db)
         }
     }
-    
+
     private func fetchWalletBalance(_ db: Database) throws -> Double {
         try AssetRecord
             .including(optional: AssetRecord.price)
             .including(optional: AssetRecord.balance)
             .joining(required: AssetRecord.balance
-                .filter(BalanceRecord.Columns.walletId == walletId)
+                .filter(BalanceRecord.Columns.walletId == walletId.id)
                 .filter(BalanceRecord.Columns.isEnabled == true)
             )
             .asRequest(of: AssetRecordInfoMinimal.self)
@@ -42,13 +42,13 @@ public struct TotalValueRequest: ValueObservationQueryable {
             .map { $0.totalFiatAmount }
             .reduce(0, +)
     }
-    
+
     private func fetchPerpetualBalance(_ db: Database) throws -> Double {
         try AssetRecord
             .including(required: AssetRecord.balance)
             .filter(AssetRecord.Columns.type == AssetType.perpetual.rawValue)
             .joining(required: AssetRecord.balance
-                .filter(BalanceRecord.Columns.walletId == walletId)
+                .filter(BalanceRecord.Columns.walletId == walletId.id)
             )
             .asRequest(of: PerpetualAssetBalance.self)
             .fetchAll(db)

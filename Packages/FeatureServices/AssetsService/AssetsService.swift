@@ -90,15 +90,15 @@ public final class AssetsService: Sendable {
     }
 
     public func addBalanceIfMissing(walletId: WalletId, assetId: AssetId) throws {
-        let exist = try balanceStore.isBalanceExist(walletId: walletId.id, assetId: assetId.identifier)
+        let exist = try balanceStore.isBalanceExist(walletId: walletId, assetId: assetId)
         if !exist {
             let balance = AddBalance(assetId: assetId, isEnabled: false)
-            try balanceStore.addBalance([balance], for: walletId.id)
+            try balanceStore.addBalance([balance], for: walletId)
         }
     }
 
     public func updateEnabled(walletId: WalletId, assetIds: [AssetId], enabled: Bool) throws {
-        try balanceStore.setIsEnabled(walletId: walletId.id, assetIds: assetIds.map { $0.identifier }, value: enabled)
+        try balanceStore.setIsEnabled(walletId: walletId, assetIds: assetIds, value: enabled)
     }
 
     public func updateAsset(assetId: AssetId) async throws {

@@ -22,7 +22,7 @@ struct RecentActivityRequestTests {
         try store.add(assetId: btc, toAssetId: .none, walletId: WalletId(id: ""), type: .transfer, createdAt: now)
 
         try db.dbQueue.read { db in
-            let result = try RecentActivityRequest(walletId: "", limit: 10).fetch(db)
+            let result = try RecentActivityRequest(walletId: WalletId(id: ""), limit: 10).fetch(db)
 
             #expect(result.count == 2)
             #expect(result.first?.id == btc)
@@ -46,10 +46,10 @@ struct RecentActivityRequestTests {
         try assetStore.setAssetIsBuyable(for: [btc.identifier], value: false)
 
         try db.dbQueue.read { db in
-            let noFilter = try RecentActivityRequest(walletId: walletId.id, limit: 10).fetch(db)
-            let hasBalance = try RecentActivityRequest(walletId: walletId.id, limit: 10, filters: [.hasBalance]).fetch(db)
-            let buyable = try RecentActivityRequest(walletId: walletId.id, limit: 10, filters: [.buyable]).fetch(db)
-            let chains = try RecentActivityRequest(walletId: walletId.id, limit: 10, filters: [.chains([Chain.ethereum.rawValue])]).fetch(db)
+            let noFilter = try RecentActivityRequest(walletId: walletId, limit: 10).fetch(db)
+            let hasBalance = try RecentActivityRequest(walletId: walletId, limit: 10, filters: [.hasBalance]).fetch(db)
+            let buyable = try RecentActivityRequest(walletId: walletId, limit: 10, filters: [.buyable]).fetch(db)
+            let chains = try RecentActivityRequest(walletId: walletId, limit: 10, filters: [.chains([Chain.ethereum.rawValue])]).fetch(db)
 
             #expect(noFilter.count == 3)
             #expect(hasBalance.count == 2)

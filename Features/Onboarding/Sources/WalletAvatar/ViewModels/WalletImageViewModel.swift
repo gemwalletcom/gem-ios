@@ -51,11 +51,11 @@ public final class WalletImageViewModel: Sendable {
     }
 
     var walletRequest: WalletRequest {
-        WalletRequest(walletId: wallet.id)
+        WalletRequest(walletId: wallet.walletId)
     }
 
     var nftAssetsRequest: NFTRequest {
-        NFTRequest(walletId: wallet.id, filter: .all)
+        NFTRequest(walletId: wallet.walletId, filter: .all)
     }
 
     var emptyContentModel: EmptyContentTypeViewModel {

@@ -14,8 +14,8 @@ public final class WalletPreferences: @unchecked Sendable {
 
     private let defaults: UserDefaults
 
-    public init(walletId: String) {
-        self.defaults = Self.suite(walletId: walletId)
+    public init(walletId: WalletId) {
+        self.defaults = Self.suite(walletId: walletId.id)
     }
 
     public var completeInitialLoadAssets: Bool {

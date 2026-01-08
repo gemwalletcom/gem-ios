@@ -4,18 +4,18 @@ import Foundation
 import Primitives
 
 public struct UpdateBalance {
-    public let assetID: String
+    public let assetId: AssetId
     public let type: UpdateBalanceType
     public let updatedAt: Date
     public let isActive: Bool
-    
+
     public init(
-        assetID: String,
+        assetId: AssetId,
         type: UpdateBalanceType,
         updatedAt: Date,
         isActive: Bool
     ) {
-        self.assetID = assetID
+        self.assetId = assetId
         self.type = type
         self.updatedAt = updatedAt
         self.isActive = isActive

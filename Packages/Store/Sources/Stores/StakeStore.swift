@@ -21,22 +21,22 @@ public struct StakeStore: Sendable {
         }
     }
     
-    public func updateDelegations(walletId: String, delegations: [DelegationBase]) throws {
+    public func updateDelegations(walletId: WalletId, delegations: [DelegationBase]) throws {
         try db.write { db in
             for delegation in delegations {
-                try delegation.record(walletId: walletId).upsert(db)
+                try delegation.record(walletId: walletId.id).upsert(db)
             }
         }
     }
 
-    public func updateAndDelete(walletId: String, delegations: [DelegationBase], deleteIds: [String]) throws {
+    public func updateAndDelete(walletId: WalletId, delegations: [DelegationBase], deleteIds: [String]) throws {
         try db.write { db in
             for delegation in delegations {
-                try delegation.record(walletId: walletId).upsert(db)
+                try delegation.record(walletId: walletId.id).upsert(db)
             }
 
             try StakeDelegationRecord
-                .filter(StakeDelegationRecord.Columns.walletId == walletId)
+                .filter(StakeDelegationRecord.Columns.walletId == walletId.id)
                 .filter(deleteIds.contains(StakeDelegationRecord.Columns.id))
                 .deleteAll(db)
         }
@@ -53,7 +53,7 @@ public struct StakeStore: Sendable {
     }
     
     
-    public func getValidatorsActive(assetId: String) throws -> [DelegationValidator] {
+    public func getValidatorsActive(assetId: AssetId) throws -> [DelegationValidator] {
         return try db.read { db in
             try Self.getValidatorsActive(db: db, assetId: assetId)
         }
@@ -77,24 +77,24 @@ public struct StakeStore: Sendable {
         }
     }
     
-    public func getDelegations(walletId: String, assetId: AssetId) throws -> [Delegation] {
+    public func getDelegations(walletId: WalletId, assetId: AssetId) throws -> [Delegation] {
         try db.read { db in
             try StakeDelegationRecord
                 .including(optional: StakeDelegationRecord.validator)
                 .including(optional: StakeDelegationRecord.price)
-                .filter(StakeDelegationRecord.Columns.walletId == walletId)
+                .filter(StakeDelegationRecord.Columns.walletId == walletId.id)
                 .filter(StakeDelegationRecord.Columns.assetId == assetId.identifier)
                 .asRequest(of: StakeDelegationInfo.self)
                 .fetchAll(db)
                 .map { $0.mapToDelegation() }
         }
     }
-    
+
     @discardableResult
-    public func deleteDelegations(walletId: String, ids: [String]) throws -> Int {
+    public func deleteDelegations(walletId: WalletId, ids: [String]) throws -> Int {
         try db.write { db in
             try StakeDelegationRecord
-                .filter(StakeDelegationRecord.Columns.walletId == walletId)
+                .filter(StakeDelegationRecord.Columns.walletId == walletId.id)
                 .filter(ids.contains(StakeDelegationRecord.Columns.id))
                 .deleteAll(db)
         }
@@ -123,10 +123,10 @@ public struct StakeStore: Sendable {
 // MARK: - Static
 
 extension StakeStore {
-    public static func getValidatorsActive(db: Database, assetId: String) throws -> [DelegationValidator] {
+    public static func getValidatorsActive(db: Database, assetId: AssetId) throws -> [DelegationValidator] {
         let excludeValidatorIds = [DelegationValidator.systemId, DelegationValidator.legacySystemId]
         return try StakeValidatorRecord
-            .filter(StakeValidatorRecord.Columns.assetId == assetId)
+            .filter(StakeValidatorRecord.Columns.assetId == assetId.identifier)
             .filter(StakeValidatorRecord.Columns.isActive == true)
             .filter(!excludeValidatorIds.contains(StakeValidatorRecord.Columns.validatorId))
             .filter(StakeValidatorRecord.Columns.name != "")

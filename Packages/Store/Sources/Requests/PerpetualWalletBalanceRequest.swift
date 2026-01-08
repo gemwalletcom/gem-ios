@@ -8,10 +8,10 @@ import Primitives
 
 public struct PerpetualWalletBalanceRequest: ValueObservationQueryable {
     public static var defaultValue: WalletBalance { .zero }
-    
+
     private let totalValueRequest: TotalValueRequest
-    
-    public init(walletId: String) {
+
+    public init(walletId: WalletId) {
         self.totalValueRequest = TotalValueRequest(walletId: walletId, balanceType: .perpetual)
     }
     

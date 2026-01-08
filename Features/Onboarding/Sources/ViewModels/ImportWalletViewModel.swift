@@ -51,7 +51,7 @@ extension ImportWalletViewModel {
     func importWallet(data: WalletImportData) async throws -> Wallet {
         let wallet = try await walletService.loadOrCreateWallet(name: data.name, type: data.keystoreType, source: .import)
         walletService.acceptTerms()
-        WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
+        WalletPreferences(walletId: wallet.walletId).completeInitialSynchronization()
         return wallet
     }
 

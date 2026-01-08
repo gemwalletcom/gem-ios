@@ -8,11 +8,11 @@ import Primitives
 
 public struct StakeDelegationsRequest: ValueObservationQueryable {
     public static var defaultValue: [Delegation] { [] }
-    
-    private let walletId: String
-    private let assetId: String
 
-    public init(walletId: String, assetId: String) {
+    private let walletId: WalletId
+    private let assetId: AssetId
+
+    public init(walletId: WalletId, assetId: AssetId) {
         self.walletId = walletId
         self.assetId = assetId
     }
@@ -21,8 +21,8 @@ public struct StakeDelegationsRequest: ValueObservationQueryable {
         try StakeDelegationRecord
             .including(optional: StakeDelegationRecord.validator)
             .including(optional: StakeDelegationRecord.price)
-            .filter(StakeDelegationRecord.Columns.walletId == walletId)
-            .filter(StakeDelegationRecord.Columns.assetId == assetId)
+            .filter(StakeDelegationRecord.Columns.walletId == walletId.id)
+            .filter(StakeDelegationRecord.Columns.assetId == assetId.identifier)
             .order(StakeDelegationRecord.Columns.balance.desc)
             .asRequest(of: StakeDelegationInfo.self)
             .fetchAll(db)

@@ -69,7 +69,7 @@ public final class WalletDetailViewModel {
     }
 
     var walletRequest: WalletRequest {
-        WalletRequest(walletId: wallet.id)
+        WalletRequest(walletId: wallet.walletId)
     }
     
     func avatarAssetImage(for wallet: Wallet) -> AssetImage {
