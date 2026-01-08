@@ -345,7 +345,7 @@ extension SelectAssetViewModel {
             )
             state = .data(assets)
         } catch {
-            await handle(error: error)
+            handle(error: error)
         }
     }
 
@@ -358,16 +358,14 @@ extension SelectAssetViewModel {
                 try await priceAlertService.delete(priceAlerts: [.default(for: assetId, currency: currency)])
             }
         } catch {
-            await handle(error: error)
+            handle(error: error)
         }
     }
 
-    private func handle(error: any Error) async {
-        await MainActor.run { [self] in
-            if !error.isCancelled {
-                self.state = .error(error)
-                debugLog("SelectAssetScene scene error: \(error)")
-            }
+    private func handle(error: any Error) {
+        if !error.isCancelled {
+            state = .error(error)
+            debugLog("SelectAssetScene scene error: \(error)")
         }
     }
 }
