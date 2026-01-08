@@ -320,7 +320,14 @@ extension SelectAssetViewModel {
 extension SelectAssetViewModel {
 
     private func assetAddress(for asset: Asset) -> AssetAddress {
-        let address = (try? wallet.account(for: asset.chain).address) ?? ""
+        let address: String = {
+            do {
+                return try wallet.account(for: asset.chain).address
+            } catch {
+                debugLog(error.localizedDescription)
+                return ""
+            }
+        }()
         return AssetAddress(asset: asset, address: address)
     }
     
