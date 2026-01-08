@@ -8,6 +8,7 @@ import Store
 import PerpetualService
 import PrimitivesComponents
 import Preferences
+import Recents
 
 public struct PerpetualsScene: View {
     @Bindable private var model: PerpetualsSceneViewModel
@@ -47,6 +48,17 @@ public struct PerpetualsScene: View {
             await model.fetch()
         }
         .listSectionSpacing(.compact)
+        .sheet(isPresented: $model.isPresentingRecents) {
+            RecentsScene(
+                model: RecentsSceneViewModel(
+                    walletId: model.wallet.walletId,
+                    types: model.recentsRequest.types,
+                    filters: model.recentsRequest.filters,
+                    activityService: model.activityService,
+                    onSelect: model.onSelectRecent
+                )
+            )
+        }
     }
 
     var list: some View {
@@ -64,10 +76,13 @@ public struct PerpetualsScene: View {
                 .cleanListRow()
             }
 
-            if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels) { assetModel in
+            if model.showRecents {
+                RecentActivitySectionView(
+                    models: model.recentModels,
+                    onSelectRecents: model.onSelectRecents
+                ) { assetModel in
                     Button {
-                        model.onSelectRecentPerpetual(asset: assetModel.asset)
+                        model.onSelectRecent(asset: assetModel.asset)
                     } label: {
                         AssetChipView(model: assetModel)
                     }
@@ -116,6 +131,8 @@ public struct PerpetualsScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
         }
-        .contentMargins([.top], .space12, for: .scrollContent)
+        .if(!model.isSearching) {
+            $0.contentMargins([.top], .space12, for: .scrollContent)
+        }
     }
 }

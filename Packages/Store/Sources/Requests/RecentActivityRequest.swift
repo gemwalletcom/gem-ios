@@ -7,7 +7,7 @@ import Combine
 import Primitives
 
 public struct RecentActivityRequest: ValueObservationQueryable {
-    public static var defaultValue: [Asset] { [] }
+    public static var defaultValue: [RecentAsset] { [] }
 
     public var walletId: String
     public var limit: Int
@@ -26,7 +26,7 @@ public struct RecentActivityRequest: ValueObservationQueryable {
         self.filters = filters
     }
 
-    public func fetch(_ db: Database) throws -> [Asset] {
+    public func fetch(_ db: Database) throws -> [RecentAsset] {
         let recentActivitiesForWallet = AssetRecord.recentActivities
             .filter(RecentActivityRecord.Columns.walletId == walletId)
             .filter(types.map(\.rawValue).contains(RecentActivityRecord.Columns.type))
@@ -44,7 +44,8 @@ public struct RecentActivityRequest: ValueObservationQueryable {
         return try AssetsRequest.applyFilters(request: request, filters)
             .order(literal: "maxCreatedAt DESC")
             .limit(limit)
+            .asRequest(of: RecentAssetRecordInfo.self)
             .fetchAll(db)
-            .map { $0.mapToAsset() }
+            .map { $0.mapToRecentAsset }
     }
 }

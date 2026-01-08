@@ -200,6 +200,7 @@
 		837A1E6C2D0B096600733AC1 /* WalletConnectorNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorNavigationStack.swift; sourceTree = "<group>"; };
 		837D7DE62E005D2800BBBDDA /* Formatters */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Formatters; sourceTree = "<group>"; };
 		838383112D5E677A00D1CAF2 /* WalletTab */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletTab; sourceTree = "<group>"; };
+		838B9B9C2F0C120100380F29 /* Recents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Recents; sourceTree = "<group>"; };
 		8393897A2CCA8F0000735088 /* InfoSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = InfoSheet; sourceTree = "<group>"; };
 		83A4F8042D30434E000E09BB /* Onboarding */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Onboarding; sourceTree = "<group>"; };
 		83B08BDA2D0B4AE200CA1B33 /* AppResolver+Storages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+Storages.swift"; sourceTree = "<group>"; };
@@ -661,6 +662,7 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				838B9B9C2F0C120100380F29 /* Recents */,
 				B67B3EEE2EFD25A6007AFA9C /* EventPresenterService */,
 				B6EA21D42E27E21700F1C849 /* Support */,
 				836281AD2DEF32F600CA5C75 /* Assets */,

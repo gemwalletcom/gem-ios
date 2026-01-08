@@ -32,6 +32,7 @@ let package = Package(
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "GemAPI", path: "../../Packages/GemAPI"),
         .package(name: "Perpetuals", path: "../Perpetuals"),
+        .package(name: "Recents", path: "../Recents"),
     ],
     targets: [
         .target(
@@ -49,7 +50,8 @@ let package = Package(
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
                 .product(name: "ActivityService", package: "FeatureServices"),
-                "Perpetuals"
+                "Perpetuals",
+                "Recents"
             ],
             path: "Sources"
         ),

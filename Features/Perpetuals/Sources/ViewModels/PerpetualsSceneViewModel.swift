@@ -16,7 +16,7 @@ import ActivityService
 @MainActor
 public final class PerpetualsSceneViewModel {
     private let perpetualService: PerpetualServiceable
-    private let activityService: ActivityService
+    let activityService: ActivityService
 
     let preferences: Preferences = .standard
     let wallet: Wallet
@@ -24,9 +24,9 @@ public final class PerpetualsSceneViewModel {
     var positionsRequest: PerpetualPositionsRequest
     var perpetualsRequest: PerpetualsRequest
     var walletBalanceRequest: PerpetualWalletBalanceRequest
-    var recentActivityRequest: RecentActivityRequest
+    var recentsRequest: RecentActivityRequest
 
-    var recentActivities: [Asset] = []
+    var recents: [RecentAsset] = []
     var positions: [PerpetualPositionData] = []
     var perpetuals: [PerpetualData] = []
     var walletBalance: WalletBalance = .zero
@@ -34,6 +34,7 @@ public final class PerpetualsSceneViewModel {
     var isSearchPresented: Bool = false
     var searchQuery: String = .empty
     var isSearching: Bool = false
+    var isPresentingRecents: Bool = false
 
     let onSelectAssetType: ((SelectAssetType) -> Void)?
     let onSelectAsset: ((Asset) -> Void)?
@@ -53,7 +54,7 @@ public final class PerpetualsSceneViewModel {
         self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.id, searchQuery: "")
         self.perpetualsRequest = PerpetualsRequest(searchQuery: "")
         self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: wallet.id)
-        self.recentActivityRequest = RecentActivityRequest(
+        self.recentsRequest = RecentActivityRequest(
             walletId: wallet.id,
             limit: 10,
             types: [.perpetual]
@@ -71,25 +72,12 @@ public final class PerpetualsSceneViewModel {
     var searchImage: Image { Images.System.search }
 
     var showPositions: Bool { positions.isNotEmpty }
-    var showPinned: Bool { !isSearching && sections.pinned.isNotEmpty }
+    var showPinned: Bool { sections.pinned.isNotEmpty }
     var showMarkets: Bool { !isSearching || sections.markets.isNotEmpty || positions.isEmpty }
+    var showRecents: Bool { isSearching && recents.isNotEmpty }
 
-    var showRecent: Bool { isSearching && recentActivities.isNotEmpty }
-
-    var sections: PerpetualsSections {
-        let source: [PerpetualData]
-        if isSearching {
-            let positionIds = Set(positions.map { $0.perpetual.id })
-            source = perpetuals.filter { !positionIds.contains($0.perpetual.id) }
-        } else {
-            source = perpetuals
-        }
-        return PerpetualsSections.from(source)
-    }
-
-    var activityModels: [AssetViewModel] {
-        recentActivities.map { AssetViewModel(asset: $0) }
-    }
+    var sections: PerpetualsSections { .from(perpetuals) }
+    var recentModels: [AssetViewModel] { recents.map { AssetViewModel(asset: $0.asset) } }
 
     var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
@@ -173,7 +161,12 @@ extension PerpetualsSceneViewModel {
         }
     }
 
-    func onSelectRecentPerpetual(asset: Asset) {
+    func onSelectRecents() {
+        isPresentingRecents = true
+    }
+
+    func onSelectRecent(asset: Asset) {
         onSelectAsset?(asset)
+        isPresentingRecents = false
     }
 }
