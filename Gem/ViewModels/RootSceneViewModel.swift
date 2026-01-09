@@ -25,7 +25,7 @@ final class RootSceneViewModel {
     private let transactionStateService: TransactionStateService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
-    private let notificationHandler: NotificationHandler
+    private let navigationHandler: NavigationHandler
     private let walletsService: WalletsService
     private let releaseAlertService: ReleaseAlertService
     private let rateService: RateService
@@ -71,7 +71,7 @@ final class RootSceneViewModel {
         transactionStateService: TransactionStateService,
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
-        notificationHandler: NotificationHandler,
+        navigationHandler: NavigationHandler,
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
         walletsService: WalletsService,
@@ -87,7 +87,7 @@ final class RootSceneViewModel {
         self.transactionStateService = transactionStateService
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
-        self.notificationHandler = notificationHandler
+        self.navigationHandler = navigationHandler
         self.lockManager = lockWindowManager
         self.walletService = walletService
         self.walletsService = walletsService
@@ -126,32 +126,10 @@ extension RootSceneViewModel {
         do {
             let parsedURL = try URLParser.from(url: url)
             switch parsedURL {
-            case .walletConnect(let uri):
-                isPresentingConnectorBar = true
-                try await connectionsService.pair(uri: uri)
-            case .walletConnectRequest:
-                isPresentingConnectorBar = true
-            case .walletConnectSession:
-                isPresentingConnectorBar = true
-                connectionsService.updateSessions()
-            case .asset(let assetId):
-                notificationHandler.notify(notification: PushNotification.asset(assetId))
-            case let .swap(fromAssetId, toAssetId):
-                notificationHandler.notify(notification: PushNotification.swapAsset(fromAssetId, toAssetId))
-            case .perpetuals:
-                notificationHandler.notify(notification: PushNotification.perpetuals)
-            case .rewards(let code):
-                notificationHandler.notify(notification: PushNotification.referral(code: code))
-            case .gift(let code):
-                notificationHandler.notify(notification: PushNotification.gift(code: code))
-            case let .buy(assetId, amount):
-                notificationHandler.notify(notification: PushNotification.buyAsset(assetId, amount: amount))
-            case let .sell(assetId, amount):
-                notificationHandler.notify(notification: PushNotification.sellAsset(assetId, amount: amount))
-            case let .setPriceAlert(assetId, price):
-                notificationHandler.notify(notification: PushNotification.setPriceAlert(assetId, price: price))
-            case .none:
-                break
+            case .walletConnect(let action):
+                try await handleWalletConnect(action)
+            case .deepLink(let action):
+                await navigationHandler.handle(action)
             }
         } catch {
             debugLog("RootSceneViewModel handleUrl error: \(error)")
@@ -164,6 +142,7 @@ extension RootSceneViewModel {
 
 extension RootSceneViewModel {
     private func setup(wallet: Wallet) {
+        navigationHandler.wallet = wallet
         onstartWalletService.setup(wallet: wallet)
         do {
             try walletsService.setup(wallet: wallet)
@@ -201,5 +180,17 @@ extension RootSceneViewModel {
             message: Localized.UpdateApp.description(release.version),
             actions: actions
         )
+    }
+
+    private func handleWalletConnect(_ action: WalletConnectAction) async throws {
+        isPresentingConnectorBar = true
+        switch action {
+        case .connect(let uri):
+            try await connectionsService.pair(uri: uri)
+        case .request:
+            break
+        case .session:
+            connectionsService.updateSessions()
+        }
     }
 }

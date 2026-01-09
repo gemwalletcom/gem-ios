@@ -32,7 +32,7 @@ struct GemApp: App {
                     transactionStateService: resolver.services.transactionStateService,
                     connectionsService: resolver.services.connectionsService,
                     deviceObserverService: resolver.services.deviceObserverService,
-                    notificationHandler: resolver.services.notificationHandler,
+                    navigationHandler: resolver.services.navigationHandler,
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
                     walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService,
@@ -75,7 +75,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-        AppResolver.main.services.notificationHandler.handleUserInfo(userInfo)
+        Task { await AppResolver.main.services.navigationHandler.handlePush(userInfo) }
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -109,7 +109,7 @@ extension AppDelegate: @preconcurrency UNUserNotificationCenterDelegate {
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        AppResolver.main.services.notificationHandler.handleUserInfo(response.notification.request.content.userInfo)
+        Task { await AppResolver.main.services.navigationHandler.handlePush(response.notification.request.content.userInfo) }
         completionHandler()
     }
 }

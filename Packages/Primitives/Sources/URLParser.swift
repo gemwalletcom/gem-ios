@@ -10,24 +10,34 @@ public enum URLParser {
     private static let localePrefixPattern = "^[a-z]{2}(-[a-z]{2})?$"
 
     public static func from(url: URL) throws -> URLAction {
-        // wallet connect
+        if let walletConnectAction = try parseWalletConnect(url: url) {
+            return .walletConnect(walletConnectAction)
+        }
+
+        let deepLinkAction = try parseDeepLink(url: url)
+        return .deepLink(deepLinkAction)
+    }
+
+    private static func parseWalletConnect(url: URL) throws -> WalletConnectAction? {
         if url.absoluteString.contains("wc?uri") {
             guard let components = url.absoluteString.components(separatedBy: "://").last?.removingPercentEncoding, components.count > 1 else {
                 throw AnyError("invalid wc url")
             }
             let uri = components.replacingOccurrences(of: "wc?uri=", with: "")
-            return .walletConnect(uri: uri)
+            return .connect(uri: uri)
         } else if url.absoluteString.contains("wc?requestId") {
-            return .walletConnectRequest
+            return .request
         } else if url.absoluteString.contains("wc?sessionTopic") {
             guard let components = URLComponents(string: url.absoluteString),
                   let sessionTopic = components.queryItems?.first(where: { $0.name == "sessionTopic" })?.value else {
                 throw AnyError("invalid sessionTopic url")
             }
-            return .walletConnectSession(sessionTopic)
+            return .session(sessionTopic)
         }
+        return nil
+    }
 
-        // universal links
+    private static func parseDeepLink(url: URL) throws -> DeepLinkAction {
         var urlComponents = Array(url.pathComponents.dropFirst())
 
         if url.scheme == "gem", let host = url.host() {
@@ -36,45 +46,42 @@ public enum URLParser {
 
         urlComponents = Self.strippingLocalePrefix(from: urlComponents)
 
-        if url.host() == DeepLink.host || url.scheme == "gem" {
-            guard let path = urlComponents.first,
-                  let pathComponent = DeepLink.PathComponent(rawValue: path) else {
-                return .none
-            }
-
-            switch pathComponent {
-            case .tokens:
-                let chain = try Chain(id: urlComponents.required(at: 1, url: url))
-                return .asset(AssetId(chain: chain, tokenId: urlComponents.element(at: 2)))
-            case .swap:
-                let fromId = try AssetId(id: urlComponents.required(at: 1, url: url))
-                let toId = urlComponents.element(at: 2).flatMap { try? AssetId(id: $0) }
-                return .swap(fromId, toId)
-            case .perpetuals:
-                return .perpetuals
-            case .rewards, .join:
-                return .rewards(code: url.queryValue(for: "code") ?? "")
-            case .gift:
-                return .gift(code: url.queryValue(for: "code") ?? "")
-            case .buy, .sell:
-                return try parseFiat(url: url, urlComponents: urlComponents, type: pathComponent)
-            case .setPriceAlert:
-                let price: Double? = url.queryValue(for: "price")
-                let assetId = try AssetId(id: urlComponents.required(at: 1, url: url))
-                return .setPriceAlert(assetId, price: price)
-            }
+        guard url.host() == DeepLink.host || url.scheme == "gem",
+              let path = urlComponents.first,
+              let pathComponent = DeepLink.PathComponent(rawValue: path) else {
+            throw URLParserError.invalidURL(url)
         }
 
-        throw URLParserError.invalidURL(url)
+        switch pathComponent {
+        case .tokens:
+            let chain = try Chain(id: urlComponents.required(at: 1, url: url))
+            return .asset(AssetId(chain: chain, tokenId: urlComponents.element(at: 2)))
+        case .swap:
+            let fromId = try AssetId(id: urlComponents.required(at: 1, url: url))
+            let toId = urlComponents.element(at: 2).flatMap { try? AssetId(id: $0) }
+            return .swap(fromId, toId)
+        case .perpetuals:
+            return .perpetuals
+        case .rewards, .join:
+            return .rewards(code: url.queryValue(for: "code") ?? "")
+        case .gift:
+            return .gift(code: url.queryValue(for: "code") ?? "")
+        case .buy, .sell:
+            return try parseFiat(url: url, urlComponents: urlComponents, type: pathComponent)
+        case .setPriceAlert:
+            let price: Double? = url.queryValue(for: "price")
+            let assetId = try AssetId(id: urlComponents.required(at: 1, url: url))
+            return .setPriceAlert(assetId, price: price)
+        }
     }
 
-    private static func parseFiat(url: URL, urlComponents: [String], type: DeepLink.PathComponent) throws -> URLAction {
+    private static func parseFiat(url: URL, urlComponents: [String], type: DeepLink.PathComponent) throws -> DeepLinkAction {
         let assetId = try AssetId(id: urlComponents.required(at: 1, url: url))
         let amount: Int? = url.queryValue(for: "amount")
-        return switch type {
-        case .buy: .buy(assetId, amount: amount)
-        case .sell: .sell(assetId, amount: amount)
-        default: .none
+        switch type {
+        case .buy: return .buy(assetId, amount: amount)
+        case .sell: return .sell(assetId, amount: amount)
+        default: throw URLParserError.invalidURL(url)
         }
     }
 
