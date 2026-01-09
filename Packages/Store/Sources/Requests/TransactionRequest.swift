@@ -9,13 +9,13 @@ import Primitives
 public struct TransactionRequest: ValueObservationQueryable {
     public static var defaultValue: TransactionExtended { .empty }
 
-    private let walletId: String
+    private let walletId: WalletId
     private let transactionId: String
 
     public var filters: [TransactionsRequestFilter] = []
 
     public init(
-        walletId: String,
+        walletId: WalletId,
         transactionId: String
     ) {
         self.walletId = walletId

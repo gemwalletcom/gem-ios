@@ -15,10 +15,10 @@ public enum NFTFilter: Sendable, Hashable {
 public struct NFTRequest: ValueObservationQueryable {
     public static var defaultValue: [NFTData] { [] }
 
-    private let walletId: String
+    private let walletId: WalletId
     private let filter: NFTFilter
 
-    public init(walletId: String, filter: NFTFilter) {
+    public init(walletId: WalletId, filter: NFTFilter) {
         self.walletId = walletId
         self.filter = filter
     }
@@ -29,7 +29,7 @@ public struct NFTRequest: ValueObservationQueryable {
                 all: NFTCollectionRecord.assets
                     .joining(
                         required: NFTAssetRecord.assetAssociations
-                            .filter(NFTAssetAssociationRecord.Columns.walletId == walletId)
+                            .filter(NFTAssetAssociationRecord.Columns.walletId == walletId.id)
                     )
             )
             .distinct()
@@ -44,6 +44,6 @@ public struct NFTRequest: ValueObservationQueryable {
         return try request
             .fetchAll(db)
             .map { $0.mapToNFTData() }
-            .filter { $0.assets.count > 0 }
+            .filter { $0.assets.isNotEmpty }
     }
 }

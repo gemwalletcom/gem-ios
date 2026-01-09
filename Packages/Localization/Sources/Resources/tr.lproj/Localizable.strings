@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Varsayılan Kaldıraç";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Son";
 "errors.no_data_available" = "Veri mevcut değil";
 "errors.dust_threshold_short" = "Ağ bu miktarı toz olarak değerlendiriyor; ücret miktarın kendisinden daha yüksek.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,10 @@
 "rewards.ways_spend.asset.title" = "Elde etmek %@";
 "rewards.insufficient_points" = "Yetersiz puan";
 "rewards.confirm_redeem" = "Elde etmek %@ için %@!";
+"transfer.sign_transaction.title" = "İmza İşlemi";
+"recent_activity.title" = "Son Haberler";
+"settings.preferences.app_icon" = "Uygulama Simgesi";
+"recent_activity.clear_confirmation" = "Son kullanılanları silmek istediğinizden emin misiniz?";
+"rewards.pending.title" = "Bonus Beklemede";
+"rewards.pending.description" = "Mevcuttur %@";
+"rewards.pending.description_ready" = "Bonusunuz hazır!";

@@ -1,5 +1,5 @@
 {
-  "originHash" : "ba5b60895640612f178cb9cdb962655d457f4ba93985b685ab3b6d456768dca9",
+  "originHash" : "00c1c6d304380587522e3db87e31443c482e0ed0f776e0d31235ee16e7345b60",
   "pins" : [
     {
       "identity" : "bigint",
@@ -43,15 +43,6 @@
       "state" : {
         "revision" : "a063fda2b8145a231953c20e7a646be254365396",
         "version" : "3.1.2"
-      }
-    },
-    {
-      "identity" : "swift-nio-zlib-support",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-nio-zlib-support.git",
-      "state" : {
-        "revision" : "37760e9a52030bb9011972c5213c3350fa9d41fd",
-        "version" : "1.0.0"
       }
     }
   ],

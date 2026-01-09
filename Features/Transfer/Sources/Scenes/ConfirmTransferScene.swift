@@ -52,7 +52,7 @@ public struct ConfirmTransferScene: View {
                     FiatConnectNavigationView(
                         model: FiatSceneViewModel(
                             assetAddress: assetAddress,
-                            walletId: walletId.id
+                            walletId: walletId
                         )
                     )
                     .navigationBarTitleDisplayMode(.inline)

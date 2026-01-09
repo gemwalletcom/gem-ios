@@ -93,6 +93,8 @@ public final class AssetSceneViewModel: Sendable {
     var showTransactions: Bool { transactions.isNotEmpty }
     var showManageToken: Bool { !assetData.metadata.isBalanceEnabled }
 
+    var canSign: Bool { wallet.canSign }
+
     var pinText: String {
         assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
     }
@@ -148,7 +150,7 @@ public final class AssetSceneViewModel: Sendable {
     }
     
     var assetBannerViewModel: AssetSceneBannersViewModel {
-        AssetSceneBannersViewModel(assetData: assetData, banners: banners, wallet: wallet)
+        AssetSceneBannersViewModel(assetData: assetData, banners: banners)
     }
     
     var assetHeaderModel: AssetHeaderViewModel {

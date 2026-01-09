@@ -49,7 +49,7 @@ public final class FiatSceneViewModel {
         securePreferences: SecurePreferences = SecurePreferences(),
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
-        walletId: String,
+        walletId: WalletId,
         type: FiatQuoteType = .buy,
         amount: Int? = nil
     ) {

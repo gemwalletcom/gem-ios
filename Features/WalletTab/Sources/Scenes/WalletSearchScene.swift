@@ -8,6 +8,7 @@ import Style
 import Localization
 import PrimitivesComponents
 import AssetsService
+import Recents
 
 public struct WalletSearchScene: View {
     @State private var model: WalletSearchSceneViewModel
@@ -37,7 +38,7 @@ public struct WalletSearchScene: View {
             }
         }
         .observeQuery(request: $model.request, value: $model.assets)
-        .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
+        .observeQuery(request: $model.recentsRequest, value: $model.recents)
         .searchable(
             text: $model.searchModel.searchableQuery,
             isPresented: $model.isSearchPresented,
@@ -56,6 +57,17 @@ public struct WalletSearchScene: View {
             model.onAppear()
         }
         .toast(message: $model.isPresentingToastMessage)
+        .sheet(isPresented: $model.isPresentingRecents) {
+            RecentsScene(
+                model: RecentsSceneViewModel(
+                    walletId: model.wallet.walletId,
+                    types: model.recentsRequest.types,
+                    filters: model.recentsRequest.filters,
+                    activityService: model.activityService,
+                    onSelect: model.onSelectRecent
+                )
+            )
+        }
     }
 
     @ViewBuilder
@@ -72,15 +84,18 @@ public struct WalletSearchScene: View {
                 .listRowInsets(EdgeInsets())
             }
 
-            if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels) { assetModel in
+            if model.showRecents {
+                RecentActivitySectionView(
+                    models: model.recentModels,
+                    onSelectRecents: model.onSelectRecents
+                ) { assetModel in
                     NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
                         AssetChipView(model: assetModel)
                     }
                 }
             }
 
-            if model.showPinnedSection {
+            if model.showPinned {
                 Section(
                     content: { list(for: model.sections.pinned) },
                     header: {
@@ -93,7 +108,7 @@ public struct WalletSearchScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
 
-            if model.showAssetsSection {
+            if model.showAssets {
                 Section(
                     content: { list(for: model.sections.assets) },
                     header: {

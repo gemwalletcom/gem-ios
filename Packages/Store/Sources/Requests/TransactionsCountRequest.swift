@@ -9,11 +9,11 @@ import Primitives
 public struct TransactionsCountRequest: ValueObservationQueryable {
     public static var defaultValue: Int { 0 }
 
-    private let walletId: String
+    private let walletId: WalletId
     private let state: TransactionState
 
     public init(
-        walletId: String,
+        walletId: WalletId,
         state: TransactionState
     ) {
         self.walletId = walletId
@@ -22,7 +22,7 @@ public struct TransactionsCountRequest: ValueObservationQueryable {
 
     public func fetch(_ db: Database) throws -> Int {
         try TransactionRecord
-            .filter(TransactionRecord.Columns.walletId == walletId)
+            .filter(TransactionRecord.Columns.walletId == walletId.id)
             .filter(TransactionRecord.Columns.state == state.rawValue)
             .fetchCount(db)
     }

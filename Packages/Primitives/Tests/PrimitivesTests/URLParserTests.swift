@@ -17,6 +17,27 @@ struct URLParserTests {
     }
 
     @Test
+    func assetUrlWithLocalePrefix() async throws {
+        let chainAction = try URLParser.from(url: URL(string: "https://gemwallet.com/ru/tokens/bitcoin")!)
+        #expect(chainAction == URLAction.asset(AssetId(chain: .bitcoin, tokenId: .none)))
+
+        let tokenAction = try URLParser.from(url: URL(string: "https://gemwallet.com/en/tokens/solana/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")!)
+        #expect(tokenAction == URLAction.asset(AssetId(chain: .solana, tokenId: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")))
+
+        let extendedLocale = try URLParser.from(url: URL(string: "https://gemwallet.com/zh-cn/tokens/solana")!)
+        #expect(extendedLocale == URLAction.asset(AssetId(chain: .solana, tokenId: .none)))
+    }
+
+    @Test
+    func gemSchemeAssetUrl() async throws {
+        let chainAction = try URLParser.from(url: URL(string: "gem://tokens/bitcoin")!)
+        #expect(chainAction == URLAction.asset(AssetId(chain: .bitcoin, tokenId: .none)))
+
+        let tokenAction = try URLParser.from(url: URL(string: "gem://tokens/solana/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")!)
+        #expect(tokenAction == URLAction.asset(AssetId(chain: .solana, tokenId: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")))
+    }
+
+    @Test
     func swapUrl() async throws {
         let swapFromOnly = try URLParser.from(url: URL(string: "https://gemwallet.com/swap/ethereum")!)
 

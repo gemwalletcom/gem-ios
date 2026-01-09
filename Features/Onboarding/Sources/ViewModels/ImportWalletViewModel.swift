@@ -49,7 +49,7 @@ public final class ImportWalletViewModel {
             do {
                 try await walletsService.discoverAssets(
                     for: wallet.walletId,
-                    preferences: WalletPreferences(walletId: wallet.walletId.id)
+                    preferences: WalletPreferences(walletId: wallet.walletId)
                 )
             } catch {
                 debugLog("Discover assets failed: \(error)")
@@ -68,7 +68,7 @@ extension ImportWalletViewModel {
     func importWallet(data: WalletImportData) async throws -> Wallet {
         let wallet = try await walletService.loadOrCreateWallet(name: data.name, type: data.keystoreType, source: .import)
         walletService.acceptTerms()
-        WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
+        WalletPreferences(walletId: wallet.walletId).completeInitialSynchronization()
         discoverAssets(wallet: wallet)
         return wallet
     }

@@ -68,11 +68,11 @@ public final class SwapSceneViewModel {
         self.walletsService = walletsService
 
         self.fromAssetRequest = AssetRequestOptional(
-            walletId: wallet.walletId.id,
+            walletId: wallet.walletId,
             assetId: pairSelectorModel.fromAssetId
         )
         self.toAssetRequest = AssetRequestOptional(
-            walletId: wallet.walletId.id,
+            walletId: wallet.walletId,
             assetId: pairSelectorModel.toAssetId
         )
         self.swapQuotesProvider = swapQuotesProvider

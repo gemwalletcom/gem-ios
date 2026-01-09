@@ -51,7 +51,7 @@ public final class StakeValidatorsViewModel {
                     title: Localized.Stake.active,
                     validators: validators
                 ),
-            ].filter { $0.values.count > 0 }
+            ].filter { $0.values.isNotEmpty }
         case .unstake:
             return [
                 listSection(

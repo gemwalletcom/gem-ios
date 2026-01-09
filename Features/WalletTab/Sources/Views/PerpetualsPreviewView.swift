@@ -3,9 +3,6 @@
 import SwiftUI
 import Components
 import Primitives
-import Style
-import PrimitivesComponents
-import Formatters
 import Store
 import Perpetuals
 
@@ -29,17 +26,7 @@ public struct PerpetualsPreviewView: View {
                     )
                 }
             } else {
-                ForEach(viewModel.positions) { position in
-                    NavigationLink(
-                        value: Scenes.Perpetual(position.perpetualData)
-                    ) {
-                        ListAssetItemView(
-                            model: PerpetualPositionItemViewModel(
-                                model: PerpetualPositionViewModel(position)
-                            )
-                        )
-                    }
-                }
+                PerpetualPositionsList(positions: viewModel.positions)
             }
         }
         .observeQuery(request: $viewModel.positionsRequest, value: $viewModel.positions)

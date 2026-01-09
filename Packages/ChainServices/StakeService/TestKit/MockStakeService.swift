@@ -16,7 +16,7 @@ public struct MockStakeService: StakeServiceable {
         self.stakeApr
     }
     
-    public func update(walletId: String, chain: Chain, address: String) async throws {
+    public func update(walletId: WalletId, chain: Chain, address: String) async throws {
         //
     }
 

@@ -44,7 +44,7 @@ extension CollectionsViewable {
     public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
         if let newWallet, wallet != newWallet {
             wallet = newWallet
-            request = NFTRequest(walletId: newWallet.id, filter: .all)
+            request = NFTRequest(walletId: newWallet.walletId, filter: .all)
         }
     }
 

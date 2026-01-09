@@ -23,7 +23,7 @@ public extension Wallet {
     }
 
     var hasTokenSupport: Bool {
-        accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).count > 0
+        accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).isNotEmpty
     }
 
     func account(for chain: Chain) throws -> Account {

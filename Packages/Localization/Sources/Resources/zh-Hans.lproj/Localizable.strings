@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "默认杠杆";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "最近的";
 "errors.no_data_available" = "暂无数据";
 "errors.dust_threshold_short" = "网络将这笔金额视为微不足道的垃圾——手续费甚至高于金额本身。";
 "charts.take_profit" = "TP";
@@ -545,3 +544,10 @@
 "rewards.ways_spend.asset.title" = "得到 %@";
 "rewards.insufficient_points" = "分数不足";
 "rewards.confirm_redeem" = "得到 %@ 为了 %@！";
+"transfer.sign_transaction.title" = "签署交易";
+"recent_activity.title" = "近期";
+"settings.preferences.app_icon" = "应用图标";
+"recent_activity.clear_confirmation" = "您确定要清除所有最近使用记录吗？";
+"rewards.pending.title" = "奖金待发放";
+"rewards.pending.description" = "有售 %@";
+"rewards.pending.description_ready" = "您的奖金已发放！";

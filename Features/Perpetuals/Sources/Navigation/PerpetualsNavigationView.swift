@@ -32,6 +32,6 @@ public struct PerpetualsNavigationView: View {
             .observeQuery(request: $model.positionsRequest, value: $model.positions)
             .observeQuery(request: $model.perpetualsRequest, value: $model.perpetuals)
             .observeQuery(request: $model.walletBalanceRequest, value: $model.walletBalance)
-            .observeQuery(request: $model.recentActivityRequest, value: $model.recentActivities)
+            .observeQuery(request: $model.recentsRequest, value: $model.recents)
     }
 }

@@ -20,7 +20,7 @@ public final class UnverifiedCollectionsViewModel: CollectionsViewable, Sendable
 
     public init(wallet: Wallet) {
         self.wallet = wallet
-        self.request = NFTRequest(walletId: wallet.id, filter: .unverified)
+        self.request = NFTRequest(walletId: wallet.walletId, filter: .unverified)
     }
 
     public var title: String { Localized.Asset.Verification.unverified }

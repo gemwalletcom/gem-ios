@@ -4,6 +4,6 @@ import Foundation
 import Primitives
 
 public struct BalanceUpdate {
-    public let walletId: String
+    public let walletId: WalletId
     public let balances: [AssetBalanceChange]
 }

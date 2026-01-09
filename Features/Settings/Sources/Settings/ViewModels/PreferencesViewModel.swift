@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import UIKit
 import SwiftUI
 import Localization
 import Primitives
@@ -26,6 +27,10 @@ public final class PreferencesViewModel {
     }
 
     var title: String { Localized.Settings.Preferences.title }
+
+    var appIconTitle: String { Localized.Settings.Preferences.appIcon }
+    var appIconImage: AssetImage { AssetImage.image(Images.Settings.gem) }
+    var supportsAlternateIcons: Bool { UIApplication.shared.supportsAlternateIcons }
 
     var currencyTitle: String { Localized.Settings.currency }
     var currencyValue: String { currencyModel.selectedCurrencyValue }

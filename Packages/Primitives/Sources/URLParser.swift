@@ -7,6 +7,8 @@ enum URLParserError: Error {
 }
 
 public enum URLParser {
+    private static let localePrefixPattern = "^[a-z]{2}(-[a-z]{2})?$"
+
     public static func from(url: URL) throws -> URLAction {
         // wallet connect
         if url.absoluteString.contains("wc?uri") {
@@ -28,10 +30,11 @@ public enum URLParser {
         // universal links
         var urlComponents = Array(url.pathComponents.dropFirst())
 
-        // For gem:// URLs like gem://join?code=gemcoder, the path component is in the host
-        if url.scheme == "gem", urlComponents.isEmpty, let host = url.host() {
-            urlComponents = [host]
+        if url.scheme == "gem", let host = url.host() {
+            urlComponents = [host] + urlComponents
         }
+
+        urlComponents = Self.strippingLocalePrefix(from: urlComponents)
 
         if url.host() == DeepLink.host || url.scheme == "gem" {
             guard let path = urlComponents.first,
@@ -73,6 +76,15 @@ public enum URLParser {
         case .sell: .sell(assetId, amount: amount)
         default: .none
         }
+    }
+
+    private static func strippingLocalePrefix(from components: [String]) -> [String] {
+        guard let first = components.first,
+              first.range(of: localePrefixPattern, options: .regularExpression) != nil,
+              DeepLink.PathComponent(rawValue: first) == nil else {
+            return components
+        }
+        return Array(components.dropFirst())
     }
 }
 

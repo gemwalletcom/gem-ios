@@ -6,15 +6,15 @@ import Primitives
 
 public struct AssetsRequest: ValueObservationQueryable {
     public static var defaultValue: [AssetData] { [] }
-    
+
     static let defaultQueryLimit = 100
-    
-    public var walletId: String
+
+    public var walletId: WalletId
     public var searchBy: String
     public var filters: [AssetsRequestFilter]
 
     public init(
-        walletId: String,
+        walletId: WalletId,
         searchBy: String = "",
         filters: [AssetsRequestFilter] = []
     ) {
@@ -139,7 +139,7 @@ extension AssetsRequest {
     }
 
     private func fetchAssetsSearch(
-        walletId: String,
+        walletId: WalletId,
         filters: [AssetsRequestFilter]
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
         let totalValue = (TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[PriceRecord.Columns.price] ?? 0))
@@ -148,10 +148,10 @@ extension AssetsRequest {
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.price)
             .joining(optional: AssetRecord.balance
-                .filter(BalanceRecord.Columns.walletId == walletId)
+                .filter(BalanceRecord.Columns.walletId == walletId.id)
             )
             .filter(
-                TableAlias(name: AccountRecord.databaseTableName)[BalanceRecord.Columns.walletId] == walletId
+                TableAlias(name: AccountRecord.databaseTableName)[BalanceRecord.Columns.walletId] == walletId.id
             )
             .order(
                 TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isPinned].desc,

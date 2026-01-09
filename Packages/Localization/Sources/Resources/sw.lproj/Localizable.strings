@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Njia Chaguomsingi";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Hivi karibuni";
 "errors.no_data_available" = "Hakuna data inayopatikana";
 "errors.dust_threshold_short" = "Mtandao unazingatia kiasi hiki cha vumbi - ada ni kubwa kuliko kiasi yenyewe.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,10 @@
 "rewards.ways_spend.asset.title" = "Pata %@";
 "rewards.insufficient_points" = "Pointi zisizotosha";
 "rewards.confirm_redeem" = "Pata %@ kwa %@!";
+"transfer.sign_transaction.title" = "Saini Muamala";
+"recent_activity.title" = "Hivi karibuni";
+"settings.preferences.app_icon" = "Aikoni ya Programu";
+"recent_activity.clear_confirmation" = "Una uhakika unataka kufuta taarifa zote za hivi karibuni?";
+"rewards.pending.title" = "Bonasi Inasubiri";
+"rewards.pending.description" = "Inapatikana katika %@";
+"rewards.pending.description_ready" = "Bonasi yako iko tayari!";

@@ -71,7 +71,7 @@ public struct WalletsService: Sendable {
 
     public func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
         async let updateAssets: () = try updateAssets(walletId: walletId, assetIds: assetIds)
-        async let assets: () = try await discoveryProcessor.discoverAssets(for: walletId, preferences: WalletPreferences(walletId: walletId.id))
+        async let assets: () = try await discoveryProcessor.discoverAssets(for: walletId, preferences: WalletPreferences(walletId: walletId))
 
         let _ = try await [updateAssets, assets]
     }

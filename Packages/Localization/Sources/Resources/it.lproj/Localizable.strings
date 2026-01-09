@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Leva finanziaria predefinita";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Recente";
 "errors.no_data_available" = "Nessun dato disponibile";
 "errors.dust_threshold_short" = "La rete considera questa cifra come polvere: la commissione è più alta dell'importo stesso.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,10 @@
 "rewards.ways_spend.asset.title" = "Ottenere %@";
 "rewards.insufficient_points" = "Punti insufficienti";
 "rewards.confirm_redeem" = "Ottenere %@ per %@!";
+"transfer.sign_transaction.title" = "Firma la transazione";
+"recent_activity.title" = "Recenti";
+"settings.preferences.app_icon" = "Icona dell'app";
+"recent_activity.clear_confirmation" = "Vuoi davvero cancellare tutti i recenti?";
+"rewards.pending.title" = "Bonus in sospeso";
+"rewards.pending.description" = "Disponibile in %@";
+"rewards.pending.description_ready" = "Il tuo bonus è pronto!";

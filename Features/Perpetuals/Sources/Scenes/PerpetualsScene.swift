@@ -8,6 +8,7 @@ import Store
 import PerpetualService
 import PrimitivesComponents
 import Preferences
+import Recents
 
 public struct PerpetualsScene: View {
     @Bindable private var model: PerpetualsSceneViewModel
@@ -47,6 +48,17 @@ public struct PerpetualsScene: View {
             await model.fetch()
         }
         .listSectionSpacing(.compact)
+        .sheet(isPresented: $model.isPresentingRecents) {
+            RecentsScene(
+                model: RecentsSceneViewModel(
+                    walletId: model.wallet.walletId,
+                    types: model.recentsRequest.types,
+                    filters: model.recentsRequest.filters,
+                    activityService: model.activityService,
+                    onSelect: model.onSelectRecent
+                )
+            )
+        }
     }
 
     var list: some View {
@@ -64,10 +76,13 @@ public struct PerpetualsScene: View {
                 .cleanListRow()
             }
 
-            if model.showRecent {
-                RecentActivitySectionView(models: model.activityModels, headerPadding: .medium + .tiny) { assetModel in
+            if model.showRecents {
+                RecentActivitySectionView(
+                    models: model.recentModels,
+                    onSelectRecents: model.onSelectRecents
+                ) { assetModel in
                     Button {
-                        model.onSelectRecentPerpetual(asset: assetModel.asset)
+                        model.onSelectRecent(asset: assetModel.asset)
                     } label: {
                         AssetChipView(model: assetModel)
                     }
@@ -76,18 +91,14 @@ public struct PerpetualsScene: View {
 
             if model.showPositions {
                 Section {
-                    ForEach(model.positions) { position in
-                        NavigationCustomLink(
-                            with: ListAssetItemView(
-                                model: PerpetualPositionItemViewModel(model: PerpetualPositionViewModel(position))
-                            ),
-                            action: { model.onSelectPerpetual(asset: position.perpetualData.asset) }
-                        )
-                        .listRowInsets(.assetListRowInsets)
-                    }
+                    PerpetualPositionsList(
+                        positions: model.positions,
+                        onSelect: model.onSelectPerpetual
+                    )
                 } header: {
                     Text(model.positionsSectionTitle)
                 }
+                .listRowInsets(.assetListRowInsets)
             }
 
             if model.showPinned {
@@ -103,6 +114,7 @@ public struct PerpetualsScene: View {
                         Text(model.pinnedSectionTitle)
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
 
             if model.showMarkets {
@@ -116,8 +128,11 @@ public struct PerpetualsScene: View {
                 } header: {
                     Text(model.marketsSectionTitle)
                 }
+                .listRowInsets(.assetListRowInsets)
             }
         }
-        .contentMargins([.top], .space12, for: .scrollContent)
+        .if(!model.isSearching) {
+            $0.contentMargins([.top], .space12, for: .scrollContent)
+        }
     }
 }

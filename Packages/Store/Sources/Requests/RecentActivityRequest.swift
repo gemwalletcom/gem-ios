@@ -7,15 +7,15 @@ import Combine
 import Primitives
 
 public struct RecentActivityRequest: ValueObservationQueryable {
-    public static var defaultValue: [Asset] { [] }
+    public static var defaultValue: [RecentAsset] { [] }
 
-    public var walletId: String
+    public var walletId: WalletId
     public var limit: Int
     public var types: [RecentActivityType]
     public var filters: [AssetsRequestFilter]
 
     public init(
-        walletId: String,
+        walletId: WalletId,
         limit: Int = 20,
         types: [RecentActivityType] = RecentActivityType.allCases,
         filters: [AssetsRequestFilter] = []
@@ -26,9 +26,9 @@ public struct RecentActivityRequest: ValueObservationQueryable {
         self.filters = filters
     }
 
-    public func fetch(_ db: Database) throws -> [Asset] {
+    public func fetch(_ db: Database) throws -> [RecentAsset] {
         let recentActivitiesForWallet = AssetRecord.recentActivities
-            .filter(RecentActivityRecord.Columns.walletId == walletId)
+            .filter(RecentActivityRecord.Columns.walletId == walletId.id)
             .filter(types.map(\.rawValue).contains(RecentActivityRecord.Columns.type))
 
         let maxCreatedAt = recentActivitiesForWallet.max(RecentActivityRecord.Columns.createdAt)
@@ -38,13 +38,14 @@ public struct RecentActivityRequest: ValueObservationQueryable {
             .annotated(with: maxCreatedAt.forKey("maxCreatedAt"))
 
         if filters.contains(where: { $0 == .hasBalance || $0 == .enabledBalance }) {
-            request = request.joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId))
+            request = request.joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId.id))
         }
 
         return try AssetsRequest.applyFilters(request: request, filters)
             .order(literal: "maxCreatedAt DESC")
             .limit(limit)
+            .asRequest(of: RecentAssetRecordInfo.self)
             .fetchAll(db)
-            .map { $0.mapToAsset() }
+            .map { $0.mapToRecentAsset }
     }
 }

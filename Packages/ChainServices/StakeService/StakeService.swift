@@ -29,7 +29,7 @@ public struct StakeService: StakeServiceable {
         try store.getStakeApr(assetId: assetId)
     }
     
-    public func update(walletId: String, chain: Chain, address: String) async throws {
+    public func update(walletId: WalletId, chain: Chain, address: String) async throws {
         let validators = try store.getValidators(assetId: chain.assetId)
         if validators.isEmpty {
             try await updateValidators(chain: chain)
@@ -39,9 +39,9 @@ public struct StakeService: StakeServiceable {
             try await updateValidators(chain: chain)
         }
     }
-    
+
     public func getValidatorsActive(assetId: AssetId) throws -> [DelegationValidator] {
-        try store.getValidatorsActive(assetId: assetId.identifier)
+        try store.getValidatorsActive(assetId: assetId)
     }
 
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
@@ -88,7 +88,7 @@ extension StakeService {
         try addressStore.addAddressNames(addressNames)
     }
 
-    private func updateDelegations(walletId: String, chain: Chain, address: String) async throws {
+    private func updateDelegations(walletId: WalletId, chain: Chain, address: String) async throws {
         let delegations = try await getDelegations(chain: chain, address: address)
         let existingDelegationsIds = try store.getDelegations(walletId: walletId, assetId: chain.assetId).map { $0.id }.asSet()
         let delegationsIds = delegations.map { $0.id }.asSet()

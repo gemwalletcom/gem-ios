@@ -11,29 +11,29 @@ public struct NFTStore: Sendable {
     
     // MARK: - Public methods
 
-    public func save(_ data: [NFTData], for walletId: String) throws {
+    public func save(_ data: [NFTData], for walletId: WalletId) throws {
         try db.write { db in
             let assetsAssociationsRequest = NFTAssetAssociationRecord
-                .filter(NFTAssetAssociationRecord.Columns.walletId == walletId)
+                .filter(NFTAssetAssociationRecord.Columns.walletId == walletId.id)
             let existingIds = try assetsAssociationsRequest.fetchAll(db).map { $0.id }
-            
+
             var newIds: [String] = []
-            
+
             for nftData in data {
                 let collection = nftData.collection
-                
+
                 try collection.record().upsert(db)
-                
+
                 for asset in nftData.assets {
                     try asset.record().upsert(db)
-                    
-                    let assetAssociation = NFTAssetAssociationRecord(walletId: walletId, collectionId: collection.id, assetId: asset.id)
+
+                    let assetAssociation = NFTAssetAssociationRecord(walletId: walletId.id, collectionId: collection.id, assetId: asset.id)
                     try assetAssociation.upsert(db)
-                    
+
                     newIds.append(assetAssociation.id)
                 }
             }
-            
+
             // delete outdated
             let deletIds = existingIds.asSet().subtracting(newIds.asSet()).asArray()
             try assetsAssociationsRequest

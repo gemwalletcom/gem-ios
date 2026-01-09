@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "Standardgearing";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "Nylig";
 "errors.no_data_available" = "Ingen data tilgængelige";
 "errors.dust_threshold_short" = "Netværket anser denne mængde for støv – gebyret er højere end selve mængden.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,10 @@
 "rewards.ways_spend.asset.title" = "Få %@";
 "rewards.insufficient_points" = "Utilstrækkelige point";
 "rewards.confirm_redeem" = "Få %@ for %@!";
+"transfer.sign_transaction.title" = "Underskriv transaktion";
+"recent_activity.title" = "Seneste";
+"settings.preferences.app_icon" = "App-ikon";
+"recent_activity.clear_confirmation" = "Er du sikker på, at du vil slette alle seneste?";
+"rewards.pending.title" = "Bonus afventer";
+"rewards.pending.description" = "Tilgængelig i %@";
+"rewards.pending.description_ready" = "Din bonus er klar!";

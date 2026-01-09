@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "डिफ़ॉल्ट उत्तोलन";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "हाल ही का";
 "errors.no_data_available" = "कोई डेटा मौजूद नहीं";
 "errors.dust_threshold_short" = "नेटवर्क इस राशि को धूल मानता है - शुल्क स्वयं राशि से अधिक है।";
 "charts.take_profit" = "TP";
@@ -545,3 +544,10 @@
 "rewards.ways_spend.asset.title" = "पाना %@";
 "rewards.insufficient_points" = "अपर्याप्त अंक";
 "rewards.confirm_redeem" = "पाना %@ के लिए %@!";
+"transfer.sign_transaction.title" = "लेनदेन पर हस्ताक्षर करें";
+"recent_activity.title" = "हाल ही";
+"settings.preferences.app_icon" = "ऐप आइकन";
+"recent_activity.clear_confirmation" = "क्या आप वाकई सभी हालिया पोस्ट मिटाना चाहते हैं?";
+"rewards.pending.title" = "बोनस लंबित है";
+"rewards.pending.description" = "उपलब्ध है %@";
+"rewards.pending.description_ready" = "आपका बोनस तैयार है!";

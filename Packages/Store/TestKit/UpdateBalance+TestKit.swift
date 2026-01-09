@@ -11,7 +11,7 @@ public extension Array where Element == UpdateBalance {
             // skip the first asset to avoid having all mocks with a balance
             guard index > 0 else { return nil }
             return UpdateBalance(
-                assetID: asset.asset.id.identifier,
+                assetId: asset.asset.id,
                 type: .token(UpdateTokenBalance(available: UpdateBalanceValue(value: "\(index)", amount: Double(index)))),
                 updatedAt: .now,
                 isActive: true

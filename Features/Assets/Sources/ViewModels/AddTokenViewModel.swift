@@ -70,25 +70,17 @@ public final class AddTokenViewModel {
 extension AddTokenViewModel {
     func fetch() async {
         guard let chain = input.chain, let address = input.address, !address.isEmpty else {
-            await MainActor.run { [self] in
-                self.state = .noData
-            }
+            state = .noData
             return
         }
 
-        await MainActor.run { [self] in
-            self.state = .loading
-        }
+        state = .loading
 
         do {
             let asset = try await service.getTokenData(chain: chain, tokenId: address)
-            await MainActor.run { [self] in
-                self.state = .data(AddAssetViewModel(asset: asset))
-            }
+            state = .data(AddAssetViewModel(asset: asset))
         } catch {
-            await MainActor.run { [self] in
-                self.state = .error(error)
-            }
+            state = .error(error)
         }
     }
 }

@@ -45,7 +45,7 @@ public final class AmountSceneViewModel {
         self.onTransferAction = onTransferAction
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: preferences.currency)
         self.provider = .make(from: input)
-        self.assetRequest = AssetRequest(walletId: wallet.walletId.id, assetId: input.asset.id)
+        self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: input.asset.id)
         self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: [])
         amountInputModel.update(validators: inputValidators)
 

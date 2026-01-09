@@ -512,7 +512,6 @@
 "settings.preferences.default_leverage" = "מינוף ברירת מחדל";
 "banner.perpetuals.title" = "Trade Perpetuals on Hyperliquid";
 "banner.perpetuals.description" = "Deposit, trade, and earn with Hyperliquid perpetuals";
-"recent_activity.title" = "אחרונים";
 "errors.no_data_available" = "אין נתונים זמינים";
 "errors.dust_threshold_short" = "הרשת מחשיבה את הכמות הזו כאבק - העמלה גבוהה יותר מהכמות עצמה.";
 "charts.take_profit" = "TP";
@@ -545,3 +544,10 @@
 "rewards.ways_spend.asset.title" = "לְקַבֵּל %@";
 "rewards.insufficient_points" = "נקודות לא מספיקות";
 "rewards.confirm_redeem" = "לְקַבֵּל %@ עֲבוּר %@!";
+"transfer.sign_transaction.title" = "חתימה על עסקה";
+"recent_activity.title" = "אחרונים";
+"settings.preferences.app_icon" = "סמל האפליקציה";
+"recent_activity.clear_confirmation" = "האם אתה בטוח שאתה רוצה למחוק את כל ההודעות האחרונות?";
+"rewards.pending.title" = "בונוס ממתין";
+"rewards.pending.description" = "זמין ב %@";
+"rewards.pending.description_ready" = "הבונוס שלך מוכן!";
