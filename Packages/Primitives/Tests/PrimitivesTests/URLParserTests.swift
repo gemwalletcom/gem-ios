@@ -74,14 +74,30 @@ struct URLParserTests {
 
     @Test
     func rewardsUrl() async throws {
+        #expect(try URLParser.from(url: URL(string: "https://gemwallet.com/join/gemcoder")!) == .rewards(code: "gemcoder"))
         #expect(try URLParser.from(url: URL(string: "https://gemwallet.com/join?code=gemcoder")!) == .rewards(code: "gemcoder"))
+        #expect(try URLParser.from(url: URL(string: "https://gemwallet.com/rewards/gemcoder")!) == .rewards(code: "gemcoder"))
         #expect(try URLParser.from(url: URL(string: "https://gemwallet.com/rewards?code=gemcoder")!) == .rewards(code: "gemcoder"))
     }
 
     @Test
     func gemSchemeRewardsUrl() async throws {
+        #expect(try URLParser.from(url: URL(string: "gem://join/gemcoder")!) == .rewards(code: "gemcoder"))
         #expect(try URLParser.from(url: URL(string: "gem://join?code=gemcoder")!) == .rewards(code: "gemcoder"))
+        #expect(try URLParser.from(url: URL(string: "gem://rewards/gemcoder")!) == .rewards(code: "gemcoder"))
         #expect(try URLParser.from(url: URL(string: "gem://rewards?code=gemcoder")!) == .rewards(code: "gemcoder"))
+    }
+
+    @Test
+    func giftUrl() async throws {
+        #expect(try URLParser.from(url: URL(string: "https://gemwallet.com/gift/giftcode123")!) == .gift(code: "giftcode123"))
+        #expect(try URLParser.from(url: URL(string: "https://gemwallet.com/gift?code=giftcode123")!) == .gift(code: "giftcode123"))
+    }
+
+    @Test
+    func gemSchemeGiftUrl() async throws {
+        #expect(try URLParser.from(url: URL(string: "gem://gift/giftcode123")!) == .gift(code: "giftcode123"))
+        #expect(try URLParser.from(url: URL(string: "gem://gift?code=giftcode123")!) == .gift(code: "giftcode123"))
     }
 
     @Test
