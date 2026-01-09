@@ -69,6 +69,7 @@ extension AppResolver {
         let eventPresenterService: EventPresenterService
         let viewModelFactory: ViewModelFactory
         let rewardsService: RewardsService
+        let observersService: ObserversService
 
         init(
             assetsService: AssetsService,
@@ -108,7 +109,8 @@ extension AppResolver {
             activityService: ActivityService,
             eventPresenterService: EventPresenterService,
             viewModelFactory: ViewModelFactory,
-            rewardsService: RewardsService
+            rewardsService: RewardsService,
+            observersService: ObserversService
         ) {
             self.assetsService = assetsService
             self.balanceService = balanceService
@@ -148,6 +150,7 @@ extension AppResolver {
             self.eventPresenterService = eventPresenterService
             self.viewModelFactory = viewModelFactory
             self.rewardsService = rewardsService
+            self.observersService = observersService
         }
     }
 }

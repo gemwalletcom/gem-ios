@@ -10,6 +10,7 @@ import PriceService
 import Components
 
 struct RootScene: View {
+    @Environment(\.scenePhase) private var scenePhase
     @State private var model: RootSceneViewModel
 
     init(model: RootSceneViewModel) {
@@ -75,6 +76,9 @@ struct RootScene: View {
             offsetY: -model.toastOffset
         )
         .toast(message: $model.isPresentingToastMessage, offsetY: -model.toastOffset)
+        .onChange(of: scenePhase) { _, newPhase in
+            Task { await model.handleScenePhase(newPhase) }
+        }
     }
 }
 

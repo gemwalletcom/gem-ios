@@ -24,14 +24,14 @@ final class RootSceneViewModel {
     private let onstartWalletService: OnstartWalletService
     private let transactionStateService: TransactionStateService
     private let connectionsService: ConnectionsService
-    private let deviceObserverService: DeviceObserverService
+    private let observersService: ObserversService
     private let notificationHandler: NotificationHandler
-    let walletsService: WalletsService
     private let releaseAlertService: ReleaseAlertService
     private let rateService: RateService
     private let eventPresenterService: EventPresenterService
     private let deviceService: DeviceService
 
+    let walletsService: WalletsService
     let walletService: WalletService
     let nameService: NameService
     let avatarService: AvatarService
@@ -70,7 +70,7 @@ final class RootSceneViewModel {
         onstartWalletService: OnstartWalletService,
         transactionStateService: TransactionStateService,
         connectionsService: ConnectionsService,
-        deviceObserverService: DeviceObserverService,
+        observersService: ObserversService,
         notificationHandler: NotificationHandler,
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
@@ -86,7 +86,7 @@ final class RootSceneViewModel {
         self.onstartWalletService = onstartWalletService
         self.transactionStateService = transactionStateService
         self.connectionsService = connectionsService
-        self.deviceObserverService = deviceObserverService
+        self.observersService = observersService
         self.notificationHandler = notificationHandler
         self.lockManager = lockWindowManager
         self.walletService = walletService
@@ -108,8 +108,11 @@ extension RootSceneViewModel {
         Task { await checkForUpdate() }
         Task { try await deviceService.update() }
         transactionStateService.setup()
-        Task { try await connectionsService.setup() }
-        Task { try await deviceObserverService.startSubscriptionsObserver() }
+        Task { await observersService.setup() }
+    }
+
+    func handleScenePhase(_ phase: ScenePhase) async {
+        await observersService.handleScenePhase(phase)
     }
 }
 
@@ -169,6 +172,9 @@ extension RootSceneViewModel {
             try walletsService.setup(wallet: wallet)
         } catch {
             debugLog("RootSceneViewModel setupWallet error: \(error)")
+        }
+        Task {
+            await observersService.setupWallet(wallet)
         }
     }
 
