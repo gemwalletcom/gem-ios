@@ -25,6 +25,7 @@ public struct RewardsScene: View {
     @State private var isPresentingShare = false
     @State private var isPresentingCodeInput: CodeInputType?
     @State private var isPresentingRedemptionAlert: AlertMessage?
+    @State private var isPresentingInfoUrl: URL?
 
     public init(model: RewardsViewModel) {
         _model = State(initialValue: model)
@@ -60,12 +61,18 @@ public struct RewardsScene: View {
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                if model.showsWalletSelector {
-                    WalletBarView(model: model.walletBarViewModel) {
-                        isPresentingWalletSelector = true
+            ToolbarItem(placement: .navigationBarTrailing) {
+                HStack(spacing: Spacing.small) {
+                    if model.showsWalletSelector {
+                        WalletBarView(model: model.walletBarViewModel) {
+                            isPresentingWalletSelector = true
+                        }
+                    }
+                    Button("", systemImage: SystemImage.info) {
+                        isPresentingInfoUrl = model.rewardsUrl
                     }
                 }
+                .fixedSize()
             }
         }
         .sheet(isPresented: $isPresentingWalletSelector) {
@@ -117,7 +124,7 @@ public struct RewardsScene: View {
         .taskOnce {
             Task {
                 await model.fetch()
-                
+
                 if model.shouldAutoActivate {
                     await model.useReferralCode()
                 } else if model.giftCodeFromLink != nil {
@@ -132,6 +139,7 @@ public struct RewardsScene: View {
                 }
             }
         }
+        .safariSheet(url: $isPresentingInfoUrl)
         .toast(message: $model.toastMessage)
         .alertSheet($isPresentingRedemptionAlert)
     }
