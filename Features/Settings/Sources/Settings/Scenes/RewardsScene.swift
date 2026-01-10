@@ -61,20 +61,21 @@ public struct RewardsScene: View {
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack(spacing: Spacing.small) {
-                    if model.showsWalletSelector {
-                        WalletBarView(model: model.walletBarViewModel) {
-                            isPresentingWalletSelector = true
-                        }
+            ToolbarItem(placement: .topBarTrailing) {
+                if model.showsWalletSelector {
+                    WalletBarView(model: model.walletBarViewModel) {
+                        isPresentingWalletSelector = true
                     }
-                    Button("", systemImage: SystemImage.info) {
+                } else {
+                    Button {
                         isPresentingInfoUrl = model.rewardsUrl
+                    } label: {
+                        Images.System.info
                     }
                 }
-                .fixedSize()
             }
         }
+        .safariSheet(url: $isPresentingInfoUrl)
         .sheet(isPresented: $isPresentingWalletSelector) {
             SelectableListNavigationStack(
                 model: model.walletSelectorModel,
@@ -124,7 +125,7 @@ public struct RewardsScene: View {
         .taskOnce {
             Task {
                 await model.fetch()
-
+                
                 if model.shouldAutoActivate {
                     await model.useReferralCode()
                 } else if model.giftCodeFromLink != nil {
@@ -139,7 +140,6 @@ public struct RewardsScene: View {
                 }
             }
         }
-        .safariSheet(url: $isPresentingInfoUrl)
         .toast(message: $model.toastMessage)
         .alertSheet($isPresentingRedemptionAlert)
     }
