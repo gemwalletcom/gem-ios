@@ -17,7 +17,7 @@ public final class AssetsResultsSceneViewModel {
     private let walletsService: WalletsService
     private let preferences: Preferences
     private let wallet: Wallet
-    
+
     let onSelectAssetAction: AssetAction
 
     var request: WalletSearchRequest
@@ -41,7 +41,7 @@ public final class AssetsResultsSceneViewModel {
     var title: String { Localized.Assets.title }
     var currencyCode: String { preferences.currency }
     var sections: WalletSearchSections { .from(searchResult) }
-    var showPinned: Bool { sections.pinned.isNotEmpty }
+    var showPinned: Bool { sections.pinnedAssets.isNotEmpty }
     var showAssets: Bool { sections.assets.isNotEmpty }
 
     func contextMenuItems(for assetData: AssetData) -> [ContextMenuItemType] {

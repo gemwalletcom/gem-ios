@@ -93,7 +93,12 @@ public struct WalletSearchScene: View {
 
             if model.showPinned {
                 Section(
-                    content: { assetItems(for: model.sections.pinned) },
+                    content: {
+                        assetItems(for: model.sections.pinnedAssets)
+                        if model.showPinnedPerpetuals {
+                            perpetualItems(for: model.sections.pinnedPerpetuals)
+                        }
+                    },
                     header: { PinnedSectionHeader() }
                 )
                 .listRowInsets(.assetListRowInsets)
@@ -115,7 +120,7 @@ public struct WalletSearchScene: View {
 
             if model.showPerpetuals {
                 Section(
-                    content: { perpetualItems },
+                    content: { perpetualItems(for: model.previewPerpetuals) },
                     header: {
                         HeaderNavigationLinkView(title: model.perpetualsTitle, destination: Scenes.Perpetuals())
                     }
@@ -138,14 +143,20 @@ public struct WalletSearchScene: View {
     }
 
     @ViewBuilder
-    private var perpetualItems: some View {
-        ForEach(model.previewPerpetuals, id: \.perpetual.id) { perpetualData in
+    private func perpetualItems(for items: [PerpetualData]) -> some View {
+        ForEach(items, id: \.perpetual.id) { perpetualData in
             NavigationLink(value: Scenes.Perpetual(perpetualData)) {
                 ListAssetItemView(
                     model: PerpetualItemViewModel(
                         model: PerpetualViewModel(perpetual: perpetualData.perpetual)
                     )
                 )
+                .contextMenu([
+                    .pin(
+                        isPinned: perpetualData.metadata.isPinned,
+                        onPin: { model.onPinPerpetual(perpetualData, value: !perpetualData.metadata.isPinned) }
+                    )
+                ])
             }
         }
     }

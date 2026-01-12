@@ -12,6 +12,7 @@ import Style
 import Localization
 import ActivityService
 import WalletsService
+import PerpetualService
 import Recents
 
 @Observable
@@ -22,6 +23,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     private let searchService: WalletSearchService
     private let activityService: ActivityService
     private let walletsService: WalletsService
+    private let perpetualService: PerpetualService
     private let preferences: Preferences
 
     private let wallet: Wallet
@@ -51,6 +53,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         searchService: WalletSearchService,
         activityService: ActivityService,
         walletsService: WalletsService,
+        perpetualService: PerpetualService,
         preferences: Preferences = .standard,
         onDismissSearch: VoidAction,
         onSelectAssetAction: AssetAction,
@@ -60,6 +63,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.searchService = searchService
         self.activityService = activityService
         self.walletsService = walletsService
+        self.perpetualService = perpetualService
         self.preferences = preferences
         self.onDismissSearch = onDismissSearch
         self.onSelectAssetAction = onSelectAssetAction
@@ -85,7 +89,8 @@ public final class WalletSearchSceneViewModel: Sendable {
     var showPerpetuals: Bool { sections.perpetuals.isNotEmpty && preferences.isPerpetualEnabled }
     var showLoading: Bool { state.isLoading && showEmpty }
     var showEmpty: Bool { !showRecents && !showPinned && !showAssets && !showPerpetuals }
-    var showPinned: Bool { sections.pinned.isNotEmpty }
+    var showPinned: Bool { sections.pinnedAssets.isNotEmpty || showPinnedPerpetuals }
+    var showPinnedPerpetuals: Bool { sections.pinnedPerpetuals.isNotEmpty && preferences.isPerpetualEnabled }
     var showAssets: Bool { sections.assets.isNotEmpty }
     var showAddToken: Bool { wallet.hasTokenSupport }
 
@@ -201,6 +206,15 @@ extension WalletSearchSceneViewModel {
             isPresentingToastMessage = .pin(assetData.asset.name, pinned: value)
         } catch {
             debugLog("WalletSearchSceneViewModel pin asset error: \(error)")
+        }
+    }
+
+    func onPinPerpetual(_ perpetualData: PerpetualData, value: Bool) {
+        do {
+            try perpetualService.setPinned(value, perpetualId: perpetualData.perpetual.id)
+            isPresentingToastMessage = .pin(perpetualData.perpetual.name, pinned: value)
+        } catch {
+            debugLog("WalletSearchSceneViewModel pin perpetual error: \(error)")
         }
     }
 

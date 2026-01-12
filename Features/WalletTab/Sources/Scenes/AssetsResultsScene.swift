@@ -20,7 +20,7 @@ public struct AssetsResultsScene: View {
             List {
                 if model.showPinned {
                     Section(
-                        content: { assetItems(for: model.sections.pinned) },
+                        content: { assetItems(for: model.sections.pinnedAssets) },
                         header: { PinnedSectionHeader() }
                     )
                     .listRowInsets(.assetListRowInsets)

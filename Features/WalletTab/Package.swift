@@ -51,6 +51,7 @@ let package = Package(
                 .product(name: "WalletService", package: "FeatureServices"),
                 .product(name: "ActivityService", package: "FeatureServices"),
                 .product(name: "AssetsService", package: "FeatureServices"),
+                .product(name: "PerpetualService", package: "FeatureServices"),
                 "Perpetuals",
                 "Recents"
             ],
@@ -67,6 +68,7 @@ let package = Package(
                 .product(name: "WalletServiceTestKit", package: "FeatureServices"),
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
                 .product(name: "ActivityServiceTestKit", package: "FeatureServices"),
+                .product(name: "PerpetualServiceTestKit", package: "FeatureServices"),
                 "WalletTab"
             ],
             path: "TestKit"
