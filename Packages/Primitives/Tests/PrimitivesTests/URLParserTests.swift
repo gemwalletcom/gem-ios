@@ -8,68 +8,62 @@ struct URLParserTests {
     @Test
     func assetUrl() async throws {
         let chainAction = try URLParser.from(url: URL(string: "https://gemwallet.com/tokens/bitcoin")!)
-
-        #expect(chainAction == URLAction.asset(AssetId(chain: .bitcoin, tokenId: .none)))
+        #expect(chainAction == .asset(AssetId(chain: .bitcoin, tokenId: .none)))
 
         let tokenAction = try URLParser.from(url: URL(string: "https://gemwallet.com/tokens/ethereum/0xdAC17F958D2ee523a2206206994597C13D831ec7")!)
-
-        #expect(tokenAction == URLAction.asset(AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7")))
+        #expect(tokenAction == .asset(AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7")))
     }
 
     @Test
     func assetUrlWithLocalePrefix() async throws {
         let chainAction = try URLParser.from(url: URL(string: "https://gemwallet.com/ru/tokens/bitcoin")!)
-        #expect(chainAction == URLAction.asset(AssetId(chain: .bitcoin, tokenId: .none)))
+        #expect(chainAction == .asset(AssetId(chain: .bitcoin, tokenId: .none)))
 
         let tokenAction = try URLParser.from(url: URL(string: "https://gemwallet.com/en/tokens/solana/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")!)
-        #expect(tokenAction == URLAction.asset(AssetId(chain: .solana, tokenId: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")))
+        #expect(tokenAction == .asset(AssetId(chain: .solana, tokenId: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")))
 
         let extendedLocale = try URLParser.from(url: URL(string: "https://gemwallet.com/zh-cn/tokens/solana")!)
-        #expect(extendedLocale == URLAction.asset(AssetId(chain: .solana, tokenId: .none)))
+        #expect(extendedLocale == .asset(AssetId(chain: .solana, tokenId: .none)))
     }
 
     @Test
     func gemSchemeAssetUrl() async throws {
         let chainAction = try URLParser.from(url: URL(string: "gem://tokens/bitcoin")!)
-        #expect(chainAction == URLAction.asset(AssetId(chain: .bitcoin, tokenId: .none)))
+        #expect(chainAction == .asset(AssetId(chain: .bitcoin, tokenId: .none)))
 
         let tokenAction = try URLParser.from(url: URL(string: "gem://tokens/solana/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")!)
-        #expect(tokenAction == URLAction.asset(AssetId(chain: .solana, tokenId: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")))
+        #expect(tokenAction == .asset(AssetId(chain: .solana, tokenId: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN")))
     }
 
     @Test
     func swapUrl() async throws {
         let swapFromOnly = try URLParser.from(url: URL(string: "https://gemwallet.com/swap/ethereum")!)
-
         #expect(swapFromOnly == .swap(AssetId(chain: .ethereum, tokenId: nil), nil))
 
         let swapFromTo = try URLParser.from(url: URL(string: "https://gemwallet.com/swap/ethereum/ethereum_0xdAC17F958D2ee523a2206206994597C13D831ec7")!)
-
         #expect(swapFromTo == .swap(
             AssetId(chain: .ethereum, tokenId: nil),
             AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7")
         ))
     }
 
-    @Test func walletConnectSessionTopicUrl() async throws {
+    @Test
+    func walletConnectSessionTopicUrl() async throws {
         let url = "gem://wc?sessionTopic=64a4f0817e3dd003cbe23202fb6ffaa16d38074de84762a5797e6092b2250a27"
-
         let action = try URLParser.from(url: URL(string: url)!)
-
-        #expect(action == .walletConnectSession("64a4f0817e3dd003cbe23202fb6ffaa16d38074de84762a5797e6092b2250a27"))
+        #expect(action == .walletConnect(.session("64a4f0817e3dd003cbe23202fb6ffaa16d38074de84762a5797e6092b2250a27")))
     }
 
     @Test
     func perpetualsUrl() async throws {
         let perpetualsAction = try URLParser.from(url: URL(string: "https://gemwallet.com/perpetuals")!)
-
         #expect(perpetualsAction == .perpetuals)
     }
 
     @Test
     func gemUrlWithoutAction() async throws {
-        #expect(try URLParser.from(url: URL(string: "gem://")!) == .none)
-        #expect(try URLParser.from(url: URL(string: "gem://invalidpath")!) == .none)
+        #expect(throws: URLParserError.self) { try URLParser.from(url: URL(string: "gem://")!) }
+        #expect(throws: URLParserError.self) { try URLParser.from(url: URL(string: "gem://invalidpath")!) }
     }
 
     @Test

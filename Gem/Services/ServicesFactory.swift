@@ -40,7 +40,7 @@ import RewardsService
 import EventPresenterService
 
 struct ServicesFactory {
-    func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
+    func makeServices(storages: AppResolver.Storages, navigation: NavigationStateManager) -> AppResolver.Services {
         let storeManager = StoreManager(db: storages.db)
         let apiService: GemAPIService = GemAPIService()
 
@@ -113,7 +113,14 @@ struct ServicesFactory {
             preferences: preferences,
             pushNotificationEnablerService: pushNotificationEnablerService
         )
-        let notificationHandler = NotificationHandler()
+        let navigationPresenter = NavigationPresenter()
+        let navigationHandler = NavigationHandler(
+            navigationState: navigation,
+            presenter: navigationPresenter,
+            assetsService: assetsService,
+            transactionsService: transactionsService,
+            walletService: walletService
+        )
 
         let priceService = PriceService(
             priceStore: storeManager.priceStore,
@@ -233,7 +240,8 @@ struct ServicesFactory {
             connectionsService: connectionsService,
             deviceService: deviceService,
             nodeService: nodeService,
-            notificationHandler: notificationHandler,
+            navigationHandler: navigationHandler,
+            navigationPresenter: navigationPresenter,
             priceAlertService: priceAlertService,
             priceObserverService: priceObserverService,
             priceService: priceService,

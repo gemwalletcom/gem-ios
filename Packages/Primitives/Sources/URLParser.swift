@@ -10,24 +10,32 @@ public enum URLParser {
     private static let localePrefixPattern = "^[a-z]{2}(-[a-z]{2})?$"
 
     public static func from(url: URL) throws -> URLAction {
-        // wallet connect
+        if let walletConnectAction = try parseWalletConnect(url: url) {
+            return .walletConnect(walletConnectAction)
+        }
+        return try parseDeepLink(url: url)
+    }
+
+    private static func parseWalletConnect(url: URL) throws -> WalletConnectAction? {
         if url.absoluteString.contains("wc?uri") {
             guard let components = url.absoluteString.components(separatedBy: "://").last?.removingPercentEncoding, components.count > 1 else {
                 throw AnyError("invalid wc url")
             }
             let uri = components.replacingOccurrences(of: "wc?uri=", with: "")
-            return .walletConnect(uri: uri)
+            return .connect(uri: uri)
         } else if url.absoluteString.contains("wc?requestId") {
-            return .walletConnectRequest
+            return .request
         } else if url.absoluteString.contains("wc?sessionTopic") {
             guard let components = URLComponents(string: url.absoluteString),
                   let sessionTopic = components.queryItems?.first(where: { $0.name == "sessionTopic" })?.value else {
                 throw AnyError("invalid sessionTopic url")
             }
-            return .walletConnectSession(sessionTopic)
+            return .session(sessionTopic)
         }
+        return nil
+    }
 
-        // universal links
+    private static func parseDeepLink(url: URL) throws -> URLAction {
         var urlComponents = Array(url.pathComponents.dropFirst())
 
         if url.scheme == "gem", let host = url.host() {
@@ -39,7 +47,7 @@ public enum URLParser {
         if url.host() == DeepLink.host || url.scheme == "gem" {
             guard let path = urlComponents.first,
                   let pathComponent = DeepLink.PathComponent(rawValue: path) else {
-                return .none
+                throw URLParserError.invalidURL(url)
             }
 
             switch pathComponent {
@@ -73,10 +81,10 @@ public enum URLParser {
     private static func parseFiat(url: URL, urlComponents: [String], type: DeepLink.PathComponent) throws -> URLAction {
         let assetId = try AssetId(id: urlComponents.required(at: 1, url: url))
         let amount: Int? = url.queryValue(for: "amount")
-        return switch type {
-        case .buy: .buy(assetId, amount: amount)
-        case .sell: .sell(assetId, amount: amount)
-        default: .none
+        switch type {
+        case .buy: return .buy(assetId, amount: amount)
+        case .sell: return .sell(assetId, amount: amount)
+        default: throw URLParserError.invalidURL(url)
         }
     }
 
