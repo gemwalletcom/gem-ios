@@ -19,11 +19,11 @@ public struct WalletSearchRequest: ValueObservationQueryable {
     private static let defaultLimit = 10
     private static let searchLimit = 20
 
-    public var walletId: String
+    public var walletId: WalletId
     public var searchBy: String
     public var tag: String?
 
-    public init(walletId: String, searchBy: String = "", tag: String? = nil) {
+    public init(walletId: WalletId, searchBy: String = "", tag: String? = nil) {
         self.walletId = walletId
         self.searchBy = searchBy
         self.tag = tag
@@ -58,8 +58,8 @@ extension WalletSearchRequest {
             .including(optional: AssetRecord.account)
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.price)
-            .joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId))
-            .filter(TableAlias(name: AccountRecord.databaseTableName)[AccountRecord.Columns.walletId] == walletId)
+            .joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId.id))
+            .filter(TableAlias(name: AccountRecord.databaseTableName)[AccountRecord.Columns.walletId] == walletId.id)
 
         if hasPriority {
             request = request
