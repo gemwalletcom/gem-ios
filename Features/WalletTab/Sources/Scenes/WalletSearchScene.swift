@@ -59,15 +59,10 @@ public struct WalletSearchScene: View {
         }
         .toast(message: $model.isPresentingToastMessage)
         .sheet(isPresented: $model.isPresentingRecents) {
-            RecentsScene(
-                model: RecentsSceneViewModel(
-                    walletId: model.wallet.walletId,
-                    types: model.recentsRequest.types,
-                    filters: model.recentsRequest.filters,
-                    activityService: model.activityService,
-                    onSelect: model.onSelectRecent
-                )
-            )
+            RecentsScene(model: model.recentsModel)
+        }
+        .sheet(isPresented: $model.isPresentingAssetsResults) {
+            AssetsResultsScene(model: model.assetsResultsModel)
         }
     }
 
@@ -99,21 +94,20 @@ public struct WalletSearchScene: View {
             if model.showPinned {
                 Section(
                     content: { assetItems(for: model.sections.pinned) },
-                    header: {
-                        HStack {
-                            model.pinnedImage
-                            Text(model.pinnedTitle)
-                        }
-                    }
+                    header: { PinnedSectionHeader() }
                 )
                 .listRowInsets(.assetListRowInsets)
             }
 
             if model.showAssets {
                 Section(
-                    content: { assetItems(for: model.sections.assets) },
+                    content: { assetItems(for: model.previewAssets) },
                     header: {
-                        Text(model.assetsTitle)
+                        SectionHeaderView(
+                            title: model.assetsTitle,
+                            actionTitle: model.hasMore(for: .asset) ? Localized.Wallet.more : nil,
+                            action: model.onSelectSeeAllAssets
+                        )
                     }
                 )
                 .listRowInsets(.assetListRowInsets)
@@ -135,25 +129,17 @@ public struct WalletSearchScene: View {
 
     @ViewBuilder
     private func assetItems(for items: [AssetData]) -> some View {
-        ForEach(items) { assetData in
-            NavigationCustomLink(
-                with: ListAssetItemView(
-                    model: ListAssetItemViewModel(
-                        showBalancePrivacy: .constant(false),
-                        assetData: assetData,
-                        formatter: .abbreviated,
-                        currencyCode: model.currencyCode
-                    )
-                )
-                .contextMenu(model.contextMenuItems(for: assetData)),
-                action: { model.onSelectAsset(assetData.asset) }
-            )
-        }
+        AssetItemsView(
+            items: items,
+            currencyCode: model.currencyCode,
+            contextMenuItems: model.contextMenuItems,
+            onSelect: model.onSelectAsset
+        )
     }
 
     @ViewBuilder
     private var perpetualItems: some View {
-        ForEach(model.sections.perpetuals, id: \.perpetual.id) { perpetualData in
+        ForEach(model.previewPerpetuals, id: \.perpetual.id) { perpetualData in
             NavigationLink(value: Scenes.Perpetual(perpetualData)) {
                 ListAssetItemView(
                     model: PerpetualItemViewModel(

@@ -12,16 +12,19 @@ import Style
 import Localization
 import ActivityService
 import WalletsService
+import Recents
 
 @Observable
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
+    private static let previewLimit = 5
+
     private let searchService: WalletSearchService
-    let activityService: ActivityService
+    private let activityService: ActivityService
     private let walletsService: WalletsService
     private let preferences: Preferences
 
-    let wallet: Wallet
+    private let wallet: Wallet
     private let onDismissSearch: VoidAction
     private let onAddToken: VoidAction
 
@@ -39,6 +42,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
     var isPresentingRecents: Bool = false
+    var isPresentingAssetsResults: Bool = false
 
     public let onSelectAssetAction: AssetAction
 
@@ -61,7 +65,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.onSelectAssetAction = onSelectAssetAction
         self.onAddToken = onAddToken
         self.searchModel = AssetSearchViewModel(selectType: .manage)
-        self.searchRequest = WalletSearchRequest(walletId: wallet.walletId)
+        self.searchRequest = WalletSearchRequest(walletId: wallet.walletId, limit: 100)
         self.recentsRequest = RecentActivityRequest(
             walletId: wallet.walletId,
             limit: 10,
@@ -69,8 +73,6 @@ public final class WalletSearchSceneViewModel: Sendable {
         )
     }
 
-    var pinnedImage: Image { Images.System.pin }
-    var pinnedTitle: String { Localized.Common.pinned }
     var perpetualsTitle: String { Localized.Perpetuals.title }
     var assetsTitle: String { Localized.Assets.title }
 
@@ -87,29 +89,50 @@ public final class WalletSearchSceneViewModel: Sendable {
     var showAssets: Bool { sections.assets.isNotEmpty }
     var showAddToken: Bool { wallet.hasTokenSupport }
 
+    var previewAssets: [AssetData] { Array(sections.assets.prefix(Self.previewLimit)) }
+    var previewPerpetuals: [PerpetualData] { Array(sections.perpetuals.prefix(Self.previewLimit)) }
+
+    func hasMore(for type: SearchItemType) -> Bool {
+        switch type {
+        case .asset: sections.assets.count > Self.previewLimit
+        case .perpetual: sections.perpetuals.count > Self.previewLimit
+        case .nft: false
+        }
+    }
+
+    var assetsResultsModel: AssetsResultsSceneViewModel {
+        AssetsResultsSceneViewModel(
+            wallet: wallet,
+            walletsService: walletsService,
+            preferences: preferences,
+            request: searchRequest,
+            onSelectAsset: onSelectAsset(_:)
+        )
+    }
+
+    var recentsModel: RecentsSceneViewModel {
+        RecentsSceneViewModel(
+            walletId: wallet.walletId,
+            types: recentsRequest.types,
+            filters: recentsRequest.filters,
+            activityService: activityService,
+            onSelect: onSelectRecent
+        )
+    }
+
     func contextMenuItems(for assetData: AssetData) -> [ContextMenuItemType] {
-        [
-            .copy(
-                title: Localized.Wallet.copyAddress,
-                value: assetData.account.address,
-                onCopy: { [weak self] in
-                    self?.onSelectCopyAddress(CopyTypeViewModel(type: .address(assetData.asset, address: $0), copyValue: $0).message)
-                }
-            ),
-            .pin(
-                isPinned: assetData.metadata.isPinned,
-                onPin: { [weak self] in
-                    self?.onSelectPinAsset(assetData, value: !assetData.metadata.isPinned)
-                }
-            ),
-            !assetData.metadata.isBalanceEnabled ? .custom(
-                title: Localized.Asset.addToWallet,
-                systemImage: SystemImage.plusCircle,
-                action: { [weak self] in
-                    self?.onSelectAddToWallet(assetData.asset)
-                }
-            ) : nil
-        ].compactMap { $0 }
+        AssetContextMenu.items(
+            for: assetData,
+            onCopy: { [weak self] in
+                self?.onSelectCopyAddress(CopyTypeViewModel(type: .address(assetData.asset, address: $0), copyValue: $0).message)
+            },
+            onPin: { [weak self] in
+                self?.onSelectPinAsset(assetData, value: !assetData.metadata.isPinned)
+            },
+            onAddToWallet: { [weak self] in
+                self?.onSelectAddToWallet(assetData.asset)
+            }
+        )
     }
 }
 
@@ -145,6 +168,15 @@ extension WalletSearchSceneViewModel {
 
     func onSelectRecents() {
         isPresentingRecents = true
+    }
+
+    func onSelectSeeAllAssets() {
+        isPresentingAssetsResults = true
+    }
+
+    func onSelectAssetFromSheet(_ asset: Asset) {
+        onSelectAsset(asset)
+        isPresentingAssetsResults = false
     }
 
     func onSelectRecent(asset: Asset) {

@@ -16,24 +16,22 @@ public struct WalletSearchResult: Equatable, Sendable {
 public struct WalletSearchRequest: ValueObservationQueryable {
     public static var defaultValue: WalletSearchResult { .empty }
 
-    private static let defaultLimit = 10
-    private static let searchLimit = 20
-
     public var walletId: WalletId
     public var searchBy: String
     public var tag: String?
+    public var limit: Int
 
-    public init(walletId: WalletId, searchBy: String = "", tag: String? = nil) {
+    public init(walletId: WalletId, searchBy: String = "", tag: String? = nil, limit: Int = 5) {
         self.walletId = walletId
         self.searchBy = searchBy
         self.tag = tag
+        self.limit = limit
     }
 
     public func fetch(_ db: Database) throws -> WalletSearchResult {
         let query = searchBy.trim()
         let searchKey = tag.map { query.isEmpty ? "tag:\($0)" : query } ?? query
         let isSearching = searchKey.isNotEmpty
-        let limit = isSearching ? Self.searchLimit : Self.defaultLimit
 
         return WalletSearchResult(
             assets: try fetchAssets(db, query: query, searchKey: searchKey, limit: limit, hasPriority: isSearching && hasPriority(db, searchKey: searchKey, column: SearchRecord.Columns.assetId)),

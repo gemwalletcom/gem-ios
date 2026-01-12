@@ -61,10 +61,7 @@ public struct WalletScene: View {
                         showBalancePrivacy: $preferences.isHideBalanceEnabled
                     )
                 } header: {
-                    HStack {
-                        model.pinImage
-                        Text(model.pinnedTitle)
-                    }
+                    PinnedSectionHeader()
                 }
                 .listRowInsets(.assetListRowInsets)
             }

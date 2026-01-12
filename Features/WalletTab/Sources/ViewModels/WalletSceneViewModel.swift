@@ -84,14 +84,11 @@ public final class WalletSceneViewModel: Sendable {
 
     public var currentWallet: Wallet? { walletService.currentWallet }
 
-    var pinnedTitle: String { Localized.Common.pinned }
     var manageTokenTitle: String { Localized.Wallet.manageTokenList }
     var perpetualsTitle: String { Localized.Perpetuals.title }
 
     public var searchImage: Image { Images.System.search }
     public var manageImage: Image { Images.Actions.manage }
-
-    var pinImage: Image { Images.System.pin }
 
     var showPinnedSection: Bool {
         !sections.pinned.isEmpty

@@ -36,10 +36,10 @@ public struct WalletSearchService: Sendable {
 
         try assetsService.addAssets(assets: response.assets)
         try searchStore.add(type: .asset, query: searchKey, ids: response.assets.map { $0.asset.id.identifier })
+        try perpetualStore.upsertPerpetuals(response.perpetuals)
         if tag == nil {
             try searchStore.add(type: .perpetual, query: searchKey, ids: response.perpetuals.map(\.id))
         }
-        try perpetualStore.upsertPerpetuals(response.perpetuals)
         try assetsService.addBalancesIfMissing(
             walletId: wallet.walletId,
             assetIds: response.assets.map { $0.asset.id }
