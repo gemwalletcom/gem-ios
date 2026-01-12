@@ -213,6 +213,15 @@ struct ServicesFactory {
         let authService = AuthService(keystore: storages.keystore)
         let rewardsService = RewardsService(authService: authService)
         let eventPresenterService = EventPresenterService()
+        let walletSearchService = WalletSearchService(
+            assetsService: assetsService,
+            searchStore: storeManager.searchStore,
+            perpetualStore: storeManager.perpetualStore
+        )
+        let assetSearchService = AssetSearchService(
+            assetsService: assetsService,
+            searchStore: storeManager.searchStore
+        )
 
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
@@ -271,7 +280,9 @@ struct ServicesFactory {
             activityService: activityService,
             eventPresenterService: eventPresenterService,
             viewModelFactory: viewModelFactory,
-            rewardsService: rewardsService
+            rewardsService: rewardsService,
+            walletSearchService: walletSearchService,
+            assetSearchService: assetSearchService
         )
     }
 }

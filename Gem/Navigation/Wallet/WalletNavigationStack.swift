@@ -28,6 +28,8 @@ struct WalletNavigationStack: View {
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.activityService) private var activityService
+    @Environment(\.walletSearchService) private var walletSearchService
+    @Environment(\.assetSearchService) private var assetSearchService
 
     @State private var model: WalletSceneViewModel
 
@@ -52,7 +54,7 @@ struct WalletNavigationStack: View {
                     WalletSearchScene(
                         model: WalletSearchSceneViewModel(
                             wallet: model.wallet,
-                            searchService: AssetSearchService(assetsService: assetsService),
+                            searchService: walletSearchService,
                             activityService: activityService,
                             walletsService: walletsService,
                             onDismissSearch: model.onToggleSearch,
@@ -162,7 +164,7 @@ struct WalletNavigationStack: View {
                     model: SelectAssetViewModel(
                         wallet: model.wallet,
                         selectType: $0,
-                        searchService: AssetSearchService(assetsService: assetsService),
+                        searchService: assetSearchService,
                         walletsService: walletsService,
                         priceAlertService: priceAlertService,
                         activityService: activityService

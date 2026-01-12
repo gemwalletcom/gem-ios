@@ -16,7 +16,7 @@ public extension WalletSearchSceneViewModel {
     @MainActor
     static func mock(
         wallet: Wallet = .mock(),
-        searchService: AssetSearchService = .mock(),
+        searchService: WalletSearchService = .mock(),
         activityService: ActivityService = .mock(),
         walletsService: WalletsService = .mock(),
         preferences: Preferences = .mock()

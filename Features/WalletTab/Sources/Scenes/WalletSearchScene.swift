@@ -9,6 +9,7 @@ import Localization
 import PrimitivesComponents
 import AssetsService
 import Recents
+import Perpetuals
 
 public struct WalletSearchScene: View {
     @State private var model: WalletSearchSceneViewModel
@@ -19,7 +20,7 @@ public struct WalletSearchScene: View {
 
     public var body: some View {
         SearchableWrapper(
-            content: { assetsList },
+            content: { content },
             isSearching: $model.isSearching,
             dismissSearch: $model.dismissSearch
         )
@@ -37,7 +38,7 @@ public struct WalletSearchScene: View {
                 )
             }
         }
-        .observeQuery(request: $model.request, value: $model.assets)
+        .observeQuery(request: $model.searchRequest, value: $model.searchResult)
         .observeQuery(request: $model.recentsRequest, value: $model.recents)
         .searchable(
             text: $model.searchModel.searchableQuery,
@@ -71,7 +72,7 @@ public struct WalletSearchScene: View {
     }
 
     @ViewBuilder
-    private var assetsList: some View {
+    private var content: some View {
         List {
             if model.showTags {
                 Section {} header: {
@@ -97,7 +98,7 @@ public struct WalletSearchScene: View {
 
             if model.showPinned {
                 Section(
-                    content: { list(for: model.sections.pinned) },
+                    content: { assetItems(for: model.sections.pinned) },
                     header: {
                         HStack {
                             model.pinnedImage
@@ -110,9 +111,19 @@ public struct WalletSearchScene: View {
 
             if model.showAssets {
                 Section(
-                    content: { list(for: model.sections.assets) },
+                    content: { assetItems(for: model.sections.assets) },
                     header: {
                         Text(model.assetsTitle)
+                    }
+                )
+                .listRowInsets(.assetListRowInsets)
+            }
+
+            if model.showPerpetuals {
+                Section(
+                    content: { perpetualItems },
+                    header: {
+                        HeaderNavigationLinkView(title: model.perpetualsTitle, destination: Scenes.Perpetuals())
                     }
                 )
                 .listRowInsets(.assetListRowInsets)
@@ -123,7 +134,7 @@ public struct WalletSearchScene: View {
     }
 
     @ViewBuilder
-    private func list(for items: [AssetData]) -> some View {
+    private func assetItems(for items: [AssetData]) -> some View {
         ForEach(items) { assetData in
             NavigationCustomLink(
                 with: ListAssetItemView(
@@ -137,6 +148,19 @@ public struct WalletSearchScene: View {
                 .contextMenu(model.contextMenuItems(for: assetData)),
                 action: { model.onSelectAsset(assetData.asset) }
             )
+        }
+    }
+
+    @ViewBuilder
+    private var perpetualItems: some View {
+        ForEach(model.sections.perpetuals, id: \.perpetual.id) { perpetualData in
+            NavigationLink(value: Scenes.Perpetual(perpetualData)) {
+                ListAssetItemView(
+                    model: PerpetualItemViewModel(
+                        model: PerpetualViewModel(perpetual: perpetualData.perpetual)
+                    )
+                )
+            }
         }
     }
 }
