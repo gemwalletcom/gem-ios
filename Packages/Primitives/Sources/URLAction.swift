@@ -4,16 +4,6 @@ import Foundation
 
 public enum URLAction: Equatable {
     case walletConnect(WalletConnectAction)
-    case deepLink(DeepLinkAction)
-}
-
-public enum WalletConnectAction: Equatable {
-    case connect(uri: String)
-    case request
-    case session(String)
-}
-
-public enum DeepLinkAction: Equatable {
     case asset(AssetId)
     case swap(AssetId, AssetId?)
     case perpetuals
@@ -22,4 +12,10 @@ public enum DeepLinkAction: Equatable {
     case buy(AssetId, amount: Int?)
     case sell(AssetId, amount: Int?)
     case setPriceAlert(AssetId, price: Double?)
+}
+
+public enum WalletConnectAction: Equatable {
+    case connect(uri: String)
+    case request
+    case session(String)
 }

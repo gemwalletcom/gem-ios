@@ -12,8 +12,6 @@
 		830FDA422C2236B6003DA605 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA412C2236B6003DA605 /* MainTabView.swift */; };
 		830FDA452C224316003DA605 /* NavigationStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA442C224316003DA605 /* NavigationStateManager.swift */; };
 		830FDA482C22EEC4003DA605 /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA472C22EEC4003DA605 /* TabItem.swift */; };
-		9F91A15D8232467B9FCBA3E7 /* DeepLinkAction+TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D114E2FDF641558479C5BD /* DeepLinkAction+TabItem.swift */; };
-		28A7298D1C78457D9F79719D /* PushNotification+TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211386A6DF2940EBBADB22FC /* PushNotification+TabItem.swift */; };
 		8327CBF12DF9E088000BF1E1 /* Validators in Frameworks */ = {isa = PBXBuildFile; productRef = 8327CBF02DF9E088000BF1E1 /* Validators */; };
 		832AD1A72DEF9AED00096469 /* Assets in Frameworks */ = {isa = PBXBuildFile; productRef = 832AD1A62DEF9AED00096469 /* Assets */; };
 		833809D02D273E450055D91F /* WalletConnectorService in Frameworks */ = {isa = PBXBuildFile; productRef = 83385DDD2D27147900D76803 /* WalletConnectorService */; };
@@ -188,8 +186,6 @@
 		830FDA412C2236B6003DA605 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		830FDA442C224316003DA605 /* NavigationStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStateManager.swift; sourceTree = "<group>"; };
 		830FDA472C22EEC4003DA605 /* TabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
-		79D114E2FDF641558479C5BD /* DeepLinkAction+TabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeepLinkAction+TabItem.swift"; sourceTree = "<group>"; };
-		211386A6DF2940EBBADB22FC /* PushNotification+TabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PushNotification+TabItem.swift"; sourceTree = "<group>"; };
 		8311A89A2DF9D35D00598C43 /* Validators */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Validators; sourceTree = "<group>"; };
 		832F57E92D36A6D50066024D /* Preferences */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Preferences; sourceTree = "<group>"; };
 		833931A32D2D54060063BB6A /* PriceAlerts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceAlerts; sourceTree = "<group>"; };
@@ -497,8 +493,6 @@
 			children = (
 				C36679092A0B7E5800F1D74D /* Environment.swift */,
 				830FDA472C22EEC4003DA605 /* TabItem.swift */,
-				79D114E2FDF641558479C5BD /* DeepLinkAction+TabItem.swift */,
-				211386A6DF2940EBBADB22FC /* PushNotification+TabItem.swift */,
 				D8D5C1D02E6CAC16007628A1 /* Errors.swift */,
 			);
 			path = Types;
@@ -1102,8 +1096,6 @@
 				837A1E6B2D0B029200733AC1 /* AppResolver+ViewInjection.swift in Sources */,
 				830FDA422C2236B6003DA605 /* MainTabView.swift in Sources */,
 				830FDA482C22EEC4003DA605 /* TabItem.swift in Sources */,
-				9F91A15D8232467B9FCBA3E7 /* DeepLinkAction+TabItem.swift in Sources */,
-				28A7298D1C78457D9F79719D /* PushNotification+TabItem.swift in Sources */,
 				B6B86A102D702E7C00D31D65 /* SwapNavigationView.swift in Sources */,
 				D89CD7A92CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift in Sources */,
 				D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */,

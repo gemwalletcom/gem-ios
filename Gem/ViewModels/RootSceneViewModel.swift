@@ -124,11 +124,11 @@ extension RootSceneViewModel {
 
     func handleOpenUrl(_ url: URL) async {
         do {
-            let parsedURL = try URLParser.from(url: url)
-            switch parsedURL {
-            case .walletConnect(let action):
-                try await handleWalletConnect(action)
-            case .deepLink(let action):
+            let action = try URLParser.from(url: url)
+            switch action {
+            case .walletConnect(let walletConnectAction):
+                try await handleWalletConnect(walletConnectAction)
+            case .asset, .swap, .perpetuals, .rewards, .gift, .buy, .sell, .setPriceAlert:
                 await navigationHandler.handle(action)
             }
         } catch {

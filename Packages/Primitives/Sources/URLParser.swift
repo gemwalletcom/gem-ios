@@ -13,9 +13,7 @@ public enum URLParser {
         if let walletConnectAction = try parseWalletConnect(url: url) {
             return .walletConnect(walletConnectAction)
         }
-
-        let deepLinkAction = try parseDeepLink(url: url)
-        return .deepLink(deepLinkAction)
+        return try parseDeepLink(url: url)
     }
 
     private static func parseWalletConnect(url: URL) throws -> WalletConnectAction? {
@@ -37,7 +35,7 @@ public enum URLParser {
         return nil
     }
 
-    private static func parseDeepLink(url: URL) throws -> DeepLinkAction {
+    private static func parseDeepLink(url: URL) throws -> URLAction {
         var urlComponents = Array(url.pathComponents.dropFirst())
 
         if url.scheme == "gem", let host = url.host() {
@@ -80,7 +78,7 @@ public enum URLParser {
         throw URLParserError.invalidURL(url)
     }
 
-    private static func parseFiat(url: URL, urlComponents: [String], type: DeepLink.PathComponent) throws -> DeepLinkAction {
+    private static func parseFiat(url: URL, urlComponents: [String], type: DeepLink.PathComponent) throws -> URLAction {
         let assetId = try AssetId(id: urlComponents.required(at: 1, url: url))
         let amount: Int? = url.queryValue(for: "amount")
         switch type {
