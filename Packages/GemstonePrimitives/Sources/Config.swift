@@ -5,11 +5,14 @@ import class Gemstone.Config
 import struct Gemstone.SwapConfig
 import enum Gemstone.DocsUrl
 import enum Gemstone.PublicUrl
+import enum Gemstone.RewardsUrl
 import enum Gemstone.SocialUrl
 import struct Gemstone.StakeChainConfig
 import typealias Gemstone.ChainConfig
 import typealias Gemstone.WalletConnectConfig
 import Primitives
+
+private let utmSource = "gemwallet_ios"
 
 extension Config {
     public static let shared = Config()
@@ -26,14 +29,22 @@ public struct GemstoneConfig {
 public struct Docs {
     public static func url(_ item: DocsUrl) -> URL {
         return URL(string: Config.shared.getDocsUrl(item: item))!
-            .withUTM(source: "gemwallet_ios")
+            .withUTM(source: utmSource)
+    }
+}
+
+public struct RewardsUrlConfig {
+    public static func url(_ item: RewardsUrl) -> URL {
+        let locale = Locale.current.identifier
+        return URL(string: Config.shared.getRewardsUrl(item: item, locale: locale))!
+            .withUTM(source: utmSource)
     }
 }
 
 public struct PublicConstants {
     public static func url(_ item: PublicUrl) -> URL {
         return URL(string: Config.shared.getPublicUrl(item: item))!
-            .withUTM(source: "gemwallet_ios")
+            .withUTM(source: utmSource)
     }
 }
 

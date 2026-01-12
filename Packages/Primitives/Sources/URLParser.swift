@@ -46,33 +46,38 @@ public enum URLParser {
 
         urlComponents = Self.strippingLocalePrefix(from: urlComponents)
 
-        guard url.host() == DeepLink.host || url.scheme == "gem",
-              let path = urlComponents.first,
-              let pathComponent = DeepLink.PathComponent(rawValue: path) else {
-            throw URLParserError.invalidURL(url)
+        if url.host() == DeepLink.host || url.scheme == "gem" {
+            guard let path = urlComponents.first,
+                  let pathComponent = DeepLink.PathComponent(rawValue: path) else {
+                throw URLParserError.invalidURL(url)
+            }
+
+            switch pathComponent {
+            case .tokens:
+                let chain = try Chain(id: urlComponents.required(at: 1, url: url))
+                return .asset(AssetId(chain: chain, tokenId: urlComponents.element(at: 2)))
+            case .swap:
+                let fromId = try AssetId(id: urlComponents.required(at: 1, url: url))
+                let toId = urlComponents.element(at: 2).flatMap { try? AssetId(id: $0) }
+                return .swap(fromId, toId)
+            case .perpetuals:
+                return .perpetuals
+            case .rewards, .join:
+                let code = urlComponents.element(at: 1) ?? url.queryValue(for: "code") ?? ""
+                return .rewards(code: code)
+            case .gift:
+                let code = urlComponents.element(at: 1) ?? url.queryValue(for: "code") ?? ""
+                return .gift(code: code)
+            case .buy, .sell:
+                return try parseFiat(url: url, urlComponents: urlComponents, type: pathComponent)
+            case .setPriceAlert:
+                let price: Double? = url.queryValue(for: "price")
+                let assetId = try AssetId(id: urlComponents.required(at: 1, url: url))
+                return .setPriceAlert(assetId, price: price)
+            }
         }
 
-        switch pathComponent {
-        case .tokens:
-            let chain = try Chain(id: urlComponents.required(at: 1, url: url))
-            return .asset(AssetId(chain: chain, tokenId: urlComponents.element(at: 2)))
-        case .swap:
-            let fromId = try AssetId(id: urlComponents.required(at: 1, url: url))
-            let toId = urlComponents.element(at: 2).flatMap { try? AssetId(id: $0) }
-            return .swap(fromId, toId)
-        case .perpetuals:
-            return .perpetuals
-        case .rewards, .join:
-            return .rewards(code: url.queryValue(for: "code") ?? "")
-        case .gift:
-            return .gift(code: url.queryValue(for: "code") ?? "")
-        case .buy, .sell:
-            return try parseFiat(url: url, urlComponents: urlComponents, type: pathComponent)
-        case .setPriceAlert:
-            let price: Double? = url.queryValue(for: "price")
-            let assetId = try AssetId(id: urlComponents.required(at: 1, url: url))
-            return .setPriceAlert(assetId, price: price)
-        }
+        throw URLParserError.invalidURL(url)
     }
 
     private static func parseFiat(url: URL, urlComponents: [String], type: DeepLink.PathComponent) throws -> DeepLinkAction {

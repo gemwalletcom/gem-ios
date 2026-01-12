@@ -25,6 +25,7 @@ public struct RewardsScene: View {
     @State private var isPresentingShare = false
     @State private var isPresentingCodeInput: CodeInputType?
     @State private var isPresentingRedemptionAlert: AlertMessage?
+    @State private var isPresentingInfoUrl: URL?
 
     public init(model: RewardsViewModel) {
         _model = State(initialValue: model)
@@ -65,9 +66,16 @@ public struct RewardsScene: View {
                     WalletBarView(model: model.walletBarViewModel) {
                         isPresentingWalletSelector = true
                     }
+                } else {
+                    Button {
+                        isPresentingInfoUrl = model.rewardsUrl
+                    } label: {
+                        Images.System.info
+                    }
                 }
             }
         }
+        .safariSheet(url: $isPresentingInfoUrl)
         .sheet(isPresented: $isPresentingWalletSelector) {
             SelectableListNavigationStack(
                 model: model.walletSelectorModel,

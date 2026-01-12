@@ -39,7 +39,7 @@ public struct WalletScene: View {
                 }
                 .listRowInsets(.assetListRowInsets)
             }
-            
+
             if let banner = model.walletBannersModel.allBanners.first {
                 Section {
                     BannerView(
@@ -96,6 +96,7 @@ public struct WalletScene: View {
             }
             .listRowInsets(.assetListRowInsets)
         }
+        .id(model.wallet.id)
         .refreshable {
             model.fetch()
         }
