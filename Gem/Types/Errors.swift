@@ -8,7 +8,8 @@ import Primitives
 extension Gemstone.GatewayError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .NetworkError(let string): string
+        case .NetworkError(let string),
+                .PlatformError(let string): string
         }
     }
 }
@@ -30,11 +31,11 @@ extension Gemstone.SwapperError: @retroactive LocalizedError {
         case .NotSupportedPair, .NoAvailableProvider: Localized.Errors.Swap.notSupportedPair
         case .InputAmountTooSmall: Localized.Errors.Swap.amountTooSmall
         case .InvalidAddress(let error),
-             .InvalidAmount(let error),
-             .NetworkError(let error),
-             .AbiError(let error),
-             .ComputeQuoteError(let error),
-             .TransactionError(let error): error
+                .InvalidAmount(let error),
+                .NetworkError(let error),
+                .AbiError(let error),
+                .ComputeQuoteError(let error),
+                .TransactionError(let error): error
         case .InvalidRoute: "Invalid Route"
         case .NotImplemented: AnyError.notImplemented.errorDescription
         }
