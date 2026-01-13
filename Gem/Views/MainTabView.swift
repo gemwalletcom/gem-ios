@@ -16,18 +16,15 @@ import PriceAlerts
 import Components
 
 struct MainTabView: View {
-    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.walletsService) private var walletsService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.navigationPresenter) private var presenter
     @Environment(\.nftService) private var nftService
     @Environment(\.priceService) private var priceService
-    @Environment(\.priceObserverService) private var priceObserverService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.walletService) private var walletService
     @Environment(\.assetsService) private var assetsService
-    @Environment(\.perpetualObserverService) private var perpetualObserverService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.transactionsService) private var transactionsService
 
@@ -134,29 +131,6 @@ struct MainTabView: View {
         }
         .toast(message: $isPresentingToastMessage)
         .onChange(of: model.walletId, onWalletIdChange)
-        .taskOnce {
-            Task {
-                await connectObservers()
-            }
-        }
-        .onChange(of: scenePhase) { (oldScene, newPhase) in
-            switch newPhase {
-            case .active:
-                Task {
-                    await connectObservers()
-                }
-                debugLog("App moved to active — restart websocket, refresh UI…")
-            case .inactive:
-                Task {
-                    await disconnectObservers()
-                }
-                debugLog("App is inactive — e.g. transitioning or showing interruption UI")
-            case .background:
-                debugLog("App went to background — tear down connections, save state…")
-            @unknown default:
-                break
-            }
-        }
     }
 }
 
@@ -182,21 +156,6 @@ extension MainTabView {
     private func onWalletIdChange() {
         navigationState.clearAll()
         navigationState.selectedTab = .wallet
-
-        Task {
-            try await priceObserverService.setupAssets()
-            await perpetualObserverService.connect(for: model.wallet)
-        }
-    }
-
-    private func connectObservers() async {
-        await priceObserverService.connect()
-        await perpetualObserverService.connect(for: model.wallet)
-    }
-
-    private func disconnectObservers() async {
-        await priceObserverService.disconnect()
-        await perpetualObserverService.disconnect()
     }
 
     private func onSetPriceAlertComplete(message: String) {
