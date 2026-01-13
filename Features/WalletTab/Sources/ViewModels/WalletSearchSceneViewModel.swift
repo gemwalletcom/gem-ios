@@ -72,8 +72,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.searchRequest = WalletSearchRequest(walletId: wallet.walletId, limit: 100)
         self.recentsRequest = RecentActivityRequest(
             walletId: wallet.walletId,
-            limit: 10,
-            types: RecentActivityType.allCases
+            limit: 10
         )
     }
 
