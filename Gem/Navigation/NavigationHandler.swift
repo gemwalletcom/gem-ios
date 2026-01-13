@@ -102,8 +102,8 @@ extension NavigationHandler {
         case .asset(let assetId):
             try await navigateToAsset(assetId)
 
-        case .transaction(let walletIndex, let assetId, let transaction):
-            try await navigateToTransaction(walletIndex: walletIndex, assetId: assetId, transaction: transaction)
+        case .transaction(let walletIndex, let walletId, let assetId, let transaction):
+            try await navigateToTransaction(walletIndex: walletIndex, walletId: walletId, assetId: assetId, transaction: transaction)
 
         case .priceAlert(let assetId):
             let asset = try await assetsService.getOrFetchAsset(for: assetId)
@@ -145,8 +145,10 @@ extension NavigationHandler {
         navigationState.wallet.append(Scenes.Asset(asset: asset))
     }
 
-    private func navigateToTransaction(walletIndex: Int, assetId: AssetId, transaction: Primitives.Transaction) async throws {
-        guard let walletId = walletService.setCurrent(for: walletIndex) else { return }
+    private func navigateToTransaction(walletIndex: Int?, walletId: String, assetId: AssetId, transaction: Primitives.Transaction) async throws {
+        guard let walletId = walletService.walletId(walletIndex: walletIndex, walletTypeId: walletId) else {
+            throw AnyError("Wallet not found")
+        }
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
         var path = NavigationPath()
         path.append(Scenes.Asset(asset: asset))
