@@ -6,6 +6,8 @@ import StoreTestKit
 import BalanceServiceTestKit
 import PrimitivesTestKit
 import Primitives
+import WalletSessionService
+import PreferencesTestKit
 import GRDB
 
 @testable import Store
@@ -45,7 +47,10 @@ struct WalletsServiceTests {
         let db = DB.mock()
         let balanceStore = BalanceStore.mock(db: db)
         let walletStore = WalletStore.mock(db: db)
-        let service = WalletsService.mock(walletStore: walletStore, balanceService: .mock(balanceStore: balanceStore))
+        let service = WalletsService.mock(
+            walletSessionService: WalletSessionService(walletStore: walletStore, preferences: .mock()),
+            balanceService: .mock(balanceStore: balanceStore)
+        )
         return (db, balanceStore, walletStore, service)
     }
 
