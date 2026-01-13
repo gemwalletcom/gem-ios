@@ -35,15 +35,19 @@ public struct SubscriptionService: Sendable {
         let localSubscriptions = try localSubscription().asSet()
 
         let remoteSubscriptionsV2 = try await getSubscriptionsV2(deviceId: deviceId).asSet()
-        let localSubscriptionsV2 = try localSubscriptionV2().asSet()
+        let localWalletSubscriptions = try localSubscriptionV2()
+        let localSubscriptionsV2 = localWalletSubscriptions.map(\.asWalletSubscriptionChains).asSet()
 
         switch preferences.isSubscriptionsEnabled {
         case true:
             let addSubscriptions = localSubscriptions.subtracting(remoteSubscriptions).asArray()
             let deleteSubscriptions = remoteSubscriptions.subtracting(localSubscriptions).asArray()
 
-            let addSubscriptionsV2 = localSubscriptionsV2.subtracting(remoteSubscriptionsV2).asArray()
-            let deleteSubscriptionsV2 = remoteSubscriptionsV2.subtracting(localSubscriptionsV2).asArray()
+            let addSubscribedWallets = localSubscriptionsV2.subtracting(remoteSubscriptionsV2)
+            let deleteSubscribedWallets = remoteSubscriptionsV2.subtracting(localSubscriptionsV2)
+
+            let addSubscriptionsV2 = localWalletSubscriptions.filter { addSubscribedWallets.contains($0.asWalletSubscriptionChains) }
+            let deleteSubscriptionsV2 = localWalletSubscriptions.filter { deleteSubscribedWallets.contains($0.asWalletSubscriptionChains) }
 
             if !addSubscriptions.isEmpty {
                 try await updateSubscriptions(deviceId: deviceId, subscriptions: addSubscriptions)
@@ -62,7 +66,8 @@ public struct SubscriptionService: Sendable {
                 try await self.deleteSubscriptions(deviceId: deviceId, subscriptions: remoteSubscriptions.asArray())
             }
             if !remoteSubscriptionsV2.isEmpty {
-                try await self.deleteSubscriptionsV2(deviceId: deviceId, subscriptions: remoteSubscriptionsV2.asArray())
+                let deleteSubscriptionsV2 = localWalletSubscriptions.filter { remoteSubscriptionsV2.contains($0.asWalletSubscriptionChains) }
+                try await self.deleteSubscriptionsV2(deviceId: deviceId, subscriptions: deleteSubscriptionsV2)
             }
         }
         preferences.subscriptionsVersionHasChange = false
@@ -92,7 +97,7 @@ public struct SubscriptionService: Sendable {
         try await subscriptionProvider.getSubscriptions(deviceId: deviceId)
     }
 
-    private func getSubscriptionsV2(deviceId: String) async throws -> [WalletSubscription] {
+    private func getSubscriptionsV2(deviceId: String) async throws -> [WalletSubscriptionChains] {
         try await subscriptionProvider.getSubscriptionsV2(deviceId: deviceId)
     }
 
