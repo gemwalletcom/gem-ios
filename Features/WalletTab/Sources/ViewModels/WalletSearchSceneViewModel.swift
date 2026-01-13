@@ -73,7 +73,7 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.recentsRequest = RecentActivityRequest(
             walletId: wallet.walletId,
             limit: 10,
-            types: RecentActivityType.allCases.filter { $0 != .perpetual }
+            types: RecentActivityType.allCases
         )
     }
 
@@ -179,11 +179,6 @@ extension WalletSearchSceneViewModel {
         isPresentingAssetsResults = true
     }
 
-    func onSelectAssetFromSheet(_ asset: Asset) {
-        onSelectAsset(asset)
-        isPresentingAssetsResults = false
-    }
-
     func onSelectRecent(asset: Asset) {
         onSelectAssetAction?(asset)
         isPresentingRecents = false
@@ -209,10 +204,12 @@ extension WalletSearchSceneViewModel {
         }
     }
 
-    func onPinPerpetual(_ perpetualData: PerpetualData, value: Bool) {
+    func onSelectPinPerpetual(_ perpetualId: String, value: Bool) {
         do {
-            try perpetualService.setPinned(value, perpetualId: perpetualData.perpetual.id)
-            isPresentingToastMessage = .pin(perpetualData.perpetual.name, pinned: value)
+            try perpetualService.setPinned(value, perpetualId: perpetualId)
+            if let name = searchResult.perpetuals.first(where: { $0.perpetual.id == perpetualId })?.perpetual.name {
+                isPresentingToastMessage = .pin(name, pinned: value)
+            }
         } catch {
             debugLog("WalletSearchSceneViewModel pin perpetual error: \(error)")
         }

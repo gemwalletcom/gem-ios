@@ -85,7 +85,9 @@ public struct WalletSearchScene: View {
                     models: model.recentModels,
                     onSelectRecents: model.onSelectRecents
                 ) { assetModel in
-                    NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
+                    Button {
+                        model.onSelectRecent(asset: assetModel.asset)
+                    } label: {
                         AssetChipView(model: assetModel)
                     }
                 }
@@ -101,7 +103,6 @@ public struct WalletSearchScene: View {
                     },
                     header: { PinnedSectionHeader() }
                 )
-                .listRowInsets(.assetListRowInsets)
             }
 
             if model.showAssets {
@@ -125,7 +126,6 @@ public struct WalletSearchScene: View {
                         HeaderNavigationLinkView(title: model.perpetualsTitle, destination: Scenes.Perpetuals())
                     }
                 )
-                .listRowInsets(.assetListRowInsets)
             }
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
@@ -144,20 +144,12 @@ public struct WalletSearchScene: View {
 
     @ViewBuilder
     private func perpetualItems(for items: [PerpetualData]) -> some View {
-        ForEach(items, id: \.perpetual.id) { perpetualData in
-            NavigationLink(value: Scenes.Perpetual(perpetualData)) {
-                ListAssetItemView(
-                    model: PerpetualItemViewModel(
-                        model: PerpetualViewModel(perpetual: perpetualData.perpetual)
-                    )
-                )
-                .contextMenu([
-                    .pin(
-                        isPinned: perpetualData.metadata.isPinned,
-                        onPin: { model.onPinPerpetual(perpetualData, value: !perpetualData.metadata.isPinned) }
-                    )
-                ])
-            }
+        ForEach(items) { perpetualData in
+            PerpetualListItem(
+                perpetualData: perpetualData,
+                onPin: model.onSelectPinPerpetual,
+                onSelect: model.onSelectAsset
+            )
         }
     }
 }

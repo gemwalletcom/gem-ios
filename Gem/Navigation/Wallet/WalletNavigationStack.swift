@@ -59,7 +59,7 @@ struct WalletNavigationStack: View {
                             walletsService: walletsService,
                             perpetualService: perpetualService,
                             onDismissSearch: model.onToggleSearch,
-                            onSelectAssetAction: { navigationState.wallet.append(Scenes.Asset(asset: $0)) },
+                            onSelectAssetAction: onSelectAsset,
                             onAddToken: model.onSelectAddCustomToken
                         )
                     )
@@ -212,6 +212,14 @@ struct WalletNavigationStack: View {
             }
             .safariSheet(url: $model.isPresentingUrl)
             .toast(message: $model.isPresentingToastMessage)
+        }
+    }
+
+    private func onSelectAsset(asset: Asset) {
+        if asset.type == .perpetual {
+            navigationState.wallet.append(Scenes.Perpetual(asset))
+        } else {
+            navigationState.wallet.append(Scenes.Asset(asset: asset))
         }
     }
 }
