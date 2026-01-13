@@ -72,6 +72,8 @@ public extension TransferDataType {
             return .account(asset: asset.map(), accountType: accountData.map())
         case .perpetual(let asset, let perpetualType):
             return .perpetual(asset: asset.map(), perpetualType: perpetualType.map())
+        case .yield:
+            throw AnyError("Unsupported transaction type: \(self)")
         }
     }
 }

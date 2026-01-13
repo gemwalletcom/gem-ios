@@ -33,6 +33,7 @@ import AddressNameService
 import ActivityService
 import RewardsService
 import EventPresenterService
+import YieldService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
@@ -68,4 +69,5 @@ extension EnvironmentValues {
     @Entry var eventPresenterService: EventPresenterService = AppResolver.main.services.eventPresenterService
     @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
     @Entry var rewardsService: RewardsService = AppResolver.main.services.rewardsService
+    @Entry var yieldService: YieldService? = AppResolver.main.services.yieldService
 }

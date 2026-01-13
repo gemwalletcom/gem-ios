@@ -60,7 +60,7 @@ struct AmountScene: View {
             }
 
             switch model.type {
-            case .transfer, .deposit, .withdraw:
+            case .transfer, .deposit, .withdraw, .yield:
                 EmptyView()
             case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
                 if let viewModel = model.stakeValidatorViewModel {

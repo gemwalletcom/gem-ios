@@ -52,6 +52,8 @@ let package = Package(
         .library(name: "RewardsServiceTestKit", targets: ["RewardsServiceTestKit"]),
         .library(name: "AuthService", targets: ["AuthService"]),
         .library(name: "AuthServiceTestKit", targets: ["AuthServiceTestKit"]),
+        .library(name: "YieldService", targets: ["YieldService"]),
+        .library(name: "YieldServiceTestKit", targets: ["YieldServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -535,6 +537,24 @@ let package = Package(
                 "AuthService",
             ],
             path: "AuthService/TestKit"
+        ),
+        .target(
+            name: "YieldService",
+            dependencies: [
+                "Gemstone",
+                "Primitives",
+                "NativeProviderService",
+            ],
+            path: "YieldService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "YieldServiceTestKit",
+            dependencies: [
+                "YieldService",
+                "Gemstone"
+            ],
+            path: "YieldService/TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",

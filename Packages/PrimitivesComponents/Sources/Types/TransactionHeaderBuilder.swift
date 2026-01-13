@@ -59,7 +59,8 @@ public struct TransactionHeaderTypeBuilder {
                     .withdrawal,
                     .generic,
                     .stake,
-                    .tokenApprove:
+                    .tokenApprove,
+                    .yield:
                 return .amount(
                     showFiat: true
                 )

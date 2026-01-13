@@ -128,15 +128,18 @@ struct SettingsNavigationStack: View {
                 )
             }
             .navigationDestination(for: Scenes.Developer.self) { _ in
-                DeveloperScene(model: DeveloperViewModel(
-                    walletId: walletId,
-                    transactionsService: transactionsService,
-                    assetService: assetsService,
-                    stakeService: stakeService,
-                    bannerService: bannerService,
-                    priceService: priceService,
-                    perpetualService: perpetualService
-                ))
+                if let wallet = walletService.currentWallet {
+                    DeveloperScene(model: DeveloperViewModel(
+                        wallet: wallet,
+                        walletId: walletId,
+                        transactionsService: transactionsService,
+                        assetService: assetsService,
+                        stakeService: stakeService,
+                        bannerService: bannerService,
+                        priceService: priceService,
+                        perpetualService: perpetualService
+                    ))
+                }
             }
             .navigationDestination(for: Scenes.Currency.self) { _ in
                 CurrencyScene(model: currencyModel)

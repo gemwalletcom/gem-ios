@@ -83,6 +83,10 @@ public enum Images {
         public static let hyperliquid = Image(.hypercore)
     }
 
+    public enum YieldProviders {
+        public static let yo = Image(.yo)
+    }
+
     public enum Fiat {
         public static let moonpay = Image(.moonpay)
         public static let transak = Image(.transak)

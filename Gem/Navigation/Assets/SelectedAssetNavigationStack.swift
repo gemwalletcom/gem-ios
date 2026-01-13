@@ -15,6 +15,7 @@ import ChainService
 import ExplorerService
 import Signer
 import EventPresenterService
+import Yield
 
 struct SelectedAssetNavigationStack: View  {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -126,6 +127,18 @@ struct SelectedAssetNavigationStack: View  {
                         ),
                         navigationPath: $navigationPath
                     )
+                case .earn:
+                    if let model = viewModelFactory.yieldScene(
+                        wallet: wallet,
+                        asset: input.asset,
+                        onAmountInputAction: {
+                            navigationPath.append($0)
+                        }
+                    ) {
+                        YieldNavigationView(model: model, navigationPath: $navigationPath)
+                    } else {
+                        EmptyView()
+                    }
                 }
             }
             .toolbarDismissItem(title: .done, placement: .topBarLeading)

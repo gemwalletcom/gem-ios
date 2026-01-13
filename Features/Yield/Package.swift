@@ -3,57 +3,49 @@
 import PackageDescription
 
 let package = Package(
-    name: "Staking",
+    name: "Yield",
     platforms: [
         .iOS(.v17),
         .macOS(.v15)
     ],
     products: [
         .library(
-            name: "Staking",
-            targets: ["Staking"]),
+            name: "Yield",
+            targets: ["Yield"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Components", path: "../../Packages/Components"),
-        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
+        .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "Localization", path: "../../Packages/Localization"),
-        .package(name: "ChainServices", path: "../../Packages/ChainServices"),
-        .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Store", path: "../../Packages/Store"),
-        .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
-        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
-        .package(name: "Yield", path: "../Yield")
+        .package(name: "Style", path: "../../Packages/Style"),
     ],
     targets: [
         .target(
-            name: "Staking",
+            name: "Yield",
             dependencies: [
                 "Primitives",
                 "Components",
-                "GemstonePrimitives",
+                "Gemstone",
                 "Localization",
-                .product(name: "StakeService", package: "ChainServices"),
-                .product(name: "ExplorerService", package: "ChainServices"),
-                "Preferences",
+                .product(name: "YieldService", package: "FeatureServices"),
                 "Store",
-                "InfoSheet",
                 "PrimitivesComponents",
                 "Formatters",
-                "Yield",
-                .product(name: "YieldService", package: "FeatureServices"),
-                .product(name: "NodeService", package: "ChainServices")
+                "Style",
             ],
             path: "Sources"
         ),
         .testTarget(
-            name: "StakingTests",
+            name: "YieldTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "StakeServiceTestKit", package: "ChainServices"),
-                "Staking"
+                .product(name: "YieldServiceTestKit", package: "FeatureServices"),
+                "Yield"
             ],
             path: "Tests"
         ),

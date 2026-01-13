@@ -54,7 +54,8 @@ let package = Package(
                 .product(name: "PriceService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "ChainService", package: "ChainServices"),
-                .product(name: "ActivityService", package: "FeatureServices")
+                .product(name: "ActivityService", package: "FeatureServices"),
+                .product(name: "YieldService", package: "FeatureServices")
             ],
             path: "Sources"
         ),

@@ -122,7 +122,7 @@ public final class AmountSceneViewModel {
 
     var infoText: String? {
         switch type {
-        case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual:
+        case .transfer, .deposit, .withdraw, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .perpetual, .yield:
             return nil
         case .stake, .freeze:
             guard shouldReserveFee, amountInputModel.text == maxBalance else { return nil }
@@ -162,6 +162,11 @@ public final class AmountSceneViewModel {
             case .freeze: Localized.Transfer.Freeze.title
             case .unfreeze: Localized.Transfer.Unfreeze.title
             }
+        case .yield(let action, _):
+            switch action {
+            case .deposit: Localized.Wallet.deposit
+            case .withdraw: Localized.Wallet.withdraw
+            }
         }
     }
 
@@ -182,7 +187,7 @@ public final class AmountSceneViewModel {
 
     var validators: [DelegationValidator] {
         switch type {
-        case .transfer, .deposit, .withdraw, .perpetual, .freeze: []
+        case .transfer, .deposit, .withdraw, .perpetual, .freeze, .yield: []
         case .stake(let validators, _): validators
         case .stakeUnstake(let delegation): [delegation.validator]
         case .stakeRedelegate(_, let validators, _): validators
@@ -192,7 +197,7 @@ public final class AmountSceneViewModel {
 
     var stakeValidatorsType: StakeValidatorsType {
         switch type {
-        case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate: .stake
+        case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate, .yield: .stake
         case .stakeUnstake, .stakeWithdraw: .unstake
         case .freeze: fatalError("unsupported")
         }
@@ -228,7 +233,7 @@ public final class AmountSceneViewModel {
 
     var delegations: [Delegation] {
         switch type {
-        case .transfer, .deposit, .withdraw, .perpetual, .stake, .freeze: []
+        case .transfer, .deposit, .withdraw, .perpetual, .stake, .freeze, .yield: []
         case .stakeUnstake(let delegation): [delegation]
         case .stakeRedelegate(let delegation, _, _): [delegation]
         case .stakeWithdraw(let delegation): [delegation]
@@ -238,14 +243,14 @@ public final class AmountSceneViewModel {
     var isSelectValidatorEnabled: Bool {
         switch type {
         case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate: true
-        case .stakeUnstake, .stakeWithdraw, .freeze: false
+        case .stakeUnstake, .stakeWithdraw, .freeze, .yield: false
         }
     }
 
     var isSelectResourceEnabled: Bool {
         switch type {
         case .freeze: true
-        case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw: false
+        case .transfer, .deposit, .withdraw, .perpetual, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .yield: false
         }
     }
 
@@ -256,14 +261,14 @@ public final class AmountSceneViewModel {
             case .open: true
             case .increase, .reduce: false
             }
-        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: false
+        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze, .yield: false
         }
     }
 
     var maxLeverage: UInt8 {
         switch type {
         case .perpetual(let data): data.positionAction.transferData.leverage
-        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: .zero
+        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze, .yield: .zero
         }
     }
 
@@ -291,7 +296,7 @@ public final class AmountSceneViewModel {
             case .open: true
             case .increase, .reduce: false
             }
-        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze: false
+        case .transfer, .deposit, .withdraw, .stake, .stakeRedelegate, .stakeUnstake, .stakeWithdraw, .freeze, .yield: false
         }
     }
 
@@ -468,6 +473,15 @@ extension AmountSceneViewModel {
                 ),
                 amount: .none
             )
+        case .yield:
+             RecipientData(
+                recipient: Recipient(
+                    name: nil,
+                    address: "",
+                    memo: nil
+                ),
+                amount: .none
+            )
         }
     }
 
@@ -485,7 +499,8 @@ extension AmountSceneViewModel {
             .stakeRedelegate,
             .stakeWithdraw,
             .perpetual,
-            .freeze:
+            .freeze,
+            .yield:
                 return [
                 .amount(
                     source: source,
@@ -609,6 +624,13 @@ extension AmountSceneViewModel {
                 value: value,
                 canChangeValue: canChangeValue
             )
+        case .yield(let action, let data):
+            return TransferData(
+                type: .yield(asset, action, data),
+                recipientData: recipientData,
+                value: value,
+                canChangeValue: canChangeValue
+            )
         }
     }
 
@@ -656,7 +678,7 @@ extension AmountSceneViewModel {
                     leverage: selectedLeverage.value
                 )
             )
-        case .stakeUnstake, .transfer:
+        case .stakeUnstake, .transfer, .yield:
             break
         }
         return BigInt(0)
@@ -666,14 +688,14 @@ extension AmountSceneViewModel {
         let recommended: DelegationValidator? = switch type {
         case .stake(_, let recommendedValidator): recommendedValidator
         case .stakeRedelegate(_, _, let recommendedValidator): recommendedValidator
-        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeWithdraw, .freeze: .none
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeWithdraw, .freeze, .yield: .none
         }
         return recommended ?? validators.first
     }
 
     private var availableValue: BigInt {
         switch input.type {
-        case .transfer, .deposit:
+        case .transfer, .deposit, .yield:
             return assetData.balance.available
         case let .perpetual(perpetualData):
             switch perpetualData.positionAction {
@@ -709,7 +731,7 @@ extension AmountSceneViewModel {
 
     private var maxBalance: String {
         let maxValue: BigInt = switch input.type {
-        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .yield:
             availableValue
         case .stake:
             switch asset.chain {
@@ -733,7 +755,8 @@ extension AmountSceneViewModel {
              .perpetual,
              .stake,
              .stakeRedelegate,
-             .freeze:
+             .freeze,
+             .yield:
             return true
         case .stakeUnstake:
             if let chain = StakeChain(rawValue: asset.chain.rawValue) {
@@ -758,7 +781,7 @@ extension AmountSceneViewModel {
     
     private var shouldReserveFee: Bool {
         switch input.type {
-        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw: false
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .yield: false
         case .stake:
             switch asset.chain {
             case .tron: false
@@ -774,7 +797,7 @@ extension AmountSceneViewModel {
 
     private var reserveForFee: BigInt {
         switch input.type {
-        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw: .zero
+        case .transfer, .deposit, .withdraw, .perpetual, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .yield: .zero
         case .stake:
             switch asset.chain {
             case .tron: .zero

@@ -49,7 +49,7 @@ extension ConfirmRecipientViewModel {
             case .stake, .unstake, .redelegate, .rewards, .withdraw: Localized.Stake.validator
             case .freeze: Localized.Stake.resource
             }
-        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .generic, .account, .perpetual: Localized.Transfer.Recipient.title
+        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .generic, .account, .perpetual, .yield: Localized.Transfer.Recipient.title
         }
     }
 
@@ -65,7 +65,8 @@ extension ConfirmRecipientViewModel {
             }
         case .account,
                 .swap,
-                .perpetual: false
+                .perpetual,
+                .yield: false
         case .transfer,
                 .transferNft,
                 .deposit,

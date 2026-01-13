@@ -16,6 +16,7 @@ import WalletsService
 import PriceService
 import BannerService
 import Formatters
+import YieldService
 
 @Observable
 @MainActor
@@ -25,8 +26,11 @@ public final class AssetSceneViewModel: Sendable {
     private let transactionsService: TransactionsService
     private let priceObserverService: PriceObserverService
     private let bannerService: BannerService
+    private let yieldService: YieldService?
 
     private let preferences: ObservablePreferences = .default
+
+    private(set) var hasYieldOpportunity: Bool = false
 
     let explorerService: ExplorerService = .standard
     public let priceAlertService: PriceAlertService
@@ -51,6 +55,7 @@ public final class AssetSceneViewModel: Sendable {
         priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
         bannerService: BannerService,
+        yieldService: YieldService? = nil,
         input: AssetSceneInput,
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
@@ -60,6 +65,7 @@ public final class AssetSceneViewModel: Sendable {
         self.priceObserverService = priceObserverService
         self.priceAlertService = priceAlertService
         self.bannerService = bannerService
+        self.yieldService = yieldService
 
         self.input = input
         self.chainAssetData = ChainAssetData(
@@ -118,6 +124,12 @@ public final class AssetSceneViewModel: Sendable {
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
         return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
+    }
+
+    var earnTitle: String { "Earn" }
+
+    var showYield: Bool {
+        hasYieldOpportunity && !wallet.isViewOnly
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -210,12 +222,18 @@ extension AssetSceneViewModel {
         Task {
             await updateAsset()
         }
-        
+        checkYieldAvailability()
+
         if assetData.priceAlerts.isNotEmpty {
             Task {
                 try await priceAlertService.update(assetId: asset.id.identifier)
             }
         }
+    }
+
+    private func checkYieldAvailability() {
+        guard let yieldService else { return }
+        hasYieldOpportunity = yieldService.isYieldAvailable(for: asset.id)
     }
 
     func fetch() async {
@@ -295,6 +313,13 @@ extension AssetSceneViewModel {
 
     func onSelectSwap() {
         onSelectHeader(.swap)
+    }
+
+    func onSelectEarn() {
+        isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
+            type: .earn(assetData.asset),
+            assetAddress: assetData.assetAddress
+        )
     }
 
     public func onSelectShareAsset() {

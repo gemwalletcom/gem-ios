@@ -38,6 +38,7 @@ import ActivityService
 import AuthService
 import RewardsService
 import EventPresenterService
+import YieldService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -204,6 +205,7 @@ struct ServicesFactory {
         let authService = AuthService(keystore: storages.keystore)
         let rewardsService = RewardsService(authService: authService)
         let eventPresenterService = EventPresenterService()
+        let yieldService = try? YieldService(nodeProvider: nodeService)
 
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
@@ -259,7 +261,8 @@ struct ServicesFactory {
             activityService: activityService,
             eventPresenterService: eventPresenterService,
             viewModelFactory: viewModelFactory,
-            rewardsService: rewardsService
+            rewardsService: rewardsService,
+            yieldService: yieldService
         )
     }
 }

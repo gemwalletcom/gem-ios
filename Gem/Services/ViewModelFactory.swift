@@ -25,6 +25,8 @@ import WalletConnectorService
 import AddressNameService
 import ActivityService
 import EventPresenterService
+import Yield
+import YieldService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -177,6 +179,23 @@ public struct ViewModelFactory: Sendable {
             wallet: wallet,
             chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
             stakeService: stakeService
+        )
+    }
+
+    @MainActor
+    public func yieldScene(
+        wallet: Wallet,
+        asset: Asset,
+        onAmountInputAction: AmountInputAction = nil
+    ) -> YieldSceneViewModel? {
+        guard let yieldService = try? YieldService(nodeProvider: nodeService) else {
+            return nil
+        }
+        let input = YieldInput(wallet: wallet, asset: asset)
+        return YieldSceneViewModel(
+            input: input,
+            yieldService: yieldService,
+            onAmountInputAction: onAmountInputAction
         )
     }
 

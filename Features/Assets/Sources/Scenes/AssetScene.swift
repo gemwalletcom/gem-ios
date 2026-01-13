@@ -127,6 +127,11 @@ public struct AssetScene: View {
                     .listRowInsets(.assetListRowInsets)
             }
 
+            if model.showYield {
+                yieldViewEmpty
+                    .listRowInsets(.assetListRowInsets)
+            }
+
             if model.showResources {
                 Section(model.resourcesTitle) {
                     ListItemView(
@@ -199,6 +204,21 @@ extension AssetScene {
                 )
             },
             action: { model.onSelectHeader(.stake) }
+        )
+    }
+
+    private var yieldViewEmpty: some View {
+        NavigationCustomLink(
+            with: HStack(spacing: .space12) {
+                EmojiView(color: Colors.grayVeryLight, emoji: "📈")
+                    .frame(size: .image.asset)
+                ListItemView(
+                    title: model.earnTitle,
+                    subtitle: nil,
+                    subtitleStyle: TextStyle(font: .callout, color: Colors.green)
+                )
+            },
+            action: { model.onSelectEarn() }
         )
     }
 }

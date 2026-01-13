@@ -19,7 +19,7 @@ public struct Signer: Sendable {
     func sign(input: SignerInput, chain: Chain, privateKey: Data) throws -> [String] {
         let signer = signer(for: chain)
         switch input.type {
-        case .transfer(let asset), .deposit(let asset):
+        case .transfer(let asset), .deposit(let asset), .yield(let asset, _, _):
             switch asset.id.type {
             case .native:
                 return try [signer.signTransfer(input: input, privateKey: privateKey)]
