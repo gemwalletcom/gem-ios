@@ -24,7 +24,7 @@ public extension Wallet {
     
     func walletIdType() throws -> String  {
         let value: String? = switch type {
-        case .multicoin: accounts.first?.address
+        case .multicoin: accounts.filter { $0.chain == .ethereum } .first?.address
         case .single, .privateKey, .view: accounts.first.map { "\($0.chain.rawValue)_\($0.address)" }
         }
         guard let value else {
