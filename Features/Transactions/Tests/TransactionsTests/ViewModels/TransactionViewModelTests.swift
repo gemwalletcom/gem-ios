@@ -103,7 +103,7 @@ final class TransactionViewModelTests {
             type: .perpetualOpenPosition,
             value: "1000000",
             asset: .hypercoreUSDC(),
-            metadata: .perpetual(.mock())
+            metadata: .encode(TransactionPerpetualMetadata.mock())
         )
         #expect(model.subtitleTextValue?.text == "$1.00")
     }
@@ -113,14 +113,14 @@ final class TransactionViewModelTests {
         let profitModel = TransactionViewModel.mock(
             type: .perpetualClosePosition,
             asset: .hypercoreUSDC(),
-            metadata: .perpetual(.mock(pnl: 125.50))
+            metadata: .encode(TransactionPerpetualMetadata.mock(pnl: 125.50))
         )
         #expect(profitModel.subtitleTextValue?.text == "+$125.50")
 
         let lossModel = TransactionViewModel.mock(
             type: .perpetualClosePosition,
             asset: .hypercoreUSDC(),
-            metadata: .perpetual(.mock(pnl: -75.25))
+            metadata: .encode(TransactionPerpetualMetadata.mock(pnl: -75.25))
         )
         #expect(lossModel.subtitleTextValue?.text == "-$75.25")
     }
@@ -130,7 +130,7 @@ final class TransactionViewModelTests {
         let model = TransactionViewModel.mock(
             type: .perpetualClosePosition,
             asset: .hypercoreUSDC(),
-            metadata: .perpetual(.mock(pnl: 0))
+            metadata: .encode(TransactionPerpetualMetadata.mock(pnl: 0))
         )
         #expect(model.subtitleTextValue == nil)
     }
@@ -139,13 +139,13 @@ final class TransactionViewModelTests {
     func titleExtraFreeze() {
         let bandwidthModel = TransactionViewModel.mock(
             type: .stakeFreeze,
-            metadata: .generic(["resourceType": "bandwidth"])
+            metadata: .object(["resourceType": .string("bandwidth")])
         )
         #expect(bandwidthModel.titleExtraTextValue?.text == "To Bandwidth")
 
         let energyModel = TransactionViewModel.mock(
             type: .stakeFreeze,
-            metadata: .generic(["resourceType": "energy"])
+            metadata: .object(["resourceType": .string("energy")])
         )
         #expect(energyModel.titleExtraTextValue?.text == "To Energy")
     }
@@ -154,13 +154,13 @@ final class TransactionViewModelTests {
     func titleExtraUnfreeze() {
         let bandwidthModel = TransactionViewModel.mock(
             type: .stakeUnfreeze,
-            metadata: .generic(["resourceType": "bandwidth"])
+            metadata: .object(["resourceType": .string("bandwidth")])
         )
         #expect(bandwidthModel.titleExtraTextValue?.text == "From Bandwidth")
 
         let energyModel = TransactionViewModel.mock(
             type: .stakeUnfreeze,
-            metadata: .generic(["resourceType": "energy"])
+            metadata: .object(["resourceType": .string("energy")])
         )
         #expect(energyModel.titleExtraTextValue?.text == "From Energy")
     }
