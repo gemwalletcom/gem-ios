@@ -49,11 +49,11 @@ public enum GemAPI: TargetType {
 
     case getAuthNonce(deviceId: String)
 
-    case getRewards(address: String)
+    case getRewards(walletId: String)
     case createReferral(AuthenticatedRequest<ReferralCode>)
     case useReferralCode(AuthenticatedRequest<ReferralCode>)
     case getRedemptionOption(code: String)
-    case redeem(address: String, request: AuthenticatedRequest<RedemptionRequest>)
+    case redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>)
 
     public var baseUrl: URL {
         Constants.apiURL
@@ -165,16 +165,16 @@ public enum GemAPI: TargetType {
             return "/v1/support/add_device"
         case .getAuthNonce(let deviceId):
             return "/v1/devices/\(deviceId)/auth/nonce"
-        case .getRewards(let address):
-            return "/v1/rewards/\(address)"
+        case .getRewards(let walletId):
+            return "/v1/rewards/\(walletId)"
         case .createReferral:
             return "/v1/rewards/referrals/create"
         case .useReferralCode:
             return "/v1/rewards/referrals/use"
         case .getRedemptionOption(let code):
             return "/v1/rewards/redemptions/\(code)"
-        case .redeem(let address, _):
-            return "/v1/rewards/\(address)/redeem"
+        case .redeem(let walletId, _):
+            return "/v1/rewards/\(walletId)/redeem"
         }
     }
     

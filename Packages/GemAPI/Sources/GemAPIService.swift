@@ -87,11 +87,11 @@ public protocol GemAPIAuthService: Sendable {
 }
 
 public protocol GemAPIRewardsService: Sendable {
-    func getRewards(address: String) async throws -> Rewards
+    func getRewards(walletId: String) async throws -> Rewards
     func createReferral(request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards
     func useReferralCode(request: AuthenticatedRequest<ReferralCode>) async throws
     func getRedemptionOption(code: String) async throws -> RewardRedemptionOption
-    func redeem(address: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
+    func redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
 }
 
 public struct GemAPIService {
@@ -343,9 +343,9 @@ extension GemAPIService: GemAPIAuthService {
 }
 
 extension GemAPIService: GemAPIRewardsService {
-    public func getRewards(address: String) async throws -> Rewards {
+    public func getRewards(walletId: String) async throws -> Rewards {
         try await provider
-            .request(.getRewards(address: address))
+            .request(.getRewards(walletId: walletId))
             .mapResponse(as: Rewards.self)
     }
 
@@ -367,9 +367,9 @@ extension GemAPIService: GemAPIRewardsService {
             .mapResponse(as: RewardRedemptionOption.self)
     }
 
-    public func redeem(address: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult {
+    public func redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult {
         try await provider
-            .request(.redeem(address: address, request: request))
+            .request(.redeem(walletId: walletId, request: request))
             .mapResponse(as: RedemptionResult.self)
     }
 }

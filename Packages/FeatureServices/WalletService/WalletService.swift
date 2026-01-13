@@ -49,7 +49,8 @@ public struct WalletService: Sendable {
     }
     
     public func walletId(walletIndex: Int?, walletTypeId: String) -> WalletId? {
-        walletSessionService.wallets.first(where: { $0.walletIdType == walletTypeId || $0.index == (walletIndex ?? -1) })?.walletId
+        walletSessionService.wallets
+            .first(where: { (try? $0.walletIdType()) == walletTypeId || $0.index == (walletIndex ?? -1) })?.walletId
     }
 
     public func setCurrent(for index: Int) -> WalletId? {

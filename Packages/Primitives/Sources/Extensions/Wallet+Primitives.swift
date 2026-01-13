@@ -21,13 +21,16 @@ public extension Wallet {
     var walletId: WalletId {
         WalletId(id: id)
     }
-
-    var walletIdType: String? {
+    
+    func walletIdType() throws -> String  {
         let value: String? = switch type {
         case .multicoin: accounts.first?.address
         case .single, .privateKey, .view: accounts.first.map { "\($0.chain.rawValue)_\($0.address)" }
         }
-        return value.map { "\(type.rawValue)_\($0)" }
+        guard let value else {
+            throw AnyError("unknown wallet id type")
+        }
+        return "\(type.rawValue)_\(value)"
     }
 
     var hasTokenSupport: Bool {

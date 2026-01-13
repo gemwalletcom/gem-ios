@@ -82,14 +82,12 @@ public struct SubscriptionService: Sendable {
     }
 
     private func localSubscriptionV2() throws -> [WalletSubscription] {
-        try walletStore.getWallets().compactMap { wallet in
-            wallet.walletIdType.map {
-                WalletSubscription(
-                    wallet_id: $0,
-                    source: wallet.source,
-                    subscriptions: wallet.accounts.map { ChainAddress(chain: $0.chain, address: $0.address) }
-                )
-            }
+        try walletStore.getWallets().map { wallet in
+            WalletSubscription(
+                wallet_id: try wallet.walletIdType(),
+                source: wallet.source,
+                subscriptions: wallet.accounts.map { ChainAddress(chain: $0.chain, address: $0.address) }
+            )
         }
     }
 
