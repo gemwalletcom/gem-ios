@@ -16,6 +16,6 @@ struct AppResolver: Sendable {
     ) {
         self.storages = storages
         self.navigation = navigation
-        self.services = factory.makeServices(storages: storages)
+        self.services = factory.makeServices(storages: storages, navigation: navigation)
     }
 }

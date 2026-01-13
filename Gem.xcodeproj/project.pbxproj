@@ -52,7 +52,8 @@
 		B62F6B9D2DE61ADF00AF56AB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = B62F6B9C2DE61ADF00AF56AB /* Onboarding */; };
 		B66AFC6C2DDB260A0082C026 /* AppService in Frameworks */ = {isa = PBXBuildFile; productRef = B66AFC6B2DDB260A0082C026 /* AppService */; };
 		B66DEDB02D49F0EA00309D53 /* ImageGalleryService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */; };
-		B67ED5472DDB5DCC009F74E6 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */; };
+		B67ED5472DDB5DCC009F74E6 /* NavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67ED5462DDB5DCC009F74E6 /* NavigationHandler.swift */; };
+		B67ED5482DDB5DCD009F74E6 /* NavigationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67ED5492DDB5DCD009F74E6 /* NavigationPresenter.swift */; };
 		B68058312ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */; };
 		B68058322ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */; };
 		B68BD2CA2DE04B5B00687F09 /* Components in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2C92DE04B5B00687F09 /* Components */; };
@@ -211,7 +212,8 @@
 		83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSceneViewModel.swift; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
 		B67B3EEE2EFD25A6007AFA9C /* EventPresenterService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EventPresenterService; sourceTree = "<group>"; };
-		B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+		B67ED5462DDB5DCC009F74E6 /* NavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHandler.swift; sourceTree = "<group>"; };
+		B67ED5492DDB5DCD009F74E6 /* NavigationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPresenter.swift; sourceTree = "<group>"; };
 		B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
 		B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
 		B69028152F10F464000FC6AD /* ObserversService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserversService.swift; sourceTree = "<group>"; };
@@ -470,6 +472,8 @@
 				D891DD3C2D3EDD7300241222 /* Staking */,
 				D8C4A3812C9388AC006FABE8 /* Price Alerts */,
 				830FDA442C224316003DA605 /* NavigationStateManager.swift */,
+				B67ED5462DDB5DCC009F74E6 /* NavigationHandler.swift */,
+				B67ED5492DDB5DCD009F74E6 /* NavigationPresenter.swift */,
 				D83BDCB62E3E878A00E41807 /* Perpetuals */,
 			);
 			path = Navigation;
@@ -491,7 +495,6 @@
 			children = (
 				C36679092A0B7E5800F1D74D /* Environment.swift */,
 				830FDA472C22EEC4003DA605 /* TabItem.swift */,
-				B67ED5462DDB5DCC009F74E6 /* NotificationHandler.swift */,
 				D8D5C1D02E6CAC16007628A1 /* Errors.swift */,
 			);
 			path = Types;
@@ -1122,7 +1125,8 @@
 				D807004C2BBB26DD00ED770B /* TransactionsNavigationStack.swift in Sources */,
 				D873DA512D7933AF0003F5CE /* MarketsNavigtionStack.swift in Sources */,
 				83B57FAB2CFF92670009319F /* AppResolver.swift in Sources */,
-				B67ED5472DDB5DCC009F74E6 /* NotificationHandler.swift in Sources */,
+				B67ED5472DDB5DCC009F74E6 /* NavigationHandler.swift in Sources */,
+				B67ED5482DDB5DCD009F74E6 /* NavigationPresenter.swift in Sources */,
 				C366790A2A0B7E5800F1D74D /* Environment.swift in Sources */,
 				D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */,
 				837A1E6D2D0B096600733AC1 /* WalletConnectorNavigationStack.swift in Sources */,

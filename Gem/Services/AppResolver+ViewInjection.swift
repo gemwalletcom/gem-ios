@@ -22,7 +22,7 @@ extension View {
             .environment(\.bannerService, services.bannerService)
             .environment(\.balanceService, services.balanceService)
             .environment(\.priceAlertService, services.priceAlertService)
-            .environment(\.notificationHandler, services.notificationHandler)
+            .environment(\.navigationPresenter, services.navigationPresenter)
             .environment(\.chainServiceFactory, services.chainServiceFactory)
             .environment(\.priceService, services.priceService)
             .environment(\.priceObserverService, services.priceObserverService)

@@ -8,6 +8,7 @@ import Components
 import Preferences
 import Localization
 import Style
+import GemstonePrimitives
 
 @Observable
 @MainActor
@@ -149,6 +150,10 @@ public final class RewardsViewModel: Sendable {
     var walletBarViewModel: WalletBarViewViewModel {
         let walletVM = WalletViewModel(wallet: selectedWallet)
         return WalletBarViewViewModel(name: walletVM.name, image: walletVM.avatarImage)
+    }
+
+    var rewardsUrl: URL {
+        RewardsUrlConfig.url(.rewards)
     }
 
     var createCodeViewModel: CreateRewardsCodeViewModel {

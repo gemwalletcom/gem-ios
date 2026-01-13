@@ -6,16 +6,11 @@ public enum PushNotification: Equatable, Sendable {
     case transaction(walletIndex: Int, AssetId, transaction: Transaction)
     case asset(AssetId)
     case priceAlert(AssetId)
-    case setPriceAlert(AssetId, price: Double?)
     case buyAsset(AssetId, amount: Int?)
-    case sellAsset(AssetId, amount: Int?)
     case swapAsset(AssetId, AssetId?)
-    case perpetuals
-    case referral(code: String)
-    case gift(code: String)
+    case support
     case rewards
     case test
-    case support
     case unknown
 
     public init(from userInfo: [AnyHashable: Any]) throws {
