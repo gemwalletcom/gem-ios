@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum Platform: String, Codable, Equatable, Sendable {
+public enum Platform: String, Codable, CaseIterable, Equatable, Sendable {
 	case ios
 	case android
 }

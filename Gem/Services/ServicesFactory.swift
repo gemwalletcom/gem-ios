@@ -223,6 +223,13 @@ struct ServicesFactory {
             searchStore: storeManager.searchStore
         )
 
+        let observersService = ObserversService(
+            connectionsService: connectionsService,
+            deviceObserverService: deviceObserverService,
+            priceObserverService: priceObserverService,
+            perpetualObserverService: perpetualObserverService
+        )
+
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
             nodeService: nodeService,
@@ -282,7 +289,8 @@ struct ServicesFactory {
             viewModelFactory: viewModelFactory,
             rewardsService: rewardsService,
             walletSearchService: walletSearchService,
-            assetSearchService: assetSearchService
+            assetSearchService: assetSearchService,
+            observersService: observersService
         )
     }
 }

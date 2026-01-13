@@ -8,9 +8,9 @@ public extension Device {
         Device(
             id: .empty,
             platform: .ios,
+            platformStore: .appStore,
             os: "iOS 26",
             model: "iPhone",
-            platformStore: .appStore,
             token: .empty,
             locale: .empty,
             version: .empty,

@@ -96,9 +96,9 @@ public struct DeviceService: DeviceServiceable {
         return Device(
             id: deviceId,
             platform: .ios,
+            platformStore: platformStore,
             os: UIDevice.current.osName,
             model: UIDevice.current.modelName,
-            platformStore: platformStore,
             token: deviceToken,
             locale: locale,
             version: Bundle.main.releaseVersionNumber,

@@ -22,6 +22,10 @@ public enum GemAPI: TargetType {
     case getSubscriptions(deviceId: String)
     case addSubscriptions(deviceId: String, subscriptions: [Subscription])
     case deleteSubscriptions(deviceId: String, subscriptions: [Subscription])
+
+    case getSubscriptionsV2(deviceId: String)
+    case addSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription])
+    case deleteSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription])
     
     case getPriceAlerts(deviceId: String, assetId: String?)
     case addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
@@ -46,11 +50,11 @@ public enum GemAPI: TargetType {
 
     case getAuthNonce(deviceId: String)
 
-    case getRewards(address: String)
+    case getRewards(walletId: String)
     case createReferral(AuthenticatedRequest<ReferralCode>)
     case useReferralCode(AuthenticatedRequest<ReferralCode>)
     case getRedemptionOption(code: String)
-    case redeem(address: String, request: AuthenticatedRequest<RedemptionRequest>)
+    case redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>)
 
     public var baseUrl: URL {
         Constants.apiURL
@@ -65,6 +69,7 @@ public enum GemAPI: TargetType {
             .getNameRecord,
             .getCharts,
             .getSubscriptions,
+            .getSubscriptionsV2,
             .getDevice,
             .getTransactions,
             .getAsset,
@@ -79,6 +84,7 @@ public enum GemAPI: TargetType {
             .getRedemptionOption:
             return .GET
         case .addSubscriptions,
+            .addSubscriptionsV2,
             .addDevice,
             .getAssets,
             .addPriceAlerts,
@@ -94,6 +100,7 @@ public enum GemAPI: TargetType {
         case .updateDevice:
             return .PUT
         case .deleteSubscriptions,
+            .deleteSubscriptionsV2,
             .deleteDevice,
             .deletePriceAlerts:
             return .DELETE
@@ -121,6 +128,10 @@ public enum GemAPI: TargetType {
         case .addSubscriptions(let deviceId, _),
                 .deleteSubscriptions(let deviceId, _):
             return "/v1/subscriptions/\(deviceId)"
+        case .getSubscriptionsV2(let deviceId),
+                .addSubscriptionsV2(let deviceId, _),
+                .deleteSubscriptionsV2(let deviceId, _):
+            return "/v2/subscriptions/\(deviceId)"
         case .addDevice:
             return "/v1/devices"
         case .getDevice(let deviceId),
@@ -158,16 +169,16 @@ public enum GemAPI: TargetType {
             return "/v1/support/add_device"
         case .getAuthNonce(let deviceId):
             return "/v1/devices/\(deviceId)/auth/nonce"
-        case .getRewards(let address):
-            return "/v1/rewards/\(address)"
+        case .getRewards(let walletId):
+            return "/v1/rewards/\(walletId)"
         case .createReferral:
             return "/v1/rewards/referrals/create"
         case .useReferralCode:
             return "/v1/rewards/referrals/use"
         case .getRedemptionOption(let code):
             return "/v1/rewards/redemptions/\(code)"
-        case .redeem(let address, _):
-            return "/v1/rewards/\(address)/redeem"
+        case .redeem(let walletId, _):
+            return "/v1/rewards/\(walletId)/redeem"
         }
     }
     
@@ -215,6 +226,11 @@ public enum GemAPI: TargetType {
             return .encodable(device)
         case .addSubscriptions(_, let subscriptions),
             .deleteSubscriptions(_, let subscriptions):
+            return .encodable(subscriptions)
+        case .getSubscriptionsV2:
+            return .plain
+        case .addSubscriptionsV2(_, let subscriptions),
+            .deleteSubscriptionsV2(_, let subscriptions):
             return .encodable(subscriptions)
         case .addPriceAlerts(_, let priceAlerts),
             .deletePriceAlerts(_, let priceAlerts):

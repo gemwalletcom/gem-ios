@@ -21,30 +21,50 @@ public extension ReferralAllowance {
     }
 }
 
+public extension ReferralCodeActivation {
+    static func mock(
+        swapCompleted: Bool = false,
+        swapAmount: Int32 = 0
+    ) -> ReferralCodeActivation {
+        ReferralCodeActivation(swapCompleted: swapCompleted, swapAmount: swapAmount)
+    }
+}
+
+public extension ReferralActivation {
+    static func mock(
+        verifyCompleted: Bool = false,
+        verifyAfter: Date? = nil,
+        swapCompleted: Bool = false,
+        swapAmount: Int32 = 0
+    ) -> ReferralActivation {
+        ReferralActivation(verifyCompleted: verifyCompleted, verifyAfter: verifyAfter, swapCompleted: swapCompleted, swapAmount: swapAmount)
+    }
+}
+
 public extension Rewards {
     static func mock(
         code: String? = "test123",
         referralCount: Int32 = 5,
         points: Int32 = 0,
         usedReferralCode: String? = nil,
-        isEnabled: Bool = true,
-        verified: Bool = true,
+        status: RewardStatus = .verified,
         redemptionOptions: [RewardRedemptionOption] = [],
         disableReason: String? = nil,
         referralAllowance: ReferralAllowance = .mock(),
-        pendingVerificationAfter: Date? = nil
+        referralCodeActivation: ReferralCodeActivation? = nil,
+        referralActivation: ReferralActivation? = nil
     ) -> Rewards {
         Rewards(
             code: code,
             referralCount: referralCount,
             points: points,
             usedReferralCode: usedReferralCode,
-            isEnabled: isEnabled,
-            verified: verified,
+            status: status,
             redemptionOptions: redemptionOptions,
             disableReason: disableReason,
             referralAllowance: referralAllowance,
-            pendingVerificationAfter: pendingVerificationAfter
+            referralCodeActivation: referralCodeActivation,
+            referralActivation: referralActivation
         )
     }
 }
