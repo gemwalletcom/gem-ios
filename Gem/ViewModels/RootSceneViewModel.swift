@@ -60,6 +60,9 @@ final class RootSceneViewModel {
         get { walletConnectorPresenter.isPresentingConnectionBar }
         set { walletConnectorPresenter.isPresentingConnectionBar = newValue }
     }
+    
+    var isPresentingCreateWalletSheet = false
+    var isPresentingImportWalletSheet = false
 
     var toastOffset: CGFloat {
         UIDevice.current.userInterfaceIdiom == .phone ? .space32 + .space16 : .zero

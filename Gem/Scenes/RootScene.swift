@@ -25,13 +25,9 @@ struct RootScene: View {
                 )
                 .alertSheet($model.updateVersionAlertMessage)
             } else {
-                OnboardingNavigationView(
-                    model: .init(
-                        walletService: model.walletService,
-                        walletsService: model.walletsService,
-                        avatarService: model.avatarService,
-                        nameService: model.nameService
-                    )
+                OnboardingScene(
+                    isPresentingCreateWalletSheet: $model.isPresentingCreateWalletSheet,
+                    isPresentingImportWalletSheet: $model.isPresentingImportWalletSheet
                 )
             }
         }
@@ -44,6 +40,25 @@ struct RootScene: View {
             WalletConnectorNavigationStack(
                 type: type,
                 presenter: model.walletConnectorPresenter
+            )
+        }
+        .sheet(isPresented: $model.isPresentingCreateWalletSheet) {
+            CreateWalletNavigationStack(
+                model: CreateWalletModel(
+                    walletService: model.walletService,
+                    avatarService: model.avatarService,
+                    isPresentingWallets: $model.isPresentingCreateWalletSheet
+                )
+            )
+        }
+        .sheet(isPresented: $model.isPresentingImportWalletSheet) {
+            ImportWalletNavigationStack(
+                model: ImportWalletViewModel(
+                    walletService: model.walletService,
+                    avatarService: model.avatarService,
+                    nameService: model.nameService,
+                    isPresentingWallets: $model.isPresentingImportWalletSheet
+                )
             )
         }
         .alert(
