@@ -5,10 +5,10 @@ import Gemstone
 import Primitives
 
 extension Gemstone.TransactionMetadata {
-    public func map() -> Primitives.TransactionMetadata {
+    public func mapToAnyCodableValue() -> AnyCodableValue? {
         switch self {
         case .perpetual(let perpetualMetadata):
-            return .perpetual(Primitives.TransactionPerpetualMetadata(
+            .encode(TransactionPerpetualMetadata(
                 pnl: perpetualMetadata.pnl,
                 price: perpetualMetadata.price,
                 direction: perpetualMetadata.direction.map(),

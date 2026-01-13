@@ -13,7 +13,7 @@ public extension Transaction {
         to: String = "",
         value: String = "",
         memo: String? = nil,
-        metadata: TransactionMetadata? = nil
+        metadata: AnyCodableValue? = nil
     ) -> Transaction {
         Transaction(
             id: TransactionId(chain: .ethereum, hash: "1"),

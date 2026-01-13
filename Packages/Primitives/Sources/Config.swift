@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Release: Codable, Sendable {
+public struct Release: Codable, Equatable, Sendable {
 	public let version: String
 	public let store: PlatformStore
 	public let upgradeRequired: Bool
@@ -16,7 +16,7 @@ public struct Release: Codable, Sendable {
 	}
 }
 
-public struct ConfigVersions: Codable, Sendable {
+public struct ConfigVersions: Codable, Equatable, Sendable {
 	public let fiatOnRampAssets: Int32
 	public let fiatOffRampAssets: Int32
 	public let swapAssets: Int32
@@ -28,7 +28,7 @@ public struct ConfigVersions: Codable, Sendable {
 	}
 }
 
-public struct SwapConfig: Codable, Sendable {
+public struct SwapConfig: Codable, Equatable, Sendable {
 	public let enabledProviders: [String]
 
 	public init(enabledProviders: [String]) {
@@ -36,7 +36,7 @@ public struct SwapConfig: Codable, Sendable {
 	}
 }
 
-public struct ConfigResponse: Codable, Sendable {
+public struct ConfigResponse: Codable, Equatable, Sendable {
 	public let releases: [Release]
 	public let versions: ConfigVersions
 	public let swap: SwapConfig
