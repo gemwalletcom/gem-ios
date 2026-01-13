@@ -16,20 +16,20 @@ public final class ImportWalletViewModel {
     let walletService: WalletService
     let avatarService: AvatarService
     let nameService: any NameServiceable
+    let onComplete: VoidAction
 
-    var isPresentingWallets: Binding<Bool>
     var isPresentingSelectImageWallet: Wallet?
 
     public init(
         walletService: WalletService,
         avatarService: AvatarService,
         nameService: any NameServiceable,
-        isPresentingWallets: Binding<Bool>
+        onComplete: VoidAction
     ) {
         self.walletService = walletService
         self.avatarService = avatarService
         self.nameService = nameService
-        self.isPresentingWallets = isPresentingWallets
+        self.onComplete = onComplete
     }
 
     public var isAcceptTermsCompleted: Bool {
@@ -37,7 +37,7 @@ public final class ImportWalletViewModel {
     }
 
     func dismiss() {
-        isPresentingWallets.wrappedValue = false
+        onComplete?()
     }
 }
 

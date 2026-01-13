@@ -52,7 +52,7 @@ struct WalletsNavigationStack: View {
                     model: CreateWalletModel(
                         walletService: walletService,
                         avatarService: avatarService,
-                        isPresentingWallets: $isPresentingWallets
+                        onComplete: { isPresentingWallets = false }
                     )
                 )
             }
@@ -62,7 +62,7 @@ struct WalletsNavigationStack: View {
                         walletService: walletService,
                         avatarService: avatarService,
                         nameService: nameService,
-                        isPresentingWallets: $isPresentingWallets
+                        onComplete: { isPresentingWallets = false }
                     )
                 )
             }

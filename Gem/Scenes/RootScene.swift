@@ -47,7 +47,7 @@ struct RootScene: View {
                 model: CreateWalletModel(
                     walletService: model.walletService,
                     avatarService: model.avatarService,
-                    isPresentingWallets: $model.isPresentingCreateWalletSheet
+                    onComplete: model.dismissCreateWallet
                 )
             )
         }
@@ -57,7 +57,7 @@ struct RootScene: View {
                     walletService: model.walletService,
                     avatarService: model.avatarService,
                     nameService: model.nameService,
-                    isPresentingWallets: $model.isPresentingImportWalletSheet
+                    onComplete: model.dismissImportWallet
                 )
             )
         }

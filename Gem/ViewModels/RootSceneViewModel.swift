@@ -142,6 +142,16 @@ extension RootSceneViewModel {
             isPresentingConnectorError = error.localizedDescription
         }
     }
+    
+    func dismissCreateWallet() {
+        isPresentingCreateWalletSheet = false
+        requestPushPermissions()
+    }
+
+    func dismissImportWallet() {
+        isPresentingImportWalletSheet = false
+        requestPushPermissions()
+    }
 }
 
 // MARK: - Private
@@ -200,6 +210,12 @@ extension RootSceneViewModel {
             break
         case .session:
             connectionsService.updateSessions()
+        }
+    }
+    
+    private func requestPushPermissions() {
+        Task {
+            await onstartWalletService.requestPushPermissions()
         }
     }
 }
