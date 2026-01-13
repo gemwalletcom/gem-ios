@@ -49,7 +49,17 @@ public struct AptosSigner: Signable {
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        let parts: [String] = try input.asset.getTokenId().split(separator: "::").map { String($0) }
+        let tokenId = try input.asset.getTokenId()
+        if !tokenId.contains(AssetId.subTokenSeparator) {
+            let payload = try buildFungibleAssetTransferPayload(
+                metadataAddress: tokenId,
+                recipientAddress: input.destinationAddress,
+                amount: input.value.asUInt
+            )
+            return try sign(payload: .anyData(payload), input: input, privateKey: privateKey)
+        }
+
+        let parts: [String] = tokenId.split(separator: AssetId.subTokenSeparator).map { String($0) }
         let accountAddress = try parts.getElement(safe: 0)
         let module = try parts.getElement(safe: 1)
         let name = try parts.getElement(safe: 2)
@@ -84,5 +94,19 @@ public struct AptosSigner: Signable {
         return [
             try sign(payload: .anyData(try input.metadata.getData()), input: input, privateKey: privateKey)
         ]
+    }
+
+    private func buildFungibleAssetTransferPayload(metadataAddress: String, recipientAddress: String, amount: UInt64) throws -> String {
+        let payload: [String: Any] = [
+            "function": "0x1::primary_fungible_store::transfer",
+            "type_arguments": ["0x1::object::ObjectCore"],
+            "arguments": [metadataAddress, recipientAddress, String(amount)],
+            "type": "entry_function_payload",
+        ]
+        let payloadData = try JSONSerialization.data(withJSONObject: payload, options: [])
+        guard let payloadString = String(data: payloadData, encoding: .utf8) else {
+            throw AnyError("Failed to encode Aptos fungible asset payload")
+        }
+        return payloadString
     }
 }
