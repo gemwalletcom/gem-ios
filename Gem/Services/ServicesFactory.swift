@@ -159,7 +159,10 @@ struct ServicesFactory {
             deviceService: deviceService
         )
 
-        let configService = GemAPIService()
+        let configService = ConfigService(
+            configStore: storeManager.configStore,
+            apiService: apiService
+        )
         let releaseService = AppReleaseService(configService: configService)
         let releaseAlertService = ReleaseAlertService(
             appReleaseService: releaseService,
@@ -477,7 +480,7 @@ extension ServicesFactory {
         preferences: Preferences,
         assetsService: AssetsService,
         bannerSetupService: BannerSetupService,
-        configService: any GemAPIConfigService,
+        configService: ConfigService,
         swappableChainsProvider: any SwappableChainsProvider
     ) -> OnstartAsyncService {
         let importAssetsService = ImportAssetsService(
@@ -488,6 +491,7 @@ extension ServicesFactory {
 
         return OnstartAsyncService(
             runners: [
+                ConfigUpdateRunner(configService: configService),
                 BannerSetupRunner(bannerSetupService: bannerSetupService),
                 NodeImportRunner(nodeService: nodeService),
                 AssetsUpdateRunner(

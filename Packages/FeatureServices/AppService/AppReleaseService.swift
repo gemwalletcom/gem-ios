@@ -2,23 +2,22 @@
 
 import Foundation
 import Primitives
-import GemAPI
 
 public struct AppReleaseService: Sendable {
-    private let configService: any GemAPIConfigService
-    
-    public init(configService: any GemAPIConfigService = GemAPIService()) {
+    private let configService: ConfigService
+
+    public init(configService: ConfigService) {
         self.configService = configService
     }
-    
+
     public var releaseVersion: String {
         Bundle.main.releaseVersionNumber
     }
-    
-    public func getNewestRelease() async throws -> Release? {
-        release(try await configService.getConfig())
+
+    public func getNewestRelease() throws -> Release? {
+        try configService.getConfig().flatMap { release($0) }
     }
-    
+
     public func release(_ config: ConfigResponse) -> Release? {
         guard
             let release = config.releases.first(where: { $0.store == .appStore }),

@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import AppService
+import AvatarService
 import Components
 import DeviceService
 import EventPresenterService
@@ -10,13 +11,13 @@ import Localization
 import NameService
 import Onboarding
 import Primitives
+import Store
 import SwiftUI
 import TransactionStateService
 import TransactionsService
 import WalletConnector
 import WalletService
 import WalletsService
-import AvatarService
 
 @Observable
 @MainActor
@@ -39,6 +40,8 @@ final class RootSceneViewModel {
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
 
+    var configRequest = ConfigRequest()
+    var config: ConfigResponse?
     var updateVersionAlertMessage: AlertMessage?
 
     var isPresentingToastMessage: ToastMessage? {
@@ -105,11 +108,15 @@ final class RootSceneViewModel {
 extension RootSceneViewModel {
     func setup() {
         rateService.perform()
-        Task { await checkForUpdate() }
         Task { try await deviceService.update() }
         transactionStateService.setup()
         Task { try await connectionsService.setup() }
         Task { try await deviceObserverService.startSubscriptionsObserver() }
+    }
+
+    func onChangeConfig(_ old: ConfigResponse?, _ new: ConfigResponse?) {
+        guard let new, let release = releaseAlertService.checkForUpdate(config: new) else { return }
+        updateVersionAlertMessage = makeUpdateAlert(for: release)
     }
 }
 
@@ -149,11 +156,6 @@ extension RootSceneViewModel {
         } catch {
             debugLog("RootSceneViewModel setupWallet error: \(error)")
         }
-    }
-
-    private func checkForUpdate() async {
-        guard let release = await releaseAlertService.checkForUpdate() else { return }
-        updateVersionAlertMessage = makeUpdateAlert(for: release)
     }
 
     private func makeUpdateAlert(for release: Release) -> AlertMessage {

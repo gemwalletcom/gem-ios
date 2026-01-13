@@ -66,8 +66,11 @@ public struct Migrations {
             // perpetuals
             try PerpetualRecord.create(db: db)
             try PerpetualPositionRecord.create(db: db)
-            
+
             try RecentActivityRecord.create(db: db)
+
+            // config
+            try ConfigRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)
     }
@@ -356,6 +359,10 @@ public struct Migrations {
                 INNER JOIN \(NodeRecord.databaseTableName) n ON ns.nodeId = n.id
             """)
             try? db.drop(table: "nodes_selected_v1")
+        }
+
+        migrator.registerMigration("Create \(ConfigRecord.databaseTableName)") { db in
+            try? ConfigRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)
