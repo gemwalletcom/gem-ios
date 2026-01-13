@@ -13,6 +13,10 @@ enum AptosPayload {
 public struct AptosSigner: Signable {
 
     private enum Constants {
+        static let functionKey = "function"
+        static let typeArgumentsKey = "type_arguments"
+        static let argumentsKey = "arguments"
+        static let typeKey = "type"
         static let fungibleTransferFunction = "0x1::primary_fungible_store::transfer"
         static let objectCoreType = "0x1::object::ObjectCore"
         static let entryFunctionPayload = "entry_function_payload"
@@ -104,10 +108,10 @@ public struct AptosSigner: Signable {
 
     private func buildFungibleAssetTransferPayload(metadataAddress: String, recipientAddress: String, amount: UInt64) throws -> String {
         let payload: [String: Any] = [
-            "function": Constants.fungibleTransferFunction,
-            "type_arguments": [Constants.objectCoreType],
-            "arguments": [metadataAddress, recipientAddress, String(amount)],
-            "type": Constants.entryFunctionPayload,
+            Constants.functionKey: Constants.fungibleTransferFunction,
+            Constants.typeArgumentsKey: [Constants.objectCoreType],
+            Constants.argumentsKey: [metadataAddress, recipientAddress, String(amount)],
+            Constants.typeKey: Constants.entryFunctionPayload,
         ]
         let payloadData = try JSONSerialization.data(withJSONObject: payload, options: [])
         guard let payloadString = String(data: payloadData, encoding: .utf8) else {
