@@ -5,11 +5,11 @@ import Foundation
 extension Wallet: Identifiable { }
 
 public extension Wallet {
-    
+
     var canSign: Bool {
         !isViewOnly
     }
-    
+
     var isViewOnly: Bool {
         return type == .view
     }
@@ -20,6 +20,14 @@ public extension Wallet {
 
     var walletId: WalletId {
         WalletId(id: id)
+    }
+
+    var walletIdType: String? {
+        let value: String? = switch type {
+        case .multicoin: accounts.first?.address
+        case .single, .privateKey, .view: accounts.first.map { "\($0.chain.rawValue)_\($0.address)" }
+        }
+        return value.map { "\(type.rawValue)_\($0)" }
     }
 
     var hasTokenSupport: Bool {

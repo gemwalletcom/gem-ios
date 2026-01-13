@@ -48,6 +48,10 @@ public protocol GemAPISubscriptionService: Sendable {
     func getSubscriptions(deviceId: String) async throws -> [Subscription]
     func addSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
     func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
+
+    func getSubscriptionsV2(deviceId: String) async throws -> [WalletSubscription]
+    func addSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws
+    func deleteSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws
 }
 
 public protocol GemAPITransactionService: Sendable {
@@ -169,7 +173,7 @@ extension GemAPIService: GemAPISubscriptionService {
             .request(.getSubscriptions(deviceId: deviceId))
             .mapResponse(as: [Subscription].self)
     }
-    
+
     public func addSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws {
         try await provider
             .request(.addSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
@@ -179,6 +183,24 @@ extension GemAPIService: GemAPISubscriptionService {
     public func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws {
         try await provider
             .request(.deleteSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
+            .mapResponse(as: Int.self)
+    }
+
+    public func getSubscriptionsV2(deviceId: String) async throws -> [WalletSubscription] {
+        try await provider
+            .request(.getSubscriptionsV2(deviceId: deviceId))
+            .mapResponse(as: [WalletSubscription].self)
+    }
+
+    public func addSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws {
+        try await provider
+            .request(.addSubscriptionsV2(deviceId: deviceId, subscriptions: subscriptions))
+            .mapResponse(as: Int.self)
+    }
+
+    public func deleteSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws {
+        try await provider
+            .request(.deleteSubscriptionsV2(deviceId: deviceId, subscriptions: subscriptions))
             .mapResponse(as: Int.self)
     }
 }
