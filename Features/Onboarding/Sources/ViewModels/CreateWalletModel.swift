@@ -15,18 +15,18 @@ public final class CreateWalletModel {
     let walletService: WalletService
     let avatarService: AvatarService
     let hasExistingWallets: Bool
+    let onComplete: VoidAction
 
-    var isPresentingWallets: Binding<Bool>
     var isPresentingSelectImageWallet: Wallet?
 
     public init(
         walletService: WalletService,
         avatarService: AvatarService,
-        isPresentingWallets: Binding<Bool>
+        onComplete: VoidAction
     ) {
         self.walletService = walletService
         self.avatarService = avatarService
-        self.isPresentingWallets = isPresentingWallets
+        self.onComplete = onComplete
         self.hasExistingWallets = walletService.wallets.isNotEmpty
     }
 
@@ -35,7 +35,7 @@ public final class CreateWalletModel {
     }
 
     func dismiss() {
-        isPresentingWallets.wrappedValue = false
+        onComplete?()
     }
 }
 

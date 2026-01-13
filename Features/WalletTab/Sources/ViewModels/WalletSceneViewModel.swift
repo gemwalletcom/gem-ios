@@ -218,7 +218,7 @@ extension WalletSceneViewModel {
     }
 
     public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
-        if let newWallet, wallet != newWallet {
+        if let newWallet, wallet.walletId != newWallet.walletId {
             refresh(for: newWallet)
         }
     }

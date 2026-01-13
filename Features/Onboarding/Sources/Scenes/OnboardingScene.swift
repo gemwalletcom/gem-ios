@@ -3,12 +3,18 @@
 import SwiftUI
 import Style
 import Components
+import Localization
 
 public struct OnboardingScene: View {
-    private let model: OnboardingViewModel
+    @Binding private var isPresentingCreateWalletSheet: Bool
+    @Binding private var isPresentingImportWalletSheet: Bool
 
-    public init(model: OnboardingViewModel) {
-        self.model = model
+    public init(
+        isPresentingCreateWalletSheet: Binding<Bool>,
+        isPresentingImportWalletSheet: Binding<Bool>
+    ) {
+        _isPresentingCreateWalletSheet = isPresentingCreateWalletSheet
+        _isPresentingImportWalletSheet = isPresentingImportWalletSheet
     }
 
     public var body: some View {
@@ -16,12 +22,12 @@ public struct OnboardingScene: View {
             Spacer()
             VStack(alignment: .center, spacing: 24) {
                 StateButton(
-                    text: model.createWalletTitle,
-                    action: model.onCreateWallet
+                    text: Localized.Wallet.createNewWallet,
+                    action: { isPresentingCreateWalletSheet = true }
                 )
                 StateButton(
-                    text: model.importWalletTitle,
-                    action: model.onImportWallet
+                    text: Localized.Wallet.importExistingWallet,
+                    action: { isPresentingImportWalletSheet = true }
                 )
             }
             .frame(maxWidth: .scene.button.maxWidth)
@@ -32,6 +38,6 @@ public struct OnboardingScene: View {
         )
         .frame(maxWidth: .infinity)
         .background(Colors.white)
-        .navigationTitle(model.title)
+        .navigationTitle(Localized.Welcome.title)
     }
 }
