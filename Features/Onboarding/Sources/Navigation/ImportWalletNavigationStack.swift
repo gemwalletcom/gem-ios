@@ -93,10 +93,10 @@ extension ImportWalletNavigationStack {
         }
     }
 
-    func onSetupWalletComplete(wallet: Wallet) {
+    func onSetupWalletComplete(_ wallet: Wallet) {
         Task {
             do {
-                try await model.setupWalletComplete(wallet: wallet)
+                try await model.setupWalletComplete()
             } catch {
                 debugLog("Failed to setup wallet: \(error)")
             }

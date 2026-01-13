@@ -25,14 +25,14 @@ final class RootSceneViewModel {
     private let onstartWalletService: OnstartWalletService
     private let transactionStateService: TransactionStateService
     private let connectionsService: ConnectionsService
-    private let deviceObserverService: DeviceObserverService
+    private let observersService: ObserversService
     private let navigationHandler: NavigationHandler
-    private let walletsService: WalletsService
     private let releaseAlertService: ReleaseAlertService
     private let rateService: RateService
     private let eventPresenterService: EventPresenterService
     private let deviceService: DeviceService
 
+    let walletsService: WalletsService
     let walletService: WalletService
     let nameService: NameService
     let avatarService: AvatarService
@@ -63,6 +63,9 @@ final class RootSceneViewModel {
         get { walletConnectorPresenter.isPresentingConnectionBar }
         set { walletConnectorPresenter.isPresentingConnectionBar = newValue }
     }
+    
+    var isPresentingCreateWalletSheet = false
+    var isPresentingImportWalletSheet = false
 
     var toastOffset: CGFloat {
         UIDevice.current.userInterfaceIdiom == .phone ? .space32 + .space16 : .zero
@@ -73,7 +76,7 @@ final class RootSceneViewModel {
         onstartWalletService: OnstartWalletService,
         transactionStateService: TransactionStateService,
         connectionsService: ConnectionsService,
-        deviceObserverService: DeviceObserverService,
+        observersService: ObserversService,
         navigationHandler: NavigationHandler,
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
@@ -89,7 +92,7 @@ final class RootSceneViewModel {
         self.onstartWalletService = onstartWalletService
         self.transactionStateService = transactionStateService
         self.connectionsService = connectionsService
-        self.deviceObserverService = deviceObserverService
+        self.observersService = observersService
         self.navigationHandler = navigationHandler
         self.lockManager = lockWindowManager
         self.walletService = walletService
@@ -110,8 +113,11 @@ extension RootSceneViewModel {
         rateService.perform()
         Task { try await deviceService.update() }
         transactionStateService.setup()
-        Task { try await connectionsService.setup() }
-        Task { try await deviceObserverService.startSubscriptionsObserver() }
+        Task { await observersService.setup() }
+    }
+
+    func handleScenePhase(_ phase: ScenePhase) async {
+        await observersService.handleScenePhase(phase)
     }
 
     func onChangeConfig(_ old: ConfigResponse?, _ new: ConfigResponse?) {
@@ -143,6 +149,16 @@ extension RootSceneViewModel {
             isPresentingConnectorError = error.localizedDescription
         }
     }
+    
+    func dismissCreateWallet() {
+        isPresentingCreateWalletSheet = false
+        requestPushPermissions()
+    }
+
+    func dismissImportWallet() {
+        isPresentingImportWalletSheet = false
+        requestPushPermissions()
+    }
 }
 
 // MARK: - Private
@@ -155,6 +171,9 @@ extension RootSceneViewModel {
             try walletsService.setup(wallet: wallet)
         } catch {
             debugLog("RootSceneViewModel setupWallet error: \(error)")
+        }
+        Task {
+            await observersService.setupWallet(wallet)
         }
     }
 
@@ -193,6 +212,12 @@ extension RootSceneViewModel {
             break
         case .session:
             connectionsService.updateSessions()
+        }
+    }
+    
+    private func requestPushPermissions() {
+        Task {
+            await onstartWalletService.requestPushPermissions()
         }
     }
 }
