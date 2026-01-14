@@ -9,7 +9,7 @@ public extension Transaction {
         id: String = "1",
         type: TransactionType = .transfer,
         assetId: AssetId = .mock(),
-        metadata: TransactionMetadata? = nil
+        metadata: AnyCodableValue? = nil
     ) -> Transaction {
         Transaction(
             id: TransactionId(chain: .ethereum, hash: "1"),

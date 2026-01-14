@@ -51,7 +51,7 @@ public struct TransactionRecord: Codable, TableRecord, FetchableRecord, Persista
     public var state: String
     public var memo: String?
     public var direction: TransactionDirection
-    public var metadata: TransactionMetadata?
+    public var metadata: AnyCodableValue?
     public var createdAt: Date
     public var updatedAt: Date
 

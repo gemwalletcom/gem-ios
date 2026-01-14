@@ -85,18 +85,11 @@ struct TransferDataTypeTests {
     }
 
     @Test
-    func freezeMetadataBandwidth() {
-        let freezeData = FreezeData(freezeType: .freeze, resource: .bandwidth)
-        let type = TransferDataType.stake(.mock(), .freeze(freezeData))
+    func freezeMetadata() {
+        let bandwidth = TransferDataType.stake(.mock(), .freeze(FreezeData(freezeType: .freeze, resource: .bandwidth)))
+        let energy = TransferDataType.stake(.mock(), .freeze(FreezeData(freezeType: .freeze, resource: .energy)))
 
-        #expect(type.metadata == .generic(["resourceType": "bandwidth"]))
-    }
-
-    @Test
-    func freezeMetadataEnergy() {
-        let freezeData = FreezeData(freezeType: .freeze, resource: .energy)
-        let type = TransferDataType.stake(.mock(), .freeze(freezeData))
-
-        #expect(type.metadata == .generic(["resourceType": "energy"]))
+        #expect(bandwidth.metadata == .object(["resourceType": .string("bandwidth")]))
+        #expect(energy.metadata == .object(["resourceType": .string("energy")]))
     }
 }

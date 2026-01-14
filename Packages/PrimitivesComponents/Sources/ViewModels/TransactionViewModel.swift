@@ -28,24 +28,21 @@ public struct TransactionViewModel: Sendable {
     }
 
     public var assetImage: AssetImage {
-        switch transaction.transaction.metadata {
-        case .null, .swap, .perpetual, .generic, .none:
-            let asset = AssetIdViewModel(assetId: assetId).assetImage
-            return AssetImage(
-                type: asset.type,
-                imageURL: asset.imageURL,
-                placeholder: asset.placeholder,
-                chainPlaceholder: overlayImage
-            )
-        case .nft(let metadata):
-            let asset = AssetIdViewModel(assetId: assetId).assetImage
+        let asset = AssetIdViewModel(assetId: assetId).assetImage
+        if let nftMetadata = transaction.transaction.metadata?.decode(TransactionNFTTransferMetadata.self) {
             return AssetImage(
                 type: "",
-                imageURL: assetImageFormatter.getNFTUrl(for: metadata.assetId),
+                imageURL: assetImageFormatter.getNFTUrl(for: nftMetadata.assetId),
                 placeholder: asset.placeholder,
                 chainPlaceholder: overlayImage
             )
         }
+        return AssetImage(
+            type: asset.type,
+            imageURL: asset.imageURL,
+            placeholder: asset.placeholder,
+            chainPlaceholder: overlayImage
+        )
     }
 
     public var overlayImage: Image? {
@@ -126,12 +123,12 @@ public struct TransactionViewModel: Sendable {
             case .stakeUnfreeze:
                 return Localized.Transfer.Unfreeze.title
             case .perpetualOpenPosition:
-                if case let .perpetual(metadata) = transaction.transaction.metadata {
+                if let metadata = transaction.transaction.metadata?.decode(TransactionPerpetualMetadata.self) {
                     return Localized.Perpetual.openDirection(PerpetualDirectionViewModel(direction: metadata.direction).title)
                 }
                 return .empty
             case .perpetualClosePosition:
-                if case let .perpetual(metadata) = transaction.transaction.metadata {
+                if let metadata = transaction.transaction.metadata?.decode(TransactionPerpetualMetadata.self) {
                     return Localized.Perpetual.closeDirection(PerpetualDirectionViewModel(direction: metadata.direction).title)
                 }
                 return .empty
@@ -216,7 +213,7 @@ public struct TransactionViewModel: Sendable {
                     .perpetualModifyPosition,
                     .perpetualOpenPosition,
                     .perpetualClosePosition:
-                guard case .perpetual(let metadata) = transaction.transaction.metadata else {
+                guard let metadata = transaction.transaction.metadata?.decode(TransactionPerpetualMetadata.self) else {
                     return .none
                 }
                 let price = AmountDisplay.currency(value: metadata.price, currencyCode: Currency.usd.rawValue, showSign: false).text
@@ -246,7 +243,7 @@ public struct TransactionViewModel: Sendable {
             .stakeUnfreeze:
             return infoModel.amountDisplay(formatter: formatter).amount
         case .perpetualClosePosition:
-            guard case .perpetual(let metadata) = transaction.transaction.metadata, metadata.pnl != 0 else {
+            guard let metadata = transaction.transaction.metadata?.decode(TransactionPerpetualMetadata.self), metadata.pnl != 0 else {
                 return .none
             }
             return AmountDisplay.currency(value: metadata.pnl, currencyCode: Currency.usd.rawValue)
@@ -262,7 +259,7 @@ public struct TransactionViewModel: Sendable {
         case .tokenApproval:
             return AmountDisplay.symbol(asset: transaction.asset).amount
         case .swap:
-            guard case .swap(let metadata) = transaction.transaction.metadata, let asset = transaction.assets.first(where: { $0.id == metadata.toAsset }) else {
+            guard let metadata = transaction.transaction.metadata?.decode(TransactionSwapMetadata.self), let asset = transaction.assets.first(where: { $0.id == metadata.toAsset }) else {
                 return .none
             }
             return AmountDisplay.numeric(
@@ -295,7 +292,7 @@ public struct TransactionViewModel: Sendable {
                 .stakeUnfreeze:
             return .none
         case .swap:
-            guard case .swap(let metadata) = transaction.transaction.metadata, let asset = transaction.assets.first(where: { $0.id == metadata.fromAsset }) else {
+            guard let metadata = transaction.transaction.metadata?.decode(TransactionSwapMetadata.self), let asset = transaction.assets.first(where: { $0.id == metadata.fromAsset }) else {
                 return .none
             }
             return AmountDisplay.numeric(
@@ -361,7 +358,7 @@ public struct TransactionViewModel: Sendable {
     }
 
     private func getResourceTitle() -> String? {
-        guard let resourceType = transaction.transaction.metadata?.resourceType else { return nil }
+        guard let resourceType = transaction.transaction.metadata?.decode(TransactionResourceTypeMetadata.self)?.resourceType else { return nil }
         return ResourceViewModel(resource: resourceType).title
     }
 }
