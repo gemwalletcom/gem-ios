@@ -118,12 +118,12 @@ struct AssetsRequestTests {
     
     @Test func testSearch() throws {
         let db = DB.mockAssets()
-        let assetStore = AssetStore(db: db)
-        
+        let searchStore = SearchStore(db: db)
+
         let query = "usdt ethereum"
-        try assetStore.addAssetsSearch(query: query, assets: [.mock(asset: .mockEthereumUSDT())])
-        try assetStore.addAssetsSearch(query: "T", assets: .mock().reversed())
-        
+        try searchStore.add(type: .asset, query: query, ids: [Asset.mockEthereumUSDT().id.identifier])
+        try searchStore.add(type: .asset, query: "T", ids: [AssetBasic].mock().reversed().map { $0.asset.id.identifier })
+
         try db.dbQueue.read { db in
             let btc = try AssetsRequest.mock(filters: [.search("btc", hasPriorityAssets: false)]).fetch(db)
             let bnb = try AssetsRequest.mock(filters: [.search("bNb", hasPriorityAssets: false)]).fetch(db)

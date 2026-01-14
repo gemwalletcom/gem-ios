@@ -130,9 +130,6 @@ public final class SelectAssetViewModel {
     var popularImage: Image { Images.System.starFill }
     var popularTitle: String { Localized.Common.popular }
 
-    var pinnedImage: Image { Images.System.pin }
-    var pinnedTitle: String { Localized.Common.pinned }
-
     var assetsTitle: String { Localized.Assets.title }
 
     public var showAddToken: Bool {

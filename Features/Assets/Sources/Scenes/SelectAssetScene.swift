@@ -114,10 +114,7 @@ public struct SelectAssetScene: View {
                 Section {
                     assetsList(assets: model.sections.pinned)
                 } header: {
-                    HStack {
-                        model.pinnedImage
-                        Text(model.pinnedTitle)
-                    }
+                    PinnedSectionHeader()
                 }
                 .listRowInsets(.assetListRowInsets)
             }

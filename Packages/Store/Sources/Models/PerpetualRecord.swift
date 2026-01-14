@@ -65,6 +65,7 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
     
     static let positions = hasMany(PerpetualPositionRecord.self).forKey("positions")
     static let asset = belongsTo(AssetRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
+    static let search = hasOne(SearchRecord.self, using: ForeignKey(["perpetualId"], to: ["id"]))
 }
 
 extension PerpetualRecord: CreateTable {

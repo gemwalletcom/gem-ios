@@ -6,13 +6,13 @@ import Components
 import PrimitivesComponents
 import Formatters
 
-struct PerpetualListItem: View {
+public struct PerpetualListItem: View {
     let perpetualData: PerpetualData
     let currencyStyle: CurrencyFormatterType
     let onPin: (String, Bool) -> Void
     let onSelect: (Asset) -> Void
 
-    init(
+    public init(
         perpetualData: PerpetualData,
         currencyStyle: CurrencyFormatterType = .abbreviated,
         onPin: @escaping (String, Bool) -> Void,
@@ -24,7 +24,7 @@ struct PerpetualListItem: View {
         self.onSelect = onSelect
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationCustomLink(
             with: ListAssetItemView(
                 model: PerpetualItemViewModel(

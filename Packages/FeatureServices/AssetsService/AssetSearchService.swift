@@ -6,9 +6,14 @@ import Store
 
 public struct AssetSearchService: Sendable {
     private let assetsService: AssetsService
+    private let searchStore: SearchStore
 
-    public init(assetsService: AssetsService) {
+    public init(
+        assetsService: AssetsService,
+        searchStore: SearchStore
+    ) {
         self.assetsService = assetsService
+        self.searchStore = searchStore
     }
 
     public func searchAssets(
@@ -33,10 +38,7 @@ public struct AssetSearchService: Sendable {
         try assetsService.addAssets(assets: assets)
 
         if let priorityAssetsQuery {
-            try assetsService.assetStore.addAssetsSearch(
-                query: priorityAssetsQuery,
-                assets: assets
-            )
+            try searchStore.add(type: .asset, query: priorityAssetsQuery, ids: assets.map { $0.asset.id.identifier })
         }
 
         try assetsService.addBalancesIfMissing(

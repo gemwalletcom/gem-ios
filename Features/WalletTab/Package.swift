@@ -50,6 +50,8 @@ let package = Package(
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
                 .product(name: "ActivityService", package: "FeatureServices"),
+                .product(name: "AssetsService", package: "FeatureServices"),
+                .product(name: "PerpetualService", package: "FeatureServices"),
                 "Perpetuals",
                 "Recents"
             ],
@@ -66,6 +68,7 @@ let package = Package(
                 .product(name: "WalletServiceTestKit", package: "FeatureServices"),
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
                 .product(name: "ActivityServiceTestKit", package: "FeatureServices"),
+                .product(name: "PerpetualServiceTestKit", package: "FeatureServices"),
                 "WalletTab"
             ],
             path: "TestKit"
@@ -83,6 +86,7 @@ let package = Package(
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "TransactionStateServiceTestKit", package: "FeatureServices"),
+                .product(name: "PerpetualServiceTestKit", package: "FeatureServices"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "ActivityServiceTestKit", package: "FeatureServices"),

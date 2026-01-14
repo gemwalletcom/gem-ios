@@ -50,7 +50,7 @@ struct MigrationsTests {
             #expect(priceColumns.contains(where: { $0.name == PriceRecord.Columns.priceUsd.name }))
             
             #expect(try! db.tableExists(AssetLinkRecord.databaseTableName))
-            #expect(try! db.tableExists(AssetSearchRecord.databaseTableName))
+            #expect(try! db.tableExists(SearchRecord.databaseTableName))
             #expect(try! db.tableExists(FiatRateRecord.databaseTableName))
             #expect(try! db.tableExists(AddressRecord.databaseTableName))
         }

@@ -12,12 +12,12 @@ import AssetsService
 
 struct PriceAlertsNavigationView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.assetsService) private var assetsService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.priceService) private var priceService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.walletService) private var walletService
     @Environment(\.activityService) private var activityService
+    @Environment(\.assetSearchService) private var assetSearchService
 
     @State private var isPresentingAddAsset: Bool = false
     @State private var isPresentingToastMessage: ToastMessage?
@@ -40,7 +40,7 @@ struct PriceAlertsNavigationView: View {
                 selectAssetModel: SelectAssetViewModel(
                     wallet: walletService.currentWallet!,
                     selectType: .priceAlert,
-                    searchService: AssetSearchService(assetsService: assetsService),
+                    searchService: assetSearchService,
                     walletsService: walletsService,
                     priceAlertService: priceAlertService,
                     activityService: activityService,

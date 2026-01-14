@@ -68,20 +68,21 @@ public struct AssetsRequest: ValueObservationQueryable {
 extension AssetsRequest {
     
     private func hasPriorityAssets(_ db: Database, query: String) throws -> Bool {
-        try AssetSearchRecord
-            .filter(AssetSearchRecord.Columns.query == query)
-            .fetchCount(db) > 0
+        try SearchRecord
+            .filter(SearchRecord.Columns.query == query)
+            .filter(SearchRecord.Columns.assetId != nil)
+            .limit(1).fetchOne(db) != nil
     }
 
     static private func applyFilter(request: QueryInterfaceRequest<AssetRecord>, _ filter: AssetsRequestFilter) -> QueryInterfaceRequest<AssetRecord>  {
         switch filter {
         case .search(let query, let hasPriorityAssets):
             if hasPriorityAssets {
-                return request.joining(required: AssetRecord.priorityAssets
-                    .filter(AssetSearchRecord.Columns.query == query)
+                return request.joining(required: AssetRecord.search
+                    .filter(SearchRecord.Columns.query == query)
                 )
                 .order(
-                    TableAlias(name: AssetSearchRecord.databaseTableName)[AssetSearchRecord.Columns.priority].ascNullsLast,
+                    TableAlias(name: SearchRecord.databaseTableName)[SearchRecord.Columns.priority].ascNullsLast,
                     TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.rank].desc
                 )
             }

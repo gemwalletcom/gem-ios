@@ -45,18 +45,12 @@ struct WalletAssetsList: View {
                     )
                 )
                 .contextMenu(
-                    [
-                        .copy(
-                            title: Localized.Wallet.copyAddress,
-                            value: asset.account.address,
-                            onCopy: { onCopyAddress?(CopyTypeViewModel(type: .address(asset.asset, address: $0), copyValue: $0).message) }
-                        ),
-                        .pin(
-                            isPinned: asset.metadata.isPinned,
-                            onPin: { onPinAsset?(asset.asset, !asset.metadata.isPinned) }
-                        ),
-                        .hide({ onHideAsset?(asset.asset.id) })
-                    ]
+                    AssetContextMenu.items(
+                        for: asset,
+                        onCopy: { onCopyAddress?(CopyTypeViewModel(type: .address(asset.asset, address: $0), copyValue: $0).message) },
+                        onPin: { onPinAsset?(asset.asset, !asset.metadata.isPinned) },
+                        onHide: { onHideAsset?(asset.asset.id) }
+                    )
                 )
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {

@@ -11,9 +11,9 @@ import Style
 
 struct SwapNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
-    @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.activityService) private var activityService
+    @Environment(\.assetSearchService) private var assetSearchService
 
     @State private var model: SwapSceneViewModel
 
@@ -32,7 +32,7 @@ struct SwapNavigationView: View {
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             selectType: .swap(type),
-                            searchService: AssetSearchService(assetsService: assetsService),
+                            searchService: assetSearchService,
                             walletsService: model.walletsService,
                             priceAlertService: priceAlertService,
                             activityService: activityService,
