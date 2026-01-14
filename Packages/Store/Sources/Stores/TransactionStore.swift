@@ -105,7 +105,7 @@ public struct TransactionStore: Sendable {
         try updateValues(id: transactionId, values: [TransactionRecord.Columns.createdAt.set(to: date)])
     }
 
-    public func updateMetadata(transactionId: String, metadata: TransactionMetadata) throws {
+    public func updateMetadata(transactionId: String, metadata: AnyCodableValue) throws {
         let string = try JSONEncoder().encode(metadata).encodeString()
         try updateValues(
             id: transactionId,

@@ -6,19 +6,18 @@ import Localization
 import Components
 
 public struct TransactionSwapButtonViewModel {
-    private let transaction: TransactionExtended
+    private let metadata: TransactionSwapMetadata?
+    private let state: TransactionState
 
-    public init(transaction: TransactionExtended) {
-        self.transaction = transaction
+    public init(metadata: TransactionSwapMetadata?, state: TransactionState) {
+        self.metadata = metadata
+        self.state = state
     }
 }
 
-// MARK: - ItemModelProvidable
-
 extension TransactionSwapButtonViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
-        guard case .swap(_) = transaction.transaction.metadata,
-              transaction.transaction.state == .confirmed else {
+        guard metadata != nil, state == .confirmed else {
             return .empty
         }
 

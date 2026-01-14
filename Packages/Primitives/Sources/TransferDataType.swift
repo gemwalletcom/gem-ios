@@ -61,42 +61,36 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         }
     }
 
-    public var metadata: TransactionMetadata {
+    public var metadata: AnyCodableValue? {
         switch self {
         case .swap(let fromAsset, let toAsset, let data):
-            return .swap(
-                TransactionSwapMetadata(
-                    fromAsset: fromAsset.id,
-                    fromValue: data.quote.fromValue,
-                    toAsset: toAsset.id,
-                    toValue: data.quote.toValue,
-                    provider: data.quote.providerData.provider.rawValue
-                )
-            )
+            return .encode(TransactionSwapMetadata(
+                fromAsset: fromAsset.id,
+                fromValue: data.quote.fromValue,
+                toAsset: toAsset.id,
+                toValue: data.quote.toValue,
+                provider: data.quote.providerData.provider.rawValue
+            ))
         case .transferNft(let asset):
-            return .nft(
-                TransactionNFTTransferMetadata(assetId: asset.id, name: asset.name)
-            )
+            return .encode(TransactionNFTTransferMetadata(assetId: asset.id, name: asset.name))
         case .perpetual(_, let type):
-            if let direction = type.data?.direction {
-                return .perpetual(TransactionPerpetualMetadata(pnl: 0, price: 0, direction: direction, provider: nil))
-            }
-            return .null
+            guard let direction = type.data?.direction else { return nil }
+            return .encode(TransactionPerpetualMetadata(pnl: 0, price: 0, direction: direction, provider: nil))
         case .stake(_, let type):
             switch type {
             case .freeze(let data):
-                return .generic(from: TransactionResourceTypeMetadata(resourceType: data.resource))
+                return .encode(TransactionResourceTypeMetadata(resourceType: data.resource))
             case .stake, .unstake, .redelegate, .rewards, .withdraw:
-                return .null
+                return nil
             }
         case .generic(_, _, let extra):
-            return .generic(from: TransactionWalletConnectMetadata(outputAction: extra.outputAction))
+            return .encode(TransactionWalletConnectMetadata(outputAction: extra.outputAction))
         case .transfer,
             .deposit,
             .withdrawal,
             .tokenApprove,
             .account:
-            return .null
+            return nil
         }
     }
 
