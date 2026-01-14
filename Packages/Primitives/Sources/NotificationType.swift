@@ -7,4 +7,5 @@ import Foundation
 public enum NotificationType: String, Codable, Equatable, Sendable {
 	case referralJoined
 	case rewardsEnabled
+	case rewardsCodeDisabled
 }

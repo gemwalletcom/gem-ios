@@ -9,6 +9,7 @@ extension Gemstone.GatewayError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .NetworkError(let string): string
+        case .PlatformError(msg: let msg): msg
         }
     }
 }
