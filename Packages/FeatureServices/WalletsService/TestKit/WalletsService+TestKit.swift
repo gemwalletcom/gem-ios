@@ -12,6 +12,7 @@ import PriceService
 import PriceServiceTestKit
 import DeviceService
 import DeviceServiceTestKit
+import PreferencesTestKit
 import WalletSessionService
 import WalletSessionServiceTestKit
 

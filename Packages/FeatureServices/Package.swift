@@ -347,6 +347,7 @@ let package = Package(
             dependencies: [
                 "DeviceServiceTestKit",
                 .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "PriceServiceTestKit",
                 "BalanceServiceTestKit",
                 "WalletSessionService",
