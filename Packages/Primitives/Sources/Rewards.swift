@@ -35,7 +35,7 @@ public struct RewardRedemptionOption: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public enum RedemptionStatus: String, Codable, Equatable, Hashable, Sendable {
+public enum RedemptionStatus: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case pending
 	case completed
 	case failed
@@ -65,6 +65,20 @@ public struct RedemptionResult: Codable, Sendable {
 	}
 }
 
+public struct ReferralActivation: Codable, Equatable, Hashable, Sendable {
+	public let verifyCompleted: Bool
+	public let verifyAfter: Date?
+	public let swapCompleted: Bool
+	public let swapAmount: Int32
+
+	public init(verifyCompleted: Bool, verifyAfter: Date?, swapCompleted: Bool, swapAmount: Int32) {
+		self.verifyCompleted = verifyCompleted
+		self.verifyAfter = verifyAfter
+		self.swapCompleted = swapCompleted
+		self.swapAmount = swapAmount
+	}
+}
+
 public struct ReferralQuota: Codable, Equatable, Hashable, Sendable {
 	public let limit: Int32
 	public let available: Int32
@@ -90,6 +104,16 @@ public struct ReferralCode: Codable, Sendable {
 
 	public init(code: String) {
 		self.code = code
+	}
+}
+
+public struct ReferralCodeActivation: Codable, Equatable, Hashable, Sendable {
+	public let swapCompleted: Bool
+	public let swapAmount: Int32
+
+	public init(swapCompleted: Bool, swapAmount: Int32) {
+		self.swapCompleted = swapCompleted
+		self.swapAmount = swapAmount
 	}
 }
 
@@ -138,28 +162,36 @@ public struct RewardEvent: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public enum RewardStatus: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
+	case unverified
+	case pending
+	case verified
+	case trusted
+	case disabled
+}
+
 public struct Rewards: Codable, Equatable, Hashable, Sendable {
 	public let code: String?
 	public let referralCount: Int32
 	public let points: Int32
 	public let usedReferralCode: String?
-	public let isEnabled: Bool
-	public let verified: Bool
+	public let status: RewardStatus
 	public let redemptionOptions: [RewardRedemptionOption]
 	public let disableReason: String?
 	public let referralAllowance: ReferralAllowance
-	public let pendingVerificationAfter: Date?
+	public let referralCodeActivation: ReferralCodeActivation?
+	public let referralActivation: ReferralActivation?
 
-	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?, isEnabled: Bool, verified: Bool, redemptionOptions: [RewardRedemptionOption], disableReason: String?, referralAllowance: ReferralAllowance, pendingVerificationAfter: Date?) {
+	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?, status: RewardStatus, redemptionOptions: [RewardRedemptionOption], disableReason: String?, referralAllowance: ReferralAllowance, referralCodeActivation: ReferralCodeActivation?, referralActivation: ReferralActivation?) {
 		self.code = code
 		self.referralCount = referralCount
 		self.points = points
 		self.usedReferralCode = usedReferralCode
-		self.isEnabled = isEnabled
-		self.verified = verified
+		self.status = status
 		self.redemptionOptions = redemptionOptions
 		self.disableReason = disableReason
 		self.referralAllowance = referralAllowance
-		self.pendingVerificationAfter = pendingVerificationAfter
+		self.referralCodeActivation = referralCodeActivation
+		self.referralActivation = referralActivation
 	}
 }

@@ -27,8 +27,7 @@ public struct RewardsService: RewardsServiceable, Sendable {
     }
 
     public func getRewards(wallet: Wallet) async throws -> Rewards {
-        let account = try wallet.account(for: .ethereum)
-        return try await apiService.getRewards(address: account.address)
+        try await apiService.getRewards(walletId: try wallet.walletIdType())
     }
 
     public func useReferralCode(wallet: Wallet, referralCode: String) async throws {
@@ -52,9 +51,8 @@ public struct RewardsService: RewardsServiceable, Sendable {
     }
 
     public func redeem(wallet: Wallet, redemptionId: String) async throws -> RedemptionResult {
-        let account = try wallet.account(for: .ethereum)
         let auth = try await authService.getAuthPayload(wallet: wallet)
         let request = AuthenticatedRequest(auth: auth, data: RedemptionRequest(id: redemptionId))
-        return try await apiService.redeem(address: account.address, request: request)
+        return try await apiService.redeem(walletId: try wallet.walletIdType(), request: request)
     }
 }

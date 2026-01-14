@@ -15,3 +15,25 @@ public struct Subscription: Codable, Equatable, Hashable, Sendable {
 		self.address = address
 	}
 }
+
+public struct WalletSubscription: Codable, Equatable, Hashable, Sendable {
+	public let wallet_id: String
+	public let source: WalletSource
+	public let subscriptions: [ChainAddress]
+
+	public init(wallet_id: String, source: WalletSource, subscriptions: [ChainAddress]) {
+		self.wallet_id = wallet_id
+		self.source = source
+		self.subscriptions = subscriptions
+	}
+}
+
+public struct WalletSubscriptionChains: Codable, Equatable, Hashable, Sendable {
+	public let wallet_id: String
+	public let chains: [Chain]
+
+	public init(wallet_id: String, chains: [Chain]) {
+		self.wallet_id = wallet_id
+		self.chains = chains
+	}
+}

@@ -5,11 +5,11 @@ import Foundation
 extension Wallet: Identifiable { }
 
 public extension Wallet {
-    
+
     var canSign: Bool {
         !isViewOnly
     }
-    
+
     var isViewOnly: Bool {
         return type == .view
     }
@@ -20,6 +20,17 @@ public extension Wallet {
 
     var walletId: WalletId {
         WalletId(id: id)
+    }
+    
+    func walletIdType() throws -> String  {
+        let value: String? = switch type {
+        case .multicoin: accounts.filter { $0.chain == .ethereum } .first?.address
+        case .single, .privateKey, .view: accounts.first.map { "\($0.chain.rawValue)_\($0.address)" }
+        }
+        guard let value else {
+            throw AnyError("unknown wallet id type")
+        }
+        return "\(type.rawValue)_\(value)"
     }
 
     var hasTokenSupport: Bool {

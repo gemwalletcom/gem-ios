@@ -41,6 +41,7 @@ let package = Package(
                 "QRScanner",
                 "Keystore",
                 .product(name: "WalletService", package: "FeatureServices"),
+                .product(name: "WalletsService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "AvatarService", package: "FeatureServices"),
                 "Formatters",

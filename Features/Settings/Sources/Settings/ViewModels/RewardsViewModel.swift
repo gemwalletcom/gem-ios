@@ -114,7 +114,7 @@ public final class RewardsViewModel: Sendable {
     }
 
     var pendingVerificationAfter: Date? {
-        rewards?.pendingVerificationAfter
+        rewards?.referralActivation?.verifyAfter
     }
 
     var hasPendingReferral: Bool {
