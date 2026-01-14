@@ -8,24 +8,19 @@ import Components
 import class Gemstone.SwapProviderConfig
 
 public struct TransactionProviderViewModel: Sendable {
-    private let transaction: Transaction
+    private let metadata: TransactionSwapMetadata?
 
-    public init(transaction: Transaction) {
-        self.transaction = transaction
+    public init(metadata: TransactionSwapMetadata?) {
+        self.metadata = metadata
     }
 }
 
-// MARK: - ItemModelProvidable
-
 extension TransactionProviderViewModel: ItemModelProvidable {
     public var itemModel: TransactionItemModel {
-        guard
-            let metadata = transaction.metadata, case let .swap(metadata) = metadata,
-            let providerId = metadata.provider
-        else {
+        guard let providerId = metadata?.provider else {
             return .empty
         }
-        
+
         return .listItem(
             .text(
                 title: Localized.Common.provider,

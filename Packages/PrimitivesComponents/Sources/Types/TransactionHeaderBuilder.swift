@@ -36,7 +36,7 @@ public struct TransactionHeaderTypeBuilder {
                     return .symbol
                 }
             case .transferNFT:
-                guard case let .nft(metadata) = transaction.metadata else {
+                guard let metadata = transaction.metadata?.decode(TransactionNFTTransferMetadata.self) else {
                     return .amount(showFiat: false)
                 }
                 return .nft(name: metadata.name, id: metadata.assetId)
@@ -81,7 +81,7 @@ public struct TransactionHeaderTypeBuilder {
                     metadata: TransactionExtendedMetadata(
                         assets: [fromAsset, toAsset],
                         assetPrices: assetPrices,
-                        transactionMetadata: .swap(TransactionSwapMetadata(
+                        metadata: .encode(TransactionSwapMetadata(
                             fromAsset: fromAsset.id,
                             fromValue: data.quote.fromValue,
                             toAsset: toAsset.id,
