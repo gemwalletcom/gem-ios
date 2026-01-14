@@ -25,6 +25,7 @@ public extension SwapProvider {
         case .hyperliquid: Images.SwapProviders.hyperliquid
         case .nearIntents: Images.Chains.near
         case .orca: Images.SwapProviders.orca
+        case .panora: Images.SwapProviders.panora
         }
     }
 }

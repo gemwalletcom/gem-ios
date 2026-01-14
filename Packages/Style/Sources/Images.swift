@@ -81,6 +81,7 @@ public enum Images {
         public static let relay = Image(.relay)
         public static let aerodrome = Image(.aerodrome)
         public static let hyperliquid = Image(.hypercore)
+        public static let panora = Image(.panora)
     }
 
     public enum Fiat {
