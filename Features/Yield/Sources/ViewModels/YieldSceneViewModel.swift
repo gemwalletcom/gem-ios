@@ -166,13 +166,11 @@ public final class YieldSceneViewModel {
     public func fetch() async {
         state = .loading
         do {
-            print("[YieldScene] Fetching position for wallet: \(walletAddress)")
             let position = try await yieldService.positions(
                 provider: .yo,
                 asset: input.asset.id,
                 walletAddress: walletAddress
             )
-            print("[YieldScene] Position vault balance: \(position.vaultBalanceValue ?? "nil")")
 
             let positionViewModel = YieldPositionViewModel(
                 position: position,
@@ -184,7 +182,6 @@ public final class YieldSceneViewModel {
 
             state = .loaded([opportunity], positionViewModel)
         } catch {
-            print("[YieldScene] Error fetching yields: \(error)")
             state = .error(error)
         }
     }

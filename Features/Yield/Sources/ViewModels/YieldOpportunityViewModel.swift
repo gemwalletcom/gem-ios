@@ -56,13 +56,6 @@ public final class YieldOpportunityViewModel: Identifiable, Sendable {
 }
 
 extension GemYieldProvider {
-    var name: String {
-        switch self {
-        case .yo:
-            return "yo"
-        }
-    }
-
     public var image: Image {
         switch self {
         case .yo:
