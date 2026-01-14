@@ -2,26 +2,42 @@
 
 import Foundation
 import Primitives
-import Store
+import Preferences
 import GemAPI
 
-public struct ConfigService: Sendable {
-    private let configStore: ConfigStore
+public actor ConfigService {
+    private let configPreferences: ConfigPreferences
     private let apiService: any GemAPIConfigService
+    private var updateTask: Task<ConfigResponse, Error>?
 
     public init(
-        configStore: ConfigStore,
+        configPreferences: ConfigPreferences = .standard,
         apiService: any GemAPIConfigService = GemAPIService()
     ) {
-        self.configStore = configStore
+        self.configPreferences = configPreferences
         self.apiService = apiService
     }
 
-    public func getConfig() throws -> ConfigResponse? {
-        try configStore.get()
+    public func updateConfig() async throws {
+        if let task = updateTask {
+            _ = try await task.value
+            return
+        }
+
+        updateTask = Task {
+            let config = try await apiService.getConfig()
+            configPreferences.config = config
+            return config
+        }
+
+        defer { updateTask = nil }
+        _ = try await updateTask?.value
     }
 
-    public func updateConfig() async throws {
-        try configStore.update(try await apiService.getConfig())
+    public func getConfig() async -> ConfigResponse? {
+        if let updateTask {
+            return try? await updateTask.value
+        }
+        return configPreferences.config
     }
 }

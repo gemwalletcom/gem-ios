@@ -33,7 +33,7 @@ public struct AssetsUpdateRunner: AsyncRunnable {
         try assetsService.setSwappableAssets(for: chains)
 
         do {
-            guard let config = try configService.getConfig() else {
+            guard let config = await configService.getConfig() else {
                 throw AnyError("Config not found")
             }
             async let fiat: () = updateFiatAssets(config: config)

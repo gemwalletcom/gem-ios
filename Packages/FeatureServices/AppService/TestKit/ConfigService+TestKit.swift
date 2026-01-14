@@ -2,8 +2,8 @@
 
 import Foundation
 import AppService
-import Store
-import StoreTestKit
+import Preferences
+import PreferencesTestKit
 import GemAPI
 import GemAPITestKit
 import Primitives
@@ -11,11 +11,11 @@ import PrimitivesTestKit
 
 public extension ConfigService {
     static func mock(
-        configStore: ConfigStore = .mock(),
+        configPreferences: ConfigPreferences = .mock(),
         apiService: any GemAPIConfigService = GemAPIConfigServiceMock(config: .mock())
     ) -> ConfigService {
         ConfigService(
-            configStore: configStore,
+            configPreferences: configPreferences,
             apiService: apiService
         )
     }

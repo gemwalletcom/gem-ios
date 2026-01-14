@@ -11,7 +11,6 @@ import Localization
 import NameService
 import Onboarding
 import Primitives
-import Store
 import SwiftUI
 import TransactionStateService
 import TransactionsService
@@ -40,8 +39,6 @@ final class RootSceneViewModel {
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
 
-    var configRequest = ConfigRequest()
-    var config: ConfigResponse?
     var updateVersionAlertMessage: AlertMessage?
 
     var isPresentingToastMessage: ToastMessage? {
@@ -111,6 +108,7 @@ final class RootSceneViewModel {
 extension RootSceneViewModel {
     func setup() {
         rateService.perform()
+        Task { await checkForUpdate() }
         Task { try await deviceService.update() }
         transactionStateService.setup()
         Task { await observersService.setup() }
@@ -118,11 +116,6 @@ extension RootSceneViewModel {
 
     func handleScenePhase(_ phase: ScenePhase) async {
         await observersService.handleScenePhase(phase)
-    }
-
-    func onChangeConfig(_ old: ConfigResponse?, _ new: ConfigResponse?) {
-        guard let new, let release = releaseAlertService.checkForUpdate(config: new) else { return }
-        updateVersionAlertMessage = makeUpdateAlert(for: release)
     }
 }
 
@@ -175,6 +168,11 @@ extension RootSceneViewModel {
         Task {
             await observersService.setupWallet(wallet)
         }
+    }
+    
+    private func checkForUpdate() async {
+        guard let release = await releaseAlertService.checkForUpdate() else { return }
+        updateVersionAlertMessage = makeUpdateAlert(for: release)
     }
 
     private func makeUpdateAlert(for release: Release) -> AlertMessage {

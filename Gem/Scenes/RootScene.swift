@@ -77,8 +77,6 @@ struct RootScene: View {
         )
         .taskOnce(model.setup)
         .lockManaged(by: model.lockManager)
-        .observeQuery(request: $model.configRequest, value: $model.config)
-        .onChange(of: model.config, initial: true, model.onChangeConfig)
         .onChange(
             of: model.currentWallet,
             initial: true,

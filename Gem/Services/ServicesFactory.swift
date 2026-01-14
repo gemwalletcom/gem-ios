@@ -159,10 +159,7 @@ struct ServicesFactory {
             deviceService: deviceService
         )
 
-        let configService = ConfigService(
-            configStore: storeManager.configStore,
-            apiService: apiService
-        )
+        let configService = ConfigService(apiService: apiService)
         let releaseService = AppReleaseService(configService: configService)
         let releaseAlertService = ReleaseAlertService(
             appReleaseService: releaseService,

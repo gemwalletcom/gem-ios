@@ -14,8 +14,8 @@ public struct AppReleaseService: Sendable {
         Bundle.main.releaseVersionNumber
     }
 
-    public func getNewestRelease() throws -> Release? {
-        try configService.getConfig().flatMap { release($0) }
+    public func getNewestRelease() async -> Release? {
+        await configService.getConfig().flatMap { release($0) }
     }
 
     public func release(_ config: ConfigResponse) -> Release? {

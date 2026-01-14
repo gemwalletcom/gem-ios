@@ -18,8 +18,8 @@ public struct ReleaseAlertService: Sendable {
         self.preferences = preferences
     }
 
-    public func checkForUpdate(config: ConfigResponse) -> Release? {
-        guard let release = appReleaseService.release(config),
+    public func checkForUpdate() async -> Release? {
+        guard let release = await appReleaseService.getNewestRelease(),
               preferences.skippedReleaseVersion != release.version
         else { return nil }
         return release
