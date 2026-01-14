@@ -20,24 +20,17 @@ public struct TransactionHeaderViewModel: Sendable {
     }
 
     public var headerType: TransactionHeaderType {
-        let metadata: TransactionExtendedMetadata? = {
-            guard let metadata = transaction.transaction.metadata else {
-                return nil
-            }
-            return TransactionExtendedMetadata(
-                assets: transaction.assets,
-                assetPrices: transaction.prices,
-                transactionMetadata: metadata
-            )
-        }()
-        
-        return TransactionHeaderTypeBuilder.build(
+        TransactionHeaderTypeBuilder.build(
             infoModel: infoModel,
             transaction: transaction.transaction,
-            metadata: metadata
+            metadata: TransactionExtendedMetadata(
+                assets: transaction.assets,
+                assetPrices: transaction.prices,
+                metadata: transaction.transaction.metadata
+            )
         )
     }
-    
+
     public var showClearHeader: Bool {
         switch headerType {
         case .amount, .nft: true
@@ -46,12 +39,10 @@ public struct TransactionHeaderViewModel: Sendable {
     }
 
     public var headerLink: URL? {
-        switch transaction.transaction.metadata {
-        case .null, .nft, .none, .perpetual, .generic:
-            nil
-        case let .swap(metadata):
-            DeepLink.swap(metadata.fromAsset, metadata.toAsset).localUrl
+        guard let swapMetadata = transaction.transaction.metadata?.decode(TransactionSwapMetadata.self) else {
+            return nil
         }
+        return DeepLink.swap(swapMetadata.fromAsset, swapMetadata.toAsset).localUrl
     }
 }
 

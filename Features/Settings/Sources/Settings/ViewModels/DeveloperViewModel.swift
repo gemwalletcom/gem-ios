@@ -152,7 +152,7 @@ public final class DeveloperViewModel {
         let ethAddress = "0xf1158986419F6058231b0Dbd7A78Ff0674ebBc50"
         let btcAddress = "bc1q4jwwsy7txnzsr7w53j4wnrg6rrnmj86a47e2t9"
         let trxAddress = "TAw8sw21A3pGDCtHGuB55BGDqLVHQTYwAC"
-        let data: [(direction: TransactionDirection, from: String, to: String, assetId: AssetId, transactionType: TransactionType, value: BigInt, metadata: TransactionMetadata?, createdAt: Date)] = [
+        let data: [(direction: TransactionDirection, from: String, to: String, assetId: AssetId, transactionType: TransactionType, value: BigInt, metadata: AnyCodableValue?, createdAt: Date)] = [
             (.incoming, solAddress, "", AssetId(chain: .solana), .transfer, BigInt(111111111), .none, createdAt: Date().addingTimeInterval(-1)),
             (.outgoing, "", solAddress, AssetId(chain: .solana), .transfer, BigInt(3311111111), .none, createdAt: Date().addingTimeInterval(-2)),
             (
@@ -162,16 +162,13 @@ public final class DeveloperViewModel {
                 AssetId(chain: .sui),
                 .swap,
                 BigInt(76767623311111111),
-                TransactionMetadata
-                    .swap(
-                        TransactionSwapMetadata(
-                            fromAsset: AssetId.init(chain: .sui),
-                            fromValue: BigInt(2767611111).description,
-                            toAsset: AssetId.init(chain: .solana),
-                            toValue: BigInt(812312312).description,
-                            provider: .none
-                        )
-                    ),
+                .encode(TransactionSwapMetadata(
+                    fromAsset: AssetId.init(chain: .sui),
+                    fromValue: BigInt(2767611111).description,
+                    toAsset: AssetId.init(chain: .solana),
+                    toValue: BigInt(812312312).description,
+                    provider: .none
+                )),
                 createdAt: Date().addingTimeInterval(-122223)
             ),
             (
@@ -231,16 +228,13 @@ public final class DeveloperViewModel {
                 AssetId(chain: .ethereum),
                 .swap,
                 BigInt(76767623311111111),
-                TransactionMetadata
-                    .swap(
-                        TransactionSwapMetadata(
-                            fromAsset: AssetId.init(chain: .ethereum),
-                            fromValue: BigInt(276767623311111111).description,
-                            toAsset: AssetId.init(chain: .bitcoin),
-                            toValue: BigInt(32312312).description,
-                            provider: .none
-                        )
-                    ),
+                .encode(TransactionSwapMetadata(
+                    fromAsset: AssetId.init(chain: .ethereum),
+                    fromValue: BigInt(276767623311111111).description,
+                    toAsset: AssetId.init(chain: .bitcoin),
+                    toValue: BigInt(32312312).description,
+                    provider: .none
+                )),
                 createdAt: Date().addingTimeInterval(-1344411)
             ),
             (

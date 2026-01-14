@@ -36,45 +36,16 @@ extension Transaction {
             .stakeUnfreeze:
             return [assetId]
         case .swap:
-            guard case .swap(let metadata) = metadata else {
+            guard let swapMetadata = metadata?.decode(TransactionSwapMetadata.self) else {
                 return []
             }
-            return [metadata.fromAsset, metadata.toAsset]
+            return [swapMetadata.fromAsset, swapMetadata.toAsset]
         }
     }
 
     public var swapProvider: String? {
-        guard case let .swap(metadata) = self.metadata else {
-            return nil
-        }
-        return metadata.provider
+        metadata?.decode(TransactionSwapMetadata.self)?.provider
     }
 }
 
 extension Transaction: Identifiable { }
-
-extension TransactionMetadata: Equatable {
-    public static func == (lhs: TransactionMetadata, rhs: TransactionMetadata) -> Bool {
-        switch (lhs, rhs) {
-        case (.null, .null):
-            true
-        case (.swap(let lhs), .swap(let rhs)):
-            lhs.fromAsset == rhs.fromAsset &&
-            lhs.toAsset == rhs.toAsset &&
-            lhs.toValue == rhs.toValue &&
-            lhs.fromValue == rhs.fromValue
-        case (.nft(let lhs), .nft(let rhs)):
-            lhs.assetId == rhs.assetId &&
-            lhs.name == rhs.name
-        case (.perpetual(let lhs), .perpetual(let rhs)):
-            lhs.pnl == rhs.pnl &&
-            lhs.price == rhs.price &&
-            lhs.direction == rhs.direction &&
-            lhs.provider == rhs.provider
-        case (.generic(let lhs), .generic(let rhs)):
-            lhs == rhs
-        case (.null, _), (.swap, _), (.nft, _), (.perpetual, _), (.generic, _):
-            false
-        }
-    }
-}

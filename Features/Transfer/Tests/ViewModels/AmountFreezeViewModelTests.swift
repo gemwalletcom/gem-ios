@@ -89,6 +89,6 @@ struct AmountFreezeViewModelTests {
 
         let transferData = try model.makeTransferData(value: 100)
 
-        #expect(transferData.type.metadata.resourceType == .energy)
+        #expect(transferData.type.metadata?.decode(TransactionResourceTypeMetadata.self)?.resourceType == .energy)
     }
 }

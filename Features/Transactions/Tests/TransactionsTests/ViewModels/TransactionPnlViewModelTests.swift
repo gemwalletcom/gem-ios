@@ -1,5 +1,6 @@
 import Testing
 import Primitives
+import PrimitivesTestKit
 import Style
 
 @testable import Transactions
@@ -8,7 +9,7 @@ struct TransactionPnlViewModelTests {
 
     @Test
     func positivePnl() {
-        if case .pnl(_, let value, let color) = TransactionPnlViewModel(metadata: .perpetual(.mock(pnl: 100))).itemModel {
+        if case .pnl(_, let value, let color) = TransactionPnlViewModel(metadata: .mock(pnl: 100)).itemModel {
             #expect(value.contains("+"))
             #expect(color == Colors.green)
         } else {
@@ -18,7 +19,7 @@ struct TransactionPnlViewModelTests {
 
     @Test
     func negativePnl() {
-        if case .pnl(_, let value, let color) = TransactionPnlViewModel(metadata: .perpetual(.mock(pnl: -50))).itemModel {
+        if case .pnl(_, let value, let color) = TransactionPnlViewModel(metadata: .mock(pnl: -50)).itemModel {
             #expect(value.contains("-"))
             #expect(color == Colors.red)
         } else {
@@ -28,7 +29,7 @@ struct TransactionPnlViewModelTests {
 
     @Test
     func zeroPnl() {
-        if case .empty = TransactionPnlViewModel(metadata: .perpetual(.mock(pnl: 0))).itemModel {
+        if case .empty = TransactionPnlViewModel(metadata: .mock(pnl: 0)).itemModel {
         } else {
             Issue.record("Expected empty")
         }
