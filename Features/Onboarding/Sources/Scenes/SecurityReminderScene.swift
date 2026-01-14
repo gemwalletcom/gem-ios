@@ -26,6 +26,7 @@ struct SecurityReminderScene: View {
                         titleExtra: TextValue(text: item.subtitle, style: .bodySecondary),
                         imageStyle: item.image
                     )
+                    .listRowInsets(.assetListRowInsets)
                 }
             }
         }
