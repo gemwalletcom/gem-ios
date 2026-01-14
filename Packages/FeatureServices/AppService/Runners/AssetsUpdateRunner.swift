@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import GemAPI
 import Primitives
 import Preferences
 import AssetsService
@@ -9,14 +8,14 @@ import AssetsService
 public struct AssetsUpdateRunner: AsyncRunnable {
     public let id = "assets_update"
 
-    private let configService: any GemAPIConfigService
+    private let configService: ConfigService
     private let importAssetsService: ImportAssetsService
     private let assetsService: AssetsService
     private let swappableChainsProvider: any SwappableChainsProvider
     private let preferences: Preferences
 
     public init(
-        configService: any GemAPIConfigService,
+        configService: ConfigService,
         importAssetsService: ImportAssetsService,
         assetsService: AssetsService,
         swappableChainsProvider: any SwappableChainsProvider,
@@ -34,7 +33,9 @@ public struct AssetsUpdateRunner: AsyncRunnable {
         try assetsService.setSwappableAssets(for: chains)
 
         do {
-            let config = try await configService.getConfig()
+            guard let config = await configService.getConfig() else {
+                throw AnyError("Config not found")
+            }
             async let fiat: () = updateFiatAssets(config: config)
             async let swap: () = updateSwapAssets(config: config)
             _ = try await (fiat, swap)

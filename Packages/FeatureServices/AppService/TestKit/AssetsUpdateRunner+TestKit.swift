@@ -2,8 +2,6 @@
 
 import Foundation
 import AppService
-import GemAPI
-import GemAPITestKit
 import Primitives
 import PrimitivesTestKit
 import Preferences
@@ -13,7 +11,7 @@ import AssetsServiceTestKit
 
 public extension AssetsUpdateRunner {
     static func mock(
-        configService: any GemAPIConfigService = GemAPIConfigServiceMock(config: .mock()),
+        configService: ConfigService = .mock(),
         importAssetsService: ImportAssetsService = .mock(),
         assetsService: AssetsService = .mock(),
         swappableChainsProvider: any SwappableChainsProvider = SwappableChainsProviderMock.mock(),
