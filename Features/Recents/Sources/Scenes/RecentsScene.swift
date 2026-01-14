@@ -8,8 +8,6 @@ import Style
 import Store
 
 public struct RecentsScene: View {
-    @Environment(\.dismiss) private var dismiss
-
     @State private var model: RecentsSceneViewModel
 
     public init(model: RecentsSceneViewModel) {
@@ -34,12 +32,15 @@ public struct RecentsScene: View {
                         }
                     } header: {
                         Text(section.title)
+                            .fontWeight(.semibold)
                     }
                     .listRowInsets(.assetListRowInsets)
                 }
             }
             .contentMargins([.top], .extraSmall, for: .scrollContent)
             .listSectionSpacing(.compact)
+            .scrollContentBackground(.hidden)
+            .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
             .searchable(
                 text: $model.searchQuery,
                 placement: .navigationBarDrawer(displayMode: .always)
@@ -54,9 +55,12 @@ public struct RecentsScene: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarDismissItem(title: .cancel, placement: .topBarLeading)
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(model.clearTitle) {
-                        model.onSelectClear()
+                if model.showClear {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(model.clearTitle) {
+                            model.onSelectClear()
+                        }
+                        .bold()
                     }
                 }
             }
@@ -77,6 +81,5 @@ public struct RecentsScene: View {
 extension RecentsScene {
     private func onSelectConfirm() {
         model.onSelectConfirmClear()
-        dismiss()
     }
 }

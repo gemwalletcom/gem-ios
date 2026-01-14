@@ -59,7 +59,7 @@
 "wallet.scan" = "Scan";
 "settings.aboutus" = "About Us";
 "common.wallet" = "Wallet";
-"common.show" = "Show %@";
+"common.show" = "دکھائیں۔ %@";
 "transfer.network" = "Network";
 "common.copied" = "Copied: %@";
 "transfer.amount.title" = "Amount";
@@ -175,7 +175,7 @@
 "asset.name" = "Name";
 "asset.symbol" = "Symbol";
 "asset.decimals" = "Decimals";
-"asset.token_id" = "Token ID";
+"asset.token_id" = "ٹوکن آئی ڈی";
 "common.type" = "Type";
 "stake.active_in" = "Active In";
 "errors.import.invalid_secret_phrase" = "Invalid Secret Phrase";
@@ -535,7 +535,7 @@
 "rewards.referrals" = "حوالہ جات";
 "rewards.earn_points.title" = "پوائنٹس حاصل کریں۔";
 "rewards.get_rewards.title" = "انعامات حاصل کریں۔";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "کسی دوست کا حوالہ کوڈ ہے؟";
 "rewards.activate_referral_code.title" = "کوڈ بھنائیں۔";
 "rewards.create_referral_code.title" = "صارف نام بنائیں";
 "rewards.create_referral_code.info" = "یہ آپ کا ذاتی صارف نام ہوگا۔";
@@ -551,3 +551,5 @@
 "rewards.pending.title" = "بونس زیر التواء";
 "rewards.pending.description" = "میں دستیاب ہے۔ %@";
 "rewards.pending.description_ready" = "آپ کا بونس تیار ہے!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";

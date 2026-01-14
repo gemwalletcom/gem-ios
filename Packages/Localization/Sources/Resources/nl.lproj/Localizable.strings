@@ -175,7 +175,7 @@
 "asset.name" = "Name";
 "asset.symbol" = "Symbol";
 "asset.decimals" = "Decimals";
-"asset.token_id" = "Token ID";
+"asset.token_id" = "Token-ID";
 "common.type" = "Type";
 "stake.active_in" = "Active In";
 "errors.import.invalid_secret_phrase" = "Invalid Secret Phrase";
@@ -535,7 +535,7 @@
 "rewards.referrals" = "Verwijzingen";
 "rewards.earn_points.title" = "Verdien punten";
 "rewards.get_rewards.title" = "Ontvang beloningen";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "Heb je een verwijzingscode van een vriend?";
 "rewards.activate_referral_code.title" = "Code inwisselen";
 "rewards.create_referral_code.title" = "Gebruikersnaam aanmaken";
 "rewards.create_referral_code.info" = "Dit wordt je persoonlijke gebruikersnaam.";
@@ -551,3 +551,5 @@
 "rewards.pending.title" = "Bonus in afwachting";
 "rewards.pending.description" = "Beschikbaar in %@";
 "rewards.pending.description_ready" = "Je bonus staat klaar!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";

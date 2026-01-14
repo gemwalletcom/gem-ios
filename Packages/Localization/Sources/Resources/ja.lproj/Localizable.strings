@@ -535,7 +535,7 @@
 "rewards.referrals" = "紹介";
 "rewards.earn_points.title" = "ポイントを獲得";
 "rewards.get_rewards.title" = "報酬を獲得";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "友達からの紹介コードをお持ちですか?";
 "rewards.activate_referral_code.title" = "コードを利用する";
 "rewards.create_referral_code.title" = "ユーザー名を作成";
 "rewards.create_referral_code.info" = "これはあなたの個人ユーザー名になります。";
@@ -551,3 +551,5 @@
 "rewards.pending.title" = "ボーナス保留中";
 "rewards.pending.description" = "入手可能な %@";
 "rewards.pending.description_ready" = "ボーナスの準備ができました!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
