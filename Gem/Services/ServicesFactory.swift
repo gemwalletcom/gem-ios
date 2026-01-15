@@ -180,7 +180,7 @@ struct ServicesFactory {
             preferences: preferences,
             assetsService: assetsService,
             bannerSetupService: bannerSetupService,
-            configService: apiService,
+            configService: configService,
             swappableChainsProvider: swapService
         )
         let onstartWalletService = Self.makeOnstartWalletService(

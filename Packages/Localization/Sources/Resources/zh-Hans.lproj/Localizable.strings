@@ -535,7 +535,7 @@
 "rewards.referrals" = "转诊";
 "rewards.earn_points.title" = "赚取积分";
 "rewards.get_rewards.title" = "获得奖励";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "有朋友的推荐码吗？";
 "rewards.activate_referral_code.title" = "兑换码";
 "rewards.create_referral_code.title" = "创建用户名";
 "rewards.create_referral_code.info" = "这将是您的个人用户名。";
@@ -551,3 +551,5 @@
 "rewards.pending.title" = "奖金待发放";
 "rewards.pending.description" = "有售 %@";
 "rewards.pending.description_ready" = "您的奖金已发放！";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";

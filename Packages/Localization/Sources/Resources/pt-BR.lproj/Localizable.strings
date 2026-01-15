@@ -535,7 +535,7 @@
 "rewards.referrals" = "Encaminhamentos";
 "rewards.earn_points.title" = "Ganhe pontos";
 "rewards.get_rewards.title" = "Receba recompensas";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "Tem um código de indicação de um amigo?";
 "rewards.activate_referral_code.title" = "Resgatar código";
 "rewards.create_referral_code.title" = "Criar nome de usuário";
 "rewards.create_referral_code.info" = "Este será o seu nome de usuário pessoal.";
@@ -551,3 +551,5 @@
 "rewards.pending.title" = "Bônus pendente";
 "rewards.pending.description" = "Disponível em %@";
 "rewards.pending.description_ready" = "Seu bônus está pronto!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";

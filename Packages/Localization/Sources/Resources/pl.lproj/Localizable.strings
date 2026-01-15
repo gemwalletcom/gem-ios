@@ -175,7 +175,7 @@
 "asset.name" = "Nazwa";
 "asset.symbol" = "Symbol";
 "asset.decimals" = "Decimals";
-"asset.token_id" = "Token ID";
+"asset.token_id" = "Identyfikator tokena";
 "common.type" = "Typ";
 "stake.active_in" = "Aktywne w";
 "errors.import.invalid_secret_phrase" = "Nieprawidłowe tajne zdanie";
@@ -535,7 +535,7 @@
 "rewards.referrals" = "Polecenia";
 "rewards.earn_points.title" = "Zdobądź punkty";
 "rewards.get_rewards.title" = "Zdobądź nagrody";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "Masz kod polecający od znajomego?";
 "rewards.activate_referral_code.title" = "Zrealizuj kod";
 "rewards.create_referral_code.title" = "Utwórz nazwę użytkownika";
 "rewards.create_referral_code.info" = "To będzie Twoja osobista nazwa użytkownika.";
@@ -551,3 +551,5 @@
 "rewards.pending.title" = "Bonus w toku";
 "rewards.pending.description" = "Dostępne w %@";
 "rewards.pending.description_ready" = "Twój bonus jest gotowy!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
