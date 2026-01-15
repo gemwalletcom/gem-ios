@@ -166,7 +166,7 @@ public final class SelectAssetViewModel {
     }
 
     var showTags: Bool {
-        searchModel.searchableQuery.isEmpty
+        !isSearching && searchModel.searchableQuery.isEmpty
     }
 
     var showLoading: Bool {
