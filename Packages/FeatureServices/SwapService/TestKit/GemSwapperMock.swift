@@ -23,6 +23,8 @@ public final class GemSwapperMock: GemSwapperProtocol {
     private let chains: [Chain]
     private let swapAssetList: SwapperAssetList
     private let swapResult: SwapperSwapResult
+    private let fetchQuoteDelay: Duration?
+    private let fetchQuoteError: Error?
 
     public init(
         permit2ForQuote: Permit2ApprovalData = .mock(),
@@ -33,7 +35,9 @@ public final class GemSwapperMock: GemSwapperProtocol {
         transactionStatus: Bool = false,
         chains: [Chain] = ["ethereum"],
         swapAssetList: SwapperAssetList = .mock(),
-        swapResult: SwapperSwapResult = .mock()
+        swapResult: SwapperSwapResult = .mock(),
+        fetchQuoteDelay: Duration? = nil,
+        fetchQuoteError: Error? = nil
     ) {
         self.permit2ForQuote = permit2ForQuote
         self.quotes = quotes
@@ -44,6 +48,8 @@ public final class GemSwapperMock: GemSwapperProtocol {
         self.chains = chains
         self.swapAssetList = swapAssetList
         self.swapResult = swapResult
+        self.fetchQuoteDelay = fetchQuoteDelay
+        self.fetchQuoteError = fetchQuoteError
     }
 
     public func fetchPermit2ForQuote(quote: SwapperQuote) async throws -> Permit2ApprovalData? {
@@ -51,7 +57,13 @@ public final class GemSwapperMock: GemSwapperProtocol {
     }
 
     public func fetchQuote(request: SwapperQuoteRequest) async throws -> [SwapperQuote] {
-        quotes
+        if let delay = fetchQuoteDelay {
+            try await Task.sleep(for: delay)
+        }
+        if let error = fetchQuoteError {
+            throw error
+        }
+        return quotes
     }
 
     public func fetchQuoteByProvider(provider: SwapperProvider, request: SwapperQuoteRequest) async throws -> SwapperQuote {
