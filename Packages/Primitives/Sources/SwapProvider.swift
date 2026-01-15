@@ -19,7 +19,6 @@ public enum SwapProvider: String, Codable, Equatable, Hashable, Sendable {
 	case cetus
 	case stonfiV2 = "stonfi_v2"
 	case mayan
-	case reservoir
 	case chainflip
 	case nearIntents = "near_intents"
 	case cetusAggregator = "cetus_aggregator"

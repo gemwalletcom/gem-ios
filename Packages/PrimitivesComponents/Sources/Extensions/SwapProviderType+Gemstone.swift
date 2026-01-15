@@ -18,7 +18,6 @@ public extension SwapProvider {
         case .cetus, .cetusAggregator: Images.SwapProviders.cetus
         case .stonfiV2: Images.SwapProviders.stonfi
         case .mayan: Images.SwapProviders.mayan
-        case .reservoir: Images.SwapProviders.reservoir
         case .chainflip: Images.SwapProviders.chainflip
         case .relay: Images.SwapProviders.relay
         case .aerodrome: Images.SwapProviders.aerodrome
