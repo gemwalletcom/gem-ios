@@ -56,7 +56,7 @@ public struct DeviceService: DeviceServiceable {
     }
     
     public func getDeviceId() throws -> String {
-        return try securePreferences.getDeviceId()
+        try securePreferences.getDeviceId()
     }
     
     public func getSubscriptionsDeviceId() async throws -> String {
@@ -67,7 +67,7 @@ public struct DeviceService: DeviceServiceable {
     }
     
     private func generateDeviceId() -> String {
-        return String(NSUUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(32).lowercased())
+        String(NSUUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(32).lowercased())
     }
     
     private func getOrCreateDeviceId() async throws -> String?  {
@@ -110,7 +110,7 @@ public struct DeviceService: DeviceServiceable {
     }
     
     private func getDevice(deviceId: String) async throws -> Device {
-        return try await deviceProvider.getDevice(deviceId: deviceId)
+        try await deviceProvider.getDevice(deviceId: deviceId)
     }
     
     @discardableResult
@@ -121,11 +121,11 @@ public struct DeviceService: DeviceServiceable {
     
     @discardableResult
     private func addDevice(_ device: Device) async throws -> Device {
-        return try await deviceProvider.addDevice(device: device)
+        try await deviceProvider.addDevice(device: device)
     }
-    
+
     @discardableResult
     private func updateDevice(_ device: Device) async throws -> Device {
-        return try await deviceProvider.updateDevice(device: device)
+        try await deviceProvider.updateDevice(device: device)
     }
 }

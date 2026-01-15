@@ -49,7 +49,7 @@ public struct BannerService: Sendable {
     }
 
     private func updateState(id: String, state: BannerState) throws {
-        let _ = try store.updateState(id, state: state)
+        try store.updateState(id, state: state)
     }
 }
 
