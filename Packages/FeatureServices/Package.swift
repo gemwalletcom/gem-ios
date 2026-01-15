@@ -453,6 +453,10 @@ let package = Package(
         .target(
             name: "NotificationService",
             dependencies: [
+                "Primitives",
+                "Store",
+                "GemAPI",
+                "DeviceService",
                 "Preferences"
             ],
             path: "NotificationService",
@@ -462,6 +466,9 @@ let package = Package(
             name: "NotificationServiceTestKit",
             dependencies: [
                 "NotificationService",
+                "DeviceServiceTestKit",
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "PreferencesTestKit", package: "Preferences")
             ],
             path: "NotificationService/TestKit"

@@ -175,7 +175,7 @@
 "asset.name" = "Ім'я";
 "asset.symbol" = "символ";
 "asset.decimals" = "Десяткові знаки";
-"asset.token_id" = "Ідентифікатор токену";
+"asset.token_id" = "Токен ID";
 "common.type" = "Тип";
 "stake.active_in" = "Активний в";
 "errors.import.invalid_secret_phrase" = "Недійсна секретна фраза";
@@ -493,7 +493,7 @@
 "receive.warning" = "Це ваша адреса - надсилайте тільки %@ в мережі %@.";
 "perpetual.leverage" = "Кредитне плече";
 "perpetual.direction" = "Напрямок";
-"perpetual.auto_close" = "Автоматичне закриття";
+"perpetual.auto_close" = "Авто закриття";
 "info.perpetual.auto_close.description" = "Автоматично закривайте свою позицію за встановленими ціновими рівнями. Тейк-профіт фіксує прибутки, а стоп-лос обмежує збитки.";
 "perpetual.auto_close.take_profit" = "Зафіксуйте прибуток";
 "perpetual.market_price" = "Ринкова ціна";
@@ -527,7 +527,7 @@
 "rewards.share_text" = "Приєднатися Gem Wallet за моїм реферальним посиланням та отримуйте винагороди: %@";
 "rewards.my_referral_code" = "Мій реферальний код";
 "rewards.invite_friends.title" = "Запросити друзів";
-"rewards.invite_friends.description" = "Заробляти %@ бали за кожного друга, який приєднається.";
+"rewards.invite_friends.description" = "Отримуйте %@ балів за кожного друга, який долучиться.";
 "common.get_started" = "Почати";
 "rewards.referral_code" = "Реферальний код";
 "rewards.invited_by" = "Invited By";
@@ -535,7 +535,7 @@
 "rewards.referrals" = "Реферали";
 "rewards.earn_points.title" = "Заробляйте бали";
 "rewards.get_rewards.title" = "Отримайте винагороди";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "Маєте реферальний код від друга?";
 "rewards.activate_referral_code.title" = "Активувати код";
 "rewards.create_referral_code.title" = "Створити ім'я користувача";
 "rewards.create_referral_code.info" = "Це буде ваше особисте ім'я користувача.";
@@ -551,3 +551,13 @@
 "rewards.pending.title" = "Бонус очікує на розгляд";
 "rewards.pending.description" = "Доступно в %@";
 "rewards.pending.description_ready" = "Ваш бонус готовий!";
+"recent_activity.state.empty.title" = "Тут з’являться ваші нещодавні активи";
+"recent_activity.state.empty.description" = "Тут відображатимуться активи, які ви нещодавно використовували";
+"notifications.inApp.state.empty.title" = "Поки що немає сповіщень";
+"notifications.inApp.state.empty.description" = "Тут ви побачите оновлення щодо своїх сповіщень";
+"notifications.inApp.referral.joined_title" = "Нове направлення";
+"notifications.inApp.referral.joined_subtitle" = "Ваше рекомендаційне повідомлення %@ приєднався";
+"notifications.inApp.rewards.enabled_title" = "Нагороди ввімкнено";
+"notifications.inApp.rewards.enabled_subtitle" = "Почніть заробляти бали, запрошуючи друзів";
+"notifications.inApp.rewards.disabled_title" = "Реферальний код вимкнено";
+"notifications.inApp.rewards.disabled_subtitle" = "Ваш реферальний код деактивовано";

@@ -535,7 +535,7 @@
 "rewards.referrals" = "Rujukan";
 "rewards.earn_points.title" = "Dapatkan Poin";
 "rewards.get_rewards.title" = "Dapatkan Hadiah";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "Punya kode referensi dari teman?";
 "rewards.activate_referral_code.title" = "Tukarkan kode";
 "rewards.create_referral_code.title" = "Buat Nama Pengguna";
 "rewards.create_referral_code.info" = "Ini akan menjadi nama pengguna pribadi Anda.";
@@ -551,3 +551,13 @@
 "rewards.pending.title" = "Bonus Tertunda";
 "rewards.pending.description" = "Tersedia dalam %@";
 "rewards.pending.description_ready" = "Bonus Anda sudah siap!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Belum ada notifikasi";
+"notifications.inApp.state.empty.description" = "Anda akan melihat pembaruan tentang notifikasi Anda di sini.";
+"notifications.inApp.referral.joined_title" = "Rujukan Baru";
+"notifications.inApp.referral.joined_subtitle" = "Referensi Anda %@ bergabung";
+"notifications.inApp.rewards.enabled_title" = "Hadiah Diaktifkan";
+"notifications.inApp.rewards.enabled_subtitle" = "Mulailah mengumpulkan poin dengan mengundang teman.";
+"notifications.inApp.rewards.disabled_title" = "Kode Referensi Dinonaktifkan";
+"notifications.inApp.rewards.disabled_subtitle" = "Kode referensi Anda telah dinonaktifkan";

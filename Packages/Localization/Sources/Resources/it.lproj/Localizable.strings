@@ -59,7 +59,7 @@
 "wallet.scan" = "Scan";
 "settings.aboutus" = "About Us";
 "common.wallet" = "Wallet";
-"common.show" = "Show %@";
+"common.show" = "Spettacolo %@";
 "transfer.network" = "Network";
 "common.copied" = "Copied: %@";
 "transfer.amount.title" = "Amount";
@@ -175,7 +175,7 @@
 "asset.name" = "Name";
 "asset.symbol" = "Symbol";
 "asset.decimals" = "Decimals";
-"asset.token_id" = "Token ID";
+"asset.token_id" = "ID token";
 "common.type" = "Type";
 "stake.active_in" = "Active In";
 "errors.import.invalid_secret_phrase" = "Invalid Secret Phrase";
@@ -535,7 +535,7 @@
 "rewards.referrals" = "Riferimenti";
 "rewards.earn_points.title" = "Guadagna punti";
 "rewards.get_rewards.title" = "Ottieni ricompense";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "Hai ricevuto un codice di riferimento da un amico?";
 "rewards.activate_referral_code.title" = "Riscatta il codice";
 "rewards.create_referral_code.title" = "Crea nome utente";
 "rewards.create_referral_code.info" = "Questo sarà il tuo nome utente personale.";
@@ -551,3 +551,13 @@
 "rewards.pending.title" = "Bonus in sospeso";
 "rewards.pending.description" = "Disponibile in %@";
 "rewards.pending.description_ready" = "Il tuo bonus è pronto!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Nessuna notifica ancora";
+"notifications.inApp.state.empty.description" = "Qui vedrai gli aggiornamenti sulle tue notifiche";
+"notifications.inApp.referral.joined_title" = "Nuovo referral";
+"notifications.inApp.referral.joined_subtitle" = "Il tuo referral %@ partecipato";
+"notifications.inApp.rewards.enabled_title" = "Premi abilitati";
+"notifications.inApp.rewards.enabled_subtitle" = "Inizia a guadagnare punti invitando gli amici";
+"notifications.inApp.rewards.disabled_title" = "Codice di riferimento disabilitato";
+"notifications.inApp.rewards.disabled_subtitle" = "Il tuo codice di riferimento è stato disattivato";

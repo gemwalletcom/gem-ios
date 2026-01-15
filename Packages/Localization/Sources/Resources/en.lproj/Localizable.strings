@@ -551,3 +551,13 @@
 "rewards.pending.title" = "Bonus Pending";
 "rewards.pending.description" = "Available in %@";
 "rewards.pending.description_ready" = "Your bonus is ready!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "No notifications yet";
+"notifications.inApp.state.empty.description" = "You'll see updates about your notifications here";
+"notifications.inApp.referral.joined_title" = "New Referral";
+"notifications.inApp.referral.joined_subtitle" = "Your referral %@ joined";
+"notifications.inApp.rewards.enabled_title" = "Rewards Enabled";
+"notifications.inApp.rewards.enabled_subtitle" = "Start earning points by inviting friends";
+"notifications.inApp.rewards.disabled_title" = "Referral Code Disabled";
+"notifications.inApp.rewards.disabled_subtitle" = "Your referral code has been deactivated";

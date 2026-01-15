@@ -55,6 +55,9 @@ public enum GemAPI: TargetType {
     case getRedemptionOption(code: String)
     case redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>)
 
+    case getNotifications(deviceId: String)
+    case markNotificationsRead(deviceId: String)
+
     public var baseUrl: URL {
         Constants.apiURL
     }
@@ -79,7 +82,8 @@ public enum GemAPI: TargetType {
             .markets,
             .getAuthNonce,
             .getRewards,
-            .getRedemptionOption:
+            .getRedemptionOption,
+            .getNotifications:
             return .GET
         case .addSubscriptions,
             .addSubscriptionsV2,
@@ -93,7 +97,8 @@ public enum GemAPI: TargetType {
             .reportNft,
             .createReferral,
             .useReferralCode,
-            .redeem:
+            .redeem,
+            .markNotificationsRead:
             return .POST
         case .updateDevice:
             return .PUT
@@ -175,6 +180,10 @@ public enum GemAPI: TargetType {
             return "/v1/rewards/redemptions/\(code)"
         case .redeem(let walletId, _):
             return "/v1/rewards/\(walletId)/redeem"
+        case .getNotifications(let deviceId):
+            return "/v1/notifications/\(deviceId)"
+        case .markNotificationsRead(let deviceId):
+            return "/v1/notifications/\(deviceId)/read"
         }
     }
     
@@ -193,7 +202,9 @@ public enum GemAPI: TargetType {
             .markets,
             .getAuthNonce,
             .getRewards,
-            .getRedemptionOption:
+            .getRedemptionOption,
+            .getNotifications,
+            .markNotificationsRead:
             return .plain
         case .getFiatQuoteUrl(let request):
             return .encodable(request)

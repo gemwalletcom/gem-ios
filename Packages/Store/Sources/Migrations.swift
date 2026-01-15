@@ -358,6 +358,10 @@ public struct Migrations {
             try? db.drop(table: "nodes_selected_v1")
         }
 
+        migrator.registerMigration("Create \(InAppNotificationRecord.databaseTableName)") { db in
+            try? InAppNotificationRecord.create(db: db)
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

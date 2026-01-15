@@ -213,6 +213,10 @@ struct ServicesFactory {
         let authService = AuthService(keystore: storages.keystore)
         let rewardsService = RewardsService(authService: authService)
         let eventPresenterService = EventPresenterService()
+        let inAppNotificationService = InAppNotificationService(
+            deviceService: deviceService,
+            store: storeManager.inAppNotificationStore
+        )
 
         let observersService = ObserversService(
             connectionsService: connectionsService,
@@ -279,7 +283,8 @@ struct ServicesFactory {
             eventPresenterService: eventPresenterService,
             viewModelFactory: viewModelFactory,
             rewardsService: rewardsService,
-            observersService: observersService
+            observersService: observersService,
+            inAppNotificationService: inAppNotificationService
         )
     }
 }
