@@ -10,7 +10,7 @@ public extension SwapProvider {
         switch self {
         case .uniswapV3, .uniswapV4: Images.SwapProviders.uniswap
         case .jupiter: Images.SwapProviders.jupiter
-        case .pancakeswapV3, .pancakeswapAptosV2: Images.SwapProviders.pancakeswap
+        case .pancakeswapV3: Images.SwapProviders.pancakeswap
         case .thorchain: Images.SwapProviders.thorchain
         case .across: Images.SwapProviders.across
         case .oku: Images.SwapProviders.oku

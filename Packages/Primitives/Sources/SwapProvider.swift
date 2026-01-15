@@ -9,7 +9,6 @@ public enum SwapProvider: String, Codable, Equatable, Hashable, Sendable {
 	case uniswapV4 = "uniswap_v4"
 	case pancakeswapV3 = "pancakeswap_v3"
 	case aerodrome
-	case pancakeswapAptosV2 = "pancakeswap_aptos_v2"
 	case panora
 	case thorchain
 	case jupiter
