@@ -18,24 +18,20 @@ public struct WalletsService: Sendable {
     private let priceUpdater: any PriceUpdater
     private let balanceUpdater: any BalanceUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
-    
+
     public init(
-        walletStore: WalletStore,
+        walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        preferences: ObservablePreferences = .default,
         deviceService: any DeviceServiceable
     ) {
-
-        let walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
         let balanceUpdater = BalanceUpdateService(
             balanceService: balanceService,
             walletSessionService: walletSessionService
         )
         let priceUpdater = PriceUpdateService(priceObserver: priceObserver)
-
         let assetsEnabler = AssetsEnablerService(
             assetsService: assetsService,
             balanceUpdater: balanceUpdater,
@@ -49,12 +45,12 @@ public struct WalletsService: Sendable {
             walletSessionService: walletSessionService,
             assetsEnabler: assetsEnabler
         )
+        self.walletSessionService = walletSessionService
         self.assetsVisibilityManager = AssetVisibilityManager(service: balanceService)
         self.assetsEnabler = assetsEnabler
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
         self.discoveryProcessor = processor
-        self.walletSessionService = walletSessionService
     }
 
     public func walletsCount() throws -> Int {

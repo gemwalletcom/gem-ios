@@ -43,11 +43,16 @@ public final class RecentsSceneViewModel {
     var clearTitle: String { Localized.Filter.clear }
     var clearConfirmationTitle: String { Localized.RecentActivity.clearConfirmation }
 
-    var showEmpty: Bool { !searchQuery.isEmpty && filteredAssets.isEmpty }
+    var showEmpty: Bool { recentAssets.isEmpty || (!searchQuery.isEmpty && filteredAssets.isEmpty) }
     var showClear: Bool { recentAssets.isNotEmpty }
 
     var sections: [RecentAssetsSection] { RecentAssetsSection.from(filteredAssets) }
-    var emptyModel: any EmptyContentViewable { EmptyContentTypeViewModel(type: .search(type: .assets)) }
+    var emptyModel: any EmptyContentViewable {
+        if recentAssets.isEmpty {
+            return EmptyContentTypeViewModel(type: .recents)
+        }
+        return EmptyContentTypeViewModel(type: .search(type: .assets))
+    }
 
     private var filteredAssets: [RecentAsset] {
         guard !searchQuery.isEmpty else { return recentAssets }

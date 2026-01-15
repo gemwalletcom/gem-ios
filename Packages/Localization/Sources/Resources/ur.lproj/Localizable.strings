@@ -59,7 +59,7 @@
 "wallet.scan" = "Scan";
 "settings.aboutus" = "About Us";
 "common.wallet" = "Wallet";
-"common.show" = "Show %@";
+"common.show" = "دکھائیں۔ %@";
 "transfer.network" = "Network";
 "common.copied" = "Copied: %@";
 "transfer.amount.title" = "Amount";
@@ -175,7 +175,7 @@
 "asset.name" = "Name";
 "asset.symbol" = "Symbol";
 "asset.decimals" = "Decimals";
-"asset.token_id" = "Token ID";
+"asset.token_id" = "ٹوکن آئی ڈی";
 "common.type" = "Type";
 "stake.active_in" = "Active In";
 "errors.import.invalid_secret_phrase" = "Invalid Secret Phrase";
@@ -535,10 +535,10 @@
 "rewards.referrals" = "حوالہ جات";
 "rewards.earn_points.title" = "پوائنٹس حاصل کریں۔";
 "rewards.get_rewards.title" = "انعامات حاصل کریں۔";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "کسی دوست کا حوالہ کوڈ ہے؟";
 "rewards.activate_referral_code.title" = "کوڈ بھنائیں۔";
 "rewards.create_referral_code.title" = "صارف نام بنائیں";
-"rewards.create_referral_code.info" = "یہ آپ کا ذاتی صارف نام ہوگا۔";
+"rewards.create_referral_code.info" = "موجودہ بٹوے کے لیے یہ آپ کا ذاتی عرفی نام ہوگا۔";
 "rewards.username" = "صارف نام";
 "rewards.ways_spend.title" = "خرچ کرنے کے طریقے";
 "rewards.ways_spend.asset.title" = "حاصل کریں۔ %@";
@@ -551,3 +551,14 @@
 "rewards.pending.title" = "بونس زیر التواء";
 "rewards.pending.description" = "میں دستیاب ہے۔ %@";
 "rewards.pending.description_ready" = "آپ کا بونس تیار ہے!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "ابھی تک کوئی اطلاع نہیں ہے۔";
+"notifications.inApp.state.empty.description" = "آپ یہاں اپنی اطلاعات کے بارے میں اپ ڈیٹس دیکھیں گے۔";
+"notifications.inApp.referral.joined_title" = "نیا حوالہ";
+"notifications.inApp.referral.joined_subtitle" = "آپ کا حوالہ %@ شمولیت اختیار کی";
+"notifications.inApp.rewards.enabled_title" = "انعامات فعال ہیں۔";
+"notifications.inApp.rewards.enabled_subtitle" = "دوستوں کو مدعو کرکے پوائنٹس حاصل کرنا شروع کریں۔";
+"notifications.inApp.rewards.disabled_title" = "ریفرل کوڈ غیر فعال ہے۔";
+"notifications.inApp.rewards.disabled_subtitle" = "آپ کا ریفرل کوڈ غیر فعال کر دیا گیا ہے۔";
+"rewards.nickname" = "عرفی نام";

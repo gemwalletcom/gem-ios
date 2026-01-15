@@ -175,7 +175,7 @@
 "asset.name" = "اسم";
 "asset.symbol" = "رمز";
 "asset.decimals" = "Decimals";
-"asset.token_id" = "Token ID";
+"asset.token_id" = "معرف الرمز المميز";
 "common.type" = "يكتب";
 "stake.active_in" = "نشط في";
 "errors.import.invalid_secret_phrase" = "العبارة السرية غير صالحة";
@@ -535,10 +535,10 @@
 "rewards.referrals" = "الإحالات";
 "rewards.earn_points.title" = "اكسب نقاطًا";
 "rewards.get_rewards.title" = "احصل على مكافآت";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "هل لديك رمز إحالة من صديق؟";
 "rewards.activate_referral_code.title" = "رمز الاسترداد";
 "rewards.create_referral_code.title" = "إنشاء اسم المستخدم";
-"rewards.create_referral_code.info" = "سيكون هذا اسم المستخدم الشخصي الخاص بك.";
+"rewards.create_referral_code.info" = "سيكون هذا هو اسمك المستعار الشخصي للمحفظة الحالية.";
 "rewards.username" = "اسم المستخدم";
 "rewards.ways_spend.title" = "طرق الإنفاق";
 "rewards.ways_spend.asset.title" = "يحصل %@";
@@ -551,3 +551,14 @@
 "rewards.pending.title" = "المكافأة معلقة";
 "rewards.pending.description" = "متوفر في %@";
 "rewards.pending.description_ready" = "مكافأتك جاهزة!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "لم تصل أي إشعارات بعد";
+"notifications.inApp.state.empty.description" = "ستجد هنا تحديثات حول إشعاراتك";
+"notifications.inApp.referral.joined_title" = "إحالة جديدة";
+"notifications.inApp.referral.joined_subtitle" = "إحالتك %@ انضم";
+"notifications.inApp.rewards.enabled_title" = "تم تفعيل نظام المكافآت";
+"notifications.inApp.rewards.enabled_subtitle" = "ابدأ في كسب النقاط عن طريق دعوة الأصدقاء";
+"notifications.inApp.rewards.disabled_title" = "تم تعطيل رمز الإحالة";
+"notifications.inApp.rewards.disabled_subtitle" = "تم تعطيل رمز الإحالة الخاص بك";
+"rewards.nickname" = "كنية";
