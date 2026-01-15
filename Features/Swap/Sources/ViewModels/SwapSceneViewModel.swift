@@ -351,7 +351,7 @@ extension SwapSceneViewModel {
                 applyQuote(selectedSwapQuote, asset: asset)
             }
         } catch {
-            if !error.isCancelled {
+            if !error.isCancelled && !Task.isCancelled {
                 swapState.quotes = .error(error)
                 swapState.fetch = .data(quotes: [])
                 selectedSwapQuote = nil
