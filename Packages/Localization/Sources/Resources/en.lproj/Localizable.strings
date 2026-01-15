@@ -551,3 +551,5 @@
 "rewards.pending.title" = "Bonus Pending";
 "rewards.pending.description" = "Available in %@";
 "rewards.pending.description_ready" = "Your bonus is ready!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";

@@ -175,7 +175,7 @@
 "asset.name" = "이름";
 "asset.symbol" = "상징";
 "asset.decimals" = "Decimals";
-"asset.token_id" = "Token ID";
+"asset.token_id" = "토큰 ID";
 "common.type" = "유형";
 "stake.active_in" = "활성 상태";
 "errors.import.invalid_secret_phrase" = "잘못된 비밀번호 문구";
@@ -535,7 +535,7 @@
 "rewards.referrals" = "추천";
 "rewards.earn_points.title" = "포인트를 적립하세요";
 "rewards.get_rewards.title" = "보상을 받으세요";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "친구에게 추천 코드가 있으신가요?";
 "rewards.activate_referral_code.title" = "코드 사용";
 "rewards.create_referral_code.title" = "사용자 이름 생성";
 "rewards.create_referral_code.info" = "이것이 당신의 개인 사용자 이름이 될 것입니다.";
@@ -551,3 +551,5 @@
 "rewards.pending.title" = "보너스 지급 예정";
 "rewards.pending.description" = "다음에서 이용 가능합니다: %@";
 "rewards.pending.description_ready" = "보너스가 지급되었습니다!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";

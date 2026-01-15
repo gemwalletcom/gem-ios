@@ -969,6 +969,14 @@ public enum Localized {
     public static let clearConfirmation = Localized.tr("Localizable", "recent_activity.clear_confirmation", fallback: "Are you sure you want to clear all recents?")
     /// Recents
     public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recents")
+    public enum State {
+      public enum Empty {
+        /// Assets you’ve recently used will appear here
+        public static let description = Localized.tr("Localizable", "recent_activity.state.empty.description", fallback: "Assets you’ve recently used will appear here")
+        /// Your recents will appear here
+        public static let title = Localized.tr("Localizable", "recent_activity.state.empty.title", fallback: "Your recents will appear here")
+      }
+    }
   }
   public enum Rewards {
     /// Get %@ for %@!

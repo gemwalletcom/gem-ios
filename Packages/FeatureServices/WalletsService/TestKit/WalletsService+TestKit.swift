@@ -10,28 +10,27 @@ import BalanceService
 import BalanceServiceTestKit
 import PriceService
 import PriceServiceTestKit
-import Preferences
-import PreferencesTestKit
 import DeviceService
 import DeviceServiceTestKit
+import PreferencesTestKit
+import WalletSessionService
+import WalletSessionServiceTestKit
 
 public extension WalletsService {
     static func mock(
-        walletStore: WalletStore = .mock(),
+        walletSessionService: WalletSessionService = WalletSessionService(walletStore: .mock(), preferences: .mock()),
         assetsService: AssetsService = .mock(),
         balanceService: BalanceService = .mock(),
         priceService: PriceService = .mock(),
         priceObserver: PriceObserverService = .mock(),
-        preferences: ObservablePreferences = .mock(),
         deviceService: DeviceService = .mock()
     ) -> WalletsService {
         WalletsService(
-            walletStore: walletStore,
+            walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            preferences: preferences,
             deviceService: deviceService
         )
     }
