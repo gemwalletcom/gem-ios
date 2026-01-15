@@ -3,13 +3,11 @@
 import Foundation
 import SwiftUI
 import Primitives
-import Localization
 import PriceAlerts
 import Assets
+import PrimitivesComponents
 
 struct AddAssetPriceAlertsNavigationStack: View {
-    @Environment(\.dismiss) private var dismiss
-
     @State private var selectAssetModel: SelectAssetViewModel
 
     init(selectAssetModel: SelectAssetViewModel) {
@@ -22,11 +20,7 @@ struct AddAssetPriceAlertsNavigationStack: View {
                 model: selectAssetModel
             )
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.cancel) {
-                        dismiss()
-                    }
-                }
+                ToolbarDismissItem(type: .close, placement: .topBarLeading)
             }
             .navigationBarTitleDisplayMode(.inline)
         }

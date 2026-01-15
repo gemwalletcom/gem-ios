@@ -42,11 +42,8 @@ public struct AssetsFilterScene: View {
                         .bold()
                 }
             }
-            ToolbarItem(placement: .primaryAction) {
-                Button(model.done, action: onSelectDone)
-                    .bold()
-            }
         }
+        .toolbarDismissItem(type: .done, placement: .primaryAction)
         .sheet(isPresented: $isPresentingChains) {
             SelectableSheet(
                 model: model.networksModel,

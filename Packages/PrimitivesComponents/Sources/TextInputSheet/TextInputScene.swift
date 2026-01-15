@@ -40,8 +40,7 @@ public struct TextInputScene<ViewModel: TextInputViewModelProtocol>: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(Localized.Common.cancel, action: onCancel)
-                        .bold()
+                    Button("", systemImage: SystemImage.xmark, action: onCancel)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     if model.isLoading {

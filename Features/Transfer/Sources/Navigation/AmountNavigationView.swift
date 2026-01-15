@@ -35,7 +35,7 @@ public struct AmountNavigationView: View {
                             model: FiatSceneViewModel(assetAddress: assetAddress, walletId: walletId)
                         )
                         .navigationBarTitleDisplayMode(.inline)
-                        .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }
+                        .toolbar { ToolbarDismissItem(type: .close, placement: .topBarLeading) }
                     }
                 case let .leverageSelector(selection):
                     @Bindable var leverageSelection = selection
