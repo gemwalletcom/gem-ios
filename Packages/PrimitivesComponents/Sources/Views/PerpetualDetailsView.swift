@@ -72,7 +72,7 @@ public struct PerpetualDetailsView: View {
                 )
             }
         }
-        .toolbarDismissItem(title: .done, placement: .topBarLeading)
+        .toolbarDismissItem(type: .close, placement: .topBarLeading)
         .navigationTitle(Localized.Common.details)
         .navigationBarTitleDisplayMode(.inline)
         .listSectionSpacing(.compact)

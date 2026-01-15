@@ -53,7 +53,7 @@ public struct RecentsScene: View {
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarDismissItem(title: .cancel, placement: .topBarLeading)
+                ToolbarDismissItem(type: .close, placement: .topBarLeading)
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(model.clearTitle) {
                         model.onSelectClear()

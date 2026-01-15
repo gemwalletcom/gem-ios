@@ -16,7 +16,7 @@ public struct AutocloseSheet: View {
         NavigationStack {
             AutocloseScene(model: model)
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar { ToolbarDismissItem(title: .cancel, placement: .topBarLeading) }
+                .toolbar { ToolbarDismissItem(type: .close, placement: .topBarLeading) }
         }
     }
 }

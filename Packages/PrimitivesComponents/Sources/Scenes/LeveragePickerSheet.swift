@@ -24,7 +24,7 @@ public struct LeveragePickerSheet: View {
             .navigationTitle(title)
             .toolbar {
                 ToolbarDismissItem(
-                    title: .done,
+                    type: .close,
                     placement: .topBarLeading
                 )
             }

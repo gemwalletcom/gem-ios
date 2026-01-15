@@ -2,10 +2,10 @@
 
 import Foundation
 import SwiftUI
-import Localization
 import Primitives
 import Onboarding
 import ManageWallets
+import Style
 
 struct WalletsNavigationStack: View {
     @Environment(\.walletService) private var walletService
@@ -67,11 +67,10 @@ struct WalletsNavigationStack: View {
                 )
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.done) {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("", systemImage: SystemImage.xmark) {
                         isPresentingWallets.toggle()
                     }
-                    .bold()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

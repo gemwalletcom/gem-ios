@@ -33,7 +33,6 @@ public final class AddNodeSceneViewModel {
     public var title: String { Localized.Nodes.ImportNode.title }
 
     public var actionButtonTitle: String { Localized.Wallet.Import.action }
-    public var doneButtonTitle: String { Localized.Common.done }
     public var inputFieldTitle: String { Localized.Common.url }
 
     public var errorTitle: String { Localized.Errors.errorOccured }

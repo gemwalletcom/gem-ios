@@ -88,7 +88,7 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
                                 .bold()
                         }
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                    ToolbarItem(placement: .topBarTrailing) {
                         Button(model.doneButtonTitle) {
                             onDone()
                         }
