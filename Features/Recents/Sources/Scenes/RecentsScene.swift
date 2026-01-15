@@ -58,6 +58,7 @@ public struct RecentsScene: View {
                     Button(model.clearTitle) {
                         model.onSelectClear()
                     }
+                    .bold()
                 }
             }
             .alert(

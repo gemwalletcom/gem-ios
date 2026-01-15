@@ -59,7 +59,7 @@
 "wallet.scan" = "Scan";
 "settings.aboutus" = "About Us";
 "common.wallet" = "Wallet";
-"common.show" = "Show %@";
+"common.show" = "แสดง %@";
 "transfer.network" = "Network";
 "common.copied" = "Copied: %@";
 "transfer.amount.title" = "Amount";
@@ -175,7 +175,7 @@
 "asset.name" = "Name";
 "asset.symbol" = "Symbol";
 "asset.decimals" = "Decimals";
-"asset.token_id" = "Token ID";
+"asset.token_id" = "รหัสโทเค็น";
 "common.type" = "Type";
 "stake.active_in" = "Active In";
 "errors.import.invalid_secret_phrase" = "Invalid Secret Phrase";
@@ -535,10 +535,10 @@
 "rewards.referrals" = "การส่งต่อ";
 "rewards.earn_points.title" = "สะสมคะแนน";
 "rewards.get_rewards.title" = "รับรางวัล";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "มีรหัสแนะนำจากเพื่อนไหม?";
 "rewards.activate_referral_code.title" = "รหัสแลกรับ";
 "rewards.create_referral_code.title" = "สร้างชื่อผู้ใช้";
-"rewards.create_referral_code.info" = "นี่จะเป็นชื่อผู้ใช้ส่วนตัวของคุณ";
+"rewards.create_referral_code.info" = "นี่จะเป็นชื่อเล่นส่วนตัวของคุณสำหรับกระเป๋าเงินดิจิทัลปัจจุบัน";
 "rewards.username" = "ชื่อผู้ใช้";
 "rewards.ways_spend.title" = "วิธีใช้จ่าย";
 "rewards.ways_spend.asset.title" = "รับ %@";
@@ -551,3 +551,14 @@
 "rewards.pending.title" = "โบนัสรออนุมัติ";
 "rewards.pending.description" = "มีจำหน่ายใน %@";
 "rewards.pending.description_ready" = "โบนัสของคุณพร้อมแล้ว!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "ยังไม่มีการแจ้งเตือนใดๆ";
+"notifications.inApp.state.empty.description" = "คุณจะเห็นการอัปเดตเกี่ยวกับการแจ้งเตือนของคุณได้ที่นี่";
+"notifications.inApp.referral.joined_title" = "การแนะนำใหม่";
+"notifications.inApp.referral.joined_subtitle" = "การแนะนำของคุณ %@ เข้าร่วม";
+"notifications.inApp.rewards.enabled_title" = "เปิดใช้งานรางวัลแล้ว";
+"notifications.inApp.rewards.enabled_subtitle" = "เริ่มสะสมคะแนนโดยการชวนเพื่อนๆ";
+"notifications.inApp.rewards.disabled_title" = "รหัสอ้างอิงถูกปิดใช้งาน";
+"notifications.inApp.rewards.disabled_subtitle" = "รหัสแนะนำของคุณถูกปิดใช้งานแล้ว";
+"rewards.nickname" = "ชื่อเล่น";

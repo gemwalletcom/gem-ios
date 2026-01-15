@@ -81,7 +81,6 @@ public final class AmountSceneViewModel {
     }
 
     var maxTitle: String { Localized.Transfer.max }
-    var nextTitle: String { Localized.Common.next }
     var continueTitle: String { Localized.Common.continue }
     var isNextEnabled: Bool { actionButtonState == .normal }
 

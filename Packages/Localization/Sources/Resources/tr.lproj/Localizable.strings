@@ -535,10 +535,10 @@
 "rewards.referrals" = "Yönlendirmeler";
 "rewards.earn_points.title" = "Puan Kazanın";
 "rewards.get_rewards.title" = "Ödüller Kazanın";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "Arkadaşınızdan aldığınız bir referans kodunuz var mı?";
 "rewards.activate_referral_code.title" = "Kodu kullan";
 "rewards.create_referral_code.title" = "Kullanıcı Adı Oluştur";
-"rewards.create_referral_code.info" = "Bu sizin kişisel kullanıcı adınız olacak.";
+"rewards.create_referral_code.info" = "Bu, mevcut cüzdanınız için kullanacağınız kişisel takma adınız olacak.";
 "rewards.username" = "Kullanıcı adı";
 "rewards.ways_spend.title" = "Harcama Yolları";
 "rewards.ways_spend.asset.title" = "Elde etmek %@";
@@ -551,3 +551,14 @@
 "rewards.pending.title" = "Bonus Beklemede";
 "rewards.pending.description" = "Mevcuttur %@";
 "rewards.pending.description_ready" = "Bonusunuz hazır!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Henüz hiçbir bildirim yok.";
+"notifications.inApp.state.empty.description" = "Bildirimlerinizle ilgili güncellemeleri burada göreceksiniz.";
+"notifications.inApp.referral.joined_title" = "Yeni Sevk";
+"notifications.inApp.referral.joined_subtitle" = "Sizin referansınız %@ katıldı";
+"notifications.inApp.rewards.enabled_title" = "Ödüller Etkinleştirildi";
+"notifications.inApp.rewards.enabled_subtitle" = "Arkadaşlarınızı davet ederek puan kazanmaya başlayın.";
+"notifications.inApp.rewards.disabled_title" = "Yönlendirme Kodu Devre Dışı Bırakıldı";
+"notifications.inApp.rewards.disabled_subtitle" = "Yönlendirme kodunuz devre dışı bırakıldı.";
+"rewards.nickname" = "Takma ad";

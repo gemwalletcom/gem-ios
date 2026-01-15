@@ -55,7 +55,7 @@ public struct AmountNavigationView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(model.nextTitle, action: model.onSelectNextButton)
+                    Button(model.continueTitle, action: model.onSelectNextButton)
                         .bold()
                         .disabled(!model.isNextEnabled)
                 }
