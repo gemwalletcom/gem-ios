@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "Máte doporučovací kód od přítele?";
 "rewards.activate_referral_code.title" = "Uplatnit kód";
 "rewards.create_referral_code.title" = "Vytvořit uživatelské jméno";
-"rewards.create_referral_code.info" = "Toto bude vaše osobní uživatelské jméno.";
+"rewards.create_referral_code.info" = "Toto bude vaše osobní přezdívka pro aktuální peněženku.";
 "rewards.username" = "Uživatelské jméno";
 "rewards.ways_spend.title" = "Způsoby, jak utratit";
 "rewards.ways_spend.asset.title" = "Získat %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "Váš bonus je připraven!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Zatím žádná oznámení";
+"notifications.inApp.state.empty.description" = "Zde se zobrazí aktuální informace o vašich oznámeních";
+"notifications.inApp.referral.joined_title" = "Nové doporučení";
+"notifications.inApp.referral.joined_subtitle" = "Vaše doporučení %@ připojil se";
+"notifications.inApp.rewards.enabled_title" = "Odměny povoleny";
+"notifications.inApp.rewards.enabled_subtitle" = "Začněte sbírat body pozváním přátel";
+"notifications.inApp.rewards.disabled_title" = "Doporučovací kód deaktivován";
+"notifications.inApp.rewards.disabled_subtitle" = "Váš doporučovací kód byl deaktivován";
+"rewards.nickname" = "Přezdívka";

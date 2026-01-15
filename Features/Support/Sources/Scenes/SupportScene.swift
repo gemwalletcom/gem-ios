@@ -30,8 +30,7 @@ public struct SupportScene: View {
                     supportTypePickerView
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(Localized.Common.done, action: model.onDismiss)
-                        .bold()
+                    Button("", systemImage: SystemImage.xmark, action: model.onDismiss)
                 }
             }
             .task {

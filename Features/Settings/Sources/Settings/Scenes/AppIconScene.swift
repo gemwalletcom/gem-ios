@@ -22,6 +22,7 @@ public struct AppIconScene: View {
                     }
                 }
             }
+            .listRowInsets(EdgeInsets(top: .medium, leading: .medium, bottom: .space12, trailing: .medium))
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .listSectionSpacing(.compact)

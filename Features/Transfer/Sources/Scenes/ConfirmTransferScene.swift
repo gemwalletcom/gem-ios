@@ -56,12 +56,7 @@ public struct ConfirmTransferScene: View {
                         )
                     )
                     .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarDismissItem(
-                            title: .done,
-                            placement: .topBarLeading
-                        )
-                    }
+                    .toolbarDismissItem(type: .close, placement: .topBarLeading)
                 }
             case .swapDetails:
                 if case let .swapDetails(model) = model.detailsViewModel.itemModel {

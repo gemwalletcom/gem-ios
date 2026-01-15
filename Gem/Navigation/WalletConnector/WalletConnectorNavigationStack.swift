@@ -2,12 +2,12 @@
 
 import SwiftUI
 import Primitives
-import Localization
 import WalletConnector
 import Transfer
 import TransactionStateService
 import ExplorerService
 import Signer
+import Style
 
 struct WalletConnectorNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -59,10 +59,9 @@ struct WalletConnectorNavigationStack: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(Localized.Common.cancel) {
+                    Button("", systemImage: SystemImage.xmark) {
                         presenter.cancelSheet(type: type)
                     }
-                    .bold()
                 }
             }
         }

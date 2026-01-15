@@ -44,9 +44,7 @@ public struct SelectableListNavigationStack<ViewModel: SelectableListAdoptable &
             .presentationBackground(Colors.grayBackground)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(model.doneTitle) {
-                        dismiss()
-                    }.bold()
+                    Button("", systemImage: SystemImage.xmark, action: { dismiss() })
                 }
             }
         }

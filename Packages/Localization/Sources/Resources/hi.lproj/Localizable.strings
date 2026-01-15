@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "क्या आपके पास किसी मित्र का रेफरल कोड है?";
 "rewards.activate_referral_code.title" = "रीडीम कोड";
 "rewards.create_referral_code.title" = "उपयोगकर्ता नाम बनाएँ";
-"rewards.create_referral_code.info" = "यह आपका व्यक्तिगत उपयोगकर्ता नाम होगा।";
+"rewards.create_referral_code.info" = "यह आपके वर्तमान वॉलेट के लिए आपका व्यक्तिगत उपनाम होगा।";
 "rewards.username" = "उपयोगकर्ता नाम";
 "rewards.ways_spend.title" = "खर्च करने के तरीके";
 "rewards.ways_spend.asset.title" = "पाना %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "आपका बोनस तैयार है!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "अभी तक कोई सूचना नहीं मिली है";
+"notifications.inApp.state.empty.description" = "आपको अपनी सूचनाओं से संबंधित अपडेट यहां मिलेंगे।";
+"notifications.inApp.referral.joined_title" = "नया रेफरल";
+"notifications.inApp.referral.joined_subtitle" = "आपका रेफरल %@ शामिल हुए";
+"notifications.inApp.rewards.enabled_title" = "पुरस्कार सक्षम";
+"notifications.inApp.rewards.enabled_subtitle" = "दोस्तों को आमंत्रित करके पॉइंट कमाना शुरू करें";
+"notifications.inApp.rewards.disabled_title" = "रेफरल कोड निष्क्रिय";
+"notifications.inApp.rewards.disabled_subtitle" = "आपका रेफरल कोड निष्क्रिय कर दिया गया है।";
+"rewards.nickname" = "उपनाम";

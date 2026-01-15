@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "友達からの紹介コードをお持ちですか?";
 "rewards.activate_referral_code.title" = "コードを利用する";
 "rewards.create_referral_code.title" = "ユーザー名を作成";
-"rewards.create_referral_code.info" = "これはあなたの個人ユーザー名になります。";
+"rewards.create_referral_code.info" = "これは現在のウォレットの個人的なニックネームになります。";
 "rewards.username" = "ユーザー名";
 "rewards.ways_spend.title" = "使い方";
 "rewards.ways_spend.asset.title" = "得る %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "ボーナスの準備ができました!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "まだ通知はありません";
+"notifications.inApp.state.empty.description" = "通知に関する最新情報はここで確認できます";
+"notifications.inApp.referral.joined_title" = "新規紹介";
+"notifications.inApp.referral.joined_subtitle" = "あなたの紹介 %@ 参加した";
+"notifications.inApp.rewards.enabled_title" = "報酬が有効";
+"notifications.inApp.rewards.enabled_subtitle" = "友達を招待してポイントを獲得しましょう";
+"notifications.inApp.rewards.disabled_title" = "紹介コードが無効です";
+"notifications.inApp.rewards.disabled_subtitle" = "紹介コードは無効になりました";
+"rewards.nickname" = "ニックネーム";

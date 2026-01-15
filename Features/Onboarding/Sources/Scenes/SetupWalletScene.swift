@@ -40,8 +40,7 @@ public struct SetupWalletScene: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button(Localized.Common.done, action: model.onComplete)
-                    .bold()
+                Button("", systemImage: SystemImage.xmark, action: model.onComplete)
             }
         }
         .listSectionSpacing(.compact)

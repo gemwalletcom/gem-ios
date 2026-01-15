@@ -147,8 +147,9 @@ public final class SelectAssetViewModel {
                 wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
             case .collection: false
             }
-        case .buy, .manage, .priceAlert, .send, .swap, .deposit, .withdraw:
+        case .buy, .manage, .priceAlert, .send, .swap:
             wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
+        case .deposit, .withdraw: false
         }
     }
 

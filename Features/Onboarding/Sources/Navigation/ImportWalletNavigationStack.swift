@@ -16,7 +16,7 @@ public struct ImportWalletNavigationStack: View {
     public var body: some View {
         NavigationStack(path: $navigationPath) {
             rootScene
-                .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
+                .toolbarDismissItem(type: .close, placement: .topBarLeading)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationDestination(for: ImportWalletType.self) { type in
                     ImportWalletScene(
@@ -52,7 +52,7 @@ public struct ImportWalletNavigationStack: View {
                                 avatarService: model.avatarService
                             )
                         )
-                        .toolbarDismissItem(title: .done, placement: .topBarLeading)
+                        .toolbarDismissItem(type: .close, placement: .topBarLeading)
                     }
                 }
         }

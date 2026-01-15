@@ -41,8 +41,8 @@ struct PerpetualPositionNavigationStack: View {
             )
             .toolbar {
                 ToolbarDismissItem(
-                    title: .cancel,
-                    placement: .navigationBarLeading
+                    type: .close,
+                    placement: .topBarLeading
                 )
             }
             .navigationDestination(for: TransferData.self) {
