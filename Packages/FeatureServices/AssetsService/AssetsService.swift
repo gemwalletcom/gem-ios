@@ -37,15 +37,15 @@ public final class AssetsService: Sendable {
     }
 
     public func addAssets(assets: [AssetBasic]) throws {
-        return try assetStore.add(assets: assets)
+        try assetStore.add(assets: assets)
     }
 
     public func getAssets() throws -> [Asset] {
-        return try assetStore.getAssets()
+        try assetStore.getAssets()
     }
 
     public func getEnabledAssets() throws -> [AssetId] {
-        return try balanceStore.getEnabledAssetIds()
+        try balanceStore.getEnabledAssetIds()
     }
 
     public func getAsset(for assetId: AssetId) throws -> Asset {
@@ -64,7 +64,7 @@ public final class AssetsService: Sendable {
     }
     
     public func getAssets(for assetIds: [AssetId]) throws -> [Asset] {
-        return try assetStore.getAssets(for: assetIds.ids)
+        try assetStore.getAssets(for: assetIds.ids)
     }
 
     public func addBalancesIfMissing(walletId: WalletId, assetIds: [AssetId]) throws {

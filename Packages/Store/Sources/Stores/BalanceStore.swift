@@ -158,7 +158,7 @@ public struct BalanceStore: Sendable {
     @discardableResult
     public func setIsEnabled(walletId: WalletId, assetIds: [AssetId], value: Bool) throws -> Int {
         try db.write { db in
-            let assigments = switch value {
+            let assignments = switch value {
             case true: [
                 BalanceRecord.Columns.isEnabled.set(to: true),
             ]
@@ -170,7 +170,7 @@ public struct BalanceStore: Sendable {
             return try BalanceRecord
                 .filter(BalanceRecord.Columns.walletId == walletId.id)
                 .filter(assetIds.map { $0.identifier }.contains(BalanceRecord.Columns.assetId))
-                .updateAll(db, assigments)
+                .updateAll(db, assignments)
         }
     }
 
