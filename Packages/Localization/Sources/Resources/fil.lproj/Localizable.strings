@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "May referral code ka ba mula sa isang kaibigan?";
 "rewards.activate_referral_code.title" = "I-redeem ang code";
 "rewards.create_referral_code.title" = "Gumawa ng Username";
-"rewards.create_referral_code.info" = "Ito ang magiging personal mong username.";
+"rewards.create_referral_code.info" = "Ito ang magiging personal mong palayaw para sa kasalukuyang wallet.";
 "rewards.username" = "Pangalan ng Gumagamit";
 "rewards.ways_spend.title" = "Mga Paraan ng Paggastos";
 "rewards.ways_spend.asset.title" = "Kunin %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "Handa na ang iyong bonus!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Wala pang mga abiso";
+"notifications.inApp.state.empty.description" = "Makakakita ka ng mga update tungkol sa iyong mga notification dito";
+"notifications.inApp.referral.joined_title" = "Bagong Referral";
+"notifications.inApp.referral.joined_subtitle" = "Ang iyong referral %@ sumali";
+"notifications.inApp.rewards.enabled_title" = "Pinagana ang mga Gantimpala";
+"notifications.inApp.rewards.enabled_subtitle" = "Simulan ang pagkamit ng mga puntos sa pamamagitan ng pag-imbita ng mga kaibigan";
+"notifications.inApp.rewards.disabled_title" = "Hindi Pinagana ang Referral Code";
+"notifications.inApp.rewards.disabled_subtitle" = "Na-deactivate na ang iyong referral code";
+"rewards.nickname" = "Palayaw";

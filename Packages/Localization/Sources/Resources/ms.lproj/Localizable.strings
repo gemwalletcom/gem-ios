@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "Ada kod rujukan daripada rakan?";
 "rewards.activate_referral_code.title" = "Tebus kod";
 "rewards.create_referral_code.title" = "Cipta Nama Pengguna";
-"rewards.create_referral_code.info" = "Ini akan menjadi nama pengguna peribadi anda.";
+"rewards.create_referral_code.info" = "Ini akan menjadi nama panggilan peribadi anda untuk dompet semasa.";
 "rewards.username" = "Nama pengguna";
 "rewards.ways_spend.title" = "Cara-cara untuk Berbelanja";
 "rewards.ways_spend.asset.title" = "Dapatkan %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "Bonus anda sudah siap!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Tiada pemberitahuan lagi";
+"notifications.inApp.state.empty.description" = "Anda akan melihat kemas kini tentang pemberitahuan anda di sini";
+"notifications.inApp.referral.joined_title" = "Rujukan Baharu";
+"notifications.inApp.referral.joined_subtitle" = "Rujukan anda %@ menyertai";
+"notifications.inApp.rewards.enabled_title" = "Ganjaran Didayakan";
+"notifications.inApp.rewards.enabled_subtitle" = "Mula kumpul mata dengan menjemput rakan";
+"notifications.inApp.rewards.disabled_title" = "Kod Rujukan Dilumpuhkan";
+"notifications.inApp.rewards.disabled_subtitle" = "Kod rujukan anda telah dinyahaktifkan";
+"rewards.nickname" = "Nama panggilan";

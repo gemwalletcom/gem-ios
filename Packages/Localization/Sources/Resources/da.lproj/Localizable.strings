@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "Har du en henvisningskode fra en ven?";
 "rewards.activate_referral_code.title" = "Indløs kode";
 "rewards.create_referral_code.title" = "Opret brugernavn";
-"rewards.create_referral_code.info" = "Dette vil være dit personlige brugernavn.";
+"rewards.create_referral_code.info" = "Dette vil være dit personlige kaldenavn for den nuværende tegnebog.";
 "rewards.username" = "Brugernavn";
 "rewards.ways_spend.title" = "Måder at bruge penge på";
 "rewards.ways_spend.asset.title" = "Få %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "Din bonus er klar!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Ingen notifikationer endnu";
+"notifications.inApp.state.empty.description" = "Du kan se opdateringer om dine notifikationer her";
+"notifications.inApp.referral.joined_title" = "Ny henvisning";
+"notifications.inApp.referral.joined_subtitle" = "Din henvisning %@ tiltrådte";
+"notifications.inApp.rewards.enabled_title" = "Belønninger aktiveret";
+"notifications.inApp.rewards.enabled_subtitle" = "Begynd at optjene point ved at invitere venner";
+"notifications.inApp.rewards.disabled_title" = "Henvisningskode deaktiveret";
+"notifications.inApp.rewards.disabled_subtitle" = "Din henvisningskode er blevet deaktiveret";
+"rewards.nickname" = "Kælenavn";

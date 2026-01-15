@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "Hast du einen Empfehlungscode von einem Freund?";
 "rewards.activate_referral_code.title" = "Einlösecode";
 "rewards.create_referral_code.title" = "Benutzername erstellen";
-"rewards.create_referral_code.info" = "Dies wird Ihr persönlicher Benutzername sein.";
+"rewards.create_referral_code.info" = "Dies wird Ihr persönlicher Spitzname für die aktuelle Geldbörse sein.";
 "rewards.username" = "Benutzername";
 "rewards.ways_spend.title" = "Möglichkeiten zum Ausgeben";
 "rewards.ways_spend.asset.title" = "Erhalten %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "Ihr Bonus ist bereit!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Noch keine Benachrichtigungen";
+"notifications.inApp.state.empty.description" = "Hier sehen Sie Aktualisierungen zu Ihren Benachrichtigungen.";
+"notifications.inApp.referral.joined_title" = "Neue Überweisung";
+"notifications.inApp.referral.joined_subtitle" = "Ihre Empfehlung %@ beigetreten";
+"notifications.inApp.rewards.enabled_title" = "Prämien aktiviert";
+"notifications.inApp.rewards.enabled_subtitle" = "Sammle Punkte, indem du Freunde einlädst.";
+"notifications.inApp.rewards.disabled_title" = "Empfehlungscode deaktiviert";
+"notifications.inApp.rewards.disabled_subtitle" = "Ihr Empfehlungscode wurde deaktiviert";
+"rewards.nickname" = "Spitzname";

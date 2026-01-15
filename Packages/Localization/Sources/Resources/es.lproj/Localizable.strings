@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "¿Tienes un código de referencia de un amigo?";
 "rewards.activate_referral_code.title" = "Canjear código";
 "rewards.create_referral_code.title" = "Crear nombre de usuario";
-"rewards.create_referral_code.info" = "Este será tu nombre de usuario personal.";
+"rewards.create_referral_code.info" = "Este será tu apodo personal para la billetera actual.";
 "rewards.username" = "Nombre de usuario";
 "rewards.ways_spend.title" = "Formas de gastar";
 "rewards.ways_spend.asset.title" = "Conseguir %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "¡Tu bono está listo!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "No hay notificaciones todavía";
+"notifications.inApp.state.empty.description" = "Verás actualizaciones sobre tus notificaciones aquí";
+"notifications.inApp.referral.joined_title" = "Nueva referencia";
+"notifications.inApp.referral.joined_subtitle" = "Su referencia %@ unido";
+"notifications.inApp.rewards.enabled_title" = "Recompensas habilitadas";
+"notifications.inApp.rewards.enabled_subtitle" = "Empieza a ganar puntos invitando a tus amigos";
+"notifications.inApp.rewards.disabled_title" = "Código de referencia deshabilitado";
+"notifications.inApp.rewards.disabled_subtitle" = "Su código de referencia ha sido desactivado";
+"rewards.nickname" = "Apodo";

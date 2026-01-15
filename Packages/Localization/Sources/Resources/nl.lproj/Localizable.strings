@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "Heb je een verwijzingscode van een vriend?";
 "rewards.activate_referral_code.title" = "Code inwisselen";
 "rewards.create_referral_code.title" = "Gebruikersnaam aanmaken";
-"rewards.create_referral_code.info" = "Dit wordt je persoonlijke gebruikersnaam.";
+"rewards.create_referral_code.info" = "Dit wordt je persoonlijke bijnaam voor de huidige portemonnee.";
 "rewards.username" = "Gebruikersnaam";
 "rewards.ways_spend.title" = "Manieren om je geld uit te geven";
 "rewards.ways_spend.asset.title" = "Krijgen %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "Je bonus staat klaar!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Nog geen meldingen";
+"notifications.inApp.state.empty.description" = "Je ziet hier updates over je meldingen.";
+"notifications.inApp.referral.joined_title" = "Nieuwe verwijzing";
+"notifications.inApp.referral.joined_subtitle" = "Uw verwijzing %@ lid geworden";
+"notifications.inApp.rewards.enabled_title" = "Beloningen ingeschakeld";
+"notifications.inApp.rewards.enabled_subtitle" = "Verdien punten door vrienden uit te nodigen.";
+"notifications.inApp.rewards.disabled_title" = "Verwijzingscode uitgeschakeld";
+"notifications.inApp.rewards.disabled_subtitle" = "Je verwijzingscode is gedeactiveerd.";
+"rewards.nickname" = "Bijnaam";

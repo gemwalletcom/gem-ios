@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "কোন বন্ধুর কাছ থেকে রেফারেল কোড পেয়েছেন?";
 "rewards.activate_referral_code.title" = "কোড রিডিম করুন";
 "rewards.create_referral_code.title" = "ব্যবহারকারীর নাম তৈরি করুন";
-"rewards.create_referral_code.info" = "এটি আপনার ব্যক্তিগত ব্যবহারকারীর নাম হবে।";
+"rewards.create_referral_code.info" = "এটি আপনার বর্তমান ওয়ালেটের ব্যক্তিগত ডাকনাম হবে।";
 "rewards.username" = "ব্যবহারকারীর নাম";
 "rewards.ways_spend.title" = "খরচ করার উপায়";
 "rewards.ways_spend.asset.title" = "পান %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "আপনার বোনাস প্রস্তুত!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "এখনও কোনও বিজ্ঞপ্তি নেই";
+"notifications.inApp.state.empty.description" = "আপনার বিজ্ঞপ্তি সম্পর্কে আপডেটগুলি এখানে দেখতে পাবেন।";
+"notifications.inApp.referral.joined_title" = "নতুন রেফারেল";
+"notifications.inApp.referral.joined_subtitle" = "আপনার রেফারেল %@ যোগদান করেছেন";
+"notifications.inApp.rewards.enabled_title" = "পুরস্কার চালু করা হয়েছে";
+"notifications.inApp.rewards.enabled_subtitle" = "বন্ধুদের আমন্ত্রণ জানিয়ে পয়েন্ট অর্জন শুরু করুন";
+"notifications.inApp.rewards.disabled_title" = "রেফারেল কোড বন্ধ করা আছে";
+"notifications.inApp.rewards.disabled_subtitle" = "আপনার রেফারেল কোডটি নিষ্ক্রিয় করা হয়েছে।";
+"rewards.nickname" = "ডাকনাম";

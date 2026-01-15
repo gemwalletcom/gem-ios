@@ -22,7 +22,7 @@ struct SecurityReminderScene: View {
             ForEach(model.items) { item in
                 Section {
                     ListItemView(
-                        title: TextValue(text: item.title, style: .headline),
+                        title: TextValue(text: item.title, style: .headline, lineLimit: 2),
                         titleExtra: TextValue(text: item.subtitle, style: .bodySecondary),
                         imageStyle: item.image
                     )

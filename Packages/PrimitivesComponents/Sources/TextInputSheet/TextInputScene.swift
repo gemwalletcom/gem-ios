@@ -41,6 +41,7 @@ public struct TextInputScene<ViewModel: TextInputViewModelProtocol>: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(Localized.Common.cancel, action: onCancel)
+                        .bold()
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     if model.isLoading {

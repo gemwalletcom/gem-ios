@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "کد معرف از دوستتون دارید؟";
 "rewards.activate_referral_code.title" = "کد فعال‌سازی";
 "rewards.create_referral_code.title" = "ایجاد نام کاربری";
-"rewards.create_referral_code.info" = "این نام کاربری شخصی شما خواهد بود.";
+"rewards.create_referral_code.info" = "این نام مستعار شخصی شما برای کیف پول فعلی خواهد بود.";
 "rewards.username" = "نام کاربری";
 "rewards.ways_spend.title" = "راه‌های خرج کردن";
 "rewards.ways_spend.asset.title" = "دریافت %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "جایزه شما آماده است!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "هنوز هیچ اعلانی وجود ندارد";
+"notifications.inApp.state.empty.description" = "به‌روزرسانی‌های مربوط به اعلان‌هایتان را اینجا خواهید دید";
+"notifications.inApp.referral.joined_title" = "ارجاع جدید";
+"notifications.inApp.referral.joined_subtitle" = "ارجاع شما %@ پیوست";
+"notifications.inApp.rewards.enabled_title" = "پاداش‌ها فعال شدند";
+"notifications.inApp.rewards.enabled_subtitle" = "با دعوت از دوستان، امتیاز جمع کنید";
+"notifications.inApp.rewards.disabled_title" = "کد ارجاع غیرفعال است";
+"notifications.inApp.rewards.disabled_subtitle" = "کد معرف شما غیرفعال شده است";
+"rewards.nickname" = "نام مستعار";

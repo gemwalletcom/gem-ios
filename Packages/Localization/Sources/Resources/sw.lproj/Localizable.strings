@@ -538,7 +538,7 @@
 "rewards.activate_referral_code.description" = "Una nambari ya rufaa kutoka kwa rafiki?";
 "rewards.activate_referral_code.title" = "Komboa msimbo";
 "rewards.create_referral_code.title" = "Unda Jina la Mtumiaji";
-"rewards.create_referral_code.info" = "Hili litakuwa jina lako la mtumiaji binafsi.";
+"rewards.create_referral_code.info" = "Hili litakuwa jina lako la utani la pochi ya sasa.";
 "rewards.username" = "Jina la mtumiaji";
 "rewards.ways_spend.title" = "Njia za Kutumia";
 "rewards.ways_spend.asset.title" = "Pata %@";
@@ -553,3 +553,12 @@
 "rewards.pending.description_ready" = "Bonasi yako iko tayari!";
 "recent_activity.state.empty.title" = "Your recents will appear here";
 "recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Hakuna arifa bado";
+"notifications.inApp.state.empty.description" = "Utaona masasisho kuhusu arifa zako hapa";
+"notifications.inApp.referral.joined_title" = "Rufaa Mpya";
+"notifications.inApp.referral.joined_subtitle" = "Rufaa yako %@ alijiunga";
+"notifications.inApp.rewards.enabled_title" = "Zawadi Zimewezeshwa";
+"notifications.inApp.rewards.enabled_subtitle" = "Anza kupata pointi kwa kuwaalika marafiki";
+"notifications.inApp.rewards.disabled_title" = "Nambari ya Rufaa Imezimwa";
+"notifications.inApp.rewards.disabled_subtitle" = "Nambari yako ya rufaa imezimwa";
+"rewards.nickname" = "Jina la utani";
