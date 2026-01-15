@@ -24,6 +24,7 @@ public struct RecentsScene: View {
                             NavigationCustomLink(
                                 with: ListItemView(
                                     title: assetModel.name,
+                                    titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
                                     imageStyle: .asset(assetImage: assetModel.assetImage)
                                 )
                             ) {
@@ -40,7 +41,7 @@ public struct RecentsScene: View {
             .contentMargins([.top], .extraSmall, for: .scrollContent)
             .listSectionSpacing(.compact)
             .scrollContentBackground(.hidden)
-            .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
+            .background { Colors.sheetInsetGroupedListStyle.ignoresSafeArea() }
             .searchable(
                 text: $model.searchQuery,
                 placement: .navigationBarDrawer(displayMode: .always)
