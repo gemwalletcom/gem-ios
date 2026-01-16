@@ -49,7 +49,7 @@ public struct RewardsScene: View {
                 if model.isInfoEnabled {
                     infoSection(rewards: rewards)
                 }
-                if !rewards.redemptionOptions.isEmpty {
+                if rewards.redemptionOptions.isNotEmpty {
                     redemptionOptionsSection(options: rewards.redemptionOptions)
                 }
             case .noData:
