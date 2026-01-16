@@ -32,11 +32,7 @@ public struct ChartScene: View {
                         case .data(let model):
                             ChartView(model: model)
                         case .error(let error):
-                            StateEmptyView(
-                                title: model.errorTitle,
-                                description: model.description(for: error),
-                                image: Images.ErrorConent.error
-                            )
+                            StateEmptyView.error(error)
                         }
                     }
                     .frame(height: 320)
