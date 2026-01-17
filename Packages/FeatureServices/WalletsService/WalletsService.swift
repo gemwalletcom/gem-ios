@@ -105,6 +105,10 @@ extension WalletsService: AssetsEnabler {
     public func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async {
         await assetsEnabler.enableAssets(walletId: walletId, assetIds: assetIds, enabled: enabled)
     }
+
+    public func enableAssetId(walletId: WalletId, assetId: AssetId) async {
+        await assetsEnabler.enableAssetId(walletId: walletId, assetId: assetId)
+    }
 }
 
 // MARK: - PriceUpdater

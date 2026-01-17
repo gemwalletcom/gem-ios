@@ -9,6 +9,7 @@ import Preferences
 import Localization
 import Style
 import GemstonePrimitives
+import WalletsService
 
 @Observable
 @MainActor
@@ -22,6 +23,7 @@ public final class RewardsViewModel: Sendable {
     }()
 
     private let rewardsService: RewardsServiceable
+    private let assetsEnabler: any AssetsEnabler
     private let activateCode: String?
     private let giftCode: String?
 
@@ -34,12 +36,14 @@ public final class RewardsViewModel: Sendable {
 
     public init(
         rewardsService: RewardsServiceable,
+        assetsEnabler: any AssetsEnabler,
         wallet: Wallet,
         wallets: [Wallet],
         activateCode: String? = nil,
         giftCode: String? = nil
     ) {
         self.rewardsService = rewardsService
+        self.assetsEnabler = assetsEnabler
         self.selectedWallet = wallet
         self.wallets = wallets
         self.activateCode = activateCode
@@ -236,9 +240,11 @@ public final class RewardsViewModel: Sendable {
 
     func redeem(option: RewardRedemptionOption) async {
         do {
-            _ = try await rewardsService.redeem(wallet: selectedWallet, redemptionId: option.id)
+            let result = try await rewardsService.redeem(wallet: selectedWallet, redemptionId: option.id)
             toastMessage = ToastMessage.success(Localized.Common.done)
-            await fetch()
+            if let asset = result.redemption.option.asset {
+                Task { await assetsEnabler.enableAssetId(walletId: selectedWallet.walletId, assetId: asset.id) }
+            }
         } catch {
             isPresentingError = error.localizedDescription
         }
@@ -257,4 +263,5 @@ public final class RewardsViewModel: Sendable {
             state = .noData
         }
     }
+
 }
