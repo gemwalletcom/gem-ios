@@ -261,7 +261,10 @@ public struct RewardsScene: View {
             message: "",
             actions: [
                 AlertAction(title: Localized.Transfer.confirm, isDefaultAction: true) {
-                    Task { await model.redeem(option: option) }
+                    Task {
+                        await model.redeem(option: option)
+                        await model.fetch()
+                    }
                 },
                 .cancel(title: Localized.Common.cancel)
             ]

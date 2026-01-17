@@ -9,7 +9,6 @@ import Preferences
 import Localization
 import Style
 import GemstonePrimitives
-import AssetsService
 import WalletsService
 
 @Observable
@@ -24,7 +23,6 @@ public final class RewardsViewModel: Sendable {
     }()
 
     private let rewardsService: RewardsServiceable
-    private let assetsService: AssetsService
     private let assetsEnabler: any AssetsEnabler
     private let activateCode: String?
     private let giftCode: String?
@@ -38,7 +36,6 @@ public final class RewardsViewModel: Sendable {
 
     public init(
         rewardsService: RewardsServiceable,
-        assetsService: AssetsService,
         assetsEnabler: any AssetsEnabler,
         wallet: Wallet,
         wallets: [Wallet],
@@ -46,7 +43,6 @@ public final class RewardsViewModel: Sendable {
         giftCode: String? = nil
     ) {
         self.rewardsService = rewardsService
-        self.assetsService = assetsService
         self.assetsEnabler = assetsEnabler
         self.selectedWallet = wallet
         self.wallets = wallets
@@ -245,11 +241,10 @@ public final class RewardsViewModel: Sendable {
     func redeem(option: RewardRedemptionOption) async {
         do {
             let result = try await rewardsService.redeem(wallet: selectedWallet, redemptionId: option.id)
-            if let asset = result.redemption.option.asset {
-                enableAsset(wallet: selectedWallet, asset: asset)
-            }
             toastMessage = ToastMessage.success(Localized.Common.done)
-            await fetch()
+            if let asset = result.redemption.option.asset {
+                Task { await assetsEnabler.enableAssetId(walletId: selectedWallet.walletId, assetId: asset.id) }
+            }
         } catch {
             isPresentingError = error.localizedDescription
         }
@@ -269,15 +264,4 @@ public final class RewardsViewModel: Sendable {
         }
     }
 
-    private func enableAsset(wallet: Wallet, asset: Asset) {
-        Task {
-            do {
-                try await Task.sleep(for: .seconds(2))
-                let asset = try await assetsService.getOrFetchAsset(for: asset.id)
-                await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
-            } catch {
-                debugLog("Rewards enable asset error: \(error)")
-            }
-        }
-    }
 }

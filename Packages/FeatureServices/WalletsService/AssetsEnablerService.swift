@@ -35,4 +35,13 @@ struct AssetsEnablerService: AssetsEnabler {
             debugLog("enableAssets error: \(error)")
         }
     }
+
+    func enableAssetId(walletId: WalletId, assetId: AssetId) async {
+        do {
+            let asset = try await assetsService.getOrFetchAsset(for: assetId)
+            await enableAssets(walletId: walletId, assetIds: [asset.id], enabled: true)
+        } catch {
+            debugLog("enableAssetId error: \(error)")
+        }
+    }
 }
