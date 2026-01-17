@@ -31,7 +31,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         case .stake: Localized.Stake.State.Empty.title
         case .walletConnect: Localized.WalletConnect.State.Empty.title
         case .markets: Localized.Markets.State.Empty.title
-        case .notifications: Localized.Notifications.InApp.State.Empty.title
+        case .notifications: Localized.Notifications.Inapp.State.Empty.title
         case let .search(searchType, _):
             switch searchType {
             case .assets: Localized.Assets.State.Empty.searchTitle
@@ -64,7 +64,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             case .activity: Localized.Activity.State.Empty.searchDescription
             }
         case .markets: .none
-        case .notifications: Localized.Notifications.InApp.State.Empty.description
+        case .notifications: Localized.Notifications.Inapp.State.Empty.description
         }
     }
 

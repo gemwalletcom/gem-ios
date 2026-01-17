@@ -68,6 +68,7 @@ public struct Migrations {
             try PerpetualPositionRecord.create(db: db)
 
             try RecentActivityRecord.create(db: db)
+            try InAppNotificationRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)
     }

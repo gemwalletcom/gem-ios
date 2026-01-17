@@ -30,17 +30,17 @@ public struct InAppNotificationListItemViewModel: Identifiable, Sendable {
 
     private var title: String {
         switch notification.notificationType {
-        case .referralJoined: Localized.Notifications.InApp.Referral.joinedTitle
-        case .rewardsEnabled: Localized.Notifications.InApp.Rewards.enabledTitle
-        case .rewardsCodeDisabled: Localized.Notifications.InApp.Rewards.disabledTitle
+        case .referralJoined: Localized.Notifications.Inapp.Referral.Joined.title
+        case .rewardsEnabled: Localized.Notifications.Inapp.Rewards.Enabled.title
+        case .rewardsCodeDisabled: Localized.Notifications.Inapp.Rewards.Disabled.title
         }
     }
 
     private var titleExtra: String? {
         switch notification.notificationType {
-        case .referralJoined: metadata.map { Localized.Notifications.InApp.Referral.joinedSubtitle($0.username) }
-        case .rewardsEnabled: Localized.Notifications.InApp.Rewards.enabledSubtitle
-        case .rewardsCodeDisabled: Localized.Notifications.InApp.Rewards.disabledSubtitle
+        case .referralJoined: metadata.map { Localized.Notifications.Inapp.Referral.Joined.subtitle($0.username) }
+        case .rewardsEnabled: Localized.Notifications.Inapp.Rewards.Enabled.subtitle
+        case .rewardsCodeDisabled: Localized.Notifications.Inapp.Rewards.Disabled.subtitle
         }
     }
 
@@ -64,7 +64,8 @@ public struct InAppNotificationListItemViewModel: Identifiable, Sendable {
 
     private var pointsText: String? {
         guard let points = metadata?.points, points != .zero else { return nil }
-        return "+\(points) \(Emoji.gem)"
+        let sign = points >= 0 ? "+" : "-"
+        return "\(sign)\(abs(points)) \(Emoji.gem)"
     }
 
     private var pointsStyle: TextStyle {

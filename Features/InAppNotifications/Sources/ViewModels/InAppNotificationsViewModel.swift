@@ -34,21 +34,14 @@ public final class InAppNotificationsViewModel {
     }
 
     private var sections: [ListSection<InAppNotificationListItemViewModel>] {
-        let grouped = Dictionary(grouping: notifications) {
-            Calendar.current.startOfDay(for: $0.createdAt)
-        }
-        return grouped.keys.sorted(by: >).compactMap { date in
-            guard let items = grouped[date] else { return nil }
-            return ListSection(
-                id: date.ISO8601Format(),
-                title: TransactionDateFormatter(date: date).section,
-                image: nil,
-                values: items.map { InAppNotificationListItemViewModel(notification: $0) }
-            )
-        }
+        DateSectionBuilder(
+            items: notifications,
+            dateKeyPath: \.createdAt,
+            transform: { InAppNotificationListItemViewModel(notification: $0) }
+        ).build()
     }
 
-    private var hasUnreadNotifications: Bool {
+    var hasUnreadNotifications: Bool {
         notifications.contains { !$0.isRead }
     }
 }
@@ -63,7 +56,9 @@ extension InAppNotificationsViewModel {
     public func update() async {
         do {
             try await notificationService.update()
-            await markAsRead()
+            if hasUnreadNotifications {
+                await markAsRead()
+            }
         } catch {
             state = .error(error)
             debugLog("update notifications error: \(error)")
@@ -71,12 +66,10 @@ extension InAppNotificationsViewModel {
     }
 
     public func markAsRead() async {
-        if hasUnreadNotifications {
-            do {
-                try await notificationService.markNotificationsRead()
-            } catch {
-                debugLog("markAsRead error: \(error)")
-            }
+        do {
+            try await notificationService.markNotificationsRead()
+        } catch {
+            debugLog("markAsRead error: \(error)")
         }
     }
 }

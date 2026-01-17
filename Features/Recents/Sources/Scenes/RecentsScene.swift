@@ -21,7 +21,7 @@ public struct RecentsScene: View {
             List {
                 ForEach(model.sections) { section in
                     Section {
-                        ForEach(section.assets) { recentAsset in
+                        ForEach(section.values) { recentAsset in
                             let assetModel = AssetViewModel(asset: recentAsset.asset)
                             NavigationCustomLink(
                                 with: ListItemView(
@@ -33,7 +33,7 @@ public struct RecentsScene: View {
                             }
                         }
                     } header: {
-                        Text(section.title)
+                        section.title.map { Text($0) }
                     }
                     .listRowInsets(.assetListRowInsets)
                 }

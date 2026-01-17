@@ -29,7 +29,6 @@ extension InAppNotificationRecord: CreateTable {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
             $0.primaryKey(Columns.id.name, .text)
                 .notNull()
-                .indexed()
             $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
@@ -37,7 +36,6 @@ extension InAppNotificationRecord: CreateTable {
                 .notNull()
             $0.column(Columns.isRead.name, .boolean)
                 .notNull()
-                .defaults(to: false)
             $0.column(Columns.metadata.name, .jsonText)
             $0.column(Columns.createdAt.name, .date)
                 .notNull()
