@@ -1,10 +1,10 @@
 {
-  "originHash" : "a3df2d97e0909799479998a5763f679c5b2a6b7245f9152d33d9c80bcdca73ea",
+  "originHash" : "fd57f9dddfe412e17254ec166f29a4443ab8e6b7ac29274b731b1670a1fc661f",
   "pins" : [
     {
       "identity" : "bigint",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/attaswift/BigInt.git",
+      "location" : "https://github.com/gemwalletcom/BigInt.git",
       "state" : {
         "revision" : "e07e00fa1fd435143a2dcf8b7eec9a7710b2fdfe",
         "version" : "5.7.0"
