@@ -2,13 +2,11 @@
 
 import Foundation
 import SwiftUI
-import Localization
+import PrimitivesComponents
 
 public struct SetPriceAlertNavigationStack: View {
-    @Environment(\.dismiss) private var dismiss
-
     private let model: SetPriceAlertViewModel
-    
+
     public init(model: SetPriceAlertViewModel) {
         self.model = model
     }
@@ -16,13 +14,7 @@ public struct SetPriceAlertNavigationStack: View {
     public var body: some View {
         NavigationStack {
             SetPriceAlertScene(model: model)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.done) {
-                        dismiss()
-                    }.bold()
-                }
-            }
+                .toolbarDismissItem(type: .close, placement: .topBarLeading)
         }
     }
 }

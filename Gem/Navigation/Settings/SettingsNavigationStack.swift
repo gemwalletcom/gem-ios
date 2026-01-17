@@ -166,6 +166,7 @@ struct SettingsNavigationStack: View {
                     RewardsScene(
                         model: RewardsViewModel(
                             rewardsService: rewardsService,
+                            assetsEnabler: walletsService,
                             wallet: wallet,
                             wallets: wallets,
                             activateCode: scene.code,

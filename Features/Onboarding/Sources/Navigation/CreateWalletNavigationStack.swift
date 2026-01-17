@@ -17,7 +17,7 @@ public struct CreateWalletNavigationStack: View {
     public var body: some View {
         NavigationStack(path: $navigationPath) {
             rootScene
-                .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
+                .toolbarDismissItem(type: .close, placement: .topBarLeading)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationDestination(for: Scenes.VerifyPhrase.self) { scene in
                     VerifyPhraseWalletScene(
@@ -59,7 +59,7 @@ public struct CreateWalletNavigationStack: View {
                                 avatarService: model.avatarService
                             )
                         )
-                        .toolbarDismissItem(title: .done, placement: .topBarLeading)
+                        .toolbarDismissItem(type: .close, placement: .topBarLeading)
                     }
                 }
         }

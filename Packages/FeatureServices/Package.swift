@@ -346,11 +346,12 @@ let package = Package(
             name: "WalletsServiceTestKit",
             dependencies: [
                 "DeviceServiceTestKit",
-                "BannerServiceTestKit",
                 .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "PriceServiceTestKit",
                 "BalanceServiceTestKit",
-                "TransactionStateServiceTestKit",
+                "WalletSessionService",
+                "WalletSessionServiceTestKit",
                 "WalletsService"
             ],
             path: "WalletsService/TestKit"
@@ -594,6 +595,7 @@ let package = Package(
             dependencies: [
                 "WalletsService",
                 "WalletsServiceTestKit",
+                "WalletSessionService",
                 .product(name: "StoreTestKit", package: "Store"),
                 "BalanceServiceTestKit",
                 "PriceServiceTestKit",

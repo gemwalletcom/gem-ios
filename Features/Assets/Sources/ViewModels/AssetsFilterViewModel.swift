@@ -74,7 +74,6 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
 
     var title: String { Localized.Filter.title }
     var clear: String { Localized.Filter.clear }
-    var done: String { Localized.Common.done }
 
     var hasBalanceImageStyle: ListItemImageStyle? { .settings(assetImage: .image(Images.Filters.balance)) }
     var hasBalanceTitle: String { Localized.Filter.hasBalance }

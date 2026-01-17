@@ -26,12 +26,12 @@ public final class WalletSceneViewModel: Sendable {
 
     public var wallet: Wallet
 
-    // db ovservation
+    // db observation
     public var totalFiatRequest: TotalValueRequest
     public var assetsRequest: AssetsRequest
     public var bannersRequest: BannersRequest
 
-    // db observered values
+    // db observed values
     public var totalFiatValue: Double = .zero
     public var assets: [AssetData] = []
     public var banners: [Banner] = []

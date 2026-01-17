@@ -9,13 +9,15 @@ public struct Notification: Codable, Equatable, Sendable {
 	public let notificationType: NotificationType
 	public let isRead: Bool
 	public let metadata: AnyCodableValue?
+	public let readAt: Date?
 	public let createdAt: Date
 
-	public init(walletId: String, notificationType: NotificationType, isRead: Bool, metadata: AnyCodableValue?, createdAt: Date) {
+	public init(walletId: String, notificationType: NotificationType, isRead: Bool, metadata: AnyCodableValue?, readAt: Date?, createdAt: Date) {
 		self.walletId = walletId
 		self.notificationType = notificationType
 		self.isRead = isRead
 		self.metadata = metadata
+		self.readAt = readAt
 		self.createdAt = createdAt
 	}
 }

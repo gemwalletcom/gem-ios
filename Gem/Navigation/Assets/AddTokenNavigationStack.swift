@@ -2,9 +2,10 @@
 
 import SwiftUI
 import Primitives
-import Localization
 import ChainService
 import Assets
+import Style
+import Localization
 
 struct AddTokenNavigationStack: View {
     
@@ -26,8 +27,8 @@ struct AddTokenNavigationStack: View {
             .navigationTitle(Localized.Settings.Networks.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.cancel) {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("", systemImage: SystemImage.xmark) {
                         isPresenting.wrappedValue = false
                     }
                 }

@@ -30,7 +30,6 @@ public final class NetworkFeeSceneViewModel {
     }
 
     public var title: String { Localized.Transfer.networkFee }
-    public var doneTitle: String { Localized.Common.done }
     public var infoIcon: String { Localized.FeeRates.info }
 
     public var feeRatesViewModels: [FeeRateViewModel] {

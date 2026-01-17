@@ -70,7 +70,7 @@ struct ServicesFactory {
             chainFactory: chainServiceFactory
         )
 
-        let walletService = Self.makewalletService(
+        let walletService = Self.makeWalletService(
             preferences: storages.observablePreferences,
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
@@ -108,9 +108,9 @@ struct ServicesFactory {
 
         let preferences = storages.observablePreferences.preferences
         let pushNotificationEnablerService = PushNotificationEnablerService(preferences: preferences)
+        let bannerSetupService = BannerSetupService(store: storeManager.bannerStore, preferences: preferences)
         let bannerService = Self.makeBannerService(
             bannerStore: storeManager.bannerStore,
-            preferences: preferences,
             pushNotificationEnablerService: pushNotificationEnablerService
         )
         let navigationPresenter = NavigationPresenter()
@@ -139,19 +139,20 @@ struct ServicesFactory {
         let explorerService = ExplorerService.standard
         let swapService = SwapService(nodeProvider: nodeService)
 
+        let walletSessionService = WalletSessionService(
+            walletStore: storeManager.walletStore,
+            preferences: storages.observablePreferences
+        )
         let presenter = WalletConnectorPresenter()
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)
         let connectionsService = Self.makeConnectionsService(
             connectionsStore: storeManager.connectionsStore,
-            walletSessionService: WalletSessionService(
-                walletStore: storeManager.walletStore,
-                preferences: storages.observablePreferences
-            ),
+            walletSessionService: walletSessionService,
             interactor: walletConnectorManager
         )
 
         let walletsService = Self.makeWalletsService(
-            walletStore: storeManager.walletStore,
+            walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,
@@ -170,29 +171,22 @@ struct ServicesFactory {
         let onStartService = Self.makeOnstartService(
             assetStore: storeManager.assetStore,
             nodeStore: storeManager.nodeStore,
-            balanceStore: storeManager.balanceStore,
             preferences: preferences,
-            chainServiceFactory: chainServiceFactory,
+            assetsService: assetsService,
             walletService: walletService
         )
         let onstartAsyncService = Self.makeOnstartAsyncService(
             nodeService: nodeService,
             preferences: preferences,
             assetsService: assetsService,
-            bannerSetupService: BannerSetupService(
-                store: storeManager.bannerStore,
-                preferences: preferences
-            ),
+            bannerSetupService: bannerSetupService,
             configService: configService,
             swappableChainsProvider: swapService
         )
         let onstartWalletService = Self.makeOnstartWalletService(
             preferences: preferences,
             deviceService: deviceService,
-            bannerSetupService: BannerSetupService(
-                store: storeManager.bannerStore,
-                preferences: preferences
-            ),
+            bannerSetupService: bannerSetupService,
             addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory),
             pushNotificationEnablerService: pushNotificationEnablerService
         )
@@ -324,7 +318,7 @@ extension ServicesFactory {
         )
     }
 
-    private static func makewalletService(
+    private static func makeWalletService(
         preferences: ObservablePreferences,
         keystore: any Keystore,
         walletStore: WalletStore,
@@ -408,7 +402,6 @@ extension ServicesFactory {
 
     private static func makeBannerService(
         bannerStore: BannerStore,
-        preferences: Preferences,
         pushNotificationEnablerService: PushNotificationEnablerService
     ) -> BannerService {
         BannerService(
@@ -447,7 +440,7 @@ extension ServicesFactory {
     }
 
     private static func makeWalletsService(
-        walletStore: WalletStore,
+        walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -455,7 +448,7 @@ extension ServicesFactory {
         deviceService: DeviceService
     ) -> WalletsService {
         WalletsService(
-            walletStore: walletStore,
+            walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,
@@ -467,17 +460,12 @@ extension ServicesFactory {
     private static func makeOnstartService(
         assetStore: AssetStore,
         nodeStore: NodeStore,
-        balanceStore: BalanceStore,
         preferences: Preferences,
-        chainServiceFactory: ChainServiceFactory,
+        assetsService: AssetsService,
         walletService: WalletService
     ) -> OnstartService {
         OnstartService(
-            assetsService: AssetsService(
-                assetStore: assetStore,
-                balanceStore: balanceStore,
-                chainServiceFactory: chainServiceFactory
-            ),
+            assetsService: assetsService,
             assetStore: assetStore,
             nodeStore: nodeStore,
             preferences: preferences,
