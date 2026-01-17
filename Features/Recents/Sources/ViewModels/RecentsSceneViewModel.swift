@@ -46,7 +46,9 @@ public final class RecentsSceneViewModel {
     var showEmpty: Bool { recentAssets.isEmpty || (!searchQuery.isEmpty && filteredAssets.isEmpty) }
     var showClear: Bool { recentAssets.isNotEmpty }
 
-    var sections: [RecentAssetsSection] { RecentAssetsSection.from(filteredAssets) }
+    var sections: [ListSection<RecentAsset>] {
+        DateSectionBuilder(items: filteredAssets, dateKeyPath: \.createdAt).build()
+    }
     var emptyModel: any EmptyContentViewable {
         if recentAssets.isEmpty {
             return EmptyContentTypeViewModel(type: .recents)

@@ -68,4 +68,5 @@ extension EnvironmentValues {
     @Entry var eventPresenterService: EventPresenterService = AppResolver.main.services.eventPresenterService
     @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
     @Entry var rewardsService: RewardsService = AppResolver.main.services.rewardsService
+    @Entry var inAppNotificationService: InAppNotificationService = AppResolver.main.services.inAppNotificationService
 }

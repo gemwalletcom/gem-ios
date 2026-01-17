@@ -18,4 +18,5 @@ public enum EmptyContentType {
     case search(type: SearchType, action: (() -> Void)? = nil)
     case markets
     case recents
+    case notifications
 }

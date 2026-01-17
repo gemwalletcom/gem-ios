@@ -33,6 +33,7 @@ extension View {
             .environment(\.avatarService, services.avatarService)
             .environment(\.releaseService, services.appReleaseService)
             .environment(\.viewModelFactory, services.viewModelFactory)
+            .environment(\.inAppNotificationService, services.inAppNotificationService)
     }
     
     private func inject(storages: AppResolver.Storages) -> some View {
