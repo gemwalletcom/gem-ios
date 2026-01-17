@@ -13,6 +13,7 @@ public struct InAppNotificationRecord: Codable, FetchableRecord, PersistableReco
         static let notificationType = Column("notificationType")
         static let isRead = Column("isRead")
         static let metadata = Column("metadata")
+        static let readAt = Column("readAt")
         static let createdAt = Column("createdAt")
     }
 
@@ -21,6 +22,7 @@ public struct InAppNotificationRecord: Codable, FetchableRecord, PersistableReco
     public var notificationType: NotificationType
     public var isRead: Bool
     public var metadata: AnyCodableValue?
+    public var readAt: Date?
     public var createdAt: Date
 }
 
@@ -32,11 +34,13 @@ extension InAppNotificationRecord: CreateTable {
             $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
+                .references(WalletRecord.databaseTableName, onDelete: .cascade)
             $0.column(Columns.notificationType.name, .text)
                 .notNull()
             $0.column(Columns.isRead.name, .boolean)
                 .notNull()
             $0.column(Columns.metadata.name, .jsonText)
+            $0.column(Columns.readAt.name, .date)
             $0.column(Columns.createdAt.name, .date)
                 .notNull()
                 .indexed()
@@ -51,19 +55,21 @@ extension InAppNotificationRecord {
             notificationType: notificationType,
             isRead: isRead,
             metadata: metadata,
+            readAt: readAt,
             createdAt: createdAt
         )
     }
 }
 
 extension Primitives.Notification {
-    func record() -> InAppNotificationRecord {
+    func record(walletId: WalletId) -> InAppNotificationRecord {
         InAppNotificationRecord(
-            id: "\(walletId)_\(notificationType.rawValue)_\(createdAt.timeIntervalSince1970)",
-            walletId: walletId,
+            id: "\(walletId.id)_\(notificationType.rawValue)_\(createdAt.timeIntervalSince1970)",
+            walletId: walletId.id,
             notificationType: notificationType,
             isRead: isRead,
             metadata: metadata,
+            readAt: readAt,
             createdAt: createdAt
         )
     }

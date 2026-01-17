@@ -209,6 +209,7 @@ struct ServicesFactory {
         let eventPresenterService = EventPresenterService()
         let inAppNotificationService = InAppNotificationService(
             deviceService: deviceService,
+            walletService: walletService,
             store: storeManager.inAppNotificationStore
         )
 

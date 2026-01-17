@@ -24,7 +24,7 @@ public final class InAppNotificationsViewModel {
     ) {
         self.wallet = wallet
         self.notificationService = notificationService
-        self.request = InAppNotificationsRequest(walletIdType: (try? wallet.walletIdType()) ?? "")
+        self.request = InAppNotificationsRequest(walletId: wallet.id)
     }
 
     public var title: String { Localized.Settings.Notifications.title }
