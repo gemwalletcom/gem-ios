@@ -4,7 +4,6 @@ import SwiftUI
 import Components
 import Style
 import Localization
-import Primitives
 
 public extension StateEmptyView where Content == EmptyView {
     static func noData() -> StateEmptyView<EmptyView> {
@@ -14,7 +13,7 @@ public extension StateEmptyView where Content == EmptyView {
     static func error(_ error: Error) -> StateEmptyView<EmptyView> {
         StateEmptyView(
             title: Localized.Errors.errorOccured,
-            description: isNetworkError(error) ? error.localizedDescription : Localized.Errors.noDataAvailable,
+            description: error.localizedDescription,
             image: Images.ErrorConent.error
         )
     }
