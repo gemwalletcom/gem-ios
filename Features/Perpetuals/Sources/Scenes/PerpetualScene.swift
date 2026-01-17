@@ -24,7 +24,12 @@ public struct PerpetualScene: View {
                         case .noData: StateEmptyView.noData()
                         case .loading: LoadingView()
                         case .data(let data): CandlestickChartView(data: data, period: model.currentPeriod, lineModels: model.chartLineModels)
-                        case .error(let error): StateEmptyView.error(error)
+                        case .error(let error):
+                            StateEmptyView(
+                                title: Localized.Errors.errorOccured,
+                                description: error.networkOrNoDataDescription,
+                                image: Images.ErrorConent.error
+                            )
                         }
                     }
                     .frame(height: 320)

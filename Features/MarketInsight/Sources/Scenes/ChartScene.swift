@@ -33,8 +33,8 @@ public struct ChartScene: View {
                             ChartView(model: model)
                         case .error(let error):
                             StateEmptyView(
-                                title: model.errorTitle,
-                                description: model.description(for: error),
+                                title: Localized.Errors.errorOccured,
+                                description: error.networkOrNoDataDescription,
                                 image: Images.ErrorConent.error
                             )
                         }
