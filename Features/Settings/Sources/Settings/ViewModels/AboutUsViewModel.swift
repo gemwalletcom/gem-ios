@@ -78,11 +78,7 @@ extension AboutUsViewModel {
     }
     
     func fetch() async {
-        do {
-            release = try await releaseService.getNewestRelease()
-        } catch {
-            debugLog("Release fetch failed: \(error)")
-        }
+        release = await releaseService.getNewestRelease()
     }
     
     func onUpdate() {

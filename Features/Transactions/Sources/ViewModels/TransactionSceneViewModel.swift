@@ -51,16 +51,16 @@ extension TransactionSceneViewModel: ListSectionProvideable {
     public func itemModel(for item: TransactionItem) -> any ItemModelProvidable<TransactionItemModel> {
         switch item {
         case .header: headerViewModel
-        case .swapButton: TransactionSwapButtonViewModel(transaction: transactionExtended)
+        case .swapButton: TransactionSwapButtonViewModel(metadata: model.transaction.transaction.metadata?.decode(TransactionSwapMetadata.self), state: model.transaction.transaction.state)
         case .date: TransactionDateViewModel(date: model.transaction.transaction.createdAt)
         case .status: TransactionStatusViewModel(state: model.transaction.transaction.state, onInfoAction: onSelectStatusInfo)
         case .participant: TransactionParticipantViewModel(transactionViewModel: model)
         case .memo: TransactionMemoViewModel(transaction: model.transaction.transaction)
         case .network: TransactionNetworkViewModel(chain: model.transaction.asset.chain)
-        case .pnl: TransactionPnlViewModel(metadata: model.transaction.transaction.metadata)
-        case .price: TransactionPriceViewModel(metadata: model.transaction.transaction.metadata)
+        case .pnl: TransactionPnlViewModel(metadata: model.transaction.transaction.metadata?.decode(TransactionPerpetualMetadata.self))
+        case .price: TransactionPriceViewModel(metadata: model.transaction.transaction.metadata?.decode(TransactionPerpetualMetadata.self))
         case .size: TransactionSizeViewModel(transaction: model.transaction)
-        case .provider: TransactionProviderViewModel(transaction: model.transaction.transaction)
+        case .provider: TransactionProviderViewModel(metadata: model.transaction.transaction.metadata?.decode(TransactionSwapMetadata.self))
         case .fee: TransactionNetworkFeeViewModel(feeDisplay: model.infoModel.feeDisplay, onInfoAction: onSelectFee)
         case .explorerLink: TransactionExplorerViewModel(transactionViewModel: model, explorerService: explorerService)
         }

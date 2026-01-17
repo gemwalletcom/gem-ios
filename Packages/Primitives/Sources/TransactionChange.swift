@@ -18,5 +18,5 @@ public enum TransactionChange: Sendable {
     case blockNumber(Int)
     case createdAt(Date)
     case hashChange(old: String, new: String)
-    case metadata(TransactionMetadata)
+    case metadata(AnyCodableValue)
 }

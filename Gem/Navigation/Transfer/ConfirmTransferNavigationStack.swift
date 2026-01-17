@@ -4,10 +4,10 @@ import Foundation
 import SwiftUI
 import Primitives
 import ChainService
-import Localization
 import Transfer
 import ExplorerService
 import Signer
+import Style
 
 struct ConfirmTransferNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -36,11 +36,10 @@ struct ConfirmTransferNavigationStack: View {
                 )
             )
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.cancel) {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("", systemImage: SystemImage.xmark) {
                         onComplete?()
                     }
-                    .bold()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

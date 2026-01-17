@@ -535,10 +535,10 @@
 "rewards.referrals" = "轉診";
 "rewards.earn_points.title" = "賺取積分";
 "rewards.get_rewards.title" = "獲得獎勵";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "有朋友的推薦碼嗎？";
 "rewards.activate_referral_code.title" = "兌換碼";
 "rewards.create_referral_code.title" = "建立使用者名稱";
-"rewards.create_referral_code.info" = "這將是您的個人用戶名。";
+"rewards.create_referral_code.info" = "這將是您為目前錢包起的個人暱稱。";
 "rewards.username" = "使用者名稱";
 "rewards.ways_spend.title" = "消費方式";
 "rewards.ways_spend.asset.title" = "得到 %@";
@@ -551,3 +551,14 @@
 "rewards.pending.title" = "獎金待發放";
 "rewards.pending.description" = "有售 %@";
 "rewards.pending.description_ready" = "您的獎金已發放！";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "暫無通知";
+"notifications.inApp.state.empty.description" = "您可以在這裡查看通知更新。";
+"notifications.inApp.referral.joined_title" = "新推薦";
+"notifications.inApp.referral.joined_subtitle" = "您的推薦 %@ 加入";
+"notifications.inApp.rewards.enabled_title" = "獎勵功能已啟用";
+"notifications.inApp.rewards.enabled_subtitle" = "邀請好友即可開始賺取積分";
+"notifications.inApp.rewards.disabled_title" = "推薦碼已停用";
+"notifications.inApp.rewards.disabled_subtitle" = "您的推薦碼已停用。";
+"rewards.nickname" = "暱稱";

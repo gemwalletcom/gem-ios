@@ -66,7 +66,7 @@ public struct Migrations {
             // perpetuals
             try PerpetualRecord.create(db: db)
             try PerpetualPositionRecord.create(db: db)
-            
+
             try RecentActivityRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)

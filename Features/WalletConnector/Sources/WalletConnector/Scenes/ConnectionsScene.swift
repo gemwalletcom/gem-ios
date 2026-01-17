@@ -58,6 +58,7 @@ public struct ConnectionsScene: View {
         .overlay {
             if model.sections.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
+                    .padding(.horizontal, .medium)
             }
         }
         .navigationDestination(for: WalletConnection.self) { connection in

@@ -535,10 +535,10 @@
 "rewards.referrals" = "Encaminhamentos";
 "rewards.earn_points.title" = "Ganhe pontos";
 "rewards.get_rewards.title" = "Receba recompensas";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "Tem um código de indicação de um amigo?";
 "rewards.activate_referral_code.title" = "Resgatar código";
 "rewards.create_referral_code.title" = "Criar nome de usuário";
-"rewards.create_referral_code.info" = "Este será o seu nome de usuário pessoal.";
+"rewards.create_referral_code.info" = "Este será o seu apelido pessoal para a carteira atual.";
 "rewards.username" = "Nome de usuário";
 "rewards.ways_spend.title" = "Formas de gastar";
 "rewards.ways_spend.asset.title" = "Pegar %@";
@@ -551,3 +551,14 @@
 "rewards.pending.title" = "Bônus pendente";
 "rewards.pending.description" = "Disponível em %@";
 "rewards.pending.description_ready" = "Seu bônus está pronto!";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inApp.state.empty.title" = "Ainda não há notificações.";
+"notifications.inApp.state.empty.description" = "Você verá atualizações sobre suas notificações aqui.";
+"notifications.inApp.referral.joined_title" = "Nova indicação";
+"notifications.inApp.referral.joined_subtitle" = "Sua indicação %@ ingressou";
+"notifications.inApp.rewards.enabled_title" = "Recompensas ativadas";
+"notifications.inApp.rewards.enabled_subtitle" = "Comece a ganhar pontos convidando amigos.";
+"notifications.inApp.rewards.disabled_title" = "Código de indicação desativado";
+"notifications.inApp.rewards.disabled_subtitle" = "Seu código de indicação foi desativado.";
+"rewards.nickname" = "Apelido";

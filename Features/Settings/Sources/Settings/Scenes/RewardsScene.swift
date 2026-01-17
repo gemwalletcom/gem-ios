@@ -226,6 +226,7 @@ public struct RewardsScene: View {
             Text(text)
                 .font(.caption)
                 .foregroundStyle(Colors.secondaryText)
+                .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
     }

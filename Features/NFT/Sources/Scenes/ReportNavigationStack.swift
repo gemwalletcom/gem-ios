@@ -15,7 +15,7 @@ public struct ReportNavigationStack: View {
     public var body: some View {
         NavigationStack {
             ReportSelectReasonScene(model: model)
-                .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
+                .toolbarDismissItem(type: .close, placement: .topBarLeading)
                 .activityIndicator(isLoading: model.state.isLoading, message: model.progressMessage)
         }
         .presentationDetentsForCurrentDeviceSize()

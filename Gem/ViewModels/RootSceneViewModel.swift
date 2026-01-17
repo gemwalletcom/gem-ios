@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import AppService
+import AvatarService
 import Components
 import DeviceService
 import EventPresenterService
@@ -16,7 +17,6 @@ import TransactionsService
 import WalletConnector
 import WalletService
 import WalletsService
-import AvatarService
 
 @Observable
 @MainActor
@@ -169,7 +169,7 @@ extension RootSceneViewModel {
             await observersService.setupWallet(wallet)
         }
     }
-
+    
     private func checkForUpdate() async {
         guard let release = await releaseAlertService.checkForUpdate() else { return }
         updateVersionAlertMessage = makeUpdateAlert(for: release)
