@@ -27,6 +27,7 @@ import AddressNameService
 import ActivityService
 import RewardsService
 import EventPresenterService
+import NotificationService
 
 extension AppResolver {
     struct Services: Sendable {
@@ -71,6 +72,7 @@ extension AppResolver {
         let viewModelFactory: ViewModelFactory
         let rewardsService: RewardsService
         let observersService: ObserversService
+        let inAppNotificationService: InAppNotificationService
 
         init(
             assetsService: AssetsService,
@@ -112,7 +114,8 @@ extension AppResolver {
             eventPresenterService: EventPresenterService,
             viewModelFactory: ViewModelFactory,
             rewardsService: RewardsService,
-            observersService: ObserversService
+            observersService: ObserversService,
+            inAppNotificationService: InAppNotificationService
         ) {
             self.assetsService = assetsService
             self.balanceService = balanceService
@@ -154,6 +157,7 @@ extension AppResolver {
             self.viewModelFactory = viewModelFactory
             self.rewardsService = rewardsService
             self.observersService = observersService
+            self.inAppNotificationService = inAppNotificationService
         }
     }
 }

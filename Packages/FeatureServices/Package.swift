@@ -454,7 +454,12 @@ let package = Package(
         .target(
             name: "NotificationService",
             dependencies: [
-                "Preferences"
+                "Primitives",
+                "Store",
+                "GemAPI",
+                "DeviceService",
+                "Preferences",
+                "WalletService"
             ],
             path: "NotificationService",
             exclude: ["TestKit"]
@@ -463,6 +468,10 @@ let package = Package(
             name: "NotificationServiceTestKit",
             dependencies: [
                 "NotificationService",
+                "DeviceServiceTestKit",
+                "WalletServiceTestKit",
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "PreferencesTestKit", package: "Preferences")
             ],
             path: "NotificationService/TestKit"
