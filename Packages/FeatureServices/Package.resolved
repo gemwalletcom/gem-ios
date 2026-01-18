@@ -13,7 +13,7 @@
     {
       "identity" : "grdb.swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gemwalletcom/GRDB.swift.git",
+      "location" : "https://github.com/groue/GRDB.swift.git",
       "state" : {
         "revision" : "aa0079aeb82a4bf00324561a40bffe68c6fe1c26",
         "version" : "7.9.0"
@@ -22,7 +22,7 @@
     {
       "identity" : "grdbquery",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gemwalletcom/GRDBQuery.git",
+      "location" : "https://github.com/groue/GRDBQuery.git",
       "state" : {
         "revision" : "540dc48e86af2972b4f1815616aa1ed8ac97845a",
         "version" : "0.11.0"
