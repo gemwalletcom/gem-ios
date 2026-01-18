@@ -3,11 +3,15 @@
 import struct Gemstone.GemApprovalData
 
 public extension GemApprovalData {
-    static func mock() -> GemApprovalData {
+    static func mock(
+        token: String = "0x",
+        spender: String = "0x",
+        value: String = "1000000000000000000"
+    ) -> GemApprovalData {
         GemApprovalData(
-            token: "0x",
-            spender: "0x",
-            value: "1000000000000000000"
+            token: token,
+            spender: spender,
+            value: value
         )
     }
 }

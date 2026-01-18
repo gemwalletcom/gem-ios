@@ -99,7 +99,7 @@ public struct ViewModelFactory: Sendable {
             eventPresenterService: eventPresenterService,
             chain: data.chain
         )
-        
+
         return ConfirmTransferSceneViewModel(
             wallet: wallet,
             data: data,

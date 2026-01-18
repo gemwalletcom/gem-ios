@@ -67,7 +67,9 @@ public struct TransactionViewModel: Sendable {
                 .perpetualClosePosition,
                 .stakeFreeze,
                 .stakeUnfreeze,
-                .perpetualModifyPosition: .none
+                .perpetualModifyPosition,
+                .yieldDeposit,
+                .yieldWithdraw: .none
         }
     }
 
@@ -137,6 +139,10 @@ public struct TransactionViewModel: Sendable {
                 return .empty
             case .perpetualModifyPosition:
                 return .empty
+            case .yieldDeposit:
+                return Localized.Wallet.deposit
+            case .yieldWithdraw:
+                return Localized.Transfer.Withdraw.title
             }
         }()
         return TextValue(
@@ -215,7 +221,9 @@ public struct TransactionViewModel: Sendable {
                     .assetActivation,
                     .perpetualModifyPosition,
                     .perpetualOpenPosition,
-                    .perpetualClosePosition:
+                    .perpetualClosePosition,
+                    .yieldDeposit,
+                    .yieldWithdraw:
                 guard case .perpetual(let metadata) = transaction.transaction.metadata else {
                     return .none
                 }
@@ -243,7 +251,9 @@ public struct TransactionViewModel: Sendable {
             .stakeRedelegate,
             .assetActivation,
             .stakeFreeze,
-            .stakeUnfreeze:
+            .stakeUnfreeze,
+            .yieldDeposit,
+            .yieldWithdraw:
             return infoModel.amountDisplay(formatter: formatter).amount
         case .perpetualClosePosition:
             guard case .perpetual(let metadata) = transaction.transaction.metadata, metadata.pnl != 0 else {
@@ -292,7 +302,9 @@ public struct TransactionViewModel: Sendable {
                 .perpetualClosePosition,
                 .perpetualModifyPosition,
                 .stakeFreeze,
-                .stakeUnfreeze:
+                .stakeUnfreeze,
+                .yieldDeposit,
+                .yieldWithdraw:
             return .none
         case .swap:
             guard case .swap(let metadata) = transaction.transaction.metadata, let asset = transaction.assets.first(where: { $0.id == metadata.fromAsset }) else {

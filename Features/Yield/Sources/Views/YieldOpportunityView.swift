@@ -56,6 +56,7 @@ public struct YieldOpportunityView: View {
                     .foregroundStyle(Colors.gray)
             }
             .padding(.vertical, Spacing.small)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }

@@ -6,7 +6,7 @@ import NativeProviderService
 import Primitives
 
 public final class YieldService: Sendable {
-    private let yielder: GemYielder
+    public let yielder: GemYielder
 
     public init(yielder: GemYielder) {
         self.yielder = yielder
@@ -67,8 +67,8 @@ public final class YieldService: Sendable {
     }
 }
 
-extension GemYieldProvider {
-    public var name: String {
+public extension GemYieldProvider {
+    var name: String {
         switch self {
         case .yo:
             return "yo"

@@ -176,10 +176,7 @@ public final class YieldSceneViewModel {
                 position: position,
                 decimals: Int(input.asset.decimals)
             )
-
-            // Create opportunity from position data (position includes name + apy)
             let opportunity = YieldOpportunityViewModel(position: position)
-
             state = .loaded([opportunity], positionViewModel)
         } catch {
             state = .error(error)
@@ -187,7 +184,13 @@ public final class YieldSceneViewModel {
     }
 
     public func onSelectOpportunity(_ opportunity: YieldOpportunityViewModel) {
-        let yieldData = YieldData(providerName: opportunity.provider.name)
+        let yieldData = YieldData(
+            providerName: opportunity.provider.name,
+            contractAddress: "",
+            callData: "",
+            approval: nil,
+            gasLimit: nil
+        )
         let amountInput = AmountInput(
             type: .yield(action: .deposit, data: yieldData),
             asset: input.asset

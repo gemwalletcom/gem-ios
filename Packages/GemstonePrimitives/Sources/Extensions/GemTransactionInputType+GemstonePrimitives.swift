@@ -17,6 +17,7 @@ public extension GemTransactionInputType {
         case .generic(let asset, _, _): asset
         case .account(let asset, _): asset
         case .perpetual(asset: let asset, perpetualType: _): asset
+        case .yield(let asset, _, _): asset
         }
     }
 }
@@ -42,6 +43,8 @@ public extension GemTransactionInputType {
             return try TransferDataType.account(asset.map(), accountType.map())
         case .perpetual(asset: let asset, perpetualType: let perpetualType):
             return try TransferDataType.perpetual(asset.map(), perpetualType.map())
+        case .yield(let asset, let action, let data):
+            return try TransferDataType.yield(asset.map(), action.map(), data.map())
         }
     }
 }
@@ -72,8 +75,50 @@ public extension TransferDataType {
             return .account(asset: asset.map(), accountType: accountData.map())
         case .perpetual(let asset, let perpetualType):
             return .perpetual(asset: asset.map(), perpetualType: perpetualType.map())
-        case .yield:
-            throw AnyError("Unsupported transaction type: \(self)")
+        case .yield(let asset, let action, let data):
+            return .yield(asset: asset.map(), action: action.map(), data: data.map())
         }
+    }
+}
+
+public extension GemYieldAction {
+    func map() -> YieldAction {
+        switch self {
+        case .deposit: .deposit
+        case .withdraw: .withdraw
+        }
+    }
+}
+
+public extension YieldAction {
+    func map() -> GemYieldAction {
+        switch self {
+        case .deposit: .deposit
+        case .withdraw: .withdraw
+        }
+    }
+}
+
+public extension GemYieldData {
+    func map() -> YieldData {
+        YieldData(
+            providerName: providerName,
+            contractAddress: contractAddress,
+            callData: callData,
+            approval: approval?.map(),
+            gasLimit: gasLimit
+        )
+    }
+}
+
+public extension YieldData {
+    func map() -> GemYieldData {
+        GemYieldData(
+            providerName: providerName,
+            contractAddress: contractAddress,
+            callData: callData,
+            approval: approval?.map(),
+            gasLimit: gasLimit
+        )
     }
 }

@@ -46,8 +46,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             }
         case .yield(_, let action, _):
             switch action {
-            case .deposit: .stakeDelegate
-            case .withdraw: .stakeUndelegate
+            case .deposit: .yieldDeposit
+            case .withdraw: .yieldWithdraw
             }
         }
     }

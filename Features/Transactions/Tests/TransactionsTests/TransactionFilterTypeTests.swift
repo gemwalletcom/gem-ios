@@ -19,7 +19,7 @@ struct TransactionFilterTypeTests {
                 #expect(type.filterType == .swaps)
             case .tokenApproval:
                 #expect(type.filterType == .swaps)
-            case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw, .stakeFreeze, .stakeUnfreeze:
+            case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw, .stakeFreeze, .stakeUnfreeze, .yieldDeposit, .yieldWithdraw:
                 #expect(type.filterType == .stake)
             case .assetActivation:
                 #expect(type.filterType == .others)

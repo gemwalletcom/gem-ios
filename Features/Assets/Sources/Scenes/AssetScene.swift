@@ -210,8 +210,14 @@ extension AssetScene {
     private var yieldViewEmpty: some View {
         NavigationCustomLink(
             with: HStack(spacing: .space12) {
-                EmojiView(color: Colors.grayVeryLight, emoji: "📈")
-                    .frame(size: .image.asset)
+                ZStack {
+                    Circle()
+                        .fill(Colors.grayVeryLight)
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.system(size: 20))
+                        .foregroundStyle(Colors.gray)
+                }
+                .frame(size: .image.asset)
                 ListItemView(
                     title: model.earnTitle,
                     subtitle: nil,

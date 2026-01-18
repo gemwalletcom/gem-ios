@@ -20,7 +20,9 @@ public struct TransactionHeaderTypeBuilder {
                     .stakeWithdraw,
                     .smartContractCall,
                     .stakeFreeze,
-                    .stakeUnfreeze:
+                    .stakeUnfreeze,
+                    .yieldDeposit,
+                    .yieldWithdraw:
                 return .amount(showFiat: true)
             case .swap:
                 guard let metadata, let input = SwapMetadataViewModel(metadata: metadata).headerInput else {
