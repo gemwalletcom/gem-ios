@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
-import GemAPI
 import AuthService
+import Foundation
+import GemAPI
+import Primitives
 
 public protocol RewardsServiceable: Sendable {
     func getRewards(wallet: Wallet) async throws -> Rewards
@@ -27,7 +27,7 @@ public struct RewardsService: RewardsServiceable, Sendable {
     }
 
     public func getRewards(wallet: Wallet) async throws -> Rewards {
-        try await apiService.getRewards(walletId: try wallet.walletIdType())
+        try await apiService.getRewards(walletId: wallet.walletIdentifier().id)
     }
 
     public func useReferralCode(wallet: Wallet, referralCode: String) async throws {
@@ -53,6 +53,6 @@ public struct RewardsService: RewardsServiceable, Sendable {
     public func redeem(wallet: Wallet, redemptionId: String) async throws -> RedemptionResult {
         let auth = try await authService.getAuthPayload(wallet: wallet)
         let request = AuthenticatedRequest(auth: auth, data: RedemptionRequest(id: redemptionId))
-        return try await apiService.redeem(walletId: try wallet.walletIdType(), request: request)
+        return try await apiService.redeem(walletId: wallet.walletIdentifier().id, request: request)
     }
 }
