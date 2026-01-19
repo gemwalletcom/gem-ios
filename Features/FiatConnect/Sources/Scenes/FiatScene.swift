@@ -37,12 +37,9 @@ public struct FiatScene: View {
         .frame(maxWidth: .infinity)
         .onChange(of: model.type, model.onChangeType)
         .onChange(of: model.inputValidationModel.text, model.onChangeAmountText)
-        .debounce(
-            value: model.inputValidationModel.text,
-            initial: true,
-            interval: Duration.milliseconds(250),
-            action: { _ in await model.fetch() }
-        )
+        .task(id: model.fetchTrigger) {
+            await model.performFetch()
+        }
         .alertSheet($model.isPresentingAlertMessage)
     }
 }
