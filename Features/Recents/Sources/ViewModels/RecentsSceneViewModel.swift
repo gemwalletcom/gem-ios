@@ -19,7 +19,6 @@ public final class RecentsSceneViewModel {
 
     var recentAssets: [RecentAsset] = []
     var searchQuery: String = ""
-    var isPresentingClearConfirmation: Bool?
 
     public init(
         walletId: WalletId,
@@ -41,12 +40,13 @@ public final class RecentsSceneViewModel {
 
     var title: String { Localized.RecentActivity.title }
     var clearTitle: String { Localized.Filter.clear }
-    var clearConfirmationTitle: String { Localized.RecentActivity.clearConfirmation }
 
     var showEmpty: Bool { recentAssets.isEmpty || (!searchQuery.isEmpty && filteredAssets.isEmpty) }
     var showClear: Bool { recentAssets.isNotEmpty }
 
-    var sections: [RecentAssetsSection] { RecentAssetsSection.from(filteredAssets) }
+    var sections: [ListSection<RecentAsset>] {
+        DateSectionBuilder(items: filteredAssets, dateKeyPath: \.createdAt).build()
+    }
     var emptyModel: any EmptyContentViewable {
         if recentAssets.isEmpty {
             return EmptyContentTypeViewModel(type: .recents)
@@ -67,10 +67,6 @@ public final class RecentsSceneViewModel {
 
 extension RecentsSceneViewModel {
     func onSelectClear() {
-        isPresentingClearConfirmation = true
-    }
-
-    func onSelectConfirmClear() {
         do {
             try activityService.clearRecent(walletId: walletId, types: RecentActivityType.allCases)
         } catch {

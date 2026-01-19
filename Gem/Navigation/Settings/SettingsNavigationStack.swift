@@ -11,6 +11,8 @@ import MarketInsight
 import Settings
 import PriceService
 import RewardsService
+import InAppNotifications
+import NotificationService
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -30,6 +32,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.walletConnectorManager) private var walletConnectorManager
     @Environment(\.rewardsService) private var rewardsService
+    @Environment(\.inAppNotificationService) private var inAppNotificationService
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -137,6 +140,16 @@ struct SettingsNavigationStack: View {
                     priceService: priceService,
                     perpetualService: perpetualService
                 ))
+            }
+            .navigationDestination(for: Scenes.InAppNotifications.self) { _ in
+                if let wallet = walletService.currentWallet {
+                    InAppNotificationsScene(
+                        model: InAppNotificationsViewModel(
+                            wallet: wallet,
+                            notificationService: inAppNotificationService
+                        )
+                    )
+                }
             }
             .navigationDestination(for: Scenes.Currency.self) { _ in
                 CurrencyScene(model: currencyModel)

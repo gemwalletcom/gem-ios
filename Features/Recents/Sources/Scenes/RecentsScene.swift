@@ -19,7 +19,7 @@ public struct RecentsScene: View {
             List {
                 ForEach(model.sections) { section in
                     Section {
-                        ForEach(section.assets) { recentAsset in
+                        ForEach(section.values) { recentAsset in
                             let assetModel = AssetViewModel(asset: recentAsset.asset)
                             NavigationCustomLink(
                                 with: ListItemView(
@@ -32,7 +32,7 @@ public struct RecentsScene: View {
                             }
                         }
                     } header: {
-                        Text(section.title)
+                        section.title.map { Text($0) }
                             .fontWeight(.semibold)
                     }
                     .listRowInsets(.assetListRowInsets)
@@ -54,33 +54,17 @@ public struct RecentsScene: View {
             }
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
+            .toolbarContent {
                 ToolbarDismissItem(type: .close, placement: .topBarLeading)
                 if model.showClear {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(model.clearTitle) {
-                            model.onSelectClear()
-                        }
-                        .bold()
+                    ToolbarItemView(placement: .topBarTrailing) {
+                        Button(model.clearTitle, action: model.onSelectClear)
+                            .bold()
                     }
                 }
-            }
-            .alert(
-                model.clearConfirmationTitle,
-                presenting: $model.isPresentingClearConfirmation,
-                sensoryFeedback: .warning
-            ) { _ in
-                Button(model.clearTitle, role: .destructive, action: onSelectConfirm)
             }
         }
         .observeQuery(request: $model.request, value: $model.recentAssets)
     }
 }
 
-// MARK: - Private
-
-extension RecentsScene {
-    private func onSelectConfirm() {
-        model.onSelectConfirmClear()
-    }
-}
