@@ -37,6 +37,7 @@ public struct RewardRedemptionOption: Codable, Equatable, Hashable, Sendable {
 
 public enum RedemptionStatus: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case pending
+	case processing
 	case completed
 	case failed
 }

@@ -23,6 +23,10 @@ public struct Scenes {
         public init() {}
     }
 
+    public struct InAppNotifications: Hashable {
+        public init() {}
+    }
+
     public struct PriceAlerts: Hashable {
         public init() {}
     }
