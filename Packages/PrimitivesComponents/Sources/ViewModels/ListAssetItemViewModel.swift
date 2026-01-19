@@ -51,12 +51,9 @@ public struct ListAssetItemViewModel: ListAssetItemViewable {
 
     public var symbol: String? {
         switch type {
-        case .wallet,
-            .view:
+        case .wallet, .view, .copy(.collection):
             return .none
-        case .manage,
-            .copy,
-            .price:
+        case .manage, .price, .copy(.asset):
             if name == assetDataModel.symbol {
                 return .none
             }
