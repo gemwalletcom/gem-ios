@@ -2,6 +2,8 @@
 
 import Foundation
 
+import BigInt
+
 public enum AmountType: Equatable, Hashable, Sendable {
     case transfer(recipient: RecipientData)
     case deposit(recipient: RecipientData)
@@ -12,5 +14,5 @@ public enum AmountType: Equatable, Hashable, Sendable {
     case stakeWithdraw(delegation: Delegation)
     case freeze(data: FreezeData)
     case perpetual(PerpetualRecipientData)
-    case yield(action: YieldAction, data: YieldData)
+    case yield(action: YieldAction, data: YieldData, depositedBalance: BigInt?)
 }

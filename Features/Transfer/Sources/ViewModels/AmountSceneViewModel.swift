@@ -162,7 +162,7 @@ public final class AmountSceneViewModel {
             case .freeze: Localized.Transfer.Freeze.title
             case .unfreeze: Localized.Transfer.Unfreeze.title
             }
-        case .yield(let action, _):
+        case .yield(let action, _, _):
             switch action {
             case .deposit: Localized.Wallet.deposit
             case .withdraw: Localized.Wallet.withdraw
@@ -624,7 +624,7 @@ extension AmountSceneViewModel {
                 value: value,
                 canChangeValue: canChangeValue
             )
-        case .yield(let action, let data):
+        case .yield(let action, let data, _):
             return TransferData(
                 type: .yield(asset, action, data),
                 recipientData: recipientData,
@@ -695,8 +695,15 @@ extension AmountSceneViewModel {
 
     private var availableValue: BigInt {
         switch input.type {
-        case .transfer, .deposit, .yield:
+        case .transfer, .deposit:
             return assetData.balance.available
+        case .yield(let action, _, let depositedBalance):
+            switch action {
+            case .deposit:
+                return assetData.balance.available
+            case .withdraw:
+                return depositedBalance ?? .zero
+            }
         case let .perpetual(perpetualData):
             switch perpetualData.positionAction {
             case .open, .increase: return assetData.balance.available

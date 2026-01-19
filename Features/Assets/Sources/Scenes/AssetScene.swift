@@ -105,6 +105,10 @@ public struct AssetScene: View {
                         stakeView
                     }
 
+                    if model.hasYieldPosition {
+                        yieldView
+                    }
+
                     if model.showPendingUnconfirmedBalance {
                         ListItemView(
                             title: model.assetDataModel.pendingUnconfirmedBalanceTitle,
@@ -127,7 +131,7 @@ public struct AssetScene: View {
                     .listRowInsets(.assetListRowInsets)
             }
 
-            if model.showYield {
+            if model.showYieldButton {
                 yieldViewEmpty
                     .listRowInsets(.assetListRowInsets)
             }
@@ -207,6 +211,17 @@ extension AssetScene {
         )
     }
 
+    private var yieldView: some View {
+        NavigationCustomLink(
+            with: ListItemView(
+                title: model.yieldTitle,
+                subtitle: model.yieldBalanceText
+            ),
+            action: { model.onSelectEarn() }
+        )
+        .accessibilityIdentifier("yield")
+    }
+
     private var yieldViewEmpty: some View {
         NavigationCustomLink(
             with: HStack(spacing: .space12) {
@@ -220,8 +235,7 @@ extension AssetScene {
                 .frame(size: .image.asset)
                 ListItemView(
                     title: model.earnTitle,
-                    subtitle: nil,
-                    subtitleStyle: TextStyle(font: .callout, color: Colors.green)
+                    subtitle: nil
                 )
             },
             action: { model.onSelectEarn() }

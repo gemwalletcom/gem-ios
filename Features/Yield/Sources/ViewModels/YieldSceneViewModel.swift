@@ -1,5 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Gemstone
 import Primitives
@@ -24,6 +25,13 @@ public struct YieldPositionViewModel: Sendable {
             return false
         }
         return balance > 0
+    }
+
+    public var vaultBalance: BigInt? {
+        guard let vaultBalanceStr = position.vaultBalanceValue else {
+            return nil
+        }
+        return BigInt(vaultBalanceStr)
     }
 
     public var vaultBalanceFormatted: String {
@@ -163,6 +171,12 @@ public final class YieldSceneViewModel {
         self.onAmountInputAction = onAmountInputAction
     }
 
+    public func fetchOnce() {
+        Task {
+            await fetch()
+        }
+    }
+
     public func fetch() async {
         state = .loading
         do {
@@ -192,7 +206,23 @@ public final class YieldSceneViewModel {
             gasLimit: nil
         )
         let amountInput = AmountInput(
-            type: .yield(action: .deposit, data: yieldData),
+            type: .yield(action: .deposit, data: yieldData, depositedBalance: nil),
+            asset: input.asset
+        )
+        onAmountInputAction?(amountInput)
+    }
+
+    public func onWithdraw() {
+        guard let position = position else { return }
+        let yieldData = YieldData(
+            providerName: position.providerName,
+            contractAddress: "",
+            callData: "",
+            approval: nil,
+            gasLimit: nil
+        )
+        let amountInput = AmountInput(
+            type: .yield(action: .withdraw, data: yieldData, depositedBalance: position.vaultBalance),
             asset: input.asset
         )
         onAmountInputAction?(amountInput)

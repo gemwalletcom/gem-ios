@@ -31,9 +31,7 @@ public struct YieldScene: View {
         .refreshable {
             await model.fetch()
         }
-        .task {
-            await model.fetch()
-        }
+        .taskOnce(model.fetchOnce)
     }
 }
 
@@ -54,28 +52,24 @@ extension YieldScene {
     private var positionSection: some View {
         Section {
             if let position = model.position {
-                VStack(alignment: .leading, spacing: Spacing.small) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: Spacing.tiny) {
-                            Text("Your Balance")
-                                .font(.subheadline)
-                                .foregroundStyle(Colors.gray)
-                            Text("\(position.assetBalanceFormatted) \(model.assetSymbol)")
-                                .font(.title2.bold())
-                                .foregroundStyle(Colors.black)
-                        }
+                Button {
+                    model.onWithdraw()
+                } label: {
+                    HStack(spacing: Spacing.small) {
+                        Text("\(position.assetBalanceFormatted) \(model.assetSymbol)")
+                            .font(.body)
+                            .foregroundStyle(Colors.black)
                         Spacer()
-                        VStack(alignment: .trailing, spacing: Spacing.tiny) {
-                            Text("APY")
-                                .font(.subheadline)
-                                .foregroundStyle(Colors.gray)
-                            Text(position.apyText)
-                                .font(.title3.bold())
-                                .foregroundStyle(Colors.green)
-                        }
+                        position.position.provider.image
+                            .resizable()
+                            .frame(width: 24, height: 24)
+                        Image(systemName: "chevron.right")
+                            .font(.body)
+                            .foregroundStyle(Colors.grayLight)
                     }
+                    .contentShape(Rectangle())
                 }
-                .padding(.vertical, Spacing.small)
+                .buttonStyle(.plain)
             }
         } header: {
             Text("Current Position")
@@ -93,7 +87,7 @@ extension YieldScene {
                 }
             }
         } header: {
-            Text("Available for \(model.assetSymbol)")
+            Text("Protocol")
         }
     }
 
