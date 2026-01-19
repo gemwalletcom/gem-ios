@@ -37,7 +37,7 @@ public struct AssetsResultsScene: View {
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarDismissItem(title: .done, placement: .cancellationAction)
+                ToolbarDismissItem(type: .done, placement: .cancellationAction)
             }
         }
         .observeQuery(request: $model.request, value: $model.searchResult)

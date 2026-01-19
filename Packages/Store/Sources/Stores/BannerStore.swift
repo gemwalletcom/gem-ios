@@ -20,6 +20,7 @@ public struct BannerStore: Sendable {
         }
     }
 
+    @discardableResult
     public func updateState(_ id: String, state: BannerState) throws -> Int {
         try db.write {
             try BannerRecord

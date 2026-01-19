@@ -12,6 +12,7 @@ public struct Emoji {
     public static let rocket = "🚀"
     public static let turle = "🐢"
     public static let gem = "💎"
+    public static let party = "🎉"
 
     public struct Flags {
         public static let flagsByIdentifier: [String: String] = [

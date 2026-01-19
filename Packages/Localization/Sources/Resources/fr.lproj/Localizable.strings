@@ -175,7 +175,7 @@
 "asset.name" = "Nom";
 "asset.symbol" = "Symbole";
 "asset.decimals" = "Decimals";
-"asset.token_id" = "Token ID";
+"asset.token_id" = "ID du jeton";
 "common.type" = "Taper";
 "stake.active_in" = "Actif dans";
 "errors.import.invalid_secret_phrase" = "Phrase secrète invalide";
@@ -535,10 +535,10 @@
 "rewards.referrals" = "Orientations";
 "rewards.earn_points.title" = "Gagnez des points";
 "rewards.get_rewards.title" = "Obtenez des récompenses";
-"rewards.activate_referral_code.description" = "Have a referral code from a friend?";
+"rewards.activate_referral_code.description" = "Vous avez un code de parrainage d'un ami ?";
 "rewards.activate_referral_code.title" = "Code d'échange";
 "rewards.create_referral_code.title" = "Créer un nom d'utilisateur";
-"rewards.create_referral_code.info" = "Ce sera votre nom d'utilisateur personnel.";
+"rewards.create_referral_code.info" = "Ce sera le surnom personnel que vous donnerez à votre portefeuille actuel.";
 "rewards.username" = "Nom d'utilisateur";
 "rewards.ways_spend.title" = "Façons de dépenser";
 "rewards.ways_spend.asset.title" = "Obtenir %@";
@@ -551,3 +551,14 @@
 "rewards.pending.title" = "Bonus en attente";
 "rewards.pending.description" = "Disponible en %@";
 "rewards.pending.description_ready" = "Votre prime est prête !";
+"recent_activity.state.empty.title" = "Your recents will appear here";
+"recent_activity.state.empty.description" = "Assets you’ve recently used will appear here";
+"notifications.inapp.state.empty.title" = "Aucune notification pour le moment";
+"notifications.inapp.state.empty.description" = "Vous trouverez ici les mises à jour concernant vos notifications.";
+"notifications.inapp.referral.joined.title" = "Nouvelle recommandation";
+"notifications.inapp.referral.joined.subtitle" = "Votre recommandation %@ a rejoint";
+"notifications.inapp.rewards.enabled.title" = "Récompenses activées";
+"notifications.inapp.rewards.enabled.subtitle" = "Commencez à gagner des points en invitant des amis";
+"notifications.inapp.rewards.disabled.title" = "Code de parrainage désactivé";
+"notifications.inapp.rewards.disabled.subtitle" = "Votre code de parrainage a été désactivé.";
+"rewards.nickname" = "Surnom";

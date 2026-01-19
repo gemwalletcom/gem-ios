@@ -5,17 +5,29 @@
 import Foundation
 
 public struct Notification: Codable, Equatable, Sendable {
-	public let wallet_id: String
-	public let notification_type: NotificationType
-	public let is_read: Bool
+	public let walletId: String
+	public let notificationType: NotificationType
+	public let isRead: Bool
 	public let metadata: AnyCodableValue?
-	public let created_at: Date
+	public let readAt: Date?
+	public let createdAt: Date
 
-	public init(wallet_id: String, notification_type: NotificationType, is_read: Bool, metadata: AnyCodableValue?, created_at: Date) {
-		self.wallet_id = wallet_id
-		self.notification_type = notification_type
-		self.is_read = is_read
+	public init(walletId: String, notificationType: NotificationType, isRead: Bool, metadata: AnyCodableValue?, readAt: Date?, createdAt: Date) {
+		self.walletId = walletId
+		self.notificationType = notificationType
+		self.isRead = isRead
 		self.metadata = metadata
-		self.created_at = created_at
+		self.readAt = readAt
+		self.createdAt = createdAt
+	}
+}
+
+public struct NotificationRewardsMetadata: Codable, Equatable, Sendable {
+	public let username: String
+	public let points: Int32?
+
+	public init(username: String, points: Int32?) {
+		self.username = username
+		self.points = points
 	}
 }

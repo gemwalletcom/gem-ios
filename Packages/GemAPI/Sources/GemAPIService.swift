@@ -98,6 +98,11 @@ public protocol GemAPISearchService: Sendable {
     func search(query: String, chains: [Chain], tags: [AssetTag]) async throws -> SearchResponse
 }
 
+public protocol GemAPINotificationService: Sendable {
+    func getNotifications(deviceId: String) async throws -> [Primitives.Notification]
+    func markNotificationsRead(deviceId: String) async throws
+}
+
 public struct GemAPIService {
     
     let provider: Provider<GemAPI>
@@ -383,6 +388,19 @@ extension GemAPIService: GemAPISearchService {
         try await provider
             .request(.getSearch(query: query, chains: chains, tags: tags))
             .mapResponse(as: SearchResponse.self)
+    }
+}
+
+extension GemAPIService: GemAPINotificationService {
+    public func getNotifications(deviceId: String) async throws -> [Primitives.Notification] {
+        try await provider
+            .request(.getNotifications(deviceId: deviceId))
+            .mapResponse(as: [Primitives.Notification].self)
+    }
+
+    public func markNotificationsRead(deviceId: String) async throws {
+        _ = try await provider
+            .request(.markNotificationsRead(deviceId: deviceId))
     }
 }
 

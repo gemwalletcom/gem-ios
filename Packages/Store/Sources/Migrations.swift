@@ -64,9 +64,10 @@ public struct Migrations {
             // perpetuals
             try PerpetualRecord.create(db: db)
             try PerpetualPositionRecord.create(db: db)
-            
+
             try RecentActivityRecord.create(db: db)
             try SearchRecord.create(db: db)
+            try InAppNotificationRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)
     }
@@ -356,6 +357,10 @@ public struct Migrations {
         migrator.registerMigration("Create \(SearchRecord.databaseTableName) and drop assets_search") { db in
             try? SearchRecord.create(db: db)
             try? db.drop(table: "assets_search")
+        }
+
+        migrator.registerMigration("Create \(InAppNotificationRecord.databaseTableName)") { db in
+            try? InAppNotificationRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

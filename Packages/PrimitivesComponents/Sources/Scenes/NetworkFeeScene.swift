@@ -58,18 +58,12 @@ public struct NetworkFeeScene: View {
                 placeholders: [.subtitle]
             )
         }
-
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button {
-                    dismiss()
-                } label: {
-                    Text(model.doneTitle)
-                        .bold()
-                }
+                Button("", systemImage: SystemImage.xmark, action: { dismiss() })
             }
         }
     }

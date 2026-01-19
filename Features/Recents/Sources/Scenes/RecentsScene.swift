@@ -8,8 +8,6 @@ import Style
 import Store
 
 public struct RecentsScene: View {
-    @Environment(\.dismiss) private var dismiss
-
     @State private var model: RecentsSceneViewModel
 
     public init(model: RecentsSceneViewModel) {
@@ -21,11 +19,12 @@ public struct RecentsScene: View {
             List {
                 ForEach(model.sections) { section in
                     Section {
-                        ForEach(section.assets) { recentAsset in
+                        ForEach(section.values) { recentAsset in
                             let assetModel = AssetViewModel(asset: recentAsset.asset)
                             NavigationCustomLink(
                                 with: ListItemView(
                                     title: assetModel.name,
+                                    titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
                                     imageStyle: .asset(assetImage: assetModel.assetImage)
                                 )
                             ) {
@@ -33,13 +32,16 @@ public struct RecentsScene: View {
                             }
                         }
                     } header: {
-                        Text(section.title)
+                        section.title.map { Text($0) }
+                            .fontWeight(.semibold)
                     }
                     .listRowInsets(.assetListRowInsets)
                 }
             }
             .contentMargins([.top], .extraSmall, for: .scrollContent)
             .listSectionSpacing(.compact)
+            .scrollContentBackground(.hidden)
+            .background { Colors.sheetInsetGroupedListStyle.ignoresSafeArea() }
             .searchable(
                 text: $model.searchQuery,
                 placement: .navigationBarDrawer(displayMode: .always)
@@ -53,10 +55,13 @@ public struct RecentsScene: View {
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarDismissItem(title: .cancel, placement: .topBarLeading)
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(model.clearTitle) {
-                        model.onSelectClear()
+                ToolbarDismissItem(type: .close, placement: .topBarLeading)
+                if model.showClear {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(model.clearTitle) {
+                            model.onSelectClear()
+                        }
+                        .bold()
                     }
                 }
             }
@@ -77,6 +82,5 @@ public struct RecentsScene: View {
 extension RecentsScene {
     private func onSelectConfirm() {
         model.onSelectConfirmClear()
-        dismiss()
     }
 }

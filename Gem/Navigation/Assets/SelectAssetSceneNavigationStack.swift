@@ -51,7 +51,7 @@ struct SelectAssetSceneNavigationStack: View {
             .onChange(of: model.assetSelection, onChangeAssetSelection)
             .toolbar {
                 ToolbarDismissItem(
-                    title: .done,
+                    type: .close,
                     placement: .topBarLeading
                 )
                 if model.showFilter {

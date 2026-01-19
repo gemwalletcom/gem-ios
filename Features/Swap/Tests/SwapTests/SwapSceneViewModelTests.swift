@@ -39,17 +39,59 @@ struct SwapSceneViewModelTests {
     @Test
     func buttonViewModelFlow() {
         let model = SwapSceneViewModel.mock()
-        
+
         model.swapState.quotes = .data([])
         #expect(model.buttonViewModel.buttonAction == SwapButtonAction.swap)
         #expect(model.buttonViewModel.isVisible)
-        
+
         model.swapState.quotes = .error(TestError())
         #expect(model.buttonViewModel.buttonAction == SwapButtonAction.retryQuotes)
-        
+
         model.swapState.quotes = .data([])
         model.swapState.swapTransferData = .error(TestError())
         #expect(model.buttonViewModel.buttonAction == SwapButtonAction.retrySwap)
+    }
+
+    @Test
+    func cancelledTaskDoesNotUpdateStateWithError() async throws {
+        let swapper = GemSwapperMock(
+            fetchQuoteDelay: .milliseconds(100),
+            fetchQuoteError: SwapperError.NoQuoteAvailable
+        )
+        let model = SwapSceneViewModel.mock(swapper: swapper)
+
+        let task = Task {
+            await model.onFetchStateChange(state: .fetch(input: .mock(), delay: nil))
+        }
+
+        try await Task.sleep(for: .milliseconds(50))
+        task.cancel()
+        await task.value
+
+        if case .error = model.swapState.quotes {
+            Issue.record("State should not be .error when Task is cancelled")
+        }
+    }
+
+    @Test
+    func emptyInputCancelsInFlightRequest() async throws {
+        let swapper = GemSwapperMock(
+            fetchQuoteDelay: .milliseconds(100),
+            fetchQuoteError: SwapperError.NoQuoteAvailable
+        )
+        let model = SwapSceneViewModel.mock(swapper: swapper)
+
+        let task = Task {
+            await model.onFetchStateChange(state: .fetch(input: .mock(), delay: nil))
+        }
+
+        try await Task.sleep(for: .milliseconds(50))
+        task.cancel()
+        model.swapState.quotes = .noData
+
+        await task.value
+
+        #expect(model.swapState.quotes.isNoData)
     }
 
     // MARK: - Private methods

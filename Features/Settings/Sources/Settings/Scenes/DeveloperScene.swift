@@ -22,6 +22,11 @@ public struct DeveloperScene: View {
                 ListItemView(title: "Device Token", subtitle: model.deviceToken)
                     .contextMenu(.copy(value: model.deviceToken))
             }
+            Section {
+                NavigationLink(value: Scenes.InAppNotifications()) {
+                    ListItemView(title: "In-App Notifications")
+                }
+            }
             Section("Networking") {
                 NavigationCustomLink(
                     with: ListItemView(title: "Clear URLCache"),

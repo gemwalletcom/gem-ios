@@ -19,8 +19,9 @@ public struct ReleaseAlertService: Sendable {
     }
 
     public func checkForUpdate() async -> Release? {
-        guard let release = try? await appReleaseService.getNewestRelease() else { return nil }
-        guard preferences.skippedReleaseVersion != release.version else { return nil }
+        guard let release = await appReleaseService.getNewestRelease(),
+              preferences.skippedReleaseVersion != release.version
+        else { return nil }
         return release
     }
 

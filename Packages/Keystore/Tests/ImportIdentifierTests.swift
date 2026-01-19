@@ -5,11 +5,11 @@ import Primitives
 import KeystoreTestKit
 @testable import Keystore
 
-struct WalletIdentifierTests {
+struct ImportIdentifierTests {
 
     @Test
-    func secretDeriveAddress() throws {
-        let identifier = WalletIdentifier.secret(words: LocalKeystore.words)
+    func phraseDeriveAddress() throws {
+        let identifier = ImportIdentifier.phrase(words: LocalKeystore.words)
         let (chain, address) = try identifier.deriveAddress()
 
         #expect(chain == .ethereum)
@@ -18,7 +18,7 @@ struct WalletIdentifierTests {
 
     @Test
     func privateKeyDeriveAddress() throws {
-        let identifier = WalletIdentifier.privateKey(chain: .ethereum, key: LocalKeystore.privateKey)
+        let identifier = ImportIdentifier.privateKey(chain: .ethereum, key: LocalKeystore.privateKey)
         let (chain, address) = try identifier.deriveAddress()
 
         #expect(chain == .ethereum)
@@ -27,7 +27,7 @@ struct WalletIdentifierTests {
 
     @Test
     func singleDeriveAddress() throws {
-        let identifier = WalletIdentifier.single(chain: .bitcoin, words: LocalKeystore.words)
+        let identifier = ImportIdentifier.single(chain: .bitcoin, words: LocalKeystore.words)
         let (chain, address) = try identifier.deriveAddress()
 
         #expect(chain == .bitcoin)
@@ -36,7 +36,7 @@ struct WalletIdentifierTests {
 
     @Test
     func addressDeriveAddress() throws {
-        let identifier = WalletIdentifier.address(address: LocalKeystore.address, chain: .polygon)
+        let identifier = ImportIdentifier.address(address: LocalKeystore.address, chain: .polygon)
         let (chain, address) = try identifier.deriveAddress()
 
         #expect(chain == .polygon)

@@ -49,7 +49,7 @@ public struct RewardsScene: View {
                 if model.isInfoEnabled {
                     infoSection(rewards: rewards)
                 }
-                if !rewards.redemptionOptions.isEmpty {
+                if rewards.redemptionOptions.isNotEmpty {
                     redemptionOptionsSection(options: rewards.redemptionOptions)
                 }
             case .noData:
@@ -226,6 +226,7 @@ public struct RewardsScene: View {
             Text(text)
                 .font(.caption)
                 .foregroundStyle(Colors.secondaryText)
+                .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
     }
@@ -260,7 +261,10 @@ public struct RewardsScene: View {
             message: "",
             actions: [
                 AlertAction(title: Localized.Transfer.confirm, isDefaultAction: true) {
-                    Task { await model.redeem(option: option) }
+                    Task {
+                        await model.redeem(option: option)
+                        await model.fetch()
+                    }
                 },
                 .cancel(title: Localized.Common.cancel)
             ]

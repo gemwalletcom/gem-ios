@@ -2,12 +2,11 @@
 
 import Foundation
 import GemAPI
+import Preferences
 import Primitives
 import Store
-import Preferences
 
 public struct SubscriptionService: Sendable {
-
     private let subscriptionProvider: any GemAPISubscriptionService
     private let preferences: Preferences
     private let walletStore: WalletStore
@@ -63,7 +62,7 @@ public struct SubscriptionService: Sendable {
             }
         case false:
             if !remoteSubscriptions.isEmpty {
-                try await self.deleteSubscriptions(deviceId: deviceId, subscriptions: remoteSubscriptions.asArray())
+                try await deleteSubscriptions(deviceId: deviceId, subscriptions: remoteSubscriptions.asArray())
             }
             if !remoteSubscriptionsV2.isEmpty {
                 let deleteSubscriptionsV2 = localWalletSubscriptions.filter { remoteSubscriptionsV2.contains($0.asWalletSubscriptionChains) }
@@ -83,8 +82,8 @@ public struct SubscriptionService: Sendable {
 
     private func localSubscriptionV2() throws -> [WalletSubscription] {
         try walletStore.getWallets().map { wallet in
-            WalletSubscription(
-                wallet_id: try wallet.walletIdType(),
+            try WalletSubscription(
+                wallet_id: wallet.walletIdentifier().id,
                 source: wallet.source,
                 subscriptions: wallet.accounts.map { ChainAddress(chain: $0.chain, address: $0.address) }
             )
