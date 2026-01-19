@@ -133,7 +133,14 @@ public final class SelectAssetViewModel {
     var pinnedImage: Image { Images.System.pin }
     var pinnedTitle: String { Localized.Common.pinned }
 
-    var assetsTitle: String { Localized.Assets.title }
+    var assetsTitle: String {
+        switch selectType {
+        case .send, .buy, .swap, .manage, .priceAlert, .deposit, .withdraw, .receive(.asset):
+            Localized.Assets.title
+        case .receive(.collection):
+            Localized.Settings.Networks.title
+        }
+    }
 
     public var showAddToken: Bool {
         selectType == .manage && wallet.hasTokenSupport && !filterModel.chainsFilter.isEmpty
@@ -381,7 +388,7 @@ extension SelectAssetType {
                 .swap,
                 .deposit,
                 .withdraw: .view
-        case .receive: .copy
+        case .receive(let type): .copy(type)
         case .manage: .manage
         case .priceAlert: .price
         }
