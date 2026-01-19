@@ -16,7 +16,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/attaswift/BigInt.git", exact: Version(5, 7, 0)),
+        .package(url: "https://github.com/gemwalletcom/BigInt.git", exact: Version(5, 7, 0)),
     ],
     targets: [
         .target(
