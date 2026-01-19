@@ -59,6 +59,9 @@ public struct PerpetualsScene: View {
                 )
             )
         }
+        .sheet(isPresented: $model.isPresentingPortfolio) {
+            PerpetualPortfolioScene(wallet: model.wallet, balance: model.walletBalance)
+        }
     }
 
     var list: some View {
@@ -67,7 +70,8 @@ public struct PerpetualsScene: View {
                 Section { } header: {
                     WalletHeaderView(
                         model: model.headerViewModel,
-                        isHideBalanceEnalbed: .constant(model.preferences.isHideBalanceEnabled),
+                        isPrivacyEnabled: .constant(false),
+                        balanceActionType: .action(model.onSelectBalance),
                         onHeaderAction: model.onSelectHeaderAction,
                         onInfoAction: .none
                     )

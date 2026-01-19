@@ -35,6 +35,7 @@ public final class PerpetualsSceneViewModel {
     var searchQuery: String = .empty
     var isSearching: Bool = false
     var isPresentingRecents: Bool = false
+    var isPresentingPortfolio: Bool = false
 
     let onSelectAssetType: ((SelectAssetType) -> Void)?
     let onSelectAsset: ((Asset) -> Void)?
@@ -168,5 +169,9 @@ extension PerpetualsSceneViewModel {
     func onSelectRecent(asset: Asset) {
         onSelectAsset?(asset)
         isPresentingRecents = false
+    }
+
+    func onSelectBalance() {
+        isPresentingPortfolio = true
     }
 }

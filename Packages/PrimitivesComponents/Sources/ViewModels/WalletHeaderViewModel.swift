@@ -36,7 +36,6 @@ public struct WalletHeaderViewModel {
 // MARK: - HeaderViewModel
 
 extension WalletHeaderViewModel: HeaderViewModel {
-    public var allowHiddenBalance: Bool { true }
     public var isWatchWallet: Bool { walletType == .view }
     public var title: String { totalValueText }
     public var assetImage: AssetImage? { .none }
