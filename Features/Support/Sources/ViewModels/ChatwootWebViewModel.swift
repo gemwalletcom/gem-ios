@@ -16,7 +16,7 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
     let baseUrl: URL
     let settings: ChatwootSettings
     let supportDeviceId: String
-    
+
     var isPresentingSupport: Binding<Bool>
     var isLoading: Bool = true
     
@@ -62,7 +62,13 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
         configuration.userContentController.addUserScript(hideCloseButtonUserScript)
         return configuration
     }
-
+    
+    func navigationPolicy(for url: URL?) -> WKNavigationActionPolicy {
+        url?.host() == baseUrl.host() ? .allow : .cancel
+    }
+    
+    // MARK: - Private properties
+    
     private var hideCloseButtonUserScript: WKUserScript {
         let source = """
         var style = document.createElement('style');
@@ -71,8 +77,6 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
         """
         return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
     }
-    
-    // MARK: - Private properties
     
     private var chatwootSettingsScript: String {
         """
@@ -143,6 +147,13 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
 // MARK: - WKNavigationDelegate, WKScriptMessageHandler
 
 extension ChatwootWebViewModel: WKNavigationDelegate, WKScriptMessageHandler {
+    public func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction
+    ) async -> WKNavigationActionPolicy {
+        navigationPolicy(for: navigationAction.request.url)
+    }
+
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch ChatwootHandler(rawValue: message.name) {
         case .chatOpened: isLoading = false
