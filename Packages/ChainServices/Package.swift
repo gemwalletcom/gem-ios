@@ -34,7 +34,7 @@ let package = Package(
         .package(name: "Preferences", path: "../Preferences"),
         .package(name: "FeatureServices", path: "../FeatureServices"),
         .package(url: "https://github.com/gemwalletcom/reown-swift.git", revision: "e902bbb0de2208777c8e9c09591f4bdd39fc13ae"),
-        .package(url: "https://github.com/daltoniam/Starscream.git", exact: Version(stringLiteral: "3.1.2")),
+        .package(url: "https://github.com/gemwalletcom/Starscream.git", exact: Version(stringLiteral: "3.1.2")),
     ],
     targets: [
         .target(
@@ -86,7 +86,7 @@ let package = Package(
                 "ChainService",
             ],
             path: "NodeService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "NodeServiceTestKit",
@@ -95,6 +95,16 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store"),
             ],
             path: "NodeService/TestKit"
+        ),
+        .testTarget(
+            name: "NodeServiceTests",
+            dependencies: [
+                "NodeService",
+                "NodeServiceTestKit",
+                "Primitives",
+                .product(name: "StoreTestKit", package: "Store"),
+            ],
+            path: "NodeService/Tests"
         ),
         .target(
             name: "WalletConnectorService",

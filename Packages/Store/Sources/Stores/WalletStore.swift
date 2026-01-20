@@ -39,10 +39,10 @@ public struct WalletStore: Sendable {
         }
     }
     
-    public func getWallet(id walletId: String) throws -> Wallet? {
+    public func getWallet(id walletId: WalletId) throws -> Wallet? {
         try db.read { db in
             try WalletRecord
-                .filter(WalletRecord.Columns.id == walletId)
+                .filter(WalletRecord.Columns.id == walletId.id)
                 .including(all: WalletRecord.accounts)
                 .asRequest(of: WalletRecordInfo.self)
                 .fetchOne(db)?
@@ -60,42 +60,42 @@ public struct WalletStore: Sendable {
         }
     }
     
-    public func renameWallet(_ walletId: String, name: String) throws {
+    public func renameWallet(_ walletId: WalletId, name: String) throws {
         let _ = try db.write { db in
             let assignments = [
                 WalletRecord.Columns.name.set(to: name),
                 WalletRecord.Columns.updatedAt.set(to: Date.now)
             ]
             return try WalletRecord
-                .filter(WalletRecord.Columns.id == walletId)
+                .filter(WalletRecord.Columns.id == walletId.id)
                 .updateAll(db, assignments)
         }
     }
     
     
     @discardableResult
-    public func deleteWallet(for id: String) throws -> Bool {
+    public func deleteWallet(for walletId: WalletId) throws -> Bool {
         try db.write { db in
-            try WalletRecord.deleteOne(db, key: id)
+            try WalletRecord.deleteOne(db, key: walletId.id)
             try AccountRecord
-                .filter(AccountRecord.Columns.walletId == id)
+                .filter(AccountRecord.Columns.walletId == walletId.id)
                 .deleteAll(db)
             return true
         }
     }
 
-    public func pinWallet(_ walletId: String, value: Bool) throws {
+    public func pinWallet(_ walletId: WalletId, value: Bool) throws {
         let _ = try db.write { db in
             return try WalletRecord
-                .filter(WalletRecord.Columns.id == walletId)
+                .filter(WalletRecord.Columns.id == walletId.id)
                 .updateAll(db, WalletRecord.Columns.isPinned.set(to: value))
         }
     }
 
     public func swapOrder(from: WalletId, to: WalletId) throws {
-        guard 
-            let fromWallet = try getWallet(id: from.id),
-            let toWallet = try getWallet(id: to.id) else {
+        guard
+            let fromWallet = try getWallet(id: from),
+            let toWallet = try getWallet(id: to) else {
             throw AnyError("Unable to locate wallets to swap order")
         }
         return try db.write { db in
@@ -113,14 +113,14 @@ public struct WalletStore: Sendable {
         return SubscriptionsObserver(dbQueue: db)
     }
     
-    public func setWalletAvatar(_ walletId: String, path: String?) throws {
+    public func setWalletAvatar(_ walletId: WalletId, path: String?) throws {
         let _ = try db.write { db in
             let assignments = [
                 WalletRecord.Columns.imageUrl.set(to: path),
                 WalletRecord.Columns.updatedAt.set(to: Date.now)
             ]
             return try WalletRecord
-                .filter(WalletRecord.Columns.id == walletId)
+                .filter(WalletRecord.Columns.id == walletId.id)
                 .updateAll(db, assignments)
         }
     }

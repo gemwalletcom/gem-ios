@@ -14,6 +14,7 @@ public struct RedemptionRequest: Codable, Sendable {
 
 public enum RewardRedemptionType: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case asset
+	case giftAsset
 }
 
 public struct RewardRedemptionOption: Codable, Equatable, Hashable, Sendable {
@@ -34,8 +35,9 @@ public struct RewardRedemptionOption: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public enum RedemptionStatus: String, Codable, Equatable, Hashable, Sendable {
+public enum RedemptionStatus: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case pending
+	case processing
 	case completed
 	case failed
 }
@@ -64,6 +66,40 @@ public struct RedemptionResult: Codable, Sendable {
 	}
 }
 
+public struct ReferralActivation: Codable, Equatable, Hashable, Sendable {
+	public let verifyCompleted: Bool
+	public let verifyAfter: Date?
+	public let swapCompleted: Bool
+	public let swapAmount: Int32
+
+	public init(verifyCompleted: Bool, verifyAfter: Date?, swapCompleted: Bool, swapAmount: Int32) {
+		self.verifyCompleted = verifyCompleted
+		self.verifyAfter = verifyAfter
+		self.swapCompleted = swapCompleted
+		self.swapAmount = swapAmount
+	}
+}
+
+public struct ReferralQuota: Codable, Equatable, Hashable, Sendable {
+	public let limit: Int32
+	public let available: Int32
+
+	public init(limit: Int32, available: Int32) {
+		self.limit = limit
+		self.available = available
+	}
+}
+
+public struct ReferralAllowance: Codable, Equatable, Hashable, Sendable {
+	public let daily: ReferralQuota
+	public let weekly: ReferralQuota
+
+	public init(daily: ReferralQuota, weekly: ReferralQuota) {
+		self.daily = daily
+		self.weekly = weekly
+	}
+}
+
 public struct ReferralCode: Codable, Sendable {
 	public let code: String
 
@@ -72,11 +108,47 @@ public struct ReferralCode: Codable, Sendable {
 	}
 }
 
+public struct ReferralCodeActivation: Codable, Equatable, Hashable, Sendable {
+	public let swapCompleted: Bool
+	public let swapAmount: Int32
+
+	public init(swapCompleted: Bool, swapAmount: Int32) {
+		self.swapCompleted = swapCompleted
+		self.swapAmount = swapAmount
+	}
+}
+
+public struct ReferralLeader: Codable, Equatable, Hashable, Sendable {
+	public let username: String
+	public let referrals: Int32
+	public let points: Int32
+
+	public init(username: String, referrals: Int32, points: Int32) {
+		self.username = username
+		self.referrals = referrals
+		self.points = points
+	}
+}
+
+public struct ReferralLeaderboard: Codable, Equatable, Hashable, Sendable {
+	public let daily: [ReferralLeader]
+	public let weekly: [ReferralLeader]
+	public let monthly: [ReferralLeader]
+
+	public init(daily: [ReferralLeader], weekly: [ReferralLeader], monthly: [ReferralLeader]) {
+		self.daily = daily
+		self.weekly = weekly
+		self.monthly = monthly
+	}
+}
+
 public enum RewardEventType: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case createUsername
+	case invitePending
 	case inviteNew
 	case inviteExisting
 	case joined
+	case disabled
 }
 
 public struct RewardEvent: Codable, Equatable, Hashable, Sendable {
@@ -91,20 +163,36 @@ public struct RewardEvent: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public enum RewardStatus: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
+	case unverified
+	case pending
+	case verified
+	case trusted
+	case disabled
+}
+
 public struct Rewards: Codable, Equatable, Hashable, Sendable {
 	public let code: String?
 	public let referralCount: Int32
 	public let points: Int32
 	public let usedReferralCode: String?
-	public let isEnabled: Bool
+	public let status: RewardStatus
 	public let redemptionOptions: [RewardRedemptionOption]
+	public let disableReason: String?
+	public let referralAllowance: ReferralAllowance
+	public let referralCodeActivation: ReferralCodeActivation?
+	public let referralActivation: ReferralActivation?
 
-	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?, isEnabled: Bool, redemptionOptions: [RewardRedemptionOption]) {
+	public init(code: String?, referralCount: Int32, points: Int32, usedReferralCode: String?, status: RewardStatus, redemptionOptions: [RewardRedemptionOption], disableReason: String?, referralAllowance: ReferralAllowance, referralCodeActivation: ReferralCodeActivation?, referralActivation: ReferralActivation?) {
 		self.code = code
 		self.referralCount = referralCount
 		self.points = points
 		self.usedReferralCode = usedReferralCode
-		self.isEnabled = isEnabled
+		self.status = status
 		self.redemptionOptions = redemptionOptions
+		self.disableReason = disableReason
+		self.referralAllowance = referralAllowance
+		self.referralCodeActivation = referralCodeActivation
+		self.referralActivation = referralActivation
 	}
 }

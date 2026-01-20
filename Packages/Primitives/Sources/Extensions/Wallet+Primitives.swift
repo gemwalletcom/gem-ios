@@ -2,14 +2,13 @@
 
 import Foundation
 
-extension Wallet: Identifiable { }
+extension Wallet: Identifiable {}
 
 public extension Wallet {
-    
     var canSign: Bool {
         !isViewOnly
     }
-    
+
     var isViewOnly: Bool {
         return type == .view
     }
@@ -22,8 +21,23 @@ public extension Wallet {
         WalletId(id: id)
     }
 
+    func walletIdentifier() throws -> WalletIdentifier {
+        switch type {
+        case .multicoin:
+            guard let address = accounts.first(where: { $0.chain == .ethereum })?.address else {
+                throw AnyError("multicoin wallet requires an ethereum account")
+            }
+            return .multicoin(address: address)
+        case .single, .privateKey, .view:
+            guard let account = accounts.first else {
+                throw AnyError("\(type) wallet requires at least one account")
+            }
+            return WalletIdentifier.make(walletType: type, chain: account.chain, address: account.address)
+        }
+    }
+
     var hasTokenSupport: Bool {
-        accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).count > 0
+        accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).isNotEmpty
     }
 
     func account(for chain: Chain) throws -> Account {
@@ -48,7 +62,7 @@ public extension Wallet {
                     address: address,
                     derivationPath: "",
                     extendedPublicKey: ""
-                )
+                ),
             ],
             order: 0,
             isPinned: false,

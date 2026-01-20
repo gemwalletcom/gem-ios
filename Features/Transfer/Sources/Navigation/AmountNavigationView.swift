@@ -29,21 +29,23 @@ public struct AmountNavigationView: View {
                 switch $0 {
                 case let .infoAction(type):
                     InfoSheetScene(type: type)
-                case .fiatConnect(let assetAddress, let walletId):
+                case let .fiatConnect(assetAddress, walletId):
                     NavigationStack {
                         FiatConnectNavigationView(
-                            model: FiatSceneViewModel(assetAddress: assetAddress, walletId: walletId.id)
+                            model: FiatSceneViewModel(assetAddress: assetAddress, walletId: walletId)
                         )
                         .navigationBarTitleDisplayMode(.inline)
-                        .toolbar { ToolbarDismissItem(title: .done, placement: .topBarLeading) }
+                        .toolbar { ToolbarDismissItem(type: .close, placement: .topBarLeading) }
                     }
-                case .leverageSelector:
+                case let .leverageSelector(selection):
+                    @Bindable var leverageSelection = selection
                     LeveragePickerSheet(
-                        title: model.leverageTitle,
-                        leverageOptions: model.leverageOptions,
-                        selectedLeverage: $model.selectedLeverage
+                        title: leverageSelection.title,
+                        leverageOptions: leverageSelection.options,
+                        selectedLeverage: $leverageSelection.selected
                     )
-                case .autoclose(let openData):
+                    .onChange(of: leverageSelection.selected, model.onChangeLeverage)
+                case let .autoclose(openData):
                     AutocloseSheet(
                         openData: openData,
                         onComplete: model.onAutocloseComplete
@@ -53,21 +55,23 @@ public struct AmountNavigationView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(model.nextTitle, action: model.onSelectNextButton)
+                    Button(model.continueTitle, action: model.onSelectNextButton)
                         .bold()
                         .disabled(!model.isNextEnabled)
                 }
             }
-            .navigationDestination(for: $model.delegation) { value in
-                StakeValidatorsScene(
-                    model: StakeValidatorsViewModel(
-                        type: model.stakeValidatorsType,
-                        chain: model.asset.chain,
-                        currentValidator: value,
-                        validators: model.validators,
-                        selectValidator: model.onSelectValidator
+            .navigationDestination(for: DelegationValidator.self) { validator in
+                if case let .stake(stake) = model.provider {
+                    StakeValidatorsScene(
+                        model: StakeValidatorsViewModel(
+                            type: stake.stakeValidatorsType,
+                            chain: model.asset.chain,
+                            currentValidator: validator,
+                            validators: stake.validatorSelection.options,
+                            selectValidator: model.onValidatorSelected
+                        )
                     )
-                )
+                }
             }
     }
 }

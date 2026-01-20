@@ -9,12 +9,12 @@ import Primitives
 public struct PerpetualPositionsRequest: ValueObservationQueryable {
     public static var defaultValue: [PerpetualPositionData] { [] }
 
-    public var walletId: String
+    public var walletId: WalletId
     public var filter: PositionsRequestFilter?
     public var searchQuery: String
 
     public init(
-        walletId: String,
+        walletId: WalletId,
         filter: PositionsRequestFilter? = nil,
         searchQuery: String = ""
     ) {
@@ -27,7 +27,7 @@ public struct PerpetualPositionsRequest: ValueObservationQueryable {
         var query = PerpetualRecord
             .including(required: PerpetualRecord.asset)
             .including(all: PerpetualRecord.positions
-                .filter(PerpetualPositionRecord.Columns.walletId == walletId))
+                .filter(PerpetualPositionRecord.Columns.walletId == walletId.id))
 
         switch filter {
         case .perpetualId(let perpetualId):

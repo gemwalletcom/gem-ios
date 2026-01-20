@@ -9,9 +9,9 @@ import Primitives
 public struct StakeValidatorsRequest: ValueObservationQueryable {
     public static var defaultValue: [DelegationValidator] { [] }
 
-    private let assetId: String
+    private let assetId: AssetId
 
-    public init(assetId: String) {
+    public init(assetId: AssetId) {
         self.assetId = assetId
     }
 

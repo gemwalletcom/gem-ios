@@ -28,18 +28,20 @@ struct GemApp: App {
             RootScene(
                 model: RootSceneViewModel(
                     walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
-                    onstartAsyncService: resolver.services.onstartAsyncService,
                     onstartWalletService: resolver.services.onstartWalletService,
                     transactionStateService: resolver.services.transactionStateService,
                     connectionsService: resolver.services.connectionsService,
-                    deviceObserverService: resolver.services.deviceObserverService,
-                    notificationHandler: resolver.services.notificationHandler,
+                    observersService: resolver.services.observersService,
+                    navigationHandler: resolver.services.navigationHandler,
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
                     walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService,
                     nameService: resolver.services.nameService,
+                    releaseAlertService: resolver.services.releaseAlertService,
+                    rateService: resolver.services.rateService,
                     eventPresenterService: resolver.services.eventPresenterService,
-                    avatarService: resolver.services.avatarService
+                    avatarService: resolver.services.avatarService,
+                    deviceService: resolver.services.deviceService
                 )
             )
             .inject(resolver: resolver)
@@ -53,6 +55,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         AppResolver.main.services.onstartService.configure()
+        Task {
+            await AppResolver.main.services.onstartAsyncService.run()
+        }
         return true
     }
     
@@ -70,7 +75,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-        AppResolver.main.services.notificationHandler.handleUserInfo(userInfo)
+        Task { await AppResolver.main.services.navigationHandler.handlePush(userInfo) }
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -104,7 +109,7 @@ extension AppDelegate: @preconcurrency UNUserNotificationCenterDelegate {
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        AppResolver.main.services.notificationHandler.handleUserInfo(response.notification.request.content.userInfo)
+        Task { await AppResolver.main.services.navigationHandler.handlePush(response.notification.request.content.userInfo) }
         completionHandler()
     }
 }

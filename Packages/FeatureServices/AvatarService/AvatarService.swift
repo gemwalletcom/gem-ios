@@ -25,7 +25,7 @@ public struct AvatarService: Sendable {
 
     public func remove(for wallet: Wallet) throws {
         try deleteExistingAvatar(for: wallet)
-        try store.setWalletAvatar(wallet.id, path: nil)
+        try store.setWalletAvatar(wallet.walletId, path: nil)
     }
 
     // MARK: - Private methods
@@ -34,7 +34,7 @@ public struct AvatarService: Sendable {
         try deleteExistingAvatar(for: wallet)
 
         let imageUrl = try localStore.store(data, id: UUID().uuidString, documentType: "png")
-        try store.setWalletAvatar(wallet.id, path: imageUrl)
+        try store.setWalletAvatar(wallet.walletId, path: imageUrl)
     }
 
     private func deleteExistingAvatar(for wallet: Wallet) throws {

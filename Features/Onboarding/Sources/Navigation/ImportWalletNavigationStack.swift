@@ -16,7 +16,7 @@ public struct ImportWalletNavigationStack: View {
     public var body: some View {
         NavigationStack(path: $navigationPath) {
             rootScene
-                .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
+                .toolbarDismissItem(type: .close, placement: .topBarLeading)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationDestination(for: ImportWalletType.self) { type in
                     ImportWalletScene(
@@ -52,7 +52,7 @@ public struct ImportWalletNavigationStack: View {
                                 avatarService: model.avatarService
                             )
                         )
-                        .toolbarDismissItem(title: .done, placement: .topBarLeading)
+                        .toolbarDismissItem(type: .close, placement: .topBarLeading)
                     }
                 }
         }
@@ -86,22 +86,17 @@ extension ImportWalletNavigationStack {
         Task {
             do {
                 let wallet = try await model.importWallet(data: data)
-
-                if model.hasExistingWallets {
-                    navigate(to: .walletProfile(wallet: wallet))
-                } else {
-                    try await model.setupWalletComplete(wallet: wallet)
-                }
+                navigate(to: .walletProfile(wallet: wallet))
             } catch {
                 debugLog("Failed to import wallet: \(error)")
             }
         }
     }
 
-    func onSetupWalletComplete(wallet: Wallet) {
+    func onSetupWalletComplete(_ wallet: Wallet) {
         Task {
             do {
-                try await model.setupWalletComplete(wallet: wallet)
+                try await model.setupWalletComplete()
             } catch {
                 debugLog("Failed to setup wallet: \(error)")
             }

@@ -10,7 +10,7 @@ import PrimitivesComponents
 public final class AssetSceneBannersViewModel: Sendable {
     private let assetData: AssetData
     private let banners: [Banner]
-    
+
     public init(
         assetData: AssetData,
         banners: [Banner]

@@ -27,7 +27,7 @@ public final class CreateRewardsCodeViewModel: TextInputViewModelProtocol {
         self.onSuccess = onSuccess
     }
 
-    public var title: String { Localized.Rewards.CreateReferralCode.title }
+    public var title: String { Localized.Rewards.nickname }
     public var placeholder: String { Localized.Rewards.username }
     public var footer: String? { Localized.Rewards.CreateReferralCode.info }
     public var isActionDisabled: Bool { text.isEmpty }

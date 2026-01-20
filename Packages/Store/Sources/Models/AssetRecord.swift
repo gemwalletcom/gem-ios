@@ -116,7 +116,7 @@ extension Asset {
 
 extension AssetRecord {
     func mapToAsset() -> Asset {
-        let tokenId = tokenId.count == 0 ? nil : tokenId
+        let tokenId = tokenId.isEmpty ? nil : tokenId
         return Asset(
             id: AssetId(chain: chain, tokenId: tokenId),
             name: name,

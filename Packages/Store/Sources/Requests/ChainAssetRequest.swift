@@ -12,7 +12,7 @@ public struct ChainAssetRequest: ValueObservationQueryable {
     public var assetRequest: AssetRequest
     public var feeAssetRequest: AssetRequest
 
-    public init(walletId: String, assetId: AssetId) {
+    public init(walletId: WalletId, assetId: AssetId) {
         self.assetRequest = AssetRequest(walletId: walletId, assetId: assetId)
         self.feeAssetRequest = AssetRequest(walletId: walletId, assetId: assetId.chain.assetId)
     }

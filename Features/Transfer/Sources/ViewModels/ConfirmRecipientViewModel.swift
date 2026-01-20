@@ -49,7 +49,12 @@ extension ConfirmRecipientViewModel {
             case .stake, .unstake, .redelegate, .rewards, .withdraw: Localized.Stake.validator
             case .freeze: Localized.Stake.resource
             }
-        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .generic, .account, .perpetual, .yield: Localized.Transfer.Recipient.title
+        case .generic:
+            switch model.type.outputAction {
+            case .sign: Localized.Asset.contract
+            case .send: Localized.Transfer.Recipient.title
+            }
+        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .account, .perpetual, .yield: Localized.Transfer.Recipient.title
         }
     }
 

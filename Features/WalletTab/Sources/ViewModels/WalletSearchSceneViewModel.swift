@@ -17,26 +17,28 @@ import WalletsService
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
     private let searchService: AssetSearchService
-    private let activityService: ActivityService
+    let activityService: ActivityService
     private let walletsService: WalletsService
     private let preferences: Preferences
 
-    private let wallet: Wallet
+    let wallet: Wallet
     private let onDismissSearch: VoidAction
     private let onAddToken: VoidAction
 
     private var state: StateViewType<[AssetBasic]> = .noData
 
     var assets: [AssetData] = []
-    var recentActivities: [Asset] = []
+    var recents: [RecentAsset] = []
     var searchModel: AssetSearchViewModel
+
     var request: AssetsRequest
-    var recentActivityRequest: RecentActivityRequest
+    var recentsRequest: RecentActivityRequest
 
     var isPresentingToastMessage: ToastMessage? = nil
     var isSearching: Bool = false
     var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
+    var isPresentingRecents: Bool = false
 
     public let onSelectAssetAction: AssetAction
 
@@ -60,60 +62,31 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.onAddToken = onAddToken
         self.searchModel = AssetSearchViewModel(selectType: .manage)
         self.request = AssetsRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             filters: []
         )
-        self.recentActivityRequest = RecentActivityRequest(
-            walletId: wallet.id,
+        self.recentsRequest = RecentActivityRequest(
+            walletId: wallet.walletId,
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual }
         )
     }
 
-    var sections: AssetsSections {
-        AssetsSections.from(assets)
-    }
-
     var pinnedImage: Image { Images.System.pin }
     var pinnedTitle: String { Localized.Common.pinned }
-
     var assetsTitle: String { Localized.Assets.title }
 
-    var showTags: Bool {
-        searchModel.searchableQuery.isEmpty
-    }
+    var sections: AssetsSections { AssetsSections.from(assets) }
+    var recentModels: [AssetViewModel] { recents.map { AssetViewModel(asset: $0.asset) } }
+    var currencyCode: String { preferences.currency }
 
-    var showRecent: Bool {
-        searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
-    }
-
-    var activityModels: [AssetViewModel] {
-        recentActivities.map { AssetViewModel(asset: $0) }
-    }
-
-    var showLoading: Bool {
-        state.isLoading && showEmpty
-    }
-
-    var showEmpty: Bool {
-        !showAssetsSection && !showPinnedSection
-    }
-
-    var showPinnedSection: Bool {
-        sections.pinned.isNotEmpty
-    }
-
-    var showAssetsSection: Bool {
-        sections.assets.isNotEmpty
-    }
-
-    var currencyCode: String {
-        preferences.currency
-    }
-
-    var showAddToken: Bool {
-        wallet.hasTokenSupport
-    }
+    var showTags: Bool { searchModel.searchableQuery.isEmpty }
+    var showRecents: Bool { searchModel.searchableQuery.isEmpty && recents.isNotEmpty }
+    var showLoading: Bool { state.isLoading && showEmpty }
+    var showEmpty: Bool { !showRecents && !showPinned && !showAssets }
+    var showPinned: Bool { sections.pinned.isNotEmpty }
+    var showAssets: Bool { sections.assets.isNotEmpty }
+    var showAddToken: Bool { wallet.hasTokenSupport }
 }
 
 // MARK: - Actions
@@ -127,6 +100,7 @@ extension WalletSearchSceneViewModel {
     func onSearch(query: String) async {
         let query = query.trim()
         guard !query.isEmpty else { return }
+
         await searchAssets(
             query: query,
             priorityAssetsQuery: searchModel.priorityAssetsQuery,
@@ -168,6 +142,15 @@ extension WalletSearchSceneViewModel {
     func onSelectAsset(_ asset: Asset) {
         onSelectAssetAction?(asset)
         updateRecent(asset)
+    }
+
+    func onSelectRecents() {
+        isPresentingRecents = true
+    }
+
+    func onSelectRecent(asset: Asset) {
+        onSelectAssetAction?(asset)
+        isPresentingRecents = false
     }
 
     func onSelectAddCustomToken() {

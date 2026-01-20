@@ -52,16 +52,11 @@ public struct ConfirmTransferScene: View {
                     FiatConnectNavigationView(
                         model: FiatSceneViewModel(
                             assetAddress: assetAddress,
-                            walletId: walletId.id
+                            walletId: walletId
                         )
                     )
                     .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarDismissItem(
-                            title: .done,
-                            placement: .topBarLeading
-                        )
-                    }
+                    .toolbarDismissItem(type: .close, placement: .topBarLeading)
                 }
             case .swapDetails:
                 if case let .swapDetails(model) = model.detailsViewModel.itemModel {

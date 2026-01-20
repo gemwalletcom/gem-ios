@@ -29,6 +29,7 @@ let package = Package(
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
+        .package(name: "Recents", path: "../Recents"),
     ],
     targets: [
         .target(
@@ -46,7 +47,8 @@ let package = Package(
                 "Formatters",
                 "Preferences",
                 "InfoSheet",
-                .product(name: "ExplorerService", package: "ChainServices")
+                .product(name: "ExplorerService", package: "ChainServices"),
+                "Recents"
             ],
             path: "Sources"
         ),

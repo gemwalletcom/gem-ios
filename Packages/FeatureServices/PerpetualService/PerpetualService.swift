@@ -29,11 +29,11 @@ public struct PerpetualService: PerpetualServiceable {
     }
     
     public func getPositions(walletId: WalletId) async throws -> [PerpetualPosition] {
-        return try store.getPositions(walletId: walletId.id)
+        try store.getPositions(walletId: walletId)
     }
     
     public func getMarkets() async throws -> [Perpetual] {
-        return try store.getPerpetuals()
+        try store.getPerpetuals()
     }
     
     public func updatePositions(wallet: Wallet) async throws {
@@ -44,26 +44,26 @@ public struct PerpetualService: PerpetualServiceable {
         }
         let summary = try await provider.getPositions(address: account.address)
         
-        try syncProviderBalances(walletId: wallet.id, balance: summary.balance)
+        try syncProviderBalances(walletId: wallet.walletId, balance: summary.balance)
         try syncProviderPositions(
             positions: summary.positions,
             provider: provider.provider(),
-            walletId: wallet.id
+            walletId: wallet.walletId
         )
     }
-    
-    private func syncProviderBalances(walletId: String, balance: PerpetualBalance) throws {
+
+    private func syncProviderBalances(walletId: WalletId, balance: PerpetualBalance) throws {
         let usd = Asset.hypercoreUSDC()
         let formatter = ValueFormatter.full
         try balanceStore.addMissingBalances(walletId: walletId, assetIds: [usd.id], isEnabled: false)
-        
+
         let perpetuals = try store.getPerpetuals().map(\.assetId)
         try balanceStore.addMissingBalances(walletId: walletId, assetIds: perpetuals, isEnabled: false)
-        
+
         try balanceStore.updateBalances(
             [
              UpdateBalance(
-                assetID: usd.id.identifier,
+                assetId: usd.id,
                 type: .perpetual(UpdatePerpetualBalance(
                     available: UpdateBalanceValue(
                         value: try formatter.inputNumber(from: balance.available.description, decimals: 6).description,
@@ -85,18 +85,18 @@ public struct PerpetualService: PerpetualServiceable {
             for: walletId
         )
     }
-    
-    private func syncProviderPositions(positions: [PerpetualPosition], provider: Primitives.PerpetualProvider, walletId: String) throws {
+
+    private func syncProviderPositions(positions: [PerpetualPosition], provider: Primitives.PerpetualProvider, walletId: WalletId) throws {
         let existingPositions = try store.getPositions(walletId: walletId, provider: provider)
         let existingIds = existingPositions.map { $0.id }.asSet()
         let newIds = positions.map { $0.id }.asSet()
-        
+
         let changes = SyncDiff.calculate(
             primary: .remote,
             local: existingIds,
             remote: newIds
         )
-        
+
         try store.diffPositions(
             deleteIds: changes.toDelete.asArray(),
             positions: positions,

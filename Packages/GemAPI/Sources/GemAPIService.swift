@@ -48,6 +48,10 @@ public protocol GemAPISubscriptionService: Sendable {
     func getSubscriptions(deviceId: String) async throws -> [Subscription]
     func addSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
     func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
+
+    func getSubscriptionsV2(deviceId: String) async throws -> [WalletSubscriptionChains]
+    func addSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws
+    func deleteSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws
 }
 
 public protocol GemAPITransactionService: Sendable {
@@ -83,10 +87,16 @@ public protocol GemAPIAuthService: Sendable {
 }
 
 public protocol GemAPIRewardsService: Sendable {
-    func getRewards(address: String) async throws -> Rewards
+    func getRewards(walletId: String) async throws -> Rewards
     func createReferral(request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards
     func useReferralCode(request: AuthenticatedRequest<ReferralCode>) async throws
-    func redeem(address: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
+    func getRedemptionOption(code: String) async throws -> RewardRedemptionOption
+    func redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
+}
+
+public protocol GemAPINotificationService: Sendable {
+    func getNotifications(deviceId: String) async throws -> [Primitives.Notification]
+    func markNotificationsRead(deviceId: String) async throws
 }
 
 public struct GemAPIService {
@@ -168,7 +178,7 @@ extension GemAPIService: GemAPISubscriptionService {
             .request(.getSubscriptions(deviceId: deviceId))
             .mapResponse(as: [Subscription].self)
     }
-    
+
     public func addSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws {
         try await provider
             .request(.addSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
@@ -178,6 +188,24 @@ extension GemAPIService: GemAPISubscriptionService {
     public func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws {
         try await provider
             .request(.deleteSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
+            .mapResponse(as: Int.self)
+    }
+
+    public func getSubscriptionsV2(deviceId: String) async throws -> [WalletSubscriptionChains] {
+        try await provider
+            .request(.getSubscriptionsV2(deviceId: deviceId))
+            .mapResponse(as: [WalletSubscriptionChains].self)
+    }
+
+    public func addSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws {
+        try await provider
+            .request(.addSubscriptionsV2(deviceId: deviceId, subscriptions: subscriptions))
+            .mapResponse(as: Int.self)
+    }
+
+    public func deleteSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws {
+        try await provider
+            .request(.deleteSubscriptionsV2(deviceId: deviceId, subscriptions: subscriptions))
             .mapResponse(as: Int.self)
     }
 }
@@ -320,9 +348,9 @@ extension GemAPIService: GemAPIAuthService {
 }
 
 extension GemAPIService: GemAPIRewardsService {
-    public func getRewards(address: String) async throws -> Rewards {
+    public func getRewards(walletId: String) async throws -> Rewards {
         try await provider
-            .request(.getRewards(address: address))
+            .request(.getRewards(walletId: walletId))
             .mapResponse(as: Rewards.self)
     }
 
@@ -338,10 +366,29 @@ extension GemAPIService: GemAPIRewardsService {
             .mapResponse(as: [RewardEvent].self)
     }
 
-    public func redeem(address: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult {
+    public func getRedemptionOption(code: String) async throws -> RewardRedemptionOption {
         try await provider
-            .request(.redeem(address: address, request: request))
+            .request(.getRedemptionOption(code: code))
+            .mapResponse(as: RewardRedemptionOption.self)
+    }
+
+    public func redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult {
+        try await provider
+            .request(.redeem(walletId: walletId, request: request))
             .mapResponse(as: RedemptionResult.self)
+    }
+}
+
+extension GemAPIService: GemAPINotificationService {
+    public func getNotifications(deviceId: String) async throws -> [Primitives.Notification] {
+        try await provider
+            .request(.getNotifications(deviceId: deviceId))
+            .mapResponse(as: [Primitives.Notification].self)
+    }
+
+    public func markNotificationsRead(deviceId: String) async throws {
+        _ = try await provider
+            .request(.markNotificationsRead(deviceId: deviceId))
     }
 }
 

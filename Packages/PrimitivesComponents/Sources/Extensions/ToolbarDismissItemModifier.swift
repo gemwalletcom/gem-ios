@@ -3,22 +3,22 @@
 import SwiftUI
 
 struct ToolbarDismissItemModifier: ViewModifier {
-    let title: ToolbarDismissItem.Title
+    let type: ToolbarDismissItem.ButtonType
     let placement: ToolbarItemPlacement
-    
+
     public init(
-        title: ToolbarDismissItem.Title,
+        type: ToolbarDismissItem.ButtonType,
         placement: ToolbarItemPlacement
     ) {
-        self.title = title
+        self.type = type
         self.placement = placement
     }
-    
+
     func body(content: Content) -> some View {
         content
             .toolbar {
                 ToolbarDismissItem(
-                    title: title,
+                    type: type,
                     placement: placement
                 )
             }
@@ -27,9 +27,9 @@ struct ToolbarDismissItemModifier: ViewModifier {
 
 public extension View {
     func toolbarDismissItem(
-        title: ToolbarDismissItem.Title,
+        type: ToolbarDismissItem.ButtonType,
         placement: ToolbarItemPlacement
     ) -> some View {
-        modifier(ToolbarDismissItemModifier(title: title, placement: placement))
+        modifier(ToolbarDismissItemModifier(type: type, placement: placement))
     }
 }

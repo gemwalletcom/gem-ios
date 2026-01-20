@@ -42,7 +42,7 @@ public struct TransactionStateService: Sendable {
 
     public func addTransactions(wallet: Wallet, transactions: [Transaction]) throws {
         try transactionStore.addTransactions(
-            walletId: wallet.walletId.id,
+            walletId: wallet.walletId,
             transactions: transactions
         )
         runUpdate(for: transactions.map({ TransactionWallet(transaction: $0, wallet: wallet) }))

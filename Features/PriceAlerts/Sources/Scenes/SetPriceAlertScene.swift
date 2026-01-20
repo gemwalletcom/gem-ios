@@ -43,6 +43,10 @@ public struct SetPriceAlertScene: View {
                 }
             }
             .cleanListRow()
+
+            Section {
+                ListAssetItemView(model: model.assetItemViewModel(for: assetData))
+            }
         }
         .safeAreaView {
             StateButton(

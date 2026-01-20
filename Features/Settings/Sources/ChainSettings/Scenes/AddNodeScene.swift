@@ -49,12 +49,7 @@ public struct AddNodeScene: View {
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(model.doneButtonTitle, action: onSelectDone)
-                    .bold()
-            }
-        }
+        .toolbarDismissItem(type: .close, placement: .topBarLeading)
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
@@ -79,7 +74,7 @@ extension AddNodeScene {
                 placeholder: model.inputFieldTitle,
                 onClean: { model.debounceInterval = nil }
             ) {
-                HStack(spacing: .medium) {
+                HStack(spacing: .small) {
                     ListButton(image: Images.System.paste, action: onSelectPaste)
                     ListButton(image: Images.System.qrCodeViewfinder, action: onSelectScan)
                 }

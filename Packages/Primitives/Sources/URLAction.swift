@@ -3,15 +3,19 @@
 import Foundation
 
 public enum URLAction: Equatable {
-    case walletConnect(uri: String)
-    case walletConnectRequest
-    case walletConnectSession(String)
+    case walletConnect(WalletConnectAction)
     case asset(AssetId)
     case swap(AssetId, AssetId?)
     case perpetuals
     case rewards(code: String)
+    case gift(code: String)
     case buy(AssetId, amount: Int?)
     case sell(AssetId, amount: Int?)
     case setPriceAlert(AssetId, price: Double?)
-    case none
+}
+
+public enum WalletConnectAction: Equatable {
+    case connect(uri: String)
+    case request
+    case session(String)
 }

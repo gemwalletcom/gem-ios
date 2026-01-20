@@ -23,7 +23,6 @@ let package = Package(
         .target(
             name: "Keystore",
             dependencies: [
-                .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
                 .product(name: "WalletCore", package: "WalletCore"),
                 .product(name: "WalletCorePrimitives", package: "WalletCore"),
                 "Primitives",

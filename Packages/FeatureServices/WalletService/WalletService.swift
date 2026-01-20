@@ -1,11 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Store
-import Primitives
-import Preferences
-import Keystore
 import AvatarService
+import Foundation
+import Keystore
+import Preferences
+import Primitives
+import Store
 import WalletSessionService
 
 public struct WalletService: Sendable {
@@ -24,14 +24,14 @@ public struct WalletService: Sendable {
         self.keystore = keystore
         self.walletStore = walletStore
         self.avatarService = avatarService
-        self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
+        walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
         self.preferences = preferences
     }
 
     public var currentWalletId: WalletId? {
         walletSessionService.currentWalletId
     }
-    
+
     public var currentWallet: Wallet? {
         walletSessionService.currentWallet
     }
@@ -39,13 +39,18 @@ public struct WalletService: Sendable {
     public var wallets: [Wallet] {
         walletSessionService.wallets
     }
-    
+
     public var isAcceptTermsCompleted: Bool {
         preferences.isAcceptTermsCompleted
     }
-    
+
     public func nextWalletIndex() throws -> Int {
         try walletStore.nextWalletIndex()
+    }
+
+    public func walletId(walletIndex: Int?, walletTypeId: String) -> WalletId? {
+        walletSessionService.wallets
+            .first(where: { (try? $0.walletIdentifier().id) == walletTypeId || $0.index == (walletIndex ?? -1) })?.walletId
     }
 
     public func setCurrent(for index: Int) -> WalletId? {
@@ -55,7 +60,7 @@ public struct WalletService: Sendable {
     public func setCurrent(for walletId: WalletId) {
         walletSessionService.setCurrent(walletId: walletId)
     }
-    
+
     public func acceptTerms() {
         preferences.isAcceptTermsCompleted = true
     }
@@ -71,7 +76,7 @@ public struct WalletService: Sendable {
         }
         return wallet
     }
-    
+
     public func loadOrCreateWallet(name: String, type: KeystoreImportType, source: WalletSource) async throws -> Wallet {
         if let existing = try existingWallet(type: type) {
             return existing
@@ -87,7 +92,7 @@ public struct WalletService: Sendable {
     }
 
     private func existingWallet(type: KeystoreImportType) throws -> Wallet? {
-        let (chain, address) = try WalletIdentifier.from(type).deriveAddress()
+        let (chain, address) = try ImportIdentifier.from(type).deriveAddress()
         return wallets.first { wallet in
             wallet.type == type.walletType && wallet.accounts.contains {
                 $0.chain == chain && $0.address == address
@@ -97,7 +102,7 @@ public struct WalletService: Sendable {
 
     public func delete(_ wallet: Wallet) async throws {
         try await keystore.deleteKey(for: wallet)
-        try walletStore.deleteWallet(for: wallet.id)
+        try walletStore.deleteWallet(for: wallet.walletId)
         try avatarService.remove(for: wallet)
 
         await MainActor.run {
@@ -118,21 +123,21 @@ public struct WalletService: Sendable {
     }
 
     public func pin(wallet: Wallet) throws {
-        try walletStore.pinWallet(wallet.id, value: true)
+        try walletStore.pinWallet(wallet.walletId, value: true)
     }
 
     public func unpin(wallet: Wallet) throws {
-        try walletStore.pinWallet(wallet.id, value: false)
+        try walletStore.pinWallet(wallet.walletId, value: false)
     }
 
     public func swapOrder(from: WalletId, to: WalletId) throws {
         try walletStore.swapOrder(from: from, to: to)
     }
-    
+
     public func rename(walletId: WalletId, newName: String) throws {
-        try walletStore.renameWallet(walletId.id, name: newName)
+        try walletStore.renameWallet(walletId, name: newName)
     }
-    
+
     public func getMnemonic(wallet: Wallet) async throws -> [String] {
         try await keystore.getMnemonic(wallet: wallet)
     }

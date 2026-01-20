@@ -2,39 +2,48 @@
 
 import SwiftUI
 import Localization
+import Style
+import Components
 
 public struct ToolbarDismissItem: ToolbarContent {
     @Environment(\.dismiss) private var dismiss
 
-    public enum Title {
+    public enum ButtonType {
         case cancel
         case done
+        case close
         case custom(String)
-        
+
         var localized: String {
             switch self {
             case .cancel: Localized.Common.cancel
             case .done: Localized.Common.done
+            case .close: ""
             case .custom(let title): title
             }
         }
     }
 
-    let title: Title
+    let type: ButtonType
     let placement: ToolbarItemPlacement
-    
+
     public init(
-        title: Title,
+        type: ButtonType,
         placement: ToolbarItemPlacement
     ) {
-        self.title = title
+        self.type = type
         self.placement = placement
     }
 
     public var body: some ToolbarContent {
         ToolbarItem(placement: placement) {
-            Button(title.localized, action: { dismiss() })
-                .bold()
+            switch type {
+            case .close:
+                Button("", systemImage: SystemImage.xmark, action: { dismiss() })
+            case .cancel, .done, .custom:
+                Button(type.localized, action: { dismiss() })
+                    .bold()
+            }
         }
     }
 }

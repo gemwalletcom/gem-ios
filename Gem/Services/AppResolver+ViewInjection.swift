@@ -22,7 +22,7 @@ extension View {
             .environment(\.bannerService, services.bannerService)
             .environment(\.balanceService, services.balanceService)
             .environment(\.priceAlertService, services.priceAlertService)
-            .environment(\.notificationHandler, services.notificationHandler)
+            .environment(\.navigationPresenter, services.navigationPresenter)
             .environment(\.chainServiceFactory, services.chainServiceFactory)
             .environment(\.priceService, services.priceService)
             .environment(\.priceObserverService, services.priceObserverService)
@@ -33,6 +33,7 @@ extension View {
             .environment(\.avatarService, services.avatarService)
             .environment(\.releaseService, services.appReleaseService)
             .environment(\.viewModelFactory, services.viewModelFactory)
+            .environment(\.inAppNotificationService, services.inAppNotificationService)
     }
     
     private func inject(storages: AppResolver.Storages) -> some View {

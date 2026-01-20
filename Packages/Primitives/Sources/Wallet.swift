@@ -4,13 +4,6 @@
 
 import Foundation
 
-public enum WalletType: String, Codable, Equatable, Hashable, Sendable {
-	case multicoin
-	case single
-	case privateKey
-	case view
-}
-
 public enum WalletSource: String, Codable, Equatable, Hashable, Sendable {
 	case create
 	case `import`
@@ -37,13 +30,5 @@ public struct Wallet: Codable, Equatable, Hashable, Sendable {
 		self.isPinned = isPinned
 		self.imageUrl = imageUrl
 		self.source = source
-	}
-}
-
-public struct WalletId: Codable, Equatable, Hashable, Sendable {
-	public let id: String
-
-	public init(id: String) {
-		self.id = id
 	}
 }

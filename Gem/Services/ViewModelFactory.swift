@@ -150,7 +150,7 @@ public struct ViewModelFactory: Sendable {
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
             assetAddress: assetAddress,
-            walletId: walletId.id,
+            walletId: walletId,
             type: type,
             amount: amount
         )

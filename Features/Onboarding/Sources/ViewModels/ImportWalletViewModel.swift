@@ -16,22 +16,20 @@ public final class ImportWalletViewModel {
     let walletService: WalletService
     let avatarService: AvatarService
     let nameService: any NameServiceable
-    let hasExistingWallets: Bool
+    let onComplete: VoidAction
 
-    var isPresentingWallets: Binding<Bool>
     var isPresentingSelectImageWallet: Wallet?
 
     public init(
         walletService: WalletService,
         avatarService: AvatarService,
         nameService: any NameServiceable,
-        isPresentingWallets: Binding<Bool>
+        onComplete: VoidAction
     ) {
         self.walletService = walletService
         self.avatarService = avatarService
         self.nameService = nameService
-        self.isPresentingWallets = isPresentingWallets
-        self.hasExistingWallets = walletService.wallets.isNotEmpty
+        self.onComplete = onComplete
     }
 
     public var isAcceptTermsCompleted: Bool {
@@ -39,7 +37,7 @@ public final class ImportWalletViewModel {
     }
 
     func dismiss() {
-        isPresentingWallets.wrappedValue = false
+        onComplete?()
     }
 }
 
@@ -53,12 +51,12 @@ extension ImportWalletViewModel {
     func importWallet(data: WalletImportData) async throws -> Wallet {
         let wallet = try await walletService.loadOrCreateWallet(name: data.name, type: data.keystoreType, source: .import)
         walletService.acceptTerms()
-        WalletPreferences(walletId: wallet.id).completeInitialSynchronization()
+        WalletPreferences(walletId: wallet.walletId).completeInitialSynchronization()
+        try await walletService.setCurrent(wallet: wallet)
         return wallet
     }
 
-    func setupWalletComplete(wallet: Wallet) async throws {
-        try await walletService.setCurrent(wallet: wallet)
+    func setupWalletComplete() async throws {
         dismiss()
     }
 }

@@ -45,4 +45,8 @@ public extension ToastMessage {
     static func success(_ message: String) -> ToastMessage {
         ToastMessage(title: message, image: SystemImage.checkmark)
     }
+
+    static func error(_ message: String) -> ToastMessage {
+        ToastMessage(title: message, image: SystemImage.xmarkCircle)
+    }
 }

@@ -33,14 +33,32 @@ public final class OnstartWalletService: Sendable {
     public func setup(wallet: Wallet) {
         Task {
             try bannerSetupService.setupWallet(wallet: wallet)
-            async let addressStatusTask: Void = runAddressStatusCheck(wallet)
-            async let pushPermissionsTask: Void = requestPushPermissions()
-            _ = await (addressStatusTask, pushPermissionsTask)
+            await runAddressStatusCheck(wallet)
+        }
+    }
+    
+    public func requestPushPermissions() async {
+        do {
+            let status = try await pushNotificationEnablerService.getNotificationSettingsStatus()
+
+            switch status {
+            case .notDetermined:
+                let isEnabled = try await pushNotificationEnablerService.requestPermissions()
+                if isEnabled {
+                    try await deviceService.update()
+                }
+            case .authorized, .ephemeral, .provisional, .denied:
+                return
+            @unknown default:
+                return
+            }
+        } catch {
+            debugLog("requestPushPermissions error: \(error)")
         }
     }
 
     private func runAddressStatusCheck(_ wallet: Wallet) async {
-        let walletPreferences = WalletPreferences(walletId: wallet.id)
+        let walletPreferences = WalletPreferences(walletId: wallet.walletId)
         guard !walletPreferences.completeInitialAddressStatus else { return }
 
         do {
@@ -54,27 +72,6 @@ public final class OnstartWalletService: Sendable {
             walletPreferences.completeInitialAddressStatus = true
         } catch {
             debugLog("runAddressStatusCheck error: \(error)")
-        }
-    }
-
-    private func requestPushPermissions() async {
-        do {
-            let status = try await pushNotificationEnablerService.getNotificationSettingsStatus()
-
-            switch status {
-            case .notDetermined:
-                try await Task.sleep(nanoseconds: 300)
-                let isEnabled = try await pushNotificationEnablerService.requestPermissions()
-                if isEnabled {
-                    try await deviceService.update()
-                }
-            case .authorized, .ephemeral, .provisional, .denied:
-                return
-            @unknown default:
-                return
-            }
-        } catch {
-            debugLog("requestPushPermissions error: \(error)")
         }
     }
 }

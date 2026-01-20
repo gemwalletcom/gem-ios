@@ -52,9 +52,9 @@ public final class StakeSceneViewModel {
         self.stakeService = stakeService
         self.nodeService = nodeService
         self.yieldAsset = yieldAsset
-        self.request = StakeDelegationsRequest(walletId: wallet.id, assetId: chain.chain.id)
-        self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId.identifier)
-        self.assetRequest = AssetRequest(walletId: wallet.id, assetId: chain.chain.assetId)
+        self.request = StakeDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
+        self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId)
+        self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
     }
 
     public var stakeInfoUrl: URL {
@@ -220,7 +220,7 @@ extension StakeSceneViewModel {
         delegatitonsState = .loading
         do {
             let acccount = try wallet.account(for: chain.chain)
-            try await stakeService.update(walletId: wallet.id, chain: chain.chain, address: acccount.address)
+            try await stakeService.update(walletId: wallet.walletId, chain: chain.chain, address: acccount.address)
             delegatitonsState = .data(true)
         } catch {
             debugLog("Stake scene fetch error: \(error)")

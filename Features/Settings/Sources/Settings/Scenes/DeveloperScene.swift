@@ -22,6 +22,11 @@ public struct DeveloperScene: View {
                 ListItemView(title: "Device Token", subtitle: model.deviceToken)
                     .contextMenu(.copy(value: model.deviceToken))
             }
+            Section {
+                NavigationLink(value: Scenes.InAppNotifications()) {
+                    ListItemView(title: "In-App Notifications")
+                }
+            }
             Section("Networking") {
                 NavigationCustomLink(
                     with: ListItemView(title: "Clear URLCache"),
@@ -93,6 +98,13 @@ public struct DeveloperScene: View {
                     with: ListItemView(title: "Open Referral (gemcoder)"),
                     action: {
                         model.deeplink(deeplink: .rewards(code: "gemcoder"))
+                    }
+                )
+                
+                NavigationCustomLink(
+                    with: ListItemView(title: "Open Gift (code)"),
+                    action: {
+                        model.deeplink(deeplink: .gift(code: "GIFT-1234-1234-1234"))
                     }
                 )
             }

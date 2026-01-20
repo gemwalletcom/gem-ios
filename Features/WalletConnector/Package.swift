@@ -54,6 +54,7 @@ let package = Package(
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "WalletSessionServiceTestKit", package: "FeatureServices"),
                 .product(name: "WalletConnectorServiceTestKit", package: "ChainServices"),
+                .product(name: "KeystoreTestKit", package: "Keystore"),
                 "WalletConnector",
                 "Gemstone"
             ],

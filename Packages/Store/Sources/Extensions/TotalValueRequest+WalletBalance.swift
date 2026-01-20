@@ -14,7 +14,7 @@ extension TotalValueRequest {
             .including(required: AssetRecord.balance)
             .filter(AssetRecord.Columns.type == AssetType.perpetual.rawValue)
             .joining(required: AssetRecord.balance
-                .filter(BalanceRecord.Columns.walletId == walletId)
+                .filter(BalanceRecord.Columns.walletId == walletId.id)
             )
             .asRequest(of: PerpetualAssetBalance.self)
             .fetchAll(db)

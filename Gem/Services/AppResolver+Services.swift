@@ -27,6 +27,7 @@ import AddressNameService
 import ActivityService
 import RewardsService
 import EventPresenterService
+import NotificationService
 import YieldService
 
 extension AppResolver {
@@ -39,7 +40,8 @@ extension AppResolver {
         let connectionsService: ConnectionsService
         let deviceService: DeviceService
         let nodeService: NodeService
-        let notificationHandler: NotificationHandler
+        let navigationHandler: NavigationHandler
+        let navigationPresenter: NavigationPresenter
         let priceAlertService: PriceAlertService
         let priceService: PriceService
         let priceObserverService: PriceObserverService
@@ -55,6 +57,8 @@ extension AppResolver {
         let swapService: SwapService
         let subscriptionsService: SubscriptionService
         let appReleaseService: AppReleaseService
+        let releaseAlertService: ReleaseAlertService
+        let rateService: RateService
         let deviceObserverService: DeviceObserverService
         let onstartService: OnstartService
         let onstartAsyncService: OnstartAsyncService
@@ -68,6 +72,8 @@ extension AppResolver {
         let eventPresenterService: EventPresenterService
         let viewModelFactory: ViewModelFactory
         let rewardsService: RewardsService
+        let observersService: ObserversService
+        let inAppNotificationService: InAppNotificationService
         let yieldService: YieldService?
 
         init(
@@ -78,7 +84,8 @@ extension AppResolver {
             connectionsService: ConnectionsService,
             deviceService: DeviceService,
             nodeService: NodeService,
-            notificationHandler: NotificationHandler,
+            navigationHandler: NavigationHandler,
+            navigationPresenter: NavigationPresenter,
             priceAlertService: PriceAlertService,
             priceObserverService: PriceObserverService,
             priceService: PriceService,
@@ -93,6 +100,8 @@ extension AppResolver {
             avatarService: AvatarService,
             swapService: SwapService,
             appReleaseService: AppReleaseService,
+            releaseAlertService: ReleaseAlertService,
+            rateService: RateService,
             subscriptionsService: SubscriptionService,
             deviceObserverService: DeviceObserverService,
             onstartService: OnstartService,
@@ -107,6 +116,8 @@ extension AppResolver {
             eventPresenterService: EventPresenterService,
             viewModelFactory: ViewModelFactory,
             rewardsService: RewardsService,
+            observersService: ObserversService,
+            inAppNotificationService: InAppNotificationService,
             yieldService: YieldService?
         ) {
             self.assetsService = assetsService
@@ -116,7 +127,8 @@ extension AppResolver {
             self.connectionsService = connectionsService
             self.deviceService = deviceService
             self.nodeService = nodeService
-            self.notificationHandler = notificationHandler
+            self.navigationHandler = navigationHandler
+            self.navigationPresenter = navigationPresenter
             self.priceAlertService = priceAlertService
             self.priceService = priceService
             self.priceObserverService = priceObserverService
@@ -131,6 +143,8 @@ extension AppResolver {
             self.avatarService = avatarService
             self.swapService = swapService
             self.appReleaseService = appReleaseService
+            self.releaseAlertService = releaseAlertService
+            self.rateService = rateService
             self.deviceObserverService = deviceObserverService
             self.subscriptionsService = subscriptionsService
             self.onstartService = onstartService
@@ -145,6 +159,8 @@ extension AppResolver {
             self.eventPresenterService = eventPresenterService
             self.viewModelFactory = viewModelFactory
             self.rewardsService = rewardsService
+            self.observersService = observersService
+            self.inAppNotificationService = inAppNotificationService
             self.yieldService = yieldService
         }
     }

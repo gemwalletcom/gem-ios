@@ -762,6 +762,42 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "nodes.import_node.title", fallback: "Add node")
     }
   }
+  public enum Notifications {
+    public enum Inapp {
+      public enum Referral {
+        public enum Joined {
+          /// Your referral %@ joined
+          public static func subtitle(_ p1: Any) -> String {
+            return Localized.tr("Localizable", "notifications.inapp.referral.joined.subtitle", String(describing: p1), fallback: "Your referral %@ joined")
+          }
+          /// New Referral
+          public static let title = Localized.tr("Localizable", "notifications.inapp.referral.joined.title", fallback: "New Referral")
+        }
+      }
+      public enum Rewards {
+        public enum Disabled {
+          /// Your referral code has been deactivated
+          public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.disabled.subtitle", fallback: "Your referral code has been deactivated")
+          /// Referral Code Disabled
+          public static let title = Localized.tr("Localizable", "notifications.inapp.rewards.disabled.title", fallback: "Referral Code Disabled")
+        }
+        public enum Enabled {
+          /// Start earning points by inviting friends
+          public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.enabled.subtitle", fallback: "Start earning points by inviting friends")
+          /// Rewards Enabled
+          public static let title = Localized.tr("Localizable", "notifications.inapp.rewards.enabled.title", fallback: "Rewards Enabled")
+        }
+      }
+      public enum State {
+        public enum Empty {
+          /// You'll see updates about your notifications here
+          public static let description = Localized.tr("Localizable", "notifications.inapp.state.empty.description", fallback: "You'll see updates about your notifications here")
+          /// No notifications yet
+          public static let title = Localized.tr("Localizable", "notifications.inapp.state.empty.title", fallback: "No notifications yet")
+        }
+      }
+    }
+  }
   public enum Onboarding {
     public enum AcceptTerms {
       /// Agree and Continue
@@ -965,8 +1001,16 @@ public enum Localized {
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
   }
   public enum RecentActivity {
-    /// Recent
-    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recent")
+    /// Recents
+    public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recents")
+    public enum State {
+      public enum Empty {
+        /// Assets you’ve recently used will appear here
+        public static let description = Localized.tr("Localizable", "recent_activity.state.empty.description", fallback: "Assets you’ve recently used will appear here")
+        /// Your recents will appear here
+        public static let title = Localized.tr("Localizable", "recent_activity.state.empty.title", fallback: "Your recents will appear here")
+      }
+    }
   }
   public enum Rewards {
     /// Get %@ for %@!
@@ -979,6 +1023,8 @@ public enum Localized {
     public static let invitedBy = Localized.tr("Localizable", "rewards.invited_by", fallback: "Invited By")
     /// My referral code
     public static let myReferralCode = Localized.tr("Localizable", "rewards.my_referral_code", fallback: "My referral code")
+    /// Nickname
+    public static let nickname = Localized.tr("Localizable", "rewards.nickname", fallback: "Nickname")
     /// Points
     public static let points = Localized.tr("Localizable", "rewards.points", fallback: "Points")
     /// Referral Code
@@ -1000,8 +1046,8 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "rewards.activate_referral_code.title", fallback: "Redeem code")
     }
     public enum CreateReferralCode {
-      /// This will be your personal username.
-      public static let info = Localized.tr("Localizable", "rewards.create_referral_code.info", fallback: "This will be your personal username.")
+      /// This will be your personal nickname for the current wallet.
+      public static let info = Localized.tr("Localizable", "rewards.create_referral_code.info", fallback: "This will be your personal nickname for the current wallet.")
       /// Create Username
       public static let title = Localized.tr("Localizable", "rewards.create_referral_code.title", fallback: "Create Username")
     }
@@ -1020,6 +1066,16 @@ public enum Localized {
       }
       /// Invite Friends
       public static let title = Localized.tr("Localizable", "rewards.invite_friends.title", fallback: "Invite Friends")
+    }
+    public enum Pending {
+      /// Available in %@
+      public static func description(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "rewards.pending.description", String(describing: p1), fallback: "Available in %@")
+      }
+      /// Your bonus is ready!
+      public static let descriptionReady = Localized.tr("Localizable", "rewards.pending.description_ready", fallback: "Your bonus is ready!")
+      /// Bonus Pending
+      public static let title = Localized.tr("Localizable", "rewards.pending.title", fallback: "Bonus Pending")
     }
     public enum WaysSpend {
       /// Ways to Spend
@@ -1137,6 +1193,8 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "settings.notifications.title", fallback: "Notifications")
     }
     public enum Preferences {
+      /// App Icon
+      public static let appIcon = Localized.tr("Localizable", "settings.preferences.app_icon", fallback: "App Icon")
       /// Default Leverage
       public static let defaultLeverage = Localized.tr("Localizable", "settings.preferences.default_leverage", fallback: "Default Leverage")
       /// Preferences
@@ -1419,6 +1477,10 @@ public enum Localized {
     public enum Send {
       /// Send
       public static let title = Localized.tr("Localizable", "transfer.send.title", fallback: "Send")
+    }
+    public enum SignTransaction {
+      /// Sign Transaction
+      public static let title = Localized.tr("Localizable", "transfer.sign_transaction.title", fallback: "Sign Transaction")
     }
     public enum SmartContract {
       /// Smart Contract

@@ -66,8 +66,9 @@ public struct Migrations {
             // perpetuals
             try PerpetualRecord.create(db: db)
             try PerpetualPositionRecord.create(db: db)
-            
+
             try RecentActivityRecord.create(db: db)
+            try InAppNotificationRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)
     }
@@ -344,6 +345,22 @@ public struct Migrations {
                 $0.add(column: BalanceRecord.Columns.pendingUnconfirmedAmount.name, .double)
                     .defaults(to: 0)
             }
+        }
+
+        migrator.registerMigration("Migrate nodes_selected_v1 to \(NodeSelectedRecord.databaseTableName)") { db in
+            try? db.drop(table: NodeSelectedRecord.databaseTableName)
+            try? NodeSelectedRecord.create(db: db)
+            try? db.execute(sql: """
+                INSERT INTO \(NodeSelectedRecord.databaseTableName) (chain, nodeUrl)
+                SELECT ns.chain, n.url
+                FROM nodes_selected_v1 ns
+                INNER JOIN \(NodeRecord.databaseTableName) n ON ns.nodeId = n.id
+            """)
+            try? db.drop(table: "nodes_selected_v1")
+        }
+
+        migrator.registerMigration("Create \(InAppNotificationRecord.databaseTableName)") { db in
+            try? InAppNotificationRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

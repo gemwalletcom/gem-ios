@@ -23,7 +23,7 @@ struct TransactionFactory {
         let metadata = transferData.type.metadata
         let direction: TransactionDirection = senderAddress == recipientAddress ? .selfTransfer : .outgoing
 
-        let data: (type: TransactionType, metadata: TransactionMetadata) = switch transferData.type {
+        let data: (type: TransactionType, metadata: AnyCodableValue?) = switch transferData.type {
         case .swap(_, _, let data):
             switch data.approval {
             case .some: transactionIndex == 0 ? (.tokenApproval, .null) : (.swap, metadata)
@@ -42,9 +42,9 @@ struct TransactionFactory {
         default: (transferData.type.transactionType, metadata)
         }
         let value = amount.value.description
-        
+
         let state = TransactionState.pending
-        
+
         return Transaction(
             id: TransactionId(chain: transferData.chain, hash: hash),
             assetId: transferData.type.asset.id,

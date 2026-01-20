@@ -23,6 +23,10 @@ public struct Scenes {
         public init() {}
     }
 
+    public struct InAppNotifications: Hashable {
+        public init() {}
+    }
+
     public struct PriceAlerts: Hashable {
         public init() {}
     }
@@ -52,6 +56,10 @@ public struct Scenes {
     }
 
     public struct Preferences: Hashable {
+        public init() {}
+    }
+
+    public struct AppIcon: Hashable {
         public init() {}
     }
 
@@ -169,9 +177,11 @@ public struct Scenes {
 
     public struct Referral: Hashable {
         public let code: String?
+        public let giftCode: String?
 
-        public init(code: String? = nil) {
+        public init(code: String? = nil, giftCode: String? = nil) {
             self.code = code
+            self.giftCode = giftCode
         }
     }
     

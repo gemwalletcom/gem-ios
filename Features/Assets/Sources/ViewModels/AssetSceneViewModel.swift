@@ -103,6 +103,8 @@ public final class AssetSceneViewModel: Sendable {
     var showTransactions: Bool { transactions.isNotEmpty }
     var showManageToken: Bool { !assetData.metadata.isBalanceEnabled }
 
+    var canSign: Bool { wallet.canSign }
+
     var pinText: String {
         assetData.metadata.isPinned ? Localized.Common.unpin : Localized.Common.pin
     }

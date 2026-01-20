@@ -18,8 +18,8 @@ final class PerpetualsPreviewViewModel {
     var walletBalanceRequest: PerpetualWalletBalanceRequest
     
     init(walletId: WalletId) {
-        self.positionsRequest = PerpetualPositionsRequest(walletId: walletId.id)
-        self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: walletId.id)
+        self.positionsRequest = PerpetualPositionsRequest(walletId: walletId)
+        self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: walletId)
     }
     
     var tradePerpetualsSubtitle: String {
@@ -31,7 +31,7 @@ final class PerpetualsPreviewViewModel {
     }
     
     func updateWallet(walletId: WalletId) {
-        positionsRequest = PerpetualPositionsRequest(walletId: walletId.id)
-        walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: walletId.id)
+        positionsRequest = PerpetualPositionsRequest(walletId: walletId)
+        walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: walletId)
     }
 }

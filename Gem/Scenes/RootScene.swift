@@ -10,6 +10,7 @@ import PriceService
 import Components
 
 struct RootScene: View {
+    @Environment(\.scenePhase) private var scenePhase
     @State private var model: RootSceneViewModel
 
     init(model: RootSceneViewModel) {
@@ -24,12 +25,9 @@ struct RootScene: View {
                 )
                 .alertSheet($model.updateVersionAlertMessage)
             } else {
-                OnboardingNavigationView(
-                    model: .init(
-                        walletService: model.walletService,
-                        avatarService: model.avatarService,
-                        nameService: model.nameService
-                    )
+                OnboardingScene(
+                    isPresentingCreateWalletSheet: $model.isPresentingCreateWalletSheet,
+                    isPresentingImportWalletSheet: $model.isPresentingImportWalletSheet
                 )
             }
         }
@@ -42,6 +40,25 @@ struct RootScene: View {
             WalletConnectorNavigationStack(
                 type: type,
                 presenter: model.walletConnectorPresenter
+            )
+        }
+        .sheet(isPresented: $model.isPresentingCreateWalletSheet) {
+            CreateWalletNavigationStack(
+                model: CreateWalletModel(
+                    walletService: model.walletService,
+                    avatarService: model.avatarService,
+                    onComplete: model.dismissCreateWallet
+                )
+            )
+        }
+        .sheet(isPresented: $model.isPresentingImportWalletSheet) {
+            ImportWalletNavigationStack(
+                model: ImportWalletViewModel(
+                    walletService: model.walletService,
+                    avatarService: model.avatarService,
+                    nameService: model.nameService,
+                    onComplete: model.dismissImportWallet
+                )
             )
         }
         .alert(
@@ -70,9 +87,13 @@ struct RootScene: View {
             message: ToastMessage(
                 title: "\(Localized.WalletConnect.brandName)...",
                 image: SystemImage.network
-            )
+            ),
+            offsetY: -model.toastOffset
         )
-        .toast(message: $model.isPresentingToastMessage)
+        .toast(message: $model.isPresentingToastMessage, offsetY: -model.toastOffset)
+        .onChange(of: scenePhase) { _, newPhase in
+            Task { await model.handleScenePhase(newPhase) }
+        }
     }
 }
 

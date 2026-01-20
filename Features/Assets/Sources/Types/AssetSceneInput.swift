@@ -19,20 +19,20 @@ public struct AssetSceneInput: Sendable {
         self.asset = asset
 
         self.assetRequest = ChainAssetRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             assetId: asset.id
         )
 
         self.transactionsRequest = TransactionsRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             type: .asset(assetId: asset.id),
             limit: Self.transactionsLimit
         )
 
         self.bannersRequest = BannersRequest(
-            walletId: wallet.id,
-            assetId: asset.id.identifier,
-            chain: asset.id.chain.rawValue,
+            walletId: wallet.walletId,
+            assetId: asset.id,
+            chain: asset.id.chain,
             events: BannerEvent.allCases
         )
     }

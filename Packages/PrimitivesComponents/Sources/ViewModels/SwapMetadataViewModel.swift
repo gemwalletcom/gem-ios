@@ -13,12 +13,12 @@ public struct SwapMetadataViewModel: Sendable {
 
     var headerInput: SwapHeaderInput? {
         guard
-            case let .swap(swapMetadata) = metadata.transactionMetadata,
+            let swapMetadata = metadata.swapMetadata,
             let fromAsset = metadata.asset(for: swapMetadata.fromAsset),
             let toAsset = metadata.asset(for: swapMetadata.toAsset) else {
             return .none
         }
-        
+
         return SwapHeaderInput(
             from: AssetValuePrice(
                 asset: fromAsset,

@@ -11,6 +11,8 @@ import MarketInsight
 import Settings
 import PriceService
 import RewardsService
+import InAppNotifications
+import NotificationService
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -30,6 +32,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.walletConnectorManager) private var walletConnectorManager
     @Environment(\.rewardsService) private var rewardsService
+    @Environment(\.inAppNotificationService) private var inAppNotificationService
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -141,11 +144,24 @@ struct SettingsNavigationStack: View {
                     ))
                 }
             }
+            .navigationDestination(for: Scenes.InAppNotifications.self) { _ in
+                if let wallet = walletService.currentWallet {
+                    InAppNotificationsScene(
+                        model: InAppNotificationsViewModel(
+                            wallet: wallet,
+                            notificationService: inAppNotificationService
+                        )
+                    )
+                }
+            }
             .navigationDestination(for: Scenes.Currency.self) { _ in
                 CurrencyScene(model: currencyModel)
             }
             .navigationDestination(for: Scenes.Preferences.self) { _ in
                 PreferencesScene(model: PreferencesViewModel(currencyModel: currencyModel))
+            }
+            .navigationDestination(for: Scenes.AppIcon.self) { _ in
+                AppIconScene(model: AppIconSceneViewModel())
             }
             .navigationDestination(for: Scenes.Referral.self) { scene in
                 let wallets = walletService.wallets.filter { $0.type == .multicoin }
@@ -153,9 +169,11 @@ struct SettingsNavigationStack: View {
                     RewardsScene(
                         model: RewardsViewModel(
                             rewardsService: rewardsService,
+                            assetsEnabler: walletsService,
                             wallet: wallet,
                             wallets: wallets,
-                            activateCode: scene.code
+                            activateCode: scene.code,
+                            giftCode: scene.giftCode
                         )
                     )
                 }

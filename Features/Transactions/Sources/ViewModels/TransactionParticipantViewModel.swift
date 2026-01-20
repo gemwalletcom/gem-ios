@@ -55,7 +55,7 @@ extension TransactionParticipantViewModel {
     }
 
     private var resourceItemModel: TransactionItemModel {
-        guard let resourceType = transactionViewModel.transaction.transaction.metadata?.resourceType else {
+        guard let resourceType = transactionViewModel.transaction.transaction.metadata?.decode(TransactionResourceTypeMetadata.self)?.resourceType else {
             return .empty
         }
         let resourceTitle = ResourceViewModel(resource: resourceType).title
@@ -69,8 +69,13 @@ extension TransactionParticipantViewModel {
             case .incoming: Localized.Transaction.sender
             case .outgoing, .selfTransfer: Localized.Transaction.recipient
             }
-        case .tokenApproval, .smartContractCall:
+        case .tokenApproval:
             Localized.Asset.contract
+        case .smartContractCall:
+            switch transactionViewModel.transaction.transaction.metadata?.decode(TransactionWalletConnectMetadata.self)?.outputAction {
+            case .send: Localized.Transaction.recipient
+            case .sign, .none: Localized.Asset.contract
+            }
         case .stakeDelegate:
             Localized.Stake.validator
         case .stakeFreeze, .stakeUnfreeze:

@@ -28,23 +28,24 @@ struct TransactionStoreTests {
         let store = TransactionStore(db: db)
         let transactionId = "1"
 
-        try store.addTransactions(walletId: "1", transactions: [
+        let walletId = WalletId(id: "1")
+        try store.addTransactions(walletId: walletId, transactions: [
             .mock(
                 id: transactionId,
                 type: .swap,
                 assetId: btc,
-                metadata: .swap(TransactionSwapMetadata(
+                metadata: .encode(TransactionSwapMetadata(
                     fromAsset: btc, fromValue: "100", toAsset: eth, toValue: "200", provider: nil
                 ))
             )
         ])
-        
-        try store.addTransactions(walletId: "1", transactions: [
+
+        try store.addTransactions(walletId: walletId, transactions: [
             .mock(
                 id: transactionId,
                 type: .swap,
                 assetId: btc,
-                metadata: .swap(TransactionSwapMetadata(
+                metadata: .encode(TransactionSwapMetadata(
                     fromAsset: btc, fromValue: "100", toAsset: sol, toValue: "300", provider: nil
                 ))
             )

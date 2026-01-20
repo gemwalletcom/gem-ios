@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
-import Style
 import Components
 import Primitives
 import PrimitivesComponents
+import Style
+import SwiftUI
 import struct Staking.StakeValidatorViewModel
 import struct Staking.ValidatorView
 
@@ -13,7 +13,7 @@ struct AmountScene: View {
 
     private var model: AmountSceneViewModel
 
-    public init(model: AmountSceneViewModel) {
+    init(model: AmountSceneViewModel) {
         self.model = model
     }
 
@@ -59,60 +59,62 @@ struct AmountScene: View {
                 }
             }
 
-            switch model.type {
-            case .transfer, .deposit, .withdraw, .yield:
-                EmptyView()
-            case .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw:
-                if let viewModel = model.stakeValidatorViewModel {
-                    Section(model.validatorTitle) {
-                        if model.isSelectValidatorEnabled {
-                            NavigationCustomLink(
-                                with: ValidatorView(model: viewModel),
-                                action: model.onSelectCurrentValidator
-                            )
-                        } else {
-                            ValidatorView(model: viewModel)
+            switch model.provider {
+            case let .stake(stake):
+                Section(stake.validatorSelection.title) {
+                    if stake.validatorSelection.isEnabled {
+                        NavigationLink(value: stake.validatorSelection.selected) {
+                            ValidatorView(model: StakeValidatorViewModel(validator: stake.validatorSelection.selected))
                         }
+                    } else {
+                        ValidatorView(model: StakeValidatorViewModel(validator: stake.validatorSelection.selected))
                     }
                 }
-            case .freeze:
-                if model.isSelectResourceEnabled {
-                    Section {
-                        Picker("", selection: $model.selectedResource) {
-                            ForEach(model.availableResources) { resource in
-                                Text(resource.title).tag(resource)
-                            }
+
+            case let .freeze(freeze):
+                @Bindable var resourceSelection = freeze.resourceSelection
+                Section {
+                    Picker("", selection: $resourceSelection.selected) {
+                        ForEach(resourceSelection.options) { resource in
+                            Text(ResourceViewModel(resource: resource).title)
+                                .tag(resource)
                         }
-                        .pickerStyle(.segmented)
-                        .frame(width: 200)
                     }
-                    .cleanListRow()
+                    .pickerStyle(.segmented)
+                    .frame(width: 200)
+                    .onChange(of: resourceSelection.selected, model.onChangeResource)
                 }
-            case .perpetual:
-                if model.isPerpetualLeverageEnabled {
+                .cleanListRow()
+
+            case let .perpetual(perpetual):
+                if let leverageSelection = perpetual.leverageSelection {
                     Section {
                         NavigationCustomLink(
                             with: ListItemView(
-                                title: model.leverageTitle,
-                                subtitle: model.leverageText,
-                                subtitleStyle: model.leverageTextStyle
+                                title: leverageSelection.title,
+                                subtitle: leverageSelection.selected.displayText,
+                                subtitleStyle: perpetual.leverageTextStyle
                             ),
                             action: model.onSelectLeverage
                         )
                     }
                 }
-                if model.isAutocloseEnabled {
+
+                if perpetual.isAutocloseEnabled {
                     Section {
                         NavigationCustomLink(
                             with: ListItemView(
-                                title: model.autocloseTitle,
-                                subtitle: model.autocloseText.subtitle,
-                                subtitleExtra: model.autocloseText.subtitleExtra
+                                title: perpetual.autocloseTitle,
+                                subtitle: perpetual.autocloseText.subtitle,
+                                subtitleExtra: perpetual.autocloseText.subtitleExtra
                             ),
                             action: model.onSelectAutoclose
                         )
                     }
                 }
+
+            case .transfer, .yield:
+                EmptyView()
             }
         }
         .safeAreaView {
@@ -135,11 +137,7 @@ struct AmountScene: View {
             }
         }
     }
-}
 
-// MARK: - Actions
-
-extension AmountScene {
     private func onSelectMaxButton() {
         focusedField = false
         model.onSelectMaxButton()

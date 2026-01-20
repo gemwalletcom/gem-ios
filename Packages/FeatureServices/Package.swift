@@ -107,6 +107,7 @@ let package = Package(
             dependencies: [
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "AssetsServiceTestKit",
                 "BalanceService",
                 "Primitives"
@@ -232,6 +233,7 @@ let package = Package(
             dependencies: [
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "NFTServiceTestKit",
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 "BalanceServiceTestKit",
@@ -256,6 +258,7 @@ let package = Package(
             name: "TransactionsServiceTestKit",
             dependencies: [
                 .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "AssetsServiceTestKit",
                 "TransactionsService",
                 "DeviceServiceTestKit",
@@ -315,9 +318,9 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "AssetsService",
                 "Primitives",
-                "Preferences",
                 "GemstonePrimitives"
             ],
             path: "AssetsService/TestKit"
@@ -345,11 +348,12 @@ let package = Package(
             name: "WalletsServiceTestKit",
             dependencies: [
                 "DeviceServiceTestKit",
-                "BannerServiceTestKit",
                 .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "PriceServiceTestKit",
                 "BalanceServiceTestKit",
-                "TransactionStateServiceTestKit",
+                "WalletSessionService",
+                "WalletSessionServiceTestKit",
                 "WalletsService"
             ],
             path: "WalletsService/TestKit"
@@ -404,6 +408,7 @@ let package = Package(
                 "GemAPI",
                 .product(name: "NodeService", package: "ChainServices"),
                 .product(name: "ChainService", package: "ChainServices"),
+                "GemstonePrimitives",
                 "Preferences",
                 "BannerService",
                 "DeviceService",
@@ -417,7 +422,14 @@ let package = Package(
         .target(
             name: "AppServiceTestKit",
             dependencies: [
-                "Primitives"
+                "AppService",
+                "Primitives",
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                "BannerServiceTestKit",
+                .product(name: "NodeServiceTestKit", package: "ChainServices"),
+                "DeviceServiceTestKit",
+                "AssetsServiceTestKit",
+                .product(name: "PreferencesTestKit", package: "Preferences"),
             ],
             path: "AppService/TestKit"
         ),
@@ -444,7 +456,12 @@ let package = Package(
         .target(
             name: "NotificationService",
             dependencies: [
-                "Preferences"
+                "Primitives",
+                "Store",
+                "GemAPI",
+                "DeviceService",
+                "Preferences",
+                "WalletService"
             ],
             path: "NotificationService",
             exclude: ["TestKit"]
@@ -453,6 +470,10 @@ let package = Package(
             name: "NotificationServiceTestKit",
             dependencies: [
                 "NotificationService",
+                "DeviceServiceTestKit",
+                "WalletServiceTestKit",
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "PreferencesTestKit", package: "Preferences")
             ],
             path: "NotificationService/TestKit"
@@ -596,6 +617,7 @@ let package = Package(
             dependencies: [
                 "WalletsService",
                 "WalletsServiceTestKit",
+                "WalletSessionService",
                 .product(name: "StoreTestKit", package: "Store"),
                 "BalanceServiceTestKit",
                 "PriceServiceTestKit",
@@ -623,12 +645,8 @@ let package = Package(
             dependencies: [
                 "AppService",
                 "AppServiceTestKit",
-                "AssetsServiceTestKit",
-                "DeviceServiceTestKit",
-                "BannerServiceTestKit",
-                .product(name: "StoreTestKit", package: "Store"),
-                .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             path: "AppService/Tests"
         ),

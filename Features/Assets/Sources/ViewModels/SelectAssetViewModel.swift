@@ -27,18 +27,21 @@ public final class SelectAssetViewModel {
     public let wallet: Wallet
 
     var assets: [AssetData] = []
-    var recentActivities: [Asset] = []
+    var recents: [RecentAsset] = []
     var state: StateViewType<[AssetBasic]> = .noData
     var searchModel: AssetSearchViewModel
+
     var request: AssetsRequest
-    var recentActivityRequest: RecentActivityRequest
+    public var recentsRequest: RecentActivityRequest
 
     var isSearching: Bool = false
     var isDismissSearch: Bool = false
-
     var isPresentingCopyToast: Bool = false
     var copyTypeViewModel: CopyTypeViewModel?
+
     public var isPresentingAddToken: Bool = false
+    public var isPresentingRecents: Bool = false
+    public var assetSelection: AssetSelectionType?
 
     public var filterModel: AssetsFilterViewModel
     public var onSelectAssetAction: AssetAction
@@ -72,11 +75,11 @@ public final class SelectAssetViewModel {
         self.searchModel = AssetSearchViewModel(selectType: selectType)
 
         self.request = AssetsRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId,
             filters: filter.filters
         )
-        self.recentActivityRequest = RecentActivityRequest(
-            walletId: wallet.id,
+        self.recentsRequest = RecentActivityRequest(
+            walletId: wallet.walletId,
             limit: 10,
             types: RecentActivityType.allCases.filter { $0 != .perpetual },
             filters: filter.defaultFilters
@@ -130,7 +133,14 @@ public final class SelectAssetViewModel {
     var pinnedImage: Image { Images.System.pin }
     var pinnedTitle: String { Localized.Common.pinned }
 
-    var assetsTitle: String { Localized.Assets.title }
+    var assetsTitle: String {
+        switch selectType {
+        case .send, .buy, .swap, .manage, .priceAlert, .deposit, .withdraw, .receive(.asset):
+            Localized.Assets.title
+        case .receive(.collection):
+            Localized.Settings.Networks.title
+        }
+    }
 
     public var showAddToken: Bool {
         selectType == .manage && wallet.hasTokenSupport && !filterModel.chainsFilter.isEmpty
@@ -144,8 +154,9 @@ public final class SelectAssetViewModel {
                 wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
             case .collection: false
             }
-        case .buy, .manage, .priceAlert, .send, .swap, .deposit, .withdraw:
+        case .buy, .manage, .priceAlert, .send, .swap:
             wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
+        case .deposit, .withdraw: false
         }
     }
 
@@ -162,7 +173,7 @@ public final class SelectAssetViewModel {
     }
 
     var showTags: Bool {
-        searchModel.searchableQuery.isEmpty
+        !isSearching && searchModel.searchableQuery.isEmpty
     }
 
     var showLoading: Bool {
@@ -173,24 +184,19 @@ public final class SelectAssetViewModel {
         sections.pinned.isEmpty && sections.assets.isEmpty
     }
 
-    var showRecent: Bool {
+    var showRecents: Bool {
         switch selectType {
-        case .send, .receive, .buy, .swap: searchModel.searchableQuery.isEmpty && recentActivities.isNotEmpty
+        case .send, .receive, .buy, .swap: searchModel.searchableQuery.isEmpty && recents.isNotEmpty
         case .manage, .priceAlert, .deposit, .withdraw: false
         }
     }
 
-    var activityModels: [AssetViewModel] {
-        recentActivities.map { AssetViewModel(asset: $0) }
+    var recentModels: [AssetViewModel] {
+        recents.map { AssetViewModel(asset: $0.asset) }
     }
 
     var currencyCode: String {
         preferences.currency
-    }
-
-    func assetAddress(for asset: Asset) -> AssetAddress {
-        let address = (try? wallet.account(for: asset.chain).address) ?? ""
-        return AssetAddress(asset: asset, address: address)
     }
 }
 
@@ -291,7 +297,27 @@ extension SelectAssetViewModel {
             }
         }
     }
-    
+
+    func onSelectRecents() {
+        isPresentingRecents = true
+    }
+
+    func onSelectAsset(_ assetData: AssetData) {
+        assetSelection = .regular(SelectAssetInput(type: selectType, assetAddress: assetData.assetAddress))
+    }
+
+    public func onSelectRecent(_ asset: Asset) {
+        switch selectType {
+        case .send, .receive, .buy:
+            assetSelection = .recent(SelectAssetInput(type: selectType, assetAddress: assetAddress(for: asset)))
+        case .swap:
+            selectAsset(asset: asset)
+        case .manage, .priceAlert, .deposit, .withdraw:
+            break
+        }
+        isPresentingRecents = false
+    }
+
     func onSelectAddCustomToken() {
         isPresentingAddToken.toggle()
     }
@@ -300,6 +326,19 @@ extension SelectAssetViewModel {
 // MARK: - Private
 
 extension SelectAssetViewModel {
+
+    private func assetAddress(for asset: Asset) -> AssetAddress {
+        let address: String = {
+            do {
+                return try wallet.account(for: asset.chain).address
+            } catch {
+                debugLog(error.localizedDescription)
+                return ""
+            }
+        }()
+        return AssetAddress(asset: asset, address: address)
+    }
+    
     private func searchAssets(
         query: String,
         priorityAssetsQuery: String?,
@@ -314,7 +353,7 @@ extension SelectAssetViewModel {
             )
             state = .data(assets)
         } catch {
-            await handle(error: error)
+            handle(error: error)
         }
     }
 
@@ -327,16 +366,14 @@ extension SelectAssetViewModel {
                 try await priceAlertService.delete(priceAlerts: [.default(for: assetId, currency: currency)])
             }
         } catch {
-            await handle(error: error)
+            handle(error: error)
         }
     }
 
-    private func handle(error: any Error) async {
-        await MainActor.run { [self] in
-            if !error.isCancelled {
-                self.state = .error(error)
-                debugLog("SelectAssetScene scene error: \(error)")
-            }
+    private func handle(error: any Error) {
+        if !error.isCancelled {
+            state = .error(error)
+            debugLog("SelectAssetScene scene error: \(error)")
         }
     }
 }
@@ -351,7 +388,7 @@ extension SelectAssetType {
                 .swap,
                 .deposit,
                 .withdraw: .view
-        case .receive: .copy
+        case .receive(let type): .copy(type)
         case .manage: .manage
         case .priceAlert: .price
         }

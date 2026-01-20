@@ -40,31 +40,30 @@ public struct PerpetualStore: Sendable {
         }
     }
     
-    public func getPositions(walletId: String) throws -> [PerpetualPosition] {
+    public func getPositions(walletId: WalletId) throws -> [PerpetualPosition] {
         try db.read { db in
             try PerpetualPositionRecord
-                .filter(PerpetualPositionRecord.Columns.walletId == walletId)
+                .filter(PerpetualPositionRecord.Columns.walletId == walletId.id)
                 .order(PerpetualPositionRecord.Columns.updatedAt.desc)
                 .fetchAll(db)
                 .map { $0.mapToPerpetualPosition() }
         }
     }
-    
-    
-    public func getPositions(walletId: String, provider: PerpetualProvider) throws -> [PerpetualPosition] {
+
+    public func getPositions(walletId: WalletId, provider: PerpetualProvider) throws -> [PerpetualPosition] {
         try db.read { db in
             try PerpetualPositionRecord
                 .joining(required: PerpetualPositionRecord.perpetual
                     .filter(PerpetualRecord.Columns.provider == provider.rawValue)
                 )
-                .filter(PerpetualPositionRecord.Columns.walletId == walletId)
+                .filter(PerpetualPositionRecord.Columns.walletId == walletId.id)
                 .order(PerpetualPositionRecord.Columns.updatedAt.desc)
                 .fetchAll(db)
                 .map { $0.mapToPerpetualPosition() }
         }
     }
-    
-    public func diffPositions(deleteIds: [String], positions: [PerpetualPosition], walletId: String) throws {
+
+    public func diffPositions(deleteIds: [String], positions: [PerpetualPosition], walletId: WalletId) throws {
         if deleteIds.isEmpty && positions.isEmpty {
             return
         }
@@ -72,9 +71,9 @@ public struct PerpetualStore: Sendable {
             try PerpetualPositionRecord
                 .filter(deleteIds.contains(PerpetualPositionRecord.Columns.id))
                 .deleteAll(db)
-            
+
             for position in positions {
-                try position.record(walletId: walletId).upsert(db)
+                try position.record(walletId: walletId.id).upsert(db)
             }
         }
     }

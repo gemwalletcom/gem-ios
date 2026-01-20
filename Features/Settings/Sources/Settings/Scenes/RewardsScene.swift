@@ -25,6 +25,7 @@ public struct RewardsScene: View {
     @State private var isPresentingShare = false
     @State private var isPresentingCodeInput: CodeInputType?
     @State private var isPresentingRedemptionAlert: AlertMessage?
+    @State private var isPresentingInfoUrl: URL?
 
     public init(model: RewardsViewModel) {
         _model = State(initialValue: model)
@@ -39,10 +40,16 @@ public struct RewardsScene: View {
                 stateErrorView(error: error)
             case .data(let rewards):
                 inviteFriendsSection(code: rewards.code)
+                if let disableReason = model.disableReason {
+                    disableReasonSection(reason: disableReason)
+                }
+                if model.hasPendingReferral {
+                    pendingReferralSection
+                }
                 if model.isInfoEnabled {
                     infoSection(rewards: rewards)
                 }
-                if !rewards.redemptionOptions.isEmpty {
+                if rewards.redemptionOptions.isNotEmpty {
                     redemptionOptionsSection(options: rewards.redemptionOptions)
                 }
             case .noData:
@@ -59,9 +66,16 @@ public struct RewardsScene: View {
                     WalletBarView(model: model.walletBarViewModel) {
                         isPresentingWalletSelector = true
                     }
+                } else {
+                    Button {
+                        isPresentingInfoUrl = model.rewardsUrl
+                    } label: {
+                        Images.System.info
+                    }
                 }
             }
         }
+        .safariSheet(url: $isPresentingInfoUrl)
         .sheet(isPresented: $isPresentingWalletSelector) {
             SelectableListNavigationStack(
                 model: model.walletSelectorModel,
@@ -111,8 +125,16 @@ public struct RewardsScene: View {
         .taskOnce {
             Task {
                 await model.fetch()
+                
                 if model.shouldAutoActivate {
                     await model.useReferralCode()
+                } else if model.giftCodeFromLink != nil {
+                    do {
+                        let option = try await model.getRewardRedemptionOption()
+                        showRedemptionAlert(for: option)
+                    } catch {
+                        model.isPresentingError = error.localizedDescription
+                    }
                 } else if let code = model.activateCodeFromLink {
                     isPresentingCodeInput = .activate(code: code)
                 }
@@ -204,6 +226,7 @@ public struct RewardsScene: View {
             Text(text)
                 .font(.caption)
                 .foregroundStyle(Colors.secondaryText)
+                .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
     }
@@ -220,16 +243,7 @@ public struct RewardsScene: View {
                     )
                 ) {
                     if model.canRedeem(option: viewModel.option) {
-                        isPresentingRedemptionAlert = AlertMessage(
-                            title: viewModel.confirmationMessage,
-                            message: "",
-                            actions: [
-                                AlertAction(title: Localized.Transfer.confirm, isDefaultAction: true) {
-                                    Task { await model.redeem(option: viewModel.option) }
-                                },
-                                .cancel(title: Localized.Common.cancel)
-                            ]
-                        )
+                        showRedemptionAlert(for: viewModel.option)
                     } else {
                         model.isPresentingError = Localized.Rewards.insufficientPoints
                     }
@@ -238,6 +252,23 @@ public struct RewardsScene: View {
         } header: {
             Text(Localized.Rewards.WaysSpend.title)
         }
+    }
+
+    private func showRedemptionAlert(for option: RewardRedemptionOption) {
+        let viewModel = RewardRedemptionOptionViewModel(option: option)
+        isPresentingRedemptionAlert = AlertMessage(
+            title: viewModel.confirmationMessage,
+            message: "",
+            actions: [
+                AlertAction(title: Localized.Transfer.confirm, isDefaultAction: true) {
+                    Task {
+                        await model.redeem(option: option)
+                        await model.fetch()
+                    }
+                },
+                .cancel(title: Localized.Common.cancel)
+            ]
+        )
     }
 
     @ViewBuilder
@@ -266,6 +297,39 @@ public struct RewardsScene: View {
             }
         } header: {
             Text(model.statsSectionTitle)
+        }
+    }
+
+    @ViewBuilder
+    private func disableReasonSection(reason: String) -> some View {
+        Section {
+            ListItemErrorView(
+                errorTitle: model.errorTitle,
+                error: AnyError(reason)
+            )
+        }
+    }
+
+    @ViewBuilder
+    private var pendingReferralSection: some View {
+        Section {
+            ListItemInfoView(
+                title: model.pendingReferralTitle,
+                description: model.pendingReferralDescription
+            )
+
+            HStack {
+                Spacer()
+                StateButton(
+                    text: model.pendingReferralButtonTitle,
+                    type: model.activatePendingButtonType
+                ) {
+                    Task { await model.activatePendingReferral() }
+                }
+                .frame(height: .scene.button.height)
+                .frame(maxWidth: .scene.button.maxWidth)
+                Spacer()
+            }
         }
     }
 }

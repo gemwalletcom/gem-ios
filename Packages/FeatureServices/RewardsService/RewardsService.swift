@@ -1,15 +1,16 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
-import GemAPI
 import AuthService
+import Foundation
+import GemAPI
+import Primitives
 
 public protocol RewardsServiceable: Sendable {
     func getRewards(wallet: Wallet) async throws -> Rewards
     func createReferral(wallet: Wallet, code: String) async throws -> Rewards
     func useReferralCode(wallet: Wallet, referralCode: String) async throws
     func generateReferralLink(code: String) -> URL
+    func getRedemptionOption(code: String) async throws -> RewardRedemptionOption
     func redeem(wallet: Wallet, redemptionId: String) async throws -> RedemptionResult
 }
 
@@ -26,8 +27,7 @@ public struct RewardsService: RewardsServiceable, Sendable {
     }
 
     public func getRewards(wallet: Wallet) async throws -> Rewards {
-        let account = try wallet.account(for: .ethereum)
-        return try await apiService.getRewards(address: account.address)
+        try await apiService.getRewards(walletId: wallet.walletIdentifier().id)
     }
 
     public func useReferralCode(wallet: Wallet, referralCode: String) async throws {
@@ -46,10 +46,13 @@ public struct RewardsService: RewardsServiceable, Sendable {
         URL(string: "\(Constants.App.website)/join?code=\(code)")!
     }
 
+    public func getRedemptionOption(code: String) async throws -> RewardRedemptionOption {
+        try await apiService.getRedemptionOption(code: code)
+    }
+
     public func redeem(wallet: Wallet, redemptionId: String) async throws -> RedemptionResult {
-        let account = try wallet.account(for: .ethereum)
         let auth = try await authService.getAuthPayload(wallet: wallet)
         let request = AuthenticatedRequest(auth: auth, data: RedemptionRequest(id: redemptionId))
-        return try await apiService.redeem(address: account.address, request: request)
+        return try await apiService.redeem(walletId: wallet.walletIdentifier().id, request: request)
     }
 }

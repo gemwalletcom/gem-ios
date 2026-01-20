@@ -59,25 +59,23 @@ public struct AlertToastModifier: ViewModifier {
 
     var duration: Double = 2
     var tapToDismiss: Bool = true
+    var offsetY: CGFloat = 0
 
     var alert: () -> AlertToast
 
     var onTap: (() -> Void)? = nil
     var completion: (() -> Void)? = nil
 
-    @State private var workItem: DispatchWorkItem?
-
     @ViewBuilder
     private func main() -> some View {
         if isPresenting {
             alert()
+                .offset(y: offsetY)
                 .onTapGesture {
                     onTap?()
                     if tapToDismiss {
                         withAnimation(.spring()) {
-                            workItem?.cancel()
                             isPresenting = false
-                            workItem = nil
                         }
                     }
                 }
@@ -96,28 +94,14 @@ public struct AlertToastModifier: ViewModifier {
                 }
                 .animation(.spring(), value: isPresenting)
             )
-            .onChange(of: isPresenting) { _, presented in
-                if presented {
-                    onAppearAction()
+            .task(id: isPresenting) {
+                if isPresenting && duration > 0 {
+                    try? await Task.sleep(for: .seconds(duration))
+                    withAnimation(.spring()) {
+                        isPresenting = false
+                    }
                 }
             }
-    }
-
-    private func onAppearAction() {
-        guard workItem == nil else { return }
-
-        if duration > 0 {
-            workItem?.cancel()
-
-            let task = DispatchWorkItem {
-                withAnimation(.spring()) {
-                    isPresenting = false
-                    workItem = nil
-                }
-            }
-            workItem = task
-            DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: task)
-        }
     }
 }
 
@@ -126,6 +110,7 @@ public extension View {
         isPresenting: Binding<Bool>,
         duration: Double = 2,
         tapToDismiss: Bool = true,
+        offsetY: CGFloat = 0,
         alert: @escaping () -> AlertToast,
         onTap: (() -> Void)? = nil,
         completion: (() -> Void)? = nil
@@ -134,6 +119,7 @@ public extension View {
             isPresenting: isPresenting,
             duration: duration,
             tapToDismiss: tapToDismiss,
+            offsetY: offsetY,
             alert: alert,
             onTap: onTap,
             completion: completion

@@ -2,6 +2,7 @@ import Testing
 import Foundation
 import Localization
 import Primitives
+import PrimitivesTestKit
 import Preferences
 import PreferencesTestKit
 import PrimitivesComponents
@@ -104,7 +105,7 @@ struct TransactionSceneViewModelTests {
         )
         let modelWithAddresses = TransactionSceneViewModel(
             transaction: transaction,
-            walletId: "test_wallet_id",
+            walletId: .mock(),
             preferences: Preferences.standard
         )
 
@@ -246,7 +247,7 @@ extension TransactionSceneViewModel {
                     memo: memo
                 )
             ),
-            walletId: "test_wallet_id",
+            walletId: .mock(),
             preferences: Preferences.standard
         )
     }

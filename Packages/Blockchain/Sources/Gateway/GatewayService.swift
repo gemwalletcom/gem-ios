@@ -62,7 +62,8 @@ extension GatewayService {
             case .hashChange(old: let old, new: let new):
                 return .hashChange(old: old, new: new)
             case .metadata(let metadata):
-                return .metadata(metadata.map())
+                guard let value = metadata.mapToAnyCodableValue() else { return nil }
+                return .metadata(value)
             case .blockNumber(let number):
                 return .blockNumber(try Int.from(string: number))
             case .networkFee(let fee):

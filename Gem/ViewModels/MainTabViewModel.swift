@@ -14,7 +14,7 @@ struct MainTabViewModel {
     }
 
     var transactionsCountRequest: TransactionsCountRequest {
-        TransactionsCountRequest(walletId: walletId.id, state: .pending)
+        TransactionsCountRequest(walletId: walletId, state: .pending)
     }
     
     var isMarketEnabled: Bool {

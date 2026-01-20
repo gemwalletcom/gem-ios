@@ -30,7 +30,7 @@ public final class SetupWalletViewModel: Sendable {
         self.wallet = wallet
         self.walletService = walletService
         self.nameInput = wallet.name
-        self.walletRequest = WalletRequest(walletId: wallet.id)
+        self.walletRequest = WalletRequest(walletId: wallet.walletId)
         self.onSelectImageAction = onSelectImage
         self.onCompleteAction = onComplete
     }

@@ -7,12 +7,25 @@ import PrimitivesComponents
 import Components
 import Preferences
 import Localization
+import Style
+import GemstonePrimitives
+import WalletsService
 
 @Observable
 @MainActor
 public final class RewardsViewModel: Sendable {
+    private static let dateFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute]
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.unitsStyle = .full
+        return formatter
+    }()
+
     private let rewardsService: RewardsServiceable
+    private let assetsEnabler: any AssetsEnabler
     private let activateCode: String?
+    private let giftCode: String?
 
     private(set) var selectedWallet: Wallet
     private(set) var wallets: [Wallet]
@@ -23,14 +36,18 @@ public final class RewardsViewModel: Sendable {
 
     public init(
         rewardsService: RewardsServiceable,
+        assetsEnabler: any AssetsEnabler,
         wallet: Wallet,
         wallets: [Wallet],
-        activateCode: String? = nil
+        activateCode: String? = nil,
+        giftCode: String? = nil
     ) {
         self.rewardsService = rewardsService
+        self.assetsEnabler = assetsEnabler
         self.selectedWallet = wallet
         self.wallets = wallets
         self.activateCode = activateCode
+        self.giftCode = giftCode
     }
 
     // MARK: - UI Properties
@@ -96,9 +113,51 @@ public final class RewardsViewModel: Sendable {
         hasReferralCode || hasUsedReferralCode
     }
 
+    var disableReason: String? {
+        rewards?.disableReason
+    }
+
+    var pendingVerificationAfter: Date? {
+        rewards?.referralActivation?.verifyAfter
+    }
+
+    var hasPendingReferral: Bool {
+        pendingVerificationAfter != nil
+    }
+
+    var canActivatePendingReferral: Bool {
+        guard let pendingDate = pendingVerificationAfter else { return false }
+        return Date() >= pendingDate
+    }
+
+    var pendingReferralTitle: String {
+        Localized.Rewards.Pending.title
+    }
+
+    var pendingReferralDescription: String? {
+        guard let pendingDate = pendingVerificationAfter else { return nil }
+        if canActivatePendingReferral {
+            return Localized.Rewards.Pending.descriptionReady
+        }
+        guard let timeString = Self.dateFormatter.string(from: .now, to: pendingDate) else { return nil }
+        return Localized.Rewards.Pending.description(timeString)
+    }
+
+    var pendingReferralButtonTitle: String {
+        Localized.Transfer.confirm
+    }
+
+    var activatePendingButtonType: ButtonType {
+        canActivatePendingReferral ? .primary() : .primary(.disabled)
+    }
+
     var walletBarViewModel: WalletBarViewViewModel {
         let walletVM = WalletViewModel(wallet: selectedWallet)
         return WalletBarViewViewModel(name: walletVM.name, image: walletVM.avatarImage)
+    }
+
+    var rewardsUrl: URL {
+        RewardsUrlConfig.url(.rewards)
     }
 
     var createCodeViewModel: CreateRewardsCodeViewModel {
@@ -134,7 +193,11 @@ public final class RewardsViewModel: Sendable {
     }
 
     var activateCodeFromLink: String? {
-        return activateCode
+        activateCode
+    }
+
+    var giftCodeFromLink: String? {
+        giftCode
     }
 
     var shouldAutoActivate: Bool {
@@ -152,6 +215,24 @@ public final class RewardsViewModel: Sendable {
         }
     }
 
+    func activatePendingReferral() async {
+        guard let code = rewards?.usedReferralCode else { return }
+        do {
+            try await rewardsService.useReferralCode(wallet: selectedWallet, referralCode: code)
+            showActivatedToast()
+            await fetch()
+        } catch {
+            isPresentingError = error.localizedDescription
+        }
+    }
+
+    func getRewardRedemptionOption() async throws -> RewardRedemptionOption {
+        guard let code = giftCode else {
+            throw AnyError("no gift code")
+        }
+        return try await rewardsService.getRedemptionOption(code: code)
+    }
+
     func canRedeem(option: RewardRedemptionOption) -> Bool {
         guard let rewards else { return false }
         return rewards.points >= option.points
@@ -159,9 +240,11 @@ public final class RewardsViewModel: Sendable {
 
     func redeem(option: RewardRedemptionOption) async {
         do {
-            _ = try await rewardsService.redeem(wallet: selectedWallet, redemptionId: option.id)
+            let result = try await rewardsService.redeem(wallet: selectedWallet, redemptionId: option.id)
             toastMessage = ToastMessage.success(Localized.Common.done)
-            await fetch()
+            if let asset = result.redemption.option.asset {
+                Task { await assetsEnabler.enableAssetId(walletId: selectedWallet.walletId, assetId: asset.id) }
+            }
         } catch {
             isPresentingError = error.localizedDescription
         }
@@ -180,4 +263,5 @@ public final class RewardsViewModel: Sendable {
             state = .noData
         }
     }
+
 }

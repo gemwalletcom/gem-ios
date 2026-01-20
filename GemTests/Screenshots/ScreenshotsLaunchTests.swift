@@ -12,6 +12,15 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
     @MainActor func testScreenshots() throws {
         // Take a screenshot of an app's first window.
+        let locale = Locale.current.identifier
+        do {
+            try runScreenshots()
+        } catch {
+            XCTFail("❌ Screenshots failed for locale: \(locale) - \(error)")
+        }
+    }
+
+    @MainActor private func runScreenshots() throws {
         let app = XCUIApplication()
         
         if let path = ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] {
@@ -23,20 +32,6 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         let collectionViewsQuery = app.collectionViews
 
-        // import wallet if not already
-        if app.buttons.containing(.button, identifier: "welcome_import").count > 0 {
-
-            app.buttons.element(boundBy: 1).tap()
-
-            collectionViewsQuery.buttons.element(matching: .button, identifier: "multicoin").tap()
-            
-            let secretPhrase = ProcessInfo.processInfo.environment["SCREENSHOTS_SECRET_PHRASE"]!
-            collectionViewsQuery.textViews.element(matching: .textView, identifier: "phrase")
-                .typeText(secretPhrase)
-
-            app.buttons.element(matching: .button, identifier: "import_wallet").tap()
-        }
-
         sleep(4)
 
         try snapshoter.snap("secure")
@@ -45,7 +40,7 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         try snapshoter.snap("private")
 
-        collectionViewsQuery.buttons.element(matching: .button, identifier: "buy").tap()
+        collectionViewsQuery.buttons.element(matching: .button, identifier: "buy_button").tap()
 
         sleep(4)
 
@@ -53,11 +48,11 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
         
-        collectionViewsQuery.buttons.element(matching: .button, identifier: "swap").tap()
+        collectionViewsQuery.buttons.element(matching: .button, identifier: "swap_button").tap()
         
         let fromTextField = app.textFields.element(boundBy: 0)
         fromTextField.tap()
-        fromTextField.typeText("1\n")
+        fromTextField.typeText("0.2\n")
         
         sleep(4)
         
@@ -79,8 +74,10 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         try snapshoter.snap("earn")
 
+        app.navigationBars.buttons.element(boundBy: 1).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.navigationBars.buttons.element(boundBy: 0).tap()
+        
+        app.swipeUp()
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "manage").tap()
 
@@ -132,7 +129,9 @@ struct Snapshoter {
 
         let screenshotData = app.windows.firstMatch.screenshot().pngRepresentation
 
-        let path = ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"]!
+        guard let path = ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] else {
+            throw NSError(domain: "Snapshoter", code: 1, userInfo: [NSLocalizedDescriptionKey: "SCREENSHOTS_PATH environment variable not set"])
+        }
         let directoryPath = "\(path)/\(Locale.current.appstoreLanguageIdentifier())"
         
         let fileURL = URL(fileURLWithPath: "\(directoryPath)/\(UIDevice.current.model.lowercased())_\(name).png")

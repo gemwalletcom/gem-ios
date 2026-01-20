@@ -1,10 +1,10 @@
 {
-  "originHash" : "ba5b60895640612f178cb9cdb962655d457f4ba93985b685ab3b6d456768dca9",
+  "originHash" : "00c1c6d304380587522e3db87e31443c482e0ed0f776e0d31235ee16e7345b60",
   "pins" : [
     {
       "identity" : "bigint",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/attaswift/BigInt.git",
+      "location" : "https://github.com/gemwalletcom/BigInt.git",
       "state" : {
         "revision" : "e07e00fa1fd435143a2dcf8b7eec9a7710b2fdfe",
         "version" : "5.7.0"
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift.git",
       "state" : {
-        "revision" : "8ba1bc9a96afc731a000fd4136dd13a5a46297bd",
-        "version" : "7.6.1"
+        "revision" : "aa0079aeb82a4bf00324561a40bffe68c6fe1c26",
+        "version" : "7.9.0"
       }
     },
     {
@@ -39,19 +39,10 @@
     {
       "identity" : "starscream",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/daltoniam/Starscream.git",
+      "location" : "https://github.com/gemwalletcom/Starscream.git",
       "state" : {
         "revision" : "a063fda2b8145a231953c20e7a646be254365396",
         "version" : "3.1.2"
-      }
-    },
-    {
-      "identity" : "swift-nio-zlib-support",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-nio-zlib-support.git",
-      "state" : {
-        "revision" : "37760e9a52030bb9011972c5213c3350fa9d41fd",
-        "version" : "1.0.0"
       }
     }
   ],

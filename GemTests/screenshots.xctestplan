@@ -322,10 +322,6 @@
       {
         "key" : "RUNNING_SCREENSHOTS",
         "value" : "YES"
-      },
-      {
-        "key" : "SCREENSHOTS_SECRET_PHRASE",
-        "value" : "$(SCREENSHOTS_SECRET_PHRASE)"
       }
     ],
     "targetForVariableExpansion" : {

@@ -10,22 +10,25 @@ struct ToastModifier: ViewModifier {
     private let message: ToastMessage
     private let duration: Double
     private let tapToDismiss: Bool
+    private let offsetY: CGFloat
 
     init(
         isPresenting: Binding<Bool>,
         message: ToastMessage,
         duration: Double,
-        tapToDismiss: Bool
+        tapToDismiss: Bool,
+        offsetY: CGFloat
     ) {
         self.isPresenting = isPresenting
         self.message = message
         self.duration = duration
         self.tapToDismiss = tapToDismiss
+        self.offsetY = offsetY
     }
 
     func body(content: Content) -> some View {
         content
-            .toast(isPresenting: isPresenting, duration: duration, tapToDismiss: tapToDismiss) {
+            .toast(isPresenting: isPresenting, duration: duration, tapToDismiss: tapToDismiss, offsetY: offsetY) {
                 AlertToast(
                     systemImage: message.image,
                     imageColor: Colors.black,
@@ -39,11 +42,13 @@ private struct OptionalMessageToastModifier: ViewModifier {
     @Binding var message: ToastMessage?
     private let duration: Double
     private let tapToDismiss: Bool
+    private let offsetY: CGFloat
 
-    init(message: Binding<ToastMessage?>, duration: Double, tapToDismiss: Bool) {
+    init(message: Binding<ToastMessage?>, duration: Double, tapToDismiss: Bool, offsetY: CGFloat) {
         _message = message
         self.duration = duration
         self.tapToDismiss = tapToDismiss
+        self.offsetY = offsetY
     }
 
     func body(content: Content) -> some View {
@@ -57,7 +62,8 @@ private struct OptionalMessageToastModifier: ViewModifier {
                 ),
                 message: message ?? .empty(),
                 duration: duration,
-                tapToDismiss: tapToDismiss
+                tapToDismiss: tapToDismiss,
+                offsetY: offsetY
             )
         )
     }
@@ -72,25 +78,29 @@ public extension View {
         isPresenting: Binding<Bool>,
         message: ToastMessage,
         duration: Double = Self.toastDuration,
-        tapToDismiss: Bool = true
+        tapToDismiss: Bool = true,
+        offsetY: CGFloat = 0
     ) -> some View {
         modifier(ToastModifier(
             isPresenting: isPresenting,
             message: message,
             duration: duration,
-            tapToDismiss: tapToDismiss
+            tapToDismiss: tapToDismiss,
+            offsetY: offsetY
         ))
     }
 
     func toast(
         message: Binding<ToastMessage?>,
         duration: Double = Self.toastDuration,
-        tapToDismiss: Bool = true
+        tapToDismiss: Bool = true,
+        offsetY: CGFloat = 0
     ) -> some View {
         modifier(OptionalMessageToastModifier(
             message: message,
             duration: duration,
-            tapToDismiss: tapToDismiss
+            tapToDismiss: tapToDismiss,
+            offsetY: offsetY
         ))
     }
 }

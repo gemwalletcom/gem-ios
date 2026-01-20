@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 
-protocol AssetsEnabler: Sendable {
+public protocol AssetsEnabler: Sendable {
     func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async
+    func enableAssetId(walletId: WalletId, assetId: AssetId) async
 }

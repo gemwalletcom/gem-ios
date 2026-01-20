@@ -29,7 +29,7 @@ extension XCUIApplication {
     
     func tapWalletBar() {
         let walletBar = buttons["walletBar"].firstMatch
-        XCTAssertTrue(walletBar.waitForExistence(timeout: 2), "walletBar not found")
+        XCTAssertTrue(walletBar.waitForExistence(timeout: 5), "walletBar not found")
         walletBar.tap()
     }
     
@@ -53,6 +53,8 @@ extension XCUIApplication {
     }
     
     func tapImportWallet() {
-        buttons["Import an Existing Wallet"].firstMatch.tap()
+        let button = buttons["Import an Existing Wallet"].firstMatch
+        XCTAssertTrue(button.waitForExistence(timeout: 2), "button not found")
+        button.tap()
     }
 }

@@ -33,7 +33,7 @@ public struct ExportWalletNavigationStack: View {
                     ShowSecretDataScene(model: ShowPrivateKeyViewModel(text: key))
                 }
             }
-            .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
+            .toolbarDismissItem(type: .close, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: ExportWalletDestination.self) {
                 switch $0 {

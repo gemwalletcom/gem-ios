@@ -4,19 +4,16 @@ import Foundation
 
 public struct WebSocketConfiguration: Sendable {
     public let url: URL
-    public let reconnectDelay: TimeInterval
-    public let maxReconnectDelay: TimeInterval
+    public let reconnection: any Reconnectable
     public let sessionConfiguration: URLSessionConfiguration
 
     public init(
         url: URL,
-        reconnectDelay: TimeInterval = 1,
-        maxReconnectDelay: TimeInterval = 30,
+        reconnection: any Reconnectable = ExponentialReconnection(),
         sessionConfiguration: URLSessionConfiguration = .default
     ) {
         self.url = url
-        self.reconnectDelay = reconnectDelay
-        self.maxReconnectDelay = maxReconnectDelay
+        self.reconnection = reconnection
         self.sessionConfiguration = sessionConfiguration
     }
 }

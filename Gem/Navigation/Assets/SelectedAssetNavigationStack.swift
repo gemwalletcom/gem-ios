@@ -141,7 +141,7 @@ struct SelectedAssetNavigationStack: View  {
                     }
                 }
             }
-            .toolbarDismissItem(title: .done, placement: .topBarLeading)
+            .toolbarDismissItem(type: .close, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: TransferData.self) { data in
                 ConfirmTransferScene(
