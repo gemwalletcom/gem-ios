@@ -775,6 +775,10 @@ public enum Localized {
         }
       }
       public enum Rewards {
+        public enum CreateUsername {
+          /// Set up your username to earn rewards
+          public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.create_username.subtitle", fallback: "Set up your username to earn rewards")
+        }
         public enum Disabled {
           /// Your referral code has been deactivated
           public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.disabled.subtitle", fallback: "Your referral code has been deactivated")
@@ -786,6 +790,16 @@ public enum Localized {
           public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.enabled.subtitle", fallback: "Start earning points by inviting friends")
           /// Rewards Enabled
           public static let title = Localized.tr("Localizable", "notifications.inapp.rewards.enabled.title", fallback: "Rewards Enabled")
+        }
+        public enum Invite {
+          /// Invite friends and earn rewards together
+          public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.invite.subtitle", fallback: "Invite friends and earn rewards together")
+        }
+        public enum Redeemed {
+          /// Your rewards have been redeemed successfully
+          public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.redeemed.subtitle", fallback: "Your rewards have been redeemed successfully")
+          /// Rewards Redeemed
+          public static let title = Localized.tr("Localizable", "notifications.inapp.rewards.redeemed.title", fallback: "Rewards Redeemed")
         }
       }
       public enum State {

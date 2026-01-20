@@ -561,3 +561,7 @@
 "notifications.inapp.rewards.disabled.title" = "Nambari ya Rufaa Imezimwa";
 "notifications.inapp.rewards.disabled.subtitle" = "Nambari yako ya rufaa imezimwa";
 "rewards.nickname" = "Jina la utani";
+"notifications.inapp.rewards.redeemed.title" = "Zawadi Zilizokombolewa";
+"notifications.inapp.rewards.redeemed.subtitle" = "Zawadi zako zimetumika kwa mafanikio";
+"notifications.inapp.rewards.create_username.subtitle" = "Weka jina lako la mtumiaji ili upate zawadi";
+"notifications.inapp.rewards.invite.subtitle" = "Alika marafiki na upate zawadi pamoja";

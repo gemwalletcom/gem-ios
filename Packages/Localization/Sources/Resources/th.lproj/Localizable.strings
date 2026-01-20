@@ -561,3 +561,7 @@
 "notifications.inapp.rewards.disabled.title" = "รหัสอ้างอิงถูกปิดใช้งาน";
 "notifications.inapp.rewards.disabled.subtitle" = "รหัสแนะนำของคุณถูกปิดใช้งานแล้ว";
 "rewards.nickname" = "ชื่อเล่น";
+"notifications.inapp.rewards.redeemed.title" = "รางวัลที่แลกรับ";
+"notifications.inapp.rewards.redeemed.subtitle" = "รางวัลของคุณได้รับการแลกรับเรียบร้อยแล้ว";
+"notifications.inapp.rewards.create_username.subtitle" = "ตั้งชื่อผู้ใช้ของคุณเพื่อรับรางวัล";
+"notifications.inapp.rewards.invite.subtitle" = "ชวนเพื่อนมารับรางวัลด้วยกัน";

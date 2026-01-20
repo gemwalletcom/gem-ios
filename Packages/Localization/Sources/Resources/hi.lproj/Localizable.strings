@@ -561,3 +561,7 @@
 "notifications.inapp.rewards.disabled.title" = "रेफरल कोड निष्क्रिय";
 "notifications.inapp.rewards.disabled.subtitle" = "आपका रेफरल कोड निष्क्रिय कर दिया गया है।";
 "rewards.nickname" = "उपनाम";
+"notifications.inapp.rewards.redeemed.title" = "भुनाए गए पुरस्कार";
+"notifications.inapp.rewards.redeemed.subtitle" = "आपके पुरस्कार सफलतापूर्वक भुना लिए गए हैं।";
+"notifications.inapp.rewards.create_username.subtitle" = "पुरस्कार अर्जित करने के लिए अपना उपयोगकर्ता नाम सेट करें";
+"notifications.inapp.rewards.invite.subtitle" = "दोस्तों को आमंत्रित करें और साथ मिलकर पुरस्कार जीतें";

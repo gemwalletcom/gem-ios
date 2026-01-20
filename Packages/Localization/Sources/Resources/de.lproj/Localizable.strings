@@ -561,3 +561,7 @@
 "notifications.inapp.rewards.disabled.title" = "Empfehlungscode deaktiviert";
 "notifications.inapp.rewards.disabled.subtitle" = "Ihr Empfehlungscode wurde deaktiviert";
 "rewards.nickname" = "Spitzname";
+"notifications.inapp.rewards.redeemed.title" = "Eingelöste Prämien";
+"notifications.inapp.rewards.redeemed.subtitle" = "Ihre Prämien wurden erfolgreich eingelöst.";
+"notifications.inapp.rewards.create_username.subtitle" = "Richten Sie Ihren Benutzernamen ein, um Prämien zu erhalten.";
+"notifications.inapp.rewards.invite.subtitle" = "Lade Freunde ein und verdient gemeinsam Prämien.";

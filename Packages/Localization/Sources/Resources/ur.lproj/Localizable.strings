@@ -561,3 +561,7 @@
 "notifications.inapp.rewards.disabled.title" = "ریفرل کوڈ غیر فعال ہے۔";
 "notifications.inapp.rewards.disabled.subtitle" = "آپ کا ریفرل کوڈ غیر فعال کر دیا گیا ہے۔";
 "rewards.nickname" = "عرفی نام";
+"notifications.inapp.rewards.redeemed.title" = "انعامات بھنائے گئے۔";
+"notifications.inapp.rewards.redeemed.subtitle" = "آپ کے انعامات کو کامیابی کے ساتھ بھنایا گیا ہے۔";
+"notifications.inapp.rewards.create_username.subtitle" = "انعامات حاصل کرنے کے لیے اپنا صارف نام ترتیب دیں۔";
+"notifications.inapp.rewards.invite.subtitle" = "دوستوں کو مدعو کریں اور مل کر انعامات کمائیں۔";

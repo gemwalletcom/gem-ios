@@ -561,3 +561,7 @@
 "notifications.inapp.rewards.disabled.title" = "Doporučovací kód deaktivován";
 "notifications.inapp.rewards.disabled.subtitle" = "Váš doporučovací kód byl deaktivován";
 "rewards.nickname" = "Přezdívka";
+"notifications.inapp.rewards.redeemed.title" = "Odměny obdrženy";
+"notifications.inapp.rewards.redeemed.subtitle" = "Vaše odměny byly úspěšně uplatněny";
+"notifications.inapp.rewards.create_username.subtitle" = "Nastavte si uživatelské jméno a získejte odměny";
+"notifications.inapp.rewards.invite.subtitle" = "Pozvěte přátele a společně sbírejte odměny";

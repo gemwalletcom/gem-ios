@@ -33,6 +33,9 @@ public struct InAppNotificationListItemViewModel: Identifiable, Sendable {
         case .referralJoined: Localized.Notifications.Inapp.Referral.Joined.title
         case .rewardsEnabled: Localized.Notifications.Inapp.Rewards.Enabled.title
         case .rewardsCodeDisabled: Localized.Notifications.Inapp.Rewards.Disabled.title
+        case .rewardsRedeemed: Localized.Notifications.Inapp.Rewards.Redeemed.title
+        case .rewardsCreateUsername: Localized.Rewards.CreateReferralCode.title
+        case .rewardsInvite: Localized.Rewards.InviteFriends.title
         }
     }
 
@@ -41,6 +44,9 @@ public struct InAppNotificationListItemViewModel: Identifiable, Sendable {
         case .referralJoined: metadata.map { Localized.Notifications.Inapp.Referral.Joined.subtitle($0.username) }
         case .rewardsEnabled: Localized.Notifications.Inapp.Rewards.Enabled.subtitle
         case .rewardsCodeDisabled: Localized.Notifications.Inapp.Rewards.Disabled.subtitle
+        case .rewardsRedeemed: Localized.Notifications.Inapp.Rewards.Redeemed.subtitle
+        case .rewardsCreateUsername: Localized.Notifications.Inapp.Rewards.CreateUsername.subtitle
+        case .rewardsInvite: Localized.Notifications.Inapp.Rewards.Invite.subtitle
         }
     }
 
@@ -58,6 +64,9 @@ public struct InAppNotificationListItemViewModel: Identifiable, Sendable {
         case .referralJoined: Emoji.party
         case .rewardsEnabled: Emoji.WalletAvatar.gift.rawValue
         case .rewardsCodeDisabled: Emoji.WalletAvatar.warning.rawValue
+        case .rewardsRedeemed: Emoji.WalletAvatar.check.rawValue
+        case .rewardsCreateUsername: Emoji.WalletAvatar.star.rawValue
+        case .rewardsInvite: Emoji.WalletAvatar.magic.rawValue
         }
         return AssetImage(type: emoji)
     }

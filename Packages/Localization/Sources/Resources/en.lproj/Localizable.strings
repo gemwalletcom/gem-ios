@@ -561,3 +561,7 @@
 "notifications.inapp.rewards.disabled.title" = "Referral Code Disabled";
 "notifications.inapp.rewards.disabled.subtitle" = "Your referral code has been deactivated";
 "rewards.nickname" = "Nickname";
+"notifications.inapp.rewards.redeemed.title" = "Rewards Redeemed";
+"notifications.inapp.rewards.redeemed.subtitle" = "Your rewards have been redeemed successfully";
+"notifications.inapp.rewards.create_username.subtitle" = "Set up your username to earn rewards";
+"notifications.inapp.rewards.invite.subtitle" = "Invite friends and earn rewards together";

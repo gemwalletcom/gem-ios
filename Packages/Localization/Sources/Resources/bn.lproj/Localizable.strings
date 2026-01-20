@@ -561,3 +561,7 @@
 "notifications.inapp.rewards.disabled.title" = "রেফারেল কোড বন্ধ করা আছে";
 "notifications.inapp.rewards.disabled.subtitle" = "আপনার রেফারেল কোডটি নিষ্ক্রিয় করা হয়েছে।";
 "rewards.nickname" = "ডাকনাম";
+"notifications.inapp.rewards.redeemed.title" = "পুরস্কার রিডিম করা হয়েছে";
+"notifications.inapp.rewards.redeemed.subtitle" = "আপনার পুরষ্কারগুলি সফলভাবে রিডিম করা হয়েছে।";
+"notifications.inapp.rewards.create_username.subtitle" = "পুরস্কার জিততে আপনার ব্যবহারকারীর নাম সেট আপ করুন";
+"notifications.inapp.rewards.invite.subtitle" = "বন্ধুদের আমন্ত্রণ জানান এবং একসাথে পুরস্কার জিতুন";

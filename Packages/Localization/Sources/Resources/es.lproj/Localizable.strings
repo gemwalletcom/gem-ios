@@ -561,3 +561,7 @@
 "notifications.inapp.rewards.disabled.title" = "Código de referencia deshabilitado";
 "notifications.inapp.rewards.disabled.subtitle" = "Su código de referencia ha sido desactivado";
 "rewards.nickname" = "Apodo";
+"notifications.inapp.rewards.redeemed.title" = "Recompensas canjeadas";
+"notifications.inapp.rewards.redeemed.subtitle" = "Tus recompensas se han canjeado con éxito";
+"notifications.inapp.rewards.create_username.subtitle" = "Configura tu nombre de usuario para ganar recompensas";
+"notifications.inapp.rewards.invite.subtitle" = "Invita a tus amigos y gana recompensas juntos";
