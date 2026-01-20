@@ -57,7 +57,7 @@ public struct AlertToastModifier: ViewModifier {
 
     @Binding var isPresenting: Bool
 
-    var duration: Double = 2
+    var duration: TimeInterval = 2
     var tapToDismiss: Bool = true
     var offsetY: CGFloat = 0
 
@@ -95,7 +95,7 @@ public struct AlertToastModifier: ViewModifier {
                 .animation(.spring(), value: isPresenting)
             )
             .task(id: isPresenting) {
-                if isPresenting && duration > 0 {
+                if isPresenting && duration > 0 && duration.isFinite {
                     try? await Task.sleep(for: .seconds(duration))
                     withAnimation(.spring()) {
                         isPresenting = false
@@ -108,7 +108,7 @@ public struct AlertToastModifier: ViewModifier {
 public extension View {
     func toast(
         isPresenting: Binding<Bool>,
-        duration: Double = 2,
+        duration: TimeInterval = 2,
         tapToDismiss: Bool = true,
         offsetY: CGFloat = 0,
         alert: @escaping () -> AlertToast,
