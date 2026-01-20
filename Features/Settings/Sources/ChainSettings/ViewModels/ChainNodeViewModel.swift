@@ -28,7 +28,7 @@ public struct ChainNodeViewModel: Sendable {
 
         let flag: String? = {
             switch host {
-            case Constants.nodesAsiaURL.cleanHost(): "🇸🇬"
+            case Constants.nodesAsiaURL.cleanHost(): "🇯🇵"
             case Constants.nodesEuropeURL.cleanHost(): "🇪🇺"
             case Constants.nodesURL.cleanHost(): "🇺🇸"
             default: nil
