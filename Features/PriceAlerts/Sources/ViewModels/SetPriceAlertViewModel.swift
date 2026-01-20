@@ -9,6 +9,7 @@ import PriceAlertService
 import Style
 import Localization
 import Formatters
+import PrimitivesComponents
 
 @MainActor
 @Observable
@@ -80,6 +81,18 @@ public final class SetPriceAlertViewModel {
             assetData: assetData,
             formatter: currencyFormatter,
             onTapActionButton: toggleAlertDirection
+        )
+    }
+
+    func assetItemViewModel(for assetData: AssetData) -> ListAssetItemViewModel {
+        ListAssetItemViewModel(
+            showBalancePrivacy: .constant(false),
+            assetDataModel: AssetDataViewModel(
+                assetData: assetData,
+                formatter: .abbreviated,
+                currencyCode: currencyFormatter.currencyCode
+            ),
+            type: .price
         )
     }
     

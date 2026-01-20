@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "Podepsat transakci";
 "recent_activity.title" = "Nedávné";
 "settings.preferences.app_icon" = "Ikona aplikace";
-"recent_activity.clear_confirmation" = "Opravdu chcete vymazat všechny nedávné položky?";
 "rewards.pending.title" = "Bonus čeká na vyřízení";
 "rewards.pending.description" = "K dispozici v %@";
 "rewards.pending.description_ready" = "Váš bonus je připraven!";

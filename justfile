@@ -3,6 +3,9 @@ BUILD_THREADS := `sysctl -n hw.ncpu`
 SIMULATOR_NAME := "iPhone 17 Pro Max"
 SIMULATOR_DEST := "platform=iOS Simulator,name=" + SIMULATOR_NAME
 
+default:
+    @just --list
+
 xcbeautify:
     @xcbeautify {{XCBEAUTIFY_ARGS}}
 

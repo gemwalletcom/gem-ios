@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "חתימה על עסקה";
 "recent_activity.title" = "אחרונים";
 "settings.preferences.app_icon" = "סמל האפליקציה";
-"recent_activity.clear_confirmation" = "האם אתה בטוח שאתה רוצה למחוק את כל ההודעות האחרונות?";
 "rewards.pending.title" = "בונוס ממתין";
 "rewards.pending.description" = "זמין ב %@";
 "rewards.pending.description_ready" = "הבונוס שלך מוכן!";

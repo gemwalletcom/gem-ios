@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "Menandatangani Transaksi";
 "recent_activity.title" = "Terbaru";
 "settings.preferences.app_icon" = "Ikon Aplikasi";
-"recent_activity.clear_confirmation" = "Apakah Anda yakin ingin menghapus semua postingan terbaru?";
 "rewards.pending.title" = "Bonus Tertunda";
 "rewards.pending.description" = "Tersedia dalam %@";
 "rewards.pending.description_ready" = "Bonus Anda sudah siap!";
