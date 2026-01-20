@@ -1,6 +1,6 @@
 XCBEAUTIFY_ARGS := "--quieter --is-ci"
 BUILD_THREADS := `sysctl -n hw.ncpu`
-SIMULATOR_NAME := "iPhone 17 Pro Max"
+SIMULATOR_NAME := "iPhone 17"
 SIMULATOR_DEST := "platform=iOS Simulator,name=" + SIMULATOR_NAME
 
 xcbeautify:
