@@ -66,6 +66,14 @@ clean:
     @rm -rf build/DerivedData
     @echo "Build cache cleaned"
 
+run: build
+    @echo "==> Installing app on simulator..."
+    @xcrun simctl boot "{{SIMULATOR_NAME}}" 2>/dev/null || true
+    @open -a Simulator
+    @xcrun simctl install "{{SIMULATOR_NAME}}" build/DerivedData/Build/Products/Debug-iphonesimulator/Gem.app
+    @echo "==> Launching app..."
+    @xcrun simctl launch --console-pty "{{SIMULATOR_NAME}}" com.gemwallet.ios
+
 build-package PACKAGE:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme {{PACKAGE}} \
@@ -121,11 +129,6 @@ test TARGET: show-simulator
     -jobs {{BUILD_THREADS}} \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-mobsfscan:
-    @command -v uv >/dev/null || { \
-        echo "uv is not installed. Install it via 'curl -LsSf https://astral.sh/uv/install.sh | sh'."; \
-        exit 1; }
-    uv tool run mobsfscan -- --type ios --config .mobsf --exit-warning
 
 localize:
     @sh core/scripts/localize.sh ios Packages/Localization/Sources/Resources

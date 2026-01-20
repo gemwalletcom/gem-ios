@@ -7,7 +7,7 @@ import Primitives
 
 public final class LocalKeystorePassword: KeystorePassword {
     private struct Keys {
-        static let password = "password" // mobsf-ignore: ios_hardcoded_secret
+        static let password = "password"
         static let passwordAuthentication = "password_authentication"
         static let passwordAuthenticationPeriod = "password_authentication_period"
         static let passwordAuthenticationPrivacyLock = "password_authentication_privacy_lock"
