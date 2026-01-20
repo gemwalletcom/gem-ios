@@ -166,10 +166,14 @@ extension GatewayService {
         }
     }
     
-    public func getCandlesticks(chain: Primitives.Chain, symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
-        try await gateway.getCandlesticks(chain: chain.rawValue, symbol: symbol, period: period.rawValue).map {
+    public func getPerpetualCandlesticks(chain: Primitives.Chain, symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
+        try await gateway.getPerpetualCandlesticks(chain: chain.rawValue, symbol: symbol, period: period.rawValue).map {
             try $0.map()
         }
+    }
+
+    public func getPerpetualPortfolio(chain: Primitives.Chain, address: String) async throws -> PerpetualPortfolioChartData {
+        try await gateway.getPerpetualPortfolio(chain: chain.rawValue, address: address).map()
     }
 }
 

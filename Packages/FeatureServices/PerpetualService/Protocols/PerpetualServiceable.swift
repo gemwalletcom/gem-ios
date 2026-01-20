@@ -10,5 +10,6 @@ public protocol PerpetualServiceable: Sendable {
     func updateMarkets() async throws
     func updateMarket(symbol: String) async throws
     func candlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick]
+    func portfolio(wallet: Wallet) async throws -> PerpetualPortfolioChartData
     func setPinned(_ isPinned: Bool, perpetualId: String) throws
 }

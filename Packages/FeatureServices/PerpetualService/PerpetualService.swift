@@ -127,7 +127,16 @@ public struct PerpetualService: PerpetualServiceable {
     public func candlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
         return try await provider.getCandlesticks(symbol: symbol, period: period)
     }
-    
+
+    public func portfolio(wallet: Wallet) async throws -> PerpetualPortfolioChartData {
+        guard let account = wallet.accounts.first(where: {
+            $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid
+        }) else {
+            return PerpetualPortfolioChartData(day: nil, week: nil, month: nil, allTime: nil)
+        }
+        return try await provider.getPortfolio(address: account.address)
+    }
+
     public func setPinned(_ isPinned: Bool, perpetualId: String) throws {
         try store.setPinned(for: [perpetualId], value: isPinned)
     }
