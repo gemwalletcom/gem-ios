@@ -9,7 +9,7 @@ public extension StateEmptyView where Content == EmptyView {
     static func noData() -> StateEmptyView<EmptyView> {
         StateEmptyView(title: Localized.Common.notAvailable)
     }
-    
+
     static func error(_ error: Error) -> StateEmptyView<EmptyView> {
         StateEmptyView(
             title: Localized.Errors.errorOccured,

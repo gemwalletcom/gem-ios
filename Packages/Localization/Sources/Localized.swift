@@ -1001,8 +1001,6 @@ public enum Localized {
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
   }
   public enum RecentActivity {
-    /// Are you sure you want to clear all recents?
-    public static let clearConfirmation = Localized.tr("Localizable", "recent_activity.clear_confirmation", fallback: "Are you sure you want to clear all recents?")
     /// Recents
     public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recents")
     public enum State {
