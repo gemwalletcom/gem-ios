@@ -22,27 +22,10 @@ public struct ChartScene: View {
     public var body: some View {
         List {
             Section { } header: {
-                VStack {
-                    VStack {
-                        switch model.state {
-                        case .noData:
-                            StateEmptyView(title: model.emptyTitle)
-                        case .loading:
-                            LoadingView()
-                        case .data(let model):
-                            ChartView(model: model)
-                        case .error(let error):
-                            StateEmptyView(
-                                title: Localized.Errors.errorOccured,
-                                description: error.networkOrNoDataDescription,
-                                image: Images.ErrorConent.error
-                            )
-                        }
-                    }
-                    .frame(height: 320)
-
-                    PeriodSelectorView(selectedPeriod: $model.currentPeriod)
-                }
+                ChartStateView(
+                    state: model.state,
+                    selectedPeriod: $model.selectedPeriod
+                )
             }
             .cleanListRow()
             

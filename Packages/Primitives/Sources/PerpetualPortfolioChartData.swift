@@ -21,8 +21,7 @@ public struct PerpetualPortfolioChartData: Sendable, Equatable {
     }
 
     public var availablePeriods: [ChartPeriod] {
-        [(day, ChartPeriod.day), (week, .week), (month, .month), (allTime, .all)]
-            .compactMap { $0.0 != nil ? $0.1 : nil }
+        [(day, ChartPeriod.day), (week, .week), (month, .month), (allTime, .all)].compactMap { $0.0 != nil ? $0.1 : nil }
     }
 
     public func timeframeData(for period: ChartPeriod) -> PerpetualTimeframeChartData? {

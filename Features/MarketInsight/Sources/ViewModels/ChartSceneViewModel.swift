@@ -11,6 +11,7 @@ import PriceService
 import Preferences
 import PriceAlertService
 import SwiftUI
+import Formatters
 
 @MainActor
 @Observable
@@ -25,7 +26,7 @@ public final class ChartSceneViewModel {
     private let preferences: Preferences = .standard
 
     var state: StateViewType<ChartValuesViewModel> = .loading
-    var currentPeriod: ChartPeriod {
+    var selectedPeriod: ChartPeriod {
         didSet {
             Task { await fetch() }
         }
@@ -37,8 +38,6 @@ public final class ChartSceneViewModel {
     public var isPresentingSetPriceAlert: Binding<AssetId?>
 
     var title: String { assetModel.name }
-    var emptyTitle: String { Localized.Common.notAvailable }
-    var errorTitle: String { Localized.Errors.errorOccured }
     
     var priceAlertsViewModel: PriceAlertsViewModel { PriceAlertsViewModel(priceAlerts: priceData?.priceAlerts ?? []) }
     var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts && isPriceAvailable }
@@ -58,7 +57,7 @@ public final class ChartSceneViewModel {
         self.assetModel = assetModel
         self.priceAlertService = priceAlertService
         self.walletId = walletId
-        self.currentPeriod = currentPeriod
+        self.selectedPeriod = currentPeriod
         self.priceRequest = PriceRequest(assetId: assetModel.asset.id)
         self.isPresentingSetPriceAlert = isPresentingSetPriceAlert
     }
@@ -77,7 +76,7 @@ extension ChartSceneViewModel {
         do {
             let values = try await service.getCharts(
                 assetId: assetModel.asset.id,
-                period: currentPeriod
+                period: selectedPeriod
             )
             if let market = values.market {
                 try priceService.updateMarketPrice(assetId: assetModel.asset.id, market: market, currency: preferences.currency)
@@ -88,13 +87,19 @@ extension ChartSceneViewModel {
             var charts = values.prices.map {
                 ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value) * rate)
             }
-            
+
             if let price = price, let last = charts.last, price.updatedAt > last.date {
                 charts.append(ChartDateValue(date: .now, value: price.price))
             }
 
             let chartValues = try ChartValues.from(charts: charts)
-            let model = ChartValuesViewModel(period: currentPeriod, price: price?.mapToPrice(), values: chartValues)
+            let formatter = CurrencyFormatter(currencyCode: preferences.currency)
+            let model = ChartValuesViewModel(
+                period: selectedPeriod,
+                price: price?.mapToPrice(),
+                values: chartValues,
+                formatter: formatter
+            )
             state = .data(model)
         } catch {
             state = .error(error)

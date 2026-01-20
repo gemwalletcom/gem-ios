@@ -15,7 +15,7 @@ import ActivityService
 @Observable
 @MainActor
 public final class PerpetualsSceneViewModel {
-    private let perpetualService: PerpetualServiceable
+    let perpetualService: PerpetualServiceable
     let activityService: ActivityService
 
     let preferences: Preferences = .standard

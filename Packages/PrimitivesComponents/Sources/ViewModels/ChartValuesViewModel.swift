@@ -1,0 +1,52 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
+import Foundation
+import SwiftUI
+import Primitives
+import Charts
+import Formatters
+import Style
+
+public struct ChartValuesViewModel: Sendable {
+    public let period: ChartPeriod
+    public let price: Price?
+    public let values: ChartValues
+    public let lineColor: Color
+    public let formatter: CurrencyFormatter
+    public let signed: Bool
+
+    public static let defaultPeriod = ChartPeriod.day
+
+    public init(
+        period: ChartPeriod,
+        price: Price?,
+        values: ChartValues,
+        lineColor: Color = Colors.blue,
+        formatter: CurrencyFormatter,
+        signed: Bool = false
+    ) {
+        self.period = period
+        self.price = price
+        self.values = values
+        self.lineColor = lineColor
+        self.formatter = formatter
+        self.signed = signed
+    }
+
+    var charts: [ChartDateValue] { values.charts }
+    var lowerBoundValueText: String { formatter.string(values.lowerBoundValue) }
+    var upperBoundValueText: String { formatter.string(values.upperBoundValue) }
+
+    var chartPriceViewModel: ChartPriceViewModel? {
+        guard let price else { return nil }
+        let priceChangePercentage = period == Self.defaultPeriod
+            ? price.priceChangePercentage24h
+            : values.percentageChange(from: values.baseValue, to: price.price)
+        return ChartPriceViewModel(period: period, date: nil, price: price.price, priceChangePercentage: priceChangePercentage, formatter: formatter, signed: signed)
+    }
+
+    func priceViewModel(for element: ChartDateValue) -> ChartPriceViewModel {
+        let priceChangePercentage = values.percentageChange(from: values.baseValue, to: element.value)
+        return ChartPriceViewModel(period: period, date: element.date, price: element.value, priceChangePercentage: priceChangePercentage, formatter: formatter, signed: signed)
+    }
+}
