@@ -36,4 +36,13 @@ extension URL {
     public func queryValue<T: LosslessStringConvertible>(for name: String) -> T? {
         queryValue(for: name).flatMap { T($0) }
     }
+
+    public func isDomainAllowed(_ allowedDomains: [String]) -> Bool {
+        guard let host = host?.lowercased() else {
+            return false
+        }
+        return allowedDomains.contains { domain in
+            host == domain || host.hasSuffix(".\(domain)")
+        }
+    }
 }
