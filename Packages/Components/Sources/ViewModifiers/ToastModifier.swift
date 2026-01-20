@@ -8,14 +8,14 @@ struct ToastModifier: ViewModifier {
     private var isPresenting: Binding<Bool>
 
     private let message: ToastMessage
-    private let duration: Double
+    private let duration: TimeInterval
     private let tapToDismiss: Bool
     private let offsetY: CGFloat
 
     init(
         isPresenting: Binding<Bool>,
         message: ToastMessage,
-        duration: Double,
+        duration: TimeInterval,
         tapToDismiss: Bool,
         offsetY: CGFloat
     ) {
@@ -40,11 +40,11 @@ struct ToastModifier: ViewModifier {
 
 private struct OptionalMessageToastModifier: ViewModifier {
     @Binding var message: ToastMessage?
-    private let duration: Double
+    private let duration: TimeInterval
     private let tapToDismiss: Bool
     private let offsetY: CGFloat
 
-    init(message: Binding<ToastMessage?>, duration: Double, tapToDismiss: Bool, offsetY: CGFloat) {
+    init(message: Binding<ToastMessage?>, duration: TimeInterval, tapToDismiss: Bool, offsetY: CGFloat) {
         _message = message
         self.duration = duration
         self.tapToDismiss = tapToDismiss
@@ -77,7 +77,7 @@ public extension View {
     func toast(
         isPresenting: Binding<Bool>,
         message: ToastMessage,
-        duration: Double = Self.toastDuration,
+        duration: TimeInterval = Self.toastDuration,
         tapToDismiss: Bool = true,
         offsetY: CGFloat = 0
     ) -> some View {
@@ -92,7 +92,7 @@ public extension View {
 
     func toast(
         message: Binding<ToastMessage?>,
-        duration: Double = Self.toastDuration,
+        duration: TimeInterval = Self.toastDuration,
         tapToDismiss: Bool = true,
         offsetY: CGFloat = 0
     ) -> some View {
