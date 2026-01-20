@@ -149,6 +149,7 @@ public enum RewardEventType: String, Codable, CaseIterable, Equatable, Hashable,
 	case inviteExisting
 	case joined
 	case disabled
+	case redeemed
 }
 
 public struct RewardEvent: Codable, Equatable, Hashable, Sendable {
