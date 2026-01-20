@@ -133,10 +133,18 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     var yieldTitle: String { "Yield" }
-    var earnTitle: String { "Earn" }
+    var earnSectionTitle: String { "Earn" }
+
+    var showStakeButton: Bool {
+        !showBalances && assetDataModel.isStakeEnabled && !wallet.isViewOnly
+    }
 
     var showYieldButton: Bool {
         hasYieldOpportunity && !wallet.isViewOnly && isYieldPositionLoaded && !hasYieldPosition
+    }
+
+    var showEarnSection: Bool {
+        showStakeButton || showYieldButton
     }
 
     var hasYieldPosition: Bool {
@@ -344,6 +352,8 @@ extension AssetSceneViewModel {
             case .tradePerpetuals:
                 UIApplication.shared.open(DeepLink.perpetuals.localUrl)
                 preferences.isPerpetualEnabled = true
+            case .yield:
+                onSelectEarn()
             }
         case .button(let bannerButton):
             switch bannerButton {

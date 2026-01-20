@@ -126,14 +126,17 @@ public struct AssetScene: View {
                         }
                     }
                 }
-            } else if model.assetDataModel.isStakeEnabled {
-                stakeViewEmpty
-                    .listRowInsets(.assetListRowInsets)
             }
 
-            if model.showYieldButton {
-                yieldViewEmpty
-                    .listRowInsets(.assetListRowInsets)
+            if model.showEarnSection {
+                Section(model.earnSectionTitle) {
+                    if model.showStakeButton {
+                        stakeButtonView
+                    }
+                    if model.showYieldButton {
+                        yieldButtonView
+                    }
+                }
             }
 
             if model.showResources {
@@ -195,21 +198,6 @@ extension AssetScene {
         )
         .accessibilityIdentifier("stake")
     }
-    
-    private var stakeViewEmpty: some View {
-        NavigationCustomLink(
-            with: HStack(spacing: .space12) {
-                EmojiView(color: Colors.grayVeryLight, emoji: "💰")
-                    .frame(size: .image.asset)
-                ListItemView(
-                    title: model.stakeTitle,
-                    subtitle: model.stakeAprText,
-                    subtitleStyle: TextStyle(font: .callout, color: Colors.green)
-                )
-            },
-            action: { model.onSelectHeader(.stake) }
-        )
-    }
 
     private var yieldView: some View {
         NavigationCustomLink(
@@ -222,23 +210,34 @@ extension AssetScene {
         .accessibilityIdentifier("yield")
     }
 
-    private var yieldViewEmpty: some View {
+    private var stakeButtonView: some View {
         NavigationCustomLink(
-            with: HStack(spacing: .space12) {
-                ZStack {
-                    Circle()
-                        .fill(Colors.grayVeryLight)
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .font(.system(size: 20))
-                        .foregroundStyle(Colors.gray)
-                }
-                .frame(size: .image.asset)
+            with: HStack(spacing: Spacing.medium) {
+                EmojiView(color: Colors.grayVeryLight, emoji: Emoji.WalletAvatar.moneyBag.rawValue)
+                    .frame(size: .image.asset)
                 ListItemView(
-                    title: model.earnTitle,
+                    title: model.stakeTitle,
+                    subtitle: model.stakeAprText,
+                    subtitleStyle: TextStyle(font: .callout, color: Colors.green)
+                )
+            },
+            action: { model.onSelectHeader(.stake) }
+        )
+        .accessibilityIdentifier("stakeButton")
+    }
+
+    private var yieldButtonView: some View {
+        NavigationCustomLink(
+            with: HStack(spacing: Spacing.medium) {
+                EmojiView(color: Colors.grayVeryLight, emoji: Emoji.WalletAvatar.moneyBag.rawValue)
+                    .frame(size: .image.asset)
+                ListItemView(
+                    title: model.yieldTitle,
                     subtitle: nil
                 )
             },
             action: { model.onSelectEarn() }
         )
+        .accessibilityIdentifier("yieldButton")
     }
 }

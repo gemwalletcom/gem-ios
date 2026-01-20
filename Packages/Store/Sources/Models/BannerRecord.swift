@@ -159,4 +159,12 @@ extension NewBanner {
             state: .active
         )
     }
+
+    public static func yield(assetId: AssetId) -> NewBanner {
+        NewBanner(
+            assetId: assetId,
+            event: .yield,
+            state: .active
+        )
+    }
 }

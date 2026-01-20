@@ -21,6 +21,7 @@ public struct BannerSetupService: Sendable {
     public func setup() throws {
         try setupStake()
         try setupHypercorePerpetuals()
+        try setupYield()
     }
 
     public func setupWallet(wallet: Wallet) throws  {
@@ -61,6 +62,18 @@ public struct BannerSetupService: Sendable {
         try store.addBanners([
             NewBanner.tradePerpetuals(assetId: Chain.hyperCore.assetId),
             NewBanner.tradePerpetuals(assetId: Chain.hyperliquid.assetId)
+        ])
+    }
+
+    private func setupYield() throws {
+        // USDC on Base
+        let usdcBase = AssetId(chain: .base, tokenId: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913")
+        // USDT on Ethereum
+        let usdtEthereum = AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7")
+
+        try store.addBanners([
+            NewBanner.yield(assetId: usdcBase),
+            NewBanner.yield(assetId: usdtEthereum)
         ])
     }
 }
