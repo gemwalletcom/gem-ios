@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "紹介コードが無効です";
 "notifications.inapp.rewards.disabled.subtitle" = "紹介コードは無効になりました";
 "rewards.nickname" = "ニックネーム";
+"notifications.inapp.rewards.redeemed.title" = "交換された報酬";
+"notifications.inapp.rewards.redeemed.subtitle" = "報酬は正常に引き換えられました";
+"notifications.inapp.rewards.create_username.subtitle" = "ユーザー名を設定して報酬を獲得しましょう";
+"notifications.inapp.rewards.invite.subtitle" = "友達を招待して一緒に報酬を獲得しましょう";
+"nodes.import_node.warning_message" = "カスタム ノードは悪意のあるものである可能性があり、トランザクション データが公開されたり、誤った情報が提供されたりする可能性があります。";

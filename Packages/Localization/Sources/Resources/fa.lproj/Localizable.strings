@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "کد ارجاع غیرفعال است";
 "notifications.inapp.rewards.disabled.subtitle" = "کد معرف شما غیرفعال شده است";
 "rewards.nickname" = "نام مستعار";
+"notifications.inapp.rewards.redeemed.title" = "جوایز بازخرید شده";
+"notifications.inapp.rewards.redeemed.subtitle" = "جوایز شما با موفقیت دریافت شد";
+"notifications.inapp.rewards.create_username.subtitle" = "نام کاربری خود را برای کسب جوایز تنظیم کنید";
+"notifications.inapp.rewards.invite.subtitle" = "دوستان را دعوت کنید و با هم پاداش کسب کنید";
+"nodes.import_node.warning_message" = "گره‌های سفارشی می‌توانند مخرب باشند و ممکن است داده‌های تراکنش شما را افشا کنند یا اطلاعات نادرست ارائه دهند.";

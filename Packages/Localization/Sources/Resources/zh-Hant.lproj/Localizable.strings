@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "推薦碼已停用";
 "notifications.inapp.rewards.disabled.subtitle" = "您的推薦碼已停用。";
 "rewards.nickname" = "暱稱";
+"notifications.inapp.rewards.redeemed.title" = "已兌換獎勵";
+"notifications.inapp.rewards.redeemed.subtitle" = "您的獎勵已成功兌換";
+"notifications.inapp.rewards.create_username.subtitle" = "設定您的用戶名即可獲得獎勵";
+"notifications.inapp.rewards.invite.subtitle" = "邀請好友，一起贏取獎勵";
+"nodes.import_node.warning_message" = "自訂節點可能存在惡意，可能會洩露您的交易資料或提供虛假資訊。";

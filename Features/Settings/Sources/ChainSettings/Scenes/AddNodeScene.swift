@@ -102,6 +102,13 @@ extension AddNodeScene {
                 ListItemView(title: result.latestBlockTitle, subtitle: result.latestBlockValue)
                 ListItemView(title: result.latencyTitle, subtitle: result.latecyValue)
             }
+            warningSection
+        }
+    }
+
+    private var warningSection: some View {
+        Section {
+            ListItemView(model: model.warningModel)
         }
     }
 }
@@ -114,6 +121,7 @@ extension AddNodeScene {
     }
 
     private func onSubmitUrl() {
+        focusedField = nil
         Task {
             await model.fetch()
         }
@@ -122,6 +130,7 @@ extension AddNodeScene {
     private func onSelectPaste() {
         guard let content = UIPasteboard.general.string else { return }
         model.setInput(content.trim())
+        focusedField = nil
     }
 
     private func onSelectImport() {
@@ -135,6 +144,7 @@ extension AddNodeScene {
 
     private func onHandleScan(_ result: String) {
         model.setInput(result)
+        focusedField = nil
     }
 
     private func onSelectScan() {

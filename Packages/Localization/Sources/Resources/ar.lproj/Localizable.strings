@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "تم تعطيل رمز الإحالة";
 "notifications.inapp.rewards.disabled.subtitle" = "تم تعطيل رمز الإحالة الخاص بك";
 "rewards.nickname" = "كنية";
+"notifications.inapp.rewards.redeemed.title" = "تم استرداد المكافآت";
+"notifications.inapp.rewards.redeemed.subtitle" = "تم استرداد مكافآتك بنجاح";
+"notifications.inapp.rewards.create_username.subtitle" = "قم بإعداد اسم المستخدم الخاص بك لكسب المكافآت";
+"notifications.inapp.rewards.invite.subtitle" = "ادعُ أصدقاءك واربحوا المكافآت معًا";
+"nodes.import_node.warning_message" = "قد تكون العقد المخصصة ضارة وقد تكشف بيانات معاملاتك أو تقدم معلومات خاطئة.";
