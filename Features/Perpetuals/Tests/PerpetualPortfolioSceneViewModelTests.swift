@@ -65,12 +65,30 @@ struct PerpetualPortfolioSceneViewModelTests {
 
         model.selectedChartType = .value
         if case .data(let chartModel) = model.chartState {
-            #expect(chartModel.signed == false)
+            #expect(chartModel.signed == true)
         }
 
         model.selectedChartType = .pnl
         if case .data(let chartModel) = model.chartState {
             #expect(chartModel.signed == true)
+        }
+    }
+
+    @Test
+    @MainActor
+    func valueChangeCalculation() {
+        let model = PerpetualPortfolioSceneViewModel.mock()
+        model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [0, 50, 30, 100]))))
+
+        if case .data(let chartModel) = model.chartState {
+            #expect(chartModel.price?.price == 100)
+            #expect(chartModel.price?.priceChangePercentage24h == 0)
+        }
+
+        model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [50, 100, 75]))))
+        if case .data(let chartModel) = model.chartState {
+            #expect(chartModel.price?.price == 25)
+            #expect(chartModel.price?.priceChangePercentage24h == 50)
         }
     }
 }

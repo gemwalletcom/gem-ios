@@ -80,17 +80,17 @@ extension PerpetualPortfolioSceneViewModel {
         guard let values = try? ChartValues.from(charts: charts), values.hasVariation else {
             return nil
         }
-        let valueChange = values.lastValue - values.baseValue
+        let valueChange = values.lastValue - values.firstValue
         let price = Price(
             price: valueChange,
-            priceChangePercentage24h: values.percentageChange(from: values.baseValue, to: values.lastValue),
+            priceChangePercentage24h: values.percentageChange(from: values.firstValue, to: values.lastValue),
             updatedAt: .now
         )
         return ChartValuesViewModel(
             period: selectedPeriod,
             price: price,
             values: values,
-            lineColor: .blue,
+            lineColor: Colors.blue,
             formatter: currencyFormatter,
             signed: true
         )
