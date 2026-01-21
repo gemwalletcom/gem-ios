@@ -6,6 +6,8 @@ import Style
 
 public struct AlertToast: View {
 
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
     public let systemImage: String
     public let imageColor: Color
     public let title: String
@@ -29,11 +31,11 @@ public struct AlertToast: View {
     public var body: some View {
         VStack {
             Spacer()
-            
+
             HStack(spacing: .medium) {
                 Image(systemName: systemImage)
                     .foregroundColor(imageColor)
-                
+
                 Text(LocalizedStringKey(title))
                     .font(titleFont ?? Font.headline.bold())
                     .foregroundColor(titleColor)
@@ -41,15 +43,21 @@ public struct AlertToast: View {
             .multilineTextAlignment(.leading)
             .padding(.horizontal, .medium)
             .padding(.vertical, .medium)
-            .frame(maxWidth: .scene.content.maxWidth, alignment: .leading)
+            .frame(maxWidth: maxWidth, alignment: .leading)
             .liquidGlass(fallback: { view in
                 view
                     .background(BlurView())
                     .cornerRadius(.space10)
             })
-            .padding(.horizontal, .medium)
+            .padding(.horizontal, .space10 * 2)
             .padding(.bottom, .medium)
         }
+    }
+
+    private var maxWidth: CGFloat {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isCompactVertical = verticalSizeClass == .compact
+        return (isPad || isCompactVertical) ? .scene.content.maxWidth : .infinity
     }
 }
 
