@@ -214,8 +214,8 @@ extension ConfirmTransferSceneViewModel {
     }
 
     func fetch() {
-        Task {
-            await fetch()
+        Task { [weak self] in
+            await self?.fetch()
         }
     }
 }
@@ -256,7 +256,8 @@ extension ConfirmTransferSceneViewModel {
         transactionData: TransactionData,
         amount: TransferAmount
     ) {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             await processConfirmation(
                 transactionData: transactionData,
                 amount: amount

@@ -23,18 +23,19 @@ public actor PerpetualObserverService: Sendable {
         await disconnect()
         currentWallet = wallet
         
-        updateTask = Task {
+        updateTask = Task { [weak self] in
             while !Task.isCancelled {
+                guard let self, let wallet = await self.currentWallet else { return }
                 do {
-                    let positions = try await perpetualService.getPositions(walletId: wallet.walletId)
-                    
+                    let positions = try await self.perpetualService.getPositions(walletId: wallet.walletId)
+
                     if positions.isNotEmpty {
-                        try await perpetualService.updatePositions(wallet: wallet)
+                        try await self.perpetualService.updatePositions(wallet: wallet)
                     }
                 } catch {
                     debugLog("PerpetualObserverService error getting positions: \(error)")
                 }
-                
+
                 try? await Task.sleep(for: .seconds(5))
             }
         }

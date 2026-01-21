@@ -24,6 +24,7 @@ struct ChatwootWebView: UIViewRepresentable {
     }
     
     static func dismantleUIView(_ webView: WKWebView, coordinator: ()) {
+        webView.navigationDelegate = nil
         webView.configuration.userContentController.removeAllScriptMessageHandlers()
     }
 }

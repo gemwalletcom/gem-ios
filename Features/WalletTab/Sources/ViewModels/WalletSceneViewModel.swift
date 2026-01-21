@@ -138,7 +138,8 @@ public final class WalletSceneViewModel: Sendable {
 
 extension WalletSceneViewModel {
     func fetch() {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             shouldStartLoadingAssets()
             await fetch(
                 walletId: wallet.walletId,
@@ -186,7 +187,10 @@ extension WalletSceneViewModel {
     func onBanner(action: BannerAction) {
         switch action.type {
         case .event, .closeBanner:
-            Task { try await handleBanner(action: action) }
+            Task { [weak self] in
+                guard let self else { return }
+                try await handleBanner(action: action)
+            }
         case .button(let bannerButton):
             switch bannerButton {
             case .buy: isPresentingSelectAssetType = .buy
