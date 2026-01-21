@@ -71,5 +71,6 @@ struct PerpetualPortfolioSceneViewModelTests {
         model.selectedChartType = .pnl
         if case .data(let chartModel) = model.chartState {
             #expect(chartModel.signed == true)
+        }
     }
 }
