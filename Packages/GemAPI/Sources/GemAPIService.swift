@@ -95,7 +95,7 @@ public protocol GemAPIRewardsService: Sendable {
 }
 
 public protocol GemAPINotificationService: Sendable {
-    func getNotifications(deviceId: String) async throws -> [Primitives.InAppNotification]
+    func getNotifications(deviceId: String, fromTimestamp: Int) async throws -> [Primitives.InAppNotification]
     func markNotificationsRead(deviceId: String) async throws
 }
 
@@ -380,9 +380,9 @@ extension GemAPIService: GemAPIRewardsService {
 }
 
 extension GemAPIService: GemAPINotificationService {
-    public func getNotifications(deviceId: String) async throws -> [Primitives.InAppNotification] {
+    public func getNotifications(deviceId: String, fromTimestamp: Int) async throws -> [Primitives.InAppNotification] {
         try await provider
-            .request(.getNotifications(deviceId: deviceId))
+            .request(.getNotifications(deviceId: deviceId, fromTimestamp: fromTimestamp))
             .mapResponse(as: [Primitives.InAppNotification].self)
     }
 

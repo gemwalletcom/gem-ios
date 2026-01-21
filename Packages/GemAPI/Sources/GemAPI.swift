@@ -55,7 +55,7 @@ public enum GemAPI: TargetType {
     case getRedemptionOption(code: String)
     case redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>)
 
-    case getNotifications(deviceId: String)
+    case getNotifications(deviceId: String, fromTimestamp: Int)
     case markNotificationsRead(deviceId: String)
 
     public var baseUrl: URL {
@@ -180,8 +180,8 @@ public enum GemAPI: TargetType {
             return "/v1/rewards/redemptions/\(code)"
         case .redeem(let walletId, _):
             return "/v1/rewards/\(walletId)/redeem"
-        case .getNotifications(let deviceId):
-            return "/v1/notifications/\(deviceId)"
+        case .getNotifications(let deviceId, let fromTimestamp):
+            return "/v1/notifications/\(deviceId)?from_timestamp=\(fromTimestamp)"
         case .markNotificationsRead(let deviceId):
             return "/v1/notifications/\(deviceId)/read"
         }
