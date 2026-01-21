@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "لین دین پر دستخط کریں۔";
 "recent_activity.title" = "حالیہ";
 "settings.preferences.app_icon" = "ایپ آئیکن";
-"recent_activity.clear_confirmation" = "کیا آپ واقعی تمام حالیہ کو صاف کرنا چاہتے ہیں؟";
 "rewards.pending.title" = "بونس زیر التواء";
 "rewards.pending.description" = "میں دستیاب ہے۔ %@";
 "rewards.pending.description_ready" = "آپ کا بونس تیار ہے!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "ریفرل کوڈ غیر فعال ہے۔";
 "notifications.inapp.rewards.disabled.subtitle" = "آپ کا ریفرل کوڈ غیر فعال کر دیا گیا ہے۔";
 "rewards.nickname" = "عرفی نام";
+"notifications.inapp.rewards.redeemed.title" = "انعامات بھنائے گئے۔";
+"notifications.inapp.rewards.redeemed.subtitle" = "آپ کے انعامات کو کامیابی کے ساتھ بھنایا گیا ہے۔";
+"notifications.inapp.rewards.create_username.subtitle" = "انعامات حاصل کرنے کے لیے اپنا صارف نام ترتیب دیں۔";
+"notifications.inapp.rewards.invite.subtitle" = "دوستوں کو مدعو کریں اور مل کر انعامات کمائیں۔";
+"nodes.import_node.warning_message" = "حسب ضرورت نوڈس بدنیتی پر مبنی ہو سکتے ہیں اور آپ کے لین دین کے ڈیٹا کو بے نقاب کر سکتے ہیں یا غلط معلومات فراہم کر سکتے ہیں۔";

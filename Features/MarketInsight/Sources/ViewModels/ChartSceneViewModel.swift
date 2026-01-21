@@ -68,14 +68,6 @@ public final class ChartSceneViewModel {
         guard let priceData else { return nil }
         return AssetDetailsInfoViewModel(priceData: priceData)
     }
-    
-    func description(for error: Error) -> String {
-        if isNetworkError(error) {
-            error.localizedDescription
-        } else {
-            Localized.Errors.noDataAvailable
-        }
-    }
 }
 
 // MARK: - Business Logic

@@ -68,7 +68,7 @@ public struct Migrations {
             try PerpetualPositionRecord.create(db: db)
 
             try RecentActivityRecord.create(db: db)
-            try InAppNotificationRecord.create(db: db)
+            try NotificationRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)
     }
@@ -359,8 +359,9 @@ public struct Migrations {
             try? db.drop(table: "nodes_selected_v1")
         }
 
-        migrator.registerMigration("Create \(InAppNotificationRecord.databaseTableName)") { db in
-            try? InAppNotificationRecord.create(db: db)
+        migrator.registerMigration("Create \(NotificationRecord.databaseTableName)") { db in
+            try? db.drop(table: NotificationRecord.databaseTableName)
+            try? NotificationRecord.create(db: db)
         }
 
         migrator.registerMigration("Add allTimeHigh/Low to \(PriceRecord.databaseTableName)") { db in

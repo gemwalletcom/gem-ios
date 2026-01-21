@@ -11,8 +11,6 @@ import PrimitivesComponents
 @MainActor
 @Observable
 public final class AssetPriceDetailsViewModel {
-    let assetId: AssetId
-
     var priceData: PriceData?
     var priceRequest: PriceRequest
 
@@ -22,7 +20,6 @@ public final class AssetPriceDetailsViewModel {
         assetId: AssetId,
         preferences: Preferences = .standard
     ) {
-        self.assetId = assetId
         self.priceRequest = PriceRequest(assetId: assetId)
         self.currencyFormatter = CurrencyFormatter(type: .abbreviated, currencyCode: preferences.currency)
     }

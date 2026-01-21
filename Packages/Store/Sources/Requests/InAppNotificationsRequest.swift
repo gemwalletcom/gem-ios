@@ -7,7 +7,7 @@ import GRDBQuery
 import Primitives
 
 public struct InAppNotificationsRequest: ValueObservationQueryable {
-    public static var defaultValue: [Primitives.Notification] { [] }
+    public static var defaultValue: [Primitives.InAppNotification] { [] }
 
     public var walletId: String
 
@@ -15,10 +15,10 @@ public struct InAppNotificationsRequest: ValueObservationQueryable {
         self.walletId = walletId
     }
 
-    public func fetch(_ db: Database) throws -> [Primitives.Notification] {
-        try InAppNotificationRecord
-            .filter(InAppNotificationRecord.Columns.walletId == walletId)
-            .order(InAppNotificationRecord.Columns.createdAt.desc)
+    public func fetch(_ db: Database) throws -> [Primitives.InAppNotification] {
+        try NotificationRecord
+            .filter(NotificationRecord.Columns.walletId == walletId)
+            .order(NotificationRecord.Columns.createdAt.desc)
             .fetchAll(db)
             .map { $0.mapToNotification() }
     }

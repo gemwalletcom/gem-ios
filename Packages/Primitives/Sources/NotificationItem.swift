@@ -4,16 +4,18 @@
 
 import Foundation
 
-public struct InAppNotification: Codable, Equatable, Sendable {
+public struct Notification: Codable, Equatable, Sendable {
 	public let walletId: String
 	public let readAt: Date?
 	public let createdAt: Date
+	public let asset: Asset?
 	public let item: CoreListItem
 
-	public init(walletId: String, readAt: Date?, createdAt: Date, item: CoreListItem) {
+	public init(walletId: String, readAt: Date?, createdAt: Date, asset: Asset?, item: CoreListItem) {
 		self.walletId = walletId
 		self.readAt = readAt
 		self.createdAt = createdAt
+		self.asset = asset
 		self.item = item
 	}
 }

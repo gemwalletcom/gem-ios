@@ -15,7 +15,7 @@ public final class InAppNotificationsViewModel {
     private let wallet: Wallet
 
     public var request: InAppNotificationsRequest
-    public var notifications: [Primitives.Notification] = []
+    public var notifications: [Primitives.InAppNotification] = []
     public var state: StateViewType<[ListSection<InAppNotificationListItemViewModel>]> = .loading
 
     public init(

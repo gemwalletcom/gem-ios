@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "İmza İşlemi";
 "recent_activity.title" = "Son Haberler";
 "settings.preferences.app_icon" = "Uygulama Simgesi";
-"recent_activity.clear_confirmation" = "Son kullanılanları silmek istediğinizden emin misiniz?";
 "rewards.pending.title" = "Bonus Beklemede";
 "rewards.pending.description" = "Mevcuttur %@";
 "rewards.pending.description_ready" = "Bonusunuz hazır!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Yönlendirme Kodu Devre Dışı Bırakıldı";
 "notifications.inapp.rewards.disabled.subtitle" = "Yönlendirme kodunuz devre dışı bırakıldı.";
 "rewards.nickname" = "Takma ad";
+"notifications.inapp.rewards.redeemed.title" = "Ödüller Alındı";
+"notifications.inapp.rewards.redeemed.subtitle" = "Ödülleriniz başarıyla kullanıldı.";
+"notifications.inapp.rewards.create_username.subtitle" = "Ödüller kazanmak için kullanıcı adınızı oluşturun.";
+"notifications.inapp.rewards.invite.subtitle" = "Arkadaşlarınızı davet edin ve birlikte ödüller kazanın.";
+"nodes.import_node.warning_message" = "Özel düğümler kötü amaçlı olabilir ve işlem verilerinizi ifşa edebilir veya yanlış bilgi sağlayabilir.";

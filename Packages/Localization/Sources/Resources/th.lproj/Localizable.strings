@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "ลงนามในธุรกรรม";
 "recent_activity.title" = "ล่าสุด";
 "settings.preferences.app_icon" = "ไอคอนแอป";
-"recent_activity.clear_confirmation" = "คุณแน่ใจหรือไม่ว่าต้องการล้างรายการล่าสุดทั้งหมด?";
 "rewards.pending.title" = "โบนัสรออนุมัติ";
 "rewards.pending.description" = "มีจำหน่ายใน %@";
 "rewards.pending.description_ready" = "โบนัสของคุณพร้อมแล้ว!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "รหัสอ้างอิงถูกปิดใช้งาน";
 "notifications.inapp.rewards.disabled.subtitle" = "รหัสแนะนำของคุณถูกปิดใช้งานแล้ว";
 "rewards.nickname" = "ชื่อเล่น";
+"notifications.inapp.rewards.redeemed.title" = "รางวัลที่แลกรับ";
+"notifications.inapp.rewards.redeemed.subtitle" = "รางวัลของคุณได้รับการแลกรับเรียบร้อยแล้ว";
+"notifications.inapp.rewards.create_username.subtitle" = "ตั้งชื่อผู้ใช้ของคุณเพื่อรับรางวัล";
+"notifications.inapp.rewards.invite.subtitle" = "ชวนเพื่อนมารับรางวัลด้วยกัน";
+"nodes.import_node.warning_message" = "โหนดที่กำหนดเองอาจเป็นอันตรายและอาจเปิดเผยข้อมูลธุรกรรมของคุณหรือให้ข้อมูลเท็จได้";

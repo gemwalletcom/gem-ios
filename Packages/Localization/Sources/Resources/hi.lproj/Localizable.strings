@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "लेनदेन पर हस्ताक्षर करें";
 "recent_activity.title" = "हाल ही";
 "settings.preferences.app_icon" = "ऐप आइकन";
-"recent_activity.clear_confirmation" = "क्या आप वाकई सभी हालिया पोस्ट मिटाना चाहते हैं?";
 "rewards.pending.title" = "बोनस लंबित है";
 "rewards.pending.description" = "उपलब्ध है %@";
 "rewards.pending.description_ready" = "आपका बोनस तैयार है!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "रेफरल कोड निष्क्रिय";
 "notifications.inapp.rewards.disabled.subtitle" = "आपका रेफरल कोड निष्क्रिय कर दिया गया है।";
 "rewards.nickname" = "उपनाम";
+"notifications.inapp.rewards.redeemed.title" = "भुनाए गए पुरस्कार";
+"notifications.inapp.rewards.redeemed.subtitle" = "आपके पुरस्कार सफलतापूर्वक भुना लिए गए हैं।";
+"notifications.inapp.rewards.create_username.subtitle" = "पुरस्कार अर्जित करने के लिए अपना उपयोगकर्ता नाम सेट करें";
+"notifications.inapp.rewards.invite.subtitle" = "दोस्तों को आमंत्रित करें और साथ मिलकर पुरस्कार जीतें";
+"nodes.import_node.warning_message" = "कस्टम नोड्स दुर्भावनापूर्ण हो सकते हैं और आपके लेनदेन डेटा को उजागर कर सकते हैं या गलत जानकारी प्रदान कर सकते हैं।";

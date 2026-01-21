@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "Podpisz transakcję";
 "recent_activity.title" = "Ostatnie";
 "settings.preferences.app_icon" = "Ikona aplikacji";
-"recent_activity.clear_confirmation" = "Czy na pewno chcesz wyczyścić wszystkie ostatnie?";
 "rewards.pending.title" = "Bonus w toku";
 "rewards.pending.description" = "Dostępne w %@";
 "rewards.pending.description_ready" = "Twój bonus jest gotowy!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Kod polecający wyłączony";
 "notifications.inapp.rewards.disabled.subtitle" = "Twój kod polecający został dezaktywowany";
 "rewards.nickname" = "Przydomek";
+"notifications.inapp.rewards.redeemed.title" = "Nagrody zrealizowane";
+"notifications.inapp.rewards.redeemed.subtitle" = "Twoje nagrody zostały pomyślnie odebrane";
+"notifications.inapp.rewards.create_username.subtitle" = "Ustaw swoją nazwę użytkownika, aby zdobywać nagrody";
+"notifications.inapp.rewards.invite.subtitle" = "Zaproś znajomych i zdobywajcie nagrody razem";
+"nodes.import_node.warning_message" = "Węzły niestandardowe mogą mieć charakter złośliwy i ujawniać dane transakcji lub podawać fałszywe informacje.";

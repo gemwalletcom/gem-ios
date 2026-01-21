@@ -5,13 +5,13 @@ import GemAPI
 import Primitives
 
 public final class GemAPINotificationServiceMock: GemAPINotificationService, @unchecked Sendable {
-    private let notifications: [Primitives.Notification]
+    private let notifications: [Primitives.InAppNotification]
 
-    public init(notifications: [Primitives.Notification] = []) {
+    public init(notifications: [Primitives.InAppNotification] = []) {
         self.notifications = notifications
     }
 
-    public func getNotifications(deviceId: String) async throws -> [Primitives.Notification] {
+    public func getNotifications(deviceId: String) async throws -> [Primitives.InAppNotification] {
         notifications
     }
 

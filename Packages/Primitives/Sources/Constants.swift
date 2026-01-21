@@ -21,8 +21,14 @@ public struct Constants {
     public static let nodesEuropeURL = URL(string: "https://eu.gemnodes.com")!
     public static let nodesAsiaURL = URL(string: "https://asia.gemnodes.com")!
 
-    public static let chatwootURL = URL(string: "https://support.gemwallet.com")!
-    public static let chatwootPublicToken = "21yu9Az48rJHe1rg4poHqLSr"
+    public struct Support {
+        public static let chatwootURL = URL(string: "https://support.gemwallet.com")!
+        public static let chatwootPublicToken = "21yu9Az48rJHe1rg4poHqLSr"
+        public static let domainPolicy = WebViewDomainPolicy(
+            allowedDomains: ["gemwallet.com"],
+            openExternalLinksInSafari: true
+        )
+    }
 
     public static let pricesWebSocketURL = URL(string: "wss://api.gemwallet.com/v1/ws/prices")!
 }

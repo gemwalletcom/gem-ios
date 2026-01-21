@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "Sign Transaction";
 "recent_activity.title" = "Recents";
 "settings.preferences.app_icon" = "App Icon";
-"recent_activity.clear_confirmation" = "Are you sure you want to clear all recents?";
 "rewards.pending.title" = "Bonus Pending";
 "rewards.pending.description" = "Available in %@";
 "rewards.pending.description_ready" = "Your bonus is ready!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Referral Code Disabled";
 "notifications.inapp.rewards.disabled.subtitle" = "Your referral code has been deactivated";
 "rewards.nickname" = "Nickname";
+"notifications.inapp.rewards.redeemed.title" = "Rewards Redeemed";
+"notifications.inapp.rewards.redeemed.subtitle" = "Your rewards have been redeemed successfully";
+"notifications.inapp.rewards.create_username.subtitle" = "Set up your username to earn rewards";
+"notifications.inapp.rewards.invite.subtitle" = "Invite friends and earn rewards together";
+"nodes.import_node.warning_message" = "Custom nodes can be malicious and may expose your transaction data or provide false information.";
