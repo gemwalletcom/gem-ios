@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Code de parrainage désactivé";
 "notifications.inapp.rewards.disabled.subtitle" = "Votre code de parrainage a été désactivé.";
 "rewards.nickname" = "Surnom";
+"notifications.inapp.rewards.redeemed.title" = "Récompenses reçues";
+"notifications.inapp.rewards.redeemed.subtitle" = "Vos récompenses ont été utilisées avec succès.";
+"notifications.inapp.rewards.create_username.subtitle" = "Configurez votre nom d'utilisateur pour gagner des récompenses";
+"notifications.inapp.rewards.invite.subtitle" = "Invitez vos amis et gagnez des récompenses ensemble.";
+"nodes.import_node.warning_message" = "Les nœuds personnalisés peuvent être malveillants et exposer vos données de transaction ou fournir de fausses informations.";

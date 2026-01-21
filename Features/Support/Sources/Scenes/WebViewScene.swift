@@ -5,7 +5,7 @@ import Components
 
 public struct WebViewScene: View {
     @State var model: WebSceneViewModel
-    
+
     public init(url: URL) {
         _model = State(initialValue: WebSceneViewModel(url: url))
     }

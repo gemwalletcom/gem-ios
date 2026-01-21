@@ -11,7 +11,7 @@ public struct InAppNotificationStore: Sendable {
         self.db = db.dbQueue
     }
 
-    public func addNotifications(_ notifications: [(WalletId, Primitives.Notification)]) throws {
+    public func addNotifications(_ notifications: [(WalletId, Primitives.InAppNotification)]) throws {
         try db.write { db in
             for (walletId, notification) in notifications {
                 try notification.record(walletId: walletId).upsert(db)

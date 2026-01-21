@@ -33,9 +33,10 @@ public final class SupportSceneViewModel: Sendable {
     
     var chatwootModel: ChatwootWebViewModel {
         return ChatwootWebViewModel(
-            websiteToken: Constants.chatwootPublicToken,
-            baseUrl: Constants.chatwootURL,
+            websiteToken: Constants.Support.chatwootPublicToken,
+            baseUrl: Constants.Support.chatwootURL,
             supportDeviceId: supportService.getOrCreateSupportDeviceId(),
+            domainPolicy: Constants.Support.domainPolicy,
             isPresentingSupport: isPresentingSupport
         )
     }

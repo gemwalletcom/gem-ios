@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Реферальний код вимкнено";
 "notifications.inapp.rewards.disabled.subtitle" = "Ваш реферальний код деактивовано";
 "rewards.nickname" = "Прізвисько";
+"notifications.inapp.rewards.redeemed.title" = "Винагороду отримано";
+"notifications.inapp.rewards.redeemed.subtitle" = "Ваші винагороди успішно отримано";
+"notifications.inapp.rewards.create_username.subtitle" = "Налаштуйте своє ім'я користувача, щоб отримувати винагороди";
+"notifications.inapp.rewards.invite.subtitle" = "Запрошуйте друзів та отримуйте винагороди разом";
+"nodes.import_node.warning_message" = "Користувацькі вузли можуть бути шкідливими та розкривати дані ваших транзакцій або надавати неправдиву інформацію.";
