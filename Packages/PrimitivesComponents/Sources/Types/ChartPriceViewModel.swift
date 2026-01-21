@@ -12,7 +12,7 @@ public struct ChartPriceViewModel {
     public let date: Date?
     public let price: Double
     public let priceChangePercentage: Double
-    public let signed: Bool
+    public let type: ChartValueType
 
     private let formatter: CurrencyFormatter
 
@@ -22,14 +22,18 @@ public struct ChartPriceViewModel {
         price: Double,
         priceChangePercentage: Double,
         formatter: CurrencyFormatter,
-        signed: Bool = false
+        type: ChartValueType = .price
     ) {
         self.period = period
         self.date = date
         self.price = price
         self.priceChangePercentage = priceChangePercentage
-        self.signed = signed
+        self.type = type
         self.formatter = formatter
+    }
+
+    private var valueChange: PriceChangeViewModel? {
+        type == .priceChange ? PriceChangeViewModel(value: price, currencyFormatter: formatter) : nil
     }
 
     public var dateText: String? {
@@ -47,19 +51,15 @@ public struct ChartPriceViewModel {
     }
 
     public var priceText: String {
-        if signed {
-            let formatted = formatter.string(abs(price))
-            return price >= 0 ? "+\(formatted)" : "-\(formatted)"
-        }
-        return formatter.string(price)
+        valueChange?.text ?? formatter.string(price)
     }
 
     public var priceColor: Color {
-        signed ? PriceChangeColor.color(for: price) : Colors.black
+        valueChange?.color ?? Colors.black
     }
 
     public var priceChangeText: String? {
-        guard !signed, price != 0 else { return nil }
+        guard type == .price, price != 0 else { return nil }
         return CurrencyFormatter.percent.string(priceChangePercentage)
     }
 

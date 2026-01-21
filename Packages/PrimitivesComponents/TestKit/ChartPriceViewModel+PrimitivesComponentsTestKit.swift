@@ -11,7 +11,7 @@ public extension ChartPriceViewModel {
         date: Date? = nil,
         price: Double = 100,
         priceChangePercentage: Double = 5,
-        signed: Bool = false
+        type: ChartValueType = .price
     ) -> ChartPriceViewModel {
         ChartPriceViewModel(
             period: period,
@@ -19,7 +19,7 @@ public extension ChartPriceViewModel {
             price: price,
             priceChangePercentage: priceChangePercentage,
             formatter: CurrencyFormatter(type: .currency, currencyCode: "USD"),
-            signed: signed
+            type: type
         )
     }
 }

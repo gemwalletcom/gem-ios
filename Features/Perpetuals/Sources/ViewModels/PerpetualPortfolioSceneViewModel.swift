@@ -17,9 +17,19 @@ public final class PerpetualPortfolioSceneViewModel {
     private let perpetualService: PerpetualServiceable
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
 
-    var state: StateViewType<PerpetualPortfolio> = .loading
+    var state: StateViewType<PerpetualPortfolio> = .loading {
+        didSet {
+            switch state {
+            case .data(let data): portfolio = data
+            case .error: portfolio = nil
+            case .loading, .noData: break
+            }
+        }
+    }
     var selectedPeriod: ChartPeriod = .day
     var selectedChartType: PortfolioChartType = .value
+
+    private var portfolio: PerpetualPortfolio?
 
     public init(
         wallet: Wallet,
@@ -29,11 +39,14 @@ public final class PerpetualPortfolioSceneViewModel {
         self.perpetualService = perpetualService
     }
 
-    var navigationTitle: String { "Account" }
+    var navigationTitle: String { Localized.Perpetuals.title }
+    var infoSectionTitle: String { Localized.Common.info }
 
     var periods: [ChartPeriod] {
-        guard case .data(let data) = state else { return [.day, .week, .month, .all] }
-        return data.availablePeriods.isEmpty ? [.day, .week, .month, .all] : data.availablePeriods
+        guard let periods = portfolio?.availablePeriods, !periods.isEmpty else {
+            return [.day, .week, .month, .all]
+        }
+        return periods
     }
 
     var chartState: StateViewType<ChartValuesViewModel> {
@@ -66,9 +79,29 @@ public final class PerpetualPortfolioSceneViewModel {
     }
 }
 
+// MARK: - Stats
+
+extension PerpetualPortfolioSceneViewModel {
+    var unrealizedPnlTitle: String { "Unrealized PnL" }
+    var unrealizedPnlValue: TextValue { TextValue(text: unrealizedPnlModel.text ?? "-", style: unrealizedPnlModel.textStyle) }
+
+    var allTimePnlTitle: String { "All Time PnL" }
+    var allTimePnlValue: TextValue { TextValue(text: allTimePnlModel.text ?? "-", style: allTimePnlModel.textStyle) }
+
+    var volumeTitle: String { "Volume" }
+    var volumeText: String { portfolio.map { currencyFormatter.string($0.allTime?.volume ?? 0) } ?? "-" }
+}
+
 // MARK: - Private
 
 extension PerpetualPortfolioSceneViewModel {
+    private var unrealizedPnlModel: PriceChangeViewModel { priceChangeModel(value: portfolio?.day?.pnlHistory.last?.value) }
+    private var allTimePnlModel: PriceChangeViewModel { priceChangeModel(value: portfolio?.allTime?.pnlHistory.last?.value) }
+
+    private func priceChangeModel(value: Double?) -> PriceChangeViewModel {
+        PriceChangeViewModel(value: value, currencyFormatter: currencyFormatter)
+    }
+
     private func chartModel(data: PerpetualPortfolio) -> ChartValuesViewModel? {
         guard let timeframe = data.timeframeData(for: selectedPeriod) else {
             return nil
@@ -93,7 +126,7 @@ extension PerpetualPortfolioSceneViewModel {
             values: values,
             lineColor: Colors.blue,
             formatter: currencyFormatter,
-            signed: true
+            type: .priceChange
         )
     }
 }

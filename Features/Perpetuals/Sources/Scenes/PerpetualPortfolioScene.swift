@@ -36,6 +36,12 @@ public struct PerpetualPortfolioScene: View {
                     }
                 }
                 .cleanListRow()
+
+                Section(header: Text(model.infoSectionTitle)) {
+                    ListItemView(title: model.unrealizedPnlTitle, subtitle: model.unrealizedPnlValue.text, subtitleStyle: model.unrealizedPnlValue.style)
+                    ListItemView(title: model.allTimePnlTitle, subtitle: model.allTimePnlValue.text, subtitleStyle: model.allTimePnlValue.style)
+                    ListItemView(title: model.volumeTitle, subtitle: model.volumeText)
+                }
             }
             .navigationTitle(model.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)

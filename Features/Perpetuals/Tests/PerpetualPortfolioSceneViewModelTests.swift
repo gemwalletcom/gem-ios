@@ -3,6 +3,7 @@
 import Testing
 import Primitives
 import PrimitivesTestKit
+import PrimitivesComponents
 import Components
 import PerpetualsTestKit
 @testable import Perpetuals
@@ -12,7 +13,7 @@ struct PerpetualPortfolioSceneViewModelTests {
     @Test
     @MainActor
     func navigationTitle() {
-        #expect(PerpetualPortfolioSceneViewModel.mock().navigationTitle == "Account")
+        #expect(PerpetualPortfolioSceneViewModel.mock().navigationTitle == "Perpetuals")
     }
 
     @Test
@@ -56,7 +57,7 @@ struct PerpetualPortfolioSceneViewModelTests {
 
     @Test
     @MainActor
-    func chartStateSigned() {
+    func chartStateType() {
         let model = PerpetualPortfolioSceneViewModel.mock()
         model.state = .data(.mock(day: .mock(
             accountValueHistory: PerpetualPortfolioDataPoint.mockHistory(values: [100, 110]),
@@ -65,12 +66,12 @@ struct PerpetualPortfolioSceneViewModelTests {
 
         model.selectedChartType = .value
         if case .data(let chartModel) = model.chartState {
-            #expect(chartModel.signed == true)
+            #expect(chartModel.type == .priceChange)
         }
 
         model.selectedChartType = .pnl
         if case .data(let chartModel) = model.chartState {
-            #expect(chartModel.signed == true)
+            #expect(chartModel.type == .priceChange)
         }
     }
 

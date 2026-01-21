@@ -13,7 +13,7 @@ public struct ChartValuesViewModel: Sendable {
     public let values: ChartValues
     public let lineColor: Color
     public let formatter: CurrencyFormatter
-    public let signed: Bool
+    public let type: ChartValueType
 
     public static let defaultPeriod = ChartPeriod.day
 
@@ -23,14 +23,14 @@ public struct ChartValuesViewModel: Sendable {
         values: ChartValues,
         lineColor: Color = Colors.blue,
         formatter: CurrencyFormatter,
-        signed: Bool = false
+        type: ChartValueType = .price
     ) {
         self.period = period
         self.price = price
         self.values = values
         self.lineColor = lineColor
         self.formatter = formatter
-        self.signed = signed
+        self.type = type
     }
 
     var charts: [ChartDateValue] { values.charts }
@@ -42,11 +42,11 @@ public struct ChartValuesViewModel: Sendable {
         let priceChangePercentage = period == Self.defaultPeriod
             ? price.priceChangePercentage24h
             : values.percentageChange(from: values.baseValue, to: price.price)
-        return ChartPriceViewModel(period: period, date: nil, price: price.price, priceChangePercentage: priceChangePercentage, formatter: formatter, signed: signed)
+        return ChartPriceViewModel(period: period, date: nil, price: price.price, priceChangePercentage: priceChangePercentage, formatter: formatter, type: type)
     }
 
     func priceViewModel(for element: ChartDateValue) -> ChartPriceViewModel {
         let priceChangePercentage = values.percentageChange(from: values.baseValue, to: element.value)
-        return ChartPriceViewModel(period: period, date: element.date, price: element.value, priceChangePercentage: priceChangePercentage, formatter: formatter, signed: signed)
+        return ChartPriceViewModel(period: period, date: element.date, price: element.value, priceChangePercentage: priceChangePercentage, formatter: formatter, type: type)
     }
 }

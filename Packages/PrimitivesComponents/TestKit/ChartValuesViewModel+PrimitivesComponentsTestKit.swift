@@ -12,14 +12,14 @@ public extension ChartValuesViewModel {
         period: ChartPeriod = .day,
         price: Price? = .mock(),
         values: ChartValues = .mock(),
-        signed: Bool = false
+        type: ChartValueType = .price
     ) -> ChartValuesViewModel {
         ChartValuesViewModel(
             period: period,
             price: price,
             values: values,
             formatter: CurrencyFormatter(type: .currency, currencyCode: "USD"),
-            signed: signed
+            type: type
         )
     }
 }
