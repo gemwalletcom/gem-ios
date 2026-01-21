@@ -105,8 +105,8 @@ extension ChainSettingsSceneViewModel {
 
     func onDismissImportNode() {
         isPresentingImportNode = false
-        Task {
-            await fetch()
+        Task { [weak self] in
+            await self?.fetch()
         }
     }
 

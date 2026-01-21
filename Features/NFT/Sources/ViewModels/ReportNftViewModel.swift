@@ -32,7 +32,8 @@ public final class ReportNftViewModel {
 
     func submitReport(reason: String) {
         state = .loading
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 try await nftService.report(
                     collectionId: assetData.collection.id,
