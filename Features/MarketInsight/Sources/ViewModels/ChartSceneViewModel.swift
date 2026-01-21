@@ -35,6 +35,7 @@ public final class ChartSceneViewModel {
     var priceRequest: PriceRequest
 
     public var isPresentingSetPriceAlert: Binding<AssetId?>
+    var isPresentingDetails: AssetId?
 
     var title: String { assetModel.name }
     var emptyTitle: String { Localized.Common.notAvailable }
@@ -111,5 +112,9 @@ extension ChartSceneViewModel {
 
     public func onSelectSetPriceAlerts() {
         isPresentingSetPriceAlert.wrappedValue = assetModel.asset.id
+    }
+
+    public func onSelectPriceDetails() {
+        isPresentingDetails = assetModel.asset.id
     }
 }

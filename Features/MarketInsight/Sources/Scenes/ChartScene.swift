@@ -29,8 +29,8 @@ public struct ChartScene: View {
                             StateEmptyView(title: model.emptyTitle)
                         case .loading:
                             LoadingView()
-                        case .data(let model):
-                            ChartView(model: model)
+                        case .data(let chartModel):
+                            ChartView(model: chartModel, onInfo: model.onSelectPriceDetails)
                         case .error(let error):
                             StateEmptyView(
                                 title: model.errorTitle,
@@ -110,5 +110,13 @@ public struct ChartScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .sheet(item: $model.isPresentingDetails) { assetId in
+            NavigationStack {
+                AssetPriceDetailsView(
+                    model: AssetPriceDetailsViewModel(assetId: assetId)
+                )
+            }
+            .presentationDetentsForCurrentDeviceSize(expandable: true)
+        }
     }
 }

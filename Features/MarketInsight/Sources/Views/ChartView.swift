@@ -7,6 +7,7 @@ import Primitives
 
 struct ChartView: View {
     let model: ChartValuesViewModel
+    let onInfo: VoidAction
 
     static let date = "Date"
     static let value = "Value"
@@ -20,17 +21,27 @@ struct ChartView: View {
     }
 
     init(
-        model: ChartValuesViewModel
+        model: ChartValuesViewModel,
+        onInfo: VoidAction
     ) {
         self.model = model
+        self.onInfo = onInfo
     }
     
     var body: some View {
         VStack {
-            if let selectedValue {
-                ChartPriceView.from(model: selectedValue)
-            } else if let chartPriceModel = model.chartPriceModel {
-                ChartPriceView.from(model: chartPriceModel)
+            if let onInfo {
+                Button(action: onInfo) {
+                    HStack(alignment: .top, spacing: .tiny) {
+                        chartPriceView
+                        Images.System.info
+                            .foregroundStyle(Colors.gray)
+                            .frame(width: .list.image, height: .list.image)
+                            .padding(.top, .extraSmall)
+                    }
+                }
+            } else {
+                chartPriceView
             }
         }
         .padding(.top, .small)
@@ -129,6 +140,15 @@ struct ChartView: View {
         .padding(0)
     }
     
+    @ViewBuilder
+    private var chartPriceView: some View {
+        if let selectedValue {
+            ChartPriceView.from(model: selectedValue)
+        } else if let chartPriceModel = model.chartPriceModel {
+            ChartPriceView.from(model: chartPriceModel)
+        }
+    }
+    
     private func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ChartDateValue? {
         guard let plotFrame = proxy.plotFrame else {
             return .none
@@ -153,7 +173,7 @@ struct ChartView: View {
         return .none
     }
     
-    func calculateX(x: CGFloat, maxWidth: CGFloat, geoWidth: CGFloat) -> CGFloat {
+    private func calculateX(x: CGFloat, maxWidth: CGFloat, geoWidth: CGFloat) -> CGFloat {
         let halfWidth = maxWidth / 2
         if x < halfWidth {
             return x - halfWidth/2
@@ -162,7 +182,7 @@ struct ChartView: View {
         }
     }
     
-    func vibrate() {
+    private func vibrate() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
 }
