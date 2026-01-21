@@ -172,7 +172,7 @@ extension GatewayService {
         }
     }
 
-    public func getPerpetualPortfolio(chain: Primitives.Chain, address: String) async throws -> PerpetualPortfolioChartData {
+    public func getPerpetualPortfolio(chain: Primitives.Chain, address: String) async throws -> PerpetualPortfolio {
         try await gateway.getPerpetualPortfolio(chain: chain.rawValue, address: address).map()
     }
 }

@@ -17,7 +17,7 @@ public final class PerpetualPortfolioSceneViewModel {
     private let perpetualService: PerpetualServiceable
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
 
-    var state: StateViewType<PerpetualPortfolioChartData> = .loading
+    var state: StateViewType<PerpetualPortfolio> = .loading
     var selectedPeriod: ChartPeriod = .day
     var selectedChartType: PortfolioChartType = .value
 
@@ -69,14 +69,15 @@ public final class PerpetualPortfolioSceneViewModel {
 // MARK: - Private
 
 extension PerpetualPortfolioSceneViewModel {
-    private func chartModel(data: PerpetualPortfolioChartData) -> ChartValuesViewModel? {
+    private func chartModel(data: PerpetualPortfolio) -> ChartValuesViewModel? {
         guard let timeframe = data.timeframeData(for: selectedPeriod) else {
             return nil
         }
-        let charts: [ChartDateValue] = switch selectedChartType {
+        let dataPoints: [PerpetualPortfolioDataPoint] = switch selectedChartType {
         case .value: timeframe.accountValueHistory
         case .pnl: timeframe.pnlHistory
         }
+        let charts = dataPoints.map { ChartDateValue(date: $0.date, value: $0.value) }
         guard let values = try? ChartValues.from(charts: charts), values.hasVariation else {
             return nil
         }

@@ -5,8 +5,8 @@ import Gemstone
 import Primitives
 
 extension GemPerpetualPortfolio {
-    public func map() -> PerpetualPortfolioChartData {
-        PerpetualPortfolioChartData(
+    public func map() -> PerpetualPortfolio {
+        PerpetualPortfolio(
             day: day?.map(),
             week: week?.map(),
             month: month?.map(),
@@ -16,8 +16,8 @@ extension GemPerpetualPortfolio {
 }
 
 extension GemPerpetualPortfolioTimeframeData {
-    public func map() -> PerpetualTimeframeChartData {
-        PerpetualTimeframeChartData(
+    public func map() -> PerpetualPortfolioTimeframeData {
+        PerpetualPortfolioTimeframeData(
             accountValueHistory: accountValueHistory.map { $0.map() },
             pnlHistory: pnlHistory.map { $0.map() },
             volume: volume
@@ -26,8 +26,8 @@ extension GemPerpetualPortfolioTimeframeData {
 }
 
 extension GemPerpetualPortfolioDataPoint {
-    public func map() -> ChartDateValue {
-        ChartDateValue(
+    public func map() -> PerpetualPortfolioDataPoint {
+        PerpetualPortfolioDataPoint(
             date: Date(timeIntervalSince1970: TimeInterval(date)),
             value: value
         )

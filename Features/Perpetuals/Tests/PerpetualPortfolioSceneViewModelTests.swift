@@ -47,10 +47,10 @@ struct PerpetualPortfolioSceneViewModelTests {
         model.state = .error(AnyError("test"))
         #expect(model.chartState.isError)
 
-        model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [100, 100, 100]))))
+        model.state = .data(.mock(day: .mock(accountValueHistory: PerpetualPortfolioDataPoint.mockHistory(values: [100, 100, 100]))))
         #expect(model.chartState.isNoData)
 
-        model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [100, 105, 110]))))
+        model.state = .data(.mock(day: .mock(accountValueHistory: PerpetualPortfolioDataPoint.mockHistory(values: [100, 105, 110]))))
         #expect(model.chartState.value != nil)
     }
 
@@ -59,8 +59,8 @@ struct PerpetualPortfolioSceneViewModelTests {
     func chartStateSigned() {
         let model = PerpetualPortfolioSceneViewModel.mock()
         model.state = .data(.mock(day: .mock(
-            accountValueHistory: ChartDateValue.mockHistory(values: [100, 110]),
-            pnlHistory: ChartDateValue.mockHistory(values: [0, 10])
+            accountValueHistory: PerpetualPortfolioDataPoint.mockHistory(values: [100, 110]),
+            pnlHistory: PerpetualPortfolioDataPoint.mockHistory(values: [0, 10])
         )))
 
         model.selectedChartType = .value
@@ -78,14 +78,14 @@ struct PerpetualPortfolioSceneViewModelTests {
     @MainActor
     func valueChangeCalculation() {
         let model = PerpetualPortfolioSceneViewModel.mock()
-        model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [0, 50, 30, 100]))))
+        model.state = .data(.mock(day: .mock(accountValueHistory: PerpetualPortfolioDataPoint.mockHistory(values: [0, 50, 30, 100]))))
 
         if case .data(let chartModel) = model.chartState {
             #expect(chartModel.price?.price == 100)
             #expect(chartModel.price?.priceChangePercentage24h == 0)
         }
 
-        model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [50, 100, 75]))))
+        model.state = .data(.mock(day: .mock(accountValueHistory: PerpetualPortfolioDataPoint.mockHistory(values: [50, 100, 75]))))
         if case .data(let chartModel) = model.chartState {
             #expect(chartModel.price?.price == 25)
             #expect(chartModel.price?.priceChangePercentage24h == 50)

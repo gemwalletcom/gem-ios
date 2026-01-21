@@ -9,7 +9,7 @@ public protocol PerpetualProvidable: Sendable {
     func getPositions(address: String) async throws -> PerpetualPositionsSummary
     func getPerpetualsData() async throws -> [PerpetualData]
     func getCandlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick]
-    func getPortfolio(address: String) async throws -> PerpetualPortfolioChartData
+    func getPortfolio(address: String) async throws -> PerpetualPortfolio
 }
 
 struct GatewayPerpetualProvider: PerpetualProvidable {
@@ -41,7 +41,7 @@ struct GatewayPerpetualProvider: PerpetualProvidable {
         try await gateway.getPerpetualCandlesticks(chain: chain, symbol: symbol, period: period)
     }
 
-    func getPortfolio(address: String) async throws -> PerpetualPortfolioChartData {
+    func getPortfolio(address: String) async throws -> PerpetualPortfolio {
         try await gateway.getPerpetualPortfolio(chain: chain, address: address)
     }
 }
