@@ -92,19 +92,20 @@ extension ConnectionsViewModel {
             return
         }
 
-        Task {
-            await connectURI(uri: content)
+        Task { [weak self] in
+            await self?.connectURI(uri: content)
         }
     }
     
     func onHandleScan(_ result: String) {
-        Task {
-            await connectURI(uri: result)
+        Task { [weak self] in
+            await self?.connectURI(uri: result)
         }
     }
     
     func onSelectDisconnect(_ connection: WalletConnection) {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 try await disconnect(connection: connection)
             } catch {

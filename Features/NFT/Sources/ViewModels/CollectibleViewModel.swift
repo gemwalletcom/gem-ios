@@ -182,7 +182,8 @@ extension CollectibleViewModel {
     }
 
     func onSelectSaveToGallery() {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 try await saveImageToGallery()
                 isPresentingToast = .success(Localized.Nft.saveToPhotos)
@@ -213,7 +214,8 @@ extension CollectibleViewModel {
     }
 
     func onSelectSetAsAvatar() {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 try await setWalletAvatar()
                 isPresentingToast = .success(Localized.Nft.setAsAvatar)

@@ -108,10 +108,10 @@ final class RootSceneViewModel {
 extension RootSceneViewModel {
     func setup() {
         rateService.perform()
-        Task { await checkForUpdate() }
-        Task { try await deviceService.update() }
+        Task { [weak self] in await self?.checkForUpdate() }
+        Task { [weak self] in try await self?.deviceService.update() }
         transactionStateService.setup()
-        Task { await observersService.setup() }
+        Task { [weak self] in await self?.observersService.setup() }
     }
 
     func handleScenePhase(_ phase: ScenePhase) async {
@@ -165,8 +165,8 @@ extension RootSceneViewModel {
         } catch {
             debugLog("RootSceneViewModel setupWallet error: \(error)")
         }
-        Task {
-            await observersService.setupWallet(wallet)
+        Task { [weak self] in
+            await self?.observersService.setupWallet(wallet)
         }
     }
     
@@ -214,8 +214,8 @@ extension RootSceneViewModel {
     }
     
     private func requestPushPermissions() {
-        Task {
-            await onstartWalletService.requestPushPermissions()
+        Task { [weak self] in
+            await self?.onstartWalletService.requestPushPermissions()
         }
     }
 }

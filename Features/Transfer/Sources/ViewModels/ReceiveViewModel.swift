@@ -100,8 +100,8 @@ public final class ReceiveViewModel: Sendable {
 
 extension ReceiveViewModel {
     func onTaskOnce() {
-        Task {
-            await enableAsset()
+        Task { [weak self] in
+            await self?.enableAsset()
         }
     }
 

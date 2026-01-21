@@ -112,7 +112,8 @@ extension WalletSearchSceneViewModel {
         searchModel.tagsViewModel.selectedTag = tag
         searchModel.focus = .tags
         updateRequest()
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             await searchAssets(
                 query: .empty,
                 priorityAssetsQuery: searchModel.priorityAssetsQuery,
@@ -158,7 +159,8 @@ extension WalletSearchSceneViewModel {
     }
 
     func onSelectAddToWallet(_ asset: Asset) {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
             isPresentingToastMessage = .addedToWallet()
         }
