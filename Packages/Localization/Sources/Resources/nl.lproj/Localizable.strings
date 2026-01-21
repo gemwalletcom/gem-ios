@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Verwijzingscode uitgeschakeld";
 "notifications.inapp.rewards.disabled.subtitle" = "Je verwijzingscode is gedeactiveerd.";
 "rewards.nickname" = "Bijnaam";
+"notifications.inapp.rewards.redeemed.title" = "Ingewisselde beloningen";
+"notifications.inapp.rewards.redeemed.subtitle" = "Uw beloningen zijn succesvol verzilverd.";
+"notifications.inapp.rewards.create_username.subtitle" = "Stel je gebruikersnaam in om beloningen te verdienen.";
+"notifications.inapp.rewards.invite.subtitle" = "Nodig vrienden uit en verdien samen beloningen.";
+"nodes.import_node.warning_message" = "Aangepaste nodes kunnen kwaadaardig zijn en uw transactiegegevens blootleggen of valse informatie verstrekken.";

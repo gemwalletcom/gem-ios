@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Cod de recomandare dezactivat";
 "notifications.inapp.rewards.disabled.subtitle" = "Codul tău de recomandare a fost dezactivat";
 "rewards.nickname" = "Poreclă";
+"notifications.inapp.rewards.redeemed.title" = "Recompense răscumpărate";
+"notifications.inapp.rewards.redeemed.subtitle" = "Recompensele tale au fost valorificate cu succes";
+"notifications.inapp.rewards.create_username.subtitle" = "Configurați-vă numele de utilizator pentru a câștiga recompense";
+"notifications.inapp.rewards.invite.subtitle" = "Invită-ți prietenii și câștigă recompense împreună";
+"nodes.import_node.warning_message" = "Nodurile personalizate pot fi rău intenționate și pot expune datele tranzacțiilor sau pot furniza informații false.";

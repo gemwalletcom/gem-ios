@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Hindi Pinagana ang Referral Code";
 "notifications.inapp.rewards.disabled.subtitle" = "Na-deactivate na ang iyong referral code";
 "rewards.nickname" = "Palayaw";
+"notifications.inapp.rewards.redeemed.title" = "Mga Gantimpala na Natubos";
+"notifications.inapp.rewards.redeemed.subtitle" = "Matagumpay na na-redeem ang iyong mga reward";
+"notifications.inapp.rewards.create_username.subtitle" = "I-set up ang iyong username para makakuha ng mga reward";
+"notifications.inapp.rewards.invite.subtitle" = "Mag-imbita ng mga kaibigan at kumita ng mga gantimpala nang sama-sama";
+"nodes.import_node.warning_message" = "Ang mga custom node ay maaaring maging malisyoso at maaaring maglantad ng iyong data ng transaksyon o magbigay ng maling impormasyon.";

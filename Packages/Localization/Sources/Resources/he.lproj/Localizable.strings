@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "קוד הפניה מושבת";
 "notifications.inapp.rewards.disabled.subtitle" = "קוד ההפניה שלך הושבת";
 "rewards.nickname" = "כינוי";
+"notifications.inapp.rewards.redeemed.title" = "תגמולים שנפדו";
+"notifications.inapp.rewards.redeemed.subtitle" = "התגמולים שלך מומשו בהצלחה";
+"notifications.inapp.rewards.create_username.subtitle" = "הגדר את שם המשתמש שלך כדי לצבור פרסים";
+"notifications.inapp.rewards.invite.subtitle" = "הזמינו חברים וצברו יחד פרסים";
+"nodes.import_node.warning_message" = "צמתים מותאמים אישית עלולים להיות זדוניים ולחשוף את נתוני העסקאות שלך או לספק מידע כוזב.";

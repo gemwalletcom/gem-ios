@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Henvisningskode deaktiveret";
 "notifications.inapp.rewards.disabled.subtitle" = "Din henvisningskode er blevet deaktiveret";
 "rewards.nickname" = "Kælenavn";
+"notifications.inapp.rewards.redeemed.title" = "Indløste belønninger";
+"notifications.inapp.rewards.redeemed.subtitle" = "Dine belønninger er blevet indløst";
+"notifications.inapp.rewards.create_username.subtitle" = "Opret dit brugernavn for at optjene belønninger";
+"notifications.inapp.rewards.invite.subtitle" = "Inviter venner og optjen belønninger sammen";
+"nodes.import_node.warning_message" = "Brugerdefinerede noder kan være skadelige og kan eksponere dine transaktionsdata eller give falske oplysninger.";

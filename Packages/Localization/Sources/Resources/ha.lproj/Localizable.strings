@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "An kashe Lambar Tukuitawa";
 "notifications.inapp.rewards.disabled.subtitle" = "An kashe lambar tura ku";
 "rewards.nickname" = "Laƙabi";
+"notifications.inapp.rewards.redeemed.title" = "Lada da aka fanshe";
+"notifications.inapp.rewards.redeemed.subtitle" = "An yi nasarar fansar ladaran ku";
+"notifications.inapp.rewards.create_username.subtitle" = "Saita sunan mai amfani don samun lada";
+"notifications.inapp.rewards.invite.subtitle" = "Gayyaci abokai kuma ku sami lada tare";
+"nodes.import_node.warning_message" = "Maɓallan da aka keɓance na iya zama masu cutarwa kuma suna iya fallasa bayanan ma'amalar ku ko kuma samar da bayanan karya.";

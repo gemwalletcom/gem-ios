@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Código de indicação desativado";
 "notifications.inapp.rewards.disabled.subtitle" = "Seu código de indicação foi desativado.";
 "rewards.nickname" = "Apelido";
+"notifications.inapp.rewards.redeemed.title" = "Recompensas Resgatadas";
+"notifications.inapp.rewards.redeemed.subtitle" = "Suas recompensas foram resgatadas com sucesso.";
+"notifications.inapp.rewards.create_username.subtitle" = "Configure seu nome de usuário para ganhar recompensas.";
+"notifications.inapp.rewards.invite.subtitle" = "Convide amigos e ganhem recompensas juntos.";
+"nodes.import_node.warning_message" = "Nós personalizados podem ser maliciosos e expor seus dados de transação ou fornecer informações falsas.";

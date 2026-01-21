@@ -9,6 +9,7 @@ import ChainService
 import NodeService
 import PrimitivesComponents
 import Validators
+import Style
 
 @MainActor
 @Observable
@@ -37,6 +38,21 @@ public final class AddNodeSceneViewModel {
 
     public var errorTitle: String { Localized.Errors.errorOccured }
     public var chainModel: ChainViewModel { ChainViewModel(chain: chain) }
+
+    public var warningModel: ListItemModel {
+        ListItemModel(
+            title: Localized.Asset.Verification.warningTitle,
+            titleStyle: .headline,
+            titleExtra: Localized.Nodes.ImportNode.warningMessage,
+            titleStyleExtra: .bodySecondary,
+            imageStyle: ListItemImageStyle(
+                assetImage: AssetImage(type: Emoji.WalletAvatar.warning.rawValue),
+                imageSize: .image.semiMedium,
+                alignment: .top,
+                cornerRadiusType: .none
+            )
+        )
+    }
 }
 
 // MARK: - Business Logic

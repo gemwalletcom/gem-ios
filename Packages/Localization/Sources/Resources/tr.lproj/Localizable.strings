@@ -561,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Yönlendirme Kodu Devre Dışı Bırakıldı";
 "notifications.inapp.rewards.disabled.subtitle" = "Yönlendirme kodunuz devre dışı bırakıldı.";
 "rewards.nickname" = "Takma ad";
+"notifications.inapp.rewards.redeemed.title" = "Ödüller Alındı";
+"notifications.inapp.rewards.redeemed.subtitle" = "Ödülleriniz başarıyla kullanıldı.";
+"notifications.inapp.rewards.create_username.subtitle" = "Ödüller kazanmak için kullanıcı adınızı oluşturun.";
+"notifications.inapp.rewards.invite.subtitle" = "Arkadaşlarınızı davet edin ve birlikte ödüller kazanın.";
+"nodes.import_node.warning_message" = "Özel düğümler kötü amaçlı olabilir ve işlem verilerinizi ifşa edebilir veya yanlış bilgi sağlayabilir.";
