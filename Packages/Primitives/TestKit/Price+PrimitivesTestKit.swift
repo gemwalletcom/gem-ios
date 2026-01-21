@@ -5,8 +5,8 @@ import Primitives
 
 public extension Price {
     static func mock(
-        price: Double = 1.5,
-        priceChangePercentage24h: Double = .zero,
+        price: Double = 100,
+        priceChangePercentage24h: Double = 5,
         updatedAt: Date = .now
     ) -> Price {
         Price(
