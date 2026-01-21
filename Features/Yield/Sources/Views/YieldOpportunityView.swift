@@ -40,7 +40,7 @@ public struct YieldOpportunityView: View {
 
                 if model.hasApy {
                     VStack(alignment: .trailing, spacing: Spacing.tiny) {
-                        Text("APY")
+                        Text("APR")
                             .font(.caption)
                             .foregroundStyle(Colors.gray)
 
