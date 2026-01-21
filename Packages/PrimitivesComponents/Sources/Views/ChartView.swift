@@ -5,28 +5,39 @@ import Style
 import Charts
 import Primitives
 
-private struct ChartKey {
-    static let date = "Date"
-    static let value = "Value"
-}
-
 public struct ChartView: View {
+    private enum ChartKey {
+        static let date = "Date"
+        static let value = "Value"
+    }
+
+    private enum Metrics {
+        static let lineWidth: CGFloat = 2.5
+        static let selectionDotSize: CGFloat = 12
+        static let labelWidth: CGFloat = 88
+    }
+
     private let model: ChartValuesViewModel
 
-    @State private var selectedValue: ChartPriceViewModel? {
-        didSet {
-            if let selectedValue, selectedValue.date != oldValue?.date {
-                vibrate()
-            }
-        }
-    }
+    @State private var selectedValue: ChartPriceViewModel?
 
     public init(model: ChartValuesViewModel) {
         self.model = model
     }
 
     public var body: some View {
-        VStack {
+        VStack(spacing: 0) {
+            priceHeader
+            chart
+        }
+    }
+}
+
+// MARK: - UI
+
+extension ChartView {
+    private var priceHeader: some View {
+        Group {
             if let selectedValue {
                 ChartPriceView(model: selectedValue)
             } else if let chartPriceViewModel = model.chartPriceViewModel {
@@ -35,49 +46,75 @@ public struct ChartView: View {
         }
         .padding(.top, Spacing.small)
         .padding(.bottom, Spacing.tiny)
+    }
 
+    private var chart: some View {
         Chart {
             ForEach(model.charts, id: \.date) { item in
+                AreaMark(
+                    x: .value(ChartKey.date, item.date),
+                    y: .value(ChartKey.value, item.value)
+                )
+                .interpolationMethod(.catmullRom)
+                .foregroundStyle(areaGradient)
+                .alignsMarkStylesWithPlotArea()
+
                 LineMark(
                     x: .value(ChartKey.date, item.date),
                     y: .value(ChartKey.value, item.value)
                 )
-                .lineStyle(StrokeStyle(lineWidth: 3))
+                .lineStyle(StrokeStyle(lineWidth: Metrics.lineWidth, lineCap: .round, lineJoin: .round))
                 .foregroundStyle(model.lineColor)
-                .interpolationMethod(.cardinal)
+                .interpolationMethod(.catmullRom)
             }
-            if let selectedValue, let date = selectedValue.date {
-                PointMark(
-                    x: .value(ChartKey.date, date),
-                    y: .value(ChartKey.value, selectedValue.price)
-                )
-                .symbol {
-                    Circle()
-                        .strokeBorder(model.lineColor, lineWidth: 2)
-                        .background(Circle().foregroundColor(Colors.white))
-                        .frame(width: 12)
-                }
-                .foregroundStyle(model.lineColor)
 
+            if let selectedValue, let date = selectedValue.date {
                 RuleMark(x: .value(ChartKey.date, date))
-                    .foregroundStyle(model.lineColor)
-                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                    .foregroundStyle(model.lineColor.opacity(0.5))
+                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+
+                PointMark(x: .value(ChartKey.date, date), y: .value(ChartKey.value, selectedValue.price))
+                    .symbol {
+                        Circle()
+                            .fill(
+                                RadialGradient(
+                                    colors: [Colors.white, model.lineColor.opacity(0.8)],
+                                    center: .center,
+                                    startRadius: 0,
+                                    endRadius: Metrics.selectionDotSize / 2
+                                )
+                            )
+                            .frame(width: Metrics.selectionDotSize, height: Metrics.selectionDotSize)
+                            .shadow(color: model.lineColor.opacity(0.6), radius: 6)
+                            .overlay(Circle().strokeBorder(model.lineColor, lineWidth: Metrics.lineWidth))
+                    }
             }
         }
-        .chartOverlay { (proxy: ChartProxy) in
+        .chartOverlay { proxy in
             GeometryReader { geometry in
-                Rectangle().fill(.clear).contentShape(Rectangle())
+                Rectangle()
+                    .fill(.clear)
+                    .contentShape(Rectangle())
                     .gesture(
                         DragGesture(minimumDistance: 0)
                             .onChanged { value in
-                                if let element = findElement(location: value.location, proxy: proxy, geometry: geometry) {
-                                    selectedValue = model.priceViewModel(for: element)
-                                }
+                                onDragChange(location: value.location, proxy: proxy, geometry: geometry)
                             }
                             .onEnded { _ in
-                                selectedValue = nil
+                                onDragEnd()
                             }
                     )
+
+                if let lastPoint = model.charts.last,
+                   let plotFrame = proxy.plotFrame,
+                   let xPos = proxy.position(forX: lastPoint.date),
+                   let yPos = proxy.position(forY: lastPoint.value) {
+                    let origin = geometry[plotFrame].origin
+                    PulsingDotView(color: model.lineColor)
+                        .position(x: origin.x + xPos, y: origin.y + yPos)
+                        .opacity(selectedValue == nil ? 1 : 0)
+                        .animation(.easeInOut(duration: 0.2), value: selectedValue == nil)
+                }
             }
         }
         .padding(.vertical, Spacing.large)
@@ -86,72 +123,72 @@ public struct ChartView: View {
         .chartYScale(domain: model.values.yScale)
         .chartXScale(domain: model.values.xScale)
         .chartBackground { proxy in
-            ZStack(alignment: .topLeading) {
-                GeometryReader { geo in
-                    let maxWidth = 88.0
+            GeometryReader { geometry in
+                if let plotFrame = proxy.plotFrame {
+                    let chartBounds = geometry[plotFrame]
 
-                    if let plotFrame = proxy.plotFrame {
-                        let chartBounds = geo[plotFrame]
+                    if let lowerBoundX = proxy.position(forX: model.values.lowerBoundDate) {
+                        boundLabel(model.lowerBoundValueText)
+                            .offset(x: labelX(lowerBoundX, geoWidth: geometry.size.width), y: chartBounds.maxY + Spacing.small)
+                    }
 
-                        if let lowerBoundX = proxy.position(forX: model.values.lowerBoundDate) {
-                            let x = calculateX(x: lowerBoundX, maxWidth: maxWidth, geoWidth: geo.size.width)
-                            Text(model.lowerBoundValueText)
-                                .font(.caption2)
-                                .foregroundColor(Colors.gray)
-                                .frame(width: maxWidth)
-                                .offset(x: x, y: chartBounds.maxY + Spacing.small)
-                        }
-
-                        if let upperBoundX = proxy.position(forX: model.values.upperBoundDate) {
-                            let x = calculateX(x: upperBoundX, maxWidth: maxWidth, geoWidth: geo.size.width)
-                            Text(model.upperBoundValueText)
-                                .font(.caption2)
-                                .foregroundColor(Colors.gray)
-                                .frame(width: maxWidth)
-                                .offset(x: x, y: chartBounds.minY - Spacing.large)
-                        }
+                    if let upperBoundX = proxy.position(forX: model.values.upperBoundDate) {
+                        boundLabel(model.upperBoundValueText)
+                            .offset(x: labelX(upperBoundX, geoWidth: geometry.size.width), y: chartBounds.minY - Spacing.large)
                     }
                 }
             }
         }
-        .padding(0)
+    }
+
+    private var areaGradient: LinearGradient {
+        .linearGradient(
+            stops: [
+                .init(color: model.lineColor.opacity(0.45), location: 0),
+                .init(color: model.lineColor.opacity(0.38), location: 0.25),
+                .init(color: model.lineColor.opacity(0.28), location: 0.5),
+                .init(color: model.lineColor.opacity(0.15), location: 0.75),
+                .init(color: model.lineColor.opacity(0.05), location: 0.92),
+                .init(color: model.lineColor.opacity(0), location: 1.0)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+
+    private func boundLabel(_ text: String) -> some View {
+        Text(text)
+            .font(.caption2)
+            .foregroundStyle(Colors.gray)
+            .frame(width: Metrics.labelWidth)
+    }
+
+    private func labelX(_ x: CGFloat, geoWidth: CGFloat) -> CGFloat {
+        let half = Metrics.labelWidth / 2
+        return x < half ? x - half / 2 : min(x - half, geoWidth - Metrics.labelWidth)
     }
 }
 
-// MARK: - Private
+// MARK: - Actions
 
 extension ChartView {
-    private func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ChartDateValue? {
-        guard let plotFrame = proxy.plotFrame else { return nil }
-        let relativeXPosition = location.x - geometry[plotFrame].origin.x
+    private func onDragChange(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) {
+        guard let plotFrame = proxy.plotFrame else { return }
 
-        if let date = proxy.value(atX: relativeXPosition) as Date? {
-            var minDistance: TimeInterval = .infinity
-            var dataIndex: Int?
-            for (index, _) in model.charts.enumerated() {
-                let nthSalesDataDistance = model.charts[index].date.distance(to: date)
-                if abs(nthSalesDataDistance) < minDistance {
-                    minDistance = abs(nthSalesDataDistance)
-                    dataIndex = index
-                }
-            }
-            if let dataIndex {
-                return model.charts[dataIndex]
-            }
+        let relativeX = location.x - geometry[plotFrame].origin.x
+        guard let targetDate = proxy.value(atX: relativeX) as Date?,
+              let element = model.charts.min(by: { abs($0.date.distance(to: targetDate)) < abs($1.date.distance(to: targetDate)) }) else {
+            return
         }
-        return nil
+
+        let newValue = model.priceViewModel(for: element)
+        if newValue.date != selectedValue?.date {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+        selectedValue = newValue
     }
 
-    private func calculateX(x: CGFloat, maxWidth: CGFloat, geoWidth: CGFloat) -> CGFloat {
-        let halfWidth = maxWidth / 2
-        if x < halfWidth {
-            return x - halfWidth / 2
-        } else {
-            return min(x - halfWidth, geoWidth - maxWidth)
-        }
-    }
-
-    private func vibrate() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+    private func onDragEnd() {
+        selectedValue = nil
     }
 }
