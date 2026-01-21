@@ -47,7 +47,7 @@ extension WalletConnectionRecord: CreateTable {
             $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
-                .references(WalletRecord.databaseTableName, onDelete: .cascade)
+                .references(WalletRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.state.name, .text)
                 .notNull()
             $0.column(Columns.chains.name, .jsonText)

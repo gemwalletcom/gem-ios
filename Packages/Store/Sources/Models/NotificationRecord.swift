@@ -30,7 +30,7 @@ extension NotificationRecord: CreateTable {
             $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
-                .references(WalletRecord.databaseTableName, onDelete: .cascade)
+                .references(WalletRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.readAt.name, .date)
             $0.column(Columns.createdAt.name, .date)
                 .notNull()
