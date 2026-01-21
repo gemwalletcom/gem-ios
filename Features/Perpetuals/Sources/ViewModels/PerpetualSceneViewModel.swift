@@ -41,8 +41,8 @@ public final class PerpetualSceneViewModel {
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .day {
         didSet {
-            Task { [weak self] in
-                await self?.fetchCandlesticks()
+            Task {
+                await fetchCandlesticks()
             }
         }
     }
@@ -119,15 +119,13 @@ public final class PerpetualSceneViewModel {
     }
 
     public func fetch() {
-        Task { [weak self] in
-            await self?.fetchCandlesticks()
+        Task {
+            await fetchCandlesticks()
         }
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             try await perpetualService.updateMarket(symbol: perpetual.name)
         }
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             do {
                 try await perpetualService.updatePositions(wallet: wallet)
             } catch {

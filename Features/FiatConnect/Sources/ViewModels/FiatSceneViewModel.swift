@@ -177,8 +177,7 @@ extension FiatSceneViewModel {
     func onSelectContinue() {
         guard let selectedQuote = currentViewModel.selectedQuote else { return }
 
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             urlState = .loading
 
             do {

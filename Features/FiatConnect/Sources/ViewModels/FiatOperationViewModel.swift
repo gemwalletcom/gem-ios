@@ -78,8 +78,7 @@ final class FiatOperationViewModel {
         fetchTask?.cancel()
         loadingAmount = amount
 
-        fetchTask = Task { [weak self] in
-            guard let self else { return }
+        fetchTask = Task {
             setLoadingState()
             selectedQuote = nil
 

@@ -124,8 +124,7 @@ extension WalletDetailViewModel {
     }
 
     func onShowSecretPhrase() {
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             do {
                 isPresentingExportWallet = .words(try await getMnemonicWords())
             } catch {
@@ -135,8 +134,7 @@ extension WalletDetailViewModel {
     }
 
     func onShowPrivateKey() {
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             do {
                 isPresentingExportWallet = .privateKey(try await getPrivateKey())
             } catch {

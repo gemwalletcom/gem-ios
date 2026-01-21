@@ -206,16 +206,15 @@ public final class AssetSceneViewModel: Sendable {
 
 extension AssetSceneViewModel {
     func fetchOnce() {
-        Task { [weak self] in
-            await self?.fetch()
+        Task {
+            await fetch()
         }
-        Task { [weak self] in
-            await self?.updateAsset()
+        Task {
+            await updateAsset()
         }
 
         if assetData.priceAlerts.isNotEmpty {
-            Task { [weak self] in
-                guard let self else { return }
+            Task {
                 try await priceAlertService.update(assetId: asset.id.identifier)
             }
         }
@@ -271,8 +270,7 @@ extension AssetSceneViewModel {
                     .accountActivation,
                     .accountBlockedMultiSignature,
                     .onboarding:
-                Task { [weak self] in
-                    guard let self else { return }
+                Task {
                     try await bannerService.handleAction(action)
                 }
             case .suspiciousAsset: break
@@ -286,8 +284,7 @@ extension AssetSceneViewModel {
             case .receive: onSelectHeader(.receive)
             }
         case .closeBanner:
-            Task { [weak self] in
-                guard let self else { return }
+            Task {
                 try await bannerService.handleAction(action)
             }
         }
@@ -311,8 +308,7 @@ extension AssetSceneViewModel {
     }
 
     public func onTogglePriceAlert() {
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             let enabled = !assetData.isPriceAlertsEnabled
             isPresentingToastMessage = .priceAlert(for: assetData.asset.name, enabled: enabled)
             if enabled {
@@ -345,8 +341,7 @@ extension AssetSceneViewModel {
     }
 
     public func onSelectEnable() {
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             let enabled = !assetData.metadata.isBalanceEnabled
             isPresentingToastMessage = .showAsset(visible: enabled)
             await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: enabled)
@@ -426,12 +421,10 @@ extension AssetSceneViewModel {
             debugLog("asset scene: updateAsset error \(error)")
         }
 
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             do {
                 try await priceObserverService.addAssets(assets: [assetModel.asset.id])
             } catch {
-                // TODO: - handle priceObserverService.addAssets error
                 debugLog("asset scene: priceObserverService.addAssets error \(error)")
             }
         }

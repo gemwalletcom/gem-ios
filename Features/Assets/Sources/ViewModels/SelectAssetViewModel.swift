@@ -215,8 +215,8 @@ extension SelectAssetViewModel {
     func selectAsset(asset: Asset) {
         switch selectType {
         case .priceAlert:
-            Task { [weak self] in
-                await self?.setPriceAlert(assetId: asset.id, enabled: true)
+            Task {
+                await setPriceAlert(assetId: asset.id, enabled: true)
             }
         case .manage, .send, .receive, .buy, .swap, .deposit, .withdraw: break
         }
@@ -248,8 +248,7 @@ extension SelectAssetViewModel {
         searchModel.tagsViewModel.selectedTag = tag
         searchModel.focus = .tags
         updateRequest()
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             await searchAssets(
                 query: .empty,
                 priorityAssetsQuery: searchModel.priorityAssetsQuery,
@@ -283,8 +282,8 @@ extension SelectAssetViewModel {
         let asset = assetData.asset
         switch action {
         case .switcher(let enabled):
-            Task { [weak self] in
-                await self?.handleAction(assetId: asset.id, enabled: enabled)
+            Task {
+                await handleAction(assetId: asset.id, enabled: enabled)
             }
         case .copy:
             let address = assetData.account.address
@@ -293,8 +292,8 @@ extension SelectAssetViewModel {
                 copyValue: address
             )
             isPresentingCopyToast = true
-            Task { [weak self] in
-                await self?.handleAction(assetId: asset.id, enabled: true)
+            Task {
+                await handleAction(assetId: asset.id, enabled: true)
             }
         }
     }

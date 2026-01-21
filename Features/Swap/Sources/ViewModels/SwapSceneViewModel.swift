@@ -175,8 +175,7 @@ extension SwapSceneViewModel {
             selectedSwapQuote = nil
         }
         
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             let assetIds = [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
             try await walletsService.addPrices(assetIds: assetIds)
         }
@@ -310,8 +309,7 @@ extension SwapSceneViewModel {
             return
         }
 
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             do {
                 swapState.swapTransferData = .loading
                 let data = try await swapQuoteDataProvider.fetchQuoteData(wallet: wallet, quote: quote)

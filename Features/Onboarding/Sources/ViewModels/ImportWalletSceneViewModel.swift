@@ -115,8 +115,7 @@ extension ImportWalletSceneViewModel {
     func onSelectActionButton() {
         buttonState = .loading(showProgress: true)
 
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             do {
                 try await importWallet()
             } catch {

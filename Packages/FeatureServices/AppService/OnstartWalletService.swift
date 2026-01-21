@@ -31,8 +31,7 @@ public final class OnstartWalletService: Sendable {
     }
 
     public func setup(wallet: Wallet) {
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             try bannerSetupService.setupWallet(wallet: wallet)
             await runAddressStatusCheck(wallet)
         }

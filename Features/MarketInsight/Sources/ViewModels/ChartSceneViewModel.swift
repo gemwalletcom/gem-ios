@@ -27,7 +27,7 @@ public final class ChartSceneViewModel {
     var state: StateViewType<ChartValuesViewModel> = .loading
     var currentPeriod: ChartPeriod {
         didSet {
-            Task { [weak self] in await self?.fetch() }
+            Task { await fetch() }
         }
     }
 

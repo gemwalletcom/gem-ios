@@ -176,8 +176,8 @@ public final class RewardsViewModel: Sendable {
             code: code
         ) { [weak self] _ in
             guard let self else { return }
-            self.showActivatedToast()
-            Task { [weak self] in await self?.fetch() }
+            showActivatedToast()
+            Task { await self.fetch() }
         }
     }
 
@@ -185,7 +185,7 @@ public final class RewardsViewModel: Sendable {
 
     func selectWallet(_ wallet: Wallet) {
         selectedWallet = wallet
-        Task { [weak self] in await self?.fetch(wallet: wallet) }
+        Task { await fetch(wallet: wallet) }
     }
 
     func fetch() async {
@@ -243,8 +243,7 @@ public final class RewardsViewModel: Sendable {
             let result = try await rewardsService.redeem(wallet: selectedWallet, redemptionId: option.id)
             toastMessage = ToastMessage.success(Localized.Common.done)
             if let asset = result.redemption.option.asset {
-                Task { [weak self] in
-                    guard let self else { return }
+                Task {
                     await assetsEnabler.enableAssetId(walletId: selectedWallet.walletId, assetId: asset.id)
                 }
             }
