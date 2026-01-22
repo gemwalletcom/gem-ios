@@ -572,3 +572,11 @@
 "info.total_supply.description" = "लॉक किए गए या आरक्षित सिक्कों सहित, मौजूद सिक्कों की कुल संख्या।";
 "info.max_supply.title" = "अधिकतम आपूर्ति";
 "info.max_supply.description" = "कुल मिलाकर मौजूद सिक्कों की अधिकतम संख्या।";
+"perpetual.value" = "कीमत";
+"perpetual.unrealized_pnl" = "अवास्तविक लाभ-हानि";
+"perpetual.volume" = "आयतन";
+"perpetual.all_time_pnl" = "सर्वकालिक लाभ एवं हानि";
+"perpetual.margin_usage" = "मार्जिन उपयोग";
+"perpetual.account_leverage" = "खाता उत्तोलन";
+"asset.all_time_high" = "सर्वकालिक उच्च";
+"asset.all_time_low" = "सबसे कम";

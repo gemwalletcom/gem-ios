@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Tổng số lượng tiền xu hiện có, bao gồm cả tiền xu bị khóa hoặc được giữ lại.";
 "info.max_supply.title" = "Cung cấp tối đa";
 "info.max_supply.description" = "Số lượng tối đa các đồng xu sẽ từng tồn tại.";
+"perpetual.value" = "Giá trị";
+"perpetual.unrealized_pnl" = "Lợi nhuận và lỗ chưa thực hiện";
+"perpetual.volume" = "Âm lượng";
+"perpetual.all_time_pnl" = "Lợi nhuận và thua lỗ mọi thời đại";
+"perpetual.margin_usage" = "Sử dụng lề";
+"perpetual.account_leverage" = "Tận dụng tài khoản";
+"asset.all_time_high" = "Mức cao nhất mọi thời đại";
+"asset.all_time_low" = "Mức thấp nhất mọi thời đại";

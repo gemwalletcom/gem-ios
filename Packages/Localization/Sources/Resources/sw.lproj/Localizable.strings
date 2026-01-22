@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Jumla ya sarafu zilizopo, ikijumuisha sarafu zilizofungwa au zilizohifadhiwa.";
 "info.max_supply.title" = "Ugavi wa Juu Zaidi";
 "info.max_supply.description" = "Idadi ya juu zaidi ya sarafu zitakazokuwepo.";
+"perpetual.value" = "Thamani";
+"perpetual.unrealized_pnl" = "PnL Isiyotekelezwa";
+"perpetual.volume" = "Kiasi";
+"perpetual.all_time_pnl" = "PnL ya Wakati Wote";
+"perpetual.margin_usage" = "Matumizi ya Pambizo";
+"perpetual.account_leverage" = "Ufaidi wa Akaunti";
+"asset.all_time_high" = "Wakati Wote Juu";
+"asset.all_time_low" = "Chini Wakati Wote";

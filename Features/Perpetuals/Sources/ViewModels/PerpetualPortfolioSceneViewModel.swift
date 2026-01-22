@@ -60,8 +60,8 @@ public final class PerpetualPortfolioSceneViewModel {
 
     func chartTypeTitle(_ type: PortfolioChartType) -> String {
         switch type {
-        case .value: "Value"
-        case .pnl: "PnL"
+        case .value: Localized.Perpetual.value
+        case .pnl: Localized.Perpetual.pnl
         }
     }
 
@@ -82,13 +82,13 @@ public final class PerpetualPortfolioSceneViewModel {
 // MARK: - Stats
 
 extension PerpetualPortfolioSceneViewModel {
-    var unrealizedPnlTitle: String { "Unrealized PnL" }
+    var unrealizedPnlTitle: String { Localized.Perpetual.unrealizedPnl }
     var unrealizedPnlValue: TextValue { TextValue(text: unrealizedPnlModel.text ?? "-", style: unrealizedPnlModel.textStyle) }
 
-    var allTimePnlTitle: String { "All Time PnL" }
+    var allTimePnlTitle: String { Localized.Perpetual.allTimePnl }
     var allTimePnlValue: TextValue { TextValue(text: allTimePnlModel.text ?? "-", style: allTimePnlModel.textStyle) }
 
-    var volumeTitle: String { "Volume" }
+    var volumeTitle: String { Localized.Perpetual.volume }
     var volumeText: String { portfolio.map { currencyFormatter.string($0.allTime?.volume ?? 0) } ?? "-" }
 }
 

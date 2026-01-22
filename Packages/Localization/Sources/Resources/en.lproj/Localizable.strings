@@ -572,5 +572,11 @@
 "info.total_supply.description" = "The total number of coins that exist, including locked or reserved coins.";
 "info.max_supply.title" = "Max Supply";
 "info.max_supply.description" = "The maximum number of coins that will ever exist.";
+"perpetual.value" = "Value";
+"perpetual.unrealized_pnl" = "Unrealized PnL";
+"perpetual.volume" = "Volume";
+"perpetual.all_time_pnl" = "All Time PnL";
+"perpetual.margin_usage" = "Margin Usage";
+"perpetual.account_leverage" = "Account Leverage";
 "asset.all_time_high" = "All Time High";
 "asset.all_time_low" = "All Time Low";

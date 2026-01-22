@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Ang kabuuang bilang ng mga barya na umiiral, kabilang ang mga naka-lock o nakareserbang barya.";
 "info.max_supply.title" = "Pinakamataas na Suplay";
 "info.max_supply.description" = "Ang pinakamataas na bilang ng mga barya na iiral kailanman.";
+"perpetual.value" = "Halaga";
+"perpetual.unrealized_pnl" = "Hindi Natanto na PnL";
+"perpetual.volume" = "Dami";
+"perpetual.all_time_pnl" = "All Time PnL";
+"perpetual.margin_usage" = "Paggamit ng Margin";
+"perpetual.account_leverage" = "Leverage ng Account";
+"asset.all_time_high" = "Mataas sa Lahat ng Panahon";
+"asset.all_time_low" = "Mababa sa Lahat ng Panahon";
