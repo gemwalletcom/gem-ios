@@ -46,6 +46,6 @@ public struct PerpetualProviderMock: PerpetualProvidable {
     }
 
     public func getPortfolio(address: String) async throws -> PerpetualPortfolio {
-        PerpetualPortfolio(day: nil, week: nil, month: nil, allTime: nil)
+        PerpetualPortfolio(day: nil, week: nil, month: nil, allTime: nil, accountSummary: nil)
     }
 }
