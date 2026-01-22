@@ -38,16 +38,41 @@ struct WalletSceneViewModelTests {
         #expect(model.walletBannersModel.allBanners.first?.state == .alwaysActive)
     }
 
+    @Test
+    func onChangeWalletUpdatesImageUrl() {
+        let wallet = Wallet.mock(id: "1", imageUrl: nil)
+        let model = WalletSceneViewModel.mock(wallet: wallet)
+
+        #expect(model.wallet.imageUrl == nil)
+
+        let updatedWallet = Wallet.mock(id: "1", imageUrl: "avatar.png")
+        model.onChangeWallet(wallet, updatedWallet)
+
+        #expect(model.wallet.imageUrl == "avatar.png")
+    }
+
+    @Test
+    func onChangeWalletSwitchesToDifferentWallet() {
+        let wallet = Wallet.mock(id: "1", name: "Wallet 1")
+        let model = WalletSceneViewModel.mock(wallet: wallet)
+
+        #expect(model.wallet.id == "1")
+
+        let newWallet = Wallet.mock(id: "2", name: "Wallet 2")
+        model.onChangeWallet(wallet, newWallet)
+
+        #expect(model.wallet.id == "2")
+    }
 }
 
 extension WalletSceneViewModel {
-    static func mock() -> WalletSceneViewModel {
+    static func mock(wallet: Wallet = .mock()) -> WalletSceneViewModel {
         WalletSceneViewModel(
             walletsService: .mock(),
             bannerService: .mock(),
             walletService: .mock(),
             observablePreferences: .mock(),
-            wallet: .mock(),
+            wallet: wallet,
             isPresentingSelectedAssetInput: .constant(.none)
         )
     }
