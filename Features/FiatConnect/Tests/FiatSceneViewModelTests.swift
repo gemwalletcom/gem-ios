@@ -209,7 +209,7 @@ final class FiatSceneViewModelTests {
         model.onChangeType(oldType: .buy, newType: .sell)
 
         #expect(model.fetchTrigger.type == .sell)
-        #expect(model.fetchTrigger.immediate == true)
+        #expect(model.fetchTrigger.isImmediate == true)
     }
 
     @Test
@@ -219,7 +219,7 @@ final class FiatSceneViewModelTests {
         model.onSelect(amount: 250)
 
         #expect(model.fetchTrigger.amount == "250")
-        #expect(model.fetchTrigger.immediate == true)
+        #expect(model.fetchTrigger.isImmediate == true)
     }
 
     @Test
@@ -229,7 +229,7 @@ final class FiatSceneViewModelTests {
         model.onChangeAmountText("", text: "123")
 
         #expect(model.fetchTrigger.amount == "123")
-        #expect(model.fetchTrigger.immediate == false)
+        #expect(model.fetchTrigger.isImmediate == false)
     }
 
     @Test
@@ -238,7 +238,7 @@ final class FiatSceneViewModelTests {
 
         model.onSelectRandomAmount()
 
-        #expect(model.fetchTrigger.immediate == true)
+        #expect(model.fetchTrigger.isImmediate == true)
     }
 
     // MARK: - ShouldSkipFetch Tests

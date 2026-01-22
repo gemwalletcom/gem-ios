@@ -1,11 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Primitives
+import Components
 
-struct FiatFetchTrigger: Equatable, Sendable {
-    static let debounceInterval: Duration = .milliseconds(250)
-
+struct FiatFetchTrigger: DebouncableTrigger {
     let type: FiatQuoteType
     let amount: String
-    let immediate: Bool
+    let isImmediate: Bool
 }
