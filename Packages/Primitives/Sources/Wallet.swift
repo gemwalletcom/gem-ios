@@ -11,6 +11,7 @@ public enum WalletSource: String, Codable, Equatable, Hashable, Sendable {
 
 public struct Wallet: Codable, Equatable, Hashable, Sendable {
 	public let id: String
+	public let externalId: String?
 	public let name: String
 	public let index: Int32
 	public let type: WalletType
@@ -20,8 +21,9 @@ public struct Wallet: Codable, Equatable, Hashable, Sendable {
 	public let imageUrl: String?
 	public let source: WalletSource
 
-	public init(id: String, name: String, index: Int32, type: WalletType, accounts: [Account], order: Int32, isPinned: Bool, imageUrl: String?, source: WalletSource) {
+	public init(id: String, externalId: String?, name: String, index: Int32, type: WalletType, accounts: [Account], order: Int32, isPinned: Bool, imageUrl: String?, source: WalletSource) {
 		self.id = id
+		self.externalId = externalId
 		self.name = name
 		self.index = index
 		self.type = type

@@ -109,9 +109,11 @@ extension PriceRecord {
             totalSupply: totalSupply,
             maxSupply: maxSupply,
             allTimeHigh: .none,
-            allTimeHighDate: .now,
+            allTimeHighDate: .none,
+            allTimeHighChangePercentage: .none,
             allTimeLow: .none,
-            allTimeLowDate: .none
+            allTimeLowDate: .none,
+            allTimeLowChangePercentage: .none
         )
     }
 }

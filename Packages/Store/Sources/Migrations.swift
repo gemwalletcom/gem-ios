@@ -364,6 +364,16 @@ public struct Migrations {
             try? NotificationRecord.create(db: db)
         }
 
+        migrator.registerMigration("Add externalId to \(WalletRecord.databaseTableName)") { db in
+            try? db.alter(table: WalletRecord.databaseTableName) {
+                $0.add(column: WalletRecord.Columns.externalId.name, .text)
+            }
+        }
+
+        migrator.registerMigration("Migrate wallet IDs to WalletIdentifier format") { db in
+            try WalletIdMigration.migrate(db: db)
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

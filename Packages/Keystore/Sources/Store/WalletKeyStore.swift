@@ -102,6 +102,7 @@ public struct WalletKeyStore: Sendable {
         )
         return Primitives.Wallet(
             id: wallet.id,
+            externalId: nil,
             name: wallet.key.name,
             index: 0,
             type: .privateKey,
@@ -146,6 +147,7 @@ public struct WalletKeyStore: Sendable {
 
         return Wallet(
             id: wallet.id,
+            externalId: nil,
             name: wallet.key.name,
             index: 0,
             type: type,
@@ -165,7 +167,7 @@ public struct WalletKeyStore: Sendable {
     ) throws -> Primitives.Wallet {
         try addCoins(
             type: wallet.type,
-            wallet: try getWallet(id: wallet.id),
+            wallet: try getWallet(id: wallet.keystoreId),
             existingChains: existingChains,
             newChains: newChains,
             password: password,
@@ -207,8 +209,8 @@ public struct WalletKeyStore: Sendable {
         }
     }
 
-    func getMnemonic(wallet: Primitives.Wallet, password: String) throws -> [String] {
-        let wallet = try getWallet(id: wallet.id)
+    func getMnemonic(walletId: String, password: String) throws -> [String] {
+        let wallet = try getWallet(id: walletId)
         guard
             let hdwallet = wallet.key.wallet(password: Data(password.utf8))
         else {

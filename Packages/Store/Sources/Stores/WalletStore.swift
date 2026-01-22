@@ -130,6 +130,7 @@ extension WalletRecord {
     func mapToWallet() -> Wallet {
         return Wallet(
             id: id,
+            externalId: externalId,
             name: name,
             index: index.asInt32,
             type: type,
@@ -146,8 +147,9 @@ extension Wallet {
     var record: WalletRecord {
         return WalletRecord(
             id: id,
+            externalId: externalId,
             name: name,
-            type: type, 
+            type: type,
             index: index.asInt,
             order: 0,
             isPinned: false,

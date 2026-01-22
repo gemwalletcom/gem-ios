@@ -53,6 +53,7 @@ public extension Wallet {
     static func makeView(name: String, chain: Chain, address: String) -> Wallet {
         return Wallet(
             id: NSUUID().uuidString,
+            externalId: nil,
             name: name,
             index: 0,
             type: .view,

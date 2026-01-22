@@ -9,6 +9,7 @@ public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRe
     
     public struct Columns {
         static let id = Column("id")
+        static let externalId = Column("externalId")
         static let name = Column("name")
         static let index = Column("index")
         static let type = Column("type")
@@ -20,6 +21,7 @@ public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRe
     }
 
     public var id: String
+    public var externalId: String?
     public var name: String
     public var type: WalletType
     public var index: Int
@@ -39,6 +41,7 @@ extension WalletRecord: CreateTable {
             $0.column(Columns.id.name, .text)
                 .primaryKey()
                 .notNull()
+            $0.column(Columns.externalId.name, .text)
             $0.column(Columns.name.name, .text)
                 .notNull()
             $0.column(Columns.type.name, .text)
