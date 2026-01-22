@@ -2,41 +2,47 @@
 
 import SwiftUI
 import Components
-import Primitives
-import Style
 import Store
-import Localization
 import PrimitivesComponents
 
 public struct InAppNotificationsScene: View {
     @State private var model: InAppNotificationsViewModel
 
     public init(model: InAppNotificationsViewModel) {
-        self._model = State(initialValue: model)
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
         List {
-            switch model.state {
-            case .loading:
-                CenterLoadingView()
-            case .noData, .error:
-                EmptyContentView(model: model.emptyContentModel)
-            case .data(let sections):
-                ForEach(sections) { section in
-                    Section(header: section.title.map { Text($0) }) {
-                        ForEach(section.values) { itemModel in
-                            ListItemView(model: itemModel.listItemModel)
-                        }
+            ForEach(model.sections) { section in
+                Section(header: section.title.map { Text($0) }) {
+                    ForEach(section.values) { itemModel in
+                        notificationRow(itemModel)
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
             }
+            .listRowInsets(.assetListRowInsets)
         }
         .listSectionSpacing(.compact)
+        .overlay {
+            if model.sections.isEmpty {
+                EmptyContentView(model: model.emptyContentModel)
+            }
+        }
         .navigationTitle(model.title)
         .observeQuery(request: $model.request, value: $model.notifications)
-        .onChange(of: model.notifications) { model.updateState() }
-        .task { await model.update() }
+        .task { await model.fetch() }
+    }
+
+    @ViewBuilder
+    private func notificationRow(_ itemModel: InAppNotificationListItemViewModel) -> some View {
+        let view = ListItemView(model: itemModel.listItemModel)
+        if let url = itemModel.url {
+            NavigationCustomLink(with: view) {
+                model.open(url: url)
+            }
+        } else {
+            view
+        }
     }
 }

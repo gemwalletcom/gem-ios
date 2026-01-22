@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "ตั้งชื่อผู้ใช้ของคุณเพื่อรับรางวัล";
 "notifications.inapp.rewards.invite.subtitle" = "ชวนเพื่อนมารับรางวัลด้วยกัน";
 "nodes.import_node.warning_message" = "โหนดที่กำหนดเองอาจเป็นอันตรายและอาจเปิดเผยข้อมูลธุรกรรมของคุณหรือให้ข้อมูลเท็จได้";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "มูลค่าตลาดตามทฤษฎีหากเหรียญทั้งหมดหมุนเวียนอยู่ในระบบ คำนวณจากราคาคูณด้วยจำนวนเหรียญสูงสุดที่มีอยู่";
+"info.circulating_supply.description" = "จำนวนเหรียญที่มีอยู่และซื้อขายกันในตลาด ณ ปัจจุบัน\"";
+"info.total_supply.description" = "จำนวนเหรียญทั้งหมดที่มีอยู่ รวมทั้งเหรียญที่ถูกล็อกหรือสงวนไว้";
+"info.max_supply.title" = "แม็กซ์ซัพพลาย";
+"info.max_supply.description" = "จำนวนเหรียญสูงสุดที่จะมีอยู่ตลอดไป";

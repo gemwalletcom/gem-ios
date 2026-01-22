@@ -364,14 +364,15 @@ public struct Migrations {
             try? NotificationRecord.create(db: db)
         }
 
-        migrator.registerMigration("Add externalId to \(WalletRecord.databaseTableName)") { db in
-            try? db.alter(table: WalletRecord.databaseTableName) {
-                $0.add(column: WalletRecord.Columns.externalId.name, .text)
+        migrator.registerMigration("Add allTimeHigh/Low to \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: PriceRecord.Columns.allTimeHigh.name, .double)
+                $0.add(column: PriceRecord.Columns.allTimeHighDate.name, .date)
+                $0.add(column: PriceRecord.Columns.allTimeHighChangePercentage.name, .double)
+                $0.add(column: PriceRecord.Columns.allTimeLow.name, .double)
+                $0.add(column: PriceRecord.Columns.allTimeLowDate.name, .date)
+                $0.add(column: PriceRecord.Columns.allTimeLowChangePercentage.name, .double)
             }
-        }
-
-        migrator.registerMigration("Migrate wallet IDs to WalletIdentifier format") { db in
-            try WalletIdMigration.migrate(db: db)
         }
 
         try migrator.migrate(dbQueue)

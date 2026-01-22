@@ -212,7 +212,7 @@ extension AssetSceneViewModel {
         Task {
             await updateAsset()
         }
-        
+
         if assetData.priceAlerts.isNotEmpty {
             Task {
                 try await priceAlertService.update(assetId: asset.id.identifier)
@@ -425,7 +425,6 @@ extension AssetSceneViewModel {
             do {
                 try await priceObserverService.addAssets(assets: [assetModel.asset.id])
             } catch {
-                // TODO: - handle priceObserverService.addAssets error
                 debugLog("asset scene: priceObserverService.addAssets error \(error)")
             }
         }

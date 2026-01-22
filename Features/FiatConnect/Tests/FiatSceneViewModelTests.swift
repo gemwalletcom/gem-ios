@@ -32,7 +32,7 @@ final class FiatSceneViewModelTests {
         #expect(model.inputValidationModel.text == "50")
 
         model.type = .sell
-        model.onChangeType(.buy, type: .sell)
+        model.onChangeType(oldType: .buy, newType: .sell)
 
         #expect(model.inputValidationModel.text == "100")
     }
@@ -53,7 +53,7 @@ final class FiatSceneViewModelTests {
     func testSelectSellAmount() {
         let model = FiatSceneViewModelTests.mock()
         model.type = .sell
-        model.onChangeType(.buy, type: .sell)
+        model.onChangeType(oldType: .buy, newType: .sell)
 
         model.onSelect(amount: 50)
 
@@ -70,7 +70,7 @@ final class FiatSceneViewModelTests {
         #expect(model.currencyInputConfig.currencySymbol == "$")
 
         model.type = .sell
-        model.onChangeType(.buy, type: .sell)
+        model.onChangeType(oldType: .buy, newType: .sell)
 
         #expect(model.currencyInputConfig.currencySymbol == "$")
     }
@@ -82,7 +82,7 @@ final class FiatSceneViewModelTests {
         #expect(model.buttonTitle(amount: 10) == "$10")
 
         model.type = .sell
-        model.onChangeType(.buy, type: .sell)
+        model.onChangeType(oldType: .buy, newType: .sell)
 
         #expect(model.buttonTitle(amount: 100) == "$100")
     }
@@ -200,5 +200,74 @@ final class FiatSceneViewModelTests {
 
         #expect(model.urlState.isNoData == true)
         #expect(model.urlState.isLoading == false)
+    }
+
+    @Test
+    func fetchTriggerOnChangeTypeIsImmediate() {
+        let model = FiatSceneViewModelTests.mock()
+
+        model.onChangeType(oldType: .buy, newType: .sell)
+
+        #expect(model.fetchTrigger.type == .sell)
+        #expect(model.fetchTrigger.isImmediate == true)
+    }
+
+    @Test
+    func fetchTriggerOnSelectAmountIsImmediate() {
+        let model = FiatSceneViewModelTests.mock()
+
+        model.onSelect(amount: 250)
+
+        #expect(model.fetchTrigger.amount == "250")
+        #expect(model.fetchTrigger.isImmediate == true)
+    }
+
+    @Test
+    func fetchTriggerOnChangeAmountTextIsDebounced() {
+        let model = FiatSceneViewModelTests.mock()
+
+        model.onChangeAmountText("", text: "123")
+
+        #expect(model.fetchTrigger.amount == "123")
+        #expect(model.fetchTrigger.isImmediate == false)
+    }
+
+    @Test
+    func fetchTriggerOnSelectRandomAmountIsImmediate() {
+        let model = FiatSceneViewModelTests.mock()
+
+        model.onSelectRandomAmount()
+
+        #expect(model.fetchTrigger.isImmediate == true)
+    }
+
+    // MARK: - ShouldSkipFetch Tests
+
+    @Test
+    func secondFetchSkippedWhenSameAmountLoading() {
+        let model = FiatSceneViewModelTests.mock()
+
+        model.buyViewModel.loadingAmount = 100.0
+
+        #expect(model.buyViewModel.shouldSkipFetch(for: 100.0) == true)
+    }
+
+    @Test
+    func secondFetchSkippedWhenDataExistsForSameAmount() {
+        let model = FiatSceneViewModelTests.mock()
+        
+        model.buyViewModel.quotesState = .data(FiatQuotes(amount: 100.0, quotes: []))
+
+        #expect(model.buyViewModel.shouldSkipFetch(for: 100.0) == true)
+    }
+
+    @Test
+    func fetchAllowedForDifferentAmount() {
+        let model = FiatSceneViewModelTests.mock()
+
+        model.buyViewModel.loadingAmount = 100.0
+        model.buyViewModel.quotesState = .data(FiatQuotes(amount: 100.0, quotes: []))
+
+        #expect(model.buyViewModel.shouldSkipFetch(for: 200.0) == false)
     }
 }

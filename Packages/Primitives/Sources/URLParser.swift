@@ -61,10 +61,10 @@ public enum URLParser {
             case .perpetuals:
                 return .perpetuals
             case .rewards, .join:
-                let code = urlComponents.element(at: 1) ?? url.queryValue(for: "code") ?? ""
+                let code = urlComponents.element(at: 1) ?? url.queryValue(for: "code")
                 return .rewards(code: code)
             case .gift:
-                let code = urlComponents.element(at: 1) ?? url.queryValue(for: "code") ?? ""
+                let code = urlComponents.element(at: 1) ?? url.queryValue(for: "code")
                 return .gift(code: code)
             case .buy, .sell:
                 return try parseFiat(url: url, urlComponents: urlComponents, type: pathComponent)

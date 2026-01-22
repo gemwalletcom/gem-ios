@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Sediakan nama pengguna anda untuk mendapatkan ganjaran";
 "notifications.inapp.rewards.invite.subtitle" = "Jemput rakan-rakan dan dapatkan ganjaran bersama-sama";
 "nodes.import_node.warning_message" = "Nod tersuai boleh berniat jahat dan mungkin mendedahkan data transaksi anda atau memberikan maklumat palsu.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Nilai pasaran teori jika semua syiling berada dalam edaran. Dikira sebagai harga didarab dengan penawaran maksimum.";
+"info.circulating_supply.description" = "Bilangan syiling yang kini tersedia dan didagangkan di pasaran.\"";
+"info.total_supply.description" = "Jumlah syiling yang wujud, termasuk syiling yang dikunci atau ditempah.";
+"info.max_supply.title" = "Bekalan Maks";
+"info.max_supply.description" = "Bilangan maksimum syiling yang akan wujud.";

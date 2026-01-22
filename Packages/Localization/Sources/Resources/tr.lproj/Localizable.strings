@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Ödüller kazanmak için kullanıcı adınızı oluşturun.";
 "notifications.inapp.rewards.invite.subtitle" = "Arkadaşlarınızı davet edin ve birlikte ödüller kazanın.";
 "nodes.import_node.warning_message" = "Özel düğümler kötü amaçlı olabilir ve işlem verilerinizi ifşa edebilir veya yanlış bilgi sağlayabilir.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Tüm madeni paraların dolaşımda olması durumunda teorik piyasa değeri. Fiyatın maksimum arzla çarpılmasıyla hesaplanır.";
+"info.circulating_supply.description" = "Piyasada şu anda mevcut olan ve işlem gören kripto para birimi sayısı.\"";
+"info.total_supply.description" = "Kilitli veya rezerve edilmiş paralar da dahil olmak üzere mevcut toplam para sayısı.";
+"info.max_supply.title" = "Maksimum Tedarik";
+"info.max_supply.description" = "Var olabilecek maksimum madeni para sayısı.";

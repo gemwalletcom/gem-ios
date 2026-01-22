@@ -10,7 +10,7 @@ struct ChartView: View {
 
     static let date = "Date"
     static let value = "Value"
-    
+
     @State private var selectedValue: ChartPriceModel? {
         didSet {
             if let selectedValue, selectedValue.date != oldValue?.date {
@@ -19,19 +19,13 @@ struct ChartView: View {
         }
     }
 
-    init(
-        model: ChartValuesViewModel
-    ) {
+    init(model: ChartValuesViewModel) {
         self.model = model
     }
-    
+
     var body: some View {
         VStack {
-            if let selectedValue {
-                ChartPriceView.from(model: selectedValue)
-            } else if let chartPriceModel = model.chartPriceModel {
-                ChartPriceView.from(model: chartPriceModel)
-            }
+            chartPriceView
         }
         .padding(.top, .small)
         .padding(.bottom, .tiny)
@@ -129,6 +123,15 @@ struct ChartView: View {
         .padding(0)
     }
     
+    @ViewBuilder
+    private var chartPriceView: some View {
+        if let selectedValue {
+            ChartPriceView.from(model: selectedValue)
+        } else if let chartPriceModel = model.chartPriceModel {
+            ChartPriceView.from(model: chartPriceModel)
+        }
+    }
+    
     private func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ChartDateValue? {
         guard let plotFrame = proxy.plotFrame else {
             return .none
@@ -153,7 +156,7 @@ struct ChartView: View {
         return .none
     }
     
-    func calculateX(x: CGFloat, maxWidth: CGFloat, geoWidth: CGFloat) -> CGFloat {
+    private func calculateX(x: CGFloat, maxWidth: CGFloat, geoWidth: CGFloat) -> CGFloat {
         let halfWidth = maxWidth / 2
         if x < halfWidth {
             return x - halfWidth/2
@@ -162,7 +165,7 @@ struct ChartView: View {
         }
     }
     
-    func vibrate() {
+    private func vibrate() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
 }
