@@ -572,3 +572,11 @@
 "info.total_supply.description" = "现存硬币总数，包括已锁定或已预留的硬币。";
 "info.max_supply.title" = "最大供应";
 "info.max_supply.description" = "硬币的最大存世量。";
+"perpetual.value" = "价值";
+"perpetual.unrealized_pnl" = "未实现损益";
+"perpetual.volume" = "体积";
+"perpetual.all_time_pnl" = "总损益";
+"perpetual.margin_usage" = "边际利用率";
+"perpetual.account_leverage" = "账户杠杆";
+"asset.all_time_high" = "历史最高点";
+"asset.all_time_low" = "最低";

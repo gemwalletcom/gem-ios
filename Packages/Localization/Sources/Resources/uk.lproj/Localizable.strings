@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Загальна кількість існуючих монет, включаючи заблоковані або зарезервовані монети.";
 "info.max_supply.title" = "Максимальна пропозиція";
 "info.max_supply.description" = "Максимальна кількість монет, яка коли-небудь існуватиме.";
+"perpetual.value" = "Значення";
+"perpetual.unrealized_pnl" = "Нереалізований PnL";
+"perpetual.volume" = "Обсяг";
+"perpetual.all_time_pnl" = "PnL за весь час";
+"perpetual.margin_usage" = "Використання маржі";
+"perpetual.account_leverage" = "Кредитне плече рахунку";
+"asset.all_time_high" = "Рекордний максимум за весь час";
+"asset.all_time_low" = "Найнижчий показник за весь час";

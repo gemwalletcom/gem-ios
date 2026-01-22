@@ -572,3 +572,11 @@
 "info.total_supply.description" = "লক করা বা সংরক্ষিত কয়েন সহ বিদ্যমান মোট কয়েনের সংখ্যা।";
 "info.max_supply.title" = "সর্বোচ্চ সরবরাহ";
 "info.max_supply.description" = "সর্বোচ্চ সংখ্যক কয়েন বিদ্যমান থাকবে।";
+"perpetual.value" = "মূল্য";
+"perpetual.unrealized_pnl" = "অবাস্তব PnL";
+"perpetual.volume" = "আয়তন";
+"perpetual.all_time_pnl" = "সর্বকালের পিএনএল";
+"perpetual.margin_usage" = "মার্জিন ব্যবহার";
+"perpetual.account_leverage" = "অ্যাকাউন্ট লিভারেজ";
+"asset.all_time_high" = "সর্বকালের সর্বোচ্চ";
+"asset.all_time_low" = "সর্বকালের সর্বনিম্ন";

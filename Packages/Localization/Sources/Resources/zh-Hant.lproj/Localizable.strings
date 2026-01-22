@@ -572,3 +572,11 @@
 "info.total_supply.description" = "現存硬幣總數，包括已鎖定或已預留的硬幣。";
 "info.max_supply.title" = "最大供應";
 "info.max_supply.description" = "硬幣的最大存世量。";
+"perpetual.value" = "價值";
+"perpetual.unrealized_pnl" = "未實現損益";
+"perpetual.volume" = "體積";
+"perpetual.all_time_pnl" = "總損益";
+"perpetual.margin_usage" = "邊際利用率";
+"perpetual.account_leverage" = "帳戶槓桿";
+"asset.all_time_high" = "歷史最高點";
+"asset.all_time_low" = "最低";

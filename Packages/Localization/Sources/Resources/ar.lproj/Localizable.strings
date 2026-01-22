@@ -572,3 +572,11 @@
 "info.total_supply.description" = "إجمالي عدد العملات المعدنية الموجودة، بما في ذلك العملات المعدنية المقفلة أو المحجوزة.";
 "info.max_supply.title" = "أقصى إمداد";
 "info.max_supply.description" = "الحد الأقصى لعدد العملات المعدنية التي ستوجد على الإطلاق.";
+"perpetual.value" = "قيمة";
+"perpetual.unrealized_pnl" = "الأرباح والخسائر غير المحققة";
+"perpetual.volume" = "مقدار";
+"perpetual.all_time_pnl" = "إجمالي الربح والخسارة على مر الزمن";
+"perpetual.margin_usage" = "استخدام الهامش";
+"perpetual.account_leverage" = "الاستفادة من الحساب";
+"asset.all_time_high" = "أعلى مستوى على الإطلاق";
+"asset.all_time_low" = "أدنى مستوى على الإطلاق";

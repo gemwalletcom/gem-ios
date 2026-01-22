@@ -572,3 +572,11 @@
 "info.total_supply.description" = "จำนวนเหรียญทั้งหมดที่มีอยู่ รวมทั้งเหรียญที่ถูกล็อกหรือสงวนไว้";
 "info.max_supply.title" = "แม็กซ์ซัพพลาย";
 "info.max_supply.description" = "จำนวนเหรียญสูงสุดที่จะมีอยู่ตลอดไป";
+"perpetual.value" = "ค่า";
+"perpetual.unrealized_pnl" = "กำไรขาดทุนที่ยังไม่เกิดขึ้นจริง";
+"perpetual.volume" = "ปริมาณ";
+"perpetual.all_time_pnl" = "กำไรขาดทุนตลอดกาล";
+"perpetual.margin_usage" = "การใช้มาร์จิน";
+"perpetual.account_leverage" = "การใช้ประโยชน์จากบัญชี";
+"asset.all_time_high" = "สูงสุดตลอดกาล";
+"asset.all_time_low" = "ออลไทม์โลว์";

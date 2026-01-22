@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Общее количество существующих монет, включая заблокированные или зарезервированные монеты.";
 "info.max_supply.title" = "Максимальное предложение";
 "info.max_supply.description" = "Максимальное количество монет, которое когда-либо будет существовать.";
+"perpetual.value" = "Ценить";
+"perpetual.unrealized_pnl" = "Нереализованный PnL";
+"perpetual.volume" = "Объем";
+"perpetual.all_time_pnl" = "PnL за всё время";
+"perpetual.margin_usage" = "Использование маржи";
+"perpetual.account_leverage" = "Кредитное плечо счета";
+"asset.all_time_high" = "Рекордный максимум за все время";
+"asset.all_time_low" = "Рекордный минимум за все время";

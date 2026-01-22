@@ -903,6 +903,10 @@ public enum Localized {
     }
   }
   public enum Perpetual {
+    /// Account Leverage
+    public static let accountLeverage = Localized.tr("Localizable", "perpetual.account_leverage", fallback: "Account Leverage")
+    /// All Time PnL
+    public static let allTimePnl = Localized.tr("Localizable", "perpetual.all_time_pnl", fallback: "All Time PnL")
     /// Auto Close
     public static let autoClose = Localized.tr("Localizable", "perpetual.auto_close", fallback: "Auto Close")
     /// Close %@
@@ -927,6 +931,8 @@ public enum Localized {
     public static let long = Localized.tr("Localizable", "perpetual.long", fallback: "Long")
     /// Margin
     public static let margin = Localized.tr("Localizable", "perpetual.margin", fallback: "Margin")
+    /// Margin Usage
+    public static let marginUsage = Localized.tr("Localizable", "perpetual.margin_usage", fallback: "Margin Usage")
     /// Market Price
     public static let marketPrice = Localized.tr("Localizable", "perpetual.market_price", fallback: "Market Price")
     /// Modify
@@ -953,6 +959,12 @@ public enum Localized {
     public static let short = Localized.tr("Localizable", "perpetual.short", fallback: "Short")
     /// Size
     public static let size = Localized.tr("Localizable", "perpetual.size", fallback: "Size")
+    /// Unrealized PnL
+    public static let unrealizedPnl = Localized.tr("Localizable", "perpetual.unrealized_pnl", fallback: "Unrealized PnL")
+    /// Value
+    public static let value = Localized.tr("Localizable", "perpetual.value", fallback: "Value")
+    /// Volume
+    public static let volume = Localized.tr("Localizable", "perpetual.volume", fallback: "Volume")
     public enum AutoClose {
       /// Expected loss
       public static let expectedLoss = Localized.tr("Localizable", "perpetual.auto_close.expected_loss", fallback: "Expected loss")

@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Det samlede antal mønter, der findes, inklusive låste eller reserverede mønter.";
 "info.max_supply.title" = "Maks. forsyning";
 "info.max_supply.description" = "Det maksimale antal mønter, der nogensinde vil eksistere.";
+"perpetual.value" = "Værdi";
+"perpetual.unrealized_pnl" = "Urealiseret PnL";
+"perpetual.volume" = "Bind";
+"perpetual.all_time_pnl" = "Alle tiders PnL";
+"perpetual.margin_usage" = "Marginforbrug";
+"perpetual.account_leverage" = "Kontogearing";
+"asset.all_time_high" = "Alle tiders højder";
+"asset.all_time_low" = "Laveste niveau nogensinde";

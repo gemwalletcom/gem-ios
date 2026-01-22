@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Die Gesamtzahl der existierenden Münzen, einschließlich gesperrter oder reservierter Münzen.";
 "info.max_supply.title" = "Maximale Versorgung";
 "info.max_supply.description" = "Die maximale Anzahl an Münzen, die jemals existieren wird.";
+"perpetual.value" = "Wert";
+"perpetual.unrealized_pnl" = "Nicht realisierte Gewinn- und Verlustrechnung";
+"perpetual.volume" = "Volumen";
+"perpetual.all_time_pnl" = "Gesamtgewinn und -verlust";
+"perpetual.margin_usage" = "Margennutzung";
+"perpetual.account_leverage" = "Kontohebel";
+"asset.all_time_high" = "Allzeithoch";
+"asset.all_time_low" = "Allzeittief";

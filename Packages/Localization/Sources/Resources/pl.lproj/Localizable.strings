@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Łączna liczba istniejących monet, łącznie z monetami zablokowanymi lub zarezerwowanymi.";
 "info.max_supply.title" = "Maksymalna podaż";
 "info.max_supply.description" = "Maksymalna liczba monet, która kiedykolwiek będzie istnieć.";
+"perpetual.value" = "Wartość";
+"perpetual.unrealized_pnl" = "Niezrealizowany zysk/strata";
+"perpetual.volume" = "Tom";
+"perpetual.all_time_pnl" = "Całkowity zysk i strata";
+"perpetual.margin_usage" = "Wykorzystanie marży";
+"perpetual.account_leverage" = "Dźwignia konta";
+"asset.all_time_high" = "Najwyższy poziom wszech czasów";
+"asset.all_time_low" = "Najniższy poziom wszech czasów";

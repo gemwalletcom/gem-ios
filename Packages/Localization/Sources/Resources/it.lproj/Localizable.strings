@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Il numero totale di monete esistenti, comprese quelle bloccate o riservate.";
 "info.max_supply.title" = "Massima fornitura";
 "info.max_supply.description" = "Il numero massimo di monete che esisteranno mai.";
+"perpetual.value" = "Valore";
+"perpetual.unrealized_pnl" = "PnL non realizzato";
+"perpetual.volume" = "Volume";
+"perpetual.all_time_pnl" = "PnL di tutti i tempi";
+"perpetual.margin_usage" = "Utilizzo del margine";
+"perpetual.account_leverage" = "Leva finanziaria del conto";
+"asset.all_time_high" = "Massimo storico";
+"asset.all_time_low" = "Minimo storico";

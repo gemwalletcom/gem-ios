@@ -44,4 +44,8 @@ public struct PerpetualProviderMock: PerpetualProvidable {
     public func getCandlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
         []
     }
+
+    public func getPortfolio(address: String) async throws -> PerpetualPortfolio {
+        PerpetualPortfolio(day: nil, week: nil, month: nil, allTime: nil, accountSummary: nil)
+    }
 }

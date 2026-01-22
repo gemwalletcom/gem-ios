@@ -572,3 +572,11 @@
 "info.total_supply.description" = "המספר הכולל של מטבעות שקיימים, כולל מטבעות נעולים או שמורים.";
 "info.max_supply.title" = "אספקה ​​מקסימלית";
 "info.max_supply.description" = "המספר המקסימלי של מטבעות שאי פעם יהיה קיים.";
+"perpetual.value" = "עֵרֶך";
+"perpetual.unrealized_pnl" = "רווח והפסד לא ממומשים";
+"perpetual.volume" = "כֶּרֶך";
+"perpetual.all_time_pnl" = "כל הזמנים PnL";
+"perpetual.margin_usage" = "שימוש בשוליים";
+"perpetual.account_leverage" = "מינוף חשבון";
+"asset.all_time_high" = "שיא כל הזמנים";
+"asset.all_time_low" = "שפל של כל הזמנים";
