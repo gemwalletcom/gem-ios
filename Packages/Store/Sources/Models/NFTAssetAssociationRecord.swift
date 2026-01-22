@@ -51,7 +51,7 @@ extension NFTAssetAssociationRecord: CreateTable {
             $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
-                .references(WalletRecord.databaseTableName, onDelete: .cascade)
+                .references(WalletRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.collectionId.name, .text)
                 .notNull()
                 .indexed()
