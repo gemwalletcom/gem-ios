@@ -132,7 +132,7 @@ public struct PerpetualService: PerpetualServiceable {
         guard let account = wallet.accounts.first(where: {
             $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid
         }) else {
-            return PerpetualPortfolio(day: nil, week: nil, month: nil, allTime: nil)
+            return PerpetualPortfolio(day: nil, week: nil, month: nil, allTime: nil, accountSummary: nil)
         }
         return try await provider.getPortfolio(address: account.address)
     }

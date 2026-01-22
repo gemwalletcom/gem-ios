@@ -85,6 +85,12 @@ extension PerpetualPortfolioSceneViewModel {
     var unrealizedPnlTitle: String { Localized.Perpetual.unrealizedPnl }
     var unrealizedPnlValue: TextValue { TextValue(text: unrealizedPnlModel.text ?? "-", style: unrealizedPnlModel.textStyle) }
 
+    var accountLeverageTitle: String { Localized.Perpetual.accountLeverage }
+    var accountLeverageText: String { portfolio?.accountSummary.map { String(format: "%.2fx", $0.accountLeverage) } ?? "-" }
+
+    var marginUsageTitle: String { Localized.Perpetual.marginUsage }
+    var marginUsageText: String { portfolio?.accountSummary.map { CurrencyFormatter.percentSignLess.string($0.marginUsage * 100) } ?? "-" }
+
     var allTimePnlTitle: String { Localized.Perpetual.allTimePnl }
     var allTimePnlValue: TextValue { TextValue(text: allTimePnlModel.text ?? "-", style: allTimePnlModel.textStyle) }
 
@@ -95,7 +101,7 @@ extension PerpetualPortfolioSceneViewModel {
 // MARK: - Private
 
 extension PerpetualPortfolioSceneViewModel {
-    private var unrealizedPnlModel: PriceChangeViewModel { priceChangeModel(value: portfolio?.day?.pnlHistory.last?.value) }
+    private var unrealizedPnlModel: PriceChangeViewModel { priceChangeModel(value: portfolio?.accountSummary?.unrealizedPnl) }
     private var allTimePnlModel: PriceChangeViewModel { priceChangeModel(value: portfolio?.allTime?.pnlHistory.last?.value) }
 
     private func priceChangeModel(value: Double?) -> PriceChangeViewModel {

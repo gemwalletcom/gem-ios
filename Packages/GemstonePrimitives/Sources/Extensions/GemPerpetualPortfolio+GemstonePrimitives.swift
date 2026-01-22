@@ -10,7 +10,8 @@ extension GemPerpetualPortfolio {
             day: day?.map(),
             week: week?.map(),
             month: month?.map(),
-            allTime: allTime?.map()
+            allTime: allTime?.map(),
+            accountSummary: accountSummary?.map()
         )
     }
 }
@@ -30,6 +31,17 @@ extension GemPerpetualPortfolioDataPoint {
         PerpetualPortfolioDataPoint(
             date: Date(timeIntervalSince1970: TimeInterval(date)),
             value: value
+        )
+    }
+}
+
+extension GemPerpetualAccountSummary {
+    public func map() -> PerpetualAccountSummary {
+        PerpetualAccountSummary(
+            accountValue: accountValue,
+            accountLeverage: accountLeverage,
+            marginUsage: marginUsage,
+            unrealizedPnl: unrealizedPnl
         )
     }
 }

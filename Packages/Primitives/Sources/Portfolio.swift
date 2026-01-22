@@ -4,6 +4,20 @@
 
 import Foundation
 
+public struct PerpetualAccountSummary: Codable, Equatable, Hashable, Sendable {
+	public let accountValue: Double
+	public let accountLeverage: Double
+	public let marginUsage: Double
+	public let unrealizedPnl: Double
+
+	public init(accountValue: Double, accountLeverage: Double, marginUsage: Double, unrealizedPnl: Double) {
+		self.accountValue = accountValue
+		self.accountLeverage = accountLeverage
+		self.marginUsage = marginUsage
+		self.unrealizedPnl = unrealizedPnl
+	}
+}
+
 public struct PerpetualPortfolioDataPoint: Codable, Equatable, Hashable, Sendable {
 	public let date: Date
 	public let value: Double
@@ -31,11 +45,13 @@ public struct PerpetualPortfolio: Codable, Equatable, Hashable, Sendable {
 	public let week: PerpetualPortfolioTimeframeData?
 	public let month: PerpetualPortfolioTimeframeData?
 	public let allTime: PerpetualPortfolioTimeframeData?
+	public let accountSummary: PerpetualAccountSummary?
 
-	public init(day: PerpetualPortfolioTimeframeData?, week: PerpetualPortfolioTimeframeData?, month: PerpetualPortfolioTimeframeData?, allTime: PerpetualPortfolioTimeframeData?) {
+	public init(day: PerpetualPortfolioTimeframeData?, week: PerpetualPortfolioTimeframeData?, month: PerpetualPortfolioTimeframeData?, allTime: PerpetualPortfolioTimeframeData?, accountSummary: PerpetualAccountSummary?) {
 		self.day = day
 		self.week = week
 		self.month = month
 		self.allTime = allTime
+		self.accountSummary = accountSummary
 	}
 }
