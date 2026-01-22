@@ -39,6 +39,11 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     // scan transaction
     case maliciousTransaction
     case memoRequired(symbol: String)
+    // market
+    case fullyDilutedValuation
+    case circulatingSupply
+    case totalSupply
+    case maxSupply
 
     public var id: String {
         switch self {
@@ -65,6 +70,10 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case .maliciousTransaction: "maliciousTransaction"
         case let .memoRequired(symbol): "memoRequired_\(symbol)"
         case let .dustThreshold(chain, _): "dustThreshold_\(chain.rawValue)"
+        case .fullyDilutedValuation: "fullyDilutedValuation"
+        case .circulatingSupply: "circulatingSupply"
+        case .totalSupply: "totalSupply"
+        case .maxSupply: "maxSupply"
         }
     }
     

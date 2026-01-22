@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Saita sunan mai amfani don samun lada";
 "notifications.inapp.rewards.invite.subtitle" = "Gayyaci abokai kuma ku sami lada tare";
 "nodes.import_node.warning_message" = "Maɓallan da aka keɓance na iya zama masu cutarwa kuma suna iya fallasa bayanan ma'amalar ku ko kuma samar da bayanan karya.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Darajar kasuwa ta ka'ida idan duk tsabar kudi suna yawo. An ƙididdige shi azaman farashi da aka ninka ta hanyar mafi girman wadata.";
+"info.circulating_supply.description" = "Adadin tsabar kuɗi da ake da su a kasuwa a yanzu haka.\"";
+"info.total_supply.description" = "Jimillar tsabar kuɗin da ke akwai, gami da tsabar kuɗi da aka kulle ko aka ajiye.";
+"info.max_supply.title" = "Mafi girman wadata";
+"info.max_supply.description" = "Matsakaicin adadin tsabar kuɗi da za su wanzu.";

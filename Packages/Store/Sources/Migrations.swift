@@ -364,6 +364,17 @@ public struct Migrations {
             try? NotificationRecord.create(db: db)
         }
 
+        migrator.registerMigration("Add allTimeHigh/Low to \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: PriceRecord.Columns.allTimeHigh.name, .double)
+                $0.add(column: PriceRecord.Columns.allTimeHighDate.name, .date)
+                $0.add(column: PriceRecord.Columns.allTimeHighChangePercentage.name, .double)
+                $0.add(column: PriceRecord.Columns.allTimeLow.name, .double)
+                $0.add(column: PriceRecord.Columns.allTimeLowDate.name, .date)
+                $0.add(column: PriceRecord.Columns.allTimeLowChangePercentage.name, .double)
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

@@ -566,3 +566,11 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Set up your username to earn rewards";
 "notifications.inapp.rewards.invite.subtitle" = "Invite friends and earn rewards together";
 "nodes.import_node.warning_message" = "Custom nodes can be malicious and may expose your transaction data or provide false information.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "The theoretical market value if all coins were in circulation. Calculated as price multiplied by max supply.";
+"info.circulating_supply.description" = "The number of coins currently available and trading in the market.\"";
+"info.total_supply.description" = "The total number of coins that exist, including locked or reserved coins.";
+"info.max_supply.title" = "Max Supply";
+"info.max_supply.description" = "The maximum number of coins that will ever exist.";
+"asset.all_time_high" = "All Time High";
+"asset.all_time_low" = "All Time Low";

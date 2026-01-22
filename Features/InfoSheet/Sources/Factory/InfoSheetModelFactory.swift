@@ -189,6 +189,30 @@ public struct InfoSheetModelFactory {
                 image: .assetImage(image),
                 button: .url(Docs.url(.dust))
             )
+        case .fullyDilutedValuation:
+            return InfoSheetModel(
+                title: Localized.Info.FullyDilutedValuation.title,
+                description: Localized.Info.FullyDilutedValuation.description,
+                image: .image(Images.Logo.logo)
+            )
+        case .circulatingSupply:
+            return InfoSheetModel(
+                title: Localized.Asset.circulatingSupply,
+                description: Localized.Info.CirculatingSupply.description,
+                image: .image(Images.Logo.logo)
+            )
+        case .totalSupply:
+            return InfoSheetModel(
+                title: Localized.Asset.totalSupply,
+                description: Localized.Info.TotalSupply.description,
+                image: .image(Images.Logo.logo)
+            )
+        case .maxSupply:
+            return InfoSheetModel(
+                title: Localized.Info.MaxSupply.title,
+                description: Localized.Info.MaxSupply.description,
+                image: .image(Images.Logo.logo)
+            )
         }
     }
 }

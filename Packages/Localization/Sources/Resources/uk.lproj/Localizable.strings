@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Налаштуйте своє ім'я користувача, щоб отримувати винагороди";
 "notifications.inapp.rewards.invite.subtitle" = "Запрошуйте друзів та отримуйте винагороди разом";
 "nodes.import_node.warning_message" = "Користувацькі вузли можуть бути шкідливими та розкривати дані ваших транзакцій або надавати неправдиву інформацію.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Теоретична ринкова вартість, якби всі монети були в обігу. Розраховується як ціна, помножена на максимальну пропозицію.";
+"info.circulating_supply.description" = "Кількість монет, що наразі доступні та торгуються на ринку.";
+"info.total_supply.description" = "Загальна кількість існуючих монет, включаючи заблоковані або зарезервовані монети.";
+"info.max_supply.title" = "Максимальна пропозиція";
+"info.max_supply.description" = "Максимальна кількість монет, яка коли-небудь існуватиме.";

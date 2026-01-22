@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Ustaw swoją nazwę użytkownika, aby zdobywać nagrody";
 "notifications.inapp.rewards.invite.subtitle" = "Zaproś znajomych i zdobywajcie nagrody razem";
 "nodes.import_node.warning_message" = "Węzły niestandardowe mogą mieć charakter złośliwy i ujawniać dane transakcji lub podawać fałszywe informacje.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Teoretyczna wartość rynkowa, gdyby wszystkie monety były w obiegu. Obliczona jako iloczyn ceny i maksymalnej podaży.";
+"info.circulating_supply.description" = "Liczba monet aktualnie dostępnych i będących w obrocie na rynku.";
+"info.total_supply.description" = "Łączna liczba istniejących monet, łącznie z monetami zablokowanymi lub zarezerwowanymi.";
+"info.max_supply.title" = "Maksymalna podaż";
+"info.max_supply.description" = "Maksymalna liczba monet, która kiedykolwiek będzie istnieć.";

@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "نام کاربری خود را برای کسب جوایز تنظیم کنید";
 "notifications.inapp.rewards.invite.subtitle" = "دوستان را دعوت کنید و با هم پاداش کسب کنید";
 "nodes.import_node.warning_message" = "گره‌های سفارشی می‌توانند مخرب باشند و ممکن است داده‌های تراکنش شما را افشا کنند یا اطلاعات نادرست ارائه دهند.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "ارزش بازار فرضی در صورتی که همه کوین‌ها در گردش باشند. این ارزش از حاصل ضرب قیمت در حداکثر عرضه محاسبه می‌شود.";
+"info.circulating_supply.description" = "تعداد کوین‌های موجود و قابل معامله در بازار.";
+"info.total_supply.description" = "تعداد کل سکه‌های موجود، شامل سکه‌های قفل‌شده یا رزرو شده.";
+"info.max_supply.title" = "حداکثر عرضه";
+"info.max_supply.description" = "حداکثر تعداد سکه‌هایی که تا به حال وجود خواهد داشت.";

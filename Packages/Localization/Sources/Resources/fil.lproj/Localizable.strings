@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "I-set up ang iyong username para makakuha ng mga reward";
 "notifications.inapp.rewards.invite.subtitle" = "Mag-imbita ng mga kaibigan at kumita ng mga gantimpala nang sama-sama";
 "nodes.import_node.warning_message" = "Ang mga custom node ay maaaring maging malisyoso at maaaring maglantad ng iyong data ng transaksyon o magbigay ng maling impormasyon.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Ang teoretikal na halaga sa pamilihan kung lahat ng barya ay nasa sirkulasyon. Kinakalkula bilang presyo na pinarami sa pinakamataas na suplay.";
+"info.circulating_supply.description" = "Ang bilang ng mga barya na kasalukuyang magagamit at ipinagbibili sa merkado.\"";
+"info.total_supply.description" = "Ang kabuuang bilang ng mga barya na umiiral, kabilang ang mga naka-lock o nakareserbang barya.";
+"info.max_supply.title" = "Pinakamataas na Suplay";
+"info.max_supply.description" = "Ang pinakamataas na bilang ng mga barya na iiral kailanman.";

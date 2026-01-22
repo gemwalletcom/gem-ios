@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Richten Sie Ihren Benutzernamen ein, um Prämien zu erhalten.";
 "notifications.inapp.rewards.invite.subtitle" = "Lade Freunde ein und verdient gemeinsam Prämien.";
 "nodes.import_node.warning_message" = "Benutzerdefinierte Knoten können bösartig sein und Ihre Transaktionsdaten offenlegen oder falsche Informationen liefern.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Der theoretische Marktwert, wenn alle Münzen im Umlauf wären. Berechnet als Preis multipliziert mit der maximalen Gesamtmenge.";
+"info.circulating_supply.description" = "Die Anzahl der aktuell verfügbaren und auf dem Markt gehandelten Coins.";
+"info.total_supply.description" = "Die Gesamtzahl der existierenden Münzen, einschließlich gesperrter oder reservierter Münzen.";
+"info.max_supply.title" = "Maximale Versorgung";
+"info.max_supply.description" = "Die maximale Anzahl an Münzen, die jemals existieren wird.";

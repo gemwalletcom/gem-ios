@@ -35,6 +35,10 @@ public enum Localized {
   public enum Asset {
     /// Add to wallet
     public static let addToWallet = Localized.tr("Localizable", "asset.add_to_wallet", fallback: "Add to wallet")
+    /// All Time High
+    public static let allTimeHigh = Localized.tr("Localizable", "asset.all_time_high", fallback: "All Time High")
+    /// All Time Low
+    public static let allTimeLow = Localized.tr("Localizable", "asset.all_time_low", fallback: "All Time Low")
     /// Balances
     public static let balances = Localized.tr("Localizable", "asset.balances", fallback: "Balances")
     /// Buy %@
@@ -543,6 +547,16 @@ public enum Localized {
         public static let description = Localized.tr("Localizable", "info.asset_status.unverified.description", fallback: "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.")
       }
     }
+    public enum CirculatingSupply {
+      /// The number of coins currently available and trading in the market."
+      public static let description = Localized.tr("Localizable", "info.circulating_supply.description", fallback: "The number of coins currently available and trading in the market.\"")
+    }
+    public enum FullyDilutedValuation {
+      /// The theoretical market value if all coins were in circulation. Calculated as price multiplied by max supply.
+      public static let description = Localized.tr("Localizable", "info.fully_diluted_valuation.description", fallback: "The theoretical market value if all coins were in circulation. Calculated as price multiplied by max supply.")
+      /// Fully Diluted Valuation
+      public static let title = Localized.tr("Localizable", "info.fully_diluted_valuation.title", fallback: "Fully Diluted Valuation")
+    }
     public enum FundingPayments {
       /// Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.
       public static let description = Localized.tr("Localizable", "info.funding_payments.description", fallback: "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.")
@@ -582,6 +596,12 @@ public enum Localized {
     public enum LockTime {
       /// Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.
       public static let description = Localized.tr("Localizable", "info.lock_time.description", fallback: "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.")
+    }
+    public enum MaxSupply {
+      /// The maximum number of coins that will ever exist.
+      public static let description = Localized.tr("Localizable", "info.max_supply.description", fallback: "The maximum number of coins that will ever exist.")
+      /// Max Supply
+      public static let title = Localized.tr("Localizable", "info.max_supply.title", fallback: "Max Supply")
     }
     public enum NetworkFee {
       /// Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.
@@ -636,6 +656,10 @@ public enum Localized {
       }
       /// Minimum Amount
       public static let title = Localized.tr("Localizable", "info.stake_minimum_amount.title", fallback: "Minimum Amount")
+    }
+    public enum TotalSupply {
+      /// The total number of coins that exist, including locked or reserved coins.
+      public static let description = Localized.tr("Localizable", "info.total_supply.description", fallback: "The total number of coins that exist, including locked or reserved coins.")
     }
     public enum Transaction {
       public enum Error {

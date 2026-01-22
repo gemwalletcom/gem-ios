@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Configure seu nome de usuário para ganhar recompensas.";
 "notifications.inapp.rewards.invite.subtitle" = "Convide amigos e ganhem recompensas juntos.";
 "nodes.import_node.warning_message" = "Nós personalizados podem ser maliciosos e expor seus dados de transação ou fornecer informações falsas.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "O valor de mercado teórico se todas as moedas estivessem em circulação. Calculado como o preço multiplicado pela oferta máxima.";
+"info.circulating_supply.description" = "O número de moedas atualmente disponíveis e negociadas no mercado.\"";
+"info.total_supply.description" = "O número total de moedas existentes, incluindo moedas bloqueadas ou reservadas.";
+"info.max_supply.title" = "Suprimento máximo";
+"info.max_supply.description" = "O número máximo de moedas que jamais existirão.";

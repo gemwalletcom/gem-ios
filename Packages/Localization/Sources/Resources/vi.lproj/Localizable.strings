@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Thiết lập tên người dùng của bạn để nhận phần thưởng";
 "notifications.inapp.rewards.invite.subtitle" = "Mời bạn bè và cùng nhau nhận phần thưởng.";
 "nodes.import_node.warning_message" = "Các node tùy chỉnh có thể chứa mã độc và có thể làm lộ dữ liệu giao dịch của bạn hoặc cung cấp thông tin sai lệch.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Giá trị thị trường lý thuyết nếu tất cả các đồng tiền đều được lưu thông. Được tính bằng giá nhân với nguồn cung tối đa.";
+"info.circulating_supply.description" = "Số lượng tiền điện tử hiện có và đang được giao dịch trên thị trường.";
+"info.total_supply.description" = "Tổng số lượng tiền xu hiện có, bao gồm cả tiền xu bị khóa hoặc được giữ lại.";
+"info.max_supply.title" = "Cung cấp tối đa";
+"info.max_supply.description" = "Số lượng tối đa các đồng xu sẽ từng tồn tại.";
