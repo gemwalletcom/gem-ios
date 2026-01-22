@@ -186,7 +186,9 @@ extension WalletSceneViewModel {
     func onBanner(action: BannerAction) {
         switch action.type {
         case .event, .closeBanner:
-            Task { try await handleBanner(action: action) }
+            Task {
+                try await handleBanner(action: action)
+            }
         case .button(let bannerButton):
             switch bannerButton {
             case .buy: isPresentingSelectAssetType = .buy

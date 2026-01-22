@@ -198,9 +198,9 @@ extension CollectibleViewModel {
                             AlertAction(
                                 title: Localized.Common.openSettings,
                                 isDefaultAction: true,
-                                action: { [weak self] in
+                                action: {
                                     Task { @MainActor in
-                                        self?.openSettings()
+                                        self.openSettings()
                                     }
                                 }
                             ),

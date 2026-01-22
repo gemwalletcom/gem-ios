@@ -19,4 +19,8 @@ struct WebView: UIViewRepresentable {
         let request = URLRequest(url: model.url)
         webView.load(request)
     }
+
+    static func dismantleUIView(_ webView: WKWebView, coordinator: ()) {
+        webView.navigationDelegate = nil
+    }
 }
