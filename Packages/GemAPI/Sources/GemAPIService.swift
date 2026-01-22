@@ -212,16 +212,14 @@ extension GemAPIService: GemAPISubscriptionService {
 
 extension GemAPIService: GemAPITransactionService {
     public func getTransactionsForAsset(deviceId: String, walletIndex: Int, asset: Primitives.AssetId, fromTimestamp: Int) async throws -> TransactionsResponse {
-        let options = TransactionsFetchOption(wallet_index: walletIndex.asInt32, asset_id: asset.identifier, from_timestamp: fromTimestamp.asUInt32)
-        return try await provider
-            .request(.getTransactions(deviceId: deviceId, options: options))
+        try await provider
+            .request(.getTransactions(deviceId: deviceId, walletIndex: walletIndex, assetId: asset.identifier, fromTimestamp: fromTimestamp))
             .mapResponse(as: TransactionsResponse.self)
     }
 
     public func getTransactionsAll(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> TransactionsResponse {
-        let options = TransactionsFetchOption(wallet_index: walletIndex.asInt32, asset_id: .none, from_timestamp: fromTimestamp.asUInt32)
-        return try await provider
-            .request(.getTransactions(deviceId: deviceId, options: options))
+        try await provider
+            .request(.getTransactions(deviceId: deviceId, walletIndex: walletIndex, assetId: nil, fromTimestamp: fromTimestamp))
             .mapResponse(as: TransactionsResponse.self)
     }
 }
