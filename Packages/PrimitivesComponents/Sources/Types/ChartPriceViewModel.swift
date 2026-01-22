@@ -66,4 +66,8 @@ public struct ChartPriceViewModel {
     public var priceChangeTextColor: Color {
         PriceChangeColor.color(for: priceChangePercentage)
     }
+
+    public static func priceChangePercentage(close: Double, base: Double) -> Double {
+        base == 0 ? 0 : ((close - base) / base) * 100
+    }
 }

@@ -4,33 +4,33 @@ import Foundation
 import Primitives
 
 public actor PerpetualObserverService: Sendable {
-    
+
     private let perpetualService: PerpetualServiceable
     private var updateTask: Task<Void, Never>?
     private var currentWallet: Wallet?
-    
+
     public init(perpetualService: PerpetualServiceable) {
         self.perpetualService = perpetualService
     }
-    
+
     deinit {
         updateTask?.cancel()
     }
-    
+
     public func connect(for wallet: Wallet) async {
         guard currentWallet?.id != wallet.id else { return }
-        
+
         await disconnect()
         currentWallet = wallet
-        
+
         updateTask = Task { [weak self] in
             while !Task.isCancelled {
                 guard let self, let wallet = await self.currentWallet else { return }
                 do {
                     let positions = try await self.perpetualService.getPositions(walletId: wallet.walletId)
 
-                    if positions.isNotEmpty {
-                        try await self.perpetualService.updatePositions(wallet: wallet)
+                    if let address = self.perpetualAddress(from: wallet), positions.isNotEmpty {
+                        try await self.perpetualService.updatePositions(address: address, walletId: wallet.walletId)
                     }
                 } catch {
                     debugLog("PerpetualObserverService error getting positions: \(error)")
@@ -40,10 +40,14 @@ public actor PerpetualObserverService: Sendable {
             }
         }
     }
-    
+
     public func disconnect() async {
         updateTask?.cancel()
         updateTask = nil
         currentWallet = nil
+    }
+
+    private func perpetualAddress(from wallet: Wallet) -> String? {
+        wallet.accounts.first(where: { $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid })?.address
     }
 }

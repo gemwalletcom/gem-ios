@@ -45,3 +45,8 @@ public struct PerpetualPortfolio: Codable, Equatable, Hashable, Sendable {
 		self.accountSummary = accountSummary
 	}
 }
+
+public enum PerpetualPortfolioChartType: String, Codable, CaseIterable, Equatable, Identifiable, Sendable {
+	case value
+	case pnl
+}

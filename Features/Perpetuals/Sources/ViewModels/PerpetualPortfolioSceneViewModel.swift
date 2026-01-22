@@ -27,7 +27,7 @@ public final class PerpetualPortfolioSceneViewModel {
         }
     }
     var selectedPeriod: ChartPeriod = .day
-    var selectedChartType: PortfolioChartType = .value
+    var selectedChartType: PerpetualPortfolioChartType = .value
 
     private var portfolio: PerpetualPortfolio?
 
@@ -58,7 +58,7 @@ public final class PerpetualPortfolioSceneViewModel {
         }
     }
 
-    func chartTypeTitle(_ type: PortfolioChartType) -> String {
+    func chartTypeTitle(_ type: PerpetualPortfolioChartType) -> String {
         switch type {
         case .value: Localized.Perpetual.value
         case .pnl: Localized.Perpetual.pnl
@@ -68,11 +68,13 @@ public final class PerpetualPortfolioSceneViewModel {
     func fetch() async {
         state = .loading
         do {
-            let data = try await perpetualService.portfolio(wallet: wallet)
-            if !data.availablePeriods.contains(selectedPeriod), let first = data.availablePeriods.first {
-                selectedPeriod = first
+            if let address {
+                let data = try await perpetualService.portfolio(address: address)
+                if !data.availablePeriods.contains(selectedPeriod), let first = data.availablePeriods.first {
+                    selectedPeriod = first
+                }
+                state = .data(data)
             }
-            state = .data(data)
         } catch {
             state = .error(error)
         }
@@ -101,6 +103,10 @@ extension PerpetualPortfolioSceneViewModel {
 // MARK: - Private
 
 extension PerpetualPortfolioSceneViewModel {
+    private var address: String? {
+        wallet.accounts.first(where: { $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid})?.address
+    }
+
     private var unrealizedPnlModel: PriceChangeViewModel { priceChangeModel(value: portfolio?.accountSummary?.unrealizedPnl) }
     private var allTimePnlModel: PriceChangeViewModel { priceChangeModel(value: portfolio?.allTime?.pnlHistory.last?.value) }
 

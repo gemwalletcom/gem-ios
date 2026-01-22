@@ -80,6 +80,10 @@ public final class PerpetualsSceneViewModel {
     var sections: PerpetualsSections { .from(perpetuals) }
     var recentModels: [AssetViewModel] { recents.map { AssetViewModel(asset: $0.asset) } }
 
+    private var address: String? {
+        wallet.accounts.first(where: { $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid })?.address
+    }
+
     var headerViewModel: PerpetualsHeaderViewModel {
         PerpetualsHeaderViewModel(
             walletType: wallet.type,
@@ -97,8 +101,9 @@ extension PerpetualsSceneViewModel {
     }
 
     private func updatePositions() async {
+        guard let address else { return }
         do {
-            try await perpetualService.updatePositions(wallet: wallet)
+            try await perpetualService.updatePositions(address: address, walletId: wallet.walletId)
         } catch {
             debugLog("Failed to update positions: \(error)")
         }

@@ -2,9 +2,6 @@
 
 import Foundation
 
-public enum PortfolioChartType: String, CaseIterable, Identifiable {
-    case value
-    case pnl
-
+extension PerpetualPortfolioChartType {
     public var id: String { rawValue }
 }

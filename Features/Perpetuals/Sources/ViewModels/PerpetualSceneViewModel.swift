@@ -127,7 +127,9 @@ public final class PerpetualSceneViewModel {
         }
         Task {
             do {
-                try await perpetualService.updatePositions(wallet: wallet)
+                if let address {
+                    try await perpetualService.updatePositions(address: address, walletId: wallet.walletId)
+                }
             } catch {
                 debugLog("Failed to load data: \(error)")
             }
@@ -267,6 +269,10 @@ public extension PerpetualSceneViewModel {
     }
 
     // MARK: - Private
+
+    private var address: String? {
+        wallet.accounts.first(where: { $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid})?.address
+    }
 
     private func createTransferData(direction: PerpetualDirection, leverage: UInt8) -> PerpetualTransferData? {
         guard let assetIndex = Int(perpetual.identifier) else {

@@ -20,7 +20,7 @@ public struct PerpetualPortfolioScene: View {
                 Section { } header: {
                     VStack {
                         Picker("", selection: $model.selectedChartType) {
-                            ForEach(PortfolioChartType.allCases) { type in
+                            ForEach(PerpetualPortfolioChartType.allCases) { type in
                                 Text(model.chartTypeTitle(type)).tag(type)
                             }
                         }

@@ -190,24 +190,22 @@ struct CandlestickChartView: View {
     private var currentPriceModel: ChartPriceViewModel? {
         guard let lastCandle = data.last,
               let base = basePrice else { return nil }
-        let priceChangePercentage = base == 0 ? 0 : ((lastCandle.close - base) / base) * 100
         return ChartPriceViewModel(
             period: period,
             date: nil,
             price: lastCandle.close,
-            priceChangePercentage: priceChangePercentage,
+            priceChangePercentage: ChartPriceViewModel.priceChangePercentage(close: lastCandle.close, base: base),
             formatter: formatter
         )
     }
 
     private func createPriceModel(for candle: ChartCandleStick) -> ChartPriceViewModel {
         let base = basePrice ?? data.first?.close ?? candle.close
-        let priceChangePercentage = base == 0 ? 0 : ((candle.close - base) / base) * 100
         return ChartPriceViewModel(
             period: period,
             date: candle.date,
             price: candle.close,
-            priceChangePercentage: priceChangePercentage,
+            priceChangePercentage: ChartPriceViewModel.priceChangePercentage(close: candle.close, base: base),
             formatter: formatter
         )
     }

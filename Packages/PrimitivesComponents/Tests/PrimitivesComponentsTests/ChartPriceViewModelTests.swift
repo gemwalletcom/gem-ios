@@ -28,4 +28,12 @@ struct ChartPriceViewModelTests {
         #expect(ChartPriceViewModel.mock(date: nil).dateText == nil)
         #expect(ChartPriceViewModel.mock(date: Date()).dateText != nil)
     }
+
+    @Test
+    func priceChangePercentage() {
+        #expect(ChartPriceViewModel.priceChangePercentage(close: 110, base: 100) == 10)
+        #expect(ChartPriceViewModel.priceChangePercentage(close: 90, base: 100) == -10)
+        #expect(ChartPriceViewModel.priceChangePercentage(close: 100, base: 100) == 0)
+        #expect(ChartPriceViewModel.priceChangePercentage(close: 100, base: 0) == 0)
+    }
 }
