@@ -167,6 +167,18 @@ public final class AssetSceneViewModel: Sendable {
         return String(format: "%.2f %@", formatted, asset.symbol)
     }
 
+    var yieldRewardsText: String? {
+        guard let position = yieldPosition,
+              let rewardsStr = position.rewards,
+              let rewards = Double(rewardsStr),
+              rewards > 0 else {
+            return nil
+        }
+        let divisor = pow(10.0, Double(asset.decimals))
+        let formatted = rewards / divisor
+        return String(format: "+%.4f %@", formatted, asset.symbol)
+    }
+
     var priceItemViewModel: PriceListItemViewModel {
         PriceListItemViewModel(
             title: Localized.Asset.price,

@@ -56,9 +56,16 @@ extension YieldScene {
                     model.onWithdraw()
                 } label: {
                     HStack(spacing: Spacing.small) {
-                        Text("\(position.assetBalanceFormatted) \(model.assetSymbol)")
-                            .font(.body)
-                            .foregroundStyle(Colors.black)
+                        VStack(alignment: .leading, spacing: Spacing.tiny) {
+                            Text("\(position.assetBalanceFormatted) \(model.assetSymbol)")
+                                .font(.body)
+                                .foregroundStyle(Colors.black)
+                            if let rewards = position.rewardsFormatted {
+                                Text("+\(rewards) \(model.assetSymbol)")
+                                    .font(.caption)
+                                    .foregroundStyle(Colors.green)
+                            }
+                        }
                         Spacer()
                         position.position.provider.image
                             .resizable()

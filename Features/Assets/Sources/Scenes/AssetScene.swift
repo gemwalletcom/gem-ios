@@ -203,7 +203,9 @@ extension AssetScene {
         NavigationCustomLink(
             with: ListItemView(
                 title: model.yieldTitle,
-                subtitle: model.yieldBalanceText
+                subtitle: model.yieldBalanceText,
+                subtitleExtra: model.yieldRewardsText,
+                subtitleStyleExtra: TextStyle(font: .callout, color: Colors.green)
             ),
             action: { model.onSelectEarn() }
         )

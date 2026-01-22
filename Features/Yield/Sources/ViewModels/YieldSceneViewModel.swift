@@ -59,6 +59,16 @@ public struct YieldPositionViewModel: Sendable {
         return String(format: "%.2f%%", apy * 100)
     }
 
+    public var rewardsFormatted: String? {
+        guard let rewardsStr = position.rewards,
+              let rewards = Double(rewardsStr),
+              rewards > 0 else {
+            return nil
+        }
+        let divisor = pow(10.0, Double(decimals))
+        return String(format: "%.2f", rewards / divisor)
+    }
+
     public var providerName: String {
         switch position.provider {
         case .yo:
