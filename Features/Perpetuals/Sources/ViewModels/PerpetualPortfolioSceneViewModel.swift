@@ -112,11 +112,10 @@ extension PerpetualPortfolioSceneViewModel {
         guard let timeframe = data.timeframeData(for: selectedPeriod) else {
             return nil
         }
-        let dataPoints: [PerpetualPortfolioDataPoint] = switch selectedChartType {
+        let charts: [ChartDateValue] = switch selectedChartType {
         case .value: timeframe.accountValueHistory
         case .pnl: timeframe.pnlHistory
         }
-        let charts = dataPoints.map { ChartDateValue(date: $0.date, value: $0.value) }
         guard let values = try? ChartValues.from(charts: charts), values.hasVariation else {
             return nil
         }

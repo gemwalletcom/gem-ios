@@ -26,15 +26,6 @@ extension GemPerpetualPortfolioTimeframeData {
     }
 }
 
-extension GemPerpetualPortfolioDataPoint {
-    public func map() -> PerpetualPortfolioDataPoint {
-        PerpetualPortfolioDataPoint(
-            date: Date(timeIntervalSince1970: TimeInterval(date)),
-            value: value
-        )
-    }
-}
-
 extension GemPerpetualAccountSummary {
     public func map() -> PerpetualAccountSummary {
         PerpetualAccountSummary(

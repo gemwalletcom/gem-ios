@@ -3,32 +3,10 @@
 import Foundation
 import Primitives
 
-public extension PerpetualPortfolioDataPoint {
-    static func mock(
-        date: Date = Date(),
-        value: Double = 100.0
-    ) -> PerpetualPortfolioDataPoint {
-        PerpetualPortfolioDataPoint(date: date, value: value)
-    }
-
-    static func mockHistory(
-        startDate: Date = Date().addingTimeInterval(-86400),
-        values: [Double] = [100, 105, 102, 108, 110]
-    ) -> [PerpetualPortfolioDataPoint] {
-        let interval = 86400.0 / Double(values.count)
-        return values.enumerated().map { index, value in
-            PerpetualPortfolioDataPoint(
-                date: startDate.addingTimeInterval(Double(index) * interval),
-                value: value
-            )
-        }
-    }
-}
-
 public extension PerpetualPortfolioTimeframeData {
     static func mock(
-        accountValueHistory: [PerpetualPortfolioDataPoint] = PerpetualPortfolioDataPoint.mockHistory(values: [100, 105, 102, 108, 110]),
-        pnlHistory: [PerpetualPortfolioDataPoint] = PerpetualPortfolioDataPoint.mockHistory(values: [0, 5, 2, 8, 10]),
+        accountValueHistory: [ChartDateValue] = ChartDateValue.mockHistory(values: [100, 105, 102, 108, 110]),
+        pnlHistory: [ChartDateValue] = ChartDateValue.mockHistory(values: [0, 5, 2, 8, 10]),
         volume: Double = 50000
     ) -> PerpetualPortfolioTimeframeData {
         PerpetualPortfolioTimeframeData(
@@ -44,13 +22,15 @@ public extension PerpetualPortfolio {
         day: PerpetualPortfolioTimeframeData? = .mock(),
         week: PerpetualPortfolioTimeframeData? = .mock(),
         month: PerpetualPortfolioTimeframeData? = .mock(),
-        allTime: PerpetualPortfolioTimeframeData? = .mock()
+        allTime: PerpetualPortfolioTimeframeData? = .mock(),
+        accountSummary: PerpetualAccountSummary? = nil
     ) -> PerpetualPortfolio {
         PerpetualPortfolio(
             day: day,
             week: week,
             month: month,
-            allTime: allTime
+            allTime: allTime,
+            accountSummary: accountSummary
         )
     }
 
@@ -59,7 +39,8 @@ public extension PerpetualPortfolio {
             day: nil,
             week: nil,
             month: nil,
-            allTime: nil
+            allTime: nil,
+            accountSummary: nil
         )
     }
 }

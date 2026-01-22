@@ -18,22 +18,12 @@ public struct PerpetualAccountSummary: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct PerpetualPortfolioDataPoint: Codable, Equatable, Hashable, Sendable {
-	public let date: Date
-	public let value: Double
-
-	public init(date: Date, value: Double) {
-		self.date = date
-		self.value = value
-	}
-}
-
 public struct PerpetualPortfolioTimeframeData: Codable, Equatable, Hashable, Sendable {
-	public let accountValueHistory: [PerpetualPortfolioDataPoint]
-	public let pnlHistory: [PerpetualPortfolioDataPoint]
+	public let accountValueHistory: [ChartDateValue]
+	public let pnlHistory: [ChartDateValue]
 	public let volume: Double
 
-	public init(accountValueHistory: [PerpetualPortfolioDataPoint], pnlHistory: [PerpetualPortfolioDataPoint], volume: Double) {
+	public init(accountValueHistory: [ChartDateValue], pnlHistory: [ChartDateValue], volume: Double) {
 		self.accountValueHistory = accountValueHistory
 		self.pnlHistory = pnlHistory
 		self.volume = volume
