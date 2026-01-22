@@ -66,15 +66,14 @@ public final class PerpetualPortfolioSceneViewModel {
     }
 
     func fetch() async {
+        guard let address = wallet.perpetualAddress else { return }
         state = .loading
         do {
-            if let address {
-                let data = try await perpetualService.portfolio(address: address)
-                if !data.availablePeriods.contains(selectedPeriod), let first = data.availablePeriods.first {
-                    selectedPeriod = first
-                }
-                state = .data(data)
+            let data = try await perpetualService.portfolio(address: address)
+            if !data.availablePeriods.contains(selectedPeriod), let first = data.availablePeriods.first {
+                selectedPeriod = first
             }
+            state = .data(data)
         } catch {
             state = .error(error)
         }
@@ -103,10 +102,6 @@ extension PerpetualPortfolioSceneViewModel {
 // MARK: - Private
 
 extension PerpetualPortfolioSceneViewModel {
-    private var address: String? {
-        wallet.accounts.first(where: { $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid})?.address
-    }
-
     private var unrealizedPnlModel: PriceChangeViewModel { priceChangeModel(value: portfolio?.accountSummary?.unrealizedPnl) }
     private var allTimePnlModel: PriceChangeViewModel { priceChangeModel(value: portfolio?.allTime?.pnlHistory.last?.value) }
 

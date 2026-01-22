@@ -29,7 +29,7 @@ public actor PerpetualObserverService: Sendable {
                 do {
                     let positions = try await self.perpetualService.getPositions(walletId: wallet.walletId)
 
-                    if let address = self.perpetualAddress(from: wallet), positions.isNotEmpty {
+                    if let address = wallet.perpetualAddress, positions.isNotEmpty {
                         try await self.perpetualService.updatePositions(address: address, walletId: wallet.walletId)
                     }
                 } catch {
@@ -45,9 +45,5 @@ public actor PerpetualObserverService: Sendable {
         updateTask?.cancel()
         updateTask = nil
         currentWallet = nil
-    }
-
-    private func perpetualAddress(from wallet: Wallet) -> String? {
-        wallet.accounts.first(where: { $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid })?.address
     }
 }

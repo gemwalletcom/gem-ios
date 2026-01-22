@@ -127,7 +127,7 @@ public final class PerpetualSceneViewModel {
         }
         Task {
             do {
-                if let address {
+                if let address = wallet.perpetualAddress {
                     try await perpetualService.updatePositions(address: address, walletId: wallet.walletId)
                 }
             } catch {
@@ -269,10 +269,6 @@ public extension PerpetualSceneViewModel {
     }
 
     // MARK: - Private
-
-    private var address: String? {
-        wallet.accounts.first(where: { $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid})?.address
-    }
 
     private func createTransferData(direction: PerpetualDirection, leverage: UInt8) -> PerpetualTransferData? {
         guard let assetIndex = Int(perpetual.identifier) else {
