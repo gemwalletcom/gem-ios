@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "पुरस्कार अर्जित करने के लिए अपना उपयोगकर्ता नाम सेट करें";
 "notifications.inapp.rewards.invite.subtitle" = "दोस्तों को आमंत्रित करें और साथ मिलकर पुरस्कार जीतें";
 "nodes.import_node.warning_message" = "कस्टम नोड्स दुर्भावनापूर्ण हो सकते हैं और आपके लेनदेन डेटा को उजागर कर सकते हैं या गलत जानकारी प्रदान कर सकते हैं।";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "यदि सभी सिक्के प्रचलन में होते तो उनका सैद्धांतिक बाजार मूल्य क्या होता? इसकी गणना मूल्य को अधिकतम आपूर्ति से गुणा करके की जाती है।";
+"info.circulating_supply.description" = "बाजार में वर्तमान में उपलब्ध और कारोबार कर रहे सिक्कों की संख्या।\"";
+"info.total_supply.description" = "लॉक किए गए या आरक्षित सिक्कों सहित, मौजूद सिक्कों की कुल संख्या।";
+"info.max_supply.title" = "अधिकतम आपूर्ति";
+"info.max_supply.description" = "कुल मिलाकर मौजूद सिक्कों की अधिकतम संख्या।";

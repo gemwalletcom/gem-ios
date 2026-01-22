@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Opret dit brugernavn for at optjene belønninger";
 "notifications.inapp.rewards.invite.subtitle" = "Inviter venner og optjen belønninger sammen";
 "nodes.import_node.warning_message" = "Brugerdefinerede noder kan være skadelige og kan eksponere dine transaktionsdata eller give falske oplysninger.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Den teoretiske markedsværdi, hvis alle mønter var i omløb. Beregnet som prisen ganget med det maksimale udbud.";
+"info.circulating_supply.description" = "Antallet af tilgængelige og handlede mønter på markedet i øjeblikket.";
+"info.total_supply.description" = "Det samlede antal mønter, der findes, inklusive låste eller reserverede mønter.";
+"info.max_supply.title" = "Maks. forsyning";
+"info.max_supply.description" = "Det maksimale antal mønter, der nogensinde vil eksistere.";

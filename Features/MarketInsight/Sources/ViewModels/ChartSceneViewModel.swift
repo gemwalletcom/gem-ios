@@ -36,9 +36,13 @@ public final class ChartSceneViewModel {
     var priceRequest: PriceRequest
 
     public var isPresentingSetPriceAlert: Binding<AssetId?>
+    var isPresentingMarkets: PriceData?
 
     var title: String { assetModel.name }
-    
+    var emptyTitle: String { Localized.Common.notAvailable }
+    var errorTitle: String { Localized.Errors.errorOccured }
+    var hasMarketData: Bool { priceData?.market != nil }
+
     var priceAlertsViewModel: PriceAlertsViewModel { PriceAlertsViewModel(priceAlerts: priceData?.priceAlerts ?? []) }
     var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts && isPriceAvailable }
     var isPriceAvailable: Bool { PriceViewModel(price: priceData?.price, currencyCode: preferences.currency).isPriceAvailable }
@@ -108,5 +112,9 @@ extension ChartSceneViewModel {
 
     public func onSelectSetPriceAlerts() {
         isPresentingSetPriceAlert.wrappedValue = assetModel.asset.id
+    }
+
+    public func onSelectPriceDetails() {
+        isPresentingMarkets = priceData
     }
 }
