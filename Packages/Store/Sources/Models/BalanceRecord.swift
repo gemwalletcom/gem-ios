@@ -86,11 +86,11 @@ extension BalanceRecord: CreateTable {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
             $0.column(Columns.assetId.name, .text)
                 .notNull()
-                .references(AssetRecord.databaseTableName, onDelete: .cascade)
+                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
-                .references(WalletRecord.databaseTableName, onDelete: .cascade)
+                .references(WalletRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             
             // balances
             $0.column(Columns.available.name, .text).defaults(to: "0")

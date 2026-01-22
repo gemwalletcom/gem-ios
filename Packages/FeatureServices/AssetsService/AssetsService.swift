@@ -128,13 +128,11 @@ public final class AssetsService: Sendable {
         let assets = try await withThrowingTaskGroup(of: [AssetBasic]?.self) { group in
             var assets = [AssetBasic]()
 
-            group.addTask { [weak self] in
-                guard let self = self else { return [] }
-                return try await self.searchAPIAssets(query: query, chains: chains, tags: tags)
+            group.addTask {
+                try await self.searchAPIAssets(query: query, chains: chains, tags: tags)
             }
-            group.addTask { [weak self] in
-                guard let self = self else { return [] }
-                return try await self.searchNetworkAsset(tokenId: query, chains: chains.isEmpty ? Chain.allCases : chains)
+            group.addTask {
+                try await self.searchNetworkAsset(tokenId: query, chains: chains.isEmpty ? Chain.allCases : chains)
             }
 
             for try await result in group {
@@ -154,8 +152,7 @@ public final class AssetsService: Sendable {
     func searchNetworkAsset(tokenId: String, chains: [Chain]) async throws -> [AssetBasic] {
         try await withThrowingTaskGroup(of: AssetBasic?.self) { group in
             chains.forEach { chain in
-                group.addTask { [weak self] in
-                    guard let self else { return nil }
+                group.addTask {
                     let service = self.chainServiceFactory.service(for: chain)
                     guard try await service.getIsTokenAddress(tokenId: tokenId),
                           let asset = try? await service.getTokenData(tokenId: tokenId)

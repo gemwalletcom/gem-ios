@@ -8,55 +8,58 @@ import Components
 import PrimitivesComponents
 
 public struct InAppNotificationListItemViewModel: Identifiable, Sendable {
-    public let notification: Primitives.InAppNotification
+    private let item: CoreListItem
+    private let isRead: Bool
 
-    public var id: String { notification.id }
+    public let id: String
+    public let url: URL?
+
+    public init(notification: InAppNotification) {
+        self.id = notification.id
+        self.item = notification.item
+        self.isRead = notification.isRead
+        self.url = notification.item.url?.asURL
+    }
 
     var listItemModel: ListItemModel {
         ListItemModel(
-            title: notification.item.title,
-            titleTag: notification.isRead ? nil : Localized.Assets.Tags.new,
-            titleTagStyle: titleTagStyle,
-            titleExtra: notification.item.subtitle,
-            subtitle: notification.item.value,
-            subtitleStyle: pointsStyle,
+            title: item.title,
+            titleTag: isRead ? nil : Localized.Assets.Tags.new,
+            titleTagStyle: TextStyle(font: .footnote.weight(.medium), color: .blue, background: Colors.blue.opacity(0.15)),
+            titleExtra: item.subtitle,
+            subtitle: item.value,
+            subtitleStyle: TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold),
+            subtitleExtra: item.subvalue,
             imageStyle: imageStyle
         )
     }
 
-    private var titleTagStyle: TextStyle {
-        TextStyle(font: .footnote.weight(.medium), color: .blue, background: Colors.blue.opacity(0.15))
-    }
-
     private var imageStyle: ListItemImageStyle? {
-        guard let assetImage else { return nil }
+        guard let icon = item.icon else { return nil }
         return ListItemImageStyle(
-            assetImage: assetImage,
+            assetImage: assetImage(for: icon),
             imageSize: .image.asset,
             alignment: .top,
             cornerRadiusType: .rounded
         )
     }
 
-    private var assetImage: AssetImage? {
-        guard let icon = notification.item.icon else { return nil }
+    private func assetImage(for icon: CoreListItemIcon) -> AssetImage {
         switch icon {
-        case .emoji(let coreEmoji):
-            let emoji: String = switch coreEmoji {
-            case .gift: Emoji.WalletAvatar.gift.rawValue
-            case .gem: Emoji.gem
-            case .party: Emoji.party
-            case .warning: Emoji.WalletAvatar.warning.rawValue
-            }
-            return AssetImage(type: emoji)
-        case .asset(let assetId):
-            return AssetIdViewModel(assetId: assetId).assetImage
-        case .image(let url):
-            return AssetImage(imageURL: URL(string: url))
+        case .emoji(let emoji): AssetImage(type: emoji.value)
+        case .asset(let assetId): AssetIdViewModel(assetId: assetId).assetImage
+        case .image(let url): AssetImage(imageURL: url.asURL)
         }
     }
+}
 
-    private var pointsStyle: TextStyle {
-        TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold)
+private extension CoreEmoji {
+    var value: String {
+        switch self {
+        case .gift: Emoji.WalletAvatar.gift.rawValue
+        case .gem: Emoji.gem
+        case .party: Emoji.party
+        case .warning: Emoji.WalletAvatar.warning.rawValue
+        }
     }
 }

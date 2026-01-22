@@ -33,7 +33,7 @@ extension AddressRecord: CreateTable {
         try db.create(table: Self.databaseTableName) {
             $0.column(Columns.chain.name, .text)
                 .notNull()
-                .references(AssetRecord.databaseTableName, onDelete: .cascade)
+                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.address.name, .text)
                 .notNull()
             $0.column(Columns.name.name, .text)
