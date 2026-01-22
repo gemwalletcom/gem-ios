@@ -39,21 +39,23 @@ struct WalletIdMigration {
         }
 
         // Step 3: Rename remaining wallets to new ID format
+        // Temporarily disable FK constraints for existing databases without onUpdate: .cascade
+        try db.execute(sql: "PRAGMA foreign_keys = OFF")
+
         let remainingMappings = try buildWalletMappings(db: db)
         for mapping in remainingMappings where mapping.oldId != mapping.newId {
-            // Update child table references FIRST (before wallet ID changes)
+            try db.execute(sql: "UPDATE \(WalletRecord.databaseTableName) SET externalId = id, id = ? WHERE id = ?", arguments: [mapping.newId, mapping.oldId])
+
+            // Update child table references
             for table in childTables {
                 try db.execute(
                     sql: "UPDATE \(table) SET walletId = ? WHERE walletId = ?",
                     arguments: [mapping.newId, mapping.oldId]
                 )
             }
-
-            // Update wallet ID
-            try db.execute(sql: """
-                UPDATE \(WalletRecord.databaseTableName) SET externalId = id, id = ? WHERE id = ?
-            """, arguments: [mapping.newId, mapping.oldId])
         }
+
+        try db.execute(sql: "PRAGMA foreign_keys = ON")
 
         // Step 4: Migrate currentWalletId preference
         migrateCurrentWalletPreference(mappings: remainingMappings)
