@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "חתימה על עסקה";
 "recent_activity.title" = "אחרונים";
 "settings.preferences.app_icon" = "סמל האפליקציה";
-"recent_activity.clear_confirmation" = "האם אתה בטוח שאתה רוצה למחוק את כל ההודעות האחרונות?";
 "rewards.pending.title" = "בונוס ממתין";
 "rewards.pending.description" = "זמין ב %@";
 "rewards.pending.description_ready" = "הבונוס שלך מוכן!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "קוד הפניה מושבת";
 "notifications.inapp.rewards.disabled.subtitle" = "קוד ההפניה שלך הושבת";
 "rewards.nickname" = "כינוי";
+"notifications.inapp.rewards.redeemed.title" = "תגמולים שנפדו";
+"notifications.inapp.rewards.redeemed.subtitle" = "התגמולים שלך מומשו בהצלחה";
+"notifications.inapp.rewards.create_username.subtitle" = "הגדר את שם המשתמש שלך כדי לצבור פרסים";
+"notifications.inapp.rewards.invite.subtitle" = "הזמינו חברים וצברו יחד פרסים";
+"nodes.import_node.warning_message" = "צמתים מותאמים אישית עלולים להיות זדוניים ולחשוף את נתוני העסקאות שלך או לספק מידע כוזב.";

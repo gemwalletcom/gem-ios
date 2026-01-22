@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "Подписать транзакцию";
 "recent_activity.title" = "Последние";
 "settings.preferences.app_icon" = "Иконка приложения";
-"recent_activity.clear_confirmation" = "Вы уверены, что хотите удалить все последние записи?";
 "rewards.pending.title" = "Ожидается выплата бонуса";
 "rewards.pending.description" = "Доступно в %@";
 "rewards.pending.description_ready" = "Ваш бонус готов!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Реферальный код отключен";
 "notifications.inapp.rewards.disabled.subtitle" = "Ваш реферальный код деактивирован.";
 "rewards.nickname" = "Никнейм";
+"notifications.inapp.rewards.redeemed.title" = "Награда получена";
+"notifications.inapp.rewards.redeemed.subtitle" = "Награда успешно получена.";
+"notifications.inapp.rewards.create_username.subtitle" = "Зарегистрируйте имя пользователя, чтобы получать награды.";
+"notifications.inapp.rewards.invite.subtitle" = "Приглашайте друзей и зарабатывайте награды вместе.";
+"nodes.import_node.warning_message" = "Пользовательские узлы могут быть вредоносными и способны раскрыть данные ваших транзакций или предоставить ложную информацию.";

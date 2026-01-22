@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "Sa hannu kan Ma'amala";
 "recent_activity.title" = "Kwanan nan";
 "settings.preferences.app_icon" = "Alamar Manhaja";
-"recent_activity.clear_confirmation" = "Shin kana da tabbacin kana son share duk sabbin bayanai?";
 "rewards.pending.title" = "Karin Kudi Ana Jira";
 "rewards.pending.description" = "Akwai a cikin %@";
 "rewards.pending.description_ready" = "Karin kyautar ku a shirye take!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "An kashe Lambar Tukuitawa";
 "notifications.inapp.rewards.disabled.subtitle" = "An kashe lambar tura ku";
 "rewards.nickname" = "Laƙabi";
+"notifications.inapp.rewards.redeemed.title" = "Lada da aka fanshe";
+"notifications.inapp.rewards.redeemed.subtitle" = "An yi nasarar fansar ladaran ku";
+"notifications.inapp.rewards.create_username.subtitle" = "Saita sunan mai amfani don samun lada";
+"notifications.inapp.rewards.invite.subtitle" = "Gayyaci abokai kuma ku sami lada tare";
+"nodes.import_node.warning_message" = "Maɓallan da aka keɓance na iya zama masu cutarwa kuma suna iya fallasa bayanan ma'amalar ku ko kuma samar da bayanan karya.";

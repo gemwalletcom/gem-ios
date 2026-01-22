@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "Saini Muamala";
 "recent_activity.title" = "Hivi karibuni";
 "settings.preferences.app_icon" = "Aikoni ya Programu";
-"recent_activity.clear_confirmation" = "Una uhakika unataka kufuta taarifa zote za hivi karibuni?";
 "rewards.pending.title" = "Bonasi Inasubiri";
 "rewards.pending.description" = "Inapatikana katika %@";
 "rewards.pending.description_ready" = "Bonasi yako iko tayari!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Nambari ya Rufaa Imezimwa";
 "notifications.inapp.rewards.disabled.subtitle" = "Nambari yako ya rufaa imezimwa";
 "rewards.nickname" = "Jina la utani";
+"notifications.inapp.rewards.redeemed.title" = "Zawadi Zilizokombolewa";
+"notifications.inapp.rewards.redeemed.subtitle" = "Zawadi zako zimetumika kwa mafanikio";
+"notifications.inapp.rewards.create_username.subtitle" = "Weka jina lako la mtumiaji ili upate zawadi";
+"notifications.inapp.rewards.invite.subtitle" = "Alika marafiki na upate zawadi pamoja";
+"nodes.import_node.warning_message" = "Nodi maalum zinaweza kuwa na nia mbaya na zinaweza kufichua data ya muamala wako au kutoa taarifa za uongo.";

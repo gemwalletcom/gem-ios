@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "Ký giao dịch";
 "recent_activity.title" = "Gần đây";
 "settings.preferences.app_icon" = "Biểu tượng ứng dụng";
-"recent_activity.clear_confirmation" = "Bạn có chắc chắn muốn xóa tất cả mục gần đây không?";
 "rewards.pending.title" = "Tiền thưởng đang chờ xử lý";
 "rewards.pending.description" = "Có sẵn trong %@";
 "rewards.pending.description_ready" = "Phần thưởng của bạn đã sẵn sàng!";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "Mã giới thiệu đã bị vô hiệu hóa";
 "notifications.inapp.rewards.disabled.subtitle" = "Mã giới thiệu của bạn đã bị vô hiệu hóa.";
 "rewards.nickname" = "Biệt danh";
+"notifications.inapp.rewards.redeemed.title" = "Phần thưởng đã quy đổi";
+"notifications.inapp.rewards.redeemed.subtitle" = "Phần thưởng của bạn đã được quy đổi thành công.";
+"notifications.inapp.rewards.create_username.subtitle" = "Thiết lập tên người dùng của bạn để nhận phần thưởng";
+"notifications.inapp.rewards.invite.subtitle" = "Mời bạn bè và cùng nhau nhận phần thưởng.";
+"nodes.import_node.warning_message" = "Các node tùy chỉnh có thể chứa mã độc và có thể làm lộ dữ liệu giao dịch của bạn hoặc cung cấp thông tin sai lệch.";

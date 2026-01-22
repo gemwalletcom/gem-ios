@@ -1,12 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
 import Components
+import Foundation
 import Localization
 import NotificationService
+import Primitives
 import PrimitivesComponents
 import Store
+import UIKit
 
 @Observable
 @MainActor
@@ -15,8 +16,7 @@ public final class InAppNotificationsViewModel {
     private let wallet: Wallet
 
     public var request: InAppNotificationsRequest
-    public var notifications: [Primitives.Notification] = []
-    public var state: StateViewType<[ListSection<InAppNotificationListItemViewModel>]> = .loading
+    public var notifications: [Primitives.InAppNotification] = []
 
     public init(
         wallet: Wallet,
@@ -33,7 +33,7 @@ public final class InAppNotificationsViewModel {
         EmptyContentTypeViewModel(type: .notifications)
     }
 
-    private var sections: [ListSection<InAppNotificationListItemViewModel>] {
+    public var sections: [ListSection<InAppNotificationListItemViewModel>] {
         DateSectionBuilder(
             items: notifications,
             dateKeyPath: \.createdAt,
@@ -41,7 +41,7 @@ public final class InAppNotificationsViewModel {
         ).build()
     }
 
-    var hasUnreadNotifications: Bool {
+    private var hasUnreadNotifications: Bool {
         notifications.contains { !$0.isRead }
     }
 }
@@ -49,27 +49,26 @@ public final class InAppNotificationsViewModel {
 // MARK: - Actions
 
 extension InAppNotificationsViewModel {
-    public func updateState() {
-        state = notifications.isEmpty ? .noData : .data(sections)
-    }
-
-    public func update() async {
+    public func fetch() async {
         do {
-            try await notificationService.update()
+            try await notificationService.update(walletId: wallet.walletId)
             if hasUnreadNotifications {
                 await markAsRead()
             }
         } catch {
-            state = .error(error)
-            debugLog("update notifications error: \(error)")
+            debugLog("fetch notifications error: \(error)")
         }
     }
 
-    public func markAsRead() async {
+    private func markAsRead() async {
         do {
             try await notificationService.markNotificationsRead()
         } catch {
             debugLog("markAsRead error: \(error)")
         }
+    }
+
+    public func open(url: URL) {
+        UIApplication.shared.open(url)
     }
 }

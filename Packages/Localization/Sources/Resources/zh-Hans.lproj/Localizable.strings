@@ -547,7 +547,6 @@
 "transfer.sign_transaction.title" = "签署交易";
 "recent_activity.title" = "近期";
 "settings.preferences.app_icon" = "应用图标";
-"recent_activity.clear_confirmation" = "您确定要清除所有最近使用记录吗？";
 "rewards.pending.title" = "奖金待发放";
 "rewards.pending.description" = "有售 %@";
 "rewards.pending.description_ready" = "您的奖金已发放！";
@@ -562,3 +561,8 @@
 "notifications.inapp.rewards.disabled.title" = "推荐码已禁用";
 "notifications.inapp.rewards.disabled.subtitle" = "您的推荐码已停用。";
 "rewards.nickname" = "昵称";
+"notifications.inapp.rewards.redeemed.title" = "已兑换奖励";
+"notifications.inapp.rewards.redeemed.subtitle" = "您的奖励已成功兑换";
+"notifications.inapp.rewards.create_username.subtitle" = "设置您的用户名即可获得奖励";
+"notifications.inapp.rewards.invite.subtitle" = "邀请好友，一起赢取奖励";
+"nodes.import_node.warning_message" = "自定义节点可能存在恶意，可能会泄露您的交易数据或提供虚假信息。";

@@ -31,7 +31,7 @@ public enum GemAPI: TargetType {
     case addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
     case deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
 
-    case getTransactions(deviceId: String, options: TransactionsFetchOption)
+    case getTransactions(deviceId: String, walletIndex: Int, assetId: String?, fromTimestamp: Int)
 
     case getAsset(AssetId)
     case getAssets([AssetId])
@@ -55,7 +55,7 @@ public enum GemAPI: TargetType {
     case getRedemptionOption(code: String)
     case redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>)
 
-    case getNotifications(deviceId: String)
+    case getNotifications(deviceId: String, fromTimestamp: Int)
     case markNotificationsRead(deviceId: String)
 
     public var baseUrl: URL {
@@ -142,8 +142,12 @@ public enum GemAPI: TargetType {
             return "/v1/devices/\(deviceId)"
         case .updateDevice(let device):
             return "/v1/devices/\(device.id)"
-        case .getTransactions(let deviceId, _):
-            return "/v2/transactions/device/\(deviceId)"
+        case .getTransactions(let deviceId, let walletIndex, let assetId, let fromTimestamp):
+            var path = "/v2/transactions/device/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
+            if let assetId {
+                path += "&asset_id=\(assetId)"
+            }
+            return path
         case .getAsset(let id):
             return "/v1/assets/\(id.identifier.replacingOccurrences(of: "/", with: "%2F"))"
         case .getAssets:
@@ -180,8 +184,8 @@ public enum GemAPI: TargetType {
             return "/v1/rewards/redemptions/\(code)"
         case .redeem(let walletId, _):
             return "/v1/rewards/\(walletId)/redeem"
-        case .getNotifications(let deviceId):
-            return "/v1/notifications/\(deviceId)"
+        case .getNotifications(let deviceId, let fromTimestamp):
+            return "/v1/notifications/\(deviceId)?from_timestamp=\(fromTimestamp)"
         case .markNotificationsRead(let deviceId):
             return "/v1/notifications/\(deviceId)/read"
         }
@@ -204,7 +208,8 @@ public enum GemAPI: TargetType {
             .getRewards,
             .getRedemptionOption,
             .getNotifications,
-            .markNotificationsRead:
+            .markNotificationsRead,
+            .getTransactions:
             return .plain
         case .getFiatQuoteUrl(let request):
             return .encodable(request)
@@ -245,14 +250,6 @@ public enum GemAPI: TargetType {
         case .addDevice(let device),
             .updateDevice(let device):
             return .encodable(device)
-        case .getTransactions(_, let options):
-            let params: [String: Any] = [
-                "wallet_index": options.wallet_index,
-                "asset_id": options.asset_id as Any?,
-                "from_timestamp": options.from_timestamp as Any?,
-            ].compactMapValues { $0 }
-            
-            return .params(params)
         case .getSearchAssets(let query, let chains, let tags):
             return .params([
                 "query": query,

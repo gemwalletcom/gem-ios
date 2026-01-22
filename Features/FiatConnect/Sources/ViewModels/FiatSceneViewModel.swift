@@ -216,7 +216,7 @@ extension FiatSceneViewModel {
     }
 
     func onSelectRandomAmount() {
-        let amount = Int.random(in: Constants.defaultAmount..<Constants.randomMaxAmount) // mobsf-ignore: ios_insecure_random_no_generator (UI suggestion only)
+        let amount = Int.random(in: Constants.defaultAmount..<Constants.randomMaxAmount)
         selectAmount(amount)
     }
 

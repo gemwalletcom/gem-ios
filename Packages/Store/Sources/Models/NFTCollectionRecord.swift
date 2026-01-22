@@ -46,7 +46,7 @@ extension NFTCollectionRecord: CreateTable {
             $0.column(Columns.chain.name, .text).notNull()
                 .notNull()
                 .indexed()
-                .references(AssetRecord.databaseTableName, onDelete: .cascade)
+                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.contractAddress.name, .text).notNull()
             $0.column(Columns.isVerified.name, .boolean).notNull()
             $0.column(Columns.links.name, .jsonText)

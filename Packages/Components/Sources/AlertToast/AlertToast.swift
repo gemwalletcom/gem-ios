@@ -6,6 +6,8 @@ import Style
 
 public struct AlertToast: View {
 
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
     public let systemImage: String
     public let imageColor: Color
     public let title: String
@@ -29,11 +31,11 @@ public struct AlertToast: View {
     public var body: some View {
         VStack {
             Spacer()
-            
+
             HStack(spacing: .medium) {
                 Image(systemName: systemImage)
                     .foregroundColor(imageColor)
-                
+
                 Text(LocalizedStringKey(title))
                     .font(titleFont ?? Font.headline.bold())
                     .foregroundColor(titleColor)
@@ -41,15 +43,21 @@ public struct AlertToast: View {
             .multilineTextAlignment(.leading)
             .padding(.horizontal, .medium)
             .padding(.vertical, .medium)
-            .frame(maxWidth: .scene.content.maxWidth, alignment: .leading)
+            .frame(maxWidth: maxWidth, alignment: .leading)
             .liquidGlass(fallback: { view in
                 view
                     .background(BlurView())
                     .cornerRadius(.space10)
             })
-            .padding(.horizontal, .medium)
+            .padding(.horizontal, .space10 * 2)
             .padding(.bottom, .medium)
         }
+    }
+
+    private var maxWidth: CGFloat {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isCompactVertical = verticalSizeClass == .compact
+        return (isPad || isCompactVertical) ? .scene.content.maxWidth : .infinity
     }
 }
 
@@ -57,7 +65,7 @@ public struct AlertToastModifier: ViewModifier {
 
     @Binding var isPresenting: Bool
 
-    var duration: Double = 2
+    var duration: TimeInterval = 2
     var tapToDismiss: Bool = true
     var offsetY: CGFloat = 0
 
@@ -65,8 +73,6 @@ public struct AlertToastModifier: ViewModifier {
 
     var onTap: (() -> Void)? = nil
     var completion: (() -> Void)? = nil
-
-    @State private var workItem: DispatchWorkItem?
 
     @ViewBuilder
     private func main() -> some View {
@@ -77,9 +83,7 @@ public struct AlertToastModifier: ViewModifier {
                     onTap?()
                     if tapToDismiss {
                         withAnimation(.spring()) {
-                            workItem?.cancel()
                             isPresenting = false
-                            workItem = nil
                         }
                     }
                 }
@@ -98,35 +102,21 @@ public struct AlertToastModifier: ViewModifier {
                 }
                 .animation(.spring(), value: isPresenting)
             )
-            .onChange(of: isPresenting) { _, presented in
-                if presented {
-                    onAppearAction()
+            .task(id: isPresenting) {
+                if isPresenting && duration > 0 && duration.isFinite {
+                    try? await Task.sleep(for: .seconds(duration))
+                    withAnimation(.spring()) {
+                        isPresenting = false
+                    }
                 }
             }
-    }
-
-    private func onAppearAction() {
-        guard workItem == nil else { return }
-
-        if duration > 0 {
-            workItem?.cancel()
-
-            let task = DispatchWorkItem {
-                withAnimation(.spring()) {
-                    isPresenting = false
-                    workItem = nil
-                }
-            }
-            workItem = task
-            DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: task)
-        }
     }
 }
 
 public extension View {
     func toast(
         isPresenting: Binding<Bool>,
-        duration: Double = 2,
+        duration: TimeInterval = 2,
         tapToDismiss: Bool = true,
         offsetY: CGFloat = 0,
         alert: @escaping () -> AlertToast,

@@ -7,6 +7,7 @@ import NameService
 import PrimitivesComponents
 import SwiftUI
 import Components
+import GemstonePrimitives
 import enum Keystore.KeystoreImportType
 import struct Keystore.Mnemonic
 
@@ -86,6 +87,17 @@ final class ImportWalletSceneViewModel {
         case .address: try? AttributedString(markdown: Localized.Wallet.importAddressWarning)
         }
     }
+
+    var docsUrl: URL {
+        Docs.url(.howToSecureSecretPhrase)
+    }
+
+    var shouldProtectInput: Bool {
+        switch importType {
+        case .phrase, .privateKey: true
+        case .address: false
+        }
+    }
 }
 
 // MARK: - Business Logic
@@ -137,6 +149,10 @@ extension ImportWalletSceneViewModel {
             return
         }
         input = string.trim()
+
+        if shouldProtectInput {
+            CopyTypeViewModel.clearClipboard()
+        }
     }
 }
 
@@ -144,15 +160,16 @@ extension ImportWalletSceneViewModel {
 
 extension ImportWalletSceneViewModel {
     private func importWallet() async throws {
+        let trimmedInput = input.trim()
         let recipient: RecipientImport = {
             if let result = nameResolveState.result {
                 return RecipientImport(name: result.name, address: result.address)
             }
-            return RecipientImport(name: WalletNameGenerator(type: type, walletService: walletService).name, address: input)
+            return RecipientImport(name: WalletNameGenerator(type: type, walletService: walletService).name, address: trimmedInput)
         }()
         switch importType {
         case .phrase:
-            let words = input.split(separator: " ").map{String($0)}
+            let words = trimmedInput.split(separator: " ").map { String($0) }
             guard try validateForm(type: importType, address: recipient.address, words: words) else {
                 return
             }
@@ -169,10 +186,10 @@ extension ImportWalletSceneViewModel {
                 )
             }
         case .privateKey:
-            guard try validateForm(type: importType, address: recipient.address, words: [input]) else {
+            guard try validateForm(type: importType, address: recipient.address, words: [trimmedInput]) else {
                 return
             }
-            importWallet(name: recipient.name, keystoreType: .privateKey(text: input, chain: chain!))
+            importWallet(name: recipient.name, keystoreType: .privateKey(text: trimmedInput, chain: chain!))
         case .address:
             guard try validateForm(type: importType, address: recipient.address, words: []) else {
                 return
