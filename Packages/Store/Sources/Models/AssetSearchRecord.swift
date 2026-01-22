@@ -29,7 +29,7 @@ extension AssetSearchRecord: CreateTable {
             $0.column(Columns.assetId.name, .text)
                 .indexed()
                 .notNull()
-                .references(AssetRecord.databaseTableName, onDelete: .cascade)
+                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.priority.name, .integer)
                 .notNull()
             $0.uniqueKey([Columns.query.name, Columns.assetId.name])

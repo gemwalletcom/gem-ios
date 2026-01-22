@@ -46,18 +46,6 @@ public struct Transaction: Codable, Equatable, Sendable {
 	}
 }
 
-public struct TransactionsFetchOption: Codable, Equatable, Sendable {
-	public let wallet_index: Int32
-	public let asset_id: String?
-	public let from_timestamp: UInt32?
-
-	public init(wallet_index: Int32, asset_id: String?, from_timestamp: UInt32?) {
-		self.wallet_index = wallet_index
-		self.asset_id = asset_id
-		self.from_timestamp = from_timestamp
-	}
-}
-
 public struct TransactionsResponse: Codable, Equatable, Sendable {
 	public let transactions: [Transaction]
 	public let addressNames: [AddressName]

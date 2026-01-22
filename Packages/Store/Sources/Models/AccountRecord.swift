@@ -31,7 +31,7 @@ extension AccountRecord: CreateTable {
             $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
-                .references(WalletRecord.databaseTableName, onDelete: .cascade)
+                .references(WalletRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.chain.name, .text)
                 .notNull()
             $0.column(Columns.address.name, .text)
