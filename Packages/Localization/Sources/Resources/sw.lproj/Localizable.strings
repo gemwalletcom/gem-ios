@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Weka jina lako la mtumiaji ili upate zawadi";
 "notifications.inapp.rewards.invite.subtitle" = "Alika marafiki na upate zawadi pamoja";
 "nodes.import_node.warning_message" = "Nodi maalum zinaweza kuwa na nia mbaya na zinaweza kufichua data ya muamala wako au kutoa taarifa za uongo.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Thamani ya kinadharia ya soko ikiwa sarafu zote zilikuwa zikitumika. Imehesabiwa kama bei ikizidishwa na usambazaji wa juu zaidi.";
+"info.circulating_supply.description" = "Idadi ya sarafu zinazopatikana sasa na zinazouzwa sokoni.\"";
+"info.total_supply.description" = "Jumla ya sarafu zilizopo, ikijumuisha sarafu zilizofungwa au zilizohifadhiwa.";
+"info.max_supply.title" = "Ugavi wa Juu Zaidi";
+"info.max_supply.description" = "Idadi ya juu zaidi ya sarafu zitakazokuwepo.";

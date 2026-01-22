@@ -30,7 +30,7 @@ public struct ChartScene: View {
                         case .loading:
                             LoadingView()
                         case .data(let chartModel):
-                            ChartView(model: chartModel, onInfo: model.onSelectPriceDetails)
+                            ChartView(model: chartModel)
                         case .error(let error):
                             StateEmptyView(
                                 title: Localized.Errors.errorOccured,
@@ -86,6 +86,13 @@ public struct ChartScene: View {
                                 )
                             }
                         }
+                        if model.hasMarketData {
+                            NavigationCustomLink(
+                                with: ListItemView(title: Localized.Wallet.more)
+                            ) {
+                                model.onSelectPriceDetails()
+                            }
+                        }
                     }
                 }
                 
@@ -110,13 +117,14 @@ public struct ChartScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .sheet(item: $model.isPresentingDetails) { assetId in
+        .sheet(item: $model.isPresentingDetails) { priceData in
             NavigationStack {
                 AssetPriceDetailsView(
-                    model: AssetPriceDetailsViewModel(assetId: assetId)
+                    model: AssetPriceDetailsViewModel(priceData: priceData)
                 )
             }
             .presentationDetentsForCurrentDeviceSize(expandable: true)
+            .presentationBackground(Colors.grayBackground)
         }
     }
 }

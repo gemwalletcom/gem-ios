@@ -46,8 +46,10 @@ public struct PriceStore: Sendable {
                         PriceRecord.Columns.maxSupply.noOverwrite,
                         PriceRecord.Columns.allTimeHigh.noOverwrite,
                         PriceRecord.Columns.allTimeHighDate.noOverwrite,
+                        PriceRecord.Columns.allTimeHighChangePercentage.noOverwrite,
                         PriceRecord.Columns.allTimeLow.noOverwrite,
                         PriceRecord.Columns.allTimeLowDate.noOverwrite,
+                        PriceRecord.Columns.allTimeLowChangePercentage.noOverwrite,
                     ] })
             }
         }
@@ -61,6 +63,7 @@ public struct PriceStore: Sendable {
                 .updateAll(
                     db,
                     PriceRecord.Columns.marketCap.set(to: market.marketCap ?? 0 * rate),
+                    PriceRecord.Columns.marketCapFdv.set(to: market.marketCapFdv ?? 0 * rate),
                     PriceRecord.Columns.totalVolume.set(to: market.totalVolume ?? 0 * rate),
                     PriceRecord.Columns.marketCapRank.set(to: market.marketCapRank),
                     PriceRecord.Columns.circulatingSupply.set(to: market.circulatingSupply),
@@ -68,8 +71,10 @@ public struct PriceStore: Sendable {
                     PriceRecord.Columns.maxSupply.set(to: market.maxSupply),
                     PriceRecord.Columns.allTimeHigh.set(to: market.allTimeHigh),
                     PriceRecord.Columns.allTimeHighDate.set(to: market.allTimeHighDate),
+                    PriceRecord.Columns.allTimeHighChangePercentage.set(to: market.allTimeHighChangePercentage),
                     PriceRecord.Columns.allTimeLow.set(to: market.allTimeLow),
-                    PriceRecord.Columns.allTimeLowDate.set(to: market.allTimeLowDate)
+                    PriceRecord.Columns.allTimeLowDate.set(to: market.allTimeLowDate),
+                    PriceRecord.Columns.allTimeLowChangePercentage.set(to: market.allTimeLowChangePercentage)
                 )
         }
     }

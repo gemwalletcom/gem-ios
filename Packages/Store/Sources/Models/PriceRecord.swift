@@ -21,8 +21,10 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let maxSupply = Column("maxSupply")
         static let allTimeHigh = Column("allTimeHigh")
         static let allTimeHighDate = Column("allTimeHighDate")
+        static let allTimeHighChangePercentage = Column("allTimeHighChangePercentage")
         static let allTimeLow = Column("allTimeLow")
         static let allTimeLowDate = Column("allTimeLowDate")
+        static let allTimeLowChangePercentage = Column("allTimeLowChangePercentage")
         static let updatedAt = Column("updatedAt")
     }
 
@@ -40,8 +42,10 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
     public var maxSupply: Double?
     public var allTimeHigh: Double?
     public var allTimeHighDate: Date?
+    public var allTimeHighChangePercentage: Double?
     public var allTimeLow: Double?
     public var allTimeLowDate: Date?
+    public var allTimeLowChangePercentage: Double?
 
     public var updatedAt: Date?
 }
@@ -71,8 +75,10 @@ extension PriceRecord: CreateTable {
             $0.column(Columns.maxSupply.name, .double)
             $0.column(Columns.allTimeHigh.name, .double)
             $0.column(Columns.allTimeHighDate.name, .date)
+            $0.column(Columns.allTimeHighChangePercentage.name, .double)
             $0.column(Columns.allTimeLow.name, .double)
             $0.column(Columns.allTimeLowDate.name, .date)
+            $0.column(Columns.allTimeLowChangePercentage.name, .double)
             $0.column(Columns.updatedAt.name, .date)
         }
     }
@@ -122,8 +128,10 @@ extension PriceRecord {
             maxSupply: maxSupply,
             allTimeHigh: allTimeHigh,
             allTimeHighDate: allTimeHighDate,
+            allTimeHighChangePercentage: allTimeHighChangePercentage,
             allTimeLow: allTimeLow,
-            allTimeLowDate: allTimeLowDate
+            allTimeLowDate: allTimeLowDate,
+            allTimeLowChangePercentage: allTimeLowChangePercentage
         )
     }
 }

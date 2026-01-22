@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Configurați-vă numele de utilizator pentru a câștiga recompense";
 "notifications.inapp.rewards.invite.subtitle" = "Invită-ți prietenii și câștigă recompense împreună";
 "nodes.import_node.warning_message" = "Nodurile personalizate pot fi rău intenționate și pot expune datele tranzacțiilor sau pot furniza informații false.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Valoarea teoretică de piață ar rezulta în cazul în care toate monedele ar fi în circulație. Calculată ca preț înmulțit cu oferta maximă.";
+"info.circulating_supply.description" = "Numărul de monede disponibile în prezent și tranzacționate pe piață.";
+"info.total_supply.description" = "Numărul total de monede existente, inclusiv monedele blocate sau rezervate.";
+"info.max_supply.title" = "Aprovizionare maximă";
+"info.max_supply.description" = "Numărul maxim de monede care vor exista vreodată.";

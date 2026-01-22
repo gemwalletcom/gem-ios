@@ -7,11 +7,10 @@ import Primitives
 
 struct ChartView: View {
     let model: ChartValuesViewModel
-    let onInfo: VoidAction
 
     static let date = "Date"
     static let value = "Value"
-    
+
     @State private var selectedValue: ChartPriceModel? {
         didSet {
             if let selectedValue, selectedValue.date != oldValue?.date {
@@ -20,29 +19,13 @@ struct ChartView: View {
         }
     }
 
-    init(
-        model: ChartValuesViewModel,
-        onInfo: VoidAction
-    ) {
+    init(model: ChartValuesViewModel) {
         self.model = model
-        self.onInfo = onInfo
     }
-    
+
     var body: some View {
         VStack {
-            if let onInfo {
-                Button(action: onInfo) {
-                    HStack(alignment: .top, spacing: .tiny) {
-                        chartPriceView
-                        Images.System.info
-                            .foregroundStyle(Colors.gray)
-                            .frame(width: .list.image, height: .list.image)
-                            .padding(.top, .extraSmall)
-                    }
-                }
-            } else {
-                chartPriceView
-            }
+            chartPriceView
         }
         .padding(.top, .small)
         .padding(.bottom, .tiny)

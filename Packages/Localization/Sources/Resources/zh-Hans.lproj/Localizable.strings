@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "设置您的用户名即可获得奖励";
 "notifications.inapp.rewards.invite.subtitle" = "邀请好友，一起赢取奖励";
 "nodes.import_node.warning_message" = "自定义节点可能存在恶意，可能会泄露您的交易数据或提供虚假信息。";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "如果所有硬币都在流通，其理论市场价值为：价格乘以最大供应量。";
+"info.circulating_supply.description" = "目前市场上可供交易的加密货币数量。";
+"info.total_supply.description" = "现存硬币总数，包括已锁定或已预留的硬币。";
+"info.max_supply.title" = "最大供应";
+"info.max_supply.description" = "硬币的最大存世量。";

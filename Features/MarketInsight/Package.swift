@@ -24,6 +24,7 @@ let package = Package(
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
+        .package(name: "InfoSheet", path: "../InfoSheet"),
     ],
     targets: [
         .target(
@@ -40,7 +41,8 @@ let package = Package(
                 "Preferences",
                 .product(name: "PriceService", package: "FeatureServices"),
                 .product(name: "PriceAlertService", package: "FeatureServices"),
-                .product(name: "AssetsService", package: "FeatureServices")
+                .product(name: "AssetsService", package: "FeatureServices"),
+                "InfoSheet"
             ],
             path: "Sources"
         ),

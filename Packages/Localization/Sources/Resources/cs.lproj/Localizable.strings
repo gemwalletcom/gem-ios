@@ -566,3 +566,9 @@
 "notifications.inapp.rewards.create_username.subtitle" = "Nastavte si uživatelské jméno a získejte odměny";
 "notifications.inapp.rewards.invite.subtitle" = "Pozvěte přátele a společně sbírejte odměny";
 "nodes.import_node.warning_message" = "Vlastní uzly mohou být škodlivé a mohou zveřejnit vaše transakční data nebo poskytovat nepravdivé informace.";
+"info.fully_diluted_valuation.title" = "Fully Diluted Valuation";
+"info.fully_diluted_valuation.description" = "Teoretická tržní hodnota, pokud by všechny mince byly v oběhu. Vypočítá se jako cena vynásobená maximální nabídkou.";
+"info.circulating_supply.description" = "Počet mincí aktuálně dostupných a obchodovaných na trhu.";
+"info.total_supply.description" = "Celkový počet existujících mincí, včetně uzamčených nebo rezervovaných mincí.";
+"info.max_supply.title" = "Maximální nabídka";
+"info.max_supply.description" = "Maximální počet mincí, které kdy budou existovat.";
