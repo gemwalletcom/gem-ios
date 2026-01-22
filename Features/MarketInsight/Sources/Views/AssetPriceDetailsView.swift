@@ -33,7 +33,7 @@ public struct AssetPriceDetailsView: View {
 
     @ViewBuilder
     private func marketSection(_ items: [MarketValueViewModel]) -> some View {
-        if !items.isEmpty {
+        if items.isNotEmpty {
             Section {
                 ForEach(items, id: \.title) { item in
                     ListItemView(

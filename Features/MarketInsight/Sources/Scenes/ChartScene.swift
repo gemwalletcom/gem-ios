@@ -117,7 +117,7 @@ public struct ChartScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .sheet(item: $model.isPresentingDetails) { priceData in
+        .sheet(item: $model.isPresentingMarkets) { priceData in
             NavigationStack {
                 AssetPriceDetailsView(
                     model: AssetPriceDetailsViewModel(priceData: priceData)

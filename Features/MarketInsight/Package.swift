@@ -46,5 +46,12 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .testTarget(
+            name: "MarketInsightTests",
+            dependencies: [
+                "MarketInsight",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ]
+        ),
     ]
 )
