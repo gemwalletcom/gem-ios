@@ -44,6 +44,10 @@ public final class WalletPreferences: @unchecked Sendable {
         get { defaults.bool(forKey: Keys.completeInitialAddressStatus) }
     }
     
+    public var isCompleteInitialSynchronization: Bool {
+        completeInitialAddressStatus && completeInitialLoadAssets
+    }
+    
     public func completeInitialSynchronization() {
         completeInitialAddressStatus = true
         completeInitialLoadAssets = true

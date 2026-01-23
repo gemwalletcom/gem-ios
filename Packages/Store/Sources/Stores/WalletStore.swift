@@ -124,21 +124,12 @@ public struct WalletStore: Sendable {
                 .updateAll(db, assignments)
         }
     }
-
-    public func setOrder(walletId: String, order: Int) throws {
-        let _ = try db.write { db in
-            try WalletRecord
-                .filter(WalletRecord.Columns.id == walletId)
-                .updateAll(db, WalletRecord.Columns.order.set(to: order))
-        }
-    }
 }
 
 extension WalletRecord {
     func mapToWallet() -> Wallet {
         return Wallet(
             id: id,
-            externalId: externalId,
             name: name,
             index: index.asInt32,
             type: type,
@@ -155,9 +146,8 @@ extension Wallet {
     var record: WalletRecord {
         return WalletRecord(
             id: id,
-            externalId: externalId,
             name: name,
-            type: type,
+            type: type, 
             index: index.asInt,
             order: 0,
             isPinned: false,

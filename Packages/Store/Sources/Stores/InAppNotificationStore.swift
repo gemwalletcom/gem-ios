@@ -11,10 +11,10 @@ public struct InAppNotificationStore: Sendable {
         self.db = db.dbQueue
     }
 
-    public func addNotifications(_ notifications: [InAppNotification]) throws {
+    public func addNotifications(_ notifications: [(WalletId, Primitives.InAppNotification)]) throws {
         try db.write { db in
-            for notification in notifications {
-                try notification.record().upsert(db)
+            for (walletId, notification) in notifications {
+                try notification.record(walletId: walletId).upsert(db)
             }
         }
     }

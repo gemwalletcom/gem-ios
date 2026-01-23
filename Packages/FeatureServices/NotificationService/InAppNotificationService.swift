@@ -35,7 +35,10 @@ public struct InAppNotificationService: Sendable {
             deviceId: deviceId,
             fromTimestamp: preferences.notificationsTimestamp
         )
-        try store.addNotifications(notifications)
+        let walletNotifications = notifications.compactMap { notification in
+            walletService.walletId(walletIndex: nil, walletTypeId: notification.walletId).map { ($0, notification) }
+        }
+        try store.addNotifications(walletNotifications)
 
         preferences.notificationsTimestamp = newTimestamp
     }

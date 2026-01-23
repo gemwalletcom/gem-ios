@@ -23,7 +23,7 @@ public struct WalletKeyStore: Sendable {
     }
 
     public func importWallet(
-        id: WalletIdentifier,
+        type: Primitives.WalletType,
         name: String,
         words: [String],
         chains: [Chain],
@@ -36,7 +36,7 @@ public struct WalletKeyStore: Sendable {
             encryptPassword: password,
             coins: []
         )
-        return try addCoins(id: id, wallet: wallet, existingChains: [], newChains: chains, password: password, source: source)
+        return try addCoins(type: type, wallet: wallet, existingChains: [], newChains: chains, password: password, source: source)
     }
 
     public static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
@@ -90,23 +90,21 @@ public struct WalletKeyStore: Sendable {
         }
     }
 
-    public func importPrivateKey(id: WalletIdentifier, name: String, key: String, chain: Chain, password: String, source: WalletSource) throws -> Primitives.Wallet {
+    public func importPrivateKey(name: String, key: String, chain: Chain, password: String, source: WalletSource) throws -> Primitives.Wallet {
         let privateKey = try Self.decodeKey(key, chain: chain)
         let wallet = try keyStore.import(privateKey: privateKey, name: name, password: password, coin: chain.coinType)
 
-        let address = chain.coinType.deriveAddress(privateKey: privateKey)
         let account = Primitives.Account(
             chain: chain,
-            address: address,
+            address: chain.coinType.deriveAddress(privateKey: privateKey),
             derivationPath: chain.coinType.derivationPath(), // not applicable
             extendedPublicKey: nil
         )
         return Primitives.Wallet(
-            id: id.id,
-            externalId: wallet.id,
+            id: wallet.id,
             name: wallet.key.name,
             index: 0,
-            type: id.walletType,
+            type: .privateKey,
             accounts: [account],
             order: 0,
             isPinned: false,
@@ -116,7 +114,7 @@ public struct WalletKeyStore: Sendable {
     }
 
     public func addCoins(
-        id: WalletIdentifier,
+        type: Primitives.WalletType,
         wallet: WalletCore.Wallet,
         existingChains: [Chain],
         newChains: [Chain],
@@ -141,17 +139,16 @@ public struct WalletKeyStore: Sendable {
         if newChains.isNotEmpty && newCoinTypes.subtracting(existingCoinTypes).isNotEmpty {
             let _ = try keyStore.addAccounts(wallet: wallet, coins: coins, password: password)
         }
-
+        
         let accounts = allChains.compactMap { chain in
             wallet.accounts.filter({ $0.coin == chain.coinType }).first?.mapToAccount(chain: chain)
         }
 
         return Wallet(
-            id: id.id,
-            externalId: wallet.id,
+            id: wallet.id,
             name: wallet.key.name,
             index: 0,
-            type: id.walletType,
+            type: type,
             accounts: accounts,
             order: 0,
             isPinned: false,
@@ -167,8 +164,8 @@ public struct WalletKeyStore: Sendable {
         password: String
     ) throws -> Primitives.Wallet {
         try addCoins(
-            id: try WalletIdentifier.from(id: wallet.id),
-            wallet: try getWallet(id: wallet.keystoreId),
+            type: wallet.type,
+            wallet: try getWallet(id: wallet.id),
             existingChains: existingChains,
             newChains: newChains,
             password: password,
@@ -210,8 +207,8 @@ public struct WalletKeyStore: Sendable {
         }
     }
 
-    func getMnemonic(walletId: String, password: String) throws -> [String] {
-        let wallet = try getWallet(id: walletId)
+    func getMnemonic(wallet: Primitives.Wallet, password: String) throws -> [String] {
+        let wallet = try getWallet(id: wallet.id)
         guard
             let hdwallet = wallet.key.wallet(password: Data(password.utf8))
         else {
