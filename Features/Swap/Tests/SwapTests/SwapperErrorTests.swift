@@ -10,9 +10,9 @@ struct SwapperErrorTests {
     @Test
     func isRetryAvailable() {
         #expect(SwapperError.NoQuoteAvailable.isRetryAvailable == true)
-        #expect(SwapperError.NetworkError("error").isRetryAvailable == true)
-        
+        #expect(SwapperError.ComputeQuoteError("error").isRetryAvailable == true)
+
         #expect(SwapperError.NotSupportedChain.isRetryAvailable == false)
-        #expect(SwapperError.InvalidAmount("").isRetryAvailable == false)
+        #expect(SwapperError.InputAmountError(minAmount: nil).isRetryAvailable == false)
     }
 }
