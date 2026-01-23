@@ -20,7 +20,7 @@ extension Gemstone.SwapperError: @retroactive RetryableError {
         case .InputAmountError(let minAmount):
             if let minAmount, let value = BigInt(minAmount), !value.isZero {
                 let value = ValueFormatter(style: .full).string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
-                return Localized.Errors.Swap.minimumAmount(value)
+                return Localized.Errors.Swap.minimumAmount(value.boldMarkdown())
             }
             return Localized.Errors.Swap.amountTooSmall
         default:
