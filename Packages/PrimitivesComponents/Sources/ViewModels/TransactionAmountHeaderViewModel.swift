@@ -10,7 +10,6 @@ struct TransactionAmountHeaderViewModel: HeaderViewModel {
 
     let isWatchWallet: Bool = false
     let buttons: [HeaderButton] = []
-    let allowHiddenBalance: Bool = false
 
     var assetImage: AssetImage? {
         display.assetImage

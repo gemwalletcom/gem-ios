@@ -8,6 +8,7 @@ public final class WalletPreferences: @unchecked Sendable {
         static let assetsTimestamp = "assets_timestamp"
         static let transactionsForAsset = "transactions_for_asset_v1"
         static let transactionsTimestamp = "transactions_timestamp_v1"
+        static let notificationsTimestamp = "notifications_timestamp"
         static let completeInitialLoadAssets = "complete_initial_load_assets"
         static let completeInitialAddressStatus = "complete_initial_address_status"
     }
@@ -27,7 +28,12 @@ public final class WalletPreferences: @unchecked Sendable {
         set { defaults.setValue(newValue, forKey: Keys.transactionsTimestamp) }
         get { defaults.integer(forKey: Keys.transactionsTimestamp) }
     }
-    
+
+    public var notificationsTimestamp: Int {
+        set { defaults.setValue(newValue, forKey: Keys.notificationsTimestamp) }
+        get { defaults.integer(forKey: Keys.notificationsTimestamp) }
+    }
+
     public var assetsTimestamp: Int {
         set { defaults.setValue(newValue, forKey: Keys.assetsTimestamp) }
         get { defaults.integer(forKey: Keys.assetsTimestamp) }

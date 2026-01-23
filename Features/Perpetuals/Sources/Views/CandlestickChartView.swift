@@ -5,6 +5,7 @@ import Charts
 import Style
 import Primitives
 import PrimitivesComponents
+import Formatters
 
 private struct ChartKey {
     static let date = "Date"
@@ -20,8 +21,9 @@ struct CandlestickChartView: View {
     private let period: ChartPeriod
     private let basePrice: Double?
     private let lineModels: [ChartLineViewModel]
+    private let formatter: CurrencyFormatter
 
-    @State private var selectedCandle: ChartPriceModel? {
+    @State private var selectedCandle: ChartPriceViewModel? {
         didSet {
             if let selectedCandle, selectedCandle.date != oldValue?.date {
                 vibrate()
@@ -33,12 +35,14 @@ struct CandlestickChartView: View {
         data: [ChartCandleStick],
         period: ChartPeriod = .day,
         basePrice: Double? = nil,
-        lineModels: [ChartLineViewModel] = []
+        lineModels: [ChartLineViewModel] = [],
+        formatter: CurrencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
     ) {
         self.data = data
         self.period = period
         self.basePrice = basePrice ?? data.first?.close
         self.lineModels = lineModels
+        self.formatter = formatter
     }
     
     var body: some View {
@@ -51,9 +55,9 @@ struct CandlestickChartView: View {
     private var priceHeader: some View {
         VStack {
             if let selectedCandle {
-                ChartPriceView.from(model: selectedCandle)
+                ChartPriceView(model: selectedCandle)
             } else if let currentPrice = currentPriceModel {
-                ChartPriceView.from(model: currentPrice)
+                ChartPriceView(model: currentPrice)
             }
         }
         .padding(.top, Spacing.small)
@@ -183,35 +187,26 @@ struct CandlestickChartView: View {
         }
     }
     
-    private var currentPriceModel: ChartPriceModel? {
+    private var currentPriceModel: ChartPriceViewModel? {
         guard let lastCandle = data.last,
               let base = basePrice else { return nil }
-        
-        let priceChange = lastCandle.close - base
-        let priceChangePercentage = (priceChange / base) * 100
-        
-        return ChartPriceModel(
+        return ChartPriceViewModel(
             period: period,
             date: nil,
             price: lastCandle.close,
-            priceChange: priceChange,
-            priceChangePercentage: priceChangePercentage,
-            currency: .default
+            priceChangePercentage: ChartPriceViewModel.priceChangePercentage(close: lastCandle.close, base: base),
+            formatter: formatter
         )
     }
 
-    private func createPriceModel(for candle: ChartCandleStick) -> ChartPriceModel {
+    private func createPriceModel(for candle: ChartCandleStick) -> ChartPriceViewModel {
         let base = basePrice ?? data.first?.close ?? candle.close
-        let priceChange = candle.close - base
-        let priceChangePercentage = (priceChange / base) * 100
-
-        return ChartPriceModel(
+        return ChartPriceViewModel(
             period: period,
             date: candle.date,
             price: candle.close,
-            priceChange: priceChange,
-            priceChangePercentage: priceChangePercentage,
-            currency: .default
+            priceChangePercentage: ChartPriceViewModel.priceChangePercentage(close: candle.close, base: base),
+            formatter: formatter
         )
     }
     

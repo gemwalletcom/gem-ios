@@ -521,7 +521,6 @@ extension AssetSceneViewModel {
             do {
                 try await priceObserverService.addAssets(assets: [assetModel.asset.id])
             } catch {
-                // TODO: - handle priceObserverService.addAssets error
                 debugLog("asset scene: priceObserverService.addAssets error \(error)")
             }
         }

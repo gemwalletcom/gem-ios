@@ -8,80 +8,58 @@ import Components
 import PrimitivesComponents
 
 public struct InAppNotificationListItemViewModel: Identifiable, Sendable {
-    public let notification: Primitives.Notification
+    private let item: CoreListItem
+    private let isRead: Bool
 
-    public var id: Date { notification.createdAt }
+    public let id: String
+    public let url: URL?
+
+    public init(notification: InAppNotification) {
+        self.id = notification.id
+        self.item = notification.item
+        self.isRead = notification.isRead
+        self.url = notification.item.url?.asURL
+    }
 
     var listItemModel: ListItemModel {
         ListItemModel(
-            title: title,
-            titleTag: notification.isRead ? nil : Localized.Assets.Tags.new,
-            titleTagStyle: titleTagStyle,
-            titleExtra: titleExtra,
-            subtitle: pointsText,
-            subtitleStyle: pointsStyle,
+            title: item.title,
+            titleTag: isRead ? nil : Localized.Assets.Tags.new,
+            titleTagStyle: TextStyle(font: .footnote.weight(.medium), color: .blue, background: Colors.blue.opacity(0.15)),
+            titleExtra: item.subtitle,
+            subtitle: item.value,
+            subtitleStyle: TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold),
+            subtitleExtra: item.subvalue,
             imageStyle: imageStyle
         )
     }
 
-    private var titleTagStyle: TextStyle {
-        TextStyle(font: .footnote.weight(.medium), color: .blue, background: Colors.blue.opacity(0.15))
-    }
-
-    private var title: String {
-        switch notification.notificationType {
-        case .referralJoined: Localized.Notifications.Inapp.Referral.Joined.title
-        case .rewardsEnabled: Localized.Notifications.Inapp.Rewards.Enabled.title
-        case .rewardsCodeDisabled: Localized.Notifications.Inapp.Rewards.Disabled.title
-        case .rewardsRedeemed: Localized.Notifications.Inapp.Rewards.Enabled.title
-        case .rewardsCreateUsername: Localized.Notifications.Inapp.Rewards.Enabled.title
-        case .rewardsInvite: Localized.Notifications.Inapp.Referral.Joined.title
-        }
-    }
-
-    private var titleExtra: String? {
-        switch notification.notificationType {
-        case .referralJoined: metadata.map { Localized.Notifications.Inapp.Referral.Joined.subtitle($0.username) }
-        case .rewardsEnabled: Localized.Notifications.Inapp.Rewards.Enabled.subtitle
-        case .rewardsCodeDisabled: Localized.Notifications.Inapp.Rewards.Disabled.subtitle
-        case .rewardsRedeemed: Localized.Notifications.Inapp.Rewards.Enabled.subtitle
-        case .rewardsCreateUsername: Localized.Notifications.Inapp.Rewards.Enabled.subtitle
-        case .rewardsInvite: metadata.map { Localized.Notifications.Inapp.Referral.Joined.subtitle($0.username) }
-        }
-    }
-
     private var imageStyle: ListItemImageStyle? {
-        ListItemImageStyle(
-            assetImage: assetImage,
+        guard let icon = item.icon else { return nil }
+        return ListItemImageStyle(
+            assetImage: assetImage(for: icon),
             imageSize: .image.asset,
             alignment: .top,
             cornerRadiusType: .rounded
         )
     }
 
-    private var assetImage: AssetImage {
-        let emoji: String = switch notification.notificationType {
-        case .referralJoined: Emoji.party
-        case .rewardsEnabled: Emoji.WalletAvatar.gift.rawValue
-        case .rewardsCodeDisabled: Emoji.WalletAvatar.warning.rawValue
-        case .rewardsRedeemed: Emoji.WalletAvatar.gift.rawValue
-        case .rewardsCreateUsername: Emoji.WalletAvatar.gift.rawValue
-        case .rewardsInvite: Emoji.party
+    private func assetImage(for icon: CoreListItemIcon) -> AssetImage {
+        switch icon {
+        case .emoji(let emoji): AssetImage(type: emoji.value)
+        case .asset(let assetId): AssetIdViewModel(assetId: assetId).assetImage
+        case .image(let url): AssetImage(imageURL: url.asURL)
         }
-        return AssetImage(type: emoji)
     }
+}
 
-    private var pointsText: String? {
-        guard let points = metadata?.points, points != .zero else { return nil }
-        let sign = points >= 0 ? "+" : "-"
-        return "\(sign)\(abs(points)) \(Emoji.gem)"
-    }
-
-    private var pointsStyle: TextStyle {
-        TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold)
-    }
-
-    private var metadata: NotificationRewardsMetadata? {
-        notification.metadata?.decode(NotificationRewardsMetadata.self)
+private extension CoreEmoji {
+    var value: String {
+        switch self {
+        case .gift: Emoji.WalletAvatar.gift.rawValue
+        case .gem: Emoji.gem
+        case .party: Emoji.party
+        case .warning: Emoji.WalletAvatar.warning.rawValue
+        }
     }
 }

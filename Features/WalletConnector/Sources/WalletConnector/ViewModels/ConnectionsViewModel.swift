@@ -96,13 +96,13 @@ extension ConnectionsViewModel {
             await connectURI(uri: content)
         }
     }
-    
+
     func onHandleScan(_ result: String) {
         Task {
             await connectURI(uri: result)
         }
     }
-    
+
     func onSelectDisconnect(_ connection: WalletConnection) {
         Task {
             do {

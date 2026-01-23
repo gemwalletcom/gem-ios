@@ -33,7 +33,7 @@ extension PriceAlertRecord: CreateTable {
             $0.column(Columns.id.name, .text)
                 .primaryKey()
             $0.column(Columns.assetId.name, .text)
-                .references(AssetRecord.databaseTableName, onDelete: .cascade)
+                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.currency.name, .text)
             $0.column(Columns.priceDirection.name, .text)
             $0.column(Columns.price.name, .double)

@@ -7,33 +7,37 @@ import Style
 import Formatters
 import Components
 
-public struct ChartPriceModel {
+public struct ChartPriceViewModel {
     public let period: ChartPeriod
     public let date: Date?
     public let price: Double
-    public let priceChange: Double
     public let priceChangePercentage: Double
-    public let currency: Currency
-    
+    public let type: ChartValueType
+
+    private let formatter: CurrencyFormatter
+
     public init(
         period: ChartPeriod,
         date: Date?,
         price: Double,
-        priceChange: Double,
         priceChangePercentage: Double,
-        currency: Currency = Currency.default
+        formatter: CurrencyFormatter,
+        type: ChartValueType = .price
     ) {
         self.period = period
         self.date = date
         self.price = price
-        self.priceChange = priceChange
         self.priceChangePercentage = priceChangePercentage
-        self.currency = currency
+        self.type = type
+        self.formatter = formatter
     }
-    
+
+    private var valueChange: PriceChangeViewModel? {
+        type == .priceChange ? PriceChangeViewModel(value: price, currencyFormatter: formatter) : nil
+    }
+
     public var dateText: String? {
-        guard let date = date else { return nil }
-        
+        guard let date else { return nil }
         switch period {
         case .hour:
             return date.formatted(.dateTime.hour().minute())
@@ -45,27 +49,25 @@ public struct ChartPriceModel {
             return date.formatted(.dateTime.year().month(.abbreviated).day())
         }
     }
-    
-    public var priceText: String {
-        CurrencyFormatter(currencyCode: currency.rawValue).string(price)
-    }
-    
-    public var priceChangeText: String? {
-        CurrencyFormatter.percent.string(priceChangePercentage)
-    }
-    
-    public var priceChangeTextColor: Color {
-        PriceChangeColor.color(for: priceChange)
-    }
-}
 
-extension ChartPriceView {
-    public static func from(model: ChartPriceModel) -> some View {
-        ChartPriceView(
-            date: model.dateText,
-            price: model.priceText,
-            priceChange: model.priceChangeText,
-            priceChangeTextColor: model.priceChangeTextColor
-        )
+    public var priceText: String {
+        valueChange?.text ?? formatter.string(price)
+    }
+
+    public var priceColor: Color {
+        valueChange?.color ?? Colors.black
+    }
+
+    public var priceChangeText: String? {
+        guard type == .price, price != 0 else { return nil }
+        return CurrencyFormatter.percent.string(priceChangePercentage)
+    }
+
+    public var priceChangeTextColor: Color {
+        PriceChangeColor.color(for: priceChangePercentage)
+    }
+
+    public static func priceChangePercentage(close: Double, base: Double) -> Double {
+        base == 0 ? 0 : ((close - base) / base) * 100
     }
 }

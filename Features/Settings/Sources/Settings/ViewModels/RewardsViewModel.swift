@@ -176,7 +176,7 @@ public final class RewardsViewModel: Sendable {
             code: code
         ) { [weak self] _ in
             guard let self else { return }
-            self.showActivatedToast()
+            showActivatedToast()
             Task { await self.fetch() }
         }
     }
@@ -243,7 +243,9 @@ public final class RewardsViewModel: Sendable {
             let result = try await rewardsService.redeem(wallet: selectedWallet, redemptionId: option.id)
             toastMessage = ToastMessage.success(Localized.Common.done)
             if let asset = result.redemption.option.asset {
-                Task { await assetsEnabler.enableAssetId(walletId: selectedWallet.walletId, assetId: asset.id) }
+                Task {
+                    await assetsEnabler.enableAssetId(walletId: selectedWallet.walletId, assetId: asset.id)
+                }
             }
         } catch {
             isPresentingError = error.localizedDescription

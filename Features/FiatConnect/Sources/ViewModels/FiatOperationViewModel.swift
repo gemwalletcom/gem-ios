@@ -86,22 +86,17 @@ final class FiatOperationViewModel {
                 let quotes = try await operation.fetch(amount: amount)
                 try Task.checkCancellation()
 
-                let fiatQuotes = FiatQuotes(amount: amount, quotes: quotes)
-
                 if quotes.isNotEmpty {
                     selectedQuote = quotes.first
-                    quotesState = .data(fiatQuotes)
+                    quotesState = .data(FiatQuotes(amount: amount, quotes: quotes))
                     updateValidators()
                 } else {
                     quotesState = .noData
                 }
             } catch {
-                guard !Task.isCancelled else { return }
-
-                if !error.isCancelled {
-                    quotesState = .error(error)
-                    debugLog("FiatOperationViewModel get quotes error: \(error)")
-                }
+                guard !Task.isCancelled, !error.isCancelled else { return }
+                quotesState = .error(error)
+                debugLog("FiatOperationViewModel get quotes error: \(error)")
             }
 
             loadingAmount = nil

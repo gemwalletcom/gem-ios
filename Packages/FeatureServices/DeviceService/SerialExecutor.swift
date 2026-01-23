@@ -4,8 +4,12 @@ import Foundation
 
 public actor SerialExecutor {
     private var currentTask: Task<Void, Never>?
-    
+
     public init() {}
+
+    deinit {
+        currentTask?.cancel()
+    }
     
     public func execute<T: Sendable>(_ operation: @escaping @Sendable () async throws -> T) async throws -> T {
         let previousTask = currentTask

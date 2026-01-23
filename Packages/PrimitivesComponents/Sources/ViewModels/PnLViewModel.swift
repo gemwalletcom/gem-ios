@@ -27,16 +27,13 @@ public struct PnLViewModel {
 
     public var title: String { Localized.Perpetual.pnl }
 
-    public var text: String? {
-        guard let pnl else { return nil }
-        let pnlAmount = currencyFormatter.string(abs(pnl))
-        let percentText = percentFormatter.string(percent)
+    private var valueChange: PriceChangeViewModel {
+        PriceChangeViewModel(value: pnl, currencyFormatter: currencyFormatter)
+    }
 
-        if pnl >= 0 {
-            return "+\(pnlAmount) (\(percentText))"
-        } else {
-            return "-\(pnlAmount) (\(percentText))"
-        }
+    public var text: String? {
+        guard let amountText = valueChange.text else { return nil }
+        return "\(amountText) (\(percentFormatter.string(percent)))"
     }
 
     public var percent: Double {
@@ -44,12 +41,7 @@ public struct PnLViewModel {
         return (pnl / marginAmount) * 100
     }
 
-    public var color: Color {
-        guard let pnl else { return .secondary }
-        return PriceChangeColor.color(for: pnl)
-    }
+    public var color: Color { valueChange.color }
 
-    public var textStyle: TextStyle {
-        TextStyle(font: .callout, color: color)
-    }
+    public var textStyle: TextStyle { valueChange.textStyle }
 }

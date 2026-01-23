@@ -176,7 +176,7 @@ extension SwapSceneViewModel {
         }
         
         Task {
-            let assetIds =  [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
+            let assetIds = [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
             try await walletsService.addPrices(assetIds: assetIds)
         }
     }
