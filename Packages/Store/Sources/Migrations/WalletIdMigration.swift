@@ -22,9 +22,12 @@ struct WalletIdMigration {
     private static let currentWalletKey = "currentWallet"
 
     static func migrate(db: Database, userDefaults: UserDefaults = .standard) throws {
-        try db.execute(sql: "PRAGMA foreign_keys = OFF")
-
         let mappings = try buildWalletMappings(db: db)
+        if mappings.isEmpty {
+            return
+        }
+        
+        try db.execute(sql: "PRAGMA foreign_keys = OFF")
 
         let groups = Dictionary(grouping: mappings, by: { $0.newId })
         for (_, wallets) in groups where wallets.count > 1 {
