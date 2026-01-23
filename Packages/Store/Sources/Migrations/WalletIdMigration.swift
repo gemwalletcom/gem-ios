@@ -49,6 +49,9 @@ struct WalletIdMigration {
                 try? db.execute(sql: "UPDATE \(table) SET walletId = ? WHERE walletId = ?", arguments: [mapping.newId, mapping.oldId])
             }
 
+            // Delete banners with old wallet IDs (their computed id won't match the stored id)
+            try? db.execute(sql: "DELETE FROM \(BannerRecord.databaseTableName) WHERE walletId = ?", arguments: [mapping.newId])
+
             migrateWalletPreferences(oldId: mapping.oldId, newId: mapping.newId)
         }
 
