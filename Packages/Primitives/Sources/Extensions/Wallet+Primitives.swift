@@ -22,18 +22,7 @@ public extension Wallet {
     }
 
     func walletIdentifier() throws -> WalletIdentifier {
-        switch type {
-        case .multicoin:
-            guard let address = accounts.first(where: { $0.chain == .ethereum })?.address else {
-                throw AnyError("multicoin wallet requires an ethereum account")
-            }
-            return .multicoin(address: address)
-        case .single, .privateKey, .view:
-            guard let account = accounts.first else {
-                throw AnyError("\(type) wallet requires at least one account")
-            }
-            return WalletIdentifier.make(walletType: type, chain: account.chain, address: account.address)
-        }
+        try WalletIdentifier.from(type: type, accounts: accounts)
     }
 
     var hasTokenSupport: Bool {
@@ -55,8 +44,9 @@ public extension Wallet {
 // factory
 public extension Wallet {
     static func makeView(name: String, chain: Chain, address: String) -> Wallet {
+        let id = WalletIdentifier.make(walletType: .view, chain: chain, address: address).id
         return Wallet(
-            id: NSUUID().uuidString,
+            id: id,
             externalId: nil,
             name: name,
             index: 0,

@@ -22,6 +22,8 @@ struct WalletIdMigration {
     private static let currentWalletKey = "currentWallet"
 
     static func migrate(db: Database, userDefaults: UserDefaults = .standard) throws {
+        try db.execute(sql: "PRAGMA foreign_keys = OFF")
+
         let mappings = try buildWalletMappings(db: db)
 
         let groups = Dictionary(grouping: mappings, by: { $0.newId })
@@ -29,30 +31,41 @@ struct WalletIdMigration {
             let sorted = wallets.sorted { $0.order < $1.order }
             let losers = sorted.dropFirst()
             for loser in losers {
-                try db.execute(
-                    sql: "DELETE FROM \(WalletRecord.databaseTableName) WHERE id = ?",
-                    arguments: [loser.oldId]
-                )
+                for table in childTables {
+                    try? db.execute(sql: "DELETE FROM \(table) WHERE walletId = ?", arguments: [loser.oldId])
+                }
+                try db.execute(sql: "DELETE FROM \(WalletRecord.databaseTableName) WHERE id = ?", arguments: [loser.oldId])
             }
         }
-
-        try db.execute(sql: "PRAGMA foreign_keys = OFF")
 
         let remainingMappings = try buildWalletMappings(db: db)
         for mapping in remainingMappings where mapping.oldId != mapping.newId {
             try db.execute(sql: "UPDATE \(WalletRecord.databaseTableName) SET externalId = id, id = ? WHERE id = ?", arguments: [mapping.newId, mapping.oldId])
 
             for table in childTables {
-                try db.execute(
-                    sql: "UPDATE \(table) SET walletId = ? WHERE walletId = ?",
-                    arguments: [mapping.newId, mapping.oldId]
-                )
+                try? db.execute(sql: "UPDATE \(table) SET walletId = ? WHERE walletId = ?", arguments: [mapping.newId, mapping.oldId])
             }
+
+            migrateWalletPreferences(oldId: mapping.oldId, newId: mapping.newId)
         }
 
         try db.execute(sql: "PRAGMA foreign_keys = ON")
 
         migrateCurrentWalletPreference(mappings: remainingMappings, userDefaults: userDefaults)
+    }
+
+    private static func migrateWalletPreferences(oldId: String, newId: String) {
+        let oldSuiteName = "wallet_preferences_\(oldId)_v2"
+        let newSuiteName = "wallet_preferences_\(newId)_v2"
+
+        guard let oldDefaults = UserDefaults(suiteName: oldSuiteName),
+              let newDefaults = UserDefaults(suiteName: newSuiteName) else { return }
+
+        for (key, value) in oldDefaults.dictionaryRepresentation() {
+            newDefaults.set(value, forKey: key)
+        }
+
+        oldDefaults.removePersistentDomain(forName: oldSuiteName)
     }
 
     private static func migrateCurrentWalletPreference(mappings: [WalletMapping], userDefaults: UserDefaults) {

@@ -40,15 +40,16 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         source: WalletSource
     ) async throws -> Primitives.Wallet {
         let password = try await getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
+        let walletIdentifier = try ImportIdentifier.from(type).walletIdentifier()
 
         return try await queue.asyncTask { [walletKeyStore] in
             switch type {
             case .phrase(let words, let chains):
-                try walletKeyStore.importWallet(type: .multicoin, name: name, words: words, chains: chains, password: password, source: source)
+                try walletKeyStore.importWallet(id: walletIdentifier, name: name, words: words, chains: chains, password: password, source: source)
             case .single(let words, let chain):
-                try walletKeyStore.importWallet(type: .single, name: name, words: words, chains: [chain], password: password, source: source)
+                try walletKeyStore.importWallet(id: walletIdentifier, name: name, words: words, chains: [chain], password: password, source: source)
             case .privateKey(let text, let chain):
-                try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: password, source: source)
+                try walletKeyStore.importPrivateKey(id: walletIdentifier, name: name, key: text, chain: chain, password: password, source: source)
             case .address(let address, let chain):
                 Wallet.makeView(name: name, chain: chain, address: address)
             }
