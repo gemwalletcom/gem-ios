@@ -40,15 +40,16 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         source: WalletSource
     ) async throws -> Primitives.Wallet {
         let password = try await getOrCreatePassword(createPasswordIfNone: isWalletsEmpty)
+        let walletIdentifier = try ImportIdentifier.from(type).walletIdentifier()
 
         return try await queue.asyncTask { [walletKeyStore] in
             switch type {
             case .phrase(let words, let chains):
-                try walletKeyStore.importWallet(type: .multicoin, name: name, words: words, chains: chains, password: password, source: source)
+                try walletKeyStore.importWallet(id: walletIdentifier, name: name, words: words, chains: chains, password: password, source: source)
             case .single(let words, let chain):
-                try walletKeyStore.importWallet(type: .single, name: name, words: words, chains: [chain], password: password, source: source)
+                try walletKeyStore.importWallet(id: walletIdentifier, name: name, words: words, chains: [chain], password: password, source: source)
             case .privateKey(let text, let chain):
-                try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: password, source: source)
+                try walletKeyStore.importPrivateKey(id: walletIdentifier, name: name, key: text, chain: chain, password: password, source: source)
             case .address(let address, let chain):
                 Wallet.makeView(name: name, chain: chain, address: address)
             }
@@ -86,7 +87,7 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
             let password = try await getPassword()
             try await queue.asyncTask { [walletKeyStore] in
                 do {
-                    try walletKeyStore.deleteWallet(id: wallet.id, password: password)
+                    try walletKeyStore.deleteWallet(id: wallet.keystoreId, password: password)
                 } catch let error as KeystoreError {
                     // in some cases wallet already deleted, just ignore
                     switch error {
@@ -107,7 +108,7 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
     public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain) async throws -> Data {
         let password = try await getPassword()
         return try await queue.asyncTask { [walletKeyStore] in
-            try walletKeyStore.getPrivateKey(id: wallet.id, type: wallet.type, chain: chain, password: password)
+            try walletKeyStore.getPrivateKey(id: wallet.keystoreId, type: wallet.type, chain: chain, password: password)
         }
     }
 
@@ -127,7 +128,7 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
     public func getMnemonic(wallet: Primitives.Wallet) async throws -> [String] {
         let password = try await getPassword()
         return try await queue.asyncTask { [walletKeyStore] in
-            try walletKeyStore.getMnemonic(wallet: wallet, password: password)
+            try walletKeyStore.getMnemonic(walletId: wallet.keystoreId, password: password)
         }
     }
 
@@ -140,7 +141,7 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         return try await queue.asyncTask { [walletKeyStore] in
             try walletKeyStore.sign(
                 hash: hash,
-                walletId: wallet.id,
+                walletId: wallet.keystoreId,
                 type: wallet.type,
                 password: password,
                 chain: chain

@@ -26,7 +26,7 @@ public struct SwapScene: View {
             }
 
             if let error = model.swapState.error {
-                ListItemErrorView(errorTitle: model.errorTitle, error: error.asAnyError(asset: model.fromAsset?.asset), infoAction: model.errorInfoAction)
+                ListItemErrorView(errorTitle: model.errorTitle, error: error, infoAction: model.errorInfoAction)
             }
         }
         .listSectionSpacing(.compact)

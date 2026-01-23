@@ -128,8 +128,6 @@ public final class SwapDetailsViewModel {
         valueFormatter.string(selectedQuote.toValueBigInt.decrease(byPercent: Int(slippageValue)), asset: toAssetPrice.asset)
     }
 
-    var fromAsset: Asset { fromAssetPrice.asset }
-
     // MARK: - Private methods
     private func swapProviderItems(_ quotes: [SwapperQuote]) -> [SwapProviderItem] {
         quotes.compactMap {
