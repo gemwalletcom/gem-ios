@@ -53,10 +53,10 @@ extension NotificationRecord {
 }
 
 extension Primitives.InAppNotification {
-    func record(walletId: WalletId) -> NotificationRecord {
+    func record() -> NotificationRecord {
         NotificationRecord(
             id: item.id,
-            walletId: walletId.id,
+            walletId: walletId,
             readAt: readAt,
             createdAt: createdAt,
             item: item
