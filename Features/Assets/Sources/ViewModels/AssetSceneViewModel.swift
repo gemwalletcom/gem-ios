@@ -279,7 +279,7 @@ extension AssetSceneViewModel {
     }
 
     private func checkYieldAvailability() {
-        guard let yieldService else { return }
+        guard let yieldService, assetData.isEarnable else { return }
         hasYieldOpportunity = yieldService.isYieldAvailable(for: asset.id)
 
         if hasYieldOpportunity {

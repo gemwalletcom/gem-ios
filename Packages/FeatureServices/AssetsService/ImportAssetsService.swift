@@ -59,7 +59,9 @@ public struct ImportAssetsService: Sendable {
                         isSellable: false,
                         isSwapable: isSwapable,
                         isStakeable: isStakable,
-                        stakingApr: .none
+                        stakingApr: .none,
+                        isEarnable: false,
+                        earnApr: .none
                     ),
                     score: score
                 )
@@ -75,7 +77,9 @@ public struct ImportAssetsService: Sendable {
                         isSellable: false,
                         isSwapable: false,
                         isStakeable: false,
-                        stakingApr: .none
+                        stakingApr: .none,
+                        isEarnable: false,
+                        earnApr: .none
                     ),
                     score: AssetScore(rank: 16)
                 )

@@ -23,6 +23,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
         static let isSellable = Column("isSellable")
         static let isSwappable = Column("isSwappable")
         static let isStakeable = Column("isStakeable")
+        static let isEarnable = Column("isEarnable")
         static let stakingApr = Column("stakingApr")
     }
     
@@ -39,6 +40,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     public var isSellable: Bool
     public var isSwappable: Bool
     public var isStakeable: Bool
+    public var isEarnable: Bool
     public var rank: Int
     public var stakingApr: Double?
     
@@ -87,6 +89,8 @@ extension AssetRecord: CreateTable {
                 .defaults(to: false)
             $0.column(Columns.isStakeable.name, .boolean)
                 .defaults(to: false)
+            $0.column(Columns.isEarnable.name, .boolean)
+                .defaults(to: false)
             $0.column(Columns.rank.name, .numeric)
                 .defaults(to: 0)
             $0.column(Columns.stakingApr.name, .double)
@@ -109,6 +113,7 @@ extension Asset {
             isSellable: false,
             isSwappable: false,
             isStakeable: false,
+            isEarnable: false,
             rank: 0
         )
     }
@@ -135,7 +140,9 @@ extension AssetRecord {
                 isSellable: isSellable,
                 isSwapable: isSwappable,
                 isStakeable: isStakeable,
-                stakingApr: stakingApr
+                stakingApr: stakingApr,
+                isEarnable: isEarnable,
+                earnApr: nil
             ),
             score: AssetScore(rank: rank.asInt32)
         )
@@ -162,7 +169,8 @@ extension AssetRecordInfo {
             account: account.mapToAccount(),
             price: price?.mapToPrice(),
             priceAlerts: priceAlerts.or([]).compactMap { $0.map() },
-            metadata: metadata
+            metadata: metadata,
+            isEarnable: asset.isEarnable
         )
     }
 
@@ -197,6 +205,7 @@ extension AssetBasic {
             isSellable: properties.isSellable,
             isSwappable: properties.isSwapable,
             isStakeable: properties.isStakeable,
+            isEarnable: properties.isEarnable,
             rank: score.rank.asInt,
             stakingApr: properties.stakingApr
         )

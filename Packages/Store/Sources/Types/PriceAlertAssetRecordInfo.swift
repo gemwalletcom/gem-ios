@@ -34,7 +34,8 @@ extension PriceAlertAssetRecordInfo {
                 isActive: false,
                 stakingApr: asset.stakingApr,
                 rankScore: asset.rank.asInt32
-            )
+            ),
+            isEarnable: asset.isEarnable
         )
     }
 }

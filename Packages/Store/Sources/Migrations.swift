@@ -375,6 +375,12 @@ public struct Migrations {
             }
         }
 
+        migrator.registerMigration("Add isEarnable to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.isEarnable.name, .boolean).defaults(to: false)
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }
