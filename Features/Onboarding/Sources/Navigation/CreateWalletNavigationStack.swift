@@ -22,7 +22,7 @@ public struct CreateWalletNavigationStack: View {
                 .navigationDestination(for: Scenes.VerifyPhrase.self) { scene in
                     VerifyPhraseWalletScene(
                         model: VerifyPhraseViewModel(
-                            words: scene.words,
+                            secretData: scene.secretData,
                             onComplete: onVerifyPhraseComplete
                         )
                     )
@@ -43,7 +43,7 @@ public struct CreateWalletNavigationStack: View {
                     ShowSecretDataScene(
                         model: NewSecretPhraseViewModel(
                             walletService: model.walletService,
-                            onCreateWallet: { navigate(to: .verifyPhrase(words: $0)) }
+                            onCreateWallet: { navigate(to: .verifyPhrase(secretData: $0)) }
                         )
                     )
                 }
@@ -91,15 +91,15 @@ extension CreateWalletNavigationStack {
         switch route {
         case .securityReminder: navigationPath.append(Scenes.SecurityReminder())
         case .createWallet: navigationPath.append(Scenes.CreateWallet())
-        case .verifyPhrase(let words): navigationPath.append(Scenes.VerifyPhrase(words: words))
+        case .verifyPhrase(let secretData): navigationPath.append(Scenes.VerifyPhrase(secretData: secretData))
         case .walletProfile(let wallet): navigationPath.append(Scenes.WalletProfile(wallet: wallet))
         }
     }
 
-    func onVerifyPhraseComplete(words: [String]) {
+    func onVerifyPhraseComplete(secretData: SecretData) {
         Task {
             do {
-                let wallet = try await model.createWallet(words: words)
+                let wallet = try await model.createWallet(secretData: secretData)
 
                 if model.hasExistingWallets {
                     navigate(to: .walletProfile(wallet: wallet))

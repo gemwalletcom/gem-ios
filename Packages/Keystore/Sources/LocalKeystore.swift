@@ -29,8 +29,8 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         self.keystorePassword = keystorePassword
     }
 
-    public func createWallet() throws -> [String] {
-        try walletKeyStore.createWallet()
+    public func createWallet() throws -> SecretData {
+        SecretData(words: try walletKeyStore.createWallet())
     }
 
     public func importWallet(
@@ -43,12 +43,12 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
 
         return try await queue.asyncTask { [walletKeyStore] in
             switch type {
-            case .phrase(let words, let chains):
-                try walletKeyStore.importWallet(type: .multicoin, name: name, words: words, chains: chains, password: password, source: source)
-            case .single(let words, let chain):
-                try walletKeyStore.importWallet(type: .single, name: name, words: words, chains: [chain], password: password, source: source)
-            case .privateKey(let text, let chain):
-                try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: password, source: source)
+            case .phrase(let secretData, let chains):
+                try walletKeyStore.importWallet(type: .multicoin, name: name, words: secretData.words, chains: chains, password: password, source: source)
+            case .single(let secretData, let chain):
+                try walletKeyStore.importWallet(type: .single, name: name, words: secretData.words, chains: [chain], password: password, source: source)
+            case .privateKey(let secretData, let chain):
+                try walletKeyStore.importPrivateKey(name: name, key: secretData.string, chain: chain, password: password, source: source)
             case .address(let address, let chain):
                 Wallet.makeView(name: name, chain: chain, address: address)
             }
@@ -111,23 +111,23 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         }
     }
 
-    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> String {
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> SecretData {
         var data = try await getPrivateKey(wallet: wallet, chain: chain)
         defer { data.zeroize() }
         switch encoding {
         case .base58:
-            return Base58.encodeNoCheck(data: data)
+            return SecretData(string: Base58.encodeNoCheck(data: data))
         case .hex:
-            return data.hexString.append0x
+            return SecretData(string: data.hexString.append0x)
         case .base32:
             throw KeystoreError.invalidPrivateKeyEncoding
         }
     }
 
-    public func getMnemonic(wallet: Primitives.Wallet) async throws -> [String] {
+    public func getMnemonic(wallet: Primitives.Wallet) async throws -> SecretData {
         let password = try await getPassword()
         return try await queue.asyncTask { [walletKeyStore] in
-            try walletKeyStore.getMnemonic(wallet: wallet, password: password)
+            SecretData(words: try walletKeyStore.getMnemonic(wallet: wallet, password: password))
         }
     }
 

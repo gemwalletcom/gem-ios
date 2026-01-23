@@ -14,9 +14,10 @@ import GemstonePrimitives
 @MainActor
 final class VerifyPhraseViewModel {
 
+    private let secretData: SecretData
     private let words: [String]
     private let shuffledWords: [String]
-    private let onComplete: ([String]) -> Void
+    private let onComplete: (SecretData) -> Void
 
     var wordsVerified: [String]
     var wordsIndex: Int = 0
@@ -25,12 +26,13 @@ final class VerifyPhraseViewModel {
     private var selectedIndexes = Set<WordIndex>()
 
     init(
-        words: [String],
-        onComplete: @escaping ([String]) -> Void
+        secretData: SecretData,
+        onComplete: @escaping (SecretData) -> Void
     ) {
-        self.words = words
-        self.shuffledWords = words.shuffleInGroups(groupSize: 4)
-        self.wordsVerified = Array(repeating: "", count: words.count)
+        self.secretData = secretData
+        self.words = secretData.words
+        self.shuffledWords = secretData.words.shuffleInGroups(groupSize: 4)
+        self.wordsVerified = Array(repeating: "", count: secretData.words.count)
         self.onComplete = onComplete
     }
     
@@ -85,6 +87,6 @@ final class VerifyPhraseViewModel {
 extension VerifyPhraseViewModel {
     func onContinue() {
         buttonState = .loading(showProgress: true)
-        onComplete(words)
+        onComplete(secretData)
     }
 }

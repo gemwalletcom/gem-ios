@@ -94,10 +94,10 @@ public struct Scenes {
     }
 
     public struct VerifyPhrase: Hashable {
-        public let words: [String]
+        public let secretData: SecretData
 
-        public init(words: [String]) {
-            self.words = words
+        public init(secretData: SecretData) {
+            self.secretData = secretData
         }
     }
 

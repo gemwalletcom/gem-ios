@@ -8,29 +8,29 @@ import Formatters
 import Components
 
 struct ShowSecretPhraseViewModel: SecretPhraseViewableModel {
-    private let words: [String]
+    private let secretData: SecretData
     let continueAction: Primitives.VoidAction = nil
 
-    init(words: [String]) {
-        self.words = words
+    init(secretData: SecretData) {
+        self.secretData = secretData
     }
 
     var calloutViewStyle: CalloutViewStyle? {
         .secretDataWarning()
     }
-    
+
     var title: String {
         Localized.Common.secretPhrase
     }
 
     var type: SecretPhraseDataType {
-        .words(words: WordIndex.rows(for: words))
+        .words(words: WordIndex.rows(for: secretData.words))
     }
 
     var copyModel: CopyTypeViewModel {
         CopyTypeViewModel(
             type: .secretPhrase,
-            copyValue: MnemonicFormatter.fromArray(words: words)
+            copyValue: secretData.string
         )
     }
 }

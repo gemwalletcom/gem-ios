@@ -65,7 +65,7 @@ public struct WalletService: Sendable {
         preferences.isAcceptTermsCompleted = true
     }
 
-    public func createWallet() throws -> [String] {
+    public func createWallet() throws -> SecretData {
         try keystore.createWallet()
     }
 
@@ -138,11 +138,11 @@ public struct WalletService: Sendable {
         try walletStore.renameWallet(walletId, name: newName)
     }
 
-    public func getMnemonic(wallet: Wallet) async throws -> [String] {
+    public func getMnemonic(wallet: Wallet) async throws -> SecretData {
         try await keystore.getMnemonic(wallet: wallet)
     }
 
-    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> String {
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> SecretData {
         try await keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
     }
 }

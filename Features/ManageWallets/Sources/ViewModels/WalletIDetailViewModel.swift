@@ -90,11 +90,11 @@ extension WalletDetailViewModel {
         try walletService.rename(walletId: wallet.walletId, newName: name)
     }
     
-    func getMnemonicWords() async throws -> [String] {
+    func getMnemonicWords() async throws -> SecretData {
         try await walletService.getMnemonic(wallet: wallet)
     }
 
-    func getPrivateKey() async throws -> String {
+    func getPrivateKey() async throws -> SecretData {
         let chain = wallet.accounts[0].chain
         return try await walletService.getPrivateKey(
             wallet: wallet,

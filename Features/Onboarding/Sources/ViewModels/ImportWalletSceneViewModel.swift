@@ -173,23 +173,24 @@ extension ImportWalletSceneViewModel {
             guard try validateForm(type: importType, address: recipient.address, words: words) else {
                 return
             }
+            let secretData = SecretData(words: words)
             switch type {
             case .multicoin:
                 importWallet(
                     name: recipient.name,
-                    keystoreType: .phrase(words: words, chains: AssetConfiguration.allChains)
+                    keystoreType: .phrase(secretData: secretData, chains: AssetConfiguration.allChains)
                 )
             case .chain(let chain):
                 importWallet(
                     name: recipient.name,
-                    keystoreType: .single(words: words, chain: chain)
+                    keystoreType: .single(secretData: secretData, chain: chain)
                 )
             }
         case .privateKey:
             guard try validateForm(type: importType, address: recipient.address, words: [trimmedInput]) else {
                 return
             }
-            importWallet(name: recipient.name, keystoreType: .privateKey(text: trimmedInput, chain: chain!))
+            importWallet(name: recipient.name, keystoreType: .privateKey(secretData: SecretData(string: trimmedInput), chain: chain!))
         case .address:
             guard try validateForm(type: importType, address: recipient.address, words: []) else {
                 return

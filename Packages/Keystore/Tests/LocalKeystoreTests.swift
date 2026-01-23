@@ -12,17 +12,17 @@ struct LocalKeystoreTests {
     func testCreateWallet() throws {
         let keystore = LocalKeystore.mock()
         let createdWords = try keystore.createWallet()
-        #expect(createdWords.count == 12)
+        #expect(createdWords.words.count == 12)
     }
 
     @Test
     func testImportWallet() async {
         await #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
-            let words = try keystore.createWallet()
+            let secretData = try keystore.createWallet()
             let wallet = try await keystore.importWallet(
                 name: "test",
-                type: .phrase(words: words, chains: [.ethereum]),
+                type: .phrase(secretData: secretData, chains: [.ethereum]),
                 isWalletsEmpty: true,
                 source: .import
             )
@@ -38,7 +38,7 @@ struct LocalKeystoreTests {
             let keystore = LocalKeystore.mock()
             let wallet = try await keystore.importWallet(
                 name: "Solana Wallet",
-                type: .phrase(words: LocalKeystore.words, chains: [.solana]),
+                type: .phrase(secretData: SecretData(words: LocalKeystore.words), chains: [.solana]),
                 isWalletsEmpty: true,
                 source: .import
             )
@@ -57,7 +57,7 @@ struct LocalKeystoreTests {
 
             let wallet = try await keystore.importWallet(
                 name: "test",
-                type: .phrase(words: LocalKeystore.words, chains: chains),
+                type: .phrase(secretData: SecretData(words: LocalKeystore.words), chains: chains),
                 isWalletsEmpty: true,
                 source: .import
             )
@@ -78,7 +78,7 @@ struct LocalKeystoreTests {
             let hex = "0xb9095df5360714a69bc86ca92f6191e60355f206909982a8409f7b8358cf41b0"
             let wallet = try await keystore.importWallet(
                 name: "Test Solana",
-                type: .privateKey(text: hex, chain: .solana),
+                type: .privateKey(secretData: SecretData(string: hex), chain: .solana),
                 isWalletsEmpty: true,
                 source: .import
             )
@@ -86,19 +86,19 @@ struct LocalKeystoreTests {
             let exportedHex = try await keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .hex)
             let exportedBase58 = try await keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .base58)
 
-            #expect(exportedHex == hex)
-            #expect(exportedBase58 == "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV")
+            #expect(exportedHex.string == hex)
+            #expect(exportedBase58.string == "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV")
 
             let keystore2 = LocalKeystore.mock()
             let wallet2 = try await keystore2.importWallet(
                 name: "Test Solana 2",
-                type: .privateKey(text: exportedBase58, chain: .solana),
+                type: .privateKey(secretData: exportedBase58, chain: .solana),
                 isWalletsEmpty: true,
                 source: .import
             )
             let exportedKey = try await keystore2.getPrivateKey(wallet: wallet2, chain: .solana)
 
-            #expect(Base58.encodeNoCheck(data: exportedKey) == exportedBase58)
+            #expect(Base58.encodeNoCheck(data: exportedKey) == exportedBase58.string)
         }
     }
 
@@ -107,7 +107,7 @@ struct LocalKeystoreTests {
         let keystore = LocalKeystore.mock()
         let wallet = try await keystore.importWallet(
             name: "Test Solana",
-            type: .phrase(words: LocalKeystore.words, chains: [.solana]),
+            type: .phrase(secretData: SecretData(words: LocalKeystore.words), chains: [.solana]),
             isWalletsEmpty: true,
             source: .import
         )
@@ -139,7 +139,7 @@ struct LocalKeystoreTests {
             let chains = Chain.allCases
             let wallet = try await keystore.importWallet(
                 name: "test",
-                type: .phrase(words: LocalKeystore.words, chains: chains),
+                type: .phrase(secretData: SecretData(words: LocalKeystore.words), chains: chains),
                 isWalletsEmpty: true,
                 source: .import
             )
@@ -239,13 +239,13 @@ struct LocalKeystoreTests {
             let keystore = LocalKeystore.mock()
             let ethWallet = try await keystore.importWallet(
                 name: "ETH only",
-                type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
+                type: .phrase(secretData: SecretData(words: LocalKeystore.words), chains: [.ethereum]),
                 isWalletsEmpty: true,
                 source: .import
             )
             let solWallet = try await keystore.importWallet(
                 name: "SOL only",
-                type: .phrase(words: LocalKeystore.words, chains: [.solana]),
+                type: .phrase(secretData: SecretData(words: LocalKeystore.words), chains: [.solana]),
                 isWalletsEmpty: false,
                 source: .import
             )
@@ -268,7 +268,7 @@ struct LocalKeystoreTests {
             let keystore = LocalKeystore.mock()
             let wallet = try await keystore.importWallet(
                 name: "Complete wallet",
-                type: .phrase(words: LocalKeystore.words, chains: chains),
+                type: .phrase(secretData: SecretData(words: LocalKeystore.words), chains: chains),
                 isWalletsEmpty: true,
                 source: .import
             )
@@ -291,7 +291,7 @@ struct LocalKeystoreTests {
                 group.addTask {
                     try await keystore.importWallet(
                         name: "Wallet \(index)",
-                        type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
+                        type: .phrase(secretData: SecretData(words: LocalKeystore.words), chains: [.ethereum]),
                         isWalletsEmpty: index == 0 ? true : false,
                         source: .import
                     )

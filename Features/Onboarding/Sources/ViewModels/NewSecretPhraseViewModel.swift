@@ -10,36 +10,36 @@ import Style
 
 struct NewSecretPhraseViewModel: SecretPhraseViewableModel {
 
-    private let onCreateWallet: (([String]) -> Void)
-    let words: [String]
+    private let onCreateWallet: ((SecretData) -> Void)
+    let secretData: SecretData
 
     var calloutViewStyle: CalloutViewStyle? {
         .header(title: Localized.SecretPhrase.savePhraseSafely)
     }
 
     var continueAction: VoidAction {
-        { onCreateWallet(words) }
+        { onCreateWallet(secretData) }
     }
 
     init(
         walletService: WalletService,
-        onCreateWallet: @escaping (([String]) -> Void)
+        onCreateWallet: @escaping ((SecretData) -> Void)
     ) {
         self.onCreateWallet = onCreateWallet
         do {
-            self.words = try walletService.createWallet()
+            self.secretData = try walletService.createWallet()
         } catch {
             fatalError("Unable to create wallet")
         }
     }
 
     var title: String { Localized.Wallet.New.title }
-    var type: SecretPhraseDataType { .words(words: WordIndex.rows(for: words)) }
+    var type: SecretPhraseDataType { .words(words: WordIndex.rows(for: secretData.words)) }
 
     var copyModel: CopyTypeViewModel {
         CopyTypeViewModel(
             type: .secretPhrase,
-            copyValue: MnemonicFormatter.fromArray(words: words)
+            copyValue: secretData.string
         )
     }
 }

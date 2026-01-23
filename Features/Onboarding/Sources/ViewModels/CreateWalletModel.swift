@@ -46,10 +46,10 @@ extension CreateWalletModel {
         isPresentingSelectImageWallet = wallet
     }
 
-    func createWallet(words: [String]) async throws -> Wallet {
+    func createWallet(secretData: SecretData) async throws -> Wallet {
         let wallet = try await walletService.loadOrCreateWallet(
             name: WalletNameGenerator(type: .multicoin, walletService: walletService).name,
-            type: .phrase(words: words, chains: AssetConfiguration.allChains),
+            type: .phrase(secretData: secretData, chains: AssetConfiguration.allChains),
             source: .create
         )
         walletService.acceptTerms()

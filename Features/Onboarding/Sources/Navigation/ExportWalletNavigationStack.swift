@@ -5,15 +5,15 @@ import Primitives
 import Localization
 
 enum ExportWalletDestination: Hashable {
-    case words([String])
-    case privateKey(String)
+    case words(SecretData)
+    case privateKey(SecretData)
 }
 
 public struct ExportWalletNavigationStack: View {
-    
+
     private let flow: ExportWalletType
     @State private var navigationPath: NavigationPath = NavigationPath()
-    
+
     public init(flow: ExportWalletType) {
         self.flow = flow
     }
@@ -29,18 +29,18 @@ public struct ExportWalletNavigationStack: View {
                             onNext: onNext
                         )
                     )
-                case .privateKey(let key):
-                    ShowSecretDataScene(model: ShowPrivateKeyViewModel(text: key))
+                case .privateKey(let secretData):
+                    ShowSecretDataScene(model: ShowPrivateKeyViewModel(secretData: secretData))
                 }
             }
             .toolbarDismissItem(type: .close, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: ExportWalletDestination.self) {
                 switch $0 {
-                case .words(let words):
-                    ShowSecretDataScene(model: ShowSecretPhraseViewModel(words: words))
-                case .privateKey(let key):
-                    ShowSecretDataScene(model: ShowPrivateKeyViewModel(text: key))
+                case .words(let secretData):
+                    ShowSecretDataScene(model: ShowSecretPhraseViewModel(secretData: secretData))
+                case .privateKey(let secretData):
+                    ShowSecretDataScene(model: ShowPrivateKeyViewModel(secretData: secretData))
                 }
             }
         }
@@ -50,10 +50,10 @@ public struct ExportWalletNavigationStack: View {
 extension ExportWalletNavigationStack {
     private func onNext() {
         switch flow {
-        case .words(let words):
-            navigationPath.append(ExportWalletDestination.words(words))
-        case .privateKey(let key):
-            navigationPath.append(ExportWalletDestination.privateKey(key))
+        case .words(let secretData):
+            navigationPath.append(ExportWalletDestination.words(secretData))
+        case .privateKey(let secretData):
+            navigationPath.append(ExportWalletDestination.privateKey(secretData))
         }
     }
 }

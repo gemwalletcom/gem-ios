@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 
 public enum ExportWalletType: Identifiable {
     public var id: String {
@@ -10,6 +11,6 @@ public enum ExportWalletType: Identifiable {
         }
     }
 
-    case words([String])
-    case privateKey(String)
+    case words(SecretData)
+    case privateKey(SecretData)
 }

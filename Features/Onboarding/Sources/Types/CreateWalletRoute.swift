@@ -6,6 +6,6 @@ import Primitives
 enum CreateWalletRoute {
     case securityReminder
     case createWallet
-    case verifyPhrase(words: [String])
+    case verifyPhrase(secretData: SecretData)
     case walletProfile(wallet: Wallet)
 }

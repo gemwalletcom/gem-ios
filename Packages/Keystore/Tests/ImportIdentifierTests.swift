@@ -9,7 +9,7 @@ struct ImportIdentifierTests {
 
     @Test
     func phraseDeriveAddress() throws {
-        let identifier = ImportIdentifier.phrase(words: LocalKeystore.words)
+        let identifier = ImportIdentifier.phrase(secretData: SecretData(words: LocalKeystore.words))
         let (chain, address) = try identifier.deriveAddress()
 
         #expect(chain == .ethereum)
@@ -18,7 +18,7 @@ struct ImportIdentifierTests {
 
     @Test
     func privateKeyDeriveAddress() throws {
-        let identifier = ImportIdentifier.privateKey(chain: .ethereum, key: LocalKeystore.privateKey)
+        let identifier = ImportIdentifier.privateKey(chain: .ethereum, secretData: SecretData(string: LocalKeystore.privateKey))
         let (chain, address) = try identifier.deriveAddress()
 
         #expect(chain == .ethereum)
@@ -27,7 +27,7 @@ struct ImportIdentifierTests {
 
     @Test
     func singleDeriveAddress() throws {
-        let identifier = ImportIdentifier.single(chain: .bitcoin, words: LocalKeystore.words)
+        let identifier = ImportIdentifier.single(chain: .bitcoin, secretData: SecretData(words: LocalKeystore.words))
         let (chain, address) = try identifier.deriveAddress()
 
         #expect(chain == .bitcoin)

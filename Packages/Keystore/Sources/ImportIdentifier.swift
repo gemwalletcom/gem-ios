@@ -6,9 +6,9 @@ import Primitives
 import WalletCore
 
 public enum ImportIdentifier {
-    case phrase(words: [String])
-    case single(chain: Chain, words: [String])
-    case privateKey(chain: Chain, key: String)
+    case phrase(secretData: SecretData)
+    case single(chain: Chain, secretData: SecretData)
+    case privateKey(chain: Chain, secretData: SecretData)
     case address(address: String, chain: Chain)
 
     public func walletIdentifier() throws -> WalletIdentifier {
@@ -23,12 +23,12 @@ public enum ImportIdentifier {
 
     public func deriveAddress() throws -> (Chain, String) {
         switch self {
-        case let .phrase(words):
-            return try deriveFromMnemonic(words: words, chain: .ethereum)
-        case let .single(chain, words):
-            return try deriveFromMnemonic(words: words, chain: chain)
-        case let .privateKey(chain, key):
-            let privateKey = try WalletKeyStore.decodeKey(key, chain: chain)
+        case let .phrase(secretData):
+            return try deriveFromMnemonic(words: secretData.words, chain: .ethereum)
+        case let .single(chain, secretData):
+            return try deriveFromMnemonic(words: secretData.words, chain: chain)
+        case let .privateKey(chain, secretData):
+            let privateKey = try WalletKeyStore.decodeKey(secretData.string, chain: chain)
             let address = chain.coinType.deriveAddress(privateKey: privateKey)
             return (chain, address)
         case let .address(address, chain):
@@ -50,9 +50,9 @@ public enum ImportIdentifier {
 public extension ImportIdentifier {
     static func from(_ type: KeystoreImportType) -> ImportIdentifier {
         switch type {
-        case let .phrase(words, _): .phrase(words: words)
-        case let .single(words, chain): .single(chain: chain, words: words)
-        case let .privateKey(key, chain): .privateKey(chain: chain, key: key)
+        case let .phrase(secretData, _): .phrase(secretData: secretData)
+        case let .single(secretData, chain): .single(chain: chain, secretData: secretData)
+        case let .privateKey(secretData, chain): .privateKey(chain: chain, secretData: secretData)
         case let .address(address, chain): .address(address: address, chain: chain)
         }
     }

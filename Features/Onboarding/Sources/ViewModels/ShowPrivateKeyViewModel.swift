@@ -8,13 +8,13 @@ import Style
 import Components
 
 struct ShowPrivateKeyViewModel: SecretPhraseViewableModel {
-    let text: String
+    let secretData: SecretData
     let continueAction: VoidAction = nil
 
-    init(text: String) {
-        self.text = text
+    init(secretData: SecretData) {
+        self.secretData = secretData
     }
-    
+
     var calloutViewStyle: CalloutViewStyle? {
         .secretDataWarning()
     }
@@ -26,10 +26,11 @@ struct ShowPrivateKeyViewModel: SecretPhraseViewableModel {
     var copyModel: CopyTypeViewModel {
         CopyTypeViewModel(
             type: .privateKey,
-            copyValue: text
+            copyValue: secretData.string
         )
     }
+
     var type: SecretPhraseDataType {
-        .privateKey(key: text)
+        .privateKey(key: secretData.string)
     }
 }
