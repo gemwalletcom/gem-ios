@@ -19,8 +19,8 @@ extension Gemstone.SwapperError: @retroactive RetryableError {
         switch self {
         case .InputAmountError(let minAmount):
             if let minAmount, let value = BigInt(minAmount), !value.isZero {
-                let formatted = ValueFormatter(style: .full).string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
-                return "\(Localized.Errors.Swap.amountTooSmall) (\(formatted))"
+                let value = ValueFormatter(style: .full).string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
+                return Localized.Errors.Swap.minimumAmount(value)
             }
             return Localized.Errors.Swap.amountTooSmall
         default:

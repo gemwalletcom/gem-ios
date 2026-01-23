@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Kontohebel";
 "asset.all_time_high" = "Allzeithoch";
 "asset.all_time_low" = "Allzeittief";
+"errors.swap.minimum_amount" = "Der Mindesthandelsbetrag beträgt %@Bitte geben Sie einen höheren Betrag ein.";

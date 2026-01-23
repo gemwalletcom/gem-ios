@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "계정 레버리지";
 "asset.all_time_high" = "역대 최고";
 "asset.all_time_low" = "역대 최저치";
+"errors.swap.minimum_amount" = "최소 거래 금액은 %@더 높은 금액을 입력해 주세요.";

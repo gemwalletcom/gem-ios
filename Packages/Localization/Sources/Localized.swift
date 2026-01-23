@@ -466,6 +466,10 @@ public enum Localized {
     public enum Swap {
       /// Amount too small
       public static let amountTooSmall = Localized.tr("Localizable", "errors.swap.amount_too_small", fallback: "Amount too small")
+      /// Minimum trade amount is %@. Please enter a higher amount.
+      public static func minimumAmount(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "errors.swap.minimum_amount", String(describing: p1), fallback: "Minimum trade amount is %@. Please enter a higher amount.")
+      }
       /// No quote available.
       public static let noQuoteAvailable = Localized.tr("Localizable", "errors.swap.no_quote_available", fallback: "No quote available.")
       /// No quote data

@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Apalancamiento de la cuenta";
 "asset.all_time_high" = "Máximo histórico";
 "asset.all_time_low" = "Mínimo histórico";
+"errors.swap.minimum_amount" = "La cantidad mínima de operación es %@. Introduce una cantidad mayor.";

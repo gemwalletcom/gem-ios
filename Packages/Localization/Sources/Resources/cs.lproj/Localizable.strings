@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Pákový efekt účtu";
 "asset.all_time_high" = "Historické maximum";
 "asset.all_time_low" = "Historické minimum";
+"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";

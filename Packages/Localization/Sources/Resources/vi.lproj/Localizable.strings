@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Tận dụng tài khoản";
 "asset.all_time_high" = "Mức cao nhất mọi thời đại";
 "asset.all_time_low" = "Mức thấp nhất mọi thời đại";
+"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
