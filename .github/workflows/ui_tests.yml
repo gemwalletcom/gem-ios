@@ -11,16 +11,19 @@ concurrency:
   group: ui-tests-${{ github.ref }}
   cancel-in-progress: false
 
-env:
-  SCCACHE_GHA_ENABLED: "true"
-  RUSTC_WRAPPER: "sccache"
-
 jobs:
   ui_test:
     name: Build and UI Test iPhone simulator
     runs-on: [self-hosted, macOS]
 
+    env:
+      RUSTC_WRAPPER: "sccache"
+
     steps:
+      - name: Setup sccache for GitHub-hosted
+        if: runner.environment == 'github-hosted'
+        run: echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
