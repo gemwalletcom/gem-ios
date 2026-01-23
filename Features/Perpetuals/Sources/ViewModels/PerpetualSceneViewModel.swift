@@ -127,7 +127,9 @@ public final class PerpetualSceneViewModel {
         }
         Task {
             do {
-                try await perpetualService.updatePositions(wallet: wallet)
+                if let address = wallet.perpetualAddress {
+                    try await perpetualService.updatePositions(address: address, walletId: wallet.walletId)
+                }
             } catch {
                 debugLog("Failed to load data: \(error)")
             }

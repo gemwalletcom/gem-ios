@@ -46,6 +46,10 @@ public extension Wallet {
         }
         return account
     }
+
+    var perpetualAddress: String? {
+        accounts.first { $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid }?.address
+    }
 }
 
 // factory

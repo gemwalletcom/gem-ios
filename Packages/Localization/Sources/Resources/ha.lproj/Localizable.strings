@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Jimillar tsabar kuɗin da ke akwai, gami da tsabar kuɗi da aka kulle ko aka ajiye.";
 "info.max_supply.title" = "Mafi girman wadata";
 "info.max_supply.description" = "Matsakaicin adadin tsabar kuɗi da za su wanzu.";
+"perpetual.value" = "darajar";
+"perpetual.unrealized_pnl" = "PnL mara Gaskiya";
+"perpetual.volume" = "Ƙarar girma";
+"perpetual.all_time_pnl" = "PnL na Duk Lokaci";
+"perpetual.margin_usage" = "Amfani da Gefen";
+"perpetual.account_leverage" = "Amfani da Asusu";
+"asset.all_time_high" = "Babban Lokaci";
+"asset.all_time_low" = "Ƙasa a Kowane Lokaci";

@@ -572,3 +572,11 @@
 "info.total_supply.description" = "잠겨 있거나 예약된 코인을 포함하여 존재하는 전체 코인 수입니다.";
 "info.max_supply.title" = "최대 공급";
 "info.max_supply.description" = "세상에 존재할 수 있는 동전의 최대 개수.";
+"perpetual.value" = "값";
+"perpetual.unrealized_pnl" = "미실현 손익";
+"perpetual.volume" = "용량";
+"perpetual.all_time_pnl" = "역대 최고 PnL";
+"perpetual.margin_usage" = "마진 사용";
+"perpetual.account_leverage" = "계정 레버리지";
+"asset.all_time_high" = "역대 최고";
+"asset.all_time_low" = "역대 최저치";

@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Jumlah syiling yang wujud, termasuk syiling yang dikunci atau ditempah.";
 "info.max_supply.title" = "Bekalan Maks";
 "info.max_supply.description" = "Bilangan maksimum syiling yang akan wujud.";
+"perpetual.value" = "Nilai";
+"perpetual.unrealized_pnl" = "PnL Tidak Terrealisasi";
+"perpetual.volume" = "Kelantangan";
+"perpetual.all_time_pnl" = "PnL Sepanjang Masa";
+"perpetual.margin_usage" = "Penggunaan Margin";
+"perpetual.account_leverage" = "Leveraj Akaun";
+"asset.all_time_high" = "Tertinggi Sepanjang Masa";
+"asset.all_time_low" = "Rendah Sepanjang Masa";

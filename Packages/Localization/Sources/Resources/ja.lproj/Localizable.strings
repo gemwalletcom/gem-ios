@@ -572,3 +572,11 @@
 "info.total_supply.description" = "ロックされたコインや予約されたコインを含む、存在するコインの合計数。";
 "info.max_supply.title" = "最大供給";
 "info.max_supply.description" = "これまでに存在するコインの最大数。";
+"perpetual.value" = "価値";
+"perpetual.unrealized_pnl" = "未実現損益";
+"perpetual.volume" = "音量";
+"perpetual.all_time_pnl" = "これまでの損益";
+"perpetual.margin_usage" = "マージンの使用";
+"perpetual.account_leverage" = "アカウントレバレッジ";
+"asset.all_time_high" = "史上最高値";
+"asset.all_time_low" = "オールタイムロー";

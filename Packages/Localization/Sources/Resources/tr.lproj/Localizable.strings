@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Kilitli veya rezerve edilmiş paralar da dahil olmak üzere mevcut toplam para sayısı.";
 "info.max_supply.title" = "Maksimum Tedarik";
 "info.max_supply.description" = "Var olabilecek maksimum madeni para sayısı.";
+"perpetual.value" = "Değer";
+"perpetual.unrealized_pnl" = "Gerçekleşmemiş Kar ve Zarar";
+"perpetual.volume" = "Hacim";
+"perpetual.all_time_pnl" = "Tüm Zamanların Kar ve Zarar Tablosu";
+"perpetual.margin_usage" = "Kenar Boşluğu Kullanımı";
+"perpetual.account_leverage" = "Hesap Kaldıraç";
+"asset.all_time_high" = "Tüm Zamanların En Yüksek Seviyesi";
+"asset.all_time_low" = "Tüm Zamanların En Düşük Seviyesi";

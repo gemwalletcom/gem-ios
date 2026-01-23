@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Numărul total de monede existente, inclusiv monedele blocate sau rezervate.";
 "info.max_supply.title" = "Aprovizionare maximă";
 "info.max_supply.description" = "Numărul maxim de monede care vor exista vreodată.";
+"perpetual.value" = "Valoare";
+"perpetual.unrealized_pnl" = "PnL nerealizat";
+"perpetual.volume" = "Volum";
+"perpetual.all_time_pnl" = "PnL din toate timpurile";
+"perpetual.margin_usage" = "Utilizarea marjei";
+"perpetual.account_leverage" = "Levierul contului";
+"asset.all_time_high" = "Maxim istoric";
+"asset.all_time_low" = "Minim istoric";

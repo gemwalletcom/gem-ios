@@ -572,3 +572,11 @@
 "info.total_supply.description" = "موجود سکوں کی کل تعداد، بشمول مقفل یا محفوظ سکے";
 "info.max_supply.title" = "زیادہ سے زیادہ سپلائی";
 "info.max_supply.description" = "سکوں کی زیادہ سے زیادہ تعداد جو کبھی موجود ہوں گے۔";
+"perpetual.value" = "قدر";
+"perpetual.unrealized_pnl" = "غیر حقیقی PnL";
+"perpetual.volume" = "حجم";
+"perpetual.all_time_pnl" = "ہر وقت PnL";
+"perpetual.margin_usage" = "مارجن کا استعمال";
+"perpetual.account_leverage" = "اکاؤنٹ لیوریج";
+"asset.all_time_high" = "آل ٹائم ہائی";
+"asset.all_time_low" = "آل ٹائم لو";

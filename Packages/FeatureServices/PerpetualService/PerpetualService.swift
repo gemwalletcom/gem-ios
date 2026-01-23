@@ -36,19 +36,14 @@ public struct PerpetualService: PerpetualServiceable {
         try store.getPerpetuals()
     }
     
-    public func updatePositions(wallet: Wallet) async throws {
-        guard let account = wallet.accounts.first(where: { 
-            $0.chain == .arbitrum || $0.chain == .hyperCore || $0.chain == .hyperliquid
-        }) else {
-            return
-        }
-        let summary = try await provider.getPositions(address: account.address)
-        
-        try syncProviderBalances(walletId: wallet.walletId, balance: summary.balance)
+    public func updatePositions(address: String, walletId: WalletId) async throws {
+        let summary = try await provider.getPositions(address: address)
+
+        try syncProviderBalances(walletId: walletId, balance: summary.balance)
         try syncProviderPositions(
             positions: summary.positions,
             provider: provider.provider(),
-            walletId: wallet.walletId
+            walletId: walletId
         )
     }
 
@@ -127,7 +122,11 @@ public struct PerpetualService: PerpetualServiceable {
     public func candlesticks(symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
         return try await provider.getCandlesticks(symbol: symbol, period: period)
     }
-    
+
+    public func portfolio(address: String) async throws -> PerpetualPortfolio {
+        try await provider.getPortfolio(address: address)
+    }
+
     public func setPinned(_ isPinned: Bool, perpetualId: String) throws {
         try store.setPinned(for: [perpetualId], value: isPinned)
     }

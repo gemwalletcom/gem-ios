@@ -12,8 +12,6 @@ struct AssetHeaderViewModel: Sendable {
 }
 
 extension AssetHeaderViewModel: HeaderViewModel {
-    var allowHiddenBalance: Bool { false }
-
     var isWatchWallet: Bool {
         walletModel.wallet.type == .view
     }

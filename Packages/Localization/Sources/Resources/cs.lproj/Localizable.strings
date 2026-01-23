@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Celkový počet existujících mincí, včetně uzamčených nebo rezervovaných mincí.";
 "info.max_supply.title" = "Maximální nabídka";
 "info.max_supply.description" = "Maximální počet mincí, které kdy budou existovat.";
+"perpetual.value" = "Hodnota";
+"perpetual.unrealized_pnl" = "Nerealizovaný zisk/ztráta";
+"perpetual.volume" = "Objem";
+"perpetual.all_time_pnl" = "Výhra všech dob";
+"perpetual.margin_usage" = "Využití marže";
+"perpetual.account_leverage" = "Pákový efekt účtu";
+"asset.all_time_high" = "Historické maximum";
+"asset.all_time_low" = "Historické minimum";

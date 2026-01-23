@@ -572,3 +572,11 @@
 "info.total_supply.description" = "تعداد کل سکه‌های موجود، شامل سکه‌های قفل‌شده یا رزرو شده.";
 "info.max_supply.title" = "حداکثر عرضه";
 "info.max_supply.description" = "حداکثر تعداد سکه‌هایی که تا به حال وجود خواهد داشت.";
+"perpetual.value" = "ارزش";
+"perpetual.unrealized_pnl" = "سود و زیان تحقق نیافته";
+"perpetual.volume" = "حجم";
+"perpetual.all_time_pnl" = "سود و زیان تمام وقت";
+"perpetual.margin_usage" = "استفاده از مارجین";
+"perpetual.account_leverage" = "اهرم حساب";
+"asset.all_time_high" = "بالاترین رکورد تمام دوران";
+"asset.all_time_low" = "پایین‌ترین سطح تمام دوران";

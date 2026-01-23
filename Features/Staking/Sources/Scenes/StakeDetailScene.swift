@@ -16,7 +16,8 @@ public struct StakeDetailScene: View {
             Section { } header: {
                 WalletHeaderView(
                     model: model.validatorHeaderViewModel,
-                    isHideBalanceEnalbed: .constant(false),
+                    isPrivacyEnabled: .constant(false),
+                    balanceActionType: .none,
                     onHeaderAction: nil,
                     onInfoAction: nil
                 )

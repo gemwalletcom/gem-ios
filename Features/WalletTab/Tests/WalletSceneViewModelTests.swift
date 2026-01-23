@@ -16,9 +16,12 @@ import PreferencesTestKit
 struct WalletSceneViewModelTests {
     @Test
     func isLoading() {
+        let preferences = WalletPreferences(walletId: Wallet.mock().walletId)
+        preferences.clear()
+
         let model = WalletSceneViewModel.mock()
         #expect(model.isLoadingAssets == false)
-        
+
         model.shouldStartLoadingAssets()
         #expect(model.isLoadingAssets)
         

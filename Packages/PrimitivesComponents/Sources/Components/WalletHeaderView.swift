@@ -9,19 +9,22 @@ import Primitives
 public struct WalletHeaderView: View {
     private let model: any HeaderViewModel
 
-    @Binding var isHideBalanceEnalbed: Bool
+    @Binding var isPrivacyEnabled: Bool
 
+    private let balanceActionType: BalanceActionType
     private let onHeaderAction: HeaderButtonAction?
     private let onInfoAction: VoidAction
 
     public init(
         model: any HeaderViewModel,
-        isHideBalanceEnalbed: Binding<Bool>,
+        isPrivacyEnabled: Binding<Bool>,
+        balanceActionType: BalanceActionType,
         onHeaderAction: HeaderButtonAction?,
         onInfoAction: VoidAction
     ) {
         self.model = model
-        _isHideBalanceEnalbed = isHideBalanceEnalbed
+        _isPrivacyEnabled = isPrivacyEnabled
+        self.balanceActionType = balanceActionType
         self.onHeaderAction = onHeaderAction
         self.onInfoAction = onInfoAction
     }
@@ -35,16 +38,7 @@ public struct WalletHeaderView: View {
                 )
                 .padding(.bottom, .space12)
             }
-            ZStack {
-                if model.allowHiddenBalance {
-                    PrivacyToggleView(
-                        model.title,
-                        isEnabled: $isHideBalanceEnalbed
-                    )
-                } else {
-                    Text(model.title)
-                }
-            }
+            balanceView
             .numericTransition(for: model.title)
             .minimumScaleFactor(0.5)
             .font(.system(size: 42))
@@ -56,7 +50,7 @@ public struct WalletHeaderView: View {
             if let subtitle = model.subtitle {
                 PrivacyText(
                     subtitle,
-                    isEnabled: isEnabled
+                    isEnabled: $isPrivacyEnabled
                 )
                 .font(.system(size: 16))
                 .fontWeight(.medium)
@@ -93,8 +87,18 @@ public struct WalletHeaderView: View {
         }
     }
 
-    private var isEnabled: Binding<Bool> {
-        return model.allowHiddenBalance ? $isHideBalanceEnalbed : .constant(false)
+    @ViewBuilder
+    private var balanceView: some View {
+        switch balanceActionType {
+        case .privacyToggle:
+            PrivacyToggleView(model.title, isEnabled: $isPrivacyEnabled)
+        case .action(let action):
+            Button(action: action) {
+                PrivacyText(model.title, isEnabled: $isPrivacyEnabled)
+            }
+        case .none:
+            Text(model.title)
+        }
     }
 }
 
@@ -110,7 +114,8 @@ public struct WalletHeaderView: View {
 
     WalletHeaderView(
         model: model,
-        isHideBalanceEnalbed: .constant(false),
+        isPrivacyEnabled: .constant(false),
+        balanceActionType: .privacyToggle,
         onHeaderAction: .none,
         onInfoAction: .none
     )

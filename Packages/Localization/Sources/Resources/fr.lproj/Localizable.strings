@@ -572,3 +572,11 @@
 "info.total_supply.description" = "Le nombre total de pièces existantes, y compris les pièces bloquées ou réservées.";
 "info.max_supply.title" = "Max Supply";
 "info.max_supply.description" = "Le nombre maximal de pièces qui existeront jamais.";
+"perpetual.value" = "Valeur";
+"perpetual.unrealized_pnl" = "P&L non réalisé";
+"perpetual.volume" = "Volume";
+"perpetual.all_time_pnl" = "PnL de tous les temps";
+"perpetual.margin_usage" = "Utilisation de la marge";
+"perpetual.account_leverage" = "Effet de levier du compte";
+"asset.all_time_high" = "Record absolu";
+"asset.all_time_low" = "Plus bas historique";

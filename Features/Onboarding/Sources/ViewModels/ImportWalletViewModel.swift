@@ -6,7 +6,6 @@ import Primitives
 import WalletService
 import AvatarService
 import PrimitivesComponents
-import Preferences
 import enum Keystore.KeystoreImportType
 
 @Observable
@@ -51,7 +50,6 @@ extension ImportWalletViewModel {
     func importWallet(data: WalletImportData) async throws -> Wallet {
         let wallet = try await walletService.loadOrCreateWallet(name: data.name, type: data.keystoreType, source: .import)
         walletService.acceptTerms()
-        WalletPreferences(walletId: wallet.walletId).completeInitialSynchronization()
         try await walletService.setCurrent(wallet: wallet)
         return wallet
     }
