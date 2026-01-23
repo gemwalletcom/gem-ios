@@ -66,6 +66,7 @@ jobs:
         uses: mozilla-actions/sccache-action@v0.0.8
 
       - name: Install just
+        if: runner.environment == 'github-hosted'
         run: brew install just
 
       - name: Install dependencies
