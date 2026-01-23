@@ -146,7 +146,7 @@ extension NavigationHandler {
     }
 
     private func navigateToTransaction(walletIndex: Int?, walletId: String, assetId: AssetId, transaction: Primitives.Transaction) async throws {
-        guard let walletId = walletService.walletId(walletIndex: walletIndex, walletTypeId: walletId) else {
+        guard let walletId = walletService.walletId(walletIndex: walletIndex, walletId: walletId) else {
             throw AnyError("Wallet not found")
         }
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
