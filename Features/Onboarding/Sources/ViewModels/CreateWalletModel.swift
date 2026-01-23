@@ -53,7 +53,6 @@ extension CreateWalletModel {
             source: .create
         )
         walletService.acceptTerms()
-        WalletPreferences(walletId: wallet.walletId).completeInitialSynchronization()
         return wallet
     }
 

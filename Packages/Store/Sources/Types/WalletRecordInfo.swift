@@ -13,7 +13,6 @@ extension WalletRecordInfo {
     func mapToWallet() -> Wallet? {
         return Wallet(
             id: wallet.id,
-            externalId: wallet.externalId,
             name: wallet.name,
             index: wallet.index.asInt32,
             type: wallet.type,

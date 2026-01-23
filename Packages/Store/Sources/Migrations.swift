@@ -375,13 +375,6 @@ public struct Migrations {
             }
         }
 
-        migrator.registerMigration("Migrate wallet IDs to WalletIdentifier format") { db in
-            try? db.alter(table: WalletRecord.databaseTableName) {
-                $0.add(column: WalletRecord.Columns.externalId.name, .text)
-            }
-            try WalletIdMigration.migrate(db: db)
-        }
-
         try migrator.migrate(dbQueue)
     }
 }
