@@ -13,6 +13,7 @@ concurrency:
 jobs:
   unit_test:
     name: Build and Test iPhone simulator
+    #runs-on: macos-26
     runs-on: [self-hosted, macOS]
 
     env:

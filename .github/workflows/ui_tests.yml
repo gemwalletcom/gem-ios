@@ -14,6 +14,7 @@ concurrency:
 jobs:
   ui_test:
     name: Build and UI Test iPhone simulator
+    #runs-on: macos-26
     runs-on: [self-hosted, macOS]
 
     env:
