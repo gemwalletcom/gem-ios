@@ -1,9 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import BigInt
+import Components
 import Foundation
 import Gemstone
 import Primitives
+import Style
 import YieldService
 
 public struct YieldPositionViewModel: Sendable {
@@ -129,6 +131,15 @@ public final class YieldSceneViewModel {
 
     public var assetSymbol: String {
         input.asset.symbol
+    }
+
+    public var assetImage: AssetImage {
+        AssetImage(
+            type: input.asset.type.rawValue,
+            imageURL: AssetImageFormatter.shared.getURL(for: input.asset.id),
+            placeholder: nil,
+            chainPlaceholder: Images.YieldProviders.yo
+        )
     }
 
     public var isLoading: Bool {
