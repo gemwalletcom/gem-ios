@@ -53,6 +53,7 @@ let package = Package(
             name: "OnboardingTest",
             dependencies: [
                 "Onboarding",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "WalletServiceTestKit", package: "FeatureServices"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "NameServiceTestKit", package: "ChainServices"),

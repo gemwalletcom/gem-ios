@@ -26,5 +26,7 @@ struct CreateWalletModelTests {
 
         #expect(preferences.completeInitialAddressStatus)
         #expect(preferences.completeInitialLoadAssets)
+
+        preferences.clear()
     }
 }
