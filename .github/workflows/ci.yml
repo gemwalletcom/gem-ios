@@ -20,10 +20,6 @@ jobs:
     runs-on: [self-hosted, macOS]
 
     steps:
-      - name: Select Xcode
-        run: |
-          xcrun simctl list devices
-        
       - name: Checkout
         uses: actions/checkout@v4
         with:
