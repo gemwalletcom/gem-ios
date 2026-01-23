@@ -18,7 +18,7 @@ env:
 jobs:
   ui_test:
     name: Build and UI Test iPhone simulator
-    runs-on: macos-26
+    runs-on: [self-hosted, macOS]
 
     steps:
       - name: Select Xcode
@@ -31,6 +31,7 @@ jobs:
           submodules: true
 
       - name: Cache Cargo Dependencies
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -41,6 +42,7 @@ jobs:
             ${{ runner.os }}-cargo-deps-
       
       - name: Cache Cargo Target
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -50,6 +52,7 @@ jobs:
             ${{ runner.os }}-cargo-deps-
       
       - name: Cache Swift Package Manager
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -60,11 +63,9 @@ jobs:
             ${{ runner.os }}-spm-
 
       - name: Run sccache-cache
+        if: runner.environment == 'github-hosted'
         uses: mozilla-actions/sccache-action@v0.0.8
-      
-      - name: Verify sccache usage
-        run: sccache --show-stats
-    
+
       - name: Install just
         run: brew install just
 

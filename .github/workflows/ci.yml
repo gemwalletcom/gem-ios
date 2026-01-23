@@ -17,7 +17,7 @@ env:
 jobs:
   unit_test:
     name: Build and Test iPhone simulator
-    runs-on: macos-26
+    runs-on: [self-hosted, macOS]
 
     steps:
       - name: Select Xcode
@@ -30,6 +30,7 @@ jobs:
           submodules: true
 
       - name: Cache Cargo Dependencies
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -38,8 +39,9 @@ jobs:
           key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-deps-
-        
+
       - name: Cache Cargo Target
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -49,6 +51,7 @@ jobs:
             ${{ runner.os }}-cargo-deps-
 
       - name: Cache Swift Package Manager
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -59,8 +62,9 @@ jobs:
             ${{ runner.os }}-spm-
 
       - name: Run sccache-cache
+        if: runner.environment == 'github-hosted'
         uses: mozilla-actions/sccache-action@v0.0.8
-    
+
       - name: Install just
         run: brew install just
 
