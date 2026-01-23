@@ -21,11 +21,9 @@ struct WalletIdMigration {
 
     private static let currentWalletKey = "currentWallet"
 
-    static func migrate(db: Database) throws {
-        // Step 1: Build wallet mappings (oldId -> newId)
+    static func migrate(db: Database, userDefaults: UserDefaults = .standard) throws {
         let mappings = try buildWalletMappings(db: db)
 
-        // Step 2: Find and delete duplicates (keep wallet with lowest order)
         let groups = Dictionary(grouping: mappings, by: { $0.newId })
         for (_, wallets) in groups where wallets.count > 1 {
             let sorted = wallets.sorted { $0.order < $1.order }
@@ -38,15 +36,12 @@ struct WalletIdMigration {
             }
         }
 
-        // Step 3: Rename remaining wallets to new ID format
-        // Temporarily disable FK constraints for existing databases without onUpdate: .cascade
         try db.execute(sql: "PRAGMA foreign_keys = OFF")
 
         let remainingMappings = try buildWalletMappings(db: db)
         for mapping in remainingMappings where mapping.oldId != mapping.newId {
             try db.execute(sql: "UPDATE \(WalletRecord.databaseTableName) SET externalId = id, id = ? WHERE id = ?", arguments: [mapping.newId, mapping.oldId])
 
-            // Update child table references
             for table in childTables {
                 try db.execute(
                     sql: "UPDATE \(table) SET walletId = ? WHERE walletId = ?",
@@ -57,24 +52,23 @@ struct WalletIdMigration {
 
         try db.execute(sql: "PRAGMA foreign_keys = ON")
 
-        // Step 4: Migrate currentWalletId preference
-        migrateCurrentWalletPreference(mappings: remainingMappings)
+        migrateCurrentWalletPreference(mappings: remainingMappings, userDefaults: userDefaults)
     }
 
-    private static func migrateCurrentWalletPreference(mappings: [WalletMapping]) {
+    private static func migrateCurrentWalletPreference(mappings: [WalletMapping], userDefaults: UserDefaults) {
         let firstWallet = mappings.min(by: { $0.order < $1.order })
 
-        guard let currentId = UserDefaults.standard.string(forKey: currentWalletKey) else {
+        guard let currentId = userDefaults.string(forKey: currentWalletKey) else {
             if let first = firstWallet {
-                UserDefaults.standard.set(first.newId, forKey: currentWalletKey)
+                userDefaults.set(first.newId, forKey: currentWalletKey)
             }
             return
         }
 
         if let mapping = mappings.first(where: { $0.oldId == currentId && $0.oldId != $0.newId }) {
-            UserDefaults.standard.set(mapping.newId, forKey: currentWalletKey)
+            userDefaults.set(mapping.newId, forKey: currentWalletKey)
         } else if let first = firstWallet {
-            UserDefaults.standard.set(first.newId, forKey: currentWalletKey)
+            userDefaults.set(first.newId, forKey: currentWalletKey)
         }
     }
 
