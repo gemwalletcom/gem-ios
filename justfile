@@ -90,7 +90,7 @@ show-simulator:
     @echo "Destination: {{SIMULATOR_DEST}}"
     @xcrun simctl list devices | grep "iPhone" | head -5 || true
 
-test-all:
+_test action:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     ONLY_ACTIVE_ARCH=YES \
@@ -99,18 +99,11 @@ test-all:
     -parallel-testing-enabled YES \
     -parallelizeTargets \
     -jobs {{BUILD_THREADS}} \
-    test | xcbeautify {{XCBEAUTIFY_ARGS}}
+    {{action}} | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test-without-building:
-    @set -o pipefail && xcodebuild -project Gem.xcodeproj \
-    -scheme Gem \
-    ONLY_ACTIVE_ARCH=YES \
-    -destination "{{SIMULATOR_DEST}}" \
-    -derivedDataPath build/DerivedData \
-    -parallel-testing-enabled YES \
-    -parallelizeTargets \
-    -jobs {{BUILD_THREADS}} \
-    test-without-building | xcbeautify {{XCBEAUTIFY_ARGS}}
+test-all: (_test "test")
+
+test-without-building: (_test "test-without-building")
 
 test-ui: reset-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
