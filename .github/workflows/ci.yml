@@ -74,9 +74,6 @@ jobs:
       - name: Build Core
         run: just generate-stone
 
-      - name: Clean DerivedData
-        run: just clean
-
       - name: Build for Testing
         run: just build-for-testing
 

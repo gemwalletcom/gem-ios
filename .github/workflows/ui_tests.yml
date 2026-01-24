@@ -71,9 +71,6 @@ jobs:
 
       - name: Install dependencies
         run: just install-toolchains
-      
-      - name: Clean DerivedData
-        run: just clean
 
       - name: Build Core
         run: just generate-stone
