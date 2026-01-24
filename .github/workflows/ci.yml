@@ -6,9 +6,9 @@ on:
   pull_request: 
     branches: ["main"]
 
-concurrency:
-  group: unit-tests-${{ github.ref }}
-  cancel-in-progress: false
+# concurrency:
+#   group: unit-tests-${{ github.ref }}
+#   cancel-in-progress: false
 
 jobs:
   unit_test:
