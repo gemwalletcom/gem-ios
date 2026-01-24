@@ -109,7 +109,7 @@ test-without-building: (_test "test-without-building")
 # Example: just test PrimitivesTests
 test TARGET: (_test "test" TARGET)
 
-test-ui: reset-simulator
+_test-ui action:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
     -testPlan ui_tests \
@@ -118,18 +118,13 @@ test-ui: reset-simulator
     -derivedDataPath {{DERIVED_DATA}} \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
-    test | xcbeautify {{XCBEAUTIFY_ARGS}}
+    {{action}} | xcbeautify {{XCBEAUTIFY_ARGS}}
 
-test-ui-without-building: reset-simulator
-    @set -o pipefail && xcodebuild -project Gem.xcodeproj \
-    -scheme GemUITests \
-    -testPlan ui_tests \
-    ONLY_ACTIVE_ARCH=YES \
-    -destination "{{SIMULATOR_DEST}}" \
-    -derivedDataPath {{DERIVED_DATA}} \
-    -allowProvisioningUpdates \
-    -allowProvisioningDeviceRegistration \
-    test-without-building | xcbeautify {{XCBEAUTIFY_ARGS}}
+test-ui: reset-simulator (_test-ui "test")
+
+build-for-testing-ui: (_test-ui "build-for-testing")
+
+test-ui-without-building: reset-simulator (_test-ui "test-without-building")
 
 reset-simulator NAME=SIMULATOR_NAME:
     @echo "==> Resetting {{NAME}} simulator to clean state"

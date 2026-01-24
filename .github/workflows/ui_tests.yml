@@ -79,7 +79,7 @@ jobs:
         run: just generate-stone
 
       - name: Build for Testing
-        run: just build-for-testing
+        run: just build-for-testing-ui
 
       - name: UI Tests
         run: just test-ui-without-building
