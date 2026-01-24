@@ -221,7 +221,7 @@ public final class YieldSceneViewModel {
     }
 
     public func onSelectOpportunity(_ opportunity: YieldOpportunityViewModel) {
-        let yieldData = YieldData(
+        let yieldData = Primitives.YieldData(
             providerName: opportunity.provider.name,
             contractAddress: "",
             callData: "",
@@ -237,7 +237,7 @@ public final class YieldSceneViewModel {
 
     public func onWithdraw() {
         guard let position = position else { return }
-        let yieldData = YieldData(
+        let yieldData = Primitives.YieldData(
             providerName: position.providerName,
             contractAddress: "",
             callData: "",

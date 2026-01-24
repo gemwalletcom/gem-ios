@@ -166,16 +166,6 @@ public final class AssetSceneViewModel: Sendable {
         return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
-    var yieldRewardsText: String? {
-        guard let position = yieldPosition,
-              let rewardsStr = position.rewards,
-              let rewards = BigInt(rewardsStr),
-              rewards > 0 else {
-            return nil
-        }
-        return "+" + ValueFormatter(style: .full).string(rewards, decimals: asset.decimals.asInt, currency: asset.symbol)
-    }
-
     var priceItemViewModel: PriceListItemViewModel {
         PriceListItemViewModel(
             title: Localized.Asset.price,

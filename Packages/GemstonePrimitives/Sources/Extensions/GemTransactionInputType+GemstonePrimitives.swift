@@ -81,8 +81,8 @@ public extension TransferDataType {
     }
 }
 
-public extension GemYieldAction {
-    func map() -> YieldAction {
+public extension Gemstone.YieldAction {
+    func map() -> Primitives.YieldAction {
         switch self {
         case .deposit: .deposit
         case .withdraw: .withdraw
@@ -90,8 +90,8 @@ public extension GemYieldAction {
     }
 }
 
-public extension YieldAction {
-    func map() -> GemYieldAction {
+public extension Primitives.YieldAction {
+    func map() -> Gemstone.YieldAction {
         switch self {
         case .deposit: .deposit
         case .withdraw: .withdraw
@@ -99,9 +99,9 @@ public extension YieldAction {
     }
 }
 
-public extension GemYieldData {
-    func map() -> YieldData {
-        YieldData(
+public extension Gemstone.YieldData {
+    func map() -> Primitives.YieldData {
+        Primitives.YieldData(
             providerName: providerName,
             contractAddress: contractAddress,
             callData: callData,
@@ -111,9 +111,9 @@ public extension GemYieldData {
     }
 }
 
-public extension YieldData {
-    func map() -> GemYieldData {
-        GemYieldData(
+public extension Primitives.YieldData {
+    func map() -> Gemstone.YieldData {
+        Gemstone.YieldData(
             providerName: providerName,
             contractAddress: contractAddress,
             callData: callData,
