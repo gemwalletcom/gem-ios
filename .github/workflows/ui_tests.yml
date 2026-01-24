@@ -72,7 +72,7 @@ jobs:
       - name: Install dependencies
         run: just install-toolchains
       
-      - name: Clean
+      - name: Clean DerivedData
         run: just clean
 
       - name: Build Core
