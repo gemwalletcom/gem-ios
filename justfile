@@ -115,9 +115,21 @@ test-ui: reset-simulator
     -testPlan ui_tests \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath {{DERIVED_DATA}} \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
+
+test-ui-without-building: reset-simulator
+    @set -o pipefail && xcodebuild -project Gem.xcodeproj \
+    -scheme GemUITests \
+    -testPlan ui_tests \
+    ONLY_ACTIVE_ARCH=YES \
+    -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath {{DERIVED_DATA}} \
+    -allowProvisioningUpdates \
+    -allowProvisioningDeviceRegistration \
+    test-without-building | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 reset-simulator NAME=SIMULATOR_NAME:
     @echo "==> Resetting {{NAME}} simulator to clean state"
