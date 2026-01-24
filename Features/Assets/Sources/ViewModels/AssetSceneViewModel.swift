@@ -280,26 +280,24 @@ extension AssetSceneViewModel {
         hasYieldOpportunity = yieldService.isYieldAvailable(for: asset.id)
 
         if hasYieldOpportunity {
-            Task {
-                await fetchYieldPosition()
-            }
+            fetchYieldPosition()
         }
     }
 
-    private func fetchYieldPosition() async {
-        guard let yieldService else {
+    private func fetchYieldPosition() {
+        guard let yieldService,
+              let address = try? wallet.account(for: asset.id.chain).address else {
             isYieldPositionLoaded = true
             return
         }
-        do {
-            let address = try wallet.account(for: asset.id.chain).address
-            yieldPosition = try await yieldService.positions(
-                provider: .yo,
-                asset: asset.id,
-                walletAddress: address
-            )
-        } catch {
-            debugLog("fetchYieldPosition error: \(error)")
+
+        yieldPosition = yieldService.getPosition(
+            provider: .yo,
+            asset: asset.id,
+            walletAddress: address,
+            walletId: wallet.walletId
+        ) { [weak self] fresh in
+            self?.yieldPosition = fresh
         }
         isYieldPositionLoaded = true
     }
@@ -509,6 +507,7 @@ extension AssetSceneViewModel {
     private func updateAsset() async {
         do {
             try await assetsService.updateAsset(assetId: assetModel.asset.id)
+            checkYieldAvailability()
         } catch {
             // TODO: - handle updateAsset error
             debugLog("asset scene: updateAsset error \(error)")

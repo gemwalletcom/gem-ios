@@ -196,22 +196,28 @@ public final class YieldSceneViewModel {
 
     public func fetch() async {
         state = .loading
-        do {
-            let position = try await yieldService.positions(
-                provider: .yo,
-                asset: input.asset.id,
-                walletAddress: walletAddress
-            )
 
-            let positionViewModel = YieldPositionViewModel(
-                position: position,
-                decimals: Int(input.asset.decimals)
-            )
-            let opportunity = YieldOpportunityViewModel(position: position)
-            state = .loaded([opportunity], positionViewModel)
-        } catch {
-            state = .error(error)
+        let cached = yieldService.getPosition(
+            provider: .yo,
+            asset: input.asset.id,
+            walletAddress: walletAddress,
+            walletId: input.wallet.walletId
+        ) { [weak self] fresh in
+            self?.updateState(with: fresh)
         }
+
+        if let cached {
+            updateState(with: cached)
+        }
+    }
+
+    private func updateState(with position: GemYieldPosition) {
+        let positionViewModel = YieldPositionViewModel(
+            position: position,
+            decimals: Int(input.asset.decimals)
+        )
+        let opportunity = YieldOpportunityViewModel(position: position)
+        state = .loaded([opportunity], positionViewModel)
     }
 
     public func onSelectOpportunity(_ opportunity: YieldOpportunityViewModel) {

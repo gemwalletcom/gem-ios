@@ -21,8 +21,8 @@ public struct YieldOpportunityView: View {
     }
 
     public var body: some View {
-        Button(action: action) {
-            HStack(spacing: Spacing.medium) {
+        NavigationCustomLink(
+            with: HStack(spacing: Spacing.medium) {
                 model.providerImage
 
                 VStack(alignment: .leading, spacing: Spacing.tiny) {
@@ -50,14 +50,9 @@ public struct YieldOpportunityView: View {
                             .foregroundStyle(Colors.green)
                     }
                 }
-
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(Colors.gray)
             }
-            .padding(.vertical, Spacing.small)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
+            .padding(.vertical, Spacing.small),
+            action: action
+        )
     }
 }

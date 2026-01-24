@@ -4,20 +4,6 @@
 
 import Foundation
 
-public struct EvmYieldData: Codable, Equatable, Hashable, Sendable {
-	public let contractAddress: String
-	public let callData: String
-	public let approval: ApprovalData?
-	public let gasLimit: String?
-
-	public init(contractAddress: String, callData: String, approval: ApprovalData?, gasLimit: String?) {
-		self.contractAddress = contractAddress
-		self.callData = callData
-		self.approval = approval
-		self.gasLimit = gasLimit
-	}
-}
-
 public struct YieldData: Codable, Equatable, Hashable, Sendable {
 	public let providerName: String
 	public let contractAddress: String

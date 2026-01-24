@@ -381,6 +381,10 @@ public struct Migrations {
             }
         }
 
+        migrator.registerMigration("Create \(YieldPositionRecord.databaseTableName)") { db in
+            try YieldPositionRecord.create(db: db)
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

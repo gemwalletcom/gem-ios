@@ -1,30 +1,27 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import BigInt
-import enum Gemstone.SwapperError
 import Formatters
+import enum Gemstone.SwapperError
 import Localization
 import Primitives
 
 extension Gemstone.SwapperError: @retroactive RetryableError {
     public var isRetryAvailable: Bool {
         switch self {
-        case .NoQuoteAvailable, .ComputeQuoteError, .TransactionError, .NetworkError: true
-        case .NotSupportedChain, .NotSupportedAsset, .NotSupportedPair, .NoAvailableProvider,
-             .InvalidAddress, .InvalidAmount, .InputAmountTooSmall, .InvalidRoute,
-             .AbiError, .NotImplemented: false
+        case .NoQuoteAvailable, .ComputeQuoteError, .TransactionError: true
+        case .NotSupportedChain, .NotSupportedAsset, .NoAvailableProvider,
+             .InputAmountError, .InvalidRoute: false
         }
     }
 
     public func message(asset: Asset) -> String {
         switch self {
-        case .InvalidAmount(let minAmount):
-            if let value = BigInt(minAmount), !value.isZero {
+        case .InputAmountError(let minAmount):
+            if let minAmount, let value = BigInt(minAmount), !value.isZero {
                 let value = ValueFormatter(style: .full).string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
                 return Localized.Errors.Swap.minimumAmount(value.boldMarkdown())
             }
-            return Localized.Errors.Swap.amountTooSmall
-        case .InputAmountTooSmall:
             return Localized.Errors.Swap.amountTooSmall
         default:
             return localizedDescription

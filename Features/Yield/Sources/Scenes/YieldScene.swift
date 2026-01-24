@@ -52,10 +52,8 @@ extension YieldScene {
     private var positionSection: some View {
         Section {
             if let position = model.position {
-                Button {
-                    model.onWithdraw()
-                } label: {
-                    HStack(spacing: Spacing.small) {
+                NavigationCustomLink(
+                    with: HStack(spacing: Spacing.small) {
                         AssetImageView(assetImage: model.assetImage, size: 40)
                         Text("\(position.assetBalanceFormatted) \(model.assetSymbol)")
                             .font(.body)
@@ -66,13 +64,10 @@ extension YieldScene {
                                 .font(.callout)
                                 .foregroundStyle(Colors.green)
                         }
-                        Image(systemName: "chevron.right")
-                            .font(.body)
-                            .foregroundStyle(Colors.grayLight)
                     }
-                    .contentShape(Rectangle())
+                ) {
+                    model.onWithdraw()
                 }
-                .buttonStyle(.plain)
             }
         } header: {
             Text("Current Position")

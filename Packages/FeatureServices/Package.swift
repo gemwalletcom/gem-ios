@@ -564,6 +564,7 @@ let package = Package(
             dependencies: [
                 "Gemstone",
                 "Primitives",
+                "Store",
                 "NativeProviderService",
             ],
             path: "YieldService",

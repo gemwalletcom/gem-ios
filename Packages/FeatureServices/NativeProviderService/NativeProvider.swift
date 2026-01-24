@@ -59,7 +59,7 @@ extension NativeProvider: AlienProvider {
             return AlienResponse(status: statusCode.map(UInt16.init), data: data)
         } catch {
             if (error as NSError).domain == NSURLErrorDomain {
-                throw AlienError.ResponseError(msg: error.localizedDescription)
+                throw AlienError.Network(error.localizedDescription)
             }
             throw error
         }

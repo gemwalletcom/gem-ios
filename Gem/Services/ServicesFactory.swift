@@ -223,7 +223,7 @@ struct ServicesFactory {
 
         let yieldService: YieldService? = {
             do {
-                return try YieldService(nodeProvider: nodeService)
+                return try YieldService(nodeProvider: nodeService, store: storeManager.yieldStore)
             } catch {
                 debugLog("Failed to initialize YieldService: \(error)")
                 return nil
