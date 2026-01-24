@@ -78,8 +78,8 @@ jobs:
       - name: Clean DerivedData
         run: rm -rf build/DerivedData
 
-      - name: Build
-        run: just build
+      - name: Build for Testing
+        run: just build-for-testing
 
       - name: Unit Tests
         run: just test-without-building
