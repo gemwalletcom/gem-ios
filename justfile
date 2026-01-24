@@ -8,12 +8,6 @@ FAST_BUILD_FLAGS := "GCC_OPTIMIZATION_LEVEL=0 SWIFT_OPTIMIZATION_LEVEL=-Onone SW
 default:
     @just --list
 
-xcbeautify:
-    @xcbeautify {{XCBEAUTIFY_ARGS}}
-
-list:
-    just --list
-
 bootstrap: install generate-stone
     @echo "<== Bootstrap done."
 
@@ -36,7 +30,7 @@ install-swifttools:
 
 download-wallet-core VERSION:
     @echo "==> Install wallet-core {{VERSION}}"
-    curl -L https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -o Packages/WalletCore/Package.swift
+    @curl -sL https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -o Packages/WalletCore/Package.swift
 
 setup-git:
     @echo "==> Setup git submodules"
@@ -44,10 +38,10 @@ setup-git:
     @git config submodule.recurse true
 
 core-upgrade:
-    git submodule update --recursive --remote
+    @git submodule update --recursive --remote
 
 spm-resolve-all:
-    sh scripts/spm-resolve-all.sh
+    @sh scripts/spm-resolve-all.sh
 
 _build action extra_flags="":
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
