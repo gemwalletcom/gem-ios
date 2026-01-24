@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "الاستفادة من الحساب";
 "asset.all_time_high" = "أعلى مستوى على الإطلاق";
 "asset.all_time_low" = "أدنى مستوى على الإطلاق";
+"errors.swap.minimum_amount" = "الحد الأدنى لمبلغ التداول هو %@يرجى إدخال مبلغ أعلى.";

@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Effet de levier du compte";
 "asset.all_time_high" = "Record absolu";
 "asset.all_time_low" = "Plus bas historique";
+"errors.swap.minimum_amount" = "Le montant minimum de transaction est %@Veuillez saisir un montant plus élevé.";

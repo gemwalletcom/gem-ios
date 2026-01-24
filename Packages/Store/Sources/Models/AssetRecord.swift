@@ -135,7 +135,9 @@ extension AssetRecord {
                 isSellable: isSellable,
                 isSwapable: isSwappable,
                 isStakeable: isStakeable,
-                stakingApr: stakingApr
+                stakingApr: stakingApr,
+                isEarnable: false,
+                earnApr: nil
             ),
             score: AssetScore(rank: rank.asInt32)
         )

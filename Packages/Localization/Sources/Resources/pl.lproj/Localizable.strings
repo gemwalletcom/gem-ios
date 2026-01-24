@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Dźwignia konta";
 "asset.all_time_high" = "Najwyższy poziom wszech czasów";
 "asset.all_time_low" = "Najniższy poziom wszech czasów";
+"errors.swap.minimum_amount" = "Minimalna kwota transakcji wynosi %@. Proszę wprowadzić wyższą kwotę.";

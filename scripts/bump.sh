@@ -19,9 +19,16 @@ bump_build() {
 
 version=$(bump_version)
 new_build=$(bump_build)
+
+# Keep incrementing version until we find one without an existing tag
+while git tag -l "$version" | grep -q .; do
+  echo "⚠️  Tag $version already exists, trying next version..."
+  version=$(bump_version)
+done
+
 git add "$file"
 git commit -S -m "Bump to $version ($new_build)" > /dev/null
-git tag -s "$version" -m "$version" 2>/dev/null || echo "⚠️  Tag $version already exists"
+git tag -s "$version" -m "$version"
 git push
 git push origin "$version"
 echo "✅ Bumped to $version ($new_build)"

@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Amfani da Asusu";
 "asset.all_time_high" = "Babban Lokaci";
 "asset.all_time_low" = "Ƙasa a Kowane Lokaci";
+"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";

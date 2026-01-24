@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Levierul contului";
 "asset.all_time_high" = "Maxim istoric";
 "asset.all_time_low" = "Minim istoric";
+"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
