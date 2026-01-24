@@ -1,6 +1,6 @@
 XCBEAUTIFY_ARGS := "--quieter --is-ci"
 BUILD_THREADS := `sysctl -n hw.ncpu`
-SIMULATOR_NAME := "iPhone 17"
+SIMULATOR_NAME := env_var_or_default("SIMULATOR_NAME", "iPhone 17")
 SIMULATOR_DEST := "platform=iOS Simulator,name=" + SIMULATOR_NAME
 DERIVED_DATA := "build/DerivedData"
 FAST_BUILD_FLAGS := "GCC_OPTIMIZATION_LEVEL=0 SWIFT_OPTIMIZATION_LEVEL=-Onone SWIFT_COMPILATION_MODE=incremental ENABLE_TESTABILITY=NO"
