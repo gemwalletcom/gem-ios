@@ -38,6 +38,7 @@ import ActivityService
 import AuthService
 import RewardsService
 import EventPresenterService
+import YieldService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages, navigation: NavigationStateManager) -> AppResolver.Services {
@@ -220,6 +221,15 @@ struct ServicesFactory {
             perpetualObserverService: perpetualObserverService
         )
 
+        let yieldService: YieldService? = {
+            do {
+                return try YieldService(nodeProvider: nodeService, store: storeManager.yieldStore)
+            } catch {
+                debugLog("Failed to initialize YieldService: \(error)")
+                return nil
+            }
+        }()
+
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
             nodeService: nodeService,
@@ -279,7 +289,8 @@ struct ServicesFactory {
             viewModelFactory: viewModelFactory,
             rewardsService: rewardsService,
             observersService: observersService,
-            inAppNotificationService: inAppNotificationService
+            inAppNotificationService: inAppNotificationService,
+            yieldService: yieldService
         )
     }
 }

@@ -99,7 +99,7 @@ extension TransferExecutor {
         switch data.chain {
         case .solana:
             switch data.type {
-            case .transfer, .deposit, .withdrawal, .transferNft, .stake, .account, .tokenApprove, .perpetual: BroadcastOptions(
+            case .transfer, .deposit, .withdrawal, .transferNft, .stake, .account, .tokenApprove, .perpetual, .yield: BroadcastOptions(
                 skipPreflight: false
             )
             case .swap, .generic: BroadcastOptions(skipPreflight: true)

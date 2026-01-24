@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import BigInt
-import enum Gemstone.SwapperError
 import Formatters
+import enum Gemstone.SwapperError
 import Localization
 import Primitives
 

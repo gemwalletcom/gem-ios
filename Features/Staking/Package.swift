@@ -23,8 +23,9 @@ let package = Package(
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
-        .package(name: "Formatters", path: "../../Packages/Formatters")
-
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
+        .package(name: "Yield", path: "../Yield")
     ],
     targets: [
         .target(
@@ -40,7 +41,10 @@ let package = Package(
                 "Store",
                 "InfoSheet",
                 "PrimitivesComponents",
-                "Formatters"
+                "Formatters",
+                "Yield",
+                .product(name: "YieldService", package: "FeatureServices"),
+                .product(name: "NodeService", package: "ChainServices")
             ],
             path: "Sources"
         ),

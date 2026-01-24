@@ -200,13 +200,64 @@ public class EthereumSigner: Signable {
         ))
     }
 
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case .stake(_, let stakeType) = input.type else {
-            fatalError("Invalid type for staking")
+    public func signYield(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard
+            case .evm(_, _, _, let yieldData) = input.metadata,
+            let yieldData = yieldData
+        else {
+            throw AnyError("Invalid metadata for yield transaction")
         }
 
+        let callData = try Data.from(hex: yieldData.callData)
+        let depositGasLimit = yieldData.gasLimit.flatMap { BigInt($0) } ?? input.fee.gasLimit
+
+        if let approvalData = yieldData.approval {
+            return try [
+                sign(coinType: input.coinType, input: buildBaseInput(
+                    input: input,
+                    transaction: .with {
+                        $0.erc20Approve = EthereumTransaction.ERC20Approve.with {
+                            $0.spender = approvalData.spender
+                            $0.amount = BigInt.MAX_256.magnitude.serialize()
+                        }
+                    },
+                    toAddress: approvalData.token,
+                    privateKey: privateKey
+                )),
+                sign(coinType: input.coinType, input: buildBaseInputCustom(
+                    input: input,
+                    transaction: .with {
+                        $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
+                            $0.amount = Data()
+                            $0.data = callData
+                        }
+                    },
+                    toAddress: yieldData.contractAddress,
+                    nonce: BigInt(input.metadata.getSequence()) + 1,
+                    gasLimit: depositGasLimit,
+                    privateKey: privateKey
+                )),
+            ]
+        } else {
+            return try [sign(coinType: input.coinType, input: buildBaseInputCustom(
+                input: input,
+                transaction: .with {
+                    $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
+                        $0.amount = Data()
+                        $0.data = callData
+                    }
+                },
+                toAddress: yieldData.contractAddress,
+                nonce: BigInt(input.metadata.getSequence()),
+                gasLimit: depositGasLimit,
+                privateKey: privateKey
+            ))]
+        }
+    }
+
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard
-            case .evm(_, _, let stakeData) = input.metadata,
+            case .evm(_, _, let stakeData, _) = input.metadata,
             let stakeData = stakeData,
             let data = stakeData.data,
             let to = stakeData.to
@@ -215,29 +266,34 @@ public class EthereumSigner: Signable {
         }
 
         let callData = try Data.from(hex: data)
-        let valueData = try {
-            switch input.asset.chain {
-            case .ethereum:
-                return switch stakeType {
-                case .stake: input.value.magnitude.serialize()
-                case .unstake, .withdraw: Data()
-                case .freeze, .redelegate, .rewards:
-                    throw AnyError("Ethereum doesn't support this stake type")
-                }
-            case .smartChain:
-                return switch stakeType {
-                case .stake: input.value.magnitude.serialize()
-                case .redelegate, .unstake, .rewards, .withdraw: Data()
-                case .freeze: throw AnyError("SmartChain does not support freeze operations")
-                }
-            case .monad:
-                return switch stakeType {
-                case .stake: input.value.magnitude.serialize()
-                case .unstake, .withdraw, .rewards: Data()
-                case .redelegate, .freeze: throw AnyError("Monad doesn't support this stake type")
+        let valueData: Data = try {
+            switch input.type {
+            case .stake(_, let stakeType):
+                switch input.asset.chain {
+                case .ethereum:
+                    return switch stakeType {
+                    case .stake: input.value.magnitude.serialize()
+                    case .unstake, .withdraw: Data()
+                    case .freeze, .redelegate, .rewards:
+                        throw AnyError("Ethereum doesn't support this stake type")
+                    }
+                case .smartChain:
+                    return switch stakeType {
+                    case .stake: input.value.magnitude.serialize()
+                    case .redelegate, .unstake, .rewards, .withdraw: Data()
+                    case .freeze: throw AnyError("SmartChain does not support freeze operations")
+                    }
+                case .monad:
+                    return switch stakeType {
+                    case .stake: input.value.magnitude.serialize()
+                    case .unstake, .withdraw, .rewards: Data()
+                    case .redelegate, .freeze: throw AnyError("Monad doesn't support this stake type")
+                    }
+                default:
+                    fatalError("\(input.asset.name) native staking not supported")
                 }
             default:
-                fatalError("\(input.asset.name) native staking not supported")
+                throw AnyError("Invalid type for staking")
             }
         }()
 

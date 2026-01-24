@@ -8,4 +8,7 @@ public enum NotificationType: String, Codable, Equatable, Sendable {
 	case referralJoined
 	case rewardsEnabled
 	case rewardsCodeDisabled
+	case rewardsRedeemed
+	case rewardsCreateUsername
+	case rewardsInvite
 }

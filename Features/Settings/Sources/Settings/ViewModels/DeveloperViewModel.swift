@@ -18,6 +18,7 @@ import PrimitivesComponents
 @Observable
 @MainActor
 public final class DeveloperViewModel {
+    private let wallet: Wallet
     private let walletId: WalletId
     private let transactionsService: TransactionsService
     private let assetService: AssetsService
@@ -29,6 +30,7 @@ public final class DeveloperViewModel {
     public var isPresentingToastMessage: ToastMessage?
 
     public init(
+        wallet: Wallet,
         walletId: WalletId,
         transactionsService: TransactionsService,
         assetService: AssetsService,
@@ -37,6 +39,7 @@ public final class DeveloperViewModel {
         priceService: PriceService,
         perpetualService: PerpetualService
     ) {
+        self.wallet = wallet
         self.walletId = walletId
         self.transactionsService = transactionsService
         self.assetService = assetService

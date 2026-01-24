@@ -112,10 +112,10 @@ public struct DeveloperScene: View {
             Section("Preferences") {
                 NavigationCustomLink(
                     with: ListItemView(title: "Clear Swap Assets Version"),
-                    action: model.clearAssetsVersion 
+                    action: model.clearAssetsVersion
                 )
             }
-            
+
             Section {
                 NavigationCustomLink(with: ListItemView(title: "Reset"), action: model.reset)
             }

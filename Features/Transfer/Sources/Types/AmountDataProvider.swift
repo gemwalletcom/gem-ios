@@ -9,6 +9,7 @@ enum AmountDataProvider: AmountDataProvidable {
     case stake(AmountStakeViewModel)
     case freeze(AmountFreezeViewModel)
     case perpetual(AmountPerpetualViewModel)
+    case yield(AmountYieldViewModel)
 
     static func make(from input: AmountInput) -> AmountDataProvider {
         switch input.type {
@@ -30,6 +31,8 @@ enum AmountDataProvider: AmountDataProvidable {
             .freeze(AmountFreezeViewModel(asset: input.asset, data: data))
         case .perpetual(let data):
             .perpetual(AmountPerpetualViewModel(asset: input.asset, data: data))
+        case .yield(let action, let data, let depositedBalance):
+            .yield(AmountYieldViewModel(asset: input.asset, action: action, data: data, depositedBalance: depositedBalance))
         }
     }
 
@@ -70,6 +73,7 @@ extension AmountDataProvider {
         case .stake(let provider): provider
         case .freeze(let provider): provider
         case .perpetual(let provider): provider
+        case .yield(let provider): provider
         }
     }
 }

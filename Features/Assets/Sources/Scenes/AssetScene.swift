@@ -106,6 +106,10 @@ public struct AssetScene: View {
                         stakeView
                     }
 
+                    if model.hasYieldPosition {
+                        yieldView
+                    }
+
                     if model.showPendingUnconfirmedBalance {
                         ListItemView(
                             title: model.assetDataModel.pendingUnconfirmedBalanceTitle,
@@ -123,9 +127,17 @@ public struct AssetScene: View {
                         }
                     }
                 }
-            } else if model.assetDataModel.isStakeEnabled {
-                stakeViewEmpty
-                    .listRowInsets(.assetListRowInsets)
+            }
+
+            if model.showEarnSection {
+                Section(model.earnSectionTitle) {
+                    if model.showStakeButton {
+                        stakeButtonView
+                    }
+                    if model.showYieldButton {
+                        yieldButtonView
+                    }
+                }
             }
 
             if model.showResources {
@@ -187,11 +199,22 @@ extension AssetScene {
         )
         .accessibilityIdentifier("stake")
     }
-    
-    private var stakeViewEmpty: some View {
+
+    private var yieldView: some View {
         NavigationCustomLink(
-            with: HStack(spacing: .space12) {
-                EmojiView(color: Colors.grayVeryLight, emoji: "💰")
+            with: ListItemView(
+                title: model.yieldTitle,
+                subtitle: model.yieldBalanceText
+            ),
+            action: { model.onSelectEarn() }
+        )
+        .accessibilityIdentifier("yield")
+    }
+
+    private var stakeButtonView: some View {
+        NavigationCustomLink(
+            with: HStack(spacing: Spacing.medium) {
+                EmojiView(color: Colors.grayVeryLight, emoji: Emoji.WalletAvatar.moneyBag.rawValue)
                     .frame(size: .image.asset)
                 ListItemView(
                     title: model.stakeTitle,
@@ -201,5 +224,21 @@ extension AssetScene {
             },
             action: { model.onSelectHeader(.stake) }
         )
+        .accessibilityIdentifier("stakeButton")
+    }
+
+    private var yieldButtonView: some View {
+        NavigationCustomLink(
+            with: HStack(spacing: Spacing.medium) {
+                EmojiView(color: Colors.grayVeryLight, emoji: Emoji.WalletAvatar.moneyBag.rawValue)
+                    .frame(size: .image.asset)
+                ListItemView(
+                    title: model.yieldTitle,
+                    subtitle: nil
+                )
+            },
+            action: { model.onSelectEarn() }
+        )
+        .accessibilityIdentifier("yieldButton")
     }
 }

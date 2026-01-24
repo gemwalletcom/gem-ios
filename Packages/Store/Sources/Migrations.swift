@@ -375,11 +375,14 @@ public struct Migrations {
             }
         }
 
-        migrator.registerMigration("Migrate wallet IDs to WalletIdentifier format") { db in
-            try? db.alter(table: WalletRecord.databaseTableName) {
-                $0.add(column: WalletRecord.Columns.externalId.name, .text)
+        migrator.registerMigration("Add isEarnable to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.isEarnable.name, .boolean).defaults(to: false)
             }
-            try WalletIdMigration.migrate(db: db)
+        }
+
+        migrator.registerMigration("Create \(YieldPositionRecord.databaseTableName)") { db in
+            try YieldPositionRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

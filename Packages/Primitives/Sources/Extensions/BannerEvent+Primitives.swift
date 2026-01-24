@@ -17,6 +17,7 @@ extension BannerEvent: Comparable {
         case .enableNotifications: 5
         case .stake: 6
         case .tradePerpetuals: 7
+        case .yield: 8
         }
     }
 }

@@ -28,6 +28,12 @@ struct BannerViewModel {
                 return .none
             }
             return AssetImage.resourceImage(image: asset.chain.rawValue)
+        case .yield:
+            guard let asset = asset else {
+                return .none
+            }
+            let imageURL = AssetImageFormatter.shared.getURL(for: asset.id)
+            return AssetImage(imageURL: imageURL, placeholder: Images.name(asset.chain.rawValue))
         case .enableNotifications:
             return AssetImage.image(Images.System.bell)
         case .accountBlockedMultiSignature:
@@ -60,6 +66,11 @@ struct BannerViewModel {
             return Localized.Banner.AssetStatus.title
         case .onboarding: return Localized.Banner.Onboarding.title
         case .tradePerpetuals: return Localized.Banner.Perpetuals.title
+        case .yield:
+            guard let asset = asset else {
+                return .none
+            }
+            return "Earn on \(asset.symbol)"
         }
     }
 
@@ -90,6 +101,11 @@ struct BannerViewModel {
             return Localized.Banner.AssetStatus.description
         case .onboarding: return Localized.Banner.Onboarding.description
         case .tradePerpetuals: return Localized.Banner.Perpetuals.description
+        case .yield:
+            guard let asset = asset else {
+                return .none
+            }
+            return "Earn yield on your \(asset.symbol)"
         }
     }
 
@@ -105,7 +121,8 @@ struct BannerViewModel {
                 .accountBlockedMultiSignature,
                 .activateAsset,
                 .suspiciousAsset,
-                .tradePerpetuals: .image.asset
+                .tradePerpetuals,
+                .yield: .image.asset
         case .onboarding: .image.medium
         }
     }
@@ -116,7 +133,8 @@ struct BannerViewModel {
             .accountActivation,
             .activateAsset,
             .suspiciousAsset,
-            .tradePerpetuals: 14
+            .tradePerpetuals,
+            .yield: 14
         case .enableNotifications,
             .accountBlockedMultiSignature,
             .onboarding: 0
@@ -137,8 +155,9 @@ struct BannerViewModel {
             .enableNotifications,
             .activateAsset,
             .onboarding,
-            .tradePerpetuals:
-            return.none
+            .tradePerpetuals,
+            .yield:
+            return .none
         case .accountActivation:
             return asset?.chain.accountActivationFeeUrl
         case .accountBlockedMultiSignature:
@@ -164,11 +183,12 @@ struct BannerViewModel {
                 .accountBlockedMultiSignature,
                 .activateAsset,
                 .suspiciousAsset,
-                .tradePerpetuals: .list
+                .tradePerpetuals,
+                .yield: .list
         case .onboarding: .banner
         }
     }
-    
+
     var buttons: [BannerButtonViewModel] {
         switch banner.event {
         case .stake,
@@ -177,7 +197,8 @@ struct BannerViewModel {
                 .accountBlockedMultiSignature,
                 .activateAsset,
                 .suspiciousAsset,
-                .tradePerpetuals: []
+                .tradePerpetuals,
+                .yield: []
         case .onboarding: [
             BannerButtonViewModel(button: .buy, banner: banner),
             BannerButtonViewModel(button: .receive, banner: banner)

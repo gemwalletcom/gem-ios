@@ -1,5 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Primitives
 import SwiftUI
 import UIKit
@@ -16,6 +17,9 @@ import WalletsService
 import PriceService
 import BannerService
 import Formatters
+import YieldService
+import Gemstone
+import BigInt
 
 @Observable
 @MainActor
@@ -25,8 +29,13 @@ public final class AssetSceneViewModel: Sendable {
     private let transactionsService: TransactionsService
     private let priceObserverService: PriceObserverService
     private let bannerService: BannerService
+    private let yieldService: YieldService?
 
     private let preferences: ObservablePreferences = .default
+
+    private(set) var hasYieldOpportunity: Bool = false
+    private(set) var yieldPosition: GemYieldPosition?
+    private(set) var isYieldPositionLoaded: Bool = false
 
     let explorerService: ExplorerService = .standard
     public let priceAlertService: PriceAlertService
@@ -51,6 +60,7 @@ public final class AssetSceneViewModel: Sendable {
         priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
         bannerService: BannerService,
+        yieldService: YieldService? = nil,
         input: AssetSceneInput,
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
@@ -60,6 +70,7 @@ public final class AssetSceneViewModel: Sendable {
         self.priceObserverService = priceObserverService
         self.priceAlertService = priceAlertService
         self.bannerService = bannerService
+        self.yieldService = yieldService
 
         self.input = input
         self.chainAssetData = ChainAssetData(
@@ -83,7 +94,7 @@ public final class AssetSceneViewModel: Sendable {
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
-    var showBalances: Bool { assetDataModel.showBalances }
+    var showBalances: Bool { assetDataModel.showBalances || hasYieldPosition }
     private var showStakedBalanceTypes: [BalanceType] = [.staked, .pending, .rewards]
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
@@ -120,6 +131,39 @@ public final class AssetSceneViewModel: Sendable {
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
         return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
+    }
+
+    var yieldTitle: String { "Yield" }
+    var earnSectionTitle: String { "Earn" }
+
+    var showStakeButton: Bool {
+        !showBalances && assetDataModel.isStakeEnabled && !wallet.isViewOnly
+    }
+
+    var showYieldButton: Bool {
+        hasYieldOpportunity && !wallet.isViewOnly && isYieldPositionLoaded && !hasYieldPosition
+    }
+
+    var showEarnSection: Bool {
+        showStakeButton || showYieldButton
+    }
+
+    var hasYieldPosition: Bool {
+        guard let position = yieldPosition,
+              let balanceStr = position.vaultBalanceValue,
+              let balance = BigInt(balanceStr) else {
+            return false
+        }
+        return balance > 0
+    }
+
+    var yieldBalanceText: String {
+        guard let position = yieldPosition,
+              let balanceStr = position.assetBalanceValue,
+              let balance = BigInt(balanceStr) else {
+            return "0"
+        }
+        return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -212,12 +256,40 @@ extension AssetSceneViewModel {
         Task {
             await updateAsset()
         }
+        checkYieldAvailability()
 
         if assetData.priceAlerts.isNotEmpty {
             Task {
                 try await priceAlertService.update(assetId: asset.id.identifier)
             }
         }
+    }
+
+    private func checkYieldAvailability() {
+        guard let yieldService, assetData.isEarnable else { return }
+        hasYieldOpportunity = yieldService.isYieldAvailable(for: asset.id)
+
+        if hasYieldOpportunity {
+            fetchYieldPosition()
+        }
+    }
+
+    private func fetchYieldPosition() {
+        guard let yieldService,
+              let address = try? wallet.account(for: asset.id.chain).address else {
+            isYieldPositionLoaded = true
+            return
+        }
+
+        yieldPosition = yieldService.getPosition(
+            provider: .yo,
+            asset: asset.id,
+            walletAddress: address,
+            walletId: wallet.walletId
+        ) { [weak self] fresh in
+            self?.yieldPosition = fresh
+        }
+        isYieldPositionLoaded = true
     }
 
     func fetch() async {
@@ -277,6 +349,8 @@ extension AssetSceneViewModel {
             case .tradePerpetuals:
                 UIApplication.shared.open(DeepLink.perpetuals.localUrl)
                 preferences.isPerpetualEnabled = true
+            case .yield:
+                onSelectEarn()
             }
         case .button(let bannerButton):
             switch bannerButton {
@@ -297,6 +371,13 @@ extension AssetSceneViewModel {
 
     func onSelectSwap() {
         onSelectHeader(.swap)
+    }
+
+    func onSelectEarn() {
+        isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
+            type: .earn(assetData.asset),
+            assetAddress: assetData.assetAddress
+        )
     }
 
     public func onSelectShareAsset() {
@@ -416,6 +497,7 @@ extension AssetSceneViewModel {
     private func updateAsset() async {
         do {
             try await assetsService.updateAsset(assetId: assetModel.asset.id)
+            checkYieldAvailability()
         } catch {
             // TODO: - handle updateAsset error
             debugLog("asset scene: updateAsset error \(error)")
