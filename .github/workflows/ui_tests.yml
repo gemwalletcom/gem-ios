@@ -17,12 +17,12 @@ jobs:
     #runs-on: macos-26
     runs-on: [self-hosted, macOS]
 
-    env:
-      SIMULATOR_NAME: ${{ runner.name }}-iPhone
-
     steps:
-      - name: Create simulator if needed
-        run: xcrun simctl create "$SIMULATOR_NAME" "iPhone 17" 2>/dev/null || true
+      - name: Setup simulator for runner
+        run: |
+          echo "SIMULATOR_NAME=${{ runner.name }}-iPhone" >> $GITHUB_ENV
+          xcrun simctl create "${{ runner.name }}-iPhone" "iPhone 17" 2>/dev/null || true
+
       - name: Setup sccache for GitHub-hosted
         if: runner.environment == 'github-hosted'
         run: |
