@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Leverage ng Account";
 "asset.all_time_high" = "Mataas sa Lahat ng Panahon";
 "asset.all_time_low" = "Mababa sa Lahat ng Panahon";
+"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";

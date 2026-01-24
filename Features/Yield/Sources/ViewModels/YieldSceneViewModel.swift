@@ -2,6 +2,7 @@
 
 import BigInt
 import Components
+import Formatters
 import Foundation
 import Gemstone
 import Primitives
@@ -22,11 +23,10 @@ public struct YieldPositionViewModel: Sendable {
     }
 
     public var hasBalance: Bool {
-        guard let vaultBalance = position.vaultBalanceValue,
-              let balance = Double(vaultBalance) else {
+        guard let vaultBalance = vaultBalance else {
             return false
         }
-        return balance > 0
+        return vaultBalance > 0
     }
 
     public var vaultBalance: BigInt? {
@@ -37,38 +37,34 @@ public struct YieldPositionViewModel: Sendable {
     }
 
     public var vaultBalanceFormatted: String {
-        guard let vaultBalance = position.vaultBalanceValue,
-              let balance = Double(vaultBalance) else {
+        guard let vaultBalance = vaultBalance else {
             return "0"
         }
-        let divisor = pow(10.0, Double(decimals))
-        return String(format: "%.6f", balance / divisor)
+        return ValueFormatter(style: .full).string(vaultBalance, decimals: decimals)
     }
 
     public var assetBalanceFormatted: String {
-        guard let assetBalance = position.assetBalanceValue,
-              let balance = Double(assetBalance) else {
+        guard let assetBalanceStr = position.assetBalanceValue,
+              let assetBalance = BigInt(assetBalanceStr) else {
             return "0"
         }
-        let divisor = pow(10.0, Double(decimals))
-        return String(format: "%.2f", balance / divisor)
+        return ValueFormatter(style: .medium).string(assetBalance, decimals: decimals)
     }
 
     public var apyText: String {
         guard let apy = position.apy else {
             return "--"
         }
-        return String(format: "%.2f%%", apy * 100)
+        return CurrencyFormatter.percent.string(apy)
     }
 
     public var rewardsFormatted: String? {
         guard let rewardsStr = position.rewards,
-              let rewards = Double(rewardsStr),
+              let rewards = BigInt(rewardsStr),
               rewards > 0 else {
             return nil
         }
-        let divisor = pow(10.0, Double(decimals))
-        return String(format: "%.2f", rewards / divisor)
+        return ValueFormatter(style: .medium).string(rewards, decimals: decimals)
     }
 
     public var providerName: String {

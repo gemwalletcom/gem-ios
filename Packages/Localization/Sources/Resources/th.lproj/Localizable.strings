@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "การใช้ประโยชน์จากบัญชี";
 "asset.all_time_high" = "สูงสุดตลอดกาล";
 "asset.all_time_low" = "ออลไทม์โลว์";
+"errors.swap.minimum_amount" = "จำนวนเงินขั้นต่ำในการซื้อขายคือ %@กรุณาป้อนจำนวนเงินที่สูงกว่านี้";

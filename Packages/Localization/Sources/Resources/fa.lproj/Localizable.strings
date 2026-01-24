@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "اهرم حساب";
 "asset.all_time_high" = "بالاترین رکورد تمام دوران";
 "asset.all_time_low" = "پایین‌ترین سطح تمام دوران";
+"errors.swap.minimum_amount" = "حداقل مبلغ معامله %@لطفا مبلغ بیشتری وارد کنید.";

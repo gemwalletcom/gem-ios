@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Alavancagem da conta";
 "asset.all_time_high" = "Maior de todos os tempos";
 "asset.all_time_low" = "Mínima histórica";
+"errors.swap.minimum_amount" = "O valor mínimo de transação é %@Por favor, insira um valor maior.";

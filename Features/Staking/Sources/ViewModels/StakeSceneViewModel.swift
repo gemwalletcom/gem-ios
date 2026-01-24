@@ -250,12 +250,17 @@ extension StakeSceneViewModel {
 
     public func yieldSceneViewModel() -> YieldSceneViewModel? {
         guard let nodeService = nodeService,
-              let yieldAsset = yieldAsset,
-              let yieldService = try? YieldService(nodeProvider: nodeService) else {
+              let yieldAsset = yieldAsset else {
             return nil
         }
-        let input = YieldInput(wallet: wallet, asset: yieldAsset)
-        return YieldSceneViewModel(input: input, yieldService: yieldService)
+        do {
+            let yieldService = try YieldService(nodeProvider: nodeService)
+            let input = YieldInput(wallet: wallet, asset: yieldAsset)
+            return YieldSceneViewModel(input: input, yieldService: yieldService)
+        } catch {
+            debugLog("Failed to initialize YieldService: \(error)")
+            return nil
+        }
     }
 }
 

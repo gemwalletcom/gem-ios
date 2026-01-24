@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Leveraj Akaun";
 "asset.all_time_high" = "Tertinggi Sepanjang Masa";
 "asset.all_time_low" = "Rendah Sepanjang Masa";
+"errors.swap.minimum_amount" = "Jumlah dagangan minimum ialah %@Sila masukkan jumlah yang lebih tinggi.";

@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "账户杠杆";
 "asset.all_time_high" = "历史最高点";
 "asset.all_time_low" = "最低";
+"errors.swap.minimum_amount" = "最低交易金额为 %@请输入更高的金额。";

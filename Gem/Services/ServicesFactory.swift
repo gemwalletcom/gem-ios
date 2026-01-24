@@ -221,7 +221,14 @@ struct ServicesFactory {
             perpetualObserverService: perpetualObserverService
         )
 
-        let yieldService = try? YieldService(nodeProvider: nodeService)
+        let yieldService: YieldService? = {
+            do {
+                return try YieldService(nodeProvider: nodeService)
+            } catch {
+                debugLog("Failed to initialize YieldService: \(error)")
+                return nil
+            }
+        }()
 
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,

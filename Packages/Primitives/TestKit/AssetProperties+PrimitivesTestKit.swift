@@ -10,7 +10,9 @@ public extension AssetProperties {
             isSellable: true,
             isSwapable: true,
             isStakeable: true,
-            stakingApr: stakingApr
+            stakingApr: stakingApr,
+            isEarnable: false,
+            earnApr: nil
         )
     }
 }

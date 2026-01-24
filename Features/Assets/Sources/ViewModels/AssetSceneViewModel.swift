@@ -1,5 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Primitives
 import SwiftUI
 import UIKit
@@ -150,7 +151,7 @@ public final class AssetSceneViewModel: Sendable {
     var hasYieldPosition: Bool {
         guard let position = yieldPosition,
               let balanceStr = position.vaultBalanceValue,
-              let balance = Double(balanceStr) else {
+              let balance = BigInt(balanceStr) else {
             return false
         }
         return balance > 0
@@ -159,24 +160,20 @@ public final class AssetSceneViewModel: Sendable {
     var yieldBalanceText: String {
         guard let position = yieldPosition,
               let balanceStr = position.assetBalanceValue,
-              let balance = Double(balanceStr) else {
+              let balance = BigInt(balanceStr) else {
             return "0"
         }
-        let divisor = pow(10.0, Double(asset.decimals))
-        let formatted = balance / divisor
-        return String(format: "%.2f %@", formatted, asset.symbol)
+        return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
     var yieldRewardsText: String? {
         guard let position = yieldPosition,
               let rewardsStr = position.rewards,
-              let rewards = Double(rewardsStr),
+              let rewards = BigInt(rewardsStr),
               rewards > 0 else {
             return nil
         }
-        let divisor = pow(10.0, Double(asset.decimals))
-        let formatted = rewards / divisor
-        return String(format: "+%.4f %@", formatted, asset.symbol)
+        return "+" + ValueFormatter(style: .full).string(rewards, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
     var priceItemViewModel: PriceListItemViewModel {

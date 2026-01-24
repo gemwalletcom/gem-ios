@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "Leva finanziaria del conto";
 "asset.all_time_high" = "Massimo storico";
 "asset.all_time_low" = "Minimo storico";
+"errors.swap.minimum_amount" = "L'importo minimo di scambio è %@Inserisci un importo maggiore.";

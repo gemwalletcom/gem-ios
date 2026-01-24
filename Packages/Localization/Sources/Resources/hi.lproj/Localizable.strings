@@ -580,3 +580,4 @@
 "perpetual.account_leverage" = "खाता उत्तोलन";
 "asset.all_time_high" = "सर्वकालिक उच्च";
 "asset.all_time_low" = "सबसे कम";
+"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
