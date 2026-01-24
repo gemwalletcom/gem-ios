@@ -75,8 +75,8 @@ jobs:
       - name: Build Core
         run: just generate-stone
 
-      - name: Clean DerivedData
-        run: rm -rf build/DerivedData
+      # - name: Clean DerivedData
+      #   run: rm -rf build/DerivedData
 
       - name: Build for Testing
         run: just build-for-testing
