@@ -22,7 +22,8 @@ jobs:
         run: |
           SIMULATOR_NAME="${{ runner.name }}-iPhone"
           echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> $GITHUB_ENV
-          xcrun simctl delete "$SIMULATOR_NAME" 2>/dev/null || true
+          # Delete all simulators with this name
+          xcrun simctl list devices -j | jq -r ".devices[][] | select(.name == \"$SIMULATOR_NAME\") | .udid" | xargs -I {} xcrun simctl delete {} 2>/dev/null || true
           xcrun simctl create "$SIMULATOR_NAME" "iPhone 17"
 
       - name: Setup sccache for GitHub-hosted
