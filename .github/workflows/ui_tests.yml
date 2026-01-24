@@ -11,19 +11,18 @@ concurrency:
   group: ui-tests-${{ github.ref }}
   cancel-in-progress: false
 
-env:
-  SCCACHE_GHA_ENABLED: "true"
-  RUSTC_WRAPPER: "sccache"
-
 jobs:
   ui_test:
     name: Build and UI Test iPhone simulator
-    runs-on: macos-26
+    #runs-on: macos-26
+    runs-on: [self-hosted, macOS]
 
     steps:
-      - name: Select Xcode
+      - name: Setup sccache for GitHub-hosted
+        if: runner.environment == 'github-hosted'
         run: |
-          xcrun simctl list devices
+          echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+          echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,6 +30,7 @@ jobs:
           submodules: true
 
       - name: Cache Cargo Dependencies
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -41,6 +41,7 @@ jobs:
             ${{ runner.os }}-cargo-deps-
       
       - name: Cache Cargo Target
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -50,6 +51,7 @@ jobs:
             ${{ runner.os }}-cargo-deps-
       
       - name: Cache Swift Package Manager
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -60,19 +62,24 @@ jobs:
             ${{ runner.os }}-spm-
 
       - name: Run sccache-cache
+        if: runner.environment == 'github-hosted'
         uses: mozilla-actions/sccache-action@v0.0.8
-      
-      - name: Verify sccache usage
-        run: sccache --show-stats
-    
+
       - name: Install just
+        if: runner.environment == 'github-hosted'
         run: brew install just
 
       - name: Install dependencies
         run: just install-toolchains
+      
+      - name: Clean DerivedData
+        run: just clean
 
       - name: Build Core
         run: just generate-stone
 
+      - name: Build for Testing
+        run: just build-for-testing
+
       - name: UI Tests
-        run: just test-ui
+        run: just test-ui-without-building

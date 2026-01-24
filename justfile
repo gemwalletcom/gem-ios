@@ -2,15 +2,11 @@ XCBEAUTIFY_ARGS := "--quieter --is-ci"
 BUILD_THREADS := `sysctl -n hw.ncpu`
 SIMULATOR_NAME := "iPhone 17"
 SIMULATOR_DEST := "platform=iOS Simulator,name=" + SIMULATOR_NAME
+DERIVED_DATA := "build/DerivedData"
+FAST_BUILD_FLAGS := "GCC_OPTIMIZATION_LEVEL=0 SWIFT_OPTIMIZATION_LEVEL=-Onone SWIFT_COMPILATION_MODE=incremental ENABLE_TESTABILITY=NO"
 
 default:
     @just --list
-
-xcbeautify:
-    @xcbeautify {{XCBEAUTIFY_ARGS}}
-
-list:
-    just --list
 
 bootstrap: install generate-stone
     @echo "<== Bootstrap done."
@@ -34,7 +30,7 @@ install-swifttools:
 
 download-wallet-core VERSION:
     @echo "==> Install wallet-core {{VERSION}}"
-    curl -L https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -o Packages/WalletCore/Package.swift
+    @curl -sL https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -o Packages/WalletCore/Package.swift
 
 setup-git:
     @echo "==> Setup git submodules"
@@ -42,44 +38,48 @@ setup-git:
     @git config submodule.recurse true
 
 core-upgrade:
-    git submodule update --recursive --remote
+    @git submodule update --recursive --remote
 
 spm-resolve-all:
-    sh scripts/spm-resolve-all.sh
+    @sh scripts/spm-resolve-all.sh
 
-build:
+_build action extra_flags="":
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
-    -derivedDataPath build/DerivedData \
+    -derivedDataPath {{DERIVED_DATA}} \
     -parallelizeTargets \
     -jobs {{BUILD_THREADS}} \
     -showBuildTimingSummary \
-    GCC_OPTIMIZATION_LEVEL=0 \
-    SWIFT_OPTIMIZATION_LEVEL=-Onone \
-    SWIFT_COMPILATION_MODE=incremental \
-    ENABLE_TESTABILITY=NO \
-    build | xcbeautify {{XCBEAUTIFY_ARGS}}
+    {{extra_flags}} \
+    {{action}} | xcbeautify {{XCBEAUTIFY_ARGS}}
+
+# Example: just build
+build: (_build "build" FAST_BUILD_FLAGS)
+
+# Example: just build-for-testing
+build-for-testing: (_build "build-for-testing")
 
 clean:
-    @rm -rf build/DerivedData
+    @rm -rf {{DERIVED_DATA}}
     @echo "Build cache cleaned"
 
 run: build
     @echo "==> Installing app on simulator..."
     @xcrun simctl boot "{{SIMULATOR_NAME}}" 2>/dev/null || true
     @open -a Simulator
-    @xcrun simctl install "{{SIMULATOR_NAME}}" build/DerivedData/Build/Products/Debug-iphonesimulator/Gem.app
+    @xcrun simctl install "{{SIMULATOR_NAME}}" {{DERIVED_DATA}}/Build/Products/Debug-iphonesimulator/Gem.app
     @echo "==> Launching app..."
     @xcrun simctl launch --console-pty "{{SIMULATOR_NAME}}" com.gemwallet.ios
 
+# Example: just build-package Primitives
 build-package PACKAGE:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme {{PACKAGE}} \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
-    -derivedDataPath build/DerivedData \
+    -derivedDataPath {{DERIVED_DATA}} \
     -parallelizeTargets \
     -jobs {{BUILD_THREADS}} \
     GCC_OPTIMIZATION_LEVEL=0 \
@@ -90,16 +90,24 @@ show-simulator:
     @echo "Destination: {{SIMULATOR_DEST}}"
     @xcrun simctl list devices | grep "iPhone" | head -5 || true
 
-test-all: show-simulator
+_test action target="":
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
-    -derivedDataPath build/DerivedData \
+    -derivedDataPath {{DERIVED_DATA}} \
+    {{ if target != "" { "-only-testing " + target } else { "" } }} \
     -parallel-testing-enabled YES \
     -parallelizeTargets \
     -jobs {{BUILD_THREADS}} \
-    test | xcbeautify {{XCBEAUTIFY_ARGS}}
+    {{action}} | xcbeautify {{XCBEAUTIFY_ARGS}}
+
+test-all: (_test "test")
+
+test-without-building: (_test "test-without-building")
+
+# Example: just test PrimitivesTests
+test TARGET: (_test "test" TARGET)
 
 test-ui: reset-simulator
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -107,28 +115,27 @@ test-ui: reset-simulator
     -testPlan ui_tests \
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath {{DERIVED_DATA}} \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     test | xcbeautify {{XCBEAUTIFY_ARGS}}
+
+test-ui-without-building: reset-simulator
+    @set -o pipefail && xcodebuild -project Gem.xcodeproj \
+    -scheme GemUITests \
+    -testPlan ui_tests \
+    ONLY_ACTIVE_ARCH=YES \
+    -destination "{{SIMULATOR_DEST}}" \
+    -derivedDataPath {{DERIVED_DATA}} \
+    -allowProvisioningUpdates \
+    -allowProvisioningDeviceRegistration \
+    test-without-building | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 reset-simulator NAME=SIMULATOR_NAME:
     @echo "==> Resetting {{NAME}} simulator to clean state"
     @xcrun simctl shutdown "{{NAME}}" 2>/dev/null || true
     @xcrun simctl erase "{{NAME}}" 2>/dev/null || true
     @xcrun simctl boot "{{NAME}}" 2>/dev/null || true
-
-test TARGET: show-simulator
-    @set -o pipefail && xcodebuild -project Gem.xcodeproj \
-    -scheme Gem \
-    ONLY_ACTIVE_ARCH=YES \
-    -destination "{{SIMULATOR_DEST}}" \
-    -derivedDataPath build/DerivedData \
-    -only-testing {{TARGET}} \
-    -parallel-testing-enabled YES \
-    -parallelizeTargets \
-    -jobs {{BUILD_THREADS}} \
-    test | xcbeautify {{XCBEAUTIFY_ARGS}}
-
 
 localize:
     @sh core/scripts/localize.sh ios Packages/Localization/Sources/Resources

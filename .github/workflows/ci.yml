@@ -6,30 +6,30 @@ on:
   pull_request: 
     branches: ["main"]
 
-concurrency:
-  group: unit-tests-${{ github.ref }}
-  cancel-in-progress: false
-
-env:
-  SCCACHE_GHA_ENABLED: "true"
-  RUSTC_WRAPPER: "sccache"
+# concurrency:
+#   group: unit-tests-${{ github.ref }}
+#   cancel-in-progress: false
 
 jobs:
   unit_test:
     name: Build and Test iPhone simulator
-    runs-on: macos-26
+    #runs-on: macos-26
+    runs-on: [self-hosted, macOS]
 
     steps:
-      - name: Select Xcode
+      - name: Setup sccache for GitHub-hosted
+        if: runner.environment == 'github-hosted'
         run: |
-          xcrun simctl list devices
-        
+          echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+          echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: true
 
       - name: Cache Cargo Dependencies
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -38,8 +38,9 @@ jobs:
           key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-deps-
-        
+
       - name: Cache Cargo Target
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -49,6 +50,7 @@ jobs:
             ${{ runner.os }}-cargo-deps-
 
       - name: Cache Swift Package Manager
+        if: runner.environment == 'github-hosted'
         uses: actions/cache@v4
         with:
           path: |
@@ -59,9 +61,11 @@ jobs:
             ${{ runner.os }}-spm-
 
       - name: Run sccache-cache
+        if: runner.environment == 'github-hosted'
         uses: mozilla-actions/sccache-action@v0.0.8
-    
+
       - name: Install just
+        if: runner.environment == 'github-hosted'
         run: brew install just
 
       - name: Install dependencies
@@ -70,5 +74,11 @@ jobs:
       - name: Build Core
         run: just generate-stone
 
+      - name: Clean DerivedData
+        run: just clean
+
+      - name: Build for Testing
+        run: just build-for-testing
+
       - name: Unit Tests
-        run: just test-all
+        run: just test-without-building
