@@ -71,6 +71,9 @@ jobs:
 
       - name: Install dependencies
         run: just install-toolchains
+      
+      - name: Clean
+        run: just clean
 
       - name: Build Core
         run: just generate-stone
