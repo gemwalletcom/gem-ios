@@ -32,10 +32,7 @@ public final class YieldOpportunityViewModel: Identifiable, Sendable {
     }
 
     public var providerName: String {
-        switch provider {
-        case .yo:
-            return "Yo"
-        }
+        provider.displayName
     }
 
     public var apyText: String {
@@ -56,10 +53,15 @@ public final class YieldOpportunityViewModel: Identifiable, Sendable {
 }
 
 extension GemYieldProvider {
+    public var displayName: String {
+        switch self {
+        case .yo: "Yo"
+        }
+    }
+
     public var image: Image {
         switch self {
-        case .yo:
-            return Images.YieldProviders.yo
+        case .yo: Images.YieldProviders.yo
         }
     }
 }

@@ -18,60 +18,30 @@ public struct YieldPositionViewModel: Sendable {
         self.decimals = decimals
     }
 
-    public var name: String {
-        position.name
-    }
-
     public var hasBalance: Bool {
-        guard let vaultBalance = vaultBalance else {
-            return false
-        }
-        return vaultBalance > 0
+        vaultBalance.map { $0 > 0 } ?? false
     }
 
     public var vaultBalance: BigInt? {
-        guard let vaultBalanceStr = position.vaultBalanceValue else {
-            return nil
-        }
-        return BigInt(vaultBalanceStr)
-    }
-
-    public var vaultBalanceFormatted: String {
-        guard let vaultBalance = vaultBalance else {
-            return "0"
-        }
-        return ValueFormatter(style: .full).string(vaultBalance, decimals: decimals)
+        position.vaultBalanceValue.flatMap { BigInt($0) }
     }
 
     public var assetBalanceFormatted: String {
-        guard let assetBalanceStr = position.assetBalanceValue,
-              let assetBalance = BigInt(assetBalanceStr) else {
+        guard let balance = position.assetBalanceValue.flatMap({ BigInt($0) }) else {
             return "0"
         }
-        return ValueFormatter(style: .medium).string(assetBalance, decimals: decimals)
-    }
-
-    public var apyText: String {
-        guard let apy = position.apy else {
-            return "--"
-        }
-        return CurrencyFormatter.percent.string(apy)
+        return ValueFormatter(style: .medium).string(balance, decimals: decimals)
     }
 
     public var rewardsFormatted: String? {
-        guard let rewardsStr = position.rewards,
-              let rewards = BigInt(rewardsStr),
-              rewards > 0 else {
+        guard let rewards = position.rewards.flatMap({ BigInt($0) }), rewards > 0 else {
             return nil
         }
         return ValueFormatter(style: .medium).string(rewards, decimals: decimals)
     }
 
     public var providerName: String {
-        switch position.provider {
-        case .yo:
-            return "Yo"
-        }
+        position.provider.displayName
     }
 }
 

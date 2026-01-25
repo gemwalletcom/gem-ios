@@ -1,25 +1,24 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import BigInt
-import Primitives
-import SwiftUI
-import UIKit
-import Components
-import Style
-import Localization
-import PriceAlertService
-import PrimitivesComponents
-import Preferences
-import ExplorerService
 import AssetsService
-import TransactionsService
-import WalletsService
-import PriceService
 import BannerService
-import Formatters
-import YieldService
-import Gemstone
 import BigInt
+import Components
+import ExplorerService
+import Formatters
+import Gemstone
+import Localization
+import Preferences
+import PriceAlertService
+import PriceService
+import Primitives
+import PrimitivesComponents
+import Style
+import SwiftUI
+import TransactionsService
+import UIKit
+import WalletsService
+import YieldService
 
 @Observable
 @MainActor
@@ -150,8 +149,7 @@ public final class AssetSceneViewModel: Sendable {
 
     var hasYieldPosition: Bool {
         guard let position = yieldPosition,
-              let balanceStr = position.vaultBalanceValue,
-              let balance = BigInt(balanceStr) else {
+              let balance = position.vaultBalanceValue.flatMap({ BigInt($0) }) else {
             return false
         }
         return balance > 0
@@ -159,8 +157,7 @@ public final class AssetSceneViewModel: Sendable {
 
     var yieldBalanceText: String {
         guard let position = yieldPosition,
-              let balanceStr = position.assetBalanceValue,
-              let balance = BigInt(balanceStr) else {
+              let balance = position.assetBalanceValue.flatMap({ BigInt($0) }) else {
             return "0"
         }
         return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
