@@ -3,6 +3,7 @@ BUILD_THREADS := `sysctl -n hw.ncpu`
 SIMULATOR_NAME := env_var_or_default("SIMULATOR_NAME", "iPhone 17")
 SIMULATOR_DEST := "platform=iOS Simulator,name=" + SIMULATOR_NAME
 DERIVED_DATA := "build/DerivedData"
+SPM_CACHE := "build/SourcePackages"
 FAST_BUILD_FLAGS := "GCC_OPTIMIZATION_LEVEL=0 SWIFT_OPTIMIZATION_LEVEL=-Onone SWIFT_COMPILATION_MODE=incremental ENABLE_TESTABILITY=NO"
 
 default:
@@ -40,6 +41,9 @@ setup-git:
 core-upgrade:
     @git submodule update --recursive --remote
 
+spm-resolve:
+    @xcodebuild -resolvePackageDependencies -project Gem.xcodeproj -scheme Gem -derivedDataPath {{DERIVED_DATA}} -clonedSourcePackagesDirPath {{SPM_CACHE}}
+
 spm-resolve-all:
     @sh scripts/spm-resolve-all.sh
 
@@ -49,6 +53,7 @@ _build action extra_flags="":
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -derivedDataPath {{DERIVED_DATA}} \
+    -clonedSourcePackagesDirPath {{SPM_CACHE}} \
     -parallelizeTargets \
     -jobs {{BUILD_THREADS}} \
     -showBuildTimingSummary \
@@ -80,6 +85,7 @@ build-package PACKAGE:
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -derivedDataPath {{DERIVED_DATA}} \
+    -clonedSourcePackagesDirPath {{SPM_CACHE}} \
     -parallelizeTargets \
     -jobs {{BUILD_THREADS}} \
     GCC_OPTIMIZATION_LEVEL=0 \
@@ -96,6 +102,7 @@ _test action target="":
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -derivedDataPath {{DERIVED_DATA}} \
+    -clonedSourcePackagesDirPath {{SPM_CACHE}} \
     {{ if target != "" { "-only-testing " + target } else { "" } }} \
     -parallel-testing-enabled YES \
     -parallelizeTargets \
@@ -116,6 +123,7 @@ _test-ui action:
     ONLY_ACTIVE_ARCH=YES \
     -destination "{{SIMULATOR_DEST}}" \
     -derivedDataPath {{DERIVED_DATA}} \
+    -clonedSourcePackagesDirPath {{SPM_CACHE}} \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     {{action}} | xcbeautify {{XCBEAUTIFY_ARGS}}

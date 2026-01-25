@@ -74,6 +74,9 @@ jobs:
       - name: Build Core
         run: just generate-stone
 
+      - name: Resolve SPM Dependencies
+        run: just spm-resolve
+
       - name: Build for Testing
         run: just build-for-testing
 
