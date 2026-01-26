@@ -59,9 +59,11 @@ extension AssetData {
                 isSellEnabled: false,
                 isSwapEnabled: false,
                 isStakeEnabled: false,
+                stakingApr: .none,
+                isEarnEnabled: false,
+                earnApr: .none,
                 isPinned: false,
                 isActive: true,
-                stakingApr: .none,
                 rankScore: 0
             )
         )
@@ -86,9 +88,11 @@ extension AssetData {
                 isSellEnabled: false,
                 isSwapEnabled: false,
                 isStakeEnabled: false,
+                stakingApr: .none,
+                isEarnEnabled: false,
+                earnApr: .none,
                 isPinned: false,
                 isActive: true,
-                stakingApr: .none,
                 rankScore: 0
             )
         )

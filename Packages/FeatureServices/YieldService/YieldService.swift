@@ -25,10 +25,6 @@ public final class YieldService: Sendable {
         try await yielder.yieldsForAsset(assetId: assetId.identifier)
     }
 
-    public func isYieldAvailable(for assetId: Primitives.AssetId) -> Bool {
-        yielder.isYieldAvailable(assetId: assetId.identifier)
-    }
-
     public func deposit(
         provider: GemYieldProvider,
         asset: Primitives.AssetId,

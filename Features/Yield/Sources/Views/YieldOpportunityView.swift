@@ -26,33 +26,38 @@ public struct YieldOpportunityView: View {
                 model.providerImage
 
                 VStack(alignment: .leading, spacing: Spacing.tiny) {
-                    Text(displayName)
+                    Text("\(displayName) (\(model.providerName))")
                         .font(.body)
                         .fontWeight(.semibold)
                         .foregroundStyle(Colors.black)
 
-                    Text(model.providerName)
-                        .font(.callout)
-                        .foregroundStyle(Colors.gray)
+                    riskView
                 }
 
                 Spacer()
 
                 if model.hasApy {
-                    VStack(alignment: .trailing, spacing: Spacing.tiny) {
-                        Text("APR")
-                            .font(.caption)
-                            .foregroundStyle(Colors.gray)
-
-                        Text(model.apyText)
-                            .font(.body)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(Colors.green)
-                    }
+                    Text(model.apyText)
+                        .font(.callout)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Colors.green)
+                        .padding(.horizontal, Spacing.small)
+                        .padding(.vertical, Spacing.extraSmall)
+                        .background(Colors.green.opacity(0.1))
+                        .cornerRadius(Spacing.small)
                 }
             }
             .padding(.vertical, Spacing.small),
             action: action
         )
+    }
+
+    private var riskView: some View {
+        HStack(spacing: Spacing.small) {
+            Text("Risk:")
+                .font(.callout)
+                .foregroundStyle(Colors.gray)
+            model.riskDotsView
+        }
     }
 }

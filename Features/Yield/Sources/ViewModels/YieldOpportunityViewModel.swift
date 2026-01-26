@@ -12,12 +12,14 @@ public final class YieldOpportunityViewModel: Identifiable, Sendable {
     public let assetId: Gemstone.AssetId
     public let provider: GemYieldProvider
     public let apy: Double?
+    public let risk: GemRiskLevel
 
     public init(yield: GemYield) {
         self.name = yield.name
         self.assetId = yield.assetId
         self.provider = yield.provider
         self.apy = yield.apy
+        self.risk = yield.risk
     }
 
     public init(position: GemYieldPosition) {
@@ -25,6 +27,7 @@ public final class YieldOpportunityViewModel: Identifiable, Sendable {
         self.assetId = position.assetId
         self.provider = position.provider
         self.apy = position.apy
+        self.risk = .medium
     }
 
     public var id: String {
@@ -40,7 +43,7 @@ public final class YieldOpportunityViewModel: Identifiable, Sendable {
             return "--"
         }
         let formatted = String(format: "%.2f", apy * 100)
-        return "\(formatted)%"
+        return "\(formatted)% APY"
     }
 
     public var hasApy: Bool {
@@ -49,6 +52,25 @@ public final class YieldOpportunityViewModel: Identifiable, Sendable {
 
     public var providerImage: Image {
         provider.image
+    }
+
+    public var riskText: String {
+        risk.displayName
+    }
+
+    public var riskColor: Color {
+        risk.color
+    }
+
+    public var riskDotsView: some View {
+        let riskLevel = risk
+        return HStack(spacing: Spacing.small) {
+            ForEach(0..<3, id: \.self) { index in
+                Circle()
+                    .fill(index < riskLevel.dotCount ? riskLevel.color : Colors.grayLight)
+                    .frame(width: 6, height: 6)
+            }
+        }
     }
 }
 
@@ -62,6 +84,32 @@ extension GemYieldProvider {
     public var image: Image {
         switch self {
         case .yo: Images.YieldProviders.yo
+        }
+    }
+}
+
+extension GemRiskLevel {
+    public var displayName: String {
+        switch self {
+        case .low: "Low"
+        case .medium: "Medium"
+        case .high: "High"
+        }
+    }
+
+    public var color: Color {
+        switch self {
+        case .low: Colors.green
+        case .medium: Colors.orange
+        case .high: Colors.red
+        }
+    }
+
+    public var dotCount: Int {
+        switch self {
+        case .low: 1
+        case .medium: 2
+        case .high: 3
         }
     }
 }

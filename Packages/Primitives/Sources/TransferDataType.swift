@@ -12,7 +12,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
     case perpetual(Asset, PerpetualType)
-    case yield(Asset, YieldAction, YieldData)
+    case yield(Asset, YieldAction, EarnData)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
 
     public var transactionType: TransactionType {
@@ -46,8 +46,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             }
         case .yield(_, let action, _):
             switch action {
-            case .deposit: .yieldDeposit
-            case .withdraw: .yieldWithdraw
+            case .deposit: .earnDeposit
+            case .withdraw: .earnWithdraw
             }
         }
     }

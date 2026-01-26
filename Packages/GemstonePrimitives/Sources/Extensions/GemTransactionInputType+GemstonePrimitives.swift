@@ -99,26 +99,3 @@ public extension Primitives.YieldAction {
     }
 }
 
-public extension Gemstone.YieldData {
-    func map() -> Primitives.YieldData {
-        Primitives.YieldData(
-            providerName: providerName,
-            contractAddress: contractAddress,
-            callData: callData,
-            approval: approval?.map(),
-            gasLimit: gasLimit
-        )
-    }
-}
-
-public extension Primitives.YieldData {
-    func map() -> Gemstone.YieldData {
-        Gemstone.YieldData(
-            providerName: providerName,
-            contractAddress: contractAddress,
-            callData: callData,
-            approval: approval?.map(),
-            gasLimit: gasLimit
-        )
-    }
-}

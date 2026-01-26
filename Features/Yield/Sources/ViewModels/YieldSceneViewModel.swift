@@ -191,15 +191,15 @@ public final class YieldSceneViewModel {
     }
 
     public func onSelectOpportunity(_ opportunity: YieldOpportunityViewModel) {
-        let yieldData = Primitives.YieldData(
-            providerName: opportunity.provider.name,
-            contractAddress: "",
-            callData: "",
+        let earnData = Primitives.EarnData(
+            provider: opportunity.provider.name,
+            contractAddress: nil,
+            callData: nil,
             approval: nil,
             gasLimit: nil
         )
         let amountInput = AmountInput(
-            type: .yield(action: .deposit, data: yieldData, depositedBalance: nil),
+            type: .yield(action: .deposit, data: earnData, depositedBalance: nil),
             asset: input.asset
         )
         onAmountInputAction?(amountInput)
@@ -207,15 +207,15 @@ public final class YieldSceneViewModel {
 
     public func onWithdraw() {
         guard let position = position else { return }
-        let yieldData = Primitives.YieldData(
-            providerName: position.providerName,
-            contractAddress: "",
-            callData: "",
+        let earnData = Primitives.EarnData(
+            provider: position.providerName,
+            contractAddress: nil,
+            callData: nil,
             approval: nil,
             gasLimit: nil
         )
         let amountInput = AmountInput(
-            type: .yield(action: .withdraw, data: yieldData, depositedBalance: position.vaultBalance),
+            type: .yield(action: .withdraw, data: earnData, depositedBalance: position.vaultBalance),
             asset: input.asset
         )
         onAmountInputAction?(amountInput)

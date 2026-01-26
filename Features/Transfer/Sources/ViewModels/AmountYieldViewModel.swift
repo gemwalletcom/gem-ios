@@ -8,10 +8,10 @@ import Primitives
 final class AmountYieldViewModel: AmountDataProvidable {
     let asset: Asset
     let action: YieldAction
-    let data: YieldData
+    let data: EarnData
     let depositedBalance: BigInt?
 
-    init(asset: Asset, action: YieldAction, data: YieldData, depositedBalance: BigInt?) {
+    init(asset: Asset, action: YieldAction, data: EarnData, depositedBalance: BigInt?) {
         self.asset = asset
         self.action = action
         self.data = data
@@ -48,7 +48,7 @@ final class AmountYieldViewModel: AmountDataProvidable {
 
     func recipientData() -> RecipientData {
         RecipientData(
-            recipient: Recipient(name: data.providerName, address: data.contractAddress, memo: nil),
+            recipient: Recipient(name: data.provider ?? "", address: data.contractAddress ?? "", memo: nil),
             amount: nil
         )
     }

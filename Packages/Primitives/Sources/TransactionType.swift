@@ -21,6 +21,6 @@ public enum TransactionType: String, Codable, CaseIterable, Equatable, Sendable 
 	case perpetualOpenPosition
 	case perpetualClosePosition
 	case perpetualModifyPosition
-	case yieldDeposit
-	case yieldWithdraw
+	case earnDeposit
+	case earnWithdraw
 }

@@ -182,9 +182,11 @@ extension AssetRecordInfo {
             isSellEnabled: asset.isSellable,
             isSwapEnabled: asset.isSwappable,
             isStakeEnabled: asset.isStakeable,
+            stakingApr: asset.stakingApr,
+            isEarnEnabled: asset.isEarnable,
+            earnApr: nil,
             isPinned: balance?.isPinned ?? false,
             isActive: balance?.isActive ?? true,
-            stakingApr: asset.stakingApr,
             rankScore: asset.rank.asInt32
         )
     }

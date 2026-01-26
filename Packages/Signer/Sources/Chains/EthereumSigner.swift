@@ -202,16 +202,18 @@ public class EthereumSigner: Signable {
 
     public func signYield(input: SignerInput, privateKey: Data) throws -> [String] {
         guard
-            case .evm(_, _, _, let yieldData) = input.metadata,
-            let yieldData = yieldData
+            case .evm(_, _, let earnData) = input.metadata,
+            let earnData = earnData,
+            let callDataHex = earnData.callData,
+            let contractAddress = earnData.contractAddress
         else {
             throw AnyError("Invalid metadata for yield transaction")
         }
 
-        let callData = try Data.from(hex: yieldData.callData)
-        let depositGasLimit = yieldData.gasLimit.flatMap { BigInt($0) } ?? input.fee.gasLimit
+        let callData = try Data.from(hex: callDataHex)
+        let depositGasLimit = earnData.gasLimit.flatMap { BigInt($0) } ?? input.fee.gasLimit
 
-        if let approvalData = yieldData.approval {
+        if let approvalData = earnData.approval {
             return try [
                 sign(coinType: input.coinType, input: buildBaseInput(
                     input: input,
@@ -232,7 +234,7 @@ public class EthereumSigner: Signable {
                             $0.data = callData
                         }
                     },
-                    toAddress: yieldData.contractAddress,
+                    toAddress: contractAddress,
                     nonce: BigInt(input.metadata.getSequence()) + 1,
                     gasLimit: depositGasLimit,
                     privateKey: privateKey
@@ -247,7 +249,7 @@ public class EthereumSigner: Signable {
                         $0.data = callData
                     }
                 },
-                toAddress: yieldData.contractAddress,
+                toAddress: contractAddress,
                 nonce: BigInt(input.metadata.getSequence()),
                 gasLimit: depositGasLimit,
                 privateKey: privateKey
@@ -257,10 +259,10 @@ public class EthereumSigner: Signable {
 
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard
-            case .evm(_, _, let stakeData, _) = input.metadata,
-            let stakeData = stakeData,
-            let data = stakeData.data,
-            let to = stakeData.to
+            case .evm(_, _, let earnData) = input.metadata,
+            let earnData = earnData,
+            let data = earnData.callData,
+            let to = earnData.contractAddress
         else {
             throw AnyError("Invalid metadata for {\(input.asset.chain)} staking")
         }

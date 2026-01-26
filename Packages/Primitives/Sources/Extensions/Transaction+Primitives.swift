@@ -34,8 +34,8 @@ extension Transaction {
             .perpetualModifyPosition,
             .stakeFreeze,
             .stakeUnfreeze,
-            .yieldDeposit,
-            .yieldWithdraw:
+            .earnDeposit,
+            .earnWithdraw:
             return [assetId]
         case .swap:
             guard let swapMetadata = metadata?.decode(TransactionSwapMetadata.self) else {

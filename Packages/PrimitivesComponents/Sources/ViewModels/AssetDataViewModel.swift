@@ -163,16 +163,24 @@ public struct AssetDataViewModel: Sendable {
         assetData.metadata.isStakeEnabled
     }
 
+    public var stakingApr: Double? {
+        assetData.metadata.stakingApr
+    }
+
+    public var isEarnEnabled: Bool {
+        assetData.metadata.isEarnEnabled
+    }
+
+    public var earnApr: Double? {
+        assetData.metadata.earnApr
+    }
+
     public var isActive: Bool {
         assetData.metadata.isActive
     }
 
     public var address: String {
         assetData.account.address
-    }
-
-    public var stakeApr: Double? {
-        assetData.metadata.stakingApr
     }
     
     public var isPriceAlertsEnabled: Bool {

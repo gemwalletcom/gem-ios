@@ -4,15 +4,15 @@
 
 import Foundation
 
-public struct YieldData: Codable, Equatable, Hashable, Sendable {
-	public let providerName: String
-	public let contractAddress: String
-	public let callData: String
+public struct EarnData: Codable, Equatable, Hashable, Sendable {
+	public let provider: String?
+	public let contractAddress: String?
+	public let callData: String?
 	public let approval: ApprovalData?
 	public let gasLimit: String?
 
-	public init(providerName: String, contractAddress: String, callData: String, approval: ApprovalData?, gasLimit: String?) {
-		self.providerName = providerName
+	public init(provider: String?, contractAddress: String?, callData: String?, approval: ApprovalData?, gasLimit: String?) {
+		self.provider = provider
 		self.contractAddress = contractAddress
 		self.callData = callData
 		self.approval = approval

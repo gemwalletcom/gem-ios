@@ -28,7 +28,7 @@ extension TransactionType {
         case .transfer, .transferNFT: .transfers
         case .smartContractCall: .smartContract
         case .swap, .tokenApproval: .swaps
-        case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw, .stakeFreeze, .stakeUnfreeze, .yieldDeposit, .yieldWithdraw: .stake
+        case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw, .stakeFreeze, .stakeUnfreeze, .earnDeposit, .earnWithdraw: .stake
         case .assetActivation: .others
         case .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition: .perpetuals
         }
