@@ -51,7 +51,6 @@ let package = Package(
             name: "NameServiceTestKit",
             dependencies: [
                 "NameService",
-                "PrimitivesComponents",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             path: "NameService/TestKit"

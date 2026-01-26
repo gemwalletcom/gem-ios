@@ -18,9 +18,9 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Keystore", path: "../Keystore"),
-        .package(name: "Blockchain", path: "../Blockchain"),
         .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "Gemstone", path: "../Gemstone"),
+        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Keychain", path: "../Keychain"),
     ],
     targets: [
@@ -29,9 +29,9 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Keystore",
-                "Blockchain",
                 .product(name: "WalletCore", package: "WalletCore"),
                 "Gemstone",
+                "GemstonePrimitives",
             ],
             path: "Sources"
         ),
