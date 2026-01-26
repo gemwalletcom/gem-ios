@@ -18,22 +18,11 @@ public struct PerpetualPortfolioScene: View {
         NavigationStack {
             List {
                 Section { } header: {
-                    VStack {
-                        Picker("", selection: $model.selectedChartType) {
-                            ForEach(PerpetualPortfolioChartType.allCases) { type in
-                                Text(model.chartTypeTitle(type)).tag(type)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .padding(.horizontal, Spacing.medium)
-                        .padding(.vertical, Spacing.small)
-
-                        ChartStateView(
-                            state: model.chartState,
-                            selectedPeriod: $model.selectedPeriod,
-                            periods: model.periods
-                        )
-                    }
+                    ChartStateView(
+                        state: model.chartState,
+                        selectedPeriod: $model.selectedPeriod,
+                        periods: model.periods
+                    )
                 }
                 .cleanListRow()
 
@@ -47,6 +36,16 @@ public struct PerpetualPortfolioScene: View {
             }
             .navigationTitle(model.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Picker("", selection: $model.selectedChartType) {
+                        ForEach(PerpetualPortfolioChartType.allCases) { type in
+                            Text(model.chartTypeTitle(type)).tag(type)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
+            }
             .toolbarDismissItem(type: .close, placement: .cancellationAction)
             .task {
                 await model.fetch()
