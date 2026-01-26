@@ -12,7 +12,7 @@ public struct PerpetualServiceMock: PerpetualServiceable {
         []
     }
 
-    public func getMarkets() async throws -> [Perpetual] {
+    public func getMarkets() async throws -> [Primitives.Perpetual] {
         []
     }
 
@@ -25,7 +25,7 @@ public struct PerpetualServiceMock: PerpetualServiceable {
     }
 
     public func portfolio(address: String) async throws -> PerpetualPortfolio {
-        PerpetualPortfolio(totalValue: 0, totalPnl: 0, totalMargin: 0)
+        PerpetualPortfolio(day: nil, week: nil, month: nil, allTime: nil, accountSummary: nil)
     }
 
     public func setPinned(_ isPinned: Bool, perpetualId: String) throws {}

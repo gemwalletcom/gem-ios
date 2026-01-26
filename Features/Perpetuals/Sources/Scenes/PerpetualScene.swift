@@ -170,5 +170,7 @@ public struct PerpetualScene: View {
         .taskOnce {
             model.fetch()
         }
+        .onChange(of: model.currentPeriod, initial: true, model.onPeriodChange)
+        .onDisappear(perform: model.onDisappear)
     }
 }
