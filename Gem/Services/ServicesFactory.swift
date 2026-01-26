@@ -198,7 +198,7 @@ struct ServicesFactory {
             balanceStore: storeManager.balanceStore,
             nodeProvider: nodeService
         )
-        let perpetualObserverService = PerpetualObserverService(perpetualService: perpetualService)
+        let hyperliquidObserverService = HyperliquidObserverService(perpetualService: perpetualService)
 
         let nameService = NameService()
         let scanService = ScanService(gatewayService: gatewayService)
@@ -217,7 +217,7 @@ struct ServicesFactory {
             connectionsService: connectionsService,
             deviceObserverService: deviceObserverService,
             priceObserverService: priceObserverService,
-            perpetualObserverService: perpetualObserverService
+            hyperliquidObserverService: hyperliquidObserverService
         )
 
         let viewModelFactory = ViewModelFactory(
@@ -271,7 +271,7 @@ struct ServicesFactory {
             onstartWalletService: onstartWalletService,
             walletConnectorManager: walletConnectorManager,
             perpetualService: perpetualService,
-            perpetualObserverService: perpetualObserverService,
+            hyperliquidObserverService: hyperliquidObserverService,
             nameService: nameService,
             addressNameService: addressNameService,
             activityService: activityService,

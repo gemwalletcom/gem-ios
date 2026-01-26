@@ -12,7 +12,7 @@ actor ObserversService: Sendable {
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
     private let priceObserverService: PriceObserverService
-    private let perpetualObserverService: PerpetualObserverService
+    private let hyperliquidObserverService: HyperliquidObserverService
 
     private var currentWallet: Wallet?
 
@@ -20,12 +20,12 @@ actor ObserversService: Sendable {
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
         priceObserverService: PriceObserverService,
-        perpetualObserverService: PerpetualObserverService
+        hyperliquidObserverService: HyperliquidObserverService
     ) {
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
         self.priceObserverService = priceObserverService
-        self.perpetualObserverService = perpetualObserverService
+        self.hyperliquidObserverService = hyperliquidObserverService
     }
 
     func setup() async {
@@ -39,7 +39,7 @@ actor ObserversService: Sendable {
     func setupWallet(_ wallet: Wallet) async {
         currentWallet = wallet
         async let assets: () = setupPriceAssets()
-        async let perpetual: () = perpetualObserverService.connect(for: wallet)
+        async let perpetual: () = hyperliquidObserverService.connect(for: wallet)
         _ = await (assets, perpetual)
     }
 
@@ -91,7 +91,7 @@ extension ObserversService {
         async let price: () = priceObserverService.connect()
         async let perpetual: () = {
             if let wallet {
-                await perpetualObserverService.connect(for: wallet)
+                await hyperliquidObserverService.connect(for: wallet)
             }
         }()
         _ = await (price, perpetual)
@@ -99,7 +99,7 @@ extension ObserversService {
 
     private func disconnectObservers() async {
         async let price: () = priceObserverService.disconnect()
-        async let perpetual: () = perpetualObserverService.disconnect()
+        async let perpetual: () = hyperliquidObserverService.disconnect()
         _ = await (price, perpetual)
     }
 }

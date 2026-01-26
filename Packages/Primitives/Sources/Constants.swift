@@ -31,4 +31,5 @@ public struct Constants {
     }
 
     public static let pricesWebSocketURL = URL(string: "wss://api.gemwallet.com/v1/ws/prices")!
+    public static let hyperliquidWebSocketURL = URL(string: "wss://api.hyperliquid.xyz/ws")!
 }

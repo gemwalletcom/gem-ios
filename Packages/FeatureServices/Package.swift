@@ -76,6 +76,7 @@ let package = Package(
                 "Blockchain",
                 "Formatters",
                 .product(name: "ChainService", package: "ChainServices"),
+                .product(name: "WebSocketClient", package: "SwiftHTTPClient"),
             ],
             path: "PerpetualService",
             exclude: ["Tests", "TestKit"]

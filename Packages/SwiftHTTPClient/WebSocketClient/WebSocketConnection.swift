@@ -61,6 +61,13 @@ public actor WebSocketConnection: WebSocketConnectable {
         try await task.send(.data(data))
     }
 
+    public func send(_ text: String) async throws {
+        guard let task, state == .connected else {
+            throw WebSocketError.notConnected
+        }
+        try await task.send(.string(text))
+    }
+
     // MARK: - Private
 
     private func cancelTask() {

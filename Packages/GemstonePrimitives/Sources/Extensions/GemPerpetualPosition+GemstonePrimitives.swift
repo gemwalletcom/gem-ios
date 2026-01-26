@@ -25,3 +25,25 @@ extension GemPerpetualPosition {
         )
     }
 }
+
+extension PerpetualPosition {
+    public func map() -> GemPerpetualPosition {
+        GemPerpetualPosition(
+            id: id,
+            perpetualId: perpetualId,
+            assetId: assetId.identifier,
+            size: size,
+            sizeValue: sizeValue,
+            leverage: leverage,
+            entryPrice: entryPrice,
+            liquidationPrice: liquidationPrice,
+            marginType: marginType.map(),
+            direction: direction.map(),
+            marginAmount: marginAmount,
+            takeProfit: takeProfit?.map(),
+            stopLoss: stopLoss?.map(),
+            pnl: pnl,
+            funding: funding
+        )
+    }
+}

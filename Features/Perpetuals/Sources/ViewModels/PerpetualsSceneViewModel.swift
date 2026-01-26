@@ -93,16 +93,6 @@ public final class PerpetualsSceneViewModel {
 extension PerpetualsSceneViewModel {
     func fetch() async {
         await updateMarkets()
-        await updatePositions()
-    }
-
-    private func updatePositions() async {
-        guard let address = wallet.perpetualAddress else { return }
-        do {
-            try await perpetualService.updatePositions(address: address, walletId: wallet.walletId)
-        } catch {
-            debugLog("Failed to update positions: \(error)")
-        }
     }
 
     func updateMarkets() async {

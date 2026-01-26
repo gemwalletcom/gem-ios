@@ -125,15 +125,6 @@ public final class PerpetualSceneViewModel {
         Task {
             try await perpetualService.updateMarket(symbol: perpetual.name)
         }
-        Task {
-            do {
-                if let address = wallet.perpetualAddress {
-                    try await perpetualService.updatePositions(address: address, walletId: wallet.walletId)
-                }
-            } catch {
-                debugLog("Failed to load data: \(error)")
-            }
-        }
     }
 
     public func fetchCandlesticks() async {

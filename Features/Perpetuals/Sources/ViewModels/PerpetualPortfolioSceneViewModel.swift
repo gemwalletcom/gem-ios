@@ -66,7 +66,7 @@ public final class PerpetualPortfolioSceneViewModel {
     }
 
     func fetch() async {
-        guard let address = wallet.perpetualAddress else { return }
+        guard let address = wallet.hyperliquidAccount?.address else { return }
         state = .loading
         do {
             let data = try await perpetualService.portfolio(address: address)
