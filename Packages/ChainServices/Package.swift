@@ -33,8 +33,8 @@ let package = Package(
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Preferences", path: "../Preferences"),
         .package(name: "NativeProviderService", path: "../NativeProviderService"),
-        .package(url: "https://github.com/gemwalletcom/reown-swift.git", revision: "e902bbb0de2208777c8e9c09591f4bdd39fc13ae"),
-        .package(url: "https://github.com/gemwalletcom/Starscream.git", exact: Version(stringLiteral: "3.1.2")),
+        .package(name: "reown-swift", path: "../../Submodules/reown-swift"),
+        .package(name: "Starscream", path: "../../Submodules/Starscream"),
     ],
     targets: [
         .target(
