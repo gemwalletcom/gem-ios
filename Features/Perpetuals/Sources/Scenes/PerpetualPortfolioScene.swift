@@ -38,12 +38,16 @@ public struct PerpetualPortfolioScene: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Picker("", selection: $model.selectedChartType) {
-                        ForEach(PerpetualPortfolioChartType.allCases) { type in
-                            Text(model.chartTypeTitle(type)).tag(type)
+                    Menu {
+                        Picker("", selection: $model.selectedChartType) {
+                            ForEach(PerpetualPortfolioChartType.allCases) { type in
+                                Text(model.chartTypeTitle(type)).tag(type)
+                            }
                         }
+                    } label: {
+                        Text(model.chartTypeTitle(model.selectedChartType))
+                            .fontWeight(.semibold)
                     }
-                    .pickerStyle(.menu)
                 }
             }
             .toolbarDismissItem(type: .close, placement: .cancellationAction)
