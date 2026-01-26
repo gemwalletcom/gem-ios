@@ -32,7 +32,7 @@ let package = Package(
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Preferences", path: "../Preferences"),
-        .package(name: "FeatureServices", path: "../FeatureServices"),
+        .package(name: "NativeProviderService", path: "../NativeProviderService"),
         .package(url: "https://github.com/gemwalletcom/reown-swift.git", revision: "e902bbb0de2208777c8e9c09591f4bdd39fc13ae"),
         .package(url: "https://github.com/gemwalletcom/Starscream.git", exact: Version(stringLiteral: "3.1.2")),
     ],
@@ -139,7 +139,7 @@ let package = Package(
                 "ScanService",
                 "Primitives",
                 "Blockchain",
-                .product(name: "NativeProviderService", package: "FeatureServices"),
+                "NativeProviderService",
             ],
             path: "ScanService/TestKit"
         ),
