@@ -9,12 +9,13 @@ extension GemTransactionLoadMetadata {
         switch self {
         case .none:
             return .none
-        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash):
+        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash, let jitoTips):
             return .solana(
                 senderTokenAddress: senderTokenAddress,
                 recipientTokenAddress: recipientTokenAddress,
                 tokenProgram: tokenProgram?.map(),
-                blockHash: blockHash
+                blockHash: blockHash,
+                jitoTips: jitoTips.map()
             )
         case .ton(let senderTokenAddress, let recipientTokenAddress, let sequence):
             return .ton(
@@ -75,12 +76,13 @@ extension TransactionLoadMetadata {
         switch self {
         case .none:
             return .none
-        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash):
+        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash, let jitoTips):
             return .solana(
                 senderTokenAddress: senderTokenAddress,
                 recipientTokenAddress: recipientTokenAddress,
                 tokenProgram: tokenProgram?.map(),
-                blockHash: blockHash
+                blockHash: blockHash,
+                jitoTips: jitoTips.map()
             )
         case .ton(let senderTokenAddress, let recipientTokenAddress, let sequence):
             return .ton(senderTokenAddress: senderTokenAddress, recipientTokenAddress: recipientTokenAddress, sequence: sequence)
@@ -159,5 +161,17 @@ extension HyperliquidOrder {
             agentAddress: agentAddress,
             agentPrivateKey: agentPrivateKey
         )
+    }
+}
+
+extension GemSolanaJitoTips {
+    func map() -> SolanaJitoTips {
+        SolanaJitoTips(slow: slow, normal: normal, fast: fast)
+    }
+}
+
+extension SolanaJitoTips {
+    func map() -> GemSolanaJitoTips {
+        GemSolanaJitoTips(slow: slow, normal: normal, fast: fast)
     }
 }

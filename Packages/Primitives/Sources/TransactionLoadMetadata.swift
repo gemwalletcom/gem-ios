@@ -27,13 +27,26 @@ public struct HyperliquidOrder: Sendable {
     }
 }
 
+public struct SolanaJitoTips: Sendable {
+    public let slow: UInt64
+    public let normal: UInt64
+    public let fast: UInt64
+
+    public init(slow: UInt64, normal: UInt64, fast: UInt64) {
+        self.slow = slow
+        self.normal = normal
+        self.fast = fast
+    }
+}
+
 public enum TransactionLoadMetadata: Sendable {
     case none
     case solana(
         senderTokenAddress: String?,
         recipientTokenAddress: String?,
         tokenProgram: SolanaTokenProgramId?,
-        blockHash: String
+        blockHash: String,
+        jitoTips: SolanaJitoTips
     )
     case ton(
         senderTokenAddress: String?,
@@ -114,7 +127,7 @@ extension TransactionLoadMetadata {
     
     public func getBlockHash() throws -> String {
         switch self {
-        case .solana(_, _, _, let blockHash),
+        case .solana(_, _, _, let blockHash, _),
             .near(_, let blockHash),
              .algorand(_, let blockHash, _),
              .polkadot(_, _, let blockHash, _, _, _, _):
@@ -202,5 +215,14 @@ extension TransactionLoadMetadata {
             throw AnyError("Data not available for this metadata type")
         }
         return data
+    }
+
+    public func getJitoTips() -> SolanaJitoTips? {
+        switch self {
+        case .solana(_, _, _, _, let jitoTips):
+            return jitoTips
+        default:
+            return nil
+        }
     }
 }

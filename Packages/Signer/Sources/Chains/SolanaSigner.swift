@@ -2,6 +2,7 @@
 
 import BigInt
 import Foundation
+import Gemstone
 import Keystore
 import Primitives
 import WalletCore
@@ -25,7 +26,7 @@ public struct SolanaSigner: Signable {
         let amount = input.value.asUInt
         let destinationAddress = input.destinationAddress
         
-        guard case let .solana(senderTokenAddress, recipientTokenAddress, solanaTokenProgram, _) = input.metadata,
+        guard case let .solana(senderTokenAddress, recipientTokenAddress, solanaTokenProgram, _, _) = input.metadata,
             let token = solanaTokenProgram, let senderTokenAddress = senderTokenAddress
         else {
             throw AnyError("unknown solana metadata")
@@ -89,7 +90,17 @@ public struct SolanaSigner: Signable {
             throw AnyError(output.errorMessage)
         }
 
-        return try transcodeBase58ToBase64(output.encoded)
+        let encoded = try transcodeBase58ToBase64(output.encoded)
+
+        if let jitoTips = input.metadata.getJitoTips() {
+            let tipLamports = jitoTips.normal
+            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: tipLamports)
+            if let transaction = SolanaTransaction.insertInstruction(encodedTx: encoded, insertAt: -1, instruction: instructionJson) {
+                return try signRawTransaction(transaction: transaction, privateKey: privateKey)
+            }
+        }
+
+        return encoded
     }
 
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
@@ -103,7 +114,7 @@ public struct SolanaSigner: Signable {
         return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType)
     }
 
-    func signData(bytes: Data, privateKey: Data, outputType: TransferDataOutputType) throws -> String {
+    func signData(bytes: Data, privateKey: Data, outputType: Primitives.TransferDataOutputType) throws -> String {
         let rawTxDecoder = SolanaRawTxDecoder(rawData: bytes)
         let numRequiredSignatures = rawTxDecoder.signatureCount()
         var signatures: [Data] = rawTxDecoder.signatures()
@@ -178,12 +189,21 @@ public struct SolanaSigner: Signable {
             ]
         }
 
-        // Only user's signature is needed, safe to modifiy instructions
-        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: encodedTx, price: price.description) else {
+        // Only user's signature is needed, safe to modify instructions
+        guard var transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: encodedTx, price: price.description) else {
             throw AnyError("Unable to set compute unit price")
         }
-        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {
+        guard let updatedTransaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {
             throw AnyError("Unable to set compute unit limit")
+        }
+        transaction = updatedTransaction
+
+        if let jitoTips = input.metadata.getJitoTips() {
+            let tipLamports = jitoTips.normal
+            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: tipLamports)
+            if let updatedTransaction = SolanaTransaction.insertInstruction(encodedTx: transaction, insertAt: -1, instruction: instructionJson) {
+                transaction = updatedTransaction
+            }
         }
 
         return try [
