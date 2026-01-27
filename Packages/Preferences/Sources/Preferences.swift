@@ -31,6 +31,7 @@ public final class Preferences: @unchecked Sendable {
         static let skippedReleaseVersion = "skipped_release_version"
         static let isWalletConnectActivated = "is_walletconnect_activated"
         static let perpetualsMarketsUpdatedAt = "perpetual_markets_updated_at"
+        static let perpetualPricesUpdatedAt = "perpetual_prices_updated_at"
         static let isPerpetualEnabled = "is_perpetual_enabled"
         static let perpetualLeverage = "perpetual_leverage"
         static let supportDeviceId = "support_device_id"
@@ -102,6 +103,9 @@ public final class Preferences: @unchecked Sendable {
     
     @ConfigurableDefaults(key: Keys.perpetualsMarketsUpdatedAt, defaultValue: nil)
     public var perpetualMarketsUpdatedAt: Date?
+
+    @ConfigurableDefaults(key: Keys.perpetualPricesUpdatedAt, defaultValue: nil)
+    public var perpetualPricesUpdatedAt: Date?
     
     @ConfigurableDefaults(key: Keys.isPerpetualEnabled, defaultValue: false)
     public var isPerpetualEnabled: Bool
@@ -151,6 +155,7 @@ public final class Preferences: @unchecked Sendable {
         configure(\._skippedReleaseVersion, key: Keys.skippedReleaseVersion, defaultValue: nil)
         configure(\._isWalletConnectActivated, key: Keys.isWalletConnectActivated, defaultValue: nil)
         configure(\._perpetualMarketsUpdatedAt, key: Keys.perpetualsMarketsUpdatedAt, defaultValue: nil)
+        configure(\._perpetualPricesUpdatedAt, key: Keys.perpetualPricesUpdatedAt, defaultValue: nil)
         configure(\._isPerpetualEnabled, key: Keys.isPerpetualEnabled, defaultValue: false)
         configure(\._perpetualLeverage, key: Keys.perpetualLeverage, defaultValue: 10)
         configure(\._supportDeviceId, key: Keys.supportDeviceId, defaultValue: nil)

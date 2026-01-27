@@ -196,9 +196,10 @@ struct ServicesFactory {
             assetStore: storeManager.assetStore,
             priceAstore: storeManager.priceStore,
             balanceStore: storeManager.balanceStore,
-            nodeProvider: nodeService
+            nodeProvider: nodeService,
+            preferences: preferences
         )
-        let perpetualObserverService = PerpetualObserverService(perpetualService: perpetualService)
+        let hyperliquidObserverService = HyperliquidObserverService(perpetualService: perpetualService)
 
         let nameService = NameService()
         let scanService = ScanService(gatewayService: gatewayService)
@@ -217,7 +218,7 @@ struct ServicesFactory {
             connectionsService: connectionsService,
             deviceObserverService: deviceObserverService,
             priceObserverService: priceObserverService,
-            perpetualObserverService: perpetualObserverService
+            hyperliquidObserverService: hyperliquidObserverService
         )
 
         let viewModelFactory = ViewModelFactory(
@@ -271,7 +272,7 @@ struct ServicesFactory {
             onstartWalletService: onstartWalletService,
             walletConnectorManager: walletConnectorManager,
             perpetualService: perpetualService,
-            perpetualObserverService: perpetualObserverService,
+            hyperliquidObserverService: hyperliquidObserverService,
             nameService: nameService,
             addressNameService: addressNameService,
             activityService: activityService,
@@ -537,14 +538,16 @@ extension ServicesFactory {
         assetStore: AssetStore,
         priceAstore: PriceStore,
         balanceStore: BalanceStore,
-        nodeProvider: any NodeURLFetchable
+        nodeProvider: any NodeURLFetchable,
+        preferences: Preferences
     ) -> PerpetualService {
         PerpetualService(
             store: perpetualStore,
             assetStore: assetStore,
             priceStore: priceAstore,
             balanceStore: balanceStore,
-            provider: PerpetualProviderFactory(nodeProvider: nodeProvider).createProvider()
+            provider: PerpetualProviderFactory(nodeProvider: nodeProvider).createProvider(),
+            preferences: preferences
         )
     }
 }

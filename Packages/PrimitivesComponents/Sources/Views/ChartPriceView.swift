@@ -1,5 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Components
 import SwiftUI
 import Style
 
@@ -16,11 +17,13 @@ public struct ChartPriceView: View {
                 Text(model.priceText)
                     .font(.title2)
                     .foregroundColor(model.priceColor)
+                    .numericTransition(for: model.priceText)
 
                 if let priceChange = model.priceChangeText {
                     Text(priceChange)
                         .font(.callout)
                         .foregroundColor(model.priceChangeTextColor)
+                        .numericTransition(for: priceChange)
                 }
             }
 

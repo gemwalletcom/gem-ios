@@ -13,11 +13,13 @@ public extension PerpetualsSceneViewModel {
     static func mock(
         wallet: Wallet = .mock(),
         perpetualService: PerpetualServiceable = PerpetualService.mock(),
+        observerService: HyperliquidObserverService = HyperliquidObserverService(perpetualService: PerpetualServiceMock()),
         activityService: ActivityService = .mock()
     ) -> PerpetualsSceneViewModel {
         PerpetualsSceneViewModel(
             wallet: wallet,
             perpetualService: perpetualService,
+            observerService: observerService,
             activityService: activityService
         )
     }
