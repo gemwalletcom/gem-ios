@@ -7,5 +7,3 @@ public extension BigInt {
         try BigNumberFormatter.standard.number(from: string, decimals: decimals)
     }
 }
-
-
