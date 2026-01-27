@@ -382,6 +382,12 @@ public struct Migrations {
             try WalletIdMigration.migrate(db: db)
         }
 
+        migrator.registerMigration("Add hasImage to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.hasImage.name, .boolean).defaults(to: false)
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }
