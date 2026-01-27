@@ -26,12 +26,14 @@ public struct YieldOpportunityView: View {
                 model.providerImage
 
                 VStack(alignment: .leading, spacing: Spacing.tiny) {
-                    Text("\(displayName) (\(model.providerName))")
+                    Text(displayName)
                         .font(.body)
                         .fontWeight(.semibold)
                         .foregroundStyle(Colors.black)
 
-                    riskView
+                    Text(model.providerName)
+                        .font(.callout)
+                        .foregroundStyle(Colors.gray)
                 }
 
                 Spacer()
@@ -50,14 +52,5 @@ public struct YieldOpportunityView: View {
             .padding(.vertical, Spacing.small),
             action: action
         )
-    }
-
-    private var riskView: some View {
-        HStack(spacing: Spacing.small) {
-            Text("Risk:")
-                .font(.callout)
-                .foregroundStyle(Colors.gray)
-            model.riskDotsView
-        }
     }
 }
