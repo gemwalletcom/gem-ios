@@ -34,8 +34,7 @@ public struct ChartStateView: View {
                     ChartView(model: model)
                 case .error(let error):
                     StateEmptyView(
-                        title: Localized.Errors.errorOccured,
-                        description: error.networkOrNoDataDescription,
+                        title: error.networkOrNoDataDescription,
                         image: Images.ErrorConent.error
                     )
                 }
