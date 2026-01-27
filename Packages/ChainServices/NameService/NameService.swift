@@ -3,7 +3,6 @@
 import Foundation
 import GemAPI
 import Primitives
-import PrimitivesComponents
 
 public final class NameService: NameServiceable, Sendable {
     private let provider: any GemAPINameService

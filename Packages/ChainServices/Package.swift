@@ -25,7 +25,6 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
         .package(name: "GemAPI", path: "../GemAPI"),
         .package(name: "Store", path: "../Store"),
         .package(name: "Blockchain", path: "../Blockchain"),
@@ -41,7 +40,6 @@ let package = Package(
             name: "NameService",
             dependencies: [
                 "Primitives",
-                "PrimitivesComponents",
                 "GemAPI"
             ],
             path: "NameService",

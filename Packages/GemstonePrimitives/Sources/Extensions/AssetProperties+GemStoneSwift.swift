@@ -18,7 +18,8 @@ public extension AssetProperties {
             isStakeable: isStakeable,
             stakingApr: .none,
             isEarnable: false,
-            earnApr: .none
+            earnApr: .none,
+            hasImage: false
         )
     }
 }

@@ -6,12 +6,14 @@ public extension AssetBasic {
     static func mock(
         asset: Asset = .mock(),
         properties: AssetProperties = .mock(),
-        score: AssetScore = .mock()
+        score: AssetScore = .mock(),
+        price: Price? = nil
     ) -> Self {
         AssetBasic(
             asset: asset,
             properties: properties,
-            score: score
+            score: score,
+            price: price
         )
     }
 }
