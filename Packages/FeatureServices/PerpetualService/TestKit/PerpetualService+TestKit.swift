@@ -2,6 +2,7 @@
 
 import PerpetualService
 import Preferences
+import PreferencesTestKit
 import Primitives
 import Store
 import StoreTestKit

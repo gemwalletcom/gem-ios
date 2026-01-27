@@ -41,8 +41,7 @@ public final class PerpetualSceneViewModel {
 
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .day
-
-    private var chartTask: Task<Void, Never>?
+    let periods: [ChartPeriod] = [.hour, .day, .week, .month, .year, .all]
 
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingModifyAlert: Bool?
@@ -127,30 +126,22 @@ public extension PerpetualSceneViewModel {
         }
     }
 
-    func onPeriodChange(_ oldPeriod: ChartPeriod, _ newPeriod: ChartPeriod) {
-        chartTask?.cancel()
-        chartTask = Task {
-            do {
-                try await fetchCandlesticks()
-                guard !Task.isCancelled else { return }
-                await subscribeCandle()
-                if oldPeriod != newPeriod {
-                    await unsubscribeCandle(period: oldPeriod)
-                }
-                await observeCandles()
-            } catch {
-                if !Task.isCancelled {
-                    state = .error(error)
-                }
-            }
-        }
+    func onAppear() async {
+        await subscribeCandles()
+        await observeCandles()
     }
 
-    func onDisappear() {
-        chartTask?.cancel()
-        chartTask = nil
+    func onDisappear() async {
+        await unsubscribeCandles()
+    }
+
+    func onPeriodChange(_ oldPeriod: ChartPeriod, _ newPeriod: ChartPeriod) {
         Task {
-            await unsubscribeCandle(period: currentPeriod)
+            do {
+                try await fetchCandlesticks()
+            } catch {
+                state = .error(error)
+            }
         }
     }
 
@@ -272,15 +263,6 @@ public extension PerpetualSceneViewModel {
 // MARK: - Private
 
 private extension PerpetualSceneViewModel {
-    func unsubscribeCandle(period: ChartPeriod) async {
-        do {
-            let subscription = ChartSubscription(coin: perpetual.name, period: period)
-            try await observerService.unsubscribeCandle(subscription: subscription)
-        } catch {
-            debugLog("Chart unsubscribe failed: \(error)")
-        }
-    }
-
     func fetchCandlesticks() async throws {
         state = .loading
         let candlesticks = try await perpetualService.candlesticks(
@@ -290,13 +272,27 @@ private extension PerpetualSceneViewModel {
         state = .data(candlesticks)
     }
 
-    func subscribeCandle() async {
+    func subscribeCandles() async {
         do {
-            try await observerService.subscribeCandle(
-                subscription: .init(coin: perpetual.name, period: currentPeriod)
-            )
+            for period in periods {
+                try await observerService.subscribeCandle(
+                    subscription: ChartSubscription(coin: perpetual.name, period: period)
+                )
+            }
         } catch {
             debugLog("Chart subscription failed: \(error)")
+        }
+    }
+
+    func unsubscribeCandles() async {
+        do {
+            for period in periods {
+                try await observerService.unsubscribeCandle(
+                    subscription: ChartSubscription(coin: perpetual.name, period: period)
+                )
+            }
+        } catch {
+            debugLog("Chart unsubscribe failed: \(error)")
         }
     }
 

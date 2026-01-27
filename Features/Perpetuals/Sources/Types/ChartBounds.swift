@@ -28,18 +28,13 @@ struct ChartBounds {
         self.maxPrice = max(candleMax, overlayMax) + padding
         self.visibleLines = visibleLines.sorted { $0.price < $1.price }
     }
-    
-    var axisStride: Double {
-        (maxPrice - minPrice) / Double(Self.desiredTickCount)
-    }
 
     var axisFractionLength: Int {
-        switch axisStride {
-        case _ where axisStride >= 1: 0
-        case _ where axisStride >= 0.1: 1
-        case _ where axisStride >= 0.01: 2
-        case _ where axisStride >= 0.001: 3
-        case _ where axisStride >= 0.0001: 4
+        switch maxPrice {
+        case _ where maxPrice >= 1000: 0
+        case _ where maxPrice >= 0.01: 2
+        case _ where maxPrice >= 0.001: 3
+        case _ where maxPrice >= 0.0001: 4
         default: 5
         }
     }

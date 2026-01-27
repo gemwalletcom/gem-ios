@@ -89,6 +89,24 @@ public final class PerpetualsSceneViewModel {
             balance: walletBalance
         )
     }
+    
+    // MARK: - Private
+
+    private func subscribeAllMids() async {
+        do {
+            try await observerService.subscribeAllMids()
+        } catch {
+            debugLog("AllMids subscribe failed: \(error)")
+        }
+    }
+
+    private func unsubscribeAllMids() async {
+        do {
+            try await observerService.unsubscribeAllMids()
+        } catch {
+            debugLog("AllMids unsubscribe failed: \(error)")
+        }
+    }
 }
 
 // MARK: - Businesss Logic
@@ -96,13 +114,14 @@ public final class PerpetualsSceneViewModel {
 extension PerpetualsSceneViewModel {
     func fetch() async {
         await updateMarkets()
+    }
+
+    func onAppear() async {
         await subscribeAllMids()
     }
 
-    func onDisappear() {
-        Task {
-            await unsubscribeAllMids()
-        }
+    func onDisappear() async {
+        await unsubscribeAllMids()
     }
 
     func updateMarkets() async {
@@ -174,23 +193,5 @@ extension PerpetualsSceneViewModel {
 
     func onSelectBalance() {
         isPresentingPortfolio = true
-    }
-
-    // MARK: - AllMids
-
-    private func subscribeAllMids() async {
-        do {
-            try await observerService.subscribeAllMids()
-        } catch {
-            debugLog("AllMids subscribe failed: \(error)")
-        }
-    }
-
-    private func unsubscribeAllMids() async {
-        do {
-            try await observerService.unsubscribeAllMids()
-        } catch {
-            debugLog("AllMids unsubscribe failed: \(error)")
-        }
     }
 }
