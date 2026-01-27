@@ -2,7 +2,6 @@
 
 import Foundation
 import WalletCore
-import Blockchain
 import Primitives
 import BigInt
 import Formatters
