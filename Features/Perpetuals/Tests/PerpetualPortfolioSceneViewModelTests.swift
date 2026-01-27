@@ -38,6 +38,7 @@ struct PerpetualPortfolioSceneViewModelTests {
     @MainActor
     func chartState() {
         let model = PerpetualPortfolioSceneViewModel.mock()
+        model.selectedChartType = .value
 
         model.state = .loading
         #expect(model.chartState.isLoading)
@@ -93,6 +94,7 @@ struct PerpetualPortfolioSceneViewModelTests {
     @MainActor
     func valueChangeCalculation() {
         let model = PerpetualPortfolioSceneViewModel.mock()
+        model.selectedChartType = .value
         model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [0, 50, 30, 100]))))
 
         if case .data(let chartModel) = model.chartState {
