@@ -8,8 +8,8 @@ public extension BigInt {
     }
 
     func ceilToPrecision(decimals: Int, precision: Int) -> BigInt {
-        guard decimals > precision else { return self }
+        guard decimals > precision, self > 0 else { return self }
         let factor = BigInt(10).power(decimals - precision)
-        return ((self + factor - 1) / factor) * factor
+        return ((self - 1) / factor + 1) * factor
     }
 }
