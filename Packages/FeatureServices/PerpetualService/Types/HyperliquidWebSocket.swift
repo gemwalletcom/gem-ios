@@ -42,6 +42,7 @@ enum HyperliquidSubscription: Encodable {
     case clearinghouseState(user: String)
     case openOrders(user: String)
     case candle(coin: String, interval: String)
+    case allMids
 
     enum CodingKeys: String, CodingKey {
         case type, user, coin, interval
@@ -60,6 +61,8 @@ enum HyperliquidSubscription: Encodable {
             try container.encode("candle", forKey: .type)
             try container.encode(coin, forKey: .coin)
             try container.encode(interval, forKey: .interval)
+        case .allMids:
+            try container.encode("allMids", forKey: .type)
         }
     }
 }

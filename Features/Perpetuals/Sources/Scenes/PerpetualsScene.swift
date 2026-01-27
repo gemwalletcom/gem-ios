@@ -44,6 +44,7 @@ public struct PerpetualsScene: View {
                 await model.fetch()
             }
         }
+        .onDisappear(perform: model.onDisappear)
         .refreshable {
             await model.fetch()
         }

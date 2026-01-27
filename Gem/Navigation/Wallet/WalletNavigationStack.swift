@@ -135,6 +135,7 @@ struct WalletNavigationStack: View {
                 PerpetualsNavigationView(
                     wallet: model.wallet,
                     perpetualService: perpetualService,
+                    observerService: hyperliquidObserverService,
                     activityService: activityService,
                     onSelectAssetType: { model.isPresentingSelectAssetType = $0 },
                     onSelectAsset: { navigationState.wallet.append(Scenes.Perpetual($0)) }

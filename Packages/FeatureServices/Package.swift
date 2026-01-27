@@ -75,6 +75,7 @@ let package = Package(
                 "Store",
                 "Blockchain",
                 "Formatters",
+                "Preferences",
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "WebSocketClient", package: "SwiftHTTPClient"),
             ],
@@ -86,7 +87,8 @@ let package = Package(
             dependencies: [
                 "PerpetualService",
                 "Primitives",
-                .product(name: "StoreTestKit", package: "Store")
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
             ],
             path: "PerpetualService/TestKit"
         ),

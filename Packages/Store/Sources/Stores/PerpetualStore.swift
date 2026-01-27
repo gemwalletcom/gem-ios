@@ -91,6 +91,17 @@ public struct PerpetualStore: Sendable {
         }
     }
     
+    public func updatePrices(_ prices: [String: Double]) throws {
+        guard !prices.isEmpty else { return }
+        try db.write { db in
+            for (name, price) in prices {
+                try PerpetualRecord
+                    .filter(PerpetualRecord.Columns.name == name)
+                    .updateAll(db, PerpetualRecord.Columns.price.set(to: price))
+            }
+        }
+    }
+
     public func clear() throws {
         try db.write { db in
             try PerpetualPositionRecord.deleteAll(db)

@@ -41,4 +41,6 @@ extension PerpetualServiceMock: HyperliquidPerpetualServiceable {
     public func updateBalance(walletId: WalletId, balance: GemPerpetualBalance) throws {}
 
     public func diffPositions(deleteIds: [String], positions: [GemPerpetualPosition], walletId: WalletId) throws {}
+
+    public func updatePrices(_ prices: [String: Double]) throws {}
 }

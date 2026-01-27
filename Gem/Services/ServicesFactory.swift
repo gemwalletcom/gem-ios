@@ -196,7 +196,8 @@ struct ServicesFactory {
             assetStore: storeManager.assetStore,
             priceAstore: storeManager.priceStore,
             balanceStore: storeManager.balanceStore,
-            nodeProvider: nodeService
+            nodeProvider: nodeService,
+            preferences: preferences
         )
         let hyperliquidObserverService = HyperliquidObserverService(perpetualService: perpetualService)
 
@@ -537,14 +538,16 @@ extension ServicesFactory {
         assetStore: AssetStore,
         priceAstore: PriceStore,
         balanceStore: BalanceStore,
-        nodeProvider: any NodeURLFetchable
+        nodeProvider: any NodeURLFetchable,
+        preferences: Preferences
     ) -> PerpetualService {
         PerpetualService(
             store: perpetualStore,
             assetStore: assetStore,
             priceStore: priceAstore,
             balanceStore: balanceStore,
-            provider: PerpetualProviderFactory(nodeProvider: nodeProvider).createProvider()
+            provider: PerpetualProviderFactory(nodeProvider: nodeProvider).createProvider(),
+            preferences: preferences
         )
     }
 }

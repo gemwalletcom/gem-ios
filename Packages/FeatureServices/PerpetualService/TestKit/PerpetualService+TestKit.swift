@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import PerpetualService
+import Preferences
 import Primitives
 import Store
 import StoreTestKit
@@ -11,14 +12,16 @@ public extension PerpetualService {
         assetStore: AssetStore = .mock(),
         priceStore: PriceStore = .mock(),
         balanceStore: BalanceStore = .mock(),
-        provider: PerpetualProvidable = PerpetualProviderMock()
+        provider: PerpetualProvidable = PerpetualProviderMock(),
+        preferences: Preferences = .mock()
     ) -> PerpetualService {
         PerpetualService(
             store: store,
             assetStore: assetStore,
             priceStore: priceStore,
             balanceStore: balanceStore,
-            provider: provider
+            provider: provider,
+            preferences: preferences
         )
     }
 }

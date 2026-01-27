@@ -96,6 +96,8 @@ public actor HyperliquidObserverService: Sendable {
                 try handleOpenOrders(orders: orders)
             case .candle(let candle):
                 try await handleCandle(candle: candle)
+            case .allMids(let prices):
+                try perpetualService.updatePrices(prices)
             case .subscriptionResponse(let subscriptionType):
                 debugLog("HyperliquidObserver: subscription response - \(subscriptionType)")
             case .unknown:
@@ -148,6 +150,18 @@ public actor HyperliquidObserverService: Sendable {
 
     private func send(_ request: HyperliquidRequest) async throws {
         try await webSocket.send(try encoder.encode(request).encodeString())
+    }
+}
+
+// MARK: - AllMids Subscriptions
+
+extension HyperliquidObserverService {
+    public func subscribeAllMids() async throws {
+        try await send(HyperliquidRequest(method: .subscribe, subscription: .allMids))
+    }
+
+    public func unsubscribeAllMids() async throws {
+        try await send(HyperliquidRequest(method: .unsubscribe, subscription: .allMids))
     }
 }
 

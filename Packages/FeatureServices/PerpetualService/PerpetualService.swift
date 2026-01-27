@@ -6,27 +6,31 @@ import struct Gemstone.GemPerpetualPosition
 import Primitives
 import Store
 import Formatters
+import Preferences
 
 public struct PerpetualService: PerpetualServiceable {
-    
+
     private let store: PerpetualStore
     private let assetStore: AssetStore
     private let priceStore: PriceStore
     private let balanceStore: BalanceStore
     private let provider: PerpetualProvidable
-    
+    private let preferences: Preferences
+
     public init(
         store: PerpetualStore,
         assetStore: AssetStore,
         priceStore: PriceStore,
         balanceStore: BalanceStore,
-        provider: PerpetualProvidable
+        provider: PerpetualProvidable,
+        preferences: Preferences
     ) {
         self.store = store
         self.assetStore = assetStore
         self.priceStore = priceStore
         self.balanceStore = balanceStore
         self.provider = provider
+        self.preferences = preferences
     }
     
     public func getPositions(walletId: WalletId) async throws -> [PerpetualPosition] {
@@ -142,5 +146,11 @@ extension PerpetualService: HyperliquidPerpetualServiceable {
 
     public func diffPositions(deleteIds: [String], positions: [GemPerpetualPosition], walletId: WalletId) throws {
         try store.diffPositions(deleteIds: deleteIds, positions: positions.map { try $0.map() }, walletId: walletId)
+    }
+
+    public func updatePrices(_ prices: [String: Double]) throws {
+        guard preferences.perpetualPricesUpdatedAt.isOutdated(by: 5) else { return }
+        try store.updatePrices(prices)
+        preferences.perpetualPricesUpdatedAt = .now
     }
 }
