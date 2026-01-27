@@ -95,7 +95,6 @@ public struct PerpetualStore: Sendable {
         try db.write { db in
             try PerpetualPositionRecord.deleteAll(db)
             try PerpetualRecord.deleteAll(db)
-            // SearchRecords with perpetualId are deleted via cascade
         }
     }
 }
