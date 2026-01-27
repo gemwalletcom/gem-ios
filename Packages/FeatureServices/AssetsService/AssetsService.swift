@@ -29,7 +29,8 @@ public final class AssetsService: Sendable {
             AssetBasic(
                 asset: asset,
                 properties: AssetProperties.defaultValue(assetId: asset.id),
-                score: AssetScore.defaultValue(assetId: asset.id)
+                score: AssetScore.defaultValue(assetId: asset.id),
+                price: nil
             )
         ])
         try addBalanceIfMissing(walletId: walletId, assetId: asset.id)
@@ -161,7 +162,8 @@ public final class AssetsService: Sendable {
                     return AssetBasic(
                         asset: asset,
                         properties: .defaultValue(assetId: asset.id),
-                        score: .defaultValue(assetId: asset.id)
+                        score: .defaultValue(assetId: asset.id),
+                        price: nil
                     )
                 }
             }
