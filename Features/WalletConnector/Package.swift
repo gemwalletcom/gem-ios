@@ -42,7 +42,7 @@ let package = Package(
                 .product(name: "WalletSessionService", package: "FeatureServices"),
                 "Keystore",
                 "Gemstone",
-                "Formatters"
+                "Formatters",
             ],
             path: "Sources"
         ),
