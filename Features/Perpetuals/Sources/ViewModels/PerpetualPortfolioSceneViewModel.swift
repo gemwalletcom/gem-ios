@@ -28,6 +28,7 @@ public final class PerpetualPortfolioSceneViewModel {
     }
     var selectedPeriod: ChartPeriod = .day
     var selectedChartType: PerpetualPortfolioChartType = .value
+    var selectedChartType: PerpetualPortfolioChartType = .pnl
 
     private var portfolio: PerpetualPortfolio?
 
