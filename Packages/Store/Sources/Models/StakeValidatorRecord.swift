@@ -63,8 +63,8 @@ extension StakeValidatorRecord {
 }
 
 extension DelegationValidator {
-    static func recordId(chain: Chain, validatorId: String) -> String {
-        return "\(chain.rawValue)_\(validatorId)"
+    public static func recordId(chain: Chain, validatorId: String) -> String {
+        "\(chain.rawValue)_\(validatorId)"
     }
 }
 

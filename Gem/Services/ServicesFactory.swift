@@ -83,7 +83,7 @@ struct ServicesFactory {
             chainFactory: chainServiceFactory
         )
         let stakeService = Self.makeStakeService(
-            stakeStore: storeManager.stakeStore,
+            earnStore: storeManager.earnStore,
             addressStore: storeManager.addressStore,
             chainFactory: chainServiceFactory
         )
@@ -223,7 +223,7 @@ struct ServicesFactory {
 
         let yieldService: YieldService? = {
             do {
-                return try YieldService(nodeProvider: nodeService, store: storeManager.yieldStore)
+                return try YieldService(nodeProvider: nodeService, store: storeManager.earnStore)
             } catch {
                 debugLog("Failed to initialize YieldService: \(error)")
                 return nil
@@ -357,12 +357,12 @@ extension ServicesFactory {
     }
 
     private static func makeStakeService(
-        stakeStore: StakeStore,
+        earnStore: EarnStore,
         addressStore: AddressStore,
         chainFactory: ChainServiceFactory
     ) -> StakeService {
         StakeService(
-            store: stakeStore,
+            store: earnStore,
             addressStore: addressStore,
             chainServiceFactory: chainFactory
         )

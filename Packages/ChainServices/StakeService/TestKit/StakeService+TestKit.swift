@@ -10,7 +10,7 @@ import StoreTestKit
 
 public extension StakeService {
     static func mock(
-        store: StakeStore = .mock(),
+        store: EarnStore = .mock(),
         addressStore: AddressStore = .mock(),
         chainServiceFactory: ChainServiceFactory = .mock(),
         assetsService: GemAPIStaticService = GemAPIStaticService()

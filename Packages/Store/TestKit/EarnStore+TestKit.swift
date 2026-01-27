@@ -3,8 +3,8 @@
 import Foundation
 import Store
 
-public extension StakeStore {
+public extension EarnStore {
     static func mock(db: DB = .mock()) -> Self {
-        StakeStore(db: db)
+        EarnStore(db: db)
     }
 }

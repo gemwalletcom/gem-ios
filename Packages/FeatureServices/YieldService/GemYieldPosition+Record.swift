@@ -5,34 +5,35 @@ import Gemstone
 import Primitives
 import Store
 
-extension YieldPositionRecord {
-    init?(walletId: WalletId, position: GemYieldPosition) {
+extension EarnPosition {
+    public init?(walletId: WalletId, position: GemYieldPosition) {
         guard let assetId = try? Primitives.AssetId(id: position.assetId) else {
             return nil
         }
-        let uniqueId = "\(walletId.id)_\(position.assetId)_\(position.provider.name)"
         self.init(
-            id: uniqueId,
             walletId: walletId.id,
             assetId: assetId,
+            type: .yield,
+            balance: position.assetBalanceValue ?? "0",
+            rewards: position.rewards,
+            apy: position.apy,
             provider: position.provider.name,
             name: position.name,
             vaultTokenAddress: position.vaultTokenAddress,
             assetTokenAddress: position.assetTokenAddress,
             vaultBalanceValue: position.vaultBalanceValue,
-            assetBalanceValue: position.assetBalanceValue,
-            apy: position.apy,
-            rewards: position.rewards
+            assetBalanceValue: position.assetBalanceValue
         )
     }
 
-    func toGemYieldPosition() -> GemYieldPosition {
-        GemYieldPosition(
-            name: name,
+    public func toGemYieldPosition() -> GemYieldPosition? {
+        guard type == .yield, let provider = provider else { return nil }
+        return GemYieldPosition(
+            name: name ?? "",
             assetId: assetId.identifier,
             provider: GemYieldProvider(name: provider),
-            vaultTokenAddress: vaultTokenAddress,
-            assetTokenAddress: assetTokenAddress,
+            vaultTokenAddress: vaultTokenAddress ?? "",
+            assetTokenAddress: assetTokenAddress ?? "",
             vaultBalanceValue: vaultBalanceValue,
             assetBalanceValue: assetBalanceValue,
             apy: apy,

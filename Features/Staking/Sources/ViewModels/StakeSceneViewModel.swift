@@ -30,7 +30,7 @@ public final class StakeSceneViewModel {
     private let recommendedValidators = StakeRecommendedValidators()
 
     public let wallet: Wallet
-    public var request: StakeDelegationsRequest
+    public var request: EarnDelegationsRequest
     public var delegations: [Delegation] = []
     public var validatorsRequest: StakeValidatorsRequest
     public var validators: [DelegationValidator] = []
@@ -52,7 +52,7 @@ public final class StakeSceneViewModel {
         self.stakeService = stakeService
         self.nodeService = nodeService
         self.yieldAsset = yieldAsset
-        self.request = StakeDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
+        self.request = EarnDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
         self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId)
         self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
     }

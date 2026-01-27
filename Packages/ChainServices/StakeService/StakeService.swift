@@ -8,13 +8,13 @@ import GemAPI
 import Blockchain
 
 public struct StakeService: StakeServiceable {
-    private let store: StakeStore
+    private let store: EarnStore
     private let addressStore: AddressStore
     private let chainServiceFactory: ChainServiceFactory
     private let assetsService: GemAPIStaticService
-    
+
     public init(
-        store: StakeStore,
+        store: EarnStore,
         addressStore: AddressStore,
         chainServiceFactory: ChainServiceFactory,
         assetsService: GemAPIStaticService = GemAPIStaticService()
@@ -24,11 +24,11 @@ public struct StakeService: StakeServiceable {
         self.chainServiceFactory = chainServiceFactory
         self.assetsService = assetsService
     }
-    
+
     public func stakeApr(assetId: AssetId) throws -> Double? {
         try store.getStakeApr(assetId: assetId)
     }
-    
+
     public func update(walletId: WalletId, chain: Chain, address: String) async throws {
         let validators = try store.getValidators(assetId: chain.assetId)
         if validators.isEmpty {
@@ -47,11 +47,11 @@ public struct StakeService: StakeServiceable {
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
         try store.getValidator(assetId: assetId, validatorId: validatorId)
     }
-    
+
     public func clearDelegations() throws {
-        try store.clearDelegations()
+        try store.clear(type: .stake)
     }
-    
+
     public func clearValidators() throws {
         try store.clearValidators()
     }
@@ -83,33 +83,43 @@ extension StakeService {
             )
         }
         try store.updateValidators(updateValidators)
-        
+
         let addressNames = updateValidators.map { AddressName(chain: $0.chain, address: $0.id, name: $0.name)}
         try addressStore.addAddressNames(addressNames)
     }
 
     private func updateDelegations(walletId: WalletId, chain: Chain, address: String) async throws {
         let delegations = try await getDelegations(chain: chain, address: address)
-        let existingDelegationsIds = try store.getDelegations(walletId: walletId, assetId: chain.assetId).map { $0.id }.asSet()
-        let delegationsIds = delegations.map { $0.id }.asSet()
-        let deleteDelegationsIds = existingDelegationsIds.subtracting(delegationsIds).asArray()
+        let existingPositions = try store.getPositions(walletId: walletId, assetId: chain.assetId, type: .stake)
+        let existingIds = existingPositions.map { $0.record.id }.asSet()
+        let delegationsIds = delegations.map { delegationRecordId(walletId: walletId, delegation: $0, chain: chain) }.asSet()
+        let deleteIds = existingIds.subtracting(delegationsIds).asArray()
 
-        // validators
         let validatorsIds = try store.getValidators(assetId: chain.assetId).map { $0.id }.asSet()
         let delegationsValidatorIds = delegations.map { $0.validatorId }.asSet()
         let missingValidatorIds = delegationsValidatorIds.subtracting(validatorsIds)
 
-        //TODO: Might need to fetch in the future.
         if !missingValidatorIds.isEmpty {
             debugLog("missingValidatorIds \(missingValidatorIds)")
         }
-        let updateDelegations = delegations.filter { validatorsIds.contains($0.validatorId) }
 
-        try store.updateAndDelete(walletId: walletId, delegations: updateDelegations, deleteIds: deleteDelegationsIds)
+        let updatePositions = delegations
+            .filter { validatorsIds.contains($0.validatorId) }
+            .map { delegation in
+                let validatorRecordId = DelegationValidator.recordId(chain: chain, validatorId: delegation.validatorId)
+                return delegation.toEarnPosition(walletId: walletId.id, validatorRecordId: validatorRecordId)
+            }
+
+        try store.updateAndDelete(walletId: walletId, positions: updatePositions, deleteIds: deleteIds)
     }
 
     private func getDelegations(chain: Chain, address: String) async throws -> [DelegationBase] {
         let service = chainServiceFactory.service(for: chain)
         return try await service.getStakeDelegations(address: address)
+    }
+
+    private func delegationRecordId(walletId: WalletId, delegation: DelegationBase, chain: Chain) -> String {
+        let validatorRecordId = DelegationValidator.recordId(chain: chain, validatorId: delegation.validatorId)
+        return delegation.toEarnPosition(walletId: walletId.id, validatorRecordId: validatorRecordId).record.id
     }
 }

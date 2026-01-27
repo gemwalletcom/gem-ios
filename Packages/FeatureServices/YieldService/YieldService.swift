@@ -8,14 +8,14 @@ import Store
 
 public final class YieldService: Sendable {
     public let yielder: GemYielder
-    private let store: YieldStore?
+    private let store: EarnStore?
 
-    public init(yielder: GemYielder, store: YieldStore? = nil) {
+    public init(yielder: GemYielder, store: EarnStore? = nil) {
         self.yielder = yielder
         self.store = store
     }
 
-    public convenience init(nodeProvider: any NodeURLFetchable, store: YieldStore? = nil) throws {
+    public convenience init(nodeProvider: any NodeURLFetchable, store: EarnStore? = nil) throws {
         let nativeProvider = NativeProvider(nodeProvider: nodeProvider)
         let yielder = try GemYielder(rpcProvider: nativeProvider)
         self.init(yielder: yielder, store: store)
@@ -61,7 +61,7 @@ public final class YieldService: Sendable {
         walletId: WalletId,
         onUpdate: (@MainActor @Sendable (GemYieldPosition) -> Void)? = nil
     ) -> GemYieldPosition? {
-        let cached = getCachedPosition(walletId: walletId, assetId: asset)
+        let cached = getCachedPosition(provider: provider, walletId: walletId, assetId: asset)
 
         Task {
             do {
@@ -82,22 +82,22 @@ public final class YieldService: Sendable {
         return cached
     }
 
-    public func clearPosition(walletId: WalletId, assetId: Primitives.AssetId) {
+    public func clearPosition(provider: GemYieldProvider, walletId: WalletId, assetId: Primitives.AssetId) {
         guard let store else { return }
         do {
-            try store.deletePosition(walletId: walletId, assetId: assetId)
+            try store.deletePosition(walletId: walletId, assetId: assetId, provider: provider.name)
         } catch {
             debugLog("clearPosition error: \(error)")
         }
     }
 
-    private func getCachedPosition(walletId: WalletId, assetId: Primitives.AssetId) -> GemYieldPosition? {
+    private func getCachedPosition(provider: GemYieldProvider, walletId: WalletId, assetId: Primitives.AssetId) -> GemYieldPosition? {
         guard let store else { return nil }
         do {
-            guard let record = try store.getPosition(walletId: walletId, assetId: assetId) else {
+            guard let position = try store.getPosition(walletId: walletId, assetId: assetId, provider: provider.name) else {
                 return nil
             }
-            return record.toGemYieldPosition()
+            return position.toGemYieldPosition()
         } catch {
             debugLog("getCachedPosition error: \(error)")
             return nil
@@ -106,9 +106,9 @@ public final class YieldService: Sendable {
 
     private func savePosition(_ position: GemYieldPosition, walletId: WalletId) {
         guard let store,
-              let record = YieldPositionRecord(walletId: walletId, position: position) else { return }
+              let earnPosition = EarnPosition(walletId: walletId, position: position) else { return }
         do {
-            try store.updatePosition(record)
+            try store.updatePosition(earnPosition)
         } catch {
             debugLog("savePosition error: \(error)")
         }
