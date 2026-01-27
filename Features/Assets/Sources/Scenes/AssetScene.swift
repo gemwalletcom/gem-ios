@@ -107,7 +107,7 @@ public struct AssetScene: View {
                     }
 
                     if model.hasYieldPosition {
-                        yieldView
+                        earnView
                     }
 
                     if model.showPendingUnconfirmedBalance {
@@ -129,14 +129,15 @@ public struct AssetScene: View {
                 }
             }
 
-            if model.showEarnSection {
-                Section(model.earnSectionTitle) {
-                    if model.showStakeButton {
-                        stakeButtonView
-                    }
-                    if model.showYieldButton {
-                        yieldButtonView
-                    }
+            if model.showStakeButton {
+                Section {
+                    stakeButtonView
+                }
+            }
+
+            if model.showEarnButton {
+                Section {
+                    earnButtonView
                 }
             }
 
@@ -200,15 +201,15 @@ extension AssetScene {
         .accessibilityIdentifier("stake")
     }
 
-    private var yieldView: some View {
+    private var earnView: some View {
         NavigationCustomLink(
             with: ListItemView(
-                title: model.yieldTitle,
+                title: model.earnTitle,
                 subtitle: model.yieldBalanceText
             ),
             action: { model.onSelectEarn() }
         )
-        .accessibilityIdentifier("yield")
+        .accessibilityIdentifier("earn")
     }
 
     private var stakeButtonView: some View {
@@ -227,18 +228,18 @@ extension AssetScene {
         .accessibilityIdentifier("stakeButton")
     }
 
-    private var yieldButtonView: some View {
+    private var earnButtonView: some View {
         NavigationCustomLink(
             with: HStack(spacing: Spacing.medium) {
                 EmojiView(color: Colors.grayVeryLight, emoji: Emoji.WalletAvatar.moneyBag.rawValue)
                     .frame(size: .image.asset)
                 ListItemView(
-                    title: model.yieldTitle,
+                    title: model.earnTitle,
                     subtitle: nil
                 )
             },
             action: { model.onSelectEarn() }
         )
-        .accessibilityIdentifier("yieldButton")
+        .accessibilityIdentifier("earnButton")
     }
 }

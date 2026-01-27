@@ -132,19 +132,14 @@ public final class AssetSceneViewModel: Sendable {
         return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
     }
 
-    var yieldTitle: String { "Yield" }
-    var earnSectionTitle: String { "Earn" }
+    var earnTitle: String { "Earn" }
 
     var showStakeButton: Bool {
         !showBalances && assetDataModel.isStakeEnabled && !wallet.isViewOnly
     }
 
-    var showYieldButton: Bool {
+    var showEarnButton: Bool {
         hasYieldOpportunity && !wallet.isViewOnly && isYieldPositionLoaded && !hasYieldPosition
-    }
-
-    var showEarnSection: Bool {
-        showStakeButton || showYieldButton
     }
 
     var hasYieldPosition: Bool {
