@@ -6,6 +6,7 @@ import GemAPI
 import DeviceService
 import Store
 import WalletService
+import Preferences
 
 public struct InAppNotificationService: Sendable {
     private let apiService: GemAPINotificationService
@@ -25,13 +26,21 @@ public struct InAppNotificationService: Sendable {
         self.store = store
     }
 
-    public func update() async throws {
+    public func update(walletId: WalletId) async throws {
+        let preferences = WalletPreferences(walletId: walletId)
         let deviceId = try deviceService.getDeviceId()
-        let notifications = try await apiService.getNotifications(deviceId: deviceId)
+        let newTimestamp = Int(Date.now.timeIntervalSince1970)
+
+        let notifications = try await apiService.getNotifications(
+            deviceId: deviceId,
+            fromTimestamp: preferences.notificationsTimestamp
+        )
         let walletNotifications = notifications.compactMap { notification in
             walletService.walletId(walletIndex: nil, walletTypeId: notification.walletId).map { ($0, notification) }
         }
         try store.addNotifications(walletNotifications)
+
+        preferences.notificationsTimestamp = newTimestamp
     }
 
     public func markNotificationsRead() async throws {

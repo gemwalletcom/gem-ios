@@ -28,16 +28,11 @@ extension Gemstone.SwapperError: @retroactive LocalizedError {
         case .NotSupportedChain: Localized.Errors.Swap.notSupportedChain
         case .NotSupportedAsset: Localized.Errors.Swap.notSupportedAsset
         case .NoQuoteAvailable: Localized.Errors.Swap.noQuoteAvailable
-        case .NotSupportedPair, .NoAvailableProvider: Localized.Errors.Swap.notSupportedPair
-        case .InputAmountTooSmall: Localized.Errors.Swap.amountTooSmall
-        case .InvalidAddress(let error),
-                .InvalidAmount(let error),
-                .NetworkError(let error),
-                .AbiError(let error),
-                .ComputeQuoteError(let error),
-                .TransactionError(let error): error
+        case .NoAvailableProvider: Localized.Errors.Swap.notSupportedPair
+        case .InputAmountError: Localized.Errors.Swap.amountTooSmall
+        case .ComputeQuoteError(let error),
+             .TransactionError(let error): error
         case .InvalidRoute: "Invalid Route"
-        case .NotImplemented: AnyError.notImplemented.errorDescription
         }
     }
 }

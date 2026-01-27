@@ -23,7 +23,8 @@ public struct WalletScene: View {
             Section { } header: {
                 WalletHeaderView(
                     model: model.walletHeaderModel,
-                    isHideBalanceEnalbed: $preferences.isHideBalanceEnabled,
+                    isPrivacyEnabled: $preferences.isHideBalanceEnabled,
+                    balanceActionType: .privacyToggle,
                     onHeaderAction: model.onHeaderAction,
                     onInfoAction: model.onSelectWatchWalletInfo
                 )

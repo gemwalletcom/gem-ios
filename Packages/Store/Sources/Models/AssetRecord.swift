@@ -24,6 +24,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
         static let isSwappable = Column("isSwappable")
         static let isStakeable = Column("isStakeable")
         static let stakingApr = Column("stakingApr")
+        static let hasImage = Column("hasImage")
     }
     
     public var id: String
@@ -41,6 +42,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     public var isStakeable: Bool
     public var rank: Int
     public var stakingApr: Double?
+    public var hasImage: Bool
     
     static let price = hasOne(PriceRecord.self)
     static let links = hasMany(AssetLinkRecord.self, key: "links")
@@ -86,6 +88,8 @@ extension AssetRecord: CreateTable {
             $0.column(Columns.rank.name, .numeric)
                 .defaults(to: 0)
             $0.column(Columns.stakingApr.name, .double)
+            $0.column(Columns.hasImage.name, .boolean)
+                .defaults(to: false)
         }
     }
 }
@@ -105,7 +109,8 @@ extension Asset {
             isSellable: false,
             isSwappable: false,
             isStakeable: false,
-            rank: 0
+            rank: 0,
+            hasImage: false
         )
     }
 }
@@ -131,9 +136,13 @@ extension AssetRecord {
                 isSellable: isSellable,
                 isSwapable: isSwappable,
                 isStakeable: isStakeable,
-                stakingApr: stakingApr
+                stakingApr: stakingApr,
+                isEarnable: false,
+                earnApr: nil,
+                hasImage: hasImage
             ),
-            score: AssetScore(rank: rank.asInt32)
+            score: AssetScore(rank: rank.asInt32),
+            price: nil
         )
     }
 }
@@ -194,7 +203,8 @@ extension AssetBasic {
             isSwappable: properties.isSwapable,
             isStakeable: properties.isStakeable,
             rank: score.rank.asInt,
-            stakingApr: properties.stakingApr
+            stakingApr: properties.stakingApr,
+            hasImage: properties.hasImage
         )
     }
 }

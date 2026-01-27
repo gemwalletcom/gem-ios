@@ -57,7 +57,7 @@ extension NFTAssetRecord: CreateTable {
             $0.column(Columns.description.name, .text)
             $0.column(Columns.chain.name, .text)
                 .notNull()
-                .references(AssetRecord.databaseTableName, onDelete: .cascade)
+                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.collectionId.name, .text)
                 .notNull()
                 .indexed()

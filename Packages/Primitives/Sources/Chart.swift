@@ -22,7 +22,7 @@ public struct ChartCandleStick: Codable, Equatable, Sendable {
 	}
 }
 
-public struct ChartDateValue: Codable, Equatable, Sendable {
+public struct ChartDateValue: Codable, Equatable, Hashable, Sendable {
 	public let date: Date
 	public let value: Double
 

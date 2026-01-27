@@ -53,18 +53,15 @@ extension WalletConnectorService: WalletConnectorServiceable {
     public func setup() async {
         Events.instance.setTelemetryEnabled(false)
         await withTaskGroup(of: Void.self) { group in
-            group.addTask { [weak self] in
-                guard let self else { return }
+            group.addTask {
                 await self.handleSessions()
             }
 
-            group.addTask { [weak self] in
-                guard let self else { return }
+            group.addTask {
                 await self.handleSessionProposals()
             }
 
-            group.addTask { [weak self] in
-                guard let self else { return }
+            group.addTask {
                 await self.handleSessionRequests()
             }
         }

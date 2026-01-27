@@ -19,7 +19,8 @@ public struct AssetScene: View {
             Section { } header: {
                 WalletHeaderView(
                     model: model.assetHeaderModel,
-                    isHideBalanceEnalbed: .constant(false),
+                    isPrivacyEnabled: .constant(false),
+                    balanceActionType: .none,
                     onHeaderAction: model.onSelectHeader,
                     onInfoAction: model.onSelectWalletHeaderInfo
                 )

@@ -6,10 +6,10 @@ import Foundation
 
 public struct SearchResponse: Codable, Sendable {
 	public let assets: [AssetBasic]
-	public let perpetuals: [Perpetual]
+	public let perpetuals: [PerpetualSearchData]
 	public let nfts: [NFTCollection]
 
-	public init(assets: [AssetBasic], perpetuals: [Perpetual], nfts: [NFTCollection]) {
+	public init(assets: [AssetBasic], perpetuals: [PerpetualSearchData], nfts: [NFTCollection]) {
 		self.assets = assets
 		self.perpetuals = perpetuals
 		self.nfts = nfts

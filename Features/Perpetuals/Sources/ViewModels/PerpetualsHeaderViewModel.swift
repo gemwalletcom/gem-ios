@@ -24,7 +24,6 @@ public struct PerpetualsHeaderViewModel {
 }
 
 extension PerpetualsHeaderViewModel: HeaderViewModel {
-    public var allowHiddenBalance: Bool { true }
     public var isWatchWallet: Bool { walletType == .view }
     public var title: String { currencyFormatter.string(balance.total) }
     public var assetImage: AssetImage? { .none }

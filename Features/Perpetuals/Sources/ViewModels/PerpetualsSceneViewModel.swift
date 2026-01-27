@@ -15,7 +15,7 @@ import ActivityService
 @Observable
 @MainActor
 public final class PerpetualsSceneViewModel {
-    private let perpetualService: PerpetualServiceable
+    let perpetualService: PerpetualServiceable
     let activityService: ActivityService
 
     let preferences: Preferences = .standard
@@ -35,6 +35,7 @@ public final class PerpetualsSceneViewModel {
     var searchQuery: String = .empty
     var isSearching: Bool = false
     var isPresentingRecents: Bool = false
+    var isPresentingPortfolio: Bool = false
 
     let onSelectAssetType: ((SelectAssetType) -> Void)?
     let onSelectAsset: ((Asset) -> Void)?
@@ -96,8 +97,9 @@ extension PerpetualsSceneViewModel {
     }
 
     private func updatePositions() async {
+        guard let address = wallet.perpetualAddress else { return }
         do {
-            try await perpetualService.updatePositions(wallet: wallet)
+            try await perpetualService.updatePositions(address: address, walletId: wallet.walletId)
         } catch {
             debugLog("Failed to update positions: \(error)")
         }
@@ -168,5 +170,9 @@ extension PerpetualsSceneViewModel {
     func onSelectRecent(asset: Asset) {
         onSelectAsset?(asset)
         isPresentingRecents = false
+    }
+
+    func onSelectBalance() {
+        isPresentingPortfolio = true
     }
 }

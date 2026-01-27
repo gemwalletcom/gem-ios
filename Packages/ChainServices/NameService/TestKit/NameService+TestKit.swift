@@ -2,7 +2,6 @@
 
 import Foundation
 import Primitives
-import PrimitivesComponents
 import PrimitivesTestKit
 @testable import NameService
 

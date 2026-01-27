@@ -67,7 +67,7 @@ public struct Migrations {
 
             try RecentActivityRecord.create(db: db)
             try SearchRecord.create(db: db)
-            try InAppNotificationRecord.create(db: db)
+            try NotificationRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)
     }
@@ -359,8 +359,33 @@ public struct Migrations {
             try? db.drop(table: "assets_search")
         }
 
-        migrator.registerMigration("Create \(InAppNotificationRecord.databaseTableName)") { db in
-            try? InAppNotificationRecord.create(db: db)
+        migrator.registerMigration("Create \(NotificationRecord.databaseTableName)") { db in
+            try? db.drop(table: NotificationRecord.databaseTableName)
+            try? NotificationRecord.create(db: db)
+        }
+
+        migrator.registerMigration("Add allTimeHigh/Low to \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: PriceRecord.Columns.allTimeHigh.name, .double)
+                $0.add(column: PriceRecord.Columns.allTimeHighDate.name, .date)
+                $0.add(column: PriceRecord.Columns.allTimeHighChangePercentage.name, .double)
+                $0.add(column: PriceRecord.Columns.allTimeLow.name, .double)
+                $0.add(column: PriceRecord.Columns.allTimeLowDate.name, .date)
+                $0.add(column: PriceRecord.Columns.allTimeLowChangePercentage.name, .double)
+            }
+        }
+
+        migrator.registerMigration("Migrate wallet IDs to WalletIdentifier format") { db in
+            try? db.alter(table: WalletRecord.databaseTableName) {
+                $0.add(column: WalletRecord.Columns.externalId.name, .text)
+            }
+            try WalletIdMigration.migrate(db: db)
+        }
+
+        migrator.registerMigration("Add hasImage to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.hasImage.name, .boolean).defaults(to: false)
+            }
         }
 
         try migrator.migrate(dbQueue)

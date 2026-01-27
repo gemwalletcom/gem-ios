@@ -24,7 +24,8 @@ public struct TransactionHeaderView: View {
             case .amount(let display):
                 WalletHeaderView(
                     model: TransactionAmountHeaderViewModel(display: display),
-                    isHideBalanceEnalbed: .constant(false),
+                    isPrivacyEnabled: .constant(false),
+                    balanceActionType: .none,
                     onHeaderAction: nil,
                     onInfoAction: nil
                 )

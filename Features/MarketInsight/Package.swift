@@ -17,13 +17,13 @@ let package = Package(
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Localization", path: "../../Packages/Localization"),
-        .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
+        .package(name: "InfoSheet", path: "../InfoSheet"),
     ],
     targets: [
         .target(
@@ -32,7 +32,6 @@ let package = Package(
                 "Primitives",
                 "Formatters",
                 "Localization",
-                "Gemstone",
                 "Store",
                 .product(name: "ExplorerService", package: "ChainServices"),
                 "PrimitivesComponents",
@@ -40,9 +39,17 @@ let package = Package(
                 "Preferences",
                 .product(name: "PriceService", package: "FeatureServices"),
                 .product(name: "PriceAlertService", package: "FeatureServices"),
-                .product(name: "AssetsService", package: "FeatureServices")
+                .product(name: "AssetsService", package: "FeatureServices"),
+                "InfoSheet"
             ],
             path: "Sources"
+        ),
+        .testTarget(
+            name: "MarketInsightTests",
+            dependencies: [
+                "MarketInsight",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ]
         ),
     ]
 )

@@ -40,6 +40,7 @@ public final class FiatSceneViewModel {
     var type: FiatQuoteType
     var isPresentingFiatProvider: Bool = false
     var isPresentingAlertMessage: AlertMessage?
+    var fetchTrigger: FiatFetchTrigger
 
     let buyViewModel: FiatOperationViewModel
     let sellViewModel: FiatOperationViewModel
@@ -81,6 +82,9 @@ public final class FiatSceneViewModel {
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter
         )
+
+        let initialAmount = amount.map { String($0) } ?? buyViewModel.amount
+        self.fetchTrigger = FiatFetchTrigger(type: type, amount: initialAmount, isImmediate: true)
 
         if let amount {
             currentViewModel.inputValidationModel.text = String(amount)
@@ -212,7 +216,7 @@ extension FiatSceneViewModel {
     }
 
     func onSelectRandomAmount() {
-        let amount = Int.random(in: Constants.defaultAmount..<Constants.randomMaxAmount) // mobsf-ignore: ios_insecure_random_no_generator (UI suggestion only)
+        let amount = Int.random(in: Constants.defaultAmount..<Constants.randomMaxAmount)
         selectAmount(amount)
     }
 
@@ -226,14 +230,16 @@ extension FiatSceneViewModel {
         isPresentingFiatProvider = false
     }
 
-    func onChangeType(_: FiatQuoteType, type: FiatQuoteType) {
+    func onChangeType(oldType: FiatQuoteType, newType: FiatQuoteType) {
+        resetStateIfNeeded(for: oldType)
         currentViewModel.inputValidationModel.text = currentViewModel.amount
         currentViewModel.updateValidators()
-        currentViewModel.fetch()
+        fetchTrigger = FiatFetchTrigger(type: newType, amount: currentViewModel.amount, isImmediate: true)
     }
 
     func onChangeAmountText(_: String, text: String) {
         currentViewModel.onChangeAmountText("", text: text)
+        fetchTrigger = FiatFetchTrigger(type: type, amount: text, isImmediate: false)
     }
 }
 
@@ -247,6 +253,18 @@ extension FiatSceneViewModel {
     private func selectAmount(_ amount: Int) {
         currentViewModel.reset()
         currentViewModel.inputValidationModel.update(text: String(amount))
-        currentViewModel.fetch()
+        fetchTrigger = FiatFetchTrigger(type: type, amount: String(amount), isImmediate: true)
+    }
+
+    private func resetStateIfNeeded(for type: FiatQuoteType) {
+        let model: FiatOperationViewModel = switch type {
+        case .buy: buyViewModel
+        case .sell: sellViewModel
+        }
+
+        switch model.quotesState {
+        case .noData, .error: model.quotesState = .loading
+        case .loading, .data: break
+        }
     }
 }

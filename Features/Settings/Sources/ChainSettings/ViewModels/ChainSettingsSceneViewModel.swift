@@ -132,12 +132,10 @@ extension ChainSettingsSceneViewModel {
     }
 
     private func fetchNodesStates() async {
-        await withTaskGroup(of: (ChainNode, NodeStatusState).self) { [weak self] group in
-            guard let self else { return }
-            for node in self.nodes {
-                group.addTask { [weak self] in
-                    guard let self else { return (node, .none) }
-                    return (node, await fetchNodeStatusState(for: node))
+        await withTaskGroup(of: (ChainNode, NodeStatusState).self) { group in
+            for node in nodes {
+                group.addTask {
+                    (node, await self.fetchNodeStatusState(for: node))
                 }
             }
 

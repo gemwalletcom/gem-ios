@@ -11,25 +11,28 @@ import DeviceService
 @Observable
 @MainActor
 public final class ChatwootWebViewModel: NSObject, Sendable {
-    
+
     let websiteToken: String
     let baseUrl: URL
     let settings: ChatwootSettings
     let supportDeviceId: String
-    
+    let domainPolicy: WebViewDomainPolicy
+
     var isPresentingSupport: Binding<Bool>
     var isLoading: Bool = true
-    
+
     public init(
         websiteToken: String,
         baseUrl: URL,
         supportDeviceId: String,
+        domainPolicy: WebViewDomainPolicy,
         settings: ChatwootSettings = .defaultSettings,
         isPresentingSupport: Binding<Bool>
     ) {
         self.websiteToken = websiteToken
         self.baseUrl = baseUrl
         self.supportDeviceId = supportDeviceId
+        self.domainPolicy = domainPolicy
         self.settings = settings
         self.isPresentingSupport = isPresentingSupport
     }
@@ -143,6 +146,24 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
 // MARK: - WKNavigationDelegate, WKScriptMessageHandler
 
 extension ChatwootWebViewModel: WKNavigationDelegate, WKScriptMessageHandler {
+    public func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction
+    ) async -> WKNavigationActionPolicy {
+        guard let url = navigationAction.request.url else {
+            return .cancel
+        }
+
+        if url.isAllowed(by: domainPolicy) {
+            return .allow
+        }
+
+        if domainPolicy.openExternalLinksInSafari, url.scheme == "https" || url.scheme == "http" {
+            await UIApplication.shared.open(url)
+        }
+        return .cancel
+    }
+
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch ChatwootHandler(rawValue: message.name) {
         case .chatOpened: isLoading = false

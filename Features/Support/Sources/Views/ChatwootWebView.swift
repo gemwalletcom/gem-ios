@@ -22,4 +22,9 @@ struct ChatwootWebView: UIViewRepresentable {
     func updateUIView(_ webView: WKWebView, context: Context) {
         webView.loadHTMLString(model.htmlContent, baseURL: model.baseUrl)
     }
+    
+    static func dismantleUIView(_ webView: WKWebView, coordinator: ()) {
+        webView.navigationDelegate = nil
+        webView.configuration.userContentController.removeAllScriptMessageHandlers()
+    }
 }

@@ -80,6 +80,7 @@ struct URLParserTests {
         #expect(try URLParser.from(url: URL(string: "gem://join?code=gemcoder")!) == .rewards(code: "gemcoder"))
         #expect(try URLParser.from(url: URL(string: "gem://rewards/gemcoder")!) == .rewards(code: "gemcoder"))
         #expect(try URLParser.from(url: URL(string: "gem://rewards?code=gemcoder")!) == .rewards(code: "gemcoder"))
+        #expect(try URLParser.from(url: URL(string: "gem://rewards")!) == .rewards(code: nil))
     }
 
     @Test
@@ -92,6 +93,7 @@ struct URLParserTests {
     func gemSchemeGiftUrl() async throws {
         #expect(try URLParser.from(url: URL(string: "gem://gift/giftcode123")!) == .gift(code: "giftcode123"))
         #expect(try URLParser.from(url: URL(string: "gem://gift?code=giftcode123")!) == .gift(code: "giftcode123"))
+        #expect(try URLParser.from(url: URL(string: "gem://gift")!) == .gift(code: nil))
     }
 
     @Test

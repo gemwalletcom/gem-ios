@@ -22,27 +22,10 @@ public struct ChartScene: View {
     public var body: some View {
         List {
             Section { } header: {
-                VStack {
-                    VStack {
-                        switch model.state {
-                        case .noData:
-                            StateEmptyView(title: model.emptyTitle)
-                        case .loading:
-                            LoadingView()
-                        case .data(let model):
-                            ChartView(model: model)
-                        case .error(let error):
-                            StateEmptyView(
-                                title: model.errorTitle,
-                                description: model.description(for: error),
-                                image: Images.ErrorConent.error
-                            )
-                        }
-                    }
-                    .frame(height: 320)
-
-                    PeriodSelectorView(selectedPeriod: $model.currentPeriod)
-                }
+                ChartStateView(
+                    state: model.state,
+                    selectedPeriod: $model.selectedPeriod
+                )
             }
             .cleanListRow()
             
@@ -86,6 +69,13 @@ public struct ChartScene: View {
                                 )
                             }
                         }
+                        if model.hasMarketData {
+                            NavigationCustomLink(
+                                with: ListItemView(title: Localized.Wallet.more)
+                            ) {
+                                model.onSelectPriceDetails()
+                            }
+                        }
                     }
                 }
                 
@@ -110,5 +100,13 @@ public struct ChartScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .sheet(item: $model.isPresentingMarkets) { priceData in
+            NavigationStack {
+                AssetPriceDetailsView(
+                    model: AssetPriceDetailsViewModel(priceData: priceData)
+                )
+            }
+            .presentationBackground(Colors.grayBackground)
+        }
     }
 }

@@ -86,18 +86,12 @@ public struct PerpetualPositionViewModel {
     }
     
     public var fundingPaymentsTitle: String { Localized.Info.FundingPayments.title }
-    public var fundingPaymentsText: String {
-        guard let funding = data.position.funding else { return "--" }
-        return currencyFormatter.string(Double(funding))
+    private var fundingPaymentsModel: PriceChangeViewModel {
+        PriceChangeViewModel(value: data.position.funding.map { Double($0) }, currencyFormatter: currencyFormatter)
     }
-    public var fundingPaymentsColor: Color {
-        guard let funding = data.position.funding else { return .secondary }
-        return PriceChangeColor.color(for: Double(funding))
-    }
-    
-    public var fundingPaymentsTextStyle: TextStyle {
-        TextStyle(font: .callout, color: fundingPaymentsColor)
-    }
+    public var fundingPaymentsText: String { fundingPaymentsModel.text ?? "-" }
+    public var fundingPaymentsColor: Color { fundingPaymentsModel.color }
+    public var fundingPaymentsTextStyle: TextStyle { fundingPaymentsModel.textStyle }
     
     public var sizeTitle: String { Localized.Perpetual.size }
     public var sizeValueText: String {

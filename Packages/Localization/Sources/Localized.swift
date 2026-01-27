@@ -35,6 +35,10 @@ public enum Localized {
   public enum Asset {
     /// Add to wallet
     public static let addToWallet = Localized.tr("Localizable", "asset.add_to_wallet", fallback: "Add to wallet")
+    /// All Time High
+    public static let allTimeHigh = Localized.tr("Localizable", "asset.all_time_high", fallback: "All Time High")
+    /// All Time Low
+    public static let allTimeLow = Localized.tr("Localizable", "asset.all_time_low", fallback: "All Time Low")
     /// Balances
     public static let balances = Localized.tr("Localizable", "asset.balances", fallback: "Balances")
     /// Buy %@
@@ -462,6 +466,10 @@ public enum Localized {
     public enum Swap {
       /// Amount too small
       public static let amountTooSmall = Localized.tr("Localizable", "errors.swap.amount_too_small", fallback: "Amount too small")
+      /// Minimum trade amount is %@. Please enter a higher amount.
+      public static func minimumAmount(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "errors.swap.minimum_amount", String(describing: p1), fallback: "Minimum trade amount is %@. Please enter a higher amount.")
+      }
       /// No quote available.
       public static let noQuoteAvailable = Localized.tr("Localizable", "errors.swap.no_quote_available", fallback: "No quote available.")
       /// No quote data
@@ -543,6 +551,16 @@ public enum Localized {
         public static let description = Localized.tr("Localizable", "info.asset_status.unverified.description", fallback: "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.")
       }
     }
+    public enum CirculatingSupply {
+      /// The number of coins currently available and trading in the market."
+      public static let description = Localized.tr("Localizable", "info.circulating_supply.description", fallback: "The number of coins currently available and trading in the market.\"")
+    }
+    public enum FullyDilutedValuation {
+      /// The theoretical market value if all coins were in circulation. Calculated as price multiplied by max supply.
+      public static let description = Localized.tr("Localizable", "info.fully_diluted_valuation.description", fallback: "The theoretical market value if all coins were in circulation. Calculated as price multiplied by max supply.")
+      /// Fully Diluted Valuation
+      public static let title = Localized.tr("Localizable", "info.fully_diluted_valuation.title", fallback: "Fully Diluted Valuation")
+    }
     public enum FundingPayments {
       /// Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.
       public static let description = Localized.tr("Localizable", "info.funding_payments.description", fallback: "Funding payments are periodic payments between traders to keep the perpetual contract price close to the underlying asset's spot price. Positive funding means long positions pay short positions, while negative funding means short positions pay long positions.")
@@ -582,6 +600,12 @@ public enum Localized {
     public enum LockTime {
       /// Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.
       public static let description = Localized.tr("Localizable", "info.lock_time.description", fallback: "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.")
+    }
+    public enum MaxSupply {
+      /// The maximum number of coins that will ever exist.
+      public static let description = Localized.tr("Localizable", "info.max_supply.description", fallback: "The maximum number of coins that will ever exist.")
+      /// Max Supply
+      public static let title = Localized.tr("Localizable", "info.max_supply.title", fallback: "Max Supply")
     }
     public enum NetworkFee {
       /// Every transaction on the %@ network requires a fee in %@ paid to miners to process your transaction, not Gem Wallet. Network fees varies based on network usage.
@@ -636,6 +660,10 @@ public enum Localized {
       }
       /// Minimum Amount
       public static let title = Localized.tr("Localizable", "info.stake_minimum_amount.title", fallback: "Minimum Amount")
+    }
+    public enum TotalSupply {
+      /// The total number of coins that exist, including locked or reserved coins.
+      public static let description = Localized.tr("Localizable", "info.total_supply.description", fallback: "The total number of coins that exist, including locked or reserved coins.")
     }
     public enum Transaction {
       public enum Error {
@@ -760,6 +788,8 @@ public enum Localized {
       public static let latestBlock = Localized.tr("Localizable", "nodes.import_node.latest_block", fallback: "Latest Block")
       /// Add node
       public static let title = Localized.tr("Localizable", "nodes.import_node.title", fallback: "Add node")
+      /// Custom nodes can be malicious and may expose your transaction data or provide false information.
+      public static let warningMessage = Localized.tr("Localizable", "nodes.import_node.warning_message", fallback: "Custom nodes can be malicious and may expose your transaction data or provide false information.")
     }
   }
   public enum Notifications {
@@ -775,6 +805,10 @@ public enum Localized {
         }
       }
       public enum Rewards {
+        public enum CreateUsername {
+          /// Set up your username to earn rewards
+          public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.create_username.subtitle", fallback: "Set up your username to earn rewards")
+        }
         public enum Disabled {
           /// Your referral code has been deactivated
           public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.disabled.subtitle", fallback: "Your referral code has been deactivated")
@@ -786,6 +820,16 @@ public enum Localized {
           public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.enabled.subtitle", fallback: "Start earning points by inviting friends")
           /// Rewards Enabled
           public static let title = Localized.tr("Localizable", "notifications.inapp.rewards.enabled.title", fallback: "Rewards Enabled")
+        }
+        public enum Invite {
+          /// Invite friends and earn rewards together
+          public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.invite.subtitle", fallback: "Invite friends and earn rewards together")
+        }
+        public enum Redeemed {
+          /// Your rewards have been redeemed successfully
+          public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.redeemed.subtitle", fallback: "Your rewards have been redeemed successfully")
+          /// Rewards Redeemed
+          public static let title = Localized.tr("Localizable", "notifications.inapp.rewards.redeemed.title", fallback: "Rewards Redeemed")
         }
       }
       public enum State {
@@ -863,6 +907,10 @@ public enum Localized {
     }
   }
   public enum Perpetual {
+    /// Account Leverage
+    public static let accountLeverage = Localized.tr("Localizable", "perpetual.account_leverage", fallback: "Account Leverage")
+    /// All Time PnL
+    public static let allTimePnl = Localized.tr("Localizable", "perpetual.all_time_pnl", fallback: "All Time PnL")
     /// Auto Close
     public static let autoClose = Localized.tr("Localizable", "perpetual.auto_close", fallback: "Auto Close")
     /// Close %@
@@ -887,6 +935,8 @@ public enum Localized {
     public static let long = Localized.tr("Localizable", "perpetual.long", fallback: "Long")
     /// Margin
     public static let margin = Localized.tr("Localizable", "perpetual.margin", fallback: "Margin")
+    /// Margin Usage
+    public static let marginUsage = Localized.tr("Localizable", "perpetual.margin_usage", fallback: "Margin Usage")
     /// Market Price
     public static let marketPrice = Localized.tr("Localizable", "perpetual.market_price", fallback: "Market Price")
     /// Modify
@@ -913,6 +963,12 @@ public enum Localized {
     public static let short = Localized.tr("Localizable", "perpetual.short", fallback: "Short")
     /// Size
     public static let size = Localized.tr("Localizable", "perpetual.size", fallback: "Size")
+    /// Unrealized PnL
+    public static let unrealizedPnl = Localized.tr("Localizable", "perpetual.unrealized_pnl", fallback: "Unrealized PnL")
+    /// Value
+    public static let value = Localized.tr("Localizable", "perpetual.value", fallback: "Value")
+    /// Volume
+    public static let volume = Localized.tr("Localizable", "perpetual.volume", fallback: "Volume")
     public enum AutoClose {
       /// Expected loss
       public static let expectedLoss = Localized.tr("Localizable", "perpetual.auto_close.expected_loss", fallback: "Expected loss")
@@ -1001,8 +1057,6 @@ public enum Localized {
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
   }
   public enum RecentActivity {
-    /// Are you sure you want to clear all recents?
-    public static let clearConfirmation = Localized.tr("Localizable", "recent_activity.clear_confirmation", fallback: "Are you sure you want to clear all recents?")
     /// Recents
     public static let title = Localized.tr("Localizable", "recent_activity.title", fallback: "Recents")
     public enum State {

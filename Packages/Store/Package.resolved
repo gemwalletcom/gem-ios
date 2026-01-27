@@ -1,31 +1,13 @@
 {
-  "originHash" : "621b50c23d024879e77a77ff24461ac63db616668e10b7bf4e96d8dac72ce05b",
+  "originHash" : "967d39c8b3922e71eebcea9724f14480569febbaed95f2bf271eaf332523426c",
   "pins" : [
-    {
-      "identity" : "bigint",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/attaswift/BigInt.git",
-      "state" : {
-        "revision" : "e07e00fa1fd435143a2dcf8b7eec9a7710b2fdfe",
-        "version" : "5.7.0"
-      }
-    },
     {
       "identity" : "grdb.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift.git",
       "state" : {
-        "revision" : "8ba1bc9a96afc731a000fd4136dd13a5a46297bd",
-        "version" : "7.6.1"
-      }
-    },
-    {
-      "identity" : "grdbquery",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/groue/GRDBQuery.git",
-      "state" : {
-        "revision" : "540dc48e86af2972b4f1815616aa1ed8ac97845a",
-        "version" : "0.11.0"
+        "revision" : "aa0079aeb82a4bf00324561a40bffe68c6fe1c26",
+        "version" : "7.9.0"
       }
     }
   ],

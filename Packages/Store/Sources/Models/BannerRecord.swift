@@ -37,11 +37,11 @@ extension BannerRecord: CreateTable {
                 .indexed()
             $0.column(Columns.walletId.name, .text)
                 .indexed()
-                .references(WalletRecord.databaseTableName, onDelete: .cascade)
+                .references(WalletRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.assetId.name, .text)
-                .references(AssetRecord.databaseTableName, onDelete: .cascade)
+                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.chain.name, .text)
-                .references(AssetRecord.databaseTableName, onDelete: .cascade)
+                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.event.name, .text)
                 .notNull()
             $0.column(Columns.state.name, .text)
@@ -75,7 +75,7 @@ extension NewBanner {
     var record: BannerRecord {
         let wallet: Wallet? = {
             if let walletId {
-                return Wallet(id: walletId, name: "", index: 0, type: .multicoin, accounts: [], order: 0, isPinned: false, imageUrl: nil, source: .create)
+                return Wallet(id: walletId, externalId: nil, name: "", index: 0, type: .multicoin, accounts: [], order: 0, isPinned: false, imageUrl: nil, source: .create)
             }
             return .none
         }()

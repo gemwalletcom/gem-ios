@@ -59,9 +59,13 @@ public struct ImportAssetsService: Sendable {
                         isSellable: false,
                         isSwapable: isSwapable,
                         isStakeable: isStakable,
-                        stakingApr: .none
+                        stakingApr: .none,
+                        isEarnable: false,
+                        earnApr: nil,
+                        hasImage: true
                     ),
-                    score: score
+                    score: score,
+                    price: nil
                 )
             }
             try assetStore.add(assets: assets)
@@ -75,9 +79,13 @@ public struct ImportAssetsService: Sendable {
                         isSellable: false,
                         isSwapable: false,
                         isStakeable: false,
-                        stakingApr: .none
+                        stakingApr: .none,
+                        isEarnable: false,
+                        earnApr: nil,
+                        hasImage: false
                     ),
-                    score: AssetScore(rank: 16)
+                    score: AssetScore(rank: 16),
+                    price: nil
                 )
             })
         }

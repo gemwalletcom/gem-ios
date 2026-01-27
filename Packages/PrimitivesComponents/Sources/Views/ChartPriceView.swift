@@ -4,39 +4,28 @@ import SwiftUI
 import Style
 
 public struct ChartPriceView: View {
-    let date: String?
-    let price: String
-    let priceChange: String?
-    let priceChangeTextColor: Color
-    
-    public init(
-        date: String?,
-        price: String,
-        priceChange: String?,
-        priceChangeTextColor: Color
-    ) {
-        self.date = date
-        self.price = price
-        self.priceChange = priceChange
-        self.priceChangeTextColor = priceChangeTextColor
+    let model: ChartPriceViewModel
+
+    public init(model: ChartPriceViewModel) {
+        self.model = model
     }
-    
+
     public var body: some View {
         VStack(spacing: Spacing.tiny) {
             HStack(alignment: .center, spacing: Spacing.tiny) {
-                Text(price)
+                Text(model.priceText)
                     .font(.title2)
-                    .foregroundColor(Colors.black)
-                
-                if let priceChange {
+                    .foregroundColor(model.priceColor)
+
+                if let priceChange = model.priceChangeText {
                     Text(priceChange)
                         .font(.callout)
-                        .foregroundColor(priceChangeTextColor)
+                        .foregroundColor(model.priceChangeTextColor)
                 }
             }
-            
+
             HStack {
-                if let date {
+                if let date = model.dateText {
                     Text(date)
                         .font(.footnote)
                         .foregroundColor(Colors.gray)

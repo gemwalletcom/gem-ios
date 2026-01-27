@@ -183,7 +183,9 @@ extension WalletSceneViewModel {
     func onBanner(action: BannerAction) {
         switch action.type {
         case .event, .closeBanner:
-            Task { try await handleBanner(action: action) }
+            Task {
+                try await handleBanner(action: action)
+            }
         case .button(let bannerButton):
             switch bannerButton {
             case .buy: isPresentingSelectAssetType = .buy
@@ -215,8 +217,12 @@ extension WalletSceneViewModel {
     }
 
     public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
-        if let newWallet, wallet.walletId != newWallet.walletId {
+        guard let newWallet else { return }
+
+        if wallet.walletId != newWallet.walletId {
             refresh(for: newWallet)
+        } else if wallet != newWallet {
+            wallet = newWallet
         }
     }
 

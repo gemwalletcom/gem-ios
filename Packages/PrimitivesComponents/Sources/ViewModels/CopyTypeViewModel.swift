@@ -48,6 +48,10 @@ public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
         UIPasteboard.general.setItems([[UIPasteboard.typeAutomatic: value]], options: options)
     }
 
+    public static func clearClipboard() {
+        UIPasteboard.general.items = []
+    }
+
     static func pasteboardOptions(expirationTime: TimeInterval?) -> [UIPasteboard.OptionsKey: Any] {
         var options: [UIPasteboard.OptionsKey: Any] = [:]
 
