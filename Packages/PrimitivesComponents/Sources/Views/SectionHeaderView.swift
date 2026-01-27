@@ -20,7 +20,7 @@ public struct SectionHeaderView: View {
     }
 
     public var body: some View {
-        HStack(spacing: Spacing.tiny) {
+        HStack {
             if let image {
                 image
             }
@@ -32,5 +32,6 @@ public struct SectionHeaderView: View {
                 .buttonStyle(.plain)
             }
         }
+        .bold()
     }
 }
