@@ -99,26 +99,12 @@ public struct WalletSearchScene: View {
             if model.showPinned {
                 Section(
                     content: {
-                        assetItems(for: model.sections.pinnedAssets)
                         if model.showPinnedPerpetuals {
                             perpetualItems(for: model.sections.pinnedPerpetuals)
                         }
+                        assetItems(for: model.sections.pinnedAssets)
                     },
                     header: { PinnedSectionHeader() }
-                )
-                .listRowInsets(.assetListRowInsets)
-            }
-
-            if model.showAssets {
-                Section(
-                    content: { assetItems(for: model.previewAssets) },
-                    header: {
-                        SectionHeaderView(
-                            title: model.assetsTitle,
-                            actionTitle: model.hasMore(for: .asset) ? Localized.Wallet.more : nil,
-                            action: model.onSelectSeeAllAssets
-                        )
-                    }
                 )
                 .listRowInsets(.assetListRowInsets)
             }
@@ -130,6 +116,20 @@ public struct WalletSearchScene: View {
                         HeaderNavigationLinkView(title: model.perpetualsTitle, destination: Scenes.Perpetuals())
                     }
                 )
+                .listRowInsets(.assetListRowInsets)
+            }
+
+            if model.showAssets {
+                Section(
+                    content: { assetItems(for: model.previewAssets) },
+                    header: {
+                        SectionHeaderView(
+                            title: model.assetsTitle,
+                            action: model.hasMoreAssets ? { model.onSelectSeeAllAssets() } : nil
+                        )
+                    }
+                )
+                .listRowInsets(.assetListRowInsets)
             }
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)

@@ -95,14 +95,7 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var previewAssets: [AssetData] { Array(sections.assets.prefix(Self.previewLimit)) }
     var previewPerpetuals: [PerpetualData] { Array(sections.perpetuals.prefix(Self.previewLimit)) }
-
-    func hasMore(for type: SearchItemType) -> Bool {
-        switch type {
-        case .asset: sections.assets.count > Self.previewLimit
-        case .perpetual: sections.perpetuals.count > Self.previewLimit
-        case .nft: false
-        }
-    }
+    var hasMoreAssets: Bool { sections.assets.count > Self.previewLimit }
 
     var assetsResultsModel: AssetsResultsSceneViewModel {
         AssetsResultsSceneViewModel(
