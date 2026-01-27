@@ -242,6 +242,16 @@ public struct PerpetualReduceData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct PerpetualSearchData: Codable, Sendable {
+	public let perpetual: Perpetual
+	public let asset: Asset
+
+	public init(perpetual: Perpetual, asset: Asset) {
+		self.perpetual = perpetual
+		self.asset = asset
+	}
+}
+
 public struct TPSLOrderData: Codable, Equatable, Hashable, Sendable {
 	public let direction: PerpetualDirection
 	public let takeProfit: String?

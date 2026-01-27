@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import BigInt
-import Blockchain
 import Foundation
 import Keystore
 import Primitives

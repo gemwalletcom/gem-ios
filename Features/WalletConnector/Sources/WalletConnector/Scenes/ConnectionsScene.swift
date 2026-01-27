@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import GRDBQuery
 import Store
 import Primitives
 import Components

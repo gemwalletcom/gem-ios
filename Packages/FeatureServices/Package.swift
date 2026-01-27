@@ -45,7 +45,6 @@ let package = Package(
         .library(name: "NotificationServiceTestKit", targets: ["NotificationServiceTestKit"]),
         .library(name: "AddressNameService", targets: ["AddressNameService"]),
         .library(name: "AddressNameServiceTestKit", targets: ["AddressNameServiceTestKit"]),
-        .library(name: "NativeProviderService", targets: ["NativeProviderService"]),
         .library(name: "ActivityService", targets: ["ActivityService"]),
         .library(name: "ActivityServiceTestKit", targets: ["ActivityServiceTestKit"]),
         .library(name: "RewardsService", targets: ["RewardsService"]),
@@ -66,6 +65,7 @@ let package = Package(
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "Formatters", path: "../Formatters"),
         .package(name: "SwiftHTTPClient", path: "../SwiftHTTPClient"),
+        .package(name: "NativeProviderService", path: "../NativeProviderService"),
     ],
     targets: [
         .target(
@@ -492,15 +492,6 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store")
             ],
             path: "AddressNameService/TestKit"
-        ),
-        .target(
-            name: "NativeProviderService",
-            dependencies: [
-                "Primitives",
-                "Gemstone"
-            ],
-            path: "NativeProviderService",
-            exclude: ["Tests", "TestKit"]
         ),
         .target(
             name: "ActivityService",

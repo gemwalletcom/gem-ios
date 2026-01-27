@@ -106,7 +106,6 @@ public struct ChartScene: View {
                     model: AssetPriceDetailsViewModel(priceData: priceData)
                 )
             }
-            .presentationDetentsForCurrentDeviceSize(expandable: true)
             .presentationBackground(Colors.grayBackground)
         }
     }
