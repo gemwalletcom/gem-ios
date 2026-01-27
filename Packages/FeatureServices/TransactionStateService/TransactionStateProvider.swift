@@ -10,7 +10,7 @@ struct TransactionStateProvider: Sendable {
     private let transactionStore: TransactionStore
     private let chainServiceFactory: ChainServiceFactory
 
-    public init(
+    init(
         transactionStore: TransactionStore,
         chainServiceFactory: ChainServiceFactory
     ) {
@@ -18,7 +18,7 @@ struct TransactionStateProvider: Sendable {
         self.chainServiceFactory = chainServiceFactory
     }
 
-    public func getState(for transaction: Transaction) async throws -> TransactionChanges {
+    func getState(for transaction: Transaction) async throws -> TransactionChanges {
         let chainService = chainServiceFactory.service(for: transaction.assetId.chain)
         return try await chainService.transactionState(
             for: TransactionStateRequest(
@@ -31,7 +31,7 @@ struct TransactionStateProvider: Sendable {
         )
     }
 
-    public func updateStateChanges(_ stateChanges: TransactionChanges, for transaction: Transaction) async throws {
+    func updateStateChanges(_ stateChanges: TransactionChanges, for transaction: Transaction) async throws {
         debugLog("updateStateChanges for \(transaction.id), \(stateChanges)")
 
         try updateState(
@@ -64,7 +64,7 @@ struct TransactionStateProvider: Sendable {
         }
     }
 
-    public func updateState(state: TransactionState, for transaction: Transaction) throws {
+    func updateState(state: TransactionState, for transaction: Transaction) throws {
         try transactionStore.updateState(
             id: transaction.id.identifier,
             state: state

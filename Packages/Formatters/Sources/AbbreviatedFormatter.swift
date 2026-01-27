@@ -2,11 +2,11 @@
 
 import Foundation
 
-public struct AbbreviatedFormatter: Sendable {
+struct AbbreviatedFormatter: Sendable {
     private let locale: Locale
     private let threshold: Decimal
-    
-    public init(
+
+    init(
         locale: Locale = .current,
         threshold: Decimal = 100_000
     ) {
@@ -14,15 +14,15 @@ public struct AbbreviatedFormatter: Sendable {
         self.threshold = threshold
     }
 
-    public func string(from double: Double) -> String? {
+    func string(from double: Double) -> String? {
         string(from: Decimal(double))
     }
-    
-    public func string(from double: Double, currency: String) -> String? {
+
+    func string(from double: Double, currency: String) -> String? {
         string(from: Decimal(double), currency: currency)
     }
-    
-    public func string(from decimal: Decimal) -> String? {
+
+    func string(from decimal: Decimal) -> String? {
         guard abs(decimal) >= threshold, #available(iOS 18, *) else {
             return nil
         }
@@ -35,7 +35,7 @@ public struct AbbreviatedFormatter: Sendable {
         )
     }
     
-    public func string(from decimal: Decimal, currency: String) -> String? {
+    func string(from decimal: Decimal, currency: String) -> String? {
         guard abs(decimal) >= threshold, #available(iOS 18, *) else {
             return nil
         }

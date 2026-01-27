@@ -134,11 +134,11 @@ public struct ValueFormatter: Sendable {
         return combined(value, currency: currency)
     }
     
-    public func number(amount: String) throws -> Decimal {
+    func number(amount: String) throws -> Decimal {
         return try number(amount: amount, locale: locale)
     }
-    
-    public func number(amount: String, locale: Locale) throws -> Decimal {
+
+    func number(amount: String, locale: Locale) throws -> Decimal {
         guard let decimal = Decimal(string: amount, locale: locale) else {
             throw AnyError("unknown \(amount) decimal")
         }

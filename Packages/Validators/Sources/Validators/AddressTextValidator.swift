@@ -2,7 +2,8 @@
 
 import Foundation
 import Primitives
-import WalletCorePrimitives
+
+internal import WalletCorePrimitives
 
 public struct AddressTextValidator: TextValidator {
     private let asset: Asset

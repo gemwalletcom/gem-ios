@@ -18,7 +18,7 @@ public struct AppReleaseService: Sendable {
         await configService.getConfig().flatMap { release($0) }
     }
 
-    public func release(_ config: ConfigResponse) -> Release? {
+    func release(_ config: ConfigResponse) -> Release? {
         guard
             let release = config.releases.first(where: { $0.store == .appStore }),
             VersionCheck.isVersionHigher(new: release.version, current: releaseVersion)

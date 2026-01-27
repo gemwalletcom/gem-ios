@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct TransactionRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
-    public static let databaseTableName: String = "transactions_v23"
+struct TransactionRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
+    static let databaseTableName: String = "transactions_v23"
     
-    public enum Columns {
+    enum Columns {
         static let id = Column("id")
         static let walletId = Column("walletId")
         static let transactionId = Column("transactionId")
@@ -32,28 +32,28 @@ public struct TransactionRecord: Codable, TableRecord, FetchableRecord, Persista
         static let updatedAt = Column("updatedAt")
     }
 
-    public var id: Int? = .none
-    public var walletId: String
-    public var transactionId: String
-    public var hash: String
-    public var type: TransactionType
-    public var from: String
-    public var to: String
-    public var contract: String?
-    public var chain: Chain
-    public var assetId: AssetId
-    public var blockNumber: Int
-    public var value: String
-    public var fee: String
-    public var feeAssetId: AssetId
-    public var sequence: Int
-    public var date: Date
-    public var state: String
-    public var memo: String?
-    public var direction: TransactionDirection
-    public var metadata: AnyCodableValue?
-    public var createdAt: Date
-    public var updatedAt: Date
+    var id: Int? = .none
+    var walletId: String
+    var transactionId: String
+    var hash: String
+    var type: TransactionType
+    var from: String
+    var to: String
+    var contract: String?
+    var chain: Chain
+    var assetId: AssetId
+    var blockNumber: Int
+    var value: String
+    var fee: String
+    var feeAssetId: AssetId
+    var sequence: Int
+    var date: Date
+    var state: String
+    var memo: String?
+    var direction: TransactionDirection
+    var metadata: AnyCodableValue?
+    var createdAt: Date
+    var updatedAt: Date
 
     static let wallet = belongsTo(WalletRecord.self, key: "wallet", using: ForeignKey(["walletId"], to: ["id"]))
 

@@ -7,13 +7,13 @@ import PrimitivesComponents
 import Formatters
 import Localization
 
-public struct PerpetualsHeaderViewModel {
+struct PerpetualsHeaderViewModel {
     let walletType: WalletType
     let balance: WalletBalance
     let currencyFormatter: CurrencyFormatter
     let currency = Currency.usd.rawValue
     
-    public init(
+    init(
         walletType: WalletType,
         balance: WalletBalance
     ) {
@@ -24,15 +24,15 @@ public struct PerpetualsHeaderViewModel {
 }
 
 extension PerpetualsHeaderViewModel: HeaderViewModel {
-    public var isWatchWallet: Bool { walletType == .view }
-    public var title: String { currencyFormatter.string(balance.total) }
-    public var assetImage: AssetImage? { .none }
-    public var subtitle: String? {
+    var isWatchWallet: Bool { walletType == .view }
+    var title: String { currencyFormatter.string(balance.total) }
+    var assetImage: AssetImage? { .none }
+    var subtitle: String? {
         Localized.Wallet
             .availableBalance(currencyFormatter.string(balance.available))
     }
 
-    public var buttons: [HeaderButton] {
+    var buttons: [HeaderButton] {
         [
             HeaderButton(type: .withdraw, isEnabled: isWithdrawEnabled),
             HeaderButton(type: .deposit, isEnabled: true)

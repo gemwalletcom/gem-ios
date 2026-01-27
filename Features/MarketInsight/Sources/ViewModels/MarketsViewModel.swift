@@ -9,7 +9,7 @@ import Style
 import Localization
 import Formatters
 
-public struct MarketsViewModel: Sendable {
+struct MarketsViewModel: Sendable {
     let markets: Markets
     
     private let currencyFormatter: CurrencyFormatter

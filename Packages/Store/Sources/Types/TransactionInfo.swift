@@ -4,16 +4,16 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct TransactionInfo: Codable, FetchableRecord {
-    public let transaction: TransactionRecord
-    public let asset: AssetRecord
-    public let feeAsset: AssetRecord
-    public let price: PriceRecord?
-    public let feePrice: PriceRecord?
-    public let assets: [AssetRecord]
-    public let prices: [PriceRecord]
-    public let fromAddress: AddressRecord?
-    public let toAddress: AddressRecord?
+struct TransactionInfo: Codable, FetchableRecord {
+    let transaction: TransactionRecord
+    let asset: AssetRecord
+    let feeAsset: AssetRecord
+    let price: PriceRecord?
+    let feePrice: PriceRecord?
+    let assets: [AssetRecord]
+    let prices: [PriceRecord]
+    let fromAddress: AddressRecord?
+    let toAddress: AddressRecord?
 }
 
 extension TransactionInfo {

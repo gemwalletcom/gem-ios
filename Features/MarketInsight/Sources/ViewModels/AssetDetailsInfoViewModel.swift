@@ -8,12 +8,12 @@ import Preferences
 import PrimitivesComponents
 import Formatters
 
-public struct AssetDetailsInfoViewModel {
+struct AssetDetailsInfoViewModel {
     private let priceData: PriceData
     private let explorerService: ExplorerService
     private let market: AssetMarketViewModel?
 
-    public init(
+    init(
         priceData: PriceData,
         explorerService: ExplorerService = .standard,
         currency: String = Preferences.standard.currency
@@ -25,16 +25,16 @@ public struct AssetDetailsInfoViewModel {
         }
     }
 
-    public var showMarketValues: Bool { !marketValues.isEmpty }
+    var showMarketValues: Bool { !marketValues.isEmpty }
 
-    public var marketValues: [MarketValueViewModel] {
+    var marketValues: [MarketValueViewModel] {
         guard let market else { return [contractViewModel].withValues() }
         return [market.marketCap, market.circulatingSupply, market.totalSupply, contractViewModel].withValues()
     }
 
-    public var showLinks: Bool { !priceData.links.isEmpty }
+    var showLinks: Bool { !priceData.links.isEmpty }
 
-    public var linksViewModel: SocialLinksViewModel {
+    var linksViewModel: SocialLinksViewModel {
         SocialLinksViewModel(assetLinks: priceData.links)
     }
 

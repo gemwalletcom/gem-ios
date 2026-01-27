@@ -1,13 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
-import SwiftUI
-import GemstonePrimitives
-import Style
-import Localization
 import Components
 import Formatters
+import Foundation
+import Localization
+import Primitives
+import Style
+import SwiftUI
+
+internal import GemstonePrimitives
 
 struct BannerViewModel {
     enum BannerViewType {

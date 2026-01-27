@@ -8,25 +8,25 @@ import SwiftUI
 import PrimitivesComponents
 import Formatters
 
-public struct PerpetualItemViewModel: ListAssetItemViewable {
+struct PerpetualItemViewModel: ListAssetItemViewable {
     
-    public let model: PerpetualViewModel
+    let model: PerpetualViewModel
     
-    public init(
+    init(
         model: PerpetualViewModel
     ) {
         self.model = model
     }
 
-    public var name: String { model.name }
-    public var symbol: String? { .none }
-    public var action: ((ListAssetItemAction) -> Void)?
+    var name: String { model.name }
+    var symbol: String? { .none }
+    var action: ((ListAssetItemAction) -> Void)?
     
-    public var assetImage: AssetImage {
+    var assetImage: AssetImage {
         model.assetImage
     }
     
-    public var subtitleView: ListAssetItemSubtitleView {
+    var subtitleView: ListAssetItemSubtitleView {
         .price(
             price: TextValue(
                 text: model.priceText,
@@ -39,7 +39,7 @@ public struct PerpetualItemViewModel: ListAssetItemViewable {
         )
     }
     
-    public var rightView: ListAssetItemRightView {
+    var rightView: ListAssetItemRightView {
         .balance(
             balance: TextValue(
                 text: model.volumeText,

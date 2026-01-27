@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum Status: OSStatus, Error {
+enum Status: OSStatus, Error {
     case success                            = 0
     case unimplemented                      = -4
     case diskFull                           = -34
@@ -410,7 +410,7 @@ public enum Status: OSStatus, Error {
 
 extension Status: RawRepresentable, CustomStringConvertible {
 
-    public init(status: OSStatus) {
+    init(status: OSStatus) {
         if let mappedStatus = Status(rawValue: status) {
             self = mappedStatus
         } else {
@@ -418,7 +418,7 @@ extension Status: RawRepresentable, CustomStringConvertible {
         }
     }
 
-    public var description: String {
+    var description: String {
         switch self {
         case .success:
             return "No error."
@@ -1231,11 +1231,11 @@ extension Status: RawRepresentable, CustomStringConvertible {
 }
 
 extension Status: CustomNSError {
-    public var errorCode: Int {
+    var errorCode: Int {
         return Int(rawValue)
     }
 
-    public var errorUserInfo: [String : Any] {
+    var errorUserInfo: [String : Any] {
         return [NSLocalizedDescriptionKey: description]
     }
 }

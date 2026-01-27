@@ -1,9 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import Components
+import Foundation
 import Primitives
-import GemstonePrimitives
+
+internal import GemstonePrimitives
 
 public protocol SecretPhraseViewableModel {
     var title: String { get }

@@ -1,12 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WalletCore
 import Primitives
-import BigInt
-import Formatters
+import WalletCore
 
-public struct XrpSigner: Signable {
+internal import BigInt
+internal import Formatters
+
+struct XrpSigner: Signable {
     enum Operation {
         case operation(RippleSigningInput.OneOf_OperationOneof)
         case json(String)
@@ -36,7 +37,7 @@ public struct XrpSigner: Signable {
         return output.encoded.hexString
     }
     
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let operation: Operation = {
             if let memo = input.memo {
                 if let destinationTag = UInt64(memo) {
@@ -68,7 +69,7 @@ public struct XrpSigner: Signable {
         )
     }
     
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         return try sign(
             input: input,
             operation: .operation(.opPayment(.with {
@@ -86,7 +87,7 @@ public struct XrpSigner: Signable {
         )
     }
     
-    public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
+    func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
         return try sign(
             input: input,
             operation: .operation(.opTrustSet(.with {
@@ -100,19 +101,19 @@ public struct XrpSigner: Signable {
         )
     }
     
-    public func hexSymbol(symbol: String) -> String {
+    private func hexSymbol(symbol: String) -> String {
         Data(symbol.utf8).hexString.capitalized.addTrailing(number: 40, padding: "0")
     }
     
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
+    func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
         fatalError()
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         fatalError()
     }
     
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+    func signMessage(message: SignMessage, privateKey: Data) throws -> String {
         fatalError()
     }
     

@@ -1,14 +1,15 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import BigInt
 import Foundation
-import GemstonePrimitives
 import Keystore
 import Primitives
 import WalletCore
 
-public class EthereumSigner: Signable {
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+internal import BigInt
+internal import GemstonePrimitives
+
+class EthereumSigner: Signable {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let base = try buildBaseInput(
             input: input,
             transaction: .with {
@@ -22,7 +23,7 @@ public class EthereumSigner: Signable {
         return try sign(coinType: input.coinType, input: base)
     }
 
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let base = try buildBaseInput(
             input: input,
             transaction: .with {
@@ -37,7 +38,7 @@ public class EthereumSigner: Signable {
         return try sign(coinType: input.coinType, input: base)
     }
 
-    public func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String {
         guard case .transferNft(let asset) = input.type else {
             fatalError()
         }
@@ -118,7 +119,7 @@ public class EthereumSigner: Signable {
         return output.encoded.hexString
     }
 
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
+    func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
         guard case .generic(_, _, let extra) = input.type else {
             fatalError()
         }
@@ -136,7 +137,7 @@ public class EthereumSigner: Signable {
         return try sign(coinType: input.coinType, input: base)
     }
 
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let swapData = try input.type.swap().data.data
         switch swapData.approval {
         case .some(let approvalData):
@@ -183,7 +184,7 @@ public class EthereumSigner: Signable {
         }
     }
 
-    public func signTokenApproval(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenApproval(input: SignerInput, privateKey: Data) throws -> String {
         guard case .tokenApprove(_, let approvalData) = input.type else {
             fatalError()
         }
@@ -200,7 +201,7 @@ public class EthereumSigner: Signable {
         ))
     }
 
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let stakeType) = input.type else {
             fatalError("Invalid type for staking")
         }
@@ -255,7 +256,7 @@ public class EthereumSigner: Signable {
         return [signedData]
     }
 
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+    func signMessage(message: SignMessage, privateKey: Data) throws -> String {
         guard let privateKey = PrivateKey(data: privateKey) else {
             throw AnyError("Unable to get private key")
         }

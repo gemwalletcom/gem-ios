@@ -1,11 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
-import Localization
-import GemstonePrimitives
 import Components
+import Foundation
+import Localization
+import Primitives
 import Style
+
+internal import GemstonePrimitives
 
 public struct AssetScoreTypeViewModel {
     public let scoreType: AssetScoreType

@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public enum SignerError: Error {
+enum SignerError: Error {
     case incompleteData
 }
 

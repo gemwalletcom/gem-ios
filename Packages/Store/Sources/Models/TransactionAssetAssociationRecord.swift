@@ -4,16 +4,16 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct TransactionAssetAssociationRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
-    public static let databaseTableName: String = TransactionRecord.databaseTableName + "_assets"
+struct TransactionAssetAssociationRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
+    static let databaseTableName: String = TransactionRecord.databaseTableName + "_assets"
     
-    public enum Columns {
+    enum Columns {
         static let transactionId = Column("transactionId")
         static let assetId = Column("assetId")
     }
     
-    public var transactionId: Int
-    public var assetId: AssetId
+    var transactionId: Int
+    var assetId: AssetId
     
     static let transaction = belongsTo(TransactionRecord.self, using: ForeignKey(["transactionId"], to: ["id"]))
     static let asset = belongsTo(AssetRecord.self)

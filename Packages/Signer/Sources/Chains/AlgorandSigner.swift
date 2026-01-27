@@ -4,7 +4,7 @@ import Foundation
 import WalletCore
 import Primitives
 
-public struct AlgorandSigner: Signable {
+struct AlgorandSigner: Signable {
     
     func sign(input: SignerInput, message: AlgorandSigningInput.OneOf_MessageOneof, privateKey: Data) throws -> String {
         let input = try AlgorandSigningInput.with {
@@ -28,7 +28,7 @@ public struct AlgorandSigner: Signable {
         return output.encoded.hexString
     }
     
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         return try sign(
             input: input,
             message: .transfer(.with {
@@ -39,7 +39,7 @@ public struct AlgorandSigner: Signable {
         )
     }
     
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         try sign(
             input: input,
             message: .assetTransfer(.with {
@@ -51,7 +51,7 @@ public struct AlgorandSigner: Signable {
         )
     }
     
-    public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
+    func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
         try sign(
             input: input,
             message: .assetOptIn(.with {

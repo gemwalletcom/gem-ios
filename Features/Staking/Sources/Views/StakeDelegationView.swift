@@ -5,15 +5,15 @@ import SwiftUI
 import Style
 import Components
 
-public struct StakeDelegationView: View {
+struct StakeDelegationView: View {
 
     private let delegation: StakeDelegationViewModel
 
-    public init(delegation: StakeDelegationViewModel) {
+    init(delegation: StakeDelegationViewModel) {
         self.delegation = delegation
     }
 
-    public var body: some View {
+    var body: some View {
         ListItemView(
            title: delegation.validatorText,
            titleStyle: delegation.titleStyle,

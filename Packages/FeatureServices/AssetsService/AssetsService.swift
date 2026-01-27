@@ -41,15 +41,15 @@ public final class AssetsService: Sendable {
         try assetStore.add(assets: assets)
     }
 
-    public func getAssets() throws -> [Asset] {
+    func getAssets() throws -> [Asset] {
         try assetStore.getAssets()
     }
 
-    public func getEnabledAssets() throws -> [AssetId] {
+    func getEnabledAssets() throws -> [AssetId] {
         try balanceStore.getEnabledAssetIds()
     }
 
-    public func getAsset(for assetId: AssetId) throws -> Asset {
+    func getAsset(for assetId: AssetId) throws -> Asset {
         if let asset = try assetStore.getAssets(for: [assetId.identifier]).first {
             return asset
         }

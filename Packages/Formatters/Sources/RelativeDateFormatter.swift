@@ -1,7 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Localization
+
+internal import Localization
 
 public struct RelativeDateFormatter: Sendable {
     private static let time: DateFormatter = {
