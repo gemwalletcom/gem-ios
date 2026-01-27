@@ -581,3 +581,4 @@
 "asset.all_time_high" = "史上最高値";
 "asset.all_time_low" = "オールタイムロー";
 "errors.swap.minimum_amount" = "最低取引金額は %@より高い金額を入力してください。";
+"swap.use_minimum_amount" = "最小量を使用する";
