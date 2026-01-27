@@ -19,18 +19,14 @@ struct SwapperErrorTests {
     }
 
     @Test
-    func messageCeilsPrecisionTo8Decimals() {
-        let asset = Asset.mockBNB()
-        let error = SwapperError.InputAmountError(minAmount: "120966091866986")
-
-        #expect(error.message(asset: asset) == "Minimum trade amount is **0.00012097 BNB**. Please enter a higher amount.")
-    }
-
-    @Test
-    func messageNoCeilingWhenDecimalsLessThan8() {
-        let asset = Asset.mock(symbol: "USDT", decimals: 6)
-        let error = SwapperError.InputAmountError(minAmount: "123456")
-
-        #expect(error.message(asset: asset) == "Minimum trade amount is **0.123456 USDT**. Please enter a higher amount.")
+    func inputAmountErrorMessage() {
+        #expect(
+            SwapperError.InputAmountError(minAmount: "120966091866986").message(asset: .mockBNB()) == 
+            "Minimum trade amount is **0.0001209 BNB**. Please enter a higher amount."
+        )
+        #expect(
+            SwapperError.InputAmountError(minAmount: "123456").message(asset: .mock(symbol: "USDT", decimals: 6)) ==
+            "Minimum trade amount is **0.1234 USDT**. Please enter a higher amount."
+        )
     }
 }
