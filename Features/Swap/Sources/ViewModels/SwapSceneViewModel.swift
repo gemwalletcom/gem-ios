@@ -144,6 +144,18 @@ public final class SwapSceneViewModel {
         }
     }
 
+    var errorInfoActionButtonTitle: String? {
+        guard case .error(let error) = swapState.quotes else {
+            return nil
+        }
+        switch error.swapperError {
+        case .InputAmountError:
+            return Localized.Swap.useMinimumAmount
+        default:
+            return nil
+        }
+    }
+
     func swapTokenModel(type: SelectAssetSwapType) -> SwapTokenViewModel {
         guard let assetData: AssetData = type == .pay ? fromAsset : toAsset else {
             return SwapTokenViewModel(type: .placeholder(currencyCode: preferences.currency))
