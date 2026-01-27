@@ -57,6 +57,9 @@ public struct WalletSearchScene: View {
         .onAppear {
             model.onAppear()
         }
+        .taskOnce {
+            model.onSelectTag(tag: .all)
+        }
         .toast(message: $model.isPresentingToastMessage)
         .sheet(isPresented: $model.isPresentingRecents) {
             RecentsScene(model: model.recentsModel)
@@ -103,6 +106,7 @@ public struct WalletSearchScene: View {
                     },
                     header: { PinnedSectionHeader() }
                 )
+                .listRowInsets(.assetListRowInsets)
             }
 
             if model.showAssets {

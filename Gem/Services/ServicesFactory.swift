@@ -210,7 +210,9 @@ struct ServicesFactory {
         let walletSearchService = WalletSearchService(
             assetsService: assetsService,
             searchStore: storeManager.searchStore,
-            perpetualStore: storeManager.perpetualStore
+            perpetualStore: storeManager.perpetualStore,
+            priceStore: storeManager.priceStore,
+            preferences: preferences
         )
         let assetSearchService = AssetSearchService(
             assetsService: assetsService,

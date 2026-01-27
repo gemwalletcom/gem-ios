@@ -62,7 +62,11 @@ extension WalletSearchRequest {
         if hasPriority {
             request = request
                 .joining(required: AssetRecord.search.filter(SearchRecord.Columns.query == searchKey))
-                .order(TableAlias(name: SearchRecord.databaseTableName)[SearchRecord.Columns.priority].ascNullsLast, AssetRecord.Columns.rank.desc)
+                .order(
+                    (TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[PriceRecord.Columns.price] ?? 0)).desc,
+                    TableAlias(name: SearchRecord.databaseTableName)[SearchRecord.Columns.priority].ascNullsLast,
+                    AssetRecord.Columns.rank.desc
+                )
         } else {
             request = request
                 .filter(AssetRecord.Columns.symbol.like("%%\(query)%%") || AssetRecord.Columns.name.like("%%\(query)%%") || AssetRecord.Columns.tokenId.like("%%\(query)%%"))

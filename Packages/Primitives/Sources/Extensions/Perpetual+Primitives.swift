@@ -21,3 +21,24 @@ extension PerpetualDirection {
         }
     }
 }
+
+extension PerpetualSearchData {
+    public var assetBasic: AssetBasic {
+        AssetBasic(
+            asset: asset,
+            properties: AssetProperties(
+                isEnabled: false,
+                isBuyable: false,
+                isSellable: false,
+                isSwapable: false,
+                isStakeable: false,
+                stakingApr: nil,
+                isEarnable: false,
+                earnApr: nil,
+                hasImage: false
+            ),
+            score: AssetScore(rank: 0),
+            price: nil
+        )
+    }
+}
