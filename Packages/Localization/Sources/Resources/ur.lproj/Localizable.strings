@@ -580,4 +580,5 @@
 "perpetual.account_leverage" = "اکاؤنٹ لیوریج";
 "asset.all_time_high" = "آل ٹائم ہائی";
 "asset.all_time_low" = "آل ٹائم لو";
-"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
+"errors.swap.minimum_amount" = "کم از کم تجارتی رقم ہے۔ %@. براہ کرم زیادہ رقم درج کریں۔";
+"swap.use_minimum_amount" = "کم سے کم رقم استعمال کریں۔";

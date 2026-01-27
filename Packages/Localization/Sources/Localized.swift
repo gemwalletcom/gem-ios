@@ -1382,6 +1382,8 @@ public enum Localized {
     }
     /// Slippage
     public static let slippage = Localized.tr("Localizable", "swap.slippage", fallback: "Slippage")
+    /// Use Minimum Amount
+    public static let useMinimumAmount = Localized.tr("Localizable", "swap.use_minimum_amount", fallback: "Use Minimum Amount")
     /// You Pay
     public static let youPay = Localized.tr("Localizable", "swap.you_pay", fallback: "You Pay")
     /// You Receive

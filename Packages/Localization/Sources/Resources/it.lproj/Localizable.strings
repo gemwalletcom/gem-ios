@@ -581,3 +581,4 @@
 "asset.all_time_high" = "Massimo storico";
 "asset.all_time_low" = "Minimo storico";
 "errors.swap.minimum_amount" = "L'importo minimo di scambio è %@Inserisci un importo maggiore.";
+"swap.use_minimum_amount" = "Utilizzare l'importo minimo";

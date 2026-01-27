@@ -580,4 +580,5 @@
 "perpetual.account_leverage" = "Ufaidi wa Akaunti";
 "asset.all_time_high" = "Wakati Wote Juu";
 "asset.all_time_low" = "Chini Wakati Wote";
-"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
+"errors.swap.minimum_amount" = "Kiwango cha chini cha biashara ni %@Tafadhali weka kiasi cha juu zaidi.";
+"swap.use_minimum_amount" = "Tumia Kiasi cha Chini Zaidi";
