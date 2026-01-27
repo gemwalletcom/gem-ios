@@ -56,7 +56,8 @@ public extension AssetFull {
         AssetBasic(
             asset: asset,
             properties: properties,
-            score: score
+            score: score,
+            price: nil
         )
     }
 }

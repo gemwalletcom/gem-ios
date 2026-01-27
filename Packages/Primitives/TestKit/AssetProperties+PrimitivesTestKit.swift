@@ -3,7 +3,7 @@
 import Primitives
 
 public extension AssetProperties {
-    static func mock(stakingApr: Double? = 13.5) -> Self {
+    static func mock(stakingApr: Double? = 13.5, hasImage: Bool = true) -> Self {
         AssetProperties(
             isEnabled: true,
             isBuyable: true,
@@ -12,7 +12,8 @@ public extension AssetProperties {
             isStakeable: true,
             stakingApr: stakingApr,
             isEarnable: false,
-            earnApr: nil
+            earnApr: nil,
+            hasImage: hasImage
         )
     }
 }

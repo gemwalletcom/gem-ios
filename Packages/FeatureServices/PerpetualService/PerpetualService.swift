@@ -120,9 +120,11 @@ public struct PerpetualService: PerpetualServiceable {
                 isStakeable: false,
                 stakingApr: nil,
                 isEarnable: false,
-                earnApr: nil
+                earnApr: nil,
+                hasImage: false
             ),
-            score: AssetScore(rank: 0)
+            score: AssetScore(rank: 0),
+            price: nil
         )
     }
 }
