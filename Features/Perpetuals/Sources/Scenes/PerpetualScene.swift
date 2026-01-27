@@ -26,8 +26,7 @@ public struct PerpetualScene: View {
                         case .data(let data): CandlestickChartView(data: data, period: model.currentPeriod, lineModels: model.chartLineModels)
                         case .error(let error):
                             StateEmptyView(
-                                title: Localized.Errors.errorOccured,
-                                description: error.networkOrNoDataDescription,
+                                title: error.networkOrNoDataDescription,
                                 image: Images.ErrorConent.error
                             )
                         }
