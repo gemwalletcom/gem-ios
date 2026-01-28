@@ -8,16 +8,16 @@ import Formatters
 import SwiftUI
 import Style
 
-public struct TransactionPnlViewModel: Sendable {
+struct TransactionPnlViewModel: Sendable {
     private let metadata: TransactionPerpetualMetadata?
 
-    public init(metadata: TransactionPerpetualMetadata?) {
+    init(metadata: TransactionPerpetualMetadata?) {
         self.metadata = metadata
     }
 }
 
 extension TransactionPnlViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         guard let metadata, metadata.pnl != 0 else {
             return .empty
         }

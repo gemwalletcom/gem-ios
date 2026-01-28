@@ -1,7 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import CryptoKit
 import Foundation
+
+internal import CryptoKit
 import protocol Gemstone.AlienProvider
 import struct Gemstone.AlienResponse
 import struct Gemstone.AlienTarget
@@ -31,14 +32,14 @@ public actor NativeProvider {
     }
 }
 
-public struct StaticNode: NodeURLFetchable {
+struct StaticNode: NodeURLFetchable {
     let url: URL
 
-    public init(url: URL) {
+    init(url: URL) {
         self.url = url
     }
 
-    public func node(for chain: Primitives.Chain) -> URL {
+    func node(for chain: Primitives.Chain) -> URL {
         url
     }
 }

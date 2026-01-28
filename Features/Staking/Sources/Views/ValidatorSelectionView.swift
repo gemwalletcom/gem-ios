@@ -5,13 +5,13 @@ import SwiftUI
 import Primitives
 import Components
 
-public struct ValidatorSelectionView: View {
+struct ValidatorSelectionView: View {
     
     private let value: ListItemValue<DelegationValidator>
     private let selection: String?
     private let action: ((DelegationValidator) -> Void)?
     
-    public init(
+    init(
         value: ListItemValue<DelegationValidator>,
         selection: String?,
         action: ((DelegationValidator)-> Void)?
@@ -21,7 +21,7 @@ public struct ValidatorSelectionView: View {
         self.action = action
     }
     
-    public var body: some View {
+    var body: some View {
         HStack {
             ValidatorImageView(validator: value.value)
             ListItemSelectionView(

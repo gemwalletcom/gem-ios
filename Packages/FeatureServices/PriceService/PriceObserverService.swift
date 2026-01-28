@@ -64,7 +64,7 @@ public actor PriceObserverService: Sendable {
         subscribedAssetIds.formUnion(newAssets)
     }
 
-    public func subscribeAssets() -> Set<AssetId> {
+    func subscribeAssets() -> Set<AssetId> {
         return subscribedAssetIds
     }
 

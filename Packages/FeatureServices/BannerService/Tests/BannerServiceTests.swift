@@ -5,7 +5,7 @@ import BannerServiceTestKit
 import StoreTestKit
 import NotificationServiceTestKit
 import Primitives
-import Store
+@testable import Store
 
 @testable import BannerService
 

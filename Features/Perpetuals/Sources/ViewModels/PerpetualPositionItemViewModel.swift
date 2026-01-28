@@ -7,25 +7,25 @@ import Style
 import SwiftUI
 import PrimitivesComponents
 
-public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
+struct PerpetualPositionItemViewModel: ListAssetItemViewable {
     
-    public let model: PerpetualPositionViewModel
-    public var action: ((ListAssetItemAction) -> Void)?
+    let model: PerpetualPositionViewModel
+    var action: ((ListAssetItemAction) -> Void)?
     
-    public init(
+    init(
         model: PerpetualPositionViewModel
     ) {
         self.model = model
     }
 
-    public var name: String { model.symbolText }
-    public var symbol: String? { nil }
+    var name: String { model.symbolText }
+    var symbol: String? { nil }
     
-    public var assetImage: AssetImage {
+    var assetImage: AssetImage {
         model.assetImage
     }
     
-    public var subtitleView: ListAssetItemSubtitleView {
+    var subtitleView: ListAssetItemSubtitleView {
         .type(
             TextValue(
                 text: model.positionTypeText,
@@ -34,7 +34,7 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
         )
     }
     
-    public var rightView: ListAssetItemRightView {
+    var rightView: ListAssetItemRightView {
         .balance(
             balance: TextValue(
                 text: model.marginAmountText,
@@ -49,5 +49,5 @@ public struct PerpetualPositionItemViewModel: ListAssetItemViewable {
 }
 
 extension PerpetualPositionItemViewModel: Identifiable {
-    public var id: String { model.id }
+    var id: String { model.id }
 }

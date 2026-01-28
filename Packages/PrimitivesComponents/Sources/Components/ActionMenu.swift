@@ -4,8 +4,8 @@ import SwiftUI
 import Primitives
 
 @resultBuilder
-public enum ActionMenuBuilder {
-    public static func buildBlock(
+enum ActionMenuBuilder {
+    static func buildBlock(
         _ components: ActionMenuItemType...
     ) -> [ActionMenuItemType] { components }
 }

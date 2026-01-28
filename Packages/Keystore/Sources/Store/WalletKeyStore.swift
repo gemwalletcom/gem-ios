@@ -1,12 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import struct Formatters.MnemonicFormatter
 import Foundation
 import Primitives
 @preconcurrency import WalletCore
-import WalletCorePrimitives
 
-public struct WalletKeyStore: Sendable {
+internal import struct Formatters.MnemonicFormatter
+internal import WalletCorePrimitives
+
+struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore
     private let directory: URL
 
@@ -17,12 +18,12 @@ public struct WalletKeyStore: Sendable {
         return wallet.mnemonic.split(separator: " ").map { String($0) }
     }
 
-    public init(directory: URL) {
+    init(directory: URL) {
         self.directory = directory
         keyStore = try! WalletCore.KeyStore(keyDirectory: directory)
     }
 
-    public func importWallet(
+    func importWallet(
         id: WalletIdentifier,
         name: String,
         words: [String],
@@ -39,7 +40,7 @@ public struct WalletKeyStore: Sendable {
         return try addCoins(id: id, wallet: wallet, existingChains: [], newChains: chains, password: password, source: source)
     }
 
-    public static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
+    static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
         var data: Data?
         for encoding in chain.keyEncodingTypes {
             if data != nil {
@@ -90,7 +91,7 @@ public struct WalletKeyStore: Sendable {
         }
     }
 
-    public func importPrivateKey(id: WalletIdentifier, name: String, key: String, chain: Chain, password: String, source: WalletSource) throws -> Primitives.Wallet {
+    func importPrivateKey(id: WalletIdentifier, name: String, key: String, chain: Chain, password: String, source: WalletSource) throws -> Primitives.Wallet {
         let privateKey = try Self.decodeKey(key, chain: chain)
         let wallet = try keyStore.import(privateKey: privateKey, name: name, password: password, coin: chain.coinType)
 
@@ -115,7 +116,7 @@ public struct WalletKeyStore: Sendable {
         )
     }
 
-    public func addCoins(
+    func addCoins(
         id: WalletIdentifier,
         wallet: WalletCore.Wallet,
         existingChains: [Chain],
@@ -160,7 +161,7 @@ public struct WalletKeyStore: Sendable {
         )
     }
 
-    public func addChains(
+    func addChains(
         wallet: Primitives.Wallet,
         existingChains: [Chain],
         newChains: [Chain],
@@ -221,7 +222,7 @@ public struct WalletKeyStore: Sendable {
         return MnemonicFormatter.toArray(string: hdwallet.mnemonic)
     }
 
-    public func sign(hash: Data, walletId: String, type: Primitives.WalletType, password: String, chain: Chain) throws -> Data {
+    func sign(hash: Data, walletId: String, type: Primitives.WalletType, password: String, chain: Chain) throws -> Data {
         var privateKey = try getPrivateKey(id: walletId, type: type, chain: chain, password: password)
         defer {
             privateKey.zeroize()

@@ -10,11 +10,11 @@ import Store
 import Preferences
 import Localization
 
-public struct PriceAlertItemViewModel: ListAssetItemViewable {
-    public let data: PriceAlertData
+struct PriceAlertItemViewModel: ListAssetItemViewable {
+    let data: PriceAlertData
     private let priceModel: PriceViewModel
 
-    public init(data: PriceAlertData) {
+    init(data: PriceAlertData) {
         self.data = data
         switch data.priceAlert.type {
         case .auto:
@@ -24,16 +24,16 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
         }
     }
 
-    public var name: String { data.asset.name }
-    public var symbol: String? { data.asset.symbol }
-    public var rightView: ListAssetItemRightView { .none }
-    public var action: ((ListAssetItemAction) -> Void)?
+    var name: String { data.asset.name }
+    var symbol: String? { data.asset.symbol }
+    var rightView: ListAssetItemRightView { .none }
+    var action: ((ListAssetItemAction) -> Void)?
 
-    public var assetImage: AssetImage {
+    var assetImage: AssetImage {
         AssetViewModel(asset: data.asset).assetImage
     }
 
-    public var subtitleView: ListAssetItemSubtitleView {
+    var subtitleView: ListAssetItemSubtitleView {
         .price(
             price: prefixTextValue,
             priceChangePercentage24h: suffixTextValue

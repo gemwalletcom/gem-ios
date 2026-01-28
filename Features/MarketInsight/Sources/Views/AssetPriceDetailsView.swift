@@ -6,16 +6,16 @@ import Components
 import Style
 import InfoSheet
 
-public struct AssetPriceDetailsView: View {
+struct AssetPriceDetailsView: View {
     private let model: AssetPriceDetailsViewModel
 
     @State private var isPresentingInfoSheet: InfoSheetType?
 
-    public init(model: AssetPriceDetailsViewModel) {
+    init(model: AssetPriceDetailsViewModel) {
         self.model = model
     }
 
-    public var body: some View {
+    var body: some View {
         List {
             marketSection(model.marketValues)
             marketSection(model.supplyValues)

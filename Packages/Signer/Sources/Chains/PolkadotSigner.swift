@@ -4,7 +4,7 @@ import Foundation
 import WalletCore
 import Primitives
 
-public struct PolkadotSigner: Signable {
+struct PolkadotSigner: Signable {
     
     func sign(input: SignerInput, message: PolkadotSigningInput.OneOf_MessageOneof, privateKey: Data) throws -> String {
         guard case let .polkadot(sequence, genesisHash, blockHash, blockNumber, specVersion, transactionVersion, period) = input.metadata else {
@@ -34,7 +34,7 @@ public struct PolkadotSigner: Signable {
         return output.encoded.hexString.append0x
     }
     
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         return try sign(
             input: input,
             message: .balanceCall(.with {

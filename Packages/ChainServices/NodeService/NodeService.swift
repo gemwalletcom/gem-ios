@@ -44,7 +44,7 @@ public final class NodeService: Sendable {
         ] + nodes).unique()
     }
 
-    public func update(chain: Chain, force: Bool = false) throws {
+    func update(chain: Chain, force: Bool = false) throws {
         // TODO: - implement later
         /*
         guard !requestedChains.contains(chain) else { return }

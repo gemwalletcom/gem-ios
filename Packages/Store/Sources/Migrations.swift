@@ -2,7 +2,7 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct Migrations {
+struct Migrations {
     
     var migrator = DatabaseMigrator()
     

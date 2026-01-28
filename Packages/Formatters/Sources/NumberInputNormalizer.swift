@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct NumberInputNormalizer: Sendable {
+struct NumberInputNormalizer: Sendable {
     /// Symbol used as our standard decimal separator in the final output.
     private static let dot = "."
 
@@ -17,7 +17,7 @@ public struct NumberInputNormalizer: Sendable {
 
     /// Normalizes a raw `input` numeric string (with potential locale-specific separators or extra symbols)
     /// into a standard dot-based decimal format (e.g. `"1234.56"`) suitable for parsing.
-    public static func normalize(_ input: String, locale: Locale) -> String {
+    static func normalize(_ input: String, locale: Locale) -> String {
         var string = LatinNumericConverter.toLatinDigits(input).trimmingCharacters(in: .whitespacesAndNewlines)
 
         while let last = string.unicodeScalars.last, !allowedTrailingCharacters.contains(last) {

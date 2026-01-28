@@ -3,14 +3,14 @@
 import SwiftUI
 import Components
 
-public struct WebViewScene: View {
+struct WebViewScene: View {
     @State var model: WebSceneViewModel
 
-    public init(url: URL) {
+    init(url: URL) {
         _model = State(initialValue: WebSceneViewModel(url: url))
     }
     
-    public var body: some View {
+    var body: some View {
         ZStack {
             WebView(model: model)
             

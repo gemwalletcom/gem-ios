@@ -4,10 +4,10 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct StakeDelegationInfo: Codable, FetchableRecord {
-    public let delegation: StakeDelegationRecord
-    public let validator: StakeValidatorRecord
-    public let price: PriceRecord?
+struct StakeDelegationInfo: Codable, FetchableRecord {
+    let delegation: StakeDelegationRecord
+    let validator: StakeValidatorRecord
+    let price: PriceRecord?
 }
 
 extension StakeDelegationInfo {

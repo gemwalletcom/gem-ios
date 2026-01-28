@@ -8,14 +8,14 @@ import PrimitivesComponents
 import Style
 import InfoSheet
 
-public struct AssetMarketViewModel {
+struct AssetMarketViewModel {
     private let market: AssetMarket
     private let assetSymbol: String
     private let currencyFormatter: CurrencyFormatter
     private let priceFormatter: CurrencyFormatter
     private let percentFormatter: CurrencyFormatter
 
-    public init(
+    init(
         market: AssetMarket,
         assetSymbol: String,
         currency: String
@@ -29,7 +29,7 @@ public struct AssetMarketViewModel {
 
     // MARK: - Market
 
-    public var marketCap: MarketValueViewModel {
+    var marketCap: MarketValueViewModel {
         if let rank = market.marketCapRank, Int(rank).isBetween(1, and: 1000) {
             return MarketValueViewModel(
                 title: Localized.Asset.marketCap,
@@ -41,11 +41,11 @@ public struct AssetMarketViewModel {
         return MarketValueViewModel(title: Localized.Asset.marketCap, subtitle: formatCurrency(market.marketCap))
     }
 
-    public var tradingVolume: MarketValueViewModel {
+    var tradingVolume: MarketValueViewModel {
         MarketValueViewModel(title: Localized.Asset.tradingVolume, subtitle: formatCurrency(market.totalVolume))
     }
 
-    public var fdv: MarketValueViewModel {
+    var fdv: MarketValueViewModel {
         MarketValueViewModel(
             title: Localized.Info.FullyDilutedValuation.title,
             subtitle: formatCurrency(market.marketCapFdv),
@@ -55,7 +55,7 @@ public struct AssetMarketViewModel {
 
     // MARK: - Supply
 
-    public var circulatingSupply: MarketValueViewModel {
+    var circulatingSupply: MarketValueViewModel {
         MarketValueViewModel(
             title: Localized.Asset.circulatingSupply,
             subtitle: formatSupply(market.circulatingSupply),
@@ -63,7 +63,7 @@ public struct AssetMarketViewModel {
         )
     }
 
-    public var totalSupply: MarketValueViewModel {
+    var totalSupply: MarketValueViewModel {
         MarketValueViewModel(
             title: Localized.Asset.totalSupply,
             subtitle: formatSupply(market.totalSupply),
@@ -71,7 +71,7 @@ public struct AssetMarketViewModel {
         )
     }
 
-    public var maxSupply: MarketValueViewModel {
+    var maxSupply: MarketValueViewModel {
         MarketValueViewModel(
             title: Localized.Info.MaxSupply.title,
             subtitle: formatSupply(market.maxSupply),
@@ -81,7 +81,7 @@ public struct AssetMarketViewModel {
 
     // MARK: - All Time
 
-    public var allTimeHigh: MarketValueViewModel {
+    var allTimeHigh: MarketValueViewModel {
         allTimeViewModel(
             title: Localized.Asset.allTimeHigh,
             value: market.allTimeHigh,
@@ -90,7 +90,7 @@ public struct AssetMarketViewModel {
         )
     }
 
-    public var allTimeLow: MarketValueViewModel {
+    var allTimeLow: MarketValueViewModel {
         allTimeViewModel(
             title: Localized.Asset.allTimeLow,
             value: market.allTimeLow,

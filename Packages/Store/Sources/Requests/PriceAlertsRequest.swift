@@ -32,10 +32,10 @@ public struct PriceAlertsRequest: ValueObservationQueryable {
     }
 }
 
-public struct PriceAlertInfo: FetchableRecord, Codable {
-    public var asset: AssetRecord
-    public var price: PriceRecord?
-    public var priceAlert: PriceAlertRecord
+struct PriceAlertInfo: FetchableRecord, Codable {
+    var asset: AssetRecord
+    var price: PriceRecord?
+    var priceAlert: PriceAlertRecord
 }
 
 extension PriceAlertInfo {

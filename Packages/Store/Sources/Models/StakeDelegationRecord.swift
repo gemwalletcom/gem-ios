@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord  {
-    public static let databaseTableName: String = "stake_delegations"
+struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord  {
+    static let databaseTableName: String = "stake_delegations"
     
-    public enum Columns {
+    enum Columns {
         static let id = Column("id")
         static let walletId = Column("walletId")
         static let assetId = Column("assetId")
@@ -20,16 +20,16 @@ public struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord
         static let delegationId = Column("delegationId")
     }
 
-    public var id: String
-    public var assetId: AssetId
-    public var walletId: String
-    public var state: DelegationState
-    public var balance: String
-    public var shares: String?
-    public var rewards: String
-    public var completionDate: Date?
-    public var delegationId: String
-    public var validatorId: String
+    var id: String
+    var assetId: AssetId
+    var walletId: String
+    var state: DelegationState
+    var balance: String
+    var shares: String?
+    var rewards: String
+    var completionDate: Date?
+    var delegationId: String
+    var validatorId: String
     
     static let validator = belongsTo(StakeValidatorRecord.self, key: "validator")
     static let price = belongsTo(PriceRecord.self, key: "price", using: ForeignKey(["assetId"], to: ["assetId"]))

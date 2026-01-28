@@ -8,11 +8,11 @@ import Localization
 import Components
 import Style
 
-public struct TransactionStatusViewModel {
+struct TransactionStatusViewModel {
     private let state: TransactionState
     private let onInfoAction: VoidAction
 
-    public init(
+    init(
         state: TransactionState,
         onInfoAction: VoidAction
     ) {
@@ -28,7 +28,7 @@ public struct TransactionStatusViewModel {
 // MARK: - ItemModelProvidable
 
 extension TransactionStatusViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         .listItem(ListItemModel(
             title: Localized.Transaction.status,
             titleTagType: state == .pending ? .progressView() : .image(stateViewModel.stateImage),

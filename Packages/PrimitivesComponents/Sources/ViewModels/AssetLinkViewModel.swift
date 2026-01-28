@@ -7,14 +7,14 @@ import SwiftUI
 import Style
 import Components
 
-public struct AssetLinkViewModel {
-    public let assetLink: AssetLink
-    
-    public init(_ assetLink: AssetLink) {
+struct AssetLinkViewModel {
+    let assetLink: AssetLink
+
+    init(_ assetLink: AssetLink) {
         self.assetLink = assetLink
     }
-    
-    public var insightLink: InsightLink? {
+
+    var insightLink: InsightLink? {
         guard let name, let url, let image else {
             return .none
         }
@@ -27,7 +27,7 @@ public struct AssetLinkViewModel {
         )
     }
     
-    public var name: String? {
+    var name: String? {
         switch assetLink.linkType {
         case .x: Localized.Social.x
         case .discord: Localized.Social.discord
@@ -47,7 +47,7 @@ public struct AssetLinkViewModel {
         }
     }
     
-    public var image: Image? {
+    var image: Image? {
         switch assetLink.linkType {
         case .x: Images.Social.x
         case .discord: Images.Social.discord
@@ -67,15 +67,15 @@ public struct AssetLinkViewModel {
         }
     }
     
-    public var url: URL? {
+    var url: URL? {
         assetLink.url.asURL
     }
     
-    public var deepLink: URL? {
+    var deepLink: URL? {
         DeepLinkViewModel(assetLink).deepLink
     }
     
-    public var host: String? {
+    var host: String? {
         if case .website = assetLink.linkType {
             return assetLink.url.asURL?.cleanHost()
         }
