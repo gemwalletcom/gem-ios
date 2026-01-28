@@ -64,7 +64,7 @@ extension AppResolver {
         let onstartWalletService: OnstartWalletService
         let walletConnectorManager: WalletConnectorManager
         let perpetualService: PerpetualService
-        let hyperliquidObserverService: HyperliquidObserverService
+        let hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription>
         let nameService: NameService
         let addressNameService: AddressNameService
         let activityService: ActivityService
@@ -107,7 +107,7 @@ extension AppResolver {
             onstartWalletService: OnstartWalletService,
             walletConnectorManager: WalletConnectorManager,
             perpetualService: PerpetualService,
-            hyperliquidObserverService: HyperliquidObserverService,
+            hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription>,
             nameService: NameService,
             addressNameService: AddressNameService,
             activityService: ActivityService,

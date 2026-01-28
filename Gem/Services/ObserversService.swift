@@ -12,7 +12,7 @@ actor ObserversService: Sendable {
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
     private let priceObserverService: PriceObserverService
-    private let hyperliquidObserverService: HyperliquidObserverService
+    private let hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription>
 
     private var currentWallet: Wallet?
 
@@ -20,7 +20,7 @@ actor ObserversService: Sendable {
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
         priceObserverService: PriceObserverService,
-        hyperliquidObserverService: HyperliquidObserverService
+        hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription>
     ) {
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService

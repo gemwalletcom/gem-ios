@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public actor HyperliquidChartService: Sendable {
+public actor ChartObserverService: ChartStreamable {
     private var continuation: AsyncStream<ChartCandleStick>.Continuation?
 
     public init() {}
@@ -15,7 +15,7 @@ public actor HyperliquidChartService: Sendable {
         return stream
     }
 
-    func yield(_ candle: ChartCandleStick) {
+    public func yield(_ candle: ChartCandleStick) {
         continuation?.yield(candle)
     }
 }

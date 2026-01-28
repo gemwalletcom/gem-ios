@@ -199,7 +199,10 @@ struct ServicesFactory {
             nodeProvider: nodeService,
             preferences: preferences
         )
-        let hyperliquidObserverService = HyperliquidObserverService(perpetualService: perpetualService)
+        let hyperliquidObserverService = HyperliquidObserverService(
+            nodeProvider: PerpetualNodeService(preferences: preferences),
+            perpetualService: perpetualService
+        )
 
         let nameService = NameService()
         let scanService = ScanService(gatewayService: gatewayService)

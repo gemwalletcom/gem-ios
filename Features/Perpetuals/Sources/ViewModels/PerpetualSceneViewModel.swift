@@ -19,7 +19,7 @@ import GemstonePrimitives
 @MainActor
 public final class PerpetualSceneViewModel {
     private let perpetualService: PerpetualServiceable
-    private let observerService: HyperliquidObserverService
+    private let observerService: any PerpetualObservable<HyperliquidSubscription>
     private let onTransferData: TransferDataAction
     private let onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)?
     private let perpetualOrderFactory = PerpetualOrderFactory()
@@ -41,7 +41,6 @@ public final class PerpetualSceneViewModel {
 
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .day
-    let periods: [ChartPeriod] = [.hour, .day, .week, .month, .year, .all]
 
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingModifyAlert: Bool?
@@ -53,7 +52,7 @@ public final class PerpetualSceneViewModel {
         wallet: Wallet,
         asset: Asset,
         perpetualService: PerpetualServiceable,
-        observerService: HyperliquidObserverService,
+        observerService: any PerpetualObservable<HyperliquidSubscription>,
         onTransferData: TransferDataAction = nil,
         onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)? = nil
     ) {
@@ -127,17 +126,19 @@ public extension PerpetualSceneViewModel {
     }
 
     func onAppear() async {
-        await subscribeCandles()
+        await subscribeCandles(period: currentPeriod)
         await observeCandles()
     }
 
     func onDisappear() async {
-        await unsubscribeCandles()
+        await unsubscribeCandles(period: currentPeriod)
     }
 
     func onPeriodChange(_ oldPeriod: ChartPeriod, _ newPeriod: ChartPeriod) {
         Task {
             do {
+                await unsubscribeCandles(period: oldPeriod)
+                await subscribeCandles(period: newPeriod)
                 try await fetchCandlesticks()
             } catch {
                 state = .error(error)
@@ -272,25 +273,19 @@ private extension PerpetualSceneViewModel {
         state = .data(candlesticks)
     }
 
-    func subscribeCandles() async {
+    func subscribeCandles(period: ChartPeriod) async {
+        let subscription = ChartSubscription(coin: perpetual.name, period: period)
         do {
-            for period in periods {
-                try await observerService.subscribeCandle(
-                    subscription: ChartSubscription(coin: perpetual.name, period: period)
-                )
-            }
+            try await observerService.subscribe(.candle(coin: subscription.coin, interval: subscription.interval))
         } catch {
             debugLog("Chart subscription failed: \(error)")
         }
     }
 
-    func unsubscribeCandles() async {
+    func unsubscribeCandles(period: ChartPeriod) async {
+        let subscription = ChartSubscription(coin: perpetual.name, period: period)
         do {
-            for period in periods {
-                try await observerService.unsubscribeCandle(
-                    subscription: ChartSubscription(coin: perpetual.name, period: period)
-                )
-            }
+            try await observerService.unsubscribe(.candle(coin: subscription.coin, interval: subscription.interval))
         } catch {
             debugLog("Chart unsubscribe failed: \(error)")
         }

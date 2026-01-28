@@ -12,7 +12,7 @@ public struct PerpetualsNavigationView: View {
     public init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
-        observerService: HyperliquidObserverService,
+        observerService: any PerpetualObservable<HyperliquidSubscription>,
         activityService: ActivityService,
         onSelectAssetType: @escaping (SelectAssetType) -> Void,
         onSelectAsset: @escaping (Asset) -> Void

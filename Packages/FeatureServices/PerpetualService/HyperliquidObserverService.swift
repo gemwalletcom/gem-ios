@@ -9,7 +9,7 @@ import struct Gemstone.GemChartCandleStick
 import Primitives
 import WebSocketClient
 
-public actor HyperliquidObserverService: Sendable {
+public actor HyperliquidObserverService: PerpetualObservable {
 
     private let perpetualService: HyperliquidPerpetualServiceable
     private let webSocket: any WebSocketConnectable
@@ -19,13 +19,13 @@ public actor HyperliquidObserverService: Sendable {
     private var observeTask: Task<Void, Never>?
     private var currentWallet: Wallet?
 
-    public let chartService = HyperliquidChartService()
+    public let chartService: any ChartStreamable = ChartObserverService()
 
     public init(
-        webSocket: any WebSocketConnectable = WebSocketConnection(url: Constants.hyperliquidWebSocketURL),
+        nodeProvider: any NodeURLFetchable,
         perpetualService: HyperliquidPerpetualServiceable
     ) {
-        self.webSocket = webSocket
+        self.webSocket = WebSocketConnection(url: nodeProvider.node(for: .hyperCore))
         self.perpetualService = perpetualService
     }
 
@@ -57,6 +57,14 @@ public actor HyperliquidObserverService: Sendable {
         currentWallet = nil
 
         await webSocket.disconnect()
+    }
+
+    public func subscribe(_ subscription: HyperliquidSubscription) async throws {
+        try await send(HyperliquidRequest(method: .subscribe, subscription: subscription))
+    }
+
+    public func unsubscribe(_ subscription: HyperliquidSubscription) async throws {
+        try await send(HyperliquidRequest(method: .unsubscribe, subscription: subscription))
     }
 
     // MARK: - Private
@@ -148,31 +156,7 @@ public actor HyperliquidObserverService: Sendable {
         await chartService.yield(try candle.map())
     }
 
-    private func send(_ request: HyperliquidRequest) async throws {
+    private func send(_ request: some Encodable) async throws {
         try await webSocket.send(try encoder.encode(request).encodeString())
-    }
-}
-
-// MARK: - AllMids Subscriptions
-
-extension HyperliquidObserverService {
-    public func subscribeAllMids() async throws {
-        try await send(HyperliquidRequest(method: .subscribe, subscription: .allMids))
-    }
-
-    public func unsubscribeAllMids() async throws {
-        try await send(HyperliquidRequest(method: .unsubscribe, subscription: .allMids))
-    }
-}
-
-// MARK: - Chart Subscriptions
-
-extension HyperliquidObserverService {
-    public func subscribeCandle(subscription: ChartSubscription) async throws {
-        try await send(HyperliquidRequest(method: .subscribe, subscription: .candle(coin: subscription.coin, interval: subscription.interval)))
-    }
-
-    public func unsubscribeCandle(subscription: ChartSubscription) async throws {
-        try await send(HyperliquidRequest(method: .unsubscribe, subscription: .candle(coin: subscription.coin, interval: subscription.interval)))
     }
 }
