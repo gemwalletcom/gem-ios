@@ -7,12 +7,12 @@ import ChainService
 import NativeProviderService
 import Primitives
 
-public struct SwapTransactionService: Sendable {
+struct SwapTransactionService: Sendable {
     private let nodeProvider: any NodeURLFetchable
     private let swapper: GemSwapper
     private let swapConfig = GemstoneConfig.shared.getSwapConfig()
     
-    public init(
+    init(
         nodeProvider: any NodeURLFetchable
     ) {
         self.nodeProvider = nodeProvider
@@ -21,7 +21,7 @@ public struct SwapTransactionService: Sendable {
         )
     }
     
-    public func getTransactionStatus(chain: Primitives.Chain, provider: String?, hash: String) async throws {
+    func getTransactionStatus(chain: Primitives.Chain, provider: String?, hash: String) async throws {
         //let provider = SwapProviderConfig
         
         //let provider = SwapProvider.across

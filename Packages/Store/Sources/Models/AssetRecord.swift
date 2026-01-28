@@ -3,13 +3,14 @@
 import Foundation
 import GRDB
 import Primitives
-import BigInt
 
-public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRecord, TableRecord  {
+internal import BigInt
+
+struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRecord, TableRecord  {
     
-    public static let databaseTableName: String = "assets"
+    static let databaseTableName: String = "assets"
     
-    public enum Columns {
+    enum Columns {
         static let id = Column("id")
         static let rank = Column("rank")
         static let type = Column("type")
@@ -27,22 +28,22 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
         static let hasImage = Column("hasImage")
     }
     
-    public var id: String
-    public var chain: Chain
-    public var tokenId: String
-    public var name: String
-    public var symbol: String
-    public var decimals: Int
-    public var type: AssetType
+    var id: String
+    var chain: Chain
+    var tokenId: String
+    var name: String
+    var symbol: String
+    var decimals: Int
+    var type: AssetType
     
-    public var isEnabled: Bool
-    public var isBuyable: Bool
-    public var isSellable: Bool
-    public var isSwappable: Bool
-    public var isStakeable: Bool
-    public var rank: Int
-    public var stakingApr: Double?
-    public var hasImage: Bool
+    var isEnabled: Bool
+    var isBuyable: Bool
+    var isSellable: Bool
+    var isSwappable: Bool
+    var isStakeable: Bool
+    var rank: Int
+    var stakingApr: Double?
+    var hasImage: Bool
     
     static let price = hasOne(PriceRecord.self)
     static let links = hasMany(AssetLinkRecord.self, key: "links")

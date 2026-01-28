@@ -6,15 +6,15 @@ import Style
 import PrimitivesComponents
 import Localization
 
-public struct ConnectionView: View {
+struct ConnectionView: View {
     @State private var isPresentingUrl: URL? = nil
-    public let model: WalletConnectionViewModel
+    let model: WalletConnectionViewModel
 
-    public init(model: WalletConnectionViewModel) {
+    init(model: WalletConnectionViewModel) {
         self.model = model
     }
 
-    public var body: some View {
+    var body: some View {
         HStack(spacing: .space12) {
             AsyncImageView(url: model.imageUrl, size: Sizing.image.app)
             VStack(alignment: .leading) {

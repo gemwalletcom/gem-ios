@@ -3,7 +3,7 @@
 import Testing
 import BigInt
 import Foundation
-import Formatters
+@testable import Formatters
 
 final class ValueFormatterTests {
     @Test

@@ -4,13 +4,13 @@ import Foundation
 import Primitives
 import Formatters
 
-public struct ChartDateFormatter {
+struct ChartDateFormatter {
     private static let relativeDateFormatter = RelativeDateFormatter()
 
     private let period: ChartPeriod
     private let date: Date
 
-    public init(
+    init(
         period: ChartPeriod,
         date: Date
     ) {
@@ -27,7 +27,7 @@ public struct ChartDateFormatter {
         }
     }
 
-    public var dateText: String {
+    var dateText: String {
         Self.relativeDateFormatter.string(from: date, includeTime: includeTime)
     }
 }

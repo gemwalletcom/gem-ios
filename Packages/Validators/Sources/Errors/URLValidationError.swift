@@ -3,10 +3,10 @@
 import Localization
 import Foundation
 
-public enum URLValidationError: LocalizedError {
+enum URLValidationError: LocalizedError {
     case invalidUrl
 
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .invalidUrl: Localized.Errors.invalidUrl
         }

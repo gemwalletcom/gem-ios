@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct NodeRecord: Codable, FetchableRecord, PersistableRecord  {
-    public static let databaseTableName: String = "nodes"
+struct NodeRecord: Codable, FetchableRecord, PersistableRecord  {
+    static let databaseTableName: String = "nodes"
     
-    public enum Columns {
+    enum Columns {
         static let id = Column("id")
         static let url = Column("url")
         static let chain = Column("chain")
@@ -15,11 +15,11 @@ public struct NodeRecord: Codable, FetchableRecord, PersistableRecord  {
         static let priority = Column("priority")
     }
 
-    public var id: Int?
-    public var url: String
-    public var chain: Chain
-    public var status: String
-    public var priority: Int
+    var id: Int?
+    var url: String
+    var chain: Chain
+    var status: String
+    var priority: Int
 }
 
 extension NodeRecord: CreateTable {

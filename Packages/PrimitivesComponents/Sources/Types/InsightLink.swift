@@ -4,15 +4,15 @@ import Foundation
 import SwiftUI
 import Components
 
-public struct InsightLink {
+struct InsightLink {
 
-    public let title: String
-    public let subtitle: String?
-    public var url: URL
-    public let deepLink: URL?
-    public let image: AssetImage
-    
-    public init(
+    let title: String
+    let subtitle: String?
+    var url: URL
+    let deepLink: URL?
+    let image: AssetImage
+
+    init(
         title: String,
         subtitle: String?,
         url: URL,
@@ -28,5 +28,5 @@ public struct InsightLink {
 }
 
 extension InsightLink: Identifiable {
-    public var id: String { title + url.absoluteString }
+    var id: String { title + url.absoluteString }
 }

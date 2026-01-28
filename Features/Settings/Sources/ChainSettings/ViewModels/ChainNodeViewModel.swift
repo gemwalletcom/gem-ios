@@ -7,8 +7,8 @@ import Style
 import Localization
 import Formatters
 
-public struct ChainNodeViewModel: Sendable {
-    public let chainNode: ChainNode
+struct ChainNodeViewModel: Sendable {
+    let chainNode: ChainNode
 
     private let statusState: NodeStatusState
     private let formatter: ValueFormatter
@@ -23,7 +23,7 @@ public struct ChainNodeViewModel: Sendable {
         self.formatter = formatter
     }
 
-    public var title: String {
+    var title: String {
         guard let host = chainNode.host else { return "" }
 
         let flag: String? = {
@@ -41,7 +41,7 @@ public struct ChainNodeViewModel: Sendable {
         return host
     }
 
-    public var titleExtra: String? {
+    var titleExtra: String? {
         nodeStatusModel
             .latestBlockText(
                 title: Localized.Nodes.ImportNode.latestBlock,
@@ -49,18 +49,18 @@ public struct ChainNodeViewModel: Sendable {
             )
     }
 
-    public var titleTag: String? {
+    var titleTag: String? {
         nodeStatusModel.latencyText
     }
 
-    public var titleTagType: TitleTagType {
+    var titleTagType: TitleTagType {
         switch statusState {
         case .result, .error: .none
         case .none: .progressView(scale: 1.24)
         }
     }
 
-    public var titleTagStyle: TextStyle {
+    var titleTagStyle: TextStyle {
         return TextStyle(
             font: .footnote.weight(.medium),
             color: nodeStatusModel.color,
@@ -76,17 +76,17 @@ public struct ChainNodeViewModel: Sendable {
 // MARK: - Identifiable
 
 extension ChainNodeViewModel: Identifiable {
-    public var id: String { chainNode.id }
+    var id: String { chainNode.id }
 }
 
 // MARK: - Models extensions
 
 extension ChainNode {
-    public var host: String? {
+    var host: String? {
         URL(string: node.url)?.host
     }
 
-    public var isGemNode: Bool {
+    var isGemNode: Bool {
         host?.contains("gemnodes.com") ?? false
     }
 }

@@ -11,7 +11,7 @@ public struct ChainService {
     let chain: Chain
     let url: URL
 
-    public init(
+    init(
         chain: Chain,
         url: URL
     ) {

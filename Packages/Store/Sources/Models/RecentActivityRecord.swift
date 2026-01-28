@@ -4,10 +4,10 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct RecentActivityRecord: Codable, PersistableRecord, FetchableRecord, TableRecord {
-    public static let databaseTableName = "assets_recent_activities"
+struct RecentActivityRecord: Codable, PersistableRecord, FetchableRecord, TableRecord {
+    static let databaseTableName = "assets_recent_activities"
 
-    public enum Columns {
+    enum Columns {
         static let assetId = Column("assetId")
         static let toAssetId = Column("toAssetId")
         static let walletId = Column("walletId")
@@ -15,13 +15,13 @@ public struct RecentActivityRecord: Codable, PersistableRecord, FetchableRecord,
         static let createdAt = Column("createdAt")
     }
 
-    public var assetId: AssetId
-    public var toAssetId: AssetId?
-    public var walletId: String
-    public var type: RecentActivityType
-    public var createdAt: Date
+    var assetId: AssetId
+    var toAssetId: AssetId?
+    var walletId: String
+    var type: RecentActivityType
+    var createdAt: Date
 
-    public init(
+    init(
         assetId: AssetId,
         toAssetId: AssetId?,
         walletId: String,

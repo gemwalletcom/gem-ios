@@ -4,17 +4,17 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct MarketAssetRecord: Codable, FetchableRecord, PersistableRecord  {
+struct MarketAssetRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public enum Columns {
-        public static let tag = Column("tag")
-        public static let assetId = Column("assetId")
+    enum Columns {
+        static let tag = Column("tag")
+        static let assetId = Column("assetId")
     }
     
-    public static let databaseTableName: String = "markets_assets"
+    static let databaseTableName: String = "markets_assets"
 
-    public var tag: AssetTag
-    public var assetId: AssetId
+    var tag: AssetTag
+    var assetId: AssetId
 }
 
 extension MarketAssetRecord: CreateTable {

@@ -4,10 +4,10 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, PersistableRecord {
-    public static let databaseTableName: String = "perpetuals"
+struct PerpetualRecord: Codable, TableRecord, FetchableRecord, PersistableRecord {
+    static let databaseTableName: String = "perpetuals"
     
-    public struct Columns {
+    struct Columns {
         static let id = Column("id")
         static let name = Column("name")
         static let provider = Column("provider")
@@ -22,20 +22,20 @@ public struct PerpetualRecord: Codable, TableRecord, FetchableRecord, Persistabl
         static let isPinned = Column("isPinned")
     }
     
-    public var id: String
-    public var name: String
-    public var provider: PerpetualProvider
-    public var assetId: AssetId
-    public var identifier: String
-    public var price: Double
-    public var pricePercentChange24h: Double
-    public var openInterest: Double
-    public var volume24h: Double
-    public var funding: Double
-    public var maxLeverage: UInt8
-    public var isPinned: Bool
+    var id: String
+    var name: String
+    var provider: PerpetualProvider
+    var assetId: AssetId
+    var identifier: String
+    var price: Double
+    var pricePercentChange24h: Double
+    var openInterest: Double
+    var volume24h: Double
+    var funding: Double
+    var maxLeverage: UInt8
+    var isPinned: Bool
     
-    public init(
+    init(
         id: String,
         name: String,
         provider: PerpetualProvider,

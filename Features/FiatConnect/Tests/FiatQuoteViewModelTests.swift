@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import FiatConnect
+@testable import FiatConnect
 import PrimitivesTestKit
 import Primitives
 import Formatters

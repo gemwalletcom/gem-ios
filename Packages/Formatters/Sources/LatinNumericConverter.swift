@@ -3,7 +3,7 @@
 import Foundation
 
 // Converts every Unicode decimal digit (General-Category “Nd”) to ASCII 0-9.
-public enum LatinNumericConverter {
+enum LatinNumericConverter {
 
     // Arabic punctuation we normalise explicitly
     private static let arabicDecimal: UnicodeScalar = "٫"   // U+066B
@@ -17,7 +17,7 @@ public enum LatinNumericConverter {
         return set
     }()
 
-    public static func toLatinDigits(_ raw: String) -> String {
+    static func toLatinDigits(_ raw: String) -> String {
         guard raw.rangeOfCharacter(from: nonLatinDigits) != nil else { return raw }
 
         var output = String.UnicodeScalarView()

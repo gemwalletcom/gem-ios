@@ -14,7 +14,7 @@ import ActivityService
 
 @Observable
 @MainActor
-public final class PerpetualsSceneViewModel {
+final class PerpetualsSceneViewModel {
     let perpetualService: PerpetualServiceable
     let activityService: ActivityService
 
@@ -40,7 +40,7 @@ public final class PerpetualsSceneViewModel {
     let onSelectAssetType: ((SelectAssetType) -> Void)?
     let onSelectAsset: ((Asset) -> Void)?
 
-    public init(
+    init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
         activityService: ActivityService,

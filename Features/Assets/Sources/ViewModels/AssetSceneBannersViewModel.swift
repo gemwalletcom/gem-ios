@@ -7,11 +7,11 @@ import PrimitivesComponents
 
 @Observable
 @MainActor
-public final class AssetSceneBannersViewModel: Sendable {
+final class AssetSceneBannersViewModel: Sendable {
     private let assetData: AssetData
     private let banners: [Banner]
 
-    public init(
+    init(
         assetData: AssetData,
         banners: [Banner]
     ) {
@@ -19,7 +19,7 @@ public final class AssetSceneBannersViewModel: Sendable {
         self.banners = banners
     }
     
-    public var allBanners: [Banner] {
+    var allBanners: [Banner] {
         (extraBanners + banners)
             .filter { shouldShowBanner($0) }
             .sorted { $0 < $1 }

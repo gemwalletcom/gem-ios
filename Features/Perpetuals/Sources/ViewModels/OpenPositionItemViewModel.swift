@@ -8,25 +8,25 @@ import SwiftUI
 import PrimitivesComponents
 import Formatters
 
-public struct OpenPositionItemViewModel: ListAssetItemViewable {
+struct OpenPositionItemViewModel: ListAssetItemViewable {
     private let data: AutocloseOpenData
     private let currencyFormatter: CurrencyFormatter
 
-    public var action: ((ListAssetItemAction) -> Void)?
+    var action: ((ListAssetItemAction) -> Void)?
 
-    public init(data: AutocloseOpenData) {
+    init(data: AutocloseOpenData) {
         self.data = data
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
     }
 
-    public var name: String { data.symbol }
-    public var symbol: String? { nil }
+    var name: String { data.symbol }
+    var symbol: String? { nil }
 
-    public var assetImage: AssetImage {
+    var assetImage: AssetImage {
         AssetIdViewModel(assetId: data.assetId).assetImage
     }
 
-    public var subtitleView: ListAssetItemSubtitleView {
+    var subtitleView: ListAssetItemSubtitleView {
         .type(
             TextValue(
                 text: positionTypeText,
@@ -35,7 +35,7 @@ public struct OpenPositionItemViewModel: ListAssetItemViewable {
         )
     }
 
-    public var rightView: ListAssetItemRightView {
+    var rightView: ListAssetItemRightView {
         .balance(
             balance: TextValue(
                 text: data.size.isZero ? "" : currencyFormatter.string(data.size),

@@ -3,16 +3,16 @@
 import SwiftUI
 import Style
 
-public struct AppIconViewModel: Identifiable, Hashable {
-    public let icon: AppIcon
-    public let isSelected: Bool
+struct AppIconViewModel: Identifiable, Hashable {
+    let icon: AppIcon
+    let isSelected: Bool
 
-    public init(icon: AppIcon, isSelected: Bool) {
+    init(icon: AppIcon, isSelected: Bool) {
         self.icon = icon
         self.isSelected = isSelected
     }
 
-    public var id: String { icon.id }
+    var id: String { icon.id }
 
     var displayName: String {
         switch icon {

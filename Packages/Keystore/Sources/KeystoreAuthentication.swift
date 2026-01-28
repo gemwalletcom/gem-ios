@@ -10,7 +10,7 @@ public enum KeystoreAuthentication: String, Sendable {
     case none
 }
 
-public extension KeystoreAuthentication {
+extension KeystoreAuthentication {
     var policy: AuthenticationPolicy {
         switch self {
         case .biometrics:

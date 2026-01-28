@@ -5,7 +5,7 @@ import GRDB
 import Primitives
 
 extension TotalValueRequest {
-    public func fetchWalletBalance(_ db: Database) throws -> WalletBalance {
+    func fetchWalletBalance(_ db: Database) throws -> WalletBalance {
         guard type == .perpetual else {
             throw NSError(domain: "TotalValueRequest", code: 0, userInfo: [NSLocalizedDescriptionKey: "fetchWalletBalance only works with perpetual balance type"])
         }

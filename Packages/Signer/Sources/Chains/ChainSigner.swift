@@ -1,9 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import class Gemstone.GemChainSigner
-import GemstonePrimitives
 import Primitives
+
+internal import class Gemstone.GemChainSigner
+internal import GemstonePrimitives
 
 final class ChainSigner: Signable {
     private let signer: GemChainSigner

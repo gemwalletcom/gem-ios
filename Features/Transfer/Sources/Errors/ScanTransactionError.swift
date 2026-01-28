@@ -4,13 +4,13 @@ import Foundation
 import Primitives
 import Localization
 
-public enum ScanTransactionError: Error, Equatable, Sendable {
+enum ScanTransactionError: Error, Equatable, Sendable {
     case malicious
     case memoRequired(symbol: String)
 }
 
 extension ScanTransactionError: LocalizedError {
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .malicious: Localized.Errors.ScanTransaction.Malicious.description
         case .memoRequired(let symbol): Localized.Errors.ScanTransaction.memoRequired(symbol)

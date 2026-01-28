@@ -6,11 +6,11 @@ import PrimitivesComponents
 import Localization
 import Components
 
-public struct TransactionNetworkFeeViewModel {
+struct TransactionNetworkFeeViewModel {
     private let feeDisplay: AmountDisplay?
     private let onInfoAction: VoidAction
 
-    public init(
+    init(
         feeDisplay: AmountDisplay?,
         onInfoAction: VoidAction = nil
     ) {
@@ -22,7 +22,7 @@ public struct TransactionNetworkFeeViewModel {
 // MARK: - ItemModelProvidable
 
 extension TransactionNetworkFeeViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         .fee(
             ListItemModel(
                 title: Localized.Transfer.networkFee,
