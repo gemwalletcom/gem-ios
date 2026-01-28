@@ -38,7 +38,7 @@ struct CollectionsNavigationStack: View {
         _isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
-    public var body: some View {
+    var body: some View {
         NavigationStack(path: navigationPath) {
             CollectionsScene(model: model)
                 .onChange(

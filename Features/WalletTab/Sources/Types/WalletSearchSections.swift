@@ -4,14 +4,14 @@ import Foundation
 import Primitives
 import Store
 
-public struct WalletSearchSections: Equatable, Sendable {
-    public let pinnedAssets: [AssetData]
-    public let assets: [AssetData]
-    
-    public let pinnedPerpetuals: [PerpetualData]
-    public let perpetuals: [PerpetualData]
+struct WalletSearchSections: Equatable, Sendable {
+    let pinnedAssets: [AssetData]
+    let assets: [AssetData]
 
-    public static func from(_ result: WalletSearchResult) -> WalletSearchSections {
+    let pinnedPerpetuals: [PerpetualData]
+    let perpetuals: [PerpetualData]
+
+    static func from(_ result: WalletSearchResult) -> WalletSearchSections {
         let (pinnedAssets, assets) = result.assets.reduce(into: ([AssetData](), [AssetData]())) {
             if $1.metadata.isPinned {
                 $0.0.append($1)

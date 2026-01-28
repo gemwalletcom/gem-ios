@@ -46,7 +46,7 @@ public final class WalletSearchSceneViewModel: Sendable {
     var isPresentingRecents: Bool = false
     var isPresentingAssetsResults: Bool = false
 
-    public let onSelectAssetAction: AssetAction
+    let onSelectAssetAction: AssetAction
 
     public init(
         wallet: Wallet,

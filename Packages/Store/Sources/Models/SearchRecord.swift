@@ -4,22 +4,22 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct SearchRecord: Codable, PersistableRecord, FetchableRecord, TableRecord, Sendable {
-    public static let databaseTableName = "search"
+struct SearchRecord: Codable, PersistableRecord, FetchableRecord, TableRecord, Sendable {
+    static let databaseTableName = "search"
 
-    public enum Columns {
+    enum Columns {
         static let query = Column("query")
         static let assetId = Column("assetId")
         static let perpetualId = Column("perpetualId")
         static let priority = Column("priority")
     }
 
-    public var query: String
-    public var assetId: String?
-    public var perpetualId: String?
-    public var priority: Int
+    var query: String
+    var assetId: String?
+    var perpetualId: String?
+    var priority: Int
 
-    public init(query: String, assetId: String? = nil, perpetualId: String? = nil, priority: Int) {
+    init(query: String, assetId: String? = nil, perpetualId: String? = nil, priority: Int) {
         self.query = query
         self.assetId = assetId
         self.perpetualId = perpetualId
