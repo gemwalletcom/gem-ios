@@ -4,9 +4,9 @@ import Foundation
 import WalletCore
 import Primitives
 
-public struct CardanoSigner: Signable {
+struct CardanoSigner: Signable {
     
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         var signingInput = CardanoSigningInput.with {
             $0.transferMessage.toAddress = input.destinationAddress
             $0.transferMessage.changeAddress = input.senderAddress

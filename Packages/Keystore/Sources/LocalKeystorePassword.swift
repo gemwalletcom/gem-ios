@@ -115,7 +115,7 @@ extension LocalKeystorePassword {
 // MARK: - Models extensions
 
 extension LAContext {
-    public func canEvaluatePolicyThrowing(policy: LAPolicy) throws {
+    func canEvaluatePolicyThrowing(policy: LAPolicy) throws {
         var error : NSError?
         canEvaluatePolicy(policy, error: &error)
         if let error = error { throw error }

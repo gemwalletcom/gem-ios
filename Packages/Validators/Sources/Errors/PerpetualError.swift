@@ -4,12 +4,12 @@ import Foundation
 import Localization
 import Primitives
 
-public enum PerpetualError: Equatable {
+enum PerpetualError: Equatable {
     case invalidAutoclose(type: TpslType, direction: PerpetualDirection)
 }
 
 extension PerpetualError: LocalizedError {
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .invalidAutoclose(let type, let direction):
             let comparison = switch (type, direction) {

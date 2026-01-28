@@ -4,10 +4,10 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, PersistableRecord {
-    public static let databaseTableName: String = "perpetuals_positions"
+struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, PersistableRecord {
+    static let databaseTableName: String = "perpetuals_positions"
     
-    public struct Columns {
+    struct Columns {
         static let id = Column("id")
         static let walletId = Column("walletId")
         static let perpetualId = Column("perpetualId")
@@ -27,25 +27,25 @@ public struct PerpetualPositionRecord: Codable, TableRecord, FetchableRecord, Pe
         static let updatedAt = Column("updatedAt")
     }
     
-    public var id: String
-    public var walletId: String
-    public var perpetualId: String
-    public var assetId: AssetId
-    public var size: Double
-    public var sizeValue: Double
-    public var leverage: Int
-    public var entryPrice: Double
-    public var liquidationPrice: Double?
-    public var marginType: PerpetualMarginType
-    public var direction: PerpetualDirection
-    public var marginAmount: Double
-    public var takeProfit: PerpetualTriggerOrder?
-    public var stopLoss: PerpetualTriggerOrder?
-    public var pnl: Double
-    public var funding: Float?
-    public var updatedAt: Date
+    var id: String
+    var walletId: String
+    var perpetualId: String
+    var assetId: AssetId
+    var size: Double
+    var sizeValue: Double
+    var leverage: Int
+    var entryPrice: Double
+    var liquidationPrice: Double?
+    var marginType: PerpetualMarginType
+    var direction: PerpetualDirection
+    var marginAmount: Double
+    var takeProfit: PerpetualTriggerOrder?
+    var stopLoss: PerpetualTriggerOrder?
+    var pnl: Double
+    var funding: Float?
+    var updatedAt: Date
     
-    public init(
+    init(
         id: String,
         walletId: String,
         perpetualId: String,

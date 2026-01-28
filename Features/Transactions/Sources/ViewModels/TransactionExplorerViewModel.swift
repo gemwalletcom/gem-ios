@@ -6,11 +6,11 @@ import PrimitivesComponents
 import Localization
 import Components
 
-public struct TransactionExplorerViewModel: Sendable {
+struct TransactionExplorerViewModel: Sendable {
     private let transactionViewModel: TransactionViewModel
     private let explorerService: any ExplorerLinkFetchable
     
-    public init(
+    init(
         transactionViewModel: TransactionViewModel,
         explorerService: any ExplorerLinkFetchable
     ) {
@@ -27,7 +27,7 @@ public struct TransactionExplorerViewModel: Sendable {
         )
     }
     
-    public var url: URL {
+    var url: URL {
         transactionLink.url
     }
 }
@@ -35,7 +35,7 @@ public struct TransactionExplorerViewModel: Sendable {
 // MARK: - ItemModelProvidable
 
 extension TransactionExplorerViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         .explorer(
             url: transactionLink.url,
             text: Localized.Transaction.viewOn(transactionLink.name)

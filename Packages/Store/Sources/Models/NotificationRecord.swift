@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct NotificationRecord: Codable, FetchableRecord, PersistableRecord {
-    public static let databaseTableName: String = "notifications"
+struct NotificationRecord: Codable, FetchableRecord, PersistableRecord {
+    static let databaseTableName: String = "notifications"
 
-    public enum Columns {
+    enum Columns {
         static let id = Column("id")
         static let walletId = Column("walletId")
         static let readAt = Column("readAt")
@@ -15,11 +15,11 @@ public struct NotificationRecord: Codable, FetchableRecord, PersistableRecord {
         static let item = Column("item")
     }
 
-    public var id: String
-    public var walletId: String
-    public var readAt: Date?
-    public var createdAt: Date
-    public var item: CoreListItem
+    var id: String
+    var walletId: String
+    var readAt: Date?
+    var createdAt: Date
+    var item: CoreListItem
 }
 
 extension NotificationRecord: CreateTable {

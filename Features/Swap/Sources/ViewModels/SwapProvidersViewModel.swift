@@ -5,14 +5,14 @@ import Primitives
 import Components
 import Localization
 
-public struct SwapProvidersViewModel: SelectableListAdoptable {
+struct SwapProvidersViewModel: SelectableListAdoptable {
     public typealias Item = SwapProviderItem
 
-    public var state: StateViewType<SelectableListType<SwapProviderItem>>
-    public var selectedItems: Set<SwapProviderItem>
-    public var selectionType: SelectionType
+    var state: StateViewType<SelectableListType<SwapProviderItem>>
+    var selectedItems: Set<SwapProviderItem>
+    var selectionType: SelectionType
     
-    public init(
+    init(
         state: StateViewType<SelectableListType<Item>>,
         selectedItems: [SwapProviderItem],
         selectionType: SelectionType
@@ -22,11 +22,11 @@ public struct SwapProvidersViewModel: SelectableListAdoptable {
         self.selectionType = selectionType
     }
 
-    public var emptyStateTitle: String? { Localized.Common.notAvailable }
-    public var errorTitle: String? { Localized.Errors.errorOccured }
+    var emptyStateTitle: String? { Localized.Common.notAvailable }
+    var errorTitle: String? { Localized.Errors.errorOccured }
 }
 
 extension SwapProvidersViewModel: SelectableListNavigationAdoptable {
-    public var title: String { Localized.Buy.Providers.title }
-    public var doneTitle: String { Localized.Common.done }
+    var title: String { Localized.Buy.Providers.title }
+    var doneTitle: String { Localized.Common.done }
 }

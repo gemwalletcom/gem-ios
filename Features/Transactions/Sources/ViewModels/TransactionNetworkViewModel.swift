@@ -6,10 +6,10 @@ import PrimitivesComponents
 import Localization
 import Components
 
-public struct TransactionNetworkViewModel: Sendable {
+struct TransactionNetworkViewModel: Sendable {
     private let chain: Chain
 
-    public init(chain: Chain) {
+    init(chain: Chain) {
         self.chain = chain
     }
 }
@@ -17,7 +17,7 @@ public struct TransactionNetworkViewModel: Sendable {
 // MARK: - ItemModelProvidable
 
 extension TransactionNetworkViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         .network(
             title: Localized.Transfer.network,
             subtitle: chain.asset.name,

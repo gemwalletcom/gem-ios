@@ -1,11 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import BigInt
 import Foundation
 import Primitives
 import WalletCore
 
-public struct TronSigner: Signable {
+internal import BigInt
+
+struct TronSigner: Signable {
     
     func sign(
         input: SignerInput,
@@ -64,7 +65,7 @@ public struct TronSigner: Signable {
         }
     }
 
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let contract = TronTransferContract.with {
             $0.ownerAddress = input.senderAddress
             $0.toAddress = input.destinationAddress
@@ -73,7 +74,7 @@ public struct TronSigner: Signable {
         return try sign(input: input, contract: .transfer(contract), feeLimit: .none, memo: input.memo, privateKey: privateKey)
     }
 
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let contract = try TronTransferTRC20Contract.with {
             $0.contractAddress = try input.asset.getTokenId()
             $0.ownerAddress = input.senderAddress
@@ -89,7 +90,7 @@ public struct TronSigner: Signable {
         )
     }
 
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case let .stake(_, stakeType) = input.type else {
             throw (AnyError("Invalid input type for staking"))
         }

@@ -1,9 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
-import Style
-import Charts
 import Primitives
+import Style
+import SwiftUI
+
+internal import Charts
 
 public struct ChartView: View {
     private enum ChartKey {

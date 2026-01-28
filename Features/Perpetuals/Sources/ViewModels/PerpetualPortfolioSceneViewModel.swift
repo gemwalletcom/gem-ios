@@ -12,7 +12,7 @@ import Localization
 
 @Observable
 @MainActor
-public final class PerpetualPortfolioSceneViewModel {
+final class PerpetualPortfolioSceneViewModel {
     private let wallet: Wallet
     private let perpetualService: PerpetualServiceable
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
@@ -31,7 +31,7 @@ public final class PerpetualPortfolioSceneViewModel {
 
     private var portfolio: PerpetualPortfolio?
 
-    public init(
+    init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable
     ) {

@@ -3,13 +3,14 @@
 import Foundation
 import Primitives
 import GRDB
-import BigInt
 
-public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
+internal import BigInt
+
+struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static let databaseTableName: String = "balances"
+    static let databaseTableName: String = "balances"
     
-    public enum Columns {
+    enum Columns {
         static let assetId = Column("assetId")
         static let walletId = Column("walletId")
         static let isEnabled = Column("isEnabled")
@@ -39,46 +40,46 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let updatedAt = Column("updatedAt")
     }
 
-    public var assetId: AssetId
-    public var walletId: String
+    var assetId: AssetId
+    var walletId: String
     
-    public var available: String
-    public var availableAmount: Double
+    var available: String
+    var availableAmount: Double
     
-    public var frozen: String
-    public var frozenAmount: Double
+    var frozen: String
+    var frozenAmount: Double
     
-    public var locked: String
-    public var lockedAmount: Double
+    var locked: String
+    var lockedAmount: Double
     
-    public var staked: String
-    public var stakedAmount: Double
+    var staked: String
+    var stakedAmount: Double
     
-    public var pending: String
-    public var pendingAmount: Double
+    var pending: String
+    var pendingAmount: Double
 
-    public var pendingUnconfirmed: String
-    public var pendingUnconfirmedAmount: Double
+    var pendingUnconfirmed: String
+    var pendingUnconfirmedAmount: Double
 
-    public var rewards: String
-    public var rewardsAmount: Double
+    var rewards: String
+    var rewardsAmount: Double
     
-    public var reserved: String
-    public var reservedAmount: Double
+    var reserved: String
+    var reservedAmount: Double
     
-    public var withdrawable: String
-    public var withdrawableAmount: Double
+    var withdrawable: String
+    var withdrawableAmount: Double
     
-    public var totalAmount: Double
+    var totalAmount: Double
     
-    public var isEnabled: Bool
-    public var isPinned: Bool
-    public var isActive: Bool
+    var isEnabled: Bool
+    var isPinned: Bool
+    var isActive: Bool
     
-    public var metadata: BalanceMetadata?
+    var metadata: BalanceMetadata?
 
-    public var lastUsedAt: Date?
-    public var updatedAt: Date?
+    var lastUsedAt: Date?
+    var updatedAt: Date?
 }
 
 extension BalanceRecord: CreateTable {
@@ -140,7 +141,7 @@ extension BalanceRecord: CreateTable {
 }
 
 extension BalanceRecord: Identifiable {
-    public var id: String { assetId.identifier }
+    var id: String { assetId.identifier }
 }
 
 extension BalanceRecord {

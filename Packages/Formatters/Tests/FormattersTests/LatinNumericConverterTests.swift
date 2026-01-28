@@ -2,7 +2,7 @@
 
 import Testing
 import Foundation
-import Formatters
+@testable import Formatters
 
 struct LatinNumericConverterTests {
     @Test

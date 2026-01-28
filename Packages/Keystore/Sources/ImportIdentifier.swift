@@ -1,9 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import struct Formatters.MnemonicFormatter
 import Foundation
 import Primitives
 import WalletCore
+
+internal import struct Formatters.MnemonicFormatter
 
 public enum ImportIdentifier {
     case phrase(words: [String])
@@ -11,7 +12,7 @@ public enum ImportIdentifier {
     case privateKey(chain: Chain, key: String)
     case address(address: String, chain: Chain)
 
-    public func walletIdentifier() throws -> WalletIdentifier {
+    func walletIdentifier() throws -> WalletIdentifier {
         let (chain, address) = try deriveAddress()
         switch self {
         case .phrase: return .multicoin(address: address)

@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public enum RecipientScanResult {
+enum RecipientScanResult {
     case recipient(address: String, memo: String?, amount: String?)
     case transferData(TransferData)
 }

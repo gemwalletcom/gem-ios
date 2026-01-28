@@ -5,13 +5,13 @@ import Primitives
 import Localization
 import Components
 
-public struct FiatProvidersViewModel: SelectableListAdoptable {
+struct FiatProvidersViewModel: SelectableListAdoptable {
     public typealias Item = FiatQuoteViewModel
-    public let state: StateViewType<SelectableListType<FiatQuoteViewModel>>
-    public var selectedItems: Set<FiatQuoteViewModel>
-    public let selectionType: SelectionType
+    let state: StateViewType<SelectableListType<FiatQuoteViewModel>>
+    var selectedItems: Set<FiatQuoteViewModel>
+    let selectionType: SelectionType
     
-    public init(
+    init(
         state: StateViewType<SelectableListType<FiatQuoteViewModel>>,
         selectedItems: [FiatQuoteViewModel],
         selectionType: SelectionType
@@ -23,6 +23,6 @@ public struct FiatProvidersViewModel: SelectableListAdoptable {
 }
 
 extension FiatProvidersViewModel: SelectableListNavigationAdoptable {
-    public var title: String { Localized.Buy.Providers.title }
-    public var doneTitle: String { Localized.Common.done }
+    var title: String { Localized.Buy.Providers.title }
+    var doneTitle: String { Localized.Common.done }
 }

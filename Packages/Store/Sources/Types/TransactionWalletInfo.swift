@@ -5,9 +5,9 @@ import GRDB
 import GRDBQuery
 import Primitives
 
-public struct WalletTransactionInfo: FetchableRecord, Decodable {
-    public var transaction: TransactionRecord
-    public var wallet: WalletRecord
+struct WalletTransactionInfo: FetchableRecord, Decodable {
+    var transaction: TransactionRecord
+    var wallet: WalletRecord
 
     var transactionWallet: TransactionWallet {
         TransactionWallet(

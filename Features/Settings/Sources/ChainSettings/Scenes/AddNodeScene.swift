@@ -7,7 +7,7 @@ import Components
 import QRScanner
 import PrimitivesComponents
 
-public struct AddNodeScene: View {
+struct AddNodeScene: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var model: AddNodeSceneViewModel
@@ -18,12 +18,12 @@ public struct AddNodeScene: View {
 
     private let onDismiss: (() -> Void)?
 
-    public init(model: AddNodeSceneViewModel, onDismiss: (() -> Void)? = nil) {
+    init(model: AddNodeSceneViewModel, onDismiss: (() -> Void)? = nil) {
         _model = State(initialValue: model)
         self.onDismiss = onDismiss
     }
 
-    public var body: some View {
+    var body: some View {
         List {
             networkSection
             inputView

@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
-    public static let databaseTableName: String = "prices"
+struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
+    static let databaseTableName: String = "prices"
     
-    public enum Columns {
+    enum Columns {
         static let assetId = Column("assetId")
         static let price = Column("price")
         static let priceUsd = Column("priceUsd")
@@ -28,26 +28,26 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let updatedAt = Column("updatedAt")
     }
 
-    public var assetId: AssetId
-    public var price: Double
-    public var priceUsd: Double
-    public var priceChangePercentage24h: Double
+    var assetId: AssetId
+    var price: Double
+    var priceUsd: Double
+    var priceChangePercentage24h: Double
     
-    public var marketCap: Double?
-    public var marketCapFdv: Double?
-    public var marketCapRank: Int?
-    public var totalVolume: Double?
-    public var circulatingSupply: Double?
-    public var totalSupply: Double?
-    public var maxSupply: Double?
-    public var allTimeHigh: Double?
-    public var allTimeHighDate: Date?
-    public var allTimeHighChangePercentage: Double?
-    public var allTimeLow: Double?
-    public var allTimeLowDate: Date?
-    public var allTimeLowChangePercentage: Double?
+    var marketCap: Double?
+    var marketCapFdv: Double?
+    var marketCapRank: Int?
+    var totalVolume: Double?
+    var circulatingSupply: Double?
+    var totalSupply: Double?
+    var maxSupply: Double?
+    var allTimeHigh: Double?
+    var allTimeHighDate: Date?
+    var allTimeHighChangePercentage: Double?
+    var allTimeLow: Double?
+    var allTimeLowDate: Date?
+    var allTimeLowChangePercentage: Double?
 
-    public var updatedAt: Date?
+    var updatedAt: Date?
 }
 
 extension PriceRecord: CreateTable {
@@ -85,7 +85,7 @@ extension PriceRecord: CreateTable {
 }
 
 extension PriceRecord: Identifiable {
-    public var id: String { assetId.identifier }
+    var id: String { assetId.identifier }
 }
 
 extension AssetPrice {

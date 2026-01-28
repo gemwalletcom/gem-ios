@@ -4,16 +4,16 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct NodeSelectedRecord: Codable, FetchableRecord, PersistableRecord, TableRecord {
-    public static let databaseTableName: String = "nodes_selected"
+struct NodeSelectedRecord: Codable, FetchableRecord, PersistableRecord, TableRecord {
+    static let databaseTableName: String = "nodes_selected"
 
-    public enum Columns {
+    enum Columns {
         static let chain = Column("chain")
         static let nodeUrl = Column("nodeUrl")
     }
 
-    public var chain: Chain
-    public var nodeUrl: String
+    var chain: Chain
+    var nodeUrl: String
 
 }
 

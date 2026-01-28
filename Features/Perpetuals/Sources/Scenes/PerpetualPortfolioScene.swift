@@ -6,15 +6,15 @@ import Components
 import Style
 import PrimitivesComponents
 
-public struct PerpetualPortfolioScene: View {
+struct PerpetualPortfolioScene: View {
     private let fetchTimer = Timer.publish(every: 60, tolerance: 1, on: .main, in: .common).autoconnect()
     @State private var model: PerpetualPortfolioSceneViewModel
 
-    public init(model: PerpetualPortfolioSceneViewModel) {
+    init(model: PerpetualPortfolioSceneViewModel) {
         _model = State(initialValue: model)
     }
 
-    public var body: some View {
+    var body: some View {
         NavigationStack {
             List {
                 Section { } header: {

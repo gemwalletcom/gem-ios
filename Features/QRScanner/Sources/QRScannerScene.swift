@@ -4,7 +4,7 @@ import SwiftUI
 import PhotosUI
 import Components
 
-public struct QRScannerScene: View {
+struct QRScannerScene: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismiss
 
@@ -12,12 +12,12 @@ public struct QRScannerScene: View {
 
     private let action: ((String) -> Void)
 
-    public init(resources: QRScannerResources, action: @escaping ((String) -> Void)) {
+    init(resources: QRScannerResources, action: @escaping ((String) -> Void)) {
         self.action = action
         _model = State(initialValue: QRScannerSceneViewModel(scannerState: .idle, imageState: .empty, resources: resources))
     }
 
-    public var body: some View {
+    var body: some View {
         ZStack {
             switch model.scannerState {
             case .idle, .scanning:

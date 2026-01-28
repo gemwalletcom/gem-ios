@@ -5,6 +5,8 @@ import Primitives
 import PrimitivesTestKit
 import PrimitivesComponents
 import Components
+import PerpetualService
+import PerpetualServiceTestKit
 import PerpetualsTestKit
 @testable import Perpetuals
 
@@ -91,5 +93,18 @@ struct PerpetualPortfolioSceneViewModelTests {
             #expect(chartModel.price?.price == 25)
             #expect(chartModel.price?.priceChangePercentage24h == 50)
         }
+    }
+}
+
+extension PerpetualPortfolioSceneViewModel {
+    @MainActor
+    static func mock(
+        wallet: Wallet = .mock(),
+        perpetualService: PerpetualServiceable = PerpetualService.mock()
+    ) -> PerpetualPortfolioSceneViewModel {
+        PerpetualPortfolioSceneViewModel(
+            wallet: wallet,
+            perpetualService: perpetualService
+        )
     }
 }
