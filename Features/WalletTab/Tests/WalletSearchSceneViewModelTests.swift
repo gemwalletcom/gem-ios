@@ -13,7 +13,6 @@ struct WalletSearchSceneViewModelTests {
     func recentActivityTypes() {
         let model = WalletSearchSceneViewModel.mock()
 
-        #expect(model.recentsRequest.types.contains(.perpetual) == false)
-        #expect(model.recentsRequest.types.count == RecentActivityType.allCases.count - 1)
+        #expect(model.recentsRequest.types == RecentActivityType.allCases)
     }
 }

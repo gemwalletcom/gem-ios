@@ -11,14 +11,17 @@ import Preferences
 import PreferencesTestKit
 import WalletsService
 import WalletsServiceTestKit
+import PerpetualService
+import PerpetualServiceTestKit
 
 public extension WalletSearchSceneViewModel {
     @MainActor
     static func mock(
         wallet: Wallet = .mock(),
-        searchService: AssetSearchService = .mock(),
+        searchService: WalletSearchService = .mock(),
         activityService: ActivityService = .mock(),
         walletsService: WalletsService = .mock(),
+        perpetualService: PerpetualService = .mock(),
         preferences: Preferences = .mock()
     ) -> WalletSearchSceneViewModel {
         WalletSearchSceneViewModel(
@@ -26,6 +29,7 @@ public extension WalletSearchSceneViewModel {
             searchService: searchService,
             activityService: activityService,
             walletsService: walletsService,
+            perpetualService: perpetualService,
             preferences: preferences,
             onDismissSearch: {},
             onSelectAssetAction: { _ in },

@@ -28,6 +28,8 @@ struct WalletNavigationStack: View {
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.activityService) private var activityService
+    @Environment(\.walletSearchService) private var walletSearchService
+    @Environment(\.assetSearchService) private var assetSearchService
 
     @State private var model: WalletSceneViewModel
 
@@ -52,11 +54,12 @@ struct WalletNavigationStack: View {
                     WalletSearchScene(
                         model: WalletSearchSceneViewModel(
                             wallet: model.wallet,
-                            searchService: AssetSearchService(assetsService: assetsService),
+                            searchService: walletSearchService,
                             activityService: activityService,
                             walletsService: walletsService,
+                            perpetualService: perpetualService,
                             onDismissSearch: model.onToggleSearch,
-                            onSelectAssetAction: { navigationState.wallet.append(Scenes.Asset(asset: $0)) },
+                            onSelectAssetAction: onSelectAsset,
                             onAddToken: model.onSelectAddCustomToken
                         )
                     )
@@ -162,7 +165,7 @@ struct WalletNavigationStack: View {
                     model: SelectAssetViewModel(
                         wallet: model.wallet,
                         selectType: $0,
-                        searchService: AssetSearchService(assetsService: assetsService),
+                        searchService: assetSearchService,
                         walletsService: walletsService,
                         priceAlertService: priceAlertService,
                         activityService: activityService
@@ -209,6 +212,14 @@ struct WalletNavigationStack: View {
             }
             .safariSheet(url: $model.isPresentingUrl)
             .toast(message: $model.isPresentingToastMessage)
+        }
+    }
+
+    private func onSelectAsset(asset: Asset) {
+        if asset.type == .perpetual {
+            navigationState.wallet.append(Scenes.Perpetual(asset))
+        } else {
+            navigationState.wallet.append(Scenes.Asset(asset: asset))
         }
     }
 }

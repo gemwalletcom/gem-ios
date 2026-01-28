@@ -51,12 +51,8 @@ struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRecord, T
     static let account = hasOne(AccountRecord.self, key: "account", using: ForeignKey(["chain"], to: ["chain"]))
     static let priceAlert = hasOne(PriceAlertRecord.self).forKey("priceAlert")
     static let priceAlerts = hasMany(PriceAlertRecord.self).forKey("priceAlerts")
-    static let priorityAssets = hasOne(AssetSearchRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
     static let recentActivities = hasMany(RecentActivityRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
-    
-    var priorityAsset: QueryInterfaceRequest<AssetSearchRecord> {
-        request(for: AssetRecord.priorityAssets)
-    }
+    static let search = hasOne(SearchRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
 }
 
 extension AssetRecord: CreateTable {

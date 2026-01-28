@@ -94,6 +94,10 @@ public protocol GemAPIRewardsService: Sendable {
     func redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
 }
 
+public protocol GemAPISearchService: Sendable {
+    func search(query: String, chains: [Chain], tags: [AssetTag]) async throws -> SearchResponse
+}
+
 public protocol GemAPINotificationService: Sendable {
     func getNotifications(deviceId: String, fromTimestamp: Int) async throws -> [Primitives.InAppNotification]
     func markNotificationsRead(deviceId: String) async throws
@@ -374,6 +378,14 @@ extension GemAPIService: GemAPIRewardsService {
         try await provider
             .request(.redeem(walletId: walletId, request: request))
             .mapResponse(as: RedemptionResult.self)
+    }
+}
+
+extension GemAPIService: GemAPISearchService {
+    public func search(query: String, chains: [Chain], tags: [AssetTag]) async throws -> SearchResponse {
+        try await provider
+            .request(.getSearch(query: query, chains: chains, tags: tags))
+            .mapResponse(as: SearchResponse.self)
     }
 }
 

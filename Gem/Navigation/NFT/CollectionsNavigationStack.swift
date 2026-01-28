@@ -15,9 +15,9 @@ struct CollectionsNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.avatarService) private var avatarService
     @Environment(\.priceAlertService) private var priceAlertService
-    @Environment(\.assetsService) private var assetsService
     @Environment(\.activityService) private var activityService
     @Environment(\.nftService) private var nftService
+    @Environment(\.assetSearchService) private var assetSearchService
 
     @State private var model: CollectionsViewModel
 
@@ -38,7 +38,7 @@ struct CollectionsNavigationStack: View {
         _isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
-    public var body: some View {
+    var body: some View {
         NavigationStack(path: navigationPath) {
             CollectionsScene(model: model)
                 .onChange(
@@ -76,7 +76,7 @@ struct CollectionsNavigationStack: View {
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             selectType: $0,
-                            searchService: AssetSearchService(assetsService: assetsService),
+                            searchService: assetSearchService,
                             walletsService: walletsService,
                             priceAlertService: priceAlertService,
                             activityService: activityService

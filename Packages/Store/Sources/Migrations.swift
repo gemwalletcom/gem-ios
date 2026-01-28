@@ -17,7 +17,6 @@ struct Migrations {
         try? db.execute(sql: "DELETE FROM \(TransactionRecord.databaseTableName) WHERE chain = ?", arguments: [chain])
         try? db.execute(sql: "DELETE FROM \(BalanceRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(PriceRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
-        try? db.execute(sql: "DELETE FROM \(AssetSearchRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(AssetLinkRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(PerpetualRecord.databaseTableName) WHERE assetId LIKE ? COLLATE NOCASE", arguments: ["\(chain)%"])
         try? db.execute(sql: "DELETE FROM \(AssetRecord.databaseTableName) WHERE chain = ?", arguments: [chain])
@@ -35,7 +34,6 @@ struct Migrations {
             try FiatRateRecord.create(db: db)
             try PriceRecord.create(db: db)
             try AssetLinkRecord.create(db: db)
-            try AssetSearchRecord.create(db: db)
             //TODO: Market. try MarketAssetRecord.create(db: db)
             
             // transactions
@@ -68,6 +66,7 @@ struct Migrations {
             try PerpetualPositionRecord.create(db: db)
 
             try RecentActivityRecord.create(db: db)
+            try SearchRecord.create(db: db)
             try NotificationRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)
@@ -238,10 +237,6 @@ struct Migrations {
                 $0.add(column: WalletRecord.Columns.updatedAt.name, .date)
             }
         }
-      
-        migrator.registerMigration("Add \(AssetSearchRecord.databaseTableName)") { db in
-            try? AssetSearchRecord.create(db: db)
-        }
         
         migrator.registerMigration("Add currency to \(PriceAlertRecord.databaseTableName)") { db in
             try? db.alter(table: PriceAlertRecord.databaseTableName) {
@@ -357,6 +352,11 @@ struct Migrations {
                 INNER JOIN \(NodeRecord.databaseTableName) n ON ns.nodeId = n.id
             """)
             try? db.drop(table: "nodes_selected_v1")
+        }
+
+        migrator.registerMigration("Create \(SearchRecord.databaseTableName) and drop assets_search") { db in
+            try? SearchRecord.create(db: db)
+            try? db.drop(table: "assets_search")
         }
 
         migrator.registerMigration("Create \(NotificationRecord.databaseTableName)") { db in
