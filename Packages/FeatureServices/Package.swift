@@ -97,7 +97,8 @@ let package = Package(
                 "Primitives",
                 "Store",
                 .product(name: "ChainService", package: "ChainServices"),
-                "AssetsService"
+                "AssetsService",
+                "YieldService"
             ],
             path: "BalanceService",
             exclude: ["TestKit"]

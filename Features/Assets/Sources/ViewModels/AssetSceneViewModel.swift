@@ -134,27 +134,26 @@ public final class AssetSceneViewModel: Sendable {
 
     var earnTitle: String { "Earn" }
 
+    var earnAprText: String {
+        guard let apr = assetDataModel.earnApr else { return .empty }
+        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
+    }
+
     var showStakeButton: Bool {
         !showBalances && assetDataModel.isStakeEnabled && !wallet.isViewOnly
     }
 
     var showEarnButton: Bool {
-        hasYieldOpportunity && !wallet.isViewOnly && isYieldPositionLoaded && !hasYieldPosition
+        hasYieldOpportunity && !wallet.isViewOnly && !hasYieldPosition
     }
 
     var hasYieldPosition: Bool {
-        guard let position = yieldPosition,
-              let balance = position.vaultBalanceValue.flatMap({ BigInt($0) }) else {
-            return false
-        }
-        return balance > 0
+        assetData.balance.yield > 0
     }
 
     var yieldBalanceText: String {
-        guard let position = yieldPosition,
-              let balance = position.assetBalanceValue.flatMap({ BigInt($0) }) else {
-            return "0"
-        }
+        let balance = assetData.balance.yield
+        guard balance > 0 else { return "0" }
         return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
@@ -283,6 +282,7 @@ extension AssetSceneViewModel {
 
     func fetch() async {
         await updateWallet()
+        fetchYieldPosition()
     }
 
     func onSelectHeader(_ buttonType: HeaderButtonType) {

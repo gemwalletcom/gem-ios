@@ -1,26 +1,31 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Primitives
 import Store
 import ChainService
 import Formatters
 import AssetsService
+import YieldService
 
 public struct BalanceService: BalancerUpdater, Sendable {
     private let balanceStore: BalanceStore
     private let assetsService: AssetsService
     private let fetcher: BalanceFetcher
+    private let yieldService: YieldService?
     private let formatter = ValueFormatter(style: .full)
 
     public init(
         balanceStore: BalanceStore,
         assetsService: AssetsService,
-        chainServiceFactory: ChainServiceFactory
+        chainServiceFactory: ChainServiceFactory,
+        yieldService: YieldService? = nil
     ) {
         self.balanceStore = balanceStore
         self.assetsService = assetsService
         self.fetcher = BalanceFetcher(chainServiceFactory: chainServiceFactory)
+        self.yieldService = yieldService
     }
 }
 
@@ -89,6 +94,11 @@ extension BalanceService {
                         await updateTokenBalances(walletId: walletId, chain: chain, tokenIds: tokenIds, address: address)
                     }
                 }
+
+                // yield balance
+                group.addTask {
+                    await updateYieldBalances(walletId: walletId, assetIds: ids, address: address)
+                }
             }
 
             for await _ in group { }
@@ -143,6 +153,39 @@ extension BalanceService {
             fetchBalance: { [try await fetcher.getCoinStakeBalance(chain: chain, address: address)?.stakeChange] },
             mapBalance: { $0 }
         )
+    }
+
+    private func updateYieldBalances(walletId: WalletId, assetIds: [AssetId], address: String) async {
+        guard let yieldService else { return }
+
+        for assetId in assetIds {
+            do {
+                let position = try await yieldService.yielder.positions(
+                    provider: "yo",
+                    asset: assetId.identifier,
+                    walletAddress: address
+                )
+                guard let balanceValue = position.assetBalanceValue,
+                      let balance = BigInt(balanceValue) else { continue }
+
+                let asset = try assetsService.getAsset(for: assetId)
+                let decimals = asset.decimals.asInt
+
+                let yieldValue = try UpdateBalanceValue(
+                    value: balance.description,
+                    amount: formatter.double(from: balance, decimals: decimals)
+                )
+                let update = UpdateBalance(
+                    assetId: assetId,
+                    type: .yield(UpdateYieldBalance(balance: yieldValue)),
+                    updatedAt: .now,
+                    isActive: true
+                )
+                try balanceStore.updateBalances([update], for: walletId)
+            } catch {
+                // Asset may not have yield support - skip silently
+            }
+        }
     }
 
     @discardableResult
@@ -227,6 +270,12 @@ extension BalanceService {
                     metadata: metadata
                 )
             )
+        case .yield(let balance):
+            let yieldValue = try UpdateBalanceValue(
+                value: balance.description,
+                amount: formatter.double(from: balance, decimals: decimals)
+            )
+            return .yield(UpdateYieldBalance(balance: yieldValue))
         }
     }
 

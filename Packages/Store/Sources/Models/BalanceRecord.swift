@@ -33,6 +33,8 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let reservedAmount = Column("reservedAmount")
         static let withdrawable = Column("withdrawable")
         static let withdrawableAmount = Column("withdrawableAmount")
+        static let yield = Column("yield")
+        static let yieldAmount = Column("yieldAmount")
         static let totalAmount = Column("totalAmount")
         static let metadata = Column("metadata")
         static let lastUsedAt = Column("lastUsedAt")
@@ -68,7 +70,10 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public var withdrawable: String
     public var withdrawableAmount: Double
-    
+
+    public var yield: String
+    public var yieldAmount: Double
+
     public var totalAmount: Double
     
     public var isEnabled: Bool
@@ -155,6 +160,7 @@ extension BalanceRecord {
             rewards: BigInt(stringLiteral: rewards),
             reserved: BigInt(stringLiteral: reserved),
             withdrawable: BigInt(stringLiteral: withdrawable),
+            yield: BigInt(stringLiteral: yield),
             metadata: metadata
         )
     }

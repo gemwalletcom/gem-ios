@@ -55,6 +55,7 @@ let package = Package(
                 .product(name: "AppService", package: "FeatureServices"),
                 .product(name: "PerpetualService", package: "FeatureServices"),
                 .product(name: "RewardsService", package: "FeatureServices"),
+                .product(name: "YieldService", package: "FeatureServices"),
                 "Formatters",
                 "Validators",
                 .product(name: "ChainService", package: "ChainServices"),

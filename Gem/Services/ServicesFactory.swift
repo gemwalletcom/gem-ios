@@ -77,10 +77,19 @@ struct ServicesFactory {
             walletStore: storeManager.walletStore,
             avatarService: avatarService
         )
+        let yieldService: YieldService? = {
+            do {
+                return try YieldService(nodeProvider: nodeService, store: storeManager.earnStore)
+            } catch {
+                debugLog("Failed to initialize YieldService: \(error)")
+                return nil
+            }
+        }()
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
             assetsService: assetsService,
-            chainFactory: chainServiceFactory
+            chainFactory: chainServiceFactory,
+            yieldService: yieldService
         )
         let stakeService = Self.makeStakeService(
             earnStore: storeManager.earnStore,
@@ -221,15 +230,6 @@ struct ServicesFactory {
             perpetualObserverService: perpetualObserverService
         )
 
-        let yieldService: YieldService? = {
-            do {
-                return try YieldService(nodeProvider: nodeService, store: storeManager.earnStore)
-            } catch {
-                debugLog("Failed to initialize YieldService: \(error)")
-                return nil
-            }
-        }()
-
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
             nodeService: nodeService,
@@ -347,12 +347,14 @@ extension ServicesFactory {
     private static func makeBalanceService(
         balanceStore: BalanceStore,
         assetsService: AssetsService,
-        chainFactory: ChainServiceFactory
+        chainFactory: ChainServiceFactory,
+        yieldService: YieldService?
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,
             assetsService: assetsService,
-            chainServiceFactory: chainFactory
+            chainServiceFactory: chainFactory,
+            yieldService: yieldService
         )
     }
 

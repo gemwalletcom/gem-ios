@@ -91,6 +91,11 @@ public final class YieldService: Sendable {
         }
     }
 
+    public func clear() throws {
+        guard let store else { return }
+        try store.clear(type: .yield)
+    }
+
     private func getCachedPosition(provider: GemYieldProvider, walletId: WalletId, assetId: Primitives.AssetId) -> GemYieldPosition? {
         guard let store else { return nil }
         do {

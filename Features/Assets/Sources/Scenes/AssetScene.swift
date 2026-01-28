@@ -205,7 +205,9 @@ extension AssetScene {
         NavigationCustomLink(
             with: ListItemView(
                 title: model.earnTitle,
-                subtitle: model.yieldBalanceText
+                subtitle: model.yieldBalanceText,
+                subtitleExtra: model.earnAprText,
+                subtitleStyleExtra: TextStyle(font: .callout, color: Colors.green)
             ),
             action: { model.onSelectEarn() }
         )
@@ -235,7 +237,8 @@ extension AssetScene {
                     .frame(size: .image.asset)
                 ListItemView(
                     title: model.earnTitle,
-                    subtitle: nil
+                    subtitle: model.earnAprText,
+                    subtitleStyle: TextStyle(font: .callout, color: Colors.green)
                 )
             },
             action: { model.onSelectEarn() }

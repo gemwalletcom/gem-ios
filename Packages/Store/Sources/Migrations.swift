@@ -385,6 +385,16 @@ public struct Migrations {
             try EarnPositionRecord.create(db: db)
         }
 
+        migrator.registerMigration("Add earnApr to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.earnApr.name, .double)
+            }
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.yield.name, .text).defaults(to: "0")
+                $0.add(column: BalanceRecord.Columns.yieldAmount.name, .double).defaults(to: 0)
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

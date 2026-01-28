@@ -1,7 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Formatters
 import Foundation
 import Gemstone
+import Localization
 import Primitives
 import Style
 import SwiftUI
@@ -42,8 +44,7 @@ public final class YieldOpportunityViewModel: Identifiable, Sendable {
         guard let apy = apy else {
             return "--"
         }
-        let formatted = String(format: "%.2f", apy * 100)
-        return "\(formatted)% APY"
+        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apy))
     }
 
     public var hasApy: Bool {

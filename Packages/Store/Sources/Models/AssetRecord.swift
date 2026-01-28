@@ -25,6 +25,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
         static let isStakeable = Column("isStakeable")
         static let isEarnable = Column("isEarnable")
         static let stakingApr = Column("stakingApr")
+        static let earnApr = Column("earnApr")
     }
     
     public var id: String
@@ -43,6 +44,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     public var isEarnable: Bool
     public var rank: Int
     public var stakingApr: Double?
+    public var earnApr: Double?
     
     static let price = hasOne(PriceRecord.self)
     static let links = hasMany(AssetLinkRecord.self, key: "links")
@@ -114,7 +116,9 @@ extension Asset {
             isSwappable: false,
             isStakeable: false,
             isEarnable: false,
-            rank: 0
+            rank: 0,
+            stakingApr: nil,
+            earnApr: nil
         )
     }
 }
@@ -142,7 +146,7 @@ extension AssetRecord {
                 isStakeable: isStakeable,
                 stakingApr: stakingApr,
                 isEarnable: isEarnable,
-                earnApr: nil
+                earnApr: earnApr
             ),
             score: AssetScore(rank: rank.asInt32)
         )
@@ -184,7 +188,7 @@ extension AssetRecordInfo {
             isStakeEnabled: asset.isStakeable,
             stakingApr: asset.stakingApr,
             isEarnEnabled: asset.isEarnable,
-            earnApr: nil,
+            earnApr: asset.earnApr,
             isPinned: balance?.isPinned ?? false,
             isActive: balance?.isActive ?? true,
             rankScore: asset.rank.asInt32
@@ -209,7 +213,8 @@ extension AssetBasic {
             isStakeable: properties.isStakeable,
             isEarnable: properties.isEarnable,
             rank: score.rank.asInt,
-            stakingApr: properties.stakingApr
+            stakingApr: properties.stakingApr,
+            earnApr: properties.earnApr
         )
     }
 }
