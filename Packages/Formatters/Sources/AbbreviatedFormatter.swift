@@ -26,7 +26,7 @@ struct AbbreviatedFormatter: Sendable {
         guard abs(decimal) >= threshold, #available(iOS 18, *) else {
             return nil
         }
-        
+
         return decimal.formatted(
             .number
             .notation(.compactName)
@@ -34,12 +34,12 @@ struct AbbreviatedFormatter: Sendable {
             .precision(.fractionLength(0...2))
         )
     }
-    
+
     func string(from decimal: Decimal, currency: String) -> String? {
         guard abs(decimal) >= threshold, #available(iOS 18, *) else {
             return nil
         }
-        
+
         return decimal.formatted(
             .currency(code: currency)
             .notation(.compactName)

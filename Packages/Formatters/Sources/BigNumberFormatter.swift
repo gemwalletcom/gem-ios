@@ -14,12 +14,11 @@ public final class BigNumberFormatter: Sendable {
     private let maximumFractionDigits: Int
     private let groupingSeparator: String
 
-
     init(
         locale: Locale = .current,
-         minimumFractionDigits: Int = 0,
-         maximumFractionDigits: Int = Int.max,
-         groupingSeparator: String? = nil
+        minimumFractionDigits: Int = 0,
+        maximumFractionDigits: Int = Int.max,
+        groupingSeparator: String? = nil
     ) {
         self.locale = locale
         self.minimumFractionDigits = minimumFractionDigits
