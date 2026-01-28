@@ -25,13 +25,13 @@ public struct SolanaSigner: Signable {
         let tokenId = try input.asset.getTokenId()
         let amount = input.value.asUInt
         let destinationAddress = input.destinationAddress
-        
-        guard case let .solana(senderTokenAddress, recipientTokenAddress, solanaTokenProgram, _, _) = input.metadata,
-            let token = solanaTokenProgram, let senderTokenAddress = senderTokenAddress
+
+        guard case .solana(let senderTokenAddress, let recipientTokenAddress, let solanaTokenProgram, _) = input.metadata,
+              let token = solanaTokenProgram, let senderTokenAddress = senderTokenAddress
         else {
             throw AnyError("unknown solana metadata")
         }
-        
+
         switch recipientTokenAddress {
         case .some(let recipientTokenAddress):
             let type = SolanaSigningInput.OneOf_TransactionType.tokenTransferTransaction(.with {
@@ -71,16 +71,13 @@ public struct SolanaSigner: Signable {
     }
 
     private func sign(input: SignerInput, type: SolanaSigningInput.OneOf_TransactionType, coinType: CoinType, privateKey: Data) throws -> String {
+        let jitoTip = input.fee.gasPriceType.jitoTip
+
         let signingInput = try SolanaSigningInput.with {
             $0.transactionType = type
             $0.recentBlockhash = try input.metadata.getBlockHash()
             $0.priorityFeeLimit = .with {
                 $0.limit = UInt32(input.fee.gasLimit)
-            }
-            if input.fee.unitPrice > 0 {
-                $0.priorityFeePrice = .with {
-                    $0.price = input.fee.unitPrice.asUInt
-                }
             }
             $0.privateKey = privateKey
         }
@@ -91,16 +88,11 @@ public struct SolanaSigner: Signable {
         }
 
         let encoded = try transcodeBase58ToBase64(output.encoded)
-
-        if let jitoTips = input.metadata.getJitoTips() {
-            let tipLamports = jitoTips.normal
-            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: tipLamports)
-            if let transaction = SolanaTransaction.insertInstruction(encodedTx: encoded, insertAt: -1, instruction: instructionJson) {
-                return try signRawTransaction(transaction: transaction, privateKey: privateKey)
-            }
+        let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
+        guard let transaction = SolanaTransaction.insertInstruction(encodedTx: encoded, insertAt: -1, instruction: instructionJson) else {
+            throw AnyError("unable to insert Jito tip instruction")
         }
-
-        return encoded
+        return try signRawTransaction(transaction: transaction, privateKey: privateKey)
     }
 
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
@@ -169,9 +161,8 @@ public struct SolanaSigner: Signable {
 
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let (_, _, data) = try input.type.swap()
-        let price = input.fee.unitPrice
-        let limit = input.fee.gasLimit
         let encodedTx = data.data.data
+        let jitoTip = input.fee.gasPriceType.jitoTip
 
         guard
             let encodedTxData = Base64.decode(string: encodedTx),
@@ -190,20 +181,13 @@ public struct SolanaSigner: Signable {
         }
 
         // Only user's signature is needed, safe to modify instructions
-        guard var transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: encodedTx, price: price.description) else {
-            throw AnyError("Unable to set compute unit price")
+        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: encodedTx, limit: input.fee.gasLimit.description) else {
+            throw AnyError("unable to set compute unit limit")
         }
-        guard let updatedTransaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {
-            throw AnyError("Unable to set compute unit limit")
-        }
-        transaction = updatedTransaction
 
-        if let jitoTips = input.metadata.getJitoTips() {
-            let tipLamports = jitoTips.normal
-            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: tipLamports)
-            if let updatedTransaction = SolanaTransaction.insertInstruction(encodedTx: transaction, insertAt: -1, instruction: instructionJson) {
-                transaction = updatedTransaction
-            }
+        let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
+        guard let transaction = SolanaTransaction.insertInstruction(encodedTx: transaction, insertAt: -1, instruction: instructionJson) else {
+            throw AnyError("unable to insert Jito tip instruction")
         }
 
         return try [
@@ -251,7 +235,7 @@ public struct SolanaSigner: Signable {
         case .redelegate,
              .rewards:
             fatalError()
-        case .freeze(_):
+        case .freeze:
             throw AnyError("Solana does not support freeze operations")
         }
         return try [

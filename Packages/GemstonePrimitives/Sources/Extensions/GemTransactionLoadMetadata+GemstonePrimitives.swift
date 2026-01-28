@@ -9,13 +9,12 @@ extension GemTransactionLoadMetadata {
         switch self {
         case .none:
             return .none
-        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash, let jitoTips):
+        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash):
             return .solana(
                 senderTokenAddress: senderTokenAddress,
                 recipientTokenAddress: recipientTokenAddress,
                 tokenProgram: tokenProgram?.map(),
-                blockHash: blockHash,
-                jitoTips: jitoTips.map()
+                blockHash: blockHash
             )
         case .ton(let senderTokenAddress, let recipientTokenAddress, let sequence):
             return .ton(
@@ -76,13 +75,12 @@ extension TransactionLoadMetadata {
         switch self {
         case .none:
             return .none
-        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash, let jitoTips):
+        case .solana(let senderTokenAddress, let recipientTokenAddress, let tokenProgram, let blockHash):
             return .solana(
                 senderTokenAddress: senderTokenAddress,
                 recipientTokenAddress: recipientTokenAddress,
                 tokenProgram: tokenProgram?.map(),
-                blockHash: blockHash,
-                jitoTips: jitoTips.map()
+                blockHash: blockHash
             )
         case .ton(let senderTokenAddress, let recipientTokenAddress, let sequence):
             return .ton(senderTokenAddress: senderTokenAddress, recipientTokenAddress: recipientTokenAddress, sequence: sequence)
@@ -164,14 +162,3 @@ extension HyperliquidOrder {
     }
 }
 
-extension GemSolanaJitoTips {
-    func map() -> SolanaJitoTips {
-        SolanaJitoTips(slow: slow, normal: normal, fast: fast)
-    }
-}
-
-extension SolanaJitoTips {
-    func map() -> GemSolanaJitoTips {
-        GemSolanaJitoTips(slow: slow, normal: normal, fast: fast)
-    }
-}
