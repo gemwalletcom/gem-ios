@@ -218,6 +218,7 @@ struct ServicesFactory {
         )
 
         let observersService = ObserversService(
+            preferences: preferences,
             connectionsService: connectionsService,
             deviceObserverService: deviceObserverService,
             priceObserverService: priceObserverService,

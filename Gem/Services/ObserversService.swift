@@ -7,8 +7,10 @@ import PriceService
 import PerpetualService
 import WalletConnector
 import Primitives
+import Preferences
 
 actor ObserversService: Sendable {
+    private let preferences: Preferences
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
     private let priceObserverService: PriceObserverService
@@ -17,11 +19,13 @@ actor ObserversService: Sendable {
     private var currentWallet: Wallet?
 
     init(
+        preferences: Preferences,
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
         priceObserverService: PriceObserverService,
         hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription>
     ) {
+        self.preferences = preferences
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
         self.priceObserverService = priceObserverService
@@ -39,8 +43,21 @@ actor ObserversService: Sendable {
     func setupWallet(_ wallet: Wallet) async {
         currentWallet = wallet
         async let assets: () = setupPriceAssets()
-        async let perpetual: () = hyperliquidObserverService.connect(for: wallet)
+        async let perpetual: () = {
+            if preferences.isPerpetualEnabled {
+                await hyperliquidObserverService.connect(for: wallet)
+            }
+        }()
         _ = await (assets, perpetual)
+    }
+
+    func updatePerpetualConnection() async {
+        if preferences.isPerpetualEnabled {
+            guard let wallet = currentWallet else { return }
+            await hyperliquidObserverService.connect(for: wallet)
+        } else {
+            await hyperliquidObserverService.disconnect()
+        }
     }
 
     func handleScenePhase(_ phase: ScenePhase) async {
@@ -90,7 +107,7 @@ extension ObserversService {
         let wallet = currentWallet
         async let price: () = priceObserverService.connect()
         async let perpetual: () = {
-            if let wallet {
+            if let wallet, preferences.isPerpetualEnabled {
                 await hyperliquidObserverService.connect(for: wallet)
             }
         }()

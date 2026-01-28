@@ -17,6 +17,7 @@ import TransactionsService
 import WalletConnector
 import WalletService
 import WalletsService
+import Preferences
 
 @Observable
 @MainActor
@@ -31,6 +32,7 @@ final class RootSceneViewModel {
     private let eventPresenterService: EventPresenterService
     private let deviceService: DeviceService
 
+    let observablePreferences: ObservablePreferences
     let walletsService: WalletsService
     let walletService: WalletService
     let nameService: NameService
@@ -69,6 +71,7 @@ final class RootSceneViewModel {
     }
 
     init(
+        observablePreferences: ObservablePreferences,
         walletConnectorPresenter: WalletConnectorPresenter,
         onstartWalletService: OnstartWalletService,
         transactionStateService: TransactionStateService,
@@ -85,6 +88,7 @@ final class RootSceneViewModel {
         avatarService: AvatarService,
         deviceService: DeviceService
     ) {
+        self.observablePreferences = observablePreferences
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartWalletService = onstartWalletService
         self.transactionStateService = transactionStateService
@@ -114,8 +118,16 @@ extension RootSceneViewModel {
         Task { await observersService.setup() }
     }
 
-    func handleScenePhase(_ phase: ScenePhase) async {
-        await observersService.handleScenePhase(phase)
+    func onScenePhaseChanged(_ oldPhase: ScenePhase, _ newPhase: ScenePhase) {
+        Task {
+            await observersService.handleScenePhase(newPhase)
+        }
+    }
+
+    func onPerpetualEnabledChanged(_ oldValue: Bool, _ newValue: Bool) {
+        Task {
+            await observersService.updatePerpetualConnection()
+        }
     }
 }
 
