@@ -581,3 +581,4 @@
 "asset.all_time_high" = "All Time High";
 "asset.all_time_low" = "All Time Low";
 "errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
+"swap.use_minimum_amount" = "Use Minimum Amount";

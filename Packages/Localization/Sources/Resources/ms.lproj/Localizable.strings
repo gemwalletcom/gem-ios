@@ -581,3 +581,4 @@
 "asset.all_time_high" = "Tertinggi Sepanjang Masa";
 "asset.all_time_low" = "Rendah Sepanjang Masa";
 "errors.swap.minimum_amount" = "Jumlah dagangan minimum ialah %@Sila masukkan jumlah yang lebih tinggi.";
+"swap.use_minimum_amount" = "Gunakan Jumlah Minimum";
