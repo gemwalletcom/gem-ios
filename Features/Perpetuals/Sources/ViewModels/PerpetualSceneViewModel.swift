@@ -48,6 +48,8 @@ public final class PerpetualSceneViewModel {
 
     let preference = Preferences.standard
 
+    private var observeTask: Task<Void, Never>?
+
     public init(
         wallet: Wallet,
         asset: Asset,
@@ -127,10 +129,14 @@ public extension PerpetualSceneViewModel {
 
     func onAppear() async {
         await subscribeCandles(period: currentPeriod)
-        await observeCandles()
+        observeTask = Task {
+            await observeCandles()
+        }
     }
 
     func onDisappear() async {
+        observeTask?.cancel()
+        observeTask = nil
         await unsubscribeCandles(period: currentPeriod)
     }
 
@@ -293,6 +299,7 @@ private extension PerpetualSceneViewModel {
 
     func observeCandles() async {
         for await candle in await observerService.chartService.makeStream() {
+            if Task.isCancelled { break }
             handleChartUpdate(candle)
         }
     }
