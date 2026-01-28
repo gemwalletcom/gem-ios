@@ -10,7 +10,7 @@ import Style
 import Localization
 import PrimitivesComponents
 
-public struct SetPriceAlertScene: View {
+struct SetPriceAlertScene: View {
     @State private var model: SetPriceAlertViewModel
     
     @FocusState private var focusedField: Bool
@@ -18,12 +18,12 @@ public struct SetPriceAlertScene: View {
     @Query<AssetRequest>
     private var assetData: AssetData
     
-    public init(model: SetPriceAlertViewModel) {
+    init(model: SetPriceAlertViewModel) {
         _model = State(initialValue: model)
         _assetData = Query(constant: model.assetRequest)
     }
     
-    public var body: some View {
+    var body: some View {
         List {
             Section {
                 VStack(spacing: .small) {

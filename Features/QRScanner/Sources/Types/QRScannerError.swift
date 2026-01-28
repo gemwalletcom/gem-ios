@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum QRScannerError: Error, Sendable {
+enum QRScannerError: Error, Sendable {
     case notSupported
     case permissionsNotGranted
     case decoding
@@ -10,7 +10,7 @@ public enum QRScannerError: Error, Sendable {
 }
 
 extension QRScannerError: Equatable {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
         case (.notSupported, .notSupported),
             (.permissionsNotGranted, .permissionsNotGranted),

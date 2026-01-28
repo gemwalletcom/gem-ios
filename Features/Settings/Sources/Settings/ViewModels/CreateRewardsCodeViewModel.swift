@@ -8,16 +8,16 @@ import Localization
 
 @Observable
 @MainActor
-public final class CreateRewardsCodeViewModel: TextInputViewModelProtocol {
+final class CreateRewardsCodeViewModel: TextInputViewModelProtocol {
     private let rewardsService: RewardsServiceable
     private let wallet: Wallet
     private let onSuccess: (Rewards) -> Void
 
-    public var text: String = ""
-    public var isLoading: Bool = false
-    public var errorMessage: String?
+    var text: String = ""
+    var isLoading: Bool = false
+    var errorMessage: String?
 
-    public init(
+    init(
         rewardsService: RewardsServiceable,
         wallet: Wallet,
         onSuccess: @escaping (Rewards) -> Void
@@ -27,12 +27,12 @@ public final class CreateRewardsCodeViewModel: TextInputViewModelProtocol {
         self.onSuccess = onSuccess
     }
 
-    public var title: String { Localized.Rewards.nickname }
-    public var placeholder: String { Localized.Rewards.username }
-    public var footer: String? { Localized.Rewards.CreateReferralCode.info }
-    public var isActionDisabled: Bool { text.isEmpty }
+    var title: String { Localized.Rewards.nickname }
+    var placeholder: String { Localized.Rewards.username }
+    var footer: String? { Localized.Rewards.CreateReferralCode.info }
+    var isActionDisabled: Bool { text.isEmpty }
 
-    public func action() async {
+    func action() async {
         isLoading = true
         let code = text
 

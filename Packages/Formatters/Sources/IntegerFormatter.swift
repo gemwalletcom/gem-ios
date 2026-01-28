@@ -12,7 +12,7 @@ public struct IntegerFormatter: Sendable {
         return formatter
     }
     
-    public static let standard = IntegerFormatter()
+    static let standard = IntegerFormatter()
     
     public init(
         locale: Locale = Locale.current

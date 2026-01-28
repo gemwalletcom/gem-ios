@@ -1,7 +1,8 @@
 import Foundation
-import WalletCore
 import Primitives
-import struct Formatters.MnemonicFormatter
+import WalletCore
+
+internal import struct Formatters.MnemonicFormatter
 
 public struct Mnemonic {
     

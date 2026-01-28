@@ -7,15 +7,15 @@ import Store
 import ChainService
 import Blockchain
 
-public struct TransactionStateUpdateJob: Job {
+struct TransactionStateUpdateJob: Job {
     private let transactionWallet: TransactionWallet
     private let stateService: TransactionStateProvider
     private let postProcessingService: TransactionPostProcessingService
     private let minInitialInterval: Duration = .seconds(5)
 
-    public var id: String { transaction.id.identifier }
+    var id: String { transaction.id.identifier }
 
-    public var configuration: JobConfiguration {
+    var configuration: JobConfiguration {
         .adaptive(
             configuration: AdaptiveConfiguration(
                 initialInterval: min(
@@ -41,7 +41,7 @@ public struct TransactionStateUpdateJob: Job {
         self.postProcessingService = postProcessingService
     }
 
-    public func run() async -> JobStatus {
+    func run() async -> JobStatus {
         do {
             let stateChanges = try await stateService.getState(for: transaction)
 
@@ -65,7 +65,7 @@ public struct TransactionStateUpdateJob: Job {
         }
     }
 
-    public func onComplete() async throws {
+    func onComplete() async throws {
         try await postProcessingService.process(
             wallet: transactionWallet.wallet,
             transaction: transactionWallet.transaction

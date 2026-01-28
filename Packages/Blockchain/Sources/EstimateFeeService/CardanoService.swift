@@ -1,19 +1,20 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
+import Gemstone
 import Primitives
 import SwiftHTTPClient
-import BigInt
-import Gemstone
-import GemstonePrimitives
 import WalletCore
 
-public final class CardanoService: Sendable {
-    
-    public init() {
-        
+internal import GemstonePrimitives
+
+final class CardanoService: Sendable {
+
+    init() {
+
     }
-    
+
     private func calculateFee(input: TransactionInput) async throws -> Gemstone.GemTransactionLoadFee? {
         let utxos = try input.metadata.getUtxos()
         let signingInput = try CardanoSigningInput.with {
@@ -32,7 +33,7 @@ public final class CardanoService: Sendable {
             $0.ttl = 190000000
         }
         let plan: CardanoTransactionPlan = AnySigner.plan(input: signingInput, coin: .cardano)
-        
+
         return Fee(
             fee: BigInt(plan.fee),
             gasPriceType: .regular(gasPrice: 1),
@@ -45,7 +46,7 @@ extension CardanoService: GemGatewayEstimateFee {
     public func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
         return try await calculateFee(input: try input.map())
     }
-    
+
     public func getFeeData(chain: Gemstone.Chain, input: GemTransactionLoadInput) async throws -> String? {
         .none
     }

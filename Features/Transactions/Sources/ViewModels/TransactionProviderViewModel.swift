@@ -7,16 +7,16 @@ import Localization
 import Components
 import class Gemstone.SwapProviderConfig
 
-public struct TransactionProviderViewModel: Sendable {
+struct TransactionProviderViewModel: Sendable {
     private let metadata: TransactionSwapMetadata?
 
-    public init(metadata: TransactionSwapMetadata?) {
+    init(metadata: TransactionSwapMetadata?) {
         self.metadata = metadata
     }
 }
 
 extension TransactionProviderViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         guard let providerId = metadata?.provider else {
             return .empty
         }

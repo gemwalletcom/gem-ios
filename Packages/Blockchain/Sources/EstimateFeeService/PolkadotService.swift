@@ -1,20 +1,21 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
+import Gemstone
 import Primitives
 import SwiftHTTPClient
-import BigInt
-import Gemstone
-import GemstonePrimitives
 import WalletCore
 
-public final class PolkadotService: Sendable {
-    
-    public init() {
-        
+internal import GemstonePrimitives
+
+final class PolkadotService: Sendable {
+
+    init() {
+
     }
-    
-    public func feePayload(input: TransactionInput) throws -> String {
+
+    func feePayload(input: TransactionInput) throws -> String {
         guard case .polkadot(
             let sequence,
             let genesisHash,
@@ -26,7 +27,7 @@ public final class PolkadotService: Sendable {
         ) = input.metadata else {
             throw AnyError("")
         }
-        
+
         let input = try PolkadotSigningInput.with {
             $0.genesisHash = try genesisHash.encodedData()
             $0.blockHash = try blockHash.encodedData()
@@ -60,7 +61,7 @@ extension PolkadotService: GemGatewayEstimateFee {
     public func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
         return .none
     }
-    
+
     public func getFeeData(chain: Gemstone.Chain, input: GemTransactionLoadInput) async throws -> String? {
         try feePayload(input: try input.map())
     }

@@ -1,11 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Gemstone
-import Primitives
-import BigInt
 import NativeProviderService
-import GemstonePrimitives
+import Primitives
+
+internal import GemstonePrimitives
 
 public actor GatewayService: Sendable {
     let gateway: GemGateway
@@ -82,7 +83,7 @@ extension GatewayService {
 // MARK: - Account
 
 extension GatewayService {
-    public func utxos(chain: Primitives.Chain, address: String) async throws -> [UTXO] {
+    func utxos(chain: Primitives.Chain, address: String) async throws -> [UTXO] {
         try await gateway.getUtxos(chain: chain.rawValue, address: address).map {
             try $0.map()
         }

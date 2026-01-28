@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct WalletConnectionRecord: Codable, FetchableRecord, PersistableRecord  {
-    public static let databaseTableName: String = "wallets_connections"
+struct WalletConnectionRecord: Codable, FetchableRecord, PersistableRecord  {
+    static let databaseTableName: String = "wallets_connections"
     
-    public enum Columns {
+    enum Columns {
         static let id = Column("id")
         static let sessionId = Column("sessionId")
         static let walletId = Column("walletId")
@@ -21,19 +21,19 @@ public struct WalletConnectionRecord: Codable, FetchableRecord, PersistableRecor
         static let appIcon = Column("appIcon")
     }
 
-    public var id: String
-    public var sessionId: String
-    public var walletId: String
-    public var state: WalletConnectionState
-    public var chains: [Chain]?
-    public var createdAt: Date
-    public var expireAt: Date
+    var id: String
+    var sessionId: String
+    var walletId: String
+    var state: WalletConnectionState
+    var chains: [Chain]?
+    var createdAt: Date
+    var expireAt: Date
     
     // metadata
-    public var appName: String
-    public var appDescription: String
-    public var appLink: String
-    public var appIcon: String
+    var appName: String
+    var appDescription: String
+    var appLink: String
+    var appIcon: String
 }
 
 extension WalletConnectionRecord: CreateTable {

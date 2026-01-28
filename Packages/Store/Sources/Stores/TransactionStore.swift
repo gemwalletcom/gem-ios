@@ -34,7 +34,7 @@ public struct TransactionStore: Sendable {
         }
     }
 
-    public func getTransactionRecord(transactionId: String) throws -> TransactionRecord {
+    func getTransactionRecord(transactionId: String) throws -> TransactionRecord {
         try db.read { db in
             guard let transaction = try TransactionRecord
                 .filter(TransactionRecord.Columns.transactionId == transactionId)
@@ -45,7 +45,7 @@ public struct TransactionStore: Sendable {
         }
     }
 
-    public func getWalletIds(for transactionId: String) throws -> [String] {
+    func getWalletIds(for transactionId: String) throws -> [String] {
         return try db.read { db in
             return try TransactionRecord
                 .filter(TransactionRecord.Columns.transactionId == transactionId)
@@ -54,7 +54,7 @@ public struct TransactionStore: Sendable {
         }
     }
 
-    public func getTransactionAssetAssociations(for transactionId: String) throws -> [TransactionAssetAssociationRecord] {
+    func getTransactionAssetAssociations(for transactionId: String) throws -> [TransactionAssetAssociationRecord] {
         try db.read { db in
             try TransactionAssetAssociationRecord
                 .joining(required: TransactionAssetAssociationRecord.transaction)
@@ -129,7 +129,7 @@ public struct TransactionStore: Sendable {
         }
     }
 
-    public func isExist(transactionId: String) throws -> Bool {
+    private func isExist(transactionId: String) throws -> Bool {
         return try db.read { db in
             try TransactionRecord
                 .filter(TransactionRecord.Columns.transactionId == transactionId)

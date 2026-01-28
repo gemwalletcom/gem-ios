@@ -11,11 +11,11 @@ struct AssetVisibilityManager: AssetVisibilityServiceable {
         self.service = service
     }
 
-    public func hideAsset(walletId: WalletId, assetId: AssetId) throws {
+    func hideAsset(walletId: WalletId, assetId: AssetId) throws {
         try service.hideAsset(walletId: walletId, assetId: assetId)
     }
 
-    public func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {
+    func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {
         switch isPinned {
         case true: try service.pinAsset(walletId: walletId, assetId: assetId)
         case false: try service.unpinAsset(walletId: walletId, assetId: assetId)

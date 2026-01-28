@@ -1,11 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import BigInt
-import Primitives
-import Formatters
-import GemstonePrimitives
 import Components
+import Formatters
+import Foundation
+import Primitives
+
+internal import GemstonePrimitives
 
 public struct TransactionInfoViewModel: Sendable {
     private let asset: Asset

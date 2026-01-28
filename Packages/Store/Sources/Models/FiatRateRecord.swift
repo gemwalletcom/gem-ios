@@ -10,7 +10,7 @@ public struct FiatRateRecord: Codable, FetchableRecord, PersistableRecord  {
         public static let rate = Column("rate")
         public static let updatedAt = Column("updatedAt")
     }
-    
+
     public static let databaseTableName: String = "fiat_rates"
 
     public var symbol: String

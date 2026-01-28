@@ -5,19 +5,19 @@ import SwiftUI
 import Style
 import InfoSheet
 
-public struct MarketValueViewModel {
-    public let title: String
-    public let titleExtra: String?
-    public let subtitle: String?
-    public let subtitleExtra: String?
-    public let subtitleExtraStyle: TextStyle?
-    public let value: String?
-    public let url: URL?
-    public let titleTag: String?
-    public let titleTagStyle: TextStyle?
-    public let infoSheetType: InfoSheetType?
+struct MarketValueViewModel {
+    let title: String
+    let titleExtra: String?
+    let subtitle: String?
+    let subtitleExtra: String?
+    let subtitleExtraStyle: TextStyle?
+    let value: String?
+    let url: URL?
+    let titleTag: String?
+    let titleTagStyle: TextStyle?
+    let infoSheetType: InfoSheetType?
 
-    public init(
+    init(
         title: String,
         titleExtra: String? = .none,
         subtitle: String?,

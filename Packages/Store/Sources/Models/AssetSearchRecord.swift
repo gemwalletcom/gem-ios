@@ -3,21 +3,22 @@
 import Foundation
 import GRDB
 import Primitives
-import BigInt
 
-public struct AssetSearchRecord: Codable, PersistableRecord, FetchableRecord, TableRecord  {
+internal import BigInt
+
+struct AssetSearchRecord: Codable, PersistableRecord, FetchableRecord, TableRecord  {
     
-    public static let databaseTableName: String = "assets_search"
+    static let databaseTableName: String = "assets_search"
     
-    public enum Columns {
+    enum Columns {
         static let query = Column("query")
         static let assetId = Column("assetId")
         static let priority = Column("priority")
     }
 
-    public var query: String
-    public var assetId: AssetId
-    public var priority: Int
+    var query: String
+    var assetId: AssetId
+    var priority: Int
 }
 
 extension AssetSearchRecord: CreateTable {

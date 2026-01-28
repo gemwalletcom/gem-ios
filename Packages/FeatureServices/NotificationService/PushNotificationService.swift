@@ -41,7 +41,7 @@ public struct PushNotificationEnablerService: Sendable {
         return await center.notificationSettings().authorizationStatus
     }
     
-    public func openSetting() async throws {
+    func openSetting() async throws {
         if let appSettings = URL(string: UIApplication.openSettingsURLString) {
             if await UIApplication.shared.canOpenURL(appSettings) {
                 await UIApplication.shared.open(appSettings, completionHandler: .none)

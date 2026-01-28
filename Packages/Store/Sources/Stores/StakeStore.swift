@@ -123,7 +123,7 @@ public struct StakeStore: Sendable {
 // MARK: - Static
 
 extension StakeStore {
-    public static func getValidatorsActive(db: Database, assetId: AssetId) throws -> [DelegationValidator] {
+    static func getValidatorsActive(db: Database, assetId: AssetId) throws -> [DelegationValidator] {
         let excludeValidatorIds = [DelegationValidator.systemId, DelegationValidator.legacySystemId]
         return try StakeValidatorRecord
             .filter(StakeValidatorRecord.Columns.assetId == assetId.identifier)

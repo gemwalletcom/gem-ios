@@ -3,12 +3,12 @@
 import SwiftUI
 import Style
 
-public struct PulsingDotView: View {
+struct PulsingDotView: View {
     private let color: Color
     private let dotSize: CGFloat
     private let isAnimated: Bool
 
-    public init(
+    init(
         color: Color,
         dotSize: CGFloat = 8,
         isAnimated: Bool = true
@@ -18,7 +18,7 @@ public struct PulsingDotView: View {
         self.isAnimated = isAnimated
     }
 
-    public var body: some View {
+    var body: some View {
         ZStack {
             pulseRing(scale: 3.0, delay: 0)
             pulseRing(scale: 2.5, delay: 0.4)
