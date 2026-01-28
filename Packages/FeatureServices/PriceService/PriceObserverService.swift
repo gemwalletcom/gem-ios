@@ -15,6 +15,7 @@ public actor PriceObserverService: Sendable {
 
     private var observeTask: Task<Void, Never>?
     private var subscribedAssetIds: Set<AssetId> = []
+    private var currentWalletId: WalletId?
 
     public init(
         webSocket: any WebSocketConnectable = WebSocketConnection(url: Constants.pricesWebSocketURL),
@@ -67,14 +68,15 @@ public actor PriceObserverService: Sendable {
         return subscribedAssetIds
     }
 
-    public func setupAssets() async throws {
-        let assets = try priceService.observableAssets()
+    public func setupAssets(walletId: WalletId) async throws {
+        currentWalletId = walletId
+        let assets = try priceService.observableAssets(walletId: walletId)
         let action = WebSocketPriceAction(
             action: .subscribe,
             assets: assets
         )
         try await sendAction(action)
-        subscribedAssetIds.formUnion(assets)
+        subscribedAssetIds = Set(assets)
     }
 
     // MARK: - Private
@@ -92,8 +94,9 @@ public actor PriceObserverService: Sendable {
     }
 
     private func handleConnected() async {
+        guard let walletId = currentWalletId else { return }
         do {
-            try await setupAssets()
+            try await setupAssets(walletId: walletId)
         } catch {
             debugLog("price observer: setupAssets failed: \(error)")
         }
