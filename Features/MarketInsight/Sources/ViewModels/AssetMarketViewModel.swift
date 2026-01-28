@@ -74,7 +74,7 @@ struct AssetMarketViewModel {
     var maxSupply: MarketValueViewModel {
         MarketValueViewModel(
             title: Localized.Info.MaxSupply.title,
-            subtitle: formatSupply(market.maxSupply),
+            subtitle: market.maxSupply == 0 ? "∞ \(assetSymbol)" : formatSupply(market.maxSupply),
             infoSheetType: .maxSupply
         )
     }
