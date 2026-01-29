@@ -35,6 +35,7 @@ public final class Preferences: @unchecked Sendable {
         static let isPerpetualEnabled = "is_perpetual_enabled"
         static let perpetualLeverage = "perpetual_leverage"
         static let perpetualNodeUrl = "perpetual_node_url"
+        static let isDeviceRegistered = "is_device_registered"
         static let supportDeviceId = "support_device_id"
         static let supportDeviceRegistered = "support_device_registered"
     }
@@ -117,6 +118,9 @@ public final class Preferences: @unchecked Sendable {
     @ConfigurableDefaults(key: Keys.perpetualNodeUrl, defaultValue: nil)
     public var perpetualNodeUrl: String?
 
+    @ConfigurableDefaults(key: Keys.isDeviceRegistered, defaultValue: false)
+    public var isDeviceRegistered: Bool
+
     @ConfigurableDefaults(key: Keys.supportDeviceId, defaultValue: nil)
     public var supportDeviceId: String?
 
@@ -163,6 +167,7 @@ public final class Preferences: @unchecked Sendable {
         configure(\._isPerpetualEnabled, key: Keys.isPerpetualEnabled, defaultValue: false)
         configure(\._perpetualLeverage, key: Keys.perpetualLeverage, defaultValue: 10)
         configure(\._perpetualNodeUrl, key: Keys.perpetualNodeUrl, defaultValue: nil)
+        configure(\._isDeviceRegistered, key: Keys.isDeviceRegistered, defaultValue: false)
         configure(\._supportDeviceId, key: Keys.supportDeviceId, defaultValue: nil)
         configure(\._isSupportDeviceRegistered, key: Keys.supportDeviceRegistered, defaultValue: false)
     }
