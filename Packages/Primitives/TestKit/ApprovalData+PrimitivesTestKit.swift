@@ -5,7 +5,10 @@ import Primitives
 
 extension ApprovalData {
     public static func mock(
+        token: String = "",
+        spender: String = "",
+        value: String = ""
     ) -> ApprovalData {
-        ApprovalData(token: "", spender: "", value: "")
+        ApprovalData(token: token, spender: spender, value: value)
     }
 }

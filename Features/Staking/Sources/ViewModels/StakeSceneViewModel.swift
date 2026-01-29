@@ -12,11 +12,16 @@ import StakeService
 import InfoSheet
 import PrimitivesComponents
 import Formatters
+import Yield
+import YieldService
+import NodeService
 
 @MainActor
 @Observable
 public final class StakeSceneViewModel {
     private let stakeService: any StakeServiceable
+    private let nodeService: NodeService?
+    private let yieldAsset: Asset?
 
     private var delegatitonsState: StateViewType<Bool> = .loading
     private let chain: StakeChain
@@ -25,7 +30,7 @@ public final class StakeSceneViewModel {
     private let recommendedValidators = StakeRecommendedValidators()
 
     public let wallet: Wallet
-    public var request: StakeDelegationsRequest
+    public var request: EarnDelegationsRequest
     public var delegations: [Delegation] = []
     public var validatorsRequest: StakeValidatorsRequest
     public var validators: [DelegationValidator] = []
@@ -38,12 +43,16 @@ public final class StakeSceneViewModel {
     public init(
         wallet: Wallet,
         chain: StakeChain,
-        stakeService: any StakeServiceable
+        stakeService: any StakeServiceable,
+        nodeService: NodeService? = nil,
+        yieldAsset: Asset? = nil
     ) {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
-        self.request = StakeDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
+        self.nodeService = nodeService
+        self.yieldAsset = yieldAsset
+        self.request = EarnDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
         self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId)
         self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
     }
@@ -225,6 +234,33 @@ extension StakeSceneViewModel {
 
     func onAprInfo() {
         isPresentingInfoSheet = aprInfoSheet
+    }
+}
+
+// MARK: - Yield
+
+extension StakeSceneViewModel {
+    public var showYield: Bool {
+        yieldAsset != nil && nodeService != nil
+    }
+
+    public var yieldTitle: String {
+        "Earn"
+    }
+
+    public func yieldSceneViewModel() -> YieldSceneViewModel? {
+        guard let nodeService = nodeService,
+              let yieldAsset = yieldAsset else {
+            return nil
+        }
+        do {
+            let yieldService = try YieldService(nodeProvider: nodeService)
+            let input = YieldInput(wallet: wallet, asset: yieldAsset)
+            return YieldSceneViewModel(input: input, yieldService: yieldService)
+        } catch {
+            debugLog("Failed to initialize YieldService: \(error)")
+            return nil
+        }
     }
 }
 

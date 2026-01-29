@@ -28,6 +28,7 @@ struct WalletNavigationStack: View {
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.activityService) private var activityService
+    @Environment(\.yieldService) private var yieldService
     @Environment(\.walletSearchService) private var walletSearchService
     @Environment(\.assetSearchService) private var assetSearchService
 
@@ -106,6 +107,7 @@ struct WalletNavigationStack: View {
                         priceObserverService: priceObserverService,
                         priceAlertService: priceAlertService,
                         bannerService: bannerService,
+                        yieldService: yieldService,
                         input: AssetSceneInput(
                             wallet: model.wallet,
                             asset: $0.asset

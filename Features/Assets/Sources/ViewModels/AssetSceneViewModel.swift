@@ -1,21 +1,24 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Primitives
-import SwiftUI
-import UIKit
-import Components
-import Style
-import Localization
-import PriceAlertService
-import PrimitivesComponents
-import Preferences
-import ExplorerService
 import AssetsService
-import TransactionsService
-import WalletsService
-import PriceService
 import BannerService
+import BigInt
+import Components
+import ExplorerService
 import Formatters
+import Gemstone
+import Localization
+import Preferences
+import PriceAlertService
+import PriceService
+import Primitives
+import PrimitivesComponents
+import Style
+import SwiftUI
+import TransactionsService
+import UIKit
+import WalletsService
+import YieldService
 
 @Observable
 @MainActor
@@ -25,8 +28,13 @@ public final class AssetSceneViewModel: Sendable {
     private let transactionsService: TransactionsService
     private let priceObserverService: PriceObserverService
     private let bannerService: BannerService
+    private let yieldService: YieldService?
 
     private let preferences: ObservablePreferences = .default
+
+    private(set) var hasYieldOpportunity: Bool = false
+    private(set) var yieldPosition: GemYieldPosition?
+    private(set) var isYieldPositionLoaded: Bool = false
 
     let explorerService: ExplorerService = .standard
     public let priceAlertService: PriceAlertService
@@ -51,6 +59,7 @@ public final class AssetSceneViewModel: Sendable {
         priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
         bannerService: BannerService,
+        yieldService: YieldService? = nil,
         input: AssetSceneInput,
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
@@ -60,6 +69,7 @@ public final class AssetSceneViewModel: Sendable {
         self.priceObserverService = priceObserverService
         self.priceAlertService = priceAlertService
         self.bannerService = bannerService
+        self.yieldService = yieldService
 
         self.input = input
         self.chainAssetData = ChainAssetData(
@@ -83,7 +93,7 @@ public final class AssetSceneViewModel: Sendable {
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
-    var showBalances: Bool { assetDataModel.showBalances }
+    var showBalances: Bool { assetDataModel.showBalances || hasYieldPosition }
     private var showStakedBalanceTypes: [BalanceType] = [.staked, .pending, .rewards]
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
@@ -118,8 +128,33 @@ public final class AssetSceneViewModel: Sendable {
 
     var networkText: String { assetModel.networkFullName }
     var stakeAprText: String {
-        guard let apr = assetDataModel.stakeApr else { return .empty }
+        guard let apr = assetDataModel.stakingApr else { return .empty }
         return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
+    }
+
+    var earnTitle: String { "Earn" }
+
+    var earnAprText: String {
+        guard let apr = assetDataModel.earnApr else { return .empty }
+        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
+    }
+
+    var showStakeButton: Bool {
+        !showBalances && assetDataModel.isStakeEnabled && !wallet.isViewOnly
+    }
+
+    var showEarnButton: Bool {
+        hasYieldOpportunity && !wallet.isViewOnly && !hasYieldPosition
+    }
+
+    var hasYieldPosition: Bool {
+        assetData.balance.yield > 0
+    }
+
+    var yieldBalanceText: String {
+        let balance = assetData.balance.yield
+        guard balance > 0 else { return "0" }
+        return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -212,6 +247,7 @@ extension AssetSceneViewModel {
         Task {
             await updateAsset()
         }
+        checkYieldAvailability()
 
         if assetData.priceAlerts.isNotEmpty {
             Task {
@@ -220,8 +256,33 @@ extension AssetSceneViewModel {
         }
     }
 
+    private func checkYieldAvailability() {
+        guard let _ = yieldService, assetData.isEarnable else { return }
+        hasYieldOpportunity = true
+        fetchYieldPosition()
+    }
+
+    private func fetchYieldPosition() {
+        guard let yieldService,
+              let address = try? wallet.account(for: asset.id.chain).address else {
+            isYieldPositionLoaded = true
+            return
+        }
+
+        yieldPosition = yieldService.getPosition(
+            provider: .yo,
+            asset: asset.id,
+            walletAddress: address,
+            walletId: wallet.walletId
+        ) { [weak self] fresh in
+            self?.yieldPosition = fresh
+        }
+        isYieldPositionLoaded = true
+    }
+
     func fetch() async {
         await updateWallet()
+        fetchYieldPosition()
     }
 
     func onSelectHeader(_ buttonType: HeaderButtonType) {
@@ -277,6 +338,8 @@ extension AssetSceneViewModel {
             case .tradePerpetuals:
                 UIApplication.shared.open(DeepLink.perpetuals.localUrl)
                 preferences.isPerpetualEnabled = true
+            case .yield:
+                onSelectEarn()
             }
         case .button(let bannerButton):
             switch bannerButton {
@@ -297,6 +360,13 @@ extension AssetSceneViewModel {
 
     func onSelectSwap() {
         onSelectHeader(.swap)
+    }
+
+    func onSelectEarn() {
+        isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
+            type: .earn(assetData.asset),
+            assetAddress: assetData.assetAddress
+        )
     }
 
     public func onSelectShareAsset() {
@@ -416,6 +486,7 @@ extension AssetSceneViewModel {
     private func updateAsset() async {
         do {
             try await assetsService.updateAsset(assetId: assetModel.asset.id)
+            checkYieldAvailability()
         } catch {
             // TODO: - handle updateAsset error
             debugLog("asset scene: updateAsset error \(error)")

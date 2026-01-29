@@ -11,7 +11,6 @@ public struct StoreManager: Sendable {
     public let nodeStore: NodeStore
     public let walletStore: WalletStore
     public let connectionsStore: ConnectionsStore
-    public let stakeStore: StakeStore
     public let bannerStore: BannerStore
     public let priceAlertStore: PriceAlertStore
     public let nftStore: NFTStore
@@ -20,6 +19,7 @@ public struct StoreManager: Sendable {
     public let recentActivityStore: RecentActivityStore
     public let searchStore: SearchStore
     public let inAppNotificationStore: InAppNotificationStore
+    public let earnStore: EarnStore
 
     public init(db: DB) {
         self.assetStore = AssetStore(db: db)
@@ -30,7 +30,6 @@ public struct StoreManager: Sendable {
         self.nodeStore = NodeStore(db: db)
         self.walletStore = WalletStore(db: db)
         self.connectionsStore = ConnectionsStore(db: db)
-        self.stakeStore = StakeStore(db: db)
         self.bannerStore = BannerStore(db: db)
         self.priceAlertStore = PriceAlertStore(db: db)
         self.nftStore = NFTStore(db: db)
@@ -39,5 +38,6 @@ public struct StoreManager: Sendable {
         self.recentActivityStore = RecentActivityStore(db: db)
         self.searchStore = SearchStore(db: db)
         self.inAppNotificationStore = InAppNotificationStore(db: db)
+        self.earnStore = EarnStore(db: db)
     }
 }

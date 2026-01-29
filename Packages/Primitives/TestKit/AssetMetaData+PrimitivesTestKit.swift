@@ -11,9 +11,11 @@ public extension AssetMetaData {
         isSellEnabled: Bool = true,
         isSwapEnabled: Bool = true,
         isStakeEnabled: Bool = true,
+        stakingApr: Double? = nil,
+        isEarnEnabled: Bool = false,
+        earnApr: Double? = nil,
         isPinned: Bool = true,
         isActive: Bool = true,
-        stakingApr: Double? = nil,
         rankScore: Int32 = 42
     ) -> AssetMetaData {
         AssetMetaData(
@@ -23,9 +25,11 @@ public extension AssetMetaData {
             isSellEnabled: isSellEnabled,
             isSwapEnabled: isSwapEnabled,
             isStakeEnabled: isStakeEnabled,
+            stakingApr: stakingApr,
+            isEarnEnabled: isEarnEnabled,
+            earnApr: earnApr,
             isPinned: isPinned,
             isActive: isActive,
-            stakingApr: stakingApr,
             rankScore: rankScore
         )
     }

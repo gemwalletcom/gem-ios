@@ -375,9 +375,9 @@ struct Migrations {
             }
         }
 
-        migrator.registerMigration("Migrate wallet IDs to WalletIdentifier format") { db in
-            try? db.alter(table: WalletRecord.databaseTableName) {
-                $0.add(column: WalletRecord.Columns.externalId.name, .text)
+        migrator.registerMigration("Add isEarnable to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.isEarnable.name, .boolean).defaults(to: false)
             }
             try WalletIdMigration.migrate(db: db)
         }
@@ -385,6 +385,20 @@ struct Migrations {
         migrator.registerMigration("Add hasImage to \(AssetRecord.databaseTableName)") { db in
             try? db.alter(table: AssetRecord.databaseTableName) {
                 $0.add(column: AssetRecord.Columns.hasImage.name, .boolean).defaults(to: false)
+            }
+        }
+
+        migrator.registerMigration("Create \(EarnPositionRecord.databaseTableName)") { db in
+            try EarnPositionRecord.create(db: db)
+        }
+
+        migrator.registerMigration("Add earnApr to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.earnApr.name, .double)
+            }
+            try? db.alter(table: BalanceRecord.databaseTableName) {
+                $0.add(column: BalanceRecord.Columns.yield.name, .text).defaults(to: "0")
+                $0.add(column: BalanceRecord.Columns.yieldAmount.name, .double).defaults(to: 0)
             }
         }
 

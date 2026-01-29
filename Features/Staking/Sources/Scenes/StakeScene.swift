@@ -7,6 +7,7 @@ import Components
 import Localization
 import InfoSheet
 import PrimitivesComponents
+import Yield
 
 public struct StakeScene: View {
     private let model: StakeSceneViewModel
@@ -25,6 +26,9 @@ public struct StakeScene: View {
                 resourcesSection
             }
             delegationsSection
+            if model.showYield {
+                earnSection
+            }
         }
         .listSectionSpacing(.compact)
         .refreshable {
@@ -126,6 +130,18 @@ extension StakeScene {
                 subtitle: model.bandwidthText
             )
         }
-        
+    }
+
+    @ViewBuilder
+    private var earnSection: some View {
+        if let yieldModel = model.yieldSceneViewModel() {
+            Section(model.yieldTitle) {
+                NavigationLink {
+                    YieldScene(model: yieldModel)
+                } label: {
+                    ListItemView(title: model.yieldTitle)
+                }
+            }
+        }
     }
 }

@@ -79,6 +79,10 @@ public struct DeveloperScene: View {
                     with: ListItemView(title: "Clear Prices"),
                     action: model.clearPrices
                 )
+                NavigationCustomLink(
+                    with: ListItemView(title: "Clear Earn Positions"),
+                    action: model.clearEarnPositions
+                )
                 #if DEBUG
                 NavigationCustomLink(
                     with: ListItemView(title: "Add Transactions"),
@@ -112,10 +116,10 @@ public struct DeveloperScene: View {
             Section("Preferences") {
                 NavigationCustomLink(
                     with: ListItemView(title: "Clear Swap Assets Version"),
-                    action: model.clearAssetsVersion 
+                    action: model.clearAssetsVersion
                 )
             }
-            
+
             Section {
                 NavigationCustomLink(with: ListItemView(title: "Reset"), action: model.reset)
             }

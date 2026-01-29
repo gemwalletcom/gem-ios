@@ -61,7 +61,7 @@ public struct ImportAssetsService: Sendable {
                         isStakeable: isStakable,
                         stakingApr: .none,
                         isEarnable: false,
-                        earnApr: nil,
+                        earnApr: .none,
                         hasImage: true
                     ),
                     score: score,
@@ -81,7 +81,7 @@ public struct ImportAssetsService: Sendable {
                         isStakeable: false,
                         stakingApr: .none,
                         isEarnable: false,
-                        earnApr: nil,
+                        earnApr: .none,
                         hasImage: false
                     ),
                     score: AssetScore(rank: 16),

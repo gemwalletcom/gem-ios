@@ -113,7 +113,7 @@ struct AmountScene: View {
                     }
                 }
 
-            case .transfer:
+            case .transfer, .yield:
                 EmptyView()
             }
         }

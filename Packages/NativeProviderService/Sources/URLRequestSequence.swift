@@ -43,7 +43,7 @@ struct URLRequestSequence<T: URLRequestConvertible>: AsyncSequence {
 extension AlienTarget: URLRequestConvertible {
     func asRequest() throws -> URLRequest {
         guard let url = URL(string: self.url) else {
-            let error = AlienError.RequestError(msg: "invalid url: \(self.url)")
+            let error = AlienError.Network("invalid url: \(self.url)")
             throw error
         }
         var request = URLRequest(url: url)

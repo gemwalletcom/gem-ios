@@ -17,11 +17,14 @@ public extension AssetData {
             isSellEnabled: true,
             isSwapEnabled: true,
             isStakeEnabled: true,
+            stakingApr: .none,
+            isEarnEnabled: false,
+            earnApr: .none,
             isPinned: true,
             isActive: true,
-            stakingApr: .none,
             rankScore: 42
-        )
+        ),
+        isEarnable: Bool = false
     ) -> AssetData {
         AssetData(
             asset: asset,
@@ -29,7 +32,8 @@ public extension AssetData {
             account: account,
             price: price,
             priceAlerts: priceAlerts,
-            metadata: metadata
+            metadata: metadata,
+            isEarnable: isEarnable
         )
     }
 }

@@ -34,16 +34,6 @@ public struct RedelegateData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct StakeData: Codable, Equatable, Hashable, Sendable {
-	public let data: String?
-	public let to: String?
-
-	public init(data: String?, to: String?) {
-		self.data = data
-		self.to = to
-	}
-}
-
 public enum StakeType: Codable, Equatable, Hashable, Sendable {
 	case stake(DelegationValidator)
 	case unstake(Delegation)

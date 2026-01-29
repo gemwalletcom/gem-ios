@@ -16,6 +16,6 @@ public struct StakeValidatorsRequest: ValueObservationQueryable {
     }
 
     public func fetch(_ db: Database) throws -> [DelegationValidator] {
-        try StakeStore.getValidatorsActive(db: db, assetId: assetId)
+        try EarnStore.getValidatorsActive(db: db, assetId: assetId)
     }
 }

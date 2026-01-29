@@ -13,6 +13,7 @@ import PriceService
 import RewardsService
 import InAppNotifications
 import NotificationService
+import YieldService
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -33,6 +34,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.walletConnectorManager) private var walletConnectorManager
     @Environment(\.rewardsService) private var rewardsService
     @Environment(\.inAppNotificationService) private var inAppNotificationService
+    @Environment(\.yieldService) private var yieldService
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -138,7 +140,8 @@ struct SettingsNavigationStack: View {
                     stakeService: stakeService,
                     bannerService: bannerService,
                     priceService: priceService,
-                    perpetualService: perpetualService
+                    perpetualService: perpetualService,
+                    yieldService: yieldService
                 ))
             }
             .navigationDestination(for: Scenes.InAppNotifications.self) { _ in

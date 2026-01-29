@@ -67,6 +67,11 @@ public struct BalanceStore: Sendable {
                         BalanceRecord.Columns.withdrawable.set(to: balance.withdrawable.value),
                         BalanceRecord.Columns.withdrawableAmount.set(to: balance.withdrawable.amount)
                     ]
+                case .yield(let balance):
+                    [
+                        BalanceRecord.Columns.yield.set(to: balance.balance.value),
+                        BalanceRecord.Columns.yieldAmount.set(to: balance.balance.amount)
+                    ]
                 }
 
                 let defaultFields: [ColumnAssignment] = try {
