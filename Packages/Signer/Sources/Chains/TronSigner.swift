@@ -1,13 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+internal import BigInt
 import Foundation
 import Primitives
 import WalletCore
 
-internal import BigInt
-
-struct TronSigner: Signable {
-    
+public struct TronSigner: Signable {
     func sign(
         input: SignerInput,
         contract: WalletCore.TronTransaction.OneOf_ContractOneof,
@@ -15,9 +13,9 @@ struct TronSigner: Signable {
         memo: String? = .none,
         privateKey: Data
     ) throws -> String {
-        guard case .tron(
-            let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot,
-            let parentHash, let witnessAddress, _) = input.metadata
+        guard case let .tron(
+            blockNumber, blockVersion, blockTimestamp, transactionTreeRoot,
+            parentHash, witnessAddress, _, _) = input.metadata
         else {
             throw AnyError("Missing ton metadata")
         }
@@ -65,7 +63,7 @@ struct TronSigner: Signable {
         }
     }
 
-    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let contract = TronTransferContract.with {
             $0.ownerAddress = input.senderAddress
             $0.toAddress = input.destinationAddress
@@ -74,7 +72,7 @@ struct TronSigner: Signable {
         return try sign(input: input, contract: .transfer(contract), feeLimit: .none, memo: input.memo, privateKey: privateKey)
     }
 
-    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let contract = try TronTransferTRC20Contract.with {
             $0.contractAddress = try input.asset.getTokenId()
             $0.ownerAddress = input.senderAddress
@@ -86,11 +84,15 @@ struct TronSigner: Signable {
             contract: .transferTrc20Contract(contract),
             feeLimit: input.fee.gasLimit.asInt,
             memo: input.memo,
-            privateKey: privateKey
-        )
+            privateKey: privateKey)
     }
 
-    func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+    public func signData(input: SignerInput, privateKey: Data) throws -> String {
+        try ChainSigner(chain: input.asset.chain)
+            .signData(input: input, privateKey: privateKey)
+    }
+
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case let .stake(_, stakeType) = input.type else {
             throw (AnyError("Invalid input type for staking"))
         }
@@ -98,11 +100,10 @@ struct TronSigner: Signable {
         let contract: WalletCore.TronTransaction.OneOf_ContractOneof
         switch stakeType {
         case .stake, .redelegate, .unstake:
-            contract = .voteWitness(
-                try createVoteWitnessContract(
+            contract = try .voteWitness(
+                createVoteWitnessContract(
                     input: input,
-                    votes: input.metadata.getVotes()
-                )
+                    votes: input.metadata.getVotes())
             )
         case .rewards:
             contract = .withdrawBalance(
@@ -114,7 +115,7 @@ struct TronSigner: Signable {
                 TronWithdrawExpireUnfreezeContract.with {
                     $0.ownerAddress = input.senderAddress
                 })
-        case .freeze(let data):
+        case let .freeze(data):
             switch data.freezeType {
             case .freeze:
                 contract = .freezeBalanceV2(

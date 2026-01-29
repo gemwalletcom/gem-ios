@@ -1,12 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 import Preferences
+import Primitives
 import WebSocketClient
 
 public actor PriceObserverService: Sendable {
-
     private let priceService: PriceService
     private let preferences: Preferences
     private let webSocket: any WebSocketConnectable
@@ -105,8 +104,6 @@ public actor PriceObserverService: Sendable {
     private func handleMessage(_ data: Data) {
         do {
             let payload = try decoder.decode(WebSocketPricePayload.self, from: data)
-
-            debugLog("price observer: prices: \(payload.prices.count), rates: \(payload.rates.count)")
 
             try priceService.addRates(payload.rates)
             try priceService.updatePrices(payload.prices, currency: preferences.currency)
