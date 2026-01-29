@@ -175,6 +175,18 @@ public struct Scenes {
         public init() {}
     }
 
+    public struct AssetsResults: Hashable {
+        public let walletId: WalletId
+        public let searchQuery: String
+        public let tag: String?
+
+        public init(walletId: WalletId, searchQuery: String, tag: String?) {
+            self.walletId = walletId
+            self.searchQuery = searchQuery
+            self.tag = tag
+        }
+    }
+
     public struct Referral: Hashable {
         public let code: String?
         public let giftCode: String?
