@@ -203,12 +203,7 @@ extension AssetScene {
 
     private var earnView: some View {
         NavigationCustomLink(
-            with: ListItemView(
-                title: model.earnTitle,
-                subtitle: model.yieldBalanceText,
-                subtitleExtra: model.earnAprText,
-                subtitleStyleExtra: TextStyle(font: .callout, color: Colors.green)
-            ),
+            with: ListItemView(title: model.earnTitle, subtitle: model.yieldBalanceText),
             action: { model.onSelectEarn() }
         )
         .accessibilityIdentifier("earn")
