@@ -27,6 +27,7 @@ struct WalletNavigationStack: View {
     @Environment(\.priceObserverService) private var priceObserverService
     @Environment(\.stakeService) private var stakeService
     @Environment(\.perpetualService) private var perpetualService
+    @Environment(\.hyperliquidObserverService) private var hyperliquidObserverService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.activityService) private var activityService
     @Environment(\.walletSearchService) private var walletSearchService
@@ -138,6 +139,7 @@ struct WalletNavigationStack: View {
                 PerpetualsNavigationView(
                     wallet: model.wallet,
                     perpetualService: perpetualService,
+                    observerService: hyperliquidObserverService,
                     activityService: activityService,
                     onSelectAssetType: { model.isPresentingSelectAssetType = $0 },
                     onSelectAsset: { navigationState.wallet.append(Scenes.Perpetual($0)) }
@@ -163,6 +165,7 @@ struct WalletNavigationStack: View {
                     asset: $0.asset,
                     wallet: model.wallet,
                     perpetualService: perpetualService,
+                    observerService: hyperliquidObserverService,
                     isPresentingTransferData: $model.isPresentingTransferData,
                     isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
                 )
