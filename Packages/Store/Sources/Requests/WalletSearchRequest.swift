@@ -10,6 +10,11 @@ public struct WalletSearchResult: Equatable, Sendable {
     public let assets: [AssetData]
     public let perpetuals: [PerpetualData]
 
+    public init(assets: [AssetData], perpetuals: [PerpetualData]) {
+        self.assets = assets
+        self.perpetuals = perpetuals
+    }
+
     public static let empty = WalletSearchResult(assets: [], perpetuals: [])
 }
 
