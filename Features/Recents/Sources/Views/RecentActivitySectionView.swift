@@ -27,7 +27,7 @@ public struct RecentActivitySectionView<Content: View>: View {
     public var body: some View {
         Section {} header: {
             VStack(alignment: .leading, spacing: Spacing.space12) {
-                headerView
+                SectionHeaderView(title: Localized.RecentActivity.title, action: onSelectRecents)
                     .padding(.leading, headerPadding)
                 AssetsCollectionView(models: models, content: content)
             }
@@ -36,20 +36,5 @@ public struct RecentActivitySectionView<Content: View>: View {
         }
         .textCase(nil)
         .listRowInsets(EdgeInsets())
-    }
-
-    @ViewBuilder
-    private var headerView: some View {
-        Button {
-            onSelectRecents?()
-        } label: {
-            HStack {
-                Text(Localized.RecentActivity.title)
-                if onSelectRecents != nil {
-                    Images.System.chevronRight
-                }
-            }
-        }
-        .buttonStyle(.plain)
     }
 }
