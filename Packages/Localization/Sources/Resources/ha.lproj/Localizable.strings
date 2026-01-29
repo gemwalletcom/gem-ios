@@ -580,4 +580,5 @@
 "perpetual.account_leverage" = "Amfani da Asusu";
 "asset.all_time_high" = "Babban Lokaci";
 "asset.all_time_low" = "Ƙasa a Kowane Lokaci";
-"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
+"errors.swap.minimum_amount" = "Mafi ƙarancin adadin ciniki shine %@. Da fatan a shigar da adadin da ya fi girma.";
+"swap.use_minimum_amount" = "Yi amfani da Mafi ƙarancin Adadin";

@@ -6,14 +6,14 @@ import Style
 import Components
 import Formatters
 
-public struct FiatQuoteViewModel: Sendable {
+struct FiatQuoteViewModel: Sendable {
     let quote: FiatQuote
     let selectedQuote: FiatQuote?
 
     private let asset: Asset
     private let formatter: CurrencyFormatter
 
-    public init(
+    init(
         asset: Asset,
         quote: FiatQuote,
         selectedQuote: FiatQuote? = nil,
@@ -25,15 +25,15 @@ public struct FiatQuoteViewModel: Sendable {
         self.formatter = formatter
     }
 
-    public var title: String {
+    var title: String {
         quote.provider.name
     }
 
-    public var amountText: String {
+    var amountText: String {
         formatter.string(double: quote.cryptoAmount, symbol: asset.symbol)
     }
 
-    public var rateText: String {
+    var rateText: String {
         let amount = quote.fiatAmount / quote.cryptoAmount
         return formatter.string(amount)
     }
@@ -44,7 +44,7 @@ public struct FiatQuoteViewModel: Sendable {
 }
 
 extension FiatQuoteViewModel: Identifiable {
-    public var id: String {
+    var id: String {
         "\(asset.id.identifier)\(quote.provider.name)\(quote.cryptoAmount)"
     }
 }
@@ -52,20 +52,20 @@ extension FiatQuoteViewModel: Identifiable {
 // MARK: - SimpleListItemViewable
 
 extension FiatQuoteViewModel: SimpleListItemViewable {
-    public var assetImage: AssetImage {
+    var assetImage: AssetImage {
         AssetImage(
             placeholder: Images.name(quote.provider.name.lowercased().replacing(" ", with: "_")),
             chainPlaceholder: isSelected ? Images.Wallets.selected : nil
         )
     }
 
-    public var subtitle: String? { amountText }
+    var subtitle: String? { amountText }
 }
 
 // MARK: - Hashable
 
 extension FiatQuoteViewModel: Hashable {
-    public func hash(into hasher: inout Hasher) {
+    func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }

@@ -29,7 +29,8 @@ public final class AssetsService: Sendable {
             AssetBasic(
                 asset: asset,
                 properties: AssetProperties.defaultValue(assetId: asset.id),
-                score: AssetScore.defaultValue(assetId: asset.id)
+                score: AssetScore.defaultValue(assetId: asset.id),
+                price: nil
             )
         ])
         try addBalanceIfMissing(walletId: walletId, assetId: asset.id)
@@ -40,15 +41,15 @@ public final class AssetsService: Sendable {
         try assetStore.add(assets: assets)
     }
 
-    public func getAssets() throws -> [Asset] {
+    func getAssets() throws -> [Asset] {
         try assetStore.getAssets()
     }
 
-    public func getEnabledAssets() throws -> [AssetId] {
+    func getEnabledAssets() throws -> [AssetId] {
         try balanceStore.getEnabledAssetIds()
     }
 
-    public func getAsset(for assetId: AssetId) throws -> Asset {
+    func getAsset(for assetId: AssetId) throws -> Asset {
         if let asset = try assetStore.getAssets(for: [assetId.identifier]).first {
             return asset
         }
@@ -161,7 +162,8 @@ public final class AssetsService: Sendable {
                     return AssetBasic(
                         asset: asset,
                         properties: .defaultValue(assetId: asset.id),
-                        score: .defaultValue(assetId: asset.id)
+                        score: .defaultValue(assetId: asset.id),
+                        price: nil
                     )
                 }
             }

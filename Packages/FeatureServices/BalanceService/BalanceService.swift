@@ -168,8 +168,8 @@ extension BalanceService {
                 guard let balanceValue = position.assetBalanceValue,
                       let balance = BigInt(balanceValue) else { continue }
 
-                let asset = try assetsService.getAsset(for: assetId)
-                let decimals = asset.decimals.asInt
+                let assetFull = try await assetsService.getAsset(assetId: assetId)
+                let decimals = assetFull.asset.decimals.asInt
 
                 let yieldValue = try UpdateBalanceValue(
                     value: balance.description,

@@ -3,16 +3,16 @@
 import Foundation
 import Localization
 
-public struct RequiredFieldError: Equatable {
+struct RequiredFieldError: Equatable {
     private let field: String
 
-    public init(field: String) {
+    init(field: String) {
         self.field = field
     }
 }
 
 extension RequiredFieldError: LocalizedError {
-    public var errorDescription: String? {
+    var errorDescription: String? {
         Localized.Errors.required(field)
     }
 }

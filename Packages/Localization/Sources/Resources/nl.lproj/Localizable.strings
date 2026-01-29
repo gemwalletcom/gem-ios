@@ -581,3 +581,4 @@
 "asset.all_time_high" = "Hoogste ooit";
 "asset.all_time_low" = "Laagste ooit";
 "errors.swap.minimum_amount" = "Het minimale handelsbedrag is %@Voer een hoger bedrag in.";
+"swap.use_minimum_amount" = "Gebruik de minimale hoeveelheid";

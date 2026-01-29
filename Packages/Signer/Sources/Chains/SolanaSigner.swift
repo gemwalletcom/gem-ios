@@ -1,14 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import BigInt
-import Blockchain
 import Foundation
 import Keystore
 import Primitives
 import WalletCore
 
-public struct SolanaSigner: Signable {
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+internal import BigInt
+
+struct SolanaSigner: Signable {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let coinType = input.coinType
         let type = SolanaSigningInput.OneOf_TransactionType.transferTransaction(.with {
             $0.recipient = input.destinationAddress
@@ -19,7 +19,7 @@ public struct SolanaSigner: Signable {
         return try sign(input: input, type: type, coinType: coinType, privateKey: privateKey)
     }
 
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let coinType = input.coinType
         let decimals = UInt32(input.asset.decimals)
         let tokenId = try input.asset.getTokenId()
@@ -66,7 +66,7 @@ public struct SolanaSigner: Signable {
         }
     }
 
-    public func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String {
         throw AnyError.notImplemented
     }
 
@@ -93,7 +93,7 @@ public struct SolanaSigner: Signable {
         return try transcodeBase58ToBase64(output.encoded)
     }
 
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
+    func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
         guard
             case .generic(_, _, let extra) = input.type,
             let string = String(data: extra.data!, encoding: .utf8),
@@ -157,7 +157,7 @@ public struct SolanaSigner: Signable {
         return output.encoded
     }
 
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let (_, _, data) = try input.type.swap()
         let price = input.fee.unitPrice
         let limit = input.fee.gasLimit
@@ -192,7 +192,7 @@ public struct SolanaSigner: Signable {
         ]
     }
 
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let type) = input.type else {
             throw AnyError("invalid type")
         }
@@ -255,7 +255,7 @@ extension String {
     }
 }
 
-public struct SolanaRawTxDecoder {
+struct SolanaRawTxDecoder {
     let rawData: Data
 
     /// Decode a “short-vec” (compact-U16) length at `offset`, advancing the offset.

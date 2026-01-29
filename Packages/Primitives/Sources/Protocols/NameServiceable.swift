@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 
 public protocol NameServiceable: Sendable {
     func getName(name: String, chain: String) async throws -> NameRecord

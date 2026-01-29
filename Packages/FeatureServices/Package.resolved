@@ -1,10 +1,10 @@
 {
-  "originHash" : "608662e93f52c8a66331f240ba2b49e70f7a208c87754234a316387ea83e1920",
+  "originHash" : "221de1963b8cfee9f908821ce15fa61e1a85813aeab1954b759d267e9f263c4f",
   "pins" : [
     {
       "identity" : "bigint",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gemwalletcom/BigInt.git",
+      "location" : "https://github.com/attaswift/BigInt.git",
       "state" : {
         "revision" : "e07e00fa1fd435143a2dcf8b7eec9a7710b2fdfe",
         "version" : "5.7.0"
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift.git",
       "state" : {
-        "revision" : "aa0079aeb82a4bf00324561a40bffe68c6fe1c26",
-        "version" : "7.9.0"
+        "revision" : "8ba1bc9a96afc731a000fd4136dd13a5a46297bd",
+        "version" : "7.6.1"
       }
     },
     {
@@ -39,7 +39,7 @@
     {
       "identity" : "starscream",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gemwalletcom/Starscream.git",
+      "location" : "https://github.com/daltoniam/Starscream.git",
       "state" : {
         "revision" : "a063fda2b8145a231953c20e7a646be254365396",
         "version" : "3.1.2"

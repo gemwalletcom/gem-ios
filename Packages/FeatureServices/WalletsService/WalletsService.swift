@@ -94,7 +94,7 @@ public struct WalletsService: Sendable {
 // MARK: - DiscoveryAssetsProcessing
 
 extension WalletsService: DiscoveryAssetsProcessing {
-    public func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
+    func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
         try await discoveryProcessor.discoverAssets(for: walletId, preferences: preferences)
     }
 }
@@ -123,7 +123,7 @@ extension WalletsService: PriceUpdater {
 
 
 extension WalletsService: BalanceUpdater {
-    public func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
+    func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
         try await balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
     }
 

@@ -72,6 +72,8 @@ extension AppResolver {
         let eventPresenterService: EventPresenterService
         let viewModelFactory: ViewModelFactory
         let rewardsService: RewardsService
+        let walletSearchService: WalletSearchService
+        let assetSearchService: AssetSearchService
         let observersService: ObserversService
         let inAppNotificationService: InAppNotificationService
         let yieldService: YieldService?
@@ -116,6 +118,8 @@ extension AppResolver {
             eventPresenterService: EventPresenterService,
             viewModelFactory: ViewModelFactory,
             rewardsService: RewardsService,
+            walletSearchService: WalletSearchService,
+            assetSearchService: AssetSearchService,
             observersService: ObserversService,
             inAppNotificationService: InAppNotificationService,
             yieldService: YieldService?
@@ -159,6 +163,8 @@ extension AppResolver {
             self.eventPresenterService = eventPresenterService
             self.viewModelFactory = viewModelFactory
             self.rewardsService = rewardsService
+            self.walletSearchService = walletSearchService
+            self.assetSearchService = assetSearchService
             self.observersService = observersService
             self.inAppNotificationService = inAppNotificationService
             self.yieldService = yieldService

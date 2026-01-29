@@ -10,7 +10,7 @@ import DeviceService
 
 @Observable
 @MainActor
-public final class ChatwootWebViewModel: NSObject, Sendable {
+final class ChatwootWebViewModel: NSObject, Sendable {
 
     let websiteToken: String
     let baseUrl: URL
@@ -21,7 +21,7 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
     var isPresentingSupport: Binding<Bool>
     var isLoading: Bool = true
 
-    public init(
+    init(
         websiteToken: String,
         baseUrl: URL,
         supportDeviceId: String,
@@ -146,7 +146,7 @@ public final class ChatwootWebViewModel: NSObject, Sendable {
 // MARK: - WKNavigationDelegate, WKScriptMessageHandler
 
 extension ChatwootWebViewModel: WKNavigationDelegate, WKScriptMessageHandler {
-    public func webView(
+    func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction
     ) async -> WKNavigationActionPolicy {
@@ -164,7 +164,7 @@ extension ChatwootWebViewModel: WKNavigationDelegate, WKScriptMessageHandler {
         return .cancel
     }
 
-    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch ChatwootHandler(rawValue: message.name) {
         case .chatOpened: isLoading = false
         default: break

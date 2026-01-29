@@ -6,10 +6,10 @@ import PrimitivesComponents
 import Localization
 import Components
 
-public struct TransactionParticipantViewModel {
+struct TransactionParticipantViewModel {
     private let transactionViewModel: TransactionViewModel
 
-    public init(transactionViewModel: TransactionViewModel) {
+    init(transactionViewModel: TransactionViewModel) {
         self.transactionViewModel = transactionViewModel
     }
 }
@@ -17,7 +17,7 @@ public struct TransactionParticipantViewModel {
 // MARK: - ItemModelProvidable
 
 extension TransactionParticipantViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         switch transactionViewModel.transaction.transaction.type {
         case .stakeFreeze, .stakeUnfreeze: resourceItemModel
         case .transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate: participantItemModel

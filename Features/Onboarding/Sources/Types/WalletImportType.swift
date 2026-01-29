@@ -13,7 +13,7 @@ enum WalletImportType: String, Hashable, CaseIterable, Identifiable {
 }
 
 extension WalletImportType {
-    public var title: String {
+    var title: String {
         switch self {
         case .phrase: Localized.Common.phrase
         case .privateKey: Localized.Common.privateKey
@@ -21,7 +21,7 @@ extension WalletImportType {
         }
     }
 
-    public var description: String {
+    var description: String {
         switch self {
         case .phrase: Localized.Common.secretPhrase
         case .privateKey: Localized.Common.privateKey
@@ -29,7 +29,7 @@ extension WalletImportType {
         }
     }
 
-    public var showToolbar: Bool {
+    var showToolbar: Bool {
         switch self {
         case .phrase: true
         case .privateKey, .address: false

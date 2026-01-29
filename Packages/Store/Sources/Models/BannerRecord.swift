@@ -7,7 +7,7 @@ import GRDB
 public struct BannerRecord: Codable, FetchableRecord, PersistableRecord  {
 
     public static let databaseTableName: String = "banners"
-    
+
     public enum Columns {
         static let id = Column("id")
         static let state = Column("state")
@@ -97,13 +97,13 @@ extension NewBanner {
 }
 
 public struct NewBanner {
-    public let walletId: String?
-    public let assetId: AssetId?
-    public var chain: Chain?
-    public let event: BannerEvent
-    public let state: BannerState
+    let walletId: String?
+    let assetId: AssetId?
+    var chain: Chain?
+    let event: BannerEvent
+    let state: BannerState
 
-    public init(
+    init(
         walletId: String? = .none,
         assetId: AssetId? = .none,
         chain: Chain? = .none,
@@ -118,8 +118,8 @@ public struct NewBanner {
     }
 }
 
-extension NewBanner {
-    public static func stake(assetId: AssetId) -> NewBanner {
+public extension NewBanner {
+    static func stake(assetId: AssetId) -> NewBanner {
         NewBanner(
             assetId: assetId,
             event: .stake,
@@ -127,7 +127,7 @@ extension NewBanner {
         )
     }
 
-    public static func accountActivation(assetId: AssetId) -> NewBanner {
+    static func accountActivation(assetId: AssetId) -> NewBanner {
         NewBanner(
             assetId: assetId,
             event: .accountActivation,
@@ -135,7 +135,7 @@ extension NewBanner {
         )
     }
 
-    public static func accountBlockedMultiSignature(walletId: WalletId, chain: Chain) -> NewBanner {
+    static func accountBlockedMultiSignature(walletId: WalletId, chain: Chain) -> NewBanner {
         NewBanner(
             walletId: walletId.id,
             chain: chain,
@@ -144,7 +144,7 @@ extension NewBanner {
         )
     }
 
-    public static func onboarding(walletId: WalletId) -> NewBanner {
+    static func onboarding(walletId: WalletId) -> NewBanner {
         NewBanner(
             walletId: walletId.id,
             event: .onboarding,
@@ -152,7 +152,7 @@ extension NewBanner {
         )
     }
 
-    public static func tradePerpetuals(assetId: AssetId) -> NewBanner {
+    static func tradePerpetuals(assetId: AssetId) -> NewBanner {
         NewBanner(
             assetId: assetId,
             event: .tradePerpetuals,

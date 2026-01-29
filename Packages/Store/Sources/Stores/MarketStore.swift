@@ -4,15 +4,15 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct MarketStore: Sendable {
+struct MarketStore: Sendable {
 
     let db: DatabaseQueue
     
-    public init(db: DB) {
+    init(db: DB) {
         self.db = db.dbQueue
     }
 
-    public func addAssets(assets: MarketsAssets)  throws {
+    func addAssets(assets: MarketsAssets)  throws {
         try db.write { db in
             for asset in assets.assets {
                 try asset.upsert(db)
@@ -20,7 +20,7 @@ public struct MarketStore: Sendable {
         }
     }
 
-    public func clear() throws -> Int {
+    func clear() throws -> Int {
         try db.write {
             try MarketAssetRecord
                 .deleteAll($0)

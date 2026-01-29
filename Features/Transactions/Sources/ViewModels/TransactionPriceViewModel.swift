@@ -6,16 +6,16 @@ import Localization
 import Components
 import Formatters
 
-public struct TransactionPriceViewModel: Sendable {
+struct TransactionPriceViewModel: Sendable {
     private let metadata: TransactionPerpetualMetadata?
 
-    public init(metadata: TransactionPerpetualMetadata?) {
+    init(metadata: TransactionPerpetualMetadata?) {
         self.metadata = metadata
     }
 }
 
 extension TransactionPriceViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         guard let metadata, metadata.price > 0 else {
             return .empty
         }

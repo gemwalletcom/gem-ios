@@ -6,15 +6,15 @@ import Validators
 import BigInt
 import Formatters
 
-public struct FiatSellValidator: ValueValidator {
-    public typealias Formatted = BigInt
+struct FiatSellValidator: ValueValidator {
+    typealias Formatted = BigInt
 
     private let quote: FiatQuote?
     private let availableBalance: BigInt
     private let asset: Asset
     private let formatter = BigNumberFormatter.standard
 
-    public init(
+    init(
         quote: FiatQuote?,
         availableBalance: BigInt,
         asset: Asset
@@ -24,7 +24,7 @@ public struct FiatSellValidator: ValueValidator {
         self.asset = asset
     }
 
-    public func validate(_ value: BigInt) throws {
+    func validate(_ value: BigInt) throws {
         guard let quote else { return }
 
         let amount = try formatter.number(from: String(quote.cryptoAmount), decimals: asset.decimals.asInt)
@@ -34,5 +34,5 @@ public struct FiatSellValidator: ValueValidator {
         }
     }
 
-    public var id: String { "FiatSellValidator" }
+    var id: String { "FiatSellValidator" }
 }

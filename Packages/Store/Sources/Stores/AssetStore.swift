@@ -45,15 +45,6 @@ public struct AssetStore: Sendable {
         }
     }
     
-    public func addAssetsSearch(query: String, assets: [AssetBasic]) throws {
-        try db.write { db in
-            try assets.enumerated().forEach {
-                try AssetSearchRecord(query: query, assetId: $1.asset.id, priority: $0)
-                    .upsert(db)
-            }
-        }
-    }
-    
     public func getAssets() throws -> [Asset] {
         try db.read { db in
             try AssetRecord
@@ -62,7 +53,7 @@ public struct AssetStore: Sendable {
         }
     }
     
-    public func getBasicAssets() throws -> [AssetBasic] {
+    func getBasicAssets() throws -> [AssetBasic] {
         try db.read { db in
             try AssetRecord
                 .fetchAll(db)

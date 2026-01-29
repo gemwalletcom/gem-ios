@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
-    public static let databaseTableName: String = "stake_validators"
+struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
+    static let databaseTableName: String = "stake_validators"
     
-    public enum Columns {
+    enum Columns {
         static let id = Column("id")
         static let assetId = Column("assetId")
         static let validatorId = Column("validatorId")
@@ -17,13 +17,13 @@ public struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord 
         static let apr = Column("apr")
     }
 
-    public var id: String
-    public var assetId: AssetId
-    public var validatorId: String
-    public var name: String
-    public var isActive: Bool
-    public var commission: Double
-    public var apr: Double
+    var id: String
+    var assetId: AssetId
+    var validatorId: String
+    var name: String
+    var isActive: Bool
+    var commission: Double
+    var apr: Double
 }
 
 extension StakeValidatorRecord: CreateTable {

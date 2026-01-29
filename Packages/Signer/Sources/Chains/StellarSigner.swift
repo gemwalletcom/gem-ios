@@ -2,10 +2,9 @@
 
 import Foundation
 import WalletCore
-import Blockchain
 import Primitives
 
-public struct StellarSigner: Signable {
+struct StellarSigner: Signable {
     
     func sign(input: SignerInput, operation: StellarSigningInput.OneOf_OperationOneof,  privateKey: Data) throws -> String {
         let input = try StellarSigningInput.with {
@@ -30,7 +29,7 @@ public struct StellarSigner: Signable {
         return output.signature
     }
     
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         if input.fee.options.contains(where:  { $0.key == .tokenAccountCreation }) {
             try sign(
                 input: input,
@@ -52,7 +51,7 @@ public struct StellarSigner: Signable {
         }
     }
     
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let (issuer, symbol) = try input.asset.id.twoSubTokenIds()
         return try sign(
             input: input,
@@ -68,7 +67,7 @@ public struct StellarSigner: Signable {
         )
     }
     
-    public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
+    func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
         let (issuer, symbol) = try input.asset.id.twoSubTokenIds()
         return try sign(
             input: input,

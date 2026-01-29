@@ -21,9 +21,8 @@ let package = Package(
         .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
-        .package(name: "Formatters", path: "../Formatters"),
         .package(name: "Keychain", path: "../Keychain"),
-        .package(name: "FeatureServices", path: "../FeatureServices"),
+        .package(name: "NativeProviderService", path: "../NativeProviderService"),
     ],
     targets: [
         .target(
@@ -35,9 +34,8 @@ let package = Package(
                 .product(name: "WalletCorePrimitives", package: "WalletCore"),
                 "Gemstone",
                 "GemstonePrimitives",
-                "Formatters",
                 "Keychain",
-                .product(name: "NativeProviderService", package: "FeatureServices"),
+                "NativeProviderService",
             ],
             path: "Sources"
         ),

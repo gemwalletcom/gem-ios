@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public struct BalanceUpdateError {
-    public let chain: Chain
-    public let error: any Error
+struct BalanceUpdateError {
+    let chain: Chain
+    let error: any Error
 }

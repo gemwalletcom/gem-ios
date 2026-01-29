@@ -6,8 +6,8 @@ import Primitives
 
 public struct EarnPositionInfo: Codable, FetchableRecord {
     public let position: EarnPositionRecord
-    public let validator: StakeValidatorRecord?
-    public let price: PriceRecord?
+    let validator: StakeValidatorRecord?
+    let price: PriceRecord?
 }
 
 extension EarnPositionInfo {

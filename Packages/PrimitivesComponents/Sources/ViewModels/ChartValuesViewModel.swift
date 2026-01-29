@@ -1,11 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import SwiftUI
-import Primitives
-import Charts
 import Formatters
+import Foundation
+import Primitives
 import Style
+import SwiftUI
+
+internal import Charts
 
 public struct ChartValuesViewModel: Sendable {
     public let period: ChartPeriod

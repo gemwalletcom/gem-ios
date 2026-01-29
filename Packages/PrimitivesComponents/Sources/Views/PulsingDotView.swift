@@ -3,14 +3,12 @@
 import SwiftUI
 import Style
 
-public struct PulsingDotView: View {
+struct PulsingDotView: View {
     private let color: Color
     private let dotSize: CGFloat
     private let isAnimated: Bool
 
-    @State private var pulsePhase: CGFloat = 0
-
-    public init(
+    init(
         color: Color,
         dotSize: CGFloat = 8,
         isAnimated: Bool = true
@@ -20,15 +18,11 @@ public struct PulsingDotView: View {
         self.isAnimated = isAnimated
     }
 
-    public var body: some View {
+    var body: some View {
         ZStack {
             pulseRing(scale: 3.0, delay: 0)
             pulseRing(scale: 2.5, delay: 0.4)
             centerDot
-        }
-        .onAppear {
-            guard isAnimated else { return }
-            startAnimation()
         }
     }
 }
@@ -62,16 +56,6 @@ extension PulsingDotView {
     }
 }
 
-// MARK: - Actions
-
-extension PulsingDotView {
-    private func startAnimation() {
-        withAnimation(.linear(duration: 0.01)) {
-            pulsePhase = 1
-        }
-    }
-}
-
 // MARK: - PulseRingView
 
 private struct PulseRingView: View {
@@ -81,25 +65,23 @@ private struct PulseRingView: View {
     let delay: Double
     let isAnimated: Bool
 
-    @State private var isExpanded = false
-
-    private let animationDuration: Double = 1.8
+    private let duration: Double = 1.8
 
     var body: some View {
-        Circle()
-            .stroke(color.opacity(0.4), lineWidth: 1.5)
-            .frame(width: size, height: size)
-            .scaleEffect(isExpanded ? maxScale : 1.0)
-            .opacity(isExpanded ? 0 : 0.8)
-            .onAppear {
-                guard isAnimated else { return }
-                withAnimation(
-                    .easeOut(duration: animationDuration)
-                    .delay(delay)
-                    .repeatForever(autoreverses: false)
-                ) {
-                    isExpanded = true
-                }
-            }
+        TimelineView(.animation(paused: !isAnimated)) { timeline in
+            let progress = progress(at: timeline.date)
+            Circle()
+                .stroke(color.opacity(0.4), lineWidth: 1.5)
+                .frame(width: size, height: size)
+                .scaleEffect(1.0 + (maxScale - 1.0) * progress)
+                .opacity(0.8 * (1.0 - progress))
+        }
+    }
+
+    private func progress(at date: Date) -> Double {
+        guard isAnimated else { return 0 }
+        let elapsed = date.timeIntervalSinceReferenceDate + delay
+        let normalized = elapsed.truncatingRemainder(dividingBy: duration) / duration
+        return 1.0 - pow(1.0 - normalized, 2)
     }
 }

@@ -580,4 +580,5 @@
 "perpetual.account_leverage" = "מינוף חשבון";
 "asset.all_time_high" = "שיא כל הזמנים";
 "asset.all_time_low" = "שפל של כל הזמנים";
-"errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
+"errors.swap.minimum_amount" = "סכום המסחר המינימלי הוא %@אנא הזן סכום גבוה יותר.";
+"swap.use_minimum_amount" = "השתמש בסכום מינימלי";
