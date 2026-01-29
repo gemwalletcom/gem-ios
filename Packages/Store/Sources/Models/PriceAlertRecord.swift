@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
-    public static let databaseTableName: String = "price_alerts"
+struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
+    static let databaseTableName: String = "price_alerts"
     
-    public enum Columns {
+    enum Columns {
         static let id = Column("id")
         static let assetId = Column("assetId")
         static let currency = Column("currency")
@@ -17,14 +17,14 @@ public struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
         static let lastNotifiedAt = Column("lastNotifiedAt")
     }
 
-    public var id: String
-    public var assetId: AssetId
-    public var currency: String
-    public var priceDirection: PriceAlertDirection?
-    public var price: Double?
-    public var pricePercentChange: Double?
+    var id: String
+    var assetId: AssetId
+    var currency: String
+    var priceDirection: PriceAlertDirection?
+    var price: Double?
+    var pricePercentChange: Double?
 
-    public var lastNotifiedAt: Date?
+    var lastNotifiedAt: Date?
 }
 
 extension PriceAlertRecord: CreateTable {

@@ -5,11 +5,11 @@ import Primitives
 import Preferences
 import Localization
 
-public struct AssetPriceDetailsViewModel {
+struct AssetPriceDetailsViewModel {
     private let priceData: PriceData
     private let currency: String
 
-    public init(
+    init(
         priceData: PriceData,
         currency: String = Preferences.standard.currency
     ) {

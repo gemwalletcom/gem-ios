@@ -6,17 +6,17 @@ import Primitives
 import Store
 import Perpetuals
 
-public struct PerpetualsPreviewView: View {
+struct PerpetualsPreviewView: View {
     
     @State private var viewModel: PerpetualsPreviewViewModel
     private let wallet: Wallet
     
-    public init(wallet: Wallet) {
+    init(wallet: Wallet) {
         self.wallet = wallet
         _viewModel = State(initialValue: PerpetualsPreviewViewModel(walletId: wallet.walletId))
     }
     
-    public var body: some View {
+    var body: some View {
         Group {
             if viewModel.hasNoPositions {
                 NavigationLink(value: Scenes.Perpetuals()) {

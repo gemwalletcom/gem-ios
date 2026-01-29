@@ -4,16 +4,16 @@ import Foundation
 import Primitives
 import WalletCore
 
-public struct BitcoinSigner: Signable {
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+struct BitcoinSigner: Signable {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         return try sign(input: input, privateKey: privateKey)
     }
 
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         fatalError()
     }
 
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
+    func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
         fatalError()
     }
 

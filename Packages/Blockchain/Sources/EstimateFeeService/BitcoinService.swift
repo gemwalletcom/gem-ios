@@ -1,25 +1,26 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
+import Gemstone
 import Primitives
 import SwiftHTTPClient
-import BigInt
 import WalletCore
-import WalletCorePrimitives
-import Gemstone
-import GemstonePrimitives
 
-public final class BitcoinService: Sendable {
-    
+internal import GemstonePrimitives
+internal import WalletCorePrimitives
+
+final class BitcoinService: Sendable {
+
     let chain: BitcoinChain
-    
-    public init(
+
+    init(
         chain: BitcoinChain
     ) {
         self.chain = chain
     }
-    
-    public func calculate(
+
+    func calculate(
         senderAddress: String,
         destinationAddress: String,
         amount: BigInt,
@@ -30,14 +31,14 @@ public final class BitcoinService: Sendable {
         guard amount <= BigInt(Int64.max) else {
             throw ChainCoreError.incorrectAmount
         }
-        
+
         guard !utxos.isEmpty else {
             throw ChainCoreError.cantEstimateFee
         }
-        
+
         let primitiveChain = chain.chain
         let coinType = primitiveChain.coinType
-        
+
         let utxo = utxos.map { $0.mapToUnspendTransaction(address: senderAddress, coinType: coinType) }
         let scripts = utxo.mapToScripts(address: senderAddress, coinType: coinType)
         let hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
@@ -57,15 +58,15 @@ public final class BitcoinService: Sendable {
         let plan: BitcoinTransactionPlan = AnySigner.plan(input: signingInput, coin: coinType)
 
         try ChainCoreError.fromWalletCore(plan.error)
-        
+
         return Fee(
             fee: BigInt(plan.fee),
             gasPriceType: .regular(gasPrice: gasPrice),
             gasLimit: 1
         )
     }
-    
-    public func calculateFee(input: TransactionInput) throws -> Fee {
+
+    func calculateFee(input: TransactionInput) throws -> Fee {
         return try calculate(
             senderAddress: input.senderAddress,
             destinationAddress: input.destinationAddress,

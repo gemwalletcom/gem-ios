@@ -2,7 +2,7 @@
 
 import Testing
 import Foundation
-import Store
+@testable import Store
 import StoreTestKit
 import PrimitivesTestKit
 import Primitives

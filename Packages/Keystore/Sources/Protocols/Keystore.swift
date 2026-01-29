@@ -2,7 +2,8 @@
 
 import Foundation
 import Primitives
-import SwiftUI
+
+internal import SwiftUI
 
 public protocol Keystore: Sendable {
     func createWallet() throws -> [String]

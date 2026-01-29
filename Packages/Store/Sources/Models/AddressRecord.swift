@@ -4,20 +4,20 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct AddressRecord: Codable, FetchableRecord, PersistableRecord, Sendable {
-    public static let databaseTableName = "addresses"
+struct AddressRecord: Codable, FetchableRecord, PersistableRecord, Sendable {
+    static let databaseTableName = "addresses"
     
-    public enum Columns {
+    enum Columns {
         static let chain = Column("chain")
         static let address = Column("address")
         static let name = Column("name")
     }
     
-    public let chain: Chain
-    public let address: String
-    public let name: String
+    let chain: Chain
+    let address: String
+    let name: String
     
-    public init(
+    init(
         chain: Chain,
         address: String,
         name: String

@@ -72,7 +72,7 @@ public protocol ChainNodeStatusFetchable: Sendable {
     func getNodeStatus(url: String) async throws -> NodeStatus
 }
 
-public protocol ChainFeePriorityPreference: Sendable {}
+protocol ChainFeePriorityPreference: Sendable {}
 
 public extension ChainFeeRateFetchable {
     func defaultPriority(for type: TransferDataType) -> FeePriority {

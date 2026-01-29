@@ -6,7 +6,7 @@ import Primitives
 public struct ValueConverter: Sendable {
     private let formatter: ValueFormatter
     
-    public init(formatter: ValueFormatter = ValueFormatter(style: .medium)) {
+    public init(formatter: ValueFormatter = .medium) {
         self.formatter = formatter
     }
     

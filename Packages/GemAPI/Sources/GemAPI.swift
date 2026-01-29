@@ -36,6 +36,7 @@ public enum GemAPI: TargetType {
     case getAsset(AssetId)
     case getAssets([AssetId])
     case getSearchAssets(query: String, chains: [Chain], tags: [AssetTag])
+    case getSearch(query: String, chains: [Chain], tags: [AssetTag])
     case getAssetsList(deviceId: String, walletIndex: Int, fromTimestamp: Int)
     
     case getNFTAssets(deviceId: String, walletIndex: Int)
@@ -76,6 +77,7 @@ public enum GemAPI: TargetType {
             .getTransactions,
             .getAsset,
             .getSearchAssets,
+            .getSearch,
             .getAssetsList,
             .getPriceAlerts,
             .getNFTAssets,
@@ -154,6 +156,8 @@ public enum GemAPI: TargetType {
             return "/v1/assets"
         case .getSearchAssets:
             return "/v1/assets/search"
+        case .getSearch:
+            return "/v1/search"
         case .getAssetsList(let deviceId, let walletIndex, let fromTimestamp):
             return "/v1/assets/device/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
         case .getPrices:
@@ -250,7 +254,8 @@ public enum GemAPI: TargetType {
         case .addDevice(let device),
             .updateDevice(let device):
             return .encodable(device)
-        case .getSearchAssets(let query, let chains, let tags):
+        case .getSearchAssets(let query, let chains, let tags),
+            .getSearch(let query, let chains, let tags):
             return .params([
                 "query": query,
                 "chains": chains.map { $0.rawValue }.joined(separator: ","),

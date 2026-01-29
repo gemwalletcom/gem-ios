@@ -4,14 +4,14 @@ import Foundation
 import ChainService
 import Primitives
 
-public struct BalanceFetcher: Sendable {
+struct BalanceFetcher: Sendable {
     private let chainServiceFactory: ChainServiceFactory
     
-    public init(chainServiceFactory: ChainServiceFactory) {
+    init(chainServiceFactory: ChainServiceFactory) {
         self.chainServiceFactory = chainServiceFactory
     }
     
-    public func getBalance(
+    func getBalance(
         assetId: AssetId,
         address: String
     ) async throws -> AssetBalance  {

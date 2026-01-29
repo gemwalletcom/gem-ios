@@ -1,12 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WalletCore
 import Primitives
-import BigInt
+import WalletCore
 
-public struct NearSigner: Signable {
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+internal import BigInt
+
+struct NearSigner: Signable {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let signingInput = try NEARSigningInput.with {
             $0.signerID = input.senderAddress
             $0.nonce = try input.metadata.getSequence()

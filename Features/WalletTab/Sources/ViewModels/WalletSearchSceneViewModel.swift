@@ -12,26 +12,31 @@ import Style
 import Localization
 import ActivityService
 import WalletsService
+import PerpetualService
+import Recents
 
 @Observable
 @MainActor
 public final class WalletSearchSceneViewModel: Sendable {
-    private let searchService: AssetSearchService
-    let activityService: ActivityService
+    private static let previewLimit = 5
+
+    private let searchService: WalletSearchService
+    private let activityService: ActivityService
     private let walletsService: WalletsService
+    private let perpetualService: PerpetualService
     private let preferences: Preferences
 
-    let wallet: Wallet
+    private let wallet: Wallet
     private let onDismissSearch: VoidAction
     private let onAddToken: VoidAction
 
-    private var state: StateViewType<[AssetBasic]> = .noData
+    private var state: StateViewType<Bool> = .noData
 
-    var assets: [AssetData] = []
-    var recents: [RecentAsset] = []
     var searchModel: AssetSearchViewModel
+    var searchResult: WalletSearchResult = .empty
+    var recents: [RecentAsset] = []
 
-    var request: AssetsRequest
+    var searchRequest: WalletSearchRequest
     var recentsRequest: RecentActivityRequest
 
     var isPresentingToastMessage: ToastMessage? = nil
@@ -39,14 +44,16 @@ public final class WalletSearchSceneViewModel: Sendable {
     var isSearchPresented: Bool = false
     var dismissSearch: Bool = false
     var isPresentingRecents: Bool = false
+    var isPresentingAssetsResults: Bool = false
 
-    public let onSelectAssetAction: AssetAction
+    let onSelectAssetAction: AssetAction
 
     public init(
         wallet: Wallet,
-        searchService: AssetSearchService,
+        searchService: WalletSearchService,
         activityService: ActivityService,
         walletsService: WalletsService,
+        perpetualService: PerpetualService,
         preferences: Preferences = .standard,
         onDismissSearch: VoidAction,
         onSelectAssetAction: AssetAction,
@@ -56,37 +63,74 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.searchService = searchService
         self.activityService = activityService
         self.walletsService = walletsService
+        self.perpetualService = perpetualService
         self.preferences = preferences
         self.onDismissSearch = onDismissSearch
         self.onSelectAssetAction = onSelectAssetAction
         self.onAddToken = onAddToken
         self.searchModel = AssetSearchViewModel(selectType: .manage)
-        self.request = AssetsRequest(
-            walletId: wallet.walletId,
-            filters: []
-        )
+        self.searchRequest = WalletSearchRequest(walletId: wallet.walletId, limit: 100)
         self.recentsRequest = RecentActivityRequest(
             walletId: wallet.walletId,
-            limit: 10,
-            types: RecentActivityType.allCases.filter { $0 != .perpetual }
+            limit: 10
         )
     }
 
-    var pinnedImage: Image { Images.System.pin }
-    var pinnedTitle: String { Localized.Common.pinned }
+    var perpetualsTitle: String { Localized.Perpetuals.title }
     var assetsTitle: String { Localized.Assets.title }
 
-    var sections: AssetsSections { AssetsSections.from(assets) }
+    var sections: WalletSearchSections { .from(searchResult) }
     var recentModels: [AssetViewModel] { recents.map { AssetViewModel(asset: $0.asset) } }
     var currencyCode: String { preferences.currency }
 
     var showTags: Bool { searchModel.searchableQuery.isEmpty }
     var showRecents: Bool { searchModel.searchableQuery.isEmpty && recents.isNotEmpty }
+    var showPerpetuals: Bool { sections.perpetuals.isNotEmpty && preferences.isPerpetualEnabled }
     var showLoading: Bool { state.isLoading && showEmpty }
-    var showEmpty: Bool { !showRecents && !showPinned && !showAssets }
-    var showPinned: Bool { sections.pinned.isNotEmpty }
+    var showEmpty: Bool { !showRecents && !showPinned && !showAssets && !showPerpetuals }
+    var showPinned: Bool { sections.pinnedAssets.isNotEmpty || showPinnedPerpetuals }
+    var showPinnedPerpetuals: Bool { sections.pinnedPerpetuals.isNotEmpty && preferences.isPerpetualEnabled }
     var showAssets: Bool { sections.assets.isNotEmpty }
     var showAddToken: Bool { wallet.hasTokenSupport }
+
+    var previewAssets: [AssetData] { Array(sections.assets.prefix(Self.previewLimit)) }
+    var previewPerpetuals: [PerpetualData] { Array(sections.perpetuals.prefix(Self.previewLimit)) }
+    var hasMoreAssets: Bool { sections.assets.count > Self.previewLimit }
+
+    var assetsResultsModel: AssetsResultsSceneViewModel {
+        AssetsResultsSceneViewModel(
+            wallet: wallet,
+            walletsService: walletsService,
+            preferences: preferences,
+            request: searchRequest,
+            onSelectAsset: onSelectAsset(_:)
+        )
+    }
+
+    var recentsModel: RecentsSceneViewModel {
+        RecentsSceneViewModel(
+            walletId: wallet.walletId,
+            types: recentsRequest.types,
+            filters: recentsRequest.filters,
+            activityService: activityService,
+            onSelect: onSelectRecent
+        )
+    }
+
+    func contextMenuItems(for assetData: AssetData) -> [ContextMenuItemType] {
+        AssetContextMenu.items(
+            for: assetData,
+            onCopy: { [weak self] in
+                self?.onSelectCopyAddress(CopyTypeViewModel(type: .address(assetData.asset, address: $0), copyValue: $0).message)
+            },
+            onPin: { [weak self] in
+                self?.onSelectPinAsset(assetData, value: !assetData.metadata.isPinned)
+            },
+            onAddToWallet: { [weak self] in
+                self?.onSelectAddToWallet(assetData.asset)
+            }
+        )
+    }
 }
 
 // MARK: - Actions
@@ -101,42 +145,17 @@ extension WalletSearchSceneViewModel {
         let query = query.trim()
         guard !query.isEmpty else { return }
 
-        await searchAssets(
-            query: query,
-            priorityAssetsQuery: searchModel.priorityAssetsQuery,
-            tag: nil
-        )
+        await search(query: query)
     }
 
     func onSelectTag(tag: AssetTagSelection) {
         searchModel.tagsViewModel.selectedTag = tag
         searchModel.focus = .tags
+        searchRequest.tag = tag.tag?.rawValue
         updateRequest()
         Task {
-            await searchAssets(
-                query: .empty,
-                priorityAssetsQuery: searchModel.priorityAssetsQuery,
-                tag: searchModel.tagsViewModel.selectedTag.tag
-            )
+            await search(query: .empty, tag: tag.tag)
         }
-    }
-
-    func onChangeSearchQuery(_: String, _: String) {
-        updateRequest()
-    }
-
-    func onChangeFocus(_: Bool, isSearching: Bool) {
-        if isSearching {
-            searchModel.focus = .search
-            searchModel.tagsViewModel.selectedTag = AssetTagSelection.all
-            updateRequest()
-        }
-    }
-
-    func onChangeSearchPresented(_: Bool, isPresented: Bool) {
-        guard !isPresented else { return }
-        dismissSearch = true
-        onDismissSearch?()
     }
 
     func onSelectAsset(_ asset: Asset) {
@@ -146,6 +165,10 @@ extension WalletSearchSceneViewModel {
 
     func onSelectRecents() {
         isPresentingRecents = true
+    }
+
+    func onSelectSeeAllAssets() {
+        isPresentingAssetsResults = true
     }
 
     func onSelectRecent(asset: Asset) {
@@ -173,33 +196,38 @@ extension WalletSearchSceneViewModel {
         }
     }
 
+    func onSelectPinPerpetual(_ perpetualId: String, value: Bool) {
+        do {
+            try perpetualService.setPinned(value, perpetualId: perpetualId)
+            if let name = searchResult.perpetuals.first(where: { $0.perpetual.id == perpetualId })?.perpetual.name {
+                isPresentingToastMessage = .pin(name, pinned: value)
+            }
+        } catch {
+            debugLog("WalletSearchSceneViewModel pin perpetual error: \(error)")
+        }
+    }
+
     func onSelectCopyAddress(_ message: String) {
         isPresentingToastMessage = .copy(message)
     }
 
-    func contextMenuItems(for assetData: AssetData) -> [ContextMenuItemType] {
-        [
-            .copy(
-                title: Localized.Wallet.copyAddress,
-                value: assetData.account.address,
-                onCopy: { [weak self] in
-                    self?.onSelectCopyAddress(CopyTypeViewModel(type: .address(assetData.asset, address: $0), copyValue: $0).message)
-                }
-            ),
-            .pin(
-                isPinned: assetData.metadata.isPinned,
-                onPin: { [weak self] in
-                    self?.onSelectPinAsset(assetData, value: !assetData.metadata.isPinned)
-                }
-            ),
-            !assetData.metadata.isBalanceEnabled ? .custom(
-                title: Localized.Asset.addToWallet,
-                systemImage: SystemImage.plusCircle,
-                action: { [weak self] in
-                    self?.onSelectAddToWallet(assetData.asset)
-                }
-            ) : nil
-        ].compactMap { $0 }
+    func onChangeSearchQuery(_: String, _: String) {
+        updateRequest()
+    }
+
+    func onChangeFocus(_: Bool, isSearching: Bool) {
+        if isSearching {
+            searchModel.focus = .search
+            searchModel.tagsViewModel.selectedTag = AssetTagSelection.all
+            searchRequest.tag = nil
+            updateRequest()
+        }
+    }
+
+    func onChangeSearchPresented(_: Bool, isPresented: Bool) {
+        guard !isPresented else { return }
+        dismissSearch = true
+        onDismissSearch?()
     }
 }
 
@@ -221,27 +249,21 @@ extension WalletSearchSceneViewModel {
         if searchModel.searchableQuery.isNotEmpty && searchModel.focus == .tags {
             searchModel.focus = .search
             searchModel.tagsViewModel.selectedTag = AssetTagSelection.all
+            searchRequest.tag = nil
         }
-        request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
-        state = .loading
+        searchRequest.searchBy = searchModel.searchableQuery
+        state = searchModel.searchableQuery.isNotEmpty || searchRequest.tag != nil ? .loading : .noData
     }
 
-    private func searchAssets(
-        query: String,
-        priorityAssetsQuery: String?,
-        tag: AssetTag?
-    ) async {
+    private func search(query: String, tag: AssetTag? = nil) async {
+        state = .loading
         do {
-            let assets = try await searchService.searchAssets(
-                wallet: wallet,
-                query: query,
-                priorityAssetsQuery: priorityAssetsQuery,
-                tag: tag
-            )
-            state = .data(assets)
+            try await searchService.search(wallet: wallet, query: query, tag: tag)
+            state = .data(true)
         } catch {
             if !error.isCancelled {
                 state = .error(error)
+                debugLog("Search error: \(error)")
             }
         }
     }

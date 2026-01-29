@@ -5,8 +5,8 @@ import Keystore
 import Primitives
 import WalletCore
 
-public struct SwapSigner {
-    public init() {}
+struct SwapSigner {
+    init() {}
 
     func isTransferSwap(fromAsset: Asset, data: SwapData) -> Bool {
         switch data.data.dataType {

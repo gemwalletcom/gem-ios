@@ -2,6 +2,6 @@
 
 import Foundation
 
-public protocol LocalizedQRCodeError: LocalizedError {
+protocol LocalizedQRCodeError: LocalizedError {
     var titleImage: ErrorTitleImage? { get }
 }

@@ -42,7 +42,7 @@ actor ObserversService: Sendable {
 
     func setupWallet(_ wallet: Wallet) async {
         currentWallet = wallet
-        async let assets: () = setupPriceAssets()
+        async let assets: () = setupPriceAssets(wallet: wallet)
         async let perpetual: () = {
             if preferences.isPerpetualEnabled {
                 await hyperliquidObserverService.connect(for: wallet)
@@ -95,9 +95,9 @@ extension ObserversService {
         }
     }
 
-    private func setupPriceAssets() async {
+    private func setupPriceAssets(wallet: Wallet) async {
         do {
-            try await priceObserverService.setupAssets()
+            try await priceObserverService.setupAssets(walletId: wallet.walletId)
         } catch {
             debugLog("ObserversService setupPriceAssets error: \(error)")
         }

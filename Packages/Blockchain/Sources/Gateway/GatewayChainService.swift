@@ -1,16 +1,17 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Primitives
-import BigInt
-import GemstonePrimitives
 
-public struct GatewayChainService: Sendable {
-    
+internal import GemstonePrimitives
+
+struct GatewayChainService: Sendable {
+
     private let chain: Chain
-    public let gateway: GatewayService
-    
-    public init(
+    let gateway: GatewayService
+
+    init(
         chain: Chain,
         gateway: GatewayService,
     ) {
@@ -25,7 +26,7 @@ extension GatewayChainService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
         try await gateway.coinBalance(chain: chain, address: address)
     }
-    
+
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         try await gateway.tokenBalance(chain: chain, address: address, tokenIds: tokenIds)
     }
@@ -65,14 +66,14 @@ extension GatewayChainService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
         try await gateway.tokenData(chain: chain, tokenId: tokenId)
     }
-    
+
     public func getIsTokenAddress(tokenId: String) async throws -> Bool {
         try await gateway.isTokenAddress(chain: chain, tokenId: tokenId)
     }
 }
 
 // MARK: - ChainIDFetchable
- 
+
 extension GatewayChainService: ChainIDFetchable {
     public func getChainID() async throws -> String {
         try await gateway.chainId(chain: chain)
@@ -109,7 +110,7 @@ extension GatewayChainService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
         try await gateway.validators(chain: chain, apy: apr)
     }
-    
+
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
         try await gateway.delegations(chain: chain, address: address)
     }

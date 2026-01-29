@@ -3,14 +3,14 @@
 import SwiftUI
 import Components
 
-public struct ChatwootWebScene: View {
+struct ChatwootWebScene: View {
     @State var model: ChatwootWebViewModel
     
-    public init(model: ChatwootWebViewModel) {
+    init(model: ChatwootWebViewModel) {
         _model = State(wrappedValue: model)
     }
     
-    public var body: some View {
+    var body: some View {
         ZStack {
             ChatwootWebView(model: model)
             

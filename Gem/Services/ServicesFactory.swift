@@ -211,6 +211,17 @@ struct ServicesFactory {
         let authService = AuthService(keystore: storages.keystore)
         let rewardsService = RewardsService(authService: authService)
         let eventPresenterService = EventPresenterService()
+        let walletSearchService = WalletSearchService(
+            assetsService: assetsService,
+            searchStore: storeManager.searchStore,
+            perpetualStore: storeManager.perpetualStore,
+            priceStore: storeManager.priceStore,
+            preferences: preferences
+        )
+        let assetSearchService = AssetSearchService(
+            assetsService: assetsService,
+            searchStore: storeManager.searchStore
+        )
         let inAppNotificationService = InAppNotificationService(
             deviceService: deviceService,
             walletService: walletService,
@@ -283,6 +294,8 @@ struct ServicesFactory {
             eventPresenterService: eventPresenterService,
             viewModelFactory: viewModelFactory,
             rewardsService: rewardsService,
+            walletSearchService: walletSearchService,
+            assetSearchService: assetSearchService,
             observersService: observersService,
             inAppNotificationService: inAppNotificationService
         )

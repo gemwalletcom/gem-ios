@@ -5,10 +5,10 @@ import PrimitivesComponents
 import Localization
 import Components
 
-public struct TransactionDateViewModel: Sendable {
+struct TransactionDateViewModel: Sendable {
     private let date: Date
 
-    public init(date: Date) {
+    init(date: Date) {
         self.date = date
     }
 }
@@ -16,7 +16,7 @@ public struct TransactionDateViewModel: Sendable {
 // MARK: - ItemModelProvidable
 
 extension TransactionDateViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         .listItem(
             .text(
                 title: Localized.Transaction.date,

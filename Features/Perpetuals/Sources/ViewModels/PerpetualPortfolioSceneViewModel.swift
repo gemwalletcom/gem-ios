@@ -12,7 +12,7 @@ import Localization
 
 @Observable
 @MainActor
-public final class PerpetualPortfolioSceneViewModel {
+final class PerpetualPortfolioSceneViewModel {
     private let wallet: Wallet
     private let perpetualService: PerpetualServiceable
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
@@ -27,11 +27,11 @@ public final class PerpetualPortfolioSceneViewModel {
         }
     }
     var selectedPeriod: ChartPeriod = .day
-    var selectedChartType: PerpetualPortfolioChartType = .value
+    var selectedChartType: PerpetualPortfolioChartType = .pnl
 
     private var portfolio: PerpetualPortfolio?
 
-    public init(
+    init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable
     ) {
@@ -90,7 +90,13 @@ extension PerpetualPortfolioSceneViewModel {
     var accountLeverageText: String { portfolio?.accountSummary.map { String(format: "%.2fx", $0.accountLeverage) } ?? "-" }
 
     var marginUsageTitle: String { Localized.Perpetual.marginUsage }
-    var marginUsageText: String { portfolio?.accountSummary.map { CurrencyFormatter.percentSignLess.string($0.marginUsage * 100) } ?? "-" }
+    var marginUsageText: String {
+        portfolio?.accountSummary.map {
+            let marginValue = currencyFormatter.string($0.accountValue * $0.marginUsage)
+            let marginPercent = CurrencyFormatter.percentSignLess.string($0.marginUsage * 100)
+            return "\(marginValue) (\(marginPercent))"
+        } ?? "-"
+    }
 
     var allTimePnlTitle: String { Localized.Perpetual.allTimePnl }
     var allTimePnlValue: TextValue { TextValue(text: allTimePnlModel.text ?? "-", style: allTimePnlModel.textStyle) }

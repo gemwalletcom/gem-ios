@@ -3,6 +3,22 @@
 import Foundation
 import Primitives
 
+public extension PerpetualAccountSummary {
+    static func mock(
+        accountValue: Double = 100,
+        accountLeverage: Double = 1.5,
+        marginUsage: Double = 0.168,
+        unrealizedPnl: Double = 0
+    ) -> PerpetualAccountSummary {
+        PerpetualAccountSummary(
+            accountValue: accountValue,
+            accountLeverage: accountLeverage,
+            marginUsage: marginUsage,
+            unrealizedPnl: unrealizedPnl
+        )
+    }
+}
+
 public extension PerpetualPortfolioTimeframeData {
     static func mock(
         accountValueHistory: [ChartDateValue] = ChartDateValue.mockHistory(values: [100, 105, 102, 108, 110]),

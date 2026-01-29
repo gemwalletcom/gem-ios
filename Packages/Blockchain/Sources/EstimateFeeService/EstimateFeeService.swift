@@ -4,11 +4,11 @@ import Foundation
 import Primitives
 import Gemstone
 
-public struct EstimateFeeService: Sendable {
-    
-    public init() {}
-    
-    public func provider(chain: Primitives.Chain) throws -> any GemGatewayEstimateFee {
+struct EstimateFeeService: Sendable {
+
+    init() {}
+
+    func provider(chain: Primitives.Chain) throws -> any GemGatewayEstimateFee {
         switch chain.type {
         case .bitcoin: BitcoinService(chain: try BitcoinChain(id: chain.rawValue))
         case .cardano: CardanoService()
@@ -16,20 +16,20 @@ public struct EstimateFeeService: Sendable {
         default: EmptyService()
         }
     }
-    
-    public func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
+
+    func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
         try await provider(chain: try chain.map()).getFee(chain: chain, input: input)
     }
 
-    public func getFeeData(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> String? {
+    func getFeeData(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> String? {
         try await provider(chain: try chain.map()).getFeeData(chain: chain, input: input)
     }
 }
 
-public final class EmptyService: Sendable {
-    
-    public init() {
-        
+final class EmptyService: Sendable {
+
+    init() {
+
     }
 }
 
@@ -37,7 +37,7 @@ extension EmptyService: GemGatewayEstimateFee {
     public func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
         return .none
     }
-    
+
     public func getFeeData(chain: Gemstone.Chain, input: GemTransactionLoadInput) async throws -> String? {
         .none
     }

@@ -2,7 +2,7 @@
 
 import Testing
 import Foundation
-import Signer
+@testable import Signer
 import Keystore
 import KeystoreTestKit
 import PrimitivesTestKit

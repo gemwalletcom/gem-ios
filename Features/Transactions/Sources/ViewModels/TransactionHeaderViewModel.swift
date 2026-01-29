@@ -7,11 +7,11 @@ import SwiftUI
 import Localization
 import Components
 
-public struct TransactionHeaderViewModel: Sendable {
+struct TransactionHeaderViewModel: Sendable {
     private let transaction: TransactionExtended
     private let infoModel: TransactionInfoViewModel
     
-    public init(
+    init(
         transaction: TransactionExtended,
         infoModel: TransactionInfoViewModel
     ) {
@@ -19,7 +19,7 @@ public struct TransactionHeaderViewModel: Sendable {
         self.infoModel = infoModel
     }
 
-    public var headerType: TransactionHeaderType {
+    var headerType: TransactionHeaderType {
         TransactionHeaderTypeBuilder.build(
             infoModel: infoModel,
             transaction: transaction.transaction,
@@ -31,14 +31,14 @@ public struct TransactionHeaderViewModel: Sendable {
         )
     }
 
-    public var showClearHeader: Bool {
+    var showClearHeader: Bool {
         switch headerType {
         case .amount, .nft: true
         case .swap: false
         }
     }
 
-    public var headerLink: URL? {
+    var headerLink: URL? {
         guard let swapMetadata = transaction.transaction.metadata?.decode(TransactionSwapMetadata.self) else {
             return nil
         }
@@ -49,7 +49,7 @@ public struct TransactionHeaderViewModel: Sendable {
 // MARK: - ItemModelProvidable
 
 extension TransactionHeaderViewModel: ItemModelProvidable {
-    public var itemModel: TransactionItemModel {
+    var itemModel: TransactionItemModel {
         .header(
             TransactionHeaderItemModel(
                 headerType: headerType,

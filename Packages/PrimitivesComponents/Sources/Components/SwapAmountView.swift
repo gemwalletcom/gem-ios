@@ -17,20 +17,20 @@ public struct SwapAmountField {
     }
 }
 
-public struct SwapAmountView: View {
-    
-    public let from: SwapAmountField
-    public let to: SwapAmountField
-    
-    public init(
+struct SwapAmountView: View {
+
+    let from: SwapAmountField
+    let to: SwapAmountField
+
+    init(
         from: SwapAmountField,
         to: SwapAmountField
     ) {
         self.from = from
         self.to = to
     }
-    
-    public var body: some View {
+
+    var body: some View {
         VStack(spacing: 0) {
             SwapAmountSingleView(field: from)
             Images.Actions.receive
@@ -45,11 +45,11 @@ public struct SwapAmountView: View {
     }
 }
 
-public struct SwapAmountSingleView: View {
-    
+struct SwapAmountSingleView: View {
+
     let field: SwapAmountField
-    
-    public var body: some View {
+
+    var body: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading) {
                 Text(field.amount)

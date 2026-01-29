@@ -9,7 +9,7 @@ struct AssetsEnablerService: AssetsEnabler {
     private let balanceUpdater: any BalanceUpdater
     private let priceUpdater: any PriceUpdater
 
-    public init(
+    init(
         assetsService: AssetsService,
         balanceUpdater: any BalanceUpdater,
         priceUpdater: any PriceUpdater
