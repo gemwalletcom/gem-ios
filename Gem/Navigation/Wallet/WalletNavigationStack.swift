@@ -148,7 +148,6 @@ struct WalletNavigationStack: View {
                     model: AssetsResultsSceneViewModel(
                         wallet: model.wallet,
                         walletsService: walletsService,
-                        preferences: .standard,
                         request: WalletSearchRequest(
                             walletId: destination.walletId,
                             searchBy: destination.searchQuery,

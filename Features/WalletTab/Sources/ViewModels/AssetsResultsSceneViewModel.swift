@@ -29,7 +29,7 @@ public final class AssetsResultsSceneViewModel {
     public init(
         wallet: Wallet,
         walletsService: WalletsService,
-        preferences: Preferences,
+        preferences: Preferences = .standard,
         request: WalletSearchRequest,
         onSelectAsset: @escaping (Asset) -> Void
     ) {
