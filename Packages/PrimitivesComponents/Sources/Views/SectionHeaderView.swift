@@ -20,16 +20,24 @@ public struct SectionHeaderView: View {
     }
 
     public var body: some View {
+        if let action {
+            Button(action: action) {
+                content
+            }
+            .buttonStyle(.plain)
+        } else {
+            content
+        }
+    }
+
+    private var content: some View {
         HStack {
             if let image {
                 image
             }
             Text(title)
-            if let action {
-                Button(action: action) {
-                    Images.System.chevronRight
-                }
-                .buttonStyle(.plain)
+            if action != nil {
+                Images.System.chevronRight
             }
         }
         .bold()
