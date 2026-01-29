@@ -15,6 +15,7 @@ public struct PerpetualNavigationView: View {
         asset: Asset,
         wallet: Wallet,
         perpetualService: any PerpetualServiceable,
+        observerService: any PerpetualObservable<HyperliquidSubscription>,
         isPresentingTransferData: Binding<TransferData?>,
         isPresentingPerpetualRecipientData: Binding<PerpetualRecipientData?>
     ) {
@@ -24,6 +25,7 @@ public struct PerpetualNavigationView: View {
             wallet: wallet,
             asset: asset,
             perpetualService: perpetualService,
+            observerService: observerService,
             onTransferData: { isPresentingTransferData.wrappedValue = $0 },
             onPerpetualRecipientData: { isPresentingPerpetualRecipientData.wrappedValue = $0 }
         ))

@@ -1,8 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Foundation
 import Primitives
 
 struct ChartBounds {
+    static let desiredTickCount = 5
+
     let minPrice: Double
     let maxPrice: Double
     let visibleLines: [ChartLineViewModel]
@@ -24,5 +27,19 @@ struct ChartBounds {
         self.minPrice = min(candleMin, overlayMin) - padding
         self.maxPrice = max(candleMax, overlayMax) + padding
         self.visibleLines = visibleLines.sorted { $0.price < $1.price }
+    }
+
+    var axisFractionLength: Int {
+        switch maxPrice {
+        case _ where maxPrice >= 1000: 0
+        case _ where maxPrice >= 0.01: 2
+        case _ where maxPrice >= 0.001: 3
+        case _ where maxPrice >= 0.0001: 4
+        default: 5
+        }
+    }
+
+    var axisFormat: FloatingPointFormatStyle<Double> {
+        .number.precision(.fractionLength(axisFractionLength))
     }
 }

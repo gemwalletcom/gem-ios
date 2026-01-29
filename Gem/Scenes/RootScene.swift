@@ -91,9 +91,8 @@ struct RootScene: View {
             offsetY: -model.toastOffset
         )
         .toast(message: $model.isPresentingToastMessage, offsetY: -model.toastOffset)
-        .onChange(of: scenePhase) { _, newPhase in
-            Task { await model.handleScenePhase(newPhase) }
-        }
+        .onChange(of: scenePhase, model.onScenePhaseChanged)
+        .onChange(of: model.observablePreferences.isPerpetualEnabled, model.onPerpetualEnabledChanged)
     }
 }
 
