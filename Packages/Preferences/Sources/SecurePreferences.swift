@@ -8,6 +8,8 @@ public final class SecurePreferences: Sendable {
     public enum Keys: String, CaseIterable {
         case deviceId
         case deviceToken
+        case devicePrivateKey
+        case devicePublicKey
     }
 
     public static let standard = SecurePreferences()

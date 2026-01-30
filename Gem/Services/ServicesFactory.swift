@@ -38,11 +38,20 @@ import ActivityService
 import AuthService
 import RewardsService
 import EventPresenterService
+import SwiftHTTPClient
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages, navigation: NavigationStateManager) -> AppResolver.Services {
         let storeManager = StoreManager(db: storages.db)
-        let apiService: GemAPIService = GemAPIService()
+        let securePreferences = SecurePreferences()
+        let signer = Self.makeRequestSigner(securePreferences: securePreferences)
+        let interceptor: (@Sendable (inout URLRequest) throws -> Void)? = if let signer {
+            { (request: inout URLRequest) in try signer.sign(request: &request) }
+        } else {
+            nil
+        }
+        let provider = Provider<GemAPI>(options: ProviderOptions(baseUrl: nil, requestInterceptor: interceptor))
+        let apiService = GemAPIService(provider: provider)
 
         let subscriptionService = Self.makeSubscriptionService(
             apiService: apiService,
@@ -209,7 +218,7 @@ struct ServicesFactory {
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
         let activityService = ActivityService(store: storeManager.recentActivityStore)
         let authService = AuthService(keystore: storages.keystore)
-        let rewardsService = RewardsService(authService: authService)
+        let rewardsService = RewardsService(authService: authService, securePreferences: securePreferences)
         let eventPresenterService = EventPresenterService()
         let walletSearchService = WalletSearchService(
             assetsService: assetsService,
@@ -305,6 +314,13 @@ struct ServicesFactory {
 // MARK: - Private Static
 
 extension ServicesFactory {
+    private static func makeRequestSigner(securePreferences: SecurePreferences) -> DeviceRequestSigner? {
+        guard let privateKeyHex = try? securePreferences.get(key: .devicePrivateKey) else {
+            return nil
+        }
+        return try? DeviceRequestSigner(privateKeyHex: privateKeyHex)
+    }
+
     private static func makeSubscriptionService(
         apiService: GemAPIService,
         walletStore: WalletStore

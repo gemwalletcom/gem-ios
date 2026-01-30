@@ -519,6 +519,7 @@ let package = Package(
                 "Primitives",
                 "GemAPI",
                 "AuthService",
+                "Preferences",
             ],
             path: "RewardsService",
             exclude: ["TestKit"]

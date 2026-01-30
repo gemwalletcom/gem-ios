@@ -88,11 +88,13 @@ public protocol GemAPIAuthService: Sendable {
 }
 
 public protocol GemAPIRewardsService: Sendable {
-    func getRewards(walletId: String) async throws -> Rewards
-    func createReferral(request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards
-    func useReferralCode(request: AuthenticatedRequest<ReferralCode>) async throws
-    func getRedemptionOption(code: String) async throws -> RewardRedemptionOption
-    func redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
+    func getRewards(deviceId: String, walletId: String) async throws -> Rewards
+    func getRewardsEvents(deviceId: String, walletId: String) async throws -> [RewardEvent]
+    func getRewardsLeaderboard(deviceId: String) async throws -> ReferralLeaderboard
+    func createReferral(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards
+    func useReferralCode(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws
+    func getRedemptionOption(deviceId: String, code: String) async throws -> RewardRedemptionOption
+    func redeem(deviceId: String, walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
 }
 
 public protocol GemAPISearchService: Sendable {
@@ -357,33 +359,45 @@ extension GemAPIService: GemAPIAuthService {
 }
 
 extension GemAPIService: GemAPIRewardsService {
-    public func getRewards(walletId: String) async throws -> Rewards {
+    public func getRewards(deviceId: String, walletId: String) async throws -> Rewards {
         try await provider
-            .request(.getRewards(walletId: walletId))
+            .request(.getDeviceRewards(deviceId: deviceId, walletId: walletId))
             .mapResponse(as: Rewards.self)
     }
 
-    public func createReferral(request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards {
+    public func getRewardsEvents(deviceId: String, walletId: String) async throws -> [RewardEvent] {
         try await provider
-            .request(.createReferral(request))
-            .mapResponse(as: Rewards.self)
-    }
-
-    public func useReferralCode(request: AuthenticatedRequest<ReferralCode>) async throws {
-        _ = try await provider
-            .request(.useReferralCode(request))
+            .request(.getDeviceRewardsEvents(deviceId: deviceId, walletId: walletId))
             .mapResponse(as: [RewardEvent].self)
     }
 
-    public func getRedemptionOption(code: String) async throws -> RewardRedemptionOption {
+    public func getRewardsLeaderboard(deviceId: String) async throws -> ReferralLeaderboard {
         try await provider
-            .request(.getRedemptionOption(code: code))
+            .request(.getDeviceRewardsLeaderboard(deviceId: deviceId))
+            .mapResponse(as: ReferralLeaderboard.self)
+    }
+
+    public func createReferral(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards {
+        try await provider
+            .request(.createDeviceReferral(deviceId: deviceId, walletId: walletId, request: request))
+            .mapResponse(as: Rewards.self)
+    }
+
+    public func useReferralCode(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws {
+        _ = try await provider
+            .request(.useDeviceReferralCode(deviceId: deviceId, walletId: walletId, request: request))
+            .mapResponse(as: [RewardEvent].self)
+    }
+
+    public func getRedemptionOption(deviceId: String, code: String) async throws -> RewardRedemptionOption {
+        try await provider
+            .request(.getDeviceRedemptionOption(deviceId: deviceId, code: code))
             .mapResponse(as: RewardRedemptionOption.self)
     }
 
-    public func redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult {
+    public func redeem(deviceId: String, walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult {
         try await provider
-            .request(.redeem(walletId: walletId, request: request))
+            .request(.redeemDeviceRewards(deviceId: deviceId, walletId: walletId, request: request))
             .mapResponse(as: RedemptionResult.self)
     }
 }

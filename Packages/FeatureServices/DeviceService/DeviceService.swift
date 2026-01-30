@@ -87,8 +87,22 @@ public struct DeviceService: DeviceServiceable {
             return deviceId
         } catch {
             let newDeviceId = generateDeviceId()
+            try generateDeviceKeyPairIfNeeded()
             return try securePreferences.set(value: newDeviceId, key: .deviceId)
         }
+    }
+
+    private func generateDeviceKeyPairIfNeeded() throws {
+        if try securePreferences.get(key: .devicePrivateKey) != nil {
+            return
+        }
+        let keyPair = DeviceKeyPair()
+        try securePreferences.set(value: keyPair.privateKeyHex, key: .devicePrivateKey)
+        try securePreferences.set(value: keyPair.publicKeyHex, key: .devicePublicKey)
+    }
+
+    private func devicePublicKey() -> String? {
+        try? securePreferences.get(key: .devicePublicKey)
     }
     
     @MainActor
@@ -116,7 +130,8 @@ public struct DeviceService: DeviceServiceable {
             currency: preferences.currency,
             isPushEnabled: preferences.isPushNotificationsEnabled,
             isPriceAlertsEnabled: preferences.isPriceAlertsEnabled,
-            subscriptionsVersion: ignoreSubscriptionsVersion ? 0 : preferences.subscriptionsVersion.asInt32
+            subscriptionsVersion: ignoreSubscriptionsVersion ? 0 : preferences.subscriptionsVersion.asInt32,
+            publicKey: devicePublicKey()
         )
     }
     

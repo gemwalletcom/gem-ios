@@ -17,8 +17,9 @@ public struct Device: Codable, Equatable, Sendable {
 	public let isPushEnabled: Bool
 	public let isPriceAlertsEnabled: Bool?
 	public let subscriptionsVersion: Int32
+	public let publicKey: String?
 
-	public init(id: String, platform: Platform, platformStore: PlatformStore, os: String, model: String, token: String, locale: String, version: String, currency: String, isPushEnabled: Bool, isPriceAlertsEnabled: Bool?, subscriptionsVersion: Int32) {
+	public init(id: String, platform: Platform, platformStore: PlatformStore, os: String, model: String, token: String, locale: String, version: String, currency: String, isPushEnabled: Bool, isPriceAlertsEnabled: Bool?, subscriptionsVersion: Int32, publicKey: String?) {
 		self.id = id
 		self.platform = platform
 		self.platformStore = platformStore
@@ -31,5 +32,6 @@ public struct Device: Codable, Equatable, Sendable {
 		self.isPushEnabled = isPushEnabled
 		self.isPriceAlertsEnabled = isPriceAlertsEnabled
 		self.subscriptionsVersion = subscriptionsVersion
+		self.publicKey = publicKey
 	}
 }
