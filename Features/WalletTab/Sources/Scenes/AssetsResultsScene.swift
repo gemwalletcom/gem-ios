@@ -8,7 +8,6 @@ import Style
 import PrimitivesComponents
 
 public struct AssetsResultsScene: View {
-    @Environment(\.dismiss) private var dismiss
     @State private var model: AssetsResultsSceneViewModel
 
     public init(model: AssetsResultsSceneViewModel) {
@@ -16,30 +15,25 @@ public struct AssetsResultsScene: View {
     }
 
     public var body: some View {
-        NavigationStack {
-            List {
-                if model.showPinned {
-                    Section(
-                        content: { assetItems(for: model.sections.pinnedAssets) },
-                        header: { PinnedSectionHeader() }
-                    )
-                    .listRowInsets(.assetListRowInsets)
-                }
-
-                if model.showAssets {
-                    Section {
-                        assetItems(for: model.sections.assets)
-                    }
-                    .listRowInsets(.assetListRowInsets)
-                }
+        List {
+            if model.showPinned {
+                Section(
+                    content: { assetItems(for: model.sections.pinnedAssets) },
+                    header: { PinnedSectionHeader() }
+                )
+                .listRowInsets(.assetListRowInsets)
             }
-            .listSectionSpacing(.compact)
-            .navigationTitle(model.title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarDismissItem(type: .done, placement: .cancellationAction)
+
+            if model.showAssets {
+                Section {
+                    assetItems(for: model.sections.assets)
+                }
+                .listRowInsets(.assetListRowInsets)
             }
         }
+        .listSectionSpacing(.compact)
+        .navigationTitle(model.title)
+        .navigationBarTitleDisplayMode(.inline)
         .observeQuery(request: $model.request, value: $model.searchResult)
         .toast(message: $model.isPresentingToastMessage)
     }
@@ -50,10 +44,7 @@ public struct AssetsResultsScene: View {
             items: items,
             currencyCode: model.currencyCode,
             contextMenuItems: model.contextMenuItems,
-            onSelect: {
-                dismiss()
-                model.onSelectAssetAction?($0)
-            }
+            onSelect: { model.onSelectAssetAction?($0) }
         )
     }
 }
