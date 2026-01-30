@@ -80,7 +80,7 @@ public protocol GemAPIMarketService: Sendable {
 }
 
 public protocol GemAPISupportService: Sendable {
-    func addSupportDevice(_ supportDevice: NewSupportDevice) async throws -> SupportDevice
+    func addSupportDevice(deviceId: String, supportDeviceId: String) async throws -> SupportDevice
 }
 
 public protocol GemAPIAuthService: Sendable {
@@ -107,12 +107,12 @@ public protocol GemAPINotificationService: Sendable {
 }
 
 public struct GemAPIService {
-    
+
     let provider: Provider<GemAPI>
-    
+
     public static let shared = GemAPIService()
     public static let sharedProvider = Provider<GemAPI>()
-    
+
     public init(
         provider: Provider<GemAPI> = Self.sharedProvider
     ) {
@@ -343,9 +343,9 @@ extension GemAPIService: GemAPIPricesService {
 
 extension GemAPIService: GemAPISupportService {
     @discardableResult
-    public func addSupportDevice(_ supportDevice: NewSupportDevice) async throws -> SupportDevice {
+    public func addSupportDevice(deviceId: String, supportDeviceId: String) async throws -> SupportDevice {
         try await provider
-            .request(.addSupportDevice(supportDevice))
+            .request(.addSupportDevice(deviceId: deviceId, supportDeviceId: supportDeviceId))
             .mapResponse(as: SupportDevice.self)
     }
 }

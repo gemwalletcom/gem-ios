@@ -46,7 +46,7 @@ public enum GemAPI: TargetType {
 
     case markets
 
-    case addSupportDevice(NewSupportDevice)
+    case addSupportDevice(deviceId: String, supportDeviceId: String)
 
     case getAuthNonce(deviceId: String)
 
@@ -181,8 +181,8 @@ public enum GemAPI: TargetType {
             return "/v2/scan/transaction"
         case .markets:
             return "/v1/markets"
-        case .addSupportDevice:
-            return "/v1/support/add_device"
+        case .addSupportDevice(let deviceId, _):
+            return "/v1/devices/\(deviceId)/support"
         case .getAuthNonce(let deviceId):
             return "/v1/devices/\(deviceId)/auth/nonce"
         case .getDeviceRewards(let deviceId, let walletId):
@@ -254,8 +254,8 @@ public enum GemAPI: TargetType {
             ])
         case .getPrices(let request):
             return .encodable(request)
-        case .addSupportDevice(let device):
-            return .encodable(device)
+        case .addSupportDevice(_, let supportDeviceId):
+            return .encodable(SupportDeviceRequest(supportDeviceId: supportDeviceId))
         case .addSubscriptions(_, let subscriptions),
             .deleteSubscriptions(_, let subscriptions):
             return .encodable(subscriptions)

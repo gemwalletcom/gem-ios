@@ -39,6 +39,7 @@ import AuthService
 import RewardsService
 import EventPresenterService
 import SwiftHTTPClient
+import Support
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages, navigation: NavigationStateManager) -> AppResolver.Services {
@@ -101,6 +102,7 @@ struct ServicesFactory {
             deviceService: deviceService
         )
         let transactionsService = Self.makeTransactionsService(
+            apiService: apiService,
             transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
             walletStore: storeManager.walletStore,
@@ -140,6 +142,7 @@ struct ServicesFactory {
             preferences: preferences
         )
         let priceAlertService = Self.makePriceAlertService(
+            apiService: apiService,
             priceAlertStore: storeManager.priceAlertStore,
             deviceService: deviceService,
             priceObserverService: priceObserverService,
@@ -185,6 +188,7 @@ struct ServicesFactory {
             walletService: walletService
         )
         let onstartAsyncService = Self.makeOnstartAsyncService(
+            apiService: apiService,
             nodeService: nodeService,
             preferences: preferences,
             assetsService: assetsService,
@@ -217,8 +221,8 @@ struct ServicesFactory {
         let scanService = ScanService(gatewayService: gatewayService)
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
         let activityService = ActivityService(store: storeManager.recentActivityStore)
-        let authService = AuthService(keystore: storages.keystore)
-        let rewardsService = RewardsService(authService: authService, securePreferences: securePreferences)
+        let authService = AuthService(apiService: apiService, keystore: storages.keystore)
+        let rewardsService = RewardsService(apiService: apiService, authService: authService, securePreferences: securePreferences)
         let eventPresenterService = EventPresenterService()
         let walletSearchService = WalletSearchService(
             assetsService: assetsService,
@@ -232,10 +236,13 @@ struct ServicesFactory {
             searchStore: storeManager.searchStore
         )
         let inAppNotificationService = InAppNotificationService(
+            apiService: apiService,
             deviceService: deviceService,
             walletService: walletService,
             store: storeManager.inAppNotificationStore
         )
+
+        let supportService = SupportService(api: apiService)
 
         let observersService = ObserversService(
             preferences: preferences,
@@ -306,7 +313,8 @@ struct ServicesFactory {
             walletSearchService: walletSearchService,
             assetSearchService: assetSearchService,
             observersService: observersService,
-            inAppNotificationService: inAppNotificationService
+            inAppNotificationService: inAppNotificationService,
+            supportService: supportService
         )
     }
 }
@@ -315,6 +323,11 @@ struct ServicesFactory {
 
 extension ServicesFactory {
     private static func makeRequestSigner(securePreferences: SecurePreferences) -> DeviceRequestSigner? {
+        if (try? securePreferences.get(key: .devicePrivateKey)) == nil {
+            let keyPair = DeviceKeyPair()
+            _ = try? securePreferences.set(value: keyPair.privateKeyHex, key: .devicePrivateKey)
+            _ = try? securePreferences.set(value: keyPair.publicKeyHex, key: .devicePublicKey)
+        }
         guard let privateKeyHex = try? securePreferences.get(key: .devicePrivateKey) else {
             return nil
         }
@@ -404,6 +417,7 @@ extension ServicesFactory {
     }
 
     private static func makeTransactionsService(
+        apiService: GemAPIService,
         transactionStore: TransactionStore,
         assetsService: AssetsService,
         walletStore: WalletStore,
@@ -411,6 +425,7 @@ extension ServicesFactory {
         addressStore: AddressStore
     ) -> TransactionsService {
         TransactionsService(
+            provider: apiService,
             transactionStore: transactionStore,
             assetsService: assetsService,
             walletStore: walletStore,
@@ -446,6 +461,7 @@ extension ServicesFactory {
     }
 
     private static func makePriceAlertService(
+        apiService: GemAPIService,
         priceAlertStore: PriceAlertStore,
         deviceService: DeviceService,
         priceObserverService: PriceObserverService,
@@ -453,6 +469,7 @@ extension ServicesFactory {
     ) -> PriceAlertService {
         PriceAlertService(
             store: priceAlertStore,
+            apiService: apiService,
             deviceService: deviceService,
             priceObserverService: priceObserverService,
             preferences: preferences
@@ -509,6 +526,7 @@ extension ServicesFactory {
     }
 
     private static func makeOnstartAsyncService(
+        apiService: GemAPIService,
         nodeService: NodeService,
         preferences: Preferences,
         assetsService: AssetsService,
@@ -517,6 +535,7 @@ extension ServicesFactory {
         swappableChainsProvider: any SwappableChainsProvider
     ) -> OnstartAsyncService {
         let importAssetsService = ImportAssetsService(
+            assetListService: apiService,
             assetsService: assetsService,
             assetStore: assetsService.assetStore,
             preferences: preferences

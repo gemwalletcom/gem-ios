@@ -20,7 +20,7 @@ public final class SupportSceneViewModel: Sendable {
     
     public init(
         pushNotificationService: PushNotificationEnablerService = PushNotificationEnablerService(),
-        supportService: SupportService = SupportService(),
+        supportService: SupportService,
         isPresentingSupport: Binding<Bool>
     ) {
         self.isPresentingSupport = isPresentingSupport
