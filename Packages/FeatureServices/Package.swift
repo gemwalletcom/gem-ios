@@ -27,6 +27,7 @@ let package = Package(
         .library(name: "TransactionsService", targets: ["TransactionsService"]),
         .library(name: "TransactionsServiceTestKit", targets: ["TransactionsServiceTestKit"]),
         .library(name: "DiscoverAssetsService", targets: ["DiscoverAssetsService"]),
+        .library(name: "DiscoverAssetsServiceTestKit", targets: ["DiscoverAssetsServiceTestKit"]),
         .library(name: "SwapService", targets: ["SwapService"]),
         .library(name: "SwapServiceTestKit", targets: ["SwapServiceTestKit"]),
         .library(name: "AssetsService", targets: ["AssetsService"]),
@@ -278,6 +279,14 @@ let package = Package(
             exclude: ["Tests", "TestKit"]
         ),
         .target(
+            name: "DiscoverAssetsServiceTestKit",
+            dependencies: [
+                "DiscoverAssetsService",
+                "BalanceServiceTestKit",
+            ],
+            path: "DiscoverAssetsService/TestKit"
+        ),
+        .target(
             name: "SwapService",
             dependencies: [
                 "Gemstone",
@@ -349,6 +358,7 @@ let package = Package(
             name: "WalletsServiceTestKit",
             dependencies: [
                 "DeviceServiceTestKit",
+                "DiscoverAssetsServiceTestKit",
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 "PriceServiceTestKit",
@@ -519,6 +529,7 @@ let package = Package(
                 "Primitives",
                 "GemAPI",
                 "AuthService",
+                "Preferences",
             ],
             path: "RewardsService",
             exclude: ["TestKit"]

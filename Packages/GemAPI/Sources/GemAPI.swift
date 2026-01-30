@@ -13,56 +13,56 @@ public enum GemAPI: TargetType {
     case getNameRecord(name: String, chain: String)
     case getPrices(AssetPricesRequest)
     case getCharts(AssetId, period: String)
-    
+
     case getDevice(deviceId: String)
     case addDevice(device: Device)
     case updateDevice(device: Device)
     case deleteDevice(deviceId: String)
-    
-    case getSubscriptions(deviceId: String)
-    case addSubscriptions(deviceId: String, subscriptions: [Subscription])
-    case deleteSubscriptions(deviceId: String, subscriptions: [Subscription])
 
-    case getSubscriptionsV2(deviceId: String)
-    case addSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription])
-    case deleteSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription])
-    
+    case getSubscriptions(deviceId: String)
+    case addSubscriptions(deviceId: String, subscriptions: [WalletSubscription])
+    case deleteSubscriptions(deviceId: String, subscriptions: [WalletSubscription])
+
     case getPriceAlerts(deviceId: String, assetId: String?)
     case addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
     case deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
 
-    case getTransactions(deviceId: String, walletIndex: Int, assetId: String?, fromTimestamp: Int)
+    case getTransactions(deviceId: String, walletId: String, assetId: String?, fromTimestamp: Int)
 
     case getAsset(AssetId)
     case getAssets([AssetId])
     case getSearchAssets(query: String, chains: [Chain], tags: [AssetTag])
     case getSearch(query: String, chains: [Chain], tags: [AssetTag])
-    case getAssetsList(deviceId: String, walletIndex: Int, fromTimestamp: Int)
-    
-    case getNFTAssets(deviceId: String, walletIndex: Int)
-    case reportNft(ReportNft)
+    case getAssetsList(deviceId: String, walletId: String, fromTimestamp: Int)
 
-    case scanTransaction(payload: ScanTransactionPayload)
-    
+    case getDeviceNFTAssets(deviceId: String, walletId: String)
+    case reportNft(deviceId: String, report: ReportNft)
+
+    case scanTransaction(deviceId: String, payload: ScanTransactionPayload)
+
     case markets
 
-    case addSupportDevice(NewSupportDevice)
+    case addSupportDevice(deviceId: String, supportDeviceId: String)
 
     case getAuthNonce(deviceId: String)
 
-    case getRewards(walletId: String)
-    case createReferral(AuthenticatedRequest<ReferralCode>)
-    case useReferralCode(AuthenticatedRequest<ReferralCode>)
-    case getRedemptionOption(code: String)
-    case redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>)
+    case getDeviceRewards(deviceId: String, walletId: String)
+    case getDeviceRewardsEvents(deviceId: String, walletId: String)
+    case getDeviceRewardsLeaderboard(deviceId: String)
+    case getDeviceRedemptionOption(deviceId: String, code: String)
+    case createDeviceReferral(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>)
+    case useDeviceReferralCode(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>)
+    case redeemDeviceRewards(deviceId: String, walletId: String, request: AuthenticatedRequest<RedemptionRequest>)
 
     case getNotifications(deviceId: String, fromTimestamp: Int)
     case markNotificationsRead(deviceId: String)
 
+    case isDeviceRegistered(deviceId: String)
+
     public var baseUrl: URL {
         Constants.apiURL
     }
-    
+
     public var method: HTTPMethod {
         switch self {
         case .getFiatQuotes,
@@ -72,7 +72,6 @@ public enum GemAPI: TargetType {
             .getNameRecord,
             .getCharts,
             .getSubscriptions,
-            .getSubscriptionsV2,
             .getDevice,
             .getTransactions,
             .getAsset,
@@ -80,15 +79,17 @@ public enum GemAPI: TargetType {
             .getSearch,
             .getAssetsList,
             .getPriceAlerts,
-            .getNFTAssets,
+            .getDeviceNFTAssets,
             .markets,
             .getAuthNonce,
-            .getRewards,
-            .getRedemptionOption,
-            .getNotifications:
+            .getDeviceRewards,
+            .getDeviceRewardsEvents,
+            .getDeviceRewardsLeaderboard,
+            .getDeviceRedemptionOption,
+            .getNotifications,
+            .isDeviceRegistered:
             return .GET
         case .addSubscriptions,
-            .addSubscriptionsV2,
             .addDevice,
             .getAssets,
             .addPriceAlerts,
@@ -97,15 +98,14 @@ public enum GemAPI: TargetType {
             .addSupportDevice,
             .getFiatQuoteUrl,
             .reportNft,
-            .createReferral,
-            .useReferralCode,
-            .redeem,
+            .createDeviceReferral,
+            .useDeviceReferralCode,
+            .redeemDeviceRewards,
             .markNotificationsRead:
             return .POST
         case .updateDevice:
             return .PUT
         case .deleteSubscriptions,
-            .deleteSubscriptionsV2,
             .deleteDevice,
             .deletePriceAlerts:
             return .DELETE
@@ -128,15 +128,10 @@ public enum GemAPI: TargetType {
             return "/v1/name/resolve/\(name)?chain=\(chain)"
         case .getCharts(let assetId, _):
             return "/v1/charts/\(assetId.identifier)"
-        case .getSubscriptions(let deviceId):
-            return "/v1/subscriptions/\(deviceId)"
-        case .addSubscriptions(let deviceId, _),
+        case .getSubscriptions(let deviceId),
+                .addSubscriptions(let deviceId, _),
                 .deleteSubscriptions(let deviceId, _):
-            return "/v1/subscriptions/\(deviceId)"
-        case .getSubscriptionsV2(let deviceId),
-                .addSubscriptionsV2(let deviceId, _),
-                .deleteSubscriptionsV2(let deviceId, _):
-            return "/v2/subscriptions/\(deviceId)"
+            return "/v1/devices/\(deviceId)/subscriptions"
         case .addDevice:
             return "/v1/devices"
         case .getDevice(let deviceId),
@@ -144,8 +139,8 @@ public enum GemAPI: TargetType {
             return "/v1/devices/\(deviceId)"
         case .updateDevice(let device):
             return "/v1/devices/\(device.id)"
-        case .getTransactions(let deviceId, let walletIndex, let assetId, let fromTimestamp):
-            var path = "/v2/transactions/device/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
+        case .getTransactions(let deviceId, let walletId, let assetId, let fromTimestamp):
+            var path = "/v1/devices/\(deviceId)/wallets/\(walletId)/transactions?from_timestamp=\(fromTimestamp)"
             if let assetId {
                 path += "&asset_id=\(assetId)"
             }
@@ -158,43 +153,49 @@ public enum GemAPI: TargetType {
             return "/v1/assets/search"
         case .getSearch:
             return "/v1/search"
-        case .getAssetsList(let deviceId, let walletIndex, let fromTimestamp):
-            return "/v1/assets/device/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
+        case .getAssetsList(let deviceId, let walletId, let fromTimestamp):
+            return "/v1/devices/\(deviceId)/wallets/\(walletId)/assets?from_timestamp=\(fromTimestamp)"
         case .getPrices:
             return "/v1/prices"
         case .getPriceAlerts(let deviceId, _):
-            return "/v1/price_alerts/\(deviceId)"
+            return "/v1/devices/\(deviceId)/price_alerts"
         case .addPriceAlerts(let deviceId, _), .deletePriceAlerts(let deviceId, _):
-            return "/v1/price_alerts/\(deviceId)"
-        case .getNFTAssets(deviceId: let deviceId, walletIndex: let walletIndex):
-            return "/v2/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
-        case .reportNft:
-            return "/v1/nft/report"
-        case .scanTransaction:
-            return "/v2/scan/transaction"
+            return "/v1/devices/\(deviceId)/price_alerts"
+        case .getDeviceNFTAssets(deviceId: let deviceId, walletId: let walletId):
+            return "/v1/devices/\(deviceId)/wallets/\(walletId)/nft_assets"
+        case .reportNft(let deviceId, _):
+            return "/v1/devices/\(deviceId)/nft/report"
+        case .scanTransaction(let deviceId, _):
+            return "/v1/devices/\(deviceId)/scan/transaction"
         case .markets:
             return "/v1/markets"
-        case .addSupportDevice:
-            return "/v1/support/add_device"
+        case .addSupportDevice(let deviceId, _):
+            return "/v1/devices/\(deviceId)/support"
         case .getAuthNonce(let deviceId):
             return "/v1/devices/\(deviceId)/auth/nonce"
-        case .getRewards(let walletId):
-            return "/v1/rewards/\(walletId)"
-        case .createReferral:
-            return "/v1/rewards/referrals/create"
-        case .useReferralCode:
-            return "/v1/rewards/referrals/use"
-        case .getRedemptionOption(let code):
-            return "/v1/rewards/redemptions/\(code)"
-        case .redeem(let walletId, _):
-            return "/v1/rewards/\(walletId)/redeem"
+        case .getDeviceRewards(let deviceId, let walletId):
+            return "/v1/devices/\(deviceId)/wallets/\(walletId)/rewards"
+        case .getDeviceRewardsEvents(let deviceId, let walletId):
+            return "/v1/devices/\(deviceId)/wallets/\(walletId)/rewards/events"
+        case .getDeviceRewardsLeaderboard(let deviceId):
+            return "/v1/devices/\(deviceId)/rewards/leaderboard"
+        case .getDeviceRedemptionOption(let deviceId, let code):
+            return "/v1/devices/\(deviceId)/rewards/redemptions/\(code)"
+        case .createDeviceReferral(let deviceId, let walletId, _):
+            return "/v1/devices/\(deviceId)/wallets/\(walletId)/rewards/referrals/create"
+        case .useDeviceReferralCode(let deviceId, let walletId, _):
+            return "/v1/devices/\(deviceId)/wallets/\(walletId)/rewards/referrals/use"
+        case .redeemDeviceRewards(let deviceId, let walletId, _):
+            return "/v1/devices/\(deviceId)/wallets/\(walletId)/rewards/redeem"
         case .getNotifications(let deviceId, let fromTimestamp):
-            return "/v1/notifications/\(deviceId)?from_timestamp=\(fromTimestamp)"
+            return "/v1/devices/\(deviceId)/notifications?from_timestamp=\(fromTimestamp)"
         case .markNotificationsRead(let deviceId):
-            return "/v1/notifications/\(deviceId)/read"
+            return "/v1/devices/\(deviceId)/notifications/read"
+        case .isDeviceRegistered(let deviceId):
+            return "/v1/devices/\(deviceId)/is_registered"
         }
     }
-    
+
     public var data: RequestData {
         switch self {
         case .getFiatAssets,
@@ -206,14 +207,17 @@ public enum GemAPI: TargetType {
             .deleteDevice,
             .getAssetsList,
             .getAsset,
-            .getNFTAssets,
+            .getDeviceNFTAssets,
             .markets,
             .getAuthNonce,
-            .getRewards,
-            .getRedemptionOption,
+            .getDeviceRewards,
+            .getDeviceRewardsEvents,
+            .getDeviceRewardsLeaderboard,
+            .getDeviceRedemptionOption,
             .getNotifications,
             .markNotificationsRead,
-            .getTransactions:
+            .getTransactions,
+            .isDeviceRegistered:
             return .plain
         case .getFiatQuoteUrl(let request):
             return .encodable(request)
@@ -223,7 +227,7 @@ public enum GemAPI: TargetType {
             let params: [String: Any] = [
                 "asset_id": assetId,
             ].compactMapValues { $0 }
-            
+
             return .params(params)
         case let .getFiatQuotes(_, _, request):
             let params: [String: Any] = [
@@ -238,15 +242,10 @@ public enum GemAPI: TargetType {
             ])
         case .getPrices(let request):
             return .encodable(request)
-        case .addSupportDevice(let device):
-            return .encodable(device)
+        case .addSupportDevice(_, let supportDeviceId):
+            return .encodable(SupportDeviceRequest(supportDeviceId: supportDeviceId))
         case .addSubscriptions(_, let subscriptions),
             .deleteSubscriptions(_, let subscriptions):
-            return .encodable(subscriptions)
-        case .getSubscriptionsV2:
-            return .plain
-        case .addSubscriptionsV2(_, let subscriptions),
-            .deleteSubscriptionsV2(_, let subscriptions):
             return .encodable(subscriptions)
         case .addPriceAlerts(_, let priceAlerts),
             .deletePriceAlerts(_, let priceAlerts):
@@ -261,15 +260,15 @@ public enum GemAPI: TargetType {
                 "chains": chains.map { $0.rawValue }.joined(separator: ","),
                 "tags": tags.map { $0.rawValue }.joined(separator: ",")
             ])
-        case .scanTransaction(let payload):
+        case .scanTransaction(_, let payload):
             return .encodable(payload)
-        case .reportNft(let report):
+        case .reportNft(_, let report):
             return .encodable(report)
-        case .createReferral(let request):
+        case .createDeviceReferral(_, _, let request):
             return .encodable(request)
-        case .useReferralCode(let request):
+        case .useDeviceReferralCode(_, _, let request):
             return .encodable(request)
-        case .redeem(_, let request):
+        case .redeemDeviceRewards(_, _, let request):
             return .encodable(request)
         }
     }
