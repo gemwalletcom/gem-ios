@@ -30,30 +30,37 @@ public struct SubscriptionService: Sendable {
     }
 
     public func update(deviceId: String) async throws {
-        let remoteSubscriptions = try await getSubscriptions(deviceId: deviceId).asSet()
         let localWalletSubscriptions = try localSubscriptions()
+
+        if !preferences.isSubscriptionsEnabled {
+            if !localWalletSubscriptions.isEmpty {
+                try await deleteSubscriptions(deviceId: deviceId, subscriptions: localWalletSubscriptions)
+            }
+            preferences.subscriptionsVersionHasChange = false
+            return
+        }
+
+        let remoteSubscriptions = try await getSubscriptions(deviceId: deviceId).asSet()
         let localSubscriptions = localWalletSubscriptions.map(\.asWalletSubscriptionChains).asSet()
 
-        switch preferences.isSubscriptionsEnabled {
-        case true:
-            let addSubscribedWallets = localSubscriptions.subtracting(remoteSubscriptions)
-            let deleteSubscribedWallets = remoteSubscriptions.subtracting(localSubscriptions)
+        let addSubscribedWallets = localSubscriptions.subtracting(remoteSubscriptions)
+        let deleteSubscribedWallets = remoteSubscriptions.subtracting(localSubscriptions)
 
-            let addSubscriptions = localWalletSubscriptions.filter { addSubscribedWallets.contains($0.asWalletSubscriptionChains) }
-            let deleteSubscriptions = localWalletSubscriptions.filter { deleteSubscribedWallets.contains($0.asWalletSubscriptionChains) }
-
-            if !addSubscriptions.isEmpty {
-                try await updateSubscriptions(deviceId: deviceId, subscriptions: addSubscriptions)
-            }
-            if !deleteSubscriptions.isEmpty {
-                try await self.deleteSubscriptions(deviceId: deviceId, subscriptions: deleteSubscriptions)
-            }
-        case false:
-            if !remoteSubscriptions.isEmpty {
-                let deleteSubscriptions = localWalletSubscriptions.filter { remoteSubscriptions.contains($0.asWalletSubscriptionChains) }
-                try await self.deleteSubscriptions(deviceId: deviceId, subscriptions: deleteSubscriptions)
-            }
+        if addSubscribedWallets.isEmpty && deleteSubscribedWallets.isEmpty {
+            preferences.subscriptionsVersionHasChange = false
+            return
         }
+
+        if !addSubscribedWallets.isEmpty {
+            let addSubscriptions = localWalletSubscriptions.filter { addSubscribedWallets.contains($0.asWalletSubscriptionChains) }
+            try await updateSubscriptions(deviceId: deviceId, subscriptions: addSubscriptions)
+        }
+
+        if !deleteSubscribedWallets.isEmpty {
+            let deleteSubscriptions = localWalletSubscriptions.filter { deleteSubscribedWallets.contains($0.asWalletSubscriptionChains) }
+            try await self.deleteSubscriptions(deviceId: deviceId, subscriptions: deleteSubscriptions)
+        }
+
         preferences.subscriptionsVersionHasChange = false
     }
 

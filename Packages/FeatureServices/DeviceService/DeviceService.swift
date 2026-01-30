@@ -32,11 +32,9 @@ public struct DeviceService: DeviceServiceable {
         if let deviceId = try securePreferences.get(key: .deviceId) {
             return deviceId
         }
-        return try securePreferences.set(value: generateDeviceId(), key: .deviceId)
-    }
-
-    private static func generateDeviceId() -> String {
-        String(NSUUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(32).lowercased())
+        let keyPair = try getOrCreateKeyPair(securePreferences: securePreferences)
+        let newDeviceId = keyPair.publicKey.hex
+        return try securePreferences.set(value: newDeviceId, key: .deviceId)
     }
 
     @discardableResult
@@ -53,37 +51,48 @@ public struct DeviceService: DeviceServiceable {
 
     public func update() async throws  {
         try await Self.serialExecutor.execute {
+            try await migrateDeviceIfNeeded()
             try await updateDevice()
         }
     }
-    
+
+    private func migrateDeviceIfNeeded() async throws {
+        let deviceId = try getOrCreateDeviceId()
+        guard deviceId.count < 64 else { return }
+
+        let keyPair = try getOrCreateKeyPair()
+        let publicKey = keyPair.publicKey.hex
+
+        let request = MigrateDeviceIdRequest(oldDeviceId: deviceId, publicKey: publicKey)
+        _ = try await deviceProvider.migrateDevice(request: request)
+
+        try securePreferences.set(value: publicKey, key: .deviceId)
+    }
+
     private func updateDevice() async throws {
         let deviceId = try self.getOrCreateDeviceId()
-        let device = try await self.getOrCreateDevice(deviceId)
+        var device = try await self.getOrCreateDevice(deviceId)
         let localDevice = try await self.currentDevice(deviceId: deviceId)
-        if device.subscriptionsVersion != localDevice.subscriptionsVersion || self.preferences.subscriptionsVersionHasChange {
+
+        let needsSubscriptionUpdate = device.subscriptionsVersion != localDevice.subscriptionsVersion || self.preferences.subscriptionsVersionHasChange
+        let needsDeviceUpdate = device != localDevice
+
+        if needsSubscriptionUpdate {
             try await self.subscriptionsService.update(deviceId: deviceId)
         }
-        if device != localDevice  {
-            try await self.updateDevice(localDevice)
+
+        if needsSubscriptionUpdate || needsDeviceUpdate {
+            device = try await self.updateDevice(localDevice)
         }
     }
     
     private func getOrCreateDevice(_ deviceId: String) async throws -> Device {
-        if preferences.isDeviceRegistered {
-            if let device = try await getDevice(deviceId: deviceId) {
-                return device
-            }
-            preferences.isDeviceRegistered = false
-            return try await getOrCreateDevice(deviceId)
-        }
-        let isRegistered = try await deviceProvider.isDeviceRegistered(deviceId: deviceId)
-        if isRegistered {
+        if let device = try await getDevice(deviceId: deviceId) {
             preferences.isDeviceRegistered = true
-            if let device = try await getDevice(deviceId: deviceId) {
-                return device
-            }
+            return device
         }
+
+        preferences.isDeviceRegistered = false
         let device = try await currentDevice(deviceId: deviceId, ignoreSubscriptionsVersion: true)
         let result = try await addDevice(device)
         preferences.isDeviceRegistered = true
@@ -110,10 +119,6 @@ public struct DeviceService: DeviceServiceable {
         try Self.getOrCreateKeyPair(securePreferences: securePreferences)
     }
 
-    private func devicePublicKey() -> String? {
-        try? getOrCreateKeyPair().publicKey.hex
-    }
-    
     @MainActor
     private func currentDevice(
         deviceId: String,
@@ -139,11 +144,10 @@ public struct DeviceService: DeviceServiceable {
             currency: preferences.currency,
             isPushEnabled: preferences.isPushNotificationsEnabled,
             isPriceAlertsEnabled: preferences.isPriceAlertsEnabled,
-            subscriptionsVersion: ignoreSubscriptionsVersion ? 0 : preferences.subscriptionsVersion.asInt32,
-            publicKey: devicePublicKey()
+            subscriptionsVersion: ignoreSubscriptionsVersion ? 0 : preferences.subscriptionsVersion.asInt32
         )
     }
-    
+
     private func getDevice(deviceId: String) async throws -> Device? {
         try await deviceProvider.getDevice(deviceId: deviceId)
     }

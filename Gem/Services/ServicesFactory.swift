@@ -52,8 +52,9 @@ struct ServicesFactory {
         } else {
             nil
         }
-        let provider = Provider<GemAPI>(options: ProviderOptions(baseUrl: nil, requestInterceptor: interceptor))
-        let apiService = GemAPIService(provider: provider)
+        let provider = Provider<GemAPI>()
+        let deviceProvider = Provider<GemDeviceAPI>(options: ProviderOptions(baseUrl: nil, requestInterceptor: interceptor))
+        let apiService = GemAPIService(provider: provider, deviceProvider: deviceProvider)
 
         let subscriptionService = Self.makeSubscriptionService(
             apiService: apiService,

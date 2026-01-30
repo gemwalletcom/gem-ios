@@ -35,7 +35,7 @@ public struct DeviceRequestSigner: Sendable {
     }
 
     public init(privateKeyHex: String) throws {
-        let bytes = try Self.dataFromHex(privateKeyHex)
+        let bytes = try Data.from(hex: privateKeyHex)
         self.privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: bytes)
     }
 
@@ -51,31 +51,8 @@ public struct DeviceRequestSigner: Sendable {
         request.setValue(timestamp, forHTTPHeaderField: "x-device-timestamp")
         request.setValue(bodyHash, forHTTPHeaderField: "x-device-body-hash")
     }
-
-    public static func signMessage(_ message: String, privateKeyHex: String) throws -> String {
-        let bytes = try dataFromHex(privateKeyHex)
-        let privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: bytes)
-        let signature = try privateKey.signature(for: Data(message.utf8))
-        return signature.base64EncodedString()
-    }
 }
 
-private extension DeviceRequestSigner {
-    static func dataFromHex(_ hex: String) throws -> Data {
-        let len = hex.count / 2
-        var data = Data(capacity: len)
-        var index = hex.startIndex
-        for _ in 0..<len {
-            let nextIndex = hex.index(index, offsetBy: 2)
-            guard let byte = UInt8(hex[index..<nextIndex], radix: 16) else {
-                throw CryptoKitError.incorrectParameterSize
-            }
-            data.append(byte)
-            index = nextIndex
-        }
-        return data
-    }
-}
 
 private extension SHA256Digest {
     var hex: String {
