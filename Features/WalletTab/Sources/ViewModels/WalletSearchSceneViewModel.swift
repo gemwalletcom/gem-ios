@@ -117,7 +117,6 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var assetsResultsDestination: Scenes.AssetsResults {
         Scenes.AssetsResults(
-            walletId: wallet.walletId,
             searchQuery: searchRequest.searchBy,
             tag: searchRequest.tag
         )

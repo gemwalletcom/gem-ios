@@ -176,12 +176,10 @@ public struct Scenes {
     }
 
     public struct AssetsResults: Hashable {
-        public let walletId: WalletId
         public let searchQuery: String
         public let tag: String?
 
-        public init(walletId: WalletId, searchQuery: String, tag: String?) {
-            self.walletId = walletId
+        public init(searchQuery: String, tag: String?) {
             self.searchQuery = searchQuery
             self.tag = tag
         }

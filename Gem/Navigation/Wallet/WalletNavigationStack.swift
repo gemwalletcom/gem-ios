@@ -32,6 +32,7 @@ struct WalletNavigationStack: View {
     @Environment(\.activityService) private var activityService
     @Environment(\.walletSearchService) private var walletSearchService
     @Environment(\.assetSearchService) private var assetSearchService
+    @Environment(\.observablePreferences) private var preferences
 
     @State private var model: WalletSceneViewModel
 
@@ -150,8 +151,9 @@ struct WalletNavigationStack: View {
                     model: AssetsResultsSceneViewModel(
                         wallet: model.wallet,
                         walletsService: walletsService,
+                        preferences: preferences.preferences,
                         request: WalletSearchRequest(
-                            walletId: destination.walletId,
+                            walletId: model.wallet.walletId,
                             searchBy: destination.searchQuery,
                             tag: destination.tag,
                             limit: AssetsResultsSceneViewModel.defaultLimit

@@ -46,5 +46,7 @@ struct WalletSearchModelTests {
         #expect(WalletSearchModel.initialFetchLimit(isPerpetualEnabled: true) == 13)
         #expect(WalletSearchModel.searchItemTypes(isPerpetualEnabled: false) == [.asset])
         #expect(WalletSearchModel.searchItemTypes(isPerpetualEnabled: true) == [.asset, .perpetual])
+        #expect(WalletSearchModel.recentActivityTypes(isPerpetualEnabled: false) == RecentActivityType.allCases.filter { $0 != .perpetual })
+        #expect(WalletSearchModel.recentActivityTypes(isPerpetualEnabled: true) == RecentActivityType.allCases)
     }
 }
