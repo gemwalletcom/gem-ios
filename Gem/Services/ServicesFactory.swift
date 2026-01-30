@@ -36,6 +36,7 @@ import Blockchain
 import NativeProviderService
 import ActivityService
 import AuthService
+import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
 import SwiftHTTPClient
@@ -163,13 +164,15 @@ struct ServicesFactory {
             interactor: walletConnectorManager
         )
 
+        let discoverAssetsService = DiscoverAssetsService(balanceService: balanceService, assetsService: apiService)
         let walletsService = Self.makeWalletsService(
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserverService,
-            deviceService: deviceService
+            deviceService: deviceService,
+            discoverAssetsService: discoverAssetsService
         )
 
         let configService = ConfigService(apiService: apiService)
@@ -497,7 +500,8 @@ extension ServicesFactory {
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        deviceService: DeviceService
+        deviceService: DeviceService,
+        discoverAssetsService: DiscoverAssetsService
     ) -> WalletsService {
         WalletsService(
             walletSessionService: walletSessionService,
@@ -505,7 +509,8 @@ extension ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            deviceService: deviceService
+            deviceService: deviceService,
+            discoverAssetsService: discoverAssetsService
         )
     }
 
