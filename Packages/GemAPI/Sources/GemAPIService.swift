@@ -46,13 +46,9 @@ public protocol GemAPIDeviceService: Sendable {
 }
 
 public protocol GemAPISubscriptionService: Sendable {
-    func getSubscriptions(deviceId: String) async throws -> [Subscription]
-    func addSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
-    func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
-
-    func getSubscriptionsV2(deviceId: String) async throws -> [WalletSubscriptionChains]
-    func addSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws
-    func deleteSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws
+    func getSubscriptions(deviceId: String) async throws -> [WalletSubscriptionChains]
+    func addSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws
+    func deleteSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws
 }
 
 public protocol GemAPITransactionService: Sendable {
@@ -68,11 +64,11 @@ public protocol GemAPIPriceAlertService: Sendable {
 
 public protocol GemAPINFTService: Sendable {
     func getDeviceNFTAssets(deviceId: String, walletId: String) async throws -> [NFTData]
-    func reportNft(_ report: ReportNft) async throws
+    func reportNft(deviceId: String, report: ReportNft) async throws
 }
 
 public protocol GemAPIScanService: Sendable {
-    func getScanTransaction(payload: ScanTransactionPayload) async throws -> ScanTransaction
+    func getScanTransaction(deviceId: String, payload: ScanTransactionPayload) async throws -> ScanTransaction
 }
 
 public protocol GemAPIMarketService: Sendable {
@@ -186,39 +182,21 @@ extension GemAPIService: GemAPIDeviceService {
 }
 
 extension GemAPIService: GemAPISubscriptionService {
-    public func getSubscriptions(deviceId: String) async throws -> [Subscription] {
+    public func getSubscriptions(deviceId: String) async throws -> [WalletSubscriptionChains] {
         try await provider
             .request(.getSubscriptions(deviceId: deviceId))
-            .mapResponse(as: [Subscription].self)
+            .mapResponse(as: [WalletSubscriptionChains].self)
     }
 
-    public func addSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws {
+    public func addSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws {
         try await provider
             .request(.addSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
             .mapResponse(as: Int.self)
     }
 
-    public func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws {
+    public func deleteSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws {
         try await provider
             .request(.deleteSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
-            .mapResponse(as: Int.self)
-    }
-
-    public func getSubscriptionsV2(deviceId: String) async throws -> [WalletSubscriptionChains] {
-        try await provider
-            .request(.getSubscriptionsV2(deviceId: deviceId))
-            .mapResponse(as: [WalletSubscriptionChains].self)
-    }
-
-    public func addSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws {
-        try await provider
-            .request(.addSubscriptionsV2(deviceId: deviceId, subscriptions: subscriptions))
-            .mapResponse(as: Int.self)
-    }
-
-    public func deleteSubscriptionsV2(deviceId: String, subscriptions: [WalletSubscription]) async throws {
-        try await provider
-            .request(.deleteSubscriptionsV2(deviceId: deviceId, subscriptions: subscriptions))
             .mapResponse(as: Int.self)
     }
 }
@@ -311,16 +289,16 @@ extension GemAPIService: GemAPINFTService {
             .mapResponse(as: [NFTData].self)
     }
 
-    public func reportNft(_ report: ReportNft) async throws {
+    public func reportNft(deviceId: String, report: ReportNft) async throws {
         _ = try await provider
-            .request(.reportNft(report))
+            .request(.reportNft(deviceId: deviceId, report: report))
     }
 }
 
 extension GemAPIService: GemAPIScanService {
-    public func getScanTransaction(payload: ScanTransactionPayload) async throws -> ScanTransaction {
+    public func getScanTransaction(deviceId: String, payload: ScanTransactionPayload) async throws -> ScanTransaction {
         try await provider
-            .request(.scanTransaction(payload: payload))
+            .request(.scanTransaction(deviceId: deviceId, payload: payload))
             .mapResponse(as: ScanTransaction.self)
     }
 }

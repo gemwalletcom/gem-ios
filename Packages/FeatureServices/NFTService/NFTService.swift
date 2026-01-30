@@ -29,12 +29,13 @@ public struct NFTService: Sendable {
     }
 
     public func report(collectionId: String, assetId: String?, reason: String?) async throws {
+        let deviceId = try deviceService.getDeviceId()
         let report = ReportNft(
-            deviceId: try deviceService.getDeviceId(),
+            deviceId: deviceId,
             collectionId: collectionId,
             assetId: assetId,
             reason: reason
         )
-        try await apiService.reportNft(report)
+        try await apiService.reportNft(deviceId: deviceId, report: report)
     }
 }
