@@ -25,9 +25,19 @@ public final class SecurePreferences: Sendable {
         try keychain.set(value: value, key: key.rawValue)
         return value
     }
-    
+
     public func get(key: SecurePreferences.Keys) throws -> String? {
         try keychain.get(key: key.rawValue)
+    }
+
+    @discardableResult
+    public func set(value: Data, key: SecurePreferences.Keys) throws -> Data {
+        try keychain.set(value, key: key.rawValue)
+        return value
+    }
+
+    public func getData(key: SecurePreferences.Keys) throws -> Data? {
+        try keychain.getData(key: key.rawValue)
     }
     
     public func delete(key: SecurePreferences.Keys) throws {
@@ -55,6 +65,14 @@ extension KeychainDefault: KeychainPreferenceStorable {
 
     public func get(key: String) throws -> String? {
         try get(key, ignoringAttributeSynchronizable: true)
+    }
+
+    public func set(_ value: Data, key: String) throws {
+        try set(value, key: key, ignoringAttributeSynchronizable: true)
+    }
+
+    public func getData(key: String) throws -> Data? {
+        try getData(key, ignoringAttributeSynchronizable: true)
     }
 
     public func remove(key: String) throws {

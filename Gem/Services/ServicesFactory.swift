@@ -61,7 +61,8 @@ struct ServicesFactory {
         )
         let deviceService = Self.makeDeviceService(
             apiService: apiService,
-            subscriptionService: subscriptionService
+            subscriptionService: subscriptionService,
+            securePreferences: securePreferences
         )
         let deviceObserverService = Self.makeDeviceObserverService(
             deviceService: deviceService,
@@ -326,15 +327,13 @@ struct ServicesFactory {
 
 extension ServicesFactory {
     private static func makeRequestSigner(securePreferences: SecurePreferences) -> DeviceRequestSigner? {
-        if (try? securePreferences.get(key: .devicePrivateKey)) == nil {
-            let keyPair = DeviceKeyPair()
-            _ = try? securePreferences.set(value: keyPair.privateKeyHex, key: .devicePrivateKey)
-            _ = try? securePreferences.set(value: keyPair.publicKeyHex, key: .devicePublicKey)
-        }
-        guard let privateKeyHex = try? securePreferences.get(key: .devicePrivateKey) else {
+        do {
+            let keyPair = try DeviceService.getOrCreateKeyPair(securePreferences: securePreferences)
+            return try DeviceRequestSigner(privateKey: keyPair.privateKey)
+        } catch {
+            debugLog("makeRequestSigner error: \(error)")
             return nil
         }
-        return try? DeviceRequestSigner(privateKeyHex: privateKeyHex)
     }
 
     private static func makeSubscriptionService(
@@ -349,11 +348,13 @@ extension ServicesFactory {
 
     private static func makeDeviceService(
         apiService: GemAPIService,
-        subscriptionService: SubscriptionService
+        subscriptionService: SubscriptionService,
+        securePreferences: SecurePreferences
     ) -> DeviceService {
         DeviceService(
             deviceProvider: apiService,
-            subscriptionsService: subscriptionService
+            subscriptionsService: subscriptionService,
+            securePreferences: securePreferences
         )
     }
 

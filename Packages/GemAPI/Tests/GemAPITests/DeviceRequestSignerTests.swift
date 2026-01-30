@@ -21,6 +21,19 @@ final class DeviceRequestSignerTests: XCTestCase {
         XCTAssertNotEqual(a.publicKeyHex, b.publicKeyHex)
     }
 
+    func testKeyPairGeneratesValidData() {
+        let keyPair = DeviceKeyPair()
+        XCTAssertEqual(keyPair.privateKey.count, 32)
+        XCTAssertEqual(keyPair.publicKey.count, 32)
+        XCTAssertNotEqual(keyPair.privateKey, keyPair.publicKey)
+    }
+
+    func testSignerInitFromPrivateKey() throws {
+        let keyPair = DeviceKeyPair()
+        let signer = try DeviceRequestSigner(privateKey: keyPair.privateKey)
+        XCTAssertEqual(signer.publicKeyHex, keyPair.publicKeyHex)
+    }
+
     func testSignerInitFromPrivateKeyHex() throws {
         let keyPair = DeviceKeyPair()
         let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)

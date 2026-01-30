@@ -27,6 +27,30 @@ public struct DeviceService: DeviceServiceable {
         self.securePreferences = securePreferences
     }
     
+    @discardableResult
+    private static func getOrCreateDeviceId(securePreferences: SecurePreferences) throws -> String {
+        if let deviceId = try securePreferences.get(key: .deviceId) {
+            return deviceId
+        }
+        return try securePreferences.set(value: generateDeviceId(), key: .deviceId)
+    }
+
+    private static func generateDeviceId() -> String {
+        String(NSUUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(32).lowercased())
+    }
+
+    @discardableResult
+    public static func getOrCreateKeyPair(securePreferences: SecurePreferences) throws -> (privateKey: Data, publicKey: Data) {
+        if let privateKey = try securePreferences.getData(key: .devicePrivateKey),
+           let publicKey = try securePreferences.getData(key: .devicePublicKey) {
+            return (privateKey, publicKey)
+        }
+        let keyPair = DeviceKeyPair()
+        let publicKey = try securePreferences.set(value: keyPair.publicKey, key: .devicePublicKey)
+        let privateKey = try securePreferences.set(value: keyPair.privateKey, key: .devicePrivateKey)
+        return (privateKey, publicKey)
+    }
+
     public func update() async throws  {
         try await Self.serialExecutor.execute {
             try await updateDevice()
@@ -34,7 +58,7 @@ public struct DeviceService: DeviceServiceable {
     }
     
     private func updateDevice() async throws {
-        guard let deviceId = try await self.getOrCreateDeviceId() else { return }
+        let deviceId = try self.getOrCreateDeviceId()
         let device = try await self.getOrCreateDevice(deviceId)
         let localDevice = try await self.currentDevice(deviceId: deviceId)
         if device.subscriptionsVersion != localDevice.subscriptionsVersion || self.preferences.subscriptionsVersionHasChange {
@@ -77,22 +101,17 @@ public struct DeviceService: DeviceServiceable {
         return try getDeviceId()
     }
     
-    private func generateDeviceId() -> String {
-        String(NSUUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(32).lowercased())
+    private func getOrCreateDeviceId() throws -> String {
+        try Self.getOrCreateDeviceId(securePreferences: securePreferences)
     }
-    
-    private func getOrCreateDeviceId() async throws -> String?  {
-        do {
-            let deviceId = try getDeviceId()
-            return deviceId
-        } catch {
-            let newDeviceId = generateDeviceId()
-            return try securePreferences.set(value: newDeviceId, key: .deviceId)
-        }
+
+    @discardableResult
+    private func getOrCreateKeyPair() throws -> (privateKey: Data, publicKey: Data) {
+        try Self.getOrCreateKeyPair(securePreferences: securePreferences)
     }
 
     private func devicePublicKey() -> String? {
-        try? securePreferences.get(key: .devicePublicKey)
+        try? getOrCreateKeyPair().publicKey.hex
     }
     
     @MainActor
