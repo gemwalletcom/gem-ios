@@ -52,6 +52,8 @@ let package = Package(
         .library(name: "RewardsServiceTestKit", targets: ["RewardsServiceTestKit"]),
         .library(name: "AuthService", targets: ["AuthService"]),
         .library(name: "AuthServiceTestKit", targets: ["AuthServiceTestKit"]),
+        .library(name: "ConnectionsService", targets: ["ConnectionsService"]),
+        .library(name: "ConnectionsServiceTestKit", targets: ["ConnectionsServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -425,7 +427,10 @@ let package = Package(
                 "DeviceService",
                 "AssetsService",
                 "WalletService",
-                "NotificationService"
+                "NotificationService",
+                "PriceService",
+                "PerpetualService",
+                "ConnectionsService",
             ],
             path: "AppService",
             exclude: ["Tests", "TestKit"]
@@ -441,6 +446,9 @@ let package = Package(
                 "DeviceServiceTestKit",
                 "AssetsServiceTestKit",
                 .product(name: "PreferencesTestKit", package: "Preferences"),
+                "PriceServiceTestKit",
+                "PerpetualServiceTestKit",
+                "ConnectionsServiceTestKit",
             ],
             path: "AppService/TestKit"
         ),
@@ -562,6 +570,28 @@ let package = Package(
             ],
             path: "AuthService/TestKit"
         ),
+        .target(
+            name: "ConnectionsService",
+            dependencies: [
+                "Primitives",
+                "Store",
+                "Preferences",
+                .product(name: "WalletConnectorService", package: "ChainServices"),
+            ],
+            path: "ConnectionsService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "ConnectionsServiceTestKit",
+            dependencies: [
+                "ConnectionsService",
+                "Primitives",
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "WalletConnectorServiceTestKit", package: "ChainServices"),
+            ],
+            path: "ConnectionsService/TestKit"
+        ),
         .testTarget(
             name: "PriceAlertServiceTests",
             dependencies: [
@@ -632,6 +662,8 @@ let package = Package(
                 "AppServiceTestKit",
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                "PerpetualServiceTestKit",
             ],
             path: "AppService/Tests"
         ),

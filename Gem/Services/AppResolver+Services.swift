@@ -9,6 +9,7 @@ import StakeService
 import NodeService
 import PriceService
 import WalletConnector
+import ConnectionsService
 import ExplorerService
 import BalanceService
 import AssetsService
@@ -74,7 +75,7 @@ extension AppResolver {
         let rewardsService: RewardsService
         let walletSearchService: WalletSearchService
         let assetSearchService: AssetSearchService
-        let observersService: ObserversService
+        let appLifecycleService: AppLifecycleService
         let inAppNotificationService: InAppNotificationService
         let supportService: SupportService
 
@@ -120,7 +121,7 @@ extension AppResolver {
             rewardsService: RewardsService,
             walletSearchService: WalletSearchService,
             assetSearchService: AssetSearchService,
-            observersService: ObserversService,
+            appLifecycleService: AppLifecycleService,
             inAppNotificationService: InAppNotificationService,
             supportService: SupportService
         ) {
@@ -165,7 +166,7 @@ extension AppResolver {
             self.rewardsService = rewardsService
             self.walletSearchService = walletSearchService
             self.assetSearchService = assetSearchService
-            self.observersService = observersService
+            self.appLifecycleService = appLifecycleService
             self.inAppNotificationService = inAppNotificationService
             self.supportService = supportService
         }

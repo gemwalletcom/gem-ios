@@ -15,6 +15,7 @@ import StakeService
 import NodeService
 import PriceService
 import WalletConnector
+import ConnectionsService
 import ExplorerService
 import NFTService
 import BalanceService
