@@ -44,7 +44,7 @@ actor ObserversService: Sendable {
         currentWallet = wallet
         async let assets: () = setupPriceAssets(wallet: wallet)
         async let perpetual: () = {
-            if preferences.isPerpetualEnabled {
+            if preferences.isPerpetualEnabled, wallet.isMultiCoins {
                 await hyperliquidObserverService.connect(for: wallet)
             }
         }()
