@@ -453,7 +453,7 @@ let package = Package(
                 "GemAPI",
             ],
             path: "DeviceService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "DeviceServiceTestKit",
@@ -634,6 +634,14 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             path: "AppService/Tests"
+        ),
+        .testTarget(
+            name: "DeviceServiceTests",
+            dependencies: [
+                "DeviceService",
+                "Primitives",
+            ],
+            path: "DeviceService/Tests"
         ),
     ]
 )

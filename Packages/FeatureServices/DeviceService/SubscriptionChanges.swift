@@ -5,14 +5,14 @@ import Primitives
 
 public struct SubscriptionChanges: Sendable {
     public let toAdd: [WalletSubscription]
-    public let walletIdsToDelete: [String]
+    public let toDelete: [WalletSubscriptionChains]
 
-    public init(toAdd: [WalletSubscription], walletIdsToDelete: [String]) {
+    public init(toAdd: [WalletSubscription], toDelete: [WalletSubscriptionChains]) {
         self.toAdd = toAdd
-        self.walletIdsToDelete = walletIdsToDelete
+        self.toDelete = toDelete
     }
 
     public var hasChanges: Bool {
-        !toAdd.isEmpty || !walletIdsToDelete.isEmpty
+        !toAdd.isEmpty || !toDelete.isEmpty
     }
 }

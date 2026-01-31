@@ -8,7 +8,7 @@ import PrimitivesTestKit
 public extension SubscriptionChanges {
     static func mock(
         toAdd: [WalletSubscription] = [],
-        toDelete: [WalletSubscription] = []
+        toDelete: [WalletSubscriptionChains] = []
     ) -> SubscriptionChanges {
         SubscriptionChanges(
             toAdd: toAdd,

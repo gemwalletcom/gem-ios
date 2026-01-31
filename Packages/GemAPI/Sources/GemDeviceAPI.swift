@@ -14,7 +14,7 @@ public enum GemDeviceAPI: TargetType {
 
     case getSubscriptions(deviceId: String)
     case addSubscriptions(deviceId: String, subscriptions: [WalletSubscription])
-    case deleteSubscriptions(deviceId: String, walletIds: [String])
+    case deleteSubscriptions(deviceId: String, subscriptions: [WalletSubscriptionChains])
 
     case getPriceAlerts(deviceId: String, assetId: String?)
     case addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
@@ -198,8 +198,8 @@ public enum GemDeviceAPI: TargetType {
             return .encodable(request)
         case .addSubscriptions(_, let subscriptions):
             return .encodable(subscriptions)
-        case .deleteSubscriptions(_, let walletIds):
-            return .encodable(walletIds)
+        case .deleteSubscriptions(_, let subscriptions):
+            return .encodable(subscriptions)
         case .addPriceAlerts(_, let priceAlerts),
             .deletePriceAlerts(_, let priceAlerts):
             return .encodable(priceAlerts)
