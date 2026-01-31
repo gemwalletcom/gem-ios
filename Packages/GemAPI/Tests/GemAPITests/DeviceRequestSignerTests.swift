@@ -3,6 +3,7 @@
 import XCTest
 import Foundation
 import CryptoKit
+import Primitives
 @testable import GemAPI
 
 final class DeviceRequestSignerTests: XCTestCase {
@@ -44,22 +45,34 @@ final class DeviceRequestSignerTests: XCTestCase {
         XCTAssertThrowsError(try DeviceRequestSigner(privateKeyHex: "not_valid_hex"))
     }
 
-    func testSignMessageProducesValidBase64() throws {
+    func testSignatureIsValidBase64With64Bytes() throws {
         let keyPair = DeviceKeyPair()
-        let message = "v1.1706000000000.GET./v1/devices/abc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-        let signature = try DeviceRequestSigner.signMessage(message, privateKeyHex: keyPair.privateKeyHex)
+        let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)
+        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v1/devices/abc")!)
+        request.httpMethod = "GET"
 
+        try signer.sign(request: &request)
+
+        let signature = request.value(forHTTPHeaderField: "x-device-signature")!
         let sigData = Data(base64Encoded: signature)
         XCTAssertNotNil(sigData)
         XCTAssertEqual(sigData?.count, 64)
     }
 
-    func testSignMessageVerifiesWithPublicKey() throws {
+    func testSignatureVerifiesWithPublicKey() throws {
         let keyPair = DeviceKeyPair()
-        let message = "v1.1706000000000.GET./v1/devices/abc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-        let signature = try DeviceRequestSigner.signMessage(message, privateKeyHex: keyPair.privateKeyHex)
+        let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)
+        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v1/devices/abc")!)
+        request.httpMethod = "GET"
 
-        let pubKeyData = try dataFromHex(keyPair.publicKeyHex)
+        try signer.sign(request: &request)
+
+        let signature = request.value(forHTTPHeaderField: "x-device-signature")!
+        let timestamp = request.value(forHTTPHeaderField: "x-device-timestamp")!
+        let bodyHash = request.value(forHTTPHeaderField: "x-device-body-hash")!
+        let message = "v1.\(timestamp).GET./v1/devices/abc.\(bodyHash)"
+
+        let pubKeyData = try Data.from(hex: keyPair.publicKeyHex)
         let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: pubKeyData)
         let sigData = Data(base64Encoded: signature)!
 
@@ -69,7 +82,7 @@ final class DeviceRequestSignerTests: XCTestCase {
     func testSignRequestSetsHeaders() throws {
         let keyPair = DeviceKeyPair()
         let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)
-        var request = URLRequest(url: URL(string: "https://api.gem.com/v1/devices/abc")!)
+        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v1/devices/abc")!)
         request.httpMethod = "GET"
 
         try signer.sign(request: &request)
@@ -89,7 +102,7 @@ final class DeviceRequestSignerTests: XCTestCase {
     func testSignRequestWithBody() throws {
         let keyPair = DeviceKeyPair()
         let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)
-        var request = URLRequest(url: URL(string: "https://api.gem.com/v1/devices/abc")!)
+        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v1/devices/abc")!)
         request.httpMethod = "POST"
         request.httpBody = Data("{\"test\":true}".utf8)
 
@@ -101,18 +114,4 @@ final class DeviceRequestSignerTests: XCTestCase {
         XCTAssertEqual(bodyHash.count, 64)
     }
 
-    private func dataFromHex(_ hex: String) throws -> Data {
-        let len = hex.count / 2
-        var data = Data(capacity: len)
-        var index = hex.startIndex
-        for _ in 0..<len {
-            let nextIndex = hex.index(index, offsetBy: 2)
-            guard let byte = UInt8(hex[index..<nextIndex], radix: 16) else {
-                throw CryptoKitError.incorrectParameterSize
-            }
-            data.append(byte)
-            index = nextIndex
-        }
-        return data
-    }
 }

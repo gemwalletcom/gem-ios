@@ -6,7 +6,9 @@ import Keychain
 
 public final class SecurePreferences: Sendable {
     public enum Keys: String, CaseIterable {
+        // Deprecated. Use devicePublicKey
         case deviceId
+        
         case deviceToken
         case devicePrivateKey
         case devicePublicKey

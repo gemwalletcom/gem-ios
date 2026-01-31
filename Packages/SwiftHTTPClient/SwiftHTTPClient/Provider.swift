@@ -32,7 +32,8 @@ public struct Provider<T: TargetType>: ProviderType {
             path: api.path,
             data: api.data,
             contentType: api.contentType,
-            cachePolicy: api.cachePolicy
+            cachePolicy: api.cachePolicy,
+            headers: api.headers
         ).build(encoder: encoder)
         if let interceptor = options.requestInterceptor {
             try interceptor(&request)
@@ -63,7 +64,8 @@ extension Provider where T: BatchTargetType {
             path: "",
             data: .data(payload),
             contentType: ContentType.json.rawValue,
-            cachePolicy: .useProtocolCachePolicy
+            cachePolicy: .useProtocolCachePolicy,
+            headers: [:]
         ).build(encoder: encoder)
 
         let (data, response) = try await session.data(for: request, delegate: nil)
