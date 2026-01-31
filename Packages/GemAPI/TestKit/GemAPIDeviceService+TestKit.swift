@@ -12,4 +12,5 @@ public struct GemAPIDeviceServiceMock: GemAPIDeviceService {
     public func updateDevice(device: Device) async throws -> Device { Device.mock() }
     public func deleteDevice(deviceId: String) async throws {}
     public func isDeviceRegistered(deviceId: String) async throws -> Bool { true }
+    public func migrateDevice(request: MigrateDeviceIdRequest) async throws -> Device { Device.mock() }
 }
