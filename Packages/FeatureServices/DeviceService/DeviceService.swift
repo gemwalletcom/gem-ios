@@ -87,12 +87,19 @@ public struct DeviceService: DeviceServiceable {
     }
     
     private func getOrCreateDevice(_ deviceId: String) async throws -> Device {
-        if let device = try await getDevice(deviceId: deviceId) {
-            preferences.isDeviceRegistered = true
-            return device
+        var shouldFetchDevice = preferences.isDeviceRegistered
+        if !shouldFetchDevice {
+            shouldFetchDevice = try await deviceProvider.isDeviceRegistered(deviceId: deviceId)
         }
 
-        preferences.isDeviceRegistered = false
+        if shouldFetchDevice {
+            if let device = try await getDevice(deviceId: deviceId) {
+                preferences.isDeviceRegistered = true
+                return device
+            }
+            preferences.isDeviceRegistered = false
+        }
+
         let device = try await currentDevice(deviceId: deviceId, ignoreSubscriptionsVersion: true)
         let result = try await addDevice(device)
         preferences.isDeviceRegistered = true
