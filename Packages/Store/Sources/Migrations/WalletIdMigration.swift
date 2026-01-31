@@ -55,9 +55,25 @@ struct WalletIdMigration {
             migrateWalletPreferences(oldId: mapping.oldId, newId: mapping.newId)
         }
 
+        cleanupOrphanedRecords(db: db)
+
         try db.execute(sql: "PRAGMA foreign_keys = ON")
 
         migrateCurrentWalletPreference(mappings: remainingMappings, userDefaults: userDefaults)
+    }
+
+    private static func cleanupOrphanedRecords(db: Database) {
+        do {
+            let violations = try Row.fetchAll(db, sql: "PRAGMA foreign_key_check")
+            for violation in violations {
+                if let table = violation["table"] as? String,
+                   let rowid = violation["rowid"] as? Int64 {
+                    try? db.execute(sql: "DELETE FROM \(table) WHERE rowid = ?", arguments: [rowid])
+                }
+            }
+        } catch {
+            // Silently continue if check fails
+        }
     }
 
     private static func migrateWalletPreferences(oldId: String, newId: String) {
