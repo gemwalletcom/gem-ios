@@ -11,6 +11,7 @@ import NotificationService
 import GemstonePrimitives
 import NodeService
 import WalletConnector
+import ConnectionsService
 import Store
 import GemAPI
 import Keystore
@@ -249,7 +250,7 @@ struct ServicesFactory {
 
         let supportService = SupportService(api: apiService)
 
-        let observersService = ObserversService(
+        let appLifecycleService = AppLifecycleService(
             preferences: preferences,
             connectionsService: connectionsService,
             deviceObserverService: deviceObserverService,
@@ -317,7 +318,7 @@ struct ServicesFactory {
             rewardsService: rewardsService,
             walletSearchService: walletSearchService,
             assetSearchService: assetSearchService,
-            observersService: observersService,
+            appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
             supportService: supportService
         )

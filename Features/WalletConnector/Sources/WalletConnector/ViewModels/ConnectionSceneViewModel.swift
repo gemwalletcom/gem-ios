@@ -4,6 +4,7 @@ import Foundation
 import Localization
 import Primitives
 import Formatters
+import ConnectionsService
 
 public struct ConnectionSceneViewModel: Sendable {
     private static let dateFormatter = RelativeDateFormatter()

@@ -6,6 +6,8 @@ import Primitives
 import PrimitivesTestKit
 import StoreTestKit
 import WalletConnectorServiceTestKit
+import ConnectionsService
+import ConnectionsServiceTestKit
 
 @testable import WalletConnector
 

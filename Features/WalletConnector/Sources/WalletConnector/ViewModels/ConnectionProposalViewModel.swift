@@ -10,18 +10,15 @@ import Components
 import Style
 
 public struct ConnectionProposalViewModel {
-    private let connectionsService: ConnectionsService
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate
     private let pairingProposal: WCPairingProposal
 
     var walletSelectorModel: SelectWalletViewModel
 
     public init(
-        connectionsService: ConnectionsService,
         confirmTransferDelegate: @escaping TransferDataCallback.ConfirmTransferDelegate,
         pairingProposal: WCPairingProposal
     ) {
-        self.connectionsService = connectionsService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.pairingProposal = pairingProposal
         self.walletSelectorModel = SelectWalletViewModel(
