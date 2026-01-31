@@ -49,7 +49,7 @@ public protocol GemAPIDeviceService: Sendable {
 public protocol GemAPISubscriptionService: Sendable {
     func getSubscriptions(deviceId: String) async throws -> [WalletSubscriptionChains]
     func addSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws
-    func deleteSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws
+    func deleteSubscriptions(deviceId: String, walletIds: [String]) async throws
 }
 
 public protocol GemAPITransactionService: Sendable {
@@ -215,9 +215,9 @@ extension GemAPIService: GemAPISubscriptionService {
             .mapResponse(as: Int.self)
     }
 
-    public func deleteSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws {
+    public func deleteSubscriptions(deviceId: String, walletIds: [String]) async throws {
         try await deviceProvider
-            .request(.deleteSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
+            .request(.deleteSubscriptions(deviceId: deviceId, walletIds: walletIds))
             .mapResponse(as: Int.self)
     }
 }
