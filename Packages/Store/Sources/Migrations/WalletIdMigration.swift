@@ -84,7 +84,7 @@ struct WalletIdMigration {
             return
         }
 
-        if let mapping = mappings.first(where: { $0.oldId == currentId && $0.oldId != $0.newId }) {
+        if let mapping = mappings.first(where: { $0.oldId == currentId }) {
             userDefaults.set(mapping.newId, forKey: currentWalletKey)
         } else if let first = firstWallet {
             userDefaults.set(first.newId, forKey: currentWalletKey)
@@ -95,11 +95,14 @@ struct WalletIdMigration {
         try Row.fetchAll(db, sql: """
             SELECT w.id, w.type, w."order",
                    (SELECT a.address FROM \(AccountRecord.databaseTableName) a
-                    WHERE a.walletId = w.id AND a.chain = 'ethereum' LIMIT 1) as ethereumAddress,
+                    WHERE a.walletId = w.id AND a.chain = 'ethereum'
+                    ORDER BY a.address LIMIT 1) as ethereumAddress,
                    (SELECT a.address FROM \(AccountRecord.databaseTableName) a
-                    WHERE a.walletId = w.id LIMIT 1) as address,
+                    WHERE a.walletId = w.id
+                    ORDER BY a.address LIMIT 1) as address,
                    (SELECT a.chain FROM \(AccountRecord.databaseTableName) a
-                    WHERE a.walletId = w.id LIMIT 1) as chain
+                    WHERE a.walletId = w.id
+                    ORDER BY a.address LIMIT 1) as chain
             FROM \(WalletRecord.databaseTableName) w
         """).compactMap { row -> WalletMapping? in
             guard let oldId: String = row["id"],
@@ -109,11 +112,15 @@ struct WalletIdMigration {
             let newId: String
             switch type {
             case .multicoin:
-                guard let address: String = row["ethereumAddress"] else { return nil }
+                guard let address: String = row["ethereumAddress"] else {
+                    return nil
+                }
                 newId = "multicoin_\(address)"
             case .single, .privateKey, .view:
                 guard let address: String = row["address"],
-                      let chain: String = row["chain"] else { return nil }
+                      let chain: String = row["chain"] else {
+                    return nil
+                }
                 newId = "\(type.rawValue)_\(chain)_\(address)"
             }
             return WalletMapping(oldId: oldId, newId: newId, order: row["order"] ?? 0)

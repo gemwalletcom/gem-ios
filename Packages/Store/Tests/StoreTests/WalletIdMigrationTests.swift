@@ -416,6 +416,34 @@ struct WalletIdMigrationTests {
         let wallets = try walletStore.getWallets()
         #expect(wallets.isEmpty)
     }
+
+    @Test
+    func multipleAccountsConsistentSelection() throws {
+        let userDefaults = UserDefaults.mock()
+        let db = DB.mock()
+        let walletStore = WalletStore(db: db)
+
+        let oldId = "uuid-multi-accounts"
+        let btcAddress = "bc1bitcoin"
+        let ethAddress = "0xethereum"
+        let wallet = Wallet.mock(
+            id: oldId,
+            type: .single,
+            accounts: [
+                .mock(chain: .bitcoin, address: btcAddress),
+                .mock(chain: .ethereum, address: ethAddress)
+            ]
+        )
+        try walletStore.addWallet(wallet)
+
+        try db.dbQueue.write { db in
+            try WalletIdMigration.migrate(db: db, userDefaults: userDefaults)
+        }
+
+        let wallets = try walletStore.getWallets()
+        #expect(wallets.count == 1)
+        #expect(wallets.first?.id == "single_ethereum_\(ethAddress)")
+    }
 }
 
 @Suite(.serialized)
@@ -482,5 +510,26 @@ struct WalletIdMigrationPreferenceTests {
 
         let currentWalletId = userDefaults.string(forKey: currentWalletKey)
         #expect(currentWalletId == "multicoin_0xfallback")
+    }
+
+    @Test
+    func preserveCurrentWalletWhenAlreadyMigrated() throws {
+        let userDefaults = UserDefaults.mock()
+        let db = DB.mock()
+        let walletStore = WalletStore(db: db)
+
+        let ethAddress = "0xalready"
+        let newFormatId = "multicoin_\(ethAddress)"
+        try walletStore.addWallet(.mock(id: newFormatId, type: .multicoin, accounts: [.mock(chain: .ethereum, address: ethAddress)], order: 1))
+        try walletStore.addWallet(.mock(id: "uuid-other", type: .multicoin, accounts: [.mock(chain: .ethereum, address: "0xother")], order: 0))
+
+        userDefaults.set(newFormatId, forKey: currentWalletKey)
+
+        try db.dbQueue.write { db in
+            try WalletIdMigration.migrate(db: db, userDefaults: userDefaults)
+        }
+
+        let currentWalletId = userDefaults.string(forKey: currentWalletKey)
+        #expect(currentWalletId == newFormatId)
     }
 }
