@@ -76,8 +76,7 @@ public final class SignMessageSceneViewModel {
     }
 
     public func signMessage() async throws {
-        let messageChain = Chain(rawValue: payload.message.chain) ?? payload.chain
-        var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: messageChain)
+        var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
         defer { privateKey.zeroize() }
 
         let signature = try signer.sign(privateKey: privateKey)
