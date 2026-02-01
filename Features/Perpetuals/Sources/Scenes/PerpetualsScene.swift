@@ -10,14 +10,14 @@ import PrimitivesComponents
 import Preferences
 import Recents
 
-public struct PerpetualsScene: View {
+struct PerpetualsScene: View {
     @Bindable private var model: PerpetualsSceneViewModel
 
-    public init(model: PerpetualsSceneViewModel) {
+    init(model: PerpetualsSceneViewModel) {
         self.model = model
     }
 
-    public var body: some View {
+    var body: some View {
         SearchableWrapper(
             content: { list },
             isSearching: $model.isSearching,
@@ -43,6 +43,12 @@ public struct PerpetualsScene: View {
             Task {
                 await model.fetch()
             }
+        }
+        .onAppear {
+            Task { await model.onAppear() }
+        }
+        .onDisappear {
+            Task { await model.onDisappear() }
         }
         .refreshable {
             await model.fetch()

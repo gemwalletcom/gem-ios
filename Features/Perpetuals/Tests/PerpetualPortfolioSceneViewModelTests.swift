@@ -5,6 +5,8 @@ import Primitives
 import PrimitivesTestKit
 import PrimitivesComponents
 import Components
+import PerpetualService
+import PerpetualServiceTestKit
 import PerpetualsTestKit
 @testable import Perpetuals
 
@@ -38,6 +40,7 @@ struct PerpetualPortfolioSceneViewModelTests {
     @MainActor
     func chartState() {
         let model = PerpetualPortfolioSceneViewModel.mock()
+        model.selectedChartType = .value
 
         model.state = .loading
         #expect(model.chartState.isLoading)
@@ -77,8 +80,23 @@ struct PerpetualPortfolioSceneViewModelTests {
 
     @Test
     @MainActor
+    func marginUsageText() {
+        let model = PerpetualPortfolioSceneViewModel.mock()
+
+        #expect(model.marginUsageText == "-")
+
+        model.state = .data(.mock(accountSummary: .mock(accountValue: 100, marginUsage: 0.168)))
+        #expect(model.marginUsageText == "$16.80 (16.80%)")
+
+        model.state = .data(.mock(accountSummary: .mock(accountValue: 0, marginUsage: 0)))
+        #expect(model.marginUsageText == "$0.00 (0.00%)")
+    }
+
+    @Test
+    @MainActor
     func valueChangeCalculation() {
         let model = PerpetualPortfolioSceneViewModel.mock()
+        model.selectedChartType = .value
         model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [0, 50, 30, 100]))))
 
         if case .data(let chartModel) = model.chartState {
@@ -91,5 +109,18 @@ struct PerpetualPortfolioSceneViewModelTests {
             #expect(chartModel.price?.price == 25)
             #expect(chartModel.price?.priceChangePercentage24h == 50)
         }
+    }
+}
+
+extension PerpetualPortfolioSceneViewModel {
+    @MainActor
+    static func mock(
+        wallet: Wallet = .mock(),
+        perpetualService: PerpetualServiceable = PerpetualService.mock()
+    ) -> PerpetualPortfolioSceneViewModel {
+        PerpetualPortfolioSceneViewModel(
+            wallet: wallet,
+            perpetualService: perpetualService
+        )
     }
 }

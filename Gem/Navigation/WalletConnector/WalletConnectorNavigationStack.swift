@@ -12,7 +12,6 @@ import Style
 struct WalletConnectorNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.keystore) private var keystore
-    @Environment(\.connectionsService) private var connectionsService
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter
@@ -48,7 +47,6 @@ struct WalletConnectorNavigationStack: View {
                 case .connectionProposal(let data):
                     ConnectionProposalScene(
                         model: ConnectionProposalViewModel(
-                            connectionsService: connectionsService,
                             confirmTransferDelegate: data.delegate,
                             pairingProposal: data.payload
                         )

@@ -3,6 +3,7 @@
 import SwiftUI
 import Primitives
 import PrimitivesComponents
+import Store
 import MarketInsight
 import Transactions
 import WalletTab
@@ -26,8 +27,12 @@ struct WalletNavigationStack: View {
     @Environment(\.priceObserverService) private var priceObserverService
     @Environment(\.stakeService) private var stakeService
     @Environment(\.perpetualService) private var perpetualService
+    @Environment(\.hyperliquidObserverService) private var hyperliquidObserverService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.activityService) private var activityService
+    @Environment(\.walletSearchService) private var walletSearchService
+    @Environment(\.assetSearchService) private var assetSearchService
+    @Environment(\.observablePreferences) private var preferences
 
     @State private var model: WalletSceneViewModel
 
@@ -52,11 +57,12 @@ struct WalletNavigationStack: View {
                     WalletSearchScene(
                         model: WalletSearchSceneViewModel(
                             wallet: model.wallet,
-                            searchService: AssetSearchService(assetsService: assetsService),
+                            searchService: walletSearchService,
                             activityService: activityService,
                             walletsService: walletsService,
+                            perpetualService: perpetualService,
                             onDismissSearch: model.onToggleSearch,
-                            onSelectAssetAction: { navigationState.wallet.append(Scenes.Asset(asset: $0)) },
+                            onSelectAssetAction: onSelectAsset,
                             onAddToken: model.onSelectAddCustomToken
                         )
                     )
@@ -134,9 +140,26 @@ struct WalletNavigationStack: View {
                 PerpetualsNavigationView(
                     wallet: model.wallet,
                     perpetualService: perpetualService,
+                    observerService: hyperliquidObserverService,
                     activityService: activityService,
                     onSelectAssetType: { model.isPresentingSelectAssetType = $0 },
                     onSelectAsset: { navigationState.wallet.append(Scenes.Perpetual($0)) }
+                )
+            }
+            .navigationDestination(for: Scenes.AssetsResults.self) { destination in
+                AssetsResultsScene(
+                    model: AssetsResultsSceneViewModel(
+                        wallet: model.wallet,
+                        walletsService: walletsService,
+                        preferences: preferences.preferences,
+                        request: WalletSearchRequest(
+                            walletId: model.wallet.walletId,
+                            searchBy: destination.searchQuery,
+                            tag: destination.tag,
+                            limit: AssetsResultsSceneViewModel.defaultLimit
+                        ),
+                        onSelectAsset: onSelectAsset
+                    )
                 )
             }
             .navigationDestination(for: Scenes.Perpetual.self) {
@@ -144,6 +167,7 @@ struct WalletNavigationStack: View {
                     asset: $0.asset,
                     wallet: model.wallet,
                     perpetualService: perpetualService,
+                    observerService: hyperliquidObserverService,
                     isPresentingTransferData: $model.isPresentingTransferData,
                     isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
                 )
@@ -162,7 +186,7 @@ struct WalletNavigationStack: View {
                     model: SelectAssetViewModel(
                         wallet: model.wallet,
                         selectType: $0,
-                        searchService: AssetSearchService(assetsService: assetsService),
+                        searchService: assetSearchService,
                         walletsService: walletsService,
                         priceAlertService: priceAlertService,
                         activityService: activityService
@@ -209,6 +233,14 @@ struct WalletNavigationStack: View {
             }
             .safariSheet(url: $model.isPresentingUrl)
             .toast(message: $model.isPresentingToastMessage)
+        }
+    }
+
+    private func onSelectAsset(asset: Asset) {
+        if asset.type == .perpetual {
+            navigationState.wallet.append(Scenes.Perpetual(asset))
+        } else {
+            navigationState.wallet.append(Scenes.Asset(asset: asset))
         }
     }
 }

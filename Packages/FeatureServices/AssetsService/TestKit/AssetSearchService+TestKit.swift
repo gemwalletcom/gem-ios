@@ -3,11 +3,17 @@
 import Foundation
 import AssetsService
 import Primitives
+import Store
+import StoreTestKit
 
 extension AssetSearchService {
     public static func mock(
-        assetsService: AssetsService = .mock()
+        assetsService: AssetsService = .mock(),
+        searchStore: SearchStore = .mock()
     ) -> AssetSearchService {
-        AssetSearchService(assetsService: assetsService)
+        AssetSearchService(
+            assetsService: assetsService,
+            searchStore: searchStore
+        )
     }
 }

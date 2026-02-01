@@ -9,6 +9,7 @@ import Localization
 import PrimitivesComponents
 import AssetsService
 import Recents
+import Perpetuals
 
 public struct WalletSearchScene: View {
     @State private var model: WalletSearchSceneViewModel
@@ -19,7 +20,7 @@ public struct WalletSearchScene: View {
 
     public var body: some View {
         SearchableWrapper(
-            content: { assetsList },
+            content: { content },
             isSearching: $model.isSearching,
             dismissSearch: $model.dismissSearch
         )
@@ -37,7 +38,7 @@ public struct WalletSearchScene: View {
                 )
             }
         }
-        .observeQuery(request: $model.request, value: $model.assets)
+        .observeQuery(request: $model.searchRequest, value: $model.searchResult)
         .observeQuery(request: $model.recentsRequest, value: $model.recents)
         .searchable(
             text: $model.searchModel.searchableQuery,
@@ -53,25 +54,21 @@ public struct WalletSearchScene: View {
         .onChange(of: model.searchModel.searchableQuery, model.onChangeSearchQuery)
         .onChange(of: model.isSearching, model.onChangeFocus)
         .onChange(of: model.isSearchPresented, model.onChangeSearchPresented)
+        .onChange(of: model.isPerpetualEnabled, model.onChangePerpetualsEnabled)
         .onAppear {
             model.onAppear()
         }
+        .taskOnce {
+            model.onSelectTag(tag: .all)
+        }
         .toast(message: $model.isPresentingToastMessage)
         .sheet(isPresented: $model.isPresentingRecents) {
-            RecentsScene(
-                model: RecentsSceneViewModel(
-                    walletId: model.wallet.walletId,
-                    types: model.recentsRequest.types,
-                    filters: model.recentsRequest.filters,
-                    activityService: model.activityService,
-                    onSelect: model.onSelectRecent
-                )
-            )
+            RecentsScene(model: model.recentsModel)
         }
     }
 
     @ViewBuilder
-    private var assetsList: some View {
+    private var content: some View {
         List {
             if model.showTags {
                 Section {} header: {
@@ -89,7 +86,9 @@ public struct WalletSearchScene: View {
                     models: model.recentModels,
                     onSelectRecents: model.onSelectRecents
                 ) { assetModel in
-                    NavigationLink(value: Scenes.Asset(asset: assetModel.asset)) {
+                    Button {
+                        model.onSelectRecent(asset: assetModel.asset)
+                    } label: {
                         AssetChipView(model: assetModel)
                     }
                 }
@@ -97,11 +96,25 @@ public struct WalletSearchScene: View {
 
             if model.showPinned {
                 Section(
-                    content: { list(for: model.sections.pinned) },
+                    content: {
+                        if model.showPinnedPerpetuals {
+                            perpetualItems(for: model.sections.pinnedPerpetuals)
+                        }
+                        assetItems(for: model.sections.pinnedAssets)
+                    },
+                    header: { PinnedSectionHeader() }
+                )
+                .listRowInsets(.assetListRowInsets)
+            }
+
+            if model.showPerpetuals {
+                Section(
+                    content: { perpetualItems(for: model.previewPerpetuals) },
                     header: {
-                        HStack {
-                            model.pinnedImage
-                            Text(model.pinnedTitle)
+                        if model.hasMorePerpetuals {
+                            HeaderNavigationLinkView(title: model.perpetualsTitle, destination: Scenes.Perpetuals())
+                        } else {
+                            SectionHeaderView(title: model.perpetualsTitle)
                         }
                     }
                 )
@@ -110,9 +123,16 @@ public struct WalletSearchScene: View {
 
             if model.showAssets {
                 Section(
-                    content: { list(for: model.sections.assets) },
+                    content: { assetItems(for: model.previewAssets) },
                     header: {
-                        Text(model.assetsTitle)
+                        if model.hasMoreAssets {
+                            HeaderNavigationLinkView(
+                                title: model.assetsTitle,
+                                destination: model.assetsResultsDestination
+                            )
+                        } else {
+                            SectionHeaderView(title: model.assetsTitle)
+                        }
                     }
                 )
                 .listRowInsets(.assetListRowInsets)
@@ -123,19 +143,22 @@ public struct WalletSearchScene: View {
     }
 
     @ViewBuilder
-    private func list(for items: [AssetData]) -> some View {
-        ForEach(items) { assetData in
-            NavigationCustomLink(
-                with: ListAssetItemView(
-                    model: ListAssetItemViewModel(
-                        showBalancePrivacy: .constant(false),
-                        assetData: assetData,
-                        formatter: .abbreviated,
-                        currencyCode: model.currencyCode
-                    )
-                )
-                .contextMenu(model.contextMenuItems(for: assetData)),
-                action: { model.onSelectAsset(assetData.asset) }
+    private func assetItems(for items: [AssetData]) -> some View {
+        AssetItemsView(
+            items: items,
+            currencyCode: model.currencyCode,
+            contextMenuItems: model.contextMenuItems,
+            onSelect: model.onSelectAsset
+        )
+    }
+
+    @ViewBuilder
+    private func perpetualItems(for items: [PerpetualData]) -> some View {
+        ForEach(items) { perpetualData in
+            PerpetualListItem(
+                perpetualData: perpetualData,
+                onPin: model.onSelectPinPerpetual,
+                onSelect: model.onSelectAsset
             )
         }
     }

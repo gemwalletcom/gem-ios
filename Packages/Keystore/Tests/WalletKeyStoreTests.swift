@@ -1,6 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Keystore
+@testable import Keystore
 import Primitives
 import Testing
 import WalletCore
@@ -163,5 +163,14 @@ final class WalletKeyStoreTests {
         )
 
         #expect(wallet2.accounts.map { $0.chain } == [.bitcoin, .ethereum])
+    }
+}
+
+extension WalletKeyStore {
+    static func mock() -> WalletKeyStore {
+        let id = UUID().uuidString
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let directory = URL(fileURLWithPath: String(format: "%@/test_keystore/%@", documentsDirectory, id))
+        return WalletKeyStore(directory: directory)
     }
 }

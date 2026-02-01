@@ -88,15 +88,16 @@ public struct PriceStore: Sendable {
         }
     }
     
-    public func enabledPriceAssets() throws -> [AssetId] {
+    public func enabledPriceAssets(walletId: WalletId) throws -> [AssetId] {
         try db.read { db in
             let priceAlertsAssets = try PriceAlertRecord.fetchAll(db).map { $0.assetId }
             let enabledAssets = try BalanceRecord
+                .filter(BalanceRecord.Columns.walletId == walletId.id)
                 .filter(BalanceRecord.Columns.isEnabled == true)
                 .fetchAll(db)
                 .compactMap { $0.assetId }
-            
-            return priceAlertsAssets + enabledAssets.asSet().asArray()
+
+            return priceAlertsAssets.asSet().union(enabledAssets).asArray()
         }
     }
     

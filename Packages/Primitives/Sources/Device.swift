@@ -33,3 +33,13 @@ public struct Device: Codable, Equatable, Sendable {
 		self.subscriptionsVersion = subscriptionsVersion
 	}
 }
+
+public struct MigrateDeviceIdRequest: Codable, Equatable, Sendable {
+	public let oldDeviceId: String
+	public let publicKey: String
+
+	public init(oldDeviceId: String, publicKey: String) {
+		self.oldDeviceId = oldDeviceId
+		self.publicKey = publicKey
+	}
+}

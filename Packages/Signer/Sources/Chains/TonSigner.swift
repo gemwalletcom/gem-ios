@@ -1,13 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WalletCore
 import Keystore
 import Primitives
-import BigInt
+import WalletCore
 
-public struct TonSigner: Signable {
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+internal import BigInt
+
+struct TonSigner: Signable {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let transfer = TheOpenNetworkTransfer.with {
             $0.dest = input.destinationAddress
             $0.amount = input.value.serialize()
@@ -21,7 +22,7 @@ public struct TonSigner: Signable {
         return try sign(input: input, messages: [transfer], coinType: input.coinType, privateKey: privateKey)
     }
 
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         guard let jettonCreationFee = input.fee.options[.tokenAccountCreation] else {
             throw AnyError("Invalid token creation fee")
         }
@@ -49,7 +50,7 @@ public struct TonSigner: Signable {
         return try sign(input: input, messages: [transfer], coinType: input.coinType, privateKey: privateKey)
     }
     
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let data = try input.type.swap().data.data
         let transfer = try TheOpenNetworkTransfer.with {
             $0.dest = data.to
@@ -66,7 +67,7 @@ public struct TonSigner: Signable {
         ]
     }
 
-    public func signData(input: SignerInput, privateKey: Data) throws -> String {
+    func signData(input: SignerInput, privateKey: Data) throws -> String {
         guard
             case .generic(_, _, let extra) = input.type,
             let data = extra.data

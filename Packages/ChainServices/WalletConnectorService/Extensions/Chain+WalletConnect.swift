@@ -7,16 +7,16 @@ import struct WalletConnectUtils.Blockchain
 
 extension Chain {
     // CAIP-2 https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-2.md
-    public var namespace: String? {
+    var namespace: String? {
         WalletConnect.shared.getNamespace(chain: id)
     }
 
     // CAIP-20 https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-20.md
-    public var reference: String? {
+    var reference: String? {
         WalletConnect.shared.getReference(chain: id)
     }
 
-    public var blockchain: Blockchain? {
+    var blockchain: Blockchain? {
         if let namespace = namespace, let reference = reference {
             return Blockchain(namespace: namespace, reference: reference)
         }

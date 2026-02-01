@@ -5,15 +5,15 @@ import Primitives
 import Components
 import Style
 
-public struct CalloutView: View {
+struct CalloutView: View {
 
-    public let title: String?
-    public let titleStyle: TextStyle
-    public let subtitle: String?
-    public let subtitleStyle: TextStyle
-    public let backgroundColor: Color
+    let title: String?
+    let titleStyle: TextStyle
+    let subtitle: String?
+    let subtitleStyle: TextStyle
+    let backgroundColor: Color
 
-    public var body: some View {
+    var body: some View {
         VStack(alignment: .center, spacing: .medium) {
             if let title = title {
                 Text(title)
@@ -34,7 +34,7 @@ public struct CalloutView: View {
     }
 }
 
-public extension CalloutView {
+extension CalloutView {
     static func error(
         title: String?,
         subtitle: String?

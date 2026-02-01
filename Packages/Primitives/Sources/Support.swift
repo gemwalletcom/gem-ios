@@ -23,3 +23,11 @@ public struct SupportDevice: Codable, Equatable, Sendable {
 		self.unread = unread
 	}
 }
+
+public struct SupportDeviceRequest: Codable, Equatable, Sendable {
+	public let supportDeviceId: String
+
+	public init(supportDeviceId: String) {
+		self.supportDeviceId = supportDeviceId
+	}
+}

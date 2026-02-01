@@ -97,18 +97,43 @@ struct CandlestickChartView: View {
             }
         }
         .chartYAxis {
-            AxisMarks(position: .trailing, values: .automatic(desiredCount: 5)) { _ in
+            AxisMarks(position: .trailing, values: .automatic(desiredCount: ChartBounds.desiredTickCount)) { value in
                 AxisGridLine(stroke: ChartGridStyle.strokeStyle)
                     .foregroundStyle(ChartGridStyle.color)
                 AxisTick(stroke: StrokeStyle(lineWidth: ChartGridStyle.lineWidth))
                     .foregroundStyle(ChartGridStyle.color)
-                AxisValueLabel()
-                    .foregroundStyle(Colors.gray)
-                    .font(.caption2)
+                AxisValueLabel {
+                    if let price = value.as(Double.self) {
+                        Text(price, format: bounds.axisFormat)
+                            .font(.caption2)
+                            .foregroundStyle(Colors.gray)
+                            .padding(.horizontal, .extraSmall)
+                    }
+                }
+            }
+            if let currentPrice = data.last?.close {
+                AxisMarks(position: .trailing, values: [currentPrice]) { value in
+                    AxisValueLabel {
+                        if let price = value.as(Double.self) {
+                            Text(price, format: bounds.axisFormat)
+                                .font(.caption2)
+                                .foregroundStyle(Colors.whiteSolid)
+                                .padding(.horizontal, .extraSmall)
+                                .padding(.vertical, 1)
+                                .background(currentPriceColor)
+                                .clipShape(RoundedRectangle(cornerRadius: Spacing.tiny))
+                        }
+                    }
+                }
             }
         }
         .chartXScale(domain: dateRange)
         .chartYScale(domain: bounds.minPrice...bounds.maxPrice)
+    }
+
+    private var currentPriceColor: Color {
+        guard let lastCandle = data.last else { return Colors.gray }
+        return lastCandle.close >= lastCandle.open ? Colors.green : Colors.red
     }
 
     @ChartContentBuilder

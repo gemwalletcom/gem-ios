@@ -61,6 +61,13 @@ public actor WebSocketConnection: WebSocketConnectable {
         try await task.send(.data(data))
     }
 
+    public func send(_ text: String) async throws {
+        guard let task, state == .connected else {
+            throw WebSocketError.notConnected
+        }
+        try await task.send(.string(text))
+    }
+
     // MARK: - Private
 
     private func cancelTask() {
@@ -113,7 +120,7 @@ public actor WebSocketConnection: WebSocketConnectable {
             delegateQueue: nil
         )
 
-        task = session?.webSocketTask(with: configuration.url)
+        task = session?.webSocketTask(with: configuration.request)
         task?.resume()
 
         listen()
@@ -152,8 +159,16 @@ public actor WebSocketConnection: WebSocketConnectable {
     }
 
     private func handleMessage(_ message: URLSessionWebSocketTask.Message) {
-        guard let data = message.data else { return }
-        continuation?.yield(.message(data))
+        switch message {
+        case .data(let data):
+            continuation?.yield(.message(data))
+        case .string(let text):
+            if let data = text.data(using: .utf8) {
+                continuation?.yield(.message(data))
+            }
+        @unknown default:
+            break
+        }
     }
 
     private func handleError(_ error: Error) {

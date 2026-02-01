@@ -17,7 +17,7 @@ public struct PriceService: Sendable {
         self.fiatRateStore = fiatRateStore
     }
 
-    public func updatePrices(_ prices: [AssetPrice], currency: String) throws {
+    func updatePrices(_ prices: [AssetPrice], currency: String) throws {
         try priceStore.updatePrices(prices: prices, currency: currency)
     }
 
@@ -37,8 +37,8 @@ public struct PriceService: Sendable {
         try priceStore.getPrices(for: assetIds.map { $0.identifier })
     }
     
-    public func observableAssets() throws -> [AssetId] {
-        let priceAssets = try priceStore.enabledPriceAssets()
+    public func observableAssets(walletId: WalletId) throws -> [AssetId] {
+        let priceAssets = try priceStore.enabledPriceAssets(walletId: walletId)
         if priceAssets.isEmpty {
             return [Chain.bitcoin, Chain.ethereum, Chain.smartChain, Chain.solana].map { $0.assetId }
         }
@@ -53,7 +53,7 @@ public struct PriceService: Sendable {
         try priceStore.getRate(currency: currency).rate
     }
     
-    public func addRates(_ rates: [FiatRate]) throws {
+    func addRates(_ rates: [FiatRate]) throws {
         guard rates.isNotEmpty else { return }
         
         try fiatRateStore.add(rates)

@@ -3,10 +3,10 @@
 import Foundation
 import Localization
 
-public enum ConnectionsError: LocalizedError {
+enum ConnectionsError: LocalizedError {
     case userCancelled
 
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .userCancelled: Localized.Errors.Connections.userCancelled
         }

@@ -15,8 +15,10 @@ import SwiftUI
 import TransactionStateService
 import TransactionsService
 import WalletConnector
+import ConnectionsService
 import WalletService
 import WalletsService
+import Preferences
 
 @Observable
 @MainActor
@@ -24,13 +26,14 @@ final class RootSceneViewModel {
     private let onstartWalletService: OnstartWalletService
     private let transactionStateService: TransactionStateService
     private let connectionsService: ConnectionsService
-    private let observersService: ObserversService
+    private let appLifecycleService: AppLifecycleService
     private let navigationHandler: NavigationHandler
     private let releaseAlertService: ReleaseAlertService
     private let rateService: RateService
     private let eventPresenterService: EventPresenterService
     private let deviceService: DeviceService
 
+    let observablePreferences: ObservablePreferences
     let walletsService: WalletsService
     let walletService: WalletService
     let nameService: NameService
@@ -69,11 +72,12 @@ final class RootSceneViewModel {
     }
 
     init(
+        observablePreferences: ObservablePreferences,
         walletConnectorPresenter: WalletConnectorPresenter,
         onstartWalletService: OnstartWalletService,
         transactionStateService: TransactionStateService,
         connectionsService: ConnectionsService,
-        observersService: ObserversService,
+        appLifecycleService: AppLifecycleService,
         navigationHandler: NavigationHandler,
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
@@ -85,11 +89,12 @@ final class RootSceneViewModel {
         avatarService: AvatarService,
         deviceService: DeviceService
     ) {
+        self.observablePreferences = observablePreferences
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartWalletService = onstartWalletService
         self.transactionStateService = transactionStateService
         self.connectionsService = connectionsService
-        self.observersService = observersService
+        self.appLifecycleService = appLifecycleService
         self.navigationHandler = navigationHandler
         self.lockManager = lockWindowManager
         self.walletService = walletService
@@ -111,11 +116,19 @@ extension RootSceneViewModel {
         Task { await checkForUpdate() }
         Task { try await deviceService.update() }
         transactionStateService.setup()
-        Task { await observersService.setup() }
+        Task { await appLifecycleService.setup() }
     }
 
-    func handleScenePhase(_ phase: ScenePhase) async {
-        await observersService.handleScenePhase(phase)
+    func onScenePhaseChanged(_ oldPhase: ScenePhase, _ newPhase: ScenePhase) {
+        Task {
+            await appLifecycleService.handleScenePhase(newPhase)
+        }
+    }
+
+    func onPerpetualEnabledChanged(_ oldValue: Bool, _ newValue: Bool) {
+        Task {
+            await appLifecycleService.updatePerpetualConnection()
+        }
     }
 }
 
@@ -166,7 +179,7 @@ extension RootSceneViewModel {
             debugLog("RootSceneViewModel setupWallet error: \(error)")
         }
         Task {
-            await observersService.setupWallet(wallet)
+            await appLifecycleService.setupWallet(wallet)
         }
     }
     

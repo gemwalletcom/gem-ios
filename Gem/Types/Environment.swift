@@ -15,6 +15,7 @@ import StakeService
 import NodeService
 import PriceService
 import WalletConnector
+import ConnectionsService
 import ExplorerService
 import NFTService
 import BalanceService
@@ -33,6 +34,7 @@ import AddressNameService
 import ActivityService
 import RewardsService
 import EventPresenterService
+import Support
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
@@ -60,7 +62,7 @@ extension EnvironmentValues {
     @Entry var scanService: ScanService = AppResolver.main.services.scanService
     @Entry var swapService: SwapService = AppResolver.main.services.swapService
     @Entry var perpetualService: PerpetualService = AppResolver.main.services.perpetualService
-    @Entry var perpetualObserverService: PerpetualObserverService = AppResolver.main.services.perpetualObserverService
+    @Entry var hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription> = AppResolver.main.services.hyperliquidObserverService
     @Entry var transactionStateService: TransactionStateService = AppResolver.main.services.transactionStateService
     @Entry var nameService: NameService = AppResolver.main.services.nameService
     @Entry var addressNameService: AddressNameService = AppResolver.main.services.addressNameService
@@ -68,5 +70,8 @@ extension EnvironmentValues {
     @Entry var eventPresenterService: EventPresenterService = AppResolver.main.services.eventPresenterService
     @Entry var viewModelFactory: ViewModelFactory = AppResolver.main.services.viewModelFactory
     @Entry var rewardsService: RewardsService = AppResolver.main.services.rewardsService
+    @Entry var walletSearchService: WalletSearchService = AppResolver.main.services.walletSearchService
+    @Entry var assetSearchService: AssetSearchService = AppResolver.main.services.assetSearchService
     @Entry var inAppNotificationService: InAppNotificationService = AppResolver.main.services.inAppNotificationService
+    @Entry var supportService: SupportService = AppResolver.main.services.supportService
 }

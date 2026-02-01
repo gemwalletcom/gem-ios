@@ -125,7 +125,7 @@ public struct WalletStore: Sendable {
         }
     }
 
-    public func setOrder(walletId: String, order: Int) throws {
+    func setOrder(walletId: String, order: Int) throws {
         let _ = try db.write { db in
             try WalletRecord
                 .filter(WalletRecord.Columns.id == walletId)

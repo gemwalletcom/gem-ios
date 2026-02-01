@@ -125,12 +125,34 @@ public final class SwapSceneViewModel {
     }
     
     var errorInfoAction: VoidAction {
-        guard case .error(let error) = swapState.quotes, error.swapperError == .NoQuoteAvailable else {
+        guard case .error(let error) = swapState.quotes, let swapperError = error.swapperError else {
             return nil
         }
-        
-        return VoidAction { [weak self] in
-            self?.isPresentingInfoSheet = .info(.noQuote)
+
+        switch swapperError {
+        case .NoQuoteAvailable:
+            return VoidAction { [weak self] in
+                self?.isPresentingInfoSheet = .info(.noQuote)
+            }
+        case .InputAmountError(let minAmount):
+            guard let minAmount, let fromAsset else { return nil }
+            return VoidAction { [weak self] in
+                self?.applyMinAmount(minAmount, asset: fromAsset.asset)
+            }
+        default:
+            return nil
+        }
+    }
+
+    var errorInfoActionButtonTitle: String? {
+        guard case .error(let error) = swapState.quotes else {
+            return nil
+        }
+        switch error.swapperError {
+        case .InputAmountError:
+            return Localized.Swap.useMinimumAmount
+        default:
+            return nil
         }
     }
 
@@ -302,6 +324,11 @@ extension SwapSceneViewModel {
             value: assetData.balance.available.multiply(byPercent: percent),
             decimals: assetData.asset.decimals.asInt
         )
+    }
+
+    private func applyMinAmount(_ minAmount: String, asset: Asset) {
+        guard let value = BigInt(minAmount) else { return }
+        amountInputModel.text = formatter.format(value: value, decimals: asset.decimals.asInt)
     }
 
     private func swap() {

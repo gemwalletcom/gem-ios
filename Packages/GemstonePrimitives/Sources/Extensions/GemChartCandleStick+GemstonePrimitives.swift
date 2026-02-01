@@ -8,6 +8,7 @@ extension GemChartCandleStick {
     public func map() throws -> ChartCandleStick {
         ChartCandleStick(
             date: Date(timeIntervalSince1970: TimeInterval(date)),
+            interval: interval,
             open: open,
             high: high,
             low: low,

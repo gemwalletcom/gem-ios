@@ -3,25 +3,26 @@
 import Foundation
 import GRDB
 import Primitives
-import BigInt
 
-public struct AssetLinkRecord: Codable, FetchableRecord, PersistableRecord  {
+internal import BigInt
+
+struct AssetLinkRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static let databaseTableName: String = "assets_links"
+    static let databaseTableName: String = "assets_links"
     
-    public enum Columns {
+    enum Columns {
         static let assetId = Column("assetId")
         static let name = Column("name")
         static let url = Column("url")
     }
     
-    public var assetId: AssetId
-    public var name: String
-    public var url: String
+    var assetId: AssetId
+    var name: String
+    var url: String
 }
 
 extension AssetLinkRecord: Identifiable {
-    public var id: String { assetId.identifier }
+    var id: String { assetId.identifier }
 }
 
 extension AssetLinkRecord: CreateTable {

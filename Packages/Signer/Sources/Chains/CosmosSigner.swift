@@ -6,15 +6,15 @@ import Primitives
 import Keystore
 
 // https://github.com/trustwallet/wallet-core/blob/master/swift/Tests/Blockchains/THORChainTests.swift#L27
-public struct CosmosSigner: Signable {
+struct CosmosSigner: Signable {
 
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
         let message = getTransferMessage(input: input, denom: chain.denom.rawValue)
         return try sign(input: input, messages: [message], chain: chain, memo: input.memo, privateKey: privateKey)
     }
     
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
         let denom = try input.asset.getTokenId()
         let message = getTransferMessage(input: input, denom: denom)
@@ -63,11 +63,11 @@ public struct CosmosSigner: Signable {
         return output.serialized
     }
     
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
+    func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
         fatalError()
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let type) = input.type else {
             throw AnyError("invalid type")
         }

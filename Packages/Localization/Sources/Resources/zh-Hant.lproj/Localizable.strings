@@ -581,3 +581,4 @@
 "asset.all_time_high" = "歷史最高點";
 "asset.all_time_low" = "最低";
 "errors.swap.minimum_amount" = "最低交易金額為 %@請輸入更高的金額。";
+"swap.use_minimum_amount" = "使用最低金額";

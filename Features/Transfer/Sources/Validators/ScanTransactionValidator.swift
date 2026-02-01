@@ -4,8 +4,8 @@ import Foundation
 import Primitives
 import GemstonePrimitives
 
-public struct ScanTransactionValidator {
-    public static func validate(
+struct ScanTransactionValidator {
+    static func validate(
         transaction: ScanTransaction,
         asset: Asset,
         memo: String?

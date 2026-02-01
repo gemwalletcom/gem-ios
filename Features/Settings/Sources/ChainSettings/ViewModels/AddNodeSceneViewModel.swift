@@ -13,33 +13,33 @@ import Style
 
 @MainActor
 @Observable
-public final class AddNodeSceneViewModel {
+final class AddNodeSceneViewModel {
     private let nodeService: NodeService
     private let addNodeService: AddNodeService
 
-    public let chain: Chain
+    let chain: Chain
 
-    public var urlInputModel = InputValidationViewModel(mode: .onDemand, validators: [.url])
-    public var state: StateViewType<AddNodeResultViewModel> = .noData
-    public var isPresentingScanner: Bool = false
-    public var isPresentingAlertMessage: AlertMessage?
-    public var debounceInterval: Duration? = .milliseconds(250)
+    var urlInputModel = InputValidationViewModel(mode: .onDemand, validators: [.url])
+    var state: StateViewType<AddNodeResultViewModel> = .noData
+    var isPresentingScanner: Bool = false
+    var isPresentingAlertMessage: AlertMessage?
+    var debounceInterval: Duration? = .milliseconds(250)
 
-    public init(chain: Chain, nodeService: NodeService) {
+    init(chain: Chain, nodeService: NodeService) {
         self.chain = chain
         self.nodeService = nodeService
         self.addNodeService = AddNodeService(nodeStore: nodeService.nodeStore)
     }
 
-    public var title: String { Localized.Nodes.ImportNode.title }
+    var title: String { Localized.Nodes.ImportNode.title }
 
-    public var actionButtonTitle: String { Localized.Wallet.Import.action }
-    public var inputFieldTitle: String { Localized.Common.url }
+    var actionButtonTitle: String { Localized.Wallet.Import.action }
+    var inputFieldTitle: String { Localized.Common.url }
 
-    public var errorTitle: String { Localized.Errors.errorOccured }
-    public var chainModel: ChainViewModel { ChainViewModel(chain: chain) }
+    var errorTitle: String { Localized.Errors.errorOccured }
+    var chainModel: ChainViewModel { ChainViewModel(chain: chain) }
 
-    public var warningModel: ListItemModel {
+    var warningModel: ListItemModel {
         ListItemModel(
             title: Localized.Asset.Verification.warningTitle,
             titleStyle: .headline,

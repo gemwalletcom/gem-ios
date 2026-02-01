@@ -5,18 +5,20 @@ import BigInt
 import Primitives
 
 public final class BigNumberFormatter: Sendable {
-    public let locale: Locale
-    public let minimumFractionDigits: Int
-    public let maximumFractionDigits: Int
-    public let decimalSeparator: String
-    public let groupingSeparator: String
-
     public static let standard: BigNumberFormatter = BigNumberFormatter(locale: Locale(identifier: "en_US"))
 
-    public init(locale: Locale = .current,
-                minimumFractionDigits: Int = 0,
-                maximumFractionDigits: Int = Int.max,
-                groupingSeparator: String? = nil
+    let locale: Locale
+    let decimalSeparator: String
+
+    private let minimumFractionDigits: Int
+    private let maximumFractionDigits: Int
+    private let groupingSeparator: String
+
+    init(
+        locale: Locale = .current,
+        minimumFractionDigits: Int = 0,
+        maximumFractionDigits: Int = Int.max,
+        groupingSeparator: String? = nil
     ) {
         self.locale = locale
         self.minimumFractionDigits = minimumFractionDigits
@@ -63,7 +65,7 @@ public final class BigNumberFormatter: Sendable {
          return BigInt(value) * BigInt(10).power(decimals)
     }
 
-    public func string(from number: BigInt, decimals: Int) -> String {
+    func string(from number: BigInt, decimals: Int) -> String {
         let dividend = BigInt(10).power(decimals)
         let (integerPart, remainder) = number.quotientAndRemainder(dividingBy: dividend)
         let integerString = integerString(from: integerPart)
@@ -74,7 +76,7 @@ public final class BigNumberFormatter: Sendable {
         return "\(integerString)\(decimalSeparator)\(fractionalString)"
     }
 
-    public func decimal(from number: BigInt, decimals: Int) -> Decimal? {
+    func decimal(from number: BigInt, decimals: Int) -> Decimal? {
         let dividend = BigInt(10).power(decimals)
         let (integerPart, remainder) = number.quotientAndRemainder(dividingBy: dividend)
         let integerString = integerPart.description
@@ -85,7 +87,7 @@ public final class BigNumberFormatter: Sendable {
         return Decimal(string: "\(integerString)\(decimalSeparator)\(fractionalString)", locale: locale)
     }
     
-    public func double(from number: BigInt, decimals: Int) -> Double? {
+    func double(from number: BigInt, decimals: Int) -> Double? {
         guard let decimal = decimal(from: number, decimals: decimals) else {
             return .none
         }

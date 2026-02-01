@@ -22,7 +22,7 @@ struct ToolbarItemViewModifier<V: View>: ViewModifier {
     }
 }
 
-public extension View {
+extension View {
     func toolbarItemView<Content: View>(
         placement: ToolbarItemPlacement,
         @ViewBuilder content: @escaping () -> Content

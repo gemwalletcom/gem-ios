@@ -4,11 +4,11 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct AccountRecord: Codable, FetchableRecord, PersistableRecord  {
+struct AccountRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static let databaseTableName: String = "wallets_accounts"
+    static let databaseTableName: String = "wallets_accounts"
 
-    public enum Columns {
+    enum Columns {
         static let walletId = Column("walletId")
         static let chain = Column("chain")
         static let address = Column("address")
@@ -17,12 +17,12 @@ public struct AccountRecord: Codable, FetchableRecord, PersistableRecord  {
         static let derivationPath = Column("derivationPath")
     }
 
-    public var walletId: String
-    public var chain: Chain
-    public var address: String
-    public var extendedPublicKey: String?
-    public var index: Int
-    public var derivationPath: String
+    var walletId: String
+    var chain: Chain
+    var address: String
+    var extendedPublicKey: String?
+    var index: Int
+    var derivationPath: String
 }
 
 extension AccountRecord: CreateTable {

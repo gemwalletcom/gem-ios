@@ -6,34 +6,23 @@ import Components
 import Style
 import PrimitivesComponents
 
-public struct PerpetualPortfolioScene: View {
+struct PerpetualPortfolioScene: View {
     private let fetchTimer = Timer.publish(every: 60, tolerance: 1, on: .main, in: .common).autoconnect()
     @State private var model: PerpetualPortfolioSceneViewModel
 
-    public init(model: PerpetualPortfolioSceneViewModel) {
+    init(model: PerpetualPortfolioSceneViewModel) {
         _model = State(initialValue: model)
     }
 
-    public var body: some View {
+    var body: some View {
         NavigationStack {
             List {
                 Section { } header: {
-                    VStack {
-                        Picker("", selection: $model.selectedChartType) {
-                            ForEach(PerpetualPortfolioChartType.allCases) { type in
-                                Text(model.chartTypeTitle(type)).tag(type)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .padding(.horizontal, Spacing.medium)
-                        .padding(.vertical, Spacing.small)
-
-                        ChartStateView(
-                            state: model.chartState,
-                            selectedPeriod: $model.selectedPeriod,
-                            periods: model.periods
-                        )
-                    }
+                    ChartStateView(
+                        state: model.chartState,
+                        selectedPeriod: $model.selectedPeriod,
+                        periods: model.periods
+                    )
                 }
                 .cleanListRow()
 
@@ -47,6 +36,20 @@ public struct PerpetualPortfolioScene: View {
             }
             .navigationTitle(model.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Picker("", selection: $model.selectedChartType) {
+                            ForEach(PerpetualPortfolioChartType.allCases) { type in
+                                Text(model.chartTypeTitle(type)).tag(type)
+                            }
+                        }
+                    } label: {
+                        Text(model.chartTypeTitle(model.selectedChartType))
+                            .fontWeight(.semibold)
+                    }
+                }
+            }
             .toolbarDismissItem(type: .close, placement: .cancellationAction)
             .task {
                 await model.fetch()

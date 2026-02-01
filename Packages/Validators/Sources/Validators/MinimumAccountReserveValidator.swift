@@ -4,19 +4,19 @@ import Foundation
 import BigInt
 import Primitives
 
-public struct MinimumAccountReserveValidator<V>: ValueValidator where V: ValueValidatable & SignedNumeric {
+struct MinimumAccountReserveValidator<V>: ValueValidator where V: ValueValidatable & SignedNumeric {
 
     private let available: V
     private let requiredReserve: V
     private let asset: Asset
 
-    public init(available: V, reserve: V, asset: Asset) {
+    init(available: V, reserve: V, asset: Asset) {
         self.available = available
         self.requiredReserve = reserve
         self.asset = asset
     }
 
-    public func validate(_ value: V) throws {
+    func validate(_ value: V) throws {
         guard requiredReserve > 0, asset.type == .native else { return }
 
         let remaining = available - value
@@ -31,5 +31,5 @@ public struct MinimumAccountReserveValidator<V>: ValueValidator where V: ValueVa
         }
     }
 
-    public var id: String { "MinAccountReserveValidator<\(asset.symbol)>" }
+    var id: String { "MinAccountReserveValidator<\(asset.symbol)>" }
 }

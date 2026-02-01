@@ -9,6 +9,7 @@ import StakeService
 import NodeService
 import PriceService
 import WalletConnector
+import ConnectionsService
 import ExplorerService
 import BalanceService
 import AssetsService
@@ -28,6 +29,7 @@ import ActivityService
 import RewardsService
 import EventPresenterService
 import NotificationService
+import Support
 
 extension AppResolver {
     struct Services: Sendable {
@@ -64,15 +66,18 @@ extension AppResolver {
         let onstartWalletService: OnstartWalletService
         let walletConnectorManager: WalletConnectorManager
         let perpetualService: PerpetualService
-        let perpetualObserverService: PerpetualObserverService
+        let hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription>
         let nameService: NameService
         let addressNameService: AddressNameService
         let activityService: ActivityService
         let eventPresenterService: EventPresenterService
         let viewModelFactory: ViewModelFactory
         let rewardsService: RewardsService
-        let observersService: ObserversService
+        let walletSearchService: WalletSearchService
+        let assetSearchService: AssetSearchService
+        let appLifecycleService: AppLifecycleService
         let inAppNotificationService: InAppNotificationService
+        let supportService: SupportService
 
         init(
             assetsService: AssetsService,
@@ -107,15 +112,18 @@ extension AppResolver {
             onstartWalletService: OnstartWalletService,
             walletConnectorManager: WalletConnectorManager,
             perpetualService: PerpetualService,
-            perpetualObserverService: PerpetualObserverService,
+            hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription>,
             nameService: NameService,
             addressNameService: AddressNameService,
             activityService: ActivityService,
             eventPresenterService: EventPresenterService,
             viewModelFactory: ViewModelFactory,
             rewardsService: RewardsService,
-            observersService: ObserversService,
-            inAppNotificationService: InAppNotificationService
+            walletSearchService: WalletSearchService,
+            assetSearchService: AssetSearchService,
+            appLifecycleService: AppLifecycleService,
+            inAppNotificationService: InAppNotificationService,
+            supportService: SupportService
         ) {
             self.assetsService = assetsService
             self.balanceService = balanceService
@@ -149,15 +157,18 @@ extension AppResolver {
             self.onstartWalletService = onstartWalletService
             self.walletConnectorManager = walletConnectorManager
             self.perpetualService = perpetualService
-            self.perpetualObserverService = perpetualObserverService
+            self.hyperliquidObserverService = hyperliquidObserverService
             self.nameService = nameService
             self.addressNameService = addressNameService
             self.activityService = activityService
             self.eventPresenterService = eventPresenterService
             self.viewModelFactory = viewModelFactory
             self.rewardsService = rewardsService
-            self.observersService = observersService
+            self.walletSearchService = walletSearchService
+            self.assetSearchService = assetSearchService
+            self.appLifecycleService = appLifecycleService
             self.inAppNotificationService = inAppNotificationService
+            self.supportService = supportService
         }
     }
 }
