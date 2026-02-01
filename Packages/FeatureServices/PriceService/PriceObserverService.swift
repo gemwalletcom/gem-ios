@@ -61,7 +61,7 @@ public actor PriceObserverService: Sendable {
         guard newAssets.isNotEmpty else {
             return
         }
-        let message = StreamMessage.addPrices(StreamMessageAddPricesInner(assets: newAssets))
+        let message = StreamMessage.addPrices(StreamMessagePrices(assets: newAssets))
         try await sendMessage(message)
         subscribedAssetIds.formUnion(newAssets)
     }
@@ -73,7 +73,7 @@ public actor PriceObserverService: Sendable {
     public func setupAssets(walletId: WalletId) async throws {
         currentWalletId = walletId
         let assets = try priceService.observableAssets(walletId: walletId)
-        let message = StreamMessage.subscribePrices(StreamMessageSubscribePricesInner(assets: assets))
+        let message = StreamMessage.subscribePrices(StreamMessagePrices(assets: assets))
         try await sendMessage(message)
         subscribedAssetIds = Set(assets)
     }
