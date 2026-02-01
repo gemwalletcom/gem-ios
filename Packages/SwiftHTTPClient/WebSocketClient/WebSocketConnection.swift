@@ -105,6 +105,11 @@ public actor WebSocketConnection: WebSocketConnectable {
     private func startConnection() {
         state = .connecting
 
+        guard let request = try? configuration.requestProvider.makeRequest() else {
+            scheduleReconnect(with: WebSocketError.notConnected)
+            return
+        }
+
         let delegate = WebSocketSessionDelegate(
             didOpen: { [weak self] in
                 Task { await self?.didOpen() }
@@ -120,7 +125,7 @@ public actor WebSocketConnection: WebSocketConnectable {
             delegateQueue: nil
         )
 
-        task = session?.webSocketTask(with: configuration.request)
+        task = session?.webSocketTask(with: request)
         task?.resume()
 
         listen()
