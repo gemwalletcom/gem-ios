@@ -41,6 +41,10 @@ public actor WebSocketConnectionMock: WebSocketConnectable {
         sentData.append(data)
     }
 
+    public func send(_ text: String) async throws {
+        try await send(Data(text.utf8))
+    }
+
     // MARK: - Mock Control API
 
     public func simulateConnected() {

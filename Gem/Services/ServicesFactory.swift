@@ -49,7 +49,7 @@ struct ServicesFactory {
         let securePreferences = SecurePreferences()
         let signer = Self.makeRequestSigner(securePreferences: securePreferences)
         let interceptor: (@Sendable (inout URLRequest) throws -> Void)? = if let signer {
-            { (request: inout URLRequest) in try signer.sign(request: &request) }
+            { try signer.sign(request: &$0) }
         } else {
             nil
         }
@@ -141,9 +141,10 @@ struct ServicesFactory {
             priceStore: storeManager.priceStore,
             fiatRateStore: storeManager.fiatRateStore
         )
-        let priceObserverService = PriceObserverService(
+        let priceObserverService = Self.makePriceObserverService(
             priceService: priceService,
-            preferences: preferences
+            preferences: preferences,
+            securePreferences: securePreferences
         )
         let priceAlertService = Self.makePriceAlertService(
             apiService: apiService,
@@ -608,6 +609,18 @@ extension ServicesFactory {
             balanceStore: balanceStore,
             provider: PerpetualProviderFactory(nodeProvider: nodeProvider).createProvider(),
             preferences: preferences
+        )
+    }
+
+    private static func makePriceObserverService(
+        priceService: PriceService,
+        preferences: Preferences,
+        securePreferences: SecurePreferences
+    ) -> PriceObserverService {
+        PriceObserverService(
+            priceService: priceService,
+            preferences: preferences,
+            securePreferences: securePreferences
         )
     }
 }

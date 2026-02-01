@@ -175,6 +175,7 @@ let package = Package(
                 "Store",
                 "GemAPI",
                 "Preferences",
+                "DeviceService",
                 .product(name: "WebSocketClient", package: "SwiftHTTPClient")
             ],
             path: "PriceService",
@@ -188,6 +189,7 @@ let package = Package(
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "WebSocketClientTestKit", package: "SwiftHTTPClient"),
             ],
             path: "PriceService/TestKit"
         ),
