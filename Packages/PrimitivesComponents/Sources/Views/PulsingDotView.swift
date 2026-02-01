@@ -58,7 +58,7 @@ extension PulsingDotView {
 
 // MARK: - PulseRingView
 
-private struct PulseRingView: View {
+public struct PulseRingView: View {
     let color: Color
     let size: CGFloat
     let maxScale: CGFloat
@@ -67,7 +67,21 @@ private struct PulseRingView: View {
 
     private let duration: Double = 1.8
 
-    var body: some View {
+    public init(
+        color: Color,
+        size: CGFloat = 8,
+        maxScale: CGFloat = 3.0,
+        delay: Double = 0,
+        isAnimated: Bool = true
+    ) {
+        self.color = color
+        self.size = size
+        self.maxScale = maxScale
+        self.delay = delay
+        self.isAnimated = isAnimated
+    }
+
+    public var body: some View {
         TimelineView(.animation(paused: !isAnimated)) { timeline in
             let progress = progress(at: timeline.date)
             Circle()

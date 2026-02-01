@@ -88,6 +88,10 @@ struct CandlestickChartView: View {
                                 selectedCandle = nil
                             }
                     )
+
+                if selectedCandle == nil {
+                    currentPriceIndicator(proxy: proxy, geometry: geometry)
+                }
             }
         }
         .chartXAxis {
@@ -136,16 +140,34 @@ struct CandlestickChartView: View {
         return lastCandle.close >= lastCandle.open ? Colors.green : Colors.red
     }
 
+    @ViewBuilder
+    private func currentPriceIndicator(proxy: ChartProxy, geometry: GeometryProxy) -> some View {
+        if let lastCandle = data.last,
+           let plotFrame = proxy.plotFrame,
+           let xPos = proxy.position(forX: lastCandle.date),
+           let yPos = proxy.position(forY: lastCandle.close) {
+            let origin = geometry[plotFrame].origin
+
+            ZStack {
+                PulseRingView(color: currentPriceColor, size: .space6, maxScale: .space4, delay: .zero)
+                PulseRingView(color: currentPriceColor, size: .space6, maxScale: .space4, delay: 0.9)
+            }
+            .position(x: origin.x + xPos, y: origin.y + yPos)
+        }
+    }
+
     @ChartContentBuilder
     private var candlestickMarks: some ChartContent {
         ForEach(data, id: \.date) { candle in
+            let candleColor = candle.close >= candle.open ? Colors.green : Colors.red
+
             RuleMark(
                 x: .value(ChartKey.date, candle.date),
                 yStart: .value(ChartKey.low, candle.low),
                 yEnd: .value(ChartKey.high, candle.high)
             )
             .lineStyle(StrokeStyle(lineWidth: 1))
-            .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
+            .foregroundStyle(candleColor)
 
             RectangleMark(
                 x: .value(ChartKey.date, candle.date),
@@ -153,7 +175,7 @@ struct CandlestickChartView: View {
                 yEnd: .value(ChartKey.close, candle.close),
                 width: .fixed(4)
             )
-            .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
+            .foregroundStyle(candleColor)
         }
     }
 
