@@ -71,6 +71,7 @@ public struct SolanaSigner: Signable {
     }
 
     private func sign(input: SignerInput, type: SolanaSigningInput.OneOf_TransactionType, coinType: CoinType, privateKey: Data) throws -> String {
+        let unitPrice = input.fee.gasPriceType.unitPrice
         let jitoTip = input.fee.gasPriceType.jitoTip
 
         let signingInput = try SolanaSigningInput.with {
@@ -78,6 +79,11 @@ public struct SolanaSigner: Signable {
             $0.recentBlockhash = try input.metadata.getBlockHash()
             $0.priorityFeeLimit = .with {
                 $0.limit = UInt32(input.fee.gasLimit)
+            }
+            if unitPrice > 0 {
+                $0.priorityFeePrice = .with {
+                    $0.price = UInt64(unitPrice)
+                }
             }
             $0.privateKey = privateKey
         }
@@ -88,11 +94,14 @@ public struct SolanaSigner: Signable {
         }
 
         let encoded = try transcodeBase58ToBase64(output.encoded)
-        let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
-        guard let transaction = SolanaTransaction.insertInstruction(encodedTx: encoded, insertAt: -1, instruction: instructionJson) else {
-            throw AnyError("unable to insert Jito tip instruction")
+        if jitoTip > 0 {
+            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
+            guard let transaction = SolanaTransaction.insertInstruction(encodedTx: encoded, insertAt: -1, instruction: instructionJson) else {
+                throw AnyError("unable to insert Jito tip instruction")
+            }
+            return try signRawTransaction(transaction: transaction, privateKey: privateKey)
         }
-        return try signRawTransaction(transaction: transaction, privateKey: privateKey)
+        return try signRawTransaction(transaction: encoded, privateKey: privateKey)
     }
 
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
@@ -162,6 +171,7 @@ public struct SolanaSigner: Signable {
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let (_, _, data) = try input.type.swap()
         let encodedTx = data.data.data
+        let unitPrice = input.fee.gasPriceType.unitPrice
         let jitoTip = input.fee.gasPriceType.jitoTip
 
         guard
@@ -181,17 +191,24 @@ public struct SolanaSigner: Signable {
         }
 
         // Only user's signature is needed, safe to modify instructions
-        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: encodedTx, limit: input.fee.gasLimit.description) else {
+        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: encodedTx, price: unitPrice.description) else {
+            throw AnyError("unable to set compute unit price")
+        }
+        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: input.fee.gasLimit.description) else {
             throw AnyError("unable to set compute unit limit")
         }
 
-        let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
-        guard let transaction = SolanaTransaction.insertInstruction(encodedTx: transaction, insertAt: -1, instruction: instructionJson) else {
-            throw AnyError("unable to insert Jito tip instruction")
+        var finalTransaction = transaction
+        if jitoTip > 0 {
+            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
+            guard let tx = SolanaTransaction.insertInstruction(encodedTx: transaction, insertAt: -1, instruction: instructionJson) else {
+                throw AnyError("unable to insert Jito tip instruction")
+            }
+            finalTransaction = tx
         }
 
         return try [
-            signRawTransaction(transaction: transaction, privateKey: privateKey),
+            signRawTransaction(transaction: finalTransaction, privateKey: privateKey),
         ]
     }
 
