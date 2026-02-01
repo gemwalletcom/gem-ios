@@ -76,6 +76,10 @@ public final class SignMessageSceneViewModel {
     }
 
     public func signMessage() async throws {
+        guard payload.message.chain == payload.chain.rawValue else {
+            throw WalletConnectorServiceError.wrongSignParameters
+        }
+
         var privateKey = try await keystore.getPrivateKey(wallet: payload.wallet, chain: payload.chain)
         defer { privateKey.zeroize() }
 

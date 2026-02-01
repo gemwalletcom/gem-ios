@@ -1,5 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Foundation
 import Testing
 import Primitives
 import PrimitivesTestKit
@@ -51,6 +52,27 @@ struct SignMessageSceneViewModelTests {
 
         #expect(viewModel.connectionViewModel.connection.wallet.id == "specific-wallet-id")
         #expect(viewModel.connectionViewModel.connection.wallet.name == "Test Wallet")
+    }
+
+    @Test
+    @MainActor
+    func signMessageRejectsChainMismatch() async {
+        let payload = SignMessagePayload(
+            chain: .ethereum,
+            session: .mock(),
+            wallet: .mock(),
+            message: SignMessage(chain: "solana", signType: .eip191, data: Data())
+        )
+
+        let viewModel = SignMessageSceneViewModel(
+            keystore: KeystoreMock(),
+            payload: payload,
+            confirmTransferDelegate: { _ in }
+        )
+
+        await #expect(throws: WalletConnectorServiceError.wrongSignParameters) {
+            try await viewModel.signMessage()
+        }
     }
 
     @Test
