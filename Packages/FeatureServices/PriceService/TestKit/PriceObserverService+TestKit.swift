@@ -12,7 +12,6 @@ public extension PriceObserverService {
         preferences: Preferences = .mock()
     ) -> PriceObserverService {
         PriceObserverService(
-            webSocket: WebSocketConnectionMock(),
             priceService: priceService,
             preferences: preferences
         )
