@@ -100,27 +100,15 @@ struct BannerViewModel {
 
     var imageSize: CGFloat {
         switch banner.event {
-        case .stake,
-                .accountActivation,
-                .enableNotifications,
-                .accountBlockedMultiSignature,
-                .activateAsset,
-                .suspiciousAsset,
-                .tradePerpetuals: .image.asset
+        case .stake, .accountActivation, .enableNotifications, .accountBlockedMultiSignature, .activateAsset, .suspiciousAsset, .tradePerpetuals: .image.asset
         case .onboarding: .image.medium
         }
     }
 
     var cornerRadius: CGFloat {
         switch banner.event {
-        case .stake,
-            .accountActivation,
-            .activateAsset,
-            .suspiciousAsset,
-            .tradePerpetuals: 14
-        case .enableNotifications,
-            .accountBlockedMultiSignature,
-            .onboarding: 0
+        case .stake, .accountActivation, .activateAsset, .suspiciousAsset, .tradePerpetuals: 14
+        case .enableNotifications, .accountBlockedMultiSignature, .onboarding: 0
         }
     }
     
@@ -134,11 +122,7 @@ struct BannerViewModel {
     
     var url: URL? {
         switch banner.event {
-        case .stake,
-            .enableNotifications,
-            .activateAsset,
-            .onboarding,
-            .tradePerpetuals:
+        case .stake, .enableNotifications, .activateAsset, .onboarding, .tradePerpetuals:
             return.none
         case .accountActivation:
             return asset?.chain.accountActivationFeeUrl
@@ -159,26 +143,14 @@ struct BannerViewModel {
     
     var viewType: BannerViewType {
         switch banner.event {
-        case .stake,
-                .accountActivation,
-                .enableNotifications,
-                .accountBlockedMultiSignature,
-                .activateAsset,
-                .suspiciousAsset,
-                .tradePerpetuals: .list
+        case .stake, .accountActivation, .enableNotifications, .accountBlockedMultiSignature, .activateAsset, .suspiciousAsset, .tradePerpetuals: .list
         case .onboarding: .banner
         }
     }
     
     var buttons: [BannerButtonViewModel] {
         switch banner.event {
-        case .stake,
-                .accountActivation,
-                .enableNotifications,
-                .accountBlockedMultiSignature,
-                .activateAsset,
-                .suspiciousAsset,
-                .tradePerpetuals: []
+        case .stake, .accountActivation, .enableNotifications, .accountBlockedMultiSignature, .activateAsset, .suspiciousAsset, .tradePerpetuals: []
         case .onboarding: [
             BannerButtonViewModel(button: .buy, banner: banner),
             BannerButtonViewModel(button: .receive, banner: banner)

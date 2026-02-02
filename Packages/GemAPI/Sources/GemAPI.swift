@@ -25,20 +25,9 @@ public enum GemAPI: TargetType {
 
     public var method: HTTPMethod {
         switch self {
-        case .getFiatQuotes,
-            .getFiatAssets,
-            .getSwapAssets,
-            .getConfig,
-            .getNameRecord,
-            .getCharts,
-            .getAsset,
-            .getSearchAssets,
-            .getSearch,
-            .markets:
+        case .getFiatQuotes, .getFiatAssets, .getSwapAssets, .getConfig, .getNameRecord, .getCharts, .getAsset, .getSearchAssets, .getSearch, .markets:
             return .GET
-        case .getAssets,
-            .getPrices,
-            .getFiatQuoteUrl:
+        case .getAssets, .getPrices, .getFiatQuoteUrl:
             return .POST
         }
     }
@@ -76,12 +65,7 @@ public enum GemAPI: TargetType {
 
     public var data: RequestData {
         switch self {
-        case .getFiatAssets,
-            .getSwapAssets,
-            .getConfig,
-            .getNameRecord,
-            .getAsset,
-            .markets:
+        case .getFiatAssets, .getSwapAssets, .getConfig, .getNameRecord, .getAsset, .markets:
             return .plain
         case .getFiatQuoteUrl(let request):
             return .encodable(request)
@@ -99,8 +83,7 @@ public enum GemAPI: TargetType {
             ])
         case .getPrices(let request):
             return .encodable(request)
-        case .getSearchAssets(let query, let chains, let tags),
-            .getSearch(let query, let chains, let tags):
+        case .getSearchAssets(let query, let chains, let tags), .getSearch(let query, let chains, let tags):
             return .params([
                 "query": query,
                 "chains": chains.map { $0.rawValue }.joined(separator: ","),
