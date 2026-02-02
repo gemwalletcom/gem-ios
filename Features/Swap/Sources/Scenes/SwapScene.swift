@@ -173,11 +173,11 @@ extension SwapScene {
                 if model.buttonViewModel.isVisible {
                     buttonView
                 } else if focusedField {
-                    PercentageAccessoryView(
-                        percents: SwapSceneViewModel.inputPercents,
-                        onSelectPercent: {
+                    SuggestionsAccessoryView(
+                        suggestions: SwapSceneViewModel.inputPercentSuggestions,
+                        onSelect: {
                             focusedField = false
-                            model.onSelectPercent($0)
+                            model.onSelectPercent($0.value)
                         },
                         onDone: {
                             focusedField = false

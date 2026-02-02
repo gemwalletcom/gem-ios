@@ -29,17 +29,12 @@ struct SetPriceAlertScene: View {
                 VStack(spacing: .small) {
                     Text(model.alertDirectionTitle)
                         .textStyle(.subHeadline)
-                    
+
                     CurrencyInputView(
                         text: $model.state.amount,
                         config: model.currencyInputConfig(for: assetData)
                     )
                     .focused($focusedField)
-                }
-                
-                if model.showPercentagePreselectedPicker {
-                    preselectedPercentagePickerView
-                        .padding(.top, Spacing.medium)
                 }
             }
             .cleanListRow()
@@ -49,13 +44,7 @@ struct SetPriceAlertScene: View {
             }
         }
         .safeAreaView {
-            StateButton(
-                text: Localized.Transfer.confirm,
-                type: .primary(model.confirmButtonState),
-                action: confirm
-            )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .padding(.bottom, Spacing.scene.bottom)
+            safeAreaContent
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -83,16 +72,46 @@ extension SetPriceAlertScene {
         .pickerStyle(.segmented)
         .fixedSize()
     }
-    
-    var preselectedPercentagePickerView: some View {
-        Picker("", selection: $model.state.amount) {
-            ForEach(model.preselectedPercentages, id: \.self) {
-                Text($0 + "%")
-                    .tag($0)
+
+    @ViewBuilder
+    var safeAreaContent: some View {
+        VStack(spacing: 0) {
+            if focusedField {
+                Divider()
+                    .frame(height: 1 / UIScreen.main.scale)
+                    .background(Colors.grayVeryLight)
+                    .isVisible(focusedField)
+                accessoryView
+                    .padding(.small)
+            } else {
+                StateButton(
+                    text: Localized.Transfer.confirm,
+                    type: .primary(model.confirmButtonState),
+                    action: confirm
+                )
+                .frame(maxWidth: Spacing.scene.button.maxWidth)
+                .padding(.bottom, Spacing.scene.bottom)
             }
         }
-        .pickerStyle(.segmented)
-        .frame(width: 200)
+        .background(focusedField ? Colors.grayBackground : .clear)
+    }
+
+    @ViewBuilder
+    var accessoryView: some View {
+        switch model.state.type {
+        case .price:
+            SuggestionsAccessoryView(
+                suggestions: model.priceSuggestions(for: assetData.price),
+                onSelect: onSelectPriceSuggestion,
+                onDone: { focusedField = false }
+            )
+        case .percentage:
+            SuggestionsAccessoryView(
+                suggestions: model.percentageSuggestions,
+                onSelect: onSelectPercentage,
+                onDone: { focusedField = false }
+            )
+        }
     }
 }
 
@@ -102,7 +121,17 @@ extension SetPriceAlertScene {
     func onChangeAmount(_: String, _: String) {
         model.setAlertDirection(for: assetData.price)
     }
-    
+
+    func onSelectPriceSuggestion(_ suggestion: PriceSuggestion) {
+        model.onSelectPriceSuggestion(suggestion)
+        focusedField = false
+    }
+
+    func onSelectPercentage(_ suggestion: PercentageSuggestion) {
+        model.onSelectPercentage(suggestion)
+        focusedField = false
+    }
+
     func confirm() {
         Task {
             await model.setPriceAlert()
