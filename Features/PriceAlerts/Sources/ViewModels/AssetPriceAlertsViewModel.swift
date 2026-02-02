@@ -54,9 +54,12 @@ public final class AssetPriceAlertsViewModel: Sendable {
             .map { PriceAlertItemViewModel(data: $0) }
     }
     
-    var emptyContentModel: EmptyContentTypeViewModel? {
-        guard alertsModel.isEmpty, autoAlertModel == nil else { return nil }
-        return EmptyContentTypeViewModel(type: .priceAlerts)
+    var showEmptyState: Bool {
+        alertsModel.isEmpty && autoAlertModel == nil
+    }
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .priceAlerts)
     }
 }
 
