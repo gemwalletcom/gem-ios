@@ -271,7 +271,6 @@ struct ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             transactionStateService: transactionStateService,
-            chainServiceFactory: chainServiceFactory,
             addressNameService: addressNameService,
             activityService: activityService,
             eventPresenterService: eventPresenterService

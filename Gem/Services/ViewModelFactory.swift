@@ -4,7 +4,6 @@ import Foundation
 import SwiftUI
 import Primitives
 import Transfer
-import ChainService
 import Keystore
 import SwapService
 import Swap
@@ -38,7 +37,6 @@ public struct ViewModelFactory: Sendable {
     let balanceService: BalanceService
     let priceService: PriceService
     let transactionStateService: TransactionStateService
-    let chainServiceFactory: ChainServiceFactory
     let addressNameService: AddressNameService
     let activityService: ActivityService
     let eventPresenterService: EventPresenterService
@@ -55,7 +53,6 @@ public struct ViewModelFactory: Sendable {
         balanceService: BalanceService,
         priceService: PriceService,
         transactionStateService: TransactionStateService,
-        chainServiceFactory: ChainServiceFactory,
         addressNameService: AddressNameService,
         activityService: ActivityService,
         eventPresenterService: EventPresenterService
@@ -71,7 +68,6 @@ public struct ViewModelFactory: Sendable {
         self.balanceService = balanceService
         self.priceService = priceService
         self.transactionStateService = transactionStateService
-        self.chainServiceFactory = chainServiceFactory
         self.addressNameService = addressNameService
         self.activityService = activityService
         self.eventPresenterService = eventPresenterService

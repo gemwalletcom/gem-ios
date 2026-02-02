@@ -26,7 +26,6 @@ import WalletService
 import AvatarService
 import AppService
 import ScanService
-import SwapService
 import NameService
 import PerpetualService
 import TransactionStateService
@@ -60,7 +59,6 @@ extension EnvironmentValues {
     @Entry var avatarService: AvatarService = AppResolver.main.services.avatarService
     @Entry var releaseService: AppReleaseService = AppResolver.main.services.appReleaseService
     @Entry var scanService: ScanService = AppResolver.main.services.scanService
-    @Entry var swapService: SwapService = AppResolver.main.services.swapService
     @Entry var perpetualService: PerpetualService = AppResolver.main.services.perpetualService
     @Entry var hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription> = AppResolver.main.services.hyperliquidObserverService
     @Entry var transactionStateService: TransactionStateService = AppResolver.main.services.transactionStateService

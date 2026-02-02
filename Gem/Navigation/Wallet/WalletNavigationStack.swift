@@ -25,10 +25,8 @@ struct WalletNavigationStack: View {
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.priceObserverService) private var priceObserverService
-    @Environment(\.stakeService) private var stakeService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.hyperliquidObserverService) private var hyperliquidObserverService
-    @Environment(\.balanceService) private var balanceService
     @Environment(\.activityService) private var activityService
     @Environment(\.walletSearchService) private var walletSearchService
     @Environment(\.assetSearchService) private var assetSearchService
