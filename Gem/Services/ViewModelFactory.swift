@@ -24,6 +24,8 @@ import WalletConnectorService
 import AddressNameService
 import ActivityService
 import EventPresenterService
+import Preferences
+import GemAPI
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -40,6 +42,7 @@ public struct ViewModelFactory: Sendable {
     let addressNameService: AddressNameService
     let activityService: ActivityService
     let eventPresenterService: EventPresenterService
+    let fiatService: any GemAPIFiatService
 
     public init(
         keystore: any Keystore,
@@ -55,7 +58,8 @@ public struct ViewModelFactory: Sendable {
         transactionStateService: TransactionStateService,
         addressNameService: AddressNameService,
         activityService: ActivityService,
-        eventPresenterService: EventPresenterService
+        eventPresenterService: EventPresenterService,
+        fiatService: any GemAPIFiatService
     ) {
         self.keystore = keystore
         self.nodeService = nodeService
@@ -71,6 +75,7 @@ public struct ViewModelFactory: Sendable {
         self.addressNameService = addressNameService
         self.activityService = activityService
         self.eventPresenterService = eventPresenterService
+        self.fiatService = fiatService
     }
     
     @MainActor
@@ -143,6 +148,7 @@ public struct ViewModelFactory: Sendable {
         amount: Int? = nil
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
+            fiatService: fiatService,
             assetAddress: assetAddress,
             walletId: walletId,
             type: type,

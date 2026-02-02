@@ -8,8 +8,10 @@ import InfoSheet
 import PrimitivesComponents
 import FiatConnect
 import Swap
+import Preferences
 
 public struct ConfirmTransferScene: View {
+    @Environment(\.fiatService) private var fiatService
     @State private var model: ConfirmTransferSceneViewModel
 
     public init(model: ConfirmTransferSceneViewModel) {
@@ -51,6 +53,7 @@ public struct ConfirmTransferScene: View {
                 NavigationStack {
                     FiatConnectNavigationView(
                         model: FiatSceneViewModel(
+                            fiatService: fiatService,
                             assetAddress: assetAddress,
                             walletId: walletId
                         )
