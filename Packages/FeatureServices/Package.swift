@@ -27,6 +27,7 @@ let package = Package(
         .library(name: "TransactionsService", targets: ["TransactionsService"]),
         .library(name: "TransactionsServiceTestKit", targets: ["TransactionsServiceTestKit"]),
         .library(name: "DiscoverAssetsService", targets: ["DiscoverAssetsService"]),
+        .library(name: "DiscoverAssetsServiceTestKit", targets: ["DiscoverAssetsServiceTestKit"]),
         .library(name: "SwapService", targets: ["SwapService"]),
         .library(name: "SwapServiceTestKit", targets: ["SwapServiceTestKit"]),
         .library(name: "AssetsService", targets: ["AssetsService"]),
@@ -53,6 +54,8 @@ let package = Package(
         .library(name: "AuthServiceTestKit", targets: ["AuthServiceTestKit"]),
         .library(name: "YieldService", targets: ["YieldService"]),
         .library(name: "YieldServiceTestKit", targets: ["YieldServiceTestKit"]),
+        .library(name: "ConnectionsService", targets: ["ConnectionsService"]),
+        .library(name: "ConnectionsServiceTestKit", targets: ["ConnectionsServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -77,7 +80,9 @@ let package = Package(
                 "Store",
                 "Blockchain",
                 "Formatters",
+                "Preferences",
                 .product(name: "ChainService", package: "ChainServices"),
+                .product(name: "WebSocketClient", package: "SwiftHTTPClient"),
             ],
             path: "PerpetualService",
             exclude: ["Tests", "TestKit"]
@@ -87,7 +92,8 @@ let package = Package(
             dependencies: [
                 "PerpetualService",
                 "Primitives",
-                .product(name: "StoreTestKit", package: "Store")
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
             ],
             path: "PerpetualService/TestKit"
         ),
@@ -172,6 +178,7 @@ let package = Package(
                 "Store",
                 "GemAPI",
                 "Preferences",
+                "DeviceService",
                 .product(name: "WebSocketClient", package: "SwiftHTTPClient")
             ],
             path: "PriceService",
@@ -185,6 +192,7 @@ let package = Package(
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "WebSocketClientTestKit", package: "SwiftHTTPClient"),
             ],
             path: "PriceService/TestKit"
         ),
@@ -278,6 +286,14 @@ let package = Package(
             exclude: ["Tests", "TestKit"]
         ),
         .target(
+            name: "DiscoverAssetsServiceTestKit",
+            dependencies: [
+                "DiscoverAssetsService",
+                "BalanceServiceTestKit",
+            ],
+            path: "DiscoverAssetsService/TestKit"
+        ),
+        .target(
             name: "SwapService",
             dependencies: [
                 "Gemstone",
@@ -349,6 +365,7 @@ let package = Package(
             name: "WalletsServiceTestKit",
             dependencies: [
                 "DeviceServiceTestKit",
+                "DiscoverAssetsServiceTestKit",
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 "PriceServiceTestKit",
@@ -415,7 +432,10 @@ let package = Package(
                 "DeviceService",
                 "AssetsService",
                 "WalletService",
-                "NotificationService"
+                "NotificationService",
+                "PriceService",
+                "PerpetualService",
+                "ConnectionsService",
             ],
             path: "AppService",
             exclude: ["Tests", "TestKit"]
@@ -431,6 +451,9 @@ let package = Package(
                 "DeviceServiceTestKit",
                 "AssetsServiceTestKit",
                 .product(name: "PreferencesTestKit", package: "Preferences"),
+                "PriceServiceTestKit",
+                "PerpetualServiceTestKit",
+                "ConnectionsServiceTestKit",
             ],
             path: "AppService/TestKit"
         ),
@@ -443,7 +466,7 @@ let package = Package(
                 "GemAPI",
             ],
             path: "DeviceService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "DeviceServiceTestKit",
@@ -519,6 +542,7 @@ let package = Package(
                 "Primitives",
                 "GemAPI",
                 "AuthService",
+                "Preferences",
             ],
             path: "RewardsService",
             exclude: ["TestKit"]
@@ -569,6 +593,28 @@ let package = Package(
                 "Gemstone"
             ],
             path: "YieldService/TestKit"
+        ),
+        .target(
+            name: "ConnectionsService",
+            dependencies: [
+                "Primitives",
+                "Store",
+                "Preferences",
+                .product(name: "WalletConnectorService", package: "ChainServices"),
+            ],
+            path: "ConnectionsService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "ConnectionsServiceTestKit",
+            dependencies: [
+                "ConnectionsService",
+                "Primitives",
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "WalletConnectorServiceTestKit", package: "ChainServices"),
+            ],
+            path: "ConnectionsService/TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",
@@ -640,8 +686,18 @@ let package = Package(
                 "AppServiceTestKit",
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                "PerpetualServiceTestKit",
             ],
             path: "AppService/Tests"
+        ),
+        .testTarget(
+            name: "DeviceServiceTests",
+            dependencies: [
+                "DeviceService",
+                "Primitives",
+            ],
+            path: "DeviceService/Tests"
         ),
     ]
 )

@@ -22,7 +22,7 @@ public extension WalletSearchSceneViewModel {
         activityService: ActivityService = .mock(),
         walletsService: WalletsService = .mock(),
         perpetualService: PerpetualService = .mock(),
-        preferences: Preferences = .mock()
+        preferences: ObservablePreferences = .mock()
     ) -> WalletSearchSceneViewModel {
         WalletSearchSceneViewModel(
             wallet: wallet,

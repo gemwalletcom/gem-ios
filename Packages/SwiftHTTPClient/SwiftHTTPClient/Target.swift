@@ -9,6 +9,7 @@ public protocol TargetType: Sendable {
     var data: RequestData { get }
     var contentType: String { get }
     var cachePolicy: URLRequest.CachePolicy { get }
+    var headers: [String: String] { get }
 }
 
 public enum ContentType: String {
@@ -27,5 +28,9 @@ public extension TargetType {
 public extension TargetType {
     var contentType: String {
         return ContentType.json.rawValue
+    }
+
+    var headers: [String: String] {
+        return [:]
     }
 }

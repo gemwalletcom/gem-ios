@@ -4,6 +4,7 @@ import Foundation
 import PriceService
 import Preferences
 import PreferencesTestKit
+import WebSocketClientTestKit
 
 public extension PriceObserverService {
     static func mock(

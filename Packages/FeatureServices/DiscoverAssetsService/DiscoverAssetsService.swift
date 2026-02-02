@@ -23,6 +23,11 @@ public struct DiscoverAssetsService: Sendable {
         wallet: Wallet,
         fromTimestamp: Int
     ) async throws -> [AssetId] {
-        try await assetsService.getAssetsByDeviceId(deviceId: deviceId, walletIndex: wallet.index.asInt, fromTimestamp: fromTimestamp)
+        try await assetsService
+            .getDeviceAssets(
+                deviceId: deviceId,
+                walletId: wallet.walletIdentifier().id,
+                fromTimestamp: fromTimestamp
+            )
     }
 }

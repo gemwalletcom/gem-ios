@@ -10,30 +10,37 @@ public struct WalletSearchResult: Equatable, Sendable {
     public let assets: [AssetData]
     public let perpetuals: [PerpetualData]
 
+    public init(assets: [AssetData], perpetuals: [PerpetualData]) {
+        self.assets = assets
+        self.perpetuals = perpetuals
+    }
+
     public static let empty = WalletSearchResult(assets: [], perpetuals: [])
 }
 
-public struct WalletSearchRequest: ValueObservationQueryable {
+public struct WalletSearchRequest: ValueObservationQueryable, Hashable {
     public static var defaultValue: WalletSearchResult { .empty }
 
     public var walletId: WalletId
     public var searchBy: String
     public var tag: String?
     public var limit: Int
+    public var types: [SearchItemType]
 
-    public init(walletId: WalletId, searchBy: String = "", tag: String? = nil, limit: Int = 5) {
+    public init(walletId: WalletId, searchBy: String = "", tag: String? = nil, limit: Int = 5, types: [SearchItemType] = [.asset, .perpetual]) {
         self.walletId = walletId
         self.searchBy = searchBy
         self.tag = tag
         self.limit = limit
+        self.types = types
     }
 
     public func fetch(_ db: Database) throws -> WalletSearchResult {
         let query = searchBy.trim()
         let searchKey = tag.map { query.isEmpty ? "tag:\($0)" : query } ?? query
 
-        let assets = try fetchAssets(db, query: query, searchKey: searchKey)
-        let perpetuals = tag == nil ? try fetchPerpetuals(db, query: query, searchKey: searchKey) : []
+        let assets = types.contains(.asset) ? try fetchAssets(db, query: query, searchKey: searchKey) : []
+        let perpetuals = types.contains(.perpetual) && tag == nil ? try fetchPerpetuals(db, query: query, searchKey: searchKey) : []
 
         return WalletSearchResult(assets: assets, perpetuals: perpetuals)
     }

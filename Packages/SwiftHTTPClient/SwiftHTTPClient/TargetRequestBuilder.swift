@@ -3,13 +3,14 @@
 import Foundation
 
 public struct TargetRequestBuilder {
-    
+
     let baseUrl: URL
     let method: HTTPMethod
     let path: String
     let data: RequestData
     let contentType: String
     let cachePolicy: URLRequest.CachePolicy
+    let headers: [String: String]
     
     func build(encoder: JSONEncoder) throws -> URLRequest {
         let string: String
@@ -38,6 +39,9 @@ public struct TargetRequestBuilder {
         request.httpMethod = method.rawValue
         request.setValue(contentType, forHTTPHeaderField: "Content-Type")
         request.cachePolicy = cachePolicy
+        for (key, value) in headers {
+            request.setValue(value, forHTTPHeaderField: key)
+        }
         return request
     }
 }

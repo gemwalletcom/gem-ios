@@ -40,9 +40,9 @@ public final class TransactionsService: Sendable {
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
 
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
-        let response = try await provider.getTransactionsAll(
+        let response = try await provider.getDeviceTransactions(
             deviceId: deviceId,
-            walletIndex: wallet.index.asInt,
+            walletId: try wallet.walletIdentifier().id,
             fromTimestamp: store.transactionsTimestamp
         )
 
@@ -57,9 +57,9 @@ public final class TransactionsService: Sendable {
         let store = WalletPreferences(walletId: wallet.walletId)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
-        let response = try await provider.getTransactionsForAsset(
+        let response = try await provider.getDeviceTransactionsForAsset(
             deviceId: deviceId,
-            walletIndex: wallet.index.asInt,
+            walletId: try wallet.walletIdentifier().id,
             asset: assetId,
             fromTimestamp: store.transactionsForAssetTimestamp(assetId: assetId.identifier)
         )

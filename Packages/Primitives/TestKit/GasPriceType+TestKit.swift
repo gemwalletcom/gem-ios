@@ -9,6 +9,6 @@ public extension GasPriceType {
     }
     
     static func mockSolana() -> GasPriceType {
-        .solana(gasPrice: BigInt(5000), priorityFee: BigInt(10000), unitPrice: BigInt(200))
+        .solana(gasPrice: BigInt(5000), priorityFee: BigInt(10000), unitPrice: BigInt(200), jitoTip: 1000)
     }
 }

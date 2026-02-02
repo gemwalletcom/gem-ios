@@ -61,7 +61,6 @@
 		B68BD2DA2DE05F9100687F09 /* PrimitivesTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2D92DE05F9100687F09 /* PrimitivesTestKit */; };
 		B68BD2DC2DE05FB600687F09 /* Keystore in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2DB2DE05FB600687F09 /* Keystore */; };
 		B68BD2E62DE0760E00687F09 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2E52DE0760E00687F09 /* Primitives */; };
-		B69028162F10F464000FC6AD /* ObserversService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69028152F10F464000FC6AD /* ObserversService.swift */; };
 		B69C52F32DE72B1000BBD95D /* ManageWallets in Frameworks */ = {isa = PBXBuildFile; productRef = B69C52F22DE72B1000BBD95D /* ManageWallets */; };
 		B69D9C872ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */; };
 		B6B86A102D702E7C00D31D65 /* SwapNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */; };
@@ -82,6 +81,7 @@
 		C3D1C4E22A2A9485006E8EEA /* Signer in Frameworks */ = {isa = PBXBuildFile; productRef = C3D1C4E12A2A9485006E8EEA /* Signer */; };
 		C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = C3E99BBE2A71E932005DF35F /* WalletCorePrimitives */; };
 		D80312AF2E2EE3E1005A5C77 /* PerpetualService in Frameworks */ = {isa = PBXBuildFile; productRef = D80312AE2E2EE3E1005A5C77 /* PerpetualService */; };
+		AA0000032F26000000000002 /* ConnectionsService in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000022F26000000000002 /* ConnectionsService */; };
 		D807004A2BBB1FB600ED770B /* SettingsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80700492BBB1FB600ED770B /* SettingsNavigationStack.swift */; };
 		D807004C2BBB26DD00ED770B /* TransactionsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807004B2BBB26DD00ED770B /* TransactionsNavigationStack.swift */; };
 		D807004E2BBB283400ED770B /* WalletNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807004D2BBB283400ED770B /* WalletNavigationStack.swift */; };
@@ -221,7 +221,6 @@
 		B67ED5492DDB5DCD009F74E6 /* NavigationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPresenter.swift; sourceTree = "<group>"; };
 		B680582E2ED9C6F7001273D6 /* XCTestCase+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
 		B680582F2ED9C6F7001273D6 /* XCUIApplication+GemUITestsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+GemUITestsAppTests.swift"; sourceTree = "<group>"; };
-		B69028152F10F464000FC6AD /* ObserversService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserversService.swift; sourceTree = "<group>"; };
 		B69D9C852ED85EA000A04F7F /* ImportWalletReceiveBitcoinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletReceiveBitcoinUITests.swift; sourceTree = "<group>"; };
 		B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapNavigationView.swift; sourceTree = "<group>"; };
 		B6C8F2AD2EDE2691005915E4 /* UITestKitConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestKitConstants.swift; sourceTree = "<group>"; };
@@ -317,6 +316,7 @@
 				D85AD2A62CD7017E0010DEF8 /* NativeProviderService in Frameworks */,
 				8361BB6D2D400E4F008D89CF /* AssetsService in Frameworks */,
 				D80312AF2E2EE3E1005A5C77 /* PerpetualService in Frameworks */,
+				AA0000032F26000000000002 /* ConnectionsService in Frameworks */,
 				D8D83C842CECFA610083AA53 /* Swap in Frameworks */,
 				8342EA032DB67EE3001B3780 /* WalletService in Frameworks */,
 				833931A82D2D663C0063BB6A /* PriceService in Frameworks */,
@@ -531,7 +531,6 @@
 		83B08BD92D0B4AB700CA1B33 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				B69028152F10F464000FC6AD /* ObserversService.swift */,
 				83B57FAA2CFF92670009319F /* AppResolver.swift */,
 				837A1E6A2D0B029200733AC1 /* AppResolver+ViewInjection.swift */,
 				83B08BDA2D0B4AE200CA1B33 /* AppResolver+Storages.swift */,
@@ -867,6 +866,7 @@
 				D80312AE2E2EE3E1005A5C77 /* PerpetualService */,
 				B60C6C342E68848900899BAC /* Support */,
 				83D0114E2EFB6341009274B8 /* TransactionStateService */,
+				AA0000022F26000000000002 /* ConnectionsService */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -1136,7 +1136,6 @@
 				D807004E2BBB283400ED770B /* WalletNavigationStack.swift in Sources */,
 				D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */,
 				8358DBBF2EA6AE59007A4DC7 /* PerpetualNavigationView.swift in Sources */,
-				B69028162F10F464000FC6AD /* ObserversService.swift in Sources */,
 				D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */,
 				D83BDCB72E3E878A00E41807 /* PerpetualPositionNavigationStack.swift in Sources */,
 				8358DBBD2EA6AD31007A4DC7 /* AutocloseNavigationStack.swift in Sources */,
@@ -1484,7 +1483,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Gem/Resources/Gem.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = U2D6XV88CZ;
@@ -1510,7 +1509,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.334;
+				MARKETING_VERSION = 1.3.342;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -1536,7 +1535,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
@@ -1564,7 +1563,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LLVM_LTO = YES_THIN;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.334;
+				MARKETING_VERSION = 1.3.342;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -1586,7 +1585,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -1607,7 +1606,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -1627,7 +1626,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -1648,7 +1647,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -1673,7 +1672,7 @@
 				CODE_SIGN_ENTITLEMENTS = GemPriceWidget/GemPriceWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = U2D6XV88CZ;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1687,7 +1686,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.3.334;
+				MARKETING_VERSION = 1.3.342;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.widgetprice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1708,7 +1707,7 @@
 				CODE_SIGN_ENTITLEMENTS = GemPriceWidget/GemPriceWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = U2D6XV88CZ;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1722,7 +1721,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.3.334;
+				MARKETING_VERSION = 1.3.342;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.widgetprice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1740,7 +1739,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = U2D6XV88CZ;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1763,7 +1762,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = U2D6XV88CZ;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2264,6 +2263,10 @@
 		DF93C4ED2C969F4F00204ABD /* Gemstone */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Gemstone;
+		};
+		AA0000022F26000000000002 /* ConnectionsService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ConnectionsService;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

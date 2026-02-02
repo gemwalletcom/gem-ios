@@ -14,6 +14,8 @@ import Style
 @Observable
 @MainActor
 public final class AssetsResultsSceneViewModel {
+    public static let defaultLimit = 100
+
     private let walletsService: WalletsService
     private let preferences: Preferences
     private let wallet: Wallet
