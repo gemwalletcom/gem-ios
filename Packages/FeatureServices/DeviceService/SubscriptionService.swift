@@ -32,7 +32,7 @@ public struct SubscriptionService: Sendable {
     public func update(deviceId: String) async throws {
         let local = try walletStore.getWallets().map { wallet in
             WalletSubscription(
-                wallet_id: try wallet.walletIdentifier().id,
+                wallet_id: wallet.id,
                 source: wallet.source,
                 subscriptions: wallet.accounts.map { ChainAddress(chain: $0.chain, address: $0.address) }
             )
