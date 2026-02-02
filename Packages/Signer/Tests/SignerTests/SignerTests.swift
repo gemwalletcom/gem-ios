@@ -17,4 +17,20 @@ struct SignerTests {
         
         #expect(type(of: signer) == EthereumSigner.self)
     }
+    
+    @Test
+    func testChainSignerForMultipleChainTypes() async throws {
+        let wallet = Wallet.mock()
+        let keystore = LocalKeystore.mock()
+        let signer = Signer(wallet: wallet, keystore: keystore)
+        
+        // Test that aptos, sui, and hyperCore all return ChainSigner
+        let aptosSigner = signer.signer(for: .aptos)
+        let suiSigner = signer.signer(for: .sui)
+        let hyperCoreSigner = signer.signer(for: .hyperCore)
+        
+        #expect(type(of: aptosSigner) == ChainSigner.self)
+        #expect(type(of: suiSigner) == ChainSigner.self)
+        #expect(type(of: hyperCoreSigner) == ChainSigner.self)
+    }
 }
