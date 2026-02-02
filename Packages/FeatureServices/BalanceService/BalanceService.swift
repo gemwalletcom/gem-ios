@@ -2,6 +2,8 @@
 
 import BigInt
 import Foundation
+import enum Gemstone.GemYieldProvider
+import GemstonePrimitives
 import Primitives
 import Store
 import ChainService
@@ -13,14 +15,14 @@ public struct BalanceService: BalancerUpdater, Sendable {
     private let balanceStore: BalanceStore
     private let assetsService: AssetsService
     private let fetcher: BalanceFetcher
-    private let yieldService: YieldService?
+    private let yieldService: any YieldServiceType
     private let formatter = ValueFormatter(style: .full)
 
     public init(
         balanceStore: BalanceStore,
         assetsService: AssetsService,
         chainServiceFactory: ChainServiceFactory,
-        yieldService: YieldService? = nil
+        yieldService: any YieldServiceType
     ) {
         self.balanceStore = balanceStore
         self.assetsService = assetsService
@@ -156,34 +158,34 @@ extension BalanceService {
     }
 
     private func updateYieldBalances(walletId: WalletId, assetIds: [AssetId], address: String) async {
-        guard let yieldService else { return }
-
         for assetId in assetIds {
-            do {
-                let position = try await yieldService.yielder.positions(
-                    provider: "yo",
-                    asset: assetId.identifier,
-                    walletAddress: address
-                )
-                guard let balanceValue = position.assetBalanceValue,
-                      let balance = BigInt(balanceValue) else { continue }
+            for provider in GemYieldProvider.allCases {
+                do {
+                    let position = try await yieldService.fetchPosition(
+                        provider: provider,
+                        asset: assetId,
+                        walletAddress: address
+                    )
+                    guard let balanceValue = position.assetBalanceValue,
+                          let balance = BigInt(balanceValue) else { continue }
 
-                let assetFull = try await assetsService.getAsset(assetId: assetId)
-                let decimals = assetFull.asset.decimals.asInt
+                    let assetFull = try await assetsService.getAsset(assetId: assetId)
+                    let decimals = assetFull.asset.decimals.asInt
 
-                let yieldValue = try UpdateBalanceValue(
-                    value: balance.description,
-                    amount: formatter.double(from: balance, decimals: decimals)
-                )
-                let update = UpdateBalance(
-                    assetId: assetId,
-                    type: .yield(UpdateYieldBalance(balance: yieldValue)),
-                    updatedAt: .now,
-                    isActive: true
-                )
-                try balanceStore.updateBalances([update], for: walletId)
-            } catch {
-                // Asset may not have yield support - skip silently
+                    let yieldValue = try UpdateBalanceValue(
+                        value: balance.description,
+                        amount: formatter.double(from: balance, decimals: decimals)
+                    )
+                    let update = UpdateBalance(
+                        assetId: assetId,
+                        type: .yield(UpdateYieldBalance(balance: yieldValue)),
+                        updatedAt: .now,
+                        isActive: true
+                    )
+                    try balanceStore.updateBalances([update], for: walletId)
+                } catch {
+                    // Asset may not have yield support for this provider - skip silently
+                }
             }
         }
     }
