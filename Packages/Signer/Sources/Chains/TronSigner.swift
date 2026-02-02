@@ -7,7 +7,7 @@ import WalletCore
 internal import BigInt
 
 struct TronSigner: Signable {
-    
+
     func sign(
         input: SignerInput,
         contract: WalletCore.TronTransaction.OneOf_ContractOneof,
@@ -19,7 +19,7 @@ struct TronSigner: Signable {
             let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot,
             let parentHash, let witnessAddress, _) = input.metadata
         else {
-            throw AnyError("Missing ton metadata")
+            throw AnyError("Missing tron metadata")
         }
         let signingInput = try TronSigningInput.with {
             $0.transaction = try TronTransaction.with {
@@ -52,14 +52,14 @@ struct TronSigner: Signable {
         return output.json
     }
 
-    private func createVoteWitnessContract(input: SignerInput, votes: [String: UInt64]) throws -> TronVoteWitnessContract {
+    private func createVoteWitnessContract(input: SignerInput, votes: [TronVote]) -> TronVoteWitnessContract {
         TronVoteWitnessContract.with {
             $0.ownerAddress = input.senderAddress
             $0.support = true
-            $0.votes = votes.map { address, count in
+            $0.votes = votes.map { vote in
                 TronVoteWitnessContract.Vote.with {
-                    $0.voteAddress = address
-                    $0.voteCount = Int64(count)
+                    $0.voteAddress = vote.validator
+                    $0.voteCount = Int64(vote.count)
                 }
             }
         }
@@ -92,18 +92,39 @@ struct TronSigner: Signable {
 
     func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case let .stake(_, stakeType) = input.type else {
-            throw (AnyError("Invalid input type for staking"))
+            throw AnyError("Invalid input type for staking")
+        }
+        guard case .tron(_, _, _, _, _, _, let stakeData) = input.metadata else {
+            throw AnyError("Missing tron metadata")
         }
 
         let contract: WalletCore.TronTransaction.OneOf_ContractOneof
         switch stakeType {
-        case .stake, .redelegate, .unstake:
-            contract = .voteWitness(
-                try createVoteWitnessContract(
-                    input: input,
-                    votes: input.metadata.getVotes()
-                )
-            )
+        case .stake, .redelegate:
+            guard case .votes(let votes) = stakeData else {
+                throw AnyError("Expected votes for stake/redelegate")
+            }
+            contract = .voteWitness(createVoteWitnessContract(input: input, votes: votes))
+        case .unstake:
+            switch stakeData {
+            case .unfreeze(let amounts):
+                return try amounts.map { unfreeze in
+                    try sign(
+                        input: input,
+                        contract: .unfreezeBalanceV2(
+                            TronUnfreezeBalanceV2Contract.with {
+                                $0.ownerAddress = input.senderAddress
+                                $0.unfreezeBalance = Int64(unfreeze.amount)
+                                $0.resource = unfreeze.resource.rawValue.uppercased()
+                            }
+                        ),
+                        feeLimit: .none,
+                        privateKey: privateKey
+                    )
+                }
+            case .votes(let votes):
+                contract = .voteWitness(createVoteWitnessContract(input: input, votes: votes))
+            }
         case .rewards:
             contract = .withdrawBalance(
                 TronWithdrawBalanceContract.with {

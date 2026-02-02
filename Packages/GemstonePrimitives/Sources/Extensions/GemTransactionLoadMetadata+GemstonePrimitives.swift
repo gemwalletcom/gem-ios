@@ -52,7 +52,7 @@ extension GemTransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let votes):
+        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let stakeData):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
@@ -60,7 +60,7 @@ extension GemTransactionLoadMetadata {
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
                 witnessAddress: witnessAddress,
-                votes: votes
+                stakeData: try stakeData.map()
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
@@ -118,7 +118,7 @@ extension TransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let votes):
+        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let stakeData):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
@@ -126,13 +126,59 @@ extension TransactionLoadMetadata {
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
                 witnessAddress: witnessAddress,
-                votes: votes
+                stakeData: stakeData.map()
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
         case .hyperliquid(let order):
             return .hyperliquid(order: order?.map())
         }
+    }
+}
+
+extension Gemstone.TronStakeData {
+    func map() throws -> Primitives.TronStakeData {
+        switch self {
+        case .votes(let votes):
+            return .votes(votes.map { $0.map() })
+        case .unfreeze(let amounts):
+            return .unfreeze(try amounts.map { try $0.map() })
+        }
+    }
+}
+
+extension Primitives.TronStakeData {
+    func map() -> Gemstone.TronStakeData {
+        switch self {
+        case .votes(let votes):
+            return .votes(votes.map { $0.map() })
+        case .unfreeze(let amounts):
+            return .unfreeze(amounts.map { $0.map() })
+        }
+    }
+}
+
+extension Gemstone.TronVote {
+    func map() -> Primitives.TronVote {
+        Primitives.TronVote(validator: validator, count: count)
+    }
+}
+
+extension Primitives.TronVote {
+    func map() -> Gemstone.TronVote {
+        Gemstone.TronVote(validator: validator, count: count)
+    }
+}
+
+extension Gemstone.TronUnfreeze {
+    func map() throws -> Primitives.TronUnfreeze {
+        Primitives.TronUnfreeze(resource: try resource.map(), amount: amount)
+    }
+}
+
+extension Primitives.TronUnfreeze {
+    func map() -> Gemstone.TronUnfreeze {
+        Gemstone.TronUnfreeze(resource: resource.map(), amount: amount)
     }
 }
 
