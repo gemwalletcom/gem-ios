@@ -333,7 +333,6 @@ struct ServicesFactory {
             assetSearchService: assetSearchService,
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
-            yieldService: yieldService,
             earnService: earnService,
             supportService: supportService
         )

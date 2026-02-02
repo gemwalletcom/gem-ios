@@ -130,7 +130,7 @@ public final class AssetSceneViewModel: Sendable {
         return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
     }
 
-    var earnTitle: String { "Earn" }
+    var earnTitle: String { Localized.Common.earn }
 
     var earnAprText: String {
         guard let apr = assetDataModel.earnApr else { return .empty }

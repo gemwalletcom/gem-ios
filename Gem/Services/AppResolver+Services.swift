@@ -79,7 +79,6 @@ extension AppResolver {
         let assetSearchService: AssetSearchService
         let appLifecycleService: AppLifecycleService
         let inAppNotificationService: InAppNotificationService
-        let yieldService: any YieldServiceType
         let earnService: EarnService
         let supportService: SupportService
 
@@ -127,7 +126,6 @@ extension AppResolver {
             assetSearchService: AssetSearchService,
             appLifecycleService: AppLifecycleService,
             inAppNotificationService: InAppNotificationService,
-            yieldService: any YieldServiceType,
             earnService: EarnService,
             supportService: SupportService
         ) {
@@ -174,7 +172,6 @@ extension AppResolver {
             self.assetSearchService = assetSearchService
             self.appLifecycleService = appLifecycleService
             self.inAppNotificationService = inAppNotificationService
-            self.yieldService = yieldService
             self.earnService = earnService
             self.supportService = supportService
         }
