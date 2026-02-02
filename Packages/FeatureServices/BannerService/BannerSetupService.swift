@@ -1,12 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Preferences
 import Primitives
 import Store
-import Preferences
 
 public struct BannerSetupService: Sendable {
-
     private let store: BannerStore
     private let preferences: Preferences
 
@@ -17,26 +16,26 @@ public struct BannerSetupService: Sendable {
         self.store = store
         self.preferences = preferences
     }
-    
+
     public func setup() throws {
         try setupStake()
         try setupHypercorePerpetuals()
         try setupYield()
     }
 
-    public func setupWallet(wallet: Wallet) throws  {
+    public func setupWallet(wallet: Wallet) throws {
         try setupAccountActivation()
         try setupOnboarding(wallet: wallet)
     }
-    
+
     public func setupAccountMultiSignatureWallet(walletId: WalletId, chain: Chain) throws {
         try store.addBanners([
             NewBanner.accountBlockedMultiSignature(walletId: walletId, chain: chain)
         ])
     }
-    
+
     // MARK: - Private methods
-    
+
     private func setupStake() throws {
         try store.addBanners(StakeChain.allCases.map {
             NewBanner.stake(assetId: $0.chain.assetId)
@@ -66,9 +65,7 @@ public struct BannerSetupService: Sendable {
     }
 
     private func setupYield() throws {
-        // USDC on Base
         let usdcBase = AssetId(chain: .base, tokenId: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913")
-        // USDT on Ethereum
         let usdtEthereum = AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7")
 
         try store.addBanners([

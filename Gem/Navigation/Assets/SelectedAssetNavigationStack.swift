@@ -15,7 +15,7 @@ import ChainService
 import ExplorerService
 import Signer
 import EventPresenterService
-import Yield
+import Earn
 
 struct SelectedAssetNavigationStack: View  {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -120,25 +120,24 @@ struct SelectedAssetNavigationStack: View  {
                         )
                     )
                 case .stake:
-                    StakeNavigationView(
-                        model: viewModelFactory.stakeScene(
+                    EarnNavigationView(
+                        model: viewModelFactory.earnScene(
                             wallet: wallet,
                             chain: input.asset.id.chain
                         ),
                         navigationPath: $navigationPath
                     )
                 case .earn:
-                    if let model = viewModelFactory.yieldScene(
-                        wallet: wallet,
-                        asset: input.asset,
-                        onAmountInputAction: {
-                            navigationPath.append($0)
-                        }
-                    ) {
-                        YieldNavigationView(model: model, navigationPath: $navigationPath)
-                    } else {
-                        EmptyView()
-                    }
+                    YieldNavigationView(
+                        model: viewModelFactory.yieldScene(
+                            wallet: wallet,
+                            asset: input.asset,
+                            onAmountInputAction: {
+                                navigationPath.append($0)
+                            }
+                        ),
+                        navigationPath: $navigationPath
+                    )
                 }
             }
             .toolbarDismissItem(type: .close, placement: .topBarLeading)

@@ -56,6 +56,8 @@ let package = Package(
         .library(name: "YieldServiceTestKit", targets: ["YieldServiceTestKit"]),
         .library(name: "ConnectionsService", targets: ["ConnectionsService"]),
         .library(name: "ConnectionsServiceTestKit", targets: ["ConnectionsServiceTestKit"]),
+        .library(name: "EarnService", targets: ["EarnService"]),
+        .library(name: "EarnServiceTestKit", targets: ["EarnServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -100,6 +102,8 @@ let package = Package(
         .target(
             name: "BalanceService",
             dependencies: [
+                "Gemstone",
+                "GemstonePrimitives",
                 "Primitives",
                 "Store",
                 .product(name: "ChainService", package: "ChainServices"),
@@ -117,7 +121,8 @@ let package = Package(
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 "AssetsServiceTestKit",
                 "BalanceService",
-                "Primitives"
+                "Primitives",
+                "YieldServiceTestKit"
             ],
             path: "BalanceService/TestKit"
         ),
@@ -579,6 +584,7 @@ let package = Package(
             name: "YieldService",
             dependencies: [
                 "Gemstone",
+                "GemstonePrimitives",
                 "Primitives",
                 "Store",
                 "NativeProviderService",
@@ -590,7 +596,8 @@ let package = Package(
             name: "YieldServiceTestKit",
             dependencies: [
                 "YieldService",
-                "Gemstone"
+                "Gemstone",
+                "Primitives"
             ],
             path: "YieldService/TestKit"
         ),
@@ -615,6 +622,24 @@ let package = Package(
                 .product(name: "WalletConnectorServiceTestKit", package: "ChainServices"),
             ],
             path: "ConnectionsService/TestKit"
+        ),
+        .target(
+            name: "EarnService",
+            dependencies: [
+                .product(name: "StakeService", package: "ChainServices"),
+                "YieldService",
+            ],
+            path: "EarnService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "EarnServiceTestKit",
+            dependencies: [
+                "EarnService",
+                .product(name: "StakeServiceTestKit", package: "ChainServices"),
+                "YieldServiceTestKit",
+            ],
+            path: "EarnService/TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",

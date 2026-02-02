@@ -5,8 +5,8 @@ import Primitives
 import PrimitivesComponents
 import Style
 import SwiftUI
-import struct Staking.StakeValidatorViewModel
-import struct Staking.ValidatorView
+import struct Earn.StakeValidatorViewModel
+import struct Earn.ValidatorView
 
 struct AmountScene: View {
     @FocusState private var focusedField: Bool

@@ -4,6 +4,11 @@ import Foundation
 import Primitives
 import GRDB
 
+public enum EarnTypeRecord: String, Codable, Sendable {
+    case stake
+    case yield
+}
+
 public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
     public static let databaseTableName: String = "earn_positions"
 
@@ -31,7 +36,7 @@ public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
     public var id: String
     public var walletId: String
     public var assetId: AssetId
-    public var type: EarnType
+    public var type: EarnTypeRecord
     public var balance: String
     public var rewards: String?
     public var apy: Double?
@@ -53,7 +58,7 @@ public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
         id: String,
         walletId: String,
         assetId: AssetId,
-        type: EarnType,
+        type: EarnTypeRecord,
         balance: String,
         rewards: String?,
         apy: Double?,
@@ -132,25 +137,37 @@ extension EarnPositionRecord: CreateTable {
 }
 
 extension EarnPositionRecord {
-    public var earnPosition: EarnPosition {
-        EarnPosition(
+    public var earnPosition: EarnPosition? {
+        let earnType: EarnType
+        switch type {
+        case .stake:
+            guard let validatorId, let state else { return nil }
+            earnType = .stake(StakePositionData(
+                validatorId: validatorId,
+                state: state,
+                completionDate: completionDate,
+                delegationId: delegationId ?? "",
+                shares: shares ?? "0"
+            ))
+        case .yield:
+            guard let provider else { return nil }
+            earnType = .yield(YieldPositionData(
+                provider: provider,
+                name: name ?? "",
+                vaultTokenAddress: vaultTokenAddress,
+                assetTokenAddress: assetTokenAddress,
+                vaultBalanceValue: vaultBalanceValue,
+                assetBalanceValue: assetBalanceValue
+            ))
+        }
+
+        return EarnPosition(
             walletId: walletId,
             assetId: assetId,
-            type: type,
+            type: earnType,
             balance: balance,
             rewards: rewards,
-            apy: apy,
-            validatorId: validatorId,
-            state: state,
-            completionDate: completionDate,
-            delegationId: delegationId,
-            shares: shares,
-            provider: provider,
-            name: name,
-            vaultTokenAddress: vaultTokenAddress,
-            assetTokenAddress: assetTokenAddress,
-            vaultBalanceValue: vaultBalanceValue,
-            assetBalanceValue: assetBalanceValue
+            apy: apy
         )
     }
 }
@@ -160,26 +177,58 @@ extension DelegationBase {
         EarnPosition(
             walletId: walletId,
             assetId: assetId,
-            type: .stake,
+            type: .stake(StakePositionData(
+                validatorId: validatorRecordId,
+                state: state,
+                completionDate: completionDate,
+                delegationId: delegationId,
+                shares: shares
+            )),
             balance: balance,
             rewards: rewards,
-            apy: nil,
-            validatorId: validatorRecordId,
-            state: state,
-            completionDate: completionDate,
-            delegationId: delegationId,
-            shares: shares
+            apy: nil
         )
     }
 }
 
 extension EarnPosition {
     public var record: EarnPositionRecord {
-        EarnPositionRecord(
+        let recordType: EarnTypeRecord
+        var validatorId: String?
+        var state: DelegationState?
+        var completionDate: Date?
+        var delegationId: String?
+        var shares: String?
+        var provider: String?
+        var name: String?
+        var vaultTokenAddress: String?
+        var assetTokenAddress: String?
+        var vaultBalanceValue: String?
+        var assetBalanceValue: String?
+
+        switch type {
+        case .stake(let data):
+            recordType = .stake
+            validatorId = data.validatorId
+            state = data.state
+            completionDate = data.completionDate
+            delegationId = data.delegationId
+            shares = data.shares
+        case .yield(let data):
+            recordType = .yield
+            provider = data.provider
+            name = data.name
+            vaultTokenAddress = data.vaultTokenAddress
+            assetTokenAddress = data.assetTokenAddress
+            vaultBalanceValue = data.vaultBalanceValue
+            assetBalanceValue = data.assetBalanceValue
+        }
+
+        return EarnPositionRecord(
             id: recordId,
             walletId: walletId,
             assetId: assetId,
-            type: type,
+            type: recordType,
             balance: balance,
             rewards: rewards,
             apy: apy,
@@ -199,10 +248,10 @@ extension EarnPosition {
 
     private var recordId: String {
         switch type {
-        case .stake:
-            return "\(walletId)-\(assetId.identifier)-\(validatorId ?? "")-\(state?.rawValue ?? "")-\(delegationId ?? "")"
-        case .yield:
-            return "\(walletId)-\(assetId.identifier)-\(provider ?? "")"
+        case .stake(let data):
+            return "\(walletId)-\(assetId.identifier)-\(data.validatorId)-\(data.state.rawValue)-\(data.delegationId)"
+        case .yield(let data):
+            return "\(walletId)-\(assetId.identifier)-\(data.provider)"
         }
     }
 }

@@ -30,6 +30,7 @@ import RewardsService
 import EventPresenterService
 import NotificationService
 import YieldService
+import EarnService
 import Support
 
 extension AppResolver {
@@ -78,7 +79,8 @@ extension AppResolver {
         let assetSearchService: AssetSearchService
         let appLifecycleService: AppLifecycleService
         let inAppNotificationService: InAppNotificationService
-        let yieldService: YieldService?
+        let yieldService: any YieldServiceType
+        let earnService: EarnService
         let supportService: SupportService
 
         init(
@@ -125,7 +127,8 @@ extension AppResolver {
             assetSearchService: AssetSearchService,
             appLifecycleService: AppLifecycleService,
             inAppNotificationService: InAppNotificationService,
-            yieldService: YieldService?,
+            yieldService: any YieldServiceType,
+            earnService: EarnService,
             supportService: SupportService
         ) {
             self.assetsService = assetsService
@@ -172,6 +175,7 @@ extension AppResolver {
             self.appLifecycleService = appLifecycleService
             self.inAppNotificationService = inAppNotificationService
             self.yieldService = yieldService
+            self.earnService = earnService
             self.supportService = supportService
         }
     }

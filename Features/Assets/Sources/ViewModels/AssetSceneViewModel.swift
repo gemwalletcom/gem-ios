@@ -28,13 +28,11 @@ public final class AssetSceneViewModel: Sendable {
     private let transactionsService: TransactionsService
     private let priceObserverService: PriceObserverService
     private let bannerService: BannerService
-    private let yieldService: YieldService?
+    private let yieldService: any YieldServiceType
 
     private let preferences: ObservablePreferences = .default
 
-    private(set) var hasYieldOpportunity: Bool = false
-    private(set) var yieldPosition: GemYieldPosition?
-    private(set) var isYieldPositionLoaded: Bool = false
+    private(set) var earnState: EarnState = .initial
 
     let explorerService: ExplorerService = .standard
     public let priceAlertService: PriceAlertService
@@ -59,7 +57,7 @@ public final class AssetSceneViewModel: Sendable {
         priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
         bannerService: BannerService,
-        yieldService: YieldService? = nil,
+        yieldService: any YieldServiceType,
         input: AssetSceneInput,
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
@@ -144,7 +142,7 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     var showEarnButton: Bool {
-        hasYieldOpportunity && !wallet.isViewOnly && !hasYieldPosition
+        earnState.hasOpportunity && !wallet.isViewOnly && !hasYieldPosition
     }
 
     var hasYieldPosition: Bool {
@@ -257,27 +255,26 @@ extension AssetSceneViewModel {
     }
 
     private func checkYieldAvailability() {
-        guard let _ = yieldService, assetData.isEarnable else { return }
-        hasYieldOpportunity = true
+        guard assetData.isEarnable else { return }
+        earnState.hasOpportunity = true
         fetchYieldPosition()
     }
 
     private func fetchYieldPosition() {
-        guard let yieldService,
-              let address = try? wallet.account(for: asset.id.chain).address else {
-            isYieldPositionLoaded = true
+        guard let address = try? wallet.account(for: asset.id.chain).address else {
+            earnState.isPositionLoaded = true
             return
         }
 
-        yieldPosition = yieldService.getPosition(
+        earnState.position = yieldService.getPosition(
             provider: .yo,
             asset: asset.id,
             walletAddress: address,
             walletId: wallet.walletId
         ) { [weak self] fresh in
-            self?.yieldPosition = fresh
+            self?.earnState.position = fresh
         }
-        isYieldPositionLoaded = true
+        earnState.isPositionLoaded = true
     }
 
     func fetch() async {

@@ -10,6 +10,7 @@ import TransactionsServiceTestKit
 import PriceServiceTestKit
 import PriceAlertServiceTestKit
 import BannerServiceTestKit
+import YieldServiceTestKit
 
 @testable import Assets
 
@@ -68,6 +69,7 @@ extension AssetSceneViewModel {
             priceObserverService: .mock(),
             priceAlertService: .mock(),
             bannerService: .mock(),
+            yieldService: MockYieldService(),
             input: AssetSceneInput(
                 wallet: .mock(),
                 asset: assetData.asset

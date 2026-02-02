@@ -13,29 +13,30 @@ extension EarnPosition {
         self.init(
             walletId: walletId.id,
             assetId: assetId,
-            type: .yield,
+            type: .yield(YieldPositionData(
+                provider: position.provider.name,
+                name: position.name,
+                vaultTokenAddress: position.vaultTokenAddress,
+                assetTokenAddress: position.assetTokenAddress,
+                vaultBalanceValue: position.vaultBalanceValue,
+                assetBalanceValue: position.assetBalanceValue
+            )),
             balance: position.assetBalanceValue ?? "0",
             rewards: position.rewards,
-            apy: position.apy,
-            provider: position.provider.name,
-            name: position.name,
-            vaultTokenAddress: position.vaultTokenAddress,
-            assetTokenAddress: position.assetTokenAddress,
-            vaultBalanceValue: position.vaultBalanceValue,
-            assetBalanceValue: position.assetBalanceValue
+            apy: position.apy
         )
     }
 
     public func toGemYieldPosition() -> GemYieldPosition? {
-        guard type == .yield, let provider = provider else { return nil }
+        guard let yieldData = type.yieldData else { return nil }
         return GemYieldPosition(
-            name: name ?? "",
+            name: yieldData.name,
             assetId: assetId.identifier,
-            provider: GemYieldProvider(name: provider),
-            vaultTokenAddress: vaultTokenAddress ?? "",
-            assetTokenAddress: assetTokenAddress ?? "",
-            vaultBalanceValue: vaultBalanceValue,
-            assetBalanceValue: assetBalanceValue,
+            provider: GemYieldProvider(name: yieldData.provider),
+            vaultTokenAddress: yieldData.vaultTokenAddress ?? "",
+            assetTokenAddress: yieldData.assetTokenAddress ?? "",
+            vaultBalanceValue: yieldData.vaultBalanceValue,
+            assetBalanceValue: yieldData.assetBalanceValue,
             apy: apy,
             rewards: rewards
         )

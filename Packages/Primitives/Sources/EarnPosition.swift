@@ -2,9 +2,83 @@
 
 import Foundation
 
-public enum EarnType: String, Codable, CaseIterable, Equatable, Sendable {
-    case stake
-    case yield
+public struct StakePositionData: Codable, Equatable, Hashable, Sendable {
+    public let validatorId: String
+    public let state: DelegationState
+    public let completionDate: Date?
+    public let delegationId: String
+    public let shares: String
+
+    public init(
+        validatorId: String,
+        state: DelegationState,
+        completionDate: Date?,
+        delegationId: String,
+        shares: String
+    ) {
+        self.validatorId = validatorId
+        self.state = state
+        self.completionDate = completionDate
+        self.delegationId = delegationId
+        self.shares = shares
+    }
+}
+
+public struct YieldPositionData: Codable, Equatable, Hashable, Sendable {
+    public let provider: String
+    public let name: String
+    public let vaultTokenAddress: String?
+    public let assetTokenAddress: String?
+    public let vaultBalanceValue: String?
+    public let assetBalanceValue: String?
+
+    public init(
+        provider: String,
+        name: String,
+        vaultTokenAddress: String?,
+        assetTokenAddress: String?,
+        vaultBalanceValue: String?,
+        assetBalanceValue: String?
+    ) {
+        self.provider = provider
+        self.name = name
+        self.vaultTokenAddress = vaultTokenAddress
+        self.assetTokenAddress = assetTokenAddress
+        self.vaultBalanceValue = vaultBalanceValue
+        self.assetBalanceValue = assetBalanceValue
+    }
+}
+
+public enum EarnType: Codable, Equatable, Hashable, Sendable {
+    case stake(StakePositionData)
+    case yield(YieldPositionData)
+
+    public var isStake: Bool {
+        if case .stake = self { return true }
+        return false
+    }
+
+    public var isYield: Bool {
+        if case .yield = self { return true }
+        return false
+    }
+
+    public var stakeData: StakePositionData? {
+        if case .stake(let data) = self { return data }
+        return nil
+    }
+
+    public var yieldData: YieldPositionData? {
+        if case .yield(let data) = self { return data }
+        return nil
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .stake: "stake"
+        case .yield: "yield"
+        }
+    }
 }
 
 public struct EarnPosition: Codable, Equatable, Hashable, Sendable {
@@ -15,39 +89,13 @@ public struct EarnPosition: Codable, Equatable, Hashable, Sendable {
     public let rewards: String?
     public let apy: Double?
 
-    // Stake-specific
-    public let validatorId: String?
-    public let state: DelegationState?
-    public let completionDate: Date?
-    public let delegationId: String?
-    public let shares: String?
-
-    // Yield-specific
-    public let provider: String?
-    public let name: String?
-    public let vaultTokenAddress: String?
-    public let assetTokenAddress: String?
-    public let vaultBalanceValue: String?
-    public let assetBalanceValue: String?
-
     public init(
         walletId: String,
         assetId: AssetId,
         type: EarnType,
         balance: String,
         rewards: String?,
-        apy: Double?,
-        validatorId: String? = nil,
-        state: DelegationState? = nil,
-        completionDate: Date? = nil,
-        delegationId: String? = nil,
-        shares: String? = nil,
-        provider: String? = nil,
-        name: String? = nil,
-        vaultTokenAddress: String? = nil,
-        assetTokenAddress: String? = nil,
-        vaultBalanceValue: String? = nil,
-        assetBalanceValue: String? = nil
+        apy: Double?
     ) {
         self.walletId = walletId
         self.assetId = assetId
@@ -55,16 +103,5 @@ public struct EarnPosition: Codable, Equatable, Hashable, Sendable {
         self.balance = balance
         self.rewards = rewards
         self.apy = apy
-        self.validatorId = validatorId
-        self.state = state
-        self.completionDate = completionDate
-        self.delegationId = delegationId
-        self.shares = shares
-        self.provider = provider
-        self.name = name
-        self.vaultTokenAddress = vaultTokenAddress
-        self.assetTokenAddress = assetTokenAddress
-        self.vaultBalanceValue = vaultBalanceValue
-        self.assetBalanceValue = assetBalanceValue
     }
 }

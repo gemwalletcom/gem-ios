@@ -8,7 +8,7 @@ import GemstonePrimitives
 import Localization
 import Primitives
 import PrimitivesComponents
-import Staking
+import Earn
 import Validators
 
 enum StakeAction {

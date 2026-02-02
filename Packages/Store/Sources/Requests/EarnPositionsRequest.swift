@@ -23,7 +23,7 @@ public struct EarnDelegationsRequest: ValueObservationQueryable {
             .including(optional: EarnPositionRecord.price)
             .filter(EarnPositionRecord.Columns.walletId == walletId.id)
             .filter(EarnPositionRecord.Columns.assetId == assetId.identifier)
-            .filter(EarnPositionRecord.Columns.type == EarnType.stake.rawValue)
+            .filter(EarnPositionRecord.Columns.type == EarnTypeRecord.stake.rawValue)
             .order(EarnPositionRecord.Columns.balance.desc)
             .asRequest(of: EarnPositionInfo.self)
             .fetchAll(db)
@@ -36,9 +36,9 @@ public struct EarnPositionsRequest: ValueObservationQueryable {
 
     private let walletId: WalletId
     private let assetId: AssetId?
-    private let type: EarnType?
+    private let type: EarnTypeRecord?
 
-    public init(walletId: WalletId, assetId: AssetId? = nil, type: EarnType? = nil) {
+    public init(walletId: WalletId, assetId: AssetId? = nil, type: EarnTypeRecord? = nil) {
         self.walletId = walletId
         self.assetId = assetId
         self.type = type
@@ -59,6 +59,6 @@ public struct EarnPositionsRequest: ValueObservationQueryable {
         return try request
             .order(EarnPositionRecord.Columns.balance.desc)
             .fetchAll(db)
-            .map { $0.earnPosition }
+            .compactMap { $0.earnPosition }
     }
 }

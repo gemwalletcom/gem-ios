@@ -41,6 +41,7 @@ import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
 import YieldService
+import EarnService
 import SwiftHTTPClient
 import Support
 
@@ -91,14 +92,10 @@ struct ServicesFactory {
             walletStore: storeManager.walletStore,
             avatarService: avatarService
         )
-        let yieldService: YieldService? = {
-            do {
-                return try YieldService(nodeProvider: nodeService, store: storeManager.earnStore)
-            } catch {
-                debugLog("Failed to initialize YieldService: \(error)")
-                return nil
-            }
-        }()
+        let yieldService = Self.makeYieldService(
+            nodeProvider: nodeService,
+            store: storeManager.earnStore
+        )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
             assetsService: assetsService,
@@ -109,6 +106,10 @@ struct ServicesFactory {
             earnStore: storeManager.earnStore,
             addressStore: storeManager.addressStore,
             chainFactory: chainServiceFactory
+        )
+        let earnService = Self.makeEarnService(
+            stakeService: stakeService,
+            yieldService: yieldService
         )
         let nftService = Self.makeNftService(
             apiService: apiService,
@@ -277,6 +278,7 @@ struct ServicesFactory {
             walletsService: walletsService,
             walletService: walletService,
             stakeService: stakeService,
+            yieldService: yieldService,
             nameService: nameService,
             balanceService: balanceService,
             priceService: priceService,
@@ -332,6 +334,7 @@ struct ServicesFactory {
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
             yieldService: yieldService,
+            earnService: earnService,
             supportService: supportService
         )
     }
@@ -402,7 +405,7 @@ extension ServicesFactory {
         balanceStore: BalanceStore,
         assetsService: AssetsService,
         chainFactory: ChainServiceFactory,
-        yieldService: YieldService?
+        yieldService: any YieldServiceType
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,
@@ -634,6 +637,23 @@ extension ServicesFactory {
             priceService: priceService,
             preferences: preferences,
             securePreferences: securePreferences
+        )
+    }
+
+    private static func makeYieldService(
+        nodeProvider: any NodeURLFetchable,
+        store: EarnStore
+    ) -> YieldService {
+        try! YieldService(nodeProvider: nodeProvider, store: store)
+    }
+
+    private static func makeEarnService(
+        stakeService: StakeService,
+        yieldService: any YieldServiceType
+    ) -> EarnService {
+        EarnService(
+            stakeService: stakeService,
+            yieldService: yieldService
         )
     }
 }

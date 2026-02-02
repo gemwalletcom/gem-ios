@@ -18,14 +18,13 @@ import NameService
 import BalanceService
 import PriceService
 import TransactionStateService
-import Staking
+import Earn
 import Assets
 import FiatConnect
 import WalletConnectorService
 import AddressNameService
 import ActivityService
 import EventPresenterService
-import Yield
 import YieldService
 
 public struct ViewModelFactory: Sendable {
@@ -36,6 +35,7 @@ public struct ViewModelFactory: Sendable {
     let walletsService: WalletsService
     let walletService: WalletService
     let stakeService: StakeService
+    let yieldService: any YieldServiceType
     let nameService: NameService
     let balanceService: BalanceService
     let priceService: PriceService
@@ -53,6 +53,7 @@ public struct ViewModelFactory: Sendable {
         walletsService: WalletsService,
         walletService: WalletService,
         stakeService: StakeService,
+        yieldService: any YieldServiceType,
         nameService: NameService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -69,6 +70,7 @@ public struct ViewModelFactory: Sendable {
         self.walletsService = walletsService
         self.walletService = walletService
         self.stakeService = stakeService
+        self.yieldService = yieldService
         self.nameService = nameService
         self.balanceService = balanceService
         self.priceService = priceService
@@ -171,14 +173,15 @@ public struct ViewModelFactory: Sendable {
     }
 
     @MainActor
-    public func stakeScene(
+    public func earnScene(
         wallet: Wallet,
         chain: Chain
-    ) -> StakeSceneViewModel {
-        StakeSceneViewModel(
+    ) -> EarnSceneViewModel {
+        EarnSceneViewModel(
             wallet: wallet,
             chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
-            stakeService: stakeService
+            stakeService: stakeService,
+            yieldService: yieldService
         )
     }
 
@@ -187,13 +190,10 @@ public struct ViewModelFactory: Sendable {
         wallet: Wallet,
         asset: Asset,
         onAmountInputAction: AmountInputAction = nil
-    ) -> YieldSceneViewModel? {
-        guard let yieldService = try? YieldService(nodeProvider: nodeService) else {
-            return nil
-        }
-        let input = YieldInput(wallet: wallet, asset: asset)
-        return YieldSceneViewModel(
-            input: input,
+    ) -> YieldSceneViewModel {
+        YieldSceneViewModel(
+            wallet: wallet,
+            asset: asset,
             yieldService: yieldService,
             onAmountInputAction: onAmountInputAction
         )
@@ -215,8 +215,8 @@ public struct ViewModelFactory: Sendable {
     public func stakeDetailScene(
         wallet: Wallet,
         delegation: Delegation,
-        onAmountInputAction: AmountInputAction,
-        onTransferAction: TransferDataAction
+        onAmountInputAction: Earn.AmountInputAction,
+        onTransferAction: Earn.TransferDataAction
     ) -> StakeDetailSceneViewModel {
         StakeDetailSceneViewModel(
             wallet: wallet,

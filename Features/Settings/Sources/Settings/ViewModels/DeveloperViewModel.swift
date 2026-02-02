@@ -26,7 +26,7 @@ public final class DeveloperViewModel {
     private let bannerService: BannerService
     private let priceService: PriceService
     private let perpetualService: PerpetualService
-    private let yieldService: YieldService?
+    private let yieldService: (any YieldServiceType)?
 
     public var isPresentingToastMessage: ToastMessage?
 
@@ -38,7 +38,7 @@ public final class DeveloperViewModel {
         bannerService: BannerService,
         priceService: PriceService,
         perpetualService: PerpetualService,
-        yieldService: YieldService?
+        yieldService: (any YieldServiceType)?
     ) {
         self.walletId = walletId
         self.transactionsService = transactionsService

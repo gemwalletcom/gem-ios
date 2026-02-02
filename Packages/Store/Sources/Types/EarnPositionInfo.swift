@@ -33,7 +33,7 @@ extension EarnPositionInfo {
         )
     }
 
-    public var earnPosition: EarnPosition {
+    public var earnPosition: EarnPosition? {
         position.earnPosition
     }
 }

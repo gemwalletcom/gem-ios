@@ -12,18 +12,18 @@ public struct EarnStore: Sendable {
         self.db = db.dbQueue
     }
 
-    public func getPositions(walletId: WalletId, type: EarnType? = nil) throws -> [EarnPosition] {
+    public func getPositions(walletId: WalletId, type: EarnTypeRecord? = nil) throws -> [EarnPosition] {
         try db.read { db in
             var request = EarnPositionRecord
                 .filter(EarnPositionRecord.Columns.walletId == walletId.id)
             if let type {
                 request = request.filter(EarnPositionRecord.Columns.type == type.rawValue)
             }
-            return try request.fetchAll(db).map { $0.earnPosition }
+            return try request.fetchAll(db).compactMap { $0.earnPosition }
         }
     }
 
-    public func getPositions(walletId: WalletId, assetId: AssetId, type: EarnType? = nil) throws -> [EarnPosition] {
+    public func getPositions(walletId: WalletId, assetId: AssetId, type: EarnTypeRecord? = nil) throws -> [EarnPosition] {
         try db.read { db in
             var request = EarnPositionRecord
                 .filter(EarnPositionRecord.Columns.walletId == walletId.id)
@@ -31,7 +31,7 @@ public struct EarnStore: Sendable {
             if let type {
                 request = request.filter(EarnPositionRecord.Columns.type == type.rawValue)
             }
-            return try request.fetchAll(db).map { $0.earnPosition }
+            return try request.fetchAll(db).compactMap { $0.earnPosition }
         }
     }
 
@@ -83,7 +83,7 @@ public struct EarnStore: Sendable {
         }
     }
 
-    public func deletePositions(walletId: WalletId, type: EarnType? = nil) throws {
+    public func deletePositions(walletId: WalletId, type: EarnTypeRecord? = nil) throws {
         try db.write { db in
             var request = EarnPositionRecord
                 .filter(EarnPositionRecord.Columns.walletId == walletId.id)
@@ -105,7 +105,7 @@ public struct EarnStore: Sendable {
     }
 
     @discardableResult
-    public func clear(type: EarnType? = nil) throws -> Int {
+    public func clear(type: EarnTypeRecord? = nil) throws -> Int {
         try db.write { db in
             if let type {
                 return try EarnPositionRecord
@@ -123,7 +123,7 @@ public struct EarnStore: Sendable {
                 .including(optional: EarnPositionRecord.price)
                 .filter(EarnPositionRecord.Columns.walletId == walletId.id)
                 .filter(EarnPositionRecord.Columns.assetId == assetId.identifier)
-                .filter(EarnPositionRecord.Columns.type == EarnType.stake.rawValue)
+                .filter(EarnPositionRecord.Columns.type == EarnTypeRecord.stake.rawValue)
                 .asRequest(of: EarnPositionInfo.self)
                 .fetchAll(db)
                 .compactMap { $0.mapToDelegation() }
