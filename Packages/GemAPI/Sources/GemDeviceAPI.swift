@@ -198,8 +198,9 @@ public enum GemDeviceAPI: TargetType {
             return .encodable(device)
         case .migrateDevice(let request):
             return .encodable(request)
-        case .addSubscriptions(_, let subscriptions),
-            .deleteSubscriptions(_, let subscriptions):
+        case .addSubscriptions(_, let subscriptions):
+            return .encodable(subscriptions)
+        case .deleteSubscriptions(_, let subscriptions):
             return .encodable(subscriptions)
         case .addPriceAlerts(_, let priceAlerts),
             .deletePriceAlerts(_, let priceAlerts):
