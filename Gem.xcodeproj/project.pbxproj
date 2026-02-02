@@ -110,7 +110,6 @@
 		D896B57E2E2EE2D300ADE083 /* Perpetuals in Frameworks */ = {isa = PBXBuildFile; productRef = D896B57D2E2EE2D300ADE083 /* Perpetuals */; };
 		D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */; };
 		D89CD7A92CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */; };
-		D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */; };
 		D8B738D42C59643D004EF083 /* MainTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B738D32C59643D004EF083 /* MainTabViewModel.swift */; };
 		D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */; };
 		D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */; };
@@ -270,7 +269,6 @@
 		D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedAssetNavigationStack.swift; sourceTree = "<group>"; };
 		D8A1F8732B17F21E00B15F54 /* Screenshots.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Screenshots.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A1F8772B17F21E00B15F54 /* ScreenshotsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotsLaunchTests.swift; sourceTree = "<group>"; };
-		D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonListItem.swift; sourceTree = "<group>"; };
 		D8B738D32C59643D004EF083 /* MainTabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabViewModel.swift; sourceTree = "<group>"; };
 		D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAssetSceneNavigationStack.swift; sourceTree = "<group>"; };
 		D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenNavigationStack.swift; sourceTree = "<group>"; };
@@ -665,7 +663,6 @@
 			isa = PBXGroup;
 			children = (
 				830FDA412C2236B6003DA605 /* MainTabView.swift */,
-				D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1136,7 +1133,6 @@
 				B67ED5472DDB5DCC009F74E6 /* NavigationHandler.swift in Sources */,
 				B67ED5482DDB5DCD009F74E6 /* NavigationPresenter.swift in Sources */,
 				C366790A2A0B7E5800F1D74D /* Environment.swift in Sources */,
-				D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */,
 				837A1E6D2D0B096600733AC1 /* WalletConnectorNavigationStack.swift in Sources */,
 				D8D5C1D12E6CAC16007628A1 /* Errors.swift in Sources */,
 				D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */,
