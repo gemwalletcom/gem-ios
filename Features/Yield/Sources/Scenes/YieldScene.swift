@@ -55,15 +55,13 @@ extension YieldScene {
                 NavigationCustomLink(
                     with: HStack(spacing: Spacing.small) {
                         AssetImageView(assetImage: model.assetImage, size: 40)
-                        Text("\(position.assetBalanceFormatted) \(model.assetSymbol)")
+                        Text(position.providerName)
                             .font(.body)
                             .foregroundStyle(Colors.black)
                         Spacer()
-                        if let rewards = position.rewardsFormatted {
-                            Text("+\(rewards)")
-                                .font(.callout)
-                                .foregroundStyle(Colors.green)
-                        }
+                        Text("\(position.assetBalanceFormatted) \(model.assetSymbol)")
+                            .font(.callout)
+                            .foregroundStyle(Colors.gray)
                     }
                 ) {
                     model.onWithdraw()
