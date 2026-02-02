@@ -82,9 +82,8 @@ public enum GemDeviceAPI: TargetType {
 
     public var path: String {
         switch self {
-        case .addDevice:
-            return "/v2/devices"
-        case .getDevice,
+        case .addDevice,
+            .getDevice,
             .deleteDevice,
             .updateDevice:
             return "/v2/devices"
@@ -199,9 +198,8 @@ public enum GemDeviceAPI: TargetType {
             return .encodable(device)
         case .migrateDevice(let request):
             return .encodable(request)
-        case .addSubscriptions(_, let subscriptions):
-            return .encodable(subscriptions)
-        case .deleteSubscriptions(_, let subscriptions):
+        case .addSubscriptions(_, let subscriptions),
+            .deleteSubscriptions(_, let subscriptions):
             return .encodable(subscriptions)
         case .addPriceAlerts(_, let priceAlerts),
             .deletePriceAlerts(_, let priceAlerts):
