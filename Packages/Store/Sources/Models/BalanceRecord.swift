@@ -125,7 +125,10 @@ extension BalanceRecord: CreateTable {
             
             $0.column(Columns.withdrawable.name, .text).defaults(to: "0")
             $0.column(Columns.withdrawableAmount.name, .double).defaults(to: 0)
-            
+
+            $0.column(Columns.yield.name, .text).defaults(to: "0")
+            $0.column(Columns.yieldAmount.name, .double).defaults(to: 0)
+
             $0.column(sql: totalAmountSQlCreation)
             
             $0.column(Columns.isEnabled.name, .boolean).defaults(to: true).indexed()

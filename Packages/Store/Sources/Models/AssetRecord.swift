@@ -95,6 +95,7 @@ extension AssetRecord: CreateTable {
             $0.column(Columns.rank.name, .numeric)
                 .defaults(to: 0)
             $0.column(Columns.stakingApr.name, .double)
+            $0.column(Columns.earnApr.name, .double)
             $0.column(Columns.hasImage.name, .boolean)
                 .defaults(to: false)
         }
