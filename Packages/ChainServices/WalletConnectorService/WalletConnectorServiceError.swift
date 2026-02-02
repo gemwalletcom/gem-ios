@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum WalletConnectorServiceError: Error {
+public enum WalletConnectorServiceError: Error, Equatable {
     case unresolvedMethod(String)
     case unresolvedChainId(String)
     case walletsUnsupported

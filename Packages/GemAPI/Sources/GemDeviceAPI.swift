@@ -96,10 +96,10 @@ public enum GemDeviceAPI: TargetType {
             .addSubscriptions,
             .deleteSubscriptions:
             return "/v2/devices/subscriptions"
-        case .getPriceAlerts(let deviceId, _),
-            .addPriceAlerts(let deviceId, _),
-            .deletePriceAlerts(let deviceId, _):
-            return "/v1/devices/\(deviceId)/price_alerts"
+        case .getPriceAlerts,
+            .addPriceAlerts,
+            .deletePriceAlerts:
+            return "/v2/devices/price_alerts"
         case .getTransactions(_, _, let assetId, let fromTimestamp):
             var path = "/v2/devices/transactions?from_timestamp=\(fromTimestamp)"
             if let assetId {
@@ -151,7 +151,10 @@ public enum GemDeviceAPI: TargetType {
             .getDeviceRedemptionOption(let deviceId, _),
             .getSubscriptions(let deviceId),
             .addSubscriptions(let deviceId, _),
-            .deleteSubscriptions(let deviceId, _):
+            .deleteSubscriptions(let deviceId, _),
+            .getPriceAlerts(let deviceId, _),
+            .addPriceAlerts(let deviceId, _),
+            .deletePriceAlerts(let deviceId, _):
             return ["x-device-id": deviceId]
         case .addDevice(let device),
             .updateDevice(let device):

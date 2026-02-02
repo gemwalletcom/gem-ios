@@ -5,7 +5,6 @@ import Primitives
 import Preferences
 import WebSocketClient
 import GemAPI
-import DeviceService
 
 public actor PriceObserverService: Sendable {
 
@@ -28,7 +27,9 @@ public actor PriceObserverService: Sendable {
         self.priceService = priceService
         self.preferences = preferences
         self.securePreferences = securePreferences
-        self.webSocket = WebSocketConnection(url: Constants.deviceStreamWebSocketURL)
+        let requestProvider = AuthenticatedRequestProvider(securePreferences: securePreferences)
+        let configuration = WebSocketConfiguration(requestProvider: requestProvider)
+        self.webSocket = WebSocketConnection(configuration: configuration)
     }
 
     deinit {
@@ -42,32 +43,8 @@ public actor PriceObserverService: Sendable {
 
         observeTask = Task { [weak self] in
             guard let self else { return }
-            do {
-                let socket = try self.createAuthenticatedWebSocket()
-                await self.setWebSocket(socket)
-                await self.observeConnection()
-            } catch {
-                debugLog("price observer: authentication failed: \(error)")
-            }
+            await self.observeConnection()
         }
-    }
-
-    nonisolated private func createAuthenticatedWebSocket() throws -> any WebSocketConnectable {
-        let deviceId = try securePreferences.getDeviceId()
-        let keyPair = try DeviceService.getOrCreateKeyPair(securePreferences: securePreferences)
-        let signer = try DeviceRequestSigner(privateKey: keyPair.privateKey)
-
-        var request = URLRequest(url: Constants.deviceStreamWebSocketURL)
-        request.httpMethod = "GET"
-        request.setValue(deviceId, forHTTPHeaderField: "x-device-id")
-        try signer.sign(request: &request)
-
-        let configuration = WebSocketConfiguration(request: request)
-        return WebSocketConnection(configuration: configuration)
-    }
-
-    private func setWebSocket(_ socket: any WebSocketConnectable) {
-        webSocket = socket
     }
 
     public func disconnect() async {
@@ -84,7 +61,7 @@ public actor PriceObserverService: Sendable {
         guard newAssets.isNotEmpty else {
             return
         }
-        let message = StreamMessage.addPrices(StreamMessageAddPricesInner(assets: newAssets))
+        let message = StreamMessage.addPrices(StreamMessagePrices(assets: newAssets))
         try await sendMessage(message)
         subscribedAssetIds.formUnion(newAssets)
     }
@@ -96,7 +73,7 @@ public actor PriceObserverService: Sendable {
     public func setupAssets(walletId: WalletId) async throws {
         currentWalletId = walletId
         let assets = try priceService.observableAssets(walletId: walletId)
-        let message = StreamMessage.subscribePrices(StreamMessageSubscribePricesInner(assets: assets))
+        let message = StreamMessage.subscribePrices(StreamMessagePrices(assets: assets))
         try await sendMessage(message)
         subscribedAssetIds = Set(assets)
     }

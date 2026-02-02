@@ -18,6 +18,14 @@ public struct StreamBalanceUpdate: Codable, Sendable {
 	}
 }
 
+public struct StreamMessagePrices: Codable, Sendable {
+	public let assets: [AssetId]
+
+	public init(assets: [AssetId]) {
+		self.assets = assets
+	}
+}
+
 public struct StreamTransactionsUpdate: Codable, Sendable {
 	public let walletId: WalletId
 	public let transactions: [Transaction]
@@ -83,37 +91,10 @@ public enum StreamEvent: Codable, Sendable {
 	}
 }
 
-
-/// Generated type representing the anonymous struct variant `SubscribePrices` of the `StreamMessage` Rust enum
-public struct StreamMessageSubscribePricesInner: Codable, Sendable {
-	public let assets: [AssetId]?
-
-	public init(assets: [AssetId]?) {
-		self.assets = assets
-	}
-}
-
-/// Generated type representing the anonymous struct variant `UnsubscribePrices` of the `StreamMessage` Rust enum
-public struct StreamMessageUnsubscribePricesInner: Codable, Sendable {
-	public let assets: [AssetId]?
-
-	public init(assets: [AssetId]?) {
-		self.assets = assets
-	}
-}
-
-/// Generated type representing the anonymous struct variant `AddPrices` of the `StreamMessage` Rust enum
-public struct StreamMessageAddPricesInner: Codable, Sendable {
-	public let assets: [AssetId]?
-
-	public init(assets: [AssetId]?) {
-		self.assets = assets
-	}
-}
 public enum StreamMessage: Codable, Sendable {
-	case subscribePrices(StreamMessageSubscribePricesInner)
-	case unsubscribePrices(StreamMessageUnsubscribePricesInner)
-	case addPrices(StreamMessageAddPricesInner)
+	case subscribePrices(StreamMessagePrices)
+	case unsubscribePrices(StreamMessagePrices)
+	case addPrices(StreamMessagePrices)
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case subscribePrices,
@@ -130,17 +111,17 @@ public enum StreamMessage: Codable, Sendable {
 		if let type = try? container.decode(CodingKeys.self, forKey: .type) {
 			switch type {
 			case .subscribePrices:
-				if let content = try? container.decode(StreamMessageSubscribePricesInner.self, forKey: .data) {
+				if let content = try? container.decode(StreamMessagePrices.self, forKey: .data) {
 					self = .subscribePrices(content)
 					return
 				}
 			case .unsubscribePrices:
-				if let content = try? container.decode(StreamMessageUnsubscribePricesInner.self, forKey: .data) {
+				if let content = try? container.decode(StreamMessagePrices.self, forKey: .data) {
 					self = .unsubscribePrices(content)
 					return
 				}
 			case .addPrices:
-				if let content = try? container.decode(StreamMessageAddPricesInner.self, forKey: .data) {
+				if let content = try? container.decode(StreamMessagePrices.self, forKey: .data) {
 					self = .addPrices(content)
 					return
 				}
