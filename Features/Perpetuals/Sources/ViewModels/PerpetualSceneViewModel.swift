@@ -36,7 +36,7 @@ public final class PerpetualSceneViewModel {
 
     public var positions: [PerpetualPositionData] = []
     public var perpetualData: PerpetualData = .empty
-    public var perpetualTotalValue: Double = .zero
+    public var perpetualTotalValue: TotalFiatValue = .zero
     public var transactions: [TransactionExtended] = []
 
     public var state: StateViewType<[ChartCandleStick]> = .loading

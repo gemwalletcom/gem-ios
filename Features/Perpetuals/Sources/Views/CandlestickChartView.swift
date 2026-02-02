@@ -219,7 +219,7 @@ struct CandlestickChartView: View {
             period: period,
             date: nil,
             price: lastCandle.close,
-            priceChangePercentage: ChartPriceViewModel.priceChangePercentage(close: lastCandle.close, base: base),
+            priceChangePercentage: PriceChangeCalculator.calculate(.percentage(from: base, to: lastCandle.close)),
             formatter: formatter
         )
     }
@@ -230,7 +230,7 @@ struct CandlestickChartView: View {
             period: period,
             date: candle.date,
             price: candle.close,
-            priceChangePercentage: ChartPriceViewModel.priceChangePercentage(close: candle.close, base: base),
+            priceChangePercentage: PriceChangeCalculator.calculate(.percentage(from: base, to: candle.close)),
             formatter: formatter
         )
     }
