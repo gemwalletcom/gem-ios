@@ -52,19 +52,7 @@ public struct TransactionViewModel: Sendable {
             case .incoming: Images.Transaction.incoming
             case .outgoing, .selfTransfer: Images.Transaction.outgoing
             }
-        case .swap,
-                .tokenApproval,
-                .stakeDelegate,
-                .stakeUndelegate,
-                .stakeRewards,
-                .stakeRedelegate,
-                .stakeWithdraw,
-                .assetActivation,
-                .perpetualOpenPosition,
-                .perpetualClosePosition,
-                .stakeFreeze,
-                .stakeUnfreeze,
-                .perpetualModifyPosition: .none
+        case .swap, .tokenApproval, .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw, .assetActivation, .perpetualOpenPosition, .perpetualClosePosition, .stakeFreeze, .stakeUnfreeze, .perpetualModifyPosition: .none
         }
     }
 

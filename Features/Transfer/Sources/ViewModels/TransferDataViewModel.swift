@@ -65,15 +65,7 @@ struct TransferDataViewModel {
 
     var websiteURL: URL? {
         switch type {
-        case .transfer,
-            .deposit,
-            .withdrawal,
-            .transferNft,
-            .swap,
-            .tokenApprove,
-            .stake,
-            .account,
-            .perpetual: .none
+        case .transfer, .deposit, .withdrawal, .transferNft, .swap, .tokenApprove, .stake, .account, .perpetual: .none
         case .generic(_, let metadata, _):
             URL(string: metadata.url)
         }
@@ -81,14 +73,7 @@ struct TransferDataViewModel {
 
     func availableValue(metadata: TransferDataMetadata?) -> BigInt {
         switch type {
-        case .transfer,
-                .deposit,
-                .withdrawal,
-                .swap,
-                .tokenApprove,
-                .generic,
-                .transferNft,
-                .perpetual: metadata?.available ?? .zero
+        case .transfer, .deposit, .withdrawal, .swap, .tokenApprove, .generic, .transferNft, .perpetual: metadata?.available ?? .zero
         case .account(_, let type):
             switch type {
             case .activate: metadata?.available ?? .zero

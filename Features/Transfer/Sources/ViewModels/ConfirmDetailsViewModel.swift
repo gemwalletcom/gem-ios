@@ -35,14 +35,7 @@ extension ConfirmDetailsViewModel: ItemModelProvidable {
             case .modify(let data):
                 .perpetualModifyPosition(PerpetualModifyViewModel(data: data))
             }
-        case .transfer,
-            .deposit,
-            .withdrawal,
-            .transferNft,
-            .tokenApprove,
-            .stake,
-            .account,
-            .generic:
+        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .stake, .account, .generic:
             .empty
         }
     }

@@ -68,15 +68,8 @@ extension ConfirmRecipientViewModel {
             case .rewards: false
             case .freeze: true
             }
-        case .account,
-                .swap,
-                .perpetual: false
-        case .transfer,
-                .transferNft,
-                .deposit,
-                .withdrawal,
-                .generic,
-                .tokenApprove: true
+        case .account, .swap, .perpetual: false
+        case .transfer, .transferNft, .deposit, .withdrawal, .generic, .tokenApprove: true
         }
     }
 }

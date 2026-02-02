@@ -16,15 +16,7 @@ public struct ConfirmAppViewModel: ItemModelProvidable {
 
     var websiteURL: URL? {
         switch type {
-        case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .swap,
-                .tokenApprove,
-                .stake,
-                .account,
-                .perpetual: .none
+        case .transfer, .deposit, .withdrawal, .transferNft, .swap, .tokenApprove, .stake, .account, .perpetual: .none
         case .generic(_, let metadata, _):
             URL(string: metadata.url)
         }
@@ -59,15 +51,7 @@ extension ConfirmAppViewModel {
 extension ConfirmAppViewModel {
     private var appValue: String? {
         switch type {
-        case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .swap,
-                .tokenApprove,
-                .stake,
-                .account,
-                .perpetual: .none
+        case .transfer, .deposit, .withdrawal, .transferNft, .swap, .tokenApprove, .stake, .account, .perpetual: .none
         case .generic(_, let metadata, _):
             metadata.shortName
         }
@@ -75,15 +59,7 @@ extension ConfirmAppViewModel {
 
     private var assetImage: AssetImage? {
         switch type {
-        case .transfer,
-                .deposit,
-                .withdrawal,
-                .transferNft,
-                .swap,
-                .tokenApprove,
-                .stake,
-                .account,
-                .perpetual:
+        case .transfer, .deposit, .withdrawal, .transferNft, .swap, .tokenApprove, .stake, .account, .perpetual:
                 .none
         case let .generic(_, session, _):
             AssetImage(imageURL: session.icon.asURL)
