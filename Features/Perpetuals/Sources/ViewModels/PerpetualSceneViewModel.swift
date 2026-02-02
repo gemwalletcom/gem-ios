@@ -127,6 +127,12 @@ public extension PerpetualSceneViewModel {
         }
     }
 
+    func refreshPositions() {
+        Task {
+            await observerService.update(for: wallet)
+        }
+    }
+
     func onAppear() async {
         await subscribeCandles(period: currentPeriod)
         observeTask = Task {
@@ -263,7 +269,6 @@ public extension PerpetualSceneViewModel {
 
     func onAutocloseComplete() {
         isPresentingAutoclose = false
-        fetch()
     }
 }
 

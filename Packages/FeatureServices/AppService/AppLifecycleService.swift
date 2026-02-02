@@ -45,7 +45,7 @@ public actor AppLifecycleService: Sendable {
         async let assets: () = setupPriceAssets(wallet: wallet)
         async let perpetual: () = {
             if preferences.isPerpetualEnabled, wallet.isMultiCoins {
-                await hyperliquidObserverService.connect(for: wallet)
+                await hyperliquidObserverService.setup(for: wallet)
             } else {
                 await hyperliquidObserverService.disconnect()
             }
@@ -56,7 +56,7 @@ public actor AppLifecycleService: Sendable {
     public func updatePerpetualConnection() async {
         guard let wallet = currentWallet, wallet.isMultiCoins else { return }
         if preferences.isPerpetualEnabled {
-            await hyperliquidObserverService.connect(for: wallet)
+            await hyperliquidObserverService.setup(for: wallet)
         } else {
             await hyperliquidObserverService.disconnect()
         }
@@ -110,7 +110,7 @@ extension AppLifecycleService {
         async let price: () = priceObserverService.connect()
         async let perpetual: () = {
             if let wallet, wallet.isMultiCoins, preferences.isPerpetualEnabled {
-                await hyperliquidObserverService.connect(for: wallet)
+                await hyperliquidObserverService.setup(for: wallet)
             }
         }()
         _ = await (price, perpetual)

@@ -35,18 +35,10 @@ public actor HyperliquidObserverService: PerpetualObservable {
 
     // MARK: - Public API
 
-    public func connect(for wallet: Wallet) async {
-        guard currentWallet?.id != wallet.id else { return }
-
-        await disconnect()
-        currentWallet = wallet
-
-        guard observeTask == nil else { return }
-
-        observeTask = Task { [weak self] in
-            guard let self else { return }
-            await observeConnection()
-        }
+    public func setup(for wallet: Wallet) async {
+        async let connect: () = connect(for: wallet)
+        async let update: () = update(for: wallet)
+        _ = await (connect, update)
     }
 
     public func disconnect() async {
@@ -67,7 +59,32 @@ public actor HyperliquidObserverService: PerpetualObservable {
         try await send(HyperliquidRequest(method: .unsubscribe, subscription: subscription))
     }
 
+    public func update(for wallet: Wallet) async {
+        guard let address = wallet.hyperliquidAccount?.address else { return }
+        do {
+            async let fetchPositions: () = perpetualService.fetchPositions(walletId: wallet.walletId, address: address)
+            async let updateMarkets: () = perpetualService.updateMarkets()
+            _ = try await (fetchPositions, updateMarkets)
+        } catch {
+            debugLog("HyperliquidObserver: update failed: \(error)")
+        }
+    }
+
     // MARK: - Private
+
+    private func connect(for wallet: Wallet) async {
+        guard currentWallet?.id != wallet.id else { return }
+
+        await disconnect()
+        currentWallet = wallet
+
+        guard observeTask == nil else { return }
+
+        observeTask = Task { [weak self] in
+            guard let self else { return }
+            await observeConnection()
+        }
+    }
 
     private func observeConnection() async {
         for await event in await webSocket.connect() {
@@ -87,7 +104,6 @@ public actor HyperliquidObserverService: PerpetualObservable {
     private func handleConnected() async {
         guard let address = currentWallet?.hyperliquidAccount?.address else { return }
         do {
-            try await perpetualService.updateMarkets()
             try await send(HyperliquidRequest(method: .subscribe, subscription: .clearinghouseState(user: address)))
             try await send(HyperliquidRequest(method: .subscribe, subscription: .openOrders(user: address)))
         } catch {
