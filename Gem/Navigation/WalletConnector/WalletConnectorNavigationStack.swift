@@ -11,7 +11,6 @@ import Style
 
 struct WalletConnectorNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
-    @Environment(\.keystore) private var keystore
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter

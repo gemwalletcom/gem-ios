@@ -24,14 +24,12 @@ public struct FiatScene: View {
             amountSelectorSection
             providerSection
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.actionButtonState, showProgress: true),
                 action: model.onSelectContinue
             )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
         }
         .contentMargins([.top], .zero, for: .scrollContent)
         .frame(maxWidth: .infinity)
