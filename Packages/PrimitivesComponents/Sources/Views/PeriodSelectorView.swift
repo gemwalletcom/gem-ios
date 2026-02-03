@@ -26,7 +26,7 @@ public struct PeriodSelectorView: View {
                     Text(period.title)
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
-                        .padding(6)
+                        .padding(.space6)
                         .background(selectedPeriod == period ? Colors.white : .clear)
                         .cornerRadius(8)
                 }

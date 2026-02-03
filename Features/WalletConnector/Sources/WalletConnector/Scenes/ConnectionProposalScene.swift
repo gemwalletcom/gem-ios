@@ -21,7 +21,7 @@ public struct ConnectionProposalScene: View {
                 VStack(alignment: .center) {
                     AsyncImageView(url: model.imageUrl, size: .image.semiLarge)
                 }
-                .padding(.top, 8)
+                .padding(.top, .small)
             }
             .cleanListRow()
 

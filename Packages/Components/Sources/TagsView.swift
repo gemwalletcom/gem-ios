@@ -41,7 +41,7 @@ public struct TagView<T: TagItemViewable>: View {
         Button {
             action(tag)
         } label: {
-            HStack(spacing: .tiny + .space2) {
+            HStack(spacing: .space6) {
                 if let image = tag.image {
                     image
                         .resizable()
@@ -54,7 +54,7 @@ public struct TagView<T: TagItemViewable>: View {
             }
             .foregroundStyle(Color.primary.opacity(tag.opacity))
             .padding(.horizontal, .small)
-            .padding(.vertical, .tiny + .space2)
+            .padding(.vertical, .space6)
             .background {
                 RoundedRectangle(
                     cornerRadius: .space12,

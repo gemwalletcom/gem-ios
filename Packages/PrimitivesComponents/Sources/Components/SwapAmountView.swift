@@ -38,8 +38,8 @@ struct SwapAmountView: View {
                 .colorMultiply(Colors.black)
                 .frame(width: 18, height: 22)
                 .scaledToFit()
-                .padding(.bottom, 8)
-                .offset(y: -8)
+                .padding(.bottom, .small)
+                .offset(y: -.small)
             SwapAmountSingleView(field: to)
         }
     }
