@@ -20,7 +20,7 @@ import Validators
 @MainActor
 @Observable
 public final class SwapSceneViewModel {
-    static let inputPercents = [25, 50, 100]
+    static let inputPercentSuggestions = [25, 50, 100].map { PercentageSuggestion(value: $0) }
     static let quoteTaskDebounceTimeout = Duration.milliseconds(150)
 
     public let wallet: Wallet
