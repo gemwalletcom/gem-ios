@@ -18,16 +18,16 @@ struct TotalValueRequestTests {
 
         let ethId = AssetId(chain: .ethereum)
         try priceStore.updatePrice(
-            price: AssetPrice(assetId: ethId, price: 3000, priceChangePercentage24h: 10, updatedAt: .now),
+            price: AssetPrice(assetId: ethId, price: 1100, priceChangePercentage24h: 10, updatedAt: .now),
             currency: Currency.usd.rawValue
         )
 
         try db.dbQueue.read { db in
             let result = try TotalValueRequest(walletId: .mock(), balanceType: .wallet).fetch(db)
 
-            #expect(result.value > 0)
-            #expect(result.pnlAmount != 0)
-            #expect(result.pnlPercentage != 0)
+            #expect(result.value == 3300)
+            #expect(result.pnlAmount == 300)
+            #expect(result.pnlPercentage == 10)
         }
     }
 
@@ -54,14 +54,14 @@ struct TotalValueRequestTests {
 
         let ethId = AssetId(chain: .ethereum)
         try priceStore.updatePrice(
-            price: AssetPrice(assetId: ethId, price: 3000, priceChangePercentage24h: 0, updatedAt: .now),
+            price: AssetPrice(assetId: ethId, price: 1100, priceChangePercentage24h: 0, updatedAt: .now),
             currency: Currency.usd.rawValue
         )
 
         try db.dbQueue.read { db in
             let result = try TotalValueRequest(walletId: .mock(), balanceType: .wallet).fetch(db)
 
-            #expect(result.value > 0)
+            #expect(result.value == 3300)
             #expect(result.pnlAmount == 0)
             #expect(result.pnlPercentage == 0)
         }
