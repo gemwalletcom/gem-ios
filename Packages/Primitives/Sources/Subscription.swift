@@ -4,36 +4,24 @@
 
 import Foundation
 
-public struct Subscription: Codable, Equatable, Hashable, Sendable {
-	public let wallet_index: Int32
-	public let chain: Chain
-	public let address: String
-
-	public init(wallet_index: Int32, chain: Chain, address: String) {
-		self.wallet_index = wallet_index
-		self.chain = chain
-		self.address = address
-	}
-}
-
 public struct WalletSubscription: Codable, Equatable, Hashable, Sendable {
-	public let wallet_id: String
+	public let walletId: String
 	public let source: WalletSource?
 	public let subscriptions: [ChainAddress]
 
-	public init(wallet_id: String, source: WalletSource?, subscriptions: [ChainAddress]) {
-		self.wallet_id = wallet_id
+	public init(walletId: String, source: WalletSource?, subscriptions: [ChainAddress]) {
+		self.walletId = walletId
 		self.source = source
 		self.subscriptions = subscriptions
 	}
 }
 
 public struct WalletSubscriptionChains: Codable, Equatable, Hashable, Sendable {
-	public let wallet_id: String
+	public let walletId: String
 	public let chains: [Chain]
 
-	public init(wallet_id: String, chains: [Chain]) {
-		self.wallet_id = wallet_id
+	public init(walletId: String, chains: [Chain]) {
+		self.walletId = walletId
 		self.chains = chains
 	}
 }

@@ -48,14 +48,12 @@ struct SetPriceAlertScene: View {
                 ListAssetItemView(model: model.assetItemViewModel(for: assetData))
             }
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: Localized.Transfer.confirm,
                 type: .primary(model.confirmButtonState),
                 action: confirm
             )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .padding(.bottom, Spacing.scene.bottom)
         }
         .toolbar {
             ToolbarItem(placement: .principal) {

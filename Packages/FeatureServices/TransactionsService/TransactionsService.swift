@@ -42,7 +42,7 @@ public final class TransactionsService: Sendable {
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let response = try await provider.getDeviceTransactions(
             deviceId: deviceId,
-            walletId: try wallet.walletIdentifier().id,
+            walletId: wallet.id,
             fromTimestamp: store.transactionsTimestamp
         )
 
@@ -59,7 +59,7 @@ public final class TransactionsService: Sendable {
         let deviceId = try await deviceService.getSubscriptionsDeviceId()
         let response = try await provider.getDeviceTransactionsForAsset(
             deviceId: deviceId,
-            walletId: try wallet.walletIdentifier().id,
+            walletId: wallet.id,
             asset: assetId,
             fromTimestamp: store.transactionsForAssetTimestamp(assetId: assetId.identifier)
         )

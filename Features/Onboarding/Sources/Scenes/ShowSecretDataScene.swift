@@ -34,15 +34,11 @@ struct ShowSecretDataScene: View {
             .frame(maxWidth: .infinity, alignment: .center)
             .cleanListRow()
         }
-        .safeAreaView {
-            if model.continueAction != nil {
-                StateButton(
-                    text: Localized.Common.continue,
-                    action: continueAction
-                )
-                .frame(maxWidth: .scene.button.maxWidth)
-                .padding(.bottom, .scene.bottom)
-            }
+        .safeAreaButton(isVisible: model.continueAction != nil) {
+            StateButton(
+                text: Localized.Common.continue,
+                action: continueAction
+            )
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
         .listSectionSpacing(.custom(.medium))

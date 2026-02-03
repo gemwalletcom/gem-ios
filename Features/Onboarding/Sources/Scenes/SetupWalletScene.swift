@@ -44,14 +44,12 @@ public struct SetupWalletScene: View {
             }
         }
         .listSectionSpacing(.compact)
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: Localized.Common.done,
                 type: .primary(.normal),
                 action: model.onComplete
             )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .padding(.bottom, Spacing.scene.bottom)
         }
         .observeQuery(request: $model.walletRequest, value: $model.wallet)
         .onChange(of: model.nameInput, model.onChangeWalletName)
