@@ -11,7 +11,10 @@ struct TotalValueRequestTests {
     @Test
     func walletBalanceWithPrice() throws {
         let db = DB.mockAssets()
+        let fiatRateStore = FiatRateStore(db: db)
         let priceStore = PriceStore(db: db)
+
+        try fiatRateStore.add([FiatRate(symbol: Currency.usd.rawValue, rate: 1)])
 
         let ethId = AssetId(chain: .ethereum)
         try priceStore.updatePrice(
@@ -44,7 +47,10 @@ struct TotalValueRequestTests {
     @Test
     func walletBalanceZeroChange() throws {
         let db = DB.mockAssets()
+        let fiatRateStore = FiatRateStore(db: db)
         let priceStore = PriceStore(db: db)
+
+        try fiatRateStore.add([FiatRate(symbol: Currency.usd.rawValue, rate: 1)])
 
         let ethId = AssetId(chain: .ethereum)
         try priceStore.updatePrice(
