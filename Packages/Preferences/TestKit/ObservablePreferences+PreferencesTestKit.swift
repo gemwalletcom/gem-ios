@@ -9,7 +9,7 @@ public extension ObservablePreferences {
         preferences: Preferences = .mock(),
         isPerpetualEnabled: Bool = true
     ) -> ObservablePreferences {
-        var prefs = preferences
+        let prefs = preferences
         prefs.isPerpetualEnabled = isPerpetualEnabled
         return ObservablePreferences(preferences: prefs)
     }

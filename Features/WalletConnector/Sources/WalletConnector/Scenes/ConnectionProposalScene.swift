@@ -41,13 +41,11 @@ public struct ConnectionProposalScene: View {
                 )
             }
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: model.buttonTitle,
                 action: onAccept
             )
-            .padding(.bottom, .scene.bottom)
-            .frame(maxWidth: .scene.button.maxWidth)
         }
         .navigationTitle(model.title)
         .navigationDestination(for: Scenes.SelectWallet.self) { _ in

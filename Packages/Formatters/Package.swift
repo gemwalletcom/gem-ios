@@ -15,21 +15,18 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Localization", path: "../Localization"),
     ],
     targets: [
         .target(
             name: "Formatters",
             dependencies: [
                 "Primitives",
-                "Localization"
             ]
         ),
         .testTarget(
             name: "FormattersTests",
             dependencies: [
                 "Formatters",
-                "Localization",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ]
         ),

@@ -11,9 +11,7 @@ import Components
 import AssetsService
 
 struct PriceAlertsNavigationView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.priceService) private var priceService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.walletService) private var walletService
     @Environment(\.activityService) private var activityService

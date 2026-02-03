@@ -26,7 +26,7 @@ public struct DiscoverAssetsService: Sendable {
         try await assetsService
             .getDeviceAssets(
                 deviceId: deviceId,
-                walletId: wallet.walletIdentifier().id,
+                walletId: wallet.id,
                 fromTimestamp: fromTimestamp
             )
     }

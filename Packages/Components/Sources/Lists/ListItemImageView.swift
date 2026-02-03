@@ -53,28 +53,3 @@ public struct ListItemImageView: View {
         }
     }
 }
-
-public struct ListItemImageValue {
-    public let title: String
-    public let subtitle: String
-    public let assetImage: AssetImage?
-    
-    public init(title: String, subtitle: String, assetImage: AssetImage?) {
-        self.title = title
-        self.subtitle = subtitle
-        self.assetImage = assetImage
-    }
-}
-
-#Preview {
-    ListItemImageView(
-        title: "Title",
-        subtitle: "Subtitle",
-        assetImage: .resourceImage(image: "logo")
-    )
-    ListItemImageView(
-        title: "Title",
-        subtitle: "Subtitle",
-        assetImage: nil
-    )
-}

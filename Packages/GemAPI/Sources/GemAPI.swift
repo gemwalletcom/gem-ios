@@ -6,8 +6,6 @@ import Primitives
 
 public enum GemAPI: TargetType {
     case getFiatAssets(FiatQuoteType)
-    case getFiatQuotes(FiatQuoteType, AssetId, FiatQuoteRequest)
-    case getFiatQuoteUrl(FiatQuoteUrlRequest)
     case getSwapAssets
     case getConfig
     case getNameRecord(name: String, chain: String)
@@ -25,8 +23,7 @@ public enum GemAPI: TargetType {
 
     public var method: HTTPMethod {
         switch self {
-        case .getFiatQuotes,
-            .getFiatAssets,
+        case .getFiatAssets,
             .getSwapAssets,
             .getConfig,
             .getNameRecord,
@@ -37,8 +34,7 @@ public enum GemAPI: TargetType {
             .markets:
             return .GET
         case .getAssets,
-            .getPrices,
-            .getFiatQuoteUrl:
+            .getPrices:
             return .POST
         }
     }
@@ -47,10 +43,6 @@ public enum GemAPI: TargetType {
         switch self {
         case .getFiatAssets(let type):
             return "/v1/fiat/assets/\(type.rawValue)"
-        case .getFiatQuotes(let type, let assetId, _):
-            return "/v1/fiat/quotes/\(type.rawValue)/\(assetId.identifier)"
-        case .getFiatQuoteUrl:
-            return "/v1/fiat/quotes/url"
         case .getSwapAssets:
             return "/v1/swap/assets"
         case .getConfig:
@@ -83,16 +75,8 @@ public enum GemAPI: TargetType {
             .getAsset,
             .markets:
             return .plain
-        case .getFiatQuoteUrl(let request):
-            return .encodable(request)
         case .getAssets(let value):
             return .encodable(value.map { $0.identifier })
-        case let .getFiatQuotes(_, _, request):
-            let params: [String: Any] = [
-                "amount": request.amount,
-                "currency": request.currency
-            ]
-            return .params(params)
         case .getCharts(_, let period):
             return .params([
                 "period": period

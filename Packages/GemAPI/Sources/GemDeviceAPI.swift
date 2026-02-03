@@ -40,6 +40,9 @@ public enum GemDeviceAPI: TargetType {
     case getNotifications(deviceId: String, fromTimestamp: Int)
     case markNotificationsRead(deviceId: String)
 
+    case getFiatQuotes(deviceId: String, walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest)
+    case getFiatQuoteUrl(deviceId: String, walletId: String, quoteId: String)
+
     public var baseUrl: URL {
         Constants.apiURL
     }
@@ -57,7 +60,9 @@ public enum GemDeviceAPI: TargetType {
             .getDeviceRewardsEvents,
             .getDeviceRedemptionOption,
             .getNotifications,
-            .isDeviceRegistered:
+            .isDeviceRegistered,
+            .getFiatQuotes,
+            .getFiatQuoteUrl:
             return .GET
         case .addDevice,
             .addSubscriptions,
@@ -133,6 +138,10 @@ public enum GemDeviceAPI: TargetType {
             return "/v2/devices/notifications?from_timestamp=\(fromTimestamp)"
         case .markNotificationsRead:
             return "/v2/devices/notifications/read"
+        case .getFiatQuotes(_, _, let type, let assetId, _):
+            return "/v2/devices/fiat/quotes/\(type.rawValue)/\(assetId.identifier)"
+        case .getFiatQuoteUrl(_, _, let quoteId):
+            return "/v2/devices/fiat/quotes/\(quoteId)/url"
         }
     }
 
@@ -165,7 +174,9 @@ public enum GemDeviceAPI: TargetType {
             .getDeviceRewardsEvents(let deviceId, let walletId),
             .createDeviceReferral(let deviceId, let walletId, _),
             .useDeviceReferralCode(let deviceId, let walletId, _),
-            .redeemDeviceRewards(let deviceId, let walletId, _):
+            .redeemDeviceRewards(let deviceId, let walletId, _),
+            .getFiatQuotes(let deviceId, let walletId, _, _, _),
+            .getFiatQuoteUrl(let deviceId, let walletId, _):
             return ["x-device-id": deviceId, "x-wallet-id": walletId]
         default:
             return [:]
@@ -186,12 +197,19 @@ public enum GemDeviceAPI: TargetType {
             .getNotifications,
             .markNotificationsRead,
             .getTransactions,
-            .isDeviceRegistered:
+            .isDeviceRegistered,
+            .getFiatQuoteUrl:
             return .plain
         case .getPriceAlerts(_, let assetId):
             let params: [String: Any] = [
                 "asset_id": assetId,
             ].compactMapValues { $0 }
+            return .params(params)
+        case .getFiatQuotes(_, _, _, _, let request):
+            let params: [String: Any] = [
+                "amount": request.amount,
+                "currency": request.currency
+            ]
             return .params(params)
         case .addDevice(let device),
             .updateDevice(let device):
