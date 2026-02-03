@@ -7,5 +7,6 @@ struct PriceSuggestion: SuggestionViewable {
     let title: String
     let value: String
 
+    var inputValue: String { value }
     var id: String { title + value }
 }

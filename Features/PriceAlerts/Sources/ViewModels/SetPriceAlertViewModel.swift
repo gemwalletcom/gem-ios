@@ -20,13 +20,11 @@ public final class SetPriceAlertViewModel {
     private let onComplete: StringAction
     private let preferences = Preferences.standard
     private let currencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
+    private let roundingFormatter = RoundingFormatter()
+    private let percentageSuggestionsFormatter = PercentageSuggestionsFormatter()
+    private let priceSuggestionPercent: Double = 5
 
     var state: SetPriceAlertViewModelState
-    let priceSuggestionPercents: [Int] = [-5, 5]
-
-    var percentageSuggestions: [PercentageSuggestion] {
-        [5, 10, 15].map { PercentageSuggestion(value: $0) }
-    }
     
     public init(
         walletId: WalletId,
@@ -49,27 +47,25 @@ public final class SetPriceAlertViewModel {
         )
     }
     
-    func priceSuggestions(for price: Price?) -> [PriceSuggestion] {
-        guard let currentPrice = price?.price, currentPrice > 0 else { return [] }
+    func percentageSuggestions(for price: Price?) -> [PercentageSuggestion] {
+        guard let currentPrice = price?.price else { return [] }
+        return percentageSuggestionsFormatter.suggestions(for: currentPrice).map {
+            PercentageSuggestion(value: $0)
+        }
+    }
 
-        return priceSuggestionPercents.compactMap { percent in
-            let value = currentPrice * (1 + Double(percent) / 100)
-            guard let normalizedValue = currencyFormatter.normalizedDouble(from: value) else {
-                return nil
-            }
-            return PriceSuggestion(
-                title: currencyFormatter.string(normalizedValue),
-                value: String(normalizedValue)
+    func priceSuggestions(for price: Price?) -> [PriceSuggestion] {
+        guard let currentPrice = price?.price else { return [] }
+        return roundingFormatter.roundedValues(for: currentPrice, byPercent: priceSuggestionPercent).map { value in
+            PriceSuggestion(
+                title: currencyFormatter.string(value),
+                value: String(value)
             )
         }
     }
 
-    func onSelectPriceSuggestion(_ suggestion: PriceSuggestion) {
-        state.amount = suggestion.value
-    }
-
-    func onSelectPercentage(_ suggestion: PercentageSuggestion) {
-        state.amount = String(suggestion.value)
+    func onSelectSuggestion(_ suggestion: some SuggestionViewable) {
+        state.amount = suggestion.inputValue
     }
     
     var alertDirectionTitle: String {

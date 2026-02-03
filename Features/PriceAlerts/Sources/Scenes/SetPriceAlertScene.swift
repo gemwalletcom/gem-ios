@@ -100,15 +100,18 @@ extension SetPriceAlertScene {
     var accessoryView: some View {
         switch model.state.type {
         case .price:
-            SuggestionsAccessoryView(
-                suggestions: model.priceSuggestions(for: assetData.price),
-                onSelect: onSelectPriceSuggestion,
-                onDone: { focusedField = false }
-            )
+            suggestionsView(model.priceSuggestions(for: assetData.price))
         case .percentage:
+            suggestionsView(model.percentageSuggestions(for: assetData.price))
+        }
+    }
+
+    @ViewBuilder
+    private func suggestionsView(_ suggestions: [some SuggestionViewable]) -> some View {
+        if suggestions.isNotEmpty {
             SuggestionsAccessoryView(
-                suggestions: model.percentageSuggestions,
-                onSelect: onSelectPercentage,
+                suggestions: suggestions,
+                onSelect: onSelectSuggestion,
                 onDone: { focusedField = false }
             )
         }
@@ -122,13 +125,8 @@ extension SetPriceAlertScene {
         model.setAlertDirection(for: assetData.price)
     }
 
-    func onSelectPriceSuggestion(_ suggestion: PriceSuggestion) {
-        model.onSelectPriceSuggestion(suggestion)
-        focusedField = false
-    }
-
-    func onSelectPercentage(_ suggestion: PercentageSuggestion) {
-        model.onSelectPercentage(suggestion)
+    func onSelectSuggestion(_ suggestion: some SuggestionViewable) {
+        model.onSelectSuggestion(suggestion)
         focusedField = false
     }
 
