@@ -43,30 +43,21 @@ public actor AppLifecycleService: Sendable {
     public func setupWallet(_ wallet: Wallet) async {
         currentWallet = wallet
         async let assets: () = setupPriceAssets(wallet: wallet)
-        async let perpetual: () = {
-            if preferences.isPerpetualEnabled, wallet.isMultiCoins {
-                await hyperliquidObserverService.connect(for: wallet)
-            } else {
-                await hyperliquidObserverService.disconnect()
-            }
-        }()
+        async let perpetual: () = connectPerpetual()
         _ = await (assets, perpetual)
     }
 
     public func updatePerpetualConnection() async {
-        guard let wallet = currentWallet, wallet.isMultiCoins else { return }
-        if preferences.isPerpetualEnabled {
-            await hyperliquidObserverService.connect(for: wallet)
-        } else {
-            await hyperliquidObserverService.disconnect()
-        }
+        await connectPerpetual()
     }
 
     public func handleScenePhase(_ phase: ScenePhase) async {
         switch phase {
         case .active:
             debugLog("AppLifecycleService: App active — connecting observers")
-            await connectObservers()
+            async let observers: () = connectObservers()
+            async let perpetual: () = connectPerpetual()
+            _ = await (observers, perpetual)
         case .background:
             debugLog("AppLifecycleService: App background — disconnecting observers")
             await disconnectObservers()
@@ -106,14 +97,15 @@ extension AppLifecycleService {
     }
 
     private func connectObservers() async {
-        let wallet = currentWallet
-        async let price: () = priceObserverService.connect()
-        async let perpetual: () = {
-            if let wallet, wallet.isMultiCoins, preferences.isPerpetualEnabled {
-                await hyperliquidObserverService.connect(for: wallet)
-            }
-        }()
-        _ = await (price, perpetual)
+        await priceObserverService.connect()
+    }
+
+    private func connectPerpetual() async {
+        if let wallet = currentWallet, wallet.isMultiCoins, preferences.isPerpetualEnabled {
+            await hyperliquidObserverService.setup(for: wallet)
+        } else {
+            await hyperliquidObserverService.disconnect()
+        }
     }
 
     private func disconnectObservers() async {
