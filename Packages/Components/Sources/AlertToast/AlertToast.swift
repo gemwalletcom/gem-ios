@@ -34,11 +34,11 @@ public struct AlertToast: View {
 
             HStack(spacing: .medium) {
                 Image(systemName: systemImage)
-                    .foregroundColor(imageColor)
+                    .foregroundStyle(imageColor)
 
                 Text(LocalizedStringKey(title))
                     .font(titleFont ?? Font.headline.bold())
-                    .foregroundColor(titleColor)
+                    .foregroundStyle(titleColor)
             }
             .multilineTextAlignment(.leading)
             .padding(.horizontal, .medium)

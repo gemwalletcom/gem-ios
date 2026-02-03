@@ -53,7 +53,7 @@ struct SwapAmountSingleView: View {
         HStack(spacing: 0) {
             VStack(alignment: .leading) {
                 Text(field.amount)
-                    .foregroundColor(Colors.black)
+                    .foregroundStyle(Colors.black)
                     .font(.system(size: 22))
                     .fontWeight(.medium)
                     .truncationMode(.middle)
@@ -62,7 +62,7 @@ struct SwapAmountSingleView: View {
                     Text(fiatAmount)
                         .font(.system(size: 12))
                         .fontWeight(.medium)
-                        .foregroundColor(Colors.gray)
+                        .foregroundStyle(Colors.gray)
                 }
             }
             Spacer(minLength: .extraLarge)

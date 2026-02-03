@@ -24,7 +24,7 @@ struct PerpetualSectionView: View {
     var body: some View {
         if perpetuals.isEmpty, let emptyText {
             Text(emptyText)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         } else {
             ForEach(perpetuals) { perpetualData in
                 PerpetualListItem(
