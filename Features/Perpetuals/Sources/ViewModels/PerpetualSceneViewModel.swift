@@ -41,7 +41,6 @@ public final class PerpetualSceneViewModel {
 
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .day
-    private var currentChartSubscription: ChartSubscription { ChartSubscription(coin: perpetual.name, period: currentPeriod) }
 
     public var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingModifyAlert: Bool?
@@ -117,6 +116,8 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
+
+    private var currentChartSubscription: ChartSubscription { ChartSubscription(coin: perpetual.name, period: currentPeriod) }
 }
 
 // MARK: - Actions
