@@ -53,16 +53,16 @@ public struct WalletHeaderView: View {
                         subtitle,
                         isEnabled: $isPrivacyEnabled
                     )
-                    .font(.system(size: 16, weight: .medium))
+                    .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(model.subtitleColor)
 
                     if let badge = model.subtitleBadge, !isPrivacyEnabled {
                         Text(badge)
-                            .font(.system(size: 13, weight: .medium))
+                            .font(.system(size: 15, weight: .medium))
                             .foregroundStyle(model.subtitleColor)
                             .padding(.horizontal, Spacing.small)
                             .padding(.vertical, Spacing.extraSmall)
-                            .background(model.subtitleColor.opacity(0.15))
+                            .background(model.subtitleColor.opacity(0.1))
                             .clipShape(Capsule())
                     }
                 }
