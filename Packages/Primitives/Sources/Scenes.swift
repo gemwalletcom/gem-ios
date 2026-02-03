@@ -47,10 +47,6 @@ public struct Scenes {
         public init() {}
     }
 
-    public struct Wallets: Hashable {
-        public init() {}
-    }
-
     public struct Currency: Hashable {
         public init() {}
     }
