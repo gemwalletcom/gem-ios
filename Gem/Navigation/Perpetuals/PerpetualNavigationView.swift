@@ -50,13 +50,11 @@ public struct PerpetualNavigationView: View {
             .onChange(of: isPresentingTransferData) { _, newValue in
                 if newValue == .none {
                     model.fetch()
-                    model.refreshPositions()
                 }
             }
             .onChange(of: isPresentingPerpetualRecipientData) { oldValue, newValue in
                 if newValue == .none {
                     model.fetch()
-                    model.refreshPositions()
                 }
             }
     }

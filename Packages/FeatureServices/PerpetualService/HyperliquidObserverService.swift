@@ -18,6 +18,7 @@ public actor HyperliquidObserverService: PerpetualObservable {
 
     private var observeTask: Task<Void, Never>?
     private var currentWallet: Wallet?
+    private var activeSubscriptions: Set<HyperliquidSubscription> = []
 
     public let chartService: any ChartStreamable = ChartObserverService()
 
@@ -36,9 +37,8 @@ public actor HyperliquidObserverService: PerpetualObservable {
     // MARK: - Public API
 
     public func setup(for wallet: Wallet) async {
-        async let connect: () = connect(for: wallet)
-        async let update: () = update(for: wallet)
-        _ = await (connect, update)
+        await update(for: wallet)
+        await connect(for: wallet)
     }
 
     public func disconnect() async {
@@ -52,19 +52,19 @@ public actor HyperliquidObserverService: PerpetualObservable {
     }
 
     public func subscribe(_ subscription: HyperliquidSubscription) async throws {
+        activeSubscriptions.insert(subscription)
         try await send(HyperliquidRequest(method: .subscribe, subscription: subscription))
     }
 
     public func unsubscribe(_ subscription: HyperliquidSubscription) async throws {
+        activeSubscriptions.remove(subscription)
         try await send(HyperliquidRequest(method: .unsubscribe, subscription: subscription))
     }
 
     public func update(for wallet: Wallet) async {
         guard let address = wallet.hyperliquidAccount?.address else { return }
         do {
-            async let fetchPositions: () = perpetualService.fetchPositions(walletId: wallet.walletId, address: address)
-            async let updateMarkets: () = perpetualService.updateMarkets()
-            _ = try await (fetchPositions, updateMarkets)
+            try await perpetualService.fetchPositions(walletId: wallet.walletId, address: address)
         } catch {
             debugLog("HyperliquidObserver: update failed: \(error)")
         }
@@ -106,6 +106,9 @@ public actor HyperliquidObserverService: PerpetualObservable {
         do {
             try await send(HyperliquidRequest(method: .subscribe, subscription: .clearinghouseState(user: address)))
             try await send(HyperliquidRequest(method: .subscribe, subscription: .openOrders(user: address)))
+            for subscription in activeSubscriptions {
+                try await send(HyperliquidRequest(method: .subscribe, subscription: subscription))
+            }
         } catch {
             debugLog("HyperliquidObserver: subscribe failed: \(error)")
         }

@@ -5,7 +5,7 @@ import Primitives
 
 // MARK: - Chart Types
 
-public struct ChartSubscription: Equatable, Sendable {
+public struct ChartSubscription: Hashable, Sendable {
     public let coin: String
     public let period: ChartPeriod
 
@@ -38,10 +38,10 @@ struct HyperliquidRequest: Encodable {
     let subscription: HyperliquidSubscription
 }
 
-public enum HyperliquidSubscription: Encodable, Sendable {
+public enum HyperliquidSubscription: Encodable, Hashable, Sendable {
     case clearinghouseState(user: String)
     case openOrders(user: String)
-    case candle(coin: String, interval: String)
+    case candle(ChartSubscription)
     case allMids
 
     enum CodingKeys: String, CodingKey {
@@ -57,10 +57,10 @@ public enum HyperliquidSubscription: Encodable, Sendable {
         case .openOrders(let user):
             try container.encode("openOrders", forKey: .type)
             try container.encode(user, forKey: .user)
-        case .candle(let coin, let interval):
+        case .candle(let subscription):
             try container.encode("candle", forKey: .type)
-            try container.encode(coin, forKey: .coin)
-            try container.encode(interval, forKey: .interval)
+            try container.encode(subscription.coin, forKey: .coin)
+            try container.encode(subscription.interval, forKey: .interval)
         case .allMids:
             try container.encode("allMids", forKey: .type)
         }
