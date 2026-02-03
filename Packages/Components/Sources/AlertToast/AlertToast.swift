@@ -38,7 +38,9 @@ public struct AlertToast: View {
 
                 Text(LocalizedStringKey(title))
                     .font(titleFont ?? Font.headline.bold())
-                    .foregroundStyle(titleColor)
+                    .ifLet(titleColor) { view, color in
+                        view.foregroundStyle(color)
+                    }
             }
             .multilineTextAlignment(.leading)
             .padding(.horizontal, .medium)
