@@ -25,10 +25,8 @@ public struct ConfirmTransferScene: View {
         )
         .contentMargins([.top], .small, for: .scrollContent)
         .listSectionSpacing(.compact)
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(model.confirmButtonModel)
-                .frame(maxWidth: .scene.button.maxWidth)
-                .padding(.bottom, .scene.bottom)
         }
         .frame(maxWidth: .infinity)
         .debounce(

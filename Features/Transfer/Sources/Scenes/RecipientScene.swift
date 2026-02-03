@@ -92,14 +92,12 @@ struct RecipientScene: View {
                 }
             }
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.actionButtonState),
                 action: onSelectContinue
             )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .navigationTitle(model.tittle)

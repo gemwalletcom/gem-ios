@@ -30,13 +30,11 @@ struct SecurityReminderScene: View {
                 }
             }
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: Localized.Common.continue,
                 action: model.onNext
             )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
         .listSectionSpacing(.custom(.medium))

@@ -117,14 +117,12 @@ struct AmountScene: View {
                 EmptyView()
             }
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: model.continueTitle,
                 type: .primary(model.actionButtonState),
                 action: onSelectNextButton
             )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
         }
         .contentMargins([.top], .zero, for: .scrollContent)
         .listSectionSpacing(.custom(.medium))
