@@ -104,11 +104,7 @@ public actor HyperliquidObserverService: PerpetualObservable {
     private func handleConnected() async {
         guard let address = currentWallet?.hyperliquidAccount?.address else { return }
         do {
-            try await send(HyperliquidRequest(method: .subscribe, subscription: .clearinghouseState(user: address)))
-            try await send(HyperliquidRequest(method: .subscribe, subscription: .openOrders(user: address)))
-            for subscription in activeSubscriptions {
-                try await send(HyperliquidRequest(method: .subscribe, subscription: subscription))
-            }
+            try await subscribe(defaultSubscriptions(for: address) + activeSubscriptions.asArray())
         } catch {
             debugLog("HyperliquidObserver: subscribe failed: \(error)")
         }
@@ -173,6 +169,21 @@ public actor HyperliquidObserverService: PerpetualObservable {
 
     private func handleCandle(candle: GemChartCandleStick) async throws {
         await chartService.yield(try candle.map())
+    }
+
+    private func defaultSubscriptions(for address: String) -> [HyperliquidSubscription] {
+        [.clearinghouseState(user: address), .openOrders(user: address)]
+    }
+
+    private func subscribe(_ subscriptions: [HyperliquidSubscription]) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for subscription in subscriptions {
+                group.addTask {
+                    try await self.send(HyperliquidRequest(method: .subscribe, subscription: subscription))
+                }
+            }
+            try await group.waitForAll()
+        }
     }
 
     private func send(_ request: some Encodable) async throws {
