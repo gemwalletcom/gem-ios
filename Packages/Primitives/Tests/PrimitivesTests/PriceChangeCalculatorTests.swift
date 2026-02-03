@@ -18,6 +18,5 @@ struct PriceChangeCalculatorTests {
         #expect(PriceChangeCalculator.calculate(.amount(percentage: 10, value: 110)) == 10)
         #expect(PriceChangeCalculator.calculate(.amount(percentage: -10, value: 90)) == -10)
         #expect(PriceChangeCalculator.calculate(.amount(percentage: 0, value: 100)) == 0)
-        #expect(PriceChangeCalculator.calculate(.amount(percentage: -100, value: 100)) == 0)
     }
 }

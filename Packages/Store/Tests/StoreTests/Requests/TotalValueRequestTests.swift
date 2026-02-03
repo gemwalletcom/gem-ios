@@ -13,9 +13,9 @@ struct TotalValueRequestTests {
         let db = DB.mockAssets()
         let priceStore = PriceStore(db: db)
 
-        let btcId = AssetId(chain: .bitcoin)
+        let ethId = AssetId(chain: .ethereum)
         try priceStore.updatePrice(
-            price: AssetPrice(assetId: btcId, price: 50000, priceChangePercentage24h: 10, updatedAt: .now),
+            price: AssetPrice(assetId: ethId, price: 3000, priceChangePercentage24h: 10, updatedAt: .now),
             currency: Currency.usd.rawValue
         )
 
@@ -46,9 +46,9 @@ struct TotalValueRequestTests {
         let db = DB.mockAssets()
         let priceStore = PriceStore(db: db)
 
-        let btcId = AssetId(chain: .bitcoin)
+        let ethId = AssetId(chain: .ethereum)
         try priceStore.updatePrice(
-            price: AssetPrice(assetId: btcId, price: 50000, priceChangePercentage24h: 0, updatedAt: .now),
+            price: AssetPrice(assetId: ethId, price: 3000, priceChangePercentage24h: 0, updatedAt: .now),
             currency: Currency.usd.rawValue
         )
 
