@@ -32,7 +32,7 @@ public struct SubscriptionService: Sendable {
     public func update(deviceId: String) async throws {
         let local = try walletStore.getWallets().map { wallet in
             WalletSubscription(
-                wallet_id: wallet.id,
+                walletId: wallet.id,
                 source: wallet.source,
                 subscriptions: wallet.accounts.map { ChainAddress(chain: $0.chain, address: $0.address) }
             )
@@ -60,24 +60,24 @@ public struct SubscriptionService: Sendable {
         local: [WalletSubscription],
         remote: [WalletSubscriptionChains]
     ) -> SubscriptionChanges {
-        let remoteByWallet = Dictionary(uniqueKeysWithValues: remote.map { ($0.wallet_id, $0) })
-        let localByWallet = Dictionary(uniqueKeysWithValues: local.map { ($0.wallet_id, $0) })
+        let remoteByWallet = Dictionary(uniqueKeysWithValues: remote.map { ($0.walletId, $0) })
+        let localByWallet = Dictionary(uniqueKeysWithValues: local.map { ($0.walletId, $0) })
 
         let toAdd = local.compactMap { wallet -> WalletSubscription? in
-            let remoteChains = Set(remoteByWallet[wallet.wallet_id]?.chains ?? [])
+            let remoteChains = Set(remoteByWallet[wallet.walletId]?.chains ?? [])
             let newChains = wallet.subscriptions.filter { !remoteChains.contains($0.chain) }
             guard !newChains.isEmpty else { return nil }
-            return WalletSubscription(wallet_id: wallet.wallet_id, source: wallet.source, subscriptions: newChains)
+            return WalletSubscription(walletId: wallet.walletId, source: wallet.source, subscriptions: newChains)
         }
 
         let toDelete = remote.compactMap { remoteWallet -> WalletSubscriptionChains? in
-            guard let localWallet = localByWallet[remoteWallet.wallet_id] else {
+            guard let localWallet = localByWallet[remoteWallet.walletId] else {
                 return remoteWallet
             }
             let localChains = Set(localWallet.subscriptions.map(\.chain))
             let chainsToDelete = remoteWallet.chains.filter { !localChains.contains($0) }
             guard !chainsToDelete.isEmpty else { return nil }
-            return WalletSubscriptionChains(wallet_id: remoteWallet.wallet_id, chains: chainsToDelete.sorted())
+            return WalletSubscriptionChains(walletId: remoteWallet.walletId, chains: chainsToDelete.sorted())
         }
 
         return SubscriptionChanges(toAdd: toAdd, toDelete: toDelete)
