@@ -26,7 +26,13 @@ struct RelativeDateFormatterTests {
 
     @Test
     func oneMonthOld() {
-        let date = ISO8601DateFormatter().date(from: "2025-02-02T10:25:00Z")!
+        var components = DateComponents()
+        components.year = 2025
+        components.month = 2
+        components.day = 2
+        components.hour = 10
+        components.minute = 25
+        let date = Calendar.current.date(from: components)!
 
         #expect(formatter.string(from: date) == "February 2, 2025 at 10:25 AM")
     }
