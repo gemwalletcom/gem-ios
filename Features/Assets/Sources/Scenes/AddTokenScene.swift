@@ -28,14 +28,12 @@ public struct AddTokenScene: View {
 
     public var body: some View {
         addTokenList
-            .safeAreaView {
+            .safeAreaButton {
                 StateButton(
                     text: model.actionButtonTitle,
                     type: .primary(model.state),
                     action: onSelectImportToken
                 )
-                .frame(maxWidth: .scene.button.maxWidth)
-                .padding(.bottom, .scene.bottom)
             }
             .toolbarInfoButton(url: model.customTokenUrl)
             .onAppear {
