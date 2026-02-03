@@ -59,10 +59,10 @@ public struct WalletHeaderView: View {
                     if let badge = model.subtitleBadge, !isPrivacyEnabled {
                         Text(badge)
                             .font(.system(size: 15, weight: .medium))
-                            .foregroundStyle(model.subtitleColor)
+                            .foregroundStyle(Colors.whiteSolid)
                             .padding(.horizontal, Spacing.small)
                             .padding(.vertical, Spacing.extraSmall)
-                            .background(model.subtitleColor.opacity(0.1))
+                            .background(model.subtitleColor)
                             .clipShape(Capsule())
                     }
                 }
