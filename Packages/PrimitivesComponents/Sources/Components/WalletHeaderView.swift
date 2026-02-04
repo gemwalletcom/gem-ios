@@ -79,7 +79,7 @@ public struct WalletHeaderView: View {
                         Images.System.eye
 
                         Text(Localized.Wallet.Watch.Tooltip.title)
-                            .foregroundColor(Colors.black)
+                            .foregroundStyle(Colors.black)
                             .font(.callout)
 
                         Images.System.info

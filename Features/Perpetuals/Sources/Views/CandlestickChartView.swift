@@ -202,7 +202,7 @@ struct CandlestickChartView: View {
             .symbol {
                 Circle()
                     .strokeBorder(Colors.blue, lineWidth: 2)
-                    .background(Circle().foregroundColor(Colors.white))
+                    .background(Circle().foregroundStyle(Colors.white))
                     .frame(width: 12)
             }
 

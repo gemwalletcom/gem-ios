@@ -39,7 +39,7 @@ struct SwapTokenView: View {
             }
             TextField(showLoading ? "" : String.zero, text: $text)
                 .keyboardType(.decimalPad)
-                .foregroundColor(Colors.black)
+                .foregroundStyle(Colors.black)
                 .font(.system(size: Constants.amountFontSize))
                 .fontWeight(.semibold)
                 .disabled(disabledTextField)
@@ -52,7 +52,7 @@ struct SwapTokenView: View {
             .lineLimit(1)
             .font(.system(size: Constants.balanceFontSize))
             .fontWeight(.medium)
-            .foregroundColor(Colors.secondaryText)
+            .foregroundStyle(Colors.secondaryText)
     }
 
     private var assetActionView: some View {
@@ -80,7 +80,7 @@ struct SwapTokenView: View {
                     .lineLimit(1)
                     .font(.system(size: Constants.balanceFontSize))
                     .fontWeight(.medium)
-                    .foregroundColor(Colors.secondaryText)
+                    .foregroundStyle(Colors.secondaryText)
             }
         }
     }

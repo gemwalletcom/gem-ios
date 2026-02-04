@@ -38,8 +38,8 @@ struct SwapAmountView: View {
                 .colorMultiply(Colors.black)
                 .frame(width: 18, height: 22)
                 .scaledToFit()
-                .padding(.bottom, 8)
-                .offset(y: -8)
+                .padding(.bottom, .small)
+                .offset(y: -.small)
             SwapAmountSingleView(field: to)
         }
     }
@@ -53,7 +53,7 @@ struct SwapAmountSingleView: View {
         HStack(spacing: 0) {
             VStack(alignment: .leading) {
                 Text(field.amount)
-                    .foregroundColor(Colors.black)
+                    .foregroundStyle(Colors.black)
                     .font(.system(size: 22))
                     .fontWeight(.medium)
                     .truncationMode(.middle)
@@ -62,7 +62,7 @@ struct SwapAmountSingleView: View {
                     Text(fiatAmount)
                         .font(.system(size: 12))
                         .fontWeight(.medium)
-                        .foregroundColor(Colors.gray)
+                        .foregroundStyle(Colors.gray)
                 }
             }
             Spacer(minLength: .extraLarge)

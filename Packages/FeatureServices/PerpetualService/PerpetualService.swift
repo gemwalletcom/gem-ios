@@ -153,4 +153,14 @@ extension PerpetualService: HyperliquidPerpetualServiceable {
         try store.updatePrices(prices)
         preferences.perpetualPricesUpdatedAt = .now
     }
+
+    public func fetchPositions(walletId: WalletId, address: String) async throws {
+        let summary = try await provider.getPositions(address: address)
+        let existingPositionIds = Set(try store.getPositions(walletId: walletId, provider: .hypercore).map(\.id))
+        let newPositionIds = Set(summary.positions.map(\.id))
+        let deleteIds = Array(existingPositionIds.subtracting(newPositionIds))
+
+        try store.diffPositions(deleteIds: deleteIds, positions: summary.positions, walletId: walletId)
+        try syncProviderBalances(walletId: walletId, balance: summary.balance)
+    }
 }

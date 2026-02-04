@@ -61,7 +61,7 @@ struct WalletListItemView: View {
                     action: { onEdit(model.wallet) },
                     label: {
                         Images.System.settings
-                            .padding(.vertical, 8)
+                            .padding(.vertical, .small)
                             .padding(.leading, .small)
                     }
                 )
