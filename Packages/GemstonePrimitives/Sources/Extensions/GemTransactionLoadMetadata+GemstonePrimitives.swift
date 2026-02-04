@@ -60,7 +60,7 @@ extension GemTransactionLoadMetadata {
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
                 witnessAddress: witnessAddress,
-                stakeData: try stakeData.map()
+                stakeData: stakeData.map()
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
@@ -137,12 +137,12 @@ extension TransactionLoadMetadata {
 }
 
 extension Gemstone.TronStakeData {
-    func map() throws -> Primitives.TronStakeData {
+    func map() -> Primitives.TronStakeData {
         switch self {
         case .votes(let votes):
             return .votes(votes.map { $0.map() })
         case .unfreeze(let amounts):
-            return .unfreeze(try amounts.map { try $0.map() })
+            return .unfreeze(amounts.map { $0.map() })
         }
     }
 }
@@ -171,8 +171,8 @@ extension Primitives.TronVote {
 }
 
 extension Gemstone.TronUnfreeze {
-    func map() throws -> Primitives.TronUnfreeze {
-        Primitives.TronUnfreeze(resource: try resource.map(), amount: amount)
+    func map() -> Primitives.TronUnfreeze {
+        Primitives.TronUnfreeze(resource: resource.map(), amount: amount)
     }
 }
 
