@@ -43,6 +43,6 @@ public final class EarnProtocolViewModel: Sendable {
 
 extension EarnProtocolViewModel: Identifiable {
     public var id: String {
-        "\(provider.name)-\(assetId)"
+        "\(provider.rawValue)-\(assetId)"
     }
 }

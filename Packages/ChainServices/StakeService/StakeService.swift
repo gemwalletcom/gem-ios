@@ -90,7 +90,10 @@ extension StakeService {
 
     private func updateDelegations(walletId: WalletId, chain: Chain, address: String) async throws {
         let delegations = try await getDelegations(chain: chain, address: address)
-        let existingIds = try store.getDelegationIds(walletId: walletId, assetId: chain.assetId).asSet()
+        let existingIds = try store
+            .getDelegations(walletId: walletId, assetId: chain.assetId)
+            .map(\.id)
+            .asSet()
         let delegationsIds = delegations.map(\.id).asSet()
         let deleteIds = existingIds.subtracting(delegationsIds).asArray()
 

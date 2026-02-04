@@ -88,16 +88,6 @@ public struct StakeStore: Sendable {
         }
     }
 
-    public func getDelegationIds(walletId: WalletId, assetId: AssetId) throws -> [String] {
-        try db.read { db in
-            try StakeDelegationRecord
-                .filter(StakeDelegationRecord.Columns.walletId == walletId.id)
-                .filter(StakeDelegationRecord.Columns.assetId == assetId.identifier)
-                .select(StakeDelegationRecord.Columns.id)
-                .fetchAll(db)
-        }
-    }
-
     @discardableResult
     public func deleteDelegations(walletId: WalletId, ids: [String]) throws -> Int {
         try db.write { db in

@@ -4,17 +4,7 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemEarnProvider: CaseIterable {
-    public static var allCases: [GemEarnProvider] {
-        [.yo]
-    }
-
-    public var name: String {
-        switch self {
-        case .yo: "yo"
-        }
-    }
-
+extension GemEarnProvider {
     public var displayName: String {
         switch self {
         case .yo: "Yo"
