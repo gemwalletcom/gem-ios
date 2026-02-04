@@ -86,7 +86,9 @@ public actor WebSocketConnection: WebSocketConnectable {
             do {
                 try await task?.send(message)
             } catch {
-                debugLog("WebSocket send error: \(error)")
+                #if DEBUG
+                NSLog("WebSocket send error: \(error)")
+                #endif
             }
         }
     }
