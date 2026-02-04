@@ -38,5 +38,8 @@ public struct TransactionsScene: View {
             }
         }
         .task { await model.fetch() }
+        .onTimer(every: .minutes5) {
+            await model.fetch()
+        }
     }
 }

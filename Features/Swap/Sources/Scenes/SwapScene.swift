@@ -10,9 +10,6 @@ public struct SwapScene: View {
 
     @State private var model: SwapSceneViewModel
 
-    // Update quote every 30 seconds, needed if you come back from the background.
-    private let updateQuoteTimer = Timer.publish(every: 30, tolerance: 1, on: .main, in: .common).autoconnect()
-
     public init(model: SwapSceneViewModel) {
         _model = State(initialValue: model)
     }
@@ -83,8 +80,8 @@ public struct SwapScene: View {
         .onChange(of: model.amountInputModel.text, model.onChangeFromValue)
         .onChange(of: model.pairSelectorModel, model.onChangePair)
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
-        .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
-            model.fetch()
+        .onTimer(every: .seconds30) {
+            await model.fetch()
         }
         .onAppear {
             focusedField = true

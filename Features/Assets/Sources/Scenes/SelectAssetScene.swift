@@ -29,7 +29,7 @@ public struct SelectAssetScene: View {
         .if(model.isNetworkSearchEnabled) {
             $0.debounce(
                 value: $model.searchModel.searchableQuery.wrappedValue,
-                interval: Duration.milliseconds(250),
+                interval: .Debounce.normal,
                 action: model.search(query:)
             )
         }

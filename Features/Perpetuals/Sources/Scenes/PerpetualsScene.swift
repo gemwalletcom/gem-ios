@@ -53,6 +53,9 @@ struct PerpetualsScene: View {
         .refreshable {
             await model.fetch()
         }
+        .onTimer(every: .minute1) {
+            await model.fetch()
+        }
         .listSectionSpacing(.compact)
         .sheet(isPresented: $model.isPresentingRecents) {
             RecentsScene(

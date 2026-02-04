@@ -162,6 +162,9 @@ public struct AssetScene: View {
             await model.fetch()
         }
         .taskOnce(model.fetchOnce)
+        .onTimer(every: .minutes5) {
+            await model.fetch()
+        }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .contentMargins([.top], .small, for: .scrollContent)
