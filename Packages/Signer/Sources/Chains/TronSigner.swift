@@ -115,7 +115,7 @@ struct TronSigner: Signable {
                             TronUnfreezeBalanceV2Contract.with {
                                 $0.ownerAddress = input.senderAddress
                                 $0.unfreezeBalance = Int64(unfreeze.amount)
-                                $0.resource = unfreeze.resource.rawValue.uppercased()
+                                $0.resource = unfreeze.resource.key
                             }
                         ),
                         feeLimit: .none,
@@ -142,14 +142,14 @@ struct TronSigner: Signable {
                     TronFreezeBalanceV2Contract.with {
                         $0.ownerAddress = input.senderAddress
                         $0.frozenBalance = input.value.asInt64
-                        $0.resource = data.resource.rawValue.uppercased()
+                        $0.resource = data.resource.key
                     })
             case .unfreeze:
                 contract = .unfreezeBalanceV2(
                     TronUnfreezeBalanceV2Contract.with {
                         $0.ownerAddress = input.senderAddress
                         $0.unfreezeBalance = input.value.asInt64
-                        $0.resource = data.resource.rawValue.uppercased()
+                        $0.resource = data.resource.key
                     })
             }
         }
