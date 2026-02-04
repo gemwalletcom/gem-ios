@@ -9,9 +9,6 @@ import InfoSheet
 
 struct EarnNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
-    @Environment(\.stakeService) private var stakeService
-    @Environment(\.balanceService) private var balanceService
-    @Environment(\.priceService) private var priceService
 
     @State private var model: EarnSceneViewModel
     @Binding private var navigationPath: NavigationPath

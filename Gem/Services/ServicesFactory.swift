@@ -286,10 +286,10 @@ struct ServicesFactory {
             balanceService: balanceService,
             priceService: priceService,
             transactionStateService: transactionStateService,
-            chainServiceFactory: chainServiceFactory,
             addressNameService: addressNameService,
             activityService: activityService,
-            eventPresenterService: eventPresenterService
+            eventPresenterService: eventPresenterService,
+            fiatService: apiService
         )
 
         return AppResolver.Services(
@@ -337,7 +337,8 @@ struct ServicesFactory {
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
             earnServices: earnServices,
-            supportService: supportService
+            supportService: supportService,
+            fiatService: apiService
         )
     }
 }

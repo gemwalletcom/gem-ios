@@ -4,7 +4,6 @@ import Foundation
 import SwiftUI
 import Primitives
 import Transfer
-import ChainService
 import Keystore
 import SwapService
 import Swap
@@ -26,7 +25,7 @@ import AddressNameService
 import ActivityService
 import EventPresenterService
 import EarnService
-import GemstonePrimitives
+import GemAPI
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -42,10 +41,10 @@ public struct ViewModelFactory: Sendable {
     let balanceService: BalanceService
     let priceService: PriceService
     let transactionStateService: TransactionStateService
-    let chainServiceFactory: ChainServiceFactory
     let addressNameService: AddressNameService
     let activityService: ActivityService
     let eventPresenterService: EventPresenterService
+    let fiatService: any GemAPIFiatService
 
     public init(
         keystore: any Keystore,
@@ -61,10 +60,10 @@ public struct ViewModelFactory: Sendable {
         balanceService: BalanceService,
         priceService: PriceService,
         transactionStateService: TransactionStateService,
-        chainServiceFactory: ChainServiceFactory,
         addressNameService: AddressNameService,
         activityService: ActivityService,
-        eventPresenterService: EventPresenterService
+        eventPresenterService: EventPresenterService,
+        fiatService: any GemAPIFiatService
     ) {
         self.keystore = keystore
         self.nodeService = nodeService
@@ -79,10 +78,10 @@ public struct ViewModelFactory: Sendable {
         self.balanceService = balanceService
         self.priceService = priceService
         self.transactionStateService = transactionStateService
-        self.chainServiceFactory = chainServiceFactory
         self.addressNameService = addressNameService
         self.activityService = activityService
         self.eventPresenterService = eventPresenterService
+        self.fiatService = fiatService
     }
     
     @MainActor
@@ -155,6 +154,7 @@ public struct ViewModelFactory: Sendable {
         amount: Int? = nil
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
+            fiatService: fiatService,
             assetAddress: assetAddress,
             walletId: walletId,
             type: type,

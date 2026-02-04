@@ -396,13 +396,6 @@ struct Migrations {
             try EarnPositionRecord.create(db: db)
         }
 
-        migrator.registerMigration("Backfill earn positions fields") { db in
-            try? db.execute(sql: "UPDATE \(EarnPositionRecord.databaseTableName) SET vaultTokenAddress = '' WHERE vaultTokenAddress IS NULL")
-            try? db.execute(sql: "UPDATE \(EarnPositionRecord.databaseTableName) SET assetTokenAddress = '' WHERE assetTokenAddress IS NULL")
-            try? db.execute(sql: "UPDATE \(EarnPositionRecord.databaseTableName) SET vaultBalanceValue = '0' WHERE vaultBalanceValue IS NULL")
-            try? db.execute(sql: "UPDATE \(EarnPositionRecord.databaseTableName) SET assetBalanceValue = '0' WHERE assetBalanceValue IS NULL")
-        }
-
         try migrator.migrate(dbQueue)
     }
 }

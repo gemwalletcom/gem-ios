@@ -14,12 +14,12 @@ struct ChartPriceView: View {
             HStack(alignment: .center, spacing: .tiny) {
                 Text(price)
                     .font(.title2)
-                    .foregroundColor(Colors.black)
+                    .foregroundStyle(Colors.black)
 
                 if let priceChange {
                     Text(priceChange)
                         .font(.callout)
-                        .foregroundColor(priceChangeTextColor)
+                        .foregroundStyle(priceChangeTextColor)
                 }
             }
 
@@ -27,7 +27,7 @@ struct ChartPriceView: View {
                 if let date {
                     Text(date)
                         .font(.footnote)
-                        .foregroundColor(Colors.gray)
+                        .foregroundStyle(Colors.gray)
                 }
             }.frame(height: 16)
         }

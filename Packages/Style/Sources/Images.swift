@@ -343,7 +343,7 @@ public enum Images {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 40, height: 40)
-                            .padding(4) // Adjust padding as needed
+                            .padding(.tiny)
                         Text(category.1[index].1)
                     }
                     .listRowBackground(Colors.greenLight)

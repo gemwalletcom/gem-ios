@@ -99,6 +99,16 @@ public struct StakeStore: Sendable {
     }
 
     @discardableResult
+    public func deleteDelegations(walletId: WalletId, ids: [String]) throws -> Int {
+        try db.write { db in
+            try StakeDelegationRecord
+                .filter(StakeDelegationRecord.Columns.walletId == walletId.id)
+                .filter(ids.contains(StakeDelegationRecord.Columns.id))
+                .deleteAll(db)
+        }
+    }
+    
+    @discardableResult
     public func clearDelegations() throws -> Int {
         try db.write { db in
             try StakeDelegationRecord.deleteAll(db)
