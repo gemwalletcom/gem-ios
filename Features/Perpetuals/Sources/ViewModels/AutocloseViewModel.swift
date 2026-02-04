@@ -7,6 +7,7 @@ import Style
 import Primitives
 import Formatters
 import Components
+import PrimitivesComponents
 
 public struct AutocloseViewModel {
     private let type: TpslType
@@ -71,5 +72,9 @@ public struct AutocloseViewModel {
         case 4...10: [15, 25, 50]
         case _: [25, 50, 100]
         }
+    }
+
+    public var percentSuggestions: [PercentageSuggestion] {
+        percents.map { PercentageSuggestion(value: $0) }
     }
 }
