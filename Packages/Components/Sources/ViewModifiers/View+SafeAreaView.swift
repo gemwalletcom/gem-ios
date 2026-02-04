@@ -3,7 +3,6 @@
 import Foundation
 import SwiftUI
 import Style
-import Components
 
 public extension View {
     @ViewBuilder
