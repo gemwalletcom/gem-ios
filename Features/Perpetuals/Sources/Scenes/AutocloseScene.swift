@@ -44,35 +44,20 @@ public struct AutocloseScene: View {
                 field: Field.stopLoss,
                 focusedField: $focusedField
             )
-
-            Section {
-                StateButton(
+        }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
+        .safeAreaView {
+            InputAccessoryView(
+                isEditing: model.input.focused?.text.isEmpty == true,
+                suggestions: model.takeProfitModel.percentSuggestions,
+                onSelect: { model.onSelectPercent($0.value) },
+                onDone: { focusedField = nil },
+                button: StateButton(
                     text: Localized.Transfer.confirm,
                     type: model.confirmButtonType,
                     action: model.onSelectConfirm
                 )
-                .frame(maxWidth: .infinity)
-                .listRowInsets(EdgeInsets())
-            }
-        }
-        .contentMargins(.top, .scene.top, for: .scrollContent)
-        .safeAreaView {
-            VStack(spacing: 0) {
-                Divider()
-                    .frame(height: 1 / UIScreen.main.scale)
-                    .background(Colors.grayVeryLight)
-                    .isVisible(focusedField != nil)
-
-                if focusedField != nil {
-                    SuggestionsAccessoryView(
-                        suggestions: model.takeProfitModel.percentSuggestions,
-                        onSelect: { model.onSelectPercent($0.value) },
-                        onDone: { focusedField = nil }
-                    )
-                    .padding(.small)
-                }
-            }
-            .background(Colors.grayBackground)
+            )
         }
         .navigationTitle(model.title)
         .onChange(of: focusedField, model.onChangeFocusField)
