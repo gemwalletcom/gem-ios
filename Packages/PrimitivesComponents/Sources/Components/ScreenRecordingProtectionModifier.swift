@@ -16,7 +16,7 @@ struct ScreenRecordingProtectionModifier: ViewModifier {
             if isRecording {
                 Text(Localized.SecretPhrase.ContentHidden.description)
                     .font(.callout)
-                    .foregroundColor(Colors.secondaryText)
+                    .foregroundStyle(Colors.secondaryText)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
