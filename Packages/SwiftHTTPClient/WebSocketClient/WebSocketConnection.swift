@@ -83,7 +83,11 @@ public actor WebSocketConnection: WebSocketConnectable {
         pendingMessages = []
 
         for message in messages {
-            try? await task?.send(message)
+            do {
+                try await task?.send(message)
+            } catch {
+                debugLog("WebSocket send error: \(error)")
+            }
         }
     }
 
