@@ -47,7 +47,7 @@ struct Migrations {
             
             // stake
             try StakeValidatorRecord.create(db: db)
-            try StakeDelegationRecord.create(db: db)
+            try StakePositionRecord.create(db: db)
             
             // connections
             try WalletConnectionRecord.create(db: db)
@@ -394,10 +394,6 @@ struct Migrations {
             }
             try WalletIdMigration.migrate(db: db)
             try EarnPositionRecord.create(db: db)
-            try? db.alter(table: BalanceRecord.databaseTableName) {
-                $0.add(column: BalanceRecord.Columns.yield.name, .text).defaults(to: "0")
-                $0.add(column: BalanceRecord.Columns.yieldAmount.name, .double).defaults(to: 0)
-            }
         }
 
         try migrator.migrate(dbQueue)

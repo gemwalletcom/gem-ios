@@ -5,11 +5,12 @@ import Components
 import Style
 import Primitives
 import Localization
+import Store
 
-public struct YieldScene: View {
-    @State private var model: YieldSceneViewModel
+public struct EarnProtocolsScene: View {
+    @State private var model: EarnProtocolsSceneViewModel
 
-    public init(model: YieldSceneViewModel) {
+    public init(model: EarnProtocolsSceneViewModel) {
         _model = State(initialValue: model)
     }
 
@@ -19,16 +20,21 @@ public struct YieldScene: View {
                 loadingView
             } else if model.hasError {
                 errorView
-            } else if model.hasProtocols {
+            } else if model.isEmpty && !model.hasPosition {
+                emptyStateView
+            } else {
                 if model.hasPosition {
                     positionSection
                 }
-                protocolsSection
-            } else {
-                emptyStateView
+                if model.hasProtocols {
+                    protocolsSection
+                } else if !model.hasPosition {
+                    emptyStateView
+                }
             }
         }
         .navigationTitle(model.title)
+        .observeQuery(request: $model.positionsRequest, value: $model.positions)
         .refreshable {
             await model.fetch()
         }
@@ -38,7 +44,7 @@ public struct YieldScene: View {
 
 // MARK: - UI Components
 
-extension YieldScene {
+extension EarnProtocolsScene {
     private var loadingView: some View {
         Section {
             HStack {
@@ -52,7 +58,7 @@ extension YieldScene {
 
     private var positionSection: some View {
         Section {
-            if let position = model.position {
+            ForEach(model.positionModels) { position in
                 NavigationCustomLink(
                     with: HStack(spacing: Spacing.small) {
                         AssetImageView(assetImage: model.assetImage, size: 40)
@@ -65,7 +71,7 @@ extension YieldScene {
                             .foregroundStyle(Colors.gray)
                     }
                 ) {
-                    model.onWithdraw()
+                    model.onWithdraw(position)
                 }
             }
         } header: {
@@ -76,7 +82,7 @@ extension YieldScene {
     private var protocolsSection: some View {
         Section {
             ForEach(model.protocols) { `protocol` in
-                YieldProtocolView(
+                EarnProtocolView(
                     model: `protocol`,
                     displayName: model.assetName
                 ) {
@@ -84,7 +90,7 @@ extension YieldScene {
                 }
             }
         } header: {
-            Text("Protocol")
+            Text(Localized.Common.provider)
         }
     }
 
@@ -104,28 +110,19 @@ extension YieldScene {
     private var errorView: some View {
         Section {
             VStack(spacing: Spacing.small) {
-                Image(systemName: "exclamationmark.triangle")
-                    .font(.largeTitle)
-                    .foregroundStyle(Colors.red)
-
-                Text("Error loading yields")
-                    .font(.headline)
-                    .foregroundStyle(Colors.black)
-
-                if let errorMessage = model.errorMessage {
-                    Text(errorMessage)
-                        .font(.caption)
-                        .foregroundStyle(Colors.gray)
-                        .multilineTextAlignment(.center)
+                if let error = model.error {
+                    ListItemErrorView(
+                        errorTitle: Localized.Errors.errorOccured,
+                        error: error
+                    )
                 }
 
-                Button("Retry") {
+                Button(Localized.Common.tryAgain) {
                     Task {
                         await model.fetch()
                     }
                 }
                 .buttonStyle(.bordered)
-                .padding(.top, Spacing.small)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, Spacing.large)

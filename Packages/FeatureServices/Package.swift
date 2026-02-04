@@ -52,12 +52,12 @@ let package = Package(
         .library(name: "RewardsServiceTestKit", targets: ["RewardsServiceTestKit"]),
         .library(name: "AuthService", targets: ["AuthService"]),
         .library(name: "AuthServiceTestKit", targets: ["AuthServiceTestKit"]),
-        .library(name: "YieldService", targets: ["YieldService"]),
-        .library(name: "YieldServiceTestKit", targets: ["YieldServiceTestKit"]),
-        .library(name: "ConnectionsService", targets: ["ConnectionsService"]),
-        .library(name: "ConnectionsServiceTestKit", targets: ["ConnectionsServiceTestKit"]),
         .library(name: "EarnService", targets: ["EarnService"]),
         .library(name: "EarnServiceTestKit", targets: ["EarnServiceTestKit"]),
+        .library(name: "ConnectionsService", targets: ["ConnectionsService"]),
+        .library(name: "ConnectionsServiceTestKit", targets: ["ConnectionsServiceTestKit"]),
+        .library(name: "EarnServices", targets: ["EarnServices"]),
+        .library(name: "EarnServicesTestKit", targets: ["EarnServicesTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -108,7 +108,7 @@ let package = Package(
                 "Store",
                 .product(name: "ChainService", package: "ChainServices"),
                 "AssetsService",
-                "YieldService"
+                "EarnService"
             ],
             path: "BalanceService",
             exclude: ["TestKit"]
@@ -122,7 +122,7 @@ let package = Package(
                 "AssetsServiceTestKit",
                 "BalanceService",
                 "Primitives",
-                "YieldServiceTestKit"
+                "EarnServiceTestKit"
             ],
             path: "BalanceService/TestKit"
         ),
@@ -581,25 +581,24 @@ let package = Package(
             path: "AuthService/TestKit"
         ),
         .target(
-            name: "YieldService",
+            name: "EarnService",
             dependencies: [
                 "Gemstone",
                 "GemstonePrimitives",
                 "Primitives",
-                "Store",
                 "NativeProviderService",
             ],
-            path: "YieldService",
+            path: "EarnService",
             exclude: ["TestKit"]
         ),
         .target(
-            name: "YieldServiceTestKit",
+            name: "EarnServiceTestKit",
             dependencies: [
-                "YieldService",
+                "EarnService",
                 "Gemstone",
                 "Primitives"
             ],
-            path: "YieldService/TestKit"
+            path: "EarnService/TestKit"
         ),
         .target(
             name: "ConnectionsService",
@@ -624,22 +623,22 @@ let package = Package(
             path: "ConnectionsService/TestKit"
         ),
         .target(
-            name: "EarnService",
+            name: "EarnServices",
             dependencies: [
                 .product(name: "StakeService", package: "ChainServices"),
-                "YieldService",
+                "EarnService",
             ],
-            path: "EarnService",
+            path: "EarnServices",
             exclude: ["TestKit"]
         ),
         .target(
-            name: "EarnServiceTestKit",
+            name: "EarnServicesTestKit",
             dependencies: [
-                "EarnService",
+                "EarnServices",
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
-                "YieldServiceTestKit",
+                "EarnServiceTestKit",
             ],
-            path: "EarnService/TestKit"
+            path: "EarnServices/TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",

@@ -3,7 +3,6 @@
 import Foundation
 import Gemstone
 import Primitives
-import Store
 
 extension EarnPosition {
     public init?(walletId: WalletId, position: GemYieldPosition) {
@@ -25,29 +24,5 @@ extension EarnPosition {
             rewards: position.rewards,
             apy: position.apy
         )
-    }
-
-    public func toGemYieldPosition() -> GemYieldPosition? {
-        guard let yieldData = type.yieldData else { return nil }
-        return GemYieldPosition(
-            name: yieldData.name,
-            assetId: assetId.identifier,
-            provider: GemYieldProvider(name: yieldData.provider),
-            vaultTokenAddress: yieldData.vaultTokenAddress ?? "",
-            assetTokenAddress: yieldData.assetTokenAddress ?? "",
-            vaultBalanceValue: yieldData.vaultBalanceValue,
-            assetBalanceValue: yieldData.assetBalanceValue,
-            apy: apy,
-            rewards: rewards
-        )
-    }
-}
-
-extension GemYieldProvider {
-    init(name: String) {
-        switch name {
-        case "yo": self = .yo
-        default: self = .yo
-        }
     }
 }

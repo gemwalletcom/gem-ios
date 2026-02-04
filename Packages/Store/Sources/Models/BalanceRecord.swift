@@ -34,8 +34,6 @@ struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let reservedAmount = Column("reservedAmount")
         static let withdrawable = Column("withdrawable")
         static let withdrawableAmount = Column("withdrawableAmount")
-        static let yield = Column("yield")
-        static let yieldAmount = Column("yieldAmount")
         static let totalAmount = Column("totalAmount")
         static let metadata = Column("metadata")
         static let lastUsedAt = Column("lastUsedAt")
@@ -71,9 +69,6 @@ struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
     var withdrawable: String
     var withdrawableAmount: Double
-
-    var yield: String
-    var yieldAmount: Double
 
     var totalAmount: Double
     
@@ -126,9 +121,6 @@ extension BalanceRecord: CreateTable {
             $0.column(Columns.withdrawable.name, .text).defaults(to: "0")
             $0.column(Columns.withdrawableAmount.name, .double).defaults(to: 0)
 
-            $0.column(Columns.yield.name, .text).defaults(to: "0")
-            $0.column(Columns.yieldAmount.name, .double).defaults(to: 0)
-
             $0.column(sql: totalAmountSQlCreation)
             
             $0.column(Columns.isEnabled.name, .boolean).defaults(to: true).indexed()
@@ -164,7 +156,6 @@ extension BalanceRecord {
             rewards: BigInt(stringLiteral: rewards),
             reserved: BigInt(stringLiteral: reserved),
             withdrawable: BigInt(stringLiteral: withdrawable),
-            yield: BigInt(stringLiteral: yield),
             metadata: metadata
         )
     }

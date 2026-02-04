@@ -25,7 +25,7 @@ import WalletConnectorService
 import AddressNameService
 import ActivityService
 import EventPresenterService
-import YieldService
+import EarnService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -35,7 +35,7 @@ public struct ViewModelFactory: Sendable {
     let walletsService: WalletsService
     let walletService: WalletService
     let stakeService: StakeService
-    let yieldService: any YieldServiceType
+    let earnService: any EarnServiceType
     let nameService: NameService
     let balanceService: BalanceService
     let priceService: PriceService
@@ -53,7 +53,7 @@ public struct ViewModelFactory: Sendable {
         walletsService: WalletsService,
         walletService: WalletService,
         stakeService: StakeService,
-        yieldService: any YieldServiceType,
+        earnService: any EarnServiceType,
         nameService: NameService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -70,7 +70,7 @@ public struct ViewModelFactory: Sendable {
         self.walletsService = walletsService
         self.walletService = walletService
         self.stakeService = stakeService
-        self.yieldService = yieldService
+        self.earnService = earnService
         self.nameService = nameService
         self.balanceService = balanceService
         self.priceService = priceService
@@ -181,20 +181,22 @@ public struct ViewModelFactory: Sendable {
             wallet: wallet,
             chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
             stakeService: stakeService,
-            yieldService: yieldService
+            earnService: earnService,
+            balanceService: balanceService
         )
     }
 
     @MainActor
-    public func yieldScene(
+    public func earnProtocolsScene(
         wallet: Wallet,
         asset: Asset,
         onAmountInputAction: AmountInputAction = nil
-    ) -> YieldSceneViewModel {
-        YieldSceneViewModel(
+    ) -> EarnProtocolsSceneViewModel {
+        EarnProtocolsSceneViewModel(
             wallet: wallet,
             asset: asset,
-            yieldService: yieldService,
+            balanceService: balanceService,
+            earnService: earnService,
             onAmountInputAction: onAmountInputAction
         )
     }

@@ -1,24 +1,27 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BalanceService
 import Components
 import Foundation
-import struct Gemstone.GemYieldPosition
-import enum Gemstone.GemYieldProvider
-import GemstonePrimitives
 import Localization
 import Primitives
+import Store
 import Style
-import YieldService
+import EarnService
 
 @MainActor
 @Observable
-public final class YieldSceneViewModel {
+public final class EarnProtocolsSceneViewModel {
     public let wallet: Wallet
     public let asset: Asset
-    private let yieldService: any YieldServiceType
+    private let balanceService: BalanceService
+    private let earnService: any EarnServiceType
     private let onAmountInputAction: AmountInputAction
 
-    public private(set) var state: YieldState = .idle
+    public var positionsRequest: EarnPositionsRequest
+    public var positions: [EarnPosition] = []
+
+    private var protocolsState: StateViewType<[EarnProtocolViewModel]> = .loading
 
     public var title: String {
         Localized.Common.earn
@@ -42,19 +45,21 @@ public final class YieldSceneViewModel {
     }
 
     public var isLoading: Bool {
-        state.isLoading
+        protocolsState.isLoading
     }
 
-    public var protocols: [YieldProtocolViewModel] {
-        state.protocols
+    public var protocols: [EarnProtocolViewModel] {
+        protocolsState.value ?? []
     }
 
-    public var position: YieldPositionViewModel? {
-        state.position
+    public var positionModels: [EarnPositionViewModel] {
+        positions
+            .compactMap { EarnPositionViewModel(position: $0, decimals: Int(asset.decimals)) }
+            .filter { $0.hasBalance }
     }
 
     public var hasPosition: Bool {
-        position?.hasBalance ?? false
+        positionModels.isNotEmpty
     }
 
     public var hasProtocols: Bool {
@@ -62,15 +67,22 @@ public final class YieldSceneViewModel {
     }
 
     public var hasError: Bool {
-        state.hasError
+        protocolsState.isError
     }
 
-    public var errorMessage: String? {
-        state.error?.localizedDescription
+    public var isEmpty: Bool {
+        protocolsState.isNoData
+    }
+
+    public var error: Error? {
+        if case .error(let error) = protocolsState {
+            return error
+        }
+        return nil
     }
 
     public var emptyStateTitle: String {
-        "No yield protocols available"
+        Localized.Errors.noDataAvailable
     }
 
     public var walletAddress: String {
@@ -80,13 +92,19 @@ public final class YieldSceneViewModel {
     public init(
         wallet: Wallet,
         asset: Asset,
-        yieldService: any YieldServiceType,
+        balanceService: BalanceService,
+        earnService: any EarnServiceType,
         onAmountInputAction: AmountInputAction = nil
     ) {
         self.wallet = wallet
         self.asset = asset
-        self.yieldService = yieldService
+        self.balanceService = balanceService
+        self.earnService = earnService
         self.onAmountInputAction = onAmountInputAction
+        self.positionsRequest = EarnPositionsRequest(
+            walletId: wallet.walletId,
+            assetId: asset.id
+        )
     }
 
     public func fetchOnce() {
@@ -96,39 +114,28 @@ public final class YieldSceneViewModel {
     }
 
     public func fetch() async {
-        state = .loading
+        protocolsState = .loading
+        async let _ = updatePositions()
 
         do {
-            let yields = try await yieldService.getYields(for: asset.id)
-            let protocols = yields.map { YieldProtocolViewModel(yield: $0) }
-
-            let cached = yieldService.getPosition(
-                provider: .yo,
-                asset: asset.id,
-                walletAddress: walletAddress,
-                walletId: wallet.walletId
-            ) { [weak self] fresh in
-                self?.updatePosition(fresh, protocols: protocols)
-            }
-
-            let positionViewModel = cached.map {
-                YieldPositionViewModel(position: $0, decimals: Int(asset.decimals))
-            }
-            state = .loaded(protocols, positionViewModel)
+            let yields = try await earnService.getYields(for: asset.id)
+            let protocols = yields.map { EarnProtocolViewModel(yield: $0) }
+            protocolsState = protocols.isEmpty ? .noData : .data(protocols)
         } catch {
-            state = .error(error)
+            protocolsState = .error(error)
         }
     }
 
-    private func updatePosition(_ position: GemYieldPosition, protocols: [YieldProtocolViewModel]) {
-        let positionViewModel = YieldPositionViewModel(
-            position: position,
-            decimals: Int(asset.decimals)
+    private func updatePositions() async {
+        guard !walletAddress.isEmpty else { return }
+        await balanceService.updateYieldPositions(
+            walletId: wallet.walletId,
+            assetId: asset.id,
+            address: walletAddress
         )
-        state = .loaded(protocols, positionViewModel)
     }
 
-    public func onSelectProtocol(_ opportunity: YieldProtocolViewModel) {
+    public func onSelectProtocol(_ opportunity: EarnProtocolViewModel) {
         let earnData = EarnData(
             provider: opportunity.provider.name,
             contractAddress: nil,
@@ -143,10 +150,9 @@ public final class YieldSceneViewModel {
         onAmountInputAction?(amountInput)
     }
 
-    public func onWithdraw() {
-        guard let position = position else { return }
+    public func onWithdraw(_ position: EarnPositionViewModel) {
         let earnData = EarnData(
-            provider: position.providerName,
+            provider: position.provider,
             contractAddress: nil,
             callData: nil,
             approval: nil,

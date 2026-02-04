@@ -4,36 +4,31 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct EarnPositionInfo: Codable, FetchableRecord {
-    public let position: EarnPositionRecord
+struct StakePositionInfo: Codable, FetchableRecord {
+    let position: StakePositionRecord
     let validator: StakeValidatorRecord?
     let price: PriceRecord?
 }
 
-extension EarnPositionInfo {
-    public func mapToDelegation() -> Delegation? {
-        guard position.type == .stake,
-              let validator = validator,
-              let state = position.state else {
+extension StakePositionInfo {
+    func mapToDelegation() -> Delegation? {
+        guard let validator else {
             return nil
         }
+
         return Delegation(
             base: DelegationBase(
                 assetId: position.assetId,
-                state: state,
+                state: position.state,
                 balance: position.balance,
                 shares: position.shares ?? "0",
-                rewards: position.rewards ?? "0",
+                rewards: position.rewards,
                 completionDate: position.completionDate,
-                delegationId: position.delegationId ?? "",
+                delegationId: position.delegationId,
                 validatorId: validator.validatorId
             ),
             validator: validator.validator,
             price: price?.mapToPrice()
         )
-    }
-
-    public var earnPosition: EarnPosition? {
-        position.earnPosition
     }
 }

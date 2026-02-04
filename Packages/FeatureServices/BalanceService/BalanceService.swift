@@ -1,6 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import BigInt
 import Foundation
 import enum Gemstone.GemYieldProvider
 import GemstonePrimitives
@@ -9,25 +8,28 @@ import Store
 import ChainService
 import Formatters
 import AssetsService
-import YieldService
+import EarnService
 
 public struct BalanceService: BalancerUpdater, Sendable {
     private let balanceStore: BalanceStore
+    private let earnStore: EarnStore
     private let assetsService: AssetsService
     private let fetcher: BalanceFetcher
-    private let yieldService: any YieldServiceType
+    private let earnService: any EarnServiceType
     private let formatter = ValueFormatter(style: .full)
 
     public init(
         balanceStore: BalanceStore,
+        earnStore: EarnStore,
         assetsService: AssetsService,
         chainServiceFactory: ChainServiceFactory,
-        yieldService: any YieldServiceType
+        earnService: any EarnServiceType
     ) {
         self.balanceStore = balanceStore
+        self.earnStore = earnStore
         self.assetsService = assetsService
         self.fetcher = BalanceFetcher(chainServiceFactory: chainServiceFactory)
-        self.yieldService = yieldService
+        self.earnService = earnService
     }
 }
 
@@ -99,7 +101,7 @@ extension BalanceService {
 
                 // yield balance
                 group.addTask {
-                    await updateYieldBalances(walletId: walletId, assetIds: ids, address: address)
+                    await updateYieldPositions(walletId: walletId, assetIds: ids, address: address)
                 }
             }
 
@@ -157,32 +159,27 @@ extension BalanceService {
         )
     }
 
-    private func updateYieldBalances(walletId: WalletId, assetIds: [AssetId], address: String) async {
+    public func updateYieldPositions(walletId: WalletId, assetId: AssetId, address: String) async {
+        await updateYieldPositions(walletId: walletId, assetIds: [assetId], address: address)
+    }
+
+    public func clearEarnPositions() throws {
+        try earnStore.clear()
+    }
+
+    private func updateYieldPositions(walletId: WalletId, assetIds: [AssetId], address: String) async {
         for assetId in assetIds {
             for provider in GemYieldProvider.allCases {
                 do {
-                    let position = try await yieldService.fetchPosition(
+                    let position = try await earnService.fetchPosition(
                         provider: provider,
                         asset: assetId,
                         walletAddress: address
                     )
-                    guard let balanceValue = position.assetBalanceValue,
-                          let balance = BigInt(balanceValue) else { continue }
-
-                    let assetFull = try await assetsService.getAsset(assetId: assetId)
-                    let decimals = assetFull.asset.decimals.asInt
-
-                    let yieldValue = try UpdateBalanceValue(
-                        value: balance.description,
-                        amount: formatter.double(from: balance, decimals: decimals)
-                    )
-                    let update = UpdateBalance(
-                        assetId: assetId,
-                        type: .yield(UpdateYieldBalance(balance: yieldValue)),
-                        updatedAt: .now,
-                        isActive: true
-                    )
-                    try balanceStore.updateBalances([update], for: walletId)
+                    guard let earnPosition = EarnPosition(walletId: walletId, position: position) else {
+                        continue
+                    }
+                    try earnStore.updatePosition(earnPosition)
                 } catch {
                     // Asset may not have yield support for this provider - skip silently
                 }
@@ -272,12 +269,6 @@ extension BalanceService {
                     metadata: metadata
                 )
             )
-        case .yield(let balance):
-            let yieldValue = try UpdateBalanceValue(
-                value: balance.description,
-                amount: formatter.double(from: balance, decimals: decimals)
-            )
-            return .yield(UpdateYieldBalance(balance: yieldValue))
         }
     }
 

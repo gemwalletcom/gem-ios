@@ -12,9 +12,9 @@ import Primitives
 import BigInt
 import PriceService
 import PerpetualService
-import YieldService
 import Components
 import PrimitivesComponents
+import BalanceService
 
 @Observable
 @MainActor
@@ -26,7 +26,7 @@ public final class DeveloperViewModel {
     private let bannerService: BannerService
     private let priceService: PriceService
     private let perpetualService: PerpetualService
-    private let yieldService: (any YieldServiceType)?
+    private let balanceService: BalanceService
 
     public var isPresentingToastMessage: ToastMessage?
 
@@ -38,7 +38,7 @@ public final class DeveloperViewModel {
         bannerService: BannerService,
         priceService: PriceService,
         perpetualService: PerpetualService,
-        yieldService: (any YieldServiceType)?
+        balanceService: BalanceService
     ) {
         self.walletId = walletId
         self.transactionsService = transactionsService
@@ -47,7 +47,7 @@ public final class DeveloperViewModel {
         self.bannerService = bannerService
         self.priceService = priceService
         self.perpetualService = perpetualService
-        self.yieldService = yieldService
+        self.balanceService = balanceService
     }
 
     var title: String {
@@ -153,7 +153,7 @@ public final class DeveloperViewModel {
 
     func clearEarnPositions() {
         performAction {
-            try yieldService?.clear()
+            try balanceService.clearEarnPositions()
         }
     }
     

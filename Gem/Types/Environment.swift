@@ -34,8 +34,8 @@ import AddressNameService
 import ActivityService
 import RewardsService
 import EventPresenterService
-import YieldService
 import EarnService
+import EarnServices
 import Support
 
 extension EnvironmentValues {
@@ -75,6 +75,6 @@ extension EnvironmentValues {
     @Entry var walletSearchService: WalletSearchService = AppResolver.main.services.walletSearchService
     @Entry var assetSearchService: AssetSearchService = AppResolver.main.services.assetSearchService
     @Entry var inAppNotificationService: InAppNotificationService = AppResolver.main.services.inAppNotificationService
-    @Entry var earnService: EarnService = AppResolver.main.services.earnService
+    @Entry var earnServices: EarnServices = AppResolver.main.services.earnServices
     @Entry var supportService: SupportService = AppResolver.main.services.supportService
 }

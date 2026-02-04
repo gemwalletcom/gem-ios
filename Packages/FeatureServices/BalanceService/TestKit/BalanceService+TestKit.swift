@@ -8,21 +8,23 @@ import Store
 import ChainService
 import AssetsService
 import AssetsServiceTestKit
-import YieldService
-import YieldServiceTestKit
+import EarnService
+import EarnServiceTestKit
 
 public extension BalanceService {
     static func mock(
         balanceStore: BalanceStore = .mock(),
+        earnStore: EarnStore = .mock(),
         assetsService: AssetsService = .mock(),
         chainServiceFactory: ChainServiceFactory = .mock(),
-        yieldService: any YieldServiceType = MockYieldService()
+        earnService: any EarnServiceType = MockEarnService()
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,
+            earnStore: earnStore,
             assetsService: assetsService,
             chainServiceFactory: chainServiceFactory,
-            yieldService: yieldService
+            earnService: earnService
         )
     }
 }

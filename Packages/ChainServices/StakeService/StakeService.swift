@@ -8,13 +8,13 @@ import GemAPI
 import Blockchain
 
 public struct StakeService: StakeServiceable {
-    private let store: EarnStore
+    private let store: StakeStore
     private let addressStore: AddressStore
     private let chainServiceFactory: ChainServiceFactory
     private let assetsService: GemAPIStaticService
 
     public init(
-        store: EarnStore,
+        store: StakeStore,
         addressStore: AddressStore,
         chainServiceFactory: ChainServiceFactory,
         assetsService: GemAPIStaticService = GemAPIStaticService()
@@ -49,7 +49,7 @@ public struct StakeService: StakeServiceable {
     }
 
     public func clearDelegations() throws {
-        try store.clear(type: .stake)
+        try store.clearDelegations()
     }
 
     public func clearValidators() throws {
@@ -90,9 +90,8 @@ extension StakeService {
 
     private func updateDelegations(walletId: WalletId, chain: Chain, address: String) async throws {
         let delegations = try await getDelegations(chain: chain, address: address)
-        let existingPositions = try store.getPositions(walletId: walletId, assetId: chain.assetId, type: .stake)
-        let existingIds = existingPositions.map { $0.record.id }.asSet()
-        let delegationsIds = delegations.map { delegationRecordId(walletId: walletId, delegation: $0, chain: chain) }.asSet()
+        let existingIds = try store.getDelegationIds(walletId: walletId, assetId: chain.assetId).asSet()
+        let delegationsIds = delegations.map(\.id).asSet()
         let deleteIds = existingIds.subtracting(delegationsIds).asArray()
 
         let validatorsIds = try store.getValidators(assetId: chain.assetId).map { $0.id }.asSet()
@@ -103,14 +102,11 @@ extension StakeService {
             debugLog("missingValidatorIds \(missingValidatorIds)")
         }
 
-        let updatePositions = delegations
+        let updateDelegations = delegations
             .filter { validatorsIds.contains($0.validatorId) }
-            .map { delegation in
-                let validatorRecordId = DelegationValidator.recordId(chain: chain, validatorId: delegation.validatorId)
-                return delegation.toEarnPosition(walletId: walletId.id, validatorRecordId: validatorRecordId)
-            }
+            .map { $0 }
 
-        try store.updateAndDelete(walletId: walletId, positions: updatePositions, deleteIds: deleteIds)
+        try store.updateAndDelete(walletId: walletId, delegations: updateDelegations, deleteIds: deleteIds)
     }
 
     private func getDelegations(chain: Chain, address: String) async throws -> [DelegationBase] {
@@ -118,8 +114,4 @@ extension StakeService {
         return try await service.getStakeDelegations(address: address)
     }
 
-    private func delegationRecordId(walletId: WalletId, delegation: DelegationBase, chain: Chain) -> String {
-        let validatorRecordId = DelegationValidator.recordId(chain: chain, validatorId: delegation.validatorId)
-        return delegation.toEarnPosition(walletId: walletId.id, validatorRecordId: validatorRecordId).record.id
-    }
 }

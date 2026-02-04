@@ -40,8 +40,8 @@ import AuthService
 import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
-import YieldService
 import EarnService
+import EarnServices
 import SwiftHTTPClient
 import Support
 
@@ -92,24 +92,24 @@ struct ServicesFactory {
             walletStore: storeManager.walletStore,
             avatarService: avatarService
         )
-        let yieldService = Self.makeYieldService(
-            nodeProvider: nodeService,
-            store: storeManager.earnStore
+        let earnService = Self.makeEarnService(
+            nodeProvider: nodeService
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
+            earnStore: storeManager.earnStore,
             assetsService: assetsService,
             chainFactory: chainServiceFactory,
-            yieldService: yieldService
+            earnService: earnService
         )
         let stakeService = Self.makeStakeService(
-            earnStore: storeManager.earnStore,
+            stakeStore: storeManager.stakeStore,
             addressStore: storeManager.addressStore,
             chainFactory: chainServiceFactory
         )
-        let earnService = Self.makeEarnService(
+        let earnServices = Self.makeEarnServices(
             stakeService: stakeService,
-            yieldService: yieldService
+            earnService: earnService
         )
         let nftService = Self.makeNftService(
             apiService: apiService,
@@ -278,7 +278,7 @@ struct ServicesFactory {
             walletsService: walletsService,
             walletService: walletService,
             stakeService: stakeService,
-            yieldService: yieldService,
+            earnService: earnService,
             nameService: nameService,
             balanceService: balanceService,
             priceService: priceService,
@@ -333,7 +333,7 @@ struct ServicesFactory {
             assetSearchService: assetSearchService,
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
-            earnService: earnService,
+            earnServices: earnServices,
             supportService: supportService
         )
     }
@@ -402,25 +402,27 @@ extension ServicesFactory {
 
     private static func makeBalanceService(
         balanceStore: BalanceStore,
+        earnStore: EarnStore,
         assetsService: AssetsService,
         chainFactory: ChainServiceFactory,
-        yieldService: any YieldServiceType
+        earnService: any EarnServiceType
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,
+            earnStore: earnStore,
             assetsService: assetsService,
             chainServiceFactory: chainFactory,
-            yieldService: yieldService
+            earnService: earnService
         )
     }
 
     private static func makeStakeService(
-        earnStore: EarnStore,
+        stakeStore: StakeStore,
         addressStore: AddressStore,
         chainFactory: ChainServiceFactory
     ) -> StakeService {
         StakeService(
-            store: earnStore,
+            store: stakeStore,
             addressStore: addressStore,
             chainServiceFactory: chainFactory
         )
@@ -639,20 +641,19 @@ extension ServicesFactory {
         )
     }
 
-    private static func makeYieldService(
-        nodeProvider: any NodeURLFetchable,
-        store: EarnStore
-    ) -> YieldService {
-        try! YieldService(nodeProvider: nodeProvider, store: store)
+    private static func makeEarnService(
+        nodeProvider: any NodeURLFetchable
+    ) -> EarnService {
+        try! EarnService(nodeProvider: nodeProvider)
     }
 
-    private static func makeEarnService(
+    private static func makeEarnServices(
         stakeService: StakeService,
-        yieldService: any YieldServiceType
-    ) -> EarnService {
-        EarnService(
+        earnService: any EarnServiceType
+    ) -> EarnServices {
+        EarnServices(
             stakeService: stakeService,
-            yieldService: yieldService
+            earnService: earnService
         )
     }
 }

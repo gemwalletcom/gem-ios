@@ -128,8 +128,8 @@ struct SelectedAssetNavigationStack: View  {
                         navigationPath: $navigationPath
                     )
                 case .earn:
-                    YieldNavigationView(
-                        model: viewModelFactory.yieldScene(
+                    EarnProtocolsNavigationView(
+                        model: viewModelFactory.earnProtocolsScene(
                             wallet: wallet,
                             asset: input.asset,
                             onAmountInputAction: {

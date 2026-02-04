@@ -30,7 +30,6 @@ struct WalletNavigationStack: View {
     @Environment(\.hyperliquidObserverService) private var hyperliquidObserverService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.activityService) private var activityService
-    @Environment(\.earnService) private var earnService
     @Environment(\.walletSearchService) private var walletSearchService
     @Environment(\.assetSearchService) private var assetSearchService
     @Environment(\.observablePreferences) private var preferences
@@ -110,7 +109,6 @@ struct WalletNavigationStack: View {
                         priceObserverService: priceObserverService,
                         priceAlertService: priceAlertService,
                         bannerService: bannerService,
-                        yieldService: earnService.yieldService,
                         input: AssetSceneInput(
                             wallet: model.wallet,
                             asset: $0.asset

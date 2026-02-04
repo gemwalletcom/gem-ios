@@ -13,7 +13,6 @@ import PriceService
 import RewardsService
 import InAppNotifications
 import NotificationService
-import YieldService
 import Support
 
 struct SettingsNavigationStack: View {
@@ -28,6 +27,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
+    @Environment(\.balanceService) private var balanceService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.releaseService) private var releaseService
@@ -35,7 +35,6 @@ struct SettingsNavigationStack: View {
     @Environment(\.walletConnectorManager) private var walletConnectorManager
     @Environment(\.rewardsService) private var rewardsService
     @Environment(\.inAppNotificationService) private var inAppNotificationService
-    @Environment(\.earnService) private var earnService
     @Environment(\.supportService) private var supportService
 
     @State private var isPresentingWallets = false
@@ -144,7 +143,7 @@ struct SettingsNavigationStack: View {
                     bannerService: bannerService,
                     priceService: priceService,
                     perpetualService: perpetualService,
-                    yieldService: earnService.yieldService
+                    balanceService: balanceService
                 ))
             }
             .navigationDestination(for: Scenes.InAppNotifications.self) { _ in

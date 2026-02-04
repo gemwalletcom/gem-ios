@@ -116,7 +116,7 @@
 		D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */; };
 		D8C4A3672C8BA114006FABE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
 		D8C4A3762C8CF956006FABE8 /* EarnNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* EarnNavigationView.swift */; };
-		E1B4C7012E85A00000YIELD1 /* YieldNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B4C7002E85A00000YIELD1 /* YieldNavigationView.swift */; };
+		E1B4C7012E85A00000YIELD1 /* EarnProtocolsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B4C7002E85A00000YIELD1 /* EarnProtocolsNavigationView.swift */; };
 		D8C4A3A52C9696FE006FABE8 /* AssetNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */; };
 		D8CF19E32CC747370025D6B4 /* Transfer in Frameworks */ = {isa = PBXBuildFile; productRef = D8CF19E22CC747370025D6B4 /* Transfer */; };
 		D8CFDE9E2E37FC2500D27283 /* Style in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDE9D2E37FC2500D27283 /* Style */; };
@@ -133,8 +133,8 @@
 		D8F5B8602CCA008E0007E615 /* ChainService in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B85F2CCA008E0007E615 /* ChainService */; };
 		D8F5B86C2CCD52EB0007E615 /* Earn in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86B2CCD52EB0007E615 /* Earn */; };
 
-		E1B4C7052E85A00000YIELD1 /* YieldService in Frameworks */ = {isa = PBXBuildFile; productRef = E1B4C7062E85A00000YIELD1 /* YieldService */; };
-		E1B4C7072E85A00000EARN01 /* EarnService in Frameworks */ = {isa = PBXBuildFile; productRef = E1B4C7082E85A00000EARN01 /* EarnService */; };
+		E1B4C7052E85A00000YIELD1 /* EarnService in Frameworks */ = {isa = PBXBuildFile; productRef = E1B4C7062E85A00000YIELD1 /* EarnService */; };
+		E1B4C7072E85A00000EARN01 /* EarnServices in Frameworks */ = {isa = PBXBuildFile; productRef = E1B4C7082E85A00000EARN01 /* EarnServices */; };
 		D8F5B86F2CCD639A0007E615 /* StakeService in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86E2CCD639A0007E615 /* StakeService */; };
 		D8WIDGBF12345678901234 /* WidgetLocalization in Frameworks */ = {isa = PBXBuildFile; productRef = D8WIDGET12345678901234 /* WidgetLocalization */; };
 		D9F015752F10654000000003 /* InAppNotifications in Frameworks */ = {isa = PBXBuildFile; productRef = D9F015752F10654000000002 /* InAppNotifications */; };
@@ -279,7 +279,7 @@
 		D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAssetSceneNavigationStack.swift; sourceTree = "<group>"; };
 		D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenNavigationStack.swift; sourceTree = "<group>"; };
 		D8C4A3752C8CF956006FABE8 /* EarnNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarnNavigationView.swift; sourceTree = "<group>"; };
-		E1B4C7002E85A00000YIELD1 /* YieldNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YieldNavigationView.swift; sourceTree = "<group>"; };
+		E1B4C7002E85A00000YIELD1 /* EarnProtocolsNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarnProtocolsNavigationView.swift; sourceTree = "<group>"; };
 		D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetNavigationView.swift; sourceTree = "<group>"; };
 		D8CF19E12CC745ED0025D6B4 /* Transfer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transfer; sourceTree = "<group>"; };
 		D8D203D12AE0813E00261CA2 /* SwiftHTTPClient */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwiftHTTPClient; sourceTree = "<group>"; };
@@ -348,8 +348,8 @@
 				D829BF422CBDD65A00DEB2E8 /* MarketInsight in Frameworks */,
 				D83D3C252D6E62F4002959EA /* ScanService in Frameworks */,
 				D8F5B86C2CCD52EB0007E615 /* Earn in Frameworks */,
-				E1B4C7052E85A00000YIELD1 /* YieldService in Frameworks */,
-				E1B4C7072E85A00000EARN01 /* EarnService in Frameworks */,
+				E1B4C7052E85A00000YIELD1 /* EarnService in Frameworks */,
+				E1B4C7072E85A00000EARN01 /* EarnServices in Frameworks */,
 				C36679162A119C6200F1D74D /* GemAPI in Frameworks */,
 				D896B57E2E2EE2D300ADE083 /* Perpetuals in Frameworks */,
 				C3CF3B7729A98C7B00E96586 /* Blockchain in Frameworks */,
@@ -736,7 +736,7 @@
 			isa = PBXGroup;
 			children = (
 				D8C4A3752C8CF956006FABE8 /* EarnNavigationView.swift */,
-				E1B4C7002E85A00000YIELD1 /* YieldNavigationView.swift */,
+				E1B4C7002E85A00000YIELD1 /* EarnProtocolsNavigationView.swift */,
 			);
 			path = Earn;
 			sourceTree = "<group>";
@@ -820,8 +820,8 @@
 				83D6808A2CCA90D900B45089 /* InfoSheet */,
 				D8F5B85F2CCA008E0007E615 /* ChainService */,
 				D8F5B86B2CCD52EB0007E615 /* Earn */,
-				E1B4C7062E85A00000YIELD1 /* YieldService */,
-				E1B4C7082E85A00000EARN01 /* EarnService */,
+				E1B4C7062E85A00000YIELD1 /* EarnService */,
+				E1B4C7082E85A00000EARN01 /* EarnServices */,
 				D8F5B86E2CCD639A0007E615 /* StakeService */,
 				D85AD29C2CD337BE0010DEF8 /* SwapService */,
 				D85AD2A52CD7017E0010DEF8 /* NativeProviderService */,
@@ -1150,7 +1150,7 @@
 				837A1E6D2D0B096600733AC1 /* WalletConnectorNavigationStack.swift in Sources */,
 				D8D5C1D12E6CAC16007628A1 /* Errors.swift in Sources */,
 				D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */,
-				E1B4C7012E85A00000YIELD1 /* YieldNavigationView.swift in Sources */,
+				E1B4C7012E85A00000YIELD1 /* EarnProtocolsNavigationView.swift in Sources */,
 				D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */,
 				833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */,
 			);
@@ -2229,15 +2229,15 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Earn;
 		};
-		E1B4C7062E85A00000YIELD1 /* YieldService */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D8B890FF2CA2F68E002DDEF7 /* XCRemoteSwiftPackageReference "gem-ios-libraries" */;
-			productName = YieldService;
-		};
-		E1B4C7082E85A00000EARN01 /* EarnService */ = {
+		E1B4C7062E85A00000YIELD1 /* EarnService */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D8B890FF2CA2F68E002DDEF7 /* XCRemoteSwiftPackageReference "gem-ios-libraries" */;
 			productName = EarnService;
+		};
+		E1B4C7082E85A00000EARN01 /* EarnServices */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8B890FF2CA2F68E002DDEF7 /* XCRemoteSwiftPackageReference "gem-ios-libraries" */;
+			productName = EarnServices;
 		};
 		D8F5B86E2CCD639A0007E615 /* StakeService */ = {
 			isa = XCSwiftPackageProductDependency;

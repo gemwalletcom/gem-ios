@@ -45,7 +45,8 @@ let package = Package(
                 "InfoSheet",
                 "PrimitivesComponents",
                 "Formatters",
-                .product(name: "YieldService", package: "FeatureServices"),
+                .product(name: "EarnService", package: "FeatureServices"),
+                .product(name: "BalanceService", package: "FeatureServices"),
                 "Style",
             ],
             path: "Sources"
@@ -55,7 +56,8 @@ let package = Package(
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
-                .product(name: "YieldServiceTestKit", package: "FeatureServices"),
+                .product(name: "EarnServiceTestKit", package: "FeatureServices"),
+                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 "Earn"
             ],
             path: "Tests"

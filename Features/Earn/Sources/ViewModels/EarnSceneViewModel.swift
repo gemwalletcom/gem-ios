@@ -12,14 +12,16 @@ import StakeService
 import InfoSheet
 import PrimitivesComponents
 import Formatters
-import YieldService
+import EarnService
+import BalanceService
 
 @MainActor
 @Observable
 public final class EarnSceneViewModel {
     private let stakeService: any StakeServiceable
-    private let yieldService: any YieldServiceType
-    private let yieldAsset: Asset?
+    private let earnService: any EarnServiceType
+    private let balanceService: BalanceService
+    private let earnAsset: Asset?
 
     private var delegatitonsState: StateViewType<Bool> = .loading
     private let chain: StakeChain
@@ -42,14 +44,16 @@ public final class EarnSceneViewModel {
         wallet: Wallet,
         chain: StakeChain,
         stakeService: any StakeServiceable,
-        yieldService: any YieldServiceType,
-        yieldAsset: Asset? = nil
+        earnService: any EarnServiceType,
+        balanceService: BalanceService,
+        earnAsset: Asset? = nil
     ) {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
-        self.yieldService = yieldService
-        self.yieldAsset = yieldAsset
+        self.earnService = earnService
+        self.balanceService = balanceService
+        self.earnAsset = earnAsset
         self.request = EarnDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
         self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId)
         self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
@@ -235,25 +239,26 @@ extension EarnSceneViewModel {
     }
 }
 
-// MARK: - Yield
+// MARK: - Earn Protocols
 
 extension EarnSceneViewModel {
-    public var showYield: Bool {
-        yieldAsset != nil
+    public var showEarnProtocols: Bool {
+        earnAsset != nil
     }
 
-    public var yieldTitle: String {
+    public var earnProtocolsTitle: String {
         Localized.Common.earn
     }
 
-    public func yieldSceneViewModel() -> YieldSceneViewModel? {
-        guard let yieldAsset else {
+    public func earnProtocolsSceneViewModel() -> EarnProtocolsSceneViewModel? {
+        guard let earnAsset else {
             return nil
         }
-        return YieldSceneViewModel(
+        return EarnProtocolsSceneViewModel(
             wallet: wallet,
-            asset: yieldAsset,
-            yieldService: yieldService
+            asset: earnAsset,
+            balanceService: balanceService,
+            earnService: earnService
         )
     }
 }

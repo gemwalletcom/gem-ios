@@ -18,7 +18,7 @@ import SwiftUI
 import TransactionsService
 import UIKit
 import WalletsService
-import YieldService
+import Store
 
 @Observable
 @MainActor
@@ -28,11 +28,8 @@ public final class AssetSceneViewModel: Sendable {
     private let transactionsService: TransactionsService
     private let priceObserverService: PriceObserverService
     private let bannerService: BannerService
-    private let yieldService: any YieldServiceType
 
     private let preferences: ObservablePreferences = .default
-
-    private(set) var earnState: EarnState = .initial
 
     let explorerService: ExplorerService = .standard
     public let priceAlertService: PriceAlertService
@@ -46,6 +43,8 @@ public final class AssetSceneViewModel: Sendable {
     public var chainAssetData: ChainAssetData
     public var transactions: [TransactionExtended] = []
     public var banners: [Banner] = []
+    public var earnPositionsRequest: EarnPositionsRequest
+    public var earnPositions: [EarnPosition] = []
     public var assetData: AssetData { chainAssetData.assetData }
     private var asset: Asset { assetData.asset }
     private var wallet: Wallet { walletModel.wallet }
@@ -57,7 +56,6 @@ public final class AssetSceneViewModel: Sendable {
         priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
         bannerService: BannerService,
-        yieldService: any YieldServiceType,
         input: AssetSceneInput,
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
@@ -67,12 +65,15 @@ public final class AssetSceneViewModel: Sendable {
         self.priceObserverService = priceObserverService
         self.priceAlertService = priceAlertService
         self.bannerService = bannerService
-        self.yieldService = yieldService
 
         self.input = input
         self.chainAssetData = ChainAssetData(
             assetData: AssetData.with(asset: input.asset),
             feeAssetData: AssetData.with(asset: input.asset.chain.asset)
+        )
+        self.earnPositionsRequest = EarnPositionsRequest(
+            walletId: input.wallet.walletId,
+            assetId: input.asset.id
         )
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
@@ -92,7 +93,7 @@ public final class AssetSceneViewModel: Sendable {
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
     var showBalances: Bool { assetDataModel.showBalances || hasYieldPosition }
-    private var showStakedBalanceTypes: [BalanceType] = [.staked, .pending, .rewards]
+    private var showStakedBalanceTypes: [Primitives.BalanceType] = [.staked, .pending, .rewards]
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showPendingUnconfirmedBalance: Bool { assetDataModel.hasPendingUnconfirmedBalance }
@@ -142,17 +143,23 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     var showEarnButton: Bool {
-        earnState.hasOpportunity && !wallet.isViewOnly && !hasYieldPosition
+        assetData.isEarnable && !wallet.isViewOnly && !hasYieldPosition
     }
 
     var hasYieldPosition: Bool {
-        assetData.balance.yield > 0
+        yieldPositionsBalance > 0
     }
 
     var yieldBalanceText: String {
-        let balance = assetData.balance.yield
+        let balance = yieldPositionsBalance
         guard balance > 0 else { return "0" }
         return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
+    }
+
+    private var yieldPositionsBalance: BigInt {
+        earnPositions
+            .compactMap { BigInt($0.balance) }
+            .reduce(0, +)
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -245,7 +252,6 @@ extension AssetSceneViewModel {
         Task {
             await updateAsset()
         }
-        checkYieldAvailability()
 
         if assetData.priceAlerts.isNotEmpty {
             Task {
@@ -254,32 +260,8 @@ extension AssetSceneViewModel {
         }
     }
 
-    private func checkYieldAvailability() {
-        guard assetData.isEarnable else { return }
-        earnState.hasOpportunity = true
-        fetchYieldPosition()
-    }
-
-    private func fetchYieldPosition() {
-        guard let address = try? wallet.account(for: asset.id.chain).address else {
-            earnState.isPositionLoaded = true
-            return
-        }
-
-        earnState.position = yieldService.getPosition(
-            provider: .yo,
-            asset: asset.id,
-            walletAddress: address,
-            walletId: wallet.walletId
-        ) { [weak self] fresh in
-            self?.earnState.position = fresh
-        }
-        earnState.isPositionLoaded = true
-    }
-
     func fetch() async {
         await updateWallet()
-        fetchYieldPosition()
     }
 
     func onSelectHeader(_ buttonType: HeaderButtonType) {
@@ -483,7 +465,6 @@ extension AssetSceneViewModel {
     private func updateAsset() async {
         do {
             try await assetsService.updateAsset(assetId: assetModel.asset.id)
-            checkYieldAvailability()
         } catch {
             // TODO: - handle updateAsset error
             debugLog("asset scene: updateAsset error \(error)")

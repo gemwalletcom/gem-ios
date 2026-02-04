@@ -5,13 +5,13 @@ import Style
 import Components
 import Primitives
 
-public struct YieldProtocolView: View {
-    private let model: YieldProtocolViewModel
+public struct EarnProtocolView: View {
+    private let model: EarnProtocolViewModel
     private let displayName: String
     private let action: () -> Void
 
     public init(
-        model: YieldProtocolViewModel,
+        model: EarnProtocolViewModel,
         displayName: String,
         action: @escaping () -> Void
     ) {

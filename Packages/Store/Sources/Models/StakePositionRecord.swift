@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import GRDB
 
-struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord  {
+struct StakePositionRecord: Codable, FetchableRecord, PersistableRecord  {
     static let databaseTableName: String = "stake_delegations"
     
     enum Columns {
@@ -35,7 +35,7 @@ struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord  {
     static let price = belongsTo(PriceRecord.self, key: "price", using: ForeignKey(["assetId"], to: ["assetId"]))
 }
 
-extension StakeDelegationRecord: CreateTable {
+extension StakePositionRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName) {
             $0.column(Columns.id.name, .text)
@@ -78,8 +78,8 @@ extension StakeDelegationRecord: CreateTable {
 }
 
 extension DelegationBase {
-    func record(walletId: String) -> StakeDelegationRecord {
-        return StakeDelegationRecord(
+    func record(walletId: String) -> StakePositionRecord {
+        return StakePositionRecord(
             id: id,
             assetId: assetId,
             walletId: walletId,

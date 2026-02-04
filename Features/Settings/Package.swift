@@ -52,7 +52,7 @@ let package = Package(
                 .product(name: "AppService", package: "FeatureServices"),
                 .product(name: "PerpetualService", package: "FeatureServices"),
                 .product(name: "RewardsService", package: "FeatureServices"),
-                .product(name: "YieldService", package: "FeatureServices"),
+                .product(name: "BalanceService", package: "FeatureServices"),
                 "Formatters",
                 "Validators",
                 .product(name: "ChainService", package: "ChainServices"),

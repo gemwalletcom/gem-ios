@@ -6,14 +6,14 @@ import Primitives
 import Earn
 import Transfer
 
-struct YieldNavigationView: View {
+struct EarnProtocolsNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
 
-    @State private var model: YieldSceneViewModel
+    @State private var model: EarnProtocolsSceneViewModel
     @Binding private var navigationPath: NavigationPath
 
     init(
-        model: YieldSceneViewModel,
+        model: EarnProtocolsSceneViewModel,
         navigationPath: Binding<NavigationPath>
     ) {
         _model = State(initialValue: model)
@@ -21,7 +21,7 @@ struct YieldNavigationView: View {
     }
 
     var body: some View {
-        YieldScene(model: model)
+        EarnProtocolsScene(model: model)
             .navigationDestination(for: AmountInput.self) { input in
                 AmountNavigationView(
                     model: viewModelFactory.amountScene(

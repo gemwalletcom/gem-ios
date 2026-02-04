@@ -5,13 +5,12 @@ import Foundation
 import Gemstone
 import GemstonePrimitives
 import Localization
-import Primitives
 import PrimitivesComponents
 import Style
 import SwiftUI
 
 @Observable
-public final class YieldProtocolViewModel: Identifiable, Sendable {
+public final class EarnProtocolViewModel: Identifiable, Sendable {
     public let name: String
     public let assetId: Gemstone.AssetId
     public let provider: GemYieldProvider
@@ -24,14 +23,6 @@ public final class YieldProtocolViewModel: Identifiable, Sendable {
         self.provider = yield.provider
         self.apy = yield.apy
         self.risk = yield.risk
-    }
-
-    public init(position: GemYieldPosition) {
-        self.name = position.name
-        self.assetId = position.assetId
-        self.provider = position.provider
-        self.apy = position.apy
-        self.risk = .medium
     }
 
     public var id: String {

@@ -7,19 +7,18 @@ public enum AssetBalanceType: Sendable {
     case coin(available: BigInt, reserved: BigInt, pendingUnconfirmed: BigInt)
     case token(available: BigInt)
     case stake(staked: BigInt, pending: BigInt, rewards: BigInt, reserved: BigInt, locked: BigInt, frozen: BigInt, metadata: BalanceMetadata?)
-    case yield(balance: BigInt)
 
     public var available: BigInt? {
         switch self {
         case .coin(let available, _, _): available
         case .token(let available): available
-        case .stake, .yield: nil
+        case .stake: nil
         }
     }
 
     public var metadata: BalanceMetadata? {
         switch self {
-        case .coin, .token, .yield: .none
+        case .coin, .token: .none
         case let .stake(_, _, _, _, _, _, metadata): metadata
         }
     }
@@ -91,14 +90,6 @@ extension AssetBalance {
                 frozen: balance.frozen,
                 metadata: balance.metadata
             ),
-            isActive: isActive
-        )
-    }
-
-    public var yieldChange: AssetBalanceChange {
-        AssetBalanceChange(
-            assetId: assetId,
-            type: AssetBalanceType.yield(balance: balance.yield),
             isActive: isActive
         )
     }
