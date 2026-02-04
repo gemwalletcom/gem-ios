@@ -22,7 +22,7 @@ public final class EarnSceneViewModel {
     private let earnPositionsService: any EarnBalanceServiceable
     private let earnAsset: Asset
 
-    private var delegatitonsState: StateViewType<Bool> = .loading
+    public var delegationsState: StateViewType<Bool> = .loading
     private let chain: StakeChain
 
     private let formatter = ValueFormatter(style: .medium)
@@ -128,20 +128,33 @@ public final class EarnSceneViewModel {
     }
 
     var delegationsSectionTitle: String {
-        guard case .data(let delegations) = delegationsState, !delegations.isEmpty else {
+        guard case .data = delegationsViewState, delegationModels.isNotEmpty else {
             return .empty
         }
         return delegationsTitle
     }
 
-    var delegationsState: StateViewType<[StakeDelegationViewModel]> {
-        let delegationModels = delegations.map { StakeDelegationViewModel(delegation: $0) }
+    var delegationModels: [StakeDelegationViewModel] {
+        delegations.map { StakeDelegationViewModel(delegation: $0) }
+    }
 
-        switch delegatitonsState {
-        case .noData: return .noData
-        case .loading: return delegationModels.isEmpty ? .loading : .data(delegationModels)
-        case .data: return delegationModels.isEmpty ? .noData : .data(delegationModels)
-        case .error(let error): return .error(error)
+    var delegationsError: Error? {
+        if case .error(let error) = delegationsViewState {
+            return error
+        }
+        return nil
+    }
+
+    var delegationsViewState: StateViewType<Bool> {
+        switch delegationsState {
+        case .noData:
+            return .noData
+        case .loading:
+            return delegationModels.isEmpty ? .loading : .data(true)
+        case .data:
+            return delegationModels.isEmpty ? .noData : .data(true)
+        case .error(let error):
+            return .error(error)
         }
     }
 
@@ -218,14 +231,14 @@ public final class EarnSceneViewModel {
 
 extension EarnSceneViewModel {
     func fetch() async {
-        delegatitonsState = .loading
+        delegationsState = .loading
         do {
             let acccount = try wallet.account(for: chain.chain)
             try await stakeService.update(walletId: wallet.walletId, chain: chain.chain, address: acccount.address)
-            delegatitonsState = .data(true)
+            delegationsState = .data(true)
         } catch {
             debugLog("Stake scene fetch error: \(error)")
-            delegatitonsState = .error(error)
+            delegationsState = .error(error)
         }
     }
 

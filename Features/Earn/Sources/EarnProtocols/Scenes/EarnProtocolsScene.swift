@@ -16,22 +16,10 @@ public struct EarnProtocolsScene: View {
 
     public var body: some View {
         List {
-            if model.isLoading {
-                loadingView
-            } else if model.hasError {
-                errorView
-            } else if model.isEmpty && !model.hasPosition {
-                emptyStateView
-            } else {
-                if model.hasPosition {
-                    positionSection
-                }
-                if model.hasProtocols {
-                    protocolsSection
-                } else if !model.hasPosition {
-                    emptyStateView
-                }
+            if model.hasPosition {
+                positionSection
             }
+            protocolsStateView
         }
         .navigationTitle(model.title)
         .observeQuery(request: $model.positionsRequest, value: $model.positions)
@@ -127,5 +115,32 @@ extension EarnProtocolsScene {
             .frame(maxWidth: .infinity)
             .padding(.vertical, Spacing.large)
         }
+    }
+
+    private var protocolsStateView: some View {
+        StateView(
+            state: model.protocolsState,
+            content: { _ in
+                Group {
+                    if model.hasProtocols {
+                        protocolsSection
+                    } else if !model.hasPosition {
+                        emptyStateView
+                    }
+                }
+            },
+            emptyView: {
+                model.hasPosition ? AnyView(EmptyView()) : AnyView(emptyStateView)
+            },
+            noDataView: {
+                model.hasPosition ? AnyView(EmptyView()) : AnyView(emptyStateView)
+            },
+            loadingView: {
+                AnyView(loadingView)
+            },
+            errorView: {
+                AnyView(errorView)
+            }
+        )
     }
 }

@@ -7,7 +7,6 @@ import Foundation
 public struct EarnPosition: Codable, Equatable, Hashable, Sendable {
 	public let assetId: AssetId
 	public let provider: EarnProvider
-	public let name: String
 	public let vaultTokenAddress: String
 	public let assetTokenAddress: String
 	public let vaultBalanceValue: String
@@ -16,10 +15,9 @@ public struct EarnPosition: Codable, Equatable, Hashable, Sendable {
 	public let rewards: String?
 	public let apy: Double?
 
-	public init(assetId: AssetId, provider: EarnProvider, name: String, vaultTokenAddress: String, assetTokenAddress: String, vaultBalanceValue: String, assetBalanceValue: String, balance: String, rewards: String?, apy: Double?) {
+	public init(assetId: AssetId, provider: EarnProvider, vaultTokenAddress: String, assetTokenAddress: String, vaultBalanceValue: String, assetBalanceValue: String, balance: String, rewards: String?, apy: Double?) {
 		self.assetId = assetId
 		self.provider = provider
-		self.name = name
 		self.vaultTokenAddress = vaultTokenAddress
 		self.assetTokenAddress = assetTokenAddress
 		self.vaultBalanceValue = vaultBalanceValue

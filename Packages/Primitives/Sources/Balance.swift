@@ -12,6 +12,7 @@ public struct Balance: Codable, Equatable, Hashable, Sendable {
     public var pendingUnconfirmed: BigInt
     public var rewards: BigInt
     public var reserved: BigInt
+    public var earn: BigInt
     public var withdrawable: BigInt
     public var metadata: BalanceMetadata?
 
@@ -24,6 +25,7 @@ public struct Balance: Codable, Equatable, Hashable, Sendable {
         pendingUnconfirmed: BigInt = .zero,
         rewards: BigInt = .zero,
         reserved: BigInt = .zero,
+        earn: BigInt = .zero,
         withdrawable: BigInt = .zero,
         metadata: BalanceMetadata? = .none
     ) {
@@ -35,6 +37,7 @@ public struct Balance: Codable, Equatable, Hashable, Sendable {
         self.pendingUnconfirmed = pendingUnconfirmed
         self.rewards = rewards
         self.reserved = reserved
+        self.earn = earn
         self.withdrawable = withdrawable
         self.metadata = metadata
     }

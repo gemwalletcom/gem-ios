@@ -96,6 +96,8 @@ struct ServicesFactory {
             nodeProvider: nodeService
         )
         let earnBalanceService = Self.makeEarnBalanceService(
+            assetsService: assetsService,
+            balanceStore: storeManager.balanceStore,
             earnStore: storeManager.earnStore,
             earnService: earnService
         )
@@ -186,6 +188,7 @@ struct ServicesFactory {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
+            earnBalanceService: earnBalanceService,
             priceService: priceService,
             priceObserver: priceObserverService,
             deviceService: deviceService,
@@ -417,10 +420,14 @@ extension ServicesFactory {
     }
 
     private static func makeEarnBalanceService(
+        assetsService: AssetsService,
+        balanceStore: BalanceStore,
         earnStore: EarnStore,
         earnService: any EarnServiceType
     ) -> EarnBalanceService {
         EarnBalanceService(
+            assetsService: assetsService,
+            balanceStore: balanceStore,
             earnStore: earnStore,
             earnService: earnService
         )
@@ -529,6 +536,7 @@ extension ServicesFactory {
         walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
+        earnBalanceService: any EarnBalanceServiceable,
         priceService: PriceService,
         priceObserver: PriceObserverService,
         deviceService: DeviceService,
@@ -538,6 +546,7 @@ extension ServicesFactory {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
+            earnBalanceService: earnBalanceService,
             priceService: priceService,
             priceObserver: priceObserver,
             deviceService: deviceService,

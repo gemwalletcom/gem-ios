@@ -9,7 +9,6 @@ extension GemEarnPosition {
         EarnPosition(
             assetId: try AssetId(id: assetId),
             provider: provider.map(),
-            name: name,
             vaultTokenAddress: vaultTokenAddress,
             assetTokenAddress: assetTokenAddress,
             vaultBalanceValue: vaultBalanceValue,
@@ -24,7 +23,6 @@ extension GemEarnPosition {
 extension EarnPosition {
     public func map() -> GemEarnPosition {
         GemEarnPosition(
-            name: name,
             assetId: assetId.identifier,
             provider: provider.map(),
             vaultTokenAddress: vaultTokenAddress,

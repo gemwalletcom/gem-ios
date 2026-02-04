@@ -2,7 +2,6 @@
 
 import AssetsService
 import BannerService
-import BigInt
 import Components
 import ExplorerService
 import Formatters
@@ -17,7 +16,6 @@ import SwiftUI
 import TransactionsService
 import UIKit
 import WalletsService
-import Store
 
 @Observable
 @MainActor
@@ -42,8 +40,6 @@ public final class AssetSceneViewModel: Sendable {
     public var chainAssetData: ChainAssetData
     public var transactions: [TransactionExtended] = []
     public var banners: [Banner] = []
-    public var earnPositionsRequest: EarnPositionsRequest
-    public var earnPositions: [EarnPosition] = []
     public var assetData: AssetData { chainAssetData.assetData }
     private var asset: Asset { assetData.asset }
     private var wallet: Wallet { walletModel.wallet }
@@ -69,10 +65,6 @@ public final class AssetSceneViewModel: Sendable {
         self.chainAssetData = ChainAssetData(
             assetData: AssetData.with(asset: input.asset),
             feeAssetData: AssetData.with(asset: input.asset.chain.asset)
-        )
-        self.earnPositionsRequest = EarnPositionsRequest(
-            walletId: input.wallet.walletId,
-            assetId: input.asset.id
         )
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
@@ -146,19 +138,13 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     var hasEarnPosition: Bool {
-        earnBalance > 0
+        assetData.balance.earn > 0
     }
 
     var earnBalanceText: String {
-        let balance = earnBalance
+        let balance = assetData.balance.earn
         guard balance > 0 else { return "0" }
         return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
-    }
-
-    private var earnBalance: BigInt {
-        earnPositions
-            .compactMap { BigInt($0.balance) }
-            .reduce(0, +)
     }
 
     var priceItemViewModel: PriceListItemViewModel {

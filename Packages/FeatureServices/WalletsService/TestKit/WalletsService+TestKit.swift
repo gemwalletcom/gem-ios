@@ -8,6 +8,8 @@ import AssetsService
 import AssetsServiceTestKit
 import BalanceService
 import BalanceServiceTestKit
+import EarnService
+import EarnServiceTestKit
 import PriceService
 import PriceServiceTestKit
 import DeviceService
@@ -23,6 +25,7 @@ public extension WalletsService {
         walletSessionService: WalletSessionService = WalletSessionService(walletStore: .mock(), preferences: .mock()),
         assetsService: AssetsService = .mock(),
         balanceService: BalanceService = .mock(),
+        earnBalanceService: any EarnBalanceServiceable = MockEarnBalanceService(),
         priceService: PriceService = .mock(),
         priceObserver: PriceObserverService = .mock(),
         deviceService: DeviceService = .mock(),
@@ -32,6 +35,7 @@ public extension WalletsService {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
+            earnBalanceService: earnBalanceService,
             priceService: priceService,
             priceObserver: priceObserver,
             deviceService: deviceService,

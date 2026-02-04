@@ -15,7 +15,6 @@ public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
         static let rewards = Column("rewards")
         static let apy = Column("apy")
         static let provider = Column("provider")
-        static let name = Column("name")
         static let vaultTokenAddress = Column("vaultTokenAddress")
         static let assetTokenAddress = Column("assetTokenAddress")
         static let vaultBalanceValue = Column("vaultBalanceValue")
@@ -30,7 +29,6 @@ public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
     public var apy: Double?
 
     public var provider: String?
-    public var name: String?
     public var vaultTokenAddress: String
     public var assetTokenAddress: String
     public var vaultBalanceValue: String
@@ -44,7 +42,6 @@ public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
         rewards: String?,
         apy: Double?,
         provider: String?,
-        name: String?,
         vaultTokenAddress: String,
         assetTokenAddress: String,
         vaultBalanceValue: String,
@@ -57,7 +54,6 @@ public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
         self.rewards = rewards
         self.apy = apy
         self.provider = provider
-        self.name = name
         self.vaultTokenAddress = vaultTokenAddress
         self.assetTokenAddress = assetTokenAddress
         self.vaultBalanceValue = vaultBalanceValue
@@ -87,7 +83,6 @@ extension EarnPositionRecord: CreateTable {
             $0.column(Columns.rewards.name, .text)
             $0.column(Columns.apy.name, .double)
             $0.column(Columns.provider.name, .text)
-            $0.column(Columns.name.name, .text)
             $0.column(Columns.vaultTokenAddress.name, .text)
                 .notNull()
                 .defaults(to: "")
@@ -111,7 +106,6 @@ extension EarnPositionRecord {
         return EarnPosition(
             assetId: assetId,
             provider: earnProvider,
-            name: name ?? "",
             vaultTokenAddress: vaultTokenAddress,
             assetTokenAddress: assetTokenAddress,
             vaultBalanceValue: vaultBalanceValue,
@@ -133,7 +127,6 @@ extension EarnPosition {
             rewards: rewards,
             apy: apy,
             provider: provider.rawValue,
-            name: name,
             vaultTokenAddress: vaultTokenAddress,
             assetTokenAddress: assetTokenAddress,
             vaultBalanceValue: vaultBalanceValue,

@@ -73,6 +73,7 @@ let package = Package(
         .package(name: "Formatters", path: "../Formatters"),
         .package(name: "SwiftHTTPClient", path: "../SwiftHTTPClient"),
         .package(name: "NativeProviderService", path: "../NativeProviderService"),
+        .package(name: "BigInt", path: "../../Submodules/BigInt"),
     ],
     targets: [
         .target(
@@ -352,6 +353,7 @@ let package = Package(
                 "PriceService",
                 "Preferences",
                 "BalanceService",
+                "EarnService",
                 "AssetsService",
                 "TransactionStateService",
                 "DiscoverAssetsService",
@@ -371,6 +373,7 @@ let package = Package(
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 "PriceServiceTestKit",
                 "BalanceServiceTestKit",
+                "EarnServiceTestKit",
                 "WalletSessionService",
                 "WalletSessionServiceTestKit",
                 "WalletsService"
@@ -579,8 +582,11 @@ let package = Package(
         .target(
             name: "EarnService",
             dependencies: [
+                "AssetsService",
+                "Formatters",
                 "Gemstone",
                 "GemstonePrimitives",
+                .product(name: "BigInt", package: "BigInt"),
                 "Primitives",
                 "NativeProviderService",
                 "Store",

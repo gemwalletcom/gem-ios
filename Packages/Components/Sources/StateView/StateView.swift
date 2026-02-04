@@ -4,7 +4,7 @@ import Foundation
 
 import SwiftUI
 
-struct StateView<Content: View, T: Hashable & Sendable>: View {
+public struct StateView<Content: View, T: Hashable & Sendable>: View {
     let state: StateViewType<T>
     let content: (T) -> Content
     let emptyView: AnyView
@@ -12,7 +12,7 @@ struct StateView<Content: View, T: Hashable & Sendable>: View {
     let loadingView: AnyView
     let errorView: AnyView
 
-    init(
+    public init(
         state: StateViewType<T>,
         @ViewBuilder content: @escaping (T) -> Content,
         @ViewBuilder emptyView: @escaping () -> AnyView,
@@ -28,7 +28,7 @@ struct StateView<Content: View, T: Hashable & Sendable>: View {
         self.errorView = errorView()
     }
 
-    var body: some View {
+    public var body: some View {
         switch state {
         case .noData:
             noDataView
@@ -36,9 +36,8 @@ struct StateView<Content: View, T: Hashable & Sendable>: View {
             loadingView
         case .data(let model):
             content(model)
-        case .error(let error):
-            Text("Error: \(error.localizedDescription)")
-                .foregroundStyle(.red)
+        case .error:
+            errorView
         }
     }
 }

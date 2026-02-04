@@ -19,8 +19,9 @@ public final class EarnProtocolsSceneViewModel {
 
     public var positionsRequest: EarnPositionsRequest
     public var positions: [EarnPosition] = []
+    public var protocols: [EarnProtocolViewModel] = []
 
-    private var protocolsState: StateViewType<[EarnProtocolViewModel]> = .loading
+    public var protocolsState: StateViewType<Bool> = .loading
 
     public var title: String {
         Localized.Common.earn
@@ -45,10 +46,6 @@ public final class EarnProtocolsSceneViewModel {
 
     public var isLoading: Bool {
         protocolsState.isLoading
-    }
-
-    public var protocols: [EarnProtocolViewModel] {
-        protocolsState.value ?? []
     }
 
     public var positionModels: [EarnPositionViewModel] {
@@ -119,7 +116,8 @@ public final class EarnProtocolsSceneViewModel {
         do {
             let protocols = try await earnService.getProtocols(for: asset.id)
             let protocolModels = protocols.map { EarnProtocolViewModel(protocol: $0) }
-            protocolsState = protocolModels.isEmpty ? .noData : .data(protocolModels)
+            self.protocols = protocolModels
+            protocolsState = protocolModels.isEmpty ? .noData : .data(true)
         } catch {
             protocolsState = .error(error)
         }
@@ -135,13 +133,7 @@ public final class EarnProtocolsSceneViewModel {
     }
 
     public func onSelectProtocol(_ opportunity: EarnProtocolViewModel) {
-        let earnData = EarnData(
-            provider: opportunity.provider.rawValue,
-            contractAddress: nil,
-            callData: nil,
-            approval: nil,
-            gasLimit: nil
-        )
+        let earnData = makeEarnData(provider: opportunity.provider.rawValue)
         let amountInput = AmountInput(
             type: .earn(action: .deposit, data: earnData, depositedBalance: nil),
             asset: asset
@@ -150,17 +142,21 @@ public final class EarnProtocolsSceneViewModel {
     }
 
     public func onWithdraw(_ position: EarnPositionViewModel) {
-        let earnData = EarnData(
-            provider: position.provider,
-            contractAddress: nil,
-            callData: nil,
-            approval: nil,
-            gasLimit: nil
-        )
+        let earnData = makeEarnData(provider: position.provider)
         let amountInput = AmountInput(
             type: .earn(action: .withdraw, data: earnData, depositedBalance: position.vaultBalance),
             asset: asset
         )
         onAmountInputAction?(amountInput)
+    }
+
+    private func makeEarnData(provider: String) -> EarnData {
+        EarnData(
+            provider: provider,
+            contractAddress: nil,
+            callData: nil,
+            approval: nil,
+            gasLimit: nil
+        )
     }
 }

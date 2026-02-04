@@ -79,23 +79,49 @@ extension EarnScene {
 
     private var delegationsSection: some View {
         Section(model.delegationsSectionTitle) {
-            switch model.delegationsState {
-            case .noData:
-                EmptyContentView(model: model.emptyContentModel)
-                    .cleanListRow()
-            case .loading:
-                ListItemLoadingView()
-                    .id(UUID())
-            case .data(let delegations):
-                ForEach(delegations) { delegation in
-                    NavigationLink(value: delegation.navigationDestination) {
-                        StakeDelegationView(delegation: delegation)
+            StateView(
+                state: model.delegationsViewState,
+                content: { _ in
+                    ForEach(model.delegationModels) { delegation in
+                        NavigationLink(value: delegation.navigationDestination) {
+                            StakeDelegationView(delegation: delegation)
+                        }
                     }
+                    .listRowInsets(.assetListRowInsets)
+                },
+                emptyView: {
+                    AnyView(
+                        EmptyContentView(model: model.emptyContentModel)
+                            .cleanListRow()
+                    )
+                },
+                noDataView: {
+                    AnyView(
+                        EmptyContentView(model: model.emptyContentModel)
+                            .cleanListRow()
+                    )
+                },
+                loadingView: {
+                    AnyView(
+                        ListItemLoadingView()
+                            .id(UUID())
+                    )
+                },
+                errorView: {
+                    AnyView(
+                        Group {
+                            if let error = model.delegationsError {
+                                ListItemErrorView(
+                                    errorTitle: Localized.Errors.errorOccured,
+                                    error: error
+                                )
+                            } else {
+                                EmptyView()
+                            }
+                        }
+                    )
                 }
-                .listRowInsets(.assetListRowInsets)
-            case .error(let error):
-                ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
-            }
+            )
         }
     }
 

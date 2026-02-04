@@ -13,7 +13,6 @@ extension EarnPosition {
         self.init(
             assetId: assetId,
             provider: position.provider.map(),
-            name: position.name,
             vaultTokenAddress: position.vaultTokenAddress,
             assetTokenAddress: position.assetTokenAddress,
             vaultBalanceValue: position.vaultBalanceValue,
