@@ -160,10 +160,10 @@ public extension NewBanner {
         )
     }
 
-    public static func yield(assetId: AssetId) -> NewBanner {
+    public static func earn(assetId: AssetId) -> NewBanner {
         NewBanner(
             assetId: assetId,
-            event: .yield,
+            event: .earn,
             state: .active
         )
     }

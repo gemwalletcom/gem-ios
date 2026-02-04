@@ -4,13 +4,13 @@ import Foundation
 import GRDB
 import Primitives
 
-struct StakePositionInfo: Codable, FetchableRecord {
-    let position: StakePositionRecord
+struct StakeDelegationInfo: Codable, FetchableRecord {
+    let position: StakeDelegationRecord
     let validator: StakeValidatorRecord?
     let price: PriceRecord?
 }
 
-extension StakePositionInfo {
+extension StakeDelegationInfo {
     func mapToDelegation() -> Delegation? {
         guard let validator else {
             return nil

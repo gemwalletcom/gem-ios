@@ -3,10 +3,7 @@
 import Formatters
 import Foundation
 import Gemstone
-import GemstonePrimitives
 import Localization
-import PrimitivesComponents
-import Style
 import SwiftUI
 
 @Observable
@@ -15,14 +12,12 @@ public final class EarnProtocolViewModel: Identifiable, Sendable {
     public let assetId: Gemstone.AssetId
     public let provider: GemYieldProvider
     public let apy: Double?
-    public let risk: GemRiskLevel
 
     public init(yield: GemYield) {
         self.name = yield.name
         self.assetId = yield.assetId
         self.provider = yield.provider
         self.apy = yield.apy
-        self.risk = yield.risk
     }
 
     public var id: String {
@@ -46,24 +41,5 @@ public final class EarnProtocolViewModel: Identifiable, Sendable {
 
     public var providerImage: Image {
         provider.image
-    }
-
-    public var riskText: String {
-        risk.displayName
-    }
-
-    public var riskColor: Color {
-        risk.color
-    }
-
-    public var riskDotsView: some View {
-        let riskLevel = risk
-        return HStack(spacing: Spacing.small) {
-            ForEach(0..<3, id: \.self) { index in
-                Circle()
-                    .fill(index < riskLevel.dotCount ? riskLevel.color : Colors.grayLight)
-                    .frame(width: 6, height: 6)
-            }
-        }
     }
 }

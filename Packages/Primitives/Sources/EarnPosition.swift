@@ -24,7 +24,7 @@ public struct StakePositionData: Codable, Equatable, Hashable, Sendable {
     }
 }
 
-public struct YieldPositionData: Codable, Equatable, Hashable, Sendable {
+public struct EarnPositionData: Codable, Equatable, Hashable, Sendable {
     public let provider: String
     public let name: String
     public let vaultTokenAddress: String?
@@ -51,7 +51,7 @@ public struct YieldPositionData: Codable, Equatable, Hashable, Sendable {
 
 public enum EarnType: Codable, Equatable, Hashable, Sendable {
     case stake(StakePositionData)
-    case yield(YieldPositionData)
+    case yield(EarnPositionData)
 
     public var isStake: Bool {
         if case .stake = self { return true }
@@ -68,7 +68,7 @@ public enum EarnType: Codable, Equatable, Hashable, Sendable {
         return nil
     }
 
-    public var yieldData: YieldPositionData? {
+    public var yieldData: EarnPositionData? {
         if case .yield(let data) = self { return data }
         return nil
     }

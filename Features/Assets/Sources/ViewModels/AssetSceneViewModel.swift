@@ -92,7 +92,7 @@ public final class AssetSceneViewModel: Sendable {
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
-    var showBalances: Bool { assetDataModel.showBalances || hasYieldPosition }
+    var showBalances: Bool { assetDataModel.showBalances || hasEarnPosition }
     private var showStakedBalanceTypes: [Primitives.BalanceType] = [.staked, .pending, .rewards]
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
@@ -143,20 +143,20 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     var showEarnButton: Bool {
-        assetData.isEarnable && !wallet.isViewOnly && !hasYieldPosition
+        assetData.isEarnable && !wallet.isViewOnly && !hasEarnPosition
     }
 
-    var hasYieldPosition: Bool {
-        yieldPositionsBalance > 0
+    var hasEarnPosition: Bool {
+        earnBalance > 0
     }
 
-    var yieldBalanceText: String {
-        let balance = yieldPositionsBalance
+    var earnBalanceText: String {
+        let balance = earnBalance
         guard balance > 0 else { return "0" }
         return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
-    private var yieldPositionsBalance: BigInt {
+    private var earnBalance: BigInt {
         earnPositions
             .compactMap { BigInt($0.balance) }
             .reduce(0, +)
@@ -317,7 +317,7 @@ extension AssetSceneViewModel {
             case .tradePerpetuals:
                 UIApplication.shared.open(DeepLink.perpetuals.localUrl)
                 preferences.isPerpetualEnabled = true
-            case .yield:
+            case .earn:
                 onSelectEarn()
             }
         case .button(let bannerButton):

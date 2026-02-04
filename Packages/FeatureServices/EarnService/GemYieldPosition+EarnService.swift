@@ -12,7 +12,7 @@ extension EarnPosition {
         self.init(
             walletId: walletId.id,
             assetId: assetId,
-            type: .yield(YieldPositionData(
+            type: .yield(EarnPositionData(
                 provider: position.provider.name,
                 name: position.name,
                 vaultTokenAddress: position.vaultTokenAddress,

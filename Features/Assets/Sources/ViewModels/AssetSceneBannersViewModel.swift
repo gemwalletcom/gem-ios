@@ -37,7 +37,7 @@ final class AssetSceneBannersViewModel: Sendable {
     private func shouldShowBanner(_ banner: Banner) -> Bool {
         switch banner.event {
         case .enableNotifications, .accountBlockedMultiSignature, .tradePerpetuals: true
-        case .yield: assetData.isEarnable
+        case .earn: assetData.isEarnable
         case .accountActivation: assetData.balance.available == 0
         case .stake: assetData.balance.staked.isZero && assetData.balance.frozen.isZero
         case .activateAsset: !assetData.metadata.isActive

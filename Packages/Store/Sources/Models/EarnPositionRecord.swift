@@ -103,7 +103,7 @@ extension EarnPositionRecord {
         return EarnPosition(
             walletId: walletId,
             assetId: assetId,
-            type: .yield(YieldPositionData(
+            type: .yield(EarnPositionData(
                 provider: provider,
                 name: name ?? "",
                 vaultTokenAddress: vaultTokenAddress,
@@ -121,7 +121,7 @@ extension EarnPositionRecord {
 extension EarnPosition {
     public var record: EarnPositionRecord {
         guard case .yield(let data) = type else {
-            preconditionFailure("Stake positions should be stored in StakePositionRecord.")
+            preconditionFailure("Stake positions should be stored in StakeDelegationRecord.")
         }
 
         return EarnPositionRecord(
@@ -142,7 +142,7 @@ extension EarnPosition {
 
     private var recordId: String {
         guard case .yield(let data) = type else {
-            preconditionFailure("Stake positions should be stored in StakePositionRecord.")
+            preconditionFailure("Stake positions should be stored in StakeDelegationRecord.")
         }
         return "\(walletId)-\(assetId.identifier)-\(data.provider)"
     }

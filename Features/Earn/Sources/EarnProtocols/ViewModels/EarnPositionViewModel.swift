@@ -9,7 +9,7 @@ import Primitives
 
 public struct EarnPositionViewModel: Identifiable, Sendable {
     private let position: EarnPosition
-    private let yieldData: YieldPositionData
+    private let yieldData: EarnPositionData
     private let decimals: Int
 
     public init?(position: EarnPosition, decimals: Int) {

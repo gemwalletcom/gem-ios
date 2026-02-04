@@ -14,7 +14,7 @@ struct WalletIdMigration {
         NotificationRecord.databaseTableName,
         PerpetualPositionRecord.databaseTableName,
         RecentActivityRecord.databaseTableName,
-        StakePositionRecord.databaseTableName,
+        StakeDelegationRecord.databaseTableName,
         TransactionRecord.databaseTableName,
         WalletConnectionRecord.databaseTableName,
     ]

@@ -29,7 +29,7 @@ struct BannerViewModel {
                 return .none
             }
             return AssetImage.resourceImage(image: asset.chain.rawValue)
-        case .yield:
+        case .earn:
             guard let asset = asset else {
                 return .none
             }
@@ -67,7 +67,7 @@ struct BannerViewModel {
             return Localized.Banner.AssetStatus.title
         case .onboarding: return Localized.Banner.Onboarding.title
         case .tradePerpetuals: return Localized.Banner.Perpetuals.title
-        case .yield:
+        case .earn:
             guard let asset = asset else {
                 return .none
             }
@@ -102,7 +102,7 @@ struct BannerViewModel {
             return Localized.Banner.AssetStatus.description
         case .onboarding: return Localized.Banner.Onboarding.description
         case .tradePerpetuals: return Localized.Banner.Perpetuals.description
-        case .yield:
+        case .earn:
             guard let asset = asset else {
                 return .none
             }
@@ -123,7 +123,7 @@ struct BannerViewModel {
                 .activateAsset,
                 .suspiciousAsset,
                 .tradePerpetuals,
-                .yield: .image.asset
+                .earn: .image.asset
         case .onboarding: .image.medium
         }
     }
@@ -135,7 +135,7 @@ struct BannerViewModel {
             .activateAsset,
             .suspiciousAsset,
             .tradePerpetuals,
-            .yield: 14
+            .earn: 14
         case .enableNotifications,
             .accountBlockedMultiSignature,
             .onboarding: 0
@@ -157,7 +157,7 @@ struct BannerViewModel {
             .activateAsset,
             .onboarding,
             .tradePerpetuals,
-            .yield:
+            .earn:
             return .none
         case .accountActivation:
             return asset?.chain.accountActivationFeeUrl
@@ -185,7 +185,7 @@ struct BannerViewModel {
                 .activateAsset,
                 .suspiciousAsset,
                 .tradePerpetuals,
-                .yield: .list
+                .earn: .list
         case .onboarding: .banner
         }
     }
@@ -199,7 +199,7 @@ struct BannerViewModel {
                 .activateAsset,
                 .suspiciousAsset,
                 .tradePerpetuals,
-                .yield: []
+                .earn: []
         case .onboarding: [
             BannerButtonViewModel(button: .buy, banner: banner),
             BannerButtonViewModel(button: .receive, banner: banner)

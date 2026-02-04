@@ -106,7 +106,7 @@ public struct AssetScene: View {
                         stakeView
                     }
 
-                    if model.hasYieldPosition {
+                    if model.hasEarnPosition {
                         earnView
                     }
 
@@ -203,7 +203,7 @@ extension AssetScene {
 
     private var earnView: some View {
         NavigationCustomLink(
-            with: ListItemView(title: model.earnTitle, subtitle: model.yieldBalanceText),
+            with: ListItemView(title: model.earnTitle, subtitle: model.earnBalanceText),
             action: { model.onSelectEarn() }
         )
         .accessibilityIdentifier("earn")
