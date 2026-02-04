@@ -25,8 +25,7 @@ struct WalletHeaderViewModelTests {
             currencyCode: Currency.usd.rawValue,
             bannerEventsViewModel: HeaderBannerEventViewModel(events: [])
         )
-        #expect(model.subtitle == "+$50.00")
-        #expect(model.subtitleBadge == "+5.00%")
+        #expect(model.subtitle == "+$50.00 (+5.00%)")
     }
 
     @Test

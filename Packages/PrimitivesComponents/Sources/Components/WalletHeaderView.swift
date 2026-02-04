@@ -48,7 +48,7 @@ public struct WalletHeaderView: View {
             .padding(.bottom, .space10)
 
             if let subtitle = model.subtitle {
-                HStack(spacing: Spacing.small) {
+                HStack(spacing: Spacing.tiny) {
                     PrivacyText(
                         subtitle,
                         isEnabled: $isPrivacyEnabled
@@ -56,14 +56,10 @@ public struct WalletHeaderView: View {
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(model.subtitleColor)
 
-                    if let badge = model.subtitleBadge, !isPrivacyEnabled {
-                        Text(badge)
-                            .font(.system(size: 15, weight: .medium))
-                            .foregroundStyle(Colors.whiteSolid)
-                            .padding(.horizontal, Spacing.small)
-                            .padding(.vertical, Spacing.extraSmall)
-                            .background(model.subtitleColor)
-                            .clipShape(Capsule())
+                    if let arrow = model.subtitleImage, !isPrivacyEnabled {
+                        arrow
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(model.subtitleColor)
                     }
                 }
                 .numericTransition(for: model.subtitle)

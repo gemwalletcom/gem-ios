@@ -8,11 +8,11 @@ public protocol HeaderViewModel {
     var assetImage: AssetImage? { get }
     var title: String { get }
     var subtitle: String? { get }
-    var subtitleBadge: String? { get }
+    var subtitleImage: Image? { get }
     var subtitleColor: Color { get }
     var buttons: [HeaderButton] { get }
 }
 
 public extension HeaderViewModel {
-    var subtitleBadge: String? { nil }
+    var subtitleImage: Image? { nil }
 }
