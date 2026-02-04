@@ -23,10 +23,7 @@ struct TransactionsNavigationStack: View {
     }
 
     private var navigationPath: Binding<NavigationPath> {
-        Binding(
-            get: { navigationState.activity },
-            set: { navigationState.activity = $0 }
-        )
+        navigationState.activity.binding
     }
 
     var body: some View {

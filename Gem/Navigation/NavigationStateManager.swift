@@ -5,15 +5,15 @@ import SwiftUI
 @Observable
 final class NavigationStateManager: Sendable {
     @MainActor
-    var wallet = NavigationPath()
+    var wallet = NavigationPathState()
     @MainActor
-    var collections = NavigationPath()
+    var collections = NavigationPathState()
     @MainActor
-    var activity = NavigationPath()
+    var activity = NavigationPathState()
     @MainActor
-    var settings = NavigationPath()
+    var settings = NavigationPathState()
     @MainActor
-    var markets = NavigationPath()
+    var markets = NavigationPathState()
 
     @MainActor
     var selectedTab: TabItem = .wallet
@@ -44,19 +44,14 @@ extension NavigationStateManager {
         if wallet.isEmpty {
             walletTabReselected.toggle()
         }
-        
-        switch tab {
-        case .wallet: resetPath(&wallet)
-        case .collections: resetPath(&collections)
-        case .activity: resetPath(&activity)
-        case .settings: resetPath(&settings)
-        case .markets: resetPath(&markets)
-        }
-    }
 
-    private func resetPath(_ path: inout NavigationPath) {
-        guard !path.isEmpty else { return }
-        path.removeLast(path.count)
+        switch tab {
+        case .wallet: wallet.reset()
+        case .collections: collections.reset()
+        case .activity: activity.reset()
+        case .settings: settings.reset()
+        case .markets: markets.reset()
+        }
     }
 
     func clearAll() {
