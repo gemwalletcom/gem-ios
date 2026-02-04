@@ -1,12 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
-import SwiftUI
-import Style
 import Components
-import Localization
 import Formatters
+import Foundation
+import Localization
+import Primitives
+import Style
+import SwiftUI
 
 public struct AssetDataViewModel: Sendable {
     private let assetData: AssetData
@@ -35,9 +35,17 @@ public struct AssetDataViewModel: Sendable {
         self.currencyCode = currencyCode
     }
 
-    public var availableBalanceTitle: String { Localized.Asset.Balances.available }
-    public var reservedBalanceTitle: String { Localized.Asset.Balances.reserved }
-    public var pendingUnconfirmedBalanceTitle: String { Localized.Stake.pending }
+    public var availableBalanceTitle: String {
+        Localized.Asset.Balances.available
+    }
+
+    public var reservedBalanceTitle: String {
+        Localized.Asset.Balances.reserved
+    }
+
+    public var pendingUnconfirmedBalanceTitle: String {
+        Localized.Stake.pending
+    }
 
     // asset
 
@@ -163,10 +171,6 @@ public struct AssetDataViewModel: Sendable {
         assetData.metadata.isStakeEnabled
     }
 
-    public var stakingApr: Double? {
-        assetData.metadata.stakingApr
-    }
-
     public var isEarnEnabled: Bool {
         assetData.metadata.isEarnEnabled
     }
@@ -182,11 +186,15 @@ public struct AssetDataViewModel: Sendable {
     public var address: String {
         assetData.account.address
     }
-    
+
+    public var stakingApr: Double? {
+        assetData.metadata.stakingApr
+    }
+
     public var isPriceAlertsEnabled: Bool {
         assetData.isPriceAlertsEnabled
     }
-    
+
     public var assetAddress: AssetAddress {
         assetData.assetAddress
     }

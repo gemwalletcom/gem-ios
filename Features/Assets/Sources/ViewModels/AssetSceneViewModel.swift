@@ -6,7 +6,6 @@ import BigInt
 import Components
 import ExplorerService
 import Formatters
-import Gemstone
 import Localization
 import Preferences
 import PriceAlertService

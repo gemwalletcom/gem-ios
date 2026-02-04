@@ -9,8 +9,6 @@ import PrimitivesTestKit
 import Primitives
 import EarnService
 import EarnServiceTestKit
-import BalanceService
-import BalanceServiceTestKit
 
 @testable import Earn
 
@@ -47,14 +45,16 @@ extension EarnSceneViewModel {
         chain: StakeChain = .tron,
         stakeService: any StakeServiceable = MockStakeService(stakeApr: 13.5),
         earnService: any EarnServiceType = MockEarnService(),
-        balanceService: BalanceService = .mock()
+        earnPositionsService: any EarnBalanceServiceable = MockEarnBalanceService(),
+        earnAsset: Asset = .mockTron()
     ) -> EarnSceneViewModel {
         EarnSceneViewModel(
             wallet: wallet,
             chain: chain,
             stakeService: stakeService,
             earnService: earnService,
-            balanceService: balanceService
+            earnPositionsService: earnPositionsService,
+            earnAsset: earnAsset
         )
     }
 }

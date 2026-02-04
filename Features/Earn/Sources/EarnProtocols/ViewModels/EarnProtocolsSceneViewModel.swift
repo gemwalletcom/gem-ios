@@ -1,6 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import BalanceService
 import Components
 import Foundation
 import Localization
@@ -14,7 +13,7 @@ import EarnService
 public final class EarnProtocolsSceneViewModel {
     public let wallet: Wallet
     public let asset: Asset
-    private let balanceService: BalanceService
+    private let earnPositionsService: any EarnBalanceServiceable
     private let earnService: any EarnServiceType
     private let onAmountInputAction: AmountInputAction
 
@@ -40,7 +39,7 @@ public final class EarnProtocolsSceneViewModel {
             type: asset.type.rawValue,
             imageURL: AssetImageFormatter.shared.getURL(for: asset.id),
             placeholder: nil,
-            chainPlaceholder: Images.YieldProviders.yo
+            chainPlaceholder: Images.EarnProviders.yo
         )
     }
 
@@ -92,13 +91,13 @@ public final class EarnProtocolsSceneViewModel {
     public init(
         wallet: Wallet,
         asset: Asset,
-        balanceService: BalanceService,
+        earnPositionsService: any EarnBalanceServiceable,
         earnService: any EarnServiceType,
         onAmountInputAction: AmountInputAction = nil
     ) {
         self.wallet = wallet
         self.asset = asset
-        self.balanceService = balanceService
+        self.earnPositionsService = earnPositionsService
         self.earnService = earnService
         self.onAmountInputAction = onAmountInputAction
         self.positionsRequest = EarnPositionsRequest(
@@ -118,9 +117,9 @@ public final class EarnProtocolsSceneViewModel {
         async let _ = updatePositions()
 
         do {
-            let yields = try await earnService.getYields(for: asset.id)
-            let protocols = yields.map { EarnProtocolViewModel(yield: $0) }
-            protocolsState = protocols.isEmpty ? .noData : .data(protocols)
+            let protocols = try await earnService.getProtocols(for: asset.id)
+            let protocolModels = protocols.map { EarnProtocolViewModel(protocol: $0) }
+            protocolsState = protocolModels.isEmpty ? .noData : .data(protocolModels)
         } catch {
             protocolsState = .error(error)
         }
@@ -128,7 +127,7 @@ public final class EarnProtocolsSceneViewModel {
 
     private func updatePositions() async {
         guard !walletAddress.isEmpty else { return }
-        await balanceService.updateYieldPositions(
+        await earnPositionsService.updatePositions(
             walletId: wallet.walletId,
             assetId: asset.id,
             address: walletAddress
@@ -137,14 +136,14 @@ public final class EarnProtocolsSceneViewModel {
 
     public func onSelectProtocol(_ opportunity: EarnProtocolViewModel) {
         let earnData = EarnData(
-            provider: opportunity.provider.name,
+            provider: opportunity.provider.rawValue,
             contractAddress: nil,
             callData: nil,
             approval: nil,
             gasLimit: nil
         )
         let amountInput = AmountInput(
-            type: .yield(action: .deposit, data: earnData, depositedBalance: nil),
+            type: .earn(action: .deposit, data: earnData, depositedBalance: nil),
             asset: asset
         )
         onAmountInputAction?(amountInput)
@@ -159,7 +158,7 @@ public final class EarnProtocolsSceneViewModel {
             gasLimit: nil
         )
         let amountInput = AmountInput(
-            type: .yield(action: .withdraw, data: earnData, depositedBalance: position.vaultBalance),
+            type: .earn(action: .withdraw, data: earnData, depositedBalance: position.vaultBalance),
             asset: asset
         )
         onAmountInputAction?(amountInput)

@@ -102,13 +102,10 @@ let package = Package(
         .target(
             name: "BalanceService",
             dependencies: [
-                "Gemstone",
-                "GemstonePrimitives",
                 "Primitives",
                 "Store",
                 .product(name: "ChainService", package: "ChainServices"),
-                "AssetsService",
-                "EarnService"
+                "AssetsService"
             ],
             path: "BalanceService",
             exclude: ["TestKit"]
@@ -121,8 +118,7 @@ let package = Package(
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 "AssetsServiceTestKit",
                 "BalanceService",
-                "Primitives",
-                "EarnServiceTestKit"
+                "Primitives"
             ],
             path: "BalanceService/TestKit"
         ),
@@ -587,6 +583,7 @@ let package = Package(
                 "GemstonePrimitives",
                 "Primitives",
                 "NativeProviderService",
+                "Store",
             ],
             path: "EarnService",
             exclude: ["TestKit"]

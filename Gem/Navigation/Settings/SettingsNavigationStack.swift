@@ -142,8 +142,7 @@ struct SettingsNavigationStack: View {
                     stakeService: stakeService,
                     bannerService: bannerService,
                     priceService: priceService,
-                    perpetualService: perpetualService,
-                    balanceService: balanceService
+                    perpetualService: perpetualService
                 ))
             }
             .navigationDestination(for: Scenes.InAppNotifications.self) { _ in

@@ -62,7 +62,7 @@ public struct TransactionHeaderTypeBuilder {
                     .generic,
                     .stake,
                     .tokenApprove,
-                    .yield:
+                    .earn:
                 return .amount(
                     showFiat: true
                 )

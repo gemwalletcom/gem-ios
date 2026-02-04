@@ -54,7 +54,7 @@ extension ConfirmRecipientViewModel {
             case .sign: Localized.Asset.contract
             case .send: Localized.Transfer.Recipient.title
             }
-        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .account, .perpetual, .yield: Localized.Transfer.Recipient.title
+        case .transfer, .deposit, .withdrawal, .transferNft, .tokenApprove, .account, .perpetual, .earn: Localized.Transfer.Recipient.title
         }
     }
 
@@ -71,7 +71,7 @@ extension ConfirmRecipientViewModel {
         case .account,
                 .swap,
                 .perpetual,
-                .yield: false
+                .earn: false
         case .transfer,
                 .transferNft,
                 .deposit,

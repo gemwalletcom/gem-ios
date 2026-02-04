@@ -21,7 +21,7 @@ struct AmountInputConfig: CurrencyInputConfigurable {
     var placeholder: String { .zero }
     var keyboardType: UIKeyboardType {
         switch sceneType {
-        case .transfer, .deposit, .withdraw, .stakeWithdraw, .perpetual, .stakeRedelegate, .freeze, .yield: .decimalPad
+        case .transfer, .deposit, .withdraw, .stakeWithdraw, .perpetual, .stakeRedelegate, .freeze, .earn: .decimalPad
         case .stake, .stakeUnstake: asset.chain == .tron ? .numberPad : .decimalPad
         }
     }
@@ -46,7 +46,7 @@ struct AmountInputConfig: CurrencyInputConfigurable {
             position: .secondary,
             image: Images.Actions.swap.renderingMode(.template)
         )
-        case .deposit, .withdraw, .perpetual, .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .freeze, .yield: nil
+        case .deposit, .withdraw, .perpetual, .stake, .stakeUnstake, .stakeRedelegate, .stakeWithdraw, .freeze, .earn: nil
         }
     }
 

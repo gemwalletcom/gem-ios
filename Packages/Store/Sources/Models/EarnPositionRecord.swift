@@ -31,10 +31,10 @@ public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
 
     public var provider: String?
     public var name: String?
-    public var vaultTokenAddress: String?
-    public var assetTokenAddress: String?
-    public var vaultBalanceValue: String?
-    public var assetBalanceValue: String?
+    public var vaultTokenAddress: String
+    public var assetTokenAddress: String
+    public var vaultBalanceValue: String
+    public var assetBalanceValue: String
 
     public init(
         id: String,
@@ -45,10 +45,10 @@ public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
         apy: Double?,
         provider: String?,
         name: String?,
-        vaultTokenAddress: String?,
-        assetTokenAddress: String?,
-        vaultBalanceValue: String?,
-        assetBalanceValue: String?
+        vaultTokenAddress: String,
+        assetTokenAddress: String,
+        vaultBalanceValue: String,
+        assetBalanceValue: String
     ) {
         self.id = id
         self.walletId = walletId
@@ -89,28 +89,33 @@ extension EarnPositionRecord: CreateTable {
             $0.column(Columns.provider.name, .text)
             $0.column(Columns.name.name, .text)
             $0.column(Columns.vaultTokenAddress.name, .text)
+                .notNull()
+                .defaults(to: "")
             $0.column(Columns.assetTokenAddress.name, .text)
+                .notNull()
+                .defaults(to: "")
             $0.column(Columns.vaultBalanceValue.name, .text)
+                .notNull()
+                .defaults(to: "0")
             $0.column(Columns.assetBalanceValue.name, .text)
+                .notNull()
+                .defaults(to: "0")
         }
     }
 }
 
 extension EarnPositionRecord {
     public var earnPosition: EarnPosition? {
-        guard let provider else { return nil }
+        guard let provider, let earnProvider = EarnProvider(rawValue: provider) else { return nil }
 
         return EarnPosition(
-            walletId: walletId,
             assetId: assetId,
-            type: .yield(EarnPositionData(
-                provider: provider,
-                name: name ?? "",
-                vaultTokenAddress: vaultTokenAddress,
-                assetTokenAddress: assetTokenAddress,
-                vaultBalanceValue: vaultBalanceValue,
-                assetBalanceValue: assetBalanceValue
-            )),
+            provider: earnProvider,
+            name: name ?? "",
+            vaultTokenAddress: vaultTokenAddress,
+            assetTokenAddress: assetTokenAddress,
+            vaultBalanceValue: vaultBalanceValue,
+            assetBalanceValue: assetBalanceValue,
             balance: balance,
             rewards: rewards,
             apy: apy
@@ -119,31 +124,24 @@ extension EarnPositionRecord {
 }
 
 extension EarnPosition {
-    public var record: EarnPositionRecord {
-        guard case .yield(let data) = type else {
-            preconditionFailure("Stake positions should be stored in StakeDelegationRecord.")
-        }
-
+    public func record(walletId: String) -> EarnPositionRecord {
         return EarnPositionRecord(
-            id: recordId,
+            id: recordId(walletId: walletId),
             walletId: walletId,
             assetId: assetId,
             balance: balance,
             rewards: rewards,
             apy: apy,
-            provider: data.provider,
-            name: data.name,
-            vaultTokenAddress: data.vaultTokenAddress,
-            assetTokenAddress: data.assetTokenAddress,
-            vaultBalanceValue: data.vaultBalanceValue,
-            assetBalanceValue: data.assetBalanceValue
+            provider: provider.rawValue,
+            name: name,
+            vaultTokenAddress: vaultTokenAddress,
+            assetTokenAddress: assetTokenAddress,
+            vaultBalanceValue: vaultBalanceValue,
+            assetBalanceValue: assetBalanceValue
         )
     }
 
-    private var recordId: String {
-        guard case .yield(let data) = type else {
-            preconditionFailure("Stake positions should be stored in StakeDelegationRecord.")
-        }
-        return "\(walletId)-\(assetId.identifier)-\(data.provider)"
+    private func recordId(walletId: String) -> String {
+        "\(walletId)-\(assetId.identifier)-\(provider.rawValue)"
     }
 }

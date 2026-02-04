@@ -1,35 +1,26 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import enum Gemstone.GemYieldProvider
-import GemstonePrimitives
 import Primitives
 import Store
 import ChainService
 import Formatters
 import AssetsService
-import EarnService
 
 public struct BalanceService: BalancerUpdater, Sendable {
     private let balanceStore: BalanceStore
-    private let earnStore: EarnStore
     private let assetsService: AssetsService
     private let fetcher: BalanceFetcher
-    private let earnService: any EarnServiceType
     private let formatter = ValueFormatter(style: .full)
 
     public init(
         balanceStore: BalanceStore,
-        earnStore: EarnStore,
         assetsService: AssetsService,
-        chainServiceFactory: ChainServiceFactory,
-        earnService: any EarnServiceType
+        chainServiceFactory: ChainServiceFactory
     ) {
         self.balanceStore = balanceStore
-        self.earnStore = earnStore
         self.assetsService = assetsService
         self.fetcher = BalanceFetcher(chainServiceFactory: chainServiceFactory)
-        self.earnService = earnService
     }
 }
 
@@ -98,11 +89,6 @@ extension BalanceService {
                         await updateTokenBalances(walletId: walletId, chain: chain, tokenIds: tokenIds, address: address)
                     }
                 }
-
-                // yield balance
-                group.addTask {
-                    await updateYieldPositions(walletId: walletId, assetIds: ids, address: address)
-                }
             }
 
             for await _ in group { }
@@ -157,34 +143,6 @@ extension BalanceService {
             fetchBalance: { [try await fetcher.getCoinStakeBalance(chain: chain, address: address)?.stakeChange] },
             mapBalance: { $0 }
         )
-    }
-
-    public func updateYieldPositions(walletId: WalletId, assetId: AssetId, address: String) async {
-        await updateYieldPositions(walletId: walletId, assetIds: [assetId], address: address)
-    }
-
-    public func clearEarnPositions() throws {
-        try earnStore.clear()
-    }
-
-    private func updateYieldPositions(walletId: WalletId, assetIds: [AssetId], address: String) async {
-        for assetId in assetIds {
-            for provider in GemYieldProvider.allCases {
-                do {
-                    let position = try await earnService.fetchPosition(
-                        provider: provider,
-                        asset: assetId,
-                        walletAddress: address
-                    )
-                    guard let earnPosition = EarnPosition(walletId: walletId, position: position) else {
-                        continue
-                    }
-                    try earnStore.updatePosition(earnPosition)
-                } catch {
-                    // Asset may not have yield support for this provider - skip silently
-                }
-            }
-        }
     }
 
     @discardableResult

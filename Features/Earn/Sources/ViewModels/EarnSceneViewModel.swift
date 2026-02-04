@@ -13,15 +13,14 @@ import InfoSheet
 import PrimitivesComponents
 import Formatters
 import EarnService
-import BalanceService
 
 @MainActor
 @Observable
 public final class EarnSceneViewModel {
     private let stakeService: any StakeServiceable
     private let earnService: any EarnServiceType
-    private let balanceService: BalanceService
-    private let earnAsset: Asset?
+    private let earnPositionsService: any EarnBalanceServiceable
+    private let earnAsset: Asset
 
     private var delegatitonsState: StateViewType<Bool> = .loading
     private let chain: StakeChain
@@ -45,14 +44,14 @@ public final class EarnSceneViewModel {
         chain: StakeChain,
         stakeService: any StakeServiceable,
         earnService: any EarnServiceType,
-        balanceService: BalanceService,
-        earnAsset: Asset? = nil
+        earnPositionsService: any EarnBalanceServiceable,
+        earnAsset: Asset
     ) {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
         self.earnService = earnService
-        self.balanceService = balanceService
+        self.earnPositionsService = earnPositionsService
         self.earnAsset = earnAsset
         self.request = EarnDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
         self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId)
@@ -243,21 +242,18 @@ extension EarnSceneViewModel {
 
 extension EarnSceneViewModel {
     public var showEarnProtocols: Bool {
-        earnAsset != nil
+        assetData.isEarnable
     }
 
     public var earnProtocolsTitle: String {
         Localized.Common.earn
     }
 
-    public func earnProtocolsSceneViewModel() -> EarnProtocolsSceneViewModel? {
-        guard let earnAsset else {
-            return nil
-        }
-        return EarnProtocolsSceneViewModel(
+    public func earnProtocolsSceneViewModel() -> EarnProtocolsSceneViewModel {
+        EarnProtocolsSceneViewModel(
             wallet: wallet,
             asset: earnAsset,
-            balanceService: balanceService,
+            earnPositionsService: earnPositionsService,
             earnService: earnService
         )
     }

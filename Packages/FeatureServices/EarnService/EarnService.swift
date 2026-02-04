@@ -19,18 +19,19 @@ public final class EarnService: EarnServiceType {
         self.init(yielder: yielder)
     }
 
-    public func getYields(for assetId: Primitives.AssetId) async throws -> [GemYield] {
-        try await yielder.yieldsForAsset(assetId: assetId.identifier)
+    public func getProtocols(for assetId: Primitives.AssetId) async throws -> [EarnProtocol] {
+        let protocols = try await yielder.yieldsForAsset(assetId: assetId.identifier)
+        return try protocols.map { try $0.map() }
     }
 
     public func deposit(
-        provider: GemYieldProvider,
+        provider: EarnProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
     ) async throws -> GemYieldTransaction {
         try await yielder.deposit(
-            provider: provider.name,
+            provider: provider.map(),
             asset: asset.identifier,
             walletAddress: walletAddress,
             value: value
@@ -38,13 +39,13 @@ public final class EarnService: EarnServiceType {
     }
 
     public func withdraw(
-        provider: GemYieldProvider,
+        provider: EarnProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
     ) async throws -> GemYieldTransaction {
         try await yielder.withdraw(
-            provider: provider.name,
+            provider: provider.map(),
             asset: asset.identifier,
             walletAddress: walletAddress,
             value: value
@@ -52,14 +53,18 @@ public final class EarnService: EarnServiceType {
     }
 
     public func fetchPosition(
-        provider: GemYieldProvider,
+        provider: EarnProvider,
         asset: Primitives.AssetId,
         walletAddress: String
-    ) async throws -> GemYieldPosition {
-        try await yielder.positions(
-            provider: provider.name,
+    ) async throws -> EarnPosition {
+        let position = try await yielder.positions(
+            provider: provider.map(),
             asset: asset.identifier,
             walletAddress: walletAddress
         )
+        guard let earnPosition = EarnPosition(position: position) else {
+            throw AnyError("Earn position mapping failed")
+        }
+        return earnPosition
     }
 }

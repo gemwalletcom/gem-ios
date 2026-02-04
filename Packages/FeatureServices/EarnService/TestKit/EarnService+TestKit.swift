@@ -7,18 +7,18 @@ import Primitives
 @testable import EarnService
 
 public final class MockEarnService: EarnServiceType, @unchecked Sendable {
-    public var mockYields: [GemYield] = []
-    public var mockPosition: GemYieldPosition?
+    public var mockProtocols: [EarnProtocol] = []
+    public var mockPosition: EarnPosition?
     public var mockTransaction: GemYieldTransaction?
 
     public init() {}
 
-    public func getYields(for assetId: Primitives.AssetId) async throws -> [GemYield] {
-        mockYields
+    public func getProtocols(for assetId: Primitives.AssetId) async throws -> [EarnProtocol] {
+        mockProtocols
     }
 
     public func deposit(
-        provider: GemYieldProvider,
+        provider: EarnProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
@@ -30,7 +30,7 @@ public final class MockEarnService: EarnServiceType, @unchecked Sendable {
     }
 
     public func withdraw(
-        provider: GemYieldProvider,
+        provider: EarnProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
@@ -42,10 +42,10 @@ public final class MockEarnService: EarnServiceType, @unchecked Sendable {
     }
 
     public func fetchPosition(
-        provider: GemYieldProvider,
+        provider: EarnProvider,
         asset: Primitives.AssetId,
         walletAddress: String
-    ) async throws -> GemYieldPosition {
+    ) async throws -> EarnPosition {
         guard let position = mockPosition else {
             throw EarnServiceMockError.notConfigured
         }
@@ -59,12 +59,12 @@ enum EarnServiceMockError: Error {
 
 extension MockEarnService {
     public static func mock(
-        yields: [GemYield] = [],
-        position: GemYieldPosition? = nil,
+        protocols: [EarnProtocol] = [],
+        position: EarnPosition? = nil,
         transaction: GemYieldTransaction? = nil
     ) -> MockEarnService {
         let service = MockEarnService()
-        service.mockYields = yields
+        service.mockProtocols = protocols
         service.mockPosition = position
         service.mockTransaction = transaction
         return service

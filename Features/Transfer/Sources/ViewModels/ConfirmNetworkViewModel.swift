@@ -32,7 +32,7 @@ extension ConfirmNetworkViewModel {
     private var networkText: String {
         let model = AssetViewModel(asset: type.asset)
         switch type {
-        case .transfer, .deposit, .withdrawal, .yield:
+        case .transfer, .deposit, .withdrawal, .earn:
             return model.networkFullName
         case .transferNft, .swap, .tokenApprove, .stake, .account, .generic, .perpetual:
             return model.networkName

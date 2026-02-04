@@ -5,26 +5,22 @@ import GRDB
 import Primitives
 
 struct StakeDelegationInfo: Codable, FetchableRecord {
-    let position: StakeDelegationRecord
-    let validator: StakeValidatorRecord?
+    let delegation: StakeDelegationRecord
+    let validator: StakeValidatorRecord
     let price: PriceRecord?
 }
 
 extension StakeDelegationInfo {
-    func mapToDelegation() -> Delegation? {
-        guard let validator else {
-            return nil
-        }
-
+    func mapToDelegation() -> Delegation {
         return Delegation(
             base: DelegationBase(
-                assetId: position.assetId,
-                state: position.state,
-                balance: position.balance,
-                shares: position.shares ?? "0",
-                rewards: position.rewards,
-                completionDate: position.completionDate,
-                delegationId: position.delegationId,
+                assetId: delegation.assetId,
+                state: delegation.state,
+                balance: delegation.balance,
+                shares: delegation.shares ?? "0",
+                rewards: delegation.rewards,
+                completionDate: delegation.completionDate,
+                delegationId: delegation.delegationId,
                 validatorId: validator.validatorId
             ),
             validator: validator.validator,

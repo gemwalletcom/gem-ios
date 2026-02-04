@@ -3,24 +3,20 @@
 import BigInt
 import Formatters
 import Foundation
-import Gemstone
-import GemstonePrimitives
 import Primitives
+import PrimitivesComponents
 
 public struct EarnPositionViewModel: Identifiable, Sendable {
     private let position: EarnPosition
-    private let yieldData: EarnPositionData
     private let decimals: Int
 
     public init?(position: EarnPosition, decimals: Int) {
-        guard let yieldData = position.type.yieldData else { return nil }
         self.position = position
-        self.yieldData = yieldData
         self.decimals = decimals
     }
 
     public var provider: String {
-        yieldData.provider
+        position.provider.rawValue
     }
 
     public var id: String {
@@ -28,15 +24,15 @@ public struct EarnPositionViewModel: Identifiable, Sendable {
     }
 
     public var providerName: String {
-        GemYieldProvider.allCases.first { $0.name == yieldData.provider }?.displayName ?? yieldData.provider
+        position.provider.displayName
     }
 
     public var hasBalance: Bool {
-        vaultBalance.map { $0 > 0 } ?? false
+        vaultBalance > 0
     }
 
-    public var vaultBalance: BigInt? {
-        yieldData.vaultBalanceValue.flatMap { BigInt($0) }
+    public var vaultBalance: BigInt {
+        BigInt(position.vaultBalanceValue) ?? .zero
     }
 
     public var assetBalanceFormatted: String {

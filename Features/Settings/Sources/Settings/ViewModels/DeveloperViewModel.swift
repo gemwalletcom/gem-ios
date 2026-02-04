@@ -14,7 +14,6 @@ import PriceService
 import PerpetualService
 import Components
 import PrimitivesComponents
-import BalanceService
 
 @Observable
 @MainActor
@@ -26,7 +25,6 @@ public final class DeveloperViewModel {
     private let bannerService: BannerService
     private let priceService: PriceService
     private let perpetualService: PerpetualService
-    private let balanceService: BalanceService
 
     public var isPresentingToastMessage: ToastMessage?
 
@@ -37,8 +35,7 @@ public final class DeveloperViewModel {
         stakeService: StakeService,
         bannerService: BannerService,
         priceService: PriceService,
-        perpetualService: PerpetualService,
-        balanceService: BalanceService
+        perpetualService: PerpetualService
     ) {
         self.walletId = walletId
         self.transactionsService = transactionsService
@@ -47,7 +44,6 @@ public final class DeveloperViewModel {
         self.bannerService = bannerService
         self.priceService = priceService
         self.perpetualService = perpetualService
-        self.balanceService = balanceService
     }
 
     var title: String {
@@ -148,12 +144,6 @@ public final class DeveloperViewModel {
         performAction {
             try perpetualService.clear()
             Preferences.standard.perpetualMarketsUpdatedAt = .none
-        }
-    }
-
-    func clearEarnPositions() {
-        performAction {
-            try balanceService.clearEarnPositions()
         }
     }
     

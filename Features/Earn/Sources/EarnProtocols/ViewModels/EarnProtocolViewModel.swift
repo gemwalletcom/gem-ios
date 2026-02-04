@@ -2,26 +2,23 @@
 
 import Formatters
 import Foundation
-import Gemstone
 import Localization
+import Primitives
+import PrimitivesComponents
 import SwiftUI
 
 @Observable
-public final class EarnProtocolViewModel: Identifiable, Sendable {
+public final class EarnProtocolViewModel: Sendable {
     public let name: String
-    public let assetId: Gemstone.AssetId
-    public let provider: GemYieldProvider
+    public let assetId: AssetId
+    public let provider: EarnProvider
     public let apy: Double?
 
-    public init(yield: GemYield) {
-        self.name = yield.name
-        self.assetId = yield.assetId
-        self.provider = yield.provider
-        self.apy = yield.apy
-    }
-
-    public var id: String {
-        "\(provider.name)-\(assetId)"
+    public init(protocol: EarnProtocol) {
+        self.name = `protocol`.name
+        self.assetId = `protocol`.assetId
+        self.provider = `protocol`.provider
+        self.apy = `protocol`.apy
     }
 
     public var providerName: String {
@@ -41,5 +38,11 @@ public final class EarnProtocolViewModel: Identifiable, Sendable {
 
     public var providerImage: Image {
         provider.image
+    }
+}
+
+extension EarnProtocolViewModel: Identifiable {
+    public var id: String {
+        "\(provider.name)-\(assetId)"
     }
 }

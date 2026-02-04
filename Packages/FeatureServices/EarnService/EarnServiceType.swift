@@ -5,25 +5,25 @@ import Gemstone
 import Primitives
 
 public protocol EarnServiceType: Sendable {
-    func getYields(for assetId: Primitives.AssetId) async throws -> [GemYield]
+    func getProtocols(for assetId: Primitives.AssetId) async throws -> [EarnProtocol]
 
     func deposit(
-        provider: GemYieldProvider,
+        provider: EarnProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
     ) async throws -> GemYieldTransaction
 
     func withdraw(
-        provider: GemYieldProvider,
+        provider: EarnProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
     ) async throws -> GemYieldTransaction
 
     func fetchPosition(
-        provider: GemYieldProvider,
+        provider: EarnProvider,
         asset: Primitives.AssetId,
         walletAddress: String
-    ) async throws -> GemYieldPosition
+    ) async throws -> EarnPosition
 }

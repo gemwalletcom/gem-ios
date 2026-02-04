@@ -381,6 +381,12 @@ struct Migrations {
             try WalletIdMigration.migrate(db: db)
         }
 
+        migrator.registerMigration("Add hasImage to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: AssetRecord.Columns.hasImage.name, .boolean).defaults(to: false)
+            }
+        }
+
         migrator.registerMigration("Add earn support") { db in
             try? db.alter(table: AssetRecord.databaseTableName) {
                 $0.add(column: AssetRecord.Columns.isEarnable.name, .boolean).defaults(to: false)
@@ -388,6 +394,13 @@ struct Migrations {
             }
 
             try EarnPositionRecord.create(db: db)
+        }
+
+        migrator.registerMigration("Backfill earn positions fields") { db in
+            try? db.execute(sql: "UPDATE \(EarnPositionRecord.databaseTableName) SET vaultTokenAddress = '' WHERE vaultTokenAddress IS NULL")
+            try? db.execute(sql: "UPDATE \(EarnPositionRecord.databaseTableName) SET assetTokenAddress = '' WHERE assetTokenAddress IS NULL")
+            try? db.execute(sql: "UPDATE \(EarnPositionRecord.databaseTableName) SET vaultBalanceValue = '0' WHERE vaultBalanceValue IS NULL")
+            try? db.execute(sql: "UPDATE \(EarnPositionRecord.databaseTableName) SET assetBalanceValue = '0' WHERE assetBalanceValue IS NULL")
         }
 
         try migrator.migrate(dbQueue)

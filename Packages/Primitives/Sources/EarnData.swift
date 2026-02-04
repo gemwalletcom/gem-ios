@@ -19,8 +19,3 @@ public struct EarnData: Codable, Equatable, Hashable, Sendable {
 		self.gasLimit = gasLimit
 	}
 }
-
-public enum YieldAction: String, Codable, Equatable, Hashable, Sendable {
-	case deposit = "Deposit"
-	case withdraw = "Withdraw"
-}

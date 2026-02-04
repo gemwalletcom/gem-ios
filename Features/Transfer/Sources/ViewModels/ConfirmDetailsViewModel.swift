@@ -43,7 +43,7 @@ extension ConfirmDetailsViewModel: ItemModelProvidable {
             .stake,
             .account,
             .generic,
-            .yield:
+            .earn:
             .empty
         }
     }

@@ -27,8 +27,8 @@ public struct Signer: Sendable {
             case .token:
                 return try [signer.signTokenTransfer(input: input, privateKey: privateKey)]
             }
-        case .yield:
-            return try signer.signYield(input: input, privateKey: privateKey)
+        case .earn:
+            return try signer.signEarn(input: input, privateKey: privateKey)
         case .transferNft:
             return try [signer.signNftTransfer(input: input, privateKey: privateKey)]
         case .tokenApprove:

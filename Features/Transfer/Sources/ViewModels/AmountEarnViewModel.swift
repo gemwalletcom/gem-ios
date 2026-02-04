@@ -5,13 +5,13 @@ import Foundation
 import Localization
 import Primitives
 
-final class AmountYieldViewModel: AmountDataProvidable {
+final class AmountEarnViewModel: AmountDataProvidable {
     let asset: Asset
-    let action: YieldAction
+    let action: EarnAction
     let data: EarnData
     let depositedBalance: BigInt?
 
-    init(asset: Asset, action: YieldAction, data: EarnData, depositedBalance: BigInt?) {
+    init(asset: Asset, action: EarnAction, data: EarnData, depositedBalance: BigInt?) {
         self.asset = asset
         self.action = action
         self.data = data
@@ -26,7 +26,7 @@ final class AmountYieldViewModel: AmountDataProvidable {
     }
 
     var amountType: AmountType {
-        .yield(action: action, data: data, depositedBalance: depositedBalance)
+        .earn(action: action, data: data, depositedBalance: depositedBalance)
     }
 
     var minimumValue: BigInt { .zero }
@@ -55,7 +55,7 @@ final class AmountYieldViewModel: AmountDataProvidable {
 
     func makeTransferData(value: BigInt) throws -> TransferData {
         TransferData(
-            type: .yield(asset, action, data),
+            type: .earn(asset, action, data),
             recipientData: recipientData(),
             value: value,
             canChangeValue: true

@@ -131,15 +131,13 @@ extension EarnScene {
         }
     }
 
-    @ViewBuilder
     private var earnProtocolsSection: some View {
-        if let earnModel = model.earnProtocolsSceneViewModel() {
-            Section(model.earnProtocolsTitle) {
-                NavigationLink {
-                    EarnProtocolsScene(model: earnModel)
-                } label: {
-                    ListItemView(title: model.earnProtocolsTitle)
-                }
+        let earnModel = model.earnProtocolsSceneViewModel()
+        return Section(model.earnProtocolsTitle) {
+            NavigationLink {
+                EarnProtocolsScene(model: earnModel)
+            } label: {
+                ListItemView(title: model.earnProtocolsTitle)
             }
         }
     }

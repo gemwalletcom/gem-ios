@@ -29,7 +29,7 @@ struct TransactionFactory {
             case .some: transactionIndex == 0 ? (.tokenApproval, .null) : (.swap, metadata)
             case .none: (.swap, transferData.type.metadata)
             }
-        case .yield(_, let action, let earnData):
+        case .earn(_, let action, let earnData):
             switch earnData.approval {
             case .some:
                 if transactionIndex == 0 {

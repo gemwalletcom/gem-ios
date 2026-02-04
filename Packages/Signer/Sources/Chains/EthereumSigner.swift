@@ -201,14 +201,14 @@ class EthereumSigner: Signable {
         ))
     }
 
-    func signYield(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signEarn(input: SignerInput, privateKey: Data) throws -> [String] {
         guard
             case .evm(_, _, let earnData) = input.metadata,
             let earnData = earnData,
             let callDataHex = earnData.callData,
             let contractAddress = earnData.contractAddress
         else {
-            throw AnyError("Invalid metadata for yield transaction")
+            throw AnyError("Invalid metadata for earn transaction")
         }
 
         let callData = try Data.from(hex: callDataHex)

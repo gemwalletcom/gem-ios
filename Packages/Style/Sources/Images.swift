@@ -83,7 +83,7 @@ public enum Images {
         public static let panora = Image(.panora)
     }
 
-    public enum YieldProviders {
+    public enum EarnProviders {
         public static let yo = Image(.yo)
     }
 

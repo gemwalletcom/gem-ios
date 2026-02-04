@@ -26,6 +26,7 @@ import AddressNameService
 import ActivityService
 import EventPresenterService
 import EarnService
+import GemstonePrimitives
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -36,6 +37,7 @@ public struct ViewModelFactory: Sendable {
     let walletService: WalletService
     let stakeService: StakeService
     let earnService: any EarnServiceType
+    let earnBalanceService: any EarnBalanceServiceable
     let nameService: NameService
     let balanceService: BalanceService
     let priceService: PriceService
@@ -54,6 +56,7 @@ public struct ViewModelFactory: Sendable {
         walletService: WalletService,
         stakeService: StakeService,
         earnService: any EarnServiceType,
+        earnBalanceService: any EarnBalanceServiceable,
         nameService: NameService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -71,6 +74,7 @@ public struct ViewModelFactory: Sendable {
         self.walletService = walletService
         self.stakeService = stakeService
         self.earnService = earnService
+        self.earnBalanceService = earnBalanceService
         self.nameService = nameService
         self.balanceService = balanceService
         self.priceService = priceService
@@ -182,7 +186,8 @@ public struct ViewModelFactory: Sendable {
             chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
             stakeService: stakeService,
             earnService: earnService,
-            balanceService: balanceService
+            earnPositionsService: earnBalanceService,
+            earnAsset: chain.asset
         )
     }
 
@@ -195,7 +200,7 @@ public struct ViewModelFactory: Sendable {
         EarnProtocolsSceneViewModel(
             wallet: wallet,
             asset: asset,
-            balanceService: balanceService,
+            earnPositionsService: earnBalanceService,
             earnService: earnService,
             onAmountInputAction: onAmountInputAction
         )

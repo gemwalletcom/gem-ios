@@ -33,16 +33,16 @@ public struct EarnStore: Sendable {
         }
     }
 
-    public func updatePosition(_ position: EarnPosition) throws {
+    public func updatePosition(_ position: EarnPosition, walletId: WalletId) throws {
         try db.write { db in
-            try position.record.upsert(db)
+            try position.record(walletId: walletId.id).upsert(db)
         }
     }
 
-    public func updatePositions(_ positions: [EarnPosition]) throws {
+    public func updatePositions(_ positions: [EarnPosition], walletId: WalletId) throws {
         try db.write { db in
             for position in positions {
-                try position.record.upsert(db)
+                try position.record(walletId: walletId.id).upsert(db)
             }
         }
     }

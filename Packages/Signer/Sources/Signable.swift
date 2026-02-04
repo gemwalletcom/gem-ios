@@ -14,7 +14,7 @@ public protocol Signable {
     func signSwap(input: SignerInput, privateKey: Data) throws -> [String]
     func signTokenApproval(input: SignerInput, privateKey: Data) throws -> String
     func signStake(input: SignerInput, privateKey: Data) throws -> [String]
-    func signYield(input: SignerInput, privateKey: Data) throws -> [String]
+    func signEarn(input: SignerInput, privateKey: Data) throws -> [String]
     func signMessage(message: SignMessage, privateKey: Data) throws -> String
     func signAccountAction(input: SignerInput, privateKey: Data) throws -> String
     func signPerpetual(input: SignerInput, privateKey: Data) throws -> [String]
@@ -50,8 +50,8 @@ extension Signable {
         throw AnyError("unimplemented: signStake method")
     }
 
-    public func signYield(input: SignerInput, privateKey: Data) throws -> [String] {
-        throw AnyError("unimplemented: signYield method")
+    public func signEarn(input: SignerInput, privateKey: Data) throws -> [String] {
+        throw AnyError("unimplemented: signEarn method")
     }
 
     public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
