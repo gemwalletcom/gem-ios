@@ -139,10 +139,8 @@ extension TransactionLoadMetadata {
 extension Gemstone.TronStakeData {
     func map() -> Primitives.TronStakeData {
         switch self {
-        case .votes(let votes):
-            return .votes(votes.map { $0.map() })
-        case .unfreeze(let amounts):
-            return .unfreeze(amounts.map { $0.map() })
+        case .votes(let votes): .votes(votes.map { $0.map() })
+        case .unfreeze(let amounts): .unfreeze(amounts.map { $0.map() })
         }
     }
 }
@@ -150,10 +148,8 @@ extension Gemstone.TronStakeData {
 extension Primitives.TronStakeData {
     func map() -> Gemstone.TronStakeData {
         switch self {
-        case .votes(let votes):
-            return .votes(votes.map { $0.map() })
-        case .unfreeze(let amounts):
-            return .unfreeze(amounts.map { $0.map() })
+        case .votes(let votes): .votes(votes.map { $0.map() })
+        case .unfreeze(let amounts): .unfreeze(amounts.map { $0.map() })
         }
     }
 }
