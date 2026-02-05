@@ -19,6 +19,8 @@ public final class WalletConnectorService {
     private let signer: WalletConnectorSignable
     private let messageTracker = MessageTracker()
     private let walletConnect = WalletConnect()
+    private static let tronMethodVersionKey = "tron_method_version"
+    private static let tronMethodVersionValue = "v1"
 
     public init(signer: WalletConnectorSignable) {
         self.signer = signer
@@ -35,13 +37,13 @@ extension WalletConnectorService: WalletConnectorServiceable {
             socketFactory: DefaultSocketFactory()
         )
 
-        WalletKit.configure(
+        try WalletKit.configure(
             metadata: AppMetadata(
                 name: Constants.App.name,
                 description: "Gem Web3 Wallet",
                 url: Constants.App.website,
                 icons: ["https://gemwallet.com/images/gem-logo-256x256.png"],
-                redirect: try AppMetadata.Redirect(
+                redirect: AppMetadata.Redirect(
                     native: "gem://",
                     universal: .none
                 )
@@ -94,7 +96,7 @@ extension WalletConnectorService: WalletConnectorServiceable {
 
         try await WalletKit.instance.cleanup()
     }
-    
+
     public func updateSessions() {
         updateSessions(interactor.sessions)
     }
@@ -113,7 +115,7 @@ extension WalletConnectorService {
         for await (proposal, verifyContext) in interactor.sessionProposalStream {
             debugLog("Session proposal received: \(proposal)")
             debugLog("Verify context: \(String(describing: verifyContext))")
-            
+
             guard let verifyContext = verifyContext else {
                 await handleRejectSession(proposal: proposal, error: WalletConnectorServiceError.invalidOrigin)
                 continue
@@ -123,7 +125,7 @@ extension WalletConnectorService {
                 try await processSession(proposal: proposal, verifyContext: verifyContext)
             } catch {
                 debugLog("Error accepting proposal: \(error)")
-                
+
                 await handleRejectSession(proposal: proposal, error: error)
             }
         }
@@ -132,18 +134,18 @@ extension WalletConnectorService {
     private func handleRejectSession(proposal: Session.Proposal, error: Error) async {
         try? await signer.sessionReject(id: proposal.pairingTopic, error: error)
     }
-    
+
     private func handleSessionRequests() async {
         for await (request, verifyContext) in interactor.sessionRequestStream {
             debugLog("Session request received: \(request.method)")
             debugLog("Verify context: \(String(describing: verifyContext))")
 
             let session = WalletKit.instance.getSessions().first { $0.topic == request.topic }
-            
+
             guard let verifyContext, let session else {
                 continue
             }
-            
+
             do {
                 let status = walletConnect.validateOrigin(metadataUrl: session.peer.metadata.url, origin: verifyContext.origin, validation: verifyContext.validation.map()).map()
 
@@ -174,7 +176,7 @@ extension WalletConnectorService {
         }
     }
 
-    private func handleRequest(request: WalletConnectSign.Request, session: Session) async throws  {
+    private func handleRequest(request: WalletConnectSign.Request, session: Session) async throws {
         let messageId = request.messageId
 
         guard await messageTracker.shouldProcess(messageId) else {
@@ -248,7 +250,7 @@ extension WalletConnectorService {
         case .getChainId: .error(.methodNotFound)
         }
     }
-    
+
     private func rejectRequest(_ request: WalletConnectSign.Request) async throws {
         try await WalletKit.instance.respond(topic: request.topic, requestId: request.id, response: .error(JSONRPCError(code: 4001, message: "User rejected the request")))
     }
@@ -264,7 +266,7 @@ extension WalletConnectorService {
         let wallets = try signer.getWallets(for: proposal)
         let currentWalletId = try signer.getCurrentWallet().walletId
 
-        guard let preselectedWallet = wallets.first(where: { $0.walletId ==  currentWalletId }) ?? wallets.first else {
+        guard let preselectedWallet = wallets.first(where: { $0.walletId == currentWalletId }) ?? wallets.first else {
             throw WalletConnectorServiceError.walletsUnsupported
         }
 
@@ -312,10 +314,15 @@ extension WalletConnectorService {
             events: events.map { $0.rawValue },
             accounts: supportedAccounts
         )
+        var sessionProperties = proposal.sessionProperties ?? [:]
+        if supportedChains.contains(where: { $0.chain == .tron }), sessionProperties[Self.tronMethodVersionKey] == nil {
+            sessionProperties[Self.tronMethodVersionKey] = Self.tronMethodVersionValue
+        }
+
         return try await WalletKit.instance.approve(
             proposalId: proposal.id,
             namespaces: sessionNamespaces,
-            sessionProperties: proposal.sessionProperties
+            sessionProperties: sessionProperties
         )
     }
 }
