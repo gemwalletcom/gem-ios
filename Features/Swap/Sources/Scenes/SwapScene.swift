@@ -150,7 +150,7 @@ extension SwapScene {
         }
     }
 
-    private var buttonView: some View {
+    private var swapButton: StateButton {
         StateButton(
             text: model.buttonViewModel.title,
             type: model.buttonViewModel.type,
@@ -158,36 +158,19 @@ extension SwapScene {
             infoTitle: model.buttonViewModel.infoText,
             action: onSelectActionButton
         )
-        .frame(maxWidth: Spacing.scene.button.maxWidth)
     }
 
-    @ViewBuilder
     private var bottomActionView: some View {
-        VStack(spacing: 0) {
-            Divider()
-                .frame(height: 1 / UIScreen.main.scale)
-                .background(Colors.grayVeryLight)
-                .isVisible(focusedField)
-
-            Group {
-                if model.buttonViewModel.isVisible {
-                    buttonView
-                } else if focusedField {
-                    SuggestionsAccessoryView(
-                        suggestions: SwapSceneViewModel.inputPercentSuggestions,
-                        onSelect: {
-                            focusedField = false
-                            model.onSelectPercent($0.value)
-                        },
-                        onDone: {
-                            focusedField = false
-                        }
-                    )
-                }
-            }
-            .padding(.small)
-        }
-        .background(Colors.grayBackground)
+        InputAccessoryView(
+            isEditing: focusedField && !model.buttonViewModel.isVisible,
+            suggestions: SwapSceneViewModel.inputPercentSuggestions,
+            onSelect: {
+                focusedField = false
+                model.onSelectPercent($0.value)
+            },
+            onDone: { focusedField = false },
+            button: swapButton
+        )
     }
 }
 
