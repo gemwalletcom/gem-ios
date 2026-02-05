@@ -73,48 +73,32 @@ extension SetPriceAlertScene {
         .fixedSize()
     }
 
+    var confirmButton: StateButton {
+        StateButton(
+            text: Localized.Transfer.confirm,
+            type: .primary(model.confirmButtonState),
+            action: confirm
+        )
+    }
+
     @ViewBuilder
     var safeAreaContent: some View {
-        VStack(spacing: 0) {
-            if focusedField {
-                Divider()
-                    .frame(height: 1 / UIScreen.main.scale)
-                    .background(Colors.grayVeryLight)
-                    .isVisible(focusedField)
-                accessoryView
-                    .padding(.small)
-            } else {
-                StateButton(
-                    text: Localized.Transfer.confirm,
-                    type: .primary(model.confirmButtonState),
-                    action: confirm
-                )
-                .frame(maxWidth: Spacing.scene.button.maxWidth)
-                .padding(.bottom, Spacing.scene.bottom)
-            }
-        }
-        .background(focusedField ? Colors.grayBackground : .clear)
-    }
-
-    @ViewBuilder
-    var accessoryView: some View {
         switch model.state.type {
         case .price:
-            suggestionsView(model.priceSuggestions(for: assetData.price))
+            inputAccessoryView(model.priceSuggestions(for: assetData.price))
         case .percentage:
-            suggestionsView(model.percentageSuggestions(for: assetData.price))
+            inputAccessoryView(model.percentageSuggestions(for: assetData.price))
         }
     }
 
-    @ViewBuilder
-    private func suggestionsView(_ suggestions: [some SuggestionViewable]) -> some View {
-        if suggestions.isNotEmpty {
-            SuggestionsAccessoryView(
-                suggestions: suggestions,
-                onSelect: onSelectSuggestion,
-                onDone: { focusedField = false }
-            )
-        }
+    private func inputAccessoryView(_ suggestions: [some SuggestionViewable]) -> some View {
+        InputAccessoryView(
+            isEditing: focusedField && model.state.amount.isEmpty,
+            suggestions: suggestions,
+            onSelect: onSelectSuggestion,
+            onDone: { focusedField = false },
+            button: confirmButton
+        )
     }
 }
 
@@ -127,7 +111,6 @@ extension SetPriceAlertScene {
 
     func onSelectSuggestion(_ suggestion: some SuggestionViewable) {
         model.onSelectSuggestion(suggestion)
-        focusedField = false
     }
 
     func confirm() {
