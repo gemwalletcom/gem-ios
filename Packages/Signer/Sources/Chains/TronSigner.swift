@@ -16,8 +16,15 @@ struct TronSigner: Signable {
         privateKey: Data
     ) throws -> String {
         guard case .tron(
-            let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot,
-            let parentHash, let witnessAddress, _) = input.metadata
+            let blockNumber,
+            let blockVersion,
+            let blockTimestamp,
+            let transactionTreeRoot,
+            let parentHash,
+            let witnessAddress,
+            _,
+            _
+        ) = input.metadata
         else {
             throw AnyError("Missing tron metadata")
         }
@@ -94,7 +101,7 @@ struct TronSigner: Signable {
         guard case let .stake(_, stakeType) = input.type else {
             throw AnyError("Invalid input type for staking")
         }
-        guard case .tron(_, _, _, _, _, _, let stakeData) = input.metadata else {
+        guard case .tron(_, _, _, _, _, _, let stakeData, _) = input.metadata else {
             throw AnyError("Missing tron metadata")
         }
 
